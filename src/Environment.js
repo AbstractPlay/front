@@ -8,16 +8,17 @@ const {
   const store = new Store(new RecordSource())
 
   const network = Network.create((operation, variables) => {
-    return fetch('https://api.dev.abstractplay.com/graphql', {
-      method: 'POST',
+    var optext = operation.text.replace(/\n/g, "");
+    return fetch(`https://api.dev.abstractplay.com/graphql?query=${encodeURIComponent(optext)}`, {
+      method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        query: operation.text,
-        variables,
-      }),
+      // body: JSON.stringify({
+      //   query: operation.text,
+      //   variables,
+      // }),
     }).then(response => {
       return response.json()
     })
@@ -28,4 +29,4 @@ const {
     store,
   })
 
-  export default environment
+  export {environment};

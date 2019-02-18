@@ -113,7 +113,7 @@ type ChallengeType {
   game: GamesMetaType
 
   """This challenge's unique ID"""
-  id: String
+  id: ID
 
   """The player who issued the challenge"""
   issuer: UserType
@@ -144,7 +144,7 @@ type ConsoleType {
   game: GamesDataType
 
   """Console entry's unique ID number"""
-  id: String
+  id: ID
 
   """The user who issued the command"""
   user: UserType
@@ -158,7 +158,7 @@ type ConsoleVoteType {
   command: ConsoleType
 
   """Vote's unique ID number"""
-  id: String
+  id: ID
 
   """The user the vote belongs to"""
   user: UserType
@@ -197,7 +197,7 @@ input DeleteDmsInput {
 
 type DmsType {
   """This entry's unique ID number"""
-  id: String
+  id: ID
 
   """The text of the message"""
   message: String!
@@ -217,7 +217,7 @@ type GamesDataChatType {
   game: GamesDataType
 
   """This entry's unique ID number"""
-  id: String
+  id: ID
 
   """The text of the chat message"""
   message: String!
@@ -253,7 +253,7 @@ type GamesDataStateType {
   game: GamesDataType
 
   """This state's unique ID"""
-  id: String
+  id: ID
 
   """The render representation of this state"""
   renderrep: String!
@@ -294,7 +294,7 @@ type GamesDataType {
   consoleCommands: [ConsoleType]
 
   """The game's unique ID number"""
-  id: String
+  id: ID
 
   """This game's most recent state"""
   lastState: GamesDataStateType
@@ -329,7 +329,7 @@ type GamesMetaType {
   description: String!
 
   """Game's unique ID number"""
-  id: String
+  id: ID
 
   """Whether the game is currently available for play"""
   isLive: Boolean!
@@ -369,7 +369,7 @@ type GamesMetaType {
 
 type GameStatusType {
   """Entry's unique ID number"""
-  id: String
+  id: ID
 
   """Whether the code responded"""
   isUp: Boolean!
@@ -407,7 +407,7 @@ type MeType {
   games: [GamesDataType]
 
   """Your ID number"""
-  id: String
+  id: ID
 
   """The games in which you can currently move"""
   myTurn: [GamesDataType]
@@ -439,7 +439,7 @@ scalar Milliseconds
 """The input required when submitting move requests"""
 input MoveGameInput {
   """The game's ID number"""
-  id: String!
+  id: ID!
 
   """The move itself, using whatever notation the game supports"""
   move: String!
@@ -491,7 +491,7 @@ input NewChallengeInput {
 """The input required when posting a chat to a game"""
 input NewChatInput {
   """The game's ID number"""
-  id: String!
+  id: ID!
 
   """The message you wish to post."""
   message: String!
@@ -500,7 +500,7 @@ input NewChatInput {
 """The input required when issuing new console commands"""
 input NewConsoleInput {
   """The game's ID number"""
-  id: String!
+  id: ID!
 
   """
   The command you wish to issue: `0` offers a draw, `1` freezes the clocks, `2` thaws them
@@ -543,7 +543,7 @@ type PublisherType {
   games: [GamesMetaType]
 
   """Publisher's unique ID number"""
-  id: String
+  id: ID
 
   """Publisher's name"""
   name: String!
@@ -566,7 +566,7 @@ type RankType {
   game: GamesMetaType
 
   """Rank entry's unique ID number"""
-  id: String
+  id: ID
 
   """The rank itself"""
   rank: Int
@@ -584,7 +584,7 @@ input ReadDmsInput {
 """The input required when resigning from games"""
 input ResignGameInput {
   """The game's ID number"""
-  id: String!
+  id: ID!
 
   """To proceed, must be true. This action cannot be undone."""
   confirmed: Boolean!
@@ -595,7 +595,7 @@ The input required when accepting or withdrawing from a pending challenge
 """
 input RespondChallengeInput {
   """The challenge's ID number"""
-  id: String!
+  id: ID!
 
   """
   True accepts the challenge if not already accepted and does nothing if already
@@ -635,7 +635,7 @@ type TagType {
   game: GamesMetaType
 
   """Tag entry's unique ID number"""
-  id: String
+  id: ID
 
   """The tag itself"""
   tag: String!
@@ -673,7 +673,7 @@ type UserType {
   games: [GamesDataType]
 
   """User's ID number"""
-  id: String
+  id: ID
 
   """User's current display name"""
   name: String
@@ -699,7 +699,7 @@ type VariantType {
   group: String!
 
   """Variant's unique ID number"""
-  id: String
+  id: ID
 
   """The variant's display name"""
   name: String!
@@ -711,7 +711,7 @@ type VariantType {
 """The input required when voting on a console command"""
 input VoteConsoleInput {
   """The command's unique ID number"""
-  id: String!
+  id: ID!
 
   """Your yes/no vote"""
   vote: Boolean!
@@ -720,5 +720,5 @@ input VoteConsoleInput {
 """The input required when withdrawing a console command"""
 input WithdrawConsoleInput {
   """The command's unique ID number"""
-  id: String!
+  id: ID!
 }

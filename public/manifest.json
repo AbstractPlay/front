@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Abstract Play",
+  "name": "Abstract Play Browser Client",
   "icons": [
     {
       "src": "favicon.ico",
