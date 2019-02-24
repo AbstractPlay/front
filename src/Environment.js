@@ -1,4 +1,5 @@
-import { GRAPHQL_ENDPOINT_OPEN/*, GRAPHQL_ENDPOINT_AUTH*/ } from './config';
+import { getGlobal } from 'reactn';
+import { GRAPHQL_ENDPOINT_OPEN, GRAPHQL_ENDPOINT_AUTH } from './config';
 
 const {
     Environment,
@@ -10,21 +11,38 @@ const {
   const store = new Store(new RecordSource())
 
   const network = Network.create((operation, variables) => {
-    console.log(operation);
-    var optext = operation.text.replace(/\n/g, "");
-    return fetch(`${GRAPHQL_ENDPOINT_OPEN}?query=${encodeURIComponent(optext)}`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      // body: JSON.stringify({
-      //   query: operation.text,
-      //   variables,
-      // }),
-    }).then(response => {
-      return response.json()
-    })
+    const global = getGlobal();
+    if (global.token === null) {
+      var optext = operation.text.replace(/\n/g, "");
+      return fetch(`${GRAPHQL_ENDPOINT_OPEN}?query=${encodeURIComponent(optext)}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        return response.json();
+      })
+    } else {
+      console.log(JSON.stringify({
+        query: operation.text,
+        variables,
+      }));
+      return fetch(`${GRAPHQL_ENDPOINT_AUTH}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${global.token}`
+        },
+        body: JSON.stringify({
+          query: operation.text,
+          variables,
+        }),
+      }).then(response => {
+        return response.json()
+      })
+    }
   })
 
   const environment = new Environment({

@@ -1,5 +1,5 @@
 # source: https://api.dev.abstractplay.com/graphqlauth
-# timestamp: Sun Feb 17 2019 14:18:27 GMT-0700 (Mountain Standard Time)
+# timestamp: Sun Feb 24 2019 13:14:16 GMT-0700 (Mountain Standard Time)
 
 schema {
   query: APQueryAuth
@@ -348,6 +348,9 @@ type GamesMetaType {
 
   """The rankings given to this game by different users"""
   rankings: [RankType]
+
+  """JSON data representing a sample game state"""
+  sampleRep: String!
 
   """The game's short name (camel cased, no spaces)"""
   shortcode: String!

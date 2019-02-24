@@ -2,5 +2,8 @@
     "Welcome": "Welcome to Abstract Play!",
     "Make time for games": "Make time for games",
     "Log In": "Log In",
-    "Log Out": "Log Out"
+    "Log Out": "Log Out",
+    "Login Error": "Login Error",
+    "Generic login error message": "An error occurred while trying to log in. If the problem persists, please contact the system administrator.",
+    "Close button label": "Close"
 }
