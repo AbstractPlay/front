@@ -1,3 +1,5 @@
+import { GRAPHQL_ENDPOINT_OPEN/*, GRAPHQL_ENDPOINT_AUTH*/ } from './config';
+
 const {
     Environment,
     Network,
@@ -8,8 +10,9 @@ const {
   const store = new Store(new RecordSource())
 
   const network = Network.create((operation, variables) => {
+    console.log(operation);
     var optext = operation.text.replace(/\n/g, "");
-    return fetch(`https://api.dev.abstractplay.com/graphql?query=${encodeURIComponent(optext)}`, {
+    return fetch(`${GRAPHQL_ENDPOINT_OPEN}?query=${encodeURIComponent(optext)}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
