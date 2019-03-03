@@ -1,26 +1,20 @@
 import React from 'reactn';
 import {graphql, QueryRenderer} from 'react-relay';
 import { environment } from '../Environment';
-import Spinner from '../components/Spinner';
+import Spinner from './Spinner';
+import MetaItem from './MetaItem';
 import { useTranslation } from 'react-i18next';
 
-class MetaTable extends React.Component {
+class MetaContainer extends React.Component {
   render() {
     return (
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query MetaTableQuery {
+          query MetaContainerQuery {
             gamesMeta {
-              id,
-              name,
-              shortcode,
-              description,
-              sampleRep,
-              publisher {
-                  name,
-                  url
-              }
+                id,
+              ...MetaItem_item
             }  
           }
         `}
@@ -32,11 +26,15 @@ class MetaTable extends React.Component {
           if (!props) {
             return <Spinner />;
           }
-          return <div>Game Name: {props.gamesMeta[0].name} ({props.gamesMeta[0].id})</div>;
+          return (
+            <div>
+                {props.gamesMeta.map(item => <MetaItem item={item} key={item.id} />)}
+            </div>
+          );
         }}
       />
     );
   }
 }
 
-export default MetaTable;
+export default MetaContainer;

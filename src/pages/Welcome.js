@@ -1,9 +1,9 @@
 import React from 'reactn';
 import WelcomeBlurb from '../components/WelcomeBlurb';
-import MetaTable from '../components/MetaTable';
+import MetaContainer from '../components/MetaContainer';
 
 function MyComponent(props) {
-    return (<><WelcomeBlurb /><MetaTable /></>);
+    return (<><WelcomeBlurb /><MetaContainer /></>);
 }
 
-export default React.memo(MyComponent);
+export default MyComponent;
