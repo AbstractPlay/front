@@ -1,6 +1,6 @@
 import React from 'reactn';
 import {createFragmentContainer, graphql} from 'react-relay';
-import { Container, Row, Col } from 'react-bootstrap';
+import {Container, Row, Col} from 'react-bootstrap';
 import {render} from '@abstractplay/renderer';
 import { useTranslation } from 'react-i18next';
 
@@ -13,8 +13,10 @@ class MetaItem extends React.Component {
     this.sampleImage = React.createRef();
   }
 
+  handleBoardClick = (row, col, piece) => { }
+
   componentDidMount() {
-    render(JSON.parse(this.props.item.sampleRep), {divelem: this.sampleImage.current});
+    render(JSON.parse(this.props.item.sampleRep), this.handleBoardClick, {divelem: this.sampleImage.current});
   }
 
   render() {
@@ -23,7 +25,7 @@ class MetaItem extends React.Component {
       <Container>
         <Row>
           <Col>
-            <ReactMarkdown 
+            <ReactMarkdown
               source={`## ${item.name}\n\n${item.description}\n\n&mdash;<a href="${item.publisher.url}">${item.publisher.name}</a>`}
               escapeHtml={false}
             />
@@ -38,7 +40,7 @@ class MetaItem extends React.Component {
 }
 
 export default createFragmentContainer(
-    MetaItem, 
+    MetaItem,
     graphql`
         fragment MetaItem_item on GamesMetaType {
             name,

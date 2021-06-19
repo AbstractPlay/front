@@ -1,6 +1,7 @@
 import React from 'reactn';
 import { withTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
+import jwt_decode from "jwt-decode";
 
 class LegacyLogInButton extends React.Component {
     handleClick = (event) => {
@@ -31,7 +32,8 @@ export default class LogInOutButton extends React.Component {
         if (this.global.token === null) {
             return (<LogInButton />);
         } else {
-            return (<LogOutButton />);
+            var token = jwt_decode(this.global.token);
+            return (<div>Logged in as: {token["cognito:username"]}<LogOutButton /></div>);
         }
     }
 }
