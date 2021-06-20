@@ -48,7 +48,8 @@ class Me extends React.Component {
                   name
                 },
                 players {
-                  id
+                  id,
+                  name
                 },
                 whoseTurn {
                   id,

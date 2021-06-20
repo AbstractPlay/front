@@ -60,7 +60,7 @@ class GameMove extends React.Component {
       const game = this.props.game;
       return (
         <div>
-          <div ref={this.sampleImage} style={{width: "50%"}}></div>
+          <div ref={this.sampleImage} style={{width: "30%"}}></div>
           <label>
             Enter your move:
               <input name="move" type="text" value={this.state.move} onChange={this.handleInputChange} />

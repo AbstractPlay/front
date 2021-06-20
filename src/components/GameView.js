@@ -28,7 +28,7 @@ class GameView extends React.Component {
     if (! this.state.error) {
       const game = this.props.game;
       return (
-        <div ref={this.sampleImage} style={{width: "50%"}}></div>
+        <div ref={this.sampleImage} style={{width: "30%"}}></div>
       );
     }
     else {
