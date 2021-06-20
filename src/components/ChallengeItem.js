@@ -24,7 +24,7 @@ class ChallengeItem extends React.Component {
         <Container>
           <Row>
             <Col>
-              <div>{challenge.game.name}, to move: {challenge.issuer.name}
+              <div>{challenge.game.name} challenge from {challenge.issuer.name}
                 <Button variant="primary" onClick={() => this.handleChallengeResponseClick(challenge.id)}>{"Respond"}</Button>
               </div>
             </Col>
@@ -33,11 +33,24 @@ class ChallengeItem extends React.Component {
       );
     }
     else {
+      var desc = challenge.game.name;
+      const otherplayers = challenge.players.filter(item => item.id !== this.props.me).map(item => item.name);
+      if (challenge.numPlayers === 2) {
+        desc = desc + ' against ' + otherplayers[0];
+      }
+      else {
+        if (otherplayers.length === 0) {
+          desc = desc + ', no other players yet.';
+        }
+        else {
+          desc = desc + ', other players: ' + otherplayers.join(", ");
+        }
+      }
       return (
         <Container>
           <Row>
             <Col>
-              <div>{challenge.game.name}, to move: {challenge.issuer.name}
+              <div>{desc}
                 <Button variant="primary" onClick={() => this.handleChallengeViewClick(challenge.id)}>{"View"}</Button>
               </div>
             </Col>

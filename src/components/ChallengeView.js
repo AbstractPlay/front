@@ -19,6 +19,25 @@ class ChallengeView extends React.Component {
     this.setState({ error: true, errorMessage: message });
   }
 
+  handleResponse = (response) => {
+    const { stateSetter } = this.props;
+    if (response === -1) {
+      stateSetter({ mainState: "main" });
+    }
+    else {
+      ChallengeResponseMutation(this.props.id, false,
+        (response, errors) => {
+          if (errors !== null && errors !== undefined && errors.length > 0) {
+            this.setError(errors[0].message);
+          }
+          else {
+            stateSetter({ mainState: "main" });
+          }
+        },
+        this.setError);
+    }
+  }
+
   render() {
     if (! this.state.error) {
       return (
@@ -36,11 +55,13 @@ class ChallengeView extends React.Component {
                     name
                   },
                   issuer {
+                    id,
                     name
                   },
                   notes,
                   numPlayers,
                   players {
+                    id,
                     name
                   },
                   variants
@@ -55,24 +76,32 @@ class ChallengeView extends React.Component {
               if (!props) {
                 return <Spinner />;
               }
-              var players = 'Your opponent has not accepted the challenge yet.';
-              if (props.challenge.numPlayers > 2) {
-                if (props.challenge.players.name !== null || props.challenge.players.name.length === 0) {
-                  players = 'No other players have accepted yet.';
-                }
-                else {
-                  players = 'The following other players have already accepted ' + props.challenge.players.name.join(', ');
-                }
-              }
               var variants = ' no variants';
               if (props.challenge.variants !== null && props.challenge.variants.length > 0)
                 variants = ' with variants ' + props.challenge.variants.join(', ');
+              var challenge = '';
+              var players = '';
+              const otherplayers = props.challenge.players.filter(item => item.id !== props.challenge.issuer.id).map(item => item.name);
+              if (props.challenge.numPlayers > 2) {
+                challenge = 'You issued a challenge for a game of ' + props.challenge.game.name + ' with ' + variants + '.';
+                if (props.challenge.players.name !== null || props.challenge.players.name.length === 0) {
+                  players = 'No other players yet.';
+                }
+                else {
+                  players = 'So far the following other players will participate in the game ' + otherplayers.join(', ');
+                }
+              }
+              else {
+                // two player game
+                challenge = 'You challenged ' + otherplayers[0] + ' to a game of ' + props.challenge.game.name + ' with ' + variants + '.';
+                players = '';
+              }
               var notes = '';
               if (props.challenge.notes !== null && props.challenge.notes.length > 0)
                 notes = 'Notes: ' + <p>props.challenge.notes</p>;
               return (
                 <div>
-                  <div>You challenged ??? to a game of {props.challenge.game.name} with {variants}.</div>
+                  <div>{challenge}</div>
                   <div>The clock will be {props.challenge.clockStart}/{props.challenge.clockInc}/{props.challenge.clockMax}.</div>
                   <div>There will be {props.challenge.numPlayers} players in this game.</div>
                   <div>{players}</div>
@@ -88,25 +117,6 @@ class ChallengeView extends React.Component {
     }
     else {
       return (<h4>{this.state.errorMessage}</h4>);
-    }
-  }
-
-  handleResponse = (response) => {
-    const { stateSetter } = this.props;
-    if (response === -1) {
-      stateSetter({ mainState: "main" });
-    }
-    else {
-      ChallengeResponseMutation(this.props.id, false,
-        (response, errors) => {
-          if (errors !== null && errors !== undefined && errors.length > 0) {
-            this.setError(errors[0].message);
-          }
-          else {
-            stateSetter({ mainState: "main" });
-          }
-        },
-        this.setError);
     }
   }
 }

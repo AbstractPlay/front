@@ -14,12 +14,20 @@ class GameItem extends React.Component {
   render() {
     const game = this.props.item;
     const canMove = this.props.canMove;
+    const myid = this.props.me;
+    var desc = game.type.name;
+    if (canMove) {
+      desc = desc + ', against: ' + game.players.filter(item => item.id !== myid).map(item => item.name).join(", ");
+    }
+    else {
+      desc = desc + ', to move: ' + game.whoseTurn.map(item => item.name).join(", ");
+    }
     return (
       <Container>
         <Row>
           <Col>
             <div>
-              <div>{game.type.name}, to move: {game.whoseTurn.map(t => t.name).join(", ")}</div>
+              <div>{desc}</div>
               <Button variant="primary" onClick={() => this.handleViewGameClick(game, canMove)}>{canMove ? "Move" : "View"}</Button>
             </div>
           </Col>

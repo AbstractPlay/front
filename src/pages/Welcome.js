@@ -1,9 +1,9 @@
 import React from 'reactn';
 import WelcomeBlurb from '../components/WelcomeBlurb';
-import MetaContainer from '../components/MetaContainer';
+import Main from '../components/Main';
 
 function MyComponent(props) {
-    return (<><WelcomeBlurb /><MetaContainer /></>);
+    return (<><WelcomeBlurb /><Main /></>);
 }
 
 export default MyComponent;
