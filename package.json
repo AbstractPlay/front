@@ -13,7 +13,7 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/renderer": "github:abstractplay/renderer",
+    "@abstractplay/renderer": "file:../renderer",
     "@babel/core": "7.2.2",
     "@svgr/webpack": "4.1.0",
     "babel-core": "7.0.0-bridge.0",
@@ -41,7 +41,8 @@
     "i18next-browser-languagedetector": "^3.0.1",
     "i18next-xhr-backend": "^2.0.1",
     "identity-obj-proxy": "3.0.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.6.0",
+    "jwt-decode": "^3.1.2",
     "mini-css-extract-plugin": "0.5.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.2.1",
@@ -51,7 +52,7 @@
     "postcss-safe-parser": "4.0.1",
     "react": "^16.8.3",
     "react-app-polyfill": "^0.2.1",
-    "react-bootstrap": "^1.0.0-beta.5",
+    "react-bootstrap": "^1.5.2",
     "react-dev-utils": "^7.0.3",
     "react-dom": "^16.8.3",
     "react-i18next": "^10.2.0",
@@ -62,18 +63,20 @@
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
     "url-loader": "1.1.2",
-    "uuid": "^3.3.2"
+    "uuid": "^3.4.0",
+    "uuid-tool": "^2.0.2"
   },
   "scripts": {
     "start": "node scripts/start.js",
     "build-prod": "npm run relay && node scripts/build.js",
     "build-dev": "npm run relay && node scripts/buildDev.js",
+    "build-local": "npm run relay && node scripts/buildLocal.js",
     "full-prod": "npm run build-prod && npm run invalidate && npm run deploy",
     "full-dev": "npm run build-dev && npm run invalidate && npm run deploy",
     "deploy": "sls client deploy --no-confirm --no-config-change --no-policy-change --no-cors-change",
     "test": "node scripts/test.js",
     "relay": "relay-compiler --src ./src --schema ./schema.graphql --watchman false",
-    "invalidate": "aws cloudfront create-invalidation --distribution-id E8GI8TIAOBUGE --paths /*"
+    "invalidate": "invalidate-cloudfront.cmd"
   },
   "browserslist": [
     ">0.2%",
@@ -148,13 +151,13 @@
     "jest-pnp-resolver": "1.0.2",
     "jest-resolve": "23.6.0",
     "jest-watch-typeahead": "^0.2.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "relay-compiler": "^2.0.0",
     "serverless-finch": "^2.3.2",
     "serverless-single-page-app-plugin": "^1.0.2",
     "terser-webpack-plugin": "1.2.2",
     "webpack": "4.28.3",
-    "webpack-dev-server": "3.1.14",
+    "webpack-dev-server": "^3.11.2",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.3"
   }
