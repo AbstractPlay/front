@@ -1,5 +1,4 @@
 import React from 'reactn';
-import {graphql} from 'react-relay';
 import {Container, Row, Col} from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 

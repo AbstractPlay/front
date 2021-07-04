@@ -3,6 +3,7 @@ import { withTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Spinner from '../components/Spinner';
+import { v4 as uuidv4 } from 'uuid';
 
 class AuthProcessor extends React.Component {
     constructor(props, context) {
@@ -29,21 +30,20 @@ class AuthProcessor extends React.Component {
             hash.split("&").forEach(function(part) {
                 var item = part.split("=");
                 result[item[0]] = decodeURIComponent(item[1]);
-            });	
+            });
 
             if ( ("id_token" in result) && (result.id_token.length > 0) && (this.global.nonce === result.state) ) {
                 const redirect = this.global.redirect;
                 // Store token
-                const uuidv4 = require('uuid/v4');
                 this.setGlobal({token: result.id_token, nonce: uuidv4(), redirect: "/"});
                 // Redirect
                 window.location.replace(redirect);
             } else {
                 this.setState({ showModal: true });
-            }        
+            }
         } else {
             this.setState({ showModal: true });
-        }        
+        }
     }
 
     render() {

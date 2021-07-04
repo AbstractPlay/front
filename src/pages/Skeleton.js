@@ -1,9 +1,7 @@
 import React, { Suspense } from 'reactn';
 import { useTranslation } from 'react-i18next';
 import './Skeleton.css';
-// import {graphql, QueryRenderer} from 'react-relay';
 import { Container, Row, Col } from 'react-bootstrap';
-// import { environment } from '../Environment';
 import Spinner from '../components/Spinner';
 import LogInOutButton from '../components/LogInOutButton';
 import Welcome from './Welcome';

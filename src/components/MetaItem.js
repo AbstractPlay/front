@@ -1,10 +1,11 @@
 import React from 'reactn';
-import {createFragmentContainer, graphql} from 'react-relay';
+import graphql from 'babel-plugin-relay/macro';
+import {createFragmentContainer} from 'react-relay';
 import {Container, Row, Col} from 'react-bootstrap';
 import {render} from '@abstractplay/renderer';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw'
 import { useTranslation } from 'react-i18next';
-
-const ReactMarkdown = require('react-markdown/with-html');
 
 class MetaItem extends React.Component {
   constructor(props) {
@@ -25,10 +26,10 @@ class MetaItem extends React.Component {
       <Container>
         <Row>
           <Col>
-            <ReactMarkdown
-              source={`## ${item.name}\n\n${item.description}\n\n&mdash;<a href="${item.publisher.url}">${item.publisher.name}</a>`}
-              escapeHtml={false}
-            />
+            <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+              {`## ${item.name}\n\n${item.description}\n\n&mdash;
+              <a href="${item.publisher.url}">${item.publisher.name}</a>`}
+            </ReactMarkdown>
           </Col>
           <Col>
             <div ref={this.sampleImage} style={{"height": "15em"}}></div>
@@ -39,9 +40,8 @@ class MetaItem extends React.Component {
   }
 }
 
-export default createFragmentContainer(
-    MetaItem,
-    graphql`
+export default createFragmentContainer(MetaItem, {
+    item: graphql`
         fragment MetaItem_item on GamesMetaType {
             name,
             shortcode,
@@ -52,4 +52,4 @@ export default createFragmentContainer(
                 url
             }
         }`
-);
+      });

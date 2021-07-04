@@ -1,5 +1,6 @@
 import React from 'reactn';
-import {graphql, QueryRenderer} from 'react-relay';
+import graphql from 'babel-plugin-relay/macro';
+import { QueryRenderer } from 'react-relay';
 import { environment } from '../Environment';
 import Spinner from './Spinner';
 import ChallengeResponseMutation from './ChallengeResponseMutation'

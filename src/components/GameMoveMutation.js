@@ -1,8 +1,6 @@
-import {
-  commitMutation,
-  graphql,
-} from 'react-relay'
-import { environment } from '../Environment'
+import graphql from 'babel-plugin-relay/macro';
+import {commitMutation} from 'react-relay';
+import { environment } from '../Environment';
 
 const mutation = graphql`
   mutation GameMoveMutation($input: MoveGameInput!) {
