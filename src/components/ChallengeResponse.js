@@ -82,9 +82,6 @@ class ChallengeResponse extends React.Component {
               );
             }}
           />
-          <Button variant="primary" onClick={() => this.handleResponse(1)}>{"Accept"}</Button>
-          <Button variant="primary" onClick={() => this.handleResponse(0)}>{"Reject"}</Button>
-          <Button variant="primary" onClick={() => this.handleResponse(-1)}>{"Cancel"}</Button>
         </div>
       );
     }

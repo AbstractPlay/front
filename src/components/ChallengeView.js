@@ -3,7 +3,6 @@ import graphql from 'babel-plugin-relay/macro';
 import { QueryRenderer } from 'react-relay';
 import { environment } from '../Environment';
 import Spinner from './Spinner';
-import ChallengeResponseMutation from './ChallengeResponseMutation'
 import Button from 'react-bootstrap/Button';
 
 class ChallengeView extends React.Component {
@@ -14,29 +13,6 @@ class ChallengeView extends React.Component {
   state = {
     error: false,
     errorMessage: ""
-  }
-
-  setError = (message) => {
-    this.setState({ error: true, errorMessage: message });
-  }
-
-  handleResponse = (response) => {
-    const { stateSetter } = this.props;
-    if (response === -1) {
-      stateSetter({ mainState: "main" });
-    }
-    else {
-      ChallengeResponseMutation(this.props.id, false,
-        (response, errors) => {
-          if (errors !== null && errors !== undefined && errors.length > 0) {
-            this.setError(errors[0].message);
-          }
-          else {
-            stateSetter({ mainState: "main" });
-          }
-        },
-        this.setError);
-    }
   }
 
   render() {
@@ -111,8 +87,6 @@ class ChallengeView extends React.Component {
               );
             }}
           />
-          <Button variant="primary" onClick={() => this.handleResponse(0)}>{"Revoke challenge"}</Button>
-          <Button variant="primary" onClick={() => this.handleResponse(-1)}>{"Cancel"}</Button>
         </div>
       );
     }

@@ -1,10 +1,7 @@
 import React from 'reactn';
 import MetaContainer from './MetaContainer';
 import Me from './Me';
-import NewChallenge from './NewChallenge';
 import NewProfile from './NewProfile';
-import ChallengeResponse from './ChallengeResponse';
-import ChallengeView from './ChallengeView';
 import GameMove from './GameMove';
 import GameView from './GameView';
 
@@ -40,23 +37,9 @@ class Main extends React.Component {
           return (<Me stateSetter = {this.setMainState} />);
         }
       }
-      case "newchallenge": {
-        // Issue a challenge
-        return (<NewChallenge stateSetter = {this.setMainState} />);
-      }
       case "profile": {
         // Set up your profile
         return (<NewProfile stateSetter = {this.setMainState} />)
-      }
-      case "challengeResponse": {
-        // Respond to a challenge
-        const challengeID = this.state.id;
-        return (<ChallengeResponse id = {challengeID} stateSetter = {this.setMainState} />);
-      }
-      case "challengeView": {
-        // View challenges you have issued
-        const challengeID = this.state.id;
-        return (<ChallengeView id = {challengeID} stateSetter = {this.setMainState} />);
       }
       case "gameView": {
         // View the state of a game (where it isn't your move)

@@ -1,5 +1,5 @@
 import React from 'reactn';
-import {Container, Row, Col} from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 
 class ChallengeItem extends React.Component {
@@ -8,11 +8,11 @@ class ChallengeItem extends React.Component {
   }
 
   handleChallengeResponseClick = (id) => {
-    this.props.stateSetter({mainState: "challengeResponse", id: id});
+    this.props.meStateSetter( {showChallengeResponseModal: true, challengeID: id});
   }
 
   handleChallengeViewClick = (id) => {
-    this.props.stateSetter({mainState: "challengeView", id: id});
+    this.props.meStateSetter( {showChallengeViewModal: true, challengeID: id});
   }
 
   render() {
