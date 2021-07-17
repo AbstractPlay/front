@@ -1,29 +1,21 @@
-import React, {Suspense} from 'reactn';
+import React, { useEffect, useState, Suspense }  from 'react';
+import { useHistory } from "react-router-dom";
 import { withTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Spinner from '../components/Spinner';
 import { v4 as uuidv4 } from 'uuid';
+import { useAuth } from '../pages/Skeleton';
 
-class AuthProcessor extends React.Component {
-    constructor(props, context) {
-        super(props, context);
-        this.state = {
-            showModal: false
-        };
-        this.handleClose = this.handleClose.bind(this);
-    }
+function AuthProcessor (props) {
+    const [showModal, setShowModal] = useState(false);
 
-    static defaultProps = {
-        redirect: "/"
-    };
-
-    handleClose() {
-        this.setState({showModal: false});
+    const handleClose = () => {
+        setShowModal(false);
         window.location.replace("/")
     }
 
-    componentDidMount() {
+    useEffect(() => {
         var hash = window.location.hash.substr(1);
         var result = {};
         if ( (hash !== null) && (hash !== undefined) && (hash.length > 0) ) {
@@ -32,40 +24,40 @@ class AuthProcessor extends React.Component {
                 result[item[0]] = decodeURIComponent(item[1]);
             });
 
-            if ( ("id_token" in result) && (result.id_token.length > 0) && (this.global.nonce === result.state) ) {
-                const redirect = this.global.redirect;
+            console.log('Nonce = ' + sessionStorage.getItem('Nonce'));
+            if ( ("id_token" in result) && (result.id_token.length > 0) && (sessionStorage.getItem('Nonce') === result.state) ) {
                 // Store token
-                this.setGlobal({token: result.id_token, nonce: uuidv4(), redirect: "/"});
+                localStorage.setItem('token', result.id_token);
+                sessionStorage.setItem('Nonce', uuidv4());
                 // Redirect
-                window.location.replace(redirect);
+                window.location.replace("/");
             } else {
-                this.setState({ showModal: true });
+                setShowModal(true);
             }
         } else {
-            this.setState({ showModal: true });
+            setShowModal(true);
         }
-    }
+    }, []);
 
-    render() {
-        // An error will appear here if something went wrong.
-        const {t} = this.props;
-        return (
-            <Suspense fallback={<Spinner />}>
-                <Modal show={this.state.showModal} onHide={this.handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{t("Login Error")}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        {t("Generic login error message")}
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={this.handleClose}>{t("Close button label")}</Button>
-                    </Modal.Footer>
-                </Modal>
-            </Suspense>
-        );
-    }
+    // An error will appear here if something went wrong.
+    const {t} = props;
+    return (
+        <Suspense fallback={<Spinner />}>
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{t("Login Error")}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {t("Generic login error message")}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={handleClose}>{t("Close button label")}</Button>
+                </Modal.Footer>
+            </Modal>
+        </Suspense>
+    );
 }
+
 const Processor = withTranslation()(AuthProcessor);
 export default () => {
     return (

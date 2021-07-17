@@ -8,7 +8,8 @@ class GameItem extends React.Component {
   }
 
   handleViewGameClick = (game, canMove) => {
-    this.props.stateSetter({mainState: canMove ? "gameMove" : "gameView", id: game.id, data: game});
+    window.location.replace("/play");
+    // this.props.stateSetter({mainState: canMove ? "gameMove" : "gameView", id: game.id, data: game});
   }
 
   render() {

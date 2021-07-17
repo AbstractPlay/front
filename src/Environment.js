@@ -11,8 +11,8 @@ const {
   const store = new Store(new RecordSource())
 
   const network = Network.create((operation, variables) => {
-    const global = getGlobal();
-    if (global.token === null) {
+    const token = localStorage.getItem('token');
+    if (token === null) {
       var optext = operation.text.replace(/\n/g, "");
       return fetch(`${GRAPHQL_ENDPOINT_OPEN}?query=${encodeURIComponent(optext)}`, {
         method: 'GET',
@@ -33,7 +33,7 @@ const {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${global.token}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           query: operation.text,

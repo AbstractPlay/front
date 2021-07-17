@@ -28,7 +28,9 @@ class Main extends React.Component {
     switch(this.state.mainState) {
       case "main": {
         // landing page when first connecting to the AP site
-        if (this.global.token === null) {
+        // return (<MetaContainer />);
+        const token = localStorage.getItem('token');
+        if (token === null) {
           // Not logged in. Show available (meta) games.
           return (<MetaContainer />);
         }

@@ -1,4 +1,4 @@
-import React from 'reactn';
+import React from 'react';
 import { COGNITO_ENDPOINT, COGNITO_APPID, COGNITO_REDIRECT_LOGIN } from '../config';
 
 function RedirectLogin(props) {
