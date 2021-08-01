@@ -10,7 +10,7 @@ const mutation = graphql`
   }
 `
 
-export default (name, consent, anonymous, country, tagline, callback, errcallback) => {
+const NewProfileMutation = (name, consent, anonymous, country, tagline, callback, errcallback) => {
   const variables = {
     input: {
       name,
@@ -33,3 +33,5 @@ export default (name, consent, anonymous, country, tagline, callback, errcallbac
     },
   )
 }
+
+export default NewProfileMutation;

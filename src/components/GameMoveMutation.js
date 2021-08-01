@@ -23,7 +23,7 @@ const mutation = graphql`
   }
 `
 
-export default (id, move, callback, errcallback) => {
+const GameMoveMutation = (id, move, callback, errcallback) => {
   const variables = {
     input: {
       id,
@@ -43,3 +43,5 @@ export default (id, move, callback, errcallback) => {
     },
   )
 }
+
+export default GameMoveMutation;

@@ -1,89 +1,105 @@
-import React from 'reactn';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import NewProfileMutation from './NewProfileMutation';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { Auth } from 'aws-amplify';
+import { useAuth } from '../pages/Skeleton';
 
-class NewChallenge extends React.Component {
-  constructor(props) {
-    super(props);
+function NewProfile(props) {
+  const [show, showSetter] = useState(props.show);
+  const [name, nameSetter] = useState("");
+  const [consent, consentSetter] = useState(false);
+  const [anonymous, anonymousSetter] = useState(false);
+  const [country, countrySetter] = useState("");
+  const [tagline, taglineSetter] = useState("");
+  const [error, errorSetter] = useState(false);
+  const [errorMessage, errorMessageSetter] = useState("");
+
+  var auth = useAuth();
+  const { t } = useTranslation();
+
+  const setError = (message) => {
+    errorSetter(true);
+    errorMessageSetter(message);
   }
 
-  state = {
-    name: "",
-    consent: false,
-    anonymous: false,
-    country: "",
-    tagline: "",
-    error: false,
-    errorMessage: ""
+  const handleNewProfileClose = () => {
+    console.log('Logging user out');
+    auth.setToken(null);
+    localStorage.removeItem('token');
+    showSetter(false);
   }
 
-  setError = (message) => {
-    this.setState({ error: true, errorMessage: message });
-  }
-
-  handleInputChange = (event) => {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
+  const handleNewProfile = () => {
+    Auth.currentAuthenticatedUser()
+    .then(usr => {
+      console.log('currentAuthenticatedUser', usr);
+      auth.setToken(usr.signInUserSession.idToken.jwtToken);
+      localStorage.setItem('token', usr.signInUserSession.idToken.jwtToken);
+      NewProfileMutation(name, consent, anonymous, country, tagline,
+        (response, errors) => {
+          if (errors !== null && errors !== undefined && errors.length > 0) {
+            setError(errors[0].message);
+          }
+          else {
+            showSetter(false);
+            props.varsSetter({ dummy: usr.signInUserSession.idToken.jwtToken });
+          }
+        },
+        setError);
+      })
+    .catch(() => {
+      console.log('Not signed in');
+      auth.setToken(null);
+      localStorage.removeItem('token');
     });
   }
 
-  render() {
-    if (! this.state.error) {
-      return (
+  return (
+    <Modal show={show} onHide={handleNewProfileClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>New Profile</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>{
+        (!error)?
         <div>
+          <h4>Please create your profile.</h4>
           <form>
             <label>
-              Your desired display name. It must be unique across names currently in use and those recently used.
-              <input name="name" type="text" value={this.state.name} onChange={this.handleInputChange} />
+              {t('ProfileName')}
+              <input name="name" type="text" value={name} onChange={(e) => nameSetter(e.target.value)} />
             </label>
             <label>
-              2 Character Country code of where you want to tell people you're from
-              <input name="country" type="text" value={this.state.country} onChange={this.handleInputChange} />
+              {t('ProfileCountry')}
+              <input name="country" type="text" value={country} onChange={(e) => countrySetter(e.target.value)} />
             </label>
             <label>
-            A free-form tagline (255 characters max)
-              <input name="tagline" type="text" value={this.state.tagline} onChange={this.handleInputChange} />
+              {t('ProfileTagline')}
+              <input name="tagline" type="text" value={tagline} onChange={(e) => taglineSetter(e.target.value)} />
             </label>
             <label>
-              Would you like to be anonymous?
-              <input name="anonymous" type="checkbox" checked={this.state.anonymous} onChange={this.handleInputChange} />
+              {t('ProfileAnon')}
+              <input name="anonymous" type="checkbox" checked={anonymous} onChange={(e) => anonymousSetter(e.target.checked)} />
             </label>
             <label>
-              Do you consent to the Abstract Play's terms of service and the privacy policy?
-              <input name="consent" type="checkbox" checked={this.state.consent} onChange={this.handleInputChange} />
+              {t('ProfileConsent')}
+              <input name="consent" type="checkbox" checked={consent} onChange={(e) => consentSetter(e.target.checked)} />
             </label>
           </form>
-          <Button variant="primary" onClick={this.handleSubmit}>{"Submit!"}</Button>
-        </div>
-      );
-    }
-    else {
-      return (<h4>{this.state.errorMessage}</h4>);
-    }
-  }
-
-  handleSubmit = () => {
-    const name = this.state.name;
-    const consent = this.state.consent;
-    const anonymous = this.state.anonymous;
-    const country = this.state.country;
-    const tagline = this.state.tagline;
-    const { stateSetter } = this.props;
-    NewProfileMutation(name, consent, anonymous, country, tagline,
-      (response, errors) => {
-        if (errors !== null && errors !== undefined && errors.length > 0) {
-          this.setError(errors[0].message);
-        }
-        else {
-          stateSetter({ mainState: "main" });
-        }
-      },
-      this.setError);
-  }
+        </div>:
+        <h4>{errorMessage}</h4>}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="primary" onClick={handleNewProfile}>
+          Submit
+        </Button>
+        <Button variant="primary" onClick={handleNewProfileClose}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
 }
 
-export default NewChallenge;
+export default NewProfile;

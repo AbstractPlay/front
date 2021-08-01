@@ -1,4 +1,4 @@
-import React from 'reactn';
+import React from 'react';
 import WelcomeBlurb from '../components/WelcomeBlurb';
 import Main from '../components/Main';
 

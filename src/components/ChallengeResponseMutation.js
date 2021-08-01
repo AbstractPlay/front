@@ -10,7 +10,7 @@ const mutation = graphql`
   }
 `
 
-export default (id, confirmed, callback, errcallback) => {
+const ChallengeResponseMutation = (id, confirmed, callback, errcallback) => {
   const variables = {
     input: {
       id,
@@ -30,3 +30,5 @@ export default (id, confirmed, callback, errcallback) => {
     },
   )
 }
+
+export default ChallengeResponseMutation;

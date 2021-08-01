@@ -10,7 +10,7 @@ const mutation = graphql`
   }
 `
 
-export default (game, opponent, callback, errcallback) => {
+const NewChallengeMutation = (game, opponent, callback, errcallback) => {
   const variables = {
     input: {
       game: game,
@@ -32,3 +32,5 @@ export default (game, opponent, callback, errcallback) => {
     },
   )
 }
+
+export default NewChallengeMutation;
