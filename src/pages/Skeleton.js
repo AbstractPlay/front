@@ -1,8 +1,7 @@
 import React, { useContext, useState, createContext, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import awsconfig from '../config/awsconfig';
-import awsauth from '../config/awsauth';
+import { COGNITO_APPID, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';
 import Amplify, { Auth } from 'aws-amplify';
 import './Skeleton.css';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -37,7 +36,40 @@ function MyComponent(props) {
   const BodyContent = Welcome;
 
   useEffect(() => {
+    const awsconfig = {
+      "Auth": {
+        "region": "us-east-1",
+        "userPoolId": "us-east-1_jQP9BEv25",
+        "userPoolWebClientId": COGNITO_APPID,
+        "mandatorySignIn": false,
+        "cookieStorage": {
+          "domain": COGNITO_COOKIE_DOMAIN,
+          "path": "/",
+          "expires": 7,
+          "secure": true
+        },
+        "redirectSignIn": COGNITO_REDIRECT_LOGIN,
+        "redirectSignOut": COGNITO_REDIRECT_LOGOUT
+      },
+      "API": {
+        "endpoints": [
+          {
+            "name": "demo",
+            "endpoint": COGNITO_REDIRECT_LOGIN
+          }
+        ]
+      }
+    };
     Amplify.configure(awsconfig);
+    const awsauth = {
+      "domain": "abstract-play.auth.us-east-1.amazoncognito.com",
+      "scope": [
+        "openid"
+      ],
+      "redirectSignIn": COGNITO_REDIRECT_LOGIN,
+      "redirectSignOut": COGNITO_REDIRECT_LOGOUT,
+      "responseType": "code"
+    };
     Auth.configure({ oauth: awsauth });
   },[]);
 
