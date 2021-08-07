@@ -1,7 +1,7 @@
 import React, { useContext, useState, createContext, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import { COGNITO_APPID, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';
+import { COGNITO_APPID, COGNITO_COOKIE_DOMAIN, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';
 import Amplify, { Auth } from 'aws-amplify';
 import './Skeleton.css';
 import { Container, Row, Col } from 'react-bootstrap';
