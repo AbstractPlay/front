@@ -1,37 +1,22 @@
-import React from 'reactn';
-import { withTranslation } from 'react-i18next';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
+import { Auth } from 'aws-amplify';
+import { useAuth } from '../pages/Skeleton';
 
-class LegacyLogInButton extends React.Component {
-    handleClick = (event) => {
-        window.location.replace("/redirect/login");
-    }
+const LogInOutButton = () => {
+    const auth = useAuth();
+    const { t } = useTranslation();
+    const token = auth.token;
 
-    render() {
-        const {t} = this.props;
-        return (<Button variant="primary" onClick={this.handleClick}>{t("Log In")}</Button>);
-    }
-}
-const LogInButton = withTranslation()(LegacyLogInButton);
-
-class LegacyLogOutButton extends React.Component {
-    handleClick = (event) => {
-        window.location.replace("/redirect/logout");
-    }
-
-    render() {
-        const {t} = this.props;
-        return (<Button variant="primary" onClick={this.handleClick}>{t("Log Out")}</Button>);
+    if (token === null) {
+        return (<Button onClick={() => Auth.federatedSignIn()}>{t('LogIn')}</Button>);
+    } else {
+        return (
+            <div>
+                <Button onClick={() => Auth.signOut()}>{t('LogOut')}</Button>
+            </div>);
     }
 }
-const LogOutButton = withTranslation()(LegacyLogOutButton);
 
-export default class LogInOutButton extends React.Component {
-    render() {
-        if (this.global.token === null) {
-            return (<LogInButton />);
-        } else {
-            return (<LogOutButton />);
-        }
-    }
-}
+export default LogInOutButton;

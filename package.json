@@ -13,98 +13,153 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/renderer": "github:abstractplay/renderer",
-    "@babel/core": "7.2.2",
-    "@svgr/webpack": "4.1.0",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "9.0.0",
-    "babel-jest": "23.6.0",
-    "babel-loader": "8.0.5",
-    "babel-plugin-named-asset-import": "^0.3.1",
-    "babel-preset-react-app": "^7.0.1",
-    "bfj": "6.1.1",
-    "bootstrap": "^4.3.1",
-    "case-sensitive-paths-webpack-plugin": "2.2.0",
-    "core-js": "^2.6.5",
-    "css-loader": "1.0.0",
-    "dotenv": "6.0.0",
-    "dotenv-expand": "4.2.0",
-    "farce": "^0.2.7",
-    "file-loader": "2.0.0",
-    "fork-ts-checker-webpack-plugin-alt": "0.4.14",
-    "found": "^0.3.21",
-    "found-relay": "^0.3.1",
-    "fs-extra": "7.0.1",
-    "graphql": "^14.1.1",
-    "html-webpack-plugin": "4.0.0-alpha.2",
-    "i18next": "^15.0.5",
-    "i18next-browser-languagedetector": "^3.0.1",
-    "i18next-xhr-backend": "^2.0.1",
+    "@abstractplay/renderer": "file:../renderer",
+    "@babel/core": "7.12.3",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
+    "@svgr/webpack": "5.5.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
+    "aws-amplify": "^4.2.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.6.0",
+    "babel-loader": "8.1.0",
+    "babel-plugin-named-asset-import": "^0.3.7",
+    "babel-plugin-relay": "^11.0.2",
+    "babel-preset-react-app": "^10.0.0",
+    "bfj": "^7.0.2",
+    "bootstrap": "^4.6.0",
+    "camelcase": "^6.1.0",
+    "case-sensitive-paths-webpack-plugin": "2.3.0",
+    "css-loader": "4.3.0",
+    "dotenv": "8.2.0",
+    "dotenv-expand": "5.1.0",
+    "eslint": "^7.11.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-testing-library": "^3.9.2",
+    "eslint-webpack-plugin": "^2.5.2",
+    "file-loader": "6.1.1",
+    "found": "^0.6.0",
+    "found-relay": "^0.9.1",
+    "fs-extra": "^9.0.1",
+    "html-webpack-plugin": "4.5.0",
+    "i18next": "^20.3.2",
+    "i18next-browser-languagedetector": "^6.1.2",
+    "i18next-xhr-backend": "^3.2.2",
     "identity-obj-proxy": "3.0.0",
-    "jquery": "^3.3.1",
-    "mini-css-extract-plugin": "0.5.0",
-    "optimize-css-assets-webpack-plugin": "5.0.1",
-    "pnp-webpack-plugin": "1.2.1",
-    "postcss-flexbugs-fixes": "4.1.0",
+    "jest": "26.6.0",
+    "jest-circus": "26.6.0",
+    "jest-resolve": "26.6.0",
+    "jest-watch-typeahead": "0.6.1",
+    "jwt-decode": "^3.1.2",
+    "mini-css-extract-plugin": "0.11.3",
+    "optimize-css-assets-webpack-plugin": "5.0.4",
+    "pnp-webpack-plugin": "1.6.4",
+    "postcss-flexbugs-fixes": "4.2.1",
     "postcss-loader": "3.0.0",
-    "postcss-preset-env": "6.5.0",
-    "postcss-safe-parser": "4.0.1",
-    "react": "^16.8.3",
-    "react-app-polyfill": "^0.2.1",
-    "react-bootstrap": "^1.0.0-beta.5",
-    "react-dev-utils": "^7.0.3",
-    "react-dom": "^16.8.3",
-    "react-i18next": "^10.2.0",
-    "react-markdown": "^4.0.6",
-    "react-relay": "^2.0.0",
-    "reactn": "^1.0.0",
-    "resolve": "1.10.0",
-    "sass-loader": "7.1.0",
-    "style-loader": "0.23.1",
-    "url-loader": "1.1.2",
-    "uuid": "^3.3.2"
+    "postcss-normalize": "8.0.1",
+    "postcss-preset-env": "6.7.0",
+    "postcss-safe-parser": "5.0.2",
+    "prompts": "2.4.0",
+    "react": "^17.0.2",
+    "react-app-polyfill": "^2.0.0",
+    "react-bootstrap": "^1.6.1",
+    "react-dev-utils": "^11.0.3",
+    "react-dom": "^17.0.2",
+    "react-i18next": "^11.11.0",
+    "react-markdown": "^6.0.2",
+    "react-refresh": "^0.8.3",
+    "react-relay": "^11.0.2",
+    "react-router-dom": "^5.2.0",
+    "rehype-raw": "^5.1.0",
+    "relay-runtime": "^11.0.2",
+    "resolve": "1.18.1",
+    "resolve-url-loader": "^3.1.2",
+    "sass-loader": "^10.0.5",
+    "semver": "7.3.2",
+    "style-loader": "1.3.0",
+    "terser-webpack-plugin": "4.2.3",
+    "ts-pnp": "1.2.0",
+    "url-loader": "4.1.1",
+    "web-vitals": "^1.1.2",
+    "webpack": "4.44.2",
+    "webpack-dev-server": "3.11.1",
+    "webpack-manifest-plugin": "2.2.0",
+    "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
     "start": "node scripts/start.js",
     "build-prod": "npm run relay && node scripts/build.js",
     "build-dev": "npm run relay && node scripts/buildDev.js",
+    "build-local": "npm run relay && node scripts/buildLocal.js",
     "full-prod": "npm run build-prod && npm run invalidate && npm run deploy",
     "full-dev": "npm run build-dev && npm run invalidate && npm run deploy",
     "deploy": "sls client deploy --no-confirm --no-config-change --no-policy-change --no-cors-change",
     "test": "node scripts/test.js",
     "relay": "relay-compiler --src ./src --schema ./schema.graphql --watchman false",
-    "invalidate": "aws cloudfront create-invalidation --distribution-id E8GI8TIAOBUGE --paths /*"
+    "invalidate": "invalidate-cloudfront.cmd"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ],
+    "local": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/*.d.ts"
     ],
-    "resolver": "jest-pnp-resolver",
     "setupFiles": [
       "react-app-polyfill/jsdom"
     ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}"
+      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
     ],
     "testEnvironment": "jsdom",
-    "testURL": "http://localhost",
+    "testRunner": "C:\\Projects\\AbstractPlay\\front2\\node_modules\\jest-circus\\runner.js",
     "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
       "^.+\\.module\\.(css|sass|scss)$"
     ],
+    "modulePaths": [],
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
@@ -122,40 +177,20 @@
       "node"
     ],
     "watchPlugins": [
-      "D:\\GitHub\\newfront\\node_modules\\jest-watch-typeahead\\filename.js",
-      "D:\\GitHub\\newfront\\node_modules\\jest-watch-typeahead\\testname.js"
-    ]
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ],
+    "resetMocks": true
   },
   "babel": {
     "presets": [
       "react-app"
-    ],
-    "plugins": [
-      "relay"
     ]
   },
   "devDependencies": {
-    "babel-plugin-relay": "^2.0.0",
-    "eslint": "5.12.0",
-    "eslint-config-react-app": "^3.0.7",
-    "eslint-loader": "2.1.1",
-    "eslint-plugin-flowtype": "2.50.1",
-    "eslint-plugin-import": "2.14.0",
-    "eslint-plugin-jsx-a11y": "6.1.2",
-    "eslint-plugin-react": "7.12.4",
-    "eslint-plugin-react-hooks": "^1.4.0",
-    "jest": "23.6.0",
-    "jest-pnp-resolver": "1.0.2",
-    "jest-resolve": "23.6.0",
-    "jest-watch-typeahead": "^0.2.1",
-    "lodash": "^4.17.11",
-    "relay-compiler": "^2.0.0",
-    "serverless-finch": "^2.3.2",
-    "serverless-single-page-app-plugin": "^1.0.2",
-    "terser-webpack-plugin": "1.2.2",
-    "webpack": "4.28.3",
-    "webpack-dev-server": "3.1.14",
-    "webpack-manifest-plugin": "2.0.4",
-    "workbox-webpack-plugin": "3.6.3"
+    "graphql": "^15.5.1",
+    "relay-compiler": "^11.0.2",
+    "serverless-finch": "^2.6.0",
+    "serverless-single-page-app-plugin": "^1.0.2"
   }
 }

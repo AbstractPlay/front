@@ -1,45 +1,40 @@
-import React from 'reactn';
-import {createFragmentContainer, graphql} from 'react-relay';
-import { Container, Row, Col } from 'react-bootstrap';
+import React, {useEffect, useRef} from 'react';
+import graphql from 'babel-plugin-relay/macro';
+import {createFragmentContainer} from 'react-relay';
+import {Container, Row, Col} from 'react-bootstrap';
 import {render} from '@abstractplay/renderer';
-import { useTranslation } from 'react-i18next';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw'
 
-const ReactMarkdown = require('react-markdown/with-html');
+function MetaItem(props) {
 
-class MetaItem extends React.Component {
-  constructor(props) {
-    super(props);
-    // create a ref to store the textInput DOM element
-    this.sampleImage = React.createRef();
-  }
+  const handleBoardClick = (row, col, piece) => { }
 
-  componentDidMount() {
-    render(JSON.parse(this.props.item.sampleRep), {divelem: this.sampleImage.current});
-  }
+  useEffect(() => {
+    render(JSON.parse(props.item.sampleRep), handleBoardClick, {divelem: sampleImage.current});
+  },[props.item.sampleRep]);
 
-  render() {
-    const item = this.props.item;
-    return (
-      <Container>
-        <Row>
-          <Col>
-            <ReactMarkdown 
-              source={`## ${item.name}\n\n${item.description}\n\n&mdash;<a href="${item.publisher.url}">${item.publisher.name}</a>`}
-              escapeHtml={false}
-            />
-          </Col>
-          <Col>
-            <div ref={this.sampleImage} style={{"height": "15em"}}></div>
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
+  const sampleImage = useRef();
+  const item = props.item;
+  return (
+    <Container>
+      <Row>
+        <Col>
+          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+            {`## ${item.name}\n\n${item.description}\n\n&mdash;
+            <a href="${item.publisher.url}">${item.publisher.name}</a>`}
+          </ReactMarkdown>
+        </Col>
+        <Col>
+          <div ref={sampleImage} style={{"height": "15em"}}></div>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
 
-export default createFragmentContainer(
-    MetaItem, 
-    graphql`
+export default createFragmentContainer(MetaItem, {
+    item: graphql`
         fragment MetaItem_item on GamesMetaType {
             name,
             shortcode,
@@ -50,4 +45,4 @@ export default createFragmentContainer(
                 url
             }
         }`
-);
+      });

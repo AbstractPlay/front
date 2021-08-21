@@ -1,4 +1,3 @@
-import { getGlobal } from 'reactn';
 import { GRAPHQL_ENDPOINT_OPEN, GRAPHQL_ENDPOINT_AUTH } from './config';
 
 const {
@@ -6,13 +5,13 @@ const {
     Network,
     RecordSource,
     Store,
-  } = require('relay-runtime')
+  } = require('relay-runtime');
 
-  const store = new Store(new RecordSource())
+  const store = new Store(new RecordSource());
 
   const network = Network.create((operation, variables) => {
-    const global = getGlobal();
-    if (global.token === null) {
+    const token = localStorage.getItem('token');
+    if (token === null) {
       var optext = operation.text.replace(/\n/g, "");
       return fetch(`${GRAPHQL_ENDPOINT_OPEN}?query=${encodeURIComponent(optext)}`, {
         method: 'GET',
@@ -33,11 +32,11 @@ const {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${global.token}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           query: operation.text,
-          variables,
+          variables
         }),
       }).then(response => {
         return response.json()
