@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import NewProfileMutation from './NewProfileMutation';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Auth } from 'aws-amplify';
-import { useAuth } from '../pages/Skeleton';
 
 function NewProfile(props) {
   const [show, showSetter] = useState(props.show);
@@ -16,7 +14,6 @@ function NewProfile(props) {
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
 
-  var auth = useAuth();
   const { t } = useTranslation();
 
   const setError = (message) => {
@@ -26,34 +23,36 @@ function NewProfile(props) {
 
   const handleNewProfileClose = () => {
     console.log('Logging user out');
-    auth.setToken(null);
-    localStorage.removeItem('token');
     showSetter(false);
   }
 
-  const handleNewProfile = () => {
-    Auth.currentAuthenticatedUser()
-    .then(usr => {
+  const handleNewProfile = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
       console.log('currentAuthenticatedUser', usr);
-      auth.setToken(usr.signInUserSession.idToken.jwtToken);
-      localStorage.setItem('token', usr.signInUserSession.idToken.jwtToken);
-      NewProfileMutation(name, consent, anonymous, country, tagline,
-        (response, errors) => {
-          if (errors !== null && errors !== undefined && errors.length > 0) {
-            setError(errors[0].message);
-          }
-          else {
-            showSetter(false);
-            props.varsSetter({ dummy: usr.signInUserSession.idToken.jwtToken });
-          }
-        },
-        setError);
-      })
-    .catch(() => {
-      console.log('Not signed in');
-      auth.setToken(null);
-      localStorage.removeItem('token');
-    });
+      await fetch('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/authQuery', {
+          method: 'POST', // or 'PUT'
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
+          },
+          body: JSON.stringify({
+            "query": "new_profile",
+            "pars" : {
+              "name": name,
+              "consent": consent,
+              "anonymous": anonymous,
+              "country": country,
+              "tagline": tagline
+            }}),
+        });
+      showSetter(false);
+      props.varsSetter({ dummy: usr.signInUserSession.idToken.jwtToken });
+    }
+    catch (err) {
+      setError(err.message);
+    }
   }
 
   return (
@@ -64,7 +63,7 @@ function NewProfile(props) {
       <Modal.Body>{
         (!error)?
         <div>
-          <h4>Please create your profile.</h4>
+          <h4>{t('CreateProfile')}</h4>
           <form>
             <label>
               {t('ProfileName')}

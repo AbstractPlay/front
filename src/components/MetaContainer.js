@@ -1,37 +1,37 @@
-import React from 'react';
-import graphql from 'babel-plugin-relay/macro';
-import { QueryRenderer } from 'react-relay';
-import { environment } from '../Environment';
+import React, { useState, useEffect } from 'react';
 import Spinner from './Spinner';
 import MetaItem from './MetaItem';
 
 function MetaContainer(props) {
+  const [error, errorSetter] = useState(null);
+  const [games, gamesSetter] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/query');
+        url.searchParams.append('query', 'list_games');
+        const res = await fetch(url);
+        const result = await res.json();
+        gamesSetter(result);
+      }
+      catch (error) {
+        errorSetter(error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (error) {
+    return <div><p>Error!</p><p>{JSON.stringify(error)}</p></div>;
+  }
+  if (!games) {
+    return <Spinner />;
+  }
   return (
-    <QueryRenderer
-      environment={environment}
-      query={graphql`
-        query MetaContainerQuery {
-          gamesMeta {
-              id,
-            ...MetaItem_item
-          }
-        }
-      `}
-      variables={{}}
-      render={({error, props}) => {
-        if (error) {
-          return <div><p>Error!</p><p>{error.message}</p></div>;
-        }
-        if (!props) {
-          return <Spinner />;
-        }
-        return (
-          <div>
-              {props.gamesMeta.map(item => <MetaItem item={item} key={item.id} />)}
-          </div>
-        );
-      }}
-    />
+    <div>
+        {games.map(item => <MetaItem item={item} key={item.name} />)}
+    </div>
   );
 }
 

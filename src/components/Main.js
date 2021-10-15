@@ -5,12 +5,13 @@ import { useAuth } from '../pages/Skeleton';
 import { Auth } from 'aws-amplify';
 import Spinner from './Spinner';
 
-function Main() {
-  const [authed, authedSetter] = useState(false);
+function Main(props) {
+  // const [authed, authedSetter] = useState(false);
 
-  const auth = useAuth();
-  const token = auth.token;
+  // const auth = useAuth();
 
+
+  /*
   useEffect(() => {
     Auth.currentAuthenticatedUser().then(usr => {
       console.log('currentAuthenticatedUser', usr);
@@ -39,6 +40,16 @@ function Main() {
       // Logged in. Show your games in progress and outstanding challenges.
       return (<Me />);
     }
+  }
+  */
+    // landing page when first connecting to the AP site
+  if (props.token === null) {
+    // Not logged in. Show available (meta) games.
+    return (<MetaContainer />);
+  }
+  else {
+    // Logged in. Show your games in progress and outstanding challenges.
+    return (<Me />);
   }
 }
 

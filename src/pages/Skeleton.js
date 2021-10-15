@@ -10,6 +10,7 @@ import LogInOutButton from '../components/LogInOutButton';
 import Welcome from './Welcome';
 import GameMove from '../components/GameMove';
 
+/*
 const authContext = createContext();
 
 function ProvideAuth({ children }) {
@@ -30,10 +31,12 @@ function useProvideAuth() {
     setToken
   };
 }
+*/
 
-function MyComponent(props) {
+function Bones(props) {
   const { t } = useTranslation();
-  const BodyContent = Welcome;
+  const [authed, authedSetter] = useState(false);
+  const [token, tokenSetter] = useState(null);
 
   useEffect(() => {
     const awsconfig = {
@@ -71,16 +74,32 @@ function MyComponent(props) {
       "responseType": "code"
     };
     Auth.configure({ oauth: awsauth });
+    async function getToken() {
+      try {
+        const usr = await Auth.currentAuthenticatedUser();
+        console.log(usr);
+        // if (usr.signInUserSession !== undefined)
+        tokenSetter(usr.signInUserSession.idToken.jwtToken);
+      }
+      catch (error) {
+        tokenSetter(null);
+      }
+      authedSetter(true);
+      console.log("authed");
+    }
+    getToken();
   },[]);
 
-  return (
-    <ProvideAuth>
+  if (!authed)
+    return <Spinner />;
+  else
+    return (
       <Router>
         <Container>
           <Row>
             <Col><p>{t("Abstract Play")}<br/>{t("Make time for games")}</p></Col>
             <Col>{t("Menu")}</Col>
-            <Col><LogInOutButton /></Col>
+            <Col><LogInOutButton token={token} /></Col>
           </Row>
           <Row>
             <Col>
@@ -89,7 +108,7 @@ function MyComponent(props) {
                   <GameMove />
                 </Route>
                 <Route path="/">
-                  <BodyContent />
+                  <Welcome token={token} />
                 </Route>
               </Switch>
             </Col>
@@ -99,18 +118,21 @@ function MyComponent(props) {
           </Row>
         </Container>
       </Router>
-    </ProvideAuth>
-  );
+    );
 }
 
+/*
 export const useAuth = () => {
   return useContext(authContext);
 };
+*/
+
 
 export default function Skeleton() {
+  // The useTranslation hook will trigger a Suspense if not ready
   return (
     <Suspense fallback={<Spinner />}>
-      <MyComponent />
+      <Bones />
     </Suspense>
   );
 }

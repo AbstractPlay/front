@@ -2,8 +2,8 @@ import React from 'react';
 import WelcomeBlurb from '../components/WelcomeBlurb';
 import Main from '../components/Main';
 
-function MyComponent(props) {
-    return (<><WelcomeBlurb /><Main /></>);
+function Welcome(props) {
+    return (<><WelcomeBlurb /><Main token={props.token}/></>);
 }
 
-export default MyComponent;
+export default Welcome;

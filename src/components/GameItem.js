@@ -12,17 +12,17 @@ function GameItem(props) {
   var desc = "";
   if (game.players.length === 2) {
     if (canMove) {
-      desc = t("GameToMoveTwoPlayer", {game: game.type.name, opponent: game.players.filter(item => item.id !== myid).map(item => item.name)[0]});
+      desc = t("GameToMoveTwoPlayer", {game: game.metaGame, opponent: game.players.filter(item => item.id !== myid).map(item => item.name)[0]});
     }
     else {
-      desc = t("GameNoMoveTwoPlayer", {game: game.type.name, opponent: game.whoseTurn.map(item => item.name)[0]});
+      desc = t("GameNoMoveTwoPlayer", {game: game.metaGame, opponent: game.players.filter(item => item.id !== myid).map(item => item.name)[0]});
     }
   } else {
     if (canMove) {
-      desc = t("GameToMoveNPlayer", {game: game.type.name, opponents: game.players.filter(item => item.id !== myid).map(item => item.name).join(", ")});
+      desc = t("GameToMoveNPlayer", {game: game.metaGame, opponents: game.players.filter(item => item.id !== myid).map(item => item.name).join(", ")});
     }
     else {
-      desc = t("GameNoMoveNPlayer", {game: game.type.name, opponents: game.whoseTurn.map(item => item.name)[0]});
+      desc = t("GameNoMoveNPlayer", {game: game.metaGame, opponents: game.players.filter(item => item.id !== myid).map(item => item.name).join(", ")});
     }
   }
   return (
@@ -30,7 +30,7 @@ function GameItem(props) {
       <Row>
         <Col>
           <div>
-            <Link to={{pathname: "/move", state: {canMove: canMove, game: game}}}>{desc}</Link>
+            <Link to={{pathname: "/move", state: {myid: myid, game: game}}}>{desc}</Link>
           </div>
         </Col>
       </Row>

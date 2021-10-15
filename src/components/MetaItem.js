@@ -1,6 +1,4 @@
 import React, {useEffect, useRef} from 'react';
-import graphql from 'babel-plugin-relay/macro';
-import {createFragmentContainer} from 'react-relay';
 import {Container, Row, Col} from 'react-bootstrap';
 import {render} from '@abstractplay/renderer';
 import ReactMarkdown from 'react-markdown';
@@ -33,16 +31,4 @@ function MetaItem(props) {
   );
 }
 
-export default createFragmentContainer(MetaItem, {
-    item: graphql`
-        fragment MetaItem_item on GamesMetaType {
-            name,
-            shortcode,
-            description,
-            sampleRep,
-            publisher {
-                name,
-                url
-            }
-        }`
-      });
+export default MetaItem;
