@@ -16,7 +16,6 @@ function ChallengeItem(props) {
     props.setters.challengeSetter(challenge);
   }
 
-  console.log(props);
   const challenge = props.item;
   const respond = props.respond;
   if (respond) {

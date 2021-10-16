@@ -1,4 +1,4 @@
-import React, { useContext, useState, createContext, Suspense, useEffect } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { COGNITO_APPID, COGNITO_COOKIE_DOMAIN, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';

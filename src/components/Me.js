@@ -18,9 +18,7 @@ function Me(props) {
   const [challenge, challengeSetter] = useState(0);
   const [vars, varsSetter] = useState({});
   const [showChallengeViewModal, showChallengeViewModalSetter] = useState(false);
-  const [challengeViewError, challengeViewErrorSetter] = useState('');
   const [showChallengeResponseModal, showChallengeResponseModalSetter] = useState(false);
-  const [challengeResponseError, challengeResponseErrorSetter] = useState('');
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
   const [newChallengeError, newChallengeErrorSetter] = useState('');
   const [challengeGame, challengeGameSetter] = useState('');
@@ -74,7 +72,6 @@ function Me(props) {
 
   const handleChallengeViewClose = () => {
     showChallengeViewModalSetter(false);
-    challengeViewErrorSetter('');
   }
 
   const handleChallengeRevoke = async () => {
@@ -111,7 +108,6 @@ function Me(props) {
 
   const handleChallengeResponseClose = () => {
     showChallengeResponseModalSetter(false);
-    challengeResponseErrorSetter('');
   }
 
   const handleChallengeResponse = async (resp) => {

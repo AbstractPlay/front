@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {render} from '@abstractplay/renderer';
+import { render } from '@abstractplay/renderer';
 import Button from 'react-bootstrap/Button';
 import { Auth } from 'aws-amplify';
 import { merge } from 'lodash';
@@ -16,7 +16,6 @@ function GameMove(props) {
   const [errorMessage, errorMessageSetter] = useState("");
   const [gameEngine, gameEngineSetter] = useState();
 
-  const history = useHistory();
   const { t } = useTranslation();
   const { state } = useLocation();
 
@@ -29,7 +28,7 @@ function GameMove(props) {
         const res = await fetch(url);
         if (res.status !== 200) {
           const result = await res.json();
-          errorSetter(JSON.parse(result.body));
+          setError(JSON.parse(result.body));
         } else {
           const game0 = await res.json();
           console.log(game0);
@@ -49,7 +48,7 @@ function GameMove(props) {
       }
       catch (error) {
         console.log(error);
-        errorSetter(error);
+        setError(error);
       }
     }
     fetchData();
@@ -74,9 +73,12 @@ function GameMove(props) {
     }
   }, [renderrep]);
 
-  const setError = (message) => {
+  const setError = (error) => {
+    if (error.Message !== undefined)
+      errorMessageSetter(error.Message);
+    else
+      errorMessageSetter(JSON.stringify(error));
     errorSetter(true);
-    errorMessageSetter(message);
   }
 
   const handleView = () => {
@@ -116,7 +118,7 @@ function GameMove(props) {
       });
       const result = await res.json();
       if (result.statusCode !== 200)
-        errorSetter(JSON.parse(result.body));
+        setError(JSON.parse(result.body));
       let game0 = JSON.parse(result.body);
       console.log(game0);
       game0.currentMove = game0.moves.length;
@@ -173,10 +175,7 @@ function GameMove(props) {
     }
   }
   else {
-    if (error.Message !== undefined)
-      return (<h4>{error.Message}</h4>);
-    else
-      return (<h4>{JSON.stringify(error)}</h4>);
+    return (<h4>{errorMessage}</h4>);
   }
 }
 

@@ -1,13 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Spinner from './Spinner';
 
 function ChallengeResponse(props) {
   const { t } = useTranslation();
 
   var players = '';
   const challenge = props.challenge;
-  console.log(challenge);
+
   const otherPlayers = challenge.players.filter(x => x.id !== props.me.id).map(x => x.name);
   if (challenge.numPlayers > 2) {
     if (otherPlayers.length === 0)
