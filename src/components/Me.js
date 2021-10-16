@@ -10,6 +10,7 @@ import ChallengeView from './ChallengeView';
 import ChallengeResponse from './ChallengeResponse';
 import NewChallenge from './NewChallenge';
 import NewProfile from './NewProfile'
+import { API_ENDPOINT_AUTH } from '../config';
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -33,7 +34,7 @@ function Me(props) {
       const token = usr.signInUserSession.idToken.jwtToken;
       try {
         console.log("calling authQuery with token: " + token);
-        const res = await fetch('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/authQuery', {
+        const res = await fetch(API_ENDPOINT_AUTH, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -79,7 +80,7 @@ function Me(props) {
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
       console.log("calling authQuery query = challenge_revoke with token: " + token);
-      const res = await fetch('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/authQuery', {
+      const res = await fetch(API_ENDPOINT_AUTH, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -115,7 +116,7 @@ function Me(props) {
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
       console.log("calling authQuery query = challenge_response with token: " + token);
-      const res = await fetch('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/authQuery', {
+      const res = await fetch(API_ENDPOINT_AUTH, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -149,7 +150,7 @@ function Me(props) {
     try {
       const usr = await Auth.currentAuthenticatedUser();
       console.log('currentAuthenticatedUser', usr);
-      await fetch('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/authQuery', {
+      await fetch(API_ENDPOINT_AUTH, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

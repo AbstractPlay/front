@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Auth } from 'aws-amplify';
+import { API_ENDPOINT_AUTH } from '../config';
 
 function NewProfile(props) {
   const [show, showSetter] = useState(props.show);
@@ -30,7 +31,7 @@ function NewProfile(props) {
     try {
       const usr = await Auth.currentAuthenticatedUser();
       console.log('currentAuthenticatedUser', usr);
-      await fetch('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/authQuery', {
+      await fetch(API_ENDPOINT_AUTH, {
           method: 'POST', // or 'PUT'
           headers: {
             'Accept': 'application/json',

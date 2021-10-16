@@ -5,8 +5,9 @@ import { render } from '@abstractplay/renderer';
 import Button from 'react-bootstrap/Button';
 import { Auth } from 'aws-amplify';
 import { merge } from 'lodash';
-function GameMove(props) {
+import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from '../config';
 
+function GameMove(props) {
   const [game, gameSetter] = useState(null);
   const [renderrep, renderrepSetter] = useState(null);
   const [moveError, moveErrorSetter] = useState("");
@@ -22,7 +23,7 @@ function GameMove(props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        var url = new URL('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/query');
+        var url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append('query', 'get_game');
         url.searchParams.append('id', state.game.id);
         const res = await fetch(url);
@@ -101,7 +102,7 @@ function GameMove(props) {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
-      const res = await fetch('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/authQuery', {
+      const res = await fetch(API_ENDPOINT_AUTH, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Spinner from './Spinner';
+import { API_ENDPOINT_OPEN } from '../config';
 
 function NewChallenge(props) {
   const { t } = useTranslation();
@@ -13,7 +14,7 @@ function NewChallenge(props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        var url = new URL('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/query');
+        var url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append('query', 'game_names');
         const res = await fetch(url);
         const result = await res.json();
@@ -30,7 +31,7 @@ function NewChallenge(props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        var url = new URL('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/query');
+        var url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append('query', 'user_names');
         const res = await fetch(url);
         const result = await res.json();

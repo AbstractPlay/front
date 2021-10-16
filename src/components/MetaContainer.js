@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Spinner from './Spinner';
 import MetaItem from './MetaItem';
+import { API_ENDPOINT_OPEN } from '../config';
 
 function MetaContainer(props) {
   const [error, errorSetter] = useState(null);
@@ -9,7 +10,7 @@ function MetaContainer(props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        var url = new URL('https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/query');
+        var url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append('query', 'list_games');
         const res = await fetch(url);
         const result = await res.json();
