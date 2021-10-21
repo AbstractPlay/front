@@ -36,6 +36,21 @@ function toBoardString(board) {
 }
 
 function render(game) {
+
+  var annotations = [];
+  if (game.moves.length > 0) {
+    const lastmove = game.moves[game.moves.length - 1];
+    const from = positionToCoord(lastmove.substr(0,2));
+    const to = positionToCoord(lastmove.substr(3,2));
+    const annotation = {
+      "type": "move",
+      "targets": [
+        { "row": from[0], "col": from[1]},
+        { "row": to[0], "col": to[1]}
+      ]
+    }
+    annotations.push(annotation);
+  }
   game.renderrep = {
     "board": {
       "style": "squares-checkered",
@@ -47,7 +62,9 @@ function render(game) {
       "G": {"name": "piece", "player": 3},
       "R": {"name": "piece", "player": 1},
       "Y": {"name": "piece", "player": 4}},
-    "pieces": toBoardString(game.board)};
+    "pieces": toBoardString(game.board),
+    annotations: annotations
+  };
 }
 
 // Take the alhpa numeric position return, [y, x]. 'a1' becomes [3, 0].
