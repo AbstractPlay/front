@@ -37,6 +37,10 @@ function GameMove(props) {
           // the engine to be just code, no state of its own.
           // Is importing this dynamically overkill? Should we just bundle all engines for everyone?
           const engine = await import('./games/' + game0.metaGame + '.js');
+          if (game0.renderrep !== undefined) {
+            // why is this needed here, but not in MetaContainer????
+            game0.renderrep.pieces = game0.renderrep.pieces.replace(/\\n/g,"\n");
+          }
           if (game0.moves === undefined)
             engine.initializeGame(game0);
           game0.currentMove = game0.moves.length;
@@ -70,7 +74,7 @@ function GameMove(props) {
     }
     if (renderrep !== null) {
       console.log(renderrep);
-      render(renderrep, handleBoardClick, {divelem: boardImage.current});
+      render(renderrep, {"divid": "svg", "boardClick": handleBoardClick});
     }
   }, [renderrep]);
 
@@ -155,7 +159,7 @@ function GameMove(props) {
       return (
         <div>
           <div><h5>{game.players[game.toMove].name} to move.</h5></div>
-          <div ref={boardImage} style={{width: "30%"}}></div>
+          <div id="svg" ref={boardImage} style={{width: "30%"}}></div>
           <div>{moveError}</div>
           <div>
             <label>
@@ -167,7 +171,6 @@ function GameMove(props) {
             {game.exploreMove > game.currentMove ? <Button variant="primary" onClick={handleUndo}>{"Undo"}</Button>:""}
             {game.canSubmit && game.exploreMove === game.currentMove + 1 ? <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button>:""}
           </div>
-          <div>{t('OppsMove')}</div>
         </div>
       );
     }

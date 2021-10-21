@@ -32,7 +32,7 @@ exports.initializeGame = function(game) {
 }
 
 function toBoardString(board) {
-  return board[0].join("") + ';' + board[1].join("") + ';' + board[2].join("") + ';' + board[3].join("");
+  return board[0].join("") + "\n" + board[1].join("") + "\n" + board[2].join("") + "\n" + board[3].join("");
 }
 
 function render(game) {

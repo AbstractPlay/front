@@ -6,13 +6,10 @@ import rehypeRaw from 'rehype-raw'
 
 function MetaItem(props) {
 
-  const handleBoardClick = (row, col, piece) => { }
-
   useEffect(() => {
-    render(JSON.parse(props.item.sampleRep), handleBoardClick, {divelem: sampleImage.current});
+    render(JSON.parse(props.item.sampleRep), { "divid": "svg" + props.item.name });
   },[props.item.sampleRep]);
 
-  const sampleImage = useRef();
   const item = props.item;
   return (
     <Container>
@@ -24,7 +21,7 @@ function MetaItem(props) {
           </ReactMarkdown>
         </Col>
         <Col>
-          <div ref={sampleImage} style={{"height": "15em"}}></div>
+          <div id={"svg" + item.name} style={{"height": "15em"}}></div>
         </Col>
       </Row>
     </Container>
