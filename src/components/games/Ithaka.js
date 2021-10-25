@@ -1,3 +1,50 @@
+const { merge } = require('lodash');
+
+// This takes the (minimal) game object as it is saved in the DB on the server and fills in other
+// fields that is useful or needed for displaying and manipulating (showing old states, exploring new states) the game
+// in the front end.
+// Note that the (required) currentMove, canSubmit, and exploreMove is set in the GameMove code and should not be set here.
+// For Ithaka only the list of moves and the current renderep is maintained in the DB.
+exports.hydrate = function(game) {
+  if (game.moves === undefined) {
+    initializeGame(game);
+    game.moves = [];
+  }
+  game.currentRenderRep = {};
+  merge(game.currentRenderRep, game.renderrep);
+  hydrateBoard(game);
+}
+
+// This takes the full game object and keeps only the minimal object for persistence in the DB and transmission to the front end.
+exports.minimize = function(game) {
+  delete game.board;
+  delete game.currentRenderRep;
+}
+
+function initializeGame(game) {
+  game.renderrep = {
+    "board": {
+      "style": "squares-checkered",
+      "height": 4,
+      "width": 4
+    },
+    "legend": {
+      "B": {"name": "piece", "player": 2},
+      "G": {"name": "piece", "player": 3},
+      "R": {"name": "piece", "player": 1},
+      "Y": {"name": "piece", "player": 4}},
+    "pieces": "YYRR\nY--R\nB--G\nBBGG"
+  };
+}
+
+function hydrateBoard(game) {
+  game.board = [];
+  const rows = game.renderrep.pieces.split('\n');
+  for (let i = 0; i < 4; i++) {
+    game.board.push(rows[i].split(''));
+  }
+}
+
 function initializeBoard(board) {
   for (let i = 0; i < 4; i++) {
     let row = [];
@@ -36,7 +83,6 @@ function toBoardString(board) {
 }
 
 function render(game) {
-
   var annotations = [];
   if (game.moves.length > 0) {
     const lastmove = game.moves[game.moves.length - 1];
@@ -81,6 +127,7 @@ function legalCoord(c) {
   return c[0] >= 0 && c[0] < 4 && c[1] >= 0 && c[1] < 4;
 }
 
+// This acts on the hydrated game object.
 exports.badMoveReason = function(game, move) {
   let board = game.board;
   move = move.replace(/ /g, '');
@@ -133,13 +180,15 @@ exports.badMoveReason = function(game, move) {
 }
 
 // BEWARE: this assumes it's a legal move! Check first!
-exports.makeMove = function(game, move, explore) {
+// This acts on the hydrated game object.
+exports.makeMove = function(game, move, newmove, explore) {
   move = move.replace(/ /g, '');
   let from = positionToCoord(move.substr(0,2));
   let to = positionToCoord(move.substr(3,2));
   game.board[to[0]][to[1]] = game.board[from[0]][from[1]];
   game.board[from[0]][from[1]] = '-';
-  game.moves.push(move);
+  if (newmove)
+    game.moves.push(move);
   game.lastMoved = move.substr(3,2);
   game.toMove = 1 - game.toMove;
   if (explore)
@@ -157,5 +206,16 @@ exports.undoLastMove = function(game, explore) {
   game.toMove = 1 - game.toMove;
   if (explore)
     game.exploreMove -= 1;
+  render(game);
+}
+
+exports.replayToMove = function(game, index) {
+  initializeGame(game);
+  hydrateBoard(game);
+  game.exploreMove = 0;
+  game.toMove = 0;
+  for (let i = 0; i <= index; i++) {
+    this.makeMove(game, game.moves[i], false, true)
+  }
   render(game);
 }

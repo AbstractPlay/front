@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { Auth } from 'aws-amplify';
 import { merge } from 'lodash';
 import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from '../config';
+import '../app.css';
 
 function GameMove(props) {
   const [game, gameSetter] = useState(null);
@@ -41,8 +42,7 @@ function GameMove(props) {
             // why is this needed here, but not in MetaContainer????
             game0.renderrep.pieces = game0.renderrep.pieces.replace(/\\n/g,"\n");
           }
-          if (game0.moves === undefined)
-            engine.initializeGame(game0);
+          engine.hydrate(game0);
           game0.currentMove = game0.moves.length;
           game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
           game0.exploreMove = game0.currentMove;
@@ -62,6 +62,14 @@ function GameMove(props) {
   const handleBoardClick = (row, col, piece) => {
     let coord = String.fromCharCode(97 + col) + (4 - row).toString();
     clickedSetter(coord);
+  }
+
+  const handleGameMoveClick = (index) => {
+    let tmpGame = {};
+    merge(tmpGame, game); // deep copy game to tmpGame.
+    gameEngine.replayToMove(tmpGame, index);
+    gameSetter(tmpGame);
+    renderrepSetter(tmpGame.renderrep);
   }
 
   // We don't want this to be triggered for every change to "game", so it only depends on
@@ -92,7 +100,7 @@ function GameMove(props) {
     moveErrorSetter(err);
     if (err === ""){
       let tmpGame = {};
-      merge(tmpGame, game);
+      merge(tmpGame, game); // deep copy game to tmpGame.
       console.log("handleView tmpGame: ");
       console.log(tmpGame);
       gameEngine.makeMove(tmpGame, move, true);
@@ -154,22 +162,58 @@ function GameMove(props) {
       moveSetter(clicked);
     clickedSetter("");
   }
+
   if (!error) {
     if (game !== null) {
+      let moveRows = [];
+      for (let i = 0; i < Math.ceil(game.moves.length / 2); i++) {
+        moveRows.push([game.moves[2 * i], 2 * i + 1 > game.moves.length ? "" : game.moves[2 * i + 1]]);
+      }
       return (
-        <div>
-          <div><h5>{game.players[game.toMove].name} to move.</h5></div>
-          <div id="svg" ref={boardImage} style={{width: "30%"}}></div>
-          <div>{moveError}</div>
-          <div>
-            <label>
-              {t('EnterMove')}
-              <input name="move" type="text" value={move} onChange={(e) => moveSetter(e.target.value)} />
-            </label>
-            <Button variant="primary" onClick={handleView}>{"View"}</Button></div>
-          <div>
-            {game.exploreMove > game.currentMove ? <Button variant="primary" onClick={handleUndo}>{"Undo"}</Button>:""}
-            {game.canSubmit && game.exploreMove === game.currentMove + 1 ? <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button>:""}
+        <div className="row">
+          <div className="column left">
+            <div className="columnTitleContainer"><h2 className="columnTitle">Make a move</h2></div>
+            <div><h5>{game.players[game.toMove].name} to move.</h5></div>
+            <div>{moveError}</div>
+            <div>
+              <label>
+                {t('EnterMove')}
+                <input name="move" type="text" value={move} onChange={(e) => moveSetter(e.target.value)} />
+              </label>
+              <Button variant="primary" onClick={handleView}>{"View"}</Button></div>
+            <div>
+              {game.exploreMove > game.currentMove ? <Button variant="primary" onClick={handleUndo}>{"Undo"}</Button>:""}
+              {game.canSubmit && game.exploreMove === game.currentMove + 1 ? <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button>:""}
+            </div>
+          </div>
+          <div className="column middle">
+            <div className="columnTitleContainer"><h2 className="columnTitle">Board</h2></div>
+            <div className="board" id="svg" ref={boardImage} style={{width: "100%"}}></div>
+          </div>
+          <div className="column right gameMovesContainer">
+            <div className="columnTitleContainer"><h2 className="columnTitle">Moves</h2></div>
+            <div className="gameMoves">
+              <table className="striped movesTable">
+                <tbody>
+                  { moveRows.map((row, index) =>
+                    <tr key={"move" + index}>
+                      <td>{(2 * index + 1) + '.'}</td>
+                      <td>
+                        <div className="gameMove" onClick={() => handleGameMoveClick(2 * index)}>
+                          {row[0]}
+                        </div>
+                      </td>
+                      <td className="gameMoveMiddleCol">{row[1] === '' ? '' : (2 * index + 2) + '.'}</td>
+                      <td>
+                        <div className="gameMove" onClick={() => handleGameMoveClick(2 * index + 1)}>
+                          {row[1]}
+                        </div>
+                      </td>
+                    </tr>)
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       );

@@ -1,0 +1,71 @@
+/*
+:root {
+  --main-bg-color: #CAFAFE;
+}
+
+:root {
+  --main-fg-color: #FC4445;
+}
+
+body {
+  background-color: var(--main-bg-color);
+}
+*/
+
+.column {
+  float: left;
+}
+
+/* Left and right column */
+.left {
+  width: 20%;
+}
+
+/* Middle column */
+.middle {
+  width: 40%;
+}
+
+.right {
+  width: 40%;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column.side, .column.middle {
+    width: 100%;
+  }
+}
+
+.gameMoves {
+  height:300px;
+  overflow:auto;
+}
+
+.columnTitleContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.columnTitle {
+  display: inline-block;
+  text-align: center;
+  background-color: var(--main-fg-color);
+  padding: 0.2em 0.5em 0.2em 0.5em;
+  /* border: 3px solid green; */
+  border-radius: 0.5rem;
+}
+
+.board {
+  background-color: #fff;
+  padding: 2em;
+}
+
+.movesTable {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gameMoveMiddleCol {
+  padding-left: 2rem;
+}

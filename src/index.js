@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './i18n';
-import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Skeleton from './pages/Skeleton';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
+import './app.css'
 
 require('core-js/es/map');
 require('core-js/es/set');

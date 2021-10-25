@@ -1,3 +1,15 @@
+:root {
+  --main-bg-color: #FBEEC1;
+}
+
+:root {
+  --main-fg-color: #659DBD;
+}
+
+:root {
+  --bg-color2: #8D8741;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -6,9 +18,17 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--main-bg-color);
 }
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.btn-primary {
+  color: black;
+  background-color: var(--bg-color2);
+  border-color: var(--bg-color2);
 }
