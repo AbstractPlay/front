@@ -69,3 +69,23 @@ body {
 .gameMoveMiddleCol {
   padding-left: 2rem;
 }
+
+.gameMove {
+  display: inline;
+}
+
+.gameMoveFocus {
+  background-color: #bbb;
+}
+
+.gameMoveUnknownOutcome {
+  color: #888;
+}
+
+.gameMoveLoss {
+  color: #f00a28;
+}
+
+.gameMoveWin {
+  color:#7df00a;
+}

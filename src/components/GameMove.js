@@ -4,13 +4,17 @@ import { useTranslation } from 'react-i18next';
 import { render } from '@abstractplay/renderer';
 import Button from 'react-bootstrap/Button';
 import { Auth } from 'aws-amplify';
-import { merge } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from '../config';
-import '../app.css';
+import { GameNode } from './GameTree.js';
 
 function GameMove(props) {
   const [game, gameSetter] = useState(null);
   const [renderrep, renderrepSetter] = useState(null);
+  // Game tree of explored moves at each history move. For games that are not complete, only at the last move.
+  const [exploration, explorationSetter] = useState(null);
+  // What place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
+  const [focus, focusSetter] = useState(null);
   const [moveError, moveErrorSetter] = useState("");
   const [move, moveSetter] = useState("");
   const [clicked, clickedSetter] = useState("");
@@ -43,12 +47,24 @@ function GameMove(props) {
             game0.renderrep.pieces = game0.renderrep.pieces.replace(/\\n/g,"\n");
           }
           engine.hydrate(game0);
-          game0.currentMove = game0.moves.length;
+          game0.currentMove = game0.moves.length - 1;
           game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
           game0.exploreMove = game0.currentMove;
           gameEngineSetter(engine);
           gameSetter(game0);
           renderrepSetter(game0.renderrep);
+          focusSetter([game0.currentMove, []]);
+          // fill in history
+          let game1 = cloneDeep(game0);
+          game1.moves = [];
+          engine.hydrate(game1);
+          let history = [];
+          for (const m of game0.moves) {
+            engine.makeMove(game1, m, true, false);
+            let game2 = cloneDeep(game1);
+            history.push(new GameNode(null, m, game2, game2.toMove));
+          }
+          explorationSetter(history)
         }
       }
       catch (error) {
@@ -64,12 +80,10 @@ function GameMove(props) {
     clickedSetter(coord);
   }
 
-  const handleGameMoveClick = (index) => {
-    let tmpGame = {};
-    merge(tmpGame, game); // deep copy game to tmpGame.
-    gameEngine.replayToMove(tmpGame, index);
-    gameSetter(tmpGame);
-    renderrepSetter(tmpGame.renderrep);
+  const handleGameMoveClick = (foc) => {
+    focusSetter(foc);
+    let node = getFocusNode(exploration, foc);
+    renderrepSetter(node.state.renderrep);
   }
 
   // We don't want this to be triggered for every change to "game", so it only depends on
@@ -94,20 +108,46 @@ function GameMove(props) {
     errorSetter(true);
   }
 
+  const getFocusNode = (exp, foc) => {
+    let curNode = exp[foc[0]];
+    for (const p of foc[1]) {
+      curNode = curNode.children[p];
+    }
+    return curNode;
+  }
+
   const handleView = () => {
     // probably more overkill: only clone game if we know we are going to change it.
-    let err = gameEngine.badMoveReason(game, move);
+    let node = getFocusNode(exploration, focus);
+    let err = gameEngine.badMoveReason(node.state, move);
     moveErrorSetter(err);
     if (err === ""){
-      let tmpGame = {};
-      merge(tmpGame, game); // deep copy game to tmpGame.
-      console.log("handleView tmpGame: ");
-      console.log(tmpGame);
-      gameEngine.makeMove(tmpGame, move, true);
-      gameSetter(tmpGame);
-      console.log("handleView tmpGame.renderrep: " + tmpGame.renderrep);
-      renderrepSetter(tmpGame.renderrep);
+      let newExploration = cloneDeep(exploration);
+      node = getFocusNode(newExploration, focus);
+      let newstate = cloneDeep(node.state);
+      gameEngine.makeMove(newstate, move, true);
+      node.AddChild(move, newstate);
+      let newfocus = cloneDeep(focus);
+      newfocus[1].push(node.children.length - 1);
+      explorationSetter(newExploration);
+      focusSetter(newfocus);
+      renderrepSetter(newstate.renderrep);
     }
+  }
+
+  const handleMarkAsWin = () => {
+    handleMark(1);
+  }
+
+  const handleMarkAsLoss = () => {
+    handleMark(-1);
+  }
+
+  const handleMark = (mark) => {
+    let newExploration = cloneDeep(exploration);
+    let node = getFocusNode(newExploration, focus);
+    node.SetOutcome(mark);
+    explorationSetter(newExploration);
   }
 
   const handleSubmit = async () => {
@@ -146,8 +186,7 @@ function GameMove(props) {
   }
 
   const handleUndo = () => {
-    let tmpGame = {};
-    merge(tmpGame, game);
+    let tmpGame = cloneDeep(game);
     gameEngine.undoLastMove(tmpGame, true);
     gameSetter(tmpGame);
     renderrepSetter(tmpGame.renderrep);
@@ -166,8 +205,48 @@ function GameMove(props) {
   if (!error) {
     if (game !== null) {
       let moveRows = [];
-      for (let i = 0; i < Math.ceil(game.moves.length / 2); i++) {
-        moveRows.push([game.moves[2 * i], 2 * i + 1 > game.moves.length ? "" : game.moves[2 * i + 1]]);
+      if (exploration !== null) {
+        let path = [];
+        for (let i = 0; i < exploration.length; i++) {
+          let className = "gameMove";
+          if (i === focus[0] && (i < exploration.length - 1 || (i === exploration.length - 1 && focus[1].length === 0)))
+            className += " gameMoveFocus";
+          path.push([{"class": className, "move": exploration[i].move, "path": [i, []]}]);
+        }
+        if (focus[0] === exploration.length - 1) {
+          let node = exploration[focus[0]];
+          for (let j = 0; j < focus[1].length; j++) {
+            let className = "gameMove";
+            if (j === focus[1].length - 1)
+              className += " gameMoveFocus";
+            node = node.children[focus[1][j]];
+            if (node.outcome === 0)
+              className += " gameMoveUnknownOutcome";
+            else if (node.outcome === -1)
+              className += " gameMoveLoss";
+            else if (node.outcome === 1)
+              className += " gameMoveWin";
+            path.push([{"class": className, "move": node.move, "path": [focus[0], focus[1].slice(0, j + 1)]}]);
+          }
+          if (node.children.length > 0) {
+            let next = [];
+            for (let k = 0; k < node.children.length; k++) {
+              const c = node.children[k];
+              let className = "gameMove";
+              if (c.outcome === 0)
+                className += " gameMoveUnknownOutcome";
+              else if (c.outcome === -1)
+                className += " gameMoveLoss";
+              else if (c.outcome === 1)
+                className += " gameMoveWin";
+              next.push({"class": className, "move": c.move, "path": [focus[0], focus[1].concat(k)]})
+            }
+            path.push(next);
+          }
+        }
+        for (let i = 0; i < Math.ceil(path.length / 2); i++) {
+          moveRows.push([path[2 * i], 2 * i + 1 === path.length ? [] : path[2 * i + 1]]);
+        }
       }
       return (
         <div className="row">
@@ -175,16 +254,21 @@ function GameMove(props) {
             <div className="columnTitleContainer"><h2 className="columnTitle">Make a move</h2></div>
             <div><h5>{game.players[game.toMove].name} to move.</h5></div>
             <div>{moveError}</div>
-            <div>
-              <label>
-                {t('EnterMove')}
-                <input name="move" type="text" value={move} onChange={(e) => moveSetter(e.target.value)} />
-              </label>
-              <Button variant="primary" onClick={handleView}>{"View"}</Button></div>
-            <div>
-              {game.exploreMove > game.currentMove ? <Button variant="primary" onClick={handleUndo}>{"Undo"}</Button>:""}
-              {game.canSubmit && game.exploreMove === game.currentMove + 1 ? <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button>:""}
-            </div>
+            { exploration !== null && focus[0] === game.currentMove ?
+                <div>
+                  <label>
+                    {t('EnterMove')}
+                    <input name="move" type="text" value={move} onChange={(e) => moveSetter(e.target.value)} />
+                  </label>
+                  <Button variant="primary" onClick={handleView}>{"View"}</Button>
+                  <div>
+                    { game.canSubmit && focus[1].length === 1 ? <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button>:""}
+                    { focus[1].length > 0 ? <Button variant="primary" onClick={handleMarkAsWin}>{"Mark as win"}</Button>:""}
+                    { focus[1].length > 0 ? <Button variant="primary" onClick={handleMarkAsLoss}>{"Mark as loss"}</Button>:""}
+                  </div>
+                </div>
+                : <div/>
+            }
           </div>
           <div className="column middle">
             <div className="columnTitleContainer"><h2 className="columnTitle">Board</h2></div>
@@ -199,15 +283,23 @@ function GameMove(props) {
                     <tr key={"move" + index}>
                       <td>{(2 * index + 1) + '.'}</td>
                       <td>
-                        <div className="gameMove" onClick={() => handleGameMoveClick(2 * index)}>
-                          {row[0]}
-                        </div>
+                        { row[0].map((m, i) =>
+                          <div className="gameMove">{i > 0 ? ", ": ""}
+                            <div className={m.class} onClick={() => handleGameMoveClick(m.path)}>
+                              {m.move}
+                            </div>
+                          </div>)
+                        }
                       </td>
-                      <td className="gameMoveMiddleCol">{row[1] === '' ? '' : (2 * index + 2) + '.'}</td>
+                      <td className="gameMoveMiddleCol">{row[1].length > 0 ? (2 * index + 2) + '.' : ''}</td>
                       <td>
-                        <div className="gameMove" onClick={() => handleGameMoveClick(2 * index + 1)}>
-                          {row[1]}
-                        </div>
+                        { row[1].map((m, i) =>
+                          <div>{i > 0 ? ", ": ""}
+                            <div className={m.class} onClick={() => handleGameMoveClick(m.path)}>
+                              {m.move}
+                            </div>
+                          </div>)
+                        }
                       </td>
                     </tr>)
                   }

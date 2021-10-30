@@ -6,7 +6,7 @@ const { merge } = require('lodash');
 // Note that the (required) currentMove, canSubmit, and exploreMove is set in the GameMove code and should not be set here.
 // For Ithaka only the list of moves and the current renderep is maintained in the DB.
 exports.hydrate = function(game) {
-  if (game.moves === undefined) {
+  if (game.moves === undefined || game.moves.length === 0) {
     initializeGame(game);
     game.moves = [];
   }
