@@ -4,77 +4,41 @@ const { merge } = require('lodash');
 // fields that is useful or needed for displaying and manipulating (showing old states, exploring new states) the game
 // in the front end.
 // Note that the (required) currentMove, canSubmit, and exploreMove is set in the GameMove code and should not be set here.
-// For Ithaka only the list of moves and the current renderep is maintained in the DB.
+// For Ithaka only the list of moves and the current pieces string is maintained in the DB.
 exports.hydrate = function(game) {
   if (game.moves === undefined || game.moves.length === 0) {
     initializeGame(game);
-    game.moves = [];
   }
-  game.currentRenderRep = {};
-  merge(game.currentRenderRep, game.renderrep);
   hydrateBoard(game);
+  render(game);
 }
 
 // This takes the full game object and keeps only the minimal object for persistence in the DB and transmission to the front end.
 exports.minimize = function(game) {
+  game.pieces = toBoardString(game.board)
   delete game.board;
-  delete game.currentRenderRep;
+  delete game.canSubmit;
+  delete game.renderrep;
+  delete game.lastMoved;
 }
 
 function initializeGame(game) {
-  game.renderrep = {
-    "board": {
-      "style": "squares-checkered",
-      "height": 4,
-      "width": 4
-    },
-    "legend": {
-      "B": {"name": "piece", "player": 2},
-      "G": {"name": "piece", "player": 3},
-      "R": {"name": "piece", "player": 1},
-      "Y": {"name": "piece", "player": 4}},
-    "pieces": "YYRR\nY--R\nB--G\nBBGG"
-  };
+  game.pieces = "YYRR\nY--R\nB--G\nBBGG";
+  game.moves = [];
 }
 
 function hydrateBoard(game) {
   game.board = [];
-  const rows = game.renderrep.pieces.split('\n');
+  const rows = game.pieces.split('\n');
   for (let i = 0; i < 4; i++) {
     game.board.push(rows[i].split(''));
   }
 }
 
-function initializeBoard(board) {
-  for (let i = 0; i < 4; i++) {
-    let row = [];
-    for (let j = 0; j < 4; j++)
-      row.push('-');
-    board.push(row);
-  }
-  // First coordinate is y, second x. y = 0 is top. x = 0 is left.
-  board[0][0] = 'Y';
-  board[0][1] = 'Y';
-  board[1][0] = 'Y';
-  board[0][2] = 'R';
-  board[0][3] = 'R';
-  board[1][3] = 'R';
-  board[2][0] = 'B';
-  board[3][0] = 'B';
-  board[3][1] = 'B';
-  board[3][2] = 'G';
-  board[3][3] = 'G';
-  board[2][3] = 'G';
-}
-
 exports.initializeGame = function(game) {
-  if (game.moves === undefined) {
+  if (game.moves === undefined || game.moves.length === 0) {
     game.moves = [];
-    game.lastMoved = '';
-    game.toMove = 0;
-    game.board = [];
-    initializeBoard(game.board);
-    render(game);
+    game.initializeGame();
   }
 }
 
@@ -108,9 +72,10 @@ function render(game) {
       "G": {"name": "piece", "player": 3},
       "R": {"name": "piece", "player": 1},
       "Y": {"name": "piece", "player": 4}},
-    "pieces": toBoardString(game.board),
-    annotations: annotations
+    "pieces": toBoardString(game.board)
   };
+  if (annotations.length > 0)
+  game.renderrep.annotations = annotations;
 }
 
 // Take the alhpa numeric position return, [y, x]. 'a1' becomes [3, 0].
@@ -181,18 +146,15 @@ exports.badMoveReason = function(game, move) {
 
 // BEWARE: this assumes it's a legal move! Check first!
 // This acts on the hydrated game object.
-exports.makeMove = function(game, move, newmove, explore) {
+exports.makeMove = function(game, move) {
   move = move.replace(/ /g, '');
   let from = positionToCoord(move.substr(0,2));
   let to = positionToCoord(move.substr(3,2));
   game.board[to[0]][to[1]] = game.board[from[0]][from[1]];
   game.board[from[0]][from[1]] = '-';
-  if (newmove)
-    game.moves.push(move);
+  game.moves.push(move);
   game.lastMoved = move.substr(3,2);
   game.toMove = 1 - game.toMove;
-  if (explore)
-    game.exploreMove += 1;
   render(game);
 }
 

@@ -10,7 +10,7 @@ export class GameNode {
     else if (this.parent !== null)
       this.toMove = 1 - this.parent.toMove;
     else
-      throw "Can't decide whose move it is!";
+      throw new Error("Can't decide whose move it is!");
     this.outcome = 0; // -1 for player1 win, 1 for player2 win, 0 for undecided.
   }
 

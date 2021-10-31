@@ -25,6 +25,30 @@ function GameMove(props) {
   const { t } = useTranslation();
   const { state } = useLocation();
 
+  const setupGame = (engine, game0) => {
+    if (game0.pieces !== undefined) {
+      // why is this needed here, but not in MetaContainer????
+      game0.pieces = game0.pieces.replace(/\\n/g,"\n");
+    }
+    engine.hydrate(game0);
+    game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
+    gameSetter(game0);
+    renderrepSetter(game0.renderrep);
+    // fill in history
+    let game1 = cloneDeep(game0);
+    game1.moves = [];
+    engine.hydrate(game1);
+    let history = [];
+    history.push(new GameNode(null, null, game1, game1.toMove));
+    for (const m of game0.moves) {
+      engine.makeMove(game1, m);
+      let game2 = cloneDeep(game1);
+      history.push(new GameNode(null, m, game2, game2.toMove));
+    }
+    focusSetter([game0.moves.length, []]);
+    explorationSetter(history);
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -42,29 +66,8 @@ function GameMove(props) {
           // the engine to be just code, no state of its own.
           // Is importing this dynamically overkill? Should we just bundle all engines for everyone?
           const engine = await import('./games/' + game0.metaGame + '.js');
-          if (game0.renderrep !== undefined) {
-            // why is this needed here, but not in MetaContainer????
-            game0.renderrep.pieces = game0.renderrep.pieces.replace(/\\n/g,"\n");
-          }
-          engine.hydrate(game0);
-          game0.currentMove = game0.moves.length - 1;
-          game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
-          game0.exploreMove = game0.currentMove;
           gameEngineSetter(engine);
-          gameSetter(game0);
-          renderrepSetter(game0.renderrep);
-          focusSetter([game0.currentMove, []]);
-          // fill in history
-          let game1 = cloneDeep(game0);
-          game1.moves = [];
-          engine.hydrate(game1);
-          let history = [];
-          for (const m of game0.moves) {
-            engine.makeMove(game1, m, true, false);
-            let game2 = cloneDeep(game1);
-            history.push(new GameNode(null, m, game2, game2.toMove));
-          }
-          explorationSetter(history)
+          setupGame(engine, game0);
         }
       }
       catch (error) {
@@ -125,7 +128,7 @@ function GameMove(props) {
       let newExploration = cloneDeep(exploration);
       node = getFocusNode(newExploration, focus);
       let newstate = cloneDeep(node.state);
-      gameEngine.makeMove(newstate, move, true);
+      gameEngine.makeMove(newstate, move);
       node.AddChild(move, newstate);
       let newfocus = cloneDeep(focus);
       newfocus[1].push(node.children.length - 1);
@@ -151,6 +154,7 @@ function GameMove(props) {
   }
 
   const handleSubmit = async () => {
+    let m = getFocusNode(exploration, focus).move;
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
@@ -165,7 +169,7 @@ function GameMove(props) {
           "query": "submit_move",
           "pars" : {
             "id": game.id,
-            "move": move
+            "move": m
           }
         })
       });
@@ -173,24 +177,13 @@ function GameMove(props) {
       if (result.statusCode !== 200)
         setError(JSON.parse(result.body));
       let game0 = JSON.parse(result.body);
+      console.log("In handleSubmit. game0:");
       console.log(game0);
-      game0.currentMove = game0.moves.length;
-      game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
-      game0.exploreMove = game0.currentMove;
-      gameSetter(game0);
-      renderrepSetter(game0.renderrep);
+      setupGame(gameEngine, game0);
     }
     catch (err) {
       setError(err.message);
     }
-  }
-
-  const handleUndo = () => {
-    let tmpGame = cloneDeep(game);
-    gameEngine.undoLastMove(tmpGame, true);
-    gameSetter(tmpGame);
-    renderrepSetter(tmpGame.renderrep);
-    moveSetter(tmpGame.moves[tmpGame.moves.length - 1]);
   }
 
   const boardImage = useRef();
@@ -207,7 +200,7 @@ function GameMove(props) {
       let moveRows = [];
       if (exploration !== null) {
         let path = [];
-        for (let i = 0; i < exploration.length; i++) {
+        for (let i = 1; i < exploration.length; i++) {
           let className = "gameMove";
           if (i === focus[0] && (i < exploration.length - 1 || (i === exploration.length - 1 && focus[1].length === 0)))
             className += " gameMoveFocus";
@@ -254,7 +247,7 @@ function GameMove(props) {
             <div className="columnTitleContainer"><h2 className="columnTitle">Make a move</h2></div>
             <div><h5>{game.players[game.toMove].name} to move.</h5></div>
             <div>{moveError}</div>
-            { exploration !== null && focus[0] === game.currentMove ?
+            { exploration !== null && focus[0] === exploration.length - 1 ?
                 <div>
                   <label>
                     {t('EnterMove')}
@@ -284,7 +277,7 @@ function GameMove(props) {
                       <td>{(2 * index + 1) + '.'}</td>
                       <td>
                         { row[0].map((m, i) =>
-                          <div className="gameMove">{i > 0 ? ", ": ""}
+                          <div key={"move" + index + "-0-" + i} className="gameMove">{i > 0 ? ", ": ""}
                             <div className={m.class} onClick={() => handleGameMoveClick(m.path)}>
                               {m.move}
                             </div>
@@ -294,7 +287,7 @@ function GameMove(props) {
                       <td className="gameMoveMiddleCol">{row[1].length > 0 ? (2 * index + 2) + '.' : ''}</td>
                       <td>
                         { row[1].map((m, i) =>
-                          <div>{i > 0 ? ", ": ""}
+                          <div key={"move" + index + "-1-" + i}>{i > 0 ? ", ": ""}
                             <div className={m.class} onClick={() => handleGameMoveClick(m.path)}>
                               {m.move}
                             </div>
