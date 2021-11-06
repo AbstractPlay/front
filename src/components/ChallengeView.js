@@ -1,11 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { gameinfo } from '@abstractplay/gameslib';
 
 function ChallengeView(props) {
   const { t } = useTranslation();
 
   const challenge = props.challenge;
-  console.log(challenge);
+  const game = gameinfo.get(challenge.metaGame);
   const hasVariants = (challenge.variants !== undefined && challenge.variants.length > 0);
   const variants = hasVariants ? challenge.variants.join(', ') : null;
   var challengeDesc = '';
@@ -13,9 +14,9 @@ function ChallengeView(props) {
   const otherplayers = challenge.players.filter(item => item.id !== challenge.challenger.id).map(item => item.name);
   if (challenge.numPlayers > 2) {
     if (hasVariants)
-      challengeDesc = t('ChallengeDescriptionVariants', {game: challenge.metaGame, variants: variants});
+      challengeDesc = t('ChallengeDescriptionVariants', {game: game.name, variants: variants});
     else
-      challengeDesc = t('ChallengeDescriptionNoVariants', {game: challenge.metaGame});
+      challengeDesc = t('ChallengeDescriptionNoVariants', {game: game.name});
     if (otherplayers.length === 0)
       players = t('NoOtherPlayers');
     else
@@ -24,9 +25,9 @@ function ChallengeView(props) {
   else {
     // two player game
     if (hasVariants)
-      challengeDesc = t('TwoPlayersChallengeDescriptionVariants', {other: challenge.challengees[0].name, game: challenge.metaGame, variants: variants});
+      challengeDesc = t('TwoPlayersChallengeDescriptionVariants', {other: challenge.challengees[0].name, game: game.name, variants: variants});
     else
-      challengeDesc = t('TwoPlayersChallengeDescriptionNoVariants', {other: challenge.challengees[0].name, game: challenge.metaGame});
+      challengeDesc = t('TwoPlayersChallengeDescriptionNoVariants', {other: challenge.challengees[0].name, game: game.name});
     players = '';
   }
   var notes = '';

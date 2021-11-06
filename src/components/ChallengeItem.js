@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
+import { gameinfo } from '@abstractplay/gameslib';
 
 function ChallengeItem(props) {
   const { t } = useTranslation();
@@ -18,6 +19,8 @@ function ChallengeItem(props) {
 
   const challenge = props.item;
   const respond = props.respond;
+  const game = gameinfo.get(challenge.metaGame);
+
   if (respond) {
     return (
       <Container>
@@ -35,14 +38,14 @@ function ChallengeItem(props) {
     var desc = "";
     const otherplayers = challenge.challengees.map(item => item.name);
     if (challenge.numPlayers === 2) {
-      desc = t('ChallengedTwoPlayers', {game: challenge.metaGame, other: otherplayers[0]});
+      desc = t('ChallengedTwoPlayers', {game: game.name, other: otherplayers[0]});
     }
     else {
       if (otherplayers.length === 0) {
-        desc = t('ChallengedNoOthers', {game: challenge.metaGame});
+        desc = t('ChallengedNoOthers', {game: game.name});
       }
       else {
-        desc = t('ChallengedOthers', {game: challenge.metaGame, others: otherplayers.join(", ")});
+        desc = t('ChallengedOthers', {game: game.name, others: otherplayers.join(", ")});
       }
     }
     return (

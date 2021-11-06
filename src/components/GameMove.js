@@ -7,6 +7,7 @@ import { Auth } from 'aws-amplify';
 import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from '../config';
 import { GameNode } from './GameTree.js';
+import { gameinfo, GameFactory } from '@abstractplay/gameslib';
 
 function GameMove(props) {
   const [game, gameSetter] = useState(null);
@@ -16,36 +17,49 @@ function GameMove(props) {
   // What place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
   const [focus, focusSetter] = useState(null);
   const [moveError, moveErrorSetter] = useState("");
+  const [coord, coordSetter] = useState("");
   const [move, moveSetter] = useState("");
-  const [clicked, clickedSetter] = useState("");
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
-  const [gameEngine, gameEngineSetter] = useState();
+  // const [gameEngine, gameEngineSetter] = useState();
 
   const { t } = useTranslation();
   const { state } = useLocation();
 
-  const setupGame = (engine, game0) => {
-    if (game0.pieces !== undefined) {
-      // why is this needed here, but not in MetaContainer????
-      game0.pieces = game0.pieces.replace(/\\n/g,"\n");
+  const setupGame = (game0) => {
+    let engine;
+    const info = gameinfo.get(game0.metaGame);
+    if (game0.state === undefined) {
+      if (info.playercounts.length > 1)
+        engine = GameFactory(game0.metaGame, game0.players.length);
+      else
+        engine = GameFactory(game0.metaGame);
+    } else {
+      engine = GameFactory(game0.metaGame, game0.state);
     }
-    engine.hydrate(game0);
     game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
     gameSetter(game0);
-    renderrepSetter(game0.renderrep);
+    renderrepSetter(engine.render());
     // fill in history
-    let game1 = cloneDeep(game0);
-    game1.moves = [];
-    engine.hydrate(game1);
+    let gameEngineTmp;
+    const numplayers = game0.players.length;
+    if (info.playercounts.length > 1)
+      gameEngineTmp = GameFactory(game0.metaGame, numplayers);
+    else
+      gameEngineTmp = GameFactory(game0.metaGame);
+    let moves = [];
+    for (let round of engine.moveHistory())
+      for (let m of round)
+        moves.push(m);
     let history = [];
-    history.push(new GameNode(null, null, game1, game1.toMove));
-    for (const m of game0.moves) {
-      engine.makeMove(game1, m);
-      let game2 = cloneDeep(game1);
-      history.push(new GameNode(null, m, game2, game2.toMove));
+    let toMove = 0;
+    history.push(new GameNode(null, null, gameEngineTmp.serialize(), toMove));
+    for (const m of moves) {
+      gameEngineTmp.move(m);
+      toMove = (toMove + 1) % numplayers;
+      history.push(new GameNode(null, m, gameEngineTmp.serialize(), toMove));
     }
-    focusSetter([game0.moves.length, []]);
+    focusSetter([moves.length, []]);
     explorationSetter(history);
   }
 
@@ -62,12 +76,7 @@ function GameMove(props) {
         } else {
           const game0 = await res.json();
           console.log(game0);
-          // the engine becomes part of the state and state variables are immutable, so I think we need
-          // the engine to be just code, no state of its own.
-          // Is importing this dynamically overkill? Should we just bundle all engines for everyone?
-          const engine = await import('./games/' + game0.metaGame + '.js');
-          gameEngineSetter(engine);
-          setupGame(engine, game0);
+          setupGame(game0);
         }
       }
       catch (error) {
@@ -78,15 +87,30 @@ function GameMove(props) {
     fetchData();
   },[state]);
 
-  const handleBoardClick = (row, col, piece) => {
-    let coord = String.fromCharCode(97 + col) + (4 - row).toString();
-    clickedSetter(coord);
+  useEffect(() => {
+    if (game !== null) {
+      const info = gameinfo.get(game.metaGame);
+      let engine;
+      if (info.playercounts.length > 1)
+        engine = GameFactory(game.metaGame, game.numPlayers);
+      else
+        engine = GameFactory(game.metaGame);
+      const newmove = engine.clicked(move, coord);
+      moveSetter(newmove);
+    }
+  },[coord]);
+
+  const handleMove = (value) => {
+    moveSetter(value);
+    moveErrorSetter("");
   }
 
   const handleGameMoveClick = (foc) => {
     focusSetter(foc);
     let node = getFocusNode(exploration, foc);
-    renderrepSetter(node.state.renderrep);
+    let engine = GameFactory(game.metaGame, node.state);
+    renderrepSetter(engine.render());
+    moveErrorSetter("");
   }
 
   // We don't want this to be triggered for every change to "game", so it only depends on
@@ -99,6 +123,17 @@ function GameMove(props) {
     }
     if (renderrep !== null) {
       console.log(renderrep);
+      const info = gameinfo.get(game.metaGame);
+      let engine;
+      if (info.playercounts.length > 1)
+        engine = GameFactory(game.metaGame, game.numPlayers);
+      else
+        engine = GameFactory(game.metaGame);
+      const handleBoardClick = (row, col, piece) => {
+        const coord = engine.click(row, col, piece);
+        coordSetter(coord);
+        moveErrorSetter("");
+      }
       render(renderrep, {"divid": "svg", "boardClick": handleBoardClick});
     }
   }, [renderrep]);
@@ -120,22 +155,24 @@ function GameMove(props) {
   }
 
   const handleView = () => {
-    // probably more overkill: only clone game if we know we are going to change it.
     let node = getFocusNode(exploration, focus);
-    let err = gameEngine.badMoveReason(node.state, move);
-    moveErrorSetter(err);
-    if (err === ""){
-      let newExploration = cloneDeep(exploration);
-      node = getFocusNode(newExploration, focus);
-      let newstate = cloneDeep(node.state);
-      gameEngine.makeMove(newstate, move);
-      node.AddChild(move, newstate);
-      let newfocus = cloneDeep(focus);
-      newfocus[1].push(node.children.length - 1);
-      explorationSetter(newExploration);
-      focusSetter(newfocus);
-      renderrepSetter(newstate.renderrep);
+    let gameEngineTmp = GameFactory(game.metaGame, node.state);
+    try {
+      gameEngineTmp.move(move);
     }
+    catch (err) {
+      moveErrorSetter(err.message);
+      return;
+    }
+    let newExploration = cloneDeep(exploration);
+    node = getFocusNode(newExploration, focus);
+    let newstate = gameEngineTmp.serialize();
+    node.AddChild(move, newstate);
+    let newfocus = cloneDeep(focus);
+    newfocus[1].push(node.children.length - 1);
+    explorationSetter(newExploration);
+    focusSetter(newfocus);
+    renderrepSetter(gameEngineTmp.render());
   }
 
   const handleMarkAsWin = () => {
@@ -179,7 +216,7 @@ function GameMove(props) {
       let game0 = JSON.parse(result.body);
       console.log("In handleSubmit. game0:");
       console.log(game0);
-      setupGame(gameEngine, game0);
+      setupGame(game0);
     }
     catch (err) {
       setError(err.message);
@@ -187,13 +224,6 @@ function GameMove(props) {
   }
 
   const boardImage = useRef();
-  if (clicked.length > 0) {
-    if (move.length > 0 && move.length < 5)
-      moveSetter(move + '-' + clicked);
-    else
-      moveSetter(clicked);
-    clickedSetter("");
-  }
 
   if (!error) {
     if (game !== null) {
@@ -246,12 +276,12 @@ function GameMove(props) {
           <div className="column left">
             <div className="columnTitleContainer"><h2 className="columnTitle">Make a move</h2></div>
             <div><h5>{game.players[game.toMove].name} to move.</h5></div>
-            <div>{moveError}</div>
+            <div className="moveError">{moveError}</div>
             { exploration !== null && focus[0] === exploration.length - 1 ?
                 <div>
                   <label>
                     {t('EnterMove')}
-                    <input name="move" type="text" value={move} onChange={(e) => moveSetter(e.target.value)} />
+                    <input name="move" type="text" value={move} onChange={(e) => handleMove(e.target.value)} />
                   </label>
                   <Button variant="primary" onClick={handleView}>{"View"}</Button>
                   <div>

@@ -47,7 +47,7 @@
     "ProfileTagline": "A free-form tagline (255 characters max)",
     "ProfileAnon": "Would you like to be anonymous?",
     "ProfileConsent": "Do you consent to the Abstract Play's terms of service and the privacy policy?",
-    "EnterMove": "Enter your move:",
+    "EnterMove": "Enter/Click a move:",
     "OppsMove": "Opponent's move",
     "ChallengeFrom": "{{game}} challenge from {{challenger}}",
     "ChallengedTwoPlayers": "{{game}} against {{other}}",

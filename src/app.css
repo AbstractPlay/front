@@ -12,6 +12,19 @@ body {
 }
 */
 
+.metaDescriptionMarkdown {
+  font-size: small;
+}
+
+.metaDescriptionMarkdown h1 {
+  font-size: 1.5rem;
+}
+
+.metaGameRender {
+  width: 15em;
+  padding: 2em;
+}
+
 .column {
   float: left;
 }
@@ -88,4 +101,8 @@ body {
 
 .gameMoveWin {
   color:#7df00a;
+}
+
+.moveError {
+  color: red;
 }

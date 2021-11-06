@@ -2,31 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Spinner from './Spinner';
 import { API_ENDPOINT_OPEN } from '../config';
+import { gameinfo } from '@abstractplay/gameslib';
 
 function NewChallenge(props) {
   const { t } = useTranslation();
   const setters = props.setters;
   const myid = props.id;
-  const [games, gamesSetter] = useState(null);
   const [users, usersSetter] = useState(null);
   const [error, errorSetter] = useState(null);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        var url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append('query', 'game_names');
-        const res = await fetch(url);
-        const result = await res.json();
-        console.log(result);
-        gamesSetter(result);
-      }
-      catch (error) {
-        errorSetter(error);
-      }
-    }
-    fetchData();
-  },[]);
 
   useEffect(() => {
     async function fetchData() {
@@ -45,6 +29,9 @@ function NewChallenge(props) {
     fetchData();
   },[]);
 
+  let games = [];
+  gameinfo.forEach((game) => games.push({"id": game.uid, "name": game.name}));
+
   if (error)
     return <div><p>{t('Error')}</p><p>{error.message}</p></div>;
   else
@@ -54,7 +41,7 @@ function NewChallenge(props) {
         { games === null ? <Spinner/> :
             <select name="games" id="game_for_challenge" onChange={(e) => setters.challengeGameSetter(e.target.value)}>
               <option value="">--{t('Select')}--</option>
-              { games.map(item => { return <option key={item.name} value={item.name}>{item.name}</option>}) }
+              { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
             </select>
         }
         <label>{t("ChooseOpponent")}</label>
