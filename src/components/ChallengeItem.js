@@ -26,7 +26,7 @@ function ChallengeItem(props) {
       <Container>
         <Row>
           <Col>
-            <div>{t("ChallengeFrom", {game: challenge.metaGame, challenger: challenge.challenger.name})}
+            <div>{t("ChallengeFrom", {game: game.name, challenger: challenge.challenger.name})}
               <Button variant="primary" onClick={() => handleChallengeResponseClick(challenge)}>{t("Respond")}</Button>
             </div>
           </Col>

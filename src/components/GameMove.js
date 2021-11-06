@@ -21,6 +21,7 @@ function GameMove(props) {
   const [move, moveSetter] = useState("");
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
+  const [moves, movesSetter] = useState(null);
   // const [gameEngine, gameEngineSetter] = useState();
 
   const { t } = useTranslation();
@@ -40,6 +41,7 @@ function GameMove(props) {
     game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
     gameSetter(game0);
     renderrepSetter(engine.render());
+    movesSetter(engine.moves());
     // fill in history
     let gameEngineTmp;
     const numplayers = game0.players.length;
@@ -173,6 +175,7 @@ function GameMove(props) {
     explorationSetter(newExploration);
     focusSetter(newfocus);
     renderrepSetter(gameEngineTmp.render());
+    movesSetter(gameEngineTmp.moves())
   }
 
   const handleMarkAsWin = () => {
@@ -279,11 +282,24 @@ function GameMove(props) {
             <div className="moveError">{moveError}</div>
             { exploration !== null && focus[0] === exploration.length - 1 ?
                 <div>
-                  <label>
-                    {t('EnterMove')}
-                    <input name="move" type="text" value={move} onChange={(e) => handleMove(e.target.value)} />
-                  </label>
-                  <Button variant="primary" onClick={handleView}>{"View"}</Button>
+                  <div>
+                    { moves === null ? <div/> :
+                      <div>
+                        <label>{t("ChooseMove")}</label>
+                        <select name="moves" id="selectmove" onChange={(e) => handleMove(e.target.value)}>
+                        <option value="">--{t('Select')}--</option>
+                          { moves.map((move, index) => { return <option key={index} value={move}>{move}</option>})}
+                        </select>
+                      </div>
+                    }
+                  </div>
+                  <div>
+                    <label>
+                      {t('EnterMove')}
+                      <input name="move" type="text" value={move} onChange={(e) => handleMove(e.target.value)} />
+                    </label>
+                    <Button variant="primary" onClick={handleView}>{"View"}</Button>
+                  </div>
                   <div>
                     { game.canSubmit && focus[1].length === 1 ? <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button>:""}
                     { focus[1].length > 0 ? <Button variant="primary" onClick={handleMarkAsWin}>{"Mark as win"}</Button>:""}

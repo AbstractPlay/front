@@ -9,7 +9,7 @@ function MetaContainer(props) {
     <div>
       <h1>Available games</h1>
       <table>
-        {[...gameinfo.keys()].map(k =>
+        {[...gameinfo.keys()].filter(k => gameinfo.get(k).uid !== 'entropy').map(k =>
           <MetaItem key={gameinfo.get(k).uid} game={gameinfo.get(k)} />)
         }
       </table>
