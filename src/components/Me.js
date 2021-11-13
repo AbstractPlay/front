@@ -191,17 +191,38 @@ function Me(props) {
     let games = me.games;
     if (games === undefined)
       games = [];
+    let myMove = [];
+    let waiting = [];
+    for (const game of games) {
+      if (Array.isArray(game.toMove)) {
+        let found = false;
+        for (let i = 0; i < game.players.length; i++) {
+          if (game.players[i].id == me.id) {
+            if (game.toMove[i]) {
+              myMove.push(game);
+              found = true;
+            }
+          }
+        }
+        if (!found)
+          waiting.push(game);
+      }
+      else {
+        if (game.players[game.toMove].id === me.id)
+          myMove.push(game);
+        else
+          waiting.push(game);
+      }
+    }
     return (
       <div>
         <h1>{t('WelcomePlayer', {me: me.name})}</h1>
         <h2>{t('Your games')}</h2>
         <h3>{t('Your move')}</h3>
-          { games
-              .filter(item => item.players[item.toMove].id === me.id)
+          { myMove
               .map(item => <GameItem me={me.id} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)}
         <h3>{t("Opponent's move")}</h3>
-          { games
-              .filter(item => item.players[item.toMove].id !== me.id)
+          { waiting
               .map(item => <GameItem me={me.id} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)}
         <h2>{t('Your challenges')}</h2>
         <h3>{t('Response needed')}</h3>

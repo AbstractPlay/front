@@ -5,7 +5,7 @@ import { render } from '@abstractplay/renderer';
 import Button from 'react-bootstrap/Button';
 import { Auth } from 'aws-amplify';
 import { cloneDeep } from 'lodash';
-import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from '../config';
+import { API_ENDPOINT_AUTH } from '../config';
 import { GameNode } from './GameTree.js';
 import { gameinfo, GameFactory } from '@abstractplay/gameslib';
 
@@ -31,18 +31,42 @@ function GameMove(props) {
     let engine;
     const info = gameinfo.get(game0.metaGame);
     if (game0.state === undefined) {
+      throw new Error("Why no state? This shouldn't happen no more!");
+      /*
       if (info.playercounts.length > 1)
         engine = GameFactory(game0.metaGame, game0.players.length);
       else
         engine = GameFactory(game0.metaGame);
+        */
     } else {
       engine = GameFactory(game0.metaGame, game0.state);
     }
-    game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
+    let player = -1;
+    if (info.simultaneous === true) {
+      game0.canSubmit = false;
+      for (let i = 0; i < game0.numPlayers; i++)
+        if (game0.players[i].id === state.myid) {
+          game0.canSubmit = game0.toMove[i];
+          player = i;
+        }
+      if (game0.partialMove !== undefined && game0.partialMove.length > game0.numPlayers - 1)
+        engine.move(game0.partialMove, true);
+      game0.canExplore = false;
+    }
+    else {
+      game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
+      game0.canExplore = game0.canSubmit || game0.numPlayers === 2;
+    }
     gameSetter(game0);
     renderrepSetter(engine.render());
-    movesSetter(engine.moves());
+    if (game0.canSubmit || (!info.simultaneous && game0.numPlayers === 2)) {
+      if (info.simultaneous === true)
+        movesSetter(engine.moves(player + 1));
+      else
+        movesSetter(engine.moves());
+    }
     // fill in history
+    /*
     let gameEngineTmp;
     const numplayers = game0.players.length;
     if (info.playercounts.length > 1)
@@ -50,6 +74,7 @@ function GameMove(props) {
     else
       gameEngineTmp = GameFactory(game0.metaGame);
     let moves = [];
+    console.log(engine.moveHistory());
     for (let round of engine.moveHistory())
       for (let m of round)
         moves.push(m);
@@ -57,26 +82,67 @@ function GameMove(props) {
     let toMove = 0;
     history.push(new GameNode(null, null, gameEngineTmp.serialize(), toMove));
     for (const m of moves) {
+      // make sure that engines produce history with the hidden random info encoded in the moveHistory (and that the engine can apply those moves)
       gameEngineTmp.move(m);
       toMove = (toMove + 1) % numplayers;
       history.push(new GameNode(null, m, gameEngineTmp.serialize(), toMove));
     }
-    focusSetter([moves.length, []]);
+    // especially for games with random information (that should only be generated on the server), make sure to use the actual state (not the "replayed" state)
+    console.log(history[0].state);
+    history[moves.length] = new GameNode(null, history[moves.length].move, engine.serialize(), game0.toMove)
+    console.log(history[0].state);
+    */
+    let history = [];
+    let toMove = game0.toMove;
+    const numplayers = game0.players.length;
+    if (info.simultaneous)
+      toMove = game0.players.map(p => true);
+    /*eslint-disable no-constant-condition*/
+    while (true) {
+      // maybe last move should be the last numPlayers moves for simul games?
+      let lastmove = null;
+      if (Array.isArray(engine.stack[engine.stack.length - 1].lastmove))
+        lastmove = engine.stack[engine.stack.length - 1].lastmove.join(', ');
+      else
+        lastmove = engine.stack[engine.stack.length - 1].lastmove;
+      history.unshift(new GameNode(null, lastmove, engine.serialize(), toMove));
+      engine.stack.pop();
+      if (engine.stack.length === 0)
+        break;
+      engine.load();
+      if (!info.simultaneous)
+        toMove = (toMove + 1) % numplayers;
+    }
+
+    focusSetter({"moveNumber": history.length - 1, "exPath": []});
     explorationSetter(history);
   }
 
   useEffect(() => {
     async function fetchData() {
+      const usr = await Auth.currentAuthenticatedUser();
+      const token = usr.signInUserSession.idToken.jwtToken;
       try {
-        var url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append('query', 'get_game');
-        url.searchParams.append('id', state.game.id);
-        const res = await fetch(url);
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            "query": "get_game",
+            "pars" : {
+              "id": state.game.id
+            }
+          })
+        });
         if (res.status !== 200) {
           const result = await res.json();
           setError(JSON.parse(result.body));
         } else {
-          const game0 = await res.json();
+          const result = await res.json();
+          let game0 = JSON.parse(result.body);
           console.log(game0);
           setupGame(game0);
         }
@@ -90,7 +156,7 @@ function GameMove(props) {
   },[state]);
 
   useEffect(() => {
-    if (game !== null) {
+    if (game !== null && coord !== null) {
       const info = gameinfo.get(game.metaGame);
       let engine;
       if (info.playercounts.length > 1)
@@ -99,6 +165,7 @@ function GameMove(props) {
         engine = GameFactory(game.metaGame);
       const newmove = engine.clicked(move, coord);
       moveSetter(newmove);
+      coordSetter(null);
     }
   },[coord]);
 
@@ -111,6 +178,10 @@ function GameMove(props) {
     focusSetter(foc);
     let node = getFocusNode(exploration, foc);
     let engine = GameFactory(game.metaGame, node.state);
+    if (gameinfo.get(game.metaGame).simultaneous && foc[1].length == 1) {
+      const m = game.players.map(p => (p.id === state.myid ? node.move : '')).join(',');
+      engine.move(m, true);
+    }
     renderrepSetter(engine.render());
     moveErrorSetter("");
   }
@@ -149,8 +220,8 @@ function GameMove(props) {
   }
 
   const getFocusNode = (exp, foc) => {
-    let curNode = exp[foc[0]];
-    for (const p of foc[1]) {
+    let curNode = exp[foc.moveNumber];
+    for (const p of foc.exPath) {
       curNode = curNode.children[p];
     }
     return curNode;
@@ -159,23 +230,36 @@ function GameMove(props) {
   const handleView = () => {
     let node = getFocusNode(exploration, focus);
     let gameEngineTmp = GameFactory(game.metaGame, node.state);
+    console.log(gameEngineTmp.serialize());
+    let partialMove = false;
+    let simMove = false;
+    let m = move;
+    const info = gameinfo.get(game.metaGame);
+    if (info.simultaneous) {
+      simMove = true;
+      m = game.players.map(p => (p.id === state.myid ? m : '')).join(',');
+    }
     try {
-      gameEngineTmp.move(move);
+      gameEngineTmp.move(m, partialMove || simMove);
     }
     catch (err) {
       moveErrorSetter(err.message);
       return;
     }
-    let newExploration = cloneDeep(exploration);
-    node = getFocusNode(newExploration, focus);
-    let newstate = gameEngineTmp.serialize();
-    node.AddChild(move, newstate);
-    let newfocus = cloneDeep(focus);
-    newfocus[1].push(node.children.length - 1);
-    explorationSetter(newExploration);
-    focusSetter(newfocus);
+    if (!partialMove) {
+      let newExploration = cloneDeep(exploration);
+      node = getFocusNode(newExploration, focus);
+      let newstate = gameEngineTmp.serialize();
+      node.AddChild(move, newstate);
+      let newfocus = cloneDeep(focus);
+      newfocus.exPath.push(node.children.length - 1);
+      explorationSetter(newExploration);
+      focusSetter(newfocus);
+      moveSetter("");
+    }
     renderrepSetter(gameEngineTmp.render());
-    movesSetter(gameEngineTmp.moves())
+    if (game.canExplore)
+      movesSetter(gameEngineTmp.moves());
   }
 
   const handleMarkAsWin = () => {
@@ -231,28 +315,29 @@ function GameMove(props) {
   if (!error) {
     if (game !== null) {
       let moveRows = [];
+      const simul = gameinfo.get(game.metaGame).simultaneous;
       if (exploration !== null) {
         let path = [];
         for (let i = 1; i < exploration.length; i++) {
           let className = "gameMove";
-          if (i === focus[0] && (i < exploration.length - 1 || (i === exploration.length - 1 && focus[1].length === 0)))
+          if (i === focus.moveNumber && (i < exploration.length - 1 || (i === exploration.length - 1 && focus.exPath.length === 0)))
             className += " gameMoveFocus";
-          path.push([{"class": className, "move": exploration[i].move, "path": [i, []]}]);
+          path.push([{"class": className, "move": exploration[i].move, "path": {"moveNumber": i, "exPath": []}}]);
         }
-        if (focus[0] === exploration.length - 1) {
-          let node = exploration[focus[0]];
-          for (let j = 0; j < focus[1].length; j++) {
+        if (focus.moveNumber === exploration.length - 1) {
+          let node = exploration[focus.moveNumber];
+          for (let j = 0; j < focus.exPath.length; j++) {
             let className = "gameMove";
-            if (j === focus[1].length - 1)
+            if (j === focus.exPath.length - 1)
               className += " gameMoveFocus";
-            node = node.children[focus[1][j]];
+            node = node.children[focus.exPath[j]];
             if (node.outcome === 0)
               className += " gameMoveUnknownOutcome";
             else if (node.outcome === -1)
               className += " gameMoveLoss";
             else if (node.outcome === 1)
               className += " gameMoveWin";
-            path.push([{"class": className, "move": node.move, "path": [focus[0], focus[1].slice(0, j + 1)]}]);
+            path.push([{"class": className, "move": node.move, "path": {"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}}]);
           }
           if (node.children.length > 0) {
             let next = [];
@@ -265,22 +350,55 @@ function GameMove(props) {
                 className += " gameMoveLoss";
               else if (c.outcome === 1)
                 className += " gameMoveWin";
-              next.push({"class": className, "move": c.move, "path": [focus[0], focus[1].concat(k)]})
+              next.push({"class": className, "move": c.move, "path": {"moveNumber": focus.moveNumber, "exPath": focus.exPath.concat(k)}})
             }
             path.push(next);
           }
         }
-        for (let i = 0; i < Math.ceil(path.length / 2); i++) {
-          moveRows.push([path[2 * i], 2 * i + 1 === path.length ? [] : path[2 * i + 1]]);
+        let numcolumns = simul ? 1 : game.numPlayers;
+        for (let i = 0; i < Math.ceil(path.length / numcolumns); i++) {
+          let row = [];
+          for (let j = 0; j < numcolumns; j++) {
+            let clName = j == 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
+            let movenum = numcolumns * i + j;
+            row.push(<td key={'td0-'+i+'-'+j} className={clName}>{movenum >= path.length ? '' : (movenum+1) + '.'}</td>);
+            if (movenum < path.length) {
+              row.push(
+                <td key={'td1-'+i+'-'+j}>
+                  { path[movenum].map((m, k) =>
+                    <div key={"move" + i + "-" + j + "-" + k}>{k > 0 ? ", ": ""}
+                      <div className={m.class} onClick={() => handleGameMoveClick(m.path)}>
+                        {m.move}
+                      </div>
+                    </div>)
+                  }
+                </td>);
+            }
+            else {
+              row.push(<td key={'td1-'+i+'-'+j}></td>);
+            }
+          }
+          moveRows.push(row);
         }
+      }
+      let mover = '';
+      if (gameinfo.get(game.metaGame).simultaneous) {
+        if (game.canSubmit)
+          mover = t('ToMove', {player: game.players.find(p => p.id === state.myid).name});
+        else
+          mover = t('Waiting');
+      }
+      else {
+        mover = t('ToMove', {player: game.players[game.toMove].name});
       }
       return (
         <div className="row">
           <div className="column left">
             <div className="columnTitleContainer"><h2 className="columnTitle">Make a move</h2></div>
-            <div><h5>{game.players[game.toMove].name} to move.</h5></div>
+            <div><h5>{mover}</h5></div>
             <div className="moveError">{moveError}</div>
-            { exploration !== null && focus[0] === exploration.length - 1 ?
+            { (game.canSubmit || game.canExplore) && exploration !== null && focus.moveNumber === exploration.length - 1
+              && (game.canExplore || focus.exPath.length === 0) ?
                 <div>
                   <div>
                     { moves === null ? <div/> :
@@ -301,12 +419,21 @@ function GameMove(props) {
                     <Button variant="primary" onClick={handleView}>{"View"}</Button>
                   </div>
                   <div>
-                    { game.canSubmit && focus[1].length === 1 ? <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button>:""}
-                    { focus[1].length > 0 ? <Button variant="primary" onClick={handleMarkAsWin}>{"Mark as win"}</Button>:""}
-                    { focus[1].length > 0 ? <Button variant="primary" onClick={handleMarkAsLoss}>{"Mark as loss"}</Button>:""}
+                    { game.canSubmit && focus.exPath.length === 1 ?
+                      <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button> : ""
+                    }
+                    { focus.exPath.length > 0 && game.canExplore ?
+                      <Button variant="primary" onClick={handleMarkAsWin}>{"Mark as win"}</Button>:""
+                    }
+                    { focus.exPath.length > 0 && game.canExplore ?
+                      <Button variant="primary" onClick={handleMarkAsLoss}>{"Mark as loss"}</Button>:""
+                    }
                   </div>
                 </div>
-                : <div/>
+                : (game.canSubmit && exploration !== null && focus.moveNumber === exploration.length - 1
+                    && focus.exPath.length === 1) ?
+                    <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button>
+                  : <div/>
             }
           </div>
           <div className="column middle">
@@ -320,26 +447,7 @@ function GameMove(props) {
                 <tbody>
                   { moveRows.map((row, index) =>
                     <tr key={"move" + index}>
-                      <td>{(2 * index + 1) + '.'}</td>
-                      <td>
-                        { row[0].map((m, i) =>
-                          <div key={"move" + index + "-0-" + i} className="gameMove">{i > 0 ? ", ": ""}
-                            <div className={m.class} onClick={() => handleGameMoveClick(m.path)}>
-                              {m.move}
-                            </div>
-                          </div>)
-                        }
-                      </td>
-                      <td className="gameMoveMiddleCol">{row[1].length > 0 ? (2 * index + 2) + '.' : ''}</td>
-                      <td>
-                        { row[1].map((m, i) =>
-                          <div key={"move" + index + "-1-" + i}>{i > 0 ? ", ": ""}
-                            <div className={m.class} onClick={() => handleGameMoveClick(m.path)}>
-                              {m.move}
-                            </div>
-                          </div>)
-                        }
-                      </td>
+                      { row }
                     </tr>)
                   }
                 </tbody>

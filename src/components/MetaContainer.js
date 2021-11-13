@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Spinner from './Spinner';
+import React from 'react';
 import MetaItem from './MetaItem';
-import { API_ENDPOINT_OPEN } from '../config';
 import { gameinfo } from '@abstractplay/gameslib';
 
 function MetaContainer(props) {
@@ -9,9 +7,11 @@ function MetaContainer(props) {
     <div>
       <h1>Available games</h1>
       <table>
-        {[...gameinfo.keys()].filter(k => gameinfo.get(k).uid !== 'entropy').map(k =>
-          <MetaItem key={gameinfo.get(k).uid} game={gameinfo.get(k)} />)
-        }
+        <tbody>
+          {[...gameinfo.keys()].map(k =>
+            <MetaItem key={gameinfo.get(k).uid} game={gameinfo.get(k)} />)
+          }
+        </tbody>
       </table>
     </div>
   );

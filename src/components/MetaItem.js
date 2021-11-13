@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import {Container, Row, Col} from 'react-bootstrap';
+import React, {useEffect} from 'react';
 import {render} from '@abstractplay/renderer';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw'
@@ -27,7 +26,7 @@ function MetaItem(props) {
       gameEngine = GameFactory(props.game.uid);
     }
     var data = gameEngine.render();
-    console.log(data);
+    // console.log(JSON.stringify(data));
     render(data, { "divid": "svg" + props.game.uid });
   },[props.game]);
 
