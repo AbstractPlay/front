@@ -98,9 +98,9 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build-prod": "npm run relay && node scripts/build.js",
-    "build-dev": "npm run relay && node scripts/buildDev.js",
-    "build-local": "npm run relay && node scripts/buildLocal.js",
+    "build-prod": "node scripts/build.js",
+    "build-dev": "node scripts/buildDev.js",
+    "build-local": "node scripts/buildLocal.js",
     "full-prod": "npm run build-prod && npm run invalidate && npm run deploy",
     "full-dev": "npm run build-dev && npm run invalidate && npm run deploy",
     "deploy": "sls client deploy --no-confirm --no-config-change --no-policy-change --no-cors-change",

@@ -197,7 +197,7 @@ function Me(props) {
       if (Array.isArray(game.toMove)) {
         let found = false;
         for (let i = 0; i < game.players.length; i++) {
-          if (game.players[i].id == me.id) {
+          if (game.players[i].id === me.id) {
             if (game.toMove[i]) {
               myMove.push(game);
               found = true;

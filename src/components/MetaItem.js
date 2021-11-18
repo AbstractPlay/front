@@ -26,15 +26,11 @@ function MetaItem(props) {
       gameEngine = GameFactory(props.game.uid);
     }
     var data = gameEngine.render();
-    // console.log(JSON.stringify(data));
+    console.log(props.game.uid);
+    console.log(JSON.stringify(data));
     render(data, { "divid": "svg" + props.game.uid });
   },[props.game]);
 
-  /*
-  \n\n&mdash;
-              <a href="${item.publisher.url}">${item.publisher.name}</a>`}
-  */
- // {`${game.description}`}
   let game = props.game;
   return (
     <tr>

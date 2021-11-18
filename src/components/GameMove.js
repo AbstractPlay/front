@@ -30,19 +30,15 @@ function GameMove(props) {
   const setupGame = (game0) => {
     let engine;
     const info = gameinfo.get(game0.metaGame);
+    game0.simultaneous = (info.flags !== undefined && info.flags.includes('simultaneous'));
+    game0.fixedNumPlayers = info.playercounts.length === 1;
     if (game0.state === undefined) {
       throw new Error("Why no state? This shouldn't happen no more!");
-      /*
-      if (info.playercounts.length > 1)
-        engine = GameFactory(game0.metaGame, game0.players.length);
-      else
-        engine = GameFactory(game0.metaGame);
-        */
     } else {
       engine = GameFactory(game0.metaGame, game0.state);
     }
     let player = -1;
-    if (info.simultaneous === true) {
+    if (game0.simultaneous) {
       game0.canSubmit = false;
       for (let i = 0; i < game0.numPlayers; i++)
         if (game0.players[i].id === state.myid) {
@@ -59,43 +55,16 @@ function GameMove(props) {
     }
     gameSetter(game0);
     renderrepSetter(engine.render());
-    if (game0.canSubmit || (!info.simultaneous && game0.numPlayers === 2)) {
-      if (info.simultaneous === true)
+    if (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2)) {
+      if (game0.simultaneous)
         movesSetter(engine.moves(player + 1));
       else
         movesSetter(engine.moves());
     }
-    // fill in history
-    /*
-    let gameEngineTmp;
-    const numplayers = game0.players.length;
-    if (info.playercounts.length > 1)
-      gameEngineTmp = GameFactory(game0.metaGame, numplayers);
-    else
-      gameEngineTmp = GameFactory(game0.metaGame);
-    let moves = [];
-    console.log(engine.moveHistory());
-    for (let round of engine.moveHistory())
-      for (let m of round)
-        moves.push(m);
-    let history = [];
-    let toMove = 0;
-    history.push(new GameNode(null, null, gameEngineTmp.serialize(), toMove));
-    for (const m of moves) {
-      // make sure that engines produce history with the hidden random info encoded in the moveHistory (and that the engine can apply those moves)
-      gameEngineTmp.move(m);
-      toMove = (toMove + 1) % numplayers;
-      history.push(new GameNode(null, m, gameEngineTmp.serialize(), toMove));
-    }
-    // especially for games with random information (that should only be generated on the server), make sure to use the actual state (not the "replayed" state)
-    console.log(history[0].state);
-    history[moves.length] = new GameNode(null, history[moves.length].move, engine.serialize(), game0.toMove)
-    console.log(history[0].state);
-    */
     let history = [];
     let toMove = game0.toMove;
     const numplayers = game0.players.length;
-    if (info.simultaneous)
+    if (game0.simultaneous)
       toMove = game0.players.map(p => true);
     /*eslint-disable no-constant-condition*/
     while (true) {
@@ -110,7 +79,7 @@ function GameMove(props) {
       if (engine.stack.length === 0)
         break;
       engine.load();
-      if (!info.simultaneous)
+      if (!game0.simultaneous)
         toMove = (toMove + 1) % numplayers;
     }
 
@@ -157,9 +126,8 @@ function GameMove(props) {
 
   useEffect(() => {
     if (game !== null && coord !== null) {
-      const info = gameinfo.get(game.metaGame);
       let engine;
-      if (info.playercounts.length > 1)
+      if (!game.fixedNumPlayers)
         engine = GameFactory(game.metaGame, game.numPlayers);
       else
         engine = GameFactory(game.metaGame);
@@ -178,7 +146,7 @@ function GameMove(props) {
     focusSetter(foc);
     let node = getFocusNode(exploration, foc);
     let engine = GameFactory(game.metaGame, node.state);
-    if (gameinfo.get(game.metaGame).simultaneous && foc[1].length == 1) {
+    if (game.simultaneous && foc.exPath.length === 1) {
       const m = game.players.map(p => (p.id === state.myid ? node.move : '')).join(',');
       engine.move(m, true);
     }
@@ -196,9 +164,8 @@ function GameMove(props) {
     }
     if (renderrep !== null) {
       console.log(renderrep);
-      const info = gameinfo.get(game.metaGame);
       let engine;
-      if (info.playercounts.length > 1)
+      if (!game.fixedNumPlayers)
         engine = GameFactory(game.metaGame, game.numPlayers);
       else
         engine = GameFactory(game.metaGame);
@@ -234,8 +201,7 @@ function GameMove(props) {
     let partialMove = false;
     let simMove = false;
     let m = move;
-    const info = gameinfo.get(game.metaGame);
-    if (info.simultaneous) {
+    if (game.simultaneous) {
       simMove = true;
       m = game.players.map(p => (p.id === state.myid ? m : '')).join(',');
     }
@@ -315,7 +281,7 @@ function GameMove(props) {
   if (!error) {
     if (game !== null) {
       let moveRows = [];
-      const simul = gameinfo.get(game.metaGame).simultaneous;
+      const simul = game.simultaneous;
       if (exploration !== null) {
         let path = [];
         for (let i = 1; i < exploration.length; i++) {
@@ -359,7 +325,7 @@ function GameMove(props) {
         for (let i = 0; i < Math.ceil(path.length / numcolumns); i++) {
           let row = [];
           for (let j = 0; j < numcolumns; j++) {
-            let clName = j == 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
+            let clName = j === 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
             let movenum = numcolumns * i + j;
             row.push(<td key={'td0-'+i+'-'+j} className={clName}>{movenum >= path.length ? '' : (movenum+1) + '.'}</td>);
             if (movenum < path.length) {
@@ -382,7 +348,7 @@ function GameMove(props) {
         }
       }
       let mover = '';
-      if (gameinfo.get(game.metaGame).simultaneous) {
+      if (game.simultaneous) {
         if (game.canSubmit)
           mover = t('ToMove', {player: game.players.find(p => p.id === state.myid).name});
         else
