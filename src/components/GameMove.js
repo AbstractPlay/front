@@ -7,7 +7,7 @@ import { Auth } from 'aws-amplify';
 import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_AUTH } from '../config';
 import { GameNode } from './GameTree.js';
-import { gameinfo, GameFactory } from '@abstractplay/gameslib';
+import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
 
 function GameMove(props) {
   const [game, gameSetter] = useState(null);
@@ -22,10 +22,13 @@ function GameMove(props) {
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
   const [moves, movesSetter] = useState(null);
-  // const [gameEngine, gameEngineSetter] = useState();
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { state } = useLocation();
+
+  useEffect(() => {
+    addResource(i18n.language);
+  },[]);
 
   const setupGame = (game0) => {
     let engine;
@@ -209,7 +212,11 @@ function GameMove(props) {
       gameEngineTmp.move(m, partialMove || simMove);
     }
     catch (err) {
-      moveErrorSetter(err.message);
+      if (err.name === "UserFacingError") {
+        moveErrorSetter(err.client);
+      } else {
+        moveErrorSetter(err.message);
+      }
       return;
     }
     if (!partialMove) {

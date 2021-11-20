@@ -10,29 +10,6 @@ import LogInOutButton from '../components/LogInOutButton';
 import Welcome from './Welcome';
 import GameMove from '../components/GameMove';
 
-/*
-const authContext = createContext();
-
-function ProvideAuth({ children }) {
-  const auth = useProvideAuth();
-
-  return (
-    <authContext.Provider value={auth}>
-      {children}
-    </authContext.Provider>
-  );
-}
-
-function useProvideAuth() {
-  const [token, setToken] = useState(null);
-
-  return {
-    token,
-    setToken
-  };
-}
-*/
-
 function Bones(props) {
   const { t } = useTranslation();
   const [authed, authedSetter] = useState(false);
@@ -120,13 +97,6 @@ function Bones(props) {
       </Router>
     );
 }
-
-/*
-export const useAuth = () => {
-  return useContext(authContext);
-};
-*/
-
 
 export default function Skeleton() {
   // The useTranslation hook will trigger a Suspense if not ready
