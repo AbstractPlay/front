@@ -17,7 +17,7 @@ function GameMove(props) {
   // What place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
   const [focus, focusSetter] = useState(null);
   const [moveError, moveErrorSetter] = useState("");
-  const [move, moveSetter] = useState({"move": '', "state":-1, "message": 'empty'});
+  const [move, moveSetter] = useState({"move": '', "valid": true, "message": '', "complete": 0});
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
   const [moves, movesSetter] = useState(null);
@@ -161,7 +161,7 @@ function GameMove(props) {
   }
 
   useEffect(() => {
-    if (move.state === 1)
+    if ((move.valid && move.complete > -1 && move.move !== '') || (move.canrender === true))
       handleView();
   }, [move]);
 
@@ -200,6 +200,8 @@ function GameMove(props) {
     let gameEngineTmp = GameFactory(game.metaGame, node.state);
     console.log(gameEngineTmp.serialize());
     let partialMove = false;
+    if (move.valid && move.complete === -1 && move.canrender === true)
+      partialMove = true;
     let simMove = false;
     let m = move.move;
     if (game.simultaneous) {
@@ -226,10 +228,10 @@ function GameMove(props) {
       newfocus.exPath.push(node.children.length - 1);
       explorationSetter(newExploration);
       focusSetter(newfocus);
-      moveSetter({"move": '', "state":-1, "message": 'empty'});
+      moveSetter({"move": '', "valid": true, "message": '', "complete": 0});
     }
     renderrepSetter(gameEngineTmp.render());
-    if (game.canExplore)
+    if (game.canExplore && !partialMove)
       movesSetter(gameEngineTmp.moves());
   }
 
@@ -367,8 +369,8 @@ function GameMove(props) {
           <div className="column left">
             <div className="columnTitleContainer"><h2 className="columnTitle">Make a move</h2></div>
             <div><h5>{mover}</h5></div>
-            { move.state < 1 && move.move !== '' ?
-              <div className={ move.state == 0 ? "moveMessage" : "moveError"}>{move.message}</div> :
+            { !move.valid || (move.valid && move.complete === -1)  ?
+              <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :
               ''
             }
             { (game.canSubmit || game.canExplore) && exploration !== null && focus.moveNumber === exploration.length - 1
@@ -390,7 +392,10 @@ function GameMove(props) {
                       {t('EnterMove')}
                       <input name="move" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)} />
                     </label>
-                    <Button variant="primary" onClick={handleView}>{"View"}</Button>
+                    { move.valid && move.complete === -1 ?
+                      <Button variant="primary" onClick={handleView}>{"View"}</Button>
+                      : ''
+                    }
                   </div>
                   <div>
                     { game.canSubmit && focus.exPath.length === 1 ?

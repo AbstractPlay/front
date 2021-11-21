@@ -106,3 +106,7 @@ body {
 .moveError {
   color: red;
 }
+
+.moveMessage {
+  color: pink;
+}
