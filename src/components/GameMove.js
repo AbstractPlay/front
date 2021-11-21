@@ -17,11 +17,16 @@ function GameMove(props) {
   // What place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
   const [focus, focusSetter] = useState(null);
   const [moveError, moveErrorSetter] = useState("");
-  const [coord, coordSetter] = useState("");
-  const [move, moveSetter] = useState("");
+  const [move, moveSetter] = useState({"move": '', "state":-1, "message": 'empty'});
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
   const [moves, movesSetter] = useState(null);
+  const explorationRef = useRef();
+  explorationRef.current = exploration;
+  const focusRef = useRef();
+  focusRef.current = focus;
+  const moveRef = useRef();
+  moveRef.current = move;
 
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
@@ -127,22 +132,12 @@ function GameMove(props) {
     fetchData();
   },[state]);
 
-  useEffect(() => {
-    if (game !== null && coord !== null) {
-      let engine;
-      if (!game.fixedNumPlayers)
-        engine = GameFactory(game.metaGame, game.numPlayers);
-      else
-        engine = GameFactory(game.metaGame);
-      const newmove = engine.clicked(move, coord);
-      moveSetter(newmove);
-      coordSetter(null);
-    }
-  },[coord]);
-
   const handleMove = (value) => {
-    moveSetter(value);
-    moveErrorSetter("");
+    let node = getFocusNode(exploration, focus);
+    let gameEngineTmp = GameFactory(game.metaGame, node.state);
+    const result = gameEngineTmp.validateMove(value);
+    result.move = value;
+    moveSetter(result);
   }
 
   const handleGameMoveClick = (foc) => {
@@ -157,6 +152,19 @@ function GameMove(props) {
     moveErrorSetter("");
   }
 
+  function boardClick(row, col, piece) {
+    // console.log("Row: " + row + ", Col: " + col + ", Piece: " + piece);
+    let node = getFocusNode(explorationRef.current, focusRef.current);
+    let gameEngineTmp = GameFactory(game.metaGame, node.state);
+    var result = gameEngineTmp.handleClick(moveRef.current.move, row, col);
+    moveSetter(result);
+  }
+
+  useEffect(() => {
+    if (move.state === 1)
+      handleView();
+  }, [move]);
+
   // We don't want this to be triggered for every change to "game", so it only depends on
   // renderrep. But that means we need to remember to update the renderrep state when game.renderrep changes.
   useEffect(() => {
@@ -167,17 +175,7 @@ function GameMove(props) {
     }
     if (renderrep !== null) {
       console.log(renderrep);
-      let engine;
-      if (!game.fixedNumPlayers)
-        engine = GameFactory(game.metaGame, game.numPlayers);
-      else
-        engine = GameFactory(game.metaGame);
-      const handleBoardClick = (row, col, piece) => {
-        const coord = engine.click(row, col, piece);
-        coordSetter(coord);
-        moveErrorSetter("");
-      }
-      render(renderrep, {"divid": "svg", "boardClick": handleBoardClick});
+      render(renderrep, {"divid": "svg", "boardClick": boardClick});
     }
   }, [renderrep]);
 
@@ -203,7 +201,7 @@ function GameMove(props) {
     console.log(gameEngineTmp.serialize());
     let partialMove = false;
     let simMove = false;
-    let m = move;
+    let m = move.move;
     if (game.simultaneous) {
       simMove = true;
       m = game.players.map(p => (p.id === state.myid ? m : '')).join(',');
@@ -223,12 +221,12 @@ function GameMove(props) {
       let newExploration = cloneDeep(exploration);
       node = getFocusNode(newExploration, focus);
       let newstate = gameEngineTmp.serialize();
-      node.AddChild(move, newstate);
+      node.AddChild(move.move, newstate);
       let newfocus = cloneDeep(focus);
       newfocus.exPath.push(node.children.length - 1);
       explorationSetter(newExploration);
       focusSetter(newfocus);
-      moveSetter("");
+      moveSetter({"move": '', "state":-1, "message": 'empty'});
     }
     renderrepSetter(gameEngineTmp.render());
     if (game.canExplore)
@@ -369,7 +367,10 @@ function GameMove(props) {
           <div className="column left">
             <div className="columnTitleContainer"><h2 className="columnTitle">Make a move</h2></div>
             <div><h5>{mover}</h5></div>
-            <div className="moveError">{moveError}</div>
+            { move.state < 1 && move.move !== '' ?
+              <div className={ move.state == 0 ? "moveMessage" : "moveError"}>{move.message}</div> :
+              ''
+            }
             { (game.canSubmit || game.canExplore) && exploration !== null && focus.moveNumber === exploration.length - 1
               && (game.canExplore || focus.exPath.length === 0) ?
                 <div>
@@ -387,7 +388,7 @@ function GameMove(props) {
                   <div>
                     <label>
                       {t('EnterMove')}
-                      <input name="move" type="text" value={move} onChange={(e) => handleMove(e.target.value)} />
+                      <input name="move" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)} />
                     </label>
                     <Button variant="primary" onClick={handleView}>{"View"}</Button>
                   </div>
