@@ -16,11 +16,11 @@ function GameMove(props) {
   const [exploration, explorationSetter] = useState(null);
   // What place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
   const [focus, focusSetter] = useState(null);
-  const [moveError, moveErrorSetter] = useState("");
-  const [move, moveSetter] = useState({"move": '', "valid": true, "message": '', "complete": 0});
+  const [move, moveSetter] = useState({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
   const [moves, movesSetter] = useState(null);
+  const [partialMoveRender, partialMoveRenderSetter] = useState(false);
   const explorationRef = useRef();
   explorationRef.current = exploration;
   const focusRef = useRef();
@@ -33,9 +33,9 @@ function GameMove(props) {
 
   useEffect(() => {
     addResource(i18n.language);
-  },[]);
+  },[i18n.language]);
 
-  const setupGame = (game0) => {
+  function setupGame(game0) {
     let engine;
     const info = gameinfo.get(game0.metaGame);
     game0.simultaneous = (info.flags !== undefined && info.flags.includes('simultaneous'));
@@ -62,6 +62,7 @@ function GameMove(props) {
       game0.canExplore = game0.canSubmit || game0.numPlayers === 2;
     }
     gameSetter(game0);
+    partialMoveRenderSetter(false);
     renderrepSetter(engine.render());
     if (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2)) {
       if (game0.simultaneous)
@@ -130,13 +131,14 @@ function GameMove(props) {
       }
     }
     fetchData();
-  },[state]);
+  },[state, setupGame]);
 
   const handleMove = (value) => {
     let node = getFocusNode(exploration, focus);
     let gameEngineTmp = GameFactory(game.metaGame, node.state);
     const result = gameEngineTmp.validateMove(value);
     result.move = value;
+    result.previous = move.move;
     moveSetter(result);
   }
 
@@ -148,8 +150,8 @@ function GameMove(props) {
       const m = game.players.map(p => (p.id === state.myid ? node.move : '')).join(',');
       engine.move(m, true);
     }
+    partialMoveRenderSetter(false);
     renderrepSetter(engine.render());
-    moveErrorSetter("");
   }
 
   function boardClick(row, col, piece) {
@@ -157,13 +159,18 @@ function GameMove(props) {
     let node = getFocusNode(explorationRef.current, focusRef.current);
     let gameEngineTmp = GameFactory(game.metaGame, node.state);
     var result = gameEngineTmp.handleClick(moveRef.current.move, row, col);
+    result.previous = move.move;
     moveSetter(result);
   }
 
   useEffect(() => {
-    if ((move.valid && move.complete > -1 && move.move !== '') || (move.canrender === true))
+    if ((move.valid && move.complete > -1 && move.move !== '') || (move.canrender === true)) {
       handleView();
-  }, [move]);
+    }
+    else if (partialMoveRender && !move.move.startsWith(move.previous)) {
+      renderCurrent();
+    }
+  }, [move, handleView, renderCurrent, partialMoveRender]);
 
   // We don't want this to be triggered for every change to "game", so it only depends on
   // renderrep. But that means we need to remember to update the renderrep state when game.renderrep changes.
@@ -195,6 +202,15 @@ function GameMove(props) {
     return curNode;
   }
 
+  const renderCurrent = () => {
+    let node = getFocusNode(exploration, focus);
+    let gameEngineTmp = GameFactory(game.metaGame, node.state);
+    partialMoveRenderSetter(false);
+    renderrepSetter(gameEngineTmp.render());
+    if (game.canExplore)
+      movesSetter(gameEngineTmp.moves());
+  }
+
   const handleView = () => {
     let node = getFocusNode(exploration, focus);
     let gameEngineTmp = GameFactory(game.metaGame, node.state);
@@ -213,9 +229,9 @@ function GameMove(props) {
     }
     catch (err) {
       if (err.name === "UserFacingError") {
-        moveErrorSetter(err.client);
+        errorSetter(err.client);
       } else {
-        moveErrorSetter(err.message);
+        errorSetter(err.message);
       }
       return;
     }
@@ -228,8 +244,9 @@ function GameMove(props) {
       newfocus.exPath.push(node.children.length - 1);
       explorationSetter(newExploration);
       focusSetter(newfocus);
-      moveSetter({"move": '', "valid": true, "message": '', "complete": 0});
+      moveSetter({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
     }
+    partialMoveRenderSetter(partialMove);
     renderrepSetter(gameEngineTmp.render());
     if (game.canExplore && !partialMove)
       movesSetter(gameEngineTmp.moves());
