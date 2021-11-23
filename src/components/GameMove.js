@@ -9,20 +9,128 @@ import { API_ENDPOINT_AUTH } from '../config';
 import { GameNode } from './GameTree.js';
 import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
 
+function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef) {
+  let engine;
+  const info = gameinfo.get(game0.metaGame);
+  game0.simultaneous = (info.flags !== undefined && info.flags.includes('simultaneous'));
+  game0.fixedNumPlayers = info.playercounts.length === 1;
+  if (game0.state === undefined) {
+    throw new Error("Why no state? This shouldn't happen no more!");
+  } else {
+    engine = GameFactory(game0.metaGame, game0.state);
+  }
+  let player = -1;
+  if (game0.simultaneous) {
+    game0.canSubmit = false;
+    for (let i = 0; i < game0.numPlayers; i++)
+      if (game0.players[i].id === state.myid) {
+        game0.canSubmit = game0.toMove[i];
+        player = i;
+      }
+    if (game0.partialMove !== undefined && game0.partialMove.length > game0.numPlayers - 1)
+      engine.move(game0.partialMove, true);
+    game0.canExplore = false;
+  }
+  else {
+    game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
+    game0.canExplore = game0.canSubmit || game0.numPlayers === 2;
+  }
+  gameRef.current = game0;
+  partialMoveRenderRef.current = false;
+  const render = engine.render();
+  if (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2)) {
+    if (game0.simultaneous)
+      movesRef.current = engine.moves(player + 1);
+    else
+      movesRef.current = engine.moves();
+  }
+  let history = [];
+  let toMove = game0.toMove;
+  const numplayers = game0.players.length;
+  if (game0.simultaneous)
+    toMove = game0.players.map(p => true);
+  /*eslint-disable no-constant-condition*/
+  while (true) {
+    // maybe last move should be the last numPlayers moves for simul games?
+    let lastmove = null;
+    if (Array.isArray(engine.stack[engine.stack.length - 1].lastmove))
+      lastmove = engine.stack[engine.stack.length - 1].lastmove.join(', ');
+    else
+      lastmove = engine.stack[engine.stack.length - 1].lastmove;
+    history.unshift(new GameNode(null, lastmove, engine.serialize(), toMove));
+    engine.stack.pop();
+    if (engine.stack.length === 0)
+      break;
+    engine.load();
+    if (!game0.simultaneous)
+      toMove = (toMove + 1) % numplayers;
+  }
+
+  explorationRef.current = history;
+  focusSetter({"moveNumber": history.length - 1, "exPath": []});
+  renderrepSetter(render);
+}
+
+function doView(state, game, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter, partialMoveRenderRef, renderrepSetter, movesRef) {
+  let node = getFocusNode(explorationRef.current, focus);
+  let gameEngineTmp = GameFactory(game.metaGame, node.state);
+  console.log(gameEngineTmp.serialize());
+  let partialMove = false;
+  if (move.valid && move.complete === -1 && move.canrender === true)
+    partialMove = true;
+  let simMove = false;
+  let m = move.move;
+  if (game.simultaneous) {
+    simMove = true;
+    m = game.players.map(p => (p.id === state.myid ? m : '')).join(',');
+  }
+  try {
+    gameEngineTmp.move(m, partialMove || simMove);
+  }
+  catch (err) {
+    if (err.name === "UserFacingError") {
+      errorMessageRef.current = err.client;
+    } else {
+      errorMessageRef.current = err.message;
+    }
+    errorSetter(true);
+    return;
+  }
+  if (!partialMove) {
+    node = getFocusNode(explorationRef.current, focus);
+    let newstate = gameEngineTmp.serialize();
+    node.AddChild(move.move, newstate);
+    let newfocus = cloneDeep(focus);
+    newfocus.exPath.push(node.children.length - 1);
+    focusSetter(newfocus);
+    moveSetter({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
+  }
+  partialMoveRenderRef.current = partialMove;
+  renderrepSetter(gameEngineTmp.render());
+  if (game.canExplore && !partialMove)
+    movesRef.current = gameEngineTmp.moves();
+}
+
+function getFocusNode(exp, foc) {
+  let curNode = exp[foc.moveNumber];
+  for (const p of foc.exPath) {
+    curNode = curNode.children[p];
+  }
+  return curNode;
+}
+
 function GameMove(props) {
-  const [game, gameSetter] = useState(null);
+  const gameRef = useRef(null);
   const [renderrep, renderrepSetter] = useState(null);
   // Game tree of explored moves at each history move. For games that are not complete, only at the last move.
-  const [exploration, explorationSetter] = useState(null);
+  const explorationRef = useRef(null);
   // What place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
   const [focus, focusSetter] = useState(null);
   const [move, moveSetter] = useState({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
   const [error, errorSetter] = useState(false);
-  const [errorMessage, errorMessageSetter] = useState("");
-  const [moves, movesSetter] = useState(null);
-  const [partialMoveRender, partialMoveRenderSetter] = useState(false);
-  const explorationRef = useRef();
-  explorationRef.current = exploration;
+  const errorMessageRef = useRef("");
+  const movesRef = useRef(null);
+  const partialMoveRenderRef = useRef(false);
   const focusRef = useRef();
   focusRef.current = focus;
   const moveRef = useRef();
@@ -34,67 +142,6 @@ function GameMove(props) {
   useEffect(() => {
     addResource(i18n.language);
   },[i18n.language]);
-
-  function setupGame(game0) {
-    let engine;
-    const info = gameinfo.get(game0.metaGame);
-    game0.simultaneous = (info.flags !== undefined && info.flags.includes('simultaneous'));
-    game0.fixedNumPlayers = info.playercounts.length === 1;
-    if (game0.state === undefined) {
-      throw new Error("Why no state? This shouldn't happen no more!");
-    } else {
-      engine = GameFactory(game0.metaGame, game0.state);
-    }
-    let player = -1;
-    if (game0.simultaneous) {
-      game0.canSubmit = false;
-      for (let i = 0; i < game0.numPlayers; i++)
-        if (game0.players[i].id === state.myid) {
-          game0.canSubmit = game0.toMove[i];
-          player = i;
-        }
-      if (game0.partialMove !== undefined && game0.partialMove.length > game0.numPlayers - 1)
-        engine.move(game0.partialMove, true);
-      game0.canExplore = false;
-    }
-    else {
-      game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
-      game0.canExplore = game0.canSubmit || game0.numPlayers === 2;
-    }
-    gameSetter(game0);
-    partialMoveRenderSetter(false);
-    renderrepSetter(engine.render());
-    if (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2)) {
-      if (game0.simultaneous)
-        movesSetter(engine.moves(player + 1));
-      else
-        movesSetter(engine.moves());
-    }
-    let history = [];
-    let toMove = game0.toMove;
-    const numplayers = game0.players.length;
-    if (game0.simultaneous)
-      toMove = game0.players.map(p => true);
-    /*eslint-disable no-constant-condition*/
-    while (true) {
-      // maybe last move should be the last numPlayers moves for simul games?
-      let lastmove = null;
-      if (Array.isArray(engine.stack[engine.stack.length - 1].lastmove))
-        lastmove = engine.stack[engine.stack.length - 1].lastmove.join(', ');
-      else
-        lastmove = engine.stack[engine.stack.length - 1].lastmove;
-      history.unshift(new GameNode(null, lastmove, engine.serialize(), toMove));
-      engine.stack.pop();
-      if (engine.stack.length === 0)
-        break;
-      engine.load();
-      if (!game0.simultaneous)
-        toMove = (toMove + 1) % numplayers;
-    }
-
-    focusSetter({"moveNumber": history.length - 1, "exPath": []});
-    explorationSetter(history);
-  }
 
   useEffect(() => {
     async function fetchData() {
@@ -117,64 +164,74 @@ function GameMove(props) {
         });
         if (res.status !== 200) {
           const result = await res.json();
-          setError(JSON.parse(result.body));
+          errorMessageRef.current = JSON.parse(result.body);
+          errorSetter(true);
         } else {
           const result = await res.json();
           let game0 = JSON.parse(result.body);
-          console.log(game0);
-          setupGame(game0);
+          setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef);
         }
       }
       catch (error) {
         console.log(error);
-        setError(error);
+        errorMessageRef.current = error.message;
+        errorSetter(true);
       }
     }
     fetchData();
-  },[state, setupGame]);
+  },[state, renderrepSetter, focusSetter]);
 
   const handleMove = (value) => {
-    let node = getFocusNode(exploration, focus);
-    let gameEngineTmp = GameFactory(game.metaGame, node.state);
+    let node = getFocusNode(explorationRef.current, focus);
+    let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     const result = gameEngineTmp.validateMove(value);
     result.move = value;
     result.previous = move.move;
     moveSetter(result);
   }
 
-  const handleGameMoveClick = (foc) => {
-    focusSetter(foc);
-    let node = getFocusNode(exploration, foc);
-    let engine = GameFactory(game.metaGame, node.state);
-    if (game.simultaneous && foc.exPath.length === 1) {
-      const m = game.players.map(p => (p.id === state.myid ? node.move : '')).join(',');
-      engine.move(m, true);
-    }
-    partialMoveRenderSetter(false);
-    renderrepSetter(engine.render());
+  const handleView = () => {
+    doView(state, gameRef.current, move, explorationRef, focus, errorSetter, focusSetter, moveSetter, partialMoveRenderRef, renderrepSetter, movesRef);
   }
 
-  function boardClick(row, col, piece) {
-    // console.log("Row: " + row + ", Col: " + col + ", Piece: " + piece);
-    let node = getFocusNode(explorationRef.current, focusRef.current);
-    let gameEngineTmp = GameFactory(game.metaGame, node.state);
-    var result = gameEngineTmp.handleClick(moveRef.current.move, row, col);
-    result.previous = move.move;
-    moveSetter(result);
+  const handleGameMoveClick = (foc) => {
+    focusSetter(foc);
+    let node = getFocusNode(explorationRef.current, foc);
+    let engine = GameFactory(gameRef.current.metaGame, node.state);
+    if (gameRef.current.simultaneous && foc.exPath.length === 1) {
+      const m = gameRef.current.players.map(p => (p.id === state.myid ? node.move : '')).join(',');
+      engine.move(m, true);
+    }
+    partialMoveRenderRef.current = false;
+    renderrepSetter(engine.render());
   }
 
   useEffect(() => {
     if ((move.valid && move.complete > -1 && move.move !== '') || (move.canrender === true)) {
-      handleView();
+      doView(state, gameRef.current, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter, partialMoveRenderRef, renderrepSetter, movesRef);
     }
-    else if (partialMoveRender && !move.move.startsWith(move.previous)) {
-      renderCurrent();
+    else if (partialMoveRenderRef.current && !move.move.startsWith(move.previous)) {
+      let node = getFocusNode(explorationRef.current, focus);
+      let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
+      partialMoveRenderRef.current = false;
+      renderrepSetter(gameEngineTmp.render());
+      if (gameRef.current.canExplore)
+        movesRef.current = gameEngineTmp.moves();
     }
-  }, [move, handleView, renderCurrent, partialMoveRender]);
+  }, [state, move, focus]);
 
   // We don't want this to be triggered for every change to "game", so it only depends on
   // renderrep. But that means we need to remember to update the renderrep state when game.renderrep changes.
   useEffect(() => {
+    function boardClick(row, col, piece) {
+      // console.log("Row: " + row + ", Col: " + col + ", Piece: " + piece);
+      let node = getFocusNode(explorationRef.current, focusRef.current);
+      let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
+      var result = gameEngineTmp.handleClick(moveRef.current.move, row, col);
+      result.previous = moveRef.current.move;
+      moveSetter(result);
+    }
+
     if (boardImage.current !== undefined) {
       const svg = boardImage.current.querySelector('SVG');
       if (svg !== null)
@@ -184,72 +241,14 @@ function GameMove(props) {
       console.log(renderrep);
       render(renderrep, {"divid": "svg", "boardClick": boardClick});
     }
-  }, [renderrep]);
+  }, [renderrep, moveSetter]);
 
   const setError = (error) => {
     if (error.Message !== undefined)
-      errorMessageSetter(error.Message);
+      errorMessageRef.current = error.Message;
     else
-      errorMessageSetter(JSON.stringify(error));
+    errorMessageRef.current = JSON.stringify(error);
     errorSetter(true);
-  }
-
-  const getFocusNode = (exp, foc) => {
-    let curNode = exp[foc.moveNumber];
-    for (const p of foc.exPath) {
-      curNode = curNode.children[p];
-    }
-    return curNode;
-  }
-
-  const renderCurrent = () => {
-    let node = getFocusNode(exploration, focus);
-    let gameEngineTmp = GameFactory(game.metaGame, node.state);
-    partialMoveRenderSetter(false);
-    renderrepSetter(gameEngineTmp.render());
-    if (game.canExplore)
-      movesSetter(gameEngineTmp.moves());
-  }
-
-  const handleView = () => {
-    let node = getFocusNode(exploration, focus);
-    let gameEngineTmp = GameFactory(game.metaGame, node.state);
-    console.log(gameEngineTmp.serialize());
-    let partialMove = false;
-    if (move.valid && move.complete === -1 && move.canrender === true)
-      partialMove = true;
-    let simMove = false;
-    let m = move.move;
-    if (game.simultaneous) {
-      simMove = true;
-      m = game.players.map(p => (p.id === state.myid ? m : '')).join(',');
-    }
-    try {
-      gameEngineTmp.move(m, partialMove || simMove);
-    }
-    catch (err) {
-      if (err.name === "UserFacingError") {
-        errorSetter(err.client);
-      } else {
-        errorSetter(err.message);
-      }
-      return;
-    }
-    if (!partialMove) {
-      let newExploration = cloneDeep(exploration);
-      node = getFocusNode(newExploration, focus);
-      let newstate = gameEngineTmp.serialize();
-      node.AddChild(move.move, newstate);
-      let newfocus = cloneDeep(focus);
-      newfocus.exPath.push(node.children.length - 1);
-      explorationSetter(newExploration);
-      focusSetter(newfocus);
-      moveSetter({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
-    }
-    partialMoveRenderSetter(partialMove);
-    renderrepSetter(gameEngineTmp.render());
-    if (game.canExplore && !partialMove)
-      movesSetter(gameEngineTmp.moves());
   }
 
   const handleMarkAsWin = () => {
@@ -261,14 +260,12 @@ function GameMove(props) {
   }
 
   const handleMark = (mark) => {
-    let newExploration = cloneDeep(exploration);
-    let node = getFocusNode(newExploration, focus);
+    let node = getFocusNode(explorationRef.current, focus);
     node.SetOutcome(mark);
-    explorationSetter(newExploration);
   }
 
   const handleSubmit = async () => {
-    let m = getFocusNode(exploration, focus).move;
+    let m = getFocusNode(explorationRef.current, focus).move;
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
@@ -282,7 +279,7 @@ function GameMove(props) {
         body: JSON.stringify({
           "query": "submit_move",
           "pars" : {
-            "id": game.id,
+            "id": gameRef.current.id,
             "move": m
           }
         })
@@ -293,7 +290,7 @@ function GameMove(props) {
       let game0 = JSON.parse(result.body);
       console.log("In handleSubmit. game0:");
       console.log(game0);
-      setupGame(game0);
+      setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef);
     }
     catch (err) {
       setError(err.message);
@@ -301,9 +298,11 @@ function GameMove(props) {
   }
 
   const boardImage = useRef();
-
+  const game = gameRef.current;
+  const exploration = explorationRef.current;
+  const moves = movesRef.current;
   if (!error) {
-    if (game !== null) {
+    if (focus !== null) {
       let moveRows = [];
       const simul = game.simultaneous;
       if (exploration !== null) {
@@ -374,12 +373,12 @@ function GameMove(props) {
       let mover = '';
       if (game.simultaneous) {
         if (game.canSubmit)
-          mover = t('ToMove', {player: game.players.find(p => p.id === state.myid).name});
+          mover = t('ToMove', {"player": game.players.find(p => p.id === state.myid).name});
         else
           mover = t('Waiting');
       }
       else {
-        mover = t('ToMove', {player: game.players[game.toMove].name});
+        mover = t('ToMove', {"player": game.players[game.toMove].name});
       }
       return (
         <div className="row">
@@ -458,7 +457,7 @@ function GameMove(props) {
     }
   }
   else {
-    return (<h4>{errorMessage}</h4>);
+    return (<h4>{errorMessageRef.current}</h4>);
   }
 }
 
