@@ -76,7 +76,7 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
   console.log(gameEngineTmp.serialize());
   let partialMove = false;
-  if (move.valid && move.complete === -1 && move.canrender === true)
+  if (move.valid && move.complete < 1 && move.canrender === true)
     partialMove = true;
   let simMove = false;
   let m = move.move;
@@ -191,11 +191,13 @@ function GameMove(props) {
   }
 
   const handleView = () => {
-    doView(state, gameRef.current, move, explorationRef, focus, errorSetter, focusSetter, moveSetter, partialMoveRenderRef, renderrepSetter, movesRef);
+    // doView(state, gameRef.current, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter, partialMoveRenderRef, renderrepSetter, movesRef);
+    const newmove = cloneDeep(move);
+    newmove.complete = 1;
+    moveSetter(newmove);
   }
 
   const handleGameMoveClick = (foc) => {
-    focusSetter(foc);
     let node = getFocusNode(explorationRef.current, foc);
     let engine = GameFactory(gameRef.current.metaGame, node.state);
     if (gameRef.current.simultaneous && foc.exPath.length === 1) {
@@ -203,6 +205,10 @@ function GameMove(props) {
       engine.move(m, true);
     }
     partialMoveRenderRef.current = false;
+    if (foc.moveNumber === explorationRef.current.length - 1) {
+      movesRef.current = engine.moves();
+    }
+    focusSetter(foc);
     renderrepSetter(engine.render());
   }
 
@@ -227,7 +233,7 @@ function GameMove(props) {
       // console.log("Row: " + row + ", Col: " + col + ", Piece: " + piece);
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-      var result = gameEngineTmp.handleClick(moveRef.current.move, row, col);
+      var result = gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       result.previous = moveRef.current.move;
       moveSetter(result);
     }
@@ -396,7 +402,7 @@ function GameMove(props) {
                     { moves === null ? <div/> :
                       <div>
                         <label>{t("ChooseMove")}</label>
-                        <select name="moves" id="selectmove" onChange={(e) => handleMove(e.target.value)}>
+                        <select name="moves" id="selectmove" value="" onChange={(e) => handleMove(e.target.value)}>
                         <option value="">--{t('Select')}--</option>
                           { moves.map((move, index) => { return <option key={index} value={move}>{move}</option>})}
                         </select>
@@ -408,8 +414,8 @@ function GameMove(props) {
                       {t('EnterMove')}
                       <input name="move" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)} />
                     </label>
-                    { move.valid && move.complete === -1 ?
-                      <Button variant="primary" onClick={handleView}>{"View"}</Button>
+                    { move.valid && move.complete === 0 && move.move.length > 0 ?
+                      <Button variant="primary" onClick={handleView}>{"Complete move"}</Button>
                       : ''
                     }
                   </div>
