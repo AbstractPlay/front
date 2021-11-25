@@ -1,18 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { render } from '@abstractplay/renderer';
-import Button from 'react-bootstrap/Button';
+import { render, renderStatic, renderglyph } from '@abstractplay/renderer';
 import { Auth } from 'aws-amplify';
 import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_AUTH } from '../config';
 import { GameNode } from './GameTree.js';
 import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
+import MoveEntry from './MoveEntry.js';
 
-function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef) {
+function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef, t) {
   let engine;
   const info = gameinfo.get(game0.metaGame);
+  game0.name = info.name;
   game0.simultaneous = (info.flags !== undefined && info.flags.includes('simultaneous'));
+  game0.sharedPieces = (info.flags !== undefined && info.flags.includes('shared-pieces'));
+  game0.perspective = (info.flags !== undefined && info.flags.includes('perspective'));
+  game0.scores = (info.flags !== undefined && info.flags.includes('scores'));
   game0.fixedNumPlayers = info.playercounts.length === 1;
   if (game0.state === undefined) {
     throw new Error("Why no state? This shouldn't happen no more!");
@@ -22,11 +26,12 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   let player = -1;
   if (game0.simultaneous) {
     game0.canSubmit = false;
-    for (let i = 0; i < game0.numPlayers; i++)
+    for (let i = 0; i < game0.numPlayers; i++) {
       if (game0.players[i].id === state.myid) {
         game0.canSubmit = game0.toMove[i];
         player = i;
       }
+    }
     if (game0.partialMove !== undefined && game0.partialMove.length > game0.numPlayers - 1)
       engine.move(game0.partialMove, true);
     game0.canExplore = false;
@@ -35,6 +40,13 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
     game0.canExplore = game0.canSubmit || game0.numPlayers === 2;
   }
+  game0.colors = game0.players.map((p, i) => {
+    if (game0.sharedPieces) {
+      return {"isImage": false, "value": t("Player") + (i+1).toString()}
+    } else {
+      return {"isImage": true, "value": renderglyph("piece", i + 1)}
+    }
+  });
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   const render = engine.render();
@@ -169,7 +181,7 @@ function GameMove(props) {
         } else {
           const result = await res.json();
           let game0 = JSON.parse(result.body);
-          setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef);
+          setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef, t);
         }
       }
       catch (error) {
@@ -179,7 +191,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  },[state, renderrepSetter, focusSetter]);
+  },[state, renderrepSetter, focusSetter, t]);
 
   const handleMove = (value) => {
     let node = getFocusNode(explorationRef.current, focus);
@@ -296,7 +308,7 @@ function GameMove(props) {
       let game0 = JSON.parse(result.body);
       console.log("In handleSubmit. game0:");
       console.log(game0);
-      setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef);
+      setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef, t);
     }
     catch (err) {
       setError(err.message);
@@ -306,7 +318,6 @@ function GameMove(props) {
   const boardImage = useRef();
   const game = gameRef.current;
   const exploration = explorationRef.current;
-  const moves = movesRef.current;
   if (!error) {
     if (focus !== null) {
       let moveRows = [];
@@ -376,73 +387,20 @@ function GameMove(props) {
           moveRows.push(row);
         }
       }
-      let mover = '';
-      if (game.simultaneous) {
-        if (game.canSubmit)
-          mover = t('ToMove', {"player": game.players.find(p => p.id === state.myid).name});
-        else
-          mover = t('Waiting');
-      }
-      else {
-        mover = t('ToMove', {"player": game.players[game.toMove].name});
-      }
+
       return (
         <div className="row">
           <div className="column left">
-            <div className="columnTitleContainer"><h2 className="columnTitle">Make a move</h2></div>
-            <div><h5>{mover}</h5></div>
-            { !move.valid || (move.valid && move.complete === -1)  ?
-              <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :
-              ''
-            }
-            { (game.canSubmit || game.canExplore) && exploration !== null && focus.moveNumber === exploration.length - 1
-              && (game.canExplore || focus.exPath.length === 0) ?
-                <div>
-                  <div>
-                    { moves === null ? <div/> :
-                      <div>
-                        <label>{t("ChooseMove")}</label>
-                        <select name="moves" id="selectmove" value="" onChange={(e) => handleMove(e.target.value)}>
-                        <option value="">--{t('Select')}--</option>
-                          { moves.map((move, index) => { return <option key={index} value={move}>{move}</option>})}
-                        </select>
-                      </div>
-                    }
-                  </div>
-                  <div>
-                    <label>
-                      {t('EnterMove')}
-                      <input name="move" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)} />
-                    </label>
-                    { move.valid && move.complete === 0 && move.move.length > 0 ?
-                      <Button variant="primary" onClick={handleView}>{"Complete move"}</Button>
-                      : ''
-                    }
-                  </div>
-                  <div>
-                    { game.canSubmit && focus.exPath.length === 1 ?
-                      <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button> : ""
-                    }
-                    { focus.exPath.length > 0 && game.canExplore ?
-                      <Button variant="primary" onClick={handleMarkAsWin}>{"Mark as win"}</Button>:""
-                    }
-                    { focus.exPath.length > 0 && game.canExplore ?
-                      <Button variant="primary" onClick={handleMarkAsLoss}>{"Mark as loss"}</Button>:""
-                    }
-                  </div>
-                </div>
-                : (game.canSubmit && exploration !== null && focus.moveNumber === exploration.length - 1
-                    && focus.exPath.length === 1) ?
-                    <Button variant="primary" onClick={handleSubmit}>{"Submit"}</Button>
-                  : <div/>
-            }
-          </div>
+            <div className="columnTitleContainer"><h2 className="columnTitle">{t("Make a move")}</h2></div>
+              <MoveEntry move={move} toMove={getFocusNode(explorationRef.current, focus).toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
+                focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView]}/>
+            </div>
           <div className="column middle">
-            <div className="columnTitleContainer"><h2 className="columnTitle">Board</h2></div>
+            <div className="columnTitleContainer"><h2 className="columnTitle">{game.name}</h2></div>
             <div className="board" id="svg" ref={boardImage} style={{width: "100%"}}></div>
           </div>
           <div className="column right gameMovesContainer">
-            <div className="columnTitleContainer"><h2 className="columnTitle">Moves</h2></div>
+            <div className="columnTitleContainer"><h2 className="columnTitle">{t("Moves")}</h2></div>
             <div className="gameMoves">
               <table className="striped movesTable">
                 <tbody>

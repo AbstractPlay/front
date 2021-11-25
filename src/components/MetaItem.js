@@ -6,17 +6,6 @@ import { gameinfo, GameFactory } from '@abstractplay/gameslib';
 
 function MetaItem(props) {
 
-  /*
-  const [game, gameSetter] = useState(null);
-
-  useEffect(() => {
-    let gamename = props.item.name;
-    let g = gameinfo.get(gamename);
-    gameSetter(g)
-    console.log(g);
-  },[props.item.name]);
-*/
-
   useEffect(() => {
     let info = gameinfo.get(props.game.uid);
     let gameEngine;
