@@ -21,9 +21,6 @@ function Me(props) {
   const [showChallengeViewModal, showChallengeViewModalSetter] = useState(false);
   const [showChallengeResponseModal, showChallengeResponseModalSetter] = useState(false);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
-  const [newChallengeError, newChallengeErrorSetter] = useState('');
-  const [challengeGame, challengeGameSetter] = useState('');
-  const [challengePlayer, challengePlayerSetter] = useState('');
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -241,29 +238,6 @@ function Me(props) {
                 showChallengeViewModalSetter: showChallengeViewModalSetter,
                 showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)}
         <Button variant="primary" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</Button>
-
-{/*
-        <Modal show={showNewChallengeModal} onHide={handleNewChallengeClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>{t('New Challenge')}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{
-            (newChallengeError.length===0)?
-              <NewChallenge id={me.id} setters={{
-                challengeGameSetter: challengeGameSetter,
-                challengePlayerSetter: challengePlayerSetter}}/>
-              : newChallengeError}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={handleNewChallenge}>
-              {t('Challenge')}
-            </Button>
-            <Button variant="primary" onClick={handleNewChallengeClose}>
-              {t('Close')}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-              */}
 
         <NewChallengeModal show={showNewChallengeModal} id={me.id} handleClose={handleNewChallengeClose} handleChallenge={handleNewChallenge2} />
 

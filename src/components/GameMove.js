@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { render, renderStatic, renderglyph } from '@abstractplay/renderer';
+import { render, renderglyph } from '@abstractplay/renderer';
 import { Auth } from 'aws-amplify';
 import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_AUTH } from '../config';

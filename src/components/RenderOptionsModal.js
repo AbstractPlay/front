@@ -64,54 +64,7 @@ function NewChallengeModal(props) {
     const annotateSetting = getSettingAndLevel("annotate", true, gameSettings, settings, metaGame);
     annotateSetter(annotateSetting[0]);
     annotateLevelSetter(annotateSetting[1]);
-/*
-    if (gameSettings === undefined || gameSettings.color === undefined) {
-      if (settings === undefined || settings.color === undefined) {
-        colorSetter("standard");
-        colorLevelSetter("game");
-      } else {
-        if (settings.color[metaGame] === undefined) {
-          if (settings.color.all === undefined) {
-            colorSetter("standard");
-            colorLevelSetter("game");
-          } else {
-            colorSetter(settings.color.all);
-            colorLevelSetter("all");
-          }
-        } else {
-          colorSetter(settings.color[metaGame]);
-          colorLevelSetter("meta");
-        }
-      }
-    } else {
-      colorSetter(gameSettings.color);
-      colorLevelSetter("game");
-    }
-    // annotate
-    if (gameSettings === undefined || gameSettings.annotate === undefined) {
-      if (settings === undefined || settings.annotate === undefined) {
-        annotateSetter(true);
-        annotateLevelSetter("game");
-      } else {
-        if (settings.annotate[metaGame] === undefined) {
-          if (settings.annotate.all === undefined) {
-            annotateSetter(true);
-            annotateLevelSetter("game");
-          } else {
-            annotateSetter(settings.annotate.all);
-            annotateLevelSetter("all");
-          }
-        } else {
-          annotateSetter(settings.annotate[metaGame]);
-          annotateLevelSetter("meta");
-        }
-      }
-    } else {
-      annotateSetter(gameSettings.annotate);
-      annotateLevelSetter("game");
-    }
-  */
-  },[show]);
+  }, [show, gameSettings, metaGame, settings]);
 
   const handleColorChange = (color, checked) => {
     if (checked) {
@@ -147,38 +100,6 @@ function NewChallengeModal(props) {
     let newGameSettings = cloneDeep(gameSettings);
     [newSettings, newGameSettings] = updateSettings("color", colorLevel, color, newGameSettings, newSettings, metaGame);
     [newSettings, newGameSettings] = updateSettings("annotate", annotateLevel, annotate, newGameSettings, newSettings, metaGame);
-    /*
-    if (colorLevel === "game") {
-      if (newGameSettings === undefined) newGameSettings = {};
-      newGameSettings.color = color;
-    } else if (colorLevel === "meta") {
-      if (newSettings === undefined) newSettings = {};
-      if (newSettings[metaGame] === undefined) newSettings[metaGame] = {};
-      newSettings[metaGame].color = color;
-      if (newGameSettings !== undefined && newGameSettings.color !== undefined) delete newGameSettings.color;
-    } else {
-      if (newSettings === undefined) newSettings = {};
-      if (newSettings.all === undefined) newSettings.all = {};
-      newSettings.all.color = color;
-      if (newSettings[metaGame] !== undefined && newSettings[metaGame].color !== undefined) delete newSettings[metaGame].color;
-      if (newGameSettings !== undefined && newGameSettings.color !== undefined) delete newGameSettings.color;
-    }
-    if (annotateLevel === "game") {
-      if (newGameSettings === undefined) newGameSettings = {};
-      newGameSettings.annotate = annotate;
-    } else if (annotateLevel === "meta") {
-      if (newSettings === undefined) newSettings = {};
-      if (newSettings[metaGame] === undefined) newSettings[metaGame] = {};
-      newSettings[metaGame].annotate = annotate;
-      if (newGameSettings !== undefined && newGameSettings.annotate !== undefined) delete newGameSettings.annotate;
-    } else {
-      if (newSettings === undefined) newSettings = {};
-      if (newSettings.all === undefined) newSettings.all = {};
-      newSettings.all.annotate = annotate;
-      if (newSettings[metaGame] !== undefined && newSettings[metaGame].annotate !== undefined) delete newSettings[metaGame].annotate;
-      if (newGameSettings !== undefined && newGameSettings.annotate !== undefined) delete newGameSettings.annotate;
-    }
-    */
     props.settingsSetter(newSettings);
     props.gameSettingsSetter(newGameSettings);
     if (newGameSettings !== undefined) {
