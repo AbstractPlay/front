@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import Button from 'react-bootstrap/Button';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { render, renderStatic, renderglyph } from '@abstractplay/renderer';
@@ -8,6 +9,24 @@ import { API_ENDPOINT_AUTH } from '../config';
 import { GameNode } from './GameTree.js';
 import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
 import MoveEntry from './MoveEntry.js';
+import RenderOptionsModal from './RenderOptionsModal.js';
+
+function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
+  if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
+    return gameSettings[setting];
+  } else if (userSettings !== undefined) {
+    if (userSettings[metaGame] !== undefined && userSettings[metaGame][setting] !== undefined) {
+      return userSettings[metaGame][setting];
+    } else if (userSettings.all !== undefined && userSettings.all[setting] !== undefined) {
+      return userSettings.all[setting];
+    } else {
+      return deflt;
+    }
+  }
+  else {
+    return deflt;
+  }
+}
 
 function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef, t) {
   let engine;
@@ -40,13 +59,6 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
     game0.canExplore = game0.canSubmit || game0.numPlayers === 2;
   }
-  game0.colors = game0.players.map((p, i) => {
-    if (game0.sharedPieces) {
-      return {"isImage": false, "value": t("Player") + (i+1).toString()}
-    } else {
-      return {"isImage": true, "value": renderglyph("piece", i + 1)}
-    }
-  });
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   const render = engine.render();
@@ -77,7 +89,6 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     if (!game0.simultaneous)
       toMove = (toMove + 1) % numplayers;
   }
-
   explorationRef.current = history;
   focusSetter({"moveNumber": history.length - 1, "exPath": []});
   renderrepSetter(render);
@@ -140,6 +151,11 @@ function GameMove(props) {
   const [focus, focusSetter] = useState(null);
   const [move, moveSetter] = useState({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
   const [error, errorSetter] = useState(false);
+  const [showSettings, showSettingsSetter] = useState(false);
+  const [rotate, rotateSetter] = useState(0);
+  const [userSettings, userSettingsSetter] = useState();
+  const [gameSettings, gameSettingsSetter] = useState();
+  const [settings, settingsSetter] = useState(null);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const partialMoveRenderRef = useRef(false);
@@ -181,7 +197,10 @@ function GameMove(props) {
         } else {
           const result = await res.json();
           let game0 = JSON.parse(result.body);
+          console.log(game0);
           setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef, t);
+          userSettingsSetter(state.settings);
+          gameSettingsSetter(game0.players.find(p => p.id === state.myid).settings);
         }
       }
       catch (error) {
@@ -191,7 +210,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  },[state, renderrepSetter, focusSetter, t]);
+  }, [state, renderrepSetter, focusSetter, t]);
 
   const handleMove = (value) => {
     let node = getFocusNode(explorationRef.current, focus);
@@ -255,11 +274,43 @@ function GameMove(props) {
       if (svg !== null)
         svg.remove();
     }
-    if (renderrep !== null) {
+    if (renderrep !== null && settings !== null) {
       console.log(renderrep);
-      render(renderrep, {"divid": "svg", "boardClick": boardClick});
+      let options = {"divid": "svg", "boardClick": boardClick};
+      if (settings.color === "blind") {
+        options.colourBlind = true;
+      } else if (settings.color === "patterns") {
+        options.patterns = true;
+      }
+      options.showAnnotations = settings.annotate;
+      render(renderrep, options);
     }
-  }, [renderrep, moveSetter]);
+  }, [renderrep, settings, moveSetter]);
+
+  useEffect(() => {
+    if (gameRef.current !== null) {
+      var newSettings = {};
+      const game = gameRef.current;
+      newSettings.color = getSetting("color", "standard", gameSettings, userSettings, game.metaGame);
+      newSettings.annotate = getSetting("annotate", true, gameSettings, userSettings, game.metaGame);
+      var options = {};
+      if (newSettings.color === "blind") {
+          options.colourBlind = true;
+      } else if (newSettings.color === "patterns") {
+          options.patterns = true;
+      }
+      console.log(options);
+      game.colors = game.players.map((p, i) => {
+        if (game.sharedPieces) {
+          return {"isImage": false, "value": t("Player") + (i+1).toString()}
+        } else {
+          return {"isImage": true, "value": renderglyph("piece", i + 1, options)}
+        }
+      });
+      console.log(game.colors[0].value);
+      settingsSetter(newSettings);
+    }
+  }, [gameSettings, userSettings, settingsSetter, t]);
 
   const setError = (error) => {
     if (error.Message !== undefined)
@@ -275,6 +326,26 @@ function GameMove(props) {
 
   const handleMarkAsLoss = () => {
     handleMark(-1);
+  }
+
+  const handleUpdateRenderOptions = () => {
+      showSettingsSetter(true);
+  }
+
+  const handleRotate = () => {
+    if (rotate === 0) {
+      rotateSetter(180);
+    } else {
+      rotateSetter(0);
+    }
+  }
+
+  const handleSettingsClose = () => {
+    showSettingsSetter(false);
+  }
+
+  const handleSettingsSave = () => {
+    showSettingsSetter(false);
   }
 
   const handleMark = (mark) => {
@@ -391,13 +462,15 @@ function GameMove(props) {
       return (
         <div className="row">
           <div className="column left">
-            <div className="columnTitleContainer"><h2 className="columnTitle">{t("Make a move")}</h2></div>
+            <div className="columnTitleContainer"><h2 className="columnTitle">{t("MakeMove")}</h2></div>
               <MoveEntry move={move} toMove={getFocusNode(explorationRef.current, focus).toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
                 focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView]}/>
             </div>
           <div className="column middle">
             <div className="columnTitleContainer"><h2 className="columnTitle">{game.name}</h2></div>
             <div className="board" id="svg" ref={boardImage} style={{width: "100%"}}></div>
+            <Button variant="primary" onClick={handleUpdateRenderOptions}>{t("DisplaySettings")}</Button>
+            <Button variant="primary" onClick={handleRotate}>{t("Rotate")}</Button>
           </div>
           <div className="column right gameMovesContainer">
             <div className="columnTitleContainer"><h2 className="columnTitle">{t("Moves")}</h2></div>
@@ -413,6 +486,9 @@ function GameMove(props) {
               </table>
             </div>
           </div>
+          <RenderOptionsModal show={showSettings} metaGame={{"id":game.metaGame, "name": game.name}} gameId={game.id} settings={userSettings} gameSettings={gameSettings}
+            settingsSetter={userSettingsSetter} gameSettingsSetter={gameSettingsSetter} showSettingsSetter={showSettingsSetter} setError={setError}
+            handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
         </div>
       );
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Spinner from './Spinner';
 import { API_ENDPOINT_OPEN } from '../config';
@@ -10,7 +10,9 @@ function NewChallenge(props) {
   const myid = props.id;
   const [users, usersSetter] = useState(null);
   const [error, errorSetter] = useState(null);
-
+  const [metaGame, metaGameSetter] = useState(null);
+  const groupVariantsRef = useRef({});
+  const nonGroupVariantsRef = useRef({})
 
   useEffect(() => {
     async function fetchData() {
@@ -29,21 +31,51 @@ function NewChallenge(props) {
     fetchData();
   },[]);
 
+  const handleChangeGame = (game) => {
+    setters.challengeGameSetter(game);
+    metaGameSetter(game);
+  }
+
+  const handleGroupChange = (group, variant) => {
+    console.log(group);
+    groupVariantsRef.current[group] = variant;
+  }
+
+  const handleNonGroupChange = (variant, flag) => {
+    console.log(flag);
+    nonGroupVariantsRef.current[variant] = flag;
+  }
+
   let games = [];
   gameinfo.forEach((game) => games.push({"id": game.uid, "name": game.name}));
-
+  games.sort((a,b) => (a.name > b.name) ? 1 : -1);
+  let groupData = [];
+  let nonGroupData = [];
+  if (metaGame !== null) {
+    const info = gameinfo.get(metaGame);
+    if (info.variants !== undefined) {
+      const groups = [...new Set(info.variants.filter(v => v.group !== undefined).map(v => v.group))];
+      groups.forEach(g => groupVariantsRef.current[g] = []);
+      groupData = groups.map(g => {return {"group": g, "variants": info.variants.filter(v => v.group === g).sort((a,b) => (a.uid > b.uid) ? 1 : -1)}});
+      nonGroupData = info.variants.filter(v => v.group === undefined).sort((a,b) => (a.uid > b.uid) ? 1 : -1);
+      nonGroupData.forEach(v => nonGroupVariantsRef.current[v.uid] = false);
+    }
+  }
   if (error)
     return <div><p>{t('Error')}</p><p>{error.message}</p></div>;
   else
     return (
-      <div>
+      <div className="challenge">
+        <div>
         <label>{t("ChooseGame")}</label>
         { games === null ? <Spinner/> :
-            <select name="games" id="game_for_challenge" onChange={(e) => setters.challengeGameSetter(e.target.value)}>
+            <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
               <option value="">--{t('Select')}--</option>
               { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
             </select>
         }
+        </div>
+        <div>
         <label>{t("ChooseOpponent")}</label>
         { users === null ? <Spinner/> :
             <select name="users" id="user_for_challenge" onChange={(e) =>
@@ -53,6 +85,30 @@ function NewChallenge(props) {
               .filter(user => user.id !== myid)
               .map(item => { return <option key={item.id} value={item.id}>{item.name}</option>})}
           </select>
+        }
+        </div>
+        { groupData.length === 0 && nonGroupData.length === 0 ? '' :
+          <div className='pickVariant'><span className='pickVariantHeader'>{t("PickVariant")}</span>
+            { metaGame === null || groupData.length === 0 ? '' :
+              groupData.map(g =>
+                <div key={"group:" + g.group} className='pickOneOfVariants' onChange={(e) => handleGroupChange(g.group, e.target.value)}>
+                  <span className='pickOneOfVariantHeader'>{t("PickOneVariant")}</span>
+                  { g.variants.map(v =>
+                    <div key={v.uid} className='pickOneOfVariant'><label><input type="radio" value={v.uid} name={v.group}/> {v.name} </label></div>
+                    )}
+                </div>
+                )}
+            { metaGame === null || nonGroupData.length === 0 ? '' :
+              <div className='pickAnyOfVariants'>
+                <span className='pickAnyOfVariantHeader'>{t("PickAnyVariant")}</span>
+                { nonGroupData.map(v =>
+                  <div className='pickAnyOfVariant' key={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)}>
+                    <label><input type="checkbox" value={v.uid} name={v.group}/> {v.name} </label>
+                  </div>)
+                }
+              </div>
+            }
+          </div>
         }
       </div>
     );

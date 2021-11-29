@@ -34,14 +34,14 @@ function MoveEntry(props) {
   if (game.simultaneous) {
     if (game.canSubmit) {
       mover = t('ToMove', {"player": game.players[toMove].name});
-      img = game.colors[toMove];
+      if (game.colors !== undefined) img = game.colors[toMove];
     } else {
       mover = t('Waiting');
     }
   }
   else {
     mover = t('ToMove', {"player": game.players[toMove].name});
-    img = game.colors[toMove];
+    if (game.colors !== undefined) img = game.colors[toMove];
   }
 
   return (
@@ -51,11 +51,12 @@ function MoveEntry(props) {
           { uiState === -1 ? t("History") : uiState === 0 ? t("Current") : t("Explore")}
         </span>
         <div className="toMove">
-          { img.isImage ?
-            <div className="toMoveIndicator">
-              <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
-            </div>
-            : <span className="playerIndicator">img.value</span>
+          { img === null ? '' :
+            img.isImage ?
+              <div className="toMoveIndicator">
+                <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
+              </div>
+              : <span className="playerIndicator">img.value</span>
           }
           <span className="mover">{mover}</span>
         </div>
@@ -89,10 +90,10 @@ function MoveEntry(props) {
               </div>
               <div>
                 { focus.exPath.length > 0 && game.canExplore ?
-                  <Button variant="primary" onClick={handleMarkAsWin}>{"Mark as win"}</Button>:""
+                  <Button variant="primary" onClick={handleMarkAsWin}>{"MarkAsWin"}</Button>:""
                 }
                 { focus.exPath.length > 0 && game.canExplore ?
-                  <Button variant="primary" onClick={handleMarkAsLoss}>{"Mark as loss"}</Button>:""
+                  <Button variant="primary" onClick={handleMarkAsLoss}>{"MarkAsLoss"}</Button>:""
                 }
               </div>
             </div> : <div/>

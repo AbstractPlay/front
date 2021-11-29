@@ -32,7 +32,7 @@ function GameItem(props) {
       <Row>
         <Col>
           <div>
-            <Link to={{pathname: "/move", state: {myid: myid, game: game}}}>{desc}</Link>
+            <Link to={{pathname: "/move", state: {"myid": myid, "settings": props.settings, "game": game}}}>{desc}</Link>
           </div>
         </Col>
       </Row>

@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ChallengeView from './ChallengeView';
 import ChallengeResponse from './ChallengeResponse';
-import NewChallenge from './NewChallenge';
+import NewChallengeModal from './NewChallengeModal.js';
 import NewProfile from './NewProfile'
 import { API_ENDPOINT_AUTH } from '../config';
 
@@ -66,9 +66,8 @@ function Me(props) {
     myidSetter(id);
   }
 
-  const handleNewChallengeClose = (id) => {
+  const handleNewChallengeClose = () => {
     showNewChallengeModalSetter(false);
-    newChallengeErrorSetter('');
   }
 
   const handleChallengeViewClose = () => {
@@ -144,9 +143,11 @@ function Me(props) {
     }
   }
 
-  const handleNewChallenge = async () => {
-    const game = challengeGame;
-    const opponent = challengePlayer;
+  const handleNewChallenge2 = async (challenge) => {
+    const game = challenge.metaGame;
+    const opponent = challenge.opponent;
+    const variants = challenge.variants;
+
     try {
       const usr = await Auth.currentAuthenticatedUser();
       console.log('currentAuthenticatedUser', usr);
@@ -163,7 +164,7 @@ function Me(props) {
             "challenger": {"id": me.id, "name": me.name},
             "metaGame": game,
             "numPlayers": 2,
-            "variants": [],
+            "variants": variants,
             "challengees": [opponent]
           }})
         });
@@ -171,7 +172,7 @@ function Me(props) {
       varsSetter({ dummy: myid });
     }
     catch (error) {
-      newChallengeErrorSetter(error);
+      errorSetter(error);
     }
   }
 
@@ -220,10 +221,10 @@ function Me(props) {
         <h2>{t('Your games')}</h2>
         <h3>{t('Your move')}</h3>
           { myMove
-              .map(item => <GameItem me={me.id} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)}
+              .map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)}
         <h3>{t("Opponent's move")}</h3>
           { waiting
-              .map(item => <GameItem me={me.id} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)}
+              .map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)}
         <h2>{t('Your challenges')}</h2>
         <h3>{t('Response needed')}</h3>
           { me.challengesReceived.map(item =>
@@ -241,6 +242,7 @@ function Me(props) {
                 showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)}
         <Button variant="primary" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</Button>
 
+{/*
         <Modal show={showNewChallengeModal} onHide={handleNewChallengeClose}>
           <Modal.Header closeButton>
             <Modal.Title>{t('New Challenge')}</Modal.Title>
@@ -261,6 +263,9 @@ function Me(props) {
             </Button>
           </Modal.Footer>
         </Modal>
+              */}
+
+        <NewChallengeModal show={showNewChallengeModal} id={me.id} handleClose={handleNewChallengeClose} handleChallenge={handleNewChallenge2} />
 
         <Modal show={showChallengeViewModal} onHide={handleChallengeViewClose}>
           <Modal.Header closeButton>
