@@ -152,7 +152,6 @@ function GameMove(props) {
   const [move, moveSetter] = useState({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
   const [error, errorSetter] = useState(false);
   const [showSettings, showSettingsSetter] = useState(false);
-  const [rotate, rotateSetter] = useState(0);
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
   const [settings, settingsSetter] = useState(null);
@@ -277,6 +276,7 @@ function GameMove(props) {
     if (renderrep !== null && settings !== null) {
       console.log(renderrep);
       let options = {"divid": "svg", "boardClick": boardClick};
+      options.rotate = settings.rotate;
       if (settings.color === "blind") {
         options.colourBlind = true;
       } else if (settings.color === "patterns") {
@@ -293,6 +293,7 @@ function GameMove(props) {
       const game = gameRef.current;
       newSettings.color = getSetting("color", "standard", gameSettings, userSettings, game.metaGame);
       newSettings.annotate = getSetting("annotate", true, gameSettings, userSettings, game.metaGame);
+      newSettings.rotate = (gameSettings === undefined || gameSettings.rotate === undefined) ? 0 : gameSettings.rotate;
       var options = {};
       if (newSettings.color === "blind") {
           options.colourBlind = true;
@@ -332,11 +333,34 @@ function GameMove(props) {
       showSettingsSetter(true);
   }
 
-  const handleRotate = () => {
-    if (rotate === 0) {
-      rotateSetter(180);
-    } else {
-      rotateSetter(0);
+  const handleRotate = async () => {
+    let newGameSettings = cloneDeep(gameSettings);
+    if (newGameSettings === undefined) newGameSettings = {};
+    let rotate = newGameSettings.rotate;
+    if (rotate === undefined) rotate = 0;
+    rotate = (rotate === 0) ? 180 : 0;
+    newGameSettings.rotate = rotate;
+    gameSettingsSetter(newGameSettings);
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log('currentAuthenticatedUser', usr);
+      await fetch(API_ENDPOINT_AUTH, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
+        },
+        body: JSON.stringify({
+          "query": "update_game_settings",
+          "pars" : {
+            "game": game.id,
+            "settings": newGameSettings
+          }})
+        });
+    }
+    catch (error) {
+      setError(error);
     }
   }
 
