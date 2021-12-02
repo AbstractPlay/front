@@ -36,6 +36,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   game0.sharedPieces = (info.flags !== undefined && info.flags.includes('shared-pieces'));
   game0.perspective = (info.flags !== undefined && info.flags.includes('perspective'));
   game0.scores = (info.flags !== undefined && info.flags.includes('scores'));
+  game0.nomoves = (info.flags !== undefined && info.flags.includes('no-moves'));
   game0.fixedNumPlayers = info.playercounts.length === 1;
   if (game0.state === undefined) {
     throw new Error("Why no state? This shouldn't happen no more!");
@@ -62,7 +63,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   const render = engine.render();
-  if (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2)) {
+  if (!game0.nomoves && (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2))) {
     if (game0.simultaneous)
       movesRef.current = engine.moves(player + 1);
     else
@@ -130,7 +131,7 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
   }
   partialMoveRenderRef.current = partialMove;
   renderrepSetter(gameEngineTmp.render());
-  if (game.canExplore && !partialMove)
+  if (!game.nomoves && game.canExplore && !partialMove)
     movesRef.current = gameEngineTmp.moves();
 }
 
@@ -221,7 +222,6 @@ function GameMove(props) {
   }
 
   const handleView = () => {
-    // doView(state, gameRef.current, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter, partialMoveRenderRef, renderrepSetter, movesRef);
     const newmove = cloneDeep(move);
     newmove.complete = 1;
     moveSetter(newmove);
@@ -235,7 +235,7 @@ function GameMove(props) {
       engine.move(m, true);
     }
     partialMoveRenderRef.current = false;
-    if (foc.moveNumber === explorationRef.current.length - 1) {
+    if (!gameRef.current.nomoves && foc.moveNumber === explorationRef.current.length - 1) {
       movesRef.current = engine.moves();
     }
     focusSetter(foc);
@@ -251,7 +251,7 @@ function GameMove(props) {
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       partialMoveRenderRef.current = false;
       renderrepSetter(gameEngineTmp.render());
-      if (gameRef.current.canExplore)
+      if (!gameRef.current.nomoves && gameRef.current.canExplore)
         movesRef.current = gameEngineTmp.moves();
     }
   }, [state, move, focus]);
