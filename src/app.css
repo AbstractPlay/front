@@ -70,8 +70,16 @@ body {
 }
 
 .board {
+  display: flex;
   background-color: #fff;
   padding: 2em;
+}
+
+.stackboard {
+  flex: 8;
+}
+.stack {
+  flex: 1;
 }
 
 .toMove {
@@ -90,7 +98,7 @@ body {
   width: 1.15rem
 }
 
-.mover {
+.mover, .playerIndicator {
   vertical-align: middle;
 }
 

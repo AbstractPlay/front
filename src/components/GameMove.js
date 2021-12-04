@@ -37,6 +37,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   game0.perspective = (info.flags !== undefined && info.flags.includes('perspective'));
   game0.scores = (info.flags !== undefined && info.flags.includes('scores'));
   game0.nomoves = (info.flags !== undefined && info.flags.includes('no-moves'));
+  game0.stackexpanding = (info.flags !== undefined && info.flags.includes('stacking-expanding'));
   game0.fixedNumPlayers = info.playercounts.length === 1;
   if (game0.state === undefined) {
     throw new Error("Why no state? This shouldn't happen no more!");
@@ -93,6 +94,22 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   explorationRef.current = history;
   focusSetter({"moveNumber": history.length - 1, "exPath": []});
   renderrepSetter(render);
+}
+
+function setupColors(settings, game, t) {
+  var options = {};
+  if (settings.color === "blind") {
+      options.colourBlind = true;
+  } else if (settings.color === "patterns") {
+      options.patterns = true;
+  }
+  game.colors = game.players.map((p, i) => {
+    if (game.sharedPieces) {
+      return {"isImage": false, "value": t("Player") + (i+1).toString()}
+    } else {
+      return {"isImage": true, "value": renderglyph("piece", i + 1, options)}
+    }
+  });
 }
 
 function doView(state, game, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter, partialMoveRenderRef, renderrepSetter, movesRef) {
@@ -240,6 +257,7 @@ function GameMove(props) {
     }
     focusSetter(foc);
     renderrepSetter(engine.render());
+    moveSetter({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
   }
 
   useEffect(() => {
@@ -260,12 +278,29 @@ function GameMove(props) {
   // renderrep. But that means we need to remember to update the renderrep state when game.renderrep changes.
   useEffect(() => {
     function boardClick(row, col, piece) {
-      // console.log("Row: " + row + ", Col: " + col + ", Piece: " + piece);
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       var result = gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       result.previous = moveRef.current.move;
+      console.log(`boardClick:(${row},${col},${piece})`,result);
       moveSetter(result);
+    }
+
+    function expand(row, col) {
+      let node = getFocusNode(explorationRef.current, focusRef.current);
+      let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
+      const svg = stackImage.current.querySelector('SVG');
+      if (svg !== null)
+        svg.remove();
+      let options = {"divid": "stack"};
+      options.rotate = settings.rotate;
+      if (settings.color === "blind") {
+        options.colourBlind = true;
+      } else if (settings.color === "patterns") {
+        options.patterns = true;
+      }
+      options.showAnnotations = settings.annotate;
+      render(gameEngineTmp.renderColumn(row, col), options);
     }
 
     if (boardImage.current !== undefined) {
@@ -282,10 +317,14 @@ function GameMove(props) {
       } else if (settings.color === "patterns") {
         options.patterns = true;
       }
+      if (gameRef.current.stackexpanding) {
+        options.boardHover = (row, col, piece) => expand(col, row);
+      }
       options.showAnnotations = settings.annotate;
+      console.log(renderrep);
       render(renderrep, options);
     }
-  }, [renderrep, settings, moveSetter]);
+  }, [renderrep, settings, moveSetter, renderrepSetter]);
 
   useEffect(() => {
     if (gameRef.current !== null) {
@@ -294,21 +333,7 @@ function GameMove(props) {
       newSettings.color = getSetting("color", "standard", gameSettings, userSettings, game.metaGame);
       newSettings.annotate = getSetting("annotate", true, gameSettings, userSettings, game.metaGame);
       newSettings.rotate = (gameSettings === undefined || gameSettings.rotate === undefined) ? 0 : gameSettings.rotate;
-      var options = {};
-      if (newSettings.color === "blind") {
-          options.colourBlind = true;
-      } else if (newSettings.color === "patterns") {
-          options.patterns = true;
-      }
-      console.log(options);
-      game.colors = game.players.map((p, i) => {
-        if (game.sharedPieces) {
-          return {"isImage": false, "value": t("Player") + (i+1).toString()}
-        } else {
-          return {"isImage": true, "value": renderglyph("piece", i + 1, options)}
-        }
-      });
-      console.log(game.colors[0].value);
+      setupColors(newSettings, game, t);
       settingsSetter(newSettings);
     }
   }, [gameSettings, userSettings, settingsSetter, t]);
@@ -404,6 +429,8 @@ function GameMove(props) {
       console.log("In handleSubmit. game0:");
       console.log(game0);
       setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef, t);
+      setupColors(settings, gameRef.current, t);
+      focusSetter({"moveNumber": explorationRef.current.length - 1, "exPath": []});
     }
     catch (err) {
       setError(err.message);
@@ -411,8 +438,10 @@ function GameMove(props) {
   }
 
   const boardImage = useRef();
+  const stackImage = useRef();
   const game = gameRef.current;
   const exploration = explorationRef.current;
+  console.log("rendering");
   if (!error) {
     if (focus !== null) {
       let moveRows = [];
@@ -492,7 +521,10 @@ function GameMove(props) {
             </div>
           <div className="column middle">
             <div className="columnTitleContainer"><h2 className="columnTitle">{game.name}</h2></div>
-            <div className="board" id="svg" ref={boardImage} style={{width: "100%"}}></div>
+            {gameRef.current.stackexpanding
+              ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
+              : <div className="board" id="svg" ref={boardImage} style={{width: "100%"}}></div>
+            }
             <Button variant="primary" onClick={handleUpdateRenderOptions}>{t("DisplaySettings")}</Button>
             <Button variant="primary" onClick={handleRotate}>{t("Rotate")}</Button>
           </div>

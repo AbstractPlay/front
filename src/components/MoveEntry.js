@@ -56,7 +56,7 @@ function MoveEntry(props) {
               <div className="toMoveIndicator">
                 <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
               </div>
-              : <span className="playerIndicator">img.value</span>
+              : <span className="playerIndicator">{img.value + ':'}</span>
           }
           <span className="mover">{mover}</span>
         </div>
