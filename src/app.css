@@ -98,6 +98,11 @@ body {
   width: 1.15rem
 }
 
+.playerImage {
+  height: 0.8rem;
+  width: 0.8rem
+}
+
 .mover, .playerIndicator {
   vertical-align: middle;
 }

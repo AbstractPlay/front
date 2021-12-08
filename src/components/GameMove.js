@@ -8,7 +8,9 @@ import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_AUTH } from '../config';
 import { GameNode } from './GameTree.js';
 import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
+import GameStatus from './GameStatus.js'
 import MoveEntry from './MoveEntry.js';
+import MoveResults from './MoveResults.js';
 import RenderOptionsModal from './RenderOptionsModal.js';
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
@@ -28,7 +30,28 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   }
 }
 
-function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef, t) {
+function setStatus(engine, game, status) {
+  if (game.scores) {
+    status.scores = [];
+    for (let i = 1; i <= game.numPlayers; i++) {
+      status.scores.push(engine.getPlayerScore(i));
+    }
+  }
+  if (game.limitedPieces) {
+    status.pieces = [];
+    for (let i = 1; i <= game.numPlayers; i++) {
+      status.pieces.push(engine.getPlayerPieces(i));
+    }
+  }
+  if (game.playerStashes) {
+    status.stashes = [];
+    for (let i = 1; i <= game.numPlayers; i++) {
+      status.stashes.push(engine.getPlayerStash(i));
+    }
+  }
+}
+
+function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, t) {
   let engine;
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
@@ -36,8 +59,10 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   game0.sharedPieces = (info.flags !== undefined && info.flags.includes('shared-pieces'));
   game0.perspective = (info.flags !== undefined && info.flags.includes('perspective'));
   game0.scores = (info.flags !== undefined && info.flags.includes('scores'));
-  game0.nomoves = (info.flags !== undefined && info.flags.includes('no-moves'));
-  game0.stackexpanding = (info.flags !== undefined && info.flags.includes('stacking-expanding'));
+  game0.limitedPieces = (info.flags !== undefined && info.flags.includes('limited-pieces'));
+  game0.playerStashes = (info.flags !== undefined && info.flags.includes('player-stashes'));
+  game0.noMoves = (info.flags !== undefined && info.flags.includes('no-moves'));
+  game0.stackExpanding = (info.flags !== undefined && info.flags.includes('stacking-expanding'));
   game0.fixedNumPlayers = info.playercounts.length === 1;
   if (game0.state === undefined) {
     throw new Error("Why no state? This shouldn't happen no more!");
@@ -61,10 +86,16 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
     game0.canExplore = game0.canSubmit || game0.numPlayers === 2;
   }
+  if (typeof engine.chatLog === "function") {
+    game0.moveResults = engine.chatLog(game0.players.map(p => p.name)).reverse().map(e => e.join(" "));
+  } else {
+    game0.moveResults = engine.resultsHistory().reverse();
+  }
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   const render = engine.render();
-  if (!game0.nomoves && (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2))) {
+  setStatus(engine, game0, statusRef.current);
+  if (!game0.noMoves && (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2))) {
     if (game0.simultaneous)
       movesRef.current = engine.moves(player + 1);
     else
@@ -112,10 +143,10 @@ function setupColors(settings, game, t) {
   });
 }
 
-function doView(state, game, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter, partialMoveRenderRef, renderrepSetter, movesRef) {
+function doView(state, game, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
+  partialMoveRenderRef, renderrepSetter, movesRef, statusRef) {
   let node = getFocusNode(explorationRef.current, focus);
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
-  console.log(gameEngineTmp.serialize());
   let partialMove = false;
   if (move.valid && move.complete < 1 && move.canrender === true)
     partialMove = true;
@@ -138,6 +169,7 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
     return;
   }
   if (!partialMove) {
+    setStatus(gameEngineTmp, game, statusRef.current);
     node = getFocusNode(explorationRef.current, focus);
     let newstate = gameEngineTmp.serialize();
     node.AddChild(move.move, newstate);
@@ -147,9 +179,9 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
     moveSetter({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
   }
   partialMoveRenderRef.current = partialMove;
-  renderrepSetter(gameEngineTmp.render());
-  if (!game.nomoves && game.canExplore && !partialMove)
+  if (!game.noMoves && game.canExplore && !partialMove)
     movesRef.current = gameEngineTmp.moves();
+  renderrepSetter(gameEngineTmp.render());
 }
 
 function getFocusNode(exp, foc) {
@@ -175,6 +207,7 @@ function GameMove(props) {
   const [settings, settingsSetter] = useState(null);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
+  const statusRef = useRef({});
   const partialMoveRenderRef = useRef(false);
   const focusRef = useRef();
   focusRef.current = focus;
@@ -215,7 +248,7 @@ function GameMove(props) {
           const result = await res.json();
           let game0 = JSON.parse(result.body);
           console.log(game0);
-          setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef, t);
+          setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, t);
           userSettingsSetter(state.settings);
           gameSettingsSetter(game0.players.find(p => p.id === state.myid).settings);
         }
@@ -252,25 +285,28 @@ function GameMove(props) {
       engine.move(m, true);
     }
     partialMoveRenderRef.current = false;
-    if (!gameRef.current.nomoves && foc.moveNumber === explorationRef.current.length - 1) {
+    if (!gameRef.current.noMoves && foc.moveNumber === explorationRef.current.length - 1) {
       movesRef.current = engine.moves();
     }
     focusSetter(foc);
     renderrepSetter(engine.render());
+    setStatus(engine, gameRef.current, statusRef.current);
     moveSetter({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
   }
 
   useEffect(() => {
     if ((move.valid && move.complete > -1 && move.move !== '') || (move.canrender === true)) {
-      doView(state, gameRef.current, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter, partialMoveRenderRef, renderrepSetter, movesRef);
+      doView(state, gameRef.current, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
+        partialMoveRenderRef, renderrepSetter, movesRef, statusRef);
     }
     else if (partialMoveRenderRef.current && !move.move.startsWith(move.previous)) {
       let node = getFocusNode(explorationRef.current, focus);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       partialMoveRenderRef.current = false;
-      renderrepSetter(gameEngineTmp.render());
-      if (!gameRef.current.nomoves && gameRef.current.canExplore)
+      setStatus(gameEngineTmp, gameRef.current, statusRef.current);
+      if (!gameRef.current.noMoves && gameRef.current.canExplore)
         movesRef.current = gameEngineTmp.moves();
+      renderrepSetter(gameEngineTmp.render());
     }
   }, [state, move, focus]);
 
@@ -317,7 +353,7 @@ function GameMove(props) {
       } else if (settings.color === "patterns") {
         options.patterns = true;
       }
-      if (gameRef.current.stackexpanding) {
+      if (gameRef.current.stackExpanding) {
         options.boardHover = (row, col, piece) => expand(col, row);
       }
       options.showAnnotations = settings.annotate;
@@ -428,7 +464,7 @@ function GameMove(props) {
       let game0 = JSON.parse(result.body);
       console.log("In handleSubmit. game0:");
       console.log(game0);
-      setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, movesRef, focusSetter, explorationRef, t);
+      setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, t);
       setupColors(settings, gameRef.current, t);
       focusSetter({"moveNumber": explorationRef.current.length - 1, "exPath": []});
     }
@@ -444,6 +480,7 @@ function GameMove(props) {
   console.log("rendering");
   if (!error) {
     if (focus !== null) {
+      // Prepare the list of moves
       let moveRows = [];
       const simul = game.simultaneous;
       if (exploration !== null) {
@@ -516,17 +553,19 @@ function GameMove(props) {
         <div className="row">
           <div className="column left">
             <div className="columnTitleContainer"><h2 className="columnTitle">{t("MakeMove")}</h2></div>
+              <GameStatus status={statusRef.current} game={game}/>
               <MoveEntry move={move} toMove={getFocusNode(explorationRef.current, focus).toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
                 focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView]}/>
             </div>
           <div className="column middle">
             <div className="columnTitleContainer"><h2 className="columnTitle">{game.name}</h2></div>
-            {gameRef.current.stackexpanding
+            {gameRef.current.stackExpanding
               ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
               : <div className="board" id="svg" ref={boardImage} style={{width: "100%"}}></div>
             }
             <Button variant="primary" onClick={handleUpdateRenderOptions}>{t("DisplaySettings")}</Button>
             <Button variant="primary" onClick={handleRotate}>{t("Rotate")}</Button>
+            <MoveResults results={game.moveResults}/>
           </div>
           <div className="column right gameMovesContainer">
             <div className="columnTitleContainer"><h2 className="columnTitle">{t("Moves")}</h2></div>
