@@ -1,8 +1,10 @@
-module.exports = {
-    COGNITO_APPID: "582g6mda7dgtgpv9ron3k71361",
-    COGNITO_REDIRECT_LOGIN: "https://play.dev.abstractplay.com/auth",
-    COGNITO_REDIRECT_LOGOUT: "https://play.dev.abstractplay.com/",
+const API_ENDPOINT = "https://m3y2udc717.execute-api.us-east-1.amazonaws.com/dev/";
 
-    GRAPHQL_ENDPOINT_OPEN: "https://api.dev.abstractplay.com/graphql",
-    GRAPHQL_ENDPOINT_AUTH: "https://api.dev.abstractplay.com/graphqlauth",
+module.exports = {
+    COGNITO_APPID: "5tjvv8go4peaudg88oi5mrnn2v",
+    COGNITO_COOKIE_DOMAIN: "d1o94rjd1cgcak.cloudfront.net",
+    COGNITO_REDIRECT_LOGIN: "https://d1o94rjd1cgcak.cloudfront.net/",
+    COGNITO_REDIRECT_LOGOUT: "https://d1o94rjd1cgcak.cloudfront.net/",
+    API_ENDPOINT_OPEN: API_ENDPOINT + "query",
+    API_ENDPOINT_AUTH: API_ENDPOINT + "authQuery",
 };
