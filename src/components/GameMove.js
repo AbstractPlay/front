@@ -325,7 +325,7 @@ function GameMove(props) {
     function expand(row, col) {
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-      const svg = stackImage.current.querySelector('SVG');
+      const svg = stackImage.current.querySelector('svg');
       if (svg !== null)
         svg.remove();
       let options = {"divid": "stack"};
@@ -340,9 +340,10 @@ function GameMove(props) {
     }
 
     if (boardImage.current !== undefined) {
-      const svg = boardImage.current.querySelector('SVG');
-      if (svg !== null)
+      const svg = boardImage.current.querySelector('svg');
+      if (svg !== null) {
         svg.remove();
+      }
     }
     if (renderrep !== null && settings !== null) {
       console.log(renderrep);

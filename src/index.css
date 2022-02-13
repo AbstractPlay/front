@@ -1,13 +1,14 @@
 :root {
-  --main-bg-color: #FBEEC1;
+  /* --main-bg-color: #FBEEC1; */
+  --main-bg-color: white;
 }
 
 :root {
-  --main-fg-color: #659DBD;
+  --main-fg-color: #1a3e6f;
 }
 
 :root {
-  --bg-color2: #8D8741;
+  --bg-color2: #999999;
 }
 
 body {
@@ -21,7 +22,6 @@ body {
   background-color: var(--main-bg-color);
 }
 
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -31,4 +31,10 @@ code {
   color: black;
   background-color: var(--bg-color2);
   border-color: var(--bg-color2);
+}
+
+.btn-primary:hover {
+  color: black;
+  background-color: var(--main-fg-color);
+  border-color: var(--main-fg-color);
 }

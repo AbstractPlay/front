@@ -12,19 +12,6 @@ body {
 }
 */
 
-.metaDescriptionMarkdown {
-  font-size: small;
-}
-
-.metaDescriptionMarkdown h1 {
-  font-size: 1.5rem;
-}
-
-.metaGameRender {
-  width: 15em;
-  padding: 2em;
-}
-
 .column {
   float: left;
 }
@@ -48,6 +35,111 @@ body {
   .column.side, .column.middle {
     width: 100%;
   }
+}
+
+.container {
+  max-width: 95%;
+}
+
+#logo {
+  height: 20vh;
+  padding-top: 5vh;
+}
+
+#login-button, #logout-button {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+}
+
+h1 {
+  margin: 2em;
+}
+
+.centered {
+  text-align:center;
+}
+
+.named-top-border {
+  border-top: 2px solid var(--main-fg-color);
+  padding: 20px;
+  margin: 10px;
+}
+
+.metaGames {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.metaGame {
+  width: 500px;
+  flex-grow: 1;
+  margin: 0.5em 1.5em;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+.metaGameTitle {
+  width: 100%;
+  position: relative;
+  height: 2em;
+}
+
+.metaGameTitleLine {
+  background-color: var(--main-fg-color);
+  height: 2px;
+  width: 100%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.metaGameTitleText {
+  background-color: var(--main-bg-color);
+  font-size: large;
+  font-weight: bold;
+  padding: 0em 0.5em;
+  margin: 0em 1.5em;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.metaGameDescription {
+  width: 75%;
+}
+
+.metaDescriptionMarkdown {
+  font-size: small;
+}
+
+.metaDescriptionMarkdown h1 {
+  font-size: 1.5rem;
+}
+
+ul[title]::before {
+  content: attr(title);
+  display: block;
+}
+
+.metaGameImage {
+  width: 25%;
+  padding: 2em;
+}
+
+.ctitle {
+  font-size: 15px;
+  color: var(--main-fg-color);
+  position: relative;
+  display: inline-block;
+  top: -33px;
+  background: white;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .gameMoves {

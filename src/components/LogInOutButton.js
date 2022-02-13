@@ -7,11 +7,11 @@ function LogInOutButton(props) {
     const { t } = useTranslation();
 
     if (props.token === null) {
-        return (<Button onClick={() => Auth.federatedSignIn()}>{t('LogIn')}</Button>);
+        return (<Button onClick={() => Auth.federatedSignIn()} id="login-button" >{t('LogIn')}</Button>);
     } else {
         return (
             <div>
-                <Button onClick={() => Auth.signOut()}>{t('LogOut')}</Button>
+                <Button onClick={() => Auth.signOut()} id="logout-button">{t('LogOut')}</Button>
             </div>);
     }
 }

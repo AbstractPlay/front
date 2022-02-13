@@ -9,6 +9,7 @@ import Spinner from '../components/Spinner';
 import LogInOutButton from '../components/LogInOutButton';
 import Welcome from './Welcome';
 import GameMove from '../components/GameMove';
+import logo from '../assets/logo2.png';
 
 function Bones(props) {
   const { t } = useTranslation();
@@ -74,8 +75,11 @@ function Bones(props) {
       <Router>
         <Container>
           <Row>
-            <Col><p>{t("Abstract Play")}<br/>{t("Make time for games")}</p></Col>
-            <Col>{t("Menu")}</Col>
+            <Col>
+              <div>
+                <img src={logo} alt="Abstract Play logo"  id="logo" />
+              </div> </Col>
+            <Col></Col>
             <Col><LogInOutButton token={token} /></Col>
           </Row>
           <Row>

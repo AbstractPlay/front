@@ -13,8 +13,8 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/gameslib": "file:../gameslib",
-    "@abstractplay/renderer": "file:../renderer",
+    "@abstractplay/gameslib": "file:../gameslib/abstractplay-gameslib-0.6.0.tgz",
+    "@abstractplay/renderer": "file:../renderer/abstractplay-renderer-0.8.0.tgz",
     "@babel/core": "7.12.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",

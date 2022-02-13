@@ -1,43 +1,52 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {render} from '@abstractplay/renderer';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw'
-import { gameinfo, GameFactory } from '@abstractplay/gameslib';
+import { GameFactory } from '@abstractplay/gameslib';
+import gameImages from '../assets/GameImages';
 
 function MetaItem(props) {
 
-  useEffect(() => {
-    let info = gameinfo.get(props.game.uid);
-    let gameEngine;
-    if (info.playercounts.length > 1) {
-      gameEngine = GameFactory(props.game.uid, 2);
-    } else {
-      gameEngine = GameFactory(props.game.uid);
-    }
-    var data = gameEngine.render();
-    console.log(props.game.uid);
-    console.log(JSON.stringify(data));
-    render(data, { "divid": "svg" + props.game.uid });
-  },[props.game]);
-
   let game = props.game;
+  const image = encodeURIComponent(gameImages[game.uid]);
+  let gameEngine;
+  if (game.playercounts.length > 1) {
+    gameEngine = GameFactory(game.uid, 2);
+  } else {
+    gameEngine = GameFactory(game.uid);
+  }
+  let designers = game.people.filter(p => p.type === "designer").map(p => p.name);
+  let designerString;
+  if (designers.length === 1)
+    designerString = 'Designer: ';
+  else
+    designerString = 'Designers: ';
+  designerString += designers.join(", ");
   return (
-    <tr>
-      <td className="metaGameDescription">
+    <div className="metaGame">
+      <div className="metaGameTitle">
+        <div className="metaGameTitleLine"></div>
+        <div className="metaGameTitleText">{game.name}</div>
+      </div>
+      <div className="metaGameDescription">
         <ReactMarkdown rehypePlugins={[rehypeRaw]} className="metaDescriptionMarkdown">
-          {game.description}
+          {gameEngine.description()}
         </ReactMarkdown>
-        {game.people.filter(p => p.type === "designer").map((p, i) =>
-          <ul key = {i}>{p.name}</ul>
-          )}
-        {game.urls.map((l, i) =>
-          <ul key = {i}><a href="{l}">{l}</a></ul>
-          )}
-      </td>
-      <td className="metaGameRender">
-        <div id={"svg" + game.uid} ></div>
-      </td>
-    </tr>
+        <p>{designerString}</p>
+        <div>External links
+        <ul>
+          {game.urls.map((l, i) =>
+            <li key = {i}><a href={l}>{l}</a></li>
+            )}
+        </ul>
+        </div>
+      </div>
+      <div className="metaGameImage">
+        <div id={"svg" + game.uid} >
+          <img  src={`data:image/svg+xml;utf8,${image}`} alt={game.uid} />
+        </div>
+      </div>
+    </div>
   );
 }
 

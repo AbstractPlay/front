@@ -3,7 +3,7 @@ import React from 'react';
 function GameStatus(props) {
   const status = props.status;
   const game = props.game;
-  if (game.colors == undefined) {
+  if (game.colors === undefined) {
     return (<div></div>);
   }
   else {
