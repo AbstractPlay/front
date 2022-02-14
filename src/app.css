@@ -42,8 +42,8 @@ body {
 }
 
 #logo {
-  height: 20vh;
-  padding-top: 5vh;
+  height: 10vh;
+  padding-top: 2vh;
 }
 
 #login-button, #logout-button {
@@ -53,7 +53,8 @@ body {
 }
 
 h1 {
-  margin: 2em;
+  margin-top: 1em;
+  margin-bottom: 1.5em;
 }
 
 .centered {
@@ -121,25 +122,9 @@ h1 {
   font-size: 1.5rem;
 }
 
-ul[title]::before {
-  content: attr(title);
-  display: block;
-}
-
 .metaGameImage {
   width: 25%;
   padding: 2em;
-}
-
-.ctitle {
-  font-size: 15px;
-  color: var(--main-fg-color);
-  position: relative;
-  display: inline-block;
-  top: -33px;
-  background: white;
-  padding-left: 5px;
-  padding-right: 5px;
 }
 
 .gameMoves {
