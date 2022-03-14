@@ -114,48 +114,65 @@ function NewChallengeModal(props) {
       </Modal.Header>
       <Modal.Body>
         <div className="challenge">
-          <div>
+          <div className="form-group row">
             { error === "" ? '' : <div className="error">{error}</div>}
-            <label>{t("ChooseGame")}</label>
+            <label for="game_for_challenge" className="col-sm-5 col-form-label text-right">{t("ChooseGame")}</label>
+            <div className="col-sm-7">
             { games === null ? <Spinner/> :
-                <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
+                <select className="form-control" name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
                   <option value="">--{t('Select')}--</option>
                   { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
                 </select>
             }
+            </div>
           </div>
-          <div>
-            <label>{t("ChooseOpponent")}</label>
-            { users === null ? <Spinner/> :
-                <select name="users" id="user_for_challenge" onChange={(e) =>
-                  handleChangePlayer({id: e.target.value, name: e.target.options[e.target.selectedIndex].text})}>
-                <option value="">--{t('Select')}--</option>
-                { users
-                  .filter(user => user.id !== myid)
-                  .map(item => { return <option key={item.id} value={item.id}>{item.name}</option>})}
-              </select>
-            }
+          <div className="form-group row">
+            <label for="user_for_challenge" className="col-sm-5 col-form-label  text-right">{t("ChooseOpponent")}</label>
+            <div className="col-sm-7">
+              { users === null ? <Spinner/> :
+                  <select className="form-control" name="users" id="user_for_challenge" onChange={(e) =>
+                    handleChangePlayer({id: e.target.value, name: e.target.options[e.target.selectedIndex].text})}>
+                  <option value="">--{t('Select')}--</option>
+                  { users
+                    .filter(user => user.id !== myid)
+                    .map(item => { return <option key={item.id} value={item.id}>{item.name}</option>})}
+                </select>
+              }
+            </div>
           </div>
           { groupData.length === 0 && nonGroupData.length === 0 ? '' :
             <div className='pickVariant'><span className='pickVariantHeader'>{t("PickVariant")}</span>
               { metaGame === null || groupData.length === 0 ? '' :
                 groupData.map(g =>
-                  <div key={"group:" + g.group} className='pickOneOfVariants' onChange={(e) => handleGroupChange(g.group, e.target.value)}>
-                    <span className='pickOneOfVariantHeader'>{t("PickOneVariant")}</span>
-                    { g.variants.map(v =>
-                      <div key={v.uid} className='pickOneOfVariant'><label><input type="radio" value={v.uid} name={v.group}/> {v.name} </label></div>
-                      )}
-                  </div>
+                  <fieldset className="form-group" key={"group:" + g.group}>
+                    <div className='row' onChange={(e) => handleGroupChange(g.group, e.target.value)}>
+                      <legend className="col-form-label col-sm-5 pt-0 text-right">{t("PickOneVariant")}</legend>
+                      <div className="col-sm-7">
+                          { g.variants.map(v =>
+                              <div className="form-check" key={v.uid}>
+                                <input className="form-check-input" type="radio" id={v.uid} value={v.uid} name={v.group}/>
+                                <label className="form-check-label" for={v.uid}> {v.name} </label>
+                              </div>
+                            )
+                          }
+                      </div>
+                    </div>
+                  </fieldset>
                   )}
               { metaGame === null || nonGroupData.length === 0 ? '' :
-                <div className='pickAnyOfVariants'>
-                  <span className='pickAnyOfVariantHeader'>{t("PickAnyVariant")}</span>
-                  { nonGroupData.map(v =>
-                    <div className='pickAnyOfVariant' key={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)}>
-                      <label><input type="checkbox" value={v.uid} /> {v.name} </label>
-                    </div>)
-                  }
-                </div>
+                <fieldset class="form-group">
+                  <div className='row'>
+                    <legend className="col-form-label col-sm-5 pt-0 text-right">{t("PickAnyVariant")}</legend>
+                    <div className="col-sm-7">
+                      { nonGroupData.map(v =>
+                        <div className="form-check" key={v.uid}>
+                          <input className="form-check-input" type="checkbox" id={v.uid} value={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)} />
+                          <label className='form-check-label' for={v.uid}>{v.name}</label>
+                        </div>)
+                      }
+                    </div>
+                  </div>
+                </fieldset>
               }
             </div>
           }

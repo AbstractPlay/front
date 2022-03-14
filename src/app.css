@@ -12,16 +12,15 @@ body {
 }
 */
 
+/*
 .column {
   float: left;
 }
 
-/* Left and right column */
 .left {
   width: 30%;
 }
 
-/* Middle column */
 .middle {
   width: 50%;
 }
@@ -29,13 +28,16 @@ body {
 .right {
   width: 20%;
 }
+*/
 
 /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+/*
 @media screen and (max-width: 600px) {
   .column.side, .column.middle {
     width: 100%;
   }
 }
+*/
 
 .container {
   max-width: 95%;
@@ -44,6 +46,7 @@ body {
 #logo {
   height: 10vh;
   padding-top: 2vh;
+  padding-bottom: 1vh;
 }
 
 #login-button, #logout-button {
@@ -52,7 +55,37 @@ body {
   left: 50%;
 }
 
+.main {
+  flex: 1;
+  display: flex;
+}
+
+.main > article {
+  flex: 1;
+}
+
+.main > nav {
+  flex: 0 0 5vw;
+  order: -1;
+  padding-top: 1em;
+  border-right: 2px solid #1A3E6F;
+  margin-top: 1em;
+  margin-right: 1.5em;
+}
+
+.article {
+  /* width: 1200px;
+  margin: 0 auto; */
+  display: flex;
+  flex-wrap: wrap;
+}
+
 h1 {
+  width: 100%;
+  font-family: 'Open Sans Condensed', sans-serif;
+  /* font-family: 'Gotham Rounded', sans-serif; */
+  font-size: 40px;
+  font-weight: 700;
   margin-top: 1em;
   margin-bottom: 1.5em;
 }
@@ -127,10 +160,164 @@ h1 {
   padding: 2em;
 }
 
-.gameMoves {
-  height:300px;
-  overflow:auto;
+.groupLevel1 {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 }
+
+/*
+.groupLevel1Header {
+  width: 100%;
+  position: relative;
+  height: 2em;
+}
+
+.groupLevel1Header:before {
+  background-color: var(--main-fg-color);
+  height: 2px;
+  width: 100%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+*/
+.groupLevel1Header {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--main-fg-color);
+  display: block;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  position: relative;
+  text-align: left;
+  z-index: 1;
+}
+
+.groupLevel1Header:before {
+  border-top: 2px solid var(--main-fg-color);
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.groupLevel1Header span {
+  background: var(--main-bg-color);
+  padding: 0em 0.5em;
+  margin: 0em 1.5em;
+}
+
+.groupLevel2 {
+  width: 100%;
+  margin: 1em 0 0.5em 2em;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.groupLevel2Header {
+  width: 100%;
+  color: var(--main-fg-color);
+  display: block;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  position: relative;
+  text-align: left;
+  z-index: 1;
+}
+
+.groupLevel2Header:before {
+  border-top: 1px solid var(--main-fg-color);
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.groupLevel2Header span {
+  background: var(--main-bg-color);
+  padding: 0em 0.5em;
+  margin: 0em 1.5em;
+}
+
+a { color: inherit; }
+
+/*
+a:link {
+  color: black;
+}
+*/
+
+a:hover {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.lisComment {
+  margin-left: 2em;
+}
+
+.gameMoveContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.enterMoveContainer {
+  width: 33%;
+  min-width: 15rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.enterMoveContainer2 {
+  /*
+  margin-left: auto;
+  margin-right: 0;
+  float: right; */
+  min-width: 15rem;
+}
+
+.selectMove {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.enterMove {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.boardContainer {
+  width: 34%;
+  min-width: 300px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.gameMovesContainer {
+  width: 33%;
+  min-width: 15rem;
+  overflow: auto;
+}
+
+.gameMovesContainer2 {
+  min-width: 15rem;
+  float: left;
+}
+
+/*
+.gameMoves {
+}
+*/
 
 .columnTitleContainer {
   display: flex;
@@ -149,7 +336,15 @@ h1 {
 .board {
   display: flex;
   background-color: #fff;
-  padding: 2em;
+  padding: 1em;
+}
+
+.boardButtons {
+  overflow: hidden;
+}
+
+.align-right {
+  float: right;
 }
 
 .stackboard {
@@ -160,9 +355,10 @@ h1 {
 }
 
 .toMove {
-  font-size: 1.5rem;
-  /* display: flex;
+  /*font-size: 1.5rem;
+   display: flex;
   align-items: center; */
+  padding-bottom: 0.5em;
 }
 
 .toMoveIndicator {
@@ -184,6 +380,7 @@ h1 {
   vertical-align: middle;
 }
 
+/*
 .historyState {
   background-color: greenyellow;
   padding: 1rem;
@@ -198,9 +395,25 @@ h1 {
   background-color: lavenderblush;
   padding: 1rem;
 }
+*/
+
+.historyState {
+  color: var(--secondary-color-2);
+  font-weight: bold;
+}
+
+.currentState {
+  color: black;
+  font-weight: bold;
+}
+
+.exploreState {
+  color: var(--secondary-color-3);
+  font-weight: bold;
+}
 
 .uiState {
-  padding: 1rem;
+  padding: 1em 0 0 0;
 }
 
 .movesTable {
@@ -208,14 +421,36 @@ h1 {
   margin-right: auto;
 }
 
+.gameMoveHeaderImg {
+  float:right;
+}
+
+.gameMoveLeftCol {
+  padding-right: 0.2rem;
+  text-align: right;
+}
+
 .gameMoveMiddleCol {
-  padding-left: 2rem;
+  padding-left: 0.7rem;
+  padding-right: 0.2rem;
+  text-align: right;
+}
+
+.move {
+  max-width: 15em;
 }
 
 .gameMove {
   display: inline;
 }
 
+.moveButtons {
+  display: inline-block;
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  margin-left: 2em;
+}
 .gameMoveFocus {
   background-color: #bbb;
 }
@@ -232,16 +467,67 @@ h1 {
   color:#7df00a;
 }
 
-.moveError {
-  color: red;
-}
-
 .error {
   color: red;
 }
 
+.moveError {
+  font-size: 90%;
+  color: red;
+  width: 11em;
+}
+
 .moveMessage {
+  font-size: 90%;
   color: blue;
+  width: 11em;
+}
+
+.fabtn {
+  background-color: white;
+  border: none;
+  color:var(--bg-color2);
+  cursor: pointer;
+}
+
+/* Darker background on mouse-over */
+.fabtn:hover {
+  color:var(--main-fg-color)
+}
+
+.fa-thumbs-up {
+  font-size: 20px;
+  color:#7df00a;
+}
+
+.fa-thumbs-down {
+  font-size: 20px;
+  color: red;
+}
+
+.fa-thumbs-up:hover, .fa-thumbs-down:hover {
+  color: var(--main-fg-color);
+}
+
+.tooltipped {
+  position: relative;
+}
+
+.tooltipped .tooltiptext {
+  visibility: hidden;
+  bottom: 110%;
+  left: 50%;
+  white-space: nowrap;
+  background-color: var(--bg-color2);
+  color: black;
+  border-radius: 6px;
+  padding: 5px 0.5em;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltipped:hover .tooltiptext {
+  visibility: visible;
 }
 
 .challenge {

@@ -213,32 +213,58 @@ function Me(props) {
       }
     }
     return (
-      <div>
-        <h1>{t('WelcomePlayer', {me: me.name})}</h1>
-        <h2>{t('Your games')}</h2>
-        <h3>{t('Your move')}</h3>
-          { myMove
-              .map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)}
-        <h3>{t("Opponent's move")}</h3>
-          { waiting
-              .map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)}
-        <h2>{t('Your challenges')}</h2>
-        <h3>{t('Response needed')}</h3>
-          { me.challengesReceived.map(item =>
-            <ChallengeItem me={me.id} item={item} key={item.id} respond={true}
-              setters={{
-                challengeSetter: challengeSetter,
-                showChallengeViewModalSetter: showChallengeViewModalSetter,
-                showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)}
-        <h3>{t('Waiting on response')}</h3>
-          { me.challengesIssued.map(item =>
-            <ChallengeItem me={me.id} item={item} key={item.id} respond={false}
-              setters={{
-                challengeSetter: challengeSetter,
-                showChallengeViewModalSetter: showChallengeViewModalSetter,
-                showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)}
-        <Button variant="primary" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</Button>
-
+      <div className="main">
+        <nav>
+          <a href="#">{t('About')}</a>
+        </nav>
+        <article>
+          <div className="article">
+            <h1 className="centered">{t('WelcomePlayer', {me: me.name})}</h1>
+            <div className="groupLevel1">
+              <div className="groupLevel1Header"><span>{t('YourGames')}</span></div>
+              <div className="groupLevel2">
+                <div className="groupLevel2Header"><span>{t('YourMove')}</span></div>
+                { myMove.length === 0
+                  ? <span className="lisComment">{t('NoYourMove')}</span>
+                  : myMove.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)}
+              </div>
+              <div className="groupLevel2">
+                <div className="groupLevel2Header"><span>{t('OpponentMove')}</span></div>
+                { waiting.length === 0
+                    ? <span className="lisComment">{t('NoOpponentMove')}</span>
+                    : waiting.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)
+                }
+              </div>
+            </div>
+            <div className="groupLevel1">
+              <div className="groupLevel1Header"><span>{t('YourChallenges')}</span></div>
+              <div className="groupLevel2">
+                <div className="groupLevel2Header"><span>{t('ChallengeResponse')}</span></div>
+                { me.challengesReceived.length == 0
+                  ? <span className="lisComment">{t('NoChallengeResponse')}</span>
+                  : me.challengesReceived.map(item =>
+                    <ChallengeItem me={me.id} item={item} key={item.id} respond={true}
+                      setters={{
+                        challengeSetter: challengeSetter,
+                        showChallengeViewModalSetter: showChallengeViewModalSetter,
+                        showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
+                }
+              </div>
+              <div className="groupLevel2">
+                <div className="groupLevel2Header"><span>{t('WaitingResponse')}</span></div>
+                { me.challengesIssued.length == 0
+                  ? <span className="lisComment">{t('NoWaitingResponse')}</span>
+                  : me.challengesIssued.map(item =>
+                    <ChallengeItem me={me.id} item={item} key={item.id} respond={false}
+                      setters={{
+                        challengeSetter: challengeSetter,
+                        showChallengeViewModalSetter: showChallengeViewModalSetter,
+                        showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)}
+              </div>
+            </div>
+            <Button variant="primary" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</Button>
+            </div>
+        </article>
         <NewChallengeModal show={showNewChallengeModal} id={me.id} handleClose={handleNewChallengeClose} handleChallenge={handleNewChallenge2} />
 
         <Modal show={showChallengeViewModal} onHide={handleChallengeViewClose}>

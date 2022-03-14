@@ -1,14 +1,10 @@
 :root {
-  /* --main-bg-color: #FBEEC1; */
   --main-bg-color: white;
-}
-
-:root {
   --main-fg-color: #1a3e6f;
-}
-
-:root {
   --bg-color2: #999999;
+  --secondary-color-1:#ff6633;
+  --secondary-color-2:#99cccc;
+  --secondary-color-3:#008ca8;
 }
 
 body {
@@ -27,14 +23,20 @@ code {
     monospace;
 }
 
-.btn-primary {
+.btn-primary, .btn-primary:visited, .btn-primary:focus {
   color: black;
   background-color: var(--bg-color2);
-  border-color: var(--bg-color2);
+  box-shadow: none;
+}
+
+.btn-primary:visited {
+  color: black;
+  background-color: var(--bg-color2);
+  border-color: black;
 }
 
 .btn-primary:hover {
-  color: black;
+  color: white;
   background-color: var(--main-fg-color);
   border-color: var(--main-fg-color);
 }

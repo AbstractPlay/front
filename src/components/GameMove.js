@@ -278,6 +278,7 @@ function GameMove(props) {
   }
 
   const handleGameMoveClick = (foc) => {
+    console.log("foc = ", foc);
     let node = getFocusNode(explorationRef.current, foc);
     let engine = GameFactory(gameRef.current.metaGame, node.state);
     if (gameRef.current.simultaneous && foc.exPath.length === 1) {
@@ -478,14 +479,39 @@ function GameMove(props) {
   const stackImage = useRef();
   const game = gameRef.current;
   const exploration = explorationRef.current;
-  console.log("rendering");
+  console.log("rendering at focus ", focus);
   if (!error) {
     if (focus !== null) {
+      // Prepare header
+      const simul = game.simultaneous;
+      let numcolumns = simul ? 1 : game.numPlayers;
+      let header = [];
+      for (let i = 0; i < numcolumns; i++) {
+        let player = game.players[i].name;
+        let img = null;
+        if (game.colors !== undefined) img = game.colors[i];
+        header.push(
+          <th key={"th-" + i}>
+            { img === null ? '' :
+              img.isImage ?
+                <div className="gameMoveHeaderImg">
+                  <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
+                </div>
+                : <span className="playerIndicator">{img.value + ':'}</span>
+            }
+          </th>
+        );
+        header.push(
+          <th key={"th-" + player}>
+            <span className="mover">{player}</span>
+          </th>
+        );
+      }
       // Prepare the list of moves
       let moveRows = [];
-      const simul = game.simultaneous;
+      let path = [];
+      let curNumVariations= 0;
       if (exploration !== null) {
-        let path = [];
         for (let i = 1; i < exploration.length; i++) {
           let className = "gameMove";
           if (i === focus.moveNumber && (i < exploration.length - 1 || (i === exploration.length - 1 && focus.exPath.length === 0)))
@@ -498,6 +524,7 @@ function GameMove(props) {
             let className = "gameMove";
             if (j === focus.exPath.length - 1)
               className += " gameMoveFocus";
+            curNumVariations = node.children.length;
             node = node.children[focus.exPath[j]];
             if (node.outcome === 0)
               className += " gameMoveUnknownOutcome";
@@ -523,7 +550,6 @@ function GameMove(props) {
             path.push(next);
           }
         }
-        let numcolumns = simul ? 1 : game.numPlayers;
         for (let i = 0; i < Math.ceil(path.length / numcolumns); i++) {
           let row = [];
           for (let j = 0; j < numcolumns; j++) {
@@ -533,13 +559,15 @@ function GameMove(props) {
             if (movenum < path.length) {
               row.push(
                 <td key={'td1-'+i+'-'+j}>
-                  { path[movenum].map((m, k) =>
-                    <div key={"move" + i + "-" + j + "-" + k}>{k > 0 ? ", ": ""}
-                      <div className={m.class} onClick={() => handleGameMoveClick(m.path)}>
-                        {m.move}
-                      </div>
-                    </div>)
-                  }
+                  <div className="move">
+                    { path[movenum].map((m, k) =>
+                      <span key={"move" + i + "-" + j + "-" + k}>{k > 0 ? ", ": ""}
+                        <span className={m.class} onClick={() => handleGameMoveClick(m.path)}>
+                          {m.move}
+                        </span>
+                      </span>)
+                    }
+                  </div>
                 </td>);
             }
             else {
@@ -550,41 +578,95 @@ function GameMove(props) {
         }
       }
 
+      console.log("path");
+      console.log(path);
+      console.log("focus");
+      console.log(focus);
+      console.log(curNumVariations);
       return (
-        <div className="row">
-          <div className="column left">
-            <div className="columnTitleContainer"><h2 className="columnTitle">{t("MakeMove")}</h2></div>
-              <GameStatus status={statusRef.current} game={game}/>
-              <MoveEntry move={move} toMove={getFocusNode(explorationRef.current, focus).toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
-                focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView]}/>
-            </div>
-          <div className="column middle">
-            <div className="columnTitleContainer"><h2 className="columnTitle">{game.name}</h2></div>
-            {gameRef.current.stackExpanding
-              ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
-              : <div className="board" id="svg" ref={boardImage} style={{width: "100%"}}></div>
-            }
-            <Button variant="primary" onClick={handleUpdateRenderOptions}>{t("DisplaySettings")}</Button>
-            <Button variant="primary" onClick={handleRotate}>{t("Rotate")}</Button>
-            <MoveResults results={game.moveResults}/>
-          </div>
-          <div className="column right gameMovesContainer">
-            <div className="columnTitleContainer"><h2 className="columnTitle">{t("Moves")}</h2></div>
-            <div className="gameMoves">
-              <table className="striped movesTable">
-                <tbody>
-                  { moveRows.map((row, index) =>
-                    <tr key={"move" + index}>
-                      { row }
-                    </tr>)
+        <div className="main">
+          <nav>
+            <a href="#">{t('About')}</a>
+          </nav>
+          <article>
+            <div className="article">
+              <div className="gameMoveContainer">
+                <div className="enterMoveContainer">
+                  <div className="enterMoveContainer2">
+                    <div className="groupLevel1Header"><span>{t("MakeMove")}</span></div>
+                      <GameStatus status={statusRef.current} game={game}/>
+                      <MoveEntry move={move} toMove={getFocusNode(explorationRef.current, focus).toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
+                        focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView]}/>
+                    </div>
+                  </div>
+                <div className="boardContainer">
+                  <div className="groupLevel1Header"><span>{game.name}</span></div>
+                  {gameRef.current.stackExpanding
+                    ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
+                    : <div className="board" id="svg" ref={boardImage} style={{width: "100%"}}></div>
                   }
-                </tbody>
-              </table>
+                  <div className="boardButtons">
+                    <button className="fabtn align-right" onClick={handleRotate}>
+                      <i className="fa fa-refresh"></i>
+                    </button>
+                    <button className="fabtn align-right" onClick={handleUpdateRenderOptions}>
+                      <i className="fa fa-cog"></i>
+                    </button>
+                  </div>
+                  {/*
+                  <Button variant="primary" onClick={handleUpdateRenderOptions}>{t("DisplaySettings")}</Button>
+                  <Button variant="primary" onClick={handleRotate}>{t("Rotate")}</Button> */}
+                </div>
+                <div className="gameMovesContainer">
+                  <div className="gameMovesContainer2">
+                    <div className="groupLevel1Header"><span>{t("Moves")}</span></div>
+                      <div className="moveButtons">
+                        <button className="fabtn" onClick={() => handleGameMoveClick({"moveNumber": 0, "exPath": []})}>
+                          <i className="fa fa-angle-double-left"></i>
+                        </button>
+                        <button className="fabtn" onClick={
+                            focus.moveNumber + focus.exPath.length > 0 ? () => handleGameMoveClick(focus.moveNumber + focus.exPath.length == 1 ? {"moveNumber": 0, "exPath": []} :
+                              path[focus.moveNumber + focus.exPath.length - 2][0].path) : undefined }>
+                          <i className="fa fa-angle-left"></i>
+                        </button>
+                        <button className="fabtn" onClick={
+                          focus.moveNumber + focus.exPath.length == path.length && focus.exPath.length > 0 ?
+                            () => handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + 1) % curNumVariations]}) : undefined }>
+                          <i className="fa fa-angle-up"></i>
+                        </button>
+                        <button className="fabtn" onClick={
+                          focus.moveNumber + focus.exPath.length == path.length && focus.exPath.length > 0 ?
+                            () => handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + curNumVariations - 1) % curNumVariations]}) : undefined }>
+                          <i className="fa fa-angle-down"></i>
+                        </button>
+                        <button className="fabtn" onClick={focus.moveNumber + focus.exPath.length < path.length ? () => handleGameMoveClick(path[focus.moveNumber + focus.exPath.length][0].path) : undefined }>
+                          <i className="fa fa-angle-right"></i>
+                        </button>
+                        <button className="fabtn" onClick={() => handleGameMoveClick(path[exploration.length - 2][0].path)}>
+                          <i className="fa fa-angle-double-right"></i>
+                        </button>
+                      </div>
+                      <table className="movesTable">
+                        <tbody>
+                          <tr>{header}</tr>
+                          { moveRows.map((row, index) =>
+                            <tr key={"move" + index}>
+                              { row }
+                            </tr>)
+                          }
+                        </tbody>
+                      </table>
+                  </div>
+                </div>
+                <RenderOptionsModal show={showSettings} metaGame={{"id":game.metaGame, "name": game.name}} gameId={game.id} settings={userSettings} gameSettings={gameSettings}
+                  settingsSetter={userSettingsSetter} gameSettingsSetter={gameSettingsSetter} showSettingsSetter={showSettingsSetter} setError={setError}
+                  handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
+              </div>
+              <div className="moveResultsContainer">
+                <MoveResults results={game.moveResults}/>
+              </div>
             </div>
-          </div>
-          <RenderOptionsModal show={showSettings} metaGame={{"id":game.metaGame, "name": game.name}} gameId={game.id} settings={userSettings} gameSettings={gameSettings}
-            settingsSetter={userSettingsSetter} gameSettingsSetter={gameSettingsSetter} showSettingsSetter={showSettingsSetter} setError={setError}
-            handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
+          </article>
         </div>
       );
     }

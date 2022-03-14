@@ -46,10 +46,12 @@ function MoveEntry(props) {
 
   return (
     <div className="uiState">
-      <div className={ uiState === -1 ? "historyState" : uiState === 0 ? "currentState" : "exploreState"}>
-        <span className="uiStateHeading">
-          { uiState === -1 ? t("History") : uiState === 0 ? t("Current") : t("Explore")}
-        </span>
+      <div className={ uiState === -1 ? "historyStateContainer" : uiState === 0 ? "currentStateContainer" : "exploreStateContainer"}>
+          { uiState === -1 ?
+            <span className="historyState">{t("History")}</span> : uiState === 0 ?
+            <span className="currentState">{t("Current")}</span> :
+            <span className="exploreState">{t("Explore")}</span>
+          }
         <div className="toMove">
           { img === null ? '' :
             img.isImage ?
@@ -60,47 +62,56 @@ function MoveEntry(props) {
           }
           <span className="mover">{mover}</span>
         </div>
-        { !move.valid || (move.valid && move.complete === -1)  ?
-          <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :
-          ''
-        }
-        { (game.canSubmit || game.canExplore) && exploration !== null && focus.moveNumber === exploration.length - 1
-          && (game.canExplore || focus.exPath.length === 0) ?
-            <div>
+        <div className="enterMoveNope">
+          { !move.valid || (move.valid && move.complete === -1)  ?
+            <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :
+            ''
+          }
+          { (game.canSubmit || game.canExplore) && exploration !== null && focus.moveNumber === exploration.length - 1
+            && (game.canExplore || focus.exPath.length === 0) ?
               <div>
                 { moves === null ? <div/> :
-                  <div>
-                    <label>{t("ChooseMove")}</label>
-                    <select name="moves" id="selectmove" value="" onChange={(e) => handleMove(e.target.value)}>
-                    <option value="">--{t('Select')}--</option>
+                  <div className="selectMove">
+                    {/*<label for="selectmove" className="form-label-sm">{t("ChooseMove")}</label>*/}
+                    <select className="form-controlNope" name="moves" id="selectmove" value="" onChange={(e) => handleMove(e.target.value)}>
+                      <option value="">{t('ChooseMove')}</option>
                       { moves.map((move, index) => { return <option key={index} value={move}>{move}</option>})}
                     </select>
                   </div>
                 }
-              </div>
-              <div>
-                <label>
-                  {t('EnterMove')}
-                  <input name="move" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)} />
-                </label>
-                { move.valid && move.complete === 0 && move.move.length > 0 ?
-                  <Button variant="primary" onClick={handleView}>{"Complete move"}</Button>
-                  : ''
-                }
-              </div>
-              <div>
-                { focus.exPath.length > 0 && game.canExplore ?
-                  <Button variant="primary" onClick={handleMarkAsWin}>{"MarkAsWin"}</Button>:""
-                }
-                { focus.exPath.length > 0 && game.canExplore ?
-                  <Button variant="primary" onClick={handleMarkAsLoss}>{"MarkAsLoss"}</Button>:""
-                }
-              </div>
-            </div> : <div/>
-        }
+                <div className="enterMove">
+                  {/* <label for="enterAMove" className="form-label-sm text-right">{t('EnterMove')}</label>*/}
+                  <input className="form-controlNope form-control-smNope" name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}
+                    placeholder={t('EnterMove')} />
+                </div>
+                <div>
+                  { move.valid && move.complete === 0 && move.move.length > 0 ?
+                    <Button variant="primary" onClick={handleView}>{"Complete move"}</Button>
+                    : ''
+                  }
+                </div>
+              </div> : <div/>
+          }
+        </div>
       </div>
-      { moveToSubmit !== null ?
-        <Button variant="primary" onClick={handleSubmit}>{"Submit: " + moveToSubmit}</Button> : ""
+      { moveToSubmit !== null && focus.exPath.length == 1 ?
+        <Button variant="primary" onClick={handleSubmit} className='tooltipped'>
+          {t('Submit')}
+          <span className="tooltiptext">{t('SubmitMove', {move: moveToSubmit})}</span>
+        </Button>
+        : ""
+      }
+      { focus.exPath.length > 0 && game.canExplore ?
+        <button className="fabtn tooltipped" onClick={handleMarkAsWin}>
+          <i className="fa fa-thumbs-up"></i>
+          <span className="tooltiptext">{t('Winning')}</span>
+        </button>:""
+      }
+      { focus.exPath.length > 0 && game.canExplore ?
+        <button className="fabtn tooltipped" onClick={handleMarkAsLoss}>
+          <i className="fa fa-thumbs-down"></i>
+          <span className="tooltiptext">{t('Losing')}</span>
+        </button>:""
       }
     </div>
   );
