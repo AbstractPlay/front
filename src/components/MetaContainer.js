@@ -17,7 +17,7 @@ function MetaContainer(props) {
     <div>
       <h1 className="centered">{t("AvailableGames")}</h1>
       <div className="metaGames">
-        {[...gameinfo.keys()].sort().filter(k => k != "volcano").map(k =>
+        {[...gameinfo.keys()].sort().filter(k => k !== "volcano").map(k =>
           <MetaItem key={gameinfo.get(k).uid} game={gameinfo.get(k)} />)
         }
       </div>

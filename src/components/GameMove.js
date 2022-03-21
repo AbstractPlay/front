@@ -534,7 +534,7 @@ function GameMove(props) {
               className += " gameMoveWin";
             path.push([{"class": className, "move": node.move, "path": {"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}}]);
           }
-          if (node.children.length > 0) {
+          while (node.children.length > 0) {
             let next = [];
             for (let k = 0; k < node.children.length; k++) {
               const c = node.children[k];
@@ -548,6 +548,9 @@ function GameMove(props) {
               next.push({"class": className, "move": c.move, "path": {"moveNumber": focus.moveNumber, "exPath": focus.exPath.concat(k)}})
             }
             path.push(next);
+            if (node.children.length !== 1)
+              break;
+            node = node.children[0];
           }
         }
         for (let i = 0; i < Math.ceil(path.length / numcolumns); i++) {
@@ -621,30 +624,37 @@ function GameMove(props) {
                   <div className="gameMovesContainer2">
                     <div className="groupLevel1Header"><span>{t("Moves")}</span></div>
                       <div className="moveButtons">
-                        <button className="fabtn" onClick={() => handleGameMoveClick({"moveNumber": 0, "exPath": []})}>
+                        <div className="famnav tooltipped" onClick={() => handleGameMoveClick({"moveNumber": 0, "exPath": []})}>
                           <i className="fa fa-angle-double-left"></i>
-                        </button>
-                        <button className="fabtn" onClick={
-                            focus.moveNumber + focus.exPath.length > 0 ? () => handleGameMoveClick(focus.moveNumber + focus.exPath.length == 1 ? {"moveNumber": 0, "exPath": []} :
+                          <span className="tooltiptext">{t('GoBegin')}</span>
+                        </div>
+                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length > 0 ? "" : " disabled")} onClick={
+                            focus.moveNumber + focus.exPath.length > 0 ? () => handleGameMoveClick(focus.moveNumber + focus.exPath.length === 1 ? {"moveNumber": 0, "exPath": []} :
                               path[focus.moveNumber + focus.exPath.length - 2][0].path) : undefined }>
                           <i className="fa fa-angle-left"></i>
-                        </button>
-                        <button className="fabtn" onClick={
-                          focus.moveNumber + focus.exPath.length == path.length && focus.exPath.length > 0 ?
+                          <span className="tooltiptext">{t('GoPrev')}</span>
+                        </div>
+                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1 ? "" : " disabled")} onClick={
+                          focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 ?
                             () => handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + 1) % curNumVariations]}) : undefined }>
                           <i className="fa fa-angle-up"></i>
-                        </button>
-                        <button className="fabtn" onClick={
-                          focus.moveNumber + focus.exPath.length == path.length && focus.exPath.length > 0 ?
+                          <span className="tooltiptext">{t('GoNextVar')}</span>
+                        </div>
+                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1 ? "" : " disabled")} onClick={
+                          focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 ?
                             () => handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + curNumVariations - 1) % curNumVariations]}) : undefined }>
                           <i className="fa fa-angle-down"></i>
-                        </button>
-                        <button className="fabtn" onClick={focus.moveNumber + focus.exPath.length < path.length ? () => handleGameMoveClick(path[focus.moveNumber + focus.exPath.length][0].path) : undefined }>
+                          <span className="tooltiptext">{t('GoPrevVar')}</span>
+                        </div>
+                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length < path.length ? "" : " disabled")} onClick={
+                          focus.moveNumber + focus.exPath.length < path.length ? () => handleGameMoveClick(path[focus.moveNumber + focus.exPath.length][0].path) : undefined }>
                           <i className="fa fa-angle-right"></i>
-                        </button>
-                        <button className="fabtn" onClick={() => handleGameMoveClick(path[exploration.length - 2][0].path)}>
+                          <span className="tooltiptext">{t('GoNext')}</span>
+                        </div>
+                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length != exploration.length - 1 ? "" : " disabled")} onClick={() => handleGameMoveClick(path[exploration.length - 2][0].path)}>
                           <i className="fa fa-angle-double-right"></i>
-                        </button>
+                          <span className="tooltiptext">{t('GoCurrent')}</span>
+                        </div>
                       </div>
                       <table className="movesTable">
                         <tbody>

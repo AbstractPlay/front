@@ -240,7 +240,7 @@ function Me(props) {
               <div className="groupLevel1Header"><span>{t('YourChallenges')}</span></div>
               <div className="groupLevel2">
                 <div className="groupLevel2Header"><span>{t('ChallengeResponse')}</span></div>
-                { me.challengesReceived.length == 0
+                { me.challengesReceived.length === 0
                   ? <span className="lisComment">{t('NoChallengeResponse')}</span>
                   : me.challengesReceived.map(item =>
                     <ChallengeItem me={me.id} item={item} key={item.id} respond={true}
@@ -252,7 +252,7 @@ function Me(props) {
               </div>
               <div className="groupLevel2">
                 <div className="groupLevel2Header"><span>{t('WaitingResponse')}</span></div>
-                { me.challengesIssued.length == 0
+                { me.challengesIssued.length === 0
                   ? <span className="lisComment">{t('NoWaitingResponse')}</span>
                   : me.challengesIssued.map(item =>
                     <ChallengeItem me={me.id} item={item} key={item.id} respond={false}

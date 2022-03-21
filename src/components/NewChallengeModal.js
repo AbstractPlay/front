@@ -75,7 +75,7 @@ function NewChallengeModal(props) {
   const handleChallenge = () => {
     if (metaGame === null) {
       errorSetter(t("SelectAGame"));
-    } else if (playerRef.current == null) {
+    } else if (playerRef.current === null) {
       errorSetter(t("SelectAnOpponent"));
     } else {
       let variants = [];

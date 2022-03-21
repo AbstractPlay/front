@@ -94,7 +94,7 @@ function MoveEntry(props) {
           }
         </div>
       </div>
-      { moveToSubmit !== null && focus.exPath.length == 1 ?
+      { moveToSubmit !== null && focus.exPath.length === 1 ?
         <Button variant="primary" onClick={handleSubmit} className='tooltipped'>
           {t('Submit')}
           <span className="tooltiptext">{t('SubmitMove', {move: moveToSubmit})}</span>
