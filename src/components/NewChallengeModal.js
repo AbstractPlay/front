@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import Spinner from './Spinner';
 import { API_ENDPOINT_OPEN } from '../config';
 import { gameinfo } from '@abstractplay/gameslib';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 function NewChallengeModal(props) {
@@ -179,12 +178,12 @@ function NewChallengeModal(props) {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={handleChallenge}>
+        <button className="apButton" onClick={handleChallenge}>
           {t('Challenge')}
-        </Button>
-        <Button variant="primary" onClick={handleNewChallengeClose}>
+        </button>
+        <button className="apButton" onClick={handleNewChallengeClose}>
           {t('Close')}
-        </Button>
+        </button>
       </Modal.Footer>
     </Modal>
   )

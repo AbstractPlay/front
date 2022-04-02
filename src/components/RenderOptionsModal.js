@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Auth } from 'aws-amplify';
 import { API_ENDPOINT_AUTH } from '../config';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { cloneDeep } from 'lodash';
 
@@ -217,12 +216,12 @@ function NewChallengeModal(props) {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={handleSave}>
+        <button className="apButton" onClick={handleSave}>
           {t('Save')}
-        </Button>
-        <Button variant="primary" onClick={handleClose}>
+        </button>
+        <button className="apButton" onClick={handleClose}>
           {t('Close')}
-        </Button>
+        </button>
       </Modal.Footer>
     </Modal>
   )

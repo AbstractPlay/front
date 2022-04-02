@@ -9,7 +9,7 @@ import Spinner from '../components/Spinner';
 import LogInOutButton from '../components/LogInOutButton';
 import Welcome from './Welcome';
 import GameMove from '../components/GameMove';
-import logo from '../assets/logo2.png';
+import logo from '../assets/AbstractPlayLogo.svg';
 
 function Bones(props) {
   const { t } = useTranslation();

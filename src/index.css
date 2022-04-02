@@ -3,8 +3,11 @@
   --main-fg-color: #1a3e6f;
   --bg-color2: #999999;
   --secondary-color-1:#ff6633;
+  --secondary-color-1-lighter: #ff8962;
   --secondary-color-2:#99cccc;
+  --secondary-color-2-lighter:#99cccc;
   --secondary-color-3:#008ca8;
+  --secondary-color-3-lighter:#009fbf;
 }
 
 body {

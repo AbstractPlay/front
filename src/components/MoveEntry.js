@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 
 function MoveEntry(props) {
@@ -86,7 +85,7 @@ function MoveEntry(props) {
                 </div>
                 <div>
                   { move.valid && move.complete === 0 && move.move.length > 0 ?
-                    <Button variant="primary" onClick={handleView}>{"Complete move"}</Button>
+                    <button className="apButton" onClick={handleView}>{"Complete move"}</button>
                     : ''
                   }
                 </div>
@@ -95,10 +94,10 @@ function MoveEntry(props) {
         </div>
       </div>
       { moveToSubmit !== null && focus.exPath.length === 1 ?
-        <Button variant="primary" onClick={handleSubmit} className='tooltipped'>
+        <button className="apButton tooltipped" onClick={handleSubmit}>
           {t('Submit')}
           <span className="tooltiptext">{t('SubmitMove', {move: moveToSubmit})}</span>
-        </Button>
+        </button>
         : ""
       }
       { focus.exPath.length > 0 && game.canExplore ?

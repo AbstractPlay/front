@@ -31,9 +31,8 @@ function GameItem(props) {
     <Container>
       <Row>
         <Col>
-          <div>
-            <Link to={{pathname: "/move", state: {"myid": myid, "settings": props.settings, "game": game}}}>{desc}</Link>
-          </div>
+          <i className="fa fa-circle apBullet"></i>
+          <Link to={{pathname: "/move", state: {"myid": myid, "settings": props.settings, "game": game}}}>{desc}</Link>
         </Col>
       </Row>
     </Container>

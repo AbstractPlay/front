@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Container, Row, Col } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
 import { gameinfo } from '@abstractplay/gameslib';
 
 function ChallengeItem(props) {
@@ -27,7 +26,7 @@ function ChallengeItem(props) {
         <Row>
           <Col>
             <div>{t("ChallengeFrom", {game: game.name, challenger: challenge.challenger.name})}
-              <Button variant="primary" onClick={() => handleChallengeResponseClick(challenge)}>{t("Respond")}</Button>
+              <button className="apButton" variant="primary" onClick={() => handleChallengeResponseClick(challenge)}>{t("Respond")}</button>
             </div>
           </Col>
         </Row>
@@ -53,7 +52,7 @@ function ChallengeItem(props) {
         <Row>
           <Col>
             <div>{desc}
-              <Button variant="primary" onClick={() => handleChallengeViewClick(challenge)}>{t("View")}</Button>
+              <button className="apButton" variant="primary" onClick={() => handleChallengeViewClick(challenge)}>{t("View")}</button>
             </div>
           </Col>
         </Row>

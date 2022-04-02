@@ -55,6 +55,25 @@ body {
   left: 50%;
 }
 
+.apButton {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, var(--secondary-color-3-lighter) 0%, var(--secondary-color-3) 100%);
+  background-origin: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+  
+.apButton:hover {
+  background: var(--main-fg-color);
+}
+
 .main {
   flex: 1;
   display: flex;
@@ -184,6 +203,20 @@ h1 {
   transform: translateY(-50%);
 }
 */
+
+.dashboardContainer1 {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dashboardContainer2 {
+  margin-top: 2em;
+  width: 50%;
+  min-width: 400px;
+}
+
 .groupLevel1Header {
   width: 100%;
   margin-left: auto;
@@ -248,6 +281,14 @@ h1 {
   margin: 0em 1.5em;
 }
 
+.apBullet {
+  color: var(--secondary-color-1);
+  font-size: 10px;
+  position: relative;
+  bottom: 2px;
+  padding-right: 0.7em;
+}
+
 a { color: inherit; }
 
 /*
@@ -279,10 +320,6 @@ a:hover {
 }
 
 .enterMoveContainer2 {
-  /*
-  margin-left: auto;
-  margin-right: 0;
-  float: right; */
   min-width: 15rem;
 }
 
@@ -306,7 +343,8 @@ a:hover {
 .gameMovesContainer {
   width: 33%;
   min-width: 15rem;
-  overflow: auto;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .gameMovesContainer2 {
@@ -314,10 +352,22 @@ a:hover {
   float: left;
 }
 
-/*
-.gameMoves {
+.moveResultsContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-*/
+
+.moveResultsContainer2 {
+  margin-top: 2em;
+  width: 45%;
+  min-width: 400px;
+}
+
+.moveResultsTable {
+  margin-top: 1em;
+}
 
 .columnTitleContainer {
   display: flex;
@@ -376,8 +426,13 @@ a:hover {
   width: 0.8rem
 }
 
-.mover, .playerIndicator {
+.playerIndicator {
   vertical-align: middle;
+}
+
+.mover {
+  vertical-align: middle;
+  margin-left: 0.5em;
 }
 
 /*

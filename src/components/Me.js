@@ -4,7 +4,6 @@ import { Auth } from 'aws-amplify';
 import Spinner from './Spinner';
 import GameItem from './GameItem';
 import ChallengeItem from './ChallengeItem';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ChallengeView from './ChallengeView';
 import ChallengeResponse from './ChallengeResponse';
@@ -219,50 +218,54 @@ function Me(props) {
         </nav>
         <article>
           <div className="article">
-            <h1 className="centered">{t('WelcomePlayer', {me: me.name})}</h1>
-            <div className="groupLevel1">
-              <div className="groupLevel1Header"><span>{t('YourGames')}</span></div>
-              <div className="groupLevel2">
-                <div className="groupLevel2Header"><span>{t('YourMove')}</span></div>
-                { myMove.length === 0
-                  ? <span className="lisComment">{t('NoYourMove')}</span>
-                  : myMove.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)}
+            <div className="dashboardContainer1">
+              <div className="dashboardContainer2">
+                <h1 className="centered">{t('WelcomePlayer', {me: me.name})}</h1>
+                <div className="groupLevel1">
+                  <div className="groupLevel1Header"><span>{t('YourGames')}</span></div>
+                  <div className="groupLevel2">
+                    <div className="groupLevel2Header"><span>{t('YourMove')}</span></div>
+                    { myMove.length === 0
+                      ? <span className="lisComment">{t('NoYourMove')}</span>
+                      : myMove.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)}
+                  </div>
+                  <div className="groupLevel2">
+                    <div className="groupLevel2Header"><span>{t('OpponentMove')}</span></div>
+                    { waiting.length === 0
+                        ? <span className="lisComment">{t('NoOpponentMove')}</span>
+                        : waiting.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)
+                    }
+                  </div>
+                </div>
+                <div className="groupLevel1">
+                  <div className="groupLevel1Header"><span>{t('YourChallenges')}</span></div>
+                  <div className="groupLevel2">
+                    <div className="groupLevel2Header"><span>{t('ChallengeResponse')}</span></div>
+                    { me.challengesReceived.length === 0
+                      ? <span className="lisComment">{t('NoChallengeResponse')}</span>
+                      : me.challengesReceived.map(item =>
+                        <ChallengeItem me={me.id} item={item} key={item.id} respond={true}
+                          setters={{
+                            challengeSetter: challengeSetter,
+                            showChallengeViewModalSetter: showChallengeViewModalSetter,
+                            showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
+                    }
+                  </div>
+                  <div className="groupLevel2">
+                    <div className="groupLevel2Header"><span>{t('WaitingResponse')}</span></div>
+                    { me.challengesIssued.length === 0
+                      ? <span className="lisComment">{t('NoWaitingResponse')}</span>
+                      : me.challengesIssued.map(item =>
+                        <ChallengeItem me={me.id} item={item} key={item.id} respond={false}
+                          setters={{
+                            challengeSetter: challengeSetter,
+                            showChallengeViewModalSetter: showChallengeViewModalSetter,
+                            showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)}
+                  </div>
+                </div>
+                <button className="apButton" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</button>
+                </div>
               </div>
-              <div className="groupLevel2">
-                <div className="groupLevel2Header"><span>{t('OpponentMove')}</span></div>
-                { waiting.length === 0
-                    ? <span className="lisComment">{t('NoOpponentMove')}</span>
-                    : waiting.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)
-                }
-              </div>
-            </div>
-            <div className="groupLevel1">
-              <div className="groupLevel1Header"><span>{t('YourChallenges')}</span></div>
-              <div className="groupLevel2">
-                <div className="groupLevel2Header"><span>{t('ChallengeResponse')}</span></div>
-                { me.challengesReceived.length === 0
-                  ? <span className="lisComment">{t('NoChallengeResponse')}</span>
-                  : me.challengesReceived.map(item =>
-                    <ChallengeItem me={me.id} item={item} key={item.id} respond={true}
-                      setters={{
-                        challengeSetter: challengeSetter,
-                        showChallengeViewModalSetter: showChallengeViewModalSetter,
-                        showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
-                }
-              </div>
-              <div className="groupLevel2">
-                <div className="groupLevel2Header"><span>{t('WaitingResponse')}</span></div>
-                { me.challengesIssued.length === 0
-                  ? <span className="lisComment">{t('NoWaitingResponse')}</span>
-                  : me.challengesIssued.map(item =>
-                    <ChallengeItem me={me.id} item={item} key={item.id} respond={false}
-                      setters={{
-                        challengeSetter: challengeSetter,
-                        showChallengeViewModalSetter: showChallengeViewModalSetter,
-                        showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)}
-              </div>
-            </div>
-            <Button variant="primary" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</Button>
             </div>
         </article>
         <NewChallengeModal show={showNewChallengeModal} id={me.id} handleClose={handleNewChallengeClose} handleChallenge={handleNewChallenge2} />
@@ -276,12 +279,12 @@ function Me(props) {
             }
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={handleChallengeRevoke}>
+            <button className="apButton" onClick={handleChallengeRevoke}>
               {t('Revoke challenge')}
-            </Button>
-            <Button variant="primary" onClick={handleChallengeViewClose}>
+            </button>
+            <button className="apButton" onClick={handleChallengeViewClose}>
               {t('Close')}
-            </Button>
+            </button>
           </Modal.Footer>
         </Modal>
 
@@ -294,15 +297,15 @@ function Me(props) {
             }
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={() => handleChallengeResponse(true)}>
+            <button className="apButton" onClick={() => handleChallengeResponse(true)}>
               {t('Accept')}
-            </Button>
-            <Button variant="primary" onClick={() => handleChallengeResponse(false)}>
-            {t('Reject')}
-            </Button>
-            <Button variant="primary" onClick={handleChallengeResponseClose}>
+            </button>
+            <button className="apButton" onClick={() => handleChallengeResponse(false)}>
+              {t('Reject')}
+            </button>
+            <button className="apButton" onClick={handleChallengeResponseClose}>
               {t('Close')}
-            </Button>
+            </button>
           </Modal.Footer>
         </Modal>
       </div>

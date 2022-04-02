@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Auth } from 'aws-amplify';
 import { API_ENDPOINT_AUTH } from '../config';
@@ -91,12 +90,12 @@ function NewProfile(props) {
         <h4>{errorMessage}</h4>}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={handleNewProfile}>
+        <button className="apButton" onClick={handleNewProfile}>
           Submit
-        </Button>
-        <Button variant="primary" onClick={handleNewProfileClose}>
+        </button>
+        <button className="apButton" onClick={handleNewProfileClose}>
           Close
-        </Button>
+        </button>
       </Modal.Footer>
     </Modal>
   );

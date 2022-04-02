@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { render, renderglyph } from '@abstractplay/renderer';
@@ -616,9 +615,6 @@ function GameMove(props) {
                       <i className="fa fa-cog"></i>
                     </button>
                   </div>
-                  {/*
-                  <Button variant="primary" onClick={handleUpdateRenderOptions}>{t("DisplaySettings")}</Button>
-                  <Button variant="primary" onClick={handleRotate}>{t("Rotate")}</Button> */}
                 </div>
                 <div className="gameMovesContainer">
                   <div className="gameMovesContainer2">
@@ -673,7 +669,10 @@ function GameMove(props) {
                   handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
               </div>
               <div className="moveResultsContainer">
-                <MoveResults results={game.moveResults}/>
+                <div className="moveResultsContainer2">
+                  <div className="groupLevel1Header"><span>Game summary</span></div>
+                  <MoveResults className="moveResults" results={game.moveResults}/>
+                </div>
               </div>
             </div>
           </article>
