@@ -5,12 +5,12 @@ import { render, renderglyph } from '@abstractplay/renderer';
 import { Auth } from 'aws-amplify';
 import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_AUTH } from '../config';
-import { GameNode } from './GameTree.js';
+import { GameNode } from './GameTree';
 import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
-import GameStatus from './GameStatus.js'
-import MoveEntry from './MoveEntry.js';
-import MoveResults from './MoveResults.js';
-import RenderOptionsModal from './RenderOptionsModal.js';
+import GameStatus from './GameStatus'
+import MoveEntry from './MoveEntry';
+import MoveResults from './MoveResults';
+import RenderOptionsModal from './RenderOptionsModal';
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {

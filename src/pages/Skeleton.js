@@ -1,10 +1,8 @@
 import React, { useState, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
 import { COGNITO_APPID, COGNITO_COOKIE_DOMAIN, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';
 import Amplify, { Auth } from 'aws-amplify';
 import './Skeleton.css';
-import { Container, Row, Col } from 'react-bootstrap';
 import Spinner from '../components/Spinner';
 import LogInOutButton from '../components/LogInOutButton';
 import Welcome from './Welcome';
@@ -12,7 +10,6 @@ import GameMove from '../components/GameMove';
 import logo from '../assets/AbstractPlayLogo.svg';
 
 function Bones(props) {
-  const { t } = useTranslation();
   const [authed, authedSetter] = useState(false);
   const [token, tokenSetter] = useState(null);
 
@@ -73,17 +70,17 @@ function Bones(props) {
   else
     return (
       <Router>
-        <Container>
-          <Row>
-            <Col>
-              <div>
-                <img src={logo} alt="Abstract Play logo"  id="logo" />
-              </div> </Col>
-            <Col></Col>
-            <Col><LogInOutButton token={token} /></Col>
-          </Row>
-          <Row>
-            <Col>
+        <div className="apPageContainer">
+          <div className="apHeader">
+            <div className="apLogo">
+              <img src={logo} alt="Abstract Play logo"  id="logo" />
+            </div>
+            <div className="loginOut">
+              <LogInOutButton token={token} />
+            </div>
+          </div>
+          <div>
+            <div>
               <Switch>
                 <Route path="/move">
                   <GameMove />
@@ -92,12 +89,12 @@ function Bones(props) {
                   <Welcome token={token} />
                 </Route>
               </Switch>
-            </Col>
-          </Row>
-          <Row>
-            <Col>Footer</Col>
-          </Row>
-        </Container>
+            </div>
+          </div>
+          <div>
+            Footer
+          </div>
+        </div>
       </Router>
     );
 }

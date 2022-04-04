@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Modal from 'react-bootstrap/Modal';
 import { Auth } from 'aws-amplify';
 import { API_ENDPOINT_AUTH } from '../config';
+import Modal from './Modal';
 
 function NewProfile(props) {
   const [show, showSetter] = useState(props.show);
@@ -56,14 +56,11 @@ function NewProfile(props) {
   }
 
   return (
-    <Modal show={show} onHide={handleNewProfileClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>New Profile</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>{
+    <Modal show={show} title={t('NewProfile')} 
+      buttons={[{label: t('Submit'), action: handleNewProfile}, {label: t('Close'), action: handleNewProfileClose}]}>
+      <div>{
         (!error)?
         <div>
-          <h4>{t('CreateProfile')}</h4>
           <form>
             <label>
               {t('ProfileName')}
@@ -88,15 +85,7 @@ function NewProfile(props) {
           </form>
         </div>:
         <h4>{errorMessage}</h4>}
-      </Modal.Body>
-      <Modal.Footer>
-        <button className="apButton" onClick={handleNewProfile}>
-          Submit
-        </button>
-        <button className="apButton" onClick={handleNewProfileClose}>
-          Close
-        </button>
-      </Modal.Footer>
+      </div>
     </Modal>
   );
 }

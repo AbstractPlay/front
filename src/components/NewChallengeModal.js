@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Spinner from './Spinner';
 import { API_ENDPOINT_OPEN } from '../config';
 import { gameinfo } from '@abstractplay/gameslib';
-import Modal from 'react-bootstrap/Modal';
+import Modal from './Modal';
 
 function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
@@ -107,29 +107,30 @@ function NewChallengeModal(props) {
   }
 
   return (
-    <Modal show={show} onHide={handleNewChallengeClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>{t('NewChallenge')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <Modal show={show} title={t('NewChallenge')}
+      buttons={[{label: t('Challenge'), action: handleChallenge}, {label: t('Close'), action: handleNewChallengeClose}]}>
+      <div>
+        <div>{t('NewChallenge')}</div>
+      </div>
+      <div>
         <div className="challenge">
-          <div className="form-group row">
-            { error === "" ? '' : <div className="error">{error}</div>}
-            <label for="game_for_challenge" className="col-sm-5 col-form-label text-right">{t("ChooseGame")}</label>
-            <div className="col-sm-7">
-            { games === null ? <Spinner/> :
-                <select className="form-control" name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
-                  <option value="">--{t('Select')}--</option>
-                  { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
-                </select>
-            }
+          <div>
+            { error === "" ? '' : <div className="error">{error}</div> }
+            <label htmlFor="game_for_challenge" >{t("ChooseGame")}</label>
+            <div >
+              { games === null ? <Spinner/> :
+                  <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
+                    <option value="">--{t('Select')}--</option>
+                    { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
+                  </select>
+              }
             </div>
           </div>
-          <div className="form-group row">
-            <label for="user_for_challenge" className="col-sm-5 col-form-label  text-right">{t("ChooseOpponent")}</label>
-            <div className="col-sm-7">
+          <div>
+            <label htmlFor="user_for_challenge">{t("ChooseOpponent")}</label>
+            <div>
               { users === null ? <Spinner/> :
-                  <select className="form-control" name="users" id="user_for_challenge" onChange={(e) =>
+                <select name="users" id="user_for_challenge" onChange={(e) =>
                     handleChangePlayer({id: e.target.value, name: e.target.options[e.target.selectedIndex].text})}>
                   <option value="">--{t('Select')}--</option>
                   { users
@@ -143,14 +144,14 @@ function NewChallengeModal(props) {
             <div className='pickVariant'><span className='pickVariantHeader'>{t("PickVariant")}</span>
               { metaGame === null || groupData.length === 0 ? '' :
                 groupData.map(g =>
-                  <fieldset className="form-group" key={"group:" + g.group}>
-                    <div className='row' onChange={(e) => handleGroupChange(g.group, e.target.value)}>
-                      <legend className="col-form-label col-sm-5 pt-0 text-right">{t("PickOneVariant")}</legend>
-                      <div className="col-sm-7">
+                  <fieldset key={"group:" + g.group}>
+                    <div onChange={(e) => handleGroupChange(g.group, e.target.value)}>
+                      <legend>{t("PickOneVariant")}</legend>
+                      <div>
                           { g.variants.map(v =>
-                              <div className="form-check" key={v.uid}>
-                                <input className="form-check-input" type="radio" id={v.uid} value={v.uid} name={v.group}/>
-                                <label className="form-check-label" for={v.uid}> {v.name} </label>
+                              <div key={v.uid}>
+                                <input type="radio" id={v.uid} value={v.uid} name={v.group}/>
+                                <label htmlFor={v.uid}> {v.name} </label>
                               </div>
                             )
                           }
@@ -159,14 +160,14 @@ function NewChallengeModal(props) {
                   </fieldset>
                   )}
               { metaGame === null || nonGroupData.length === 0 ? '' :
-                <fieldset class="form-group">
-                  <div className='row'>
-                    <legend className="col-form-label col-sm-5 pt-0 text-right">{t("PickAnyVariant")}</legend>
-                    <div className="col-sm-7">
+                <fieldset>
+                  <div>
+                    <legend>{t("PickAnyVariant")}</legend>
+                    <div >
                       { nonGroupData.map(v =>
-                        <div className="form-check" key={v.uid}>
-                          <input className="form-check-input" type="checkbox" id={v.uid} value={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)} />
-                          <label className='form-check-label' for={v.uid}>{v.name}</label>
+                        <div key={v.uid}>
+                          <input type="checkbox" id={v.uid} value={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)} />
+                          <label htmlFor={v.uid}>{v.name}</label>
                         </div>)
                       }
                     </div>
@@ -176,15 +177,7 @@ function NewChallengeModal(props) {
             </div>
           }
         </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <button className="apButton" onClick={handleChallenge}>
-          {t('Challenge')}
-        </button>
-        <button className="apButton" onClick={handleNewChallengeClose}>
-          {t('Close')}
-        </button>
-      </Modal.Footer>
+      </div>
     </Modal>
   )
 }

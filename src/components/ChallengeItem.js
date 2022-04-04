@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Container, Row, Col } from 'react-bootstrap';
 import { gameinfo } from '@abstractplay/gameslib';
 
 function ChallengeItem(props) {
@@ -22,15 +21,11 @@ function ChallengeItem(props) {
 
   if (respond) {
     return (
-      <Container>
-        <Row>
-          <Col>
-            <div>{t("ChallengeFrom", {game: game.name, challenger: challenge.challenger.name})}
-              <button className="apButton" variant="primary" onClick={() => handleChallengeResponseClick(challenge)}>{t("Respond")}</button>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      <div>
+        <div>{t("ChallengeFrom", {game: game.name, challenger: challenge.challenger.name})}
+          <button className="apButton" variant="primary" onClick={() => handleChallengeResponseClick(challenge)}>{t("Respond")}</button>
+        </div>
+      </div>
     );
   }
   else {
@@ -48,15 +43,11 @@ function ChallengeItem(props) {
       }
     }
     return (
-      <Container>
-        <Row>
-          <Col>
-            <div>{desc}
-              <button className="apButton" variant="primary" onClick={() => handleChallengeViewClick(challenge)}>{t("View")}</button>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      <li>
+        <i className="fa fa-circle apBullet"></i>
+        {desc}
+        <button className="apButton inlineButton" variant="primary" onClick={() => handleChallengeViewClick(challenge)}>{t("View")}</button>
+      </li>
     );
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { gameinfo } from '@abstractplay/gameslib';
+
 function ChallengeResponse(props) {
   const { t } = useTranslation();
 

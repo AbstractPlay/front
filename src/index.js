@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './i18n';
 import * as serviceWorker from './serviceWorker';
 import Skeleton from './pages/Skeleton';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import './app.css'
 

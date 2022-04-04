@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Auth } from 'aws-amplify';
 import { API_ENDPOINT_AUTH } from '../config';
-import Modal from 'react-bootstrap/Modal';
 import { cloneDeep } from 'lodash';
+import Modal from './Modal';
 
 function getSettingAndLevel(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -149,11 +149,9 @@ function NewChallengeModal(props) {
   }
 
   return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>{t('ChangeRenderOptions')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <Modal show={show} title={t('ChangeRenderOptions')}
+      buttons={[{label: t('Save'), action: handleSave}, {label: t('Close'), action: handleClose}]}>
+      <div>
         <div className='chooseColors'>
           <span className='chooseColorsHeader'>{t("ChooseColors")}</span>
           <div className='pickOneOfColors'>
@@ -214,15 +212,7 @@ function NewChallengeModal(props) {
             </div>
           </div>
         </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <button className="apButton" onClick={handleSave}>
-          {t('Save')}
-        </button>
-        <button className="apButton" onClick={handleClose}>
-          {t('Close')}
-        </button>
-      </Modal.Footer>
+      </div>
     </Modal>
   )
 }

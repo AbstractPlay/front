@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {Link} from "react-router-dom";
-import {Container, Row, Col} from 'react-bootstrap';
 import { gameinfo } from '@abstractplay/gameslib';
 
 function GameItem(props) {
@@ -28,14 +27,10 @@ function GameItem(props) {
     }
   }
   return (
-    <Container>
-      <Row>
-        <Col>
-          <i className="fa fa-circle apBullet"></i>
-          <Link to={{pathname: "/move", state: {"myid": myid, "settings": props.settings, "game": game}}}>{desc}</Link>
-        </Col>
-      </Row>
-    </Container>
+    <li>
+      <i className="fa fa-circle apBullet"></i>
+      <Link to={{pathname: "/move", state: {"myid": myid, "settings": props.settings, "game": game}}}>{desc}</Link>
+    </li>
   );
 }
 

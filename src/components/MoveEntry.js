@@ -80,7 +80,7 @@ function MoveEntry(props) {
                 }
                 <div className="enterMove">
                   {/* <label for="enterAMove" className="form-label-sm text-right">{t('EnterMove')}</label>*/}
-                  <input className="form-controlNope form-control-smNope" name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}
+                  <input name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}
                     placeholder={t('EnterMove')} />
                 </div>
                 <div>
