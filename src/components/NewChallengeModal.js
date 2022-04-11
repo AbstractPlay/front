@@ -112,71 +112,69 @@ function NewChallengeModal(props) {
       <div>
         <div>{t('NewChallenge')}</div>
       </div>
-      <div>
-        <div className="challenge">
-          <div>
-            { error === "" ? '' : <div className="error">{error}</div> }
-            <label htmlFor="game_for_challenge" >{t("ChooseGame")}</label>
-            <div >
-              { games === null ? <Spinner/> :
-                  <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
-                    <option value="">--{t('Select')}--</option>
-                    { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
-                  </select>
-              }
-            </div>
-          </div>
-          <div>
-            <label htmlFor="user_for_challenge">{t("ChooseOpponent")}</label>
-            <div>
-              { users === null ? <Spinner/> :
-                <select name="users" id="user_for_challenge" onChange={(e) =>
-                    handleChangePlayer({id: e.target.value, name: e.target.options[e.target.selectedIndex].text})}>
-                  <option value="">--{t('Select')}--</option>
-                  { users
-                    .filter(user => user.id !== myid)
-                    .map(item => { return <option key={item.id} value={item.id}>{item.name}</option>})}
-                </select>
-              }
-            </div>
-          </div>
-          { groupData.length === 0 && nonGroupData.length === 0 ? '' :
-            <div className='pickVariant'><span className='pickVariantHeader'>{t("PickVariant")}</span>
-              { metaGame === null || groupData.length === 0 ? '' :
-                groupData.map(g =>
-                  <fieldset key={"group:" + g.group}>
-                    <div onChange={(e) => handleGroupChange(g.group, e.target.value)}>
-                      <legend>{t("PickOneVariant")}</legend>
-                      <div>
-                          { g.variants.map(v =>
-                              <div key={v.uid}>
-                                <input type="radio" id={v.uid} value={v.uid} name={v.group}/>
-                                <label htmlFor={v.uid}> {v.name} </label>
-                              </div>
-                            )
-                          }
-                      </div>
-                    </div>
-                  </fieldset>
-                  )}
-              { metaGame === null || nonGroupData.length === 0 ? '' :
-                <fieldset>
-                  <div>
-                    <legend>{t("PickAnyVariant")}</legend>
-                    <div >
-                      { nonGroupData.map(v =>
-                        <div key={v.uid}>
-                          <input type="checkbox" id={v.uid} value={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)} />
-                          <label htmlFor={v.uid}>{v.name}</label>
-                        </div>)
-                      }
-                    </div>
-                  </div>
-                </fieldset>
-              }
-            </div>
+      <div className="challenge">
+        <div className="newChallengeLabelDiv">
+          <label className="newChallengeLabel" htmlFor="game_for_challenge" >{t("ChooseGame")}</label>
+        </div>
+        <div className="newChallengeInputDiv">
+          { games === null ? <Spinner/> :
+            <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
+              <option value="">--{t('Select')}--</option>
+              { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
+            </select>
           }
         </div>
+        <div className="newChallengeLabelDiv">
+          <label className="newChallengeLabel" htmlFor="user_for_challenge">{t("ChooseOpponent")}</label>
+        </div>
+        <div className="newChallengeInputDiv">
+          { users === null ? <Spinner/> :
+            <select className="newChallengeInput" name="users" id="user_for_challenge" onChange={(e) => handleChangePlayer({id: e.target.value, name: e.target.options[e.target.selectedIndex].text})}>
+              <option value="">--{t('Select')}--</option>
+              { users
+                .filter(user => user.id !== myid)
+                .map(item => { return <option key={item.id} value={item.id}>{item.name}</option>})}
+            </select>
+          }
+        </div>
+        { groupData.length === 0 && nonGroupData.length === 0 ? '' :
+          <div>
+            <span className='pickVariantHeader'>{t("PickVariant")}</span>
+            { metaGame === null || groupData.length === 0 ? '' :
+              groupData.map(g =>
+                <div className="pickVariant "key={"group:" + g.group} onChange={(e) => handleGroupChange(g.group, e.target.value)}>
+                  <legend>{t("PickOneVariant")}</legend>
+                  <div className="pickVariantVariant">
+                    <div key="default">
+                      <input type="radio" id="default" value="" name={g.group}/>
+                      <label htmlFor="default"> Default {g.group} </label>
+                    </div>
+                    { g.variants.map(v =>
+                          <div key={v.uid}>
+                            <input type="radio" id={v.uid} value={v.uid} name={g.group}/>
+                            <label htmlFor={v.uid}> {v.name} </label>
+                          </div>
+                        )
+                      }
+                  </div>
+                </div>
+              )
+            }
+            { metaGame === null || nonGroupData.length === 0 ? '' :
+              <div className="pickVariant">
+                <legend>{t("PickAnyVariant")}</legend>
+                <div className="pickVariantVariant">
+                  { nonGroupData.map(v =>
+                    <div key={v.uid}>
+                      <input type="checkbox" id={v.uid} value={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)} />
+                      <label htmlFor={v.uid}>{v.name}</label>
+                    </div>)
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
       </div>
     </Modal>
   )

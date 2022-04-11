@@ -92,7 +92,6 @@ function Bones(props) {
             </div>
           </div>
           <div>
-            Footer
           </div>
         </div>
       </Router>

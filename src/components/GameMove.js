@@ -490,21 +490,23 @@ function GameMove(props) {
         let img = null;
         if (game.colors !== undefined) img = game.colors[i];
         header.push(
-          <th key={"th-" + i}>
-            { img === null ? '' :
-              img.isImage ?
-                <div className="gameMoveHeaderImg">
-                  <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
-                </div>
-                : <span className="playerIndicator">{img.value + ':'}</span>
-            }
+          <th colspan="2" key={"th-" + i}>
+            <div className="player">
+              { img === null ? '' :
+                img.isImage ?
+                    <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
+                  : <span className="playerIndicator">{img.value + ':'}</span>
+              }
+              <span className="mover">{player}</span>
+            </div>
           </th>
         );
+        /*
         header.push(
           <th key={"th-" + player}>
-            <span className="mover">{player}</span>
           </th>
         );
+        */
       }
       // Prepare the list of moves
       let moveRows = [];

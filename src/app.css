@@ -53,9 +53,12 @@
   flex: 0 0 5vw;
   order: -1;
   padding-top: 1em;
+  padding-right: 1em;
   border-right: 2px solid #1A3E6F;
   margin-top: 1em;
   margin-right: 1.5em;
+  display: flex;
+  justify-content: end;
 }
 
 .article {
@@ -369,15 +372,17 @@ a:hover {
   flex: 1;
 }
 
-.toMove {
-  /*font-size: 1.5rem;
-   display: flex;
-  align-items: center; */
+.player {
+  display: flex;
+  align-items: center;
   padding-bottom: 0.5em;
 }
 
+th .player {
+  justify-content: center;
+}
+
 .toMoveIndicator {
-  display: inline;
   padding-right: 0.5rem;
 }
 
@@ -396,7 +401,6 @@ a:hover {
 }
 
 .mover {
-  vertical-align: middle;
   margin-left: 0.5em;
 }
 
@@ -573,22 +577,33 @@ a:hover {
 }
 
 .challenge {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+.newChallengeLabelDiv {
   display: block;
+  width: 30%;
+  text-align: right;
+  padding-bottom: 0.3em;
 }
 
-.pickOneOfVariants {
+.newChallengeLabel {
+  padding-right: 1em;
+}
+
+.newChallengeInputDiv {
+  display: block;
+  width: 70%;
+}
+
+.pickVariant {
   padding-left: 1rem;
 }
 
-.pickOneOfVariant {
-  padding-left: 1rem;
-}
-
-.pickAnyOfVariants {
-  padding-left: 1rem;
-}
-
-.pickAnyOfVariant {
+.pickVariantVariant {
   padding-left: 1rem;
 }
 
@@ -597,8 +612,11 @@ a:hover {
 }
 
 .radios {
-  display: block;
   padding-left: 1rem;
+}
+
+div.radios label {
+  display: block;
 }
 
 .apModal {

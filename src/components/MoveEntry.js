@@ -51,17 +51,15 @@ function MoveEntry(props) {
             <span className="currentState">{t("Current")}</span> :
             <span className="exploreState">{t("Explore")}</span>
           }
-        <div className="toMove">
+        <div className="player">
           { img === null ? '' :
             img.isImage ?
-              <div className="toMoveIndicator">
-                <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
-              </div>
+              <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
               : <span className="playerIndicator">{img.value + ':'}</span>
           }
           <span className="mover">{mover}</span>
         </div>
-        <div className="enterMoveNope">
+        <div>
           { !move.valid || (move.valid && move.complete === -1)  ?
             <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :
             ''
