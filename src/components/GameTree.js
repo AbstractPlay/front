@@ -15,15 +15,14 @@ export class GameNode {
   }
 
   AddChild(move, state) {
-    this.children.forEach(child => {
-      if (child.move === move) {
-        return child;
-      }
-    });
+    for (let i = 0; i < this.children.length; i++) {
+      if (this.children[i].move === move)
+        return i;
+    }
     const child = new GameNode(this, move, state);
     this.children.push(child);
     this.UpdateOutcome();
-    return child;
+    return this.children.length - 1;
   }
 
   UpdateOutcome() {

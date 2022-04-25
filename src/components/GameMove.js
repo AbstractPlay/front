@@ -171,9 +171,9 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
     setStatus(gameEngineTmp, game, statusRef.current);
     node = getFocusNode(explorationRef.current, focus);
     let newstate = gameEngineTmp.serialize();
-    node.AddChild(move.move, newstate);
+    const pos = node.AddChild(move.move, newstate);
     let newfocus = cloneDeep(focus);
-    newfocus.exPath.push(node.children.length - 1);
+    newfocus.exPath.push(pos);
     focusSetter(newfocus);
     moveSetter({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
   }
@@ -189,6 +189,64 @@ function getFocusNode(exp, foc) {
     curNode = curNode.children[p];
   }
   return curNode;
+}
+
+function useEventListener(eventName, handler, element = window){
+  const savedHandler = useRef();
+
+  useEffect(() => {
+    savedHandler.current = handler;
+  }, [handler]);
+
+  useEffect(
+    () => {
+      const isSupported = element && element.addEventListener;
+      if (!isSupported) return;
+
+      const eventListener = event => savedHandler.current(event);
+      element.addEventListener(eventName, eventListener);
+
+      // Remove event listener on cleanup
+      return () => {
+        element.removeEventListener(eventName, eventListener);
+      };
+    },
+    [eventName, element] // Re-run if eventName or element changes
+  );
+}
+
+function getPath(focus, exploration, path) {
+  let curNumVariations = 0;
+  for (let i = 1; i < exploration.length; i++) {
+    path.push([{"moveNumber": i, "exPath": []}]);
+  }
+  if (focus.moveNumber === exploration.length - 1) {
+    let node = exploration[focus.moveNumber];
+    for (let j = 0; j < focus.exPath.length; j++) {
+      curNumVariations = node.children.length;
+      node = node.children[focus.exPath[j]];
+      path.push([{"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}]);
+    }
+    while (node.children.length > 0) {
+      let next = [];
+      for (let k = 0; k < node.children.length; k++) {
+        const c = node.children[k];
+        let className = "gameMove";
+        if (c.outcome === 0)
+          className += " gameMoveUnknownOutcome";
+        else if (c.outcome === -1)
+          className += " gameMoveLoss";
+        else if (c.outcome === 1)
+          className += " gameMoveWin";
+        next.push({"moveNumber": focus.moveNumber, "exPath": focus.exPath.concat(k)});
+      }
+      path.push(next);
+      if (node.children.length !== 1)
+        break;
+      node = node.children[0];
+    }
+  }
+  return curNumVariations;
 }
 
 function GameMove(props) {
@@ -313,6 +371,8 @@ function GameMove(props) {
   // We don't want this to be triggered for every change to "game", so it only depends on
   // renderrep. But that means we need to remember to update the renderrep state when game.renderrep changes.
   useEffect(() => {
+    let options = {};
+
     function boardClick(row, col, piece) {
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
@@ -328,14 +388,8 @@ function GameMove(props) {
       const svg = stackImage.current.querySelector('svg');
       if (svg !== null)
         svg.remove();
-      let options = {"divid": "stack"};
-      options.rotate = settings.rotate;
-      if (settings.color === "blind") {
-        options.colourBlind = true;
-      } else if (settings.color === "patterns") {
-        options.patterns = true;
-      }
-      options.showAnnotations = settings.annotate;
+      options.divid = "stack";
+      console.log(gameEngineTmp.renderColumn(row, col));
       render(gameEngineTmp.renderColumn(row, col), options);
     }
 
@@ -344,24 +398,28 @@ function GameMove(props) {
       if (svg !== null) {
         svg.remove();
       }
-    }
-    if (renderrep !== null && settings !== null) {
-      console.log(renderrep);
-      let options = {"divid": "svg", "boardClick": boardClick};
-      options.rotate = settings.rotate;
-      if (settings.color === "blind") {
-        options.colourBlind = true;
-      } else if (settings.color === "patterns") {
-        options.patterns = true;
+      if (renderrep !== null && settings !== null) {
+        console.log(renderrep);
+        options = {"divid": "svg"};
+        if (focus.moveNumber === explorationRef.current.length - 1) {
+          options.boardClick = boardClick;
+        }
+        options.rotate = settings.rotate;
+        if (settings.color === "blind") {
+          options.colourBlind = true;
+        } else if (settings.color === "patterns") {
+          options.patterns = true;
+        }
+        if (gameRef.current.stackExpanding) {
+          options.boardHover = (row, col, piece) => { console.log("gm", row, col);expand(col, row); };
+        }
+        options.showAnnotations = settings.annotate;
+        console.log(renderrep);
+        console.log("options = ", options);
+        render(renderrep, options);
       }
-      if (gameRef.current.stackExpanding) {
-        options.boardHover = (row, col, piece) => expand(col, row);
-      }
-      options.showAnnotations = settings.annotate;
-      console.log(renderrep);
-      render(renderrep, options);
     }
-  }, [renderrep, settings, moveSetter, renderrepSetter]);
+  }, [renderrep, focus, settings, moveSetter, renderrepSetter]);
 
   useEffect(() => {
     if (gameRef.current !== null) {
@@ -474,6 +532,63 @@ function GameMove(props) {
     }
   }
 
+  function keyDownHandler(e) {
+    const key = e.key;
+    if (document.activeElement.id === "enterAMove" || explorationRef.current === null)
+      return;
+    let path = [];
+    let curNumVariations;
+
+    switch (key) {
+      case "Home":
+      case "h":
+        handleGameMoveClick({"moveNumber": 0, "exPath": []});
+        e.preventDefault();
+        break;
+      case "ArrowLeft":
+      case "j":
+        getPath(focus, explorationRef.current, path);
+        if (focus.moveNumber + focus.exPath.length > 0)
+          handleGameMoveClick(focus.moveNumber + focus.exPath.length === 1 ? {"moveNumber": 0, "exPath": []} : path[focus.moveNumber + focus.exPath.length - 2][0]);
+        e.preventDefault();
+        break;
+      case "ArrowRight":
+      case "k":
+        getPath(focus, explorationRef.current, path);
+        if (focus.moveNumber + focus.exPath.length < path.length)
+          handleGameMoveClick(path[focus.moveNumber + focus.exPath.length][0]);
+        e.preventDefault();
+        break;
+      case "End":
+      case "l":
+        getPath(focus, explorationRef.current, path);
+        if (focus.moveNumber + focus.exPath.length !== exploration.length - 1)
+          handleGameMoveClick(path[exploration.length - 2][0]);
+        e.preventDefault();
+        break;
+      case "ArrowDown":
+      case "i":
+        curNumVariations = getPath(focus, explorationRef.current, path);
+        console.log(curNumVariations);
+        console.log("focus = ", focus);
+        if (focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1)
+          handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + 1) % curNumVariations]});
+        e.preventDefault();
+        break;
+      case "ArrowUp":
+      case "m":
+        curNumVariations = getPath(focus, explorationRef.current, path);
+        if (focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1)
+          handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + curNumVariations - 1) % curNumVariations]});
+        e.preventDefault();
+        break;
+      default:
+        console.log(key + ' key pressed');
+    }
+  }
+
+  useEventListener('keydown', keyDownHandler);
+
   const boardImage = useRef();
   const stackImage = useRef();
   const game = gameRef.current;
@@ -490,7 +605,7 @@ function GameMove(props) {
         let img = null;
         if (game.colors !== undefined) img = game.colors[i];
         header.push(
-          <th colspan="2" key={"th-" + i}>
+          <th colSpan="2" key={"th-" + i}>
             <div className="player">
               { img === null ? '' :
                 img.isImage ?
@@ -501,17 +616,12 @@ function GameMove(props) {
             </div>
           </th>
         );
-        /*
-        header.push(
-          <th key={"th-" + player}>
-          </th>
-        );
-        */
       }
       // Prepare the list of moves
       let moveRows = [];
       let path = [];
-      let curNumVariations= 0;
+      let curNumVariations = 0;
+
       if (exploration !== null) {
         for (let i = 1; i < exploration.length; i++) {
           let className = "gameMove";
@@ -582,11 +692,14 @@ function GameMove(props) {
         }
       }
 
+      /*
       console.log("path");
       console.log(path);
       console.log("focus");
       console.log(focus);
       console.log(curNumVariations);
+      */
+      console.log(explorationRef.current);
       return (
         <div className="main">
           <nav>

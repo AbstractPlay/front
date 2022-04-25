@@ -80,6 +80,7 @@
     "react-router-dom": "^5.2.0",
     "rehype-raw": "^5.1.0",
     "relay-runtime": "^11.0.2",
+    "renderer": "^0.1.5",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",
     "sass-loader": "^10.0.5",
@@ -101,7 +102,7 @@
     "build-local": "node scripts/buildLocal.js",
     "full-prod": "npm run build-prod && npm run invalidate && npm run deploy",
     "full-dev": "npm run build-dev && npm run invalidate && npm run deploy",
-    "deploy": "sls client deploy --no-confirm --no-config-change --no-policy-change --no-cors-change",
+    "deploy": "sls client deploy",
     "test": "node scripts/test.js",
     "relay": "relay-compiler --src ./src --schema ./schema.graphql --watchman false",
     "invalidate": "invalidate-cloudfront.cmd"

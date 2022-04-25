@@ -127,14 +127,16 @@ function Me(props) {
         }),
       });
       const result = await res.json();
-      if (result.statusCode !== 200)
+      if (result.statusCode !== 200) {
+        console.log("handleChallengeResponse", result.statusCode);
         errorSetter(JSON.parse(result.body));
-      else {
+      } else {
         showChallengeResponseModalSetter(false);
         varsSetter(challenge.id);
       }
     }
     catch (error) {
+      console.log("handleChallengeResponse catch", error);
       errorSetter(error);
     }
   }

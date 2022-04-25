@@ -14,7 +14,7 @@ function Modal(props) {
             {props.children}
           </div>
           <div className="apModalFooter">
-            { props.buttons.map(button => <button className="apButton apModalFooterButtons" onClick={button.action}>{button.label}</button>) }
+            { props.buttons.map((button, index) => <button key={"modalButton" + index} className="apButton apModalFooterButtons" onClick={button.action}>{button.label}</button>) }
           </div>
         </div>
       </div>

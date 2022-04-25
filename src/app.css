@@ -1,3 +1,18 @@
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+  text-decoration: underline;
+}
 
 .apHeader {
   display: flex;
@@ -91,10 +106,11 @@ h1 {
 .metaGames {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 .metaGame {
-  width: 500px;
+  max-width: 500px;
   flex-grow: 1;
   margin: 0.5em 1.5em;
   display: flex;
@@ -354,6 +370,7 @@ a:hover {
 .board {
   display: flex;
   background-color: #fff;
+  align-items: flex-start;
   padding: 1em;
 }
 
@@ -369,6 +386,8 @@ a:hover {
   flex: 8;
 }
 .stack {
+  padding-top: 2em;
+  padding-right: 1.5em;
   flex: 1;
 }
 

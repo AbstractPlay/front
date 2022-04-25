@@ -17,8 +17,10 @@ function ChallengeResponse(props) {
       players = t("OtherPlayersAccepted", {others: otherPlayers.join(', ')});
   }
   var desc = "";
-  if (challenge.variants !== null && challenge.variants.length > 0)
+  if (challenge.variants !== null && challenge.variants.length > 1)
     desc = t("ChallengeResponseDescVars", {opp: challenge.challenger.name, game: game.name, variants: challenge.variants.join(', ')});
+  else if (challenge.variants !== null && challenge.variants.length > 0)
+    desc = t("ChallengeResponseDescVars1", {opp: challenge.challenger.name, game: game.name, variants: challenge.variants.join(', ')});
   else
     desc = t("ChallengeResponseDescNoVars", {opp: challenge.challenger.name, game: game.name});
   var notes = '';
@@ -27,7 +29,7 @@ function ChallengeResponse(props) {
 
   return (
     <div>
-      <label>Challenge details:</label>
+      <label>{t('ChallengeDetails')}</label>
       <div>
         <div>{desc}.</div>
         <div>{t('ChallengeClock', {start: challenge.clockStart, inc: challenge.clockInc, max: challenge.clockMax})}</div>

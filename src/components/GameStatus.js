@@ -18,7 +18,7 @@ function GameStatus(props) {
                   <tr key={"score" + index}>
                     <td>{game.colors[index].isImage
                       ? <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[index].value)}`} alt="" />
-                      : <span >{game.colors[index] + ':'}</span>
+                      : <span >{game.colors[index].value + ':'}</span>
                     }</td>
                     <td>{game.players[index].name}</td>
                     <td>:</td>
@@ -38,7 +38,7 @@ function GameStatus(props) {
                   <tr key={"piece" + index}>
                     <td>{game.colors[index].isImage
                       ? <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[index].value)}`} alt="" />
-                      : <span>{game.colors[index] + ':'}</span>
+                      : <span>{game.colors[index].value + ':'}</span>
                     }</td>
                     <td>{game.players[index].name}</td>
                     <td>:</td>
@@ -54,11 +54,11 @@ function GameStatus(props) {
             <span>Stash</span>
             <table className="scoresTable">
               <tbody>
-                { status.pieces.map((stash, index) =>
+                { status.stashes.map((stash, index) =>
                   <tr key={"stash" + index}>
                     <td>{game.colors[index].isImage
                       ? <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[index].value)}`} alt="" />
-                      : <span>{game.colors[index] + ':'}</span>
+                      : <span>{game.colors[index].value + ':'}</span>
                     }</td>
                     <td>{game.players[index].name}</td>
                     <td>:</td>
