@@ -13,6 +13,7 @@ function MoveEntry(props) {
   const handleMarkAsLoss = props.handlers[2];
   const handleSubmit = props.handlers[3];
   const handleView = props.handlers[4];
+  const handleResign = props.handlers[5];
   const { t } = useTranslation();
 
   let moveToSubmit = null;
@@ -83,7 +84,7 @@ function MoveEntry(props) {
                 </div>
                 <div>
                   { move.valid && move.complete === 0 && move.move.length > 0 ?
-                    <button className="apButton" onClick={handleView}>{"Complete move"}</button>
+                    <button className="apButton" onClick={handleView}>{t('CompleteMove')}</button>
                     : ''
                   }
                 </div>
@@ -95,6 +96,12 @@ function MoveEntry(props) {
         <button className="apButton tooltipped" onClick={handleSubmit}>
           {t('Submit')}
           <span className="tooltiptext">{t('SubmitMove', {move: moveToSubmit})}</span>
+        </button>
+        : ""
+      }
+      { uiState === 0 && game.canSubmit ?
+        <button className="apButton" onClick={handleResign}>
+          {t('Resign')}
         </button>
         : ""
       }

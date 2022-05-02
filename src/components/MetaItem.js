@@ -1,5 +1,4 @@
 import React from 'react';
-import {render} from '@abstractplay/renderer';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw'
 import { GameFactory } from '@abstractplay/gameslib';

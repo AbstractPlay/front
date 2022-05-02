@@ -11,6 +11,7 @@ import GameStatus from './GameStatus'
 import MoveEntry from './MoveEntry';
 import MoveResults from './MoveResults';
 import RenderOptionsModal from './RenderOptionsModal';
+import Modal from './Modal';
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -48,6 +49,10 @@ function setStatus(engine, game, status) {
       status.stashes.push(engine.getPlayerStash(i));
     }
   }
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, t) {
@@ -259,9 +264,11 @@ function GameMove(props) {
   const [move, moveSetter] = useState({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
   const [error, errorSetter] = useState(false);
   const [showSettings, showSettingsSetter] = useState(false);
+  const [showResignConfirm, showResignConfirmSetter] = useState(false);
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
   const [settings, settingsSetter] = useState(null);
+  const [wait, waitSetter] = useState(0);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -373,6 +380,12 @@ function GameMove(props) {
   useEffect(() => {
     let options = {};
 
+    const waiter = async () => {
+      await sleep(50);
+      waitSetter(wait + 1);
+      console.log("wait", wait);
+    }
+    
     function boardClick(row, col, piece) {
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
@@ -418,8 +431,10 @@ function GameMove(props) {
         console.log("options = ", options);
         render(renderrep, options);
       }
+    } else {
+      waiter();
     }
-  }, [renderrep, focus, settings, moveSetter, renderrepSetter]);
+  }, [renderrep, focus, settings, wait, moveSetter, renderrepSetter]);
 
   useEffect(() => {
     if (gameRef.current !== null) {
@@ -532,6 +547,48 @@ function GameMove(props) {
     }
   }
 
+  const handleResign = () => {
+    showResignConfirmSetter(true);
+  }
+
+  const handleCloseResignConfirm = () => {
+    showResignConfirmSetter(false);
+  }
+
+  const handleResignConfirmed = async () => {
+    const usr = await Auth.currentAuthenticatedUser();
+    const token = usr.signInUserSession.idToken.jwtToken;
+    try {
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          "query": "submit_move",
+          "pars" : {
+            "id": gameRef.current.id,
+            "move": "resign"
+          }
+        })
+      });
+      const result = await res.json();
+      if (result.statusCode !== 200)
+        setError(JSON.parse(result.body));
+      let game0 = JSON.parse(result.body);
+      console.log("In handleSubmit. game0:");
+      console.log(game0);
+      setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, t);
+      setupColors(settings, gameRef.current, t);
+      focusSetter({"moveNumber": explorationRef.current.length - 1, "exPath": []});
+    }
+    catch (err) {
+      setError(err.message);
+    }
+  }
+
   function keyDownHandler(e) {
     const key = e.key;
     if (document.activeElement.id === "enterAMove" || explorationRef.current === null)
@@ -563,7 +620,7 @@ function GameMove(props) {
       case "l":
         getPath(focus, explorationRef.current, path);
         if (focus.moveNumber + focus.exPath.length !== exploration.length - 1)
-          handleGameMoveClick(path[exploration.length - 2][0]);
+          handleGameMoveClick(exploration.length === 1 ? {"moveNumber": 0, "exPath": []} : path[exploration.length - 2][0]);
         e.preventDefault();
         break;
       case "ArrowDown":
@@ -692,8 +749,8 @@ function GameMove(props) {
         }
       }
 
+      console.log("path", path);
       /*
-      console.log("path");
       console.log(path);
       console.log("focus");
       console.log(focus);
@@ -713,7 +770,7 @@ function GameMove(props) {
                     <div className="groupLevel1Header"><span>{t("MakeMove")}</span></div>
                       <GameStatus status={statusRef.current} game={game}/>
                       <MoveEntry move={move} toMove={getFocusNode(explorationRef.current, focus).toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
-                        focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView]}/>
+                        focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign]}/>
                     </div>
                   </div>
                 <div className="boardContainer">
@@ -762,7 +819,8 @@ function GameMove(props) {
                           <i className="fa fa-angle-right"></i>
                           <span className="tooltiptext">{t('GoNext')}</span>
                         </div>
-                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length != exploration.length - 1 ? "" : " disabled")} onClick={() => handleGameMoveClick(path[exploration.length - 2][0].path)}>
+                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length !== exploration.length - 1 ? "" : " disabled")} 
+                          onClick={() => handleGameMoveClick(exploration.length === 1 ? {"moveNumber": 0, "exPath": []} : path[exploration.length - 2][0].path)}>
                           <i className="fa fa-angle-double-right"></i>
                           <span className="tooltiptext">{t('GoCurrent')}</span>
                         </div>
@@ -789,6 +847,12 @@ function GameMove(props) {
                   <MoveResults className="moveResults" results={game.moveResults}/>
                 </div>
               </div>
+              <Modal show={showResignConfirm} title={t('ConfirmResign')} size="small"
+                buttons={[{label: t('Resign'), action: handleResignConfirmed}, {label: t('Cancel'), action: handleCloseResignConfirm}]}>
+                <div>
+                  Are you sure you want to resign?
+                </div>
+              </Modal>
             </div>
           </article>
         </div>

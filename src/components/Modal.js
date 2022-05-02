@@ -5,7 +5,7 @@ function Modal(props) {
   return (
     props.show ?
       <div className={modalClassName}>
-        <div className="apModalMain">
+        <div className={"apModalMain " + (props.size === "small" ? "small" : "large")}>
           <div className="apModalHeader">
             <span className="apModalHeaderTitle">{props.title}</span>
             <button className="apButton" onClick={props.buttons[props.buttons.length - 1].action}>X</button>
