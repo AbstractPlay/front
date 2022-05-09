@@ -91,7 +91,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     game0.canExplore = game0.canSubmit || game0.numPlayers === 2;
   }
   if (typeof engine.chatLog === "function") {
-    game0.moveResults = engine.chatLog(game0.players.map(p => p.name)).reverse().map(e => e.join(" "));
+    game0.moveResults = engine.chatLog(game0.players.map(p => p.name)).reverse().map((e) => {return {"time": e[0], "log": e.slice(1).join(" ")};});
   } else {
     game0.moveResults = engine.resultsHistory().reverse();
   }

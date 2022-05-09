@@ -7,8 +7,8 @@ function MoveResults(props) {
     <tbody>
       { results.map((r, index) =>
         <tr key={"moveResult" + index}>
-          <td>SYSTEM</td>
-          <td>{r}</td>
+          <td>[{r.time}]</td>
+          <td>{r.log}</td>
         </tr>)
       }
     </tbody>
