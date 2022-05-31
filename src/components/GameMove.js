@@ -56,7 +56,6 @@ function sleep(ms) {
 }
 
 function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, t) {
-  let engine;
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
   game0.simultaneous = (info.flags !== undefined && info.flags.includes('simultaneous'));
@@ -68,27 +67,27 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   game0.noMoves = (info.flags !== undefined && info.flags.includes('no-moves'));
   game0.stackExpanding = (info.flags !== undefined && info.flags.includes('stacking-expanding'));
   game0.fixedNumPlayers = info.playercounts.length === 1;
-  if (game0.state === undefined) {
+  if (game0.state === undefined)
     throw new Error("Why no state? This shouldn't happen no more!");
-  } else {
-    engine = GameFactory(game0.metaGame, game0.state);
-  }
+  const engine = GameFactory(game0.metaGame, game0.state);
   let player = -1;
   if (game0.simultaneous) {
     game0.canSubmit = false;
-    for (let i = 0; i < game0.numPlayers; i++) {
-      if (game0.players[i].id === state.myid) {
-        game0.canSubmit = game0.toMove[i];
-        player = i;
+    if (game0.toMove !== "") {
+      for (let i = 0; i < game0.numPlayers; i++) {
+        if (game0.players[i].id === state.myid) {
+          game0.canSubmit = game0.toMove[i];
+          player = i;
+        }
       }
+      if (game0.partialMove !== undefined && game0.partialMove.length > game0.numPlayers - 1)
+        engine.move(game0.partialMove, true);
     }
-    if (game0.partialMove !== undefined && game0.partialMove.length > game0.numPlayers - 1)
-      engine.move(game0.partialMove, true);
     game0.canExplore = false;
   }
   else {
-    game0.canSubmit = (game0.players[game0.toMove].id === state.myid);
-    game0.canExplore = game0.canSubmit || game0.numPlayers === 2;
+    game0.canSubmit = (game0.toMove !== "" && game0.players[game0.toMove].id === state.myid);
+    game0.canExplore = game0.canSubmit || (game0.toMove !== "" && game0.numPlayers === 2);
   }
   if (typeof engine.chatLog === "function") {
     game0.moveResults = engine.chatLog(game0.players.map(p => p.name)).reverse().map((e) => {return {"time": e[0], "log": e.slice(1).join(" ")};});
@@ -107,7 +106,6 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   }
   let history = [];
   let toMove = game0.toMove;
-  const numplayers = game0.players.length;
   if (game0.simultaneous)
     toMove = game0.players.map(p => true);
   /*eslint-disable no-constant-condition*/
@@ -118,16 +116,15 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
       lastmove = engine.stack[engine.stack.length - 1].lastmove.join(', ');
     else
       lastmove = engine.stack[engine.stack.length - 1].lastmove;
-    history.unshift(new GameNode(null, lastmove, engine.serialize(), toMove));
+    history.unshift(new GameNode(null, lastmove, engine.serialize(), engine.stack[engine.stack.length - 1].currplayer - 1));
     engine.stack.pop();
     if (engine.stack.length === 0)
       break;
     engine.load();
-    if (!game0.simultaneous)
-      toMove = (toMove + 1) % numplayers;
   }
   explorationRef.current = history;
   focusSetter({"moveNumber": history.length - 1, "exPath": []});
+  console.log("Setting renderrep");
   renderrepSetter(render);
 }
 
@@ -412,7 +409,7 @@ function GameMove(props) {
         svg.remove();
       }
       if (renderrep !== null && settings !== null) {
-        console.log(renderrep);
+        console.log("renderrep", renderrep);
         options = {"divid": "svg"};
         if (focus.moveNumber === explorationRef.current.length - 1) {
           options.boardClick = boardClick;
@@ -556,6 +553,7 @@ function GameMove(props) {
   }
 
   const handleResignConfirmed = async () => {
+    showResignConfirmSetter(false);
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {

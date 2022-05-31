@@ -618,6 +618,14 @@ th .player {
   width: 70%;
 }
 
+.newChallengeVariantContainer {
+  width: 100%;
+}
+
+.challengeHelp {
+  margin-left: 0.7em;
+}
+
 .pickVariant {
   padding-left: 1rem;
 }

@@ -14,6 +14,10 @@ function NewChallengeModal(props) {
   const [users, usersSetter] = useState(null);
   const [error, errorSetter] = useState(null);
   const [metaGame, metaGameSetter] = useState(null);
+  const [clockStart, clockStartSetter] = useState(72);
+  const [clockInc, clockIncSetter] = useState(24);
+  const [clockMax, clockMaxSetter] = useState(240);
+  const [clockHard, clockHardSetter] = useState(false);
   const playerRef = useRef(null);
   const groupVariantsRef = useRef({});
   const nonGroupVariantsRef = useRef({})
@@ -41,6 +45,10 @@ function NewChallengeModal(props) {
     nonGroupVariantsRef.current = {};
     metaGameSetter(null);
     errorSetter("");
+    clockStartSetter(72);
+    clockIncSetter(24);
+    clockMaxSetter(240);
+    clockHardSetter(false);
   },[show]);
 
   const handleChangeGame = (game) => {
@@ -71,6 +79,46 @@ function NewChallengeModal(props) {
     nonGroupVariantsRef.current[variant] = flag;
   }
 
+  const isNonNegativeInteger = (str, field) => {
+    if (str.trim() === '') {
+      errorSetter(field + " must have a value");
+    } else {
+      const num = Number(str);
+      if (num === NaN) {
+        errorSetter(field + " must be a number");
+      } else {
+        if (num < 0) {
+          errorSetter(field + " can't be negative");
+        } else {
+          if (!Number.isInteger(num)) {
+            errorSetter(field + " must be an integer");
+          } else {
+            errorSetter(null);
+          }
+        }
+      }
+    }
+  }
+
+  const handleClockStartChange = (event) => {
+    isNonNegativeInteger(event.target.value, t("ChooseClockStart"));
+    clockStartSetter(event.target.value);
+  }
+
+  const handleClockIncChange = (event) => {
+    isNonNegativeInteger(event.target.value, t("ChooseClockIncrement"));
+    clockIncSetter(event.target.value);
+  }
+
+  const handleClockMaxChange = (event) => {
+    isNonNegativeInteger(event.target.value, t("ChooseClockMax"));
+    clockMaxSetter(event.target.value);
+  }
+
+  const handleClockHardChange = (event) => {
+    clockHardSetter(event.target.checked);
+  }
+
   const handleChallenge = () => {
     if (metaGame === null) {
       errorSetter(t("SelectAGame"));
@@ -88,7 +136,7 @@ function NewChallengeModal(props) {
           variants.push(variant)
         }
       }
-      handleNewChallenge({"metaGame": metaGame, "variants": variants, "opponent": playerRef.current});
+      handleNewChallenge({"metaGame": metaGame, "variants": variants, "opponent": playerRef.current, "clockStart": clockStart, "clockInc": clockInc, "clockMax": clockMax, "clockHard": clockHard});
     }
   }
 
@@ -114,17 +162,6 @@ function NewChallengeModal(props) {
       </div>
       <div className="challenge">
         <div className="newChallengeLabelDiv">
-          <label className="newChallengeLabel" htmlFor="game_for_challenge" >{t("ChooseGame")}</label>
-        </div>
-        <div className="newChallengeInputDiv">
-          { games === null ? <Spinner/> :
-            <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
-              <option value="">--{t('Select')}--</option>
-              { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
-            </select>
-          }
-        </div>
-        <div className="newChallengeLabelDiv">
           <label className="newChallengeLabel" htmlFor="user_for_challenge">{t("ChooseOpponent")}</label>
         </div>
         <div className="newChallengeInputDiv">
@@ -137,8 +174,19 @@ function NewChallengeModal(props) {
             </select>
           }
         </div>
+        <div className="newChallengeLabelDiv">
+          <label className="newChallengeLabel" htmlFor="game_for_challenge" >{t("ChooseGame")}</label>
+        </div>
+        <div className="newChallengeInputDiv">
+          { games === null ? <Spinner/> :
+            <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
+              <option value="">--{t('Select')}--</option>
+              { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
+            </select>
+          }
+        </div>
         { groupData.length === 0 && nonGroupData.length === 0 ? '' :
-          <div>
+          <div className="newChallengeVariantContainer">
             <span className='pickVariantHeader'>{t("PickVariant")}</span>
             { metaGame === null || groupData.length === 0 ? '' :
               groupData.map(g =>
@@ -175,6 +223,37 @@ function NewChallengeModal(props) {
             }
           </div>
         }
+        <div className="newChallengeLabelDiv">
+          <label className="newChallengeLabel" htmlFor="clock_start">{t("ChooseClockStart") + ":"}</label>
+        </div>
+        <div className="newChallengeInputDiv">
+          <input type="text" id="clock_start" name="clock_start" size="3" value={clockStart} onChange={handleClockStartChange}/>
+          <span className="challengeHelp">{t("HelpClockStart")}</span>
+        </div>
+        <div className="newChallengeLabelDiv">
+          <label className="newChallengeLabel" htmlFor="clock_inc">{t("ChooseClockIncrement") + ":"}</label>
+        </div>
+        <div className="newChallengeInputDiv">
+          <input type="text" id="clock_inc" name="clock_inc" size="3" value={clockInc} onChange={handleClockIncChange}/>
+          <span className="challengeHelp">{t("HelpClockIncrement")}</span>
+        </div>
+        <div className="newChallengeLabelDiv">
+          <label className="newChallengeLabel" htmlFor="clock_max">{t("ChooseClockMax") + ":"}</label>
+        </div>
+        <div className="newChallengeInputDiv">
+          <input type="text" id="clock_start" name="clock_max" size="3" value={clockMax} onChange={handleClockMaxChange}/>
+          <span className="challengeHelp">{t("HelpClockMax")}</span>
+        </div>
+        <div className="newChallengeLabelDiv">
+          <label className="newChallengeLabel" htmlFor="clock_hard">{t("ChooseClockHard")}</label>
+        </div>
+        <div className="newChallengeInputDiv">
+          <input type="checkbox" id="clock_hard" value={clockHard} onChange={handleClockHardChange} />
+          <span className="challengeHelp">{t("HelpClockHard")}</span>
+        </div>
+      </div>
+      <div className="error">
+        {error}
       </div>
     </Modal>
   )

@@ -33,6 +33,7 @@ function ChallengeResponse(props) {
       <div>
         <div>{desc}.</div>
         <div>{t('ChallengeClock', {start: challenge.clockStart, inc: challenge.clockInc, max: challenge.clockMax})}</div>
+        <div>{challenge.clockHard ? t('HardTime') : t('SoftTime')}</div>
         <div>{t('NumChallenge', {num: challenge.numPlayers})}</div>
         <div>{players}</div>
         <div>{notes}</div>

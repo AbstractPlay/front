@@ -41,7 +41,7 @@ function updateSettings(setting, level, val, gameSettings, userSettings, metaGam
   return [userSettings, gameSettings];
 }
 
-function NewChallengeModal(props) {
+function RenderOptionsModal(props) {
   const handleClose = props.handleClose;
   const metaGame = props.metaGame.id;
   const metaName = props.metaGame.name;
@@ -217,4 +217,4 @@ function NewChallengeModal(props) {
   )
 }
 
-export default NewChallengeModal;
+export default RenderOptionsModal;

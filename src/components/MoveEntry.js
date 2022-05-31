@@ -1,6 +1,32 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+function showMilliseconds(ms) {
+  let positive = true;
+  if (ms < 0) {
+    ms = -ms;
+    positive = false;
+  }
+  let seconds = ms / 1000;
+  const days = Math.floor( seconds / (24 * 3600));
+  seconds = seconds % (24 * 3600);
+  const hours = parseInt( seconds / 3600 );
+  seconds = seconds % 3600;
+  const minutes = parseInt( seconds / 60 );
+  seconds = seconds % 60;
+  let output = '';
+  if (!positive)
+    output = '-';
+  if (days > 0)
+    output += days + 'd, ';
+  if (days > 0 || hours > 0)
+    output = output + hours + 'h, ';
+  if (days > 0 || hours > 0 || minutes > 0)
+    output = output + minutes + 'm, ';
+  output += Math.round(seconds) + 's';
+  return output;
+}
+
 function MoveEntry(props) {
   const move = props.move;
   const toMove = props.toMove;
@@ -16,6 +42,7 @@ function MoveEntry(props) {
   const handleResign = props.handlers[5];
   const { t } = useTranslation();
 
+  console.log("players", game.players);
   let moveToSubmit = null;
   if (focus.exPath.length > 0 && game.canSubmit) {
     moveToSubmit = exploration[exploration.length - 1].children[focus.exPath[0]].move;
@@ -60,6 +87,13 @@ function MoveEntry(props) {
           }
           <span className="mover">{mover}</span>
         </div>
+        { uiState !== 0 ? '' :
+          <div>
+              Time remaining: {
+                  showMilliseconds(game.players[toMove].time - (Date.now() - game.lastMoveTime))
+              }
+          </div>
+        }
         <div>
           { !move.valid || (move.valid && move.complete === -1)  ?
             <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :

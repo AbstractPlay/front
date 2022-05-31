@@ -161,6 +161,10 @@ function Me(props) {
           "pars" : {
             "challenger": {"id": me.id, "name": me.name},
             "metaGame": game,
+            "clockStart": challenge.clockStart,
+            "clockInc": challenge.clockInc,
+            "clockMax": challenge.clockMax,
+            "clockHard": challenge.clockHard,
             "numPlayers": 2,
             "variants": variants,
             "challengees": [opponent]
@@ -192,6 +196,7 @@ function Me(props) {
       games = [];
     let myMove = [];
     let waiting = [];
+    let over = [];
     for (const game of games) {
       if (Array.isArray(game.toMove)) {
         let found = false;
@@ -207,7 +212,10 @@ function Me(props) {
           waiting.push(game);
       }
       else {
-        if (game.players[game.toMove].id === me.id)
+        console.log("game", game);
+        if (game.toMove === "" || game.toMove === null)
+          over.push(game);
+        else if (game.players[game.toMove].id === me.id)
           myMove.push(game);
         else
           waiting.push(game);
@@ -239,6 +247,12 @@ function Me(props) {
                         : <ul> {waiting.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)} </ul>
                     }
                   </div>
+                  { over.length === 0 ? '' :
+                    <div className="groupLevel2">
+                      <div className="groupLevel2Header"><span>{t('CompletedGames')}</span></div>
+                      <ul> {over.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)}</ul>
+                    </div>
+                  }
                 </div>
                 <div className="groupLevel1">
                   <div className="groupLevel1Header"><span>{t('YourChallenges')}</span></div>
