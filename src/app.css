@@ -336,14 +336,14 @@ a:hover {
   float: left;
 }
 
-.moveResultsContainer {
+.moveResultsContainer, .commentContainer {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.moveResultsContainer2 {
+.moveResultsContainer2, commentContainer2 {
   margin-top: 2em;
   width: 45%;
   min-width: 400px;

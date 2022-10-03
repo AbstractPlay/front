@@ -21,6 +21,7 @@ The [main website](https://www.abstractplay.com) houses the development blog and
 - If you make changes to renderer or gameslib, you need to reinstall the dependency. E.g. for version 0.8.0 of renderer:
   - `npm uninstall @abstractplay/renderer`
   - `npm install ..\renderer\abstractplay-renderer-0.8.0.tgz`
+- After you have node-backend (https://github.com/AbstractPlay/node-backend) deployed you can debug locally with `npm start`.
 
 ## Deploy to AWS
   - Install AWS-CLI. See https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html

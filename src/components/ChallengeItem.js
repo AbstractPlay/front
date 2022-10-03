@@ -23,7 +23,7 @@ function ChallengeItem(props) {
     return (
       <div>
         <div>{t("ChallengeFrom", {game: game.name, challenger: challenge.challenger.name})}
-          <button className="apButton" variant="primary" onClick={() => handleChallengeResponseClick(challenge)}>{t("Respond")}</button>
+          <button className="apButton inlineButton" onClick={() => handleChallengeResponseClick(challenge)}>{t("Respond")}</button>
         </div>
       </div>
     );
@@ -46,7 +46,7 @@ function ChallengeItem(props) {
       <li>
         <i className="fa fa-circle apBullet"></i>
         {desc}
-        <button className="apButton inlineButton" variant="primary" onClick={() => handleChallengeViewClick(challenge)}>{t("View")}</button>
+        <button className="apButton inlineButton" onClick={() => handleChallengeViewClick(challenge)}>{t("View")}</button>
       </li>
     );
   }

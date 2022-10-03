@@ -12,6 +12,7 @@ import MoveEntry from './MoveEntry';
 import MoveResults from './MoveResults';
 import RenderOptionsModal from './RenderOptionsModal';
 import Modal from './Modal';
+import GameComment from './GameComment';
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -105,19 +106,21 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
       movesRef.current = engine.moves();
   }
   let history = [];
-  let toMove = game0.toMove;
-  if (game0.simultaneous)
-    toMove = game0.players.map(p => true);
   /*eslint-disable no-constant-condition*/
+  let gameOver = engine.gameover;
   while (true) {
     // maybe last move should be the last numPlayers moves for simul games?
+    /*
     let lastmove = null;
     if (Array.isArray(engine.stack[engine.stack.length - 1].lastmove))
       lastmove = engine.stack[engine.stack.length - 1].lastmove.join(', ');
     else
       lastmove = engine.stack[engine.stack.length - 1].lastmove;
-    history.unshift(new GameNode(null, lastmove, engine.serialize(), engine.stack[engine.stack.length - 1].currplayer - 1));
+    history.unshift(new GameNode(null, lastmove, engine.serialize(), engine.stack[engine.stack.length - 1].gameover ? '' : engine.stack[engine.stack.length - 1].currplayer - 1));
+    */
+    history.unshift(new GameNode(null, engine.lastmove, engine.serialize(), gameOver ? '' : engine.currplayer - 1));
     engine.stack.pop();
+    gameOver = false;
     if (engine.stack.length === 0)
       break;
     engine.load();
@@ -233,13 +236,6 @@ function getPath(focus, exploration, path) {
       let next = [];
       for (let k = 0; k < node.children.length; k++) {
         const c = node.children[k];
-        let className = "gameMove";
-        if (c.outcome === 0)
-          className += " gameMoveUnknownOutcome";
-        else if (c.outcome === -1)
-          className += " gameMoveLoss";
-        else if (c.outcome === 1)
-          className += " gameMoveWin";
         next.push({"moveNumber": focus.moveNumber, "exPath": focus.exPath.concat(k)});
       }
       path.push(next);
@@ -262,10 +258,12 @@ function GameMove(props) {
   const [error, errorSetter] = useState(false);
   const [showSettings, showSettingsSetter] = useState(false);
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
+  const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
   const [settings, settingsSetter] = useState(null);
   const [wait, waitSetter] = useState(0);
+  const [comments, commentsSetter] = useState([]);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -307,11 +305,13 @@ function GameMove(props) {
           errorSetter(true);
         } else {
           const result = await res.json();
-          let game0 = JSON.parse(result.body);
-          console.log(game0);
-          setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, t);
+          let data = JSON.parse(result.body);
+          console.log(data.game);
+          setupGame(data.game, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, t);
           userSettingsSetter(state.settings);
-          gameSettingsSetter(game0.players.find(p => p.id === state.myid).settings);
+          gameSettingsSetter(data.game.players.find(p => p.id === state.myid).settings);
+          if (data.comments !== undefined)
+            commentsSetter(data.comments);
         }
       }
       catch (error) {
@@ -511,6 +511,10 @@ function GameMove(props) {
 
   const handleSubmit = async () => {
     let m = getFocusNode(explorationRef.current, focus).move;
+    submitMove(m);
+  }
+
+  const submitMove = async (m) => {  
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
@@ -544,16 +548,9 @@ function GameMove(props) {
     }
   }
 
-  const handleResign = () => {
-    showResignConfirmSetter(true);
-  }
-
-  const handleCloseResignConfirm = () => {
-    showResignConfirmSetter(false);
-  }
-
-  const handleResignConfirmed = async () => {
-    showResignConfirmSetter(false);
+  const submitComment = async (comment) => {
+    commentsSetter([...comments, {"comment": comment, "userId": state.myid, "timeStamp": Date.now()}]);
+    console.log(comments);
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
@@ -565,31 +562,53 @@ function GameMove(props) {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          "query": "submit_move",
+          "query": "submit_comment",
           "pars" : {
             "id": gameRef.current.id,
-            "move": "resign"
+            "comment": comment,
+            "moveNumber": explorationRef.current.length - 1
           }
         })
       });
       const result = await res.json();
-      if (result.statusCode !== 200)
+      if (result && result.statusCode && result.statusCode !== 200)
         setError(JSON.parse(result.body));
-      let game0 = JSON.parse(result.body);
-      console.log("In handleSubmit. game0:");
-      console.log(game0);
-      setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, t);
-      setupColors(settings, gameRef.current, t);
-      focusSetter({"moveNumber": explorationRef.current.length - 1, "exPath": []});
     }
     catch (err) {
-      setError(err.message);
+      console.log(err);
+      //setError(err.message);
     }
+  }
+
+  const handleResign = () => {
+    showResignConfirmSetter(true);
+  }
+
+  const handleCloseResignConfirm = () => {
+    showResignConfirmSetter(false);
+  }
+
+  const handleResignConfirmed = async () => {
+    showResignConfirmSetter(false);
+    submitMove('resign');
+  }
+
+  const handleTimeout = () => {
+    showTimeoutConfirmSetter(true);
+  }
+
+  const handleCloseTimeoutConfirm = () => {
+    showTimeoutConfirmSetter(false);
+  }
+
+  const handleTimeoutConfirmed = async () => {
+    showTimeoutConfirmSetter(false);
+    submitMove('timeout');
   }
 
   function keyDownHandler(e) {
     const key = e.key;
-    if (document.activeElement.id === "enterAMove" || explorationRef.current === null)
+    if (document.activeElement.id === "enterAMove" || document.activeElement.id === "enterAComment" || explorationRef.current === null)
       return;
     let path = [];
     let curNumVariations;
@@ -768,7 +787,7 @@ function GameMove(props) {
                     <div className="groupLevel1Header"><span>{t("MakeMove")}</span></div>
                       <GameStatus status={statusRef.current} game={game}/>
                       <MoveEntry move={move} toMove={getFocusNode(explorationRef.current, focus).toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
-                        focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign]}/>
+                        focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}/>
                     </div>
                   </div>
                 <div className="boardContainer">
@@ -839,16 +858,27 @@ function GameMove(props) {
                   settingsSetter={userSettingsSetter} gameSettingsSetter={gameSettingsSetter} showSettingsSetter={showSettingsSetter} setError={setError}
                   handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
               </div>
+              <div className="commentContainer">
+                <div className="commentContainer2">
+                  <GameComment className="gameComment" handleSubmit={submitComment} />
+                </div>
+              </div>
               <div className="moveResultsContainer">
                 <div className="moveResultsContainer2">
                   <div className="groupLevel1Header"><span>Game summary</span></div>
-                  <MoveResults className="moveResults" results={game.moveResults}/>
+                  <MoveResults className="moveResults" results={game.moveResults} comments={comments} players={gameRef.current.players} />
                 </div>
               </div>
               <Modal show={showResignConfirm} title={t('ConfirmResign')} size="small"
                 buttons={[{label: t('Resign'), action: handleResignConfirmed}, {label: t('Cancel'), action: handleCloseResignConfirm}]}>
                 <div>
-                  Are you sure you want to resign?
+                  {t('ConfirmResignDesc')}
+                </div>
+              </Modal>
+              <Modal show={showTimeoutConfirm} title={t('ConfirmTimeout')} size="small"
+                buttons={[{label: t('Claim'), action: handleTimeoutConfirmed}, {label: t('Cancel'), action: handleCloseTimeoutConfirm}]}>
+                <div>
+                {t('ConfirmTimeoutDesc')}
                 </div>
               </Modal>
             </div>

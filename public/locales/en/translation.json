@@ -69,6 +69,8 @@
     "ProfileTagline": "A free-form tagline (255 characters max)",
     "ProfileAnon": "Would you like to be anonymous?",
     "ProfileConsent": "Do you consent to the Abstract Play's terms of service and the privacy policy?",
+    "TimeRemaining": "Time remaining: ",
+    "ClaimTimeOut": "Claim win on time",
     "ChooseMove": "Choose move: ",
     "EnterMove": "Enter/Click a move:",
     "OppsMove": "Opponent's move",
@@ -95,6 +97,11 @@
     "SubmitMove": "Submit your move: {{move}}",
     "Resign": "Resign",
     "ConfirmResign": "Confirm resignation",
+    "ConfirmResignDesc": "Are you sure you want to resign?",
+    "ConfirmTimeout": "Out of time",
+    "ConfirmTimeoutDesc": "Your opponent is out of time. Are you sure you want to claim the win?",
+    "Claim": "Claim",
+    "GameIsOver": "The game has ended",
     "Winning": "Mark this move as winning",
     "Losing": "Mark this move as losing",
     "GoBegin": "Show beginning of game. Keys: Home or 'h'.",
@@ -127,5 +134,6 @@
     "DisplaySettings" : "Display Settings",
     "Rotate": "Rotate board",
     "MarkAsWin": "Mark as win",
-    "MarkAsLoss": "Mark as loss"
+    "MarkAsLoss": "Mark as loss",
+    "Comment": "Comment"
 }

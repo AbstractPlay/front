@@ -20,10 +20,18 @@ function showMilliseconds(ms) {
   if (days > 0)
     output += days + 'd, ';
   if (days > 0 || hours > 0)
-    output = output + hours + 'h, ';
-  if (days > 0 || hours > 0 || minutes > 0)
-    output = output + minutes + 'm, ';
-  output += Math.round(seconds) + 's';
+    output += hours + 'h';
+  if (days < 1) {
+    if (days > 0 || hours > 0)
+      output += ', ';
+    if (minutes > 0)
+      output += minutes + 'm';
+    if (hours < 1) {
+      if (minutes > 0)
+        output += ', ';
+      output += Math.round(seconds) + 's';
+    }
+  }
   return output;
 }
 
@@ -40,6 +48,7 @@ function MoveEntry(props) {
   const handleSubmit = props.handlers[3];
   const handleView = props.handlers[4];
   const handleResign = props.handlers[5];
+  const handleTimeOut = props.handlers[6];
   const { t } = useTranslation();
 
   console.log("players", game.players);
@@ -58,19 +67,23 @@ function MoveEntry(props) {
   }
   let mover = '';
   let img = null;
-  if (game.simultaneous) {
-    if (game.canSubmit) {
+  if (toMove !== '') {
+    if (game.simultaneous) {
+      if (game.canSubmit) {
+        mover = t('ToMove', {"player": game.players[toMove].name});
+        if (game.colors !== undefined) img = game.colors[toMove];
+      } else {
+        mover = t('Waiting');
+      }
+    }
+    else {
       mover = t('ToMove', {"player": game.players[toMove].name});
       if (game.colors !== undefined) img = game.colors[toMove];
-    } else {
-      mover = t('Waiting');
     }
+  } else {
+    mover = t('GameIsOver');
   }
-  else {
-    mover = t('ToMove', {"player": game.players[toMove].name});
-    if (game.colors !== undefined) img = game.colors[toMove];
-  }
-
+  let timeremaining = toMove === '' ? 0 : game.players[toMove].time - (Date.now() - game.lastMoveTime);
   return (
     <div className="uiState">
       <div className={ uiState === -1 ? "historyStateContainer" : uiState === 0 ? "currentStateContainer" : "exploreStateContainer"}>
@@ -87,10 +100,10 @@ function MoveEntry(props) {
           }
           <span className="mover">{mover}</span>
         </div>
-        { uiState !== 0 ? '' :
+        { uiState !== 0 || toMove === '' ? '' :
           <div>
-              Time remaining: {
-                  showMilliseconds(game.players[toMove].time - (Date.now() - game.lastMoveTime))
+              {t('TimeRemaining')}{ 
+                  showMilliseconds(timeremaining)
               }
           </div>
         }
@@ -98,6 +111,10 @@ function MoveEntry(props) {
           { !move.valid || (move.valid && move.complete === -1)  ?
             <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :
             ''
+          }
+          { timeremaining < 0 && !game.canSubmit && uiState === 0 ?
+            <button className="apButton" onClick={handleTimeOut}>{t('ClaimTimeOut')}</button>
+            : ''
           }
           { (game.canSubmit || game.canExplore) && exploration !== null && focus.moveNumber === exploration.length - 1
             && (game.canExplore || focus.exPath.length === 0) ?
