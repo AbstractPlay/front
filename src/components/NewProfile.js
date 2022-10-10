@@ -58,34 +58,61 @@ function NewProfile(props) {
   return (
     <Modal show={show} title={t('NewProfile')} 
       buttons={[{label: t('Submit'), action: handleNewProfile}, {label: t('Close'), action: handleNewProfileClose}]}>
-      <div>{
+      {
         (!error)?
-        <div>
-          <form>
-            <label>
-              {t('ProfileName')}
-              <input name="name" type="text" value={name} onChange={(e) => nameSetter(e.target.value)} />
-            </label>
-            <label>
-              {t('ProfileCountry')}
-              <input name="country" type="text" value={country} onChange={(e) => countrySetter(e.target.value)} />
-            </label>
-            <label>
-              {t('ProfileTagline')}
-              <input name="tagline" type="text" value={tagline} onChange={(e) => taglineSetter(e.target.value)} />
-            </label>
-            <label>
-              {t('ProfileAnon')}
-              <input name="anonymous" type="checkbox" checked={anonymous} onChange={(e) => anonymousSetter(e.target.checked)} />
-            </label>
-            <label>
-              {t('ProfileConsent')}
-              <input name="consent" type="checkbox" checked={consent} onChange={(e) => consentSetter(e.target.checked)} />
-            </label>
-          </form>
-        </div>:
-        <h4>{errorMessage}</h4>}
-      </div>
+        <div className="profile">
+          <div className="newProfileLabelDiv">
+            <div className="newProfileLabel">
+              <label htmlFor="profile_name">
+                {t('ProfileName')}
+              </label>
+            </div>
+          </div>
+          <div className="newProfileInputDiv">
+            <input name="name" id="profile_name" type="text" value={name} onChange={(e) => nameSetter(e.target.value)} />
+          </div>
+          <div className="newProfileLabelDiv">
+            <div className="newProfileLabel">
+              <label htmlFor="profile_country">
+                {t('ProfileCountry')}
+              </label>
+            </div>
+          </div>
+          <div className="newProfileInputDiv">
+            <input name="country" id="profile_country" type="text" value={country} onChange={(e) => countrySetter(e.target.value)} />
+          </div>
+          <div className="newProfileLabelDiv">
+            <div className="newProfileLabel">
+              <label htmlFor="profile_tagline">
+                {t('ProfileTagline')}
+              </label>
+            </div>
+          </div>
+          <div className="newProfileInputDiv">
+            <input name="tagline" id="profile_tagline" type="text" value={tagline} onChange={(e) => taglineSetter(e.target.value)} />
+          </div>
+          <div className="newProfileLabelDiv">
+            <div className="newProfileLabel">
+              <label htmlFor="profile_anon">
+                {t('ProfileAnon')}
+              </label>
+            </div>
+          </div>
+          <div className="newProfileInputDiv">
+            <input name="anonymous" id="profile_anon" type="checkbox" checked={anonymous} onChange={(e) => anonymousSetter(e.target.checked)} />
+          </div>
+          <div className="newProfileLabelDiv">
+            <div className="newProfileLabel">
+              <label htmlFor="profile_consent">
+                {t('ProfileConsent')}
+              </label>
+            </div>
+          </div>
+          <div className="newProfileInputDiv">
+            <input name="consent" id="profile_consent" type="checkbox" checked={consent} onChange={(e) => consentSetter(e.target.checked)} />
+          </div>
+        </div>
+        :<h4>{errorMessage}</h4>}
     </Modal>
   );
 }

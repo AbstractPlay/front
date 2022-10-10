@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 function GameComment(props) {
-  const [comment, commentSetter] = useState(null);
+  const [comment, commentSetter] = useState("");
   const { t } = useTranslation();
 
   const handleChange = (comment) => {

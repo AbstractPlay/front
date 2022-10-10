@@ -2,6 +2,10 @@ import React from 'react';
 
 function Modal(props) {
   const modalClassName = props.show ? "apModal display-block" : "apModal display-none";
+
+  // Prevent background from scrolling while modal is open.
+  props.show ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'unset';
+
   return (
     props.show ?
       <div className={modalClassName}>

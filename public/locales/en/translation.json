@@ -54,6 +54,7 @@
     "Select": "select",
     "ChooseGame": "Choose a game: ",
     "ChooseOpponent": "Choose an opponent: ",
+    "ConfigureClock": "Clock Settings",
     "ChooseClockStart": "Clock start",
     "ChooseClockIncrement": "Clock increment",
     "ChooseClockMax": "Clock max",

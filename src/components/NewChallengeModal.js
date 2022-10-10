@@ -223,34 +223,36 @@ function NewChallengeModal(props) {
             }
           </div>
         }
-        <div className="newChallengeLabelDiv">
-          <label className="newChallengeLabel" htmlFor="clock_start">{t("ChooseClockStart") + ":"}</label>
-        </div>
-        <div className="newChallengeInputDiv">
-          <input type="text" id="clock_start" name="clock_start" size="3" value={clockStart} onChange={handleClockStartChange}/>
-          <span className="challengeHelp">{t("HelpClockStart")}</span>
-        </div>
-        <div className="newChallengeLabelDiv">
-          <label className="newChallengeLabel" htmlFor="clock_inc">{t("ChooseClockIncrement") + ":"}</label>
-        </div>
-        <div className="newChallengeInputDiv">
-          <input type="text" id="clock_inc" name="clock_inc" size="3" value={clockInc} onChange={handleClockIncChange}/>
-          <span className="challengeHelp">{t("HelpClockIncrement")}</span>
-        </div>
-        <div className="newChallengeLabelDiv">
-          <label className="newChallengeLabel" htmlFor="clock_max">{t("ChooseClockMax") + ":"}</label>
-        </div>
-        <div className="newChallengeInputDiv">
-          <input type="text" id="clock_start" name="clock_max" size="3" value={clockMax} onChange={handleClockMaxChange}/>
-          <span className="challengeHelp">{t("HelpClockMax")}</span>
-        </div>
-        <div className="newChallengeLabelDiv">
-          <label className="newChallengeLabel" htmlFor="clock_hard">{t("ChooseClockHard")}</label>
-        </div>
-        <div className="newChallengeInputDiv">
-          <input type="checkbox" id="clock_hard" value={clockHard} onChange={handleClockHardChange} />
-          <span className="challengeHelp">{t("HelpClockHard")}</span>
-        </div>
+          <span className="clockHeader">{t("ConfigureClock")}</span>
+          <div className="newChallengeLabelDiv">
+            <label className="newChallengeLabel" htmlFor="clock_start">{t("ChooseClockStart") + ":"}</label>
+          </div>
+          <div className="newChallengeInputDiv">
+            <input type="text" id="clock_start" name="clock_start" size="3" value={clockStart} onChange={handleClockStartChange}/>
+            <span className="challengeHelp">{t("HelpClockStart")}</span>
+          </div>
+          <div className="newChallengeLabelDiv">
+            <label className="newChallengeLabel" htmlFor="clock_inc">{t("ChooseClockIncrement") + ":"}</label>
+          </div>
+          <div className="newChallengeInputDiv">
+            <input type="text" id="clock_inc" name="clock_inc" size="3" value={clockInc} onChange={handleClockIncChange}/>
+            <span className="challengeHelp">{t("HelpClockIncrement")}</span>
+          </div>
+          <div className="newChallengeLabelDiv">
+            <label className="newChallengeLabel" htmlFor="clock_max">{t("ChooseClockMax") + ":"}</label>
+          </div>
+          <div className="newChallengeInputDiv">
+            <input type="text" id="clock_start" name="clock_max" size="3" value={clockMax} onChange={handleClockMaxChange}/>
+            <span className="challengeHelp">{t("HelpClockMax")}</span>
+          </div>
+          <div className="newChallengeLabelDiv">
+            <label className="newChallengeLabel" htmlFor="clock_hard">{t("ChooseClockHard")}</label>
+          </div>
+          <div className="newChallengeInputDiv">
+            <input type="checkbox" id="clock_hard" value={clockHard} onChange={handleClockHardChange} />
+            <span className="challengeHelp">{t("HelpClockHard")}</span>
+          </div>
+
       </div>
       <div className="error">
         {error}

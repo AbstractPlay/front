@@ -595,11 +595,24 @@ th .player {
   visibility: visible;
 }
 
-.challenge {
+.newProfileLabelDiv {
+  display: block;
+  width: 60%;
+  text-align: right;
+  padding-bottom: 0.3em;
+}
+
+.newProfileInputDiv {
+  display: block;
+  width: 40%;
+}
+
+.challenge, .profile {
   width: 100%;
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .newChallengeLabelDiv {
@@ -609,7 +622,7 @@ th .player {
   padding-bottom: 0.3em;
 }
 
-.newChallengeLabel {
+.newChallengeLabel, .newProfileLabel {
   padding-right: 1em;
 }
 
@@ -618,7 +631,7 @@ th .player {
   width: 70%;
 }
 
-.newChallengeVariantContainer {
+.newChallengeVariantContainer, .clockHeader {
   width: 100%;
 }
 
@@ -665,7 +678,10 @@ div.radios label {
   height: auto;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
+  /* For really small screens we need: */
+  overflow: auto;
+  max-height: 90%;
 }
 
 .apModalMain.large {

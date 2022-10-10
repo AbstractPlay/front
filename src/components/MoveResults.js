@@ -16,6 +16,7 @@ function MoveResults(props) {
       { results.map((r, index) =>
         <tr key={"moveResult" + index}>
           <td>[{r.time}]</td>
+          {/* Seems like JSX automatically sanitizes this, so no need to worry about XSS or use "htmlEscape". */}
           <td>{r.log}</td>
         </tr>)
       }
