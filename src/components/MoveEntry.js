@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 function showMilliseconds(ms) {
@@ -36,6 +36,8 @@ function showMilliseconds(ms) {
 }
 
 function MoveEntry(props) {
+  const [drawoffer, drawofferSetter] = useState(false);
+
   const move = props.move;
   const toMove = props.toMove;
   const game = props.game;
@@ -51,7 +53,10 @@ function MoveEntry(props) {
   const handleTimeOut = props.handlers[6];
   const { t } = useTranslation();
 
-  console.log("players", game.players);
+  const handleDrawOfferChange = (value) => {
+    drawofferSetter(value);
+  }
+
   let moveToSubmit = null;
   if (focus.exPath.length > 0 && game.canSubmit) {
     moveToSubmit = exploration[exploration.length - 1].children[focus.exPath[0]].move;
@@ -88,9 +93,9 @@ function MoveEntry(props) {
     <div className="uiState">
       <div className={ uiState === -1 ? "historyStateContainer" : uiState === 0 ? "currentStateContainer" : "exploreStateContainer"}>
           { uiState === -1 ?
-            <span className="historyState">{t("History")}</span> : uiState === 0 ?
-            <span className="currentState">{t("Current")}</span> :
-            <span className="exploreState">{t("Explore")}</span>
+            <div className="historyState">{t("History")}</div> : uiState === 0 ?
+            <div className="currentState">{t("Current")}</div> :
+            <div className="exploreState">{t("Explore")}</div>
           }
         <div className="player">
           { img === null ? '' :
@@ -102,9 +107,16 @@ function MoveEntry(props) {
         </div>
         { uiState !== 0 || toMove === '' ? '' :
           <div>
-              {t('TimeRemaining')}{ 
-                  showMilliseconds(timeremaining)
+            <div className="timeRemaining tooltipped">
+              {t("TimeRemaining")}
+              <span className="tooltiptext">Time Setting: {game.clockHard ? t("HardTimeSet") : t("NotHardTime")}, {t("Increment", {"inc": game.clockInc})}, {t("MaxTime", {"max": game.clockMax})}</span>
+            </div>
+            <div className="timeRemainingntries">
+              { game.players.map((p, ind) => ind === toMove ?
+                <div className="timeRemainingEntry"><b>{p.name}</b>: {showMilliseconds(p.time - (Date.now() - game.lastMoveTime))}</div>
+                : <div className="timeRemainingEntry">{p.name}: {showMilliseconds(p.time)}</div>)
               }
+            </div>
           </div>
         }
         <div>
@@ -121,7 +133,6 @@ function MoveEntry(props) {
               <div>
                 { moves === null ? <div/> :
                   <div className="selectMove">
-                    {/*<label for="selectmove" className="form-label-sm">{t("ChooseMove")}</label>*/}
                     <select className="form-controlNope" name="moves" id="selectmove" value="" onChange={(e) => handleMove(e.target.value)}>
                       <option value="">{t('ChooseMove')}</option>
                       { moves.map((move, index) => { return <option key={index} value={move}>{move}</option>})}
@@ -129,7 +140,6 @@ function MoveEntry(props) {
                   </div>
                 }
                 <div className="enterMove">
-                  {/* <label for="enterAMove" className="form-label-sm text-right">{t('EnterMove')}</label>*/}
                   <input name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}
                     placeholder={t('EnterMove')} />
                 </div>
@@ -144,30 +154,43 @@ function MoveEntry(props) {
         </div>
       </div>
       { moveToSubmit !== null && focus.exPath.length === 1 ?
-        <button className="apButton tooltipped" onClick={handleSubmit}>
-          {t('Submit')}
-          <span className="tooltiptext">{t('SubmitMove', {move: moveToSubmit})}</span>
-        </button>
+        <div className="drawoffer">
+          <label><input type="checkbox" onChange={(e) => handleDrawOfferChange(e.target.checked)} checked={drawoffer}/>{t("IncludeDrawOffer")}</label>
+        </div>
         : ""
       }
-      { uiState === 0 && game.canSubmit ?
-        <button className="apButton" onClick={handleResign}>
-          {t('Resign')}
-        </button>
-        : ""
-      }
-      { focus.exPath.length > 0 && game.canExplore ?
-        <button className="fabtn tooltipped" onClick={handleMarkAsWin}>
-          <i className="fa fa-thumbs-up"></i>
-          <span className="tooltiptext">{t('Winning')}</span>
-        </button>:""
-      }
-      { focus.exPath.length > 0 && game.canExplore ?
-        <button className="fabtn tooltipped" onClick={handleMarkAsLoss}>
-          <i className="fa fa-thumbs-down"></i>
-          <span className="tooltiptext">{t('Losing')}</span>
-        </button>:""
-      }
+      <div>
+        { moveToSubmit !== null && focus.exPath.length === 1 ?
+          <button className="apButton tooltipped" onClick={() => handleSubmit(drawoffer ? "drawoffer" : "")}>
+            {t('Submit')}
+            <span className="tooltiptext">{t('SubmitMove', {move: moveToSubmit})}</span>
+          </button>
+          : ""
+        }
+        { uiState === 0 && game.canSubmit ?
+            game.players.some(p => p.draw) ?
+              <button className="apButton" onClick={() => handleSubmit("drawaccepted")}>
+                {t('AcceptDraw')}
+              </button>
+            :
+              <button className="apButton" onClick={handleResign}>
+                {t('Resign')}
+              </button>
+          : ""
+        }
+        { focus.exPath.length > 0 && game.canExplore ?
+          <button className="fabtn tooltipped" onClick={handleMarkAsWin}>
+            <i className="fa fa-thumbs-up"></i>
+            <span className="tooltiptext">{t('Winning')}</span>
+          </button>:""
+        }
+        { focus.exPath.length > 0 && game.canExplore ?
+          <button className="fabtn tooltipped" onClick={handleMarkAsLoss}>
+            <i className="fa fa-thumbs-down"></i>
+            <span className="tooltiptext">{t('Losing')}</span>
+          </button>:""
+        }
+      </div>
     </div>
   );
 }

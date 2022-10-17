@@ -10,6 +10,7 @@ import ChallengeResponse from './ChallengeResponse';
 import NewChallengeModal from './NewChallengeModal';
 import NewProfile from './NewProfile'
 import { API_ENDPOINT_AUTH } from '../config';
+import { Link } from "react-router-dom";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -224,7 +225,7 @@ function Me(props) {
     return (
       <div className="main">
         <nav>
-          <a href="#">{t('About')}</a>
+          <div><Link to="/about">{t('About')}</Link></div>
         </nav>
         <article>
           <div className="article">

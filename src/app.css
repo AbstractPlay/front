@@ -65,15 +65,19 @@ a:active {
 }
 
 .main > nav {
-  flex: 0 0 5vw;
+  flex: 0 0 4vw;
   order: -1;
-  padding-top: 1em;
-  padding-right: 1em;
+  padding: 1em;
   border-right: 2px solid #1A3E6F;
-  margin-top: 1em;
-  margin-right: 1.5em;
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  /* justify-content: flex-end; */
+}
+
+.main > nav > div {
+  width: 4vw;
+  text-align:center;
 }
 
 .article {
@@ -423,41 +427,31 @@ th .player {
   margin-left: 0.5em;
 }
 
-/*
-.historyState {
-  background-color: greenyellow;
-  padding: 1rem;
-}
-
-.currentState {
-  background-color: ivory;
-  padding: 1rem;
-}
-
-.exploreState {
-  background-color: lavenderblush;
-  padding: 1rem;
-}
-*/
-
 .historyState {
   color: var(--secondary-color-2);
-  font-weight: bold;
 }
 
 .currentState {
   color: black;
-  font-weight: bold;
 }
 
 .exploreState {
   color: var(--secondary-color-3);
+}
+
+.historyState, .currentState, .exploreState {
   font-weight: bold;
+  padding-bottom: 1em;
 }
 
 .uiState {
   padding: 1em 0 0 0;
 }
+
+.drawoffer {
+  padding-bottom: 0.5em;
+}
+
 
 .movesTable {
   margin-left: auto;
@@ -728,5 +722,8 @@ div.radios label {
 }
 
 .apModalFooterButtons {
+  margin: 0.5em;
+}
+.timeRemainingEntry {
   margin: 0.5em;
 }

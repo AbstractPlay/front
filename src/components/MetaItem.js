@@ -35,7 +35,7 @@ function MetaItem(props) {
         <div>External links
         <ul>
           {game.urls.map((l, i) =>
-            <li key = {i}><a href={l}>{l}</a></li>
+            <li key = {i}><a href={l} target="_blank">{l}</a></li>
             )}
         </ul>
         </div>

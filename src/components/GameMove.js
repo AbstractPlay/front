@@ -13,6 +13,7 @@ import MoveResults from './MoveResults';
 import RenderOptionsModal from './RenderOptionsModal';
 import Modal from './Modal';
 import GameComment from './GameComment';
+import { Link } from "react-router-dom";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -509,12 +510,16 @@ function GameMove(props) {
     node.SetOutcome(mark);
   }
 
-  const handleSubmit = async () => {
-    let m = getFocusNode(explorationRef.current, focus).move;
-    submitMove(m);
+  const handleSubmit = async (draw) => {
+    if (draw === "drawaccepted") {
+      submitMove("", draw);  
+    } else {
+      let m = getFocusNode(explorationRef.current, focus).move;
+      submitMove(m, draw);
+    }
   }
 
-  const submitMove = async (m) => {  
+  const submitMove = async (m, draw) => {  
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
@@ -529,7 +534,8 @@ function GameMove(props) {
           "query": "submit_move",
           "pars" : {
             "id": gameRef.current.id,
-            "move": m
+            "move": m,
+            "draw": draw
           }
         })
       });
@@ -590,7 +596,7 @@ function GameMove(props) {
 
   const handleResignConfirmed = async () => {
     showResignConfirmSetter(false);
-    submitMove('resign');
+    submitMove('resign', false);
   }
 
   const handleTimeout = () => {
@@ -603,7 +609,7 @@ function GameMove(props) {
 
   const handleTimeoutConfirmed = async () => {
     showTimeoutConfirmSetter(false);
-    submitMove('timeout');
+    submitMove('timeout', false);
   }
 
   function keyDownHandler(e) {
@@ -777,7 +783,7 @@ function GameMove(props) {
       return (
         <div className="main">
           <nav>
-            <a href="#">{t('About')}</a>
+            <div><Link to="/about">{t('About')}</Link></div>
           </nav>
           <article>
             <div className="article">

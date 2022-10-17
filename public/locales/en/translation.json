@@ -63,6 +63,10 @@
     "HelpClockStart": "Time on clock at the start of the game.",
     "HelpClockIncrement": "Time added after every move.",
     "HelpClockMax": "Remaining time won't become more than this.",
+    "HardTimeSet": "Hard time",
+    "NotHardTime": "No hard limit",
+    "Increment": "increment {{inc}} hours",
+    "MaxTime": "max time {{max}} hours",
     "NoUsers": "No users!",
     "NewProfile": "Create profile",
     "ProfileName": "Your desired display name. It must be unique across names currently in use and those recently used.",
@@ -136,5 +140,8 @@
     "Rotate": "Rotate board",
     "MarkAsWin": "Mark as win",
     "MarkAsLoss": "Mark as loss",
-    "Comment": "Comment"
+    "Comment": "Comment",
+    "MyDashboard": "Play",
+    "IncludeDrawOffer": "include draw offer with move",
+    "AcceptDraw": "Accept draw offer"
 }

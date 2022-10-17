@@ -8,6 +8,8 @@ import LogInOutButton from '../components/LogInOutButton';
 import Welcome from './Welcome';
 import GameMove from '../components/GameMove';
 import logo from '../assets/AbstractPlayLogo.svg';
+import MetaContainer from "../components/MetaContainer";
+import About from "../components/About";
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -82,6 +84,12 @@ function Bones(props) {
           <div>
             <div>
               <Switch>
+                <Route path="/about">
+                  <About token={token}/>
+                </Route>
+                <Route path="/games">
+                  <MetaContainer token={token}/>
+                </Route>
                 <Route path="/move">
                   <GameMove />
                 </Route>
