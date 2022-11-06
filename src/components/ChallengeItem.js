@@ -16,6 +16,7 @@ function ChallengeItem(props) {
   }
 
   const challenge = props.item;
+  console.log("challenge",challenge);
   const respond = props.respond;
   const game = gameinfo.get(challenge.metaGame);
 
@@ -30,7 +31,7 @@ function ChallengeItem(props) {
   }
   else {
     var desc = "";
-    const otherplayers = challenge.challengees.map(item => item.name);
+    const otherplayers = challenge.challengees.map(item => item.name).concat(challenge.players.filter(p => p.id !== props.me).map(item => item.name));
     if (challenge.numPlayers === 2) {
       desc = t('ChallengedTwoPlayers', {game: game.name, other: otherplayers[0]});
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import Spinner from './Spinner';
 import { API_ENDPOINT_OPEN } from '../config';
@@ -14,11 +14,13 @@ function NewChallengeModal(props) {
   const [users, usersSetter] = useState(null);
   const [error, errorSetter] = useState(null);
   const [metaGame, metaGameSetter] = useState(null);
+  const [playerCount, playerCountSetter] = useState(-1);
+  const [seating, seatingSetter] = useState('');
   const [clockStart, clockStartSetter] = useState(72);
   const [clockInc, clockIncSetter] = useState(24);
   const [clockMax, clockMaxSetter] = useState(240);
   const [clockHard, clockHardSetter] = useState(false);
-  const playerRef = useRef(null);
+  const [opponents, opponentsSetter] = useState([]);
   const groupVariantsRef = useRef({});
   const nonGroupVariantsRef = useRef({})
 
@@ -40,16 +42,44 @@ function NewChallengeModal(props) {
   },[]);
 
   useEffect(() => {
-    playerRef.current = null;
     groupVariantsRef.current = {};
     nonGroupVariantsRef.current = {};
     metaGameSetter(null);
+    playerCountSetter(-1);
+    opponentsSetter([]);
     errorSetter("");
     clockStartSetter(72);
     clockIncSetter(24);
     clockMaxSetter(240);
     clockHardSetter(false);
   },[show]);
+
+  useEffect(() => {
+    if (metaGame !== null) {
+      const info = gameinfo.get(metaGame);
+      playercounts = info.playercounts;
+      if (playercounts.length === 1) {
+        playerCountSetter(playercounts[0]);
+        opponentsSetter(Array(playercounts[0] - 1).fill(''));
+      } else {
+        playerCountSetter(-1);
+        opponentsSetter([]);
+      }
+      seatingSetter('');
+    }
+  }, [metaGame]);
+
+  useEffect(() => {
+    if (playerCount === 2) {
+      seatingSetter('');
+      opponentsSetter(['']);
+    }
+    else
+      seatingSetter('random');
+    if (playerCount !== -1) {
+      opponentsSetter(Array(playerCount - 1).fill(''));
+    }
+  }, [playerCount]);
 
   const handleChangeGame = (game) => {
     groupVariantsRef.current = {};
@@ -62,12 +92,21 @@ function NewChallengeModal(props) {
     errorSetter("");
   }
 
-  const handleChangePlayer = (player) => {
-    if (player === "") {
-      playerRef.current = null;
-    } else {
-      playerRef.current = player;
-    }
+  const handleChangePlayerCount = (cnt) => {
+    playerCountSetter(parseInt(cnt));
+    errorSetter("");
+  }
+
+  const handleChangeSeating = (seat) => {
+    seatingSetter(seat);
+    errorSetter("");
+  }
+
+  const handleChangeOpponent = (data) => {
+    console.log(data);
+    let opps = [...opponents];
+    opps[data.player] = {"id": data.id, "name": data.name};
+    opponentsSetter(opps);
     errorSetter("");
   }
 
@@ -122,22 +161,41 @@ function NewChallengeModal(props) {
   const handleChallenge = () => {
     if (metaGame === null) {
       errorSetter(t("SelectAGame"));
-    } else if (playerRef.current === null) {
-      errorSetter(t("SelectAnOpponent"));
-    } else {
-      let variants = [];
-      for (var group of Object.keys(groupVariantsRef.current)) {
-        if (groupVariantsRef.current[group] !== null) {
-          variants.push(groupVariantsRef.current[group]);
-        }
-      }
-      for (var variant of Object.keys(nonGroupVariantsRef.current)) {
-        if (nonGroupVariantsRef.current[variant]) {
-          variants.push(variant)
-        }
-      }
-      handleNewChallenge({"metaGame": metaGame, "variants": variants, "opponent": playerRef.current, "clockStart": clockStart, "clockInc": clockInc, "clockMax": clockMax, "clockHard": clockHard});
+      return;
     }
+    if (playerCount === null || playerCount === -1) {
+      errorSetter(t("SelectPlayerCount"));
+      return;
+    }
+    if (seating === null || seating === '') {
+      errorSetter(t("SelectSeating"));
+      return;
+    }
+    let ok = true;
+    opponents.forEach(o => {
+      if (o === '') {
+        if (opponents.length === 1)
+          errorSetter(t("SelectAnOpponent"));
+        else
+          errorSetter(t("SelectOpponents", {"count": opponents.length}));
+        ok = false;
+        return;
+      }
+     });
+    if (!ok)
+     return;
+    let variants = [];
+    for (var group of Object.keys(groupVariantsRef.current)) {
+      if (groupVariantsRef.current[group] !== null) {
+        variants.push(groupVariantsRef.current[group]);
+      }
+    }
+    for (var variant of Object.keys(nonGroupVariantsRef.current)) {
+      if (nonGroupVariantsRef.current[variant]) {
+        variants.push(variant)
+      }
+    }
+    handleNewChallenge({"metaGame": metaGame, "numPlayers": playerCount, "seating": seating, "variants": variants, "opponents": opponents, "clockStart": clockStart, "clockInc": clockInc, "clockMax": clockMax, "clockHard": clockHard});
   }
 
   let games = [];
@@ -145,6 +203,7 @@ function NewChallengeModal(props) {
   games.sort((a,b) => (a.name > b.name) ? 1 : -1);
   let groupData = [];
   let nonGroupData = [];
+  let playercounts = [];
   if (metaGame !== null) {
     const info = gameinfo.get(metaGame);
     if (info.variants !== undefined) {
@@ -152,7 +211,10 @@ function NewChallengeModal(props) {
       groupData = groups.map(g => {return {"group": g, "variants": info.variants.filter(v => v.group === g).sort((a,b) => (a.uid > b.uid) ? 1 : -1)}});
       nonGroupData = info.variants.filter(v => v.group === undefined).sort((a,b) => (a.uid > b.uid) ? 1 : -1);
     }
+    playercounts = info.playercounts;
   }
+
+  console.log('opponents', opponents);
 
   return (
     <Modal show={show} title={t('NewChallenge')}
@@ -162,29 +224,67 @@ function NewChallengeModal(props) {
       </div>
       <div className="challenge">
         <div className="newChallengeLabelDiv">
-          <label className="newChallengeLabel" htmlFor="user_for_challenge">{t("ChooseOpponent")}</label>
-        </div>
-        <div className="newChallengeInputDiv">
-          { users === null ? <Spinner/> :
-            <select className="newChallengeInput" name="users" id="user_for_challenge" onChange={(e) => handleChangePlayer({id: e.target.value, name: e.target.options[e.target.selectedIndex].text})}>
-              <option value="">--{t('Select')}--</option>
-              { users
-                .filter(user => user.id !== myid)
-                .map(item => { return <option key={item.id} value={item.id}>{item.name}</option>})}
-            </select>
-          }
-        </div>
-        <div className="newChallengeLabelDiv">
           <label className="newChallengeLabel" htmlFor="game_for_challenge" >{t("ChooseGame")}</label>
         </div>
         <div className="newChallengeInputDiv">
           { games === null ? <Spinner/> :
-            <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
+            <select value={metaGame ? metaGame : ''} name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
               <option value="">--{t('Select')}--</option>
               { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
             </select>
           }
         </div>
+        { metaGame === null ? '' :
+          <div className="newChallengeLabelDiv">
+            <label className="newChallengeLabel" htmlFor="num_players_for_challenge" >{t("NumPlayers")}</label>
+          </div>
+        }
+        { metaGame === null ? '' :
+          <div className="newChallengeInputDiv">
+              { playercounts.length === 1 ? playercounts[0] :
+                <select value={playerCount} name="playercount" id="num_players_for_challenge" onChange={(e) => handleChangePlayerCount(e.target.value)}>
+                  <option value="">--{t('Select')}--</option>
+                  { playercounts.map(cnt => { return <option key={cnt} value={cnt}>{cnt}</option>}) }
+                </select>
+              }
+          </div>
+        }
+        { metaGame === null || playerCount === -1 ? '' :
+          <div className="newChallengeLabelDiv">
+            <label className="newChallengeLabel" htmlFor="seating_for_challenge" >{t('Seating')}</label>
+          </div>
+        }
+        { metaGame === null || playerCount === -1 ? '' :
+          <div className="newChallengeInputDiv">
+              { playerCount !== 2 ? t('SeatingRandom') :
+                <select value={seating} name="playercount" id="seating_for_challenge" onChange={(e) => handleChangeSeating(e.target.value)}>
+                  <option key="s0" value="">--{t('Select')}--</option>
+                  <option key="s1" value="random">{t('SeatingRandom')}</option>
+                  <option key="s2" value="s1">{t('Seating1')}</option>
+                  <option key="s3" value="s2">{t('Seating2')}</option>
+                </select>
+              }
+          </div>
+        }
+        { playerCount === -1 ? ''
+          : opponents.map((o, i) => { console.log(o, i); return (
+            <Fragment key={i}>
+              <div className="newChallengeLabelDiv">
+                <label className="newChallengeLabel" htmlFor={"user_for_challenge" + i}>{playerCount === 2 ? t("ChooseOpponent") : t("ChooseOpponent", i)}</label>
+              </div>
+              <div className="newChallengeInputDiv">
+                { users === null ? <Spinner/> :
+                  <select value={o.id || ''} className="newChallengeInput" name="users" id={"user_for_challenge" + i} onChange={(e) => handleChangeOpponent({'id': e.target.value, 'name': e.target.options[e.target.selectedIndex].text, 'player': i})}>
+                    <option value="">--{t('Select')}--</option>
+                    { users
+                      .filter(user => user.id === opponents[i].id || (user.id !== myid && !opponents.some(o => user.id === o.id)))
+                      .map(item => { return <option key={item.id} value={item.id}>{item.name}</option>})}
+                  </select>
+                }
+              </div>
+            </Fragment>)
+            })
+        }
         { groupData.length === 0 && nonGroupData.length === 0 ? '' :
           <div className="newChallengeVariantContainer">
             <span className='pickVariantHeader'>{t("PickVariant")}</span>

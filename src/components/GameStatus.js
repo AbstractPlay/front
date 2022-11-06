@@ -1,8 +1,25 @@
 import React from 'react';
+import { renderglyph } from '@abstractplay/renderer';
+
+// status.stashes.push(stash.map(s => {return {count: s.count, glyph: renderGlyph(settings, s.glyph, i + 1), movePart: s.movePart}}));
+
+function renderGlyph(settings, glyph, id, player) {
+  var options = {};
+  if (settings.color === "blind") {
+      options.colourBlind = true;
+  } else if (settings.color === "patterns") {
+      options.patterns = true;
+  }
+  options.svgid = id;
+  return renderglyph(glyph, player, options);
+}
 
 function GameStatus(props) {
   const status = props.status;
+  const settings = props.settings;
   const game = props.game;
+  const handleStashClick = props.handleStashClick;
+
   if (game.colors === undefined) {
     return (<div></div>);
   }
@@ -62,9 +79,11 @@ function GameStatus(props) {
                     }</td>
                     <td>{game.players[index].name}</td>
                     <td>:</td>
-                    <td>{stash.small}</td>
-                    <td>{stash.medium}</td>
-                    <td>{stash.large}</td>
+                    { stash.map((s, j) => 
+                        <td key={"stashentry" + j} onClick={() => handleStashClick(index, s.count, s.movePart)}>
+                          {s.count}&#215;
+                          <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, s.glyph, 'stack-' + index + '-' + j, index + 1))}`} alt="" />
+                        </td>) }
                   </tr>)
                 }
               </tbody>

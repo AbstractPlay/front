@@ -160,15 +160,8 @@ function Me(props) {
         body: JSON.stringify({
           "query": "new_challenge",
           "pars" : {
+            ...challenge,
             "challenger": {"id": me.id, "name": me.name},
-            "metaGame": game,
-            "clockStart": challenge.clockStart,
-            "clockInc": challenge.clockInc,
-            "clockMax": challenge.clockMax,
-            "clockHard": challenge.clockHard,
-            "numPlayers": 2,
-            "variants": variants,
-            "challengees": [opponent]
           }})
         });
       showNewChallengeModalSetter(false);
@@ -222,6 +215,7 @@ function Me(props) {
           waiting.push(game);
       }
     }
+    let challengesResponded = me.challengesIssued.concat(me.challengesAccepted);
     return (
       <div className="main">
         <nav>
@@ -274,10 +268,10 @@ function Me(props) {
                   </div>
                   <div className="groupLevel2">
                     <div className="groupLevel2Header"><span>{t('WaitingResponse')}</span></div>
-                    { me.challengesIssued.length === 0
+                    { challengesResponded.length === 0
                       ? <span className="listComment">{t('NoWaitingResponse')}</span>
                       : <ul>
-                          { me.challengesIssued.map(item =>
+                          { challengesResponded.map(item =>
                           <ChallengeItem me={me.id} item={item} key={item.id} respond={false}
                             setters={{
                               challengeSetter: challengeSetter,
@@ -299,9 +293,9 @@ function Me(props) {
         <NewChallengeModal show={showNewChallengeModal} id={me.id} handleClose={handleNewChallengeClose} handleChallenge={handleNewChallenge2} />
 
         <Modal show={showChallengeViewModal} title={t('Challenge Details')} 
-          buttons={[{label: t('Revoke challenge'), action: handleChallengeRevoke}, {label: t('Close'), action: handleChallengeViewClose}]}>
+          buttons={[{label: (challenge.challenger ? challenge.challenger.id : '') === me.id ? t('RevokeChallenge') : t('RevokeAcceptance'), action: handleChallengeRevoke}, {label: t('Close'), action: handleChallengeViewClose}]}>
           <div>{
-              <ChallengeView challenge={challenge} me={me}/>
+              <ChallengeView challenge={challenge} me={me.id}/>
             }
           </div>
         </Modal>

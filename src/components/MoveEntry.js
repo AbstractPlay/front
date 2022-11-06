@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 function showMilliseconds(ms) {
@@ -75,8 +75,8 @@ function MoveEntry(props) {
   if (toMove !== '') {
     if (game.simultaneous) {
       if (game.canSubmit) {
-        mover = t('ToMove', {"player": game.players[toMove].name});
-        if (game.colors !== undefined) img = game.colors[toMove];
+        mover = t('ToMove', {"player": game.players[game.me].name});
+        if (game.colors !== undefined) img = game.colors[game.me];
       } else {
         mover = t('Waiting');
       }
@@ -88,7 +88,11 @@ function MoveEntry(props) {
   } else {
     mover = t('GameIsOver');
   }
-  let timeremaining = toMove === '' ? 0 : game.players[toMove].time - (Date.now() - game.lastMoveTime);
+  let canClaimTimeout = false;
+  if (game.simultaneous)
+    canClaimTimeout = game.players.some((p, i) => game.toMove[i] && i !== game.me && p.time - (Date.now() - game.lastMoveTime) < 0); // this is WRONG!
+  else
+    canClaimTimeout = game.me !== game.toMove && game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
   return (
     <div className="uiState">
       <div className={ uiState === -1 ? "historyStateContainer" : uiState === 0 ? "currentStateContainer" : "exploreStateContainer"}>
@@ -111,7 +115,7 @@ function MoveEntry(props) {
               {t("TimeRemaining")}
               <span className="tooltiptext">Time Setting: {game.clockHard ? t("HardTimeSet") : t("NotHardTime")}, {t("Increment", {"inc": game.clockInc})}, {t("MaxTime", {"max": game.clockMax})}</span>
             </div>
-            <div className="timeRemainingntries">
+            <div className="timeRemainingEntries">
               { game.players.map((p, ind) => ind === toMove ?
                 <div className="timeRemainingEntry"><b>{p.name}</b>: {showMilliseconds(p.time - (Date.now() - game.lastMoveTime))}</div>
                 : <div className="timeRemainingEntry">{p.name}: {showMilliseconds(p.time)}</div>)
@@ -120,36 +124,37 @@ function MoveEntry(props) {
           </div>
         }
         <div>
-          { !move.valid || (move.valid && move.complete === -1)  ?
-            <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :
-            ''
-          }
-          { timeremaining < 0 && !game.canSubmit && uiState === 0 ?
+          { canClaimTimeout && !game.canSubmit && uiState === 0 ?
             <button className="apButton" onClick={handleTimeOut}>{t('ClaimTimeOut')}</button>
             : ''
           }
           { (game.canSubmit || game.canExplore) && exploration !== null && focus.moveNumber === exploration.length - 1
             && (game.canExplore || focus.exPath.length === 0) ?
-              <div>
-                { moves === null ? <div/> :
+            <Fragment>
+              { moves === null ? <div/> :
                   <div className="selectMove">
                     <select className="form-controlNope" name="moves" id="selectmove" value="" onChange={(e) => handleMove(e.target.value)}>
                       <option value="">{t('ChooseMove')}</option>
                       { moves.map((move, index) => { return <option key={index} value={move}>{move}</option>})}
                     </select>
                   </div>
+              }
+              <div className="enterMove">
+                <input name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}
+                  placeholder={t('EnterMove')} />
+              </div>
+              { !move.valid || (move.valid && move.complete === -1)  ?
+                <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :
+                ''
+              }
+              <div>
+                { move.valid && move.complete === 0 && move.move.length > 0 ?
+                  <button className="apButton" onClick={handleView}>{t('CompleteMove')}</button>
+                  : ''
                 }
-                <div className="enterMove">
-                  <input name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}
-                    placeholder={t('EnterMove')} />
-                </div>
-                <div>
-                  { move.valid && move.complete === 0 && move.move.length > 0 ?
-                    <button className="apButton" onClick={handleView}>{t('CompleteMove')}</button>
-                    : ''
-                  }
-                </div>
-              </div> : <div/>
+              </div>
+            </Fragment>
+            : ''
           }
         </div>
       </div>

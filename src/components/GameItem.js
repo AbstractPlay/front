@@ -10,7 +10,8 @@ function GameItem(props) {
   const info = gameinfo.get(game.metaGame);
   const canMove = props.canMove;
   const myid = props.me;
-  var desc = "";
+  var desc = t("GameAgainst", {game: info.name, opp: game.players.filter(item => item.id !== myid).map(item => item.name).join(", ")});
+  /*
   if (game.players.length === 2) {
     if (canMove) {
       desc = t("GameToMoveTwoPlayer", {game: info.name, opponent: game.players.filter(item => item.id !== myid).map(item => item.name)[0]});
@@ -26,6 +27,7 @@ function GameItem(props) {
       desc = t("GameNoMoveNPlayer", {game: info.name, opponents: game.players.filter(item => item.id !== myid).map(item => item.name).join(", ")});
     }
   }
+  */
   return (
     <li>
       <i className="fa fa-circle apBullet"></i>

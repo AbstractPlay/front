@@ -14,12 +14,12 @@ export class GameNode {
     this.outcome = 0; // -1 for player1 win, 1 for player2 win, 0 for undecided.
   }
 
-  AddChild(move, state) {
+  AddChild(move, state, toMove) {
     for (let i = 0; i < this.children.length; i++) {
       if (this.children[i].move === move)
         return i;
     }
-    const child = new GameNode(this, move, state);
+    const child = new GameNode(this, move, state, toMove);
     this.children.push(child);
     this.UpdateOutcome();
     return this.children.length - 1;
