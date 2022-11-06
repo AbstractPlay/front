@@ -128,16 +128,15 @@ function MoveEntry(props) {
             <button className="apButton" onClick={handleTimeOut}>{t('ClaimTimeOut')}</button>
             : ''
           }
-          { (game.canSubmit || game.canExplore) && exploration !== null && focus.moveNumber === exploration.length - 1
-            && (game.canExplore || focus.exPath.length === 0) ?
+          { focus.canExplore ?
             <Fragment>
               { moves === null ? <div/> :
-                  <div className="selectMove">
-                    <select className="form-controlNope" name="moves" id="selectmove" value="" onChange={(e) => handleMove(e.target.value)}>
-                      <option value="">{t('ChooseMove')}</option>
-                      { moves.map((move, index) => { return <option key={index} value={move}>{move}</option>})}
-                    </select>
-                  </div>
+                <div className="selectMove">
+                  <select className="form-controlNope" name="moves" id="selectmove" value="" onChange={(e) => handleMove(e.target.value)}>
+                    <option value="">{t('ChooseMove')}</option>
+                    { moves.map((move, index) => { return <option key={index} value={move}>{move}</option>})}
+                  </select>
+                </div>
               }
               <div className="enterMove">
                 <input name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}

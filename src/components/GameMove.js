@@ -103,6 +103,8 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   } else {
     game0.moveResults = engine.resultsHistory().reverse();
   }
+  if (gameRef.current !== null && gameRef.current.colors !== undefined)
+    game0.colors = gameRef.current.colors; // gets used when you submit a move.
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   const render = engine.render();
@@ -134,7 +136,9 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     engine.load();
   }
   explorationRef.current = history;
-  focusSetter({"moveNumber": history.length - 1, "exPath": []});
+  let focus0 = {"moveNumber": history.length - 1, "exPath": []};
+  focus0.canExplore = canExploreMove(gameRef.current, explorationRef.current, focus0);
+  focusSetter(focus0);
   console.log("Setting renderrep");
   renderrepSetter(render);
 }
@@ -150,7 +154,7 @@ function setupColors(settings, game, t) {
     if (game.sharedPieces) {
       return {"isImage": false, "value": game.seatNames[i]}
     } else {
-      // options.svgid = 'player' + i + 'color';
+      options.svgid = 'player' + i + 'color';
       return {"isImage": true, "value": renderglyph("piece", i + 1, options)}
     }
   });
@@ -189,13 +193,14 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
     const pos = node.AddChild(move.move, newstate, (node.toMove + 1) % game.players.length);
     let newfocus = cloneDeep(focus);
     newfocus.exPath.push(pos);
+    newfocus.canExplore = canExploreMove(game, explorationRef.current, newfocus);
     focusSetter(newfocus);
-    // moveSetter({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
     moveSetter({...gameEngineTmp.validateMove(''), "previous": '', "move": ''});
+    if (newfocus.canExplore && !game.noMoves)
+      movesRef.current = gameEngineTmp.moves();
   }
   partialMoveRenderRef.current = partialMove;
-  if (!game.noMoves && game.canExplore && !partialMove)
-    movesRef.current = gameEngineTmp.moves();
+  console.log('setting renderrep 1');
   renderrepSetter(gameEngineTmp.render());
 }
 
@@ -256,6 +261,12 @@ function getPath(focus, exploration, path) {
     }
   }
   return curNumVariations;
+}
+
+function canExploreMove(game, exploration, focus) {
+  return (game.canExplore || (game.canSubmit && focus.exPath.length === 0)) // exploring (beyond move input) is supported or it is my move and we are just looking at the current position
+    && exploration !== null 
+    && focus.moveNumber === exploration.length - 1;    // we aren't looking at history
 }
 
 function GameMove(props) {
@@ -354,6 +365,7 @@ function GameMove(props) {
   }
 
   const handleStashClick = (player, count, movePart) => {
+    console.log(`handleStashClick movePArt=${movePart}`);
     handleMove(move.move + movePart);
   }
 
@@ -367,7 +379,8 @@ function GameMove(props) {
       engine.move(m, true);
     }
     partialMoveRenderRef.current = false;
-    if (!gameRef.current.noMoves && foc.moveNumber === explorationRef.current.length - 1) {
+    foc.canExplore = canExploreMove(gameRef.current, explorationRef.current, foc);
+    if (foc.canExplore && !gameRef.current.noMoves) {
       movesRef.current = engine.moves();
     }
     focusSetter(foc);
@@ -388,7 +401,7 @@ function GameMove(props) {
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       partialMoveRenderRef.current = false;
       setStatus(gameEngineTmp, gameRef.current, statusRef.current);
-      if (!gameRef.current.noMoves && gameRef.current.canExplore)
+      if (focus.canExplore && !gameRef.current.noMoves)
         movesRef.current = gameEngineTmp.moves();
       renderrepSetter(gameEngineTmp.render());
     }
@@ -436,7 +449,7 @@ function GameMove(props) {
         console.log("renderrep", renderrep);
         options = {"divid": "svg"};
         console.log("focus.moveNumber", focus.moveNumber, "explorationRef.current.length", explorationRef.current.length);
-        if (focus.moveNumber === explorationRef.current.length - 1) {
+        if (focus.canExplore) {
           options.boardClick = boardClick;
         }
         options.rotate = settings.rotate;
@@ -460,6 +473,7 @@ function GameMove(props) {
   }, [renderrep, focus, settings, wait, moveSetter, renderrepSetter]);
 
   useEffect(() => {
+    console.log('In useEffect for [gameSettings, userSettings, settingsSetter, t]');
     if (gameRef.current !== null) {
       var newSettings = {};
       const game = gameRef.current;
@@ -571,8 +585,7 @@ function GameMove(props) {
       console.log("In handleSubmit. game0:");
       console.log(game0);
       setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
-      setupColors(settings, gameRef.current, t);
-      // focusSetter({"moveNumber": explorationRef.current.length - 1, "exPath": []});
+      // setupColors(settings, gameRef.current, t);
     }
     catch (err) {
       setError(err.message);
@@ -820,7 +833,7 @@ function GameMove(props) {
                 <div className="enterMoveContainer">
                   <div className="enterMoveContainer2">
                     <div className="groupLevel1Header"><span>{t("MakeMove")}</span></div>
-                      <GameStatus status={statusRef.current} settings={settings} game={game} handleStashClick={handleStashClick} />
+                      <GameStatus status={statusRef.current} settings={settings} game={game} canExplore={focus.canExplore} handleStashClick={handleStashClick} />
                       <MoveEntry move={move} toMove={getFocusNode(explorationRef.current, focus).toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
                         focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}/>
                     </div>

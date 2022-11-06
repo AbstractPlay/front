@@ -18,6 +18,7 @@ function GameStatus(props) {
   const status = props.status;
   const settings = props.settings;
   const game = props.game;
+  const canExplore = props.canExplore;
   const handleStashClick = props.handleStashClick;
 
   if (game.colors === undefined) {
@@ -80,7 +81,7 @@ function GameStatus(props) {
                     <td>{game.players[index].name}</td>
                     <td>:</td>
                     { stash.map((s, j) => 
-                        <td key={"stashentry" + j} onClick={() => handleStashClick(index, s.count, s.movePart)}>
+                        <td key={"stashentry" + j} onClick={ canExplore ? () => handleStashClick(index, s.count, s.movePart) : undefined }>
                           {s.count}&#215;
                           <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, s.glyph, 'stack-' + index + '-' + j, index + 1))}`} alt="" />
                         </td>) }
