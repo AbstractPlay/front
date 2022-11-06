@@ -146,6 +146,7 @@
     "Comment": "Comment",
     "MyDashboard": "Play",
     "IncludeDrawOffer": "include draw offer with move",
+    "IncludeAcceptDrawOffer": "a draw has been offered. Do you accept?",
     "AcceptDraw": "Accept draw offer",
     "NumPlayers": "Number of players:",
     "Seating": "Seating:",

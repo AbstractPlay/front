@@ -92,7 +92,12 @@ function MoveEntry(props) {
   if (game.simultaneous)
     canClaimTimeout = game.players.some((p, i) => game.toMove[i] && i !== game.me && p.time - (Date.now() - game.lastMoveTime) < 0); // this is WRONG!
   else
-    canClaimTimeout = game.me !== game.toMove && game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
+    canClaimTimeout = toMove !== '' && game.me !== game.toMove && game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
+  
+  const drawOffered = game.players.some(p => p.draw);
+  // Am I the last player that needs to agree to a draw?
+  const canDraw =  drawOffered && game.players.reduce((acc, p) => acc + (p.draw ? 1 : 0), 0) === game.players.length - 1;
+
   return (
     <div className="uiState">
       <div className={ uiState === -1 ? "historyStateContainer" : uiState === 0 ? "currentStateContainer" : "exploreStateContainer"}>
@@ -157,9 +162,13 @@ function MoveEntry(props) {
           }
         </div>
       </div>
-      { moveToSubmit !== null && focus.exPath.length === 1 ?
+      { moveToSubmit !== null && focus.exPath.length === 1 && !drawOffered ?
         <div className="drawoffer">
           <label><input type="checkbox" onChange={(e) => handleDrawOfferChange(e.target.checked)} checked={drawoffer}/>{t("IncludeDrawOffer")}</label>
+        </div>
+        : moveToSubmit !== null && focus.exPath.length === 1 && drawOffered && !canDraw ?
+        <div className="drawoffer">
+          <label><input type="checkbox" onChange={(e) => handleDrawOfferChange(e.target.checked)} checked={drawoffer}/>{t("IncludeAcceptDrawOffer")}</label>
         </div>
         : ""
       }
@@ -172,7 +181,7 @@ function MoveEntry(props) {
           : ""
         }
         { uiState === 0 && game.canSubmit ?
-            game.players.some(p => p.draw) ?
+            canDraw ?
               <button className="apButton" onClick={() => handleSubmit("drawaccepted")}>
                 {t('AcceptDraw')}
               </button>
