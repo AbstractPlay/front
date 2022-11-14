@@ -122,8 +122,8 @@ function MoveEntry(props) {
             </div>
             <div className="timeRemainingEntries">
               { game.players.map((p, ind) => ind === toMove ?
-                <div className="timeRemainingEntry"><b>{p.name}</b>: {showMilliseconds(p.time - (Date.now() - game.lastMoveTime))}</div>
-                : <div className="timeRemainingEntry">{p.name}: {showMilliseconds(p.time)}</div>)
+                <div className="timeRemainingEntry" key={'player'+ind}><b>{p.name}</b>: {showMilliseconds(p.time - (Date.now() - game.lastMoveTime))}</div>
+                : <div className="timeRemainingEntry" key={'player'+ind}>{p.name}: {showMilliseconds(p.time)}</div>)
               }
             </div>
           </div>
@@ -143,14 +143,14 @@ function MoveEntry(props) {
                   </select>
                 </div>
               }
-              <div className="enterMove">
-                <input name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}
-                  placeholder={t('EnterMove')} />
-              </div>
               { !move.valid || (move.valid && move.complete === -1)  ?
                 <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :
                 ''
               }
+              <div className="enterMove">
+                <input name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}
+                  placeholder={t('EnterMove')} />
+              </div>
               <div>
                 { move.valid && move.complete === 0 && move.move.length > 0 ?
                   <button className="apButton" onClick={handleView}>{t('CompleteMove')}</button>

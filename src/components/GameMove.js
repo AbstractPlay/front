@@ -64,6 +64,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   game0.simultaneous = (info.flags !== undefined && info.flags.includes('simultaneous'));
   game0.sharedPieces = (info.flags !== undefined && info.flags.includes('shared-pieces'));
   game0.perspective = (info.flags !== undefined && info.flags.includes('perspective'));
+  game0.rotate90 = (info.flags !== undefined && info.flags.includes('rotate90'));
   game0.scores = (info.flags !== undefined && info.flags.includes('scores'));
   game0.limitedPieces = (info.flags !== undefined && info.flags.includes('limited-pieces'));
   game0.playerStashes = (info.flags !== undefined && info.flags.includes('player-stashes'));
@@ -355,6 +356,7 @@ function GameMove(props) {
       result = gameEngineTmp.validateMove(value);
     result.move = value;
     result.previous = move.move;
+    console.log(result);
     moveSetter(result);
   }
      
@@ -392,7 +394,7 @@ function GameMove(props) {
   useEffect(() => {
     console.log('in useEffect for [state, move, focus]');
     console.log(move);
-    if ((move.valid && move.complete > -1 && move.move !== '') || (move.canrender === true)) {
+    if ((move.valid && move.complete > 0 && move.move !== '') || (move.canrender === true)) {
       doView(state, gameRef.current, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
         partialMoveRenderRef, renderrepSetter, movesRef, statusRef);
     }
@@ -510,7 +512,9 @@ function GameMove(props) {
     if (newGameSettings === undefined) newGameSettings = {};
     let rotate = newGameSettings.rotate;
     if (rotate === undefined) rotate = 0;
-    rotate = (rotate === 0) ? 180 : 0;
+    rotate += gameRef.current.rotate90 && gameRef.current.numPlayers > 2 ? 90 : 180;
+    if (rotate >= 360)
+      rotate -= 360;
     newGameSettings.rotate = rotate;
     gameSettingsSetter(newGameSettings);
     try {
@@ -826,6 +830,8 @@ function GameMove(props) {
         <div className="main">
           <nav>
             <div><Link to="/about">{t('About')}</Link></div>
+            <div><Link to="/games">{t('Games')}</Link></div>
+            <div><Link to="/">{t('MyDashboard')}</Link></div>
           </nav>
           <article>
             <div className="article">

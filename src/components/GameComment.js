@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 function GameComment(props) {
@@ -16,13 +16,14 @@ function GameComment(props) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <Fragment>
       <textarea id="enterAComment" value={comment} placeholder={t('Comment')} onChange={(e) => handleChange(e.target.value)} 
         rows={3}
         cols={100} />
-      <input type="submit" value="Submit" />
-    </form>
+      <input type="submit" value="Submit" onClick={handleSubmit}/>
+    </Fragment>
   );
+
 }
 
 export default GameComment;

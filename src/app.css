@@ -89,10 +89,14 @@ a:active {
 
 h1 {
   width: 100%;
-  font-family: 'Open Sans Condensed', sans-serif;
+  font-family: 'Rubik Mono One', sans-serif;
+  /* "CourierNewPS-BoldMT", "Courier New", Raleway Dots, cursive; */
+  /*'Courier New Bold', sans-serif; */
+  /* 'Roboto Slab Bold', serif; */
+  /* font-family: 'Open Sans Condensed', sans-serif; */
   /* font-family: 'Gotham Rounded', sans-serif; */
-  font-size: 40px;
-  font-weight: 700;
+  font-size: 35px;
+  font-weight: 400;
   margin-top: 1em;
   margin-bottom: 1.5em;
 }
@@ -101,11 +105,17 @@ h1 {
   text-align:center;
 }
 
+.aboutText {
+  margin-left: 2em;
+}
+
+/*
 .named-top-border {
   border-top: 2px solid var(--main-fg-color);
   padding: 20px;
   margin: 10px;
 }
+*/
 
 .metaGames {
   display: flex;
@@ -284,7 +294,7 @@ li {
 
 a { color: inherit; }
 
-a:hover {
+a:hover, .aboutText a {
   color: inherit;
   text-decoration: underline;
 }
@@ -341,16 +351,26 @@ a:hover {
 }
 
 .moveResultsContainer, .commentContainer {
+  margin-top: 1.5em;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.moveResultsContainer2, commentContainer2 {
-  margin-top: 2em;
+.moveResultsContainer2 {
   width: 45%;
   min-width: 400px;
+}
+
+.commentContainer2 {
+  width: 45%;
+  display: flex;
+  align-items: center;
+}
+
+#enterAComment {
+  margin-right: 1em;
 }
 
 .moveResultsTable {
