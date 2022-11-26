@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, Fragment } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { render, renderglyph } from '@abstractplay/renderer';
@@ -7,7 +7,8 @@ import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_AUTH } from '../config';
 import { GameNode } from './GameTree';
 import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
-import GameStatus from './GameStatus'
+import GameMoves from './GameMoves';
+import GameStatus from './GameStatus';
 import MoveEntry from './MoveEntry';
 import MoveResults from './MoveResults';
 import RenderOptionsModal from './RenderOptionsModal';
@@ -225,57 +226,6 @@ function getFocusNode(exp, foc) {
   return curNode;
 }
 
-function useEventListener(eventName, handler, element = window){
-  const savedHandler = useRef();
-
-  useEffect(() => {
-    savedHandler.current = handler;
-  }, [handler]);
-
-  useEffect(
-    () => {
-      const isSupported = element && element.addEventListener;
-      if (!isSupported) return;
-
-      const eventListener = event => savedHandler.current(event);
-      element.addEventListener(eventName, eventListener);
-
-      // Remove event listener on cleanup
-      return () => {
-        element.removeEventListener(eventName, eventListener);
-      };
-    },
-    [eventName, element] // Re-run if eventName or element changes
-  );
-}
-
-function getPath(focus, exploration, path) {
-  let curNumVariations = 0;
-  for (let i = 1; i < exploration.length; i++) {
-    path.push([{"moveNumber": i, "exPath": []}]);
-  }
-  if (focus.moveNumber === exploration.length - 1) {
-    let node = exploration[focus.moveNumber];
-    for (let j = 0; j < focus.exPath.length; j++) {
-      curNumVariations = node.children.length;
-      node = node.children[focus.exPath[j]];
-      path.push([{"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}]);
-    }
-    while (node.children.length > 0) {
-      let next = [];
-      for (let k = 0; k < node.children.length; k++) {
-        const c = node.children[k];
-        next.push({"moveNumber": focus.moveNumber, "exPath": focus.exPath.concat(k)});
-      }
-      path.push(next);
-      if (node.children.length !== 1)
-        break;
-      node = node.children[0];
-    }
-  }
-  return curNumVariations;
-}
-
 function canExploreMove(game, exploration, focus) {
   return (game.canExplore || (game.canSubmit && focus.exPath.length === 0)) // exploring (beyond move input) is supported or it is my move and we are just looking at the current position
     && exploration !== null 
@@ -283,10 +233,7 @@ function canExploreMove(game, exploration, focus) {
 }
 
 function GameMove(props) {
-  const gameRef = useRef(null);
   const [renderrep, renderrepSetter] = useState(null);
-  // Game tree of explored moves at each history move. For games that are not complete, only at the last move.
-  const explorationRef = useRef(null);
   // What place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
   const [focus, focusSetter] = useState(null);
   const [move, moveSetter] = useState({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
@@ -309,6 +256,11 @@ function GameMove(props) {
   focusRef.current = focus;
   const moveRef = useRef();
   moveRef.current = move;
+  const boardImage = useRef();
+  const stackImage = useRef();
+  const gameRef = useRef(null);
+  // Game tree of explored moves at each history move. For games that are not complete, only at the last move.
+  const explorationRef = useRef(null);
 
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
@@ -360,6 +312,24 @@ function GameMove(props) {
     fetchData();
   }, [state, renderrepSetter, focusSetter, t]);
 
+  // when the user clicks on the list of moves (or move list navigation)
+  const handleGameMoveClick = (foc) => {
+    console.log("foc = ", foc);
+    let node = getFocusNode(explorationRef.current, foc);
+    let engine = GameFactory(game.metaGame, node.state);
+    partialMoveRenderRef.current = false;
+    foc.canExplore = canExploreMove(game, explorationRef.current, foc);
+    if (foc.canExplore && !game.noMoves) {
+      movesRef.current = engine.moves();
+    }
+    focusSetter(foc);
+    renderrepSetter(engine.render(gameRef.current.me + 1));
+    const isPartialSimMove = gameRef.current.simultaneous 
+      && (foc.exPath.length === 1 || (foc.exPath.length === 0 && foc.moveNumber === explorationRef.current.length - 1 && !gameRef.current.canSubmit))
+    setStatus(engine, gameRef.current, isPartialSimMove, '', statusRef.current);
+    moveSetter({...engine.validateMove(''), "move": '', "previous": ''});
+  }
+  
   const handleMove = (value) => {
     let node = getFocusNode(explorationRef.current, focus);
     let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
@@ -383,28 +353,6 @@ function GameMove(props) {
   const handleStashClick = (player, count, movePart) => {
     console.log(`handleStashClick movePArt=${movePart}`);
     handleMove(move.move + movePart);
-  }
-
-  // when the user clicks on the list of moves (or move list navigation)
-  const handleGameMoveClick = (foc) => {
-    console.log("foc = ", foc);
-    let node = getFocusNode(explorationRef.current, foc);
-    let engine = GameFactory(gameRef.current.metaGame, node.state);
-    /*
-    if (gameRef.current.simultaneous && foc.exPath.length === 1) {
-      const m = gameRef.current.players.map(p => (p.id === state.myid ? node.move : '')).join(',');
-      engine.move(m, true);
-    }
-    */
-    partialMoveRenderRef.current = false;
-    foc.canExplore = canExploreMove(gameRef.current, explorationRef.current, foc);
-    if (foc.canExplore && !gameRef.current.noMoves) {
-      movesRef.current = engine.moves();
-    }
-    focusSetter(foc);
-    renderrepSetter(engine.render(gameRef.current.me + 1));
-    setStatus(engine, gameRef.current, gameRef.current.simultaneous && foc.exPath.length === 1, '', statusRef.current);
-    moveSetter({...engine.validateMove(''), "move": '', "previous": ''});
   }
 
   useEffect(() => {
@@ -678,315 +626,82 @@ function GameMove(props) {
     submitMove('timeout', false);
   }
 
-  function keyDownHandler(e) {
-    const key = e.key;
-    if (document.activeElement.id === "enterAMove" || document.activeElement.id === "enterAComment" || explorationRef.current === null)
-      return;
-    let path = [];
-    let curNumVariations;
-
-    switch (key) {
-      case "Home":
-      case "h":
-        handleGameMoveClick({"moveNumber": 0, "exPath": []});
-        e.preventDefault();
-        break;
-      case "ArrowLeft":
-      case "j":
-        getPath(focus, explorationRef.current, path);
-        if (focus.moveNumber + focus.exPath.length > 0)
-          handleGameMoveClick(focus.moveNumber + focus.exPath.length === 1 ? {"moveNumber": 0, "exPath": []} : path[focus.moveNumber + focus.exPath.length - 2][0]);
-        e.preventDefault();
-        break;
-      case "ArrowRight":
-      case "k":
-        getPath(focus, explorationRef.current, path);
-        if (focus.moveNumber + focus.exPath.length < path.length)
-          handleGameMoveClick(path[focus.moveNumber + focus.exPath.length][0]);
-        e.preventDefault();
-        break;
-      case "End":
-      case "l":
-        getPath(focus, explorationRef.current, path);
-        if (focus.moveNumber + focus.exPath.length !== exploration.length - 1)
-          handleGameMoveClick(exploration.length === 1 ? {"moveNumber": 0, "exPath": []} : path[exploration.length - 2][0]);
-        e.preventDefault();
-        break;
-      case "ArrowDown":
-      case "i":
-        curNumVariations = getPath(focus, explorationRef.current, path);
-        console.log(curNumVariations);
-        console.log("focus = ", focus);
-        if (focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1)
-          handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + 1) % curNumVariations]});
-        e.preventDefault();
-        break;
-      case "ArrowUp":
-      case "m":
-        curNumVariations = getPath(focus, explorationRef.current, path);
-        if (focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1)
-          handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + curNumVariations - 1) % curNumVariations]});
-        e.preventDefault();
-        break;
-      default:
-        console.log(key + ' key pressed');
-    }
-  }
-
-  useEventListener('keydown', keyDownHandler);
-
-  const boardImage = useRef();
-  const stackImage = useRef();
   const game = gameRef.current;
-  const exploration = explorationRef.current;
   console.log("rendering at focus ", focus);
   if (!error) {
-    if (focus !== null) {
-      // Prepare header
-      const simul = game.simultaneous;
-      let numcolumns = simul ? 1 : game.numPlayers;
-      let header = [];
-      if (simul) {
-        header.push(
-          <th colSpan="2" key="th-1">
-            <div className="player">
-              { game.players.map((p, i) => 
-                    <Fragment>
-                      { game.colors === undefined ? '' :
-                      game.colors[i].isImage ?
-                          <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[i].value)}`} alt="" />
-                        : <span className="playerIndicator">{game.colors[i].value + ':'}</span> }
-                      <span className="mover">{p.name}</span>
-                      { i < game.numPlayers - 1 ? <span className="simmover">,</span> : '' }
-                    </Fragment>             
-                  )
+    console.log(explorationRef.current);
+    return (
+      <div className="main">
+        <nav>
+          <div><Link to="/about">{t('About')}</Link></div>
+          <div><Link to="/games">{t('Games')}</Link></div>
+          <div><Link to="/">{t('MyDashboard')}</Link></div>
+        </nav>
+        <article>
+          <div className="article">
+            <div className="gameMoveContainer">
+              <div className="enterMoveContainer">
+                <div className="enterMoveContainer2">
+                  { /***************** MoveEntry *****************/}
+                  <div className="groupLevel1Header"><span>{t("MakeMove")}</span></div>
+                    <GameStatus status={statusRef.current} settings={settings} game={game} canExplore={focus?.canExplore} handleStashClick={handleStashClick} />
+                    <MoveEntry move={move} toMove={focus ? getFocusNode(explorationRef.current, focus).toMove : ''} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
+                      focus={focus} submitting={submitting} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}/>
+                  </div>
+                </div>
+              <div className="boardContainer">
+                { /***************** Board *****************/}
+                <div className="groupLevel1Header"><span>{state.metaGame}</span></div>
+                {gameRef.current?.stackExpanding
+                  ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
+                  : <div className="board" id="svg" ref={boardImage} ></div>
                 }
+                <div className="boardButtons">
+                  <button className="fabtn align-right" onClick={handleRotate}>
+                    <i className="fa fa-refresh"></i>
+                  </button>
+                  <button className="fabtn align-right" onClick={handleUpdateRenderOptions}>
+                    <i className="fa fa-cog"></i>
+                  </button>
+                </div>
+              </div>
+              <div className="gameMovesContainer">
+                { /***************** GameMoves *****************/}
+                <GameMoves focus={focus} game={game} exploration={explorationRef.current} handleGameMoveClick={handleGameMoveClick} />
+              </div>
+              <RenderOptionsModal show={showSettings} metaGame={{"id":game?.metaGame, "name": game?.name}} gameId={game?.id} settings={userSettings} gameSettings={gameSettings}
+                settingsSetter={userSettingsSetter} gameSettingsSetter={gameSettingsSetter} showSettingsSetter={showSettingsSetter} setError={setError}
+                handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
             </div>
-          </th>
-        );
-      } else {
-        for (let i = 0; i < numcolumns; i++) {
-          let player = game.players[i].name;
-          let img = null;
-          if (game.colors !== undefined) img = game.colors[i];
-          header.push(
-            <th colSpan="2" key={"th-" + i}>
-              <div className="player">
-                { img === null ? '' :
-                  img.isImage ?
-                      <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
-                    : <span className="playerIndicator">{img.value + ':'}</span>
-                }
-                <span className="mover">{player}</span>
+            <div className="commentContainer">
+              <div className="commentContainer2">
+                { /***************** GameComment *****************/}
+                <GameComment className="gameComment" handleSubmit={submitComment} />
               </div>
-            </th>
-          );
-        }
-      }
-      // Prepare the list of moves
-      let moveRows = [];
-      let path = [];
-      let curNumVariations = 0;
-
-      if (exploration !== null) {
-        for (let i = 1; i < exploration.length; i++) {
-          let className = "gameMove";
-          if (i === focus.moveNumber && (i < exploration.length - 1 || (i === exploration.length - 1 && focus.exPath.length === 0)))
-            className += " gameMoveFocus";
-          path.push([{"class": className, "move": exploration[i].move, "path": {"moveNumber": i, "exPath": []}}]);
-        }
-        if (focus.moveNumber === exploration.length - 1) {
-          let node = exploration[focus.moveNumber];
-          for (let j = 0; j < focus.exPath.length; j++) {
-            let className = "gameMove";
-            if (j === focus.exPath.length - 1)
-              className += " gameMoveFocus";
-            curNumVariations = node.children.length;
-            node = node.children[focus.exPath[j]];
-            if (node.outcome === 0)
-              className += " gameMoveUnknownOutcome";
-            else if (node.outcome === -1)
-              className += " gameMoveLoss";
-            else if (node.outcome === 1)
-              className += " gameMoveWin";
-            path.push([{"class": className, "move": node.move, "path": {"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}}]);
-          }
-          let exPath = focus.exPath;
-          while (node.children.length > 0) {
-            let next = [];
-            for (let k = 0; k < node.children.length; k++) {
-              const c = node.children[k];
-              let className = "gameMove";
-              if (c.outcome === 0)
-                className += " gameMoveUnknownOutcome";
-              else if (c.outcome === -1)
-                className += " gameMoveLoss";
-              else if (c.outcome === 1)
-                className += " gameMoveWin";
-              next.push({"class": className, "move": c.move, "path": {"moveNumber": focus.moveNumber, "exPath": exPath.concat(k)}})
-            }
-            exPath = exPath.concat(0);
-            path.push(next);
-            if (node.children.length !== 1)
-              break;
-            node = node.children[0];
-          }
-        }
-        for (let i = 0; i < Math.ceil(path.length / numcolumns); i++) {
-          let row = [];
-          for (let j = 0; j < numcolumns; j++) {
-            let clName = j === 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
-            let movenum = numcolumns * i + j;
-            row.push(<td key={'td0-'+i+'-'+j} className={clName}>{movenum >= path.length ? '' : (movenum+1) + '.'}</td>);
-            if (movenum < path.length) {
-              // path[movenum].map((m, k) => console.log(m.move, m.path));
-              row.push(
-                <td key={'td1-'+i+'-'+j}>
-                  <div className="move">
-                    { path[movenum].map((m, k) =>
-                      <span key={"move" + i + "-" + j + "-" + k}>{k > 0 ? ", ": ""}
-                        <span className={m.class} onClick={() => handleGameMoveClick(m.path)}>
-                          {m.move}
-                        </span>
-                      </span>)
-                    }
-                  </div>
-                </td>);
-            }
-            else {
-              row.push(<td key={'td1-'+i+'-'+j}></td>);
-            }
-          }
-          moveRows.push(row);
-        }
-      }
-
-      console.log("path", path);
-      /*
-      console.log(path);
-      console.log("focus");
-      console.log(focus);
-      console.log(curNumVariations);
-      */
-      console.log(explorationRef.current);
-      // console.log(getFocusNode(explorationRef.current, focus));
-      return (
-        <div className="main">
-          <nav>
-            <div><Link to="/about">{t('About')}</Link></div>
-            <div><Link to="/games">{t('Games')}</Link></div>
-            <div><Link to="/">{t('MyDashboard')}</Link></div>
-          </nav>
-          <article>
-            <div className="article">
-              <div className="gameMoveContainer">
-                <div className="enterMoveContainer">
-                  <div className="enterMoveContainer2">
-                    <div className="groupLevel1Header"><span>{t("MakeMove")}</span></div>
-                      <GameStatus status={statusRef.current} settings={settings} game={game} canExplore={focus.canExplore} handleStashClick={handleStashClick} />
-                      <MoveEntry move={move} toMove={getFocusNode(explorationRef.current, focus).toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
-                        focus={focus} submitting={submitting} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}/>
-                    </div>
-                  </div>
-                <div className="boardContainer">
-                  <div className="groupLevel1Header"><span>{game.name}</span></div>
-                  {gameRef.current.stackExpanding
-                    ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
-                    : <div className="board" id="svg" ref={boardImage} ></div>
-                  }
-                  <div className="boardButtons">
-                    <button className="fabtn align-right" onClick={handleRotate}>
-                      <i className="fa fa-refresh"></i>
-                    </button>
-                    <button className="fabtn align-right" onClick={handleUpdateRenderOptions}>
-                      <i className="fa fa-cog"></i>
-                    </button>
-                  </div>
-                </div>
-                <div className="gameMovesContainer">
-                  <div className="gameMovesContainer2">
-                    <div className="groupLevel1Header"><span>{t("Moves")}</span></div>
-                      <div className="moveButtons">
-                        <div className="famnav tooltipped" onClick={() => handleGameMoveClick({"moveNumber": 0, "exPath": []})}>
-                          <i className="fa fa-angle-double-left"></i>
-                          <span className="tooltiptext">{t('GoBegin')}</span>
-                        </div>
-                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length > 0 ? "" : " disabled")} onClick={
-                            focus.moveNumber + focus.exPath.length > 0 ? () => handleGameMoveClick(focus.moveNumber + focus.exPath.length === 1 ? {"moveNumber": 0, "exPath": []} :
-                              path[focus.moveNumber + focus.exPath.length - 2][0].path) : undefined }>
-                          <i className="fa fa-angle-left"></i>
-                          <span className="tooltiptext">{t('GoPrev')}</span>
-                        </div>
-                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1 ? "" : " disabled")} onClick={
-                          focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 ?
-                            () => handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + 1) % curNumVariations]}) : undefined }>
-                          <i className="fa fa-angle-up"></i>
-                          <span className="tooltiptext">{t('GoNextVar')}</span>
-                        </div>
-                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1 ? "" : " disabled")} onClick={
-                          focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 ?
-                            () => handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + curNumVariations - 1) % curNumVariations]}) : undefined }>
-                          <i className="fa fa-angle-down"></i>
-                          <span className="tooltiptext">{t('GoPrevVar')}</span>
-                        </div>
-                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length < path.length ? "" : " disabled")} onClick={
-                          focus.moveNumber + focus.exPath.length < path.length ? () => handleGameMoveClick(path[focus.moveNumber + focus.exPath.length][0].path) : undefined }>
-                          <i className="fa fa-angle-right"></i>
-                          <span className="tooltiptext">{t('GoNext')}</span>
-                        </div>
-                        <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length !== exploration.length - 1 ? "" : " disabled")} 
-                          onClick={() => handleGameMoveClick(exploration.length === 1 ? {"moveNumber": 0, "exPath": []} : path[exploration.length - 2][0].path)}>
-                          <i className="fa fa-angle-double-right"></i>
-                          <span className="tooltiptext">{t('GoCurrent')}</span>
-                        </div>
-                      </div>
-                      <table className="movesTable">
-                        <tbody>
-                          <tr>{header}</tr>
-                          { moveRows.map((row, index) =>
-                            <tr key={"move" + index}>
-                              { row }
-                            </tr>)
-                          }
-                        </tbody>
-                      </table>
-                  </div>
-                </div>
-                <RenderOptionsModal show={showSettings} metaGame={{"id":game.metaGame, "name": game.name}} gameId={game.id} settings={userSettings} gameSettings={gameSettings}
-                  settingsSetter={userSettingsSetter} gameSettingsSetter={gameSettingsSetter} showSettingsSetter={showSettingsSetter} setError={setError}
-                  handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
-              </div>
-              <div className="commentContainer">
-                <div className="commentContainer2">
-                  <GameComment className="gameComment" handleSubmit={submitComment} />
-                </div>
-              </div>
-              <div className="moveResultsContainer">
-                <div className="moveResultsContainer2">
-                  <div className="groupLevel1Header"><span>Game summary</span></div>
-                  <MoveResults className="moveResults" results={game.moveResults} comments={comments} players={gameRef.current.players} />
-                </div>
-              </div>
-              <Modal show={showResignConfirm} title={t('ConfirmResign')} size="small"
-                buttons={[{label: t('Resign'), action: handleResignConfirmed}, {label: t('Cancel'), action: handleCloseResignConfirm}]}>
-                <div>
-                  {t('ConfirmResignDesc')}
-                </div>
-              </Modal>
-              <Modal show={showTimeoutConfirm} title={t('ConfirmTimeout')} size="small"
-                buttons={[{label: t('Claim'), action: handleTimeoutConfirmed}, {label: t('Cancel'), action: handleCloseTimeoutConfirm}]}>
-                <div>
-                {t('ConfirmTimeoutDesc')}
-                </div>
-              </Modal>
             </div>
-          </article>
-        </div>
-      );
-    }
-    else {
-      return (<div></div>);
-    }
+            <div className="moveResultsContainer">
+              <div className="moveResultsContainer2">
+                { /***************** MoveResults *****************/}
+                <div className="groupLevel1Header"><span>Game summary</span></div>
+                <MoveResults className="moveResults" results={game?.moveResults} comments={comments} players={gameRef.current?.players} />
+              </div>
+            </div>
+            <Modal show={showResignConfirm} title={t('ConfirmResign')} size="small"
+              buttons={[{label: t('Resign'), action: handleResignConfirmed}, {label: t('Cancel'), action: handleCloseResignConfirm}]}>
+              <div>
+                {t('ConfirmResignDesc')}
+              </div>
+            </Modal>
+            <Modal show={showTimeoutConfirm} title={t('ConfirmTimeout')} size="small"
+              buttons={[{label: t('Claim'), action: handleTimeoutConfirmed}, {label: t('Cancel'), action: handleCloseTimeoutConfirm}]}>
+              <div>
+              {t('ConfirmTimeoutDesc')}
+              </div>
+            </Modal>
+          </div>
+        </article>
+      </div>
+    );
   }
   else {
     return (<h4>{errorMessageRef.current}</h4>);

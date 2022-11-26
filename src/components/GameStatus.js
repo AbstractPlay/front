@@ -21,7 +21,7 @@ function GameStatus(props) {
   const canExplore = props.canExplore;
   const handleStashClick = props.handleStashClick;
 
-  if (game.colors === undefined) {
+  if (!game || game.colors === undefined) {
     return (<div></div>);
   }
   else {
