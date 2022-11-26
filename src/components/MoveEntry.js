@@ -44,6 +44,7 @@ function MoveEntry(props) {
   const moves = props.moves;
   const exploration = props.exploration;
   const focus = props.focus;
+  const submitting = props.submitting;
   const handleMove = props.handlers[0];
   const handleMarkAsWin = props.handlers[1];
   const handleMarkAsLoss = props.handlers[2];
@@ -92,7 +93,7 @@ function MoveEntry(props) {
   if (game.simultaneous)
     canClaimTimeout = game.players.some((p, i) => game.toMove[i] && i !== game.me && p.time - (Date.now() - game.lastMoveTime) < 0); // this is WRONG!
   else
-    canClaimTimeout = toMove !== '' && game.me !== game.toMove && game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
+    canClaimTimeout = game.toMove !== '' && game.me !== game.toMove && game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
   
   const drawOffered = game.players.some(p => p.draw);
   // Am I the last player that needs to agree to a draw?
@@ -129,7 +130,7 @@ function MoveEntry(props) {
           </div>
         }
         <div>
-          { canClaimTimeout && !game.canSubmit && uiState === 0 ?
+          { canClaimTimeout && !game.canSubmit && uiState === 0 && !submitting ?
             <button className="apButton" onClick={handleTimeOut}>{t('ClaimTimeOut')}</button>
             : ''
           }
@@ -173,15 +174,15 @@ function MoveEntry(props) {
         : ""
       }
       <div>
-        { moveToSubmit !== null && focus.exPath.length === 1 ?
+        { moveToSubmit !== null && focus.exPath.length === 1 && !submitting ?
           <button className="apButton tooltipped" onClick={() => handleSubmit(drawoffer ? "drawoffer" : "")}>
             {t('Submit')}
             <span className="tooltiptext">{t('SubmitMove', {move: moveToSubmit})}</span>
           </button>
           : ""
         }
-        { uiState === 0 && game.canSubmit ?
-            canDraw ?
+        { uiState === 0 && game.canSubmit  && !submitting ?
+            canDraw?
               <button className="apButton" onClick={() => handleSubmit("drawaccepted")}>
                 {t('AcceptDraw')}
               </button>

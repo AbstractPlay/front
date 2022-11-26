@@ -78,6 +78,8 @@ a:active {
 .main > nav > div {
   width: 4vw;
   text-align:center;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
 }
 
 .article {
@@ -89,14 +91,15 @@ a:active {
 
 h1 {
   width: 100%;
-  font-family: 'Rubik Mono One', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  /* 'Rubik Mono One', sans-serif; */
   /* "CourierNewPS-BoldMT", "Courier New", Raleway Dots, cursive; */
   /*'Courier New Bold', sans-serif; */
   /* 'Roboto Slab Bold', serif; */
   /* font-family: 'Open Sans Condensed', sans-serif; */
   /* font-family: 'Gotham Rounded', sans-serif; */
-  font-size: 35px;
-  font-weight: 400;
+  font-size: 40px;
+  font-weight: 900;
   margin-top: 1em;
   margin-bottom: 1.5em;
 }
@@ -398,6 +401,10 @@ a:hover, .aboutText a {
   padding: 1em;
 }
 
+.board > svg {
+  max-height: 600px;
+}
+
 .boardButtons {
   overflow: hidden;
 }
@@ -409,6 +416,7 @@ a:hover, .aboutText a {
 .stackboard {
   flex: 8;
 }
+
 .stack {
   padding-top: 2em;
   padding-right: 1.5em;
@@ -447,6 +455,10 @@ th .player {
   margin-left: 0.5em;
 }
 
+.simmover {
+  margin-right: 0.5em;
+}
+
 .historyState {
   color: var(--secondary-color-2);
 }
@@ -460,6 +472,7 @@ th .player {
 }
 
 .historyState, .currentState, .exploreState {
+  font-size: 1.3rem;
   font-weight: bold;
   padding-bottom: 1em;
 }
@@ -746,4 +759,8 @@ div.radios label {
 }
 .timeRemainingEntry {
   margin: 0.5em;
+}
+
+.genericStatusKey {
+  text-align: right;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Fragment } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { render, renderglyph } from '@abstractplay/renderer';
@@ -32,7 +32,8 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   }
 }
 
-function setStatus(engine, game, status) {
+function setStatus(engine, game, isPartial, partialMove, status) {
+  status.statuses = engine.statuses(isPartial, partialMove);
   if (game.scores) {
     status.scores = [];
     for (let i = 1; i <= game.numPlayers; i++) {
@@ -52,6 +53,9 @@ function setStatus(engine, game, status) {
       status.stashes.push(stash);
     }
   }
+  if (game.sharedStash) {
+    status.sharedstash = engine.getSharedStash(isPartial, partialMove);
+  }
 }
 
 function sleep(ms) {
@@ -68,6 +72,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   game0.scores = (info.flags !== undefined && info.flags.includes('scores'));
   game0.limitedPieces = (info.flags !== undefined && info.flags.includes('limited-pieces'));
   game0.playerStashes = (info.flags !== undefined && info.flags.includes('player-stashes'));
+  game0.sharedStash = (info.flags !== undefined && info.flags.includes('shared-stash'));
   game0.noMoves = (info.flags !== undefined && info.flags.includes('no-moves'));
   game0.stackExpanding = (info.flags !== undefined && info.flags.includes('stacking-expanding'));
   if (game0.state === undefined)
@@ -78,7 +83,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   if (game0.simultaneous) {
     game0.canSubmit = (game0.toMove === "" || game0.me < 0) ? false : game0.toMove[game0.me];
     if (game0.toMove !== "") {
-      if (game0.partialMove !== undefined && game0.partialMove.length > game0.numPlayers - 1)
+      if (game0.partialMove !== undefined && game0.partialMove.length > game0.numPlayers - 1) // the empty move is numPlayers - 1 commas
         engine.move(game0.partialMove, true);
     }
     game0.canExplore = false;
@@ -108,8 +113,8 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     game0.colors = gameRef.current.colors; // gets used when you submit a move.
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
-  const render = engine.render();
-  setStatus(engine, game0, statusRef.current);
+  const render = engine.render(game0.me + 1);
+  setStatus(engine, game0, game0.simultaneous && !game0.canSubmit, '', statusRef.current);
   if (!game0.noMoves && (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2))) {
     if (game0.simultaneous)
       movesRef.current = engine.moves(game0.me + 1);
@@ -119,6 +124,13 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   let history = [];
   /*eslint-disable no-constant-condition*/
   let gameOver = engine.gameover;
+  /*
+  // if this is a simultaneous game, and I've submitted my move but not everyone else has, the partialMove won't be on the stack. So update history without popping the stack.
+  if (game0.simultaneous && game0.toMove !== "" && game0.partialMove !== undefined && game0.partialMove.length > 0) {
+    history.unshift(new GameNode(null, engine.lastmove, engine.serialize(), gameOver ? '' : engine.currplayer - 1));
+    engine.load();
+  }
+  */
   while (true) {
     // maybe last move should be the last numPlayers moves for simul games?
     /*
@@ -186,8 +198,8 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
     errorSetter(true);
     return;
   }
+  setStatus(gameEngineTmp, game, partialMove || simMove, move, statusRef.current);
   if (!partialMove) {
-    setStatus(gameEngineTmp, game, statusRef.current);
     node = getFocusNode(explorationRef.current, focus);
     let newstate = gameEngineTmp.serialize();
     console.log("newstate", newstate);
@@ -202,7 +214,7 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
   }
   partialMoveRenderRef.current = partialMove;
   console.log('setting renderrep 1');
-  renderrepSetter(gameEngineTmp.render());
+  renderrepSetter(gameEngineTmp.render(game.me + 1));
 }
 
 function getFocusNode(exp, foc) {
@@ -287,9 +299,11 @@ function GameMove(props) {
   const [settings, settingsSetter] = useState(null);
   const [wait, waitSetter] = useState(0);
   const [comments, commentsSetter] = useState([]);
+  const [submitting, submittingSetter] = useState(false);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
+  // whether user has entered a partial move that can be rendered
   const partialMoveRenderRef = useRef(false);
   const focusRef = useRef();
   focusRef.current = focus;
@@ -376,36 +390,40 @@ function GameMove(props) {
     console.log("foc = ", foc);
     let node = getFocusNode(explorationRef.current, foc);
     let engine = GameFactory(gameRef.current.metaGame, node.state);
+    /*
     if (gameRef.current.simultaneous && foc.exPath.length === 1) {
       const m = gameRef.current.players.map(p => (p.id === state.myid ? node.move : '')).join(',');
       engine.move(m, true);
     }
+    */
     partialMoveRenderRef.current = false;
     foc.canExplore = canExploreMove(gameRef.current, explorationRef.current, foc);
     if (foc.canExplore && !gameRef.current.noMoves) {
       movesRef.current = engine.moves();
     }
     focusSetter(foc);
-    renderrepSetter(engine.render());
-    setStatus(engine, gameRef.current, statusRef.current);
+    renderrepSetter(engine.render(gameRef.current.me + 1));
+    setStatus(engine, gameRef.current, gameRef.current.simultaneous && foc.exPath.length === 1, '', statusRef.current);
     moveSetter({...engine.validateMove(''), "move": '', "previous": ''});
   }
 
   useEffect(() => {
     console.log('in useEffect for [state, move, focus]');
     console.log(move);
+    // if the move is complete, or partial and renderable, update board
     if ((move.valid && move.complete > 0 && move.move !== '') || (move.canrender === true)) {
       doView(state, gameRef.current, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
         partialMoveRenderRef, renderrepSetter, movesRef, statusRef);
     }
+    // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position
     else if (partialMoveRenderRef.current && !move.move.startsWith(move.previous)) {
       let node = getFocusNode(explorationRef.current, focus);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       partialMoveRenderRef.current = false;
-      setStatus(gameEngineTmp, gameRef.current, statusRef.current);
+      setStatus(gameEngineTmp, gameRef.current, false, '', statusRef.current);
       if (focus.canExplore && !gameRef.current.noMoves)
         movesRef.current = gameEngineTmp.moves();
-      renderrepSetter(gameEngineTmp.render());
+      renderrepSetter(gameEngineTmp.render(gameRef.current.me + 1));
     }
   }, [state, move, focus]);
 
@@ -424,7 +442,9 @@ function GameMove(props) {
       console.log(`boardClick:(${row},${col},${piece})`);
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-      var result = gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
+      let result = gameRef.current.simultaneous ? 
+        gameEngineTmp.handleClickSimultaneous(moveRef.current.move, row, col, gameRef.current.me + 1, piece) 
+        : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       result.previous = moveRef.current.move;
       console.log('move', moveRef.current.move);
       console.log('result',result);
@@ -554,6 +574,7 @@ function GameMove(props) {
   }
 
   const handleSubmit = async (draw) => {
+    submittingSetter(true);
     if (draw === "drawaccepted") {
       submitMove("", draw);  
     } else {
@@ -583,6 +604,7 @@ function GameMove(props) {
         })
       });
       const result = await res.json();
+      submittingSetter(false);
       if (result.statusCode !== 200)
         setError(JSON.parse(result.body));
       let game0 = JSON.parse(result.body);
@@ -638,6 +660,7 @@ function GameMove(props) {
 
   const handleResignConfirmed = async () => {
     showResignConfirmSetter(false);
+    submittingSetter(true);
     submitMove('resign', false);
   }
 
@@ -651,6 +674,7 @@ function GameMove(props) {
 
   const handleTimeoutConfirmed = async () => {
     showTimeoutConfirmSetter(false);
+    submittingSetter(true);
     submitMove('timeout', false);
   }
 
@@ -722,22 +746,42 @@ function GameMove(props) {
       const simul = game.simultaneous;
       let numcolumns = simul ? 1 : game.numPlayers;
       let header = [];
-      for (let i = 0; i < numcolumns; i++) {
-        let player = game.players[i].name;
-        let img = null;
-        if (game.colors !== undefined) img = game.colors[i];
+      if (simul) {
         header.push(
-          <th colSpan="2" key={"th-" + i}>
+          <th colSpan="2" key="th-1">
             <div className="player">
-              { img === null ? '' :
-                img.isImage ?
-                    <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
-                  : <span className="playerIndicator">{img.value + ':'}</span>
-              }
-              <span className="mover">{player}</span>
+              { game.players.map((p, i) => 
+                    <Fragment>
+                      { game.colors === undefined ? '' :
+                      game.colors[i].isImage ?
+                          <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[i].value)}`} alt="" />
+                        : <span className="playerIndicator">{game.colors[i].value + ':'}</span> }
+                      <span className="mover">{p.name}</span>
+                      { i < game.numPlayers - 1 ? <span className="simmover">,</span> : '' }
+                    </Fragment>             
+                  )
+                }
             </div>
           </th>
         );
+      } else {
+        for (let i = 0; i < numcolumns; i++) {
+          let player = game.players[i].name;
+          let img = null;
+          if (game.colors !== undefined) img = game.colors[i];
+          header.push(
+            <th colSpan="2" key={"th-" + i}>
+              <div className="player">
+                { img === null ? '' :
+                  img.isImage ?
+                      <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
+                    : <span className="playerIndicator">{img.value + ':'}</span>
+                }
+                <span className="mover">{player}</span>
+              </div>
+            </th>
+          );
+        }
       }
       // Prepare the list of moves
       let moveRows = [];
@@ -795,7 +839,7 @@ function GameMove(props) {
             let movenum = numcolumns * i + j;
             row.push(<td key={'td0-'+i+'-'+j} className={clName}>{movenum >= path.length ? '' : (movenum+1) + '.'}</td>);
             if (movenum < path.length) {
-              path[movenum].map((m, k) => console.log(m.move, m.path));
+              // path[movenum].map((m, k) => console.log(m.move, m.path));
               row.push(
                 <td key={'td1-'+i+'-'+j}>
                   <div className="move">
@@ -841,14 +885,14 @@ function GameMove(props) {
                     <div className="groupLevel1Header"><span>{t("MakeMove")}</span></div>
                       <GameStatus status={statusRef.current} settings={settings} game={game} canExplore={focus.canExplore} handleStashClick={handleStashClick} />
                       <MoveEntry move={move} toMove={getFocusNode(explorationRef.current, focus).toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
-                        focus={focus} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}/>
+                        focus={focus} submitting={submitting} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}/>
                     </div>
                   </div>
                 <div className="boardContainer">
                   <div className="groupLevel1Header"><span>{game.name}</span></div>
                   {gameRef.current.stackExpanding
                     ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
-                    : <div className="board" id="svg" ref={boardImage} style={{width: "100%"}}></div>
+                    : <div className="board" id="svg" ref={boardImage} ></div>
                   }
                   <div className="boardButtons">
                     <button className="fabtn align-right" onClick={handleRotate}>

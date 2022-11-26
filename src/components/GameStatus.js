@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { renderglyph } from '@abstractplay/renderer';
 
 // status.stashes.push(stash.map(s => {return {count: s.count, glyph: renderGlyph(settings, s.glyph, i + 1), movePart: s.movePart}}));
@@ -27,6 +27,26 @@ function GameStatus(props) {
   else {
     return (
       <div>
+        <table className="genericStatuses">
+          <tbody>
+            { status.statuses.map((status, ind) => 
+              <tr key={"genericStatusRow" + ind}>
+                <td className="genericStatusKey">{status.key}</td>
+                <td className="genericStatusValue">
+                  { status.value.map((v, i) => 
+                    <span>
+                      { typeof v === 'string' ?
+                        v 
+                        : <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, v.glyph, 'genericStatus-' + ind + '-' + i, v.player))}`} alt={"color " + v.player} />
+                      }
+                    </span>
+                  )}
+                </td>
+              </tr>
+              )
+            }
+          </tbody>
+        </table>
         { !game.scores ? '' :
           <div>
             <span>Scores</span>
@@ -83,12 +103,25 @@ function GameStatus(props) {
                     { stash.map((s, j) => 
                         <td key={"stashentry" + j} onClick={ canExplore ? () => handleStashClick(index, s.count, s.movePart) : undefined }>
                           {s.count}&#215;
-                          <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, s.glyph, 'stack-' + index + '-' + j, index + 1))}`} alt="" />
+                          <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, s.glyph.name, 'stack-' + index + '-' + j, s.glyph.player ))}`} alt="" />
                         </td>) }
                   </tr>)
                 }
               </tbody>
             </table>
+          </div>
+        }
+        { !game.sharedStash ? '' :
+          <div>
+            <span>Stash</span>
+            <div>
+              { status.sharedstash.map((s, j) => 
+                <span key={"stashentry" + j} onClick={ canExplore && s.movePart != '' ? () => handleStashClick(0, s.count, s.movePart) : undefined }>
+                  {j > 0 ? ", " : "" } {s.count}&#215;
+                  <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, s.glyph.name, 'stack-' + j, s.glyph.player))}`} alt="" />
+                </span>) 
+              }
+            </div>
           </div>
         }
       </div>
