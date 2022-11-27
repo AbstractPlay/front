@@ -1,7 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { renderglyph } from '@abstractplay/renderer';
-
-// status.stashes.push(stash.map(s => {return {count: s.count, glyph: renderGlyph(settings, s.glyph, i + 1), movePart: s.movePart}}));
 
 function renderGlyph(settings, glyph, id, player) {
   var options = {};
@@ -34,7 +32,7 @@ function GameStatus(props) {
                 <td className="genericStatusKey">{status.key}</td>
                 <td className="genericStatusValue">
                   { status.value.map((v, i) => 
-                    <span>
+                    <span key={i}>
                       { typeof v === 'string' ?
                         v 
                         : <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, v.glyph, 'genericStatus-' + ind + '-' + i, v.player))}`} alt={"color " + v.player} />
@@ -116,7 +114,7 @@ function GameStatus(props) {
             <span>Stash</span>
             <div>
               { status.sharedstash.map((s, j) => 
-                <span key={"stashentry" + j} onClick={ canExplore && s.movePart != '' ? () => handleStashClick(0, s.count, s.movePart) : undefined }>
+                <span key={"stashentry" + j} onClick={ canExplore && s.movePart !== '' ? () => handleStashClick(0, s.count, s.movePart) : undefined }>
                   {j > 0 ? ", " : "" } {s.count}&#215;
                   <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, s.glyph.name, 'stack-' + j, s.glyph.player))}`} alt="" />
                 </span>) 

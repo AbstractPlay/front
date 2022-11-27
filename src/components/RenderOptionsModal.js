@@ -95,12 +95,11 @@ function RenderOptionsModal(props) {
 
   const handleSave = async () => {
     props.showSettingsSetter(false);
-    let newSettings = cloneDeep(settings);
+    let newUserSettings = cloneDeep(settings);
     let newGameSettings = cloneDeep(gameSettings);
-    [newSettings, newGameSettings] = updateSettings("color", colorLevel, color, newGameSettings, newSettings, metaGame);
-    [newSettings, newGameSettings] = updateSettings("annotate", annotateLevel, annotate, newGameSettings, newSettings, metaGame);
-    props.settingsSetter(newSettings);
-    props.gameSettingsSetter(newGameSettings);
+    [newUserSettings, newGameSettings] = updateSettings("color", colorLevel, color, newGameSettings, newUserSettings, metaGame);
+    [newUserSettings, newGameSettings] = updateSettings("annotate", annotateLevel, annotate, newGameSettings, newUserSettings, metaGame);
+    props.processNewSettings(newGameSettings, newUserSettings);
     if (newGameSettings !== undefined) {
       try {
         const usr = await Auth.currentAuthenticatedUser();
@@ -124,7 +123,7 @@ function RenderOptionsModal(props) {
         props.setError(error);
       }
     }
-    if (newSettings !== undefined) {
+    if (newUserSettings !== undefined) {
       try {
         const usr = await Auth.currentAuthenticatedUser();
         console.log('currentAuthenticatedUser', usr);
@@ -138,7 +137,7 @@ function RenderOptionsModal(props) {
           body: JSON.stringify({
             "query": "update_user_settings",
             "pars" : {
-              "settings": newSettings
+              "settings": newUserSettings
             }})
           });
       }
@@ -149,6 +148,7 @@ function RenderOptionsModal(props) {
   }
 
   return (
+    !gameId ? '' :
     <Modal show={show} title={t('ChangeRenderOptions')}
       buttons={[{label: t('Save'), action: handleSave}, {label: t('Close'), action: handleClose}]}>
       <div>

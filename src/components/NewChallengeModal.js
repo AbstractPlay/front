@@ -57,7 +57,7 @@ function NewChallengeModal(props) {
   useEffect(() => {
     if (metaGame !== null) {
       const info = gameinfo.get(metaGame);
-      playercounts = info.playercounts;
+      const playercounts = info.playercounts;
       if (playercounts.length === 1) {
         playerCountSetter(playercounts[0]);
         opponentsSetter(Array(playercounts[0] - 1).fill(''));
@@ -123,7 +123,7 @@ function NewChallengeModal(props) {
       errorSetter(field + " must have a value");
     } else {
       const num = Number(str);
-      if (num === NaN) {
+      if (isNaN(num)) {
         errorSetter(field + " must be a number");
       } else {
         if (num < 0) {

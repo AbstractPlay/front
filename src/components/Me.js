@@ -143,9 +143,6 @@ function Me(props) {
   }
 
   const handleNewChallenge2 = async (challenge) => {
-    const game = challenge.metaGame;
-    const opponent = challenge.opponent;
-    const variants = challenge.variants;
 
     try {
       const usr = await Auth.currentAuthenticatedUser();

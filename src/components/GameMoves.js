@@ -126,7 +126,7 @@ function GameMoves(props) {
         <th colSpan="2" key="th-1">
           <div className="player">
             { game.players.map((p, i) => 
-                  <Fragment>
+                  <Fragment key={i}>
                     { game.colors === undefined ? '' :
                     game.colors[i].isImage ?
                         <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[i].value)}`} alt="" />
