@@ -1,5 +1,6 @@
 import React from 'react';
 import { renderglyph } from '@abstractplay/renderer';
+import { useTranslation } from 'react-i18next';
 
 function renderGlyph(settings, glyph, id, player) {
   var options = {};
@@ -19,71 +20,61 @@ function GameStatus(props) {
   const canExplore = props.canExplore;
   const handleStashClick = props.handleStashClick;
 
-  if (!game || game.colors === undefined) {
+  const { t } = useTranslation();
+
+  if (!game || game.colors === undefined || ((!game.variants || game.variants.length === 0) && (status.statuses.length === 0) && (!game.scores || status.scores.length == 0) && (!game.playerStashes) && (!game.sharedStash))) {
     return (<div></div>);
   }
   else {
     return (
-      <div>
-        <table className="genericStatuses">
-          <tbody>
-            { status.statuses.map((status, ind) => 
-              <tr key={"genericStatusRow" + ind}>
-                <td className="genericStatusKey">{status.key}</td>
-                <td className="genericStatusValue">
-                  { status.value.map((v, i) => 
-                    <span key={i}>
-                      { typeof v === 'string' ?
-                        v 
-                        : <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, v.glyph, 'genericStatus-' + ind + '-' + i, v.player))}`} alt={"color " + v.player} />
-                      }
-                    </span>
-                  )}
-                </td>
-              </tr>
-              )
-            }
-          </tbody>
-        </table>
-        { !game.scores ? '' :
-          <div>
-            <span>Scores</span>
-            <table className="scoresTable">
-              <tbody>
-                { status.scores.map((score, index) =>
-                  <tr key={"score" + index}>
-                    <td>{game.colors[index].isImage
-                      ? <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[index].value)}`} alt="" />
-                      : <span >{game.colors[index].value + ':'}</span>
-                    }</td>
-                    <td>{game.players[index].name}</td>
-                    <td>:</td>
-                    <td>{score}</td>
-                  </tr>)
-                }
-              </tbody>
-            </table>
-          </div>
+      <div className="statusContainer">
+        <div className="groupLevel1Header"><span>{t("Status")}</span></div>
+        { !game.variants || game.variants.length === 0 ? '' :
+         <span>{t(game.variants.length === 1 ? "Variant" : "Variants") + ": "}{game.variants.join(", ")}</span>
         }
-        { !game.limitedPieces ? '' :
-          <div>
-            <span>Pieces</span>
-            <table className="scoresTable">
-              <tbody>
-                { status.pieces.map((count, index) =>
-                  <tr key={"piece" + index}>
-                    <td>{game.colors[index].isImage
-                      ? <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[index].value)}`} alt="" />
-                      : <span>{game.colors[index].value + ':'}</span>
-                    }</td>
-                    <td>{game.players[index].name}</td>
-                    <td>:</td>
-                    <td>{count}</td>
-                  </tr>)
-                }
-              </tbody>
-            </table>
-          </div>
+        { status.statuses.length === 0 ? '' :
+          <table className="genericStatuses">
+            <tbody>
+              { status.statuses.map((status, ind) => 
+                <tr key={"genericStatusRow" + ind}>
+                  <td className="genericStatusKey">{status.key}</td>
+                  <td className="genericStatusValue">
+                    { status.value.map((v, i) => 
+                      <span key={i}>
+                        { typeof v === 'string' ?
+                          v 
+                          : <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, v.glyph, 'genericStatus-' + ind + '-' + i, v.player))}`} alt={"color " + v.player} />
+                        }
+                      </span>
+                    )}
+                  </td>
+                </tr>
+                )
+              }
+            </tbody>
+          </table>
+        }
+        { !game.scores || status.scores.length == 0 ? '' :
+          status.scores.map((scores, i) =>
+            <div key={i}>
+              <span>{scores.name}</span>
+              <table className="scoresTable">
+                <tbody>
+                  { scores.scores.map((score, index) =>
+                    <tr key={"score" + i + "-" + index}>
+                      <td>{game.colors[index].isImage
+                        ? <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[index].value)}`} alt="" />
+                        : <span >{game.colors[index].value + ':'}</span>
+                      }</td>
+                      <td>{game.players[index].name}</td>
+                      <td>:</td>
+                      <td>{score}</td>
+                    </tr>)
+                  }
+                </tbody>
+              </table>
+            </div>
+          )
         }
         { !game.playerStashes ? '' :
           <div>

@@ -36,16 +36,7 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
 function setStatus(engine, game, isPartial, partialMove, status) {
   status.statuses = engine.statuses(isPartial, partialMove);
   if (game.scores) {
-    status.scores = [];
-    for (let i = 1; i <= game.numPlayers; i++) {
-      status.scores.push(engine.getPlayerScore(i));
-    }
-  }
-  if (game.limitedPieces) {
-    status.pieces = [];
-    for (let i = 1; i <= game.numPlayers; i++) {
-      status.pieces.push(engine.getPlayerPieces(i));
-    }
+    status.scores = engine.getPlayersScores();
   }
   if (game.playerStashes) {
     status.stashes = [];
@@ -57,7 +48,7 @@ function setStatus(engine, game, isPartial, partialMove, status) {
   if (game.sharedStash) {
     status.sharedstash = engine.getSharedStash(isPartial, partialMove);
   }
-  console.log("setStatus, status:", status);
+  // console.log("setStatus, status:", status);
 }
 
 function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter) {
@@ -78,6 +69,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   const engine = GameFactory(game0.metaGame, game0.state);
   moveSetter({...engine.validateMove(''), "previous": '', "move": ''});
   game0.me = game0.players.findIndex(p => p.id === state.myid);
+  game0.variants = engine.getVariants();
   if (game0.simultaneous) {
     game0.canSubmit = (game0.toMove === "" || game0.me < 0) ? false : game0.toMove[game0.me];
     if (game0.toMove !== "") {
@@ -134,7 +126,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   let focus0 = {"moveNumber": history.length - 1, "exPath": []};
   focus0.canExplore = canExploreMove(gameRef.current, explorationRef.current, focus0);
   focusSetter(focus0);
-  console.log("Setting renderrep");
+  // console.log("Setting renderrep");
   renderrepSetter(render);
 }
 
@@ -180,13 +172,13 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
     errorSetter(true);
     return;
   }
-  console.log("explorationRef:",explorationRef);
-  console.log("statusRef:",statusRef);
+  // console.log("explorationRef:",explorationRef);
+  // console.log("statusRef:",statusRef);
   setStatus(gameEngineTmp, game, partialMove || simMove, move, statusRef.current);
   if (!partialMove) {
     node = getFocusNode(explorationRef.current, focus);
     let newstate = gameEngineTmp.serialize();
-    console.log("newstate", newstate);
+    // console.log("newstate", newstate);
     const pos = node.AddChild(move.move, newstate, (node.toMove + 1) % game.players.length);
     let newfocus = cloneDeep(focus);
     newfocus.exPath.push(pos);
@@ -195,9 +187,11 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
     moveSetter({...gameEngineTmp.validateMove(''), "previous": '', "move": ''});
     if (newfocus.canExplore && !game.noMoves)
       movesRef.current = gameEngineTmp.moves();
+  } else {
+    moveSetter(move);
   }
   partialMoveRenderRef.current = partialMove;
-  console.log('setting renderrep 1');
+  // console.log('setting renderrep 1');
   renderrepSetter(gameEngineTmp.render(game.me + 1));
 }
 
@@ -228,6 +222,7 @@ function GameMove(props) {
   const [gameSettings, gameSettingsSetter] = useState();
   const [settings, settingsSetter] = useState(null);
   const [comments, commentsSetter] = useState([]);
+  const [commentsTooLong, commentsTooLongSetter] = useState(false);
   const [submitting, submittingSetter] = useState(false);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
@@ -277,11 +272,15 @@ function GameMove(props) {
         } else {
           const result = await res.json();
           let data = JSON.parse(result.body);
-          console.log(data.game);
+          // console.log(data.game);
           setupGame(data.game, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
           processNewSettings(state.settings, data.game.players.find(p => p.id === state.myid).settings);
-          if (data.comments !== undefined)
+          if (data.comments !== undefined) {
             commentsSetter(data.comments);
+            if (data.comments.reduce((s, a) => s + 110 + Buffer.byteLength(a.comment,'utf8'), 0) > 350000) {
+              commentsTooLongSetter(true);
+            }
+          }
         }
       }
       catch (error) {
@@ -295,7 +294,7 @@ function GameMove(props) {
 
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {
-    console.log("foc = ", foc);
+    // console.log("foc = ", foc);
     let node = getFocusNode(explorationRef.current, foc);
     let engine = GameFactory(game.metaGame, node.state);
     partialMoveRenderRef.current = false;
@@ -322,7 +321,7 @@ function GameMove(props) {
       result = gameEngineTmp.validateMove(value);
     result.move = value;
     result.previous = move.move;
-    console.log(result);
+    // console.log(result);
     processNewMove(result);
   }
      
@@ -334,7 +333,7 @@ function GameMove(props) {
   }
 
   const handleStashClick = (player, count, movePart) => {
-    console.log(`handleStashClick movePart=${movePart}`);
+    // console.log(`handleStashClick movePart=${movePart}`);
     handleMove(move.move + movePart);
   }
 
@@ -362,15 +361,15 @@ function GameMove(props) {
     let options = {};
 
     function boardClick(row, col, piece) {
-      console.log(`boardClick:(${row},${col},${piece})`);
+      // console.log(`boardClick:(${row},${col},${piece})`);
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous ? 
         gameEngineTmp.handleClickSimultaneous(moveRef.current.move, row, col, gameRef.current.me + 1, piece) 
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       result.previous = moveRef.current.move;
-      console.log('move', moveRef.current.move);
-      console.log('result',result);
+      console.log('boardClick: move', moveRef.current.move);
+      console.log('boardClick: result',result);
       processNewMove(result);
     }
 
@@ -381,7 +380,7 @@ function GameMove(props) {
       if (svg !== null)
         svg.remove();
       options.divid = "stack";
-      console.log(gameEngineTmp.renderColumn(row, col));
+      // console.log(gameEngineTmp.renderColumn(row, col));
       render(gameEngineTmp.renderColumn(row, col), options);
     }
 
@@ -391,9 +390,9 @@ function GameMove(props) {
         svg.remove();
       }
       if (renderrep !== null && settings !== null) {
-        console.log("renderrep", renderrep);
+        // console.log("renderrep", renderrep);
         options = {"divid": "svg"};
-        console.log("focus.moveNumber", focus.moveNumber, "explorationRef.current.length", explorationRef.current.length);
+        // console.log("focus.moveNumber", focus.moveNumber, "explorationRef.current.length", explorationRef.current.length);
         if (focus.canExplore) {
           options.boardClick = boardClick;
         }
@@ -404,13 +403,13 @@ function GameMove(props) {
           options.patterns = true;
         }
         if (gameRef.current.stackExpanding) {
-          options.boardHover = (row, col, piece) => { console.log("gm", row, col); expand(col, row); };
+          options.boardHover = (row, col, piece) => { expand(col, row); };
         }
         options.showAnnotations = settings.annotate;
         options.svgid = 'theBoardSVG';
-        console.log(renderrep);
-        console.log("options = ", options);
-        console.log("renderrep useEffect statusRef: ", statusRef);
+        // console.log(renderrep);
+        // console.log("options = ", options);
+        // console.log("renderrep useEffect statusRef: ", statusRef);
         render(renderrep, options);
       }
     }
@@ -462,7 +461,6 @@ function GameMove(props) {
     gameSettingsSetter(newGameSettings);
     try {
       const usr = await Auth.currentAuthenticatedUser();
-      console.log('currentAuthenticatedUser', usr);
       await fetch(API_ENDPOINT_AUTH, {
         method: 'POST',
         headers: {
@@ -531,8 +529,8 @@ function GameMove(props) {
       if (result.statusCode !== 200)
         setError(JSON.parse(result.body));
       let game0 = JSON.parse(result.body);
-      console.log("In handleSubmit. game0:");
-      console.log(game0);
+      // console.log("In handleSubmit. game0:");
+      // console.log(game0);
       setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
       // setupColors(settings, gameRef.current, t);
     }
@@ -543,7 +541,7 @@ function GameMove(props) {
 
   const submitComment = async (comment) => {
     commentsSetter([...comments, {"comment": comment, "userId": state.myid, "timeStamp": Date.now()}]);
-    console.log(comments);
+    // console.log(comments);
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
@@ -604,7 +602,14 @@ function GameMove(props) {
   const game = gameRef.current;
   console.log("rendering at focus ", focus);
   if (!error) {
-    console.log(explorationRef.current);
+    let toMove;
+    if (focus) {
+      if (game.simultaneous) {
+        toMove = game.toMove; // will only be used at current position
+      } else {
+        toMove = getFocusNode(explorationRef.current, focus).toMove;
+      }
+    }
     return (
       <div className="main">
         <nav>
@@ -618,9 +623,9 @@ function GameMove(props) {
               <div className="enterMoveContainer">
                 <div className="enterMoveContainer2">
                   { /***************** MoveEntry *****************/}
+                  <GameStatus status={statusRef.current} settings={settings} game={game} canExplore={focus?.canExplore} handleStashClick={handleStashClick} />
                   <div className="groupLevel1Header"><span>{t("MakeMove")}</span></div>
-                    <GameStatus status={statusRef.current} settings={settings} game={game} canExplore={focus?.canExplore} handleStashClick={handleStashClick} />
-                    <MoveEntry move={move} toMove={focus ? getFocusNode(explorationRef.current, focus).toMove : ''} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
+                    <MoveEntry move={move} toMove={toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
                       focus={focus} submitting={submitting} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}/>
                   </div>
                 </div>
@@ -648,19 +653,24 @@ function GameMove(props) {
                 processNewSettings={processNewSettings} showSettingsSetter={showSettingsSetter} setError={setError}
                 handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
             </div>
-            <div className="commentContainer">
-              <div className="commentContainer2">
-                { /***************** GameComment *****************/}
-                <GameComment className="gameComment" handleSubmit={submitComment} />
+            { focus ?
+              <div className="commentContainer">
+                <div className="commentContainer2">
+                  { /***************** GameComment *****************/}
+                  <GameComment className="gameComment" handleSubmit={submitComment} tooMuch={commentsTooLong}/>
+                </div>
+              </div> : ''
+            }
+            { focus ? 
+              <div className="moveResultsContainer">
+                <div className="moveResultsContainer2">
+                  { /***************** MoveResults *****************/}
+                  <div className="groupLevel1Header"><span>Game summary</span></div>
+                  <MoveResults className="moveResults" results={game?.moveResults} comments={comments} players={gameRef.current?.players} />
+                </div>
               </div>
-            </div>
-            <div className="moveResultsContainer">
-              <div className="moveResultsContainer2">
-                { /***************** MoveResults *****************/}
-                <div className="groupLevel1Header"><span>Game summary</span></div>
-                <MoveResults className="moveResults" results={game?.moveResults} comments={comments} players={gameRef.current?.players} />
-              </div>
-            </div>
+              : ''
+            }  
             <Modal show={showResignConfirm} title={t('ConfirmResign')} size="small"
               buttons={[{label: t('Resign'), action: handleResignConfirmed}, {label: t('Cancel'), action: handleCloseResignConfirm}]}>
               <div>

@@ -179,9 +179,6 @@ function Me(props) {
     return <NewProfile show={true} varsSetter={varsSetter} />;
   }
   else {
-    // const myid = me.id.substring(3);
-    // myidSetter(me.id);
-    // myidSetter(myid);
     let games = me.games;
     if (games === undefined)
       games = [];
@@ -217,6 +214,7 @@ function Me(props) {
       <div className="main">
         <nav>
           <div><Link to="/about">{t('About')}</Link></div>
+          <div><Link to="/games">{t('Games')}</Link></div>
         </nav>
         <article>
           <div className="article">

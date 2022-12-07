@@ -76,11 +76,15 @@ function MoveEntry(props) {
     let img = null;
     if (toMove !== '') {
       if (game.simultaneous) {
-        if (game.canSubmit) {
-          mover = t('ToMove', {"player": game.players[game.me].name});
-          if (game.colors !== undefined) img = game.colors[game.me];
+        if (uiState === 0) {
+          if (game.canSubmit) {
+            mover = t('ToMove', {"player": game.players[game.me].name});
+            if (game.colors !== undefined) img = game.colors[game.me];
+          } else {
+            mover = t('Waiting');
+          }
         } else {
-          mover = t('Waiting');
+          mover = '';
         }
       }
       else {
@@ -92,7 +96,7 @@ function MoveEntry(props) {
     }
     let canClaimTimeout = false;
     if (game.simultaneous)
-      canClaimTimeout = game.players.some((p, i) => game.toMove[i] && i !== game.me && p.time - (Date.now() - game.lastMoveTime) < 0); // this is WRONG!
+      canClaimTimeout = game.players.some((p, i) => game.toMove[i] && i !== game.me && p.time - (Date.now() - game.lastMoveTime) < 0);
     else
       canClaimTimeout = game.toMove !== '' && game.me !== game.toMove && game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
     
@@ -100,6 +104,7 @@ function MoveEntry(props) {
     // Am I the last player that needs to agree to a draw?
     const canDraw =  drawOffered && game.players.reduce((acc, p) => acc + (p.draw ? 1 : 0), 0) === game.players.length - 1;
 
+    console.log('toMove', toMove);
     return (
       <div className="uiState">
         <div className={ uiState === -1 ? "historyStateContainer" : uiState === 0 ? "currentStateContainer" : "exploreStateContainer"}>
@@ -116,19 +121,20 @@ function MoveEntry(props) {
             }
             <span className="mover">{mover}</span>
           </div>
-          { uiState !== 0 || toMove === '' ? '' :
+          { uiState === 0 && toMove !== '' ? 
             <div>
               <div className="timeRemaining tooltipped">
                 {t("TimeRemaining")}
                 <span className="tooltiptext">Time Setting: {game.clockHard ? t("HardTimeSet") : t("NotHardTime")}, {t("Increment", {"inc": game.clockInc})}, {t("MaxTime", {"max": game.clockMax})}</span>
               </div>
               <div className="timeRemainingEntries">
-                { game.players.map((p, ind) => ind === toMove ?
-                  <div className="timeRemainingEntry" key={'player'+ind}><b>{p.name}</b>: {showMilliseconds(p.time - (Date.now() - game.lastMoveTime))}</div>
+                { game.players.map((p, ind) => (Array.isArray(toMove) ? toMove[ind] : ind === toMove) ?
+                  <div className="timeRemainingEntry" key={'player'+ind}><b>{p.name}</b>: { showMilliseconds(p.time - (Date.now() - game.lastMoveTime)) }</div>
                   : <div className="timeRemainingEntry" key={'player'+ind}>{p.name}: {showMilliseconds(p.time)}</div>)
                 }
               </div>
             </div>
+            : ''
           }
           <div>
             { canClaimTimeout && !game.canSubmit && uiState === 0 && !submitting ?

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import Spinner from './Spinner';
 import { API_ENDPOINT_OPEN } from '../config';
-import { gameinfo } from '@abstractplay/gameslib';
+import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
 import Modal from './Modal';
 
 function NewChallengeModal(props) {
@@ -10,11 +10,12 @@ function NewChallengeModal(props) {
   const handleNewChallenge = props.handleChallenge;
   const myid = props.id;
   const show = props.show;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [users, usersSetter] = useState(null);
   const [error, errorSetter] = useState(null);
   const [metaGame, metaGameSetter] = useState(null);
   const [playerCount, playerCountSetter] = useState(-1);
+  const [allvariants, allvariantsSetter] = useState(null);
   const [seating, seatingSetter] = useState('');
   const [clockStart, clockStartSetter] = useState(72);
   const [clockInc, clockIncSetter] = useState(24);
@@ -23,6 +24,10 @@ function NewChallengeModal(props) {
   const [opponents, opponentsSetter] = useState([]);
   const groupVariantsRef = useRef({});
   const nonGroupVariantsRef = useRef({})
+
+  useEffect(() => {
+    addResource(i18n.language);
+  },[i18n.language]);
 
   useEffect(() => {
     async function fetchData() {
@@ -55,21 +60,6 @@ function NewChallengeModal(props) {
   },[show]);
 
   useEffect(() => {
-    if (metaGame !== null) {
-      const info = gameinfo.get(metaGame);
-      const playercounts = info.playercounts;
-      if (playercounts.length === 1) {
-        playerCountSetter(playercounts[0]);
-        opponentsSetter(Array(playercounts[0] - 1).fill(''));
-      } else {
-        playerCountSetter(-1);
-        opponentsSetter([]);
-      }
-      seatingSetter('');
-    }
-  }, [metaGame]);
-
-  useEffect(() => {
     if (playerCount === 2) {
       seatingSetter('');
       opponentsSetter(['']);
@@ -88,6 +78,23 @@ function NewChallengeModal(props) {
       metaGameSetter(null);
     } else {
       metaGameSetter(game);
+      const info = gameinfo.get(game);
+      let gameEngine;
+      if (info.playercounts.length > 1) {
+        gameEngine = GameFactory(info.uid, 2);
+      } else {
+        gameEngine = GameFactory(info.uid);
+      }
+      allvariantsSetter(gameEngine.allvariants());
+      const playercounts = info.playercounts;
+      if (playercounts.length === 1) {
+        playerCountSetter(playercounts[0]);
+        opponentsSetter(Array(playercounts[0] - 1).fill(''));
+      } else {
+        playerCountSetter(-1);
+        opponentsSetter([]);
+      }
+      seatingSetter('');
     }
     errorSetter("");
   }
@@ -206,10 +213,10 @@ function NewChallengeModal(props) {
   let playercounts = [];
   if (metaGame !== null) {
     const info = gameinfo.get(metaGame);
-    if (info.variants !== undefined) {
-      const groups = [...new Set(info.variants.filter(v => v.group !== undefined).map(v => v.group))];
-      groupData = groups.map(g => {return {"group": g, "variants": info.variants.filter(v => v.group === g).sort((a,b) => (a.uid > b.uid) ? 1 : -1)}});
-      nonGroupData = info.variants.filter(v => v.group === undefined).sort((a,b) => (a.uid > b.uid) ? 1 : -1);
+    if (allvariants && allvariants !== undefined) {
+      const groups = [...new Set(allvariants.filter(v => v.group !== undefined).map(v => v.group))];
+      groupData = groups.map(g => {return {"group": g, "variants": allvariants.filter(v => v.group === g).sort((a,b) => (a.uid > b.uid) ? 1 : -1)}});
+      nonGroupData = allvariants.filter(v => v.group === undefined).sort((a,b) => (a.uid > b.uid) ? 1 : -1);
     }
     playercounts = info.playercounts;
   }
@@ -295,12 +302,15 @@ function NewChallengeModal(props) {
                   <div className="pickVariantVariant">
                     <div key="default">
                       <input type="radio" id="default" value="" name={g.group}/>
-                      <label htmlFor="default"> Default {g.group} </label>
+                      <label htmlFor="default">{`Default ${g.group}`} </label>
                     </div>
                     { g.variants.map(v =>
                           <div key={v.uid}>
                             <input type="radio" id={v.uid} value={v.uid} name={g.group}/>
-                            <label htmlFor={v.uid}> {v.name} </label>
+                            <label htmlFor={v.uid} className={v.description === undefined ? undefined : "tooltipped"}> 
+                              {v.name} 
+                              <span className="tooltiptext">{v.description}</span>
+                            </label>
                           </div>
                         )
                       }

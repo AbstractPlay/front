@@ -313,6 +313,10 @@ a:hover, .aboutText a {
   flex-wrap: wrap;
 }
 
+.statusContainer {
+  margin-bottom: 2rem;
+}
+
 .enterMoveContainer {
   width: 33%;
   min-width: 15rem;
@@ -369,11 +373,16 @@ a:hover, .aboutText a {
 .commentContainer2 {
   width: 45%;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
 
 #enterAComment {
   margin-right: 1em;
+}
+
+.commenttoolong {
+  width: 100%;
 }
 
 .moveResultsTable {
