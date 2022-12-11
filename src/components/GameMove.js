@@ -56,7 +56,6 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   game0.name = info.name;
   game0.simultaneous = (info.flags !== undefined && info.flags.includes('simultaneous'));
   game0.sharedPieces = (info.flags !== undefined && info.flags.includes('shared-pieces'));
-  game0.perspective = (info.flags !== undefined && info.flags.includes('perspective'));
   game0.rotate90 = (info.flags !== undefined && info.flags.includes('rotate90'));
   game0.scores = (info.flags !== undefined && info.flags.includes('scores'));
   game0.limitedPieces = (info.flags !== undefined && info.flags.includes('limited-pieces'));
@@ -274,7 +273,7 @@ function GameMove(props) {
           let data = JSON.parse(result.body);
           // console.log(data.game);
           setupGame(data.game, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
-          processNewSettings(state.settings, data.game.players.find(p => p.id === state.myid).settings);
+          processNewSettings(data.game.players.find(p => p.id === state.myid).settings, state.settings);
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
             if (data.comments.reduce((s, a) => s + 110 + Buffer.byteLength(a.comment,'utf8'), 0) > 350000) {
@@ -407,8 +406,8 @@ function GameMove(props) {
         }
         options.showAnnotations = settings.annotate;
         options.svgid = 'theBoardSVG';
-        // console.log(renderrep);
-        // console.log("options = ", options);
+        console.log(renderrep);
+        console.log("options = ", options);
         // console.log("renderrep useEffect statusRef: ", statusRef);
         render(renderrep, options);
       }
@@ -454,11 +453,11 @@ function GameMove(props) {
     if (newGameSettings === undefined) newGameSettings = {};
     let rotate = newGameSettings.rotate;
     if (rotate === undefined) rotate = 0;
-    rotate += gameRef.current.rotate90 && gameRef.current.numPlayers > 2 ? 90 : 180;
+    rotate += (gameRef.current.rotate90 && gameRef.current.numPlayers) > 2 ? 90 : 180;
     if (rotate >= 360)
       rotate -= 360;
     newGameSettings.rotate = rotate;
-    gameSettingsSetter(newGameSettings);
+    processNewSettings(newGameSettings, userSettings);
     try {
       const usr = await Auth.currentAuthenticatedUser();
       await fetch(API_ENDPOINT_AUTH, {

@@ -62,10 +62,13 @@ a:active {
 
 .main > article {
   flex: 1;
+  /* font-size: 93.75%; */
+  font-size: 87.5%;
 }
 
 .main > nav {
-  flex: 0 0 4vw;
+  flex: 0 0 6vw;
+  min-width: 5em;
   order: -1;
   padding: 1em;
   border-right: 2px solid #1A3E6F;
@@ -76,8 +79,9 @@ a:active {
 }
 
 .main > nav > div {
-  width: 4vw;
-  text-align:center;
+  width: 100%;
+  min-width: 3em;
+  text-align: center;
   font-family: 'Open Sans', sans-serif;
   font-weight: bold;
 }
@@ -101,7 +105,7 @@ h1 {
   font-size: 40px;
   font-weight: 900;
   margin-top: 1em;
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
 }
 
 .centered {
@@ -126,13 +130,27 @@ h1 {
   justify-content: space-evenly;
 }
 
+.goToGame {
+  width: 100%;
+  margin-bottom: 0.8em;
+}
+
+goToGameLabel {
+  padding-right: 1em;
+}
+
 .metaGame {
   max-width: 500px;
   flex-grow: 1;
-  margin: 0.5em 1.5em;
+  padding: 0.25em 1em;
+  margin: 0.25em 0.5em;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
+}
+
+.theMetaGame {
+  border: 1px solid var(--main-fg-color)
 }
 
 .metaGameTitle {

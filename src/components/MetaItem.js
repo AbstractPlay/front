@@ -4,8 +4,7 @@ import rehypeRaw from 'rehype-raw'
 import { GameFactory } from '@abstractplay/gameslib';
 import gameImages from '../assets/GameImages';
 
-function MetaItem(props) {
-
+const MetaItem = React.forwardRef((props, ref) => {
   let game = props.game;
   const image = encodeURIComponent(gameImages[game.uid]);
   let gameEngine;
@@ -22,7 +21,7 @@ function MetaItem(props) {
     designerString = 'Designers: ';
   designerString += designers.join(", ");
   return (
-    <div className="metaGame">
+    <div ref={ref} className={"metaGame" + (props.highlight ? " theMetaGame" : "")}>
       <div className="metaGameTitle">
         <div className="metaGameTitleLine"></div>
         <div className="metaGameTitleText">{game.name}</div>
@@ -47,6 +46,6 @@ function MetaItem(props) {
       </div>
     </div>
   );
-}
+})
 
 export default MetaItem;

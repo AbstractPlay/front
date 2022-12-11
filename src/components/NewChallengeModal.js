@@ -325,7 +325,10 @@ function NewChallengeModal(props) {
                   { nonGroupData.map(v =>
                     <div key={v.uid}>
                       <input type="checkbox" id={v.uid} value={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)} />
-                      <label htmlFor={v.uid}>{v.name}</label>
+                      <label htmlFor={v.uid} className={v.description === undefined ? undefined : "tooltipped"}>
+                        {v.name}
+                        <span className="tooltiptext">{v.description}</span>
+                      </label>
                     </div>)
                   }
                 </div>
