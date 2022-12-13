@@ -95,11 +95,12 @@ function MoveEntry(props) {
       mover = t('GameIsOver');
     }
     let canClaimTimeout = false;
-    if (game.simultaneous)
-      canClaimTimeout = game.players.some((p, i) => game.toMove[i] && i !== game.me && p.time - (Date.now() - game.lastMoveTime) < 0);
-    else
-      canClaimTimeout = game.toMove !== '' && game.me !== game.toMove && game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
-    
+    if (uiState === 0 && !submitting) {
+      if (game.simultaneous)
+        canClaimTimeout = game.players.some((p, i) => toMove[i] && i !== game.me && p.time - (Date.now() - game.lastMoveTime) < 0);
+      else
+        canClaimTimeout = !game.canSubmit && game.toMove !== '' && game.me !== game.toMove && game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
+    }
     const drawOffered = game.players.some(p => p.draw);
     // Am I the last player that needs to agree to a draw?
     const canDraw =  drawOffered && game.players.reduce((acc, p) => acc + (p.draw ? 1 : 0), 0) === game.players.length - 1;
@@ -137,7 +138,7 @@ function MoveEntry(props) {
             : ''
           }
           <div>
-            { canClaimTimeout && !game.canSubmit && uiState === 0 && !submitting ?
+            { canClaimTimeout ?
               <button className="apButton" onClick={handleTimeOut}>{t('ClaimTimeOut')}</button>
               : ''
             }

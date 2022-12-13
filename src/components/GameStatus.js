@@ -37,7 +37,7 @@ function GameStatus(props) {
             <tbody>
               { status.statuses.map((status, ind) => 
                 <tr key={"genericStatusRow" + ind}>
-                  <td className="genericStatusKey">{status.key}</td>
+                  <td className="genericStatusKey">{status.key}:</td>
                   <td className="genericStatusValue">
                     { status.value.map((v, i) => 
                       <span key={i}>
