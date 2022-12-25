@@ -146,6 +146,7 @@ function setupColors(settings, game, t) {
   });
 }
 
+
 function doView(state, game, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
   partialMoveRenderRef, renderrepSetter, movesRef, statusRef) {
   let node = getFocusNode(explorationRef.current, focus);
@@ -351,6 +352,7 @@ function GameMove(props) {
       if (focus.canExplore && !gameRef.current.noMoves)
         movesRef.current = gameEngineTmp.moves();
       renderrepSetter(gameEngineTmp.render(gameRef.current.me + 1));
+      moveSetter(newmove);
     } else {
       moveSetter(newmove); // not renderable yet
     }
@@ -367,8 +369,10 @@ function GameMove(props) {
         gameEngineTmp.handleClickSimultaneous(moveRef.current.move, row, col, gameRef.current.me + 1, piece) 
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       result.previous = moveRef.current.move;
+      // if (!result.valid && partialMoveRenderRef.current)
+      //   result.move = moveRef.current.move; 
       console.log('boardClick: move', moveRef.current.move);
-      console.log('boardClick: result',result);
+      console.log('boardClick: result', result);
       processNewMove(result);
     }
 

@@ -1,6 +1,6 @@
 import React, { useState, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { COGNITO_APPID, COGNITO_COOKIE_DOMAIN, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';
+import { COGNITO_USER_POOL_ID, COGNITO_APPID, COGNITO_DOMAIN, COGNITO_COOKIE_DOMAIN, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';
 import Amplify, { Auth } from 'aws-amplify';
 import './Skeleton.css';
 import Spinner from '../components/Spinner';
@@ -19,7 +19,7 @@ function Bones(props) {
     const awsconfig = {
       "Auth": {
         "region": "us-east-1",
-        "userPoolId": "us-east-1_jQP9BEv25",
+        "userPoolId": COGNITO_USER_POOL_ID,
         "userPoolWebClientId": COGNITO_APPID,
         "mandatorySignIn": false,
         "cookieStorage": {
@@ -42,7 +42,7 @@ function Bones(props) {
     };
     Amplify.configure(awsconfig);
     const awsauth = {
-      "domain": "abstract-play.auth.us-east-1.amazoncognito.com",
+      "domain": COGNITO_DOMAIN,
       "scope": [
         "openid"
       ],
