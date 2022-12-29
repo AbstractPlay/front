@@ -99,12 +99,14 @@
     "build-prod": "node scripts/build.js",
     "build-dev": "node scripts/buildDev.js",
     "build-local": "node scripts/buildLocal.js",
-    "full-prod": "npm run build-prod && npm run invalidate && npm run deploy",
     "full-dev": "npm run build-dev && npm run invalidate && npm run deploy",
-    "deploy": "sls client deploy",
+    "full-prod": "npm run build-prod && npm run invalidate-prod && npm run deploy-prod",
+    "deploy": "serverless client deploy",
+    "deploy-prod": "serverless client deploy --stage prod",
     "test": "node scripts/test.js",
     "relay": "relay-compiler --src ./src --schema ./schema.graphql --watchman false",
-    "invalidate": "invalidate-cloudfront.cmd"
+    "invalidate": "aws cloudfront create-invalidation --profile AbstractPlayDev --distribution-id E2FD1T2JUN28HB --paths /*",
+    "invalidate-prod": "aws cloudfront create-invalidation --profile AbstractPlayProd --distribution-id EZ7B67NVBQ903 --paths /*"
   },
   "eslintConfig": {
     "extends": [

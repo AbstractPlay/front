@@ -1,3 +1,5 @@
+org: wamelen
+app: apfront
 # Welcome to Serverless!
 #
 # This file is the main config file for your service.
@@ -17,29 +19,38 @@ plugins:
   - serverless-finch
   - serverless-single-page-app-plugin
 
+params:
+  dev:
+    profile: AbstractPlayDev
+    url: play.dev.abstractplay.com
+  prod:
+    profile: AbstractPlayProd
+    url: play.abstractplay.com
+
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
 # frameworkVersion: "=X.X.X"
 
 provider:
+  stage: ${opt:stage, 'dev'}
   name: aws
-  runtime: nodejs8.10
-
-# you can overwrite defaults here
-  stage: dev
-  region: us-east-2
+  runtime: nodejs14.x
+  region: us-east-1
+  profile: ${param:profile}
 
 custom:
-  rootName: com.abstractplay.play
-  stage: ${opt:stage, self:provider.stage}
+  rootName: abstract-play-${self:provider.stage}
+  stage: ${self:provider.stage}
   region: ${opt:region, self:provider.region}
-  stageConfig: ${file(../apsecrets.yml):domains.front.${self:custom.stage}}
+  # stageConfig: ${file(../apsecrets.yml):domains.front.${self:custom.stage}}
   ## For CloudFront
-  s3Bucket: ${self:custom.rootName}.${self:custom.stage}
+  s3Bucket: ${self:custom.rootName}
   ## For S3 upload
   client:
-    bucketName: ${self:custom.rootName}.${self:custom.stage}
+    bucketName: ${self:custom.rootName}
     distributionFolder: build
+  # s3LocalPath: C:\Projects\AbstractPlay\front\build\
+  s3LocalPath: ./build/
 
 resources:
   Resources:
@@ -66,14 +77,14 @@ resources:
               Action:
               - s3:GetObject
               Resource: arn:aws:s3:::${self:custom.s3Bucket}/*
-    ## Specifying the CloudFront Distribution to server your Web Application
+    ## Specifying the CloudFront Distribution to serve your Web Application
     WebAppCloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
           PriceClass: "PriceClass_100"
           Origins:
-            - DomainName: ${self:custom.s3Bucket}.s3-website.us-east-2.amazonaws.com
+            - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
               ## An identifier for the origin which must be unique within the distribution
               Id: WebApp
               CustomOriginConfig:
@@ -86,8 +97,7 @@ resources:
           Enabled: 'true'
           ## Uncomment the following section in case you are using a custom domain
           Aliases:
-          - ${self:custom.stageConfig.domain}
-          # - play.dev.abstractplay.com
+            - ${param:url}
           DefaultRootObject: index.html
           ## Since the Single Page App is taking care of the routing we need to make sure ever path is served with index.html
           ## The only exception are files that actually exist e.h. app.js, reset.css
@@ -115,9 +125,10 @@ resources:
             ViewerProtocolPolicy: redirect-to-https
           ## The certificate to use when viewers use HTTPS to request objects.
           ViewerCertificate:
-            AcmCertificateArn: ${self:custom.stageConfig.certarn}
+            AcmCertificateArn: arn:aws:acm:us-east-1:153672715141:certificate/0138b8fd-1159-4928-a072-2eb1c999f53c
             SslSupportMethod: "sni-only"
             MinimumProtocolVersion: "TLSv1.1_2016"
+          #            CloudFrontDefaultCertificate: 'true'
           ## Uncomment the following section in case you want to enable logging for CloudFront requests
           # Logging:
           #   IncludeCookies: 'false'
@@ -126,6 +137,9 @@ resources:
 
   ## In order to print out the hosted domain via `serverless info` we need to define the DomainName output for CloudFormation
   Outputs:
+    WebAppS3BucketOutput:
+      Value:
+        'Ref': WebAppS3Bucket
     WebAppCloudFrontDistributionOutput:
       Value:
         'Fn::GetAtt': [ WebAppCloudFrontDistribution, DomainName ]
