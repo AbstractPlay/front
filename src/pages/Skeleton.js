@@ -14,6 +14,7 @@ import About from "../components/About";
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
   const [token, tokenSetter] = useState(null);
+  const [update, updateSetter] = useState(0);
 
   useEffect(() => {
     const awsconfig = {
@@ -44,7 +45,9 @@ function Bones(props) {
     const awsauth = {
       "domain": COGNITO_DOMAIN,
       "scope": [
-        "openid"
+        "openid",
+        "email",
+        "aws.cognito.signin.user.admin"
       ],
       "redirectSignIn": COGNITO_REDIRECT_LOGIN,
       "redirectSignOut": COGNITO_REDIRECT_LOGOUT,
@@ -67,6 +70,7 @@ function Bones(props) {
     getToken();
   },[]);
 
+  console.log("Skeleton rerendering, update=", update);
   if (!authed)
     return <Spinner />;
   else
@@ -78,7 +82,7 @@ function Bones(props) {
               <img src={logo} alt="Abstract Play logo"  id="logo" />
             </div>
             <div className="loginOut">
-              <LogInOutButton token={token} />
+              <LogInOutButton token={token} updater={updateSetter}/>
             </div>
           </div>
           <div>
@@ -91,10 +95,10 @@ function Bones(props) {
                   <MetaContainer token={token}/>
                 </Route>
                 <Route path="/move">
-                  <GameMove />
+                  <GameMove update={update} />
                 </Route>
                 <Route path="/">
-                  <Welcome token={token} />
+                  <Welcome token={token} update={update}/>
                 </Route>
               </Switch>
             </div>

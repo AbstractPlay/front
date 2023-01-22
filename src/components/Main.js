@@ -10,7 +10,8 @@ function Main(props) {
   }
   else {
     // Logged in. Show your games in progress and outstanding challenges.
-    return (<Me />);
+    console.log(`Main props.update = ${props.update}`)
+    return (<Me update={props.update} />);
   }
 }
 

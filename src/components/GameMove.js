@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { render, renderglyph } from '@abstractplay/renderer';
 import { Auth } from 'aws-amplify';
@@ -67,7 +67,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     throw new Error("Why no state? This shouldn't happen no more!");
   const engine = GameFactory(game0.metaGame, game0.state);
   moveSetter({...engine.validateMove(''), "previous": '', "move": ''});
-  game0.me = game0.players.findIndex(p => p.id === state.myid);
+  game0.me = game0.players.findIndex(p => p.id === state.me.id);
   game0.variants = engine.getVariants();
   if (game0.simultaneous) {
     game0.canSubmit = (game0.toMove === "" || game0.me < 0) ? false : game0.toMove[game0.me];
@@ -78,7 +78,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     game0.canExplore = false;
   }
   else {
-    game0.canSubmit = (game0.toMove !== "" && game0.players[game0.toMove].id === state.myid);
+    game0.canSubmit = (game0.toMove !== "" && game0.players[game0.toMove].id === state.me.id);
     game0.canExplore = game0.toMove !== "" && game0.numPlayers === 2;
   }
   if (game0.sharedPieces) {
@@ -158,7 +158,7 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
   let m = move.move;
   if (game.simultaneous) {
     simMove = true;
-    m = game.players.map(p => (p.id === state.myid ? m : '')).join(',');
+    m = game.players.map(p => (p.id === state.me.id ? m : '')).join(',');
   }
   try {
     gameEngineTmp.move(m, partialMove || simMove);
@@ -247,6 +247,16 @@ function GameMove(props) {
   },[i18n.language]);
 
   useEffect(() => {
+    var lng = "en";
+    if (state.me !== undefined && state.me.language !== undefined)
+      lng = state.me.language;
+    if (i18n.language !== lng) {
+      i18n.changeLanguage(lng);
+      console.log(`changed language  to ${lng}`);
+    }
+  }, []);
+
+  useEffect(() => {
     async function fetchData() {
       const usr = await Auth.currentAuthenticatedUser();
       const token = usr.signInUserSession.idToken.jwtToken;
@@ -274,7 +284,7 @@ function GameMove(props) {
           let data = JSON.parse(result.body);
           // console.log(data.game);
           setupGame(data.game, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
-          processNewSettings(data.game.players.find(p => p.id === state.myid).settings, state.settings);
+          processNewSettings(data.game.players.find(p => p.id === state.me.id).settings, state.settings);
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
             if (data.comments.reduce((s, a) => s + 110 + Buffer.byteLength(a.comment,'utf8'), 0) > 350000) {
@@ -543,7 +553,7 @@ function GameMove(props) {
   }
 
   const submitComment = async (comment) => {
-    commentsSetter([...comments, {"comment": comment, "userId": state.myid, "timeStamp": Date.now()}]);
+    commentsSetter([...comments, {"comment": comment, "userId": state.me.id, "timeStamp": Date.now()}]);
     // console.log(comments);
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
@@ -602,6 +612,9 @@ function GameMove(props) {
     submitMove('timeout', false);
   }
 
+  if (state.me === undefined) {
+    return <Redirect to="/" />;
+  }
   const game = gameRef.current;
   console.log("rendering at focus ", focus);
   if (!error) {

@@ -661,7 +661,7 @@ th .player {
   width: 40%;
 }
 
-.challenge, .profile {
+.challenge, .profile, .userSettings {
   width: 100%;
   display: flex;
   justify-content: flex-start;
@@ -676,7 +676,7 @@ th .player {
   padding-bottom: 0.3em;
 }
 
-.newChallengeLabel, .newProfileLabel {
+.newChallengeLabel, .newProfileLabel, .userSettingsLabel {
   padding-right: 1em;
 }
 
@@ -703,6 +703,22 @@ th .player {
 
 .pickOneOfColors, .pickOneOfColorsLevel, .pickAnnotation, .chooseAnnotationLevel {
   padding-left: 1rem;
+}
+
+.userSettingsLabelDiv {
+  display: block;
+  width: 30%;
+  text-align: right;
+}
+
+.userSettingsInputDiv {
+  display: block;
+  width: 50%;
+}
+
+.userSettingsButtonDiv {
+  display: block;
+  width: 20%;
 }
 
 .radios {

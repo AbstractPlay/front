@@ -162,5 +162,11 @@
     "seatingMeFirst": "You will play first.",
     "seatingMeSecond": "Your opponent will play first.",
     "seatingRandom": "Seating will be random.",
-    "and": "and"
+    "and": "and",
+    "UserSettings": "User Settings",
+    "DisplayName": "Display name",
+    "EMail": "e-mail",
+    "Language": "Preferred language",
+    "Change": "Change",
+    "EMailCode": "e-mailed code"
 }

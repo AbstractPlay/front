@@ -11,6 +11,7 @@ import NewChallengeModal from './NewChallengeModal';
 import NewProfile from './NewProfile'
 import { API_ENDPOINT_AUTH } from '../config';
 import { Link } from "react-router-dom";
+import i18n from '../i18n';
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -18,6 +19,7 @@ function Me(props) {
   const [error, errorSetter] = useState(null);
   const [challenge, challengeSetter] = useState(0);
   const [vars, varsSetter] = useState({});
+  const [update, updateSetter] = useState(0);
   const [showChallengeViewModal, showChallengeViewModalSetter] = useState(false);
   const [showChallengeResponseModal, showChallengeResponseModalSetter] = useState(false);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
@@ -30,7 +32,7 @@ function Me(props) {
       const usr = await Auth.currentAuthenticatedUser();
       const token = usr.signInUserSession.idToken.jwtToken;
       try {
-        console.log("calling authQuery with token: " + token);
+        console.log("calling authQuery 'me', with token: " + token);
         const res = await fetch(API_ENDPOINT_AUTH, {
           method: 'POST',
           headers: {
@@ -44,11 +46,12 @@ function Me(props) {
         if (result.statusCode !== 200)
           errorSetter(JSON.parse(result.body));
         else {
-          console.log(result);
           if (result === null)
             meSetter({});
-          else
+          else {
             meSetter(JSON.parse(result.body));
+            console.log(JSON.parse(result.body));
+          }
         }
       }
       catch (error) {
@@ -56,7 +59,7 @@ function Me(props) {
       }
     }
     fetchData();
-  },[vars]);
+  },[vars, update]);
 
   const handleNewChallengeClick = (id) => {
     showNewChallengeModalSetter(true);
@@ -143,7 +146,6 @@ function Me(props) {
   }
 
   const handleNewChallenge2 = async (challenge) => {
-
     try {
       const usr = await Auth.currentAuthenticatedUser();
       console.log('currentAuthenticatedUser', usr);
@@ -179,6 +181,8 @@ function Me(props) {
     return <NewProfile show={true} varsSetter={varsSetter} />;
   }
   else {
+    if (update !== props.update) // Can someone PLEASE explain to me why this is needed!!??? (remove it and see what happens...)
+      updateSetter(props.update);
     let games = me.games;
     if (games === undefined)
       games = [];
@@ -209,6 +213,13 @@ function Me(props) {
           waiting.push(game);
       }
     }
+    var lng = "en";
+    if (me.language !== undefined)
+      lng = me.language;
+    if (i18n.language !== lng) {
+      i18n.changeLanguage(lng);
+      console.log(`changed language  to ${lng}`);
+    }
     let challengesResponded = me.challengesIssued.concat(me.challengesAccepted);
     return (
       <div className="main">
@@ -227,20 +238,20 @@ function Me(props) {
                     <div className="groupLevel2Header"><span>{t('YourMove')}</span></div>
                     { myMove.length === 0
                       ? <span className="listComment">{t('NoYourMove')}</span>
-                      : <ul> {myMove.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)} </ul> 
+                      : <ul> {myMove.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)} </ul> 
                     }
                   </div>
                   <div className="groupLevel2">
                     <div className="groupLevel2Header"><span>{t('OpponentMove')}</span></div>
                     { waiting.length === 0
                         ? <span className="listComment">{t('NoOpponentMove')}</span>
-                        : <ul> {waiting.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)} </ul>
+                        : <ul> {waiting.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)} </ul>
                     }
                   </div>
                   { over.length === 0 ? '' :
                     <div className="groupLevel2">
                       <div className="groupLevel2Header"><span>{t('CompletedGames')}</span></div>
-                      <ul> {over.map(item => <GameItem me={me.id} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)}</ul>
+                      <ul> {over.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)}</ul>
                     </div>
                   }
                 </div>

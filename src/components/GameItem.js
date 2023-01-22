@@ -8,12 +8,13 @@ function GameItem(props) {
 
   const game = props.item;
   const info = gameinfo.get(game.metaGame);
-  const myid = props.me;
-  var desc = t("GameAgainst", {game: info.name, opp: game.players.filter(item => item.id !== myid).map(item => item.name).join(", ")});
+  const me = props.me;
+  console.log("me in GameItem", me);
+  var desc = t("GameAgainst", {game: info.name, opp: game.players.filter(item => item.id !== me.id).map(item => item.name).join(", ")});
   return (
     <li>
       <i className="fa fa-circle apBullet"></i>
-      <Link to={{pathname: "/move", state: {"myid": myid, "settings": props.settings, "game": game, "metaGame": info.name }}}>{desc}</Link>
+      <Link to={{pathname: "/move", state: {"me": me, "settings": props.settings, "game": game, "metaGame": info.name }}}>{desc}</Link>
     </li>
   );
 }
