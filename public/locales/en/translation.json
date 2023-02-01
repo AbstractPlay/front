@@ -165,6 +165,8 @@
     "and": "and",
     "UserSettings": "User Settings",
     "DisplayName": "Display name",
+    "DisplayNameChange": "The new name will only be used for new games, not existing or completed games.",
+    "DisplayNameError": "{{name}} is not available, please choose a different name.",
     "EMail": "e-mail",
     "Language": "Preferred language",
     "Change": "Change",
