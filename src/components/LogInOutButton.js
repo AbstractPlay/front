@@ -38,7 +38,7 @@ function LogInOutButton(props) {
     return (
       <div>
         { user.idToken.payload["cognito:username"] }
-        <button className="fabtn align-right" onClick={handleSettingsClick}>
+        <button className="fabtn align-right userSettingsBtn" onClick={handleSettingsClick}>
           <i className="fa fa-cog"></i>
         </button>
         { /* handleLanguageChange={handleLanguageChange} handleEMailChange={handleEMailChange} */}

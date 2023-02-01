@@ -297,21 +297,35 @@ function NewChallengeModal(props) {
             <span className='pickVariantHeader'>{t("PickVariant")}</span>
             { metaGame === null || groupData.length === 0 ? '' :
               groupData.map(g =>
-                <div className="pickVariant "key={"group:" + g.group} onChange={(e) => handleGroupChange(g.group, e.target.value)}>
+                <div className="pickVariant" key={"group:" + g.group} onChange={(e) => handleGroupChange(g.group, e.target.value)}>
                   <legend>{t("PickOneVariant")}</legend>
                   <div className="pickVariantVariant">
-                    <div key="default">
+                    <div className="pickVariantRadio" key="default">
                       <input type="radio" id="default" value="" name={g.group}/>
+                    </div>
+                    <div className="pickVariantLabel">
                       <label htmlFor="default">{`Default ${g.group}`} </label>
                     </div>
                     { g.variants.map(v =>
-                          <div key={v.uid}>
-                            <input type="radio" id={v.uid} value={v.uid} name={g.group}/>
-                            <label htmlFor={v.uid} className={v.description === undefined ? undefined : "tooltipped"}> 
-                              {v.name} 
-                              <span className="tooltiptext">{v.description}</span>
-                            </label>
-                          </div>
+                      <Fragment key={v.uid}>
+                        <div className="pickVariantRadio">
+                          <input type="radio" id={v.uid} value={v.uid} name={g.group}/>
+                        </div>
+                        <div className="pickVariantLabel">
+                          <label htmlFor={v.uid}> 
+                            {v.name} 
+                          </label>
+                        </div>
+                        { v.description.length == 0 ? '' :
+                          <Fragment key={"desc" + v.uid}>
+                            <div className="pickVariantRadio variantDescription">
+                            </div>
+                            <div className="pickVariantLabel variantDescription">
+                              <span>{v.description}</span>
+                            </div>
+                          </Fragment>
+                        }
+                        </Fragment>
                         )
                       }
                   </div>
@@ -323,13 +337,25 @@ function NewChallengeModal(props) {
                 <legend>{t("PickAnyVariant")}</legend>
                 <div className="pickVariantVariant">
                   { nonGroupData.map(v =>
-                    <div key={v.uid}>
-                      <input type="checkbox" id={v.uid} value={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)} />
-                      <label htmlFor={v.uid} className={v.description === undefined ? undefined : "tooltipped"}>
-                        {v.name}
-                        <span className="tooltiptext">{v.description}</span>
-                      </label>
-                    </div>)
+                    <Fragment key={v.uid}>
+                      <div key={v.uid}>
+                        <input type="checkbox" id={v.uid} value={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)} />
+                      </div>
+                      <div>
+                        <label htmlFor={v.uid}>
+                          {v.name}
+                        </label>
+                      </div>
+                      { v.description.length == 0 ? '' :
+                        <Fragment key={"desc" + v.uid}>
+                          <div className="pickVariantRadio variantDescription">
+                          </div>
+                          <div className="pickVariantLabel variantDescription">
+                            <span>{v.description}</span>
+                          </div>
+                        </Fragment>
+                      }
+                    </Fragment>)
                   }
                 </div>
               </div>

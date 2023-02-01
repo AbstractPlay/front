@@ -698,13 +698,21 @@ th .player {
 }
 
 .pickVariantVariant {
-  padding-left: 1rem;
+  display: grid;
+  grid-template-columns: 1.5em 1fr;
+}
+
+.variantDescription {
+  font-size: 75%;
 }
 
 .pickOneOfColors, .pickOneOfColorsLevel, .pickAnnotation, .chooseAnnotationLevel {
   padding-left: 1rem;
 }
 
+.userSettingsBtn {
+  font-size: 120%;
+}
 .userSettingsLabelDiv {
   display: block;
   width: 30%;
@@ -714,6 +722,10 @@ th .player {
 .userSettingsInputDiv {
   display: block;
   width: 50%;
+}
+
+.userSettingsInfo {
+  font-size: 75%;
 }
 
 .userSettingsButtonDiv {

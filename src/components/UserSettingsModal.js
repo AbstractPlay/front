@@ -17,6 +17,8 @@ function UserSettingsModal(props) {
   const [changingCodeSent, changingCodeSentSetter] = useState(false);
   const [changingLanguage, changingLanguageSetter] = useState(false);
   const [name, nameSetter] = useState('');
+  const [badname, badnameSetter] = useState('');
+  const [nameError, nameErrorSetter] = useState(false);
   const [email, emailSetter] = useState('');
   const [emailCode, emailCodeSetter] = useState('');
   const [language, languageSetter] = useState('');
@@ -52,7 +54,9 @@ function UserSettingsModal(props) {
 
   const handleNameChangeSubmitClick = async () => {
     if (users.find(u => u === name)) {
-      nameSetter(`${name} is not available`);
+      badnameSetter(name);
+      nameSetter('');
+      nameErrorSetter(true);
     } else {
       changingNameSetter(false);
       await handleSettingChangeSubmit("name", name);
@@ -162,7 +166,7 @@ function UserSettingsModal(props) {
         <div className="userSettingsInputDiv">
           { mySettings === null ? <Spinner/> :
             changingName ?
-              <input name="name" id="user_settings_name" type="text" value={name} onChange={(e) => nameSetter(e.target.value)} />
+              <input name="name" id="user_settings_name" type="text" value={name} onChange={(e) => { nameErrorSetter(false); nameSetter(e.target.value)}} />
               : mySettings.name
           }
         </div>
@@ -173,6 +177,15 @@ function UserSettingsModal(props) {
             : <button className="apButton inlineButton" onClick={handleNameChangeClick}>{t("Change")}</button>
           }
         </div>
+        { mySettings === null || !changingName ? '' :
+        <Fragment>
+          <div className="userSettingsLabelDiv"/>
+          <div className={"userSettingsInputDiv " + (nameError ? "error" : "userSettingsInfo")}>
+            {nameError ? t("DisplayNameError", {name: badname}) : t("DisplayNameChange")}
+          </div>
+          <div className="userSettingsButtonDiv"/>
+        </Fragment>
+        }
         {/********************* e-mail *********************/}
         <div className="userSettingsLabelDiv">
           <label className="userSettingsLabel" htmlFor="user_settings_email" >{t("EMail")}:</label>
