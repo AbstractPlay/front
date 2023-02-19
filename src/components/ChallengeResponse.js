@@ -24,12 +24,9 @@ function ChallengeResponse(props) {
       seating = t('seatingMeSecond');
   }
   var desc = "";
-  if (challenge.variants !== null && challenge.variants.length > 1)
-    desc = t("ChallengeResponseDescVars", {opp: challenge.challenger.name, game: game.name, variants: challenge.variants.join(', ')});
-  else if (challenge.variants !== null && challenge.variants.length > 0)
-    desc = t("ChallengeResponseDescVars1", {opp: challenge.challenger.name, game: game.name, variants: challenge.variants.join(', ')});
-  else
-    desc = t("ChallengeResponseDescNoVars", {opp: challenge.challenger.name, game: game.name});
+  const numVariants = challenge.variants === undefined ? 0 : challenge.variants.length;
+  const variants = numVariants > 0 ? challenge.variants.join(', ') : null;
+  desc = t("ChallengeResponseDesc", {opp: challenge.challenger.name, game: game.name}) + t('WithVariants', {count: numVariants, context: `${numVariants}`, variants: variants});
   var notes = '';
   if (challenge.notes !== undefined && challenge.notes.length > 0)
     notes = t('ChallengerNotes') + <p>challenge.notes</p>;
@@ -38,7 +35,7 @@ function ChallengeResponse(props) {
     <div>
       <label>{t('ChallengeDetails')}</label>
       <div>
-        <div>{desc}.</div>
+        <div>{desc}</div>
         <div>{ challenge.numPlayers === 2 ? t('NumChallenge2') + " " + seating : t('NumChallenge', {num: challenge.numPlayers, players: allPlayers})}</div>
         <div>{t('ChallengeClock', {start: challenge.clockStart, inc: challenge.clockInc, max: challenge.clockMax})}</div>
         <div>{challenge.clockHard ? t('HardTime') : t('SoftTime')}</div>

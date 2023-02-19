@@ -64,6 +64,11 @@ function UserSettingsModal(props) {
     }
   } 
 
+  const logout = async () => {
+    Auth.signOut();
+    updatedSetter(updated + 1);
+  }
+
   const handleLanguageChangeSubmitClick = async () => {
     changingLanguageSetter(false);
     await handleSettingChangeSubmit("language", language);
@@ -255,7 +260,7 @@ function UserSettingsModal(props) {
         <div className="userSettingsInputDiv">
         </div>
         <div className="userSettingsButtonDiv">
-          <button className="apButton inlineButton" onClick={() => Auth.signOut()} id="logout-button">{t('LogOut')}</button>
+          <button className="apButton inlineButton" onClick={logout} id="logout-button">{t('LogOut')}</button>
         </div>
       </div>
     </Modal>

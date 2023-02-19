@@ -1,13 +1,16 @@
 :root {
   --main-bg-color: white;
   --main-fg-color: #1a3e6f;
+  --main-fg-color-lighter: #c3d6f1;
   --bg-color2: #999999;
   --secondary-color-1:#ff6633;
   --secondary-color-1-lighter: #ff8962;
+  --secondary-color-1-bg: #ffe8e0;
   --secondary-color-2:#99cccc;
-  --secondary-color-2-lighter:#99cccc;
+  --secondary-color-2-lighter:#e6f2f2;
   --secondary-color-3:#008ca8;
   --secondary-color-3-lighter:#009fbf;
+  --secondary-color-3-bg: #eefcff;
 }
 
 body {

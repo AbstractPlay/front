@@ -14,6 +14,10 @@ a:active {
   text-decoration: underline;
 }
 
+.metaGame a:link {
+    text-decoration: underline;
+}
+
 .apHeader {
   display: flex;
   justify-content: space-between;
@@ -405,6 +409,33 @@ a:hover, .aboutText a {
 
 .moveResultsTable {
   margin-top: 1em;
+}
+
+.standingChallengesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.standingChallengesTable {
+  border-collapse: collapse;
+}
+
+.standingChallengesTable th {
+  border: 1px solid var(--main-fg-color-lighter);
+  text-align: left;
+  padding: 8px;
+  background-color: var(--secondary-color-1-bg)
+}
+
+.standingChallengesTable td {
+  border: 1px solid var(--main-fg-color-lighter);
+  text-align: left;
+  padding: 8px;
+}
+
+.standingChallengesTable tr:nth-child(even) {
+  background-color: var(--secondary-color-3-bg)
 }
 
 .columnTitleContainer {
@@ -818,4 +849,9 @@ div.radios label {
 
 .genericStatusKey {
   text-align: right;
+}
+
+.challengeli {
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
 }

@@ -10,6 +10,7 @@ import GameMove from '../components/GameMove';
 import logo from '../assets/AbstractPlayLogo.svg';
 import MetaContainer from "../components/MetaContainer";
 import About from "../components/About";
+import StandingChallenges from "../components/StandingChallenges";
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -93,6 +94,9 @@ function Bones(props) {
                 </Route>
                 <Route path="/games">
                   <MetaContainer token={token}/>
+                </Route>
+                <Route path="/challenges">
+                  <StandingChallenges />
                 </Route>
                 <Route path="/move">
                   <GameMove update={update} />

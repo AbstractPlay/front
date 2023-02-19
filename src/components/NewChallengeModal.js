@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import Spinner from './Spinner';
+import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_OPEN } from '../config';
 import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
 import Modal from './Modal';
@@ -21,9 +22,11 @@ function NewChallengeModal(props) {
   const [clockInc, clockIncSetter] = useState(24);
   const [clockMax, clockMaxSetter] = useState(240);
   const [clockHard, clockHardSetter] = useState(false);
+  const [rated, ratedSetter] = useState(true); // Rated game or not.
+  const [standing, standigSetter] = useState(false); // Standing challenge or not.
   const [opponents, opponentsSetter] = useState([]);
+  const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const groupVariantsRef = useRef({});
-  const nonGroupVariantsRef = useRef({})
 
   useEffect(() => {
     addResource(i18n.language);
@@ -36,7 +39,6 @@ function NewChallengeModal(props) {
         url.searchParams.append('query', 'user_names');
         const res = await fetch(url);
         const result = await res.json();
-        console.log(result);
         usersSetter(result);
       }
       catch (error) {
@@ -48,7 +50,7 @@ function NewChallengeModal(props) {
 
   useEffect(() => {
     groupVariantsRef.current = {};
-    nonGroupVariantsRef.current = {};
+    nonGroupVariantsSetter({});
     metaGameSetter(null);
     playerCountSetter(-1);
     opponentsSetter([]);
@@ -59,21 +61,19 @@ function NewChallengeModal(props) {
     clockHardSetter(false);
   },[show]);
 
-  useEffect(() => {
-    if (playerCount === 2) {
+  const setPlayerCount = (cnt) => {
+    playerCountSetter(cnt);
+    if (cnt === 2) 
       seatingSetter('');
-      opponentsSetter(['']);
-    }
     else
       seatingSetter('random');
-    if (playerCount !== -1) {
-      opponentsSetter(Array(playerCount - 1).fill(''));
+    if (cnt !== -1) {
+      opponentsSetter(Array(cnt - 1).fill(''));
     }
-  }, [playerCount]);
+  }
 
   const handleChangeGame = (game) => {
     groupVariantsRef.current = {};
-    nonGroupVariantsRef.current = {};
     if (game === "") {
       metaGameSetter(null);
     } else {
@@ -86,10 +86,12 @@ function NewChallengeModal(props) {
         gameEngine = GameFactory(info.uid);
       }
       allvariantsSetter(gameEngine.allvariants());
+      let ngVariants = {};
+      gameEngine.allvariants().filter(v => v.group === undefined).forEach(v => ngVariants[v.uid] = false);
+      nonGroupVariantsSetter(ngVariants);
       const playercounts = info.playercounts;
       if (playercounts.length === 1) {
-        playerCountSetter(playercounts[0]);
-        opponentsSetter(Array(playercounts[0] - 1).fill(''));
+        setPlayerCount(playercounts[0]);
       } else {
         playerCountSetter(-1);
         opponentsSetter([]);
@@ -100,7 +102,7 @@ function NewChallengeModal(props) {
   }
 
   const handleChangePlayerCount = (cnt) => {
-    playerCountSetter(parseInt(cnt));
+    setPlayerCount(parseInt(cnt));
     errorSetter("");
   }
 
@@ -109,8 +111,11 @@ function NewChallengeModal(props) {
     errorSetter("");
   }
 
+  const handleStandingChallengeChange = (event) => {
+    standigSetter(!standing);
+  }
+
   const handleChangeOpponent = (data) => {
-    console.log(data);
     let opps = [...opponents];
     opps[data.player] = {"id": data.id, "name": data.name};
     opponentsSetter(opps);
@@ -118,11 +123,15 @@ function NewChallengeModal(props) {
   }
 
   const handleGroupChange = (group, variant) => {
+    // Ref gets updated, so no rerender. The radio buttons aren't "controlled"
     groupVariantsRef.current[group] = variant;
   }
 
-  const handleNonGroupChange = (variant, flag) => {
-    nonGroupVariantsRef.current[variant] = flag;
+  const handleNonGroupChange = (event) => {
+    // State get updated, so rerender. The checkboxes are controlled.
+    let ngVariants = cloneDeep(nonGroupVariants);
+    ngVariants[event.target.id] = !ngVariants[event.target.id];
+    nonGroupVariantsSetter(ngVariants);
   }
 
   const isNonNegativeInteger = (str, field) => {
@@ -162,7 +171,12 @@ function NewChallengeModal(props) {
   }
 
   const handleClockHardChange = (event) => {
-    clockHardSetter(event.target.checked);
+    clockHardSetter(!clockHard);
+  }
+
+  const handleRatedChange = (event) => {
+    // ratedSetter(event.target.checked);
+    ratedSetter(!rated);
   }
 
   const handleChallenge = () => {
@@ -178,31 +192,45 @@ function NewChallengeModal(props) {
       errorSetter(t("SelectSeating"));
       return;
     }
-    let ok = true;
-    opponents.forEach(o => {
-      if (o === '') {
-        if (opponents.length === 1)
-          errorSetter(t("SelectAnOpponent"));
-        else
-          errorSetter(t("SelectOpponents", {"count": opponents.length}));
-        ok = false;
+    if (!standing) {
+      let ok = true;
+      opponents.forEach(o => {
+        if (o === '') {
+          if (opponents.length === 1)
+            errorSetter(t("SelectAnOpponent"));
+          else
+            errorSetter(t("SelectOpponents", {"count": opponents.length}));
+          ok = false;
+          return;
+        }
+      });
+      if (!ok)
         return;
-      }
-     });
-    if (!ok)
-     return;
+    }
     let variants = [];
     for (var group of Object.keys(groupVariantsRef.current)) {
-      if (groupVariantsRef.current[group] !== null) {
+      if (groupVariantsRef.current[group] !== null && groupVariantsRef.current[group] !== '') {
         variants.push(groupVariantsRef.current[group]);
       }
     }
-    for (var variant of Object.keys(nonGroupVariantsRef.current)) {
-      if (nonGroupVariantsRef.current[variant]) {
+    for (var variant of Object.keys(nonGroupVariants)) {
+      if (nonGroupVariants[variant]) {
         variants.push(variant)
       }
     }
-    handleNewChallenge({"metaGame": metaGame, "numPlayers": playerCount, "seating": seating, "variants": variants, "opponents": opponents, "clockStart": clockStart, "clockInc": clockInc, "clockMax": clockMax, "clockHard": clockHard});
+    handleNewChallenge({
+      "metaGame": metaGame,
+      "numPlayers": playerCount,
+      "standing": standing,
+      "seating": seating,
+      "variants": variants,
+      "opponents": opponents,
+      "clockStart": clockStart,
+      "clockInc": clockInc,
+      "clockMax": clockMax,
+      "clockHard": clockHard,
+      "rated": rated
+    });
   }
 
   let games = [];
@@ -220,9 +248,10 @@ function NewChallengeModal(props) {
     }
     playercounts = info.playercounts;
   }
-
-  console.log('opponents', opponents);
-
+  if (!(metaGame === null || nonGroupData.length === 0)) {
+    console.log("nonGroupData", nonGroupData);
+    console.log(nonGroupVariants);
+  }
   return (
     <Modal show={show} title={t('NewChallenge')}
       buttons={[{label: t('Challenge'), action: handleChallenge}, {label: t('Close'), action: handleNewChallengeClose}]}>
@@ -235,6 +264,7 @@ function NewChallengeModal(props) {
         </div>
         <div className="newChallengeInputDiv">
           { games === null ? <Spinner/> :
+            /* Select meta game */
             <select value={metaGame ? metaGame : ''} name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
               <option value="">--{t('Select')}--</option>
               { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
@@ -242,39 +272,50 @@ function NewChallengeModal(props) {
           }
         </div>
         { metaGame === null ? '' :
-          <div className="newChallengeLabelDiv">
-            <label className="newChallengeLabel" htmlFor="num_players_for_challenge" >{t("NumPlayers")}</label>
-          </div>
-        }
-        { metaGame === null ? '' :
-          <div className="newChallengeInputDiv">
-              { playercounts.length === 1 ? playercounts[0] :
-                <select value={playerCount} name="playercount" id="num_players_for_challenge" onChange={(e) => handleChangePlayerCount(e.target.value)}>
-                  <option value="">--{t('Select')}--</option>
-                  { playercounts.map(cnt => { return <option key={cnt} value={cnt}>{cnt}</option>}) }
-                </select>
-              }
-          </div>
-        }
-        { metaGame === null || playerCount === -1 ? '' :
-          <div className="newChallengeLabelDiv">
-            <label className="newChallengeLabel" htmlFor="seating_for_challenge" >{t('Seating')}</label>
-          </div>
+          /* Number of players */          
+          <Fragment>
+            <div className="newChallengeLabelDiv">
+              <label className="newChallengeLabel" htmlFor="num_players_for_challenge" >{t("NumPlayers")}</label>
+            </div>
+            <div className="newChallengeInputDiv">
+                { playercounts.length === 1 ? playercounts[0] :
+                  <select value={playerCount} name="playercount" id="num_players_for_challenge" onChange={(e) => handleChangePlayerCount(e.target.value)}>
+                    <option value="">--{t('Select')}--</option>
+                    { playercounts.map(cnt => { return <option key={cnt} value={cnt}>{cnt}</option>}) }
+                  </select>
+                }
+            </div>
+          </Fragment>
         }
         { metaGame === null || playerCount === -1 ? '' :
-          <div className="newChallengeInputDiv">
-              { playerCount !== 2 ? t('SeatingRandom') :
-                <select value={seating} name="playercount" id="seating_for_challenge" onChange={(e) => handleChangeSeating(e.target.value)}>
-                  <option key="s0" value="">--{t('Select')}--</option>
-                  <option key="s1" value="random">{t('SeatingRandom')}</option>
-                  <option key="s2" value="s1">{t('Seating1')}</option>
-                  <option key="s3" value="s2">{t('Seating2')}</option>
-                </select>
-              }
-          </div>
+          <Fragment>
+            {/* Seating */}
+            <div className="newChallengeLabelDiv">
+              <label className="newChallengeLabel" htmlFor="seating_for_challenge" >{t('Seating')}</label>
+            </div>
+            <div className="newChallengeInputDiv">
+                { playerCount !== 2 ? t('SeatingRandom') :
+                  <select value={seating} name="playercount" id="seating_for_challenge" onChange={(e) => handleChangeSeating(e.target.value)}>
+                    <option key="s0" value="">--{t('Select')}--</option>
+                    <option key="s1" value="random">{t('SeatingRandom')}</option>
+                    <option key="s2" value="s1">{t('Seating1')}</option>
+                    <option key="s3" value="s2">{t('Seating2')}</option>
+                  </select>
+                }
+            </div>
+            {/* Standing Challenge */}
+            <div className="newChallengeLabelDiv">
+              <label className="newChallengeLabel" htmlFor="standing_challenge" >{t('StandingChallengeLabel')}</label>
+            </div>
+            <div className="newChallengeInputDiv">
+              <input type="checkbox" checked={standing} id="standing_challenge" onChange={handleStandingChallengeChange} />
+              <label>{standing ? t('StandingChallenge') : t('StandardChallenge')}</label>
+            </div>
+          </Fragment>
         }
-        { playerCount === -1 ? ''
-          : opponents.map((o, i) => { console.log(o, i); return (
+        { playerCount === -1 || standing ? ''
+          /* Opponents */
+          : opponents.map((o, i) => { return (
             <Fragment key={i}>
               <div className="newChallengeLabelDiv">
                 <label className="newChallengeLabel" htmlFor={"user_for_challenge" + i}>{playerCount === 2 ? t("ChooseOpponent") : t("ChooseOpponent", i)}</label>
@@ -316,7 +357,7 @@ function NewChallengeModal(props) {
                             {v.name} 
                           </label>
                         </div>
-                        { v.description.length == 0 ? '' :
+                        { v.description === undefined || v.description.length == 0 ? '' :
                           <Fragment key={"desc" + v.uid}>
                             <div className="pickVariantRadio variantDescription">
                             </div>
@@ -336,17 +377,17 @@ function NewChallengeModal(props) {
               <div className="pickVariant">
                 <legend>{t("PickAnyVariant")}</legend>
                 <div className="pickVariantVariant">
-                  { nonGroupData.map(v =>
+                  { nonGroupData.map(v => 
                     <Fragment key={v.uid}>
                       <div key={v.uid}>
-                        <input type="checkbox" id={v.uid} value={v.uid} onChange={(e) => handleNonGroupChange(e.target.value, e.target.checked)} />
+                        <input type="checkbox" id={v.uid} checked={nonGroupVariants[v.uid]} onChange={handleNonGroupChange} />
                       </div>
                       <div>
                         <label htmlFor={v.uid}>
                           {v.name}
                         </label>
                       </div>
-                      { v.description.length == 0 ? '' :
+                      { v.description === undefined || v.description.length == 0 ? '' :
                         <Fragment key={"desc" + v.uid}>
                           <div className="pickVariantRadio variantDescription">
                           </div>
@@ -388,10 +429,16 @@ function NewChallengeModal(props) {
             <label className="newChallengeLabel" htmlFor="clock_hard">{t("ChooseClockHard")}</label>
           </div>
           <div className="newChallengeInputDiv">
-            <input type="checkbox" id="clock_hard" value={clockHard} onChange={handleClockHardChange} />
-            <span className="challengeHelp">{t("HelpClockHard")}</span>
+            <input type="checkbox" id="clock_hard" checked={clockHard} onChange={handleClockHardChange} />
+            <span className="challengeHelp">{clockHard ? t("HelpClockHard") : t("HelpClockSoft")}</span>
           </div>
-
+          <div className="newChallengeLabelDiv">
+            <label className="newChallengeLabel" htmlFor="rated">{t("ChooseRated")}</label>
+          </div>
+          <div className="newChallengeInputDiv">
+            <input type="checkbox" id="rated" checked={rated} onChange={handleRatedChange} />
+            <span className="challengeHelp">{ rated ? t("HelpRated") : t("HelpUnRated")}</span>
+          </div>
       </div>
       <div className="error">
         {error}

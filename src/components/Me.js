@@ -77,8 +77,9 @@ function Me(props) {
   const handleChallengeRevoke = async () => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
+    if (myid !== challenge.challenger.id)
+      return handleChallengeResponse(false);
     try {
-      console.log("calling authQuery query = challenge_revoke with token: " + token);
       const res = await fetch(API_ENDPOINT_AUTH, {
         method: 'POST',
         headers: {
@@ -89,7 +90,9 @@ function Me(props) {
         body: JSON.stringify({
           "query": "challenge_revoke",
           "pars": {
-            "id": challenge.id
+            "id": challenge.id,
+            "standing": challenge.standing === true,
+            "metaGame": challenge.metaGame
           }
         }),
       });
@@ -126,6 +129,8 @@ function Me(props) {
           "query": "challenge_response",
           "pars" : {
             "id": challenge.id,
+            "standing": challenge.standing === true,
+            "metaGame": challenge.metaGame,
             "response": resp
           }
         }),
@@ -135,6 +140,7 @@ function Me(props) {
         console.log("handleChallengeResponse", result.statusCode);
         errorSetter(JSON.parse(result.body));
       } else {
+        showChallengeViewModalSetter(false);
         showChallengeResponseModalSetter(false);
         varsSetter(challenge.id);
       }
@@ -165,6 +171,27 @@ function Me(props) {
         });
       showNewChallengeModalSetter(false);
       varsSetter({ dummy: myid });
+    }
+    catch (error) {
+      errorSetter(error);
+    }
+  }
+
+  const handleUpdateMetaGameCountsClick = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      await fetch(API_ENDPOINT_AUTH, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
+        },
+        body: JSON.stringify({
+          "query": "update_meta_game_counts",
+          "pars" : {
+          }})
+        });
     }
     catch (error) {
       errorSetter(error);
@@ -221,6 +248,10 @@ function Me(props) {
       console.log(`changed language  to ${lng}`);
     }
     let challengesResponded = me.challengesIssued.concat(me.challengesAccepted);
+    console.log("challengesIssued", me.challengesIssued);
+    console.log("challengesAccepted", me.challengesAccepted)
+    console.log("standingChallenges", me.standingChallenges);
+    console.log("challengesReceived", me.challengesReceived);
     return (
       <div className="main">
         <nav>
@@ -233,6 +264,7 @@ function Me(props) {
               <div className="dashboardContainer2">
                 <h1 className="centered">{t('WelcomePlayer', {me: me.name})}</h1>
                 <div className="groupLevel1">
+                  {/* Your Games */}
                   <div className="groupLevel1Header"><span>{t('YourGames')}</span></div>
                   <div className="groupLevel2">
                     <div className="groupLevel2Header"><span>{t('YourMove')}</span></div>
@@ -257,6 +289,7 @@ function Me(props) {
                 </div>
                 <div className="groupLevel1">
                   <div className="groupLevel1Header"><span>{t('YourChallenges')}</span></div>
+                  {/* Your Challenges */}
                   <div className="groupLevel2">
                     <div className="groupLevel2Header"><span>{t('ChallengeResponse')}</span></div>
                     { me.challengesReceived.length === 0
@@ -288,10 +321,32 @@ function Me(props) {
                     }
                   </div>
                   <div className="groupLevel2">
+                    <div className="groupLevel2Header"><span>{t('StandingChallenges2')}</span></div>
+                    { me.standingChallenges.length === 0
+                      ? <span className="listComment">{t('NoStandingChallenges')}</span>
+                      : <ul>
+                          { me.standingChallenges.map(item =>
+                          <ChallengeItem me={me.id} item={item} key={item.id} respond={false}
+                            setters={{
+                              challengeSetter: challengeSetter,
+                              showChallengeViewModalSetter: showChallengeViewModalSetter,
+                              showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>) 
+                          }
+                        </ul>
+                    }
+                  </div>
+                  <div className="groupLevel2">
                     <div className="groupLevel2Header"><span>{t('NewChallenge')}</span></div>
                     <span className="listComment"><button className="apButton" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</button></span>                
                   </div>
                 </div>
+                { me.admin !== true ? '' :
+                  <div className="groupLevel1">
+                    <div className="groupLevel1Header"><span>Administration</span></div>
+                    {/* Admin functionality */}
+                    <button className="apButton" onClick={() => handleUpdateMetaGameCountsClick()}>Update meta game counts</button>
+                  </div>
+                }
               </div>
             </div>
           </div>

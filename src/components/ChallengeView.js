@@ -8,23 +8,17 @@ function ChallengeView(props) {
   const challenge = props.challenge;
   const game = gameinfo.get(challenge.metaGame);
   const amChallenger = props.me === challenge.challenger.id;
-  const hasVariants = (challenge.variants !== undefined && challenge.variants.length > 0);
-  const variants = hasVariants ? challenge.variants.join(', ') : null;
+  const numVariants = challenge.variants === undefined ? 0 : challenge.variants.length;
+  const variants = numVariants > 0 ? challenge.variants.join(', ') : null;
   var challengeDesc = '';
   var players = '';
   const otherplayers = challenge.players.filter(item => !amChallenger || item.id !== challenge.challenger.id).map(item => item.name);
   var seating = t('seatingRandom');
   if (challenge.numPlayers > 2) {
     if (amChallenger) {
-      if (hasVariants)
-        challengeDesc = t('ChallengeDescriptionVariants', {game: game.name, variants: variants});
-      else
-        challengeDesc = t('ChallengeDescriptionNoVariants', {game: game.name});
+      challengeDesc = t('ChallengeDescription', {game: game.name}) + t('WithVariants', {count: numVariants, context: `${numVariants}`, variants: variants});
     } else {
-      if (hasVariants)
-        challengeDesc = t('ChallengeDescriptionVariantsAccepter', {challenger: challenge.challenger.name, game: game.name, variants: variants});
-      else
-        challengeDesc = t('ChallengeDescriptionNoVariantsAccepter', {challenger: challenge.challenger.name, game: game.name});
+      challengeDesc = t('ChallengeDescriptionAccepter', {challenger: challenge.challenger.name, game: game.name}) + t('WithVariants', {count: numVariants, context: `${numVariants}`, variants: variants});
     }
     if (otherplayers.length === 0) {
       players = t('NoOtherPlayersAccepted');
@@ -37,17 +31,18 @@ function ChallengeView(props) {
   }
   else {
     // two player game
-    if (hasVariants)
-      challengeDesc = t('TwoPlayersChallengeDescriptionVariants', {other: challenge.challengees[0].name, game: game.name, variants: variants});
-    else
-      challengeDesc = t('TwoPlayersChallengeDescriptionNoVariants', {other: challenge.challengees[0].name, game: game.name});
+    if (challenge.standing) {
+      challengeDesc = t('StandingChallengeDescription', {game: game.name}) + t('WithVariants', {count: numVariants, context: `${numVariants}`, variants: variants});
+    } else {
+      challengeDesc = t('TwoPlayersChallengeDescription', {other: challenge.challengees[0].name, game: game.name}) + t('WithVariants', {count: numVariants, context: `${numVariants}`, variants: variants});
+    }
     players = '';
     if (challenge.seating === "s1")
       seating = t('seatingMeFirst');
     else if (challenge.seating === "s2")
       seating = t('seatingMeSecond');
   }
-  const all = challenge.players.map(item => item.name).concat(challenge.challengees.map(item => item.name));
+  const all = challenge.players.map(item => item.name).concat(challenge.standing ? [] : challenge.challengees.map(item => item.name));
   const allPlayers = all.slice(0,-1).join(', ') + ' ' + t('and') + ' ' + all[all.length-1];
   var notes = '';
   if (challenge.notes !== undefined && challenge.notes.length > 0)
@@ -55,9 +50,11 @@ function ChallengeView(props) {
   return (
     <div>
       <div>{challengeDesc}</div>
-      <div>{challenge.numPlayers === 2 ? t('NumChallenge2') + ' ' + seating : t('NumChallenge', {num: challenge.numPlayers, players: allPlayers})}</div>
+      <div>{challenge.numPlayers === 2 ? t('NumChallenge2') + ' ' + seating : 
+        challenge.standing === true ? t('NumStandingChallenge', {num: challenge.numPlayers}) : t('NumChallenge', {num: challenge.numPlayers, players: allPlayers})}</div>
       <div>{t('ChallengeClock', {start: challenge.clockStart, inc: challenge.clockInc, max: challenge.clockMax})}</div>
       <div>{challenge.clockHard ? t('HardTime') : t('SoftTime')}</div>
+      <div>{challenge.rated ? t('RatedGame') : t('UnratedGame')}</div>
       <div>{players}</div>
       <div>{notes}</div>
     </div>

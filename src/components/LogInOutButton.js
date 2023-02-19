@@ -41,7 +41,6 @@ function LogInOutButton(props) {
         <button className="fabtn align-right userSettingsBtn" onClick={handleSettingsClick}>
           <i className="fa fa-cog"></i>
         </button>
-        { /* handleLanguageChange={handleLanguageChange} handleEMailChange={handleEMailChange} */}
         <UserSettingsModal show={showUserSettingsModal} handleClose={handleUserSettingsClose} />
       </div>);
   }
