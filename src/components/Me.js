@@ -198,11 +198,51 @@ function Me(props) {
     }
   }
 
+  const handleTestAsyncClick = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log("Posting test_async");
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
+        },
+        body: JSON.stringify({
+          "query": "test_async",
+          "pars" : {
+            "N": 1600000000
+          }})
+        });
+      const result = await res.json();
+      console.log("test_async returned:");
+      console.log(JSON.parse(result.body));
+    }
+    catch (error) {
+      errorSetter(error);
+    }
+  }
+
   if (error) {
     return <div><p>{t('Error')}</p><p>{error.message}</p></div>;
   }
   if (!me) {
-    return <Spinner />;
+    return (
+      <div className="main">
+        <nav>
+          <div><Link to="/about">{t('About')}</Link></div>
+          <div><Link to="/games">{t('Games')}</Link></div>
+        </nav>
+        <article>
+          <div className="article">
+            <div className="dashboardContainer1">
+              <Spinner />
+            </div>
+          </div>
+        </article>
+      </div>
+    );  
   }
   if (me.name === undefined) {
     return <NewProfile show={true} varsSetter={varsSetter} />;
@@ -345,6 +385,7 @@ function Me(props) {
                     <div className="groupLevel1Header"><span>Administration</span></div>
                     {/* Admin functionality */}
                     <button className="apButton" onClick={() => handleUpdateMetaGameCountsClick()}>Update meta game counts</button>
+                    <button className="apButton" onClick={() => handleTestAsyncClick()}>Test async</button>
                   </div>
                 }
               </div>

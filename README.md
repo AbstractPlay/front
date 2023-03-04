@@ -30,5 +30,5 @@ The [main website](https://www.abstractplay.com) houses the development blog and
   - Make sure serverless is installed: `npm install -g serverless`
   - For the very first deployment (in order to set up the S3 bucket and the CloudFront distribution), run `serverless deploy` and 
     `serverless --stage prod deploy`
-  - Now find the distribution ids (e.g. through the AWS console > CloudFront) and copy to the invaldate and invalidate-prod npm scripts in package.json.
-  - Run `npm run full-dev` (or `full-prod` if you want it minified; bundles everything for the browser into the `./dist` folder)
+  - Now find the distribution ids (e.g. through the AWS console > CloudFront) and copy to the invalidate and invalidate-prod npm scripts in package.json.
+  - Now you should deploy with `npm run full-dev` (or `full-prod`).

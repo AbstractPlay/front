@@ -45,7 +45,8 @@ function NewChallengeModal(props) {
         errorSetter(error);
       }
     }
-    fetchData();
+    if (show && users === null) 
+      fetchData();
   },[]);
 
   useEffect(() => {
@@ -224,7 +225,7 @@ function NewChallengeModal(props) {
       "standing": standing,
       "seating": seating,
       "variants": variants,
-      "opponents": opponents,
+      "challengees": opponents,
       "clockStart": clockStart,
       "clockInc": clockInc,
       "clockMax": clockMax,
