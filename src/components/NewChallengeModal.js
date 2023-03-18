@@ -45,9 +45,13 @@ function NewChallengeModal(props) {
         errorSetter(error);
       }
     }
-    if (show && users === null) 
+    if (show && users === null) {
+      console.log("Fetching users")
       fetchData();
-  },[]);
+    } else {
+      console.log("NOT Fetching users")
+    }
+  },[show]);
 
   useEffect(() => {
     groupVariantsRef.current = {};
@@ -64,10 +68,13 @@ function NewChallengeModal(props) {
 
   const setPlayerCount = (cnt) => {
     playerCountSetter(cnt);
-    if (cnt === 2) 
+    if (cnt === 2) {
       seatingSetter('');
-    else
+      ratedSetter(true);
+    } else {
       seatingSetter('random');
+      ratedSetter(false);
+    }
     if (cnt !== -1) {
       opponentsSetter(Array(cnt - 1).fill(''));
     }
@@ -88,7 +95,8 @@ function NewChallengeModal(props) {
       }
       allvariantsSetter(gameEngine.allvariants());
       let ngVariants = {};
-      gameEngine.allvariants().filter(v => v.group === undefined).forEach(v => ngVariants[v.uid] = false);
+      if (gameEngine.allvariants())
+        gameEngine.allvariants().filter(v => v.group === undefined).forEach(v => ngVariants[v.uid] = false);
       nonGroupVariantsSetter(ngVariants);
       const playercounts = info.playercounts;
       if (playercounts.length === 1) {
@@ -433,13 +441,17 @@ function NewChallengeModal(props) {
             <input type="checkbox" id="clock_hard" checked={clockHard} onChange={handleClockHardChange} />
             <span className="challengeHelp">{clockHard ? t("HelpClockHard") : t("HelpClockSoft")}</span>
           </div>
-          <div className="newChallengeLabelDiv">
-            <label className="newChallengeLabel" htmlFor="rated">{t("ChooseRated")}</label>
-          </div>
-          <div className="newChallengeInputDiv">
-            <input type="checkbox" id="rated" checked={rated} onChange={handleRatedChange} />
-            <span className="challengeHelp">{ rated ? t("HelpRated") : t("HelpUnRated")}</span>
-          </div>
+          { playerCount !== 2 ? null :
+            <Fragment>
+              <div className="newChallengeLabelDiv">
+                <label className="newChallengeLabel" htmlFor="rated">{t("ChooseRated")}</label>
+              </div>
+              <div className="newChallengeInputDiv">
+                <input type="checkbox" id="rated" checked={rated} onChange={handleRatedChange} />
+                <span className="challengeHelp">{ rated ? t("HelpRated") : t("HelpUnRated")}</span>
+              </div>
+            </Fragment>
+          }
       </div>
       <div className="error">
         {error}

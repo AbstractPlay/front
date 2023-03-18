@@ -43,15 +43,21 @@ const MetaItem = React.forwardRef((props, ref) => {
         <div>
           { counts === undefined ? '' :
             <Fragment>
-              <span>
-                {
-                  "Number of "
-                  + (counts.currentgames === 0 ? "current games: 0" : `current games: ${counts.currentgames}`)
-                  + ", "
-                  + (counts.completedgames === 0 ? "completed games: 0" : `completed games: ${counts.completedgames}`)
-                  + ", and "
-                }
-              </span>
+              <span>Number of </span>
+              {counts.currentgames === 0 ? <span>current games: 0</span> :
+                <span>
+                  <Link to={{pathname: "/listgames", state: {"metaGame": game.uid, "type": "current" }}}>current games</Link> 
+                  {`: ${counts.currentgames}`}
+                </span>
+              }
+              <span>, </span>
+              {counts.completedgames === 0 ? <span>completed games: 0</span> :
+                <span>
+                  <Link to={{pathname: "/listgames", state: {"metaGame": game.uid, "type": "completed" }}}>completed games</Link>
+                  {`: ${counts.completedgames}`}
+                </span>
+              }
+              <span>, </span>
               {counts.standingchallenges === 0 ? <span>standing challenges: 0</span> : 
                 <span>
                   <Link to={{pathname: "/challenges", state: {"metaGame": game.uid }}}>standing challenges</Link>

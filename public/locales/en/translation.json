@@ -200,5 +200,11 @@
     "Yes": "Yes",
     "No": "No",
     "Accepted": "Accepted!",
-    "Revoke": "Revoke"
+    "Revoke": "Revoke",
+    "tblHeaderGameNumber": "Game number",
+    "tblHeaderStarted": "Game started",
+    "tblHeaderFinished": "Game ended",
+    "tblHeaderPlayer": "Player {{num}}",
+    "CurrentGamesList": "Current {{name}} Games",
+    "CompletedGamesList": "Completed {{name}} Games"
 }

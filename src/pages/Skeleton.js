@@ -11,6 +11,7 @@ import logo from '../assets/AbstractPlayLogo.svg';
 import MetaContainer from "../components/MetaContainer";
 import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
+import ListGames from "../components/ListGames";
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -97,6 +98,9 @@ function Bones(props) {
                 </Route>
                 <Route path="/challenges">
                   <StandingChallenges />
+                </Route>
+                <Route path="/listgames">
+                  <ListGames />
                 </Route>
                 <Route path="/move">
                   <GameMove update={update} />
