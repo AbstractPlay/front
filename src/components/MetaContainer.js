@@ -21,10 +21,15 @@ function MetaContainer(props) {
 
   useEffect(() => {
     async function fetchAuth() {
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
-      if (token !== null)
-        loggedinSetter(true);
+      try {
+        const usr = await Auth.currentAuthenticatedUser();
+        const token = usr.signInUserSession.idToken.jwtToken;
+        if (token !== null)
+          loggedinSetter(true);
+      }
+      catch (error) {
+        loggedinSetter(false);
+      }
     }
     fetchAuth();
   },[]);

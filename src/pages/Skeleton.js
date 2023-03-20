@@ -100,7 +100,7 @@ function Bones(props) {
                   <StandingChallenges />
                 </Route>
                 <Route path="/listgames">
-                  <ListGames />
+                  <ListGames update={update}/>
                 </Route>
                 <Route path="/move">
                   <GameMove update={update} />

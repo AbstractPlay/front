@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation, Redirect } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { render, renderglyph } from '@abstractplay/renderer';
 import { Auth } from 'aws-amplify';
 import { cloneDeep } from 'lodash';
-import { API_ENDPOINT_AUTH } from '../config';
+import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from '../config';
 import { GameNode } from './GameTree';
 import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
 import GameMoves from './GameMoves';
@@ -67,7 +67,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     throw new Error("Why no state? This shouldn't happen no more!");
   const engine = GameFactory(game0.metaGame, game0.state);
   moveSetter({...engine.validateMove(''), "previous": '', "move": ''});
-  game0.me = game0.players.findIndex(p => p.id === state.me.id);
+  game0.me = game0.players.findIndex(p => state.me && p.id === state.me.id);
   game0.variants = engine.getVariants();
   if (game0.simultaneous) {
     game0.canSubmit = (game0.toMove === "" || game0.me < 0) ? false : game0.toMove[game0.me];
@@ -78,7 +78,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     game0.canExplore = false;
   }
   else {
-    game0.canSubmit = (game0.toMove !== "" && game0.players[game0.toMove].id === state.me.id);
+    game0.canSubmit = (game0.toMove !== "" && state.me && game0.players[game0.toMove].id === state.me.id);
     game0.canExplore = game0.toMove !== "" && game0.numPlayers === 2;
   }
   if (game0.sharedPieces) {
@@ -211,7 +211,7 @@ function canExploreMove(game, exploration, focus) {
 
 function GameMove(props) {
   const [renderrep, renderrepSetter] = useState(null);
-  // What place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
+  // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
   const [focus, focusSetter] = useState(null);
   const [move, moveSetter] = useState({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
   const [error, errorSetter] = useState(false);
@@ -248,7 +248,7 @@ function GameMove(props) {
 
   useEffect(() => {
     var lng = "en";
-    if (state.me !== undefined && state.me.language !== undefined)
+    if (state.me && state.me.language !== undefined)
       lng = state.me.language;
     if (i18n.language !== lng) {
       i18n.changeLanguage(lng);
@@ -258,33 +258,60 @@ function GameMove(props) {
 
   useEffect(() => {
     async function fetchData() {
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
+      let token = null;
       try {
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            "query": "get_game",
-            "pars" : {
-              "id": state.game.id
-            }
-          })
-        });
-        if (res.status !== 200) {
-          const result = await res.json();
-          errorMessageRef.current = JSON.parse(result.body);
-          errorSetter(true);
+        const usr = await Auth.currentAuthenticatedUser();
+        token = usr.signInUserSession.idToken.jwtToken;
+      }
+      catch (err) {
+        // non logged in user viewing the game
+      }
+      try {
+        let data;
+        let status;
+        if (token) {
+          const res = await fetch(API_ENDPOINT_AUTH, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              "query": "get_game",
+              "pars" : {
+                "id": state.game.id
+              }
+            })
+          });
+          status = res.status;
+          if (status !== 200) {
+            const result = await res.json();
+            errorMessageRef.current = JSON.parse(result.body);
+            errorSetter(true);
+          } else {
+            const result = await res.json();
+            console.log(result);
+            data = JSON.parse(result.body);
+          }
         } else {
-          const result = await res.json();
-          let data = JSON.parse(result.body);
-          // console.log(data.game);
+          var url = new URL(API_ENDPOINT_OPEN);
+          url.searchParams.append('query', 'get_game');
+          url.searchParams.append('id', state.game.id);
+          const res = await fetch(url);
+          status = res.status;
+          if (status !== 200) {
+            const result = await res.json();
+            errorMessageRef.current = result;
+            errorSetter(true);
+          } else {
+            data = await res.json();
+          }
+        }
+        if (status === 200) {
+          console.log("game fetched:", data.game);
           setupGame(data.game, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
-          processNewSettings(data.game.players.find(p => p.id === state.me.id).settings, state.settings);
+          processNewSettings(gameRef.current.me > -1 ? data.game.players.find(p => p.id === state.me.id).settings :  {}, state.settings);
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
             if (data.comments.reduce((s, a) => s + 110 + Buffer.byteLength(a.comment,'utf8'), 0) > 350000) {
@@ -313,7 +340,7 @@ function GameMove(props) {
       movesRef.current = engine.moves();
     }
     focusSetter(foc);
-    renderrepSetter(engine.render(gameRef.current.me + 1));
+    renderrepSetter(engine.render(gameRef.current.me ? gameRef.current.me + 1 : 1));
     const isPartialSimMove = gameRef.current.simultaneous 
       && (foc.exPath.length === 1 || (foc.exPath.length === 0 && foc.moveNumber === explorationRef.current.length - 1 && !gameRef.current.canSubmit))
     setStatus(engine, gameRef.current, isPartialSimMove, '', statusRef.current);
@@ -472,25 +499,27 @@ function GameMove(props) {
       rotate -= 360;
     newGameSettings.rotate = rotate;
     processNewSettings(newGameSettings, userSettings);
-    try {
-      const usr = await Auth.currentAuthenticatedUser();
-      await fetch(API_ENDPOINT_AUTH, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
-        },
-        body: JSON.stringify({
-          "query": "update_game_settings",
-          "pars" : {
-            "game": game.id,
-            "settings": newGameSettings
-          }})
-        });
-    }
-    catch (error) {
-      setError(error);
+    if (game.me > -1) {
+      try {
+        const usr = await Auth.currentAuthenticatedUser();
+        await fetch(API_ENDPOINT_AUTH, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
+          },
+          body: JSON.stringify({
+            "query": "update_game_settings",
+            "pars" : {
+              "game": game.id,
+              "settings": newGameSettings
+            }})
+          });
+      }
+      catch (error) {
+        setError(error);
+      }
     }
   }
 
@@ -612,11 +641,9 @@ function GameMove(props) {
     submitMove('timeout', false);
   }
 
-  if (state.me === undefined) {
-    return <Redirect to="/" />;
-  }
   const game = gameRef.current;
   console.log("rendering at focus ", focus);
+  console.log("game.me", game ? game.me : "nope");
   if (!error) {
     let toMove;
     if (focus) {
@@ -665,11 +692,11 @@ function GameMove(props) {
                 { /***************** GameMoves *****************/}
                 <GameMoves focus={focus} game={game} exploration={explorationRef.current} handleGameMoveClick={handleGameMoveClick} />
               </div>
-              <RenderOptionsModal show={showSettings} metaGame={{"id":game?.metaGame, "name": game?.name}} gameId={game?.id} settings={userSettings} gameSettings={gameSettings}
+              <RenderOptionsModal show={showSettings} game={game} settings={userSettings} gameSettings={gameSettings}
                 processNewSettings={processNewSettings} showSettingsSetter={showSettingsSetter} setError={setError}
                 handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
             </div>
-            { focus ?
+            { focus && game.me > -1 ?
               <div className="commentContainer">
                 <div className="commentContainer2">
                   { /***************** GameComment *****************/}

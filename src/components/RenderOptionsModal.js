@@ -43,9 +43,10 @@ function updateSettings(setting, level, val, gameSettings, userSettings, metaGam
 
 function RenderOptionsModal(props) {
   const handleClose = props.handleClose;
-  const metaGame = props.metaGame.id;
-  const metaName = props.metaGame.name;
-  const gameId = props.gameId;
+  const metaGame = props.game?.metaGame;
+  const metaName = props.game?.name;
+  const gameId = props.game?.id;
+  const game = props.game;
   const settings = props.settings;
   const gameSettings = props.gameSettings;
   const show = props.show;
@@ -100,7 +101,7 @@ function RenderOptionsModal(props) {
     [newUserSettings, newGameSettings] = updateSettings("color", colorLevel, color, newGameSettings, newUserSettings, metaGame);
     [newUserSettings, newGameSettings] = updateSettings("annotate", annotateLevel, annotate, newGameSettings, newUserSettings, metaGame);
     props.processNewSettings(newGameSettings, newUserSettings);
-    if (newGameSettings !== undefined) {
+    if (newGameSettings !== undefined && game.me > -1) {
       try {
         const usr = await Auth.currentAuthenticatedUser();
         console.log('currentAuthenticatedUser', usr);

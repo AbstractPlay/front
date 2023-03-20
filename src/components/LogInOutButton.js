@@ -10,11 +10,16 @@ function LogInOutButton(props) {
 
   useEffect(() => {
     async function fetchAuth() {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("usr: ", usr);
-      const token = usr.signInUserSession.idToken.jwtToken;
-      if (token !== null)
-        userSetter(usr.signInUserSession);
+      try {
+        const usr = await Auth.currentAuthenticatedUser();
+        console.log("usr: ", usr);
+        const token = usr.signInUserSession.idToken.jwtToken;
+        if (token !== null)
+          userSetter(usr.signInUserSession);
+      }
+      catch (error) {
+        // not logged in, ok.
+      }
     }
     fetchAuth();
   }, []);
