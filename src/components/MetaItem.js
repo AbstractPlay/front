@@ -1,11 +1,13 @@
 import React, { Fragment } from 'react';
 import {Link} from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw'
+import rehypeRaw from 'rehype-raw';
+import { useTranslation } from 'react-i18next';
 import { GameFactory } from '@abstractplay/gameslib';
 import gameImages from '../assets/GameImages';
 
 const MetaItem = React.forwardRef((props, ref) => {
+  const { t } = useTranslation();
   let game = props.game;
   let counts = props.counts;
   const image = encodeURIComponent(gameImages[game.uid]);
@@ -43,25 +45,31 @@ const MetaItem = React.forwardRef((props, ref) => {
         <div>
           { counts === undefined ? '' :
             <Fragment>
-              <span>Number of </span>
-              {counts.currentgames === 0 ? <span>current games: 0</span> :
+              {counts.currentgames === 0 ? <span>0 current games</span> :
                 <span>
-                  <Link to={{pathname: "/listgames", state: {"metaGame": game.uid, "type": "current" }}}>current games</Link> 
-                  {`: ${counts.currentgames}`}
+                  {`${counts.currentgames} `}
+                  <Link to={{pathname: "/listgames", state: {"metaGame": game.uid, "type": "current" }}}>{t("CurrentGamesCount", {count: counts.currentgames})} </Link> 
                 </span>
               }
               <span>, </span>
-              {counts.completedgames === 0 ? <span>completed games: 0</span> :
+              {counts.completedgames === 0 ? <span>0 completed games</span> :
                 <span>
-                  <Link to={{pathname: "/listgames", state: {"metaGame": game.uid, "type": "completed" }}}>completed games</Link>
-                  {`: ${counts.completedgames}`}
+                  {`${counts.completedgames} `}
+                  <Link to={{pathname: "/listgames", state: {"metaGame": game.uid, "type": "completed" }}}>{t("CompletedGamesCount", {count: counts.completedgames})}</Link>
                 </span>
               }
               <span>, </span>
-              {counts.standingchallenges === 0 ? <span>standing challenges: 0</span> : 
+              {counts.standingchallenges === 0 ? <span>0 standing challenges</span> : 
                 <span>
-                  <Link to={{pathname: "/challenges", state: {"metaGame": game.uid }}}>standing challenges</Link>
-                  {`: ${counts.standingchallenges}`}
+                  {`${counts.standingchallenges} `}
+                  <Link to={{pathname: "/challenges", state: {"metaGame": game.uid }}}>{t("StandingChallengesCount", {count: counts.standingchallenges})}</Link>
+                </span>
+              }
+              <span>, </span>
+              {!counts.ratings || counts.ratings.length === 0 ? <span>0 rated players</span> :
+                <span>
+                  {`${counts.ratings} `}
+                  <Link to={{pathname: "/ratings", state: {"metaGame": game.uid }}}>{t("RatedPlayersCount", {count: counts.ratings})}</Link>
                 </span>
               }
             </Fragment>

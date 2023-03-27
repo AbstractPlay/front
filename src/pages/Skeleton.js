@@ -12,6 +12,7 @@ import MetaContainer from "../components/MetaContainer";
 import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
+import Ratings from "../components/Ratings";
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -101,6 +102,9 @@ function Bones(props) {
                 </Route>
                 <Route path="/listgames">
                   <ListGames update={update}/>
+                </Route>
+                <Route path="/ratings">
+                  <Ratings update={update}/>
                 </Route>
                 <Route path="/move">
                   <GameMove update={update} />

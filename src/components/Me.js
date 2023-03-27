@@ -198,6 +198,27 @@ function Me(props) {
     }
   }
 
+  const handleUpdateMetaGameRatingsClick = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      await fetch(API_ENDPOINT_AUTH, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
+        },
+        body: JSON.stringify({
+          "query": "update_meta_game_ratings",
+          "pars" : {
+          }})
+        });
+    }
+    catch (error) {
+      errorSetter(error);
+    }
+  }
+
   const handleTestAsyncClick = async () => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
@@ -218,6 +239,27 @@ function Me(props) {
       const result = await res.json();
       console.log("test_async returned:");
       console.log(JSON.parse(result.body));
+    }
+    catch (error) {
+      errorSetter(error);
+    }
+  }
+
+  const handleOneTimeFixClick = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log("Posting onetime_fix");
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
+        },
+        body: JSON.stringify({
+          "query": "onetime_fix"
+        })
+      });
     }
     catch (error) {
       errorSetter(error);
@@ -385,6 +427,8 @@ function Me(props) {
                     <div className="groupLevel1Header"><span>Administration</span></div>
                     {/* Admin functionality */}
                     <button className="apButton" onClick={() => handleUpdateMetaGameCountsClick()}>Update meta game counts</button>
+                    <button className="apButton" onClick={() => handleUpdateMetaGameRatingsClick()}>Update meta game ratings</button>
+                    <button className="apButton" onClick={() => handleOneTimeFixClick()}>One time fix</button>
                     <button className="apButton" onClick={() => handleTestAsyncClick()}>Test async</button>
                   </div>
                 }

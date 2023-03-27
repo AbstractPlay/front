@@ -206,5 +206,20 @@
     "tblHeaderFinished": "Game ended",
     "tblHeaderPlayer": "Player {{num}}",
     "CurrentGamesList": "Current {{name}} Games",
-    "CompletedGamesList": "Completed {{name}} Games"
+    "CompletedGamesList": "Completed {{name}} Games",
+    "CurrentGamesCount": "current game",
+    "CurrentGamesCount_plural": "current games",
+    "CompletedGamesCount": "completed game",
+    "CompletedGamesCount_plural": "completed games",
+    "StandingChallengesCount": "standing challenge",
+    "StandingChallengesCount_plural": "standing challenges",
+    "RatedPlayersCount": "rated player",
+    "RatedPlayersCount_plural": "rated players",
+    "RatingsList": "{{name}} Ratings",
+    "tblHeaderRatingRank": "Rank",
+    "tblHeaderRatedPlayer": "Player",
+    "tblHeaderRating": "Rating",
+    "tblHeaderGamesPlayed": "Games played",
+    "tblHeaderGamesWon": "Games won",
+    "tblHeaderGamesDrawn": "Games drawn"
 }
