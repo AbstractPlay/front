@@ -39,6 +39,7 @@ function ChallengeResponse(props) {
         <div>{ challenge.numPlayers === 2 ? t('NumChallenge2') + " " + seating : t('NumChallenge', {num: challenge.numPlayers, players: allPlayers})}</div>
         <div>{t('ChallengeClock', {start: challenge.clockStart, inc: challenge.clockInc, max: challenge.clockMax})}</div>
         <div>{challenge.clockHard ? t('HardTime') : t('SoftTime')}</div>
+        <div>{challenge.rated ? t('RatedGame') : t('UnratedGame')}</div>
         <div>{players}</div>
         <div>{notes}</div>
       </div>

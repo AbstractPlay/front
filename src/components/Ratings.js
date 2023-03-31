@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { gameinfo } from '@abstractplay/gameslib';
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from '../config';
 import { Auth } from 'aws-amplify';
 import Spinner from './Spinner';
+import NewChallengeModal from './NewChallengeModal';
 
 function Ratings(props) {
   const { state } = useLocation();
@@ -13,7 +14,9 @@ function Ratings(props) {
   const [loggedin, loggedinSetter] = useState(false);
   const [ratings, ratingsSetter] = useState(null);
   const [me, meSetter] = useState(null);
+  const [opponent, opponentSetter] = useState(null);
   const [update, updateSetter] = useState(0);
+  const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
 
   // In case you are logged in get some info, so that we can show your games to you correctly
   useEffect(() => {
@@ -100,6 +103,40 @@ function Ratings(props) {
     fetchData();
   }, []);
 
+  const handleChallenge = (player) => {
+    opponentSetter(player);
+    showNewChallengeModalSetter(true);
+  }
+
+  const handleNewChallengeClose = () => {
+    showNewChallengeModalSetter(false);
+  }
+
+  const handleNewChallenge2 = async (challenge) => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log('currentAuthenticatedUser', usr);
+      await fetch(API_ENDPOINT_AUTH, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
+        },
+        body: JSON.stringify({
+          "query": "new_challenge",
+          "pars" : {
+            ...challenge,
+            "challenger": {"id": me.id, "name": me.name},
+          }})
+        });
+      showNewChallengeModalSetter(false);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
   if (update !== props.update) // Can someone PLEASE explain to me why this is needed!!??? (remove it and see what happens...)
     updateSetter(props.update);
   const metaGame = state.metaGame;
@@ -120,28 +157,38 @@ function Ratings(props) {
         <h1 className="centered">{t("RatingsList", {"name": metaGameName})}</h1>
         <div className="standingChallengesContainer">
           { ratings === null ? <Spinner/> :
-            <table className="standingChallengesTable">
-              <tbody>
-                <tr>
-                  <th>{t("tblHeaderRatingRank")}</th>
-                  <th>{t("tblHeaderRatedPlayer")}</th>
-                  <th>{t("tblHeaderRating")}</th>
-                  <th>{t("tblHeaderGamesPlayed")}</th>
-                  <th>{t("tblHeaderGamesWon")}</th>
-                  <th>{t("tblHeaderGamesDrawn")}</th>
-                </tr>
-                { ratings.map((rating, i) => {console.log(rating); return (
-                  <tr key={i}>
-                    <td>{i+1}</td>
-                    <td>{rating.name}</td>
-                    <td>{Math.round(rating.rating.rating)}</td>
-                    <td>{rating.rating.N}</td>
-                    <td>{rating.rating.wins}</td>
-                    <td>{rating.rating.draws}</td>
-                  </tr>) })
-                }
-              </tbody>
-            </table>
+            <Fragment>
+              <table className="standingChallengesTable">
+                <tbody>
+                  <tr>
+                    <th>{t("tblHeaderRatingRank")}</th>
+                    <th>{t("tblHeaderRatedPlayer")}</th>
+                    <th>{t("tblHeaderRating")}</th>
+                    <th>{t("tblHeaderGamesPlayed")}</th>
+                    <th>{t("tblHeaderGamesWon")}</th>
+                    <th>{t("tblHeaderGamesDrawn")}</th>
+                    <th/>
+                  </tr>
+                  { ratings.map((rating, i) => {console.log(rating); return (
+                    <tr key={i}>
+                      <td>{i+1}</td>
+                      <td>{rating.name}</td>
+                      <td>{Math.round(rating.rating.rating)}</td>
+                      <td>{rating.rating.N}</td>
+                      <td>{rating.rating.wins}</td>
+                      <td>{rating.rating.draws}</td>
+                      <td>{me && me.id === rating.id ? "" :
+                        <button className="apButton" onClick={() => handleChallenge({id: rating.id, name: rating.name})}>
+                          {t("Challenge")}
+                        </button>
+                      }
+                      </td>
+                    </tr>) })
+                  }
+                </tbody>
+              </table>
+              <NewChallengeModal show={showNewChallengeModal} id={me?.id} opponent={opponent} fixedMetaGame={metaGame} handleClose={handleNewChallengeClose} handleChallenge={handleNewChallenge2} />
+            </Fragment>
           }
         </div>
       </article>

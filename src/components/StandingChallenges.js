@@ -240,16 +240,16 @@ function StandingChallenges(props) {
                         {
                           challenge.id === accepted ? t("Accepted") : challenge.id === reject || challenge.id === revoke ? <Spinner></Spinner> :
                             challenge.challenger.id === myid ?
-                              <button onClick={() => handleRevoke(challenge.id)}>
+                              <button className="apButton" onClick={() => handleRevoke(challenge.id)}>
                                 {t("Revoke")}
                               </button>
                             :
                               challenge.players.find(p => p.id === myid) ?
-                                <button onClick={() => handleReject(challenge.id)}>
+                                <button className="apButton" onClick={() => handleReject(challenge.id)}>
                                   {t("Revoke")}
                                 </button>
                               :
-                                <button onClick={() => handleAccept(challenge.id)}>
+                                <button className="apButton" onClick={() => handleAccept(challenge.id)}>
                                   {t("Accept")}
                                 </button>
                         }

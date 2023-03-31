@@ -10,6 +10,8 @@ function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
   const handleNewChallenge = props.handleChallenge;
   const myid = props.id;
+  const opponent = props.opponent;
+  const fixedMetaGame = props.fixedMetaGame;
   const show = props.show;
   const { t, i18n } = useTranslation();
   const [users, usersSetter] = useState(null);
@@ -45,20 +47,29 @@ function NewChallengeModal(props) {
         errorSetter(error);
       }
     }
-    if (show && users === null) {
+    if (show && !opponent && users === null) {
       console.log("Fetching users")
       fetchData();
     } else {
       console.log("NOT Fetching users")
     }
-  },[show]);
+  }, [show, opponent, users]);
 
   useEffect(() => {
     groupVariantsRef.current = {};
     nonGroupVariantsSetter({});
-    metaGameSetter(null);
-    playerCountSetter(-1);
-    opponentsSetter([]);
+    if (fixedMetaGame !== undefined) {
+      metaGameSetter(fixedMetaGame);
+    } else {
+      metaGameSetter(null);
+    }
+    if (opponent === undefined) {
+      playerCountSetter(-1);
+      opponentsSetter([]);
+    } else {
+      playerCountSetter(2);
+      opponentsSetter([opponent]);
+    }
     errorSetter("");
     clockStartSetter(72);
     clockIncSetter(24);
@@ -261,6 +272,7 @@ function NewChallengeModal(props) {
     console.log("nonGroupData", nonGroupData);
     console.log(nonGroupVariants);
   }
+  console.log(opponents);
   return (
     <Modal show={show} title={t('NewChallenge')}
       buttons={[{label: t('Challenge'), action: handleChallenge}, {label: t('Close'), action: handleNewChallengeClose}]}>
@@ -273,6 +285,7 @@ function NewChallengeModal(props) {
         </div>
         <div className="newChallengeInputDiv">
           { games === null ? <Spinner/> :
+            fixedMetaGame ? <div>{gameinfo.get(fixedMetaGame).name}</div> :
             /* Select meta game */
             <select value={metaGame ? metaGame : ''} name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
               <option value="">--{t('Select')}--</option>
@@ -287,7 +300,7 @@ function NewChallengeModal(props) {
               <label className="newChallengeLabel" htmlFor="num_players_for_challenge" >{t("NumPlayers")}</label>
             </div>
             <div className="newChallengeInputDiv">
-                { playercounts.length === 1 ? playercounts[0] :
+                { opponent ? 2 : playercounts.length === 1 ? playercounts[0] :
                   <select value={playerCount} name="playercount" id="num_players_for_challenge" onChange={(e) => handleChangePlayerCount(e.target.value)}>
                     <option value="">--{t('Select')}--</option>
                     { playercounts.map(cnt => { return <option key={cnt} value={cnt}>{cnt}</option>}) }
@@ -312,14 +325,18 @@ function NewChallengeModal(props) {
                   </select>
                 }
             </div>
-            {/* Standing Challenge */}
-            <div className="newChallengeLabelDiv">
-              <label className="newChallengeLabel" htmlFor="standing_challenge" >{t('StandingChallengeLabel')}</label>
-            </div>
-            <div className="newChallengeInputDiv">
-              <input type="checkbox" checked={standing} id="standing_challenge" onChange={handleStandingChallengeChange} />
-              <label>{standing ? t('StandingChallenge') : t('StandardChallenge')}</label>
-            </div>
+            {/* Standing Challenge */
+              opponent ? '' :
+                <Fragment>
+                  <div className="newChallengeLabelDiv">
+                    <label className="newChallengeLabel" htmlFor="standing_challenge" >{t('StandingChallengeLabel')}</label>
+                  </div>
+                  <div className="newChallengeInputDiv">
+                    <input type="checkbox" checked={standing} id="standing_challenge" onChange={handleStandingChallengeChange} />
+                    <label>{standing ? t('StandingChallenge') : t('StandardChallenge')}</label>
+                  </div>
+                </Fragment>
+            }
           </Fragment>
         }
         { playerCount === -1 || standing ? ''
@@ -330,7 +347,8 @@ function NewChallengeModal(props) {
                 <label className="newChallengeLabel" htmlFor={"user_for_challenge" + i}>{playerCount === 2 ? t("ChooseOpponent") : t("ChooseOpponent", i)}</label>
               </div>
               <div className="newChallengeInputDiv">
-                { users === null ? <Spinner/> :
+                { users === null && !opponent ? <Spinner/> :
+                  opponent ? opponent.name :
                   <select value={o.id || ''} className="newChallengeInput" name="users" id={"user_for_challenge" + i} onChange={(e) => handleChangeOpponent({'id': e.target.value, 'name': e.target.options[e.target.selectedIndex].text, 'player': i})}>
                     <option value="">--{t('Select')}--</option>
                     { users

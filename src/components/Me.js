@@ -77,7 +77,7 @@ function Me(props) {
   const handleChallengeRevoke = async () => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
-    if (myid !== challenge.challenger.id)
+    if (me.id !== challenge.challenger.id)
       return handleChallengeResponse(false);
     try {
       const res = await fetch(API_ENDPOINT_AUTH, {
