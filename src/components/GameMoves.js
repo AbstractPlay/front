@@ -168,7 +168,7 @@ function GameMoves(props) {
         let className = "gameMove";
         if (i === focus.moveNumber && (i < exploration.length - 1 || (i === exploration.length - 1 && focus.exPath.length === 0)))
           className += " gameMoveFocus";
-        path.push([{"class": className, "move": exploration[i].move, "path": {"moveNumber": i, "exPath": []}}]);
+        path.push([{"class": className, "outcome": -1, "move": exploration[i].move, "path": {"moveNumber": i, "exPath": []}}]);
       }
       if (focus.moveNumber === exploration.length - 1) {
         let node = exploration[focus.moveNumber];
@@ -178,13 +178,13 @@ function GameMoves(props) {
             className += " gameMoveFocus";
           curNumVariations = node.children.length;
           node = node.children[focus.exPath[j]];
-          if (node.outcome === 0)
+          if (node.outcome === -1)
             className += " gameMoveUnknownOutcome";
-          else if (node.outcome === -1)
+          else if (node.outcome === node.toMove)
             className += " gameMoveLoss";
-          else if (node.outcome === 1)
+          else if (node.outcome === 1 - node.toMove)
             className += " gameMoveWin";
-          path.push([{"class": className, "move": node.move, "path": {"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}}]);
+          path.push([{"class": className, "outcome": node.outcome, "move": node.move, "path": {"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}}]);
         }
         let exPath = focus.exPath;
         while (node.children.length > 0) {
@@ -192,13 +192,13 @@ function GameMoves(props) {
           for (let k = 0; k < node.children.length; k++) {
             const c = node.children[k];
             let className = "gameMove";
-            if (c.outcome === 0)
+            if (c.outcome === -1)
               className += " gameMoveUnknownOutcome";
-            else if (c.outcome === -1)
+            else if (c.outcome === c.toMove)
               className += " gameMoveLoss";
-            else if (c.outcome === 1)
+            else if (c.outcome === 1 - c.toMove)
               className += " gameMoveWin";
-            next.push({"class": className, "move": c.move, "path": {"moveNumber": focus.moveNumber, "exPath": exPath.concat(k)}})
+            next.push({"class": className, "outcome": c.outcome, "move": c.move, "path": {"moveNumber": focus.moveNumber, "exPath": exPath.concat(k)}})
           }
           exPath = exPath.concat(0);
           path.push(next);
@@ -222,6 +222,14 @@ function GameMoves(props) {
                     <span key={"move" + i + "-" + j + "-" + k}>{k > 0 ? ", ": ""}
                       <span className={m.class} onClick={() => handleGameMoveClick(m.path)}>
                         {m.move}
+                        { m.outcome === -1 ? null :
+                          game.colors[m.outcome].isImage ?
+                            <img className="winnerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[m.outcome].value)}`} alt="" />
+                            : <svg className="winnerImage2" viewBox="0 0 44 44">
+                                <circle cx="22" cy="22" r="18"  stroke="black" stroke-width="4" fill="white" />
+                                <text x="12" y="32" fill="black" font-family="monospace" font-size="35" font-weight="bold">{m.outcome + 1}</text>
+                              </svg>
+                        }
                       </span>
                     </span>)
                   }

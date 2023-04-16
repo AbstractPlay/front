@@ -46,12 +46,11 @@ function MoveEntry(props) {
   const focus = props.focus;
   const submitting = props.submitting;
   const handleMove = props.handlers[0];
-  const handleMarkAsWin = props.handlers[1];
-  const handleMarkAsLoss = props.handlers[2];
-  const handleSubmit = props.handlers[3];
-  const handleView = props.handlers[4];
-  const handleResign = props.handlers[5];
-  const handleTimeOut = props.handlers[6];
+  const handleMark = props.handlers[1];
+  const handleSubmit = props.handlers[2];
+  const handleView = props.handlers[3];
+  const handleResign = props.handlers[4];
+  const handleTimeOut = props.handlers[5];
   const { t } = useTranslation();
 
   const handleDrawOfferChange = (value) => {
@@ -106,6 +105,7 @@ function MoveEntry(props) {
     const canDraw =  drawOffered && game.players.reduce((acc, p) => acc + (p.draw ? 1 : 0), 0) === game.players.length - 1;
 
     console.log('toMove', toMove);
+    console.log('game.colors', game.colors);
     return (
       <div className="uiState">
         <div className={ uiState === -1 ? "historyStateContainer" : uiState === 0 ? "currentStateContainer" : "exploreStateContainer"}>
@@ -181,7 +181,7 @@ function MoveEntry(props) {
           </div>
           : ""
         }
-        <div>
+        <div className="submitOrMark">
           { moveToSubmit !== null && focus.exPath.length === 1 && !submitting ?
             <button className="apButton tooltipped" onClick={() => handleSubmit(drawoffer ? "drawoffer" : "")}>
               {t('Submit')}
@@ -201,16 +201,28 @@ function MoveEntry(props) {
             : ""
           }
           { focus.exPath.length > 0 && game.canExplore ?
-            <button className="fabtn tooltipped" onClick={handleMarkAsWin}>
-              <i className="fa fa-thumbs-up"></i>
+            <div className="winningColorButton tooltipped" onClick={() => handleMark(0)}>
+              { game.colors[0].isImage ?
+                  <img className="winnerButtonImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[0].value)}`} alt="" />
+                  : <svg className="winnerButtonImage" viewBox="0 0 44 44">
+                      <circle cx="22" cy="22" r="18"  stroke="black" stroke-width="4" fill="white" />
+                      <text x="12" y="32" fill="black" font-family="monospace" font-size="35" font-weight="bold">1</text>
+                    </svg>
+              }
               <span className="tooltiptext">{t('Winning')}</span>
-            </button>:""
+            </div>:""
           }
           { focus.exPath.length > 0 && game.canExplore ?
-            <button className="fabtn tooltipped" onClick={handleMarkAsLoss}>
-              <i className="fa fa-thumbs-down"></i>
-              <span className="tooltiptext">{t('Losing')}</span>
-            </button>:""
+            <div className="winningColorButton tooltipped" onClick={() => handleMark(1)}>
+              { game.colors[1].isImage ?
+                  <img className="winnerButtonImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[1].value)}`} alt="" />
+                  : <svg className="winnerButtonImage" viewBox="0 0 44 44">
+                      <circle cx="22" cy="22" r="18"  stroke="black" stroke-width="4" fill="white" />
+                      <text x="12" y="32" fill="black" font-family="monospace" font-size="35" font-weight="bold">2</text>
+                    </svg>
+              }
+              <span className="tooltiptext">{t('Winning')}</span>
+            </div>:""
           }
         </div>
       </div>

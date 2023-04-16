@@ -11,7 +11,7 @@ export class GameNode {
       this.toMove = 1 - this.parent.toMove;
     else
       throw new Error("Can't decide whose move it is!");
-    this.outcome = 0; // -1 for player1 win, 1 for player2 win, 0 for undecided.
+    this.outcome = -1; // 0 for player1 win, 1 for player2 win, -1 for undecided.
   }
 
   AddChild(move, state, toMove) {
@@ -26,32 +26,46 @@ export class GameNode {
   }
 
   UpdateOutcome() {
-    let win = true;
-    let lose = false;
+    const mover = 1 - this.toMove;
+    // if player x moved, and the other player (1-x) has a winning reply (outcome = 1-x), then player x loses
+    // if player x moved, and the other player (1-x) has only losing replies (outcome = x) (no winning moves, no unknown outcome moves) then player x wins
+    let a_child_wins = false;
+    let all_children_lose = true;
     this.children.forEach(child => {
-      if ((this.toMove === 0 && child.outcome === 1) || (this.toMove === 1 && child.outCome === -1))
-        lose = true;
-      if ((this.toMove === 0 && child.outcome !== -1) || (this.toMove === 1 && child.outcome !== 1))
-        win = false;
+      if (child.outcome === 1 - mover)
+        a_child_wins = true;
+      if (child.outcome !== mover)
+        all_children_lose = false;
     });
-    this.outcome = 0;
-    if (this.toMove === 0 && lose)
-      this.outcome = 1;
-    if (this.toMove === 0 && win)
+    if (a_child_wins)
+      this.outcome = 1 - mover;
+    else if (all_children_lose)
+      this.outcome = mover;
+    else
       this.outcome = -1;
-    if (this.toMove === 1 && lose)
-      this.outcome = -1;
-    if (this.toMove === 1 && win)
-      this.outcome = 1;
     if (this.parent != null)
         this.parent.UpdateOutcome();
   }
 
   SetOutcome(outcome) {
     if (this.children.length === 0) {
+      console.log("Node toMove", this.toMove);
       this.outcome = outcome;
       if (this.parent !== null)
         this.parent.UpdateOutcome();
     }
+  }
+
+  Deflate() {
+    const deflated = {
+      move: this.move,
+      children: []
+    };
+    this.children.forEach(child => {
+      deflated.children.push(child.Deflate());
+    });
+    if (this.children.length === 0 && this.outcome !== -1)
+      deflated.outcome = this.outcome;
+    return deflated;
   }
 }
