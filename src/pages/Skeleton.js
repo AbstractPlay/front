@@ -1,7 +1,7 @@
 import React, { useState, Suspense, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { COGNITO_USER_POOL_ID, COGNITO_APPID, COGNITO_DOMAIN, COGNITO_COOKIE_DOMAIN, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';
-import Amplify, { Auth } from 'aws-amplify';
+import {Amplify, Auth } from 'aws-amplify';
 import './Skeleton.css';
 import Spinner from '../components/Spinner';
 import LogInOutButton from '../components/LogInOutButton';
@@ -60,7 +60,7 @@ function Bones(props) {
     async function getToken() {
       try {
         const usr = await Auth.currentAuthenticatedUser();
-        console.log(usr);
+        console.log("usr:", usr);
         // if (usr.signInUserSession !== undefined)
         tokenSetter(usr.signInUserSession.idToken.jwtToken);
       }
@@ -90,29 +90,15 @@ function Bones(props) {
           </div>
           <div>
             <div>
-              <Switch>
-                <Route path="/about">
-                  <About token={token}/>
-                </Route>
-                <Route path="/games">
-                  <MetaContainer token={token}/>
-                </Route>
-                <Route path="/challenges">
-                  <StandingChallenges />
-                </Route>
-                <Route path="/listgames">
-                  <ListGames update={update}/>
-                </Route>
-                <Route path="/ratings">
-                  <Ratings update={update}/>
-                </Route>
-                <Route path="/move">
-                  <GameMove update={update} />
-                </Route>
-                <Route path="/">
-                  <Welcome token={token} update={update}/>
-                </Route>
-              </Switch>
+              <Routes>
+                <Route path="/about" element={<About token={token} />} />
+                <Route path="/games" element={<MetaContainer token={token} />} />
+                <Route path="/challenges" element={<StandingChallenges />} />
+                <Route path="/listgames" element={<ListGames update={update} />} />
+                <Route path="/ratings" element={<Ratings update={update} />} />
+                <Route path="/move" element={<GameMove update={update} />} />
+                <Route path="/" element={<Welcome token={token} update={update} />} />
+              </Routes>
             </div>
           </div>
           <div>
