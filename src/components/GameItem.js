@@ -14,7 +14,7 @@ function GameItem(props) {
   return (
     <li>
       <i className="fa fa-circle apBullet"></i>
-      <Link to={{pathname: "/move", state: {"me": me, "settings": props.settings, "game": game, "metaGame": info.name }}}>{desc}</Link>
+      <Link to="/move" state={{"me": me, "settings": props.settings, "game": game, "metaGame": info.name }}>{desc}</Link>
     </li>
   );
 }

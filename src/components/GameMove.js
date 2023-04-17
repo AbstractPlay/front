@@ -7,6 +7,7 @@ import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from '../config';
 import { GameNode } from './GameTree';
 import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
+import {Buffer} from 'buffer';
 import GameMoves from './GameMoves';
 import GameStatus from './GameStatus';
 import MoveEntry from './MoveEntry';
@@ -424,7 +425,7 @@ function GameMove(props) {
       render(gameEngineTmp.renderColumn(row, col), options);
     }
 
-    if (boardImage.current !== undefined) {
+    if (boardImage.current !== null) {
       const svg = boardImage.current.querySelector('svg');
       if (svg !== null) {
         svg.remove();
