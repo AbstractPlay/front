@@ -13,6 +13,7 @@ import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
+import Navbar from '../components/Navbar';
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -90,15 +91,18 @@ function Bones(props) {
           </div>
           <div>
             <div>
-              <Routes>
-                <Route path="/about" element={<About token={token} />} />
-                <Route path="/games" element={<MetaContainer token={token} />} />
-                <Route path="/challenges" element={<StandingChallenges />} />
-                <Route path="/listgames" element={<ListGames update={update} />} />
-                <Route path="/ratings" element={<Ratings update={update} />} />
-                <Route path="/move" element={<GameMove update={update} />} />
-                <Route path="/" element={<Welcome token={token} update={update} />} />
-              </Routes>
+                <div class="main">
+                    <Navbar />
+                    <Routes>
+                        <Route path="/about" element={<About token={token} />} />
+                        <Route path="/games" element={<MetaContainer token={token} />} />
+                        <Route path="/challenges" element={<StandingChallenges />} />
+                        <Route path="/listgames" element={<ListGames update={update} />} />
+                        <Route path="/ratings" element={<Ratings update={update} />} />
+                        <Route path="/move" element={<GameMove update={update} />} />
+                        <Route path="/" element={<Welcome token={token} update={update} />} />
+                    </Routes>
+              </div>
             </div>
           </div>
           <div>

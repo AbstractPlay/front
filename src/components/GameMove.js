@@ -15,7 +15,6 @@ import MoveResults from './MoveResults';
 import RenderOptionsModal from './RenderOptionsModal';
 import Modal from './Modal';
 import GameComment from './GameComment';
-import { Link } from "react-router-dom";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -206,7 +205,7 @@ function getFocusNode(exp, foc) {
 
 function canExploreMove(game, exploration, focus) {
   return (game.canExplore || (game.canSubmit && focus.exPath.length === 0)) // exploring (beyond move input) is supported or it is my move and we are just looking at the current position
-    && exploration !== null 
+    && exploration !== null
     && focus.moveNumber === exploration.length - 1;    // we aren't looking at history
 }
 
@@ -342,12 +341,12 @@ function GameMove(props) {
     }
     focusSetter(foc);
     renderrepSetter(engine.render(gameRef.current.me ? gameRef.current.me + 1 : 1));
-    const isPartialSimMove = gameRef.current.simultaneous 
+    const isPartialSimMove = gameRef.current.simultaneous
       && (foc.exPath.length === 1 || (foc.exPath.length === 0 && foc.moveNumber === explorationRef.current.length - 1 && !gameRef.current.canSubmit))
     setStatus(engine, gameRef.current, isPartialSimMove, '', statusRef.current);
     moveSetter({...engine.validateMove(''), "move": '', "previous": ''});
   }
-  
+
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
     let node = getFocusNode(explorationRef.current, focus);
@@ -362,8 +361,8 @@ function GameMove(props) {
     // console.log(result);
     processNewMove(result);
   }
-     
-  // handler when user clicks on "complete move" (for a partial move that could be complete)  
+
+  // handler when user clicks on "complete move" (for a partial move that could be complete)
   const handleView = () => {
     const newmove = cloneDeep(move);
     newmove.complete = 1;
@@ -403,12 +402,12 @@ function GameMove(props) {
       // console.log(`boardClick:(${row},${col},${piece})`);
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-      let result = gameRef.current.simultaneous ? 
-        gameEngineTmp.handleClickSimultaneous(moveRef.current.move, row, col, gameRef.current.me + 1, piece) 
+      let result = gameRef.current.simultaneous ?
+        gameEngineTmp.handleClickSimultaneous(moveRef.current.move, row, col, gameRef.current.me + 1, piece)
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       result.previous = moveRef.current.move;
       // if (!result.valid && partialMoveRenderRef.current)
-      //   result.move = moveRef.current.move; 
+      //   result.move = moveRef.current.move;
       console.log('boardClick: move', moveRef.current.move);
       console.log('boardClick: result', result);
       processNewMove(result);
@@ -540,14 +539,14 @@ function GameMove(props) {
   const handleSubmit = async (draw) => {
     submittingSetter(true);
     if (draw === "drawaccepted") {
-      submitMove("", draw);  
+      submitMove("", draw);
     } else {
       let m = getFocusNode(explorationRef.current, focus).move;
       submitMove(m, draw);
     }
   }
 
-  const submitMove = async (m, draw) => {  
+  const submitMove = async (m, draw) => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
@@ -655,12 +654,6 @@ function GameMove(props) {
       }
     }
     return (
-      <div className="main">
-        <nav>
-          <div><Link to="/about">{t('About')}</Link></div>
-          <div><Link to="/games">{t('Games')}</Link></div>
-          <div><Link to="/">{t('MyDashboard')}</Link></div>
-        </nav>
         <article>
           <div className="article">
             <div className="gameMoveContainer">
@@ -705,7 +698,7 @@ function GameMove(props) {
                 </div>
               </div> : ''
             }
-            { focus ? 
+            { focus ?
               <div className="moveResultsContainer">
                 <div className="moveResultsContainer2">
                   { /***************** MoveResults *****************/}
@@ -714,7 +707,7 @@ function GameMove(props) {
                 </div>
               </div>
               : ''
-            }  
+            }
             <Modal show={showResignConfirm} title={t('ConfirmResign')} size="small"
               buttons={[{label: t('Resign'), action: handleResignConfirmed}, {label: t('Cancel'), action: handleCloseResignConfirm}]}>
               <div>
@@ -729,7 +722,6 @@ function GameMove(props) {
             </Modal>
           </div>
         </article>
-      </div>
     );
   }
   else {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { gameinfo } from '@abstractplay/gameslib';
@@ -142,17 +141,6 @@ function Ratings(props) {
   const metaGame = state.metaGame;
   const metaGameName = gameinfo.get(metaGame).name;
   return (
-    <div className="main">
-      <nav>
-        <div>
-          <Link to="/about">{t('About')}</Link>
-        </div>
-        <div><Link to="/games">{t('Games')}</Link></div>
-        { loggedin ?
-          <div><Link to="/">{t('MyDashboard')}</Link></div>
-          : ""
-        }
-      </nav>
       <article>
         <h1 className="centered">{t("RatingsList", {"name": metaGameName})}</h1>
         <div className="standingChallengesContainer">
@@ -192,7 +180,6 @@ function Ratings(props) {
           }
         </div>
       </article>
-    </div>
   );
 }
 

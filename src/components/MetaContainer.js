@@ -4,7 +4,6 @@ import { gameinfo } from '@abstractplay/gameslib';
 import { useTranslation } from 'react-i18next';
 import { addResource } from '@abstractplay/gameslib';
 import { API_ENDPOINT_OPEN } from '../config';
-import { Link } from "react-router-dom";
 import { Auth } from 'aws-amplify';
 
 function MetaContainer(props) {
@@ -57,10 +56,10 @@ function MetaContainer(props) {
     gameDivs.current[game].current.scrollIntoView({behavior: 'smooth'});
     console.log(game);
   }
-  
+
   const games = [...gameinfo.keys()].sort((a, b) => {
-    const na = gameinfo.get(a).name; 
-    const nb = gameinfo.get(b).name; 
+    const na = gameinfo.get(a).name;
+    const nb = gameinfo.get(b).name;
     if (na < nb)
       return -1;
     else if (na > nb)
@@ -70,16 +69,6 @@ function MetaContainer(props) {
 
   console.log(games);
   return (
-    <div className="main">
-      <nav>
-        <div>
-          <Link to="/about">{t('About')}</Link>
-        </div>
-        { loggedin ?
-          <div><Link to="/">{t('MyDashboard')}</Link></div>
-          : ""
-        }
-      </nav>
       <article>
         <h1 className="centered">{t("AvailableGames")}</h1>
         <div className="goToGame centered">
@@ -91,12 +80,11 @@ function MetaContainer(props) {
         </div>
         <div className="metaGames">
           {games.map(k =>
-            <MetaItem ref={el => {gameDivs.current[k] = createRef(); gameDivs.current[k].current = el}} key={gameinfo.get(k).uid} game={gameinfo.get(k)} 
+            <MetaItem ref={el => {gameDivs.current[k] = createRef(); gameDivs.current[k].current = el}} key={gameinfo.get(k).uid} game={gameinfo.get(k)}
               counts={counts ? counts[gameinfo.get(k).uid] : undefined} highlight = {k === theMataGame}/>)
           }
         </div>
       </article>
-    </div>
   );
 }
 

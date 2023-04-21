@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { gameinfo } from '@abstractplay/gameslib';
@@ -191,17 +190,6 @@ function StandingChallenges(props) {
   const showRespond = loggedin && challenges;
   const showAccepters = challenges && challenges.find(c => c.players.length > 1);
   return (
-    <div className="main">
-      <nav>
-        <div>
-          <Link to="/about">{t('About')}</Link>
-        </div>
-        <div><Link to="/games">{t('Games')}</Link></div>
-        { loggedin ?
-          <div><Link to="/">{t('MyDashboard')}</Link></div>
-          : ""
-        }
-      </nav>
       <article>
         <h1 className="centered">{t("StandingChallenges", {"name": metaGameName})}</h1>
         <div className="standingChallengesContainer">
@@ -258,11 +246,10 @@ function StandingChallenges(props) {
                   </tr>)
                 }
               </tbody>
-            </table>        
+            </table>
           }
         </div>
       </article>
-    </div>
   );
 }
 

@@ -106,17 +106,6 @@ function ListGames(props) {
   const metaGameName = gameinfo.get(metaGame).name;
   const maxPlayers = games ? games.reduce((max, game) => Math.max(max, game.players.length), 0) : null;
   return (
-    <div className="main">
-      <nav>
-        <div>
-          <Link to="/about">{t('About')}</Link>
-        </div>
-        <div><Link to="/games">{t('Games')}</Link></div>
-        { loggedin ?
-          <div><Link to="/">{t('MyDashboard')}</Link></div>
-          : ""
-        }
-      </nav>
       <article>
         <h1 className="centered">{state.type === "current" ? t("CurrentGamesList", {"name": metaGameName}) : t("CompletedGamesList", {"name": metaGameName})}</h1>
         <div className="standingChallengesContainer">
@@ -128,19 +117,18 @@ function ListGames(props) {
                   <th>{state.type === "current" ? t("tblHeaderStarted") : t("tblHeaderFinished")}</th>
                   { [...Array(maxPlayers).keys()].map((i) => <th key={i}>{t("tblHeaderPlayer", {"num": i+1})}</th>) }
                 </tr>
-                { games.map((game, i) => 
+                { games.map((game, i) =>
                   <tr key={i}>
                     <td><Link to="/move" state={{"me": me, "settings": me ? me.settings : {}, "game": game, "metaGame": metaGameName }}>{i+1}</Link></td>
                     <td>{ new Date(Number(game.sk.substring(0, game.sk.indexOf('#')))).toLocaleString() }</td>
                     { [...Array(maxPlayers).keys()].map((j) => <td key={j}>{ game.players[j] ? game.players[j].name : null }</td>) }
-                  </tr>) 
+                  </tr>)
                 }
               </tbody>
             </table>
           }
         </div>
       </article>
-    </div>
   );
 }
 
