@@ -1,5 +1,5 @@
 {
-  "name": "front2",
+  "name": "apfront",
   "version": "0.1.0",
   "description": "The official user client for Abstract Play",
   "repository": {
@@ -33,11 +33,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env REACT_APP_REAL_MODE=local react-scripts start",
     "build": "react-scripts build",
+    "build-dev": "cross-env REACT_APP_REAL_MODE=development react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "extract": "i18next 'src/**/*.{js,jsx}'"
+    "extract": "i18next 'src/**/*.{js,jsx}'",
+    "invalidate": "aws cloudfront create-invalidation --profile AbstractPlayDev --distribution-id E2FD1T2JUN28HB --paths /*",
+    "invalidate-prod": "aws cloudfront create-invalidation --profile AbstractPlayProd --distribution-id EZ7B67NVBQ903 --paths /*"
   },
   "eslintConfig": {
     "extends": [
@@ -58,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "i18next-parser": "^7.7.0"
   }
 }

@@ -54,7 +54,7 @@ function GameStatus(props) {
             </tbody>
           </table>
         }
-        { !game.scores || status.scores.length == 0 ? '' :
+        { !game.scores || status.scores.length === 0 ? '' :
           status.scores.map((scores, i) =>
             <div key={i}>
               <span>{scores.name}</span>
