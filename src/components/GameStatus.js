@@ -22,7 +22,7 @@ function GameStatus(props) {
 
   const { t } = useTranslation();
 
-  if (!game || game.colors === undefined || ((!game.variants || game.variants.length === 0) && (status.statuses.length === 0) && (!game.scores || status.scores.length == 0) && (!game.playerStashes) && (!game.sharedStash))) {
+  if (!game || game.colors === undefined || ((!game.variants || game.variants.length === 0) && (status.statuses.length === 0) && (!game.scores || status.scores.length === 0) && (!game.playerStashes) && (!game.sharedStash))) {
     return (<div></div>);
   }
   else {
@@ -35,14 +35,14 @@ function GameStatus(props) {
         { status.statuses.length === 0 ? '' :
           <table className="genericStatuses">
             <tbody>
-              { status.statuses.map((status, ind) => 
+              { status.statuses.map((status, ind) =>
                 <tr key={"genericStatusRow" + ind}>
                   <td className="genericStatusKey">{status.key}:</td>
                   <td className="genericStatusValue">
-                    { status.value.map((v, i) => 
+                    { status.value.map((v, i) =>
                       <span key={i}>
                         { typeof v === 'string' ?
-                          v 
+                          v
                           : <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, v.glyph, 'genericStatus-' + ind + '-' + i, v.player))}`} alt={"color " + v.player} />
                         }
                       </span>
@@ -89,7 +89,7 @@ function GameStatus(props) {
                     }</td>
                     <td>{game.players[index].name}</td>
                     <td>:</td>
-                    { stash.map((s, j) => 
+                    { stash.map((s, j) =>
                         <td key={"stashentry" + j} onClick={ canExplore ? () => handleStashClick(index, s.count, s.movePart) : undefined }>
                           {s.count}&#215;
                           <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, s.glyph.name, 'stack-' + index + '-' + j, s.glyph.player ))}`} alt="" />
@@ -104,11 +104,11 @@ function GameStatus(props) {
           <div>
             <span>Stash</span>
             <div>
-              { status.sharedstash.map((s, j) => 
+              { status.sharedstash.map((s, j) =>
                 <span key={"stashentry" + j} onClick={ canExplore && s.movePart !== '' ? () => handleStashClick(0, s.count, s.movePart) : undefined }>
                   {j > 0 ? ", " : "" } {s.count}&#215;
                   <img className="playerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(renderGlyph(settings, s.glyph.name, 'stack-' + j, s.glyph.player))}`} alt="" />
-                </span>) 
+                </span>)
               }
             </div>
           </div>
