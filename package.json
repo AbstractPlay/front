@@ -15,6 +15,9 @@
   "dependencies": {
     "@abstractplay/gameslib": "file:../gameslib/abstractplay-gameslib-0.6.0.tgz",
     "@abstractplay/renderer": "file:../renderer/abstractplay-renderer-0.8.0.tgz",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
     "aws-amplify": "^5.0.25",
     "buffer": "^6.0.3",
     "i18next": "^21.10.0",
@@ -25,19 +28,9 @@
     "react-i18next": "^12.2.0",
     "react-markdown": "^8.0.7",
     "react-router-dom": "^6.10.0",
+    "react-scripts": "5.0.1",
     "rehype-raw": "^6.1.1",
     "web-vitals": "^2.1.4"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "cross-env": "^7.0.3",
-    "i18next-parser": "^7.7.0",
-    "react-scripts": "5.0.1"
-  },
-  "overrides": {
-    "glob-parent": "^5.1.2"
   },
   "scripts": {
     "start": "cross-env REACT_APP_REAL_MODE=local react-scripts start",
@@ -65,5 +58,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "i18next-parser": "^7.7.0"
   }
 }
