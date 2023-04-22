@@ -118,7 +118,7 @@ function ListGames(props) {
                 </tr>
                 { games.map((game, i) =>
                   <tr key={i}>
-                    <td><Link to="/move" state={{"me": me, "settings": me ? me.settings : {}, "game": game, "metaGame": metaGameName }}>{i+1}</Link></td>
+                    <td><Link to={`/move/${game.id}`} state={{"me": me, "settings": me ? me.settings : {} }}>{i+1}</Link></td>
                     <td>{ new Date(Number(game.sk.substring(0, game.sk.indexOf('#')))).toLocaleString() }</td>
                     { [...Array(maxPlayers).keys()].map((j) => <td key={j}>{ game.players[j] ? game.players[j].name : null }</td>) }
                   </tr>)

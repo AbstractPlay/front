@@ -99,7 +99,7 @@ function Bones(props) {
                         <Route path="/challenges/:metaGame" element={<StandingChallenges />} />
                         <Route path="/listgames/:gameState/:metaGame" element={<ListGames update={update} />} />
                         <Route path="/ratings/:metaGame" element={<Ratings update={update} />} />
-                        <Route path="/move" element={<GameMove update={update} />} />
+                        <Route path="/move/:gameID" element={<GameMove update={update} />} />
                         <Route path="/" element={<Welcome token={token} update={update} />} />
                     </Routes>
               </div>
