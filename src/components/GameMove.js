@@ -129,7 +129,7 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   renderrepSetter(render);
 }
 
-function setupColors(settings, game, t) {
+function setupColors(settings, game) {
   var options = {};
   if (settings.color === "blind") {
       options.colourBlind = true;
@@ -209,6 +209,20 @@ function canExploreMove(game, exploration, focus) {
     && focus.moveNumber === exploration.length - 1;    // we aren't looking at history
 }
 
+function processNewSettings(newGameSettings, newUserSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter) {
+  gameSettingsSetter(newGameSettings);
+  userSettingsSetter(newUserSettings);
+  if (gameRef.current !== null) {
+    var newSettings = {};
+    const game = gameRef.current;
+    newSettings.color = getSetting("color", "standard", newGameSettings, newUserSettings, game.metaGame);
+    newSettings.annotate = getSetting("annotate", true, newGameSettings,newUserSettings, game.metaGame);
+    newSettings.rotate = (newGameSettings === undefined || newGameSettings.rotate === undefined) ? 0 : newGameSettings.rotate;
+    setupColors(newSettings, game);
+    settingsSetter(newSettings);
+  }
+}
+
 function GameMove(props) {
   const [renderrep, renderrepSetter] = useState(null);
   // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
@@ -254,7 +268,7 @@ function GameMove(props) {
       i18n.changeLanguage(lng);
       console.log(`changed language  to ${lng}`);
     }
-  }, []);
+  }, [i18n, state.me]);
 
   useEffect(() => {
     async function fetchData() {
@@ -264,7 +278,7 @@ function GameMove(props) {
         token = usr.signInUserSession.idToken.jwtToken;
       }
       catch (err) {
-        // non logged in user viewing the game
+        // OK, non logged in user viewing the game
       }
       try {
         let data;
@@ -311,7 +325,7 @@ function GameMove(props) {
         if (status === 200) {
           console.log("game fetched:", data.game);
           setupGame(data.game, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
-          processNewSettings(gameRef.current.me > -1 ? data.game.players.find(p => p.id === state.me.id).settings :  {}, state.settings);
+          processNewSettings(gameRef.current.me > -1 ? data.game.players.find(p => p.id === state.me.id).settings : {}, state.settings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter);
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
             if (data.comments.reduce((s, a) => s + 110 + Buffer.byteLength(a.comment,'utf8'), 0) > 350000) {
@@ -327,7 +341,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  }, [state, renderrepSetter, focusSetter, t]);
+  }, [state, renderrepSetter, focusSetter]);
 
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {
@@ -453,21 +467,7 @@ function GameMove(props) {
         render(renderrep, options);
       }
     }
-  }, [renderrep, focus, settings, moveSetter, renderrepSetter]);
-
-  const processNewSettings = (newGameSettings, newUserSettings) => {
-    gameSettingsSetter(newGameSettings);
-    userSettingsSetter(newUserSettings);
-    if (gameRef.current !== null) {
-      var newSettings = {};
-      const game = gameRef.current;
-      newSettings.color = getSetting("color", "standard", newGameSettings, newUserSettings, game.metaGame);
-      newSettings.annotate = getSetting("annotate", true, newGameSettings,newUserSettings, game.metaGame);
-      newSettings.rotate = (newGameSettings === undefined || newGameSettings.rotate === undefined) ? 0 : newGameSettings.rotate;
-      setupColors(newSettings, game, t);
-      settingsSetter(newSettings);
-    }
-  };
+  }, [renderrep, focus, settings]);
 
   const setError = (error) => {
     if (error.Message !== undefined)
@@ -498,7 +498,7 @@ function GameMove(props) {
     if (rotate >= 360)
       rotate -= 360;
     newGameSettings.rotate = rotate;
-    processNewSettings(newGameSettings, userSettings);
+    processNewSettings(newGameSettings, userSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter);
     if (game.me > -1) {
       try {
         const usr = await Auth.currentAuthenticatedUser();
@@ -687,8 +687,8 @@ function GameMove(props) {
                 <GameMoves focus={focus} game={game} exploration={explorationRef.current} handleGameMoveClick={handleGameMoveClick} />
               </div>
               <RenderOptionsModal show={showSettings} game={game} settings={userSettings} gameSettings={gameSettings}
-                processNewSettings={processNewSettings} showSettingsSetter={showSettingsSetter} setError={setError}
-                handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
+                processNewSettings={(newGameSettings, newUserSettings) => processNewSettings(newGameSettings, newUserSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter)} 
+                showSettingsSetter={showSettingsSetter} setError={setError} handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
             </div>
             { focus && game.me > -1 ?
               <div className="commentContainer">
