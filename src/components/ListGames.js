@@ -9,7 +9,6 @@ import Spinner from './Spinner';
 
 function ListGames(props) {
   const { t } = useTranslation();
-  const [loggedin, loggedinSetter] = useState(false);
   const [games, gamesSetter] = useState(null);
   const [me, meSetter] = useState(null);
   const [update, updateSetter] = useState(0);
@@ -23,12 +22,9 @@ function ListGames(props) {
         const usr = await Auth.currentAuthenticatedUser();
         token = usr.signInUserSession.idToken.jwtToken;
         console.log("idToken", usr.signInUserSession.idToken);
-        if (token !== null) {
-          loggedinSetter(true);
-        }
       }
       catch (error) {
-        loggedinSetter(false);
+        token = null;
       }
       if (token !== null) {
         try {
@@ -61,24 +57,7 @@ function ListGames(props) {
       }
     }
     fetchData();
-  },[update]);
-
-  useEffect(() => {
-    async function fetchAuth() {
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const token = usr.signInUserSession.idToken.jwtToken;
-        console.log("idToken", usr.signInUserSession.idToken);
-        if (token !== null) {
-          loggedinSetter(true);
-        }
-      }
-      catch (error) {
-        loggedinSetter(false);
-      }
-    }
-    fetchAuth();
-  },[]);
+  }, [update, gameState, metaGame]);
 
   useEffect(() => {
     async function fetchData() {
@@ -98,7 +77,7 @@ function ListGames(props) {
       }
     }
     fetchData();
-  }, []);
+  }, [gameState, metaGame]);
 
   if (update !== props.update) // Can someone PLEASE explain to me why this is needed!!??? (remove it and see what happens...)
     updateSetter(props.update);

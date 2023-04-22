@@ -5,10 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { addResource } from '@abstractplay/gameslib';
 import { API_ENDPOINT_OPEN } from '../config';
-import { Auth } from 'aws-amplify';
 
 function MetaContainer(props) {
-  const [loggedin, loggedinSetter] = useState(false);
   const [theMataGame, theMetaGameSetter] = useState("");
   const [counts, countsSetter] = useState(null);
   const gameDivs = useRef({});
@@ -19,21 +17,6 @@ function MetaContainer(props) {
   useEffect(() => {
     addResource(i18n.language);
   },[i18n.language]);
-
-  useEffect(() => {
-    async function fetchAuth() {
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const token = usr.signInUserSession.idToken.jwtToken;
-        if (token !== null)
-          loggedinSetter(true);
-      }
-      catch (error) {
-        loggedinSetter(false);
-      }
-    }
-    fetchAuth();
-  },[]);
 
   useEffect(() => {
     async function fetchData() {
@@ -56,7 +39,7 @@ function MetaContainer(props) {
     if (metaGame !== undefined) {
         handleChangeGame(metaGame);
     }
-  }, []);
+  }, [metaGame]);
 
   const handleChangeGame = (game) => {
     console.log(gameDivs.current);

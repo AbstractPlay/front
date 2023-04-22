@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { gameinfo } from '@abstractplay/gameslib';
 import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from '../config';
@@ -50,7 +49,7 @@ function StandingChallenges(props) {
       }
     }
     fetchData();
-  }, [update]);
+  }, [update, metaGame]);
 
   useEffect(() => {
     async function fetchData() {
@@ -82,7 +81,7 @@ function StandingChallenges(props) {
         } else {
           const challenge = challenges.find(c => c.id === accepted);
           if (challenge.numPlayers > 2)
-            updateSetter(update + 1);
+            updateSetter(update => update + 1);
         }
       }
       catch (error) {
@@ -92,7 +91,7 @@ function StandingChallenges(props) {
     }
     if (accepted)
       fetchData();
-  }, [accepted]);
+  }, [accepted, challenges, metaGame]);
 
   useEffect(() => {
     async function fetchData() {
@@ -120,7 +119,7 @@ function StandingChallenges(props) {
         if (result.statusCode !== 200)
           console.log(JSON.parse(result.body));
         else {
-          updateSetter(update + 1);
+          updateSetter(update => update + 1);
         }
       }
       catch (error) {
@@ -130,7 +129,7 @@ function StandingChallenges(props) {
     if (revoke) {
       fetchData();
     }
-  }, [revoke]);
+  }, [revoke, metaGame]);
 
   useEffect(() => {
     async function fetchData() {
@@ -160,7 +159,7 @@ function StandingChallenges(props) {
           console.log("Reject useEffect", result.statusCode);
           console.log(JSON.parse(result.body));
         } else {
-          updateSetter(update + 1);
+          updateSetter(update => update + 1);
         }
       }
       catch (error) {
@@ -171,7 +170,7 @@ function StandingChallenges(props) {
       fetchData();
       rejectSetter(null);
     }
-  }, [reject]);
+  }, [reject, metaGame]);
 
   const handleAccept = async (id) => {
     acceptedSetter(id);

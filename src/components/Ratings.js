@@ -9,7 +9,6 @@ import NewChallengeModal from './NewChallengeModal';
 
 function Ratings(props) {
   const { t } = useTranslation();
-  const [loggedin, loggedinSetter] = useState(false);
   const [ratings, ratingsSetter] = useState(null);
   const [me, meSetter] = useState(null);
   const [opponent, opponentSetter] = useState(null);
@@ -25,12 +24,9 @@ function Ratings(props) {
         const usr = await Auth.currentAuthenticatedUser();
         token = usr.signInUserSession.idToken.jwtToken;
         console.log("idToken", usr.signInUserSession.idToken);
-        if (token !== null) {
-          loggedinSetter(true);
-        }
       }
       catch (error) {
-        loggedinSetter(false);
+        token = null;
       }
       if (token !== null) {
         try {
@@ -66,23 +62,6 @@ function Ratings(props) {
   },[update]);
 
   useEffect(() => {
-    async function fetchAuth() {
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const token = usr.signInUserSession.idToken.jwtToken;
-        console.log("idToken", usr.signInUserSession.idToken);
-        if (token !== null) {
-          loggedinSetter(true);
-        }
-      }
-      catch (error) {
-        loggedinSetter(false);
-      }
-    }
-    fetchAuth();
-  },[]);
-
-  useEffect(() => {
     async function fetchData() {
       console.log(`Fetching ${metaGame} ratings`);
       try {
@@ -100,7 +79,7 @@ function Ratings(props) {
       }
     }
     fetchData();
-  }, []);
+  }, [metaGame]);
 
   const handleChallenge = (player) => {
     opponentSetter(player);

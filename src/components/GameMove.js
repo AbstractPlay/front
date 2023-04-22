@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { render, renderglyph } from '@abstractplay/renderer';
 import { Auth } from 'aws-amplify';
@@ -241,8 +241,6 @@ function GameMove(props) {
 
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
-  const { gameID } = useParams();
-  let metaGame;
 
   useEffect(() => {
     addResource(i18n.language);
@@ -282,7 +280,7 @@ function GameMove(props) {
             body: JSON.stringify({
               "query": "get_game",
               "pars" : {
-                "id": gameID
+                "id": state.game.id
               }
             })
           });
@@ -299,7 +297,7 @@ function GameMove(props) {
         } else {
           var url = new URL(API_ENDPOINT_OPEN);
           url.searchParams.append('query', 'get_game');
-          url.searchParams.append('id', gameID);
+          url.searchParams.append('id', state.game.id);
           const res = await fetch(url);
           status = res.status;
           if (status !== 200) {
@@ -312,7 +310,6 @@ function GameMove(props) {
         }
         if (status === 200) {
           console.log("game fetched:", data.game);
-          metaGame = data.game.megaGame;
           setupGame(data.game, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
           processNewSettings(gameRef.current.me > -1 ? data.game.players.find(p => p.id === state.me.id).settings :  {}, state.settings);
           if (data.comments !== undefined) {
@@ -330,7 +327,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  }, [state, renderrepSetter, focusSetter, t, gameID]);
+  }, [state, renderrepSetter, focusSetter, gameID]);
 
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {
@@ -671,7 +668,7 @@ function GameMove(props) {
                 </div>
               <div className="boardContainer">
                 { /***************** Board *****************/}
-                <div className="groupLevel1Header"><span>{metaGame}</span></div>
+                <div className="groupLevel1Header"><span>{state.metaGame}</span></div>
                 {gameRef.current?.stackExpanding
                   ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
                   : <div className="board" id="svg" ref={boardImage} ></div>

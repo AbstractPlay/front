@@ -248,7 +248,7 @@ function Me(props) {
     try {
       const usr = await Auth.currentAuthenticatedUser();
       console.log("Posting onetime_fix");
-      const res = await fetch(API_ENDPOINT_AUTH, {
+      await fetch(API_ENDPOINT_AUTH, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
