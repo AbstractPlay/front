@@ -48,28 +48,28 @@ const MetaItem = React.forwardRef((props, ref) => {
               {counts.currentgames === 0 ? <span>0 current games</span> :
                 <span>
                   {`${counts.currentgames} `}
-                  <Link to={{pathname: "/listgames", state: {"metaGame": game.uid, "type": "current" }}}>{t("CurrentGamesCount", {count: counts.currentgames})} </Link> 
+                  <Link to={`/listgames/current/${game.uid}`}>{t("CurrentGamesCount", {count: counts.currentgames})} </Link>
                 </span>
               }
               <span>, </span>
               {counts.completedgames === 0 ? <span>0 completed games</span> :
                 <span>
                   {`${counts.completedgames} `}
-                  <Link to={{pathname: "/listgames", state: {"metaGame": game.uid, "type": "completed" }}}>{t("CompletedGamesCount", {count: counts.completedgames})}</Link>
+                  <Link to={`/listgames/completed/${game.uid}`}>{t("CompletedGamesCount", {count: counts.completedgames})}</Link>
                 </span>
               }
               <span>, </span>
-              {counts.standingchallenges === 0 ? <span>0 standing challenges</span> : 
+              {counts.standingchallenges === 0 ? <span>0 standing challenges</span> :
                 <span>
                   {`${counts.standingchallenges} `}
-                  <Link to={{pathname: "/challenges", state: {"metaGame": game.uid }}}>{t("StandingChallengesCount", {count: counts.standingchallenges})}</Link>
+                  <Link to={`/challenges/${game.uid}`}>{t("StandingChallengesCount", {count: counts.standingchallenges})}</Link>
                 </span>
               }
               <span>, </span>
               {!counts.ratings || counts.ratings.length === 0 ? <span>0 rated players</span> :
                 <span>
                   {`${counts.ratings} `}
-                  <Link to={{pathname: "/ratings", state: {"metaGame": game.uid }}}>{t("RatedPlayersCount", {count: counts.ratings})}</Link>
+                  <Link to={`/ratings/${game.uid}`}>{t("RatedPlayersCount", {count: counts.ratings})}</Link>
                 </span>
               }
             </Fragment>

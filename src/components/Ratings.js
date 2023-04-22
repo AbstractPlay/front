@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { gameinfo } from '@abstractplay/gameslib';
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from '../config';
 import { Auth } from 'aws-amplify';
@@ -9,7 +8,6 @@ import Spinner from './Spinner';
 import NewChallengeModal from './NewChallengeModal';
 
 function Ratings(props) {
-  const { state } = useLocation();
   const { t } = useTranslation();
   const [loggedin, loggedinSetter] = useState(false);
   const [ratings, ratingsSetter] = useState(null);
@@ -17,6 +15,7 @@ function Ratings(props) {
   const [opponent, opponentSetter] = useState(null);
   const [update, updateSetter] = useState(0);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
+  const { metaGame } = useParams();
 
   // In case you are logged in get some info, so that we can show your games to you correctly
   useEffect(() => {
@@ -85,11 +84,11 @@ function Ratings(props) {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(`Fetching ${state.type} ${state.metaGame} ratings`);
+      console.log(`Fetching ${metaGame} ratings`);
       try {
         var url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append('query', 'ratings');
-        url.searchParams.append('metaGame', state.metaGame);
+        url.searchParams.append('metaGame', metaGame);
         const res = await fetch(url);
         const result = await res.json();
         console.log(result);
@@ -139,20 +138,8 @@ function Ratings(props) {
 
   if (update !== props.update) // Can someone PLEASE explain to me why this is needed!!??? (remove it and see what happens...)
     updateSetter(props.update);
-  const metaGame = state.metaGame;
   const metaGameName = gameinfo.get(metaGame).name;
   return (
-    <div className="main">
-      <nav>
-        <div>
-          <Link to="/about">{t('About')}</Link>
-        </div>
-        <div><Link to="/games">{t('Games')}</Link></div>
-        { loggedin ?
-          <div><Link to="/">{t('MyDashboard')}</Link></div>
-          : ""
-        }
-      </nav>
       <article>
         <h1 className="centered">{t("RatingsList", {"name": metaGameName})}</h1>
         <div className="standingChallengesContainer">
@@ -192,7 +179,6 @@ function Ratings(props) {
           }
         </div>
       </article>
-    </div>
   );
 }
 

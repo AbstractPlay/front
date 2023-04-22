@@ -49,7 +49,7 @@ a:active {
   -webkit-user-select: none;
   touch-action: manipulation;
 }
-  
+
 .apButton:hover {
   background: var(--main-fg-color);
 }
@@ -82,7 +82,7 @@ a:active {
   /* justify-content: flex-end; */
 }
 
-.main > nav > div {
+.main > nav > li {
   width: 100%;
   min-width: 3em;
   text-align: center;
@@ -781,7 +781,7 @@ div.radios label {
   background: rgba(0, 0, 0, 0.4);
   z-index: 2;
 }
-  
+
 .apModalMain {
   margin: 1em;
   border-radius: 0.7em;
