@@ -58,24 +58,24 @@ function NewChallengeModal(props) {
   useEffect(() => {
     groupVariantsRef.current = {};
     nonGroupVariantsSetter({});
-    if (fixedMetaGame !== undefined) {
-      metaGameSetter(fixedMetaGame);
+    if (props.fixedMetaGame !== undefined) {
+      metaGameSetter(props.fixedMetaGame);
     } else {
       metaGameSetter(null);
     }
-    if (opponent === undefined) {
+    if (props.opponent === undefined) {
       playerCountSetter(-1);
       opponentsSetter([]);
     } else {
       playerCountSetter(2);
-      opponentsSetter([opponent]);
+      opponentsSetter([props.opponent]);
     }
     errorSetter("");
     clockStartSetter(72);
     clockIncSetter(24);
     clockMaxSetter(240);
     clockHardSetter(false);
-  },[show]);
+  },[show, props]);
 
   const setPlayerCount = (cnt) => {
     playerCountSetter(cnt);
@@ -384,7 +384,7 @@ function NewChallengeModal(props) {
                             {v.name} 
                           </label>
                         </div>
-                        { v.description === undefined || v.description.length == 0 ? '' :
+                        { v.description === undefined || v.description.length === 0 ? '' :
                           <Fragment key={"desc" + v.uid}>
                             <div className="pickVariantRadio variantDescription">
                             </div>
@@ -414,7 +414,7 @@ function NewChallengeModal(props) {
                           {v.name}
                         </label>
                       </div>
-                      { v.description === undefined || v.description.length == 0 ? '' :
+                      { v.description === undefined || v.description.length === 0 ? '' :
                         <Fragment key={"desc" + v.uid}>
                           <div className="pickVariantRadio variantDescription">
                           </div>

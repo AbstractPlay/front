@@ -28,9 +28,11 @@ function Navbar(props) {
     <li>
       <Link to="/games">{t("Games")}</Link>
     </li>
-    <li>
-      <Link to="/">{t("MyDashboard")}</Link>
-    </li>
+    { !loggedin ? "" :
+      <li>
+        <Link to="/">{t("MyDashboard")}</Link>
+      </li>
+    }
     <li>
       <Link to="/about">{t("About")}</Link>
     </li>

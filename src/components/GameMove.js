@@ -223,6 +223,27 @@ function processNewSettings(newGameSettings, newUserSettings, gameRef, settingsS
   }
 }
 
+function processNewMove(newmove, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter) {
+  // if the move is complete, or partial and renderable, update board
+  if ((newmove.valid && newmove.complete > 0 && newmove.move !== '') || (newmove.canrender === true)) {
+    doView(state, gameRef.current, newmove, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
+      partialMoveRenderRef, renderrepSetter, movesRef, statusRef);
+  }
+  // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position
+  else if (partialMoveRenderRef.current && !newmove.move.startsWith(newmove.previous)) {
+    let node = getFocusNode(explorationRef.current, focus);
+    let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
+    partialMoveRenderRef.current = false;
+    setStatus(gameEngineTmp, gameRef.current, false, '', statusRef.current);
+    if (focus.canExplore && !gameRef.current.noMoves)
+      movesRef.current = gameEngineTmp.moves();
+    renderrepSetter(gameEngineTmp.render(gameRef.current.me + 1));
+    moveSetter(newmove);
+  } else {
+    moveSetter(newmove); // not renderable yet
+  }
+}
+
 function GameMove(props) {
   const [renderrep, renderrepSetter] = useState(null);
   // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
@@ -373,40 +394,19 @@ function GameMove(props) {
     result.move = value;
     result.previous = move.move;
     // console.log(result);
-    processNewMove(result);
+    processNewMove(result, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter);
   }
 
   // handler when user clicks on "complete move" (for a partial move that could be complete)
   const handleView = () => {
     const newmove = cloneDeep(move);
     newmove.complete = 1;
-    processNewMove(newmove);
+    processNewMove(newmove, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter);
   }
 
   const handleStashClick = (player, count, movePart) => {
     // console.log(`handleStashClick movePart=${movePart}`);
     handleMove(move.move + movePart);
-  }
-
-  const processNewMove = (newmove) => {
-    // if the move is complete, or partial and renderable, update board
-    if ((newmove.valid && newmove.complete > 0 && newmove.move !== '') || (newmove.canrender === true)) {
-      doView(state, gameRef.current, newmove, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
-        partialMoveRenderRef, renderrepSetter, movesRef, statusRef);
-    }
-    // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position
-    else if (partialMoveRenderRef.current && !newmove.move.startsWith(newmove.previous)) {
-      let node = getFocusNode(explorationRef.current, focus);
-      let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-      partialMoveRenderRef.current = false;
-      setStatus(gameEngineTmp, gameRef.current, false, '', statusRef.current);
-      if (focus.canExplore && !gameRef.current.noMoves)
-        movesRef.current = gameEngineTmp.moves();
-      renderrepSetter(gameEngineTmp.render(gameRef.current.me + 1));
-      moveSetter(newmove);
-    } else {
-      moveSetter(newmove); // not renderable yet
-    }
   }
 
   useEffect(() => {
@@ -424,7 +424,7 @@ function GameMove(props) {
       //   result.move = moveRef.current.move;
       console.log('boardClick: move', moveRef.current.move);
       console.log('boardClick: result', result);
-      processNewMove(result);
+      processNewMove(result, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter);
     }
 
     function expand(row, col) {
@@ -467,7 +467,7 @@ function GameMove(props) {
         render(renderrep, options);
       }
     }
-  }, [renderrep, focus, settings]);
+  }, [renderrep, state, focus, settings]);
 
   const setError = (error) => {
     if (error.Message !== undefined)
