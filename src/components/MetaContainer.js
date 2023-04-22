@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, createRef } from 'react';
 import MetaItem from './MetaItem';
 import { gameinfo } from '@abstractplay/gameslib';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { addResource } from '@abstractplay/gameslib';
 import { API_ENDPOINT_OPEN } from '../config';
 import { Auth } from 'aws-amplify';
@@ -11,6 +12,7 @@ function MetaContainer(props) {
   const [theMataGame, theMetaGameSetter] = useState("");
   const [counts, countsSetter] = useState(null);
   const gameDivs = useRef({});
+  const { metaGame } = useParams();
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
@@ -50,6 +52,12 @@ function MetaContainer(props) {
     fetchData();
   },[]);
 
+  useEffect(() => {
+    if (metaGame !== undefined) {
+        handleChangeGame(metaGame);
+    }
+  }, []);
+
   const handleChangeGame = (game) => {
     console.log(gameDivs.current);
     theMetaGameSetter(game);
@@ -73,7 +81,7 @@ function MetaContainer(props) {
         <h1 className="centered">{t("AvailableGames")}</h1>
         <div className="goToGame centered">
           <span className="goToGameLabel">Go to: </span>
-          <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
+          <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)} defaultValue={(metaGame !== undefined) ? metaGame : null}>
             <option value="">--{t('Select')}--</option>
             { games.map(game => { return <option key={gameinfo.get(game).uid} value={game}>{gameinfo.get(game).name}</option>}) }
           </select>

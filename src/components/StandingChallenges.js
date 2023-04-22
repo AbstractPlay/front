@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { gameinfo } from '@abstractplay/gameslib';
 import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from '../config';
 import { Auth } from 'aws-amplify';
 import Spinner from './Spinner';
 
 function StandingChallenges(props) {
-  const { state } = useLocation();
   const { t } = useTranslation();
   const [loggedin, loggedinSetter] = useState(false);
   const [myid, myidSetter] = useState(null);
@@ -16,6 +16,7 @@ function StandingChallenges(props) {
   const [revoke, revokeSetter] = useState(null);
   const [reject, rejectSetter] = useState(null);
   const [update, updateSetter] = useState(0);
+  const { metaGame } = useParams();
 
   useEffect(() => {
     async function fetchAuth() {
@@ -32,11 +33,11 @@ function StandingChallenges(props) {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(`Fetching ${state.metaGame} standing challenges`);
+      console.log(`Fetching ${metaGame} standing challenges`);
       try {
         var url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append('query', 'standing_challenges');
-        url.searchParams.append('metaGame', state.metaGame);
+        url.searchParams.append('metaGame', metaGame);
         const res = await fetch(url);
         const result = await res.json();
         console.log(result);
@@ -55,7 +56,7 @@ function StandingChallenges(props) {
     async function fetchData() {
       const usr = await Auth.currentAuthenticatedUser();
       const token = usr.signInUserSession.idToken.jwtToken;
-      console.log(`Submitting acceptance of ${state.metaGame} challenge ${accepted}`);
+      console.log(`Submitting acceptance of ${metaGame} challenge ${accepted}`);
       try {
         const res = await fetch(API_ENDPOINT_AUTH, {
           method: 'POST',
@@ -68,7 +69,7 @@ function StandingChallenges(props) {
             "query": "challenge_response",
             "pars" : {
               "id": accepted,
-              "metaGame": state.metaGame,
+              "metaGame": metaGame,
               "standing": true,
               "response": true
             }
@@ -110,7 +111,7 @@ function StandingChallenges(props) {
             "query": "challenge_revoke",
             "pars": {
               "id": revoke,
-              "metaGame": state.metaGame,
+              "metaGame": metaGame,
               "standing": true
             }
           }),
@@ -135,7 +136,7 @@ function StandingChallenges(props) {
     async function fetchData() {
       const usr = await Auth.currentAuthenticatedUser();
       const token = usr.signInUserSession.idToken.jwtToken;
-      console.log(`Submitting reject of ${state.metaGame} challenge ${reject}`);
+      console.log(`Submitting reject of ${metaGame} challenge ${reject}`);
       try {
         const res = await fetch(API_ENDPOINT_AUTH, {
           method: 'POST',
@@ -148,7 +149,7 @@ function StandingChallenges(props) {
             "query": "challenge_response",
             "pars" : {
               "id": reject,
-              "metaGame": state.metaGame,
+              "metaGame": metaGame,
               "standing": true,
               "response": false
             }
@@ -184,7 +185,6 @@ function StandingChallenges(props) {
     revokeSetter(id);
   }
 
-  const metaGame = state.metaGame;
   const metaGameName = gameinfo.get(metaGame).name;
   console.log(metaGame);
   const showRespond = loggedin && challenges;

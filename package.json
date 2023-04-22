@@ -38,6 +38,8 @@
     "build-dev": "cross-env REACT_APP_REAL_MODE=development react-scripts build",
     "test": "react-scripts test",
     "extract": "i18next 'src/**/*.{js,jsx}'",
+    "deploy": "serverless client deploy",
+    "deploy-prod": "serverless client deploy --stage prod",
     "invalidate": "aws cloudfront create-invalidation --profile AbstractPlayDev --distribution-id E2FD1T2JUN28HB --paths /*",
     "invalidate-prod": "aws cloudfront create-invalidation --profile AbstractPlayProd --distribution-id EZ7B67NVBQ903 --paths /*"
   },
