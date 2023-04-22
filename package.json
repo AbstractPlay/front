@@ -36,6 +36,11 @@
     "start": "cross-env REACT_APP_REAL_MODE=local react-scripts start",
     "build": "react-scripts build",
     "build-dev": "cross-env REACT_APP_REAL_MODE=development react-scripts build",
+    "build-prod": "cross-env REACT_APP_REAL_MODE=production react-scripts build",
+    "full-dev": "npm run build-dev && npm run invalidate && npm run deploy",
+    "full-prod": "npm run build-prod && npm run invalidate-prod && npm run deploy-prod",
+    "deploy": "serverless client deploy",
+    "deploy-prod": "serverless client deploy --stage prod",
     "test": "react-scripts test",
     "extract": "i18next 'src/**/*.{js,jsx}'",
     "invalidate": "aws cloudfront create-invalidation --profile AbstractPlayDev --distribution-id E2FD1T2JUN28HB --paths /*",
@@ -61,6 +66,8 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "i18next-parser": "^7.7.0"
+    "i18next-parser": "^7.7.0",
+    "serverless-finch": "^4.0.0",
+    "serverless-single-page-app-plugin": "^1.0.4"
   }
 }
