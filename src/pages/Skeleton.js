@@ -91,14 +91,14 @@ function Bones(props) {
           </div>
           <div>
             <div>
-                <div class="main">
+                <div className="main">
                     <Navbar />
                     <Routes>
                         <Route path="/about" element={<About token={token} />} />
-                        <Route path="/games" element={<MetaContainer token={token} />} />
-                        <Route path="/challenges" element={<StandingChallenges />} />
-                        <Route path="/listgames" element={<ListGames update={update} />} />
-                        <Route path="/ratings" element={<Ratings update={update} />} />
+                        <Route path="/games/:metaGame?" element={<MetaContainer token={token} />} />
+                        <Route path="/challenges/:metaGame" element={<StandingChallenges />} />
+                        <Route path="/listgames/:gameState/:metaGame" element={<ListGames update={update} />} />
+                        <Route path="/ratings/:metaGame" element={<Ratings update={update} />} />
                         <Route path="/move" element={<GameMove update={update} />} />
                         <Route path="/" element={<Welcome token={token} update={update} />} />
                     </Routes>
