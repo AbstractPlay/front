@@ -1,5 +1,6 @@
+import "bulma/css/bulma.min.css";
 import React, { useState, Suspense, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Link, Routes, Route } from "react-router-dom";
 import { COGNITO_USER_POOL_ID, COGNITO_APPID, COGNITO_DOMAIN, COGNITO_COOKIE_DOMAIN, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';
 import {Amplify, Auth } from 'aws-amplify';
 import './Skeleton.css';
@@ -14,6 +15,7 @@ import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
 import Navbar from '../components/Navbar';
+import Footer from "../components/Footer";
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -80,34 +82,21 @@ function Bones(props) {
   else
     return (
       <Router>
-        <div className="apPageContainer">
-          <div className="apHeader">
-            <div className="apLogo">
-              <img src={logo} alt="Abstract Play logo"  id="logo" />
-            </div>
-            <div className="loginOut">
-              <LogInOutButton token={token} updater={updateSetter}/>
-            </div>
-          </div>
-          <div>
-            <div>
-                <div className="main">
-                    <Navbar />
-                    <Routes>
-                        <Route path="/about" element={<About token={token} />} />
-                        <Route path="/games/:metaGame?" element={<MetaContainer token={token} />} />
-                        <Route path="/challenges/:metaGame" element={<StandingChallenges />} />
-                        <Route path="/listgames/:gameState/:metaGame" element={<ListGames update={update} />} />
-                        <Route path="/ratings/:metaGame" element={<Ratings update={update} />} />
-                        <Route path="/move/:metaGame/:gameID" element={<GameMove update={update} />} />
-                        <Route path="/" element={<Welcome token={token} update={update} />} />
-                    </Routes>
-              </div>
-            </div>
-          </div>
-          <div>
-          </div>
-        </div>
+        <main className="container p-0">
+            <Navbar />
+            <section className="section" id="main">
+                <Routes>
+                    <Route path="/about" element={<About token={token} />} />
+                    <Route path="/games/:metaGame?" element={<MetaContainer token={token} />} />
+                    <Route path="/challenges/:metaGame" element={<StandingChallenges />} />
+                    <Route path="/listgames/:gameState/:metaGame" element={<ListGames update={update} />} />
+                    <Route path="/ratings/:metaGame" element={<Ratings update={update} />} />
+                    <Route path="/move/:metaGame/:gameID" element={<GameMove update={update} />} />
+                    <Route path="/" element={<Welcome token={token} update={update} />} />
+                </Routes>
+            </section>
+        </main>
+        <Footer/>
       </Router>
     );
 }

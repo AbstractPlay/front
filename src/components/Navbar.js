@@ -1,11 +1,16 @@
+import "bulma/css/bulma.min.css";
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
 import { addResource } from '@abstractplay/gameslib';
 import { Auth } from 'aws-amplify';
+import logo from '../assets/AbstractPlayLogo.svg';
+import LogInOutButton from "./LogInOutButton";
 
 function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
+  const [update, updateSetter] = useState(0);
+  const [token, tokenSetter] = useState(null);
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
@@ -24,19 +29,46 @@ function Navbar(props) {
   },[]);
 
   return (
-    <nav>
-    <li>
-      <Link to="/games">{t("Games")}</Link>
-    </li>
-    { !loggedin ? "" :
-      <li>
-        <Link to="/">{t("MyDashboard")}</Link>
-      </li>
-    }
-    <li>
-      <Link to="/about">{t("About")}</Link>
-    </li>
-  </nav>
+    <nav className="navbar">
+        <div className="navbar-brand">
+            <div className="navbar-item">
+                <Link to="/">
+                    <img src={logo} alt="Abstract Play logo" width="100%" height="auto" style={{maxHeight: "none"}} />
+                </Link>
+            </div>
+            <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMain">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="navbarMain" className="navbar-menu">
+            <div className="navbar-start">
+                { !loggedin ? "" :
+                <div className="navbar-item">
+                    <Link to="/" className="navbar-item">
+                        {t("MyDashboard")}
+                    </Link>
+                </div>
+                }
+                <div className="navbar-item">
+                    <Link to="/games" className="navbar-item">
+                        {t("Games")}
+                    </Link>
+                </div>
+                <div className="navbar-item">
+                    <Link to="/about" className="navbar-item">
+                        {t("About")}
+                    </Link>
+                </div>
+            </div>
+            <div className="navbar-end">
+                <div className="navbar-item">
+                    <LogInOutButton token={token} updater={updateSetter}/>
+                </div>
+            </div>
+        </div>
+    </nav>
   );
 }
 

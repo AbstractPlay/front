@@ -1,12 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import {Link} from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { useTranslation } from 'react-i18next';
 import { GameFactory } from '@abstractplay/gameslib';
 import gameImages from '../assets/GameImages';
+import Modal from './ModalBulma';
 
 const MetaItem = React.forwardRef((props, ref) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const { t } = useTranslation();
   let game = props.game;
   let counts = props.counts;
@@ -24,63 +26,63 @@ const MetaItem = React.forwardRef((props, ref) => {
   else
     designerString = 'Designers: ';
   designerString += designers.join(", ");
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  }
+  const closeModal = () => {
+    setModalIsOpen(false);
+  }
+
   return (
-    <div ref={ref} className={"metaGame" + (props.highlight ? " theMetaGame" : "")}>
+    <div ref={ref} className={"metaGame is-flex is-flex-wrap-wrap is-align-content-flex-start is-flex-grow-1" + (props.highlight ? " theMetaGame" : "")}>
       <div className="metaGameTitle">
         <div className="metaGameTitleLine"></div>
         <div className="metaGameTitleText">{game.name}</div>
       </div>
-      <div className="metaGameDescription">
-        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="metaDescriptionMarkdown">
-          {gameEngine.description()}
+      <div className="content metaGameDescription">
+        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="metaDescriptionMarkdown content">
+          {gameEngine.description() + "\n\n" + designerString}
         </ReactMarkdown>
-        <p>{designerString}</p>
-        <div>External links
-          <ul>
-            {game.urls.map((l, i) =>
-              <li key = {i}><a href={l} target="_blank" rel="noopener noreferrer">{l}</a></li>
-              )}
-          </ul>
-        </div>
+        <ul>
+        {game.urls.map((l, i) =>
+            <li key = {i}><a href={l} target="_blank" rel="noopener noreferrer">{l}</a></li>
+            )}
+        </ul>
         <div>
           { counts === undefined ? '' :
             <Fragment>
-              {counts.currentgames === 0 ? <span>0 current games</span> :
                 <span>
                   {`${counts.currentgames} `}
                   <Link to={`/listgames/current/${game.uid}`}>{t("CurrentGamesCount", {count: counts.currentgames})} </Link>
-                </span>
-              }
-              <span>, </span>
-              {counts.completedgames === 0 ? <span>0 completed games</span> :
+                </span>,&nbsp;
                 <span>
                   {`${counts.completedgames} `}
                   <Link to={`/listgames/completed/${game.uid}`}>{t("CompletedGamesCount", {count: counts.completedgames})}</Link>
-                </span>
-              }
-              <span>, </span>
-              {counts.standingchallenges === 0 ? <span>0 standing challenges</span> :
+                </span>,&nbsp;
                 <span>
                   {`${counts.standingchallenges} `}
                   <Link to={`/challenges/${game.uid}`}>{t("StandingChallengesCount", {count: counts.standingchallenges})}</Link>
-                </span>
-              }
-              <span>, </span>
-              {!counts.ratings || counts.ratings.length === 0 ? <span>0 rated players</span> :
+                </span>,&nbsp;
                 <span>
                   {`${counts.ratings} `}
                   <Link to={`/ratings/${game.uid}`}>{t("RatedPlayersCount", {count: counts.ratings})}</Link>
                 </span>
-              }
             </Fragment>
           }
         </div>
       </div>
       <div className="metaGameImage">
         <div id={"svg" + game.uid} >
-          <img  src={`data:image/svg+xml;utf8,${image}`} alt={game.uid} />
+          <img src={`data:image/svg+xml;utf8,${image}`} alt={game.uid} width="100%" height="auto" onClick={openModal} />
         </div>
       </div>
+      <Modal
+        closeModal={closeModal}
+        modalState={modalIsOpen}
+        title={`Board image for ${game.name}`}>
+          <img src={`data:image/svg+xml;utf8,${image}`} alt={game.uid} width="100%" height="auto" />
+    </Modal>
     </div>
   );
 })

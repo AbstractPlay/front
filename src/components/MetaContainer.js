@@ -1,3 +1,4 @@
+import "bulma/css/bulma.min.css";
 import React, { useState, useEffect, useRef, createRef } from 'react';
 import MetaItem from './MetaItem';
 import { gameinfo } from '@abstractplay/gameslib';
@@ -69,7 +70,7 @@ function MetaContainer(props) {
             { games.map(game => { return <option key={gameinfo.get(game).uid} value={game}>{gameinfo.get(game).name}</option>}) }
           </select>
         </div>
-        <div className="metaGames">
+        <div className="is-flex is-flex-wrap-wrap is-justify-content-space-evenly">
           {games.map(k =>
             <MetaItem ref={el => {gameDivs.current[k] = createRef(); gameDivs.current[k].current = el}} key={gameinfo.get(k).uid} game={gameinfo.get(k)}
               counts={counts ? counts[gameinfo.get(k).uid] : undefined} highlight = {k === theMataGame}/>)
