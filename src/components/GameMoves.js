@@ -40,8 +40,9 @@ function getPath(focus, exploration, path) {
     while (node.children.length > 0) {
       let next = [];
       for (let k = 0; k < node.children.length; k++) {
-        const c = node.children[k];
+
         next.push({"moveNumber": focus.moveNumber, "exPath": focus.exPath.concat(k)});
+        
       }
       path.push(next);
       if (node.children.length !== 1)

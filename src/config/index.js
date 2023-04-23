@@ -2,11 +2,15 @@ const merge = require('lodash/merge');
 const global = require('./global');
 
 var env; // let doesn't seem to work here
-if (process.env.NODE_ENV === 'local') {
+console.log(`Env: ${JSON.stringify(process.env)}`);
+if (process.env.REACT_APP_REAL_MODE === 'local') {
+    console.log("Loading local environment");
     env = require('./local');
-} else if (process.env.NODE_ENV === 'development') {
+} else if (process.env.REACT_APP_REAL_MODE === 'development') {
+    console.log("Loading dev environment");
     env = require('./dev');
 } else {
+    console.log("Loading prod environment");
     env = require('./prod');
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import Spinner from './Spinner';
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from '../config';
@@ -15,6 +15,7 @@ function UserSettingsModal(props) {
   const [changingName, changingNameSetter] = useState(false);
   const [changingEMail, changingEMailSetter] = useState(false);
   const [changingCodeSent, changingCodeSentSetter] = useState(false);
+  /*eslint-disable no-unused-vars*/
   const [changingLanguage, changingLanguageSetter] = useState(false);
   const [name, nameSetter] = useState('');
   const [badname, badnameSetter] = useState('');
@@ -26,17 +27,6 @@ function UserSettingsModal(props) {
   const [updated, updatedSetter] = useState(0);
 
   useEffect(() => {
-    async function fetchData() {
-      var url = new URL(API_ENDPOINT_OPEN);
-      url.searchParams.append('query', 'user_names');
-      const res = await fetch(url);
-      const result = await res.json();
-      console.log("user_names: ", result);
-      usersSetter(result.map(u => u.name));
-    }
-    console.log(`users.length ${users.length}`);
-    if (show && users.length === 0)
-      fetchData();
     if (show) {
       changingNameSetter(false);
       changingEMailSetter(false);
@@ -46,7 +36,20 @@ function UserSettingsModal(props) {
       emailSetter('');
       emailCodeSetter('');
     }
-  },[show]);
+  }, [show]);
+
+  useEffect(() => {
+    async function fetchData() {
+      var url = new URL(API_ENDPOINT_OPEN);
+      url.searchParams.append('query', 'user_names');
+      const res = await fetch(url);
+      const result = await res.json();
+      console.log("user_names: ", result);
+      usersSetter(result.map(u => u.name));
+    }
+    if (show && users.length === 0)
+      fetchData();
+  }, [show, users]);
 
   const handleNameChangeClick = () => {
     changingNameSetter(true);
@@ -69,6 +72,7 @@ function UserSettingsModal(props) {
     updatedSetter(updated + 1);
   }
 
+  /*eslint-disable no-unused-vars*/
   const handleLanguageChangeSubmitClick = async () => {
     changingLanguageSetter(false);
     await handleSettingChangeSubmit("language", language);
@@ -99,6 +103,7 @@ function UserSettingsModal(props) {
     changingEMailSetter(true);
   }
 
+  /*eslint-disable no-unused-vars*/
   const handleLanguageChangeClick = () => {
     changingLanguageSetter(true);
   }
@@ -230,7 +235,8 @@ function UserSettingsModal(props) {
           </Fragment>
           : ''
         }
-        {/********************* Language *********************
+        {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above
+        ******************** Language *********************
         <div className="userSettingsLabelDiv">
           <label className="userSettingsLabel" htmlFor="user_settings_language" >{t("Language")}:</label>
         </div>

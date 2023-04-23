@@ -18,7 +18,6 @@ service: apfront # NOTE: update this with your service name
 plugins:
   - serverless-finch
   - serverless-single-page-app-plugin
-
 params:
   dev:
     profile: AbstractPlayDev

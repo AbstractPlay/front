@@ -10,7 +10,6 @@ import ChallengeResponse from './ChallengeResponse';
 import NewChallengeModal from './NewChallengeModal';
 import NewProfile from './NewProfile'
 import { API_ENDPOINT_AUTH } from '../config';
-import { Link } from "react-router-dom";
 import i18n from '../i18n';
 
 function Me(props) {
@@ -249,7 +248,7 @@ function Me(props) {
     try {
       const usr = await Auth.currentAuthenticatedUser();
       console.log("Posting onetime_fix");
-      const res = await fetch(API_ENDPOINT_AUTH, {
+      await fetch(API_ENDPOINT_AUTH, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -271,11 +270,6 @@ function Me(props) {
   }
   if (!me) {
     return (
-      <div className="main">
-        <nav>
-          <div><Link to="/about">{t('About')}</Link></div>
-          <div><Link to="/games">{t('Games')}</Link></div>
-        </nav>
         <article>
           <div className="article">
             <div className="dashboardContainer1">
@@ -283,8 +277,7 @@ function Me(props) {
             </div>
           </div>
         </article>
-      </div>
-    );  
+    );
   }
   if (me.name === undefined) {
     return <NewProfile show={true} varsSetter={varsSetter} />;
@@ -335,11 +328,7 @@ function Me(props) {
     console.log("standingChallenges", me.standingChallenges);
     console.log("challengesReceived", me.challengesReceived);
     return (
-      <div className="main">
-        <nav>
-          <div><Link to="/about">{t('About')}</Link></div>
-          <div><Link to="/games">{t('Games')}</Link></div>
-        </nav>
+        <div>
         <article>
           <div className="article">
             <div className="dashboardContainer1">
@@ -352,7 +341,7 @@ function Me(props) {
                     <div className="groupLevel2Header"><span>{t('YourMove')}</span></div>
                     { myMove.length === 0
                       ? <span className="listComment">{t('NoYourMove')}</span>
-                      : <ul> {myMove.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)} </ul> 
+                      : <ul> {myMove.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)} </ul>
                     }
                   </div>
                   <div className="groupLevel2">
@@ -397,7 +386,7 @@ function Me(props) {
                             setters={{
                               challengeSetter: challengeSetter,
                               showChallengeViewModalSetter: showChallengeViewModalSetter,
-                              showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>) 
+                              showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
                           }
                         </ul>
                     }
@@ -412,14 +401,14 @@ function Me(props) {
                             setters={{
                               challengeSetter: challengeSetter,
                               showChallengeViewModalSetter: showChallengeViewModalSetter,
-                              showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>) 
+                              showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
                           }
                         </ul>
                     }
                   </div>
                   <div className="groupLevel2">
                     <div className="groupLevel2Header"><span>{t('NewChallenge')}</span></div>
-                    <span className="listComment"><button className="apButton" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</button></span>                
+                    <span className="listComment"><button className="apButton" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</button></span>
                   </div>
                 </div>
                 { me.admin !== true ? '' :
@@ -438,7 +427,7 @@ function Me(props) {
         </article>
         <NewChallengeModal show={showNewChallengeModal} id={me.id} handleClose={handleNewChallengeClose} handleChallenge={handleNewChallenge2} />
 
-        <Modal show={showChallengeViewModal} title={t('Challenge Details')} 
+        <Modal show={showChallengeViewModal} title={t('Challenge Details')}
           buttons={[{label: (challenge.challenger ? challenge.challenger.id : '') === me.id ? t('RevokeChallenge') : t('RevokeAcceptance'), action: handleChallengeRevoke}, {label: t('Close'), action: handleChallengeViewClose}]}>
           <div>{
               <ChallengeView challenge={challenge} me={me.id}/>
@@ -450,7 +439,7 @@ function Me(props) {
           buttons={[{label: t('Accept'), action: () => handleChallengeResponse(true)}, {label: t('Reject'), action: () => handleChallengeResponse(false)}, {label: t('Close'), action: handleChallengeResponseClose}]}>
           <ChallengeResponse challenge={challenge} me={me}/>
         </Modal>
-      </div>
+    </div>
     );
   }
 }

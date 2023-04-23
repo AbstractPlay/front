@@ -1,0 +1,23 @@
+{
+    "Abstract Play": "Abstract Play",
+    "Board": "Board",
+    "ColorBlindLong": "Colour-blind-friendly colours (4 max)",
+    "ColorPatternsLong": "Black-and-white patterns (10 max)",
+    "DisplaySettings": "Display Settings",
+    "Generic login error message": "An error occurred while trying to log in. If the problem persists, please contact the system administrator.",
+    "Language": "Preferred language",
+    "Login Error": "Login Error",
+    "Make time for games": "Make time for games",
+    "MarkAsLoss": "Mark as loss",
+    "MarkAsWin": "Mark as win",
+    "Menu": "Menu",
+    "NoUsers": "No users!",
+    "OppsMove": "Opponent's move",
+    "Player": "Player",
+    "Rotate": "Rotate board",
+    "SelectOpponents": "Please select {{count}} opponents",
+    "StandardColorsLong": "Standard colours (9 max)",
+    "Variant": "Variant",
+    "Variants": "Variants",
+    "Welcome": "Welcome to Abstract Play!"
+}
