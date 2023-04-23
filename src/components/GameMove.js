@@ -136,13 +136,16 @@ function mergeExploration(game, exploration, data) {
     let gameEngine = GameFactory(game.metaGame, node.state);
     mergeMoveRecursive(gameEngine, node, data[0].tree);
   } else if (data[1] && data[1].move === moveNumber - 2) {
-    const subtree1 = data[1].tree.find(e => e.move === exploration[moveNumber - 2].move);
+    let node = exploration[moveNumber - 3];
+    let gameEngine = GameFactory(game.metaGame, node.state);
+    const subtree1 = data[1].tree.find(e => gameEngine.sameMove(e.move, exploration[moveNumber - 2].move));
+    console.log('Found subtree1: ', subtree1);
     if (subtree1) {
-      const subtree2 = subtree1.children.find(e => e.move === exploration[moveNumber - 1].move);
+      gameEngine.move(exploration[moveNumber - 2].move);
+      const subtree2 = subtree1.children.find(e => gameEngine.sameMove(e.move, exploration[moveNumber - 1].move));
+      console.log('Found subtree2: ', subtree2);
       if (subtree2) {
-        let node = exploration[moveNumber - 1];
-        let gameEngine = GameFactory(game.metaGame, node.state);
-        mergeMoveRecursive(gameEngine, node, subtree2.children);
+        mergeMoveRecursive(gameEngine, exploration[moveNumber - 1], subtree2.children);
       }
     }
   }
@@ -152,7 +155,7 @@ function mergeMoveRecursive(gameEngine, node, children) {
   console.log(node);
   children.forEach(n => {
     gameEngine.move(n.move);
-    const pos = node.AddChild(n.move, gameEngine.serialize(), gameEngine.gameover ? '' : gameEngine.currplayer - 1);
+    const pos = node.AddChild(n.move, gameEngine.serialize(), gameEngine.gameover ? '' : gameEngine.currplayer - 1, gameEngine);
     if (n.outcome !== undefined)
       node.children[pos].SetOutcome(n.outcome);
     mergeMoveRecursive(gameEngine, node.children[pos], n.children);
@@ -233,7 +236,7 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
     node = getFocusNode(explorationRef.current, focus);
     let newstate = gameEngineTmp.serialize();
     // console.log("newstate", newstate);
-    const pos = node.AddChild(move.move, newstate, (node.toMove + 1) % game.players.length);
+    const pos = node.AddChild(move.move, newstate, (node.toMove + 1) % game.players.length, gameEngineTmp);
     saveExploration(explorationRef.current, game.id);
     let newfocus = cloneDeep(focus);
     newfocus.exPath.push(pos);
@@ -446,7 +449,7 @@ function GameMove(props) {
             body: JSON.stringify({
               "query": "get_exploration",
               "pars" : {
-                "game": state.game.id,
+                "game": gameID,
                 "move": explorationRef.current.length
               }
             })
@@ -476,7 +479,7 @@ function GameMove(props) {
       console.log("fetching exploration");
       fetchData();
     }
-  }, [focus, explorationFetched]);
+  }, [focus, explorationFetched, gameID]);
 
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {

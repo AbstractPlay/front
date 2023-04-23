@@ -201,7 +201,7 @@
     "Waiting": "[FR] Waiting on other players to submit their moves",
     "WaitingResponse": "[FR] Waiting on response",
     "WelcomePlayer": "[FR] Dashboard for {{me}}",
-    "Winning": "[FR] Mark this move as winning",
+    "Winning": "[FR] Mark this move as winning for this player",
     "WithVariants_one": "",
     "WithVariants_many": "",
     "WithVariants_other": "",

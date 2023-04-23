@@ -14,9 +14,9 @@ export class GameNode {
     this.outcome = -1; // 0 for player1 win, 1 for player2 win, -1 for undecided.
   }
 
-  AddChild(move, state, toMove) {
+  AddChild(move, state, toMove, gameEngine) {
     for (let i = 0; i < this.children.length; i++) {
-      if (this.children[i].move === move)
+      if (gameEngine.sameMove(this.children[i].move, move))
         return i;
     }
     const child = new GameNode(this, move, state, toMove);
