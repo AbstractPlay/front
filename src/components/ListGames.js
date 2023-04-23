@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { gameinfo } from '@abstractplay/gameslib';
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from '../config';
 import { Auth } from 'aws-amplify';
@@ -97,7 +96,7 @@ function ListGames(props) {
                 </tr>
                 { games.map((game, i) =>
                   <tr key={i}>
-                    <td><Link to={`/move/${game.id}`} state={{"me": me, "settings": me ? me.settings : {} }}>{i+1}</Link></td>
+                    <td><Link to={`/move/${game.metaGame}/${game.id}`} state={{"me": me, "settings": me ? me.settings : {} }}>{i+1}</Link></td>
                     <td>{ new Date(Number(game.sk.substring(0, game.sk.indexOf('#')))).toLocaleString() }</td>
                     { [...Array(maxPlayers).keys()].map((j) => <td key={j}>{ game.players[j] ? game.players[j].name : null }</td>) }
                   </tr>)

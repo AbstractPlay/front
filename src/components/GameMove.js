@@ -276,7 +276,7 @@ function GameMove(props) {
 
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
-  const { gameID } = useParams();
+  const { metaGame, gameID } = useParams();
 
   useEffect(() => {
     addResource(i18n.language);
@@ -669,7 +669,7 @@ function GameMove(props) {
                 </div>
               <div className="boardContainer">
                 { /***************** Board *****************/}
-                <div className="groupLevel1Header"><span>{state.metaGame}</span></div>
+                <div className="groupLevel1Header"><span>{gameinfo.get(metaGame).name}</span></div>
                 {gameRef.current?.stackExpanding
                   ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
                   : <div className="board" id="svg" ref={boardImage} ></div>
