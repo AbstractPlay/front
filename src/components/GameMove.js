@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { render, renderglyph } from '@abstractplay/renderer';
 import { Auth } from 'aws-amplify';
@@ -209,6 +209,41 @@ function canExploreMove(game, exploration, focus) {
     && focus.moveNumber === exploration.length - 1;    // we aren't looking at history
 }
 
+function processNewSettings(newGameSettings, newUserSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter) {
+  gameSettingsSetter(newGameSettings);
+  userSettingsSetter(newUserSettings);
+  if (gameRef.current !== null) {
+    var newSettings = {};
+    const game = gameRef.current;
+    newSettings.color = getSetting("color", "standard", newGameSettings, newUserSettings, game.metaGame);
+    newSettings.annotate = getSetting("annotate", true, newGameSettings,newUserSettings, game.metaGame);
+    newSettings.rotate = (newGameSettings === undefined || newGameSettings.rotate === undefined) ? 0 : newGameSettings.rotate;
+    setupColors(newSettings, game);
+    settingsSetter(newSettings);
+  }
+}
+
+function processNewMove(newmove, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter) {
+  // if the move is complete, or partial and renderable, update board
+  if ((newmove.valid && newmove.complete > 0 && newmove.move !== '') || (newmove.canrender === true)) {
+    doView(state, gameRef.current, newmove, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
+      partialMoveRenderRef, renderrepSetter, movesRef, statusRef);
+  }
+  // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position
+  else if (partialMoveRenderRef.current && !newmove.move.startsWith(newmove.previous)) {
+    let node = getFocusNode(explorationRef.current, focus);
+    let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
+    partialMoveRenderRef.current = false;
+    setStatus(gameEngineTmp, gameRef.current, false, '', statusRef.current);
+    if (focus.canExplore && !gameRef.current.noMoves)
+      movesRef.current = gameEngineTmp.moves();
+    renderrepSetter(gameEngineTmp.render(gameRef.current.me + 1));
+    moveSetter(newmove);
+  } else {
+    moveSetter(newmove); // not renderable yet
+  }
+}
+
 function GameMove(props) {
   const [renderrep, renderrepSetter] = useState(null);
   // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
@@ -241,6 +276,7 @@ function GameMove(props) {
 
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
+  const { gameID } = useParams();
 
   useEffect(() => {
     addResource(i18n.language);
@@ -254,7 +290,7 @@ function GameMove(props) {
       i18n.changeLanguage(lng);
       console.log(`changed language  to ${lng}`);
     }
-  }, []);
+  }, [i18n, state.me]);
 
   useEffect(() => {
     async function fetchData() {
@@ -264,7 +300,7 @@ function GameMove(props) {
         token = usr.signInUserSession.idToken.jwtToken;
       }
       catch (err) {
-        // non logged in user viewing the game
+        // OK, non logged in user viewing the game
       }
       try {
         let data;
@@ -280,7 +316,7 @@ function GameMove(props) {
             body: JSON.stringify({
               "query": "get_game",
               "pars" : {
-                "id": state.game.id
+                "id": gameID
               }
             })
           });
@@ -297,7 +333,7 @@ function GameMove(props) {
         } else {
           var url = new URL(API_ENDPOINT_OPEN);
           url.searchParams.append('query', 'get_game');
-          url.searchParams.append('id', state.game.id);
+          url.searchParams.append('id', gameID);
           const res = await fetch(url);
           status = res.status;
           if (status !== 200) {
@@ -311,7 +347,7 @@ function GameMove(props) {
         if (status === 200) {
           console.log("game fetched:", data.game);
           setupGame(data.game, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
-          processNewSettings(gameRef.current.me > -1 ? data.game.players.find(p => p.id === state.me.id).settings :  {}, state.settings);
+          processNewSettings(gameRef.current.me > -1 ? data.game.players.find(p => p.id === state.me.id).settings : {}, state.settings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter);
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
             if (data.comments.reduce((s, a) => s + 110 + Buffer.byteLength(a.comment,'utf8'), 0) > 350000) {
@@ -359,40 +395,19 @@ function GameMove(props) {
     result.move = value;
     result.previous = move.move;
     // console.log(result);
-    processNewMove(result);
+    processNewMove(result, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter);
   }
 
   // handler when user clicks on "complete move" (for a partial move that could be complete)
   const handleView = () => {
     const newmove = cloneDeep(move);
     newmove.complete = 1;
-    processNewMove(newmove);
+    processNewMove(newmove, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter);
   }
 
   const handleStashClick = (player, count, movePart) => {
     // console.log(`handleStashClick movePart=${movePart}`);
     handleMove(move.move + movePart);
-  }
-
-  const processNewMove = (newmove) => {
-    // if the move is complete, or partial and renderable, update board
-    if ((newmove.valid && newmove.complete > 0 && newmove.move !== '') || (newmove.canrender === true)) {
-      doView(state, gameRef.current, newmove, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
-        partialMoveRenderRef, renderrepSetter, movesRef, statusRef);
-    }
-    // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position
-    else if (partialMoveRenderRef.current && !newmove.move.startsWith(newmove.previous)) {
-      let node = getFocusNode(explorationRef.current, focus);
-      let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-      partialMoveRenderRef.current = false;
-      setStatus(gameEngineTmp, gameRef.current, false, '', statusRef.current);
-      if (focus.canExplore && !gameRef.current.noMoves)
-        movesRef.current = gameEngineTmp.moves();
-      renderrepSetter(gameEngineTmp.render(gameRef.current.me + 1));
-      moveSetter(newmove);
-    } else {
-      moveSetter(newmove); // not renderable yet
-    }
   }
 
   useEffect(() => {
@@ -410,7 +425,7 @@ function GameMove(props) {
       //   result.move = moveRef.current.move;
       console.log('boardClick: move', moveRef.current.move);
       console.log('boardClick: result', result);
-      processNewMove(result);
+      processNewMove(result, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter);
     }
 
     function expand(row, col) {
@@ -453,21 +468,7 @@ function GameMove(props) {
         render(renderrep, options);
       }
     }
-  }, [renderrep, focus, settings, moveSetter, renderrepSetter]);
-
-  const processNewSettings = (newGameSettings, newUserSettings) => {
-    gameSettingsSetter(newGameSettings);
-    userSettingsSetter(newUserSettings);
-    if (gameRef.current !== null) {
-      var newSettings = {};
-      const game = gameRef.current;
-      newSettings.color = getSetting("color", "standard", newGameSettings, newUserSettings, game.metaGame);
-      newSettings.annotate = getSetting("annotate", true, newGameSettings,newUserSettings, game.metaGame);
-      newSettings.rotate = (newGameSettings === undefined || newGameSettings.rotate === undefined) ? 0 : newGameSettings.rotate;
-      setupColors(newSettings, game, t);
-      settingsSetter(newSettings);
-    }
-  };
+  }, [renderrep, state, focus, settings]);
 
   const setError = (error) => {
     if (error.Message !== undefined)
@@ -498,7 +499,7 @@ function GameMove(props) {
     if (rotate >= 360)
       rotate -= 360;
     newGameSettings.rotate = rotate;
-    processNewSettings(newGameSettings, userSettings);
+    processNewSettings(newGameSettings, userSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter);
     if (game.me > -1) {
       try {
         const usr = await Auth.currentAuthenticatedUser();
@@ -687,8 +688,8 @@ function GameMove(props) {
                 <GameMoves focus={focus} game={game} exploration={explorationRef.current} handleGameMoveClick={handleGameMoveClick} />
               </div>
               <RenderOptionsModal show={showSettings} game={game} settings={userSettings} gameSettings={gameSettings}
-                processNewSettings={processNewSettings} showSettingsSetter={showSettingsSetter} setError={setError}
-                handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
+                processNewSettings={(newGameSettings, newUserSettings) => processNewSettings(newGameSettings, newUserSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter)} 
+                showSettingsSetter={showSettingsSetter} setError={setError} handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
             </div>
             { focus && game.me > -1 ?
               <div className="commentContainer">
