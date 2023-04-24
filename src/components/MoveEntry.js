@@ -205,8 +205,8 @@ function MoveEntry(props) {
               { game.colors[0].isImage ?
                   <img className="winnerButtonImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[0].value)}`} alt="" />
                   : <svg className="winnerButtonImage" viewBox="0 0 44 44">
-                      <circle cx="22" cy="22" r="18"  stroke="black" stroke-width="4" fill="white" />
-                      <text x="12" y="32" fill="black" font-family="monospace" font-size="35" font-weight="bold">1</text>
+                      <circle cx="22" cy="22" r="18"  stroke="black" strokeWidth="4" fill="white" />
+                      <text x="12" y="32" fill="black" fontFamily="monospace" fontSize="35" fontWeight="bold">1</text>
                     </svg>
               }
               <span className="tooltiptext">{t('Winning')}</span>
@@ -217,8 +217,8 @@ function MoveEntry(props) {
               { game.colors[1].isImage ?
                   <img className="winnerButtonImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[1].value)}`} alt="" />
                   : <svg className="winnerButtonImage" viewBox="0 0 44 44">
-                      <circle cx="22" cy="22" r="18"  stroke="black" stroke-width="4" fill="white" />
-                      <text x="12" y="32" fill="black" font-family="monospace" font-size="35" font-weight="bold">2</text>
+                      <circle cx="22" cy="22" r="18"  stroke="black" strokeWidth="4" fill="white" />
+                      <text x="12" y="32" fill="black" fontFamily="monospace" fontSize="35" fontWeight="bold">2</text>
                     </svg>
               }
               <span className="tooltiptext">{t('Winning')}</span>

@@ -179,12 +179,7 @@ function GameMoves(props) {
             className += " gameMoveFocus";
           curNumVariations = node.children.length;
           node = node.children[focus.exPath[j]];
-          if (node.outcome === -1)
-            className += " gameMoveUnknownOutcome";
-          else if (node.outcome === node.toMove)
-            className += " gameMoveLoss";
-          else if (node.outcome === 1 - node.toMove)
-            className += " gameMoveWin";
+          className += " gameMoveExplore";
           path.push([{"class": className, "outcome": node.outcome, "move": node.move, "path": {"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}}]);
         }
         let exPath = focus.exPath;
@@ -193,12 +188,7 @@ function GameMoves(props) {
           for (let k = 0; k < node.children.length; k++) {
             const c = node.children[k];
             let className = "gameMove";
-            if (c.outcome === -1)
-              className += " gameMoveUnknownOutcome";
-            else if (c.outcome === c.toMove)
-              className += " gameMoveLoss";
-            else if (c.outcome === 1 - c.toMove)
-              className += " gameMoveWin";
+            className += " gameMoveExplore";
             next.push({"class": className, "outcome": c.outcome, "move": c.move, "path": {"moveNumber": focus.moveNumber, "exPath": exPath.concat(k)}})
           }
           exPath = exPath.concat(0);
@@ -227,8 +217,8 @@ function GameMoves(props) {
                           game.colors[m.outcome].isImage ?
                             <img className="winnerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[m.outcome].value)}`} alt="" />
                             : <svg className="winnerImage2" viewBox="0 0 44 44">
-                                <circle cx="22" cy="22" r="18"  stroke="black" stroke-width="4" fill="white" />
-                                <text x="12" y="32" fill="black" font-family="monospace" font-size="35" font-weight="bold">{m.outcome + 1}</text>
+                                <circle cx="22" cy="22" r="18"  stroke="black" strokeWidth="4" fill="white" />
+                                <text x="12" y="32" fill="black" fontFamily="monospace" fontSize="35" fontWeight="bold">{m.outcome + 1}</text>
                               </svg>
                         }
                       </span>

@@ -136,14 +136,13 @@ function mergeExploration(game, exploration, data) {
     let gameEngine = GameFactory(game.metaGame, node.state);
     mergeMoveRecursive(gameEngine, node, data[0].tree);
   } else if (data[1] && data[1].move === moveNumber - 2) {
-    let node = exploration[moveNumber - 3];
+    let node = exploration[moveNumber - 2];
     let gameEngine = GameFactory(game.metaGame, node.state);
-    const subtree1 = data[1].tree.find(e => gameEngine.sameMove(e.move, exploration[moveNumber - 2].move));
-    console.log('Found subtree1: ', subtree1);
+    console.log("data[1]: ", data[1]);
+    const subtree1 = data[1].tree.find(e => gameEngine.sameMove(exploration[moveNumber - 2].move, e.move));
     if (subtree1) {
-      gameEngine.move(exploration[moveNumber - 2].move);
-      const subtree2 = subtree1.children.find(e => gameEngine.sameMove(e.move, exploration[moveNumber - 1].move));
-      console.log('Found subtree2: ', subtree2);
+      gameEngine.move(exploration[moveNumber - 1].move);
+      const subtree2 = subtree1.children.find(e => gameEngine.sameMove(exploration[moveNumber - 1].move, e.move));
       if (subtree2) {
         mergeMoveRecursive(gameEngine, exploration[moveNumber - 1], subtree2.children);
       }
@@ -235,7 +234,7 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
   if (!partialMove) {
     node = getFocusNode(explorationRef.current, focus);
     let newstate = gameEngineTmp.serialize();
-    // console.log("newstate", newstate);
+    // console.log("newstate: ", newstate);
     const pos = node.AddChild(move.move, newstate, (node.toMove + 1) % game.players.length, gameEngineTmp);
     saveExploration(explorationRef.current, game.id);
     let newfocus = cloneDeep(focus);

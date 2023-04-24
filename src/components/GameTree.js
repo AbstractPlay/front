@@ -16,7 +16,7 @@ export class GameNode {
 
   AddChild(move, state, toMove, gameEngine) {
     for (let i = 0; i < this.children.length; i++) {
-      if (gameEngine.sameMove(this.children[i].move, move))
+      if (gameEngine.sameMove(move, this.children[i].move))
         return i;
     }
     const child = new GameNode(this, move, state, toMove);

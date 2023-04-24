@@ -13,7 +13,7 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/gameslib": "file:../gameslib/abstractplay-gameslib-0.6.0.tgz",
+    "@abstractplay/gameslib": "file:../gameslib/abstractplay-gameslib-0.6.1.tgz",
     "@abstractplay/renderer": "file:../renderer/abstractplay-renderer-0.8.0.tgz",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
