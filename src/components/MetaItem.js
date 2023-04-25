@@ -37,11 +37,10 @@ const MetaItem = React.forwardRef((props, ref) => {
   return (
     <div ref={ref} className={"metaGame is-flex is-flex-wrap-wrap is-align-content-flex-start is-flex-grow-1" + (props.highlight ? " theMetaGame" : "")}>
       <div className="metaGameTitle">
-        <div className="metaGameTitleLine"></div>
-        <div className="metaGameTitleText">{game.name}</div>
+        <h1 className="subtitle lined"><span>{game.name}</span></h1>
       </div>
       <div className="content metaGameDescription">
-        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="metaDescriptionMarkdown content">
+        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
           {gameEngine.description() + "\n\n" + designerString}
         </ReactMarkdown>
         <ul>

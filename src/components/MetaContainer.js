@@ -1,4 +1,3 @@
-import "bulma/css/bulma.min.css";
 import React, { useState, useEffect, useRef, createRef } from 'react';
 import MetaItem from './MetaItem';
 import { gameinfo } from '@abstractplay/gameslib';
@@ -62,8 +61,8 @@ function MetaContainer(props) {
   console.log(games);
   return (
       <article>
-        <h1 className="centered">{t("AvailableGames")}</h1>
-        <div className="goToGame centered">
+        <h1 className="has-text-centered title">{t("AvailableGames")}</h1>
+        <div className="goToGame has-text-centered">
           <span className="goToGameLabel">Go to: </span>
           <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)} defaultValue={(metaGame !== undefined) ? metaGame : null}>
             <option value="">--{t('Select')}--</option>

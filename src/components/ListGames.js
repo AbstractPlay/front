@@ -84,7 +84,7 @@ function ListGames(props) {
   const maxPlayers = games ? games.reduce((max, game) => Math.max(max, game.players.length), 0) : null;
   return (
       <article>
-        <h1 className="centered">{gameState === "current" ? t("CurrentGamesList", {"name": metaGameName}) : t("CompletedGamesList", {"name": metaGameName})}</h1>
+        <h1 className="has-text-centered title">{gameState === "current" ? t("CurrentGamesList", {"name": metaGameName}) : t("CompletedGamesList", {"name": metaGameName})}</h1>
         <div className="standingChallengesContainer">
           { games === null ? <Spinner/> :
             <table className="standingChallengesTable">

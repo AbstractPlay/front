@@ -42,7 +42,7 @@ function getPath(focus, exploration, path) {
       for (let k = 0; k < node.children.length; k++) {
 
         next.push({"moveNumber": focus.moveNumber, "exPath": focus.exPath.concat(k)});
-        
+
       }
       path.push(next);
       if (node.children.length !== 1)
@@ -61,7 +61,7 @@ function GameMoves(props) {
   let handleGameMoveClick = props.handleGameMoveClick;
 
   useEventListener('keydown', keyDownHandler);
-    
+
   function keyDownHandler(e) {
     const key = e.key;
     if (document.activeElement.id === "enterAMove" || document.activeElement.id === "enterAComment" || exploration === null)
@@ -126,7 +126,7 @@ function GameMoves(props) {
       header.push(
         <th colSpan="2" key="th-1">
           <div className="player">
-            { game.players.map((p, i) => 
+            { game.players.map((p, i) =>
                   <Fragment key={i}>
                     { game.colors === undefined ? '' :
                     game.colors[i].isImage ?
@@ -134,7 +134,7 @@ function GameMoves(props) {
                       : <span className="playerIndicator">{game.colors[i].value + ':'}</span> }
                     <span className="mover">{p.name}</span>
                     { i < game.numPlayers - 1 ? <span className="simmover">,</span> : '' }
-                  </Fragment>             
+                  </Fragment>
                 )
               }
           </div>
@@ -239,7 +239,7 @@ function GameMoves(props) {
 
     return (
       <div className="gameMovesContainer2">
-        <div className="groupLevel1Header"><span>{t("Moves")}</span></div>
+        <h1 className="subtitle lined"><span>{t("Moves")}</span></h1>
           <div className="moveButtons">
             <div className="famnav tooltipped" onClick={() => handleGameMoveClick({"moveNumber": 0, "exPath": []})}>
               <i className="fa fa-angle-double-left"></i>
@@ -268,7 +268,7 @@ function GameMoves(props) {
               <i className="fa fa-angle-right"></i>
               <span className="tooltiptext">{t('GoNext')}</span>
             </div>
-            <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length !== exploration.length - 1 ? "" : " disabled")} 
+            <div className={"famnav tooltipped" + (focus.moveNumber + focus.exPath.length !== exploration.length - 1 ? "" : " disabled")}
               onClick={() => handleGameMoveClick(exploration.length === 1 ? {"moveNumber": 0, "exPath": []} : path[exploration.length - 2][0].path)}>
               <i className="fa fa-angle-double-right"></i>
               <span className="tooltiptext">{t('GoCurrent')}</span>

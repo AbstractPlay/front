@@ -20,7 +20,6 @@
     "@testing-library/user-event": "^13.5.0",
     "aws-amplify": "^5.0.25",
     "buffer": "^6.0.3",
-    "bulma": "^0.9.4",
     "i18next": "^21.10.0",
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.2.0",
@@ -31,6 +30,7 @@
     "react-markdown": "^8.0.7",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
+    "react-time-ago": "^7.2.1",
     "rehype-raw": "^6.1.1",
     "web-vitals": "^2.1.4"
   },

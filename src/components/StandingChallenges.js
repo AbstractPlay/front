@@ -190,7 +190,7 @@ function StandingChallenges(props) {
   const showAccepters = challenges && challenges.find(c => c.players.length > 1);
   return (
       <article>
-        <h1 className="centered">{t("StandingChallenges", {"name": metaGameName})}</h1>
+        <h1 className="has-text-centered title">{t("StandingChallenges", {"name": metaGameName})}</h1>
         <div className="standingChallengesContainer">
           { challenges === null ? <Spinner/> :
             <table className="standingChallengesTable">

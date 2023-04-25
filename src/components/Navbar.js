@@ -1,4 +1,3 @@
-import "bulma/css/bulma.min.css";
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";

@@ -120,7 +120,7 @@ function Ratings(props) {
   const metaGameName = gameinfo.get(metaGame).name;
   return (
       <article>
-        <h1 className="centered">{t("RatingsList", {"name": metaGameName})}</h1>
+        <h1 className="has-text-centered title">{t("RatingsList", {"name": metaGameName})}</h1>
         <div className="standingChallengesContainer">
           { ratings === null ? <Spinner/> :
             <Fragment>

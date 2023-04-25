@@ -107,34 +107,42 @@ function MoveEntry(props) {
 
     console.log('toMove', toMove);
     return (
-      <div className="uiState">
-        <div className={ uiState === -1 ? "historyStateContainer" : uiState === 0 ? "currentStateContainer" : "exploreStateContainer"}>
-            { uiState === -1 ?
-              <div className="historyState">{t("History")}</div> : uiState === 0 ?
-              <div className="currentState">{t("Current")}</div> :
-              <div className="exploreState">{t("Explore")}</div>
-            }
-          <div className="player">
-            { img === null ? '' :
-              img.isImage ?
-                <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
-                : <span className="playerIndicator">{img.value + ':'}</span>
-            }
+      <div>
+        <h1 className="subtitle lined"><span>{t("MakeMove")}</span></h1>
+        <p style={{paddingBottom: "1em"}}>
+                {t("BoardState")}:&nbsp;
+                { uiState === -1 ?
+                        <span className="historyState">{t("History")}</span> : uiState === 0 ?
+                        <span className="currentState">{t("Current")}</span> :
+                        <span className="exploreState">{t("Explore")}</span>
+                    }
+        </p>
+        <p style={{paddingBottom: "1em"}}>
+        { img === null ? '' :
+            img.isImage ?
+            <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
+            : <span className="playerIndicator">{img.value + ':'}</span>
+        }
             <span className="mover">{mover}</span>
-          </div>
-          { uiState === 0 && toMove !== '' ? 
-            <div>
-              <div className="timeRemaining tooltipped">
-                {t("TimeRemaining")}
-                <span className="tooltiptext">Time Setting: {game.clockHard ? t("HardTimeSet") : t("NotHardTime")}, {t("Increment", {"inc": game.clockInc})}, {t("MaxTime", {"max": game.clockMax})}</span>
-              </div>
-              <div className="timeRemainingEntries">
+        </p>
+        <div>
+          { uiState === 0 && toMove !== '' ?
+            <table className="table">
+                <caption className="tooltipped">{t("TimeRemaining")}<span className="tooltiptext">Time Setting: {game.clockHard ? t("HardTimeSet") : t("NotHardTime")}, {t("Increment", {"inc": game.clockInc})}, {t("MaxTime", {"max": game.clockMax})}</span></caption>
+                <tbody>
                 { game.players.map((p, ind) => (Array.isArray(toMove) ? toMove[ind] : ind === toMove) ?
-                  <div className="timeRemainingEntry" key={'player'+ind}><b>{p.name}</b>: { showMilliseconds(p.time - (Date.now() - game.lastMoveTime)) }</div>
-                  : <div className="timeRemainingEntry" key={'player'+ind}>{p.name}: {showMilliseconds(p.time)}</div>)
-                }
-              </div>
-            </div>
+                    <tr key={'player'+ind} style={{fontWeight: "bolder"}}>
+                        <td key={'player'+ind}>{p.name}</td>
+                        <td>{ showMilliseconds(p.time - (Date.now() - game.lastMoveTime)) }</td>
+                    </tr>
+                  :
+                    <tr key={'player'+ind}>
+                        <td key={'player'+ind}>{p.name}</td>
+                        <td>{ showMilliseconds(p.time - (Date.now() - game.lastMoveTime)) }</td>
+                    </tr>
+                )}
+                </tbody>
+            </table>
             : ''
           }
           <div>

@@ -333,7 +333,7 @@ function Me(props) {
           <div className="article">
             <div className="dashboardContainer1">
               <div className="dashboardContainer2">
-                <h1 className="centered">{t('WelcomePlayer', {me: me.name})}</h1>
+                <h1 className="has-text-centered title">{t('WelcomePlayer', {me: me.name})}</h1>
                 <div className="groupLevel1">
                   {/* Your Games */}
                   <div className="groupLevel1Header"><span>{t('YourGames')}</span></div>

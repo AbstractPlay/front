@@ -656,59 +656,77 @@ function GameMove(props) {
     }
     return (
         <article>
-          <div className="article">
-            <div className="gameMoveContainer">
-              <div className="enterMoveContainer">
-                <div className="enterMoveContainer2">
-                  { /***************** MoveEntry *****************/}
-                  <GameStatus status={statusRef.current} settings={settings} game={game} canExplore={focus?.canExplore} handleStashClick={handleStashClick} />
-                  <div className="groupLevel1Header"><span>{t("MakeMove")}</span></div>
-                    <MoveEntry move={move} toMove={toMove} game={gameRef.current} moves={movesRef.current} exploration={explorationRef.current}
-                      focus={focus} submitting={submitting} handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}/>
-                  </div>
+            <div className="columns">
+                { /***************** MoveEntry *****************/}
+                <div className="column is-one-quarter">
+                    <GameStatus
+                        status={statusRef.current}
+                        settings={settings}
+                        game={game}
+                        canExplore={focus?.canExplore}
+                        handleStashClick={handleStashClick}
+                    />
+                    <MoveEntry
+                        move={move}
+                        toMove={toMove}
+                        game={gameRef.current}
+                        moves={movesRef.current}
+                        exploration={explorationRef.current}
+                        focus={focus}
+                        submitting={submitting}
+                        handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}
+                    />
                 </div>
-              <div className="boardContainer">
                 { /***************** Board *****************/}
-                <div className="groupLevel1Header"><span>{gameinfo.get(metaGame).name}</span></div>
-                {gameRef.current?.stackExpanding
-                  ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
-                  : <div className="board" id="svg" ref={boardImage} ></div>
-                }
-                <div className="boardButtons">
-                  <button className="fabtn align-right" onClick={handleRotate}>
-                    <i className="fa fa-refresh"></i>
-                  </button>
-                  <button className="fabtn align-right" onClick={handleUpdateRenderOptions}>
-                    <i className="fa fa-cog"></i>
-                  </button>
+                <div className="column is-half">
+                    <h1 className="subtitle lined"><span>{gameinfo.get(metaGame).name}</span></h1>
+                    {gameRef.current?.stackExpanding
+                    ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
+                    : <div className="board" id="svg" ref={boardImage} ></div>
+                    }
+                    <div className="boardButtons">
+                    <button className="fabtn align-right" onClick={handleRotate}>
+                        <i className="fa fa-refresh"></i>
+                    </button>
+                    <button className="fabtn align-right" onClick={handleUpdateRenderOptions}>
+                        <i className="fa fa-cog"></i>
+                    </button>
+                    </div>
                 </div>
-              </div>
-              <div className="gameMovesContainer">
                 { /***************** GameMoves *****************/}
-                <GameMoves focus={focus} game={game} exploration={explorationRef.current} handleGameMoveClick={handleGameMoveClick} />
-              </div>
-              <RenderOptionsModal show={showSettings} game={game} settings={userSettings} gameSettings={gameSettings}
-                processNewSettings={(newGameSettings, newUserSettings) => processNewSettings(newGameSettings, newUserSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter)} 
-                showSettingsSetter={showSettingsSetter} setError={setError} handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
-            </div>
-            { focus && game.me > -1 ?
-              <div className="commentContainer">
-                <div className="commentContainer2">
-                  { /***************** GameComment *****************/}
+                <div className="column is-one-quarter">
+                    <GameMoves
+                        focus={focus}
+                        game={game}
+                        exploration={explorationRef.current}
+                        handleGameMoveClick={handleGameMoveClick}
+                    />
+                </div>
+            </div> {/* columns */}
+            <div className="columns">
+                { /* Comment entry */ }
+                <div className="column is-half is-offset-one-quarter">
+                { focus && game.me > -1 ?
                   <GameComment className="gameComment" handleSubmit={submitComment} tooMuch={commentsTooLong}/>
+                  : ''
+                }
                 </div>
-              </div> : ''
-            }
-            { focus ?
-              <div className="moveResultsContainer">
-                <div className="moveResultsContainer2">
-                  { /***************** MoveResults *****************/}
-                  <div className="groupLevel1Header"><span>Game summary</span></div>
-                  <MoveResults className="moveResults" results={game?.moveResults} comments={comments} players={gameRef.current?.players} />
+            </div> {/* columns */}
+            <div className="columns">
+                { /* Comments */ }
+                <div className="column is-three-fifths is-offset-one-fifth">
+                { focus ?
+                    <div>
+                        <h1 className="subtitle lined"><span>{t("GameSummary")}</span></h1>
+                        <MoveResults className="moveResults" results={game?.moveResults} comments={comments} players={gameRef.current?.players} />
+                    </div>
+                    : ''
+                }
                 </div>
-              </div>
-              : ''
-            }
+            </div> {/* columns */}
+            <RenderOptionsModal show={showSettings} game={game} settings={userSettings} gameSettings={gameSettings}
+            processNewSettings={(newGameSettings, newUserSettings) => processNewSettings(newGameSettings, newUserSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter)}
+            showSettingsSetter={showSettingsSetter} setError={setError} handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
             <Modal show={showResignConfirm} title={t('ConfirmResign')} size="small"
               buttons={[{label: t('Resign'), action: handleResignConfirmed}, {label: t('Cancel'), action: handleCloseResignConfirm}]}>
               <div>
@@ -721,7 +739,6 @@ function GameMove(props) {
               {t('ConfirmTimeoutDesc')}
               </div>
             </Modal>
-          </div>
         </article>
     );
   }
