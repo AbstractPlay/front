@@ -109,24 +109,20 @@ function MoveEntry(props) {
     return (
       <div>
         <h1 className="subtitle lined"><span>{t("MakeMove")}</span></h1>
-        <p style={{paddingBottom: "1em"}}>
-                {t("BoardState")}:&nbsp;
-                { uiState === -1 ?
-                        <span className="historyState">{t("History")}</span> : uiState === 0 ?
-                        <span className="currentState">{t("Current")}</span> :
-                        <span className="exploreState">{t("Explore")}</span>
-                    }
-        </p>
+        { uiState === -1 ?
+            <p className="historyState">{t("History")}</p> : uiState === 0 ?
+            <p className="currentState">{t("Current")}</p> :
+            <p className="exploreState">{t("Explore")}</p>
+        }
         <p style={{paddingBottom: "1em"}}>
         { img === null ? '' :
             img.isImage ?
             <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
-            : <span className="playerIndicator">{img.value + ':'}</span>
+            : <span style={{verticalAlign: "middle"}}>{img.value + ':'}</span>
         }
             <span className="mover">{mover}</span>
         </p>
-        <div>
-          { uiState === 0 && toMove !== '' ?
+        { uiState === 0 && toMove !== '' ?
             <table className="table">
                 <caption className="tooltipped">{t("TimeRemaining")}<span className="tooltiptext">Time Setting: {game.clockHard ? t("HardTimeSet") : t("NotHardTime")}, {t("Increment", {"inc": game.clockInc})}, {t("MaxTime", {"max": game.clockMax})}</span></caption>
                 <tbody>
@@ -144,33 +140,36 @@ function MoveEntry(props) {
                 </tbody>
             </table>
             : ''
-          }
+        }
           <div>
             { canClaimTimeout ?
-              <button className="apButton" onClick={handleTimeOut}>{t('ClaimTimeOut')}</button>
+              <button className="button is-small apButton" onClick={handleTimeOut}>{t('ClaimTimeOut')}</button>
               : ''
             }
             { focus.canExplore ?
               <Fragment>
                 { moves === null ? <div/> :
-                  <div className="selectMove">
-                    <select className="form-controlNope" name="moves" id="selectmove" value="" onChange={(e) => handleMove(e.target.value)}>
+                  <Fragment>
+                  <div className="select is-small">
+                    <select name="moves" id="selectmove" value="" onChange={(e) => handleMove(e.target.value)}>
                       <option value="">{t('ChooseMove')}</option>
                       { moves.map((move, index) => { return <option key={index} value={move}>{move}</option>})}
                     </select>
                   </div>
+                  <p className="lined"><span>or</span></p>
+                  </Fragment>
                 }
                 { !move.valid || (move.valid && move.complete === -1)  ?
-                  <div className={ move.valid ? "moveMessage" : "moveError"}>{move.message}</div> :
+                  <p className={`help ${move.valid ? "is-link" : "is-danger"}`}>{move.message}</p> :
                   ''
                 }
-                <div className="enterMove">
-                  <input name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}
+                <div className="control">
+                  <input className="input is-small" name="move" id="enterAMove" type="text" value={move.move} onChange={(e) => handleMove(e.target.value)}
                     placeholder={t('EnterMove')} />
                 </div>
                 <div>
                   { move.valid && move.complete === 0 && move.move.length > 0 ?
-                    <button className="apButton" onClick={handleView}>{t('CompleteMove')}</button>
+                    <button className="button is-small apButton" onClick={handleView}>{t('CompleteMove')}</button>
                     : ''
                   }
                 </div>
@@ -178,20 +177,19 @@ function MoveEntry(props) {
               : ''
             }
           </div>
-        </div>
         { moveToSubmit !== null && focus.exPath.length === 1 && !drawOffered ?
-          <div className="drawoffer">
-            <label><input type="checkbox" onChange={(e) => handleDrawOfferChange(e.target.checked)} checked={drawoffer}/>{t("IncludeDrawOffer")}</label>
+          <div className="field">
+            <label className="checkbox"><input type="checkbox" onChange={(e) => handleDrawOfferChange(e.target.checked)} checked={drawoffer}/>{t("IncludeDrawOffer")}</label>
           </div>
           : moveToSubmit !== null && focus.exPath.length === 1 && drawOffered && !canDraw ?
-          <div className="drawoffer">
-            <label><input type="checkbox" onChange={(e) => handleDrawOfferChange(e.target.checked)} checked={drawoffer}/>{t("IncludeAcceptDrawOffer")}</label>
+          <div className="field">
+            <label className="checkbox"><input type="checkbox" onChange={(e) => handleDrawOfferChange(e.target.checked)} checked={drawoffer}/>{t("IncludeAcceptDrawOffer")}</label>
           </div>
           : ""
         }
         <div>
           { moveToSubmit !== null && focus.exPath.length === 1 && !submitting ?
-            <button className="apButton tooltipped" onClick={() => handleSubmit(drawoffer ? "drawoffer" : "")}>
+            <button className="button is-small apButton tooltipped" onClick={() => handleSubmit(drawoffer ? "drawoffer" : "")}>
               {t('Submit')}
               <span className="tooltiptext">{t('SubmitMove', {move: moveToSubmit})}</span>
             </button>
@@ -199,11 +197,11 @@ function MoveEntry(props) {
           }
           { uiState === 0 && game.canSubmit  && !submitting ?
               canDraw?
-                <button className="apButton" onClick={() => handleSubmit("drawaccepted")}>
+                <button className="button is-small apButton" onClick={() => handleSubmit("drawaccepted")}>
                   {t('AcceptDraw')}
                 </button>
               :
-                <button className="apButton" onClick={handleResign}>
+                <button className="button is-small apButton" onClick={handleResign}>
                   {t('Resign')}
                 </button>
             : ""

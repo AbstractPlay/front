@@ -727,17 +727,29 @@ function GameMove(props) {
             <RenderOptionsModal show={showSettings} game={game} settings={userSettings} gameSettings={gameSettings}
             processNewSettings={(newGameSettings, newUserSettings) => processNewSettings(newGameSettings, newUserSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter)}
             showSettingsSetter={showSettingsSetter} setError={setError} handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
-            <Modal show={showResignConfirm} title={t('ConfirmResign')} size="small"
-              buttons={[{label: t('Resign'), action: handleResignConfirmed}, {label: t('Cancel'), action: handleCloseResignConfirm}]}>
-              <div>
+            <Modal
+                show={showResignConfirm}
+                title={t('ConfirmResign')}
+                buttons={[
+                    {label: t('Resign'), action: handleResignConfirmed},
+                    {label: t('Cancel'), action: handleCloseResignConfirm}
+                ]}
+            >
+              <p>
                 {t('ConfirmResignDesc')}
-              </div>
+              </p>
             </Modal>
-            <Modal show={showTimeoutConfirm} title={t('ConfirmTimeout')} size="small"
-              buttons={[{label: t('Claim'), action: handleTimeoutConfirmed}, {label: t('Cancel'), action: handleCloseTimeoutConfirm}]}>
-              <div>
-              {t('ConfirmTimeoutDesc')}
-              </div>
+            <Modal
+                show={showTimeoutConfirm}
+                title={t('ConfirmTimeout')}
+                buttons={[
+                    {label: t('Claim'), action: handleTimeoutConfirmed},
+                    {label: t('Cancel'), action: handleCloseTimeoutConfirm}
+                ]}
+            >
+              <p>
+                {t('ConfirmTimeoutDesc')}
+              </p>
             </Modal>
         </article>
     );

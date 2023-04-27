@@ -150,8 +150,14 @@ function RenderOptionsModal(props) {
 
   return (
     !gameId ? '' :
-    <Modal show={show} title={t('ChangeRenderOptions')}
-      buttons={[{label: t('Save'), action: handleSave}, {label: t('Close'), action: handleClose}]}>
+    <Modal
+        show={show}
+        title={t('ChangeRenderOptions')}
+        buttons={[
+            {label: t('Save'), action: handleSave},
+            {label: t('Close'), action: handleClose}
+        ]}
+    >
       <div>
         <div className='chooseColors'>
           <span className='chooseColorsHeader'>{t("ChooseColors")}</span>

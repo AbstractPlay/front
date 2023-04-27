@@ -85,9 +85,9 @@ function ListGames(props) {
   return (
       <article>
         <h1 className="has-text-centered title">{gameState === "current" ? t("CurrentGamesList", {"name": metaGameName}) : t("CompletedGamesList", {"name": metaGameName})}</h1>
-        <div className="standingChallengesContainer">
+        <div id="TableListContainer">
           { games === null ? <Spinner/> :
-            <table className="standingChallengesTable">
+            <table className="table">
               <tbody>
                 <tr>
                   <th>{t("tblHeaderGameNumber")}</th>

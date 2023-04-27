@@ -41,6 +41,7 @@ html {
   box-sizing: inherit;
 }
 
+/* Link handling */
 a {
     color: inherit;
 }
@@ -49,85 +50,25 @@ a {
     text-decoration: underline;
 }
 
-.apHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navbar {
-    min-height: 10vh;
-}
-
-.loginOut {
-  margin-right: 3%;
-  margin-bottom: 2ex;
-}
-
 .apButton {
-  /* display: flex;
-  flex-direction: column;
-  align-items: center; */
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: none;
-  color: #fff;
   background: linear-gradient(180deg, var(--secondary-color-3-lighter) 0%, var(--secondary-color-3) 100%);
-  background-origin: border-box;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
+  color: white;
 }
 
 .apButton:hover {
   background: var(--main-fg-color);
+  color: white;
 }
 
 .inlineButton {
   margin-left: 1em;
 }
 
-.article {
-  /* width: 1200px;
-  margin: 0 auto; */
-  display: flex;
-  flex-wrap: wrap;
-}
-
-/*
-.named-top-border {
-  border-top: 2px solid var(--main-fg-color);
-  padding: 20px;
-  margin: 10px;
-}
-*/
-
-.goToGame {
-  width: 100%;
-  margin-bottom: 0.8em;
-}
-
-goToGameLabel {
-  padding-right: 1em;
-}
-
-.metaGame {
-  max-width: 500px;
-  padding: 0.25em 1em;
-  margin: 0.25em 0.5em;
-}
-
 .theMetaGame {
   border: 1px solid var(--main-fg-color)
 }
 
-.metaGameTitle {
-  width: 100%;
-  position: relative;
-  height: 2em;
-}
-
-h1.lined {
+.lined {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -138,7 +79,7 @@ h1.lined {
     z-index: 1;
 }
 
-h1.lined:before {
+.lined:before {
     border-top: 2px solid var(--main-fg-color);
     content: "";
     position: absolute;
@@ -148,120 +89,10 @@ h1.lined:before {
     z-index: -1;
 }
 
-h1.lined span {
+.lined span {
     background: var(--main-bg-color);
     padding: 0em 0.5em;
     margin: 0em 1.5em;
-}
-
-.metaGameDescription {
-  width: 75%;
-}
-
-.metaGameImage {
-  width: 25%;
-  padding: 2em;
-}
-
-.groupLevel1 {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-/*
-.groupLevel1Header {
-  width: 100%;
-  position: relative;
-  height: 2em;
-}
-
-.groupLevel1Header:before {
-  background-color: var(--main-fg-color);
-  height: 2px;
-  width: 100%;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-*/
-
-.dashboardContainer1 {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.dashboardContainer2 {
-  width: 50%;
-  min-width: 400px;
-}
-
-.groupLevel1Header {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--main-fg-color);
-  display: block;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
-  font-weight: bold;
-  position: relative;
-  text-align: left;
-  z-index: 1;
-}
-
-.groupLevel1Header:before {
-  border-top: 2px solid var(--main-fg-color);
-  content: "";
-  position: absolute;
-  top: 12px;
-  left: 0;
-  width: 100%;
-  z-index: -1;
-}
-
-.groupLevel1Header span {
-  background: var(--main-bg-color);
-  padding: 0em 0.5em;
-  margin: 0em 1.5em;
-}
-
-.groupLevel2 {
-  width: 100%;
-  margin: 1em 0 0.5em 2em;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.groupLevel2Header {
-  width: 100%;
-  color: var(--main-fg-color);
-  display: block;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
-  position: relative;
-  text-align: left;
-  z-index: 1;
-}
-
-.groupLevel2Header:before {
-  border-top: 1px solid var(--main-fg-color);
-  content: "";
-  position: absolute;
-  top: 12px;
-  left: 0;
-  width: 100%;
-  z-index: -1;
-}
-
-.groupLevel2Header span {
-  background: var(--main-bg-color);
-  padding: 0em 0.5em;
-  margin: 0em 1.5em;
 }
 
 .apBullet {
@@ -272,132 +103,31 @@ h1.lined span {
   padding-right: 0.7em;
 }
 
-.listComment {
-  margin-top: 1em;
-  margin-left: 2em;
-}
-
-.gameMoveContainer {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.statusContainer {
-  margin-bottom: 2rem;
-}
-
-.enterMoveContainer {
-  width: 33%;
-  min-width: 15rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.enterMoveContainer2 {
-  min-width: 15rem;
-}
-
-.selectMove {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-.enterMove {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-.boardContainer {
-  width: 34%;
-  min-width: 300px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.gameMovesContainer {
-  width: 33%;
-  min-width: 15rem;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.gameMovesContainer2 {
-  min-width: 15rem;
-  float: left;
-}
-
-.moveResultsContainer, .commentContainer {
-  margin-top: 1.5em;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.moveResultsContainer2 {
-  width: 45%;
-  min-width: 400px;
-}
-
-.commentContainer2 {
-  width: 45%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-#enterAComment {
+/* #enterAComment {
   margin-right: 1em;
+} */
+
+#TableListContainer > table {
+    border-collapse: collapse;
+    margin: auto;
+    width: auto;
 }
 
-.commenttoolong {
-  width: 100%;
-}
-
-.moveResultsTable {
-  margin-top: 1em;
-}
-
-.standingChallengesContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.standingChallengesTable {
-  border-collapse: collapse;
-}
-
-.standingChallengesTable th {
+#TableListContainer > table th {
   border: 1px solid var(--main-fg-color-lighter);
   text-align: center;
   padding: 8px;
   background-color: var(--secondary-color-1-bg)
 }
 
-.standingChallengesTable td {
+#TableListContainer > table td {
   border: 1px solid var(--main-fg-color-lighter);
   text-align: center;
   padding: 8px;
 }
 
-.standingChallengesTable tr:nth-child(even) {
+#TableListContainer > table tr:nth-child(even) {
   background-color: var(--secondary-color-3-bg)
-}
-
-.columnTitleContainer {
-  display: flex;
-  justify-content: center;
-}
-
-.columnTitle {
-  display: inline-block;
-  text-align: center;
-  background-color: var(--main-fg-color);
-  padding: 0.2em 0.5em 0.2em 0.5em;
-  /* border: 3px solid green; */
-  border-radius: 0.5rem;
 }
 
 .board {
@@ -439,76 +169,39 @@ th .player {
   justify-content: center;
 }
 
-.toMoveIndicator {
-  padding-right: 0.5rem;
+/* For some reason, .playerImage and .toMoveImage are necessary.
+ * Putting the height and width in the image does not appear to be working correctly.
+ */
+.playerImage {
+    height: 0.8rem;
+    width: 0.8rem;
 }
 
 .toMoveImage {
-  height: 1.15rem;
-  width: 1.15rem
-}
-
-.playerImage {
-  height: 0.8rem;
-  width: 0.8rem
-}
-
-.playerIndicator {
-  vertical-align: middle;
+    height: 1.15rem;
+    width: 1.15rem;
 }
 
 .mover {
   margin-left: 0.5em;
 }
 
-.simmover {
-  margin-right: 0.5em;
-}
-
 .historyState {
-  color: var(--secondary-color-2);
+    color: var(--secondary-color-2);
 }
 
 .currentState {
-  color: black;
+    color: black;
 }
 
 .exploreState {
-  color: var(--secondary-color-3);
+    color: var(--secondary-color-3);
 }
 
 .historyState, .currentState, .exploreState {
-  font-weight: bold;
+    font-size: larger;
+    font-weight: bolder;
   padding-bottom: 1em;
-}
-
-.uiState {
-  padding: 1em 0 0 0;
-}
-
-.drawoffer {
-  padding-bottom: 0.5em;
-}
-
-
-.movesTable {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.gameMoveHeaderImg {
-  float:right;
-}
-
-.gameMoveLeftCol {
-  padding-right: 0.2rem;
-  text-align: right;
-}
-
-.gameMoveMiddleCol {
-  padding-left: 0.7rem;
-  padding-right: 0.2rem;
-  text-align: right;
 }
 
 .move {
@@ -519,33 +212,9 @@ th .player {
   display: inline;
 }
 
-.moveButtons {
-  display: inline-block;
-  border-style: none;
-  border-width: 2px;
-  border-color: black;
-  margin-left: 2em;
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-}
-
-.famnav {
-  display: inline-block;
-  width: 1.5em;
-  background-color: var(--main-fg-color);
-  color: var(--main-bg-color);
-  border-style: solid;
-  border-width: 2px;
-  border-color: black;
-  border-radius: 0.3em;
-  margin-left: 0.1em;
-  margin-right: 0.1em;
-  padding: 0 0.3em 0 .3em;
-  text-align: center;
-}
-
-.disabled {
-  opacity: 0.65;
+.gameMoveNums {
+    font-size: x-small;
+    vertical-align: bottom !important;
 }
 
 .gameMoveFocus {
@@ -566,18 +235,6 @@ th .player {
 
 .error {
   color: red;
-}
-
-.moveError {
-  font-size: 90%;
-  color: red;
-  width: 11em;
-}
-
-.moveMessage {
-  font-size: 90%;
-  color: blue;
-  width: 11em;
 }
 
 .fabtn {
@@ -621,6 +278,10 @@ th .player {
   padding: 5px 0.5em;
   position: absolute;
   z-index: 1;
+}
+
+.tooltipped:disabled {
+    z-index: 100;
 }
 
 .tooltipped:hover .tooltiptext {
@@ -719,95 +380,48 @@ div.radios label {
   display: block;
 }
 
-.apModal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width:100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 2;
-}
-
-.apModalMain {
-  margin: 1em;
-  border-radius: 0.7em;
-  border: none;
-  position: fixed;
-  background: white;
-  height: auto;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* For really small screens we need: */
-  overflow: auto;
-  max-height: 90%;
-}
-
-.apModalMain.large {
-  width: 40%;
-  min-width: 400px;
-}
-
-.apModalMain.small {
-  width: 30em;
-}
-
-.display-block {
-  display: block;
-}
-
-.display-none {
-  display: none;
-}
-
-.apModalContent {
-  display: block;
-}
-
-.apModalHeader {
-  display: flex;
-  justify-content: space-between;
-  background: #f3f3f3;
-  padding: 0.5em 0.5em 0.5em 0.7em;
-  border-radius: 0.7em 0.7em 0 0;
-  border: none;
-}
-
-.apModalHeaderTitle {
-  font-weight: bold;
-}
-
-.apModalBody {
-  padding: 0.5em;
-}
-
-.apModalFooter {
-  display: flex;
-  justify-content: center;
-}
-
-.apModalFooterButtons {
-  margin: 0.5em;
-}
-.timeRemainingEntry {
-  margin: 0.5em;
-}
-
-.genericStatusKey {
-  text-align: right;
-}
-
-.challengeli {
-  padding-top: 0.1em;
-  padding-bottom: 0.1em;
-}
-
-/* tr.chatPlayer {
-
-} */
-
 .chatSystem {
     opacity: 0.5;
 }
 
+/* Used to force hyperlinks to wrap on the Games list page */
+.contained {
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+/* Overrides Bulma's default 1.5rem */
+.subtitle:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+/* Colours the buttons in the move tree button bar */
+#MoveTreeBtnBar > button {
+    background-color: var(--main-fg-color);
+    color: white;
+    /* Have to size them because of the tooltip text */
+    width: 1.5em;
+}
+
+.indentedContainer {
+    padding-left: 2em;
+    padding-bottom: 1em;
+}
+
+#dashboard * ul {
+    list-style: none;
+    margin-left: 0;
+}

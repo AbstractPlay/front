@@ -274,11 +274,14 @@ function NewChallengeModal(props) {
   }
   console.log(opponents);
   return (
-    <Modal show={show} title={t('NewChallenge')}
-      buttons={[{label: t('Challenge'), action: handleChallenge}, {label: t('Close'), action: handleNewChallengeClose}]}>
-      <div>
-        <div>{t('NewChallenge')}</div>
-      </div>
+    <Modal
+        show={show}
+        title={t('NewChallenge')}
+        buttons={[
+            {label: t('Challenge'), action: handleChallenge},
+            {label: t('Close'), action: handleNewChallengeClose}
+        ]}
+    >
       <div className="challenge">
         <div className="newChallengeLabelDiv">
           <label className="newChallengeLabel" htmlFor="game_for_challenge" >{t("ChooseGame")}</label>
@@ -294,7 +297,7 @@ function NewChallengeModal(props) {
           }
         </div>
         { metaGame === null ? '' :
-          /* Number of players */          
+          /* Number of players */
           <Fragment>
             <div className="newChallengeLabelDiv">
               <label className="newChallengeLabel" htmlFor="num_players_for_challenge" >{t("NumPlayers")}</label>
@@ -380,8 +383,8 @@ function NewChallengeModal(props) {
                           <input type="radio" id={v.uid} value={v.uid} name={g.group}/>
                         </div>
                         <div className="pickVariantLabel">
-                          <label htmlFor={v.uid}> 
-                            {v.name} 
+                          <label htmlFor={v.uid}>
+                            {v.name}
                           </label>
                         </div>
                         { v.description === undefined || v.description.length === 0 ? '' :
@@ -404,7 +407,7 @@ function NewChallengeModal(props) {
               <div className="pickVariant">
                 <legend>{t("PickAnyVariant")}</legend>
                 <div className="pickVariantVariant">
-                  { nonGroupData.map(v => 
+                  { nonGroupData.map(v =>
                     <Fragment key={v.uid}>
                       <div key={v.uid}>
                         <input type="checkbox" id={v.uid} checked={nonGroupVariants[v.uid]} onChange={handleNonGroupChange} />

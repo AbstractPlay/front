@@ -1,29 +1,56 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
-function Modal(props) {
-  const modalClassName = props.show ? "apModal display-block" : "apModal display-none";
+const Modal = ({ children, show, title, buttons }) => {
+    if(!show) {
+      return null;
+    }
 
-  // Prevent background from scrolling while modal is open.
-  props.show ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'unset';
+    if (buttons.length < 1) {
+        console.log("Must provide at least one button to the modal. The last button in the list should be the 'close' or 'cancel' action.");
+        return null;
+    }
+    for (const btn of buttons) {
+        // eslint-disable-next-line no-prototype-builtins
+        if ( (! btn.hasOwnProperty("label")) || (! btn.hasOwnProperty("action")) ) {
+            console.log("Every button requires a 'label' and an 'action'.");
+            return null;
+        }
+    }
+    const closeModal = buttons[buttons.length - 1].action;
 
-  return (
-    props.show ?
-      <div className={modalClassName}>
-        <div className={"apModalMain " + (props.size === "small" ? "small" : "large")}>
-          <div className="apModalHeader">
-            <span className="apModalHeaderTitle">{props.title}</span>
-            <button className="apButton" onClick={props.buttons[props.buttons.length - 1].action}>X</button>
-          </div>
-          <div className="apModalBody">
-            {props.children}
-          </div>
-          <div className="apModalFooter">
-            { props.buttons.map((button, index) => <button key={"modalButton" + index} className="apButton apModalFooterButtons" onClick={button.action}>{button.label}</button>) }
-          </div>
+    return(
+      <div className="modal is-active">
+        <div className="modal-background" onClick={closeModal} />
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <p className="modal-card-title">{title}</p>
+            <button className="delete" onClick={closeModal} />
+          </header>
+          <section className="modal-card-body">
+            <div className="content">
+              {children}
+            </div>
+          </section>
+          <footer className="modal-card-foot">
+            <div className="field is-grouped">
+                {buttons.map((btn, i) =>
+                    <button
+                        key={`modalButton${i}`}
+                        className={`button${i !== buttons.length - 1 ? " apButton" : ""}`}
+                        onClick={btn.action}
+                    >{btn.label}</button>
+                )}
+            </div>
+          </footer>
         </div>
       </div>
-      : ''
-  );
+    );
+}
+
+Modal.propTypes = {
+    show: PropTypes.bool.isRequired,
+    title: PropTypes.string,
+    buttons: PropTypes.array
 }
 
 export default Modal;

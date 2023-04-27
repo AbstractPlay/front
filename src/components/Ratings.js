@@ -121,10 +121,10 @@ function Ratings(props) {
   return (
       <article>
         <h1 className="has-text-centered title">{t("RatingsList", {"name": metaGameName})}</h1>
-        <div className="standingChallengesContainer">
+        <div id="TableListContainer">
           { ratings === null ? <Spinner/> :
             <Fragment>
-              <table className="standingChallengesTable">
+              <table className="table">
                 <tbody>
                   <tr>
                     <th>{t("tblHeaderRatingRank")}</th>
@@ -144,7 +144,7 @@ function Ratings(props) {
                       <td>{rating.rating.wins}</td>
                       <td>{rating.rating.draws}</td>
                       <td>{me && me.id === rating.id ? "" :
-                        <button className="apButton" onClick={() => handleChallenge({id: rating.id, name: rating.name})}>
+                        <button className="button is-small apButton" onClick={() => handleChallenge({id: rating.id, name: rating.name})}>
                           {t("Challenge")}
                         </button>
                       }

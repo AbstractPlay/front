@@ -79,8 +79,14 @@ function NewProfile(props) {
   }
 
   return (
-    <Modal show={show} title={t('NewProfile')} 
-      buttons={[{label: t('Submit'), action: handleNewProfile}, {label: t('Close'), action: handleNewProfileClose}]}>
+    <Modal
+        show={show}
+        title={t('NewProfile')}
+        buttons={[
+            {label: t('Submit'), action: handleNewProfile},
+            {label: t('Close'), action: handleNewProfileClose}
+        ]}
+    >
       {
         (!error)?
         <div className="profile">

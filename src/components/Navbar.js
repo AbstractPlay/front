@@ -28,7 +28,7 @@ function Navbar(props) {
   },[]);
 
   return (
-    <nav className="navbar">
+    <nav className="navbar" style={{minHeight: "10vh"}}>
         <div className="navbar-brand">
             <div className="navbar-item">
                 <Link to="/">
