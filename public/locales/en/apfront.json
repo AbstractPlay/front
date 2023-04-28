@@ -69,7 +69,7 @@
     "GameAgainst": "{{game}} against {{opp}}",
     "GameIsOver": "The game has ended",
     "Games": "Games",
-    "GameSummary": "",
+    "GameSummary": "Chat log",
     "GoBegin": "Show beginning of game. Keys: Home or 'h'.",
     "GoCurrent": "Show current position. Keys: End or 'l'.",
     "GoNext": "Show next move (and first variant if any). Keys: right arrow or 'k'.",
