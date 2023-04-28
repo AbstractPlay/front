@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Auth } from 'aws-amplify';
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from '../config';
 import Modal from './Modal';
+import { Fragment } from 'react';
 
 function NewProfile(props) {
   const [show, showSetter] = useState(props.show);
@@ -89,58 +90,46 @@ function NewProfile(props) {
     >
       {
         (!error)?
-        <div className="profile">
-          <div className="newProfileLabelDiv">
-            <div className="newProfileLabel">
-              <label htmlFor="profile_name">
-                {t('ProfileName')}
-              </label>
+        <Fragment>
+            <div className="field">
+                <label className="label" htmlFor="profile_name">{t('ProfileName')}</label>
+                <div className="control">
+                    <input name="name" id="profile_name" type="text" value={name} onChange={(e) => nameSetter(e.target.value)} />
+                </div>
+                <p className="help">{t("ProfileNameHelp")}</p>
             </div>
-          </div>
-          <div className="newProfileInputDiv">
-            <input name="name" id="profile_name" type="text" value={name} onChange={(e) => nameSetter(e.target.value)} />
-          </div>
-          <div className="newProfileLabelDiv">
-            <div className="newProfileLabel">
-              <label htmlFor="profile_country">
-                {t('ProfileCountry')}
-              </label>
+            <div className="field">
+                <label className="label" htmlFor="profile_country">{t('ProfileCountry')}</label>
+                <div className="control">
+                    <input name="country" id="profile_country" type="text" value={country} onChange={(e) => countrySetter(e.target.value)} />
+                </div>
+                <p className="help">{t("ProfileCountryHelp")} [<a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes" target="_NEW">Wikipedia</a>]</p>
             </div>
-          </div>
-          <div className="newProfileInputDiv">
-            <input name="country" id="profile_country" type="text" value={country} onChange={(e) => countrySetter(e.target.value)} />
-          </div>
-          <div className="newProfileLabelDiv">
-            <div className="newProfileLabel">
-              <label htmlFor="profile_tagline">
-                {t('ProfileTagline')}
-              </label>
+            <div className="field">
+                <label className="label" htmlFor="profile_tagline">{t('ProfileTagline')}</label>
+                <div className="control">
+                    <input name="tagline" id="profile_tagline" type="text" value={tagline} onChange={(e) => taglineSetter(e.target.value)} />
+                </div>
             </div>
-          </div>
-          <div className="newProfileInputDiv">
-            <input name="tagline" id="profile_tagline" type="text" value={tagline} onChange={(e) => taglineSetter(e.target.value)} />
-          </div>
-          <div className="newProfileLabelDiv">
-            <div className="newProfileLabel">
-              <label htmlFor="profile_anon">
-                {t('ProfileAnon')}
-              </label>
+            <div className="field">
+                <div className="control">
+                    <label className="checkbox">
+                        <input name="anonymous" id="profile_anon" type="checkbox" checked={anonymous} onChange={(e) => anonymousSetter(e.target.checked)} />&nbsp;
+                        {t('ProfileAnon')}
+                    </label>
+                </div>
+                <p className="help">{t("ProfileAnonHelp")}</p>
             </div>
-          </div>
-          <div className="newProfileInputDiv">
-            <input name="anonymous" id="profile_anon" type="checkbox" checked={anonymous} onChange={(e) => anonymousSetter(e.target.checked)} />
-          </div>
-          <div className="newProfileLabelDiv">
-            <div className="newProfileLabel">
-              <label htmlFor="profile_consent">
-                {t('ProfileConsent')}
-              </label>
+            <div className="field">
+                <div className="control">
+                    <label className="checkbox">
+                        <input name="consent" id="profile_consent" type="checkbox" checked={consent} onChange={(e) => consentSetter(e.target.checked)} />&nbsp;
+                        {t('ProfileConsent')}
+                    </label>
+                </div>
+                <p className="help">[Link to ToS here eventually]</p>
             </div>
-          </div>
-          <div className="newProfileInputDiv">
-            <input name="consent" id="profile_consent" type="checkbox" checked={consent} onChange={(e) => consentSetter(e.target.checked)} />
-          </div>
-        </div>
+        </Fragment>
         :<h4>{errorMessage}</h4>}
     </Modal>
   );

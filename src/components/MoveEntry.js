@@ -120,7 +120,7 @@ function MoveEntry(props) {
             <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
             : <span style={{verticalAlign: "middle"}}>{img.value + ':'}</span>
         }
-            <span className="mover">{mover}</span>
+            <span style={{marginLeft: "0.5em"}}>{mover}</span>
         </p>
         { uiState === 0 && toMove !== '' ?
             <table className="table">

@@ -735,9 +735,11 @@ function GameMove(props) {
                     {label: t('Cancel'), action: handleCloseResignConfirm}
                 ]}
             >
-              <p>
-                {t('ConfirmResignDesc')}
-              </p>
+                <div className="content">
+                    <p>
+                        {t('ConfirmResignDesc')}
+                    </p>
+                </div>
             </Modal>
             <Modal
                 show={showTimeoutConfirm}
@@ -747,9 +749,11 @@ function GameMove(props) {
                     {label: t('Cancel'), action: handleCloseTimeoutConfirm}
                 ]}
             >
-              <p>
-                {t('ConfirmTimeoutDesc')}
-              </p>
+                <div className="content">
+                    <p>
+                        {t('ConfirmTimeoutDesc')}
+                    </p>
+                </div>
             </Modal>
         </article>
     );

@@ -82,7 +82,9 @@ const MetaItem = React.forwardRef((props, ref) => {
         buttons={[{label: "Close", action: closeModal}]}
         show={modalIsOpen}
         title={`Board image for ${game.name}`}>
-          <img src={`data:image/svg+xml;utf8,${image}`} alt={game.uid} width="100%" height="auto" />
+            <div className="content">
+                <img src={`data:image/svg+xml;utf8,${image}`} alt={game.uid} width="100%" height="auto" />
+            </div>
       </Modal>
     </div>
   );

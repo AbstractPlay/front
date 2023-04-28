@@ -25,7 +25,7 @@ h1,h2,h3,h4,h5,h6 {
     font-family: "Cardo", serif;
 }
 
-body {
+body, button, input, select, textarea {
   font-family: "Josefin Sans", sans-serif;
   font-size: 1em;
   -webkit-font-smoothing: antialiased;
@@ -50,6 +50,7 @@ a {
     text-decoration: underline;
 }
 
+/* Only used to colour buttons until I can figure out how to override Bulma colours */
 .apButton {
   background: linear-gradient(180deg, var(--secondary-color-3-lighter) 0%, var(--secondary-color-3) 100%);
   color: white;
@@ -64,10 +65,12 @@ a {
   margin-left: 1em;
 }
 
+/* Outlines the chosen game on the Games page */
 .theMetaGame {
   border: 1px solid var(--main-fg-color)
 }
 
+/* Used to create headings with lines on either side */
 .lined {
     width: 100%;
     margin-left: auto;
@@ -95,6 +98,7 @@ a {
     margin: 0em 1.5em;
 }
 
+/* Only used on the dashboard */
 .apBullet {
   color: var(--secondary-color-1);
   font-size: 10px;
@@ -103,10 +107,7 @@ a {
   padding-right: 0.7em;
 }
 
-/* #enterAComment {
-  margin-right: 1em;
-} */
-
+/* Adds colours to the list tables that appear on certain pages */
 #TableListContainer > table {
     border-collapse: collapse;
     margin: auto;
@@ -130,6 +131,7 @@ a {
   background-color: var(--secondary-color-3-bg)
 }
 
+/* Leaving the board and stack styles here for now until I better understand it */
 .board {
   display: flex;
   background-color: #fff;
@@ -159,6 +161,7 @@ a {
   flex: 1;
 }
 
+/* Leaving this also for now */
 .player {
   display: flex;
   align-items: center;
@@ -182,10 +185,7 @@ th .player {
     width: 1.15rem;
 }
 
-.mover {
-  margin-left: 0.5em;
-}
-
+/* Colours the "board state" indicator */
 .historyState {
     color: var(--secondary-color-2);
 }
@@ -204,6 +204,7 @@ th .player {
   padding-bottom: 1em;
 }
 
+/* Stuff for the move history tree. Leaving most of this for now. */
 .move {
   max-width: 15em;
 }
@@ -263,6 +264,7 @@ th .player {
   color: var(--main-fg-color);
 }
 
+/* Custom tooltips */
 .tooltipped {
   position: relative;
 }
@@ -288,65 +290,14 @@ th .player {
   visibility: visible;
 }
 
-.newProfileLabelDiv {
-  display: block;
-  width: 60%;
-  text-align: right;
-  padding-bottom: 0.3em;
-}
 
-.newProfileInputDiv {
-  display: block;
-  width: 40%;
-}
-
-.challenge, .profile, .userSettings {
+/* Leaving the stuff for user settings until I'm prepared to expand it */
+.userSettings {
   width: 100%;
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
   align-items: center;
-}
-
-.newChallengeLabelDiv {
-  display: block;
-  width: 30%;
-  text-align: right;
-  padding-bottom: 0.3em;
-}
-
-.newChallengeLabel, .newProfileLabel, .userSettingsLabel {
-  padding-right: 1em;
-}
-
-.newChallengeInputDiv {
-  display: block;
-  width: 70%;
-}
-
-.newChallengeVariantContainer, .clockHeader {
-  width: 100%;
-}
-
-.challengeHelp {
-  margin-left: 0.7em;
-}
-
-.pickVariant {
-  padding-left: 1rem;
-}
-
-.pickVariantVariant {
-  display: grid;
-  grid-template-columns: 1.5em 1fr;
-}
-
-.variantDescription {
-  font-size: 75%;
-}
-
-.pickOneOfColors, .pickOneOfColorsLevel, .pickAnnotation, .chooseAnnotationLevel {
-  padding-left: 1rem;
 }
 
 .userSettingsBtn {
@@ -372,14 +323,7 @@ th .player {
   width: 20%;
 }
 
-.radios {
-  padding-left: 1rem;
-}
-
-div.radios label {
-  display: block;
-}
-
+/* Makes system chats less prominent */
 .chatSystem {
     opacity: 0.5;
 }
@@ -412,15 +356,19 @@ div.radios label {
 #MoveTreeBtnBar > button {
     background-color: var(--main-fg-color);
     color: white;
-    /* Have to size them because of the tooltip text */
+    /* Have to size them because otherwise the invisible tooltip text leads to mixed sizes */
     width: 1.5em;
 }
 
+/* Can be nested to create ever-more indented containers.
+ * Used for the dashboard.
+ */
 .indentedContainer {
     padding-left: 2em;
     padding-bottom: 1em;
 }
 
+/* Only the dashboard uses special bullet glyphs */
 #dashboard * ul {
     list-style: none;
     margin-left: 0;

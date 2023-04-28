@@ -27,9 +27,7 @@ const Modal = ({ children, show, title, buttons }) => {
             <button className="delete" onClick={closeModal} />
           </header>
           <section className="modal-card-body">
-            <div className="content">
-              {children}
-            </div>
+            {children}
           </section>
           <footer className="modal-card-foot">
             <div className="field is-grouped">

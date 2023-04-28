@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Auth } from 'aws-amplify';
 import { API_ENDPOINT_AUTH } from '../config';
@@ -158,68 +158,79 @@ function RenderOptionsModal(props) {
             {label: t('Close'), action: handleClose}
         ]}
     >
-      <div>
-        <div className='chooseColors'>
-          <span className='chooseColorsHeader'>{t("ChooseColors")}</span>
-          <div className='pickOneOfColors'>
-            <span className='pickOneOfColor'>{t("Color")}</span>
-            <div className='radios'>
-              <label>
-                <input type="radio" name="playerfill" value="standard" checked={color === "standard"} onChange={(e) => handleColorChange(e.target.value, e.target.checked)}/>
-                {t('StandardColors')}
-              </label>
-              <label>
-                <input type="radio" name="playerfill" value="blind" checked={color === "blind"} onChange={(e) => handleColorChange(e.target.value, e.target.checked)}/>
-                {t('ColorBlind')}
-              </label>
-              <label>
-                <input type="radio" name="playerfill" value="patterns" checked={color === "patterns"} onChange={(e) => handleColorChange(e.target.value, e.target.checked)}/>
-                {t('ColorPatterns')}
-              </label>
+      <Fragment>
+        <div className="field">
+            <label className="label">{t("ChooseColors")}</label>
+            <div className="control">
+                <label className="radio">
+                    <input type="radio" name="playerfill" value="standard" checked={color === "standard"} onChange={(e) => handleColorChange(e.target.value, e.target.checked)}/>&nbsp;
+                    {t('StandardColors')}
+                </label>
             </div>
-          </div>
-          <div className='pickOneOfColorsLevel'>
-            <span className='pickOneOfColorLevel'>{t("Level")}</span>
-            <div className='radios'>
-              <label>
-                <input type="radio" name="playerfilllevel" value="all" checked={colorLevel === "all"} onChange={(e) => handleColorLevelChange(e.target.value, e.target.checked)}/>
-                {t('LevelAll')}
-              </label>
-              <label>
-                <input type="radio" name="playerfilllevel" value="meta" checked={colorLevel === "meta"} onChange={(e) => handleColorLevelChange(e.target.value, e.target.checked)}/>
-                {t('LevelMetaGame', {game: metaName})}
-              </label>
-              <label>
-                <input type="radio" name="playerfilllevel" value="game" checked={colorLevel === "game"} onChange={(e) => handleColorLevelChange(e.target.value, e.target.checked)}/>
-                {t('LevelGame')}
-              </label>
+            <div className="control">
+                <label className="radio">
+                    <input type="radio" name="playerfill" value="blind" checked={color === "blind"} onChange={(e) => handleColorChange(e.target.value, e.target.checked)}/>&nbsp;
+                    {t('ColorBlind')}
+                </label>
             </div>
-          </div>
+            <div className="control">
+                <label className="radio">
+                    <input type="radio" name="playerfill" value="patterns" checked={color === "patterns"} onChange={(e) => handleColorChange(e.target.value, e.target.checked)}/>&nbsp;
+                    {t('ColorPatterns')}
+                </label>
+            </div>
         </div>
-        <div className='chooseAnnotation'>
-          <span className='chooseAnnotationsHeader'>{t("ChooseAnnotations")}</span>
-          <div className='pickAnnotation'>
-            <label><input type="checkbox" onChange={(e) => handleAnnotationChange(e.target.checked)} checked={annotate}/>{t("Annotate")}</label>
-          </div>
-          <div className='chooseAnnotationLevel'>
-            <span className='pickAnnotationLevel'>{t("AnnotationLevel")}</span>
-            <div className='radios'>
-              <label>
-                <input type="radio" name="annotationlevel" value="all" checked={annotateLevel === "all"} onChange={(e) => handleAnnotationLevelChange(e.target.value, e.target.checked)}/>
-                {t('LevelAll')}
-              </label>
-              <label>
-                <input type="radio" name="annotationlevel" value="meta" checked={annotateLevel === "meta"} onChange={(e) => handleAnnotationLevelChange(e.target.value, e.target.checked)}/>
-                {t('LevelMetaGame', {game: metaName})}
-              </label>
-              <label>
-                <input type="radio" name="annotationlevel" value="game" checked={annotateLevel === "game"} onChange={(e) => handleAnnotationLevelChange(e.target.value, e.target.checked)}/>
-                {t('LevelGame')}
-              </label>
+        <div className="field indentedContainer">
+            <label className="label">{t("Level")}</label>
+            <div className="control">
+                <label className="radio">
+                    <input type="radio" name="playerfilllevel" value="all" checked={colorLevel === "all"} onChange={(e) => handleColorLevelChange(e.target.value, e.target.checked)}/>&nbsp;
+                    {t('LevelAll')}
+                </label>
             </div>
-          </div>
+            <div className="control">
+                <label className="radio">
+                    <input type="radio" name="playerfilllevel" value="meta" checked={colorLevel === "meta"} onChange={(e) => handleColorLevelChange(e.target.value, e.target.checked)}/>&nbsp;
+                    {t('LevelMetaGame', {game: metaName})}
+                </label>
+            </div>
+            <div className="control">
+                <label className="radio">
+                    <input type="radio" name="playerfilllevel" value="game" checked={colorLevel === "game"} onChange={(e) => handleColorLevelChange(e.target.value, e.target.checked)}/>&nbsp;
+                    {t('LevelGame')}
+                </label>
+            </div>
         </div>
-      </div>
+        <div className="field">
+            <div className="control">
+                <label className="checkbox">
+                    <input type="checkbox" onChange={(e) => handleAnnotationChange(e.target.checked)} checked={annotate}/>&nbsp;
+                    {t("Annotate")}
+                </label>
+            </div>
+        </div>
+        <div className="field indentedContainer">
+            <label className="label">{t("AnnotationLevel")}</label>
+            <div className="control">
+                <label className="radio">
+                    <input type="radio" name="annotationlevel" value="all" checked={annotateLevel === "all"} onChange={(e) => handleAnnotationLevelChange(e.target.value, e.target.checked)}/>&nbsp;
+                    {t('LevelAll')}
+                </label>
+            </div>
+            <div className="control">
+                <label className="radio">
+                    <input type="radio" name="annotationlevel" value="meta" checked={annotateLevel === "meta"} onChange={(e) => handleAnnotationLevelChange(e.target.value, e.target.checked)}/>&nbsp;
+                    {t('LevelMetaGame', {game: metaName})}
+                </label>
+            </div>
+            <div className="control">
+                <label className="radio">
+                    <input type="radio" name="annotationlevel" value="game" checked={annotateLevel === "game"} onChange={(e) => handleAnnotationLevelChange(e.target.value, e.target.checked)}/>&nbsp;
+                    {t('LevelGame')}
+                </label>
+            </div>
+        </div>
+      </Fragment>
     </Modal>
   )
 }

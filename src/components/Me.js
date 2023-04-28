@@ -328,8 +328,8 @@ function Me(props) {
         <article id="dashboard">
             <h1 className="title has-text-centered">{t('WelcomePlayer', {me: me.name})}</h1>
             {/* Your Games */}
-            <div class="columns">
-                <div class="column content is-half is-offset-one-quarter">
+            <div className="columns">
+                <div className="column content is-half is-offset-one-quarter">
                     <p className="subtitle lined"><span>{t('YourGames')}</span></p>
                     <div className="indentedContainer">
                         <p className="lined"><span>{t('YourMove')}</span></p>
@@ -358,8 +358,8 @@ function Me(props) {
                 </div>
             </div>
             {/* Your Challenges */}
-            <div class="columns">
-                <div class="column content is-half is-offset-one-quarter">
+            <div className="columns">
+                <div className="column content is-half is-offset-one-quarter">
                     <p className="subtitle lined"><span>{t('YourChallenges')}</span></p>
                     <div className="indentedContainer">
                         <p className="lined"><span>{t('ChallengeResponse')}</span></p>

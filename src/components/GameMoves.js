@@ -153,7 +153,7 @@ function GameMoves(props) {
                     <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
                   : <span style={{verticalAlign: "middle"}}>{img.value + ':'}</span>
               }
-              <span className="mover">{player}</span>
+              <span style={{marginLeft: "0.5em"}}>{player}</span>
             </div>
           </th>
         );

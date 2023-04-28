@@ -19,13 +19,13 @@ function NewChallengeModal(props) {
   const [metaGame, metaGameSetter] = useState(null);
   const [playerCount, playerCountSetter] = useState(-1);
   const [allvariants, allvariantsSetter] = useState(null);
-  const [seating, seatingSetter] = useState('');
+  const [seating, seatingSetter] = useState("random");
   const [clockStart, clockStartSetter] = useState(72);
   const [clockInc, clockIncSetter] = useState(24);
   const [clockMax, clockMaxSetter] = useState(240);
   const [clockHard, clockHardSetter] = useState(false);
   const [rated, ratedSetter] = useState(true); // Rated game or not.
-  const [standing, standigSetter] = useState(false); // Standing challenge or not.
+  const [standing, standingSetter] = useState(false); // Standing challenge or not.
   const [opponents, opponentsSetter] = useState([]);
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const groupVariantsRef = useRef({});
@@ -60,6 +60,7 @@ function NewChallengeModal(props) {
     nonGroupVariantsSetter({});
     if (props.fixedMetaGame !== undefined) {
       metaGameSetter(props.fixedMetaGame);
+      handleChangeGame(props.fixedMetaGame);
     } else {
       metaGameSetter(null);
     }
@@ -131,8 +132,12 @@ function NewChallengeModal(props) {
     errorSetter("");
   }
 
-  const handleStandingChallengeChange = (event) => {
-    standigSetter(!standing);
+  const handleStandingChallengeChange = (value) => {
+    if (value === "open") {
+        standingSetter(false);
+    } else {
+        standingSetter(true);
+    }
   }
 
   const handleChangeOpponent = (data) => {
@@ -142,7 +147,7 @@ function NewChallengeModal(props) {
     errorSetter("");
   }
 
-  const handleGroupChange = (group, variant) => {
+  const  handleGroupChange = (group, variant) => {
     // Ref gets updated, so no rerender. The radio buttons aren't "controlled"
     groupVariantsRef.current[group] = variant;
   }
@@ -282,199 +287,209 @@ function NewChallengeModal(props) {
             {label: t('Close'), action: handleNewChallengeClose}
         ]}
     >
-      <div className="challenge">
-        <div className="newChallengeLabelDiv">
-          <label className="newChallengeLabel" htmlFor="game_for_challenge" >{t("ChooseGame")}</label>
-        </div>
-        <div className="newChallengeInputDiv">
-          { games === null ? <Spinner/> :
-            fixedMetaGame ? <div>{gameinfo.get(fixedMetaGame).name}</div> :
-            /* Select meta game */
-            <select value={metaGame ? metaGame : ''} name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)}>
-              <option value="">--{t('Select')}--</option>
-              { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
-            </select>
-          }
-        </div>
+      <div className="container">
+        { fixedMetaGame ?
+            <p><strong>{t("ChooseGame")}</strong>: {gameinfo.get(fixedMetaGame).name}</p>
+          :
+            <div className="field">
+                <label className="label" htmlFor="gameName">{t("ChooseGame")}</label>
+                <div className="control">
+                    <div className="select is-small">
+                        { games === null ? <Spinner/> :
+                            /* Select meta game */
+                            <select value={metaGame ? metaGame : ''} name="gameName" id="gameName" onChange={(e) => handleChangeGame(e.target.value)}>
+                            <option value="">--{t('Select')}--</option>
+                            { games.map(game => { return <option key={game.id} value={game.id}>{game.name}</option>}) }
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
         { metaGame === null ? '' :
           /* Number of players */
-          <Fragment>
-            <div className="newChallengeLabelDiv">
-              <label className="newChallengeLabel" htmlFor="num_players_for_challenge" >{t("NumPlayers")}</label>
+          ( (playercounts.length === 1) || (opponent) ) ?
+            <p><strong>{t("NumPlayers")}:</strong> {playercounts[0]}</p>
+          :
+            <div className="field">
+                <label className="label" htmlFor="numPlayers">{t("NumPlayers")}</label>
+                <div className="select is-small">
+                    <select value={playerCount} name="numPlayers" id="numPlayers" onChange={(e) => handleChangePlayerCount(e.target.value)}>
+                        <option value="">--{t('Select')}--</option>
+                        { playercounts.map(cnt => { return <option key={cnt} value={cnt}>{cnt}</option>}) }
+                    </select>
+                </div>
             </div>
-            <div className="newChallengeInputDiv">
-                { opponent ? 2 : playercounts.length === 1 ? playercounts[0] :
-                  <select value={playerCount} name="playercount" id="num_players_for_challenge" onChange={(e) => handleChangePlayerCount(e.target.value)}>
-                    <option value="">--{t('Select')}--</option>
-                    { playercounts.map(cnt => { return <option key={cnt} value={cnt}>{cnt}</option>}) }
-                  </select>
-                }
-            </div>
-          </Fragment>
         }
         { metaGame === null || playerCount === -1 ? '' :
-          <Fragment>
-            {/* Seating */}
-            <div className="newChallengeLabelDiv">
-              <label className="newChallengeLabel" htmlFor="seating_for_challenge" >{t('Seating')}</label>
-            </div>
-            <div className="newChallengeInputDiv">
-                { playerCount !== 2 ? t('SeatingRandom') :
-                  <select value={seating} name="playercount" id="seating_for_challenge" onChange={(e) => handleChangeSeating(e.target.value)}>
-                    <option key="s0" value="">--{t('Select')}--</option>
-                    <option key="s1" value="random">{t('SeatingRandom')}</option>
-                    <option key="s2" value="s1">{t('Seating1')}</option>
-                    <option key="s3" value="s2">{t('Seating2')}</option>
-                  </select>
-                }
-            </div>
-            {/* Standing Challenge */
+            playerCount !== 2 ?
+                <p><strong>{t('Seating')}</strong>: {t('SeatingRandom')}</p>
+            :
+                <div className="field">
+                    {/* Seating */}
+                    <label className="label" htmlFor="seating">{t('Seating')}</label>
+                    <div className="select is-small">
+                        <select value={seating} name="seating" id="seating" onChange={(e) => handleChangeSeating(e.target.value)}>
+                            {/* <option key="s0" value="">--{t('Select')}--</option> */}
+                            <option key="s1" value="random" defaultChecked>{t('SeatingRandom')}</option>
+                            <option key="s2" value="s1">{t('Seating1')}</option>
+                            <option key="s3" value="s2">{t('Seating2')}</option>
+                        </select>
+                    </div>
+                </div>
+        }
+        { metaGame === null || playerCount === -1 ? '' :
+            /* Standing Challenge */
               opponent ? '' :
-                <Fragment>
-                  <div className="newChallengeLabelDiv">
-                    <label className="newChallengeLabel" htmlFor="standing_challenge" >{t('StandingChallengeLabel')}</label>
+                <div className="field">
+                  <label className="label">{t('ChallengeType')}</label>
+                  <div className="control">
+                    <label className="radio">
+                        <input type="radio" name="challengeType" value="open" onClick={() => standingSetter(true)} />&nbsp;
+                        {t('ChallengeTypeOpen')}
+                    </label>
+                    <label className="radio">
+                        <input type="radio" name="challengeType" value="targeted" defaultChecked onClick={() => standingSetter(false)} />&nbsp;
+                        {t('ChallengeTypeTargeted')}
+                    </label>
                   </div>
-                  <div className="newChallengeInputDiv">
-                    <input type="checkbox" checked={standing} id="standing_challenge" onChange={handleStandingChallengeChange} />
-                    <label>{standing ? t('StandingChallenge') : t('StandardChallenge')}</label>
-                  </div>
-                </Fragment>
-            }
-          </Fragment>
+                  <p className="help">{standing ? t('ChallengeTypeOpenDescription') : t('ChallengeTypeTargetedDescription')}</p>
+                </div>
         }
         { playerCount === -1 || standing ? ''
           /* Opponents */
           : opponents.map((o, i) => { return (
-            <Fragment key={i}>
-              <div className="newChallengeLabelDiv">
-                <label className="newChallengeLabel" htmlFor={"user_for_challenge" + i}>{playerCount === 2 ? t("ChooseOpponent") : t("ChooseOpponent", i)}</label>
-              </div>
-              <div className="newChallengeInputDiv">
+            <div className="field" key={i}>
+              <label className="label" htmlFor={"user_for_challenge" + i}>{playerCount === 2 ? t("ChooseOpponent") : t("ChooseOpponent", i)}</label>
+              <div className="control">
                 { users === null && !opponent ? <Spinner/> :
                   opponent ? opponent.name :
-                  <select value={o.id || ''} className="newChallengeInput" name="users" id={"user_for_challenge" + i} onChange={(e) => handleChangeOpponent({'id': e.target.value, 'name': e.target.options[e.target.selectedIndex].text, 'player': i})}>
-                    <option value="">--{t('Select')}--</option>
-                    { users
-                      .filter(user => user.id === opponents[i].id || (user.id !== myid && !opponents.some(o => user.id === o.id)))
-                      .map(item => { return <option key={item.id} value={item.id}>{item.name}</option>})}
-                  </select>
+                  <div className="select is-small">
+                    <select value={o.id || ''} name="users" id={"user_for_challenge" + i} onChange={(e) => handleChangeOpponent({'id': e.target.value, 'name': e.target.options[e.target.selectedIndex].text, 'player': i})}>
+                        <option value="">--{t('Select')}--</option>
+                        { users
+                        .filter(user => user.id === opponents[i].id || (user.id !== myid && !opponents.some(o => user.id === o.id)))
+                        .map(item => { return <option key={item.id} value={item.id}>{item.name}</option>})}
+                    </select>
+                  </div>
                 }
               </div>
-            </Fragment>)
+            </div>)
             })
         }
         { groupData.length === 0 && nonGroupData.length === 0 ? '' :
-          <div className="newChallengeVariantContainer">
-            <span className='pickVariantHeader'>{t("PickVariant")}</span>
+          <Fragment>
+            <div className="field">
+                <label className="label">{t("PickVariant")}</label>
+            </div>
+            <div className="indentedContainer">
             { metaGame === null || groupData.length === 0 ? '' :
-              groupData.map(g =>
-                <div className="pickVariant" key={"group:" + g.group} onChange={(e) => handleGroupChange(g.group, e.target.value)}>
-                  <legend>{t("PickOneVariant")}</legend>
-                  <div className="pickVariantVariant">
-                    <div className="pickVariantRadio" key="default">
-                      <input type="radio" id="default" value="" name={g.group}/>
-                    </div>
-                    <div className="pickVariantLabel">
-                      <label htmlFor="default">{`Default ${g.group}`} </label>
+            groupData.map(g =>
+                <div className="field" key={"group:" + g.group} onChange={(e) => handleGroupChange(g.group, e.target.value)}>
+                    <label className="label">{t("PickOneVariant")}</label>
+                    <div className="control">
+                        <label className="radio">
+                            <input type="radio" id="default" value="" name={g.group} defaultChecked />&nbsp;
+                            {`Default ${g.group}`}
+                        </label>
                     </div>
                     { g.variants.map(v =>
-                      <Fragment key={v.uid}>
-                        <div className="pickVariantRadio">
-                          <input type="radio" id={v.uid} value={v.uid} name={g.group}/>
+                        <div className="control" key={v.uid}>
+                            <label className="radio">
+                                <input type="radio" id={v.uid} value={v.uid} name={g.group}/>&nbsp;
+                                {v.name}
+                            </label>
+                            { v.description === undefined || v.description.length === 0 ? '' :
+                                <p className="help" style={{marginTop: "-0.5%"}}>{v.description}</p>
+                            }
                         </div>
-                        <div className="pickVariantLabel">
-                          <label htmlFor={v.uid}>
-                            {v.name}
-                          </label>
+                    )}
+                </div>
+            )
+            }
+                { metaGame === null || nonGroupData.length === 0 ? '' :
+                    <Fragment>
+                        <div className="field">
+                            <label className="label">{t("PickAnyVariant")}</label>
                         </div>
-                        { v.description === undefined || v.description.length === 0 ? '' :
-                          <Fragment key={"desc" + v.uid}>
-                            <div className="pickVariantRadio variantDescription">
-                            </div>
-                            <div className="pickVariantLabel variantDescription">
-                              <span>{v.description}</span>
-                            </div>
-                          </Fragment>
-                        }
-                        </Fragment>
-                        )
-                      }
-                  </div>
-                </div>
-              )
-            }
-            { metaGame === null || nonGroupData.length === 0 ? '' :
-              <div className="pickVariant">
-                <legend>{t("PickAnyVariant")}</legend>
-                <div className="pickVariantVariant">
-                  { nonGroupData.map(v =>
-                    <Fragment key={v.uid}>
-                      <div key={v.uid}>
-                        <input type="checkbox" id={v.uid} checked={nonGroupVariants[v.uid]} onChange={handleNonGroupChange} />
-                      </div>
-                      <div>
-                        <label htmlFor={v.uid}>
-                          {v.name}
-                        </label>
-                      </div>
-                      { v.description === undefined || v.description.length === 0 ? '' :
-                        <Fragment key={"desc" + v.uid}>
-                          <div className="pickVariantRadio variantDescription">
-                          </div>
-                          <div className="pickVariantLabel variantDescription">
-                            <span>{v.description}</span>
-                          </div>
-                        </Fragment>
-                      }
-                    </Fragment>)
-                  }
-                </div>
-              </div>
-            }
-          </div>
+                        <div className="field">
+                            { nonGroupData.map(v =>
+                                <div className="control" key={v.uid}>
+                                    <label className="checkbox">
+                                        <input type="checkbox" id={v.uid} checked={nonGroupVariants[v.uid]} onChange={handleNonGroupChange} />&nbsp;
+                                        {v.name}
+                                    </label>
+                                { v.description === undefined || v.description.length === 0 ? '' :
+                                    <p className="help" style={{marginTop: "-0.5%"}}>{v.description}</p>
+                                }
+                                </div>
+                              )
+                            }
+                        </div>
+                    </Fragment>
+                }
+            </div>
+          </Fragment>
         }
-          <span className="clockHeader">{t("ConfigureClock")}</span>
-          <div className="newChallengeLabelDiv">
-            <label className="newChallengeLabel" htmlFor="clock_start">{t("ChooseClockStart") + ":"}</label>
-          </div>
-          <div className="newChallengeInputDiv">
-            <input type="text" id="clock_start" name="clock_start" size="3" value={clockStart} onChange={handleClockStartChange}/>
-            <span className="challengeHelp">{t("HelpClockStart")}</span>
-          </div>
-          <div className="newChallengeLabelDiv">
-            <label className="newChallengeLabel" htmlFor="clock_inc">{t("ChooseClockIncrement") + ":"}</label>
-          </div>
-          <div className="newChallengeInputDiv">
-            <input type="text" id="clock_inc" name="clock_inc" size="3" value={clockInc} onChange={handleClockIncChange}/>
-            <span className="challengeHelp">{t("HelpClockIncrement")}</span>
-          </div>
-          <div className="newChallengeLabelDiv">
-            <label className="newChallengeLabel" htmlFor="clock_max">{t("ChooseClockMax") + ":"}</label>
-          </div>
-          <div className="newChallengeInputDiv">
-            <input type="text" id="clock_start" name="clock_max" size="3" value={clockMax} onChange={handleClockMaxChange}/>
-            <span className="challengeHelp">{t("HelpClockMax")}</span>
-          </div>
-          <div className="newChallengeLabelDiv">
-            <label className="newChallengeLabel" htmlFor="clock_hard">{t("ChooseClockHard")}</label>
-          </div>
-          <div className="newChallengeInputDiv">
-            <input type="checkbox" id="clock_hard" checked={clockHard} onChange={handleClockHardChange} />
-            <span className="challengeHelp">{clockHard ? t("HelpClockHard") : t("HelpClockSoft")}</span>
-          </div>
-          { playerCount !== 2 ? null :
-            <Fragment>
-              <div className="newChallengeLabelDiv">
-                <label className="newChallengeLabel" htmlFor="rated">{t("ChooseRated")}</label>
-              </div>
-              <div className="newChallengeInputDiv">
-                <input type="checkbox" id="rated" checked={rated} onChange={handleRatedChange} />
-                <span className="challengeHelp">{ rated ? t("HelpRated") : t("HelpUnRated")}</span>
-              </div>
-            </Fragment>
-          }
+        { metaGame === null ? "" :
+        <Fragment>
+            <div className="columns">
+                <div className="column">
+                    <div className="field">
+                        <label className="label" htmlFor="clock_start">{t("ChooseClockStart")}</label>
+                        <div className="control">
+                            <input className="input is-small" type="text" id="clock_start" name="clock_start" size="3" value={clockStart} onChange={handleClockStartChange}/>
+                        </div>
+                        <p className="help">{t("HelpClockStart")}</p>
+                    </div>
+                </div>
+                <div className="column">
+                    <div className="field">
+                        <label className="label" htmlFor="clock_inc">{t("ChooseClockIncrement")}</label>
+                        <div className="control">
+                            <input className="input is-small" type="text" id="clock_inc" name="clock_inc" size="3" value={clockInc} onChange={handleClockIncChange}/>
+                        </div>
+                        <p className="help">{t("HelpClockIncrement")}</p>
+                    </div>
+                </div>
+                <div className="column">
+                    <div className="field">
+                        <label className="label" htmlFor="clock_max">{t("ChooseClockMax")}</label>
+                        <div className="control">
+                            <input className="input is-small" type="text" id="clock_start" name="clock_max" size="3" value={clockMax} onChange={handleClockMaxChange}/>
+                        </div>
+                        <p className="help">{t("HelpClockMax")}</p>
+                    </div>
+                </div>
+            </div>
+            <div className="field">
+                <div className="control">
+                    <label className="checkbox">
+                        <input type="checkbox" id="clock_hard" checked={clockHard} onChange={handleClockHardChange} />&nbsp;
+                        {t("ChooseClockHard")}
+                    </label>
+                </div>
+                <p className="help">
+                    {clockHard ? t("HelpClockHard") : t("HelpClockSoft")}
+                </p>
+            </div>
+        </Fragment>
+        }
+        { metaGame === null || playerCount !== 2 ? null :
+            <div className="field">
+                <div className="control">
+                    <label className="checkbox">
+                        <input type="checkbox" id="rated" checked={rated} onChange={handleRatedChange} />
+                        {t("ChooseRated")}
+                    </label>
+                </div>
+                <p className="help">
+                    { rated ? t("HelpRated") : t("HelpUnRated")}
+                </p>
+            </div>
+        }
       </div>
-      <div className="error">
+      <div className="is-danger">
         {error}
       </div>
     </Modal>

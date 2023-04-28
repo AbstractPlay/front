@@ -49,7 +49,7 @@ function ChallengeView(props) {
   if (challenge.notes !== undefined && challenge.notes.length > 0)
     notes = t('Notes') + <p>challenge.notes</p>;
   return (
-    <Fragment>
+    <div className="content">
       <p>{challengeDesc}</p>
       <p>{challenge.numPlayers === 2 ? t('NumChallenge2') + ' ' + seating :
         challenge.standing === true ? t('NumStandingChallenge', {num: challenge.numPlayers}) : t('NumChallenge', {num: challenge.numPlayers, players: allPlayers})}</p>
@@ -58,7 +58,7 @@ function ChallengeView(props) {
       <p>{challenge.rated ? t('RatedGame') : t('UnratedGame')}</p>
       <p>{players}</p>
       <p>{notes}</p>
-    </Fragment>
+    </div>
   );
 }
 
