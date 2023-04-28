@@ -9,6 +9,7 @@ import LogInOutButton from "./LogInOutButton";
 function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
   const [update, updateSetter] = useState(0);
+  const [burgerExpanded, updateBurgerExpanded] = useState(false);
   const [token, tokenSetter] = useState(null);
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
@@ -35,13 +36,13 @@ function Navbar(props) {
                     <img src={logo} alt="Abstract Play logo" width="100%" height="auto" style={{maxHeight: "none"}} />
                 </Link>
             </div>
-            <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMain">
+            <a role="button" className={"navbar-burger" + (burgerExpanded ? " is-active" : "")} aria-label="menu" aria-expanded="false" data-target="navbarMain" onClick={() => updateBurgerExpanded(! burgerExpanded)}>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
             </a>
         </div>
-        <div id="navbarMain" className="navbar-menu">
+        <div id="navbarMain" className={"navbar-menu" + (burgerExpanded ? " is-active" : "")}>
             <div className="navbar-start">
                 { !loggedin ? "" :
                 <div className="navbar-item">
