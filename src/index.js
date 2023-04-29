@@ -4,7 +4,6 @@ import './i18n';
 import * as serviceWorker from './serviceWorker';
 import Skeleton from './pages/Skeleton';
 import './index.css';
-import './app.css'
 
 require('core-js/es/map');
 require('core-js/es/set');

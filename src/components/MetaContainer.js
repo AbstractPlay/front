@@ -61,15 +61,21 @@ function MetaContainer(props) {
   console.log(games);
   return (
       <article>
-        <h1 className="centered">{t("AvailableGames")}</h1>
-        <div className="goToGame centered">
-          <span className="goToGameLabel">Go to: </span>
-          <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)} defaultValue={(metaGame !== undefined) ? metaGame : null}>
-            <option value="">--{t('Select')}--</option>
-            { games.map(game => { return <option key={gameinfo.get(game).uid} value={game}>{gameinfo.get(game).name}</option>}) }
-          </select>
+        <div className="container has-text-centered">
+            <h1 className="title">{t("AvailableGames")}</h1>
+            <div className="field">
+                {/* <label className="label" htmlFor="games">Go to:&nbsp;</label> */}
+                <div className="control">
+                    <div className="select">
+                        <select name="games" id="game_for_challenge" onChange={(e) => handleChangeGame(e.target.value)} defaultValue={(metaGame !== undefined) ? metaGame : null}>
+                            <option value="">--{t('SelectGameDropdown')}--</option>
+                            { games.map(game => { return <option key={gameinfo.get(game).uid} value={game}>{gameinfo.get(game).name}</option>}) }
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div className="metaGames">
+        <div className="columns is-multiline">
           {games.map(k =>
             <MetaItem ref={el => {gameDivs.current[k] = createRef(); gameDivs.current[k].current = el}} key={gameinfo.get(k).uid} game={gameinfo.get(k)}
               counts={counts ? counts[gameinfo.get(k).uid] : undefined} highlight = {k === theMataGame}/>)

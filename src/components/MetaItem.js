@@ -1,12 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import {Link} from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { useTranslation } from 'react-i18next';
 import { GameFactory } from '@abstractplay/gameslib';
 import gameImages from '../assets/GameImages';
+import Modal from './Modal';
 
 const MetaItem = React.forwardRef((props, ref) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const { t } = useTranslation();
   let game = props.game;
   let counts = props.counts;
@@ -24,63 +26,66 @@ const MetaItem = React.forwardRef((props, ref) => {
   else
     designerString = 'Designers: ';
   designerString += designers.join(", ");
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  }
+  const closeModal = () => {
+    setModalIsOpen(false);
+  }
+
   return (
-    <div ref={ref} className={"metaGame" + (props.highlight ? " theMetaGame" : "")}>
-      <div className="metaGameTitle">
-        <div className="metaGameTitleLine"></div>
-        <div className="metaGameTitleText">{game.name}</div>
-      </div>
-      <div className="metaGameDescription">
-        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="metaDescriptionMarkdown">
-          {gameEngine.description()}
-        </ReactMarkdown>
-        <p>{designerString}</p>
-        <div>External links
-          <ul>
-            {game.urls.map((l, i) =>
-              <li key = {i}><a href={l} target="_blank" rel="noopener noreferrer">{l}</a></li>
-              )}
-          </ul>
+    <div ref={ref} className={"column is-one-third" + (props.highlight ? " theMetaGame" : "")}>
+        <h1 className="subtitle lined"><span>{game.name}</span></h1>
+        <div className="columns is-mobile">
+            <div className="column is-three-quarters">
+                <div className="content">
+                    <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+                    {gameEngine.description() + "\n\n" + designerString}
+                    </ReactMarkdown>
+                    <ul className="contained">
+                    {game.urls.map((l, i) =>
+                        <li key = {i}><a href={l} target="_blank" rel="noopener noreferrer">{l}</a></li>
+                        )}
+                    </ul>
+                    <div>
+                    { counts === undefined ? '' :
+                        <Fragment>
+                            <span>
+                            {`${counts.currentgames} `}
+                            <Link to={`/listgames/current/${game.uid}`}>{t("CurrentGamesCount", {count: counts.currentgames})} </Link>
+                            </span>,&nbsp;
+                            <span>
+                            {`${counts.completedgames} `}
+                            <Link to={`/listgames/completed/${game.uid}`}>{t("CompletedGamesCount", {count: counts.completedgames})}</Link>
+                            </span>,&nbsp;
+                            <span>
+                            {`${counts.standingchallenges} `}
+                            <Link to={`/challenges/${game.uid}`}>{t("StandingChallengesCount", {count: counts.standingchallenges})}</Link>
+                            </span>,&nbsp;
+                            <span>
+                            {`${counts.ratings} `}
+                            <Link to={`/ratings/${game.uid}`}>{t("RatedPlayersCount", {count: counts.ratings})}</Link>
+                            </span>
+                        </Fragment>
+                    }
+                    </div>
+                </div>
+            </div>
+            <div className="column">
+                <div id={"svg" + game.uid} >
+                    <img src={`data:image/svg+xml;utf8,${image}`} alt={game.uid} width="100%" height="auto" onClick={openModal} />
+                </div>
+            </div>
         </div>
-        <div>
-          { counts === undefined ? '' :
-            <Fragment>
-              {counts.currentgames === 0 ? <span>0 current games</span> :
-                <span>
-                  {`${counts.currentgames} `}
-                  <Link to={`/listgames/current/${game.uid}`}>{t("CurrentGamesCount", {count: counts.currentgames})} </Link>
-                </span>
-              }
-              <span>, </span>
-              {counts.completedgames === 0 ? <span>0 completed games</span> :
-                <span>
-                  {`${counts.completedgames} `}
-                  <Link to={`/listgames/completed/${game.uid}`}>{t("CompletedGamesCount", {count: counts.completedgames})}</Link>
-                </span>
-              }
-              <span>, </span>
-              {counts.standingchallenges === 0 ? <span>0 standing challenges</span> :
-                <span>
-                  {`${counts.standingchallenges} `}
-                  <Link to={`/challenges/${game.uid}`}>{t("StandingChallengesCount", {count: counts.standingchallenges})}</Link>
-                </span>
-              }
-              <span>, </span>
-              {!counts.ratings || counts.ratings.length === 0 ? <span>0 rated players</span> :
-                <span>
-                  {`${counts.ratings} `}
-                  <Link to={`/ratings/${game.uid}`}>{t("RatedPlayersCount", {count: counts.ratings})}</Link>
-                </span>
-              }
-            </Fragment>
-          }
-        </div>
-      </div>
-      <div className="metaGameImage">
-        <div id={"svg" + game.uid} >
-          <img  src={`data:image/svg+xml;utf8,${image}`} alt={game.uid} />
-        </div>
-      </div>
+      <Modal
+        buttons={[{label: "Close", action: closeModal}]}
+        show={modalIsOpen}
+        title={`Board image for ${game.name}`}>
+            <div className="content">
+                <img src={`data:image/svg+xml;utf8,${image}`} alt={game.uid} width="100%" height="auto" />
+            </div>
+      </Modal>
     </div>
   );
 })

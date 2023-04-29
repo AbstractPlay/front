@@ -53,7 +53,7 @@ function UserSettingsModal(props) {
 
   const handleNameChangeClick = () => {
     changingNameSetter(true);
-  } 
+  }
 
   const handleNameChangeSubmitClick = async () => {
     if (users.find(u => u === name)) {
@@ -65,7 +65,7 @@ function UserSettingsModal(props) {
       await handleSettingChangeSubmit("name", name);
       updatedSetter(updated + 1);
     }
-  } 
+  }
 
   const logout = async () => {
     Auth.signOut();
@@ -79,7 +79,7 @@ function UserSettingsModal(props) {
     i18n.changeLanguage(language);
     languageSetter(language);
     updatedSetter(updated + 1);
-  } 
+  }
 
   const handleSettingChangeSubmit = async (attr, value) => {
     const usr = await Auth.currentAuthenticatedUser();
@@ -97,7 +97,7 @@ function UserSettingsModal(props) {
           "value": value
         }}),
       });
-  } 
+  }
 
   const handleEMailChangeClick = () => {
     changingEMailSetter(true);
@@ -114,7 +114,7 @@ function UserSettingsModal(props) {
     // await Auth.updateUserAttributes(usr, { email });
     Auth.updateUserAttributes(usr, { email });
     changingCodeSentSetter(true);
-  } 
+  }
 
   const handleEMailChangeCodeSubmitClick = async () => {
     const usr = await Auth.currentAuthenticatedUser();
@@ -122,7 +122,7 @@ function UserSettingsModal(props) {
     Auth.verifyCurrentUserAttributeSubmit("email", emailCode);
     changingEMailSetter(false);
     changingCodeSentSetter(false);
-  } 
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -164,7 +164,11 @@ function UserSettingsModal(props) {
   console.log(language);
 
   return (
-    <Modal show={show} title={t('UserSettings')} buttons={[{label: t('Close'), action: () => handleUserSettingsClose(updated)}]}>
+    <Modal
+        show={show}
+        title={t('UserSettings')}
+        buttons={[{label: t('Close'), action: () => handleUserSettingsClose(updated)}]}
+    >
       <div>
         <div>{t('UserSettings')}</div>
       </div>

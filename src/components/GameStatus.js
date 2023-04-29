@@ -27,18 +27,18 @@ function GameStatus(props) {
   }
   else {
     return (
-      <div className="statusContainer">
-        <div className="groupLevel1Header"><span>{t("Status")}</span></div>
+      <div style={{marginBottom: "2rem"}}>
+        <h1 className="subtitle lined"><span>{t("Status")}</span></h1>
         { !game.variants || game.variants.length === 0 ? '' :
-         <span>{t(game.variants.length === 1 ? "Variant" : "Variants") + ": "}{game.variants.join(", ")}</span>
+         <p>{t(game.variants.length === 1 ? "Variant" : "Variants") + ": "}{game.variants.join(", ")}</p>
         }
         { status.statuses.length === 0 ? '' :
-          <table className="genericStatuses">
+          <table className="table">
             <tbody>
               { status.statuses.map((status, ind) =>
                 <tr key={"genericStatusRow" + ind}>
-                  <td className="genericStatusKey">{status.key}:</td>
-                  <td className="genericStatusValue">
+                  <td>{status.key}</td>
+                  <td>
                     { status.value.map((v, i) =>
                       <span key={i}>
                         { typeof v === 'string' ?
@@ -57,8 +57,8 @@ function GameStatus(props) {
         { !game.scores || status.scores.length === 0 ? '' :
           status.scores.map((scores, i) =>
             <div key={i}>
-              <span>{scores.name}</span>
-              <table className="scoresTable">
+              <h2>{scores.name}</h2>
+              <table className="table">
                 <tbody>
                   { scores.scores.map((score, index) =>
                     <tr key={"score" + i + "-" + index}>
@@ -67,7 +67,6 @@ function GameStatus(props) {
                         : <span >{game.colors[index].value + ':'}</span>
                       }</td>
                       <td>{game.players[index].name}</td>
-                      <td>:</td>
                       <td>{score}</td>
                     </tr>)
                   }
@@ -78,8 +77,8 @@ function GameStatus(props) {
         }
         { !game.playerStashes ? '' :
           <div>
-            <span>Stash</span>
-            <table className="scoresTable">
+            <h2>Stash</h2>
+            <table className="table">
               <tbody>
                 { status.stashes.map((stash, index) =>
                   <tr key={"stash" + index}>
@@ -88,7 +87,6 @@ function GameStatus(props) {
                       : <span>{game.colors[index].value + ':'}</span>
                     }</td>
                     <td>{game.players[index].name}</td>
-                    <td>:</td>
                     { stash.map((s, j) =>
                         <td key={"stashentry" + j} onClick={ canExplore ? () => handleStashClick(index, s.count, s.movePart) : undefined }>
                           {s.count}&#215;
@@ -102,7 +100,7 @@ function GameStatus(props) {
         }
         { !game.sharedStash ? '' :
           <div>
-            <span>Stash</span>
+            <h2>Stash</h2>
             <div>
               { status.sharedstash.map((s, j) =>
                 <span key={"stashentry" + j} onClick={ canExplore && s.movePart !== '' ? () => handleStashClick(0, s.count, s.movePart) : undefined }>

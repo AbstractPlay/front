@@ -1,3 +1,4 @@
+/* Colour definitions */
 :root {
   --main-bg-color: white;
   --main-fg-color: #1a3e6f;
@@ -13,12 +14,20 @@
   --secondary-color-3-bg: #eefcff;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+/* Overall font definitions */
+@import url('https://fonts.googleapis.com/css2?family=Cardo:wght@700&family=Josefin+Sans&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Source+Sans+Pro&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Quattrocento&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Proza+Libre&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Fauna+One&display=swap'); */
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: "Cardo", serif;
+}
+
+body, button, input, select, textarea {
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 1em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--main-bg-color);
@@ -32,3 +41,335 @@ html {
   box-sizing: inherit;
 }
 
+/* Link handling */
+a {
+    color: inherit;
+}
+
+.content * a {
+    text-decoration: underline;
+}
+
+/* Only used to colour buttons until I can figure out how to override Bulma colours */
+.apButton {
+  background: linear-gradient(180deg, var(--secondary-color-3-lighter) 0%, var(--secondary-color-3) 100%);
+  color: white;
+}
+
+.apButton:hover {
+  background: var(--main-fg-color);
+  color: white;
+}
+
+.inlineButton {
+  margin-left: 1em;
+}
+
+/* Outlines the chosen game on the Games page */
+.theMetaGame {
+  border: 1px solid var(--main-fg-color)
+}
+
+/* Used to create headings with lines on either side */
+.lined {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--main-fg-color);
+    display: block;
+    position: relative;
+    text-align: left;
+    z-index: 1;
+}
+
+.lined:before {
+    border-top: 2px solid var(--main-fg-color);
+    content: "";
+    position: absolute;
+    top: 12px;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+}
+
+.lined span {
+    background: var(--main-bg-color);
+    padding: 0em 0.5em;
+    margin: 0em 1.5em;
+}
+
+/* Only used on the dashboard */
+.apBullet {
+  color: var(--secondary-color-1);
+  font-size: 10px;
+  position: relative;
+  bottom: 2px;
+  padding-right: 0.7em;
+}
+
+/* Adds colours to the list tables that appear on certain pages */
+#TableListContainer > table {
+    border-collapse: collapse;
+    margin: auto;
+    width: auto;
+}
+
+#TableListContainer > table th {
+  border: 1px solid var(--main-fg-color-lighter);
+  text-align: center;
+  padding: 8px;
+  background-color: var(--secondary-color-1-bg)
+}
+
+#TableListContainer > table td {
+  border: 1px solid var(--main-fg-color-lighter);
+  text-align: center;
+  padding: 8px;
+}
+
+#TableListContainer > table tr:nth-child(even) {
+  background-color: var(--secondary-color-3-bg)
+}
+
+/* Leaving the board and stack styles here for now until I better understand it */
+.board {
+  display: flex;
+  background-color: #fff;
+  align-items: flex-start;
+  padding: 1em;
+}
+
+.board > svg {
+  max-height: 600px;
+}
+
+.boardButtons {
+  overflow: hidden;
+}
+
+.align-right {
+  float: right;
+}
+
+.stackboard {
+  flex: 8;
+}
+
+.stack {
+  padding-top: 2em;
+  padding-right: 1.5em;
+  flex: 1;
+}
+
+/* Leaving this also for now */
+.player {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.5em;
+}
+
+th .player {
+  justify-content: center;
+}
+
+/* For some reason, .playerImage and .toMoveImage are necessary.
+ * Putting the height and width in the image does not appear to be working correctly.
+ */
+.playerImage {
+    height: 0.8rem;
+    width: 0.8rem;
+}
+
+.toMoveImage {
+    height: 1.15rem;
+    width: 1.15rem;
+}
+
+/* Colours the "board state" indicator */
+.historyState {
+    color: var(--secondary-color-2);
+}
+
+.currentState {
+    color: black;
+}
+
+.exploreState {
+    color: var(--secondary-color-3);
+}
+
+.historyState, .currentState, .exploreState {
+    font-size: larger;
+    font-weight: bolder;
+  padding-bottom: 1em;
+}
+
+/* Stuff for the move history tree. Leaving most of this for now. */
+.move {
+  max-width: 15em;
+}
+
+.gameMove {
+  display: inline;
+}
+
+.gameMoveNums {
+    font-size: x-small;
+    vertical-align: bottom !important;
+}
+
+.gameMoveFocus {
+  background-color: #bbb;
+}
+
+.gameMoveUnknownOutcome {
+  color: #888;
+}
+
+.gameMoveLoss {
+  color: #f00a28;
+}
+
+.gameMoveWin {
+  color:#7df00a;
+}
+
+.error {
+  color: red;
+}
+
+.fabtn {
+  background-color: white;
+  border: none;
+  color:var(--bg-color2);
+  cursor: pointer;
+}
+
+/* Darker background on mouse-over */
+.fabtn:hover {
+  color:var(--main-fg-color)
+}
+
+.fa-thumbs-up {
+  font-size: 20px;
+  color:#7df00a;
+}
+
+.fa-thumbs-down {
+  font-size: 20px;
+  color: red;
+}
+
+.fa-thumbs-up:hover, .fa-thumbs-down:hover {
+  color: var(--main-fg-color);
+}
+
+/* Custom tooltips */
+.tooltipped {
+  position: relative;
+}
+
+.tooltipped .tooltiptext {
+  visibility: hidden;
+  bottom: 110%;
+  left: 50%;
+  white-space: nowrap;
+  background-color: var(--bg-color2);
+  color: black;
+  border-radius: 6px;
+  padding: 5px 0.5em;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltipped:disabled {
+    z-index: 100;
+}
+
+.tooltipped:hover .tooltiptext {
+  visibility: visible;
+}
+
+
+/* Leaving the stuff for user settings until I'm prepared to expand it */
+.userSettings {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.userSettingsBtn {
+  font-size: 120%;
+}
+.userSettingsLabelDiv {
+  display: block;
+  width: 30%;
+  text-align: right;
+}
+
+.userSettingsInputDiv {
+  display: block;
+  width: 50%;
+}
+
+.userSettingsInfo {
+  font-size: 75%;
+}
+
+.userSettingsButtonDiv {
+  display: block;
+  width: 20%;
+}
+
+/* Makes system chats less prominent */
+.chatSystem {
+    opacity: 0.5;
+}
+
+/* Used to force hyperlinks to wrap on the Games list page */
+.contained {
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+/* Overrides Bulma's default 1.5rem */
+.subtitle:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+/* Colours the buttons in the move tree button bar */
+#MoveTreeBtnBar > button {
+    background-color: var(--main-fg-color);
+    color: white;
+    /* Have to size them because otherwise the invisible tooltip text leads to mixed sizes */
+    width: 1.5em;
+}
+
+/* Can be nested to create ever-more indented containers.
+ * Used for the dashboard.
+ */
+.indentedContainer {
+    padding-left: 2em;
+    padding-bottom: 1em;
+}
+
+/* Only the dashboard uses special bullet glyphs */
+#dashboard * ul {
+    list-style: none;
+    margin-left: 0;
+}

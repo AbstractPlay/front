@@ -22,10 +22,10 @@ function ChallengeItem(props) {
 
   if (respond) {
     return (
-      <li className="challengeli">
+      <li>
         <i className="fa fa-circle apBullet"></i>
         {t("ChallengeFrom", {game: game.name, challenger: challenge.challenger.name})}
-        <button className="apButton inlineButton" onClick={() => handleChallengeResponseClick(challenge)}>{t("Respond")}</button>
+        <button className="button is-small apButton inlineButton" onClick={() => handleChallengeResponseClick(challenge)}>{t("Respond")}</button>
       </li>
     );
   }
@@ -45,10 +45,10 @@ function ChallengeItem(props) {
         desc = t('ChallengedOthers', {game: game.name, others: otherplayers.join(", ")});
     }
     return (
-      <li className="challengeli">
+      <li>
         <i className="fa fa-circle apBullet"></i>
         {desc}
-        <button className="apButton inlineButton" onClick={() => handleChallengeViewClick(challenge)}>{t("View")}</button>
+        <button className="button is-small apButton inlineButton" onClick={() => handleChallengeViewClick(challenge)}>{t("View")}</button>
       </li>
     );
   }

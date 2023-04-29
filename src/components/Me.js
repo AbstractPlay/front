@@ -11,6 +11,7 @@ import NewChallengeModal from './NewChallengeModal';
 import NewProfile from './NewProfile'
 import { API_ENDPOINT_AUTH } from '../config';
 import i18n from '../i18n';
+import { Fragment } from 'react';
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -271,11 +272,7 @@ function Me(props) {
   if (!me) {
     return (
         <article>
-          <div className="article">
-            <div className="dashboardContainer1">
               <Spinner />
-            </div>
-          </div>
         </article>
     );
   }
@@ -328,118 +325,132 @@ function Me(props) {
     console.log("standingChallenges", me.standingChallenges);
     console.log("challengesReceived", me.challengesReceived);
     return (
-        <div>
-        <article>
-          <div className="article">
-            <div className="dashboardContainer1">
-              <div className="dashboardContainer2">
-                <h1 className="centered">{t('WelcomePlayer', {me: me.name})}</h1>
-                <div className="groupLevel1">
-                  {/* Your Games */}
-                  <div className="groupLevel1Header"><span>{t('YourGames')}</span></div>
-                  <div className="groupLevel2">
-                    <div className="groupLevel2Header"><span>{t('YourMove')}</span></div>
-                    { myMove.length === 0
-                      ? <span className="listComment">{t('NoYourMove')}</span>
-                      : <ul> {myMove.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)} </ul>
-                    }
-                  </div>
-                  <div className="groupLevel2">
-                    <div className="groupLevel2Header"><span>{t('OpponentMove')}</span></div>
-                    { waiting.length === 0
-                        ? <span className="listComment">{t('NoOpponentMove')}</span>
-                        : <ul> {waiting.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)} </ul>
-                    }
-                  </div>
-                  { over.length === 0 ? '' :
-                    <div className="groupLevel2">
-                      <div className="groupLevel2Header"><span>{t('CompletedGames')}</span></div>
-                      <ul> {over.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)}</ul>
+        <article id="dashboard">
+            <h1 className="title has-text-centered">{t('WelcomePlayer', {me: me.name})}</h1>
+            {/* Your Games */}
+            <div className="columns">
+                <div className="column content is-half is-offset-one-quarter">
+                    <p className="subtitle lined"><span>{t('YourGames')}</span></p>
+                    <div className="indentedContainer">
+                        <p className="lined"><span>{t('YourMove')}</span></p>
+                        <div className="indentedContainer">
+                            { myMove.length === 0
+                                ? <p>{t('NoYourMove')}</p>
+                                : <ul> {myMove.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={true} stateSetter={props.stateSetter}/>)} </ul>
+                            }
+                        </div>
+                        <p className="lined"><span>{t('OpponentMove')}</span></p>
+                        <div className="indentedContainer">
+                            { waiting.length === 0
+                                ? <p>{t('NoOpponentMove')}</p>
+                                : <ul> {waiting.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)} </ul>
+                            }
+                        </div>
+                        { over.length === 0 ? '' :
+                            <Fragment>
+                            <p className="lined"><span>{t('CompletedGames')}</span></p>
+                            <div className="indentedContainer">
+                                <ul> {over.map(item => <GameItem me={me} settings={me.settings} item={item} key={item.id} canMove={false} stateSetter={props.stateSetter}/>)}</ul>
+                            </div>
+                            </Fragment>
+                        }
                     </div>
-                  }
                 </div>
-                <div className="groupLevel1">
-                  <div className="groupLevel1Header"><span>{t('YourChallenges')}</span></div>
-                  {/* Your Challenges */}
-                  <div className="groupLevel2">
-                    <div className="groupLevel2Header"><span>{t('ChallengeResponse')}</span></div>
-                    { me.challengesReceived.length === 0
-                      ? <span className="listComment">{t('NoChallengeResponse')}</span>
-                      : <ul>
-                          { me.challengesReceived.map(item =>
-                          <ChallengeItem me={me.id} item={item} key={item.id} respond={true}
-                            setters={{
-                              challengeSetter: challengeSetter,
-                              showChallengeViewModalSetter: showChallengeViewModalSetter,
-                              showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
-                          }
-                        </ul>
-                    }
-                  </div>
-                  <div className="groupLevel2">
-                    <div className="groupLevel2Header"><span>{t('WaitingResponse')}</span></div>
-                    { challengesResponded.length === 0
-                      ? <span className="listComment">{t('NoWaitingResponse')}</span>
-                      : <ul>
-                          { challengesResponded.map(item =>
-                          <ChallengeItem me={me.id} item={item} key={item.id} respond={false}
-                            setters={{
-                              challengeSetter: challengeSetter,
-                              showChallengeViewModalSetter: showChallengeViewModalSetter,
-                              showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
-                          }
-                        </ul>
-                    }
-                  </div>
-                  <div className="groupLevel2">
-                    <div className="groupLevel2Header"><span>{t('StandingChallenges2')}</span></div>
-                    { me.standingChallenges.length === 0
-                      ? <span className="listComment">{t('NoStandingChallenges')}</span>
-                      : <ul>
-                          { me.standingChallenges.map(item =>
-                          <ChallengeItem me={me.id} item={item} key={item.id} respond={false}
-                            setters={{
-                              challengeSetter: challengeSetter,
-                              showChallengeViewModalSetter: showChallengeViewModalSetter,
-                              showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
-                          }
-                        </ul>
-                    }
-                  </div>
-                  <div className="groupLevel2">
-                    <div className="groupLevel2Header"><span>{t('NewChallenge')}</span></div>
-                    <span className="listComment"><button className="apButton" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</button></span>
-                  </div>
+            </div>
+            {/* Your Challenges */}
+            <div className="columns">
+                <div className="column content is-half is-offset-one-quarter">
+                    <p className="subtitle lined"><span>{t('YourChallenges')}</span></p>
+                    <div className="indentedContainer">
+                        <p className="lined"><span>{t('ChallengeResponse')}</span></p>
+                        <div className="indentedContainer">
+                            { me.challengesReceived.length === 0
+                            ? <p>{t('NoChallengeResponse')}</p>
+                            : <ul>
+                                { me.challengesReceived.map(item =>
+                                <ChallengeItem me={me.id} item={item} key={item.id} respond={true}
+                                    setters={{
+                                    challengeSetter: challengeSetter,
+                                    showChallengeViewModalSetter: showChallengeViewModalSetter,
+                                    showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
+                                }
+                                </ul>
+                            }
+                        </div>
+                        <p className="lined"><span>{t('WaitingResponse')}</span></p>
+                        <div className="indentedContainer">
+                            { challengesResponded.length === 0
+                            ? <p>{t('NoWaitingResponse')}</p>
+                            : <ul>
+                                { challengesResponded.map(item =>
+                                <ChallengeItem me={me.id} item={item} key={item.id} respond={false}
+                                    setters={{
+                                    challengeSetter: challengeSetter,
+                                    showChallengeViewModalSetter: showChallengeViewModalSetter,
+                                    showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
+                                }
+                                </ul>
+                            }
+                        </div>
+                        <p className="lined"><span>{t('StandingChallenges2')}</span></p>
+                        <div className="indentedContainer">
+                            { me.standingChallenges.length === 0
+                            ? <p>{t('NoStandingChallenges')}</p>
+                            : <ul>
+                                { me.standingChallenges.map(item =>
+                                <ChallengeItem me={me.id} item={item} key={item.id} respond={false}
+                                    setters={{
+                                    challengeSetter: challengeSetter,
+                                    showChallengeViewModalSetter: showChallengeViewModalSetter,
+                                    showChallengeResponseModalSetter: showChallengeResponseModalSetter }}/>)
+                                }
+                                </ul>
+                            }
+                        </div>
+                    <Fragment>
+                        <p className="lined"><span>{t('NewChallenge')}</span></p>
+                        <button className="button is-small apButton" onClick={() => handleNewChallengeClick(myid)}>{t("IssueChallenge")}</button>
+                    </Fragment>
+                    </div>
                 </div>
+                {/* Admin functionality */}
                 { me.admin !== true ? '' :
-                  <div className="groupLevel1">
-                    <div className="groupLevel1Header"><span>Administration</span></div>
-                    {/* Admin functionality */}
-                    <button className="apButton" onClick={() => handleUpdateMetaGameCountsClick()}>Update meta game counts</button>
-                    <button className="apButton" onClick={() => handleUpdateMetaGameRatingsClick()}>Update meta game ratings</button>
-                    <button className="apButton" onClick={() => handleOneTimeFixClick()}>One time fix</button>
-                    <button className="apButton" onClick={() => handleTestAsyncClick()}>Test async</button>
+                  <div className="columns">
+                    <div className="column content is-half is-offset-one-quarter">
+                        <p className="lined"><span>Administration</span></p>
+                        <button className="button is-small apButton" onClick={() => handleUpdateMetaGameCountsClick()}>Update meta game counts</button>
+                        <button className="button is-small apButton" onClick={() => handleUpdateMetaGameRatingsClick()}>Update meta game ratings</button>
+                        <button className="button is-small apButton" onClick={() => handleOneTimeFixClick()}>One time fix</button>
+                        <button className="button is-small apButton" onClick={() => handleTestAsyncClick()}>Test async</button>
+
+                    </div>
                   </div>
                 }
-              </div>
             </div>
-          </div>
+            <NewChallengeModal show={showNewChallengeModal} id={me.id} handleClose={handleNewChallengeClose} handleChallenge={handleNewChallenge2} />
+
+            <Modal
+                show={showChallengeViewModal}
+                title={t('Challenge Details')}
+                buttons={[
+                    {label: (challenge.challenger ? challenge.challenger.id : '') === me.id ? t('RevokeChallenge') : t('RevokeAcceptance'), action: handleChallengeRevoke},
+                    {label: t('Close'), action: handleChallengeViewClose}
+                ]}
+            >
+                <ChallengeView challenge={challenge} me={me.id}/>
+            </Modal>
+
+            <Modal
+                show={showChallengeResponseModal}
+                title={t('Challenge Details')}
+                buttons={[
+                    {label: t('Accept'), action: () => handleChallengeResponse(true)}, {label: t('Reject'), action: () => handleChallengeResponse(false)},
+                    {label: t('Close'), action: handleChallengeResponseClose}
+                ]}
+            >
+                <ChallengeResponse challenge={challenge} me={me}/>
+            </Modal>
         </article>
-        <NewChallengeModal show={showNewChallengeModal} id={me.id} handleClose={handleNewChallengeClose} handleChallenge={handleNewChallenge2} />
-
-        <Modal show={showChallengeViewModal} title={t('Challenge Details')}
-          buttons={[{label: (challenge.challenger ? challenge.challenger.id : '') === me.id ? t('RevokeChallenge') : t('RevokeAcceptance'), action: handleChallengeRevoke}, {label: t('Close'), action: handleChallengeViewClose}]}>
-          <div>{
-              <ChallengeView challenge={challenge} me={me.id}/>
-            }
-          </div>
-        </Modal>
-
-        <Modal show={showChallengeResponseModal} title={t('Challenge Details')}
-          buttons={[{label: t('Accept'), action: () => handleChallengeResponse(true)}, {label: t('Reject'), action: () => handleChallengeResponse(false)}, {label: t('Close'), action: handleChallengeResponseClose}]}>
-          <ChallengeResponse challenge={challenge} me={me}/>
-        </Modal>
-    </div>
     );
   }
 }
