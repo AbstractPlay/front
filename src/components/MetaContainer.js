@@ -7,9 +7,10 @@ import { addResource } from '@abstractplay/gameslib';
 import { API_ENDPOINT_OPEN } from '../config';
 
 function MetaContainer(props) {
-  const [theMataGame, theMetaGameSetter] = useState("");
+  const [theMetaGame, theMetaGameSetter] = useState("");
   const [counts, countsSetter] = useState(null);
   const gameDivs = useRef({});
+  const [hideDetails, hideDetailsSetter] = useState(false);
   const { metaGame } = useParams();
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
@@ -74,11 +75,24 @@ function MetaContainer(props) {
                     </div>
                 </div>
             </div>
+            <div className="field">
+                <div className="control">
+                    <label className="checkbox">
+                        <input type="checkbox" checked={hideDetails} onClick={() => hideDetailsSetter(!hideDetails)} />&nbsp;
+                        {t("HideDetails")}
+                    </label>
+                </div>
+            </div>
         </div>
         <div className="columns is-multiline">
           {games.map(k =>
-            <MetaItem ref={el => {gameDivs.current[k] = createRef(); gameDivs.current[k].current = el}} key={gameinfo.get(k).uid} game={gameinfo.get(k)}
-              counts={counts ? counts[gameinfo.get(k).uid] : undefined} highlight = {k === theMataGame}/>)
+            <MetaItem
+                ref={el => {gameDivs.current[k] = createRef(); gameDivs.current[k].current = el}}
+                key={gameinfo.get(k).uid} game={gameinfo.get(k)}
+                counts={counts ? counts[gameinfo.get(k).uid] : undefined}
+                highlight = {k === theMetaGame}
+                hideDetails={hideDetails}
+            />)
           }
         </div>
       </article>

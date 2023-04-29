@@ -12,6 +12,7 @@ const MetaItem = React.forwardRef((props, ref) => {
   const { t } = useTranslation();
   let game = props.game;
   let counts = props.counts;
+  let hideDetails = props.hideDetails;
   const image = encodeURIComponent(gameImages[game.uid]);
   let gameEngine;
   if (game.playercounts.length > 1) {
@@ -40,34 +41,38 @@ const MetaItem = React.forwardRef((props, ref) => {
         <div className="columns is-mobile">
             <div className="column is-three-quarters">
                 <div className="content">
-                    <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-                    {gameEngine.description() + "\n\n" + designerString}
-                    </ReactMarkdown>
-                    <ul className="contained">
-                    {game.urls.map((l, i) =>
-                        <li key = {i}><a href={l} target="_blank" rel="noopener noreferrer">{l}</a></li>
-                        )}
-                    </ul>
+                    {hideDetails ? "" :
+                        <Fragment>
+                            <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+                            {gameEngine.description() + "\n\n" + designerString}
+                            </ReactMarkdown>
+                            <ul className="contained">
+                            {game.urls.map((l, i) =>
+                                <li key = {i}><a href={l} target="_blank" rel="noopener noreferrer">{l}</a></li>
+                                )}
+                            </ul>
+                        </Fragment>
+                    }
                     <div>
                     { counts === undefined ? '' :
-                        <Fragment>
-                            <span>
-                            {`${counts.currentgames} `}
-                            <Link to={`/listgames/current/${game.uid}`}>{t("CurrentGamesCount", {count: counts.currentgames})} </Link>
-                            </span>,&nbsp;
-                            <span>
-                            {`${counts.completedgames} `}
-                            <Link to={`/listgames/completed/${game.uid}`}>{t("CompletedGamesCount", {count: counts.completedgames})}</Link>
-                            </span>,&nbsp;
-                            <span>
-                            {`${counts.standingchallenges} `}
-                            <Link to={`/challenges/${game.uid}`}>{t("StandingChallengesCount", {count: counts.standingchallenges})}</Link>
-                            </span>,&nbsp;
-                            <span>
-                            {`${counts.ratings} `}
-                            <Link to={`/ratings/${game.uid}`}>{t("RatedPlayersCount", {count: counts.ratings})}</Link>
-                            </span>
-                        </Fragment>
+                        <ul style={{listStyle: "none", marginLeft: "0", marginTop: hideDetails ? "0" : "1em"}}>
+                            <li>
+                                {`${counts.currentgames} `}
+                                <Link to={`/listgames/current/${game.uid}`}>{t("CurrentGamesCount", {count: counts.currentgames})} </Link>
+                            </li>
+                            <li>
+                                {`${counts.completedgames} `}
+                                <Link to={`/listgames/completed/${game.uid}`}>{t("CompletedGamesCount", {count: counts.completedgames})}</Link>
+                            </li>
+                            <li>
+                                {`${counts.standingchallenges} `}
+                                <Link to={`/challenges/${game.uid}`}>{t("StandingChallengesCount", {count: counts.standingchallenges})}</Link>
+                            </li>
+                            <li>
+                                {`${counts.ratings} `}
+                                <Link to={`/ratings/${game.uid}`}>{t("RatedPlayersCount", {count: counts.ratings})}</Link>
+                            </li>
+                        </ul>
                     }
                     </div>
                 </div>

@@ -221,10 +221,7 @@ function NewChallengeModal(props) {
       let ok = true;
       opponents.forEach(o => {
         if (o === '') {
-          if (opponents.length === 1)
-            errorSetter(t("SelectAnOpponent"));
-          else
-            errorSetter(t("SelectOpponents", {"count": opponents.length}));
+          errorSetter(t("SelectOpponents", {"count": opponents.length}));
           ok = false;
           return;
         }
