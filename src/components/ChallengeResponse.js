@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { useTranslation } from 'react-i18next';
 import { gameinfo } from '@abstractplay/gameslib';
 
@@ -32,17 +32,14 @@ function ChallengeResponse(props) {
     notes = t('ChallengerNotes') + <p>challenge.notes</p>;
 
   return (
-    <div>
-      <label>{t('ChallengeDetails')}</label>
-      <div>
-        <div>{desc}</div>
-        <div>{ challenge.numPlayers === 2 ? t('NumChallenge2') + " " + seating : t('NumChallenge', {num: challenge.numPlayers, players: allPlayers})}</div>
-        <div>{t('ChallengeClock', {start: challenge.clockStart, inc: challenge.clockInc, max: challenge.clockMax})}</div>
-        <div>{challenge.clockHard ? t('HardTime') : t('SoftTime')}</div>
-        <div>{challenge.rated ? t('RatedGame') : t('UnratedGame')}</div>
-        <div>{players}</div>
-        <div>{notes}</div>
-      </div>
+    <div className="content">
+        <p>{desc}</p>
+        <p>{ challenge.numPlayers === 2 ? t('NumChallenge2') + " " + seating : t('NumChallenge', {num: challenge.numPlayers, players: allPlayers})}</p>
+        <p>{t('ChallengeClock', {start: challenge.clockStart, inc: challenge.clockInc, max: challenge.clockMax})}</p>
+        <p>{challenge.clockHard ? t('HardTime') : t('SoftTime')}</p>
+        <p>{challenge.rated ? t('RatedGame') : t('UnratedGame')}</p>
+        <p>{players}</p>
+        <p>{notes}</p>
     </div>
   );
 }

@@ -2,23 +2,21 @@ import React, { useState, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { COGNITO_USER_POOL_ID, COGNITO_APPID, COGNITO_DOMAIN, COGNITO_COOKIE_DOMAIN, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';
 import {Amplify, Auth } from 'aws-amplify';
-import './Skeleton.css';
 import Spinner from '../components/Spinner';
-import LogInOutButton from '../components/LogInOutButton';
 import Welcome from './Welcome';
 import GameMove from '../components/GameMove';
-import logo from '../assets/AbstractPlayLogo.svg';
 import MetaContainer from "../components/MetaContainer";
 import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
 import Navbar from '../components/Navbar';
+import Footer from "../components/Footer";
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
   const [token, tokenSetter] = useState(null);
-  const [update, updateSetter] = useState(0);
+  const [update, ] = useState(0);
 
   useEffect(() => {
     const awsconfig = {
@@ -80,34 +78,19 @@ function Bones(props) {
   else
     return (
       <Router>
-        <div className="apPageContainer">
-          <div className="apHeader">
-            <div className="apLogo">
-              <img src={logo} alt="Abstract Play logo"  id="logo" />
-            </div>
-            <div className="loginOut">
-              <LogInOutButton token={token} updater={updateSetter}/>
-            </div>
-          </div>
-          <div>
-            <div>
-                <div className="main">
-                    <Navbar />
-                    <Routes>
-                        <Route path="/about" element={<About token={token} />} />
-                        <Route path="/games/:metaGame?" element={<MetaContainer token={token} />} />
-                        <Route path="/challenges/:metaGame" element={<StandingChallenges />} />
-                        <Route path="/listgames/:gameState/:metaGame" element={<ListGames update={update} />} />
-                        <Route path="/ratings/:metaGame" element={<Ratings update={update} />} />
-                        <Route path="/move/:metaGame/:gameID" element={<GameMove update={update} />} />
-                        <Route path="/" element={<Welcome token={token} update={update} />} />
-                    </Routes>
-              </div>
-            </div>
-          </div>
-          <div>
-          </div>
-        </div>
+        <Navbar />
+        <section className="section" id="main">
+            <Routes>
+                <Route path="/about" element={<About token={token} />} />
+                <Route path="/games/:metaGame?" element={<MetaContainer token={token} />} />
+                <Route path="/challenges/:metaGame" element={<StandingChallenges />} />
+                <Route path="/listgames/:gameState/:metaGame" element={<ListGames update={update} />} />
+                <Route path="/ratings/:metaGame" element={<Ratings update={update} />} />
+                <Route path="/move/:metaGame/:gameID" element={<GameMove update={update} />} />
+                <Route path="/" element={<Welcome token={token} update={update} />} />
+            </Routes>
+        </section>
+        <Footer/>
       </Router>
     );
 }

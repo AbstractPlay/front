@@ -19,11 +19,30 @@ function GameComment(props) {
 
   return (
     <Fragment>
-      { toolong || props.tooMuch ? <div className="commenttoolong error">{props.tooMuch ? t('CommentsTooLong') : t('CommentTooLong')}</div> : ''}
-      <textarea id="enterAComment" value={comment} placeholder={t('Comment')} onChange={(e) => handleChange(e.target.value)} 
-        rows={3}
-        cols={100} />
-      <input type="submit" value="Submit" onClick={handleSubmit}/>
+        { toolong || props.tooMuch ?
+            <p className="is-danger">{t('CommentTooLong')}</p>
+        :
+            <Fragment>
+            <div className="field">
+                <label className="label" htmlFor="enterAComment">{t("Comment")}</label>
+                <div className="control">
+                    <textarea
+                        id="enterAComment"
+                        name="enterAComment"
+                        className="textarea"
+                        value={comment}
+                        placeholder={t("Comment")}
+                        onChange={(e) => handleChange(e.target.value)}
+                    ></textarea>
+                </div>
+            </div>
+            <div className="field">
+                <div className="control">
+                    <button className="button is-small" onClick={handleSubmit}>Submit</button>
+                </div>
+            </div>
+            </Fragment>
+        }
     </Fragment>
   );
 

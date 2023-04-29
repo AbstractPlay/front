@@ -190,10 +190,10 @@ function StandingChallenges(props) {
   const showAccepters = challenges && challenges.find(c => c.players.length > 1);
   return (
       <article>
-        <h1 className="centered">{t("StandingChallenges", {"name": metaGameName})}</h1>
-        <div className="standingChallengesContainer">
+        <h1 className="has-text-centered title">{t("StandingChallenges", {"name": metaGameName})}</h1>
+        <div id="TableListContainer">
           { challenges === null ? <Spinner/> :
-            <table className="standingChallengesTable">
+            <table className="table">
               <tbody>
                 <tr>
                   <th>{t("tblHeaderChallenger")}</th>
@@ -227,16 +227,16 @@ function StandingChallenges(props) {
                         {
                           challenge.id === accepted ? t("Accepted") : challenge.id === reject || challenge.id === revoke ? <Spinner></Spinner> :
                             challenge.challenger.id === myid ?
-                              <button className="apButton" onClick={() => handleRevoke(challenge.id)}>
+                              <button className="button is-small apButton" onClick={() => handleRevoke(challenge.id)}>
                                 {t("Revoke")}
                               </button>
                             :
                               challenge.players.find(p => p.id === myid) ?
-                                <button className="apButton" onClick={() => handleReject(challenge.id)}>
+                                <button className="button is-small apButton" onClick={() => handleReject(challenge.id)}>
                                   {t("Revoke")}
                                 </button>
                               :
-                                <button className="apButton" onClick={() => handleAccept(challenge.id)}>
+                                <button className="button is-small apButton" onClick={() => handleAccept(challenge.id)}>
                                   {t("Accept")}
                                 </button>
                         }
