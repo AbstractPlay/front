@@ -190,12 +190,20 @@ function mergeExploration(game, exploration, data) {
     let node = exploration[moveNumber - 2];
     let gameEngine = GameFactory(game.metaGame, node.state);
     console.log("data[1]: ", data[1]);
-    const subtree1 = data[1].tree.find(e => gameEngine.sameMove(exploration[moveNumber - 2].move, e.move));
+    const subtree1 = data[1].tree.find((e) =>
+      gameEngine.sameMove(exploration[moveNumber - 2].move, e.move)
+    );
     if (subtree1) {
       gameEngine.move(exploration[moveNumber - 1].move);
-      const subtree2 = subtree1.children.find(e => gameEngine.sameMove(exploration[moveNumber - 1].move, e.move));
+      const subtree2 = subtree1.children.find((e) =>
+        gameEngine.sameMove(exploration[moveNumber - 1].move, e.move)
+      );
       if (subtree2) {
-        mergeMoveRecursive(gameEngine, exploration[moveNumber - 1], subtree2.children);
+        mergeMoveRecursive(
+          gameEngine,
+          exploration[moveNumber - 1],
+          subtree2.children
+        );
       }
     }
   }
@@ -203,11 +211,15 @@ function mergeExploration(game, exploration, data) {
 
 function mergeMoveRecursive(gameEngine, node, children) {
   console.log(node);
-  children.forEach(n => {
+  children.forEach((n) => {
     gameEngine.move(n.move);
-    const pos = node.AddChild(n.move, gameEngine.serialize(), gameEngine.gameover ? '' : gameEngine.currplayer - 1, gameEngine);
-    if (n.outcome !== undefined)
-      node.children[pos].SetOutcome(n.outcome);
+    const pos = node.AddChild(
+      n.move,
+      gameEngine.serialize(),
+      gameEngine.gameover ? "" : gameEngine.currplayer - 1,
+      gameEngine
+    );
+    if (n.outcome !== undefined) node.children[pos].SetOutcome(n.outcome);
     mergeMoveRecursive(gameEngine, node.children[pos], n.children);
     gameEngine.stack.pop();
     gameEngine.load();
@@ -234,26 +246,26 @@ function setupColors(settings, game, t) {
   });
 }
 
-async function saveExploration (exploration, gameid) {
+async function saveExploration(exploration, gameid) {
   const usr = await Auth.currentAuthenticatedUser();
   console.log("gameid", gameid);
   console.log("move:", exploration.length);
   console.log("tree:", exploration[exploration.length - 1].Deflate().children);
   fetch(API_ENDPOINT_AUTH, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
     },
     body: JSON.stringify({
-      "query": "save_exploration",
-      "pars" : {
-        "game": gameid,
-        "move": exploration.length,
-        "tree": exploration[exploration.length - 1].Deflate().children
-      }
-    })
+      query: "save_exploration",
+      pars: {
+        game: gameid,
+        move: exploration.length,
+        tree: exploration[exploration.length - 1].Deflate().children,
+      },
+    }),
   });
 }
 
@@ -600,8 +612,7 @@ function GameMove(props) {
       try {
         const usr = await Auth.currentAuthenticatedUser();
         token = usr.signInUserSession.idToken.jwtToken;
-      }
-      catch (err) {
+      } catch (err) {
         // non logged in user viewing the game
       }
       try {
@@ -609,19 +620,19 @@ function GameMove(props) {
         let status;
         if (token) {
           const res = await fetch(API_ENDPOINT_AUTH, {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              "query": "get_exploration",
-              "pars" : {
-                "game": gameID,
-                "move": explorationRef.current.length
-              }
-            })
+              query: "get_exploration",
+              pars: {
+                game: gameID,
+                move: explorationRef.current.length,
+              },
+            }),
           });
           status = res.status;
           if (status !== 200) {
@@ -637,8 +648,7 @@ function GameMove(props) {
             focusSetter(cloneDeep(focus)); // just to trigger a rerender...
           }
         }
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
         errorMessageRef.current = error.message;
         errorSetter(true);
@@ -675,8 +685,14 @@ function GameMove(props) {
   };
 
   function handleReset() {
-    if (focus.moveNumber + focus.exPath.length !== explorationRef.current.length - 1)
-      handleGameMoveClick({"moveNumber": explorationRef.current.length - 1, "exPath": []});
+    if (
+      focus.moveNumber + focus.exPath.length !==
+      explorationRef.current.length - 1
+    )
+      handleGameMoveClick({
+        moveNumber: explorationRef.current.length - 1,
+        exPath: [],
+      });
   }
 
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
@@ -992,7 +1008,12 @@ function GameMove(props) {
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
   // console.log("game.me", game ? game.me : "nope");
-  console.log("current move node: ", explorationRef.current ? explorationRef.current[explorationRef.current.length - 1] : '')
+  console.log(
+    "current move node: ",
+    explorationRef.current
+      ? explorationRef.current[explorationRef.current.length - 1]
+      : ""
+  );
   if (!error) {
     let toMove;
     if (focus) {

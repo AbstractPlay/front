@@ -4,28 +4,37 @@
   --main-fg-color: #1a3e6f;
   --main-fg-color-lighter: #c3d6f1;
   --bg-color2: #999999;
-  --secondary-color-1:#ff6633;
+  --secondary-color-1: #ff6633;
   --secondary-color-1-lighter: #ff8962;
   --secondary-color-1-bg: #ffe8e0;
-  --secondary-color-2:#99cccc;
-  --secondary-color-2-lighter:#e6f2f2;
-  --secondary-color-3:#008ca8;
-  --secondary-color-3-lighter:#009fbf;
+  --secondary-color-2: #99cccc;
+  --secondary-color-2-lighter: #e6f2f2;
+  --secondary-color-3: #008ca8;
+  --secondary-color-3-lighter: #009fbf;
   --secondary-color-3-bg: #eefcff;
 }
 
 /* Overall font definitions */
-@import url('https://fonts.googleapis.com/css2?family=Cardo:wght@700&family=Josefin+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cardo:wght@700&family=Josefin+Sans&display=swap");
 /* @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Source+Sans+Pro&display=swap'); */
 /* @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Quattrocento&display=swap'); */
 /* @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Proza+Libre&display=swap'); */
 /* @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Fauna+One&display=swap'); */
 
-h1,h2,h3,h4,h5,h6 {
-    font-family: "Cardo", serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Cardo", serif;
 }
 
-body, button, input, select, textarea {
+body,
+button,
+input,
+select,
+textarea {
   font-family: "Josefin Sans", sans-serif;
   font-size: 1em;
   -webkit-font-smoothing: antialiased;
@@ -37,22 +46,28 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
 /* Link handling */
 a {
-    color: inherit;
+  color: inherit;
 }
 
 .content * a {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* Only used to colour buttons until I can figure out how to override Bulma colours */
 .apButton {
-  background: linear-gradient(180deg, var(--secondary-color-3-lighter) 0%, var(--secondary-color-3) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--secondary-color-3-lighter) 0%,
+    var(--secondary-color-3) 100%
+  );
   color: white;
 }
 
@@ -67,35 +82,35 @@ a {
 
 /* Outlines the chosen game on the Games page */
 .theMetaGame {
-  border: 1px solid var(--main-fg-color)
+  border: 1px solid var(--main-fg-color);
 }
 
 /* Used to create headings with lines on either side */
 .lined {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    color: var(--main-fg-color);
-    display: block;
-    position: relative;
-    text-align: left;
-    z-index: 1;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--main-fg-color);
+  display: block;
+  position: relative;
+  text-align: left;
+  z-index: 1;
 }
 
 .lined:before {
-    border-top: 2px solid var(--main-fg-color);
-    content: "";
-    position: absolute;
-    top: 12px;
-    left: 0;
-    width: 100%;
-    z-index: -1;
+  border-top: 2px solid var(--main-fg-color);
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 0;
+  width: 100%;
+  z-index: -1;
 }
 
 .lined span {
-    background: var(--main-bg-color);
-    padding: 0em 0.5em;
-    margin: 0em 1.5em;
+  background: var(--main-bg-color);
+  padding: 0em 0.5em;
+  margin: 0em 1.5em;
 }
 
 /* Only used on the dashboard */
@@ -109,16 +124,16 @@ a {
 
 /* Adds colours to the list tables that appear on certain pages */
 #TableListContainer > table {
-    border-collapse: collapse;
-    margin: auto;
-    width: auto;
+  border-collapse: collapse;
+  margin: auto;
+  width: auto;
 }
 
 #TableListContainer > table th {
   border: 1px solid var(--main-fg-color-lighter);
   text-align: center;
   padding: 8px;
-  background-color: var(--secondary-color-1-bg)
+  background-color: var(--secondary-color-1-bg);
 }
 
 #TableListContainer > table td {
@@ -128,7 +143,7 @@ a {
 }
 
 #TableListContainer > table tr:nth-child(even) {
-  background-color: var(--secondary-color-3-bg)
+  background-color: var(--secondary-color-3-bg);
 }
 
 /* Leaving the board and stack styles here for now until I better understand it */
@@ -176,31 +191,33 @@ th .player {
  * Putting the height and width in the image does not appear to be working correctly.
  */
 .playerImage {
-    height: 0.8rem;
-    width: 0.8rem;
+  height: 0.8rem;
+  width: 0.8rem;
 }
 
 .toMoveImage {
-    height: 1.15rem;
-    width: 1.15rem;
+  height: 1.15rem;
+  width: 1.15rem;
 }
 
 /* Colours the "board state" indicator */
 .historyState {
-    color: var(--secondary-color-2);
+  color: var(--secondary-color-2);
 }
 
 .currentState {
-    color: black;
+  color: black;
 }
 
 .exploreState {
-    color: var(--secondary-color-3);
+  color: var(--secondary-color-3);
 }
 
-.historyState, .currentState, .exploreState {
-    font-size: larger;
-    font-weight: bolder;
+.historyState,
+.currentState,
+.exploreState {
+  font-size: larger;
+  font-weight: bolder;
   padding-bottom: 1em;
 }
 
@@ -214,8 +231,8 @@ th .player {
 }
 
 .gameMoveNums {
-    font-size: x-small;
-    vertical-align: bottom !important;
+  font-size: x-small;
+  vertical-align: bottom !important;
 }
 
 .gameMoveFocus {
@@ -227,13 +244,13 @@ th .player {
   padding-left: 0.2rem;
   padding-bottom: 0.1rem;
   height: 0.6rem;
-  width: 0.7rem
+  width: 0.7rem;
 }
 
 .winnerImage2 {
   padding-left: 0.2rem;
   height: 0.6rem;
-  width: 0.8rem
+  width: 0.8rem;
 }
 
 .winnerButtonImage {
@@ -244,7 +261,7 @@ th .player {
 }
 
 .resetIcon {
-  font-size:1.2rem;
+  font-size: 1.2rem;
   margin-left: 0.7rem;
   height: 1rem;
   width: 1rem;
@@ -255,7 +272,7 @@ th .player {
 }
 
 .gameMoveWin {
-  color:#7df00a;
+  color: #7df00a;
 }
 
 .error {
@@ -265,18 +282,18 @@ th .player {
 .fabtn {
   background-color: white;
   border: none;
-  color:var(--bg-color2);
+  color: var(--bg-color2);
   cursor: pointer;
 }
 
 /* Darker background on mouse-over */
 .fabtn:hover {
-  color:var(--main-fg-color)
+  color: var(--main-fg-color);
 }
 
 .fa-thumbs-up {
   font-size: 20px;
-  color:#7df00a;
+  color: #7df00a;
 }
 
 .fa-thumbs-down {
@@ -284,7 +301,8 @@ th .player {
   color: red;
 }
 
-.fa-thumbs-up:hover, .fa-thumbs-down:hover {
+.fa-thumbs-up:hover,
+.fa-thumbs-down:hover {
   color: var(--main-fg-color);
 }
 
@@ -307,13 +325,12 @@ th .player {
 }
 
 .tooltipped:disabled {
-    z-index: 100;
+  z-index: 100;
 }
 
 .tooltipped:hover .tooltiptext {
   visibility: visible;
 }
-
 
 /* Leaving the stuff for user settings until I'm prepared to expand it */
 .userSettings {
@@ -349,51 +366,51 @@ th .player {
 
 /* Makes system chats less prominent */
 .chatSystem {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 /* Used to force hyperlinks to wrap on the Games list page */
 .contained {
-    /* These are technically the same, but use both */
-    overflow-wrap: break-word;
-    word-wrap: break-word;
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 
-    -ms-word-break: break-all;
-    /* This is the dangerous one in WebKit, as it breaks things wherever */
-    word-break: break-all;
-    /* Instead use this non-standard one: */
-    word-break: break-word;
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
 
-    /* Adds a hyphen where the word breaks, if supported (No Blink) */
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 /* Overrides Bulma's default 1.5rem */
 .subtitle:not(:last-child) {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 /* Colours the buttons in the move tree button bar */
 #MoveTreeBtnBar > button {
-    background-color: var(--main-fg-color);
-    color: white;
-    /* Have to size them because otherwise the invisible tooltip text leads to mixed sizes */
-    width: 1.5em;
+  background-color: var(--main-fg-color);
+  color: white;
+  /* Have to size them because otherwise the invisible tooltip text leads to mixed sizes */
+  width: 1.5em;
 }
 
 /* Can be nested to create ever-more indented containers.
  * Used for the dashboard.
  */
 .indentedContainer {
-    padding-left: 2em;
-    padding-bottom: 1em;
+  padding-left: 2em;
+  padding-bottom: 1em;
 }
 
 /* Only the dashboard uses special bullet glyphs */
 #dashboard * ul {
-    list-style: none;
-    margin-left: 0;
+  list-style: none;
+  margin-left: 0;
 }

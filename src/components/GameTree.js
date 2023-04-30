@@ -27,20 +27,14 @@ export class GameNode {
     // if player x moved, and the other player (1-x) has only losing replies (outcome = x) (no winning moves, no unknown outcome moves) then player x wins
     let a_child_wins = false;
     let all_children_lose = true;
-    this.children.forEach(child => {
-      if (child.outcome === 1 - mover)
-        a_child_wins = true;
-      if (child.outcome !== mover)
-        all_children_lose = false;
+    this.children.forEach((child) => {
+      if (child.outcome === 1 - mover) a_child_wins = true;
+      if (child.outcome !== mover) all_children_lose = false;
     });
-    if (a_child_wins)
-      this.outcome = 1 - mover;
-    else if (all_children_lose)
-      this.outcome = mover;
-    else
-      this.outcome = -1;
-    if (this.parent != null)
-        this.parent.UpdateOutcome();
+    if (a_child_wins) this.outcome = 1 - mover;
+    else if (all_children_lose) this.outcome = mover;
+    else this.outcome = -1;
+    if (this.parent != null) this.parent.UpdateOutcome();
   }
 
   SetOutcome(outcome) {
@@ -53,9 +47,9 @@ export class GameNode {
   Deflate() {
     const deflated = {
       move: this.move,
-      children: []
+      children: [],
     };
-    this.children.forEach(child => {
+    this.children.forEach((child) => {
       deflated.children.push(child.Deflate());
     });
     if (this.children.length === 0 && this.outcome !== -1)

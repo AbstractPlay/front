@@ -247,7 +247,7 @@ function GameMoves(props) {
           if (j === focus.exPath.length - 1) className += " gameMoveFocus";
           curNumVariations = node.children.length;
           node = node.children[focus.exPath[j]];
-            className += " gameMoveExplore";
+          className += " gameMoveExplore";
           path.push([
             {
               class: className,
@@ -266,7 +266,7 @@ function GameMoves(props) {
           for (let k = 0; k < node.children.length; k++) {
             const c = node.children[k];
             let className = "gameMove";
-              className += " gameMoveExplore";
+            className += " gameMoveExplore";
             next.push({
               class: className,
               outcome: c.outcome,
@@ -306,14 +306,37 @@ function GameMoves(props) {
                         onClick={() => handleGameMoveClick(m.path)}
                       >
                         {m.move}
-                        { m.outcome === -1 ? null :
-                          game.colors[m.outcome].isImage ?
-                            <img className="winnerImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[m.outcome].value)}`} alt="" />
-                            : <svg className="winnerImage2" viewBox="0 0 44 44">
-                                <circle cx="22" cy="22" r="18"  stroke="black" strokeWidth="4" fill="white" />
-                                <text x="12" y="32" fill="black" fontFamily="monospace" fontSize="35" fontWeight="bold">{m.outcome + 1}</text>
-                              </svg>
-                        }
+                        {m.outcome === -1 ? null : game.colors[m.outcome]
+                            .isImage ? (
+                          <img
+                            className="winnerImage"
+                            src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                              game.colors[m.outcome].value
+                            )}`}
+                            alt=""
+                          />
+                        ) : (
+                          <svg className="winnerImage2" viewBox="0 0 44 44">
+                            <circle
+                              cx="22"
+                              cy="22"
+                              r="18"
+                              stroke="black"
+                              strokeWidth="4"
+                              fill="white"
+                            />
+                            <text
+                              x="12"
+                              y="32"
+                              fill="black"
+                              fontFamily="monospace"
+                              fontSize="35"
+                              fontWeight="bold"
+                            >
+                              {m.outcome + 1}
+                            </text>
+                          </svg>
+                        )}
                       </span>
                     </span>
                   ))}
