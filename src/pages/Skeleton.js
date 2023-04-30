@@ -1,59 +1,62 @@
 import React, { useState, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { COGNITO_USER_POOL_ID, COGNITO_APPID, COGNITO_DOMAIN, COGNITO_COOKIE_DOMAIN, COGNITO_REDIRECT_LOGIN, COGNITO_REDIRECT_LOGOUT } from '../config';
-import {Amplify, Auth } from 'aws-amplify';
-import Spinner from '../components/Spinner';
-import Welcome from './Welcome';
-import GameMove from '../components/GameMove';
+import {
+  COGNITO_USER_POOL_ID,
+  COGNITO_APPID,
+  COGNITO_DOMAIN,
+  COGNITO_COOKIE_DOMAIN,
+  COGNITO_REDIRECT_LOGIN,
+  COGNITO_REDIRECT_LOGOUT,
+} from "../config";
+import { Amplify, Auth } from "aws-amplify";
+import Spinner from "../components/Spinner";
+import Welcome from "./Welcome";
+import GameMove from "../components/GameMove";
 import MetaContainer from "../components/MetaContainer";
 import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
-import Navbar from '../components/Navbar';
+import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
   const [token, tokenSetter] = useState(null);
-  const [update, ] = useState(0);
+  const [update] = useState(0);
 
   useEffect(() => {
     const awsconfig = {
-      "Auth": {
-        "region": "us-east-1",
-        "userPoolId": COGNITO_USER_POOL_ID,
-        "userPoolWebClientId": COGNITO_APPID,
-        "mandatorySignIn": false,
-        "cookieStorage": {
-          "domain": COGNITO_COOKIE_DOMAIN,
-          "path": "/",
-          "expires": 7,
-          "secure": true
+      Auth: {
+        region: "us-east-1",
+        userPoolId: COGNITO_USER_POOL_ID,
+        userPoolWebClientId: COGNITO_APPID,
+        mandatorySignIn: false,
+        cookieStorage: {
+          domain: COGNITO_COOKIE_DOMAIN,
+          path: "/",
+          expires: 7,
+          secure: true,
         },
-        "redirectSignIn": COGNITO_REDIRECT_LOGIN,
-        "redirectSignOut": COGNITO_REDIRECT_LOGOUT
+        redirectSignIn: COGNITO_REDIRECT_LOGIN,
+        redirectSignOut: COGNITO_REDIRECT_LOGOUT,
       },
-      "API": {
-        "endpoints": [
+      API: {
+        endpoints: [
           {
-            "name": "demo",
-            "endpoint": COGNITO_REDIRECT_LOGIN
-          }
-        ]
-      }
+            name: "demo",
+            endpoint: COGNITO_REDIRECT_LOGIN,
+          },
+        ],
+      },
     };
     Amplify.configure(awsconfig);
     const awsauth = {
-      "domain": COGNITO_DOMAIN,
-      "scope": [
-        "openid",
-        "email",
-        "aws.cognito.signin.user.admin"
-      ],
-      "redirectSignIn": COGNITO_REDIRECT_LOGIN,
-      "redirectSignOut": COGNITO_REDIRECT_LOGOUT,
-      "responseType": "code"
+      domain: COGNITO_DOMAIN,
+      scope: ["openid", "email", "aws.cognito.signin.user.admin"],
+      redirectSignIn: COGNITO_REDIRECT_LOGIN,
+      redirectSignOut: COGNITO_REDIRECT_LOGOUT,
+      responseType: "code",
     };
     Auth.configure({ oauth: awsauth });
     async function getToken() {
@@ -62,35 +65,51 @@ function Bones(props) {
         console.log("usr:", usr);
         // if (usr.signInUserSession !== undefined)
         tokenSetter(usr.signInUserSession.idToken.jwtToken);
-      }
-      catch (error) {
+      } catch (error) {
         tokenSetter(null);
       }
       authedSetter(true);
       console.log("authed");
     }
     getToken();
-  },[]);
+  }, []);
 
   console.log("Skeleton rerendering, update=", update);
-  if (!authed)
-    return <Spinner />;
+  if (!authed) return <Spinner />;
   else
     return (
       <Router>
         <Navbar />
         <section className="section" id="main">
-            <Routes>
-                <Route path="/about" element={<About token={token} />} />
-                <Route path="/games/:metaGame?" element={<MetaContainer token={token} />} />
-                <Route path="/challenges/:metaGame" element={<StandingChallenges />} />
-                <Route path="/listgames/:gameState/:metaGame" element={<ListGames update={update} />} />
-                <Route path="/ratings/:metaGame" element={<Ratings update={update} />} />
-                <Route path="/move/:metaGame/:gameID" element={<GameMove update={update} />} />
-                <Route path="/" element={<Welcome token={token} update={update} />} />
-            </Routes>
+          <Routes>
+            <Route path="/about" element={<About token={token} />} />
+            <Route
+              path="/games/:metaGame?"
+              element={<MetaContainer token={token} />}
+            />
+            <Route
+              path="/challenges/:metaGame"
+              element={<StandingChallenges />}
+            />
+            <Route
+              path="/listgames/:gameState/:metaGame"
+              element={<ListGames update={update} />}
+            />
+            <Route
+              path="/ratings/:metaGame"
+              element={<Ratings update={update} />}
+            />
+            <Route
+              path="/move/:metaGame/:gameID"
+              element={<GameMove update={update} />}
+            />
+            <Route
+              path="/"
+              element={<Welcome token={token} update={update} />}
+            />
+          </Routes>
         </section>
-        <Footer/>
+        <Footer />
       </Router>
     );
 }

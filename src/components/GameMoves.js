@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, Fragment } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useRef, Fragment } from "react";
+import { useTranslation } from "react-i18next";
 
-function useEventListener(eventName, handler, element = window){
+function useEventListener(eventName, handler, element = window) {
   const savedHandler = useRef();
 
   useEffect(() => {
@@ -13,7 +13,7 @@ function useEventListener(eventName, handler, element = window){
       const isSupported = element && element.addEventListener;
       if (!isSupported) return;
 
-      const eventListener = event => savedHandler.current(event);
+      const eventListener = (event) => savedHandler.current(event);
       element.addEventListener(eventName, eventListener);
 
       // Remove event listener on cleanup
@@ -28,25 +28,30 @@ function useEventListener(eventName, handler, element = window){
 function getPath(focus, exploration, path) {
   let curNumVariations = 0;
   for (let i = 1; i < exploration.length; i++) {
-    path.push([{"moveNumber": i, "exPath": []}]);
+    path.push([{ moveNumber: i, exPath: [] }]);
   }
   if (focus.moveNumber === exploration.length - 1) {
     let node = exploration[focus.moveNumber];
     for (let j = 0; j < focus.exPath.length; j++) {
       curNumVariations = node.children.length;
       node = node.children[focus.exPath[j]];
-      path.push([{"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}]);
+      path.push([
+        {
+          moveNumber: focus.moveNumber,
+          exPath: focus.exPath.slice(0, j + 1),
+        },
+      ]);
     }
     while (node.children.length > 0) {
       let next = [];
       for (let k = 0; k < node.children.length; k++) {
-
-        next.push({"moveNumber": focus.moveNumber, "exPath": focus.exPath.concat(k)});
-
+        next.push({
+          moveNumber: focus.moveNumber,
+          exPath: focus.exPath.concat(k),
+        });
       }
       path.push(next);
-      if (node.children.length !== 1)
-        break;
+      if (node.children.length !== 1) break;
       node = node.children[0];
     }
   }
@@ -60,11 +65,15 @@ function GameMoves(props) {
   let exploration = props.exploration;
   let handleGameMoveClick = props.handleGameMoveClick;
 
-  useEventListener('keydown', keyDownHandler);
+  useEventListener("keydown", keyDownHandler);
 
   function keyDownHandler(e) {
     const key = e.key;
-    if (document.activeElement.id === "enterAMove" || document.activeElement.id === "enterAComment" || exploration === null)
+    if (
+      document.activeElement.id === "enterAMove" ||
+      document.activeElement.id === "enterAComment" ||
+      exploration === null
+    )
       return;
     let path = [];
     let curNumVariations;
@@ -72,14 +81,18 @@ function GameMoves(props) {
     switch (key) {
       case "Home":
       case "h":
-        handleGameMoveClick({"moveNumber": 0, "exPath": []});
+        handleGameMoveClick({ moveNumber: 0, exPath: [] });
         e.preventDefault();
         break;
       case "ArrowLeft":
       case "j":
         getPath(focus, exploration, path);
         if (focus.moveNumber + focus.exPath.length > 0)
-          handleGameMoveClick(focus.moveNumber + focus.exPath.length === 1 ? {"moveNumber": 0, "exPath": []} : path[focus.moveNumber + focus.exPath.length - 2][0]);
+          handleGameMoveClick(
+            focus.moveNumber + focus.exPath.length === 1
+              ? { moveNumber: 0, exPath: [] }
+              : path[focus.moveNumber + focus.exPath.length - 2][0]
+          );
         e.preventDefault();
         break;
       case "ArrowRight":
@@ -93,7 +106,11 @@ function GameMoves(props) {
       case "l":
         getPath(focus, exploration, path);
         if (focus.moveNumber + focus.exPath.length !== exploration.length - 1)
-          handleGameMoveClick(exploration.length === 1 ? {"moveNumber": 0, "exPath": []} : path[exploration.length - 2][0]);
+          handleGameMoveClick(
+            exploration.length === 1
+              ? { moveNumber: 0, exPath: [] }
+              : path[exploration.length - 2][0]
+          );
         e.preventDefault();
         break;
       case "ArrowDown":
@@ -101,19 +118,40 @@ function GameMoves(props) {
         curNumVariations = getPath(focus, exploration, path);
         console.log(curNumVariations);
         console.log("focus = ", focus);
-        if (focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1)
-          handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + 1) % curNumVariations]});
+        if (
+          focus.moveNumber + focus.exPath.length <= path.length &&
+          focus.exPath.length > 0 &&
+          curNumVariations !== 1
+        )
+          handleGameMoveClick({
+            moveNumber: focus.moveNumber,
+            exPath: [
+              ...focus.exPath.slice(0, -1),
+              (focus.exPath[focus.exPath.length - 1] + 1) % curNumVariations,
+            ],
+          });
         e.preventDefault();
         break;
       case "ArrowUp":
       case "m":
         curNumVariations = getPath(focus, exploration, path);
-        if (focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1)
-          handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + curNumVariations - 1) % curNumVariations]});
+        if (
+          focus.moveNumber + focus.exPath.length <= path.length &&
+          focus.exPath.length > 0 &&
+          curNumVariations !== 1
+        )
+          handleGameMoveClick({
+            moveNumber: focus.moveNumber,
+            exPath: [
+              ...focus.exPath.slice(0, -1),
+              (focus.exPath[focus.exPath.length - 1] + curNumVariations - 1) %
+                curNumVariations,
+            ],
+          });
         e.preventDefault();
         break;
       default:
-        console.log(key + ' key pressed');
+        console.log(key + " key pressed");
     }
   }
 
@@ -126,17 +164,27 @@ function GameMoves(props) {
       header.push(
         <th colSpan="2" key="th-1">
           <div className="player">
-            { game.players.map((p, i) =>
-                  <Fragment key={i}>
-                    { game.colors === undefined ? '' :
-                    game.colors[i].isImage ?
-                        <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(game.colors[i].value)}`} alt="" />
-                      : <span style={{verticalAlign: "middle"}}>{game.colors[i].value + ':'}</span> }
-                    <span>{p.name}</span>
-                    { i < game.numPlayers - 1 ? <span>,</span> : '' }
-                  </Fragment>
-                )
-              }
+            {game.players.map((p, i) => (
+              <Fragment key={i}>
+                {game.colors === undefined ? (
+                  ""
+                ) : game.colors[i].isImage ? (
+                  <img
+                    className="toMoveImage"
+                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                      game.colors[i].value
+                    )}`}
+                    alt=""
+                  />
+                ) : (
+                  <span style={{ verticalAlign: "middle" }}>
+                    {game.colors[i].value + ":"}
+                  </span>
+                )}
+                <span>{p.name}</span>
+                {i < game.numPlayers - 1 ? <span>,</span> : ""}
+              </Fragment>
+            ))}
           </div>
         </th>
       );
@@ -148,12 +196,22 @@ function GameMoves(props) {
         header.push(
           <th colSpan="2" key={"th-" + i}>
             <div className="player">
-              { img === null ? '' :
-                img.isImage ?
-                    <img className="toMoveImage" src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`} alt="" />
-                  : <span style={{verticalAlign: "middle"}}>{img.value + ':'}</span>
-              }
-              <span style={{marginLeft: "0.5em"}}>{player}</span>
+              {img === null ? (
+                ""
+              ) : img.isImage ? (
+                <img
+                  className="toMoveImage"
+                  src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                    img.value
+                  )}`}
+                  alt=""
+                />
+              ) : (
+                <span style={{ verticalAlign: "middle" }}>
+                  {img.value + ":"}
+                </span>
+              )}
+              <span style={{ marginLeft: "0.5em" }}>{player}</span>
             </div>
           </th>
         );
@@ -167,25 +225,40 @@ function GameMoves(props) {
     if (exploration !== null) {
       for (let i = 1; i < exploration.length; i++) {
         let className = "gameMove";
-        if (i === focus.moveNumber && (i < exploration.length - 1 || (i === exploration.length - 1 && focus.exPath.length === 0)))
+        if (
+          i === focus.moveNumber &&
+          (i < exploration.length - 1 ||
+            (i === exploration.length - 1 && focus.exPath.length === 0))
+        )
           className += " gameMoveFocus";
-        path.push([{"class": className, "move": exploration[i].move, "path": {"moveNumber": i, "exPath": []}}]);
+        path.push([
+          {
+            class: className,
+            move: exploration[i].move,
+            path: { moveNumber: i, exPath: [] },
+          },
+        ]);
       }
       if (focus.moveNumber === exploration.length - 1) {
         let node = exploration[focus.moveNumber];
         for (let j = 0; j < focus.exPath.length; j++) {
           let className = "gameMove";
-          if (j === focus.exPath.length - 1)
-            className += " gameMoveFocus";
+          if (j === focus.exPath.length - 1) className += " gameMoveFocus";
           curNumVariations = node.children.length;
           node = node.children[focus.exPath[j]];
-          if (node.outcome === 0)
-            className += " gameMoveUnknownOutcome";
-          else if (node.outcome === -1)
-            className += " gameMoveLoss";
-          else if (node.outcome === 1)
-            className += " gameMoveWin";
-          path.push([{"class": className, "move": node.move, "path": {"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}}]);
+          if (node.outcome === 0) className += " gameMoveUnknownOutcome";
+          else if (node.outcome === -1) className += " gameMoveLoss";
+          else if (node.outcome === 1) className += " gameMoveWin";
+          path.push([
+            {
+              class: className,
+              move: node.move,
+              path: {
+                moveNumber: focus.moveNumber,
+                exPath: focus.exPath.slice(0, j + 1),
+              },
+            },
+          ]);
         }
         let exPath = focus.exPath;
         while (node.children.length > 0) {
@@ -193,44 +266,55 @@ function GameMoves(props) {
           for (let k = 0; k < node.children.length; k++) {
             const c = node.children[k];
             let className = "gameMove";
-            if (c.outcome === 0)
-              className += " gameMoveUnknownOutcome";
-            else if (c.outcome === -1)
-              className += " gameMoveLoss";
-            else if (c.outcome === 1)
-              className += " gameMoveWin";
-            next.push({"class": className, "move": c.move, "path": {"moveNumber": focus.moveNumber, "exPath": exPath.concat(k)}})
+            if (c.outcome === 0) className += " gameMoveUnknownOutcome";
+            else if (c.outcome === -1) className += " gameMoveLoss";
+            else if (c.outcome === 1) className += " gameMoveWin";
+            next.push({
+              class: className,
+              move: c.move,
+              path: {
+                moveNumber: focus.moveNumber,
+                exPath: exPath.concat(k),
+              },
+            });
           }
           exPath = exPath.concat(0);
           path.push(next);
-          if (node.children.length !== 1)
-            break;
+          if (node.children.length !== 1) break;
           node = node.children[0];
         }
       }
       for (let i = 0; i < Math.ceil(path.length / numcolumns); i++) {
         let row = [];
         for (let j = 0; j < numcolumns; j++) {
-        //   let clName = j === 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
+          //   let clName = j === 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
           let movenum = numcolumns * i + j;
-          row.push(<td key={'td0-'+i+'-'+j} className="gameMoveNums">{movenum >= path.length ? '' : `${(movenum+1)}`}</td>);
+          row.push(
+            <td key={"td0-" + i + "-" + j} className="gameMoveNums">
+              {movenum >= path.length ? "" : `${movenum + 1}`}
+            </td>
+          );
           if (movenum < path.length) {
             // path[movenum].map((m, k) => console.log(m.move, m.path));
             row.push(
-              <td key={'td1-'+i+'-'+j}>
+              <td key={"td1-" + i + "-" + j}>
                 <div className="move">
-                  { path[movenum].map((m, k) =>
-                    <span key={"move" + i + "-" + j + "-" + k}>{k > 0 ? ", ": ""}
-                      <span className={m.class} onClick={() => handleGameMoveClick(m.path)}>
+                  {path[movenum].map((m, k) => (
+                    <span key={"move" + i + "-" + j + "-" + k}>
+                      {k > 0 ? ", " : ""}
+                      <span
+                        className={m.class}
+                        onClick={() => handleGameMoveClick(m.path)}
+                      >
                         {m.move}
                       </span>
-                    </span>)
-                  }
+                    </span>
+                  ))}
                 </div>
-              </td>);
-          }
-          else {
-            row.push(<td key={'td1-'+i+'-'+j}></td>);
+              </td>
+            );
+          } else {
+            row.push(<td key={"td1-" + i + "-" + j}></td>);
           }
         }
         moveRows.push(row);
@@ -239,125 +323,174 @@ function GameMoves(props) {
 
     return (
       <Fragment>
-        <h1 className="subtitle lined"><span>{t("Moves")}</span></h1>
-            <div className="field is-grouped" id="MoveTreeBtnBar">
-                <button
-                    className="button is-small tooltipped"
-                    onClick={() => handleGameMoveClick({"moveNumber": 0, "exPath": []})}
-                >
-                    <i className="fa fa-angle-double-left"></i>
-                    <span className="tooltiptext">{t('GoBegin')}</span>
-                </button>
-                <button
-                    className="button is-small tooltipped"
-                    disabled={(focus.moveNumber + focus.exPath.length > 0 ? false : true)}
-                    onClick={
-                        focus.moveNumber + focus.exPath.length > 0
-                        ? () => handleGameMoveClick(
-                            focus.moveNumber + focus.exPath.length === 1
-                            ? {"moveNumber": 0, "exPath": []}
-                            : path[focus.moveNumber + focus.exPath.length - 2][0].path)
-                        : undefined
-                    }
-                >
-                    <i className="fa fa-angle-left"></i>
-                    <span className="tooltiptext">{t('GoPrev')}</span>
-                </button>
-                <button
-                    className="button is-small tooltipped"
-                    disabled={(focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1 ? false : true)}
-                    onClick={
-                        focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0
-                        ? () => handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + 1) % curNumVariations]})
-                        : undefined
-                    }
-                >
-                    <i className="fa fa-angle-up"></i>
-                    <span className="tooltiptext">{t('GoNextVar')}</span>
-                </button>
-                <button
-                    className="button is-small tooltipped"
-                    disabled={(focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0 && curNumVariations !== 1 ? false : true)}
-                    onClick={
-                        focus.moveNumber + focus.exPath.length <= path.length && focus.exPath.length > 0
-                        ? () => handleGameMoveClick({"moveNumber": focus.moveNumber, "exPath": [...focus.exPath.slice(0,-1), (focus.exPath[focus.exPath.length - 1] + curNumVariations - 1) % curNumVariations]})
-                        : undefined
-                    }
-                >
-                    <i className="fa fa-angle-down"></i>
-                    <span className="tooltiptext">{t('GoPrevVar')}</span>
-                </button>
-                <button
-                    className="button is-small tooltipped"
-                    disabled={(focus.moveNumber + focus.exPath.length < path.length ? false : true)}
-                    onClick={
-                        focus.moveNumber + focus.exPath.length < path.length
-                        ? () => handleGameMoveClick(path[focus.moveNumber + focus.exPath.length][0].path)
-                        : undefined
-                    }
-                >
-                    <i className="fa fa-angle-right"></i>
-                    <span className="tooltiptext">{t('GoNext')}</span>
-                </button>
-                <button
-                    className="button is-small tooltipped"
-                    disabled={(focus.moveNumber + focus.exPath.length !== exploration.length - 1 ? false : true)}
-                    onClick={
-                        () => handleGameMoveClick(exploration.length === 1
-                        ? {"moveNumber": 0, "exPath": []}
-                        : path[exploration.length - 2][0].path)
-                    }
-                >
-                    <i className="fa fa-angle-double-right"></i>
-                    <span className="tooltiptext">{t('GoCurrent')}</span>
-                </button>
-            </div>
-          <table className="table is-narrow is-striped">
-            <tbody>
-              <tr>{header}</tr>
-              { moveRows.map((row, index) =>
-                <tr key={"move" + index}>
-                  { row }
-                </tr>)
-              }
-            </tbody>
-          </table>
+        <h1 className="subtitle lined">
+          <span>{t("Moves")}</span>
+        </h1>
+        <div className="field is-grouped" id="MoveTreeBtnBar">
+          <button
+            className="button is-small tooltipped"
+            onClick={() => handleGameMoveClick({ moveNumber: 0, exPath: [] })}
+          >
+            <i className="fa fa-angle-double-left"></i>
+            <span className="tooltiptext">{t("GoBegin")}</span>
+          </button>
+          <button
+            className="button is-small tooltipped"
+            disabled={focus.moveNumber + focus.exPath.length > 0 ? false : true}
+            onClick={
+              focus.moveNumber + focus.exPath.length > 0
+                ? () =>
+                    handleGameMoveClick(
+                      focus.moveNumber + focus.exPath.length === 1
+                        ? { moveNumber: 0, exPath: [] }
+                        : path[focus.moveNumber + focus.exPath.length - 2][0]
+                            .path
+                    )
+                : undefined
+            }
+          >
+            <i className="fa fa-angle-left"></i>
+            <span className="tooltiptext">{t("GoPrev")}</span>
+          </button>
+          <button
+            className="button is-small tooltipped"
+            disabled={
+              focus.moveNumber + focus.exPath.length <= path.length &&
+              focus.exPath.length > 0 &&
+              curNumVariations !== 1
+                ? false
+                : true
+            }
+            onClick={
+              focus.moveNumber + focus.exPath.length <= path.length &&
+              focus.exPath.length > 0
+                ? () =>
+                    handleGameMoveClick({
+                      moveNumber: focus.moveNumber,
+                      exPath: [
+                        ...focus.exPath.slice(0, -1),
+                        (focus.exPath[focus.exPath.length - 1] + 1) %
+                          curNumVariations,
+                      ],
+                    })
+                : undefined
+            }
+          >
+            <i className="fa fa-angle-up"></i>
+            <span className="tooltiptext">{t("GoNextVar")}</span>
+          </button>
+          <button
+            className="button is-small tooltipped"
+            disabled={
+              focus.moveNumber + focus.exPath.length <= path.length &&
+              focus.exPath.length > 0 &&
+              curNumVariations !== 1
+                ? false
+                : true
+            }
+            onClick={
+              focus.moveNumber + focus.exPath.length <= path.length &&
+              focus.exPath.length > 0
+                ? () =>
+                    handleGameMoveClick({
+                      moveNumber: focus.moveNumber,
+                      exPath: [
+                        ...focus.exPath.slice(0, -1),
+                        (focus.exPath[focus.exPath.length - 1] +
+                          curNumVariations -
+                          1) %
+                          curNumVariations,
+                      ],
+                    })
+                : undefined
+            }
+          >
+            <i className="fa fa-angle-down"></i>
+            <span className="tooltiptext">{t("GoPrevVar")}</span>
+          </button>
+          <button
+            className="button is-small tooltipped"
+            disabled={
+              focus.moveNumber + focus.exPath.length < path.length
+                ? false
+                : true
+            }
+            onClick={
+              focus.moveNumber + focus.exPath.length < path.length
+                ? () =>
+                    handleGameMoveClick(
+                      path[focus.moveNumber + focus.exPath.length][0].path
+                    )
+                : undefined
+            }
+          >
+            <i className="fa fa-angle-right"></i>
+            <span className="tooltiptext">{t("GoNext")}</span>
+          </button>
+          <button
+            className="button is-small tooltipped"
+            disabled={
+              focus.moveNumber + focus.exPath.length !== exploration.length - 1
+                ? false
+                : true
+            }
+            onClick={() =>
+              handleGameMoveClick(
+                exploration.length === 1
+                  ? { moveNumber: 0, exPath: [] }
+                  : path[exploration.length - 2][0].path
+              )
+            }
+          >
+            <i className="fa fa-angle-double-right"></i>
+            <span className="tooltiptext">{t("GoCurrent")}</span>
+          </button>
+        </div>
+        <table className="table is-narrow is-striped">
+          <tbody>
+            <tr>{header}</tr>
+            {moveRows.map((row, index) => (
+              <tr key={"move" + index}>{row}</tr>
+            ))}
+          </tbody>
+        </table>
       </Fragment>
     );
   } else {
     return (
-        <Fragment>
-        <h1 className="subtitle lined"><span>{t("Moves")}</span></h1>
-            <div className="field is-grouped" id="MoveTreeBtnBar">
-                <button className="button is-small tooltipped">
-                    <i className="fa fa-angle-double-left"></i>
-                    <span className="tooltiptext">{t('GoBegin')}</span>
-                </button>
-                <button className="button is-small tooltipped">
-                    <i className="fa fa-angle-left"></i>
-                    <span className="tooltiptext">{t('GoPrev')}</span>
-                </button>
-                <button className="button is-small tooltipped">
-                    <i className="fa fa-angle-up"></i>
-                    <span className="tooltiptext">{t('GoNextVar')}</span>
-                </button>
-                <button className="button is-small tooltipped">
-                    <i className="fa fa-angle-down"></i>
-                    <span className="tooltiptext">{t('GoPrevVar')}</span>
-                </button>
-                <button className="button is-small tooltipped">
-                    <i className="fa fa-angle-right"></i>
-                    <span className="tooltiptext">{t('GoNext')}</span>
-                </button>
-                <button className="button is-small tooltipped">
-                    <i className="fa fa-angle-double-right"></i>
-                    <span className="tooltiptext">{t('GoCurrent')}</span>
-                </button>
-            </div>
-          <table className="table">
-            <tbody>
-            </tbody>
-          </table>
+      <Fragment>
+        <h1 className="subtitle lined">
+          <span>{t("Moves")}</span>
+        </h1>
+        <div className="field is-grouped" id="MoveTreeBtnBar">
+          <button className="button is-small tooltipped">
+            <i className="fa fa-angle-double-left"></i>
+            <span className="tooltiptext">{t("GoBegin")}</span>
+          </button>
+          <button className="button is-small tooltipped">
+            <i className="fa fa-angle-left"></i>
+            <span className="tooltiptext">{t("GoPrev")}</span>
+          </button>
+          <button className="button is-small tooltipped">
+            <i className="fa fa-angle-up"></i>
+            <span className="tooltiptext">{t("GoNextVar")}</span>
+          </button>
+          <button className="button is-small tooltipped">
+            <i className="fa fa-angle-down"></i>
+            <span className="tooltiptext">{t("GoPrevVar")}</span>
+          </button>
+          <button className="button is-small tooltipped">
+            <i className="fa fa-angle-right"></i>
+            <span className="tooltiptext">{t("GoNext")}</span>
+          </button>
+          <button className="button is-small tooltipped">
+            <i className="fa fa-angle-double-right"></i>
+            <span className="tooltiptext">{t("GoCurrent")}</span>
+          </button>
+        </div>
+        <table className="table">
+          <tbody></tbody>
+        </table>
       </Fragment>
     );
   }
