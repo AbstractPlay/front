@@ -62,7 +62,6 @@ function MetaContainer(props) {
       <div className="container has-text-centered">
         <h1 className="title">{t("AvailableGames")}</h1>
         <div className="field">
-          {/* <label className="label" htmlFor="games">Go to:&nbsp;</label> */}
           <div className="control">
             <div className="select">
               <select
@@ -89,9 +88,8 @@ function MetaContainer(props) {
               <input
                 type="checkbox"
                 checked={hideDetails}
-                onClick={() => hideDetailsSetter(!hideDetails)}
+                onChange={() => hideDetailsSetter(!hideDetails)}
               />
-              &nbsp;
               {t("HideDetails")}
             </label>
           </div>

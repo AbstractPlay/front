@@ -418,7 +418,6 @@ function NewChallengeModal(props) {
                   value="open"
                   onClick={() => standingSetter(true)}
                 />
-                &nbsp;
                 {t("ChallengeTypeOpen")}
               </label>
               <label className="radio">
@@ -429,7 +428,6 @@ function NewChallengeModal(props) {
                   defaultChecked
                   onClick={() => standingSetter(false)}
                 />
-                &nbsp;
                 {t("ChallengeTypeTargeted")}
               </label>
             </div>
@@ -521,7 +519,6 @@ function NewChallengeModal(props) {
                             name={g.group}
                             defaultChecked
                           />
-                          &nbsp;
                           {`Default ${g.group}`}
                         </label>
                       </div>
@@ -534,7 +531,6 @@ function NewChallengeModal(props) {
                               value={v.uid}
                               name={g.group}
                             />
-                            &nbsp;
                             {v.name}
                           </label>
                           {v.description === undefined ||
@@ -571,7 +567,6 @@ function NewChallengeModal(props) {
                             checked={nonGroupVariants[v.uid]}
                             onChange={handleNonGroupChange}
                           />
-                          &nbsp;
                           {v.name}
                         </label>
                         {v.description === undefined ||
@@ -667,7 +662,6 @@ function NewChallengeModal(props) {
                     checked={clockHard}
                     onChange={handleClockHardChange}
                   />
-                  &nbsp;
                   {t("ChooseClockHard")}
                 </label>
               </div>

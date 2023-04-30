@@ -61,6 +61,11 @@ a {
   text-decoration: underline;
 }
 
+/* Add a little bit of space after checkboxes and radio buttons */
+input[type=checkbox], input[type=radio] {
+    margin-right: 0.25em;
+}
+
 /* Only used to colour buttons until I can figure out how to override Bulma colours */
 .apButton {
   background: linear-gradient(

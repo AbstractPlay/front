@@ -152,7 +152,6 @@ function NewProfile(props) {
                   checked={anonymous}
                   onChange={(e) => anonymousSetter(e.target.checked)}
                 />
-                &nbsp;
                 {t("ProfileAnon")}
               </label>
             </div>
@@ -168,7 +167,6 @@ function NewProfile(props) {
                   checked={consent}
                   onChange={(e) => consentSetter(e.target.checked)}
                 />
-                &nbsp;
                 {t("ProfileConsent")}
               </label>
             </div>

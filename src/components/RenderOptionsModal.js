@@ -223,7 +223,6 @@ function RenderOptionsModal(props) {
                   handleColorChange(e.target.value, e.target.checked)
                 }
               />
-              &nbsp;
               {t("StandardColors")}
             </label>
           </div>
@@ -238,7 +237,6 @@ function RenderOptionsModal(props) {
                   handleColorChange(e.target.value, e.target.checked)
                 }
               />
-              &nbsp;
               {t("ColorBlind")}
             </label>
           </div>
@@ -253,7 +251,6 @@ function RenderOptionsModal(props) {
                   handleColorChange(e.target.value, e.target.checked)
                 }
               />
-              &nbsp;
               {t("ColorPatterns")}
             </label>
           </div>
@@ -271,7 +268,6 @@ function RenderOptionsModal(props) {
                   handleColorLevelChange(e.target.value, e.target.checked)
                 }
               />
-              &nbsp;
               {t("LevelAll")}
             </label>
           </div>
@@ -286,7 +282,6 @@ function RenderOptionsModal(props) {
                   handleColorLevelChange(e.target.value, e.target.checked)
                 }
               />
-              &nbsp;
               {t("LevelMetaGame", { game: metaName })}
             </label>
           </div>
@@ -301,7 +296,6 @@ function RenderOptionsModal(props) {
                   handleColorLevelChange(e.target.value, e.target.checked)
                 }
               />
-              &nbsp;
               {t("LevelGame")}
             </label>
           </div>
@@ -314,7 +308,6 @@ function RenderOptionsModal(props) {
                 onChange={(e) => handleAnnotationChange(e.target.checked)}
                 checked={annotate}
               />
-              &nbsp;
               {t("Annotate")}
             </label>
           </div>
@@ -332,7 +325,6 @@ function RenderOptionsModal(props) {
                   handleAnnotationLevelChange(e.target.value, e.target.checked)
                 }
               />
-              &nbsp;
               {t("LevelAll")}
             </label>
           </div>
@@ -347,7 +339,6 @@ function RenderOptionsModal(props) {
                   handleAnnotationLevelChange(e.target.value, e.target.checked)
                 }
               />
-              &nbsp;
               {t("LevelMetaGame", { game: metaName })}
             </label>
           </div>
@@ -362,7 +353,6 @@ function RenderOptionsModal(props) {
                   handleAnnotationLevelChange(e.target.value, e.target.checked)
                 }
               />
-              &nbsp;
               {t("LevelGame")}
             </label>
           </div>

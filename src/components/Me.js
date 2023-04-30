@@ -337,7 +337,6 @@ function Me(props) {
                   <p>{t("NoYourMove")}</p>
                 ) : (
                   <ul>
-                    {" "}
                     {myMove.map((item) => (
                       <GameItem
                         me={me}
@@ -347,7 +346,7 @@ function Me(props) {
                         canMove={true}
                         stateSetter={props.stateSetter}
                       />
-                    ))}{" "}
+                    ))}
                   </ul>
                 )}
               </div>
@@ -359,7 +358,6 @@ function Me(props) {
                   <p>{t("NoOpponentMove")}</p>
                 ) : (
                   <ul>
-                    {" "}
                     {waiting.map((item) => (
                       <GameItem
                         me={me}
@@ -369,7 +367,7 @@ function Me(props) {
                         canMove={false}
                         stateSetter={props.stateSetter}
                       />
-                    ))}{" "}
+                    ))}
                   </ul>
                 )}
               </div>
@@ -382,7 +380,6 @@ function Me(props) {
                   </p>
                   <div className="indentedContainer">
                     <ul>
-                      {" "}
                       {over.map((item) => (
                         <GameItem
                           me={me}
