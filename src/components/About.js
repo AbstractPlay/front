@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { addResource } from "@abstractplay/gameslib";
+import pkgInfo from "../../package.json";
 
 function About(props) {
   const { t, i18n } = useTranslation();
@@ -21,6 +22,7 @@ function About(props) {
         your opponent has moved. We specialize in offbeat, perfect information
         games without any element of luck.
       </p>
+      <p style={{fontSize: "smaller", textAlign: "right"}}>Build: {pkgInfo.version}</p>
     </article>
   );
 }
