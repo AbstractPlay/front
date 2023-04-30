@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { addResource } from "@abstractplay/gameslib";
 
@@ -38,6 +39,8 @@ function Footer(props) {
           >
             Discord
           </a>
+          <br />
+          <Link to="/legal">Terms of Service &amp; Privacy Policy</Link>
         </p>
         <p style={{ fontWeight: "bolder", color: "red" }}>
           The site is currently in BETA testing!

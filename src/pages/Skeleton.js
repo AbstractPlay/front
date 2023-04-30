@@ -19,6 +19,7 @@ import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Legal from "../components/Legal";
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -102,6 +103,10 @@ function Bones(props) {
             <Route
               path="/move/:metaGame/:gameID"
               element={<GameMove update={update} />}
+            />
+            <Route
+              path="/legal"
+              element={<Legal token={token} update={update} />}
             />
             <Route
               path="/"
