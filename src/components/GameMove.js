@@ -674,6 +674,11 @@ function GameMove(props) {
     moveSetter({ ...engine.validateMove(""), move: "", previous: "" });
   };
 
+  function handleReset() {
+    if (focus.moveNumber + focus.exPath.length !== explorationRef.current.length - 1)
+      handleGameMoveClick({"moveNumber": explorationRef.current.length - 1, "exPath": []});
+  }
+
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
     let node = getFocusNode(explorationRef.current, focus);
@@ -1024,6 +1029,7 @@ function GameMove(props) {
                 handleView,
                 handleResign,
                 handleTimeout,
+                handleReset,
               ]}
             />
           </div>

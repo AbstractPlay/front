@@ -45,6 +45,7 @@ function MoveEntry(props) {
   const handleView = props.handlers[3];
   const handleResign = props.handlers[4];
   const handleTimeOut = props.handlers[5];
+  const handleReset = props.handlers[6];
   const { t } = useTranslation();
 
   const handleDrawOfferChange = (value) => {
@@ -315,6 +316,14 @@ function MoveEntry(props) {
           ) : (
             ""
           )}
+          {focus.exPath.length > 0 ? (
+            <div className="winningColorButton tooltipped" onClick={() => handleReset()}>
+              <i className="fa fa-undo resetIcon"></i>
+              <span className="tooltiptext">{t('ResetExploration')}</span>
+            </div>
+          ) : (
+            ""
+          )}
           {focus.exPath.length > 0 && game.canExplore ? (
             <div className="winningColorButton tooltipped" onClick={() => handleMark(0)}>
               { game.colors[0].isImage ?
@@ -338,7 +347,7 @@ function MoveEntry(props) {
                       <text x="12" y="32" fill="black" fontFamily="monospace" fontSize="35" fontWeight="bold">2</text>
                     </svg>
               }
-              <span className="tooltiptext">{t('Losing')}</span>
+              <span className="tooltiptext">{t("Winning")}</span>
             </div>
           ) : (
             ""
