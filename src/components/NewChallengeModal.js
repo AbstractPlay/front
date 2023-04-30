@@ -134,13 +134,13 @@ function NewChallengeModal(props) {
     errorSetter("");
   };
 
-  const handleStandingChallengeChange = (value) => {
-    if (value === "open") {
-      standingSetter(false);
-    } else {
-      standingSetter(true);
-    }
-  };
+//   const handleStandingChallengeChange = (value) => {
+//     if (value === "open") {
+//       standingSetter(false);
+//     } else {
+//       standingSetter(true);
+//     }
+//   };
 
   const handleChangeOpponent = (data) => {
     let opps = [...opponents];

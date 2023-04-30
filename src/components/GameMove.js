@@ -1088,7 +1088,7 @@ function GameMove(props) {
               handleGameMoveClick={handleGameMoveClick}
             />
           </div>
-        </div>{" "}
+        </div>
         {/* columns */}
         <div className="columns">
           {/* Comment entry */}
@@ -1103,7 +1103,7 @@ function GameMove(props) {
               ""
             )}
           </div>
-        </div>{" "}
+        </div>
         {/* columns */}
         <div className="columns">
           {/* Comments */}
@@ -1124,7 +1124,7 @@ function GameMove(props) {
               ""
             )}
           </div>
-        </div>{" "}
+        </div>
         {/* columns */}
         <RenderOptionsModal
           show={showSettings}

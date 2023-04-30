@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -8,9 +9,9 @@ import LogInOutButton from "./LogInOutButton";
 
 function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
-  const [update, updateSetter] = useState(0);
+  const [, updateSetter] = useState(0);
   const [burgerExpanded, updateBurgerExpanded] = useState(false);
-  const [token, tokenSetter] = useState(null);
+  const [token, ] = useState(null);
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 

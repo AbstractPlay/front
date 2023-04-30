@@ -1,7 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
-import { Fragment } from "react";
 
 function ChallengeView(props) {
   const { t } = useTranslation();
