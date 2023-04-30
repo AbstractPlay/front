@@ -325,7 +325,7 @@ function MoveEntry(props) {
                     </svg>
               }
               <span className="tooltiptext">{t("Winning")}</span>
-            </button>:""
+            </div>
           ) : (
             ""
           )}
@@ -339,7 +339,7 @@ function MoveEntry(props) {
                     </svg>
               }
               <span className="tooltiptext">{t('Losing')}</span>
-            </button>:""
+            </div>
           ) : (
             ""
           )}

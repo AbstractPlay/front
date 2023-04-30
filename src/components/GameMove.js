@@ -256,6 +256,7 @@ async function saveExploration (exploration, gameid) {
     })
   });
 }
+
 function doView(
   state,
   game,
@@ -1016,7 +1017,7 @@ function GameMove(props) {
               exploration={explorationRef.current}
               focus={focus}
               submitting={submitting}
-                        handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}
+              handlers={[
                 handleMove,
                 handleMark,
                 handleSubmit,

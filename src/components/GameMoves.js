@@ -231,7 +231,7 @@ function GameMoves(props) {
             (i === exploration.length - 1 && focus.exPath.length === 0))
         )
           className += " gameMoveFocus";
-        path.push([{"class": className, "move": exploration[i].move, "path": {"moveNumber": i, "exPath": []}}]);
+        path.push([
           {
             class: className,
             outcome: -1,
@@ -248,7 +248,7 @@ function GameMoves(props) {
           curNumVariations = node.children.length;
           node = node.children[focus.exPath[j]];
             className += " gameMoveExplore";
-          path.push([{"class": className, "move": node.move, "path": {"moveNumber": focus.moveNumber, "exPath": focus.exPath.slice(0, j + 1)}}]);
+          path.push([
             {
               class: className,
               outcome: node.outcome,
@@ -267,7 +267,7 @@ function GameMoves(props) {
             const c = node.children[k];
             let className = "gameMove";
               className += " gameMoveExplore";
-            next.push({"class": className, "move": c.move, "path": {"moveNumber": focus.moveNumber, "exPath": exPath.concat(k)}})
+            next.push({
               class: className,
               outcome: c.outcome,
               move: c.move,
