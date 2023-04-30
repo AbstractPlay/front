@@ -32,8 +32,10 @@
     "StandardColorsLong": "[FR] Standard colours (9 max)",
     "StandingChallenge": "",
     "StandingChallengeLabel": "",
+    "ThankYouExclaim": "",
     "TwoPlayersChallengeDescriptionNoVariants": "[FR] You challenged {{other}} to a game of {{game}}.",
     "TwoPlayersChallengeDescriptionVariants": "[FR] You challenged {{other}} to a game of {{game}} with variants {{variants}}.",
+    "ValueForValue": "",
     "Variant": "[FR] Variant",
     "Variants": "[FR] Variants",
     "Welcome": "[FR] Bienvenu à Abstract Play!"

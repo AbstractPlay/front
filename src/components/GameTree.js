@@ -5,19 +5,15 @@ export class GameNode {
     this.move = move;
     this.state = state;
     this.toMove = null; // 0 for player1, 1 for player2
-    if (toMove !== undefined)
-      this.toMove = toMove;
-    else if (this.parent !== null)
-      this.toMove = 1 - this.parent.toMove;
-    else
-      throw new Error("Can't decide whose move it is!");
+    if (toMove !== undefined) this.toMove = toMove;
+    else if (this.parent !== null) this.toMove = 1 - this.parent.toMove;
+    else throw new Error("Can't decide whose move it is!");
     this.outcome = -1; // 0 for player1 win, 1 for player2 win, -1 for undecided.
   }
 
   AddChild(move, state, toMove, gameEngine) {
     for (let i = 0; i < this.children.length; i++) {
-      if (gameEngine.sameMove(move, this.children[i].move))
-        return i;
+      if (gameEngine.sameMove(move, this.children[i].move)) return i;
     }
     const child = new GameNode(this, move, state, toMove);
     this.children.push(child);
@@ -49,10 +45,8 @@ export class GameNode {
 
   SetOutcome(outcome) {
     if (this.children.length === 0) {
-      console.log("Node toMove", this.toMove);
       this.outcome = outcome;
-      if (this.parent !== null)
-        this.parent.UpdateOutcome();
+      if (this.parent !== null) this.parent.UpdateOutcome();
     }
   }
 

@@ -1,34 +1,39 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { render, renderglyph } from '@abstractplay/renderer';
-import { Auth } from 'aws-amplify';
-import { cloneDeep } from 'lodash';
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from '../config';
-import { GameNode } from './GameTree';
-import { gameinfo, GameFactory, addResource } from '@abstractplay/gameslib';
-import {Buffer} from 'buffer';
-import GameMoves from './GameMoves';
-import GameStatus from './GameStatus';
-import MoveEntry from './MoveEntry';
-import MoveResults from './MoveResults';
-import RenderOptionsModal from './RenderOptionsModal';
-import Modal from './Modal';
-import GameComment from './GameComment';
+import React, { useEffect, useState, useRef } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { render, renderglyph } from "@abstractplay/renderer";
+import { Auth } from "aws-amplify";
+import { cloneDeep } from "lodash";
+import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { GameNode } from "./GameTree";
+import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
+import { Buffer } from "buffer";
+import GameMoves from "./GameMoves";
+import GameStatus from "./GameStatus";
+import MoveEntry from "./MoveEntry";
+import MoveResults from "./MoveResults";
+import RenderOptionsModal from "./RenderOptionsModal";
+import Modal from "./Modal";
+import GameComment from "./GameComment";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
     return gameSettings[setting];
   } else if (userSettings !== undefined) {
-    if (userSettings[metaGame] !== undefined && userSettings[metaGame][setting] !== undefined) {
+    if (
+      userSettings[metaGame] !== undefined &&
+      userSettings[metaGame][setting] !== undefined
+    ) {
       return userSettings[metaGame][setting];
-    } else if (userSettings.all !== undefined && userSettings.all[setting] !== undefined) {
+    } else if (
+      userSettings.all !== undefined &&
+      userSettings.all[setting] !== undefined
+    ) {
       return userSettings.all[setting];
     } else {
       return deflt;
     }
-  }
-  else {
+  } else {
     return deflt;
   }
 }
@@ -51,34 +56,58 @@ function setStatus(engine, game, isPartial, partialMove, status) {
   // console.log("setStatus, status:", status);
 }
 
-function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter) {
+function setupGame(
+  game0,
+  gameRef,
+  state,
+  partialMoveRenderRef,
+  renderrepSetter,
+  statusRef,
+  movesRef,
+  focusSetter,
+  explorationRef,
+  moveSetter
+) {
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
-  game0.simultaneous = (info.flags !== undefined && info.flags.includes('simultaneous'));
-  game0.sharedPieces = (info.flags !== undefined && info.flags.includes('shared-pieces'));
-  game0.rotate90 = (info.flags !== undefined && info.flags.includes('rotate90'));
-  game0.scores = (info.flags !== undefined && info.flags.includes('scores'));
-  game0.limitedPieces = (info.flags !== undefined && info.flags.includes('limited-pieces'));
-  game0.playerStashes = (info.flags !== undefined && info.flags.includes('player-stashes'));
-  game0.sharedStash = (info.flags !== undefined && info.flags.includes('shared-stash'));
-  game0.noMoves = (info.flags !== undefined && info.flags.includes('no-moves'));
-  game0.stackExpanding = (info.flags !== undefined && info.flags.includes('stacking-expanding'));
+  game0.simultaneous =
+    info.flags !== undefined && info.flags.includes("simultaneous");
+  game0.sharedPieces =
+    info.flags !== undefined && info.flags.includes("shared-pieces");
+  game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
+  game0.scores = info.flags !== undefined && info.flags.includes("scores");
+  game0.limitedPieces =
+    info.flags !== undefined && info.flags.includes("limited-pieces");
+  game0.playerStashes =
+    info.flags !== undefined && info.flags.includes("player-stashes");
+  game0.sharedStash =
+    info.flags !== undefined && info.flags.includes("shared-stash");
+  game0.noMoves = info.flags !== undefined && info.flags.includes("no-moves");
+  game0.stackExpanding =
+    info.flags !== undefined && info.flags.includes("stacking-expanding");
   if (game0.state === undefined)
     throw new Error("Why no state? This shouldn't happen no more!");
   const engine = GameFactory(game0.metaGame, game0.state);
-  moveSetter({...engine.validateMove(''), "previous": '', "move": ''});
-  game0.me = game0.players.findIndex(p => state.me && p.id === state.me.id);
+  moveSetter({ ...engine.validateMove(""), previous: "", move: "" });
+  game0.me = game0.players.findIndex((p) => state.me && p.id === state.me.id);
   game0.variants = engine.getVariants();
   if (game0.simultaneous) {
-    game0.canSubmit = (game0.toMove === "" || game0.me < 0) ? false : game0.toMove[game0.me];
+    game0.canSubmit =
+      game0.toMove === "" || game0.me < 0 ? false : game0.toMove[game0.me];
     if (game0.toMove !== "") {
-      if (game0.partialMove !== undefined && game0.partialMove.length > game0.numPlayers - 1) // the empty move is numPlayers - 1 commas
+      if (
+        game0.partialMove !== undefined &&
+        game0.partialMove.length > game0.numPlayers - 1
+      )
+        // the empty move is numPlayers - 1 commas
         engine.move(game0.partialMove, true);
     }
     game0.canExplore = false;
-  }
-  else {
-    game0.canSubmit = (game0.toMove !== "" && state.me && game0.players[game0.toMove].id === state.me.id);
+  } else {
+    game0.canSubmit =
+      game0.toMove !== "" &&
+      state.me &&
+      game0.players[game0.toMove].id === state.me.id;
     game0.canExplore = game0.toMove !== "" && game0.numPlayers === 2;
   }
   if (game0.sharedPieces) {
@@ -94,7 +123,12 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
     }
   }
   if (typeof engine.chatLog === "function") {
-    game0.moveResults = engine.chatLog(game0.players.map(p => p.name)).reverse().map((e) => {return {"time": e[0], "log": e.slice(1).join(" ")};});
+    game0.moveResults = engine
+      .chatLog(game0.players.map((p) => p.name))
+      .reverse()
+      .map((e) => {
+        return { time: e[0], log: e.slice(1).join(" ") };
+      });
   } else {
     game0.moveResults = engine.resultsHistory().reverse();
   }
@@ -103,27 +137,44 @@ function setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter,
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   const render = engine.render(game0.me + 1);
-  setStatus(engine, game0, game0.simultaneous && !game0.canSubmit, '', statusRef.current);
-  if (!game0.noMoves && (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2))) {
-    if (game0.simultaneous)
-      movesRef.current = engine.moves(game0.me + 1);
-    else
-      movesRef.current = engine.moves();
+  setStatus(
+    engine,
+    game0,
+    game0.simultaneous && !game0.canSubmit,
+    "",
+    statusRef.current
+  );
+  if (
+    !game0.noMoves &&
+    (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2))
+  ) {
+    if (game0.simultaneous) movesRef.current = engine.moves(game0.me + 1);
+    else movesRef.current = engine.moves();
   }
   let history = [];
   /*eslint-disable no-constant-condition*/
   let gameOver = engine.gameover;
   while (true) {
-    history.unshift(new GameNode(null, engine.lastmove, engine.serialize(), gameOver ? '' : engine.currplayer - 1));
+    history.unshift(
+      new GameNode(
+        null,
+        engine.lastmove,
+        engine.serialize(),
+        gameOver ? "" : engine.currplayer - 1
+      )
+    );
     engine.stack.pop();
     gameOver = false;
-    if (engine.stack.length === 0)
-      break;
+    if (engine.stack.length === 0) break;
     engine.load();
   }
   explorationRef.current = history;
-  let focus0 = {"moveNumber": history.length - 1, "exPath": []};
-  focus0.canExplore = canExploreMove(gameRef.current, explorationRef.current, focus0);
+  let focus0 = { moveNumber: history.length - 1, exPath: [] };
+  focus0.canExplore = canExploreMove(
+    gameRef.current,
+    explorationRef.current,
+    focus0
+  );
   focusSetter(focus0);
   // console.log("Setting renderrep");
   renderrepSetter(render);
@@ -166,16 +217,19 @@ function mergeMoveRecursive(gameEngine, node, children) {
 function setupColors(settings, game, t) {
   var options = {};
   if (settings.color === "blind") {
-      options.colourBlind = true;
+    options.colourBlind = true;
   } else if (settings.color === "patterns") {
-      options.patterns = true;
+    options.patterns = true;
   }
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
-      return {"isImage": false, "value": game.seatNames[i]}
+      return { isImage: false, value: game.seatNames[i] };
     } else {
-      options.svgid = 'player' + i + 'color';
-      return {"isImage": true, "value": renderglyph("piece", i + 1, options)}
+      options.svgid = "player" + i + "color";
+      return {
+        isImage: true,
+        value: renderglyph("piece", i + 1, options),
+      };
     }
   });
 }
@@ -202,9 +256,21 @@ async function saveExploration (exploration, gameid) {
     })
   });
 }
-
-function doView(state, game, move, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
-  partialMoveRenderRef, renderrepSetter, movesRef, statusRef) {
+function doView(
+  state,
+  game,
+  move,
+  explorationRef,
+  focus,
+  errorMessageRef,
+  errorSetter,
+  focusSetter,
+  moveSetter,
+  partialMoveRenderRef,
+  renderrepSetter,
+  movesRef,
+  statusRef
+) {
   let node = getFocusNode(explorationRef.current, focus);
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
   let partialMove = false;
@@ -214,12 +280,11 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
   let m = move.move;
   if (game.simultaneous) {
     simMove = true;
-    m = game.players.map(p => (p.id === state.me.id ? m : '')).join(',');
+    m = game.players.map((p) => (p.id === state.me.id ? m : "")).join(",");
   }
   try {
     gameEngineTmp.move(m, partialMove || simMove);
-  }
-  catch (err) {
+  } catch (err) {
     if (err.name === "UserFacingError") {
       errorMessageRef.current = err.client;
     } else {
@@ -230,18 +295,37 @@ function doView(state, game, move, explorationRef, focus, errorMessageRef, error
   }
   // console.log("explorationRef:",explorationRef);
   // console.log("statusRef:",statusRef);
-  setStatus(gameEngineTmp, game, partialMove || simMove, move, statusRef.current);
+  setStatus(
+    gameEngineTmp,
+    game,
+    partialMove || simMove,
+    move,
+    statusRef.current
+  );
   if (!partialMove) {
     node = getFocusNode(explorationRef.current, focus);
     let newstate = gameEngineTmp.serialize();
-    // console.log("newstate: ", newstate);
-    const pos = node.AddChild(move.move, newstate, (node.toMove + 1) % game.players.length, gameEngineTmp);
+    // console.log("newstate", newstate);
+    const pos = node.AddChild(
+      move.move,
+      newstate,
+      (node.toMove + 1) % game.players.length,
+      gameEngineTmp
+    );
     saveExploration(explorationRef.current, game.id);
     let newfocus = cloneDeep(focus);
     newfocus.exPath.push(pos);
-    newfocus.canExplore = canExploreMove(game, explorationRef.current, newfocus);
+    newfocus.canExplore = canExploreMove(
+      game,
+      explorationRef.current,
+      newfocus
+    );
     focusSetter(newfocus);
-    moveSetter({...gameEngineTmp.validateMove(''), "previous": '', "move": ''});
+    moveSetter({
+      ...gameEngineTmp.validateMove(""),
+      previous: "",
+      move: "",
+    });
     if (newfocus.canExplore && !game.noMoves)
       movesRef.current = gameEngineTmp.moves();
   } else {
@@ -261,37 +345,94 @@ function getFocusNode(exp, foc) {
 }
 
 function canExploreMove(game, exploration, focus) {
-  return (game.canExplore || (game.canSubmit && focus.exPath.length === 0)) // exploring (beyond move input) is supported or it is my move and we are just looking at the current position
-    && exploration !== null
-    && focus.moveNumber === exploration.length - 1;    // we aren't looking at history
+  return (
+    (game.canExplore || (game.canSubmit && focus.exPath.length === 0)) && // exploring (beyond move input) is supported or it is my move and we are just looking at the current position
+    exploration !== null &&
+    focus.moveNumber === exploration.length - 1
+  ); // we aren't looking at history
 }
 
-function processNewSettings(newGameSettings, newUserSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter) {
+function processNewSettings(
+  newGameSettings,
+  newUserSettings,
+  gameRef,
+  settingsSetter,
+  gameSettingsSetter,
+  userSettingsSetter
+) {
   gameSettingsSetter(newGameSettings);
   userSettingsSetter(newUserSettings);
   if (gameRef.current !== null) {
     var newSettings = {};
     const game = gameRef.current;
-    newSettings.color = getSetting("color", "standard", newGameSettings, newUserSettings, game.metaGame);
-    newSettings.annotate = getSetting("annotate", true, newGameSettings,newUserSettings, game.metaGame);
-    newSettings.rotate = (newGameSettings === undefined || newGameSettings.rotate === undefined) ? 0 : newGameSettings.rotate;
+    newSettings.color = getSetting(
+      "color",
+      "standard",
+      newGameSettings,
+      newUserSettings,
+      game.metaGame
+    );
+    newSettings.annotate = getSetting(
+      "annotate",
+      true,
+      newGameSettings,
+      newUserSettings,
+      game.metaGame
+    );
+    newSettings.rotate =
+      newGameSettings === undefined || newGameSettings.rotate === undefined
+        ? 0
+        : newGameSettings.rotate;
     setupColors(newSettings, game);
     settingsSetter(newSettings);
   }
 }
 
-function processNewMove(newmove, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter) {
+function processNewMove(
+  newmove,
+  state,
+  focus,
+  gameRef,
+  movesRef,
+  statusRef,
+  explorationRef,
+  errorMessageRef,
+  partialMoveRenderRef,
+  renderrepSetter,
+  errorSetter,
+  focusSetter,
+  moveSetter
+) {
   // if the move is complete, or partial and renderable, update board
-  if ((newmove.valid && newmove.complete > 0 && newmove.move !== '') || (newmove.canrender === true)) {
-    doView(state, gameRef.current, newmove, explorationRef, focus, errorMessageRef, errorSetter, focusSetter, moveSetter,
-      partialMoveRenderRef, renderrepSetter, movesRef, statusRef);
+  if (
+    (newmove.valid && newmove.complete > 0 && newmove.move !== "") ||
+    newmove.canrender === true
+  ) {
+    doView(
+      state,
+      gameRef.current,
+      newmove,
+      explorationRef,
+      focus,
+      errorMessageRef,
+      errorSetter,
+      focusSetter,
+      moveSetter,
+      partialMoveRenderRef,
+      renderrepSetter,
+      movesRef,
+      statusRef
+    );
   }
   // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position
-  else if (partialMoveRenderRef.current && !newmove.move.startsWith(newmove.previous)) {
+  else if (
+    partialMoveRenderRef.current &&
+    !newmove.move.startsWith(newmove.previous)
+  ) {
     let node = getFocusNode(explorationRef.current, focus);
     let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     partialMoveRenderRef.current = false;
-    setStatus(gameEngineTmp, gameRef.current, false, '', statusRef.current);
+    setStatus(gameEngineTmp, gameRef.current, false, "", statusRef.current);
     if (focus.canExplore && !gameRef.current.noMoves)
       movesRef.current = gameEngineTmp.moves();
     renderrepSetter(gameEngineTmp.render(gameRef.current.me + 1));
@@ -305,7 +446,13 @@ function GameMove(props) {
   const [renderrep, renderrepSetter] = useState(null);
   // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
   const [focus, focusSetter] = useState(null);
-  const [move, moveSetter] = useState({"move": '', "valid": true, "message": '', "complete": 0, "previous": ''});
+  const [move, moveSetter] = useState({
+    move: "",
+    valid: true,
+    message: "",
+    complete: 0,
+    previous: "",
+  });
   const [error, errorSetter] = useState(false);
   const [showSettings, showSettingsSetter] = useState(false);
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
@@ -338,12 +485,11 @@ function GameMove(props) {
 
   useEffect(() => {
     addResource(i18n.language);
-  },[i18n.language]);
+  }, [i18n.language]);
 
   useEffect(() => {
     var lng = "en";
-    if (state.me && state.me.language !== undefined)
-      lng = state.me.language;
+    if (state.me && state.me.language !== undefined) lng = state.me.language;
     if (i18n.language !== lng) {
       i18n.changeLanguage(lng);
       console.log(`changed language  to ${lng}`);
@@ -356,8 +502,7 @@ function GameMove(props) {
       try {
         const usr = await Auth.currentAuthenticatedUser();
         token = usr.signInUserSession.idToken.jwtToken;
-      }
-      catch (err) {
+      } catch (err) {
         // OK, non logged in user viewing the game
       }
       try {
@@ -365,18 +510,18 @@ function GameMove(props) {
         let status;
         if (token) {
           const res = await fetch(API_ENDPOINT_AUTH, {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              "query": "get_game",
-              "pars" : {
-                "id": gameID
-              }
-            })
+              query: "get_game",
+              pars: {
+                id: gameID,
+              },
+            }),
           });
           status = res.status;
           if (status !== 200) {
@@ -390,8 +535,8 @@ function GameMove(props) {
           }
         } else {
           var url = new URL(API_ENDPOINT_OPEN);
-          url.searchParams.append('query', 'get_game');
-          url.searchParams.append('id', gameID);
+          url.searchParams.append("query", "get_game");
+          url.searchParams.append("id", gameID);
           const res = await fetch(url);
           status = res.status;
           if (status !== 200) {
@@ -404,17 +549,41 @@ function GameMove(props) {
         }
         if (status === 200) {
           console.log("game fetched:", data.game);
-          setupGame(data.game, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
-          processNewSettings(gameRef.current.me > -1 ? data.game.players.find(p => p.id === state.me.id).settings : {}, state.settings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter);
+          setupGame(
+            data.game,
+            gameRef,
+            state,
+            partialMoveRenderRef,
+            renderrepSetter,
+            statusRef,
+            movesRef,
+            focusSetter,
+            explorationRef,
+            moveSetter
+          );
+          processNewSettings(
+            gameRef.current.me > -1
+              ? data.game.players.find((p) => p.id === state.me.id).settings
+              : {},
+            state.settings,
+            gameRef,
+            settingsSetter,
+            gameSettingsSetter,
+            userSettingsSetter
+          );
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
-            if (data.comments.reduce((s, a) => s + 110 + Buffer.byteLength(a.comment,'utf8'), 0) > 350000) {
+            if (
+              data.comments.reduce(
+                (s, a) => s + 110 + Buffer.byteLength(a.comment, "utf8"),
+                0
+              ) > 350000
+            ) {
               commentsTooLongSetter(true);
             }
           }
         }
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
         errorMessageRef.current = error.message;
         errorSetter(true);
@@ -491,12 +660,18 @@ function GameMove(props) {
       movesRef.current = engine.moves();
     }
     focusSetter(foc);
-    renderrepSetter(engine.render(gameRef.current.me ? gameRef.current.me + 1 : 1));
-    const isPartialSimMove = gameRef.current.simultaneous
-      && (foc.exPath.length === 1 || (foc.exPath.length === 0 && foc.moveNumber === explorationRef.current.length - 1 && !gameRef.current.canSubmit))
-    setStatus(engine, gameRef.current, isPartialSimMove, '', statusRef.current);
-    moveSetter({...engine.validateMove(''), "move": '', "previous": ''});
-  }
+    renderrepSetter(
+      engine.render(gameRef.current.me ? gameRef.current.me + 1 : 1)
+    );
+    const isPartialSimMove =
+      gameRef.current.simultaneous &&
+      (foc.exPath.length === 1 ||
+        (foc.exPath.length === 0 &&
+          foc.moveNumber === explorationRef.current.length - 1 &&
+          !gameRef.current.canSubmit));
+    setStatus(engine, gameRef.current, isPartialSimMove, "", statusRef.current);
+    moveSetter({ ...engine.validateMove(""), move: "", previous: "" });
+  };
 
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
@@ -505,25 +680,52 @@ function GameMove(props) {
     let result;
     if (gameRef.current.simultaneous)
       result = gameEngineTmp.validateMove(value, gameRef.current.me + 1);
-    else
-      result = gameEngineTmp.validateMove(value);
+    else result = gameEngineTmp.validateMove(value);
     result.move = value;
     result.previous = move.move;
     // console.log(result);
-    processNewMove(result, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter);
-  }
+    processNewMove(
+      result,
+      state,
+      focus,
+      gameRef,
+      movesRef,
+      statusRef,
+      explorationRef,
+      errorMessageRef,
+      partialMoveRenderRef,
+      renderrepSetter,
+      errorSetter,
+      focusSetter,
+      moveSetter
+    );
+  };
 
   // handler when user clicks on "complete move" (for a partial move that could be complete)
   const handleView = () => {
     const newmove = cloneDeep(move);
     newmove.complete = 1;
-    processNewMove(newmove, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter);
-  }
+    processNewMove(
+      newmove,
+      state,
+      focus,
+      gameRef,
+      movesRef,
+      statusRef,
+      explorationRef,
+      errorMessageRef,
+      partialMoveRenderRef,
+      renderrepSetter,
+      errorSetter,
+      focusSetter,
+      moveSetter
+    );
+  };
 
   const handleStashClick = (player, count, movePart) => {
     // console.log(`handleStashClick movePart=${movePart}`);
     handleMove(move.move + movePart);
-  }
+  };
 
   useEffect(() => {
     let options = {};
@@ -532,31 +734,49 @@ function GameMove(props) {
       // console.log(`boardClick:(${row},${col},${piece})`);
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-      let result = gameRef.current.simultaneous ?
-        gameEngineTmp.handleClickSimultaneous(moveRef.current.move, row, col, gameRef.current.me + 1, piece)
+      let result = gameRef.current.simultaneous
+        ? gameEngineTmp.handleClickSimultaneous(
+            moveRef.current.move,
+            row,
+            col,
+            gameRef.current.me + 1,
+            piece
+          )
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       result.previous = moveRef.current.move;
-
-      processNewMove(result, state, focus, gameRef, movesRef, statusRef, explorationRef, errorMessageRef, partialMoveRenderRef, renderrepSetter, errorSetter, focusSetter, moveSetter);
+      processNewMove(
+        result,
+        state,
+        focus,
+        gameRef,
+        movesRef,
+        statusRef,
+        explorationRef,
+        errorMessageRef,
+        partialMoveRenderRef,
+        renderrepSetter,
+        errorSetter,
+        focusSetter,
+        moveSetter
+      );
     }
 
     function expand(row, col) {
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-      const svg = stackImage.current.querySelector('svg');
-      if (svg !== null)
-        svg.remove();
+      const svg = stackImage.current.querySelector("svg");
+      if (svg !== null) svg.remove();
       options.divid = "stack";
       render(gameEngineTmp.renderColumn(row, col), options);
     }
 
     if (boardImage.current !== null) {
-      const svg = boardImage.current.querySelector('svg');
+      const svg = boardImage.current.querySelector("svg");
       if (svg !== null) {
         svg.remove();
       }
       if (renderrep !== null && settings !== null) {
-        options = {"divid": "svg"};
+        options = { divid: "svg" };
         if (focus.canExplore) {
           options.boardClick = boardClick;
         }
@@ -567,10 +787,12 @@ function GameMove(props) {
           options.patterns = true;
         }
         if (gameRef.current.stackExpanding) {
-          options.boardHover = (row, col, piece) => { expand(col, row); };
+          options.boardHover = (row, col, piece) => {
+            expand(col, row);
+          };
         }
         options.showAnnotations = settings.annotate;
-        options.svgid = 'theBoardSVG';
+        options.svgid = "theBoardSVG";
         console.log(renderrep);
         console.log("options = ", options);
         // console.log("renderrep useEffect statusRef: ", statusRef);
@@ -580,65 +802,70 @@ function GameMove(props) {
   }, [renderrep, state, focus, settings]);
 
   const setError = (error) => {
-    if (error.Message !== undefined)
-      errorMessageRef.current = error.Message;
-    else
-    errorMessageRef.current = JSON.stringify(error);
+    if (error.Message !== undefined) errorMessageRef.current = error.Message;
+    else errorMessageRef.current = JSON.stringify(error);
     errorSetter(true);
-  }
+  };
 
   const handleUpdateRenderOptions = () => {
-      showSettingsSetter(true);
-  }
+    showSettingsSetter(true);
+  };
 
   const handleRotate = async () => {
     let newGameSettings = cloneDeep(gameSettings);
     if (newGameSettings === undefined) newGameSettings = {};
     let rotate = newGameSettings.rotate;
     if (rotate === undefined) rotate = 0;
-    rotate += (gameRef.current.rotate90 && gameRef.current.numPlayers) > 2 ? 90 : 180;
-    if (rotate >= 360)
-      rotate -= 360;
+    rotate +=
+      (gameRef.current.rotate90 && gameRef.current.numPlayers) > 2 ? 90 : 180;
+    if (rotate >= 360) rotate -= 360;
     newGameSettings.rotate = rotate;
-    processNewSettings(newGameSettings, userSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter);
+    processNewSettings(
+      newGameSettings,
+      userSettings,
+      gameRef,
+      settingsSetter,
+      gameSettingsSetter,
+      userSettingsSetter
+    );
     if (game.me > -1) {
       try {
         const usr = await Auth.currentAuthenticatedUser();
         await fetch(API_ENDPOINT_AUTH, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${usr.signInUserSession.idToken.jwtToken}`
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
           },
           body: JSON.stringify({
-            "query": "update_game_settings",
-            "pars" : {
-              "game": game.id,
-              "settings": newGameSettings
-            }})
-          });
-      }
-      catch (error) {
+            query: "update_game_settings",
+            pars: {
+              game: game.id,
+              settings: newGameSettings,
+            },
+          }),
+        });
+      } catch (error) {
         setError(error);
       }
     }
-  }
+  };
 
   const handleSettingsClose = () => {
     showSettingsSetter(false);
-  }
+  };
 
   const handleSettingsSave = () => {
     showSettingsSetter(false);
-  }
+  };
 
   const handleMark = (mark) => {
     let node = getFocusNode(explorationRef.current, focus);
     node.SetOutcome(mark);
     saveExploration(explorationRef.current, game.id);
     focusSetter(cloneDeep(focus)); // just to trigger a rerender...
-  }
+  };
 
   const handleSubmit = async (draw) => {
     submittingSetter(true);
@@ -648,102 +875,113 @@ function GameMove(props) {
       let m = getFocusNode(explorationRef.current, focus).move;
       submitMove(m, draw);
     }
-  }
+  };
 
   const submitMove = async (m, draw) => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
       const res = await fetch(API_ENDPOINT_AUTH, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          "query": "submit_move",
-          "pars" : {
-            "id": gameRef.current.id,
-            "move": m,
-            "draw": draw
-          }
-        })
+          query: "submit_move",
+          pars: {
+            id: gameRef.current.id,
+            move: m,
+            draw: draw,
+          },
+        }),
       });
       const result = await res.json();
       submittingSetter(false);
-      if (result.statusCode !== 200)
-        setError(JSON.parse(result.body));
+      if (result.statusCode !== 200) setError(JSON.parse(result.body));
       let game0 = JSON.parse(result.body);
       // console.log("In handleSubmit. game0:");
       // console.log(game0);
-      setupGame(game0, gameRef, state, partialMoveRenderRef, renderrepSetter, statusRef, movesRef, focusSetter, explorationRef, moveSetter);
+      setupGame(
+        game0,
+        gameRef,
+        state,
+        partialMoveRenderRef,
+        renderrepSetter,
+        statusRef,
+        movesRef,
+        focusSetter,
+        explorationRef,
+        moveSetter
+      );
       // setupColors(settings, gameRef.current, t);
-    }
-    catch (err) {
+    } catch (err) {
       setError(err.message);
     }
-  }
+  };
 
   const submitComment = async (comment) => {
-    commentsSetter([...comments, {"comment": comment, "userId": state.me.id, "timeStamp": Date.now()}]);
+    commentsSetter([
+      ...comments,
+      { comment: comment, userId: state.me.id, timeStamp: Date.now() },
+    ]);
     // console.log(comments);
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
       const res = await fetch(API_ENDPOINT_AUTH, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          "query": "submit_comment",
-          "pars" : {
-            "id": gameRef.current.id,
-            "comment": comment,
-            "moveNumber": explorationRef.current.length - 1
-          }
-        })
+          query: "submit_comment",
+          pars: {
+            id: gameRef.current.id,
+            comment: comment,
+            moveNumber: explorationRef.current.length - 1,
+          },
+        }),
       });
       const result = await res.json();
       if (result && result.statusCode && result.statusCode !== 200)
         setError(JSON.parse(result.body));
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
       //setError(err.message);
     }
-  }
+  };
 
   const handleResign = () => {
     showResignConfirmSetter(true);
-  }
+  };
 
   const handleCloseResignConfirm = () => {
     showResignConfirmSetter(false);
-  }
+  };
 
   const handleResignConfirmed = async () => {
     showResignConfirmSetter(false);
     submittingSetter(true);
-    submitMove('resign', false);
-  }
+    submitMove("resign", false);
+  };
 
   const handleTimeout = () => {
     showTimeoutConfirmSetter(true);
-  }
+  };
 
   const handleCloseTimeoutConfirm = () => {
     showTimeoutConfirmSetter(false);
-  }
+  };
 
   const handleTimeoutConfirmed = async () => {
     showTimeoutConfirmSetter(false);
     submittingSetter(true);
-    submitMove('timeout', false);
-  }
+    submitMove("timeout", false);
+  };
 
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
@@ -759,111 +997,161 @@ function GameMove(props) {
       }
     }
     return (
-        <article>
-            <div className="columns">
-                { /***************** MoveEntry *****************/}
-                <div className="column is-one-quarter">
-                    <GameStatus
-                        status={statusRef.current}
-                        settings={settings}
-                        game={game}
-                        canExplore={focus?.canExplore}
-                        handleStashClick={handleStashClick}
-                    />
-                    <MoveEntry
-                        move={move}
-                        toMove={toMove}
-                        game={gameRef.current}
-                        moves={movesRef.current}
-                        exploration={explorationRef.current}
-                        focus={focus}
-                        submitting={submitting}
-                        handlers={[handleMove, handleMark, handleSubmit, handleView, handleResign, handleTimeout]}
-                    />
-                </div>
-                { /***************** Board *****************/}
-                <div className="column is-half">
-                    <h1 className="subtitle lined"><span>{gameinfo.get(metaGame).name}</span></h1>
-                    {gameRef.current?.stackExpanding
-                    ? <div className="board"><div className="stack" id="stack" ref={stackImage} ></div><div className="stackboard" id="svg" ref={boardImage}></div></div>
-                    : <div className="board" id="svg" ref={boardImage} ></div>
-                    }
-                    <div className="boardButtons">
-                    <button className="fabtn align-right" onClick={handleRotate}>
-                        <i className="fa fa-refresh"></i>
-                    </button>
-                    <button className="fabtn align-right" onClick={handleUpdateRenderOptions}>
-                        <i className="fa fa-cog"></i>
-                    </button>
-                    </div>
-                </div>
-                { /***************** GameMoves *****************/}
-                <div className="column is-one-quarter">
-                    <GameMoves
-                        focus={focus}
-                        game={game}
-                        exploration={explorationRef.current}
-                        handleGameMoveClick={handleGameMoveClick}
-                    />
-                </div>
-            </div> {/* columns */}
-            <div className="columns">
-                { /* Comment entry */ }
-                <div className="column is-half is-offset-one-quarter">
-                { focus && game.me > -1 ?
-                  <GameComment className="gameComment" handleSubmit={submitComment} tooMuch={commentsTooLong}/>
-                  : ''
-                }
-                </div>
-            </div> {/* columns */}
-            <div className="columns">
-                { /* Comments */ }
-                <div className="column is-three-fifths is-offset-one-fifth">
-                { focus ?
-                    <div>
-                        <h1 className="subtitle lined"><span>{t("GameSummary")}</span></h1>
-                        <MoveResults className="moveResults" results={game?.moveResults} comments={comments} players={gameRef.current?.players} />
-                    </div>
-                    : ''
-                }
-                </div>
-            </div> {/* columns */}
-            <RenderOptionsModal show={showSettings} game={game} settings={userSettings} gameSettings={gameSettings}
-            processNewSettings={(newGameSettings, newUserSettings) => processNewSettings(newGameSettings, newUserSettings, gameRef, settingsSetter, gameSettingsSetter, userSettingsSetter)}
-            showSettingsSetter={showSettingsSetter} setError={setError} handleClose={handleSettingsClose} handleSave={handleSettingsSave} />
-            <Modal
-                show={showResignConfirm}
-                title={t('ConfirmResign')}
-                buttons={[
-                    {label: t('Resign'), action: handleResignConfirmed},
-                    {label: t('Cancel'), action: handleCloseResignConfirm}
-                ]}
-            >
-                <div className="content">
-                    <p>
-                        {t('ConfirmResignDesc')}
-                    </p>
-                </div>
-            </Modal>
-            <Modal
-                show={showTimeoutConfirm}
-                title={t('ConfirmTimeout')}
-                buttons={[
-                    {label: t('Claim'), action: handleTimeoutConfirmed},
-                    {label: t('Cancel'), action: handleCloseTimeoutConfirm}
-                ]}
-            >
-                <div className="content">
-                    <p>
-                        {t('ConfirmTimeoutDesc')}
-                    </p>
-                </div>
-            </Modal>
-        </article>
+      <article>
+        <div className="columns">
+          {/***************** MoveEntry *****************/}
+          <div className="column is-one-quarter">
+            <GameStatus
+              status={statusRef.current}
+              settings={settings}
+              game={game}
+              canExplore={focus?.canExplore}
+              handleStashClick={handleStashClick}
+            />
+            <MoveEntry
+              move={move}
+              toMove={toMove}
+              game={gameRef.current}
+              moves={movesRef.current}
+              exploration={explorationRef.current}
+              focus={focus}
+              submitting={submitting}
+                        handlers={[handleMove, handleMarkAsWin, handleMarkAsLoss, handleSubmit, handleView, handleResign, handleTimeout]}
+                handleMove,
+                handleMark,
+                handleSubmit,
+                handleView,
+                handleResign,
+                handleTimeout,
+              ]}
+            />
+          </div>
+          {/***************** Board *****************/}
+          <div className="column is-half">
+            <h1 className="subtitle lined">
+              <span>{gameinfo.get(metaGame).name}</span>
+            </h1>
+            {gameRef.current?.stackExpanding ? (
+              <div className="board">
+                <div className="stack" id="stack" ref={stackImage}></div>
+                <div className="stackboard" id="svg" ref={boardImage}></div>
+              </div>
+            ) : (
+              <div className="board" id="svg" ref={boardImage}></div>
+            )}
+            <div className="boardButtons">
+              <button className="fabtn align-right" onClick={handleRotate}>
+                <i className="fa fa-refresh"></i>
+              </button>
+              <button
+                className="fabtn align-right"
+                onClick={handleUpdateRenderOptions}
+              >
+                <i className="fa fa-cog"></i>
+              </button>
+            </div>
+          </div>
+          {/***************** GameMoves *****************/}
+          <div className="column is-one-quarter">
+            <GameMoves
+              focus={focus}
+              game={game}
+              exploration={explorationRef.current}
+              handleGameMoveClick={handleGameMoveClick}
+            />
+          </div>
+        </div>{" "}
+        {/* columns */}
+        <div className="columns">
+          {/* Comment entry */}
+          <div className="column is-half is-offset-one-quarter">
+            {focus && game.me > -1 ? (
+              <GameComment
+                className="gameComment"
+                handleSubmit={submitComment}
+                tooMuch={commentsTooLong}
+              />
+            ) : (
+              ""
+            )}
+          </div>
+        </div>{" "}
+        {/* columns */}
+        <div className="columns">
+          {/* Comments */}
+          <div className="column is-three-fifths is-offset-one-fifth">
+            {focus ? (
+              <div>
+                <h1 className="subtitle lined">
+                  <span>{t("GameSummary")}</span>
+                </h1>
+                <MoveResults
+                  className="moveResults"
+                  results={game?.moveResults}
+                  comments={comments}
+                  players={gameRef.current?.players}
+                />
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>{" "}
+        {/* columns */}
+        <RenderOptionsModal
+          show={showSettings}
+          game={game}
+          settings={userSettings}
+          gameSettings={gameSettings}
+          processNewSettings={(newGameSettings, newUserSettings) =>
+            processNewSettings(
+              newGameSettings,
+              newUserSettings,
+              gameRef,
+              settingsSetter,
+              gameSettingsSetter,
+              userSettingsSetter
+            )
+          }
+          showSettingsSetter={showSettingsSetter}
+          setError={setError}
+          handleClose={handleSettingsClose}
+          handleSave={handleSettingsSave}
+        />
+        <Modal
+          show={showResignConfirm}
+          title={t("ConfirmResign")}
+          buttons={[
+            { label: t("Resign"), action: handleResignConfirmed },
+            {
+              label: t("Cancel"),
+              action: handleCloseResignConfirm,
+            },
+          ]}
+        >
+          <div className="content">
+            <p>{t("ConfirmResignDesc")}</p>
+          </div>
+        </Modal>
+        <Modal
+          show={showTimeoutConfirm}
+          title={t("ConfirmTimeout")}
+          buttons={[
+            { label: t("Claim"), action: handleTimeoutConfirmed },
+            {
+              label: t("Cancel"),
+              action: handleCloseTimeoutConfirm,
+            },
+          ]}
+        >
+          <div className="content">
+            <p>{t("ConfirmTimeoutDesc")}</p>
+          </div>
+        </Modal>
+      </article>
     );
-  }
-  else {
-    return (<h4>{errorMessageRef.current}</h4>);
+  } else {
+    return <h4>{errorMessageRef.current}</h4>;
   }
 }
 

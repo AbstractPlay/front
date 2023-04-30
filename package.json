@@ -37,6 +37,7 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "i18next-parser": "^7.7.0",
+    "prettier": "^2.8.8",
     "purgecss": "^5.0.0",
     "serverless-finch": "^4.0.0",
     "serverless-single-page-app-plugin": "^1.0.4"
@@ -52,8 +53,9 @@
     "deploy": "serverless client deploy",
     "deploy-prod": "serverless client deploy --stage prod",
     "invalidate": "aws cloudfront create-invalidation --profile AbstractPlayDev --distribution-id E2FD1T2JUN28HB --paths /*",
-    "invalidate-prod": "aws cloudfront create-invalidation --profile AbstractPlayProd --distribution-id EZ7B67NVBQ903 --paths /*"
-  },
+    "invalidate-prod": "aws cloudfront create-invalidation --profile AbstractPlayProd --distribution-id EZ7B67NVBQ903 --paths /*",
+    "format": "prettier --write \"src/**/*.{js,jsx}\""
+},
   "eslintConfig": {
     "extends": [
       "react-app",
