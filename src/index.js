@@ -1,16 +1,16 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import './i18n';
-import * as serviceWorker from './serviceWorker';
-import Skeleton from './pages/Skeleton';
-import './index.css';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import "./i18n";
+import * as serviceWorker from "./serviceWorker";
+import Skeleton from "./pages/Skeleton";
+import "./index.css";
 
-require('core-js/es/map');
-require('core-js/es/set');
-require('core-js/es/promise');
-require('core-js/es/object');
+require("core-js/es/map");
+require("core-js/es/set");
+require("core-js/es/promise");
+require("core-js/es/object");
 
-const container = document.getElementById('root');
+const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(<Skeleton />);
 
