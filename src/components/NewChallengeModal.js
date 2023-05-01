@@ -80,7 +80,7 @@ function NewChallengeModal(props) {
   const setPlayerCount = (cnt) => {
     playerCountSetter(cnt);
     if (cnt === 2) {
-      seatingSetter("");
+      seatingSetter("random");
       ratedSetter(true);
     } else {
       seatingSetter("random");
@@ -119,7 +119,7 @@ function NewChallengeModal(props) {
         playerCountSetter(-1);
         opponentsSetter([]);
       }
-      seatingSetter("");
+      seatingSetter("random");
     }
     errorSetter("");
   };
