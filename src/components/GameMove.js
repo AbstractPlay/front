@@ -17,6 +17,7 @@ import MoveResults from "./MoveResults";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import GameComment from "./GameComment";
+import ClipboardCopy from "./ClipboardCopy";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -473,6 +474,7 @@ function GameMove(props) {
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
   const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
+  const [showGameDump, showGameDumpSetter] = useState(false);
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
   const [settings, settingsSetter] = useState(null);
@@ -1107,6 +1109,13 @@ function GameMove(props) {
               >
                 <i className="fa fa-info"></i>
               </button>
+              <button
+                className="fabtn align-right"
+                onClick={() => {showGameDumpSetter(true)}}
+                title={t("DebugModal")}
+              >
+                <i className="fa fa-bug"></i>
+              </button>
             </div>
           </div>
           {/***************** GameMoves *****************/}
@@ -1229,6 +1238,34 @@ function GameMove(props) {
                 </li>
                 ))}
             </ul>
+            </div>
+        </Modal>
+        <Modal
+          show={showGameDump}
+          title={t("DebugModal")}
+          buttons={[
+            {
+              label: t("Close"),
+              action: () => {showGameDumpSetter(false)}
+            },
+          ]}
+        >
+            <div className="content">
+                <p>If there's a problem with your game, a developer may ask you to come to this page and send them the current game state. You can either click the "Copy" link below to copy the text to your clipboard and then paste it somewhere, or you can click the "Download" button to save a text file to your computer, which you can then send to the developers. Thank you!</p>
+                { ( (gameRef === null) || (gameRef.current === null) || (gameRef.current.state === null)) ? "" :
+                    <Fragment>
+                        <ClipboardCopy
+                            copyText={gameRef.current.state}
+                        />
+                        <div className="field">
+                            <div className="control">
+                                <a href={`data:text/json;charset=utf-8,${encodeURIComponent(gameRef.current.state)}`} download="AbstractPlay-Debug.json">
+                                    <button className="button">{t("Download")}</button>
+                                </a>
+                            </div>
+                        </div>
+                    </Fragment>
+            }
             </div>
         </Modal>
       </article>
