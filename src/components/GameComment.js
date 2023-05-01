@@ -35,6 +35,7 @@ function GameComment(props) {
                 value={comment}
                 placeholder={t("Comment")}
                 onChange={(e) => handleChange(e.target.value)}
+                rows="3"
               ></textarea>
             </div>
           </div>

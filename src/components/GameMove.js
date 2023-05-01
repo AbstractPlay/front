@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import rehypeRaw from "rehype-raw";
 import { useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render, renderglyph } from "@abstractplay/renderer";
@@ -470,6 +472,7 @@ function GameMove(props) {
   const [showSettings, showSettingsSetter] = useState(false);
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
   const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
+  const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
   const [settings, settingsSetter] = useState(null);
@@ -495,6 +498,21 @@ function GameMove(props) {
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
   const { metaGame, gameID } = useParams();
+
+  const gameDeets = gameinfo.get(metaGame);
+  let gameEngine;
+  if (gameDeets.playercounts.length > 1) {
+    gameEngine = GameFactory(gameDeets.uid, 2);
+  } else {
+    gameEngine = GameFactory(gameDeets.uid);
+  }
+  let designers = gameDeets.people
+    .filter((p) => p.type === "designer")
+    .map((p) => p.name);
+  let designerString;
+  if (designers.length === 1) designerString = "Designer: ";
+  else designerString = "Designers: ";
+  designerString += designers.join(", ");
 
   useEffect(() => {
     addResource(i18n.language);
@@ -1068,14 +1086,26 @@ function GameMove(props) {
               <div className="board" id="svg" ref={boardImage}></div>
             )}
             <div className="boardButtons">
-              <button className="fabtn align-right" onClick={handleRotate}>
+              <button
+                className="fabtn align-right"
+                onClick={handleRotate}
+                title={t("RotateBoard")}
+              >
                 <i className="fa fa-refresh"></i>
               </button>
               <button
                 className="fabtn align-right"
                 onClick={handleUpdateRenderOptions}
+                title={t("BoardSettings")}
               >
                 <i className="fa fa-cog"></i>
+              </button>
+              <button
+                className="fabtn align-right"
+                onClick={() => {showGameDetailsSetter(true)}}
+                title={t("GameInfo")}
+              >
+                <i className="fa fa-info"></i>
               </button>
             </div>
           </div>
@@ -1175,6 +1205,31 @@ function GameMove(props) {
           <div className="content">
             <p>{t("ConfirmTimeoutDesc")}</p>
           </div>
+        </Modal>
+        <Modal
+          show={showGameDetails}
+          title={t("GameInfoFor", {metaGame: gameDeets.name})}
+          buttons={[
+            {
+              label: t("Close"),
+              action: () => {showGameDetailsSetter(false)}
+            },
+          ]}
+        >
+            <div className="content">
+            <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+                {gameEngine.description() + "\n\n" + designerString}
+            </ReactMarkdown>
+            <ul className="contained">
+                {gameDeets.urls.map((l, i) => (
+                <li key={i}>
+                    <a href={l} target="_blank" rel="noopener noreferrer">
+                    {l}
+                    </a>
+                </li>
+                ))}
+            </ul>
+            </div>
         </Modal>
       </article>
     );
