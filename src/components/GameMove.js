@@ -943,10 +943,13 @@ function GameMove(props) {
       });
       const result = await res.json();
       submittingSetter(false);
-      if (result.statusCode !== 200) setError(JSON.parse(result.body));
+      if (result.statusCode !== 200) {
+        // setError(JSON.parse(result.body));
+        throw JSON.parse(result.body);
+      }
       let game0 = JSON.parse(result.body);
-      // console.log("In handleSubmit. game0:");
-      // console.log(game0);
+    //   console.log("In handleSubmit. game0:");
+    //   console.log(game0);
       setupGame(
         game0,
         gameRef,

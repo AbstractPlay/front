@@ -14,8 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Fixed bug where new challenges didn't *really* start with "Random" seating selected.
-* Fixed Homeworlds bug that stopped the click handler from working properly.
+* Challenges: Fixed bug where new challenges didn't *really* start with "Random" seating selected.
+* Homeworlds: Fixed bug that stopped the click handler from working properly.
+* Pikemen: Fixed bug that caused unnecessary reorientation to throw an error instead of being ignored.
 
 ## [v1.0.0-beta]
 
