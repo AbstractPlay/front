@@ -159,9 +159,9 @@ input[type=checkbox], input[type=radio] {
   padding: 1em;
 }
 
-.board > svg {
+/* .board > svg {
   max-height: 600px;
-}
+} */
 
 .boardButtons {
   overflow: hidden;

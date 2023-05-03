@@ -479,6 +479,7 @@ function GameMove(props) {
   const [injectedState, injectedStateSetter] = useState("");
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
+  const [isZoomed, isZoomedSetter] = useState(false);
   const [settings, settingsSetter] = useState(null);
   const [comments, commentsSetter] = useState([]);
   const [commentsTooLong, commentsTooLongSetter] = useState(false);
@@ -1109,7 +1110,7 @@ function GameMove(props) {
       <article>
         <div className="columns">
           {/***************** MoveEntry *****************/}
-          <div className="column is-one-quarter">
+          <div className={`column ${isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"}`}>
             <GameStatus
               status={statusRef.current}
               settings={settings}
@@ -1137,7 +1138,7 @@ function GameMove(props) {
             />
           </div>
           {/***************** Board *****************/}
-          <div className="column is-half">
+          <div className="column">
             <h1 className="subtitle lined">
               <span>{gameinfo.get(metaGame).name}</span>
             </h1>
@@ -1178,6 +1179,17 @@ function GameMove(props) {
               >
                 <i className="fa fa-bug"></i>
               </button>
+              <button
+                className="fabtn align-right"
+                onClick={() => {isZoomedSetter(!isZoomed)}}
+                title={t("ToggleZoom")}
+              >
+              {isZoomed ?
+                <i className="fa fa-search-minus"></i>
+                :
+                <i className="fa fa-search-plus"></i>
+              }
+              </button>
               {state.me.admin !== true ? "" :
                 <button
                   className="fabtn align-right"
@@ -1190,14 +1202,17 @@ function GameMove(props) {
             </div>
           </div>
           {/***************** GameMoves *****************/}
-          <div className="column is-one-quarter">
-            <GameMoves
-              focus={focus}
-              game={game}
-              exploration={explorationRef.current}
-              handleGameMoveClick={handleGameMoveClick}
-            />
-          </div>
+          {/* Hidden when zooming */}
+          {isZoomed ? "" :
+            <div className={`column ${isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"}`}>
+              <GameMoves
+                focus={focus}
+                game={game}
+                exploration={explorationRef.current}
+                handleGameMoveClick={handleGameMoveClick}
+              />
+            </div>
+          }
         </div>
         {/* columns */}
         <div className="columns">
