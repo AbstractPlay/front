@@ -475,6 +475,8 @@ function GameMove(props) {
   const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [showGameDump, showGameDumpSetter] = useState(false);
+  const [showInject, showInjectSetter] = useState(false);
+  const [injectedState, injectedStateSetter] = useState("");
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
   const [settings, settingsSetter] = useState(null);
@@ -1025,6 +1027,63 @@ function GameMove(props) {
     submitMove("timeout", false);
   };
 
+  const handleInjection = async () => {
+    if ( (injectedState !== undefined) && (injectedState !== null) && (injectedState.length > 0) ) {
+        const usr = await Auth.currentAuthenticatedUser();
+        try {
+            let status;
+            if (usr.signInUserSession.idToken.jwtToken) {
+              const res = await fetch(API_ENDPOINT_AUTH, {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+                },
+                body: JSON.stringify({
+                  query: "set_game_state",
+                  pars: {
+                    id: gameID,
+                    newState: injectedState,
+                  },
+                }),
+              });
+              status = res.status;
+              if (status !== 200) {
+                const result = await res.json();
+                errorMessageRef.current = JSON.parse(result.body);
+                errorSetter(true);
+              } else {
+                const result = await res.json();
+                let game0 = JSON.parse(result.body);
+                setupGame(
+                  game0,
+                  gameRef,
+                  state,
+                  partialMoveRenderRef,
+                  renderrepSetter,
+                  statusRef,
+                  movesRef,
+                  focusSetter,
+                  explorationRef,
+                  moveSetter
+                );                        }
+            }
+          } catch (error) {
+            console.log(error);
+            errorMessageRef.current = error.message;
+            errorSetter(true);
+          }
+
+        gameRef.current.state = injectedState;
+        showInjectSetter(false);
+    }
+  }
+
+  const handleInjectChange = (e) => {
+    injectedStateSetter(e.target.value);
+  }
+
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
   // console.log("game.me", game ? game.me : "nope");
@@ -1116,6 +1175,15 @@ function GameMove(props) {
               >
                 <i className="fa fa-bug"></i>
               </button>
+              {state.me.admin !== true ? "" :
+                <button
+                  className="fabtn align-right"
+                  onClick={() => {showInjectSetter(true)}}
+                  title={"Inject state"}
+                  >
+                  <i className="fa fa-magic"></i>
+                </button>
+              }
             </div>
           </div>
           {/***************** GameMoves *****************/}
@@ -1266,6 +1334,30 @@ function GameMove(props) {
                         </div>
                     </Fragment>
             }
+            </div>
+        </Modal>
+        <Modal
+          show={showInject}
+          title={"Inject state"}
+          buttons={[
+            {
+              label: t("Close"),
+              action: () => {showInjectSetter(false)}
+            },
+          ]}
+        >
+            <div className="content">
+                <p>If you are seeing this and are not a developer, please let an admin know immediately.</p>
+                <p>This is a destructive function. Pasting code here will obliterate the existing game state and cannot be undone. You have been warned.</p>
+                <div className="field">
+                    <label className="label" htmlFor="newState">JSON to inject</label>
+                    <div className="control">
+                        <textarea className="textarea" name="newState" placeholder="Paste JSON here" value={injectedState} onChange={handleInjectChange} />
+                    </div>
+                    <div className="control">
+                        <button className="button is-danger" onClick={handleInjection}>Inject JSON!</button>
+                    </div>
+                </div>
             </div>
         </Modal>
       </article>

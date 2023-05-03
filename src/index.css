@@ -419,3 +419,8 @@ th .player {
   list-style: none;
   margin-left: 0;
 }
+
+/* Raises modal screens so they overlay the move exploration buttons */
+.modal {
+    z-index: 1000;
+}
