@@ -20,7 +20,7 @@ function MoveResults(props) {
 
   useEffect(() => {
     // Look at the past X chats. If any of them belong to a player other than you, then we have "new chat"
-    const threshold = 4; // an opponent chat followed by three game turns
+    const threshold = Math.min(4, results.length); // an opponent chat followed by three game turns
     let oppChat = false;
     for (let i = 0; i < threshold; i++) {
         if ( (!results[i].system) && (results[i].userid !== meID) ) {
