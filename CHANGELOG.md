@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Challenges: Fixed bug where new challenges didn't *really* start with "Random" seating selected.
 * Homeworlds: Fixed bug that stopped the click handler from working properly.
 * Pikemen: Fixed bug that caused unnecessary reorientation to throw an error instead of being ignored.
+* Blam!: Click handler now autoselects your smallest piece unless you select a different one from your stash first.
 
 ## [v1.0.0-beta]
 
