@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, { Fragment, useEffect, useState, useRef, useContext } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useLocation, useParams } from "react-router-dom";
@@ -18,6 +18,7 @@ import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import GameComment from "./GameComment";
 import ClipboardCopy from "./ClipboardCopy";
+import { MyTurnContext } from "../pages/Skeleton";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -499,6 +500,14 @@ function GameMove(props) {
   const gameRef = useRef(null);
   // Array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
   const explorationRef = useRef(null);
+  const [myMove, myMoveSetter] = useContext(MyTurnContext);
+  if (myMove !== undefined) {
+    console.log(`Fetched MyMoveContext`);
+    console.log(JSON.stringify(myMove));
+    console.log(myMove.length);
+  } else {
+    console.log("Could not find context");
+  }
 
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
