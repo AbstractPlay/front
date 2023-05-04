@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef, useContext } from "react";
+import React, { Fragment, useEffect, useState, useRef, useContext, createContext } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
@@ -19,6 +19,9 @@ import Modal from "./Modal";
 import GameComment from "./GameComment";
 import ClipboardCopy from "./ClipboardCopy";
 import { MyTurnContext } from "../pages/Skeleton";
+import NewChatMarker from "./NewChatMarker";
+
+export const NewChatContext = createContext([false, () => false]);
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -486,6 +489,7 @@ function GameMove(props) {
   const [commentsTooLong, commentsTooLongSetter] = useState(false);
   const [submitting, submittingSetter] = useState(false);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
+  const [newChat, newChatSetter] = useState(false);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -1267,12 +1271,15 @@ function GameMove(props) {
                 <h1 className="subtitle lined">
                   <span>{t("GameSummary")}</span>
                 </h1>
-                <MoveResults
-                  className="moveResults"
-                  results={game?.moveResults}
-                  comments={comments}
-                  players={gameRef.current?.players}
-                />
+                <NewChatContext.Provider value={[newChat, newChatSetter]}>
+                  <MoveResults
+                    className="moveResults"
+                    results={game?.moveResults}
+                    comments={comments}
+                    players={gameRef.current?.players}
+                    meID={state.me.id}
+                  />
+                </NewChatContext.Provider>
               </div>
             ) : (
               ""
@@ -1280,6 +1287,9 @@ function GameMove(props) {
           </div>
         </div>
         {/* columns */}
+        {!newChat ? "" :
+            <NewChatMarker />
+        }
         <RenderOptionsModal
           show={showSettings}
           game={game}

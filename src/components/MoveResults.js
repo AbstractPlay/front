@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import { Fragment } from "react";
+import { NewChatContext } from "./GameMove";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import ReactTimeAgo from "react-time-ago";
@@ -12,9 +13,26 @@ function MoveResults(props) {
   const results0 = props.results;
   const comments = props.comments;
   const players = props.players;
+  const meID = props.meID;
+
+  const [, newChatSetter] = useContext(NewChatContext);
+  let results;
+
+  useEffect(() => {
+    // Look at the past X chats. If any of them belong to a player other than you, then we have "new chat"
+    const threshold = 4; // an opponent chat followed by three game turns
+    let oppChat = false;
+    for (let i = 0; i < threshold; i++) {
+        if ( (!results[i].system) && (results[i].userid !== meID) ) {
+            oppChat = true;
+            break;
+        }
+    }
+    newChatSetter(oppChat);
+  }, [JSON.stringify(results)]);
 
   if (results0) {
-    let results = results0.map((r) => ({
+    results = results0.map((r) => ({
       time: r.time,
       timestamp: new Date(r.time).getTime(),
       log: r.log,
@@ -26,10 +44,12 @@ function MoveResults(props) {
         time: new Date(c.timeStamp).toLocaleString(),
         log: c.comment,
         system: false,
+        userid: c.userId,
         player: players.find((p) => p.id === c.userId).name,
       });
     });
     results.sort((a, b) => b.timestamp - a.timestamp);
+
     return (
       <Fragment>
         {results.map((r, index) => (
