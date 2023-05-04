@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added "debug" button below the game board so players can easily get the developers the current game state for debugging purposes.
 * Added "zoom" button that hides the game tree and maximizes SVG size. This change involved removing a `max-height` SVG rule. There may be unintended consequences. Will have to monitor.
 * Added "Next game" button, which will take you immediately to the next game where it's your turn, or take you back to the dashboard if there are no games remaining. The list only refreshes when you visit the dashboard, though, so sometimes you will go back to the dashboard to find opponents have made moves in the meantime.
+* Added "New chat" indicator at bottom right of play screen. Because of how the databases are designed, I can't tell for sure whether chat is "new" meaning you for sure haven't seen it before. So instead, it looks at the chat log and sees if (a) the most recent chat is from your opponent and (b) how many moves have been made since that chat.
 
 ### Fixed
 
