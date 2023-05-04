@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added "info" button below the game board so players can quickly reference game information, including links to rules.
 * Added "debug" button below the game board so players can easily get the developers the current game state for debugging purposes.
 * Added "zoom" button that hides the game tree and maximizes SVG size. This change involved removing a `max-height` SVG rule. There may be unintended consequences. Will have to monitor.
+* Added "Next game" button, which will take you immediately to the next game where it's your turn, or take you back to the dashboard if there are no games remaining. The list only refreshes when you visit the dashboard, though, so sometimes you will go back to the dashboard to find opponents have made moves in the meantime.
 
 ### Fixed
 

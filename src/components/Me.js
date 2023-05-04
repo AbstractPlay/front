@@ -292,8 +292,8 @@ function Me(props) {
             else waitingSetter((waiting) => [...waiting, game]);
           }
         }
-        console.log(`Passing myMove as context: ${JSON.stringify(myMove)}`);
-        console.log(myMove.length);
+        // console.log(`Passing myMove as context: ${JSON.stringify(myMove)}`);
+        // console.log(myMove.length);
         myTurnSetter(myMove);
     }
   }, [me, myTurnSetter, JSON.stringify(myTurn), JSON.stringify(myMove)]);

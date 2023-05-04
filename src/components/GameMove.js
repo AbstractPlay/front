@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState, useRef, useContext } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render, renderglyph } from "@abstractplay/renderer";
 import { Auth } from "aws-amplify";
@@ -501,13 +501,13 @@ function GameMove(props) {
   // Array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
   const explorationRef = useRef(null);
   const [myMove, myMoveSetter] = useContext(MyTurnContext);
-  if (myMove !== undefined) {
-    console.log(`Fetched MyMoveContext`);
-    console.log(JSON.stringify(myMove));
-    console.log(myMove.length);
-  } else {
-    console.log("Could not find context");
-  }
+//   if (myMove !== undefined) {
+//     console.log(`Fetched MyMoveContext`);
+//     console.log(JSON.stringify(myMove));
+//     console.log(myMove.length);
+//   } else {
+//     console.log("Could not find context");
+//   }
 
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
@@ -957,6 +957,7 @@ function GameMove(props) {
         // setError(JSON.parse(result.body));
         throw JSON.parse(result.body);
       }
+      myMoveSetter((myMove) => [...myMove.filter(x => x.id !== gameID)])
       let game0 = JSON.parse(result.body);
     //   console.log("In handleSubmit. game0:");
     //   console.log(game0);
@@ -1097,6 +1098,17 @@ function GameMove(props) {
     injectedStateSetter(e.target.value);
   }
 
+  const navigate = useNavigate();
+  const handleNextGame = () => {
+    const others = myMove.filter(x => x.id !== gameID).sort(() => Math.random() - 0.5);
+    if (others.length === 0) {
+        navigate("/", {state});
+    } else {
+        const next = others[0];
+        navigate(`/move/${next.metaGame}/${next.id}`, {state});
+    }
+  }
+
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
   // console.log("game.me", game ? game.me : "nope");
@@ -1145,6 +1157,14 @@ function GameMove(props) {
                 handleReset,
               ]}
             />
+            <div className="control" style={{paddingTop: "1em"}}>
+                <button className="button apButton" onClick={handleNextGame}>
+                    <span>Next game ({myMove.length})</span>
+                    <span className="icon">
+                        <i className="fa fa-forward"></i>
+                    </span>
+                </button>
+            </div>
           </div>
           {/***************** Board *****************/}
           <div className="column">
