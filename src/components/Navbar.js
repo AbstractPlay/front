@@ -33,13 +33,18 @@ function Navbar(props) {
       <div className="navbar-brand">
         <div className="navbar-item">
           <Link to="/">
-            <img
-              src={logo}
-              alt="Abstract Play logo"
-              width="100%"
-              height="auto"
-              style={{ maxHeight: "none" }}
-            />
+          {process.env.REACT_APP_REAL_MODE === "production"
+           ?
+              <img
+                src={logo}
+                alt="Abstract Play logo"
+                width="100%"
+                height="auto"
+                style={{ maxHeight: "none" }}
+              />
+           :
+             <span>Abstract Play<br/>DEVELOPMENT Server</span>
+          }
           </Link>
         </div>
         <a

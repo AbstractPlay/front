@@ -19,6 +19,7 @@ import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
 
 export const MyTurnContext = createContext([[], () => []]);
@@ -119,7 +120,12 @@ function Bones(props) {
           </Routes>
         </MyTurnContext.Provider>
         </section>
-        <Footer />
+        {process.env.REACT_APP_REAL_MODE === "production"
+         ?
+           <Footer />
+         :
+           <FooterDev />
+        }
       </Router>
     );
 }
