@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useEffect } from "react";
+import React, { useState, Suspense, useEffect, createContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   COGNITO_USER_POOL_ID,
@@ -21,10 +21,13 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Legal from "../components/Legal";
 
+export const MyTurnContext = createContext([[], () => []]);
+
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
   const [token, tokenSetter] = useState(null);
   const [update] = useState(0);
+  const [myMove, myMoveSetter] = useState([]);
 
   useEffect(() => {
     const awsconfig = {
@@ -82,6 +85,7 @@ function Bones(props) {
       <Router>
         <Navbar />
         <section className="section" id="main">
+        <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
           <Routes>
             <Route path="/about" element={<About token={token} />} />
             <Route
@@ -113,6 +117,7 @@ function Bones(props) {
               element={<Welcome token={token} update={update} />}
             />
           </Routes>
+        </MyTurnContext.Provider>
         </section>
         <Footer />
       </Router>
