@@ -23,12 +23,14 @@ import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
 
 export const MyTurnContext = createContext([[], () => []]);
+export const MeContext = createContext([null, () => {}]);
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
   const [token, tokenSetter] = useState(null);
   const [update] = useState(0);
   const [myMove, myMoveSetter] = useState([]);
+  const [globalMe, globalMeSetter] = useState(null)
 
   useEffect(() => {
     const awsconfig = {
@@ -83,6 +85,7 @@ function Bones(props) {
   if (!authed) return <Spinner />;
   else
     return (
+    <MeContext.Provider value={[globalMe, globalMeSetter]}>
       <Router>
         <Navbar />
         <section className="section" id="main">
@@ -127,6 +130,7 @@ function Bones(props) {
            <FooterDev />
         }
       </Router>
+      </MeContext.Provider>
     );
 }
 

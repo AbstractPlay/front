@@ -12,13 +12,13 @@ import NewProfile from "./NewProfile";
 import { API_ENDPOINT_AUTH } from "../config";
 import i18n from "../i18n";
 import { Fragment } from "react";
-import { MyTurnContext } from "../pages/Skeleton";
+import { MeContext, MyTurnContext } from "../pages/Skeleton";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
-  const [me, meSetter] = useState();
   const [error, errorSetter] = useState(null);
   const [challenge, challengeSetter] = useState(0);
+  // TODO: Is `vars` really necessary?
   const [vars, varsSetter] = useState({});
   const [update, updateSetter] = useState(0);
   const [showChallengeViewModal, showChallengeViewModalSetter] =
@@ -31,6 +31,7 @@ function Me(props) {
   const [waiting, waitingSetter] = useState([]);
   const [over, overSetter] = useState([]);
   const [myTurn, myTurnSetter] = useContext(MyTurnContext);
+  const [globalMe, globalMeSetter] = useContext(MeContext);
 
   useEffect(() => {
     async function fetchData() {
@@ -52,9 +53,9 @@ function Me(props) {
         const result = await res.json();
         if (result.statusCode !== 200) errorSetter(JSON.parse(result.body));
         else {
-          if (result === null) meSetter({});
+          if (result === null) globalMeSetter({});
           else {
-            meSetter(JSON.parse(result.body));
+            globalMeSetter(JSON.parse(result.body));
             console.log(JSON.parse(result.body));
           }
         }
@@ -63,7 +64,7 @@ function Me(props) {
       }
     }
     fetchData();
-  }, [vars, update]);
+  }, [vars, update, globalMeSetter]);
 
   const handleNewChallengeClick = (id) => {
     showNewChallengeModalSetter(true);
@@ -81,7 +82,7 @@ function Me(props) {
   const handleChallengeRevoke = async () => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
-    if (me.id !== challenge.challenger.id)
+    if (globalMe.id !== challenge.challenger.id)
       return handleChallengeResponse(false);
     try {
       const res = await fetch(API_ENDPOINT_AUTH, {
@@ -169,7 +170,7 @@ function Me(props) {
           query: "new_challenge",
           pars: {
             ...challenge,
-            challenger: { id: me.id, name: me.name },
+            challenger: { id: globalMe.id, name: globalMe.name },
           },
         }),
       });
@@ -267,8 +268,8 @@ function Me(props) {
   };
 
   useEffect(() => {
-    if (me !== undefined) {
-        let games = me.games;
+    if (globalMe && globalMe.games) {
+        let games = globalMe.games;
         if (games === undefined) games = [];
         myMoveSetter([]);
         waitingSetter([]);
@@ -277,7 +278,7 @@ function Me(props) {
           if (Array.isArray(game.toMove)) {
             let found = false;
             for (let i = 0; i < game.players.length; i++) {
-              if (game.players[i].id === me.id) {
+              if (game.players[i].id === globalMe.id) {
                 if (game.toMove[i]) {
                   myMoveSetter((myMove) => [...myMove, game]);
                   found = true;
@@ -286,9 +287,8 @@ function Me(props) {
             }
             if (!found) waitingSetter((waiting) => [...waiting, game]);
           } else {
-            console.log("game", game);
             if (game.toMove === "" || game.toMove === null) overSetter((over) => [...over, game]);
-            else if (game.players[game.toMove].id === me.id) myMoveSetter((myMove) => [...myMove, game]);
+            else if (game.players[game.toMove].id === globalMe.id) myMoveSetter((myMove) => [...myMove, game]);
             else waitingSetter((waiting) => [...waiting, game]);
           }
         }
@@ -296,7 +296,7 @@ function Me(props) {
         // console.log(myMove.length);
         myTurnSetter(myMove);
     }
-  }, [me, myTurnSetter, JSON.stringify(myTurn), JSON.stringify(myMove)]);
+  }, [globalMe, myTurnSetter, JSON.stringify(myTurn), JSON.stringify(myMove)]);
 
   if (error) {
     return (
@@ -306,14 +306,14 @@ function Me(props) {
       </div>
     );
   }
-  if (!me) {
+  if (!globalMe) {
     return (
       <article>
         <Spinner />
       </article>
     );
   }
-  if (me.name === undefined) {
+  if (globalMe.name === undefined) {
     return <NewProfile show={true} varsSetter={varsSetter} />;
   } else {
     if (update !== props.update)
@@ -321,20 +321,20 @@ function Me(props) {
       updateSetter(props.update);
 
     var lng = "en";
-    if (me.language !== undefined) lng = me.language;
+    if (globalMe.language !== undefined) lng = globalMe.language;
     if (i18n.language !== lng) {
       i18n.changeLanguage(lng);
       console.log(`changed language  to ${lng}`);
     }
-    let challengesResponded = me.challengesIssued.concat(me.challengesAccepted);
-    console.log("challengesIssued", me.challengesIssued);
-    console.log("challengesAccepted", me.challengesAccepted);
-    console.log("standingChallenges", me.standingChallenges);
-    console.log("challengesReceived", me.challengesReceived);
+    let challengesResponded = globalMe.challengesIssued.concat(globalMe.challengesAccepted);
+    console.log("challengesIssued", globalMe.challengesIssued);
+    console.log("challengesAccepted", globalMe.challengesAccepted);
+    console.log("standingChallenges", globalMe.standingChallenges);
+    console.log("challengesReceived", globalMe.challengesReceived);
     return (
       <article id="dashboard">
         <h1 className="title has-text-centered">
-          {t("WelcomePlayer", { me: me.name })}
+          {t("WelcomePlayer", { me: globalMe.name })}
         </h1>
         {/* Your Games */}
         <div className="columns">
@@ -353,8 +353,6 @@ function Me(props) {
                   <ul>
                     {myMove.map((item) => (
                       <GameItem
-                          me={me}
-                          settings={me.settings}
                           item={item}
                           key={item.id}
                           canMove={true}
@@ -374,8 +372,6 @@ function Me(props) {
                   <ul>
                     {waiting.map((item) => (
                       <GameItem
-                        me={me}
-                        settings={me.settings}
                         item={item}
                         key={item.id}
                         canMove={false}
@@ -396,8 +392,6 @@ function Me(props) {
                     <ul>
                       {over.map((item) => (
                         <GameItem
-                          me={me}
-                          settings={me.settings}
                           item={item}
                           key={item.id}
                           canMove={false}
@@ -422,13 +416,12 @@ function Me(props) {
                 <span>{t("ChallengeResponse")}</span>
               </p>
               <div className="indentedContainer">
-                {me.challengesReceived.length === 0 ? (
+                {globalMe.challengesReceived.length === 0 ? (
                   <p>{t("NoChallengeResponse")}</p>
                 ) : (
                   <ul>
-                    {me.challengesReceived.map((item) => (
+                    {globalMe.challengesReceived.map((item) => (
                       <ChallengeItem
-                        me={me.id}
                         item={item}
                         key={item.id}
                         respond={true}
@@ -454,7 +447,6 @@ function Me(props) {
                   <ul>
                     {challengesResponded.map((item) => (
                       <ChallengeItem
-                        me={me.id}
                         item={item}
                         key={item.id}
                         respond={false}
@@ -474,13 +466,12 @@ function Me(props) {
                 <span>{t("StandingChallenges2")}</span>
               </p>
               <div className="indentedContainer">
-                {me.standingChallenges.length === 0 ? (
+                {globalMe.standingChallenges.length === 0 ? (
                   <p>{t("NoStandingChallenges")}</p>
                 ) : (
                   <ul>
-                    {me.standingChallenges.map((item) => (
+                    {globalMe.standingChallenges.map((item) => (
                       <ChallengeItem
-                        me={me.id}
                         item={item}
                         key={item.id}
                         respond={false}
@@ -510,7 +501,7 @@ function Me(props) {
             </div>
           </div>
           {/* Admin functionality */}
-          {me.admin !== true ? (
+          {!globalMe || globalMe.admin !== true ? (
             ""
           ) : (
             <div className="columns">
@@ -548,7 +539,6 @@ function Me(props) {
         </div>
         <NewChallengeModal
           show={showNewChallengeModal}
-          id={me.id}
           handleClose={handleNewChallengeClose}
           handleChallenge={handleNewChallenge2}
         />
@@ -559,7 +549,7 @@ function Me(props) {
           buttons={[
             {
               label:
-                (challenge.challenger ? challenge.challenger.id : "") === me.id
+                (challenge.challenger ? challenge.challenger.id : "") === globalMe.id
                   ? t("RevokeChallenge")
                   : t("RevokeAcceptance"),
               action: handleChallengeRevoke,
@@ -567,7 +557,7 @@ function Me(props) {
             { label: t("Close"), action: handleChallengeViewClose },
           ]}
         >
-          <ChallengeView challenge={challenge} me={me.id} />
+          <ChallengeView challenge={challenge} />
         </Modal>
 
         <Modal
@@ -588,7 +578,7 @@ function Me(props) {
             },
           ]}
         >
-          <ChallengeResponse challenge={challenge} me={me} />
+          <ChallengeResponse challenge={challenge} />
         </Modal>
       </article>
     );

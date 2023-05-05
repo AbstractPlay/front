@@ -2,57 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
-import { Auth } from "aws-amplify";
+import { API_ENDPOINT_OPEN } from "../config";
 import Spinner from "./Spinner";
 
 function ListGames(props) {
   const { t } = useTranslation();
   const [games, gamesSetter] = useState(null);
-  const [me, meSetter] = useState(null);
   const [update, updateSetter] = useState(0);
   const { gameState, metaGame } = useParams();
-
-  // In case you are logged in get some info, so that we can show your games to you correctly
-  useEffect(() => {
-    async function fetchData() {
-      let token = null;
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        token = usr.signInUserSession.idToken.jwtToken;
-        console.log("idToken", usr.signInUserSession.idToken);
-      } catch (error) {
-        token = null;
-      }
-      if (token !== null) {
-        try {
-          console.log("calling authQuery 'me', with token: " + token);
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            // Don't care about e.g. challenges, so size = small.
-            body: JSON.stringify({ query: "me", size: "small" }),
-          });
-          const result = await res.json();
-          if (result.statusCode !== 200) console.log(JSON.parse(result.body));
-          else {
-            if (result === null) meSetter({});
-            else {
-              meSetter(JSON.parse(result.body));
-              console.log(JSON.parse(result.body));
-            }
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-    fetchData();
-  }, [update, gameState, metaGame]);
 
   useEffect(() => {
     async function fetchData() {
@@ -109,10 +66,6 @@ function ListGames(props) {
                   <td>
                     <Link
                       to={`/move/${game.metaGame}/${game.id}`}
-                      state={{
-                        me: me,
-                        settings: me ? me.settings : {},
-                      }}
                     >
                       {i + 1}
                     </Link>

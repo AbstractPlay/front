@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from "../config";
 import { Auth } from "aws-amplify";
+import { MeContext } from "../pages/Skeleton";
 import Spinner from "./Spinner";
 
 function StandingChallenges(props) {
   const { t } = useTranslation();
   const [loggedin, loggedinSetter] = useState(false);
-  const [myid, myidSetter] = useState(null);
   const [challenges, challengesSetter] = useState(null);
   const [accepted, acceptedSetter] = useState(null);
   const [revoke, revokeSetter] = useState(null);
   const [reject, rejectSetter] = useState(null);
   const [update, updateSetter] = useState(0);
   const { metaGame } = useParams();
+  const [globalMe, ] = useContext(MeContext);
 
   useEffect(() => {
     async function fetchAuth() {
@@ -24,7 +25,6 @@ function StandingChallenges(props) {
       console.log("idToken", usr.signInUserSession.idToken);
       if (token !== null) {
         loggedinSetter(true);
-        myidSetter(usr.signInUserSession.idToken.payload.sub);
       }
     }
     fetchAuth();
@@ -242,14 +242,14 @@ function StandingChallenges(props) {
                         t("Accepted")
                       ) : challenge.id === reject || challenge.id === revoke ? (
                         <Spinner></Spinner>
-                      ) : challenge.challenger.id === myid ? (
+                      ) : challenge.challenger.id === globalMe.id ? (
                         <button
                           className="button is-small apButton"
                           onClick={() => handleRevoke(challenge.id)}
                         >
                           {t("Revoke")}
                         </button>
-                      ) : challenge.players.find((p) => p.id === myid) ? (
+                      ) : challenge.players.find((p) => p.id === globalMe.id) ? (
                         <button
                           className="button is-small apButton"
                           onClick={() => handleReject(challenge.id)}
