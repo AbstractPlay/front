@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
 function showMilliseconds(ms) {
@@ -47,10 +47,24 @@ function MoveEntry(props) {
   const handleTimeOut = props.handlers[5];
   const handleReset = props.handlers[6];
   const { t } = useTranslation();
+  // moveState should contain the class that defines the outline colour (see Bulma docs)
+  const [moveState, moveStateSetter] = useState("is-success");
 
   const handleDrawOfferChange = (value) => {
     drawofferSetter(value);
   };
+
+  useEffect(() => {
+    if ( (move.valid) && (move.complete === 0) && (move.move.length > 0) ) {
+        moveStateSetter("is-warning");
+    } else if (focus?.exPath.length > 0 && game.canSubmit && focus?.exPath.length === 1 && !submitting) {
+        moveStateSetter("is-warning");
+    } else if ( (move.move.length > 0) || (! move.valid) ) {
+        moveStateSetter("is-danger");
+    } else {
+        moveStateSetter("is-success");
+    }
+  }, [move, focus, game, submitting]);
 
   if (focus) {
     let moveToSubmit = null;
@@ -229,7 +243,7 @@ function MoveEntry(props) {
               )}
               <div className="control">
                 <input
-                  className="input is-small"
+                  className={`input is-small ${moveState}`}
                   name="move"
                   id="enterAMove"
                   type="text"
