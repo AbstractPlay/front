@@ -29,7 +29,7 @@ function MoveResults(props) {
         }
     }
     newChatSetter(oppChat);
-  }, [JSON.stringify(results)]);
+  }, [JSON.stringify(results), meID, newChatSetter]);
 
   if (results0) {
     results = results0.map((r) => ({
