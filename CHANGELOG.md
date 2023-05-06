@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added subtle colouring around the move entry box. Green is the default colour. Red means you've started a move but it's not done yet or there's a problem with the move. Yellow means the move is complete but not yet submitted.
 * Added a "Download game record" button to completed games so you can download the official record for further analysis. This is a temporary solution. Eventually there will be a dedicated "data" area and functions.
 * Better formatting of explored variations. See Feature Request #0017.
+* Highlight current position in the moves list. Very useful when exploring.
 
 ### Fixed
 
