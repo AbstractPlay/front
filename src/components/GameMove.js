@@ -20,6 +20,7 @@ import GameComment from "./GameComment";
 import ClipboardCopy from "./ClipboardCopy";
 import { MyTurnContext } from "../pages/Skeleton";
 import NewChatMarker from "./NewChatMarker";
+import DownloadDataUri from "./DownloadDataUri";
 
 export const NewChatContext = createContext([false, () => false]);
 
@@ -73,7 +74,8 @@ function setupGame(
   movesRef,
   focusSetter,
   explorationRef,
-  moveSetter
+  moveSetter,
+  gameRecSetter
 ) {
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
@@ -158,7 +160,24 @@ function setupGame(
     if (game0.simultaneous) movesRef.current = engine.moves(game0.me + 1);
     else movesRef.current = engine.moves();
   }
+
+  // If the game is over, generate the game record
+  // TODO: Add "event" and "round" should those ever be implemented.
+  if ( (engine.gameover) && (engine.stack.length >= 2) ) {
+    gameRecSetter(engine.genRecord({
+        uid: game0.id,
+        players: game0.players.map(p => { return {
+            name: p.name,
+            uid: p.id,
+        }}),
+        dateStart: new Date(engine.stack[0]._timestamp),
+        dateEnd: new Date(engine.stack[engine.stack.length - 1]._timestamp),
+        unrated: ! game0.rated
+    }));
+  }
+
   let history = [];
+  // The following is DESTRUCTIVE! If you need `engine.stack`, do it before here.
   /*eslint-disable no-constant-condition*/
   let gameOver = engine.gameover;
   while (true) {
@@ -490,6 +509,7 @@ function GameMove(props) {
   const [submitting, submittingSetter] = useState(false);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
   const [newChat, newChatSetter] = useState(false);
+  const [gameRec, gameRecSetter] = useState(undefined);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -608,7 +628,8 @@ function GameMove(props) {
             movesRef,
             focusSetter,
             explorationRef,
-            moveSetter
+            moveSetter,
+            gameRecSetter
           );
           processNewSettings(
             gameRef.current.me > -1
@@ -975,7 +996,8 @@ function GameMove(props) {
         movesRef,
         focusSetter,
         explorationRef,
-        moveSetter
+        moveSetter,
+        gameRecSetter
       );
       // setupColors(settings, gameRef.current, t);
     } catch (err) {
@@ -1084,8 +1106,10 @@ function GameMove(props) {
                   movesRef,
                   focusSetter,
                   explorationRef,
-                  moveSetter
-                );                        }
+                  moveSetter,
+                  gameRecSetter
+                );
+              }
             }
           } catch (error) {
             console.log(error);
@@ -1161,14 +1185,23 @@ function GameMove(props) {
                 handleReset,
               ]}
             />
-            <div className="control" style={{paddingTop: "1em"}}>
+            {( (toMove !== "") || (gameRec === undefined) ) ? null :
+              <DownloadDataUri
+                filename={`AbstractPlay-${metaGame}-${gameID}.json`}
+                label="Download completed game record"
+                uri={gameRec === undefined ? null : `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(gameRec))}`}
+              />
+            }
+            {toMove === "" ? null :
+              <div className="control" style={{paddingTop: "1em"}}>
                 <button className="button apButton" onClick={handleNextGame}>
-                    <span>Next game ({myMove.length})</span>
+                  <span>Next game ({myMove.length})</span>
                     <span className="icon">
-                        <i className="fa fa-forward"></i>
+                      <i className="fa fa-forward"></i>
                     </span>
                 </button>
-            </div>
+              </div>
+            }
           </div>
           {/***************** Board *****************/}
           <div className="column">
