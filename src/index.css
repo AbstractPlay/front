@@ -91,6 +91,10 @@ input[type="radio"] {
   border: 1px solid var(--main-fg-color);
 }
 
+.lastMove {
+  border: 1px solid black;
+}
+
 /* Used to create headings with lines on either side */
 .lined {
   width: 100%;
