@@ -244,6 +244,21 @@ th .player {
   background-color: #bbb;
 }
 
+.variation-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 5px;
+}
+
+.variation-item-numbering {
+  font-size: x-small;
+  align-self: end;
+}
+
+.variation-item-content {
+  justify-self: start;
+}
+
 /* Winning/losing indicators */
 .winnerImage {
   padding-left: 0.2rem;

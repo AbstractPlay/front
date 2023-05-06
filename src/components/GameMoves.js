@@ -58,6 +58,7 @@ function getPath(focus, exploration, path) {
   return curNumVariations;
 }
 
+
 function GameMoves(props) {
   const { t } = useTranslation();
   let focus = props.focus;
@@ -155,6 +156,50 @@ function GameMoves(props) {
     }
   }
 
+  function AMove(game, m) {
+    return (
+      <span>
+        <span
+          className={m.class}
+          onClick={() => props.handleGameMoveClick(m.path)}
+        >
+          {m.move}
+          {m.outcome === -1 ? null : game.colors[m.outcome]
+              .isImage ? (
+            <img
+              className="winnerImage"
+              src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                game.colors[m.outcome].value
+              )}`}
+              alt=""
+            />
+          ) : (
+            <svg className="winnerImage2" viewBox="0 0 44 44">
+              <circle
+                cx="22"
+                cy="22"
+                r="18"
+                stroke="black"
+                strokeWidth="4"
+                fill="white"
+              />
+              <text
+                x="12"
+                y="32"
+                fill="black"
+                fontFamily="monospace"
+                fontSize="35"
+                fontWeight="bold"
+              >
+                {m.outcome + 1}
+              </text>
+            </svg>
+          )}
+        </span>
+      </span>
+    );
+  }
+  
   if (focus !== null) {
     // Prepare header
     const simul = game.simultaneous;
@@ -298,48 +343,21 @@ function GameMoves(props) {
             row.push(
               <td key={"td1-" + i + "-" + j}>
                 <div className="move">
-                  {path[movenum].map((m, k) => (
-                    <span key={"move" + i + "-" + j + "-" + k}>
-                      {k > 0 ? ", " : ""}
-                      <span
-                        className={m.class}
-                        onClick={() => handleGameMoveClick(m.path)}
-                      >
-                        {m.move}
-                        {m.outcome === -1 ? null : game.colors[m.outcome]
-                            .isImage ? (
-                          <img
-                            className="winnerImage"
-                            src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                              game.colors[m.outcome].value
-                            )}`}
-                            alt=""
-                          />
-                        ) : (
-                          <svg className="winnerImage2" viewBox="0 0 44 44">
-                            <circle
-                              cx="22"
-                              cy="22"
-                              r="18"
-                              stroke="black"
-                              strokeWidth="4"
-                              fill="white"
-                            />
-                            <text
-                              x="12"
-                              y="32"
-                              fill="black"
-                              fontFamily="monospace"
-                              fontSize="35"
-                              fontWeight="bold"
-                            >
-                              {m.outcome + 1}
-                            </text>
-                          </svg>
-                        )}
-                      </span>
-                    </span>
-                  ))}
+                  { path[movenum].length === 1 ?
+                    AMove(game, path[movenum][0]) :
+                    <div className="variation-list">
+                      { path[movenum].map((m, k) => 
+                        <Fragment key={"move" + i + "-" + j + "-" + k}>
+                          <div className="variation-item-numbering">
+                            { (k + 10).toString(36) }
+                          </div>
+                          <div className="variation-item-content">
+                              { AMove(game, m) }
+                          </div>
+                        </Fragment>
+                      )}
+                    </div>
+                  }
                 </div>
               </td>
             );
