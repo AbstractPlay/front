@@ -58,7 +58,6 @@ function getPath(focus, exploration, path) {
   return curNumVariations;
 }
 
-
 function GameMoves(props) {
   const { t } = useTranslation();
   let focus = props.focus;
@@ -164,8 +163,7 @@ function GameMoves(props) {
           onClick={() => props.handleGameMoveClick(m.path)}
         >
           {m.move}
-          {m.outcome === -1 ? null : game.colors[m.outcome]
-              .isImage ? (
+          {m.outcome === -1 ? null : game.colors[m.outcome].isImage ? (
             <img
               className="winnerImage"
               src={`data:image/svg+xml;utf8,${encodeURIComponent(
@@ -199,7 +197,7 @@ function GameMoves(props) {
       </span>
     );
   }
-  
+
   if (focus !== null) {
     // Prepare header
     const simul = game.simultaneous;
@@ -343,21 +341,22 @@ function GameMoves(props) {
             row.push(
               <td key={"td1-" + i + "-" + j}>
                 <div className="move">
-                  { path[movenum].length === 1 ?
-                    AMove(game, path[movenum][0]) :
+                  {path[movenum].length === 1 ? (
+                    AMove(game, path[movenum][0])
+                  ) : (
                     <div className="variation-list">
-                      { path[movenum].map((m, k) => 
+                      {path[movenum].map((m, k) => (
                         <Fragment key={"move" + i + "-" + j + "-" + k}>
                           <div className="variation-item-numbering">
-                            { (k + 10).toString(36) }
+                            {(k + 10).toString(36)}
                           </div>
                           <div className="variation-item-content">
-                              { AMove(game, m) }
+                            {AMove(game, m)}
                           </div>
                         </Fragment>
-                      )}
+                      ))}
                     </div>
-                  }
+                  )}
                 </div>
               </td>
             );

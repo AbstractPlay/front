@@ -62,8 +62,9 @@ a {
 }
 
 /* Add a little bit of space after checkboxes and radio buttons */
-input[type=checkbox], input[type=radio] {
-    margin-right: 0.25em;
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: 0.25em;
 }
 
 /* Only used to colour buttons until I can figure out how to override Bulma colours */
@@ -438,15 +439,15 @@ th .player {
 /* Raises modal screens so they overlay the move exploration buttons */
 /* Tooltips are z-index 100 to overlay other elements, so modal has to be higher */
 .modal {
-    z-index: 1000;
+  z-index: 1000;
 }
 
 /* For "new chat" indicator */
 .chevron-down {
-    position:absolute;
-    top:100vh;
-    transform:translateY(-100%);
-    width:100%;
-    background-color: var(--secondary-color-2-lighter);
-    z-index: 500;
+  position: absolute;
+  top: 100vh;
+  transform: translateY(-100%);
+  width: 100%;
+  background-color: var(--secondary-color-2-lighter);
+  z-index: 500;
 }
