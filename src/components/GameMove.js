@@ -636,7 +636,7 @@ function GameMove(props) {
             gameRef.current.me > -1
               ? data.game.players.find((p) => p.id === globalMe.id).settings
               : {},
-            globalMe.settings,
+            globalMe?.settings,
             gameRef,
             settingsSetter,
             gameSettingsSetter,
