@@ -19,32 +19,32 @@ function LogInOutButton(props) {
         console.log("usr: ", usr);
         const token = usr.signInUserSession.idToken.jwtToken;
         if (token !== null) {
-            userSetter(usr.signInUserSession);
-            try {
-              console.log("calling authQuery 'me' (small), with token: " + token);
-              const res = await fetch(API_ENDPOINT_AUTH, {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-                // Don't care about e.g. challenges, so size = small.
-                body: JSON.stringify({ query: "me", size: "small" }),
-              });
-              const result = await res.json();
-              if (result.statusCode !== 200) console.log(JSON.parse(result.body));
+          userSetter(usr.signInUserSession);
+          try {
+            console.log("calling authQuery 'me' (small), with token: " + token);
+            const res = await fetch(API_ENDPOINT_AUTH, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              // Don't care about e.g. challenges, so size = small.
+              body: JSON.stringify({ query: "me", size: "small" }),
+            });
+            const result = await res.json();
+            if (result.statusCode !== 200) console.log(JSON.parse(result.body));
+            else {
+              if (result === null) globalMeSetter({});
               else {
-                if (result === null) globalMeSetter({});
-                else {
-                  globalMeSetter(JSON.parse(result.body));
-                  console.log(JSON.parse(result.body));
-                }
+                globalMeSetter(JSON.parse(result.body));
+                console.log(JSON.parse(result.body));
               }
-            } catch (error) {
-              console.log(error);
             }
+          } catch (error) {
+            console.log(error);
           }
+        }
       } catch (error) {
         // not logged in, ok.
       }
@@ -61,8 +61,8 @@ function LogInOutButton(props) {
     showUserSettingsModalSetter(false);
     console.log("handleUserSettingsClose, cnt: ", cnt);
     if (cnt > 0) {
-        // Refresh globalMe
-        updatedSetter(!updated);
+      // Refresh globalMe
+      updatedSetter(!updated);
     }
   };
 

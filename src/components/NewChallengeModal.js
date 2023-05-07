@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext, Fragment } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  Fragment,
+} from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { cloneDeep } from "lodash";
@@ -29,7 +35,7 @@ function NewChallengeModal(props) {
   const [opponents, opponentsSetter] = useState([]);
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const groupVariantsRef = useRef({});
-  const [globalMe, ] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
 
   useEffect(() => {
     addResource(i18n.language);
@@ -135,13 +141,13 @@ function NewChallengeModal(props) {
     errorSetter("");
   };
 
-//   const handleStandingChallengeChange = (value) => {
-//     if (value === "open") {
-//       standingSetter(false);
-//     } else {
-//       standingSetter(true);
-//     }
-//   };
+  //   const handleStandingChallengeChange = (value) => {
+  //     if (value === "open") {
+  //       standingSetter(false);
+  //     } else {
+  //       standingSetter(true);
+  //     }
+  //   };
 
   const handleChangeOpponent = (data) => {
     let opps = [...opponents];

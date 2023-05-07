@@ -1,4 +1,11 @@
-import React, { Fragment, useEffect, useState, useRef, useContext, createContext } from "react";
+import React, {
+  Fragment,
+  useEffect,
+  useState,
+  useRef,
+  useContext,
+  createContext,
+} from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useParams, useNavigate } from "react-router-dom";
@@ -114,9 +121,7 @@ function setupGame(
     game0.canExplore = false;
   } else {
     game0.canSubmit =
-      game0.toMove !== "" &&
-      me &&
-      game0.players[game0.toMove].id === me.id;
+      game0.toMove !== "" && me && game0.players[game0.toMove].id === me.id;
     game0.canExplore = game0.toMove !== "" && game0.numPlayers === 2;
   }
   if (game0.sharedPieces) {
@@ -163,17 +168,21 @@ function setupGame(
 
   // If the game is over, generate the game record
   // TODO: Add "event" and "round" should those ever be implemented.
-  if ( (engine.gameover) && (engine.stack.length >= 2) ) {
-    gameRecSetter(engine.genRecord({
+  if (engine.gameover && engine.stack.length >= 2) {
+    gameRecSetter(
+      engine.genRecord({
         uid: game0.id,
-        players: game0.players.map(p => { return {
+        players: game0.players.map((p) => {
+          return {
             name: p.name,
             uid: p.id,
-        }}),
+          };
+        }),
         dateStart: new Date(engine.stack[0]._timestamp),
         dateEnd: new Date(engine.stack[engine.stack.length - 1]._timestamp),
-        unrated: ! game0.rated
-    }));
+        unrated: !game0.rated,
+      })
+    );
   }
 
   let history = [];
@@ -509,7 +518,7 @@ function GameMove(props) {
   const [submitting, submittingSetter] = useState(false);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
   const [newChat, newChatSetter] = useState(false);
-  const [globalMe, ] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
   const [gameRec, gameRecSetter] = useState(undefined);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
@@ -526,16 +535,16 @@ function GameMove(props) {
   // Array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
   const explorationRef = useRef(null);
   const [myMove, myMoveSetter] = useContext(MyTurnContext);
-//   if (myMove !== undefined) {
-//     console.log(`Fetched MyMoveContext`);
-//     console.log(JSON.stringify(myMove));
-//     console.log(myMove.length);
-//   } else {
-//     console.log("Could not find context");
-//   }
+  //   if (myMove !== undefined) {
+  //     console.log(`Fetched MyMoveContext`);
+  //     console.log(JSON.stringify(myMove));
+  //     console.log(myMove.length);
+  //   } else {
+  //     console.log("Could not find context");
+  //   }
 
   const { t, i18n } = useTranslation();
-//   const { state } = useLocation();
+  //   const { state } = useLocation();
   const { metaGame, gameID } = useParams();
 
   const gameDeets = gameinfo.get(metaGame);
@@ -983,10 +992,10 @@ function GameMove(props) {
         // setError(JSON.parse(result.body));
         throw JSON.parse(result.body);
       }
-      myMoveSetter((myMove) => [...myMove.filter(x => x.id !== gameID)])
+      myMoveSetter((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
       let game0 = JSON.parse(result.body);
-    //   console.log("In handleSubmit. game0:");
-    //   console.log(game0);
+      //   console.log("In handleSubmit. game0:");
+      //   console.log(game0);
       setupGame(
         game0,
         gameRef,
@@ -1069,77 +1078,83 @@ function GameMove(props) {
   };
 
   const handleInjection = async () => {
-    if ( (injectedState !== undefined) && (injectedState !== null) && (injectedState.length > 0) ) {
-        const usr = await Auth.currentAuthenticatedUser();
-        try {
-            let status;
-            if (usr.signInUserSession.idToken.jwtToken) {
-              const res = await fetch(API_ENDPOINT_AUTH, {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-                },
-                body: JSON.stringify({
-                  query: "set_game_state",
-                  pars: {
-                    id: gameID,
-                    newState: injectedState,
-                  },
-                }),
-              });
-              status = res.status;
-              if (status !== 200) {
-                const result = await res.json();
-                errorMessageRef.current = JSON.parse(result.body);
-                errorSetter(true);
-              } else {
-                const result = await res.json();
-                let game0 = JSON.parse(result.body);
-                setupGame(
-                  game0,
-                  gameRef,
-                  globalMe,
-                  partialMoveRenderRef,
-                  renderrepSetter,
-                  statusRef,
-                  movesRef,
-                  focusSetter,
-                  explorationRef,
-                  moveSetter,
-                  gameRecSetter
-                );
-              }
-            }
-          } catch (error) {
-            console.log(error);
-            errorMessageRef.current = error.message;
+    if (
+      injectedState !== undefined &&
+      injectedState !== null &&
+      injectedState.length > 0
+    ) {
+      const usr = await Auth.currentAuthenticatedUser();
+      try {
+        let status;
+        if (usr.signInUserSession.idToken.jwtToken) {
+          const res = await fetch(API_ENDPOINT_AUTH, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+            },
+            body: JSON.stringify({
+              query: "set_game_state",
+              pars: {
+                id: gameID,
+                newState: injectedState,
+              },
+            }),
+          });
+          status = res.status;
+          if (status !== 200) {
+            const result = await res.json();
+            errorMessageRef.current = JSON.parse(result.body);
             errorSetter(true);
+          } else {
+            const result = await res.json();
+            let game0 = JSON.parse(result.body);
+            setupGame(
+              game0,
+              gameRef,
+              globalMe,
+              partialMoveRenderRef,
+              renderrepSetter,
+              statusRef,
+              movesRef,
+              focusSetter,
+              explorationRef,
+              moveSetter,
+              gameRecSetter
+            );
           }
+        }
+      } catch (error) {
+        console.log(error);
+        errorMessageRef.current = error.message;
+        errorSetter(true);
+      }
 
-        gameRef.current.state = injectedState;
-        showInjectSetter(false);
+      gameRef.current.state = injectedState;
+      showInjectSetter(false);
     }
-  }
+  };
 
   const handleInjectChange = (e) => {
     injectedStateSetter(e.target.value);
-  }
+  };
 
   const navigate = useNavigate();
   const handleNextGame = () => {
     // Randomizing them because otherwise you can never just skip a game for a little later.
     // It will just keep returning you to the first game in the list.
     // TODO: Ideally, though, it would just cycle you through them, but then we'd need some state.
-    const others = myMove.filter(x => x.id !== gameID).sort(() => Math.random() - 0.5);
+    const others = myMove
+      .filter((x) => x.id !== gameID)
+      .sort(() => Math.random() - 0.5);
     if (others.length === 0) {
-        navigate("/");
+      navigate("/");
     } else {
-        const next = others[0];
-        navigate(`/move/${next.metaGame}/${next.id}`);
+      const next = others[0];
+      navigate(`/move/${next.metaGame}/${next.id}`);
     }
-  }
+  };
 
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
@@ -1163,7 +1178,11 @@ function GameMove(props) {
       <article>
         <div className="columns">
           {/***************** MoveEntry *****************/}
-          <div className={`column ${isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"}`}>
+          <div
+            className={`column ${
+              isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
+            }`}
+          >
             <GameStatus
               status={statusRef.current}
               settings={settings}
@@ -1189,23 +1208,29 @@ function GameMove(props) {
                 handleReset,
               ]}
             />
-            {( (toMove !== "") || (gameRec === undefined) ) ? null :
+            {toMove !== "" || gameRec === undefined ? null : (
               <DownloadDataUri
                 filename={`AbstractPlay-${metaGame}-${gameID}.json`}
                 label="Download completed game record"
-                uri={gameRec === undefined ? null : `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(gameRec))}`}
+                uri={
+                  gameRec === undefined
+                    ? null
+                    : `data:text/json;charset=utf-8,${encodeURIComponent(
+                        JSON.stringify(gameRec)
+                      )}`
+                }
               />
-            }
-            {toMove === "" ? null :
-              <div className="control" style={{paddingTop: "1em"}}>
+            )}
+            {toMove === "" ? null : (
+              <div className="control" style={{ paddingTop: "1em" }}>
                 <button className="button apButton" onClick={handleNextGame}>
                   <span>Next game ({myMove.length})</span>
-                    <span className="icon">
-                      <i className="fa fa-forward"></i>
-                    </span>
+                  <span className="icon">
+                    <i className="fa fa-forward"></i>
+                  </span>
                 </button>
               </div>
-            }
+            )}
           </div>
           {/***************** Board *****************/}
           <div className="column">
@@ -1237,44 +1262,60 @@ function GameMove(props) {
               </button>
               <button
                 className="fabtn align-right"
-                onClick={() => {showGameDetailsSetter(true)}}
+                onClick={() => {
+                  showGameDetailsSetter(true);
+                }}
                 title={t("GameInfo")}
               >
                 <i className="fa fa-info"></i>
               </button>
               <button
                 className="fabtn align-right"
-                onClick={() => {showGameDumpSetter(true)}}
+                onClick={() => {
+                  showGameDumpSetter(true);
+                }}
                 title={t("DebugModal")}
               >
                 <i className="fa fa-bug"></i>
               </button>
               <button
                 className="fabtn align-right"
-                onClick={() => {isZoomedSetter(!isZoomed)}}
+                onClick={() => {
+                  isZoomedSetter(!isZoomed);
+                }}
                 title={t("ToggleZoom")}
               >
-              {isZoomed ?
-                <i className="fa fa-search-minus"></i>
-                :
-                <i className="fa fa-search-plus"></i>
-              }
+                {isZoomed ? (
+                  <i className="fa fa-search-minus"></i>
+                ) : (
+                  <i className="fa fa-search-plus"></i>
+                )}
               </button>
-              {!globalMe || globalMe.admin !== true ? "" :
+              {!globalMe || globalMe.admin !== true ? (
+                ""
+              ) : (
                 <button
                   className="fabtn align-right"
-                  onClick={() => {showInjectSetter(true)}}
+                  onClick={() => {
+                    showInjectSetter(true);
+                  }}
                   title={"Inject state"}
-                  >
+                >
                   <i className="fa fa-magic"></i>
                 </button>
-              }
+              )}
             </div>
           </div>
           {/***************** GameMoves *****************/}
           {/* Hidden when zooming */}
-          {isZoomed ? "" :
-            <div className={`column ${isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"}`}>
+          {isZoomed ? (
+            ""
+          ) : (
+            <div
+              className={`column ${
+                isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
+              }`}
+            >
               <GameMoves
                 focus={focus}
                 game={game}
@@ -1282,7 +1323,7 @@ function GameMove(props) {
                 handleGameMoveClick={handleGameMoveClick}
               />
             </div>
-          }
+          )}
         </div>
         {/* columns */}
         <div className="columns">
@@ -1323,9 +1364,7 @@ function GameMove(props) {
           </div>
         </div>
         {/* columns */}
-        {!newChat ? "" :
-            <NewChatMarker />
-        }
+        {!newChat ? "" : <NewChatMarker />}
         <RenderOptionsModal
           show={showSettings}
           game={game}
@@ -1378,28 +1417,30 @@ function GameMove(props) {
         </Modal>
         <Modal
           show={showGameDetails}
-          title={t("GameInfoFor", {metaGame: gameDeets.name})}
+          title={t("GameInfoFor", { metaGame: gameDeets.name })}
           buttons={[
             {
               label: t("Close"),
-              action: () => {showGameDetailsSetter(false)}
+              action: () => {
+                showGameDetailsSetter(false);
+              },
             },
           ]}
         >
-            <div className="content">
+          <div className="content">
             <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-                {gameEngine.description() + "\n\n" + designerString}
+              {gameEngine.description() + "\n\n" + designerString}
             </ReactMarkdown>
             <ul className="contained">
-                {gameDeets.urls.map((l, i) => (
+              {gameDeets.urls.map((l, i) => (
                 <li key={i}>
-                    <a href={l} target="_blank" rel="noopener noreferrer">
+                  <a href={l} target="_blank" rel="noopener noreferrer">
                     {l}
-                    </a>
+                  </a>
                 </li>
-                ))}
+              ))}
             </ul>
-            </div>
+          </div>
         </Modal>
         <Modal
           show={showGameDump}
@@ -1407,27 +1448,43 @@ function GameMove(props) {
           buttons={[
             {
               label: t("Close"),
-              action: () => {showGameDumpSetter(false)}
+              action: () => {
+                showGameDumpSetter(false);
+              },
             },
           ]}
         >
-            <div className="content">
-                <p>If there's a problem with your game, a developer may ask you to come to this page and send them the current game state. You can either click the "Copy" link below to copy the text to your clipboard and then paste it somewhere, or you can click the "Download" button to save a text file to your computer, which you can then send to the developers. Thank you!</p>
-                { ( (gameRef === null) || (gameRef.current === null) || (gameRef.current.state === null)) ? "" :
-                    <Fragment>
-                        <ClipboardCopy
-                            copyText={gameRef.current.state}
-                        />
-                        <div className="field">
-                            <div className="control">
-                                <a href={`data:text/json;charset=utf-8,${encodeURIComponent(gameRef.current.state)}`} download="AbstractPlay-Debug.json">
-                                    <button className="button">{t("Download")}</button>
-                                </a>
-                            </div>
-                        </div>
-                    </Fragment>
-            }
-            </div>
+          <div className="content">
+            <p>
+              If there's a problem with your game, a developer may ask you to
+              come to this page and send them the current game state. You can
+              either click the "Copy" link below to copy the text to your
+              clipboard and then paste it somewhere, or you can click the
+              "Download" button to save a text file to your computer, which you
+              can then send to the developers. Thank you!
+            </p>
+            {gameRef === null ||
+            gameRef.current === null ||
+            gameRef.current.state === null ? (
+              ""
+            ) : (
+              <Fragment>
+                <ClipboardCopy copyText={gameRef.current.state} />
+                <div className="field">
+                  <div className="control">
+                    <a
+                      href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                        gameRef.current.state
+                      )}`}
+                      download="AbstractPlay-Debug.json"
+                    >
+                      <button className="button">{t("Download")}</button>
+                    </a>
+                  </div>
+                </div>
+              </Fragment>
+            )}
+          </div>
         </Modal>
         <Modal
           show={showInject}
@@ -1435,23 +1492,42 @@ function GameMove(props) {
           buttons={[
             {
               label: t("Close"),
-              action: () => {showInjectSetter(false)}
+              action: () => {
+                showInjectSetter(false);
+              },
             },
           ]}
         >
-            <div className="content">
-                <p>If you are seeing this and are not a developer, please let an admin know immediately.</p>
-                <p>This is a destructive function. Pasting code here will obliterate the existing game state and cannot be undone. You have been warned.</p>
-                <div className="field">
-                    <label className="label" htmlFor="newState">JSON to inject</label>
-                    <div className="control">
-                        <textarea className="textarea" name="newState" placeholder="Paste JSON here" value={injectedState} onChange={handleInjectChange} />
-                    </div>
-                    <div className="control">
-                        <button className="button is-danger" onClick={handleInjection}>Inject JSON!</button>
-                    </div>
-                </div>
+          <div className="content">
+            <p>
+              If you are seeing this and are not a developer, please let an
+              admin know immediately.
+            </p>
+            <p>
+              This is a destructive function. Pasting code here will obliterate
+              the existing game state and cannot be undone. You have been
+              warned.
+            </p>
+            <div className="field">
+              <label className="label" htmlFor="newState">
+                JSON to inject
+              </label>
+              <div className="control">
+                <textarea
+                  className="textarea"
+                  name="newState"
+                  placeholder="Paste JSON here"
+                  value={injectedState}
+                  onChange={handleInjectChange}
+                />
+              </div>
+              <div className="control">
+                <button className="button is-danger" onClick={handleInjection}>
+                  Inject JSON!
+                </button>
+              </div>
             </div>
+          </div>
         </Modal>
       </article>
     );

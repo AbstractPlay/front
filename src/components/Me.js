@@ -269,32 +269,34 @@ function Me(props) {
 
   useEffect(() => {
     if (globalMe && globalMe.games) {
-        let games = globalMe.games;
-        if (games === undefined) games = [];
-        myMoveSetter([]);
-        waitingSetter([]);
-        overSetter([]);
-        for (const game of games) {
-          if (Array.isArray(game.toMove)) {
-            let found = false;
-            for (let i = 0; i < game.players.length; i++) {
-              if (game.players[i].id === globalMe.id) {
-                if (game.toMove[i]) {
-                  myMoveSetter((myMove) => [...myMove, game]);
-                  found = true;
-                }
+      let games = globalMe.games;
+      if (games === undefined) games = [];
+      myMoveSetter([]);
+      waitingSetter([]);
+      overSetter([]);
+      for (const game of games) {
+        if (Array.isArray(game.toMove)) {
+          let found = false;
+          for (let i = 0; i < game.players.length; i++) {
+            if (game.players[i].id === globalMe.id) {
+              if (game.toMove[i]) {
+                myMoveSetter((myMove) => [...myMove, game]);
+                found = true;
               }
             }
-            if (!found) waitingSetter((waiting) => [...waiting, game]);
-          } else {
-            if (game.toMove === "" || game.toMove === null) overSetter((over) => [...over, game]);
-            else if (game.players[game.toMove].id === globalMe.id) myMoveSetter((myMove) => [...myMove, game]);
-            else waitingSetter((waiting) => [...waiting, game]);
           }
+          if (!found) waitingSetter((waiting) => [...waiting, game]);
+        } else {
+          if (game.toMove === "" || game.toMove === null)
+            overSetter((over) => [...over, game]);
+          else if (game.players[game.toMove].id === globalMe.id)
+            myMoveSetter((myMove) => [...myMove, game]);
+          else waitingSetter((waiting) => [...waiting, game]);
         }
-        // console.log(`Passing myMove as context: ${JSON.stringify(myMove)}`);
-        // console.log(myMove.length);
-        myTurnSetter(myMove);
+      }
+      // console.log(`Passing myMove as context: ${JSON.stringify(myMove)}`);
+      // console.log(myMove.length);
+      myTurnSetter(myMove);
     }
   }, [globalMe, myTurnSetter, JSON.stringify(myTurn), JSON.stringify(myMove)]);
 
@@ -326,7 +328,9 @@ function Me(props) {
       i18n.changeLanguage(lng);
       console.log(`changed language  to ${lng}`);
     }
-    let challengesResponded = globalMe.challengesIssued.concat(globalMe.challengesAccepted);
+    let challengesResponded = globalMe.challengesIssued.concat(
+      globalMe.challengesAccepted
+    );
     console.log("challengesIssued", globalMe.challengesIssued);
     console.log("challengesAccepted", globalMe.challengesAccepted);
     console.log("standingChallenges", globalMe.standingChallenges);
@@ -353,10 +357,10 @@ function Me(props) {
                   <ul>
                     {myMove.map((item) => (
                       <GameItem
-                          item={item}
-                          key={item.id}
-                          canMove={true}
-                          stateSetter={props.stateSetter}
+                        item={item}
+                        key={item.id}
+                        canMove={true}
+                        stateSetter={props.stateSetter}
                       />
                     ))}
                   </ul>
@@ -549,7 +553,8 @@ function Me(props) {
           buttons={[
             {
               label:
-                (challenge.challenger ? challenge.challenger.id : "") === globalMe.id
+                (challenge.challenger ? challenge.challenger.id : "") ===
+                globalMe.id
                   ? t("RevokeChallenge")
                   : t("RevokeAcceptance"),
               action: handleChallengeRevoke,

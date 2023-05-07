@@ -74,36 +74,39 @@ function NewProfile(props) {
           dummy: usr.signInUserSession.idToken.jwtToken,
         });
         try {
-            const token = usr.signInUserSession.idToken.jwtToken;
-            if (token !== null) {
-                try {
-                  console.log("calling authQuery 'me' (small), with token: " + token);
-                  const res = await fetch(API_ENDPOINT_AUTH, {
-                    method: "POST",
-                    headers: {
-                      Accept: "application/json",
-                      "Content-Type": "application/json",
-                      Authorization: `Bearer ${token}`,
-                    },
-                    // Don't care about e.g. challenges, so size = small.
-                    body: JSON.stringify({ query: "me", size: "small" }),
-                  });
-                  const result = await res.json();
-                  if (result.statusCode !== 200) console.log(JSON.parse(result.body));
-                  else {
-                    if (result === null) globalMeSetter({});
-                    else {
-                      globalMeSetter(JSON.parse(result.body));
-                      console.log(JSON.parse(result.body));
-                    }
-                  }
-                } catch (error) {
-                  console.log(error);
+          const token = usr.signInUserSession.idToken.jwtToken;
+          if (token !== null) {
+            try {
+              console.log(
+                "calling authQuery 'me' (small), with token: " + token
+              );
+              const res = await fetch(API_ENDPOINT_AUTH, {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                // Don't care about e.g. challenges, so size = small.
+                body: JSON.stringify({ query: "me", size: "small" }),
+              });
+              const result = await res.json();
+              if (result.statusCode !== 200)
+                console.log(JSON.parse(result.body));
+              else {
+                if (result === null) globalMeSetter({});
+                else {
+                  globalMeSetter(JSON.parse(result.body));
+                  console.log(JSON.parse(result.body));
                 }
               }
-          } catch (error) {
-            // not logged in, ok.
+            } catch (error) {
+              console.log(error);
+            }
           }
+        } catch (error) {
+          // not logged in, ok.
+        }
       } catch (err) {
         setError(err.message);
       }

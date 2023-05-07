@@ -15,7 +15,7 @@ function Ratings(props) {
   const [update, updateSetter] = useState(0);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
   const { metaGame } = useParams();
-  const [globalMe, ] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
 
   useEffect(() => {
     async function fetchData() {

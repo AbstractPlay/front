@@ -55,14 +55,19 @@ function MoveEntry(props) {
   };
 
   useEffect(() => {
-    if ( (move.valid) && (move.complete === 0) && (move.move.length > 0) ) {
-        moveStateSetter("is-warning");
-    } else if (focus?.exPath.length > 0 && game.canSubmit && focus?.exPath.length === 1 && !submitting) {
-        moveStateSetter("is-warning");
-    } else if ( (move.move.length > 0) || (! move.valid) ) {
-        moveStateSetter("is-danger");
+    if (move.valid && move.complete === 0 && move.move.length > 0) {
+      moveStateSetter("is-warning");
+    } else if (
+      focus?.exPath.length > 0 &&
+      game.canSubmit &&
+      focus?.exPath.length === 1 &&
+      !submitting
+    ) {
+      moveStateSetter("is-warning");
+    } else if (move.move.length > 0 || !move.valid) {
+      moveStateSetter("is-danger");
     } else {
-        moveStateSetter("is-success");
+      moveStateSetter("is-success");
     }
   }, [move, focus, game, submitting]);
 

@@ -17,7 +17,7 @@ function UserSettingsModal(props) {
   const [changingEMail, changingEMailSetter] = useState(false);
   const [changingCodeSent, changingCodeSentSetter] = useState(false);
   /*eslint-disable no-unused-vars*/
-//   const [changingLanguage, changingLanguageSetter] = useState(false);
+  //   const [changingLanguage, changingLanguageSetter] = useState(false);
   const [name, nameSetter] = useState("");
   const [badname, badnameSetter] = useState("");
   const [nameError, nameErrorSetter] = useState(false);
@@ -34,7 +34,7 @@ function UserSettingsModal(props) {
     if (show) {
       changingNameSetter(false);
       changingEMailSetter(false);
-    //   changingLanguageSetter(false);
+      //   changingLanguageSetter(false);
       nameSetter("");
       languageSetter("en");
       emailSetter("");
@@ -45,10 +45,10 @@ function UserSettingsModal(props) {
         notificationsSetter(globalMe.settings.all.notifications);
       } else {
         notificationsSetter({
-            yourturn: true,
-            challenges: true,
-            gameStart: true,
-            gameEnd: true,
+          yourturn: true,
+          challenges: true,
+          gameStart: true,
+          gameEnd: true,
         });
       }
     }
@@ -86,7 +86,7 @@ function UserSettingsModal(props) {
   const handleNameChangeCancelClick = () => {
     nameSetter("");
     changingNameSetter(false);
-  }
+  };
 
   const logout = async () => {
     await Auth.signOut();
@@ -94,13 +94,13 @@ function UserSettingsModal(props) {
     handleUserSettingsClose();
   };
 
-//   const handleLanguageChangeSubmitClick = async () => {
-//     changingLanguageSetter(false);
-//     await handleSettingChangeSubmit("language", language);
-//     i18n.changeLanguage(language);
-//     languageSetter(language);
-//     updatedSetter((updated) => updated + 1);
-//   };
+  //   const handleLanguageChangeSubmitClick = async () => {
+  //     changingLanguageSetter(false);
+  //     await handleSettingChangeSubmit("language", language);
+  //     i18n.changeLanguage(language);
+  //     languageSetter(language);
+  //     updatedSetter((updated) => updated + 1);
+  //   };
 
   const handleSettingChangeSubmit = async (attr, value) => {
     const usr = await Auth.currentAuthenticatedUser();
@@ -122,13 +122,13 @@ function UserSettingsModal(props) {
   };
 
   const handleEMailChangeClick = () => {
-    emailSetter(user.signInUserSession.idToken.payload.email)
+    emailSetter(user.signInUserSession.idToken.payload.email);
     changingEMailSetter(true);
   };
 
-//   const handleLanguageChangeClick = () => {
-//     changingLanguageSetter(true);
-//   };
+  //   const handleLanguageChangeClick = () => {
+  //     changingLanguageSetter(true);
+  //   };
 
   const handleEMailChangeSubmitClick = async () => {
     const usr = await Auth.currentAuthenticatedUser();
@@ -140,7 +140,7 @@ function UserSettingsModal(props) {
   const handleEMailChangeCancelClick = () => {
     emailSetter("");
     changingEMailSetter(false);
-  }
+  };
 
   const handleEMailChangeCodeSubmitClick = async () => {
     await Auth.currentAuthenticatedUser();
@@ -153,35 +153,39 @@ function UserSettingsModal(props) {
 
   const handleNotifyCheckChange = async (key) => {
     try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
-        newSettings.all.notifications = notifications;
-        newSettings.all.notifications[key] = ! newSettings.all.notifications[key];
-        console.log(`About to save the following settings:\n${JSON.stringify(newSettings)}`);
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+      const usr = await Auth.currentAuthenticatedUser();
+      const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
+      newSettings.all.notifications = notifications;
+      newSettings.all.notifications[key] = !newSettings.all.notifications[key];
+      console.log(
+        `About to save the following settings:\n${JSON.stringify(newSettings)}`
+      );
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "update_user_settings",
+          pars: {
+            settings: newSettings,
           },
-          body: JSON.stringify({
-            query: "update_user_settings",
-            pars: {
-              settings: newSettings,
-            },
-          }),
-        });
-        if (res.status !== 200) {
-            const result = await res.json();
-            console.log(`An error occured while saving notification settings:\n${result}`);
-        } else {
-            updatedSetter((updated) => updated + 1);
-        }
-    } catch (error) {
-        props.setError(error);
+        }),
+      });
+      if (res.status !== 200) {
+        const result = await res.json();
+        console.log(
+          `An error occured while saving notification settings:\n${result}`
+        );
+      } else {
+        updatedSetter((updated) => updated + 1);
       }
-  }
+    } catch (error) {
+      props.setError(error);
+    }
+  };
 
   useEffect(() => {
     async function fetchAuth() {
@@ -190,37 +194,37 @@ function UserSettingsModal(props) {
         userSetter(usr);
         const token = usr.signInUserSession.idToken.jwtToken;
         if (token !== null) {
-            try {
-              console.log("calling authQuery 'me' (small), with token: " + token);
-              const res = await fetch(API_ENDPOINT_AUTH, {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-                // Don't care about e.g. challenges, so size = small.
-                body: JSON.stringify({ query: "me", size: "small" }),
-              });
-              const result = await res.json();
-              if (result.statusCode !== 200) console.log(JSON.parse(result.body));
+          try {
+            console.log("calling authQuery 'me' (small), with token: " + token);
+            const res = await fetch(API_ENDPOINT_AUTH, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              // Don't care about e.g. challenges, so size = small.
+              body: JSON.stringify({ query: "me", size: "small" }),
+            });
+            const result = await res.json();
+            if (result.statusCode !== 200) console.log(JSON.parse(result.body));
+            else {
+              if (result === null) globalMeSetter({});
               else {
-                if (result === null) globalMeSetter({});
-                else {
-                  globalMeSetter(JSON.parse(result.body));
-                  console.log(JSON.parse(result.body));
-                }
+                globalMeSetter(JSON.parse(result.body));
+                console.log(JSON.parse(result.body));
               }
-            } catch (error) {
-              console.log(error);
             }
+          } catch (error) {
+            console.log(error);
           }
+        }
       } catch (error) {
         // not logged in, ok.
       }
     }
     if (show) {
-        fetchAuth();
+      fetchAuth();
     }
   }, [globalMeSetter, updated, show]);
 
@@ -245,67 +249,62 @@ function UserSettingsModal(props) {
           </label>
           <div className="control">
             {globalMe === null ? (
-                <Spinner />
+              <Spinner />
             ) : changingName ? (
-                <input
+              <input
                 className="input is-small"
                 name="user_settings_name"
                 id="user_settings_name"
                 type="text"
                 value={name}
                 onChange={(e) => {
-                    nameErrorSetter(false);
-                    nameSetter(e.target.value);
+                  nameErrorSetter(false);
+                  nameSetter(e.target.value);
                 }}
-                />
+              />
             ) : (
-                globalMe.name
+              globalMe.name
             )}
           </div>
           <div className="control is-grouped">
             {globalMe === null ? (
-                ""
+              ""
             ) : changingName ? (
-                <Fragment>
+              <Fragment>
                 <button
-                className="button is-small apButton"
-                onClick={handleNameChangeSubmitClick}
+                  className="button is-small apButton"
+                  onClick={handleNameChangeSubmitClick}
                 >
-                {t("Submit")}
+                  {t("Submit")}
                 </button>
                 <button
-                className="button is-small is-danger"
-                onClick={handleNameChangeCancelClick}
+                  className="button is-small is-danger"
+                  onClick={handleNameChangeCancelClick}
                 >
-                {t("Cancel")}
+                  {t("Cancel")}
                 </button>
-                </Fragment>
+              </Fragment>
             ) : (
-                <button
+              <button
                 className="button is-small apButton"
                 onClick={handleNameChangeClick}
-                >
+              >
                 {t("Change")}
-                </button>
+              </button>
             )}
           </div>
           <p className="help">{t("DisplayNameHelp")}</p>
           {globalMe === null || !changingName ? (
             ""
-            ) : (
+          ) : (
             <Fragment>
-                <p
-                className={
-                    "help " +
-                    (nameError ? "is-danger" : "is-primary")
-                }
-                >
+              <p className={"help " + (nameError ? "is-danger" : "is-primary")}>
                 {nameError
-                    ? t("DisplayNameError", { name: badname })
-                    : t("DisplayNameChange")}
-                </p>
+                  ? t("DisplayNameError", { name: badname })
+                  : t("DisplayNameChange")}
+              </p>
             </Fragment>
-            )}
+          )}
         </div>
         {/********************* e-mail *********************/}
         <div className="field" key="email">
@@ -314,116 +313,114 @@ function UserSettingsModal(props) {
           </label>
           <div className="control">
             {globalMe === null ? (
-                <Spinner />
+              <Spinner />
             ) : changingEMail ? (
-                <input
-                  className="input is-small"
-                  name="user_settings_email"
-                  id="user_settings_email"
-                  type="text"
-                  value={email}
-                  onChange={(e) => emailSetter(e.target.value)}
-                />
+              <input
+                className="input is-small"
+                name="user_settings_email"
+                id="user_settings_email"
+                type="text"
+                value={email}
+                onChange={(e) => emailSetter(e.target.value)}
+              />
             ) : (
-                user?.signInUserSession.idToken.payload.email
+              user?.signInUserSession.idToken.payload.email
             )}
           </div>
           <div className="control">
             {globalMe === null ? (
-                ""
+              ""
             ) : changingEMail ? (
-                changingCodeSent ? (
+              changingCodeSent ? (
                 ""
-                ) : (
-                    <Fragment>
-                <button
+              ) : (
+                <Fragment>
+                  <button
                     className="button is-small apButton"
                     onClick={handleEMailChangeSubmitClick}
-                >
+                  >
                     {t("Submit")}
-                </button>
-                <button
-                className="button is-small is-danger"
-                onClick={handleEMailChangeCancelClick}
-                >
-                {t("Cancel")}
-                </button>
+                  </button>
+                  <button
+                    className="button is-small is-danger"
+                    onClick={handleEMailChangeCancelClick}
+                  >
+                    {t("Cancel")}
+                  </button>
                 </Fragment>
-                )
+              )
             ) : (
-                <button
-                  className="button is-small apButton"
-                  onClick={handleEMailChangeClick}
-                >
+              <button
+                className="button is-small apButton"
+                onClick={handleEMailChangeClick}
+              >
                 {t("Change")}
-                </button>
+              </button>
             )}
           </div>
-            {/********************* e-mail confirmation code *********************/}
-            {changingCodeSent ? (
+          {/********************* e-mail confirmation code *********************/}
+          {changingCodeSent ? (
             <div className="field">
-              <label
-                    className="label"
-                    htmlFor="user_settings_email_code"
-              >
-                    {t("EMailCode")}:
-                </label>
-                <div className="control">
+              <label className="label" htmlFor="user_settings_email_code">
+                {t("EMailCode")}:
+              </label>
+              <div className="control">
                 {globalMe === null ? (
-                    <Spinner />
+                  <Spinner />
                 ) : (
-                    <input
+                  <input
                     className="input is-small"
                     name="email"
                     id="user_settings_email_code"
                     type="text"
                     value={emailCode}
                     onChange={(e) => emailCodeSetter(e.target.value)}
-                    />
+                  />
                 )}
-                </div>
-                <div className="control">
+              </div>
+              <div className="control">
                 {globalMe === null ? (
-                    ""
+                  ""
                 ) : changingEMail ? (
-                    <button
+                  <button
                     className="button is-small apButton"
                     onClick={handleEMailChangeCodeSubmitClick}
-                    >
+                  >
                     {t("Submit")}
-                    </button>
+                  </button>
                 ) : (
-                    <button
+                  <button
                     className="button is-small apButton"
                     onClick={handleEMailChangeClick}
-                    >
+                  >
                     {t("Change")}
-                    </button>
+                  </button>
                 )}
-                </div>
-                <p className="help is-primary">{t("EMailCodeHelp")}</p>
+              </div>
+              <p className="help is-primary">{t("EMailCodeHelp")}</p>
             </div>
-            ) : (
+          ) : (
             ""
-            )}
+          )}
         </div>
         {/********************* notifications *********************/}
         <div className="field" key="notifications">
-            <label className="label">Notification settings</label>
-            {! notifications ? "" :
-            ["challenges", "gameStart", "gameEnd", "yourturn"].map((key) =>
+          <label className="label">Notification settings</label>
+          {!notifications
+            ? ""
+            : ["challenges", "gameStart", "gameEnd", "yourturn"].map((key) => (
                 <div className="control" key={key}>
-                    <label className="checkbox">
-                        <input
-                          type="checkbox"
-                          name={key}
-                          checked={notifications[key]}
-                          onChange={() => handleNotifyCheckChange(key)}
-                        />
-                        {t(`NotifyLabel-${key}`)}
-                    </label>
+                  <label className="checkbox">
+                    <input
+                      type="checkbox"
+                      name={key}
+                      checked={notifications[key]}
+                      onChange={() => handleNotifyCheckChange(key)}
+                    />
+                    {t(`NotifyLabel-${key}`)}
+                  </label>
                 </div>
-            )}
+              ))}
         </div>
 
         {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above
@@ -453,7 +450,7 @@ function UserSettingsModal(props) {
         */}
 
         {/********************* Log out *********************/}
-        <div className="control" style={{float: "right"}}>
+        <div className="control" style={{ float: "right" }}>
           <button
             className="button is-small apButton"
             onClick={logout}

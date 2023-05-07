@@ -23,8 +23,9 @@ function Navbar(props) {
       const token = usr.signInUserSession.idToken.jwtToken;
       if (token !== null) loggedinSetter(true);
     }
-    fetchAuth()
-    .catch(() => { /* Not authenticated, and that's OK */ });
+    fetchAuth().catch(() => {
+      /* Not authenticated, and that's OK */
+    });
   }, []);
 
   return (
@@ -32,8 +33,7 @@ function Navbar(props) {
       <div className="navbar-brand">
         <div className="navbar-item">
           <Link to="/">
-          {process.env.REACT_APP_REAL_MODE === "production"
-           ?
+            {process.env.REACT_APP_REAL_MODE === "production" ? (
               <img
                 src={logo}
                 alt="Abstract Play logo"
@@ -41,9 +41,13 @@ function Navbar(props) {
                 height="auto"
                 style={{ maxHeight: "none" }}
               />
-           :
-             <span>Abstract Play<br/>DEVELOPMENT Server</span>
-          }
+            ) : (
+              <span>
+                Abstract Play
+                <br />
+                DEVELOPMENT Server
+              </span>
+            )}
           </Link>
         </div>
         <a

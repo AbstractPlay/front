@@ -30,7 +30,7 @@ function Bones(props) {
   const [token, tokenSetter] = useState(null);
   const [update] = useState(0);
   const [myMove, myMoveSetter] = useState([]);
-  const [globalMe, globalMeSetter] = useState(null)
+  const [globalMe, globalMeSetter] = useState(null);
 
   useEffect(() => {
     const awsconfig = {
@@ -85,51 +85,50 @@ function Bones(props) {
   if (!authed) return <Spinner />;
   else
     return (
-    <MeContext.Provider value={[globalMe, globalMeSetter]}>
-      <Router>
-        <Navbar />
-        <section className="section" id="main">
-        <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
-          <Routes>
-            <Route path="/about" element={<About token={token} />} />
-            <Route
-              path="/games/:metaGame?"
-              element={<MetaContainer token={token} />}
-            />
-            <Route
-              path="/challenges/:metaGame"
-              element={<StandingChallenges />}
-            />
-            <Route
-              path="/listgames/:gameState/:metaGame"
-              element={<ListGames update={update} />}
-            />
-            <Route
-              path="/ratings/:metaGame"
-              element={<Ratings update={update} />}
-            />
-            <Route
-              path="/move/:metaGame/:gameID"
-              element={<GameMove update={update} />}
-            />
-            <Route
-              path="/legal"
-              element={<Legal token={token} update={update} />}
-            />
-            <Route
-              path="/"
-              element={<Welcome token={token} update={update} />}
-            />
-          </Routes>
-        </MyTurnContext.Provider>
-        </section>
-        {process.env.REACT_APP_REAL_MODE === "production"
-         ?
-           <Footer />
-         :
-           <FooterDev />
-        }
-      </Router>
+      <MeContext.Provider value={[globalMe, globalMeSetter]}>
+        <Router>
+          <Navbar />
+          <section className="section" id="main">
+            <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
+              <Routes>
+                <Route path="/about" element={<About token={token} />} />
+                <Route
+                  path="/games/:metaGame?"
+                  element={<MetaContainer token={token} />}
+                />
+                <Route
+                  path="/challenges/:metaGame"
+                  element={<StandingChallenges />}
+                />
+                <Route
+                  path="/listgames/:gameState/:metaGame"
+                  element={<ListGames update={update} />}
+                />
+                <Route
+                  path="/ratings/:metaGame"
+                  element={<Ratings update={update} />}
+                />
+                <Route
+                  path="/move/:metaGame/:gameID"
+                  element={<GameMove update={update} />}
+                />
+                <Route
+                  path="/legal"
+                  element={<Legal token={token} update={update} />}
+                />
+                <Route
+                  path="/"
+                  element={<Welcome token={token} update={update} />}
+                />
+              </Routes>
+            </MyTurnContext.Provider>
+          </section>
+          {process.env.REACT_APP_REAL_MODE === "production" ? (
+            <Footer />
+          ) : (
+            <FooterDev />
+          )}
+        </Router>
       </MeContext.Provider>
     );
 }
