@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
+import { MeContext } from "../pages/Skeleton";
 
 function ChallengeResponse(props) {
   const { t } = useTranslation();
+  const [globalMe, ] = useContext(MeContext)
 
   var players = "";
   const challenge = props.challenge;
   const game = gameinfo.get(challenge.metaGame);
   const otherPlayers = challenge.players
-    .filter((x) => x.id !== props.me.id)
+    .filter((x) => x.id !== globalMe.id)
     .map((x) => x.name);
   const all = challenge.players
     .map((item) => item.name)

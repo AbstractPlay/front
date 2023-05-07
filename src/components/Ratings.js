@@ -1,61 +1,21 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, useContext, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Auth } from "aws-amplify";
+import { MeContext } from "../pages/Skeleton";
 import Spinner from "./Spinner";
 import NewChallengeModal from "./NewChallengeModal";
 
 function Ratings(props) {
   const { t } = useTranslation();
   const [ratings, ratingsSetter] = useState(null);
-  const [me, meSetter] = useState(null);
   const [opponent, opponentSetter] = useState(null);
   const [update, updateSetter] = useState(0);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
   const { metaGame } = useParams();
-
-  // In case you are logged in get some info, so that we can show your games to you correctly
-  useEffect(() => {
-    async function fetchData() {
-      let token = null;
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        token = usr.signInUserSession.idToken.jwtToken;
-        console.log("idToken", usr.signInUserSession.idToken);
-      } catch (error) {
-        token = null;
-      }
-      if (token !== null) {
-        try {
-          console.log("calling authQuery 'me', with token: " + token);
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            // Don't care about e.g. challenges, so size = small.
-            body: JSON.stringify({ query: "me", size: "small" }),
-          });
-          const result = await res.json();
-          if (result.statusCode !== 200) console.log(JSON.parse(result.body));
-          else {
-            if (result === null) meSetter({});
-            else {
-              meSetter(JSON.parse(result.body));
-              console.log(JSON.parse(result.body));
-            }
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-    fetchData();
-  }, [update]);
+  const [globalMe, ] = useContext(MeContext);
 
   useEffect(() => {
     async function fetchData() {
@@ -100,7 +60,7 @@ function Ratings(props) {
           query: "new_challenge",
           pars: {
             ...challenge,
-            challenger: { id: me.id, name: me.name },
+            challenger: { id: globalMe.id, name: globalMe.name },
           },
         }),
       });
@@ -146,7 +106,7 @@ function Ratings(props) {
                       <td>{rating.rating.wins}</td>
                       <td>{rating.rating.draws}</td>
                       <td>
-                        {me && me.id === rating.id ? (
+                        {globalMe && globalMe.id === rating.id ? (
                           ""
                         ) : (
                           <button
@@ -169,7 +129,6 @@ function Ratings(props) {
             </table>
             <NewChallengeModal
               show={showNewChallengeModal}
-              id={me?.id}
               opponent={opponent}
               fixedMetaGame={metaGame}
               handleClose={handleNewChallengeClose}

@@ -62,13 +62,13 @@ function UserSettingsModal(props) {
     } else {
       changingNameSetter(false);
       await handleSettingChangeSubmit("name", name);
-      updatedSetter(updated + 1);
+      updatedSetter((updated) => updated + 1);
     }
   };
 
   const logout = async () => {
     Auth.signOut();
-    updatedSetter(updated + 1);
+    updatedSetter((updated) => updated + 1);
   };
 
   /*eslint-disable no-unused-vars*/
@@ -77,7 +77,7 @@ function UserSettingsModal(props) {
     await handleSettingChangeSubmit("language", language);
     i18n.changeLanguage(language);
     languageSetter(language);
-    updatedSetter(updated + 1);
+    updatedSetter((updated) => updated + 1);
   };
 
   const handleSettingChangeSubmit = async (attr, value) => {

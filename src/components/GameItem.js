@@ -1,19 +1,19 @@
-import React from "react";
+import React, {useContext} from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
+import { MeContext } from "../pages/Skeleton";
 
 function GameItem(props) {
   const { t } = useTranslation();
+  const [globalMe, ] = useContext(MeContext);
 
   const game = props.item;
   const info = gameinfo.get(game.metaGame);
-  const me = props.me;
-  console.log("me in GameItem", me);
   var desc = t("GameAgainst", {
     game: info.name,
     opp: game.players
-      .filter((item) => item.id !== me.id)
+      .filter((item) => item.id !== globalMe.id)
       .map((item) => item.name)
       .join(", "),
   });
@@ -22,7 +22,6 @@ function GameItem(props) {
       <i className="fa fa-circle apBullet"></i>
       <Link
         to={`/move/${game.metaGame}/${game.id}`}
-        state={{ me: me, settings: props.settings }}
       >
         {desc}
       </Link>

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState, useRef, useContext, createContext } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render, renderglyph } from "@abstractplay/renderer";
 import { Auth } from "aws-amplify";
@@ -18,7 +18,7 @@ import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import GameComment from "./GameComment";
 import ClipboardCopy from "./ClipboardCopy";
-import { MyTurnContext } from "../pages/Skeleton";
+import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import NewChatMarker from "./NewChatMarker";
 import DownloadDataUri from "./DownloadDataUri";
 
@@ -67,7 +67,7 @@ function setStatus(engine, game, isPartial, partialMove, status) {
 function setupGame(
   game0,
   gameRef,
-  state,
+  me,
   partialMoveRenderRef,
   renderrepSetter,
   statusRef,
@@ -98,7 +98,7 @@ function setupGame(
     throw new Error("Why no state? This shouldn't happen no more!");
   const engine = GameFactory(game0.metaGame, game0.state);
   moveSetter({ ...engine.validateMove(""), previous: "", move: "" });
-  game0.me = game0.players.findIndex((p) => state.me && p.id === state.me.id);
+  game0.me = game0.players.findIndex((p) => me && p.id === me.id);
   game0.variants = engine.getVariants();
   if (game0.simultaneous) {
     game0.canSubmit =
@@ -115,8 +115,8 @@ function setupGame(
   } else {
     game0.canSubmit =
       game0.toMove !== "" &&
-      state.me &&
-      game0.players[game0.toMove].id === state.me.id;
+      me &&
+      game0.players[game0.toMove].id === me.id;
     game0.canExplore = game0.toMove !== "" && game0.numPlayers === 2;
   }
   if (game0.sharedPieces) {
@@ -509,6 +509,7 @@ function GameMove(props) {
   const [submitting, submittingSetter] = useState(false);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
   const [newChat, newChatSetter] = useState(false);
+  const [globalMe, ] = useContext(MeContext);
   const [gameRec, gameRecSetter] = useState(undefined);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
@@ -534,7 +535,7 @@ function GameMove(props) {
 //   }
 
   const { t, i18n } = useTranslation();
-  const { state } = useLocation();
+//   const { state } = useLocation();
   const { metaGame, gameID } = useParams();
 
   const gameDeets = gameinfo.get(metaGame);
@@ -558,12 +559,12 @@ function GameMove(props) {
 
   useEffect(() => {
     var lng = "en";
-    if (state.me && state.me.language !== undefined) lng = state.me.language;
+    if (globalMe && globalMe.language !== undefined) lng = globalMe.language;
     if (i18n.language !== lng) {
       i18n.changeLanguage(lng);
       console.log(`changed language  to ${lng}`);
     }
-  }, [i18n, state.me]);
+  }, [i18n, globalMe]);
 
   useEffect(() => {
     async function fetchData() {
@@ -621,7 +622,7 @@ function GameMove(props) {
           setupGame(
             data.game,
             gameRef,
-            state,
+            globalMe,
             partialMoveRenderRef,
             renderrepSetter,
             statusRef,
@@ -633,9 +634,9 @@ function GameMove(props) {
           );
           processNewSettings(
             gameRef.current.me > -1
-              ? data.game.players.find((p) => p.id === state.me.id).settings
+              ? data.game.players.find((p) => p.id === globalMe.id).settings
               : {},
-            state.settings,
+            globalMe.settings,
             gameRef,
             settingsSetter,
             gameSettingsSetter,
@@ -660,7 +661,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  }, [state, renderrepSetter, focusSetter, gameID]);
+  }, [globalMe, renderrepSetter, focusSetter, gameID]);
 
   useEffect(() => {
     async function fetchData() {
@@ -765,7 +766,7 @@ function GameMove(props) {
     // console.log(result);
     processNewMove(
       result,
-      state,
+      globalMe,
       focus,
       gameRef,
       movesRef,
@@ -786,7 +787,7 @@ function GameMove(props) {
     newmove.complete = 1;
     processNewMove(
       newmove,
-      state,
+      globalMe,
       focus,
       gameRef,
       movesRef,
@@ -825,7 +826,7 @@ function GameMove(props) {
       result.previous = moveRef.current.move;
       processNewMove(
         result,
-        state,
+        globalMe,
         focus,
         gameRef,
         movesRef,
@@ -878,7 +879,7 @@ function GameMove(props) {
         render(renderrep, options);
       }
     }
-  }, [renderrep, state, focus, settings]);
+  }, [renderrep, globalMe, focus, settings]);
 
   const setError = (error) => {
     if (error.Message !== undefined) errorMessageRef.current = error.Message;
@@ -989,7 +990,7 @@ function GameMove(props) {
       setupGame(
         game0,
         gameRef,
-        state,
+        globalMe,
         partialMoveRenderRef,
         renderrepSetter,
         statusRef,
@@ -1008,7 +1009,7 @@ function GameMove(props) {
   const submitComment = async (comment) => {
     commentsSetter([
       ...comments,
-      { comment: comment, userId: state.me.id, timeStamp: Date.now() },
+      { comment: comment, userId: globalMe.id, timeStamp: Date.now() },
     ]);
     // console.log(comments);
     const usr = await Auth.currentAuthenticatedUser();
@@ -1099,7 +1100,7 @@ function GameMove(props) {
                 setupGame(
                   game0,
                   gameRef,
-                  state,
+                  globalMe,
                   partialMoveRenderRef,
                   renderrepSetter,
                   statusRef,
@@ -1128,12 +1129,15 @@ function GameMove(props) {
 
   const navigate = useNavigate();
   const handleNextGame = () => {
+    // Randomizing them because otherwise you can never just skip a game for a little later.
+    // It will just keep returning you to the first game in the list.
+    // TODO: Ideally, though, it would just cycle you through them, but then we'd need some state.
     const others = myMove.filter(x => x.id !== gameID).sort(() => Math.random() - 0.5);
     if (others.length === 0) {
-        navigate("/", {state});
+        navigate("/");
     } else {
         const next = others[0];
-        navigate(`/move/${next.metaGame}/${next.id}`, {state});
+        navigate(`/move/${next.metaGame}/${next.id}`);
     }
   }
 
@@ -1256,7 +1260,7 @@ function GameMove(props) {
                 <i className="fa fa-search-plus"></i>
               }
               </button>
-              {state.me.admin !== true ? "" :
+              {!globalMe || globalMe.admin !== true ? "" :
                 <button
                   className="fabtn align-right"
                   onClick={() => {showInjectSetter(true)}}
@@ -1310,7 +1314,6 @@ function GameMove(props) {
                     results={game?.moveResults}
                     comments={comments}
                     players={gameRef.current?.players}
-                    meID={state.me.id}
                   />
                 </NewChatContext.Provider>
               </div>
