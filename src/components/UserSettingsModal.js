@@ -1,8 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useContext, useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Auth } from "aws-amplify";
+import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
 
 function UserSettingsModal(props) {
@@ -10,13 +11,13 @@ function UserSettingsModal(props) {
   const show = props.show;
   // const handleLanguageChange = props.handleLanguageChange;
   // const handleEMailChange = props.handleEMailChange;
+  // eslint-disable-next-line no-unused-vars
   const { t, i18n } = useTranslation();
-  const [mySettings, mySettingsSetter] = useState(null);
   const [changingName, changingNameSetter] = useState(false);
   const [changingEMail, changingEMailSetter] = useState(false);
   const [changingCodeSent, changingCodeSentSetter] = useState(false);
   /*eslint-disable no-unused-vars*/
-  const [changingLanguage, changingLanguageSetter] = useState(false);
+//   const [changingLanguage, changingLanguageSetter] = useState(false);
   const [name, nameSetter] = useState("");
   const [badname, badnameSetter] = useState("");
   const [nameError, nameErrorSetter] = useState(false);
@@ -24,19 +25,34 @@ function UserSettingsModal(props) {
   const [emailCode, emailCodeSetter] = useState("");
   const [language, languageSetter] = useState("");
   const [users, usersSetter] = useState([]);
+  const [user, userSetter] = useState(null);
   const [updated, updatedSetter] = useState(0);
+  const [notifications, notificationsSetter] = useState(null);
+  const [globalMe, globalMeSetter] = useContext(MeContext);
 
   useEffect(() => {
     if (show) {
       changingNameSetter(false);
       changingEMailSetter(false);
-      changingLanguageSetter(false);
+    //   changingLanguageSetter(false);
       nameSetter("");
       languageSetter("en");
       emailSetter("");
       emailCodeSetter("");
+      console.log("GLOBAL ME SETTINGS:");
+      console.log(globalMe?.settings);
+      if (globalMe?.settings?.all?.notifications) {
+        notificationsSetter(globalMe.settings.all.notifications);
+      } else {
+        notificationsSetter({
+            yourturn: true,
+            challenges: true,
+            gameStart: true,
+            gameEnd: true,
+        });
+      }
     }
-  }, [show]);
+  }, [show, globalMe, notificationsSetter]);
 
   useEffect(() => {
     async function fetchData() {
@@ -51,6 +67,7 @@ function UserSettingsModal(props) {
   }, [show, users]);
 
   const handleNameChangeClick = () => {
+    nameSetter(globalMe.name);
     changingNameSetter(true);
   };
 
@@ -66,19 +83,24 @@ function UserSettingsModal(props) {
     }
   };
 
+  const handleNameChangeCancelClick = () => {
+    nameSetter("");
+    changingNameSetter(false);
+  }
+
   const logout = async () => {
-    Auth.signOut();
+    await Auth.signOut();
     updatedSetter((updated) => updated + 1);
+    handleUserSettingsClose();
   };
 
-  /*eslint-disable no-unused-vars*/
-  const handleLanguageChangeSubmitClick = async () => {
-    changingLanguageSetter(false);
-    await handleSettingChangeSubmit("language", language);
-    i18n.changeLanguage(language);
-    languageSetter(language);
-    updatedSetter((updated) => updated + 1);
-  };
+//   const handleLanguageChangeSubmitClick = async () => {
+//     changingLanguageSetter(false);
+//     await handleSettingChangeSubmit("language", language);
+//     i18n.changeLanguage(language);
+//     languageSetter(language);
+//     updatedSetter((updated) => updated + 1);
+//   };
 
   const handleSettingChangeSubmit = async (attr, value) => {
     const usr = await Auth.currentAuthenticatedUser();
@@ -100,62 +122,107 @@ function UserSettingsModal(props) {
   };
 
   const handleEMailChangeClick = () => {
+    emailSetter(user.signInUserSession.idToken.payload.email)
     changingEMailSetter(true);
   };
 
-  /*eslint-disable no-unused-vars*/
-  const handleLanguageChangeClick = () => {
-    changingLanguageSetter(true);
-  };
+//   const handleLanguageChangeClick = () => {
+//     changingLanguageSetter(true);
+//   };
 
   const handleEMailChangeSubmitClick = async () => {
     const usr = await Auth.currentAuthenticatedUser();
-    console.log(usr);
     // await Auth.updateUserAttributes(usr, { email });
     Auth.updateUserAttributes(usr, { email });
     changingCodeSentSetter(true);
   };
 
+  const handleEMailChangeCancelClick = () => {
+    emailSetter("");
+    changingEMailSetter(false);
+  }
+
   const handleEMailChangeCodeSubmitClick = async () => {
-    const usr = await Auth.currentAuthenticatedUser();
-    console.log(usr);
+    await Auth.currentAuthenticatedUser();
     Auth.verifyCurrentUserAttributeSubmit("email", emailCode);
     changingEMailSetter(false);
     changingCodeSentSetter(false);
+    emailCodeSetter("");
+    updatedSetter((updated) => updated + 1);
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      // Auth.currentAuthenticatedUser() will automatically renew the token if its expired.
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
-      try {
-        console.log("calling my_settings with token: " + token);
+  const handleNotifyCheckChange = async (key) => {
+    try {
+        const usr = await Auth.currentAuthenticatedUser();
+        const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
+        newSettings.all.notifications = notifications;
+        newSettings.all.notifications[key] = ! newSettings.all.notifications[key];
+        console.log(`About to save the following settings:\n${JSON.stringify(newSettings)}`);
         const res = await fetch(API_ENDPOINT_AUTH, {
           method: "POST",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
           },
-          body: JSON.stringify({ query: "my_settings" }),
+          body: JSON.stringify({
+            query: "update_user_settings",
+            pars: {
+              settings: newSettings,
+            },
+          }),
         });
-        const result = await res.json();
-        if (result.statusCode !== 200) console.log(JSON.parse(result.body));
-        else {
-          console.log(result);
-          if (result === null) mySettingsSetter({});
-          else mySettingsSetter(JSON.parse(result.body));
+        if (res.status !== 200) {
+            const result = await res.json();
+            console.log(`An error occured while saving notification settings:\n${result}`);
+        } else {
+            updatedSetter((updated) => updated + 1);
         }
+    } catch (error) {
+        props.setError(error);
+      }
+  }
+
+  useEffect(() => {
+    async function fetchAuth() {
+      try {
+        const usr = await Auth.currentAuthenticatedUser();
+        userSetter(usr);
+        const token = usr.signInUserSession.idToken.jwtToken;
+        if (token !== null) {
+            try {
+              console.log("calling authQuery 'me' (small), with token: " + token);
+              const res = await fetch(API_ENDPOINT_AUTH, {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                // Don't care about e.g. challenges, so size = small.
+                body: JSON.stringify({ query: "me", size: "small" }),
+              });
+              const result = await res.json();
+              if (result.statusCode !== 200) console.log(JSON.parse(result.body));
+              else {
+                if (result === null) globalMeSetter({});
+                else {
+                  globalMeSetter(JSON.parse(result.body));
+                  console.log(JSON.parse(result.body));
+                }
+              }
+            } catch (error) {
+              console.log(error);
+            }
+          }
       } catch (error) {
-        console.log(error);
+        // not logged in, ok.
       }
     }
     if (show) {
-      mySettingsSetter(null);
-      fetchData();
+        fetchAuth();
     }
-  }, [show, updated]);
+  }, [globalMeSetter, updated, show]);
 
   console.log(language);
 
@@ -170,162 +237,195 @@ function UserSettingsModal(props) {
         },
       ]}
     >
-      <div>
-        <div>{t("UserSettings")}</div>
-      </div>
-      <div className="userSettings">
+      <div className="container">
         {/********************* Display Name *********************/}
-        <div className="userSettingsLabelDiv">
-          <label className="userSettingsLabel" htmlFor="user_settings_name">
-            {t("DisplayName")}:
+        <div className="field" key="DisplayName">
+          <label className="label" htmlFor="user_settings_name">
+            {t("DisplayName")}
           </label>
-        </div>
-        <div className="userSettingsInputDiv">
-          {mySettings === null ? (
-            <Spinner />
-          ) : changingName ? (
-            <input
-              name="name"
-              id="user_settings_name"
-              type="text"
-              value={name}
-              onChange={(e) => {
-                nameErrorSetter(false);
-                nameSetter(e.target.value);
-              }}
-            />
-          ) : (
-            mySettings.name
-          )}
-        </div>
-        <div className="userSettingsButtonDiv">
-          {mySettings === null ? (
-            ""
-          ) : changingName ? (
-            <button
-              className="apButton inlineButton"
-              onClick={handleNameChangeSubmitClick}
-            >
-              {t("Submit")}
-            </button>
-          ) : (
-            <button
-              className="apButton inlineButton"
-              onClick={handleNameChangeClick}
-            >
-              {t("Change")}
-            </button>
-          )}
-        </div>
-        {mySettings === null || !changingName ? (
-          ""
-        ) : (
-          <Fragment>
-            <div className="userSettingsLabelDiv" />
-            <div
-              className={
-                "userSettingsInputDiv " +
-                (nameError ? "error" : "userSettingsInfo")
-              }
-            >
-              {nameError
-                ? t("DisplayNameError", { name: badname })
-                : t("DisplayNameChange")}
-            </div>
-            <div className="userSettingsButtonDiv" />
-          </Fragment>
-        )}
-        {/********************* e-mail *********************/}
-        <div className="userSettingsLabelDiv">
-          <label className="userSettingsLabel" htmlFor="user_settings_email">
-            {t("EMail")}:
-          </label>
-        </div>
-        <div className="userSettingsInputDiv">
-          {mySettings === null ? (
-            <Spinner />
-          ) : changingEMail ? (
-            <input
-              name="email"
-              id="user_settings_email"
-              type="text"
-              value={email}
-              onChange={(e) => emailSetter(e.target.value)}
-            />
-          ) : (
-            mySettings.email
-          )}
-        </div>
-        <div className="userSettingsButtonDiv">
-          {mySettings === null ? (
-            ""
-          ) : changingEMail ? (
-            changingCodeSent ? (
-              ""
-            ) : (
-              <button
-                className="apButton inlineButton"
-                onClick={handleEMailChangeSubmitClick}
-              >
-                {t("Submit")}
-              </button>
-            )
-          ) : (
-            <button
-              className="apButton inlineButton"
-              onClick={handleEMailChangeClick}
-            >
-              {t("Change")}
-            </button>
-          )}
-        </div>
-        {/********************* e-mail confirmation code *********************/}
-        {changingCodeSent ? (
-          <Fragment>
-            <div className="userSettingsLabelDiv">
-              <label
-                className="userSettingsLabel"
-                htmlFor="user_settings_email_code"
-              >
-                {t("EMailCode")}:
-              </label>
-            </div>
-            <div className="userSettingsInputDiv">
-              {mySettings === null ? (
+          <div className="control">
+            {globalMe === null ? (
                 <Spinner />
-              ) : (
+            ) : changingName ? (
                 <input
-                  name="email"
-                  id="user_settings_email_code"
-                  type="text"
-                  value={emailCode}
-                  onChange={(e) => emailCodeSetter(e.target.value)}
+                className="input is-small"
+                name="user_settings_name"
+                id="user_settings_name"
+                type="text"
+                value={name}
+                onChange={(e) => {
+                    nameErrorSetter(false);
+                    nameSetter(e.target.value);
+                }}
                 />
-              )}
-            </div>
-            <div className="userSettingsButtonDiv">
-              {mySettings === null ? (
+            ) : (
+                globalMe.name
+            )}
+          </div>
+          <div className="control is-grouped">
+            {globalMe === null ? (
                 ""
-              ) : changingEMail ? (
+            ) : changingName ? (
+                <Fragment>
                 <button
-                  className="apButton inlineButton"
-                  onClick={handleEMailChangeCodeSubmitClick}
+                className="button is-small apButton"
+                onClick={handleNameChangeSubmitClick}
                 >
-                  {t("Submit")}
+                {t("Submit")}
                 </button>
-              ) : (
                 <button
-                  className="apButton inlineButton"
+                className="button is-small is-danger"
+                onClick={handleNameChangeCancelClick}
+                >
+                {t("Cancel")}
+                </button>
+                </Fragment>
+            ) : (
+                <button
+                className="button is-small apButton"
+                onClick={handleNameChangeClick}
+                >
+                {t("Change")}
+                </button>
+            )}
+          </div>
+          <p className="help">{t("DisplayNameHelp")}</p>
+          {globalMe === null || !changingName ? (
+            ""
+            ) : (
+            <Fragment>
+                <p
+                className={
+                    "help " +
+                    (nameError ? "is-danger" : "is-primary")
+                }
+                >
+                {nameError
+                    ? t("DisplayNameError", { name: badname })
+                    : t("DisplayNameChange")}
+                </p>
+            </Fragment>
+            )}
+        </div>
+        {/********************* e-mail *********************/}
+        <div className="field" key="email">
+          <label className="label" htmlFor="user_settings_email">
+            {t("EMail")}
+          </label>
+          <div className="control">
+            {globalMe === null ? (
+                <Spinner />
+            ) : changingEMail ? (
+                <input
+                  className="input is-small"
+                  name="user_settings_email"
+                  id="user_settings_email"
+                  type="text"
+                  value={email}
+                  onChange={(e) => emailSetter(e.target.value)}
+                />
+            ) : (
+                user?.signInUserSession.idToken.payload.email
+            )}
+          </div>
+          <div className="control">
+            {globalMe === null ? (
+                ""
+            ) : changingEMail ? (
+                changingCodeSent ? (
+                ""
+                ) : (
+                    <Fragment>
+                <button
+                    className="button is-small apButton"
+                    onClick={handleEMailChangeSubmitClick}
+                >
+                    {t("Submit")}
+                </button>
+                <button
+                className="button is-small is-danger"
+                onClick={handleEMailChangeCancelClick}
+                >
+                {t("Cancel")}
+                </button>
+                </Fragment>
+                )
+            ) : (
+                <button
+                  className="button is-small apButton"
                   onClick={handleEMailChangeClick}
                 >
-                  {t("Change")}
+                {t("Change")}
                 </button>
-              )}
+            )}
+          </div>
+            {/********************* e-mail confirmation code *********************/}
+            {changingCodeSent ? (
+            <div className="field">
+              <label
+                    className="label"
+                    htmlFor="user_settings_email_code"
+              >
+                    {t("EMailCode")}:
+                </label>
+                <div className="control">
+                {globalMe === null ? (
+                    <Spinner />
+                ) : (
+                    <input
+                    className="input is-small"
+                    name="email"
+                    id="user_settings_email_code"
+                    type="text"
+                    value={emailCode}
+                    onChange={(e) => emailCodeSetter(e.target.value)}
+                    />
+                )}
+                </div>
+                <div className="control">
+                {globalMe === null ? (
+                    ""
+                ) : changingEMail ? (
+                    <button
+                    className="button is-small apButton"
+                    onClick={handleEMailChangeCodeSubmitClick}
+                    >
+                    {t("Submit")}
+                    </button>
+                ) : (
+                    <button
+                    className="button is-small apButton"
+                    onClick={handleEMailChangeClick}
+                    >
+                    {t("Change")}
+                    </button>
+                )}
+                </div>
+                <p className="help is-primary">{t("EMailCodeHelp")}</p>
             </div>
-          </Fragment>
-        ) : (
-          ""
-        )}
+            ) : (
+            ""
+            )}
+        </div>
+        {/********************* notifications *********************/}
+        <div className="field" key="notifications">
+            <label className="label">Notification settings</label>
+            {! notifications ? "" :
+            ["challenges", "gameStart", "gameEnd", "yourturn"].map((key) =>
+                <div className="control" key={key}>
+                    <label className="checkbox">
+                        <input
+                          type="checkbox"
+                          name={key}
+                          checked={notifications[key]}
+                          onChange={() => handleNotifyCheckChange(key)}
+                        />
+                        {t(`NotifyLabel-${key}`)}
+                    </label>
+                </div>
+            )}
+        </div>
+
         {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above
         ******************** Language *********************
         <div className="userSettingsLabelDiv">
@@ -351,12 +451,11 @@ function UserSettingsModal(props) {
           }
         </div>
         */}
+
         {/********************* Log out *********************/}
-        <div className="userSettingsLabelDiv"></div>
-        <div className="userSettingsInputDiv"></div>
-        <div className="userSettingsButtonDiv">
+        <div className="control" style={{float: "right"}}>
           <button
-            className="apButton inlineButton"
+            className="button is-small apButton"
             onClick={logout}
             id="logout-button"
           >
