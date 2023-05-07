@@ -68,6 +68,7 @@ function setupGame(
   game0,
   gameRef,
   me,
+  explorer,
   partialMoveRenderRef,
   renderrepSetter,
   statusRef,
@@ -117,7 +118,7 @@ function setupGame(
       game0.toMove !== "" &&
       me &&
       game0.players[game0.toMove].id === me.id;
-    game0.canExplore = game0.toMove !== "" && game0.numPlayers === 2;
+    game0.canExplore = game0.toMove !== "" && game0.numPlayers === 2 && explorer;
   }
   if (game0.sharedPieces) {
     game0.seatNames = [];
@@ -272,7 +273,8 @@ function setupColors(settings, game, t) {
   });
 }
 
-async function saveExploration(exploration, gameid) {
+async function saveExploration(exploration, gameid, explorer) {
+  if (!explorer) return;
   const usr = await Auth.currentAuthenticatedUser();
   console.log("gameid", gameid);
   console.log("move:", exploration.length);
@@ -299,6 +301,7 @@ function doView(
   state,
   game,
   move,
+  explorer,
   explorationRef,
   focus,
   errorMessageRef,
@@ -351,7 +354,7 @@ function doView(
       (node.toMove + 1) % game.players.length,
       gameEngineTmp
     );
-    saveExploration(explorationRef.current, game.id);
+    saveExploration(explorationRef.current, game.id, explorer);
     let newfocus = cloneDeep(focus);
     newfocus.exPath.push(pos);
     newfocus.canExplore = canExploreMove(
@@ -387,8 +390,8 @@ function canExploreMove(game, exploration, focus) {
   return (
     (game.canExplore || (game.canSubmit && focus.exPath.length === 0)) && // exploring (beyond move input) is supported or it is my move and we are just looking at the current position
     exploration !== null &&
-    focus.moveNumber === exploration.length - 1
-  ); // we aren't looking at history
+    focus.moveNumber === exploration.length - 1 // we aren't looking at history
+  );
 }
 
 function processNewSettings(
@@ -429,6 +432,7 @@ function processNewSettings(
 
 function processNewMove(
   newmove,
+  explorer,
   state,
   focus,
   gameRef,
@@ -451,6 +455,7 @@ function processNewMove(
       state,
       gameRef.current,
       newmove,
+      explorer,
       explorationRef,
       focus,
       errorMessageRef,
@@ -511,6 +516,7 @@ function GameMove(props) {
   const [newChat, newChatSetter] = useState(false);
   const [globalMe, ] = useContext(MeContext);
   const [gameRec, gameRecSetter] = useState(undefined);
+  const [explorer, explorerSetter] = useState(false);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -623,6 +629,7 @@ function GameMove(props) {
             data.game,
             gameRef,
             globalMe,
+            explorer,
             partialMoveRenderRef,
             renderrepSetter,
             statusRef,
@@ -661,7 +668,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  }, [globalMe, renderrepSetter, focusSetter, gameID]);
+  }, [globalMe, renderrepSetter, focusSetter, gameID, explorer]);
 
   useEffect(() => {
     async function fetchData() {
@@ -722,6 +729,9 @@ function GameMove(props) {
   const handleGameMoveClick = (foc) => {
     // console.log("foc = ", foc);
     let node = getFocusNode(explorationRef.current, foc);
+    if (!explorer && foc.moveNumber === explorationRef.current.length - 1) {
+      node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variations.
+    }
     let engine = GameFactory(game.metaGame, node.state);
     partialMoveRenderRef.current = false;
     foc.canExplore = canExploreMove(game, explorationRef.current, foc);
@@ -766,6 +776,7 @@ function GameMove(props) {
     // console.log(result);
     processNewMove(
       result,
+      explorer,
       globalMe,
       focus,
       gameRef,
@@ -787,6 +798,7 @@ function GameMove(props) {
     newmove.complete = 1;
     processNewMove(
       newmove,
+      explorer,
       globalMe,
       focus,
       gameRef,
@@ -826,6 +838,7 @@ function GameMove(props) {
       result.previous = moveRef.current.move;
       processNewMove(
         result,
+        explorer,
         globalMe,
         focus,
         gameRef,
@@ -879,7 +892,7 @@ function GameMove(props) {
         render(renderrep, options);
       }
     }
-  }, [renderrep, globalMe, focus, settings]);
+  }, [renderrep, globalMe, focus, settings, explorer]);
 
   const setError = (error) => {
     if (error.Message !== undefined) errorMessageRef.current = error.Message;
@@ -943,7 +956,7 @@ function GameMove(props) {
   const handleMark = (mark) => {
     let node = getFocusNode(explorationRef.current, focus);
     node.SetOutcome(mark);
-    saveExploration(explorationRef.current, game.id);
+    saveExploration(explorationRef.current, game.id, explorer);
     focusSetter(cloneDeep(focus)); // just to trigger a rerender...
   };
 
@@ -991,6 +1004,7 @@ function GameMove(props) {
         game0,
         gameRef,
         globalMe,
+        explorer,
         partialMoveRenderRef,
         renderrepSetter,
         statusRef,
@@ -1101,6 +1115,7 @@ function GameMove(props) {
                   game0,
                   gameRef,
                   globalMe,
+                  explorer,
                   partialMoveRenderRef,
                   renderrepSetter,
                   statusRef,
@@ -1125,6 +1140,10 @@ function GameMove(props) {
 
   const handleInjectChange = (e) => {
     injectedStateSetter(e.target.value);
+  }
+
+  const handleExplorer = () => {
+    explorerSetter(true);
   }
 
   const navigate = useNavigate();
@@ -1196,16 +1215,25 @@ function GameMove(props) {
                 uri={gameRec === undefined ? null : `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(gameRec))}`}
               />
             }
-            {toMove === "" ? null :
-              <div className="control" style={{paddingTop: "1em"}}>
-                <button className="button apButton" onClick={handleNextGame}>
-                  <span>Next game ({myMove.length})</span>
-                    <span className="icon">
-                      <i className="fa fa-forward"></i>
-                    </span>
-                </button>
-              </div>
-            }
+            <div className="buttons">
+              { (explorer || !game || game.simultaneous || game.numPlayers !== 2 || toMove === "") ? null :
+                <div className="control" style={{paddingTop: "1em"}}>
+                  <button className="button apButton" onClick={handleExplorer}>
+                    <span>{t("Explore")}</span>
+                  </button>
+                </div>
+              }
+              {toMove === "" ? null :
+                <div className="control" style={{paddingTop: "1em"}}>
+                  <button className="button apButton" onClick={handleNextGame}>
+                    <span>{t("NextGame")} ({myMove.length})</span>
+                      <span className="icon">
+                        <i className="fa fa-forward"></i>
+                      </span>
+                  </button>
+                </div>
+              }
+            </div>
           </div>
           {/***************** Board *****************/}
           <div className="column">
