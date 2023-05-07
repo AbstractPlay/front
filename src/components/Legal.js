@@ -13,10 +13,10 @@ By signing up for an Abstract Play account, you agree to be bound by the followi
 * You must be 13 years or older to use this service.
 * You are responsible for any activity that occurs under your account.
 * You are responsible for keeping your password secure.
-* You must not abuse, harass, threaten or intimidate other users.
+* You must not abuse, harass, threaten, or intimidate other users.
 * You may not use Abstract Play for any illegal or unauthorized purpose. You agree to comply with all local laws regarding online conduct and acceptable content.
 * You are solely responsible for your conduct and any data, text, information, screen names, graphics, photos, profiles, audio and video clips, links, and other content that you submit, post, and display using Abstract Play services.
-* You must not modify, adapt or hack Abstract Play webpages or servers or modify another website so as to falsely imply that it is associated with Abstract Play.
+* You must not modify, adapt, or hack Abstract Play webpages or servers or modify another website so as to falsely imply that it is associated with Abstract Play.
 * You must not create or submit unwanted email to any Abstract Play members.
 * You must not transmit any worms or viruses or any code of a destructive nature.
 * You must not, in the use of Abstract Play services, violate any laws in your jurisdiction (including copyright laws).
@@ -28,7 +28,7 @@ Violation of any of these agreements will result in the termination of your Abst
 * We reserve the right to modify or terminate Abstract Play for any reason, without notice, at any time.
 * We reserve the right to alter these terms of service at any time. If the alterations constitute a material change, we will announce the change on the [Abstract Play website](https://www.abstractplay.com). What constitutes a "material change" will be determined at our sole discretion, in good faith, and using common sense and reasonable judgement.
 * We reserve the right to refuse service to anyone for any reason at any time.
-* We may, but have no obligation to, remove content that we determine in our sole discretion is unlawful, offensive, threatening, libellous, defamatory, obscene or otherwise objectionable or violates any party's intellectual property or these terms of service.
+* We may, but have no obligation to, remove content (including forcibly changing display names) that we determine in our sole discretion is unlawful, offensive, threatening, libellous, defamatory, obscene, or otherwise objectionable or violates any party's intellectual property or these terms of service.
 
 #### Summary
 

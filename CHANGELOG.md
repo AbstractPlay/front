@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added a "Download game record" button to completed games so you can download the official record for further analysis. This is a temporary solution. Eventually there will be a dedicated "data" area and functions.
 * Better formatting of explored variations. See Feature Request #0017.
 * Highlight current position in the moves list. Very useful when exploring.
+* Added notification settings to the user settings screen. It has also been reformatted. Further optimization forthcoming.
+* Added some text to the ToS to make it explicit that display names must comply with the terms and can be forcibly changed if deemed necessary.
 
 ### Fixed
 

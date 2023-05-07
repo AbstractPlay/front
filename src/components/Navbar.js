@@ -23,7 +23,8 @@ function Navbar(props) {
       const token = usr.signInUserSession.idToken.jwtToken;
       if (token !== null) loggedinSetter(true);
     }
-    fetchAuth();
+    fetchAuth()
+    .catch(() => { /* Not authenticated, and that's OK */ });
   }, []);
 
   return (
