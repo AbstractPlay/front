@@ -274,7 +274,7 @@ function GameMoves(props) {
             (i === exploration.length - 1 && focus.exPath.length === 0))
         )
           className += " gameMoveFocus";
-        if (i === exploration.length - 1)
+        if (i === exploration.length - 1 && exploration[focus.moveNumber].children.length > 0)
           className += " lastMove";
 
         path.push([
