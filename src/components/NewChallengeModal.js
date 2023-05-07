@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { useState, useEffect, useRef, useContext, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_OPEN } from "../config";
 import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
+import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
 
 function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
   const handleNewChallenge = props.handleChallenge;
-  const myid = props.id;
   const opponent = props.opponent;
   const fixedMetaGame = props.fixedMetaGame;
   const show = props.show;
@@ -29,6 +29,7 @@ function NewChallengeModal(props) {
   const [opponents, opponentsSetter] = useState([]);
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const groupVariantsRef = useRef({});
+  const [globalMe, ] = useContext(MeContext);
 
   useEffect(() => {
     addResource(i18n.language);
@@ -474,7 +475,7 @@ function NewChallengeModal(props) {
                             .filter(
                               (user) =>
                                 user.id === opponents[i].id ||
-                                (user.id !== myid &&
+                                (user.id !== globalMe.id &&
                                   !opponents.some((o) => user.id === o.id))
                             )
                             .map((item) => {

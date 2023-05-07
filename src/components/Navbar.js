@@ -9,9 +9,7 @@ import LogInOutButton from "./LogInOutButton";
 
 function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
-  const [, updateSetter] = useState(0);
   const [burgerExpanded, updateBurgerExpanded] = useState(false);
-  const [token, ] = useState(null);
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
@@ -87,7 +85,7 @@ function Navbar(props) {
         </div>
         <div className="navbar-end">
           <div className="navbar-item">
-            <LogInOutButton token={token} updater={updateSetter} />
+            <LogInOutButton />
           </div>
         </div>
       </div>

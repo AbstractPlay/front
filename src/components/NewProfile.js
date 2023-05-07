@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
-import { Fragment } from "react";
 
 function NewProfile(props) {
   const [show, showSetter] = useState(props.show);
@@ -15,6 +15,7 @@ function NewProfile(props) {
   const [tagline, taglineSetter] = useState("");
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
+  const [, globalMeSetter] = useContext(MeContext);
 
   const { t } = useTranslation();
 
@@ -72,6 +73,37 @@ function NewProfile(props) {
         props.varsSetter({
           dummy: usr.signInUserSession.idToken.jwtToken,
         });
+        try {
+            const token = usr.signInUserSession.idToken.jwtToken;
+            if (token !== null) {
+                try {
+                  console.log("calling authQuery 'me' (small), with token: " + token);
+                  const res = await fetch(API_ENDPOINT_AUTH, {
+                    method: "POST",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },
+                    // Don't care about e.g. challenges, so size = small.
+                    body: JSON.stringify({ query: "me", size: "small" }),
+                  });
+                  const result = await res.json();
+                  if (result.statusCode !== 200) console.log(JSON.parse(result.body));
+                  else {
+                    if (result === null) globalMeSetter({});
+                    else {
+                      globalMeSetter(JSON.parse(result.body));
+                      console.log(JSON.parse(result.body));
+                    }
+                  }
+                } catch (error) {
+                  console.log(error);
+                }
+              }
+          } catch (error) {
+            // not logged in, ok.
+          }
       } catch (err) {
         setError(err.message);
       }
