@@ -22,7 +22,9 @@ function About(props) {
         your opponent has moved. We specialize in offbeat, perfect information
         games without any element of luck.
       </p>
-      <p style={{fontSize: "smaller", textAlign: "right"}}>Build: {pkgInfo.version}</p>
+      <p style={{ fontSize: "smaller", textAlign: "right" }}>
+        Build: {pkgInfo.version}
+      </p>
     </article>
   );
 }

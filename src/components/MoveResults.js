@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import { Fragment } from "react";
 import { NewChatContext } from "./GameMove";
 import { MeContext } from "../pages/Skeleton";
@@ -16,7 +16,7 @@ function MoveResults(props) {
   const players = props.players;
 
   const [, newChatSetter] = useContext(NewChatContext);
-  const [globalMe, ] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
 
   let results;
 
@@ -25,10 +25,10 @@ function MoveResults(props) {
     const threshold = Math.min(4, results.length); // an opponent chat followed by three game turns
     let oppChat = false;
     for (let i = 0; i < threshold; i++) {
-        if ( (!results[i].system) && (results[i].userid !== globalMe.id) ) {
-            oppChat = true;
-            break;
-        }
+      if (!results[i].system && results[i].userid !== globalMe.id) {
+        oppChat = true;
+        break;
+      }
     }
     newChatSetter(oppChat);
   }, [JSON.stringify(results), globalMe, newChatSetter]);

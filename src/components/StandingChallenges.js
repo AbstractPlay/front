@@ -16,7 +16,7 @@ function StandingChallenges(props) {
   const [reject, rejectSetter] = useState(null);
   const [update, updateSetter] = useState(0);
   const { metaGame } = useParams();
-  const [globalMe, ] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
 
   useEffect(() => {
     async function fetchAuth() {
@@ -249,7 +249,9 @@ function StandingChallenges(props) {
                         >
                           {t("Revoke")}
                         </button>
-                      ) : challenge.players.find((p) => p.id === globalMe.id) ? (
+                      ) : challenge.players.find(
+                          (p) => p.id === globalMe.id
+                        ) ? (
                         <button
                           className="button is-small apButton"
                           onClick={() => handleReject(challenge.id)}

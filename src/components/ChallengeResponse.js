@@ -5,7 +5,7 @@ import { MeContext } from "../pages/Skeleton";
 
 function ChallengeResponse(props) {
   const { t } = useTranslation();
-  const [globalMe, ] = useContext(MeContext)
+  const [globalMe] = useContext(MeContext);
 
   var players = "";
   const challenge = props.challenge;

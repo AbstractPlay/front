@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -6,7 +6,7 @@ import { MeContext } from "../pages/Skeleton";
 
 function GameItem(props) {
   const { t } = useTranslation();
-  const [globalMe, ] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
 
   const game = props.item;
   const info = gameinfo.get(game.metaGame);
@@ -20,11 +20,7 @@ function GameItem(props) {
   return (
     <li>
       <i className="fa fa-circle apBullet"></i>
-      <Link
-        to={`/move/${game.metaGame}/${game.id}`}
-      >
-        {desc}
-      </Link>
+      <Link to={`/move/${game.metaGame}/${game.id}`}>{desc}</Link>
     </li>
   );
 }
