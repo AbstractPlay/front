@@ -13,8 +13,8 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/gameslib": "file:../gameslib/abstractplay-gameslib-1.0.0-beta.tgz",
-    "@abstractplay/renderer": "file:../renderer/abstractplay-renderer-1.0.0-beta.tgz",
+    "@abstractplay/gameslib": "github:abstractplay/gameslib#develop",
+    "@abstractplay/renderer": "github:abstractplay/renderer#develop",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/user-event": "^13.5.0",
     "aws-amplify": "^5.0.25",
