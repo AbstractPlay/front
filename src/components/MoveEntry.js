@@ -39,6 +39,7 @@ function MoveEntry(props) {
   const exploration = props.exploration;
   const focus = props.focus;
   const submitting = props.submitting;
+  console.log(`SUBMITTING: ${submitting}`);
   const handleMove = props.handlers[0];
   const handleMark = props.handlers[1];
   const handleSubmit = props.handlers[2];
@@ -77,6 +78,8 @@ function MoveEntry(props) {
       moveToSubmit =
         exploration[exploration.length - 1].children[focus.exPath[0]].move;
     }
+    console.log(`MOVETOSUBMIT: ${moveToSubmit}`);
+    console.log(`EXPATH: ${JSON.stringify(focus, null, 2)}`);
 
     let uiState = null;
     if (focus.moveNumber < exploration.length - 1) {
