@@ -41,7 +41,7 @@ jobs:
     #     EOF
 
     - name: Install NPM dependencies
-      run: npm install
+      run: npm ci
 
     - name: Build and deploy
       run: npm run full-dev
