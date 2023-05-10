@@ -49,6 +49,8 @@ jobs:
 
     - name: Build and deploy
       run: npm run full-dev
+      env:
+        CI: false
 
     # Optional (to use with serverless-finch serverless plugin)
     #- name: Deploy assets to S3
