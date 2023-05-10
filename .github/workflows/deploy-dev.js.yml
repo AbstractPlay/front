@@ -47,10 +47,16 @@ jobs:
     - name: Install NPM dependencies
       run: npm ci
 
-    - name: Build and deploy
-      run: npm run full-dev
+    - name: Build
+      run: npm run build-dev
       env:
         CI: false
+
+    - name: Invalidate
+      run: aws cloudfront create-invalidation --distribution-id E2FD1T2JUN28HB --paths /*
+
+    - name: Deploy
+      run: serverless client deploy --no-confirm
 
     # Optional (to use with serverless-finch serverless plugin)
     #- name: Deploy assets to S3
