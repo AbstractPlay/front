@@ -40,6 +40,11 @@ jobs:
     #     ${{ secrets.ENV }}
     #     EOF
 
+    - name: Create .npmrc
+      run: |
+        echo "@abstractplay:registry=https://npm.pkg.github.com/" > .npmrc \
+        echo "//npm.pkg.github.com/:_authToken=${{secrets.PAT_READ_PACKAGES}}" >> .npmrc
+
     - name: Install NPM dependencies
       run: npm ci
 
