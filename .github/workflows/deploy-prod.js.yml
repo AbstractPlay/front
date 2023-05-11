@@ -9,17 +9,17 @@
 # Learn more: https://maxkostinevich.com/blog/how-to-deploy-serverless-applications-using-github-actions/
 #
 
-name: Deploy Dev
+name: Deploy Prod
 on:
   push:
     branches:
-      - develop
+      - main
   repository_dispatch:
-    types: [dep_update_dev]
+    types: [dep_update_prod]
   workflow_dispatch:
 
 jobs:
-  deploy-dev:
+  deploy-prod:
     runs-on: ubuntu-latest
 
     steps:
@@ -58,7 +58,7 @@ jobs:
     - name: Configure AWS credentials
       uses: Fooji/create-aws-profile-action@v1
       with:
-        profile: AbstractPlayDev
+        profile: AbstractPlayProd
         region: us-east-1
         key: ${{ secrets.AWS_KEY}}
         secret: ${{ secrets.AWS_SECRET}}
@@ -71,11 +71,11 @@ jobs:
     - name: Create CloudFront invalidation
       uses: josemando/aws-cloudfront-create-invalidation@v1
       with:
-        distribution-id: E2FD1T2JUN28HB
+        distribution-id: EZ7B67NVBQ903
         paths: /*
 
     - name: Deploy
-      run: serverless client deploy --no-confirm
+      run: serverless client deploy --stage prod --no-confirm
 
     # Optional (to use with serverless-finch serverless plugin)
     #- name: Deploy assets to S3
