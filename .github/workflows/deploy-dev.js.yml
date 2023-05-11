@@ -40,11 +40,39 @@ jobs:
     #     ${{ secrets.ENV }}
     #     EOF
 
-    - name: Install NPM dependencies
-      run: npm install
+    - name: Create .npmrc
+      run: echo "@abstractplay:registry=https://npm.pkg.github.com/" > .npmrc
+    - run: echo "//npm.pkg.github.com/:_authToken=${{secrets.PAT_READ_PACKAGES}}" >> .npmrc
 
-    - name: Build and deploy
-      run: npm run full-dev
+    - name: Install NPM dependencies
+      run: npm ci
+
+    - name: Build
+      run: npm run build-dev
+      env:
+        CI: false
+
+    - name: Configure AWS credentials
+      uses: Fooji/create-aws-profile-action@v1
+      with:
+        profile: AbstractPlayDev
+        region: us-east-1
+        key: ${{ secrets.AWS_KEY}}
+        secret: ${{ secrets.AWS_SECRET}}
+    #   uses: aws-actions/configure-aws-credentials@v2
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_KEY }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET }}
+    #     aws-region: us-east-1
+
+    - name: Create CloudFront invalidation
+      uses: josemando/aws-cloudfront-create-invalidation@v1
+      with:
+        distribution-id: E2FD1T2JUN28HB
+        paths: /*
+
+    - name: Deploy
+      run: serverless client deploy --no-confirm
 
     # Optional (to use with serverless-finch serverless plugin)
     #- name: Deploy assets to S3
