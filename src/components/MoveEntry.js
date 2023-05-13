@@ -55,6 +55,14 @@ function MoveEntry(props) {
     drawofferSetter(value);
   };
 
+  const sortLenAlpha = (a, b) => {
+    if (a.length === b.length) {
+        return a.localeCompare(b);
+    } else {
+        return a.length - b.length;
+    }
+  }
+
   useEffect(() => {
     if (move.valid && move.complete === 0 && move.move.length > 0) {
       moveStateSetter("is-warning");
@@ -228,7 +236,7 @@ function MoveEntry(props) {
                       onChange={(e) => handleMove(e.target.value)}
                     >
                       <option value="">{t("ChooseMove")}</option>
-                      {moves.map((move, index) => {
+                      {moves.sort(sortLenAlpha).map((move, index) => {
                         return (
                           <option key={index} value={move}>
                             {move}
