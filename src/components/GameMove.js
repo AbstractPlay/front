@@ -111,7 +111,9 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("player-stashes");
   game0.sharedStash =
     info.flags !== undefined && info.flags.includes("shared-stash");
-  game0.noMoves = (info.flags !== undefined && info.flags.includes("no-moves")) || (game0.metaGame === "homeworlds");
+  game0.noMoves =
+    (info.flags !== undefined && info.flags.includes("no-moves")) ||
+    game0.metaGame === "homeworlds";
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
   if (game0.state === undefined)
@@ -1175,6 +1177,25 @@ function GameMove(props) {
     let game = gameRef.current;
     game.canExplore =
       !game.simultaneous && game.toMove !== "" && game.numPlayers === 2;
+    let focus0 = cloneDeep(focus);
+    focus0.canExplore = canExploreMove(
+      gameRef.current,
+      explorationRef.current,
+      focus0
+    );
+    if (
+      focus0.canExplore &&
+      !focus.canExplore &&
+      !game.noMoves &&
+      (game.canSubmit || (!game.simultaneous && game.numPlayers === 2))
+    ) {
+      let node = getFocusNode(explorationRef.current, focus);
+      const engine = GameFactory(game.metaGame, node.state);
+      if (game.simultaneous) movesRef.current = engine.moves(game.me + 1);
+      else movesRef.current = engine.moves();
+      console.log("moves updated. Move 1 is: " + movesRef.current[0]);
+    }
+    focusSetter(focus0);
     explorerSetter(true);
   };
 
@@ -1375,6 +1396,7 @@ function GameMove(props) {
                 focus={focus}
                 game={game}
                 exploration={explorationRef.current}
+                noExplore={globalMe?.settings?.all?.exploration === -1}
                 handleGameMoveClick={handleGameMoveClick}
               />
             </div>

@@ -62,6 +62,7 @@ function GameMoves(props) {
   const { t } = useTranslation();
   let focus = props.focus;
   let game = props.game;
+  let neverExplore = props.noExplore;
   let exploration = props.exploration;
   let handleGameMoveClick = props.handleGameMoveClick;
 
@@ -400,62 +401,66 @@ function GameMoves(props) {
             <i className="fa fa-angle-left"></i>
             <span className="tooltiptext">{t("GoPrev")}</span>
           </button>
-          <button
-            className="button is-small tooltipped"
-            disabled={
-              focus.moveNumber + focus.exPath.length <= path.length &&
-              focus.exPath.length > 0 &&
-              curNumVariations !== 1
-                ? false
-                : true
-            }
-            onClick={
-              focus.moveNumber + focus.exPath.length <= path.length &&
-              focus.exPath.length > 0
-                ? () =>
-                    handleGameMoveClick({
-                      moveNumber: focus.moveNumber,
-                      exPath: [
-                        ...focus.exPath.slice(0, -1),
-                        (focus.exPath[focus.exPath.length - 1] + 1) %
-                          curNumVariations,
-                      ],
-                    })
-                : undefined
-            }
-          >
-            <i className="fa fa-angle-up"></i>
-            <span className="tooltiptext">{t("GoNextVar")}</span>
-          </button>
-          <button
-            className="button is-small tooltipped"
-            disabled={
-              focus.moveNumber + focus.exPath.length <= path.length &&
-              focus.exPath.length > 0 &&
-              curNumVariations !== 1
-                ? false
-                : true
-            }
-            onClick={
-              focus.moveNumber + focus.exPath.length <= path.length &&
-              focus.exPath.length > 0
-                ? () =>
-                    handleGameMoveClick({
-                      moveNumber: focus.moveNumber,
-                      exPath: [
-                        ...focus.exPath.slice(0, -1),
-                        (focus.exPath[focus.exPath.length - 1] +
-                          curNumVariations -
-                          1) %
-                          curNumVariations,
-                      ],
-                    })
-                : undefined
-            }
-          >
-            <i className="fa fa-angle-down"></i>
-            <span className="tooltiptext">{t("GoPrevVar")}</span>
-          </button>
+          { neverExplore ? null :
+            <button
+              className="button is-small tooltipped"
+              disabled={
+                focus.moveNumber + focus.exPath.length <= path.length &&
+                focus.exPath.length > 0 &&
+                curNumVariations !== 1
+                  ? false
+                  : true
+              }
+              onClick={
+                focus.moveNumber + focus.exPath.length <= path.length &&
+                focus.exPath.length > 0
+                  ? () =>
+                      handleGameMoveClick({
+                        moveNumber: focus.moveNumber,
+                        exPath: [
+                          ...focus.exPath.slice(0, -1),
+                          (focus.exPath[focus.exPath.length - 1] + 1) %
+                            curNumVariations,
+                        ],
+                      })
+                  : undefined
+              }
+            >
+              <i className="fa fa-angle-up"></i>
+              <span className="tooltiptext">{t("GoNextVar")}</span>
+            </button>
+          }
+          { neverExplore ? null :
+            <button
+              className="button is-small tooltipped"
+              disabled={
+                focus.moveNumber + focus.exPath.length <= path.length &&
+                focus.exPath.length > 0 &&
+                curNumVariations !== 1
+                  ? false
+                  : true
+              }
+              onClick={
+                focus.moveNumber + focus.exPath.length <= path.length &&
+                focus.exPath.length > 0
+                  ? () =>
+                      handleGameMoveClick({
+                        moveNumber: focus.moveNumber,
+                        exPath: [
+                          ...focus.exPath.slice(0, -1),
+                          (focus.exPath[focus.exPath.length - 1] +
+                            curNumVariations -
+                            1) %
+                            curNumVariations,
+                        ],
+                      })
+                  : undefined
+              }
+            >
+              <i className="fa fa-angle-down"></i>
+              <span className="tooltiptext">{t("GoPrevVar")}</span>
+            </button>
+          }
           <button
             className="button is-small tooltipped"
             disabled={
