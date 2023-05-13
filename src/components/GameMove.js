@@ -71,6 +71,18 @@ function setStatus(engine, game, isPartial, partialMove, status) {
   // console.log("setStatus, status:", status);
 }
 
+// Whether the user wants to explore
+function isExplorer(explorer, me) {
+  return (
+    me?.settings?.all?.exploration === 1 ||
+    ((!me ||
+      !me.settings ||
+      !me.settings.all ||
+      me.settings.all.exploration === 0) &&
+      explorer)
+  );
+}
+
 function setupGame(
   game0,
   gameRef,
@@ -122,10 +134,9 @@ function setupGame(
     game0.canExplore = false;
   } else {
     game0.canSubmit =
-      game0.toMove !== "" &&
-      me &&
-      game0.players[game0.toMove].id === me.id;
-    game0.canExplore = game0.toMove !== "" && game0.numPlayers === 2 && explorer;
+      game0.toMove !== "" && me && game0.players[game0.toMove].id === me.id;
+    game0.canExplore =
+      game0.toMove !== "" && game0.numPlayers === 2 && isExplorer(explorer, me);
   }
   if (game0.sharedPieces) {
     game0.seatNames = [];
@@ -284,8 +295,8 @@ function setupColors(settings, game, t) {
   });
 }
 
-async function saveExploration(exploration, gameid, explorer) {
-  if (!explorer) return;
+async function saveExploration(exploration, gameid, me, explorer) {
+  if (!isExplorer(explorer, me)) return;
   const usr = await Auth.currentAuthenticatedUser();
   console.log("gameid", gameid);
   console.log("move:", exploration.length);
@@ -309,7 +320,7 @@ async function saveExploration(exploration, gameid, explorer) {
 }
 
 function doView(
-  state,
+  me,
   game,
   move,
   explorer,
@@ -333,7 +344,7 @@ function doView(
   let m = move.move;
   if (game.simultaneous) {
     simMove = true;
-    m = game.players.map((p) => (p.id === state.me.id ? m : "")).join(",");
+    m = game.players.map((p) => (p.id === me.id ? m : "")).join(",");
   }
   try {
     gameEngineTmp.move(m, partialMove || simMove);
@@ -365,7 +376,7 @@ function doView(
       (node.toMove + 1) % game.players.length,
       gameEngineTmp
     );
-    saveExploration(explorationRef.current, game.id, explorer);
+    saveExploration(explorationRef.current, game.id, me, explorer);
     let newfocus = cloneDeep(focus);
     newfocus.exPath.push(pos);
     newfocus.canExplore = canExploreMove(
@@ -444,7 +455,7 @@ function processNewSettings(
 function processNewMove(
   newmove,
   explorer,
-  state,
+  me,
   focus,
   gameRef,
   movesRef,
@@ -463,7 +474,7 @@ function processNewMove(
     newmove.canrender === true
   ) {
     doView(
-      state,
+      me,
       gameRef.current,
       newmove,
       explorer,
@@ -640,7 +651,7 @@ function GameMove(props) {
             data.game,
             gameRef,
             globalMe,
-            explorer,
+            false,
             partialMoveRenderRef,
             renderrepSetter,
             statusRef,
@@ -679,7 +690,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  }, [globalMe, renderrepSetter, focusSetter, gameID, explorer]);
+  }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID]);
 
   useEffect(() => {
     async function fetchData() {
@@ -740,8 +751,11 @@ function GameMove(props) {
   const handleGameMoveClick = (foc) => {
     // console.log("foc = ", foc);
     let node = getFocusNode(explorationRef.current, foc);
-    if (!explorer && foc.moveNumber === explorationRef.current.length - 1) {
-      node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variations.
+    if (
+      !isExplorer(explorer, globalMe) &&
+      foc.moveNumber === explorationRef.current.length - 1
+    ) {
+      node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variation.
     }
     let engine = GameFactory(game.metaGame, node.state);
     partialMoveRenderRef.current = false;
@@ -1130,7 +1144,7 @@ function GameMove(props) {
               game0,
               gameRef,
               globalMe,
-                  explorer,
+              explorer,
               partialMoveRenderRef,
               renderrepSetter,
               statusRef,
@@ -1155,9 +1169,12 @@ function GameMove(props) {
 
   const handleInjectChange = (e) => {
     injectedStateSetter(e.target.value);
-  }
+  };
 
   const handleExplorer = () => {
+    let game = gameRef.current;
+    game.canExplore =
+      !game.simultaneous && game.toMove !== "" && game.numPlayers === 2;
     explorerSetter(true);
   };
 
@@ -1243,23 +1260,31 @@ function GameMove(props) {
               />
             )}
             <div className="buttons">
-              { (explorer || !game || game.simultaneous || game.numPlayers !== 2 || toMove === "") ? null :
-                <div className="control" style={{paddingTop: "1em"}}>
+              {globalMe?.settings?.all?.exploration === -1 ||
+              globalMe?.settings?.all?.exploration === 1 ||
+              explorer ||
+              !game ||
+              game.simultaneous ||
+              game.numPlayers !== 2 ||
+              toMove === "" ? null : (
+                <div className="control" style={{ paddingTop: "1em" }}>
                   <button className="button apButton" onClick={handleExplorer}>
                     <span>{t("Explore")}</span>
                   </button>
                 </div>
-              }
-            {toMove === "" ? null : (
-              <div className="control" style={{paddingTop: "1em"}}>
+              )}
+              {toMove === "" ? null : (
+                <div className="control" style={{ paddingTop: "1em" }}>
                   <button className="button apButton" onClick={handleNextGame}>
-                    <span>{t("NextGame")} ({myMove.length})</span>
+                    <span>
+                      {t("NextGame")} ({myMove.length})
+                    </span>
                     <span className="icon">
                       <i className="fa fa-forward"></i>
                     </span>
                   </button>
                 </div>
-            )}
+              )}
             </div>
           </div>
           {/***************** Board *****************/}
