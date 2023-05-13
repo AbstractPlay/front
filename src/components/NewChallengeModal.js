@@ -484,6 +484,7 @@ function NewChallengeModal(props) {
                                 (user.id !== globalMe.id &&
                                   !opponents.some((o) => user.id === o.id))
                             )
+                            .sort((a, b) => a.name.localeCompare(b.name))
                             .map((item) => {
                               return (
                                 <option key={item.id} value={item.id}>

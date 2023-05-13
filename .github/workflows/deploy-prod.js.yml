@@ -1,0 +1,82 @@
+#
+# Github Actions for Serverless Framework
+#
+# Create AWS_KEY and AWS_SECRET secrets in Github repository settings
+# If you're using env.yml file, store its content as ENV Github secret
+#
+# Master branch will be deployed as DEV and every new tag starting with "v**" (e.g. v1.0, v1.2, v2.0, etc) will be deployed as PROD
+#
+# Learn more: https://maxkostinevich.com/blog/how-to-deploy-serverless-applications-using-github-actions/
+#
+
+name: Deploy Prod
+on:
+  push:
+    branches:
+      - main
+  repository_dispatch:
+    types: [dep_update_prod]
+  workflow_dispatch:
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    - name: Install Serverless Framework
+      run: npm install -g serverless
+
+    - name: Serverless AWS authentication
+      run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
+
+    # - name: Create env file
+    #   run: | # cp sample.env.yml env.yml
+    #     cat > env.yml << EOF
+    #     ${{ secrets.ENV }}
+    #     EOF
+
+    - name: Create .npmrc
+      run: echo "@abstractplay:registry=https://npm.pkg.github.com/" > .npmrc
+    - run: echo "//npm.pkg.github.com/:_authToken=${{secrets.PAT_READ_PACKAGES}}" >> .npmrc
+
+    - name: Install NPM dependencies
+      run: npm i
+
+    - name: Set CI version
+      run: npm version prerelease --preid=ci-$GITHUB_RUN_ID --no-git-tag-version
+
+    - name: Build
+      run: npm run build-prod
+      env:
+        CI: false
+
+    - name: Configure AWS credentials
+      uses: Fooji/create-aws-profile-action@v1
+      with:
+        profile: AbstractPlayProd
+        region: us-east-1
+        key: ${{ secrets.AWS_KEY}}
+        secret: ${{ secrets.AWS_SECRET}}
+    #   uses: aws-actions/configure-aws-credentials@v2
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_KEY }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET }}
+    #     aws-region: us-east-1
+
+    - name: Create CloudFront invalidation
+      uses: josemando/aws-cloudfront-create-invalidation@v1
+      with:
+        distribution-id: EZ7B67NVBQ903
+        paths: /*
+
+    - name: Deploy
+      run: serverless client deploy --stage prod --no-confirm
+
+    # Optional (to use with serverless-finch serverless plugin)
+    #- name: Deploy assets to S3
+    #  run: sls client deploy --no-delete-contents --no-confirm -s dev
