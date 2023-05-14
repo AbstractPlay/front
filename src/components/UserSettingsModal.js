@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
+import { cloneDeep } from 'lodash';
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Auth } from "aws-amplify";
 import { MeContext } from "../pages/Skeleton";
@@ -28,6 +29,7 @@ function UserSettingsModal(props) {
   const [user, userSetter] = useState(null);
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
+  const [exploration, explorationSetter] = useState(null);
   const [globalMe, globalMeSetter] = useContext(MeContext);
 
   useEffect(() => {
@@ -51,8 +53,13 @@ function UserSettingsModal(props) {
           gameEnd: true,
         });
       }
+      if (globalMe?.settings?.all?.exploration) {
+        explorationSetter(globalMe.settings.all.exploration);
+      } else {
+        explorationSetter(0);
+      }
     }
-  }, [show, globalMe, notificationsSetter]);
+  }, [show, globalMe, notificationsSetter, explorationSetter]);
 
   useEffect(() => {
     async function fetchData() {
@@ -152,11 +159,26 @@ function UserSettingsModal(props) {
   };
 
   const handleNotifyCheckChange = async (key) => {
+    const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
+    if (newSettings.all === undefined)
+      newSettings.all = {};
+    newSettings.all.notifications = notifications;
+    newSettings.all.notifications[key] = !newSettings.all.notifications[key];
+    handleSettingsChange(newSettings);
+  }
+
+  const handleExplorationChange = async (value) => {
+    const newSettings = cloneDeep(globalMe.settings);
+    if (newSettings.all === undefined)
+      newSettings.all = {};
+    newSettings.all.exploration = value;
+    explorationSetter(value); // this will update the UI
+    handleSettingsChange(newSettings); // this will update the DB (and the UI after another round trip to the server. Do we really need that?)
+  }
+
+  const handleSettingsChange = async (newSettings) => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
-      const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
-      newSettings.all.notifications = notifications;
-      newSettings.all.notifications[key] = !newSettings.all.notifications[key];
       console.log(
         `About to save the following settings:\n${JSON.stringify(newSettings)}`
       );
@@ -405,7 +427,7 @@ function UserSettingsModal(props) {
         </div>
         {/********************* notifications *********************/}
         <div className="field" key="notifications">
-          <label className="label">Notification settings</label>
+          <label className="label">{t("NotificationSettings")}</label>
           {!notifications
             ? ""
             : ["challenges", "gameStart", "gameEnd", "yourturn"].map((key) => (
@@ -422,6 +444,58 @@ function UserSettingsModal(props) {
                 </div>
               ))}
         </div>
+        {/********************* exploration *********************/}
+        {exploration === null
+          ? "" :
+          <div className="field" key="exploration">
+            <label className="label">{t("ExplorationSetting")}</label>
+            <div className="control" key="explore-never">
+              <label className="radio">
+                <input
+                  type="radio"
+                  id="explore-never"
+                  value="-1"
+                  name="explore-never"
+                  checked={exploration === -1}
+                  onChange={() =>
+                    handleExplorationChange(-1)
+                  }
+                />
+                {t(`ExploreNever`)}
+              </label>
+            </div>
+            <div className="control" key="explore-ask">
+              <label className="radio">
+                <input
+                  type="radio"
+                  id="explore-ask"
+                  value="-1"
+                  name="explore-ask"
+                  checked={exploration === 0}
+                  onChange={() =>
+                    handleExplorationChange(0)
+                  }
+                />
+                {t(`ExploreAsk`)}
+              </label>
+            </div>
+            <div className="control" key="explore-always">
+              <label className="radio">
+                <input
+                  type="radio"
+                  id="explore-always"
+                  value="-1"
+                  name="explore-always"
+                  checked={exploration === 1}
+                  onChange={() =>
+                    handleExplorationChange(1)
+                  }
+                />
+                {t(`ExploreAlways`)}
+              </label>
+            </div>
+          </div>
+        }
 
         {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above
         ******************** Language *********************

@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Highlight current position in the moves list. Very useful when exploring.
 * Added notification settings to the user settings screen. It has also been reformatted. Further optimization forthcoming.
 * Added some text to the ToS to make it explicit that display names must comply with the terms and can be forcibly changed if deemed necessary.
+* Implemented user controllable exploring. By default new users will be in "always ask" state. There is a new usersetiing where this can be changed to "never", "always" or "ask".
 
 ### Fixed
 
