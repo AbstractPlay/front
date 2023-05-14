@@ -55,7 +55,7 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
 
 function setStatus(engine, game, isPartial, partialMove, status) {
   status.statuses = engine.statuses(isPartial, partialMove);
-  if (game.scores) {
+  if ( (game.scores) || (game.limitedPieces) ) {
     status.scores = engine.getPlayersScores();
   }
   if (game.playerStashes) {

@@ -27,7 +27,7 @@ function GameStatus(props) {
     game.colors === undefined ||
     ((!game.variants || game.variants.length === 0) &&
       status.statuses.length === 0 &&
-      (!game.scores || status.scores.length === 0) &&
+      (( (!game.scores) && (!game.limitedPieces) ) || status.scores.length === 0) &&
       !game.playerStashes &&
       !game.sharedStash)
   ) {
@@ -81,7 +81,7 @@ function GameStatus(props) {
             </tbody>
           </table>
         )}
-        {!game.scores || status.scores.length === 0
+        {( (!game.scores) && (!game.limitedPieces) ) || status.scores.length === 0
           ? ""
           : status.scores.map((scores, i) => (
               <div key={i}>
