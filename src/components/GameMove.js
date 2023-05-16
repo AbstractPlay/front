@@ -117,7 +117,7 @@ function setupGame(
   if (game0.state === undefined)
     throw new Error("Why no state? This shouldn't happen no more!");
   const engine = GameFactory(game0.metaGame, game0.state);
-  moveSetter({ ...engine.validateMove(""), previous: "", move: "" });
+  moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
   game0.me = game0.players.findIndex((p) => me && p.id === me.id);
   game0.variants = engine.getVariants();
   if (game0.simultaneous) {
@@ -357,6 +357,7 @@ function doView(
     errorSetter(true);
     return;
   }
+  move.rendered = move.move;
   // console.log("explorationRef:",explorationRef);
   // console.log("statusRef:",statusRef);
   setStatus(
@@ -387,7 +388,7 @@ function doView(
     focusSetter(newfocus);
     moveSetter({
       ...gameEngineTmp.validateMove(""),
-      previous: "",
+      rendered: "",
       move: "",
     });
     if (newfocus.canExplore && !game.noMoves)
@@ -493,7 +494,7 @@ function processNewMove(
   // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position
   else if (
     partialMoveRenderRef.current &&
-    !newmove.move.startsWith(newmove.previous)
+    !newmove.move.startsWith(newmove.rendered)
   ) {
     let node = getFocusNode(explorationRef.current, focus);
     let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
@@ -502,6 +503,7 @@ function processNewMove(
     if (focus.canExplore && !gameRef.current.noMoves)
       movesRef.current = gameEngineTmp.moves();
     renderrepSetter(gameEngineTmp.render(gameRef.current.me + 1));
+    newmove.rendered = "";
     moveSetter(newmove);
   } else {
     moveSetter(newmove); // not renderable yet
@@ -517,7 +519,7 @@ function GameMove(props) {
     valid: true,
     message: "",
     complete: 0,
-    previous: "",
+    rendered: "",
   });
   const [error, errorSetter] = useState(false);
   const [showSettings, showSettingsSetter] = useState(false);
@@ -546,6 +548,8 @@ function GameMove(props) {
   const partialMoveRenderRef = useRef(false);
   const focusRef = useRef();
   focusRef.current = focus;
+  // Revisit this moveRef variable. It works, but is it really needed? It was changed to deal with missing dependency warnings on the useEffect that updates the svg board. Is that really needed?
+  // Does it have to be a Ref, or can it just be a regular variable? Or even just the state variable?
   const moveRef = useRef();
   moveRef.current = move;
   const boardImage = useRef();
@@ -774,7 +778,7 @@ function GameMove(props) {
           foc.moveNumber === explorationRef.current.length - 1 &&
           !gameRef.current.canSubmit));
     setStatus(engine, gameRef.current, isPartialSimMove, "", statusRef.current);
-    moveSetter({ ...engine.validateMove(""), move: "", previous: "" });
+    moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
   };
 
   function handleReset() {
@@ -797,7 +801,7 @@ function GameMove(props) {
       result = gameEngineTmp.validateMove(value, gameRef.current.me + 1);
     else result = gameEngineTmp.validateMove(value);
     result.move = value;
-    result.previous = move.move;
+    result.rendered = move.rendered;
     // console.log(result);
     processNewMove(
       result,
@@ -860,7 +864,7 @@ function GameMove(props) {
             piece
           )
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
-      result.previous = moveRef.current.move;
+      result.rendered = moveRef.current.rendered;
       processNewMove(
         result,
         explorer,
