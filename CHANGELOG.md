@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added notification settings to the user settings screen. It has also been reformatted. Further optimization forthcoming.
 * Added some text to the ToS to make it explicit that display names must comply with the terms and can be forcibly changed if deemed necessary.
 * Implemented user controllable exploring. By default new users will be in "always ask" state. There is a new usersetiing where this can be changed to "never", "always" or "ask".
+* Fix editing of partial moves that can be rendered: Instead of move.previous only keep previous partial move that was renderable. Needed for Chase click handling.
 
 ### Fixed
 
