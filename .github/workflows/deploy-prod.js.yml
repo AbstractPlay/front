@@ -49,6 +49,9 @@ jobs:
     - name: Dump package.json
       run: cat package.json
 
+    - name: Dump gameslib package.json
+      run: cat node_modules/@abstractplay/gameslib/package.json
+
     - name: Install NPM dependencies
       run: npm i
 
