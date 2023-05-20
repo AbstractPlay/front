@@ -46,6 +46,9 @@ jobs:
       run: echo "@abstractplay:registry=https://npm.pkg.github.com/" > .npmrc
     - run: echo "//npm.pkg.github.com/:_authToken=${{secrets.PAT_READ_PACKAGES}}" >> .npmrc
 
+    - name: Kill package-lock.json
+      run: rm package-lock.json
+
     - name: Install NPM dependencies
       run: npm i
 
