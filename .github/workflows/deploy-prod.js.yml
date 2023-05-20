@@ -46,8 +46,14 @@ jobs:
       run: echo "@abstractplay:registry=https://npm.pkg.github.com/" > .npmrc
     - run: echo "//npm.pkg.github.com/:_authToken=${{secrets.PAT_READ_PACKAGES}}" >> .npmrc
 
+    - name: Kill package-lock.json
+      run: rm package-lock.json
+
     - name: Install NPM dependencies
       run: npm i
+
+    - name: Dump package-lock.json
+      run: cat package-lock.json
 
     - name: Set CI version
       run: npm version prerelease --preid=ci-$GITHUB_RUN_ID --no-git-tag-version
