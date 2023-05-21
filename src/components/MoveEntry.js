@@ -55,6 +55,10 @@ function MoveEntry(props) {
     drawofferSetter(value);
   };
 
+  const handleClear = () => {
+    handleMove("");
+  }
+
   const sortLenAlpha = (a, b) => {
     if (a.length === b.length) {
         return a.localeCompare(b);
@@ -246,7 +250,7 @@ function MoveEntry(props) {
                     </select>
                   </div>
                   <p className="lined">
-                    <span>or</span>
+                    <span>{t("Or")}</span>
                   </p>
                 </Fragment>
               )}
@@ -257,7 +261,7 @@ function MoveEntry(props) {
               ) : (
                 ""
               )}
-              <div className="control">
+              <div className="control input-icon">
                 <input
                   className={`input is-small ${moveState}`}
                   name="move"
@@ -267,6 +271,16 @@ function MoveEntry(props) {
                   onChange={(e) => handleMove(e.target.value)}
                   placeholder={t("EnterMove")}
                 />
+                { move.move.length === 0 ? "" :
+                  <div
+                    className="tooltipped"
+                    style={{ marginTop: '0.6ex' }}
+                    onClick={() => handleClear()}
+                  >
+                    <i className="fa fa-trash resetIcon"></i>
+                    <span className="tooltiptext">{t("ClearMove")}</span>
+                  </div>
+                }
               </div>
               <div>
                 {move.valid && move.complete === 0 && move.move.length > 0 ? (
