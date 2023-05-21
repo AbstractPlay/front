@@ -316,16 +316,6 @@ th .player {
   color: var(--main-fg-color);
 }
 
-.fa-thumbs-up {
-  font-size: 20px;
-  color: #7df00a;
-}
-
-.fa-thumbs-down {
-  font-size: 20px;
-  color: red;
-}
-
 .fa-thumbs-up:hover,
 .fa-thumbs-down:hover {
   color: var(--main-fg-color);
@@ -355,6 +345,11 @@ th .player {
 
 .tooltipped:hover .tooltiptext {
   visibility: visible;
+}
+
+.input-icon {
+  display: flex;
+  align-items: center;
 }
 
 /* Leaving the stuff for user settings until I'm prepared to expand it */
