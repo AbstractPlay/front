@@ -272,6 +272,8 @@ function mergeMoveRecursive(gameEngine, node, children) {
     mergeMoveRecursive(gameEngine, node.children[pos], n.children);
     gameEngine.stack.pop();
     gameEngine.load();
+    gameEngine.gameover = false;
+    gameEngine.winner = [];
   });
 }
 
