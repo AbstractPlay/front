@@ -90,6 +90,7 @@ function setupGame(
   explorer,
   partialMoveRenderRef,
   renderrepSetter,
+  engineRef,
   statusRef,
   movesRef,
   focusSetter,
@@ -164,6 +165,7 @@ function setupGame(
     game0.colors = gameRef.current.colors; // gets used when you submit a move.
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
+  engineRef.current = cloneDeep(engine);
   const render = engine.render(game0.me + 1);
   setStatus(
     engine,
@@ -334,6 +336,7 @@ function doView(
   moveSetter,
   partialMoveRenderRef,
   renderrepSetter,
+  engineRef,
   movesRef,
   statusRef
 ) {
@@ -400,6 +403,7 @@ function doView(
   }
   partialMoveRenderRef.current = partialMove;
   // console.log('setting renderrep 1');
+  engineRef.current = gameEngineTmp;
   renderrepSetter(gameEngineTmp.render(game.me + 1));
 }
 
@@ -467,6 +471,7 @@ function processNewMove(
   errorMessageRef,
   partialMoveRenderRef,
   renderrepSetter,
+  engineRef,
   errorSetter,
   focusSetter,
   moveSetter
@@ -489,6 +494,7 @@ function processNewMove(
       moveSetter,
       partialMoveRenderRef,
       renderrepSetter,
+      engineRef,
       movesRef,
       statusRef
     );
@@ -504,6 +510,7 @@ function processNewMove(
     setStatus(gameEngineTmp, gameRef.current, false, "", statusRef.current);
     if (focus.canExplore && !gameRef.current.noMoves)
       movesRef.current = gameEngineTmp.moves();
+    engineRef.current = gameEngineTmp;
     renderrepSetter(gameEngineTmp.render(gameRef.current.me + 1));
     newmove.rendered = "";
     moveSetter(newmove);
@@ -559,6 +566,8 @@ function GameMove(props) {
   const gameRef = useRef(null);
   // Array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
   const explorationRef = useRef(null);
+  // This is used for hover effects. Has the currently rendered engine state with partial moves, if any, applied.
+  const engineRef = useRef(null);
   const [myMove, myMoveSetter] = useContext(MyTurnContext);
   //   if (myMove !== undefined) {
   //     console.log(`Fetched MyMoveContext`);
@@ -660,6 +669,7 @@ function GameMove(props) {
             false,
             partialMoveRenderRef,
             renderrepSetter,
+            engineRef,
             statusRef,
             movesRef,
             focusSetter,
@@ -770,6 +780,7 @@ function GameMove(props) {
       movesRef.current = engine.moves();
     }
     focusSetter(foc);
+    engineRef.current = engine;
     renderrepSetter(
       engine.render(gameRef.current.me ? gameRef.current.me + 1 : 1)
     );
@@ -817,6 +828,7 @@ function GameMove(props) {
       errorMessageRef,
       partialMoveRenderRef,
       renderrepSetter,
+      engineRef,
       errorSetter,
       focusSetter,
       moveSetter
@@ -839,6 +851,7 @@ function GameMove(props) {
       errorMessageRef,
       partialMoveRenderRef,
       renderrepSetter,
+      engineRef,
       errorSetter,
       focusSetter,
       moveSetter
@@ -879,6 +892,7 @@ function GameMove(props) {
         errorMessageRef,
         partialMoveRenderRef,
         renderrepSetter,
+        engineRef,
         errorSetter,
         focusSetter,
         moveSetter
@@ -886,12 +900,10 @@ function GameMove(props) {
     }
 
     function expand(row, col) {
-      let node = getFocusNode(explorationRef.current, focusRef.current);
-      let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       const svg = stackImage.current.querySelector("svg");
       if (svg !== null) svg.remove();
       options.divid = "stack";
-      render(gameEngineTmp.renderColumn(row, col), options);
+      render(engineRef.current.renderColumn(row, col), options);
     }
 
     if (boardImage.current !== null) {
@@ -1038,6 +1050,7 @@ function GameMove(props) {
         explorer,
         partialMoveRenderRef,
         renderrepSetter,
+        engineRef,
         statusRef,
         movesRef,
         focusSetter,
@@ -1153,6 +1166,7 @@ function GameMove(props) {
               explorer,
               partialMoveRenderRef,
               renderrepSetter,
+              engineRef,
               statusRef,
               movesRef,
               focusSetter,
