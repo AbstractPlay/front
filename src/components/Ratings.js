@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Auth } from "aws-amplify";
+import { Helmet } from "react-helmet-async";
 import { MeContext } from "../pages/Skeleton";
 import Spinner from "./Spinner";
 import NewChallengeModal from "./NewChallengeModal";
@@ -14,6 +15,7 @@ function Ratings(props) {
   const [opponent, opponentSetter] = useState(null);
   const [update, updateSetter] = useState(0);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
+  const [canonical, canonicalSetter] = useState("");
   const { metaGame } = useParams();
   const [globalMe] = useContext(MeContext);
 
@@ -34,6 +36,7 @@ function Ratings(props) {
       }
     }
     fetchData();
+    canonicalSetter(`https://play.abstractplay.com/ratings/${metaGame}/`);
   }, [metaGame]);
 
   const handleChallenge = (player) => {
@@ -75,6 +78,10 @@ function Ratings(props) {
     updateSetter(props.update);
   const metaGameName = gameinfo.get(metaGame).name;
   return (
+    <Fragment>
+        <Helmet>
+            <link rel="canonical" href={canonical} />
+        </Helmet>
     <article>
       <h1 className="has-text-centered title">
         {t("RatingsList", { name: metaGameName })}
@@ -138,6 +145,7 @@ function Ratings(props) {
         )}
       </div>
     </article>
+    </Fragment>
   );
 }
 

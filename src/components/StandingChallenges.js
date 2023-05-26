@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from "../config";
 import { Auth } from "aws-amplify";
+import { Helmet } from "react-helmet-async";
 import { MeContext } from "../pages/Skeleton";
 import Spinner from "./Spinner";
 
@@ -15,6 +16,7 @@ function StandingChallenges(props) {
   const [revoke, revokeSetter] = useState(null);
   const [reject, rejectSetter] = useState(null);
   const [update, updateSetter] = useState(0);
+  const [canonical, canonicalSetter] = useState("https://play.abstractplay.com/challenges/");
   const { metaGame } = useParams();
   const [globalMe] = useContext(MeContext);
 
@@ -48,6 +50,7 @@ function StandingChallenges(props) {
       }
     }
     fetchData();
+    canonicalSetter(`https://play.abstractplay.com/challenges/${metaGame}/`);
   }, [update, metaGame]);
 
   useEffect(() => {
@@ -183,6 +186,10 @@ function StandingChallenges(props) {
   const showAccepters =
     challenges && challenges.find((c) => c.players.length > 1);
   return (
+    <Fragment>
+        <Helmet>
+        <link rel="canonical" href={canonical} />
+        </Helmet>
     <article>
       <h1 className="has-text-centered title">
         {t("StandingChallenges", { name: metaGameName })}
@@ -275,6 +282,7 @@ function StandingChallenges(props) {
         )}
       </div>
     </article>
+    </Fragment>
   );
 }
 

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN } from "../config";
+import { Helmet } from "react-helmet-async";
 import Spinner from "./Spinner";
 
 function ListGames(props) {
@@ -10,6 +11,7 @@ function ListGames(props) {
   const [games, gamesSetter] = useState(null);
   const [update, updateSetter] = useState(0);
   const { gameState, metaGame } = useParams();
+  const [canonical, canonicalSetter] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -28,6 +30,7 @@ function ListGames(props) {
       }
     }
     fetchData();
+    canonicalSetter(`https://play.abstractplay.com/listgames/${gameState}/${metaGame}/`);
   }, [gameState, metaGame]);
 
   if (update !== props.update)
@@ -38,6 +41,10 @@ function ListGames(props) {
     ? games.reduce((max, game) => Math.max(max, game.players.length), 0)
     : null;
   return (
+    <Fragment>
+        <Helmet>
+            <link rel="canonical" href={canonical} />
+        </Helmet>
     <article>
       <h1 className="has-text-centered title">
         {gameState === "current"
@@ -85,6 +92,7 @@ function ListGames(props) {
         )}
       </div>
     </article>
+    </Fragment>
   );
 }
 

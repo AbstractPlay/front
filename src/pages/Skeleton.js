@@ -1,5 +1,6 @@
 import React, { useState, Suspense, useEffect, createContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import {
   COGNITO_USER_POOL_ID,
   COGNITO_APPID,
@@ -85,6 +86,10 @@ function Bones(props) {
   if (!authed) return <Spinner />;
   else
     return (
+      <HelmetProvider>
+        <Helmet>
+          <link rel="canonical" href="https://play.abstractplay.com/" />
+        </Helmet>
       <MeContext.Provider value={[globalMe, globalMeSetter]}>
         <Router>
           <Navbar />
@@ -130,6 +135,7 @@ function Bones(props) {
           )}
         </Router>
       </MeContext.Provider>
+      </HelmetProvider>
     );
 }
 

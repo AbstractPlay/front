@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef, createRef } from "react";
+import React, { useState, useEffect, useRef, createRef, Fragment } from "react";
 import MetaItem from "./MetaItem";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN } from "../config";
+import { Helmet } from "react-helmet-async";
 
 function MetaContainer(props) {
   const [theMetaGame, theMetaGameSetter] = useState("");
@@ -13,6 +14,7 @@ function MetaContainer(props) {
   const [hideDetails, hideDetailsSetter] = useState(false);
   const { metaGame } = useParams();
   const { t, i18n } = useTranslation();
+  const [ canonical, canonicalSetter ] = useState("https://play.abstractplay.com/games/");
   addResource(i18n.language);
 
   useEffect(() => {
@@ -38,6 +40,7 @@ function MetaContainer(props) {
   useEffect(() => {
     if (metaGame !== undefined) {
       handleChangeGame(metaGame);
+      canonicalSetter(`https://play.abstractplay.com/games/${metaGame}/`)
     }
   }, [metaGame]);
 
@@ -58,6 +61,11 @@ function MetaContainer(props) {
 
   console.log(games);
   return (
+    <Fragment>
+        <Helmet>
+          <link rel="canonical" href={canonical} />
+        </Helmet>
+
     <article>
       <div className="container has-text-centered">
         <h1 className="title">{t("AvailableGames")}</h1>
@@ -111,6 +119,7 @@ function MetaContainer(props) {
         ))}
       </div>
     </article>
+    </Fragment>
   );
 }
 
