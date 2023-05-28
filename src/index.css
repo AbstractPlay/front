@@ -164,9 +164,9 @@ input[type="radio"] {
   padding: 1em;
 }
 
-/* .board > svg {
+.unZoomedBoard > svg {
   max-height: 600px;
-} */
+}
 
 .boardButtons {
   overflow: hidden;
