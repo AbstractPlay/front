@@ -55,7 +55,7 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
 
 function setStatus(engine, game, isPartial, partialMove, status) {
   status.statuses = engine.statuses(isPartial, partialMove);
-  if ( (game.scores) || (game.limitedPieces) ) {
+  if (game.scores || game.limitedPieces) {
     status.scores = engine.getPlayersScores();
   }
   if (game.playerStashes) {
@@ -1337,7 +1337,11 @@ function GameMove(props) {
                 <div className="stackboard" id="svg" ref={boardImage}></div>
               </div>
             ) : (
-              <div className="board" id="svg" ref={boardImage}></div>
+              <div
+                className={isZoomed ? "board" : "board unZoomedBoard"}
+                id="svg"
+                ref={boardImage}
+              ></div>
             )}
             <div className="boardButtons">
               <button
