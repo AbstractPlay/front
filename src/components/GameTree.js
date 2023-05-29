@@ -11,11 +11,15 @@ export class GameNode {
     this.outcome = -1; // 0 for player1 win, 1 for player2 win, -1 for undecided.
   }
 
-  AddChild(move, state, toMove, gameEngine) {
+  AddChild(move, gameEngine) {
     for (let i = 0; i < this.children.length; i++) {
       if (gameEngine.sameMove(move, this.children[i].move)) return i;
     }
-    const child = new GameNode(this, move, state, toMove);
+    const toMove = gameEngine.gameover ? "" : gameEngine.currplayer - 1;
+    const child = new GameNode(this, move, gameEngine.serialize(), toMove);
+    if (toMove === "" && gameEngine.winner.length === 1) {
+      child.outcome = gameEngine.winner[0] - 1;
+    }
     this.children.push(child);
     this.UpdateOutcome();
     return this.children.length - 1;

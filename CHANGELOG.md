@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Implemented user controllable exploring. By default new users will be in "always ask" state. There is a new usersetiing where this can be changed to "never", "always" or "ask".
 * Fix editing of partial moves that can be rendered: Instead of move.previous only keep previous partial move that was renderable. Needed for Chase click handling.
 * Add a button to clear the move input text box.
-* Fix: When someone explores 2 winning moves from a particular position, the front end crashed.
+* Give feedback when you make a game ending move while exploring. Also auto mark such a move as winning or losing.
 
 ### Fixed
 
@@ -32,6 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Pikemen: Fixed bug that caused unnecessary reorientation to throw an error instead of being ignored.
 * Blam!: Click handler now autoselects your smallest piece unless you select a different one from your stash first.
 * Fixed bug where going directly to a game sometimes wouldn't load.
+* Fix: When someone explores 2 winning moves from a particular position, the front end crashed.
+* Marking a move as winning or losing didn't get saved to the DB (would only get saved on further exploration).
+* Fix bug on merging exploration from 2 moves ago.
+* When switching to a stackExpanding game (using "Next game") react loses track of the previous board svg. Remove explicitly.
 
 ## [v1.0.0-beta]
 

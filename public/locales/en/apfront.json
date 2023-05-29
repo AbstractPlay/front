@@ -80,6 +80,8 @@
     "GameInfo": "Game information",
     "GameInfoFor": "Game information for {{metaGame}}",
     "GameIsOver": "The game has ended",
+    "GameIsOver1": "The game has ended. {{winner}} won.",
+    "GameIsOver2": "The game has ended. The following players won: {{winners}} and {{lastWinner}}.",  
     "Games": "Games",
     "GameSummary": "Chat log",
     "GoBegin": "Show beginning of game. Keys: Home or 'h'.",
