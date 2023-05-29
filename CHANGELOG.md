@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix: When someone explores 2 winning moves from a particular position, the front end crashed.
 * Marking a move as winning or losing didn't get saved to the DB (would only get saved on further exploration).
 * Fix bug on merging exploration from 2 moves ago.
+* When switching to a stackExpanding game (using "Next game") react loses track of the previous board svg. Remove explicitly.
 
 ## [v1.0.0-beta]
 

@@ -694,6 +694,13 @@ function GameMove(props) {
         errorSetter(true);
       }
     }
+    // Somehow react loses track of this, so explicitly remove this.
+    if (boardImage.current !== null) {
+      const svg = boardImage.current.querySelector("svg");
+      if (svg !== null) {
+        svg.remove();
+      }
+    }
     fetchData();
   }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID]);
 
