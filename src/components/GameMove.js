@@ -231,7 +231,7 @@ function setupGame(
   renderrepSetter(render);
 }
 
-function mergeExploration(game, exploration, data) {
+function mergeExploration(game, exploration, data, me) {
   const moveNumber = exploration.length;
   if (data[0] && data[0].move === moveNumber) {
     let node = exploration[moveNumber - 1];
@@ -240,7 +240,6 @@ function mergeExploration(game, exploration, data) {
   } else if (data[1] && data[1].move === moveNumber - 2) {
     let node = exploration[moveNumber - 2];
     let gameEngine = GameFactory(game.metaGame, node.state);
-    console.log("data[1]: ", data[1]);
     const subtree1 = data[1].tree.find((e) =>
       gameEngine.sameMove(exploration[moveNumber - 2].move, e.move)
     );
@@ -255,19 +254,18 @@ function mergeExploration(game, exploration, data) {
           exploration[moveNumber - 1],
           subtree2.children
         );
+        // save this subtree to the database at this move (we only fetch 2 moves back so this will get lost unless the player explores further)
+        saveExploration(exploration, game.id, me, true);
       }
     }
   }
 }
 
 function mergeMoveRecursive(gameEngine, node, children) {
-  console.log(node);
   children.forEach((n) => {
     gameEngine.move(n.move);
     const pos = node.AddChild(
       n.move,
-      gameEngine.serialize(),
-      gameEngine.gameover ? "" : gameEngine.currplayer - 1,
       gameEngine
     );
     if (n.outcome !== undefined) node.children[pos].SetOutcome(n.outcome);
@@ -302,9 +300,6 @@ function setupColors(settings, game, t) {
 async function saveExploration(exploration, gameid, me, explorer) {
   if (!isExplorer(explorer, me)) return;
   const usr = await Auth.currentAuthenticatedUser();
-  console.log("gameid", gameid);
-  console.log("move:", exploration.length);
-  console.log("tree:", exploration[exploration.length - 1].Deflate().children);
   fetch(API_ENDPOINT_AUTH, {
     method: "POST",
     headers: {
@@ -374,14 +369,7 @@ function doView(
   );
   if (!partialMove) {
     node = getFocusNode(explorationRef.current, focus);
-    let newstate = gameEngineTmp.serialize();
-    // console.log("newstate", newstate);
-    const pos = node.AddChild(
-      move.move,
-      newstate,
-      (node.toMove + 1) % game.players.length,
-      gameEngineTmp
-    );
+    const pos = node.AddChild(move.move, gameEngineTmp);
     saveExploration(explorationRef.current, game.id, me, explorer);
     let newfocus = cloneDeep(focus);
     newfocus.exPath.push(pos);
@@ -419,7 +407,8 @@ function canExploreMove(game, exploration, focus) {
   return (
     (game.canExplore || (game.canSubmit && focus.exPath.length === 0)) && // exploring (beyond move input) is supported or it is my move and we are just looking at the current position
     exploration !== null &&
-    focus.moveNumber === exploration.length - 1 // we aren't looking at history
+    focus.moveNumber === exploration.length - 1 && // we aren't looking at history
+    getFocusNode(exploration, focus).toMove !== "" // game isn't over
   );
 }
 
@@ -549,7 +538,7 @@ function GameMove(props) {
   const [newChat, newChatSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
   const [gameRec, gameRecSetter] = useState(undefined);
-  const [explorer, explorerSetter] = useState(false);
+  const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -744,10 +733,8 @@ function GameMove(props) {
             errorSetter(true);
           } else {
             const result = await res.json();
-            console.log(result);
             data = JSON.parse(result.body);
-            console.log("exploration fetched:", data);
-            mergeExploration(gameRef.current, explorationRef.current, data);
+            mergeExploration(gameRef.current, explorationRef.current, data, globalMe);
             focusSetter(cloneDeep(focus)); // just to trigger a rerender...
           }
         }
@@ -758,10 +745,9 @@ function GameMove(props) {
       }
     }
     if (focus && !explorationFetched && gameRef.current.canExplore) {
-      console.log("fetching exploration");
       fetchData();
     }
-  }, [focus, explorationFetched, gameID]);
+  }, [focus, explorationFetched, gameID, explorer, globalMe]);
 
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {
@@ -929,9 +915,6 @@ function GameMove(props) {
         }
         options.showAnnotations = settings.annotate;
         options.svgid = "theBoardSVG";
-        console.log(renderrep);
-        console.log("options = ", options);
-        // console.log("renderrep useEffect statusRef: ", statusRef);
         render(renderrep, options);
       }
     }
@@ -999,7 +982,7 @@ function GameMove(props) {
   const handleMark = (mark) => {
     let node = getFocusNode(explorationRef.current, focus);
     node.SetOutcome(mark);
-    saveExploration(explorationRef.current, game.id, explorer);
+    saveExploration(explorationRef.current, game.id, globalMe, explorer);
     focusSetter(cloneDeep(focus)); // just to trigger a rerender...
   };
 
@@ -1211,7 +1194,6 @@ function GameMove(props) {
       const engine = GameFactory(game.metaGame, node.state);
       if (game.simultaneous) movesRef.current = engine.moves(game.me + 1);
       else movesRef.current = engine.moves();
-      console.log("moves updated. Move 1 is: " + movesRef.current[0]);
     }
     focusSetter(focus0);
     explorerSetter(true);
@@ -1236,12 +1218,6 @@ function GameMove(props) {
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
   // console.log("game.me", game ? game.me : "nope");
-  console.log(
-    "current move node: ",
-    explorationRef.current
-      ? explorationRef.current[explorationRef.current.length - 1]
-      : ""
-  );
   if (!error) {
     let toMove;
     if (focus) {
