@@ -39,7 +39,6 @@ function MoveEntry(props) {
   const exploration = props.exploration;
   const focus = props.focus;
   const submitting = props.submitting;
-  console.log(`SUBMITTING: ${submitting}`);
   const handleMove = props.handlers[0];
   const handleMark = props.handlers[1];
   const handleSubmit = props.handlers[2];
@@ -51,6 +50,14 @@ function MoveEntry(props) {
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
 
+  function getFocusNode(exp, foc) {
+    let curNode = exp[foc.moveNumber];
+    for (const p of foc.exPath) {
+      curNode = curNode.children[p];
+    }
+    return curNode;
+  }
+  
   const handleDrawOfferChange = (value) => {
     drawofferSetter(value);
   };
@@ -90,8 +97,6 @@ function MoveEntry(props) {
       moveToSubmit =
         exploration[exploration.length - 1].children[focus.exPath[0]].move;
     }
-    console.log(`MOVETOSUBMIT: ${moveToSubmit}`);
-    console.log(`EXPATH: ${JSON.stringify(focus, null, 2)}`);
 
     let uiState = null;
     if (focus.moveNumber < exploration.length - 1) {
@@ -125,7 +130,23 @@ function MoveEntry(props) {
         if (game.colors !== undefined) img = game.colors[toMove];
       }
     } else {
-      mover = t("GameIsOver");
+      // game over
+      const node = getFocusNode(exploration, focus);
+      const state = JSON.parse(node.state);
+      if (state.winner && state.winner.length > 0) {
+        if (state.winner.length === 1) {
+          const winner = game.players[state.winner[0] - 1].name;
+          mover = t("GameIsOver1", { winner });
+        } else {
+          const winners = state.winner.map((w) => game.players[w - 1].name);
+          const lastWinner = winners.pop();
+          const winnersStr = winners.join(", ");
+          mover = t("GameIsOver2", { winners: winnersStr, lastWinner });
+        }
+      } else {
+        console.log(state);
+        mover = t("GameIsOver");
+      }
     }
     let canClaimTimeout = false;
     if (uiState === 0 && !submitting) {
@@ -150,7 +171,6 @@ function MoveEntry(props) {
       game.players.reduce((acc, p) => acc + (p.draw ? 1 : 0), 0) ===
         game.players.length - 1;
 
-    console.log("toMove", toMove);
     return (
       <div>
         <h1 className="subtitle lined">
