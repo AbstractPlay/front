@@ -59,6 +59,8 @@ function getPath(focus, exploration, path) {
 }
 
 function GameMoves(props) {
+  const scrollRef = useRef();
+  const tableRef = useRef();
   const { t } = useTranslation();
   let focus = props.focus;
   let game = props.game;
@@ -67,6 +69,17 @@ function GameMoves(props) {
   let handleGameMoveClick = props.handleGameMoveClick;
 
   useEventListener("keydown", keyDownHandler);
+
+  const scrollToBottom = () => {
+    if (scrollRef.current) {
+      if (tableRef.current.scrollTop < scrollRef.current.offsetTop - 600 + scrollRef.current.offsetHeight)
+        tableRef.current.scrollTop = scrollRef.current.offsetTop - 600 + scrollRef.current.offsetHeight;
+    }
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  });
 
   function keyDownHandler(e) {
     const key = e.key;
@@ -266,6 +279,7 @@ function GameMoves(props) {
     let path = [];
     let curNumVariations = 0;
 
+    let focusRow = 0;
     if (exploration !== null) {
       for (let i = 1; i < exploration.length; i++) {
         let className = "gameMove";
@@ -339,6 +353,8 @@ function GameMoves(props) {
             </td>
           );
           if (movenum < path.length) {
+            if (path[movenum][0].class.includes("gameMoveFocus"))
+              focusRow = i;
             // path[movenum].map((m, k) => console.log(m.move, m.path));
             row.push(
               <td key={"td1-" + i + "-" + j}>
@@ -499,14 +515,16 @@ function GameMoves(props) {
             <span className="tooltiptext">{t("GoCurrent")}</span>
           </button>
         </div>
-        <table className="table is-narrow is-striped">
-          <tbody>
-            <tr>{header}</tr>
-            {moveRows.map((row, index) => (
-              <tr key={"move" + index}>{row}</tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="movesTable" ref={tableRef}>
+          <table className="table is-narrow is-striped">
+            <tbody>
+              <tr>{header}</tr>
+              {moveRows.map((row, index) => (
+                <tr key={"move" + index} ref={index === focusRow ? scrollRef : null}>{row}</tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Fragment>
     );
   } else {
