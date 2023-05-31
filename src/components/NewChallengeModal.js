@@ -269,6 +269,9 @@ function NewChallengeModal(props) {
   let games = [];
   gameinfo.forEach((game) => games.push({ id: game.uid, name: game.name }));
   games.sort((a, b) => (a.name > b.name ? 1 : -1));
+  if (process.env.REACT_APP_REAL_MODE === "production") {
+    games = games.filter(g => ! gameinfo.get(g.id).flags.includes("experimental"));
+  }
   let groupData = [];
   let nonGroupData = [];
   let playercounts = [];
