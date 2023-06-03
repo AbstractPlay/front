@@ -59,7 +59,8 @@ function getPath(focus, exploration, path) {
 }
 
 function GameMoves(props) {
-  const scrollRef = useRef();
+  const focusRowRef = useRef();
+  const lastRowRef = useRef();
   const tableRef = useRef();
   const { t } = useTranslation();
   let focus = props.focus;
@@ -70,15 +71,20 @@ function GameMoves(props) {
 
   useEventListener("keydown", keyDownHandler);
 
-  const scrollToBottom = () => {
-    if (scrollRef.current) {
-      if (tableRef.current.scrollTop < scrollRef.current.offsetTop - 600 + scrollRef.current.offsetHeight)
-        tableRef.current.scrollTop = scrollRef.current.offsetTop - 600 + scrollRef.current.offsetHeight;
+  const scroll = () => {
+    if (focusRowRef.current) {
+      let newScrollTop = tableRef.current.scrollTop;
+      if (focus.moveNumber === exploration.length - 1 && lastRowRef.current.offsetTop + lastRowRef.current.offsetHeight > tableRef.current.scrollTop + 600)
+        newScrollTop = lastRowRef.current.offsetTop - 600 + lastRowRef.current.offsetHeight; // make last row visible
+      if (focusRowRef.current.offsetTop < newScrollTop)
+        newScrollTop = focusRowRef.current.offsetTop; // make focus row visible
+      if (newScrollTop !== tableRef.current.scrollTop)
+        tableRef.current.scrollTop = newScrollTop;
     }
   }
 
   useEffect(() => {
-    scrollToBottom()
+    scroll()
   });
 
   function keyDownHandler(e) {
@@ -280,6 +286,7 @@ function GameMoves(props) {
     let curNumVariations = 0;
 
     let focusRow = 0;
+    let numRows = 0;
     if (exploration !== null) {
       for (let i = 1; i < exploration.length; i++) {
         let className = "gameMove";
@@ -342,7 +349,8 @@ function GameMoves(props) {
           node = node.children[0];
         }
       }
-      for (let i = 0; i < Math.ceil(path.length / numcolumns); i++) {
+      numRows = Math.ceil(path.length / numcolumns);
+      for (let i = 0; i < numRows; i++) {
         let row = [];
         for (let j = 0; j < numcolumns; j++) {
           //   let clName = j === 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
@@ -520,7 +528,7 @@ function GameMoves(props) {
             <tbody>
               <tr>{header}</tr>
               {moveRows.map((row, index) => (
-                <tr key={"move" + index} ref={index === focusRow ? scrollRef : null}>{row}</tr>
+                <tr key={"move" + index} ref={index === focusRow ? focusRowRef : null} ref={index === numRows - 1 ? lastRowRef : null}>{row}</tr>
               ))}
             </tbody>
           </table>
