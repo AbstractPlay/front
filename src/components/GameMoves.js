@@ -74,17 +74,32 @@ function GameMoves(props) {
   const scroll = () => {
     if (focusRowRef.current) {
       let newScrollTop = tableRef.current.scrollTop;
-      if (focus.moveNumber === exploration.length - 1 && lastRowRef.current.offsetTop + lastRowRef.current.offsetHeight > tableRef.current.scrollTop + 600)
-        newScrollTop = lastRowRef.current.offsetTop - 600 + lastRowRef.current.offsetHeight; // make last row visible
+      if (
+        focus.moveNumber === exploration.length - 1 &&
+        lastRowRef.current.offsetTop + lastRowRef.current.offsetHeight >
+          newScrollTop + 600
+      )
+        newScrollTop =
+          lastRowRef.current.offsetTop - 600 + lastRowRef.current.offsetHeight; // make last row visible
+      if (
+        focusRowRef.current.offsetTop + focusRowRef.current.offsetHeight >
+        newScrollTop + 600
+      )
+        // focus row is below visible area
+        newScrollTop =
+          focusRowRef.current.offsetTop -
+          600 +
+          focusRowRef.current.offsetHeight;
       if (focusRowRef.current.offsetTop < newScrollTop)
-        newScrollTop = focusRowRef.current.offsetTop; // make focus row visible
+        // focus row is above visible area
+        newScrollTop = focusRowRef.current.offsetTop;
       if (newScrollTop !== tableRef.current.scrollTop)
         tableRef.current.scrollTop = newScrollTop;
     }
-  }
+  };
 
   useEffect(() => {
-    scroll()
+    scroll();
   });
 
   function keyDownHandler(e) {
@@ -136,8 +151,6 @@ function GameMoves(props) {
       case "ArrowDown":
       case "i":
         curNumVariations = getPath(focus, exploration, path);
-        console.log(curNumVariations);
-        console.log("focus = ", focus);
         if (
           focus.moveNumber + focus.exPath.length <= path.length &&
           focus.exPath.length > 0 &&
@@ -171,7 +184,6 @@ function GameMoves(props) {
         e.preventDefault();
         break;
       default:
-        console.log(key + " key pressed");
     }
   }
 
@@ -296,7 +308,10 @@ function GameMoves(props) {
             (i === exploration.length - 1 && focus.exPath.length === 0))
         )
           className += " gameMoveFocus";
-        if (i === exploration.length - 1 && exploration[focus.moveNumber].children.length > 0)
+        if (
+          i === exploration.length - 1 &&
+          exploration[focus.moveNumber].children.length > 0
+        )
           className += " lastMove";
 
         path.push([
@@ -361,9 +376,7 @@ function GameMoves(props) {
             </td>
           );
           if (movenum < path.length) {
-            if (path[movenum][0].class.includes("gameMoveFocus"))
-              focusRow = i;
-            // path[movenum].map((m, k) => console.log(m.move, m.path));
+            if (path[movenum][0].class.includes("gameMoveFocus")) focusRow = i;
             row.push(
               <td key={"td1-" + i + "-" + j}>
                 <div className="move">
@@ -425,7 +438,7 @@ function GameMoves(props) {
             <i className="fa fa-angle-left"></i>
             <span className="tooltiptext">{t("GoPrev")}</span>
           </button>
-          { neverExplore ? null :
+          {neverExplore ? null : (
             <button
               className="button is-small tooltipped"
               disabled={
@@ -453,8 +466,8 @@ function GameMoves(props) {
               <i className="fa fa-angle-up"></i>
               <span className="tooltiptext">{t("GoNextVar")}</span>
             </button>
-          }
-          { neverExplore ? null :
+          )}
+          {neverExplore ? null : (
             <button
               className="button is-small tooltipped"
               disabled={
@@ -484,7 +497,7 @@ function GameMoves(props) {
               <i className="fa fa-angle-down"></i>
               <span className="tooltiptext">{t("GoPrevVar")}</span>
             </button>
-          }
+          )}
           <button
             className="button is-small tooltipped"
             disabled={
@@ -528,7 +541,23 @@ function GameMoves(props) {
             <tbody>
               <tr>{header}</tr>
               {moveRows.map((row, index) => (
-                <tr key={"move" + index} ref={index === focusRow ? focusRowRef : null} ref={index === numRows - 1 ? lastRowRef : null}>{row}</tr>
+                <tr
+                  key={"move" + index}
+                  ref={
+                    index === focusRow
+                      ? index === numRows - 1
+                        ? (el) => {
+                            focusRowRef.current = el;
+                            lastRowRef.current = el;
+                          }
+                        : focusRowRef
+                      : index === numRows - 1
+                      ? lastRowRef
+                      : null
+                  }
+                >
+                  {row}
+                </tr>
               ))}
             </tbody>
           </table>
