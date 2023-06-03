@@ -300,10 +300,6 @@ th .player {
   display: inline-block;
 }
 
-.gameMoveWin {
-  color: #7df00a;
-}
-
 .error {
   color: red;
 }
@@ -354,6 +350,11 @@ th .player {
 .input-icon {
   display: flex;
   align-items: center;
+}
+
+.movesTable {
+  max-height: 600px;
+  overflow-y: auto;
 }
 
 /* Leaving the stuff for user settings until I'm prepared to expand it */
