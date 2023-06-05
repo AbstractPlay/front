@@ -742,7 +742,7 @@ function GameMove(props) {
             const result = await res.json();
             data = JSON.parse(result.body);
             data = data.map((d) => { 
-              if (typeof d.tree === 'string') {
+              if (d && typeof d.tree === 'string') {
                 d.tree = JSON.parse(d.tree);
               }
               return d;
