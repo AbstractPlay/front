@@ -114,7 +114,7 @@ function GameStatus(props) {
         {!game.playerStashes ? (
           ""
         ) : (
-          <div>
+          <div style={{overflowX: "auto"}}>
             <h2>Stash</h2>
             <table className="table">
               <tbody>
@@ -151,7 +151,8 @@ function GameStatus(props) {
                               settings,
                               s.glyph.name,
                               "stack-" + index + "-" + j,
-                              s.glyph.player
+                              // eslint-disable-next-line no-prototype-builtins
+                              (s.glyph.hasOwnProperty("player") ? s.glyph.player : s.glyph.colour)
                             )
                           )}`}
                           alt=""

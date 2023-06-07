@@ -20,13 +20,19 @@ const MetaItem = React.forwardRef((props, ref) => {
   } else {
     gameEngine = GameFactory(game.uid);
   }
-  let designers = game.people
+  let designerString;
+  // eslint-disable-next-line no-prototype-builtins
+  if (game.hasOwnProperty("people")) {
+    let designers = game.people
     .filter((p) => p.type === "designer")
     .map((p) => p.name);
-  let designerString;
-  if (designers.length === 1) designerString = "Designer: ";
-  else designerString = "Designers: ";
-  designerString += designers.join(", ");
+    if (designers.length === 1) {
+        designerString = "Designer: ";
+    } else {
+        designerString = "Designers: ";
+    }
+    designerString += designers.join(", ");
+  }
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -53,7 +59,7 @@ const MetaItem = React.forwardRef((props, ref) => {
             ) : (
               <Fragment>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-                  {gameEngine.description() + "\n\n" + designerString}
+                  {gameEngine.description() + (designerString === undefined ? "" : "\n\n" + designerString)}
                 </ReactMarkdown>
                 <ul className="contained">
                   {game.urls.map((l, i) => (
