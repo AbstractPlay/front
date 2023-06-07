@@ -747,6 +747,12 @@ function GameMove(props) {
           } else {
             const result = await res.json();
             data = JSON.parse(result.body);
+            data = data.map((d) => { 
+              if (d && typeof d.tree === 'string') {
+                d.tree = JSON.parse(d.tree);
+              }
+              return d;
+            });
             mergeExploration(gameRef.current, explorationRef.current, data, globalMe);
             focusSetter(cloneDeep(focus)); // just to trigger a rerender...
           }
