@@ -577,13 +577,19 @@ function GameMove(props) {
   } else {
     gameEngine = GameFactory(gameDeets.uid);
   }
-  let designers = gameDeets.people
+  let designerString;
+  // eslint-disable-next-line no-prototype-builtins
+  if (gameDeets.hasOwnProperty("people")) {
+    let designers = gameDeets.people
     .filter((p) => p.type === "designer")
     .map((p) => p.name);
-  let designerString;
-  if (designers.length === 1) designerString = "Designer: ";
-  else designerString = "Designers: ";
-  designerString += designers.join(", ");
+    if (designers.length === 1) {
+        designerString = "Designer: ";
+    } else {
+        designerString = "Designers: ";
+    }
+    designerString += designers.join(", ");
+  }
 
   useEffect(() => {
     addResource(i18n.language);
@@ -1511,7 +1517,7 @@ function GameMove(props) {
         >
           <div className="content">
             <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-              {gameEngine.description() + "\n\n" + designerString}
+              {gameEngine.description() + (designerString === undefined ? "" : "\n\n" + designerString)}
             </ReactMarkdown>
             <ul className="contained">
               {gameDeets.urls.map((l, i) => (
