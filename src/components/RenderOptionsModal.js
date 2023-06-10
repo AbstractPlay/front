@@ -166,6 +166,7 @@ function RenderOptionsModal(props) {
             query: "update_game_settings",
             pars: {
               game: gameId,
+              metaGame: metaGame,
               settings: newGameSettings,
             },
           }),

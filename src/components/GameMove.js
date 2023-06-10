@@ -622,6 +622,7 @@ function GameMove(props) {
               query: "get_game",
               pars: {
                 id: gameID,
+                metaGame: metaGame,
               },
             }),
           });
@@ -639,6 +640,7 @@ function GameMove(props) {
           var url = new URL(API_ENDPOINT_OPEN);
           url.searchParams.append("query", "get_game");
           url.searchParams.append("id", gameID);
+          url.searchParams.append("metaGame", metaGame);
           const res = await fetch(url);
           status = res.status;
           if (status !== 200) {
@@ -702,7 +704,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID]);
+  }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID, metaGame]);
 
   useEffect(() => {
     async function fetchData() {
@@ -974,6 +976,7 @@ function GameMove(props) {
             query: "update_game_settings",
             pars: {
               game: game.id,
+              metaGame: game.metaGame,
               settings: newGameSettings,
             },
           }),
@@ -1024,6 +1027,7 @@ function GameMove(props) {
           query: "submit_move",
           pars: {
             id: gameRef.current.id,
+            metaGame: gameRef.current.metaGame,
             move: m,
             draw: draw,
           },
@@ -1143,6 +1147,7 @@ function GameMove(props) {
               query: "set_game_state",
               pars: {
                 id: gameID,
+                metaGame: metaGame,
                 newState: injectedState,
               },
             }),
