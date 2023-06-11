@@ -13,12 +13,13 @@ import { API_ENDPOINT_AUTH } from "../config";
 import i18n from "../i18n";
 import { Fragment } from "react";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
+import { gameinfo } from "@abstractplay/gameslib";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
   const [error, errorSetter] = useState(null);
   const [challenge, challengeSetter] = useState(0);
-  // TODO: Is `vars` really necessary?
+  // vars is just a way to trigger a new 'me' fetch (e.g. after Profile is created)
   const [vars, varsSetter] = useState({});
   const [update, updateSetter] = useState(0);
   const [showChallengeViewModal, showChallengeViewModalSetter] =
@@ -32,6 +33,14 @@ function Me(props) {
   const [over, overSetter] = useState([]);
   const [myTurn, myTurnSetter] = useContext(MyTurnContext);
   const [globalMe, globalMeSetter] = useContext(MeContext);
+  const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
+
+  const handleNewProfileClose = (cnt) => {
+    showNewProfileModalSetter(false);
+    if (cnt > 0){
+      updateSetter((update) => update + 1);
+    }
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -55,7 +64,11 @@ function Me(props) {
         else {
           if (result === null) globalMeSetter({});
           else {
-            globalMeSetter(JSON.parse(result.body));
+            const me = JSON.parse(result.body);
+            if (me.id === undefined) {
+              showNewProfileModalSetter(true);
+            }
+            globalMeSetter(me);
             console.log(JSON.parse(result.body));
           }
         }
@@ -315,11 +328,10 @@ function Me(props) {
       </article>
     );
   }
-  if (globalMe.name === undefined) {
-    return <NewProfile show={true} varsSetter={varsSetter} />;
+  if (globalMe.id === undefined) {
+    return <NewProfile show={showNewProfileModal} handleClose={handleNewProfileClose} updateMe={false}/>
   } else {
     if (update !== props.update)
-      // Can someone PLEASE explain to me why this is needed!!??? (remove it and see what happens...)
       updateSetter(props.update);
 
     var lng = "en";
@@ -424,7 +436,7 @@ function Me(props) {
                   <p>{t("NoChallengeResponse")}</p>
                 ) : (
                   <ul>
-                    {globalMe.challengesReceived.map((item) => (
+                    {globalMe.challengesReceived.map((item) => ( gameinfo.get(item.metaGame) === undefined || item.challenger.id === undefined ? null :
                       <ChallengeItem
                         item={item}
                         key={item.id}

@@ -41,8 +41,6 @@ function UserSettingsModal(props) {
       languageSetter("en");
       emailSetter("");
       emailCodeSetter("");
-      console.log("GLOBAL ME SETTINGS:");
-      console.log(globalMe?.settings);
       if (globalMe?.settings?.all?.notifications) {
         notificationsSetter(globalMe.settings.all.notifications);
       } else {
@@ -98,7 +96,7 @@ function UserSettingsModal(props) {
   const logout = async () => {
     await Auth.signOut();
     updatedSetter((updated) => updated + 1);
-    handleUserSettingsClose();
+    handleUserSettingsClose(updated + 1);
   };
 
   //   const handleLanguageChangeSubmitClick = async () => {

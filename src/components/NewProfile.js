@@ -6,7 +6,6 @@ import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
 
 function NewProfile(props) {
-  const [show, showSetter] = useState(props.show);
   const [name, nameSetter] = useState("");
   const [users, usersSetter] = useState([]);
   const [consent, consentSetter] = useState(false);
@@ -16,8 +15,9 @@ function NewProfile(props) {
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
   const [, globalMeSetter] = useContext(MeContext);
-
   const { t } = useTranslation();
+
+  const show = props.show;
 
   useEffect(() => {
     async function fetchData() {
@@ -38,11 +38,6 @@ function NewProfile(props) {
   const setError = (message) => {
     errorSetter(true);
     errorMessageSetter(message);
-  };
-
-  const handleNewProfileClose = () => {
-    console.log("Logging user out");
-    showSetter(false);
   };
 
   const handleNewProfile = async () => {
@@ -69,43 +64,42 @@ function NewProfile(props) {
             },
           }),
         });
-        showSetter(false);
-        props.varsSetter({
-          dummy: usr.signInUserSession.idToken.jwtToken,
-        });
-        try {
-          const token = usr.signInUserSession.idToken.jwtToken;
-          if (token !== null) {
-            try {
-              console.log(
-                "calling authQuery 'me' (small), with token: " + token
-              );
-              const res = await fetch(API_ENDPOINT_AUTH, {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-                // Don't care about e.g. challenges, so size = small.
-                body: JSON.stringify({ query: "me", size: "small" }),
-              });
-              const result = await res.json();
-              if (result.statusCode !== 200)
-                console.log(JSON.parse(result.body));
-              else {
-                if (result === null) globalMeSetter({});
-                else {
-                  globalMeSetter(JSON.parse(result.body));
+        props.handleClose(1);
+        if (props.updateMe) {
+          try {
+            const token = usr.signInUserSession.idToken.jwtToken;
+            if (token !== null) {
+              try {
+                console.log(
+                  "calling authQuery 'me' (small), with token: " + token
+                );
+                const res = await fetch(API_ENDPOINT_AUTH, {
+                  method: "POST",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                  },
+                  // Don't care about e.g. challenges, so size = small.
+                  body: JSON.stringify({ query: "me", size: "small" }),
+                });
+                const result = await res.json();
+                if (result.statusCode !== 200)
                   console.log(JSON.parse(result.body));
+                else {
+                  if (result === null) globalMeSetter({});
+                  else {
+                    globalMeSetter(JSON.parse(result.body));
+                    console.log(JSON.parse(result.body));
+                  }
                 }
+              } catch (error) {
+                console.log(error);
               }
-            } catch (error) {
-              console.log(error);
             }
+          } catch (error) {
+            // not logged in, ok.
           }
-        } catch (error) {
-          // not logged in, ok.
         }
       } catch (err) {
         setError(err.message);
@@ -113,13 +107,14 @@ function NewProfile(props) {
     }
   };
 
+  console.log("NewProfile show", show);
   return (
     <Modal
       show={show}
       title={t("NewProfile")}
       buttons={[
         { label: t("Submit"), action: handleNewProfile },
-        { label: t("Close"), action: handleNewProfileClose },
+        { label: t("Close"), action: () => props.handleClose(0) }
       ]}
     >
       {!error ? (
