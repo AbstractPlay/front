@@ -13,15 +13,14 @@ function UserSettingsModal(props) {
   // const handleLanguageChange = props.handleLanguageChange;
   // const handleEMailChange = props.handleEMailChange;
   // eslint-disable-next-line no-unused-vars
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [changingName, changingNameSetter] = useState(false);
   const [changingEMail, changingEMailSetter] = useState(false);
   const [changingCodeSent, changingCodeSentSetter] = useState(false);
   /*eslint-disable no-unused-vars*/
   //   const [changingLanguage, changingLanguageSetter] = useState(false);
   const [name, nameSetter] = useState("");
-  const [badname, badnameSetter] = useState("");
-  const [nameError, nameErrorSetter] = useState(false);
+  const [nameError, nameErrorSetter] = useState("");
   const [email, emailSetter] = useState("");
   const [emailCode, emailCodeSetter] = useState("");
   const [language, languageSetter] = useState("");
@@ -78,9 +77,10 @@ function UserSettingsModal(props) {
 
   const handleNameChangeSubmitClick = async () => {
     if (users.find((u) => u === name)) {
-      badnameSetter(name);
       nameSetter("");
-      nameErrorSetter(true);
+      nameErrorSetter(t("DisplayNameError", { name }));
+    } else if (name === "") {
+      nameErrorSetter(t("NameBlank"));
     } else {
       changingNameSetter(false);
       await handleSettingChangeSubmit("name", name);
@@ -278,7 +278,7 @@ function UserSettingsModal(props) {
                 type="text"
                 value={name}
                 onChange={(e) => {
-                  nameErrorSetter(false);
+                  nameErrorSetter("");
                   nameSetter(e.target.value);
                 }}
               />
@@ -318,9 +318,9 @@ function UserSettingsModal(props) {
             ""
           ) : (
             <Fragment>
-              <p className={"help " + (nameError ? "is-danger" : "is-primary")}>
-                {nameError
-                  ? t("DisplayNameError", { name: badname })
+              <p className={"help " + (nameError !== "" ? "is-danger" : "is-primary")}>
+                {nameError !== ""
+                  ? nameError
                   : t("DisplayNameChange")}
               </p>
             </Fragment>
