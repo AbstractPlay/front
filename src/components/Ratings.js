@@ -74,7 +74,6 @@ function Ratings(props) {
   };
 
   if (update !== props.update)
-    // Can someone PLEASE explain to me why this is needed!!??? (remove it and see what happens...)
     updateSetter(props.update);
   const metaGameName = gameinfo.get(metaGame).name;
   return (
@@ -100,7 +99,7 @@ function Ratings(props) {
                   <th>{t("tblHeaderGamesPlayed")}</th>
                   <th>{t("tblHeaderGamesWon")}</th>
                   <th>{t("tblHeaderGamesDrawn")}</th>
-                  <th />
+                  { globalMe && globalMe.id !== undefined ? <th /> : null }
                 </tr>
                 {ratings.map((rating, i) => {
                   console.log(rating);
@@ -112,23 +111,25 @@ function Ratings(props) {
                       <td>{rating.rating.N}</td>
                       <td>{rating.rating.wins}</td>
                       <td>{rating.rating.draws}</td>
-                      <td>
-                        {globalMe && globalMe.id === rating.id ? (
-                          ""
-                        ) : (
-                          <button
-                            className="button is-small apButton"
-                            onClick={() =>
-                              handleChallenge({
-                                id: rating.id,
-                                name: rating.name,
-                              })
-                            }
-                          >
-                            {t("Challenge")}
-                          </button>
-                        )}
-                      </td>
+                      { !globalMe || globalMe.id === undefined ? null : 
+                        <td>
+                          {globalMe.id === rating.id ? (
+                            ""
+                          ) : (
+                            <button
+                              className="button is-small apButton"
+                              onClick={() =>
+                                handleChallenge({
+                                  id: rating.id,
+                                  name: rating.name,
+                                })
+                              }
+                            >
+                              {t("Challenge")}
+                            </button>
+                          )}
+                        </td>
+                      }
                     </tr>
                   );
                 })}
