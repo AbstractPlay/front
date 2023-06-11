@@ -7,9 +7,11 @@ import Modal from "./Modal";
 
 function NewProfile(props) {
   const [name, nameSetter] = useState("");
+  const [nameError, nameErrorSetter] = useState("");
   const [users, usersSetter] = useState([]);
   const [consent, consentSetter] = useState(false);
-  const [anonymous, anonymousSetter] = useState(false);
+  const [consentError, consentErrorSetter] = useState("");
+  const [anonymous, ] = useState(false);
   const [country, countrySetter] = useState("");
   const [tagline, taglineSetter] = useState("");
   const [error, errorSetter] = useState(false);
@@ -40,9 +42,30 @@ function NewProfile(props) {
     errorMessageSetter(message);
   };
 
+  const nameChange = (newName) => {
+    nameSetter(newName);
+    if (newName === "") {
+      nameErrorSetter(t("NameBlank"));
+    } else {
+      nameErrorSetter("");
+    }
+  }
+
+  const consentChange = (checked) => {
+    consentSetter(checked);
+    if (checked) {
+      consentErrorSetter("");
+    }
+  }
+
   const handleNewProfile = async () => {
-    if (users.find((u) => u === name)) nameSetter(`${name} is not available`);
-    else {
+    if (name === "") {
+      nameErrorSetter(t("NameBlank"));
+    } else if (users.find((u) => u === name)) {
+      nameErrorSetter(t("NameNotAvailable", { name }));
+    } else if (!consent) {
+      consentErrorSetter(t("PleaseConsent"));
+    } else {
       try {
         const usr = await Auth.currentAuthenticatedUser();
         console.log("currentAuthenticatedUser", usr);
@@ -123,13 +146,14 @@ function NewProfile(props) {
             <label className="label" htmlFor="profile_name">
               {t("ProfileName")}
             </label>
+            <div className="error">{nameError}</div>
             <div className="control">
               <input
                 name="name"
                 id="profile_name"
                 type="text"
                 value={name}
-                onChange={(e) => nameSetter(e.target.value)}
+                onChange={(e) => nameChange(e.target.value)}
               />
             </div>
             <p className="help">{t("ProfileNameHelp")}</p>
@@ -172,6 +196,7 @@ function NewProfile(props) {
               />
             </div>
           </div>
+          { /*
           <div className="field">
             <div className="control">
               <label className="checkbox">
@@ -187,6 +212,8 @@ function NewProfile(props) {
             </div>
             <p className="help">{t("ProfileAnonHelp")}</p>
           </div>
+            */ }
+          <div className="error">{consentError}</div>
           <div className="field">
             <div className="control">
               <label className="checkbox">
@@ -195,12 +222,19 @@ function NewProfile(props) {
                   id="profile_consent"
                   type="checkbox"
                   checked={consent}
-                  onChange={(e) => consentSetter(e.target.checked)}
+                  onChange={(e) => consentChange(e.target.checked)}
                 />
                 {t("ProfileConsent")}
               </label>
             </div>
-            <p className="help">[Link to ToS here eventually]</p>
+            <p className="help">[
+              <a
+                href="https://play.abstractplay.com/legal"
+                target="_NEW"
+              >
+                {t("ToS")}
+              </a>
+              ]</p>
           </div>
         </Fragment>
       ) : (

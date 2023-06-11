@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix bug on merging exploration from 2 moves ago.
 * When switching to a stackExpanding game (using "Next game") react loses track of the previous board svg. Remove explicitly.
 * If someone does not complete their profile, no user id gets saved in the DB and yet the user was able to issue challenges. Fix by making sure the user is shown the NewProfile modal whenever they do something that actually needs a user id. The can still get out of the modal (if they aren't ready to commit), but will only be able to look around, not do anything.
+* Don't allow blank display names! Insist on ToS consent. Remove anonymous setting (for now).
 
 ## [v1.0.0-beta]
 
