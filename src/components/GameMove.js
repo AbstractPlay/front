@@ -4,7 +4,6 @@ import React, {
   useState,
   useRef,
   useContext,
-  createContext,
 } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -26,10 +25,8 @@ import Modal from "./Modal";
 import GameComment from "./GameComment";
 import ClipboardCopy from "./ClipboardCopy";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
-import NewChatMarker from "./NewChatMarker";
 import DownloadDataUri from "./DownloadDataUri";
-
-export const NewChatContext = createContext([false, () => false]);
+import UserChats from "./UserChats";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -535,7 +532,6 @@ function GameMove(props) {
   const [commentsTooLong, commentsTooLongSetter] = useState(false);
   const [submitting, submittingSetter] = useState(false);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
-  const [newChat, newChatSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
   const [gameRec, gameRecSetter] = useState(undefined);
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
@@ -747,7 +743,7 @@ function GameMove(props) {
           } else {
             const result = await res.json();
             data = JSON.parse(result.body);
-            data = data.map((d) => { 
+            data = data.map((d) => {
               if (d && typeof d.tree === 'string') {
                 d.tree = JSON.parse(d.tree);
               }
@@ -1416,6 +1412,13 @@ function GameMove(props) {
                 noExplore={globalMe?.settings?.all?.exploration === -1}
                 handleGameMoveClick={handleGameMoveClick}
               />
+              <UserChats
+                comments={comments}
+                players={gameRef.current?.players}
+                handleSubmit={submitComment}
+                tooMuch={commentsTooLong}
+              />
+
             </div>
           )}
         </div>
@@ -1443,14 +1446,12 @@ function GameMove(props) {
                 <h1 className="subtitle lined">
                   <span>{t("GameSummary")}</span>
                 </h1>
-                <NewChatContext.Provider value={[newChat, newChatSetter]}>
                   <MoveResults
                     className="moveResults"
                     results={game?.moveResults}
                     comments={comments}
                     players={gameRef.current?.players}
                   />
-                </NewChatContext.Provider>
               </div>
             ) : (
               ""
@@ -1458,7 +1459,6 @@ function GameMove(props) {
           </div>
         </div>
         {/* columns */}
-        {!newChat ? "" : <NewChatMarker />}
         <RenderOptionsModal
           show={showSettings}
           game={game}
