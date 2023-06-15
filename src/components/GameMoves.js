@@ -62,6 +62,7 @@ function GameMoves(props) {
   const focusRowRef = useRef();
   const lastRowRef = useRef();
   const tableRef = useRef();
+  const headerRef = useRef();
   const { t } = useTranslation();
   let focus = props.focus;
   let game = props.game;
@@ -72,27 +73,29 @@ function GameMoves(props) {
   useEventListener("keydown", keyDownHandler);
 
   const scroll = () => {
+    // 300 is the maxHeight of the table from the CSS (for .movesTable)
+    const maxHeight = 300;
     if (focusRowRef.current) {
       let newScrollTop = tableRef.current.scrollTop;
       if (
         focus.moveNumber === exploration.length - 1 &&
         lastRowRef.current.offsetTop + lastRowRef.current.offsetHeight >
-          newScrollTop + 600
+          newScrollTop + maxHeight
       )
         newScrollTop =
-          lastRowRef.current.offsetTop - 600 + lastRowRef.current.offsetHeight; // make last row visible
+          lastRowRef.current.offsetTop - maxHeight + lastRowRef.current.offsetHeight; // make last row visible
       if (
         focusRowRef.current.offsetTop + focusRowRef.current.offsetHeight >
-        newScrollTop + 600
+        newScrollTop + maxHeight
       )
         // focus row is below visible area
         newScrollTop =
           focusRowRef.current.offsetTop -
-          600 +
+          maxHeight +
           focusRowRef.current.offsetHeight;
-      if (focusRowRef.current.offsetTop < newScrollTop)
+      if (focusRowRef.current.offsetTop < newScrollTop + headerRef.current.offsetHeight)
         // focus row is above visible area
-        newScrollTop = focusRowRef.current.offsetTop;
+        newScrollTop = focusRowRef.current.offsetTop - headerRef.current.offsetHeight;
       if (newScrollTop !== tableRef.current.scrollTop)
         tableRef.current.scrollTop = newScrollTop;
     }
@@ -539,7 +542,7 @@ function GameMoves(props) {
         <div className="movesTable" ref={tableRef}>
           <table className="table is-narrow is-striped">
             <tbody>
-              <tr>{header}</tr>
+              <tr ref={headerRef}>{header}</tr>
               {moveRows.map((row, index) => (
                 <tr
                   key={"move" + index}
