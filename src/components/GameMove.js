@@ -113,6 +113,7 @@ function setupGame(
   game0.sharedStash =
     info.flags !== undefined && info.flags.includes("shared-stash");
   game0.noMoves = info.flags !== undefined && info.flags.includes("no-moves");
+  game0.automove = info.flags !== undefined && info.flags.includes("automove");
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
   if (game0.state === undefined)
@@ -261,6 +262,25 @@ function mergeExploration(game, exploration, data, me) {
   }
 }
 
+function mergeExistingExploration(moveNum, exploration, explorationRef) {
+  let subtree = undefined;
+  moveNum++;
+  while (true) {
+    let move = explorationRef.current[moveNum].move.toLowerCase().replace(/\s+/g, "");
+    subtree = exploration.children.find((e) => e.move.toLowerCase().replace(/\s+/g, "") === move);
+    if (subtree !== undefined) {
+      exploration = subtree;
+      moveNum++;
+      if (moveNum === explorationRef.current.length) {
+        explorationRef.current[explorationRef.current.length - 1].children = subtree.children;
+        break;
+      }
+    } else {
+      break;
+    }
+  }
+}
+
 function mergeMoveRecursive(gameEngine, node, children) {
   children.forEach((n) => {
     gameEngine.move(n.move);
@@ -346,8 +366,24 @@ function doView(
     simMove = true;
     m = game.players.map((p) => (p.id === me.id ? m : "")).join(",");
   }
+  let newfocus = cloneDeep(focus);
+  let moves;
   try {
     gameEngineTmp.move(m, partialMove || simMove);
+    if (!partialMove && focus.canExplore && !game.noMoves) {
+      moves = gameEngineTmp.moves();
+    }
+    // check for auto moves
+    if (!partialMove && focus.canExplore && game.automove) {
+      while (moves.length === 1) {
+        let pos = node.AddChild(m, gameEngineTmp);
+        newfocus.exPath.push(pos);
+        node = node.children[pos];
+        m = moves[0];
+        gameEngineTmp.move(m, partialMove || simMove);
+        moves = gameEngineTmp.moves();
+      }
+    }
   } catch (err) {
     if (err.name === "UserFacingError") {
       errorMessageRef.current = err.client;
@@ -357,21 +393,17 @@ function doView(
     errorSetter(true);
     return;
   }
-  move.rendered = move.move;
-  // console.log("explorationRef:",explorationRef);
-  // console.log("statusRef:",statusRef);
+  move.rendered = m;
   setStatus(
     gameEngineTmp,
     game,
     partialMove || simMove,
-    move,
+    m,
     statusRef.current
   );
   if (!partialMove) {
-    node = getFocusNode(explorationRef.current, focus);
-    const pos = node.AddChild(move.move, gameEngineTmp);
+    const pos = node.AddChild(m, gameEngineTmp);
     saveExploration(explorationRef.current, game.id, me, explorer);
-    let newfocus = cloneDeep(focus);
     newfocus.exPath.push(pos);
     newfocus.canExplore = canExploreMove(
       game,
@@ -384,8 +416,9 @@ function doView(
       rendered: "",
       move: "",
     });
-    if (newfocus.canExplore && !game.noMoves)
-      movesRef.current = gameEngineTmp.moves();
+    if (newfocus.canExplore && !game.noMoves) {
+      movesRef.current = moves;
+    }
   } else {
     moveSetter(move);
   }
@@ -1043,8 +1076,8 @@ function GameMove(props) {
       }
       myMoveSetter((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
       let game0 = JSON.parse(result.body);
-      //   console.log("In handleSubmit. game0:");
-      //   console.log(game0);
+      const exploration = explorationRef.current[explorationRef.current.length - 1];
+      const moveNum = explorationRef.current.length - 1;
       setupGame(
         game0,
         gameRef,
@@ -1060,6 +1093,7 @@ function GameMove(props) {
         moveSetter,
         gameRecSetter
       );
+      mergeExistingExploration(moveNum, exploration, explorationRef);
       // setupColors(settings, gameRef.current, t);
     } catch (err) {
       setError(err.message);
@@ -1563,12 +1597,12 @@ function GameMove(props) {
               ""
             ) : (
               <Fragment>
-                <ClipboardCopy copyText={gameRef.current.state} />
+                <ClipboardCopy copyText={getFocusNode(explorationRef.current, focus).state} />
                 <div className="field">
                   <div className="control">
                     <a
                       href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                        gameRef.current.state
+                        getFocusNode(explorationRef.current, focus).state
                       )}`}
                       download="AbstractPlay-Debug.json"
                     >
