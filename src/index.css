@@ -353,7 +353,7 @@ th .player {
 }
 
 .movesTable {
-  max-height: 300px;
+  max-height: 300px; /* If you change this also change the scroll function in GameMoves */
   overflow-y: auto;
 }
 
