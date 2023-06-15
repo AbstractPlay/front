@@ -1,7 +1,5 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { Fragment } from "react";
-import { NewChatContext } from "./GameMove";
-import { MeContext } from "../pages/Skeleton";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import ReactTimeAgo from "react-time-ago";
@@ -15,23 +13,7 @@ function MoveResults(props) {
   const comments = props.comments;
   const players = props.players;
 
-  const [, newChatSetter] = useContext(NewChatContext);
-  const [globalMe] = useContext(MeContext);
-
   let results;
-
-  useEffect(() => {
-    // Look at the past X chats. If any of them belong to a player other than you, then we have "new chat"
-    const threshold = Math.min(4, results.length); // an opponent chat followed by three game turns
-    let oppChat = false;
-    for (let i = 0; i < threshold; i++) {
-      if (!results[i].system && results[i].userid !== globalMe.id) {
-        oppChat = true;
-        break;
-      }
-    }
-    newChatSetter(oppChat);
-  }, [JSON.stringify(results), globalMe, newChatSetter]);
 
   if (results0) {
     results = results0.map((r) => ({

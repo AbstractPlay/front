@@ -164,6 +164,10 @@ input[type="radio"] {
   padding: 1em;
 }
 
+.board > svg * text {
+    cursor: default;
+}
+
 .unZoomedBoard > svg {
   max-height: 600px;
 }
@@ -349,9 +353,15 @@ th .player {
 }
 
 .movesTable {
-  max-height: 600px;
+  max-height: 300px;
   overflow-y: auto;
 }
+.chatTable {
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: smaller;
+}
+
 
 /* Leaving the stuff for user settings until I'm prepared to expand it */
 .userSettings {

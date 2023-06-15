@@ -57,22 +57,22 @@ function MoveEntry(props) {
     }
     return curNode;
   }
-  
+
   const handleDrawOfferChange = (value) => {
     drawofferSetter(value);
   };
 
   const handleClear = () => {
     handleMove("");
-  }
+  };
 
   const sortLenAlpha = (a, b) => {
     if (a.length === b.length) {
-        return a.localeCompare(b);
+      return a.localeCompare(b);
     } else {
-        return a.length - b.length;
+      return a.length - b.length;
     }
-  }
+  };
 
   useEffect(() => {
     if (move.valid && move.complete === 0 && move.move.length > 0) {
@@ -222,11 +222,7 @@ function MoveEntry(props) {
                 ) : (
                   <tr key={"player" + ind}>
                     <td key={"player" + ind}>{p.name}</td>
-                    <td>
-                      {showMilliseconds(
-                        p.time - (Date.now() - game.lastMoveTime)
-                      )}
-                    </td>
+                    <td>{showMilliseconds(p.time)}</td>
                   </tr>
                 )
               )}
@@ -291,16 +287,18 @@ function MoveEntry(props) {
                   onChange={(e) => handleMove(e.target.value)}
                   placeholder={t("EnterMove")}
                 />
-                { move.move.length === 0 ? "" :
+                {move.move.length === 0 ? (
+                  ""
+                ) : (
                   <div
                     className="tooltipped"
-                    style={{ marginTop: '0.6ex' }}
+                    style={{ marginTop: "0.6ex" }}
                     onClick={() => handleClear()}
                   >
                     <i className="fa fa-trash resetIcon"></i>
                     <span className="tooltiptext">{t("ClearMove")}</span>
                   </div>
-                }
+                )}
               </div>
               <div>
                 {move.valid && move.complete === 0 && move.move.length > 0 ? (

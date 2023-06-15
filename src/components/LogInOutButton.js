@@ -4,13 +4,15 @@ import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH } from "../config";
 import UserSettingsModal from "./UserSettingsModal";
 import { MeContext } from "../pages/Skeleton";
+import NewProfile from "./NewProfile";
 
 function LogInOutButton(props) {
   const { t } = useTranslation();
   const [user, userSetter] = useState(null);
   const [showUserSettingsModal, showUserSettingsModalSetter] = useState(false);
+  const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
   const [updated, updatedSetter] = useState(false);
-  const [, globalMeSetter] = useContext(MeContext);
+  const [globalMe, globalMeSetter] = useContext(MeContext);
 
   useEffect(() => {
     async function fetchAuth() {
@@ -54,7 +56,12 @@ function LogInOutButton(props) {
 
   const handleSettingsClick = () => {
     console.log(user);
-    showUserSettingsModalSetter(true);
+    if (!globalMe || globalMe.id === undefined) {
+      console.log("showNewProfileModalSetter(true);");
+      showNewProfileModalSetter(true);
+    } else {
+      showUserSettingsModalSetter(true);
+    }
   };
 
   const handleUserSettingsClose = (cnt) => {
@@ -62,6 +69,13 @@ function LogInOutButton(props) {
     console.log("handleUserSettingsClose, cnt: ", cnt);
     if (cnt > 0) {
       // Refresh globalMe
+      updatedSetter(!updated);
+    }
+  };
+
+  const handleNewProfileClose = (cnt) => {
+    showNewProfileModalSetter(false);
+    if (cnt > 0){
       updatedSetter(!updated);
     }
   };
@@ -91,6 +105,7 @@ function LogInOutButton(props) {
           show={showUserSettingsModal}
           handleClose={handleUserSettingsClose}
         />
+        <NewProfile show={showNewProfileModal} handleClose={handleNewProfileClose} updateMe={true}/>
       </div>
     );
   }

@@ -51,13 +51,16 @@ function MetaContainer(props) {
     console.log(game);
   };
 
-  const games = [...gameinfo.keys()].sort((a, b) => {
+  let games = [...gameinfo.keys()].sort((a, b) => {
     const na = gameinfo.get(a).name;
     const nb = gameinfo.get(b).name;
     if (na < nb) return -1;
     else if (na > nb) return 1;
     return 0;
   });
+  if (process.env.REACT_APP_REAL_MODE === "production") {
+    games = games.filter(id => ! gameinfo.get(id).flags.includes("experimental"));
+  }
 
   console.log(games);
   return (
