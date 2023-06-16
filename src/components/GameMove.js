@@ -395,11 +395,11 @@ function doView(
     gameEngineTmp,
     game,
     partialMove || simMove,
-    m,
+    simMove ? move.move : m,
     statusRef.current
   );
   if (!partialMove) {
-    const pos = node.AddChild(m, gameEngineTmp);
+    const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
     saveExploration(explorationRef.current, game.id, me, explorer);
     newfocus.exPath.push(pos);
     newfocus.canExplore = canExploreMove(
