@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
@@ -29,7 +29,7 @@ function UserChats(props) {
     results.sort((a, b) => b.timestamp - a.timestamp);
 
     return (
-        <Fragment>
+        <div style={{paddingTop: "1em"}}>
         <h1 className="subtitle lined">
           <span>{t("GameSummary")}</span>
         </h1>
@@ -71,7 +71,7 @@ function UserChats(props) {
             </div>
         ))}
         </div>
-    </Fragment>
+    </div>
     );
   } else {
     return "";
