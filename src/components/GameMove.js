@@ -1089,7 +1089,9 @@ function GameMove(props) {
         moveSetter,
         gameRecSetter
       );
-      mergeExistingExploration(moveNum, exploration, explorationRef);
+      if (gameRef.current.canExplore) {
+        mergeExistingExploration(moveNum, exploration, explorationRef);
+      }
       // setupColors(settings, gameRef.current, t);
     } catch (err) {
       setError(err.message);
