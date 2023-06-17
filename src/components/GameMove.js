@@ -802,7 +802,7 @@ function GameMove(props) {
     // console.log("foc = ", foc);
     let node = getFocusNode(explorationRef.current, foc);
     if (
-      !isExplorer(explorer, globalMe) &&
+      !(isExplorer(explorer, globalMe) && game.canExplore) &&
       foc.moveNumber === explorationRef.current.length - 1
     ) {
       node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variation.
