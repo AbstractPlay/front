@@ -27,6 +27,7 @@ import ClipboardCopy from "./ClipboardCopy";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import DownloadDataUri from "./DownloadDataUri";
 import UserChats from "./UserChats";
+import { Canvg } from 'canvg';
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -567,6 +568,7 @@ function GameMove(props) {
   const [explorationFetched, explorationFetchedSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
   const [gameRec, gameRecSetter] = useState(undefined);
+  const [pngExport, pngExportSetter] = useState(undefined);
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
@@ -581,6 +583,7 @@ function GameMove(props) {
   moveRef.current = move;
   const boardImage = useRef();
   const stackImage = useRef();
+  const canvasRef = useRef();
   const gameRef = useRef(null);
   // Array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
   const explorationRef = useRef(null);
@@ -965,6 +968,27 @@ function GameMove(props) {
         options.svgid = "theBoardSVG";
         render(renderrep, options);
       }
+    }
+    // render to PNG
+    if ( (boardImage.current !== null) && (canvasRef !== null) ) {
+        try {
+            const ctx = canvasRef.current.getContext("2d");
+            let svgstr = boardImage.current.innerHTML;
+            if ( (svgstr !== null) && (svgstr !== undefined) && (svgstr.length > 0) ) {
+                const v = Canvg.fromString(ctx, boardImage.current.innerHTML);
+                v.resize(1000, 1000, "xMidYMid meet");
+                v.render();
+                pngExportSetter(canvasRef.current.toDataURL());
+                // console.log("Updated PNG generated");
+            } else {
+                pngExportSetter(undefined)
+                // console.log("Empty SVG string generated.");
+            }
+        } catch (e) {
+            pngExportSetter(undefined);
+            // console.log("Caught error rendering PNG");
+            // console.log(e);
+        }
     }
   }, [renderrep, globalMe, focus, settings, explorer]);
 
@@ -1416,6 +1440,16 @@ function GameMove(props) {
                   <i className="fa fa-search-plus"></i>
                 )}
               </button>
+            {pngExport === undefined ? "" :
+              <a href={pngExport} download={"AbstractPlay-" + metaGame + "-" + gameID + ".png"} target="_blank" rel="noreferrer">
+                <button
+                  className="fabtn align-right"
+                  title={t("ExportPNG")}
+                >
+                  <i className="fa fa-download"></i>
+                </button>
+              </a>
+            }
               {!globalMe || globalMe.admin !== true ? (
                 ""
               ) : (
@@ -1659,6 +1693,7 @@ function GameMove(props) {
             </div>
           </div>
         </Modal>
+        <canvas id="pngExportCanvas" ref={canvasRef} style={{display: "none"}}></canvas>
       </article>
     );
   } else {
