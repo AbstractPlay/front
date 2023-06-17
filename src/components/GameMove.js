@@ -22,7 +22,6 @@ import MoveEntry from "./MoveEntry";
 import MoveResults from "./MoveResults";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
-import GameComment from "./GameComment";
 import ClipboardCopy from "./ClipboardCopy";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import DownloadDataUri from "./DownloadDataUri";
@@ -1491,21 +1490,6 @@ function GameMove(props) {
 
             </div>
           )}
-        </div>
-        {/* columns */}
-        <div className="columns">
-          {/* Comment entry */}
-          <div className="column is-half is-offset-one-quarter">
-            {focus && game.me > -1 ? (
-              <GameComment
-                className="gameComment"
-                handleSubmit={submitComment}
-                tooMuch={commentsTooLong}
-              />
-            ) : (
-              ""
-            )}
-          </div>
         </div>
         {/* columns */}
         <div className="columns">

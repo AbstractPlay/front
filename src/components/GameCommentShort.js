@@ -1,10 +1,11 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 function GameCommentShort(props) {
   const [comment, commentSetter] = useState("");
   const [toolong, toolongSetter] = useState(false);
   const { t } = useTranslation();
+  const textareaRef = useRef();
 
   const handleChange = (comment) => {
     toolongSetter(comment.length > 4000);
@@ -17,6 +18,16 @@ function GameCommentShort(props) {
     commentSetter("");
   };
 
+  React.useLayoutEffect(() => {
+    // Reset height - important to shrink on delete
+    textareaRef.current.style.height = "inherit";
+    // Set height
+    textareaRef.current.style.height = `${Math.max(
+      textareaRef.current.scrollHeight,
+      30
+    )}px`;
+  }, [comment]);
+
   return (
     <Fragment>
       {toolong || props.tooMuch ? (
@@ -25,14 +36,16 @@ function GameCommentShort(props) {
         <Fragment>
           <div className="field is-grouped">
             <div className="control">
-              <input type="text"
+              <textarea type="textarea"
+                ref={textareaRef}
+                rows={1}
                 id="enterAComment"
                 name="enterAComment"
                 className="input is-small"
                 value={comment}
                 placeholder={t("Comment")}
                 onChange={(e) => handleChange(e.target.value)}
-              ></input>
+              ></textarea>
             </div>
             <div className="control">
               <button className="button is-small" onClick={handleSubmit}>
