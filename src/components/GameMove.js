@@ -894,9 +894,12 @@ function GameMove(props) {
     );
   };
 
-  const handleStashClick = (player, count, movePart) => {
-    // console.log(`handleStashClick movePart=${movePart}`);
-    handleMove(move.move + movePart);
+  const handleStashClick = (player, count, movePart, handler) => {
+    if (handler) {
+      handleMove(handler(move.move, movePart));
+    } else {
+      handleMove(move.move + movePart);
+    }
   };
 
   useEffect(() => {
