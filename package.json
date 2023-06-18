@@ -19,6 +19,7 @@
     "@testing-library/user-event": "13.5.0",
     "aws-amplify": "5.0.25",
     "buffer": "6.0.3",
+    "canvg": "^4.0.1",
     "i18next": "^21.10.0",
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.2.0",
