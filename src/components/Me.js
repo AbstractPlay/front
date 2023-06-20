@@ -372,6 +372,7 @@ function Me(props) {
                         item={item}
                         key={item.id}
                         canMove={true}
+                        gameOver={false}
                         stateSetter={props.stateSetter}
                       />
                     ))}
@@ -391,6 +392,7 @@ function Me(props) {
                         item={item}
                         key={item.id}
                         canMove={false}
+                        gameOver={false}
                         stateSetter={props.stateSetter}
                       />
                     ))}
@@ -411,6 +413,7 @@ function Me(props) {
                           item={item}
                           key={item.id}
                           canMove={false}
+                          gameOver={true}
                           stateSetter={props.stateSetter}
                         />
                       ))}

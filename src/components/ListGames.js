@@ -70,7 +70,7 @@ function ListGames(props) {
               {games.map((game, i) => (
                 <tr key={i}>
                   <td>
-                    <Link to={`/move/${game.metaGame}/${game.id}`}>
+                    <Link to={`/move/${game.metaGame}/${gameState === "current" ? "0" : "1"}/${game.id}`}>
                       {i + 1}
                     </Link>
                   </td>

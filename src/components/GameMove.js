@@ -599,7 +599,7 @@ function GameMove(props) {
 
   const { t, i18n } = useTranslation();
   //   const { state } = useLocation();
-  const { metaGame, gameID } = useParams();
+  const { metaGame, cbit, gameID } = useParams();
 
   const gameDeets = gameinfo.get(metaGame);
   let gameEngine;
@@ -659,6 +659,8 @@ function GameMove(props) {
               query: "get_game",
               pars: {
                 id: gameID,
+                metaGame: metaGame,
+                cbit: cbit,
               },
             }),
           });
@@ -676,6 +678,8 @@ function GameMove(props) {
           var url = new URL(API_ENDPOINT_OPEN);
           url.searchParams.append("query", "get_game");
           url.searchParams.append("id", gameID);
+          url.searchParams.append("metaGame", metaGame);
+          url.searchParams.append("cbit", cbit);
           const res = await fetch(url);
           status = res.status;
           if (status !== 200) {
@@ -739,7 +743,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID]);
+  }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID, metaGame]);
 
   useEffect(() => {
     async function fetchData() {
@@ -1035,6 +1039,8 @@ function GameMove(props) {
             query: "update_game_settings",
             pars: {
               game: game.id,
+              metaGame: game.metaGame,
+              cbit: cbit,
               settings: newGameSettings,
             },
           }),
@@ -1085,6 +1091,8 @@ function GameMove(props) {
           query: "submit_move",
           pars: {
             id: gameRef.current.id,
+            metaGame: gameRef.current.metaGame,
+            cbit: cbit,
             move: m,
             draw: draw,
           },
@@ -1207,6 +1215,7 @@ function GameMove(props) {
               query: "set_game_state",
               pars: {
                 id: gameID,
+                metaGame: metaGame,
                 newState: injectedState,
               },
             }),
@@ -1288,7 +1297,7 @@ function GameMove(props) {
       navigate("/");
     } else {
       const next = others[0];
-      navigate(`/move/${next.metaGame}/${next.id}`);
+      navigate(`/move/${next.metaGame}/0/${next.id}`);
     }
   };
 
