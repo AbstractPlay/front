@@ -206,6 +206,7 @@
     "tblHeaderGamesPlayed": "Games played",
     "tblHeaderGamesWon": "Games won",
     "tblHeaderHardClock": "Hard clock?",
+    "tblHeaderMoves": "Moves",
     "tblHeaderPlayer": "Player {{num}}",
     "tblHeaderPlayers": "Players",
     "tblHeaderRated": "Rated?",

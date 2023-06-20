@@ -599,8 +599,8 @@ function GameMove(props) {
 
   const { t, i18n } = useTranslation();
   //   const { state } = useLocation();
-  const { metaGame, cbit, gameID } = useParams();
-
+  const { metaGame, cbits, gameID } = useParams();
+  const cbit = parseInt(cbits, 10);
   const gameDeets = gameinfo.get(metaGame);
   let gameEngine;
   if (gameDeets.playercounts.length > 1) {
