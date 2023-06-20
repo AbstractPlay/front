@@ -71,7 +71,7 @@ function RenderOptionsModal(props) {
   const metaName = props.game?.name;
   const gameId = props.game?.id;
   const game = props.game;
-  const cbit = game.toMove === "" || game.toMove === null ? "1" : "0";
+  const cbit = game === undefined ? undefined : game.toMove === "" || game.toMove === null ? "1" : "0";
   const settings = props.settings;
   const gameSettings = props.gameSettings;
   const show = props.show;
