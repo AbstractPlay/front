@@ -9,6 +9,7 @@ function GameItem(props) {
   const [globalMe] = useContext(MeContext);
 
   const game = props.item;
+  const currentGameBit = props.gameOver ? "1" : "0";
   const info = gameinfo.get(game.metaGame);
   var desc = t("GameAgainst", {
     game: info.name,
@@ -20,7 +21,7 @@ function GameItem(props) {
   return (
     <li>
       <i className="fa fa-circle apBullet"></i>
-      <Link to={`/move/${game.metaGame}/${game.id}`}>{desc}</Link>
+      <Link to={`/move/${game.metaGame}/${currentGameBit}/${game.id}`}>{desc}</Link>
     </li>
   );
 }
