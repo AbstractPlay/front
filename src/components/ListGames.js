@@ -34,7 +34,6 @@ function ListGames(props) {
   }, [gameState, metaGame]);
 
   if (update !== props.update)
-    // Can someone PLEASE explain to me why this is needed!!??? (remove it and see what happens...)
     updateSetter(props.update);
   const metaGameName = gameinfo.get(metaGame).name;
   const maxPlayers = games

@@ -6,18 +6,20 @@ import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
 
 function NewProfile(props) {
-  const [show, showSetter] = useState(props.show);
   const [name, nameSetter] = useState("");
+  const [nameError, nameErrorSetter] = useState("");
   const [users, usersSetter] = useState([]);
   const [consent, consentSetter] = useState(false);
-  const [anonymous, anonymousSetter] = useState(false);
+  const [consentError, consentErrorSetter] = useState("");
+  const [anonymous, ] = useState(false);
   const [country, countrySetter] = useState("");
   const [tagline, taglineSetter] = useState("");
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
   const [, globalMeSetter] = useContext(MeContext);
-
   const { t } = useTranslation();
+
+  const show = props.show;
 
   useEffect(() => {
     async function fetchData() {
@@ -40,14 +42,30 @@ function NewProfile(props) {
     errorMessageSetter(message);
   };
 
-  const handleNewProfileClose = () => {
-    console.log("Logging user out");
-    showSetter(false);
-  };
+  const nameChange = (newName) => {
+    nameSetter(newName);
+    if (newName === "") {
+      nameErrorSetter(t("NameBlank"));
+    } else {
+      nameErrorSetter("");
+    }
+  }
+
+  const consentChange = (checked) => {
+    consentSetter(checked);
+    if (checked) {
+      consentErrorSetter("");
+    }
+  }
 
   const handleNewProfile = async () => {
-    if (users.find((u) => u === name)) nameSetter(`${name} is not available`);
-    else {
+    if (name === "") {
+      nameErrorSetter(t("NameBlank"));
+    } else if (users.find((u) => u === name)) {
+      nameErrorSetter(t("NameNotAvailable", { name }));
+    } else if (!consent) {
+      consentErrorSetter(t("PleaseConsent"));
+    } else {
       try {
         const usr = await Auth.currentAuthenticatedUser();
         console.log("currentAuthenticatedUser", usr);
@@ -69,43 +87,42 @@ function NewProfile(props) {
             },
           }),
         });
-        showSetter(false);
-        props.varsSetter({
-          dummy: usr.signInUserSession.idToken.jwtToken,
-        });
-        try {
-          const token = usr.signInUserSession.idToken.jwtToken;
-          if (token !== null) {
-            try {
-              console.log(
-                "calling authQuery 'me' (small), with token: " + token
-              );
-              const res = await fetch(API_ENDPOINT_AUTH, {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-                // Don't care about e.g. challenges, so size = small.
-                body: JSON.stringify({ query: "me", size: "small" }),
-              });
-              const result = await res.json();
-              if (result.statusCode !== 200)
-                console.log(JSON.parse(result.body));
-              else {
-                if (result === null) globalMeSetter({});
-                else {
-                  globalMeSetter(JSON.parse(result.body));
+        props.handleClose(1);
+        if (props.updateMe) {
+          try {
+            const token = usr.signInUserSession.idToken.jwtToken;
+            if (token !== null) {
+              try {
+                console.log(
+                  "calling authQuery 'me' (small), with token: " + token
+                );
+                const res = await fetch(API_ENDPOINT_AUTH, {
+                  method: "POST",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                  },
+                  // Don't care about e.g. challenges, so size = small.
+                  body: JSON.stringify({ query: "me", size: "small" }),
+                });
+                const result = await res.json();
+                if (result.statusCode !== 200)
                   console.log(JSON.parse(result.body));
+                else {
+                  if (result === null) globalMeSetter({});
+                  else {
+                    globalMeSetter(JSON.parse(result.body));
+                    console.log(JSON.parse(result.body));
+                  }
                 }
+              } catch (error) {
+                console.log(error);
               }
-            } catch (error) {
-              console.log(error);
             }
+          } catch (error) {
+            // not logged in, ok.
           }
-        } catch (error) {
-          // not logged in, ok.
         }
       } catch (err) {
         setError(err.message);
@@ -113,13 +130,14 @@ function NewProfile(props) {
     }
   };
 
+  console.log("NewProfile show", show);
   return (
     <Modal
       show={show}
       title={t("NewProfile")}
       buttons={[
         { label: t("Submit"), action: handleNewProfile },
-        { label: t("Close"), action: handleNewProfileClose },
+        { label: t("Close"), action: () => props.handleClose(0) }
       ]}
     >
       {!error ? (
@@ -128,13 +146,14 @@ function NewProfile(props) {
             <label className="label" htmlFor="profile_name">
               {t("ProfileName")}
             </label>
+            <div className="error">{nameError}</div>
             <div className="control">
               <input
                 name="name"
                 id="profile_name"
                 type="text"
                 value={name}
-                onChange={(e) => nameSetter(e.target.value)}
+                onChange={(e) => nameChange(e.target.value)}
               />
             </div>
             <p className="help">{t("ProfileNameHelp")}</p>
@@ -177,6 +196,7 @@ function NewProfile(props) {
               />
             </div>
           </div>
+          { /*
           <div className="field">
             <div className="control">
               <label className="checkbox">
@@ -192,6 +212,8 @@ function NewProfile(props) {
             </div>
             <p className="help">{t("ProfileAnonHelp")}</p>
           </div>
+            */ }
+          <div className="error">{consentError}</div>
           <div className="field">
             <div className="control">
               <label className="checkbox">
@@ -200,12 +222,19 @@ function NewProfile(props) {
                   id="profile_consent"
                   type="checkbox"
                   checked={consent}
-                  onChange={(e) => consentSetter(e.target.checked)}
+                  onChange={(e) => consentChange(e.target.checked)}
                 />
                 {t("ProfileConsent")}
               </label>
             </div>
-            <p className="help">[Link to ToS here eventually]</p>
+            <p className="help">[
+              <a
+                href="https://play.abstractplay.com/legal"
+                target="_NEW"
+              >
+                {t("ToS")}
+              </a>
+              ]</p>
           </div>
         </Fragment>
       ) : (

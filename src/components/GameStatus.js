@@ -33,6 +33,19 @@ function GameStatus(props) {
   ) {
     return <div></div>;
   } else {
+    let stashes = [];
+    let handlers = [];
+    if (game.playerStashes) {
+      status.stashes.forEach(stash => {
+        if (Array.isArray(stash)) {
+          stashes.push(stash);
+          handlers.push(undefined);
+        } else {
+          stashes.push(stash.stash);
+          handlers.push(stash.handler);
+        }
+      });
+    }
     return (
       <div style={{ marginBottom: "2rem" }}>
         <h1 className="subtitle lined">
@@ -118,7 +131,7 @@ function GameStatus(props) {
             <h2>Stash</h2>
             <table className="table">
               <tbody>
-                {status.stashes.map((stash, index) => (
+                {stashes.map((stash, index) => (
                   <tr key={"stash" + index}>
                     <td>
                       {game.colors[index].isImage ? (
@@ -139,7 +152,7 @@ function GameStatus(props) {
                         key={"stashentry" + j}
                         onClick={
                           canExplore
-                            ? () => handleStashClick(index, s.count, s.movePart)
+                            ? () => handleStashClick(index, s.count, s.movePart, handlers[index])
                             : undefined
                         }
                       >

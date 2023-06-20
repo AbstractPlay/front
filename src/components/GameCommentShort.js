@@ -1,10 +1,11 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-function GameComment(props) {
+function GameCommentShort(props) {
   const [comment, commentSetter] = useState("");
   const [toolong, toolongSetter] = useState(false);
   const { t } = useTranslation();
+  const textareaRef = useRef();
 
   const handleChange = (comment) => {
     toolongSetter(comment.length > 4000);
@@ -17,29 +18,35 @@ function GameComment(props) {
     commentSetter("");
   };
 
+  React.useLayoutEffect(() => {
+    // Reset height - important to shrink on delete
+    textareaRef.current.style.height = "inherit";
+    // Set height
+    textareaRef.current.style.height = `${Math.max(
+      textareaRef.current.scrollHeight,
+      30
+    )}px`;
+  }, [comment]);
+
   return (
     <Fragment>
       {toolong || props.tooMuch ? (
         <p className="is-danger">{t("CommentTooLong")}</p>
       ) : (
         <Fragment>
-          <div className="field">
-            <label className="label" htmlFor="enterAComment">
-              {t("Comment")}
-            </label>
+          <div className="field is-grouped">
             <div className="control">
-              <textarea
+              <textarea type="textarea"
+                ref={textareaRef}
+                rows={1}
                 id="enterAComment"
                 name="enterAComment"
-                className="textarea"
+                className="input is-small"
                 value={comment}
                 placeholder={t("Comment")}
                 onChange={(e) => handleChange(e.target.value)}
-                rows="3"
               ></textarea>
             </div>
-          </div>
-          <div className="field">
             <div className="control">
               <button className="button is-small" onClick={handleSubmit}>
                 Submit
@@ -52,4 +59,4 @@ function GameComment(props) {
   );
 }
 
-export default GameComment;
+export default GameCommentShort;

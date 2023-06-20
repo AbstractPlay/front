@@ -353,9 +353,22 @@ th .player {
 }
 
 .movesTable {
-  max-height: 600px;
+  max-height: 300px; /* If you change this also change the scroll function in GameMoves */
   overflow-y: auto;
 }
+
+.movesTable th {
+  top: 0;
+  position: sticky;
+  background: white;
+}
+
+.chatTable {
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: smaller;
+}
+
 
 /* Leaving the stuff for user settings until I'm prepared to expand it */
 .userSettings {

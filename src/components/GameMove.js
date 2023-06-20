@@ -4,7 +4,6 @@ import React, {
   useState,
   useRef,
   useContext,
-  createContext,
 } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -23,13 +22,11 @@ import MoveEntry from "./MoveEntry";
 import MoveResults from "./MoveResults";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
-import GameComment from "./GameComment";
 import ClipboardCopy from "./ClipboardCopy";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
-import NewChatMarker from "./NewChatMarker";
 import DownloadDataUri from "./DownloadDataUri";
-
-export const NewChatContext = createContext([false, () => false]);
+import UserChats from "./UserChats";
+import { Canvg } from 'canvg';
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -113,6 +110,7 @@ function setupGame(
   game0.sharedStash =
     info.flags !== undefined && info.flags.includes("shared-stash");
   game0.noMoves = info.flags !== undefined && info.flags.includes("no-moves");
+  game0.automove = info.flags !== undefined && info.flags.includes("automove");
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
   if (game0.state === undefined)
@@ -261,6 +259,25 @@ function mergeExploration(game, exploration, data, me) {
   }
 }
 
+function mergeExistingExploration(moveNum, exploration, explorationRef) {
+  let subtree = undefined;
+  moveNum++;
+  while (true) {
+    let move = explorationRef.current[moveNum].move.toLowerCase().replace(/\s+/g, "");
+    subtree = exploration.children.find((e) => e.move.toLowerCase().replace(/\s+/g, "") === move);
+    if (subtree !== undefined) {
+      exploration = subtree;
+      moveNum++;
+      if (moveNum === explorationRef.current.length) {
+        explorationRef.current[explorationRef.current.length - 1].children = subtree.children;
+        break;
+      }
+    } else {
+      break;
+    }
+  }
+}
+
 function mergeMoveRecursive(gameEngine, node, children) {
   children.forEach((n) => {
     gameEngine.move(n.move);
@@ -346,8 +363,24 @@ function doView(
     simMove = true;
     m = game.players.map((p) => (p.id === me.id ? m : "")).join(",");
   }
+  let newfocus = cloneDeep(focus);
+  let moves;
   try {
     gameEngineTmp.move(m, partialMove || simMove);
+    if (!partialMove && focus.canExplore && !game.noMoves) {
+      moves = gameEngineTmp.moves();
+    }
+    // check for auto moves
+    if (!partialMove && focus.canExplore && game.automove) {
+      while (moves.length === 1) {
+        let pos = node.AddChild(m, gameEngineTmp);
+        newfocus.exPath.push(pos);
+        node = node.children[pos];
+        m = moves[0];
+        gameEngineTmp.move(m, partialMove || simMove);
+        moves = gameEngineTmp.moves();
+      }
+    }
   } catch (err) {
     if (err.name === "UserFacingError") {
       errorMessageRef.current = err.client;
@@ -357,21 +390,17 @@ function doView(
     errorSetter(true);
     return;
   }
-  move.rendered = move.move;
-  // console.log("explorationRef:",explorationRef);
-  // console.log("statusRef:",statusRef);
+  move.rendered = m;
   setStatus(
     gameEngineTmp,
     game,
     partialMove || simMove,
-    move,
+    simMove ? move.move : m,
     statusRef.current
   );
   if (!partialMove) {
-    node = getFocusNode(explorationRef.current, focus);
-    const pos = node.AddChild(move.move, gameEngineTmp);
+    const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
     saveExploration(explorationRef.current, game.id, me, explorer);
-    let newfocus = cloneDeep(focus);
     newfocus.exPath.push(pos);
     newfocus.canExplore = canExploreMove(
       game,
@@ -384,8 +413,9 @@ function doView(
       rendered: "",
       move: "",
     });
-    if (newfocus.canExplore && !game.noMoves)
-      movesRef.current = gameEngineTmp.moves();
+    if (newfocus.canExplore && !game.noMoves) {
+      movesRef.current = moves;
+    }
   } else {
     moveSetter(move);
   }
@@ -535,9 +565,9 @@ function GameMove(props) {
   const [commentsTooLong, commentsTooLongSetter] = useState(false);
   const [submitting, submittingSetter] = useState(false);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
-  const [newChat, newChatSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
   const [gameRec, gameRecSetter] = useState(undefined);
+  const [pngExport, pngExportSetter] = useState(undefined);
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
@@ -552,6 +582,7 @@ function GameMove(props) {
   moveRef.current = move;
   const boardImage = useRef();
   const stackImage = useRef();
+  const canvasRef = useRef();
   const gameRef = useRef(null);
   // Array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
   const explorationRef = useRef(null);
@@ -577,13 +608,19 @@ function GameMove(props) {
   } else {
     gameEngine = GameFactory(gameDeets.uid);
   }
-  let designers = gameDeets.people
+  let designerString;
+  // eslint-disable-next-line no-prototype-builtins
+  if (gameDeets.hasOwnProperty("people")) {
+    let designers = gameDeets.people
     .filter((p) => p.type === "designer")
     .map((p) => p.name);
-  let designerString;
-  if (designers.length === 1) designerString = "Designer: ";
-  else designerString = "Designers: ";
-  designerString += designers.join(", ");
+    if (designers.length === 1) {
+        designerString = "Designer: ";
+    } else {
+        designerString = "Designers: ";
+    }
+    designerString += designers.join(", ");
+  }
 
   useEffect(() => {
     addResource(i18n.language);
@@ -743,7 +780,7 @@ function GameMove(props) {
           } else {
             const result = await res.json();
             data = JSON.parse(result.body);
-            data = data.map((d) => { 
+            data = data.map((d) => {
               if (d && typeof d.tree === 'string') {
                 d.tree = JSON.parse(d.tree);
               }
@@ -769,7 +806,7 @@ function GameMove(props) {
     // console.log("foc = ", foc);
     let node = getFocusNode(explorationRef.current, foc);
     if (
-      !isExplorer(explorer, globalMe) &&
+      !(isExplorer(explorer, globalMe) && game.canExplore) &&
       foc.moveNumber === explorationRef.current.length - 1
     ) {
       node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variation.
@@ -859,9 +896,12 @@ function GameMove(props) {
     );
   };
 
-  const handleStashClick = (player, count, movePart) => {
-    // console.log(`handleStashClick movePart=${movePart}`);
-    handleMove(move.move + movePart);
+  const handleStashClick = (player, count, movePart, handler) => {
+    if (handler) {
+      handleMove(handler(move.move, movePart));
+    } else {
+      handleMove(move.move + movePart);
+    }
   };
 
   useEffect(() => {
@@ -932,6 +972,27 @@ function GameMove(props) {
         options.svgid = "theBoardSVG";
         render(renderrep, options);
       }
+    }
+    // render to PNG
+    if ( (boardImage.current !== null) && (canvasRef !== null) ) {
+        try {
+            const ctx = canvasRef.current.getContext("2d");
+            let svgstr = boardImage.current.innerHTML;
+            if ( (svgstr !== null) && (svgstr !== undefined) && (svgstr.length > 0) ) {
+                const v = Canvg.fromString(ctx, boardImage.current.innerHTML);
+                v.resize(1000, 1000, "xMidYMid meet");
+                v.render();
+                pngExportSetter(canvasRef.current.toDataURL());
+                // console.log("Updated PNG generated");
+            } else {
+                pngExportSetter(undefined)
+                // console.log("Empty SVG string generated.");
+            }
+        } catch (e) {
+            pngExportSetter(undefined);
+            // console.log("Caught error rendering PNG");
+            // console.log(e);
+        }
     }
   }, [renderrep, globalMe, focus, settings, explorer]);
 
@@ -1041,8 +1102,8 @@ function GameMove(props) {
       }
       myMoveSetter((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
       let game0 = JSON.parse(result.body);
-      //   console.log("In handleSubmit. game0:");
-      //   console.log(game0);
+      const exploration = explorationRef.current[explorationRef.current.length - 1];
+      const moveNum = explorationRef.current.length - 1;
       setupGame(
         game0,
         gameRef,
@@ -1058,6 +1119,9 @@ function GameMove(props) {
         moveSetter,
         gameRecSetter
       );
+      if (gameRef.current.canExplore) {
+        mergeExistingExploration(moveNum, exploration, explorationRef);
+      }
       // setupColors(settings, gameRef.current, t);
     } catch (err) {
       setError(err.message);
@@ -1383,6 +1447,16 @@ function GameMove(props) {
                   <i className="fa fa-search-plus"></i>
                 )}
               </button>
+            {pngExport === undefined ? "" :
+              <a href={pngExport} download={"AbstractPlay-" + metaGame + "-" + gameID + ".png"} target="_blank" rel="noreferrer">
+                <button
+                  className="fabtn align-right"
+                  title={t("ExportPNG")}
+                >
+                  <i className="fa fa-download"></i>
+                </button>
+              </a>
+            }
               {!globalMe || globalMe.admin !== true ? (
                 ""
               ) : (
@@ -1415,23 +1489,15 @@ function GameMove(props) {
                 noExplore={globalMe?.settings?.all?.exploration === -1}
                 handleGameMoveClick={handleGameMoveClick}
               />
-            </div>
-          )}
-        </div>
-        {/* columns */}
-        <div className="columns">
-          {/* Comment entry */}
-          <div className="column is-half is-offset-one-quarter">
-            {focus && game.me > -1 ? (
-              <GameComment
-                className="gameComment"
+              <UserChats
+                comments={comments}
+                players={gameRef.current?.players}
                 handleSubmit={submitComment}
                 tooMuch={commentsTooLong}
               />
-            ) : (
-              ""
-            )}
-          </div>
+
+            </div>
+          )}
         </div>
         {/* columns */}
         <div className="columns">
@@ -1442,14 +1508,12 @@ function GameMove(props) {
                 <h1 className="subtitle lined">
                   <span>{t("GameSummary")}</span>
                 </h1>
-                <NewChatContext.Provider value={[newChat, newChatSetter]}>
                   <MoveResults
                     className="moveResults"
                     results={game?.moveResults}
                     comments={comments}
                     players={gameRef.current?.players}
                   />
-                </NewChatContext.Provider>
               </div>
             ) : (
               ""
@@ -1457,7 +1521,6 @@ function GameMove(props) {
           </div>
         </div>
         {/* columns */}
-        {!newChat ? "" : <NewChatMarker />}
         <RenderOptionsModal
           show={showSettings}
           game={game}
@@ -1522,7 +1585,7 @@ function GameMove(props) {
         >
           <div className="content">
             <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-              {gameEngine.description() + "\n\n" + designerString}
+              {gameEngine.description() + (designerString === undefined ? "" : "\n\n" + designerString)}
             </ReactMarkdown>
             <ul className="contained">
               {gameDeets.urls.map((l, i) => (
@@ -1562,12 +1625,12 @@ function GameMove(props) {
               ""
             ) : (
               <Fragment>
-                <ClipboardCopy copyText={gameRef.current.state} />
+                <ClipboardCopy copyText={getFocusNode(explorationRef.current, focus).state} />
                 <div className="field">
                   <div className="control">
                     <a
                       href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                        gameRef.current.state
+                        getFocusNode(explorationRef.current, focus).state
                       )}`}
                       download="AbstractPlay-Debug.json"
                     >
@@ -1622,6 +1685,7 @@ function GameMove(props) {
             </div>
           </div>
         </Modal>
+        <canvas id="pngExportCanvas" ref={canvasRef} style={{display: "none"}}></canvas>
       </article>
     );
   } else {
