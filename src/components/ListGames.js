@@ -63,6 +63,7 @@ function ListGames(props) {
                     ? t("tblHeaderStarted")
                     : t("tblHeaderFinished")}
                 </th>
+                { gameState === "current" ? <th>{t("tblHeaderMoves")}</th> : null }
                 {[...Array(maxPlayers).keys()].map((i) => (
                   <th key={i}>{t("tblHeaderPlayer", { num: i + 1 })}</th>
                 ))}
@@ -70,15 +71,16 @@ function ListGames(props) {
               {games.map((game, i) => (
                 <tr key={i}>
                   <td>
-                    <Link to={`/move/${game.metaGame}/${game.id}`}>
+                    <Link to={`/move/${game.metaGame}/${gameState === "current" ? "0" : "1"}/${game.id}`}>
                       {i + 1}
                     </Link>
                   </td>
                   <td>
                     {new Date(
-                      Number(game.sk.substring(0, game.sk.indexOf("#")))
-                    ).toLocaleString()}
+                        Number(gameState === "current" ? game.gameStarted : game.lastMoveTime)
+                      ).toLocaleString()}
                   </td>
+                  { gameState === "current" ? <td>{game.numMoves}</td> : null }
                   {[...Array(maxPlayers).keys()].map((j) => (
                     <td key={j}>
                       {game.players[j] ? game.players[j].name : null}
