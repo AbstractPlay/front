@@ -13,8 +13,8 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/gameslib": "latest",
-    "@abstractplay/renderer": "latest",
+    "@abstractplay/gameslib": "^1.0.0-ci-5364167534.0",
+    "@abstractplay/renderer": "^1.0.0-ci-5351122226.0",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/user-event": "13.5.0",
     "aws-amplify": "5.0.25",
