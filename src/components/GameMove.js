@@ -568,6 +568,7 @@ function GameMove(props) {
   const [globalMe] = useContext(MeContext);
   const [gameRec, gameRecSetter] = useState(undefined);
   const [pngExport, pngExportSetter] = useState(undefined);
+  const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
@@ -802,6 +803,11 @@ function GameMove(props) {
       fetchData();
     }
   }, [focus, explorationFetched, gameID, explorer, globalMe]);
+
+  const handleResize = () => {
+        screenWidthSetter(window.innerWidth);
+  }
+  window.addEventListener('resize', handleResize)
 
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {
@@ -1486,6 +1492,8 @@ function GameMove(props) {
                 isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
               }`}
             >
+            {screenWidth > 770 ?
+            <Fragment>
               <GameMoves
                 focus={focus}
                 game={game}
@@ -1499,7 +1507,24 @@ function GameMove(props) {
                 handleSubmit={submitComment}
                 tooMuch={commentsTooLong}
               />
-
+            </Fragment>
+            :
+            <Fragment>
+              <UserChats
+                comments={comments}
+                players={gameRef.current?.players}
+                handleSubmit={submitComment}
+                tooMuch={commentsTooLong}
+              />
+              <GameMoves
+                focus={focus}
+                game={game}
+                exploration={explorationRef.current}
+                noExplore={globalMe?.settings?.all?.exploration === -1}
+                handleGameMoveClick={handleGameMoveClick}
+              />
+            </Fragment>
+            }
             </div>
           )}
         </div>
