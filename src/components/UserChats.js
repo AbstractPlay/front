@@ -17,14 +17,16 @@ function UserChats(props) {
   if (comments) {
     let results = [];
     comments.forEach((c) => {
-      results.push({
-        timestamp: c.timeStamp,
-        time: new Date(c.timeStamp).toLocaleString(),
-        log: c.comment,
-        system: false,
-        userid: c.userId,
-        player: players.find((p) => p.id === c.userId).name,
-      });
+      if ( (c.userId !== null) && (c.userId !== undefined) && (c.userId.length > 0) ) {
+        results.push({
+            timestamp: c.timeStamp,
+            time: new Date(c.timeStamp).toLocaleString(),
+            log: c.comment,
+            system: false,
+            userid: c.userId,
+            player: players.find((p) => p.id === c.userId).name,
+        });
+      }
     });
     results.sort((a, b) => b.timestamp - a.timestamp);
 

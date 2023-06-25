@@ -82,6 +82,20 @@ input[type="radio"] {
   color: white;
 }
 
+.apButtonAlert {
+  background: linear-gradient(
+    180deg,
+    var(--secondary-color-1-lighter) 0%,
+    var(--secondary-color-1) 100%
+  );
+  color: white;
+}
+
+.apButtonAlert:hover {
+  background: var(--main-fg-color);
+  color: white;
+}
+
 .inlineButton {
   margin-left: 1em;
 }

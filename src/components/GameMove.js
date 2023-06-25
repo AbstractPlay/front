@@ -99,6 +99,8 @@ function setupGame(
   game0.name = info.name;
   game0.simultaneous =
     info.flags !== undefined && info.flags.includes("simultaneous");
+  game0.pie =
+    info.flags !== undefined && info.flags.includes("pie");
   game0.sharedPieces =
     info.flags !== undefined && info.flags.includes("shared-pieces");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
@@ -117,6 +119,8 @@ function setupGame(
     throw new Error("Why no state? This shouldn't happen no more!");
   const engine = GameFactory(game0.metaGame, game0.state);
   moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
+  // eslint-disable-next-line no-prototype-builtins
+  game0.canPie = game0.pie && engine.stack.length === 2 && ( (! game0.hasOwnProperty("pieInvoked")) || (game0.pieInvoked = false) );
   game0.me = game0.players.findIndex((p) => me && p.id === me.id);
   game0.variants = engine.getVariants();
   if (game0.simultaneous) {
@@ -570,6 +574,8 @@ function GameMove(props) {
   const [pngExport, pngExportSetter] = useState(undefined);
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
+  // pieInvoked is used to trigger the game reload after the function is called
+  const [pieInvoked, pieInvokedSetter] = useState(false);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -637,6 +643,7 @@ function GameMove(props) {
   }, [i18n, globalMe]);
 
   useEffect(() => {
+    console.log("Fetching game data");
     async function fetchData() {
       let token = null;
       try {
@@ -744,7 +751,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID, metaGame]);
+  }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID, metaGame, pieInvoked]);
 
   useEffect(() => {
     async function fetchData() {
@@ -849,6 +856,39 @@ function GameMove(props) {
         moveNumber: explorationRef.current.length - 1,
         exPath: [],
       });
+  }
+
+  // The user has clicked the "Invoke pie rule" button
+  const handlePie = async () => {
+    console.log("Pie invoked!");
+    const usr = await Auth.currentAuthenticatedUser();
+    const token = usr.signInUserSession.idToken.jwtToken;
+    try {
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          query: "invoke_pie",
+          pars: {
+            id: gameRef.current.id,
+            metaGame: gameRef.current.metaGame,
+            cbit: cbit,
+          },
+        }),
+      });
+      const result = await res.json();
+      if (result.statusCode !== 200) {
+        // setError(JSON.parse(result.body));
+        throw JSON.parse(result.body);
+      }
+      pieInvokedSetter(true);
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
@@ -1351,6 +1391,7 @@ function GameMove(props) {
                 handleResign,
                 handleTimeout,
                 handleReset,
+                handlePie,
               ]}
             />
             {toMove !== "" || gameRec === undefined ? null : (

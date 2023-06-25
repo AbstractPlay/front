@@ -1,6 +1,5 @@
-import React, { useEffect, useState, Fragment, useContext } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { MeContext } from "../pages/Skeleton";
 
 function showMilliseconds(ms) {
   let positive = true;
@@ -47,11 +46,10 @@ function MoveEntry(props) {
   const handleResign = props.handlers[4];
   const handleTimeOut = props.handlers[5];
   const handleReset = props.handlers[6];
+  const handlePie = props.handlers[7];
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
-  const [globalMe,] = useContext(MeContext);
-  let myTurn = false;
 
   function getFocusNode(exp, foc) {
     let curNode = exp[foc.moveNumber];
@@ -118,7 +116,6 @@ function MoveEntry(props) {
       if (game.simultaneous) {
         if (uiState === 0) {
           if (game.canSubmit) {
-            myTurn = true;
             mover = t("ToMove", {
               player: game.players[game.me].name,
             });
@@ -130,11 +127,6 @@ function MoveEntry(props) {
           mover = "";
         }
       } else {
-        if ( (globalMe !== null) && (uiState === 0) ) {
-            if (game.players[toMove].name === globalMe.name) {
-                myTurn = true;
-            }
-        }
         mover = t("ToMove", { player: game.players[toMove].name });
         if (game.colors !== undefined) img = game.colors[toMove];
       }
@@ -192,7 +184,7 @@ function MoveEntry(props) {
         ) : (
           <p className="exploreState">{t("Explore")}</p>
         )}
-        <p style={{ paddingBottom: "1em" }} className={myTurn ? "yourTurn" : ""}>
+        <p style={{ paddingBottom: "1em" }} className={(game.canSubmit && uiState === 0) ? "yourTurn" : ""}>
           {img === null ? (
             ""
           ) : img.isImage ? (
@@ -371,7 +363,7 @@ function MoveEntry(props) {
           {uiState === 0 && game.canSubmit && !submitting ? (
             canDraw ? (
               <button
-                className="button is-small apButton"
+                className="button apButtonAlert"
                 onClick={() => handleSubmit("drawaccepted")}
               >
                 {t("AcceptDraw")}
@@ -387,6 +379,15 @@ function MoveEntry(props) {
           ) : (
             ""
           )}
+          {uiState === 0 && game.canSubmit && game.canPie && !submitting ?
+              <button
+                className="button is-small apButton"
+                onClick={handlePie}
+              >
+                {t("InvokePie")}
+              </button>
+            : ""
+          }
           {focus.exPath.length > 0 ? (
             <div
               className="winningColorButton tooltipped"
