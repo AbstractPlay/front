@@ -1380,7 +1380,7 @@ function GameMove(props) {
                   </button>
                 </div>
               )}
-              {toMove === "" ? null : (
+              {myMove.length < 1 ? null : (
                 <div className="control" style={{ paddingTop: "1em" }}>
                   <button className="button apButton" onClick={handleNextGame}>
                     <span>
