@@ -23,14 +23,23 @@ function MoveResults(props) {
       system: true,
     }));
     comments.forEach((c) => {
-      results.push({
-        timestamp: c.timeStamp,
-        time: new Date(c.timeStamp).toLocaleString(),
-        log: c.comment,
-        system: false,
-        userid: c.userId,
-        player: players.find((p) => p.id === c.userId).name,
-      });
+      if ( (c.userId === null) || (c.userId === undefined) || (c.userId.length === 0) ) {
+        results.push({
+            timestamp: c.timeStamp,
+            time: new Date(c.timeStamp).toLocaleString(),
+            log: c.comment,
+            system: true,
+          });
+      } else {
+        results.push({
+            timestamp: c.timeStamp,
+            time: new Date(c.timeStamp).toLocaleString(),
+            log: c.comment,
+            system: false,
+            userid: c.userId,
+            player: players.find((p) => p.id === c.userId).name,
+          });
+      }
     });
     results.sort((a, b) => b.timestamp - a.timestamp);
 

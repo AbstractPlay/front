@@ -47,6 +47,7 @@ function MoveEntry(props) {
   const handleResign = props.handlers[4];
   const handleTimeOut = props.handlers[5];
   const handleReset = props.handlers[6];
+  const handlePie = props.handlers[7];
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
@@ -192,7 +193,7 @@ function MoveEntry(props) {
         ) : (
           <p className="exploreState">{t("Explore")}</p>
         )}
-        <p style={{ paddingBottom: "1em" }} className={myTurn ? "yourTurn" : ""}>
+        <p style={{ paddingBottom: "1em" }} className={(game.canSubmit && uiState === 0) ? "yourTurn" : ""}>
           {img === null ? (
             ""
           ) : img.isImage ? (
@@ -371,7 +372,7 @@ function MoveEntry(props) {
           {uiState === 0 && game.canSubmit && !submitting ? (
             canDraw ? (
               <button
-                className="button is-small apButton"
+                className="button apButtonAlert"
                 onClick={() => handleSubmit("drawaccepted")}
               >
                 {t("AcceptDraw")}
@@ -387,6 +388,15 @@ function MoveEntry(props) {
           ) : (
             ""
           )}
+          {uiState === 0 && game.canSubmit && game.canPie && !submitting ?
+              <button
+                className="button is-small apButton"
+                onClick={handlePie}
+              >
+                {t("InvokePie")}
+              </button>
+            : ""
+          }
           {focus.exPath.length > 0 ? (
             <div
               className="winningColorButton tooltipped"
