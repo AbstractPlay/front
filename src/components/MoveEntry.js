@@ -1,6 +1,5 @@
-import React, { useEffect, useState, Fragment, useContext } from "react";
+import React, { useEffect, useState, Fragment} from "react";
 import { useTranslation } from "react-i18next";
-import { MeContext } from "../pages/Skeleton";
 
 function showMilliseconds(ms) {
   let positive = true;
@@ -51,8 +50,6 @@ function MoveEntry(props) {
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
-  const [globalMe,] = useContext(MeContext);
-  let myTurn = false;
 
   function getFocusNode(exp, foc) {
     let curNode = exp[foc.moveNumber];
@@ -119,7 +116,6 @@ function MoveEntry(props) {
       if (game.simultaneous) {
         if (uiState === 0) {
           if (game.canSubmit) {
-            myTurn = true;
             mover = t("ToMove", {
               player: game.players[game.me].name,
             });
@@ -131,11 +127,6 @@ function MoveEntry(props) {
           mover = "";
         }
       } else {
-        if ( (globalMe !== null) && (uiState === 0) ) {
-            if (game.players[toMove].name === globalMe.name) {
-                myTurn = true;
-            }
-        }
         mover = t("ToMove", { player: game.players[toMove].name });
         if (game.colors !== undefined) img = game.colors[toMove];
       }
