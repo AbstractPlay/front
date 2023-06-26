@@ -102,6 +102,7 @@
     "HelpUnRated": "This game will not be rated.",
     "HideDetails": "Hide details",
     "History": "History",
+    "InCheck": "{{player}} is in check!",
     "IncludeAcceptDrawOffer": "a draw has been offered. Do you accept?",
     "IncludeDrawOffer": "include draw offer with move",
     "Increment": "increment {{inc}} hours",

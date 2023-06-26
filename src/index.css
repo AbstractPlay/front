@@ -477,3 +477,10 @@ th .player {
 .yourTurn {
     background-color: var(--secondary-color-1-lighter);
 }
+
+/* text notification of being in check */
+.inCheck {
+    color: var(--secondary-color-1);
+    font-size: larger;
+    font-weight: bolder;
+}
