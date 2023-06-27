@@ -101,6 +101,8 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("simultaneous");
   game0.pie =
     info.flags !== undefined && info.flags.includes("pie");
+  game0.canCheck =
+    info.flags !== undefined && info.flags.includes("check");
   game0.sharedPieces =
     info.flags !== undefined && info.flags.includes("shared-pieces");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
@@ -542,6 +544,21 @@ function processNewMove(
   }
 }
 
+const populateChecked = (gameRef, engineRef, t, setter) => {
+    if (gameRef.current?.canCheck) {
+        const inCheckArr = engineRef.current.inCheck();
+        if (inCheckArr.length > 0) {
+            let newstr = "";
+            for (const n of inCheckArr) {
+                newstr += "<p>" + t("InCheck", {player: gameRef.current.players[n - 1].name}) + "</p>";
+            }
+            setter(newstr);
+        } else {
+            setter("");
+        }
+    }
+}
+
 function GameMove(props) {
   const [renderrep, renderrepSetter] = useState(null);
   // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
@@ -576,6 +593,8 @@ function GameMove(props) {
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
   // pieInvoked is used to trigger the game reload after the function is called
   const [pieInvoked, pieInvokedSetter] = useState(false);
+  // used to construct the localized string of players in check
+  const [inCheck, inCheckSetter] = useState("");
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -736,6 +755,7 @@ function GameMove(props) {
               commentsTooLongSetter(true);
             }
           }
+          populateChecked(gameRef, engineRef, t, inCheckSetter);
         }
       } catch (error) {
         console.log(error);
@@ -851,11 +871,46 @@ function GameMove(props) {
     if (
       focus.moveNumber + focus.exPath.length !==
       explorationRef.current.length - 1
-    )
-      handleGameMoveClick({
-        moveNumber: explorationRef.current.length - 1,
-        exPath: [],
+    ) {
+        handleGameMoveClick({
+            moveNumber: explorationRef.current.length - 1,
+            exPath: [],
+          });
+    }
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+  }
+
+  // The user has clicked the "Invoke pie rule" button
+  const handlePie = async () => {
+    console.log("Pie invoked!");
+    const usr = await Auth.currentAuthenticatedUser();
+    const token = usr.signInUserSession.idToken.jwtToken;
+    try {
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          query: "invoke_pie",
+          pars: {
+            id: gameRef.current.id,
+            metaGame: gameRef.current.metaGame,
+            cbit: cbit,
+          },
+        }),
       });
+      const result = await res.json();
+      if (result.statusCode !== 200) {
+        // setError(JSON.parse(result.body));
+        throw JSON.parse(result.body);
+      }
+      pieInvokedSetter(true);
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   // The user has clicked the "Invoke pie rule" button
@@ -919,6 +974,7 @@ function GameMove(props) {
       focusSetter,
       moveSetter
     );
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
   };
 
   // handler when user clicks on "complete move" (for a partial move that could be complete)
@@ -942,6 +998,7 @@ function GameMove(props) {
       focusSetter,
       moveSetter
     );
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
   };
 
   const handleStashClick = (player, count, movePart, handler) => {
@@ -986,6 +1043,7 @@ function GameMove(props) {
         focusSetter,
         moveSetter
       );
+      populateChecked(gameRef, engineRef, t, inCheckSetter);
     }
 
     function expand(row, col) {
@@ -1440,6 +1498,10 @@ function GameMove(props) {
             <h1 className="subtitle lined">
               <span>{gameinfo.get(metaGame).name}</span>
             </h1>
+            {inCheck.length === 0 ? "" :
+              <div className="content inCheck" dangerouslySetInnerHTML={{__html: inCheck}}>
+              </div>
+            }
             {gameRef.current?.stackExpanding ? (
               <div className="board">
                 <div className="stack" id="stack" ref={stackImage}></div>
