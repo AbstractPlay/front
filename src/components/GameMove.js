@@ -913,39 +913,6 @@ function GameMove(props) {
     }
   }
 
-  // The user has clicked the "Invoke pie rule" button
-  const handlePie = async () => {
-    console.log("Pie invoked!");
-    const usr = await Auth.currentAuthenticatedUser();
-    const token = usr.signInUserSession.idToken.jwtToken;
-    try {
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          query: "invoke_pie",
-          pars: {
-            id: gameRef.current.id,
-            metaGame: gameRef.current.metaGame,
-            cbit: cbit,
-          },
-        }),
-      });
-      const result = await res.json();
-      if (result.statusCode !== 200) {
-        // setError(JSON.parse(result.body));
-        throw JSON.parse(result.body);
-      }
-      pieInvokedSetter(true);
-    } catch (err) {
-      setError(err.message);
-    }
-  }
-
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
     let node = getFocusNode(explorationRef.current, focus);
