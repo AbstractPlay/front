@@ -277,7 +277,6 @@ function NewChallengeModal(props) {
     const starred = games.filter(g => globalMe.stars.includes(g.id));
     const others = games.filter(g => ! globalMe.stars.includes(g.id));
     games = [...starred, {id: "", name: "-----"}, ...others];
-    console.log(games);
   }
 
   let groupData = [];
