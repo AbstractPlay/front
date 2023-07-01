@@ -1,17 +1,20 @@
-import React, { useState, useEffect, useRef, createRef, Fragment } from "react";
+import React, { useState, useEffect, useContext, useRef, createRef, Fragment } from "react";
 import MetaItem from "./MetaItem";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
+import { MeContext } from "../pages/Skeleton";
 import { API_ENDPOINT_OPEN } from "../config";
 import { Helmet } from "react-helmet-async";
 
 function MetaContainer(props) {
   const [theMetaGame, theMetaGameSetter] = useState("");
   const [counts, countsSetter] = useState(null);
+  const [globalMe,] = useContext(MeContext);
   const gameDivs = useRef({});
   const [hideDetails, hideDetailsSetter] = useState(false);
+  const [filterStars, filterStarsSetter] = useState(false);
   const { metaGame } = useParams();
   const { t, i18n } = useTranslation();
   const [ canonical, canonicalSetter ] = useState("https://play.abstractplay.com/games/");
@@ -61,6 +64,9 @@ function MetaContainer(props) {
   if (process.env.REACT_APP_REAL_MODE === "production") {
     games = games.filter(id => ! gameinfo.get(id).flags.includes("experimental"));
   }
+  if ( (filterStars) && (globalMe !== null) && ("stars" in globalMe) && (globalMe.stars.length > 0) ) {
+    games = games.filter(id => globalMe.stars.includes(id));
+  }
 
   console.log(games);
   return (
@@ -102,6 +108,14 @@ function MetaContainer(props) {
                 onChange={() => hideDetailsSetter(!hideDetails)}
               />
               {t("HideDetails")}
+            </label>&nbsp;&nbsp;&nbsp;
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={filterStars}
+                onChange={() => filterStarsSetter(!filterStars)}
+              />
+              {t("FilterStars")}
             </label>
           </div>
         </div>
