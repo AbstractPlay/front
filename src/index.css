@@ -180,6 +180,7 @@ input[type="radio"] {
 
 .board > svg * text {
     cursor: default;
+    user-select: none;
 }
 
 .unZoomedBoard > svg {
