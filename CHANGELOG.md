@@ -27,7 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * The "bug" button now exports even historic or exploration states. 
 * Auto apply "only move"s during exploration. 
 * Don't "delete" exploration after move is submitted (or after auto moves get applied and it is immediately your turn again).
-* Make the moves table header "sticky"
+* Make the moves table header "sticky".
+* Now supports alternate displays for games.
 
 ### Fixed
 
