@@ -272,6 +272,13 @@ function NewChallengeModal(props) {
   if (process.env.REACT_APP_REAL_MODE === "production") {
     games = games.filter(g => ! gameinfo.get(g.id).flags.includes("experimental"));
   }
+  // sort by stars
+  if ( (globalMe !== null) && ("stars" in globalMe) && (Array.isArray(globalMe.stars)) && (globalMe.stars.length > 0) ) {
+    const starred = games.filter(g => globalMe.stars.includes(g.id));
+    const others = games.filter(g => ! globalMe.stars.includes(g.id));
+    games = [...starred, {id: "", name: "-----"}, ...others];
+  }
+
   let groupData = [];
   let nonGroupData = [];
   let playercounts = [];

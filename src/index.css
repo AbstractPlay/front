@@ -180,6 +180,7 @@ input[type="radio"] {
 
 .board > svg * text {
     cursor: default;
+    user-select: none;
 }
 
 .unZoomedBoard > svg {
@@ -483,4 +484,13 @@ th .player {
     color: var(--secondary-color-1);
     font-size: larger;
     font-weight: bolder;
+}
+
+/* stuff for the stars */
+.starContainer {
+    text-align: right;
+}
+
+.glowingStar {
+    color: #ffdf00;
 }

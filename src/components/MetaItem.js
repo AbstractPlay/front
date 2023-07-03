@@ -1,13 +1,17 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useTranslation } from "react-i18next";
 import { GameFactory } from "@abstractplay/gameslib";
+import { MeContext } from "../pages/Skeleton";
+import { API_ENDPOINT_AUTH } from "../config";
+import { Auth } from "aws-amplify";
 import gameImages from "../assets/GameImages";
 import Modal from "./Modal";
 
 const MetaItem = React.forwardRef((props, ref) => {
+  const [globalMe,globalMeSetter] = useContext(MeContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { t } = useTranslation();
   let game = props.game;
@@ -25,7 +29,13 @@ const MetaItem = React.forwardRef((props, ref) => {
   if (game.hasOwnProperty("people")) {
     let designers = game.people
     .filter((p) => p.type === "designer")
-    .map((p) => p.name);
+    .map((p) => {
+        if ( ("urls" in p) && (p.urls !== undefined) && (p.urls.length > 0) ) {
+            return `[${p.name}](${p.urls[0]})`;
+        } else {
+            return p.name;
+        }
+    });
     if (designers.length === 1) {
         designerString = "Designer: ";
     } else {
@@ -33,6 +43,40 @@ const MetaItem = React.forwardRef((props, ref) => {
     }
     designerString += designers.join(", ");
   }
+
+  const toggleStar = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "toggle_star",
+          pars: {
+            metaGame: game.uid,
+          },
+        }),
+      });
+      if (res.status !== 200) {
+        const result = await res.json();
+        console.log(
+          `An error occured while saving toggling a star:\n${result}`
+        );
+      } else {
+        const result = await res.json();
+        console.log(result.body);
+        const newMe = JSON.parse(JSON.stringify(globalMe));
+        newMe.stars = result.body;
+        globalMeSetter(newMe);
+      }
+    } catch (error) {
+      props.setError(error);
+    }
+  };
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -115,12 +159,27 @@ const MetaItem = React.forwardRef((props, ref) => {
                       })}
                     </Link>
                   </li>
+                  <li>
+                    {`${counts.stars} `}
+                    {t("TotalStars", {count: counts.stars}).toLowerCase()}
+                  </li>
                 </ul>
               )}
             </div>
           </div>
         </div>
         <div className="column">
+          <div className="starContainer" onClick={toggleStar}>
+            {( (globalMe !== null) && ("stars" in globalMe) && (globalMe.stars !== undefined) && (globalMe.stars !== null) && (globalMe.stars.includes(game.uid)) ) ?
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+             :
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+            }
+          </div>
           <div id={"svg" + game.uid}>
             <img
               src={`data:image/svg+xml;utf8,${image}`}

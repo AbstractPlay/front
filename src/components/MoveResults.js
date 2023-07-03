@@ -31,13 +31,18 @@ function MoveResults(props) {
             system: true,
           });
       } else {
+        let personName = "Unknown";
+        const player = players.find((p) => p.id === c.userId);
+        if (player !== undefined) {
+            personName = player.name;
+        }
         results.push({
             timestamp: c.timeStamp,
             time: new Date(c.timeStamp).toLocaleString(),
             log: c.comment,
             system: false,
             userid: c.userId,
-            player: players.find((p) => p.id === c.userId).name,
+            player: personName,
           });
       }
     });
