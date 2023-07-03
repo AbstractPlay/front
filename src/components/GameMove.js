@@ -556,6 +556,8 @@ const populateChecked = (gameRef, engineRef, t, setter) => {
         } else {
             setter("");
         }
+    } else {
+        setter("");
     }
 }
 
