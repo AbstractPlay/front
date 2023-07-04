@@ -93,7 +93,8 @@ function setupGame(
   focusSetter,
   explorationRef,
   moveSetter,
-  gameRecSetter
+  gameRecSetter,
+  display
 ) {
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
@@ -125,6 +126,7 @@ function setupGame(
   game0.canPie = game0.pie && engine.stack.length === 2 && ( (! game0.hasOwnProperty("pieInvoked")) || (game0.pieInvoked = false) );
   game0.me = game0.players.findIndex((p) => me && p.id === me.id);
   game0.variants = engine.getVariants();
+
   if (game0.simultaneous) {
     game0.canSubmit =
       game0.toMove === "" || game0.me < 0 ? false : game0.toMove[game0.me];
@@ -170,7 +172,8 @@ function setupGame(
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   engineRef.current = cloneDeep(engine);
-  const render = engine.render(game0.me + 1);
+  const render = engine.render({ perspective: game0.me + 1, altDisplay: display });
+  game0.stackExpanding = game0.stackExpanding && render.renderer === "stacking-expanding";
   setStatus(
     engine,
     game0,
@@ -231,7 +234,6 @@ function setupGame(
     focus0
   );
   focusSetter(focus0);
-  // console.log("Setting renderrep");
   renderrepSetter(render);
 }
 
@@ -356,7 +358,8 @@ function doView(
   renderrepSetter,
   engineRef,
   movesRef,
-  statusRef
+  statusRef,
+  settings
 ) {
   let node = getFocusNode(explorationRef.current, focus);
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
@@ -428,7 +431,7 @@ function doView(
   partialMoveRenderRef.current = partialMove;
   // console.log('setting renderrep 1');
   engineRef.current = gameEngineTmp;
-  renderrepSetter(gameEngineTmp.render(game.me + 1));
+  renderrepSetter(gameEngineTmp.render({ perspective: game.me + 1, altDisplay: settings?.display }));
 }
 
 function getFocusNode(exp, foc) {
@@ -461,6 +464,13 @@ function processNewSettings(
   if (gameRef.current !== null) {
     var newSettings = {};
     const game = gameRef.current;
+    newSettings.display = getSetting(
+      "display",
+      undefined,
+      newGameSettings,
+      newUserSettings,
+      game.metaGame
+    );
     newSettings.color = getSetting(
       "color",
       "standard",
@@ -481,6 +491,7 @@ function processNewSettings(
         : newGameSettings.rotate;
     setupColors(newSettings, game);
     settingsSetter(newSettings);
+    return newSettings;
   }
 }
 
@@ -499,7 +510,8 @@ function processNewMove(
   engineRef,
   errorSetter,
   focusSetter,
-  moveSetter
+  moveSetter,
+  settings
 ) {
   // if the move is complete, or partial and renderable, update board
   if (
@@ -521,7 +533,8 @@ function processNewMove(
       renderrepSetter,
       engineRef,
       movesRef,
-      statusRef
+      statusRef,
+      settings
     );
   }
   // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position
@@ -536,12 +549,29 @@ function processNewMove(
     if (focus.canExplore && !gameRef.current.noMoves)
       movesRef.current = gameEngineTmp.moves();
     engineRef.current = gameEngineTmp;
-    renderrepSetter(gameEngineTmp.render(gameRef.current.me + 1));
+    renderrepSetter(gameEngineTmp.render( { perspective: gameRef.current.me + 1, altDisplay: settings?.display }));
     newmove.rendered = "";
     moveSetter(newmove);
   } else {
     moveSetter(newmove); // not renderable yet
   }
+}
+
+const populateChecked = (gameRef, engineRef, t, setter) => {
+    if (gameRef.current?.canCheck) {
+        const inCheckArr = engineRef.current.inCheck();
+        if (inCheckArr.length > 0) {
+            let newstr = "";
+            for (const n of inCheckArr) {
+                newstr += "<p>" + t("InCheck", {player: gameRef.current.players[n - 1].name}) + "</p>";
+            }
+            setter(newstr);
+        } else {
+            setter("");
+        }
+    } else {
+        setter("");
+    }
 }
 
 const populateChecked = (gameRef, engineRef, t, setter) => {
@@ -734,7 +764,8 @@ function GameMove(props) {
             focusSetter,
             explorationRef,
             moveSetter,
-            gameRecSetter
+            gameRecSetter,
+            globalMe?.settings?.[metaGame]?.display
           );
           processNewSettings(
             gameRef.current.me > -1
@@ -773,7 +804,7 @@ function GameMove(props) {
       }
     }
     fetchData();
-  }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID, metaGame, pieInvoked]);
+  }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID, metaGame, pieInvoked, cbit, t]);
 
   useEffect(() => {
     async function fetchData() {
@@ -834,7 +865,7 @@ function GameMove(props) {
   }, [focus, explorationFetched, gameID, explorer, globalMe]);
 
   const handleResize = () => {
-        screenWidthSetter(window.innerWidth);
+    screenWidthSetter(window.innerWidth);
   }
   window.addEventListener('resize', handleResize)
 
@@ -857,7 +888,7 @@ function GameMove(props) {
     focusSetter(foc);
     engineRef.current = engine;
     renderrepSetter(
-      engine.render(gameRef.current.me ? gameRef.current.me + 1 : 1)
+      engine.render({ perspective: gameRef.current.me ? gameRef.current.me + 1 : 1, altDisplay: settings?.display})
     );
     const isPartialSimMove =
       gameRef.current.simultaneous &&
@@ -941,7 +972,8 @@ function GameMove(props) {
       engineRef,
       errorSetter,
       focusSetter,
-      moveSetter
+      moveSetter,
+      settings
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   };
@@ -965,7 +997,8 @@ function GameMove(props) {
       engineRef,
       errorSetter,
       focusSetter,
-      moveSetter
+      moveSetter,
+      settings
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   };
@@ -1010,7 +1043,8 @@ function GameMove(props) {
         engineRef,
         errorSetter,
         focusSetter,
-        moveSetter
+        moveSetter,
+        settings
       );
       populateChecked(gameRef, engineRef, t, inCheckSetter);
     }
@@ -1019,11 +1053,13 @@ function GameMove(props) {
       const svg = stackImage.current.querySelector("svg");
       if (svg !== null) svg.remove();
       options.divid = "stack";
+      options.svgid = "theStackSVG";
       render(engineRef.current.renderColumn(row, col), options);
     }
 
     if (boardImage.current !== null) {
-      const svg = boardImage.current.querySelector("svg");
+      const svg = boardImage.current.parentElement.querySelector("#theBoardSVG");
+      console.log("remove svg:", svg, "from ", boardImage.current);
       if (svg !== null) {
         svg.remove();
       }
@@ -1045,6 +1081,7 @@ function GameMove(props) {
         }
         options.showAnnotations = settings.annotate;
         options.svgid = "theBoardSVG";
+        console.log("rendering", renderrep, options);
         render(renderrep, options);
       }
     }
@@ -1069,7 +1106,7 @@ function GameMove(props) {
             // console.log(e);
         }
     }
-  }, [renderrep, globalMe, focus, settings, explorer]);
+  }, [renderrep, globalMe, focus, settings, explorer, t]);
 
   const setError = (error) => {
     if (error.Message !== undefined) errorMessageRef.current = error.Message;
@@ -1123,6 +1160,24 @@ function GameMove(props) {
       }
     }
   };
+
+  const processUpdatedSettings = (newGameSettings, newUserSettings) => {
+    console.log("processUpdatedSettings", newGameSettings, newUserSettings);
+    const newSettings = processNewSettings(
+      newGameSettings,
+      newUserSettings,
+      gameRef,
+      settingsSetter,
+      gameSettingsSetter,
+      userSettingsSetter
+    );
+    if (newSettings?.display) {
+      console.log("settings.display", newSettings.display);
+      const newRenderRep = engineRef.current.render({ perspective: gameRef.current.me + 1, altDisplay: newSettings.display });
+      renderrepSetter(newRenderRep);
+      gameRef.current.stackExpanding = newRenderRep.renderer === "stacking-expanding";
+    }
+  }
 
   const handleSettingsClose = () => {
     showSettingsSetter(false);
@@ -1194,7 +1249,8 @@ function GameMove(props) {
         focusSetter,
         explorationRef,
         moveSetter,
-        gameRecSetter
+        gameRecSetter,
+        settings?.[metaGame]?.display
       );
       if (gameRef.current.canExplore) {
         mergeExistingExploration(moveNum, exploration, explorationRef);
@@ -1314,7 +1370,8 @@ function GameMove(props) {
               focusSetter,
               explorationRef,
               moveSetter,
-              gameRecSetter
+              gameRecSetter,
+              settings?.[metaGame]?.display
             );
           }
         }
@@ -1386,6 +1443,7 @@ function GameMove(props) {
         toMove = getFocusNode(explorationRef.current, focus).toMove;
       }
     }
+    console.log("rendering. expanding: ", gameRef.current?.stackExpanding);
     return (
       <article>
         <div className="columns">
@@ -1627,16 +1685,7 @@ function GameMove(props) {
           game={game}
           settings={userSettings}
           gameSettings={gameSettings}
-          processNewSettings={(newGameSettings, newUserSettings) =>
-            processNewSettings(
-              newGameSettings,
-              newUserSettings,
-              gameRef,
-              settingsSetter,
-              gameSettingsSetter,
-              userSettingsSetter
-            )
-          }
+          processNewSettings={processUpdatedSettings}
           showSettingsSetter={showSettingsSetter}
           setError={setError}
           handleClose={handleSettingsClose}
