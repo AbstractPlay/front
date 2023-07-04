@@ -4,6 +4,7 @@ import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH } from "../config";
 import { cloneDeep } from "lodash";
 import Modal from "./Modal";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 
 function getSettingAndLevel(
   setting,
@@ -75,6 +76,7 @@ function RenderOptionsModal(props) {
   const settings = props.settings;
   const gameSettings = props.gameSettings;
   const show = props.show;
+  const [display, displaySetter] = useState(null);
   const [color, colorSetter] = useState(null);
   const [colorLevel, colorLevelSetter] = useState(null);
   const [annotate, annotateSetter] = useState(null);
@@ -82,7 +84,14 @@ function RenderOptionsModal(props) {
   const { t } = useTranslation();
 
   useEffect(() => {
-    // color
+    const displaySetting = getSettingAndLevel(
+      "display",
+      "default",
+      gameSettings,
+      settings,
+      metaGame
+    );
+    displaySetter(displaySetting[0]);
     const colorSetting = getSettingAndLevel(
       "color",
       "standard",
@@ -102,6 +111,15 @@ function RenderOptionsModal(props) {
     annotateSetter(annotateSetting[0]);
     annotateLevelSetter(annotateSetting[1]);
   }, [show, gameSettings, metaGame, settings]);
+
+  const handleDisplayChange = (display, checked) => {
+    console.log("handleDisplayChange", display, checked);
+    if (checked) {
+      displaySetter(display);
+    } else {
+      displaySetter(null);
+    }
+  }
 
   const handleColorChange = (color, checked) => {
     if (checked) {
@@ -135,6 +153,14 @@ function RenderOptionsModal(props) {
     props.showSettingsSetter(false);
     let newUserSettings = cloneDeep(settings);
     let newGameSettings = cloneDeep(gameSettings);
+    [newUserSettings, newGameSettings] = updateSettings(
+      "display",
+      "meta",
+      display,
+      newGameSettings,
+      newUserSettings,
+      metaGame
+    );
     [newUserSettings, newGameSettings] = updateSettings(
       "color",
       colorLevel,
@@ -201,6 +227,19 @@ function RenderOptionsModal(props) {
     }
   };
 
+  let displays;
+  if (show === true && gameId !== undefined) {
+    const info = gameinfo.get(metaGame);
+    let gameEngine;
+    if (info.playercounts.length > 1) {
+      gameEngine = GameFactory(info.uid, 2);
+    } else {
+      gameEngine = GameFactory(info.uid);
+    }
+    displays = gameEngine.alternativeDisplays();
+  }
+  console.log("display", display);
+  console.log("displays", displays);
   return !gameId ? (
     ""
   ) : (
@@ -213,6 +252,42 @@ function RenderOptionsModal(props) {
       ]}
     >
       <Fragment>
+        { displays && displays.length > 0 ? 
+          <div className="field">
+            <label className="label">{t("ChooseDisplay")}</label>
+            <div className="control">
+              <label className="radio">
+                <input
+                  type="radio"
+                  name="display"
+                  value="default"
+                  checked={display === "default"}
+                  onChange={(e) =>
+                    handleDisplayChange(e.target.value, e.target.checked)
+                  }
+                />
+                {t("DefaultDisplay")}
+              </label>
+            </div>
+            {displays.map((disp) => (
+              <div className="control" key={disp.uid}>
+                <label className="radio">
+                  <input
+                    type="radio"
+                    name="display"
+                    value={disp.uid}
+                    checked={display === disp.uid}
+                    onChange={(e) =>
+                      handleDisplayChange(e.target.value, e.target.checked)
+                    }
+                  />
+                  {disp.description}
+                </label>
+              </div>
+            ))}
+          </div>
+          : ""
+        }
         <div className="field">
           <label className="label">{t("ChooseColors")}</label>
           <div className="control">
