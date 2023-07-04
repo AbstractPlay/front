@@ -574,23 +574,6 @@ const populateChecked = (gameRef, engineRef, t, setter) => {
     }
 }
 
-const populateChecked = (gameRef, engineRef, t, setter) => {
-    if (gameRef.current?.canCheck) {
-        const inCheckArr = engineRef.current.inCheck();
-        if (inCheckArr.length > 0) {
-            let newstr = "";
-            for (const n of inCheckArr) {
-                newstr += "<p>" + t("InCheck", {player: gameRef.current.players[n - 1].name}) + "</p>";
-            }
-            setter(newstr);
-        } else {
-            setter("");
-        }
-    } else {
-        setter("");
-    }
-}
-
 function GameMove(props) {
   const [renderrep, renderrepSetter] = useState(null);
   // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
