@@ -42,11 +42,12 @@ function MoveEntry(props) {
   const handleMove = props.handlers[0];
   const handleMark = props.handlers[1];
   const handleSubmit = props.handlers[2];
-  const handleView = props.handlers[3];
-  const handleResign = props.handlers[4];
-  const handleTimeOut = props.handlers[5];
-  const handleReset = props.handlers[6];
-  const handlePie = props.handlers[7];
+  const handleToSubmit = props.handlers[3];
+  const handleView = props.handlers[4];
+  const handleResign = props.handlers[5];
+  const handleTimeOut = props.handlers[6];
+  const handleReset = props.handlers[7];
+  const handlePie = props.handlers[8];
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
@@ -358,7 +359,19 @@ function MoveEntry(props) {
               </span>
             </button>
           ) : (
+            moveToSubmit !== null && focus.exPath.length > 1 && !submitting ? (
+              <button
+                className="button is-small apButton tooltipped"
+                onClick={ handleToSubmit }
+              >
+                {t("ToSubmit")}
+                <span className="tooltiptext">
+                  {t("ToSubmitMove")}
+                </span>
+              </button>
+            ) : (
             ""
+            )
           )}
           {uiState === 0 && game.canSubmit && !submitting ? (
             canDraw ? (

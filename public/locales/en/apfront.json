@@ -226,6 +226,8 @@
     "ToggleZoom": "Toggle zoom",
     "ToMove": "{{player}} to move.",
     "ToS": "Terms of Service",
+    "ToSubmit": "To submit",
+    "ToSubmitMove": "Go to the position you can submit",
     "TotalStars_one": "Total star",
     "TotalStars_other": "Total stars",
     "TwoPlayersChallengeDescription": "You challenged {{other}} to a game of {{game}}",

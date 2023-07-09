@@ -21,7 +21,7 @@ function About(props) {
         <h1 className="has-text-centered title">{t("About")}</h1>
         <p>
             Abstract Play is a site that allows you to play abstract strategy board
-            games against other players on the internet. These game are not
+            games against other players on the internet. These games are not
             real-time, meaning your opponent does not need to be online at the same
             time as you are. You can submit your move and come back later to see if
             your opponent has moved. We specialize in offbeat, perfect information
