@@ -380,7 +380,7 @@ function doView(
       moves = gameEngineTmp.moves();
     }
     // check for auto moves
-    if (!partialMove && focus.canExplore && game.automove) {
+    if (!partialMove && focus.canExplore && game.automove && isExplorer(explorer, me)) {
       while (moves.length === 1) {
         let pos = node.AddChild(m, gameEngineTmp);
         newfocus.exPath.push(pos);
@@ -896,6 +896,14 @@ function GameMove(props) {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   }
 
+  function handleToSubmit() {
+    handleGameMoveClick({
+        moveNumber: explorationRef.current.length - 1,
+        exPath: [focus.exPath[0]],
+    });
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+  }
+  
   // The user has clicked the "Invoke pie rule" button
   const handlePie = async () => {
     console.log("Pie invoked!");
@@ -1455,6 +1463,7 @@ function GameMove(props) {
                 handleMove,
                 handleMark,
                 handleSubmit,
+                handleToSubmit,
                 handleView,
                 handleResign,
                 handleTimeout,
