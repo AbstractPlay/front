@@ -1261,9 +1261,10 @@ function GameMove(props) {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
-      let players = [];
+      let players = []; let metaIfComplete = undefined;
       if ( (engineRef.current !== undefined) && (engineRef.current.gameover) ) {
         players = [...gameRef.current.players];
+        metaIfComplete = metaGame;
       }
       const res = await fetch(API_ENDPOINT_AUTH, {
         method: "POST",
@@ -1277,6 +1278,7 @@ function GameMove(props) {
           pars: {
             id: gameRef.current.id,
             players,
+            metaGame: metaIfComplete,
             comment: comment,
             moveNumber: explorationRef.current.length - 1,
           },

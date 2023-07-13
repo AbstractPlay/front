@@ -1,6 +1,8 @@
 import { useContext, useState, useMemo, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { MeContext } from "../pages/Skeleton";
+import { API_ENDPOINT_AUTH } from "../config";
+import { Auth } from "aws-amplify";
 import { gameinfo } from "@abstractplay/gameslib";
 import { getCoreRowModel, useReactTable, flexRender, createColumnHelper, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table'
 import TimeAgo from "javascript-time-ago";
@@ -10,8 +12,44 @@ import ReactTimeAgo from "react-time-ago";
 TimeAgo.addDefaultLocale(en);
 
 function CompletedGamesTable(props) {
-    const [globalMe] = useContext(MeContext);
+    const [globalMe, globalMeSetter] = useContext(MeContext);
     const [sorting, setSorting] = useState([{id: "completed", desc: true}]);
+
+    const handleClearClick = async (gameId) => {
+        try {
+            const usr = await Auth.currentAuthenticatedUser();
+            const res = await fetch(API_ENDPOINT_AUTH, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+              },
+              body: JSON.stringify({
+                query: "set_lastSeen",
+                pars: {
+                  gameId,
+                },
+              }),
+            });
+            if (res.status !== 200) {
+              console.log(
+                `An error occured while setting lastSeen.`
+              );
+            } else {
+              const newMe = JSON.parse(JSON.stringify(globalMe));
+              const idx = newMe.games.findIndex(g => g.id === gameId);
+              if (idx === -1) {
+                console.log(`Could not find game ID ${gameId} in the globalMe list of games: ${JSON.stringify(newMe.games)}`);
+              } else {
+                newMe.games.splice(idx, 1);
+                globalMeSetter(newMe);
+              }
+            }
+        } catch (error) {
+          props.setError(error);
+        }
+    }
 
     const data = useMemo( () => props.games.map((g) => {
         const info = gameinfo.get(g.metaGame);
@@ -51,6 +89,18 @@ function CompletedGamesTable(props) {
         columnHelper.accessor('numMoves', {
           header: "# moves",
           cell: props => props.getValue() === 0 ? "" : props.getValue(),
+        }),
+        columnHelper.display({
+            id: "clear",
+            cell: props =>
+                <div className="control">
+                    <button
+                        className="button is-small is-rounded"
+                        onClick={() => handleClearClick(props.row.original.id)}
+                    >
+                        Clear
+                    </button>
+                </div>
         }),
     ], [columnHelper]);
 
