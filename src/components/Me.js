@@ -407,7 +407,7 @@ function Me(props) {
                   <p className="lined">
                     <span>{t("CompletedGames")}</span>
                   </p>
-                  <p className="help"><em>To keep the dashboard manageable, games drop off this list 48 hours after the "last seen" date. Visit the Games page to access older completed games.</em></p>
+                  <p className="help"><em>To keep the dashboard manageable, games drop off this list 48 hours after the "last seen" date. Click the Clear button to remove it immediately. New chat will cause older games to resurface, restarting the 48-hour clock. Visit the Games page to access older completed games.</em></p>
                   <CompletedGamesTable games={over} />
                 </Fragment>
               )}
