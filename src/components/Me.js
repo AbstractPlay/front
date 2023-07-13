@@ -14,6 +14,7 @@ import i18n from "../i18n";
 import { Fragment } from "react";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
+import CompletedGamesTable from "./CompletedGamesTable";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -406,19 +407,7 @@ function Me(props) {
                   <p className="lined">
                     <span>{t("CompletedGames")}</span>
                   </p>
-                  <div className="indentedContainer">
-                    <ul>
-                      {over.map((item) => (
-                        <GameItem
-                          item={item}
-                          key={item.id}
-                          canMove={false}
-                          gameOver={true}
-                          stateSetter={props.stateSetter}
-                        />
-                      ))}
-                    </ul>
-                  </div>
+                  <CompletedGamesTable games={over} />
                 </Fragment>
               )}
             </div>

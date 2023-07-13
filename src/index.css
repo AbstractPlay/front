@@ -494,3 +494,24 @@ th .player {
 .glowingStar {
     color: #ffdf00;
 }
+
+#completedGamesTable {
+    font-size: smaller;
+}
+
+#completedGamesTable tbody tr:nth-child(even) {
+    background-color: #ddd;
+}
+
+#completedGamesTable * .sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+#completedGamesTable tr.newChat {
+    font-weight: bolder;
+}
+
+#completedGamesTableFooter {
+    font-size: smaller
+}
