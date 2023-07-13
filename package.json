@@ -15,6 +15,7 @@
   "dependencies": {
     "@abstractplay/gameslib": "latest",
     "@abstractplay/renderer": "latest",
+    "@tanstack/react-table": "^8.9.3",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/user-event": "13.5.0",
     "aws-amplify": "5.3.3",

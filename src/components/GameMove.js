@@ -903,7 +903,7 @@ function GameMove(props) {
     });
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   }
-  
+
   // The user has clicked the "Invoke pie rule" button
   const handlePie = async () => {
     console.log("Pie invoked!");
@@ -1261,6 +1261,10 @@ function GameMove(props) {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
+      let players = [];
+      if ( (engineRef.current !== undefined) && (engineRef.current.gameover) ) {
+        players = [...gameRef.current.players];
+      }
       const res = await fetch(API_ENDPOINT_AUTH, {
         method: "POST",
         headers: {
@@ -1272,6 +1276,7 @@ function GameMove(props) {
           query: "submit_comment",
           pars: {
             id: gameRef.current.id,
+            players,
             comment: comment,
             moveNumber: explorationRef.current.length - 1,
           },
