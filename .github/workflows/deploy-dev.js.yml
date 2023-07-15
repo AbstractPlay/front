@@ -46,16 +46,19 @@ jobs:
       run: echo "@abstractplay:registry=https://npm.pkg.github.com/" > .npmrc
     - run: echo "//npm.pkg.github.com/:_authToken=${{secrets.PAT_READ_PACKAGES}}" >> .npmrc
 
-    - name: Kill package-lock.json
-      run: rm package-lock.json
-
     - name: Install NPM dependencies
       run: npm i
 
-    - name: renderer version installed
+    - name: Install latest renderer
+      run: npm install @abstractplay/renderer
+
+    - name: Install latest gameslib
+      run: npm install @abstractplay/gameslib
+
+    - name: Check renderer version installed
       run: npm list @abstractplay/renderer
 
-    - name: gameslib version installed
+    - name: Check gameslib version installed
       run: npm list @abstractplay/gameslib
 
     - name: Set CI version
