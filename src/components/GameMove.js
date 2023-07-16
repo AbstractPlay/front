@@ -115,6 +115,8 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("check");
   game0.sharedPieces =
     info.flags !== undefined && info.flags.includes("shared-pieces");
+  game0.customColours =
+    info.flags !== undefined && info.flags.includes("custom-colours");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
   game0.scores = info.flags !== undefined && info.flags.includes("scores");
   game0.limitedPieces =
@@ -181,7 +183,6 @@ function setupGame(
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   engineRef.current = cloneDeep(engine);
-  console.log("Rendering in setupGame");
   const render = replaceNames(engine.render({ perspective: game0.me + 1, altDisplay: display }), game0.players);
   game0.stackExpanding = game0.stackExpanding && render.renderer === "stacking-expanding";
   setStatus(
@@ -316,17 +317,23 @@ function setupColors(settings, game, t) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
-  } else if (settings.color === "patterns") {
-    options.patterns = true;
+//   } else if (settings.color === "patterns") {
+//     options.patterns = true;
   }
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
       return { isImage: false, value: game.seatNames[i] };
     } else {
       options.svgid = "player" + i + "color";
+      let color = i + 1;
+      if (game.customColours) {
+        const engine = GameFactory(game.metaGame, game.state);
+        color = engine.getPlayerColour(i + 1);
+      }
+      console.log(JSON.stringify(game));
       return {
         isImage: true,
-        value: renderglyph("piece", i + 1, options),
+        value: renderglyph("piece", color, options),
       };
     }
   });
@@ -441,7 +448,6 @@ function doView(
   partialMoveRenderRef.current = partialMove;
   // console.log('setting renderrep 1');
   engineRef.current = gameEngineTmp;
-  console.log("Rendering in doView");
   renderrepSetter(replaceNames(gameEngineTmp.render({ perspective: game.me + 1, altDisplay: settings?.display }), game.players));
 }
 
@@ -560,7 +566,6 @@ function processNewMove(
     if (focus.canExplore && !gameRef.current.noMoves)
       movesRef.current = gameEngineTmp.moves();
     engineRef.current = gameEngineTmp;
-    console.log("Rendering in processNewMove");
     renderrepSetter(replaceNames(gameEngineTmp.render( { perspective: gameRef.current.me + 1, altDisplay: settings?.display })), gameRef.current.players);
     newmove.rendered = "";
     moveSetter(newmove);
@@ -882,7 +887,6 @@ function GameMove(props) {
     }
     focusSetter(foc);
     engineRef.current = engine;
-    console.log("Rendering in handleGameMoveClick");
     renderrepSetter(
       replaceNames(engine.render({ perspective: gameRef.current.me ? gameRef.current.me + 1 : 1, altDisplay: settings?.display}), gameRef.current.players)
     );
@@ -1075,8 +1079,8 @@ function GameMove(props) {
         options.rotate = settings.rotate;
         if (settings.color === "blind") {
           options.colourBlind = true;
-        } else if (settings.color === "patterns") {
-          options.patterns = true;
+        // } else if (settings.color === "patterns") {
+        //   options.patterns = true;
         }
         if (gameRef.current.stackExpanding) {
           options.boardHover = (row, col, piece) => {
@@ -1177,7 +1181,6 @@ function GameMove(props) {
     );
     if (newSettings?.display) {
       console.log("settings.display", newSettings.display);
-      console.log("Rendering in processUpdatedSettings");
       const newRenderRep = replaceNames(engineRef.current.render({ perspective: gameRef.current.me + 1, altDisplay: newSettings.display }), gameRef.current.players);
       renderrepSetter(newRenderRep);
       gameRef.current.stackExpanding = newRenderRep.renderer === "stacking-expanding";
