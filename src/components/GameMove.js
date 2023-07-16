@@ -30,12 +30,10 @@ import { Canvg } from 'canvg';
 
 const replaceNames = (rep, players) => {
     let stringRep = JSON.stringify(rep);
-    console.log(`Received ${stringRep}`);
     for (let i = 0; i < players.length; i++) {
         const re = new RegExp(`player ${i+1}`, "gi")
         stringRep = stringRep.replace(re, players[i].name)
     }
-    console.log(`Returning ${stringRep}`);
     return JSON.parse(stringRep);
 }
 
