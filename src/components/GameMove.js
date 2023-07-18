@@ -887,6 +887,7 @@ function GameMove(props) {
     }
     focusSetter(foc);
     engineRef.current = engine;
+    console.log("Rendering in handleGameMoveClick");
     renderrepSetter(
       replaceNames(engine.render({ perspective: gameRef.current.me ? gameRef.current.me + 1 : 1, altDisplay: settings?.display}), gameRef.current.players)
     );
