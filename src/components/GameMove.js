@@ -1270,43 +1270,46 @@ function GameMove(props) {
   };
 
   const submitComment = async (comment) => {
-    commentsSetter([
-      ...comments,
-      { comment: comment, userId: globalMe.id, timeStamp: Date.now() },
-    ]);
-    // console.log(comments);
-    const usr = await Auth.currentAuthenticatedUser();
-    const token = usr.signInUserSession.idToken.jwtToken;
-    try {
-      let players = []; let metaIfComplete = undefined;
-      if ( (engineRef.current !== undefined) && (engineRef.current.gameover) ) {
-        players = [...gameRef.current.players];
-        metaIfComplete = metaGame;
-      }
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          query: "submit_comment",
-          pars: {
-            id: gameRef.current.id,
-            players,
-            metaGame: metaIfComplete,
-            comment: comment,
-            moveNumber: explorationRef.current.length - 1,
-          },
-        }),
-      });
-      const result = await res.json();
-      if (result && result.statusCode && result.statusCode !== 200)
-        setError(JSON.parse(result.body));
-    } catch (err) {
-      console.log(err);
-      //setError(err.message);
+    // ignore blank comments
+    if ( (comment.length > 0) && (! /^\s*$/.test(comment)) ) {
+        commentsSetter([
+            ...comments,
+            { comment: comment, userId: globalMe.id, timeStamp: Date.now() },
+          ]);
+          // console.log(comments);
+          const usr = await Auth.currentAuthenticatedUser();
+          const token = usr.signInUserSession.idToken.jwtToken;
+          try {
+            let players = []; let metaIfComplete = undefined;
+            if ( (engineRef.current !== undefined) && (engineRef.current.gameover) ) {
+              players = [...gameRef.current.players];
+              metaIfComplete = metaGame;
+            }
+            const res = await fetch(API_ENDPOINT_AUTH, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                query: "submit_comment",
+                pars: {
+                  id: gameRef.current.id,
+                  players,
+                  metaGame: metaIfComplete,
+                  comment: comment,
+                  moveNumber: explorationRef.current.length - 1,
+                },
+              }),
+            });
+            const result = await res.json();
+            if (result && result.statusCode && result.statusCode !== 200)
+              setError(JSON.parse(result.body));
+          } catch (err) {
+            console.log(err);
+            //setError(err.message);
+          }
     }
   };
 
