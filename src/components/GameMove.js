@@ -566,7 +566,7 @@ function processNewMove(
     if (focus.canExplore && !gameRef.current.noMoves)
       movesRef.current = gameEngineTmp.moves();
     engineRef.current = gameEngineTmp;
-    renderrepSetter(replaceNames(gameEngineTmp.render( { perspective: gameRef.current.me + 1, altDisplay: settings?.display })), gameRef.current.players);
+    renderrepSetter(replaceNames(gameEngineTmp.render( { perspective: gameRef.current.me + 1, altDisplay: settings?.display }), gameRef.current.players));
     newmove.rendered = "";
     moveSetter(newmove);
   } else {
