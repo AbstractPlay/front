@@ -515,3 +515,7 @@ th .player {
 #completedGamesTableFooter {
     font-size: smaller
 }
+
+.hasNotes {
+    color: var(--secondary-color-1);
+}
