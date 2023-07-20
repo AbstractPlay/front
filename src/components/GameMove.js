@@ -1583,7 +1583,13 @@ function GameMove(props) {
                 }}
                 title={t("GameInfo")}
               >
-                <i className="fa fa-info"></i>
+              {( (gameEngine === undefined) || (gameEngine.notes() === undefined) ) ?
+                  <i className="fa fa-info"></i>
+                :
+                  <span className="hasNotes">
+                    <i className="fa fa-info"></i>
+                  </span>
+              }
               </button>
               <button
                 className="fabtn align-right"
@@ -1766,6 +1772,14 @@ function GameMove(props) {
                 </li>
               ))}
             </ul>
+            {gameEngine.notes() === undefined ? "" :
+              <>
+                <h2>{t("ImplementationNotes")}</h2>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+                    {gameEngine.notes()}
+                </ReactMarkdown>
+              </>
+            }
           </div>
         </Modal>
         <Modal
