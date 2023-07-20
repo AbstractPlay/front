@@ -49,7 +49,7 @@ function GameCommentShort(props) {
             </div>
             <div className="control">
               <button className="button is-small" onClick={handleSubmit}>
-              {t("Comment")}
+                {t("Comment")}
               </button>
             </div>
           </div>

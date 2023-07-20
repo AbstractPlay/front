@@ -74,7 +74,7 @@ const MetaItem = React.forwardRef((props, ref) => {
         globalMeSetter(newMe);
       }
     } catch (error) {
-      props.setError(error);
+      console.log(error);
     }
   };
 
@@ -170,14 +170,15 @@ const MetaItem = React.forwardRef((props, ref) => {
         </div>
         <div className="column">
           <div className="starContainer" onClick={toggleStar}>
-            {( (globalMe !== null) && ("stars" in globalMe) && (globalMe.stars !== undefined) && (globalMe.stars !== null) && (globalMe.stars.includes(game.uid)) ) ?
-                <span className="icon glowingStar">
-                  <i className="fa fa-star"></i>
-                </span>
-             :
-                <span className="icon">
-                  <i className="fa fa-star-o"></i>
-                </span>
+            {globalMe === null ? "" :
+                ( (globalMe !== null) && ("stars" in globalMe) && (globalMe.stars !== undefined) && (globalMe.stars !== null) && (globalMe.stars.includes(game.uid)) ) ?
+                    <span className="icon glowingStar">
+                        <i className="fa fa-star"></i>
+                    </span>
+                :
+                    <span className="icon">
+                        <i className="fa fa-star-o"></i>
+                    </span>
             }
           </div>
           <div id={"svg" + game.uid}>

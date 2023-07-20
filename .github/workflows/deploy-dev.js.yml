@@ -52,13 +52,13 @@ jobs:
     - name: Install latest renderer
       run: npm install @abstractplay/renderer
 
+    - name: install
+      run: npm list @abstractplay/renderer
+
     - name: Install latest gameslib
       run: npm install @abstractplay/gameslib
 
-    - name: Check renderer version installed
-      run: npm list @abstractplay/renderer
-
-    - name: Check gameslib version installed
+    - name: gameslib version installed
       run: npm list @abstractplay/gameslib
 
     - name: Set CI version

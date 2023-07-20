@@ -17,14 +17,6 @@ function Footer(props) {
       <div className="content has-text-centered">
         <p>
           <a
-            href="https://www.abstractplay.com"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Website
-          </a>
-          &nbsp;|&nbsp;
-          <a
             href="https://github.com/AbstractPlay"
             target="_blank"
             rel="noreferrer"

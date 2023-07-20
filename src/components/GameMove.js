@@ -28,6 +28,15 @@ import DownloadDataUri from "./DownloadDataUri";
 import UserChats from "./UserChats";
 import { Canvg } from 'canvg';
 
+const replaceNames = (rep, players) => {
+    let stringRep = JSON.stringify(rep);
+    for (let i = 0; i < players.length; i++) {
+        const re = new RegExp(`player ${i+1}`, "gi")
+        stringRep = stringRep.replace(re, players[i].name)
+    }
+    return JSON.parse(stringRep);
+}
+
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
     return gameSettings[setting];
@@ -106,6 +115,8 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("check");
   game0.sharedPieces =
     info.flags !== undefined && info.flags.includes("shared-pieces");
+  game0.customColours =
+    info.flags !== undefined && info.flags.includes("custom-colours");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
   game0.scores = info.flags !== undefined && info.flags.includes("scores");
   game0.limitedPieces =
@@ -172,7 +183,7 @@ function setupGame(
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   engineRef.current = cloneDeep(engine);
-  const render = engine.render({ perspective: game0.me + 1, altDisplay: display });
+  const render = replaceNames(engine.render({ perspective: game0.me + 1, altDisplay: display }), game0.players);
   game0.stackExpanding = game0.stackExpanding && render.renderer === "stacking-expanding";
   setStatus(
     engine,
@@ -306,17 +317,23 @@ function setupColors(settings, game, t) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
-  } else if (settings.color === "patterns") {
-    options.patterns = true;
+//   } else if (settings.color === "patterns") {
+//     options.patterns = true;
   }
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
       return { isImage: false, value: game.seatNames[i] };
     } else {
       options.svgid = "player" + i + "color";
+      let color = i + 1;
+      if (game.customColours) {
+        const engine = GameFactory(game.metaGame, game.state);
+        color = engine.getPlayerColour(i + 1);
+      }
+      console.log(JSON.stringify(game));
       return {
         isImage: true,
-        value: renderglyph("piece", i + 1, options),
+        value: renderglyph("piece", color, options),
       };
     }
   });
@@ -431,7 +448,7 @@ function doView(
   partialMoveRenderRef.current = partialMove;
   // console.log('setting renderrep 1');
   engineRef.current = gameEngineTmp;
-  renderrepSetter(gameEngineTmp.render({ perspective: game.me + 1, altDisplay: settings?.display }));
+  renderrepSetter(replaceNames(gameEngineTmp.render({ perspective: game.me + 1, altDisplay: settings?.display }), game.players));
 }
 
 function getFocusNode(exp, foc) {
@@ -549,7 +566,7 @@ function processNewMove(
     if (focus.canExplore && !gameRef.current.noMoves)
       movesRef.current = gameEngineTmp.moves();
     engineRef.current = gameEngineTmp;
-    renderrepSetter(gameEngineTmp.render( { perspective: gameRef.current.me + 1, altDisplay: settings?.display }));
+    renderrepSetter(replaceNames(gameEngineTmp.render( { perspective: gameRef.current.me + 1, altDisplay: settings?.display }), gameRef.current.players));
     newmove.rendered = "";
     moveSetter(newmove);
   } else {
@@ -870,8 +887,9 @@ function GameMove(props) {
     }
     focusSetter(foc);
     engineRef.current = engine;
+    console.log("Rendering in handleGameMoveClick");
     renderrepSetter(
-      engine.render({ perspective: gameRef.current.me ? gameRef.current.me + 1 : 1, altDisplay: settings?.display})
+      replaceNames(engine.render({ perspective: gameRef.current.me ? gameRef.current.me + 1 : 1, altDisplay: settings?.display}), gameRef.current.players)
     );
     const isPartialSimMove =
       gameRef.current.simultaneous &&
@@ -1062,8 +1080,8 @@ function GameMove(props) {
         options.rotate = settings.rotate;
         if (settings.color === "blind") {
           options.colourBlind = true;
-        } else if (settings.color === "patterns") {
-          options.patterns = true;
+        // } else if (settings.color === "patterns") {
+        //   options.patterns = true;
         }
         if (gameRef.current.stackExpanding) {
           options.boardHover = (row, col, piece) => {
@@ -1164,7 +1182,7 @@ function GameMove(props) {
     );
     if (newSettings?.display) {
       console.log("settings.display", newSettings.display);
-      const newRenderRep = engineRef.current.render({ perspective: gameRef.current.me + 1, altDisplay: newSettings.display });
+      const newRenderRep = replaceNames(engineRef.current.render({ perspective: gameRef.current.me + 1, altDisplay: newSettings.display }), gameRef.current.players);
       renderrepSetter(newRenderRep);
       gameRef.current.stackExpanding = newRenderRep.renderer === "stacking-expanding";
     }
@@ -1253,43 +1271,46 @@ function GameMove(props) {
   };
 
   const submitComment = async (comment) => {
-    commentsSetter([
-      ...comments,
-      { comment: comment, userId: globalMe.id, timeStamp: Date.now() },
-    ]);
-    // console.log(comments);
-    const usr = await Auth.currentAuthenticatedUser();
-    const token = usr.signInUserSession.idToken.jwtToken;
-    try {
-      let players = []; let metaIfComplete = undefined;
-      if ( (engineRef.current !== undefined) && (engineRef.current.gameover) ) {
-        players = [...gameRef.current.players];
-        metaIfComplete = metaGame;
-      }
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          query: "submit_comment",
-          pars: {
-            id: gameRef.current.id,
-            players,
-            metaGame: metaIfComplete,
-            comment: comment,
-            moveNumber: explorationRef.current.length - 1,
-          },
-        }),
-      });
-      const result = await res.json();
-      if (result && result.statusCode && result.statusCode !== 200)
-        setError(JSON.parse(result.body));
-    } catch (err) {
-      console.log(err);
-      //setError(err.message);
+    // ignore blank comments
+    if ( (comment.length > 0) && (! /^\s*$/.test(comment)) ) {
+        commentsSetter([
+            ...comments,
+            { comment: comment, userId: globalMe.id, timeStamp: Date.now() },
+          ]);
+          // console.log(comments);
+          const usr = await Auth.currentAuthenticatedUser();
+          const token = usr.signInUserSession.idToken.jwtToken;
+          try {
+            let players = []; let metaIfComplete = undefined;
+            if ( (engineRef.current !== undefined) && (engineRef.current.gameover) ) {
+              players = [...gameRef.current.players];
+              metaIfComplete = metaGame;
+            }
+            const res = await fetch(API_ENDPOINT_AUTH, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                query: "submit_comment",
+                pars: {
+                  id: gameRef.current.id,
+                  players,
+                  metaGame: metaIfComplete,
+                  comment: comment,
+                  moveNumber: explorationRef.current.length - 1,
+                },
+              }),
+            });
+            const result = await res.json();
+            if (result && result.statusCode && result.statusCode !== 200)
+              setError(JSON.parse(result.body));
+          } catch (err) {
+            console.log(err);
+            //setError(err.message);
+          }
     }
   };
 
@@ -1562,7 +1583,13 @@ function GameMove(props) {
                 }}
                 title={t("GameInfo")}
               >
-                <i className="fa fa-info"></i>
+              {( (gameEngine === undefined) || (gameEngine.notes() === undefined) ) ?
+                  <i className="fa fa-info"></i>
+                :
+                  <span className="hasNotes">
+                    <i className="fa fa-info"></i>
+                  </span>
+              }
               </button>
               <button
                 className="fabtn align-right"
@@ -1745,6 +1772,14 @@ function GameMove(props) {
                 </li>
               ))}
             </ul>
+            {gameEngine.notes() === undefined ? "" :
+              <>
+                <h2>{t("ImplementationNotes")}</h2>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+                    {gameEngine.notes()}
+                </ReactMarkdown>
+              </>
+            }
           </div>
         </Modal>
         <Modal
