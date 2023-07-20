@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
-import { MeContext } from "../pages/Skeleton";
+import { MeContext } from "../../pages/Skeleton";
 
 function GameItem(props) {
   const { t } = useTranslation();

@@ -4,11 +4,11 @@ import React, {
   useRef,
   useContext,
   Fragment,
+  useCallback,
 } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { cloneDeep } from "lodash";
-import { API_ENDPOINT_OPEN } from "../config";
 import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
 import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
@@ -42,49 +42,14 @@ function NewChallengeModal(props) {
   }, [i18n.language]);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        var url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append("query", "user_names");
-        const res = await fetch(url);
-        const result = await res.json();
-        usersSetter(result);
-      } catch (error) {
-        errorSetter(error);
-      }
-    }
-    if (show && !opponent && users === null) {
-      console.log("Fetching users");
-      fetchData();
+    if ( (props.users !== undefined) && (props.users !== null) && (Array.isArray(props.users)) && (props.users.length > 0) ) {
+        usersSetter(props.users);
     } else {
-      console.log("NOT Fetching users");
+        usersSetter(null);
     }
-  }, [show, opponent, users]);
+  }, [props, usersSetter]);
 
-  useEffect(() => {
-    groupVariantsRef.current = {};
-    nonGroupVariantsSetter({});
-    if (props.fixedMetaGame !== undefined) {
-      metaGameSetter(props.fixedMetaGame);
-      handleChangeGame(props.fixedMetaGame);
-    } else {
-      metaGameSetter(null);
-    }
-    if (props.opponent === undefined) {
-      playerCountSetter(-1);
-      opponentsSetter([]);
-    } else {
-      playerCountSetter(2);
-      opponentsSetter([props.opponent]);
-    }
-    errorSetter("");
-    clockStartSetter(72);
-    clockIncSetter(24);
-    clockMaxSetter(240);
-    clockHardSetter(false);
-  }, [show, props]);
-
-  const setPlayerCount = (cnt) => {
+  const setPlayerCount = useCallback((cnt) => {
     playerCountSetter(cnt);
     if (cnt === 2) {
       seatingSetter("random");
@@ -96,9 +61,9 @@ function NewChallengeModal(props) {
     if (cnt !== -1) {
       opponentsSetter(Array(cnt - 1).fill(""));
     }
-  };
+  }, [playerCountSetter, seatingSetter, ratedSetter, opponentsSetter]);
 
-  const handleChangeGame = (game) => {
+  const handleChangeGame = useCallback((game) => {
     groupVariantsRef.current = {};
     if (game === "") {
       metaGameSetter(null);
@@ -129,7 +94,30 @@ function NewChallengeModal(props) {
       seatingSetter("random");
     }
     errorSetter("");
-  };
+  }, [metaGameSetter, allvariantsSetter, nonGroupVariantsSetter, setPlayerCount, playerCountSetter, opponentsSetter]);
+
+  useEffect(() => {
+    groupVariantsRef.current = {};
+    nonGroupVariantsSetter({});
+    if (props.opponent === undefined) {
+      playerCountSetter(-1);
+      opponentsSetter([]);
+    } else {
+      playerCountSetter(2);
+      opponentsSetter([props.opponent]);
+    }
+    errorSetter("");
+    clockStartSetter(72);
+    clockIncSetter(24);
+    clockMaxSetter(240);
+    clockHardSetter(false);
+    if (props.fixedMetaGame !== undefined) {
+      metaGameSetter(props.fixedMetaGame);
+      handleChangeGame(props.fixedMetaGame);
+    } else {
+      metaGameSetter(null);
+    }
+  }, [show, props, handleChangeGame]);
 
   const handleChangePlayerCount = (cnt) => {
     setPlayerCount(parseInt(cnt));
@@ -264,6 +252,7 @@ function NewChallengeModal(props) {
       clockHard: clockHard,
       rated: rated,
     });
+    handleNewChallengeClose();
   };
 
   let games = [];
@@ -304,11 +293,11 @@ function NewChallengeModal(props) {
     }
     playercounts = info.playercounts;
   }
-  if (!(metaGame === null || nonGroupData.length === 0)) {
-    console.log("nonGroupData", nonGroupData);
-    console.log(nonGroupVariants);
-  }
-  console.log(opponents);
+//   if (!(metaGame === null || nonGroupData.length === 0)) {
+//     console.log("nonGroupData", nonGroupData);
+//     console.log(nonGroupVariants);
+//   }
+//   console.log(opponents);
   return (
     <Modal
       show={show}

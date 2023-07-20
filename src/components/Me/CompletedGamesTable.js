@@ -1,7 +1,7 @@
-import { useContext, useState, useMemo, Fragment } from "react";
+import { useCallback, useContext, useState, useMemo, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { MeContext } from "../pages/Skeleton";
-import { API_ENDPOINT_AUTH } from "../config";
+import { MeContext } from "../../pages/Skeleton";
+import { API_ENDPOINT_AUTH } from "../../config";
 import { Auth } from "aws-amplify";
 import { gameinfo } from "@abstractplay/gameslib";
 import { getCoreRowModel, useReactTable, flexRender, createColumnHelper, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table'
@@ -15,7 +15,7 @@ function CompletedGamesTable(props) {
     const [globalMe, globalMeSetter] = useContext(MeContext);
     const [sorting, setSorting] = useState([{id: "completed", desc: true}]);
 
-    const handleClearClick = async (gameId) => {
+    const handleClearClick = useCallback(async (gameId) => {
         try {
             const usr = await Auth.currentAuthenticatedUser();
             const res = await fetch(API_ENDPOINT_AUTH, {
@@ -49,7 +49,7 @@ function CompletedGamesTable(props) {
         } catch (error) {
           props.setError(error);
         }
-    }
+    }, [globalMe, globalMeSetter, props])
 
     const data = useMemo( () => props.games.map((g) => {
         const info = gameinfo.get(g.metaGame);
@@ -102,7 +102,7 @@ function CompletedGamesTable(props) {
                     </button>
                 </div>
         }),
-    ], [columnHelper]);
+    ], [columnHelper, handleClearClick]);
 
     const table = useReactTable({
         data,
