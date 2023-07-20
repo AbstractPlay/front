@@ -512,6 +512,10 @@ th .player {
     font-weight: bolder;
 }
 
+.smallerText {
+    font-size: smaller;
+}
+
 #completedGamesTableFooter {
     font-size: smaller
 }

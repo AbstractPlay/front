@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
-import { MeContext } from "../pages/Skeleton";
+import { MeContext } from "../../pages/Skeleton";
 
 function ChallengeResponse(props) {
   const { t } = useTranslation();

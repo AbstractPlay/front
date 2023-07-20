@@ -13,19 +13,19 @@ import { render, renderglyph } from "@abstractplay/renderer";
 import { Auth } from "aws-amplify";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
-import { GameNode } from "./GameTree";
+import { GameNode } from "./GameMove/GameTree";
 import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
 import { Buffer } from "buffer";
-import GameMoves from "./GameMoves";
-import GameStatus from "./GameStatus";
-import MoveEntry from "./MoveEntry";
-import MoveResults from "./MoveResults";
+import GameMoves from "./GameMove/GameMoves";
+import GameStatus from "./GameMove/GameStatus";
+import MoveEntry from "./GameMove/MoveEntry";
+import MoveResults from "./GameMove/MoveResults";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
-import ClipboardCopy from "./ClipboardCopy";
+import ClipboardCopy from "./GameMove/ClipboardCopy";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
-import DownloadDataUri from "./DownloadDataUri";
-import UserChats from "./UserChats";
+import DownloadDataUri from "./GameMove/DownloadDataUri";
+import UserChats from "./GameMove/UserChats";
 import { Canvg } from 'canvg';
 
 const replaceNames = (rep, players) => {
