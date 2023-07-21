@@ -32,6 +32,7 @@ function NewChallengeModal(props) {
   const [clockHard, clockHardSetter] = useState(false);
   const [rated, ratedSetter] = useState(true); // Rated game or not.
   const [standing, standingSetter] = useState(false); // Standing challenge or not.
+  const [standingCount, standingCountSetter] = useState(0);
   const [opponents, opponentsSetter] = useState([]);
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const groupVariantsRef = useRef({});
@@ -243,6 +244,7 @@ function NewChallengeModal(props) {
       metaGame: metaGame,
       numPlayers: playerCount,
       standing: standing,
+      duration: standingCount,
       seating: seating,
       variants: variants,
       challengees: opponents,
@@ -422,6 +424,8 @@ function NewChallengeModal(props) {
                   type="radio"
                   name="challengeType"
                   value="open"
+                  readOnly={true}
+                  checked={standing}
                   onClick={() => standingSetter(true)}
                 />
                 {t("ChallengeTypeOpen")}
@@ -431,7 +435,8 @@ function NewChallengeModal(props) {
                   type="radio"
                   name="challengeType"
                   value="targeted"
-                  defaultChecked
+                  checked={! standing}
+                  readOnly={true}
                   onClick={() => standingSetter(false)}
                 />
                 {t("ChallengeTypeTargeted")}
@@ -444,8 +449,7 @@ function NewChallengeModal(props) {
             </p>
           </div>
         )}
-        {playerCount === -1 || standing
-          ? ""
+        {playerCount === -1 || standing ? ""
           : /* Opponents */
             opponents.map((o, i) => {
               return (
@@ -497,7 +501,17 @@ function NewChallengeModal(props) {
                   </div>
                 </div>
               );
-            })}
+            })
+        }
+        {! standing ? "" : ( (playerCount === -1) || (playerCount > 2) ) ? "" :
+            <div className="field">
+                <label className="label is-small" htmlFor="duration">{t("Duration")}</label>
+                <div className="control">
+                    <input className="input is-small" type="number" min={0} name="duration" placeholder="duration" style={{width: "50%"}} value={standingCount} onChange={(e) => standingCountSetter(parseInt(e.target.value, 10))} />
+                </div>
+                <p className="help">{standingCount === 0 ? t("DurationHelpPersistent") : t("DurationHelp", {count: standingCount})}</p>
+            </div>
+        }
         {groupData.length === 0 && nonGroupData.length === 0 ? (
           ""
         ) : (
