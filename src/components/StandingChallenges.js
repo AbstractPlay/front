@@ -249,7 +249,7 @@ function StandingChallenges(props) {
                         t("Accepted")
                       ) : challenge.id === reject || challenge.id === revoke ? (
                         <Spinner></Spinner>
-                      ) : challenge.challenger.id === globalMe.id ? (
+                      ) : challenge.challenger.id === globalMe?.id ? (
                         <button
                           className="button is-small apButton"
                           onClick={() => handleRevoke(challenge.id)}
@@ -257,7 +257,7 @@ function StandingChallenges(props) {
                           {t("Revoke")}
                         </button>
                       ) : challenge.players.find(
-                          (p) => p.id === globalMe.id
+                          (p) => p.id === globalMe?.id
                         ) ? (
                         <button
                           className="button is-small apButton"
