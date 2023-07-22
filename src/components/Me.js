@@ -15,6 +15,7 @@ import { Fragment } from "react";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
+import { toast } from "react-toastify";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -297,6 +298,26 @@ function Me(props) {
     }
   };
 
+  const handleTestPushClick = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log("Posting test_push");
+      await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "test_push",
+        }),
+      });
+    } catch (error) {
+      errorSetter(error);
+    }
+  };
+
   useEffect(() => {
     if (globalMe && globalMe.games) {
       let games = globalMe.games;
@@ -558,6 +579,19 @@ function Me(props) {
                 >
                   Test async
                 </button>
+                <button
+                  className="button is-small apButton"
+                  onClick={() => handleTestPushClick()}
+                >
+                  Test push notifications
+                </button>
+                <button
+                  className="button is-small apButton"
+                  onClick={() => toast("Toast test!")}
+                >
+                  Test toast
+                </button>
+
               </div>
             </div>
           )}

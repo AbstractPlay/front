@@ -22,6 +22,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const MyTurnContext = createContext([[], () => []]);
 export const MeContext = createContext([null, () => {}]);
@@ -90,6 +92,7 @@ function Bones(props) {
         <Helmet>
           <link rel="canonical" href="https://play.abstractplay.com/" />
         </Helmet>
+        <ToastContainer />
       <MeContext.Provider value={[globalMe, globalMeSetter]}>
         <Router>
           <Navbar />

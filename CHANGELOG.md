@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added star feature.
 * Now supports alternate displays for games.
 * Added `duration` property to standing challenges for 2-player games. 0 means indefinite, >0 means it will expire after that many uses.
+* Push notifications!
 
 ### Fixed
 
