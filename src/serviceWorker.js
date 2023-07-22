@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-restricted-globals */
+import { toast } from "react-toastify";
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
@@ -22,6 +25,7 @@ const isLocalhost = Boolean(
 
 export function register(config) {
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
+//   if ("serviceWorker" in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -32,7 +36,7 @@ export function register(config) {
     }
 
     window.addEventListener("load", () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+      const swUrl = `${process.env.PUBLIC_URL}/sw.js`;
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
@@ -73,6 +77,7 @@ function registerValidSW(swUrl, config) {
                 "New content is available and will be used when all " +
                   "tabs for this page are closed. See http://bit.ly/CRA-PWA."
               );
+              toast("New content is available and will be used when all tabs for this page are closed.");
 
               // Execute callback
               if (config && config.onUpdate) {
@@ -83,6 +88,7 @@ function registerValidSW(swUrl, config) {
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
               console.log("Content is cached for offline use.");
+              toast("Content is cached for offline use.");
 
               // Execute callback
               if (config && config.onSuccess) {
@@ -133,3 +139,7 @@ export function unregister() {
     });
   }
 }
+
+navigator.serviceWorker.addEventListener('message', function (event) {
+    toast(event.data.body);
+});
