@@ -335,7 +335,7 @@ function Table(props) {
       </div>
       <div className="container">
         {tableNavigation}
-        <table className="table" id="completedGamesTable">
+        <table className="table apTable">
             <thead>
                 {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>

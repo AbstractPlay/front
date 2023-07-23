@@ -1,104 +1,87 @@
-import { useCallback, useContext, useState, useMemo, Fragment } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState, useMemo, Fragment } from "react";
 import { MeContext } from "../../pages/Skeleton";
-import { API_ENDPOINT_AUTH } from "../../config";
-import { Auth } from "aws-amplify";
+import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { getCoreRowModel, useReactTable, flexRender, createColumnHelper, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table'
 import ReactTimeAgo from "react-time-ago";
 
-function CompletedGamesTable(props) {
-    const [globalMe, globalMeSetter] = useContext(MeContext);
-    const [sorting, setSorting] = useState([{id: "completed", desc: true}]);
+function showMilliseconds(ms) {
+    let positive = true;
+    if (ms < 0) {
+      ms = -ms;
+      positive = false;
+    }
+    let seconds = ms / 1000;
+    const days = Math.floor(seconds / (24 * 3600));
+    seconds = seconds % (24 * 3600);
+    const hours = parseInt(seconds / 3600);
+    seconds = seconds % 3600;
+    const minutes = parseInt(seconds / 60);
+    seconds = seconds % 60;
+    let output = "";
+    if (!positive) output = "-";
+    if (days > 0) output += days + "d, ";
+    if (days > 0 || hours > 0) output += hours + "h";
+    if (days < 1) {
+      if (days > 0 || hours > 0) output += ", ";
+      if (minutes > 0) output += minutes + "m";
+      if (hours < 1) {
+        if (minutes > 0) output += ", ";
+        output += Math.round(seconds) + "s";
+      }
+    }
+    return output;
+}
 
-    const handleClearClick = useCallback(async (gameId) => {
-        try {
-            const usr = await Auth.currentAuthenticatedUser();
-            const res = await fetch(API_ENDPOINT_AUTH, {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-              },
-              body: JSON.stringify({
-                query: "set_lastSeen",
-                pars: {
-                  gameId,
-                },
-              }),
-            });
-            if (res.status !== 200) {
-              console.log(
-                `An error occured while setting lastSeen.`
-              );
-            } else {
-              const newMe = JSON.parse(JSON.stringify(globalMe));
-              const idx = newMe.games.findIndex(g => g.id === gameId);
-              if (idx === -1) {
-                console.log(`Could not find game ID ${gameId} in the globalMe list of games: ${JSON.stringify(newMe.games)}`);
-              } else {
-                newMe.games.splice(idx, 1);
-                globalMeSetter(newMe);
-              }
-            }
-        } catch (error) {
-          props.setError(error);
-        }
-    }, [globalMe, globalMeSetter, props])
+function TheirTurnTable(props) {
+    const [globalMe,] = useContext(MeContext);
+    const [sorting, setSorting] = useState([{id: "timeRemaining", desc: false}]);
 
     const data = useMemo( () => props.games.map((g) => {
         const info = gameinfo.get(g.metaGame);
+        let them = undefined;
+        if ( (g.toMove !== null) && (g.toMove !== undefined) && (g.toMove !== "") && (! Array.isArray(g.toMove)) ) {
+            const idx = parseInt(g.toMove);
+            them = g.players[idx];
+        }
         return{
             id: g.id,
             metaGame: g.metaGame,
             gameName: info.name,
-            gameEnded: g.gameEnded || 0,
+            gameStarted: g.gameStarted,
             opponents: g.players
                 .filter((item) => item.id !== globalMe.id)
                 .map((item) => item.name)
                 .join(", "),
             numMoves: g.numMoves || 0,
-            lastSeen: g.seen || 0,
-            lastChat: g.lastChat || 0,
+            myTime: them === undefined ? undefined : them.time,
+            timeRemaining: them === undefined ? undefined : them.time - (Date.now() - g.lastMoveTime),
         }
-    }), [globalMe.id, props.games]);
+    }), [props.games, globalMe.id]);
 
     const columnHelper = createColumnHelper();
     const columns = useMemo( () => [
         columnHelper.accessor("gameName", {
             header: "Game",
-            cell: props => <Link to={`/move/${props.row.original.metaGame}/1/${props.row.original.id}`}>{props.getValue()}</Link>,
+            cell: props => <Link to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}>{props.getValue()}</Link>,
         }),
         columnHelper.accessor("opponents", {
           header: "Opponents",
         }),
-        columnHelper.accessor('gameEnded', {
-          header: "Completed",
+        columnHelper.accessor('gameStarted', {
+          header: "Started",
           cell: props => props.getValue() === 0 ? "" : <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />,
-          id: "completed",
-        }),
-        columnHelper.accessor('lastSeen', {
-          header: "Last seen",
-          cell: props => props.getValue() === 0 ? "" : <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />,
+          id: "started",
         }),
         columnHelper.accessor('numMoves', {
           header: "# moves",
           cell: props => props.getValue() === 0 ? "" : props.getValue(),
         }),
-        columnHelper.display({
-            id: "clear",
-            cell: props =>
-                <div className="control">
-                    <button
-                        className="button is-small is-rounded"
-                        onClick={() => handleClearClick(props.row.original.id)}
-                    >
-                        Clear
-                    </button>
-                </div>
+        columnHelper.accessor("timeRemaining", {
+            header: "Time remaining",
+            cell: props => props.getValue() === undefined ? "" : showMilliseconds(props.getValue()),
         }),
-    ], [columnHelper, handleClearClick]);
+    ], [columnHelper]);
 
     const table = useReactTable({
         data,
@@ -239,4 +222,4 @@ function CompletedGamesTable(props) {
     );
 }
 
-export default CompletedGamesTable;
+export default TheirTurnTable;

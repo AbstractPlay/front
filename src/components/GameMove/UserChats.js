@@ -1,10 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en.json";
 import ReactTimeAgo from "react-time-ago";
 import GameCommentShort from "./GameCommentShort";
-TimeAgo.addDefaultLocale(en);
 
 //TODO:
 // Fix react-time-ago to be language/locale sensitive
