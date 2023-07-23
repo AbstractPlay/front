@@ -49,6 +49,7 @@ function TheirTurnTable(props) {
             metaGame: g.metaGame,
             gameName: info.name,
             gameStarted: g.gameStarted,
+            lastMove: g.lastMoveTime,
             opponents: g.players
                 .filter((item) => item.id !== globalMe.id)
                 .map((item) => item.name)
@@ -71,7 +72,10 @@ function TheirTurnTable(props) {
         columnHelper.accessor('gameStarted', {
           header: "Started",
           cell: props => props.getValue() === 0 ? "" : <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />,
-          id: "started",
+        }),
+        columnHelper.accessor('lastMove', {
+          header: "Last move",
+          cell: props => props.getValue() === 0 ? "" : <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />,
         }),
         columnHelper.accessor('numMoves', {
           header: "# moves",
