@@ -45,7 +45,7 @@ function MyTurnTable(props) {
             id: g.id,
             metaGame: g.metaGame,
             gameName: info.name,
-            gameStarted: g.gameStarted,
+            gameStarted: g.gameStarted || 0,
             opponents: g.players
                 .filter((item) => item.id !== globalMe.id)
                 .map((item) => item.name)

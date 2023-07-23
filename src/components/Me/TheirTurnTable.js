@@ -49,7 +49,7 @@ function TheirTurnTable(props) {
             id: g.id,
             metaGame: g.metaGame,
             gameName: info.name,
-            gameStarted: g.gameStarted,
+            gameStarted: g.gameStarted || 0,
             lastMove: g.lastMoveTime,
             opponents: g.players
                 .filter((item) => item.id !== globalMe.id)
