@@ -73,14 +73,10 @@ function TheirTurnTable(props) {
         columnHelper.accessor('gameStarted', {
           header: "Started",
           cell: props => props.getValue() === 0 ? "" : <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />,
-<<<<<<< HEAD
-          id: "started",
-=======
         }),
         columnHelper.accessor('lastMove', {
           header: "Last move",
           cell: props => props.getValue() === 0 ? "" : <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />,
->>>>>>> develop
         }),
         columnHelper.accessor('numMoves', {
           header: "# moves",
