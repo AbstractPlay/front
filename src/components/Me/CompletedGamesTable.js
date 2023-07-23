@@ -7,6 +7,8 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { getCoreRowModel, useReactTable, flexRender, createColumnHelper, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table'
 import ReactTimeAgo from "react-time-ago";
 
+const allSize = 1000000;
+
 function CompletedGamesTable(props) {
     const [globalMe, globalMeSetter] = useContext(MeContext);
     const [sorting, setSorting] = useState([{id: "completed", desc: true}]);
@@ -224,9 +226,9 @@ function CompletedGamesTable(props) {
                                     table.setPageSize(Number(e.target.value))
                                 }}
                                 >
-                                {[10, 20, 30, 40, 50].map(pageSize => (
+                                {[10, 20, 30, 40, 50, allSize].map(pageSize => (
                                     <option key={pageSize} value={pageSize}>
-                                    Show {pageSize}
+                                    Show {pageSize === allSize ? "All" : pageSize}
                                     </option>
                                 ))}
                             </select>

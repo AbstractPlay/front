@@ -32,6 +32,7 @@ function showMilliseconds(ms) {
     }
     return output;
 }
+const allSize = 1000000;
 
 function TheirTurnTable(props) {
     const [globalMe,] = useContext(MeContext);
@@ -211,9 +212,9 @@ function TheirTurnTable(props) {
                                     table.setPageSize(Number(e.target.value))
                                 }}
                                 >
-                                {[10, 20, 30, 40, 50].map(pageSize => (
+                                {[10, allSize].map(pageSize => (
                                     <option key={pageSize} value={pageSize}>
-                                    Show {pageSize}
+                                    Show {pageSize === allSize ? "All" : pageSize}
                                     </option>
                                 ))}
                             </select>
