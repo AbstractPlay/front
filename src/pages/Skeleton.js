@@ -29,7 +29,6 @@ import TimeAgo from "javascript-time-ago";
 // TODO: Adjust locale to user selection, when supported
 TimeAgo.addDefaultLocale(en);
 
-
 export const MyTurnContext = createContext([[], () => []]);
 export const MeContext = createContext([null, () => {}]);
 
