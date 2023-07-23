@@ -13,6 +13,7 @@ import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import ExpandableDiv from "../ExpandableDiv";
 
+const allSize = 1000000;
 // props:
 //   - metaGame
 //   - counts
@@ -315,9 +316,9 @@ function Table(props) {
                                     table.setPageSize(Number(e.target.value))
                                 }}
                                 >
-                                {[10, 20, 30, 40, 50].map(pageSize => (
+                                {[10, 20, 30, 40, 50, allSize].map(pageSize => (
                                     <option key={pageSize} value={pageSize}>
-                                    Show {pageSize}
+                                    Show {pageSize === allSize ? "All" : pageSize}
                                     </option>
                                 ))}
                             </select>

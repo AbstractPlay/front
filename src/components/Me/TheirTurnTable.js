@@ -32,6 +32,7 @@ function showMilliseconds(ms) {
     }
     return output;
 }
+const allSize = 1000000;
 
 function TheirTurnTable(props) {
     const [globalMe,] = useContext(MeContext);
@@ -49,6 +50,7 @@ function TheirTurnTable(props) {
             metaGame: g.metaGame,
             gameName: info.name,
             gameStarted: g.gameStarted,
+            lastMove: g.lastMoveTime,
             opponents: g.players
                 .filter((item) => item.id !== globalMe.id)
                 .map((item) => item.name)
@@ -71,7 +73,14 @@ function TheirTurnTable(props) {
         columnHelper.accessor('gameStarted', {
           header: "Started",
           cell: props => props.getValue() === 0 ? "" : <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />,
+<<<<<<< HEAD
           id: "started",
+=======
+        }),
+        columnHelper.accessor('lastMove', {
+          header: "Last move",
+          cell: props => props.getValue() === 0 ? "" : <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />,
+>>>>>>> develop
         }),
         columnHelper.accessor('numMoves', {
           header: "# moves",
@@ -207,9 +216,9 @@ function TheirTurnTable(props) {
                                     table.setPageSize(Number(e.target.value))
                                 }}
                                 >
-                                {[10, 20, 30, 40, 50].map(pageSize => (
+                                {[10, allSize].map(pageSize => (
                                     <option key={pageSize} value={pageSize}>
-                                    Show {pageSize}
+                                    Show {pageSize === allSize ? "All" : pageSize}
                                     </option>
                                 ))}
                             </select>

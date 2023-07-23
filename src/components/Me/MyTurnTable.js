@@ -5,6 +5,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { getCoreRowModel, useReactTable, flexRender, createColumnHelper, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table'
 import ReactTimeAgo from "react-time-ago";
 
+const allSize = 1000000;
 function showMilliseconds(ms) {
     let positive = true;
     if (ms < 0) {
@@ -203,9 +204,9 @@ function MyTurnTable(props) {
                                     table.setPageSize(Number(e.target.value))
                                 }}
                                 >
-                                {[10, 20, 30, 40, 50].map(pageSize => (
+                                {[10, allSize].map(pageSize => (
                                     <option key={pageSize} value={pageSize}>
-                                    Show {pageSize}
+                                    Show {pageSize === allSize ? "All" : pageSize}
                                     </option>
                                 ))}
                             </select>
