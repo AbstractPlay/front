@@ -48,7 +48,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Fixed completed games table to contain more information and be more useful
+* Fixed completed games table to contain more information and be more useful.
+* Your Turn and Opponent's Turn tables now moved to new format, now including "time left".
 
 ## [v1.0.0-beta]
 

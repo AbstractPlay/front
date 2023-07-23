@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Auth } from "aws-amplify";
 import Spinner from "./Spinner";
-import GameItem from "./Me/GameItem";
 import Modal from "./Modal";
 import ChallengeItem from "./Me/ChallengeItem";
 import ChallengeView from "./Me/ChallengeView";
@@ -15,6 +14,8 @@ import { Fragment } from "react";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
+import MyTurnTable from "./Me/MyTurnTable";
+import TheirTurnTable from "./Me/TheirTurnTable";
 import { toast } from "react-toastify";
 
 function Me(props) {
@@ -400,43 +401,11 @@ function Me(props) {
               <p className="lined">
                 <span>{t("YourMove")}</span>
               </p>
-              <div className="indentedContainer">
-                {myMove.length === 0 ? (
-                  <p>{t("NoYourMove")}</p>
-                ) : (
-                  <ul>
-                    {myMove.map((item) => (
-                      <GameItem
-                        item={item}
-                        key={item.id}
-                        canMove={true}
-                        gameOver={false}
-                        stateSetter={props.stateSetter}
-                      />
-                    ))}
-                  </ul>
-                )}
-              </div>
+              <MyTurnTable games={myMove} />
               <p className="lined">
                 <span>{t("OpponentMove")}</span>
               </p>
-              <div className="indentedContainer">
-                {waiting.length === 0 ? (
-                  <p>{t("NoOpponentMove")}</p>
-                ) : (
-                  <ul>
-                    {waiting.map((item) => (
-                      <GameItem
-                        item={item}
-                        key={item.id}
-                        canMove={false}
-                        gameOver={false}
-                        stateSetter={props.stateSetter}
-                      />
-                    ))}
-                  </ul>
-                )}
-              </div>
+              <TheirTurnTable games={waiting} />
               {over.length === 0 ? (
                 ""
               ) : (

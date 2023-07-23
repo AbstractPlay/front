@@ -24,6 +24,11 @@ import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import en from "javascript-time-ago/locale/en.json";
+import TimeAgo from "javascript-time-ago";
+// TODO: Adjust locale to user selection, when supported
+TimeAgo.addDefaultLocale(en);
+
 
 export const MyTurnContext = createContext([[], () => []]);
 export const MeContext = createContext([null, () => {}]);
