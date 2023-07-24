@@ -1,9 +1,10 @@
-import { useContext, useState, useMemo, Fragment } from "react";
+import { useContext, useEffect, useState, useMemo, Fragment } from "react";
 import { MeContext } from "../../pages/Skeleton";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { getCoreRowModel, useReactTable, flexRender, createColumnHelper, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table'
 import ReactTimeAgo from "react-time-ago";
+import { useStorageState } from 'react-use-storage-state'
 
 function showMilliseconds(ms) {
     let positive = true;
@@ -37,6 +38,7 @@ const allSize = 1000000;
 function TheirTurnTable(props) {
     const [globalMe,] = useContext(MeContext);
     const [sorting, setSorting] = useState([{id: "timeRemaining", desc: false}]);
+    const [showState, showStateSetter] = useStorageState("dashboard-tables-theirs-show", 10);
 
     const data = useMemo( () => props.games.map((g) => {
         const info = gameinfo.get(g.metaGame);
@@ -91,12 +93,18 @@ function TheirTurnTable(props) {
     const table = useReactTable({
         data,
         columns,
-        state: {sorting},
+        state: {
+            sorting,
+        },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
-    })
+    });
+
+    useEffect(() => {
+        table.setPageSize(showState);
+    }, [showState, table]);
 
     return (
       <Fragment>
@@ -209,7 +217,7 @@ function TheirTurnTable(props) {
                             <select
                                 value={table.getState().pagination.pageSize}
                                 onChange={e => {
-                                    table.setPageSize(Number(e.target.value))
+                                    showStateSetter(Number(e.target.value));
                                 }}
                                 >
                                 {[10, allSize].map(pageSize => (
