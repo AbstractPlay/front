@@ -12,6 +12,7 @@ import gameImages from "../../assets/GameImages";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import ExpandableDiv from "../ExpandableDiv";
+import { useStorageState } from 'react-use-storage-state'
 
 const allSize = 1000000;
 // props:
@@ -30,6 +31,7 @@ function Table(props) {
   const [filterStars, filterStarsSetter] = useState(false);
   const [globalFilter, globalFilterSetter] = useState(props.metaGame);
   const [users, usersSetter] = useState(null);
+  const [showState, showStateSetter] = useStorageState("allgames-show", 10);
   const toggleStar = props.toggleStar;
   const handleChallenge = props.handleChallenge;
   addResource(i18n.language);
@@ -239,7 +241,11 @@ function Table(props) {
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-    })
+    });
+
+    useEffect(() => {
+        table.setPageSize(showState);
+    }, [showState, table]);
 
   const tableNavigation =
   <>
@@ -313,7 +319,7 @@ function Table(props) {
                             <select
                                 value={table.getState().pagination.pageSize}
                                 onChange={e => {
-                                    table.setPageSize(Number(e.target.value))
+                                    showStateSetter(Number(e.target.value));
                                 }}
                                 >
                                 {[10, 20, 30, 40, 50, allSize].map(pageSize => (
