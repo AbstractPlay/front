@@ -95,6 +95,7 @@ function Bones(props) {
       <HelmetProvider>
         <Helmet>
           <link rel="canonical" href="https://play.abstractplay.com/" />
+          <title>{process.env.REACT_APP_REAL_MODE === "production" ? "Abstract Play" : "Abstract Play (Dev)"}</title>
         </Helmet>
         <ToastContainer />
       <MeContext.Provider value={[globalMe, globalMeSetter]}>
