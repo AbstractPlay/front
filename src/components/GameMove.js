@@ -202,7 +202,7 @@ function setupGame(
 
   // If the game is over, generate the game record
   // TODO: Add "event" and "round" should those ever be implemented.
-  if (engine.gameover && engine.stack.length >= 2) {
+  if (engine.gameover && engine.stack.length >= engine.numplayers) {
     gameRecSetter(
       engine.genRecord({
         uid: game0.id,
@@ -212,8 +212,6 @@ function setupGame(
             uid: p.id,
           };
         }),
-        dateStart: new Date(engine.stack[0]._timestamp),
-        dateEnd: new Date(engine.stack[engine.stack.length - 1]._timestamp),
         unrated: !game0.rated,
       })
     );
