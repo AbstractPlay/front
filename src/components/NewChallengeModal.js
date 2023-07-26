@@ -118,6 +118,11 @@ function NewChallengeModal(props) {
     } else {
       metaGameSetter(null);
     }
+    if (props.opponent !== undefined) {
+        opponentsSetter([props.opponent])
+    } else {
+        opponentsSetter([]);
+    }
   }, [show, props, handleChangeGame]);
 
   const handleChangePlayerCount = (cnt) => {
