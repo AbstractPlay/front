@@ -120,8 +120,6 @@ function NewChallengeModal(props) {
     }
     if (props.opponent !== undefined) {
         opponentsSetter([props.opponent])
-    } else {
-        opponentsSetter([]);
     }
   }, [show, props, handleChangeGame]);
 
