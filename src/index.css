@@ -61,6 +61,11 @@ a {
   text-decoration: underline;
 }
 
+table * a {
+    color: var(--secondary-color-3);
+    text-decoration: underline;
+}
+
 /* Add a little bit of space after checkboxes and radio buttons */
 input[type="checkbox"],
 input[type="radio"] {
