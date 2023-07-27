@@ -347,7 +347,7 @@ function Table(props) {
                 {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => (
-                    <th key={header.id}>
+                    <th key={header.id} style={{position: "sticky", top: 0, background: "#fff", zIndex: 10}}>
                     {header.isPlaceholder
                         ? null
                         : (
