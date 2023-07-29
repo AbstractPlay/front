@@ -10,4 +10,5 @@ module.exports = {
   COGNITO_REDIRECT_LOGOUT: "https://play.abstractplay.com",
   API_ENDPOINT_OPEN: API_ENDPOINT + "query",
   API_ENDPOINT_AUTH: API_ENDPOINT + "authQuery",
+  PUSH_API_URL: API_ENDPOINT + "authQuery",
 };

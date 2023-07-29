@@ -1,21 +1,21 @@
-import { useContext, useState, useMemo, Fragment } from "react";
+import { useCallback, useContext, useState, useMemo, Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { MeContext } from "../pages/Skeleton";
-import { API_ENDPOINT_AUTH } from "../config";
+import { MeContext } from "../../pages/Skeleton";
+import { API_ENDPOINT_AUTH } from "../../config";
 import { Auth } from "aws-amplify";
 import { gameinfo } from "@abstractplay/gameslib";
 import { getCoreRowModel, useReactTable, flexRender, createColumnHelper, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table'
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en.json";
 import ReactTimeAgo from "react-time-ago";
-// TODO: Adjust locale to user selection, when supported
-TimeAgo.addDefaultLocale(en);
+import { useStorageState } from 'react-use-storage-state'
+
+const allSize = 1000000;
 
 function CompletedGamesTable(props) {
     const [globalMe, globalMeSetter] = useContext(MeContext);
     const [sorting, setSorting] = useState([{id: "completed", desc: true}]);
+    const [showState, showStateSetter] = useStorageState("dashboard-tables-completed-show", 10);
 
-    const handleClearClick = async (gameId) => {
+    const handleClearClick = useCallback(async (gameId) => {
         try {
             const usr = await Auth.currentAuthenticatedUser();
             const res = await fetch(API_ENDPOINT_AUTH, {
@@ -49,7 +49,7 @@ function CompletedGamesTable(props) {
         } catch (error) {
           props.setError(error);
         }
-    }
+    }, [globalMe, globalMeSetter, props])
 
     const data = useMemo( () => props.games.map((g) => {
         const info = gameinfo.get(g.metaGame);
@@ -102,21 +102,27 @@ function CompletedGamesTable(props) {
                     </button>
                 </div>
         }),
-    ], [columnHelper]);
+    ], [columnHelper, handleClearClick]);
 
     const table = useReactTable({
         data,
         columns,
-        state: {sorting},
+        state: {
+            sorting,
+        },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
     })
 
+    useEffect(() => {
+        table.setPageSize(showState);
+    }, [showState, table]);
+
     return (
       <Fragment>
-        <table className="table" id="completedGamesTable">
+        <table className="table apTable">
             <thead>
                 {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
@@ -162,7 +168,7 @@ function CompletedGamesTable(props) {
             </tbody>
         </table>
 
-        <div className="level" id="completedGamesTableFooter">
+        <div className="level smallerText">
             <div className="level-left">
                 <div className="level-item">
                     <button
@@ -225,12 +231,12 @@ function CompletedGamesTable(props) {
                             <select
                                 value={table.getState().pagination.pageSize}
                                 onChange={e => {
-                                    table.setPageSize(Number(e.target.value))
+                                    showStateSetter(Number(e.target.value));
                                 }}
                                 >
-                                {[10, 20, 30, 40, 50].map(pageSize => (
+                                {[10, 20, 30, 40, 50, allSize].map(pageSize => (
                                     <option key={pageSize} value={pageSize}>
-                                    Show {pageSize}
+                                    Show {pageSize === allSize ? "All" : pageSize}
                                     </option>
                                 ))}
                             </select>

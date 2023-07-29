@@ -33,6 +33,8 @@
     "react-router-dom": "6.10.0",
     "react-scripts": "5.0.1",
     "react-time-ago": "7.2.1",
+    "react-toastify": "^9.1.3",
+    "react-use-storage-state": "^1.0.6",
     "rehype-raw": "6.1.1",
     "web-vitals": "2.1.4"
   },

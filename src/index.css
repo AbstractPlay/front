@@ -61,6 +61,11 @@ a {
   text-decoration: underline;
 }
 
+table * a {
+    color: var(--secondary-color-3);
+    text-decoration: underline;
+}
+
 /* Add a little bit of space after checkboxes and radio buttons */
 input[type="checkbox"],
 input[type="radio"] {
@@ -495,25 +500,25 @@ th .player {
     color: #ffdf00;
 }
 
-#completedGamesTable {
+.apTable {
     font-size: smaller;
 }
 
-#completedGamesTable tbody tr:nth-child(even) {
-    background-color: #ddd;
+.apTable tbody tr:nth-child(even) {
+    background-color: var(--secondary-color-3-bg);
 }
 
-#completedGamesTable * .sortable {
+.apTable * .sortable {
     cursor: pointer;
     user-select: none;
 }
 
-#completedGamesTable tr.newChat {
+.apTable tr.newChat {
     font-weight: bolder;
 }
 
-#completedGamesTableFooter {
-    font-size: smaller
+.smallerText {
+    font-size: smaller;
 }
 
 .hasNotes {

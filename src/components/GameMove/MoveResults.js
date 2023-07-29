@@ -1,9 +1,6 @@
 import React from "react";
 import { Fragment } from "react";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en.json";
 import ReactTimeAgo from "react-time-ago";
-TimeAgo.addDefaultLocale(en);
 
 //TODO:
 // Fix react-time-ago to be language/locale sensitive

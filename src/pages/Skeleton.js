@@ -22,6 +22,12 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import en from "javascript-time-ago/locale/en.json";
+import TimeAgo from "javascript-time-ago";
+// TODO: Adjust locale to user selection, when supported
+TimeAgo.addDefaultLocale(en);
 
 export const MyTurnContext = createContext([[], () => []]);
 export const MeContext = createContext([null, () => {}]);
@@ -89,7 +95,9 @@ function Bones(props) {
       <HelmetProvider>
         <Helmet>
           <link rel="canonical" href="https://play.abstractplay.com/" />
+          <title>{process.env.REACT_APP_REAL_MODE === "production" ? "Abstract Play" : "Abstract Play (Dev)"}</title>
         </Helmet>
+        <ToastContainer />
       <MeContext.Provider value={[globalMe, globalMeSetter]}>
         <Router>
           <Navbar />

@@ -5,6 +5,7 @@ import { API_ENDPOINT_AUTH } from "../config";
 import UserSettingsModal from "./UserSettingsModal";
 import { MeContext } from "../pages/Skeleton";
 import NewProfile from "./NewProfile";
+import { subscribeUser } from "../subscription";
 
 function LogInOutButton(props) {
   const { t } = useTranslation();
@@ -41,6 +42,7 @@ function LogInOutButton(props) {
               else {
                 globalMeSetter(JSON.parse(result.body));
                 console.log(JSON.parse(result.body));
+                subscribeUser(token);
               }
             }
           } catch (error) {

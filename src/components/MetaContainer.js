@@ -1,22 +1,21 @@
-import React, { useState, useEffect, useContext, useRef, createRef, Fragment } from "react";
-import MetaItem from "./MetaItem";
+import React, { useState, useEffect, Fragment, useContext } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
 import { MeContext } from "../pages/Skeleton";
-import { API_ENDPOINT_OPEN } from "../config";
+import { Auth } from "aws-amplify";
+import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Helmet } from "react-helmet-async";
+// import Gallery from "./MetaContainer/Gallery";
+import Table from "./MetaContainer/Table";
 
 function MetaContainer(props) {
-  const [theMetaGame, theMetaGameSetter] = useState("");
+  const [globalMe, globalMeSetter] = useContext(MeContext);
   const [counts, countsSetter] = useState(null);
-  const [globalMe,] = useContext(MeContext);
-  const gameDivs = useRef({});
-  const [hideDetails, hideDetailsSetter] = useState(false);
-  const [filterStars, filterStarsSetter] = useState(false);
+  const [users, usersSetter] = useState(null);
   const { metaGame } = useParams();
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const [ canonical, canonicalSetter ] = useState("https://play.abstractplay.com/games/");
   addResource(i18n.language);
 
@@ -41,18 +40,25 @@ function MetaContainer(props) {
   }, []);
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL(API_ENDPOINT_OPEN);
+        url.searchParams.append("query", "user_names");
+        const res = await fetch(url);
+        const result = await res.json();
+        usersSetter(result);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     if (metaGame !== undefined) {
-      handleChangeGame(metaGame);
       canonicalSetter(`https://play.abstractplay.com/games/${metaGame}/`)
     }
   }, [metaGame]);
-
-  const handleChangeGame = (game) => {
-    console.log(gameDivs.current);
-    theMetaGameSetter(game);
-    gameDivs.current[game].current.scrollIntoView({ behavior: "smooth" });
-    console.log(game);
-  };
 
   let games = [...gameinfo.keys()].sort((a, b) => {
     const na = gameinfo.get(a).name;
@@ -64,9 +70,72 @@ function MetaContainer(props) {
   if (process.env.REACT_APP_REAL_MODE === "production") {
     games = games.filter(id => ! gameinfo.get(id).flags.includes("experimental"));
   }
-  if ( (filterStars) && (globalMe !== null) && ("stars" in globalMe) && (globalMe.stars.length > 0) ) {
-    games = games.filter(id => globalMe.stars.includes(id));
-  }
+
+  const toggleStar = async (game) => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "toggle_star",
+          pars: {
+            metaGame: game,
+          },
+        }),
+      });
+      if (res.status !== 200) {
+        const result = await res.json();
+        console.log(
+          `An error occured while saving toggling a star:\n${result}`
+        );
+      } else {
+        const result = await res.json();
+        console.log(result.body);
+        const newMe = JSON.parse(JSON.stringify(globalMe));
+        newMe.stars = result.body;
+        globalMeSetter(newMe);
+        // update counts locally
+        const newcounts = JSON.parse(JSON.stringify(counts));
+        if ( (newMe !== null) && ("stars" in newMe) && (newMe.stars.length > 0) && (newMe.stars.includes(game) ) ) {
+            newcounts[game].stars++;
+        } else {
+            newcounts[game].stars--;
+        }
+        countsSetter(newcounts);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleNewChallenge = async (challenge) => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log("currentAuthenticatedUser", usr);
+      await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "new_challenge",
+          pars: {
+            ...challenge,
+            challenger: { id: globalMe.id, name: globalMe.name },
+          },
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   console.log(games);
   return (
@@ -75,67 +144,14 @@ function MetaContainer(props) {
           <link rel="canonical" href={canonical} />
         </Helmet>
 
-    <article>
-      <div className="container has-text-centered">
-        <h1 className="title">{t("AvailableGames")}</h1>
-        <div className="field">
-          <div className="control">
-            <div className="select">
-              <select
-                name="games"
-                id="game_for_challenge"
-                onChange={(e) => handleChangeGame(e.target.value)}
-                defaultValue={metaGame !== undefined ? metaGame : null}
-              >
-                <option value="">--{t("SelectGameDropdown")}--</option>
-                {games.map((game) => {
-                  return (
-                    <option key={gameinfo.get(game).uid} value={game}>
-                      {gameinfo.get(game).name}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-          </div>
-        </div>
-        <div className="field">
-          <div className="control">
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={hideDetails}
-                onChange={() => hideDetailsSetter(!hideDetails)}
-              />
-              {t("HideDetails")}
-            </label>&nbsp;&nbsp;&nbsp;
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={filterStars}
-                onChange={() => filterStarsSetter(!filterStars)}
-              />
-              {t("FilterStars")}
-            </label>
-          </div>
-        </div>
-      </div>
-      <div className="columns is-multiline">
-        {games.map((k) => (
-          <MetaItem
-            ref={(el) => {
-              gameDivs.current[k] = createRef();
-              gameDivs.current[k].current = el;
-            }}
-            key={gameinfo.get(k).uid}
-            game={gameinfo.get(k)}
-            counts={counts ? counts[gameinfo.get(k).uid] : undefined}
-            highlight={k === theMetaGame}
-            hideDetails={hideDetails}
-          />
-        ))}
-      </div>
-    </article>
+        <Table
+            metaGame={metaGame}
+            counts={counts}
+            games={games}
+            toggleStar={toggleStar.bind(this)}
+            handleChallenge={handleNewChallenge.bind(this)}
+            users={users}
+        />
     </Fragment>
   );
 }

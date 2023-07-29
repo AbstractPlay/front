@@ -76,6 +76,13 @@ function ChallengeView(props) {
     if (challenge.seating === "s1") seating = t("seatingMeFirst");
     else if (challenge.seating === "s2") seating = t("seatingMeSecond");
   }
+  if (challenge.standing) {
+    if ( ("duration" in challenge) && (typeof challenge.duration === "number") && (challenge.duration > 0) ) {
+        challengeDesc += " " + t("DurationHelp", {count: challenge.duration});
+    } else {
+        challengeDesc += " " + t("DurationHelpPersistent");
+    }
+  }
   const all = challenge.players
     .map((item) => item.name)
     .concat(

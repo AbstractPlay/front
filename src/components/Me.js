@@ -2,19 +2,21 @@ import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Auth } from "aws-amplify";
 import Spinner from "./Spinner";
-import GameItem from "./GameItem";
 import Modal from "./Modal";
-import ChallengeItem from "./ChallengeItem";
-import ChallengeView from "./ChallengeView";
-import ChallengeResponse from "./ChallengeResponse";
+import ChallengeItem from "./Me/ChallengeItem";
+import ChallengeView from "./Me/ChallengeView";
+import ChallengeResponse from "./Me/ChallengeResponse";
 import NewChallengeModal from "./NewChallengeModal";
 import NewProfile from "./NewProfile";
-import { API_ENDPOINT_AUTH } from "../config";
+import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import i18n from "../i18n";
 import { Fragment } from "react";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
-import CompletedGamesTable from "./CompletedGamesTable";
+import CompletedGamesTable from "./Me/CompletedGamesTable";
+import MyTurnTable from "./Me/MyTurnTable";
+import TheirTurnTable from "./Me/TheirTurnTable";
+import { toast } from "react-toastify";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -23,6 +25,7 @@ function Me(props) {
   // vars is just a way to trigger a new 'me' fetch (e.g. after Profile is created)
   const [vars, varsSetter] = useState({});
   const [update, updateSetter] = useState(0);
+  const [users, usersSetter] = useState(null);
   const [showChallengeViewModal, showChallengeViewModalSetter] =
     useState(false);
   const [showChallengeResponseModal, showChallengeResponseModalSetter] =
@@ -79,6 +82,21 @@ function Me(props) {
     }
     fetchData();
   }, [vars, update, globalMeSetter]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL(API_ENDPOINT_OPEN);
+        url.searchParams.append("query", "user_names");
+        const res = await fetch(url);
+        const result = await res.json();
+        usersSetter(result);
+      } catch (error) {
+        errorSetter(error);
+      }
+    }
+    fetchData();
+  }, []);
 
   const handleNewChallengeClick = (id) => {
     showNewChallengeModalSetter(true);
@@ -281,6 +299,26 @@ function Me(props) {
     }
   };
 
+  const handleTestPushClick = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log("Posting test_push");
+      await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "test_push",
+        }),
+      });
+    } catch (error) {
+      errorSetter(error);
+    }
+  };
+
   useEffect(() => {
     if (globalMe && globalMe.games) {
       let games = globalMe.games;
@@ -363,43 +401,11 @@ function Me(props) {
               <p className="lined">
                 <span>{t("YourMove")}</span>
               </p>
-              <div className="indentedContainer">
-                {myMove.length === 0 ? (
-                  <p>{t("NoYourMove")}</p>
-                ) : (
-                  <ul>
-                    {myMove.map((item) => (
-                      <GameItem
-                        item={item}
-                        key={item.id}
-                        canMove={true}
-                        gameOver={false}
-                        stateSetter={props.stateSetter}
-                      />
-                    ))}
-                  </ul>
-                )}
-              </div>
+              <MyTurnTable games={myMove} />
               <p className="lined">
                 <span>{t("OpponentMove")}</span>
               </p>
-              <div className="indentedContainer">
-                {waiting.length === 0 ? (
-                  <p>{t("NoOpponentMove")}</p>
-                ) : (
-                  <ul>
-                    {waiting.map((item) => (
-                      <GameItem
-                        item={item}
-                        key={item.id}
-                        canMove={false}
-                        gameOver={false}
-                        stateSetter={props.stateSetter}
-                      />
-                    ))}
-                  </ul>
-                )}
-              </div>
+              <TheirTurnTable games={waiting} />
               {over.length === 0 ? (
                 ""
               ) : (
@@ -542,6 +548,19 @@ function Me(props) {
                 >
                   Test async
                 </button>
+                <button
+                  className="button is-small apButton"
+                  onClick={() => handleTestPushClick()}
+                >
+                  Test push notifications
+                </button>
+                <button
+                  className="button is-small apButton"
+                  onClick={() => toast("Toast test!")}
+                >
+                  Test toast
+                </button>
+
               </div>
             </div>
           )}
@@ -550,6 +569,7 @@ function Me(props) {
           show={showNewChallengeModal}
           handleClose={handleNewChallengeClose}
           handleChallenge={handleNewChallenge2}
+          users={users}
         />
 
         <Modal
