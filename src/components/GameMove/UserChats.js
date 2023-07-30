@@ -9,6 +9,7 @@ import GameCommentShort from "./GameCommentShort";
 function UserChats(props) {
   const comments = props.comments;
   const players = props.players;
+  const gameid = props.gameid;
   const { t } = useTranslation();
 
   if (comments) {
@@ -38,6 +39,7 @@ function UserChats(props) {
           <span>{t("GameSummary")}</span>
         </h1>
         <GameCommentShort
+          key={`chatkey_${gameid}`}
           handleSubmit={props.handleSubmit}
           tooMuch={props.tooMuch}
         />

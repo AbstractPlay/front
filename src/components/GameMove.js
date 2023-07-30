@@ -1660,6 +1660,7 @@ function GameMove(props) {
                 players={gameRef.current?.players}
                 handleSubmit={submitComment}
                 tooMuch={commentsTooLong}
+                gameid={gameRef.current?.id}
               />
             </Fragment>
             :
@@ -1669,6 +1670,7 @@ function GameMove(props) {
                 players={gameRef.current?.players}
                 handleSubmit={submitComment}
                 tooMuch={commentsTooLong}
+                gameid={gameRef.current?.id}
               />
               <GameMoves
                 focus={focus}
