@@ -30,7 +30,6 @@ function Table(props) {
   const [sorting, setSorting] = useState([{id: "gameName", desc: false}]);
   const [filterStars, filterStarsSetter] = useState(false);
   const [globalFilter, globalFilterSetter] = useState(props.metaGame);
-  const [users, usersSetter] = useState(null);
   const [showState, showStateSetter] = useStorageState("allgames-show", 10);
   const toggleStar = props.toggleStar;
   const handleChallenge = props.handleChallenge;
@@ -39,14 +38,6 @@ function Table(props) {
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
-
-  useEffect(() => {
-    if ( (props.users !== undefined) && (props.users !== null) && (Array.isArray(props.users)) && (props.users.length > 0) ) {
-        usersSetter(props.users);
-    } else {
-        usersSetter(null);
-    }
-  }, [props]);
 
   const openImgModal = (name) => {
     activeImgModalSetter(name);
@@ -216,12 +207,11 @@ function Table(props) {
                 handleClose={closeChallengeModal}
                 handleChallenge={handleChallenge}
                 fixedMetaGame={props.row.original.id}
-                users={users}
               />
               <button className="button is-small apButton" onClick={() => openChallengeModal(props.row.original.id)}>Issue Challenge</button>
             </>
         }),
-    ], [columnHelper, activeImgModal, toggleStar, filterStars, users, activeChallengeModal, handleChallenge, expandedPara, togglePara]);
+    ], [columnHelper, activeImgModal, toggleStar, filterStars, activeChallengeModal, handleChallenge, expandedPara, togglePara]);
 
     const table = useReactTable({
         data,

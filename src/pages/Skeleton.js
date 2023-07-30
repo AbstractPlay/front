@@ -2,6 +2,7 @@ import React, { useState, Suspense, useEffect, createContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import {
+  API_ENDPOINT_OPEN,
   COGNITO_USER_POOL_ID,
   COGNITO_APPID,
   COGNITO_DOMAIN,
@@ -31,6 +32,7 @@ TimeAgo.addDefaultLocale(en);
 
 export const MyTurnContext = createContext([[], () => []]);
 export const MeContext = createContext([null, () => {}]);
+export const UsersContext = createContext([null, () => {}]);
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -38,6 +40,7 @@ function Bones(props) {
   const [update] = useState(0);
   const [myMove, myMoveSetter] = useState([]);
   const [globalMe, globalMeSetter] = useState(null);
+  const [users, usersSetter] = useState(null);
 
   useEffect(() => {
     const awsconfig = {
@@ -88,6 +91,21 @@ function Bones(props) {
     getToken();
   }, []);
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL(API_ENDPOINT_OPEN);
+        url.searchParams.append("query", "user_names");
+        const res = await fetch(url);
+        const result = await res.json();
+        usersSetter(result);
+      } catch (error) {
+        usersSetter(null);
+      }
+    }
+    fetchData();
+  }, []);
+
   console.log("Skeleton rerendering, update=", update);
   if (!authed) return <Spinner />;
   else
@@ -99,6 +117,7 @@ function Bones(props) {
         </Helmet>
         <ToastContainer />
       <MeContext.Provider value={[globalMe, globalMeSetter]}>
+      <UsersContext.Provider value={[users, usersSetter]}>
         <Router>
           <Navbar />
           <section className="section" id="main">
@@ -142,6 +161,7 @@ function Bones(props) {
             <FooterDev />
           )}
         </Router>
+      </UsersContext.Provider>
       </MeContext.Provider>
       </HelmetProvider>
     );
