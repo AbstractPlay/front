@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { cloneDeep } from "lodash";
 import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
-import { MeContext } from "../pages/Skeleton";
+import { MeContext, UsersContext } from "../pages/Skeleton";
 import Modal from "./Modal";
 
 function NewChallengeModal(props) {
@@ -20,7 +20,6 @@ function NewChallengeModal(props) {
   const fixedMetaGame = props.fixedMetaGame;
   const show = props.show;
   const { t, i18n } = useTranslation();
-  const [users, usersSetter] = useState(null);
   const [error, errorSetter] = useState(null);
   const [metaGame, metaGameSetter] = useState(null);
   const [playerCount, playerCountSetter] = useState(-1);
@@ -36,19 +35,12 @@ function NewChallengeModal(props) {
   const [opponents, opponentsSetter] = useState([]);
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const groupVariantsRef = useRef({});
-  const [globalMe] = useContext(MeContext);
+  const [globalMe,] = useContext(MeContext);
+  const [users,] = useContext(UsersContext);
 
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
-
-  useEffect(() => {
-    if ( (props.users !== undefined) && (props.users !== null) && (Array.isArray(props.users)) && (props.users.length > 0) ) {
-        usersSetter(props.users);
-    } else {
-        usersSetter(null);
-    }
-  }, [props, usersSetter]);
 
   const setPlayerCount = useCallback((cnt) => {
     playerCountSetter(cnt);

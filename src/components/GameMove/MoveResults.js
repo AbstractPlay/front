@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Fragment } from "react";
 import ReactTimeAgo from "react-time-ago";
+import { UsersContext } from "../../pages/Skeleton";
 
 //TODO:
 // Fix react-time-ago to be language/locale sensitive
@@ -9,6 +10,7 @@ function MoveResults(props) {
   const results0 = props.results;
   const comments = props.comments;
   const players = props.players;
+  const [users,] = useContext(UsersContext);
 
   let results;
 
@@ -29,9 +31,14 @@ function MoveResults(props) {
           });
       } else {
         let personName = "Unknown";
-        const player = players.find((p) => p.id === c.userId);
+        let player = players.find((p) => p.id === c.userId);
         if (player !== undefined) {
             personName = player.name;
+        } else if (users !== null) {
+            player = users.find(p => p.id === c.userId);
+            if (player !== undefined) {
+                personName = player.name;
+            }
         }
         results.push({
             timestamp: c.timeStamp,

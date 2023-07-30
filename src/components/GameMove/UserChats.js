@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useContext} from "react";
 import { useTranslation } from "react-i18next";
 import ReactTimeAgo from "react-time-ago";
+import { UsersContext } from "../../pages/Skeleton";
 import GameCommentShort from "./GameCommentShort";
 
 //TODO:
@@ -10,6 +11,7 @@ function UserChats(props) {
   const comments = props.comments;
   const players = props.players;
   const gameid = props.gameid;
+  const [users,] = useContext(UsersContext);
   const { t } = useTranslation();
 
   if (comments) {
@@ -17,9 +19,14 @@ function UserChats(props) {
     comments.forEach((c) => {
       if ( (c.userId !== null) && (c.userId !== undefined) && (c.userId.length > 0) ) {
         let personName = "Unknown";
-        const player = players.find((p) => p.id === c.userId);
+        let player = players.find((p) => p.id === c.userId);
         if (player !== undefined) {
             personName = player.name;
+        } else if (users !== null) {
+            player = users.find(p => p.id === c.userId);
+            if (player !== undefined) {
+                personName = player.name;
+            }
         }
         results.push({
             timestamp: c.timeStamp,
