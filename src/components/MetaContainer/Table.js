@@ -297,7 +297,7 @@ function Table(props) {
                     </button>
                 </div>
                 <div className="level-item">
-                    <p>Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of <strong>{table.getPageCount()}</strong> ({table.getPrePaginationRowModel().rows.length} total rows)</p>
+                    <p>Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of <strong>{table.getPageCount()}</strong> ({table.getPrePaginationRowModel().rows.length} total games)</p>
                 </div>
                 {/* <div className="level-item">
                     <div className="field">

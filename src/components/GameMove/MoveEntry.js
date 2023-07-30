@@ -325,7 +325,7 @@ function MoveEntry(props) {
               <input
                 type="checkbox"
                 onChange={(e) => handleDrawOfferChange(e.target.checked)}
-                checked={drawoffer}
+                defaultChecked={false}
               />
               {t("IncludeDrawOffer")}
             </label>
