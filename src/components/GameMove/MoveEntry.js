@@ -401,17 +401,6 @@ function MoveEntry(props) {
               </button>
             : ""
           }
-          {focus.exPath.length > 0 ? (
-            <div
-              className="winningColorButton tooltipped"
-              onClick={() => handleReset()}
-            >
-              <i className="fa fa-undo resetIcon"></i>
-              <span className="tooltiptext">{t("ResetExploration")}</span>
-            </div>
-          ) : (
-            ""
-          )}
           {focus.exPath.length > 0 && game.canExplore ? (
             <div
               className="winningColorButton tooltipped"
@@ -488,6 +477,17 @@ function MoveEntry(props) {
                 </svg>
               )}
               <span className="tooltiptext">{t("Winning")}</span>
+            </div>
+          ) : (
+            ""
+          )}
+          {focus.exPath.length > 0 ? (
+            <div
+              className="winningColorButton tooltipped"
+              onClick={() => handleReset()}
+            >
+              <i className="fa fa-undo resetIcon"></i>
+              <span className="tooltiptext">{t("ResetExploration")}</span>
             </div>
           ) : (
             ""
