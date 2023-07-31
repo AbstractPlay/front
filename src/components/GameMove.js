@@ -213,6 +213,7 @@ function setupGame(
           };
         }),
         unrated: !game0.rated,
+        pied: ( ("pieInvoked" in game0) && (game0.pieInvoked) ) ? game0.pieInvoked : undefined,
       })
     );
   }
