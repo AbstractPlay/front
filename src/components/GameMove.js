@@ -1542,7 +1542,7 @@ function GameMove(props) {
           {/***************** Board *****************/}
           <div className="column">
             <h1 className="subtitle lined">
-              <span>{gameinfo.get(metaGame).name}</span>
+              <span>{gameinfo.get(metaGame).name}{( (gameRef.current === null) || (gameRef.current.rated) ) ? null : (<span style={{fontSize: "smaller", padding: 0, margin: 0}}>{" (unrated)"}</span>)}</span>
             </h1>
             {inCheck.length === 0 ? "" :
               <div className="content inCheck" dangerouslySetInnerHTML={{__html: inCheck}}>
