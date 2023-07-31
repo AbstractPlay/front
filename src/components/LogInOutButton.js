@@ -42,7 +42,6 @@ function LogInOutButton(props) {
               else {
                 globalMeSetter(JSON.parse(result.body));
                 console.log(JSON.parse(result.body));
-                subscribeUser(token);
               }
             }
           } catch (error) {
@@ -55,6 +54,20 @@ function LogInOutButton(props) {
     }
     fetchAuth();
   }, [globalMeSetter, updated]);
+
+  useEffect(() => {
+    async function fetchAuth() {
+        if ( (globalMe !== null) && ("mayPush" in globalMe) && (globalMe.mayPush === true) ) {
+            const usr = await Auth.currentAuthenticatedUser();
+            console.log("usr: ", usr);
+            const token = usr.signInUserSession.idToken.jwtToken;
+            if (token !== null) {
+                subscribeUser(token);
+            }
+        }
+    }
+    fetchAuth();
+  }, [globalMe]);
 
   const handleSettingsClick = () => {
     console.log(user);

@@ -248,6 +248,43 @@ function UserSettingsModal(props) {
     }
   }, [globalMeSetter, updated, show]);
 
+  const handlePushClick = async () => {
+    try {
+      let state = true;
+      if ( (globalMe !== null) && ("mayPush" in globalMe) && (globalMe.mayPush === true) ) {
+        state = false;
+      }
+      const usr = await Auth.currentAuthenticatedUser();
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "set_push",
+          pars: {
+            state,
+          },
+        }),
+      });
+      if (res.status !== 200) {
+        console.log(
+          `An error occured while saving push preferenes`
+        );
+      } else {
+        const result = await res.json();
+        console.log(result.body);
+        const newMe = JSON.parse(JSON.stringify(globalMe));
+        newMe.mayPush = state;
+        globalMeSetter(newMe);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   console.log(language);
 
   return (
@@ -442,6 +479,18 @@ function UserSettingsModal(props) {
                 </div>
               ))}
         </div>
+        {/********************* push notifications *********************/}
+        <div className="field" key="pushNotifications">
+            <div className="control">
+                <button className="button is-small apButtonAlert" onClick={handlePushClick}>
+                { ( (globalMe !== null) && ("mayPush" in globalMe) && (globalMe.mayPush === true) )
+                  ? t("DisablePush")
+                  : t("EnablePush")
+                }
+                </button>
+            </div>
+        </div>
+
         {/********************* exploration *********************/}
         {exploration === null
           ? "" :
