@@ -80,6 +80,8 @@ function NewChallengeModal(props) {
       const playercounts = info.playercounts;
       if (playercounts.length === 1) {
         setPlayerCount(playercounts[0]);
+      } else if (props.opponent !== undefined) {
+        setPlayerCount(2);
       } else {
         playerCountSetter(-1);
         opponentsSetter([]);
@@ -87,7 +89,7 @@ function NewChallengeModal(props) {
       seatingSetter("random");
     }
     errorSetter("");
-  }, [metaGameSetter, allvariantsSetter, nonGroupVariantsSetter, setPlayerCount, playerCountSetter, opponentsSetter]);
+  }, [metaGameSetter, allvariantsSetter, nonGroupVariantsSetter, setPlayerCount, playerCountSetter, opponentsSetter, props]);
 
   useEffect(() => {
     groupVariantsRef.current = {};

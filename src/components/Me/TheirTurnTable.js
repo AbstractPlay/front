@@ -33,7 +33,7 @@ function showMilliseconds(ms) {
     }
     return output;
 }
-const allSize = 1000000;
+const allSize = Number.MAX_SAFE_INTEGER;
 
 function TheirTurnTable(props) {
     const [globalMe,] = useContext(MeContext);

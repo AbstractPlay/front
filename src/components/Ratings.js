@@ -1,23 +1,26 @@
-import React, { useState, useEffect, useContext, Fragment } from "react";
+import React, { useState, useEffect, useContext, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Auth } from "aws-amplify";
+import { getCoreRowModel, useReactTable, flexRender, createColumnHelper, getSortedRowModel, getPaginationRowModel, getFilteredRowModel } from '@tanstack/react-table';
 import { Helmet } from "react-helmet-async";
 import { MeContext } from "../pages/Skeleton";
-import Spinner from "./Spinner";
 import NewChallengeModal from "./NewChallengeModal";
+import { useStorageState } from 'react-use-storage-state'
 
-function Ratings(props) {
+const allSize = Number.MAX_SAFE_INTEGER;
+
+function Ratings() {
   const { t } = useTranslation();
-  const [ratings, ratingsSetter] = useState(null);
-  const [opponent, opponentSetter] = useState(null);
-  const [update, updateSetter] = useState(0);
-  const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
+  const [ratings, ratingsSetter] = useState([]);
+  const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [canonical, canonicalSetter] = useState("");
   const { metaGame } = useParams();
   const [globalMe] = useContext(MeContext);
+  const [showState, showStateSetter] = useStorageState("ratings-show", 20);
+  const [sorting, setSorting] = useState([{id: "rank", desc: false}]);
 
   useEffect(() => {
     async function fetchData() {
@@ -39,16 +42,14 @@ function Ratings(props) {
     canonicalSetter(`https://play.abstractplay.com/ratings/${metaGame}/`);
   }, [metaGame]);
 
-  const handleChallenge = (player) => {
-    opponentSetter(player);
-    showNewChallengeModalSetter(true);
+  const openChallengeModal = (name) => {
+    activeChallengeModalSetter(name);
+  };
+  const closeChallengeModal = () => {
+    activeChallengeModalSetter("");
   };
 
-  const handleNewChallengeClose = () => {
-    showNewChallengeModalSetter(false);
-  };
-
-  const handleNewChallenge2 = async (challenge) => {
+  const handleNewChallenge = useCallback(async (challenge) => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
       console.log("currentAuthenticatedUser", usr);
@@ -67,17 +68,169 @@ function Ratings(props) {
           },
         }),
       });
-      showNewChallengeModalSetter(false);
+      closeChallengeModal();
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [globalMe]);
 
-  if (update !== props.update)
-    updateSetter(props.update);
   const metaGameName = gameinfo.get(metaGame).name;
+
+  const data = useMemo( () => ratings.map((rec, idx) => {
+    return {
+        id: rec.id,
+        rank: idx + 1,
+        player: rec.name,
+        rating: rec.rating.rating,
+        n: rec.rating.N,
+        wins: rec.rating.wins,
+        draws: rec.rating.draws,
+        winrate: rec.rating.wins / rec.rating.N,
+    }
+  }), [ratings]);
+
+  const columnHelper = createColumnHelper();
+  const columns = useMemo( () => [
+      columnHelper.accessor("rank", {
+          header: "Rank",
+      }),
+      columnHelper.accessor("player", {
+          header: "Player",
+      }),
+      columnHelper.accessor("rating", {
+          header: "Rating",
+          cell: props => Math.trunc(props.getValue()),
+      }),
+      columnHelper.accessor("n", {
+          header: "Games played",
+      }),
+      columnHelper.accessor("wins", {
+          header: "Games won",
+      }),
+      columnHelper.accessor("winrate", {
+          header: "Win rate",
+          cell: props => Math.round((props.getValue() * 10000)) / 100 + "%"
+      }),
+      columnHelper.accessor("draws", {
+          header: "Games drawn",
+      }),
+      columnHelper.display({
+          id: "actions",
+          cell: props => ( (globalMe !== null) && (globalMe.id === props.row.original.id) ) ? null :
+          <>
+            <NewChallengeModal
+              show={(activeChallengeModal !== "") && (activeChallengeModal === props.row.original.id)}
+              handleClose={closeChallengeModal}
+              handleChallenge={handleNewChallenge}
+              fixedMetaGame={metaGame}
+              opponent={{id: props.row.original.id, name: props.row.original.player}}
+            />
+            <button className="button is-small apButton" onClick={() => openChallengeModal(props.row.original.id)}>Issue Challenge</button>
+          </>
+      }),
+  ], [activeChallengeModal, columnHelper, globalMe, handleNewChallenge, metaGame]);
+
+  const table = useReactTable({
+      data,
+      columns,
+      state: {
+          sorting,
+          columnVisibility: {
+              actions: globalMe !== null,
+          },
+      },
+      onSortingChange: setSorting,
+      getCoreRowModel: getCoreRowModel(),
+      getSortedRowModel: getSortedRowModel(),
+      getPaginationRowModel: getPaginationRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
+  });
+
+  useEffect(() => {
+      table.setPageSize(showState);
+  }, [showState, table]);
+
+const tableNavigation =
+<>
+      <div className="level smallerText has-text-centered">
+              <div className="level-item">
+                  <button
+                      className="button is-small"
+                      onClick={() => table.setPageIndex(0)}
+                      disabled={!table.getCanPreviousPage()}
+                  >
+                      <span className="icon is-small">
+                          <i className="fa fa-angle-double-left"></i>
+                      </span>
+                  </button>
+                  <button
+                      className="button is-small"
+                      onClick={() => table.previousPage()}
+                      disabled={!table.getCanPreviousPage()}
+                  >
+                      <span className="icon is-small">
+                          <i className="fa fa-angle-left"></i>
+                      </span>
+                  </button>
+                  <button
+                      className="button is-small"
+                      onClick={() => table.nextPage()}
+                      disabled={!table.getCanNextPage()}
+                  >
+                      <span className="icon is-small">
+                          <i className="fa fa-angle-right"></i>
+                      </span>
+                  </button>
+                  <button
+                      className="button is-small"
+                      onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                      disabled={!table.getCanNextPage()}
+                  >
+                      <span className="icon is-small">
+                          <i className="fa fa-angle-double-right"></i>
+                      </span>
+                  </button>
+              </div>
+              <div className="level-item">
+                  <p>Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of <strong>{table.getPageCount()}</strong> ({table.getPrePaginationRowModel().rows.length} total players)</p>
+              </div>
+              {/* <div className="level-item">
+                  <div className="field">
+                      <span>|&nbsp;Go to page:</span>
+                      <input
+                          type="number"
+                          defaultValue={table.getState().pagination.pageIndex + 1}
+                          onChange={e => {
+                              const page = e.target.value ? Number(e.target.value) - 1 : 0
+                              table.setPageIndex(page)
+                          }}
+                          className="input is-small"
+                      />
+                  </div>
+              </div> */}
+              <div className="level-item">
+                  <div className="control">
+                      <div className="select is-small">
+                          <select
+                              value={table.getState().pagination.pageSize}
+                              onChange={e => {
+                                  showStateSetter(Number(e.target.value));
+                              }}
+                              >
+                              {[10, 20, 30, 40, 50, allSize].map(pageSize => (
+                                  <option key={pageSize} value={pageSize}>
+                                  Show {pageSize === allSize ? "All" : pageSize}
+                                  </option>
+                              ))}
+                          </select>
+                      </div>
+                  </div>
+              </div>
+      </div>
+</>
+
   return (
-    <Fragment>
+    <>
         <Helmet>
             <link rel="canonical" href={canonical} />
         </Helmet>
@@ -85,70 +238,57 @@ function Ratings(props) {
       <h1 className="has-text-centered title">
         {t("RatingsList", { name: metaGameName })}
       </h1>
-      <div id="TableListContainer">
-        {ratings === null ? (
-          <Spinner />
-        ) : (
-          <Fragment>
-            <table className="table">
-              <tbody>
-                <tr>
-                  <th>{t("tblHeaderRatingRank")}</th>
-                  <th>{t("tblHeaderRatedPlayer")}</th>
-                  <th>{t("tblHeaderRating")}</th>
-                  <th>{t("tblHeaderGamesPlayed")}</th>
-                  <th>{t("tblHeaderGamesWon")}</th>
-                  <th>{t("tblHeaderGamesDrawn")}</th>
-                  { globalMe && globalMe.id !== undefined ? <th /> : null }
-                </tr>
-                {ratings.map((rating, i) => {
-                  console.log(rating);
-                  return (
-                    <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td>{rating.name}</td>
-                      <td>{Math.round(rating.rating.rating)}</td>
-                      <td>{rating.rating.N}</td>
-                      <td>{rating.rating.wins}</td>
-                      <td>{rating.rating.draws}</td>
-                      { !globalMe || globalMe.id === undefined ? null :
-                        <td>
-                          {globalMe.id === rating.id ? (
-                            ""
-                          ) : (
-                            <button
-                              className="button is-small apButton"
-                              onClick={() =>
-                                handleChallenge({
-                                  id: rating.id,
-                                  name: rating.name,
-                                })
-                              }
+      <div className="container">
+        {tableNavigation}
+        <table className="table apTable" style={{marginLeft: "auto", marginRight: "auto"}}>
+            <thead>
+                {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                    <th key={header.id}>
+                    {header.isPlaceholder
+                        ? null
+                        : (
+                            <div
+                              {...{
+                                className: header.column.getCanSort()
+                                  ? 'sortable'
+                                  : '',
+                                onClick: header.column.getToggleSortingHandler(),
+                              }}
                             >
-                              {t("Challenge")}
-                            </button>
-                          )}
-                        </td>
-                      }
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            {opponent === null ? "" :
-              <NewChallengeModal
-                show={showNewChallengeModal}
-                opponent={opponent}
-                fixedMetaGame={metaGame}
-                handleClose={handleNewChallengeClose}
-                handleChallenge={handleNewChallenge2}
-              />
-            }
-          </Fragment>
-        )}
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                              {{
+                                asc: <>&nbsp;<i className="fa fa-angle-up"></i></>,
+                                desc: <>&nbsp;<i className="fa fa-angle-down"></i></>,
+                              }[header.column.getIsSorted()] ?? null}
+                            </div>
+                        )
+                    }
+                    </th>
+                ))}
+                </tr>
+                ))}
+            </thead>
+            <tbody>
+            {table.getRowModel().rows.map(row => (
+                <tr key={row.id}>
+                {row.getVisibleCells().map(cell => (
+                    <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                ))}
+                </tr>
+            ))}
+            </tbody>
+        </table>
+        {tableNavigation}
       </div>
     </article>
-    </Fragment>
+    </>
   );
 }
 

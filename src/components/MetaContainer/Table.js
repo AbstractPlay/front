@@ -14,7 +14,7 @@ import NewChallengeModal from "../NewChallengeModal";
 import ExpandableDiv from "../ExpandableDiv";
 import { useStorageState } from 'react-use-storage-state'
 
-const allSize = 1000000;
+const allSize = Number.MAX_SAFE_INTEGER;
 // props:
 //   - metaGame
 //   - counts

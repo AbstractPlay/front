@@ -1,17 +1,30 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN } from "../config";
+import { getCoreRowModel, useReactTable, flexRender, createColumnHelper, getSortedRowModel, getPaginationRowModel, getFilteredRowModel } from '@tanstack/react-table';
+import { useStorageState } from 'react-use-storage-state'
 import { Helmet } from "react-helmet-async";
-import Spinner from "./Spinner";
+
+const allSize = Number.MAX_SAFE_INTEGER;
 
 function ListGames(props) {
   const { t } = useTranslation();
-  const [games, gamesSetter] = useState(null);
-  const [update, updateSetter] = useState(0);
+  const [games, gamesSetter] = useState([]);
   const { gameState, metaGame } = useParams();
+  const [, maxPlayersSetter] = useState(2);
   const [canonical, canonicalSetter] = useState("");
+  const [showState, showStateSetter] = useStorageState("listgames-show", 20);
+  const [sorting, setSorting] = useState([]);
+
+  useEffect(() => {
+    if (gameState === "completed") {
+        setSorting([{id: "ended", desc: true}]);
+    } else {
+        setSorting([{id: "started", desc: true}]);
+    }
+  }, [gameState]);
 
   useEffect(() => {
     async function fetchData() {
@@ -25,7 +38,10 @@ function ListGames(props) {
         const result = await res.json();
         console.log(result);
         gamesSetter(result);
+        maxPlayersSetter(result.reduce((max, game) => Math.max(max, game.players.length), 0));
       } catch (error) {
+        maxPlayersSetter(2);
+        gamesSetter(null);
         console.log(error);
       }
     }
@@ -33,14 +49,152 @@ function ListGames(props) {
     canonicalSetter(`https://play.abstractplay.com/listgames/${gameState}/${metaGame}/`);
   }, [gameState, metaGame]);
 
-  if (update !== props.update)
-    updateSetter(props.update);
   const metaGameName = gameinfo.get(metaGame).name;
-  const maxPlayers = games
-    ? games.reduce((max, game) => Math.max(max, game.players.length), 0)
-    : null;
+
+  const data = useMemo( () => games.map((rec) => {
+    return {
+        id: rec.id,
+        started: new Date(rec.gameStarted),
+        ended: ( ("gameEnded" in rec) && (rec.gameEnded !== null) ) ? new Date(rec.gameEnded) : null,
+        numMoves: rec.numMoves,
+        players: rec.players.map(p => p.name),
+        winners: ( ("winner" in rec) && (rec.winner !== null) ) ? rec.winner.map(w => rec.players[w-1].name) : null,
+        variants: ( ("variants" in rec) && (rec.variants !== null) ) ? rec.variants : null,
+        cbit: gameState === "completed" ? 1 : 0,
+    }
+  }), [games, gameState]);
+
+  const columnHelper = createColumnHelper();
+  const columns = useMemo( () => [
+      columnHelper.accessor("started", {
+          header: "Date started",
+          cell: props => props.getValue().toDateString(),
+      }),
+      columnHelper.accessor("ended", {
+          header: "Date ended",
+          cell: props => props.getValue().toDateString(),
+      }),
+      columnHelper.accessor("players", {
+          header: "Players",
+          cell: props => props.getValue().join(", "),
+          enableSorting: false,
+      }),
+      columnHelper.accessor("winners", {
+          header: "Winners",
+          cell: props => props.getValue().join(", "),
+      }),
+      columnHelper.accessor("variants", {
+        header: "Variants",
+        cell: props => props.getValue() === null ? "" : props.getValue().join(", "),
+      }),
+      columnHelper.display({
+          id: "actions",
+          cell: props => <Link to={`/move/${metaGame}/${props.row.original.cbit}/${props.row.original.id}`}>{t("VisitGame")}</Link>
+      }),
+  ], [columnHelper, metaGame, t]);
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: {
+        sorting,
+        columnVisibility: {
+            ended: gameState === "completed",
+            winners: gameState === "completed",
+        },
+    },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+  });
+
+  useEffect(() => {
+    table.setPageSize(showState);
+  }, [showState, table]);
+
+  const tableNavigation =
+<>
+      <div className="level smallerText has-text-centered">
+              <div className="level-item">
+                  <button
+                      className="button is-small"
+                      onClick={() => table.setPageIndex(0)}
+                      disabled={!table.getCanPreviousPage()}
+                  >
+                      <span className="icon is-small">
+                          <i className="fa fa-angle-double-left"></i>
+                      </span>
+                  </button>
+                  <button
+                      className="button is-small"
+                      onClick={() => table.previousPage()}
+                      disabled={!table.getCanPreviousPage()}
+                  >
+                      <span className="icon is-small">
+                          <i className="fa fa-angle-left"></i>
+                      </span>
+                  </button>
+                  <button
+                      className="button is-small"
+                      onClick={() => table.nextPage()}
+                      disabled={!table.getCanNextPage()}
+                  >
+                      <span className="icon is-small">
+                          <i className="fa fa-angle-right"></i>
+                      </span>
+                  </button>
+                  <button
+                      className="button is-small"
+                      onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                      disabled={!table.getCanNextPage()}
+                  >
+                      <span className="icon is-small">
+                          <i className="fa fa-angle-double-right"></i>
+                      </span>
+                  </button>
+              </div>
+              <div className="level-item">
+                  <p>Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of <strong>{table.getPageCount()}</strong> ({table.getPrePaginationRowModel().rows.length} total games)</p>
+              </div>
+              {/* <div className="level-item">
+                  <div className="field">
+                      <span>|&nbsp;Go to page:</span>
+                      <input
+                          type="number"
+                          defaultValue={table.getState().pagination.pageIndex + 1}
+                          onChange={e => {
+                              const page = e.target.value ? Number(e.target.value) - 1 : 0
+                              table.setPageIndex(page)
+                          }}
+                          className="input is-small"
+                      />
+                  </div>
+              </div> */}
+              <div className="level-item">
+                  <div className="control">
+                      <div className="select is-small">
+                          <select
+                              value={table.getState().pagination.pageSize}
+                              onChange={e => {
+                                  showStateSetter(Number(e.target.value));
+                              }}
+                              >
+                              {[10, 20, 30, 40, 50, allSize].map(pageSize => (
+                                  <option key={pageSize} value={pageSize}>
+                                  Show {pageSize === allSize ? "All" : pageSize}
+                                  </option>
+                              ))}
+                          </select>
+                      </div>
+                  </div>
+              </div>
+      </div>
+</>
+
   return (
-    <Fragment>
+    <>
         <Helmet>
             <link rel="canonical" href={canonical} />
         </Helmet>
@@ -50,50 +204,57 @@ function ListGames(props) {
           ? t("CurrentGamesList", { name: metaGameName })
           : t("CompletedGamesList", { name: metaGameName })}
       </h1>
-      <div id="TableListContainer">
-        {games === null ? (
-          <Spinner />
-        ) : (
-          <table className="table">
-            <tbody>
-              <tr>
-                <th>{t("tblHeaderGameNumber")}</th>
-                <th>
-                  {gameState === "current"
-                    ? t("tblHeaderStarted")
-                    : t("tblHeaderFinished")}
-                </th>
-                <th>{t("tblHeaderMoves")}</th>
-                {[...Array(maxPlayers).keys()].map((i) => (
-                  <th key={i}>{t("tblHeaderPlayer", { num: i + 1 })}</th>
+      <div className="container">
+        {tableNavigation}
+        <table className="table apTable" style={{marginLeft: "auto", marginRight: "auto"}}>
+            <thead>
+                {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                    <th key={header.id}>
+                    {header.isPlaceholder
+                        ? null
+                        : (
+                            <div
+                              {...{
+                                className: header.column.getCanSort()
+                                  ? 'sortable'
+                                  : '',
+                                onClick: header.column.getToggleSortingHandler(),
+                              }}
+                            >
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                              {{
+                                asc: <>&nbsp;<i className="fa fa-angle-up"></i></>,
+                                desc: <>&nbsp;<i className="fa fa-angle-down"></i></>,
+                              }[header.column.getIsSorted()] ?? null}
+                            </div>
+                        )
+                    }
+                    </th>
                 ))}
-              </tr>
-              {games.map((game, i) => (
-                <tr key={i}>
-                  <td>
-                    <Link to={`/move/${game.metaGame}/${gameState === "current" ? "0" : "1"}/${game.id}`}>
-                      {i + 1}
-                    </Link>
-                  </td>
-                  <td>
-                    {new Date(
-                        Number(gameState === "current" ? game.gameStarted : game.lastMoveTime)
-                      ).toLocaleString()}
-                  </td>
-                  <td>{game.numMoves}</td>
-                  {[...Array(maxPlayers).keys()].map((j) => (
-                    <td key={j}>
-                      {game.players[j] ? game.players[j].name : null}
-                    </td>
-                  ))}
                 </tr>
-              ))}
+                ))}
+            </thead>
+            <tbody>
+            {table.getRowModel().rows.map(row => (
+                <tr key={row.id}>
+                {row.getVisibleCells().map(cell => (
+                    <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                ))}
+                </tr>
+            ))}
             </tbody>
-          </table>
-        )}
+        </table>
+        {tableNavigation}
       </div>
     </article>
-    </Fragment>
+    </>
   );
 }
 
