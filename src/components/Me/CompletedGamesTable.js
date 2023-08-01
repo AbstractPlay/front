@@ -8,7 +8,7 @@ import { getCoreRowModel, useReactTable, flexRender, createColumnHelper, getSort
 import ReactTimeAgo from "react-time-ago";
 import { useStorageState } from 'react-use-storage-state'
 
-const allSize = 1000000;
+const allSize = Number.MAX_SAFE_INTEGER;
 
 function CompletedGamesTable(props) {
     const [globalMe, globalMeSetter] = useContext(MeContext);
