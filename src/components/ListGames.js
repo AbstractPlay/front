@@ -54,7 +54,7 @@ function ListGames(props) {
   const data = useMemo( () => games.map((rec) => {
     return {
         id: rec.id,
-        started: new Date(rec.gameStarted),
+        started: ( ("gameStarted" in rec) && (rec.gameStarted !== null) ) ? new Date(rec.gameStarted) : null,
         ended: ( ("gameEnded" in rec) && (rec.gameEnded !== null) ) ? new Date(rec.gameEnded) : null,
         numMoves: rec.numMoves,
         players: rec.players.map(p => p.name),
