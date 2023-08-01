@@ -111,7 +111,7 @@ function Ratings(props) {
                       <td>{rating.rating.N}</td>
                       <td>{rating.rating.wins}</td>
                       <td>{rating.rating.draws}</td>
-                      { !globalMe || globalMe.id === undefined ? null : 
+                      { !globalMe || globalMe.id === undefined ? null :
                         <td>
                           {globalMe.id === rating.id ? (
                             ""
@@ -135,13 +135,15 @@ function Ratings(props) {
                 })}
               </tbody>
             </table>
-            <NewChallengeModal
-              show={showNewChallengeModal}
-              opponent={opponent}
-              fixedMetaGame={metaGame}
-              handleClose={handleNewChallengeClose}
-              handleChallenge={handleNewChallenge2}
-            />
+            {opponent === null ? "" :
+              <NewChallengeModal
+                show={showNewChallengeModal}
+                opponent={opponent}
+                fixedMetaGame={metaGame}
+                handleClose={handleNewChallengeClose}
+                handleChallenge={handleNewChallenge2}
+              />
+            }
           </Fragment>
         )}
       </div>
