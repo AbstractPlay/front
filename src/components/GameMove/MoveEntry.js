@@ -174,7 +174,7 @@ function MoveEntry(props) {
         game.players.length - 1;
 
     return (
-      <div>
+      <div className="tourMove">
         <h1 className="subtitle lined">
           <span>{t("MakeMove")}</span>
         </h1>

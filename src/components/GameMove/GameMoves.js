@@ -411,7 +411,7 @@ function GameMoves(props) {
     }
 
     return (
-      <Fragment>
+      <div className="tourMoveList">
         <h1 className="subtitle lined">
           <span>{t("Moves")}</span>
         </h1>
@@ -565,7 +565,7 @@ function GameMoves(props) {
             </tbody>
           </table>
         </div>
-      </Fragment>
+      </div>
     );
   } else {
     return (

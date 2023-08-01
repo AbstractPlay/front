@@ -47,7 +47,7 @@ function GameStatus(props) {
       });
     }
     return (
-      <div style={{ marginBottom: "2rem" }}>
+      <div style={{ marginBottom: "2rem" }} className="tourStatus">
         <h1 className="subtitle lined">
           <span>{t("Status")}</span>
         </h1>

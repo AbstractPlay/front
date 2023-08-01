@@ -41,7 +41,7 @@ function UserChats(props) {
     results.sort((a, b) => b.timestamp - a.timestamp);
 
     return (
-        <div style={{paddingTop: "1em"}}>
+        <div style={{paddingTop: "1em"}} className="tourChat">
         <h1 className="subtitle lined">
           <span>{t("GameSummary")}</span>
         </h1>
