@@ -39,15 +39,6 @@ const replaceNames = (rep, players) => {
     return JSON.parse(stringRep);
 }
 
-const replaceNames = (rep, players) => {
-    let stringRep = JSON.stringify(rep);
-    for (let i = 0; i < players.length; i++) {
-        const re = new RegExp(`player ${i+1}`, "gi")
-        stringRep = stringRep.replace(re, players[i].name)
-    }
-    return JSON.parse(stringRep);
-}
-
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
     return gameSettings[setting];
