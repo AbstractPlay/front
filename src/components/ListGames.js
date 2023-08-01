@@ -81,7 +81,7 @@ function ListGames(props) {
       }),
       columnHelper.accessor("winners", {
           header: "Winners",
-          cell: props => props.getValue().join(", "),
+          cell: props => props.getValue() === null ? "" : props.getValue().join(", "),
       }),
       columnHelper.accessor("variants", {
         header: "Variants",
