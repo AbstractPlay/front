@@ -6,6 +6,7 @@ import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Auth } from "aws-amplify";
 import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
+import { useStorageState } from "react-use-storage-state";
 
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
@@ -30,6 +31,9 @@ function UserSettingsModal(props) {
   const [notifications, notificationsSetter] = useState(null);
   const [exploration, explorationSetter] = useState(null);
   const [globalMe, globalMeSetter] = useContext(MeContext);
+  const [showMeTour, showMeTourSetter] = useStorageState("joyride-me-show", true);
+  const [showPlayTour, showPlayTourSetter] = useStorageState("joyride-play-show", true);
+  const [hideTour, hideTourSetter] = useState(( (! showMeTour) || (! showPlayTour) ))
 
   useEffect(() => {
     if (show) {
@@ -163,6 +167,18 @@ function UserSettingsModal(props) {
     newSettings.all.notifications = notifications;
     newSettings.all.notifications[key] = !newSettings.all.notifications[key];
     handleSettingsChange(newSettings);
+  }
+
+  const handleTourCheckChange = () => {
+    const newSetting = !hideTour;
+    hideTourSetter(newSetting);
+    if (newSetting) {
+        showMeTourSetter(false);
+        showPlayTourSetter(false);
+    } else {
+        showMeTourSetter(true);
+        showPlayTourSetter(true);
+    }
   }
 
   const handleExplorationChange = async (value) => {
@@ -541,6 +557,20 @@ function UserSettingsModal(props) {
                 {t(`ExploreAlways`)}
               </label>
             </div>
+
+            <div className="field" key="tours" style={{paddingTop: "1em"}}>
+                <div className="control">
+                  <label className="checkbox">
+                    <input
+                      type="checkbox"
+                      checked={hideTour}
+                      onChange={handleTourCheckChange}
+                    />
+                    {t("HideTours")}
+                  </label>
+                </div>
+            </div>
+
           </div>
         }
 

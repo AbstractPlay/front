@@ -27,6 +27,8 @@ import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import DownloadDataUri from "./GameMove/DownloadDataUri";
 import UserChats from "./GameMove/UserChats";
 import { Canvg } from 'canvg';
+import Joyride, { STATUS } from "react-joyride";
+import { useStorageState } from "react-use-storage-state";
 
 const replaceNames = (rep, players) => {
     let stringRep = JSON.stringify(rep);
@@ -602,6 +604,8 @@ function GameMove(props) {
     rendered: "",
   });
   const [error, errorSetter] = useState(false);
+  const [tourState, tourStateSetter] = useState([]);
+  const [showTour, showTourSetter] = useStorageState("joyride-play-show", true);
   const [showSettings, showSettingsSetter] = useState(false);
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
   const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
@@ -682,6 +686,49 @@ function GameMove(props) {
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
+
+  useEffect(() => {
+    tourStateSetter([
+        {
+            target: ".tourWelcome",
+            content: t("tour.play.welcome")
+        },
+        {
+            target: ".tourStatus",
+            content: t("tour.play.status")
+        },
+        {
+            target: ".tourMove",
+            content: t("tour.play.move")
+        },
+        {
+            target: ".tourMoveList",
+            content: t("tour.play.movelist")
+        },
+        {
+            target: ".tourChat",
+            content: t("tour.play.chat")
+        },
+        {
+            target: ".tourBoard",
+            content: t("tour.play.board")
+        },
+        {
+            target: ".tourBoardButtons",
+            content: t("tour.play.boardbuttons")
+        },
+        {
+            target: ".tourSettings",
+            content: t("tour.play.settings")
+        },
+      ]);
+  }, [t, tourStateSetter]);
+
+  const handleJoyrideCallback = data => {
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(data.status)) {
+      showTourSetter(false);
+    }
+  };
 
   useEffect(() => {
     var lng = "en";
@@ -1464,6 +1511,19 @@ function GameMove(props) {
     console.log("rendering. expanding: ", gameRef.current?.stackExpanding);
     return (
       <article>
+        <Joyride
+            steps={tourState}
+            run={showTour}
+            callback={handleJoyrideCallback}
+            continuous
+            showProgress
+            showSkipButton
+            styles={{
+                options: {
+                    primaryColor: "#008ca8"
+                }
+            }}
+        />
         <div className="columns">
           {/***************** MoveEntry *****************/}
           <div
@@ -1541,7 +1601,7 @@ function GameMove(props) {
           </div>
           {/***************** Board *****************/}
           <div className="column">
-            <h1 className="subtitle lined">
+            <h1 className="subtitle lined tourWelcome">
               <span>{gameinfo.get(metaGame).name}{( (gameRef.current === null) || (gameRef.current.rated) ) ? null : (<span style={{fontSize: "smaller", padding: 0, margin: 0}}>{" (unrated)"}</span>)}</span>
             </h1>
             {inCheck.length === 0 ? "" :
@@ -1555,12 +1615,12 @@ function GameMove(props) {
               </div>
             ) : (
               <div
-                className={isZoomed ? "board" : "board unZoomedBoard"}
+                className={isZoomed ? "board tourBoard" : "board tourBoard unZoomedBoard"}
                 id="svg"
                 ref={boardImage}
               ></div>
             )}
-            <div className="boardButtons">
+            <div className="boardButtons tourBoardButtons">
               <button
                 className="fabtn align-right"
                 onClick={handleRotate}

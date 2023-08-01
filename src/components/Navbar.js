@@ -89,7 +89,7 @@ function Navbar(props) {
           </div>
         </div>
         <div className="navbar-end">
-          <div className="navbar-item">
+          <div className="navbar-item tourSettings">
             <LogInOutButton />
           </div>
         </div>

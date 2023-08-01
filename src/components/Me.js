@@ -10,13 +10,14 @@ import NewChallengeModal from "./NewChallengeModal";
 import NewProfile from "./NewProfile";
 import { API_ENDPOINT_AUTH } from "../config";
 import i18n from "../i18n";
-import { Fragment } from "react";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
 import MyTurnTable from "./Me/MyTurnTable";
 import TheirTurnTable from "./Me/TheirTurnTable";
 import { toast } from "react-toastify";
+import Joyride, { STATUS } from "react-joyride";
+import { useStorageState } from "react-use-storage-state";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -37,6 +38,47 @@ function Me(props) {
   const [myTurn, myTurnSetter] = useContext(MyTurnContext);
   const [globalMe, globalMeSetter] = useContext(MeContext);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
+  const [tourState, tourStateSetter] = useState([]);
+  const [showTour, showTourSetter] = useStorageState("joyride-me-show", true);
+
+  useEffect(() => {
+    tourStateSetter([
+        {
+            target: ".tourWelcome",
+            content: t("tour.me.welcome")
+        },
+        {
+            target: ".tourYourTurn",
+            content: t("tour.me.yourturn")
+        },
+        {
+            target: ".tourTheirTurn",
+            content: t("tour.me.theirturn")
+        },
+        {
+            target: ".tourCompleted",
+            content: t("tour.me.completed")
+        },
+        {
+            target: ".tourChallenges",
+            content: t("tour.me.challenges")
+        },
+        {
+            target: ".tourIssueChallenge",
+            content: t("tour.me.issueChallenge")
+        },
+        {
+            target: ".tourSettings",
+            content: t("tour.me.settings")
+        },
+      ]);
+  }, [t, tourStateSetter]);
+
+  const handleJoyrideCallback = data => {
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(data.status)) {
+      showTourSetter(false);
+    }
+  };
 
   const handleNewProfileClose = (cnt) => {
     showNewProfileModalSetter(false);
@@ -372,7 +414,20 @@ function Me(props) {
     console.log("challengesReceived", globalMe.challengesReceived);
     return (
       <article id="dashboard">
-        <h1 className="title has-text-centered">
+        <Joyride
+            steps={tourState}
+            run={showTour}
+            callback={handleJoyrideCallback}
+            continuous
+            showProgress
+            showSkipButton
+            styles={{
+                options: {
+                    primaryColor: "#008ca8"
+                }
+            }}
+        />
+        <h1 className="title has-text-centered tourWelcome">
           {t("WelcomePlayer", { me: globalMe.name })}
         </h1>
         {/* Your Games */}
@@ -382,24 +437,28 @@ function Me(props) {
               <span>{t("YourGames")}</span>
             </p>
             <div className="indentedContainer">
+            <div className="tourYourTurn">
               <p className="lined">
                 <span>{t("YourMove")}</span>
               </p>
               <MyTurnTable games={myMove} />
+            </div>
+            <div className="tourTheirTurn">
               <p className="lined">
                 <span>{t("OpponentMove")}</span>
               </p>
               <TheirTurnTable games={waiting} />
+            </div>
               {over.length === 0 ? (
                 ""
               ) : (
-                <Fragment>
+                <div className="tourCompleted">
                   <p className="lined">
                     <span>{t("CompletedGames")}</span>
                   </p>
                   <p className="help"><em>To keep the dashboard manageable, games drop off this list 48 hours after the "last seen" date. Click the Clear button to remove it immediately. New chat will cause older games to resurface, restarting the 48-hour clock. Visit the Games page to access older completed games.</em></p>
                   <CompletedGamesTable games={over} />
-                </Fragment>
+                </div>
               )}
             </div>
           </div>
@@ -407,7 +466,7 @@ function Me(props) {
         {/* Your Challenges */}
         <div className="columns">
           <div className="column content is-half is-offset-one-quarter">
-            <p className="subtitle lined">
+            <p className="subtitle lined tourChallenges">
               <span>{t("YourChallenges")}</span>
             </p>
             <div className="indentedContainer">
@@ -486,7 +545,7 @@ function Me(props) {
                   </ul>
                 )}
               </div>
-              <Fragment>
+              <div className="tourIssueChallenge">
                 <p className="lined">
                   <span>{t("NewChallenge")}</span>
                 </p>
@@ -496,7 +555,7 @@ function Me(props) {
                 >
                   {t("IssueChallenge")}
                 </button>
-              </Fragment>
+              </div>
             </div>
           </div>
           {/* Admin functionality */}
