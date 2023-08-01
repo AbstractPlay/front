@@ -68,11 +68,11 @@ function ListGames(props) {
   const columns = useMemo( () => [
       columnHelper.accessor("started", {
           header: "Date started",
-          cell: props => props.getValue().toDateString(),
+          cell: props => props.getValue() === null ? "" : props.getValue().toDateString(),
       }),
       columnHelper.accessor("ended", {
           header: "Date ended",
-          cell: props => props.getValue().toDateString(),
+          cell: props => props.getValue() === null ? "" : props.getValue().toDateString(),
       }),
       columnHelper.accessor("players", {
           header: "Players",
