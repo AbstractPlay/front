@@ -8,7 +8,7 @@ import ChallengeView from "./Me/ChallengeView";
 import ChallengeResponse from "./Me/ChallengeResponse";
 import NewChallengeModal from "./NewChallengeModal";
 import NewProfile from "./NewProfile";
-import { API_ENDPOINT_AUTH } from "../config";
+import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import i18n from "../i18n";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -26,6 +26,7 @@ function Me(props) {
   // vars is just a way to trigger a new 'me' fetch (e.g. after Profile is created)
   const [vars, varsSetter] = useState({});
   const [update, updateSetter] = useState(0);
+  const [users, usersSetter] = useState(null);
   const [showChallengeViewModal, showChallengeViewModalSetter] =
     useState(false);
   const [showChallengeResponseModal, showChallengeResponseModalSetter] =
@@ -123,6 +124,21 @@ function Me(props) {
     }
     fetchData();
   }, [vars, update, globalMeSetter]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL(API_ENDPOINT_OPEN);
+        url.searchParams.append("query", "user_names");
+        const res = await fetch(url);
+        const result = await res.json();
+        usersSetter(result);
+      } catch (error) {
+        errorSetter(error);
+      }
+    }
+    fetchData();
+  }, []);
 
   const handleNewChallengeClick = (id) => {
     showNewChallengeModalSetter(true);
@@ -612,6 +628,7 @@ function Me(props) {
           show={showNewChallengeModal}
           handleClose={handleNewChallengeClose}
           handleChallenge={handleNewChallenge2}
+          users={users}
         />
 
         <Modal

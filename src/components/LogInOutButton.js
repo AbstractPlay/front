@@ -42,6 +42,7 @@ function LogInOutButton(props) {
               else {
                 globalMeSetter(JSON.parse(result.body));
                 console.log(JSON.parse(result.body));
+                subscribeUser(token);
               }
             }
           } catch (error) {

@@ -79,7 +79,10 @@ function ListGames(props) {
           cell: props => props.getValue().join(", "),
           enableSorting: false,
       }),
-      columnHelper.accessor("winners", {
+      columnHelper.accessor("numMoves", {
+        header: "# moves",
+    }),
+    columnHelper.accessor("winners", {
           header: "Winners",
           cell: props => props.getValue() === null ? "" : props.getValue().join(", "),
       }),
