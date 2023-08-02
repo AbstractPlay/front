@@ -498,12 +498,16 @@ function UserSettingsModal(props) {
         {/********************* push notifications *********************/}
         <div className="field" key="pushNotifications">
             <div className="control">
-                <button className="button is-small apButtonAlert" onClick={handlePushClick}>
-                { ( (globalMe !== null) && ("mayPush" in globalMe) && (globalMe.mayPush === true) )
-                  ? t("DisablePush")
-                  : t("EnablePush")
-                }
-                </button>
+                <label className="checkbox is-small">
+                    <input type="checkbox"
+                      checked={( (globalMe !== null) && ("mayPush" in globalMe) && (globalMe.mayPush === true) )}
+                      onChange={handlePushClick}
+                    />
+                    { ( (globalMe !== null) && ("mayPush" in globalMe) && (globalMe.mayPush === true) )
+                      ? t("DisablePush")
+                      : t("EnablePush")
+                    }
+                </label>
             </div>
         </div>
 
