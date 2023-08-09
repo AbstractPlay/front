@@ -266,5 +266,9 @@
     {
         "time": 1690940640000,
         "text": "All the remaining list tables (standing challenges, ratings, current/completed games) have been moved to the new format. I've done some testing and fixed any obvious issues, but do let me know if something isn't working as you expect. One thing: in the current/completed games lists, there will be some missing data in some cases (e.g., winners, variants). Those will populate correctly from here on out, but I haven't gone back and retroactively fixed things yet. I will, but there are other DB changes being considered that would render that work moot, so leaving it be for now. Thanks! (I am seeing some layout weirdness. Further tweaks are forthcoming, but at least now the main migration is done.)"
+    },
+    {
+        "time": 1691597297000,
+        "text": "I've added a \"News\" page to the main site where I'll manually copy over major announcements from the Discord. The Discord remains the authoritative and most up-to-date source of news and conversation."
     }
 ]
