@@ -21,6 +21,7 @@ import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import News from "../components/News";
 import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
 import { ToastContainer } from 'react-toastify';
@@ -33,6 +34,7 @@ TimeAgo.addDefaultLocale(en);
 export const MyTurnContext = createContext([[], () => []]);
 export const MeContext = createContext([null, () => {}]);
 export const UsersContext = createContext([null, () => {}]);
+export const NewsContext = createContext([[], () => []]);
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -41,6 +43,7 @@ function Bones(props) {
   const [myMove, myMoveSetter] = useState([]);
   const [globalMe, globalMeSetter] = useState(null);
   const [users, usersSetter] = useState(null);
+  const [news, newsSetter] = useState([]);
 
   useEffect(() => {
     const awsconfig = {
@@ -106,6 +109,20 @@ function Bones(props) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    async function fetchData() {
+        const result = await fetch("data/news.json");
+        if (result.status !== 200) {
+            console.log(`Unable to fetch news: ${JSON.stringify(result.status)}`);
+        } else {
+            const json = await result.json();
+            json.sort((a, b) => b.time - a.time);
+            newsSetter(json);
+        }
+    }
+    fetchData();
+  }, [newsSetter]);
+
   console.log("Skeleton rerendering, update=", update);
   if (!authed) return <Spinner />;
   else
@@ -118,6 +135,7 @@ function Bones(props) {
         <ToastContainer />
       <MeContext.Provider value={[globalMe, globalMeSetter]}>
       <UsersContext.Provider value={[users, usersSetter]}>
+      <NewsContext.Provider value={[news, newsSetter]}>
         <Router>
           <Navbar />
           <section className="section" id="main">
@@ -149,6 +167,10 @@ function Bones(props) {
                   element={<Legal token={token} update={update} />}
                 />
                 <Route
+                  path="/news"
+                  element={<News />}
+                />
+                <Route
                   path="/"
                   element={<Welcome token={token} update={update} />}
                 />
@@ -161,6 +183,7 @@ function Bones(props) {
             <FooterDev />
           )}
         </Router>
+      </NewsContext.Provider>
       </UsersContext.Provider>
       </MeContext.Provider>
       </HelmetProvider>
