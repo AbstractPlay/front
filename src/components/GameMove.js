@@ -1645,7 +1645,7 @@ function GameMove(props) {
               {( (gameEngine === undefined) || (gameEngine.notes() === undefined) ) ?
                   <i className="fa fa-info"></i>
                 :
-                  <span className="hasNotes">
+                  <span className="highlight">
                     <i className="fa fa-info"></i>
                   </span>
               }

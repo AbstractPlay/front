@@ -125,9 +125,8 @@ function Table(props) {
             header: "Game",
             cell: props => <a href={props.row.original.links[0]} target="_blank" rel="noreferrer">{props.getValue()}</a>,
         }),
-        columnHelper.accessor(row => (row.designers !== undefined) ? row.designers.map(d => d.name).join(" ") : "", {
+        columnHelper.accessor("designers", {
             header: "Designers",
-            id: "designers",
             cell: props => (props.row.original.designers === undefined) ? ""
                 : props.row.original.designers.map(({name, urls}) =>
                 ( (urls !== undefined) && (urls.length > 0) ) ?
