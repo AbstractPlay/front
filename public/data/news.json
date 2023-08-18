@@ -270,5 +270,9 @@
     {
         "time": 1691597297000,
         "text": "I've added a \"News\" page to the main site where I'll manually copy over major announcements from the Discord. The Discord remains the authoritative and most up-to-date source of news and conversation."
+    },
+    {
+        "time": 1692361152000,
+        "text": "@Game Designers: Between Baldur's Gate 3 sessions, I chipped away at a game designer playground that can be found at <http://designer.abstractplay.com>. It's rudimentary, but I'd be interested in your feedback. I need to add tiling at some point, but all the basic features are there. The restriction, of course, is that it's tied to the pieces and boards available in our rendering engine. I am open to feature requests. Enjoy."
     }
 ]
