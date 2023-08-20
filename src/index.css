@@ -521,6 +521,6 @@ th .player {
     font-size: smaller;
 }
 
-.hasNotes {
+.highlight {
     color: var(--secondary-color-1);
 }

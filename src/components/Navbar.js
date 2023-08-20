@@ -1,21 +1,34 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
 import { Auth } from "aws-amplify";
 import logo from "../assets/AbstractPlayLogo.svg";
 import LogInOutButton from "./LogInOutButton";
+import { NewsContext } from "../pages/Skeleton";
+import { useStorageState } from "react-use-storage-state";
 
 function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
   const [burgerExpanded, updateBurgerExpanded] = useState(false);
+  const [news,] = useContext(NewsContext);
+  const [newsLastSeen, ] = useStorageState("news-last-seen", 0);
+  const [maxNews, maxNewsSetter] = useState(Infinity);
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
+
+  useEffect(() => {
+    if ( (news !== undefined) && (news.length > 0) ) {
+        maxNewsSetter(Math.max(...news.map(n => n.time)));
+    } else {
+        maxNewsSetter(Infinity);
+    }
+  }, [maxNewsSetter, news]);
 
   useEffect(() => {
     async function fetchAuth() {
@@ -80,6 +93,16 @@ function Navbar(props) {
           <div className="navbar-item">
             <Link to="/games" className="navbar-item">
               {t("Games")}
+            </Link>
+          </div>
+          <div className="navbar-item">
+            <Link to="/news" className="navbar-item">
+              {t("News")}
+              {newsLastSeen >= maxNews ? null :
+                <span className="icon highlight">&nbsp;
+                    <i className="fa fa-eercast" aria-hidden="true"></i>
+                </span>
+              }
             </Link>
           </div>
           <div className="navbar-item">

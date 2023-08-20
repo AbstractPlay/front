@@ -1,0 +1,278 @@
+[
+    {
+        "time": 1685066520000,
+        "text": "**Homeworlds:** Fixed a bug that kept some sacrifice moves from completing properly. Also tweaked some of the help text to be more...helpful. Also added a CATASTROPHE button. You can still click on the background of a system to trigger a catastrophe, but that wasn't particularly intuitive. We remain committed to making things as intuitive as possible. Your feedback is warmly welcomed. The most consistent lesson of my professional life has been that what's obvious to one person is likely not obvious to another!\n\nThe issue with the Homeworlds click handler in Firefox is still being worked on. We at least know what's causing it. Hopefully we can work around it. Firefox always does things differently!"
+    },
+    {
+        "time": 1685130780000,
+        "text": "**Volcano:** Power plays should now be clickable in Firefox. Hover should now correctly show the stack on the side even during partial moves (including power plays). The stash labels shouldn't be getting truncated anymore. I had to clear my JavaScript cache for the change to show."
+    },
+    {
+        "time": 1685382540000,
+        "text": "**Testers wanted for new game Realm!** This is the first time we've added a game since going live, so let me explain how this works. If you want to help with the testing, please visit <https://play.dev.abstractplay.com/> and create an account. (The user accounts, game records, ratings—everything—are completely separate from the production server.) Then start some games and intentionally try to break it! I will accept all challenges. Please report any issues. Once I'm comfortable the code is correct and stable, we'll move it over to the production server. Thanks in advance for the help!"
+    },
+    {
+        "time": 1685833440000,
+        "text": "**Testers wanted for new game Alien City!** The rules for this game can be a little confusing, and I would be shocked if I didn't make some mistake somewhere. But my basic testing is showing things as working as I expect, which again, may not be correct 🙂 I would be grateful if Alien City lovers could dive in and do some testing on the Dev server, as described above. Thanks for the help!"
+    },
+    {
+        "time": 1686170160000,
+        "text": "**Testers wanted for new game Fanorona!** Suggested by @eykca and existing on SDG 1.0000, it is now available for testing. Interested parties should create an account on the dev server (<https://play.dev.abstractplay.com/>) and try to break it. I'll accept all challenges. Thank you!"
+    },
+    {
+        "time": 1686247740000,
+        "text": "New game Realm now live! Thank you to all our testers!"
+    },
+    {
+        "time": 1686255780000,
+        "text": "**Testers wanted for new game Focus!** Interested parties should create an account on the dev server (<https://play.dev.abstractplay.com/>) and try to break it. I'll accept all challenges. Thank you!!"
+    },
+    {
+        "time": 1686266940000,
+        "text": "I just got a suggestion for Zendo (thank you, @benoke98). I love Zendo, but it simply won't work in the infrastructure we've built here. If I can come up with a way, I will. I promise. But let me take this opportunity (a) to point people to the excellent [Zendo Discord channel](https://discord.gg/gdmwPMuTyb) and (b) to point people to the synchronous, live-play Zendo client that I wrote a little while back: [GitHub](https://github.com/AbstractPlay/zendo), [playable version](https://www.perlkonig.com/zendo/). Just thought I'd put that one to bed for now. But please continue to suggest games you love! I'm typing like a maniac over here, as the four new games being tested attest. Thanks for playing!"
+    },
+    {
+        "time": 1686348000000,
+        "text": "Homeworlds has been fixed so you can trigger catastrophes at any point in your turn. I've done what testing I can, but Homeworlds is very complicated code. Let me know if something doesn't work as expected."
+    },
+    {
+        "time": 1686419820000,
+        "text": "The Homeworlds click handler has been adjusted to make use of sacrifice actions simpler. If you have remaining actions of a particular colour, the move box will autofill with the appropriate keyword. Clicking the Pass button will correctly clear the partial entry. My testing shows things functioning as I expect, but again, this is complicated code. Let me know if something isn't working as you expect. (Tagging @mneme, who indirectly gave me the idea for this change.)\n\nWe warmly welcome concrete suggestions on how to make the click handling and gameplay more intuitive for all the games, but especially the more complicated, multi-move ones like Homeworlds."
+    },
+    {
+        "time": 1686596760000,
+        "text": "**Testers wanted for new game Pulling Strings!** This one is a simultaneous action selection game where you pull strings along the outside edge of the board to manoeuvre five or more coins onto your home spaces. This is one of those \"get into your opponent's head\" games that can be infuriating and fun at the same time. Please come join us on the dev server and help me make sure things are working as intended.\n\nBy way of reminder, the following games are in testing: Alien City, Fanorona, Focus, and now Pulling Strings. Thank you to our testers!"
+    },
+    {
+        "time": 1686694080000,
+        "text": "**Testers wanted for new game Witch Stones!** The migration blitz continues. In this game, four types of pieces randomly fill a board, and players take turns removing stones and scoring points. First to 50 wins! Interested parties can join us on the dev server to try to break things. Thank you, testers!\n\nI have a soft goal of completing the SDG 1.0 migration and fully decommissioning it by the end of this year. I'm down to about a dozen games left that I think really should move over (I started with a list of 50), but I'll seriously consider any SDG 1.0 game that someone explicitly requests. So if you have a favourite that you want to make sure survives, please use the `/suggest` command to have it added to the list."
+    },
+    {
+        "time": 1686757920000,
+        "text": "I pushed changes (hopefully fixes) to the Your Turn notification code, so I apologize for the double emails. I'm sure there's still something not quite right, so please continue to report issues and I'll see what I can track down. A reminder that you won't get emails from us unless your email address was verified when you created your account. If you're not getting emails at all, let me know in DM and I'll see what we can track down. Thanks for your patience."
+    },
+    {
+        "time": 1686841560000,
+        "text": "New, more compact Homeworlds renderer is being pushed to production as we speak. I am certain more tweaks will be needed, but I think it's a solid enough improvement to roll out immediately. Nothing else has changed yet. Simplifying the click handler is the next step. I warmly welcome feedback on how to improve things further. Thank you! (Tagging @mneme , @hoembla , and @ManaT )"
+    },
+    {
+        "time": 1686875160000,
+        "text": "New Homeworlds click handler now active. Thank you all Homeworlds players, and in particular @mneme , for your concrete suggestions about how to improve the Homeworlds experience. A new click handler is now available alongside the old one. The old one only gets triggered if you're entering moves in a combination of typing and clicking or if you're continuing a string of sacrifice moves. Most moves, however, are now reduced to 1 to 3 clicks, as follows:\n\n```\nenemy -> ATTACK\nfriendly > same friendly -> BUILD\nfriendly > stash -> TRADE\nfriendly > system -> MOVE\nfriendly > VOID (the space between systems) > stash -> DISCOVER\n```\n\nThe help text has been similarly updated. I've done a fair bit of testing, but there are always edge cases. Please let me know if you run into any trouble, and I remain open to further discussion on how to make things better. Thanks for playing with us!"
+    },
+    {
+        "time": 1687027440000,
+        "text": "Some more Homeworlds adjustments:\n\n* For non-Firefox browsers, the ships are a little closer together, to further minimize wasted horizontal space. If something weird happens in Firefox, please let me know in the ⁠bugs channel.\n\n* The global stash area has been made a little smaller and a little more compact.\n\n* If you click the Catastrophe button, you now only have to click once to choose both the system and the colour. Just select a star or ship in the affected system of the matching colour. Help text has been updated.\n\n* The new click handler will now behave as expected if you've selected a friendly ship and then hit the Sacrifice button. The Pass button now works as expected as well."
+    },
+    {
+        "time": 1687030500000,
+        "text": "Because I can, I created a diagram generator for Homeworlds. For now, it's available here: <https://www.abstractplay.com/_tools/renderer/homeworlds.html>. It takes text input like the following and produces the SVG. Maybe this will be useful to someone out there. If so, let me know and I'll refine it further.\n\n```json\n        {\n            \"numPlayers\": 2,\n            \"universe\": [\n                {\n                    \"owner\": \"N\",\n                    \"stars\": [\"G2\", \"B1\"],\n                    \"ships\": [\"Y3N\"]\n                },\n                {\n                    \"owner\": \"S\",\n                    \"stars\": [\"G3\", \"R1\"],\n                    \"ships\": [\"B3S\"]\n                },\n                {\n                    \"stars\": [\"R3\"],\n                    \"ships\": [\"Y1N\"]\n                }\n            ]\n        }\n```"
+    },
+    {
+        "time": 1687098060000,
+        "text": "Reiner Knizia's connect-4 game Complica now live. Enjoy!"
+    },
+    {
+        "time": 1687118820000,
+        "text": "A few minor changes/improvements were just pushed to production:\n\n* User chats are now visible \"above the fold\" under the exploration window. The full log that includes move results is still below, but this will hopefully make it easier to keep on top of chats with fellow players.\n\n* You can now export a PNG of the game board, in any past or exploration state, by clicking the \"Download\" icon below the game board. The issue is that the PNG export is not aware of the styles that are applied to the SVG, so the fonts will be wrong, and this may lead to slightly odd layout sometimes. There are workarounds, but they are very intrusive. If you use this feature and come across a board state that's particularly egregious, let me know and I'll see what I can do, but hopefully this is good enough for most situations.\n\n* Some general bug fixes related to exploration and stash clicking are also included."
+    },
+    {
+        "time": 1687205880000,
+        "text": "**Testers wanted for new game Robo Battle Pigs!** We're doing this one a little differently from SDG 1.0. We're going with the initial rules and only supporting up to four players. I've done basic testing, but I'd be grateful for any interested parties who would join the Dev server and try to break it. I'm particularly open to ways of improving the move annotations. Thank you!"
+    },
+    {
+        "time": 1687388580000,
+        "text": "I think we may have finally, for reals this time, fixed the YourTurn notifications. If you notice incorrect counts, or if you're not getting the notifications you think you should be, please reach out!"
+    },
+    {
+        "time": 1687396620000,
+        "text": "**Testers wanted for new game Wizard's Garden!** Another of the games we're migrating over from SDG 1.0. A pair of wizards vye to harvest reagents in a single garden plot. You play until no more planting is possible, and whoever harvested the most wins! Because lots can happen in a reversi-style game, I'm trialing a new approach. Each move is presented across four boards. The top-left shows the piece placement, the top-right shows the flipping, the bottom-left shows any harvests, and the bottom-right is where you actually make your move. I can't label the individual boards at this point, but hopefully it's sufficiently clear. The help text tries to be helpful. In any case, interested testers can come join me on the dev server and help me try to break it. Thank you!!"
+    },
+    {
+        "time": 1687464360000,
+        "text": "The games Alien City, Fanorona, Pulling Strings, and Witch Stones are now available on the production server. Thank you, testers! Enjoy!"
+    },
+    {
+        "time": 1687605960000,
+        "text": "**Testers wanted for new game Generatorb!** Generatorb is played on a chess board, corner to corner. Your goal is to land a piece on your opponent's corner or to control the majority of the spaces on the middle line. Pieces can stack up to three high, each with different movement rules. Interested testers can join me on the dev server to try to break it. Thank you!"
+    },
+    {
+        "time": 1687650180000,
+        "text": "**Testers wanted for new game Mixtour!** Yet another Dieter Stein game and winner of the MinD-Spielepreis 2013, Mixtour is a game of tower building with two main twists: (1) you can move your opponent's pieces and (2) move distance is determined by the height of the target stack and not the moving stack. Interested testers can join me on the dev server to try to break my code. As always, I am grateful for our testers!"
+    },
+    {
+        "time": 1687721400000,
+        "text": "I've tweaked the CSS for the \"Accept Draw\" button to make it larger and a contrasting colour. Further tweaks will likely be necessary, but this is certainly better. ( @Nienna )\n\nThere is now a traditional \"Pie Rule\" function we can apply to games. All it does is swap the players. It only applies to games we explicitly apply it to. Right now, that's just Zola and Monkey Queen. If there are other games where this rule should be enabled, let us know. Let us know if you run into any issues with it. ( @Mark Khan )"
+    },
+    {
+        "time": 1687732320000,
+        "text": "New game: Crossway! I'm pleased to announce the availability of @Mark Khan 's connection game Crossway. You're both trying to connect opposite sides of the board, but you can't cross the streams! This is going straight into production because I'm pretty comfortable the single rule has been correctly implemented, but do let me know if there are any issues. And yes, the pie rule is enabled 🙂 Enjoy!\n\nAnd just a note for the new folks that if you click the gear icon below any game board, you can change to a colour-blind-friendly palette, or to a black & white pattern palette, which actually works quite well for this game."
+    },
+    {
+        "time": 1687826340000,
+        "text": "Nobody loves to win/lose by accident. In some games, that's easier to do than others. A \"Soandso is in check\" indicator has been added. It can only be applied to games (a) where we can generate a list of valid moves (so no Homeworlds) and (b) we can efficiently detect a \"check\" condition (so no Fabrik). Right now that includes the following games: Cannon, Lines of Action, Mixtour (in testing), Monkey Queen, and Generatorb (in testing). If there are other games where such an indicator would be helpful, feel free to let us know. If we can, we will, but we may tell you that it's not possible. For now, you just get bold text above the game board. We welcome ideas on improving things."
+    },
+    {
+        "time": 1687915020000,
+        "text": "The games Focus, Wizard's Garden, and Robo Battle Pigs are now available on the production server. Testing was light, so do let me know if you run into any issues. Enjoy!\n\nAlso, **testers wanted for new game Tintas!** Dieter Stein's game of colour collection is now available on the test server. Interested testers should join me there and try to break it! (Tagging @Longhunter ) Thank you, testers!"
+    },
+    {
+        "time": 1688216880000,
+        "text": "The games Mixtour, Tintas, and Generatorb are now available on the production server. Enjoy!! And thank you testers!"
+    },
+    {
+        "time": 1688226240000,
+        "text": "**Testers wanted for new game Streetcar Suburb!** I'm pleased to announce the availability of @Drew Edwards 's game Streetcar Suburb on the development server. Testers are welcome to come join us there to try to break it. It'll be in testing until I return from vacation. Thank you to all our testers, and thank you @Drew Edwards for letting us host the game and for working with me on polishing it up. I think the final result is beautiful, and we've expanded the types of games we can now accommodate in the future. Mobile users will have to do some zooming and panning, though, for accurate edge selection. Thanks for playing with us!\n\nBy way of reminder, testers can join us at <https://play.dev.abstractplay.com/>. The accounts, game records, ratings, etc. are completely separate from the production server. Create an account (or multiple, if you want to play games against yourself) and feel free to challenge me to whatever games are being tested. Thank you in advance to all who donate some time to ensure the best quality code gets deployed."
+    },
+    {
+        "time": 1688247000000,
+        "text": "I just pushed a working but still experimental \"star\" feature to production. We warmly welcome feedback and suggestions. From the games list, you can click the star icon to toggle it. You can then toggle showing only starred games on the page. When you create a new challenge, your starred games appear at the top of the list. That's the extent of the feature for now. Let me know if something doesn't work as you expect."
+    },
+    {
+        "time": 1688319720000,
+        "text": "Because apparently I really don't want to pack, and because I'm going to miss all this typing while I'm away, I am pleased to announce the availability of @Mark Khan 's game King & Courtesan on the production server (<https://www.marksteeregames.com/King_and_Courtesan_rules.pdf>). I didn't feel testing was necessary in this case, but let me know if you run into any issues. In this game, your king moves freely among his courtesans as you try to invade your opponent's home square or capture the opposing king. Enjoy!"
+    },
+    {
+        "time": 1688331000000,
+        "text": "In Wizard's Garden, the different boards are now labelled."
+    },
+    {
+        "time": 1688422320000,
+        "text": "Thanks to extensive testing (thank you, testers!!), @Drew Edwards is satisfied that Streetcar Suburb is ready for production release. It's available now. Enjoy!!"
+    },
+    {
+        "time": 1688482380000,
+        "text": "There is now a new Volcano (and Mega-Volcano) display option. You can still use the original display if you prefer. Click on the gear icon below the board."
+    },
+    {
+        "time": 1689171900000,
+        "text": "I've converted the Discord to a \"community\" server, which has enabled the forum features. I created a ⁠game-specific-chat channel for persistent discussions around specific games. There's a very annoying 20-tag limit or I'd create a tag for every game. I hope this will change, and when it does, I will update the tags. But until then, you'll have to settle for tags for the first letter of the game's name. Enjoy!"
+    },
+    {
+        "time": 1689184980000,
+        "text": "The \"Game Over\" email has now been expanded. If you don't get an email when you expect it, or if something weird appears in the message, do let me know."
+    },
+    {
+        "time": 1689193740000,
+        "text": "Losing the development blog. Discord will be the primary communications platform. Redirects (including a permanent discord.abstractplay.com alias) are propagating now, but it can take time for DNS servers to catch up. Let me know if weird things are happening to you even after a couple of hours."
+    },
+    {
+        "time": 1689278880000,
+        "text": "A new \"Completed Games\" table version is now rolling out to production. Feedback welcome. It shows you when games were completed and when you last saw the game. If there's new chat in a closed game, then the game will appear in bold. Games will disappear from the \"completed\" list 48 hours after you last opened the game since it closed (so you'll want to open games that closed while you were away) and will reappear if new chat is entered after that window. Old games are always visible from the Completed Games list you get to from the main Games page. As always, let us know if something weird happens, and concrete suggestions for improvement are always welcome."
+    },
+    {
+        "time": 1689541680000,
+        "text": "Testers wanted for new game Armadas! (Tagging suggesters, @Nienna and @Samraku ). I know this isn't a more traditional abstract, but my inner math nerd wanted to play. More traditional fare is on the way.\n\nArmadas is a miniatures-style game of naval combat played with Looney pyramids. 2-4 commanders move their fleet on an open field trying to eliminate their opponents. These sorts of games tend to have a lot of house rules and add-ons. I'm certainly open to expanding this over time, but for now there are three scenarios: (1) the default is trio against trio, (2) there's also a \"two trio\" variant, and (3) the \"freeform\" variant lets players place as many pieces as they want until both players pass. This requires good-faith communication in advance.\n\nAnyway, interested testers can join us at <https://play.dev.abstractplay.com/> and help me try to break it. Thanks!"
+    },
+    {
+        "time": 1689546360000,
+        "text": "In games like Alien City, Streetcar Suburb, and Tintas, the player's name is now substituted in the areas below the board. I went with a fast and slightly dirty approach for efficiency's sake, so if something weird happens, do let me know. Still more ownership issues to resolve."
+    },
+    {
+        "time": 1689550440000,
+        "text": "The fix to the last of the current ownership issues is rolling out now. Alien City now correctly shows which claim colour you are and places a bar next to the appropriate stash. I believe this is the last of this class of problem currently. If other issues arise, do let me know. Thanks!"
+    },
+    {
+        "time": 1689633360000,
+        "text": "@Mark Khan's \"dots and boxes\" style game Flume is now available on the production server. Let me know if you run into any trouble. Enjoy!"
+    },
+    {
+        "time": 1689701520000,
+        "text": "For the record, we think we have solved the root cause of the \"not getting notifications\" issue. The database should self-correct when you next log in. If you continue to not receive notifications when you think you should, do let us know."
+    },
+    {
+        "time": 1689707340000,
+        "text": "Ty Bomba's minimalist wargame Boom & Zoom is now available on the production server. Score by bearing your stacks off the opposing side, but you need to minimize your opponent's scoring opportunities as well. Enjoy!"
+    },
+    {
+        "time": 1689856980000,
+        "text": "I've created a new \"implementation notes\" field for games that need them (currently Armadas, Chase, Entropy, Homeworlds, Lines of Action, Robo Battle Pigs, Taiji, Witch Stones, and Wizard's Garden). If a game you're playing has implementation notes, then the \"information\" icon below the game board will be highlighted. If you feel there are further notes needed, please let us know."
+    },
+    {
+        "time": 1689886020000,
+        "text": "A new, tabular list of games is rolling into production as we speak. It supports filtering and sorting, and you can also issue challenges directly from there. This new format is easily expanded. I know there is more people would like to see (like game-specific \"tags\"), but we're not ready to go that far just yet. But more to come in this space, for sure. The names and numbers don't look clickable, but they are and take you to the same lists of games and ratings the old page took you to. Feedback and suggestions always welcome. Enjoy!"
+    },
+    {
+        "time": 1689891420000,
+        "text": "I have finally added the original 8x8 board back into Lines of Action (tagging @alek ). I won't bore you with the long explanation, but in short, omitting it was a mistake that I won't make again. Because reasons, the 8x8 board is available as a variant. I know this is not ideal, but fully repairing my error was simply going to cost too much by way of time. Again, I'm sorry. It won't happen again. Enjoy!!"
+    },
+    {
+        "time": 1689972420000,
+        "text": "When issuing an \"open\" or \"standing\" challenge, there is now a \"duration\" field. It defaults to 0000, which means that the challenge will remain active until you revoke it, no matter how many people accept it. But you can now change it to any number. After that many times people accept your challenge, the challenge will be automatically removed. So setting it to 1 means the challenge will expire once it is accepted the first time.\n\nFor reasons, this can only be extended to 2-player games. Maybe one day we'll find a way around that.\n\nI've done what testing I can, and everything appears to function correctly, but do let us know if something does not work as you expect or if you get some weird error. Thanks!"
+    },
+    {
+        "time": 1690058280000,
+        "text": "I am very excited to announce the availability of browser push notifications. Push notifications are 100% optional! Each browser/device has its own process for allowing/blocking push notifications. If you aren't getting notifications, the first thing to do is check your browser's documentation. If you're getting notifications but they are \"weird\" in some way, do let us know.\n\nWe've tried to minimize the amount of spam. There are only four types of notification (game start, your turn, game end, challenges), and later instances of the same type will simply overwrite the earlier ones, so you'll never have more than four notifications active at one time. Clicking a notification will open the associated URL, focusing you on an existing tab if one exists. And if you receive a notification while already actively using the site, you'll instead get a \"toast\" notification in the top-right corner of the screen.\n\nThere is one drawback: activating these notifications brings along with it a bunch of progressive web app stuff that can interfere with getting the most recent versions of front-end code. In some cases, a hard refresh is not enough. You'll instead need to close all Abstract Play tabs and then reopen. I don't have a good sense of how problematic this will be. I guess we'll find out together! 🙂 Thank you for your patience. Bug reports and suggestions for improvement are always welcome."
+    },
+    {
+        "time": 1690135680000,
+        "text": "At the designer's request, Streetcar Suburb has been updated to require drawing a second line if one is legal from your first line. Basically, it's never advantageous to intentionally skip drawing a line where possible. This does not preclude you from drawing a single line (usually deep in enemy territory) to get access to a set of buildings. Basically, you can draw your first line anywhere, and the system will only hold you up if a second line is legally possible. Hope that's clear 🙂 Let me know if you run into any issues."
+    },
+    {
+        "time": 1690146000000,
+        "text": "I've moved the \"your turn\" and \"waiting for opponents\" tables on your dashboards to the new format. I've also added in an estimated time remaining on the clock for both tables (@Nienna). I know the \"Num moves\" field is not populating. Working on it 🙂 Once fixed, it will start populating once people make a move. Enjoy!"
+    },
+    {
+        "time": 1690206900000,
+        "text": "I'm archiving the old ⁠bugs channel for now (it's still visible at the bottom of the channel list) and have created a ⁠bug-reports channel. This will hopefully keep the reports more organized and ensure the devs don't lose sight of important issues. For suggestions of new games and features, please continue to use the `/suggest` command. Thanks!"
+    },
+    {
+        "time": 1690235640000,
+        "text": "Homeworlds – A number of changes have been pushed to production:\n\n* No more \"white screen of death\" when abandoning your home system temporarily. (@Samraku)\n\n* Kamikaze draws are now supported (in 2-player games only). (@Samraku)\n\n* Catastrophes can now be more easily triggered in the middle of a sacrifice chain. (@mneme)\n\n* The new click handler now registers a move when you click on a friendly ship followed by any ship or star in a different system. It used to only get triggered by clicking on the background. (@mneme)\n\nHomeworlds is the most complicated game we have. Although all unit tests and play testing have passed as expected, unintended consequences are always possible. Please let me know if anything weird happens.\n\nThanks to everybody who takes the time to report bugs and make suggestions for improvement. I appreciate your patience and willingness to engage in the process. Enjoy!"
+    },
+    {
+        "time": 1690374300000,
+        "text": "The system already auto-rotates boards for certain games so the current player is at the bottom of the screen. Homeworlds does this too, but it hasn't lined up because of how the base render was orientated. While it really bothers the editor in me, I've altered the base render so North is at the bottom with ships pointing up, and then the auto-rotator should get things right from there. Let me know if it still doesn't, especially in 3 and 4 player games. For the record, in games that support rotation, once you rotate to where you want it, it should stay there throughout the game."
+    },
+    {
+        "time": 1690393920000,
+        "text": "**New game: Clearcut!** I'm pleased to announce that @Mark Khan's game Clearcut is now available on the production server. Let me know if you run into any issues. Enjoy!"
+    },
+    {
+        "time": 1690476540000,
+        "text": "At the designer's request, I'm afraid we're taking Clearcut back down (the game is not finite). This situation has never arisen before. For now, I'm just marking the game as \"experimental\" so it will no longer be available on production. It should still let people finish existing games. At some point, we'll land on a \"best practice\" for this sort of situation. Let me know if you run into any issues."
+    },
+    {
+        "time": 1690641360000,
+        "text": "Phutball is now available on the dev server!"
+    },
+    {
+        "time": 1690732020000,
+        "text": "**Alfred's Wyke:** The used moves are now also filled. The lighter colour is the one that will become available next turn."
+    },
+    {
+        "time": 1690736160000,
+        "text": "Testers wanted for new game Bide! @alek's game Bide is now available on the dev server. Testers are invited to come help us break it. I'm pretty comfortable that the core rules are correct, but I particularly would like to get a three-player game in with some releasing, just to make sure all the code is correct at higher player counts. Thank you, testers!"
+    },
+    {
+        "time": 1690747800000,
+        "text": "The names of commenters who are not also participants in the game now display correctly. This involved some mild refactoring. My tests show everything working, but do let us know if something wonky happens with challenges in particular. Thanks!"
+    },
+    {
+        "time": 1690814880000,
+        "text": "I'm very happy to announce the availability of @Drew Edwards's game Agere on the production server, including the \"Cobweb\" variant played on a radial board (our first such game, but hopefully not the last). Let us know if you run into any issues. Enjoy!"
+    },
+    {
+        "time": 1690830600000,
+        "text": "After a minor rule change, @Mark Khan's Clearcut is back on the production server. See the updated rule sheet for details. Let me know if you run into any trouble."
+    },
+    {
+        "time": 1690838580000,
+        "text": "Push notifications are now \"double opt-in.\" If you wish to continue to receive push notifications, please click the gear icon in the top-right of the screen and click \"Allow push notifications.\" Once you do that, your browser/device takes over, so you may receive another request for permission. Notifications will then continue as previously announced (⁠announcements⁠). Disabling push notifications from the user settings screen will immediately deactivate our ability to send you notifications until you reenable them.\n\nPush notifications are 100% optional. It's just another way to be notified of changes in your games. Please let us know if you encounter any issues or if you have suggestions for how we can do these even better. Thanks for playing with us!"
+    },
+    {
+        "time": 1690856640000,
+        "text": "As a last code push of the day, I'm putting out two \"tutorials\" for trial. The first time you visit your dashboard or the game play page after the push propagates, you will see a blue \"beacon\" (see screen capture). Clicking it will trigger a brief tutorial walking you through the different components of the page. You will only see it once per device unless you go into the user settings screen and uncheck the \"Hide Tutorials\" checkbox. I welcome feedback on how helpful you find the content and what improvements you think are needed. I want to make it easy for new players to \"get up to speed.\" The only hiccup I see so far is that on mobile, the last screen of each tutorial won't show (the one that talks about the user settings dialog) because the log in button is hidden on mobile by default. I will have to see if there's a way around this.\n\nThank you for participating in this beta period! We launched because we wanted feedback from actual players about the features they wanted to see, and you have done that in spades. Thank you for your great ideas and your patience as they get implemented."
+    },
+    {
+        "time": 1690940640000,
+        "text": "All the remaining list tables (standing challenges, ratings, current/completed games) have been moved to the new format. I've done some testing and fixed any obvious issues, but do let me know if something isn't working as you expect. One thing: in the current/completed games lists, there will be some missing data in some cases (e.g., winners, variants). Those will populate correctly from here on out, but I haven't gone back and retroactively fixed things yet. I will, but there are other DB changes being considered that would render that work moot, so leaving it be for now. Thanks! (I am seeing some layout weirdness. Further tweaks are forthcoming, but at least now the main migration is done.)"
+    },
+    {
+        "time": 1691597297000,
+        "text": "I've added a \"News\" page to the main site where I'll manually copy over major announcements from the Discord. The Discord remains the authoritative and most up-to-date source of news and conversation."
+    },
+    {
+        "time": 1692361152000,
+        "text": "@Game Designers: Between Baldur's Gate 3 sessions, I chipped away at a game designer playground that can be found at <http://designer.abstractplay.com>. It's rudimentary, but I'd be interested in your feedback. I need to add tiling at some point, but all the basic features are there. The restriction, of course, is that it's tied to the pieces and boards available in our rendering engine. I am open to feature requests. Enjoy."
+    }
+]
