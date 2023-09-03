@@ -76,6 +76,12 @@ function GameMoves(props) {
     // 300 is the maxHeight of the table from the CSS (for .movesTable)
     const maxHeight = 300;
     if (focusRowRef.current) {
+
+      // If there's a horizontal scrollbar, adjust maxHeight
+      if (tableRef.current.scrollWidth > tableRef.current.clientWidth) {
+        maxHeight -= 18;
+      }
+
       let newScrollTop = tableRef.current.scrollTop;
       if (
         focus.moveNumber === exploration.length - 1 &&
