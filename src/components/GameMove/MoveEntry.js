@@ -272,7 +272,7 @@ function MoveEntry(props) {
                   </p>
                 </Fragment>
               )}
-              {!move.valid || (move.valid && move.complete === -1) ? (
+              {!move.valid || (move.valid && move.complete !== 1) ? (
                 <p className={`help ${move.valid ? "is-link" : "is-danger"}`}>
                   {move.message}
                 </p>
