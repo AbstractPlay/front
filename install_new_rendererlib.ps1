@@ -53,7 +53,12 @@ npm install $RENDERER_TGZ_PATH --loglevel verbose
 Set-Location $CURRENT_DIR
 $versionStrings = npm cache ls | Select-String '\\gameslib\\abstractplay-gameslib-[0-9]+\.[0-9]+\.([0-9]+)(-beta)?\.tgz' -AllMatches
 $versions = $versionStrings.Matches | ForEach-Object { [int]$_.Groups[1].Value }
-$maxNumber = ($versions | Measure-Object -Maximum).Maximum + 1
+$maxNumber = 1;
+if ($null -ne $versionStrings.Matches -and $versionStrings.Matches -ne '') {
+  $versions = $versionStrings1.Matches | ForEach-Object { [int]$_.Groups[1].Value }
+  $maxNumber = ($versions | Measure-Object -Maximum).Maximum + 1
+}
+
 $NEW_VERSION = "1.0." + $maxNumber
 Write-Output "New gameslib version is: $NEW_VERSION"
 
