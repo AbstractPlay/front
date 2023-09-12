@@ -185,7 +185,7 @@ function MoveEntry(props) {
         ) : (
           <p className="exploreState">{t("Explore")}</p>
         )}
-        <p style={{ paddingBottom: "1em" }} className={(game.canSubmit && uiState === 0) ? "yourTurn" : ""}>
+        <p style={{ marginBottom: "1em" }} className={(game.canSubmit && uiState === 0) ? "yourTurn" : ""}>
           {img === null ? (
             ""
           ) : img.isImage ? (

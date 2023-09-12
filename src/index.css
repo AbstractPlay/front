@@ -481,6 +481,10 @@ th .player {
 
 /* More prominent YourTurn indicator */
 .yourTurn {
+    display: flex;
+    align-items: center;
+    border-radius: 0.25em;
+    padding: 0.3em;
     background-color: var(--secondary-color-1-lighter);
 }
 
