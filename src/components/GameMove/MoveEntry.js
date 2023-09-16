@@ -185,7 +185,7 @@ function MoveEntry(props) {
         ) : (
           <p className="exploreState">{t("Explore")}</p>
         )}
-        <p style={{ paddingBottom: "1em" }} className={(game.canSubmit && uiState === 0) ? "yourTurn" : ""}>
+        <p style={{ marginBottom: "1em" }} className={(game.canSubmit && uiState === 0) ? "yourTurn" : ""}>
           {img === null ? (
             ""
           ) : img.isImage ? (
@@ -272,7 +272,7 @@ function MoveEntry(props) {
                   </p>
                 </Fragment>
               )}
-              {!move.valid || (move.valid && move.complete === -1) ? (
+              {!move.valid || (move.valid && move.complete !== 1) ? (
                 <p className={`help ${move.valid ? "is-link" : "is-danger"}`}>
                   {move.message}
                 </p>

@@ -607,6 +607,7 @@ function GameMove(props) {
   const [tourState, tourStateSetter] = useState([]);
   const [showTour, showTourSetter] = useStorageState("joyride-play-show", true);
   const [showSettings, showSettingsSetter] = useState(false);
+  const [showMoveConfirm, showMoveConfirmSetter] = useState(false);
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
   const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
@@ -630,6 +631,7 @@ function GameMove(props) {
   const [pieInvoked, pieInvokedSetter] = useState(false);
   // used to construct the localized string of players in check
   const [inCheck, inCheckSetter] = useState("");
+  const [drawMessage, drawMessageSetter] = useState("");
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -1251,11 +1253,16 @@ function GameMove(props) {
 
   const handleSubmit = async (draw) => {
     submittingSetter(true);
-    if (draw === "drawaccepted") {
-      submitMove("", draw);
+    if (globalMe?.settings?.all?.moveConfirmOff) {
+      if (draw === "drawaccepted") {
+        submitMove("", draw);
+      } else {
+        let m = getFocusNode(explorationRef.current, focus).move;
+        submitMove(m, draw);
+      }
     } else {
-      let m = getFocusNode(explorationRef.current, focus).move;
-      submitMove(m, draw);
+      drawMessageSetter(draw);
+      showMoveConfirmSetter(true);
     }
   };
 
@@ -1362,6 +1369,22 @@ function GameMove(props) {
 
   const handleResign = () => {
     showResignConfirmSetter(true);
+  };
+
+  const handleCloseMoveConfirm = () => {
+    submittingSetter(false);
+    showMoveConfirmSetter(false);
+  };
+
+  const handleMoveConfirmed = async () => {
+    showMoveConfirmSetter(false);
+    submittingSetter(true);
+    if (drawMessage === "drawaccepted") {
+      submitMove("", drawMessage);
+    } else {
+      const m = getFocusNode(explorationRef.current, focus).move;
+      submitMove(m, drawMessage);
+    }
   };
 
   const handleCloseResignConfirm = () => {
@@ -1791,6 +1814,22 @@ function GameMove(props) {
         >
           <div className="content">
             <p>{t("ConfirmResignDesc")}</p>
+          </div>
+        </Modal>
+        <Modal
+          show={showMoveConfirm}
+          title={t("ConfirmMove")}
+          buttons={[
+            { label: t("Submit"), action: handleMoveConfirmed },
+            {
+              label: t("Cancel"),
+              action: handleCloseMoveConfirm,
+            },
+          ]}
+        >
+          <div className="content">
+            <p>{t("ConfirmMoveDesc")}</p>
+            <p className="help">{t("ConfirmMoveHelp")}</p>
           </div>
         </Modal>
         <Modal
