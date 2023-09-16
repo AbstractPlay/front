@@ -30,6 +30,7 @@ function UserSettingsModal(props) {
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
   const [exploration, explorationSetter] = useState(null);
+  const [confirmMove, confirmMoveSetter] = useState(true);
   const [globalMe, globalMeSetter] = useContext(MeContext);
   const [showMeTour, showMeTourSetter] = useStorageState("joyride-me-show", true);
   const [showPlayTour, showPlayTourSetter] = useStorageState("joyride-play-show", true);
@@ -58,6 +59,11 @@ function UserSettingsModal(props) {
         explorationSetter(globalMe.settings.all.exploration);
       } else {
         explorationSetter(0);
+      }
+      if (globalMe?.settings?.all?.moveConfirmOff) {
+        confirmMoveSetter(!globalMe.settings.all.moveConfirmOff);
+      } else {
+        confirmMoveSetter(true);
       }
     }
   }, [show, globalMe, notificationsSetter, explorationSetter]);
@@ -188,6 +194,15 @@ function UserSettingsModal(props) {
     newSettings.all.exploration = value;
     explorationSetter(value); // this will update the UI
     handleSettingsChange(newSettings); // this will update the DB (and the UI after another round trip to the server. Do we really need that?)
+  }
+
+  const handleMoveConfirmChange = async () => {
+    const newSettings = cloneDeep(globalMe.settings);
+    if (newSettings.all === undefined)
+      newSettings.all = {};
+    newSettings.all.moveConfirmOff = confirmMove;
+    confirmMoveSetter(!confirmMove);
+    handleSettingsChange(newSettings);
   }
 
   const handleSettingsChange = async (newSettings) => {
@@ -577,6 +592,22 @@ function UserSettingsModal(props) {
 
           </div>
         }
+
+        {/********************* move confirmation *********************/}
+        <div className="field" key="moveConfirm">
+            <div className="control">
+                <label className="checkbox is-small">
+                    <input type="checkbox"
+                      checked={ confirmMove }
+                      onChange={ handleMoveConfirmChange }
+                    />
+                    { confirmMove
+                      ? t("DisableMoveConfirm")
+                      : t("EnableMoveConfirm")
+                    }
+                </label>
+            </div>
+        </div>
 
         {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above
         ******************** Language *********************

@@ -359,12 +359,12 @@ th .player {
   z-index: 1;
 }
 
-.tooltipped:disabled {
-  z-index: 100;
-}
-
 .tooltipped:hover .tooltiptext {
   visibility: visible;
+}
+
+.tooltipped:disabled .tooltiptext {
+  visibility: hidden;
 }
 
 .input-icon {
