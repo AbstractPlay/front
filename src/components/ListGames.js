@@ -119,7 +119,9 @@ function ListGames(props) {
 
   const tableNavigation =
 <>
-      <div className="level smallerText has-text-centered">
+    <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
+        <div className="level smallerText has-text-centered">
               <div className="level-item">
                   <button
                       className="button is-small"
@@ -194,6 +196,8 @@ function ListGames(props) {
                   </div>
               </div>
       </div>
+        </div>
+    </div>
 </>
 
   return (
