@@ -312,6 +312,8 @@ function StandingChallenges(props) {
 
   const tableNavigation =
   <>
+    <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
         <div className="level smallerText has-text-centered">
                 <div className="level-item">
                     <button
@@ -386,6 +388,8 @@ function StandingChallenges(props) {
                         </div>
                     </div>
                 </div>
+        </div>
+        </div>
         </div>
   </>
 
