@@ -97,7 +97,7 @@ function GameStatus(props) {
         {( (!game.scores) && (!game.limitedPieces) ) || status.scores.length === 0
           ? ""
           : status.scores.map((scores, i) => (
-              <div key={i}>
+              <div key={i} style={{overflowX: "auto", scrollbarWidth: "thin"}}>
                 <h2>{scores.name}</h2>
                 <table className="table">
                   <tbody>
