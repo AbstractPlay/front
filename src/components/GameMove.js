@@ -4,6 +4,7 @@ import React, {
   useState,
   useRef,
   useContext,
+  useCallback,
 } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -119,6 +120,7 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("shared-pieces");
   game0.customColours =
     info.flags !== undefined && info.flags.includes("custom-colours");
+  game0.canRotate = undefined && info.flags.includes("perspective");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
   game0.scores = info.flags !== undefined && info.flags.includes("scores");
   game0.limitedPieces =
@@ -612,6 +614,7 @@ function GameMove(props) {
   const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [showGameDump, showGameDumpSetter] = useState(false);
+  const [showGameNote, showGameNoteSetter] = useState(false);
   const [showInject, showInjectSetter] = useState(false);
   const [injectedState, injectedStateSetter] = useState("");
   const [userSettings, userSettingsSetter] = useState();
@@ -625,6 +628,8 @@ function GameMove(props) {
   const [globalMe] = useContext(MeContext);
   const [gameRec, gameRecSetter] = useState(undefined);
   const [pngExport, pngExportSetter] = useState(undefined);
+  const [gameNote, gameNoteSetter] = useState(null);
+  const [interimNote, interimNoteSetter] = useState("");
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
   // pieInvoked is used to trigger the game reload after the function is called
@@ -853,6 +858,56 @@ function GameMove(props) {
     }
     fetchData();
   }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID, metaGame, pieInvoked, cbit, t]);
+
+  useEffect(() => {
+    if (globalMe && globalMe.games) {
+        const playerGame = globalMe.games.find(g => g.id === gameID);
+        if (playerGame !== undefined) {
+            if ( ("note" in playerGame) && (playerGame.note !== undefined) && (playerGame.note !== null) && (playerGame.note.length > 0) ) {
+                gameNoteSetter(playerGame.note);
+                interimNoteSetter(playerGame.note);
+            } else {
+                gameNoteSetter(null);
+                interimNoteSetter("");
+            }
+        }
+    }
+  }, [globalMe, gameID]);
+
+  const handleNoteUpdate = useCallback(async (newNote) => {
+    if ( (newNote.length > 0) && (! /^\s*$/.test(newNote)) ) {
+        gameNoteSetter(newNote);
+    } else {
+        gameNoteSetter(null);
+    }
+    if (globalMe !== undefined) {
+        const usr = await Auth.currentAuthenticatedUser();
+        const token = usr.signInUserSession.idToken.jwtToken;
+        try {
+          const res = await fetch(API_ENDPOINT_AUTH, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              query: "update_note",
+              pars: {
+                gameId: gameRef.current.id,
+                note: newNote,
+              },
+            }),
+          });
+          const result = await res.json();
+          if (result && result.statusCode && result.statusCode !== 200)
+            setError(JSON.parse(result.body));
+        } catch (err) {
+          console.log(err);
+          //setError(err.message);
+        }
+    }
+  }, [globalMe, gameNoteSetter]);
 
   useEffect(() => {
     async function fetchData() {
@@ -1644,6 +1699,7 @@ function GameMove(props) {
               ></div>
             )}
             <div className="boardButtons tourBoardButtons">
+            {! gameRef?.current?.canRotate ? null :
               <button
                 className="fabtn align-right"
                 onClick={handleRotate}
@@ -1651,6 +1707,7 @@ function GameMove(props) {
               >
                 <i className="fa fa-refresh"></i>
               </button>
+            }
               <button
                 className="fabtn align-right"
                 onClick={handleUpdateRenderOptions}
@@ -1673,6 +1730,21 @@ function GameMove(props) {
                   </span>
               }
               </button>
+              {! globalMe ? null : (
+                <button
+                  className="fabtn align-right"
+                  onClick={() => showGameNoteSetter(true)}
+                  title={t("GameNoteModal")}
+                >
+                {( (gameNote === undefined) || (gameNote === null) || (gameNote.length === 0) ) ?
+                  <i className="fa fa-sticky-note"></i>
+                  :
+                  <span className="highlight">
+                    <i className="fa fa-sticky-note"></i>
+                  </span>
+                }
+                </button>
+              )}
               <button
                 className="fabtn align-right"
                 onClick={() => {
@@ -1966,6 +2038,58 @@ function GameMove(props) {
                   Inject JSON!
                 </button>
               </div>
+            </div>
+          </div>
+        </Modal>
+        <Modal
+          show={showGameNote}
+          title={t("GameNoteModal")}
+          buttons={[
+            {
+              label: t("Close"),
+              action: () => {
+                showGameNoteSetter(false);
+                if ( (gameNote === undefined) || (gameNote === null) ) {
+                    interimNoteSetter("");
+                } else {
+                    interimNoteSetter(gameNote);
+                }
+              },
+            },
+          ]}
+        >
+          <div className="content">
+            <p>
+              Nobody but you can see this note. The note is tied to this game and not any specific move. The note will be irretrievably lost when the game concludes and is first cleared from your list of concluded games.
+            </p>
+          </div>
+          <div className="field">
+            <div className="control">
+              <textarea type="textarea"
+                rows={5}
+                id="enterANote"
+                name="enterANote"
+                className="textarea"
+                value={interimNote}
+                placeholder={t("Comment")}
+                onChange={(e) => { interimNoteSetter(e.target.value); return false; }}
+              ></textarea>
+            </div>
+            {interimNote.length > 250 ?
+              <p className="help is-danger" style={{textAlign: "right"}}>{interimNote.length} / 250</p>
+            :
+              <p className="help" style={{textAlign: "right"}}>{interimNote.length} / 250</p>
+            }
+            <div className="control">
+            {( (interimNote === gameNote) || ((interimNote === "") && (gameNote === null)) ) ?
+              <button className="button is-small" disabled>
+                {t("UpdateNote")}
+              </button>
+            :
+              <button className="button is-small" onClick={() => handleNoteUpdate(interimNote)}>
+                {t("UpdateNote")}
+              </button>
+            }
             </div>
           </div>
         </Modal>
