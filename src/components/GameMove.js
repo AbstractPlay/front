@@ -841,6 +841,16 @@ function GameMove(props) {
               commentsTooLongSetter(true);
             }
           }
+          // check for note
+          // note should only be defined if the user is logged in and
+          // is the owner of the note.
+          if ( ("note" in data.game) && (data.game.note !== undefined) && (data.game.note !== null) && (data.game.note.length > 0) ) {
+            gameNoteSetter(data.game.note);
+            interimNoteSetter(data.game.note);
+          } else {
+            gameNoteSetter(null);
+            interimNoteSetter("");
+          }
           populateChecked(gameRef, engineRef, t, inCheckSetter);
         }
       } catch (error) {
@@ -858,6 +868,41 @@ function GameMove(props) {
     }
     fetchData();
   }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID, metaGame, pieInvoked, cbit, t]);
+
+  const handleNoteUpdate = useCallback(async (newNote) => {
+    if ( (newNote.length > 0) && (! /^\s*$/.test(newNote)) ) {
+        gameNoteSetter(newNote);
+    } else {
+        gameNoteSetter(null);
+    }
+    if (globalMe !== undefined) {
+        const usr = await Auth.currentAuthenticatedUser();
+        const token = usr.signInUserSession.idToken.jwtToken;
+        try {
+          const res = await fetch(API_ENDPOINT_AUTH, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              query: "update_note",
+              pars: {
+                gameId: gameRef.current.id,
+                note: newNote,
+              },
+            }),
+          });
+          const result = await res.json();
+          if (result && result.statusCode && result.statusCode !== 200)
+            setError(JSON.parse(result.body));
+        } catch (err) {
+          console.log(err);
+          //setError(err.message);
+        }
+    }
+  }, [globalMe, gameNoteSetter]);
 
   useEffect(() => {
     if (globalMe && globalMe.games) {
