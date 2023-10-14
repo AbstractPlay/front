@@ -120,7 +120,7 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("shared-pieces");
   game0.customColours =
     info.flags !== undefined && info.flags.includes("custom-colours");
-  game0.canRotate = undefined && info.flags.includes("perspective");
+  game0.canRotate = info.flags !== undefined && info.flags.includes("perspective");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
   game0.scores = info.flags !== undefined && info.flags.includes("scores");
   game0.limitedPieces =
