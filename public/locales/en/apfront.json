@@ -179,6 +179,8 @@
     "ProfileName": "Display name",
     "ProfileNameHelp": "This is the name others on the site will see. It can be changed later. It must be unique across names currently in use and those recently used.",
     "ProfileTagline": "A free-form tagline (255 characters max)",
+    "Publish": "Publish exploration",
+    "PublishHelp": "Publish the exploration you did during the game so that anyone can see it.",
     "Random": "Random",
     "RatedGame": "This will be a rated game.",
     "RatedPlayersCount_one": "rated player",

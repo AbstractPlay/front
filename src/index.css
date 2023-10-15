@@ -264,6 +264,10 @@ th .player {
   display: inline;
 }
 
+.actualMove {
+  font-weight: bold;
+}
+
 .gameMoveNums {
   font-size: x-small;
   vertical-align: bottom !important;

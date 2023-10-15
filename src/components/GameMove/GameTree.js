@@ -1,9 +1,14 @@
+import { v4 as uuid } from 'uuid';
+
 export class GameNode {
   constructor(parent, move, state, toMove) {
     this.parent = parent;
     this.children = [];
     this.move = move;
     this.state = state;
+    this.id = uuid();
+    this.comment = '';
+    this.version = undefined; // Only the base node has a version. This is really the version of the tree.
     this.toMove = null; // 0 for player1, 1 for player2
     if (toMove !== undefined) this.toMove = toMove;
     else if (this.parent !== null) this.toMove = 1 - this.parent.toMove;
@@ -48,16 +53,29 @@ export class GameNode {
     }
   }
 
-  Deflate() {
+  Deflate(gameOver = false) {
     const deflated = {
       move: this.move,
       children: [],
     };
+    if (gameOver) {
+      deflated.id = this.id;
+      deflated.comment = this.comment;
+    }
     this.children.forEach((child) => {
-      deflated.children.push(child.Deflate());
+      deflated.children.push(child.Deflate(gameOver));
     });
     if (this.children.length === 0 && this.outcome !== -1)
       deflated.outcome = this.outcome;
     return deflated;
+  }
+
+  FindNode(id) {
+    if (this.id === id) return [];
+    for (let i = 0; i < this.children.length; i++) {
+      const path = this.children[i].FindNode(id);
+      if (path !== undefined) return [i, ...path];
+    }
+    return undefined;
   }
 }
