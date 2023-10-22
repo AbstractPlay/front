@@ -297,6 +297,25 @@ function mergePublicExploration(game, exploration, data) {
   }
 }
 
+// When published merge private exploration into public exploration
+function mergePrivateExploration(game, exploration, data, me, errorSetter, errorMessageRef) {
+  let moveNumbersUpdated = new Set();
+  for (const m of data) {
+    const version = m.version;
+    const move = m.move;
+    const tree = m.tree;
+    let node = exploration[move - 1];
+    node.version = version;
+    let gameEngine = GameFactory(game.metaGame, node.state);
+    const added = mergeMoveRecursive2(gameEngine, exploration, move - 1, node, tree);
+    added.forEach((e) => moveNumbersUpdated.add(e));
+  }
+  moveNumbersUpdated.forEach((e) => {
+    saveExploration(exploration, e + 1, game, me, true, errorSetter, errorMessageRef);
+  });
+}
+
+// after you submit a move, move the subtree of that explored move to the actual move.
 function mergeExistingExploration(moveNum, exploration, explorationRef) {
   let subtree = undefined;
   moveNum++;
@@ -316,14 +335,15 @@ function mergeExistingExploration(moveNum, exploration, explorationRef) {
   }
 }
 
-function mergeMoveRecursive(gameEngine, node, children) {
+function mergeMoveRecursive(gameEngine, node, children, newids = true) {
   children.forEach((n) => {
     gameEngine.move(n.move);
     const pos = node.AddChild(
       n.move,
       gameEngine
     );
-    node.children[pos].id = n.id;
+    if (newids)
+      node.children[pos].id = n.id;
     if (n.outcome !== undefined) {
       if (node.children[pos].outcome === -1) {
         node.children[pos].SetOutcome(n.outcome);
@@ -331,12 +351,44 @@ function mergeMoveRecursive(gameEngine, node, children) {
         node.children[pos].SetOutcome(-1);
       }
     }
-    mergeMoveRecursive(gameEngine, node.children[pos], n.children);
+    mergeMoveRecursive(gameEngine, node.children[pos], n.children, newids);
     gameEngine.stack.pop();
     gameEngine.load();
     gameEngine.gameover = false;
     gameEngine.winner = [];
   });
+}
+
+// This version will check if exploration followed the actual game. It also returns those move numbers that were actually updated.
+function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
+  const actualNextMove = exploration[moveNum + 1].move;
+  let movesUpdated = new Set();
+  children.forEach((n) => {
+    gameEngine.move(n.move);
+    if (gameEngine.sameMove(n.move, actualNextMove)) {
+      const updated = mergeMoveRecursive2(gameEngine, exploration, moveNum + 1, exploration[moveNum + 1], n.children);
+      updated.forEach((e) => movesUpdated.add(e));
+    } else {
+      const pos = node.AddChild(
+        n.move,
+        gameEngine
+      );
+      if (n.outcome !== undefined) {
+        if (node.children[pos].outcome === -1) {
+          node.children[pos].SetOutcome(n.outcome);
+        } else if (node.children[pos].outcome !== n.outcome) {
+          node.children[pos].SetOutcome(-1);
+        }
+      }
+      movesUpdated.add(moveNum);
+      mergeMoveRecursive(gameEngine, node.children[pos], n.children, false);
+    }
+    gameEngine.stack.pop();
+    gameEngine.load();
+    gameEngine.gameover = false;
+    gameEngine.winner = [];
+  });
+  return movesUpdated;
 }
 
 function setupColors(settings, game, t) {
@@ -522,9 +574,14 @@ function doView(
 }
 
 function setURL(exploration, focus, game, navigate) {
+  let newQueryString;
   if (game.gameOver) {
-    let node = getFocusNode(exploration, focus);
-    const newQueryString = new URLSearchParams({move: focus.moveNumber, nodeid: node.id}).toString();
+    if (focus.exPath.length === 0) {
+      newQueryString = new URLSearchParams({move: focus.moveNumber}).toString();
+    } else {
+      let node = getFocusNode(exploration, focus);
+      newQueryString = new URLSearchParams({move: focus.moveNumber, nodeid: node.id}).toString();
+    }
     navigate(`?${newQueryString}`, { replace: true });
   }
 }
@@ -1011,10 +1068,13 @@ function GameMove(props) {
             return d;
           });
           mergePublicExploration(gameRef.current, explorationRef.current, data);
-          if (moveNumberParam && nodeidParam) {
-            const exPath = explorationRef.current[moveNumberParam].FindNode(nodeidParam);
-            console.log(exPath);
-            handleGameMoveClick( { moveNumber: moveNumberParam, exPath } );
+          if (moveNumberParam) {
+            const moveNum = parseInt(moveNumberParam, 10);
+            let exPath = [];
+            if (nodeidParam) {
+              exPath = explorationRef.current[moveNum].findNode(nodeidParam);
+            }
+            handleGameMoveClick( { moveNumber: moveNum, exPath } );
           } else {
             focusSetter(cloneDeep(focus)); // just to trigger a rerender...
           }
@@ -1628,6 +1688,76 @@ function GameMove(props) {
     explorerSetter(true);
   };
 
+  const handlePublishExploration = async () => {
+    console.log("Fetching private exploration data");
+    let token = null;
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      token = usr.signInUserSession.idToken.jwtToken;
+    } catch (err) {
+      // Not logged in...
+    }
+    if (token) {
+      try {
+        // mark game as published (don't await)
+        fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            query: "mark_published",
+            pars: {
+              id: gameID,
+              metagame: gameRef.current.metaGame
+            },
+          }),
+        });
+        // fetch private exploration data
+        let status;
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            query: "get_private_exploration",
+            pars: {
+              id: gameID
+            },
+          }),
+        });
+        status = res.status;
+        if (status !== 200) {
+          const result = await res.json();
+          errorMessageRef.current = JSON.parse(result.body);
+          errorSetter(true);
+        } else {
+          const result = await res.json();
+          if (result && result.body) {
+            let data = JSON.parse(result.body);
+            data = data.map((d) => {
+              if (d && typeof d.tree === 'string') {
+                d.tree = JSON.parse(d.tree);
+              }
+              return d;
+            });
+            mergePrivateExploration(gameRef.current, explorationRef.current, data, globalMe, errorSetter, errorMessageRef);
+            focusSetter(cloneDeep(focus)); // just to trigger a rerender...
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        errorMessageRef.current = error.message;
+        errorSetter(true);
+      }
+    }
+  }
+
   const handleNextGame = () => {
     // Randomizing them because otherwise you can never just skip a game for a little later.
     // It will just keep returning you to the first game in the list.
@@ -1655,7 +1785,6 @@ function GameMove(props) {
         toMove = getFocusNode(explorationRef.current, focus).toMove;
       }
     }
-    console.log("rendering. expanding: ", gameRef.current?.stackExpanding);
     return (
       <article>
         <Joyride
@@ -1719,6 +1848,22 @@ function GameMove(props) {
               />
             )}
             <div className="buttons">
+              { !globalMe ||
+                !isExplorer(explorer, globalMe) ||
+                !game ||
+                game.simultaneous ||
+                game.numPlayers !== 2 ||
+                !game.gameOver ||
+                !game.players.find(p => p.id === globalMe.id) ||
+                (game.published && game.published.includes(globalMe.id)) ? null : 
+                  (
+                    <div className="control" style={{ paddingTop: "1em" }}>
+                      <button className="button apButton is-small" onClick={handlePublishExploration} title={t("PublishHelp")}>
+                        <span>{t("Publish")}</span>
+                      </button>
+                    </div>
+                  )
+              }
               {globalMe?.settings?.all?.exploration === -1 ||
               globalMe?.settings?.all?.exploration === 1 ||
               explorer ||

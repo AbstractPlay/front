@@ -70,7 +70,7 @@ export class GameNode {
     return deflated;
   }
 
-  FindNode(id) {
+  findNode(id) {
     if (this.id === id) return [];
     for (let i = 0; i < this.children.length; i++) {
       const path = this.children[i].FindNode(id);
