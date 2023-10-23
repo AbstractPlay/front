@@ -383,7 +383,7 @@ function MoveEntry(props) {
               </button>
             ) : (
               <button
-                className="button is-small apButton"
+                className="button is-small apButtonAlert"
                 onClick={handleResign}
               >
                 {t("Resign")}
