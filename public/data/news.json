@@ -277,6 +277,26 @@
     },
     {
         "time": 1695061586000,
-        "text": "It's with mixed emotions that I announce that the original Super Duper Games will be shutting down permanently as of Thursday, November 30th, 2023. I will be downloading all the game records starting Monday the 27th of November. I will maintain the domain name, and a permanent landing page will be set up that will list all the games and point people to the SDG archive, (already available on my Google Drive)[https://drive.google.com/drive/folders/0Bw8J0V9P_9hMeEJUSXE1LXRBN00?resourcekey=0-cklbEpjB9v8pAJ8C2nHRww&usp=sharing].\n\nIf your favourite game was not migrated, please submit a suggestion. Thank you to all the players who have been a part of the SDG community for these many years."
+        "text": "It's with mixed emotions that I announce that the original Super Duper Games will be shutting down permanently as of Thursday, November 30th, 2023. I will be downloading all the game records starting Monday the 27th of November. I will maintain the domain name, and a permanent landing page will be set up that will list all the games and point people to the SDG archive, [already available on my Google Drive](https://drive.google.com/drive/folders/0Bw8J0V9P_9hMeEJUSXE1LXRBN00?resourcekey=0-cklbEpjB9v8pAJ8C2nHRww&usp=sharing).\n\nIf your favourite game was not migrated, please submit a suggestion. Thank you to all the players who have been a part of the SDG community for these many years."
+    },
+    {
+        "time": 1695484980000,
+        "text": "The game Armadas is now on its way to the production server. There is still an issue with manually typing moves, but the game otherwise functions fine, and I want to get it out of testing. I will continue to \"chew on\" this manual input issue. Enjoy!"
+    },
+    {
+        "time": 1695504780000,
+        "text": "I'm pleased to announce that @Mark Khan's game Hexagonal Y is now available on the production server. Please let us know if you encounter any issues. Enjoy!"
+    },
+    {
+        "time": 1695644520000,
+        "text": "@alek's game Bide is now available on the production server, supporting 2–6 players. Enjoy!"
+    },
+    {
+        "time": 1696547460000,
+        "text": "A notes feature has now been added. Notes are private. Only you can see them. Notes are tied to games, not to individual moves. Notes disappear when a game ends. Because I had to pick a number, I've limited notes to 250 characters. That seems reasonable, but do let me know if it's too restrictive. Feedback on the UX is welcome.\n\nI also now hide the \"rotate\" button below the board if the game is not flagged as needing rotation. For example, games like Cannon and Ordo are flagged as `perspective`, and the board is autoflipped for the second player. But games like Cephalopod and Streetcar Suburb are not, and so now the rotate button won't appear for those games. In an ideal world the rotation would work 100% of the time for all games, but for games with below-the-board areas, it doesn't work correctly. This seemed like a good middle ground for now."
+    },
+    {
+        "time": 1698206400000,
+        "text": "Phil Leduc's game Murus Gallicus is now available on the production server. I'm pretty confident I've captured all the rules correctly, but it has been a long day 🙂 If you encounter any issues, please let me know right away and I'll try to salvage the game.\n\nIn discussion with Phil, with the goal of ensuring the \"best\" version of the game is the default, here's how things are configured:\n\n* The default ruleset is \"Advanced Murus Gallicus\" (with catapults).\n* By default, your first move is to redistribute one of your starting towers as walls on your second row.\n* The standard pie rule is also available.\n* There are three variants you can mix and match:\n\n  * \"Basic\" reverts the game to the \"no catapult\" state.\n  * \"Static\" disables the initial tower redistribution.\n  * \"Escape\" eliminates the breakthrough win condition.\n\nI should probably put that in the implementation notes, now that I think about it. Again, let me know if there are any issues. Enjoy!"
     }
 ]
