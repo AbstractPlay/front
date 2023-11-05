@@ -185,7 +185,7 @@ function MoveEntry(props) {
         ) : (
           <p className="exploreState">{t("Explore")}</p>
         )}
-        <p style={{ marginBottom: "1em" }} className={(game.canSubmit && uiState === 0) ? "yourTurn" : ""}>
+        <p style={{ marginBottom: "1em" }} className={"yourTurn" + ((game.canSubmit && uiState === 0) ? " myTurn" : "")}>
           {img === null ? (
             ""
           ) : img.isImage ? (
@@ -197,7 +197,7 @@ function MoveEntry(props) {
           ) : (
             <span style={{ verticalAlign: "middle" }}>{img.value + ":"}</span>
           )}
-          <span style={{ marginLeft: "0.5em" }}>{mover}</span>
+          <span className="playerName">{mover}</span>
         </p>
         {uiState === 0 && toMove !== "" ? (
           <table className="table">

@@ -95,6 +95,13 @@ function isExplorer(explorer, me) {
   );
 }
 
+function setCanPublish(game, explorer, me, canPublishSetter) {
+  if (me && isExplorer(explorer, me) && !game.simultaneous && game.numPlayers === 2 && game.gameOver && game.players.find(p => p.id === me.id) 
+      && (!game.published || !game.published.includes(me.id))) {
+    canPublishSetter("yes");
+  }
+}
+
 function setupGame(
   game0,
   gameRef,
@@ -109,6 +116,7 @@ function setupGame(
   explorationRef,
   moveSetter,
   gameRecSetter,
+  publishSetter,
   display,
   navigate
 ) {
@@ -250,6 +258,7 @@ function setupGame(
     explorationRef.current,
     focus0
   );
+  setCanPublish(game0, explorer, me, publishSetter);
   focusSetter(focus0);
   renderrepSetter(render);
   setURL(explorationRef.current, focus0, game0, navigate);
@@ -305,7 +314,8 @@ function mergePrivateExploration(game, exploration, data, me, errorSetter, error
     const move = m.move;
     const tree = m.tree;
     let node = exploration[move - 1];
-    node.version = version;
+    if (version)
+      node.version = version;
     let gameEngine = GameFactory(game.metaGame, node.state);
     const added = mergeMoveRecursive2(gameEngine, exploration, move - 1, node, tree);
     added.forEach((e) => moveNumbersUpdated.add(e));
@@ -361,8 +371,10 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
 
 // This version will check if exploration followed the actual game. It also returns those move numbers that were actually updated.
 function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
-  const actualNextMove = exploration[moveNum + 1].move;
   let movesUpdated = new Set();
+  if (moveNum === exploration.length - 1)
+    return movesUpdated;
+  const actualNextMove = exploration[moveNum + 1].move;
   children.forEach((n) => {
     gameEngine.move(n.move);
     if (gameEngine.sameMove(n.move, actualNextMove)) {
@@ -773,6 +785,7 @@ function GameMove(props) {
   // used to construct the localized string of players in check
   const [inCheck, inCheckSetter] = useState("");
   const [drawMessage, drawMessageSetter] = useState("");
+  const [canPublish, canPublishSetter] = useState("no");
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -794,8 +807,8 @@ function GameMove(props) {
   const engineRef = useRef(null);
   const [myMove, myMoveSetter] = useContext(MyTurnContext);
   const params = useQueryString();
-  const [moveNumberParam] = React.useState(params.get('move'));
-  const [nodeidParam] = React.useState(params.get('nodeid'));
+  const [moveNumberParam] = useState(params.get('move'));
+  const [nodeidParam] = useState(params.get('nodeid'));
   const navigate = useNavigate();
 
   const { t, i18n } = useTranslation();
@@ -951,6 +964,7 @@ function GameMove(props) {
             explorationRef,
             moveSetter,
             gameRecSetter,
+            canPublishSetter,
             globalMe?.settings?.[metaGame]?.display,
             navigate
           );
@@ -1089,7 +1103,7 @@ function GameMove(props) {
         fetchPrivateExploration();
       }
     }
-  }, [focus, explorationFetched, gameID, explorer, globalMe]);
+  }, [focus, explorationFetched, gameID, explorer, globalMe, moveNumberParam, nodeidParam]);
 
   const handleResize = () => {
     screenWidthSetter(window.innerWidth);
@@ -1495,6 +1509,7 @@ function GameMove(props) {
         explorationRef,
         moveSetter,
         gameRecSetter,
+        canPublishSetter,
         settings?.[metaGame]?.display,
         navigate
       );
@@ -1548,6 +1563,16 @@ function GameMove(props) {
             console.log(err);
             //setError(err.message);
           }
+    }
+  };
+
+  const submitNodeComment = async (comment) => {
+    // ignore blank comments
+    if ( (comment.length > 0) && (! /^\s*$/.test(comment)) ) {
+      const node = getFocusNode(explorationRef.current, focus);
+      node.comment = node.comment.filter(c => c.userId !== globalMe.id);
+      node.comment.push({userId: globalMe.id, comment, timeStamp: Date.now() });
+      saveExploration(explorationRef.current, focus.moveNumber, game, globalMe, explorer, errorSetter, errorMessageRef, focus, navigate);
     }
   };
 
@@ -1643,6 +1668,7 @@ function GameMove(props) {
               explorationRef,
               moveSetter,
               gameRecSetter,
+              canPublishSetter,
               settings?.[metaGame]?.display,
               navigate
             );
@@ -1685,11 +1711,13 @@ function GameMove(props) {
       else movesRef.current = engine.moves();
     }
     focusSetter(focus0);
+    setCanPublish(game, explorationRef.current, globalMe, canPublishSetter);
     explorerSetter(true);
   };
 
   const handlePublishExploration = async () => {
     console.log("Fetching private exploration data");
+    canPublishSetter("publishing");
     let token = null;
     try {
       const usr = await Auth.currentAuthenticatedUser();
@@ -1747,7 +1775,7 @@ function GameMove(props) {
               return d;
             });
             mergePrivateExploration(gameRef.current, explorationRef.current, data, globalMe, errorSetter, errorMessageRef);
-            focusSetter(cloneDeep(focus)); // just to trigger a rerender...
+            canPublishSetter("no");
           }
         }
       } catch (error) {
@@ -1776,6 +1804,8 @@ function GameMove(props) {
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
   // console.log("game.me", game ? game.me : "nope");
+  let exploringCompletedGame = false;
+  let nodeComments = [];
   if (!error) {
     let toMove;
     if (focus) {
@@ -1783,6 +1813,10 @@ function GameMove(props) {
         toMove = game.toMove; // will only be used at current position
       } else {
         toMove = getFocusNode(explorationRef.current, focus).toMove;
+      }
+      if (game.gameOver && focus.canExplore) {
+        exploringCompletedGame = true;
+        nodeComments = getFocusNode(explorationRef.current, focus).comment;
       }
     }
     return (
@@ -1848,17 +1882,10 @@ function GameMove(props) {
               />
             )}
             <div className="buttons">
-              { !globalMe ||
-                !isExplorer(explorer, globalMe) ||
-                !game ||
-                game.simultaneous ||
-                game.numPlayers !== 2 ||
-                !game.gameOver ||
-                !game.players.find(p => p.id === globalMe.id) ||
-                (game.published && game.published.includes(globalMe.id)) ? null : 
+              { canPublish === "no" ? null : 
                   (
                     <div className="control" style={{ paddingTop: "1em" }}>
-                      <button className="button apButton is-small" onClick={handlePublishExploration} title={t("PublishHelp")}>
+                      <button className="button apButton is-small" onClick={handlePublishExploration} title={t("PublishHelp")} disabled={canPublish === "publishing"}>
                         <span>{t("Publish")}</span>
                       </button>
                     </div>
@@ -2008,9 +2035,9 @@ function GameMove(props) {
                 handleGameMoveClick={handleGameMoveClick}
               />
               <UserChats
-                comments={comments}
+                comments={exploringCompletedGame ? nodeComments : comments}
                 players={gameRef.current?.players}
-                handleSubmit={submitComment}
+                handleSubmit={exploringCompletedGame ? submitNodeComment : submitComment}
                 tooMuch={commentsTooLong}
                 gameid={gameRef.current?.id}
               />

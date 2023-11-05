@@ -382,7 +382,7 @@ function GameMoves(props) {
                   {img.value + ":"}
                 </span>
               )}
-              <span style={{ marginLeft: "0.5em" }}>{player}</span>
+              <span className="playerName">{player}</span>
             </div>
           </th>
         );

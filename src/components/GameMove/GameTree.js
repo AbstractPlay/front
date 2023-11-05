@@ -7,7 +7,7 @@ export class GameNode {
     this.move = move;
     this.state = state;
     this.id = uuid();
-    this.comment = '';
+    this.comment = [];
     this.version = undefined; // Only the base node has a version. This is really the version of the tree.
     this.toMove = null; // 0 for player1, 1 for player2
     if (toMove !== undefined) this.toMove = toMove;

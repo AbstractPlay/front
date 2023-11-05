@@ -424,10 +424,6 @@ function Me(props) {
     let challengesResponded = globalMe.challengesIssued.concat(
       globalMe.challengesAccepted
     );
-    console.log("challengesIssued", globalMe.challengesIssued);
-    console.log("challengesAccepted", globalMe.challengesAccepted);
-    console.log("standingChallenges", globalMe.standingChallenges);
-    console.log("challengesReceived", globalMe.challengesReceived);
     return (
       <article id="dashboard">
         <Joyride
