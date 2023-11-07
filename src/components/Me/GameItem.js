@@ -21,7 +21,9 @@ function GameItem(props) {
   return (
     <li>
       <i className="fa fa-circle apBullet"></i>
-      <Link to={`/move/${game.metaGame}/${currentGameBit}/${game.id}`}>{desc}</Link>
+      <Link to={`/move/${game.metaGame}/${currentGameBit}/${game.id}`}>
+        {desc}
+      </Link>
     </li>
   );
 }

@@ -76,7 +76,6 @@ function GameMoves(props) {
     // 300 is the maxHeight of the table from the CSS (for .movesTable)
     let maxHeight = 300;
     if (focusRowRef.current) {
-
       // If there's a horizontal scrollbar, adjust maxHeight
       if (tableRef.current.scrollWidth > tableRef.current.clientWidth) {
         maxHeight -= 18;
@@ -89,7 +88,9 @@ function GameMoves(props) {
           newScrollTop + maxHeight
       )
         newScrollTop =
-          lastRowRef.current.offsetTop - maxHeight + lastRowRef.current.offsetHeight; // make last row visible
+          lastRowRef.current.offsetTop -
+          maxHeight +
+          lastRowRef.current.offsetHeight; // make last row visible
       if (
         focusRowRef.current.offsetTop + focusRowRef.current.offsetHeight >
         newScrollTop + maxHeight
@@ -99,9 +100,13 @@ function GameMoves(props) {
           focusRowRef.current.offsetTop -
           maxHeight +
           focusRowRef.current.offsetHeight;
-      if (focusRowRef.current.offsetTop < newScrollTop + headerRef.current.offsetHeight)
+      if (
+        focusRowRef.current.offsetTop <
+        newScrollTop + headerRef.current.offsetHeight
+      )
         // focus row is above visible area
-        newScrollTop = focusRowRef.current.offsetTop - headerRef.current.offsetHeight;
+        newScrollTop =
+          focusRowRef.current.offsetTop - headerRef.current.offsetHeight;
       if (newScrollTop !== tableRef.current.scrollTop)
         tableRef.current.scrollTop = newScrollTop;
     }

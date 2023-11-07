@@ -76,15 +76,15 @@ function About(props) {
 
   return (
     <Fragment>
-        <Helmet>
-            <link rel="canonical" href="https://play.abstractplay.com/legal" />
-        </Helmet>
-    <article className="content">
-      <h1 className="has-text-centered title">{t("Legal")}</h1>
-      <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-        {md}
-      </ReactMarkdown>
-    </article>
+      <Helmet>
+        <link rel="canonical" href="https://play.abstractplay.com/legal" />
+      </Helmet>
+      <article className="content">
+        <h1 className="has-text-centered title">{t("Legal")}</h1>
+        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+          {md}
+        </ReactMarkdown>
+      </article>
     </Fragment>
   );
 }

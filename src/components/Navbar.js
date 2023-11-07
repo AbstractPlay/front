@@ -12,8 +12,8 @@ import { useStorageState } from "react-use-storage-state";
 function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
   const [burgerExpanded, updateBurgerExpanded] = useState(false);
-  const [news,] = useContext(NewsContext);
-  const [newsLastSeen, ] = useStorageState("news-last-seen", 0);
+  const [news] = useContext(NewsContext);
+  const [newsLastSeen] = useStorageState("news-last-seen", 0);
   const [maxNews, maxNewsSetter] = useState(Infinity);
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
@@ -23,10 +23,10 @@ function Navbar(props) {
   }, [i18n.language]);
 
   useEffect(() => {
-    if ( (news !== undefined) && (news.length > 0) ) {
-        maxNewsSetter(Math.max(...news.map(n => n.time)));
+    if (news !== undefined && news.length > 0) {
+      maxNewsSetter(Math.max(...news.map((n) => n.time)));
     } else {
-        maxNewsSetter(Infinity);
+      maxNewsSetter(Infinity);
     }
   }, [maxNewsSetter, news]);
 
@@ -103,11 +103,12 @@ function Navbar(props) {
           <div className="navbar-item">
             <Link to="/news" className="navbar-item">
               {t("News")}
-              {newsLastSeen >= maxNews ? null :
-                <span className="icon highlight">&nbsp;
-                    <i className="fa fa-eercast" aria-hidden="true"></i>
+              {newsLastSeen >= maxNews ? null : (
+                <span className="icon highlight">
+                  &nbsp;
+                  <i className="fa fa-eercast" aria-hidden="true"></i>
                 </span>
-              }
+              )}
             </Link>
           </div>
           <div className="navbar-item">

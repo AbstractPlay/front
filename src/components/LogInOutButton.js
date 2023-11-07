@@ -58,14 +58,18 @@ function LogInOutButton(props) {
 
   useEffect(() => {
     async function fetchAuth() {
-        if ( (globalMe !== null) && ("mayPush" in globalMe) && (globalMe.mayPush === true) ) {
-            const usr = await Auth.currentAuthenticatedUser();
-            console.log("usr: ", usr);
-            const token = usr.signInUserSession.idToken.jwtToken;
-            if (token !== null) {
-                subscribeUser(token);
-            }
+      if (
+        globalMe !== null &&
+        "mayPush" in globalMe &&
+        globalMe.mayPush === true
+      ) {
+        const usr = await Auth.currentAuthenticatedUser();
+        console.log("usr: ", usr);
+        const token = usr.signInUserSession.idToken.jwtToken;
+        if (token !== null) {
+          subscribeUser(token);
         }
+      }
     }
     fetchAuth();
   }, [globalMe]);
@@ -91,7 +95,7 @@ function LogInOutButton(props) {
 
   const handleNewProfileClose = (cnt) => {
     showNewProfileModalSetter(false);
-    if (cnt > 0){
+    if (cnt > 0) {
       updatedSetter(!updated);
     }
   };
@@ -121,7 +125,11 @@ function LogInOutButton(props) {
           show={showUserSettingsModal}
           handleClose={handleUserSettingsClose}
         />
-        <NewProfile show={showNewProfileModal} handleClose={handleNewProfileClose} updateMe={true}/>
+        <NewProfile
+          show={showNewProfileModal}
+          handleClose={handleNewProfileClose}
+          updateMe={true}
+        />
       </div>
     );
   }

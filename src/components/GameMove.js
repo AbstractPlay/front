@@ -27,18 +27,18 @@ import ClipboardCopy from "./GameMove/ClipboardCopy";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import DownloadDataUri from "./GameMove/DownloadDataUri";
 import UserChats from "./GameMove/UserChats";
-import { Canvg } from 'canvg';
+import { Canvg } from "canvg";
 import Joyride, { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
 
 const replaceNames = (rep, players) => {
-    let stringRep = JSON.stringify(rep);
-    for (let i = 0; i < players.length; i++) {
-        const re = new RegExp(`player ${i+1}`, "gi")
-        stringRep = stringRep.replace(re, players[i].name)
-    }
-    return JSON.parse(stringRep);
-}
+  let stringRep = JSON.stringify(rep);
+  for (let i = 0; i < players.length; i++) {
+    const re = new RegExp(`player ${i + 1}`, "gi");
+    stringRep = stringRep.replace(re, players[i].name);
+  }
+  return JSON.parse(stringRep);
+};
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -112,15 +112,14 @@ function setupGame(
   game0.name = info.name;
   game0.simultaneous =
     info.flags !== undefined && info.flags.includes("simultaneous");
-  game0.pie =
-    info.flags !== undefined && info.flags.includes("pie");
-  game0.canCheck =
-    info.flags !== undefined && info.flags.includes("check");
+  game0.pie = info.flags !== undefined && info.flags.includes("pie");
+  game0.canCheck = info.flags !== undefined && info.flags.includes("check");
   game0.sharedPieces =
     info.flags !== undefined && info.flags.includes("shared-pieces");
   game0.customColours =
     info.flags !== undefined && info.flags.includes("custom-colours");
-  game0.canRotate = info.flags !== undefined && info.flags.includes("perspective");
+  game0.canRotate =
+    info.flags !== undefined && info.flags.includes("perspective");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
   game0.scores = info.flags !== undefined && info.flags.includes("scores");
   game0.limitedPieces =
@@ -138,7 +137,10 @@ function setupGame(
   const engine = GameFactory(game0.metaGame, game0.state);
   moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
   // eslint-disable-next-line no-prototype-builtins
-  game0.canPie = game0.pie && engine.stack.length === 2 && ( (! game0.hasOwnProperty("pieInvoked")) || (game0.pieInvoked = false) );
+  game0.canPie =
+    game0.pie &&
+    engine.stack.length === 2 &&
+    (!game0.hasOwnProperty("pieInvoked") || (game0.pieInvoked = false));
   game0.me = game0.players.findIndex((p) => me && p.id === me.id);
   game0.variants = engine.getVariants();
 
@@ -187,8 +189,12 @@ function setupGame(
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   engineRef.current = cloneDeep(engine);
-  const render = replaceNames(engine.render({ perspective: game0.me + 1, altDisplay: display }), game0.players);
-  game0.stackExpanding = game0.stackExpanding && render.renderer === "stacking-expanding";
+  const render = replaceNames(
+    engine.render({ perspective: game0.me + 1, altDisplay: display }),
+    game0.players
+  );
+  game0.stackExpanding =
+    game0.stackExpanding && render.renderer === "stacking-expanding";
   setStatus(
     engine,
     game0,
@@ -217,7 +223,10 @@ function setupGame(
           };
         }),
         unrated: !game0.rated,
-        pied: ( ("pieInvoked" in game0) && (game0.pieInvoked) ) ? game0.pieInvoked : undefined,
+        pied:
+          "pieInvoked" in game0 && game0.pieInvoked
+            ? game0.pieInvoked
+            : undefined,
       })
     );
   }
@@ -285,13 +294,18 @@ function mergeExistingExploration(moveNum, exploration, explorationRef) {
   let subtree = undefined;
   moveNum++;
   while (true) {
-    let move = explorationRef.current[moveNum].move.toLowerCase().replace(/\s+/g, "");
-    subtree = exploration.children.find((e) => e.move.toLowerCase().replace(/\s+/g, "") === move);
+    let move = explorationRef.current[moveNum].move
+      .toLowerCase()
+      .replace(/\s+/g, "");
+    subtree = exploration.children.find(
+      (e) => e.move.toLowerCase().replace(/\s+/g, "") === move
+    );
     if (subtree !== undefined) {
       exploration = subtree;
       moveNum++;
       if (moveNum === explorationRef.current.length) {
-        explorationRef.current[explorationRef.current.length - 1].children = subtree.children;
+        explorationRef.current[explorationRef.current.length - 1].children =
+          subtree.children;
         break;
       }
     } else {
@@ -303,10 +317,7 @@ function mergeExistingExploration(moveNum, exploration, explorationRef) {
 function mergeMoveRecursive(gameEngine, node, children) {
   children.forEach((n) => {
     gameEngine.move(n.move);
-    const pos = node.AddChild(
-      n.move,
-      gameEngine
-    );
+    const pos = node.AddChild(n.move, gameEngine);
     if (n.outcome !== undefined) node.children[pos].SetOutcome(n.outcome);
     mergeMoveRecursive(gameEngine, node.children[pos], n.children);
     gameEngine.stack.pop();
@@ -320,8 +331,8 @@ function setupColors(settings, game, t) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
-//   } else if (settings.color === "patterns") {
-//     options.patterns = true;
+    //   } else if (settings.color === "patterns") {
+    //     options.patterns = true;
   }
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
@@ -400,7 +411,12 @@ function doView(
       moves = gameEngineTmp.moves();
     }
     // check for auto moves
-    if (!partialMove && focus.canExplore && game.automove && isExplorer(explorer, me)) {
+    if (
+      !partialMove &&
+      focus.canExplore &&
+      game.automove &&
+      isExplorer(explorer, me)
+    ) {
       while (moves.length === 1) {
         let pos = node.AddChild(m, gameEngineTmp);
         newfocus.exPath.push(pos);
@@ -451,7 +467,15 @@ function doView(
   partialMoveRenderRef.current = partialMove;
   // console.log('setting renderrep 1');
   engineRef.current = gameEngineTmp;
-  renderrepSetter(replaceNames(gameEngineTmp.render({ perspective: game.me + 1, altDisplay: settings?.display }), game.players));
+  renderrepSetter(
+    replaceNames(
+      gameEngineTmp.render({
+        perspective: game.me + 1,
+        altDisplay: settings?.display,
+      }),
+      game.players
+    )
+  );
 }
 
 function getFocusNode(exp, foc) {
@@ -569,7 +593,15 @@ function processNewMove(
     if (focus.canExplore && !gameRef.current.noMoves)
       movesRef.current = gameEngineTmp.moves();
     engineRef.current = gameEngineTmp;
-    renderrepSetter(replaceNames(gameEngineTmp.render( { perspective: gameRef.current.me + 1, altDisplay: settings?.display }), gameRef.current.players));
+    renderrepSetter(
+      replaceNames(
+        gameEngineTmp.render({
+          perspective: gameRef.current.me + 1,
+          altDisplay: settings?.display,
+        }),
+        gameRef.current.players
+      )
+    );
     newmove.rendered = "";
     moveSetter(newmove);
   } else {
@@ -578,21 +610,24 @@ function processNewMove(
 }
 
 const populateChecked = (gameRef, engineRef, t, setter) => {
-    if (gameRef.current?.canCheck) {
-        const inCheckArr = engineRef.current.inCheck();
-        if (inCheckArr.length > 0) {
-            let newstr = "";
-            for (const n of inCheckArr) {
-                newstr += "<p>" + t("InCheck", {player: gameRef.current.players[n - 1].name}) + "</p>";
-            }
-            setter(newstr);
-        } else {
-            setter("");
-        }
+  if (gameRef.current?.canCheck) {
+    const inCheckArr = engineRef.current.inCheck();
+    if (inCheckArr.length > 0) {
+      let newstr = "";
+      for (const n of inCheckArr) {
+        newstr +=
+          "<p>" +
+          t("InCheck", { player: gameRef.current.players[n - 1].name }) +
+          "</p>";
+      }
+      setter(newstr);
     } else {
-        setter("");
+      setter("");
     }
-}
+  } else {
+    setter("");
+  }
+};
 
 function GameMove(props) {
   const [renderrep, renderrepSetter] = useState(null);
@@ -680,12 +715,12 @@ function GameMove(props) {
   // eslint-disable-next-line no-prototype-builtins
   if (gameDeets.hasOwnProperty("people")) {
     let designers = gameDeets.people
-    .filter((p) => p.type === "designer")
-    .map((p) => p.name);
+      .filter((p) => p.type === "designer")
+      .map((p) => p.name);
     if (designers.length === 1) {
-        designerString = "Designer: ";
+      designerString = "Designer: ";
     } else {
-        designerString = "Designers: ";
+      designerString = "Designers: ";
     }
     designerString += designers.join(", ");
   }
@@ -696,42 +731,42 @@ function GameMove(props) {
 
   useEffect(() => {
     tourStateSetter([
-        {
-            target: ".tourWelcome",
-            content: t("tour.play.welcome")
-        },
-        {
-            target: ".tourStatus",
-            content: t("tour.play.status")
-        },
-        {
-            target: ".tourMove",
-            content: t("tour.play.move")
-        },
-        {
-            target: ".tourMoveList",
-            content: t("tour.play.movelist")
-        },
-        {
-            target: ".tourChat",
-            content: t("tour.play.chat")
-        },
-        {
-            target: ".tourBoard",
-            content: t("tour.play.board")
-        },
-        {
-            target: ".tourBoardButtons",
-            content: t("tour.play.boardbuttons")
-        },
-        {
-            target: ".tourSettings",
-            content: t("tour.play.settings")
-        },
-      ]);
+      {
+        target: ".tourWelcome",
+        content: t("tour.play.welcome"),
+      },
+      {
+        target: ".tourStatus",
+        content: t("tour.play.status"),
+      },
+      {
+        target: ".tourMove",
+        content: t("tour.play.move"),
+      },
+      {
+        target: ".tourMoveList",
+        content: t("tour.play.movelist"),
+      },
+      {
+        target: ".tourChat",
+        content: t("tour.play.chat"),
+      },
+      {
+        target: ".tourBoard",
+        content: t("tour.play.board"),
+      },
+      {
+        target: ".tourBoardButtons",
+        content: t("tour.play.boardbuttons"),
+      },
+      {
+        target: ".tourSettings",
+        content: t("tour.play.settings"),
+      },
+    ]);
   }, [t, tourStateSetter]);
 
-  const handleJoyrideCallback = data => {
+  const handleJoyrideCallback = (data) => {
     if ([STATUS.FINISHED, STATUS.SKIPPED].includes(data.status)) {
       showTourSetter(false);
     }
@@ -844,7 +879,12 @@ function GameMove(props) {
           // check for note
           // note should only be defined if the user is logged in and
           // is the owner of the note.
-          if ( ("note" in data.game) && (data.game.note !== undefined) && (data.game.note !== null) && (data.game.note.length > 0) ) {
+          if (
+            "note" in data.game &&
+            data.game.note !== undefined &&
+            data.game.note !== null &&
+            data.game.note.length > 0
+          ) {
             gameNoteSetter(data.game.note);
             interimNoteSetter(data.game.note);
           } else {
@@ -867,15 +907,26 @@ function GameMove(props) {
       }
     }
     fetchData();
-  }, [globalMe, renderrepSetter, focusSetter, explorerSetter, gameID, metaGame, pieInvoked, cbit, t]);
+  }, [
+    globalMe,
+    renderrepSetter,
+    focusSetter,
+    explorerSetter,
+    gameID,
+    metaGame,
+    pieInvoked,
+    cbit,
+    t,
+  ]);
 
-  const handleNoteUpdate = useCallback(async (newNote) => {
-    if ( (newNote.length > 0) && (! /^\s*$/.test(newNote)) ) {
+  const handleNoteUpdate = useCallback(
+    async (newNote) => {
+      if (newNote.length > 0 && !/^\s*$/.test(newNote)) {
         gameNoteSetter(newNote);
-    } else {
+      } else {
         gameNoteSetter(null);
-    }
-    if (globalMe !== undefined) {
+      }
+      if (globalMe !== undefined) {
         const usr = await Auth.currentAuthenticatedUser();
         const token = usr.signInUserSession.idToken.jwtToken;
         try {
@@ -901,8 +952,10 @@ function GameMove(props) {
           console.log(err);
           //setError(err.message);
         }
-    }
-  }, [globalMe, gameNoteSetter]);
+      }
+    },
+    [globalMe, gameNoteSetter]
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -942,12 +995,17 @@ function GameMove(props) {
             const result = await res.json();
             data = JSON.parse(result.body);
             data = data.map((d) => {
-              if (d && typeof d.tree === 'string') {
+              if (d && typeof d.tree === "string") {
                 d.tree = JSON.parse(d.tree);
               }
               return d;
             });
-            mergeExploration(gameRef.current, explorationRef.current, data, globalMe);
+            mergeExploration(
+              gameRef.current,
+              explorationRef.current,
+              data,
+              globalMe
+            );
             focusSetter(cloneDeep(focus)); // just to trigger a rerender...
           }
         }
@@ -964,8 +1022,8 @@ function GameMove(props) {
 
   const handleResize = () => {
     screenWidthSetter(window.innerWidth);
-  }
-  window.addEventListener('resize', handleResize)
+  };
+  window.addEventListener("resize", handleResize);
 
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {
@@ -987,7 +1045,13 @@ function GameMove(props) {
     engineRef.current = engine;
     console.log("Rendering in handleGameMoveClick");
     renderrepSetter(
-      replaceNames(engine.render({ perspective: gameRef.current.me ? gameRef.current.me + 1 : 1, altDisplay: settings?.display}), gameRef.current.players)
+      replaceNames(
+        engine.render({
+          perspective: gameRef.current.me ? gameRef.current.me + 1 : 1,
+          altDisplay: settings?.display,
+        }),
+        gameRef.current.players
+      )
     );
     const isPartialSimMove =
       gameRef.current.simultaneous &&
@@ -1004,18 +1068,18 @@ function GameMove(props) {
       focus.moveNumber + focus.exPath.length !==
       explorationRef.current.length - 1
     ) {
-        handleGameMoveClick({
-            moveNumber: explorationRef.current.length - 1,
-            exPath: [],
-          });
+      handleGameMoveClick({
+        moveNumber: explorationRef.current.length - 1,
+        exPath: [],
+      });
     }
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   }
 
   function handleToSubmit() {
     handleGameMoveClick({
-        moveNumber: explorationRef.current.length - 1,
-        exPath: [focus.exPath[0]],
+      moveNumber: explorationRef.current.length - 1,
+      exPath: [focus.exPath[0]],
     });
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   }
@@ -1051,7 +1115,7 @@ function GameMove(props) {
     } catch (err) {
       setError(err.message);
     }
-  }
+  };
 
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
@@ -1165,7 +1229,8 @@ function GameMove(props) {
     }
 
     if (boardImage.current !== null) {
-      const svg = boardImage.current.parentElement.querySelector("#theBoardSVG");
+      const svg =
+        boardImage.current.parentElement.querySelector("#theBoardSVG");
       console.log("remove svg:", svg, "from ", boardImage.current);
       if (svg !== null) {
         svg.remove();
@@ -1178,8 +1243,8 @@ function GameMove(props) {
         options.rotate = settings.rotate;
         if (settings.color === "blind") {
           options.colourBlind = true;
-        // } else if (settings.color === "patterns") {
-        //   options.patterns = true;
+          // } else if (settings.color === "patterns") {
+          //   options.patterns = true;
         }
         if (gameRef.current.stackExpanding) {
           options.boardHover = (row, col, piece) => {
@@ -1193,25 +1258,25 @@ function GameMove(props) {
       }
     }
     // render to PNG
-    if ( (boardImage.current !== null) && (canvasRef !== null) ) {
-        try {
-            const ctx = canvasRef.current.getContext("2d");
-            let svgstr = boardImage.current.innerHTML;
-            if ( (svgstr !== null) && (svgstr !== undefined) && (svgstr.length > 0) ) {
-                const v = Canvg.fromString(ctx, boardImage.current.innerHTML);
-                v.resize(1000, 1000, "xMidYMid meet");
-                v.render();
-                pngExportSetter(canvasRef.current.toDataURL());
-                // console.log("Updated PNG generated");
-            } else {
-                pngExportSetter(undefined)
-                // console.log("Empty SVG string generated.");
-            }
-        } catch (e) {
-            pngExportSetter(undefined);
-            // console.log("Caught error rendering PNG");
-            // console.log(e);
+    if (boardImage.current !== null && canvasRef !== null) {
+      try {
+        const ctx = canvasRef.current.getContext("2d");
+        let svgstr = boardImage.current.innerHTML;
+        if (svgstr !== null && svgstr !== undefined && svgstr.length > 0) {
+          const v = Canvg.fromString(ctx, boardImage.current.innerHTML);
+          v.resize(1000, 1000, "xMidYMid meet");
+          v.render();
+          pngExportSetter(canvasRef.current.toDataURL());
+          // console.log("Updated PNG generated");
+        } else {
+          pngExportSetter(undefined);
+          // console.log("Empty SVG string generated.");
         }
+      } catch (e) {
+        pngExportSetter(undefined);
+        // console.log("Caught error rendering PNG");
+        // console.log(e);
+      }
     }
   }, [renderrep, globalMe, focus, settings, explorer, t]);
 
@@ -1280,11 +1345,18 @@ function GameMove(props) {
     );
     if (newSettings?.display) {
       console.log("settings.display", newSettings.display);
-      const newRenderRep = replaceNames(engineRef.current.render({ perspective: gameRef.current.me + 1, altDisplay: newSettings.display }), gameRef.current.players);
+      const newRenderRep = replaceNames(
+        engineRef.current.render({
+          perspective: gameRef.current.me + 1,
+          altDisplay: newSettings.display,
+        }),
+        gameRef.current.players
+      );
       renderrepSetter(newRenderRep);
-      gameRef.current.stackExpanding = newRenderRep.renderer === "stacking-expanding";
+      gameRef.current.stackExpanding =
+        newRenderRep.renderer === "stacking-expanding";
     }
-  }
+  };
 
   const handleSettingsClose = () => {
     showSettingsSetter(false);
@@ -1346,7 +1418,8 @@ function GameMove(props) {
       }
       myMoveSetter((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
       let game0 = JSON.parse(result.body);
-      const exploration = explorationRef.current[explorationRef.current.length - 1];
+      const exploration =
+        explorationRef.current[explorationRef.current.length - 1];
       const moveNum = explorationRef.current.length - 1;
       setupGame(
         game0,
@@ -1375,45 +1448,46 @@ function GameMove(props) {
 
   const submitComment = async (comment) => {
     // ignore blank comments
-    if ( (comment.length > 0) && (! /^\s*$/.test(comment)) ) {
-        commentsSetter([
-            ...comments,
-            { comment: comment, userId: globalMe.id, timeStamp: Date.now() },
-          ]);
-          // console.log(comments);
-          const usr = await Auth.currentAuthenticatedUser();
-          const token = usr.signInUserSession.idToken.jwtToken;
-          try {
-            let players = []; let metaIfComplete = undefined;
-            if ( (engineRef.current !== undefined) && (engineRef.current.gameover) ) {
-              players = [...gameRef.current.players];
-              metaIfComplete = metaGame;
-            }
-            const res = await fetch(API_ENDPOINT_AUTH, {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({
-                query: "submit_comment",
-                pars: {
-                  id: gameRef.current.id,
-                  players,
-                  metaGame: metaIfComplete,
-                  comment: comment,
-                  moveNumber: explorationRef.current.length - 1,
-                },
-              }),
-            });
-            const result = await res.json();
-            if (result && result.statusCode && result.statusCode !== 200)
-              setError(JSON.parse(result.body));
-          } catch (err) {
-            console.log(err);
-            //setError(err.message);
-          }
+    if (comment.length > 0 && !/^\s*$/.test(comment)) {
+      commentsSetter([
+        ...comments,
+        { comment: comment, userId: globalMe.id, timeStamp: Date.now() },
+      ]);
+      // console.log(comments);
+      const usr = await Auth.currentAuthenticatedUser();
+      const token = usr.signInUserSession.idToken.jwtToken;
+      try {
+        let players = [];
+        let metaIfComplete = undefined;
+        if (engineRef.current !== undefined && engineRef.current.gameover) {
+          players = [...gameRef.current.players];
+          metaIfComplete = metaGame;
+        }
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            query: "submit_comment",
+            pars: {
+              id: gameRef.current.id,
+              players,
+              metaGame: metaIfComplete,
+              comment: comment,
+              moveNumber: explorationRef.current.length - 1,
+            },
+          }),
+        });
+        const result = await res.json();
+        if (result && result.statusCode && result.statusCode !== 200)
+          setError(JSON.parse(result.body));
+      } catch (err) {
+        console.log(err);
+        //setError(err.message);
+      }
     }
   };
 
@@ -1585,17 +1659,17 @@ function GameMove(props) {
     return (
       <article>
         <Joyride
-            steps={tourState}
-            run={showTour}
-            callback={handleJoyrideCallback}
-            continuous
-            showProgress
-            showSkipButton
-            styles={{
-                options: {
-                    primaryColor: "#008ca8"
-                }
-            }}
+          steps={tourState}
+          run={showTour}
+          callback={handleJoyrideCallback}
+          continuous
+          showProgress
+          showSkipButton
+          styles={{
+            options: {
+              primaryColor: "#008ca8",
+            },
+          }}
         />
         <div className="columns">
           {/***************** MoveEntry *****************/}
@@ -1675,12 +1749,23 @@ function GameMove(props) {
           {/***************** Board *****************/}
           <div className="column">
             <h1 className="subtitle lined tourWelcome">
-              <span>{gameinfo.get(metaGame).name}{( (gameRef.current === null) || (gameRef.current.rated) ) ? null : (<span style={{fontSize: "smaller", padding: 0, margin: 0}}>{" (unrated)"}</span>)}</span>
+              <span>
+                {gameinfo.get(metaGame).name}
+                {gameRef.current === null || gameRef.current.rated ? null : (
+                  <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
+                    {" (unrated)"}
+                  </span>
+                )}
+              </span>
             </h1>
-            {inCheck.length === 0 ? "" :
-              <div className="content inCheck" dangerouslySetInnerHTML={{__html: inCheck}}>
-              </div>
-            }
+            {inCheck.length === 0 ? (
+              ""
+            ) : (
+              <div
+                className="content inCheck"
+                dangerouslySetInnerHTML={{ __html: inCheck }}
+              ></div>
+            )}
             {gameRef.current?.stackExpanding ? (
               <div className="board">
                 <div className="stack" id="stack" ref={stackImage}></div>
@@ -1688,21 +1773,23 @@ function GameMove(props) {
               </div>
             ) : (
               <div
-                className={isZoomed ? "board tourBoard" : "board tourBoard unZoomedBoard"}
+                className={
+                  isZoomed ? "board tourBoard" : "board tourBoard unZoomedBoard"
+                }
                 id="svg"
                 ref={boardImage}
               ></div>
             )}
             <div className="boardButtons tourBoardButtons">
-            {! gameRef?.current?.canRotate ? null :
-              <button
-                className="fabtn align-right"
-                onClick={handleRotate}
-                title={t("RotateBoard")}
-              >
-                <i className="fa fa-refresh"></i>
-              </button>
-            }
+              {!gameRef?.current?.canRotate ? null : (
+                <button
+                  className="fabtn align-right"
+                  onClick={handleRotate}
+                  title={t("RotateBoard")}
+                >
+                  <i className="fa fa-refresh"></i>
+                </button>
+              )}
               <button
                 className="fabtn align-right"
                 onClick={handleUpdateRenderOptions}
@@ -1717,27 +1804,30 @@ function GameMove(props) {
                 }}
                 title={t("GameInfo")}
               >
-              {( (gameEngine === undefined) || (gameEngine.notes() === undefined) ) ?
+                {gameEngine === undefined ||
+                gameEngine.notes() === undefined ? (
                   <i className="fa fa-info"></i>
-                :
+                ) : (
                   <span className="highlight">
                     <i className="fa fa-info"></i>
                   </span>
-              }
+                )}
               </button>
-              {! globalMe ? null : (
+              {!globalMe ? null : (
                 <button
                   className="fabtn align-right"
                   onClick={() => showGameNoteSetter(true)}
                   title={t("GameNoteModal")}
                 >
-                {( (gameNote === undefined) || (gameNote === null) || (gameNote.length === 0) ) ?
-                  <i className="fa fa-sticky-note"></i>
-                  :
-                  <span className="highlight">
+                  {gameNote === undefined ||
+                  gameNote === null ||
+                  gameNote.length === 0 ? (
                     <i className="fa fa-sticky-note"></i>
-                  </span>
-                }
+                  ) : (
+                    <span className="highlight">
+                      <i className="fa fa-sticky-note"></i>
+                    </span>
+                  )}
                 </button>
               )}
               <button
@@ -1762,16 +1852,20 @@ function GameMove(props) {
                   <i className="fa fa-search-plus"></i>
                 )}
               </button>
-            {pngExport === undefined ? "" :
-              <a href={pngExport} download={"AbstractPlay-" + metaGame + "-" + gameID + ".png"} target="_blank" rel="noreferrer">
-                <button
-                  className="fabtn align-right"
-                  title={t("ExportPNG")}
+              {pngExport === undefined ? (
+                ""
+              ) : (
+                <a
+                  href={pngExport}
+                  download={"AbstractPlay-" + metaGame + "-" + gameID + ".png"}
+                  target="_blank"
+                  rel="noreferrer"
                 >
-                  <i className="fa fa-download"></i>
-                </button>
-              </a>
-            }
+                  <button className="fabtn align-right" title={t("ExportPNG")}>
+                    <i className="fa fa-download"></i>
+                  </button>
+                </a>
+              )}
               {!globalMe || globalMe.admin !== true ? (
                 ""
               ) : (
@@ -1797,41 +1891,41 @@ function GameMove(props) {
                 isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
               }`}
             >
-            {screenWidth > 770 ?
-            <Fragment>
-              <GameMoves
-                focus={focus}
-                game={game}
-                exploration={explorationRef.current}
-                noExplore={globalMe?.settings?.all?.exploration === -1}
-                handleGameMoveClick={handleGameMoveClick}
-              />
-              <UserChats
-                comments={comments}
-                players={gameRef.current?.players}
-                handleSubmit={submitComment}
-                tooMuch={commentsTooLong}
-                gameid={gameRef.current?.id}
-              />
-            </Fragment>
-            :
-            <Fragment>
-              <UserChats
-                comments={comments}
-                players={gameRef.current?.players}
-                handleSubmit={submitComment}
-                tooMuch={commentsTooLong}
-                gameid={gameRef.current?.id}
-              />
-              <GameMoves
-                focus={focus}
-                game={game}
-                exploration={explorationRef.current}
-                noExplore={globalMe?.settings?.all?.exploration === -1}
-                handleGameMoveClick={handleGameMoveClick}
-              />
-            </Fragment>
-            }
+              {screenWidth > 770 ? (
+                <Fragment>
+                  <GameMoves
+                    focus={focus}
+                    game={game}
+                    exploration={explorationRef.current}
+                    noExplore={globalMe?.settings?.all?.exploration === -1}
+                    handleGameMoveClick={handleGameMoveClick}
+                  />
+                  <UserChats
+                    comments={comments}
+                    players={gameRef.current?.players}
+                    handleSubmit={submitComment}
+                    tooMuch={commentsTooLong}
+                    gameid={gameRef.current?.id}
+                  />
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <UserChats
+                    comments={comments}
+                    players={gameRef.current?.players}
+                    handleSubmit={submitComment}
+                    tooMuch={commentsTooLong}
+                    gameid={gameRef.current?.id}
+                  />
+                  <GameMoves
+                    focus={focus}
+                    game={game}
+                    exploration={explorationRef.current}
+                    noExplore={globalMe?.settings?.all?.exploration === -1}
+                    handleGameMoveClick={handleGameMoveClick}
+                  />
+                </Fragment>
+              )}
             </div>
           )}
         </div>
@@ -1844,12 +1938,12 @@ function GameMove(props) {
                 <h1 className="subtitle lined">
                   <span>{t("GameSummary")}</span>
                 </h1>
-                  <MoveResults
-                    className="moveResults"
-                    results={game?.moveResults}
-                    comments={comments}
-                    players={gameRef.current?.players}
-                  />
+                <MoveResults
+                  className="moveResults"
+                  results={game?.moveResults}
+                  comments={comments}
+                  players={gameRef.current?.players}
+                />
               </div>
             ) : (
               ""
@@ -1928,7 +2022,8 @@ function GameMove(props) {
         >
           <div className="content">
             <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-              {gameEngine.description() + (designerString === undefined ? "" : "\n\n" + designerString)}
+              {gameEngine.description() +
+                (designerString === undefined ? "" : "\n\n" + designerString)}
             </ReactMarkdown>
             <ul className="contained">
               {gameDeets.urls.map((l, i) => (
@@ -1939,14 +2034,16 @@ function GameMove(props) {
                 </li>
               ))}
             </ul>
-            {gameEngine.notes() === undefined ? "" :
+            {gameEngine.notes() === undefined ? (
+              ""
+            ) : (
               <>
                 <h2>{t("ImplementationNotes")}</h2>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-                    {gameEngine.notes()}
+                  {gameEngine.notes()}
                 </ReactMarkdown>
               </>
-            }
+            )}
           </div>
         </Modal>
         <Modal
@@ -1976,7 +2073,9 @@ function GameMove(props) {
               ""
             ) : (
               <Fragment>
-                <ClipboardCopy copyText={getFocusNode(explorationRef.current, focus).state} />
+                <ClipboardCopy
+                  copyText={getFocusNode(explorationRef.current, focus).state}
+                />
                 <div className="field">
                   <div className="control">
                     <a
@@ -2044,10 +2143,10 @@ function GameMove(props) {
               label: t("Close"),
               action: () => {
                 showGameNoteSetter(false);
-                if ( (gameNote === undefined) || (gameNote === null) ) {
-                    interimNoteSetter("");
+                if (gameNote === undefined || gameNote === null) {
+                  interimNoteSetter("");
                 } else {
-                    interimNoteSetter(gameNote);
+                  interimNoteSetter(gameNote);
                 }
               },
             },
@@ -2055,40 +2154,59 @@ function GameMove(props) {
         >
           <div className="content">
             <p>
-              Nobody but you can see this note. The note is tied to this game and not any specific move. The note will be irretrievably lost when the game concludes and is first cleared from your list of concluded games.
+              Nobody but you can see this note. The note is tied to this game
+              and not any specific move. The note will be irretrievably lost
+              when the game concludes and is first cleared from your list of
+              concluded games.
             </p>
           </div>
           <div className="field">
             <div className="control">
-              <textarea type="textarea"
+              <textarea
+                type="textarea"
                 rows={5}
                 id="enterANote"
                 name="enterANote"
                 className="textarea"
                 value={interimNote}
                 placeholder={t("Comment")}
-                onChange={(e) => { interimNoteSetter(e.target.value); return false; }}
+                onChange={(e) => {
+                  interimNoteSetter(e.target.value);
+                  return false;
+                }}
               ></textarea>
             </div>
-            {interimNote.length > 250 ?
-              <p className="help is-danger" style={{textAlign: "right"}}>{interimNote.length} / 250</p>
-            :
-              <p className="help" style={{textAlign: "right"}}>{interimNote.length} / 250</p>
-            }
+            {interimNote.length > 250 ? (
+              <p className="help is-danger" style={{ textAlign: "right" }}>
+                {interimNote.length} / 250
+              </p>
+            ) : (
+              <p className="help" style={{ textAlign: "right" }}>
+                {interimNote.length} / 250
+              </p>
+            )}
             <div className="control">
-            {( (interimNote === gameNote) || ((interimNote === "") && (gameNote === null)) ) ?
-              <button className="button is-small" disabled>
-                {t("UpdateNote")}
-              </button>
-            :
-              <button className="button is-small" onClick={() => handleNoteUpdate(interimNote)}>
-                {t("UpdateNote")}
-              </button>
-            }
+              {interimNote === gameNote ||
+              (interimNote === "" && gameNote === null) ? (
+                <button className="button is-small" disabled>
+                  {t("UpdateNote")}
+                </button>
+              ) : (
+                <button
+                  className="button is-small"
+                  onClick={() => handleNoteUpdate(interimNote)}
+                >
+                  {t("UpdateNote")}
+                </button>
+              )}
             </div>
           </div>
         </Modal>
-        <canvas id="pngExportCanvas" ref={canvasRef} style={{display: "none"}}></canvas>
+        <canvas
+          id="pngExportCanvas"
+          ref={canvasRef}
+          style={{ display: "none" }}
+        ></canvas>
       </article>
     );
   } else {

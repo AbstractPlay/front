@@ -77,10 +77,14 @@ function ChallengeView(props) {
     else if (challenge.seating === "s2") seating = t("seatingMeSecond");
   }
   if (challenge.standing) {
-    if ( ("duration" in challenge) && (typeof challenge.duration === "number") && (challenge.duration > 0) ) {
-        challengeDesc += " " + t("DurationHelp", {count: challenge.duration});
+    if (
+      "duration" in challenge &&
+      typeof challenge.duration === "number" &&
+      challenge.duration > 0
+    ) {
+      challengeDesc += " " + t("DurationHelp", { count: challenge.duration });
     } else {
-        challengeDesc += " " + t("DurationHelpPersistent");
+      challengeDesc += " " + t("DurationHelpPersistent");
     }
   }
   const all = challenge.players

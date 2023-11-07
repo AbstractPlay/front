@@ -1,6 +1,6 @@
 import React, { useState, Suspense, useEffect, createContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import {
   API_ENDPOINT_OPEN,
   COGNITO_USER_POOL_ID,
@@ -25,8 +25,8 @@ import News from "../components/News";
 import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
 import Stats from "../components/Stats";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
 import TimeAgo from "javascript-time-ago";
 // TODO: Adjust locale to user selection, when supported
@@ -112,14 +112,14 @@ function Bones(props) {
 
   useEffect(() => {
     async function fetchData() {
-        const result = await fetch("data/news.json");
-        if (result.status !== 200) {
-            console.log(`Unable to fetch news: ${JSON.stringify(result.status)}`);
-        } else {
-            const json = await result.json();
-            json.sort((a, b) => b.time - a.time);
-            newsSetter(json);
-        }
+      const result = await fetch("data/news.json");
+      if (result.status !== 200) {
+        console.log(`Unable to fetch news: ${JSON.stringify(result.status)}`);
+      } else {
+        const json = await result.json();
+        json.sort((a, b) => b.time - a.time);
+        newsSetter(json);
+      }
     }
     fetchData();
   }, [newsSetter]);
@@ -131,66 +131,61 @@ function Bones(props) {
       <HelmetProvider>
         <Helmet>
           <link rel="canonical" href="https://play.abstractplay.com/" />
-          <title>{process.env.REACT_APP_REAL_MODE === "production" ? "Abstract Play" : "Abstract Play (Dev)"}</title>
+          <title>
+            {process.env.REACT_APP_REAL_MODE === "production"
+              ? "Abstract Play"
+              : "Abstract Play (Dev)"}
+          </title>
         </Helmet>
         <ToastContainer />
-      <MeContext.Provider value={[globalMe, globalMeSetter]}>
-      <UsersContext.Provider value={[users, usersSetter]}>
-      <NewsContext.Provider value={[news, newsSetter]}>
-        <Router>
-          <Navbar />
-          <section className="section" id="main">
-            <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
-              <Routes>
-                <Route path="/about" element={<About token={token} />} />
-                <Route
-                  path="/games/:metaGame?"
-                  element={<MetaContainer token={token} />}
-                />
-                <Route
-                  path="/challenges/:metaGame"
-                  element={<StandingChallenges />}
-                />
-                <Route
-                  path="/listgames/:gameState/:metaGame"
-                  element={<ListGames />}
-                />
-                <Route
-                  path="/ratings/:metaGame"
-                  element={<Ratings />}
-                />
-                <Route
-                  path="/move/:metaGame/:cbits/:gameID"
-                  element={<GameMove update={update} />}
-                />
-                <Route
-                  path="/legal"
-                  element={<Legal token={token} update={update} />}
-                />
-                <Route
-                  path="/news"
-                  element={<News />}
-                />
-                <Route
-                  path="/stats"
-                  element={<Stats />}
-                />
-                <Route
-                  path="/"
-                  element={<Welcome token={token} update={update} />}
-                />
-              </Routes>
-            </MyTurnContext.Provider>
-          </section>
-          {process.env.REACT_APP_REAL_MODE === "production" ? (
-            <Footer />
-          ) : (
-            <FooterDev />
-          )}
-        </Router>
-      </NewsContext.Provider>
-      </UsersContext.Provider>
-      </MeContext.Provider>
+        <MeContext.Provider value={[globalMe, globalMeSetter]}>
+          <UsersContext.Provider value={[users, usersSetter]}>
+            <NewsContext.Provider value={[news, newsSetter]}>
+              <Router>
+                <Navbar />
+                <section className="section" id="main">
+                  <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
+                    <Routes>
+                      <Route path="/about" element={<About token={token} />} />
+                      <Route
+                        path="/games/:metaGame?"
+                        element={<MetaContainer token={token} />}
+                      />
+                      <Route
+                        path="/challenges/:metaGame"
+                        element={<StandingChallenges />}
+                      />
+                      <Route
+                        path="/listgames/:gameState/:metaGame"
+                        element={<ListGames />}
+                      />
+                      <Route path="/ratings/:metaGame" element={<Ratings />} />
+                      <Route
+                        path="/move/:metaGame/:cbits/:gameID"
+                        element={<GameMove update={update} />}
+                      />
+                      <Route
+                        path="/legal"
+                        element={<Legal token={token} update={update} />}
+                      />
+                      <Route path="/news" element={<News />} />
+                      <Route path="/stats" element={<Stats />} />
+                      <Route
+                        path="/"
+                        element={<Welcome token={token} update={update} />}
+                      />
+                    </Routes>
+                  </MyTurnContext.Provider>
+                </section>
+                {process.env.REACT_APP_REAL_MODE === "production" ? (
+                  <Footer />
+                ) : (
+                  <FooterDev />
+                )}
+              </Router>
+            </NewsContext.Provider>
+          </UsersContext.Provider>
+        </MeContext.Provider>
       </HelmetProvider>
     );
 }
