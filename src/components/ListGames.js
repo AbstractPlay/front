@@ -211,6 +211,13 @@ function ListGames(props) {
           ? t("CurrentGamesList", { name: metaGameName })
           : t("CompletedGamesList", { name: metaGameName })}
       </h1>
+      {gameState !== "completed" ? null :
+        <div className="control has-text-centered" style={{paddingBottom: "1em"}}>
+            <a href={`http://records.abstractplay.com/meta/${metaGame}.json`}>
+                <button className="button apButton is-small">Download all completed game reports</button>
+            </a>
+        </div>
+      }
       <div className="container">
         {tableNavigation}
         <table className="table apTable" style={{marginLeft: "auto", marginRight: "auto"}}>

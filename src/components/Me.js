@@ -459,23 +459,30 @@ function Me(props) {
               </p>
               <MyTurnTable games={myMove} />
             </div>
-            <div className="tourTheirTurn">
+            <div className="tourTheirTurn topPad">
               <p className="lined">
                 <span>{t("OpponentMove")}</span>
               </p>
               <TheirTurnTable games={waiting} />
             </div>
-              {over.length === 0 ? (
-                ""
-              ) : (
-                <div className="tourCompleted">
+            <div className="tourCompleted topPad">
                   <p className="lined">
                     <span>{t("CompletedGames")}</span>
                   </p>
-                  <p className="help"><em>{t("CompletedGamesHelp")}</em></p>
-                  <CompletedGamesTable games={over} />
-                </div>
-              )}
+                  {over.length === 0 ? (
+                      ""
+                  ) : (
+                    <>
+                        <p className="help"><em>{t("CompletedGamesHelp")}</em></p>
+                        <CompletedGamesTable games={over} />
+                    </>
+                  )}
+                  <div className="control">
+                    <a href={`http://records.abstractplay.com/player/${globalMe.id}.json`}>
+                        <button className="button apButton is-small">Download all your completed game reports</button>
+                    </a>
+                  </div>
+            </div>
             </div>
           </div>
         </div>

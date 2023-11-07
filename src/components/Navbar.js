@@ -96,6 +96,11 @@ function Navbar(props) {
             </Link>
           </div>
           <div className="navbar-item">
+            <Link to="/stats" className="navbar-item">
+              {t("Statistics")}
+            </Link>
+          </div>
+          <div className="navbar-item">
             <Link to="/news" className="navbar-item">
               {t("News")}
               {newsLastSeen >= maxNews ? null :

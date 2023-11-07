@@ -24,6 +24,7 @@ import Footer from "../components/Footer";
 import News from "../components/News";
 import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
+import Stats from "../components/Stats";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import en from "javascript-time-ago/locale/en.json";
@@ -169,6 +170,10 @@ function Bones(props) {
                 <Route
                   path="/news"
                   element={<News />}
+                />
+                <Route
+                  path="/stats"
+                  element={<Stats />}
                 />
                 <Route
                   path="/"

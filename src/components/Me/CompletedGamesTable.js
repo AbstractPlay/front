@@ -53,6 +53,9 @@ function CompletedGamesTable(props) {
 
     const data = useMemo( () => props.games.map((g) => {
         const info = gameinfo.get(g.metaGame);
+        if (info === undefined) {
+            throw new Error(`Could not derive game data for metaGame "${g.metaGame}".`);
+        }
         return{
             id: g.id,
             metaGame: g.metaGame,
