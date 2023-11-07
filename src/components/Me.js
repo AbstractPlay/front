@@ -486,7 +486,7 @@ function Me(props) {
                 )}
                 <div className="control">
                   <a
-                    href={`http://records.abstractplay.com/player/${globalMe.id}.json`}
+                    href={`https://records.abstractplay.com/player/${globalMe.id}.json`}
                   >
                     <button className="button apButton is-small">
                       Download all your completed game reports

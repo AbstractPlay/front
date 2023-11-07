@@ -261,7 +261,7 @@ function ListGames(props) {
             className="control has-text-centered"
             style={{ paddingBottom: "1em" }}
           >
-            <a href={`http://records.abstractplay.com/meta/${metaGame}.json`}>
+            <a href={`https://records.abstractplay.com/meta/${metaGame}.json`}>
               <button className="button apButton is-small">
                 Download all completed game reports
               </button>

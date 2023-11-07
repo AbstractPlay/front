@@ -63,7 +63,7 @@ function Stats(props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        var url = new URL("http://records.abstractplay.com/_summary.json");
+        var url = new URL("https://records.abstractplay.com/_summary.json");
         const res = await fetch(url);
         const result = await res.json();
         summarySetter(result);
@@ -154,14 +154,14 @@ function Stats(props) {
         })}
         <div className="field is-grouped topPad">
           <div className="control">
-            <a href="http://records.abstractplay.com/_summary.json">
+            <a href="https://records.abstractplay.com/_summary.json">
               <button className="button is-small apButton">
                 Download all summary stats
               </button>
             </a>
           </div>
           <div className="control">
-            <a href="http://records.abstractplay.com/ALL.json">
+            <a href="https://records.abstractplay.com/ALL.json">
               <button className="button is-small apButton">
                 Download all game reports
               </button>
