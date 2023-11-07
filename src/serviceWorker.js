@@ -25,7 +25,7 @@ const isLocalhost = Boolean(
 
 export function register(config) {
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
-//   if ("serviceWorker" in navigator) {
+    //   if ("serviceWorker" in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -77,7 +77,9 @@ function registerValidSW(swUrl, config) {
                 "New content is available and will be used when all " +
                   "tabs for this page are closed. See http://bit.ly/CRA-PWA."
               );
-              toast("New content is available and will be used when all tabs for this page are closed.");
+              toast(
+                "New content is available and will be used when all tabs for this page are closed."
+              );
 
               // Execute callback
               if (config && config.onUpdate) {
@@ -140,6 +142,6 @@ export function unregister() {
   }
 }
 
-navigator.serviceWorker.addEventListener('message', function (event) {
-    toast(event.data.body);
+navigator.serviceWorker.addEventListener("message", function (event) {
+  toast(event.data.body);
 });

@@ -44,38 +44,38 @@ function Me(props) {
 
   useEffect(() => {
     tourStateSetter([
-        {
-            target: ".tourWelcome",
-            content: t("tour.me.welcome")
-        },
-        {
-            target: ".tourYourTurn",
-            content: t("tour.me.yourturn")
-        },
-        {
-            target: ".tourTheirTurn",
-            content: t("tour.me.theirturn")
-        },
-        {
-            target: ".tourCompleted",
-            content: t("tour.me.completed")
-        },
-        {
-            target: ".tourChallenges",
-            content: t("tour.me.challenges")
-        },
-        {
-            target: ".tourIssueChallenge",
-            content: t("tour.me.issueChallenge")
-        },
-        {
-            target: ".tourSettings",
-            content: t("tour.me.settings")
-        },
-      ]);
+      {
+        target: ".tourWelcome",
+        content: t("tour.me.welcome"),
+      },
+      {
+        target: ".tourYourTurn",
+        content: t("tour.me.yourturn"),
+      },
+      {
+        target: ".tourTheirTurn",
+        content: t("tour.me.theirturn"),
+      },
+      {
+        target: ".tourCompleted",
+        content: t("tour.me.completed"),
+      },
+      {
+        target: ".tourChallenges",
+        content: t("tour.me.challenges"),
+      },
+      {
+        target: ".tourIssueChallenge",
+        content: t("tour.me.issueChallenge"),
+      },
+      {
+        target: ".tourSettings",
+        content: t("tour.me.settings"),
+      },
+    ]);
   }, [t, tourStateSetter]);
 
-  const handleJoyrideCallback = data => {
+  const handleJoyrideCallback = (data) => {
     if ([STATUS.FINISHED, STATUS.SKIPPED].includes(data.status)) {
       showTourSetter(false);
     }
@@ -83,7 +83,7 @@ function Me(props) {
 
   const handleNewProfileClose = (cnt) => {
     showNewProfileModalSetter(false);
-    if (cnt > 0){
+    if (cnt > 0) {
       updateSetter((update) => update + 1);
     }
   };
@@ -410,10 +410,15 @@ function Me(props) {
     );
   }
   if (globalMe.id === undefined) {
-    return <NewProfile show={showNewProfileModal} handleClose={handleNewProfileClose} updateMe={false}/>
+    return (
+      <NewProfile
+        show={showNewProfileModal}
+        handleClose={handleNewProfileClose}
+        updateMe={false}
+      />
+    );
   } else {
-    if (update !== props.update)
-      updateSetter(props.update);
+    if (update !== props.update) updateSetter(props.update);
 
     var lng = "en";
     if (globalMe.language !== undefined) lng = globalMe.language;
@@ -431,17 +436,17 @@ function Me(props) {
     return (
       <article id="dashboard">
         <Joyride
-            steps={tourState}
-            run={showTour}
-            callback={handleJoyrideCallback}
-            continuous
-            showProgress
-            showSkipButton
-            styles={{
-                options: {
-                    primaryColor: "#008ca8"
-                }
-            }}
+          steps={tourState}
+          run={showTour}
+          callback={handleJoyrideCallback}
+          continuous
+          showProgress
+          showSkipButton
+          styles={{
+            options: {
+              primaryColor: "#008ca8",
+            },
+          }}
         />
         <h1 className="title has-text-centered tourWelcome">
           {t("WelcomePlayer", { me: globalMe.name })}
@@ -453,29 +458,42 @@ function Me(props) {
               <span>{t("YourGames")}</span>
             </p>
             <div className="indentedContainer">
-            <div className="tourYourTurn">
-              <p className="lined">
-                <span>{t("YourMove")}</span>
-              </p>
-              <MyTurnTable games={myMove} />
-            </div>
-            <div className="tourTheirTurn">
-              <p className="lined">
-                <span>{t("OpponentMove")}</span>
-              </p>
-              <TheirTurnTable games={waiting} />
-            </div>
-              {over.length === 0 ? (
-                ""
-              ) : (
-                <div className="tourCompleted">
-                  <p className="lined">
-                    <span>{t("CompletedGames")}</span>
-                  </p>
-                  <p className="help"><em>{t("CompletedGamesHelp")}</em></p>
-                  <CompletedGamesTable games={over} />
+              <div className="tourYourTurn">
+                <p className="lined">
+                  <span>{t("YourMove")}</span>
+                </p>
+                <MyTurnTable games={myMove} />
+              </div>
+              <div className="tourTheirTurn topPad">
+                <p className="lined">
+                  <span>{t("OpponentMove")}</span>
+                </p>
+                <TheirTurnTable games={waiting} />
+              </div>
+              <div className="tourCompleted topPad">
+                <p className="lined">
+                  <span>{t("CompletedGames")}</span>
+                </p>
+                {over.length === 0 ? (
+                  ""
+                ) : (
+                  <>
+                    <p className="help">
+                      <em>{t("CompletedGamesHelp")}</em>
+                    </p>
+                    <CompletedGamesTable games={over} />
+                  </>
+                )}
+                <div className="control">
+                  <a
+                    href={`https://records.abstractplay.com/player/${globalMe.id}.json`}
+                  >
+                    <button className="button apButton is-small">
+                      Download all your completed game reports
+                    </button>
+                  </a>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
@@ -494,20 +512,23 @@ function Me(props) {
                   <p>{t("NoChallengeResponse")}</p>
                 ) : (
                   <ul>
-                    {globalMe.challengesReceived.map((item) => ( gameinfo.get(item.metaGame) === undefined || item.challenger.id === undefined ? null :
-                      <ChallengeItem
-                        item={item}
-                        key={item.id}
-                        respond={true}
-                        setters={{
-                          challengeSetter: challengeSetter,
-                          showChallengeViewModalSetter:
-                            showChallengeViewModalSetter,
-                          showChallengeResponseModalSetter:
-                            showChallengeResponseModalSetter,
-                        }}
-                      />
-                    ))}
+                    {globalMe.challengesReceived.map((item) =>
+                      gameinfo.get(item.metaGame) === undefined ||
+                      item.challenger.id === undefined ? null : (
+                        <ChallengeItem
+                          item={item}
+                          key={item.id}
+                          respond={true}
+                          setters={{
+                            challengeSetter: challengeSetter,
+                            showChallengeViewModalSetter:
+                              showChallengeViewModalSetter,
+                            showChallengeResponseModalSetter:
+                              showChallengeResponseModalSetter,
+                          }}
+                        />
+                      )
+                    )}
                   </ul>
                 )}
               </div>
@@ -619,7 +640,6 @@ function Me(props) {
                 >
                   Test toast
                 </button>
-
               </div>
             </div>
           )}

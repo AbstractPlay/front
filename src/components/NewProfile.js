@@ -11,7 +11,7 @@ function NewProfile(props) {
   const [users, usersSetter] = useState([]);
   const [consent, consentSetter] = useState(false);
   const [consentError, consentErrorSetter] = useState("");
-  const [anonymous, ] = useState(false);
+  const [anonymous] = useState(false);
   const [country, countrySetter] = useState("");
   const [tagline, taglineSetter] = useState("");
   const [error, errorSetter] = useState(false);
@@ -49,14 +49,14 @@ function NewProfile(props) {
     } else {
       nameErrorSetter("");
     }
-  }
+  };
 
   const consentChange = (checked) => {
     consentSetter(checked);
     if (checked) {
       consentErrorSetter("");
     }
-  }
+  };
 
   const handleNewProfile = async () => {
     if (name === "") {
@@ -137,7 +137,7 @@ function NewProfile(props) {
       title={t("NewProfile")}
       buttons={[
         { label: t("Submit"), action: handleNewProfile },
-        { label: t("Close"), action: () => props.handleClose(0) }
+        { label: t("Close"), action: () => props.handleClose(0) },
       ]}
     >
       {!error ? (
@@ -196,7 +196,7 @@ function NewProfile(props) {
               />
             </div>
           </div>
-          { /*
+          {/*
           <div className="field">
             <div className="control">
               <label className="checkbox">
@@ -212,7 +212,7 @@ function NewProfile(props) {
             </div>
             <p className="help">{t("ProfileAnonHelp")}</p>
           </div>
-            */ }
+            */}
           <div className="error">{consentError}</div>
           <div className="field">
             <div className="control">
@@ -227,14 +227,13 @@ function NewProfile(props) {
                 {t("ProfileConsent")}
               </label>
             </div>
-            <p className="help">[
-              <a
-                href="https://play.abstractplay.com/legal"
-                target="_NEW"
-              >
+            <p className="help">
+              [
+              <a href="https://play.abstractplay.com/legal" target="_NEW">
                 {t("ToS")}
               </a>
-              ]</p>
+              ]
+            </p>
           </div>
         </Fragment>
       ) : (

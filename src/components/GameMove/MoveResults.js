@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Fragment } from "react";
 import ReactTimeAgo from "react-time-ago";
 import { UsersContext } from "../../pages/Skeleton";
@@ -10,7 +10,7 @@ function MoveResults(props) {
   const results0 = props.results;
   const comments = props.comments;
   const players = props.players;
-  const [users,] = useContext(UsersContext);
+  const [users] = useContext(UsersContext);
 
   let results;
 
@@ -22,32 +22,36 @@ function MoveResults(props) {
       system: true,
     }));
     comments.forEach((c) => {
-      if ( (c.userId === null) || (c.userId === undefined) || (c.userId.length === 0) ) {
+      if (
+        c.userId === null ||
+        c.userId === undefined ||
+        c.userId.length === 0
+      ) {
         results.push({
-            timestamp: c.timeStamp,
-            time: new Date(c.timeStamp).toLocaleString(),
-            log: c.comment,
-            system: true,
-          });
+          timestamp: c.timeStamp,
+          time: new Date(c.timeStamp).toLocaleString(),
+          log: c.comment,
+          system: true,
+        });
       } else {
         let personName = "Unknown";
         let player = players.find((p) => p.id === c.userId);
         if (player !== undefined) {
-            personName = player.name;
+          personName = player.name;
         } else if (users !== null) {
-            player = users.find(p => p.id === c.userId);
-            if (player !== undefined) {
-                personName = player.name;
-            }
+          player = users.find((p) => p.id === c.userId);
+          if (player !== undefined) {
+            personName = player.name;
+          }
         }
         results.push({
-            timestamp: c.timeStamp,
-            time: new Date(c.timeStamp).toLocaleString(),
-            log: c.comment,
-            system: false,
-            userid: c.userId,
-            player: personName,
-          });
+          timestamp: c.timeStamp,
+          time: new Date(c.timeStamp).toLocaleString(),
+          log: c.comment,
+          system: false,
+          userid: c.userId,
+          player: personName,
+        });
       }
     });
     results.sort((a, b) => b.timestamp - a.timestamp);

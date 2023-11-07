@@ -27,7 +27,7 @@ function GameStatus(props) {
     game.colors === undefined ||
     ((!game.variants || game.variants.length === 0) &&
       status.statuses.length === 0 &&
-      (( (!game.scores) && (!game.limitedPieces) ) || status.scores.length === 0) &&
+      ((!game.scores && !game.limitedPieces) || status.scores.length === 0) &&
       !game.playerStashes &&
       !game.sharedStash)
   ) {
@@ -36,7 +36,7 @@ function GameStatus(props) {
     let stashes = [];
     let handlers = [];
     if (game.playerStashes) {
-      status.stashes.forEach(stash => {
+      status.stashes.forEach((stash) => {
         if (Array.isArray(stash)) {
           stashes.push(stash);
           handlers.push(undefined);
@@ -94,10 +94,13 @@ function GameStatus(props) {
             </tbody>
           </table>
         )}
-        {( (!game.scores) && (!game.limitedPieces) ) || status.scores.length === 0
+        {(!game.scores && !game.limitedPieces) || status.scores.length === 0
           ? ""
           : status.scores.map((scores, i) => (
-              <div key={i} style={{overflowX: "auto", scrollbarWidth: "thin"}}>
+              <div
+                key={i}
+                style={{ overflowX: "auto", scrollbarWidth: "thin" }}
+              >
                 <h2>{scores.name}</h2>
                 <table className="table">
                   <tbody>
@@ -127,7 +130,7 @@ function GameStatus(props) {
         {!game.playerStashes ? (
           ""
         ) : (
-          <div style={{overflowX: "auto"}}>
+          <div style={{ overflowX: "auto" }}>
             <h2>Stash</h2>
             <table className="table">
               <tbody>
@@ -152,7 +155,13 @@ function GameStatus(props) {
                         key={"stashentry" + j}
                         onClick={
                           canExplore
-                            ? () => handleStashClick(index, s.count, s.movePart, handlers[index])
+                            ? () =>
+                                handleStashClick(
+                                  index,
+                                  s.count,
+                                  s.movePart,
+                                  handlers[index]
+                                )
                             : undefined
                         }
                       >
@@ -165,7 +174,9 @@ function GameStatus(props) {
                               s.glyph.name,
                               "stack-" + index + "-" + j,
                               // eslint-disable-next-line no-prototype-builtins
-                              (s.glyph.hasOwnProperty("player") ? s.glyph.player : s.glyph.colour)
+                              s.glyph.hasOwnProperty("player")
+                                ? s.glyph.player
+                                : s.glyph.colour
                             )
                           )}`}
                           alt=""

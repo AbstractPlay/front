@@ -10,7 +10,6 @@ require("core-js/es/set");
 require("core-js/es/promise");
 require("core-js/es/object");
 
-
 const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(<Skeleton />);
