@@ -117,10 +117,10 @@ function NewChallengeModal(props) {
       opponentsSetter([props.opponent]);
     }
     errorSetter("");
-    clockStartSetter(72);
-    clockIncSetter(24);
-    clockMaxSetter(240);
-    clockHardSetter(false);
+    // clockStartSetter(72);
+    // clockIncSetter(24);
+    // clockMaxSetter(240);
+    // clockHardSetter(false);
     if (props.fixedMetaGame !== undefined) {
       metaGameSetter(props.fixedMetaGame);
       handleChangeGame(props.fixedMetaGame);
