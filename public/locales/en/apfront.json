@@ -102,6 +102,7 @@
     "GameNoteModal": "Game note",
     "Games": "Games",
     "GameSummary": "Chat log",
+    "GameComments": "Game comments",
     "GoBegin": "Show beginning of game. Keys: Home or 'h'.",
     "GoCurrent": "Show current position. Keys: End or 'l'.",
     "GoNext": "Show next move (and first variant if any). Keys: right arrow or 'k'.",

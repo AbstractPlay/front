@@ -322,6 +322,7 @@ function GameMoves(props) {
               </text>
             </svg>
           )}
+          {m.commented ? (<i className="fa fa-comment-o smallicon"></i>) : null}
         </span>
       </span>
     );
@@ -416,6 +417,7 @@ function GameMoves(props) {
             {
               class: className,
               outcome: -1,
+              commented: exploration[i].commented,
               move: exploration[i].move,
               path: { moveNumber: i, exPath: [] },
             },
@@ -432,6 +434,7 @@ function GameMoves(props) {
               {
                 class: className,
                 outcome: node.outcome,
+                commented: node.commented,
                 move: node.move,
                 path: {
                   moveNumber: focus.moveNumber,
@@ -449,6 +452,7 @@ function GameMoves(props) {
               next.push({
                 class: className,
                 outcome: c.outcome,
+                commented: c.commented,
                 move: c.move,
                 path: {
                   moveNumber: focus.moveNumber,
@@ -477,6 +481,7 @@ function GameMoves(props) {
             {
               class: className,
               outcome: -1,
+              commented: exploration[i].commented,
               move: exploration[i].move + (exploration[i].children.length > 0 && focus.moveNumber !== i ? "..." : ""),
               path: { moveNumber: i, exPath: [] },
             },
@@ -496,6 +501,7 @@ function GameMoves(props) {
             {
               class: className,
               outcome: node.outcome,
+              commented: node.commented,
               move: node.move,
               path: {
                 moveNumber: focus.moveNumber,
@@ -513,6 +519,7 @@ function GameMoves(props) {
               {
                 class: className,
                 outcome: -1,
+                commented: exploration[focus.moveNumber + 1].commented,
                 move: exploration[focus.moveNumber + 1].move,
                 path: {
                   moveNumber: focus.moveNumber + 1,
@@ -527,6 +534,7 @@ function GameMoves(props) {
             next.push({
               class: className,
               outcome: c.outcome,
+              commented: c.commented,
               move: c.move,
               path: {
                 moveNumber: focus.moveNumber,

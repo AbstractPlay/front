@@ -8,6 +8,7 @@ export class GameNode {
     this.state = state;
     this.id = uuid();
     this.comment = [];
+    this.commented = false;
     this.version = undefined; // Only the base node has a version. This is really the version of the tree.
     this.toMove = null; // 0 for player1, 1 for player2
     if (toMove !== undefined) this.toMove = toMove;
@@ -28,6 +29,28 @@ export class GameNode {
     this.children.push(child);
     this.UpdateOutcome();
     return this.children.length - 1;
+  }
+
+  AddComment(comment) {
+    const ind = this.comment.findIndex((c) => c.userId === comment.userId);
+    let updated = false;
+    if (ind !== -1) {
+      if (this.comment[ind].timeStamp < comment.timeStamp) {
+        this.comment[ind] = comment;
+        updated = true;
+      }
+    } else {
+      this.comment.push(comment);
+      updated = true;
+    }
+    if (updated) {
+      this.UpdateCommented();
+    }
+  }
+
+  UpdateCommented() {
+    this.commented = true;
+    if (this.parent !== null) this.parent.UpdateCommented();
   }
 
   UpdateOutcome() {
