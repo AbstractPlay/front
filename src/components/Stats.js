@@ -147,7 +147,13 @@ function Stats(props) {
         <hr />
         {modules.map(([code, Component]) => {
           if (code === statSelected) {
-            return <Component key={code} />;
+            return (
+                <div class="columns">
+                    <div class="column is-one-half is-offset-one-quarter">
+                        <Component key={code} />
+                    </div>
+                </div>
+            );
           } else {
             return null;
           }
