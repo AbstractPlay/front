@@ -11,6 +11,7 @@ import Spinner from "./Spinner";
 import { cloneDeep } from "lodash";
 import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
 import { MeContext, UsersContext } from "../pages/Skeleton";
+import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 
 function NewChallengeModal(props) {
@@ -25,11 +26,11 @@ function NewChallengeModal(props) {
   const [playerCount, playerCountSetter] = useState(-1);
   const [allvariants, allvariantsSetter] = useState(null);
   const [seating, seatingSetter] = useState("random");
-  const [clockStart, clockStartSetter] = useState(72);
-  const [clockInc, clockIncSetter] = useState(24);
-  const [clockMax, clockMaxSetter] = useState(240);
-  const [clockHard, clockHardSetter] = useState(false);
-  const [rated, ratedSetter] = useState(true); // Rated game or not.
+  const [clockStart, clockStartSetter] = useStorageState("new-challenge-clock-start", 72);
+  const [clockInc, clockIncSetter] = useStorageState("new-challenge-clock-inc", 24);
+  const [clockMax, clockMaxSetter] = useStorageState("new-challenge-clock-max", 240);
+  const [clockHard, clockHardSetter] = useStorageState("new-challenge-clock-hard", false);
+  const [rated, ratedSetter] = useStorageState("new-challenge-rated", true); // rated or not
   const [standing, standingSetter] = useState(false); // Standing challenge or not.
   const [standingCount, standingCountSetter] = useState(0);
   const [opponents, opponentsSetter] = useState([]);
