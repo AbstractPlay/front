@@ -48,7 +48,7 @@ function NewChallengeModal(props) {
       playerCountSetter(cnt);
       if (cnt === 2) {
         seatingSetter("random");
-        ratedSetter(true);
+        // ratedSetter(true);
       } else {
         seatingSetter("random");
         ratedSetter(false);
