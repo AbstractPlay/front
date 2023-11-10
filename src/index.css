@@ -306,6 +306,12 @@ th .player {
   width: 0.8rem;
 }
 
+.smallicon {
+  padding-left: 0.2rem;
+  vertical-align: 0.6em;
+  font-size: 8px;
+}
+
 .winnerButtonImage {
   margin-top: 0.4rem;
   margin-left: 0.7rem;

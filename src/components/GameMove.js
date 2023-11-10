@@ -296,14 +296,39 @@ function mergeExploration(
     let node = exploration[moveNumber - 1];
     let gameEngine = GameFactory(game.metaGame, node.state);
     mergeMoveRecursive(gameEngine, node, data[0].tree);
-  } else if (data[1] && data[1].move === moveNumber - 2) {
+  } else if (data[1] && data[1].move === moveNumber - 1) {
+    let node = exploration[moveNumber - 1];
+    let gameEngine = GameFactory(game.metaGame, node.state);
+    // subtree of the move I chose
+    const subtree1 = data[1].tree.find((e) =>
+      gameEngine.sameMove(exploration[moveNumber - 1].move, e.move)
+    );
+    if (subtree1) {
+      mergeMoveRecursive(
+        gameEngine,
+        exploration[moveNumber - 1],
+        subtree1.children
+      );
+      saveExploration(
+        exploration,
+        moveNumber,
+        game,
+        me,
+        true,
+        errorSetter,
+        errorMessageRef
+      );
+    }
+  } else if (data[2] && data[2].move === moveNumber - 2) {
     let node = exploration[moveNumber - 2];
     let gameEngine = GameFactory(game.metaGame, node.state);
-    const subtree1 = data[1].tree.find((e) =>
+    // subtree of the move I chose
+    const subtree1 = data[2].tree.find((e) =>
       gameEngine.sameMove(exploration[moveNumber - 2].move, e.move)
     );
     if (subtree1) {
       gameEngine.move(exploration[moveNumber - 1].move);
+      // subtree of the move my opponent chose
       const subtree2 = subtree1.children.find((e) =>
         gameEngine.sameMove(exploration[moveNumber - 1].move, e.move)
       );
@@ -335,12 +360,13 @@ function mergePublicExploration(game, exploration, data) {
     const tree = m.tree;
     let node = exploration[move - 1];
     node.version = version;
+    node.comment = m.tree.comment;
     let gameEngine = GameFactory(game.metaGame, node.state);
-    mergeMoveRecursive(gameEngine, node, tree);
+    mergeMoveRecursive(gameEngine, node, tree.children);
   }
 }
 
-// When published merge private exploration into public exploration
+// When publishing, merge private exploration into public exploration
 function mergePrivateExploration(
   game,
   exploration,
@@ -417,6 +443,8 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
         node.children[pos].SetOutcome(-1);
       }
     }
+    if (n.comment !== undefined)
+      for (const comment of n.comment) node.children[pos].AddComment(comment);
     mergeMoveRecursive(gameEngine, node.children[pos], n.children, newids);
     gameEngine.stack.pop();
     gameEngine.load();
@@ -507,7 +535,10 @@ async function saveExploration(
     public: game.gameOver,
     game: game.id,
     move: moveNumber,
-    tree: exploration[moveNumber - 1].Deflate(game.gameOver).children,
+    // Note that for completed games you can comment on the parent node, so don't just save children
+    tree: game.gameOver
+      ? exploration[moveNumber - 1].Deflate(game.gameOver)
+      : exploration[moveNumber - 1].Deflate(game.gameOver).children,
   };
   if (game.gameOver) {
     pars.version = exploration[moveNumber - 1].version
@@ -534,14 +565,17 @@ async function saveExploration(
   } else {
     const result = await res.json();
     if (result && result.body) {
+      // We only get here when failing to save public exploration (because the move was updated by someone else)
       const data = JSON.parse(result.body);
       const version = data.version;
       const move = data.sk;
       const tree = JSON.parse(data.tree);
       let node = exploration[move - 1];
       node.version = version;
+      if (tree.comment !== undefined)
+        for (const comment of tree.comment) node.AddComment(comment);
       let gameEngine = GameFactory(game.metaGame, node.state);
-      mergeMoveRecursive(gameEngine, node, tree);
+      mergeMoveRecursive(gameEngine, node, tree.children);
       if (focus !== undefined) setURL(exploration, focus, game, navigate);
       // Try to save again
       saveExploration(
@@ -1251,6 +1285,7 @@ function GameMove(props) {
               gameRef.current,
               explorationRef.current,
               data,
+              globalMe,
               errorSetter,
               errorMessageRef
             );
@@ -1807,15 +1842,10 @@ function GameMove(props) {
     // ignore blank comments
     if (comment.length > 0 && !/^\s*$/.test(comment)) {
       const node = getFocusNode(explorationRef.current, focus);
-      node.comment = node.comment.filter((c) => c.userId !== globalMe.id);
-      node.comment.push({
-        userId: globalMe.id,
-        comment,
-        timeStamp: Date.now(),
-      });
+      node.AddComment({ userId: globalMe.id, comment, timeStamp: Date.now() });
       saveExploration(
         explorationRef.current,
-        focus.moveNumber,
+        focus.moveNumber + 1,
         game,
         globalMe,
         explorer,
@@ -1824,6 +1854,7 @@ function GameMove(props) {
         focus,
         navigate
       );
+      focusSetter(cloneDeep(focus));
     }
   };
 
@@ -2339,6 +2370,8 @@ function GameMove(props) {
                     }
                     tooMuch={commentsTooLong}
                     gameid={gameRef.current?.id}
+                    exploringCompletedGame={exploringCompletedGame}
+                    userId={globalMe?.id}
                   />
                 </Fragment>
               ) : (

@@ -16,6 +16,7 @@ function UserChats(props) {
 
   if (comments) {
     let results = [];
+    let mycomment = "";
     comments.forEach((c) => {
       if (c.userId !== null && c.userId !== undefined && c.userId.length > 0) {
         let personName = "Unknown";
@@ -36,6 +37,9 @@ function UserChats(props) {
           userid: c.userId,
           player: personName,
         });
+        if (c.userId === props.userId) {
+            mycomment = c.comment;
+        }
       }
     });
     results.sort((a, b) => b.timestamp - a.timestamp);
@@ -43,12 +47,13 @@ function UserChats(props) {
     return (
       <div style={{ paddingTop: "1em" }} className="tourChat">
         <h1 className="subtitle lined">
-          <span>{t("GameSummary")}</span>
+          <span>{props.exploringCompletedGame ? t("GameComments") : t("GameSummary")}</span>
         </h1>
         <GameCommentShort
           key={`chatkey_${gameid}`}
           handleSubmit={props.handleSubmit}
           tooMuch={props.tooMuch}
+          comment={mycomment}
         />
         <div className="chatTable">
           {results.map((r, index) => (

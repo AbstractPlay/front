@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useRef } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 function GameCommentShort(props) {
@@ -6,6 +6,10 @@ function GameCommentShort(props) {
   const [toolong, toolongSetter] = useState(false);
   const { t } = useTranslation();
   const textareaRef = useRef();
+  
+  useEffect(() => {
+    commentSetter(props.comment);
+  }, [props.comment]);
 
   const handleChange = (comment) => {
     toolongSetter(comment.length > 4000);
