@@ -213,7 +213,7 @@ function StandingChallenges(props) {
       challenges.map((rec) => {
         return {
           id: rec.id,
-          challenger: rec.challenger,
+          challenger: rec.challenger.name,
           clockHard: rec.clockHard,
           clockStart: rec.clockStart,
           clockInc: rec.clockInc,
@@ -233,7 +233,6 @@ function StandingChallenges(props) {
     () => [
       columnHelper.accessor("challenger", {
         header: "Challenger",
-        cell: (props) => props.getValue().name,
       }),
       columnHelper.accessor("numPlayers", {
         header: "Players",
