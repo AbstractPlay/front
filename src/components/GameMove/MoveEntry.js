@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment} from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
 function showMilliseconds(ms) {
@@ -185,7 +185,12 @@ function MoveEntry(props) {
         ) : (
           <p className="exploreState">{t("Explore")}</p>
         )}
-        <p style={{ marginBottom: "1em" }} className={"yourTurn" + ((game.canSubmit && uiState === 0) ? " myTurn" : "")}>
+        <p
+          style={{ marginBottom: "1em" }}
+          className={
+            "yourTurn" + (game.canSubmit && uiState === 0 ? " myTurn" : "")
+          }
+        >
           {img === null ? (
             ""
           ) : img.isImage ? (
@@ -358,20 +363,18 @@ function MoveEntry(props) {
                 {t("SubmitMove", { move: moveToSubmit })}
               </span>
             </button>
+          ) : moveToSubmit !== null &&
+            focus.exPath.length > 1 &&
+            !submitting ? (
+            <button
+              className="button is-small apButton tooltipped"
+              onClick={handleToSubmit}
+            >
+              {t("ToSubmit")}
+              <span className="tooltiptext">{t("ToSubmitMove")}</span>
+            </button>
           ) : (
-            moveToSubmit !== null && focus.exPath.length > 1 && !submitting ? (
-              <button
-                className="button is-small apButton tooltipped"
-                onClick={ handleToSubmit }
-              >
-                {t("ToSubmit")}
-                <span className="tooltiptext">
-                  {t("ToSubmitMove")}
-                </span>
-              </button>
-            ) : (
             ""
-            )
           )}
           {uiState === 0 && game.canSubmit && !submitting ? (
             canDraw ? (
@@ -392,15 +395,13 @@ function MoveEntry(props) {
           ) : (
             ""
           )}
-          {uiState === 0 && game.canSubmit && game.canPie && !submitting ?
-              <button
-                className="button is-small apButton"
-                onClick={handlePie}
-              >
-                {t("InvokePie")}
-              </button>
-            : ""
-          }
+          {uiState === 0 && game.canSubmit && game.canPie && !submitting ? (
+            <button className="button is-small apButton" onClick={handlePie}>
+              {t("InvokePie")}
+            </button>
+          ) : (
+            ""
+          )}
           {focus.exPath.length > 0 && game.canExplore ? (
             <div
               className="winningColorButton tooltipped"

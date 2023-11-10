@@ -56,38 +56,53 @@ function getPath(focus, exploration, path, gameOver) {
         node = node.children[0];
       }
     }
-  } else { // game over
-    for (let i = 1; i <= (exploration[focus.moveNumber].children.length > 0 ? focus.moveNumber : exploration.length - 1); i++) {
+  } else {
+    // game over
+    for (
+      let i = 1;
+      i <=
+      (exploration[focus.moveNumber].children.length > 0
+        ? focus.moveNumber
+        : exploration.length - 1);
+      i++
+    ) {
       if (i === focus.moveNumber) {
         if (focus.exPath.length === 0) {
-          curNumVariations = 1 + (focus.moveNumber === 0 ? 0 : exploration[focus.moveNumber - 1].children.length);
+          curNumVariations =
+            1 +
+            (focus.moveNumber === 0
+              ? 0
+              : exploration[focus.moveNumber - 1].children.length);
         }
       }
-      path.push([{ moveNumber: i, exPath: []}]);
+      path.push([{ moveNumber: i, exPath: [] }]);
     }
     let node = exploration[focus.moveNumber];
     for (let j = 0; j < focus.exPath.length; j++) {
       if (j === focus.exPath.length - 1) {
         curNumVariations = node.children.length;
-        if (j === 0)
-          curNumVariations += 1;
+        if (j === 0) curNumVariations += 1;
       }
       node = node.children[focus.exPath[j]];
-      path.push([{
-        moveNumber: focus.moveNumber,
-        exPath: focus.exPath.slice(0, j + 1),
-      }]);
+      path.push([
+        {
+          moveNumber: focus.moveNumber,
+          exPath: focus.exPath.slice(0, j + 1),
+        },
+      ]);
     }
     let exPath = [...focus.exPath];
     while (node.children.length > 0) {
       let next = [];
-      if (focus.moveNumber < exploration.length - 1 && focus.exPath.length === 0) {
-        next.push(
-          {
-            moveNumber: focus.moveNumber + 1,
-            exPath: [],
-          });
-      }  
+      if (
+        focus.moveNumber < exploration.length - 1 &&
+        focus.exPath.length === 0
+      ) {
+        next.push({
+          moveNumber: focus.moveNumber + 1,
+          exPath: [],
+        });
+      }
       for (let k = 0; k < node.children.length; k++) {
         next.push({
           moveNumber: focus.moveNumber,
@@ -121,7 +136,6 @@ function GameMoves(props) {
     // 300 is the maxHeight of the table from the CSS (for .movesTable)
     let maxHeight = 300;
     if (focusRowRef.current) {
-
       // If there's a horizontal scrollbar, adjust maxHeight
       if (tableRef.current.scrollWidth > tableRef.current.clientWidth) {
         maxHeight -= 18;
@@ -134,7 +148,9 @@ function GameMoves(props) {
           newScrollTop + maxHeight
       )
         newScrollTop =
-          lastRowRef.current.offsetTop - maxHeight + lastRowRef.current.offsetHeight; // make last row visible
+          lastRowRef.current.offsetTop -
+          maxHeight +
+          lastRowRef.current.offsetHeight; // make last row visible
       if (
         focusRowRef.current.offsetTop + focusRowRef.current.offsetHeight >
         newScrollTop + maxHeight
@@ -144,9 +160,13 @@ function GameMoves(props) {
           focusRowRef.current.offsetTop -
           maxHeight +
           focusRowRef.current.offsetHeight;
-      if (focusRowRef.current.offsetTop < newScrollTop + headerRef.current.offsetHeight)
+      if (
+        focusRowRef.current.offsetTop <
+        newScrollTop + headerRef.current.offsetHeight
+      )
         // focus row is above visible area
-        newScrollTop = focusRowRef.current.offsetTop - headerRef.current.offsetHeight;
+        newScrollTop =
+          focusRowRef.current.offsetTop - headerRef.current.offsetHeight;
       if (newScrollTop !== tableRef.current.scrollTop)
         tableRef.current.scrollTop = newScrollTop;
     }
@@ -164,24 +184,23 @@ function GameMoves(props) {
           ...focus.exPath.slice(0, -1),
           (focus.exPath[focus.exPath.length - 1] + 1) % curNumVariations,
         ],
-      }
+      };
     } else {
       if (focus.exPath.length === 0) {
         return {
           moveNumber: focus.moveNumber - 1,
-          exPath: [0]
-        }
-      }
-      else if (focus.exPath[0] === curNumVariations - 2) {
+          exPath: [0],
+        };
+      } else if (focus.exPath[0] === curNumVariations - 2) {
         return {
           moveNumber: focus.moveNumber + 1,
-          exPath: []
-        }
+          exPath: [],
+        };
       } else {
         return {
           moveNumber: focus.moveNumber,
-          exPath: [focus.exPath[0] + 1]
-        }
+          exPath: [focus.exPath[0] + 1],
+        };
       }
     }
   }
@@ -195,26 +214,23 @@ function GameMoves(props) {
           (focus.exPath[focus.exPath.length - 1] + curNumVariations - 1) %
             curNumVariations,
         ],
-      }
+      };
     } else {
       if (focus.exPath.length === 0) {
         return {
           moveNumber: focus.moveNumber - 1,
-          exPath: [curNumVariations - 2]
-        }
-      }
-      else if (focus.exPath[0] === 0) {
+          exPath: [curNumVariations - 2],
+        };
+      } else if (focus.exPath[0] === 0) {
         return {
           moveNumber: focus.moveNumber + 1,
-          exPath: []
-        }
+          exPath: [],
+        };
       } else {
         return {
           moveNumber: focus.moveNumber,
-          exPath: [
-            focus.exPath[0] - 1
-          ]
-        }
+          exPath: [focus.exPath[0] - 1],
+        };
       }
     }
   }
@@ -322,7 +338,7 @@ function GameMoves(props) {
               </text>
             </svg>
           )}
-          {m.commented ? (<i className="fa fa-comment-o smallicon"></i>) : null}
+          {m.commented ? <i className="fa fa-comment-o smallicon"></i> : null}
         </span>
       </span>
     );
@@ -466,13 +482,25 @@ function GameMoves(props) {
             node = node.children[0];
           }
         }
-      } else { // game over
-        for (let i = 1; i <= (exploration[focus.moveNumber].children.length > 0 ? focus.moveNumber : exploration.length - 1); i++) {
+      } else {
+        // game over
+        for (
+          let i = 1;
+          i <=
+          (exploration[focus.moveNumber].children.length > 0
+            ? focus.moveNumber
+            : exploration.length - 1);
+          i++
+        ) {
           let className = "gameMove";
           if (i === focus.moveNumber) {
             if (focus.exPath.length === 0) {
               className += " gameMoveFocus";
-              curNumVariations = 1 + (focus.moveNumber === 0 ? 0 : exploration[focus.moveNumber - 1].children.length);
+              curNumVariations =
+                1 +
+                (focus.moveNumber === 0
+                  ? 0
+                  : exploration[focus.moveNumber - 1].children.length);
             } else {
               className += " lastMove";
             }
@@ -482,7 +510,11 @@ function GameMoves(props) {
               class: className,
               outcome: -1,
               commented: exploration[i].commented,
-              move: exploration[i].move + (exploration[i].children.length > 0 && focus.moveNumber !== i ? "..." : ""),
+              move:
+                exploration[i].move +
+                (exploration[i].children.length > 0 && focus.moveNumber !== i
+                  ? "..."
+                  : ""),
               path: { moveNumber: i, exPath: [] },
             },
           ]);
@@ -493,8 +525,7 @@ function GameMoves(props) {
           if (j === focus.exPath.length - 1) {
             className += " gameMoveFocus";
             curNumVariations = node.children.length;
-            if (j === 0)
-              curNumVariations += 1;
+            if (j === 0) curNumVariations += 1;
           }
           node = node.children[focus.exPath[j]];
           path.push([
@@ -513,21 +544,22 @@ function GameMoves(props) {
         let exPath = [...focus.exPath];
         while (node.children.length > 0) {
           let next = [];
-          if (focus.moveNumber < exploration.length - 1 && focus.exPath.length === 0) {
+          if (
+            focus.moveNumber < exploration.length - 1 &&
+            focus.exPath.length === 0
+          ) {
             const className = "gameMove actualMove";
-            next.push(
-              {
-                class: className,
-                outcome: -1,
-                commented: exploration[focus.moveNumber + 1].commented,
-                move: exploration[focus.moveNumber + 1].move,
-                path: {
-                  moveNumber: focus.moveNumber + 1,
-                  exPath: [],
-                },
+            next.push({
+              class: className,
+              outcome: -1,
+              commented: exploration[focus.moveNumber + 1].commented,
+              move: exploration[focus.moveNumber + 1].move,
+              path: {
+                moveNumber: focus.moveNumber + 1,
+                exPath: [],
               },
-            );
-          }  
+            });
+          }
           for (let k = 0; k < node.children.length; k++) {
             const c = node.children[k];
             let className = "gameMove";
@@ -625,15 +657,10 @@ function GameMoves(props) {
           {neverExplore ? null : (
             <button
               className="button is-small tooltipped"
-              disabled={
-                curNumVariations > 1
-                  ? false
-                  : true
-              }
+              disabled={curNumVariations > 1 ? false : true}
               onClick={
                 curNumVariations > 1
-                  ? () =>
-                      handleGameMoveClick(nextVarFocus(curNumVariations))
+                  ? () => handleGameMoveClick(nextVarFocus(curNumVariations))
                   : undefined
               }
             >
@@ -644,15 +671,10 @@ function GameMoves(props) {
           {neverExplore ? null : (
             <button
               className="button is-small tooltipped"
-              disabled={
-                curNumVariations > 1
-                  ? false
-                  : true
-              }
+              disabled={curNumVariations > 1 ? false : true}
               onClick={
                 curNumVariations > 1
-                  ? () =>
-                      handleGameMoveClick(prevVarFocus(curNumVariations))
+                  ? () => handleGameMoveClick(prevVarFocus(curNumVariations))
                   : undefined
               }
             >
