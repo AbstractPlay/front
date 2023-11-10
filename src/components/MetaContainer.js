@@ -16,7 +16,9 @@ function MetaContainer(props) {
   const [users, usersSetter] = useState(null);
   const { metaGame } = useParams();
   const { i18n } = useTranslation();
-  const [ canonical, canonicalSetter ] = useState("https://play.abstractplay.com/games/");
+  const [canonical, canonicalSetter] = useState(
+    "https://play.abstractplay.com/games/"
+  );
   addResource(i18n.language);
 
   useEffect(() => {
@@ -56,7 +58,7 @@ function MetaContainer(props) {
 
   useEffect(() => {
     if (metaGame !== undefined) {
-      canonicalSetter(`https://play.abstractplay.com/games/${metaGame}/`)
+      canonicalSetter(`https://play.abstractplay.com/games/${metaGame}/`);
     }
   }, [metaGame]);
 
@@ -68,7 +70,9 @@ function MetaContainer(props) {
     return 0;
   });
   if (process.env.REACT_APP_REAL_MODE === "production") {
-    games = games.filter(id => ! gameinfo.get(id).flags.includes("experimental"));
+    games = games.filter(
+      (id) => !gameinfo.get(id).flags.includes("experimental")
+    );
   }
 
   const toggleStar = async (game) => {
@@ -101,10 +105,15 @@ function MetaContainer(props) {
         globalMeSetter(newMe);
         // update counts locally
         const newcounts = JSON.parse(JSON.stringify(counts));
-        if ( (newMe !== null) && ("stars" in newMe) && (newMe.stars.length > 0) && (newMe.stars.includes(game) ) ) {
-            newcounts[game].stars++;
+        if (
+          newMe !== null &&
+          "stars" in newMe &&
+          newMe.stars.length > 0 &&
+          newMe.stars.includes(game)
+        ) {
+          newcounts[game].stars++;
         } else {
-            newcounts[game].stars--;
+          newcounts[game].stars--;
         }
         countsSetter(newcounts);
       }
@@ -140,18 +149,18 @@ function MetaContainer(props) {
   console.log(games);
   return (
     <Fragment>
-        <Helmet>
-          <link rel="canonical" href={canonical} />
-        </Helmet>
+      <Helmet>
+        <link rel="canonical" href={canonical} />
+      </Helmet>
 
-        <Table
-            metaGame={metaGame}
-            counts={counts}
-            games={games}
-            toggleStar={toggleStar.bind(this)}
-            handleChallenge={handleNewChallenge.bind(this)}
-            users={users}
-        />
+      <Table
+        metaGame={metaGame}
+        counts={counts}
+        games={games}
+        toggleStar={toggleStar.bind(this)}
+        handleChallenge={handleNewChallenge.bind(this)}
+        users={users}
+      />
     </Fragment>
   );
 }

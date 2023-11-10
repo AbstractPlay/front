@@ -160,6 +160,7 @@ function setupGame(
   game0.canPie =
     game0.pie &&
     engine.stack.length === 2 &&
+    // eslint-disable-next-line no-prototype-builtins
     (!game0.hasOwnProperty("pieInvoked") || (game0.pieInvoked = false));
   game0.me = game0.players.findIndex((p) => me && p.id === me.id);
   game0.variants = engine.getVariants();
@@ -1250,7 +1251,6 @@ function GameMove(props) {
               gameRef.current,
               explorationRef.current,
               data,
-              globalMe,
               errorSetter,
               errorMessageRef
             );

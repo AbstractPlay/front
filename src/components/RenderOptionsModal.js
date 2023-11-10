@@ -72,7 +72,11 @@ function RenderOptionsModal(props) {
   const metaName = props.game?.name;
   const gameId = props.game?.id;
   const game = props.game;
-  const cbit = game ? (game.toMove === "" || game.toMove === null ? 1 : 0) : undefined;
+  const cbit = game
+    ? game.toMove === "" || game.toMove === null
+      ? 1
+      : 0
+    : undefined;
   const settings = props.settings;
   const gameSettings = props.gameSettings;
   const show = props.show;
@@ -119,7 +123,7 @@ function RenderOptionsModal(props) {
     } else {
       displaySetter(null);
     }
-  }
+  };
 
   const handleColorChange = (color, checked) => {
     if (checked) {
@@ -252,7 +256,7 @@ function RenderOptionsModal(props) {
       ]}
     >
       <Fragment>
-        { displays && displays.length > 0 ? 
+        {displays && displays.length > 0 ? (
           <div className="field">
             <label className="label">{t("ChooseDisplay")}</label>
             <div className="control">
@@ -286,8 +290,9 @@ function RenderOptionsModal(props) {
               </div>
             ))}
           </div>
-          : ""
-        }
+        ) : (
+          ""
+        )}
         <div className="field">
           <label className="label">{t("ChooseColors")}</label>
           <div className="control">

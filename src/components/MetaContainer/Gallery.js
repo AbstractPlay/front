@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useRef, createRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  createRef,
+} from "react";
 import MetaItem from "./MetaItem";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
@@ -12,7 +18,7 @@ import { MeContext } from "../../pages/Skeleton";
 function Gallery(props) {
   const [theMetaGame, theMetaGameSetter] = useState(props.metaGame);
   const counts = props.counts;
-  const [globalMe,] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
   const gameDivs = useRef({});
   const [hideDetails, hideDetailsSetter] = useState(false);
   const [filterStars, filterStarsSetter] = useState(false);
@@ -37,8 +43,13 @@ function Gallery(props) {
   };
 
   let games = props.games;
-  if ( (filterStars) && (globalMe !== null) && ("stars" in globalMe) && (globalMe.stars.length > 0) ) {
-    games = games.filter(id => globalMe.stars.includes(id));
+  if (
+    filterStars &&
+    globalMe !== null &&
+    "stars" in globalMe &&
+    globalMe.stars.length > 0
+  ) {
+    games = games.filter((id) => globalMe.stars.includes(id));
   }
 
   console.log(games);
@@ -76,7 +87,8 @@ function Gallery(props) {
                 onChange={() => hideDetailsSetter(!hideDetails)}
               />
               {t("HideDetails")}
-            </label>&nbsp;&nbsp;&nbsp;
+            </label>
+            &nbsp;&nbsp;&nbsp;
             <label className="checkbox">
               <input
                 type="checkbox"

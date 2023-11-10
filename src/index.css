@@ -542,3 +542,11 @@ th .player {
 .highlight {
     color: var(--secondary-color-1);
 }
+
+.bolder {
+    font-weight: bolder;
+}
+
+.topPad {
+    padding-top: 1em;
+}

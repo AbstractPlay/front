@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from "lodash";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Auth } from "aws-amplify";
 import { MeContext } from "../pages/Skeleton";
@@ -32,9 +32,15 @@ function UserSettingsModal(props) {
   const [exploration, explorationSetter] = useState(null);
   const [confirmMove, confirmMoveSetter] = useState(true);
   const [globalMe, globalMeSetter] = useContext(MeContext);
-  const [showMeTour, showMeTourSetter] = useStorageState("joyride-me-show", true);
-  const [showPlayTour, showPlayTourSetter] = useStorageState("joyride-play-show", true);
-  const [hideTour, hideTourSetter] = useState(( (! showMeTour) || (! showPlayTour) ))
+  const [showMeTour, showMeTourSetter] = useStorageState(
+    "joyride-me-show",
+    true
+  );
+  const [showPlayTour, showPlayTourSetter] = useStorageState(
+    "joyride-play-show",
+    true
+  );
+  const [hideTour, hideTourSetter] = useState(!showMeTour || !showPlayTour);
 
   useEffect(() => {
     if (show) {
@@ -168,42 +174,39 @@ function UserSettingsModal(props) {
 
   const handleNotifyCheckChange = async (key) => {
     const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
-    if (newSettings.all === undefined)
-      newSettings.all = {};
+    if (newSettings.all === undefined) newSettings.all = {};
     newSettings.all.notifications = notifications;
     newSettings.all.notifications[key] = !newSettings.all.notifications[key];
     handleSettingsChange(newSettings);
-  }
+  };
 
   const handleTourCheckChange = () => {
     const newSetting = !hideTour;
     hideTourSetter(newSetting);
     if (newSetting) {
-        showMeTourSetter(false);
-        showPlayTourSetter(false);
+      showMeTourSetter(false);
+      showPlayTourSetter(false);
     } else {
-        showMeTourSetter(true);
-        showPlayTourSetter(true);
+      showMeTourSetter(true);
+      showPlayTourSetter(true);
     }
-  }
+  };
 
   const handleExplorationChange = async (value) => {
     const newSettings = cloneDeep(globalMe.settings);
-    if (newSettings.all === undefined)
-      newSettings.all = {};
+    if (newSettings.all === undefined) newSettings.all = {};
     newSettings.all.exploration = value;
     explorationSetter(value); // this will update the UI
     handleSettingsChange(newSettings); // this will update the DB (and the UI after another round trip to the server. Do we really need that?)
-  }
+  };
 
   const handleMoveConfirmChange = async () => {
     const newSettings = cloneDeep(globalMe.settings);
-    if (newSettings.all === undefined)
-      newSettings.all = {};
+    if (newSettings.all === undefined) newSettings.all = {};
     newSettings.all.moveConfirmOff = confirmMove;
     confirmMoveSetter(!confirmMove);
     handleSettingsChange(newSettings);
-  }
+  };
 
   const handleSettingsChange = async (newSettings) => {
     try {
@@ -282,7 +285,11 @@ function UserSettingsModal(props) {
   const handlePushClick = async () => {
     try {
       let state = true;
-      if ( (globalMe !== null) && ("mayPush" in globalMe) && (globalMe.mayPush === true) ) {
+      if (
+        globalMe !== null &&
+        "mayPush" in globalMe &&
+        globalMe.mayPush === true
+      ) {
         state = false;
       }
       const usr = await Auth.currentAuthenticatedUser();
@@ -301,9 +308,7 @@ function UserSettingsModal(props) {
         }),
       });
       if (res.status !== 200) {
-        console.log(
-          `An error occured while saving push preferenes`
-        );
+        console.log(`An error occured while saving push preferenes`);
       } else {
         const result = await res.json();
         console.log(result.body);
@@ -386,10 +391,12 @@ function UserSettingsModal(props) {
             ""
           ) : (
             <Fragment>
-              <p className={"help " + (nameError !== "" ? "is-danger" : "is-primary")}>
-                {nameError !== ""
-                  ? nameError
-                  : t("DisplayNameChange")}
+              <p
+                className={
+                  "help " + (nameError !== "" ? "is-danger" : "is-primary")
+                }
+              >
+                {nameError !== "" ? nameError : t("DisplayNameChange")}
               </p>
             </Fragment>
           )}
@@ -512,23 +519,30 @@ function UserSettingsModal(props) {
         </div>
         {/********************* push notifications *********************/}
         <div className="field" key="pushNotifications">
-            <div className="control">
-                <label className="checkbox is-small">
-                    <input type="checkbox"
-                      checked={( (globalMe !== null) && ("mayPush" in globalMe) && (globalMe.mayPush === true) )}
-                      onChange={handlePushClick}
-                    />
-                    { ( (globalMe !== null) && ("mayPush" in globalMe) && (globalMe.mayPush === true) )
-                      ? t("DisablePush")
-                      : t("EnablePush")
-                    }
-                </label>
-            </div>
+          <div className="control">
+            <label className="checkbox is-small">
+              <input
+                type="checkbox"
+                checked={
+                  globalMe !== null &&
+                  "mayPush" in globalMe &&
+                  globalMe.mayPush === true
+                }
+                onChange={handlePushClick}
+              />
+              {globalMe !== null &&
+              "mayPush" in globalMe &&
+              globalMe.mayPush === true
+                ? t("DisablePush")
+                : t("EnablePush")}
+            </label>
+          </div>
         </div>
 
         {/********************* exploration *********************/}
-        {exploration === null
-          ? "" :
+        {exploration === null ? (
+          ""
+        ) : (
           <div className="field" key="exploration">
             <label className="label">{t("ExplorationSetting")}</label>
             <div className="control" key="explore-never">
@@ -539,9 +553,7 @@ function UserSettingsModal(props) {
                   value="-1"
                   name="explore-never"
                   checked={exploration === -1}
-                  onChange={() =>
-                    handleExplorationChange(-1)
-                  }
+                  onChange={() => handleExplorationChange(-1)}
                 />
                 {t(`ExploreNever`)}
               </label>
@@ -554,9 +566,7 @@ function UserSettingsModal(props) {
                   value="-1"
                   name="explore-ask"
                   checked={exploration === 0}
-                  onChange={() =>
-                    handleExplorationChange(0)
-                  }
+                  onChange={() => handleExplorationChange(0)}
                 />
                 {t(`ExploreAsk`)}
               </label>
@@ -569,44 +579,39 @@ function UserSettingsModal(props) {
                   value="-1"
                   name="explore-always"
                   checked={exploration === 1}
-                  onChange={() =>
-                    handleExplorationChange(1)
-                  }
+                  onChange={() => handleExplorationChange(1)}
                 />
                 {t(`ExploreAlways`)}
               </label>
             </div>
 
-            <div className="field" key="tours" style={{paddingTop: "1em"}}>
-                <div className="control">
-                  <label className="checkbox">
-                    <input
-                      type="checkbox"
-                      checked={hideTour}
-                      onChange={handleTourCheckChange}
-                    />
-                    {t("HideTours")}
-                  </label>
-                </div>
+            <div className="field" key="tours" style={{ paddingTop: "1em" }}>
+              <div className="control">
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={hideTour}
+                    onChange={handleTourCheckChange}
+                  />
+                  {t("HideTours")}
+                </label>
+              </div>
             </div>
-
           </div>
-        }
+        )}
 
         {/********************* move confirmation *********************/}
         <div className="field" key="moveConfirm">
-            <div className="control">
-                <label className="checkbox is-small">
-                    <input type="checkbox"
-                      checked={ confirmMove }
-                      onChange={ handleMoveConfirmChange }
-                    />
-                    { confirmMove
-                      ? t("DisableMoveConfirm")
-                      : t("EnableMoveConfirm")
-                    }
-                </label>
-            </div>
+          <div className="control">
+            <label className="checkbox is-small">
+              <input
+                type="checkbox"
+                checked={confirmMove}
+                onChange={handleMoveConfirmChange}
+              />
+              {confirmMove ? t("DisableMoveConfirm") : t("EnableMoveConfirm")}
+            </label>
+          </div>
         </div>
 
         {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above

@@ -35,61 +35,75 @@ function NewChallengeModal(props) {
   const [opponents, opponentsSetter] = useState([]);
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const groupVariantsRef = useRef({});
-  const [globalMe,] = useContext(MeContext);
-  const [users,] = useContext(UsersContext);
+  const [globalMe] = useContext(MeContext);
+  const [users] = useContext(UsersContext);
 
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
 
-  const setPlayerCount = useCallback((cnt) => {
-    playerCountSetter(cnt);
-    if (cnt === 2) {
-      seatingSetter("random");
-      ratedSetter(true);
-    } else {
-      seatingSetter("random");
-      ratedSetter(false);
-    }
-    if (cnt !== -1) {
-      opponentsSetter(Array(cnt - 1).fill(""));
-    }
-  }, [playerCountSetter, seatingSetter, ratedSetter, opponentsSetter]);
+  const setPlayerCount = useCallback(
+    (cnt) => {
+      playerCountSetter(cnt);
+      if (cnt === 2) {
+        seatingSetter("random");
+        ratedSetter(true);
+      } else {
+        seatingSetter("random");
+        ratedSetter(false);
+      }
+      if (cnt !== -1) {
+        opponentsSetter(Array(cnt - 1).fill(""));
+      }
+    },
+    [playerCountSetter, seatingSetter, ratedSetter, opponentsSetter]
+  );
 
-  const handleChangeGame = useCallback((game) => {
-    groupVariantsRef.current = {};
-    if (game === "") {
-      metaGameSetter(null);
-    } else {
-      metaGameSetter(game);
-      const info = gameinfo.get(game);
-      let gameEngine;
-      if (info.playercounts.length > 1) {
-        gameEngine = GameFactory(info.uid, 2);
+  const handleChangeGame = useCallback(
+    (game) => {
+      groupVariantsRef.current = {};
+      if (game === "") {
+        metaGameSetter(null);
       } else {
-        gameEngine = GameFactory(info.uid);
+        metaGameSetter(game);
+        const info = gameinfo.get(game);
+        let gameEngine;
+        if (info.playercounts.length > 1) {
+          gameEngine = GameFactory(info.uid, 2);
+        } else {
+          gameEngine = GameFactory(info.uid);
+        }
+        allvariantsSetter(gameEngine.allvariants());
+        let ngVariants = {};
+        if (gameEngine.allvariants())
+          gameEngine
+            .allvariants()
+            .filter((v) => v.group === undefined)
+            .forEach((v) => (ngVariants[v.uid] = false));
+        nonGroupVariantsSetter(ngVariants);
+        const playercounts = info.playercounts;
+        if (playercounts.length === 1) {
+          setPlayerCount(playercounts[0]);
+        } else if (props.opponent !== undefined) {
+          setPlayerCount(2);
+        } else {
+          playerCountSetter(-1);
+          opponentsSetter([]);
+        }
+        seatingSetter("random");
       }
-      allvariantsSetter(gameEngine.allvariants());
-      let ngVariants = {};
-      if (gameEngine.allvariants())
-        gameEngine
-          .allvariants()
-          .filter((v) => v.group === undefined)
-          .forEach((v) => (ngVariants[v.uid] = false));
-      nonGroupVariantsSetter(ngVariants);
-      const playercounts = info.playercounts;
-      if (playercounts.length === 1) {
-        setPlayerCount(playercounts[0]);
-      } else if (props.opponent !== undefined) {
-        setPlayerCount(2);
-      } else {
-        playerCountSetter(-1);
-        opponentsSetter([]);
-      }
-      seatingSetter("random");
-    }
-    errorSetter("");
-  }, [metaGameSetter, allvariantsSetter, nonGroupVariantsSetter, setPlayerCount, playerCountSetter, opponentsSetter, props]);
+      errorSetter("");
+    },
+    [
+      metaGameSetter,
+      allvariantsSetter,
+      nonGroupVariantsSetter,
+      setPlayerCount,
+      playerCountSetter,
+      opponentsSetter,
+      props,
+    ]
+  );
 
   useEffect(() => {
     groupVariantsRef.current = {};
@@ -113,7 +127,7 @@ function NewChallengeModal(props) {
       metaGameSetter(null);
     }
     if (props.opponent !== undefined) {
-        opponentsSetter([props.opponent])
+      opponentsSetter([props.opponent]);
     }
   }, [show, props, handleChangeGame]);
 
@@ -258,13 +272,20 @@ function NewChallengeModal(props) {
   gameinfo.forEach((game) => games.push({ id: game.uid, name: game.name }));
   games.sort((a, b) => (a.name > b.name ? 1 : -1));
   if (process.env.REACT_APP_REAL_MODE === "production") {
-    games = games.filter(g => ! gameinfo.get(g.id).flags.includes("experimental"));
+    games = games.filter(
+      (g) => !gameinfo.get(g.id).flags.includes("experimental")
+    );
   }
   // sort by stars
-  if ( (globalMe !== null) && ("stars" in globalMe) && (Array.isArray(globalMe.stars)) && (globalMe.stars.length > 0) ) {
-    const starred = games.filter(g => globalMe.stars.includes(g.id));
-    const others = games.filter(g => ! globalMe.stars.includes(g.id));
-    games = [...starred, {id: "", name: "-----"}, ...others];
+  if (
+    globalMe !== null &&
+    "stars" in globalMe &&
+    Array.isArray(globalMe.stars) &&
+    globalMe.stars.length > 0
+  ) {
+    const starred = games.filter((g) => globalMe.stars.includes(g.id));
+    const others = games.filter((g) => !globalMe.stars.includes(g.id));
+    games = [...starred, { id: "", name: "-----" }, ...others];
   }
 
   let groupData = [];
@@ -292,11 +313,11 @@ function NewChallengeModal(props) {
     }
     playercounts = info.playercounts;
   }
-//   if (!(metaGame === null || nonGroupData.length === 0)) {
-//     console.log("nonGroupData", nonGroupData);
-//     console.log(nonGroupVariants);
-//   }
-//   console.log(opponents);
+  //   if (!(metaGame === null || nonGroupData.length === 0)) {
+  //     console.log("nonGroupData", nonGroupData);
+  //     console.log(nonGroupVariants);
+  //   }
+  //   console.log(opponents);
   return (
     <Modal
       show={show}
@@ -432,7 +453,7 @@ function NewChallengeModal(props) {
                   type="radio"
                   name="challengeType"
                   value="targeted"
-                  checked={! standing}
+                  checked={!standing}
                   readOnly={true}
                   onClick={() => standingSetter(false)}
                 />
@@ -446,7 +467,8 @@ function NewChallengeModal(props) {
             </p>
           </div>
         )}
-        {playerCount === -1 || standing ? ""
+        {playerCount === -1 || standing
+          ? ""
           : /* Opponents */
             opponents.map((o, i) => {
               return (
@@ -498,17 +520,37 @@ function NewChallengeModal(props) {
                   </div>
                 </div>
               );
-            })
-        }
-        {! standing ? "" : ( (playerCount === -1) || (playerCount > 2) ) ? "" :
-            <div className="field">
-                <label className="label is-small" htmlFor="duration">{t("Duration")}</label>
-                <div className="control">
-                    <input className="input is-small" type="number" min={0} name="duration" placeholder="duration" style={{width: "50%"}} value={standingCount} onChange={(e) => standingCountSetter(parseInt(e.target.value, 10))} />
-                </div>
-                <p className="help">{standingCount === 0 ? t("DurationHelpPersistent") : t("DurationHelp", {count: standingCount})}</p>
+            })}
+        {!standing ? (
+          ""
+        ) : playerCount === -1 || playerCount > 2 ? (
+          ""
+        ) : (
+          <div className="field">
+            <label className="label is-small" htmlFor="duration">
+              {t("Duration")}
+            </label>
+            <div className="control">
+              <input
+                className="input is-small"
+                type="number"
+                min={0}
+                name="duration"
+                placeholder="duration"
+                style={{ width: "50%" }}
+                value={standingCount}
+                onChange={(e) =>
+                  standingCountSetter(parseInt(e.target.value, 10))
+                }
+              />
             </div>
-        }
+            <p className="help">
+              {standingCount === 0
+                ? t("DurationHelpPersistent")
+                : t("DurationHelp", { count: standingCount })}
+            </p>
+          </div>
+        )}
         {groupData.length === 0 && nonGroupData.length === 0 ? (
           ""
         ) : (

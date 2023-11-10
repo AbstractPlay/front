@@ -36,7 +36,8 @@ function GameCommentShort(props) {
         <Fragment>
           <div className="field is-grouped">
             <div className="control">
-              <textarea type="textarea"
+              <textarea
+                type="textarea"
                 ref={textareaRef}
                 rows={1}
                 id="enterAComment"

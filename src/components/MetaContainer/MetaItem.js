@@ -9,7 +9,7 @@ import gameImages from "../../assets/GameImages";
 import Modal from "../Modal";
 
 const MetaItem = React.forwardRef((props, ref) => {
-  const [globalMe,] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const toggleStar = props.toggleStar;
   const { t } = useTranslation();
@@ -27,18 +27,18 @@ const MetaItem = React.forwardRef((props, ref) => {
   // eslint-disable-next-line no-prototype-builtins
   if (game.hasOwnProperty("people")) {
     let designers = game.people
-    .filter((p) => p.type === "designer")
-    .map((p) => {
-        if ( ("urls" in p) && (p.urls !== undefined) && (p.urls.length > 0) ) {
-            return `[${p.name}](${p.urls[0]})`;
+      .filter((p) => p.type === "designer")
+      .map((p) => {
+        if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
+          return `[${p.name}](${p.urls[0]})`;
         } else {
-            return p.name;
+          return p.name;
         }
-    });
+      });
     if (designers.length === 1) {
-        designerString = "Designer: ";
+      designerString = "Designer: ";
     } else {
-        designerString = "Designers: ";
+      designerString = "Designers: ";
     }
     designerString += designers.join(", ");
   }
@@ -68,7 +68,10 @@ const MetaItem = React.forwardRef((props, ref) => {
             ) : (
               <Fragment>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-                  {gameEngine.description() + (designerString === undefined ? "" : "\n\n" + designerString)}
+                  {gameEngine.description() +
+                    (designerString === undefined
+                      ? ""
+                      : "\n\n" + designerString)}
                 </ReactMarkdown>
                 <ul className="contained">
                   {game.urls.map((l, i) => (
@@ -126,7 +129,7 @@ const MetaItem = React.forwardRef((props, ref) => {
                   </li>
                   <li>
                     {`${counts.stars} `}
-                    {t("TotalStars", {count: counts.stars}).toLowerCase()}
+                    {t("TotalStars", { count: counts.stars }).toLowerCase()}
                   </li>
                 </ul>
               )}
@@ -135,16 +138,21 @@ const MetaItem = React.forwardRef((props, ref) => {
         </div>
         <div className="column">
           <div className="starContainer" onClick={() => toggleStar(game.uid)}>
-            {globalMe === null ? "" :
-                ( (globalMe !== null) && ("stars" in globalMe) && (globalMe.stars !== undefined) && (globalMe.stars !== null) && (globalMe.stars.includes(game.uid)) ) ?
-                    <span className="icon glowingStar">
-                        <i className="fa fa-star"></i>
-                    </span>
-                :
-                    <span className="icon">
-                        <i className="fa fa-star-o"></i>
-                    </span>
-            }
+            {globalMe === null ? (
+              ""
+            ) : globalMe !== null &&
+              "stars" in globalMe &&
+              globalMe.stars !== undefined &&
+              globalMe.stars !== null &&
+              globalMe.stars.includes(game.uid) ? (
+              <span className="icon glowingStar">
+                <i className="fa fa-star"></i>
+              </span>
+            ) : (
+              <span className="icon">
+                <i className="fa fa-star-o"></i>
+              </span>
+            )}
           </div>
           <div id={"svg" + game.uid}>
             <img

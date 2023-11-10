@@ -298,5 +298,13 @@
     {
         "time": 1698206400000,
         "text": "Phil Leduc's game Murus Gallicus is now available on the production server. I'm pretty confident I've captured all the rules correctly, but it has been a long day 🙂 If you encounter any issues, please let me know right away and I'll try to salvage the game.\n\nIn discussion with Phil, with the goal of ensuring the \"best\" version of the game is the default, here's how things are configured:\n\n* The default ruleset is \"Advanced Murus Gallicus\" (with catapults).\n* By default, your first move is to redistribute one of your starting towers as walls on your second row.\n* The standard pie rule is also available.\n* There are three variants you can mix and match:\n\n  * \"Basic\" reverts the game to the \"no catapult\" state.\n  * \"Static\" disables the initial tower redistribution.\n  * \"Escape\" eliminates the breakthrough win condition.\n\nI should probably put that in the implementation notes, now that I think about it. Again, let me know if there are any issues. Enjoy!"
+    },
+    {
+        "time": 1698604080000,
+        "text": "@Mark Khan's game Bounce is now available on the production server. Let me know if there are any issues. Enjoy!"
+    },
+    {
+        "time": 1699326540000,
+        "text": "Records and analysis of completed games have now been made available. These records and statistics are not real time! They are generated every Sunday (6am UTC).\n\n* You can access all the records at <https://records.abstractplay.com/>.\n* The new Statistics tab presents some analysis of the records.\n* Buttons for downloading all records, your records, and the records for specific games are visible on the Statistics page, your dashboard, and the completed games lists, respectively.\n\nI'll be doing some aesthetic tweaking later this week. We warmly welcome feedback and suggestions. Enjoy!"
     }
 ]
