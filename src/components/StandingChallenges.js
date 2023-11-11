@@ -214,6 +214,7 @@ function StandingChallenges(props) {
         return {
           id: rec.id,
           challenger: rec.challenger.name,
+          challengerId: rec.challenger.id,
           clockHard: rec.clockHard,
           clockStart: rec.clockStart,
           clockInc: rec.clockInc,
@@ -287,7 +288,7 @@ function StandingChallenges(props) {
                   ) : props.row.original.id === reject ||
                     props.row.original.id === revoke ? (
                     <Spinner></Spinner>
-                  ) : props.row.original.challenger.id === globalMe?.id ? (
+                  ) : props.row.original.challengerId === globalMe?.id ? (
                     <button
                       className="button is-small apButton"
                       onClick={() => handleRevoke(props.row.original.id)}
