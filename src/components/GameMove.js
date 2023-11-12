@@ -254,6 +254,7 @@ function setupGame(
   let history = [];
   // The following is DESTRUCTIVE! If you need `engine.stack`, do it before here.
   game0.gameOver = engine.gameover;
+  const winner = engine.winner;
   while (true) { // eslint-disable-line no-constant-condition
     history.unshift(
       new GameNode(
@@ -263,6 +264,9 @@ function setupGame(
         engine.gameover ? "" : engine.currplayer - 1
       )
     );
+    if (game0.gameOver && winner.length === 1 && !game0.simultaneous && game0.numPlayers === 2) {
+      history[0].outcome = winner[0] - 1;
+    }
     engine.stack.pop();
     engine.gameover = false;
     engine.winner = [];
@@ -391,6 +395,8 @@ function mergePrivateExploration(
     );
     added.forEach((e) => moveNumbersUpdated.add(e));
   }
+  if (moveNumbersUpdated.size > 0)
+    fixMoveOutcomes(exploration, Math.max.apply(this, [...moveNumbersUpdated]));
   moveNumbersUpdated.forEach((e) => {
     saveExploration(
       exploration,
@@ -402,6 +408,32 @@ function mergePrivateExploration(
       errorMessageRef
     );
   });
+}
+
+// Update outcomes of moves in the game. These aren't in the children of the previous move node, so outcomes need special handling.
+function fixMoveOutcomes(exploration, moveNumber) {
+  let child = exploration[moveNumber];
+  for (let moveNum = moveNumber; moveNum > 0; moveNum--) {
+    const parent = exploration[moveNum - 1];
+    const mover = 1 - parent.toMove;
+    // if player x moved, and the other player (1-x) has a winning reply (outcome = 1-x), then player x loses
+    // if player x moved, and the other player (1-x) has only losing replies (outcome = x) (no winning moves, no unknown outcome moves) then player x wins
+    let a_child_wins = false;
+    let all_children_lose = true;
+    if (child.outcome === 1 - mover) a_child_wins = true;
+    if (child.outcome !== mover) all_children_lose = false;
+    parent.children.forEach((c) => {
+      if (c.outcome === 1 - mover) a_child_wins = true;
+      if (c.outcome !== mover) all_children_lose = false;
+    });
+    if (a_child_wins) 
+      parent.outcome = 1 - mover;
+    else if (all_children_lose) 
+      parent.outcome = mover;
+    else
+      parent.outcome = -1;
+    child = parent;
+  }
 }
 
 // after you submit a move, move the subtree of that explored move to the actual move.
@@ -434,10 +466,14 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
     gameEngine.move(n.move);
     const pos = node.AddChild(n.move, gameEngine);
     if (newids) node.children[pos].id = n.id;
-    if (n.outcome !== undefined) {
-      if (node.children[pos].outcome === -1) {
-        node.children[pos].SetOutcome(n.outcome);
-      } else if (node.children[pos].outcome !== n.outcome) {
+    if (n.outcome !== undefined && n.children.length === 0) {
+      // outcome was set at a leaf of the exploration being merged
+      const newnode = node.children[pos];
+      if (newnode.outcome === -1) {
+        // If the newnode didn't get an outcome from existing exploration, set it now
+        newnode.SetOutcome(n.outcome);
+      } else if (newnode.outcome !== n.outcome && newnode.children.length === 0) {
+        // if two leaf nodes disagree on outcome, set it to undecided
         node.children[pos].SetOutcome(-1);
       }
     }
@@ -469,10 +505,14 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
       updated.forEach((e) => movesUpdated.add(e));
     } else {
       const pos = node.AddChild(n.move, gameEngine);
-      if (n.outcome !== undefined) {
-        if (node.children[pos].outcome === -1) {
-          node.children[pos].SetOutcome(n.outcome);
-        } else if (node.children[pos].outcome !== n.outcome) {
+      if (n.outcome !== undefined && n.children.length === 0) {
+        // outcome was set at a leaf of the exploration being merged
+        const newnode = node.children[pos];
+        if (newnode.outcome === -1) {
+          // If the newnode didn't get an outcome from existing exploration, set it now
+          newnode.SetOutcome(n.outcome);
+        } else if (newnode.outcome !== n.outcome && newnode.children.length === 0) {
+          // if two leaf nodes disagree on outcome, set it to undecided
           node.children[pos].SetOutcome(-1);
         }
       }
@@ -686,6 +726,8 @@ function doView(
       )
     ) {
       const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
+      if (game.gameOver)
+        fixMoveOutcomes(explorationRef.current, newfocus.moveNumber + 1);
       newfocus.exPath.push(pos);
       saveExploration(
         explorationRef.current,
@@ -1318,6 +1360,7 @@ function GameMove(props) {
             return d;
           });
           mergePublicExploration(gameRef.current, explorationRef.current, data);
+          fixMoveOutcomes(explorationRef.current, explorationRef.current.length - 1);
           if (moveNumberParam) {
             const moveNum = parseInt(moveNumberParam, 10);
             let exPath = [];
@@ -1702,6 +1745,8 @@ function GameMove(props) {
   const handleMark = (mark) => {
     let node = getFocusNode(explorationRef.current, focus);
     node.SetOutcome(mark);
+    if (gameRef.current.gameOver)
+      fixMoveOutcomes(explorationRef.current, focus.moveNumber);
     saveExploration(
       explorationRef.current,
       focus.moveNumber + 1,

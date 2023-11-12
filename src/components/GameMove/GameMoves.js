@@ -491,7 +491,7 @@ function GameMoves(props) {
             ? focus.moveNumber
             : exploration.length - 1);
           i++
-        ) {
+        ) { // moves up to focus, or if focus has no exploration, all actual game moves
           let className = "gameMove";
           if (i === focus.moveNumber) {
             if (focus.exPath.length === 0) {
@@ -508,7 +508,7 @@ function GameMoves(props) {
           path.push([
             {
               class: className,
-              outcome: -1,
+              outcome: exploration[i].outcome,
               commented: exploration[i].commented,
               move:
                 exploration[i].move +
@@ -521,6 +521,7 @@ function GameMoves(props) {
         }
         let node = exploration[focus.moveNumber];
         for (let j = 0; j < focus.exPath.length; j++) {
+          // now moves from the actual move along the focus path
           let className = "gameMove";
           if (j === focus.exPath.length - 1) {
             className += " gameMoveFocus";
@@ -548,10 +549,11 @@ function GameMoves(props) {
             focus.moveNumber < exploration.length - 1 &&
             focus.exPath.length === 0
           ) {
+            // actual game move isn't in the previous move's node's children, so needs special handling
             const className = "gameMove actualMove";
             next.push({
               class: className,
-              outcome: -1,
+              outcome: exploration[focus.moveNumber + 1].outcome,
               commented: exploration[focus.moveNumber + 1].commented,
               move: exploration[focus.moveNumber + 1].move,
               path: {
