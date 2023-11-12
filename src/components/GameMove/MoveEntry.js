@@ -187,7 +187,9 @@ function MoveEntry(props) {
         )}
         <p
           style={{ marginBottom: "1em" }}
-          className={game.canSubmit && uiState === 0 ? "yourTurn" : ""}
+          className={
+            "yourTurn" + (game.canSubmit && uiState === 0 ? " myTurn" : "")
+          }
         >
           {img === null ? (
             ""
@@ -200,14 +202,13 @@ function MoveEntry(props) {
           ) : (
             <span style={{ verticalAlign: "middle" }}>{img.value + ":"}</span>
           )}
-          <span style={{ marginLeft: "0.5em" }}>{mover}</span>
+          <span className="playerName">{mover}</span>
         </p>
         {uiState === 0 && toMove !== "" ? (
           <table className="table">
             <caption className="tooltipped">
-              {t("TimeRemaining")}
-              <span className="tooltiptext">
-                Time Setting:{" "}
+              {t("TimeRemaining")}<br />
+              <span className="smallerText">
                 {game.clockHard ? t("HardTimeSet") : t("NotHardTime")},{" "}
                 {t("Increment", { inc: game.clockInc })},{" "}
                 {t("MaxTime", { max: game.clockMax })}

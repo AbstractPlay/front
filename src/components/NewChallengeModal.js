@@ -26,9 +26,10 @@ function NewChallengeModal(props) {
   const [playerCount, playerCountSetter] = useState(-1);
   const [allvariants, allvariantsSetter] = useState(null);
   const [seating, seatingSetter] = useState("random");
-  const [clockStart, clockStartSetter] = useStorageState("new-challenge-clock-start", 72);
+  const [clockSpeed, clockSpeedSetter] = useStorageState("new-challenge-clock-speed", "medium");
+  const [clockStart, clockStartSetter] = useStorageState("new-challenge-clock-start", 48);
   const [clockInc, clockIncSetter] = useStorageState("new-challenge-clock-inc", 24);
-  const [clockMax, clockMaxSetter] = useStorageState("new-challenge-clock-max", 240);
+  const [clockMax, clockMaxSetter] = useStorageState("new-challenge-clock-max", 96);
   const [clockHard, clockHardSetter] = useStorageState("new-challenge-clock-hard", false);
   const [rated, ratedSetter] = useStorageState("new-challenge-rated", true); // rated or not
   const [standing, standingSetter] = useState(false); // Standing challenge or not.
@@ -59,6 +60,12 @@ function NewChallengeModal(props) {
     },
     [playerCountSetter, seatingSetter, ratedSetter, opponentsSetter]
   );
+
+  const setClock = (start, inc, max) => {
+    clockStartSetter(start);
+    clockIncSetter(inc);
+    clockMaxSetter(max);
+  }
 
   const handleChangeGame = useCallback(
     (game) => {
@@ -193,16 +200,19 @@ function NewChallengeModal(props) {
   const handleClockStartChange = (event) => {
     isNonNegativeInteger(event.target.value, t("ChooseClockStart"));
     clockStartSetter(event.target.value);
+    clockSpeedSetter("custom");
   };
 
   const handleClockIncChange = (event) => {
     isNonNegativeInteger(event.target.value, t("ChooseClockIncrement"));
     clockIncSetter(event.target.value);
+    clockSpeedSetter("custom");
   };
 
   const handleClockMaxChange = (event) => {
     isNonNegativeInteger(event.target.value, t("ChooseClockMax"));
     clockMaxSetter(event.target.value);
+    clockSpeedSetter("custom");
   };
 
   const handleClockHardChange = (event) => {
@@ -655,6 +665,27 @@ function NewChallengeModal(props) {
           ""
         ) : (
           <Fragment>
+            <div className="field">
+                <label className="label">Choose clock speed</label>
+                <div className="control">
+                    <label className="radio">
+                        <input type="radio" name="clockSpeed" value="fast" checked={clockSpeed === "fast"} onClick={() => {clockSpeedSetter("fast"); setClock(24, 8, 48)}} />
+                        Fast (daily)
+                    </label>
+                    <label className="radio">
+                        <input type="radio" name="clockSpeed" value="medium" checked={clockSpeed === "medium"} onClick={() => {clockSpeedSetter("medium"); setClock(48, 24, 96)}} />
+                        Medium (twice weekly)
+                    </label>
+                    <label className="radio">
+                        <input type="radio" name="clockSpeed" value="slow" checked={clockSpeed === "slow"} onClick={() => {clockSpeedSetter("slow"); setClock(72, 48, 168)}} />
+                        Slow (weekly)
+                    </label>
+                    <label className="radio">
+                        <input type="radio" name="clockSpeed" value="custom" checked={clockSpeed === "custom"} onClick={() => clockSpeedSetter("custom")} />
+                        Custom
+                    </label>
+                </div>
+            </div>
             <div className="columns">
               <div className="column">
                 <div className="field">

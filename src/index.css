@@ -264,6 +264,10 @@ th .player {
   display: inline;
 }
 
+.actualMove {
+  font-weight: bold;
+}
+
 .gameMoveNums {
   font-size: x-small;
   vertical-align: bottom !important;
@@ -300,6 +304,12 @@ th .player {
   padding-left: 0.2rem;
   height: 0.6rem;
   width: 0.8rem;
+}
+
+.smallicon {
+  padding-left: 0.2rem;
+  vertical-align: 0.6em;
+  font-size: 8px;
 }
 
 .winnerButtonImage {
@@ -483,9 +493,19 @@ th .player {
 .yourTurn {
     display: flex;
     align-items: center;
-    border-radius: 0.25em;
     padding: 0.3em;
-    background-color: var(--secondary-color-1-lighter);
+}
+
+.myTurn {
+  border-radius: 0.25em;
+  padding: 0.3em;
+  background-color: var(--secondary-color-1-lighter);
+}
+
+.playerName {
+  margin-left: 0.5em;
+  line-height: 1.15rem; /* Match the line height with the image height */
+  transform: translateY(10%);
 }
 
 /* text notification of being in check */
