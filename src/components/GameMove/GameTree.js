@@ -96,7 +96,7 @@ export class GameNode {
   findNode(id) {
     if (this.id === id) return [];
     for (let i = 0; i < this.children.length; i++) {
-      const path = this.children[i].FindNode(id);
+      const path = this.children[i].findNode(id);
       if (path !== undefined) return [i, ...path];
     }
     return undefined;
