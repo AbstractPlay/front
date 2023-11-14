@@ -158,8 +158,8 @@ function ListGames(props) {
 
   const tableNavigation = (
     <>
-      <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
+      <div className="columns">
+        <div className="column is-half is-offset-one-quarter">
           <div className="level smallerText has-text-centered">
             <div className="level-item">
               <button
