@@ -6,6 +6,7 @@ import TopPlayers from "./Stats/TopPlayers";
 import NumPlays from "./Stats/NumPlays";
 import PlayerStats from "./Stats/PlayerStats";
 import GameStats from "./Stats/GameStats";
+import SiteStats from "./Stats/SiteStats";
 
 export const SummaryContext = createContext([null, () => {}]);
 
@@ -50,6 +51,7 @@ const modules = [
   ["numPlays", NumPlays],
   ["playerStats", PlayerStats],
   ["gameStats", GameStats],
+  ["siteStats", SiteStats]
 ];
 
 function Stats(props) {
@@ -148,9 +150,9 @@ function Stats(props) {
         {modules.map(([code, Component]) => {
           if (code === statSelected) {
             return (
-                <div class="columns">
-                    <div class="column is-one-half is-offset-one-quarter">
-                        <Component key={code} />
+                <div className="columns" key={`${code}|columns`}>
+                    <div className="column is-one-half is-offset-one-quarter" key={`${code}|column`}>
+                        <Component key={`${code}|component`} />
                     </div>
                 </div>
             );

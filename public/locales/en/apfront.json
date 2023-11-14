@@ -226,6 +226,7 @@
     "stats_module_numPlays": "Play statistics",
     "stats_module_playerStats": "Player statistics",
     "stats_module_topPlayers": "Top players",
+    "stats_module_siteStats": "Site statistics",
     "Status": "Status",
     "Submit": "Submit",
     "SubmitMove": "Submit your move: {{move}}",

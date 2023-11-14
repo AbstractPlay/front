@@ -34,6 +34,7 @@ const allSize = Number.MAX_SAFE_INTEGER;
 //   - metaGame
 //   - counts
 //   - games
+//   - summary
 //   - toggleStar
 //   - handleChallenge
 function Table(props) {
@@ -103,6 +104,13 @@ function Table(props) {
           } else {
             gameEngine = GameFactory(metaGame);
           }
+          let recent = 0;
+          if (props.summary !== null) {
+            const rec = props.summary.recent.find(r => r.game === info.name);
+            if (rec !== undefined) {
+                recent = rec.value;
+            }
+          }
           return {
             id: metaGame,
             gameName: info.name,
@@ -141,10 +149,11 @@ function Table(props) {
               props.counts !== null && metaGame in props.counts
                 ? props.counts[metaGame].standingchallenges
                 : 0,
+            recent,
           };
         })
         .filter((obj) => !filterStars || obj.starred),
-    [globalMe, props.games, props.counts, filterStars]
+    [globalMe, props.games, props.summary, props.counts, filterStars]
   );
 
   const columnHelper = createColumnHelper();
@@ -263,6 +272,9 @@ function Table(props) {
       }),
       columnHelper.accessor("stars", {
         header: "Stars",
+      }),
+      columnHelper.accessor("recent", {
+        header: "Recent",
       }),
       columnHelper.accessor("current", {
         header: "Current",

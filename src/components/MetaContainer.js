@@ -14,6 +14,7 @@ function MetaContainer(props) {
   const [globalMe, globalMeSetter] = useContext(MeContext);
   const [counts, countsSetter] = useState(null);
   const [users, usersSetter] = useState(null);
+  const [summary, summarySetter] = useState(null);
   const { metaGame } = useParams();
   const { i18n } = useTranslation();
   const [canonical, canonicalSetter] = useState(
@@ -51,6 +52,21 @@ function MetaContainer(props) {
         usersSetter(result);
       } catch (error) {
         console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL("https://records.abstractplay.com/_summary.json");
+        const res = await fetch(url);
+        const result = await res.json();
+        summarySetter(result);
+      } catch (error) {
+        console.log(error);
+        summarySetter(null);
       }
     }
     fetchData();
@@ -157,6 +173,7 @@ function MetaContainer(props) {
         metaGame={metaGame}
         counts={counts}
         games={games}
+        summary={summary}
         toggleStar={toggleStar.bind(this)}
         handleChallenge={handleNewChallenge.bind(this)}
         users={users}
