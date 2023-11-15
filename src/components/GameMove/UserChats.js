@@ -37,7 +37,7 @@ function UserChats(props) {
           userid: c.userId,
           player: personName,
         });
-        if (c.userId === props.userId) {
+        if (c.userId === props.userId && props.exploringCompletedGame) {
             mycomment = c.comment;
         }
       }
