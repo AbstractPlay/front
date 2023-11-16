@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { SummaryContext } from "../Stats";
 import { MeContext, UsersContext } from "../../pages/Skeleton";
+import Plot from 'react-plotly.js';
+import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
 
 function PlayerStats(props) {
@@ -9,6 +11,7 @@ function PlayerStats(props) {
   const [globalMe] = useContext(MeContext);
   const [userNames] = useContext(UsersContext);
   const [joined, joinedSetter] = useState([]);
+  const [activeChartModal, activeChartModalSetter] = useState("");
 
   useEffect(() => {
     const lst = [];
@@ -17,20 +20,37 @@ function PlayerStats(props) {
         (u) => u.user === obj.user
       );
       const social = summary.players.social.find((u) => u.user === obj.user);
+      const histogram = summary.histograms.players.find(x => x.user === obj.user).value
+      histogram.reverse();
+      let histShort = histogram.slice(-10);
+      while (histShort.length < 10) {
+        histShort = [0, ...histShort];
+      }
       lst.push({
         user: obj.user,
         plays: obj.value,
         eclectic: eclectic.value,
         social: social.value,
+        histogram,
+        histShort,
       });
       joinedSetter(lst);
     }
   }, [summary]);
 
+  const openChartModal = (chart) => {
+    activeChartModalSetter(chart);
+    window.dispatchEvent(new Event("resize"));
+  }
+
+  const closeChartModal = () => {
+    activeChartModalSetter("");
+  }
+
   const data = useMemo(
     () =>
       joined
-        .map(({ user: userid, plays, eclectic, social }) => {
+        .map(({ user: userid, plays, eclectic, social, histogram, histShort }) => {
           let name = "UNKNOWN";
           const user = userNames.find((u) => u.id === userid);
           if (user !== undefined) {
@@ -42,6 +62,8 @@ function PlayerStats(props) {
             plays,
             eclectic,
             social,
+            histogram,
+            histShort,
           };
         })
         .sort((a, b) => b.plays - a.plays),
@@ -69,8 +91,58 @@ function PlayerStats(props) {
       columnHelper.accessor("social", {
         header: "Different opponents",
       }),
+      columnHelper.accessor("histogram", {
+        header: "Histogram",
+        cell: (props) => (
+        <>
+            <div style={{width: "10em"}} onClick={() => openChartModal(props.row.original.id)}>
+                <ul className="miniChart" key={props.row.original.id}>
+                {props.row.original.histShort.map((n, i) => {
+                    const histMax = Math.max(...props.row.original.histogram);
+                    return <li key={`${props.row.original.id}|${i}`}><span style={{height: `${(n / histMax) * 100}%`}}></span></li>
+                })}
+                </ul>
+            </div>
+            <Modal
+                buttons={[{ label: "Close", action: closeChartModal }]}
+                show={
+                    activeChartModal !== "" &&
+                    activeChartModal === props.row.original.id
+                }
+                title={`Histogram for ${props.row.original.name}`}
+            >
+                <div style={{overflow: "hidden"}}>
+                <Plot
+                    data={[
+                        {
+                            y: [...props.getValue()],
+                            type: "bar"
+                        }
+                    ]}
+                    config={
+                        {
+                            responsive: true,
+                            displayModeBar: false,
+                        }
+                    }
+                    layout={
+                        {
+                            xaxis: {title: "Week #"},
+                            yaxis: {title: "Completed games"},
+                            margin: {
+                                r: 160,
+                            }
+                        }
+                    }
+                />
+                </div>
+            </Modal>
+        </>
+        ),
+        enableSorting: false,
+      }),
     ],
-    [columnHelper, globalMe]
+    [columnHelper, globalMe, activeChartModal]
   );
 
   return (

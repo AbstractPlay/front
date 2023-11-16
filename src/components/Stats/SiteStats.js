@@ -1,9 +1,21 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SummaryContext } from "../Stats";
 import Plot from 'react-plotly.js';
 
 function SiteStats(props) {
   const [summary] = useContext(SummaryContext);
+  const [cumulative, cumulativeSetter] = useState([]);
+
+  useEffect(() => {
+    const lst = [];
+    const firstTimers = [...summary.histograms.firstTimers].reverse();
+    for (let i = 0; i < firstTimers.length; i++) {
+        const subset = firstTimers.slice(0, i + 1);
+        const sum = subset.reduce((prev, curr) => prev + curr, 0);
+        lst.push(sum);
+    }
+    cumulativeSetter([...lst]);
+  }, [summary]);
 
   return (
     <>
@@ -33,6 +45,33 @@ function SiteStats(props) {
             }
         />
         <hr />
+        </div>
+        <div>
+            <div className="content">
+                <p>This graph tracks the number of users who completed their first game that week. The numbers are cumulative, meaning they will never decrease, and the right-most point should always show the current recorded user count. It is of course expected that the numbers will plateau at some point, but it gives an indication of growth.</p>
+            </div>
+            <Plot
+                data={[
+                    {
+                        y: [...cumulative],
+                        type: "line"
+                    }
+                ]}
+                config={
+                    {
+                        responsive: true,
+                    }
+                }
+                layout={
+                    {
+                        title: "First-time game completions, cumulative",
+                        xaxis: {title: "Week #"},
+                        yaxis: {title: "Users who completed their first game"},
+                        height: 500,
+                    }
+                }
+            />
+            <hr />
         </div>
         <div>
             <div className="content">
