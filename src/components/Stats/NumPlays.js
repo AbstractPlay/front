@@ -32,7 +32,7 @@ function NumPlays(props) {
 
   const openChartModal = (chart) => {
     activeChartModalSetter(chart);
-    window.dispatchEvent(new Event("resize"))
+    window.dispatchEvent(new Event("resize"));
   }
 
   const closeChartModal = () => {
