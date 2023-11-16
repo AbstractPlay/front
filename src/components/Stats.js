@@ -149,13 +149,20 @@ function Stats(props) {
         <hr />
         {modules.map(([code, Component]) => {
           if (code === statSelected) {
-            return (
-                <div className="columns" key={`${code}|columns`}>
-                    <div className="column is-one-half is-offset-one-quarter" key={`${code}|column`}>
-                        <Component key={`${code}|component`} />
+            if (code === "siteStats") {
+                return (
+                    <Component key={`${code}|component`} />
+                );
+
+            } else {
+                return (
+                    <div className="columns" key={`${code}|columns`}>
+                        <div className="column is-one-half is-offset-one-quarter" key={`${code}|column`}>
+                            <Component key={`${code}|component`} />
+                        </div>
                     </div>
-                </div>
-            );
+                );
+            }
           } else {
             return null;
           }
