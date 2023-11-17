@@ -174,7 +174,7 @@ function setupGame(
         game0.partialMove.length > game0.numPlayers - 1
       )
         // the empty move is numPlayers - 1 commas
-        engine.move(game0.partialMove, true);
+        engine.move(game0.partialMove, {partial: true, trusted: true});
     }
     game0.canExplore = false;
   } else {
@@ -330,7 +330,7 @@ function mergeExploration(
       gameEngine.sameMove(exploration[moveNumber - 2].move, e.move)
     );
     if (subtree1) {
-      gameEngine.move(exploration[moveNumber - 1].move);
+      gameEngine.move(exploration[moveNumber - 1].move, {trusted: true});
       // subtree of the move my opponent chose
       const subtree2 = subtree1.children.find((e) =>
         gameEngine.sameMove(exploration[moveNumber - 1].move, e.move)
@@ -463,7 +463,7 @@ function mergeExistingExploration(moveNum, exploration, explorationRef) {
 
 function mergeMoveRecursive(gameEngine, node, children, newids = true) {
   children.forEach((n) => {
-    gameEngine.move(n.move);
+    gameEngine.move(n.move, {trusted: true});
     const pos = node.AddChild(n.move, gameEngine);
     if (newids) node.children[pos].id = n.id;
     if (n.outcome !== undefined && n.children.length === 0) {
@@ -493,7 +493,7 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
   if (moveNum === exploration.length - 1) return movesUpdated;
   const actualNextMove = exploration[moveNum + 1].move;
   children.forEach((n) => {
-    gameEngine.move(n.move);
+    gameEngine.move(n.move, {trusted: true});
     if (gameEngine.sameMove(n.move, actualNextMove)) {
       const updated = mergeMoveRecursive2(
         gameEngine,
@@ -669,7 +669,7 @@ function doView(
   let newfocus = cloneDeep(focus);
   let moves;
   try {
-    gameEngineTmp.move(m, partialMove || simMove);
+    gameEngineTmp.move(m, {partial: partialMove || simMove});
     if (!partialMove && focus.canExplore && !game.noMoves) {
       moves = gameEngineTmp.moves();
     }
@@ -696,7 +696,7 @@ function doView(
           node = getFocusNode(explorationRef.current, newfocus);
         }
         m = moves[0];
-        gameEngineTmp.move(m, partialMove || simMove);
+        gameEngineTmp.move(m, {partial: partialMove || simMove});
         moves = gameEngineTmp.moves();
       }
     }
