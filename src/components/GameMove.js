@@ -426,9 +426,9 @@ function fixMoveOutcomes(exploration, moveNumber) {
       if (c.outcome === 1 - mover) a_child_wins = true;
       if (c.outcome !== mover) all_children_lose = false;
     });
-    if (a_child_wins) 
+    if (a_child_wins)
       parent.outcome = 1 - mover;
-    else if (all_children_lose) 
+    else if (all_children_lose)
       parent.outcome = mover;
     else
       parent.outcome = -1;
@@ -1391,6 +1391,33 @@ function GameMove(props) {
     moveNumberParam,
     nodeidParam,
   ]);
+
+  const handlePlaygroundExport = async (state) => {
+    const usr = await Auth.currentAuthenticatedUser();
+    console.log("currentAuthenticatedUser", usr);
+    const res = await fetch(API_ENDPOINT_AUTH, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+      },
+      body: JSON.stringify({
+        query: "new_playground",
+        pars: {
+          metaGame: game.metaGame,
+          state,
+        },
+      }),
+    });
+    if (res.status !== 200) {
+        const result = await res.json();
+        errorMessageRef.current = JSON.parse(result.body);
+        errorSetter(true);
+    } else {
+        navigate("/playground");
+    }
+  }
 
   const handleResize = () => {
     screenWidthSetter(window.innerWidth);
@@ -2404,6 +2431,8 @@ function GameMove(props) {
                     exploration={explorationRef.current}
                     noExplore={globalMe?.settings?.all?.exploration === -1}
                     handleGameMoveClick={handleGameMoveClick}
+                    getFocusNode={getFocusNode}
+                    handlePlaygroundExport={handlePlaygroundExport}
                   />
                   <UserChats
                     comments={exploringCompletedGame ? nodeComments : comments}
@@ -2432,6 +2461,8 @@ function GameMove(props) {
                     exploration={explorationRef.current}
                     noExplore={globalMe?.settings?.all?.exploration === -1}
                     handleGameMoveClick={handleGameMoveClick}
+                    getFocusNode={getFocusNode}
+                    handlePlaygroundExport={handlePlaygroundExport}
                   />
                 </Fragment>
               )}

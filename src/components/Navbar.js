@@ -84,12 +84,19 @@ function Navbar(props) {
           {!loggedin ? (
             ""
           ) : (
+            <>
             <div className="navbar-item">
               <Link to="/" className="navbar-item">
                 {t("MyDashboard")}
               </Link>
             </div>
-          )}
+            <div className="navbar-item">
+            <Link to="/playground" className="navbar-item">
+              {t("Playground")}
+            </Link>
+          </div>
+          </>
+        )}
           <div className="navbar-item">
             <Link to="/games" className="navbar-item">
               {t("Games")}

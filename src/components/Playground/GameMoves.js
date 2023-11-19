@@ -126,10 +126,7 @@ function GameMoves(props) {
   const { t } = useTranslation();
   let focus = props.focus;
   let game = props.game;
-  let neverExplore = props.noExplore;
   let exploration = props.exploration;
-  const getFocusNode = props.getFocusNode;
-  const handlePlaygroundExport = props.handlePlaygroundExport;
   let handleGameMoveClick = props.handleGameMoveClick;
 
   useEventListener("keydown", keyDownHandler);
@@ -348,65 +345,34 @@ function GameMoves(props) {
 
   if (focus !== null) {
     // Prepare header
-    const simul = game.simultaneous;
-    let numcolumns = simul ? 1 : game.numPlayers;
+    let numcolumns = 2;
     let header = [];
-    if (simul) {
-      header.push(
-        <th colSpan="2" key="th-1">
-          <div className="player">
-            {game.players.map((p, i) => (
-              <Fragment key={i}>
-                {game.colors === undefined ? (
-                  ""
-                ) : game.colors[i].isImage ? (
-                  <img
-                    className="toMoveImage"
-                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                      game.colors[i].value
-                    )}`}
-                    alt=""
-                  />
-                ) : (
-                  <span style={{ verticalAlign: "middle" }}>
-                    {game.colors[i].value + ":"}
-                  </span>
-                )}
-                <span>{p.name}</span>
-                {i < game.numPlayers - 1 ? <span>,</span> : ""}
-              </Fragment>
-            ))}
-          </div>
+    for (let i = 0; i < numcolumns; i++) {
+    let player = `Player ${i+1}`;
+    let img = null;
+    if (game.colors !== undefined) img = game.colors[i];
+    header.push(
+        <th colSpan="2" key={"th-" + i}>
+        <div className="player">
+            {img === null ? (
+            ""
+            ) : img.isImage ? (
+            <img
+                className="toMoveImage"
+                src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                img.value
+                )}`}
+                alt=""
+            />
+            ) : (
+            <span style={{ verticalAlign: "middle" }}>
+                {img.value + ":"}
+            </span>
+            )}
+            <span className="playerName">{player}</span>
+        </div>
         </th>
-      );
-    } else {
-      for (let i = 0; i < numcolumns; i++) {
-        let player = game.players[i].name;
-        let img = null;
-        if (game.colors !== undefined) img = game.colors[i];
-        header.push(
-          <th colSpan="2" key={"th-" + i}>
-            <div className="player">
-              {img === null ? (
-                ""
-              ) : img.isImage ? (
-                <img
-                  className="toMoveImage"
-                  src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                    img.value
-                  )}`}
-                  alt=""
-                />
-              ) : (
-                <span style={{ verticalAlign: "middle" }}>
-                  {img.value + ":"}
-                </span>
-              )}
-              <span className="playerName">{player}</span>
-            </div>
-          </th>
-        );
-      }
+    );
     }
     // Prepare the list of moves
     let moveRows = [];
@@ -628,7 +594,7 @@ function GameMoves(props) {
     }
 
     return (
-      <div className="tourMoveList">
+      <div>
         <h1 className="subtitle lined">
           <span>{t("Moves")}</span>
         </h1>
@@ -658,7 +624,6 @@ function GameMoves(props) {
             <i className="fa fa-angle-left"></i>
             <span className="tooltiptext">{t("GoPrev")}</span>
           </button>
-          {neverExplore ? null : (
             <button
               className="button is-small tooltipped"
               disabled={curNumVariations > 1 ? false : true}
@@ -671,8 +636,6 @@ function GameMoves(props) {
               <i className="fa fa-angle-up"></i>
               <span className="tooltiptext">{t("GoNextVar")}</span>
             </button>
-          )}
-          {neverExplore ? null : (
             <button
               className="button is-small tooltipped"
               disabled={curNumVariations > 1 ? false : true}
@@ -685,7 +648,6 @@ function GameMoves(props) {
               <i className="fa fa-angle-down"></i>
               <span className="tooltiptext">{t("GoPrevVar")}</span>
             </button>
-          )}
           <button
             className="button is-small tooltipped"
             disabled={
@@ -752,9 +714,6 @@ function GameMoves(props) {
               ))}
             </tbody>
           </table>
-        </div>
-        <div className="control">
-            <div className="button is-small" onClick={() => handlePlaygroundExport(getFocusNode(exploration, focus).state)}>Export to playground</div>
         </div>
       </div>
     );
