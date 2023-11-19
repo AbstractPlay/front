@@ -6,7 +6,7 @@ function GameCommentShort(props) {
   const [toolong, toolongSetter] = useState(false);
   const { t } = useTranslation();
   const textareaRef = useRef();
-  
+
   useEffect(() => {
     commentSetter(props.comment);
   }, [props.comment]);

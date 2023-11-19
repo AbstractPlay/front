@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { SummaryContext } from "../Stats";
 import { MeContext, UsersContext } from "../../pages/Skeleton";
-import Plot from 'react-plotly.js';
+import Plot from "react-plotly.js";
 import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
 
@@ -20,7 +20,9 @@ function PlayerStats(props) {
         (u) => u.user === obj.user
       );
       const social = summary.players.social.find((u) => u.user === obj.user);
-      const histogram = summary.histograms.players.find(x => x.user === obj.user).value
+      const histogram = summary.histograms.players.find(
+        (x) => x.user === obj.user
+      ).value;
       histogram.reverse();
       let histShort = histogram.slice(-10);
       while (histShort.length < 10) {
@@ -41,31 +43,33 @@ function PlayerStats(props) {
   const openChartModal = (chart) => {
     activeChartModalSetter(chart);
     window.dispatchEvent(new Event("resize"));
-  }
+  };
 
   const closeChartModal = () => {
     activeChartModalSetter("");
-  }
+  };
 
   const data = useMemo(
     () =>
       joined
-        .map(({ user: userid, plays, eclectic, social, histogram, histShort }) => {
-          let name = "UNKNOWN";
-          const user = userNames.find((u) => u.id === userid);
-          if (user !== undefined) {
-            name = user.name;
+        .map(
+          ({ user: userid, plays, eclectic, social, histogram, histShort }) => {
+            let name = "UNKNOWN";
+            const user = userNames.find((u) => u.id === userid);
+            if (user !== undefined) {
+              name = user.name;
+            }
+            return {
+              id: userid,
+              name,
+              plays,
+              eclectic,
+              social,
+              histogram,
+              histShort,
+            };
           }
-          return {
-            id: userid,
-            name,
-            plays,
-            eclectic,
-            social,
-            histogram,
-            histShort,
-          };
-        })
+        )
         .sort((a, b) => b.plays - a.plays),
     [joined, userNames]
   );
@@ -94,50 +98,55 @@ function PlayerStats(props) {
       columnHelper.accessor("histogram", {
         header: "Histogram",
         cell: (props) => (
-        <>
-            <div style={{width: "10em"}} onClick={() => openChartModal(props.row.original.id)}>
-                <ul className="miniChart" key={props.row.original.id}>
+          <>
+            <div
+              style={{ width: "10em" }}
+              onClick={() => openChartModal(props.row.original.id)}
+            >
+              <ul className="miniChart" key={props.row.original.id}>
                 {props.row.original.histShort.map((n, i) => {
-                    const histMax = Math.max(...props.row.original.histogram);
-                    return <li key={`${props.row.original.id}|${i}`}><span style={{height: `${(n / histMax) * 100}%`}}></span></li>
+                  const histMax = Math.max(...props.row.original.histogram);
+                  return (
+                    <li key={`${props.row.original.id}|${i}`}>
+                      <span
+                        style={{ height: `${(n / histMax) * 100}%` }}
+                      ></span>
+                    </li>
+                  );
                 })}
-                </ul>
+              </ul>
             </div>
             <Modal
-                buttons={[{ label: "Close", action: closeChartModal }]}
-                show={
-                    activeChartModal !== "" &&
-                    activeChartModal === props.row.original.id
-                }
-                title={`Histogram for ${props.row.original.name}`}
+              buttons={[{ label: "Close", action: closeChartModal }]}
+              show={
+                activeChartModal !== "" &&
+                activeChartModal === props.row.original.id
+              }
+              title={`Histogram for ${props.row.original.name}`}
             >
-                <div style={{overflow: "hidden"}}>
+              <div style={{ overflow: "hidden" }}>
                 <Plot
-                    data={[
-                        {
-                            y: [...props.getValue()],
-                            type: "bar"
-                        }
-                    ]}
-                    config={
-                        {
-                            responsive: true,
-                            displayModeBar: false,
-                        }
-                    }
-                    layout={
-                        {
-                            xaxis: {title: "Week #"},
-                            yaxis: {title: "Completed games"},
-                            margin: {
-                                r: 160,
-                            }
-                        }
-                    }
+                  data={[
+                    {
+                      y: [...props.getValue()],
+                      type: "bar",
+                    },
+                  ]}
+                  config={{
+                    responsive: true,
+                    displayModeBar: false,
+                  }}
+                  layout={{
+                    xaxis: { title: "Week #" },
+                    yaxis: { title: "Completed games" },
+                    margin: {
+                      r: 160,
+                    },
+                  }}
                 />
-                </div>
+              </div>
             </Modal>
-        </>
+          </>
         ),
         enableSorting: false,
       }),

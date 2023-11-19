@@ -1,37 +1,7 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
-function showMilliseconds(ms) {
-  let positive = true;
-  if (ms < 0) {
-    ms = -ms;
-    positive = false;
-  }
-  let seconds = ms / 1000;
-  const days = Math.floor(seconds / (24 * 3600));
-  seconds = seconds % (24 * 3600);
-  const hours = parseInt(seconds / 3600);
-  seconds = seconds % 3600;
-  const minutes = parseInt(seconds / 60);
-  seconds = seconds % 60;
-  let output = "";
-  if (!positive) output = "-";
-  if (days > 0) output += days + "d, ";
-  if (days > 0 || hours > 0) output += hours + "h";
-  if (days < 1) {
-    if (days > 0 || hours > 0) output += ", ";
-    if (minutes > 0) output += minutes + "m";
-    if (hours < 1) {
-      if (minutes > 0) output += ", ";
-      output += Math.round(seconds) + "s";
-    }
-  }
-  return output;
-}
-
 function MoveEntry(props) {
-  const [drawoffer, drawofferSetter] = useState(false);
-
   const move = props.move;
   const toMove = props.toMove;
   const game = props.game;
@@ -39,15 +9,7 @@ function MoveEntry(props) {
   const exploration = props.exploration;
   const focus = props.focus;
   const submitting = props.submitting;
-  const handleMove = props.handlers[0];
-  const handleMark = props.handlers[1];
-  const handleSubmit = props.handlers[2];
-  const handleToSubmit = props.handlers[3];
-  const handleView = props.handlers[4];
-  const handleResign = props.handlers[5];
-  const handleTimeOut = props.handlers[6];
-  const handleReset = props.handlers[7];
-  const handlePie = props.handlers[8];
+  const [handleMove, handleMark, handleView, handleReset] = [...props.handlers];
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
@@ -59,10 +21,6 @@ function MoveEntry(props) {
     }
     return curNode;
   }
-
-  const handleDrawOfferChange = (value) => {
-    drawofferSetter(value);
-  };
 
   const handleClear = () => {
     handleMove("");
@@ -94,12 +52,6 @@ function MoveEntry(props) {
   }, [move, focus, game, submitting]);
 
   if (focus) {
-    let moveToSubmit = null;
-    if (focus.exPath.length > 0 && game.canSubmit) {
-      moveToSubmit =
-        exploration[exploration.length - 1].children[focus.exPath[0]].move;
-    }
-
     let uiState = null;
     if (focus.moveNumber < exploration.length - 1) {
       uiState = -1; // history
@@ -114,33 +66,18 @@ function MoveEntry(props) {
     let mover = "";
     let img = null;
     if (toMove !== "") {
-      if (game.simultaneous) {
-        if (uiState === 0) {
-          if (game.canSubmit) {
-            mover = t("ToMove", {
-              player: game.players[game.me].name,
-            });
-            if (game.colors !== undefined) img = game.colors[game.me];
-          } else {
-            mover = t("Waiting");
-          }
-        } else {
-          mover = "";
-        }
-      } else {
-        mover = t("ToMove", { player: game.players[toMove].name });
-        if (game.colors !== undefined) img = game.colors[toMove];
-      }
+      mover = t("ToMove", { player: `Player ${toMove + 1}` });
+      if (game.colors !== undefined) img = game.colors[toMove];
     } else {
       // game over
       const node = getFocusNode(exploration, focus);
       const state = JSON.parse(node.state);
       if (state.winner && state.winner.length > 0) {
         if (state.winner.length === 1) {
-          const winner = game.players[state.winner[0] - 1].name;
+          const winner = `Player ${state.winner[0]}`;
           mover = t("GameIsOver1", { winner });
         } else {
-          const winners = state.winner.map((w) => game.players[w - 1].name);
+          const winners = state.winner.map((w) => `Player ${w}`);
           const lastWinner = winners.pop();
           const winnersStr = winners.join(", ");
           mover = t("GameIsOver2", { winners: winnersStr, lastWinner });
@@ -150,31 +87,9 @@ function MoveEntry(props) {
         mover = t("GameIsOver");
       }
     }
-    let canClaimTimeout = false;
-    if (uiState === 0 && !submitting) {
-      if (game.simultaneous)
-        canClaimTimeout = game.players.some(
-          (p, i) =>
-            toMove[i] &&
-            i !== game.me &&
-            p.time - (Date.now() - game.lastMoveTime) < 0
-        );
-      else
-        canClaimTimeout =
-          !game.canSubmit &&
-          game.toMove !== "" &&
-          game.me !== game.toMove &&
-          game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
-    }
-    const drawOffered = game.players.some((p) => p.draw);
-    // Am I the last player that needs to agree to a draw?
-    const canDraw =
-      drawOffered &&
-      game.players.reduce((acc, p) => acc + (p.draw ? 1 : 0), 0) ===
-        game.players.length - 1;
 
     return (
-      <div className="tourMove">
+      <div>
         <h1 className="subtitle lined">
           <span>{t("MakeMove")}</span>
         </h1>
@@ -204,51 +119,7 @@ function MoveEntry(props) {
           )}
           <span className="playerName">{mover}</span>
         </p>
-        {uiState === 0 && toMove !== "" ? (
-          <table className="table">
-            <caption className="tooltipped">
-              {t("TimeRemaining")}
-              <br />
-              <span className="smallerText">
-                {game.clockHard ? t("HardTimeSet") : t("NotHardTime")},{" "}
-                {t("Increment", { inc: game.clockInc })},{" "}
-                {t("MaxTime", { max: game.clockMax })}
-              </span>
-            </caption>
-            <tbody>
-              {game.players.map((p, ind) =>
-                (Array.isArray(toMove) ? toMove[ind] : ind === toMove) ? (
-                  <tr key={"player" + ind} style={{ fontWeight: "bolder" }}>
-                    <td key={"player" + ind}>{p.name}</td>
-                    <td>
-                      {showMilliseconds(
-                        p.time - (Date.now() - game.lastMoveTime)
-                      )}
-                    </td>
-                  </tr>
-                ) : (
-                  <tr key={"player" + ind}>
-                    <td key={"player" + ind}>{p.name}</td>
-                    <td>{showMilliseconds(p.time)}</td>
-                  </tr>
-                )
-              )}
-            </tbody>
-          </table>
-        ) : (
-          ""
-        )}
         <div>
-          {canClaimTimeout ? (
-            <button
-              className="button is-small apButton"
-              onClick={handleTimeOut}
-            >
-              {t("ClaimTimeOut")}
-            </button>
-          ) : (
-            ""
-          )}
           {focus.canExplore ? (
             <Fragment>
               {moves === null ? (
@@ -324,84 +195,7 @@ function MoveEntry(props) {
             ""
           )}
         </div>
-        {moveToSubmit !== null && focus.exPath.length === 1 && !drawOffered ? (
-          <div className="field">
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                onChange={(e) => handleDrawOfferChange(e.target.checked)}
-                defaultChecked={false}
-              />
-              {t("IncludeDrawOffer")}
-            </label>
-          </div>
-        ) : moveToSubmit !== null &&
-          focus.exPath.length === 1 &&
-          drawOffered &&
-          !canDraw ? (
-          <div className="field">
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                onChange={(e) => handleDrawOfferChange(e.target.checked)}
-                checked={drawoffer}
-              />
-              {t("IncludeAcceptDrawOffer")}
-            </label>
-          </div>
-        ) : (
-          ""
-        )}
         <div className="submitOrMark">
-          {moveToSubmit !== null && focus.exPath.length === 1 && !submitting ? (
-            <button
-              className="button is-small apButton tooltipped"
-              onClick={() => handleSubmit(drawoffer ? "drawoffer" : "")}
-            >
-              {t("Submit")}
-              <span className="tooltiptext">
-                {t("SubmitMove", { move: moveToSubmit })}
-              </span>
-            </button>
-          ) : moveToSubmit !== null &&
-            focus.exPath.length > 1 &&
-            !submitting ? (
-            <button
-              className="button is-small apButton tooltipped"
-              onClick={handleToSubmit}
-            >
-              {t("ToSubmit")}
-              <span className="tooltiptext">{t("ToSubmitMove")}</span>
-            </button>
-          ) : (
-            ""
-          )}
-          {uiState === 0 && game.canSubmit && !submitting ? (
-            canDraw ? (
-              <button
-                className="button apButtonAlert"
-                onClick={() => handleSubmit("drawaccepted")}
-              >
-                {t("AcceptDraw")}
-              </button>
-            ) : (
-              <button
-                className="button is-small apButtonAlert"
-                onClick={handleResign}
-              >
-                {t("Resign")}
-              </button>
-            )
-          ) : (
-            ""
-          )}
-          {uiState === 0 && game.canSubmit && game.canPie && !submitting ? (
-            <button className="button is-small apButton" onClick={handlePie}>
-              {t("InvokePie")}
-            </button>
-          ) : (
-            ""
-          )}
           {focus.exPath.length > 0 && game.canExplore ? (
             <div
               className="winningColorButton tooltipped"

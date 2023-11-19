@@ -38,7 +38,7 @@ function UserChats(props) {
           player: personName,
         });
         if (c.userId === props.userId && props.exploringCompletedGame) {
-            mycomment = c.comment;
+          mycomment = c.comment;
         }
       }
     });
@@ -47,7 +47,11 @@ function UserChats(props) {
     return (
       <div style={{ paddingTop: "1em" }} className="tourChat">
         <h1 className="subtitle lined">
-          <span>{props.exploringCompletedGame ? t("GameComments") : t("GameSummary")}</span>
+          <span>
+            {props.exploringCompletedGame
+              ? t("GameComments")
+              : t("GameSummary")}
+          </span>
         </h1>
         <GameCommentShort
           key={`chatkey_${gameid}`}

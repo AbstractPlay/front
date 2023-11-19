@@ -19,6 +19,7 @@ import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
+import Playground from "../components/Playground";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import News from "../components/News";
@@ -174,6 +175,7 @@ function Bones(props) {
                         path="/"
                         element={<Welcome token={token} update={update} />}
                       />
+                      <Route path="/playground" element={<Playground />} />
                     </Routes>
                   </MyTurnContext.Provider>
                 </section>
