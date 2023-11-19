@@ -199,7 +199,6 @@ function setupGame(
   // The followin g is DESTRUCTIVE! If you need `engine.stack`, do it before here.
   game0.gameOver = engine.gameover;
   const winner = engine.winner;
-  // eslint-disable-line no-constant-condition
   while (true) {
     history.unshift(
       new GameNode(
