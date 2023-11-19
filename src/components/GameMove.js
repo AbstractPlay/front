@@ -255,8 +255,8 @@ function setupGame(
   // The following is DESTRUCTIVE! If you need `engine.stack`, do it before here.
   game0.gameOver = engine.gameover;
   const winner = engine.winner;
-  while (true) {
     // eslint-disable-line no-constant-condition
+    while (true) {
     history.unshift(
       new GameNode(
         null,
@@ -443,8 +443,8 @@ function fixMoveOutcomes(exploration, moveNumber) {
 function mergeExistingExploration(moveNum, exploration, explorationRef) {
   let subtree = undefined;
   moveNum++;
+  // eslint-disable-line no-constant-condition
   while (true) {
-    // eslint-disable-line no-constant-condition
     let move = explorationRef.current[moveNum].move
       .toLowerCase()
       .replace(/\s+/g, "");
