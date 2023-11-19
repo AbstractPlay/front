@@ -348,31 +348,27 @@ function GameMoves(props) {
     let numcolumns = 2;
     let header = [];
     for (let i = 0; i < numcolumns; i++) {
-    let player = `Player ${i+1}`;
-    let img = null;
-    if (game.colors !== undefined) img = game.colors[i];
-    header.push(
+      let player = `Player ${i + 1}`;
+      let img = null;
+      if (game.colors !== undefined) img = game.colors[i];
+      header.push(
         <th colSpan="2" key={"th-" + i}>
-        <div className="player">
+          <div className="player">
             {img === null ? (
-            ""
+              ""
             ) : img.isImage ? (
-            <img
+              <img
                 className="toMoveImage"
-                src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                img.value
-                )}`}
+                src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`}
                 alt=""
-            />
+              />
             ) : (
-            <span style={{ verticalAlign: "middle" }}>
-                {img.value + ":"}
-            </span>
+              <span style={{ verticalAlign: "middle" }}>{img.value + ":"}</span>
             )}
             <span className="playerName">{player}</span>
-        </div>
+          </div>
         </th>
-    );
+      );
     }
     // Prepare the list of moves
     let moveRows = [];
@@ -459,7 +455,8 @@ function GameMoves(props) {
             ? focus.moveNumber
             : exploration.length - 1);
           i++
-        ) { // moves up to focus, or if focus has no exploration, all actual game moves
+        ) {
+          // moves up to focus, or if focus has no exploration, all actual game moves
           let className = "gameMove";
           if (i === focus.moveNumber) {
             if (focus.exPath.length === 0) {
@@ -624,30 +621,30 @@ function GameMoves(props) {
             <i className="fa fa-angle-left"></i>
             <span className="tooltiptext">{t("GoPrev")}</span>
           </button>
-            <button
-              className="button is-small tooltipped"
-              disabled={curNumVariations > 1 ? false : true}
-              onClick={
-                curNumVariations > 1
-                  ? () => handleGameMoveClick(nextVarFocus(curNumVariations))
-                  : undefined
-              }
-            >
-              <i className="fa fa-angle-up"></i>
-              <span className="tooltiptext">{t("GoNextVar")}</span>
-            </button>
-            <button
-              className="button is-small tooltipped"
-              disabled={curNumVariations > 1 ? false : true}
-              onClick={
-                curNumVariations > 1
-                  ? () => handleGameMoveClick(prevVarFocus(curNumVariations))
-                  : undefined
-              }
-            >
-              <i className="fa fa-angle-down"></i>
-              <span className="tooltiptext">{t("GoPrevVar")}</span>
-            </button>
+          <button
+            className="button is-small tooltipped"
+            disabled={curNumVariations > 1 ? false : true}
+            onClick={
+              curNumVariations > 1
+                ? () => handleGameMoveClick(nextVarFocus(curNumVariations))
+                : undefined
+            }
+          >
+            <i className="fa fa-angle-up"></i>
+            <span className="tooltiptext">{t("GoNextVar")}</span>
+          </button>
+          <button
+            className="button is-small tooltipped"
+            disabled={curNumVariations > 1 ? false : true}
+            onClick={
+              curNumVariations > 1
+                ? () => handleGameMoveClick(prevVarFocus(curNumVariations))
+                : undefined
+            }
+          >
+            <i className="fa fa-angle-down"></i>
+            <span className="tooltiptext">{t("GoPrevVar")}</span>
+          </button>
           <button
             className="button is-small tooltipped"
             disabled={

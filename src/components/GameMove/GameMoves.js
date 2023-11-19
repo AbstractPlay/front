@@ -493,7 +493,8 @@ function GameMoves(props) {
             ? focus.moveNumber
             : exploration.length - 1);
           i++
-        ) { // moves up to focus, or if focus has no exploration, all actual game moves
+        ) {
+          // moves up to focus, or if focus has no exploration, all actual game moves
           let className = "gameMove";
           if (i === focus.moveNumber) {
             if (focus.exPath.length === 0) {
@@ -754,7 +755,14 @@ function GameMoves(props) {
           </table>
         </div>
         <div className="control">
-            <div className="button is-small" onClick={() => handlePlaygroundExport(getFocusNode(exploration, focus).state)}>Export to playground</div>
+          <div
+            className="button is-small"
+            onClick={() =>
+              handlePlaygroundExport(getFocusNode(exploration, focus).state)
+            }
+          >
+            Export to playground
+          </div>
         </div>
       </div>
     );

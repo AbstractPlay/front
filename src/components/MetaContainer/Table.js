@@ -106,9 +106,9 @@ function Table(props) {
           }
           let recent = 0;
           if (props.summary !== null) {
-            const rec = props.summary.recent.find(r => r.game === info.name);
+            const rec = props.summary.recent.find((r) => r.game === info.name);
             if (rec !== undefined) {
-                recent = rec.value;
+              recent = rec.value;
             }
           }
           return {

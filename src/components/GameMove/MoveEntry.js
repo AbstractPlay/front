@@ -207,7 +207,8 @@ function MoveEntry(props) {
         {uiState === 0 && toMove !== "" ? (
           <table className="table">
             <caption className="tooltipped">
-              {t("TimeRemaining")}<br />
+              {t("TimeRemaining")}
+              <br />
               <span className="smallerText">
                 {game.clockHard ? t("HardTimeSet") : t("NotHardTime")},{" "}
                 {t("Increment", { inc: game.clockInc })},{" "}

@@ -26,11 +26,26 @@ function NewChallengeModal(props) {
   const [playerCount, playerCountSetter] = useState(-1);
   const [allvariants, allvariantsSetter] = useState(null);
   const [seating, seatingSetter] = useState("random");
-  const [clockSpeed, clockSpeedSetter] = useStorageState("new-challenge-clock-speed", "medium");
-  const [clockStart, clockStartSetter] = useStorageState("new-challenge-clock-start", 48);
-  const [clockInc, clockIncSetter] = useStorageState("new-challenge-clock-inc", 24);
-  const [clockMax, clockMaxSetter] = useStorageState("new-challenge-clock-max", 96);
-  const [clockHard, clockHardSetter] = useStorageState("new-challenge-clock-hard", false);
+  const [clockSpeed, clockSpeedSetter] = useStorageState(
+    "new-challenge-clock-speed",
+    "medium"
+  );
+  const [clockStart, clockStartSetter] = useStorageState(
+    "new-challenge-clock-start",
+    48
+  );
+  const [clockInc, clockIncSetter] = useStorageState(
+    "new-challenge-clock-inc",
+    24
+  );
+  const [clockMax, clockMaxSetter] = useStorageState(
+    "new-challenge-clock-max",
+    96
+  );
+  const [clockHard, clockHardSetter] = useStorageState(
+    "new-challenge-clock-hard",
+    false
+  );
   const [rated, ratedSetter] = useStorageState("new-challenge-rated", true); // rated or not
   const [standing, standingSetter] = useState(false); // Standing challenge or not.
   const [standingCount, standingCountSetter] = useState(0);
@@ -65,7 +80,7 @@ function NewChallengeModal(props) {
     clockStartSetter(start);
     clockIncSetter(inc);
     clockMaxSetter(max);
-  }
+  };
 
   const handleChangeGame = useCallback(
     (game) => {
@@ -666,25 +681,58 @@ function NewChallengeModal(props) {
         ) : (
           <Fragment>
             <div className="field">
-                <label className="label">Choose clock speed</label>
-                <div className="control">
-                    <label className="radio">
-                        <input type="radio" name="clockSpeed" value="fast" checked={clockSpeed === "fast"} onClick={() => {clockSpeedSetter("fast"); setClock(24, 8, 48)}} />
-                        Fast (daily)
-                    </label>
-                    <label className="radio">
-                        <input type="radio" name="clockSpeed" value="medium" checked={clockSpeed === "medium"} onClick={() => {clockSpeedSetter("medium"); setClock(48, 24, 96)}} />
-                        Medium (twice weekly)
-                    </label>
-                    <label className="radio">
-                        <input type="radio" name="clockSpeed" value="slow" checked={clockSpeed === "slow"} onClick={() => {clockSpeedSetter("slow"); setClock(72, 48, 168)}} />
-                        Slow (weekly)
-                    </label>
-                    <label className="radio">
-                        <input type="radio" name="clockSpeed" value="custom" checked={clockSpeed === "custom"} onClick={() => clockSpeedSetter("custom")} />
-                        Custom
-                    </label>
-                </div>
+              <label className="label">Choose clock speed</label>
+              <div className="control">
+                <label className="radio">
+                  <input
+                    type="radio"
+                    name="clockSpeed"
+                    value="fast"
+                    checked={clockSpeed === "fast"}
+                    onClick={() => {
+                      clockSpeedSetter("fast");
+                      setClock(24, 8, 48);
+                    }}
+                  />
+                  Fast (daily)
+                </label>
+                <label className="radio">
+                  <input
+                    type="radio"
+                    name="clockSpeed"
+                    value="medium"
+                    checked={clockSpeed === "medium"}
+                    onClick={() => {
+                      clockSpeedSetter("medium");
+                      setClock(48, 24, 96);
+                    }}
+                  />
+                  Medium (twice weekly)
+                </label>
+                <label className="radio">
+                  <input
+                    type="radio"
+                    name="clockSpeed"
+                    value="slow"
+                    checked={clockSpeed === "slow"}
+                    onClick={() => {
+                      clockSpeedSetter("slow");
+                      setClock(72, 48, 168);
+                    }}
+                  />
+                  Slow (weekly)
+                </label>
+                <label className="radio">
+                  <input
+                    type="radio"
+                    name="clockSpeed"
+                    value="custom"
+                    checked={clockSpeed === "custom"}
+                    onClick={() => clockSpeedSetter("custom")}
+                  />
+                  Custom
+                </label>
+              </div>
             </div>
             <div className="columns">
               <div className="column">

@@ -66,7 +66,7 @@ function setStatus(engine, game, isPartial, partialMove, status) {
 
 // Whether the user wants to explore
 function isExplorer(explorer, me) {
-    return true;
+  return true;
 }
 
 function setupGame(
@@ -138,22 +138,25 @@ function setupGame(
       }
     }
   }
-//   if (typeof engine.chatLog === "function") {
-//     game0.moveResults = engine
-//       .chatLog(game0.players.map((p) => p.name))
-//       .reverse()
-//       .map((e) => {
-//         return { time: e[0], log: e.slice(1).join(" ") };
-//       });
-//   } else {
-//     game0.moveResults = engine.resultsHistory().reverse();
-//   }
+  //   if (typeof engine.chatLog === "function") {
+  //     game0.moveResults = engine
+  //       .chatLog(game0.players.map((p) => p.name))
+  //       .reverse()
+  //       .map((e) => {
+  //         return { time: e[0], log: e.slice(1).join(" ") };
+  //       });
+  //   } else {
+  //     game0.moveResults = engine.resultsHistory().reverse();
+  //   }
   if (gameRef.current !== null && gameRef.current.colors !== undefined)
     game0.colors = gameRef.current.colors; // gets used when you submit a move.
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   engineRef.current = cloneDeep(engine);
-  const render = engine.render({ perspective: game0.me + 1, altDisplay: display });
+  const render = engine.render({
+    perspective: game0.me + 1,
+    altDisplay: display,
+  });
   game0.stackExpanding =
     game0.stackExpanding && render.renderer === "stacking-expanding";
   setStatus(
@@ -166,53 +169,59 @@ function setupGame(
   if (
     !game0.noMoves &&
     (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2))
-  )  {
-     if (game0.simultaneous) movesRef.current = engine.moves(game0.me + 1);
-     else movesRef.current = engine.moves();
-   }
+  ) {
+    if (game0.simultaneous) movesRef.current = engine.moves(game0.me + 1);
+    else movesRef.current = engine.moves();
+  }
 
   // If the game is  over, generate the game record
   // TODO: Add "eve nt" and "round" should those ever be implemented.
   if (engine.gameover && engine.stack.length >= engine.numplayers) {
-    gameRecSetter (
+    gameRecSetter(
       engine.genRecord({
         uid: game0.id,
         players: game0.players.map((p) => {
           return {
-             name: p.name,
-             uid: p.id,
-           };
-        } ),
-         unrated: !game0.rated,
-         pied:
-           "pieInvoked" in game0 && game0.pieInvoked
-             ? game0.pieInvoked
-             : undefined,
-       })
-     );
-   }
+            name: p.name,
+            uid: p.id,
+          };
+        }),
+        unrated: !game0.rated,
+        pied:
+          "pieInvoked" in game0 && game0.pieInvoked
+            ? game0.pieInvoked
+            : undefined,
+      })
+    );
+  }
 
-  let history = [] ;
+  let history = [];
   // The followin g is DESTRUCTIVE! If you need `engine.stack`, do it before here.
-  game0.gameOver  = engine.gameover;
-  const winner  = engine.winner;
-  while (true)  { // eslint-disable-line no-constant-condition
+  game0.gameOver = engine.gameover;
+  const winner = engine.winner;
+  while (true) {
+    // eslint-disable-line no-constant-condition
     history.unshift(
       new GameNode(
         null,
         engine.lastmove,
         engine.serialize(),
-         engine.gameover ? "" : engine.currplayer - 1
+        engine.gameover ? "" : engine.currplayer - 1
       )
     );
-    if  (game0.gameOver && winner.length === 1 && !game0.simultaneous && game0.numPlayers === 2) {
-       history[0].outcome = winner[0] - 1;
+    if (
+      game0.gameOver &&
+      winner.length === 1 &&
+      !game0.simultaneous &&
+      game0.numPlayers === 2
+    ) {
+      history[0].outcome = winner[0] - 1;
     }
     engine.stack.pop();
     engine.gameover = false;
     engine.winner = [];
     if (engine.stack.length === 0) break;
-     engine.load();
+    engine.load();
   }
   explorationRef.current = history;
   let focus0 = { moveNumber: history.length - 1, exPath: [] };
@@ -225,7 +234,7 @@ function setupGame(
   renderrepSetter(render);
 }
 
-function  mergeExploration(
+function mergeExploration(
   game,
   exploration,
   data,
@@ -259,7 +268,7 @@ function  mergeExploration(
         true,
         errorSetter,
         errorMessageRef
-       );
+      );
     }
   } else if (data[2] && data[2].move === moveNumber - 2) {
     let node = exploration[moveNumber - 2];
@@ -289,10 +298,10 @@ function  mergeExploration(
           true,
           errorSetter,
           errorMessageRef
-         );
-       }
-     }
-   }
+        );
+      }
+    }
+  }
 }
 
 // Update outcomes of moves in the game. These aren't in the children of the previous move node, so outcomes need special handling.
@@ -311,14 +320,11 @@ function fixMoveOutcomes(exploration, moveNumber) {
       if (c.outcome === 1 - mover) a_child_wins = true;
       if (c.outcome !== mover) all_children_lose = false;
     });
-    if (a_child_wins)
-      parent.outcome = 1 - mover;
-    else if (all_children_lose)
-      parent.outcome = mover;
-    else
-      parent.outcome = -1;
-      child = parent;
-   }
+    if (a_child_wins) parent.outcome = 1 - mover;
+    else if (all_children_lose) parent.outcome = mover;
+    else parent.outcome = -1;
+    child = parent;
+  }
 }
 
 function mergeMoveRecursive(gameEngine, node, children, newids = true) {
@@ -332,7 +338,10 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
       if (newnode.outcome === -1) {
         // If the newnode didn't get an outcome from existing exploration, set it now
         newnode.SetOutcome(n.outcome);
-      } else if (newnode.outcome !== n.outcome && newnode.children.length === 0) {
+      } else if (
+        newnode.outcome !== n.outcome &&
+        newnode.children.length === 0
+      ) {
         // if two leaf nodes disagree on outcome, set it to undecided
         node.children[pos].SetOutcome(-1);
       }
@@ -344,7 +353,7 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
     gameEngine.load();
     gameEngine.gameover = false;
     gameEngine.winner = [];
-   });
+  });
 }
 
 function setupColors(settings, game, t) {
@@ -354,7 +363,7 @@ function setupColors(settings, game, t) {
     //   } else if (settings.color === "patterns") {
     //     options.patterns = true;
   }
-  game.colors = [1,2].map((p, i) => {
+  game.colors = [1, 2].map((p, i) => {
     if (game.sharedPieces) {
       return { isImage: false, value: game.seatNames[i] };
     } else {
@@ -366,11 +375,11 @@ function setupColors(settings, game, t) {
       }
       console.log(JSON.stringify(game));
       return {
-         isImage: true,
-         value: renderglyph("piece", color, options),
-       };
-     }
-   });
+        isImage: true,
+        value: renderglyph("piece", color, options),
+      };
+    }
+  });
 }
 
 async function saveExploration(
@@ -384,7 +393,7 @@ async function saveExploration(
   focus = undefined,
   navigate = undefined
 ) {
-  if (! isExplorer(explorer, me)) return;
+  if (!isExplorer(explorer, me)) return;
   if (!game.gameOver) {
     if (moveNumber !== exploration.length)
       throw new Error("Can't save exploration at this move!");
@@ -395,16 +404,16 @@ async function saveExploration(
     move: moveNumber,
     // Note that for completed games you can comment on the parent node, so don't just save children
     tree: game.gameOver
-       ? exploration[moveNumber - 1].Deflate(game.gameOver)
-       : exploration[moveNumber - 1].Deflate(game.gameOver).children,
+      ? exploration[moveNumber - 1].Deflate(game.gameOver)
+      : exploration[moveNumber - 1].Deflate(game.gameOver).children,
   };
   if (game.gameOver) {
     pars.version = exploration[moveNumber - 1].version
-       ? exploration[moveNumber - 1].version
-       : 0;
+      ? exploration[moveNumber - 1].version
+      : 0;
   }
-  const usr =  await Auth.currentAuthenticatedUser();
-  const res  = await fetch(API_ENDPOINT_AUTH, {
+  const usr = await Auth.currentAuthenticatedUser();
+  const res = await fetch(API_ENDPOINT_AUTH, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -448,11 +457,11 @@ async function saveExploration(
       );
     } else if (game.gameOver) {
       exploration[moveNumber - 1].version =
-         (exploration[moveNumber - 1].version
-           ? exploration[moveNumber - 1].version
-           : 0) + 1;
+        (exploration[moveNumber - 1].version
+          ? exploration[moveNumber - 1].version
+          : 0) + 1;
     }
-   }
+  }
 }
 
 function doView(
@@ -583,10 +592,10 @@ function doView(
   // console.log('setting renderrep 1');
   engineRef.current = gameEngineTmp;
   renderrepSetter(
-      gameEngineTmp.render({
-        perspective: game.me + 1,
-        altDisplay: settings?.display,
-      })
+    gameEngineTmp.render({
+      perspective: game.me + 1,
+      altDisplay: settings?.display,
+    })
   );
 }
 
@@ -711,10 +720,10 @@ function processNewMove(
       movesRef.current = gameEngineTmp.moves();
     engineRef.current = gameEngineTmp;
     renderrepSetter(
-        gameEngineTmp.render({
-          perspective: gameRef.current.me + 1,
-          altDisplay: settings?.display,
-        })
+      gameEngineTmp.render({
+        perspective: gameRef.current.me + 1,
+        altDisplay: settings?.display,
+      })
     );
     newmove.rendered = "";
     moveSetter(newmove);
@@ -755,14 +764,14 @@ function Playground(props) {
     rendered: "",
   });
   const [error, errorSetter] = useState(false);
-//   const [showSettings, showSettingsSetter] = useState(false);
+  //   const [showSettings, showSettingsSetter] = useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [showGameDump, showGameDumpSetter] = useState(false);
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
   const [isZoomed, isZoomedSetter] = useState(false);
   const [settings, settingsSetter] = useState(null);
-  const [submitting, ] = useState(false);
+  const [submitting] = useState(false);
   const [newGame, newGameSetter] = useState("");
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const [groupData, groupDataSetter] = useState([]);
@@ -775,7 +784,7 @@ function Playground(props) {
   const [pngExport, pngExportSetter] = useState(undefined);
   const [explorer, explorerSetter] = useState(true); // just whether the user clicked on the explore button. Also see isExplorer.
   // pieInvoked is used to trigger the game reload after the function is called
-  const [pieInvoked, ] = useState(false);
+  const [pieInvoked] = useState(false);
   // used to construct the localized string of players in check
   const [inCheck, inCheckSetter] = useState("");
   const [, canPublishSetter] = useState("no");
@@ -809,39 +818,42 @@ function Playground(props) {
   //   const { state } = useLocation();
 
   useEffect(() => {
-    if ( (metaGame !== null) && (metaGame !== undefined) ) {
-        const info = gameinfo.get(metaGame);
-        gameDeetsSetter(info);
-        if (info !== undefined) {
-            if (info.playercounts.length > 1) {
-                gameEngineSetter(GameFactory(info.uid, 2));
-              } else {
-                gameEngineSetter(GameFactory(info.uid));
-              }
-              let str = "";
-              // eslint-disable-next-line no-prototype-builtins
-              if (info.hasOwnProperty("people")) {
-                let designers = info.people
-                  .filter((p) => p.type === "designer")
-                  .map((p) => p.name);
-                if (designers.length === 1) {
-                  str = "Designer: ";
-                } else {
-                  str = "Designers: ";
-                }
-                str += designers.join(", ");
-                designerStringSetter(str);
-            }
+    if (metaGame !== null && metaGame !== undefined) {
+      const info = gameinfo.get(metaGame);
+      gameDeetsSetter(info);
+      if (info !== undefined) {
+        if (info.playercounts.length > 1) {
+          gameEngineSetter(GameFactory(info.uid, 2));
+        } else {
+          gameEngineSetter(GameFactory(info.uid));
         }
+        let str = "";
+        // eslint-disable-next-line no-prototype-builtins
+        if (info.hasOwnProperty("people")) {
+          let designers = info.people
+            .filter((p) => p.type === "designer")
+            .map((p) => p.name);
+          if (designers.length === 1) {
+            str = "Designer: ";
+          } else {
+            str = "Designers: ";
+          }
+          str += designers.join(", ");
+          designerStringSetter(str);
+        }
+      }
     }
   }, [metaGame, gameDeets]);
 
   useEffect(() => {
     const lst = [];
     for (const info of gameinfo.values()) {
-        if ( (info.playercounts.includes(2)) && (! info.flags.includes("simultaneous")) ) {
-            lst.push([info.uid, info.name]);
-        }
+      if (
+        info.playercounts.includes(2) &&
+        !info.flags.includes("simultaneous")
+      ) {
+        lst.push([info.uid, info.name]);
+      }
     }
     lst.sort((a, b) => a[1].localeCompare(b[1]));
     validGamesSetter(lst);
@@ -861,10 +873,10 @@ function Playground(props) {
   }, [i18n, globalMe]);
 
   useEffect(() => {
-    if ( (globalMe !== null) && (globalMe !== undefined) ) {
-        gameIDSetter(globalMe.id);
+    if (globalMe !== null && globalMe !== undefined) {
+      gameIDSetter(globalMe.id);
     } else {
-        gameIDSetter(null);
+      gameIDSetter(null);
     }
   }, [globalMe]);
 
@@ -904,48 +916,49 @@ function Playground(props) {
             console.log(result);
             data = JSON.parse(result.body);
             if (data !== null) {
-                metaGameSetter(data.metaGame);
+              metaGameSetter(data.metaGame);
             } else {
-                metaGameSetter(null);
+              metaGameSetter(null);
             }
           }
         } else {
-            errorMessageRef.current = "You must be logged in to access your playground.";
-            errorSetter(true);
-            metaGameSetter(null);
+          errorMessageRef.current =
+            "You must be logged in to access your playground.";
+          errorSetter(true);
+          metaGameSetter(null);
         }
         if (status === 200) {
-            if ( (metaGame !== null) && (metaGame !== undefined) ) {
-                console.log("playground fetched:", data);
-                setupGame(
-                  data,
-                  gameRef,
-                  globalMe,
-                  false,
-                  partialMoveRenderRef,
-                  renderrepSetter,
-                  engineRef,
-                  statusRef,
-                  movesRef,
-                  focusSetter,
-                  explorationRef,
-                  moveSetter,
-                  gameRecSetter,
-                  canPublishSetter,
-                  globalMe?.settings?.[metaGame]?.display,
-                  navigate
-                );
-                processNewSettings(
-                    {},
-                  globalMe?.settings,
-                  gameRef,
-                  settingsSetter,
-                  gameSettingsSetter,
-                  userSettingsSetter
-                );
-                populateChecked(gameRef, engineRef, t, inCheckSetter);
-              }
-            }
+          if (metaGame !== null && metaGame !== undefined) {
+            console.log("playground fetched:", data);
+            setupGame(
+              data,
+              gameRef,
+              globalMe,
+              false,
+              partialMoveRenderRef,
+              renderrepSetter,
+              engineRef,
+              statusRef,
+              movesRef,
+              focusSetter,
+              explorationRef,
+              moveSetter,
+              gameRecSetter,
+              canPublishSetter,
+              globalMe?.settings?.[metaGame]?.display,
+              navigate
+            );
+            processNewSettings(
+              {},
+              globalMe?.settings,
+              gameRef,
+              settingsSetter,
+              gameSettingsSetter,
+              userSettingsSetter
+            );
+            populateChecked(gameRef, engineRef, t, inCheckSetter);
+          }
+        }
       } catch (error) {
         console.log(error);
         errorMessageRef.current = error.message;
@@ -953,7 +966,7 @@ function Playground(props) {
       }
     }
     // Somehow react loses track of this, so explicitly remove this.
-    if ( (boardImage.current !== null) && (boardImage.current !== undefined) ) {
+    if (boardImage.current !== null && boardImage.current !== undefined) {
       const svg = boardImage.current.querySelector("svg");
       if (svg !== null) {
         svg.remove();
@@ -1034,62 +1047,65 @@ function Playground(props) {
     }
 
     if (focus && !explorationFetched && gameRef.current.canExplore) {
-        fetchPrivateExploration();
+      fetchPrivateExploration();
     }
-  }, [
-    focus,
-    explorationFetched,
-    gameID,
-    explorer,
-    globalMe,
-  ]);
+  }, [focus, explorationFetched, gameID, explorer, globalMe]);
 
   const handleChangeGame = (game) => {
-      groupVariantsRef.current = {};
-      if (game === "") {
-        newGameSetter("");
-        nonGroupVariantsSetter({});
-        groupDataSetter([]);
-        nonGroupDataSetter([]);
+    groupVariantsRef.current = {};
+    if (game === "") {
+      newGameSetter("");
+      nonGroupVariantsSetter({});
+      groupDataSetter([]);
+      nonGroupDataSetter([]);
+    } else {
+      newGameSetter(game);
+      const info = gameinfo.get(game);
+      let gameEngine;
+      if (info.playercounts.length > 1) {
+        gameEngine = GameFactory(info.uid, 2);
       } else {
-        newGameSetter(game);
-        const info = gameinfo.get(game);
-        let gameEngine;
-        if (info.playercounts.length > 1) {
-          gameEngine = GameFactory(info.uid, 2);
-        } else {
-          gameEngine = GameFactory(info.uid);
-        }
-        let ngVariants = {};
-        if (gameEngine.allvariants())
-          gameEngine
-            .allvariants()
-            .filter((v) => v.group === undefined)
-            .forEach((v) => (ngVariants[v.uid] = false));
-        nonGroupVariantsSetter(ngVariants);
-        if (gameEngine.allvariants() && gameEngine.allvariants() !== undefined) {
+        gameEngine = GameFactory(info.uid);
+      }
+      let ngVariants = {};
+      if (gameEngine.allvariants())
+        gameEngine
+          .allvariants()
+          .filter((v) => v.group === undefined)
+          .forEach((v) => (ngVariants[v.uid] = false));
+      nonGroupVariantsSetter(ngVariants);
+      if (gameEngine.allvariants() && gameEngine.allvariants() !== undefined) {
         const groups = [
-            ...new Set(
-            gameEngine.allvariants().filter((v) => v.group !== undefined).map((v) => v.group)
-            ),
+          ...new Set(
+            gameEngine
+              .allvariants()
+              .filter((v) => v.group !== undefined)
+              .map((v) => v.group)
+          ),
         ];
-        groupDataSetter(groups.map((g) => {
+        groupDataSetter(
+          groups.map((g) => {
             return {
-            group: g,
-            variants: gameEngine.allvariants()
+              group: g,
+              variants: gameEngine
+                .allvariants()
                 .filter((v) => v.group === g)
                 .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
             };
-        }));
-        nonGroupDataSetter(gameEngine.allvariants()
+          })
+        );
+        nonGroupDataSetter(
+          gameEngine
+            .allvariants()
             .filter((v) => v.group === undefined)
-            .sort((a, b) => (a.uid > b.uid ? 1 : -1)));
-        } else {
-            groupDataSetter([]);
-            nonGroupDataSetter([]);
-        }
+            .sort((a, b) => (a.uid > b.uid ? 1 : -1))
+        );
+      } else {
+        groupDataSetter([]);
+        nonGroupDataSetter([]);
       }
-      errorSetter("");
+    }
+    errorSetter("");
   };
 
   const handleGroupChange = (group, variant) => {
@@ -1105,7 +1121,7 @@ function Playground(props) {
   };
 
   const handleInitPlayground = async () => {
-    if ( (newGame === null) || (newGame === undefined) || (newGame === "") ) {
+    if (newGame === null || newGame === undefined || newGame === "") {
       errorSetter(t("SelectAGame"));
       return;
     }
@@ -1124,127 +1140,131 @@ function Playground(props) {
       }
     }
     try {
-        const info = gameinfo.get(newGame);
-        if (info === undefined) {
-            throw new Error(`Could not load game information for ${newGame}`);
-        }
-        let g;
-        if (info.playercounts.length > 1) {
-            g = GameFactory(newGame, 2, variants);
-
-        } else {
-            g = GameFactory(newGame, undefined, variants);
-        }
-        if (g !== undefined) {
-            const usr = await Auth.currentAuthenticatedUser();
-            console.log("currentAuthenticatedUser", usr);
-            const res = await fetch(API_ENDPOINT_AUTH, {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-              },
-              body: JSON.stringify({
-                query: "new_playground",
-                pars: {
-                  metaGame: newGame,
-                  state: g.serialize(),
-                },
-              }),
-            });
-            if (res.status !== 200) {
-                const result = await res.json();
-                errorMessageRef.current = JSON.parse(result.body);
-                errorSetter(true);
-              } else {
-                const result = await res.json();
-                const data = JSON.parse(result.body);
-                console.log(`INIT PLAYGROUND`);
-                console.log(data);
-                metaGameSetter(newGame);
-                setupGame(
-                    data,
-                    gameRef,
-                    globalMe,
-                    false,
-                    partialMoveRenderRef,
-                    renderrepSetter,
-                    engineRef,
-                    statusRef,
-                    movesRef,
-                    focusSetter,
-                    explorationRef,
-                    moveSetter,
-                    gameRecSetter,
-                    canPublishSetter,
-                    globalMe?.settings?.[metaGame]?.display,
-                    navigate
-                  );
-                  processNewSettings(
-                    {},
-                    globalMe?.settings,
-                    gameRef,
-                    settingsSetter,
-                    gameSettingsSetter,
-                    userSettingsSetter
-                  );
-                  populateChecked(gameRef, engineRef, t, inCheckSetter);
-              }
-        } else {
-            errorSetter(`Could not instantiate the game ${newGame} with variants ${JSON.stringify(variants)}`);
-        }
-      } catch (error) {
-        console.log(`Fatal error caught: ${error}`);
-        errorSetter(error);
+      const info = gameinfo.get(newGame);
+      if (info === undefined) {
+        throw new Error(`Could not load game information for ${newGame}`);
       }
+      let g;
+      if (info.playercounts.length > 1) {
+        g = GameFactory(newGame, 2, variants);
+      } else {
+        g = GameFactory(newGame, undefined, variants);
+      }
+      if (g !== undefined) {
+        const usr = await Auth.currentAuthenticatedUser();
+        console.log("currentAuthenticatedUser", usr);
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+          },
+          body: JSON.stringify({
+            query: "new_playground",
+            pars: {
+              metaGame: newGame,
+              state: g.serialize(),
+            },
+          }),
+        });
+        if (res.status !== 200) {
+          const result = await res.json();
+          errorMessageRef.current = JSON.parse(result.body);
+          errorSetter(true);
+        } else {
+          const result = await res.json();
+          const data = JSON.parse(result.body);
+          console.log(`INIT PLAYGROUND`);
+          console.log(data);
+          metaGameSetter(newGame);
+          setupGame(
+            data,
+            gameRef,
+            globalMe,
+            false,
+            partialMoveRenderRef,
+            renderrepSetter,
+            engineRef,
+            statusRef,
+            movesRef,
+            focusSetter,
+            explorationRef,
+            moveSetter,
+            gameRecSetter,
+            canPublishSetter,
+            globalMe?.settings?.[metaGame]?.display,
+            navigate
+          );
+          processNewSettings(
+            {},
+            globalMe?.settings,
+            gameRef,
+            settingsSetter,
+            gameSettingsSetter,
+            userSettingsSetter
+          );
+          populateChecked(gameRef, engineRef, t, inCheckSetter);
+        }
+      } else {
+        errorSetter(
+          `Could not instantiate the game ${newGame} with variants ${JSON.stringify(
+            variants
+          )}`
+        );
+      }
+    } catch (error) {
+      console.log(`Fatal error caught: ${error}`);
+      errorSetter(error);
+    }
   };
 
   const handleResetPlayground = async () => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
-    let status;
-    if (token) {
+      let status;
+      if (token) {
         const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
+          method: "POST",
+          headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+          },
+          body: JSON.stringify({
             query: "reset_playground",
             pars: {},
-        }),
+          }),
         });
         status = res.status;
         if (status !== 200) {
-            const result = await res.json();
-            errorMessageRef.current = JSON.parse(result.body);
-            console.log(`Status code was not 200: ${JSON.parse(result.body)}`);
-            errorSetter(true);
+          const result = await res.json();
+          errorMessageRef.current = JSON.parse(result.body);
+          console.log(`Status code was not 200: ${JSON.parse(result.body)}`);
+          errorSetter(true);
         } else {
-            metaGameSetter(null);
+          metaGameSetter(null);
         }
-    } else {
-        errorMessageRef.current = "You must be logged in to access your playground.";
+      } else {
+        errorMessageRef.current =
+          "You must be logged in to access your playground.";
         errorSetter(true);
         metaGameSetter(null);
-    }
+      }
     } catch (error) {
-        console.log(error);
-        errorMessageRef.current = error.message;
-        errorSetter(true);
+      console.log(error);
+      errorMessageRef.current = error.message;
+      errorSetter(true);
     }
     // Somehow react loses track of this, so explicitly remove this.
-    if ( (boardImage.current !== null) && (boardImage.current !== undefined) ) {
+    if (boardImage.current !== null && boardImage.current !== undefined) {
       const svg = boardImage.current.querySelector("svg");
       if (svg !== null) {
         svg.remove();
       }
     }
-  }
+  };
 
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {
@@ -1266,10 +1286,10 @@ function Playground(props) {
     engineRef.current = engine;
     console.log("Rendering in handleGameMoveClick");
     renderrepSetter(
-        engine.render({
-          perspective: gameRef.current.me ? gameRef.current.me + 1 : 1,
-          altDisplay: settings?.display,
-        })
+      engine.render({
+        perspective: gameRef.current.me ? gameRef.current.me + 1 : 1,
+        altDisplay: settings?.display,
+      })
     );
     const isPartialSimMove =
       gameRef.current.simultaneous &&
@@ -1408,7 +1428,7 @@ function Playground(props) {
       render(engineRef.current.renderColumn(row, col), options);
     }
 
-    if ( (boardImage.current !== null) && (boardImage.current !== undefined) ) {
+    if (boardImage.current !== null && boardImage.current !== undefined) {
       const svg =
         boardImage.current.parentElement.querySelector("#theBoardSVG");
       console.log("remove svg:", svg, "from ", boardImage.current);
@@ -1460,15 +1480,15 @@ function Playground(props) {
     }
   }, [renderrep, globalMe, focus, settings, explorer, t, navigate]);
 
-//   const setError = (error) => {
-//     if (error.Message !== undefined) errorMessageRef.current = error.Message;
-//     else errorMessageRef.current = JSON.stringify(error);
-//     errorSetter(true);
-//   };
+  //   const setError = (error) => {
+  //     if (error.Message !== undefined) errorMessageRef.current = error.Message;
+  //     else errorMessageRef.current = JSON.stringify(error);
+  //     errorSetter(true);
+  //   };
 
-//   const handleUpdateRenderOptions = () => {
-//     showSettingsSetter(true);
-//   };
+  //   const handleUpdateRenderOptions = () => {
+  //     showSettingsSetter(true);
+  //   };
 
   const handleRotate = async () => {
     let newGameSettings = cloneDeep(gameSettings);
@@ -1489,36 +1509,36 @@ function Playground(props) {
     );
   };
 
-//   const processUpdatedSettings = (newGameSettings, newUserSettings) => {
-//     console.log("processUpdatedSettings", newGameSettings, newUserSettings);
-//     const newSettings = processNewSettings(
-//       newGameSettings,
-//       newUserSettings,
-//       gameRef,
-//       settingsSetter,
-//       gameSettingsSetter,
-//       userSettingsSetter
-//     );
-//     if (newSettings?.display) {
-//       console.log("settings.display", newSettings.display);
-//       const newRenderRep =
-//         engineRef.current.render({
-//           perspective: gameRef.current.me + 1,
-//           altDisplay: newSettings.display,
-//         });
-//       renderrepSetter(newRenderRep);
-//       gameRef.current.stackExpanding =
-//         newRenderRep.renderer === "stacking-expanding";
-//     }
-//   };
+  //   const processUpdatedSettings = (newGameSettings, newUserSettings) => {
+  //     console.log("processUpdatedSettings", newGameSettings, newUserSettings);
+  //     const newSettings = processNewSettings(
+  //       newGameSettings,
+  //       newUserSettings,
+  //       gameRef,
+  //       settingsSetter,
+  //       gameSettingsSetter,
+  //       userSettingsSetter
+  //     );
+  //     if (newSettings?.display) {
+  //       console.log("settings.display", newSettings.display);
+  //       const newRenderRep =
+  //         engineRef.current.render({
+  //           perspective: gameRef.current.me + 1,
+  //           altDisplay: newSettings.display,
+  //         });
+  //       renderrepSetter(newRenderRep);
+  //       gameRef.current.stackExpanding =
+  //         newRenderRep.renderer === "stacking-expanding";
+  //     }
+  //   };
 
-//   const handleSettingsClose = () => {
-//     showSettingsSetter(false);
-//   };
+  //   const handleSettingsClose = () => {
+  //     showSettingsSetter(false);
+  //   };
 
-//   const handleSettingsSave = () => {
-//     showSettingsSetter(false);
-//   };
+  //   const handleSettingsSave = () => {
+  //     showSettingsSetter(false);
+  //   };
 
   const handleMark = (mark) => {
     let node = getFocusNode(explorationRef.current, focus);
@@ -1542,30 +1562,53 @@ function Playground(props) {
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
   // console.log("game.me", game ? game.me : "nope");
-  if ( (! error) && (metaGame === null) ) {
+  if (!error && metaGame === null) {
     return (
-        <>
-            <div className="content">
-                <p>Welcome to your playground. This is a private place where you can explore most of the games available on the site, and you can export existing games here as well.</p>
-                <p>To start a new game, use the form below. To export an existing game, find the game and click the "Export to playground" button below the move list after navigating to the game state you want to start from.</p>
-                <p>The playground uses the built-in exploration features, which does have some limits. The playground only supports 2-player non-simultaneous games.</p>
+      <>
+        <div className="content">
+          <p>
+            Welcome to your playground. This is a private place where you can
+            explore most of the games available on the site, and you can export
+            existing games here as well.
+          </p>
+          <p>
+            To start a new game, use the form below. To export an existing game,
+            find the game and click the "Export to playground" button below the
+            move list after navigating to the game state you want to start from.
+          </p>
+          <p>
+            The playground uses the built-in exploration features, which does
+            have some limits. The playground only supports 2-player
+            non-simultaneous games.
+          </p>
+        </div>
+        <hr />
+        <div className="field">
+          <label className="label" htmlFor="gameSelect">
+            Select a game
+          </label>
+          <div className="control">
+            <div className="select">
+              <select
+                id="gameSelect"
+                onChange={(e) => handleChangeGame(e.target.value)}
+              >
+                <option value=""></option>
+                {validGames.map(([uid, name], i) => {
+                  return (
+                    <option value={uid} key={`validGames|${i}`}>
+                      {name}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
-            <hr />
-            <div className="field">
-                <label className="label" htmlFor="gameSelect">Select a game</label>
-                <div className="control">
-                    <div className="select">
-                        <select id="gameSelect" onChange={(e) => handleChangeGame(e.target.value)}>
-                            <option value=""></option>
-                        {validGames.map(([uid, name], i) => {
-                            return <option value={uid} key={`validGames|${i}`}>{name}</option>
-                        })}
-                        </select>
-                    </div>
-                </div>
-                <p className="help">Simultaneous games have been removed from the list.</p>
-            </div>
-            {groupData.length === 0 && nonGroupData.length === 0 ? (
+          </div>
+          <p className="help">
+            Simultaneous games have been removed from the list.
+          </p>
+        </div>
+        {groupData.length === 0 && nonGroupData.length === 0 ? (
           ""
         ) : (
           <Fragment>
@@ -1624,7 +1667,9 @@ function Playground(props) {
                       ))}
                     </div>
                   ))}
-              {newGame === null || newGame === "" || nonGroupData.length === 0 ? (
+              {newGame === null ||
+              newGame === "" ||
+              nonGroupData.length === 0 ? (
                 ""
               ) : (
                 <Fragment>
@@ -1665,13 +1710,15 @@ function Playground(props) {
           </Fragment>
         )}
         <div className="field">
-            <div className="control">
-                <button className="button apButton" onClick={handleInitPlayground}>Explore game</button>
-            </div>
+          <div className="control">
+            <button className="button apButton" onClick={handleInitPlayground}>
+              Explore game
+            </button>
+          </div>
         </div>
-        </>
+      </>
     );
-  } else if ( (!error) && (metaGame !== null) ) {
+  } else if (!error && metaGame !== null) {
     let toMove;
     if (focus) {
       toMove = getFocusNode(explorationRef.current, focus).toMove;
@@ -1700,15 +1747,10 @@ function Playground(props) {
               exploration={explorationRef.current}
               focus={focus}
               submitting={submitting}
-              handlers={[
-                handleMove,
-                handleMark,
-                handleView,
-                handleReset,
-              ]}
+              handlers={[handleMove, handleMark, handleView, handleReset]}
             />
             <div className="buttons">
-                {/* Ended up not needing any of the buttons in this area,
+              {/* Ended up not needing any of the buttons in this area,
                     like Next Game and Explore */}
             </div>
           </div>
@@ -1718,8 +1760,8 @@ function Playground(props) {
               <span>
                 {gameDeets?.name}
                 <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
-                    {" (playground)"}
-                  </span>
+                  {" (playground)"}
+                </span>
               </span>
             </h1>
             {inCheck.length === 0 ? (
@@ -1737,9 +1779,7 @@ function Playground(props) {
               </div>
             ) : (
               <div
-                className={
-                  isZoomed ? "board" : "board unZoomedBoard"
-                }
+                className={isZoomed ? "board" : "board unZoomedBoard"}
                 id="svg"
                 ref={boardImage}
               ></div>
@@ -1768,7 +1808,8 @@ function Playground(props) {
                 }}
                 title={t("GameInfo")}
               >
-                {gameEngine === undefined || gameEngine === null ||
+                {gameEngine === undefined ||
+                gameEngine === null ||
                 gameEngine.notes() === undefined ? (
                   <i className="fa fa-info"></i>
                 ) : (
@@ -1825,17 +1866,19 @@ function Playground(props) {
                 isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
               }`}
             >
-                <GameMoves
+              <GameMoves
                 focus={focus}
                 game={game}
                 exploration={explorationRef.current}
                 handleGameMoveClick={handleGameMoveClick}
-                />
+              />
             </div>
           )}
         </div>
         <div className="control">
-            <button className="button apButton" onClick={handleResetPlayground}>Reset Playground</button>
+          <button className="button apButton" onClick={handleResetPlayground}>
+            Reset Playground
+          </button>
         </div>
 
         {/* columns */}
@@ -1862,33 +1905,36 @@ function Playground(props) {
             },
           ]}
         >
-            {gameEngine === undefined || gameEngine === null ? null :
-          <div className="content">
-          <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-            {gameEngine.description() +
-              (designerString === undefined ? "" : "\n\n" + designerString)}
-          </ReactMarkdown>
-          <ul className="contained">
-            {gameDeets.urls.map((l, i) => (
-              <li key={i}>
-                <a href={l} target="_blank" rel="noopener noreferrer">
-                  {l}
-                </a>
-              </li>
-            ))}
-          </ul>
-          {gameEngine.notes() === undefined ? (
-            ""
-          ) : (
-            <>
-              <h2>{t("ImplementationNotes")}</h2>
+          {gameEngine === undefined || gameEngine === null ? null : (
+            <div className="content">
               <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-                {gameEngine.notes()}
+                {gameEngine.description() +
+                  (designerString === undefined ? "" : "\n\n" + designerString)}
               </ReactMarkdown>
-            </>
+              <ul className="contained">
+                {gameDeets.urls.map((l, i) => (
+                  <li key={i}>
+                    <a href={l} target="_blank" rel="noopener noreferrer">
+                      {l}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              {gameEngine.notes() === undefined ? (
+                ""
+              ) : (
+                <>
+                  <h2>{t("ImplementationNotes")}</h2>
+                  <ReactMarkdown
+                    rehypePlugins={[rehypeRaw]}
+                    className="content"
+                  >
+                    {gameEngine.notes()}
+                  </ReactMarkdown>
+                </>
+              )}
+            </div>
           )}
-        </div>
-            }
         </Modal>
         <Modal
           show={showGameDump}

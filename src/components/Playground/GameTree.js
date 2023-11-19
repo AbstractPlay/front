@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 
 export class GameNode {
   constructor(parent, move, state, toMove) {

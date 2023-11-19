@@ -51,7 +51,7 @@ const modules = [
   ["numPlays", NumPlays],
   ["playerStats", PlayerStats],
   ["gameStats", GameStats],
-  ["siteStats", SiteStats]
+  ["siteStats", SiteStats],
 ];
 
 function Stats(props) {
@@ -150,18 +150,18 @@ function Stats(props) {
         {modules.map(([code, Component]) => {
           if (code === statSelected) {
             if (code === "siteStats") {
-                return (
-                    <Component key={`${code}|component`} />
-                );
-
+              return <Component key={`${code}|component`} />;
             } else {
-                return (
-                    <div className="columns" key={`${code}|columns`}>
-                        <div className="column is-one-half is-offset-one-quarter" key={`${code}|column`}>
-                            <Component key={`${code}|component`} />
-                        </div>
-                    </div>
-                );
+              return (
+                <div className="columns" key={`${code}|columns`}>
+                  <div
+                    className="column is-one-half is-offset-one-quarter"
+                    key={`${code}|column`}
+                  >
+                    <Component key={`${code}|component`} />
+                  </div>
+                </div>
+              );
             }
           } else {
             return null;
