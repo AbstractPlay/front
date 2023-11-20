@@ -196,7 +196,7 @@ function setupGame(
   }
 
   let history = [];
-  // The followin g is DESTRUCTIVE! If you need `engine.stack`, do it before here.
+  // The following is DESTRUCTIVE! If you need `engine.stack`, do it before here.
   game0.gameOver = engine.gameover;
   const winner = engine.winner;
   while (true) {
@@ -1567,16 +1567,16 @@ function Playground(props) {
         <div className="content">
           <p>
             Welcome to your playground. This is a private place where you can
-            explore most of the games available on the site, and you can export
+            explore most of the games available on the site, and you can import
             existing games here as well.
           </p>
           <p>
-            To start a new game, use the form below. To export an existing game,
+            To start a new game, use the form below. To import an existing game,
             find the game and click the "Export to playground" button below the
-            move list after navigating to the game state you want to start from.
+            move list after navigating to the move you want to start from.
           </p>
           <p>
-            The playground uses the built-in exploration features, which does
+            The playground uses the built-in exploration features, which do
             have some limits. The playground only supports 2-player
             non-simultaneous games.
           </p>
