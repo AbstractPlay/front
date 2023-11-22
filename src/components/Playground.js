@@ -277,7 +277,7 @@ function mergeExploration(
       gameEngine.sameMove(exploration[moveNumber - 2].move, e.move)
     );
     if (subtree1) {
-      gameEngine.move(exploration[moveNumber - 1].move);
+      gameEngine.move(exploration[moveNumber - 1].move, {trusted: true});
       // subtree of the move my opponent chose
       const subtree2 = subtree1.children.find((e) =>
         gameEngine.sameMove(exploration[moveNumber - 1].move, e.move)
@@ -328,7 +328,7 @@ function fixMoveOutcomes(exploration, moveNumber) {
 
 function mergeMoveRecursive(gameEngine, node, children, newids = true) {
   children.forEach((n) => {
-    gameEngine.move(n.move);
+    gameEngine.move(n.move, {trusted: true});
     const pos = node.AddChild(n.move, gameEngine);
     if (newids) node.children[pos].id = n.id;
     if (n.outcome !== undefined && n.children.length === 0) {
@@ -496,7 +496,7 @@ function doView(
   let newfocus = cloneDeep(focus);
   let moves;
   try {
-    gameEngineTmp.move(m, partialMove || simMove);
+    gameEngineTmp.move(m, { partial: partialMove || simMove});
     if (!partialMove && focus.canExplore && !game.noMoves) {
       moves = gameEngineTmp.moves();
     }
@@ -523,7 +523,7 @@ function doView(
           node = getFocusNode(explorationRef.current, newfocus);
         }
         m = moves[0];
-        gameEngineTmp.move(m, partialMove || simMove);
+        gameEngineTmp.move(m, {partial: partialMove || simMove});
         moves = gameEngineTmp.moves();
       }
     }
