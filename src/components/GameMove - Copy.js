@@ -107,8 +107,6 @@ function setCanPublish(game, explorer, me, canPublishSetter) {
     (!game.published || !game.published.includes(me.id))
   ) {
     canPublishSetter("yes");
-  } else {
-    canPublishSetter("no");
   }
 }
 
@@ -176,7 +174,7 @@ function setupGame(
         game0.partialMove.length > game0.numPlayers - 1
       )
         // the empty move is numPlayers - 1 commas
-        engine.move(game0.partialMove, { partial: true, trusted: true });
+        engine.move(game0.partialMove, {partial: true, trusted: true});
     }
     game0.canExplore = false;
   } else {
@@ -257,7 +255,7 @@ function setupGame(
   // The following is DESTRUCTIVE! If you need `engine.stack`, do it before here.
   game0.gameOver = engine.gameover;
   const winner = engine.winner;
-  while (true) {
+  while (true) { // eslint-disable-line no-constant-condition
     history.unshift(
       new GameNode(
         null,
@@ -266,12 +264,7 @@ function setupGame(
         engine.gameover ? "" : engine.currplayer - 1
       )
     );
-    if (
-      game0.gameOver &&
-      winner.length === 1 &&
-      !game0.simultaneous &&
-      game0.numPlayers === 2
-    ) {
+    if (game0.gameOver && winner.length === 1 && !game0.simultaneous && game0.numPlayers === 2) {
       history[0].outcome = winner[0] - 1;
     }
     engine.stack.pop();
@@ -337,7 +330,7 @@ function mergeExploration(
       gameEngine.sameMove(exploration[moveNumber - 2].move, e.move)
     );
     if (subtree1) {
-      gameEngine.move(exploration[moveNumber - 1].move, { trusted: true });
+      gameEngine.move(exploration[moveNumber - 1].move, {trusted: true});
       // subtree of the move my opponent chose
       const subtree2 = subtree1.children.find((e) =>
         gameEngine.sameMove(exploration[moveNumber - 1].move, e.move)
@@ -433,9 +426,12 @@ function fixMoveOutcomes(exploration, moveNumber) {
       if (c.outcome === 1 - mover) a_child_wins = true;
       if (c.outcome !== mover) all_children_lose = false;
     });
-    if (a_child_wins) parent.outcome = 1 - mover;
-    else if (all_children_lose) parent.outcome = mover;
-    else parent.outcome = -1;
+    if (a_child_wins) 
+      parent.outcome = 1 - mover;
+    else if (all_children_lose) 
+      parent.outcome = mover;
+    else
+      parent.outcome = -1;
     child = parent;
   }
 }
@@ -444,7 +440,7 @@ function fixMoveOutcomes(exploration, moveNumber) {
 function mergeExistingExploration(moveNum, exploration, explorationRef) {
   let subtree = undefined;
   moveNum++;
-  while (true) {
+  while (true) { // eslint-disable-line no-constant-condition
     let move = explorationRef.current[moveNum].move
       .toLowerCase()
       .replace(/\s+/g, "");
@@ -467,7 +463,7 @@ function mergeExistingExploration(moveNum, exploration, explorationRef) {
 
 function mergeMoveRecursive(gameEngine, node, children, newids = true) {
   children.forEach((n) => {
-    gameEngine.move(n.move, { trusted: true });
+    gameEngine.move(n.move, {trusted: true});
     const pos = node.AddChild(n.move, gameEngine);
     if (newids) node.children[pos].id = n.id;
     if (n.outcome !== undefined && n.children.length === 0) {
@@ -476,10 +472,7 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
       if (newnode.outcome === -1) {
         // If the newnode didn't get an outcome from existing exploration, set it now
         newnode.SetOutcome(n.outcome);
-      } else if (
-        newnode.outcome !== n.outcome &&
-        newnode.children.length === 0
-      ) {
+      } else if (newnode.outcome !== n.outcome && newnode.children.length === 0) {
         // if two leaf nodes disagree on outcome, set it to undecided
         node.children[pos].SetOutcome(-1);
       }
@@ -500,7 +493,7 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
   if (moveNum === exploration.length - 1) return movesUpdated;
   const actualNextMove = exploration[moveNum + 1].move;
   children.forEach((n) => {
-    gameEngine.move(n.move, { trusted: true });
+    gameEngine.move(n.move, {trusted: true});
     if (gameEngine.sameMove(n.move, actualNextMove)) {
       const updated = mergeMoveRecursive2(
         gameEngine,
@@ -518,10 +511,7 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
         if (newnode.outcome === -1) {
           // If the newnode didn't get an outcome from existing exploration, set it now
           newnode.SetOutcome(n.outcome);
-        } else if (
-          newnode.outcome !== n.outcome &&
-          newnode.children.length === 0
-        ) {
+        } else if (newnode.outcome !== n.outcome && newnode.children.length === 0) {
           // if two leaf nodes disagree on outcome, set it to undecided
           node.children[pos].SetOutcome(-1);
         }
@@ -679,7 +669,7 @@ function doView(
   let newfocus = cloneDeep(focus);
   let moves;
   try {
-    gameEngineTmp.move(m, { partial: partialMove || simMove });
+    gameEngineTmp.move(m, {partial: partialMove || simMove});
     if (!partialMove && focus.canExplore && !game.noMoves) {
       moves = gameEngineTmp.moves();
     }
@@ -706,7 +696,7 @@ function doView(
           node = getFocusNode(explorationRef.current, newfocus);
         }
         m = moves[0];
-        gameEngineTmp.move(m, { partial: partialMove || simMove });
+        gameEngineTmp.move(m, {partial: partialMove || simMove});
         moves = gameEngineTmp.moves();
       }
     }
@@ -1351,7 +1341,7 @@ function GameMove(props) {
 
     async function fetchPublicExploration() {
       explorationFetchedSetter(true);
-
+      console.log("fetching public exploration");
       var url = new URL(API_ENDPOINT_OPEN);
       url.searchParams.append("query", "get_public_exploration");
       url.searchParams.append("game", gameID);
@@ -1363,6 +1353,7 @@ function GameMove(props) {
       } else {
         const result = await res.json();
         if (result !== undefined && result.length > 0) {
+          console.log("got it");
           const data = result.map((d) => {
             if (d && typeof d.tree === "string") {
               d.tree = JSON.parse(d.tree);
@@ -1370,10 +1361,8 @@ function GameMove(props) {
             return d;
           });
           mergePublicExploration(gameRef.current, explorationRef.current, data);
-          fixMoveOutcomes(
-            explorationRef.current,
-            explorationRef.current.length - 1
-          );
+          console.log("merged");
+          fixMoveOutcomes(explorationRef.current, explorationRef.current.length - 1);
           if (moveNumberParam) {
             const moveNum = parseInt(moveNumberParam, 10);
             let exPath = [];
@@ -1404,33 +1393,6 @@ function GameMove(props) {
     moveNumberParam,
     nodeidParam,
   ]);
-
-  const handlePlaygroundExport = async (state) => {
-    const usr = await Auth.currentAuthenticatedUser();
-    console.log("currentAuthenticatedUser", usr);
-    const res = await fetch(API_ENDPOINT_AUTH, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-      },
-      body: JSON.stringify({
-        query: "new_playground",
-        pars: {
-          metaGame: game.metaGame,
-          state,
-        },
-      }),
-    });
-    if (res.status !== 200) {
-      const result = await res.json();
-      errorMessageRef.current = JSON.parse(result.body);
-      errorSetter(true);
-    } else {
-      navigate("/playground");
-    }
-  };
 
   const handleResize = () => {
     screenWidthSetter(window.innerWidth);
@@ -2444,8 +2406,6 @@ function GameMove(props) {
                     exploration={explorationRef.current}
                     noExplore={globalMe?.settings?.all?.exploration === -1}
                     handleGameMoveClick={handleGameMoveClick}
-                    getFocusNode={getFocusNode}
-                    handlePlaygroundExport={handlePlaygroundExport}
                   />
                   <UserChats
                     comments={exploringCompletedGame ? nodeComments : comments}
@@ -2474,8 +2434,6 @@ function GameMove(props) {
                     exploration={explorationRef.current}
                     noExplore={globalMe?.settings?.all?.exploration === -1}
                     handleGameMoveClick={handleGameMoveClick}
-                    getFocusNode={getFocusNode}
-                    handlePlaygroundExport={handlePlaygroundExport}
                   />
                 </Fragment>
               )}
