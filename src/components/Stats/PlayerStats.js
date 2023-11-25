@@ -28,6 +28,7 @@ function PlayerStats(props) {
       while (histShort.length < 10) {
         histShort = [0, ...histShort];
       }
+      const h = summary.players.h.find((u) => u.user === obj.user).value;
       lst.push({
         user: obj.user,
         plays: obj.value,
@@ -35,6 +36,7 @@ function PlayerStats(props) {
         social: social.value,
         histogram,
         histShort,
+        h,
       });
       joinedSetter(lst);
     }
@@ -53,7 +55,7 @@ function PlayerStats(props) {
     () =>
       joined
         .map(
-          ({ user: userid, plays, eclectic, social, histogram, histShort }) => {
+          ({ user: userid, plays, eclectic, social, histogram, histShort, h }) => {
             let name = "UNKNOWN";
             const user = userNames.find((u) => u.id === userid);
             if (user !== undefined) {
@@ -67,6 +69,7 @@ function PlayerStats(props) {
               social,
               histogram,
               histShort,
+              h,
             };
           }
         )
@@ -88,6 +91,9 @@ function PlayerStats(props) {
       }),
       columnHelper.accessor("plays", {
         header: "Total plays",
+      }),
+      columnHelper.accessor("h", {
+        header: "h-index",
       }),
       columnHelper.accessor("eclectic", {
         header: "Different games",
