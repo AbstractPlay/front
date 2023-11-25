@@ -196,7 +196,7 @@ function setupGame(
   }
 
   let history = [];
-  // The followin g is DESTRUCTIVE! If you need `engine.stack`, do it before here.
+  // The following is DESTRUCTIVE! If you need `engine.stack`, do it before here.
   game0.gameOver = engine.gameover;
   const winner = engine.winner;
   while (true) {
@@ -277,7 +277,7 @@ function mergeExploration(
       gameEngine.sameMove(exploration[moveNumber - 2].move, e.move)
     );
     if (subtree1) {
-      gameEngine.move(exploration[moveNumber - 1].move);
+      gameEngine.move(exploration[moveNumber - 1].move, {trusted: true});
       // subtree of the move my opponent chose
       const subtree2 = subtree1.children.find((e) =>
         gameEngine.sameMove(exploration[moveNumber - 1].move, e.move)
@@ -328,7 +328,7 @@ function fixMoveOutcomes(exploration, moveNumber) {
 
 function mergeMoveRecursive(gameEngine, node, children, newids = true) {
   children.forEach((n) => {
-    gameEngine.move(n.move);
+    gameEngine.move(n.move, {trusted: true});
     const pos = node.AddChild(n.move, gameEngine);
     if (newids) node.children[pos].id = n.id;
     if (n.outcome !== undefined && n.children.length === 0) {
@@ -496,7 +496,7 @@ function doView(
   let newfocus = cloneDeep(focus);
   let moves;
   try {
-    gameEngineTmp.move(m, partialMove || simMove);
+    gameEngineTmp.move(m, { partial: partialMove || simMove});
     if (!partialMove && focus.canExplore && !game.noMoves) {
       moves = gameEngineTmp.moves();
     }
@@ -523,7 +523,7 @@ function doView(
           node = getFocusNode(explorationRef.current, newfocus);
         }
         m = moves[0];
-        gameEngineTmp.move(m, partialMove || simMove);
+        gameEngineTmp.move(m, {partial: partialMove || simMove});
         moves = gameEngineTmp.moves();
       }
     }
@@ -1567,16 +1567,16 @@ function Playground(props) {
         <div className="content">
           <p>
             Welcome to your playground. This is a private place where you can
-            explore most of the games available on the site, and you can export
+            explore most of the games available on the site, and you can import
             existing games here as well.
           </p>
           <p>
-            To start a new game, use the form below. To export an existing game,
+            To start a new game, use the form below. To import an existing game,
             find the game and click the "Export to playground" button below the
-            move list after navigating to the game state you want to start from.
+            move list after navigating to the move you want to start from.
           </p>
           <p>
-            The playground uses the built-in exploration features, which does
+            The playground uses the built-in exploration features, which do
             have some limits. The playground only supports 2-player
             non-simultaneous games.
           </p>
