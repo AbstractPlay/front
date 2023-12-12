@@ -49,12 +49,6 @@ function GameStats(props) {
 
   return (
     <>
-      <div className="content">
-        <p>
-          Care should be taken with these statistics. The sample size is small
-          and biased.
-        </p>
-      </div>
       <TableSkeleton
         data={data}
         columns={columns}

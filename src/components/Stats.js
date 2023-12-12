@@ -1,5 +1,7 @@
 import React, { useState, useEffect, createContext } from "react";
 import { useTranslation } from "react-i18next";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import HighestSingleRating from "./Stats/HighestSingleRating";
 import AvgRatings from "./Stats/AvgRatings";
 import TopPlayers from "./Stats/TopPlayers";
@@ -52,6 +54,15 @@ const modules = [
   ["playerStats", PlayerStats],
   ["gameStats", GameStats],
   ["siteStats", SiteStats],
+];
+// [code, markdown]
+const explanations = [
+    ["highestSingle", `List of every recorded rating. The rating here is standard ELO, with a starting rating of 1200 and a static K of 30. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made.`],
+    ["avgRatings", `The average rating is just that: a straight average of all the ELO ratings recorded for that player. The weighted average is weighted by number of games played. For example, if you had a rating of 1300 in a game you played 10 times and 1200 in a game you only played twice, your average rating would be 1250, but your weighted average would be 1283.`],
+    ["topPlayers", `This table lists each available game and variant combination along with the player with the highest ELO rating for that combination.`],
+    ["numPlays", `This table lists each game, how many times it was played, and by how many unique players. It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day "buckets," with the most recent week on the right.`],
+    ["playerStats", `This shows each recorded player along with their total games played, a count of unique games, and the number of different opponents they played. It also provides an \`h-index\`, which represents the number of games you've played at least that many times (e.g., if you've played three different games only one time each, then your index is 1. As soon as you've played those three games at least three times *each*, the index will increase to 3). An activity histogram is also provided, showing the number of games completed each week, with the most recent week on the right. The preview shows the most recent ten weeks. Clicking on it will show you the full history.`],
+    ["gameStats", `This table shows each game and variant combination along with the number of recorded games, the average length of the game (number of moves), the median length, and the rate of first-player wins. **The first-player win stats should be treated with care!** The sample size is small and biased. There are many confounding factors that could explain an extreme rate. Note that the rate completely ignores whether the pie rule was invoked. This is a measure of how often the first player (regardless of how many times the person sitting in that chair may change) wins the game.`],
 ];
 
 function Stats(props) {
@@ -153,6 +164,14 @@ function Stats(props) {
               return <Component key={`${code}|component`} />;
             } else {
               return (
+                <>
+                {explanations.find(([c,]) => c === code) === undefined ? null :
+                  <div style={{fontSize: "smaller", paddingBottom: "1em"}} key={`${code}|explanation`}>
+                        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+                            {explanations.find(([c,]) => c === code)[1]}
+                        </ReactMarkdown>
+                  </div>
+                }
                 <div className="columns" key={`${code}|columns`}>
                   <div
                     className="column is-one-half is-offset-one-quarter"
@@ -161,6 +180,7 @@ function Stats(props) {
                     <Component key={`${code}|component`} />
                   </div>
                 </div>
+                </>
               );
             }
           } else {
