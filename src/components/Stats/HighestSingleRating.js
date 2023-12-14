@@ -12,7 +12,7 @@ function HighestSingleRating(props) {
   const data = useMemo(
     () =>
       summary.ratings.highest
-        .map(({ user: userid, game, rating, wld }) => {
+        .map(({ user: userid, game, rating, wld, glicko, trueskill }) => {
           let name = "UNKNOWN";
           const user = userNames.find((u) => u.id === userid);
           if (user !== undefined) {
@@ -24,7 +24,9 @@ function HighestSingleRating(props) {
             name,
             game,
             rating,
-            wld
+            wld,
+            glicko,
+            trueskill,
           };
         })
         .sort((a, b) => b.rating - a.rating),
@@ -47,7 +49,35 @@ function HighestSingleRating(props) {
         header: "Game",
       }),
       columnHelper.accessor("rating", {
-        header: "Rating",
+        header: "Elo",
+      }),
+      columnHelper.accessor("glicko", {
+        header: "Glicko",
+        cell: (props) => {
+            const rating = props.getValue().rating;
+            const rd = props.getValue().rd;
+            const min = Math.round(rating - (rd * 2));
+            const max = Math.round(rating + (rd * 2));
+            return `${min}–${max}`
+        },
+        sortingFn: (rowA, rowB, columnID) => {
+            const ratingA = Math.round(rowA.getAllCells(columnID).rating);
+            const ratingB = Math.round(rowB.getAllCells(columnID).rating);
+            const rdA = Math.round(rowA.getAllCells(columnID).rd);
+            const rdB = Math.round(rowB.getAllCells(columnID).rd);
+            if (ratingA === ratingB) {
+                return rdA - rdB;
+            } else {
+                return ratingA - ratingB;
+            }
+        },
+      }),
+      columnHelper.accessor("trueskill", {
+        header: "Trueskill",
+        cell: (props) => Math.round(props.getValue().mu * 10) / 10,
+        sortingFn: (rowA, rowB, columnID) => {
+            return rowA.getValue(columnID).mu - rowB.getValue(columnID).mu;
+        },
       }),
       columnHelper.accessor("wld", {
         header: "Win/Loss/Draw",
