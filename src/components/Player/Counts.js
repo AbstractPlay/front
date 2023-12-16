@@ -50,7 +50,7 @@ function Counts({handleChallenge}) {
         const lst = [];
         for (const name of countMap.keys()) {
             const inforec = [...gameinfo.values()].find(r => name.startsWith(r.name));
-            const meta = inforec.id;
+            const meta = inforec.uid;
             lst.push({meta, name, count: countMap.get(name)});
         }
         countsSetter(lst);
