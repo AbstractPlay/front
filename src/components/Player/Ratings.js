@@ -26,7 +26,7 @@ function Ratings({handleChallenge}) {
         .map(({rating: elo, game, wld, glicko, trueskill}) => {
           const inforec = [...gameinfo.values()].find(r => game.startsWith(r.name));
           return {
-            id: inforec.id,
+            id: inforec.uid,
             name: game,
             elo,
             wld,
