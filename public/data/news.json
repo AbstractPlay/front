@@ -308,7 +308,47 @@
         "text": "Records and analysis of completed games have now been made available. These records and statistics are not real time! They are generated every Sunday (6am UTC).\n\n* You can access all the records at <https://records.abstractplay.com/>.\n* The new Statistics tab presents some analysis of the records.\n* Buttons for downloading all records, your records, and the records for specific games are visible on the Statistics page, your dashboard, and the completed games lists, respectively.\n\nI'll be doing some aesthetic tweaking later this week. We warmly welcome feedback and suggestions. Enjoy!"
     },
     {
-        "time": 1699550160000,
-        "text": "Larger versions of the standard triangular Adere board are now available. Enjoy!"
+        "time": 1699572600000,
+        "text": "The clock and rated settings in the new challenge screen are now saved to your browser's \"local storage.\" That means the persistence is per device. For those that prefer different clock settings, hopefully this is a welcome change. Let me know if there are any issues."
+    },
+    {
+        "time": 1699815240000,
+        "text": "Time controls are now explicitly visible on the game screen instead of only visible via tooltip. Also, the new challenge screen now has speed presets. The custom option is of course still available. This means a change to the default game clock. The default is now \"medium\" speed which is 2d/1d/4d (or roughly making a move at least twice a week). These settings are still persisted per device. Let us know if you run into any issues."
+    },
+    {
+        "time": 1699823160000,
+        "text": "You can now explore variations in completed games and even annotate them. [Here is an example](https://play.abstractplay.com/move/manalath/1/8703d405-c79d-4dd0-8e6c-ee54729a38b5?move=7&nodeid=d4b30785-eccb-4049-be84-cc9a97ebaba9). Note that you can share the URL of a node somewhere in the tree. Make sure you turn on exploration. Move trees with comments are marked by a small comment icon. Just follow the icons untill you get to the comment.\n\n If you were playing in a completed game, there should be a \"Publish exploration\" button. This can be used to publish the exploration you did during the game so that anyone can see it. Note that all completed game exploration and comments are visible to anyone.\n\nWhen there is a lot of exploration it might be a little slow in loading..."
+    },
+    {
+        "time": 1699927380000,
+        "text": "Added some new stats and graphs to the Statistics page (it may take a few minutes to propagate):\n\n* On the Play Statistics table, a minimalist histogram of the number of completed games over the past 10 weeks is visible. If you click on the mini-graph, a full-size graph will appear with all of the data for that game.\n* A new \"Site statistics\" tab is available that gives you a histogram of all completed games on the site in seven-day \"buckets,\" and a new \"hours per move\" box plot will show you the spread of game speeds based on an average per game.\n* Finally, on the Games list table, there is now a \"recent\" column that gives the number of games completed in the past four weeks. This will give you a sense of what games are being played recently.\n\nLet me know if you see any issues or if you have feedback for other useful statistics you'd like to see. Enjoy!"
+    },
+    {
+        "time": 1700095620000,
+        "text": "Added a couple more stats, because I'm a data nerd:\n\n* **Player statistics:** Added per-player graphs for the number of games completed in each seven-day period.\n* **Site statistics:** Added a cumulative \"first-time game completions\" graph that essentially shows user growth."
+    },
+    {
+        "time": 1700365680000,
+        "text": "The solo playground is now available through the new Playground nav option. It leverages the built-in exploration function, so it only supports non-simultaneous games and only 2-player versions of games. You can also export any move state of any current or completed game to the playground. You only have one playground, and starting or importing a new game will replace the existing one. This feature is experimental. I've done basic testing, but it's possible there are edge cases that blow things up. Do let me know. Enjoy!"
+    },
+    {
+        "time": 1701008280000,
+        "text": "I've added h-index to player stats. This index gives the number of games you've played at least that many times. So an h-index of 4 would mean you've played at least 4 different games at least 4 times each. If you've played all the games only one time each, then your h-index would still only be 1. The maximum h-index is the total number of games available on the site (56 right now, I believe)."
+    },
+    {
+        "time": 1701049380000,
+        "text": "I'm pleased to announce the availability of @ManaT's game Quagmire on the production server. @ManaT also coded this one for us—a first! Many thanks. Enjoy!"
+    },
+    {
+        "time": 1701129840000,
+        "text": "After 18 years, the original Super Duper Games is now offline. There is a landing page up now that lists the games that used to be available (DNS propagation may take time depending on your area). I've maintained the local rules mirror as well. There's a link there to Abstract Play and a link to a publicly shared Google Drive folder that contains all the historical SDG data, including updated PGN game reports. Let me know if you encounter any issues with the site. If your favourite game didn't make it over, feel free to `/suggest` it.\n\nThe intent is for the landing page to be available \"indefinitely.\" The domain is paid up through 2025, so at least that long 🙂\n\nMy sincerest thanks to all SDGers. I hope you will find a similar home here at Abstract Play.\n\n❤️"
+    },
+    {
+        "time": 1702071360000,
+        "text": "@pasxalis1987's game AlmaTafl is now available on the production server. Let me know if you run into any issues. Enjoy!"
+    },
+    {
+        "time": 1702753020000,
+        "text": "A few things have just rolled out:\n\n* **Last seen indicators:** When issuing a new challenge, you can restrict the list to those active in the past 7 or 30 days. On all lists where you can accept standing challenges, an indicator appears next to the challenger's name. Green means they've logged in in the past 7 days. Yellow means last 30 days.\n* **Player profiles:** These are still very rudimentary at this point! But you can now see a page of information on other players. Links appear in most lists, including chat logs. The page itself consists of multiple \"cards,\" the order of which you can change. I appreciate and encourage continued discussion of what you want to see here, and I will continue to adjust as I can.\n* **Country selection:** In the user settings screen (the cog in the top-right corner next to your username) you can now select the country you are playing from from a drop-down list. This is the only way we normalize the data entry. If your flag does not appear correctly on your profile page, please go into the settings and set it there. This is optional. You can set it to \"Prefer not to say,\" if you like.\n\nContinued feedback and suggestions welcome. Enjoy!"
     }
 ]
