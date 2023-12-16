@@ -7,6 +7,7 @@ import { Auth } from "aws-amplify";
 import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
 import { useStorageState } from "react-use-storage-state";
+import { countryCodeList } from "../lib/countryCodeList";
 
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
@@ -25,6 +26,7 @@ function UserSettingsModal(props) {
   const [email, emailSetter] = useState("");
   const [emailCode, emailCodeSetter] = useState("");
   const [language, languageSetter] = useState("");
+  const [country, countrySetter] = useState("");
   const [users, usersSetter] = useState([]);
   const [user, userSetter] = useState(null);
   const [updated, updatedSetter] = useState(0);
@@ -71,6 +73,9 @@ function UserSettingsModal(props) {
       } else {
         confirmMoveSetter(true);
       }
+      if (globalMe?.country !== undefined) {
+        countrySetter(globalMe.country);
+      }
     }
   }, [show, globalMe, notificationsSetter, explorationSetter]);
 
@@ -102,6 +107,12 @@ function UserSettingsModal(props) {
       await handleSettingChangeSubmit("name", name);
       updatedSetter((updated) => updated + 1);
     }
+  };
+
+  const handleCountryChange = async (newCountry) => {
+    await handleSettingChangeSubmit("country", newCountry);
+    countrySetter(newCountry);
+    updatedSetter((updated) => updated + 1);
   };
 
   const handleNameChangeCancelClick = () => {
@@ -497,6 +508,22 @@ function UserSettingsModal(props) {
           ) : (
             ""
           )}
+        </div>
+        {/********************* country *********************/}
+        <div className="field" key="country">
+            <label className="label" htmlFor="countrySelect">Tell others what country you are playing from (optional)</label>
+            <div className="control">
+                <div className="select">
+                    <select id="countrySelect" value={country} onChange={(e) => handleCountryChange(e.target.value)}>
+                        <option value={""} key={"country|_blank"}>--Prefer not to say--</option>
+                    {countryCodeList.sort((a, b) => a.countryName.localeCompare(b.countryName)).map(entry => {
+                        return (
+                            <option value={entry.alpha2} key={`country|${entry.alpha2}`}>{entry.countryName}</option>
+                        );
+                    })}
+                    </select>
+                </div>
+            </div>
         </div>
         {/********************* notifications *********************/}
         <div className="field" key="notifications">

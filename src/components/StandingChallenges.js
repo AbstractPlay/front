@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from "../config";
 import {
@@ -14,8 +14,9 @@ import {
 } from "@tanstack/react-table";
 import { Auth } from "aws-amplify";
 import { Helmet } from "react-helmet-async";
-import { MeContext } from "../pages/Skeleton";
+import { MeContext, UsersContext } from "../pages/Skeleton";
 import Spinner from "./Spinner";
+import ActivityMarker from "./ActivityMarker";
 import { useStorageState } from "react-use-storage-state";
 
 const allSize = Number.MAX_SAFE_INTEGER;
@@ -33,6 +34,7 @@ function StandingChallenges(props) {
   const { metaGame } = useParams();
   const [update, updateSetter] = useState(0);
   const [globalMe] = useContext(MeContext);
+  const [allUsers,] = useContext(UsersContext);
   const [showState, showStateSetter] = useStorageState("challenges-show", 20);
   const [sorting, setSorting] = useState([]);
   const [showAccepted, showAcceptedSetter] = useState(false);
@@ -211,10 +213,18 @@ function StandingChallenges(props) {
   const data = useMemo(
     () =>
       challenges.map((rec) => {
+        let lastSeen = undefined;
+        if (allUsers !== null) {
+            const userRec = allUsers.find(u => u.id === rec.challenger.id);
+            if (userRec !== undefined) {
+                lastSeen = userRec.lastSeen;
+            }
+        }
         return {
           id: rec.id,
           challenger: rec.challenger.name,
           challengerId: rec.challenger.id,
+          lastSeen,
           clockHard: rec.clockHard,
           clockStart: rec.clockStart,
           clockInc: rec.clockInc,
@@ -226,7 +236,7 @@ function StandingChallenges(props) {
           variants: rec.variants,
         };
       }),
-    [challenges]
+    [challenges, allUsers]
   );
 
   const columnHelper = createColumnHelper();
@@ -234,6 +244,16 @@ function StandingChallenges(props) {
     () => [
       columnHelper.accessor("challenger", {
         header: "Challenger",
+        cell: (props) =>
+            <>
+                <Link to={`/player/${props.row.original.challengerId}`}>{props.getValue()}</Link>
+                {props.row.original.lastSeen === undefined ? null :
+                    <>
+                        &nbsp;
+                        <ActivityMarker lastSeen={props.row.original.lastSeen} size="s" />
+                    </>
+                }
+            </>
       }),
       columnHelper.accessor("numPlayers", {
         header: "Players",

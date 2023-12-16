@@ -26,6 +26,7 @@ import News from "../components/News";
 import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
 import Stats from "../components/Stats";
+import Player from "../components/Player";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
@@ -151,6 +152,10 @@ function Bones(props) {
                       <Route
                         path="/games/:metaGame?"
                         element={<MetaContainer token={token} />}
+                      />
+                      <Route
+                        path="/player/:userid"
+                        element={<Player />}
                       />
                       <Route
                         path="/challenges/:metaGame"

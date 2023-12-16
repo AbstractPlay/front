@@ -63,9 +63,7 @@ function MyTurnTable(props) {
           gameName: info.name,
           gameStarted: g.gameStarted || 0,
           opponents: g.players
-            .filter((item) => item.id !== globalMe.id)
-            .map((item) => item.name)
-            .join(", "),
+            .filter((item) => item.id !== globalMe.id),
           numMoves: g.numMoves || 0,
           myTime: me.time,
           timeRemaining: me.time - (Date.now() - g.lastMoveTime),
@@ -89,6 +87,7 @@ function MyTurnTable(props) {
       }),
       columnHelper.accessor("opponents", {
         header: "Opponents",
+        cell: (props) => props.getValue().map(u => <Link to={`/player/${u.id}`}>{u.name}</Link>).reduce((acc, x) => acc === null ? x : <>{acc}, {x}</>, null),
       }),
       columnHelper.accessor("gameStarted", {
         header: "Started",

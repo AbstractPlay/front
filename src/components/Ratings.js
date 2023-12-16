@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Auth } from "aws-amplify";
@@ -20,8 +20,9 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { Helmet } from "react-helmet-async";
-import { MeContext } from "../pages/Skeleton";
+import { MeContext, UsersContext } from "../pages/Skeleton";
 import NewChallengeModal from "./NewChallengeModal";
+import ActivityMarker from "./ActivityMarker";
 import { useStorageState } from "react-use-storage-state";
 
 const allSize = Number.MAX_SAFE_INTEGER;
@@ -33,6 +34,7 @@ function Ratings() {
   const [canonical, canonicalSetter] = useState("");
   const { metaGame } = useParams();
   const [globalMe] = useContext(MeContext);
+  const [allUsers,] = useContext(UsersContext);
   const [showState, showStateSetter] = useStorageState("ratings-show", 20);
   const [sorting, setSorting] = useState([{ id: "rank", desc: false }]);
 
@@ -96,10 +98,18 @@ function Ratings() {
   const data = useMemo(
     () =>
       ratings.map((rec, idx) => {
+        let lastSeen = undefined;
+        if (allUsers !== null) {
+            const userRec = allUsers.find(u => u.id === rec.id);
+            if (userRec !== undefined) {
+                lastSeen = userRec.lastSeen;
+            }
+        }
         return {
           id: rec.id,
           rank: idx + 1,
           player: rec.name,
+          lastSeen,
           rating: rec.rating.rating,
           n: rec.rating.N,
           wins: rec.rating.wins,
@@ -107,7 +117,7 @@ function Ratings() {
           winrate: rec.rating.wins / rec.rating.N,
         };
       }),
-    [ratings]
+    [ratings, allUsers]
   );
 
   const columnHelper = createColumnHelper();
@@ -118,6 +128,16 @@ function Ratings() {
       }),
       columnHelper.accessor("player", {
         header: "Player",
+        cell: (props) =>
+          <>
+            <Link to={`/player/${props.row.original.id}`}>{props.getValue()}</Link>
+                {props.row.original.lastSeen === undefined ? null :
+                    <>
+                        &nbsp;
+                        <ActivityMarker lastSeen={props.row.original.lastSeen} size="s" />
+                    </>
+                }
+          </>
       }),
       columnHelper.accessor("rating", {
         header: "Rating",
