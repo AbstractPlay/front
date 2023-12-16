@@ -157,7 +157,7 @@ function Player(props) {
                 }
                 <ActivityMarker lastSeen={user.lastSeen} />
             </div>
-            <div class="content has-text-centered" style={{fontSize: "smaller"}}>
+            <div className="content has-text-centered" style={{fontSize: "smaller"}}>
                 <p>The player profile page is very much "under development." It currently excludes any real-time stats and relies instead on the statistics tabulated weekly.</p>
             </div>
             <ProfileContext.Provider value={[user, userSetter]}>

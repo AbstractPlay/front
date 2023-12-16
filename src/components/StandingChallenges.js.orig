@@ -214,10 +214,7 @@ function StandingChallenges(props) {
         return {
           id: rec.id,
           challenger: rec.challenger.name,
-<<<<<<< HEAD
-=======
           challengerId: rec.challenger.id,
->>>>>>> develop
           clockHard: rec.clockHard,
           clockStart: rec.clockStart,
           clockInc: rec.clockInc,
@@ -291,11 +288,7 @@ function StandingChallenges(props) {
                   ) : props.row.original.id === reject ||
                     props.row.original.id === revoke ? (
                     <Spinner></Spinner>
-<<<<<<< HEAD
-                  ) : props.row.original.challenger.id === globalMe?.id ? (
-=======
                   ) : props.row.original.challengerId === globalMe?.id ? (
->>>>>>> develop
                     <button
                       className="button is-small apButton"
                       onClick={() => handleRevoke(props.row.original.id)}
@@ -351,8 +344,8 @@ function StandingChallenges(props) {
 
   const tableNavigation = (
     <>
-      <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
+      <div className="columns">
+        <div className="column is-half is-offset-one-quarter">
           <div className="level smallerText has-text-centered">
             <div className="level-item">
               <button

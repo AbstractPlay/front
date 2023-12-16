@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import Spinner from "./Spinner";
 import Modal from "./Modal";
@@ -639,6 +640,9 @@ function Me(props) {
               </div>
             </div>
           )}
+        </div>
+        <div className="content has-text-centered">
+            <p><Link to={`/player/${globalMe.id}`}>View your player profile</Link></p>
         </div>
         <NewChallengeModal
           show={showNewChallengeModal}
