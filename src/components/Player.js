@@ -1,0 +1,217 @@
+import React, { useEffect, useContext, useState, createContext } from "react";
+import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { addResource } from "@abstractplay/gameslib";
+import { MeContext, UsersContext } from "../pages/Skeleton";
+import { useStorageState } from "react-use-storage-state";
+import { Auth } from "aws-amplify";
+import { API_ENDPOINT_AUTH } from "../config";
+import Spinner from "./Spinner";
+import Flag from "./Flag";
+import ActivityMarker from "./ActivityMarker";
+import Stars from "./Player/Stars";
+import Ratings from "./Player/Ratings";
+import Counts from "./Player/Counts";
+
+export const ProfileContext = createContext([null, () => {}]);
+export const SummaryContext = createContext([null, () => {}]);
+export const AllRecsContext = createContext([null, () => []]);
+
+const code2ele = new Map([
+    ["stars", {component: Stars, name: "Starred Games"}],
+    ["ratings", {component: Ratings, name: "Ratings"}],
+    ["counts", {component: Counts, name: "Play Counts"}],
+]);
+
+function Player(props) {
+    const {userid} = useParams();
+    const [globalMe, ] = useContext(MeContext);
+    const [allUsers,] = useContext(UsersContext);
+    const [user, userSetter] = useState(null);
+    const [summary, summarySetter] = useState(null);
+    const [allRecs, allRecsSetter] = useState([]);
+    const [order, orderSetter] = useStorageState("player-profile-order", ["stars", "ratings", "counts"]);
+
+  // eslint-disable-next-line no-unused-vars
+  const { t, i18n } = useTranslation();
+  addResource(i18n.language);
+
+  useEffect(() => {
+    addResource(i18n.language);
+  }, [i18n.language]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL("https://records.abstractplay.com/_summary.json");
+        const res = await fetch(url);
+        const result = await res.json();
+        summarySetter(result);
+      } catch (error) {
+        summarySetter(null);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL(`https://records.abstractplay.com/player/${user.id}.json`);
+        const res = await fetch(url);
+        const result = await res.json();
+        allRecsSetter(result);
+      } catch (error) {
+        allRecsSetter([]);
+      }
+    }
+    fetchData();
+  }, [user]);
+
+  useEffect(() => {
+    if (allUsers !== null) {
+        const rec = allUsers.find(u => u.id === userid);
+        if ( (rec !== undefined) && (rec !== null) ) {
+            userSetter(rec);
+        } else {
+            userSetter(null);
+        }
+    } else {
+        userSetter(null);
+    }
+  }, [userid, allUsers, userSetter]);
+
+  const handleNewChallenge = async (challenge) => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log("currentAuthenticatedUser", usr);
+      await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "new_challenge",
+          pars: {
+            ...challenge,
+            challenger: { id: globalMe.id, name: globalMe.name },
+          },
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleMoveLeft = (code) => {
+    const idx = order.findIndex(c => c === code);
+    let newlst;
+    if (idx !== -1) {
+        // if first element, move to end
+        if (idx === 0) {
+            newlst = [...order.slice(1), order[0]]
+        }
+        // otherwise, swap with adjacent
+        else {
+            newlst = [...order.slice(0, idx - 1), order[idx], order[idx - 1], ...order.slice(idx + 1)];
+        }
+        if (newlst !== undefined) {
+            orderSetter(newlst);
+        }
+    }
+  }
+
+  const handleMoveRight = (code) => {
+    const idx = order.findIndex(c => c === code);
+    let newlst;
+    if (idx !== -1) {
+        // if last element, move to start
+        if (idx === order.length - 1) {
+            newlst = [order[order.length - 1], ...order.slice(0, -1)]
+        }
+        // otherwise, swap with adjacent
+        else {
+            newlst = [...order.slice(0, idx), order[idx + 1], order[idx], ...order.slice(idx + 2)];
+        }
+        if (newlst !== undefined) {
+            orderSetter(newlst);
+        }
+    }
+  }
+
+  if (user !== null) {
+    console.log(user);
+    return (
+        <article id="playerProfile">
+            <h1 className="title has-text-centered">
+              {t("ProfileFor", { player: user.name })}
+            </h1>
+            <div className="subtitle has-text-centered">
+                {user.country === undefined ? null :
+                <>
+                    <Flag code={user.country} size="l" />
+                    &emsp;
+                </>
+                }
+                <ActivityMarker lastSeen={user.lastSeen} />
+            </div>
+            <div class="content has-text-centered" style={{fontSize: "smaller"}}>
+                <p>The player profile page is very much "under development." It currently excludes any real-time stats and relies instead on the statistics tabulated weekly.</p>
+            </div>
+            <ProfileContext.Provider value={[user, userSetter]}>
+                <SummaryContext.Provider value={[summary, summarySetter]}>
+                    <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>
+                    <div className="columns is-multiline">
+                    {order.map((code) => {
+                        console.log(code);
+                        const obj = code2ele.get(code);
+                        if (obj !== undefined) {
+                            return (
+                            <>
+                                <div className="column is-narrow" key={`${code}|column`}>
+                                    <div className="card" key={`${code}|card`}>
+                                        <header className="card-header">
+                                            <p className="card-header-title">
+                                                {obj.name}
+                                            </p>
+                                            <button className="card-header-icon" aria-label="move left" title="move left" onClick={() => handleMoveLeft(code)}>
+                                                <span className="icon">
+                                                    <i className="fa fa-angle-left" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                            <button className="card-header-icon" aria-label="move right" title="move right" onClick={() => handleMoveRight(code)}>
+                                                <span className="icon">
+                                                    <i className="fa fa-angle-right" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </header>
+                                        <div className="card-content">
+                                            <obj.component
+                                                key={`${code}|component`}
+                                                handleChallenge={handleNewChallenge.bind(this)}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                            );
+                        } else {
+                            return null;
+                        }
+                    })}
+                    </div>
+                    </AllRecsContext.Provider>
+                </SummaryContext.Provider>
+            </ProfileContext.Provider>
+        </article>
+      );
+  } else {
+    return (
+        <Spinner/>
+    );
+  }
+}
+
+export default Player;

@@ -77,7 +77,7 @@ function ListGames(props) {
               ? new Date(rec.gameEnded)
               : null,
           numMoves: rec.numMoves,
-          players: rec.players.map((p) => p.name),
+          players: rec.players,
           winners:
             "winner" in rec && rec.winner !== null
               ? rec.winner.map((w) => rec.players[w - 1].name)
@@ -105,7 +105,7 @@ function ListGames(props) {
       }),
       columnHelper.accessor("players", {
         header: "Players",
-        cell: (props) => props.getValue().join(", "),
+        cell: (props) => props.getValue().map(u => <Link to={`/player/${u.id}`}>{u.name}</Link>).reduce((acc, x) => acc === null ? x : <>{acc}, {x}</>, null),
         enableSorting: false,
       }),
       columnHelper.accessor("numMoves", {

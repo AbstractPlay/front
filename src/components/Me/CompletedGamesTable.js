@@ -88,9 +88,7 @@ function CompletedGamesTable(props) {
           gameName: info.name,
           gameEnded: g.gameEnded || 0,
           opponents: g.players
-            .filter((item) => item.id !== globalMe.id)
-            .map((item) => item.name)
-            .join(", "),
+            .filter((item) => item.id !== globalMe.id),
           numMoves: g.numMoves || 0,
           lastSeen: g.seen || 0,
           lastChat: g.lastChat || 0,
@@ -114,6 +112,7 @@ function CompletedGamesTable(props) {
       }),
       columnHelper.accessor("opponents", {
         header: "Opponents",
+        cell: (props) => props.getValue().map(u => <Link to={`/player/${u.id}`}>{u.name}</Link>).reduce((acc, x) => acc === null ? x : <>{acc}, {x}</>, null),
       }),
       columnHelper.accessor("gameEnded", {
         header: "Completed",

@@ -179,6 +179,7 @@
     "ProfileConsent": "Do you consent to the Abstract Play's terms of service and the privacy policy?",
     "ProfileCountry": "Country code",
     "ProfileCountryHelp": "Tell people where you're from! You can enter anything you want here, but if you enter a valid two- or three-character ISO country code, the appropriate flag will be displayed in your profile.",
+    "ProfileFor": "Player Profile for {{player}}",
     "ProfileName": "Display name",
     "ProfileNameHelp": "This is the name others on the site will see. It can be changed later. It must be unique across names currently in use and those recently used.",
     "ProfileTagline": "A free-form tagline (255 characters max)",

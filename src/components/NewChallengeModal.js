@@ -46,6 +46,11 @@ function NewChallengeModal(props) {
     "new-challenge-clock-hard",
     false
   );
+  const [onlySee, onlySeeSetter] = useStorageState(
+    "new-challenge-onlySee",
+    "all"
+  );
+  const [minSeen, minSeenSetter] = useState(0);
   const [rated, ratedSetter] = useStorageState("new-challenge-rated", true); // rated or not
   const [standing, standingSetter] = useState(false); // Standing challenge or not.
   const [standingCount, standingCountSetter] = useState(0);
@@ -58,6 +63,17 @@ function NewChallengeModal(props) {
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
+
+  useEffect(() => {
+    const now = (new Date()).getTime();
+    let min = 0;
+    if (onlySee === "week") {
+        min = now - (7 * 24 * 60 * 60 * 1000);
+    } else if (onlySee === "month") {
+        min = now - (30 * 24 * 60 * 60 * 1000);
+    }
+    minSeenSetter(min);
+  }, [onlySee]);
 
   const setPlayerCount = useCallback(
     (cnt) => {
@@ -495,6 +511,43 @@ function NewChallengeModal(props) {
         )}
         {playerCount === -1 || standing
           ? ""
+          : /* Opponents filtering */
+          <div className="control">
+            <p className="help">Use this to filter out inactive opponents</p>
+            <label className="radio">
+                <input
+                    type="radio"
+                    name="oppFilter"
+                    checked={onlySee === "all"}
+                    value="all"
+                    onClick={() => onlySeeSetter("all")}
+                />
+                All opponents
+            </label>
+            <label className="radio">
+                <input
+                    type="radio"
+                    name="oppFilter"
+                    checked={onlySee === "week"}
+                    value="week"
+                    onClick={() => onlySeeSetter("week")}
+                />
+                Past 7 days
+            </label>
+            <label className="radio">
+                <input
+                    type="radio"
+                    name="oppFilter"
+                    checked={onlySee === "month"}
+                    value="month"
+                    onClick={() => onlySeeSetter("month")}
+                />
+                Past 30 days
+            </label>
+          </div>
+        }
+        {playerCount === -1 || standing
+          ? ""
           : /* Opponents */
             opponents.map((o, i) => {
               return (
@@ -530,7 +583,8 @@ function NewChallengeModal(props) {
                               (user) =>
                                 user.id === opponents[i].id ||
                                 (user.id !== globalMe.id &&
-                                  !opponents.some((o) => user.id === o.id))
+                                  !opponents.some((o) => user.id === o.id) &&
+                                  user.lastSeen >= minSeen)
                             )
                             .sort((a, b) => a.name.localeCompare(b.name))
                             .map((item) => {

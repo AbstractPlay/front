@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ReactTimeAgo from "react-time-ago";
 import { UsersContext } from "../../pages/Skeleton";
@@ -77,7 +78,7 @@ function UserChats(props) {
                     </p>
                   ) : (
                     <p className="chatPlayer">
-                      <strong>{r.player}</strong>&nbsp;
+                      <Link to={`/player/${r.userid}`}><strong>{r.player}</strong></Link>&nbsp;
                       <small>
                         <ReactTimeAgo
                           date={r.timestamp}

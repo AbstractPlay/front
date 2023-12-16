@@ -515,10 +515,10 @@ function UserSettingsModal(props) {
             <div className="control">
                 <div className="select">
                     <select id="countrySelect" value={country} onChange={(e) => handleCountryChange(e.target.value)}>
-                        <option value={""}>--Prefer not to say--</option>
+                        <option value={""} key={"country|_blank"}>--Prefer not to say--</option>
                     {countryCodeList.sort((a, b) => a.countryName.localeCompare(b.countryName)).map(entry => {
                         return (
-                            <option value={entry.alpha2}>{entry.countryName}</option>
+                            <option value={entry.alpha2} key={`country|${entry.alpha2}`}>{entry.countryName}</option>
                         );
                     })}
                     </select>
