@@ -215,9 +215,15 @@ function StandingChallenges(props) {
           id: rec.id,
           challenger: rec.challenger.name,
 <<<<<<< HEAD
+<<<<<<< HEAD
           challengerId: rec.challenger.id,
 =======
 <<<<<<< HEAD
+=======
+          challengerId: rec.challenger.id,
+>>>>>>> develop
+>>>>>>> develop
+=======
 =======
           challengerId: rec.challenger.id,
 >>>>>>> develop
@@ -296,13 +302,19 @@ function StandingChallenges(props) {
                     props.row.original.id === revoke ? (
                     <Spinner></Spinner>
 <<<<<<< HEAD
+<<<<<<< HEAD
                   ) : props.row.original.challengerId === globalMe?.id ? (
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> develop
                   ) : props.row.original.challenger.id === globalMe?.id ? (
 =======
                   ) : props.row.original.challengerId === globalMe?.id ? (
 >>>>>>> develop
+<<<<<<< HEAD
+>>>>>>> develop
+=======
 >>>>>>> develop
                     <button
                       className="button is-small apButton"

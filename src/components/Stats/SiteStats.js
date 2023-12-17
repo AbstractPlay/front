@@ -1,6 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
+import { createColumnHelper } from "@tanstack/react-table";
 import { SummaryContext } from "../Stats";
+import TableSkeleton from "./TableSkeleton";
 import Plot from "react-plotly.js";
+import Flag from "../Flag";
 
 function SiteStats(props) {
   const [summary] = useContext(SummaryContext);
@@ -16,6 +19,40 @@ function SiteStats(props) {
     }
     cumulativeSetter([...lst]);
   }, [summary]);
+
+  const data = useMemo(
+    () =>
+      summary.geoStats
+        .map(({ code, name, n }) => {
+          return {
+            id: code,
+            code,
+            name,
+            n,
+          };
+        })
+        .sort((a, b) => b.n - a.n),
+    [summary]
+  );
+
+  const columnHelper = createColumnHelper();
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("name", {
+        header: "Country",
+      }),
+      columnHelper.display({
+        id: "flag",
+        cell: (props) => (
+            <Flag code={props.row.original.id} size="m" />
+        )
+      }),
+      columnHelper.accessor("n", {
+        header: "Count",
+      }),
+    ],
+    [columnHelper]
+  );
 
   return (
     <>
@@ -72,6 +109,19 @@ function SiteStats(props) {
             yaxis: { title: "Users who completed their first game" },
             height: 500,
           }}
+        />
+        <hr />
+      </div>
+      <div>
+        <div className="content">
+            <p>
+                This shows the breakdown of countries players assert they are playing from. Only includes country codes the system can interpret.
+            </p>
+        </div>
+        <TableSkeleton
+            data={data}
+            columns={columns}
+            sort={[{ id: "n", desc: true }]}
         />
         <hr />
       </div>
