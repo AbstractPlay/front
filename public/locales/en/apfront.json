@@ -291,7 +291,7 @@
     "VisitGame": "Visit game",
     "Waiting": "Waiting on other players to submit their moves",
     "WaitingResponse": "Waiting on response",
-    "WelcomePlayer": "Dashboard for {{me}}",
+    "WelcomePlayer": "Dashboard for",
     "Winning": "Mark this move as winning for this player",
     "WithVariants_zero": ".",
     "WithVariants_one": " with variant {{variants}}.",
