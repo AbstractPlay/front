@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { SummaryContext } from "../Stats";
 import { MeContext, UsersContext } from "../../pages/Skeleton";
@@ -48,9 +49,9 @@ function AvgRatings(props) {
         header: "Player",
         cell: (props) =>
           globalMe !== null && globalMe.id === props.row.original.userid ? (
-            <span className="bolder highlight">{props.getValue()}</span>
+            <Link to={`/player/${props.row.original.userid}`}><span className="bolder highlight">{props.getValue()}</span></Link>
           ) : (
-            props.getValue()
+            <Link to={`/player/${props.row.original.userid}`}>{props.getValue()}</Link>
           ),
       }),
       columnHelper.accessor("avg", {
