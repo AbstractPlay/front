@@ -446,7 +446,7 @@ function Me(props) {
           }}
         />
         <h1 className="title has-text-centered tourWelcome">
-          {t("WelcomePlayer", { me: globalMe.name })}
+          {t("WelcomePlayer")}&nbsp;<Link to={`/player/${globalMe.id}`}><span style={{textDecoration: "underline"}}>{globalMe.name}</span></Link>
         </h1>
         {/* Your Games */}
         <div className="columns">
