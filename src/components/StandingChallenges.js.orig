@@ -217,9 +217,15 @@ function StandingChallenges(props) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           challengerId: rec.challenger.id,
 =======
 <<<<<<< HEAD
+=======
+          challengerId: rec.challenger.id,
+>>>>>>> develop
+>>>>>>> develop
+=======
 =======
           challengerId: rec.challenger.id,
 >>>>>>> develop
@@ -310,9 +316,12 @@ function StandingChallenges(props) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                   ) : props.row.original.challengerId === globalMe?.id ? (
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> develop
 =======
 >>>>>>> develop
 =======
@@ -323,6 +332,9 @@ function StandingChallenges(props) {
 >>>>>>> develop
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> develop
+=======
 >>>>>>> develop
 =======
 >>>>>>> develop
