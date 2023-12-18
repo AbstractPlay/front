@@ -70,15 +70,23 @@ function Stars({handleChallenge}) {
     [columnHelper, globalMe, user, activeChallengeModal, handleChallenge]
   );
 
-  return (
-    <>
-        <TableSkeleton
-            data={data}
-            columns={columns}
-            sort={[{ id: "name", desc: true }]}
-        />
-    </>
-  );
+  if ( (! ("stars" in user)) || (user.stars === undefined) || (user.stars === null) || (user.stars.length === 0) ) {
+    return (
+        <div className="content">
+            <p>None</p>
+        </div>
+    );
+  } else {
+    return (
+        <>
+            <TableSkeleton
+                data={data}
+                columns={columns}
+                sort={[{ id: "name", desc: true }]}
+            />
+        </>
+      );
+  }
 }
 
 export default Stars;
