@@ -38,7 +38,7 @@ function History({handleChallenge}) {
                 if (found !== undefined) {
                     name = found.name;
                 }
-                winner = {id: sortedResults[0].userid, name, lastSeen: 0};
+                winner = {id: sortedResults[0].userid, name, lastSeen: found.lastSeen};
             }
             const opponents = rec.header.players.map(r => { return {id: r.userid, name: allUsers.find(u => u.id === r.userid)?.name, lastSeen: allUsers.find(u => u.id === r.userid)?.lastSeen}}).filter(r => ( (globalMe === undefined) || (globalMe === null) || (r.id !== globalMe.id)));
             let variants = [];
