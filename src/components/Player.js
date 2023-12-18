@@ -14,6 +14,7 @@ import Ratings from "./Player/Ratings";
 import Counts from "./Player/Counts";
 import Opponents from "./Player/Opponents";
 import Activity from "./Player/Activity";
+import History from "./Player/History";
 
 export const ProfileContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
@@ -25,6 +26,7 @@ const code2ele = new Map([
     ["counts", {component: Counts, name: "Play Counts"}],
     ["opps", {component: Opponents, name: "Opponents"}],
     ["activity", {component: Activity, name: "Activity"}],
+    ["history", {component: History, name: "Game History"}],
 ]);
 
 function Player() {
@@ -34,7 +36,7 @@ function Player() {
     const [user, userSetter] = useState(null);
     const [summary, summarySetter] = useState(null);
     const [allRecs, allRecsSetter] = useState([]);
-    const [order, orderSetter] = useStorageState("player-profile-order", ["stars", "ratings", "counts", "opps", "activity"]);
+    const [order, orderSetter] = useStorageState("player-profile-order", ["stars", "ratings", "counts", "opps", "activity", "history"]);
 
   // eslint-disable-next-line no-unused-vars
   const { t, i18n } = useTranslation();
