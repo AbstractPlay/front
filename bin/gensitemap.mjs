@@ -6,11 +6,11 @@ import { writeFileSync } from "fs";
 // An array with your links
 const links = [
     { url: "/about",  changefreq: "yearly", priority: 0.5  },
-    { url: "/legal",  changefreq: "yearly", priority: 0.5  },
-    { url: "/news",  changefreq: "monthly", priority: 0.5  },
-    { url: "/stats",  changefreq: "weekly", priority: 0.5  },
-    { url: "/games",  changefreq: "monthly", priority: 0.5  },
-    { url: "/players",  changefreq: "weekly", priority: 0.5  },
+    { url: "/legal",  changefreq: "yearly", priority: .8  },
+    { url: "/news",  changefreq: "monthly", priority: .9  },
+    { url: "/stats",  changefreq: "weekly", priority: 0.3  },
+    { url: "/games",  changefreq: "monthly", priority: 1  },
+    { url: "/players",  changefreq: "weekly", priority: 0.3  },
 ]
 
 // add /challenges links
@@ -18,9 +18,9 @@ const links = [
 // add /ratings links
 for (const meta of gameinfo.keys()) {
     links.push({ url: `/challenges/${meta}`,  changefreq: "weekly", priority: 0.5  });
-    links.push({ url: `/listgames/current/${meta}`,  changefreq: "weekly", priority: 0.5  });
-    links.push({ url: `/listgames/completed/${meta}`,  changefreq: "weekly", priority: 0.5  });
-    links.push({ url: `/ratings/${meta}`,  changefreq: "weekly", priority: 0.5  });
+    links.push({ url: `/listgames/current/${meta}`,  changefreq: "weekly", priority: 0.3  });
+    links.push({ url: `/listgames/completed/${meta}`,  changefreq: "weekly", priority: 0.3  });
+    links.push({ url: `/ratings/${meta}`,  changefreq: "weekly", priority: 0.3  });
 }
 
 
