@@ -5,7 +5,6 @@ import Spinner from "./Spinner";
 import ReactTimeAgo from "react-time-ago";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
-import { Helmet } from "react-helmet-async";
 import { NewsContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 
@@ -23,18 +22,12 @@ function News(props) {
   if (!news || news.length === 0) {
     return (
       <article>
-        <Helmet>
-          <link rel="canonical" href="https://play.abstractplay.com/news" />
-        </Helmet>
         <Spinner />
       </article>
     );
   } else {
     return (
       <article>
-        <Helmet>
-          <link rel="canonical" href="https://play.abstractplay.com/news" />
-        </Helmet>
         <div className="content">
           <h1 className="has-text-centered title">{t("News")}</h1>
           <p>

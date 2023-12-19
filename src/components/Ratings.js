@@ -19,7 +19,6 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { Helmet } from "react-helmet-async";
 import { MeContext, UsersContext } from "../pages/Skeleton";
 import NewChallengeModal from "./NewChallengeModal";
 import ActivityMarker from "./ActivityMarker";
@@ -31,7 +30,6 @@ function Ratings() {
   const { t } = useTranslation();
   const [ratings, ratingsSetter] = useState([]);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
-  const [canonical, canonicalSetter] = useState("");
   const { metaGame } = useParams();
   const [globalMe] = useContext(MeContext);
   const [allUsers,] = useContext(UsersContext);
@@ -55,7 +53,6 @@ function Ratings() {
       }
     }
     fetchData();
-    canonicalSetter(`https://play.abstractplay.com/ratings/${metaGame}/`);
   }, [metaGame]);
 
   const openChallengeModal = (name) => {
@@ -298,9 +295,6 @@ function Ratings() {
 
   return (
     <>
-      <Helmet>
-        <link rel="canonical" href={canonical} />
-      </Helmet>
       <article>
         <h1 className="has-text-centered title">
           {t("RatingsList", { name: metaGameName })}

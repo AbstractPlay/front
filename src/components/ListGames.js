@@ -13,7 +13,6 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
-import { Helmet } from "react-helmet-async";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -22,7 +21,6 @@ function ListGames(props) {
   const [games, gamesSetter] = useState([]);
   const { gameState, metaGame } = useParams();
   const [, maxPlayersSetter] = useState(2);
-  const [canonical, canonicalSetter] = useState("");
   const [showState, showStateSetter] = useStorageState("listgames-show", 20);
   const [sorting, setSorting] = useState([]);
 
@@ -56,9 +54,6 @@ function ListGames(props) {
       }
     }
     fetchData();
-    canonicalSetter(
-      `https://play.abstractplay.com/listgames/${gameState}/${metaGame}/`
-    );
   }, [gameState, metaGame]);
 
   const metaGameName = gameinfo.get(metaGame).name;
@@ -247,9 +242,6 @@ function ListGames(props) {
 
   return (
     <>
-      <Helmet>
-        <link rel="canonical" href={canonical} />
-      </Helmet>
       <article>
         <h1 className="has-text-centered title">
           {gameState === "current"
