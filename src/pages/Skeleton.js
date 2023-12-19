@@ -132,7 +132,6 @@ function Bones(props) {
     return (
       <HelmetProvider>
         <Helmet>
-          <link rel="canonical" href="https://play.abstractplay.com/" />
           <title>
             {process.env.REACT_APP_REAL_MODE === "production"
               ? "Abstract Play"

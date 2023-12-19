@@ -13,7 +13,6 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { Auth } from "aws-amplify";
-import { Helmet } from "react-helmet-async";
 import { MeContext, UsersContext } from "../pages/Skeleton";
 import Spinner from "./Spinner";
 import ActivityMarker from "./ActivityMarker";
@@ -28,9 +27,6 @@ function StandingChallenges(props) {
   const [accepted, acceptedSetter] = useState(null);
   const [revoke, revokeSetter] = useState(null);
   const [reject, rejectSetter] = useState(null);
-  const [canonical, canonicalSetter] = useState(
-    "https://play.abstractplay.com/challenges/"
-  );
   const { metaGame } = useParams();
   const [update, updateSetter] = useState(0);
   const [globalMe] = useContext(MeContext);
@@ -69,7 +65,6 @@ function StandingChallenges(props) {
       }
     }
     fetchData();
-    canonicalSetter(`https://play.abstractplay.com/challenges/${metaGame}/`);
   }, [metaGame, update]);
 
   useEffect(() => {
@@ -453,9 +448,6 @@ function StandingChallenges(props) {
 
   return (
     <>
-      <Helmet>
-        <link rel="canonical" href={canonical} />
-      </Helmet>
       <article>
         <h1 className="has-text-centered title">
           {t("StandingChallenges", { name: metaGameName })}
