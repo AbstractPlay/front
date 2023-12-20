@@ -1351,7 +1351,7 @@ function GameMove(props) {
 
     async function fetchPublicExploration() {
       explorationFetchedSetter(true);
-
+      console.log("fetching public exploration");
       var url = new URL(API_ENDPOINT_OPEN);
       url.searchParams.append("query", "get_public_exploration");
       url.searchParams.append("game", gameID);
@@ -1363,6 +1363,7 @@ function GameMove(props) {
       } else {
         const result = await res.json();
         if (result !== undefined && result.length > 0) {
+          console.log("got it");
           const data = result.map((d) => {
             if (d && typeof d.tree === "string") {
               d.tree = JSON.parse(d.tree);
