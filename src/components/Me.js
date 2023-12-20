@@ -641,9 +641,6 @@ function Me(props) {
             </div>
           )}
         </div>
-        <div className="content has-text-centered">
-            <p><Link to={`/player/${globalMe.id}`}>View your player profile</Link></p>
-        </div>
         <NewChallengeModal
           show={showNewChallengeModal}
           handleClose={handleNewChallengeClose}
