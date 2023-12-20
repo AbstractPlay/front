@@ -13,6 +13,7 @@ function Flag({
         return null;
     }
     const countryName = isoToCountryCode(code, "countryName");
+    const alpha2 = isoToCountryCode(code, "alpha2");
     return (
         <div
         className={
@@ -26,7 +27,7 @@ function Flag({
         }
         title={countryName}
         >
-        <img src={`/flags/${size}/${code}.svg`} alt={`flag for ${countryName}`} />
+        <img src={`/flags/${size}/${alpha2}.svg`} alt={`flag for ${countryName}`} />
       </div>
     );
 }
