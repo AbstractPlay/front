@@ -274,7 +274,9 @@ function Table(props) {
         header: "Stars",
       }),
       columnHelper.accessor("recent", {
-        header: "Recent",
+        header: () => (
+            <abbr title="Number of games completed in the last four weeks">Recent</abbr>
+        ),
       }),
       columnHelper.accessor("current", {
         header: "Current",
