@@ -627,7 +627,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
                               }}
                               onClick={() => showTagModalSetter(true)}
                             >
-                              (edit tags)
+                              (edit)
                             </span>
                           </>
                         ) : null}
