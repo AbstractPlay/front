@@ -14,6 +14,7 @@ function MetaContainer(props) {
   const [counts, countsSetter] = useState(null);
   const [users, usersSetter] = useState(null);
   const [summary, summarySetter] = useState(null);
+  const [updateCounter, updateCounterSetter] = useState(0);
   const { metaGame } = useParams();
   const { i18n } = useTranslation();
   addResource(i18n.language);
@@ -36,7 +37,7 @@ function MetaContainer(props) {
       }
     }
     fetchData();
-  }, []);
+  }, [updateCounter]);
 
   useEffect(() => {
     async function fetchData() {
@@ -163,6 +164,7 @@ function MetaContainer(props) {
         toggleStar={toggleStar.bind(this)}
         handleChallenge={handleNewChallenge.bind(this)}
         users={users}
+        updateSetter={updateCounterSetter}
       />
     </Fragment>
   );

@@ -5,6 +5,7 @@ import React, {
   useMemo,
   Fragment,
   useCallback,
+  useRef,
 } from "react";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -28,6 +29,8 @@ import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import ExpandableDiv from "../ExpandableDiv";
 import { useStorageState } from "react-use-storage-state";
+import { Auth } from "aws-amplify";
+import { API_ENDPOINT_AUTH } from "../../config";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 // props:
@@ -37,18 +40,21 @@ const allSize = Number.MAX_SAFE_INTEGER;
 //   - summary
 //   - toggleStar
 //   - handleChallenge
-function Table(props) {
-  const [globalMe] = useContext(MeContext);
+function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) {
+  const [globalMe, globalMeSetter] = useContext(MeContext);
   const [activeImgModal, activeImgModalSetter] = useState("");
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
+  const [showTagModal, showTagModalSetter] = useState(false);
   const [expandedPara, expandedParaSetter] = useState([]);
+  const [selectedGame, selectedGameSetter] = useState("");
+  const [newTag, newTagSetter] = useState("");
+  const [myTags, myTagsSetter] = useState([]);
   const { t, i18n } = useTranslation();
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
   const [filterStars, filterStarsSetter] = useState(false);
-  const [globalFilter, globalFilterSetter] = useState(props.metaGame);
+  const [globalFilter, globalFilterSetter] = useState(metaGame);
   const [showState, showStateSetter] = useStorageState("allgames-show", 10);
-  const toggleStar = props.toggleStar;
-  const handleChallenge = props.handleChallenge;
+  const tagInput = useRef(null);
   addResource(i18n.language);
 
   useEffect(() => {
@@ -78,6 +84,14 @@ function Table(props) {
     },
     [expandedPara, expandedParaSetter]
   );
+
+  useEffect(() => {
+    if (globalMe !== undefined && globalMe !== null && globalMe.tags !== undefined) {
+        myTagsSetter([...globalMe.tags]);
+    } else {
+        myTagsSetter([]);
+    }
+  }, [globalMe]);
 
   /**
    * Table columns
@@ -129,6 +143,10 @@ function Table(props) {
               globalMe.stars.includes(metaGame)
                 ? true
                 : false,
+            tags:
+                props.counts !== null && metaGame in props.counts
+                  ? props.counts[metaGame].tags.join("||")
+                  : "",
             stars:
               props.counts !== null && metaGame in props.counts
                 ? props.counts[metaGame].stars
@@ -270,6 +288,13 @@ function Table(props) {
         ),
         enableSorting: false,
       }),
+      columnHelper.accessor("tags", {
+        header: "Tags",
+        cell: (props) => props.getValue().split("||").map(tag => tag === "" ? null : (
+            <span className="tag">{tag}</span>
+        )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null),
+        enableSorting: false,
+      }),
       columnHelper.accessor("stars", {
         header: "Stars",
       }),
@@ -345,9 +370,67 @@ function Table(props) {
     ]
   );
 
+  const addTag = () => {
+    const idx = myTags.findIndex(t => t.meta === selectedGame);
+    if (idx !== -1) {
+        const unique = new Set();
+        unique.add(newTag);
+        for (const tag of myTags[idx].tags) {
+            unique.add(tag);
+        }
+        myTags[idx] = {meta: selectedGame, tags: [...unique.values()].sort((a, b) => a.localeCompare(b))};
+    } else {
+        myTags.push({meta: selectedGame, tags: [newTag]})
+    }
+    newTagSetter("");
+    tagInput.current.focus();
+  }
+
+  const saveTags = async () => {
+    try {
+        const usr = await Auth.currentAuthenticatedUser();
+        const res = await fetch(API_ENDPOINT_AUTH, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+            },
+            body: JSON.stringify({
+                query: "save_tags",
+                pars: {
+                    payload: myTags,
+                },
+            }),
+        });
+        if (res.status !== 200) {
+            const result = await res.json();
+            console.log(
+                `An error occured while saving tags:\n${result}`
+            );
+        } else {
+            // update globalMe tags
+            const newMe = JSON.parse(JSON.stringify(globalMe));
+            newMe.tags = myTags;
+            globalMeSetter(newMe);
+            // triger meta game refresh
+            updateSetter(v => v + 1);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    showTagModalSetter(false);
+  }
+
   const table = useReactTable({
     data,
     columns,
+    // filterFns: {
+    //     customIncludesFilter: (row, columnId, filterValue) => {
+    //       // return the filtered rows
+    //       return row.getValue(columnId).includes(filterValue);
+    //     },
+    // },
     state: {
       sorting,
       columnVisibility: {
@@ -531,6 +614,23 @@ function Table(props) {
                             </span>
                           </>
                         )}
+                        {(header.id === "tags" && globalMe !== null && globalMe !== undefined) ? (
+                          <>
+                            {" "}
+                            <span
+                              style={{
+                                fontSize: "smaller",
+                                fontWeight: "normal",
+                                paddingTop: 0,
+                                textDecoration: "underline",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => showTagModalSetter(true)}
+                            >
+                              (edit)
+                            </span>
+                          </>
+                        ) : null}
                       </div>
                     )}
                   </th>
@@ -552,6 +652,68 @@ function Table(props) {
         </table>
         {tableNavigation}
       </div>
+
+      <Modal
+          show={showTagModal}
+          title={t("EditTags")}
+          buttons={[
+            { label: t("SaveChanges"), action: saveTags },
+            {
+              label: t("Close"),
+              action: () => showTagModalSetter(false),
+            },
+          ]}
+        >
+          <div className="content">
+            <p>Tags are publicly visible. Please familiarize yourself with our <Link to="/legal">terms of service</Link>. Don't forget to save your changes before closing this dialog.</p>
+            <p>The best tags are short (preferably one word) and lowercase.</p>
+          </div>
+          <div className="field is-grouped">
+            <div className="control">
+                <div className="select is-small">
+                    <select id="gameSelect" value={selectedGame} onChange={(e) => selectedGameSetter(e.target.value)}>
+                        <option value={""} key={`gameSelectBlank`}>--Choose a game--</option>
+                    {props.games.map(meta => {
+                        const info = gameinfo.get(meta);
+                        return (<option value={meta} key={`gameSelect|${meta}`}>{info.name}</option>)
+                    })}
+                    </select>
+                </div>
+            </div>
+            <div className="control">
+                <input className="input is-small" type="text" placeholder="Type new tag here" value={newTag} onChange={(e) => newTagSetter(e.target.value)} ref={tagInput} />
+            </div>
+          </div>
+          <div className="control">
+            <button className="button is-small apButton" onClick={addTag} disabled={newTag === "" || selectedGame === ""}>Add tag</button>
+          </div>
+          {myTags.length === 0 ? null :
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Game</th>
+                        <th>Tags</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {myTags.sort((a,b) => a.meta.localeCompare(b.meta)).map(({meta, tags}) => {
+                        const info = gameinfo.get(meta);
+                        return (
+                            <tr key={`MyTagRow|${meta}`}>
+                                <td>{info.name}</td>
+                                <td>
+                                    {tags.map(tag => (
+                                        <span className="tag">{tag}</span>
+                                    )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)}
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+          }
+      </Modal>
+
     </article>
   );
 }
