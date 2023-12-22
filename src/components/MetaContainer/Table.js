@@ -386,6 +386,20 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
     tagInput.current.focus();
   }
 
+  const deleteTag = (meta, tag) => {
+    const copy = [...myTags];
+    const idxMeta = copy.findIndex(e => e.meta === meta);
+    if (idxMeta !== -1) {
+        const tags = [...(copy[idxMeta].tags)];
+        const idxTag = tags.findIndex(t => t === tag);
+        if (idxTag !== -1) {
+            tags.splice(idxTag, 1);
+            copy[idxMeta].tags = [...tags];
+            myTagsSetter([...copy]);
+        }
+    }
+  }
+
   const saveTags = async () => {
     try {
         const usr = await Auth.currentAuthenticatedUser();
@@ -666,7 +680,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
         >
           <div className="content">
             <p>Tags are publicly visible. Please familiarize yourself with our <Link to="/legal">terms of service</Link>. Don't forget to save your changes before closing this dialog.</p>
-            <p>The best tags are short (preferably one word) and lowercase.</p>
+            <p>The best tags are short (preferably one word) and lowercase. Click on a tag to delete it.</p>
           </div>
           <div className="field is-grouped">
             <div className="control">
@@ -703,7 +717,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
                                 <td>{info.name}</td>
                                 <td>
                                     {tags.map(tag => (
-                                        <span className="tag">{tag}</span>
+                                        <span className="tag" onClick={() => deleteTag(meta, tag)}>{tag}</span>
                                     )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)}
                                 </td>
                             </tr>
