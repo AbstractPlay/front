@@ -394,7 +394,11 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
         const idxTag = tags.findIndex(t => t === tag);
         if (idxTag !== -1) {
             tags.splice(idxTag, 1);
-            copy[idxMeta].tags = [...tags];
+            if (tags.length > 0) {
+                copy[idxMeta].tags = [...tags];
+            } else {
+                copy.splice(idxMeta, 1);
+            }
             myTagsSetter([...copy]);
         }
     }
