@@ -157,7 +157,11 @@ function setupGame(
   if (game0.state === undefined)
     throw new Error("Why no state? This shouldn't happen no more!");
   const engine = GameFactory(game0.metaGame, game0.state);
-  moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
+  if (game0.simultaneous) {
+    moveSetter({ ...engine.validateMove("", gameRef.current?.me + 1), rendered: "", move: "" });
+  } else {
+    moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
+  }
   // eslint-disable-next-line no-prototype-builtins
   game0.canPie =
     game0.pie &&
@@ -759,11 +763,12 @@ function doView(
       newfocus
     );
     focusSetter(newfocus);
-    moveSetter({
-      ...gameEngineTmp.validateMove(""),
-      rendered: "",
-      move: "",
-    });
+    if (game.simultaneous) {
+        moveSetter({ ...gameEngineTmp.validateMove("", game.me + 1), rendered: "", move: "" });
+    } else {
+        moveSetter({ ...gameEngineTmp.validateMove(""), rendered: "", move: "" });
+    }
+
     if (newfocus.canExplore && !game.noMoves) {
       movesRef.current = moves;
     }
@@ -1474,7 +1479,11 @@ function GameMove(props) {
           foc.moveNumber === explorationRef.current.length - 1 &&
           !gameRef.current.canSubmit));
     setStatus(engine, gameRef.current, isPartialSimMove, "", statusRef.current);
-    moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
+    if (game.simultaneous) {
+        moveSetter({ ...engine.validateMove("", gameRef.current.me + 1), rendered: "", move: "" });
+    } else {
+        moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
+    }
   };
 
   function handleReset() {
