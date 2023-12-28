@@ -1445,6 +1445,12 @@ function Playground(props) {
           // } else if (settings.color === "patterns") {
           //   options.patterns = true;
         }
+        if ( (settings.color !== "standard") && (settings.color !== "blind") ) {
+            const palette = globalMe.palettes?.find(p => p.name === settings.color);
+            if (palette !== undefined) {
+                options.colours = [...palette.colours];
+            }
+        }
         if (gameRef.current.stackExpanding) {
           options.boardHover = (row, col, piece) => {
             expand(col, row);
