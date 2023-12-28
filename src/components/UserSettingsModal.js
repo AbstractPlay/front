@@ -8,6 +8,7 @@ import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
 import { useStorageState } from "react-use-storage-state";
 import { countryCodeList } from "../lib/countryCodeList";
+import { HexColorPicker, HexColorInput } from "react-colorful";
 
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
@@ -43,6 +44,20 @@ function UserSettingsModal(props) {
     true
   );
   const [hideTour, hideTourSetter] = useState(!showMeTour || !showPlayTour);
+  // palettes
+  const [showPalette, showPaletteSetter] = useState(false);
+  const [myPalettes, myPalettesSetter] = useState([]);
+  const [currColours, currColoursSetter] = useState([]);
+  const [selectedColour, selectedColourSetter] = useState("");
+  const [paletteName, paletteNameSetter] = useState("");
+
+  useEffect(() => {
+    if (globalMe !== undefined && globalMe !== null && globalMe.palettes !== undefined) {
+        myPalettesSetter([...globalMe.palettes]);
+    } else {
+        myPalettesSetter([]);
+    }
+  }, [globalMe]);
 
   useEffect(() => {
     if (show) {
@@ -219,6 +234,77 @@ function UserSettingsModal(props) {
     handleSettingsChange(newSettings);
   };
 
+  const savePalettes = async () => {
+    try {
+        const usr = await Auth.currentAuthenticatedUser();
+        const res = await fetch(API_ENDPOINT_AUTH, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+            },
+            body: JSON.stringify({
+                query: "save_palettes",
+                pars: {
+                    palettes: myPalettes,
+                },
+            }),
+        });
+        if (res.status !== 200) {
+            const result = await res.json();
+            console.log(
+                `An error occured while saving palettes:\n${result}`
+            );
+        } else {
+            // update globalMe palettes
+            const newMe = JSON.parse(JSON.stringify(globalMe));
+            newMe.palettes = myPalettes;
+            globalMeSetter(newMe);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    showPaletteSetter(false);
+  }
+
+  const addColour = () => {
+    if (! currColours.includes(selectedColour)) {
+        currColoursSetter(lst => [...lst, selectedColour]);
+    }
+  }
+
+  const addPalette = () => {
+    let paletteMap = new Map();
+    if (myPalettes.length > 0) {
+        for (const {name, colours} of myPalettes) {
+            paletteMap.set(name, [...colours]);
+        }
+    }
+    paletteMap.set(paletteName, [...currColours]);
+    myPalettesSetter([...paletteMap.entries()].map(([name, lst]) => {return {name, colours: [...lst]}}));
+    paletteNameSetter("");
+    currColoursSetter([]);
+  }
+
+  const delPalette = (name) => {
+    const idx = myPalettes.findIndex(p => p.name === name);
+    if (idx !== -1) {
+        const palettes = [...myPalettes];
+        palettes.splice(idx, 1);
+        myPalettesSetter([...palettes]);
+    }
+  }
+
+  const delColour = (colour) => {
+    const idx = currColours.findIndex(c => c === colour);
+    if (idx !== -1) {
+        const newlst = [...currColours];
+        newlst.splice(idx, 1);
+        currColoursSetter([...newlst]);
+    }
+  }
+
   const handleSettingsChange = async (newSettings) => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
@@ -335,6 +421,7 @@ function UserSettingsModal(props) {
   console.log(language);
 
   return (
+    <>
     <Modal
       show={show}
       title={t("UserSettings")}
@@ -667,6 +754,10 @@ function UserSettingsModal(props) {
         </div>
         */}
 
+        <div className="control is-small">
+            <button className="button is-small apButton" onClick={() => showPaletteSetter(true)}>Manage Palettes</button>
+        </div>
+
         {/********************* Log out *********************/}
         <div className="control" style={{ float: "right" }}>
           <button
@@ -679,6 +770,82 @@ function UserSettingsModal(props) {
         </div>
       </div>
     </Modal>
+    {/** Palette modal */}
+    <Modal
+          show={showPalette}
+          title={t("ManagePalettes")}
+          buttons={[
+            { label: t("SaveChanges"), action: savePalettes },
+            {
+              label: t("Close"),
+              action: () => showPaletteSetter(false),
+            },
+          ]}
+        >
+          <div className="content">
+            <p>Palettes are lists of colours you want the front end to use when generating game boards. Once defined, you can then apply them to specific games. You must provide at least two colours, four is wise, and you can provide up to ten.</p>
+            <p>These palettes will <em>not</em> be visible to your fellow players. These will only affect <em>your</em> experience.</p>
+            <p>Palettes won't necessarily work for all games. Some games have hard-coded colours. If you run into any trouble, please <a href="https://discord.abstractplay.com">join us on Discord</a> and let us know.</p>
+          </div>
+          <div className="columns">
+            <div className="column">
+                <div className="field">
+                    <label className="label is-small" htmlFor="paletteName">Name the palette</label>
+                    <div className="control">
+                        <input className="input is-small" id="paletteName" type="text" value={paletteName} onChange={(e) => paletteNameSetter(e.target.value)} />
+                    </div>
+                </div>
+                <div>
+                    <p className="help">Click to delete a colour</p>
+                {currColours.map((c, i) => (
+                    <span style={{backgroundColor: c}} onClick={() => delColour(c)}>Player {i + 1}</span>
+                )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)}
+                </div>
+            </div>
+            <div className="column">
+                <div className="field">
+                    <label className="label is-small" htmlFor="colorSelect">Choose a colour</label>
+                    <div className="control" id="colorSelect">
+                        <HexColorPicker color={selectedColour} onChange={selectedColourSetter} />
+                        <HexColorInput color={selectedColour} onChange={selectedColourSetter} />
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div className="field is-grouped">
+            <div className="control">
+                <button className="button is-small apButton" onClick={addColour} disabled={selectedColour === ""}>Add colour</button>
+            </div>
+            <div className="control">
+                <button className="button is-small apButton" onClick={addPalette} disabled={paletteName === "" || paletteName === "standard" || paletteName === "blind" || currColours.length < 2}>Add Palette</button>
+            </div>
+          </div>
+          {myPalettes.length === 0 ? null :
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Colours</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {myPalettes.map(({name, colours}) => (
+                        <tr key={`palette|${name}`}>
+                            <td>{name}</td>
+                            <td>
+                            {colours.map((c, i) => (
+                                <span style={{backgroundColor: c}} onClick={() => delColour(c)}>Player {i + 1}</span>
+                            )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)}
+                            </td>
+                            <td><span className="icon" onClick={() => delPalette(name)}><i className="fa fa-times-circle" aria-hidden="true"></i></span></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+          }
+      </Modal>
+    </>
   );
 }
 

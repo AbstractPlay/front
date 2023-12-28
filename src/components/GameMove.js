@@ -541,12 +541,18 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
   return movesUpdated;
 }
 
-function setupColors(settings, game, t) {
+function setupColors(settings, game, globalMe) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
     //   } else if (settings.color === "patterns") {
     //     options.patterns = true;
+  }
+  if (settings.color !== "standard" && settings.color !== "blind") {
+    const palette = globalMe.palettes.find(p => p.name === settings.color);
+    if (palette !== undefined) {
+        options.colours = [...palette.colours];
+    }
   }
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
@@ -834,7 +840,8 @@ function processNewSettings(
   gameRef,
   settingsSetter,
   gameSettingsSetter,
-  userSettingsSetter
+  userSettingsSetter,
+  globalMe
 ) {
   gameSettingsSetter(newGameSettings);
   userSettingsSetter(newUserSettings);
@@ -866,7 +873,7 @@ function processNewSettings(
       newGameSettings === undefined || newGameSettings.rotate === undefined
         ? 0
         : newGameSettings.rotate;
-    setupColors(newSettings, game);
+    setupColors(newSettings, game, globalMe);
     settingsSetter(newSettings);
     return newSettings;
   }
@@ -1198,7 +1205,8 @@ function GameMove(props) {
             gameRef,
             settingsSetter,
             gameSettingsSetter,
-            userSettingsSetter
+            userSettingsSetter,
+            globalMe
           );
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
@@ -1672,6 +1680,13 @@ function GameMove(props) {
           // } else if (settings.color === "patterns") {
           //   options.patterns = true;
         }
+        if ( (settings.color !== "standard") && (settings.color !== "blind") ) {
+            console.log(`Looking for a palette named ${settings.color}`);
+            const palette = globalMe.palettes?.find(p => p.name === settings.color);
+            if (palette !== undefined) {
+                options.colours = [...palette.colours];
+            }
+        }
         if (gameRef.current.stackExpanding) {
           options.boardHover = (row, col, piece) => {
             expand(col, row);
@@ -1731,7 +1746,8 @@ function GameMove(props) {
       gameRef,
       settingsSetter,
       gameSettingsSetter,
-      userSettingsSetter
+      userSettingsSetter,
+      globalMe
     );
     if (game.me > -1) {
       try {
@@ -1767,7 +1783,8 @@ function GameMove(props) {
       gameRef,
       settingsSetter,
       gameSettingsSetter,
-      userSettingsSetter
+      userSettingsSetter,
+      globalMe
     );
     if (newSettings?.display) {
       console.log("settings.display", newSettings.display);
