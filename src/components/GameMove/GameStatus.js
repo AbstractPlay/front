@@ -1,13 +1,18 @@
-import React from "react";
+import React, {useContext} from "react";
 import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
+import { MeContext } from "../../pages/Skeleton";
 
-function renderGlyph(settings, glyph, id, player) {
+function renderGlyph(settings, glyph, id, player, globalMe) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
-  } else if (settings.color === "patterns") {
-    options.patterns = true;
+  }
+  if (settings.color !== "standard" && settings.color !== "blind") {
+    const palette = globalMe.palettes.find(p => p.name === settings.color);
+    if (palette !== undefined) {
+        options.colours = [...palette.colours];
+    }
   }
   options.svgid = id;
   return renderglyph(glyph, player, options);
@@ -19,6 +24,7 @@ function GameStatus(props) {
   const game = props.game;
   const canExplore = props.canExplore;
   const handleStashClick = props.handleStashClick;
+  const [globalMe,] = useContext(MeContext);
 
   const { t } = useTranslation();
 
@@ -80,7 +86,8 @@ function GameStatus(props) {
                                 settings,
                                 v.glyph,
                                 "genericStatus-" + ind + "-" + i,
-                                v.player
+                                v.player,
+                                globalMe
                               )
                             )}`}
                             alt={"color " + v.player}
@@ -176,7 +183,8 @@ function GameStatus(props) {
                               // eslint-disable-next-line no-prototype-builtins
                               s.glyph.hasOwnProperty("player")
                                 ? s.glyph.player
-                                : s.glyph.colour
+                                : s.glyph.colour,
+                              globalMe
                             )
                           )}`}
                           alt=""
@@ -212,7 +220,8 @@ function GameStatus(props) {
                         settings,
                         s.glyph.name,
                         "stack-" + j,
-                        s.glyph.player
+                        s.glyph.player,
+                        globalMe
                       )
                     )}`}
                     alt=""
