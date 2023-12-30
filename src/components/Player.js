@@ -12,6 +12,9 @@ import ActivityMarker from "./ActivityMarker";
 import Stars from "./Player/Stars";
 import Ratings from "./Player/Ratings";
 import Counts from "./Player/Counts";
+import Opponents from "./Player/Opponents";
+import Activity from "./Player/Activity";
+import History from "./Player/History";
 
 export const ProfileContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
@@ -21,16 +24,19 @@ const code2ele = new Map([
     ["stars", {component: Stars, name: "Starred Games"}],
     ["ratings", {component: Ratings, name: "Ratings"}],
     ["counts", {component: Counts, name: "Play Counts"}],
+    ["opps", {component: Opponents, name: "Opponents"}],
+    ["activity", {component: Activity, name: "Activity"}],
+    ["history", {component: History, name: "Game History"}],
 ]);
 
-function Player(props) {
+function Player() {
     const {userid} = useParams();
     const [globalMe, ] = useContext(MeContext);
     const [allUsers,] = useContext(UsersContext);
     const [user, userSetter] = useState(null);
     const [summary, summarySetter] = useState(null);
     const [allRecs, allRecsSetter] = useState([]);
-    const [order, orderSetter] = useStorageState("player-profile-order", ["stars", "ratings", "counts"]);
+    const [order, orderSetter] = useStorageState("player-profile-order", ["stars", "ratings", "counts", "opps", "activity", "history"]);
 
   // eslint-disable-next-line no-unused-vars
   const { t, i18n } = useTranslation();
@@ -142,7 +148,6 @@ function Player(props) {
   }
 
   if (user !== null) {
-    console.log(user);
     return (
         <article id="playerProfile">
             <h1 className="title has-text-centered">
@@ -165,13 +170,12 @@ function Player(props) {
                     <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>
                     <div className="columns is-multiline">
                     {order.map((code) => {
-                        console.log(code);
                         const obj = code2ele.get(code);
                         if (obj !== undefined) {
                             return (
                             <>
-                                <div className="column is-narrow" key={`${code}|column`}>
-                                    <div className="card" key={`${code}|card`}>
+                                <div className="column is-narrow" key={`${code}|column|${userid}`}>
+                                    <div className="card" key={`${code}|card|${userid}`}>
                                         <header className="card-header">
                                             <p className="card-header-title">
                                                 {obj.name}
@@ -189,7 +193,8 @@ function Player(props) {
                                         </header>
                                         <div className="card-content">
                                             <obj.component
-                                                key={`${code}|component`}
+                                                order={order}
+                                                key={`${code}|component|${userid}`}
                                                 handleChallenge={handleNewChallenge.bind(this)}
                                             />
                                         </div>

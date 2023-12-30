@@ -26,6 +26,7 @@ import News from "../components/News";
 import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
 import Stats from "../components/Stats";
+import Players from "../components/Players";
 import Player from "../components/Player";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -132,7 +133,6 @@ function Bones(props) {
     return (
       <HelmetProvider>
         <Helmet>
-          <link rel="canonical" href="https://play.abstractplay.com/" />
           <title>
             {process.env.REACT_APP_REAL_MODE === "production"
               ? "Abstract Play"
@@ -152,6 +152,10 @@ function Bones(props) {
                       <Route
                         path="/games/:metaGame?"
                         element={<MetaContainer token={token} />}
+                      />
+                      <Route
+                        path="/players"
+                        element={<Players />}
                       />
                       <Route
                         path="/player/:userid"

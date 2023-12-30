@@ -6,7 +6,6 @@ import { addResource } from "@abstractplay/gameslib";
 import { MeContext } from "../pages/Skeleton";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
-import { Helmet } from "react-helmet-async";
 // import Gallery from "./MetaContainer/Gallery";
 import Table from "./MetaContainer/Table";
 
@@ -15,11 +14,9 @@ function MetaContainer(props) {
   const [counts, countsSetter] = useState(null);
   const [users, usersSetter] = useState(null);
   const [summary, summarySetter] = useState(null);
+  const [updateCounter, updateCounterSetter] = useState(0);
   const { metaGame } = useParams();
   const { i18n } = useTranslation();
-  const [canonical, canonicalSetter] = useState(
-    "https://play.abstractplay.com/games/"
-  );
   addResource(i18n.language);
 
   useEffect(() => {
@@ -40,7 +37,7 @@ function MetaContainer(props) {
       }
     }
     fetchData();
-  }, []);
+  }, [updateCounter]);
 
   useEffect(() => {
     async function fetchData() {
@@ -71,12 +68,6 @@ function MetaContainer(props) {
     }
     fetchData();
   }, []);
-
-  useEffect(() => {
-    if (metaGame !== undefined) {
-      canonicalSetter(`https://play.abstractplay.com/games/${metaGame}/`);
-    }
-  }, [metaGame]);
 
   let games = [...gameinfo.keys()].sort((a, b) => {
     const na = gameinfo.get(a).name;
@@ -165,10 +156,6 @@ function MetaContainer(props) {
   console.log(games);
   return (
     <Fragment>
-      <Helmet>
-        <link rel="canonical" href={canonical} />
-      </Helmet>
-
       <Table
         metaGame={metaGame}
         counts={counts}
@@ -177,6 +164,7 @@ function MetaContainer(props) {
         toggleStar={toggleStar.bind(this)}
         handleChallenge={handleNewChallenge.bind(this)}
         users={users}
+        updateSetter={updateCounterSetter}
       />
     </Fragment>
   );

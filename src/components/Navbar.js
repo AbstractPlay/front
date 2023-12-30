@@ -103,6 +103,11 @@ function Navbar(props) {
             </Link>
           </div>
           <div className="navbar-item">
+            <Link to="/players" className="navbar-item">
+              {t("Players")}
+            </Link>
+          </div>
+          <div className="navbar-item">
             <Link to="/stats" className="navbar-item">
               {t("Statistics")}
             </Link>

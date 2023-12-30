@@ -157,7 +157,11 @@ function setupGame(
   if (game0.state === undefined)
     throw new Error("Why no state? This shouldn't happen no more!");
   const engine = GameFactory(game0.metaGame, game0.state);
-  moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
+  if (game0.simultaneous) {
+    moveSetter({ ...engine.validateMove("", gameRef.current?.me + 1), rendered: "", move: "" });
+  } else {
+    moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
+  }
   // eslint-disable-next-line no-prototype-builtins
   game0.canPie =
     game0.pie &&
@@ -537,12 +541,18 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
   return movesUpdated;
 }
 
-function setupColors(settings, game, t) {
+function setupColors(settings, game, globalMe) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
     //   } else if (settings.color === "patterns") {
     //     options.patterns = true;
+  }
+  if (settings.color !== "standard" && settings.color !== "blind") {
+    const palette = globalMe.palettes.find(p => p.name === settings.color);
+    if (palette !== undefined) {
+        options.colours = [...palette.colours];
+    }
   }
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
@@ -759,11 +769,12 @@ function doView(
       newfocus
     );
     focusSetter(newfocus);
-    moveSetter({
-      ...gameEngineTmp.validateMove(""),
-      rendered: "",
-      move: "",
-    });
+    if (game.simultaneous) {
+        moveSetter({ ...gameEngineTmp.validateMove("", game.me + 1), rendered: "", move: "" });
+    } else {
+        moveSetter({ ...gameEngineTmp.validateMove(""), rendered: "", move: "" });
+    }
+
     if (newfocus.canExplore && !game.noMoves) {
       movesRef.current = moves;
     }
@@ -830,7 +841,8 @@ function processNewSettings(
   gameRef,
   settingsSetter,
   gameSettingsSetter,
-  userSettingsSetter
+  userSettingsSetter,
+  globalMe
 ) {
   gameSettingsSetter(newGameSettings);
   userSettingsSetter(newUserSettings);
@@ -862,7 +874,7 @@ function processNewSettings(
       newGameSettings === undefined || newGameSettings.rotate === undefined
         ? 0
         : newGameSettings.rotate;
-    setupColors(newSettings, game);
+    setupColors(newSettings, game, globalMe);
     settingsSetter(newSettings);
     return newSettings;
   }
@@ -1194,7 +1206,8 @@ function GameMove(props) {
             gameRef,
             settingsSetter,
             gameSettingsSetter,
-            userSettingsSetter
+            userSettingsSetter,
+            globalMe
           );
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
@@ -1352,7 +1365,7 @@ function GameMove(props) {
 
     async function fetchPublicExploration() {
       explorationFetchedSetter(true);
-
+      console.log("fetching public exploration");
       var url = new URL(API_ENDPOINT_OPEN);
       url.searchParams.append("query", "get_public_exploration");
       url.searchParams.append("game", gameID);
@@ -1364,6 +1377,7 @@ function GameMove(props) {
       } else {
         const result = await res.json();
         if (result !== undefined && result.length > 0) {
+          console.log("got it");
           const data = result.map((d) => {
             if (d && typeof d.tree === "string") {
               d.tree = JSON.parse(d.tree);
@@ -1474,7 +1488,11 @@ function GameMove(props) {
           foc.moveNumber === explorationRef.current.length - 1 &&
           !gameRef.current.canSubmit));
     setStatus(engine, gameRef.current, isPartialSimMove, "", statusRef.current);
-    moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
+    if (game.simultaneous) {
+        moveSetter({ ...engine.validateMove("", gameRef.current.me + 1), rendered: "", move: "" });
+    } else {
+        moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
+    }
   };
 
   function handleReset() {
@@ -1663,6 +1681,13 @@ function GameMove(props) {
           // } else if (settings.color === "patterns") {
           //   options.patterns = true;
         }
+        if ( (settings.color !== "standard") && (settings.color !== "blind") ) {
+            console.log(`Looking for a palette named ${settings.color}`);
+            const palette = globalMe.palettes?.find(p => p.name === settings.color);
+            if (palette !== undefined) {
+                options.colours = [...palette.colours];
+            }
+        }
         if (gameRef.current.stackExpanding) {
           options.boardHover = (row, col, piece) => {
             expand(col, row);
@@ -1722,7 +1747,8 @@ function GameMove(props) {
       gameRef,
       settingsSetter,
       gameSettingsSetter,
-      userSettingsSetter
+      userSettingsSetter,
+      globalMe
     );
     if (game.me > -1) {
       try {
@@ -1758,7 +1784,8 @@ function GameMove(props) {
       gameRef,
       settingsSetter,
       gameSettingsSetter,
-      userSettingsSetter
+      userSettingsSetter,
+      globalMe
     );
     if (newSettings?.display) {
       console.log("settings.display", newSettings.display);

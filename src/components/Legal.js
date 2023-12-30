@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Helmet } from "react-helmet-async";
 import { addResource } from "@abstractplay/gameslib";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -76,9 +75,6 @@ function About(props) {
 
   return (
     <Fragment>
-      <Helmet>
-        <link rel="canonical" href="https://play.abstractplay.com/legal" />
-      </Helmet>
       <article className="content">
         <h1 className="has-text-centered title">{t("Legal")}</h1>
         <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
