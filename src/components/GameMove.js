@@ -816,7 +816,8 @@ function canExploreMove(game, exploration, focus) {
     (!game.gameOver && // game isn't over
       (game.canExplore || (game.canSubmit && focus.exPath.length === 0)) && // exploring (beyond move input) is supported or it is my move and we are just looking at the current position
       exploration !== null &&
-      focus.moveNumber === exploration.length - 1) || // we aren't looking at history
+      focus.moveNumber === exploration.length - 1 && // we aren't looking at history
+      getFocusNode(exploration, focus).toMove !== "" ) || // game isn't over
     (game.gameOver &&
       game.canExplore &&
       focus.moveNumber !== exploration.length - 1) // game is over and exploring is supported
