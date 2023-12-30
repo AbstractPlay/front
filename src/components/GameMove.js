@@ -740,10 +740,10 @@ function doView(
   if (!partialMove) {
     if (
       !game.gameOver ||
-      !gameEngineTmp.sameMove(
+      !(newfocus.exPath.length === 0 && gameEngineTmp.sameMove(
         m,
         explorationRef.current[newfocus.moveNumber + 1].move
-      )
+      ))
     ) {
       const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
       if (game.gameOver)
