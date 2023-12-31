@@ -972,6 +972,7 @@ const populateChecked = (gameRef, engineRef, t, setter) => {
   }
 };
 
+
 function GameMove(props) {
   const [renderrep, renderrepSetter] = useState(null);
   // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
@@ -1005,6 +1006,10 @@ function GameMove(props) {
   const [explorationFetched, explorationFetchedSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
   const [gameRec, gameRecSetter] = useState(undefined);
+  const [showCustomCSS, showCustomCSSSetter] = useState(false);
+  const [customCSS, customCSSSetter] = useStorageState("custom-css", {});
+  const [newCSS, newCSSSetter] = useState("");
+  const [cssActive, cssActiveSetter] = useState(true);
   const [pngExport, pngExportSetter] = useState(undefined);
   const [gameNote, gameNoteSetter] = useState(null);
   const [interimNote, interimNoteSetter] = useState("");
@@ -1112,6 +1117,44 @@ function GameMove(props) {
       showTourSetter(false);
     }
   };
+
+  // initialize customcss modal
+  useEffect(() => {
+    if ( (customCSS !== undefined) && (metaGame in customCSS) && (customCSS[metaGame] !== undefined) ) {
+        newCSSSetter(customCSS[metaGame].css);
+        cssActiveSetter(customCSS[metaGame].active);
+    } else {
+        newCSSSetter("");
+        cssActiveSetter(true);
+    }
+  }, [customCSS, metaGame]);
+
+  // apply (or not) any custom CSS
+  useEffect(() => {
+    if ( (customCSS !== undefined) && (metaGame in customCSS) && (customCSS[metaGame] !== undefined) && (customCSS[metaGame].css !== "") && (customCSS[metaGame].active) ) {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(customCSS[metaGame].css);
+        document.adoptedStyleSheets = [sheet];
+    } else {
+        document.adoptedStyleSheets = [];
+    }
+  }, [customCSS, metaGame]);
+
+  const saveCustomCSS = () => {
+    if ( (metaGame !== null) && (metaGame !== undefined) ) {
+        const newobj = JSON.parse(JSON.stringify(customCSS));
+        if (newCSS === "") {
+            delete newobj[metaGame];
+        } else {
+            newobj[metaGame] = {
+                css: newCSS,
+                active: cssActive
+            }
+        }
+        customCSSSetter(newobj);
+    }
+    showCustomCSSSetter(false);
+  }
 
   useEffect(() => {
     var lng = "en";
@@ -2425,6 +2468,15 @@ function GameMove(props) {
                   <i className="fa fa-search-plus"></i>
                 )}
               </button>
+              <button
+                className="fabtn align-right"
+                onClick={() => {
+                  showCustomCSSSetter(true);
+                }}
+                title={t("CustomCSS")}
+              >
+                  <i className="fa fa-css3"></i>
+              </button>
               {pngExport === undefined ? (
                 ""
               ) : (
@@ -2781,6 +2833,31 @@ function GameMove(props) {
                 </button>
               )}
             </div>
+          </div>
+        </Modal>
+        <Modal
+          show={showCustomCSS}
+          title={t("CustomCSS")}
+          buttons={[
+            { label: t("Save"), action: saveCustomCSS },
+            {
+              label: t("Cancel"),
+              action: () => showCustomCSSSetter(false),
+            },
+          ]}
+        >
+          <div className="content">
+            <p>It is possible to customize the CSS of all instances of this particular game. <strong>This is not something to do lightly!</strong> Do not inject code you either do not understand or have not had vetted by someone you trust. Abstract Play and its developers are not responsible for any mishaps that may occur while using this feature.</p>
+            <p>If you are certain you wish to continue, paste the CSS code below and click Save. If everything blows up, open the developer console and clear the local storage key <code>custom-css</code>, and that should reset everything. See the wiki for documentation, and join us on Discord to discuss.</p>
+          </div>
+          <div className="control">
+            <textarea className="textarea" id="myCustomCSS" placeholder="Paste CSS code here" rows="5" value={newCSS} onChange={(e) => newCSSSetter(e.target.value)} />
+          </div>
+          <div className="control">
+            <label className="radio">
+                <input type="checkbox" name="activeCSS" checked={cssActive} onChange={(e) => cssActiveSetter(e.target.checked)} />
+                Activate custom CSS?
+            </label>
           </div>
         </Modal>
         <canvas

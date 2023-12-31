@@ -244,6 +244,7 @@ function GameMoves(props) {
       document.activeElement.id === "enterAComment" ||
       document.activeElement.id === "enterANote" ||
       document.activeElement.id === "paletteName" ||
+      document.activeElement.id === "myCustomCSS" ||
       exploration === null
     )
       return;
