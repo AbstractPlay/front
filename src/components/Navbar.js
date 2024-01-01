@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
 import { Auth } from "aws-amplify";
-import logo from "../assets/AbstractPlayLogo.svg";
+import logoLight from "../assets/AbstractPlayLogo-light.svg";
+import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
 import { NewsContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
@@ -15,7 +16,7 @@ function Navbar(props) {
   const [news] = useContext(NewsContext);
   const [newsLastSeen] = useStorageState("news-last-seen", 0);
   const [maxNews, maxNewsSetter] = useState(Infinity);
-  const [, colorModeSetter] = useStorageState("color-mode", "light");
+  const [colorMode, colorModeSetter] = useStorageState("color-mode", "light");
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
@@ -61,7 +62,7 @@ function Navbar(props) {
           <Link to="/">
             {process.env.REACT_APP_REAL_MODE === "production" ? (
               <img
-                src={logo}
+                src={colorMode === "light" ? logoLight : logoDark}
                 alt="Abstract Play logo"
                 width="100%"
                 height="auto"
