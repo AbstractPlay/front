@@ -32,6 +32,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
 import TimeAgo from "javascript-time-ago";
+import { useStorageState } from "react-use-storage-state";
+
 // TODO: Adjust locale to user selection, when supported
 TimeAgo.addDefaultLocale(en);
 
@@ -48,6 +50,7 @@ function Bones(props) {
   const [globalMe, globalMeSetter] = useState(null);
   const [users, usersSetter] = useState(null);
   const [news, newsSetter] = useState([]);
+  const [colorMode,] = useStorageState("color-mode", "light");
 
   useEffect(() => {
     const awsconfig = {
@@ -126,6 +129,14 @@ function Bones(props) {
     }
     fetchData();
   }, [newsSetter]);
+
+  // apply stored color mode
+  useEffect(() => {
+    if ( (colorMode !== null) && (colorMode !== undefined) ) {
+        // Sets the custom HTML attribute
+        document.documentElement.setAttribute("color-mode", colorMode);
+    }
+  }, [colorMode]);
 
   console.log("Skeleton rerendering, update=", update);
   if (!authed) return <Spinner />;

@@ -138,12 +138,6 @@ function TableSkeleton(props) {
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      background: "#fff",
-                      zIndex: 10,
-                    }}
                   >
                     {header.isPlaceholder ? null : (
                       <div

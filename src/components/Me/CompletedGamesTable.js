@@ -142,7 +142,7 @@ function CompletedGamesTable(props) {
         cell: (props) => (
           <div className="control">
             <button
-              className="button is-small is-rounded"
+              className="button is-small is-rounded apButtonNeutral"
               onClick={() => handleClearClick(props.row.original.id)}
             >
               Clear

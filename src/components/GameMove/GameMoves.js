@@ -244,6 +244,7 @@ function GameMoves(props) {
       document.activeElement.id === "enterAComment" ||
       document.activeElement.id === "enterANote" ||
       document.activeElement.id === "paletteName" ||
+      document.activeElement.id === "myCustomCSS" ||
       exploration === null
     )
       return;
@@ -730,7 +731,7 @@ function GameMoves(props) {
           </button>
         </div>
         <div className="movesTable" ref={tableRef}>
-          <table className="table is-narrow is-striped">
+          <table className="table apTable is-narrow">
             <tbody>
               <tr ref={headerRef}>{header}</tr>
               {moveRows.map((row, index) => (
@@ -757,7 +758,7 @@ function GameMoves(props) {
         </div>
         <div className="control">
           <div
-            className="button is-small"
+            className="button is-small apButtonNeutral"
             onClick={() =>
               handlePlaygroundExport(getFocusNode(exploration, focus).state)
             }

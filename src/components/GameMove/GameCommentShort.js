@@ -53,7 +53,7 @@ function GameCommentShort(props) {
               ></textarea>
             </div>
             <div className="control">
-              <button className="button is-small" onClick={handleSubmit}>
+              <button className="button is-small apButtonNeutral" onClick={handleSubmit}>
                 {t("Comment")}
               </button>
             </div>

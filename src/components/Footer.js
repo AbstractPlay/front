@@ -17,19 +17,35 @@ function Footer(props) {
       <div className="content has-text-centered">
         <p>
           <a
+            href="https://abstractplay.com/wiki"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Wiki
+          </a>
+          &nbsp;|&nbsp;
+          <a
+            href="https://discord.abstractplay.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Discord
+          </a>
+          &nbsp;|&nbsp;
+          <a
+            href="https://bgg.abstractplay.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            BoardGameGeek
+          </a>
+          &nbsp;|&nbsp;
+          <a
             href="https://github.com/AbstractPlay"
             target="_blank"
             rel="noreferrer"
           >
             GitHub
-          </a>
-          &nbsp;|&nbsp;
-          <a
-            href="https://discord.gg/7dmx7BwRzg"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Discord
           </a>
           <br />
           <Link to="/legal">Terms of Service &amp; Privacy Policy</Link>

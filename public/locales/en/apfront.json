@@ -67,6 +67,7 @@
     "CurrentGamesCount_other": "current games",
     "CurrentGamesList": "Current {{name}} Games",
     "Custom": "Custom",
+    "CustomCSS": "Customize CSS",
     "DebugModal": "Debugging information",
     "DefaultDisplay": "Default display",
     "DisableMoveConfirm": "Ask for confirmation before a move is submitted",
