@@ -17,11 +17,11 @@ function Footer(props) {
       <div className="content has-text-centered">
         <p>
           <a
-            href="https://github.com/AbstractPlay"
+            href="https://abstractplay.com/wiki"
             target="_blank"
             rel="noreferrer"
           >
-            GitHub
+            Wiki
           </a>
           &nbsp;|&nbsp;
           <a
@@ -38,6 +38,14 @@ function Footer(props) {
             rel="noreferrer"
           >
             BoardGameGeek
+          </a>
+          &nbsp;|&nbsp;
+          <a
+            href="https://github.com/AbstractPlay"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
           </a>
           <br />
           <Link to="/legal">Terms of Service &amp; Privacy Policy</Link>
