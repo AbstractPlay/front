@@ -884,10 +884,6 @@ tr.stickyHeader {
   line.aprender-annotation-7003d53491b27,
   line.aprender-annotation-289da774b717b,
   line.aprender-annotation-6a037e3d800d6,
-  polyline.aprender-annotation-3dc45b5962885,
-  polyline.aprender-annotation-7003d53491b27,
-  polyline.aprender-annotation-289da774b717b,
-  polyline.aprender-annotation-6a037e3d800d6,
   marker.aprender-annotation-3dc45b5962885 circle,
   marker.aprender-annotation-289da774b717b circle,
   marker.aprender-annotation-7003d53491b27 circle,
@@ -901,7 +897,11 @@ tr.stickyHeader {
     stroke: var(--svg-label-color);
   }
 
-  /* eject annotations are a little different because they don't have fill */
+  /* eject annotations and polylines are a little different because they don't have fill */
+  polyline.aprender-annotation-3dc45b5962885,
+  polyline.aprender-annotation-7003d53491b27,
+  polyline.aprender-annotation-289da774b717b,
+  polyline.aprender-annotation-6a037e3d800d6,
   path.aprender-annotation-7681581c947d5,
   line.aprender-annotation-e401e58e62dfb
   {
