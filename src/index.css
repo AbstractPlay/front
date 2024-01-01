@@ -110,7 +110,7 @@ table * a {
     text-decoration: underline;
 }
 
-.navbar {
+.navbar, .navbar-menu {
     background-color: var(--main-bg-color);
 }
 
