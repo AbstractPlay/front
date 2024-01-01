@@ -761,7 +761,7 @@ function UserSettingsModal(props) {
         {/********************* Log out *********************/}
         <div className="control" style={{ float: "right" }}>
           <button
-            className="button is-small apButton"
+            className="button is-small apButtonAlert"
             onClick={logout}
             id="logout-button"
           >

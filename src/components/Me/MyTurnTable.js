@@ -127,6 +127,13 @@ function MyTurnTable(props) {
     table.setPageSize(showState);
   }, [showState, table]);
 
+  if ( (data === null) || (data === undefined) || (data.length === 0) ) {
+    return (
+        <div className="content">
+            <p>No games currently need your attention.</p>
+        </div>
+    );
+  } else {
   return (
     <Fragment>
       <table className="table apTable">
@@ -266,6 +273,7 @@ function MyTurnTable(props) {
       </div>
     </Fragment>
   );
+                  }
 }
 
 export default MyTurnTable;

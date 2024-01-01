@@ -35,7 +35,7 @@ const Modal = ({ children, show, title, buttons }) => {
               <button
                 key={`modalButton${i}`}
                 className={`button${
-                  i !== buttons.length - 1 ? " apButton" : ""
+                  i !== buttons.length - 1 ? " apButton" : " apButtonNeutral"
                 }`}
                 onClick={btn.action}
               >

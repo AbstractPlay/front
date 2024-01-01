@@ -34,7 +34,7 @@ function ClipboardCopy({ copyText }) {
         <input className="input" type="text" value={copyText} readOnly />
       </div>
       <div className="control">
-        <button className="button" onClick={handleCopyClick}>
+        <button className="button apButtonNeutral" onClick={handleCopyClick}>
           <span>{isCopied ? "Copied!" : "Copy"}</span>
         </button>
       </div>

@@ -2717,7 +2717,7 @@ function GameMove(props) {
                       )}`}
                       download="AbstractPlay-Debug.json"
                     >
-                      <button className="button">{t("Download")}</button>
+                      <button className="button apButtonNeutral">{t("Download")}</button>
                     </a>
                   </div>
                 </div>
@@ -2851,7 +2851,7 @@ function GameMove(props) {
             <p>If you are certain you wish to continue, paste the CSS code below and click Save. If everything blows up, open the developer console and clear the local storage key <code>custom-css</code>, and that should reset everything. See the wiki for documentation, and join us on Discord to discuss.</p>
           </div>
           <div className="control">
-            <textarea className="textarea" id="myCustomCSS" placeholder="Paste CSS code here" rows="5" value={newCSS} onChange={(e) => newCSSSetter(e.target.value)} />
+            <textarea className="textarea is-small" id="myCustomCSS" placeholder="Paste CSS code here" rows="5" value={newCSS} onChange={(e) => newCSSSetter(e.target.value)} />
           </div>
           <div className="control">
             <label className="radio">

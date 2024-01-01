@@ -1,17 +1,60 @@
 /* Colour definitions */
-:root {
-  --main-bg-color: white;
-  --main-fg-color: #1a3e6f;
-  --main-fg-color-lighter: #c3d6f1;
+:root[color-mode="light"] {
+    --main-bg-color: white;
+    --main-font-color: black;
+    --secondary-font-color: #333;
+    --high-contrast-font-color: var(--main-bg-color);
+    --main-heading-color: #1a3e6f;
+    --main-fg-color: #1a3e6f;
+    --bg-color2: #999999;
+    --secondary-color-1: #ff6633;
+    --secondary-color-1-lighter: #ff8962;
+    --secondary-color-2: #99cccc;
+    --secondary-color-3: #008ca8;
+    --secondary-color-3-lighter: #009fbf;
+    --secondary-color-3-bg: #eefcff;
+    --dropshadow-target-start: rgba(10,10,10,0.1);
+    --dropshadow-target-end: rgba(10,10,10,0.02);
+    --svg-label-color: black;
+    --svg-gridline-color: black;
+    --svg-default-fill: black;
+    --svg-volcano-caps: black;
+    /* Currently unused */
+    /* --main-fg-color-lighter: #c3d6f1; */
+    /* --secondary-color-1-bg: #ffe8e0; */
+    /* --secondary-color-2-lighter: #e6f2f2; */
+}
+
+:root[color-mode="dark"] {
+  --main-bg-color: #222;
+  --main-font-color: #e6f2f2;
+  --secondary-font-color: #c3d6f1;
+  --high-contrast-font-color: var(--main-font-color);
+  --main-heading-color: #008ca8;
+  --main-fg-color: #009fbf;
   --bg-color2: #999999;
   --secondary-color-1: #ff6633;
   --secondary-color-1-lighter: #ff8962;
-  --secondary-color-1-bg: #ffe8e0;
   --secondary-color-2: #99cccc;
-  --secondary-color-2-lighter: #e6f2f2;
   --secondary-color-3: #008ca8;
   --secondary-color-3-lighter: #009fbf;
-  --secondary-color-3-bg: #eefcff;
+  --secondary-color-3-bg: #333;
+  --svg-label-color: var(--main-fg-color);
+  --svg-gridline-color: var(--main-font-color);
+  --svg-default-fill: var(--main-font-color);
+  --svg-volcano-caps: #666;
+  --dropshadow-target-start: rgba(245,245,245,0.1);
+  --dropshadow-target-end: rgba(245,245,245,0.02);
+}
+
+/* Any element with the class "light--hidden" will be hidden when the site is set to Light Mode */
+:root[color-mode="light"] .light--hidden {
+    display: none;
+}
+
+/* Any element with the class "dark--hidden" will be hidden when the site is set to Dark Mode */
+:root[color-mode="dark"] .dark--hidden {
+    display: none;
 }
 
 /* Overall font definitions */
@@ -40,6 +83,7 @@ textarea {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--main-bg-color);
+  color: var(--main-font-color);
 }
 
 html {
@@ -66,10 +110,77 @@ table * a {
     text-decoration: underline;
 }
 
+.navbar {
+    background-color: var(--main-bg-color);
+}
+
+a.navbar-item:hover {
+    background-color: var(--secondary-color-3-bg);
+}
+
+.navbar-item {
+    color: var(--main-font-color);
+}
+
+.title, .subtitle {
+    color: var(--main-heading-color);
+}
+
+.content .title, .content .subtitle {
+    color: var(--main-heading-color);
+}
+
+
+.checkbox:hover, .radio:hover {
+    color: var(--secondary-font-color);
+}
+
 /* Add a little bit of space after checkboxes and radio buttons */
 input[type="checkbox"],
 input[type="radio"] {
   margin-right: 0.25em;
+}
+
+strong {
+    color: var(--main-font-color);
+}
+
+.label {
+    color: var(--main-fg-color);
+}
+
+.footer {
+    background-color: var(--secondary-color-3-bg);
+}
+
+.modal-card-head, .modal-card-foot {
+    background-color: var(--secondary-color-3-bg);
+}
+
+.modal-card-body {
+    background-color: var(--main-bg-color);
+}
+
+.modal-card-body h2 {
+    color: var(--main-font-color);
+}
+
+.modal-card-title {
+    color: var(--main-fg-color);
+}
+
+.card {
+    background-color: var(--main-bg-color);
+    box-shadow: 0 0.5em 1em -0.125em var(--dropshadow-target-start), 0 0 0 1px var(--dropshadow-target-end);
+    color: var(--main-font-color);
+}
+
+.card-header {
+    box-shadow: 0 0.125em 0.25em var(--dropshadow-target-start);
+}
+
+.card-header-title {
+    color: var(--main-font-color);
 }
 
 /* Only used to colour buttons until I can figure out how to override Bulma colours */
@@ -79,12 +190,12 @@ input[type="radio"] {
     var(--secondary-color-3-lighter) 0%,
     var(--secondary-color-3) 100%
   );
-  color: white;
+  color: var(--high-contrast-font-color);
 }
 
 .apButton:hover {
   background: var(--main-fg-color);
-  color: white;
+  /* color: var(--high-contrast-font-color); */
 }
 
 .apButtonAlert {
@@ -93,13 +204,28 @@ input[type="radio"] {
     var(--secondary-color-1-lighter) 0%,
     var(--secondary-color-1) 100%
   );
-  color: white;
+  color: var(--high-contrast-font-color);
 }
 
 .apButtonAlert:hover {
   background: var(--main-fg-color);
-  color: white;
+  /* color: var(--main-font-color); */
 }
+
+.apButtonNeutral {
+    background: linear-gradient(
+      180deg,
+      var(--secondary-color-3-bg) 0%
+      var(--main-bg-color) 100%,
+    );
+    color: var(--main-font-color);
+  }
+
+  .apButtonNeutral:hover {
+    background: var(--bg-color2);
+    color: var(--main-font-color);
+  }
+
 
 .inlineButton {
   margin-left: 1em;
@@ -111,7 +237,7 @@ input[type="radio"] {
 }
 
 .lastMove {
-  border: 1px solid black;
+  border: 1px solid var(--main-fg-color);
 }
 
 /* Used to create headings with lines on either side */
@@ -149,30 +275,6 @@ input[type="radio"] {
   position: relative;
   bottom: 2px;
   padding-right: 0.7em;
-}
-
-/* Adds colours to the list tables that appear on certain pages */
-#TableListContainer > table {
-  border-collapse: collapse;
-  margin: auto;
-  width: auto;
-}
-
-#TableListContainer > table th {
-  border: 1px solid var(--main-fg-color-lighter);
-  text-align: center;
-  padding: 8px;
-  background-color: var(--secondary-color-1-bg);
-}
-
-#TableListContainer > table td {
-  border: 1px solid var(--main-fg-color-lighter);
-  text-align: center;
-  padding: 8px;
-}
-
-#TableListContainer > table tr:nth-child(even) {
-  background-color: var(--secondary-color-3-bg);
 }
 
 /* Leaving the board and stack styles here for now until I better understand it */
@@ -240,7 +342,7 @@ th .player {
 }
 
 .currentState {
-  color: black;
+  color: var(--main-font-color);
 }
 
 .exploreState {
@@ -274,7 +376,8 @@ th .player {
 }
 
 .gameMoveFocus {
-  background-color: #bbb;
+  background-color: var(--bg-color2);
+  color: var(--secondary-color-3-bg);
 }
 
 .variation-list {
@@ -335,7 +438,7 @@ th .player {
 }
 
 .fabtn {
-  background-color: white;
+  background-color: var(--main-bg-color);
   border: none;
   color: var(--bg-color2);
   cursor: pointer;
@@ -362,7 +465,7 @@ th .player {
   left: 50%;
   white-space: nowrap;
   background-color: var(--bg-color2);
-  color: black;
+  color: var(--main-font-color);
   border-radius: 6px;
   padding: 5px 0.5em;
   position: absolute;
@@ -390,7 +493,8 @@ th .player {
 .movesTable th {
   top: 0;
   position: sticky;
-  background: white;
+  background: inherit;
+  color: inherit;
 }
 
 .chatTable {
@@ -464,7 +568,7 @@ th .player {
 /* Colours the buttons in the move tree button bar */
 #MoveTreeBtnBar > button {
   background-color: var(--main-fg-color);
-  color: white;
+  color: var(--high-contrast-font-color);
   /* Have to size them because otherwise the invisible tooltip text leads to mixed sizes */
   width: 1.5em;
 }
@@ -524,8 +628,35 @@ th .player {
     color: #ffdf00;
 }
 
+.table {
+    background-color: var(--main-bg-color);
+    color: var(--main-font-color);
+}
+
 .apTable {
+    background-color: var(--main-bg-color);
+    color: var(--main-font-color);
     font-size: smaller;
+}
+
+.apTable thead th {
+    color: var(--main-font-color);
+}
+
+tr.stickyHeader {
+    position: sticky;
+    background: var(--main-bg-color);
+    top: 0;
+    z-index: 10;
+}
+
+.content table thead th {
+    color: var(--main-font-color);
+}
+
+.input, .select select, .textarea {
+    background-color: var(--main-bg-color);
+    color: var(--main-font-color);
 }
 
 .apTable tbody tr:nth-child(even) {
@@ -535,6 +666,7 @@ th .player {
 .apTable * .sortable {
     cursor: pointer;
     user-select: none;
+    color: inherit;
 }
 
 .apTable tr.newChat {
@@ -695,4 +827,169 @@ th .player {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* Game board customimzation for light/dark mode! */
+  /* background color */
+  div#svg, div#stack {
+    background-color: var(--main-bg-color);
+  }
+
+  /* all labels */
+  g#labels text {
+    color: var(--svg-label-color);
+    fill: var(--svg-label-color);
+  }
+
+  /* labels for areas below the board */
+  .aprender-area-label {
+    color: var(--svg-label-color);
+    fill: var(--svg-label-color);
+  }
+
+  /* all gridlines */
+  g#gridlines line:not([class]), g#gridlines rect:not([class]) {
+    stroke: var(--svg-gridline-color);
+  }
+
+  g#gridlines circle:not([class]) {
+    stroke: var(--svg-gridline-color);
+    fill: var(--svg-gridline-color);
+  }
+
+  /* gridlines for hex-of-hex, hex-slanted, and hex-odd/even boards */
+  symbol#hex-symbol polygon {
+    fill: var(--svg-default-fill);
+    opacity: 0.25;
+    stroke: var(--svg-default-fill);
+  }
+
+  /* gridlines for sowing boards */
+  symbol#pit-symbol circle {
+    stroke: var(--svg-gridline-color);
+  }
+
+  symbol#square-pit-symbol rect, symbol#end-pit-symbol rect {
+    stroke: var(--svg-gridline-color);
+  }
+
+  /* colours of sowing numerals */
+  symbol[id^="_pips_numeral_"] text {
+    color: var(--svg-gridline-color);
+    fill: var(--svg-gridline-color);
+  }
+
+  /* default black annotation line with possible arrow */
+  line.aprender-annotation-3dc45b5962885,
+  line.aprender-annotation-7003d53491b27,
+  line.aprender-annotation-289da774b717b,
+  line.aprender-annotation-6a037e3d800d6,
+  polyline.aprender-annotation-3dc45b5962885,
+  polyline.aprender-annotation-7003d53491b27,
+  polyline.aprender-annotation-289da774b717b,
+  polyline.aprender-annotation-6a037e3d800d6,
+  marker.aprender-annotation-3dc45b5962885 circle,
+  marker.aprender-annotation-289da774b717b circle,
+  marker.aprender-annotation-7003d53491b27 circle,
+  marker.aprender-annotation-7681581c947d5 circle,
+  marker.aprender-annotation-3dc45b5962885 path,
+  marker.aprender-annotation-7003d53491b27 path,
+  marker.aprender-annotation-289da774b717b path,
+  marker.aprender-annotation-7681581c947d5 path
+  {
+    fill: var(--svg-label-color);
+    stroke: var(--svg-label-color);
+  }
+
+  /* eject annotations are a little different because they don't have fill */
+  path.aprender-annotation-7681581c947d5,
+  line.aprender-annotation-e401e58e62dfb
+  {
+    stroke: var(--svg-label-color);
+  }
+
+  /* default black enter/exit annotation */
+  rect.aprender-annotation-98c266befaf0d,
+  rect.aprender-annotation-e401e58e62dfb
+  {
+    stroke: var(--svg-label-color);
+  }
+
+  /* Fence markers (Fendo) */
+  line.aprender-marker-1d39c998ed2a8 {
+    stroke: var(--svg-gridline-color);
+  }
+
+  /* default button bars (Alfred's Wyke) */
+  symbol.aprender-button-ee2fc998381cb rect {
+    stroke: var(--svg-gridline-color);
+  }
+  symbol.aprender-button-ee2fc998381cb text {
+    fill: var(--svg-gridline-color);
+  }
+
+  /* Alfred's Wyke pieces */
+  symbol._wyke-internal rect {
+    stroke: var(--svg-gridline-color);
+  }
+
+  /* Amazons */
+  symbol#aprender-glyph-69938dc480dca rect {
+    fill: var(--svg-default-fill);
+  }
+
+  /* circle markers/dots */
+  circle.aprender-marker-2feb7d348620a,
+  circle.aprender-marker-62d0c7517c33e,
+  circle.aprender-annotation-62d0c7517c33e
+  {
+    fill: var(--svg-default-fill);
+  }
+
+  /* stacking-tiles tile borders */
+  rect[class^="aprender-tile-"], rect[class*="aprender-tile-"] {
+    stroke: var(--high-contrast-font-color);
+  }
+
+  /* Generatorb orbs */
+  symbol#aprender-glyph-da79a6f4def08 * path,
+  symbol#aprender-glyph-7a79a6f5634bc * path {
+    stroke: var(--svg-default-fill);
+  }
+
+  /* Homeworlds stash bar */
+  g#stash text {
+    fill: var(--svg-gridline-color);
+  }
+
+  g#stash rect {
+    stroke: var(--svg-gridline-color);
+  }
+
+  symbol#aprender-glyph-aa22a95b2368e [data-playerfill=true] {
+    fill: var(--svg-default-fill)
+  }
+
+  /* Volcano caps */
+  symbol#aprender-glyph-389d5741cdfe1 [data-playerstroke=true] {
+    stroke: var(--svg-volcano-caps);
+  }
+
+  /* Loose text labels in volcano game areas */
+  svg#theBoardSVG > text {
+    fill: var(--svg-label-color);
+  }
+
+  /* Wizard's Garden labels */
+  text.aprender-marker-3935a634ac317,
+  text.aprender-marker-7de714aa4960a,
+  text.aprender-marker-4d768b7f82802,
+  text.aprender-marker-4e0da245977af
+  {
+    fill: var(--svg-label-color);
+  }
+
+  /* Wizard's Garden black piece */
+  symbol#aprender-glyph-a46a8bca86d66 [data-playerfill=true] {
+    fill: var(--svg-volcano-caps);
   }

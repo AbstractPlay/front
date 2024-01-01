@@ -1979,7 +1979,7 @@ function Playground(props) {
                       )}`}
                       download="AbstractPlay-Debug.json"
                     >
-                      <button className="button">{t("Download")}</button>
+                      <button className="button apButtonNeutral">{t("Download")}</button>
                     </a>
                   </div>
                 </div>

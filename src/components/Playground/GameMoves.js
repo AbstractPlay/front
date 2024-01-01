@@ -689,7 +689,7 @@ function GameMoves(props) {
           </button>
         </div>
         <div className="movesTable" ref={tableRef}>
-          <table className="table is-narrow is-striped">
+          <table className="table apTable is-narrow">
             <tbody>
               <tr ref={headerRef}>{header}</tr>
               {moveRows.map((row, index) => (

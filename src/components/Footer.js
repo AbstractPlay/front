@@ -25,11 +25,19 @@ function Footer(props) {
           </a>
           &nbsp;|&nbsp;
           <a
-            href="https://discord.gg/7dmx7BwRzg"
+            href="https://discord.abstractplay.com"
             target="_blank"
             rel="noreferrer"
           >
             Discord
+          </a>
+          &nbsp;|&nbsp;
+          <a
+            href="https://bgg.abstractplay.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            BoardGameGeek
           </a>
           <br />
           <Link to="/legal">Terms of Service &amp; Privacy Policy</Link>

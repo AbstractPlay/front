@@ -15,6 +15,7 @@ function Navbar(props) {
   const [news] = useContext(NewsContext);
   const [newsLastSeen] = useStorageState("news-last-seen", 0);
   const [maxNews, maxNewsSetter] = useState(Infinity);
+  const [, colorModeSetter] = useStorageState("color-mode", "light");
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
@@ -40,6 +41,18 @@ function Navbar(props) {
       /* Not authenticated, and that's OK */
     });
   }, []);
+
+  const toggleColorMode = (e) => {
+    // Switch to Light Mode
+    if (e.currentTarget.classList.contains("light--hidden")) {
+		//Sets the user's preference in local storage
+		colorModeSetter("light");
+		return;
+	} else {
+        // Sets the user's preference in local storage
+        colorModeSetter("dark");
+    }
+};
 
   return (
     <nav className="navbar" style={{ minHeight: "10vh" }}>
@@ -130,6 +143,25 @@ function Navbar(props) {
           </div>
         </div>
         <div className="navbar-end">
+          <div className="navbar-item">
+            {/* <!--- Light mode button ---> */}
+            <button
+                class="button is-small apButtonNeutral light--hidden"
+                aria-label="Toggle light mode"
+                onClick={toggleColorMode}
+            >
+                Toggle Light Mode
+            </button>
+
+            {/* <!--- Dark mode button ---> */}
+            <button
+                class="button is-small apButtonNeutral dark--hidden"
+                aria-label="Toggle dark mode"
+                onClick={toggleColorMode}
+            >
+                Toggle Dark Mode
+            </button>
+          </div>
           <div className="navbar-item tourSettings">
             <LogInOutButton />
           </div>
