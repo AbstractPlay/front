@@ -195,7 +195,7 @@ strong {
 
 .apButton:hover {
   background: var(--main-fg-color);
-  /* color: var(--high-contrast-font-color); */
+  color: var(--high-contrast-font-color);
 }
 
 .apButtonAlert {
@@ -209,7 +209,7 @@ strong {
 
 .apButtonAlert:hover {
   background: var(--main-fg-color);
-  /* color: var(--main-font-color); */
+  color: var(--high-contrast-font-color);
 }
 
 .apButtonNeutral {
@@ -218,12 +218,12 @@ strong {
       var(--secondary-color-3-bg) 0%
       var(--main-bg-color) 100%,
     );
-    color: var(--main-font-color);
+    color: var(--high-contrast-font-color);
   }
 
   .apButtonNeutral:hover {
     background: var(--bg-color2);
-    color: var(--main-font-color);
+    color: var(--high-contrast-font-color);
   }
 
 
@@ -993,4 +993,3 @@ tr.stickyHeader {
   symbol#aprender-glyph-a46a8bca86d66 [data-playerfill=true] {
     fill: var(--svg-volcano-caps);
   }
-
