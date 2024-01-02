@@ -82,7 +82,7 @@ function Stars({handleChallenge}) {
             <TableSkeleton
                 data={data}
                 columns={columns}
-                sort={[{ id: "name", desc: true }]}
+                sort={[{ id: "name", desc: false }]}
             />
         </>
       );
