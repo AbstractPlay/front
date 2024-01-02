@@ -213,11 +213,12 @@ strong {
 }
 
 .apButtonNeutral {
-    background: linear-gradient(
+    /* background: linear-gradient(
       180deg,
       var(--secondary-color-3-bg) 0%
       var(--main-bg-color) 100%,
-    );
+    ); */
+    background: var(--bg-color2);
     color: var(--high-contrast-font-color);
   }
 
