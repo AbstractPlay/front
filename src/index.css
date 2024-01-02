@@ -218,8 +218,8 @@ strong {
       var(--secondary-color-3-bg) 0%
       var(--main-bg-color) 100%,
     ); */
-    background: var(--bg-color2);
-    color: var(--high-contrast-font-color);
+    background: var(--main-bg-color);
+    color: var(--main-font-color);
   }
 
   .apButtonNeutral:hover {
