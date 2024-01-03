@@ -552,6 +552,9 @@ function setupColors(settings, game, globalMe) {
     const palette = globalMe.palettes.find(p => p.name === settings.color);
     if (palette !== undefined) {
         options.colours = [...palette.colours];
+        while (options.colours.length < 10) {
+            options.colours.push("#fff");
+        }
     }
   }
   game.colors = game.players.map((p, i) => {
@@ -1729,6 +1732,9 @@ function GameMove(props) {
             const palette = globalMe.palettes?.find(p => p.name === settings.color);
             if (palette !== undefined) {
                 options.colours = [...palette.colours];
+                while (options.colours.length < 10) {
+                    options.colours.push("#fff");
+                }
             }
         }
         if (gameRef.current.stackExpanding) {
