@@ -101,6 +101,10 @@ a {
   color: inherit;
 }
 
+a:hover {
+    color: var(--secondary-font-color);
+}
+
 .content * a {
   text-decoration: underline;
 }
