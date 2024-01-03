@@ -255,22 +255,31 @@ function MoveEntry(props) {
                 <div />
               ) : (
                 <Fragment>
-                  <div className="select is-small">
-                    <select
-                      name="moves"
-                      id="selectmove"
-                      value=""
-                      onChange={(e) => handleMove(e.target.value)}
-                    >
-                      <option value="">{t("ChooseMove")}</option>
-                      {moves.sort(sortLenAlpha).map((move, index) => {
-                        return (
-                          <option key={index} value={move}>
-                            {move}
-                          </option>
-                        );
-                      })}
-                    </select>
+                <div className="field is-grouped">
+                  <div className="control">
+                    <div className="select is-small">
+                        <select
+                        name="moves"
+                        id="selectmove"
+                        value=""
+                        onChange={(e) => handleMove(e.target.value)}
+                        >
+                        <option value="">{t("ChooseMove")}</option>
+                        {moves.sort(sortLenAlpha).map((move, index) => {
+                            return (
+                            <option key={index} value={move}>
+                                {move}
+                            </option>
+                            );
+                        })}
+                        </select>
+                    </div>
+                  </div>
+                  {( (! Array.isArray(moves)) || (! moves.includes("pass")) ) ? null :
+                    <div className="control">
+                        <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
+                    </div>
+                  }
                   </div>
                   <p className="lined">
                     <span>{t("Or")}</span>
