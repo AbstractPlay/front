@@ -121,6 +121,7 @@ function Bones(props) {
       const result = await fetch("data/news.json");
       if (result.status !== 200) {
         console.log(`Unable to fetch news: ${JSON.stringify(result.status)}`);
+        newsSetter([]);
       } else {
         const json = await result.json();
         json.sort((a, b) => b.time - a.time);
@@ -128,7 +129,7 @@ function Bones(props) {
       }
     }
     fetchData();
-  }, [newsSetter]);
+  }, []);
 
   // apply stored color mode
   useEffect(() => {

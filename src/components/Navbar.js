@@ -30,7 +30,7 @@ function Navbar(props) {
     } else {
       maxNewsSetter(Infinity);
     }
-  }, [maxNewsSetter, news]);
+  }, [news]);
 
   useEffect(() => {
     async function fetchAuth() {
