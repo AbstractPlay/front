@@ -134,7 +134,7 @@ function setupGame(
   game0.name = info.name;
   game0.simultaneous =
     info.flags !== undefined && info.flags.includes("simultaneous");
-  game0.pie = info.flags !== undefined && info.flags.includes("pie");
+  game0.pie = info.flags !== undefined && (info.flags.includes("pie") || info.flags.includes("pie-even") );
   game0.canCheck = info.flags !== undefined && info.flags.includes("check");
   game0.sharedPieces =
     info.flags !== undefined && info.flags.includes("shared-pieces");
