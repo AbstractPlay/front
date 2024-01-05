@@ -139,14 +139,6 @@ function Bones(props) {
     }
   }, [colorMode]);
 
-  // apply stored color mode
-  useEffect(() => {
-    if ( (colorMode !== null) && (colorMode !== undefined) ) {
-        // Sets the custom HTML attribute
-        document.documentElement.setAttribute("color-mode", colorMode);
-    }
-  }, [colorMode]);
-
   console.log("Skeleton rerendering, update=", update);
   if (!authed) return <Spinner />;
   else
