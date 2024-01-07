@@ -999,3 +999,8 @@ tr.stickyHeader {
   symbol#aprender-glyph-a46a8bca86d66 [data-playerfill=true] {
     fill: var(--svg-volcano-caps);
   }
+
+  /* Mattock: invert blocked cell color */
+  /* div._meta_mattock polygon.aprender-marker-f47325856bcb8  {
+    fill: var(--svg-default-fill);
+  } */

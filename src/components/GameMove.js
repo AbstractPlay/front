@@ -30,6 +30,7 @@ import UserChats from "./GameMove/UserChats";
 import { Canvg } from "canvg";
 import Joyride, { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
+import { toast } from "react-toastify";
 
 function useQueryString() {
   return new URLSearchParams(useLocation().search);
@@ -703,7 +704,9 @@ function doView(
       game.automove &&
       isExplorer(explorer, me)
     ) {
+      let automoved = false;
       while (moves.length === 1) {
+        automoved = true;
         if (
           !game.gameOver ||
           !gameEngineTmp.sameMove(
@@ -721,6 +724,9 @@ function doView(
         m = moves[0];
         gameEngineTmp.move(m, { partial: partialMove || simMove });
         moves = gameEngineTmp.moves();
+      }
+      if (automoved) {
+        toast("At least one forced move was automatically made. Review the move tree to see each individual state.")
       }
     }
   } catch (err) {
@@ -2389,14 +2395,14 @@ function GameMove(props) {
               ></div>
             )}
             {gameRef.current?.stackExpanding ? (
-              <div className="board">
+              <div className={`board _meta_${metaGame}`}>
                 <div className="stack" id="stack" ref={stackImage}></div>
                 <div className="stackboard" id="svg" ref={boardImage}></div>
               </div>
             ) : (
               <div
                 className={
-                  isZoomed ? "board tourBoard" : "board tourBoard unZoomedBoard"
+                  isZoomed ? `board tourBoard _meta_${metaGame}` : `board tourBoard unZoomedBoard _meta_${metaGame}`
                 }
                 id="svg"
                 ref={boardImage}

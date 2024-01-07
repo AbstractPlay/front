@@ -1781,13 +1781,15 @@ function Playground(props) {
               ></div>
             )}
             {gameRef.current?.stackExpanding ? (
-              <div className="board">
+              <div className={`board _meta_${metaGame}`}>
                 <div className="stack" id="stack" ref={stackImage}></div>
                 <div className="stackboard" id="svg" ref={boardImage}></div>
               </div>
             ) : (
               <div
-                className={isZoomed ? "board" : "board unZoomedBoard"}
+                className={
+                    isZoomed ? `board tourBoard _meta_${metaGame}` : `board tourBoard unZoomedBoard _meta_${metaGame}`
+                }
                 id="svg"
                 ref={boardImage}
               ></div>
