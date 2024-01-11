@@ -3,7 +3,7 @@ const API_ENDPOINT =
 
 module.exports = {
   COGNITO_USER_POOL_ID: "us-east-1_YCjgSZHJm",
-  COGNITO_DOMAIN: "abstractplaylogin.auth.us-east-1.amazoncognito.com",
+  COGNITO_DOMAIN: "auth.abstractplay.com", // "abstractplaylogin.auth.us-east-1.amazoncognito.com",
   COGNITO_APPID: "2isan3ctk1aabt2v6r6aptlpg",
   COGNITO_COOKIE_DOMAIN: "play.abstractplay.com",
   COGNITO_REDIRECT_LOGIN: "https://play.abstractplay.com",
