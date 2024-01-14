@@ -76,7 +76,7 @@ function NewChallengeModal(props) {
             usersSetter([...allUsers]);
         }
     }
-  }, [allUsers, metaGame, gameinfo]);
+  }, [allUsers, metaGame]);
 
   useEffect(() => {
     const now = (new Date()).getTime();
