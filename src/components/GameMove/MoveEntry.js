@@ -1,5 +1,8 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useContext, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { MeContext } from "../../pages/Skeleton";
+import { API_ENDPOINT_AUTH } from "../../config";
+import { Auth } from "aws-amplify";
 
 function showMilliseconds(ms) {
   let positive = true;
@@ -51,6 +54,7 @@ function MoveEntry(props) {
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
+  const [globalMe,] = useContext(MeContext);
 
   function getFocusNode(exp, foc) {
     let curNode = exp[foc.moveNumber];
@@ -75,6 +79,39 @@ function MoveEntry(props) {
       return a.length - b.length;
     }
   };
+
+  const pingBot = useCallback(
+    async () => {
+      if (globalMe !== undefined) {
+        // console.log(`Pinging bot in the following game:\n${JSON.stringify(game, null, 2)}`);
+        const usr = await Auth.currentAuthenticatedUser();
+        const token = usr.signInUserSession.idToken.jwtToken;
+        try {
+          const res = await fetch(API_ENDPOINT_AUTH, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              query: "ping_bot",
+              pars: {
+                metaGame: game.metaGame,
+                gameid: game.id,
+              },
+            }),
+          });
+          const result = await res.json();
+          if (result && result.statusCode && result.statusCode !== 200)
+            console.log("Ping unsuccessful");
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    },
+    [globalMe, game]
+  );
 
   useEffect(() => {
     if (move.valid && move.complete === 0 && move.move.length > 0) {
@@ -205,6 +242,7 @@ function MoveEntry(props) {
           <span className="playerName">{mover}</span>
         </p>
         {uiState === 0 && toMove !== "" ? (
+        <>
           <table className="table">
             <caption className="tooltipped">
               {t("TimeRemaining")}
@@ -235,6 +273,12 @@ function MoveEntry(props) {
               )}
             </tbody>
           </table>
+          {( (! mover.includes("(Bot)")) || (!globalMe) || (globalMe.admin !== true) ) ? null : (
+            <div className="control">
+                <button className="button is-small apButtonNeutral" onClick={pingBot}>Ping Bot</button>
+            </div>
+          )}
+        </>
         ) : (
           ""
         )}

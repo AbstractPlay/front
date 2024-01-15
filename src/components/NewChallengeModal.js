@@ -14,6 +14,8 @@ import { MeContext, UsersContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 
+const aiaiUserID = "SkQfHAjeDxs8eeEnScuYA";
+
 function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
   const handleNewChallenge = props.handleChallenge;
@@ -58,11 +60,23 @@ function NewChallengeModal(props) {
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const groupVariantsRef = useRef({});
   const [globalMe] = useContext(MeContext);
-  const [users] = useContext(UsersContext);
+  const [allUsers] = useContext(UsersContext);
+  const [users, usersSetter] = useState([]);
 
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
+
+  useEffect(() => {
+    if ( (allUsers !== null) && (metaGame !== null) ) {
+        const info = gameinfo.get(metaGame);
+        if (! info.flags.includes("aiai")) {
+            usersSetter([...allUsers].filter(u => u.id !== aiaiUserID));
+        } else {
+            usersSetter([...allUsers]);
+        }
+    }
+  }, [allUsers, metaGame]);
 
   useEffect(() => {
     const now = (new Date()).getTime();
