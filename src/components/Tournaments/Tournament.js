@@ -81,7 +81,6 @@ function Tournament(props) {
   const { t } = useTranslation();
   const [tournament, tournamentSetter] = useState(null);
   const [divisions, divisionsSetter] = useState([]);
-  const [error, errorSetter] = useState(false);
   const { tournamentid } = useParams();
   const { metaGame } = useParams();
 
@@ -96,7 +95,6 @@ function Tournament(props) {
       if (status !== 200) {
         const result = await res.json();
         console.log(JSON.parse(result.body));
-        errorSetter(true);
       } else {
         const data = await res.json();
         let divisions = processData(data.tournament[0], data.tournamentPlayers, data.tournamentGames);
@@ -105,7 +103,7 @@ function Tournament(props) {
       }
     }
     fetchData();
-  }, [tournamentid]);
+  }, [tournamentid, metaGame]);
 
   const metaGameName = tournament ? gameinfo.get(tournament.metaGame)?.name : "";
   const variants = tournament ? tournament.variants.join(", ") : "";

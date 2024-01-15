@@ -4,9 +4,9 @@ import React, {
   useEffect,
   useContext,
   useCallback,
-  Spinner,
   Fragment
 } from "react";
+import Spinner from "../Spinner";
 import { cloneDeep } from "lodash";
 import { useTranslation } from "react-i18next";
 import { MeContext } from "../../pages/Skeleton";
@@ -132,7 +132,6 @@ function NewTournamentModal(props) {
   let groupData = [];
   let nonGroupData = [];
   if (metaGame !== null) {
-    const info = gameinfo.get(metaGame);
     if (allvariants && allvariants !== undefined) {
       const groups = [
         ...new Set(

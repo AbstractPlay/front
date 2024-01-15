@@ -23,7 +23,6 @@ function Tournaments(props) {
   const [showNewTournamentModal, showNewTournamentModalSetter] = useState(false);
   const [tournaments, tournamentsSetter] = useState([]);
   const [tournamentsToArchive, tournamentsToArchiveSetter] = useState(false);
-  const [error, errorSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
   const [sorting, setSorting] = useState([{ id: "metaGame", desc: false }]);
   const [openTournamentsShowState, openTournamentsShowStateSetter] = useStorageState("open-tournaments-show", 20);
@@ -41,7 +40,6 @@ function Tournaments(props) {
       if (status !== 200) {
         const result = await res.json();
         console.log(JSON.parse(result.body));
-        errorSetter(true);
       } else {
         const data = await res.json();
         let newtournaments = data.tournaments.map((t) => {return {...t, players: []}});
@@ -144,7 +142,7 @@ function Tournaments(props) {
           updateSetter(update + 1);
         }
     } catch (error) {
-      errorSetter(error);
+      console.log(error);
     }
   };
 
@@ -173,7 +171,7 @@ function Tournaments(props) {
         updateSetter(update + 1);
       }
     } catch (error) {
-      errorSetter(error);
+      console.log(error);
     }
   };
 
@@ -202,7 +200,7 @@ function Tournaments(props) {
         updateSetter(update + 1);
       }
     } catch (error) {
-      errorSetter(error);
+      console.log(error);
     }
   };
 
