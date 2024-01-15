@@ -112,6 +112,11 @@ function Navbar(props) {
             </>
           )}
           <div className="navbar-item">
+            <Link to="/tournaments" className="navbar-item">
+              {t("Tournament.Tournaments")}
+            </Link>
+          </div>
+          <div className="navbar-item">
             <Link to="/games" className="navbar-item">
               {t("Games")}
             </Link>
