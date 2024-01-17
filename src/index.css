@@ -476,6 +476,7 @@ th .player {
   padding: 5px 0.5em;
   position: absolute;
   z-index: 1;
+  font-weight: 400;
 }
 
 .tooltipped:hover .tooltiptext {
