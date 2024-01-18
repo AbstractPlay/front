@@ -177,14 +177,6 @@ function Bones(props) {
                         element={<Player />}
                       />
                       <Route
-                        path="/players"
-                        element={<Players />}
-                      />
-                      <Route
-                        path="/player/:userid"
-                        element={<Player />}
-                      />
-                      <Route
                         path="/challenges/:metaGame"
                         element={<StandingChallenges />}
                       />
@@ -192,9 +184,9 @@ function Bones(props) {
                         path="/listgames/:gameState/:metaGame"
                         element={<ListGames />}
                       />
-                      <Route 
-                        path="/ratings/:metaGame" 
-                        element={<Ratings />} 
+                      <Route
+                        path="/ratings/:metaGame"
+                        element={<Ratings />}
                       />
                       <Route
                         path="/tournament/:metaGame/:tournamentid"
@@ -204,9 +196,9 @@ function Bones(props) {
                         path="/tournament/:tournamentid"
                         element={<Tournament />}
                       />
-                      <Route 
-                        path="/tournamenthistory/:metaGame" 
-                        element={<TournamentsOld />} 
+                      <Route
+                        path="/tournamenthistory/:metaGame"
+                        element={<TournamentsOld />}
                       />
                       <Route
                         path="/move/:metaGame/:cbits/:gameID"
