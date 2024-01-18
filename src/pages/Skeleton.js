@@ -19,6 +19,7 @@ import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
+import Tournament from "../components/Tournaments/Tournament";
 import Playground from "../components/Playground";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -28,6 +29,8 @@ import Legal from "../components/Legal";
 import Stats from "../components/Stats";
 import Players from "../components/Players";
 import Player from "../components/Player";
+import Tournaments from "../components/Tournaments/Tournaments";
+import TournamentsOld from "../components/Tournaments/TournamentsOld";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
@@ -181,7 +184,22 @@ function Bones(props) {
                         path="/listgames/:gameState/:metaGame"
                         element={<ListGames />}
                       />
-                      <Route path="/ratings/:metaGame" element={<Ratings />} />
+                      <Route 
+                        path="/ratings/:metaGame" 
+                        element={<Ratings />} 
+                      />
+                      <Route
+                        path="/tournament/:metaGame/:tournamentid"
+                        element={<Tournament />}
+                      />
+                      <Route
+                        path="/tournament/:tournamentid"
+                        element={<Tournament />}
+                      />
+                      <Route 
+                        path="/tournamenthistory/:metaGame" 
+                        element={<TournamentsOld />} 
+                      />
                       <Route
                         path="/move/:metaGame/:cbits/:gameID"
                         element={<GameMove update={update} />}
@@ -197,6 +215,7 @@ function Bones(props) {
                         element={<Welcome token={token} update={update} />}
                       />
                       <Route path="/playground" element={<Playground />} />
+                      <Route path="/tournaments" element={<Tournaments />} />
                     </Routes>
                   </MyTurnContext.Provider>
                 </section>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Auth } from "aws-amplify";
@@ -33,6 +33,10 @@ function Me(props) {
   const [showChallengeResponseModal, showChallengeResponseModalSetter] =
     useState(false);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
+  const [showDeleteGamesModal, showDeleteGamesModalSetter] = useState(false);
+  const [deleteGamesMetaGame, deleteGamesMetaGameSetter] = useState("");
+  const [deleteCompletedGames, deleteCompletedGamesSetter] = useState(false);
+  const [deletes, deletesSetter] = useState("");
   const { t } = useTranslation();
   const [myMove, myMoveSetter] = useState([]);
   const [waiting, waitingSetter] = useState([]);
@@ -319,6 +323,63 @@ function Me(props) {
       console.log(JSON.parse(result.body));
     } catch (error) {
       errorSetter(error);
+    }
+  };
+
+  const handleDeleteGamesClick = async () => {
+    showDeleteGamesModalSetter(true);
+  }
+  
+  const handleDeleteGames = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log("Posting delete_games");
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "delete_games",
+          pars: {
+            metaGame: deleteGamesMetaGame, 
+            cbit: deleteCompletedGames ? 1 : 0, 
+            gameids: deletes
+          },
+        }),
+      });
+      const result = await res.json();
+      console.log("delete_games returned:");
+      console.log(JSON.parse(result.body));
+    } catch (error) {
+      errorSetter(error);
+    }
+    showDeleteGamesModalSetter(false);
+  }
+
+  const handleDeleteGamesClose = () => {
+    showDeleteGamesModalSetter(false);
+  }
+
+  const handleStartTournamentsClick = async () => {
+    try {
+      let url = new URL(API_ENDPOINT_OPEN);
+      url.searchParams.append("query", "start_tournaments");
+      const res = await fetch(url);
+      const status = res.status;
+      if (status !== 200) {
+        const result = await res.json();
+        console.log("Error");
+        console.log(result);
+      } else {
+        const result = await res.json();
+        console.log(result);
+      }
+    } catch (error) {
+      console.log("Error");
+      console.log(error);
     }
   };
 
@@ -621,9 +682,15 @@ function Me(props) {
                 </button>
                 <button
                   className="button is-small apButton"
-                  onClick={() => handleTestAsyncClick()}
+                  onClick={() => handleStartTournamentsClick()}
                 >
-                  Test async
+                  Start tournaments
+                </button>
+                <button
+                  className="button is-small apButton"
+                  onClick={() => handleDeleteGamesClick()}
+                >
+                  Delete games!
                 </button>
                 <button
                   className="button is-small apButton"
@@ -685,6 +752,70 @@ function Me(props) {
           ]}
         >
           <ChallengeResponse challenge={challenge} />
+        </Modal>
+        <Modal
+          show={showDeleteGamesModal}
+          title={"Delete games"}
+          buttons={[
+            {
+              label: t("Submit"),
+              action: () => handleDeleteGames(true),
+            },
+            {
+              label: t("Close"),
+              action: handleDeleteGamesClose,
+            },
+          ]}
+        >
+          <Fragment>
+            <div className="field">
+              { /* get metaGame */ }
+              <label className="label" htmlFor="metaGame_to_delete">
+                {"metaGame for delete:"}
+              </label>
+              <div className="control">
+                <input
+                  name="metaGame_to_delete"
+                  id="metaGameDeletes"
+                  type="text"
+                  value={deleteGamesMetaGame}
+                  onChange={(e) => deleteGamesMetaGameSetter(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="field">
+              { /* completed games? */ }
+              <label className="label" htmlFor="delete_completed_games">
+                {"completed games?:"}
+              </label>          
+              <div className="control">
+                <label className="checkbox">
+                  <input
+                    name="delete_completed_games"
+                    id="delete_completed_games"
+                    type="checkbox"
+                    checked={deleteCompletedGames}
+                    onChange={(e) => deleteCompletedGamesSetter(e.target.checked)}
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="field">
+              { /* Get list of game ids as a string from use */ }
+              <label className="label" htmlFor="gameids_to_delete">
+                {"comma seperated list of game ids to delete:"}
+              </label>
+              <div className="control">
+                <input
+                  name="deletes"
+                  id="deletes"
+                  type="text"
+                  value={deletes}
+                  onChange={(e) => deletesSetter(e.target.value)}
+                />
+              </div>
+            </div>
+          </Fragment>
         </Modal>
       </article>
     );
