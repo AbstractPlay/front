@@ -845,7 +845,7 @@ function Playground(props) {
   }, [metaGame, gameDeets]);
 
   useEffect(() => {
-    const lst = [];
+    let lst = [];
     for (const info of gameinfo.values()) {
       if (
         info.playercounts.includes(2) &&
@@ -853,6 +853,11 @@ function Playground(props) {
       ) {
         lst.push([info.uid, info.name]);
       }
+    }
+    if (process.env.REACT_APP_REAL_MODE === "production") {
+        lst = lst.filter(
+          (id) => !gameinfo.get(id).flags.includes("experimental")
+        );
     }
     lst.sort((a, b) => a[1].localeCompare(b[1]));
     validGamesSetter(lst);
@@ -1089,7 +1094,7 @@ function Playground(props) {
               variants: gameEngine
                 .allvariants()
                 .filter((v) => v.group === g)
-                .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
+                // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
             };
           })
         );
@@ -1097,7 +1102,7 @@ function Playground(props) {
           gameEngine
             .allvariants()
             .filter((v) => v.group === undefined)
-            .sort((a, b) => (a.uid > b.uid ? 1 : -1))
+            // .sort((a, b) => (a.uid > b.uid ? 1 : -1))
         );
       } else {
         groupDataSetter([]);
@@ -2003,7 +2008,7 @@ function Playground(props) {
   } else {
     return (
         <>
-            <h4>{errorMessageRef.current}</h4>);
+            <h4>{errorMessageRef.current}</h4>
             <div className="control">
             <button className="button apButton" onClick={handleResetPlayground}>
                 Reset Playground
