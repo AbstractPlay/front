@@ -1244,6 +1244,7 @@ function Playground(props) {
           errorSetter(true);
         } else {
           metaGameSetter(null);
+          errorSetter(false);
         }
       } else {
         errorMessageRef.current =
