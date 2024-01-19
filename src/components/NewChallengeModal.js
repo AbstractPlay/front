@@ -99,7 +99,7 @@ function NewChallengeModal(props) {
         seatingSetter("random");
         ratedSetter(false);
       }
-      if (cnt !== -1) {
+      if (cnt !== -1 && cnt - 1 !== opponents.length) {
         opponentsSetter(Array(cnt - 1).fill(""));
       }
     },
