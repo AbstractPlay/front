@@ -360,12 +360,12 @@ function NewChallengeModal(props) {
           group: g,
           variants: allvariants
             .filter((v) => v.group === g)
-            .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
+            // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
         };
       });
       nonGroupData = allvariants
         .filter((v) => v.group === undefined)
-        .sort((a, b) => (a.uid > b.uid ? 1 : -1));
+        // .sort((a, b) => (a.uid > b.uid ? 1 : -1));
     }
     playercounts = info.playercounts;
   }
