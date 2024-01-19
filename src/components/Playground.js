@@ -2008,7 +2008,7 @@ function Playground(props) {
   } else {
     return (
         <>
-            <h4>{errorMessageRef.current}</h4>);
+            <h4>{errorMessageRef.current}</h4>
             <div className="control">
             <button className="button apButton" onClick={handleResetPlayground}>
                 Reset Playground
