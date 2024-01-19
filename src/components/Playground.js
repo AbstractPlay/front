@@ -2000,7 +2000,16 @@ function Playground(props) {
       </article>
     );
   } else {
-    return <h4>{errorMessageRef.current}</h4>;
+    return (
+        <>
+            <h4>{errorMessageRef.current}</h4>);
+            <div className="control">
+            <button className="button apButton" onClick={handleResetPlayground}>
+                Reset Playground
+            </button>
+            </div>
+        </>
+    )
   }
 }
 
