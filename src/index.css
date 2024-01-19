@@ -680,6 +680,14 @@ tr.stickyHeader {
     font-weight: bolder;
 }
 
+.apTable tr.newChat span.newChat::before {
+    position: relative;
+    padding-right: 5px;
+    display: inline;
+    content: "\002709";
+    color: var(--secondary-color-1);
+}
+
 .smallerText {
     font-size: smaller;
 }
