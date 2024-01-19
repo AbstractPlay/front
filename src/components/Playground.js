@@ -775,6 +775,7 @@ function Playground(props) {
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const [groupData, groupDataSetter] = useState([]);
   const [nonGroupData, nonGroupDataSetter] = useState([]);
+  const [groupDefaultData, groupDefaultDataSetter] = useState({});
   const groupVariantsRef = useRef({});
   const [validGames, validGamesSetter] = useState([]);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
@@ -1062,6 +1063,7 @@ function Playground(props) {
       nonGroupVariantsSetter({});
       groupDataSetter([]);
       nonGroupDataSetter([]);
+      groupDefaultDataSetter({});
     } else {
       newGameSetter(game);
       const info = gameinfo.get(game);
@@ -1098,6 +1100,15 @@ function Playground(props) {
             };
           })
         );
+        const defaults = {};
+        groups.forEach((g) => {
+            const {name, description} = gameEngine.describeVariantGroupDefaults(g);
+            defaults[g] = {
+                name: name || g,
+                description,
+            };
+        });
+        groupDefaultDataSetter({...defaults});
         nonGroupDataSetter(
           gameEngine
             .allvariants()
@@ -1107,6 +1118,7 @@ function Playground(props) {
       } else {
         groupDataSetter([]);
         nonGroupDataSetter([]);
+        groupDefaultDataSetter({});
       }
     }
     errorSetter("");
@@ -1650,8 +1662,21 @@ function Playground(props) {
                             name={g.group}
                             defaultChecked
                           />
-                          {`Default ${g.group}`}
-                        </label>
+                          {`Default ${groupDefaultData[g.group].name}`}
+                          </label>
+                          {groupDefaultData[g.group]?.description === undefined ||
+                          groupDefaultData[g.group]?.description.length === 0 ? (
+                            ""
+                          ) : (
+                            <p
+                              className="help"
+                              style={{
+                                marginTop: "-0.5%",
+                              }}
+                            >
+                              {groupDefaultData[g.group].description}
+                            </p>
+                          )}
                       </div>
                       {g.variants.map((v) => (
                         <div className="control" key={v.uid}>
