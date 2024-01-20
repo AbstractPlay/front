@@ -857,7 +857,7 @@ function Playground(props) {
     }
     if (process.env.REACT_APP_REAL_MODE === "production") {
         lst = lst.filter(
-          (id) => !gameinfo.get(id[0]).flags.includes("experimental")
+          (id) => !gameinfo.get(id).flags.includes("experimental")
         );
     }
     lst.sort((a, b) => a[1].localeCompare(b[1]));

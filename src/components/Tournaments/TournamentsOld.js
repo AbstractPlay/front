@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 function TournamentsOld(props) {
   const { t } = useTranslation();
   const [tournaments, tournamentsSetter] = useState([]);
-  const [sorting, setSorting] = useState([{ id: "dateEnded", desc: true }]);
+  const [sorting, sortingSetter] = useState([{ id: "dateEnded", desc: true }]);
   const [oldTournamentsShowState, oldTournamentsShowStateSetter] = useStorageState("old-tournaments-show", 20);
   const { metaGame } = useParams();
 
@@ -109,8 +109,10 @@ function TournamentsOld(props) {
   const oldTournamentsTable = useReactTable({
     data: oldTournamentsData || [],
     columns: oldTournamentsColumns,
-    sorting,
-    onSortingChange: setSorting,
+    state: {
+      sorting,
+    },
+    onSortingChange: sortingSetter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -208,7 +210,7 @@ function TournamentsOld(props) {
               </p>
             </header>
             <div className="card-content">
-              { oldTournamentsData.length === 0 ? 
+              { oldTournamentsData.length === 0 ?
                 t("Tournament.NoneOld")
                 :
                 <>

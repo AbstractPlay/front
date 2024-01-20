@@ -204,14 +204,6 @@ function NewChallengeModal(props) {
     errorSetter("");
   };
 
-  //   const handleStandingChallengeChange = (value) => {
-  //     if (value === "open") {
-  //       standingSetter(false);
-  //     } else {
-  //       standingSetter(true);
-  //     }
-  //   };
-
   const handleChangeOpponent = (data) => {
     let opps = [...opponents];
     opps[data.player] = { id: data.id, name: data.name };
@@ -332,6 +324,10 @@ function NewChallengeModal(props) {
       rated: rated,
     });
     handleNewChallengeClose();
+    // So that if you click on challenge again, it doesn't look like the challenge wasn't submitted:
+    playerCountSetter(-1);
+    opponentsSetter([]);
+    metaGameSetter(null);
   };
 
   let games = [];
@@ -379,11 +375,6 @@ function NewChallengeModal(props) {
     }
     playercounts = info.playercounts;
   }
-  //   if (!(metaGame === null || nonGroupData.length === 0)) {
-  //     console.log("nonGroupData", nonGroupData);
-  //     console.log(nonGroupVariants);
-  //   }
-  // console.log(opponents);
   return (
     <Modal
       show={show}
@@ -510,7 +501,7 @@ function NewChallengeModal(props) {
                   value="open"
                   readOnly={true}
                   checked={standing}
-                  onClick={() => standingSetter(true)}
+                  onChange={() => standingSetter(true)}
                 />
                 {t("ChallengeTypeOpen")}
               </label>
@@ -521,7 +512,7 @@ function NewChallengeModal(props) {
                   value="targeted"
                   checked={!standing}
                   readOnly={true}
-                  onClick={() => standingSetter(false)}
+                  onChange={() => standingSetter(false)}
                 />
                 {t("ChallengeTypeTargeted")}
               </label>
@@ -533,6 +524,43 @@ function NewChallengeModal(props) {
             </p>
           </div>
         )}
+        {playerCount === -1 || standing || props.opponent !== undefined
+          ? ""
+          : /* Opponents filtering */
+          <div className="control">
+            <p className="help">Use this to filter out inactive opponents</p>
+            <label className="radio">
+                <input
+                    type="radio"
+                    name="oppFilter"
+                    checked={onlySee === "all"}
+                    value="all"
+                    onChange={() => onlySeeSetter("all")}
+                />
+                All opponents
+            </label>
+            <label className="radio">
+                <input
+                    type="radio"
+                    name="oppFilter"
+                    checked={onlySee === "week"}
+                    value="week"
+                    onChange={() => onlySeeSetter("week")}
+                />
+                Past 7 days
+            </label>
+            <label className="radio">
+                <input
+                    type="radio"
+                    name="oppFilter"
+                    checked={onlySee === "month"}
+                    value="month"
+                    onChange={() => onlySeeSetter("month")}
+                />
+                Past 30 days
+            </label>
+          </div>
+        }
         {playerCount === -1 || standing
           ? ""
           : /* Opponents filtering */
@@ -780,7 +808,7 @@ function NewChallengeModal(props) {
                     name="clockSpeed"
                     value="fast"
                     checked={clockSpeed === "fast"}
-                    onClick={() => {
+                    onChange={() => {
                       clockSpeedSetter("fast");
                       setClock(24, 8, 48);
                     }}
@@ -793,7 +821,7 @@ function NewChallengeModal(props) {
                     name="clockSpeed"
                     value="medium"
                     checked={clockSpeed === "medium"}
-                    onClick={() => {
+                    onChange={() => {
                       clockSpeedSetter("medium");
                       setClock(48, 24, 96);
                     }}
@@ -806,7 +834,7 @@ function NewChallengeModal(props) {
                     name="clockSpeed"
                     value="slow"
                     checked={clockSpeed === "slow"}
-                    onClick={() => {
+                    onChange={() => {
                       clockSpeedSetter("slow");
                       setClock(72, 48, 168);
                     }}
@@ -819,7 +847,7 @@ function NewChallengeModal(props) {
                     name="clockSpeed"
                     value="custom"
                     checked={clockSpeed === "custom"}
-                    onClick={() => clockSpeedSetter("custom")}
+                    onChange={() => clockSpeedSetter("custom")}
                   />
                   Custom
                 </label>

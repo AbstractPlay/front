@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from "react";
+import React, { useState, useEffect, useMemo, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import {
@@ -24,7 +24,9 @@ function Tournaments(props) {
   const [tournaments, tournamentsSetter] = useState([]);
   const [tournamentsToArchive, tournamentsToArchiveSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
-  const [sorting, setSorting] = useState([{ id: "metaGame", desc: false }]);
+  const [openTournamentSorting, openTournamentSortingSetter] = useState([{ id: "metaGame", desc: false }]);
+  const [currentTournamentSorting, currentTournamentSortingSetter] = useState([{ id: "metaGame", desc: false }]);
+  const [completedTournamentSorting, completedTournamentSortingSetter] = useState([{ id: "metaGameName", desc: false }]);
   const [openTournamentsShowState, openTournamentsShowStateSetter] = useStorageState("open-tournaments-show", 20);
   const [currentTournamentsShowState, currentTournamentsShowStateSetter] = useStorageState("current-tournaments-show", 20);
   const [completedTournamentsShowState, completedTournamentsShowStateSetter] = useStorageState("completed-tournaments-show", 20);
@@ -92,14 +94,11 @@ function Tournaments(props) {
           const result = await res.json();
           console.log("Error");
           console.log(result);
-        } else {
-          const result = await res.json();
-          console.log(result);
         }
       } catch (error) {
         console.log("Error");
         console.log(error);
-      }          
+      }
     }
     if (tournamentsToArchive)
       archive();
@@ -120,7 +119,6 @@ function Tournaments(props) {
     showNewTournamentModalSetter(false);
     try {
       const usr = await Auth.currentAuthenticatedUser();
-      console.log("currentAuthenticatedUser", usr);
       const res = await fetch(API_ENDPOINT_AUTH, {
         method: "POST",
         headers: {
@@ -135,10 +133,8 @@ function Tournaments(props) {
         let status = res.status;
         if (status !== 200) {
           const result = await res.json();
-          console.log(JSON.parse(result.body));
+          console.log("Error: ", result);
         } else {
-          const result = await res.json();
-          console.log(result);
           updateSetter(update + 1);
         }
     } catch (error) {
@@ -146,63 +142,61 @@ function Tournaments(props) {
     }
   };
 
-  const handleWithdrawTournament = async (tournamentid) => {
-    try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("currentAuthenticatedUser", usr);
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "withdraw_tournament",
-          pars: { tournamentid }
-        })});
-      let status = res.status;
-      if (status !== 200) {
-        const result = await res.json();
-        console.log(JSON.parse(result.body));
-      } else {
-        const result = await res.json();
-        console.log(result);
-        updateSetter(update + 1);
+  const handleWithdrawTournament = useCallback(
+    async (tournamentid) => {
+      try {
+        const usr = await Auth.currentAuthenticatedUser();
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+          },
+          body: JSON.stringify({
+            query: "withdraw_tournament",
+            pars: { tournamentid }
+          })});
+        let status = res.status;
+        if (status !== 200) {
+          const result = await res.json();
+          console.log("Error: ", result);
+        } else {
+          updateSetter(update + 1);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    }, [update, updateSetter]
+  );
 
-  const handleJoinTournament = async (tournamentid) => {
-    try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("currentAuthenticatedUser", usr);
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "join_tournament",
-          pars: { tournamentid }
-        })});
-      let status = res.status;
-      if (status !== 200) {
-        const result = await res.json();
-        console.log(JSON.parse(result.body));
-      } else {
-        const result = await res.json();
-        console.log(result);
-        updateSetter(update + 1);
+  const handleJoinTournament = useCallback(
+    async (tournamentid) => {
+      try {
+        const usr = await Auth.currentAuthenticatedUser();
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+          },
+          body: JSON.stringify({
+            query: "join_tournament",
+            pars: { tournamentid }
+          })});
+        let status = res.status;
+        if (status !== 200) {
+          const result = await res.json();
+          console.log("Error: ", result);
+        } else {
+          updateSetter(update + 1);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    }, [update, updateSetter]
+  );
 
   const openTournamentsData = useMemo(
     () => {
@@ -211,7 +205,7 @@ function Tournaments(props) {
       return tournaments.filter((t) => !t.started).map((t, idx) => {
         let date1 = t.dateCreated + twoWeeks;
         const date2 = t.datePreviousEnded + oneWeek;
-        if (date2 && date2 > date1) 
+        if (date2 && date2 > date1)
           date1 = date2;
         return {
           tournamentid: t.id,
@@ -268,17 +262,19 @@ function Tournaments(props) {
           </button>
       }),
     ],
-    [openTournamentsColumnHelper, globalMe, t]
+    [globalMe, openTournamentsColumnHelper, handleJoinTournament, handleWithdrawTournament, t]
   );
 
   const openTournamentsTable = useReactTable({
     data: openTournamentsData || [], // Ensure openTournamentsData is not undefined
     columns: openTournamentsColumns,
-    sorting,
+    state: {
+      sorting: openTournamentSorting,
+    },
     columnVisibility: {
       actions: globalMe !== null,
     },
-    onSortingChange: setSorting,
+    onSortingChange: openTournamentSortingSetter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -425,11 +421,13 @@ function Tournaments(props) {
   const currentTournamentsTable = useReactTable({
     data: currentTournamentsData || [], // Ensure currentTournamentsData is not undefined
     columns: currentTournamentsColumns,
-    sorting,
+    state: {
+      sorting: currentTournamentSorting,
+    },
     columnVisibility: {
       actions: globalMe !== null,
     },
-    onSortingChange: setSorting,
+    onSortingChange: currentTournamentSortingSetter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -607,11 +605,13 @@ function Tournaments(props) {
   const completedTournamentsTable = useReactTable({
     data: completedTournamentsData || [],
     columns: completedTournamentsColumns,
-    sorting,
+    state: {
+      sorting: completedTournamentSorting,
+    },
     columnVisibility: {
       actions: globalMe !== null,
     },
-    onSortingChange: setSorting,
+    onSortingChange: completedTournamentSortingSetter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -711,7 +711,7 @@ function Tournaments(props) {
                 </p>
               </header>
               <div className="card-content">
-                { completedTournamentsData.length === 0 ? 
+                { completedTournamentsData.length === 0 ?
                   t("Tournament.NoneCompleted")
                   :
                   <>
