@@ -775,6 +775,7 @@ function Playground(props) {
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const [groupData, groupDataSetter] = useState([]);
   const [nonGroupData, nonGroupDataSetter] = useState([]);
+  const [groupDefaultData, groupDefaultDataSetter] = useState({});
   const groupVariantsRef = useRef({});
   const [validGames, validGamesSetter] = useState([]);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
@@ -845,7 +846,7 @@ function Playground(props) {
   }, [metaGame, gameDeets]);
 
   useEffect(() => {
-    const lst = [];
+    let lst = [];
     for (const info of gameinfo.values()) {
       if (
         info.playercounts.includes(2) &&
@@ -853,6 +854,11 @@ function Playground(props) {
       ) {
         lst.push([info.uid, info.name]);
       }
+    }
+    if (process.env.REACT_APP_REAL_MODE === "production") {
+        lst = lst.filter(
+          (id) => !gameinfo.get(id).flags.includes("experimental")
+        );
     }
     lst.sort((a, b) => a[1].localeCompare(b[1]));
     validGamesSetter(lst);
@@ -1057,6 +1063,7 @@ function Playground(props) {
       nonGroupVariantsSetter({});
       groupDataSetter([]);
       nonGroupDataSetter([]);
+      groupDefaultDataSetter({});
     } else {
       newGameSetter(game);
       const info = gameinfo.get(game);
@@ -1089,19 +1096,29 @@ function Playground(props) {
               variants: gameEngine
                 .allvariants()
                 .filter((v) => v.group === g)
-                .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
+                // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
             };
           })
         );
+        const defaults = {};
+        groups.forEach((g) => {
+            const {name, description} = gameEngine.describeVariantGroupDefaults(g);
+            defaults[g] = {
+                name: name || g,
+                description,
+            };
+        });
+        groupDefaultDataSetter({...defaults});
         nonGroupDataSetter(
           gameEngine
             .allvariants()
             .filter((v) => v.group === undefined)
-            .sort((a, b) => (a.uid > b.uid ? 1 : -1))
+            // .sort((a, b) => (a.uid > b.uid ? 1 : -1))
         );
       } else {
         groupDataSetter([]);
         nonGroupDataSetter([]);
+        groupDefaultDataSetter({});
       }
     }
     errorSetter("");
@@ -1244,6 +1261,7 @@ function Playground(props) {
           errorSetter(true);
         } else {
           metaGameSetter(null);
+          errorSetter(false);
         }
       } else {
         errorMessageRef.current =
@@ -1644,8 +1662,21 @@ function Playground(props) {
                             name={g.group}
                             defaultChecked
                           />
-                          {`Default ${g.group}`}
-                        </label>
+                          {`Default ${groupDefaultData[g.group].name}`}
+                          </label>
+                          {groupDefaultData[g.group]?.description === undefined ||
+                          groupDefaultData[g.group]?.description.length === 0 ? (
+                            ""
+                          ) : (
+                            <p
+                              className="help"
+                              style={{
+                                marginTop: "-0.5%",
+                              }}
+                            >
+                              {groupDefaultData[g.group].description}
+                            </p>
+                          )}
                       </div>
                       {g.variants.map((v) => (
                         <div className="control" key={v.uid}>
@@ -2000,7 +2031,16 @@ function Playground(props) {
       </article>
     );
   } else {
-    return <h4>{errorMessageRef.current}</h4>;
+    return (
+        <>
+            <h4>{errorMessageRef.current}</h4>
+            <div className="control">
+            <button className="button apButton" onClick={handleResetPlayground}>
+                Reset Playground
+            </button>
+            </div>
+        </>
+    )
   }
 }
 

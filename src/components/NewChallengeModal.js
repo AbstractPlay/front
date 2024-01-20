@@ -58,6 +58,7 @@ function NewChallengeModal(props) {
   const [standingCount, standingCountSetter] = useState(0);
   const [opponents, opponentsSetter] = useState([]);
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
+  const [groupDefaultData, groupDefaultDataSetter] = useState({});
   const groupVariantsRef = useRef({});
   const [globalMe] = useContext(MeContext);
   const [allUsers] = useContext(UsersContext);
@@ -134,6 +135,19 @@ function NewChallengeModal(props) {
             .filter((v) => v.group === undefined)
             .forEach((v) => (ngVariants[v.uid] = false));
         nonGroupVariantsSetter(ngVariants);
+        if (gameEngine.allvariants()?.length > 0) {
+            const defaults = {};
+            [...new Set(gameEngine.allvariants().filter(v => v.group !== undefined).map(v => v.group))].forEach((g) => {
+                const {name, description} = gameEngine.describeVariantGroupDefaults(g);
+                defaults[g] = {
+                    name: name || g,
+                    description,
+                };
+            });
+            groupDefaultDataSetter({...defaults});
+        } else {
+            groupDefaultDataSetter({});
+        }
         const playercounts = info.playercounts;
         if (playercounts.length === 1) {
           setPlayerCount(playercounts[0]);
@@ -151,6 +165,7 @@ function NewChallengeModal(props) {
       metaGameSetter,
       allvariantsSetter,
       nonGroupVariantsSetter,
+      groupDefaultDataSetter,
       setPlayerCount,
       playerCountSetter,
       opponentsSetter,
@@ -360,12 +375,12 @@ function NewChallengeModal(props) {
           group: g,
           variants: allvariants
             .filter((v) => v.group === g)
-            .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
+            // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
         };
       });
       nonGroupData = allvariants
         .filter((v) => v.group === undefined)
-        .sort((a, b) => (a.uid > b.uid ? 1 : -1));
+        // .sort((a, b) => (a.uid > b.uid ? 1 : -1));
     }
     playercounts = info.playercounts;
   }
@@ -673,8 +688,21 @@ function NewChallengeModal(props) {
                             name={g.group}
                             defaultChecked
                           />
-                          {`Default ${g.group}`}
-                        </label>
+                          {`Default ${groupDefaultData[g.group].name}`}
+                          </label>
+                          {groupDefaultData[g.group]?.description === undefined ||
+                          groupDefaultData[g.group]?.description.length === 0 ? (
+                            ""
+                          ) : (
+                            <p
+                              className="help"
+                              style={{
+                                marginTop: "-0.5%",
+                              }}
+                            >
+                              {groupDefaultData[g.group].description}
+                            </p>
+                          )}
                       </div>
                       {g.variants.map((v) => (
                         <div className="control" key={v.uid}>
