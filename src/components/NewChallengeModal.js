@@ -176,10 +176,7 @@ function NewChallengeModal(props) {
   useEffect(() => {
     groupVariantsRef.current = {};
     nonGroupVariantsSetter({});
-    if (props.opponent === undefined) {
-      playerCountSetter(-1);
-      opponentsSetter([]);
-    } else {
+    if (props.opponent !== undefined) {
       playerCountSetter(2);
       opponentsSetter([props.opponent]);
     }
@@ -191,8 +188,6 @@ function NewChallengeModal(props) {
     if (props.fixedMetaGame !== undefined) {
       metaGameSetter(props.fixedMetaGame);
       handleChangeGame(props.fixedMetaGame);
-    } else {
-      metaGameSetter(null);
     }
     if (props.opponent !== undefined) {
       opponentsSetter([props.opponent]);
