@@ -375,6 +375,7 @@ function NewChallengeModal(props) {
     }
     playercounts = info.playercounts;
   }
+
   return (
     <Modal
       show={show}
@@ -556,43 +557,6 @@ function NewChallengeModal(props) {
                     checked={onlySee === "month"}
                     value="month"
                     onChange={() => onlySeeSetter("month")}
-                />
-                Past 30 days
-            </label>
-          </div>
-        }
-        {playerCount === -1 || standing
-          ? ""
-          : /* Opponents filtering */
-          <div className="control">
-            <p className="help">Use this to filter out inactive opponents</p>
-            <label className="radio">
-                <input
-                    type="radio"
-                    name="oppFilter"
-                    checked={onlySee === "all"}
-                    value="all"
-                    onClick={() => onlySeeSetter("all")}
-                />
-                All opponents
-            </label>
-            <label className="radio">
-                <input
-                    type="radio"
-                    name="oppFilter"
-                    checked={onlySee === "week"}
-                    value="week"
-                    onClick={() => onlySeeSetter("week")}
-                />
-                Past 7 days
-            </label>
-            <label className="radio">
-                <input
-                    type="radio"
-                    name="oppFilter"
-                    checked={onlySee === "month"}
-                    value="month"
-                    onClick={() => onlySeeSetter("month")}
                 />
                 Past 30 days
             </label>
