@@ -104,7 +104,7 @@ function NewChallengeModal(props) {
         opponentsSetter(Array(cnt - 1).fill(""));
       }
     },
-    [playerCountSetter, seatingSetter, ratedSetter, opponents, opponentsSetter]
+    [playerCountSetter, seatingSetter, ratedSetter, opponentsSetter]
   );
 
   const setClock = (start, inc, max) => {
@@ -388,7 +388,7 @@ function NewChallengeModal(props) {
   //     console.log("nonGroupData", nonGroupData);
   //     console.log(nonGroupVariants);
   //   }
-  //   console.log(opponents);
+  console.log(opponents);
   return (
     <Modal
       show={show}
