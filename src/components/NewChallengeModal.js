@@ -388,7 +388,7 @@ function NewChallengeModal(props) {
   //     console.log("nonGroupData", nonGroupData);
   //     console.log(nonGroupVariants);
   //   }
-  console.log(opponents);
+  // console.log(opponents);
   return (
     <Modal
       show={show}
