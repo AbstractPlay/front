@@ -101,10 +101,10 @@ function NewChallengeModal(props) {
         ratedSetter(false);
       }
       if (cnt !== -1 && cnt - 1 !== opponents.length) {
-        opponentsSetter(Array(cnt - 1).fill(""));
+        opponentsSetter(prevOpponents => Array(cnt - 1).fill(""));
       }
     },
-    [playerCountSetter, seatingSetter, ratedSetter, opponentsSetter]
+    [playerCountSetter, seatingSetter, ratedSetter, opponents, opponentsSetter]
   );
 
   const setClock = (start, inc, max) => {
