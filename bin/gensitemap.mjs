@@ -11,6 +11,7 @@ const links = [
     { url: "/stats",  changefreq: "weekly", priority: 0.3  },
     { url: "/games",  changefreq: "monthly", priority: 1  },
     { url: "/players",  changefreq: "weekly", priority: 0.3  },
+    { url: "/tournaments", changefreq: "weekly", priority: 1},
 ]
 
 // add /challenges links
