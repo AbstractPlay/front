@@ -122,7 +122,7 @@ function Tournament(props) {
                 </header>
                 <div className="card-content">
                   <p className="subtitle">
-                    { d.winner ? t("Tournament.DivisionWinner", { winner: d.winner }) : t("TournamentNumCompleted", { "numCompleted": d.numCompleted, "numGames": d.numGames }) }
+                    { d.winner ? t("Tournament.DivisionWinner", { winner: d.winner }) : t("Tournament.NumCompleted", { "numCompleted": d.numCompleted, "numGames": d.numGames }) }
                   </p>
                   <table
                     className="table apTable"
