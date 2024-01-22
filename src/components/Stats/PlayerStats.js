@@ -78,6 +78,10 @@ function PlayerStats(props) {
     [joined, userNames]
   );
 
+  useEffect(() => {
+    console.log(data)
+  }, [data]);
+
   const columnHelper = createColumnHelper();
   const columns = useMemo(
     () => [
@@ -87,7 +91,7 @@ function PlayerStats(props) {
           globalMe !== null && globalMe.id === props.row.original.id ? (
             <Link to={`/player/${props.row.original.id}`}><span className="bolder highlight">{props.getValue()}</span></Link>
           ) : (
-            <Link to={`/player/${props.row.original.userid}`}>{props.getValue()}</Link>
+            <Link to={`/player/${props.row.original.id}`}>{props.getValue()}</Link>
           ),
       }),
       columnHelper.accessor("plays", {
