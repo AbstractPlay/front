@@ -53,7 +53,7 @@
     "CompletedGamesCount_one": "completed game",
     "CompletedGamesCount_other": "completed games",
     "CompletedGamesList": "Completed {{name}} Games",
-    "CompletedGamesHelp": "To keep the dashboard manageable, games drop off this list 48 hours after the \"last seen\" date. Click the Clear button to remove it immediately. New chat will cause older games to resurface, restarting the 48-hour clock. Visit the Games page to access older completed games.",
+    "CompletedGamesHelp": "To keep the dashboard manageable, games drop off this list 7 days after the \"last seen\" date. Click the Clear button to remove it immediately. New chat will cause older games to resurface, restarting the 7-day clock. Visit the Games page to access older completed games.",
     "CompleteMove": "Complete move",
     "ConfirmMove": "Confirm move submission",
     "ConfirmMoveDesc": "Are you sure you want to submit this move?",
