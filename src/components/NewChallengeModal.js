@@ -54,6 +54,7 @@ function NewChallengeModal(props) {
   );
   const [minSeen, minSeenSetter] = useState(0);
   const [rated, ratedSetter] = useStorageState("new-challenge-rated", true); // rated or not
+  const [noExplore, noExploreSetter] = useStorageState("new-challenge-noExplore", false);
   const [standing, standingSetter] = useState(false); // Standing challenge or not.
   const [standingCount, standingCountSetter] = useState(0);
   const [opponents, opponentsSetter] = useState([]);
@@ -271,6 +272,11 @@ function NewChallengeModal(props) {
     ratedSetter(!rated);
   };
 
+  const handleNoExploreChange = (event) => {
+    // ratedSetter(event.target.checked);
+    noExploreSetter(!noExplore);
+  };
+
   const handleChallenge = () => {
     if (metaGame === null) {
       errorSetter(t("SelectAGame"));
@@ -322,6 +328,7 @@ function NewChallengeModal(props) {
       clockMax: clockMax,
       clockHard: clockHard,
       rated: rated,
+      noExplore: noExplore,
     });
     handleNewChallengeClose();
     // So that if you click on challenge again, it doesn't look like the challenge wasn't submitted:
@@ -891,6 +898,22 @@ function NewChallengeModal(props) {
               <p className="help">
                 {clockHard ? t("HelpClockHard") : t("HelpClockSoft")}
               </p>
+            </div>
+            <div className="field">
+                <div className="control">
+                <label className="checkbox">
+                    <input
+                    type="checkbox"
+                    id="noExplore"
+                    checked={noExplore}
+                    onChange={handleNoExploreChange}
+                    />
+                    {t("ChooseNoExplore")}
+                </label>
+                </div>
+                <p className="help">
+                {noExplore ? t("HelpNoExploreTrue") : t("HelpNoExploreFalse")}
+                </p>
             </div>
           </Fragment>
         )}

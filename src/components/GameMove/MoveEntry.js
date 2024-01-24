@@ -293,7 +293,7 @@ function MoveEntry(props) {
           ) : (
             ""
           )}
-          {focus.canExplore ? (
+          {(focus.canExplore && (! game.noExplore) ) ? (
             <Fragment>
               {moves === null ? (
                 <div />

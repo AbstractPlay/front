@@ -1024,6 +1024,7 @@ function GameMove(props) {
   const [interimNote, interimNoteSetter] = useState("");
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
+  const [parenthetical, parentheticalSetter] = useState([]); // any description after the game name (e.g., "unrated", "exploration disabled")
   // pieInvoked is used to trigger the game reload after the function is called
   const [pieInvoked, pieInvokedSetter] = useState(false);
   // used to construct the localized string of players in check
@@ -1288,6 +1289,15 @@ function GameMove(props) {
             interimNoteSetter("");
           }
           populateChecked(gameRef, engineRef, t, inCheckSetter);
+        }
+        parentheticalSetter([]);
+        if (data !== null && data !== undefined) {
+            if (data.game.rated === false) {
+                parentheticalSetter(val => [...val, "unrated"]);
+            }
+            if ( (data.game.noExplore !== undefined) && (data.game.noExplore === true) ) {
+                parentheticalSetter(val => [...val, "exploration disabled"]);
+            }
         }
       } catch (error) {
         console.log(error);
@@ -2353,6 +2363,7 @@ function GameMove(props) {
               explorer ||
               !game ||
               game.simultaneous ||
+              game.noExplore ||
               game.numPlayers !== 2 ? null : (
                 <div className="control" style={{ paddingTop: "1em" }}>
                   <button className="button apButton" onClick={handleExplorer}>
@@ -2379,9 +2390,9 @@ function GameMove(props) {
             <h1 className="subtitle lined tourWelcome">
               <span>
                 {gameinfo.get(metaGame).name}
-                {gameRef.current === null || gameRef.current.rated ? null : (
+                {parenthetical.length === 0 ? null : (
                   <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
-                    {" (unrated)"}
+                    {` (${parenthetical.join(", ")})`}
                   </span>
                 )}
               </span>
