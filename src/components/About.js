@@ -23,6 +23,7 @@ function About(props) {
           see if your opponent has moved. We specialize in offbeat, perfect
           information games without any element of luck.
         </p>
+        <p>The site is completely free to join and play. We thank our corporate sponsor, <a href="https://store.looneylabs.com/">Looney Labs</a>, for helping us keep the lights on!</p>
         <p style={{ fontSize: "smaller", textAlign: "right" }}>
           Build: {pkgInfo.version}
         </p>
