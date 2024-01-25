@@ -1013,3 +1013,8 @@ tr.stickyHeader {
   /* div._meta_mattock polygon.aprender-marker-f47325856bcb8  {
     fill: var(--svg-default-fill);
   } */
+
+  /* black shading, 20% opacity (Gess) */
+  polygon.aprender-marker-0ba3d1e994d63 {
+    fill: var(--svg-default-fill);
+  }
