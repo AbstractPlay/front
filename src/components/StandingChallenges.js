@@ -224,6 +224,7 @@ function StandingChallenges(props) {
           clockStart: rec.clockStart,
           clockInc: rec.clockInc,
           clockMax: rec.clockMax,
+          noExplore: rec.noExplore || false,
           numPlayers: rec.numPlayers,
           players: rec.players.filter((p) => p.id !== rec.challenger.id),
           rated: rec.rated,
@@ -289,6 +290,10 @@ function StandingChallenges(props) {
       }),
       columnHelper.accessor("rated", {
         header: "Rated?",
+        cell: (props) => (props.getValue() ? t("Yes") : t("No")),
+      }),
+      columnHelper.accessor("noExplore", {
+        header: "Exploration disabled?",
         cell: (props) => (props.getValue() ? t("Yes") : t("No")),
       }),
       columnHelper.display({
