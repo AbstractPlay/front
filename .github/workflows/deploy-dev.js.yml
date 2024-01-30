@@ -49,14 +49,14 @@ jobs:
     - name: Install NPM dependencies
       run: npm i
 
-    - name: Install latest renderer
-      run: npm install @abstractplay/renderer
+    - name: Install development renderer
+      run: npm install @abstractplay/renderer@development
 
     - name: install
       run: npm list @abstractplay/renderer
 
-    - name: Install latest gameslib
-      run: npm install @abstractplay/gameslib
+    - name: Install development gameslib
+      run: npm remove @abstractplay/gameslib && npm i @abstractplay/gameslib@development
 
     - name: gameslib version installed
       run: npm list @abstractplay/gameslib
