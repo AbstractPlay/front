@@ -177,7 +177,7 @@ function MyTurnTable(props) {
             <tr
               key={row.id}
               className={
-                row.original.lastChat > row.original.lastSeen ? "newChat" : ""
+                row.original.tournament !== undefined ? "tourneyGame" : ""
               }
             >
               {row.getVisibleCells().map((cell) => (
