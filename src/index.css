@@ -680,6 +680,10 @@ tr.stickyHeader {
     font-weight: bolder;
 }
 
+.apTable tr.tourneyGame {
+    font-weight: bolder;
+}
+
 .apTable tr.newChat span.newChat::before {
     position: relative;
     padding-right: 5px;

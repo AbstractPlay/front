@@ -1291,6 +1291,9 @@ function GameMove(props) {
           }
           populateChecked(gameRef, engineRef, t, inCheckSetter);
           parentheticalSetter([]);
+          if ("tournament" in data.game && data.game.tournament !== undefined && data.game.tournament !== null) {
+            parentheticalSetter(val => [...val, "tournament"]);
+          }
           if (data.game.rated === false) {
               parentheticalSetter(val => [...val, "unrated"]);
           }
