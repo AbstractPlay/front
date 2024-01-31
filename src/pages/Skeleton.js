@@ -31,6 +31,7 @@ import Players from "../components/Players";
 import Player from "../components/Player";
 import Tournaments from "../components/Tournaments/Tournaments";
 import TournamentsOld from "../components/Tournaments/TournamentsOld";
+import NotFound from "../components/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
@@ -163,6 +164,7 @@ function Bones(props) {
                 <section className="section" id="main">
                   <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
                     <Routes>
+                      <Route path="*" element={<NotFound />} />
                       <Route path="/about" element={<About token={token} />} />
                       <Route
                         path="/games/:metaGame?"
@@ -184,9 +186,9 @@ function Bones(props) {
                         path="/listgames/:gameState/:metaGame"
                         element={<ListGames />}
                       />
-                      <Route 
-                        path="/ratings/:metaGame" 
-                        element={<Ratings />} 
+                      <Route
+                        path="/ratings/:metaGame"
+                        element={<Ratings />}
                       />
                       <Route
                         path="/tournament/:metaGame/:tournamentid"
@@ -196,9 +198,9 @@ function Bones(props) {
                         path="/tournament/:tournamentid"
                         element={<Tournament />}
                       />
-                      <Route 
-                        path="/tournamenthistory/:metaGame" 
-                        element={<TournamentsOld />} 
+                      <Route
+                        path="/tournamenthistory/:metaGame"
+                        element={<TournamentsOld />}
                       />
                       <Route
                         path="/move/:metaGame/:cbits/:gameID"

@@ -1231,7 +1231,8 @@ function GameMove(props) {
             data = await res.json();
           }
         }
-        if (status === 200) {
+        if ( (status === 200) && (data !== null) && (data !== undefined) && ("game" in data) ) {
+          console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
           console.log("game fetched:", data.game);
           setupGame(
             data.game,
@@ -1289,14 +1290,20 @@ function GameMove(props) {
             interimNoteSetter("");
           }
           populateChecked(gameRef, engineRef, t, inCheckSetter);
-        }
-        parentheticalSetter([]);
-        if (data !== null && data !== undefined) {
-            if (data.game.rated === false) {
-                parentheticalSetter(val => [...val, "unrated"]);
-            }
-            if ( (data.game.noExplore !== undefined) && (data.game.noExplore === true) ) {
-                parentheticalSetter(val => [...val, "exploration disabled"]);
+          parentheticalSetter([]);
+          if (data.game.rated === false) {
+              parentheticalSetter(val => [...val, "unrated"]);
+          }
+          if ( (data.game.noExplore !== undefined) && (data.game.noExplore === true) ) {
+              parentheticalSetter(val => [...val, "exploration disabled"]);
+          }
+        } else {
+            if ("message" in data) {
+                errorMessageRef.current = data.message;
+                errorSetter(true);
+            } else {
+                errorMessageRef.current = `An unspecified error occured while trying to fetch the game: ${JSON.stringify(data)}`;
+                errorSetter(true);
             }
         }
       } catch (error) {
