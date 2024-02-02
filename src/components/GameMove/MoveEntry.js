@@ -241,6 +241,9 @@ function MoveEntry(props) {
           )}
           <span className="playerName">{mover}</span>
         </p>
+        {moveToSubmit === null ? null :
+            <p style={{marginBottom: "1em"}} className="yourTurn myTurn">{t("PendingSubmit")}</p>
+        }
         {uiState === 0 && toMove !== "" ? (
         <>
           <table className="table">

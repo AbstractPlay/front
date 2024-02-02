@@ -1022,3 +1022,35 @@ tr.stickyHeader {
   polygon.aprender-marker-0ba3d1e994d63 {
     fill: var(--svg-default-fill);
   }
+
+  /* Tablero: Dice */
+  symbol#aprender-glyph-4e52996b2e358 circle,
+  symbol#aprender-glyph-2929ffe7da425 circle,
+  symbol#aprender-glyph-8d5038aeab733 circle,
+  symbol#aprender-glyph-15842807f2ed1 circle,
+  symbol#aprender-glyph-1513a42c54b3b circle,
+  symbol#aprender-glyph-ef7d98e9c022d circle,   /* ^dice markers */
+  symbol#aprender-glyph-981c4ac534f6a circle,   /* dice rolled */
+  symbol#aprender-glyph-2a6c4b13aa358 circle,
+  symbol#aprender-glyph-9cfc4b62e6d82 circle,
+  symbol#aprender-glyph-cfcc4bbcf734b circle,
+  symbol#aprender-glyph-925c4c0ac69d6 circle,
+  symbol#aprender-glyph-94ac4c4dbed82 circle
+  {
+    fill: var(--svg-default-fill);
+  }
+  symbol#aprender-glyph-4e52996b2e358 rect,
+  symbol#aprender-glyph-2929ffe7da425 rect,
+  symbol#aprender-glyph-8d5038aeab733 rect,
+  symbol#aprender-glyph-15842807f2ed1 rect,
+  symbol#aprender-glyph-1513a42c54b3b rect,
+  symbol#aprender-glyph-ef7d98e9c022d rect,   /* ^dice markers */
+  symbol#aprender-glyph-981c4ac534f6a rect,   /* dice rolled */
+  symbol#aprender-glyph-2a6c4b13aa358 rect,
+  symbol#aprender-glyph-9cfc4b62e6d82 rect,
+  symbol#aprender-glyph-cfcc4bbcf734b rect,
+  symbol#aprender-glyph-925c4c0ac69d6 rect,
+  symbol#aprender-glyph-94ac4c4dbed82 rect
+  {
+    stroke: var(--svg-default-fill);
+  }

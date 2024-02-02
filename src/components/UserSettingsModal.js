@@ -798,7 +798,7 @@ function UserSettingsModal(props) {
                 <div>
                     <p className="help">Click to delete a colour</p>
                 {currColours.map((c, i) => (
-                    <span style={{backgroundColor: c}} onClick={() => delColour(c)}>Player {i + 1}</span>
+                    <span style={{backgroundColor: c}} onClick={() => delColour(c)}>Player {i + 1} ({c})</span>
                 )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)}
                 </div>
             </div>
@@ -835,7 +835,7 @@ function UserSettingsModal(props) {
                             <td>{name}</td>
                             <td>
                             {colours.map((c, i) => (
-                                <span style={{backgroundColor: c}} onClick={() => delColour(c)}>Player {i + 1}</span>
+                                <span style={{backgroundColor: c}} onClick={() => delColour(c)}>Player {i + 1} ({c})</span>
                             )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)}
                             </td>
                             <td><span className="icon" onClick={() => delPalette(name)}><i className="fa fa-times-circle" aria-hidden="true"></i></span></td>
