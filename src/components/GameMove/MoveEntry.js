@@ -408,7 +408,7 @@ function MoveEntry(props) {
         <div className="submitOrMark">
           {moveToSubmit !== null && focus.exPath.length === 1 && !submitting ? (
             <button
-              className="button is-small apButton tooltipped"
+              className="button apButton tooltipped"
               onClick={() => handleSubmit(drawoffer ? "drawoffer" : "")}
             >
               {t("Submit")}
