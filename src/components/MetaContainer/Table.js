@@ -51,7 +51,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
   const [myTags, myTagsSetter] = useState([]);
   const { t, i18n } = useTranslation();
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
-  const [filterStars, filterStarsSetter] = useState(false);
+  const [filterStars, filterStarsSetter] = useStorageState("allgames-filter-stars", false);
   const [globalFilter, globalFilterSetter] = useState(metaGame);
   const [showState, showStateSetter] = useStorageState("allgames-show", 10);
   const tagInput = useRef(null);
@@ -182,6 +182,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
         header: (
           <input
             type="checkbox"
+            defaultChecked={filterStars}
             onClick={() => filterStarsSetter(!filterStars)}
           ></input>
         ),
@@ -363,6 +364,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
       activeImgModal,
       toggleStar,
       filterStars,
+      filterStarsSetter,
       activeChallengeModal,
       handleChallenge,
       expandedPara,
