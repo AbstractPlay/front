@@ -892,6 +892,17 @@ tr.stickyHeader {
     stroke: var(--svg-gridline-color);
   }
 
+  /* gridlines for ConHex boards */
+  #board > polygon:not([class]) {
+    stroke: var(--svg-gridline-color);
+  }
+  #board > circle:not([class]) {
+    stroke: var(--svg-gridline-color);
+  }
+  #board > circle[fill="white"] {
+    fill: var(--main-bg-color);
+  }
+
   /* colours of sowing numerals */
   symbol[id^="_pips_numeral_"] text {
     color: var(--svg-gridline-color);
