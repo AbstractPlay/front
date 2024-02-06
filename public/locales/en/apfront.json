@@ -301,7 +301,7 @@
         "Number": "Tournament Number",
         "Tournaments": "Tournaments",
         "Completion": "Completion",
-        "CompletionRate": "{{ratio}} games",
+        "CompletionRate": "{{ratio}} games ({{percent}}%)",
         "Current": "Ongoing tournaments",
         "Description": "These are recurring tournaments for any game and variant/s combination. As long as there is enough interest, the next tournament starts automatically once the previous tournament ends. Tournaments consists of divisions, with each division being a round-robin having at most 10 players. All games are played simultaneously. The time controls are: 36 hour increment, 72 hours starting time and 120 hours max time. After being requested a tournament is open for registration for 2 weeks. If after the 2 week registration period there aren't at least 4 players registered, the tournament is cancelled. Otherwise the tournament starts, and the next tournament for the same game and variant/s is opened for registration. The next tournament starts a week after the current tournament ends. You will be registered for the next tournament automatically. Players are divided into divisions purely by their rating at the time the tournament starts. The highest rated players play in division 1, the next highest in division 2 and so on. Players are divided into divisions in such a way that all divisions have approximately the same number of players.",
         "Division": "Division {{num}}",
