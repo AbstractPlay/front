@@ -98,7 +98,7 @@ function Tournaments(props) {
       } catch (error) {
         console.log("Error");
         console.log(error);
-      }          
+      }
     }
     if (tournamentsToArchive)
       archive();
@@ -205,7 +205,7 @@ function Tournaments(props) {
       return tournaments.filter((t) => !t.started).map((t, idx) => {
         let date1 = t.dateCreated + twoWeeks;
         const date2 = t.datePreviousEnded + oneWeek;
-        if (date2 && date2 > date1) 
+        if (date2 && date2 > date1)
           date1 = date2;
         return {
           tournamentid: t.id,
@@ -379,8 +379,10 @@ function Tournaments(props) {
           number: t.number,
           dateStarted: t.dateStarted,
           players: t.players,
-          numCompleted: Object.values(t.divisions).reduce((acc, d) => acc + d.numCompleted, 0),
-          numGames: Object.values(t.divisions).reduce((acc, d) => acc + d.numGames, 0),
+          completion: {
+            numCompleted: Object.values(t.divisions).reduce((acc, d) => acc + d.numCompleted, 0),
+            numGames: Object.values(t.divisions).reduce((acc, d) => acc + d.numGames, 0),
+          }
         };
       })},
     [tournaments]
@@ -420,15 +422,19 @@ function Tournaments(props) {
       }),
       currentTournamentsColumnHelper.accessor("completion", {
         header: t("Tournament.Completion"),
-        cell: (props) => t("Tournament.CompletionRate", { "ratio": `${props.row.original.numCompleted}/${props.row.original.numGames}`}),
+        cell: (props) => t("Tournament.CompletionRate", { "ratio": `${props.getValue().numCompleted}/${props.getValue().numGames}`, "percent": Math.round((props.getValue().numCompleted/props.getValue().numGames) * 100).toString()}),
         sortingFn: (
           rowA,
           rowB,
           columnId
         ) => {
-          const numA = rowA.getValue("numCompleted")/rowA.getValue("numGames");
-          const numB = rowB.getValue("numCompleted")/rowB.getValue("numGames");
-          return numA < numB ? 1 : numA > numB ? -1 : 0;
+          const numA = rowA.getValue(columnId).numCompleted/rowA.getValue(columnId).numGames;
+          const numB = rowB.getValue(columnId).numCompleted/rowB.getValue(columnId).numGames;
+          if (numA === numB) {
+            return rowA.getValue(columnId).numCompleted - rowB.getValue(columnId).numCompleted;
+          } else {
+            return numA - numB;
+          }
         }
       }),
       currentTournamentsColumnHelper.display({
@@ -739,7 +745,7 @@ function Tournaments(props) {
                 </p>
               </header>
               <div className="card-content">
-                { completedTournamentsData.length === 0 ? 
+                { completedTournamentsData.length === 0 ?
                   t("Tournament.NoneCompleted")
                   :
                   <>
