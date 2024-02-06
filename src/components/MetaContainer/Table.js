@@ -140,6 +140,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
               "stars" in globalMe &&
               globalMe.stars !== undefined &&
               globalMe.stars !== null &&
+              Array.isArray(globalMe.stars) &&
               globalMe.stars.includes(metaGame)
                 ? true
                 : false,
