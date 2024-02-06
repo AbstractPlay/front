@@ -30,6 +30,7 @@ function Tournaments(props) {
   const [openTournamentsShowState, openTournamentsShowStateSetter] = useStorageState("open-tournaments-show", 20);
   const [currentTournamentsShowState, currentTournamentsShowStateSetter] = useStorageState("current-tournaments-show", 20);
   const [completedTournamentsShowState, completedTournamentsShowStateSetter] = useStorageState("completed-tournaments-show", 20);
+  const [registeredOnly, registeredOnlySetter] = useStorageState("tournaments-registered-only", false);
 
   const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -215,8 +216,8 @@ function Tournaments(props) {
           startDate: date1,
           players: t.players,
         };
-      })},
-    [tournaments]
+      }).filter(rec => !globalMe || !registeredOnly || (globalMe && rec.players.includes(globalMe.id)))},
+    [tournaments, registeredOnly, globalMe]
   );
 
   const openTournamentsColumnHelper = createColumnHelper();
@@ -384,8 +385,8 @@ function Tournaments(props) {
             numGames: Object.values(t.divisions).reduce((acc, d) => acc + d.numGames, 0),
           }
         };
-      })},
-    [tournaments]
+      }).filter(rec => !globalMe || !registeredOnly || (globalMe && rec.players.includes(globalMe.id)))},
+    [tournaments, registeredOnly, globalMe]
   );
 
   const currentTournamentsColumnHelper = createColumnHelper();
@@ -574,9 +575,10 @@ function Tournaments(props) {
           dateEnded: t.dateEnded,
           winner: t.divisions[1].winner,
           numPlayers: t.players.length,
+          players: t.players,
         };
-      })},
-    [tournaments]
+      }).filter(rec => !globalMe || !registeredOnly || (globalMe && rec.players.includes(globalMe.id)))},
+    [tournaments, registeredOnly, globalMe]
   );
 
   const completedTournamentsColumnHelper = createColumnHelper();
@@ -736,6 +738,20 @@ function Tournaments(props) {
       <article className="content">
         <h1 className="title has-text-centered">{t("Tournament.Tournaments")}</h1>
         <p>{t("Tournament.Description")}</p>
+        {globalMe === undefined || globalMe === null ? null :
+            <div className="field">
+                <div className="control">
+                    <label class="checkbox">
+                        <input
+                            type="checkbox"
+                            defaultChecked={registeredOnly}
+                            onClick={() => registeredOnlySetter(!registeredOnly)}
+                        />
+                        Only show tournaments you're participating in
+                    </label>
+                </div>
+            </div>
+        }
         <div className="columns is-multiline">
           <div className="column content is-10 is-offset-1">
             <div className="card" key='completed_tournaments'>
