@@ -35,15 +35,11 @@ function UserSettingsModal(props) {
   const [exploration, explorationSetter] = useState(null);
   const [confirmMove, confirmMoveSetter] = useState(true);
   const [globalMe, globalMeSetter] = useContext(MeContext);
-  const [showMeTour, showMeTourSetter] = useStorageState(
-    "joyride-me-show",
-    true
-  );
   const [showPlayTour, showPlayTourSetter] = useStorageState(
     "joyride-play-show",
     true
   );
-  const [hideTour, hideTourSetter] = useState(!showMeTour || !showPlayTour);
+  const [hideTour, hideTourSetter] = useState(!showPlayTour);
   // palettes
   const [showPalette, showPaletteSetter] = useState(false);
   const [myPalettes, myPalettesSetter] = useState([]);
@@ -210,10 +206,8 @@ function UserSettingsModal(props) {
     const newSetting = !hideTour;
     hideTourSetter(newSetting);
     if (newSetting) {
-      showMeTourSetter(false);
       showPlayTourSetter(false);
     } else {
-      showMeTourSetter(true);
       showPlayTourSetter(true);
     }
   };
