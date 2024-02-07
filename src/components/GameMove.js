@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render, renderglyph } from "@abstractplay/renderer";
 import { Auth } from "aws-amplify";
@@ -1301,7 +1301,7 @@ function GameMove(props) {
           populateChecked(gameRef, engineRef, t, inCheckSetter);
           parentheticalSetter([]);
           if ("tournament" in data.game && data.game.tournament !== undefined && data.game.tournament !== null) {
-            parentheticalSetter(val => [...val, "tournament"]);
+            parentheticalSetter(val => [...val, (<Link to={`/tournament/${data.game.tournament}`}>tournament</Link>)]);
           }
           if (data.game.rated === false) {
               parentheticalSetter(val => [...val, "unrated"]);
@@ -2432,10 +2432,15 @@ function GameMove(props) {
               <span>
                 {gameinfo.get(metaGame).name}
                 {parenthetical.length === 0 ? null : (
-                  <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
-                    {` (${parenthetical.join(", ")})`}
-                  </span>
+                  <>
+                    <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
+                        &nbsp;(
+                        {parenthetical.reduce((prev, curr) => [prev, ", ", curr])}
+                        )
+                    </span>
+                  </>
                 )}
+
               </span>
             </h1>
             {inCheck.length === 0 ? (

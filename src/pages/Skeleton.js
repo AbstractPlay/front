@@ -217,7 +217,7 @@ function Bones(props) {
                         element={<Welcome token={token} update={update} />}
                       />
                       <Route path="/playground" element={<Playground />} />
-                      <Route path="/tournaments" element={<Tournaments />} />
+                      <Route path="/tournaments/:metaGame?" element={<Tournaments />} />
                     </Routes>
                   </MyTurnContext.Provider>
                 </section>

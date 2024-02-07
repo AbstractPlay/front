@@ -356,6 +356,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
             >
               Issue Challenge
             </button>
+            <Link to={"/tournaments/" + props.row.original.id}>Tournaments</Link>
           </>
         ),
       }),

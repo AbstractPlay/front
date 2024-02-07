@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import {
   getCoreRowModel,
@@ -31,6 +31,8 @@ function Tournaments(props) {
   const [currentTournamentsShowState, currentTournamentsShowStateSetter] = useStorageState("current-tournaments-show", 20);
   const [completedTournamentsShowState, completedTournamentsShowStateSetter] = useStorageState("completed-tournaments-show", 20);
   const [registeredOnly, registeredOnlySetter] = useStorageState("tournaments-registered-only", false);
+  const {metaGame} = useParams();
+  const [filterMeta, filterMetaSetter] = useState(null);
 
   const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -83,6 +85,24 @@ function Tournaments(props) {
     }
     fetchData();
   }, [update]);
+
+  useEffect(() => {
+    // was anything passed at all?
+    if (metaGame !== null && metaGame !== undefined && metaGame !== "") {
+        // is it a valid meta game?
+        if (gameinfo.has(metaGame)) {
+            filterMetaSetter(metaGame)
+        }
+        // if not, don't filter
+        else {
+            filterMetaSetter(null)
+        }
+    }
+    // if not, don't filter
+    else {
+        filterMetaSetter(null);
+    }
+  }, [metaGame]);
 
   useEffect(() => {
     async function archive() {
@@ -210,14 +230,16 @@ function Tournaments(props) {
           date1 = date2;
         return {
           tournamentid: t.id,
+          realMeta: t.metaGame,
           metaGame: gameinfo.get(t.metaGame).name,
           variants: t.variants.join(", "),
           number: t.number,
           startDate: date1,
           players: t.players,
         };
-      }).filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
-    [tournaments, registeredOnly, globalMe]
+      }).filter(rec => filterMeta === null || rec.realMeta === filterMeta)
+        .filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
+    [tournaments, registeredOnly, globalMe, filterMeta]
   );
 
   const openTournamentsColumnHelper = createColumnHelper();
@@ -375,6 +397,7 @@ function Tournaments(props) {
       return tournaments.filter((t) => t.started && !t.dateEnded).map((t, idx) => {
         return {
           tournamentid: t.id,
+          realMeta: t.metaGame,
           metaGame: gameinfo.get(t.metaGame).name,
           variants: t.variants.join(", "),
           number: t.number,
@@ -385,8 +408,9 @@ function Tournaments(props) {
             numGames: Object.values(t.divisions).reduce((acc, d) => acc + d.numGames, 0),
           }
         };
-      }).filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
-    [tournaments, registeredOnly, globalMe]
+      }).filter(rec => filterMeta === null || rec.realMeta === filterMeta)
+        .filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
+    [tournaments, registeredOnly, globalMe, filterMeta]
   );
 
   const currentTournamentsColumnHelper = createColumnHelper();
@@ -577,8 +601,9 @@ function Tournaments(props) {
           numPlayers: t.players.length,
           players: t.players,
         };
-      }).filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
-    [tournaments, registeredOnly, globalMe]
+      }).filter(rec => filterMeta === null || rec.metaGame === filterMeta)
+        .filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
+    [tournaments, registeredOnly, globalMe, filterMeta]
   );
 
   const completedTournamentsColumnHelper = createColumnHelper();
@@ -752,6 +777,18 @@ function Tournaments(props) {
                 </div>
             </div>
         }
+        <div className="control" style={{paddingBottom: "1em"}}>
+            <div class="select is-small">
+                <select
+                    onChange={(e) => e.target.value === "" ? filterMetaSetter(null) : filterMetaSetter(e.target.value)}
+                >
+                    <option value="" key="filterMetaBlank" selected={filterMeta === null}>--Show all--</option>
+                {[...gameinfo.values()].sort((a, b) => a.name.localeCompare(b.name)).map(rec => (
+                    <option value={rec.uid} key={"filterMeta" + rec.uid} selected={filterMeta === rec.uid}>{rec.name}</option>
+                ))}
+                </select>
+            </div>
+        </div>
         <div className="columns is-multiline">
           <div className="column content is-10 is-offset-1">
             <div className="card" key='completed_tournaments'>
