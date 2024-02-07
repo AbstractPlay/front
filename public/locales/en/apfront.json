@@ -277,6 +277,10 @@
     "TotalStars_one": "Total star",
     "TotalStars_other": "Total stars",
     "tour": {
+        "general": {
+            "Ignore": "Skip this tour",
+            "Take": "Tell me about this page"
+        },
         "me": {
             "challenges": "This section lists all the challenges you've received and issued.",
             "completed": "Once you've finished a game, you'll find it here. Games automatically drop off this list 48 hours after you last visited it. You can manually remove a game from this list by clicking the Clear button. If someone comments on a completed game, it will reappear on this list and will be bolded.",
@@ -288,13 +292,13 @@
         },
         "play": {
             "board": "This is the heart and soul of any game: the board. Click on the board to make your move. Helpful hints will appear above the move entry box as you do so.",
-            "boardbuttons": "Below the board is a series of buttons that let you do things like rotate the board and download a PNG version. Most important is the gear icon, which lets you choose alternative colour palettes and turn last-move annotations off and on. A colour-blind-friendly palette is available for all games!",
+            "boardbuttons": "Below the board is a series of buttons that let you do things like rotate the board and take notes. Most important is the gear icon, which lets you choose alternative colour palettes and turn last-move annotations off and on. A colour-blind-friendly palette is available for all games! None of these buttons will harm your game, so click around and explore!",
             "chat": "The best part about playing games is the people you play with. This is where you can talk back and forth with your opponent. The user chats are gathered here for your convenience, but a list of *all* chats, including textual descriptions of what's happening in the game, is visible at the bottom of the screen. Remember that these chats are public. Please see our terms of service and privacy policy for details.",
-            "move": "This is where you enter your move. Most of the time, you can make your move simply by clicking on the board, but some games have a move selection drop-down, and you can always manually type your move too, if you prefer. Helpful hints will appear above the move box as you enter your moves. One important feature to note is exploration. Before you submit your move, and while you're waiting for your opponent to move, you can make further moves to predict how the game might proceed and formulate your strategy.",
+            "move": "This is where you enter your move. Most of the time, you can make your move simply by clicking on the board, but some games have a move selection drop-down, and you can always manually type your move too. Helpful hints will appear above the move box as you enter your moves. One important feature to note is exploration. Before you submit your move, and while you're waiting for your opponent to move, you can make further moves to predict how the game might proceed and formulate your strategy.",
             "movelist": "Speaking of exploration, a list of all the moves made in the game is visible here. This will also include predicted future states you may have explored. When exploring, the current game state will have a box drawn around it. You can use the buttons above the move list to navigate. You can also use the arrow keys and the Home and End keys.",
             "settings": "And finally, open your user settings to change your profile, notification preferences, and exploration settings. You can disable these tours there as well.",
             "status": "In the status area you'll be told if any variants are active for this game as well as other game-specific data like scores or number of pieces in hand.",
-            "welcome": "This is where the action happens! The play screen for every game is structured the same way. The name of the game will always appear here, front and centre."
+            "welcome": "This is where the action happens! The play screen for every game is structured the same way. The name of the game will always appear here, front and centre, along with any descriptors like whether the game is part of a tournament."
         }
     },
     "Tournament": {

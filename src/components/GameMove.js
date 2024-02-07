@@ -996,6 +996,7 @@ function GameMove(props) {
   const [error, errorSetter] = useState(false);
   const [tourState, tourStateSetter] = useState([]);
   const [showTour, showTourSetter] = useStorageState("joyride-play-show", true);
+  const [startTour, startTourSetter] = useState(false);
   const [showSettings, showSettingsSetter] = useState(false);
   const [showMoveConfirm, showMoveConfirmSetter] = useState(false);
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
@@ -1090,34 +1091,42 @@ function GameMove(props) {
       {
         target: ".tourWelcome",
         content: t("tour.play.welcome"),
+        disableBeacon: true,
       },
       {
         target: ".tourStatus",
         content: t("tour.play.status"),
+        disableBeacon: true,
       },
       {
         target: ".tourMove",
         content: t("tour.play.move"),
+        disableBeacon: true,
       },
       {
         target: ".tourMoveList",
         content: t("tour.play.movelist"),
+        disableBeacon: true,
       },
       {
         target: ".tourChat",
         content: t("tour.play.chat"),
+        disableBeacon: true,
       },
       {
         target: ".tourBoard",
         content: t("tour.play.board"),
+        disableBeacon: true,
       },
       {
         target: ".tourBoardButtons",
         content: t("tour.play.boardbuttons"),
+        disableBeacon: true,
       },
       {
         target: ".tourSettings",
         content: t("tour.play.settings"),
+        disableBeacon: true,
       },
     ]);
   }, [t, tourStateSetter]);
@@ -2297,7 +2306,7 @@ function GameMove(props) {
       <article>
         <Joyride
           steps={tourState}
-          run={showTour}
+          run={startTour}
           callback={handleJoyrideCallback}
           continuous
           showProgress
@@ -2308,6 +2317,28 @@ function GameMove(props) {
             },
           }}
         />
+        {!showTour ? null :
+            <div className="has-text-centered">
+            <div className="field">
+                <div className="control">
+                    <button
+                        className="button apButton"
+                        onClick={() => startTourSetter(true)}
+                    >
+                        {t("tour.general.Take")
+                    }</button>
+                </div>
+                <div className="control">
+                <label class="checkbox">
+                    <input type="checkbox"
+                        onClick={() => {showTourSetter(false); startTourSetter(false);}}
+                    />
+                    {t("tour.general.Ignore")}
+                    </label>
+                </div>
+            </div>
+            </div>
+        }
         <div className="columns">
           {/***************** MoveEntry *****************/}
           <div

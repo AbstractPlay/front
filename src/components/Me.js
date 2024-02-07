@@ -17,8 +17,6 @@ import CompletedGamesTable from "./Me/CompletedGamesTable";
 import MyTurnTable from "./Me/MyTurnTable";
 import TheirTurnTable from "./Me/TheirTurnTable";
 import { toast } from "react-toastify";
-import Joyride, { STATUS } from "react-joyride";
-import { useStorageState } from "react-use-storage-state";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -44,49 +42,8 @@ function Me(props) {
   const [myTurn, myTurnSetter] = useContext(MyTurnContext);
   const [globalMe, globalMeSetter] = useContext(MeContext);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
-  const [tourState, tourStateSetter] = useState([]);
-  const [showTour, showTourSetter] = useStorageState("joyride-me-show", true);
 
-  useEffect(() => {
-    tourStateSetter([
-      {
-        target: ".tourWelcome",
-        content: t("tour.me.welcome"),
-      },
-      {
-        target: ".tourYourTurn",
-        content: t("tour.me.yourturn"),
-      },
-      {
-        target: ".tourTheirTurn",
-        content: t("tour.me.theirturn"),
-      },
-      {
-        target: ".tourCompleted",
-        content: t("tour.me.completed"),
-      },
-      {
-        target: ".tourChallenges",
-        content: t("tour.me.challenges"),
-      },
-      {
-        target: ".tourIssueChallenge",
-        content: t("tour.me.issueChallenge"),
-      },
-      {
-        target: ".tourSettings",
-        content: t("tour.me.settings"),
-      },
-    ]);
-  }, [t, tourStateSetter]);
-
-  const handleJoyrideCallback = (data) => {
-    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(data.status)) {
-      showTourSetter(false);
-    }
-  };
-
-  const handleNewProfileClose = (cnt) => {
+   const handleNewProfileClose = (cnt) => {
     showNewProfileModalSetter(false);
     if (cnt > 0) {
       updateSetter((update) => update + 1);
@@ -329,7 +286,7 @@ function Me(props) {
   const handleDeleteGamesClick = async () => {
     showDeleteGamesModalSetter(true);
   }
-  
+
   const handleDeleteGames = async () => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
@@ -344,8 +301,8 @@ function Me(props) {
         body: JSON.stringify({
           query: "delete_games",
           pars: {
-            metaGame: deleteGamesMetaGame, 
-            cbit: deleteCompletedGames ? 1 : 0, 
+            metaGame: deleteGamesMetaGame,
+            cbit: deleteCompletedGames ? 1 : 0,
             gameids: deletes
           },
         }),
@@ -493,20 +450,7 @@ function Me(props) {
     );
     return (
       <article id="dashboard">
-        <Joyride
-          steps={tourState}
-          run={showTour}
-          callback={handleJoyrideCallback}
-          continuous
-          showProgress
-          showSkipButton
-          styles={{
-            options: {
-              primaryColor: "#008ca8",
-            },
-          }}
-        />
-        <h1 className="title has-text-centered tourWelcome">
+        <h1 className="title has-text-centered">
           {t("WelcomePlayer")}&nbsp;<Link to={`/player/${globalMe.id}`}><span style={{textDecoration: "underline"}}>{globalMe.name}</span></Link>
         </h1>
         {/* Your Games */}
@@ -516,19 +460,19 @@ function Me(props) {
               <span>{t("YourGames")}</span>
             </p>
             <div className="indentedContainer">
-              <div className="tourYourTurn">
+              <div>
                 <p className="lined">
                   <span>{t("YourMove")}</span>
                 </p>
                 <MyTurnTable games={myMove} />
               </div>
-              <div className="tourTheirTurn topPad">
+              <div className="topPad">
                 <p className="lined">
                   <span>{t("OpponentMove")}</span>
                 </p>
                 <TheirTurnTable games={waiting} />
               </div>
-              <div className="tourCompleted topPad">
+              <div className="topPad">
                 <p className="lined">
                   <span>{t("CompletedGames")}</span>
                 </p>
@@ -558,7 +502,7 @@ function Me(props) {
         {/* Your Challenges */}
         <div className="columns">
           <div className="column content is-half is-offset-one-quarter">
-            <p className="subtitle lined tourChallenges">
+            <p className="subtitle lined">
               <span>{t("YourChallenges")}</span>
             </p>
             <div className="indentedContainer">
@@ -640,7 +584,7 @@ function Me(props) {
                   </ul>
                 )}
               </div>
-              <div className="tourIssueChallenge">
+              <div>
                 <p className="lined">
                   <span>{t("NewChallenge")}</span>
                 </p>
@@ -787,7 +731,7 @@ function Me(props) {
               { /* completed games? */ }
               <label className="label" htmlFor="delete_completed_games">
                 {"completed games?:"}
-              </label>          
+              </label>
               <div className="control">
                 <label className="checkbox">
                   <input
