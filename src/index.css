@@ -911,10 +911,14 @@ tr.stickyHeader {
     fill: var(--svg-gridline-color);
   }
 
-  /* "dark" tiles in checkered boards in dark mode */
+  /* invert light and dark squares in dark mode */
   :root[color-mode="dark"] symbol#tile-dark > rect {
     fill: var(--svg-default-fill);
-    fill-opacity: 0.5;
+    fill-opacity: 0;
+  }
+  :root[color-mode="dark"] symbol#tile-light > rect {
+    fill: var(--svg-default-fill);
+    fill-opacity: 0.25;
   }
 
   /* default black annotation line with possible arrow */
