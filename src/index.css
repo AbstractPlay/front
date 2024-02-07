@@ -16,6 +16,7 @@
     --dropshadow-target-start: rgba(10,10,10,0.1);
     --dropshadow-target-end: rgba(10,10,10,0.02);
     --svg-label-color: black;
+    --svg-annotation-color: black;
     --svg-gridline-color: black;
     --svg-default-fill: black;
     --svg-volcano-caps: black;
@@ -40,6 +41,7 @@
   --secondary-color-3-lighter: #009fbf;
   --secondary-color-3-bg: #333;
   --svg-label-color: var(--main-fg-color);
+  --svg-annotation-color: var(--secondary-color-2);
   --svg-gridline-color: var(--main-font-color);
   --svg-default-fill: var(--main-font-color);
   --svg-volcano-caps: #666;
@@ -909,6 +911,12 @@ tr.stickyHeader {
     fill: var(--svg-gridline-color);
   }
 
+  /* "dark" tiles in checkered boards in dark mode */
+  :root[color-mode="dark"] symbol#tile-dark > rect {
+    fill: var(--svg-default-fill);
+    fill-opacity: 0.5;
+  }
+
   /* default black annotation line with possible arrow */
   line.aprender-annotation-3dc45b5962885,
   line.aprender-annotation-7003d53491b27,
@@ -923,8 +931,8 @@ tr.stickyHeader {
   marker.aprender-annotation-289da774b717b path,
   marker.aprender-annotation-7681581c947d5 path
   {
-    fill: var(--svg-label-color);
-    stroke: var(--svg-label-color);
+    fill: var(--svg-annotation-color);
+    stroke: var(--svg-annotation-color);
   }
 
   /* eject annotations and polylines are a little different because they don't have fill */
@@ -935,14 +943,14 @@ tr.stickyHeader {
   path.aprender-annotation-7681581c947d5,
   line.aprender-annotation-e401e58e62dfb
   {
-    stroke: var(--svg-label-color);
+    stroke: var(--svg-annotation-color);
   }
 
   /* default black enter/exit annotation */
   rect.aprender-annotation-98c266befaf0d,
   rect.aprender-annotation-e401e58e62dfb
   {
-    stroke: var(--svg-label-color);
+    stroke: var(--svg-annotation-color);
   }
 
   /* Fence markers (Fendo) */

@@ -216,7 +216,7 @@ function Tournaments(props) {
           startDate: date1,
           players: t.players,
         };
-      }).filter(rec => !globalMe || !registeredOnly || (globalMe && rec.players.includes(globalMe.id)))},
+      }).filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
     [tournaments, registeredOnly, globalMe]
   );
 
@@ -385,7 +385,7 @@ function Tournaments(props) {
             numGames: Object.values(t.divisions).reduce((acc, d) => acc + d.numGames, 0),
           }
         };
-      }).filter(rec => !globalMe || !registeredOnly || (globalMe && rec.players.includes(globalMe.id)))},
+      }).filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
     [tournaments, registeredOnly, globalMe]
   );
 
@@ -577,7 +577,7 @@ function Tournaments(props) {
           numPlayers: t.players.length,
           players: t.players,
         };
-      }).filter(rec => !globalMe || !registeredOnly || (globalMe && rec.players.includes(globalMe.id)))},
+      }).filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
     [tournaments, registeredOnly, globalMe]
   );
 
