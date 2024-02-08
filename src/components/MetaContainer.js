@@ -30,7 +30,6 @@ function MetaContainer(props) {
         url.searchParams.append("query", "meta_games");
         const res = await fetch(url);
         const result = await res.json();
-        console.log(result);
         countsSetter(result);
       } catch (error) {
         console.log(error);
@@ -106,21 +105,21 @@ function MetaContainer(props) {
         );
       } else {
         const result = await res.json();
-        console.log(result.body);
         const newMe = JSON.parse(JSON.stringify(globalMe));
-        newMe.stars = result.body;
+        newMe.stars = JSON.parse(result.body);
         globalMeSetter(newMe);
         // update counts locally
         const newcounts = JSON.parse(JSON.stringify(counts));
         if (
-          newMe !== null &&
-          "stars" in newMe &&
-          newMe.stars.length > 0 &&
-          newMe.stars.includes(game)
+            newMe !== null &&
+            "stars" in newMe &&
+            Array.isArray(newMe.stars)
         ) {
-          newcounts[game].stars++;
-        } else {
-          newcounts[game].stars--;
+            if (newMe.stars.includes(game)) {
+                newcounts[game].stars++;
+              } else {
+                newcounts[game].stars--;
+              }
         }
         countsSetter(newcounts);
       }
@@ -153,7 +152,7 @@ function MetaContainer(props) {
     }
   };
 
-  console.log(games);
+//   console.log(games);
   return (
     <Fragment>
       <Table
