@@ -29,7 +29,7 @@ function History({handleChallenge}) {
         allRecs
         .map((rec) => {
             const gameName = rec.header.game.name;
-            const meta = [...gameinfo.entries()].find(([,info]) => info.name.startsWith(gameName))[0];
+            const meta = [...gameinfo.entries()].find(([,info]) => info.name === gameName)[0];
             let winner = undefined;
             const sortedResults = rec.header.players.sort((a, b) => b.result - a.result);
             if (sortedResults[0].result !== sortedResults[1].result) {
