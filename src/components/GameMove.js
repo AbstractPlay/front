@@ -21,16 +21,18 @@ import GameMoves from "./GameMove/GameMoves";
 import GameStatus from "./GameMove/GameStatus";
 import MoveEntry from "./GameMove/MoveEntry";
 import MoveResults from "./GameMove/MoveResults";
+import MiscButtons from "./GameMove/MiscButtons";
+import Board from "./GameMove/Board";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import ClipboardCopy from "./GameMove/ClipboardCopy";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
-import DownloadDataUri from "./GameMove/DownloadDataUri";
 import UserChats from "./GameMove/UserChats";
 import { Canvg } from "canvg";
 import Joyride, { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
 import { toast } from "react-toastify";
+import { nanoid } from "nanoid";
 
 function useQueryString() {
   return new URLSearchParams(useLocation().search);
@@ -981,6 +983,7 @@ const populateChecked = (gameRef, engineRef, t, setter) => {
   }
 };
 
+const defaultChunkOrder = ["status","move","board","moves","chat"];
 
 function GameMove(props) {
   const [renderrep, renderrepSetter] = useState(null);
@@ -1024,6 +1027,7 @@ function GameMove(props) {
   const [gameNote, gameNoteSetter] = useState(null);
   const [interimNote, interimNoteSetter] = useState("");
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
+  const [mobileOrder, mobileOrderSetter] = useStorageState("play-mobile-order", [...defaultChunkOrder]);
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
   const [parenthetical, parentheticalSetter] = useState([]); // any description after the game name (e.g., "unrated", "exploration disabled")
   // pieInvoked is used to trigger the game reload after the function is called
@@ -1032,6 +1036,7 @@ function GameMove(props) {
   const [inCheck, inCheckSetter] = useState("");
   const [drawMessage, drawMessageSetter] = useState("");
   const [canPublish, canPublishSetter] = useState("no");
+  const [boardKey, boardKeySetter] = useState(nanoid()); // used to trigger board redrawing
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -1158,6 +1163,40 @@ function GameMove(props) {
         document.adoptedStyleSheets = [];
     }
   }, [customCSS, metaGame]);
+
+  const handleMoveUp = (key) => {
+    const idx = mobileOrder.findIndex(s => s === key);
+    if (idx !== -1) {
+        // if first item, move to end
+        if (idx === 0) {
+            mobileOrderSetter([...mobileOrder.slice(1), mobileOrder[0]])
+        }
+        // otherwise, shift
+        else {
+            const left = mobileOrder.slice(0, idx-1);
+            const right = mobileOrder.slice(idx+1);
+            mobileOrderSetter([...left, mobileOrder[idx], mobileOrder[idx-1], ...right]);
+        }
+        boardKeySetter(nanoid());
+    }
+  }
+
+  const handleMoveDown = (key) => {
+    const idx = mobileOrder.findIndex(s => s === key);
+    if (idx !== -1) {
+        // if last item, move to top
+        if (idx === mobileOrder.length - 1) {
+            mobileOrderSetter([mobileOrder[idx], ...mobileOrder.slice(0, idx)])
+        }
+        // otherwise, shift
+        else {
+            const left = mobileOrder.slice(0, idx);
+            const right = mobileOrder.slice(idx+2);
+            mobileOrderSetter([...left, mobileOrder[idx+1], mobileOrder[idx], ...right]);
+        }
+        boardKeySetter(nanoid());
+    }
+  }
 
   const saveCustomCSS = () => {
     if ( (metaGame !== null) && (metaGame !== undefined) ) {
@@ -1804,7 +1843,7 @@ function GameMove(props) {
         // console.log(e);
       }
     }
-  }, [renderrep, globalMe, focus, settings, explorer, t, navigate]);
+  }, [renderrep, globalMe, focus, settings, explorer, t, navigate, boardKey]);
 
   const setError = (error) => {
     if (error.Message !== undefined) errorMessageRef.current = error.Message;
@@ -2339,299 +2378,312 @@ function GameMove(props) {
             </div>
             </div>
         }
-        <div className="columns">
-          {/***************** MoveEntry *****************/}
-          <div
-            className={`column ${
-              isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
-            }`}
-          >
-            <GameStatus
-              status={statusRef.current}
-              settings={settings}
-              game={game}
-              canExplore={focus?.canExplore}
-              handleStashClick={handleStashClick}
-            />
-            <MoveEntry
-              move={move}
-              toMove={toMove}
-              game={gameRef.current}
-              moves={movesRef.current}
-              exploration={explorationRef.current}
-              focus={focus}
-              submitting={submitting}
-              handlers={[
-                handleMove,
-                handleMark,
-                handleSubmit,
-                handleToSubmit,
-                handleView,
-                handleResign,
-                handleTimeout,
-                handleReset,
-                handlePie,
-              ]}
-            />
-            {toMove !== "" || gameRec === undefined ? null : (
-              <DownloadDataUri
-                filename={`AbstractPlay-${metaGame}-${gameID}.json`}
-                label="Download completed game record"
-                uri={
-                  gameRec === undefined
-                    ? null
-                    : `data:text/json;charset=utf-8,${encodeURIComponent(
-                        JSON.stringify(gameRec)
-                      )}`
-                }
-              />
-            )}
-            <div className="buttons">
-              {canPublish === "no" ? null : (
-                <div className="control" style={{ paddingTop: "1em" }}>
-                  <button
-                    className="button apButton is-small"
-                    onClick={handlePublishExploration}
-                    title={t("PublishHelp")}
-                    disabled={canPublish === "publishing"}
-                  >
-                    <span>{t("Publish")}</span>
-                  </button>
-                </div>
-              )}
-              {globalMe?.settings?.all?.exploration === -1 ||
-              globalMe?.settings?.all?.exploration === 1 ||
-              explorer ||
-              !game ||
-              game.simultaneous ||
-              game.noExplore ||
-              game.numPlayers !== 2 ? null : (
-                <div className="control" style={{ paddingTop: "1em" }}>
-                  <button className="button apButton" onClick={handleExplorer}>
-                    <span>{t("Explore")}</span>
-                  </button>
-                </div>
-              )}
-              {myMove.length < 1 ? null : (
-                <div className="control" style={{ paddingTop: "1em" }}>
-                  <button className="button apButton is-small" onClick={handleNextGame}>
-                    <span>
-                      {t("NextGame")} ({myMove.length})
-                    </span>
-                    <span className="icon">
-                      <i className="fa fa-forward"></i>
-                    </span>
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-          {/***************** Board *****************/}
-          <div className="column">
-            <h1 className="subtitle lined tourWelcome">
-              <span>
-                {gameinfo.get(metaGame).name}
-                {parenthetical.length === 0 ? null : (
-                  <>
-                    <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
-                        &nbsp;(
-                        {parenthetical.reduce((prev, curr) => [prev, ", ", curr])}
-                        )
-                    </span>
-                  </>
-                )}
+        {screenWidth >= 770 ?
+            /* Normal, full-width layout */
+            (
+                <div className="columns">
+                {/***************** MoveEntry *****************/}
+                <div
+                className={`column ${
+                    isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
+                }`}
+                >
+                    <div style={{ marginBottom: "2rem" }} className="tourStatus">
+                        <h1 className="subtitle lined">
+                            <span>{t("Status")}</span>
+                        </h1>
+                        <GameStatus
+                            status={statusRef.current}
+                            settings={settings}
+                            game={game}
+                            canExplore={focus?.canExplore}
+                            handleStashClick={handleStashClick}
+                        />
+                    </div>
+                    <div className="tourMove">
+                        <h1 className="subtitle lined">
+                        <span>{t("MakeMove")}</span>
+                        </h1>
+                        <MoveEntry
+                            move={move}
+                            toMove={toMove}
+                            game={gameRef.current}
+                            moves={movesRef.current}
+                            exploration={explorationRef.current}
+                            focus={focus}
+                            submitting={submitting}
+                            forceUndoRight={false}
+                            handlers={[
+                                handleMove,
+                                handleMark,
+                                handleSubmit,
+                                handleToSubmit,
+                                handleView,
+                                handleResign,
+                                handleTimeout,
+                                handleReset,
+                                handlePie,
+                            ]}
+                        />
+                    </div>
+                    <MiscButtons
+                        metaGame={metaGame}
+                        gameID={gameID}
+                        toMove={toMove}
+                        gameRec={gameRec}
+                        canPublish={canPublish}
+                        handlePublishExploration={handlePublishExploration}
+                        handleExplorer={handleExplorer}
+                        handleNextGame={handleNextGame}
+                        explorer={explorer}
+                        game={game}
+                        t={t}
+                    />
+                </div> {/* column */}
+                {/***************** Board *****************/}
+                <div className="column">
+                    <h1 className="subtitle lined tourWelcome">
+                        <span>
+                            {gameinfo.get(metaGame).name}
+                            {parenthetical.length === 0 ? null : (
+                            <>
+                                <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
+                                    &nbsp;(
+                                    {parenthetical.reduce((prev, curr) => [prev, ", ", curr])}
+                                    )
+                                </span>
+                            </>
+                            )}
 
-              </span>
-            </h1>
-            {inCheck.length === 0 ? (
-              ""
-            ) : (
-              <div
-                className="content inCheck"
-                dangerouslySetInnerHTML={{ __html: inCheck }}
-              ></div>
-            )}
-            {gameRef.current?.stackExpanding ? (
-              <div className={`board _meta_${metaGame}`}>
-                <div className="stack" id="stack" ref={stackImage}></div>
-                <div className="stackboard" id="svg" ref={boardImage}></div>
-              </div>
-            ) : (
-              <div
-                className={
-                  isZoomed ? `board tourBoard _meta_${metaGame}` : `board tourBoard unZoomedBoard _meta_${metaGame}`
-                }
-                id="svg"
-                ref={boardImage}
-              ></div>
-            )}
-            <div className="boardButtons tourBoardButtons">
-              {!gameRef?.current?.canRotate ? null : (
-                <button
-                  className="fabtn align-right"
-                  onClick={handleRotate}
-                  title={t("RotateBoard")}
-                >
-                  <i className="fa fa-refresh"></i>
-                </button>
-              )}
-              <button
-                className="fabtn align-right"
-                onClick={handleUpdateRenderOptions}
-                title={t("BoardSettings")}
-              >
-                <i className="fa fa-cog"></i>
-              </button>
-              <button
-                className="fabtn align-right"
-                onClick={() => {
-                  showGameDetailsSetter(true);
-                }}
-                title={t("GameInfo")}
-              >
-                {gameEngine === undefined ||
-                gameEngine.notes() === undefined ? (
-                  <i className="fa fa-info"></i>
-                ) : (
-                  <span className="highlight">
-                    <i className="fa fa-info"></i>
-                  </span>
-                )}
-              </button>
-              {!globalMe ? null : (
-                <button
-                  className="fabtn align-right"
-                  onClick={() => showGameNoteSetter(true)}
-                  title={t("GameNoteModal")}
-                >
-                  {gameNote === undefined ||
-                  gameNote === null ||
-                  gameNote.length === 0 ? (
-                    <i className="fa fa-sticky-note"></i>
-                  ) : (
-                    <span className="highlight">
-                      <i className="fa fa-sticky-note"></i>
-                    </span>
-                  )}
-                </button>
-              )}
-              <button
-                className="fabtn align-right"
-                onClick={() => {
-                  showGameDumpSetter(true);
-                }}
-                title={t("DebugModal")}
-              >
-                <i className="fa fa-bug"></i>
-              </button>
-              <button
-                className="fabtn align-right"
-                onClick={() => {
-                  isZoomedSetter(!isZoomed);
-                }}
-                title={t("ToggleZoom")}
-              >
+                        </span>
+                    </h1>
+                  <Board
+                      metaGame={metaGame}
+                      gameID={gameID}
+                      t={t}
+                      gameEngine={gameEngine}
+                      gameNote={gameNote}
+                      inCheck={inCheck}
+                      gameRef={gameRef}
+                      stackImage={stackImage}
+                      boardImage={boardImage}
+                      pngExport={pngExport}
+                      screenWidth={screenWidth}
+                      isZoomed={isZoomed}
+                      isZoomedSetter={isZoomedSetter}
+                      handleRotate={handleRotate}
+                      handleUpdateRenderOptions={handleUpdateRenderOptions}
+                      showGameDetailsSetter={showGameDetailsSetter}
+                      showGameNoteSetter={showGameNoteSetter}
+                      showGameDumpSetter={showGameDumpSetter}
+                      showCustomCSSSetter={showCustomCSSSetter}
+                      showInjectSetter={showInjectSetter}
+                  />
+                </div>
+                {/***************** GameMoves *****************/}
+                {/* Hidden when zooming */}
                 {isZoomed ? (
-                  <i className="fa fa-search-minus"></i>
+                  ""
                 ) : (
-                  <i className="fa fa-search-plus"></i>
+                  <div
+                    className={`column ${
+                      isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
+                    }`}
+                  >
+                    <div className="tourMoveList">
+                        <h1 className="subtitle lined">
+                            <span>{t("Moves")}</span>
+                        </h1>
+                        <GameMoves
+                            focus={focus}
+                            game={game}
+                            exploration={explorationRef.current}
+                            noExplore={globalMe?.settings?.all?.exploration === -1}
+                            handleGameMoveClick={handleGameMoveClick}
+                            getFocusNode={getFocusNode}
+                            handlePlaygroundExport={handlePlaygroundExport}
+                        />
+                    </div>
+                    <div style={{ paddingTop: "1em" }} className="tourChat">
+                    <h1 className="subtitle lined">
+                        <span>
+                            {exploringCompletedGame
+                            ? t("GameComments")
+                            : t("GameSummary")}
+                        </span>
+                        </h1>
+                        <UserChats
+                            comments={exploringCompletedGame ? nodeComments : comments}
+                            players={gameRef.current?.players}
+                            handleSubmit={
+                                exploringCompletedGame ? submitNodeComment : submitComment
+                            }
+                            tooMuch={commentsTooLong}
+                            gameid={gameRef.current?.id}
+                            exploringCompletedGame={exploringCompletedGame}
+                            userId={globalMe?.id}
+                        />
+                    </div>
+                  </div>
                 )}
-              </button>
-              <button
-                className="fabtn align-right"
-                onClick={() => {
-                  showCustomCSSSetter(true);
-                }}
-                title={t("CustomCSS")}
-              >
-                  <i className="fa fa-css3"></i>
-              </button>
-              {pngExport === undefined ? (
-                ""
-              ) : (
-                <a
-                  href={pngExport}
-                  download={"AbstractPlay-" + metaGame + "-" + gameID + ".png"}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <button className="fabtn align-right" title={t("ExportPNG")}>
-                    <i className="fa fa-download"></i>
-                  </button>
-                </a>
-              )}
-              {!globalMe || globalMe.admin !== true ? (
-                ""
-              ) : (
-                <button
-                  className="fabtn align-right"
-                  onClick={() => {
-                    showInjectSetter(true);
-                  }}
-                  title={"Inject state"}
-                >
-                  <i className="fa fa-magic"></i>
-                </button>
-              )}
-            </div>
-          </div>
-          {/***************** GameMoves *****************/}
-          {/* Hidden when zooming */}
-          {isZoomed ? (
-            ""
-          ) : (
-            <div
-              className={`column ${
-                isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
-              }`}
-            >
-              {screenWidth > 770 ? (
-                <Fragment>
-                  <GameMoves
-                    focus={focus}
-                    game={game}
-                    exploration={explorationRef.current}
-                    noExplore={globalMe?.settings?.all?.exploration === -1}
-                    handleGameMoveClick={handleGameMoveClick}
-                    getFocusNode={getFocusNode}
-                    handlePlaygroundExport={handlePlaygroundExport}
-                  />
-                  <UserChats
-                    comments={exploringCompletedGame ? nodeComments : comments}
-                    players={gameRef.current?.players}
-                    handleSubmit={
-                      exploringCompletedGame ? submitNodeComment : submitComment
-                    }
-                    tooMuch={commentsTooLong}
-                    gameid={gameRef.current?.id}
-                    exploringCompletedGame={exploringCompletedGame}
-                    userId={globalMe?.id}
-                  />
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <UserChats
-                    comments={comments}
-                    players={gameRef.current?.players}
-                    handleSubmit={submitComment}
-                    tooMuch={commentsTooLong}
-                    gameid={gameRef.current?.id}
-                  />
-                  <GameMoves
-                    focus={focus}
-                    game={game}
-                    exploration={explorationRef.current}
-                    noExplore={globalMe?.settings?.all?.exploration === -1}
-                    handleGameMoveClick={handleGameMoveClick}
-                    getFocusNode={getFocusNode}
-                    handlePlaygroundExport={handlePlaygroundExport}
-                  />
-                </Fragment>
-              )}
-            </div>
-          )}
-        </div>
-        {/* columns */}
+              </div>
+            ) :
+            /* Mobile, stacked layout */
+            mobileOrder.map(key => {
+                let title;
+                let tourClass;
+                switch (key) {
+                    case "status":
+                        title = t("Status");
+                        tourClass = "tourStatus";
+                        break;
+                    case "move":
+                        title = t("MakeMove");
+                        tourClass = "tourMove";
+                        break;
+                    case "board":
+                        title = gameinfo.get(metaGame).name;
+                        tourClass = "tourBoard";
+                        break;
+                    case "moves":
+                        title = t("Moves");
+                        tourClass = "tourMoveList";
+                        break;
+                    case "chat":
+                        title = exploringCompletedGame ? t("GameComments") : t("GameSummary");
+                        tourClass = "tourChat";
+                        break;
+                    default:
+                        throw new Error(`Unrecognized chunk name '${key}'`);
+                }
+                return (
+                <div style={{paddingBottom: "1em"}}>
+                    <div className={"card " + tourClass} key={`${key}|card`}>
+                        <header className="card-header">
+                            <p className="card-header-title">
+                                {title}
+                                {key !== "board" || parenthetical.length === 0 ? null : (
+                                <>
+                                    <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
+                                        &nbsp;(
+                                        {parenthetical.reduce((prev, curr) => [prev, ", ", curr])}
+                                        )
+                                    </span>
+                                </>
+                                )}
+                            </p>
+                            <button className="card-header-icon" aria-label="move up" title="move up" onClick={() => handleMoveUp(key)}>
+                                <span className="icon">
+                                    <i className="fa fa-angle-up" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                            <button className="card-header-icon" aria-label="move down" title="move down" onClick={() => handleMoveDown(key)}>
+                                <span className="icon">
+                                    <i className="fa fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </header>
+                        <div className="card-content">
+                        {
+                            key === "status" ? (
+                                <GameStatus
+                                    status={statusRef.current}
+                                    settings={settings}
+                                    game={game}
+                                    canExplore={focus?.canExplore}
+                                    handleStashClick={handleStashClick}
+                                />
+                            ) : key ==="move" ? (
+                            <>
+                                <MoveEntry
+                                    move={move}
+                                    toMove={toMove}
+                                    game={gameRef.current}
+                                    moves={movesRef.current}
+                                    exploration={explorationRef.current}
+                                    focus={focus}
+                                    submitting={submitting}
+                                    forceUndoRight={true}
+                                    handlers={[
+                                        handleMove,
+                                        handleMark,
+                                        handleSubmit,
+                                        handleToSubmit,
+                                        handleView,
+                                        handleResign,
+                                        handleTimeout,
+                                        handleReset,
+                                        handlePie,
+                                    ]}
+                                />
+                                <MiscButtons
+                                    metaGame={metaGame}
+                                    gameID={gameID}
+                                    toMove={toMove}
+                                    gameRec={gameRec}
+                                    canPublish={canPublish}
+                                    handlePublishExploration={handlePublishExploration}
+                                    handleExplorer={handleExplorer}
+                                    handleNextGame={handleNextGame}
+                                    explorer={explorer}
+                                    game={game}
+                                    t={t}
+                                />
+                            </>
+                            ) : key === "board" ? (
+                                <Board
+                                    metaGame={metaGame}
+                                    gameID={gameID}
+                                    t={t}
+                                    gameEngine={gameEngine}
+                                    gameNote={gameNote}
+                                    inCheck={inCheck}
+                                    gameRef={gameRef}
+                                    stackImage={stackImage}
+                                    boardImage={boardImage}
+                                    pngExport={pngExport}
+                                    screenWidth={screenWidth}
+                                    isZoomed={isZoomed}
+                                    isZoomedSetter={isZoomedSetter}
+                                    handleRotate={handleRotate}
+                                    handleUpdateRenderOptions={handleUpdateRenderOptions}
+                                    showGameDetailsSetter={showGameDetailsSetter}
+                                    showGameNoteSetter={showGameNoteSetter}
+                                    showGameDumpSetter={showGameDumpSetter}
+                                    showCustomCSSSetter={showCustomCSSSetter}
+                                    showInjectSetter={showInjectSetter}
+                                />
+                            ) : key === "moves" ? (
+                                <GameMoves
+                                    focus={focus}
+                                    game={game}
+                                    exploration={explorationRef.current}
+                                    noExplore={globalMe?.settings?.all?.exploration === -1}
+                                    handleGameMoveClick={handleGameMoveClick}
+                                    getFocusNode={getFocusNode}
+                                    handlePlaygroundExport={handlePlaygroundExport}
+                                />
+                            ) : key === "chat" ? (
+                                <UserChats
+                                    comments={exploringCompletedGame ? nodeComments : comments}
+                                    players={gameRef.current?.players}
+                                    handleSubmit={
+                                        exploringCompletedGame ? submitNodeComment : submitComment
+                                    }
+                                    tooMuch={commentsTooLong}
+                                    gameid={gameRef.current?.id}
+                                    exploringCompletedGame={exploringCompletedGame}
+                                    userId={globalMe?.id}
+                                />
+                            ) : null
+                        }
+                        </div>
+                    </div>
+                </div>
+                );
+            })
+        }
+
         <div className="columns">
           {/* Comments */}
           <div className="column is-three-fifths is-offset-one-fifth">

@@ -631,10 +631,7 @@ function GameMoves(props) {
     }
 
     return (
-      <div className="tourMoveList">
-        <h1 className="subtitle lined">
-          <span>{t("Moves")}</span>
-        </h1>
+      <>
         <div className="field is-grouped" id="MoveTreeBtnBar">
           <button
             className="button is-small tooltipped"
@@ -766,7 +763,7 @@ function GameMoves(props) {
             Export to playground
           </div>
         </div>
-      </div>
+      </>
     );
   } else {
     return (
