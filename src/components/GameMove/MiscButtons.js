@@ -44,7 +44,7 @@ function MiscButtons({
               game.simultaneous ||
               game.noExplore ||
               game.numPlayers !== 2 ? null : (
-                <div className="control" style={{ paddingTop: "1em" }}>
+                <div className="control" style={{ paddingTop: "1em", paddingRight: "1em" }}>
                   <button className="button apButton" onClick={handleExplorer}>
                     <span>{t("Explore")}</span>
                   </button>
