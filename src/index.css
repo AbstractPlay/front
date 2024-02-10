@@ -878,6 +878,17 @@ tr.stickyHeader {
     fill: var(--svg-gridline-color);
   }
 
+  /* gridlines for cobweb boards */
+  /* div._meta_agere g#gridlines path:not([class]), g#gridlines polygon:not([class]) {
+    stroke: var(--svg-gridline-color);
+  } */
+
+  div._meta_agere g#gridlines circle:not([class]) {
+    stroke: var(--svg-gridline-color);
+    fill: white;
+    fill-opacity: 0;
+  }
+
   /* gridlines for hex-of-hex, hex-slanted, and hex-odd/even boards */
   symbol#hex-symbol polygon {
     fill: var(--svg-default-fill);

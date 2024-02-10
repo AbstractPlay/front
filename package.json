@@ -13,7 +13,7 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/gameslib": "latest",
+    "@abstractplay/gameslib": "^1.0.0-ci-7857764694.0",
     "@abstractplay/renderer": "latest",
     "@tanstack/react-table": "^8.11.2",
     "@testing-library/jest-dom": "5.16.5",
