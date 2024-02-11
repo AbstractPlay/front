@@ -568,7 +568,6 @@ function setupColors(settings, game, globalMe) {
         const engine = GameFactory(game.metaGame, game.state);
         color = engine.getPlayerColour(i + 1);
       }
-      console.log(JSON.stringify(game));
       return {
         isImage: true,
         value: renderglyph("piece", color, options),

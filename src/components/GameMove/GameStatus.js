@@ -12,6 +12,9 @@ function renderGlyph(settings, glyph, id, player, globalMe) {
     const palette = globalMe.palettes.find(p => p.name === settings.color);
     if (palette !== undefined) {
         options.colours = [...palette.colours];
+        while (options.colours.length < 10) {
+            options.colours.push("#fff");
+        }
     }
   }
   options.svgid = id;
