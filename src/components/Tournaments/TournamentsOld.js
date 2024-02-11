@@ -210,7 +210,7 @@ function TournamentsOld(props) {
               </p>
             </header>
             <div className="card-content">
-              { oldTournamentsData.length === 0 ? 
+              { oldTournamentsData.length === 0 ?
                 t("Tournament.NoneOld")
                 :
                 <>
