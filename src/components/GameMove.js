@@ -155,6 +155,7 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("shared-stash");
   game0.noMoves = info.flags !== undefined && info.flags.includes("no-moves");
   game0.automove = info.flags !== undefined && info.flags.includes("automove");
+  game0.noExploreFlag = info.flags !== undefined && info.flags.includes("no-explore");
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
   if (game0.state === undefined)
@@ -189,7 +190,7 @@ function setupGame(
   } else {
     game0.canSubmit =
       game0.toMove !== "" && me && game0.players[game0.toMove].id === me.id;
-    game0.canExplore = game0.numPlayers === 2 && isExplorer(explorer, me) && (game0.noExplore !== true);
+    game0.canExplore = game0.numPlayers === 2 && isExplorer(explorer, me) && (game0.noExplore !== true) && (game0.noExploreFlag !== true);
   }
   if (game0.sharedPieces) {
     game0.seatNames = [];
