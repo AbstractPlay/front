@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, Fragment } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 function useEventListener(eventName, handler, element = window) {
@@ -404,7 +405,7 @@ function GameMoves(props) {
                   {img.value + ":"}
                 </span>
               )}
-              <span className="playerName">{player}</span>
+              <span className="playerName"><Link to={`/player/${game.players[i].id}`}>{player}</Link></span>
             </div>
           </th>
         );
