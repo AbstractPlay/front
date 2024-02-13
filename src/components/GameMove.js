@@ -2556,6 +2556,26 @@ function GameMove(props) {
                     default:
                         throw new Error(`Unrecognized chunk name '${key}'`);
                 }
+                // Skip empty status displays
+                if (key === "status") {
+                    const status = statusRef.current;
+                    if (
+                        !game ||
+                        game.colors === undefined ||
+                        (
+                            (!game.variants || game.variants.length === 0) &&
+                            status.statuses.length === 0 &&
+                            (
+                                (!game.scores && !game.limitedPieces) ||
+                                status.scores.length === 0
+                            ) &&
+                            !game.playerStashes &&
+                            !game.sharedStash
+                        )
+                    ) {
+                        return null;
+                    }
+                }
                 return (
                 <div style={{paddingBottom: "1em"}}>
                     <div className={"card " + tourClass} key={`${key}|card`}>
