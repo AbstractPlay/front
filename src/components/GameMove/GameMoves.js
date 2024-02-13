@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, Fragment } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 function useEventListener(eventName, handler, element = window) {
@@ -404,7 +405,7 @@ function GameMoves(props) {
                   {img.value + ":"}
                 </span>
               )}
-              <span className="playerName">{player}</span>
+              <span className="playerName"><Link to={`/player/${game.players[i].id}`}>{player}</Link></span>
             </div>
           </th>
         );
@@ -631,10 +632,7 @@ function GameMoves(props) {
     }
 
     return (
-      <div className="tourMoveList">
-        <h1 className="subtitle lined">
-          <span>{t("Moves")}</span>
-        </h1>
+      <>
         <div className="field is-grouped" id="MoveTreeBtnBar">
           <button
             className="button is-small tooltipped"
@@ -766,7 +764,7 @@ function GameMoves(props) {
             Export to playground
           </div>
         </div>
-      </div>
+      </>
     );
   } else {
     return (

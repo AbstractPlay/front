@@ -41,6 +41,7 @@ function MoveEntry(props) {
   const moves = props.moves;
   const exploration = props.exploration;
   const focus = props.focus;
+  const forceUndoRight = props.forceUndoRight;
   const submitting = props.submitting;
   const handleMove = props.handlers[0];
   const handleMark = props.handlers[1];
@@ -211,10 +212,7 @@ function MoveEntry(props) {
         game.players.length - 1;
 
     return (
-      <div className="tourMove">
-        <h1 className="subtitle lined">
-          <span>{t("MakeMove")}</span>
-        </h1>
+      <>
         {uiState === -1 ? (
           <p className="historyState">{t("History")}</p>
         ) : uiState === 0 ? (
@@ -540,6 +538,7 @@ function MoveEntry(props) {
           )}
           {focus.exPath.length > 0 ? (
             <div
+              style={forceUndoRight ? {float: "right"} : {}}
               className="winningColorButton tooltipped"
               onClick={() => handleReset()}
             >
@@ -550,7 +549,7 @@ function MoveEntry(props) {
             ""
           )}
         </div>
-      </div>
+      </>
     );
   } else {
     return "";

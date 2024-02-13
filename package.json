@@ -13,7 +13,7 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/gameslib": "latest",
+    "@abstractplay/gameslib": "^1.0.0-ci-7873851818.0",
     "@abstractplay/renderer": "latest",
     "@tanstack/react-table": "^8.11.2",
     "@testing-library/jest-dom": "5.16.5",
@@ -24,6 +24,7 @@
     "i18next": "^21.10.0",
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.2.0",
+    "nanoid": "^5.0.5",
     "plotly.js": "^2.27.1",
     "prop-types": "15.8.1",
     "react": "18.2.0",

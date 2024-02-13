@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import ReactTimeAgo from "react-time-ago";
 import { UsersContext } from "../../pages/Skeleton";
 import GameCommentShort from "./GameCommentShort";
@@ -13,7 +13,7 @@ function UserChats(props) {
   const players = props.players;
   const gameid = props.gameid;
   const [users] = useContext(UsersContext);
-  const { t } = useTranslation();
+//   const { t } = useTranslation();
 
   if (comments) {
     let results = [];
@@ -46,14 +46,7 @@ function UserChats(props) {
     results.sort((a, b) => b.timestamp - a.timestamp);
 
     return (
-      <div style={{ paddingTop: "1em" }} className="tourChat">
-        <h1 className="subtitle lined">
-          <span>
-            {props.exploringCompletedGame
-              ? t("GameComments")
-              : t("GameSummary")}
-          </span>
-        </h1>
+      <>
         <GameCommentShort
           key={`chatkey_${gameid}`}
           handleSubmit={props.handleSubmit}
@@ -94,7 +87,7 @@ function UserChats(props) {
             </div>
           ))}
         </div>
-      </div>
+      </>
     );
   } else {
     return "";
