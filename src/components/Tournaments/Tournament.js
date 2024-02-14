@@ -5,6 +5,18 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { API_ENDPOINT_OPEN } from "../../config";
 
+async function reportError(error) {
+  let url = new URL(API_ENDPOINT_OPEN);
+  url.searchParams.append("query", "report_problem");
+  url.searchParams.append("error", error);
+  const res = await fetch(url);
+  const status = res.status;
+  if (status !== 200) {
+    const result = await res.json();
+    console.log(JSON.parse(result.body));
+  }
+}
+
 function processData(tournament, players, games) {
   const numdivisions = Object.keys(tournament.divisions).length;
   if (tournament.players) {
@@ -28,22 +40,37 @@ function processData(tournament, players, games) {
   for (let i = 1; i <= numdivisions; i++) {
     let division = tournament.divisions[i];
     if (!division.processed) {
+      let completed = 0;
+      let errors = 0;
       for (let player of division.players) {
         player.n = player.games.reduce((acc, g) => g.winner !== undefined ? ++acc : acc, 0) + 1;
         player.tiebreak = 0;
+        let score = 0;
         for (const game of player.games) {
           if (game.winner !== undefined) {
             if (game.winner.length === 2) {
               const opponent = game.winner[0] === player.playerid ? game.winner[1] : game.winner[0];
               player.tiebreak += (division.players.find(p => p.playerid === opponent).score - 1) / 2;
+              score += 0.5;
             } else if (game.winner[0] === player.playerid) {
               player.tiebreak += player.n / 2 - 1;
+              score += 1;
             } else {
               player.tiebreak += division.players.find(p => p.playerid === game.winner[0]).score - player.n / 2;
             }
+            completed++;
           }
         }
+        if (score !== player.score && errors === 0) {
+          console.log(`Score mismatch for player ${player.playerid} in division ${i} of tournament ${tournament.id}`);
+          reportError(`Score mismatch for player ${player.playerid} in division ${i} of tournament ${tournament.id}`);
+          errors++;
+        }
         if (player.tiebreak < 0) player.tiebreak = 0;
+      }
+      if (2 * division.numCompleted !== completed + 1 && errors === 0) {
+        console.log(`Number of games completed incorrect in division ${i} of tournament ${tournament.id}`);
+        reportError(`Number of games completed incorrect in division ${i} of tournament ${tournament.id}`);
       }
     } else {
       console.log("Division " + i + " already processed");
