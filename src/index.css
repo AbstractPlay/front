@@ -1047,6 +1047,11 @@ tr.stickyHeader {
     fill: var(--svg-volcano-caps);
   }
 
+  /* Binar row/column totals */
+  div._meta_binar g#gridlines text[class^="aprender-marker"] {
+    fill: var(--svg-label-color);
+  }
+
   /* Mattock: invert blocked cell color */
   /* div._meta_mattock polygon.aprender-marker-f47325856bcb8  {
     fill: var(--svg-default-fill);
