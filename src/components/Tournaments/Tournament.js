@@ -68,7 +68,7 @@ function processData(tournament, players, games) {
         }
         if (player.tiebreak < 0) player.tiebreak = 0;
       }
-      if (2 * division.numCompleted !== completed + 1 && errors === 0) {
+      if (2 * division.numCompleted !== completed && errors === 0) {
         console.log(`Number of games completed incorrect in division ${i} of tournament ${tournament.id}`);
         reportError(`Number of games completed incorrect in division ${i} of tournament ${tournament.id}`);
       }
