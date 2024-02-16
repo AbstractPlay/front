@@ -349,14 +349,23 @@ function UserSettingsModal(props) {
                 Authorization: `Bearer ${token}`,
               },
               // Don't care about e.g. challenges, so size = small.
-              body: JSON.stringify({ query: "me", size: "small" }),
+              body: JSON.stringify({ query: "me", pars: { size: "small" }}),
             });
             const result = await res.json();
             if (result.statusCode !== 200) console.log(JSON.parse(result.body));
             else {
               if (result === null) globalMeSetter({});
               else {
-                globalMeSetter(JSON.parse(result.body));
+                globalMeSetter((currentGlobalMe) => {
+                  return {
+                    ...JSON.parse(result.body),
+                    ...(currentGlobalMe && { 
+                      challengesIssued: currentGlobalMe.challengesIssued ?? [],
+                      challengesReceived: currentGlobalMe.challengesReceived ?? [],
+                      challengesAccepted: currentGlobalMe.challengesAccepted ?? [],
+                      standingChallenges: currentGlobalMe.standingChallenges ?? []}),
+                  };
+                });
                 console.log(JSON.parse(result.body));
               }
             }
