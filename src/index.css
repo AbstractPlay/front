@@ -129,6 +129,14 @@ a.navbar-item:hover {
     color: var(--main-font-color);
 }
 
+:root[color-mode="dark"] a.navbar-burger {
+    color: var(--main-font-color);
+}
+
+:root[color-mode="dark"] a.navbar-burger:hover {
+    color: var(--secondary-font-color);
+}
+
 .title, .subtitle {
     color: var(--main-heading-color);
 }
@@ -1100,4 +1108,17 @@ tr.stickyHeader {
   }
   :root[color-mode="dark"] svg#_btnBar symbol.aprender-button-0ca07818d5ffc > rect {
     fill: #999999;
+  }
+
+  /* Polyomino area icon colours */
+  symbol#_icon-flipy > path,
+  symbol#_icon-flipx > path,
+  symbol#_icon-cw > path,
+  symbol#_icon-ccw > path
+  {
+    stroke: var(--secondary-font-color);
+  }
+  symbol#_icon-cancel > path {
+    stroke: var(--secondary-font-color);
+    fill: var(--secondary-font-color);
   }
