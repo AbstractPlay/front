@@ -976,6 +976,11 @@ tr.stickyHeader {
     stroke: var(--svg-annotation-color);
   }
 
+  /* spacer glyphs in FNAP, Four, and others */
+  symbol#aprender-glyph-181ce837a7c8f > rect {
+    fill: var(--main-bg-color);
+  }
+
   /* Fence markers (Fendo) */
   line.aprender-marker-1d39c998ed2a8 {
     stroke: var(--svg-gridline-color);
