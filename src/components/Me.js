@@ -65,7 +65,7 @@ function Me(props) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ query: "me" }),
+          body: JSON.stringify({ query: "me", pars: { vars: JSON.stringify(vars), update: update } }),
         });
         const result = await res.json();
         if (result.statusCode !== 200) errorSetter(JSON.parse(result.body));
@@ -445,9 +445,7 @@ function Me(props) {
       i18n.changeLanguage(lng);
       console.log(`changed language  to ${lng}`);
     }
-    let challengesResponded = globalMe.challengesIssued.concat(
-      globalMe.challengesAccepted
-    );
+    let challengesResponded = [...(globalMe.challengesIssued ?? []), ...(globalMe.challengesAccepted ?? [])];
     return (
       <article id="dashboard">
         <h1 className="title has-text-centered">
@@ -510,7 +508,7 @@ function Me(props) {
                 <span>{t("ChallengeResponse")}</span>
               </p>
               <div className="indentedContainer">
-                {globalMe.challengesReceived.length === 0 ? (
+                {!globalMe.challengesReceived || globalMe.challengesReceived.length === 0 ? (
                   <p>{t("NoChallengeResponse")}</p>
                 ) : (
                   <ul>
@@ -563,7 +561,7 @@ function Me(props) {
                 <span>{t("StandingChallenges2")}</span>
               </p>
               <div className="indentedContainer">
-                {globalMe.standingChallenges.length === 0 ? (
+                {!globalMe.standingChallenges || globalMe.standingChallenges.length === 0 ? (
                   <p>{t("NoStandingChallenges")}</p>
                 ) : (
                   <ul>

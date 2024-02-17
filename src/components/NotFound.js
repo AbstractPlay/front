@@ -1,7 +1,6 @@
 import React, { useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { addResource } from "@abstractplay/gameslib";
-import pkgInfo from "../../package.json";
 
 function NotFound(props) {
   const { t, i18n } = useTranslation();
