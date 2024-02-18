@@ -1127,3 +1127,8 @@ tr.stickyHeader {
     stroke: var(--secondary-font-color);
     fill: var(--secondary-font-color);
   }
+
+  /* King's Valley towers need to be highlighted */
+  div._meta_valley symbol#aprender-glyph-80f2ff48cd1c0 > path {
+    fill: var(--svg-default-fill);
+  }
