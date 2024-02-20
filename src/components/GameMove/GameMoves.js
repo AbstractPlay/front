@@ -375,8 +375,8 @@ function GameMoves(props) {
                     {game.colors[i].value + ":"}
                   </span>
                 )}
-                <span>{p.name}</span>
-                {i < game.numPlayers - 1 ? <span>,</span> : ""}
+                <span className="playerName"><Link to={`/player/${p.id}`}>{p.name}</Link></span>
+                {i < game.numPlayers - 1 ? <span>,&nbsp;</span> : ""}
               </Fragment>
             ))}
           </div>
