@@ -161,7 +161,7 @@ function MoveEntry(props) {
                   </div>
                   {! Array.isArray(moves) ? null :
                     <div className="control">
-                        <button className="button is-small apButtonNeutral" onClick={() => handleMove(moves[Math.floor(Math.random() * moves.length)])}>Random move</button>
+                        <button className="button is-small apButtonNeutral" onClick={() => handleMove(engine.randomMove())}>Random move</button>
                     </div>
                   }
                   <p className="lined">
