@@ -1783,6 +1783,7 @@ function Playground(props) {
               toMove={toMove}
               game={gameRef.current}
               moves={movesRef.current}
+              engine={engineRef.current}
               exploration={explorationRef.current}
               focus={focus}
               submitting={submitting}

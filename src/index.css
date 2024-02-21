@@ -1132,3 +1132,8 @@ tr.stickyHeader {
   div._meta_valley symbol#aprender-glyph-80f2ff48cd1c0 > path {
     fill: var(--svg-default-fill);
   }
+
+  /* Tintas neutral piece */
+  symbol#aprender-glyph-95e38e90d9ff5 > path {
+    fill: var(--svg-default-fill);
+  }
