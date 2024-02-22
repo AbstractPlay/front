@@ -124,7 +124,7 @@ function MoveEntry(props) {
           {focus.canExplore ? (
             <Fragment>
               {moves === null ?
-                typeof engine.randomMove === "function" ? (
+                game.customRandom ? (
                     <div className="control">
                         <button className="button is-small apButtonNeutral" onClick={() => handleMove(engine.randomMove())}>Random move</button>
                     </div>

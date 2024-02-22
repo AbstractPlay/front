@@ -108,6 +108,7 @@ function setupGame(
   game0.sharedStash =
     info.flags !== undefined && info.flags.includes("shared-stash");
   game0.noMoves = info.flags !== undefined && info.flags.includes("no-moves");
+  game0.customRandom = info.flags !== undefined && info.flags.includes("custom-randomization");
   game0.automove = info.flags !== undefined && info.flags.includes("automove");
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
