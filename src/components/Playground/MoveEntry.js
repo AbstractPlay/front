@@ -5,6 +5,7 @@ function MoveEntry(props) {
   const move = props.move;
   const toMove = props.toMove;
   const game = props.game;
+  const engine = props.engine;
   const moves = props.moves;
   const exploration = props.exploration;
   const focus = props.focus;
@@ -122,9 +123,15 @@ function MoveEntry(props) {
         <div>
           {focus.canExplore ? (
             <Fragment>
-              {moves === null ? (
-                <div />
-              ) : (
+              {moves === null ?
+                game.customRandom ? (
+                    <div className="control">
+                        <button className="button is-small apButtonNeutral" onClick={() => handleMove(engine.randomMove())}>Random move</button>
+                    </div>
+                ) :
+                (
+                  <div />
+                ) : (
                 <Fragment>
                 <div className="field is-grouped">
                   <div className="control">
