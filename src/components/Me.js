@@ -34,6 +34,7 @@ function Me(props) {
   const [showDeleteGamesModal, showDeleteGamesModalSetter] = useState(false);
   const [deleteGamesMetaGame, deleteGamesMetaGameSetter] = useState("");
   const [deleteCompletedGames, deleteCompletedGamesSetter] = useState(false);
+  const [genericInput, genericInputSetter] = useState("");
   const [deletes, deletesSetter] = useState("");
   const { t } = useTranslation();
   const [myMove, myMoveSetter] = useState([]);
@@ -340,6 +341,32 @@ function Me(props) {
     }
   };
 
+  const handleEndTournamentClick = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log(`Posting end tournament ${genericInput}`);
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "end_tournament",
+          pars: {
+            tournamentid: genericInput
+          },
+        }),
+      });
+      const result = await res.json();
+      console.log("end_tournament returned:");
+      console.log(JSON.parse(result.body));
+    } catch (error) {
+      errorSetter(error);
+    }
+  }
+
   const handleOneTimeFixClick = async () => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
@@ -604,6 +631,14 @@ function Me(props) {
                 <p className="lined">
                   <span>Administration</span>
                 </p>
+                <div className="control">
+                  <input
+                    id="genericInput"
+                    type="text"
+                    value={genericInput}
+                    onChange={(e) => genericInputSetter(e.target.value)}
+                  />
+                </div>
                 <button
                   className="button is-small apButton"
                   onClick={() => handleUpdateMetaGameCountsClick()}
@@ -627,6 +662,12 @@ function Me(props) {
                   onClick={() => handleStartTournamentsClick()}
                 >
                   Start tournaments
+                </button>
+                <button
+                  className="button is-small apButton"
+                  onClick={() => handleEndTournamentClick()}
+                >
+                  End Tournament
                 </button>
                 <button
                   className="button is-small apButton"
@@ -743,9 +784,9 @@ function Me(props) {
               </div>
             </div>
             <div className="field">
-              { /* Get list of game ids as a string from use */ }
+              { /* Get list of game ids as a string from user */ }
               <label className="label" htmlFor="gameids_to_delete">
-                {"comma seperated list of game ids to delete:"}
+                {"comma separated list of game ids to delete:"}
               </label>
               <div className="control">
                 <input
