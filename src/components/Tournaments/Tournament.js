@@ -50,13 +50,12 @@ function processData(tournament, players, games) {
           if (game.winner !== undefined) {
             if (game.winner.length === 2) {
               const opponent = game.winner[0] === player.playerid ? game.winner[1] : game.winner[0];
-              player.tiebreak += (division.players.find(p => p.playerid === opponent).score - 1) / 2;
+              player.tiebreak += division.players.find(p => p.playerid === opponent).score / 2;
               score += 0.5;
             } else if (game.winner[0] === player.playerid) {
-              player.tiebreak += player.n / 2 - 1;
+              const opponent = game.winner[0] === game.player1 ? game.player2 : game.player1;
+              player.tiebreak += division.players.find(p => p.playerid === opponent).score;
               score += 1;
-            } else {
-              player.tiebreak += division.players.find(p => p.playerid === game.winner[0]).score - player.n / 2;
             }
             completed++;
           }
