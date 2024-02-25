@@ -783,7 +783,7 @@ function Tournaments(props) {
                     onChange={(e) => e.target.value === "" ? filterMetaSetter(null) : filterMetaSetter(e.target.value)}
                 >
                     <option value="" key="filterMetaBlank" selected={filterMeta === null}>--Show all--</option>
-                {[...gameinfo.values()].sort((a, b) => a.name.localeCompare(b.name)).map(rec => (
+                {[...gameinfo.values()].filter(rec => ! rec.flags.includes("experimental")).sort((a, b) => a.name.localeCompare(b.name)).map(rec => (
                     <option value={rec.uid} key={"filterMeta" + rec.uid} selected={filterMeta === rec.uid}>{rec.name}</option>
                 ))}
                 </select>
