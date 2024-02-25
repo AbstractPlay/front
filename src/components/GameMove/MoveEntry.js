@@ -196,12 +196,14 @@ function MoveEntry(props) {
             toMove[i] &&
             i !== game.me &&
             p.time - (Date.now() - game.lastMoveTime) < 0
-        );
+        ) &&
+        game.players.some(p => p.id === globalMe?.id);
       else
         canClaimTimeout =
           !game.canSubmit &&
           game.toMove !== "" &&
           game.me !== game.toMove &&
+          game.players.some(p => p.id === globalMe?.id) &&
           game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
     }
     const drawOffered = game.players.some((p) => p.draw);
