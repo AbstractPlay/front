@@ -620,6 +620,11 @@ function GameMoves(props) {
                       ))}
                     </div>
                   )}
+                  {game.pieInvoked && i === 0 && j === 1 ? (
+                    <span className="icon">
+                        <i className="fa fa-pie-chart" aria-hidden="true"></i>
+                    </span>
+                  ) : null}
                 </div>
               </td>
             );
