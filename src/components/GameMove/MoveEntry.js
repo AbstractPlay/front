@@ -242,7 +242,7 @@ function MoveEntry(props) {
           )}
           <span className="playerName">{mover}</span>
         </p>
-        {! game.pie || engine.stack.length !== 2 || game.pieInvoked ? null : (
+        {! game.pie || engine?.stack?.length !== 2 || game.pieInvoked ? null : (
             <p style={{marginBottom: "1em"}}>{t("CanPie")}</p>
         )}
         {moveToSubmit === null ? null :
