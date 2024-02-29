@@ -10,6 +10,7 @@
     "AvailableGames": "Available Games",
     "BoardSettings": "Change game board settings",
     "Cancel": "Cancel",
+    "CanPie": "This player has the option to switch seats.",
     "Challenge": "Challenge",
     "Challenge Details": "Challenge Details",
     "ChallengeClock": "The clock start time will be {{start}} hours, incremented by {{inc}} hours after each move, with a maximum of {{max}} hours.",

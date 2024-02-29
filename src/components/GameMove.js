@@ -171,7 +171,7 @@ function setupGame(
     game0.pie &&
     engine.stack.length === 2 &&
     // eslint-disable-next-line no-prototype-builtins
-    (!game0.hasOwnProperty("pieInvoked") || (game0.pieInvoked = false));
+    (!game0.hasOwnProperty("pieInvoked") || (game0.pieInvoked === false));
   game0.me = game0.players.findIndex((p) => me && p.id === me.id);
   game0.variants = engine.getVariants();
 
@@ -262,16 +262,17 @@ function setupGame(
   }
 
   let history = [];
-  // The following is DESTRUCTIVE! If you need `engine.stack`, do it before here.
-  game0.gameOver = engine.gameover;
-  const winner = engine.winner;
+  // The following is no longer destructive.
+  const tmpEngine = GameFactory(game0.metaGame, game0.state);
+  game0.gameOver = tmpEngine.gameover;
+  const winner = tmpEngine.winner;
   while (true) {
     history.unshift(
       new GameNode(
         null,
-        engine.lastmove,
-        engine.serialize(),
-        engine.gameover ? "" : engine.currplayer - 1
+        tmpEngine.lastmove,
+        tmpEngine.serialize(),
+        tmpEngine.gameover ? "" : tmpEngine.currplayer - 1
       )
     );
     if (
@@ -282,11 +283,11 @@ function setupGame(
     ) {
       history[0].outcome = winner[0] - 1;
     }
-    engine.stack.pop();
-    engine.gameover = false;
-    engine.winner = [];
-    if (engine.stack.length === 0) break;
-    engine.load();
+    tmpEngine.stack.pop();
+    tmpEngine.gameover = false;
+    tmpEngine.winner = [];
+    if (tmpEngine.stack.length === 0) break;
+    tmpEngine.load();
   }
   explorationRef.current = history;
   let focus0 = { moveNumber: history.length - 1, exPath: [] };
@@ -297,6 +298,7 @@ function setupGame(
   );
   setCanPublish(game0, explorer, me, publishSetter);
   focusSetter(focus0);
+  console.log(`(setupGame) ABOUT TO RERENDER! Display setting: ${display}`);
   renderrepSetter(render);
   setURL(explorationRef.current, focus0, game0, navigate);
 }
@@ -795,6 +797,7 @@ function doView(
   partialMoveRenderRef.current = partialMove;
   // console.log('setting renderrep 1');
   engineRef.current = gameEngineTmp;
+  console.log(`(doView) ABOUT TO RERENDER! Display setting: ${settings?.display}`);
   renderrepSetter(
     replaceNames(
       gameEngineTmp.render({
@@ -947,6 +950,7 @@ function processNewMove(
     if (focus.canExplore && !gameRef.current.noMoves)
       movesRef.current = gameEngineTmp.moves();
     engineRef.current = gameEngineTmp;
+    console.log(`(processNewMove) ABOUT TO RERENDER! Display setting: ${settings?.display}`);
     renderrepSetter(
       replaceNames(
         gameEngineTmp.render({
@@ -1590,7 +1594,7 @@ function GameMove(props) {
     }
     focusSetter(foc);
     engineRef.current = engine;
-    console.log("Rendering in handleGameMoveClick");
+    console.log(`(handleGameMoveClick) ABOUT TO RERENDER! Display setting: ${settings?.display}`);
     renderrepSetter(
       replaceNames(
         engine.render({
@@ -1664,6 +1668,7 @@ function GameMove(props) {
         throw JSON.parse(result.body);
       }
       pieInvokedSetter(true);
+      gameRef.current.pieInvoked = true;
     } catch (err) {
       setError(err.message);
     }
@@ -1900,7 +1905,7 @@ function GameMove(props) {
   };
 
   const processUpdatedSettings = (newGameSettings, newUserSettings) => {
-    console.log("processUpdatedSettings", newGameSettings, newUserSettings);
+    // console.log("processUpdatedSettings", newGameSettings, newUserSettings);
     const newSettings = processNewSettings(
       newGameSettings,
       newUserSettings,
@@ -1911,7 +1916,9 @@ function GameMove(props) {
       globalMe
     );
     if (newSettings?.display) {
-      console.log("settings.display", newSettings.display);
+      console.log(`(processUpdatedSettings) ABOUT TO RERENDER! Display setting: ${newSettings.display}`);
+    //   console.log(`Current engine state:`);
+    //   console.log(engineRef.current.graph);
       const newRenderRep = replaceNames(
         engineRef.current.render({
           perspective: gameRef.current.me + 1,
@@ -2408,6 +2415,7 @@ function GameMove(props) {
                             move={move}
                             toMove={toMove}
                             game={gameRef.current}
+                            engine={engineRef.current}
                             moves={movesRef.current}
                             exploration={explorationRef.current}
                             focus={focus}
