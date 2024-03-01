@@ -16,6 +16,7 @@ import { Auth } from "aws-amplify";
 import { MeContext, UsersContext } from "../pages/Skeleton";
 import Spinner from "./Spinner";
 import ActivityMarker from "./ActivityMarker";
+import NewChallengeModal from "./NewChallengeModal";
 import { useStorageState } from "react-use-storage-state";
 
 const allSize = Number.MAX_SAFE_INTEGER;
@@ -34,14 +35,44 @@ function StandingChallenges(props) {
   const [showState, showStateSetter] = useStorageState("challenges-show", 20);
   const [sorting, setSorting] = useState([]);
   const [showAccepted, showAcceptedSetter] = useState(false);
+  const [showModal, showModalSetter] = useState(false);
+
+  const handleNewChallenge = async (challenge) => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log("currentAuthenticatedUser", usr);
+      await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "new_challenge",
+          pars: {
+            ...challenge,
+            challenger: { id: globalMe.id, name: globalMe.name },
+          },
+        }),
+      });
+      showModalSetter(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     async function fetchAuth() {
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
-      console.log("idToken", usr.signInUserSession.idToken);
-      if (token !== null) {
-        loggedinSetter(true);
+      try {
+        const usr = await Auth.currentAuthenticatedUser();
+        const token = usr.signInUserSession.idToken.jwtToken;
+        console.log("idToken", usr.signInUserSession.idToken);
+        if (token !== null) {
+          loggedinSetter(true);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
     fetchAuth();
@@ -457,6 +488,24 @@ function StandingChallenges(props) {
         <h1 className="has-text-centered title">
           {t("StandingChallenges", { name: metaGameName })}
         </h1>
+        {globalMe === undefined || globalMe === null || globalMe?.id === undefined ? null :
+        (<>
+            <NewChallengeModal
+                show={showModal}
+                handleClose={() => showModalSetter(false)}
+                handleChallenge={handleNewChallenge}
+                fixedMetaGame={metaGame}
+            />
+            <div className="has-text-centered" style={{marginBottom: "1em"}}>
+                <button
+                className="button is-small apButton"
+                onClick={() => showModalSetter(true)}
+                >
+                Issue Challenge
+                </button>
+            </div>
+        </>)
+        }
         <div className="container">
           {tableNavigation}
           <table
