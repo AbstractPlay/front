@@ -41,6 +41,7 @@ function MoveEntry(props) {
   const moves = props.moves;
   const exploration = props.exploration;
   const focus = props.focus;
+  const engine = props.engine;
   const forceUndoRight = props.forceUndoRight;
   const submitting = props.submitting;
   const handleMove = props.handlers[0];
@@ -241,6 +242,9 @@ function MoveEntry(props) {
           )}
           <span className="playerName">{mover}</span>
         </p>
+        {! game.pie || engine?.stack?.length !== 2 || game.pieInvoked ? null : (
+            <p style={{marginBottom: "1em"}}>{t("CanPie")}</p>
+        )}
         {moveToSubmit === null ? null :
             <p style={{marginBottom: "1em"}} className="yourTurn myTurn">{t("PendingSubmit")}</p>
         }
