@@ -1228,6 +1228,53 @@ function GameMove(props) {
   }, [i18n, globalMe]);
 
   useEffect(() => {
+    const timeloss = async (token, navigate) => {
+      try {
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            query: "timeloss",
+            pars: {
+              id: gameRef.current.id,
+              metaGame: gameRef.current.metaGame,
+            },
+          }),
+        });
+        const result = await res.json();
+        if (result.statusCode !== 200) {
+          throw JSON.parse(result.body);
+        }
+        let game0 = JSON.parse(result.body);
+        if (game0 !== "not_a_timeloss") {
+          setupGame(
+            game0,
+            gameRef,
+            globalMe,
+            false,
+            partialMoveRenderRef,
+            renderrepSetter,
+            engineRef,
+            statusRef,
+            movesRef,
+            focusSetter,
+            explorationRef,
+            moveSetter,
+            gameRecSetter,
+            canPublishSetter,
+            settings?.[metaGame]?.display,
+            navigate
+          );
+        }
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+  
     console.log("Fetching game data");
     async function fetchData() {
       let token = null;
@@ -1285,9 +1332,10 @@ function GameMove(props) {
         }
         if ( (status === 200) && (data !== null) && (data !== undefined) && ("game" in data) ) {
           console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
-          console.log("game fetched:", data.game);
+          const game = data.game;
+          console.log("game fetched:", game);
           setupGame(
-            data.game,
+            game,
             gameRef,
             globalMe,
             false,
@@ -1306,7 +1354,7 @@ function GameMove(props) {
           );
           processNewSettings(
             gameRef.current.me > -1
-              ? data.game.players.find((p) => p.id === globalMe.id).settings
+              ? game.players.find((p) => p.id === globalMe.id).settings
               : {},
             globalMe?.settings,
             gameRef,
@@ -1330,27 +1378,41 @@ function GameMove(props) {
           // note should only be defined if the user is logged in and
           // is the owner of the note.
           if (
-            "note" in data.game &&
-            data.game.note !== undefined &&
-            data.game.note !== null &&
-            data.game.note.length > 0
+            "note" in game &&
+            game.note !== undefined &&
+            game.note !== null &&
+            game.note.length > 0
           ) {
-            gameNoteSetter(data.game.note);
-            interimNoteSetter(data.game.note);
+            gameNoteSetter(game.note);
+            interimNoteSetter(game.note);
           } else {
             gameNoteSetter(null);
             interimNoteSetter("");
           }
           populateChecked(gameRef, engineRef, t, inCheckSetter);
           parentheticalSetter([]);
-          if ("tournament" in data.game && data.game.tournament !== undefined && data.game.tournament !== null) {
-            parentheticalSetter(val => [...val, (<Link to={`/tournament/${data.game.tournament}`}>tournament</Link>)]);
+          if ("tournament" in game && game.tournament !== undefined && game.tournament !== null) {
+            parentheticalSetter(val => [...val, (<Link to={`/tournament/${game.tournament}`}>tournament</Link>)]);
           }
-          if (data.game.rated === false) {
+          if (game.rated === false) {
               parentheticalSetter(val => [...val, "unrated"]);
           }
-          if ( (data.game.noExplore !== undefined) && (data.game.noExplore === true) ) {
+          if ( (game.noExplore !== undefined) && (game.noExplore === true) ) {
               parentheticalSetter(val => [...val, "exploration disabled"]);
+          }
+          if (game.clockHard && game.toMove !== '' && !game.players.some(p => p.id === globalMe?.id)) {
+            // If you are viewing someone else's game, and a player has timed out, let the server know.
+            if (Array.isArray(game.toMove)) {
+              const elapsed = Date.now() - game.lastMoveTime;
+              if (game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0 )) {
+                timeloss(token, navigate);
+              }
+            } else {
+              const toMove = parseInt(game.toMove);
+              if (game.players[toMove].time - (Date.now() - game.lastMoveTime) < 0) {
+                timeloss(token, navigate);
+              }
+            }
           }
         } else {
             if ("message" in data) {
@@ -1385,7 +1447,7 @@ function GameMove(props) {
     pieInvoked,
     cbit,
     t,
-    navigate,
+    navigate
   ]);
 
   const handleNoteUpdate = useCallback(
