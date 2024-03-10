@@ -66,7 +66,7 @@ export function subscribeUser(token) {
                   }
                 });
             } else {
-              console.log("Existed subscription detected.");
+              console.log("Existing subscription detected.");
               sendSubscription(token, existedSubscription);
             }
           });
