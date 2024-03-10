@@ -990,6 +990,7 @@ const populateChecked = (gameRef, engineRef, t, setter) => {
 const defaultChunkOrder = ["status","move","board","moves","chat"];
 
 function GameMove(props) {
+  const [dbgame, dbgameSetter] = useState(null);
   const [renderrep, renderrepSetter] = useState(null);
   // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
   const [focus, focusSetter] = useState(null);
@@ -1228,53 +1229,6 @@ function GameMove(props) {
   }, [i18n, globalMe]);
 
   useEffect(() => {
-    const timeloss = async (token, navigate) => {
-      try {
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: "timeloss",
-            pars: {
-              id: gameRef.current.id,
-              metaGame: gameRef.current.metaGame,
-            },
-          }),
-        });
-        const result = await res.json();
-        if (result.statusCode !== 200) {
-          throw JSON.parse(result.body);
-        }
-        let game0 = JSON.parse(result.body);
-        if (game0 !== "not_a_timeloss") {
-          setupGame(
-            game0,
-            gameRef,
-            globalMe,
-            false,
-            partialMoveRenderRef,
-            renderrepSetter,
-            engineRef,
-            statusRef,
-            movesRef,
-            focusSetter,
-            explorationRef,
-            moveSetter,
-            gameRecSetter,
-            canPublishSetter,
-            settings?.[metaGame]?.display,
-            navigate
-          );
-        }
-      } catch (err) {
-        setError(err.message);
-      }
-    }
-  
     console.log("Fetching game data");
     async function fetchData() {
       let token = null;
@@ -1332,37 +1286,7 @@ function GameMove(props) {
         }
         if ( (status === 200) && (data !== null) && (data !== undefined) && ("game" in data) ) {
           console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
-          const game = data.game;
-          console.log("game fetched:", game);
-          setupGame(
-            game,
-            gameRef,
-            globalMe,
-            false,
-            partialMoveRenderRef,
-            renderrepSetter,
-            engineRef,
-            statusRef,
-            movesRef,
-            focusSetter,
-            explorationRef,
-            moveSetter,
-            gameRecSetter,
-            canPublishSetter,
-            globalMe?.settings?.[metaGame]?.display,
-            navigate
-          );
-          processNewSettings(
-            gameRef.current.me > -1
-              ? game.players.find((p) => p.id === globalMe.id).settings
-              : {},
-            globalMe?.settings,
-            gameRef,
-            settingsSetter,
-            gameSettingsSetter,
-            userSettingsSetter,
-            globalMe
-          );
+          dbgameSetter(data.game);
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
             if (
@@ -1373,47 +1297,7 @@ function GameMove(props) {
             ) {
               commentsTooLongSetter(true);
             }
-          }
-          // check for note
-          // note should only be defined if the user is logged in and
-          // is the owner of the note.
-          if (
-            "note" in game &&
-            game.note !== undefined &&
-            game.note !== null &&
-            game.note.length > 0
-          ) {
-            gameNoteSetter(game.note);
-            interimNoteSetter(game.note);
-          } else {
-            gameNoteSetter(null);
-            interimNoteSetter("");
-          }
-          populateChecked(gameRef, engineRef, t, inCheckSetter);
-          parentheticalSetter([]);
-          if ("tournament" in game && game.tournament !== undefined && game.tournament !== null) {
-            parentheticalSetter(val => [...val, (<Link to={`/tournament/${game.tournament}`}>tournament</Link>)]);
-          }
-          if (game.rated === false) {
-              parentheticalSetter(val => [...val, "unrated"]);
-          }
-          if ( (game.noExplore !== undefined) && (game.noExplore === true) ) {
-              parentheticalSetter(val => [...val, "exploration disabled"]);
-          }
-          if (game.clockHard && game.toMove !== '' && !game.players.some(p => p.id === globalMe?.id)) {
-            // If you are viewing someone else's game, and a player has timed out, let the server know.
-            if (Array.isArray(game.toMove)) {
-              const elapsed = Date.now() - game.lastMoveTime;
-              if (game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0 )) {
-                timeloss(token, navigate);
-              }
-            } else {
-              const toMove = parseInt(game.toMove);
-              if (game.players[toMove].time - (Date.now() - game.lastMoveTime) < 0) {
-                timeloss(token, navigate);
-              }
-            }
-          }
+          }      
         } else {
             if ("message" in data) {
                 errorMessageRef.current = data.message;
@@ -1429,25 +1313,143 @@ function GameMove(props) {
         errorSetter(true);
       }
     }
-    // Somehow react loses track of this, so explicitly remove this.
-    if (boardImage.current !== null) {
-      const svg = boardImage.current.querySelector("svg");
-      if (svg !== null) {
-        svg.remove();
-      }
-    }
     fetchData();
   }, [
-    globalMe,
-    renderrepSetter,
-    focusSetter,
-    explorerSetter,
     gameID,
     metaGame,
-    pieInvoked,
     cbit,
+    errorSetter,
+    errorMessageRef,
+    commentsSetter,
+    commentsTooLongSetter,
+  ]);
+
+  const timeloss = useCallback(async (navigate) => {
+    let token = null;
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      token = usr.signInUserSession.idToken.jwtToken;
+    } catch (err) {
+      // OK, non logged in user viewing the game
+    }
+    if (token) {
+      try {
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            query: "timeloss",
+            pars: {
+              id: gameRef.current.id,
+              metaGame: gameRef.current.metaGame,
+            },
+          }),
+        });
+        const result = await res.json();
+        if (result.statusCode !== 200) {
+          throw JSON.parse(result.body);
+        }
+        let game0 = JSON.parse(result.body);
+        if (game0 !== "not_a_timeloss") {
+          dbgameSetter(game0);
+        }
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (dbgame !== null) {
+      const game = dbgame;
+      setupGame(
+        game,
+        gameRef,
+        globalMe,
+        false,
+        partialMoveRenderRef,
+        renderrepSetter,
+        engineRef,
+        statusRef,
+        movesRef,
+        focusSetter,
+        explorationRef,
+        moveSetter,
+        gameRecSetter,
+        canPublishSetter,
+        globalMe?.settings?.[game.metaGame]?.display,
+        navigate
+      );
+      processNewSettings(
+        gameRef.current.me > -1
+          ? game.players.find((p) => p.id === globalMe.id).settings
+          : {},
+        globalMe?.settings,
+        gameRef,
+        settingsSetter,
+        gameSettingsSetter,
+        userSettingsSetter,
+        globalMe
+      );
+      // check for note
+      // note should only be defined if the user is logged in and
+      // is the owner of the note.
+      if (
+        "note" in game &&
+        game.note !== undefined &&
+        game.note !== null &&
+        game.note.length > 0
+      ) {
+        gameNoteSetter(game.note);
+        interimNoteSetter(game.note);
+      } else {
+        gameNoteSetter(null);
+        interimNoteSetter("");
+      }
+      populateChecked(gameRef, engineRef, t, inCheckSetter);
+      parentheticalSetter([]);
+      if ("tournament" in game && game.tournament !== undefined && game.tournament !== null) {
+        parentheticalSetter(val => [...val, (<Link to={`/tournament/${game.tournament}`}>tournament</Link>)]);
+      }
+      if (game.rated === false) {
+          parentheticalSetter(val => [...val, "unrated"]);
+      }
+      if ( (game.noExplore !== undefined) && (game.noExplore === true) ) {
+          parentheticalSetter(val => [...val, "exploration disabled"]);
+      }
+      if (game.clockHard && game.toMove !== '' && !game.players.some(p => p.id === globalMe?.id)) {
+        // If you are viewing someone else's game, and a player has timed out, let the server know.
+        if (Array.isArray(game.toMove)) {
+          const elapsed = Date.now() - game.lastMoveTime;
+          if (game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0 )) {
+            timeloss(navigate);
+          }
+        } else {
+          const toMove = parseInt(game.toMove);
+          if (game.players[toMove].time - (Date.now() - game.lastMoveTime) < 0) {
+            timeloss(navigate);
+          }
+        }
+      }
+      // Somehow react loses track of this, so explicitly remove this.
+      if (boardImage.current !== null) {
+        const svg = boardImage.current.querySelector("svg");
+        if (svg !== null) {
+          svg.remove();
+        }
+      }
+    }
+  }, [
+    dbgame,
+    globalMe,
+    pieInvoked,
     t,
-    navigate
+    navigate,
+    timeloss
   ]);
 
   const handleNoteUpdate = useCallback(

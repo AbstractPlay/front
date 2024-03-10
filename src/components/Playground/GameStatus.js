@@ -20,8 +20,10 @@ function renderGlyph(settings, glyph, id, player, globalMe) {
 
 function GameStatus(props) {
   const status = props.status;
+  console.log("Status", status);
   const settings = props.settings;
   const game = props.game;
+  console.log("Game", game);
   const canExplore = props.canExplore;
   const handleStashClick = props.handleStashClick;
   const [globalMe,] = useContext(MeContext);
@@ -42,6 +44,8 @@ function GameStatus(props) {
     let stashes = [];
     let handlers = [];
     if (game.playerStashes) {
+        console.log("Statuses");
+        console.log(status)
       status.stashes.forEach((stash) => {
         if (Array.isArray(stash)) {
           stashes.push(stash);
@@ -52,6 +56,8 @@ function GameStatus(props) {
         }
       });
     }
+    console.log("Stashes");
+    console.log(stashes);
     return (
       <div style={{ marginBottom: "2rem" }} className="tourStatus">
         <h1 className="subtitle lined">
