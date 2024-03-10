@@ -21,7 +21,7 @@ function UserChats(props) {
     comments.forEach((c) => {
       if (c.userId !== null && c.userId !== undefined && c.userId.length > 0) {
         let personName = "Unknown";
-        let player = players.find((p) => p.id === c.userId);
+        let player = players?.find((p) => p.id === c.userId);
         if (player !== undefined) {
           personName = player.name;
         } else if (users !== null) {
