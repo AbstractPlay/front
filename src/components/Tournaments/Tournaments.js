@@ -135,7 +135,7 @@ function Tournaments(props) {
 
   const handleNewTournament = async (tournament) => {
     const variantsKey = tournament.variants.sort().join("|");
-    if (tournaments.find((t) => t.metaGame === tournament.metaGame && t.variants.sort().join("|") === variantsKey))
+    if (tournaments.find((t) => t.metaGame === tournament.metaGame && t.variants.sort().join("|") === variantsKey && t.dateEnded === undefined))
       return false;
     showNewTournamentModalSetter(false);
     try {

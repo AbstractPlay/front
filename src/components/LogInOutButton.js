@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH } from "../config";
@@ -43,7 +44,7 @@ function LogInOutButton(props) {
                 globalMeSetter((currentGlobalMe) => {
                   return {
                     ...JSON.parse(result.body),
-                    ...(currentGlobalMe && { 
+                    ...(currentGlobalMe && {
                       challengesIssued: currentGlobalMe.challengesIssued ?? [],
                       challengesReceived: currentGlobalMe.challengesReceived ?? [],
                       challengesAccepted: currentGlobalMe.challengesAccepted ?? [],
@@ -123,7 +124,7 @@ function LogInOutButton(props) {
   } else {
     return (
       <div>
-        {user.idToken.payload["cognito:username"]}
+        <Link to={`/player/${user.idToken.payload["sub"]}`}>{user.idToken.payload["cognito:username"]}</Link>
         <button
           className="fabtn align-right userSettingsBtn"
           onClick={handleSettingsClick}
