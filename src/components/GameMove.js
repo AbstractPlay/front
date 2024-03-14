@@ -26,7 +26,7 @@ import Board from "./GameMove/Board";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import ClipboardCopy from "./GameMove/ClipboardCopy";
-import { MeContext, MyTurnContext } from "../pages/Skeleton";
+import { MeContext, MyTurnContext, UsersContext } from "../pages/Skeleton";
 import UserChats from "./GameMove/UserChats";
 import { Canvg } from "canvg";
 import Joyride, { STATUS } from "react-joyride";
@@ -1066,6 +1066,7 @@ function GameMove(props) {
   const [moveNumberParam] = useState(params.get("move"));
   const [nodeidParam] = useState(params.get("nodeid"));
   const navigate = useNavigate();
+  const [allUsers] = useContext(UsersContext);
 
   const { t, i18n } = useTranslation();
   //   const { state } = useLocation();
@@ -1324,7 +1325,7 @@ function GameMove(props) {
     commentsTooLongSetter,
   ]);
 
-  const timeloss = useCallback(async (navigate) => {
+  const checkTime = useCallback(async (query) => {
     let token = null;
     try {
       const usr = await Auth.currentAuthenticatedUser();
@@ -1342,7 +1343,7 @@ function GameMove(props) {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            query: "timeloss",
+            query: query,
             pars: {
               id: gameRef.current.id,
               metaGame: gameRef.current.metaGame,
@@ -1354,7 +1355,7 @@ function GameMove(props) {
           throw JSON.parse(result.body);
         }
         let game0 = JSON.parse(result.body);
-        if (game0 !== "not_a_timeloss") {
+        if (game0 !== "not_a_timeloss" && game0 !== "not_abandoned") {
           dbgameSetter(game0);
         }
       } catch (err) {
@@ -1421,17 +1422,25 @@ function GameMove(props) {
       if ( (game.noExplore !== undefined) && (game.noExplore === true) ) {
           parentheticalSetter(val => [...val, "exploration disabled"]);
       }
-      if (game.clockHard && game.toMove !== '' && !game.players.some(p => p.id === globalMe?.id)) {
-        // If you are viewing someone else's game, and a player has timed out, let the server know.
-        if (Array.isArray(game.toMove)) {
-          const elapsed = Date.now() - game.lastMoveTime;
-          if (game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0 )) {
-            timeloss(navigate);
+      if (game.toMove !== '' && !game.players.some(p => p.id === globalMe?.id)) {
+        if (game.clockHard) {
+          // If you are viewing someone else's game, and a player has timed out, let the server know.
+          if (Array.isArray(game.toMove)) {
+            const elapsed = Date.now() - game.lastMoveTime;
+            if (game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0 )) {
+              checkTime("timeloss");
+            }
+          } else {
+            const toMove = parseInt(game.toMove);
+            if (game.players[toMove].time - (Date.now() - game.lastMoveTime) < 0) {
+              checkTime("timeloss");
+            }
           }
         } else {
-          const toMove = parseInt(game.toMove);
-          if (game.players[toMove].time - (Date.now() - game.lastMoveTime) < 0) {
-            timeloss(navigate);
+          // If you are viewing someone else's game, and both players are "red", let the server know to abandone the game.
+          const now = (new Date()).getTime();
+          if (game.players.every(p => allUsers.find(u => u.id === p.id)?.lastSeen < now - 1000 * 60 * 60 * 24 * 30)) {
+            checkTime("abandoned");
           }
         }
       }
@@ -1446,10 +1455,11 @@ function GameMove(props) {
   }, [
     dbgame,
     globalMe,
+    allUsers,
     pieInvoked,
     t,
     navigate,
-    timeloss
+    checkTime
   ]);
 
   const handleNoteUpdate = useCallback(
