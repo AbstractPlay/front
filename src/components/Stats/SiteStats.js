@@ -86,6 +86,33 @@ function SiteStats(props) {
       <div>
         <div className="content">
           <p>
+            Games are counted in seven-day chunks from the date the script ran.
+            The right-most bar is the most recent seven days. The left-most bar
+            is the first week completed games were recorded.
+          </p>
+        </div>
+        <Plot
+          data={[
+            {
+              y: [...summary.histograms.allPlayers].reverse(),
+              type: "bar",
+            },
+          ]}
+          config={{
+            responsive: true,
+          }}
+          layout={{
+            title: "Number of players completing games per week",
+            xaxis: { title: "Week #" },
+            yaxis: { title: "Number of players" },
+            height: 500,
+          }}
+        />
+        <hr />
+      </div>
+      <div>
+        <div className="content">
+          <p>
             This graph tracks the number of users who completed their first game
             that week. The numbers are cumulative, meaning they will never
             decrease, and the right-most point should always show the current
@@ -131,15 +158,15 @@ function SiteStats(props) {
             "Hours per move" is calculated as an average per game. Games that
             end by time out or on the first turn are not counted. A box plot
             shows the "hours per move" for each qualifying game record and gives
-            a sense of the spread of that data.
+            a sense of the spread of that data. Outliers &gt;100 hours are not shown but are included in the calculations.
           </p>
         </div>
         <Plot
           data={[
             {
-              y: summary.hoursPer,
+              y: summary.hoursPer.filter(x => x <= 100),
               type: "box",
-              boxpoints: "outliers",
+              boxpoints: "False",
               orientation: "v",
               name: "Hours per move",
               jitter: 0.3,

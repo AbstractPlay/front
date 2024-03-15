@@ -85,7 +85,7 @@ function HighestSingleRating(props) {
         cell: (props) => {
             const sum = props.getValue().reduce((prev, curr) => prev + curr, 0);
             if (sum > 0) {
-                const winrate = Math.trunc((props.getValue()[0] / sum) * 1000) / 10;
+                const winrate = Math.trunc(((props.getValue()[0] + (props.getValue()[2] / 2)) / sum) * 1000) / 10;
                 return `${winrate}% (${props.getValue()[0]}, ${props.getValue()[1]}, ${props.getValue()[2]})`
             } else {
                 return `---`
@@ -94,8 +94,8 @@ function HighestSingleRating(props) {
         sortingFn: (rowA, rowB, columnID) => {
             const sumA = rowA.getValue(columnID).reduce((prev, curr) => prev + curr, 0);
             const sumB = rowB.getValue(columnID).reduce((prev, curr) => prev + curr, 0);
-            const rateA = Math.trunc((rowA.getValue(columnID)[0] / sumA) * 1000) / 10;
-            const rateB = Math.trunc((rowB.getValue(columnID)[0] / sumB) * 1000) / 10;
+            const rateA = Math.trunc(((rowA.getValue(columnID)[0] + (rowA.getValue(columnID)[2] / 2)) / sumA) * 1000) / 10;
+            const rateB = Math.trunc(((rowB.getValue(columnID)[0] + (rowB.getValue(columnID)[2] / 2)) / sumB) * 1000) / 10;
             // NaNs first
             if (isNaN(rateA) && isNaN(rateB)) {
                 return 0;

@@ -58,7 +58,7 @@ function Opponents({handleChallenge}) {
         const lst = [];
         for (const [id, rec] of countMap.entries()) {
             const losses = rec.n - (rec.wins + rec.draws);
-            const winrate = Math.round((rec.wins / rec.n) * 1000) / 10;
+            const winrate = Math.round(((rec.wins + (rec.draws / 2)) / rec.n) * 1000) / 10;
             lst.push({id, count: rec.n, winrate, wld: [rec.wins, losses, rec.draws]});
         }
         countsSetter(lst);
