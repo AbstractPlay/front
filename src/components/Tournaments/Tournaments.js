@@ -766,7 +766,7 @@ function Tournaments(props) {
         {globalMe === undefined || globalMe === null ? null :
             <div className="field">
                 <div className="control">
-                    <label class="checkbox">
+                    <label className="checkbox">
                         <input
                             type="checkbox"
                             defaultChecked={registeredOnly}
@@ -778,7 +778,7 @@ function Tournaments(props) {
             </div>
         }
         <div className="control" style={{paddingBottom: "1em"}}>
-            <div class="select is-small">
+            <div className="select is-small">
                 <select
                     onChange={(e) => e.target.value === "" ? filterMetaSetter(null) : filterMetaSetter(e.target.value)}
                 >

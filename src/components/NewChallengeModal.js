@@ -105,7 +105,7 @@ function NewChallengeModal(props) {
         opponentsSetter(Array(cnt - 1).fill(""));
       }
     },
-    [playerCountSetter, seatingSetter, ratedSetter, opponents.length, opponentsSetter]
+    [ratedSetter, opponents.length]
   );
 
   const setClock = (start, inc, max) => {
@@ -116,60 +116,57 @@ function NewChallengeModal(props) {
 
   const handleChangeGame = useCallback(
     (game) => {
-      groupVariantsRef.current = {};
-      if (game === "") {
-        metaGameSetter(null);
-      } else {
-        metaGameSetter(game);
-        const info = gameinfo.get(game);
-        let gameEngine;
-        if (info.playercounts.length > 1) {
-          gameEngine = GameFactory(info.uid, 2);
+      if (game !== metaGame) {
+        groupVariantsRef.current = {};
+        if (game === "") {
+          metaGameSetter(null);
         } else {
-          gameEngine = GameFactory(info.uid);
+          metaGameSetter(game);
+          const info = gameinfo.get(game);
+          let gameEngine;
+          if (info.playercounts.length > 1) {
+            gameEngine = GameFactory(info.uid, 2);
+          } else {
+            gameEngine = GameFactory(info.uid);
+          }
+          allvariantsSetter(gameEngine.allvariants());
+          let ngVariants = {};
+          if (gameEngine.allvariants())
+            gameEngine
+              .allvariants()
+              .filter((v) => v.group === undefined)
+              .forEach((v) => (ngVariants[v.uid] = false));
+          nonGroupVariantsSetter(ngVariants);
+          if (gameEngine.allvariants()?.length > 0) {
+              const defaults = {};
+              [...new Set(gameEngine.allvariants().filter(v => v.group !== undefined).map(v => v.group))].forEach((g) => {
+                  const {name, description} = gameEngine.describeVariantGroupDefaults(g);
+                  defaults[g] = {
+                      name: name || g,
+                      description,
+                  };
+              });
+              groupDefaultDataSetter({...defaults});
+          } else {
+              groupDefaultDataSetter({});
+          }
+          const playercounts = info.playercounts;
+          if (playercounts.length === 1) {
+            setPlayerCount(playercounts[0]);
+          } else if (props.opponent !== undefined) {
+            setPlayerCount(2);
+          } else {
+            playerCountSetter(-1);
+            opponentsSetter([]);
+          }
+          seatingSetter("random");
         }
-        allvariantsSetter(gameEngine.allvariants());
-        let ngVariants = {};
-        if (gameEngine.allvariants())
-          gameEngine
-            .allvariants()
-            .filter((v) => v.group === undefined)
-            .forEach((v) => (ngVariants[v.uid] = false));
-        nonGroupVariantsSetter(ngVariants);
-        if (gameEngine.allvariants()?.length > 0) {
-            const defaults = {};
-            [...new Set(gameEngine.allvariants().filter(v => v.group !== undefined).map(v => v.group))].forEach((g) => {
-                const {name, description} = gameEngine.describeVariantGroupDefaults(g);
-                defaults[g] = {
-                    name: name || g,
-                    description,
-                };
-            });
-            groupDefaultDataSetter({...defaults});
-        } else {
-            groupDefaultDataSetter({});
-        }
-        const playercounts = info.playercounts;
-        if (playercounts.length === 1) {
-          setPlayerCount(playercounts[0]);
-        } else if (props.opponent !== undefined) {
-          setPlayerCount(2);
-        } else {
-          playerCountSetter(-1);
-          opponentsSetter([]);
-        }
-        seatingSetter("random");
+        errorSetter("");
       }
-      errorSetter("");
     },
     [
-      metaGameSetter,
-      allvariantsSetter,
-      nonGroupVariantsSetter,
-      groupDefaultDataSetter,
+      metaGame,
       setPlayerCount,
-      playerCountSetter,
-      opponentsSetter,
       props,
     ]
   );

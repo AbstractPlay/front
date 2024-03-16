@@ -2449,7 +2449,7 @@ function GameMove(props) {
                     }</button>
                 </div>
                 <div className="control">
-                <label class="checkbox">
+                <label className="checkbox">
                     <input type="checkbox"
                         onClick={() => {showTourSetter(false); startTourSetter(false);}}
                     />

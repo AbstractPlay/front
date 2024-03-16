@@ -152,7 +152,7 @@ function Navbar(props) {
           <div className="navbar-item">
             {/* <!--- Light mode button ---> */}
             <button
-                class="button is-small apButtonNeutral light--hidden"
+                className="button is-small apButtonNeutral light--hidden"
                 aria-label="Toggle light mode"
                 onClick={toggleColorMode}
             >
@@ -161,7 +161,7 @@ function Navbar(props) {
 
             {/* <!--- Dark mode button ---> */}
             <button
-                class="button is-small apButtonNeutral dark--hidden"
+                className="button is-small apButtonNeutral dark--hidden"
                 aria-label="Toggle dark mode"
                 onClick={toggleColorMode}
             >

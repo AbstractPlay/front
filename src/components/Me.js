@@ -544,6 +544,7 @@ function Me(props) {
                       item.challenger.id === undefined ? null : (
                         <ChallengeItem
                           item={item}
+                          me={globalMe.id}
                           key={item.id}
                           respond={true}
                           setters={{
@@ -570,6 +571,7 @@ function Me(props) {
                     {challengesResponded.map((item) => (
                       <ChallengeItem
                         item={item}
+                        me={globalMe.id}
                         key={item.id}
                         respond={false}
                         setters={{
@@ -595,6 +597,7 @@ function Me(props) {
                     {globalMe.standingChallenges.map((item) => (
                       <ChallengeItem
                         item={item}
+                        me={globalMe.id}
                         key={item.id}
                         respond={false}
                         setters={{
