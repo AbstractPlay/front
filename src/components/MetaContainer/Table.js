@@ -230,13 +230,13 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
             props.row.original.designers === undefined
               ? ""
               : props.row.original.designers
-                  .map(({ name, urls }) =>
+                  .map(({ name, urls }, ind) =>
                     urls !== undefined && urls.length > 0 ? (
-                      <a href={urls[0]} target="_blank" rel="noreferrer">
+                      <a key={`designr_${ind}`} href={urls[0]} target="_blank" rel="noreferrer">
                         {name}
                       </a>
                     ) : (
-                      <span>{name}</span>
+                      <span key={`designr_${ind}`}>{name}</span>
                     )
                   )
                   .reduce((prev, curr) => [prev, ", ", curr]),
@@ -292,8 +292,8 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
       }),
       columnHelper.accessor("tags", {
         header: "Tags",
-        cell: (props) => props.getValue().split("||").map(tag => tag === "" ? null : (
-            <span className="tag">{tag}</span>
+        cell: (props) => props.getValue().split("||").map((tag, ind) => tag === "" ? null : (
+            <span key={`tag_${ind}`} className="tag">{tag}</span>
         )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null),
         enableSorting: false,
       }),
