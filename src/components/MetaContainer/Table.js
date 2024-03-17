@@ -5,7 +5,6 @@ import React, {
   useMemo,
   Fragment,
   useCallback,
-  useRef,
 } from "react";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -29,8 +28,6 @@ import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import ExpandableDiv from "../ExpandableDiv";
 import { useStorageState } from "react-use-storage-state";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH } from "../../config";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 // props:
@@ -41,20 +38,16 @@ const allSize = Number.MAX_SAFE_INTEGER;
 //   - toggleStar
 //   - handleChallenge
 function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) {
-  const [globalMe, globalMeSetter] = useContext(MeContext);
+  const [globalMe,] = useContext(MeContext);
   const [activeImgModal, activeImgModalSetter] = useState("");
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
-  const [showTagModal, showTagModalSetter] = useState(false);
   const [expandedPara, expandedParaSetter] = useState([]);
-  const [selectedGame, selectedGameSetter] = useState("");
-  const [newTag, newTagSetter] = useState("");
-  const [myTags, myTagsSetter] = useState([]);
   const { t, i18n } = useTranslation();
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
   const [filterStars, filterStarsSetter] = useStorageState("allgames-filter-stars", false);
-  const [globalFilter, globalFilterSetter] = useState(metaGame);
+  const [tagFilter, tagFilterSetter] = useState([]);
+  const [columnFilters, setColumnFilters] = useState([]);
   const [showState, showStateSetter] = useStorageState("allgames-show", 10);
-  const tagInput = useRef(null);
   addResource(i18n.language);
 
   useEffect(() => {
@@ -85,13 +78,57 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
     [expandedPara, expandedParaSetter]
   );
 
-  useEffect(() => {
-    if (globalMe !== undefined && globalMe !== null && globalMe.tags !== undefined) {
-        myTagsSetter([...globalMe.tags]);
-    } else {
-        myTagsSetter([]);
+  const multiTagSelect = (row, id, filterVals) => {
+    if (filterVals.length === 0) {
+        return true;
     }
-  }, [globalMe]);
+    const val = row.getValue(id);
+    return filterVals.reduce((prev, curr) => prev && val.find(o => o.raw === curr) !== undefined, true);
+  }
+
+  const addTag = useCallback(
+    (tag) => {
+        if (! tagFilter.includes(tag)) {
+            const tags = [...tagFilter, tag];
+            tagFilterSetter([...tags]);
+            const lst = [...columnFilters].filter(cf => cf.id !== "tags");
+            setColumnFilters([...lst, {id: "tags", value: tags}])
+        }
+    },
+    [tagFilter, columnFilters]
+  );
+
+  const delTag = useCallback(
+    (tag) => {
+        if (tagFilter.includes(tag)) {
+            const tags = [...tagFilter.filter(t => t !== tag)];
+            tagFilterSetter([...tags]);
+            const lst = [...columnFilters].filter(cf => cf.id !== "tags");
+            setColumnFilters([...lst, {id: "tags", value: tags}])
+        }
+    },
+    [tagFilter, columnFilters]
+  );
+
+  const updateNameFilter = useCallback(
+    (txt) => {
+        const filters = [...columnFilters].filter(cf => cf.id !== "gameName");
+        if (txt !== "") {
+            filters.push({id: "gameName", value: txt});
+        }
+        setColumnFilters([...filters]);
+    },[columnFilters]
+  );
+
+  const updateDesignerFilter = useCallback(
+    (txt) => {
+        const filters = [...columnFilters].filter(cf => cf.id !== "designers");
+        if (txt !== "") {
+            filters.push({id: "designers", value: txt});
+        }
+        setColumnFilters([...filters]);
+    },[columnFilters]
+  );
 
   /**
    * Table columns
@@ -125,6 +162,49 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
               recent = rec.value;
             }
           }
+          const tags = info.categories.map(cat => { return {
+            raw: cat,
+            tag: t(`categories.${cat}.tag`),
+            desc: t(`categories.${cat}.description`),
+          }; }).sort((a,b) => {
+            // goals > mechanics > board > board:shape > board:connect > components
+            let valA, valB;
+            if (a.raw.startsWith("goal")) {
+                valA = 1;
+            } else if (a.raw.startsWith("mech")) {
+                valA = 2;
+            } else if (a.raw.startsWith("board")) {
+                if (a.raw.startsWith("board>shape")) {
+                    valA = 3.1;
+                } else if (a.raw.startsWith("board>connect")) {
+                    valA = 3.2;
+                } else {
+                    valA = 3;
+                }
+            } else {
+                valA = 4;
+            }
+            if (b.raw.startsWith("goal")) {
+                valB = 1;
+            } else if (b.raw.startsWith("mech")) {
+                valB = 2;
+            } else if (b.raw.startsWith("board")) {
+                if (b.raw.startsWith("board>shape")) {
+                    valB = 3.1;
+                } else if (b.raw.startsWith("board>connect")) {
+                    valB = 3.2;
+                } else {
+                    valB = 3;
+                }
+            } else {
+                valB = 4;
+            }
+            if (valA === valB) {
+                return a.tag.localeCompare(b.tag);
+            } else {
+                return valA - valB;
+            }
+          });
           return {
             id: metaGame,
             gameName: info.name,
@@ -144,10 +224,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
               globalMe.stars.includes(metaGame)
                 ? true
                 : false,
-            tags:
-                props.counts !== null && metaGame in props.counts
-                  ? props.counts[metaGame].tags.join("||")
-                  : "",
+            tags,
             stars:
               props.counts !== null && metaGame in props.counts
                 ? props.counts[metaGame].stars
@@ -172,7 +249,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
           };
         })
         .filter((obj) => !filterStars || obj.starred),
-    [globalMe, props.games, props.summary, props.counts, filterStars]
+    [globalMe, props.games, props.summary, props.counts, filterStars, t]
   );
 
   const columnHelper = createColumnHelper();
@@ -217,6 +294,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
             {props.getValue()}
           </a>
         ),
+        filterFn: "includesString",
       }),
       columnHelper.accessor(
         (row) =>
@@ -292,10 +370,11 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
       }),
       columnHelper.accessor("tags", {
         header: "Tags",
-        cell: (props) => props.getValue().split("||").map((tag, ind) => tag === "" ? null : (
-            <span key={`tag_${ind}`} className="tag">{tag}</span>
+        cell: (props) => props.getValue().map((tag, ind) => tag === "" ? null : (
+            <span key={`tag_${ind}`} className="tag" title={tag.desc} onClick={() => addTag(tag.raw)}>{tag.tag}</span>
         )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null),
         enableSorting: false,
+        filterFn: multiTagSelect,
       }),
       columnHelper.accessor("stars", {
         header: "Stars",
@@ -371,78 +450,9 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
       handleChallenge,
       expandedPara,
       togglePara,
+      addTag,
     ]
   );
-
-  const addTag = () => {
-    const idx = myTags.findIndex(t => t.meta === selectedGame);
-    if (idx !== -1) {
-        const unique = new Set();
-        unique.add(newTag);
-        for (const tag of myTags[idx].tags) {
-            unique.add(tag);
-        }
-        myTags[idx] = {meta: selectedGame, tags: [...unique.values()].sort((a, b) => a.localeCompare(b))};
-    } else {
-        myTags.push({meta: selectedGame, tags: [newTag]})
-    }
-    newTagSetter("");
-    tagInput.current.focus();
-  }
-
-  const deleteTag = (meta, tag) => {
-    const copy = [...myTags];
-    const idxMeta = copy.findIndex(e => e.meta === meta);
-    if (idxMeta !== -1) {
-        const tags = [...(copy[idxMeta].tags)];
-        const idxTag = tags.findIndex(t => t === tag);
-        if (idxTag !== -1) {
-            tags.splice(idxTag, 1);
-            if (tags.length > 0) {
-                copy[idxMeta].tags = [...tags];
-            } else {
-                copy.splice(idxMeta, 1);
-            }
-            myTagsSetter([...copy]);
-        }
-    }
-  }
-
-  const saveTags = async () => {
-    try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-            },
-            body: JSON.stringify({
-                query: "save_tags",
-                pars: {
-                    payload: myTags,
-                },
-            }),
-        });
-        if (res.status !== 200) {
-            const result = await res.json();
-            console.log(
-                `An error occured while saving tags:\n${result}`
-            );
-        } else {
-            // update globalMe tags
-            const newMe = JSON.parse(JSON.stringify(globalMe));
-            newMe.tags = myTags;
-            globalMeSetter(newMe);
-            // triger meta game refresh
-            updateSetter(v => v + 1);
-        }
-    } catch (error) {
-        console.log(error);
-    }
-    showTagModalSetter(false);
-  }
 
   const table = useReactTable({
     data,
@@ -459,11 +469,10 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
         toggleStar: globalMe !== null,
         actions: globalMe !== null,
       },
-      globalFilter,
+      columnFilters,
     },
     onSortingChange: setSorting,
-    onGlobalFilterChange: globalFilterSetter,
-    globalFilterFn: "includesString",
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -478,19 +487,6 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
     <>
       <div className="level smallerText">
         <div className="level-left">
-          <div className="level-item">
-            <div className="field">
-              <div className="control">
-                <input
-                  className="input is-small"
-                  type="search"
-                  placeholder={t("Search")}
-                  onChange={(e) => globalFilterSetter(e.target.value)}
-                  value={globalFilter ?? ""}
-                />
-              </div>
-            </div>
-          </div>
           <div className="level-item">
             <button
               className="button is-small"
@@ -592,6 +588,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
                     key={header.id}
                   >
                     {header.isPlaceholder ? null : (
+                    <>
                       <div
                         {...{
                           className: header.column.getCanSort()
@@ -630,24 +627,31 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
                             </span>
                           </>
                         )}
-                        {(header.id === "tags" && globalMe !== null && globalMe !== undefined) ? (
-                          <>
-                            {" "}
-                            <span
-                              style={{
-                                fontSize: "smaller",
-                                fontWeight: "normal",
-                                paddingTop: 0,
-                                textDecoration: "underline",
-                                cursor: "pointer",
-                              }}
-                              onClick={() => showTagModalSetter(true)}
-                            >
-                              (edit)
-                            </span>
-                          </>
-                        ) : null}
                       </div>
+                      {header.id !== "gameName" ? null : (
+                        <div className="control">
+                            <input
+                                className="input is-small"
+                                type="search"
+                                onChange={(e) => updateNameFilter(e.target.value)}
+                            />
+                        </div>
+                      )}
+                      {header.id !== "designers" ? null : (
+                        <div className="control">
+                            <input
+                                className="input is-small"
+                                type="search"
+                                onChange={(e) => updateDesignerFilter(e.target.value)}
+                            />
+                        </div>
+                      )}
+                      {header.id !== "tags" ? null :
+                        tagFilter.map((tag, ind) => tag === "" ? null : (
+                            <span key={`tag_${ind}`} className="tag" title={t(`categories.${tag}.description`)} onClick={() => delTag(tag)}>{t(`categories.${tag}.tag`)}</span>
+                        )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)
+                      }
+                      </>
                     )}
                   </th>
                 ))}
@@ -668,68 +672,6 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
         </table>
         {tableNavigation}
       </div>
-
-      <Modal
-          show={showTagModal}
-          title={t("EditTags")}
-          buttons={[
-            { label: t("SaveChanges"), action: saveTags },
-            {
-              label: t("Close"),
-              action: () => showTagModalSetter(false),
-            },
-          ]}
-        >
-          <div className="content">
-            <p>Tags are publicly visible. Please familiarize yourself with our <Link to="/legal">terms of service</Link>. Don't forget to save your changes before closing this dialog.</p>
-            <p>The best tags are short (preferably one word) and lowercase. Click on a tag to delete it.</p>
-          </div>
-          <div className="field is-grouped">
-            <div className="control">
-                <div className="select is-small">
-                    <select id="gameSelect" value={selectedGame} onChange={(e) => selectedGameSetter(e.target.value)}>
-                        <option value={""} key={`gameSelectBlank`}>--Choose a game--</option>
-                    {props.games.map(meta => {
-                        const info = gameinfo.get(meta);
-                        return (<option value={meta} key={`gameSelect|${meta}`}>{info.name}</option>)
-                    })}
-                    </select>
-                </div>
-            </div>
-            <div className="control">
-                <input className="input is-small" type="text" placeholder="Type new tag here" value={newTag} onChange={(e) => newTagSetter(e.target.value)} ref={tagInput} />
-            </div>
-          </div>
-          <div className="control">
-            <button className="button is-small apButton" onClick={addTag} disabled={newTag === "" || selectedGame === ""}>Add tag</button>
-          </div>
-          {myTags.length === 0 ? null :
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>Game</th>
-                        <th>Tags</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {myTags.sort((a,b) => a.meta.localeCompare(b.meta)).map(({meta, tags}) => {
-                        const info = gameinfo.get(meta);
-                        return (
-                            <tr key={`MyTagRow|${meta}`}>
-                                <td>{info.name}</td>
-                                <td>
-                                    {tags.map(tag => (
-                                        <span className="tag" onClick={() => deleteTag(meta, tag)}>{tag}</span>
-                                    )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)}
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-          }
-      </Modal>
-
     </article>
   );
 }
