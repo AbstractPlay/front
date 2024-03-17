@@ -11,6 +11,338 @@
     "BoardSettings": "Change game board settings",
     "Cancel": "Cancel",
     "CanPie": "This player has the option to switch seats.",
+    "categories": {
+        "board": {
+            "description": "Describes the attributes of the playing surface",
+            "full": "Board",
+            "tag": "Board"
+        },
+        "board>connect": {
+            "description": "Describes how the cells of the board connect to each other",
+            "full": "Board > Connectivity",
+            "tag": "Board Connectivity"
+        },
+        "board>connect>hex": {
+            "description": "Cells connect to each other hexagonally",
+            "full": "Board > Connectivity > Hexagonal",
+            "tag": "Connect: Hex"
+        },
+        "board>connect>other": {
+            "description": "Cells connect to each other in a unique way",
+            "full": "Board > Connectivity > Other",
+            "tag": "Connect: Other"
+        },
+        "board>connect>pent": {
+            "description": "Cells connect to each other pentagonally",
+            "full": "Board > Connectivity > Pentagonal",
+            "tag": "Connect: Pent"
+        },
+        "board>connect>rect": {
+            "description": "Cells connect to each other orthogonally and diagonally",
+            "full": "Board > Connectivity > Rectangular",
+            "tag": "Connect: Rect"
+        },
+        "board>connect>snub": {
+            "description": "Cells connect to each other in a snubsquare matrix",
+            "full": "Board > Connectivity > Snubsquare",
+            "tag": "Connect: Snub"
+        },
+        "board>dynamic": {
+            "description": "The board builds out dynamically",
+            "full": "Board > Dynamic",
+            "tag": "Board: Dynamic"
+        },
+        "board>mancala": {
+            "description": "Played on a traditional Mancala-style board",
+            "full": "Board > Mancala",
+            "tag": "Board: Mancala"
+        },
+        "board>none": {
+            "description": "Played on any flat surface",
+            "full": "Board > None",
+            "tag": "Board: None"
+        },
+        "board>other": {
+            "description": "The board is unique",
+            "full": "Board > Other",
+            "tag": "Board: Other"
+        },
+        "board>shape": {
+            "description": "Describes the shape of the board",
+            "full": "Board > Shape",
+            "tag": "Board Shape"
+        },
+        "board>shape>circle": {
+            "description": "The board is shaped like a circle",
+            "full": "Board > Shape > Circle",
+            "tag": "Shape: Circle"
+        },
+        "board>shape>hex": {
+            "description": "The board is shaped like a hexagon",
+            "full": "Board > Shape > Hexagon",
+            "tag": "Shape: Hex"
+        },
+        "board>shape>oct": {
+            "description": "The board is shaped like an octagon",
+            "full": "Board > Shape > Octagon",
+            "tag": "Shape: Oct"
+        },
+        "board>shape>other": {
+            "description": "The board has a unique shape",
+            "full": "Board > Shape > Other",
+            "tag": "Shape: Other"
+        },
+        "board>shape>rect": {
+            "description": "The board is shaped like a rectangle",
+            "full": "Board > Shape > Rectangle",
+            "tag": "Shape: Rect"
+        },
+        "board>shape>tri": {
+            "description": "The board is shaped like a triangle",
+            "full": "Board > Shape > Triangle",
+            "tag": "Shape: Tri"
+        },
+        "components>dice": {
+            "description": "Played with dice",
+            "full": "Components > Dice",
+            "tag": "C: Dice"
+        },
+        "components>piecepack": {
+            "description": "Played with Piecepack",
+            "full": "Components > Piecepack",
+            "tag": "C: Piecepack"
+        },
+        "components>poly": {
+            "description": "Played with polyominoes",
+            "full": "Components > Polyominoes",
+            "tag": "C: Polyominoes"
+        },
+        "components>pyramids": {
+            "description": "Played with Looney pyramids",
+            "full": "Components > Looney Pyramids",
+            "tag": "C: Looney Pyramids"
+        },
+        "components>simple": {
+            "description": "Played with simple pieces of uniform size, often stackable, sometimes with lots of colours",
+            "full": "Components > Simple",
+            "tag": "C: Simple"
+        },
+        "components>special": {
+            "description": "Played with specialized pieces, usually differentiated",
+            "full": "Components > Specialized",
+            "tag": "C: Special"
+        },
+        "goal>align": {
+            "description": "Arrange pieces into specific shapes or lengths (e.g., n in a row)",
+            "full": "Goal > Align",
+            "tag": "G: Align"
+        },
+        "goal>annihilate": {
+            "description": "Annihilate all opposing pieces",
+            "full": "Goal > Annihilate",
+            "tag": "G: Annihilate"
+        },
+        "goal>area": {
+            "description": "Control more area (or certain areas with certain strengths) than your opponent",
+            "full": "Goal > Area Control",
+            "tag": "G: Area Control"
+        },
+        "goal>breakthrough": {
+            "description": "Reach opposing home row or home area with sufficient strength",
+            "full": "Goal > Breakthrough",
+            "tag": "G: Breakthrough"
+        },
+        "goal>connect": {
+            "description": "Connect designated edges of the board or areas",
+            "full": "Goal > Connect",
+            "tag": "G: Connect"
+        },
+        "goal>cripple": {
+            "description": "Eliminate some critical majority or specific subset of opposing pieces",
+            "full": "Goal > Cripple",
+            "tag": "G: Cripple"
+        },
+        "goal>evacuate": {
+            "description": "Evacuate your pieces from the board",
+            "full": "Goal > Evacuate",
+            "tag": "G: Evacuate"
+        },
+        "goal>immobilize": {
+            "description": "Make it so your opponent cannot move",
+            "full": "Goal > Immobilize",
+            "tag": "G: Immobilize"
+        },
+        "goal>majority": {
+            "description": "Have more pieces than your opponent",
+            "full": "Goal > Majority",
+            "tag": "G: Majority"
+        },
+        "goal>royal-capture": {
+            "description": "Capture a specific opposing piece",
+            "full": "Goal > Royal Capture",
+            "tag": "G: Royal Capture"
+        },
+        "goal>royal-escape": {
+            "description": "Get a specific piece off the board",
+            "full": "Goal > Royal Escape",
+            "tag": "G: Royal Escape"
+        },
+        "goal>score": {
+            "description": "Outcome is determined by score in some way",
+            "full": "Goal > Score",
+            "tag": "G: Score"
+        },
+        "goal>score>eog": {
+            "description": "Have the highest score at the end of the game",
+            "full": "Goal > Score > End of game",
+            "tag": "G: Score (EOG)"
+        },
+        "goal>score>race": {
+            "description": "Be the first to reach a particular score",
+            "full": "Goal > Score > Race",
+            "tag": "G: Score (Race)"
+        },
+        "goal>set": {
+            "description": "Collect sets of pieces",
+            "full": "Goal > Set Collection",
+            "tag": "G: Set Collection"
+        },
+        "goal>unify": {
+            "description": "Bring all your pieces together",
+            "full": "Goal > Unify",
+            "tag": "G: Unify"
+        },
+        "mechanic": {
+            "description": "Describes the general game mechanics",
+            "full": "Mechanics",
+            "tag": "Mechanics"
+        },
+        "mechanic>asymmetry": {
+            "description": "Game is asymmetrical",
+            "full": "Mechanics > Asymmetry",
+            "tag": "M: Asymmetry"
+        },
+        "mechanic>bearoff": {
+            "description": "Players bear pieces off the board",
+            "full": "Mechanics > Bear off",
+            "tag": "M: Bear off"
+        },
+        "mechanic>block": {
+            "description": "Players block each other",
+            "full": "Mechanics > Block",
+            "tag": "M: Block"
+        },
+        "mechanic>capture": {
+            "description": "Pieces are captured",
+            "full": "Mechanics > Capture",
+            "tag": "M: Capture"
+        },
+        "mechanic>convert": {
+            "description": "Players can convert enemy pieces into their own",
+            "full": "Mechanics > Convert",
+            "tag": "M: Convert"
+        },
+        "mechanic>coopt": {
+            "description": "Players can interact with opposing pieces",
+            "full": "Mechanics > Co-Opt",
+            "tag": "M: Co-Opt"
+        },
+        "mechanic>differentiate": {
+            "description": "Pieces are differentiated in some essential way",
+            "full": "Mechanics > Differentiate",
+            "tag": "M: Differentiate"
+        },
+        "mechanic>displace": {
+            "description": "Moves can cause additional pieces to move as a result",
+            "full": "Mechanics > Displace",
+            "tag": "M: Displace"
+        },
+        "mechanic>economy": {
+            "description": "Players must manage some central economy",
+            "full": "Mechanics > Manage Economy",
+            "tag": "M: Manage Economy"
+        },
+        "mechanic>enclose": {
+            "description": "Players actively enclose areas or pieces",
+            "full": "Mechanics > Enclose",
+            "tag": "M: Enclose"
+        },
+        "mechanic>merge": {
+            "description": "Pieces merge or split apart",
+            "full": "Mechanics > Merge/Split",
+            "tag": "M: Merge/Split"
+        },
+        "mechanic>move": {
+            "description": "Pieces can be moved",
+            "full": "Mechanics > Move",
+            "tag": "M: Move"
+        },
+        "mechanic>move>group": {
+            "description": "Pieces can be moved as a group",
+            "full": "Mechanics > Move > Group",
+            "tag": "M: Move (Group)"
+        },
+        "mechanic>move>sow": {
+            "description": "Pieces move by sowing",
+            "full": "Mechanics > Move > Sow",
+            "tag": "M: Move (Sow)"
+        },
+        "mechanic>network": {
+            "description": "Players build networks",
+            "full": "Mechanics > Network",
+            "tag": "M: Network"
+        },
+        "mechanic>place": {
+            "description": "Pieces are placed",
+            "full": "Mechanics > Place",
+            "tag": "M: Place"
+        },
+        "mechanic>program": {
+            "description": "Sequences of moves are programmed",
+            "full": "Mechanics > Program",
+            "tag": "M: Program"
+        },
+        "mechanic>random": {
+            "description": "Game contains some random element",
+            "full": "Mechanics > Random Elements",
+            "tag": "M: Random Elements"
+        },
+        "mechanic>random>play": {
+            "description": "Individual moves of the game include some element of randomness",
+            "full": "Mechanics > Random > Play",
+            "tag": "M: Random (Play)"
+        },
+        "mechanic>random>setup": {
+            "description": "Setup is randomized in some way",
+            "full": "Mechanics > Random > Setup",
+            "tag": "M: Random (Setup)"
+        },
+        "mechanic>set": {
+            "description": "Players collect sets",
+            "full": "Mechanics > Set Collection",
+            "tag": "M: Set Collection"
+        },
+        "mechanic>share": {
+            "description": "At least some pieces in the game are shared by both players",
+            "full": "Mechanics > Share",
+            "tag": "M: Share"
+        },
+        "mechanic>simultaneous": {
+            "description": "The game includes simultaneous action selection",
+            "full": "Mechanics > Simultaneous",
+            "tag": "M: Simultaneous"
+        },
+        "mechanic>stack": {
+            "description": "Players manipulate stacks of pieces",
+            "full": "Mechanics > Stack",
+            "tag": "M: Stack"
+        },
+        "mechanic>traditional": {
+            "description": "Game is traditional",
+            "full": "Mechanics > Traditional",
+            "tag": "M: Traditional"
+        }
+    },
     "Challenge": "Challenge",
     "Challenge Details": "Challenge Details",
     "ChallengeClock": "The clock start time will be {{start}} hours, incremented by {{inc}} hours after each move, with a maximum of {{max}} hours.",
