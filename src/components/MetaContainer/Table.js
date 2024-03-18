@@ -48,6 +48,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
   const [tagFilter, tagFilterSetter] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [showState, showStateSetter] = useStorageState("allgames-show", 10);
+  const [ddSelected, ddSelectedSetter] = useState("");
   addResource(i18n.language);
 
   useEffect(() => {
@@ -88,7 +89,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
 
   const addTag = useCallback(
     (tag) => {
-        if (! tagFilter.includes(tag)) {
+        if (tag !== "" && ! tagFilter.includes(tag)) {
             const tags = [...tagFilter, tag];
             tagFilterSetter([...tags]);
             const lst = [...columnFilters].filter(cf => cf.id !== "tags");
@@ -166,6 +167,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
             raw: cat,
             tag: t(`categories.${cat}.tag`),
             desc: t(`categories.${cat}.description`),
+            full: t(`categories.${cat}.full`),
           }; }).sort((a,b) => {
             // goals > mechanics > board > board:shape > board:connect > components
             let valA, valB;
@@ -251,6 +253,58 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
         .filter((obj) => !filterStars || obj.starred),
     [globalMe, props.games, props.summary, props.counts, filterStars, t]
   );
+
+  const allTags = useMemo(() => {
+    const tagSet = new Set();
+    props.games.forEach(metaGame => {
+        const info = gameinfo.get(metaGame);
+        info.categories.forEach(cat => tagSet.add(cat));
+    });
+    return [...tagSet.values()].map(cat => { return {
+        raw: cat,
+        tag: t(`categories.${cat}.tag`),
+        desc: t(`categories.${cat}.description`),
+        full: t(`categories.${cat}.full`),
+      }; }).sort((a,b) => {
+        // goals > mechanics > board > board:shape > board:connect > components
+        let valA, valB;
+        if (a.raw.startsWith("goal")) {
+            valA = 1;
+        } else if (a.raw.startsWith("mech")) {
+            valA = 2;
+        } else if (a.raw.startsWith("board")) {
+            if (a.raw.startsWith("board>shape")) {
+                valA = 3.1;
+            } else if (a.raw.startsWith("board>connect")) {
+                valA = 3.2;
+            } else {
+                valA = 3;
+            }
+        } else {
+            valA = 4;
+        }
+        if (b.raw.startsWith("goal")) {
+            valB = 1;
+        } else if (b.raw.startsWith("mech")) {
+            valB = 2;
+        } else if (b.raw.startsWith("board")) {
+            if (b.raw.startsWith("board>shape")) {
+                valB = 3.1;
+            } else if (b.raw.startsWith("board>connect")) {
+                valB = 3.2;
+            } else {
+                valB = 3;
+            }
+        } else {
+            valB = 4;
+        }
+        if (valA === valB) {
+            return a.tag.localeCompare(b.tag);
+        } else {
+            return valA - valB;
+        }
+    });
+    }, [props.games, t]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(
@@ -646,10 +700,27 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
                             />
                         </div>
                       )}
-                      {header.id !== "tags" ? null :
-                        tagFilter.map((tag, ind) => tag === "" ? null : (
-                            <span key={`tag_${ind}`} className="tag" title={t(`categories.${tag}.description`)} onClick={() => delTag(tag)}>{t(`categories.${tag}.tag`)}</span>
-                        )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)
+                      {header.id !== "tags" ? null : (
+                        <>
+                            <div className="control">
+                                <div className="select is-small">
+                                    <select
+                                        value={ddSelected}
+                                        onChange={(e) => {addTag(e.target.value); ddSelectedSetter("")}}
+                                    >
+                                        <option value="" key="tagdd_blank"></option>
+                                        {allTags.map((t, i) => (
+                                            <option value={t.raw} key={`tagdd_${i}`}>{t.full}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            {tagFilter.map((tag, ind) => tag === "" ? null : (
+                                    <span key={`tag_${ind}`} className="tag" title={t(`categories.${tag}.description`)} onClick={() => delTag(tag)}>{t(`categories.${tag}.tag`)}</span>
+                                )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)
+                            }
+                        </>
+                      )
                       }
                       </>
                     )}
