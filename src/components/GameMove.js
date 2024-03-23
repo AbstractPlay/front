@@ -1462,6 +1462,18 @@ function GameMove(props) {
     checkTime
   ]);
 
+  async function reportError(error) {
+    let url = new URL(API_ENDPOINT_OPEN);
+    url.searchParams.append("query", "report_problem");
+    url.searchParams.append("error", error);
+    const res = await fetch(url);
+    const status = res.status;
+    if (status !== 200) {
+      const result = await res.json();
+      console.log(JSON.parse(result.body));
+    }
+  }
+
   const handleNoteUpdate = useCallback(
     async (newNote) => {
       if (newNote.length > 0 && !/^\s*$/.test(newNote)) {
@@ -3091,6 +3103,7 @@ function GameMove(props) {
       </article>
     );
   } else {
+    reportError(`Message: ${errorMessageRef.current}, state: ${getFocusNode(explorationRef.current, focus).state}`);
     return <h4>{errorMessageRef.current}</h4>;
   }
 }
