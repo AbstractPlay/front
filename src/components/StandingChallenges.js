@@ -37,6 +37,18 @@ function StandingChallenges(props) {
   const [showAccepted, showAcceptedSetter] = useState(false);
   const [showModal, showModalSetter] = useState(false);
 
+  async function reportError(error) {
+    let url = new URL(API_ENDPOINT_OPEN);
+    url.searchParams.append("query", "report_problem");
+    url.searchParams.append("error", error);
+    const res = await fetch(url);
+    const status = res.status;
+    if (status !== 200) {
+      const result = await res.json();
+      console.log(JSON.parse(result.body));
+    }
+  }
+
   const handleNewChallenge = async (challenge) => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
@@ -86,8 +98,19 @@ function StandingChallenges(props) {
         url.searchParams.append("query", "standing_challenges");
         url.searchParams.append("metaGame", metaGame);
         const res = await fetch(url);
-        const result = await res.json();
+        var result = await res.json();
         console.log(result);
+        var bad;
+        [result, bad] = result.reduce((acc, c) => {
+          if (c.id) {
+            acc[0].push(c);
+          } else {
+            acc[1].push(c);
+          }
+          return acc;
+        }, [[], []]);
+        if (bad.length > 0)
+          reportError(`Bad standing challenges: ${JSON.stringify(bad)}`);
         challengesSetter(result);
         revokeSetter(null);
         acceptedSetter(null);
@@ -241,7 +264,7 @@ function StandingChallenges(props) {
       challenges.map((rec) => {
         let lastSeen = undefined;
         if (allUsers !== null) {
-            const userRec = allUsers.find(u => u.id === rec.challenger.id);
+            const userRec = allUsers.find(u => u.id === rec.challenger?.id);
             if (userRec !== undefined) {
                 lastSeen = userRec.lastSeen;
             }
@@ -257,7 +280,7 @@ function StandingChallenges(props) {
           clockMax: rec.clockMax,
           noExplore: rec.noExplore || false,
           numPlayers: rec.numPlayers,
-          players: rec.players.filter((p) => p.id !== rec.challenger.id),
+          players: rec.players.filter((p) => p.id !== rec.challenger?.id),
           rated: rec.rated,
           seating: rec.seating,
           variants: rec.variants,
