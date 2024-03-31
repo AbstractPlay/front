@@ -284,6 +284,7 @@ function StandingChallenges(props) {
           rated: rec.rated,
           seating: rec.seating,
           variants: rec.variants,
+          comment: rec.comment
         };
       }),
     [challenges, allUsers]
@@ -328,6 +329,10 @@ function StandingChallenges(props) {
       columnHelper.accessor("variants", {
         header: "Variants",
         cell: (props) => props.getValue().join(", "),
+      }),
+      columnHelper.accessor("comment", {
+        header: "Notes",
+        cell: (props) => <div className="challenge_notes">{props.getValue()}</div>,
       }),
       columnHelper.accessor("clockHard", {
         header: "Hard clock?",

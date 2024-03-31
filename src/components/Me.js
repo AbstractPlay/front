@@ -5,8 +5,8 @@ import { Auth } from "aws-amplify";
 import Spinner from "./Spinner";
 import Modal from "./Modal";
 import ChallengeItem from "./Me/ChallengeItem";
-import ChallengeView from "./Me/ChallengeView";
-import ChallengeResponse from "./Me/ChallengeResponse";
+import ChallengeViewModal from "./Me/ChallengeViewModal";
+import ChallengeResponseModal from "./Me/ChallengeResponseModal";
 import NewChallengeModal from "./NewChallengeModal";
 import NewProfile from "./NewProfile";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
@@ -116,7 +116,7 @@ function Me(props) {
     showChallengeViewModalSetter(false);
   };
 
-  const handleChallengeRevoke = async () => {
+  const handleChallengeRevoke = async (comment) => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     if (globalMe.id !== challenge.challenger.id)
@@ -135,6 +135,7 @@ function Me(props) {
             id: challenge.id,
             standing: challenge.standing === true,
             metaGame: challenge.metaGame,
+            comment: comment,
           },
         }),
       });
@@ -153,7 +154,7 @@ function Me(props) {
     showChallengeResponseModalSetter(false);
   };
 
-  const handleChallengeResponse = async (resp) => {
+  const handleChallengeResponse = async (resp, comment) => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
@@ -174,6 +175,7 @@ function Me(props) {
             standing: challenge.standing === true,
             metaGame: challenge.metaGame,
             response: resp,
+            comment: comment,
           },
         }),
       });
@@ -700,45 +702,19 @@ function Me(props) {
           handleChallenge={handleNewChallenge2}
           users={users}
         />
-
-        <Modal
+        <ChallengeViewModal 
+          challenge={challenge}
+          myid={globalMe.id}
           show={showChallengeViewModal}
-          title={t("Challenge Details")}
-          buttons={[
-            {
-              label:
-                (challenge.challenger ? challenge.challenger.id : "") ===
-                globalMe.id
-                  ? t("RevokeChallenge")
-                  : t("RevokeAcceptance"),
-              action: handleChallengeRevoke,
-            },
-            { label: t("Close"), action: handleChallengeViewClose },
-          ]}
-        >
-          <ChallengeView challenge={challenge} />
-        </Modal>
-
-        <Modal
+          revoke={handleChallengeRevoke}
+          close={handleChallengeViewClose}
+        />
+        <ChallengeResponseModal
+          challenge={challenge}
           show={showChallengeResponseModal}
-          title={t("Challenge Details")}
-          buttons={[
-            {
-              label: t("Accept"),
-              action: () => handleChallengeResponse(true),
-            },
-            {
-              label: t("Reject"),
-              action: () => handleChallengeResponse(false),
-            },
-            {
-              label: t("Close"),
-              action: handleChallengeResponseClose,
-            },
-          ]}
-        >
-          <ChallengeResponse challenge={challenge} />
-        </Modal>
+          close={handleChallengeResponseClose}
+          respond={handleChallengeResponse}
+        />
         <Modal
           show={showDeleteGamesModal}
           title={"Delete games"}

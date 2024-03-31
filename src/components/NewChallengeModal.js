@@ -61,6 +61,7 @@ function NewChallengeModal(props) {
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const [groupDefaultData, groupDefaultDataSetter] = useState({});
   const groupVariantsRef = useRef({});
+  const [comment, commentSetter] = useState("");
   const [globalMe] = useContext(MeContext);
   const [allUsers] = useContext(UsersContext);
   const [users, usersSetter] = useState([]);
@@ -269,6 +270,11 @@ function NewChallengeModal(props) {
     ratedSetter(!rated);
   };
 
+  const handleCommentChange = (event) => {
+    errorSetter("");
+    commentSetter(event.target.value);
+  };
+
   const handleNoExploreChange = (event) => {
     // ratedSetter(event.target.checked);
     noExploreSetter(!noExplore);
@@ -326,12 +332,14 @@ function NewChallengeModal(props) {
       clockHard: clockHard,
       rated: rated,
       noExplore: noExplore,
+      comment: comment,
     });
     handleNewChallengeClose();
     // So that if you click on challenge again, it doesn't look like the challenge wasn't submitted:
     playerCountSetter(-1);
     opponentsSetter([]);
     metaGameSetter(null);
+    commentSetter("");
   };
 
   let games = [];
@@ -930,6 +938,26 @@ function NewChallengeModal(props) {
             <p className="help">{rated ? t("HelpRated") : t("HelpUnRated")}</p>
           </div>
         )}
+        {/* Comment to opponent */}
+        {metaGame === null || playerCount !== 2 ? null : 
+          <div className="field">
+            <label className="label" htmlFor="comment">
+              {t("Note")}
+            </label>
+            <div className="control">
+              <textarea
+                className="textarea is-small"
+                id="comment"
+                name="comment"
+                rows="2"
+                maxLength="128"
+                value={comment}
+                onChange={handleCommentChange}
+              ></textarea>
+            </div>
+            <p className="help">{t("NotesHelp")}</p>
+          </div>
+        }
       </div>
       <div className="is-danger">{error}</div>
     </Modal>
