@@ -858,6 +858,11 @@ tr.stickyHeader {
     object-fit: cover;
   }
 
+  .challenge_notes {
+    width: 40ch;
+    overflow-wrap: break-word;
+  }
+
   /* Game board customimzation for light/dark mode! */
   /* background color */
   div#svg, div#stack {
