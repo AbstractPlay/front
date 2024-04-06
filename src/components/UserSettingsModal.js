@@ -74,10 +74,10 @@ function UserSettingsModal(props) {
           gameEnd: true,
         });
       }
-      if (globalMe?.settings?.all?.exploration) {
-        explorationSetter(globalMe.settings.all.exploration);
-      } else {
+      if (globalMe?.settings?.all?.exploration === undefined) {
         explorationSetter(0);
+      } else {
+        explorationSetter(globalMe.settings.all.exploration);
       }
       if (globalMe?.settings?.all?.moveConfirmOff) {
         confirmMoveSetter(!globalMe.settings.all.moveConfirmOff);

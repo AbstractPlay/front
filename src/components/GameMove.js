@@ -91,11 +91,7 @@ function setStatus(engine, game, isPartial, partialMove, status) {
 function isExplorer(explorer, me) {
   return (
     me?.settings?.all?.exploration === 1 ||
-    ((!me ||
-      !me.settings ||
-      !me.settings.all ||
-      me.settings.all.exploration === 0) &&
-      explorer)
+    (!me?.settings?.all?.exploration && explorer) // (exploration not set or set to "Always ask") and Explore clicked
   );
 }
 
