@@ -588,7 +588,7 @@ async function saveExploration(
   focus = undefined,
   navigate = undefined
 ) {
-  if (!isExplorer(explorer, me)) return;
+  if (!me || !isExplorer(explorer, me)) return;
   if (!game.gameOver) {
     if (moveNumber !== exploration.length)
       throw new Error("Can't save exploration at this move!");
