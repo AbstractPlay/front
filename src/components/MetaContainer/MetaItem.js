@@ -41,6 +41,51 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
     designerString += designers.join(", ");
   }
 
+  const tags = game.categories.map(cat => { return {
+    raw: cat,
+    tag: t(`categories.${cat}.tag`),
+    desc: t(`categories.${cat}.description`),
+    full: t(`categories.${cat}.full`),
+  }; }).sort((a,b) => {
+    // goals > mechanics > board > board:shape > board:connect > components
+    let valA, valB;
+    if (a.raw.startsWith("goal")) {
+        valA = 1;
+    } else if (a.raw.startsWith("mech")) {
+        valA = 2;
+    } else if (a.raw.startsWith("board")) {
+        if (a.raw.startsWith("board>shape")) {
+            valA = 3.1;
+        } else if (a.raw.startsWith("board>connect")) {
+            valA = 3.2;
+        } else {
+            valA = 3;
+        }
+    } else {
+        valA = 4;
+    }
+    if (b.raw.startsWith("goal")) {
+        valB = 1;
+    } else if (b.raw.startsWith("mech")) {
+        valB = 2;
+    } else if (b.raw.startsWith("board")) {
+        if (b.raw.startsWith("board>shape")) {
+            valB = 3.1;
+        } else if (b.raw.startsWith("board>connect")) {
+            valB = 3.2;
+        } else {
+            valB = 3;
+        }
+    } else {
+        valB = 4;
+    }
+    if (valA === valB) {
+        return a.tag.localeCompare(b.tag);
+    } else {
+        return valA - valB;
+    }
+  }).filter(obj => !obj.raw.endsWith(">rect") && !obj.raw.endsWith(">simple"));
+
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
   };
@@ -86,6 +131,11 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
                 </ul>
               </Fragment>
             )}
+              <div>
+                {tags.map((tag, ind) => tag === "" ? null : (
+                    <span key={`tag_${ind}`} className="tag" title={tag.desc}>{tag.tag}</span>
+                )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)}
+              </div>
             <div>
               {counts === undefined ? (
                 ""
@@ -135,7 +185,8 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
                   </li>
                 </ul>
               )}
-                <NewChallengeModal
+              <div>
+              <NewChallengeModal
                 show={
                     activeChallengeModal !== "" &&
                     activeChallengeModal === game.uid
@@ -149,8 +200,11 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
                 onClick={() => openChallengeModal(game.uid)}
                 >
                 Issue Challenge
-                </button><br/>
-                <Link to={"/tournaments/" + game.uid}>Tournaments</Link>
+                </button>
+              </div>
+              <div>
+                  <Link to={"/tournaments/" + game.uid}>Tournaments</Link>
+              </div>
             </div>
           </div>
         </div>
