@@ -8,6 +8,7 @@ import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 // import Gallery from "./MetaContainer/Gallery";
 import Table from "./MetaContainer/Table";
+import MetaItem from "./MetaContainer/MetaItem";
 
 function MetaContainer(props) {
   const [globalMe, globalMeSetter] = useContext(MeContext);
@@ -153,20 +154,35 @@ function MetaContainer(props) {
   };
 
 //   console.log(games);
-  return (
-    <Fragment>
-      <Table
-        metaGame={metaGame}
-        counts={counts}
-        games={games}
-        summary={summary}
-        toggleStar={toggleStar.bind(this)}
-        handleChallenge={handleNewChallenge.bind(this)}
-        users={users}
-        updateSetter={updateCounterSetter}
-      />
-    </Fragment>
-  );
+  if (metaGame === undefined  || metaGame === null || ! gameinfo.has(metaGame)) {
+    return (
+        <Fragment>
+          <Table
+            metaGame={metaGame}
+            counts={counts}
+            games={games}
+            summary={summary}
+            toggleStar={toggleStar.bind(this)}
+            handleChallenge={handleNewChallenge.bind(this)}
+            users={users}
+            updateSetter={updateCounterSetter}
+          />
+        </Fragment>
+      );
+  } else if (counts !== null) {
+    return (
+        <>
+          <MetaItem
+            game={gameinfo.get(metaGame)}
+            counts={counts[metaGame]}
+            summary={summary}
+            toggleStar={toggleStar.bind(this)}
+            handleChallenge={handleNewChallenge.bind(this)}
+          />
+        </>
+    );
+  }
+
 }
 
 export default MetaContainer;
