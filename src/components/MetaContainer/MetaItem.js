@@ -7,15 +7,13 @@ import { GameFactory } from "@abstractplay/gameslib";
 import { MeContext } from "../../pages/Skeleton";
 import gameImages from "../../assets/GameImages";
 import Modal from "../Modal";
+import NewChallengeModal from "../NewChallengeModal";
 
-const MetaItem = React.forwardRef((props, ref) => {
+const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highlight, summary, handleChallenge}, ref) => {
   const [globalMe] = useContext(MeContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const toggleStar = props.toggleStar;
+  const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
   const { t } = useTranslation();
-  let game = props.game;
-  let counts = props.counts;
-  let hideDetails = props.hideDetails;
   const image = encodeURIComponent(gameImages[game.uid]);
   let gameEngine;
   if (game.playercounts.length > 1) {
@@ -43,6 +41,13 @@ const MetaItem = React.forwardRef((props, ref) => {
     designerString += designers.join(", ");
   }
 
+  const openChallengeModal = (name) => {
+    activeChallengeModalSetter(name);
+  };
+  const closeChallengeModal = () => {
+    activeChallengeModalSetter("");
+  };
+
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -53,9 +58,6 @@ const MetaItem = React.forwardRef((props, ref) => {
   return (
     <div
       ref={ref}
-      className={
-        "column is-one-third" + (props.highlight ? " theMetaGame" : "")
-      }
     >
       <h1 className="subtitle lined">
         <span>{game.name}</span>
@@ -133,6 +135,22 @@ const MetaItem = React.forwardRef((props, ref) => {
                   </li>
                 </ul>
               )}
+                <NewChallengeModal
+                show={
+                    activeChallengeModal !== "" &&
+                    activeChallengeModal === game.uid
+                }
+                handleClose={closeChallengeModal}
+                handleChallenge={handleChallenge}
+                fixedMetaGame={game.uid}
+                />
+                <button
+                className="button is-small apButton"
+                onClick={() => openChallengeModal(game.uid)}
+                >
+                Issue Challenge
+                </button><br/>
+                <Link to={"/tournaments/" + game.uid}>Tournaments</Link>
             </div>
           </div>
         </div>
