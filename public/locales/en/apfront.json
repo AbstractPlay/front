@@ -127,6 +127,46 @@
             "full": "Components > Simple",
             "tag": "C: Simple"
         },
+        "components>simple>1per": {
+            "description": "One colour per player",
+            "full": "Components > Simple > 1 per",
+            "tag": "C: Simple, 1 per"
+        },
+        "components>simple>2per": {
+            "description": "Two colours per player",
+            "full": "Components > Simple > 2 per",
+            "tag": "C: Simple, 2 per"
+        },
+        "components>simple>1c": {
+            "description": "One colour of pieces",
+            "full": "Components > Simple > 1 colour",
+            "tag": "C: Simple, 1 colour"
+        },
+        "components>simple>2c": {
+            "description": "Two colours of pieces",
+            "full": "Components > Simple > 2 colours",
+            "tag": "C: Simple, 2 colours"
+        },
+        "components>simple>3c": {
+            "description": "Three colours of pieces",
+            "full": "Components > Simple > 3 colours",
+            "tag": "C: Simple, 3 colours"
+        },
+        "components>simple>4c": {
+            "description": "Four colours of pieces",
+            "full": "Components > Simple > 4 colours",
+            "tag": "C: Simple, 4 colours"
+        },
+        "components>simple>7c": {
+            "description": "Seven colours of pieces",
+            "full": "Components > Simple > 7 colours",
+            "tag": "C: Simple, 7 colours"
+        },
+        "components>simple>pnp": {
+            "description": "Playable with paper and pencil",
+            "full": "Components > Simple > Paper & Pencil",
+            "tag": "C: Simple, P&P"
+        },
         "components>special": {
             "description": "Played with specialized pieces, usually differentiated",
             "full": "Components > Specialized",
