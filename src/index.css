@@ -44,7 +44,7 @@
   --svg-annotation-color: var(--secondary-color-2);
   --svg-gridline-color: var(--main-font-color);
   --svg-default-fill: var(--main-font-color);
-  --svg-volcano-caps: #666;
+  --svg-volcano-caps: #888;
   --dropshadow-target-start: rgba(245,245,245,0.1);
   --dropshadow-target-end: rgba(245,245,245,0.02);
 }
