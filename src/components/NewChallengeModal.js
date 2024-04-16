@@ -786,7 +786,7 @@ function NewChallengeModal(props) {
                     checked={clockSpeed === "fast"}
                     onChange={() => {
                       clockSpeedSetter("fast");
-                      setClock(24, 8, 48);
+                      setClock(24, 24, 48);
                     }}
                   />
                   Fast (daily)
@@ -799,7 +799,7 @@ function NewChallengeModal(props) {
                     checked={clockSpeed === "medium"}
                     onChange={() => {
                       clockSpeedSetter("medium");
-                      setClock(48, 24, 96);
+                      setClock(48, 72, 96);
                     }}
                   />
                   Medium (twice weekly)
@@ -812,7 +812,7 @@ function NewChallengeModal(props) {
                     checked={clockSpeed === "slow"}
                     onChange={() => {
                       clockSpeedSetter("slow");
-                      setClock(72, 48, 168);
+                      setClock(72, 144, 240);
                     }}
                   />
                   Slow (weekly)
@@ -939,7 +939,7 @@ function NewChallengeModal(props) {
           </div>
         )}
         {/* Comment to opponent */}
-        {metaGame === null || playerCount !== 2 ? null : 
+        {metaGame === null || playerCount !== 2 ? null :
           <div className="field">
             <label className="label" htmlFor="comment">
               {t("Note")}
