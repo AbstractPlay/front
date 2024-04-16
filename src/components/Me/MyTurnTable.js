@@ -88,6 +88,11 @@ function MyTurnTable(props) {
       columnHelper.accessor("opponents", {
         header: "Opponents",
         cell: (props) => props.getValue().map(u => <Link to={`/player/${u.id}`}>{u.name}</Link>).reduce((acc, x) => acc === null ? x : <>{acc}, {x}</>, null),
+        sortingFn: (rowA, rowB, columnID) => {
+            const nameA = rowA.getValue(columnID)[0].name;
+            const nameB = rowB.getValue(columnID)[0].name;
+            return nameA.localeCompare(nameB);
+        },
       }),
       columnHelper.accessor("gameStarted", {
         header: "Started",
