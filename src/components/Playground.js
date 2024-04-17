@@ -765,6 +765,7 @@ function Playground(props) {
   });
   const [error, errorSetter] = useState(false);
   //   const [showSettings, showSettingsSetter] = useState(false);
+  const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] = useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [showGameDump, showGameDumpSetter] = useState(false);
   const [userSettings, userSettingsSetter] = useState();
@@ -1586,6 +1587,41 @@ function Playground(props) {
     focusSetter(cloneDeep(focus)); // just to trigger a rerender...
   };
 
+  const handleDeleteExploration = () => {
+    if (getFocusNode(explorationRef.current, focus).children.length > 0) {
+      // only confirm if non leaf node
+      showDeleteSubtreeConfirmSetter(true);
+    } else {
+      handleDeleteSubtreeConfirmed();
+    }
+  };
+
+  const handleCloseDeleteSubtreeConfirm = () => {
+    showDeleteSubtreeConfirmSetter(false);
+  };
+
+  const handleDeleteSubtreeConfirmed = async () => {
+    showDeleteSubtreeConfirmSetter(false);
+    let node = getFocusNode(explorationRef.current, focus);
+    node.DeleteNode();
+    let foc = cloneDeep(focus);
+    foc.exPath.pop();
+    if (gameRef.current.gameOver)
+      fixMoveOutcomes(explorationRef.current, focus.moveNumber);
+    saveExploration(
+      explorationRef.current,
+      focus.moveNumber + 1,
+      game,
+      globalMe,
+      explorer,
+      errorSetter,
+      errorMessageRef,
+      foc,
+      navigate
+    );
+    handleGameMoveClick(foc);
+  };
+
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
   // console.log("game.me", game ? game.me : "nope");
@@ -1788,7 +1824,7 @@ function Playground(props) {
               exploration={explorationRef.current}
               focus={focus}
               submitting={submitting}
-              handlers={[handleMove, handleMark, handleView, handleReset]}
+              handlers={[handleMove, handleMark, handleView, handleReset, handleDeleteExploration]}
             />
             <div className="buttons">
               {/* Ended up not needing any of the buttons in this area,
@@ -1936,6 +1972,21 @@ function Playground(props) {
           handleClose={handleSettingsClose}
           handleSave={handleSettingsSave}
         /> */}
+        <Modal
+          show={showDeleteSubtreeConfirm}
+          title={t("ConfirmDeleteSubtree")}
+          buttons={[
+            { label: t("Delete"), action: handleDeleteSubtreeConfirmed },
+            {
+              label: t("Cancel"),
+              action: handleCloseDeleteSubtreeConfirm,
+            },
+          ]}
+        >
+          <div className="content">
+            <p>{t("ConfirmDeleteSubtreeDesc")}</p>
+          </div>
+        </Modal>
         <Modal
           show={showGameDetails}
           title={t("GameInfoFor", { metaGame: gameDeets?.name })}
