@@ -130,17 +130,21 @@ function NewChallengeModal(props) {
           } else {
             gameEngine = GameFactory(info.uid);
           }
-          allvariantsSetter(gameEngine.allvariants());
+          let rootAllVariants = gameEngine.allvariants();
+          if (process.env.REACT_APP_REAL_MODE === "production") {
+            rootAllVariants = rootAllVariants?.filter(v => v.experimental === undefined || v.experimental === false);
+          }
+          allvariantsSetter(rootAllVariants);
+
           let ngVariants = {};
-          if (gameEngine.allvariants())
-            gameEngine
-              .allvariants()
+          if (rootAllVariants)
+            rootAllVariants
               .filter((v) => v.group === undefined)
               .forEach((v) => (ngVariants[v.uid] = false));
           nonGroupVariantsSetter(ngVariants);
-          if (gameEngine.allvariants()?.length > 0) {
+          if (rootAllVariants?.length > 0) {
               const defaults = {};
-              [...new Set(gameEngine.allvariants().filter(v => v.group !== undefined).map(v => v.group))].forEach((g) => {
+              [...new Set(rootAllVariants.filter(v => v.group !== undefined).map(v => v.group))].forEach((g) => {
                   const {name, description} = gameEngine.describeVariantGroupDefaults(g);
                   defaults[g] = {
                       name: name || g,
@@ -939,7 +943,7 @@ function NewChallengeModal(props) {
           </div>
         )}
         {/* Comment to opponent */}
-        {metaGame === null || playerCount !== 2 ? null : 
+        {metaGame === null || playerCount !== 2 ? null :
           <div className="field">
             <label className="label" htmlFor="comment">
               {t("Note")}

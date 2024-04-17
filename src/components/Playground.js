@@ -1075,17 +1075,19 @@ function Playground(props) {
         gameEngine = GameFactory(info.uid);
       }
       let ngVariants = {};
-      if (gameEngine.allvariants())
-        gameEngine
-          .allvariants()
+      let rootAllVariants = gameEngine.allvariants();
+      if (process.env.REACT_APP_REAL_MODE === "production") {
+        rootAllVariants = rootAllVariants.filter(v => v.experimental === undefined || v.experimental === false);
+      }
+      if (rootAllVariants)
+        rootAllVariants
           .filter((v) => v.group === undefined)
           .forEach((v) => (ngVariants[v.uid] = false));
       nonGroupVariantsSetter(ngVariants);
-      if (gameEngine.allvariants() && gameEngine.allvariants() !== undefined) {
+      if (rootAllVariants && rootAllVariants !== undefined) {
         const groups = [
           ...new Set(
-            gameEngine
-              .allvariants()
+            rootAllVariants
               .filter((v) => v.group !== undefined)
               .map((v) => v.group)
           ),
@@ -1094,8 +1096,7 @@ function Playground(props) {
           groups.map((g) => {
             return {
               group: g,
-              variants: gameEngine
-                .allvariants()
+              variants: rootAllVariants
                 .filter((v) => v.group === g)
                 // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
             };
@@ -1111,8 +1112,7 @@ function Playground(props) {
         });
         groupDefaultDataSetter({...defaults});
         nonGroupDataSetter(
-          gameEngine
-            .allvariants()
+          rootAllVariants
             .filter((v) => v.group === undefined)
             // .sort((a, b) => (a.uid > b.uid ? 1 : -1))
         );
