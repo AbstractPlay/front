@@ -1078,7 +1078,7 @@ function Playground(props) {
       let ngVariants = {};
       let rootAllVariants = gameEngine.allvariants();
       if (process.env.REACT_APP_REAL_MODE === "production") {
-        rootAllVariants = rootAllVariants.filter(v => v.experimental === undefined || v.experimental === false);
+        rootAllVariants = rootAllVariants?.filter(v => v.experimental === undefined || v.experimental === false);
       }
       if (rootAllVariants)
         rootAllVariants
