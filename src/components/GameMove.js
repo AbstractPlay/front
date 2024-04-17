@@ -1004,6 +1004,7 @@ function GameMove(props) {
   const [showSettings, showSettingsSetter] = useState(false);
   const [showMoveConfirm, showMoveConfirmSetter] = useState(false);
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
+  const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] = useState(false);
   const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [showGameDump, showGameDumpSetter] = useState(false);
@@ -2211,6 +2212,41 @@ function GameMove(props) {
     submitMove("resign", false);
   };
 
+  const handleDeleteExploration = () => {
+    if (getFocusNode(explorationRef.current, focus).children.length > 0) {
+      // only confirm if non leaf node
+      showDeleteSubtreeConfirmSetter(true);
+    } else {
+      handleDeleteSubtreeConfirmed();
+    }
+  };
+
+  const handleCloseDeleteSubtreeConfirm = () => {
+    showDeleteSubtreeConfirmSetter(false);
+  };
+
+  const handleDeleteSubtreeConfirmed = async () => {
+    showDeleteSubtreeConfirmSetter(false);
+    let node = getFocusNode(explorationRef.current, focus);
+    node.DeleteNode();
+    let foc = cloneDeep(focus);
+    foc.exPath.pop();
+    if (gameRef.current.gameOver)
+      fixMoveOutcomes(explorationRef.current, focus.moveNumber);
+    saveExploration(
+      explorationRef.current,
+      focus.moveNumber + 1,
+      game,
+      globalMe,
+      explorer,
+      errorSetter,
+      errorMessageRef,
+      foc,
+      navigate
+    );
+    handleGameMoveClick(foc);
+  };
+
   const handleTimeout = () => {
     showTimeoutConfirmSetter(true);
   };
@@ -2465,7 +2501,7 @@ function GameMove(props) {
                     </label>
                 </div>
             </div>
-            </div>
+          </div>
         }
         {screenWidth >= 770 ?
             /* Normal, full-width layout */
@@ -2513,6 +2549,7 @@ function GameMove(props) {
                                 handleTimeout,
                                 handleReset,
                                 handlePie,
+                                handleDeleteExploration
                             ]}
                         />
                     </div>
@@ -2724,6 +2761,7 @@ function GameMove(props) {
                                         handleTimeout,
                                         handleReset,
                                         handlePie,
+                                        handleDeleteExploration
                                     ]}
                                 />
                                 <MiscButtons
@@ -2839,6 +2877,21 @@ function GameMove(props) {
         >
           <div className="content">
             <p>{t("ConfirmResignDesc")}</p>
+          </div>
+        </Modal>
+        <Modal
+          show={showDeleteSubtreeConfirm}
+          title={t("ConfirmDeleteSubtree")}
+          buttons={[
+            { label: t("Delete"), action: handleDeleteSubtreeConfirmed },
+            {
+              label: t("Cancel"),
+              action: handleCloseDeleteSubtreeConfirm,
+            },
+          ]}
+        >
+          <div className="content">
+            <p>{t("ConfirmDeleteSubtreeDesc")}</p>
           </div>
         </Modal>
         <Modal

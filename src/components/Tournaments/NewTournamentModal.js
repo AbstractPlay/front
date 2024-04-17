@@ -1,6 +1,6 @@
 import React, {
-  useState, 
-  useRef, 
+  useState,
+  useRef,
   useEffect,
   useContext,
   useCallback,
@@ -28,7 +28,7 @@ function NewTournamentModal(props) {
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
-  
+
   const handleChangeGame = useCallback(
     (game) => {
       groupVariantsRef.current = {};
@@ -43,11 +43,14 @@ function NewTournamentModal(props) {
         } else {
           gameEngine = GameFactory(info.uid);
         }
-        allvariantsSetter(gameEngine.allvariants());
+        let rootAllVariants = gameEngine.allvariants();
+        if (process.env.REACT_APP_REAL_MODE === "production") {
+          rootAllVariants = rootAllVariants?.filter(v => v.experimental === undefined || v.experimental === false);
+        }
+        allvariantsSetter(rootAllVariants);
         let ngVariants = {};
-        if (gameEngine.allvariants())
-          gameEngine
-            .allvariants()
+        if (rootAllVariants)
+          rootAllVariants
             .filter((v) => v.group === undefined)
             .forEach((v) => (ngVariants[v.uid] = false));
         nonGroupVariantsSetter(ngVariants);
@@ -104,7 +107,7 @@ function NewTournamentModal(props) {
       variants: variants
     })) {
       errorSetter(t("Tournament.Duplicate"));
-      return; 
+      return;
     }
     handleClose();
   };
