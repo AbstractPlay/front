@@ -53,6 +53,7 @@ function MoveEntry(props) {
   const handleTimeOut = props.handlers[6];
   const handleReset = props.handlers[7];
   const handlePie = props.handlers[8];
+  const handleDeleteExploration = props.handlers[9];
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
@@ -152,6 +153,7 @@ function MoveEntry(props) {
     }
     let mover = "";
     let img = null;
+    let gameOverNonLeafNode = false;
     if (toMove !== "") {
       if (game.simultaneous) {
         if (uiState === 0) {
@@ -169,6 +171,9 @@ function MoveEntry(props) {
       } else {
         mover = t("ToMove", { player: game.players[toMove].name });
         if (game.colors !== undefined) img = game.colors[toMove];
+        // Exploration in games that have finished is public. I don't think we want to allow people to delete big trees that other people might have put in
+        // so only allow leaf nodes to be deleted?
+        gameOverNonLeafNode = game.gameOver && getFocusNode(exploration, focus).children.length > 0;
       }
     } else {
       // game over
@@ -538,6 +543,17 @@ function MoveEntry(props) {
                 </svg>
               )}
               <span className="tooltiptext">{t("Winning")}</span>
+            </div>
+          ) : (
+            ""
+          )}
+          {focus.exPath.length > 0 && game.canExplore && !gameOverNonLeafNode ? (
+            <div
+              className="winningColorButton tooltipped"
+              onClick={() => handleDeleteExploration()}
+            >
+              <i className="fa fa-trash resetExploreIcon"></i>
+              <span className="tooltiptext">{t("DeleteSubtree")}</span>
             </div>
           ) : (
             ""

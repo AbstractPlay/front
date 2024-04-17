@@ -85,16 +85,21 @@ function processData(tournament, players, games) {
         } else {
           let game = p.games.find((g) => g.player1 === o.playerid || g.player2 === o.playerid);
           let outcome = "";
+          let outcome2 = "";
           if (game.winner === undefined) {
             outcome = "_";
+            outcome2 = "_";
           } else if (game.winner.length === 2) {
             outcome = "Draw";
+            outcome2 = "½";
           } else if (game.winner[0] === p.playerid) {
             outcome = "Win";
+            outcome2 = "1";
           } else {
             outcome = "Loss";
+            outcome2 = "0";
           }
-          p.outcomes.push([outcome, game.id]);
+          p.outcomes.push([outcome, outcome2, game.id]);
         }
       }
     }
@@ -107,6 +112,7 @@ function Tournament(props) {
   const { t } = useTranslation();
   const [tournament, tournamentSetter] = useState(null);
   const [divisions, divisionsSetter] = useState([]);
+  const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
   const { tournamentid } = useParams();
   const { metaGame } = useParams();
 
@@ -131,6 +137,11 @@ function Tournament(props) {
     fetchData();
   }, [tournamentid, metaGame]);
 
+  const handleResize = () => {
+    screenWidthSetter(window.innerWidth);
+  };
+  window.addEventListener("resize", handleResize);
+
   const metaGameName = tournament ? gameinfo.get(tournament.metaGame)?.name : "";
   const variants = tournament ? tournament.variants.join(", ") : "";
   return (
@@ -150,45 +161,46 @@ function Tournament(props) {
                   <p className="subtitle">
                     { d.winner ? t("Tournament.DivisionWinner", { winner: d.winner }) : t("Tournament.NumCompleted", { "numCompleted": d.numCompleted, "numGames": d.numGames }) }
                   </p>
-                  <table
-                    className="table apTable"
-                    style={{ marginLeft: "auto", marginRight: "auto" }}
-                  >
-                    <thead>
-                      <tr key={"header" + i}>
-                        <th style={{ whiteSpace: "nowrap" }}> {t("Tournament.Player")} </th>
-                        <th style={{ whiteSpace: "nowrap" }}> {t("Tournament.Position")} </th>
-                        { 
-                          d.players.map((p, j) => <th key={"header-" + i + "-" + j} style={{ whiteSpace: "nowrap" }}>{ j + 1 }</th> )
-                        }
-                        <th style={{ whiteSpace: "nowrap" }}> {t("Tournament.Score")} </th>
-                        <th style={{ whiteSpace: "nowrap" }} className = "tooltipped"> 
-                          {t("Tournament.TieBreak")}
-                          <span className="tooltiptext">{t("Tournament.TieBreakHelp")}</span>
-                        </th>
-                        <th style={{ whiteSpace: "nowrap" }} className = "tooltipped">
-                          {t("Tournament.Rating")}
-                          <span className="tooltiptext">{t("Tournament.RatingHelp")}</span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {d.players.map((p, i) => (
-                        <tr key={"player-" + i}>
-                          <td>{p.playername}</td>
-                          <td>{i + 1}</td>
-                          {p.outcomes.map((o, j) => (
-                            <td key={"player-" + i + "-" + j}>
-                              { o[0] === "-" ? "-" : <Link to={`/move/${tournament.metaGame}/${o[0] === '_' ? '0' : '1'}/${o[1]}`}>{o[0]}</Link> }
-                            </td>
-                          ))}
-                          <td>{p.score}</td>
-                          <td>{p.tiebreak}</td>
-                          <td>{Math.trunc(p.rating)}</td>
+                  <div class="table-container">
+                    <table
+                      className="table apTable"
+                    >
+                      <thead>
+                        <tr key={"header" + i}>
+                          <th style={{ whiteSpace: "nowrap" }}> {t("Tournament.Player")} </th>
+                          <th style={{ whiteSpace: "nowrap" }}> {t("Tournament.Position")} </th>
+                          { 
+                            d.players.map((p, j) => <th key={"header-" + i + "-" + j} style={{ whiteSpace: "nowrap" }}>{ j + 1 }</th> )
+                          }
+                          <th style={{ whiteSpace: "nowrap" }}> {t("Tournament.Score")} </th>
+                          <th style={{ whiteSpace: "nowrap" }} title={t("Tournament.TieBreakHelp")}> 
+                            {t("Tournament.TieBreak")}
+                          </th>
+                          <th style={{ whiteSpace: "nowrap" }} title={t("Tournament.RatingHelp")}>
+                            {t("Tournament.Rating")}
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {d.players.map((p, i) => (
+                          <tr key={"player-" + i}>
+                            <td><span className="playerName"><Link to={`/player/${p.playerid}`}>{p.playername}</Link></span></td>
+                            <td>{i + 1}</td>
+                            {p.outcomes.map((o, j) => (
+                              <td key={"player-" + i + "-" + j}>
+                                { o[0] === "-" ? "-" : <Link to={`/move/${tournament.metaGame}/${o[0] === '_' ? '0' : '1'}/${o[2]}`}>
+                                  {o[screenWidth >= 770 ? 0 : 1]}
+                                </Link> }
+                              </td>
+                            ))}
+                            <td>{p.score}</td>
+                            <td>{p.tiebreak}</td>
+                            <td>{Math.trunc(p.rating)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>

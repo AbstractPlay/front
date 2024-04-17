@@ -445,6 +445,14 @@ th .player {
   width: 1rem;
 }
 
+.resetExploreIcon {
+  font-size: 1rem;
+  margin-left: 0.7rem;
+  transform: translateY(-15%);
+  height: 1rem;
+  width: 1rem;
+}
+
 .winningColorButton {
   display: inline-block;
 }
@@ -859,8 +867,13 @@ tr.stickyHeader {
   }
 
   .challenge_notes {
-    width: 40ch;
+    max-width: 40ch;
     overflow-wrap: break-word;
+  }
+
+  .table-container {
+    overflow-x: auto; /* Enables horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
   }
 
   /* Game board customimzation for light/dark mode! */
