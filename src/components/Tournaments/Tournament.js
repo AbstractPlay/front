@@ -26,8 +26,10 @@ function processData(tournament, players, games) {
     tournament.divisions[i].players = [];
   }
   for (let player of players) {
-    player.games = [];
-    tournament.divisions[player.division].players.push(player);
+    if (player.division !== undefined) {
+      player.games = [];
+      tournament.divisions[player.division].players.push(player);
+    }
   }
   for (let game of games) {
     const division = game.sk.split('#')[1];
