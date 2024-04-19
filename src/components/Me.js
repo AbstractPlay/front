@@ -413,7 +413,7 @@ function Me(props) {
     if (globalMe && globalMe.games) {
       let games = globalMe.games;
       if (games === undefined) games = [];
-      myMoveSetter([]);
+      const localMyMove = [];
       waitingSetter([]);
       overSetter([]);
       for (const game of games) {
@@ -422,25 +422,38 @@ function Me(props) {
           for (let i = 0; i < game.players.length; i++) {
             if (game.players[i].id === globalMe.id) {
               if (game.toMove[i]) {
-                myMoveSetter((myMove) => [...myMove, game]);
+                localMyMove.push(game);
                 found = true;
               }
             }
           }
           if (!found) waitingSetter((waiting) => [...waiting, game]);
         } else {
-          if (game.toMove === "" || game.toMove === null)
+          if (game.toMove === "" || game.toMove === null) {
             overSetter((over) => [...over, game]);
-          else if (game.players[game.toMove].id === globalMe.id)
-            myMoveSetter((myMove) => [...myMove, game]);
-          else waitingSetter((waiting) => [...waiting, game]);
+          } else if (game.players[game.toMove].id === globalMe.id) {
+            localMyMove.push(game);
+          } else {
+            waitingSetter((waiting) => [...waiting, game]);
+          }
         }
       }
       // console.log(`Passing myMove as context: ${JSON.stringify(myMove)}`);
       // console.log(myMove.length);
-      myTurnSetter(myMove);
+      if (globalMe) {
+        // sort myMove by time remaining
+        localMyMove.sort((a, b) => {
+            const recA = a.players.find(x => x.id === globalMe.id);
+            const recB = b.players.find(x => x.id === globalMe.id);
+            const timeA = recA?.time || 0;
+            const timeB = recB?.time || 0;
+            return timeA - timeB;
+        });
+      }
+      myMoveSetter(localMyMove);
+      myTurnSetter(localMyMove);
     }
-  }, [globalMe, myTurnSetter, JSON.stringify(myTurn), JSON.stringify(myMove)]);
+  }, [globalMe, myTurnSetter]);
 
   if (error) {
     return (
@@ -702,7 +715,7 @@ function Me(props) {
           handleChallenge={handleNewChallenge2}
           users={users}
         />
-        <ChallengeViewModal 
+        <ChallengeViewModal
           challenge={challenge}
           myid={globalMe.id}
           show={showChallengeViewModal}

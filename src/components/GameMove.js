@@ -1295,7 +1295,7 @@ function GameMove(props) {
             ) {
               commentsTooLongSetter(true);
             }
-          }      
+          }
         } else {
             if ("message" in data) {
                 errorMessageRef.current = data.message;
@@ -2434,16 +2434,20 @@ function GameMove(props) {
   };
 
   const handleNextGame = () => {
-    // Randomizing them because otherwise you can never just skip a game for a little later.
-    // It will just keep returning you to the first game in the list.
-    // TODO: Ideally, though, it would just cycle you through them, but then we'd need some state.
-    const others = myMove
-      .filter((x) => x.id !== gameID)
-      .sort(() => Math.random() - 0.5);
-    if (others.length === 0) {
+    // If the current game is in the list, move it to the end.
+    const local = [...myMove];
+    const idx = local.findIndex(x => x.id === gameID);
+    if (idx !== -1) {
+        const thisgame = local[idx];
+        local.splice(idx, 1);
+        local.push(thisgame);
+        myMoveSetter(local);
+    }
+    // Then go to the next game in the list.
+    if (local.length === 0) {
       navigate("/");
     } else {
-      const next = others[0];
+      const next = local[0];
       navigate(`/move/${next.metaGame}/0/${next.id}`);
     }
   };
