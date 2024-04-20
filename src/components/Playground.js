@@ -356,7 +356,7 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
   });
 }
 
-function setupColors(settings, game, t) {
+function setupColors(settings, game, t, node) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
@@ -370,10 +370,14 @@ function setupColors(settings, game, t) {
       options.svgid = "player" + i + "color";
       let color = i + 1;
       if (game.customColours) {
-        const engine = GameFactory(game.metaGame, game.state);
+        let engine;
+        if (node === undefined) {
+            engine = GameFactory(game.metaGame, game.state);
+        } else {
+            engine = GameFactory(game.metaGame, node.state);
+        }
         color = engine.getPlayerColour(i + 1);
       }
-      console.log(JSON.stringify(game));
       return {
         isImage: true,
         value: renderglyph("piece", color, options),
@@ -798,6 +802,7 @@ function Playground(props) {
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
+  const [colorsChanged, colorsChangedSetter] = useState(0);
   // whether user has entered a partial move that can be rendered
   const partialMoveRenderRef = useRef(false);
   const focusRef = useRef();
@@ -1303,7 +1308,6 @@ function Playground(props) {
     }
     focusSetter(foc);
     engineRef.current = engine;
-    console.log("Rendering in handleGameMoveClick");
     renderrepSetter(
       engine.render({
         perspective: gameRef.current.me ? gameRef.current.me + 1 : 1,
@@ -1318,6 +1322,11 @@ function Playground(props) {
           !gameRef.current.canSubmit));
     setStatus(engine, gameRef.current, isPartialSimMove, "", statusRef.current);
     moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
+    const metaInfo = gameinfo.get(game.metaGame);
+    if (metaInfo.flags.includes("custom-colours")) {
+        setupColors(settings, gameRef.current, globalMe, node);
+        colorsChangedSetter((val) => val + 1);
+    }
   };
 
   function handleReset() {
@@ -1364,6 +1373,11 @@ function Playground(props) {
       navigate
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
+    const metaInfo = gameinfo.get(gameRef.current.metaGame);
+    if (metaInfo.flags.includes("custom-colours")) {
+        setupColors(settings, gameRef.current, globalMe, {state: engineRef.current.state()});
+        colorsChangedSetter((val) => val + 1);
+    }
   };
 
   // handler when user clicks on "complete move" (for a partial move that could be complete)
@@ -1437,6 +1451,11 @@ function Playground(props) {
         navigate
       );
       populateChecked(gameRef, engineRef, t, inCheckSetter);
+      const metaInfo = gameinfo.get(gameRef.current.metaGame);
+      if (metaInfo.flags.includes("custom-colours")) {
+          setupColors(settings, gameRef.current, globalMe, {state: engineRef.current.state()});
+          colorsChangedSetter((val) => val + 1);
+      }
     }
 
     function expand(row, col) {
@@ -1814,6 +1833,7 @@ function Playground(props) {
               game={game}
               canExplore={focus?.canExplore}
               handleStashClick={handleStashClick}
+              key={`Status|colorSet${colorsChanged}`}
             />
             <MoveEntry
               move={move}
@@ -1825,6 +1845,7 @@ function Playground(props) {
               focus={focus}
               submitting={submitting}
               handlers={[handleMove, handleMark, handleView, handleReset, handleDeleteExploration]}
+              key={`Entry|colorSet${colorsChanged}`}
             />
             <div className="buttons">
               {/* Ended up not needing any of the buttons in this area,
@@ -1950,6 +1971,7 @@ function Playground(props) {
                 game={game}
                 exploration={explorationRef.current}
                 handleGameMoveClick={handleGameMoveClick}
+                key={`Moves|colorSet${colorsChanged}`}
               />
             </div>
           )}

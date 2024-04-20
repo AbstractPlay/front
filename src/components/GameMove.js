@@ -543,7 +543,7 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
   return movesUpdated;
 }
 
-function setupColors(settings, game, globalMe) {
+function setupColors(settings, game, globalMe, node) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
@@ -566,7 +566,12 @@ function setupColors(settings, game, globalMe) {
       options.svgid = "player" + i + "color";
       let color = i + 1;
       if (game.customColours) {
-        const engine = GameFactory(game.metaGame, game.state);
+        let engine;
+        if (node === undefined) {
+            engine = GameFactory(game.metaGame, game.state);
+        } else {
+            engine = GameFactory(game.metaGame, node.state);
+        }
         color = engine.getPlayerColour(i + 1);
       }
       return {
@@ -1064,6 +1069,7 @@ function GameMove(props) {
   const [nodeidParam] = useState(params.get("nodeid"));
   const navigate = useNavigate();
   const [allUsers] = useContext(UsersContext);
+  const [colorsChanged, colorsChangedSetter] = useState(0);
 
   const { t, i18n } = useTranslation();
   //   const { state } = useLocation();
@@ -1434,7 +1440,7 @@ function GameMove(props) {
             }
           }
         } else {
-          // If you are viewing someone else's game, and both players are "red", let the server know to abandone the game.
+          // If you are viewing someone else's game, and both players are "red", let the server know to abandon the game.
           const now = (new Date()).getTime();
           if (game.players.every(p => allUsers.find(u => u.id === p.id)?.lastSeen < now - 1000 * 60 * 60 * 24 * 30)) {
             checkTime("abandoned");
@@ -1700,6 +1706,11 @@ function GameMove(props) {
     } else {
         moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
     }
+    const metaInfo = gameinfo.get(game.metaGame);
+    if (metaInfo.flags.includes("custom-colours")) {
+        setupColors(settings, gameRef.current, globalMe, node);
+        colorsChangedSetter((val) => val + 1);
+    }
   };
 
   function handleReset() {
@@ -1788,7 +1799,12 @@ function GameMove(props) {
       navigate
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
-  };
+    const metaInfo = gameinfo.get(gameRef.current.metaGame);
+    if (metaInfo.flags.includes("custom-colours")) {
+        setupColors(settings, gameRef.current, globalMe, {state: engineRef.current.state()});
+        colorsChangedSetter((val) => val + 1);
+    }
+};
 
   // handler when user clicks on "complete move" (for a partial move that could be complete)
   const handleView = () => {
@@ -1861,6 +1877,11 @@ function GameMove(props) {
         navigate
       );
       populateChecked(gameRef, engineRef, t, inCheckSetter);
+      const metaInfo = gameinfo.get(gameRef.current.metaGame);
+      if (metaInfo.flags.includes("custom-colours")) {
+          setupColors(settings, gameRef.current, globalMe, {state: engineRef.current.state()});
+          colorsChangedSetter((val) => val + 1);
+      }
     }
 
     function expand(row, col) {
@@ -2111,7 +2132,10 @@ function GameMove(props) {
       if (gameRef.current.canExplore) {
         mergeExistingExploration(moveNum, exploration, explorationRef);
       }
-      // setupColors(settings, gameRef.current, t);
+      if (gameRef.current.customColours) {
+        setupColors(settings, gameRef.current, t);
+        colorsChangedSetter((val) => val + 1);
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -2527,6 +2551,7 @@ function GameMove(props) {
                             game={game}
                             canExplore={focus?.canExplore}
                             handleStashClick={handleStashClick}
+                            key={`Status|colorSet${colorsChanged}`}
                         />
                     </div>
                     <div className="tourMove">
@@ -2555,6 +2580,7 @@ function GameMove(props) {
                                 handlePie,
                                 handleDeleteExploration
                             ]}
+                            key={`Entry|colorSet${colorsChanged}`}
                         />
                     </div>
                     <MiscButtons
@@ -2633,6 +2659,7 @@ function GameMove(props) {
                             handleGameMoveClick={handleGameMoveClick}
                             getFocusNode={getFocusNode}
                             handlePlaygroundExport={handlePlaygroundExport}
+                            key={`Moves|colorSet${colorsChanged}`}
                         />
                     </div>
                     <div style={{ paddingTop: "1em" }} className="tourChat">
@@ -2743,6 +2770,7 @@ function GameMove(props) {
                                     game={game}
                                     canExplore={focus?.canExplore}
                                     handleStashClick={handleStashClick}
+                                    key={`Status|colorSet${colorsChanged}`}
                                 />
                             ) : key ==="move" ? (
                             <>
@@ -2767,6 +2795,7 @@ function GameMove(props) {
                                         handlePie,
                                         handleDeleteExploration
                                     ]}
+                                    key={`Entry|colorSet${colorsChanged}`}
                                 />
                                 <MiscButtons
                                     metaGame={metaGame}
@@ -2814,6 +2843,7 @@ function GameMove(props) {
                                     handleGameMoveClick={handleGameMoveClick}
                                     getFocusNode={getFocusNode}
                                     handlePlaygroundExport={handlePlaygroundExport}
+                                    key={`Moves|colorSet${colorsChanged}`}
                                 />
                             ) : key === "chat" ? (
                                 <UserChats
