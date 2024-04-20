@@ -40,7 +40,7 @@ function Me(props) {
   const [myMove, myMoveSetter] = useState([]);
   const [waiting, waitingSetter] = useState([]);
   const [over, overSetter] = useState([]);
-  const [myTurn, myTurnSetter] = useContext(MyTurnContext);
+  const [, myTurnSetter] = useContext(MyTurnContext);
   const [globalMe, globalMeSetter] = useContext(MeContext);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
 
