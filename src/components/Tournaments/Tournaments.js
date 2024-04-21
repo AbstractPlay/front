@@ -53,7 +53,7 @@ function Tournaments(props) {
           const playerid = ids[2];
           const tournamentid = ids[0];
           const tournament = newtournaments.find((t) => t.id === tournamentid);
-          if (tournament) {
+          if (tournament && (!tournament.started || player?.division !== undefined)) {
             tournament.players.push(playerid);
           }
         }

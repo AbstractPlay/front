@@ -85,7 +85,7 @@ function TournamentsOld(props) {
         cell: (props) => (new Date(props.getValue())).toLocaleDateString(),
       }),
       oldTournamentsColumnHelper.accessor("numPlayers", {
-        header: t("TournamentParticipants"),
+        header: t("Tournament.Participants"),
         cell: (props) => props.getValue(),
       }),
       oldTournamentsColumnHelper.accessor("winner", {

@@ -325,17 +325,39 @@ function Me(props) {
 
   const handleStartTournamentsClick = async () => {
     try {
-      let url = new URL(API_ENDPOINT_OPEN);
-      url.searchParams.append("query", "start_tournaments");
-      const res = await fetch(url);
-      const status = res.status;
-      if (status !== 200) {
-        const result = await res.json();
-        console.log("Error");
-        console.log(result);
+      if (genericInput.trim() === "") {
+        let url = new URL(API_ENDPOINT_OPEN);
+        url.searchParams.append("query", "start_tournaments");
+        const res = await fetch(url);
+        const status = res.status;
+        if (status !== 200) {
+          const result = await res.json();
+          console.log("Error");
+          console.log(result);
+        } else {
+          const result = await res.json();
+          console.log(result);
+        }
       } else {
+        const usr = await Auth.currentAuthenticatedUser();
+        console.log(`Posting start tournament ${genericInput}`);
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+          },
+          body: JSON.stringify({
+            query: "start_tournament",
+            pars: {
+              tournamentid: genericInput
+            },
+          }),
+        });
         const result = await res.json();
-        console.log(result);
+        console.log("start_tournament returned:");
+        console.log(JSON.parse(result.body));
       }
     } catch (error) {
       console.log("Error");
