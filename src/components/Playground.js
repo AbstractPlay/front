@@ -999,6 +999,7 @@ function Playground(props) {
     pieInvoked,
     t,
     navigate,
+    colourContext
   ]);
 
   useEffect(() => {
