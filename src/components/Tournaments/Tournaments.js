@@ -281,7 +281,7 @@ function Tournaments(props) {
           const typeA = dateA < -1 ? 1 : dateA > 3000000000000 ? 0 : 2;
           const typeB = dateB < -1 ? 1 : dateB > 3000000000000 ? 0 : 2;
           if (typeA === typeB) {
-            return dateA - dateB;
+            return dateB - dateA;
           } else {
             return typeA - typeB;
           }
