@@ -28,7 +28,6 @@ import Modal from "./Modal";
 import ClipboardCopy from "./GameMove/ClipboardCopy";
 import { MeContext, MyTurnContext, UsersContext, ColourContext } from "../pages/Skeleton";
 import UserChats from "./GameMove/UserChats";
-import { Canvg } from "canvg";
 import Joyride, { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
 import { toast } from "react-toastify";
@@ -1032,7 +1031,6 @@ function GameMove(props) {
   const [customCSS, customCSSSetter] = useStorageState("custom-css", {});
   const [newCSS, newCSSSetter] = useState("");
   const [cssActive, cssActiveSetter] = useState(true);
-  const [pngExport, pngExportSetter] = useState(undefined);
   const [gameNote, gameNoteSetter] = useState(null);
   const [interimNote, interimNoteSetter] = useState("");
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
@@ -1939,26 +1937,26 @@ function GameMove(props) {
       }
     }
     // render to PNG
-    if (boardImage.current !== null && canvasRef !== null) {
-      try {
-        const ctx = canvasRef.current.getContext("2d");
-        let svgstr = boardImage.current.innerHTML;
-        if (svgstr !== null && svgstr !== undefined && svgstr.length > 0) {
-          const v = Canvg.fromString(ctx, boardImage.current.innerHTML);
-          v.resize(1000, 1000, "xMidYMid meet");
-          v.render();
-          pngExportSetter(canvasRef.current.toDataURL());
-          // console.log("Updated PNG generated");
-        } else {
-          pngExportSetter(undefined);
-          // console.log("Empty SVG string generated.");
-        }
-      } catch (e) {
-        pngExportSetter(undefined);
-        // console.log("Caught error rendering PNG");
-        // console.log(e);
-      }
-    }
+    // if (boardImage.current !== null && canvasRef !== null) {
+    //   try {
+    //     const ctx = canvasRef.current.getContext("2d");
+    //     let svgstr = boardImage.current.innerHTML;
+    //     if (svgstr !== null && svgstr !== undefined && svgstr.length > 0) {
+    //       const v = Canvg.fromString(ctx, boardImage.current.innerHTML);
+    //       v.resize(1000, 1000, "xMidYMid meet");
+    //       v.render();
+    //       pngExportSetter(canvasRef.current.toDataURL());
+    //       // console.log("Updated PNG generated");
+    //     } else {
+    //       pngExportSetter(undefined);
+    //       // console.log("Empty SVG string generated.");
+    //     }
+    //   } catch (e) {
+    //     pngExportSetter(undefined);
+    //     // console.log("Caught error rendering PNG");
+    //     // console.log(e);
+    //   }
+    // }
   }, [renderrep, globalMe, focus, settings, explorer, t, navigate, boardKey, colourContext]);
 
   useEffect(() => {
@@ -2637,7 +2635,6 @@ function GameMove(props) {
                       gameRef={gameRef}
                       stackImage={stackImage}
                       boardImage={boardImage}
-                      pngExport={pngExport}
                       screenWidth={screenWidth}
                       isZoomed={isZoomed}
                       isZoomedSetter={isZoomedSetter}
@@ -2835,7 +2832,6 @@ function GameMove(props) {
                                     gameRef={gameRef}
                                     stackImage={stackImage}
                                     boardImage={boardImage}
-                                    pngExport={pngExport}
                                     screenWidth={screenWidth}
                                     isZoomed={isZoomed}
                                     isZoomedSetter={isZoomedSetter}
