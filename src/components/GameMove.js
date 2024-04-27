@@ -26,7 +26,7 @@ import Board from "./GameMove/Board";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import ClipboardCopy from "./GameMove/ClipboardCopy";
-import { MeContext, MyTurnContext, UsersContext } from "../pages/Skeleton";
+import { MeContext, MyTurnContext, UsersContext, ColourContext } from "../pages/Skeleton";
 import UserChats from "./GameMove/UserChats";
 import { Canvg } from "canvg";
 import Joyride, { STATUS } from "react-joyride";
@@ -543,7 +543,7 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
   return movesUpdated;
 }
 
-function setupColors(settings, game, globalMe, node) {
+function setupColors(settings, game, globalMe, colourContext, node) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
@@ -564,6 +564,7 @@ function setupColors(settings, game, globalMe, node) {
       return { isImage: false, value: game.seatNames[i] };
     } else {
       options.svgid = "player" + i + "color";
+      options.colourContext = colourContext;
       let color = i + 1;
       if (game.customColours) {
         let engine;
@@ -857,7 +858,8 @@ function processNewSettings(
   settingsSetter,
   gameSettingsSetter,
   userSettingsSetter,
-  globalMe
+  globalMe,
+  colourContext
 ) {
   gameSettingsSetter(newGameSettings);
   userSettingsSetter(newUserSettings);
@@ -889,7 +891,7 @@ function processNewSettings(
       newGameSettings === undefined || newGameSettings.rotate === undefined
         ? 0
         : newGameSettings.rotate;
-    setupColors(newSettings, game, globalMe);
+    setupColors(newSettings, game, globalMe, colourContext);
     settingsSetter(newSettings);
     return newSettings;
   }
@@ -1069,6 +1071,7 @@ function GameMove(props) {
   const [nodeidParam] = useState(params.get("nodeid"));
   const navigate = useNavigate();
   const [allUsers] = useContext(UsersContext);
+  const [colourContext] = useContext(ColourContext);
   const [colorsChanged, colorsChangedSetter] = useState(0);
 
   const { t, i18n } = useTranslation();
@@ -1397,7 +1400,8 @@ function GameMove(props) {
         settingsSetter,
         gameSettingsSetter,
         userSettingsSetter,
-        globalMe
+        globalMe,
+        colourContext
       );
       // check for note
       // note should only be defined if the user is logged in and
@@ -1708,7 +1712,7 @@ function GameMove(props) {
     }
     const metaInfo = gameinfo.get(game.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, node);
+        setupColors(settings, gameRef.current, globalMe, colourContext, node);
         colorsChangedSetter((val) => val + 1);
     }
   };
@@ -1801,7 +1805,7 @@ function GameMove(props) {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     const metaInfo = gameinfo.get(gameRef.current.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, {state: engineRef.current.state()});
+        setupColors(settings, gameRef.current, globalMe, colourContext, {state: engineRef.current.state()});
         colorsChangedSetter((val) => val + 1);
     }
 };
@@ -1879,7 +1883,7 @@ function GameMove(props) {
       populateChecked(gameRef, engineRef, t, inCheckSetter);
       const metaInfo = gameinfo.get(gameRef.current.metaGame);
       if (metaInfo.flags.includes("custom-colours")) {
-          setupColors(settings, gameRef.current, globalMe, {state: engineRef.current.state()});
+          setupColors(settings, gameRef.current, globalMe, colourContext, {state: engineRef.current.state()});
           colorsChangedSetter((val) => val + 1);
       }
     }
@@ -1889,6 +1893,7 @@ function GameMove(props) {
       if (svg !== null) svg.remove();
       options.divid = "stack";
       options.svgid = "theStackSVG";
+      options.colourContext = colourContext;
       render(engineRef.current.renderColumn(row, col), options);
     }
 
@@ -1927,6 +1932,7 @@ function GameMove(props) {
         }
         options.showAnnotations = settings.annotate;
         options.svgid = "theBoardSVG";
+        options.colourContext = colourContext;
         console.log("rendering", renderrep, options);
         render(renderrep, options);
       }
@@ -1952,7 +1958,11 @@ function GameMove(props) {
         // console.log(e);
       }
     }
-  }, [renderrep, globalMe, focus, settings, explorer, t, navigate, boardKey]);
+  }, [renderrep, globalMe, focus, settings, explorer, t, navigate, boardKey, colourContext]);
+
+  useEffect(() => {
+    colorsChangedSetter(val => val + 1);
+  }, [colourContext]);
 
   const setError = (error) => {
     if (error.Message !== undefined) errorMessageRef.current = error.Message;
@@ -1980,7 +1990,8 @@ function GameMove(props) {
       settingsSetter,
       gameSettingsSetter,
       userSettingsSetter,
-      globalMe
+      globalMe,
+      colourContext
     );
     if (game.me > -1) {
       try {
@@ -2017,7 +2028,8 @@ function GameMove(props) {
       settingsSetter,
       gameSettingsSetter,
       userSettingsSetter,
-      globalMe
+      globalMe,
+      colourContext
     );
     if (newSettings?.display) {
       console.log(`(processUpdatedSettings) ABOUT TO RERENDER! Display setting: ${newSettings.display}`);
@@ -2133,7 +2145,7 @@ function GameMove(props) {
         mergeExistingExploration(moveNum, exploration, explorationRef);
       }
       if (gameRef.current.customColours) {
-        setupColors(settings, gameRef.current, t);
+        setupColors(settings, gameRef.current, t, colourContext);
         colorsChangedSetter((val) => val + 1);
       }
     } catch (err) {
