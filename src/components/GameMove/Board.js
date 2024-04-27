@@ -3,7 +3,7 @@ import { MeContext } from "../../pages/Skeleton";
 
 function Board({
     metaGame, gameID, t, inCheck, gameRef,
-    stackImage, boardImage, isZoomed, gameEngine, gameNote, pngExport,
+    stackImage, boardImage, isZoomed, gameEngine, gameNote,
     handleRotate, handleUpdateRenderOptions, screenWidth,
     showGameDetailsSetter, showGameNoteSetter, showGameDumpSetter,
     isZoomedSetter, showCustomCSSSetter, showInjectSetter,
@@ -117,20 +117,6 @@ function Board({
               >
                   <i className="fa fa-css3"></i>
               </button>
-              {pngExport === undefined ? (
-                ""
-              ) : (
-                <a
-                  href={pngExport}
-                  download={"AbstractPlay-" + metaGame + "-" + gameID + ".png"}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <button className="fabtn align-right" title={t("ExportPNG")}>
-                    <i className="fa fa-download"></i>
-                  </button>
-                </a>
-              )}
               {!globalMe || globalMe.admin !== true ? (
                 ""
               ) : (

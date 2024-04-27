@@ -22,7 +22,6 @@ import MoveEntry from "./Playground/MoveEntry";
 import Modal from "./Modal";
 import ClipboardCopy from "./Playground/ClipboardCopy";
 import { MeContext, ColourContext } from "../pages/Skeleton";
-import { Canvg } from "canvg";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -790,7 +789,6 @@ function Playground(props) {
   const [globalMe] = useContext(MeContext);
   const [colourContext] = useContext(ColourContext);
   const [, gameRecSetter] = useState(undefined);
-  const [pngExport, pngExportSetter] = useState(undefined);
   const [explorer, explorerSetter] = useState(true); // just whether the user clicked on the explore button. Also see isExplorer.
   // pieInvoked is used to trigger the game reload after the function is called
   const [pieInvoked] = useState(false);
@@ -1513,26 +1511,26 @@ function Playground(props) {
       }
     }
     // render to PNG
-    if (boardImage.current !== null && canvasRef !== null) {
-      try {
-        const ctx = canvasRef.current.getContext("2d");
-        let svgstr = boardImage.current.innerHTML;
-        if (svgstr !== null && svgstr !== undefined && svgstr.length > 0) {
-          const v = Canvg.fromString(ctx, boardImage.current.innerHTML);
-          v.resize(1000, 1000, "xMidYMid meet");
-          v.render();
-          pngExportSetter(canvasRef.current.toDataURL());
-          // console.log("Updated PNG generated");
-        } else {
-          pngExportSetter(undefined);
-          // console.log("Empty SVG string generated.");
-        }
-      } catch (e) {
-        pngExportSetter(undefined);
-        // console.log("Caught error rendering PNG");
-        // console.log(e);
-      }
-    }
+    // if (boardImage.current !== null && canvasRef !== null) {
+    //   try {
+    //     const ctx = canvasRef.current.getContext("2d");
+    //     let svgstr = boardImage.current.innerHTML;
+    //     if (svgstr !== null && svgstr !== undefined && svgstr.length > 0) {
+    //       const v = Canvg.fromString(ctx, boardImage.current.innerHTML);
+    //       v.resize(1000, 1000, "xMidYMid meet");
+    //       v.render();
+    //       pngExportSetter(canvasRef.current.toDataURL());
+    //       // console.log("Updated PNG generated");
+    //     } else {
+    //       pngExportSetter(undefined);
+    //       // console.log("Empty SVG string generated.");
+    //     }
+    //   } catch (e) {
+    //     pngExportSetter(undefined);
+    //     // console.log("Caught error rendering PNG");
+    //     // console.log(e);
+    //   }
+    // }
   }, [renderrep, globalMe, focus, settings, explorer, t, navigate, colourContext]);
 
   useEffect(() => {
@@ -1953,20 +1951,6 @@ function Playground(props) {
                   <i className="fa fa-search-plus"></i>
                 )}
               </button>
-              {pngExport === undefined ? (
-                ""
-              ) : (
-                <a
-                  href={pngExport}
-                  download={"AbstractPlay-" + metaGame + "-" + gameID + ".png"}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <button className="fabtn align-right" title={t("ExportPNG")}>
-                    <i className="fa fa-download"></i>
-                  </button>
-                </a>
-              )}
             </div>
           </div>
           {/***************** GameMoves *****************/}
