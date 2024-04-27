@@ -53,6 +53,9 @@ function Tournaments(props) {
           const playerid = ids[2];
           const tournamentid = ids[0];
           const tournament = newtournaments.find((t) => t.id === tournamentid);
+          if (tournament === undefined) {
+            console.log("Error: player " + playerid + " is in an unknown tournament " + tournamentid);
+          }
           if (tournament && (!tournament.started || player?.division !== undefined)) {
             tournament.players.push(playerid);
           }
@@ -223,11 +226,14 @@ function Tournaments(props) {
     () => {
       const oneWeek = 1000 * 60 * 60 * 24 * 7;
       const twoWeeks = oneWeek * 2;
-      return tournaments.filter((t) => !t.started).map((t, idx) => {
-        let date1 = t.dateCreated + twoWeeks;
-        const date2 = t.datePreviousEnded + oneWeek;
-        if (date2 && date2 > date1)
-          date1 = date2;
+      return tournaments.filter((t) => !t.started).map(t => {
+        let date1 = -1;
+        if (t.waiting !== true) {
+          date1 = t.dateCreated + twoWeeks;
+          const date2 = t.datePreviousEnded + oneWeek;
+          if (date2 && date2 > date1)
+            date1 = date2;
+        }
         return {
           tournamentid: t.id,
           realMeta: t.metaGame,
@@ -259,7 +265,27 @@ function Tournaments(props) {
       }),
       openTournamentsColumnHelper.accessor("startDate", {
         header: t("Tournament.Starts"),
-        cell: (props) => props.getValue() > 3000000000000 ? "One week after current tournament ends" : (new Date(props.getValue())).toLocaleDateString(),
+        cell: (props) => 
+          props.getValue() < 0 ? 
+            t("Tournament.StartsWhen4") : 
+            props.getValue() > 3000000000000 ? 
+              t("Tournament.StartsWhenPreviousDone") : 
+              (new Date(props.getValue())).toLocaleDateString(),
+        sortingFn: (
+          rowA,
+          rowB,
+          columnId
+        ) => {
+          const dateA = rowA.getValue(columnId);
+          const dateB = rowB.getValue(columnId);
+          const typeA = dateA < -1 ? 1 : dateA > 3000000000000 ? 0 : 2;
+          const typeB = dateB < -1 ? 1 : dateB > 3000000000000 ? 0 : 2;
+          if (typeA === typeB) {
+            return dateA - dateB;
+          } else {
+            return typeA - typeB;
+          }
+        }
       }),
       openTournamentsColumnHelper.accessor("players", {
         header: t("Tournament.Participants"),

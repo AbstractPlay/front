@@ -17,7 +17,6 @@ import React, {
   } from "@tanstack/react-table";
   import { MeContext, UsersContext } from "../pages/Skeleton";
   import { useStorageState } from "react-use-storage-state";
-  import { isoToCountryCode } from "../lib/isoToCountryCode";
   import Flag from "./Flag";
   import ActivityMarker from "./ActivityMarker";
 
@@ -40,7 +39,6 @@ import React, {
                 id,
                 name,
                 country,
-                countryName: isoToCountryCode(country, "countryName") || "",
                 lastSeen,
               };
             })
@@ -61,7 +59,7 @@ import React, {
           }),
           columnHelper.accessor("country", {
             header: "Country",
-            cell: (props) => props.getValue() === undefined ? null : <Flag code={props.getValue()} size="m" />,
+            cell: (props) => !props.getValue() ? null : <Flag code={props.getValue()} size="m" />,
           }),
         ],
         [allUsers, columnHelper]
