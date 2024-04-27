@@ -21,7 +21,7 @@ import MoveEntry from "./Playground/MoveEntry";
 // import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import ClipboardCopy from "./Playground/ClipboardCopy";
-import { MeContext } from "../pages/Skeleton";
+import { MeContext, ColourContext } from "../pages/Skeleton";
 import { Canvg } from "canvg";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
@@ -356,7 +356,7 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
   });
 }
 
-function setupColors(settings, game, t, node) {
+function setupColors(settings, game, t, colourContext, node) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
@@ -368,6 +368,7 @@ function setupColors(settings, game, t, node) {
       return { isImage: false, value: game.seatNames[i] };
     } else {
       options.svgid = "player" + i + "color";
+      options.colourContext = colourContext;
       let color = i + 1;
       if (game.customColours) {
         let engine;
@@ -629,7 +630,8 @@ function processNewSettings(
   gameRef,
   settingsSetter,
   gameSettingsSetter,
-  userSettingsSetter
+  userSettingsSetter,
+  colourContext
 ) {
   gameSettingsSetter(newGameSettings);
   userSettingsSetter(newUserSettings);
@@ -661,7 +663,7 @@ function processNewSettings(
       newGameSettings === undefined || newGameSettings.rotate === undefined
         ? 0
         : newGameSettings.rotate;
-    setupColors(newSettings, game);
+    setupColors(newSettings, game, null, colourContext);
     settingsSetter(newSettings);
     return newSettings;
   }
@@ -786,6 +788,7 @@ function Playground(props) {
   const [validGames, validGamesSetter] = useState([]);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
+  const [colourContext] = useContext(ColourContext);
   const [, gameRecSetter] = useState(undefined);
   const [pngExport, pngExportSetter] = useState(undefined);
   const [explorer, explorerSetter] = useState(true); // just whether the user clicked on the explore button. Also see isExplorer.
@@ -966,7 +969,8 @@ function Playground(props) {
               gameRef,
               settingsSetter,
               gameSettingsSetter,
-              userSettingsSetter
+              userSettingsSetter,
+              colourContext
             );
             populateChecked(gameRef, engineRef, t, inCheckSetter);
           }
@@ -995,6 +999,7 @@ function Playground(props) {
     pieInvoked,
     t,
     navigate,
+    colourContext
   ]);
 
   useEffect(() => {
@@ -1225,7 +1230,8 @@ function Playground(props) {
             gameRef,
             settingsSetter,
             gameSettingsSetter,
-            userSettingsSetter
+            userSettingsSetter,
+            colourContext
           );
           populateChecked(gameRef, engineRef, t, inCheckSetter);
         }
@@ -1324,7 +1330,7 @@ function Playground(props) {
     moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
     const metaInfo = gameinfo.get(game.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, node);
+        setupColors(settings, gameRef.current, globalMe, colourContext, node);
         colorsChangedSetter((val) => val + 1);
     }
   };
@@ -1375,7 +1381,7 @@ function Playground(props) {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     const metaInfo = gameinfo.get(gameRef.current.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, {state: engineRef.current.state()});
+        setupColors(settings, gameRef.current, globalMe, colourContext, {state: engineRef.current.state()});
         colorsChangedSetter((val) => val + 1);
     }
   };
@@ -1453,7 +1459,7 @@ function Playground(props) {
       populateChecked(gameRef, engineRef, t, inCheckSetter);
       const metaInfo = gameinfo.get(gameRef.current.metaGame);
       if (metaInfo.flags.includes("custom-colours")) {
-          setupColors(settings, gameRef.current, globalMe, {state: engineRef.current.state()});
+          setupColors(settings, gameRef.current, globalMe, colourContext, {state: engineRef.current.state()});
           colorsChangedSetter((val) => val + 1);
       }
     }
@@ -1463,6 +1469,7 @@ function Playground(props) {
       if (svg !== null) svg.remove();
       options.divid = "stack";
       options.svgid = "theStackSVG";
+      options.colourContext = colourContext;
       render(engineRef.current.renderColumn(row, col), options);
     }
 
@@ -1500,6 +1507,7 @@ function Playground(props) {
         }
         options.showAnnotations = settings.annotate;
         options.svgid = "theBoardSVG";
+        options.colourContext = colourContext;
         console.log("rendering", renderrep, options);
         render(renderrep, options);
       }
@@ -1525,7 +1533,11 @@ function Playground(props) {
         // console.log(e);
       }
     }
-  }, [renderrep, globalMe, focus, settings, explorer, t, navigate]);
+  }, [renderrep, globalMe, focus, settings, explorer, t, navigate, colourContext]);
+
+  useEffect(() => {
+    colorsChangedSetter(val => val + 1);
+  }, [colourContext]);
 
   //   const setError = (error) => {
   //     if (error.Message !== undefined) errorMessageRef.current = error.Message;
@@ -1552,7 +1564,8 @@ function Playground(props) {
       gameRef,
       settingsSetter,
       gameSettingsSetter,
-      userSettingsSetter
+      userSettingsSetter,
+      colourContext
     );
   };
 

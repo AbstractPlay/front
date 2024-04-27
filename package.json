@@ -13,8 +13,8 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/gameslib": "^1.0.0-ci-8770203378.0",
-    "@abstractplay/renderer": "latest",
+    "@abstractplay/gameslib": "^1.0.0-ci-8860540953.0",
+    "@abstractplay/renderer": "^1.0.0-ci-8860534810.0",
     "@tanstack/react-table": "^8.11.2",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/user-event": "13.5.0",
@@ -55,7 +55,7 @@
   },
   "scripts": {
     "start": "cross-env REACT_APP_REAL_MODE=local react-scripts start",
-    "build-dev": "cross-env REACT_APP_REAL_MODE=development react-scripts build && shx cp src/robots/robots.txt.dev build/robots.txt",
+    "build-dev": "cross-env REACT_APP_REAL_MODE=development react-scripts build --profile && shx cp src/robots/robots.txt.dev build/robots.txt",
     "build-prod": "node bin/gensitemap.mjs && cross-env REACT_APP_REAL_MODE=production react-scripts build && shx cp src/robots/robots.txt.prod build/robots.txt",
     "full-dev": "npm run build-dev && npm run invalidate && npm run deploy",
     "full-prod": "npm run build-prod && npm run invalidate-prod && npm run deploy-prod",

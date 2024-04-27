@@ -45,6 +45,7 @@ export const MyTurnContext = createContext([[], () => []]);
 export const MeContext = createContext([null, () => {}]);
 export const UsersContext = createContext([null, () => {}]);
 export const NewsContext = createContext([[], () => []]);
+export const ColourContext = createContext([null, () => {}]);
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -55,6 +56,17 @@ function Bones(props) {
   const [users, usersSetter] = useState(null);
   const [news, newsSetter] = useState([]);
   const [colorMode,] = useStorageState("color-mode", "light");
+  const [colourContext, colourContextSetter] = useState({background: "#fff", strokes: "#000", labels: "#000", annotations: "#000", fill: "#000"});
+
+  // Update colour context setting based on colour mode
+  useEffect(() => {
+    if (colorMode === "dark") {
+        colourContextSetter({background: "#222", strokes: "#e6f2f2", labels: "#009fbf", annotations: "#99cccc", fill: "#e6f2f2"});
+    } else {
+        colourContextSetter({background: "#fff", strokes: "#000", labels: "#000", annotations: "#000", fill: "#000"});
+    }
+  }, [colorMode]);
+
 
   useEffect(() => {
     const awsconfig = {
@@ -159,6 +171,7 @@ function Bones(props) {
         <MeContext.Provider value={[globalMe, globalMeSetter]}>
           <UsersContext.Provider value={[users, usersSetter]}>
             <NewsContext.Provider value={[news, newsSetter]}>
+            <ColourContext.Provider value={[colourContext, colourContextSetter]}>
               <Router>
                 <Navbar />
                 <section className="section" id="main">
@@ -227,6 +240,7 @@ function Bones(props) {
                   <FooterDev />
                 )}
               </Router>
+              </ColourContext.Provider>
             </NewsContext.Provider>
           </UsersContext.Provider>
         </MeContext.Provider>

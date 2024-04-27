@@ -1,9 +1,9 @@
 import React, {useContext} from "react";
 import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
-import { MeContext } from "../../pages/Skeleton";
+import { MeContext, ColourContext } from "../../pages/Skeleton";
 
-function renderGlyph(settings, glyph, id, player, globalMe) {
+function renderGlyph(settings, glyph, id, player, globalMe, colourContext) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
@@ -15,6 +15,7 @@ function renderGlyph(settings, glyph, id, player, globalMe) {
     }
   }
   options.svgid = id;
+  options.colourContext = colourContext;
   return renderglyph(glyph, player, options);
 }
 
@@ -27,6 +28,7 @@ function GameStatus(props) {
   const canExplore = props.canExplore;
   const handleStashClick = props.handleStashClick;
   const [globalMe,] = useContext(MeContext);
+  const [colourContext] = useContext(ColourContext);
 
   const { t } = useTranslation();
 
@@ -93,7 +95,8 @@ function GameStatus(props) {
                                 v.glyph,
                                 "genericStatus-" + ind + "-" + i,
                                 v.player,
-                                globalMe
+                                globalMe,
+                                colourContext
                               )
                             )}`}
                             alt={"color " + v.player}
@@ -190,7 +193,8 @@ function GameStatus(props) {
                               s.glyph.hasOwnProperty("player")
                                 ? s.glyph.player
                                 : s.glyph.colour,
-                              globalMe
+                              globalMe,
+                              colourContext
                             )
                           )}`}
                           alt=""
@@ -227,7 +231,8 @@ function GameStatus(props) {
                         s.glyph.name,
                         "stack-" + j,
                         s.glyph.player,
-                        globalMe
+                        globalMe,
+                        colourContext
                       )
                     )}`}
                     alt=""
