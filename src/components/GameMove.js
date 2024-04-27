@@ -1442,7 +1442,7 @@ function GameMove(props) {
         } else {
           // If you are viewing someone else's game, and both players are "red", let the server know to abandon the game.
           const now = (new Date()).getTime();
-          if (game.players.every(p => allUsers.find(u => u.id === p.id)?.lastSeen < now - 1000 * 60 * 60 * 24 * 30)) {
+          if (allUsers !== null && allUsers !== undefined && game.players.every(p => allUsers.find(u => u.id === p.id)?.lastSeen < now - 1000 * 60 * 60 * 24 * 30)) {
             checkTime("abandoned");
           }
         }
