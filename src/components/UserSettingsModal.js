@@ -9,6 +9,7 @@ import Modal from "./Modal";
 import { useStorageState } from "react-use-storage-state";
 import { countryCodeList } from "../lib/countryCodeList";
 import { HexColorPicker, HexColorInput } from "react-colorful";
+import { render } from "@abstractplay/renderer";
 
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
@@ -46,6 +47,16 @@ function UserSettingsModal(props) {
   const [currColours, currColoursSetter] = useState([]);
   const [selectedColour, selectedColourSetter] = useState("");
   const [paletteName, paletteNameSetter] = useState("");
+  const [showContext, showContextSetter] = useState(false);
+  const [storedContextLight, storedContextLightSetter] = useStorageState("stored-context-light", {background: "#fff", strokes: "#000", borders: "#000", labels: "#000", annotations: "#000", fill: "#000"});
+  const [storedContextDark, storedContextDarkSetter] = useStorageState("stored-context-dark", {background: "#222", strokes: "#6d6d6d", borders: "#000", labels: "#009fbf", annotations: "#99cccc", fill: "#e6f2f2"});
+  const [currContext, currContextSetter] = useState("dark");
+  const [currBackground, currBackgroundSetter] = useState("");
+  const [currFill, currFillSetter] = useState("");
+  const [currStrokes, currStrokesSetter] = useState("");
+  const [currBorders, currBordersSetter] = useState("");
+  const [currLabels, currLabelsSetter] = useState("");
+  const [currNotes, currNotesSetter] = useState("");
 
   useEffect(() => {
     if (globalMe !== undefined && globalMe !== null && globalMe.palettes !== undefined) {
@@ -228,6 +239,79 @@ function UserSettingsModal(props) {
     handleSettingsChange(newSettings);
   };
 
+  const handleContextChange = (mode) => {
+    currContextSetter(mode);
+    let context;
+    if (currContext === "dark") {
+        context = storedContextDark;
+    } else {
+        context = storedContextLight
+    }
+    if (context !== undefined && context !== null) {
+        currBackgroundSetter(context.background);
+        currBordersSetter(context.borders);
+        currFillSetter(context.fill);
+        currStrokesSetter(context.strokes);
+        currLabelsSetter(context.labels);
+        currNotesSetter(context.annotations);
+    }
+  }
+
+  const resetContext = () => {
+      if (currContext === "light") {
+        storedContextLightSetter({background: "#fff", strokes: "#000", borders: "#000", labels: "#000", annotations: "#000", fill: "#000"});
+    } else if (currContext === "dark") {
+        storedContextDarkSetter({background: "#222", strokes: "#6d6d6d", borders: "#000", labels: "#009fbf", annotations: "#99cccc", fill: "#e6f2f2"});
+    }
+    handleContextChange(currContext);
+  }
+
+  const saveContext = () => {
+    let setter;
+    if (currContext === "light") {
+        setter = storedContextLightSetter;
+    } else if (currContext === "dark") {
+        setter = storedContextDarkSetter;
+    }
+    if (setter !== null && setter !== undefined) {
+        setter({
+            background: currBackground,
+            strokes: currStrokes,
+            borders: currBorders,
+            fill: currFill,
+            labels: currLabels,
+            annotations: currNotes,
+        });
+    }
+    showContextSetter(false);
+  }
+
+  useEffect(() => {
+    if (showContext) {
+        const svg = document.getElementById("contextSample");
+        if (svg !== null) svg.remove();
+        const json = JSON.parse(`{"board":{"style":"squares-checkered","width":4,"height":4},"legend":{"A":{"name":"piece","player":1},"B":{"name":"piece","player":2},"C":{"name":"piece","player":3},"D":{"name":"piece","player":4}},"pieces":"AAB-\\nA-BB\\nC--D\\nCCDD","annotations":[{"type":"move","targets":[{"row":0,"col":3},{"row":1,"col":2}]}]}`);
+        const options = {
+            divid: "contextSampleRender",
+            svgid: "contextSample",
+            colourContext: {
+                fill: currFill,
+                strokes: currStrokes,
+                borders: currBorders,
+                background: currBackground,
+                labels: currLabels,
+                annotations: currNotes,
+            }
+        };
+        try {
+            render(json, options);
+        } catch (e) {
+            console.log(`An error occured while trying to render a sample:`);
+            console.log(e);
+        }
+    }
+  }, [showContext, currFill, currStrokes, currBorders, currBackground, currLabels, currNotes]);
+
   const savePalettes = async () => {
     try {
         const usr = await Auth.currentAuthenticatedUser();
@@ -359,7 +443,7 @@ function UserSettingsModal(props) {
                 globalMeSetter((currentGlobalMe) => {
                   return {
                     ...JSON.parse(result.body),
-                    ...(currentGlobalMe && { 
+                    ...(currentGlobalMe && {
                       challengesIssued: currentGlobalMe.challengesIssued ?? [],
                       challengesReceived: currentGlobalMe.challengesReceived ?? [],
                       challengesAccepted: currentGlobalMe.challengesAccepted ?? [],
@@ -757,8 +841,13 @@ function UserSettingsModal(props) {
         </div>
         */}
 
-        <div className="control is-small">
-            <button className="button is-small apButton" onClick={() => showPaletteSetter(true)}>Manage Palettes</button>
+        <div className="field is-grouped">
+            <div className="control is-small">
+                <button className="button is-small apButton" onClick={() => showPaletteSetter(true)}>Manage Palettes</button>
+            </div>
+            <div className="control is-small">
+                <button className="button is-small apButton" onClick={() => {handleContextChange("dark"); showContextSetter(true);}}>Manage Colour Contexts</button>
+            </div>
         </div>
 
         {/********************* Log out *********************/}
@@ -847,6 +936,104 @@ function UserSettingsModal(props) {
                 </tbody>
             </table>
           }
+      </Modal>
+    {/** Context modal */}
+    <Modal
+          show={showContext}
+          title={t("ManageContexts")}
+          buttons={[
+            {
+              label: t("Close"),
+              action: () => showContextSetter(false),
+            },
+          ]}
+        >
+          <div className="content">
+            <p>Colour contexts are sets of colours that the renderer uses when drawing boards in different settings, like dark mode. You can tweak how your boards appear globally by changing the six values here. Game-specific customizations are possible using the Custom CSS button below any game board.</p>
+            <p>These customizations will <em>not</em> be visible to your fellow players. These will only affect <em>your</em> experience.</p>
+            <p>If you run into any trouble, please <a href="https://discord.abstractplay.com">join us on Discord</a> and let us know.</p>
+          </div>
+          <div className="field">
+            <label className="label is-small" htmlFor="selectMode">Select the mode to customize</label>
+            <div className="control is-small">
+                <div className="select is-small">
+                    <select
+                        value={currContext}
+                        name="selectMode"
+                        id="selectMode"
+                        onChange={(e) => handleContextChange(e.target.value)}
+                    >
+                        <option value="dark">Dark mode</option>
+                        <option value="light">Light mode</option>
+                    </select>
+                </div>
+            </div>
+          </div>
+          <div className="columns is-multiline">
+            <div className="column is-narrow">
+                <div className="field">
+                    <label className="label is-small" htmlFor="valBackground">Board background</label>
+                    <div className="control" id="valBackground">
+                        <HexColorPicker color={currBackground} onChange={currBackgroundSetter} />
+                        <HexColorInput color={currBackground} onChange={currBackgroundSetter} />
+                    </div>
+                </div>
+            </div>
+            <div className="column is-narrow">
+                <div className="field">
+                    <label className="label is-small" htmlFor="valStrokes">Gridlines and most other lines</label>
+                    <div className="control" id="valStrokes">
+                        <HexColorPicker color={currStrokes} onChange={currStrokesSetter} />
+                        <HexColorInput color={currStrokes} onChange={currStrokesSetter} />
+                    </div>
+                </div>
+            </div>
+            <div className="column is-narrow">
+                <div className="field">
+                    <label className="label is-small" htmlFor="valBorders">Borders around most pieces</label>
+                    <div className="control" id="valBorders">
+                        <HexColorPicker color={currBorders} onChange={currBordersSetter} />
+                        <HexColorInput color={currBorders} onChange={currBordersSetter} />
+                    </div>
+                </div>
+            </div>
+            <div className="column is-narrow">
+                <div className="field">
+                    <label className="label is-small" htmlFor="valFills">Fills, like blocked cells and some glyphs</label>
+                    <div className="control" id="valFills">
+                        <HexColorPicker color={currFill} onChange={currFillSetter} />
+                        <HexColorInput color={currFill} onChange={currFillSetter} />
+                    </div>
+                </div>
+            </div>
+            <div className="column is-narrow">
+                <div className="field">
+                    <label className="label is-small" htmlFor="valLabels">Board labels</label>
+                    <div className="control" id="valLabels">
+                        <HexColorPicker color={currLabels} onChange={currLabelsSetter} />
+                        <HexColorInput color={currLabels} onChange={currLabelsSetter} />
+                    </div>
+                </div>
+            </div>
+            <div className="column is-narrow">
+                <div className="field">
+                    <label className="label is-small" htmlFor="valNotes">Annotations, like movement arrows</label>
+                    <div className="control" id="valNotes">
+                        <HexColorPicker color={currNotes} onChange={currNotesSetter} />
+                        <HexColorInput color={currNotes} onChange={currNotesSetter} />
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div id="contextSampleRender" width="100%"></div>
+          <div>
+            <div className="control">
+                <button className="button is-small apButton" onClick={resetContext}>Reset to defaults</button>
+            </div>
+            <div className="control">
+                <button className="button is-small apButton" onClick={saveContext}>Save changes</button>
+            </div>
+          </div>
       </Modal>
     </>
   );
