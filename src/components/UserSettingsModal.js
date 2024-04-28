@@ -248,7 +248,7 @@ function UserSettingsModal(props) {
         if (res.status !== 200) {
             const result = await res.json();
             console.log(
-                `An error occured while saving palettes:\n${result}`
+                `An error occurred while saving palettes:\n${result}`
             );
         } else {
             // update globalMe palettes
@@ -322,7 +322,7 @@ function UserSettingsModal(props) {
       if (res.status !== 200) {
         const result = await res.json();
         console.log(
-          `An error occured while saving notification settings:\n${result}`
+          `An error occurred while saving notification settings:\n${result}`
         );
       } else {
         updatedSetter((updated) => updated + 1);
@@ -408,7 +408,7 @@ function UserSettingsModal(props) {
         }),
       });
       if (res.status !== 200) {
-        console.log(`An error occured while saving push preferenes`);
+        console.log(`An error occurred while saving push preferenes`);
       } else {
         const result = await res.json();
         console.log(result.body);
@@ -739,7 +739,7 @@ function UserSettingsModal(props) {
         <div className="userSettingsInputDiv">
           { mySettings === null ? <Spinner/> :
             changingLanguage ?
-              <select value={language} name="laguage" id="user_settings_language" onChange={(e) => languageSetter(e.target.value)}>
+              <select value={language} name="language" id="user_settings_language" onChange={(e) => languageSetter(e.target.value)}>
               <option value="">--{t('Select')}--</option>
               <option value="en">English</option>
               <option value="fr">French</option>

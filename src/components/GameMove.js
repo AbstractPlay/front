@@ -1308,7 +1308,7 @@ function GameMove(props) {
                 errorMessageRef.current = data.message;
                 errorSetter(true);
             } else {
-                errorMessageRef.current = `An unspecified error occured while trying to fetch the game: ${JSON.stringify(data)}`;
+                errorMessageRef.current = `An unspecified error occurred while trying to fetch the game: ${JSON.stringify(data)}`;
                 errorSetter(true);
             }
         }
