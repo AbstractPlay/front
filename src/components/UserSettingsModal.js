@@ -242,9 +242,9 @@ function UserSettingsModal(props) {
   const handleContextChange = (mode) => {
     currContextSetter(mode);
     let context;
-    if (currContext === "dark") {
+    if (mode === "dark") {
         context = storedContextDark;
-    } else {
+    } else if (mode === "light") {
         context = storedContextLight
     }
     if (context !== undefined && context !== null) {
@@ -1025,7 +1025,7 @@ function UserSettingsModal(props) {
                 </div>
             </div>
           </div>
-          <div id="contextSampleRender" width="100%"></div>
+          <div id="contextSampleRender" width="100%" style={{backgroundColor: currBackground}}></div>
           <div>
             <div className="control">
                 <button className="button is-small apButton" onClick={resetContext}>Reset to defaults</button>
