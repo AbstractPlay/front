@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import Spinner from "./Spinner";
 import Modal from "./Modal";
@@ -43,8 +43,9 @@ function Me(props) {
   const [, myTurnSetter] = useContext(MyTurnContext);
   const [globalMe, globalMeSetter] = useContext(MeContext);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
+  const location = useLocation();
 
-   const handleNewProfileClose = (cnt) => {
+  const handleNewProfileClose = (cnt) => {
     showNewProfileModalSetter(false);
     if (cnt > 0) {
       updateSetter((update) => update + 1);
@@ -86,7 +87,7 @@ function Me(props) {
       }
     }
     fetchData();
-  }, [vars, update, globalMeSetter]);
+  }, [vars, update, globalMeSetter, location]);
 
   useEffect(() => {
     async function fetchData() {

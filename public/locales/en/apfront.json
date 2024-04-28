@@ -715,6 +715,8 @@
         "RecentlyCompleted": "Recently completed tournaments",
         "Score": "Score",
         "Starts": "Tournament starts",
+        "StartsWhen4": "Within a day of reaching 4 participants",
+        "StartsWhenPreviousDone": "One week after current tournament ends",
         "Started": "Date started",
         "TieBreak": "Tiebreak",
         "TieBreakHelp": "Sum of defeated opponent scores",
