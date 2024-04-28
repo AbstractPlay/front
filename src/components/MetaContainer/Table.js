@@ -143,6 +143,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
    *    Completed games
    *    Challenges
    *    Rated players
+   *    Date added
    */
 
   const data = useMemo(
@@ -212,6 +213,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
             gameName: info.name,
             image: encodeURIComponent(gameImages[metaGame]),
             links: info.urls,
+            dateAdded: info.dateAdded,
             designers:
               info.people !== undefined && info.people.length > 0
                 ? info.people.filter((p) => p.type === "designer")
@@ -429,6 +431,9 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
         )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null),
         enableSorting: false,
         filterFn: multiTagSelect,
+      }),
+      columnHelper.accessor("dateAdded", {
+        header: "Added"
       }),
       columnHelper.accessor("stars", {
         header: "Stars",
