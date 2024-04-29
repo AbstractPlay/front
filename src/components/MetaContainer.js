@@ -102,7 +102,7 @@ function MetaContainer(props) {
       if (res.status !== 200) {
         const result = await res.json();
         console.log(
-          `An error occured while saving toggling a star:\n${result}`
+          `An error occurred while saving toggling a star:\n${result}`
         );
       } else {
         const result = await res.json();

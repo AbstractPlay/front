@@ -60,7 +60,7 @@ export function subscribeUser(token) {
                     console.log("Permission was not granted.");
                   } else {
                     console.error(
-                      "An error ocurred during the subscription process.",
+                      "An error occurred during the subscription process.",
                       e
                     );
                   }
@@ -73,7 +73,7 @@ export function subscribeUser(token) {
       })
       .catch(function (e) {
         console.error(
-          "An error ocurred during Service Worker registration.",
+          "An error occurred during Service Worker registration.",
           e
         );
       });

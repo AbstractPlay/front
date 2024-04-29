@@ -51,7 +51,7 @@ function CompletedGamesTable(props) {
           }),
         });
         if (res.status !== 200) {
-          console.log(`An error occured while setting lastSeen.`);
+          console.log(`An error occurred while setting lastSeen.`);
         } else {
           const newMe = JSON.parse(JSON.stringify(globalMe));
           const idx = newMe.games.findIndex((g) => g.id === gameId);
