@@ -293,21 +293,30 @@ strong {
   padding-right: 0.7em;
 }
 
+/* pinch/zoom container */
+.react-transform-wrapper {
+    width: 100% !important;
+    /* height: 100% !important; */
+}
+
+.react-transform-component {
+    width: 100% !important;
+    /* height: 100% !important; */
+}
+
 /* Leaving the board and stack styles here for now until I better understand it */
 .board {
   display: flex;
   background-color: #fff;
   align-items: flex-start;
   padding: 1em;
+  width: 100%;
+  max-height: 600px;
 }
 
 .board > svg * text {
     cursor: default;
     user-select: none;
-}
-
-.unZoomedBoard > svg {
-  max-height: 600px;
 }
 
 .boardButtons {

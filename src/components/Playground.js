@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render, renderglyph } from "@abstractplay/renderer";
@@ -22,6 +23,7 @@ import MoveEntry from "./Playground/MoveEntry";
 import Modal from "./Modal";
 import ClipboardCopy from "./Playground/ClipboardCopy";
 import { MeContext, ColourContext } from "../pages/Skeleton";
+
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -775,7 +777,6 @@ function Playground(props) {
   const [showGameDump, showGameDumpSetter] = useState(false);
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
-  const [isZoomed, isZoomedSetter] = useState(false);
   const [settings, settingsSetter] = useState(null);
   const [submitting] = useState(false);
   const [newGame, newGameSetter] = useState("");
@@ -1834,9 +1835,7 @@ function Playground(props) {
         <div className="columns">
           {/***************** MoveEntry *****************/}
           <div
-            className={`column ${
-              isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
-            }`}
+            className={`column is-one-quarter`}
           >
             <GameStatus
               status={statusRef.current}
@@ -1881,6 +1880,11 @@ function Playground(props) {
                 dangerouslySetInnerHTML={{ __html: inCheck }}
               ></div>
             )}
+            <TransformWrapper
+                doubleClick={{disabled: true}}
+                centerOnInit={false}
+            >
+                <TransformComponent>
             {gameRef.current?.stackExpanding ? (
               <div className={`board _meta_${metaGame}`}>
                 <div className="stack" id="stack" ref={stackImage}></div>
@@ -1889,12 +1893,14 @@ function Playground(props) {
             ) : (
               <div
                 className={
-                    isZoomed ? `board tourBoard _meta_${metaGame}` : `board tourBoard unZoomedBoard _meta_${metaGame}`
+                    `board tourBoard _meta_${metaGame}`
                 }
                 id="svg"
                 ref={boardImage}
               ></div>
             )}
+                </TransformComponent>
+            </TransformWrapper>
             <div className="boardButtons">
               {!gameRef?.current?.canRotate ? null : (
                 <button
@@ -1938,30 +1944,11 @@ function Playground(props) {
               >
                 <i className="fa fa-bug"></i>
               </button>
-              <button
-                className="fabtn align-right"
-                onClick={() => {
-                  isZoomedSetter(!isZoomed);
-                }}
-                title={t("ToggleZoom")}
-              >
-                {isZoomed ? (
-                  <i className="fa fa-search-minus"></i>
-                ) : (
-                  <i className="fa fa-search-plus"></i>
-                )}
-              </button>
             </div>
           </div>
           {/***************** GameMoves *****************/}
-          {/* Hidden when zooming */}
-          {isZoomed ? (
-            ""
-          ) : (
             <div
-              className={`column ${
-                isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
-              }`}
+              className={`column is-one-quarter`}
             >
               <GameMoves
                 focus={focus}
@@ -1971,7 +1958,6 @@ function Playground(props) {
                 key={`Moves|colorSet${colorsChanged}`}
               />
             </div>
-          )}
         </div>
         <div className="control">
           <button className="button apButton" onClick={handleResetPlayground}>

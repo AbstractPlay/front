@@ -1019,7 +1019,6 @@ function GameMove(props) {
   const [injectedState, injectedStateSetter] = useState("");
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
-  const [isZoomed, isZoomedSetter] = useState(false);
   const [settings, settingsSetter] = useState(null);
   const [comments, commentsSetter] = useState([]);
   const [commentsTooLong, commentsTooLongSetter] = useState(false);
@@ -2548,9 +2547,7 @@ function GameMove(props) {
                 <div className="columns">
                 {/***************** MoveEntry *****************/}
                 <div
-                className={`column ${
-                    isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
-                }`}
+                className={`column is-one-quarter`}
                 >
                     <div style={{ marginBottom: "2rem" }} className="tourStatus">
                         <h1 className="subtitle lined">
@@ -2636,8 +2633,6 @@ function GameMove(props) {
                       stackImage={stackImage}
                       boardImage={boardImage}
                       screenWidth={screenWidth}
-                      isZoomed={isZoomed}
-                      isZoomedSetter={isZoomedSetter}
                       handleRotate={handleRotate}
                       handleUpdateRenderOptions={handleUpdateRenderOptions}
                       showGameDetailsSetter={showGameDetailsSetter}
@@ -2648,52 +2643,45 @@ function GameMove(props) {
                   />
                 </div>
                 {/***************** GameMoves *****************/}
-                {/* Hidden when zooming */}
-                {isZoomed ? (
-                  ""
-                ) : (
-                  <div
-                    className={`column ${
-                      isZoomed ? "is-one-fifth is-narrow" : "is-one-quarter"
-                    }`}
-                  >
-                    <div className="tourMoveList">
-                        <h1 className="subtitle lined">
-                            <span>{t("Moves")}</span>
-                        </h1>
-                        <GameMoves
-                            focus={focus}
-                            game={game}
-                            exploration={explorationRef.current}
-                            noExplore={globalMe?.settings?.all?.exploration === -1}
-                            handleGameMoveClick={handleGameMoveClick}
-                            getFocusNode={getFocusNode}
-                            handlePlaygroundExport={handlePlaygroundExport}
-                            key={`Moves|colorSet${colorsChanged}`}
-                        />
-                    </div>
-                    <div style={{ paddingTop: "1em" }} className="tourChat">
+                <div
+                className={`column is-one-quarter`}
+                >
+                <div className="tourMoveList">
                     <h1 className="subtitle lined">
-                        <span>
-                            {exploringCompletedGame
-                            ? t("GameComments")
-                            : t("GameSummary")}
-                        </span>
-                        </h1>
-                        <UserChats
-                            comments={exploringCompletedGame ? nodeComments : comments}
-                            players={gameRef.current?.players}
-                            handleSubmit={
-                                exploringCompletedGame ? submitNodeComment : submitComment
-                            }
-                            tooMuch={commentsTooLong}
-                            gameid={gameRef.current?.id}
-                            exploringCompletedGame={exploringCompletedGame}
-                            userId={globalMe?.id}
-                        />
-                    </div>
-                  </div>
-                )}
+                        <span>{t("Moves")}</span>
+                    </h1>
+                    <GameMoves
+                        focus={focus}
+                        game={game}
+                        exploration={explorationRef.current}
+                        noExplore={globalMe?.settings?.all?.exploration === -1}
+                        handleGameMoveClick={handleGameMoveClick}
+                        getFocusNode={getFocusNode}
+                        handlePlaygroundExport={handlePlaygroundExport}
+                        key={`Moves|colorSet${colorsChanged}`}
+                    />
+                </div>
+                <div style={{ paddingTop: "1em" }} className="tourChat">
+                <h1 className="subtitle lined">
+                    <span>
+                        {exploringCompletedGame
+                        ? t("GameComments")
+                        : t("GameSummary")}
+                    </span>
+                    </h1>
+                    <UserChats
+                        comments={exploringCompletedGame ? nodeComments : comments}
+                        players={gameRef.current?.players}
+                        handleSubmit={
+                            exploringCompletedGame ? submitNodeComment : submitComment
+                        }
+                        tooMuch={commentsTooLong}
+                        gameid={gameRef.current?.id}
+                        exploringCompletedGame={exploringCompletedGame}
+                        userId={globalMe?.id}
+                    />
+                </div>
+                </div>
               </div>
             ) :
             /* Mobile, stacked layout */
@@ -2833,8 +2821,6 @@ function GameMove(props) {
                                     stackImage={stackImage}
                                     boardImage={boardImage}
                                     screenWidth={screenWidth}
-                                    isZoomed={isZoomed}
-                                    isZoomedSetter={isZoomedSetter}
                                     handleRotate={handleRotate}
                                     handleUpdateRenderOptions={handleUpdateRenderOptions}
                                     showGameDetailsSetter={showGameDetailsSetter}
