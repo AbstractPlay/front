@@ -2644,7 +2644,7 @@ function GameMove(props) {
                 </div>
                 {/***************** GameMoves *****************/}
                 <div
-                className={`column "is-one-quarter`}
+                className={`column is-one-quarter`}
                 >
                 <div className="tourMoveList">
                     <h1 className="subtitle lined">
