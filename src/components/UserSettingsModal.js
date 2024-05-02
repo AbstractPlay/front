@@ -306,7 +306,7 @@ function UserSettingsModal(props) {
         try {
             render(json, options);
         } catch (e) {
-            console.log(`An error occured while trying to render a sample:`);
+            console.log(`An error occurred while trying to render a sample:`);
             console.log(e);
         }
     }
