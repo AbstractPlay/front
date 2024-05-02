@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import { MeContext } from "../../pages/Skeleton";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 function Board({
     metaGame, gameID, t, inCheck, gameRef,
-    stackImage, boardImage, isZoomed, gameEngine, gameNote,
+    stackImage, boardImage, gameEngine, gameNote,
     handleRotate, handleUpdateRenderOptions, screenWidth,
     showGameDetailsSetter, showGameNoteSetter, showGameDumpSetter,
-    isZoomedSetter, showCustomCSSSetter, showInjectSetter,
+    showCustomCSSSetter, showInjectSetter,
 }) {
     const [globalMe,] = useContext(MeContext);
 
@@ -20,6 +21,11 @@ function Board({
                 dangerouslySetInnerHTML={{ __html: inCheck }}
               ></div>
             )}
+            <TransformWrapper
+                doubleClick={{disabled: true}}
+                centerOnInit={false}
+            >
+                <TransformComponent>
             {gameRef.current?.stackExpanding ? (
               <div className={`board _meta_${metaGame}`}>
                 <div className="stack" id="stack" ref={stackImage}></div>
@@ -28,12 +34,15 @@ function Board({
             ) : (
               <div
                 className={
-                  isZoomed ? `board tourBoard _meta_${metaGame}` : `board tourBoard unZoomedBoard _meta_${metaGame}`
+                  `board tourBoard _meta_${metaGame}`
                 }
                 id="svg"
                 ref={boardImage}
               ></div>
             )}
+                </TransformComponent>
+            </TransformWrapper>
+
             <div className="boardButtons tourBoardButtons">
               {!gameRef?.current?.canRotate ? null : (
                 <button
@@ -93,21 +102,6 @@ function Board({
               >
                 <i className="fa fa-bug"></i>
               </button>
-              {screenWidth < 770 ? null :
-                <button
-                className="fabtn align-right"
-                onClick={() => {
-                    isZoomedSetter(!isZoomed);
-                }}
-                title={t("ToggleZoom")}
-                >
-                {isZoomed ? (
-                    <i className="fa fa-search-minus"></i>
-                ) : (
-                    <i className="fa fa-search-plus"></i>
-                )}
-                </button>
-              }
               <button
                 className="fabtn align-right"
                 onClick={() => {
