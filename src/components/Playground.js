@@ -1838,7 +1838,7 @@ function Playground(props) {
         <div className="columns">
           {/***************** MoveEntry *****************/}
           <div
-            className={`column is-one-quarter`}
+            className={`column is-one-fifth`}
           >
             <GameStatus
               status={statusRef.current}
