@@ -1835,7 +1835,8 @@ function Playground(props) {
         <div className="columns">
           {/***************** MoveEntry *****************/}
           <div
-            className={`column is-one-quarter`}
+            className={`column is-narrow`}
+            style={{maxWidth: "15vw"}}
           >
             <GameStatus
               status={statusRef.current}
@@ -1948,7 +1949,7 @@ function Playground(props) {
           </div>
           {/***************** GameMoves *****************/}
             <div
-              className={`column is-one-quarter`}
+              className={`column is-narrow`}
             >
               <GameMoves
                 focus={focus}

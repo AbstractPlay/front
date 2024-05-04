@@ -1034,6 +1034,7 @@ function GameMove(props) {
   const [interimNote, interimNoteSetter] = useState("");
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
   const [mobileOrder, mobileOrderSetter] = useStorageState("play-mobile-order", [...defaultChunkOrder]);
+  const [verticalLayout, verticalLayoutSetter] = useStorageState("play-vertical-layout", false);
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
   const [parenthetical, parentheticalSetter] = useState([]); // any description after the game name (e.g., "unrated", "exploration disabled")
   // pieInvoked is used to trigger the game reload after the function is called
@@ -1172,6 +1173,10 @@ function GameMove(props) {
         document.adoptedStyleSheets = [];
     }
   }, [customCSS, metaGame]);
+
+  useEffect(() => {
+    boardKeySetter(nanoid());
+  }, [verticalLayout]);
 
   const handleMoveUp = (key) => {
     const idx = mobileOrder.findIndex(s => s === key);
@@ -2541,149 +2546,7 @@ function GameMove(props) {
             </div>
           </div>
         }
-        {screenWidth >= 770 ?
-            /* Normal, full-width layout */
-            (
-                <div className="columns">
-                {/***************** MoveEntry *****************/}
-                <div
-                className={`column is-one-quarter`}
-                >
-                    <div style={{ marginBottom: "2rem" }} className="tourStatus">
-                        <h1 className="subtitle lined">
-                            <span>{t("Status")}</span>
-                        </h1>
-                        <GameStatus
-                            status={statusRef.current}
-                            settings={settings}
-                            game={game}
-                            canExplore={focus?.canExplore}
-                            handleStashClick={handleStashClick}
-                            key={`Status|colorSet${colorsChanged}`}
-                        />
-                    </div>
-                    <div className="tourMove">
-                        <h1 className="subtitle lined">
-                        <span>{t("MakeMove")}</span>
-                        </h1>
-                        <MoveEntry
-                            move={move}
-                            toMove={toMove}
-                            game={gameRef.current}
-                            engine={engineRef.current}
-                            moves={movesRef.current}
-                            exploration={explorationRef.current}
-                            focus={focus}
-                            submitting={submitting}
-                            forceUndoRight={false}
-                            handlers={[
-                                handleMove,
-                                handleMark,
-                                handleSubmit,
-                                handleToSubmit,
-                                handleView,
-                                handleResign,
-                                handleTimeout,
-                                handleReset,
-                                handlePie,
-                                handleDeleteExploration
-                            ]}
-                            key={`Entry|colorSet${colorsChanged}`}
-                        />
-                    </div>
-                    <MiscButtons
-                        metaGame={metaGame}
-                        gameID={gameID}
-                        toMove={toMove}
-                        gameRec={gameRec}
-                        canPublish={canPublish}
-                        handlePublishExploration={handlePublishExploration}
-                        handleExplorer={handleExplorer}
-                        handleNextGame={handleNextGame}
-                        explorer={explorer}
-                        game={game}
-                        t={t}
-                    />
-                </div> {/* column */}
-                {/***************** Board *****************/}
-                <div className="column">
-                    <h1 className="subtitle lined tourWelcome">
-                        <span>
-                            {gameinfo.get(metaGame).name}
-                            {parenthetical.length === 0 ? null : (
-                            <>
-                                <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
-                                    &nbsp;(
-                                    {parenthetical.reduce((prev, curr) => [prev, ", ", curr])}
-                                    )
-                                </span>
-                            </>
-                            )}
-
-                        </span>
-                    </h1>
-                  <Board
-                      metaGame={metaGame}
-                      gameID={gameID}
-                      t={t}
-                      gameEngine={gameEngine}
-                      gameNote={gameNote}
-                      inCheck={inCheck}
-                      gameRef={gameRef}
-                      stackImage={stackImage}
-                      boardImage={boardImage}
-                      screenWidth={screenWidth}
-                      handleRotate={handleRotate}
-                      handleUpdateRenderOptions={handleUpdateRenderOptions}
-                      showGameDetailsSetter={showGameDetailsSetter}
-                      showGameNoteSetter={showGameNoteSetter}
-                      showGameDumpSetter={showGameDumpSetter}
-                      showCustomCSSSetter={showCustomCSSSetter}
-                      showInjectSetter={showInjectSetter}
-                  />
-                </div>
-                {/***************** GameMoves *****************/}
-                <div
-                className={`column is-one-quarter`}
-                >
-                <div className="tourMoveList">
-                    <h1 className="subtitle lined">
-                        <span>{t("Moves")}</span>
-                    </h1>
-                    <GameMoves
-                        focus={focus}
-                        game={game}
-                        exploration={explorationRef.current}
-                        noExplore={globalMe?.settings?.all?.exploration === -1}
-                        handleGameMoveClick={handleGameMoveClick}
-                        getFocusNode={getFocusNode}
-                        handlePlaygroundExport={handlePlaygroundExport}
-                        key={`Moves|colorSet${colorsChanged}`}
-                    />
-                </div>
-                <div style={{ paddingTop: "1em" }} className="tourChat">
-                <h1 className="subtitle lined">
-                    <span>
-                        {exploringCompletedGame
-                        ? t("GameComments")
-                        : t("GameSummary")}
-                    </span>
-                    </h1>
-                    <UserChats
-                        comments={exploringCompletedGame ? nodeComments : comments}
-                        players={gameRef.current?.players}
-                        handleSubmit={
-                            exploringCompletedGame ? submitNodeComment : submitComment
-                        }
-                        tooMuch={commentsTooLong}
-                        gameid={gameRef.current?.id}
-                        exploringCompletedGame={exploringCompletedGame}
-                        userId={globalMe?.id}
-                    />
-                </div>
-                </div>
-              </div>
-            ) :
+        {(screenWidth < 770 || verticalLayout) ?
             /* Mobile, stacked layout */
             mobileOrder.map(key => {
                 let title;
@@ -2828,6 +2691,8 @@ function GameMove(props) {
                                     showGameDumpSetter={showGameDumpSetter}
                                     showCustomCSSSetter={showCustomCSSSetter}
                                     showInjectSetter={showInjectSetter}
+                                    verticalLayout={verticalLayout}
+                                    verticalLayoutSetter={verticalLayoutSetter}
                                 />
                             ) : key === "moves" ? (
                                 <GameMoves
@@ -2858,7 +2723,152 @@ function GameMove(props) {
                     </div>
                 </div>
                 );
-            })
+            }) :
+            /* Normal, full-width layout */
+            (
+                <div className="columns">
+                {/***************** MoveEntry *****************/}
+                <div
+                className={`column is-narrow`}
+                style={{maxWidth: "15vw"}}
+                >
+                    <div style={{ marginBottom: "2rem" }} className="tourStatus">
+                        <h1 className="subtitle lined">
+                            <span>{t("Status")}</span>
+                        </h1>
+                        <GameStatus
+                            status={statusRef.current}
+                            settings={settings}
+                            game={game}
+                            canExplore={focus?.canExplore}
+                            handleStashClick={handleStashClick}
+                            key={`Status|colorSet${colorsChanged}`}
+                        />
+                    </div>
+                    <div className="tourMove">
+                        <h1 className="subtitle lined">
+                        <span>{t("MakeMove")}</span>
+                        </h1>
+                        <MoveEntry
+                            move={move}
+                            toMove={toMove}
+                            game={gameRef.current}
+                            engine={engineRef.current}
+                            moves={movesRef.current}
+                            exploration={explorationRef.current}
+                            focus={focus}
+                            submitting={submitting}
+                            forceUndoRight={false}
+                            handlers={[
+                                handleMove,
+                                handleMark,
+                                handleSubmit,
+                                handleToSubmit,
+                                handleView,
+                                handleResign,
+                                handleTimeout,
+                                handleReset,
+                                handlePie,
+                                handleDeleteExploration
+                            ]}
+                            key={`Entry|colorSet${colorsChanged}`}
+                        />
+                    </div>
+                    <MiscButtons
+                        metaGame={metaGame}
+                        gameID={gameID}
+                        toMove={toMove}
+                        gameRec={gameRec}
+                        canPublish={canPublish}
+                        handlePublishExploration={handlePublishExploration}
+                        handleExplorer={handleExplorer}
+                        handleNextGame={handleNextGame}
+                        explorer={explorer}
+                        game={game}
+                        t={t}
+                    />
+                </div> {/* column */}
+                {/***************** Board *****************/}
+                <div className="column">
+                    <h1 className="subtitle lined tourWelcome">
+                        <span>
+                            {gameinfo.get(metaGame).name}
+                            {parenthetical.length === 0 ? null : (
+                            <>
+                                <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
+                                    &nbsp;(
+                                    {parenthetical.reduce((prev, curr) => [prev, ", ", curr])}
+                                    )
+                                </span>
+                            </>
+                            )}
+
+                        </span>
+                    </h1>
+                  <Board
+                      metaGame={metaGame}
+                      gameID={gameID}
+                      t={t}
+                      gameEngine={gameEngine}
+                      gameNote={gameNote}
+                      inCheck={inCheck}
+                      gameRef={gameRef}
+                      stackImage={stackImage}
+                      boardImage={boardImage}
+                      screenWidth={screenWidth}
+                      handleRotate={handleRotate}
+                      handleUpdateRenderOptions={handleUpdateRenderOptions}
+                      showGameDetailsSetter={showGameDetailsSetter}
+                      showGameNoteSetter={showGameNoteSetter}
+                      showGameDumpSetter={showGameDumpSetter}
+                      showCustomCSSSetter={showCustomCSSSetter}
+                      showInjectSetter={showInjectSetter}
+                      verticalLayout={verticalLayout}
+                      verticalLayoutSetter={verticalLayoutSetter}
+                  />
+                </div>
+                {/***************** GameMoves *****************/}
+                <div
+                className={`column is-narrow`}
+                >
+                <div className="tourMoveList">
+                    <h1 className="subtitle lined">
+                        <span>{t("Moves")}</span>
+                    </h1>
+                    <GameMoves
+                        focus={focus}
+                        game={game}
+                        exploration={explorationRef.current}
+                        noExplore={globalMe?.settings?.all?.exploration === -1}
+                        handleGameMoveClick={handleGameMoveClick}
+                        getFocusNode={getFocusNode}
+                        handlePlaygroundExport={handlePlaygroundExport}
+                        key={`Moves|colorSet${colorsChanged}`}
+                    />
+                </div>
+                <div style={{ paddingTop: "1em" }} className="tourChat">
+                <h1 className="subtitle lined">
+                    <span>
+                        {exploringCompletedGame
+                        ? t("GameComments")
+                        : t("GameSummary")}
+                    </span>
+                    </h1>
+                    <UserChats
+                        comments={exploringCompletedGame ? nodeComments : comments}
+                        players={gameRef.current?.players}
+                        handleSubmit={
+                            exploringCompletedGame ? submitNodeComment : submitComment
+                        }
+                        tooMuch={commentsTooLong}
+                        gameid={gameRef.current?.id}
+                        exploringCompletedGame={exploringCompletedGame}
+                        userId={globalMe?.id}
+                    />
+                </div>
+                </div>
+              </div>
+            )
         }
 
         <div className="columns">
