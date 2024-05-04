@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import { UsersContext } from "../../pages/Skeleton";
 import GameCommentShort from "./GameCommentShort";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 //TODO:
 // Fix react-time-ago to be language/locale sensitive
@@ -67,7 +68,9 @@ function UserChats(props) {
                         />
                       </small>
                       <br />
-                      {r.log}
+                      {/* <ReactMarkdown className="content"> */}
+                        {r.log}
+                      {/* </ReactMarkdown> */}
                     </p>
                   ) : (
                     <p className="chatPlayer">

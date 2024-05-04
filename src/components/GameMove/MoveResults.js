@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Fragment } from "react";
 import ReactTimeAgo from "react-time-ago";
 import { UsersContext } from "../../pages/Skeleton";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 //TODO:
 // Fix react-time-ago to be language/locale sensitive
@@ -71,7 +72,9 @@ function MoveResults(props) {
                       />
                     </small>
                     <br />
-                    {r.log}
+                      {/* <ReactMarkdown className="content"> */}
+                        {r.log}
+                      {/* </ReactMarkdown> */}
                   </p>
                 ) : (
                   <p className="chatPlayer">
