@@ -94,17 +94,19 @@ function Board({
                   )}
                 </button>
               )}
-              <button
-                className="fabtn align-right"
-                onClick={() => verticalLayoutSetter(val => !val)}
-                title={t("ToggleLayout")}
-              >
-                {verticalLayout ? (
-                  <i className="fa fa-arrows-h"></i>
-                ) : (
-                  <i className="fa fa-arrows-v"></i>
-                )}
-              </button>
+              {screenWidth < 770 ? null :
+                <button
+                    className="fabtn align-right"
+                    onClick={() => verticalLayoutSetter(val => !val)}
+                    title={t("ToggleLayout")}
+                >
+                    {verticalLayout ? (
+                    <i className="fa fa-arrows-h"></i>
+                    ) : (
+                    <i className="fa fa-arrows-v"></i>
+                    )}
+                </button>
+              }
               <button
                 className="fabtn align-right"
                 onClick={() => {

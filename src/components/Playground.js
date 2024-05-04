@@ -1836,7 +1836,6 @@ function Playground(props) {
           {/***************** MoveEntry *****************/}
           <div
             className={`column is-narrow`}
-            style={{maxWidth: "15vw"}}
           >
             <GameStatus
               status={statusRef.current}
