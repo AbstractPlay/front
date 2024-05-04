@@ -311,7 +311,7 @@ strong {
   align-items: flex-start;
   padding: 1em;
   width: 100%;
-  max-height: 600px;
+  max-height: 80vh;
 }
 
 .board > svg * text {

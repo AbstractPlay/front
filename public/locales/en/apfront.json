@@ -653,6 +653,7 @@
     "tblHeaderStarted": "Game started",
     "tblHeaderVariants": "Variants",
     "TimeRemaining": "Time remaining",
+    "ToggleLayout": "Toggle vertical/horizontal layout",
     "ToggleZoom": "Toggle zoom",
     "ToMove": "{{player}} to move.",
     "ToS": "Terms of Service",

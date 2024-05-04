@@ -1948,7 +1948,7 @@ function Playground(props) {
           </div>
           {/***************** GameMoves *****************/}
             <div
-              className={`column is-one-quarter`}
+              className={`column is-narrow`}
             >
               <GameMoves
                 focus={focus}

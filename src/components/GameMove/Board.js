@@ -7,7 +7,7 @@ function Board({
     stackImage, boardImage, gameEngine, gameNote,
     handleRotate, handleUpdateRenderOptions, screenWidth,
     showGameDetailsSetter, showGameNoteSetter, showGameDumpSetter,
-    showCustomCSSSetter, showInjectSetter,
+    showCustomCSSSetter, showInjectSetter, verticalLayout, verticalLayoutSetter,
 }) {
     const [globalMe,] = useContext(MeContext);
 
@@ -22,6 +22,7 @@ function Board({
               ></div>
             )}
             <TransformWrapper
+                disabled={screenWidth < 770 || verticalLayout}
                 doubleClick={{disabled: true}}
                 centerOnInit={false}
             >
@@ -93,6 +94,19 @@ function Board({
                   )}
                 </button>
               )}
+              {screenWidth < 770 ? null :
+                <button
+                    className="fabtn align-right"
+                    onClick={() => verticalLayoutSetter(val => !val)}
+                    title={t("ToggleLayout")}
+                >
+                    {verticalLayout ? (
+                    <i className="fa fa-arrows-h"></i>
+                    ) : (
+                    <i className="fa fa-arrows-v"></i>
+                    )}
+                </button>
+              }
               <button
                 className="fabtn align-right"
                 onClick={() => {
