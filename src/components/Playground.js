@@ -601,6 +601,7 @@ function doView(
     gameEngineTmp.render({
       perspective: game.me + 1,
       altDisplay: settings?.display,
+      ...move.opts
     })
   );
 }
@@ -1423,7 +1424,7 @@ function Playground(props) {
     let options = {};
 
     function boardClick(row, col, piece) {
-      // console.log(`boardClick:(${row},${col},${piece})`);
+    //   console.log(`boardClick:(${row},${col},${piece})`);
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous
@@ -1435,7 +1436,9 @@ function Playground(props) {
             piece
           )
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
+    //   console.log(result);
       result.rendered = moveRef.current.rendered;
+    //   console.log(moveRef.current.rendered);
       processNewMove(
         result,
         explorer,

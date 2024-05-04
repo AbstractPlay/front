@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Fragment } from "react";
 import ReactTimeAgo from "react-time-ago";
 import { UsersContext } from "../../pages/Skeleton";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 //TODO:
 // Fix react-time-ago to be language/locale sensitive
@@ -74,6 +75,7 @@ function MoveResults(props) {
                     {r.log}
                   </p>
                 ) : (
+                <>
                   <p className="chatPlayer">
                     <strong>{r.player}</strong>&nbsp;
                     <small>
@@ -82,9 +84,15 @@ function MoveResults(props) {
                         timeStyle="twitter-now"
                       />
                     </small>
-                    <br />
-                    {r.log}
                   </p>
+                  <ReactMarkdown
+                    className="content"
+                    disallowedElements={["img"]}
+                    unwrapDisallowed={true}
+                  >
+                    {r.log}
+                  </ReactMarkdown>
+                </>
                 )}
               </div>
             </div>

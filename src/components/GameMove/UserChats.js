@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import { UsersContext } from "../../pages/Skeleton";
 import GameCommentShort from "./GameCommentShort";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 //TODO:
 // Fix react-time-ago to be language/locale sensitive
@@ -70,7 +71,8 @@ function UserChats(props) {
                       {r.log}
                     </p>
                   ) : (
-                    <p className="chatPlayer">
+                  <>
+                    <p>
                       <Link to={`/player/${r.userid}`}><strong>{r.player}</strong></Link>&nbsp;
                       <small>
                         <ReactTimeAgo
@@ -78,9 +80,15 @@ function UserChats(props) {
                           timeStyle="twitter-now"
                         />
                       </small>
-                      <br />
-                      {r.log}
                     </p>
+                    <ReactMarkdown
+                      className="content"
+                      disallowedElements={["img"]}
+                      unwrapDisallowed={true}
+                    >
+                      {r.log}
+                    </ReactMarkdown>
+                  </>
                   )}
                 </div>
               </div>

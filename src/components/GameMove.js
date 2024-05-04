@@ -804,6 +804,7 @@ function doView(
       gameEngineTmp.render({
         perspective: game.me + 1,
         altDisplay: settings?.display,
+        ...move.opts
       }),
       game.players
     )
@@ -2830,6 +2831,7 @@ function GameMove(props) {
                 {/***************** GameMoves *****************/}
                 <div
                 className={`column is-narrow`}
+                style={{maxWidth: "15vw"}}
                 >
                 <div className="tourMoveList">
                     <h1 className="subtitle lined">
