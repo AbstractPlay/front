@@ -2730,8 +2730,7 @@ function GameMove(props) {
                 <div className="columns">
                 {/***************** MoveEntry *****************/}
                 <div
-                className={`column is-narrow`}
-                style={{maxWidth: "15vw"}}
+                  className={`column is-one-fifth`}
                 >
                     <div style={{ marginBottom: "2rem" }} className="tourStatus">
                         <h1 className="subtitle lined">
