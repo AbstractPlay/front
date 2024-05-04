@@ -68,12 +68,11 @@ function UserChats(props) {
                         />
                       </small>
                       <br />
-                      {/* <ReactMarkdown className="content"> */}
-                        {r.log}
-                      {/* </ReactMarkdown> */}
+                      {r.log}
                     </p>
                   ) : (
-                    <p className="chatPlayer">
+                  <>
+                    <p>
                       <Link to={`/player/${r.userid}`}><strong>{r.player}</strong></Link>&nbsp;
                       <small>
                         <ReactTimeAgo
@@ -81,9 +80,15 @@ function UserChats(props) {
                           timeStyle="twitter-now"
                         />
                       </small>
-                      <br />
-                      {r.log}
                     </p>
+                    <ReactMarkdown
+                      className="content"
+                      disallowedElements={["img"]}
+                      unwrapDisallowed={true}
+                    >
+                      {r.log}
+                    </ReactMarkdown>
+                  </>
                   )}
                 </div>
               </div>
