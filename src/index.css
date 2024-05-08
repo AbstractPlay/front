@@ -307,7 +307,6 @@ strong {
 /* Leaving the board and stack styles here for now until I better understand it */
 .board {
   display: flex;
-  background-color: #fff;
   align-items: flex-start;
   padding: 1em;
   width: 100%;
@@ -886,11 +885,6 @@ tr.stickyHeader {
   }
 
   /* Game board customimzation for light/dark mode! */
-  /* background color */
-  div#svg, div#stack {
-    background-color: var(--main-bg-color);
-  }
-
   /* gridlines for cobweb boards */
   /* div._meta_agere g#gridlines circle:not([class]) {
     stroke: var(--svg-gridline-color);
