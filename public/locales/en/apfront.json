@@ -17,6 +17,11 @@
             "full": "Board",
             "tag": "Board"
         },
+        "board>3d": {
+            "description": "The board is three dimensional",
+            "full": "Board > 3D",
+            "tag": "Board: 3D"
+        },
         "board>connect": {
             "description": "Describes how the cells of the board connect to each other",
             "full": "Board > Connectivity",
