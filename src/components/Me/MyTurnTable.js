@@ -55,12 +55,11 @@ function MyTurnTable(props) {
   const data = useMemo(
     () =>
       props.games.map((g) => {
-        const info = gameinfo.get(g.metaGame);
         const me = g.players.find((item) => item.id === globalMe.id);
-        return {
+        const ret = {
           id: g.id,
           metaGame: g.metaGame,
-          gameName: info.name,
+          gameName: "Unknown",
           gameStarted: g.gameStarted || 0,
           opponents: g.players
             .filter((item) => item.id !== globalMe.id),
@@ -68,6 +67,8 @@ function MyTurnTable(props) {
           myTime: me.time,
           timeRemaining: me.time - (Date.now() - g.lastMoveTime),
         };
+        if (gameinfo.get(g.metaGame) !== undefined) ret.gameName = gameinfo.get(g.metaGame).name;
+        return ret;
       }),
     [globalMe.id, props.games]
   );

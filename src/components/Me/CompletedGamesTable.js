@@ -76,23 +76,18 @@ function CompletedGamesTable(props) {
   const data = useMemo(
     () =>
       props.games.map((g) => {
-        const info = gameinfo.get(g.metaGame);
-        if (info === undefined) {
-          throw new Error(
-            `Could not derive game data for metaGame "${g.metaGame}".`
-          );
-        }
-        return {
+        const ret = {
           id: g.id,
           metaGame: g.metaGame,
-          gameName: info.name,
+          gameName: "Unknown",
           gameEnded: g.gameEnded || 0,
-          opponents: g.players
-            .filter((item) => item.id !== globalMe.id),
+          opponents: g.players.filter((item) => item.id !== globalMe.id),
           numMoves: g.numMoves || 0,
           lastSeen: g.seen || 0,
-          lastChat: g.lastChat || 0,
+          lastChat: g.lastChat || 0
         };
+        if (gameinfo.get(g.metaGame) !== undefined) ret.gameName = gameinfo.get(g.metaGame).name;
+        return ret;
       }),
     [globalMe.id, props.games]
   );

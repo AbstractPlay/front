@@ -23,11 +23,12 @@ function Stars({handleChallenge}) {
       ( (! ("stars" in user)) || (user.stars === undefined) || (user.stars === null) )  ? [] :
         user.stars
         .map((meta) => {
-            const info = gameinfo.get(meta);
-          return {
+          const ret = {
             id: meta,
-            name: info.name,
+            name: "Unknown",
           };
+          if (gameinfo.get(meta) !== undefined) ret.name = gameinfo.get(meta).name;
+          return ret;
         })
         .sort((a, b) => a.name.localeCompare(b.name)),
     [user]

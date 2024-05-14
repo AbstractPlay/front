@@ -55,7 +55,6 @@ function TheirTurnTable(props) {
   const data = useMemo(
     () =>
       props.games.map((g) => {
-        const info = gameinfo.get(g.metaGame);
         let them = undefined;
         if (
           g.toMove !== null &&
@@ -66,10 +65,10 @@ function TheirTurnTable(props) {
           const idx = parseInt(g.toMove);
           them = g.players[idx];
         }
-        return {
+        const ret = {
           id: g.id,
           metaGame: g.metaGame,
-          gameName: info.name,
+          gameName: "Unknown",
           gameStarted: g.gameStarted || 0,
           lastMove: g.lastMoveTime,
           opponents: g.players
@@ -81,6 +80,8 @@ function TheirTurnTable(props) {
               ? undefined
               : them.time - (Date.now() - g.lastMoveTime),
         };
+        if (gameinfo.get(g.metaGame) !== undefined) ret.gameName = gameinfo.get(g.metaGame).name;
+        return ret;
       }),
     [props.games, globalMe.id]
   );

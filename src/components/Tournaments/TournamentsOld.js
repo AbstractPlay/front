@@ -46,9 +46,9 @@ function TournamentsOld(props) {
   const oldTournamentsData = useMemo(
     () => {
       return tournaments.map((t) => {
-        return {
+        const ret = {
           tournamentid: t.id,
-          metaGameName: gameinfo.get(t.metaGame).name,
+          metaGameName: "Unknown",
           metaGame: t.metaGame,
           variants: t.variants.join(", "),
           number: t.number,
@@ -57,6 +57,8 @@ function TournamentsOld(props) {
           winner: t.divisions[1].winner,
           numPlayers: t.players.length,
         };
+        if (gameinfo.get(t.metaGame) !== undefined) ret.metaGameName = gameinfo.get(t.metaGame).name
+        return ret;
       })},
     [tournaments]
   );
