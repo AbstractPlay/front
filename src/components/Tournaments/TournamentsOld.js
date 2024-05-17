@@ -21,7 +21,7 @@ function TournamentsOld(props) {
   const [oldTournamentsShowState, oldTournamentsShowStateSetter] = useStorageState("old-tournaments-show", 20);
   const { metaGame } = useParams();
 
-  const metaGameName = gameinfo.get(metaGame).name;
+  const metaGameName = (gameinfo.get(metaGame) === undefined) ? "Unknown" : gameinfo.get(metaGame).name;
   const allSize = Number.MAX_SAFE_INTEGER;
 
   useEffect(() => {
@@ -57,7 +57,7 @@ function TournamentsOld(props) {
           winner: t.divisions[1].winner,
           numPlayers: t.players.length,
         };
-        if (gameinfo.get(t.metaGame) !== undefined) ret.metaGameName = gameinfo.get(t.metaGame).name
+        if (gameinfo.get(t.metaGame) !== undefined) ret.metaGameName = gameinfo.get(t.metaGame).name;
         return ret;
       })},
     [tournaments]

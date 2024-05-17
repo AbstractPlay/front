@@ -78,13 +78,13 @@ function MyTurnTable(props) {
     () => [
       columnHelper.accessor("gameName", {
         header: "Game",
-        cell: (props) => (
-          <Link
-            to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
-          >
-            {props.getValue()}
-          </Link>
-        ),
+        cell: (props) => {
+          if (props.getValue() === "Unknown") {
+            return "Unknown";
+          } else {
+            return `<Link to={"/move/${props.row.original.metaGame}/0/${props.row.original.id}"}>${props.getValue()}</Link>`;
+          }
+        }
       }),
       columnHelper.accessor("opponents", {
         header: "Opponents",

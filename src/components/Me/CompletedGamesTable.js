@@ -97,19 +97,13 @@ function CompletedGamesTable(props) {
     () => [
       columnHelper.accessor("gameName", {
         header: "Game",
-        cell: (props) => (
-          <span
-            className={
-              props.row.original.lastChat > props.row.original.lastSeen ? "newChat" : ""
-            }
-          >
-            <Link
-                to={`/move/${props.row.original.metaGame}/1/${props.row.original.id}`}
-            >
-                {props.getValue()}
-            </Link>
-          </span>
-        ),
+        cell: (props) => {
+          if (props.getValue() === "Unknown") {
+            return "Unknown";
+          } else {
+            return `<span className={props.row.original.lastChat > props.row.original.lastSeen ? "newChat" : ""}><Link to={"/move/${props.row.original.metaGame}/0/${props.row.original.id}"}>${props.getValue()}</Link></span>`;
+          }
+        }
       }),
       columnHelper.accessor("opponents", {
         header: "Opponents",

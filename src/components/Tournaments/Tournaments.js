@@ -631,7 +631,7 @@ function Tournaments(props) {
           numPlayers: t.players.length,
           players: t.players,
         };
-        if (gameinfo.get(t.metaGame) !== undefined) ret.metaGame = gameinfo.get(t.metaGame).name;
+        if (gameinfo.get(t.metaGame) !== undefined) ret.metaGameName = gameinfo.get(t.metaGame).name;
         return ret;
       }).filter(rec => filterMeta === null || rec.metaGame === filterMeta)
         .filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
