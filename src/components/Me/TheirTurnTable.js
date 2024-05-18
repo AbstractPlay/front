@@ -93,9 +93,9 @@ function TheirTurnTable(props) {
         header: "Game",
         cell: (props) => {
           if (props.getValue() === "Unknown") {
-            return "Unknown";
+            (<>Unknown</>);
           } else {
-            return `<Link to={"/move/${props.row.original.metaGame}/0/${props.row.original.id}"}>${props.getValue()}</Link>`;
+            (<Link to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}>${props.getValue()}</Link>);
           }
         }
       }),
