@@ -802,6 +802,7 @@ function Playground(props) {
   const [gameEngine, gameEngineSetter] = useState(null);
   const [gameDeets, gameDeetsSetter] = useState(null);
   const [designerString, designerStringSetter] = useState("");
+  const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -826,6 +827,11 @@ function Playground(props) {
 
   const { t, i18n } = useTranslation();
   //   const { state } = useLocation();
+
+  const handleResize = () => {
+    screenWidthSetter(window.innerWidth);
+  };
+  window.addEventListener("resize", handleResize);
 
   useEffect(() => {
     if (metaGame !== null && metaGame !== undefined) {
@@ -1886,6 +1892,7 @@ function Playground(props) {
             <TransformWrapper
                 doubleClick={{disabled: true}}
                 centerOnInit={false}
+                disabled={screenWidth < 770}
             >
                 <TransformComponent>
             {gameRef.current?.stackExpanding ? (
