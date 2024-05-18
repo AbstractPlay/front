@@ -234,15 +234,17 @@ function Tournaments(props) {
           if (date2 && date2 > date1)
             date1 = date2;
         }
-        return {
+        const ret = {
           tournamentid: t.id,
           realMeta: t.metaGame,
-          metaGame: gameinfo.get(t.metaGame).name,
+          metaGame: "Unknown",
           variants: t.variants.join(", "),
           number: t.number,
           startDate: date1,
           players: t.players,
         };
+        if (gameinfo.get(t.metaGame) !== undefined) ret.metaGame = gameinfo.get(t.metaGame).name;
+        return ret;
       }).filter(rec => filterMeta === null || rec.realMeta === filterMeta)
         .filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
     [tournaments, registeredOnly, globalMe, filterMeta]
@@ -421,10 +423,10 @@ function Tournaments(props) {
   const currentTournamentsData = useMemo(
     () => {
       return tournaments.filter((t) => t.started && !t.dateEnded).map((t, idx) => {
-        return {
+        const ret = {
           tournamentid: t.id,
           realMeta: t.metaGame,
-          metaGame: gameinfo.get(t.metaGame).name,
+          metaGame: "Unknown",
           variants: t.variants.join(", "),
           number: t.number,
           dateStarted: t.dateStarted,
@@ -434,6 +436,8 @@ function Tournaments(props) {
             numGames: Object.values(t.divisions).reduce((acc, d) => acc + d.numGames, 0),
           }
         };
+        if (gameinfo.get(t.metaGame) !== undefined) ret.metaGame = gameinfo.get(t.metaGame).name;
+        return ret;
       }).filter(rec => filterMeta === null || rec.realMeta === filterMeta)
         .filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
     [tournaments, registeredOnly, globalMe, filterMeta]
@@ -615,9 +619,9 @@ function Tournaments(props) {
   const completedTournamentsData = useMemo(
     () => {
       return tournaments.filter((t) => t.dateEnded).map((t) => {
-        return {
+        const ret = {
           tournamentid: t.id,
-          metaGameName: gameinfo.get(t.metaGame).name,
+          metaGameName: "Unknown",
           metaGame: t.metaGame,
           variants: t.variants.join(", "),
           number: t.number,
@@ -627,6 +631,8 @@ function Tournaments(props) {
           numPlayers: t.players.length,
           players: t.players,
         };
+        if (gameinfo.get(t.metaGame) !== undefined) ret.metaGameName = gameinfo.get(t.metaGame).name;
+        return ret;
       }).filter(rec => filterMeta === null || rec.metaGame === filterMeta)
         .filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
     [tournaments, registeredOnly, globalMe, filterMeta]

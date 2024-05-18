@@ -55,7 +55,6 @@ function TheirTurnTable(props) {
   const data = useMemo(
     () =>
       props.games.map((g) => {
-        const info = gameinfo.get(g.metaGame);
         let them = undefined;
         if (
           g.toMove !== null &&
@@ -66,10 +65,10 @@ function TheirTurnTable(props) {
           const idx = parseInt(g.toMove);
           them = g.players[idx];
         }
-        return {
+        const ret = {
           id: g.id,
           metaGame: g.metaGame,
-          gameName: info.name,
+          gameName: "Unknown",
           gameStarted: g.gameStarted || 0,
           lastMove: g.lastMoveTime,
           opponents: g.players
@@ -81,6 +80,8 @@ function TheirTurnTable(props) {
               ? undefined
               : them.time - (Date.now() - g.lastMoveTime),
         };
+        if (gameinfo.get(g.metaGame) !== undefined) ret.gameName = gameinfo.get(g.metaGame).name;
+        return ret;
       }),
     [props.games, globalMe.id]
   );
@@ -90,13 +91,13 @@ function TheirTurnTable(props) {
     () => [
       columnHelper.accessor("gameName", {
         header: "Game",
-        cell: (props) => (
-          <Link
-            to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
-          >
-            {props.getValue()}
-          </Link>
-        ),
+        cell: (props) => {
+          if (props.getValue() === "Unknown") {
+            return (<>Unknown</>);
+          } else {
+            return (<Link to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}>{props.getValue()}</Link>);
+          }
+        }
       }),
       columnHelper.accessor("opponents", {
         header: "Opponents",
