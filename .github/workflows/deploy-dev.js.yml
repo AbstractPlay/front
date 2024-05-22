@@ -31,7 +31,7 @@ jobs:
         node-version: '18.x'
 
     - name: Install Serverless Framework
-      run: npm install -g serverless
+      run: npm install -g serverless@3.38.0
 
     - name: Serverless AWS authentication
       run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
