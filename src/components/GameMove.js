@@ -549,7 +549,7 @@ function setupColors(settings, game, globalMe, colourContext, node) {
     //   } else if (settings.color === "patterns") {
     //     options.patterns = true;
   }
-  if (settings.color !== "standard" && settings.color !== "blind") {
+  if (settings.color !== "standard" && settings.color !== "blind" && globalMe !== null && globalMe.palettes !== null) {
     const palette = globalMe.palettes.find(p => p.name === settings.color);
     if (palette !== undefined) {
         options.colours = [...palette.colours];
