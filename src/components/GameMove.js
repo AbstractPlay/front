@@ -549,7 +549,7 @@ function setupColors(settings, game, globalMe, colourContext, node) {
     //   } else if (settings.color === "patterns") {
     //     options.patterns = true;
   }
-  if (settings.color !== "standard" && settings.color !== "blind") {
+  if (settings.color !== "standard" && settings.color !== "blind" && globalMe !== null && globalMe.palettes !== null) {
     const palette = globalMe.palettes.find(p => p.name === settings.color);
     if (palette !== undefined) {
         options.colours = [...palette.colours];
@@ -1477,11 +1477,15 @@ function GameMove(props) {
     let url = new URL(API_ENDPOINT_OPEN);
     url.searchParams.append("query", "report_problem");
     url.searchParams.append("error", error);
-    const res = await fetch(url);
-    const status = res.status;
-    if (status !== 200) {
-      const result = await res.json();
-      console.log(JSON.parse(result.body));
+    try {
+        const res = await fetch(url);
+        const status = res.status;
+        if (status !== 200) {
+          const result = await res.json();
+          console.log(JSON.parse(result.body));
+        }
+    } catch (e) {
+        console.log(`Error auto-reporting another error!\nOriginal error: ${JSON.stringify(error)}\nFetching error: ${JSON.stringify(e)}`);
     }
   }
 
