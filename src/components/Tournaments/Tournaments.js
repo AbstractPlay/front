@@ -283,7 +283,7 @@ function Tournaments(props) {
           const typeA = dateA < 0 ? 1 : dateA > 3000000000000 ? 0 : 2;
           const typeB = dateB < 0 ? 1 : dateB > 3000000000000 ? 0 : 2;
           if (typeA === typeB) {
-            return typeA === 1 ? rowB.getValue("players").length - rowA.getValue("players").length : dateB - dateA;
+            return typeA === 1 ? rowA.getValue("players").length - rowB.getValue("players").length : dateB - dateA;
           } else {
             return typeA - typeB;
           }
