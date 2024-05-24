@@ -24,9 +24,9 @@ function Tournaments(props) {
   const [tournaments, tournamentsSetter] = useState([]);
   const [tournamentsToArchive, tournamentsToArchiveSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
-  const [openTournamentSorting, openTournamentSortingSetter] = useState([{ id: "metaGame", desc: false }]);
+  const [openTournamentSorting, openTournamentSortingSetter] = useState([{ id: "startDate", desc: true }]);
   const [currentTournamentSorting, currentTournamentSortingSetter] = useState([{ id: "metaGame", desc: false }]);
-  const [completedTournamentSorting, completedTournamentSortingSetter] = useState([{ id: "metaGameName", desc: false }]);
+  const [completedTournamentSorting, completedTournamentSortingSetter] = useState([{ id: "dateEnded", desc: true }]);
   const [openTournamentsShowState, openTournamentsShowStateSetter] = useStorageState("open-tournaments-show", 20);
   const [currentTournamentsShowState, currentTournamentsShowStateSetter] = useStorageState("current-tournaments-show", 20);
   const [completedTournamentsShowState, completedTournamentsShowStateSetter] = useStorageState("completed-tournaments-show", 20);
@@ -280,10 +280,10 @@ function Tournaments(props) {
         ) => {
           const dateA = rowA.getValue(columnId);
           const dateB = rowB.getValue(columnId);
-          const typeA = dateA < -1 ? 1 : dateA > 3000000000000 ? 0 : 2;
-          const typeB = dateB < -1 ? 1 : dateB > 3000000000000 ? 0 : 2;
+          const typeA = dateA < 0 ? 1 : dateA > 3000000000000 ? 0 : 2;
+          const typeB = dateB < 0 ? 1 : dateB > 3000000000000 ? 0 : 2;
           if (typeA === typeB) {
-            return dateB - dateA;
+            return typeA === 1 ? rowB.getValue("players").length - rowA.getValue("players").length : dateB - dateA;
           } else {
             return typeA - typeB;
           }
