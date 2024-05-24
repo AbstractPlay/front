@@ -2153,7 +2153,7 @@ function GameMove(props) {
         mergeExistingExploration(moveNum, exploration, explorationRef);
       }
       if (gameRef.current.customColours) {
-        setupColors(settings, gameRef.current, t, colourContext);
+        setupColors(settings, gameRef.current, globalMe, colourContext, {state: engineRef.current.state()});
         colorsChangedSetter((val) => val + 1);
       }
     } catch (err) {
