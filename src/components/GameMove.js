@@ -1908,7 +1908,6 @@ function GameMove(props) {
     if (boardImage.current !== null) {
       const svg =
         boardImage.current.parentElement.querySelector("#theBoardSVG");
-      console.log("remove svg:", svg, "from ", boardImage.current);
       if (svg !== null) {
         svg.remove();
       }
@@ -2649,6 +2648,7 @@ function GameMove(props) {
                                     focus={focus}
                                     submitting={submitting}
                                     forceUndoRight={true}
+                                    screenWidth={screenWidth}
                                     handlers={[
                                         handleMove,
                                         handleMark,
@@ -2763,6 +2763,7 @@ function GameMove(props) {
                             focus={focus}
                             submitting={submitting}
                             forceUndoRight={false}
+                            screenWidth={screenWidth}
                             handlers={[
                                 handleMove,
                                 handleMark,

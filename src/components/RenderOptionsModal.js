@@ -251,8 +251,6 @@ function RenderOptionsModal(props) {
     }
     displays = gameEngine.alternativeDisplays();
   }
-  console.log("display", display);
-  console.log("displays", displays);
   return !gameId ? (
     ""
   ) : (

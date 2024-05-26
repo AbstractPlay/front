@@ -1,8 +1,9 @@
-import React, { useEffect, useState, Fragment, useContext, useCallback } from "react";
+import React, { useEffect, useState, Fragment, useContext, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { MeContext } from "../../pages/Skeleton";
 import { API_ENDPOINT_AUTH } from "../../config";
 import { Auth } from "aws-amplify";
+import { debounce } from 'lodash';
 
 function showMilliseconds(ms) {
   let positive = true;
@@ -57,6 +58,7 @@ function MoveEntry(props) {
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
+  const [inputValue, inputValueSetter] = useState(move.move);
   const [globalMe,] = useContext(MeContext);
 
   function getFocusNode(exp, foc) {
@@ -74,6 +76,22 @@ function MoveEntry(props) {
   const handleClear = () => {
     handleMove("");
   };
+
+  const delayedHandleMove = useMemo(() => debounce((value) => {
+    console.log(props.screenWidth);
+    handleMove(value);
+  }, props.screenWidth < 770 ? 1000 : 500), [handleMove, props.screenWidth]);
+
+  const handleMoveInputChange = (value) => {
+    inputValueSetter(value);
+    // If the input ends with a digit, delay the processing by a bit (500ms) in case the user wants to complete a number.
+    if (/\d$/.test(value)) {
+      delayedHandleMove(value);
+    } else {
+      delayedHandleMove.cancel();
+      handleMove(value);
+    }
+  }
 
   const sortLenAlpha = (a, b) => {
     if (a.length === b.length) {
@@ -132,6 +150,10 @@ function MoveEntry(props) {
       moveStateSetter("is-success");
     }
   }, [move, focus, game, submitting]);
+
+  useEffect(() => {
+    inputValueSetter(move.move);
+  }, [move.move]);
 
   if (focus) {
     let moveToSubmit = null;
@@ -355,8 +377,8 @@ function MoveEntry(props) {
                   name="move"
                   id="enterAMove"
                   type="text"
-                  value={move.move}
-                  onChange={(e) => handleMove(e.target.value)}
+                  value={inputValue}
+                  onChange={(e) => handleMoveInputChange(e.target.value)}
                   placeholder={t("EnterMove")}
                 />
                 {move.move.length === 0 ? (
