@@ -78,8 +78,9 @@ function MoveEntry(props) {
   };
 
   const delayedHandleMove = useMemo(() => debounce((value) => {
+    console.log(props.screenWidth);
     handleMove(value);
-  }, 500), [handleMove]);
+  }, props.screenWidth < 770 ? 1000 : 500), [handleMove, props.screenWidth]);
 
   const handleMoveInputChange = (value) => {
     inputValueSetter(value);

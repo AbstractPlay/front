@@ -2648,6 +2648,7 @@ function GameMove(props) {
                                     focus={focus}
                                     submitting={submitting}
                                     forceUndoRight={true}
+                                    screenWidth={screenWidth}
                                     handlers={[
                                         handleMove,
                                         handleMark,
@@ -2762,6 +2763,7 @@ function GameMove(props) {
                             focus={focus}
                             submitting={submitting}
                             forceUndoRight={false}
+                            screenWidth={screenWidth}
                             handlers={[
                                 handleMove,
                                 handleMark,
