@@ -12,6 +12,8 @@ import {
 } from "@tanstack/react-table";
 import ReactTimeAgo from "react-time-ago";
 import { useStorageState } from "react-use-storage-state";
+import Spinner from "../Spinner";
+import { useTranslation } from "react-i18next";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 function showMilliseconds(ms) {
@@ -51,6 +53,7 @@ function MyTurnTable(props) {
     "dashboard-tables-mine-show",
     10
   );
+  const { t } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -136,12 +139,14 @@ function MyTurnTable(props) {
   if ( (data === null) || (data === undefined) || (data.length === 0) ) {
     return (
         <div className="content">
-            <p>No games currently need your attention.</p>
+            {props.fetching ? <Spinner size="20" /> : null}
+            <p>{t("NoGames")}</p>
         </div>
     );
   } else {
   return (
     <Fragment>
+      {props.fetching ? <Spinner size="20" /> : null}
       <table className="table apTable">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
