@@ -1,11 +1,17 @@
 import React from "react";
 
 function Spinner(props) {
+  let size = 38;
+  let scale = 1;
+  if (props.size) {
+    size = props.size;
+    scale = size / 38;
+  }
   return (
     <svg
-      width="38"
-      height="38"
-      viewBox="0 0 38 38"
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
@@ -16,7 +22,7 @@ function Spinner(props) {
         </linearGradient>
       </defs>
       <g fill="none" fillRule="evenodd">
-        <g transform="translate(1 1)">
+        <g transform={(scale === 1 ? "" : ` scale(${scale})`) + "translate(1 1)"}>
           <path
             d="M36 18c0-9.94-8.06-18-18-18"
             id="Oval-2"

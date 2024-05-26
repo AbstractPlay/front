@@ -25,6 +25,7 @@ function Me(props) {
   // vars is just a way to trigger a new 'me' fetch (e.g. after Profile is created)
   const [vars, varsSetter] = useState({});
   const [update, updateSetter] = useState(0);
+  const [fetching, fetchingSetter] = useState(true);
   const [users, usersSetter] = useState(null);
   const [showChallengeViewModal, showChallengeViewModalSetter] =
     useState(false);
@@ -60,6 +61,7 @@ function Me(props) {
       const token = usr.signInUserSession.idToken.jwtToken;
       try {
         console.log("calling authQuery 'me', with token: " + token);
+        fetchingSetter(true);
         const res = await fetch(API_ENDPOINT_AUTH, {
           method: "POST",
           headers: {
@@ -69,6 +71,7 @@ function Me(props) {
           },
           body: JSON.stringify({ query: "me", pars: { vars: JSON.stringify(vars), update: update } }),
         });
+        fetchingSetter(false);
         const result = await res.json();
         if (result.statusCode !== 200) errorSetter(JSON.parse(result.body));
         else {
@@ -83,6 +86,7 @@ function Me(props) {
           }
         }
       } catch (error) {
+        fetchingSetter(false);
         errorSetter(error);
       }
     }
@@ -527,7 +531,7 @@ function Me(props) {
                 <p className="lined">
                   <span>{t("YourMove")}</span>
                 </p>
-                <MyTurnTable games={myMove} />
+                <MyTurnTable games={myMove}  fetching={fetching}/>
               </div>
               <div className="topPad">
                 <p className="lined">

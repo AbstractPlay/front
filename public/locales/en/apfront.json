@@ -545,6 +545,7 @@
     "No": "No",
     "NoChallengeResponse": "No challenges needing a response",
     "NoExploreTrue": "The built-in exploration feature will be forcibly disabled for this game.",
+    "NoGames": "No games currently need your attention.",
     "NoOpponentMove": "No games waiting on opponent's move.",
     "NoOtherPlayersAccepted": "No other players have accepted yet.",
     "NoStandingChallenges": "No standing challenges",
