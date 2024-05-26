@@ -185,6 +185,7 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
                   </li>
                 </ul>
               )}
+              {(globalMe === null || globalMe === undefined) ? "" : (
               <div>
               <NewChallengeModal
                 show={
@@ -202,6 +203,7 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
                 Issue Challenge
                 </button>
               </div>
+              )}
               <div>
                   <Link to={"/tournaments/" + game.uid}>Tournaments</Link>
               </div>
