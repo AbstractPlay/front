@@ -353,9 +353,14 @@ function MoveEntry(props) {
                         </select>
                     </div>
                   </div>
-                  {( (! Array.isArray(moves)) || (! moves.includes("pass")) ) ? null :
+                  { !(Array.isArray(moves) && moves.includes("pass")) ? null :
                     <div className="control">
-                        <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
+                      <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
+                    </div>
+                  }
+                  { !(Array.isArray(moves) && !moves.includes("pass") && moves.some((c) => c.startsWith("button-"))) ? null :
+                    <div className="control">
+                      <button className="button is-small apButton" onClick={() => handleMove(moves.find((c) => c.startsWith("button-")).substring(7)}>{moves.find((c) => c.startsWith("button-")).substring(7)}</button>
                     </div>
                   }
                   </div>
