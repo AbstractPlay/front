@@ -355,12 +355,12 @@ function MoveEntry(props) {
                   </div>
                   { !(Array.isArray(moves) && moves.includes("pass")) ? null :
                     <div className="control">
-                      <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
+                      <button className="button is-small apButton" onClick={() => handleMove("pass")}>{t("Pass")}</button>
                     </div>
                   }
                   { !(Array.isArray(moves) && moves.includes("button")) ? null :
                     <div className="control">
-                      <button className="button is-small apButton" onClick={() => handleMove("button")}>Take Button</button>
+                      <button className="button is-small apButton" onClick={() => handleMove("button")}>{t("TakeButton")}</button>
                     </div>
                   }
                   </div>
