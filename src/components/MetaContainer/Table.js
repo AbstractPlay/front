@@ -207,7 +207,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
             } else {
                 return valA - valB;
             }
-          }).filter(obj => !obj.raw.endsWith(">rect") && !obj.raw.endsWith(">simple"));
+          });
           return {
             id: metaGame,
             gameName: info.name,
