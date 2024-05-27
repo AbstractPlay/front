@@ -132,7 +132,8 @@ function setupGame(
   game0.name = info.name;
   game0.simultaneous =
     info.flags !== undefined && info.flags.includes("simultaneous");
-  game0.pie = info.flags !== undefined && (info.flags.includes("pie") || info.flags.includes("pie-even") );
+  game0.pie = info.flags !== undefined && (info.flags.includes("pie") || info.flags.includes("pie-even"));
+  game0.pieEven = info.flags !== undefined && info.flags.includes("pie-even");
   game0.canCheck = info.flags !== undefined && info.flags.includes("check");
   game0.sharedPieces =
     info.flags !== undefined && info.flags.includes("shared-pieces");
@@ -710,7 +711,7 @@ function doView(
       isExplorer(explorer, me)
     ) {
       let automoved = false;
-      while (moves.length === 1) {
+      while (moves.length === 1 && !(game.pieEven && gameEngineTmp.state().stack.length === 2)) {
         automoved = true;
         if (
           !game.gameOver ||
