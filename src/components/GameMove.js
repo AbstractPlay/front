@@ -1274,6 +1274,7 @@ function GameMove(props) {
             const result = await res.json();
             errorMessageRef.current = JSON.parse(result.body);
             errorSetter(true);
+            return;
           } else {
             const result = await res.json();
             console.log(result);
@@ -1291,6 +1292,7 @@ function GameMove(props) {
             const result = await res.json();
             errorMessageRef.current = result;
             errorSetter(true);
+            return;
           } else {
             data = await res.json();
           }
@@ -3198,7 +3200,7 @@ function GameMove(props) {
       </article>
     );
   } else {
-    reportError(`Message: ${errorMessageRef.current}, state: ${getFocusNode(explorationRef.current, focus).state}`);
+    reportError(`Message: ${errorMessageRef.current}, state: ${ explorationRef.current && focus ? getFocusNode(explorationRef.current, focus).state : ""}`);
     return <h4>{errorMessageRef.current}</h4>;
   }
 }

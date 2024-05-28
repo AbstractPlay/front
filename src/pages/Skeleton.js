@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useEffect, createContext } from "react";
+import React, { useState, Suspense, useEffect, createContext, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import {
@@ -14,7 +14,6 @@ import { Amplify, Auth } from "aws-amplify";
 import Spinner from "../components/Spinner";
 import Welcome from "./Welcome";
 import GameMove from "../components/GameMove";
-import MetaContainer from "../components/MetaContainer";
 import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
@@ -26,9 +25,7 @@ import Footer from "../components/Footer";
 import News from "../components/News";
 import FooterDev from "../components/FooterDev";
 import Legal from "../components/Legal";
-import Stats from "../components/Stats";
 import Players from "../components/Players";
-import Player from "../components/Player";
 import Tournaments from "../components/Tournaments/Tournaments";
 import TournamentsOld from "../components/Tournaments/TournamentsOld";
 import NotFound from "../components/NotFound";
@@ -37,6 +34,10 @@ import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
 import TimeAgo from "javascript-time-ago";
 import { useStorageState } from "react-use-storage-state";
+
+const Stats = lazy(() => import("../components/Stats"));
+const MetaContainer = lazy(() => import("../components/MetaContainer"));
+const Player = lazy(() => import("../components/Player"));
 
 // TODO: Adjust locale to user selection, when supported
 TimeAgo.addDefaultLocale(en);

@@ -51,10 +51,12 @@
     "serverless-finch": "4.0.0",
     "serverless-single-page-app-plugin": "1.0.4",
     "shx": "^0.3.4",
-    "sitemap": "^7.1.1"
+    "sitemap": "^7.1.1",
+    "source-map-explorer": "^2.5.3"
   },
   "scripts": {
     "start": "cross-env REACT_APP_REAL_MODE=local react-scripts start",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "build-dev": "cross-env REACT_APP_REAL_MODE=development react-scripts build --profile && shx cp src/robots/robots.txt.dev build/robots.txt",
     "build-prod": "node bin/gensitemap.mjs && cross-env REACT_APP_REAL_MODE=production react-scripts build && shx cp src/robots/robots.txt.prod build/robots.txt",
     "full-dev": "npm run build-dev && npm run invalidate && npm run deploy",
