@@ -15,6 +15,7 @@ import { Auth } from "aws-amplify";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_AUTH } from "../config";
 import { GameNode } from "./Playground/GameTree";
+import { Helmet } from "react-helmet-async";
 import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
 import GameMoves from "./Playground/GameMoves";
 import GameStatus from "./Playground/GameStatus";
@@ -1839,7 +1840,14 @@ function Playground(props) {
     if (focus) {
       toMove = getFocusNode(explorationRef.current, focus).toMove;
     }
+
     return (
+        <>
+      <Helmet>
+          <meta property="og:title" content={`Single-Player Playground`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/playground`} />
+          <meta property="og:description" content={`A place for users to experiment with and learn games (excludes simultaneous games and games requiring 3+ players)`} />
+      </Helmet>
       <article>
         <div className="columns">
           {/***************** MoveEntry *****************/}
@@ -2097,6 +2105,7 @@ function Playground(props) {
           style={{ display: "none" }}
         ></canvas>
       </article>
+      </>
     );
   } else {
     return (

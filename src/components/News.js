@@ -7,6 +7,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { NewsContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
+import { Helmet } from "react-helmet-async";
 
 function News(props) {
   const { t } = useTranslation();
@@ -27,6 +28,12 @@ function News(props) {
     );
   } else {
     return (
+        <>
+      <Helmet>
+          <meta property="og:title" content={`News`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/news`} />
+          <meta property="og:description" content={`Copy of the #announcements channel from our Discord (https://discord.abstractplay.com)`} />
+      </Helmet>
       <article>
         <div className="content">
           <h1 className="has-text-centered title">{t("News")}</h1>
@@ -71,6 +78,7 @@ function News(props) {
           </div>
         </div>
       </article>
+      </>
     );
   }
 }

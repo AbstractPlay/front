@@ -16,6 +16,7 @@ import NewTournamentModal from "./NewTournamentModal";
 import { MeContext } from "../../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet-async";
 
 function Tournaments(props) {
   const { t } = useTranslation();
@@ -267,11 +268,11 @@ function Tournaments(props) {
       }),
       openTournamentsColumnHelper.accessor("startDate", {
         header: t("Tournament.Starts"),
-        cell: (props) => 
-          props.getValue() < 0 ? 
-            t("Tournament.StartsWhen4") : 
-            props.getValue() > 3000000000000 ? 
-              t("Tournament.StartsWhenPreviousDone") : 
+        cell: (props) =>
+          props.getValue() < 0 ?
+            t("Tournament.StartsWhen4") :
+            props.getValue() > 3000000000000 ?
+              t("Tournament.StartsWhenPreviousDone") :
               (new Date(props.getValue())).toLocaleDateString(),
         sortingFn: (
           rowA,
@@ -792,6 +793,11 @@ function Tournaments(props) {
 
   return (
     <>
+      <Helmet>
+          <meta property="og:title" content={`Recurring Tournaments`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/tournaments`} />
+          <meta property="og:description" content={`List of all the available recurring tournaments`} />
+      </Helmet>
       <article className="content">
         <h1 className="title has-text-centered">{t("Tournament.Tournaments")}</h1>
         <p>{t("Tournament.Description")}</p>

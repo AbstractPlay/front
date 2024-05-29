@@ -13,6 +13,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
+import { Helmet } from "react-helmet-async";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -242,6 +243,11 @@ function ListGames(props) {
 
   return (
     <>
+      <Helmet>
+          <meta property="og:title" content={`${metaGameName}: ${gameState === "current" ? "Active" : "Completed"} Games`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/${gameState}/${metaGame}`} />
+          <meta property="og:description" content={`List of ${gameState === "current" ? "Active" : "Completed"} games of ${metaGameName}`} />
+      </Helmet>
       <article>
         <h1 className="has-text-centered title">
           {gameState === "current"

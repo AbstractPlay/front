@@ -32,6 +32,7 @@ import Joyride, { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
 import { toast } from "react-toastify";
 import { nanoid } from "nanoid";
+import { Helmet } from "react-helmet-async";
 
 function useQueryString() {
   return new URLSearchParams(useLocation().search);
@@ -2517,6 +2518,12 @@ function GameMove(props) {
       }
     }
     return (
+        <>
+      <Helmet>
+          <meta property="og:title" content={`${gameinfo.get(metaGame).name}: Game ${gameID}`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/move/${metaGame}/0/${gameID}`} />
+          <meta property="og:description" content={`${gameinfo.get(metaGame).name} game ${gameID}`} />
+      </Helmet>
       <article>
         <Joyride
           steps={tourState}
@@ -3198,6 +3205,7 @@ function GameMove(props) {
           style={{ display: "none" }}
         ></canvas>
       </article>
+      </>
     );
   } else {
     reportError(`Message: ${errorMessageRef.current}, state: ${ explorationRef.current && focus ? getFocusNode(explorationRef.current, focus).state : ""}`);

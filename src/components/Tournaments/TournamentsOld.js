@@ -13,6 +13,7 @@ import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet-async";
 
 function TournamentsOld(props) {
   const { t } = useTranslation();
@@ -201,6 +202,12 @@ function TournamentsOld(props) {
   );
 
   return (
+    <>
+      <Helmet>
+          <meta property="og:title" content={`${metaGameName}: Tournament History`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/tournamenthistory/${metaGame}`} />
+          <meta property="og:description" content={`Historical ${metaGameName} tournaments`} />
+      </Helmet>
     <article className="content">
       <h1 className="title has-text-centered">{t("Tournament.OldTitle")}</h1>
       <div className="columns is-multiline">
@@ -280,6 +287,7 @@ function TournamentsOld(props) {
         </div>
       </div>
     </article>
+    </>
   );
 }
 

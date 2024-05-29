@@ -23,6 +23,7 @@ import { MeContext, UsersContext } from "../pages/Skeleton";
 import NewChallengeModal from "./NewChallengeModal";
 import ActivityMarker from "./ActivityMarker";
 import { useStorageState } from "react-use-storage-state";
+import { Helmet } from "react-helmet-async";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -295,6 +296,11 @@ function Ratings() {
 
   return (
     <>
+      <Helmet>
+          <meta property="og:title" content={`${metaGameName}: Ratings`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/ratings/${metaGame}`} />
+          <meta property="og:description" content={`Ratings for ${metaGameName}`} />
+      </Helmet>
       <article>
         <h1 className="has-text-centered title">
           {t("RatingsList", { name: metaGameName })}
