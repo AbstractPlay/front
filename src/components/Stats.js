@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
+import { Helmet } from "react-helmet-async";
 import rehypeRaw from "rehype-raw";
 import HighestSingleRating from "./Stats/HighestSingleRating";
 import AvgRatings from "./Stats/AvgRatings";
@@ -113,6 +114,11 @@ function Stats(props) {
 
   return (
     <SummaryContext.Provider value={[summary, summarySetter]}>
+      <Helmet>
+          <meta property="og:title" content={`Site Statistics`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/stats`} />
+          <meta property="og:description" content={`Site statistics, updated weekly`} />
+      </Helmet>
       <article id="leaderboard">
         <h1 className="title has-text-centered">{t("Statistics")}</h1>
         <div className="content has-text-centered">

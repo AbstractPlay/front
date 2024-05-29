@@ -18,6 +18,7 @@ import Spinner from "./Spinner";
 import ActivityMarker from "./ActivityMarker";
 import NewChallengeModal from "./NewChallengeModal";
 import { useStorageState } from "react-use-storage-state";
+import { Helmet } from "react-helmet-async";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -512,6 +513,11 @@ function StandingChallenges(props) {
 
   return (
     <>
+      <Helmet>
+          <meta property="og:title" content={`${metaGameName}: Standing Challenges`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/challenges/${metaGame}`} />
+          <meta property="og:description" content={`Standing challenges for ${metaGameName}`} />
+      </Helmet>
       <article>
         <h1 className="has-text-centered title">
           {t("StandingChallenges", { name: metaGameName })}

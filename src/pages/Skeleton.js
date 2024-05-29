@@ -173,6 +173,13 @@ function Bones(props) {
               ? "Abstract Play"
               : "Abstract Play (Dev)"}
           </title>
+
+          <meta property="og:site_name" content="Abstract Play: Make Time for Games" />
+          <meta property="og:type" content="website" />
+          <meta property="og:image" content="https://play.abstractplay.com/public/logo-full-light.png" />
+          <meta property="og:title" content="Abstract Play: Make Time for Games" />
+          <meta property="og:url" content="https://play.abstractplay.com" />
+          <meta property="og:description" content="Abstract Play is a site that allows you to play abstract strategy board games against other players on the internet. These games are not real-time, meaning your opponent does not need to be online at the same time as you are. You can submit your move and come back later to see if your opponent has moved. We specialize in offbeat, perfect information games without any element of luck." />
         </Helmet>
         <ToastContainer />
         <MeContext.Provider value={[globalMe, globalMeSetter]}>

@@ -6,6 +6,7 @@ import { addResource } from "@abstractplay/gameslib";
 import { MeContext } from "../pages/Skeleton";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { Helmet } from "react-helmet-async";
 // import Gallery from "./MetaContainer/Gallery";
 import Table from "./MetaContainer/Table";
 import MetaItem from "./MetaContainer/MetaItem";
@@ -157,6 +158,11 @@ function MetaContainer(props) {
   if (metaGame === undefined  || metaGame === null || ! gameinfo.has(metaGame)) {
     return (
         <Fragment>
+          <Helmet>
+            <meta property="og:title" content="List of available games" />
+            <meta property="og:url" content="https://play.abstractplay.com/games" />
+            <meta property="og:description" content="A sortable table of all the games currently available on Abstract Play." />
+          </Helmet>
           <Table
             metaGame={metaGame}
             counts={counts}
@@ -172,6 +178,11 @@ function MetaContainer(props) {
   } else if (counts !== null) {
     return (
         <>
+          <Helmet>
+            <meta property="og:title" content={`${gameinfo.get(metaGame).name}: Game Information`} />
+            <meta property="og:url" content="https://play.abstractplay.com/games" />
+            <meta property="og:description" content={`Information on the game ${gameinfo.get(metaGame).name}`} />
+          </Helmet>
           <MetaItem
             game={gameinfo.get(metaGame)}
             counts={counts[metaGame]}

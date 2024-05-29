@@ -17,6 +17,7 @@ import React, {
   } from "@tanstack/react-table";
   import { MeContext, UsersContext } from "../pages/Skeleton";
   import { useStorageState } from "react-use-storage-state";
+  import { Helmet } from "react-helmet-async";
   import Flag from "./Flag";
   import ActivityMarker from "./ActivityMarker";
 
@@ -189,6 +190,11 @@ import React, {
 
     return (
       <>
+        <Helmet>
+            <meta property="og:title" content="List of players" />
+            <meta property="og:url" content="https://play.abstractplay.com/players" />
+            <meta property="og:description" content="List of players registered on Abstract Play" />
+        </Helmet>
         <article>
           <h1 className="has-text-centered title">
             {t("PlayerList")}

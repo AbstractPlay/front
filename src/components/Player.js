@@ -6,6 +6,7 @@ import { MeContext, UsersContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH } from "../config";
+import { Helmet } from "react-helmet-async";
 import Spinner from "./Spinner";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
@@ -149,6 +150,12 @@ function Player() {
 
   if (user !== null) {
     return (
+        <>
+        <Helmet>
+            <meta property="og:title" content={`${user.name}: Player Profile`} />
+            <meta property="og:url" content={`https://play.abstractplay.com/player/${user.id}`} />
+            <meta property="og:description" content={`Player profile for ${user.name}`} />
+        </Helmet>
         <article id="playerProfile">
             <h1 className="title has-text-centered">
               {t("ProfileFor", { player: user.name })}
@@ -211,6 +218,7 @@ function Player() {
                 </SummaryContext.Provider>
             </ProfileContext.Provider>
         </article>
+        </>
       );
   } else {
     return (

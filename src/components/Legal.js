@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { addResource } from "@abstractplay/gameslib";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import { Helmet } from "react-helmet-async";
 
 const md = `### Terms of Service
 
@@ -75,6 +76,11 @@ function About(props) {
 
   return (
     <Fragment>
+      <Helmet>
+          <meta property="og:title" content={`Terms of Service & Privacy Policy`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/legal`} />
+          <meta property="og:description" content={`Terms of Service & Privacy Policy`} />
+      </Helmet>
       <article className="content">
         <h1 className="has-text-centered title">{t("Legal")}</h1>
         <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">

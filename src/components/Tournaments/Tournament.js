@@ -4,6 +4,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 
 import { useTranslation } from "react-i18next";
 import { API_ENDPOINT_OPEN } from "../../config";
+import { Helmet } from 'react-helmet-async';
 
 async function reportError(error) {
   let url = new URL(API_ENDPOINT_OPEN);
@@ -148,10 +149,15 @@ function Tournament(props) {
   const variants = tournament ? tournament.variants.join(", ") : "";
   return (
     <>
+      <Helmet>
+          <meta property="og:title" content={`${metaGameName}: Tournament ${tournamentid}`} />
+          <meta property="og:url" content={`https://play.abstractplay.com/tournament/${tournamentid}`} />
+          <meta property="og:description" content={`Details of ${metaGameName} tournament ${tournamentid}`} />
+      </Helmet>
       <article className="content">
         <h1 className="title has-text-centered">{ variants === "" ? t("Tournament.Name", { "metaGame": metaGameName}) : t("Tournament.VariantsName", { "metaGame": metaGameName, "variants": variants})}</h1>
         <div className="columns  is-multiline">
-          { divisions.map((d, i) => 
+          { divisions.map((d, i) =>
             <div className="column content is-10 is-offset-1" key={"division" + i}>
               <div className="card">
                 <header className="card-header">
@@ -171,11 +177,11 @@ function Tournament(props) {
                         <tr key={"header" + i}>
                           <th style={{ whiteSpace: "nowrap" }}> {t("Tournament.Player")} </th>
                           <th style={{ whiteSpace: "nowrap" }}> {t("Tournament.Position")} </th>
-                          { 
+                          {
                             d.players.map((p, j) => <th key={"header-" + i + "-" + j} style={{ whiteSpace: "nowrap" }}>{ j + 1 }</th> )
                           }
                           <th style={{ whiteSpace: "nowrap" }}> {t("Tournament.Score")} </th>
-                          <th style={{ whiteSpace: "nowrap" }} title={t("Tournament.TieBreakHelp")}> 
+                          <th style={{ whiteSpace: "nowrap" }} title={t("Tournament.TieBreakHelp")}>
                             {t("Tournament.TieBreak")}
                           </th>
                           <th style={{ whiteSpace: "nowrap" }} title={t("Tournament.RatingHelp")}>
