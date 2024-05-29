@@ -33,9 +33,16 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <!-- These meta tags are static and can live here forever -->
     <meta property="og:site_name" content="Abstract Play: Make Time for Games" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://play.abstractplay.com/logo-full-light.png" />
+
+    <!-- These ones change based on child page, but that doesn't work until we move
+         to server-side rendering. So put static placeholders here for now. -->
+    <meta property="og:title" content="Abstract Play Homepage" />
+    <meta property="og:url" content="https://play.abstractplay.com" />
+    <meta property="og:description" content="Abstract Play is a site that allows you to play abstract strategy board games against other players on the internet. These games are not real-time, meaning your opponent does not need to be online at the same time as you are. You can submit your move and come back later to see if your opponent has moved. We specialize in offbeat, perfect information games without any element of luck." />
 
     <title>Abstract Play</title>
   </head>
