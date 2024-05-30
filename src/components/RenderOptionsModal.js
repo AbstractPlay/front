@@ -87,7 +87,7 @@ function RenderOptionsModal(props) {
   const [annotate, annotateSetter] = useState(null);
   const [annotateLevel, annotateLevelSetter] = useState(null);
   const { t } = useTranslation();
-  const [globalMe,] = useContext(MeContext);
+  const [globalMe, globalMeSetter] = useContext(MeContext);
   const [paletteName, paletteNameSetter] = useState(null);
 
   useEffect(() => {
@@ -234,6 +234,9 @@ function RenderOptionsModal(props) {
             },
           }),
         });
+        const newMe = cloneDeep(globalMe);
+        newMe.settings = cloneDeep(newUserSettings);
+        globalMeSetter(newMe);
       } catch (error) {
         props.setError(error);
       }
