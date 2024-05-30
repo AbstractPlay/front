@@ -2149,7 +2149,7 @@ function GameMove(props) {
         moveSetter,
         gameRecSetter,
         canPublishSetter,
-        settings?.[metaGame]?.display,
+        globalMe?.settings?.[metaGame]?.display,
         navigate
       );
       if (gameRef.current.canExplore) {
@@ -2357,7 +2357,7 @@ function GameMove(props) {
               moveSetter,
               gameRecSetter,
               canPublishSetter,
-              settings?.[metaGame]?.display,
+              globalMe?.settings?.[metaGame]?.display,
               navigate
             );
           }
