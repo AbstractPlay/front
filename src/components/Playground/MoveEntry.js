@@ -19,12 +19,10 @@ function MoveEntry(props) {
 
   useEffect(() => {
     if (moves !== null && moves !== undefined && Array.isArray(moves)) {
-        console.log(moves);
         let lst = moves.filter(m => m.startsWith("_btn")).map(m => {
             const [,label,result] = m.split("|");
             return {label, result};
         });
-        console.log(lst);
         moveBtnsSetter(lst);
         lst = moves.map(m => {
             if (m.startsWith("_btn")) {
@@ -34,7 +32,6 @@ function MoveEntry(props) {
                 return m;
             }
         });
-        console.log(lst);
         realMovesSetter(lst);
     } else {
         realMovesSetter(null);
