@@ -60,6 +60,30 @@ function MoveEntry(props) {
   const [moveState, moveStateSetter] = useState("is-success");
   const [inputValue, inputValueSetter] = useState(move.move);
   const [globalMe,] = useContext(MeContext);
+  const [realMoves, realMovesSetter] = useState(null);
+  const [moveBtns, moveBtnsSetter] = useState(null);
+
+  useEffect(() => {
+    if (moves !== null && Array.isArray(moves)) {
+        let lst = moves.filter(m => m.startsWith("_btn")).map(m => {
+            const [,label,result] = m.split("|");
+            return {label, result};
+        });
+        moveBtnsSetter(lst);
+        lst = moves.map(m => {
+            if (m.startsWith("_btn")) {
+                const [,,result] = m.split("|");
+                return result;
+            } else {
+                return m;
+            }
+        });
+        realMovesSetter(lst);
+    } else {
+        realMovesSetter(null);
+        moveBtnsSetter(null);
+    }
+  }, [moves]);
 
   function getFocusNode(exp, foc) {
     let curNode = exp[foc.moveNumber];
@@ -329,11 +353,11 @@ function MoveEntry(props) {
           )}
           {focus.canExplore ? (
             <Fragment>
-              {moves === null ? (
+              {realMoves === null ? (
                 <div />
               ) : (
                 <Fragment>
-                <div className="field is-grouped">
+                <div className="field">
                   <div className="control">
                     <div className="select is-small">
                         <select
@@ -343,7 +367,7 @@ function MoveEntry(props) {
                         onChange={(e) => handleMove(e.target.value)}
                         >
                         <option value="">{t("ChooseMove")}</option>
-                        {moves.sort(sortLenAlpha).map((move, index) => {
+                        {realMoves.sort(sortLenAlpha).map((move, index) => {
                             return (
                             <option key={index} value={move}>
                                 {move}
@@ -353,10 +377,17 @@ function MoveEntry(props) {
                         </select>
                     </div>
                   </div>
-                  {( (! Array.isArray(moves)) || (! moves.includes("pass")) ) ? null :
+                  {/* Pass button is the primary and only automatic button */}
+                  {( (! Array.isArray(realMoves)) || (! realMoves.includes("pass")) ) ? null :
                     <div className="control">
                         <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
                     </div>
+                  }
+                  {/* Look for automated buttons */}
+                  {( moveBtns === null || (! Array.isArray(moveBtns)) || moveBtns.length === 0 ) ? null : moveBtns.map(({label, result}, idx) =>
+                    <div className="control" key={`MoveButton|${idx}`}>
+                        <button className="button is-small apButton" onClick={() => handleMove(result)}>{t(`buttons.${label}`)}</button>
+                    </div>)
                   }
                   </div>
                   <p className="lined">

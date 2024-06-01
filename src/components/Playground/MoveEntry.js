@@ -14,6 +14,33 @@ function MoveEntry(props) {
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
+  const [realMoves, realMovesSetter] = useState(null);
+  const [moveBtns, moveBtnsSetter] = useState(null);
+
+  useEffect(() => {
+    if (moves !== null && moves !== undefined && Array.isArray(moves)) {
+        console.log(moves);
+        let lst = moves.filter(m => m.startsWith("_btn")).map(m => {
+            const [,label,result] = m.split("|");
+            return {label, result};
+        });
+        console.log(lst);
+        moveBtnsSetter(lst);
+        lst = moves.map(m => {
+            if (m.startsWith("_btn")) {
+                const [,,result] = m.split("|");
+                return result;
+            } else {
+                return m;
+            }
+        });
+        console.log(lst);
+        realMovesSetter(lst);
+    } else {
+        realMovesSetter(null);
+        moveBtnsSetter(null);
+    }
+  }, [moves]);
 
   function getFocusNode(exp, foc) {
     let curNode = exp[foc.moveNumber];
@@ -123,7 +150,7 @@ function MoveEntry(props) {
         <div>
           {focus.canExplore ? (
             <Fragment>
-              {moves === null ?
+              {realMoves === null ?
                 game.customRandom ? (
                     <div className="control">
                         <button className="button is-small apButtonNeutral" onClick={() => handleMove(engine.randomMove())}>Random move</button>
@@ -133,7 +160,7 @@ function MoveEntry(props) {
                   <div />
                 ) : (
                 <Fragment>
-                <div className="field is-grouped">
+                <div className="field">
                   <div className="control">
                     <div className="select is-small">
                         <select
@@ -143,7 +170,7 @@ function MoveEntry(props) {
                         onChange={(e) => handleMove(e.target.value)}
                         >
                         <option value="">{t("ChooseMove")}</option>
-                        {moves.sort(sortLenAlpha).map((move, index) => {
+                        {realMoves.sort(sortLenAlpha).map((move, index) => {
                             return (
                             <option key={index} value={move}>
                                 {move}
@@ -153,15 +180,21 @@ function MoveEntry(props) {
                         </select>
                     </div>
                   </div>
-                  {( (! Array.isArray(moves)) || (! moves.includes("pass")) ) ? null :
+                  {( (! Array.isArray(realMoves)) || (! realMoves.includes("pass")) ) ? null :
                     <div className="control">
                         <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
                     </div>
                   }
+                  {( moveBtns === null || (! Array.isArray(realMoves)) || moveBtns.length === 0 ) ? null : moveBtns.map(({label,result}, idx) =>
+                        <div className="control" key={`MoveButton|${idx}`}>
+                            <button className="button is-small apButton" onClick={() => handleMove(result)}>{t(`buttons.${label}`)}</button>
+                        </div>
+                    )
+                  }
                   </div>
-                  {! Array.isArray(moves) ? null :
+                  {! Array.isArray(realMoves) ? null :
                     <div className="control">
-                        <button className="button is-small apButtonNeutral" onClick={() => handleMove(moves[Math.floor(Math.random() * moves.length)])}>Random move</button>
+                        <button className="button is-small apButtonNeutral" onClick={() => handleMove(realMoves[Math.floor(Math.random() * realMoves.length)])}>Random move</button>
                     </div>
                   }
                   <p className="lined">
