@@ -148,9 +148,24 @@ function MoveEntry(props) {
           {focus.canExplore ? (
             <Fragment>
               {realMoves === null ?
+                game.customRandom && game.customPass && engine.canPass() ? (
+                    <>
+                    <div className="control">
+                        <button className="button is-small apButtonNeutral" onClick={() => handleMove(engine.randomMove())}>Random move</button>
+                    </div>
+                    <div className="control">
+                        <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
+                    </div>
+                    </>
+                ) :
                 game.customRandom ? (
                     <div className="control">
                         <button className="button is-small apButtonNeutral" onClick={() => handleMove(engine.randomMove())}>Random move</button>
+                    </div>
+                ) :
+                game.customPass && engine.canPass() ? (
+                    <div className="control">
+                        <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
                     </div>
                 ) :
                 (

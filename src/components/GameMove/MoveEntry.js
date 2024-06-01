@@ -353,7 +353,13 @@ function MoveEntry(props) {
           )}
           {focus.canExplore ? (
             <Fragment>
-              {realMoves === null ? (
+              {realMoves === null ?
+              game.customPass && engine.canPass() ? (
+                <div className="control">
+                    <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
+                </div>
+              ) :
+              (
                 <div />
               ) : (
                 <Fragment>
