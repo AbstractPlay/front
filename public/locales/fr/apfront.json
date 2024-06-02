@@ -2,7 +2,7 @@
     "About": "[FR] About",
     "Accept": "[FR] Accept",
     "AcceptDraw": "[FR] Accept draw offer",
-    "Accepted": "",
+    "Accepted": "Accepté !",
     "and": "[FR] and",
     "Annotate": "[FR] Show last move indicators",
     "AnnotationLevel": "[FR] Where would you like this choice applied?",
@@ -211,5 +211,12 @@
     "Yes": "",
     "YourChallenges": "[FR] Your challenges",
     "YourGames": "[FR] Your games",
-    "YourMove": "[FR] Your move"
+    "YourMove": "[FR] Your move",
+    "404": "404 Page non trouvée",
+    "BoardSettings": "Changer les paramètres du plateau",
+    "categories": {
+        "board": {
+            "full": "Plateau"
+        }
+    }
 }
