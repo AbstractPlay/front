@@ -10,6 +10,7 @@
     "AvailableGames": "Available Games",
     "BoardSettings": "Change game board settings",
     "buttons": {
+        "pass": "Pass",
         "takebutton": "Take button"
     },
     "Cancel": "Cancel",
