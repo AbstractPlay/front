@@ -1,1 +1,10 @@
-{}
+{
+    "About": "Om",
+    "categories": {
+        "board>3d": {
+            "full": "Brett > 3D",
+            "description": "Brettet er tredimensjonalt"
+        }
+    },
+    "Accept": "Godta"
+}
