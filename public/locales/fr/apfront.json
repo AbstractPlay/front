@@ -5,7 +5,7 @@
     "Accepted": "Accepté !",
     "and": "[FR] and",
     "Annotate": "[FR] Show last move indicators",
-    "AnnotationLevel": "[FR] Where would you like this choice applied?",
+    "AnnotationLevel": "Où souhaitez vous que ce choix soit appliqué ?",
     "AvailableGames": "[FR] Available Games",
     "Cancel": "[FR] Cancel",
     "Challenge": "[FR] Challenge",
@@ -217,6 +217,12 @@
     "categories": {
         "board": {
             "full": "Plateau"
+        },
+        "board>connect>hex": {
+            "description": "Les cases sont connéctées hexagonalement"
+        },
+        "board>shape>hex": {
+            "description": "Le plateau a une forme d'hexagone"
         }
     }
 }
