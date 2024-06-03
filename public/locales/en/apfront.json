@@ -11,7 +11,8 @@
     "BoardSettings": "Change game board settings",
     "buttons": {
         "pass": "Pass",
-        "takebutton": "Take button"
+        "takebutton": "Take button",
+        "acceptpie": "Play second"
     },
     "Cancel": "Cancel",
     "CanPie": "This player has the option to switch seats.",
