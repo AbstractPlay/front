@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { MeContext } from "../../pages/Skeleton";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent, useControls as getTransformControls } from "react-zoom-pan-pinch";
 
 function Board({
     metaGame, gameID, t, inCheck, gameRef,
@@ -10,6 +10,11 @@ function Board({
     showCustomCSSSetter, showInjectSetter, verticalLayout, verticalLayoutSetter,
 }) {
     const [globalMe,] = useContext(MeContext);
+    const [zoomEnabled, zoomEnabledSetter] = useState(false);
+
+    const toggleZoom = () => {
+        zoomEnabledSetter(val => !val);
+    }
 
     return (
         <>
@@ -22,7 +27,7 @@ function Board({
               ></div>
             )}
             <TransformWrapper
-                disabled={screenWidth < 770 || verticalLayout}
+                disabled={screenWidth < 770 || verticalLayout || !zoomEnabled}
                 doubleClick={{disabled: true}}
                 centerOnInit={false}
             >
@@ -77,6 +82,21 @@ function Board({
                   </span>
                 )}
               </button>
+              { screenWidth < 770 ? null : (
+                <button
+                    className="fabtn align-right"
+                    onClick={() => {
+                        toggleZoom();
+                    }}
+                    title={t("EnableZoom")}
+                >
+                { zoomEnabled ? (
+                    <i className="fa fa-search-minus"></i>
+                ) : (
+                    <i className="fa fa-search-plus"></i>
+                )}
+                </button>
+              )}
               {!globalMe ? null : (
                 <button
                   className="fabtn align-right"
