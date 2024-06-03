@@ -1,6 +1,34 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
+function NoMoves({engine, game, handleMove, t}) {
+    console.log("In NoMoves");
+    const elements = [];
+    if (game.customRandom) {
+        elements.push(
+            <div className="control">
+                <button className="button is-small apButtonNeutral" onClick={() => handleMove(engine.randomMove())}>Random move</button>
+            </div>
+        )
+    }
+
+    if ( game.customButtons && engine !== undefined && engine.getButtons().length > 0 )  {
+        const buttons = engine.getButtons().map(({label, move}, idx) =>
+            <div className="control" key={`MoveButton|${idx}`}>
+                <button className="button is-small apButton" onClick={() => handleMove(move)}>{t(`buttons.${label}`)}</button>
+            </div>
+        )
+        elements.push(...buttons);
+    }
+
+    if (elements.length === 0) {
+        elements.push(<div/>);
+    }
+    console.log(`${elements.length} elements found`);
+
+    return elements.reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null);
+}
+
 function MoveEntry(props) {
   const move = props.move;
   const toMove = props.toMove;
@@ -123,15 +151,14 @@ function MoveEntry(props) {
         <div>
           {focus.canExplore ? (
             <Fragment>
-              {moves === null ?
-                game.customRandom ? (
-                    <div className="control">
-                        <button className="button is-small apButtonNeutral" onClick={() => handleMove(engine.randomMove())}>Random move</button>
-                    </div>
-                ) :
-                (
-                  <div />
-                ) : (
+              {moves === null ? (
+                <NoMoves
+                    engine={engine}
+                    game={game}
+                    handleMove={handleMove}
+                    t={t}
+                />
+              ) : (
                 <Fragment>
                 <div className="field">
                   <div className="control">
