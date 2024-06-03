@@ -153,14 +153,14 @@ function MoveEntry(props) {
                         </select>
                     </div>
                   </div>
-                  {( game.customButtons || (! Array.isArray(moves)) || (! moves.includes("pass")) ) ? null :
+                  {( game.customButtons || !Array.isArray(moves) || !moves.includes("pass") ) ? null :
                     <div className="control">
                         <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
                     </div>
                   }
                   {/* Look for automated buttons */}
-                  {( (! game.customButtons) || engine.getButtons().length === 0 ) ? null :
-                  engine.getButtons().map(({label, move}, idx) =>
+                  {( !game.customButtons || engine === undefined || engine?.getButtons().length === 0 ) ? null :
+                  engine?.getButtons().map(({label, move}, idx) =>
                     <div className="control" key={`MoveButton|${idx}`}>
                         <button className="button is-small apButton" onClick={() => handleMove(move)}>{t(`buttons.${label}`)}</button>
                     </div>)
