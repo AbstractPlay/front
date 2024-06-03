@@ -9,6 +9,11 @@
     "AnnotationLevel": "Where would you like this choice applied?",
     "AvailableGames": "Available Games",
     "BoardSettings": "Change game board settings",
+    "buttons": {
+        "pass": "Pass",
+        "takebutton": "Take button",
+        "acceptpie": "Play second"
+    },
     "Cancel": "Cancel",
     "CanPie": "This player has the option to switch seats.",
     "categories": {
@@ -751,5 +756,6 @@
     "Yes": "Yes",
     "YourChallenges": "Your challenges",
     "YourGames": "Your games",
-    "YourMove": "Your move"
+    "YourMove": "Your move",
+    "EnableZoom": "Enable zoom"
 }

@@ -140,6 +140,8 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("shared-pieces");
   game0.customColours =
     info.flags !== undefined && info.flags.includes("custom-colours");
+  game0.customButtons =
+    info.flags !== undefined && info.flags.includes("custom-buttons");
   game0.canRotate =
     info.flags !== undefined && info.flags.includes("perspective");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
@@ -2654,6 +2656,7 @@ function GameMove(props) {
                                     toMove={toMove}
                                     game={gameRef.current}
                                     moves={movesRef.current}
+                                    engine={engineRef.current}
                                     exploration={explorationRef.current}
                                     focus={focus}
                                     submitting={submitting}
