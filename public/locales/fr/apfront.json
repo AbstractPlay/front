@@ -216,13 +216,27 @@
     "BoardSettings": "Changer les paramètres du plateau",
     "categories": {
         "board": {
-            "full": "Plateau"
+            "full": "Plateau",
+            "tag": "Plateau"
         },
         "board>connect>hex": {
-            "description": "Les cases sont connéctées hexagonalement"
+            "description": "Les cases sont connéctées hexagonalement",
+            "full": "Plateau > Connectivité > Hexagonal",
+            "tag": "Connection : Hex"
         },
         "board>shape>hex": {
             "description": "Le plateau a une forme d'hexagone"
+        },
+        "board>3d": {
+            "description": "Le plateau est en trois dimensions",
+            "tag": "Plateau : 3D",
+            "full": "Plateau > 3D"
+        },
+        "board>connect": {
+            "description": "Décrivez comment les cases du plateau sont connectées entre elles",
+            "tag": "Connectivité du plateau",
+            "full": "Plateau > Connectivité"
         }
-    }
+    },
+    "CanPie": "Ce joueur à l'option d'échanger les places."
 }
