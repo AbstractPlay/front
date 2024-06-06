@@ -132,6 +132,11 @@
             "full": "Components > Looney Pyramids",
             "tag": "C: Looney Pyramids"
         },
+        "components>shibumi": {
+            "description": "Played with a Shibumi set",
+            "full": "Components > Shibumi",
+            "tag": "C: Shibumi"
+        },
         "components>simple": {
             "description": "Played with simple pieces of uniform size, often stackable, sometimes with lots of colours",
             "full": "Components > Simple",
