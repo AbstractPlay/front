@@ -1,6 +1,7 @@
 import React, {
   useState,
   useEffect,
+  useRef,
   useContext,
   useMemo,
   Fragment,
@@ -13,7 +14,7 @@ import { addResource } from "@abstractplay/gameslib";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { GameFactory } from "@abstractplay/gameslib";
-import { MeContext } from "../../pages/Skeleton";
+import { MeContext, ColourContext } from "../../pages/Skeleton";
 import {
   getCoreRowModel,
   useReactTable,
@@ -23,7 +24,8 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import gameImages from "../../assets/GameImages";
+import { fetchGameImageJson, fetchGameImage } from "../../lib/fetchGameImage";
+import { render } from "@abstractplay/renderer";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import ExpandableDiv from "../ExpandableDiv";
@@ -39,7 +41,6 @@ const allSize = Number.MAX_SAFE_INTEGER;
 //   - handleChallenge
 function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) {
   const [globalMe,] = useContext(MeContext);
-  const [activeImgModal, activeImgModalSetter] = useState("");
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [expandedPara, expandedParaSetter] = useState([]);
   const { t, i18n } = useTranslation();
@@ -55,12 +56,6 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
     addResource(i18n.language);
   }, [i18n.language]);
 
-  const openImgModal = (name) => {
-    activeImgModalSetter(name);
-  };
-  const closeImgModal = () => {
-    activeImgModalSetter("");
-  };
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
   };
@@ -211,7 +206,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
           return {
             id: metaGame,
             gameName: info.name,
-            image: encodeURIComponent(gameImages[metaGame]),
+            image: metaGame,
             links: info.urls,
             dateAdded: info.dateAdded,
             designers:
@@ -379,34 +374,11 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
       columnHelper.accessor("image", {
         header: "Image",
         cell: (props) => (
-          <Fragment>
-            <div id={"svg" + props.row.original.id}>
-              <img
-                src={`data:image/svg+xml;utf8,${props.getValue()}`}
-                alt={props.row.original.id}
-                width="auto"
-                height="auto"
-                onClick={() => openImgModal(props.row.original.id)}
-              />
-            </div>
-            <Modal
-              buttons={[{ label: "Close", action: closeImgModal }]}
-              show={
-                activeImgModal !== "" &&
-                activeImgModal === props.row.original.id
-              }
-              title={`Board image for ${props.row.original.gameName}`}
-            >
-              <div className="content">
-                <img
-                  src={`data:image/svg+xml;utf8,${props.getValue()}`}
-                  alt={props.row.original.gameName}
-                  width="100%"
-                  height="auto"
-                />
-              </div>
-            </Modal>
-          </Fragment>
+          <ImageHolder
+            key={`ImgHolder_${props.getValue()}`}
+            metaGame={props.getValue()}
+            displayName={props.row.original.gameName}
+          />
         ),
         enableSorting: false,
       }),
@@ -501,7 +473,6 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
     ],
     [
       columnHelper,
-      activeImgModal,
       toggleStar,
       filterStars,
       filterStarsSetter,
@@ -750,6 +721,66 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
       </div>
     </article>
   );
+}
+
+function ImageHolder({metaGame, displayName}) {
+  const [activeImgModal, activeImgModalSetter] = useState("");
+  const [colourContext,] = useContext(ColourContext);
+  const thumbRef = useRef(null);
+
+  useEffect(() => {
+    async function setImage() {
+        const json = await fetchGameImageJson(metaGame);
+        if (json !== null) {
+            if (thumbRef.current !== null) {
+                while (thumbRef.current.querySelector("svg") !== null) {
+                    const svg = thumbRef.current.querySelector("svg");
+                    svg.remove();
+                }
+            }
+            const optsThumb = {
+                colourContext,
+                divid: `thumbnail_${metaGame}`,
+                svgid: `SVGthumbnail_${metaGame}`,
+            };
+            render(json, optsThumb);
+        } else {
+            console.log(`Failed to generate a thumbnail for ${metaGame}`);
+        }
+    }
+    if (metaGame !== null && metaGame !== undefined) {
+        try {
+            setImage();
+        } catch (e) {
+            console.log(`Unable to fetch thumbnail for ${metaGame}:\n${e}`);
+        }
+    }
+  }, [metaGame, colourContext, thumbRef]);
+
+  const openImgModal = (name) => {
+    activeImgModalSetter(name);
+  };
+  const closeImgModal = () => {
+    activeImgModalSetter("");
+  };
+
+  return (
+      <Fragment>
+        <div id={"thumbnail_" + metaGame} ref={thumbRef} onClick={() => openImgModal(metaGame)}>
+        </div>
+        <Modal
+          buttons={[{ label: "Close", action: closeImgModal }]}
+          show={
+            activeImgModal !== "" &&
+            activeImgModal === metaGame
+          }
+          title={`Board image for ${displayName}`}
+        >
+          <div className="content" id={"svg_" + metaGame} dangerouslySetInnerHTML={{ __html: thumbRef?.current?.innerHTML }}>
+          </div>
+        </Modal>
+      </Fragment>
+    );
 }
 
 export default Table;

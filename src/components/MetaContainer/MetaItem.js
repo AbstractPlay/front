@@ -1,20 +1,22 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useTranslation } from "react-i18next";
 import { GameFactory } from "@abstractplay/gameslib";
-import { MeContext } from "../../pages/Skeleton";
-import gameImages from "../../assets/GameImages";
+import { MeContext, ColourContext } from "../../pages/Skeleton";
+import { render } from "@abstractplay/renderer";
+import { fetchGameImageJson } from "../../lib/fetchGameImage";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 
 const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highlight, summary, handleChallenge}, ref) => {
   const [globalMe] = useContext(MeContext);
+  const [colourContext,] = useContext(ColourContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
   const { t } = useTranslation();
-  const image = encodeURIComponent(gameImages[game.uid]);
+  const imageRef = useRef(null);
   let gameEngine;
   if (game.playercounts.length > 1) {
     gameEngine = GameFactory(game.uid, 2);
@@ -40,6 +42,29 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
     }
     designerString += designers.join(", ");
   }
+
+  useEffect(() => {
+    async function setImage() {
+        const json = await fetchGameImageJson(game.uid);
+        if (json !== null) {
+            if (imageRef.current !== null) {
+                const oldsvg = imageRef.current.querySelector("svg");
+                if (oldsvg !== null) {
+                    oldsvg.remove();
+                }
+            }
+            const opts = {
+                divid: `_svg${game.uid}`,
+                svgid: "_apstatic",
+                colourContext
+            };
+            render(json, opts);
+        } else {
+            console.log(`Failed to fetch JSON for ${game.uid}`)
+        }
+    }
+    setImage();
+  }, [game.uid, colourContext]);
 
   const tags = game.categories.map(cat => { return {
     raw: cat,
@@ -228,15 +253,7 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
               </span>
             )}
           </div>
-          <div id={"svg" + game.uid}>
-            <img
-              src={`data:image/svg+xml;utf8,${image}`}
-              alt={game.uid}
-              width="100%"
-              height="auto"
-              onClick={openModal}
-            />
-          </div>
+          <div id={"_svg" + game.uid} ref={imageRef} onClick={openModal}></div>
         </div>
       </div>
       <Modal
@@ -244,14 +261,7 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
         show={modalIsOpen}
         title={`Board image for ${game.name}`}
       >
-        <div className="content">
-          <img
-            src={`data:image/svg+xml;utf8,${image}`}
-            alt={game.uid}
-            width="100%"
-            height="auto"
-          />
-        </div>
+        <div className="content" dangerouslySetInnerHTML={{__html: imageRef?.current?.innerHTML}}></div>
       </Modal>
     </div>
   );
