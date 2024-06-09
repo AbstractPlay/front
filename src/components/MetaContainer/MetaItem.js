@@ -5,8 +5,8 @@ import rehypeRaw from "rehype-raw";
 import { useTranslation } from "react-i18next";
 import { GameFactory } from "@abstractplay/gameslib";
 import { MeContext, ColourContext } from "../../pages/Skeleton";
-import { render } from "@abstractplay/renderer";
-import { fetchGameImageJson } from "../../lib/fetchGameImage";
+import { render, renderStatic } from "@abstractplay/renderer";
+import { fetchGameImageJson, fetchGameImage } from "../../lib/fetchGameImage";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 
@@ -17,6 +17,7 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
   const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
   const { t } = useTranslation();
   const imageRef = useRef(null);
+  const [image, imageSetter] = useState(null);
   let gameEngine;
   if (game.playercounts.length > 1) {
     gameEngine = GameFactory(game.uid, 2);
@@ -43,28 +44,40 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
     designerString += designers.join(", ");
   }
 
-  useEffect(() => {
+//   useEffect(() => {
+//     async function setImage() {
+//         const json = await fetchGameImageJson(game.uid);
+//         if (json !== null) {
+//             if (imageRef.current !== null) {
+//                 const oldsvg = imageRef.current.querySelector("svg");
+//                 if (oldsvg !== null) {
+//                     oldsvg.remove();
+//                 }
+//             }
+//             const opts = {
+//                 divid: `_svg${game.uid}`,
+//                 svgid: "_apstatic",
+//                 colourContext
+//             };
+//             render(json, opts);
+//         } else {
+//             console.log(`Failed to fetch JSON for ${game.uid}`)
+//         }
+//     }
+//     setImage();
+//   }, [game, colourContext]);
+
+useEffect(() => {
     async function setImage() {
-        const json = await fetchGameImageJson(game.uid);
-        if (json !== null) {
-            if (imageRef.current !== null) {
-                const oldsvg = imageRef.current.querySelector("svg");
-                if (oldsvg !== null) {
-                    oldsvg.remove();
-                }
-            }
-            const opts = {
-                divid: `_svg${game.uid}`,
-                svgid: "_apstatic",
-                colourContext
-            };
-            render(json, opts);
-        } else {
-            console.log(`Failed to fetch JSON for ${game.uid}`)
-        }
+        const svg = await fetchGameImage(game.uid, colourContext);
+        imageSetter(svg);
     }
-    setImage();
-  }, [game.uid, colourContext]);
+    if (game !== null && game !== undefined) {
+        setImage();
+    } else {
+        imageSetter(null);
+    }
+}, [game, colourContext]);
 
   const tags = game.categories.map(cat => { return {
     raw: cat,
@@ -253,7 +266,15 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
               </span>
             )}
           </div>
-          <div id={"_svg" + game.uid} ref={imageRef} onClick={openModal}></div>
+          <div id={"_svg" + game.uid} onClick={openModal}>
+            <img
+                src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                    image
+                  )}`}
+                width="100%"
+                alt={`Board for ${game.uid}`}
+            />
+          </div>
         </div>
       </div>
       <Modal
@@ -261,7 +282,15 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
         show={modalIsOpen}
         title={`Board image for ${game.name}`}
       >
-        <div className="content" dangerouslySetInnerHTML={{__html: imageRef?.current?.innerHTML}}></div>
+        <div className="content">
+            <img
+                src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                    image
+                )}`}
+                width="100%"
+                alt={`Board for ${game.uid}`}
+            />
+        </div>
       </Modal>
     </div>
   );
