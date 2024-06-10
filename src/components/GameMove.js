@@ -1336,6 +1336,7 @@ function GameMove(props) {
     cbit,
     errorSetter,
     errorMessageRef,
+    pieInvoked,
     commentsSetter,
     commentsTooLongSetter,
   ]);
