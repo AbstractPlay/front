@@ -3211,7 +3211,7 @@ function GameMove(props) {
       </>
     );
   } else {
-    reportError(`Message: ${errorMessageRef.current}, state: ${ explorationRef.current && focus ? getFocusNode(explorationRef.current, focus).state : ""}`);
+    reportError(`Message: ${errorMessageRef.current}, game: ${JSON.stringify(game)}, state: ${ explorationRef.current && focus ? getFocusNode(explorationRef.current, focus).state : ""}`);
     return <h4>{errorMessageRef.current}</h4>;
   }
 }
