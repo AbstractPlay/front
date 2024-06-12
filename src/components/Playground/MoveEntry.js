@@ -73,6 +73,10 @@ function MoveEntry(props) {
     }
   }
 
+  useEffect(() => {
+    inputValueSetter(move.move);
+  }, [move.move]);
+
   const sortLenAlpha = (a, b) => {
     if (a.length === b.length) {
       return a.localeCompare(b);
