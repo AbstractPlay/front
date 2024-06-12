@@ -1,5 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
+import { debounce } from 'lodash';
 
 function NoMoves({engine, game, handleMove, t}) {
     console.log("In NoMoves");
@@ -54,6 +55,22 @@ function MoveEntry(props) {
   const handleClear = () => {
     handleMove("");
   };
+
+  const delayedHandleMove = useMemo(() => debounce((value) => {
+    console.log(props.screenWidth);
+    handleMove(value);
+  }, props.screenWidth < 770 ? 1000 : 500), [handleMove, props.screenWidth]);
+
+  const handleMoveInputChange = (value) => {
+    inputValueSetter(value);
+    // If the input ends with a digit, delay the processing by a bit (500ms) in case the user wants to complete a number.
+    if (/\d$/.test(value)) {
+      delayedHandleMove(value);
+    } else {
+      delayedHandleMove.cancel();
+      handleMove(value);
+    }
+  }
 
   const sortLenAlpha = (a, b) => {
     if (a.length === b.length) {
@@ -217,7 +234,7 @@ function MoveEntry(props) {
                   id="enterAMove"
                   type="text"
                   value={move.move}
-                  onChange={(e) => handleMove(e.target.value)}
+                  onChange={(e) => handleMoveInputChange(e.target.value)}
                   placeholder={t("EnterMove")}
                 />
                 {move.move.length === 0 ? (
