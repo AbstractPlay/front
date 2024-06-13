@@ -23,13 +23,15 @@ function GameCommentShort(props) {
   };
 
   React.useLayoutEffect(() => {
-    // Reset height - important to shrink on delete
-    textareaRef.current.style.height = "inherit";
-    // Set height
-    textareaRef.current.style.height = `${Math.max(
-      textareaRef.current.scrollHeight,
-      30
-    )}px`;
+    if (textareaRef.current !== undefined && textareaRef.current !== null) {
+        // Reset height - important to shrink on delete
+        textareaRef.current.style.height = "inherit";
+        // Set height
+        textareaRef.current.style.height = `${Math.max(
+        textareaRef.current.scrollHeight,
+        30
+        )}px`;
+    }
   }, [comment]);
 
   return (
