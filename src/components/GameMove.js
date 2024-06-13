@@ -2893,7 +2893,7 @@ function GameMove(props) {
 
         <div className="columns">
           {/* Comments */}
-          <div className="column is-three-fifths is-offset-one-fifth">
+          <div className="column is-three-fifths is-offset-one-fifth" id="fullChatLog">
             {focus ? (
               <div>
                 <h1 className="subtitle lined">
