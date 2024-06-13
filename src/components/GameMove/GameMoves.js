@@ -595,7 +595,7 @@ function GameMoves(props) {
           //   let clName = j === 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
           let movenum = numcolumns * i + j;
           row.push(
-            <td key={"td0-" + i + "-" + j} className="gameMoveNums">
+            <td key={"td0-" + i + "-" + j} className="gameMoveNums" id={path[movenum][0].class.includes("gameMoveFocus") ? "focusedMoveNum" : ""}>
               {movenum >= path.length ? "" : `${movenum + 1}`}
             </td>
           );
