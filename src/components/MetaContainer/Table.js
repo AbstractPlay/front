@@ -342,13 +342,11 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
-          <a
-            href={props.row.original.links[0]}
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to={`/games/${props.row.original.id}`}
           >
             {props.getValue()}
-          </a>
+          </Link>
         ),
         filterFn: "includesString",
       }),
