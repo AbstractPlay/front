@@ -41,6 +41,7 @@ function UserSettingsModal(props) {
     true
   );
   const [hideTour, hideTourSetter] = useState(!showPlayTour);
+  const [hideSpoilers, hideSpoilersSetter] = useState(false);
   // palettes
   const [showPalette, showPaletteSetter] = useState(false);
   const [myPalettes, myPalettesSetter] = useState([]);
@@ -94,6 +95,11 @@ function UserSettingsModal(props) {
         confirmMoveSetter(!globalMe.settings.all.moveConfirmOff);
       } else {
         confirmMoveSetter(true);
+      }
+      if (globalMe?.settings?.all?.hideSpoilers) {
+        hideSpoilersSetter(globalMe.settings.all.hideSpoilers)
+      } else {
+        hideSpoilersSetter(false);
       }
       if (globalMe?.country !== undefined) {
         countrySetter(globalMe.country);
@@ -236,6 +242,14 @@ function UserSettingsModal(props) {
     if (newSettings.all === undefined) newSettings.all = {};
     newSettings.all.moveConfirmOff = confirmMove;
     confirmMoveSetter(!confirmMove);
+    handleSettingsChange(newSettings);
+  };
+
+  const handleHideSpoilersChange = async () => {
+    const newSettings = cloneDeep(globalMe.settings);
+    if (newSettings.all === undefined) newSettings.all = {};
+    newSettings.all.hideSpoilers = !hideSpoilers;
+    hideSpoilersSetter(!hideSpoilers);
     handleSettingsChange(newSettings);
   };
 
@@ -810,10 +824,26 @@ function UserSettingsModal(props) {
                 checked={confirmMove}
                 onChange={handleMoveConfirmChange}
               />
-              {confirmMove ? t("DisableMoveConfirm") : t("EnableMoveConfirm")}
+              {t("DisableMoveConfirm")}
+            </label>
+          </div>
+          <p class="help">May not work for all games. Let us know if we missed something.</p>
+        </div>
+
+        {/********************* hide spoilers *********************/}
+        <div className="field" key="hideSpoilers">
+          <div className="control">
+            <label className="checkbox is-small">
+              <input
+                type="checkbox"
+                checked={hideSpoilers}
+                onChange={handleHideSpoilersChange}
+              />
+              {t("HideSpoilers")}
             </label>
           </div>
         </div>
+
 
         {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above
         ******************** Language *********************
