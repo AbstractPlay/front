@@ -189,7 +189,7 @@ function setupGame(
   } else {
     game0.canSubmit =
       game0.toMove !== "" && me && game0.players[game0.toMove].id === me.id;
-    game0.canExplore = game0.numPlayers === 2 && isExplorer(explorer, me) && (game0.noExplore !== true) && (game0.noExploreFlag !== true);
+    game0.canExplore = game0.numPlayers === 2 && isExplorer(explorer, me) && (game0.noExplore !== true || game0.gameOver) && (game0.noExploreFlag !== true);
   }
   if (game0.sharedPieces) {
     game0.seatNames = [];
