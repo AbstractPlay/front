@@ -44,6 +44,12 @@ function GameStatus(props) {
   ) {
     return <div></div>;
   } else {
+    console.log(`ME:`, globalMe);
+    console.log(`SCORES:`, status.scores);
+    // hide spoilers
+    if (globalMe?.settings?.all?.hideSpoilers && !game.gameOver && status?.scores?.length > 0) {
+        status.scores = status.scores.filter(s => s.spoiler !== true);
+    }
     let stashes = [];
     let handlers = [];
     if (game.playerStashes) {
