@@ -13,6 +13,7 @@
     --secondary-color-3: #008ca8;
     --secondary-color-3-lighter: #009fbf;
     --secondary-color-3-bg: #eefcff;
+    --tag-background-color: #f5f5f5;
     --dropshadow-target-start: rgba(10,10,10,0.1);
     --dropshadow-target-end: rgba(10,10,10,0.02);
     --svg-label-color: black;
@@ -20,6 +21,7 @@
     --svg-gridline-color: black;
     --svg-default-fill: black;
     --svg-volcano-caps: black;
+
     /* Currently unused */
     /* --main-fg-color-lighter: #c3d6f1; */
     /* --secondary-color-1-bg: #ffe8e0; */
@@ -40,6 +42,7 @@
   --secondary-color-3: #008ca8;
   --secondary-color-3-lighter: #009fbf;
   --secondary-color-3-bg: #333;
+  --tag-background-color: #444;
   --svg-label-color: var(--main-fg-color);
   --svg-annotation-color: var(--secondary-color-2);
   --svg-gridline-color: var(--main-font-color);
@@ -89,6 +92,22 @@ textarea {
   color: var(--main-font-color);
 }
 
+.input, .select select, .textarea, .button {
+    border-color: #dbdbdb;
+}
+
+.tableNav button {
+    background-color: var(--main-bg-color);
+    color: var(--main-font-color);
+}
+
+button:disabled {
+    --bulma-button-disabled-background-color: #fff;
+    --bulma-button-disabled-border-color: #dbdbdb;
+    color: var(--main-font-color);
+    opacity: 0.5;
+}
+
 html {
   box-sizing: border-box;
 }
@@ -112,21 +131,45 @@ a:hover {
   text-decoration: underline;
 }
 
+table, .content table td, .content table th {
+    --bulma-table-color: var(--main-font-color) !important;
+    --bulma-border: gray !important;
+    --bulma-content-table-cell-border: 1px solid var(--bulma-border) !important;
+}
+
 table * a {
     color: var(--secondary-color-3);
     text-decoration: underline;
 }
 
-.navbar, .navbar-menu {
+.navbar,
+.navbar-menu,
+.navbar-item,
+.navbar-link,
+.navbar-dropdown,
+.navbar-dropdown .navbar-item:not(.is-active, .is-selected),
+.navbar-dropdown a.navbar-item:not(.is-active, .is-selected)
+{
     background-color: var(--main-bg-color);
 }
 
-a.navbar-item:hover {
+a.navbar-item:hover,
+.navbar-link:hover,
+.navbar-dropdown a.navbar-item:not(.is-active, .is-selected):hover
+{
     background-color: var(--secondary-color-3-bg);
 }
 
-.navbar-item {
+.navbar-item,
+.navbar-link,
+.navbar-dropdown a.navbar-item:not(.is-active, .is-selected)
+{
     color: var(--main-font-color);
+}
+
+.tag {
+    color: var(--main-font-color);
+    background-color: var(--tag-background-color);
 }
 
 :root[color-mode="dark"] a.navbar-burger {
@@ -313,6 +356,11 @@ strong {
   max-height: 75vh;
 }
 
+.board > svg {
+    width: 100%;
+    height: 100%;
+}
+
 .board > svg * text {
     cursor: default;
     user-select: none;
@@ -469,15 +517,17 @@ th .player {
   color: red;
 }
 
-.fabtn {
+button.fabtn {
   background-color: var(--main-bg-color);
   border: none;
   color: var(--bg-color2);
   cursor: pointer;
+  padding-block: 1px;
+  padding-inline: 6px;
 }
 
 /* Darker background on mouse-over */
-.fabtn:hover {
+button.fabtn:hover {
   color: var(--main-fg-color);
 }
 

@@ -45,7 +45,7 @@ function TableSkeleton(props) {
 
   const tableNavigation = (
     <>
-      <div className="level smallerText">
+      <div className="level smallerText tableNav">
         <div className="level-left">
           <div className="level-item">
             <div className="field">

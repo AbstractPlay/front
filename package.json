@@ -20,7 +20,6 @@
     "@testing-library/user-event": "13.5.0",
     "aws-amplify": "5.3.12",
     "buffer": "6.0.3",
-    "bulma": "^1.0.1",
     "i18next": "^21.10.0",
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.2.0",
@@ -42,14 +41,15 @@
     "react-use-storage-state": "^1.0.6",
     "react-zoom-pan-pinch": "^3.4.4",
     "rehype-raw": "6.1.1",
-    "sass": "^1.77.5",
     "web-vitals": "2.1.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.0",
+    "bulma": "^1.0.1",
     "cross-env": "7.0.3",
     "i18next-parser": "7.7.0",
     "prettier": "2.8.8",
+    "sass": "^1.77.5",
     "serverless-finch": "4.0.0",
     "serverless-single-page-app-plugin": "1.0.4",
     "shx": "^0.3.4",
@@ -71,7 +71,7 @@
     "invalidate-prod": "aws cloudfront create-invalidation --profile AbstractPlayProd --distribution-id EZ7B67NVBQ903 --paths /*",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "npm-login": "npm login --scope=@abstractplay --auth-type=legacy --registry=https://npm.pkg.github.com",
-    "build-bulma": "sass --load-path=node_modules src/myBulma.scss src/myBulma.css"
+    "build-bulma": "sass --no-source-map --load-path=node_modules src/myBulma.scss src/myBulma.css"
   },
   "browserslist": {
     "production": [

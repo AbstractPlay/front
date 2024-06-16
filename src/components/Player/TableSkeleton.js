@@ -45,7 +45,7 @@ function TableSkeleton(props) {
 
   const tableNavigation = (
     <>
-      <div className="smallerText">
+      <div className="smallerText tableNav">
           <div>
             <button
               className="button is-small"
