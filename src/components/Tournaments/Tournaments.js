@@ -348,7 +348,7 @@ function Tournaments(props) {
 
   const openTournamentsTableNavigation = (
     <>
-      <div className="columns">
+      <div className="columns tableNav">
         <div className="column is-half is-offset-one-quarter">
           <div className="level smallerText has-text-centered">
             <div className="level-item">
