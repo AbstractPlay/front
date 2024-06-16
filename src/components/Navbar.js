@@ -126,26 +126,31 @@ function Navbar(props) {
               {t("Players")}
             </Link>
           </div>
-          <div className="navbar-item">
-            <Link to="/stats" className="navbar-item">
-              {t("Statistics")}
-            </Link>
-          </div>
-          <div className="navbar-item">
-            <Link to="/news" className="navbar-item">
-              {t("News")}
-              {newsLastSeen >= maxNews ? null : (
-                <span className="icon highlight">
-                  &nbsp;
-                  <i className="fa fa-eercast" aria-hidden="true"></i>
-                </span>
-              )}
-            </Link>
-          </div>
-          <div className="navbar-item">
-            <Link to="/about" className="navbar-item">
-              {t("About")}
-            </Link>
+          <div className="navbar-item has-dropdown is-hoverable">
+            <a className="navbar-link">{t("About")}</a>
+            <div className="navbar-dropdown">
+                <div className="navbar-item">
+                    <Link to="/stats" className="navbar-item">
+                        {t("Statistics")}
+                    </Link>
+                </div>
+                <div className="navbar-item">
+                    <Link to="/news" className="navbar-item">
+                        {t("News")}
+                        {newsLastSeen >= maxNews ? null : (
+                            <span className="icon highlight">
+                                &nbsp;
+                                <i className="fa fa-eercast" aria-hidden="true"></i>
+                            </span>
+                            )}
+                    </Link>
+                </div>
+                <div className="navbar-item">
+                    <Link to="/about" className="navbar-item">
+                    {t("About")}
+                    </Link>
+                </div>
+            </div>
           </div>
         </div>
         <div className="navbar-end">
