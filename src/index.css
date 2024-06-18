@@ -145,26 +145,28 @@ table * a {
 .navbar,
 .navbar-menu,
 .navbar-item,
+a.navbar-item,
 .navbar-link,
 .navbar-dropdown,
-.navbar-dropdown .navbar-item:not(.is-active, .is-selected),
+.navbar-dropdown .navbar-item,
 .navbar-dropdown a.navbar-item:not(.is-active, .is-selected)
 {
-    background-color: var(--main-bg-color);
+    background-color: var(--main-bg-color) !important;
 }
 
 a.navbar-item:hover,
 .navbar-link:hover,
 .navbar-dropdown a.navbar-item:not(.is-active, .is-selected):hover
 {
-    background-color: var(--secondary-color-3-bg);
+    background-color: var(--secondary-color-3-bg) !important;
 }
 
 .navbar-item,
+a.navbar-item,
 .navbar-link,
 .navbar-dropdown a.navbar-item:not(.is-active, .is-selected)
 {
-    color: var(--main-font-color);
+    color: var(--main-font-color) !important;
 }
 
 .tag {
