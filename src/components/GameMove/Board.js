@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { MeContext } from "../../pages/Skeleton";
-import { TransformWrapper, TransformComponent, useControls as getTransformControls } from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 function Board({
     metaGame, gameID, t, inCheck, gameRef,
