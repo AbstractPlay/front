@@ -197,8 +197,8 @@
     "tblHeaderVariants": "",
     "TimeRemaining": "[FR] Time remaining: ",
     "ToMove": "[FR] {{player}} to move.",
-    "TwoPlayersChallengeDescription": "",
-    "UnratedGame": "",
+    "TwoPlayersChallengeDescription": "Vous avez défié {{other}} à un jeu de {{game}}",
+    "UnratedGame": "Ce sera une partie non classée.",
     "UserSettings": "[FR] User Settings",
     "View": "[FR] View",
     "Waiting": "[FR] Waiting on other players to submit their moves",
@@ -238,5 +238,17 @@
             "full": "Plateau > Connectivité"
         }
     },
-    "CanPie": "Ce joueur à l'option d'échanger les places."
+    "CanPie": "Ce joueur à l'option d'échanger les places.",
+    "Tournament": {
+        "Score": "Score",
+        "StartsWhenPreviousDone": "Une semaine après la fin du tournoi actuel",
+        "Winner": "Vainqueur",
+        "DivisionWinner": "Vainqueur : {{winner}}",
+        "Starts": "Le tournoi démarre",
+        "VariantsName": "Tounoi de {{metaGame}} ({{variants}})",
+        "Visit": "Voir le tournoi"
+    },
+    "Variants": "Variantes",
+    "Variant": "Variante",
+    "VisitGame": "Voir la partie"
 }
