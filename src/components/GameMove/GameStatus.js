@@ -44,8 +44,8 @@ function GameStatus(props) {
   ) {
     return <div></div>;
   } else {
-    console.log(`ME:`, globalMe);
-    console.log(`SCORES:`, status.scores);
+    console.log("Statuses");
+    console.log(status);
     // hide spoilers
     if (globalMe?.settings?.all?.hideSpoilers && !game.gameOver && status?.scores?.length > 0) {
         status.scores = status.scores.filter(s => s.spoiler !== true);
@@ -94,12 +94,12 @@ function GameStatus(props) {
                                 settings,
                                 v.glyph,
                                 "genericStatus-" + ind + "-" + i,
-                                v.player,
+                                v.colour,
                                 globalMe,
                                 colourContext
                               )
                             )}`}
-                            alt={"color " + v.player}
+                            alt={"color " + v.colour}
                           />
                         )}
                       </span>
@@ -189,10 +189,7 @@ function GameStatus(props) {
                               settings,
                               s.glyph.name,
                               "stack-" + index + "-" + j,
-                              // eslint-disable-next-line no-prototype-builtins
-                              s.glyph.hasOwnProperty("player")
-                                ? s.glyph.player
-                                : s.glyph.colour,
+                              s.glyph.colour,
                               globalMe,
                               colourContext
                             )
@@ -230,7 +227,7 @@ function GameStatus(props) {
                         settings,
                         s.glyph.name,
                         "stack-" + j,
-                        s.glyph.player,
+                        s.glyph.colour,
                         globalMe,
                         colourContext
                       )
