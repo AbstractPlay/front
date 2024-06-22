@@ -304,7 +304,7 @@ function UserSettingsModal(props) {
     if (showContext) {
         const svg = document.getElementById("contextSample");
         if (svg !== null) svg.remove();
-        const json = JSON.parse(`{"board":{"style":"squares-checkered","width":4,"height":4},"legend":{"A":{"name":"piece","player":1},"B":{"name":"piece","player":2},"C":{"name":"piece","player":3},"D":{"name":"piece","player":4}},"pieces":"AAB-\\nA-BB\\nC--D\\nCCDD","annotations":[{"type":"move","targets":[{"row":0,"col":3},{"row":1,"col":2}]}]}`);
+        const json = JSON.parse(`{"board":{"style":"squares-checkered","width":4,"height":4},"legend":{"A":{"name":"piece","colour":1},"B":{"name":"piece","colour":2},"C":{"name":"piece","colour":3},"D":{"name":"piece","colour":4}},"pieces":"AAB-\\nA-BB\\nC--D\\nCCDD","annotations":[{"type":"move","targets":[{"row":0,"col":3},{"row":1,"col":2}]}]}`);
         const options = {
             divid: "contextSampleRender",
             svgid: "contextSample",

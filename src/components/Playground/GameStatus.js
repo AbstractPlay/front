@@ -43,11 +43,11 @@ function GameStatus(props) {
   ) {
     return <div></div>;
   } else {
+    console.log("Statuses");
+    console.log(status);
     let stashes = [];
     let handlers = [];
     if (game.playerStashes) {
-        console.log("Statuses");
-        console.log(status)
       status.stashes.forEach((stash) => {
         if (Array.isArray(stash)) {
           stashes.push(stash);
@@ -58,8 +58,6 @@ function GameStatus(props) {
         }
       });
     }
-    console.log("Stashes");
-    console.log(stashes);
     return (
       <div style={{ marginBottom: "2rem" }} className="tourStatus">
         <h1 className="subtitle lined">
@@ -94,12 +92,12 @@ function GameStatus(props) {
                                 settings,
                                 v.glyph,
                                 "genericStatus-" + ind + "-" + i,
-                                v.player,
+                                v.colour,
                                 globalMe,
                                 colourContext
                               )
                             )}`}
-                            alt={"color " + v.player}
+                            alt={"color " + v.colour}
                           />
                         )}
                       </span>
@@ -189,10 +187,7 @@ function GameStatus(props) {
                               settings,
                               s.glyph.name,
                               "stack-" + index + "-" + j,
-                              // eslint-disable-next-line no-prototype-builtins
-                              s.glyph.hasOwnProperty("player")
-                                ? s.glyph.player
-                                : s.glyph.colour,
+                              s.glyph.colour,
                               globalMe,
                               colourContext
                             )
@@ -230,7 +225,7 @@ function GameStatus(props) {
                         settings,
                         s.glyph.name,
                         "stack-" + j,
-                        s.glyph.player,
+                        s.glyph.colour,
                         globalMe,
                         colourContext
                       )
