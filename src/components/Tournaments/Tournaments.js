@@ -13,7 +13,7 @@ import {
 import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../../config";
 import NewTournamentModal from "./NewTournamentModal";
-import { MeContext } from "../../pages/Skeleton";
+import { MeContext, UsersContext } from "../../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
@@ -25,6 +25,7 @@ function Tournaments(props) {
   const [tournaments, tournamentsSetter] = useState([]);
   const [tournamentsToArchive, tournamentsToArchiveSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
+  const [allUsers,] = useContext(UsersContext);
   const [openTournamentSorting, openTournamentSortingSetter] = useState([{ id: "startDate", desc: true }]);
   const [currentTournamentSorting, currentTournamentSortingSetter] = useState([{ id: "metaGame", desc: false }]);
   const [completedTournamentSorting, completedTournamentSortingSetter] = useState([{ id: "dateEnded", desc: true }]);
@@ -243,12 +244,13 @@ function Tournaments(props) {
           number: t.number,
           startDate: date1,
           players: t.players,
+          playerNames: t.players.map(uid => {const rec = allUsers.find(u => u.id === uid); return rec !== undefined ? rec.name : "Unknown"}).sort((a, b) => a.localeCompare(b)),
         };
         if (gameinfo.get(t.metaGame) !== undefined) ret.metaGame = gameinfo.get(t.metaGame).name;
         return ret;
       }).filter(rec => filterMeta === null || rec.realMeta === filterMeta)
         .filter(rec => !globalMe || !registeredOnly || rec.players.includes(globalMe.id))},
-    [tournaments, registeredOnly, globalMe, filterMeta]
+    [tournaments, registeredOnly, globalMe, filterMeta, allUsers]
   );
 
   const openTournamentsColumnHelper = createColumnHelper();
@@ -292,7 +294,7 @@ function Tournaments(props) {
       }),
       openTournamentsColumnHelper.accessor("players", {
         header: t("Tournament.Participants"),
-        cell: (props) => props.getValue().length,
+        cell: (props) => (<abbr title={props.row.original.playerNames.join(", ")}>{props.getValue().length}</abbr>),
         sortingFn: (
           rowA,
           rowB,
