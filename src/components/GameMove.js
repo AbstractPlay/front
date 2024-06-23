@@ -199,7 +199,7 @@ function setupGame(
       }
     } else {
       for (let i = 1; i <= game0.numPlayers; i++) {
-        game0.seatNames.push("Player" + i.toString());
+        game0.seatNames.push("P" + i.toString());
       }
     }
   }
@@ -564,7 +564,7 @@ function setupColors(settings, game, globalMe, colourContext, node) {
   }
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
-      return { isImage: false, value: game.seatNames[i] };
+        return { isImage: false, value: game.seatNames[i] };
     } else {
       options.svgid = "player" + i + "color";
       options.colourContext = colourContext;
