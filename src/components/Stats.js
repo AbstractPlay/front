@@ -1,7 +1,8 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import { Helmet } from "react-helmet-async";
+import { SummaryContext } from "../pages/Skeleton";
 import rehypeRaw from "rehype-raw";
 import HighestSingleRating from "./Stats/HighestSingleRating";
 import AvgRatings from "./Stats/AvgRatings";
@@ -10,8 +11,6 @@ import NumPlays from "./Stats/NumPlays";
 import PlayerStats from "./Stats/PlayerStats";
 import GameStats from "./Stats/GameStats";
 import SiteStats from "./Stats/SiteStats";
-
-export const SummaryContext = createContext([null, () => {}]);
 
 const daysBetween = (startDate, endDate) => {
   // The number of milliseconds in all UTC days (no DST)
@@ -68,26 +67,11 @@ const explanations = [
 
 function Stats(props) {
   const { t } = useTranslation();
-  const [summary, summarySetter] = useState(null);
-  const [error, errorSetter] = useState(null);
+  const [summary, ] = useContext(SummaryContext);
+  const [error, ] = useState(null);
   const [recDays, recDaysSetter] = useState(0);
   const [recYears, recYearsSetter] = useState(0);
   const [statSelected, statSelectedSetter] = useState(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        var url = new URL("https://records.abstractplay.com/_summary.json");
-        const res = await fetch(url);
-        const result = await res.json();
-        summarySetter(result);
-      } catch (error) {
-        errorSetter(error);
-        summarySetter(null);
-      }
-    }
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (summary !== null) {
@@ -113,7 +97,7 @@ function Stats(props) {
   }
 
   return (
-    <SummaryContext.Provider value={[summary, summarySetter]}>
+    <>
       <Helmet>
           <meta property="og:title" content={`Site Statistics`} />
           <meta property="og:url" content={`https://play.abstractplay.com/stats`} />
@@ -210,7 +194,7 @@ function Stats(props) {
           </div>
         </div>
       </article>
-    </SummaryContext.Provider>
+    </>
   );
 }
 

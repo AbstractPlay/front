@@ -8,13 +8,17 @@ import { MeContext } from "../../pages/Skeleton";
 import gameImages from "../../assets/GameImages";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
+import HighestSingleRating from "../Stats/HighestSingleRating";
+import GameStats from "../Stats/GameStats";
+import NumPlays from "../Stats/NumPlays";
 
-const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highlight, summary, handleChallenge}, ref) => {
+const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highlight, handleChallenge}, ref) => {
   const [globalMe] = useContext(MeContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
   const { t } = useTranslation();
   const image = encodeURIComponent(gameImages[game.uid]);
+
   let gameEngine;
   if (game.playercounts.length > 1) {
     gameEngine = GameFactory(game.uid, 2);
@@ -131,6 +135,7 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
                 </ul>
               </Fragment>
             )}
+            <p><a href={`https://abstractplay.com/wiki/doku.php?id=games:${game.uid}`} target="_blank" rel="noreferrer">Abstract Play Wiki</a></p>
               <div>
                 {tags.map((tag, ind) => tag === "" ? null : (
                     <span key={`tag_${ind}`} className="tag" title={tag.desc}>{tag.tag}</span>
@@ -209,6 +214,18 @@ const MetaItem = React.forwardRef(({toggleStar, game, counts, hideDetails, highl
               </div>
             </div>
           </div>
+          <hr />
+          <p className="subtitle">Historical Data</p>
+          <p>The below stats are drawn from the historical record, which is only updated weekly. Historical ratings may be slightly different from the static ratings found elsewhere on the site. See the Statistics page for more details.</p>
+          <hr width="50%" style={{opacity: 0.1}} />
+          <p>Play counts</p>
+          <NumPlays metaFilter={game.name} />
+          <hr width="50%" style={{opacity: 0.1}} />
+          <p>Game statistics</p>
+          <GameStats metaFilter={game.name} />
+          <hr width="50%" style={{opacity: 0.1}} />
+          <p>Ratings</p>
+          <HighestSingleRating metaFilter={game.name} />
         </div>
         <div className="column">
           <div className="starContainer" onClick={() => toggleStar(game.uid)}>

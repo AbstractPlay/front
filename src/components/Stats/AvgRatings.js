@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import { SummaryContext } from "../Stats";
-import { MeContext, UsersContext } from "../../pages/Skeleton";
+import { MeContext, UsersContext, SummaryContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 
 function AvgRatings(props) {
