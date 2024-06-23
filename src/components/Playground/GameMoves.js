@@ -133,7 +133,7 @@ function GameMoves(props) {
 
   const scroll = () => {
     // 300 is the maxHeight of the table from the CSS (for .movesTable)
-    let maxHeight = 300;
+    let maxHeight = 600;
     if (focusRowRef.current) {
       // If there's a horizontal scrollbar, adjust maxHeight
       if (tableRef.current.scrollWidth > tableRef.current.clientWidth) {
@@ -688,7 +688,7 @@ function GameMoves(props) {
             <span className="tooltiptext">{t("GoCurrent")}</span>
           </button>
         </div>
-        <div className="movesTable" ref={tableRef}>
+        <div className="movesTablePlayground" ref={tableRef}>
           <table className="table apTable is-narrow">
             <tbody>
               <tr ref={headerRef}>{header}</tr>

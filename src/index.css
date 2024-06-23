@@ -575,6 +575,12 @@ button.fabtn:hover {
   overflow-y: auto;
 }
 
+.movesTablePlayground {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+
 .movesTable th {
   top: 0;
   position: sticky;
@@ -695,6 +701,7 @@ button.fabtn:hover {
   margin-left: 0.5em;
   line-height: 1.15rem; /* Match the line height with the image height */
   transform: translateY(10%);
+  color: var(--main-font-color);
 }
 
 /* text notification of being in check */
