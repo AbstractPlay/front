@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
-import { SummaryContext } from "../Stats";
+import { SummaryContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 import Plot from "react-plotly.js";
 import Flag from "../Flag";

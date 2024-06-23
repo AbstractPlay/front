@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
-import { SummaryContext } from "../Stats";
+import { SummaryContext } from "../../pages/Skeleton";
 import Plot from "react-plotly.js";
 import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
 
-function NumPlays(props) {
+function NumPlays({metaFilter}) {
   const [summary] = useContext(SummaryContext);
   const [joined, joinedSetter] = useState([]);
   const [activeChartModal, activeChartModalSetter] = useState("");
@@ -62,8 +62,9 @@ function NumPlays(props) {
             histMax,
           };
         })
+        .filter(rec => metaFilter === undefined || rec.game === metaFilter || rec.game.startsWith(`${metaFilter} (`))
         .sort((a, b) => b.plays - a.plays),
-    [joined]
+    [joined, metaFilter]
   );
 
   const columnHelper = createColumnHelper();

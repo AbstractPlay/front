@@ -47,6 +47,7 @@ export const MeContext = createContext([null, () => {}]);
 export const UsersContext = createContext([null, () => {}]);
 export const NewsContext = createContext([[], () => []]);
 export const ColourContext = createContext([null, () => {}]);
+export const SummaryContext = createContext([null, () => {}]);
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -56,6 +57,7 @@ function Bones(props) {
   const [globalMe, globalMeSetter] = useState(null);
   const [users, usersSetter] = useState(null);
   const [news, newsSetter] = useState([]);
+  const [summary, summarySetter] = useState(null);
   const [colorMode,] = useStorageState("color-mode", "light");
   const [storedContextLight,] = useStorageState("stored-context-light", {background: "#fff", strokes: "#000", borders: "#000", labels: "#000", annotations: "#000", fill: "#000"});
   const [storedContextDark,] = useStorageState("stored-context-dark", {background: "#222", strokes: "#6d6d6d", borders: "#000", labels: "#009fbf", annotations: "#99cccc", fill: "#e6f2f2"});
@@ -154,6 +156,20 @@ function Bones(props) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL("https://records.abstractplay.com/_summary.json");
+        const res = await fetch(url);
+        const result = await res.json();
+        summarySetter(result);
+      } catch (error) {
+        summarySetter(null);
+      }
+    }
+    fetchData();
+  }, []);
+
   // apply stored color mode
   useEffect(() => {
     if ( (colorMode !== null) && (colorMode !== undefined) ) {
@@ -182,6 +198,7 @@ function Bones(props) {
         <MeContext.Provider value={[globalMe, globalMeSetter]}>
           <UsersContext.Provider value={[users, usersSetter]}>
             <NewsContext.Provider value={[news, newsSetter]}>
+            <SummaryContext.Provider value={[summary, summarySetter]}>
             <ColourContext.Provider value={[colourContext, colourContextSetter]}>
               <Router>
                 <Navbar />
@@ -252,6 +269,7 @@ function Bones(props) {
                 )}
               </Router>
               </ColourContext.Provider>
+            </SummaryContext.Provider>
             </NewsContext.Provider>
           </UsersContext.Provider>
         </MeContext.Provider>
