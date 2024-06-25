@@ -294,7 +294,7 @@ function Tournaments(props) {
       }),
       openTournamentsColumnHelper.accessor("players", {
         header: t("Tournament.Participants"),
-        cell: (props) => (<abbr title={props.row.original.playerNames.join(", ")}>{props.getValue().length}</abbr>),
+        cell: (props) => (<>{props.getValue().length}<br /><span style={{fontSize: "smaller"}}>{props.row.original.playerNames.join(", ")}</span></>),
         sortingFn: (
           rowA,
           rowB,
