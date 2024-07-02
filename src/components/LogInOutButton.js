@@ -114,7 +114,7 @@ function LogInOutButton(props) {
   if (user === null) {
     return (
       <button
-        className="apButton"
+        className="button is-small apButton"
         onClick={() => Auth.federatedSignIn()}
         id="login-button"
       >
