@@ -1566,7 +1566,7 @@ function Playground(props) {
     let rotate = newGameSettings.rotate;
     if (rotate === undefined) rotate = 0;
     rotate +=
-      (gameRef.current.rotate90 && gameRef.current.numPlayers) > 2 ? 90 : 180;
+      gameRef.current.rotate90 ? 90 : 180;
     if (rotate >= 360) rotate -= 360;
     newGameSettings.rotate = rotate;
     processNewSettings(
