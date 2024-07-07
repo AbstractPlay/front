@@ -1993,8 +1993,11 @@ function GameMove(props) {
     if (newGameSettings === undefined) newGameSettings = {};
     let rotate = newGameSettings.rotate;
     if (rotate === undefined) rotate = 0;
-    rotate +=
-      (gameRef.current.rotate90 && gameRef.current.numPlayers) > 2 ? 90 : 180;
+    if ( (metaGame === "homeworlds" && gameRef.current.numPlayers > 2) || (metaGame !== "homeworlds" && gameRef.current.rotate90) ) {
+        rotate += 90;
+    } else {
+        rotate += 180;
+    }
     if (rotate >= 360) rotate -= 360;
     newGameSettings.rotate = rotate;
     processNewSettings(
