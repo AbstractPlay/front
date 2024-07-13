@@ -1567,13 +1567,6 @@ function Playground(props) {
         if ("renderer" in rep && rep.renderer !== undefined && (rep.renderer === "stacking-tiles" || rep.renderer === "stacking-3D"|| rep.renderer === "entropy" || rep.renderer === "freespace" || rep.renderer.startsWith("conhex") || rep.renderer === "polyomino")) {
             return 0;
         }
-        if ("renderer" in rep && rep.renderer !== undefined && rep.renderer.startsWith("homeworlds")) {
-            if (game.numPlayers > 2) {
-                return 90;
-            } else {
-                return 180;
-            }
-        }
         const info = gameinfo.get(metaGame);
         if (info === undefined) {
             return 0;
