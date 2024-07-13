@@ -612,6 +612,8 @@
     "RevokeAcceptance": "Revoke acceptance",
     "RevokeChallenge": "Revoke challenge",
     "RotateBoard": "Rotate board",
+    "RotateBoardCCW": "Rotate board counterclockwise",
+    "RotateBoardCW": "Rotate board clockwise",
     "Save": "Save",
     "SaveChanges": "Save Changes",
     "Search": "Search",

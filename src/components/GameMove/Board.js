@@ -50,14 +50,23 @@ function Board({
             </TransformWrapper>
 
             <div className="boardButtons tourBoardButtons">
-              {!gameRef?.current?.canRotate ? null : (
+              {(gameRef === undefined || gameRef === null || gameRef.current === undefined || gameRef.current === null || gameRef.current.increment === undefined || gameRef.current.increment === null || gameRef.current.increment === 0) ? null : (
+                <>
                 <button
                   className="fabtn align-right"
-                  onClick={handleRotate}
-                  title={t("RotateBoard")}
+                  onClick={() => handleRotate("CW")}
+                  title={t("RotateBoardCW")}
                 >
-                  <i className="fa fa-refresh"></i>
+                  <i className="fa fa-repeat"></i>
                 </button>
+                <button
+                  className="fabtn align-right"
+                  onClick={() => handleRotate("CCW")}
+                  title={t("RotateBoardCCW")}
+                >
+                  <i className="fa fa-undo"></i>
+                </button>
+                </>
               )}
               <button
                 className="fabtn align-right"
