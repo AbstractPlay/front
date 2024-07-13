@@ -6,7 +6,7 @@ import { Auth } from "aws-amplify";
 import { debounce } from 'lodash';
 
 function NoMoves({engine, game, handleMove, t}) {
-    console.log("In NoMoves");
+    // console.log("In NoMoves");
     const elements = [];
     if (game.customRandom) {
         elements.push(
@@ -28,7 +28,7 @@ function NoMoves({engine, game, handleMove, t}) {
     if (elements.length === 0) {
         elements.push(<div/>);
     }
-    console.log(`${elements.length} elements found`);
+    // console.log(`${elements.length} elements found`);
 
     return elements.reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null);
 }

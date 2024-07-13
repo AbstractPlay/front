@@ -142,8 +142,6 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("custom-colours");
   game0.customButtons =
     info.flags !== undefined && info.flags.includes("custom-buttons");
-  game0.canRotate =
-    info.flags !== undefined && info.flags.includes("perspective");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
   game0.scores = info.flags !== undefined && info.flags.includes("scores");
   game0.limitedPieces =
@@ -1988,17 +1986,68 @@ function GameMove(props) {
     showSettingsSetter(true);
   };
 
-  const handleRotate = async () => {
+  useEffect(() => {
+    /**
+     * Takes the current renderrep and deduces the correct minimum rotation increment.
+     * A value of 0 means the board may not be rotated.
+     */
+    const getRotationIncrement = (metaGame, rep, engine, game) => {
+        if ("renderer" in rep && rep.renderer !== undefined && (rep.renderer === "stacking-tiles" || rep.renderer === "stacking-3D"|| rep.renderer === "entropy" || rep.renderer === "freespace" || rep.renderer.startsWith("conhex") || rep.renderer === "polyomino")) {
+            return 0;
+        }
+        if ("renderer" in rep && rep.renderer !== undefined && rep.renderer.startsWith("homeworlds")) {
+            if (game.numPlayers > 2) {
+                return 90;
+            } else {
+                return 180;
+            }
+        }
+        const info = gameinfo.get(metaGame);
+        if (info === undefined) {
+            return 0;
+        }
+        if ("flags" in info && info.flags !== undefined && Array.isArray(info.flags) && info.flags.includes("custom-rotation")) {
+            const increment = engine.getCustomRotation();
+            if (increment !== undefined) {
+                return increment;
+            }
+        }
+        if ("board" in rep && rep.board !== undefined && "style" in rep.board && rep.board.style !== undefined) {
+            const style = rep.board.style;
+            if (style.startsWith("squares") || style.startsWith("vertex") || style === "pegboard" || style === "hex-slanted" || style.startsWith("hex-odd") || style.startsWith("hex-even") || style === "snubsquare" || style.startsWith("cairo") || style === "triangles-stacked") {
+                return 90;
+            }
+            if (style.startsWith("hex-of")) {
+                return 60;
+            }
+            if (style === "sowing") {
+                return 180;
+            }
+        }
+        return 0;
+    }
+    if (renderrep !== null && engineRef.current !== null && gameRef.current !== null) {
+        gameRef.current.increment = getRotationIncrement(metaGame, renderrep, engineRef.current, gameRef.current);
+        console.log(`Rotation increment: ${gameRef.current.increment}`);
+    }
+  }, [renderrep, metaGame]);
+
+  const handleRotate = async (dir) => {
     let newGameSettings = cloneDeep(gameSettings);
     if (newGameSettings === undefined) newGameSettings = {};
     let rotate = newGameSettings.rotate;
     if (rotate === undefined) rotate = 0;
-    if ( (metaGame === "homeworlds" && gameRef.current.numPlayers > 2) || (metaGame !== "homeworlds" && gameRef.current.rotate90) ) {
-        rotate += 90;
-    } else {
-        rotate += 180;
+    let increment = 0;
+    if (gameRef.current !== null && gameRef.current.increment !== undefined) {
+        increment = gameRef.current.increment;
     }
-    if (rotate >= 360) rotate -= 360;
+    if (dir === "CW") {
+        rotate += increment;
+    } else {
+        rotate -= increment;
+    }
+    rotate = rotate % 360;
+    while (rotate < 0) { rotate += 360; }
     newGameSettings.rotate = rotate;
     processNewSettings(
       newGameSettings,
