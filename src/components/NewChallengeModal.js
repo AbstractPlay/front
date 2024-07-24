@@ -54,7 +54,10 @@ function NewChallengeModal(props) {
   );
   const [minSeen, minSeenSetter] = useState(0);
   const [rated, ratedSetter] = useStorageState("new-challenge-rated", true); // rated or not
-  const [noExplore, noExploreSetter] = useStorageState("new-challenge-noExplore", false);
+  const [noExplore, noExploreSetter] = useStorageState(
+    "new-challenge-noExplore",
+    false
+  );
   const [standing, standingSetter] = useState(false); // Standing challenge or not.
   const [standingCount, standingCountSetter] = useState(0);
   const [opponents, opponentsSetter] = useState([]);
@@ -71,23 +74,23 @@ function NewChallengeModal(props) {
   }, [i18n.language]);
 
   useEffect(() => {
-    if ( (allUsers !== null) && (metaGame !== null) ) {
-        const info = gameinfo.get(metaGame);
-        if (! info.flags.includes("aiai")) {
-            usersSetter([...allUsers].filter(u => u.id !== aiaiUserID));
-        } else {
-            usersSetter([...allUsers]);
-        }
+    if (allUsers !== null && metaGame !== null) {
+      const info = gameinfo.get(metaGame);
+      if (!info.flags.includes("aiai")) {
+        usersSetter([...allUsers].filter((u) => u.id !== aiaiUserID));
+      } else {
+        usersSetter([...allUsers]);
+      }
     }
   }, [allUsers, metaGame]);
 
   useEffect(() => {
-    const now = (new Date()).getTime();
+    const now = new Date().getTime();
     let min = 0;
     if (onlySee === "week") {
-        min = now - (7 * 24 * 60 * 60 * 1000);
+      min = now - 7 * 24 * 60 * 60 * 1000;
     } else if (onlySee === "month") {
-        min = now - (30 * 24 * 60 * 60 * 1000);
+      min = now - 30 * 24 * 60 * 60 * 1000;
     }
     minSeenSetter(min);
   }, [onlySee]);
@@ -132,7 +135,9 @@ function NewChallengeModal(props) {
           }
           let rootAllVariants = gameEngine.allvariants();
           if (process.env.REACT_APP_REAL_MODE === "production") {
-            rootAllVariants = rootAllVariants?.filter(v => v.experimental === undefined || v.experimental === false);
+            rootAllVariants = rootAllVariants?.filter(
+              (v) => v.experimental === undefined || v.experimental === false
+            );
           }
           allvariantsSetter(rootAllVariants);
 
@@ -143,17 +148,24 @@ function NewChallengeModal(props) {
               .forEach((v) => (ngVariants[v.uid] = false));
           nonGroupVariantsSetter(ngVariants);
           if (rootAllVariants?.length > 0) {
-              const defaults = {};
-              [...new Set(rootAllVariants.filter(v => v.group !== undefined).map(v => v.group))].forEach((g) => {
-                  const {name, description} = gameEngine.describeVariantGroupDefaults(g);
-                  defaults[g] = {
-                      name: name || g,
-                      description,
-                  };
-              });
-              groupDefaultDataSetter({...defaults});
+            const defaults = {};
+            [
+              ...new Set(
+                rootAllVariants
+                  .filter((v) => v.group !== undefined)
+                  .map((v) => v.group)
+              ),
+            ].forEach((g) => {
+              const { name, description } =
+                gameEngine.describeVariantGroupDefaults(g);
+              defaults[g] = {
+                name: name || g,
+                description,
+              };
+            });
+            groupDefaultDataSetter({ ...defaults });
           } else {
-              groupDefaultDataSetter({});
+            groupDefaultDataSetter({});
           }
           const playercounts = info.playercounts;
           if (playercounts.length === 1) {
@@ -169,11 +181,7 @@ function NewChallengeModal(props) {
         errorSetter("");
       }
     },
-    [
-      metaGame,
-      setPlayerCount,
-      props,
-    ]
+    [metaGame, setPlayerCount, props]
   );
 
   useEffect(() => {
@@ -380,14 +388,12 @@ function NewChallengeModal(props) {
       groupData = groups.map((g) => {
         return {
           group: g,
-          variants: allvariants
-            .filter((v) => v.group === g)
-            // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
+          variants: allvariants.filter((v) => v.group === g),
+          // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
         };
       });
-      nonGroupData = allvariants
-        .filter((v) => v.group === undefined)
-        // .sort((a, b) => (a.uid > b.uid ? 1 : -1));
+      nonGroupData = allvariants.filter((v) => v.group === undefined);
+      // .sort((a, b) => (a.uid > b.uid ? 1 : -1));
     }
     playercounts = info.playercounts;
   }
@@ -541,43 +547,44 @@ function NewChallengeModal(props) {
             </p>
           </div>
         )}
-        {playerCount === -1 || standing || props.opponent !== undefined
-          ? ""
-          : /* Opponents filtering */
+        {playerCount === -1 || standing || props.opponent !== undefined ? (
+          ""
+        ) : (
+          /* Opponents filtering */
           <div className="control">
             <p className="help">Use this to filter out inactive opponents</p>
             <label className="radio">
-                <input
-                    type="radio"
-                    name="oppFilter"
-                    checked={onlySee === "all"}
-                    value="all"
-                    onChange={() => onlySeeSetter("all")}
-                />
-                All opponents
+              <input
+                type="radio"
+                name="oppFilter"
+                checked={onlySee === "all"}
+                value="all"
+                onChange={() => onlySeeSetter("all")}
+              />
+              All opponents
             </label>
             <label className="radio">
-                <input
-                    type="radio"
-                    name="oppFilter"
-                    checked={onlySee === "week"}
-                    value="week"
-                    onChange={() => onlySeeSetter("week")}
-                />
-                Past 7 days
+              <input
+                type="radio"
+                name="oppFilter"
+                checked={onlySee === "week"}
+                value="week"
+                onChange={() => onlySeeSetter("week")}
+              />
+              Past 7 days
             </label>
             <label className="radio">
-                <input
-                    type="radio"
-                    name="oppFilter"
-                    checked={onlySee === "month"}
-                    value="month"
-                    onChange={() => onlySeeSetter("month")}
-                />
-                Past 30 days
+              <input
+                type="radio"
+                name="oppFilter"
+                checked={onlySee === "month"}
+                value="month"
+                onChange={() => onlySeeSetter("month")}
+              />
+              Past 30 days
             </label>
           </div>
-        }
+        )}
         {playerCount === -1 || standing
           ? ""
           : /* Opponents */
@@ -692,20 +699,20 @@ function NewChallengeModal(props) {
                             defaultChecked
                           />
                           {`Default ${groupDefaultData[g.group].name}`}
-                          </label>
-                          {groupDefaultData[g.group]?.description === undefined ||
-                          groupDefaultData[g.group]?.description.length === 0 ? (
-                            ""
-                          ) : (
-                            <p
-                              className="help"
-                              style={{
-                                marginTop: "-0.5%",
-                              }}
-                            >
-                              {groupDefaultData[g.group].description}
-                            </p>
-                          )}
+                        </label>
+                        {groupDefaultData[g.group]?.description === undefined ||
+                        groupDefaultData[g.group]?.description.length === 0 ? (
+                          ""
+                        ) : (
+                          <p
+                            className="help"
+                            style={{
+                              marginTop: "-0.5%",
+                            }}
+                          >
+                            {groupDefaultData[g.group].description}
+                          </p>
+                        )}
                       </div>
                       {g.variants.map((v) => (
                         <div className="control" key={v.uid}>
@@ -909,20 +916,20 @@ function NewChallengeModal(props) {
               </p>
             </div>
             <div className="field">
-                <div className="control">
+              <div className="control">
                 <label className="checkbox">
-                    <input
+                  <input
                     type="checkbox"
                     id="noExplore"
                     checked={noExplore}
                     onChange={handleNoExploreChange}
-                    />
-                    {t("ChooseNoExplore")}
+                  />
+                  {t("ChooseNoExplore")}
                 </label>
-                </div>
-                <p className="help">
+              </div>
+              <p className="help">
                 {noExplore ? t("HelpNoExploreTrue") : t("HelpNoExploreFalse")}
-                </p>
+              </p>
             </div>
           </Fragment>
         )}
@@ -943,7 +950,7 @@ function NewChallengeModal(props) {
           </div>
         )}
         {/* Comment to opponent */}
-        {metaGame === null || playerCount !== 2 ? null :
+        {metaGame === null || playerCount !== 2 ? null : (
           <div className="field">
             <label className="label" htmlFor="comment">
               {t("Note")}
@@ -961,7 +968,7 @@ function NewChallengeModal(props) {
             </div>
             <p className="help">{t("NotesHelp")}</p>
           </div>
-        }
+        )}
       </div>
       <div className="is-danger">{error}</div>
     </Modal>

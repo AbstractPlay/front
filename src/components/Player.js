@@ -22,22 +22,29 @@ export const SummaryContext = createContext([null, () => {}]);
 export const AllRecsContext = createContext([null, () => []]);
 
 const code2ele = new Map([
-    ["stars", {component: Stars, name: "Starred Games"}],
-    ["ratings", {component: Ratings, name: "Ratings"}],
-    ["counts", {component: Counts, name: "Play Counts"}],
-    ["opps", {component: Opponents, name: "Opponents"}],
-    ["activity", {component: Activity, name: "Activity"}],
-    ["history", {component: History, name: "Game History"}],
+  ["stars", { component: Stars, name: "Starred Games" }],
+  ["ratings", { component: Ratings, name: "Ratings" }],
+  ["counts", { component: Counts, name: "Play Counts" }],
+  ["opps", { component: Opponents, name: "Opponents" }],
+  ["activity", { component: Activity, name: "Activity" }],
+  ["history", { component: History, name: "Game History" }],
 ]);
 
 function Player() {
-    const {userid} = useParams();
-    const [globalMe, ] = useContext(MeContext);
-    const [allUsers,] = useContext(UsersContext);
-    const [user, userSetter] = useState(null);
-    const [summary, summarySetter] = useState(null);
-    const [allRecs, allRecsSetter] = useState([]);
-    const [order, orderSetter] = useStorageState("player-profile-order", ["stars", "ratings", "counts", "opps", "activity", "history"]);
+  const { userid } = useParams();
+  const [globalMe] = useContext(MeContext);
+  const [allUsers] = useContext(UsersContext);
+  const [user, userSetter] = useState(null);
+  const [summary, summarySetter] = useState(null);
+  const [allRecs, allRecsSetter] = useState([]);
+  const [order, orderSetter] = useStorageState("player-profile-order", [
+    "stars",
+    "ratings",
+    "counts",
+    "opps",
+    "activity",
+    "history",
+  ]);
 
   // eslint-disable-next-line no-unused-vars
   const { t, i18n } = useTranslation();
@@ -64,7 +71,9 @@ function Player() {
   useEffect(() => {
     async function fetchData() {
       try {
-        var url = new URL(`https://records.abstractplay.com/player/${user.id}.json`);
+        var url = new URL(
+          `https://records.abstractplay.com/player/${user.id}.json`
+        );
         const res = await fetch(url);
         const result = await res.json();
         allRecsSetter(result);
@@ -77,14 +86,14 @@ function Player() {
 
   useEffect(() => {
     if (allUsers !== null) {
-        const rec = allUsers.find(u => u.id === userid);
-        if ( (rec !== undefined) && (rec !== null) ) {
-            userSetter(rec);
-        } else {
-            userSetter(null);
-        }
-    } else {
+      const rec = allUsers.find((u) => u.id === userid);
+      if (rec !== undefined && rec !== null) {
+        userSetter(rec);
+      } else {
         userSetter(null);
+      }
+    } else {
+      userSetter(null);
     }
   }, [userid, allUsers, userSetter]);
 
@@ -113,117 +122,160 @@ function Player() {
   };
 
   const handleMoveLeft = (code) => {
-    const idx = order.findIndex(c => c === code);
+    const idx = order.findIndex((c) => c === code);
     let newlst;
     if (idx !== -1) {
-        // if first element, move to end
-        if (idx === 0) {
-            newlst = [...order.slice(1), order[0]]
-        }
-        // otherwise, swap with adjacent
-        else {
-            newlst = [...order.slice(0, idx - 1), order[idx], order[idx - 1], ...order.slice(idx + 1)];
-        }
-        if (newlst !== undefined) {
-            orderSetter(newlst);
-        }
+      // if first element, move to end
+      if (idx === 0) {
+        newlst = [...order.slice(1), order[0]];
+      }
+      // otherwise, swap with adjacent
+      else {
+        newlst = [
+          ...order.slice(0, idx - 1),
+          order[idx],
+          order[idx - 1],
+          ...order.slice(idx + 1),
+        ];
+      }
+      if (newlst !== undefined) {
+        orderSetter(newlst);
+      }
     }
-  }
+  };
 
   const handleMoveRight = (code) => {
-    const idx = order.findIndex(c => c === code);
+    const idx = order.findIndex((c) => c === code);
     let newlst;
     if (idx !== -1) {
-        // if last element, move to start
-        if (idx === order.length - 1) {
-            newlst = [order[order.length - 1], ...order.slice(0, -1)]
-        }
-        // otherwise, swap with adjacent
-        else {
-            newlst = [...order.slice(0, idx), order[idx + 1], order[idx], ...order.slice(idx + 2)];
-        }
-        if (newlst !== undefined) {
-            orderSetter(newlst);
-        }
+      // if last element, move to start
+      if (idx === order.length - 1) {
+        newlst = [order[order.length - 1], ...order.slice(0, -1)];
+      }
+      // otherwise, swap with adjacent
+      else {
+        newlst = [
+          ...order.slice(0, idx),
+          order[idx + 1],
+          order[idx],
+          ...order.slice(idx + 2),
+        ];
+      }
+      if (newlst !== undefined) {
+        orderSetter(newlst);
+      }
     }
-  }
+  };
 
   if (user !== null) {
     return (
-        <>
+      <>
         <Helmet>
-            <meta property="og:title" content={`${user.name}: Player Profile`} />
-            <meta property="og:url" content={`https://play.abstractplay.com/player/${user.id}`} />
-            <meta property="og:description" content={`Player profile for ${user.name}`} />
+          <meta property="og:title" content={`${user.name}: Player Profile`} />
+          <meta
+            property="og:url"
+            content={`https://play.abstractplay.com/player/${user.id}`}
+          />
+          <meta
+            property="og:description"
+            content={`Player profile for ${user.name}`}
+          />
         </Helmet>
         <article id="playerProfile">
-            <h1 className="title has-text-centered">
-              {t("ProfileFor", { player: user.name })}
-            </h1>
-            <div className="subtitle has-text-centered">
-                {user.country === undefined ? null :
-                <>
-                    <Flag code={user.country} size="l" />
-                    &emsp;
-                </>
-                }
-                <ActivityMarker lastSeen={user.lastSeen} />
-            </div>
-            <div className="content has-text-centered" style={{fontSize: "smaller"}}>
-                <p>The player profile page is very much "under development." It currently excludes any real-time stats and relies instead on the statistics tabulated weekly.</p>
-            </div>
-            <ProfileContext.Provider value={[user, userSetter]}>
-                <SummaryContext.Provider value={[summary, summarySetter]}>
-                    <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>
-                    <div className="columns is-multiline">
-                    {order.map((code) => {
-                        const obj = code2ele.get(code);
-                        if (obj !== undefined) {
-                            return (
-                            <>
-                                <div className="column is-narrow" key={`${code}|column|${userid}`}>
-                                    <div className="card" key={`${code}|card|${userid}`}>
-                                        <header className="card-header">
-                                            <p className="card-header-title">
-                                                {obj.name}
-                                            </p>
-                                            <button className="card-header-icon" aria-label="move left" title="move left" onClick={() => handleMoveLeft(code)}>
-                                                <span className="icon">
-                                                    <i className="fa fa-angle-left" aria-hidden="true"></i>
-                                                </span>
-                                            </button>
-                                            <button className="card-header-icon" aria-label="move right" title="move right" onClick={() => handleMoveRight(code)}>
-                                                <span className="icon">
-                                                    <i className="fa fa-angle-right" aria-hidden="true"></i>
-                                                </span>
-                                            </button>
-                                        </header>
-                                        <div className="card-content">
-                                            <obj.component
-                                                order={order}
-                                                key={`${code}|component|${userid}`}
-                                                handleChallenge={handleNewChallenge.bind(this)}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                            );
-                        } else {
-                            return null;
-                        }
-                    })}
-                    </div>
-                    </AllRecsContext.Provider>
-                </SummaryContext.Provider>
-            </ProfileContext.Provider>
+          <h1 className="title has-text-centered">
+            {t("ProfileFor", { player: user.name })}
+          </h1>
+          <div className="subtitle has-text-centered">
+            {user.country === undefined ? null : (
+              <>
+                <Flag code={user.country} size="l" />
+                &emsp;
+              </>
+            )}
+            <ActivityMarker lastSeen={user.lastSeen} />
+          </div>
+          <div
+            className="content has-text-centered"
+            style={{ fontSize: "smaller" }}
+          >
+            <p>
+              The player profile page is very much "under development." It
+              currently excludes any real-time stats and relies instead on the
+              statistics tabulated weekly.
+            </p>
+          </div>
+          <ProfileContext.Provider value={[user, userSetter]}>
+            <SummaryContext.Provider value={[summary, summarySetter]}>
+              <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>
+                <div className="columns is-multiline">
+                  {order.map((code) => {
+                    const obj = code2ele.get(code);
+                    if (obj !== undefined) {
+                      return (
+                        <>
+                          <div
+                            className="column is-narrow"
+                            key={`${code}|column|${userid}`}
+                          >
+                            <div
+                              className="card"
+                              key={`${code}|card|${userid}`}
+                            >
+                              <header className="card-header">
+                                <p className="card-header-title">{obj.name}</p>
+                                <button
+                                  className="card-header-icon"
+                                  aria-label="move left"
+                                  title="move left"
+                                  onClick={() => handleMoveLeft(code)}
+                                >
+                                  <span className="icon">
+                                    <i
+                                      className="fa fa-angle-left"
+                                      aria-hidden="true"
+                                    ></i>
+                                  </span>
+                                </button>
+                                <button
+                                  className="card-header-icon"
+                                  aria-label="move right"
+                                  title="move right"
+                                  onClick={() => handleMoveRight(code)}
+                                >
+                                  <span className="icon">
+                                    <i
+                                      className="fa fa-angle-right"
+                                      aria-hidden="true"
+                                    ></i>
+                                  </span>
+                                </button>
+                              </header>
+                              <div className="card-content">
+                                <obj.component
+                                  order={order}
+                                  key={`${code}|component|${userid}`}
+                                  handleChallenge={handleNewChallenge.bind(
+                                    this
+                                  )}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
+                </div>
+              </AllRecsContext.Provider>
+            </SummaryContext.Provider>
+          </ProfileContext.Provider>
         </article>
-        </>
-      );
-  } else {
-    return (
-        <Spinner/>
+      </>
     );
+  } else {
+    return <Spinner />;
   }
 }
 

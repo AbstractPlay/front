@@ -37,14 +37,23 @@ const allSize = Number.MAX_SAFE_INTEGER;
 //   - summary
 //   - toggleStar
 //   - handleChallenge
-function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) {
-  const [globalMe,] = useContext(MeContext);
+function Table({
+  toggleStar,
+  handleChallenge,
+  metaGame,
+  updateSetter,
+  ...props
+}) {
+  const [globalMe] = useContext(MeContext);
   const [activeImgModal, activeImgModalSetter] = useState("");
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [expandedPara, expandedParaSetter] = useState([]);
   const { t, i18n } = useTranslation();
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
-  const [filterStars, filterStarsSetter] = useStorageState("allgames-filter-stars", false);
+  const [filterStars, filterStarsSetter] = useStorageState(
+    "allgames-filter-stars",
+    false
+  );
   const [tagFilter, tagFilterSetter] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [showState, showStateSetter] = useStorageState("allgames-show", 10);
@@ -81,54 +90,59 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
 
   const multiTagSelect = (row, id, filterVals) => {
     if (filterVals.length === 0) {
-        return true;
+      return true;
     }
     const val = row.getValue(id);
-    return filterVals.reduce((prev, curr) => prev && val.find(o => o.raw === curr) !== undefined, true);
-  }
+    return filterVals.reduce(
+      (prev, curr) => prev && val.find((o) => o.raw === curr) !== undefined,
+      true
+    );
+  };
 
   const addTag = useCallback(
     (tag) => {
-        if (tag !== "" && ! tagFilter.includes(tag)) {
-            const tags = [...tagFilter, tag];
-            tagFilterSetter([...tags]);
-            const lst = [...columnFilters].filter(cf => cf.id !== "tags");
-            setColumnFilters([...lst, {id: "tags", value: tags}])
-        }
+      if (tag !== "" && !tagFilter.includes(tag)) {
+        const tags = [...tagFilter, tag];
+        tagFilterSetter([...tags]);
+        const lst = [...columnFilters].filter((cf) => cf.id !== "tags");
+        setColumnFilters([...lst, { id: "tags", value: tags }]);
+      }
     },
     [tagFilter, columnFilters]
   );
 
   const delTag = useCallback(
     (tag) => {
-        if (tagFilter.includes(tag)) {
-            const tags = [...tagFilter.filter(t => t !== tag)];
-            tagFilterSetter([...tags]);
-            const lst = [...columnFilters].filter(cf => cf.id !== "tags");
-            setColumnFilters([...lst, {id: "tags", value: tags}])
-        }
+      if (tagFilter.includes(tag)) {
+        const tags = [...tagFilter.filter((t) => t !== tag)];
+        tagFilterSetter([...tags]);
+        const lst = [...columnFilters].filter((cf) => cf.id !== "tags");
+        setColumnFilters([...lst, { id: "tags", value: tags }]);
+      }
     },
     [tagFilter, columnFilters]
   );
 
   const updateNameFilter = useCallback(
     (txt) => {
-        const filters = [...columnFilters].filter(cf => cf.id !== "gameName");
-        if (txt !== "") {
-            filters.push({id: "gameName", value: txt});
-        }
-        setColumnFilters([...filters]);
-    },[columnFilters]
+      const filters = [...columnFilters].filter((cf) => cf.id !== "gameName");
+      if (txt !== "") {
+        filters.push({ id: "gameName", value: txt });
+      }
+      setColumnFilters([...filters]);
+    },
+    [columnFilters]
   );
 
   const updateDesignerFilter = useCallback(
     (txt) => {
-        const filters = [...columnFilters].filter(cf => cf.id !== "designers");
-        if (txt !== "") {
-            filters.push({id: "designers", value: txt});
-        }
-        setColumnFilters([...filters]);
-    },[columnFilters]
+      const filters = [...columnFilters].filter((cf) => cf.id !== "designers");
+      if (txt !== "") {
+        filters.push({ id: "designers", value: txt });
+      }
+      setColumnFilters([...filters]);
+    },
+    [columnFilters]
   );
 
   /**
@@ -164,50 +178,54 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
               recent = rec.value;
             }
           }
-          const tags = info.categories.map(cat => { return {
-            raw: cat,
-            tag: t(`categories.${cat}.tag`),
-            desc: t(`categories.${cat}.description`),
-            full: t(`categories.${cat}.full`),
-          }; }).sort((a,b) => {
-            // goals > mechanics > board > board:shape > board:connect > components
-            let valA, valB;
-            if (a.raw.startsWith("goal")) {
+          const tags = info.categories
+            .map((cat) => {
+              return {
+                raw: cat,
+                tag: t(`categories.${cat}.tag`),
+                desc: t(`categories.${cat}.description`),
+                full: t(`categories.${cat}.full`),
+              };
+            })
+            .sort((a, b) => {
+              // goals > mechanics > board > board:shape > board:connect > components
+              let valA, valB;
+              if (a.raw.startsWith("goal")) {
                 valA = 1;
-            } else if (a.raw.startsWith("mech")) {
+              } else if (a.raw.startsWith("mech")) {
                 valA = 2;
-            } else if (a.raw.startsWith("board")) {
+              } else if (a.raw.startsWith("board")) {
                 if (a.raw.startsWith("board>shape")) {
-                    valA = 3.1;
+                  valA = 3.1;
                 } else if (a.raw.startsWith("board>connect")) {
-                    valA = 3.2;
+                  valA = 3.2;
                 } else {
-                    valA = 3;
+                  valA = 3;
                 }
-            } else {
+              } else {
                 valA = 4;
-            }
-            if (b.raw.startsWith("goal")) {
+              }
+              if (b.raw.startsWith("goal")) {
                 valB = 1;
-            } else if (b.raw.startsWith("mech")) {
+              } else if (b.raw.startsWith("mech")) {
                 valB = 2;
-            } else if (b.raw.startsWith("board")) {
+              } else if (b.raw.startsWith("board")) {
                 if (b.raw.startsWith("board>shape")) {
-                    valB = 3.1;
+                  valB = 3.1;
                 } else if (b.raw.startsWith("board>connect")) {
-                    valB = 3.2;
+                  valB = 3.2;
                 } else {
-                    valB = 3;
+                  valB = 3;
                 }
-            } else {
+              } else {
                 valB = 4;
-            }
-            if (valA === valB) {
+              }
+              if (valA === valB) {
                 return a.tag.localeCompare(b.tag);
-            } else {
+              } else {
                 return valA - valB;
-            }
-          });
+              }
+            });
           return {
             id: metaGame,
             gameName: info.name,
@@ -258,55 +276,59 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
 
   const allTags = useMemo(() => {
     const tagSet = new Set();
-    props.games.forEach(metaGame => {
-        const info = gameinfo.get(metaGame);
-        info.categories.forEach(cat => tagSet.add(cat));
+    props.games.forEach((metaGame) => {
+      const info = gameinfo.get(metaGame);
+      info.categories.forEach((cat) => tagSet.add(cat));
     });
-    return [...tagSet.values()].map(cat => { return {
-        raw: cat,
-        tag: t(`categories.${cat}.tag`),
-        desc: t(`categories.${cat}.description`),
-        full: t(`categories.${cat}.full`),
-      }; }).sort((a,b) => {
+    return [...tagSet.values()]
+      .map((cat) => {
+        return {
+          raw: cat,
+          tag: t(`categories.${cat}.tag`),
+          desc: t(`categories.${cat}.description`),
+          full: t(`categories.${cat}.full`),
+        };
+      })
+      .sort((a, b) => {
         // goals > mechanics > board > board:shape > board:connect > components
         let valA, valB;
         if (a.raw.startsWith("goal")) {
-            valA = 1;
+          valA = 1;
         } else if (a.raw.startsWith("mech")) {
-            valA = 2;
+          valA = 2;
         } else if (a.raw.startsWith("board")) {
-            if (a.raw.startsWith("board>shape")) {
-                valA = 3.1;
-            } else if (a.raw.startsWith("board>connect")) {
-                valA = 3.2;
-            } else {
-                valA = 3;
-            }
+          if (a.raw.startsWith("board>shape")) {
+            valA = 3.1;
+          } else if (a.raw.startsWith("board>connect")) {
+            valA = 3.2;
+          } else {
+            valA = 3;
+          }
         } else {
-            valA = 4;
+          valA = 4;
         }
         if (b.raw.startsWith("goal")) {
-            valB = 1;
+          valB = 1;
         } else if (b.raw.startsWith("mech")) {
-            valB = 2;
+          valB = 2;
         } else if (b.raw.startsWith("board")) {
-            if (b.raw.startsWith("board>shape")) {
-                valB = 3.1;
-            } else if (b.raw.startsWith("board>connect")) {
-                valB = 3.2;
-            } else {
-                valB = 3;
-            }
+          if (b.raw.startsWith("board>shape")) {
+            valB = 3.1;
+          } else if (b.raw.startsWith("board>connect")) {
+            valB = 3.2;
+          } else {
+            valB = 3;
+          }
         } else {
-            valB = 4;
+          valB = 4;
         }
         if (valA === valB) {
-            return a.tag.localeCompare(b.tag);
+          return a.tag.localeCompare(b.tag);
         } else {
-            return valA - valB;
+          return valA - valB;
         }
-    });
-    }, [props.games, t]);
+      });
+  }, [props.games, t]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(
@@ -342,11 +364,7 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
-          <Link
-            to={`/games/${props.row.original.id}`}
-          >
-            {props.getValue()}
-          </Link>
+          <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
         filterFn: "includesString",
       }),
@@ -364,7 +382,12 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
               : props.row.original.designers
                   .map(({ name, urls }, ind) =>
                     urls !== undefined && urls.length > 0 ? (
-                      <a key={`designr_${ind}`} href={urls[0]} target="_blank" rel="noreferrer">
+                      <a
+                        key={`designr_${ind}`}
+                        href={urls[0]}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         {name}
                       </a>
                     ) : (
@@ -424,21 +447,46 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
       }),
       columnHelper.accessor("tags", {
         header: "Tags",
-        cell: (props) => props.getValue().map((tag, ind) => tag === "" ? null : (
-            <span key={`tag_${ind}`} className="tag" title={tag.desc} onClick={() => addTag(tag.raw)}>{tag.tag}</span>
-        )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null),
+        cell: (props) =>
+          props
+            .getValue()
+            .map((tag, ind) =>
+              tag === "" ? null : (
+                <span
+                  key={`tag_${ind}`}
+                  className="tag"
+                  title={tag.desc}
+                  onClick={() => addTag(tag.raw)}
+                >
+                  {tag.tag}
+                </span>
+              )
+            )
+            .reduce(
+              (acc, x) =>
+                acc === null ? (
+                  x
+                ) : (
+                  <>
+                    {acc} {x}
+                  </>
+                ),
+              null
+            ),
         enableSorting: false,
         filterFn: multiTagSelect,
       }),
       columnHelper.accessor("dateAdded", {
-        header: "Added"
+        header: "Added",
       }),
       columnHelper.accessor("stars", {
         header: "Stars",
       }),
       columnHelper.accessor("recent", {
         header: () => (
-            <abbr title="Number of games completed in the last four weeks">Recent</abbr>
+          <abbr title="Number of games completed in the last four weeks">
+            Recent
+          </abbr>
         ),
       }),
       columnHelper.accessor("current", {
@@ -492,7 +540,9 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
             >
               Issue Challenge
             </button>
-            <Link to={"/tournaments/" + props.row.original.id}>Tournaments</Link>
+            <Link to={"/tournaments/" + props.row.original.id}>
+              Tournaments
+            </Link>
           </>
         ),
       }),
@@ -641,90 +691,114 @@ function Table({toggleStar, handleChallenge, metaGame, updateSetter, ...props}) 
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="stickyHeader">
                 {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                  >
+                  <th key={header.id}>
                     {header.isPlaceholder ? null : (
-                    <>
-                      <div
-                        {...{
-                          className: header.column.getCanSort()
-                            ? "sortable"
-                            : "",
-                          onClick: header.column.getToggleSortingHandler(),
-                        }}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
+                      <>
+                        <div
+                          {...{
+                            className: header.column.getCanSort()
+                              ? "sortable"
+                              : "",
+                            onClick: header.column.getToggleSortingHandler(),
+                          }}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {{
+                            asc: (
+                              <Fragment>
+                                &nbsp;<i className="fa fa-angle-up"></i>
+                              </Fragment>
+                            ),
+                            desc: (
+                              <Fragment>
+                                &nbsp;<i className="fa fa-angle-down"></i>
+                              </Fragment>
+                            ),
+                          }[header.column.getIsSorted()] ?? null}
+                          {header.id !== "description" ? null : (
+                            <>
+                              {" "}
+                              <span
+                                style={{
+                                  fontSize: "smaller",
+                                  fontWeight: "normal",
+                                  paddingTop: 0,
+                                }}
+                              >
+                                ({t("ClickExpand")})
+                              </span>
+                            </>
+                          )}
+                        </div>
+                        {header.id !== "gameName" ? null : (
+                          <div className="control">
+                            <input
+                              className="input is-small"
+                              type="search"
+                              onChange={(e) => updateNameFilter(e.target.value)}
+                            />
+                          </div>
                         )}
-                        {{
-                          asc: (
-                            <Fragment>
-                              &nbsp;<i className="fa fa-angle-up"></i>
-                            </Fragment>
-                          ),
-                          desc: (
-                            <Fragment>
-                              &nbsp;<i className="fa fa-angle-down"></i>
-                            </Fragment>
-                          ),
-                        }[header.column.getIsSorted()] ?? null}
-                        {header.id !== "description" ? null : (
+                        {header.id !== "designers" ? null : (
+                          <div className="control">
+                            <input
+                              className="input is-small"
+                              type="search"
+                              onChange={(e) =>
+                                updateDesignerFilter(e.target.value)
+                              }
+                            />
+                          </div>
+                        )}
+                        {header.id !== "tags" ? null : (
                           <>
-                            {" "}
-                            <span
-                              style={{
-                                fontSize: "smaller",
-                                fontWeight: "normal",
-                                paddingTop: 0,
-                              }}
-                            >
-                              ({t("ClickExpand")})
-                            </span>
+                            <div className="control">
+                              <div className="select is-small">
+                                <select
+                                  value={ddSelected}
+                                  onChange={(e) => {
+                                    addTag(e.target.value);
+                                    ddSelectedSetter("");
+                                  }}
+                                >
+                                  <option value="" key="tagdd_blank"></option>
+                                  {allTags.map((t, i) => (
+                                    <option value={t.raw} key={`tagdd_${i}`}>
+                                      {t.full}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                            {tagFilter
+                              .map((tag, ind) =>
+                                tag === "" ? null : (
+                                  <span
+                                    key={`tag_${ind}`}
+                                    className="tag"
+                                    title={t(`categories.${tag}.description`)}
+                                    onClick={() => delTag(tag)}
+                                  >
+                                    {t(`categories.${tag}.tag`)}
+                                  </span>
+                                )
+                              )
+                              .reduce(
+                                (acc, x) =>
+                                  acc === null ? (
+                                    x
+                                  ) : (
+                                    <>
+                                      {acc} {x}
+                                    </>
+                                  ),
+                                null
+                              )}
                           </>
                         )}
-                      </div>
-                      {header.id !== "gameName" ? null : (
-                        <div className="control">
-                            <input
-                                className="input is-small"
-                                type="search"
-                                onChange={(e) => updateNameFilter(e.target.value)}
-                            />
-                        </div>
-                      )}
-                      {header.id !== "designers" ? null : (
-                        <div className="control">
-                            <input
-                                className="input is-small"
-                                type="search"
-                                onChange={(e) => updateDesignerFilter(e.target.value)}
-                            />
-                        </div>
-                      )}
-                      {header.id !== "tags" ? null : (
-                        <>
-                            <div className="control">
-                                <div className="select is-small">
-                                    <select
-                                        value={ddSelected}
-                                        onChange={(e) => {addTag(e.target.value); ddSelectedSetter("")}}
-                                    >
-                                        <option value="" key="tagdd_blank"></option>
-                                        {allTags.map((t, i) => (
-                                            <option value={t.raw} key={`tagdd_${i}`}>{t.full}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-                            {tagFilter.map((tag, ind) => tag === "" ? null : (
-                                    <span key={`tag_${ind}`} className="tag" title={t(`categories.${tag}.description`)} onClick={() => delTag(tag)}>{t(`categories.${tag}.tag`)}</span>
-                                )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)
-                            }
-                        </>
-                      )
-                      }
                       </>
                     )}
                   </th>

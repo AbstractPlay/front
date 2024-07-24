@@ -104,7 +104,10 @@ function NewProfile(props) {
                     Authorization: `Bearer ${token}`,
                   },
                   // Don't care about e.g. challenges, so size = small.
-                  body: JSON.stringify({ query: "me", pars: {size: "small"}}),
+                  body: JSON.stringify({
+                    query: "me",
+                    pars: { size: "small" },
+                  }),
                 });
                 const result = await res.json();
                 if (result.statusCode !== 200)
@@ -115,13 +118,18 @@ function NewProfile(props) {
                     globalMeSetter((currentGlobalMe) => {
                       return {
                         ...JSON.parse(result.body),
-                        ...(currentGlobalMe && { 
-                          challengesIssued: currentGlobalMe.challengesIssued ?? [],
-                          challengesReceived: currentGlobalMe.challengesReceived ?? [],
-                          challengesAccepted: currentGlobalMe.challengesAccepted ?? [],
-                          standingChallenges: currentGlobalMe.standingChallenges ?? []}),
+                        ...(currentGlobalMe && {
+                          challengesIssued:
+                            currentGlobalMe.challengesIssued ?? [],
+                          challengesReceived:
+                            currentGlobalMe.challengesReceived ?? [],
+                          challengesAccepted:
+                            currentGlobalMe.challengesAccepted ?? [],
+                          standingChallenges:
+                            currentGlobalMe.standingChallenges ?? [],
+                        }),
                       };
-                    });    
+                    });
                     console.log(JSON.parse(result.body));
                   }
                 }

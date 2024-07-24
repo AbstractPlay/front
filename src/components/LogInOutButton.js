@@ -34,7 +34,7 @@ function LogInOutButton(props) {
                 Authorization: `Bearer ${token}`,
               },
               // Don't care about e.g. challenges, so size = small.
-              body: JSON.stringify({ query: "me", pars: {size: "small"}}),
+              body: JSON.stringify({ query: "me", pars: { size: "small" } }),
             });
             const result = await res.json();
             if (result.statusCode !== 200) console.log(JSON.parse(result.body));
@@ -46,9 +46,13 @@ function LogInOutButton(props) {
                     ...JSON.parse(result.body),
                     ...(currentGlobalMe && {
                       challengesIssued: currentGlobalMe.challengesIssued ?? [],
-                      challengesReceived: currentGlobalMe.challengesReceived ?? [],
-                      challengesAccepted: currentGlobalMe.challengesAccepted ?? [],
-                      standingChallenges: currentGlobalMe.standingChallenges ?? []}),
+                      challengesReceived:
+                        currentGlobalMe.challengesReceived ?? [],
+                      challengesAccepted:
+                        currentGlobalMe.challengesAccepted ?? [],
+                      standingChallenges:
+                        currentGlobalMe.standingChallenges ?? [],
+                    }),
                   };
                 });
                 console.log(JSON.parse(result.body));
@@ -124,7 +128,9 @@ function LogInOutButton(props) {
   } else {
     return (
       <div>
-        <Link to={`/player/${user.idToken.payload["sub"]}`}>{user.idToken.payload["cognito:username"]}</Link>
+        <Link to={`/player/${user.idToken.payload["sub"]}`}>
+          {user.idToken.payload["cognito:username"]}
+        </Link>
         <button
           className="fabtn align-right userSettingsBtn"
           onClick={handleSettingsClick}

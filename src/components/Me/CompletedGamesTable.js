@@ -84,9 +84,10 @@ function CompletedGamesTable(props) {
           opponents: g.players.filter((item) => item.id !== globalMe.id),
           numMoves: g.numMoves || 0,
           lastSeen: g.seen || 0,
-          lastChat: g.lastChat || 0
+          lastChat: g.lastChat || 0,
         };
-        if (gameinfo.get(g.metaGame) !== undefined) ret.gameName = gameinfo.get(g.metaGame).name;
+        if (gameinfo.get(g.metaGame) !== undefined)
+          ret.gameName = gameinfo.get(g.metaGame).name;
         return ret;
       }),
     [globalMe.id, props.games]
@@ -99,19 +100,47 @@ function CompletedGamesTable(props) {
         header: "Game",
         cell: (props) => {
           if (props.getValue() === "Unknown") {
-            return (<>Unknown</>);
+            return <>Unknown</>;
           } else {
-            return (<span className={props.row.original.lastChat > props.row.original.lastSeen ? "newChat" : ""}><Link to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}>{props.getValue()}</Link></span>);
+            return (
+              <span
+                className={
+                  props.row.original.lastChat > props.row.original.lastSeen
+                    ? "newChat"
+                    : ""
+                }
+              >
+                <Link
+                  to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
+                >
+                  {props.getValue()}
+                </Link>
+              </span>
+            );
           }
-        }
+        },
       }),
       columnHelper.accessor("opponents", {
         header: "Opponents",
-        cell: (props) => props.getValue().map(u => <Link to={`/player/${u.id}`}>{u.name}</Link>).reduce((acc, x) => acc === null ? x : <>{acc}, {x}</>, null),
+        cell: (props) =>
+          props
+            .getValue()
+            .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+            .reduce(
+              (acc, x) =>
+                acc === null ? (
+                  x
+                ) : (
+                  <>
+                    {acc}, {x}
+                  </>
+                ),
+              null
+            ),
         sortingFn: (rowA, rowB, columnID) => {
-            const nameA = rowA.getValue(columnID)[0].name;
-            const nameB = rowB.getValue(columnID)[0].name;
-            return nameA.localeCompare(nameB);
+          const nameA = rowA.getValue(columnID)[0].name;
+          const nameB = rowB.getValue(columnID)[0].name;
+          return nameA.localeCompare(nameB);
         },
       }),
       columnHelper.accessor("gameEnded", {

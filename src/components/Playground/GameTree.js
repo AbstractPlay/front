@@ -36,15 +36,14 @@ export class GameNode {
       const ind = this.parent.children.findIndex((c) => c.move === this.move);
       if (ind !== -1) {
         this.parent.children.splice(ind, 1);
-        if (this.parent.children.length > 0)
-          this.parent.UpdateOutcome();
+        if (this.parent.children.length > 0) this.parent.UpdateOutcome();
       } else {
         this.parent.outcome = -1;
         if (this.parent.parent !== null) this.parent.parent.UpdateOutcome();
       }
     }
   }
-  
+
   AddComment(comment) {
     const ind = this.comment.findIndex((c) => c.userId === comment.userId);
     let updated = false;

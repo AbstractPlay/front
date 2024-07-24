@@ -487,6 +487,11 @@
     "EnablePush": "Push notifications are currently disabled",
     "EnterMove": "Enter/Click a move",
     "Error": "Error!",
+    "Events": {
+        "Description": "Organized events are managed by individuals. The system allows organizers to create events, for players to register, and then for organizers to launch games between registered players. Tracking results, enforcing detailed time restrictions, and announcing winners is up to the organizer.",
+        "Name": "Organized Events"
+    },
+    "EventsNav": "Events",
     "ExplorationSetting": "Exploration setting",
     "ExploreNever": "Never explore",
     "ExploreAsk": "Always ask",
@@ -707,7 +712,7 @@
     },
     "Tournament": {
         "Number": "Tournament Number",
-        "Tournaments": "Tournaments",
+        "Tournaments": "Automated Tournaments",
         "Completion": "Completion",
         "CompletionRate": "{{ratio}} games ({{percent}}%)",
         "Current": "Ongoing tournaments",

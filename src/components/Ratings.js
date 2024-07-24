@@ -33,7 +33,7 @@ function Ratings() {
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const { metaGame } = useParams();
   const [globalMe] = useContext(MeContext);
-  const [allUsers,] = useContext(UsersContext);
+  const [allUsers] = useContext(UsersContext);
   const [showState, showStateSetter] = useStorageState("ratings-show", 20);
   const [sorting, setSorting] = useState([{ id: "rank", desc: false }]);
 
@@ -98,10 +98,10 @@ function Ratings() {
       ratings.map((rec, idx) => {
         let lastSeen = undefined;
         if (allUsers !== null) {
-            const userRec = allUsers.find(u => u.id === rec.id);
-            if (userRec !== undefined) {
-                lastSeen = userRec.lastSeen;
-            }
+          const userRec = allUsers.find((u) => u.id === rec.id);
+          if (userRec !== undefined) {
+            lastSeen = userRec.lastSeen;
+          }
         }
         return {
           id: rec.id,
@@ -126,16 +126,22 @@ function Ratings() {
       }),
       columnHelper.accessor("player", {
         header: "Player",
-        cell: (props) =>
+        cell: (props) => (
           <>
-            <Link to={`/player/${props.row.original.id}`}>{props.getValue()}</Link>
-                {props.row.original.lastSeen === undefined ? null :
-                    <>
-                        &nbsp;
-                        <ActivityMarker lastSeen={props.row.original.lastSeen} size="s" />
-                    </>
-                }
+            <Link to={`/player/${props.row.original.id}`}>
+              {props.getValue()}
+            </Link>
+            {props.row.original.lastSeen === undefined ? null : (
+              <>
+                &nbsp;
+                <ActivityMarker
+                  lastSeen={props.row.original.lastSeen}
+                  size="s"
+                />
+              </>
+            )}
           </>
+        ),
       }),
       columnHelper.accessor("rating", {
         header: "Rating",
@@ -297,9 +303,15 @@ function Ratings() {
   return (
     <>
       <Helmet>
-          <meta property="og:title" content={`${metaGameName}: Ratings`} />
-          <meta property="og:url" content={`https://play.abstractplay.com/ratings/${metaGame}`} />
-          <meta property="og:description" content={`Ratings for ${metaGameName}`} />
+        <meta property="og:title" content={`${metaGameName}: Ratings`} />
+        <meta
+          property="og:url"
+          content={`https://play.abstractplay.com/ratings/${metaGame}`}
+        />
+        <meta
+          property="og:description"
+          content={`Ratings for ${metaGameName}`}
+        />
       </Helmet>
       <article>
         <h1 className="has-text-centered title">

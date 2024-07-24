@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useContext,
   useCallback,
-  Fragment
+  Fragment,
 } from "react";
 import Spinner from "../Spinner";
 import { cloneDeep } from "lodash";
@@ -45,7 +45,9 @@ function NewTournamentModal(props) {
         }
         let rootAllVariants = gameEngine.allvariants();
         if (process.env.REACT_APP_REAL_MODE === "production") {
-          rootAllVariants = rootAllVariants?.filter(v => v.experimental === undefined || v.experimental === false);
+          rootAllVariants = rootAllVariants?.filter(
+            (v) => v.experimental === undefined || v.experimental === false
+          );
         }
         allvariantsSetter(rootAllVariants);
         let ngVariants = {};
@@ -57,11 +59,7 @@ function NewTournamentModal(props) {
       }
       errorSetter("");
     },
-    [
-      metaGameSetter,
-      allvariantsSetter,
-      nonGroupVariantsSetter,
-    ]
+    [metaGameSetter, allvariantsSetter, nonGroupVariantsSetter]
   );
 
   useEffect(() => {
@@ -102,10 +100,12 @@ function NewTournamentModal(props) {
         variants.push(variant);
       }
     }
-    if (! await handleNewTournament({
-      metaGame: metaGame,
-      variants: variants
-    })) {
+    if (
+      !(await handleNewTournament({
+        metaGame: metaGame,
+        variants: variants,
+      }))
+    ) {
       errorSetter(t("Tournament.Duplicate"));
       return;
     }

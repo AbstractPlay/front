@@ -1,36 +1,67 @@
-import React, { useEffect, useState, Fragment, useContext, useCallback, useMemo } from "react";
+import React, {
+  useEffect,
+  useState,
+  Fragment,
+  useContext,
+  useCallback,
+  useMemo,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { MeContext } from "../../pages/Skeleton";
 import { API_ENDPOINT_AUTH } from "../../config";
 import { Auth } from "aws-amplify";
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 
-function NoMoves({engine, game, handleMove, t}) {
-    // console.log("In NoMoves");
-    const elements = [];
-    if (game.customRandom) {
-        elements.push(
-            <div className="control">
-                <button className="button is-small apButtonNeutral" onClick={() => handleMove(engine.randomMove())}>Random move</button>
-            </div>
-        )
-    }
+function NoMoves({ engine, game, handleMove, t }) {
+  // console.log("In NoMoves");
+  const elements = [];
+  if (game.customRandom) {
+    elements.push(
+      <div className="control">
+        <button
+          className="button is-small apButtonNeutral"
+          onClick={() => handleMove(engine.randomMove())}
+        >
+          Random move
+        </button>
+      </div>
+    );
+  }
 
-    if ( game.customButtons && engine !== undefined && engine.getButtons().length > 0 )  {
-        const buttons = engine.getButtons().map(({label, move}, idx) =>
-            <div className="control" key={`MoveButton|${idx}`}>
-                <button className="button is-small apButton" onClick={() => handleMove(move)}>{t(`buttons.${label}`)}</button>
-            </div>
-        )
-        elements.push(...buttons);
-    }
+  if (
+    game.customButtons &&
+    engine !== undefined &&
+    engine.getButtons().length > 0
+  ) {
+    const buttons = engine.getButtons().map(({ label, move }, idx) => (
+      <div className="control" key={`MoveButton|${idx}`}>
+        <button
+          className="button is-small apButton"
+          onClick={() => handleMove(move)}
+        >
+          {t(`buttons.${label}`)}
+        </button>
+      </div>
+    ));
+    elements.push(...buttons);
+  }
 
-    if (elements.length === 0) {
-        elements.push(<div/>);
-    }
-    // console.log(`${elements.length} elements found`);
+  if (elements.length === 0) {
+    elements.push(<div />);
+  }
+  // console.log(`${elements.length} elements found`);
 
-    return elements.reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null);
+  return elements.reduce(
+    (acc, x) =>
+      acc === null ? (
+        x
+      ) : (
+        <>
+          {acc} {x}
+        </>
+      ),
+    null
+  );
 }
 
 function showMilliseconds(ms) {
@@ -87,7 +118,7 @@ function MoveEntry(props) {
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
   const [inputValue, inputValueSetter] = useState(move.move);
-  const [globalMe,] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
 
   function getFocusNode(exp, foc) {
     let curNode = exp[foc.moveNumber];
@@ -105,10 +136,17 @@ function MoveEntry(props) {
     handleMove("");
   };
 
-  const delayedHandleMove = useMemo(() => debounce((value) => {
-    console.log(props.screenWidth);
-    handleMove(value);
-  }, props.screenWidth < 770 ? 1000 : 500), [handleMove, props.screenWidth]);
+  const delayedHandleMove = useMemo(
+    () =>
+      debounce(
+        (value) => {
+          console.log(props.screenWidth);
+          handleMove(value);
+        },
+        props.screenWidth < 770 ? 1000 : 500
+      ),
+    [handleMove, props.screenWidth]
+  );
 
   const handleMoveInputChange = (value) => {
     inputValueSetter(value);
@@ -119,7 +157,7 @@ function MoveEntry(props) {
       delayedHandleMove.cancel();
       handleMove(value);
     }
-  }
+  };
 
   const sortLenAlpha = (a, b) => {
     if (a.length === b.length) {
@@ -129,38 +167,35 @@ function MoveEntry(props) {
     }
   };
 
-  const pingBot = useCallback(
-    async () => {
-      if (globalMe !== undefined) {
-        // console.log(`Pinging bot in the following game:\n${JSON.stringify(game, null, 2)}`);
-        const usr = await Auth.currentAuthenticatedUser();
-        const token = usr.signInUserSession.idToken.jwtToken;
-        try {
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+  const pingBot = useCallback(async () => {
+    if (globalMe !== undefined) {
+      // console.log(`Pinging bot in the following game:\n${JSON.stringify(game, null, 2)}`);
+      const usr = await Auth.currentAuthenticatedUser();
+      const token = usr.signInUserSession.idToken.jwtToken;
+      try {
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            query: "ping_bot",
+            pars: {
+              metaGame: game.metaGame,
+              gameid: game.id,
             },
-            body: JSON.stringify({
-              query: "ping_bot",
-              pars: {
-                metaGame: game.metaGame,
-                gameid: game.id,
-              },
-            }),
-          });
-          const result = await res.json();
-          if (result && result.statusCode && result.statusCode !== 200)
-            console.log("Ping unsuccessful");
-        } catch (err) {
-          console.log(err);
-        }
+          }),
+        });
+        const result = await res.json();
+        if (result && result.statusCode && result.statusCode !== 200)
+          console.log("Ping unsuccessful");
+      } catch (err) {
+        console.log(err);
       }
-    },
-    [globalMe, game]
-  );
+    }
+  }, [globalMe, game]);
 
   useEffect(() => {
     if (move.valid && move.complete === 0 && move.move.length > 0) {
@@ -223,7 +258,8 @@ function MoveEntry(props) {
         if (game.colors !== undefined) img = game.colors[toMove];
         // Exploration in games that have finished is public. I don't think we want to allow people to delete big trees that other people might have put in
         // so only allow leaf nodes to be deleted?
-        gameOverNonLeafNode = game.gameOver && getFocusNode(exploration, focus).children.length > 0;
+        gameOverNonLeafNode =
+          game.gameOver && getFocusNode(exploration, focus).children.length > 0;
       }
     } else {
       // game over
@@ -247,19 +283,19 @@ function MoveEntry(props) {
     let canClaimTimeout = false;
     if (uiState === 0 && !submitting) {
       if (game.simultaneous)
-        canClaimTimeout = game.players.some(
-          (p, i) =>
-            toMove[i] &&
-            i !== game.me &&
-            p.time - (Date.now() - game.lastMoveTime) < 0
-        ) &&
-        game.players.some(p => p.id === globalMe?.id);
+        canClaimTimeout =
+          game.players.some(
+            (p, i) =>
+              toMove[i] &&
+              i !== game.me &&
+              p.time - (Date.now() - game.lastMoveTime) < 0
+          ) && game.players.some((p) => p.id === globalMe?.id);
       else
         canClaimTimeout =
           !game.canSubmit &&
           game.toMove !== "" &&
           game.me !== game.toMove &&
-          game.players.some(p => p.id === globalMe?.id) &&
+          game.players.some((p) => p.id === globalMe?.id) &&
           game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
     }
     const drawOffered = game.players.some((p) => p.draw);
@@ -297,53 +333,63 @@ function MoveEntry(props) {
           )}
           <span className="playerName">{mover}</span>
         </p>
-        {! game.pie
-            || (typeof engine?.isPieTurn === 'function' && !engine?.isPieTurn())
-            || (typeof engine?.isPieTurn !== 'function' && engine?.stack?.length !== 2)
-            || game.pieInvoked ? null : (
-            <p style={{marginBottom: "1em"}}>{t("CanPie")}</p>
+        {!game.pie ||
+        (typeof engine?.isPieTurn === "function" && !engine?.isPieTurn()) ||
+        (typeof engine?.isPieTurn !== "function" &&
+          engine?.stack?.length !== 2) ||
+        game.pieInvoked ? null : (
+          <p style={{ marginBottom: "1em" }}>{t("CanPie")}</p>
         )}
-        {moveToSubmit === null ? null :
-            <p style={{marginBottom: "1em"}} className="yourTurn myTurn">{t("PendingSubmit")}</p>
-        }
+        {moveToSubmit === null ? null : (
+          <p style={{ marginBottom: "1em" }} className="yourTurn myTurn">
+            {t("PendingSubmit")}
+          </p>
+        )}
         {uiState === 0 && toMove !== "" ? (
-        <>
-          <table className="table">
-            <caption className="tooltipped">
-              {t("TimeRemaining")}
-              <br />
-              <span className="smallerText">
-                {game.clockHard ? t("HardTimeSet") : t("NotHardTime")},{" "}
-                {t("Increment", { inc: game.clockInc })},{" "}
-                {t("MaxTime", { max: game.clockMax })}
-              </span>
-            </caption>
-            <tbody>
-              {game.players.map((p, ind) =>
-                (Array.isArray(toMove) ? toMove[ind] : ind === toMove) ? (
-                  <tr key={"player" + ind} style={{ fontWeight: "bolder" }}>
-                    <td key={"player" + ind}>{p.name}</td>
-                    <td>
-                      {showMilliseconds(
-                        p.time - (Date.now() - game.lastMoveTime)
-                      )}
-                    </td>
-                  </tr>
-                ) : (
-                  <tr key={"player" + ind}>
-                    <td key={"player" + ind}>{p.name}</td>
-                    <td>{showMilliseconds(p.time)}</td>
-                  </tr>
-                )
-              )}
-            </tbody>
-          </table>
-          {( (! mover.includes("(Bot)")) || (!globalMe) || (globalMe.admin !== true) ) ? null : (
-            <div className="control">
-                <button className="button is-small apButtonNeutral" onClick={pingBot}>Ping Bot</button>
-            </div>
-          )}
-        </>
+          <>
+            <table className="table">
+              <caption className="tooltipped">
+                {t("TimeRemaining")}
+                <br />
+                <span className="smallerText">
+                  {game.clockHard ? t("HardTimeSet") : t("NotHardTime")},{" "}
+                  {t("Increment", { inc: game.clockInc })},{" "}
+                  {t("MaxTime", { max: game.clockMax })}
+                </span>
+              </caption>
+              <tbody>
+                {game.players.map((p, ind) =>
+                  (Array.isArray(toMove) ? toMove[ind] : ind === toMove) ? (
+                    <tr key={"player" + ind} style={{ fontWeight: "bolder" }}>
+                      <td key={"player" + ind}>{p.name}</td>
+                      <td>
+                        {showMilliseconds(
+                          p.time - (Date.now() - game.lastMoveTime)
+                        )}
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr key={"player" + ind}>
+                      <td key={"player" + ind}>{p.name}</td>
+                      <td>{showMilliseconds(p.time)}</td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+            {!mover.includes("(Bot)") ||
+            !globalMe ||
+            globalMe.admin !== true ? null : (
+              <div className="control">
+                <button
+                  className="button is-small apButtonNeutral"
+                  onClick={pingBot}
+                >
+                  Ping Bot
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           ""
         )}
@@ -360,49 +406,63 @@ function MoveEntry(props) {
           )}
           {focus.canExplore ? (
             <Fragment>
-              {moves === null ?
-              (
+              {moves === null ? (
                 <NoMoves
-                    engine={engine}
-                    game={game}
-                    handleMove={handleMove}
-                    t={t}
+                  engine={engine}
+                  game={game}
+                  handleMove={handleMove}
+                  t={t}
                 />
               ) : (
                 <Fragment>
-                <div className="field">
-                  <div className="control">
-                    <div className="select is-small">
-                        <select
-                        name="moves"
-                        id="selectmove"
-                        value=""
-                        onChange={(e) => handleMove(e.target.value)}
-                        >
-                        <option value="">{t("ChooseMove")}</option>
-                        {moves.sort(sortLenAlpha).map((move, index) => {
-                            return (
-                            <option key={index} value={move}>
-                                {move}
-                            </option>
-                            );
-                        })}
-                        </select>
-                    </div>
-                  </div>
-                  {/* Pass button is the primary and only automatic button */}
-                  {( game.customButtons || !Array.isArray(moves) || !moves.includes("pass") ) ? null :
+                  <div className="field">
                     <div className="control">
-                        <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
+                      <div className="select is-small">
+                        <select
+                          name="moves"
+                          id="selectmove"
+                          value=""
+                          onChange={(e) => handleMove(e.target.value)}
+                        >
+                          <option value="">{t("ChooseMove")}</option>
+                          {moves.sort(sortLenAlpha).map((move, index) => {
+                            return (
+                              <option key={index} value={move}>
+                                {move}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
                     </div>
-                  }
-                  {/* Look for automated buttons */}
-                  {( !game.customButtons || engine === undefined || engine?.getButtons().length === 0 ) ? null :
-                  engine?.getButtons().map(({label, move}, idx) =>
-                    <div className="control" key={`MoveButton|${idx}`}>
-                        <button className="button is-small apButton" onClick={() => handleMove(move)}>{t(`buttons.${label}`)}</button>
-                    </div>)
-                  }
+                    {/* Pass button is the primary and only automatic button */}
+                    {game.customButtons ||
+                    !Array.isArray(moves) ||
+                    !moves.includes("pass") ? null : (
+                      <div className="control">
+                        <button
+                          className="button is-small apButton"
+                          onClick={() => handleMove("pass")}
+                        >
+                          Pass
+                        </button>
+                      </div>
+                    )}
+                    {/* Look for automated buttons */}
+                    {!game.customButtons ||
+                    engine === undefined ||
+                    engine?.getButtons().length === 0
+                      ? null
+                      : engine?.getButtons().map(({ label, move }, idx) => (
+                          <div className="control" key={`MoveButton|${idx}`}>
+                            <button
+                              className="button is-small apButton"
+                              onClick={() => handleMove(move)}
+                            >
+                              {t(`buttons.${label}`)}
+                            </button>
+                          </div>
+                        ))}
                   </div>
                   <p className="lined">
                     <span>{t("Or")}</span>
@@ -614,7 +674,9 @@ function MoveEntry(props) {
           ) : (
             ""
           )}
-          {focus.exPath.length > 0 && game.canExplore && !gameOverNonLeafNode ? (
+          {focus.exPath.length > 0 &&
+          game.canExplore &&
+          !gameOverNonLeafNode ? (
             <div
               className="winningColorButton tooltipped"
               onClick={() => handleDeleteExploration()}
@@ -627,7 +689,7 @@ function MoveEntry(props) {
           )}
           {focus.exPath.length > 0 ? (
             <div
-              style={forceUndoRight ? {float: "right"} : {}}
+              style={forceUndoRight ? { float: "right" } : {}}
               className="winningColorButton tooltipped"
               onClick={() => handleReset()}
             >

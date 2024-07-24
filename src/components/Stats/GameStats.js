@@ -3,7 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { SummaryContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 
-function GameStats({metaFilter}) {
+function GameStats({ metaFilter }) {
   const [summary] = useContext(SummaryContext);
 
   const data = useMemo(
@@ -20,7 +20,12 @@ function GameStats({metaFilter}) {
             winsFirst: Math.trunc(rec.winsFirst * 10000) / 100,
           };
         })
-        .filter(rec => metaFilter === undefined || rec.game === metaFilter || rec.game.startsWith(`${metaFilter} (`))
+        .filter(
+          (rec) =>
+            metaFilter === undefined ||
+            rec.game === metaFilter ||
+            rec.game.startsWith(`${metaFilter} (`)
+        )
         .sort((a, b) => a.game.localeCompare(b.game)),
     [summary, metaFilter]
   );

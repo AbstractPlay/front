@@ -22,7 +22,9 @@ function Spinner(props) {
         </linearGradient>
       </defs>
       <g fill="none" fillRule="evenodd">
-        <g transform={(scale === 1 ? "" : ` scale(${scale})`) + "translate(1 1)"}>
+        <g
+          transform={(scale === 1 ? "" : ` scale(${scale})`) + "translate(1 1)"}
+        >
           <path
             d="M36 18c0-9.94-8.06-18-18-18"
             id="Oval-2"

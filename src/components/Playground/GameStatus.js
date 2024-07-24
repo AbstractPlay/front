@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { MeContext, ColourContext } from "../../pages/Skeleton";
@@ -9,9 +9,9 @@ function renderGlyph(settings, glyph, id, player, globalMe, colourContext) {
     options.colourBlind = true;
   }
   if (settings.color !== "standard" && settings.color !== "blind") {
-    const palette = globalMe.palettes.find(p => p.name === settings.color);
+    const palette = globalMe.palettes.find((p) => p.name === settings.color);
     if (palette !== undefined) {
-        options.colours = [...palette.colours];
+      options.colours = [...palette.colours];
     }
   }
   options.svgid = id;
@@ -27,7 +27,7 @@ function GameStatus(props) {
   console.log("Game", game);
   const canExplore = props.canExplore;
   const handleStashClick = props.handleStashClick;
-  const [globalMe,] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
   const [colourContext] = useContext(ColourContext);
 
   const { t } = useTranslation();

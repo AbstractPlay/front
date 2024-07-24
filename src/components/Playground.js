@@ -25,7 +25,6 @@ import Modal from "./Modal";
 import ClipboardCopy from "./Playground/ClipboardCopy";
 import { MeContext, ColourContext } from "../pages/Skeleton";
 
-
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
     return gameSettings[setting];
@@ -96,9 +95,10 @@ function setupGame(
   game0.name = info.name;
   game0.simultaneous =
     info.flags !== undefined && info.flags.includes("simultaneous");
-  game0.pie = info.flags !== undefined &&
+  game0.pie =
+    info.flags !== undefined &&
     (info.flags.includes("pie") || info.flags.includes("pie-even")) &&
-    (typeof engine.shouldOfferPie !== 'function' || engine.shouldOfferPie());
+    (typeof engine.shouldOfferPie !== "function" || engine.shouldOfferPie());
   game0.pieEven = info.flags !== undefined && info.flags.includes("pie-even");
   game0.canCheck = info.flags !== undefined && info.flags.includes("check");
   game0.sharedPieces =
@@ -116,7 +116,8 @@ function setupGame(
   game0.sharedStash =
     info.flags !== undefined && info.flags.includes("shared-stash");
   game0.noMoves = info.flags !== undefined && info.flags.includes("no-moves");
-  game0.customRandom = info.flags !== undefined && info.flags.includes("custom-randomization");
+  game0.customRandom =
+    info.flags !== undefined && info.flags.includes("custom-randomization");
   game0.automove = info.flags !== undefined && info.flags.includes("automove");
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
@@ -124,8 +125,8 @@ function setupGame(
   // eslint-disable-next-line no-prototype-builtins
   game0.canPie =
     game0.pie &&
-    ((typeof engine.isPieTurn === 'function' && engine.isPieTurn()) ||
-      (typeof engine.isPieTurn !== 'function' && engine.stack.length === 2)) &&
+    ((typeof engine.isPieTurn === "function" && engine.isPieTurn()) ||
+      (typeof engine.isPieTurn !== "function" && engine.stack.length === 2)) &&
     // eslint-disable-next-line no-prototype-builtins
     (!game0.hasOwnProperty("pieInvoked") || (game0.pieInvoked = false));
   game0.me = 0; //game0.players.findIndex((p) => me && p.id === me.id);
@@ -284,7 +285,7 @@ function mergeExploration(
       gameEngine.sameMove(exploration[moveNumber - 2].move, e.move)
     );
     if (subtree1) {
-      gameEngine.move(exploration[moveNumber - 1].move, {trusted: true});
+      gameEngine.move(exploration[moveNumber - 1].move, { trusted: true });
       // subtree of the move my opponent chose
       const subtree2 = subtree1.children.find((e) =>
         gameEngine.sameMove(exploration[moveNumber - 1].move, e.move)
@@ -335,7 +336,7 @@ function fixMoveOutcomes(exploration, moveNumber) {
 
 function mergeMoveRecursive(gameEngine, node, children, newids = true) {
   children.forEach((n) => {
-    gameEngine.move(n.move, {trusted: true});
+    gameEngine.move(n.move, { trusted: true });
     const pos = node.AddChild(n.move, gameEngine);
     if (newids) node.children[pos].id = n.id;
     if (n.outcome !== undefined && n.children.length === 0) {
@@ -379,9 +380,9 @@ function setupColors(settings, game, t, colourContext, node) {
       if (game.customColours) {
         let engine;
         if (node === undefined) {
-            engine = GameFactory(game.metaGame, game.state);
+          engine = GameFactory(game.metaGame, game.state);
         } else {
-            engine = GameFactory(game.metaGame, node.state);
+          engine = GameFactory(game.metaGame, node.state);
         }
         color = engine.getPlayerColour(i + 1);
       }
@@ -508,7 +509,7 @@ function doView(
   let newfocus = cloneDeep(focus);
   let moves;
   try {
-    gameEngineTmp.move(m, { partial: partialMove || simMove});
+    gameEngineTmp.move(m, { partial: partialMove || simMove });
     if (!partialMove && focus.canExplore && !game.noMoves) {
       moves = gameEngineTmp.moves();
     }
@@ -535,7 +536,7 @@ function doView(
           node = getFocusNode(explorationRef.current, newfocus);
         }
         m = moves[0];
-        gameEngineTmp.move(m, {partial: partialMove || simMove});
+        gameEngineTmp.move(m, { partial: partialMove || simMove });
         moves = gameEngineTmp.moves();
       }
     }
@@ -606,7 +607,7 @@ function doView(
     gameEngineTmp.render({
       perspective: game.me + 1,
       altDisplay: settings?.display,
-      ...move.opts
+      ...move.opts,
     })
   );
 }
@@ -778,7 +779,8 @@ function Playground(props) {
   });
   const [error, errorSetter] = useState(false);
   //   const [showSettings, showSettingsSetter] = useState(false);
-  const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] = useState(false);
+  const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] =
+    useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [showGameDump, showGameDumpSetter] = useState(false);
   const [userSettings, userSettingsSetter] = useState();
@@ -877,9 +879,9 @@ function Playground(props) {
       }
     }
     if (process.env.REACT_APP_REAL_MODE === "production") {
-        lst = lst.filter(
-          (id) => !gameinfo.get(id[0]).flags.includes("experimental")
-        );
+      lst = lst.filter(
+        (id) => !gameinfo.get(id[0]).flags.includes("experimental")
+      );
     }
     lst.sort((a, b) => a[1].localeCompare(b[1]));
     validGamesSetter(lst);
@@ -1010,7 +1012,7 @@ function Playground(props) {
     pieInvoked,
     t,
     navigate,
-    colourContext
+    colourContext,
   ]);
 
   useEffect(() => {
@@ -1099,7 +1101,9 @@ function Playground(props) {
       let ngVariants = {};
       let rootAllVariants = gameEngine.allvariants();
       if (process.env.REACT_APP_REAL_MODE === "production") {
-        rootAllVariants = rootAllVariants?.filter(v => v.experimental === undefined || v.experimental === false);
+        rootAllVariants = rootAllVariants?.filter(
+          (v) => v.experimental === undefined || v.experimental === false
+        );
       }
       if (rootAllVariants)
         rootAllVariants
@@ -1118,25 +1122,24 @@ function Playground(props) {
           groups.map((g) => {
             return {
               group: g,
-              variants: rootAllVariants
-                .filter((v) => v.group === g)
-                // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
+              variants: rootAllVariants.filter((v) => v.group === g),
+              // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
             };
           })
         );
         const defaults = {};
         groups.forEach((g) => {
-            const {name, description} = gameEngine.describeVariantGroupDefaults(g);
-            defaults[g] = {
-                name: name || g,
-                description,
-            };
+          const { name, description } =
+            gameEngine.describeVariantGroupDefaults(g);
+          defaults[g] = {
+            name: name || g,
+            description,
+          };
         });
-        groupDefaultDataSetter({...defaults});
+        groupDefaultDataSetter({ ...defaults });
         nonGroupDataSetter(
-          rootAllVariants
-            .filter((v) => v.group === undefined)
-            // .sort((a, b) => (a.uid > b.uid ? 1 : -1))
+          rootAllVariants.filter((v) => v.group === undefined)
+          // .sort((a, b) => (a.uid > b.uid ? 1 : -1))
         );
       } else {
         groupDataSetter([]);
@@ -1341,8 +1344,8 @@ function Playground(props) {
     moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
     const metaInfo = gameinfo.get(game.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, colourContext, node);
-        colorsChangedSetter((val) => val + 1);
+      setupColors(settings, gameRef.current, globalMe, colourContext, node);
+      colorsChangedSetter((val) => val + 1);
     }
   };
 
@@ -1392,8 +1395,10 @@ function Playground(props) {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     const metaInfo = gameinfo.get(gameRef.current.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, colourContext, {state: engineRef.current.state()});
-        colorsChangedSetter((val) => val + 1);
+      setupColors(settings, gameRef.current, globalMe, colourContext, {
+        state: engineRef.current.state(),
+      });
+      colorsChangedSetter((val) => val + 1);
     }
   };
 
@@ -1435,7 +1440,7 @@ function Playground(props) {
     let options = {};
 
     function boardClick(row, col, piece) {
-    //   console.log(`boardClick:(${row},${col},${piece})`);
+      //   console.log(`boardClick:(${row},${col},${piece})`);
       let node = getFocusNode(explorationRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous
@@ -1447,9 +1452,9 @@ function Playground(props) {
             piece
           )
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
-    //   console.log(result);
+      //   console.log(result);
       result.rendered = moveRef.current.rendered;
-    //   console.log(moveRef.current.rendered);
+      //   console.log(moveRef.current.rendered);
       processNewMove(
         result,
         explorer,
@@ -1472,8 +1477,10 @@ function Playground(props) {
       populateChecked(gameRef, engineRef, t, inCheckSetter);
       const metaInfo = gameinfo.get(gameRef.current.metaGame);
       if (metaInfo.flags.includes("custom-colours")) {
-          setupColors(settings, gameRef.current, globalMe, colourContext, {state: engineRef.current.state()});
-          colorsChangedSetter((val) => val + 1);
+        setupColors(settings, gameRef.current, globalMe, colourContext, {
+          state: engineRef.current.state(),
+        });
+        colorsChangedSetter((val) => val + 1);
       }
     }
 
@@ -1504,14 +1511,16 @@ function Playground(props) {
           // } else if (settings.color === "patterns") {
           //   options.patterns = true;
         }
-        if ( (settings.color !== "standard") && (settings.color !== "blind") ) {
-            const palette = globalMe.palettes?.find(p => p.name === settings.color);
-            if (palette !== undefined) {
-                options.colours = [...palette.colours];
-                while (options.colours.length < 10) {
-                    options.colours.push("#fff");
-                }
+        if (settings.color !== "standard" && settings.color !== "blind") {
+          const palette = globalMe.palettes?.find(
+            (p) => p.name === settings.color
+          );
+          if (palette !== undefined) {
+            options.colours = [...palette.colours];
+            while (options.colours.length < 10) {
+              options.colours.push("#fff");
             }
+          }
         }
         if (gameRef.current.stackExpanding) {
           options.boardHover = (row, col, piece) => {
@@ -1546,10 +1555,19 @@ function Playground(props) {
     //     // console.log(e);
     //   }
     // }
-  }, [renderrep, globalMe, focus, settings, explorer, t, navigate, colourContext]);
+  }, [
+    renderrep,
+    globalMe,
+    focus,
+    settings,
+    explorer,
+    t,
+    navigate,
+    colourContext,
+  ]);
 
   useEffect(() => {
-    colorsChangedSetter(val => val + 1);
+    colorsChangedSetter((val) => val + 1);
   }, [colourContext]);
 
   //   const setError = (error) => {
@@ -1568,36 +1586,74 @@ function Playground(props) {
      * A value of 0 means the board may not be rotated.
      */
     const getRotationIncrement = (metaGame, rep, engine, game) => {
-        if ("renderer" in rep && rep.renderer !== undefined && (rep.renderer === "stacking-tiles" || rep.renderer === "stacking-3D"|| rep.renderer === "entropy" || rep.renderer === "freespace" || rep.renderer.startsWith("conhex") || rep.renderer === "polyomino")) {
-            return 0;
-        }
-        const info = gameinfo.get(metaGame);
-        if (info === undefined) {
-            return 0;
-        }
-        if ("flags" in info && info.flags !== undefined && Array.isArray(info.flags) && info.flags.includes("custom-rotation")) {
-            const increment = engine.getCustomRotation();
-            if (increment !== undefined) {
-                return increment;
-            }
-        }
-        if ("board" in rep && rep.board !== undefined && "style" in rep.board && rep.board.style !== undefined) {
-            const style = rep.board.style;
-            if (style.startsWith("squares") || style.startsWith("vertex") || style === "pegboard" || style === "hex-slanted" || style.startsWith("hex-odd") || style.startsWith("hex-even") || style === "snubsquare" || style.startsWith("cairo") || style === "triangles-stacked") {
-                return 90;
-            }
-            if (style.startsWith("hex-of")) {
-                return 60;
-            }
-            if (style === "sowing") {
-                return 180;
-            }
-        }
+      if (
+        "renderer" in rep &&
+        rep.renderer !== undefined &&
+        (rep.renderer === "stacking-tiles" ||
+          rep.renderer === "stacking-3D" ||
+          rep.renderer === "entropy" ||
+          rep.renderer === "freespace" ||
+          rep.renderer.startsWith("conhex") ||
+          rep.renderer === "polyomino")
+      ) {
         return 0;
-    }
-    if (renderrep !== null && engineRef.current !== null && gameRef.current !== null) {
-        gameRef.current.increment = getRotationIncrement(metaGame, renderrep, engineRef.current, gameRef.current);
-        console.log(`Rotation increment: ${gameRef.current.increment}`);
+      }
+      const info = gameinfo.get(metaGame);
+      if (info === undefined) {
+        return 0;
+      }
+      if (
+        "flags" in info &&
+        info.flags !== undefined &&
+        Array.isArray(info.flags) &&
+        info.flags.includes("custom-rotation")
+      ) {
+        const increment = engine.getCustomRotation();
+        if (increment !== undefined) {
+          return increment;
+        }
+      }
+      if (
+        "board" in rep &&
+        rep.board !== undefined &&
+        "style" in rep.board &&
+        rep.board.style !== undefined
+      ) {
+        const style = rep.board.style;
+        if (
+          style.startsWith("squares") ||
+          style.startsWith("vertex") ||
+          style === "pegboard" ||
+          style === "hex-slanted" ||
+          style.startsWith("hex-odd") ||
+          style.startsWith("hex-even") ||
+          style === "snubsquare" ||
+          style.startsWith("cairo") ||
+          style === "triangles-stacked"
+        ) {
+          return 90;
+        }
+        if (style.startsWith("hex-of")) {
+          return 60;
+        }
+        if (style === "sowing") {
+          return 180;
+        }
+      }
+      return 0;
+    };
+    if (
+      renderrep !== null &&
+      engineRef.current !== null &&
+      gameRef.current !== null
+    ) {
+      gameRef.current.increment = getRotationIncrement(
+        metaGame,
+        renderrep,
+        engineRef.current,
+        gameRef.current
+      );
+      console.log(`Rotation increment: ${gameRef.current.increment}`);
     }
   }, [renderrep, metaGame]);
 
@@ -1608,15 +1664,17 @@ function Playground(props) {
     if (rotate === undefined) rotate = 0;
     let increment = 0;
     if (gameRef.current !== null && gameRef.current.increment !== undefined) {
-        increment = gameRef.current.increment;
+      increment = gameRef.current.increment;
     }
     if (dir === "CW") {
-        rotate += increment;
+      rotate += increment;
     } else {
-        rotate -= increment;
+      rotate -= increment;
     }
     rotate = rotate % 360;
-    while (rotate < 0) { rotate += 360; }
+    while (rotate < 0) {
+      rotate += 360;
+    }
     newGameSettings.rotate = rotate;
     processNewSettings(
       newGameSettings,
@@ -1732,9 +1790,9 @@ function Playground(props) {
             move list after navigating to the move you want to start from.
           </p>
           <p>
-            The playground uses the built-in exploration features, which do
-            have some limits. The playground only supports 2-player
-            non-simultaneous games.
+            The playground uses the built-in exploration features, which do have
+            some limits. The playground only supports 2-player non-simultaneous
+            games.
           </p>
         </div>
         <hr />
@@ -1792,20 +1850,20 @@ function Playground(props) {
                             defaultChecked
                           />
                           {`Default ${groupDefaultData[g.group].name}`}
-                          </label>
-                          {groupDefaultData[g.group]?.description === undefined ||
-                          groupDefaultData[g.group]?.description.length === 0 ? (
-                            ""
-                          ) : (
-                            <p
-                              className="help"
-                              style={{
-                                marginTop: "-0.5%",
-                              }}
-                            >
-                              {groupDefaultData[g.group].description}
-                            </p>
-                          )}
+                        </label>
+                        {groupDefaultData[g.group]?.description === undefined ||
+                        groupDefaultData[g.group]?.description.length === 0 ? (
+                          ""
+                        ) : (
+                          <p
+                            className="help"
+                            style={{
+                              marginTop: "-0.5%",
+                            }}
+                          >
+                            {groupDefaultData[g.group].description}
+                          </p>
+                        )}
                       </div>
                       {g.variants.map((v) => (
                         <div className="control" key={v.uid}>
@@ -1893,141 +1951,157 @@ function Playground(props) {
     }
 
     return (
-        <>
-      <Helmet>
+      <>
+        <Helmet>
           <meta property="og:title" content={`Single-Player Playground`} />
-          <meta property="og:url" content={`https://play.abstractplay.com/playground`} />
-          <meta property="og:description" content={`A place for users to experiment with and learn games (excludes simultaneous games and games requiring 3+ players)`} />
-      </Helmet>
-      <article>
-        <div className="columns">
-          {/***************** MoveEntry *****************/}
-          <div
-            className={`column is-one-fifth`}
-          >
-            <GameStatus
-              status={statusRef.current}
-              settings={settings}
-              game={game}
-              canExplore={focus?.canExplore}
-              handleStashClick={handleStashClick}
-              key={`Status|colorSet${colorsChanged}`}
-            />
-            <MoveEntry
-              move={move}
-              toMove={toMove}
-              game={gameRef.current}
-              moves={movesRef.current}
-              engine={engineRef.current}
-              exploration={explorationRef.current}
-              focus={focus}
-              submitting={submitting}
-              handlers={[handleMove, handleMark, handleView, handleReset, handleDeleteExploration]}
-              key={`Entry|colorSet${colorsChanged}`}
-            />
-            <div className="buttons">
-              {/* Ended up not needing any of the buttons in this area,
+          <meta
+            property="og:url"
+            content={`https://play.abstractplay.com/playground`}
+          />
+          <meta
+            property="og:description"
+            content={`A place for users to experiment with and learn games (excludes simultaneous games and games requiring 3+ players)`}
+          />
+        </Helmet>
+        <article>
+          <div className="columns">
+            {/***************** MoveEntry *****************/}
+            <div className={`column is-one-fifth`}>
+              <GameStatus
+                status={statusRef.current}
+                settings={settings}
+                game={game}
+                canExplore={focus?.canExplore}
+                handleStashClick={handleStashClick}
+                key={`Status|colorSet${colorsChanged}`}
+              />
+              <MoveEntry
+                move={move}
+                toMove={toMove}
+                game={gameRef.current}
+                moves={movesRef.current}
+                engine={engineRef.current}
+                exploration={explorationRef.current}
+                focus={focus}
+                submitting={submitting}
+                handlers={[
+                  handleMove,
+                  handleMark,
+                  handleView,
+                  handleReset,
+                  handleDeleteExploration,
+                ]}
+                key={`Entry|colorSet${colorsChanged}`}
+              />
+              <div className="buttons">
+                {/* Ended up not needing any of the buttons in this area,
                     like Next Game and Explore */}
+              </div>
             </div>
-          </div>
-          {/***************** Board *****************/}
-          <div className="column">
-            <h1 className="subtitle lined">
-              <span>
-                {gameDeets?.name}
-                <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
-                  {" (playground)"}
+            {/***************** Board *****************/}
+            <div className="column">
+              <h1 className="subtitle lined">
+                <span>
+                  {gameDeets?.name}
+                  <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
+                    {" (playground)"}
+                  </span>
                 </span>
-              </span>
-            </h1>
-            {inCheck.length === 0 ? (
-              ""
-            ) : (
-              <div
-                className="content inCheck"
-                dangerouslySetInnerHTML={{ __html: inCheck }}
-              ></div>
-            )}
-            <TransformWrapper
-                doubleClick={{disabled: true}}
+              </h1>
+              {inCheck.length === 0 ? (
+                ""
+              ) : (
+                <div
+                  className="content inCheck"
+                  dangerouslySetInnerHTML={{ __html: inCheck }}
+                ></div>
+              )}
+              <TransformWrapper
+                doubleClick={{ disabled: true }}
                 centerOnInit={false}
                 disabled={screenWidth < 770}
-            >
+              >
                 <TransformComponent>
-            {gameRef.current?.stackExpanding ? (
-              <div className={`board _meta_${metaGame}`}>
-                <div className="stack" id="stack" ref={stackImage}></div>
-                <div className="stackboard" id="svg" ref={boardImage}></div>
-              </div>
-            ) : (
-              <div
-                className={
-                    `board tourBoard _meta_${metaGame}`
-                }
-                id="svg"
-                ref={boardImage}
-              ></div>
-            )}
+                  {gameRef.current?.stackExpanding ? (
+                    <div className={`board _meta_${metaGame}`}>
+                      <div className="stack" id="stack" ref={stackImage}></div>
+                      <div
+                        className="stackboard"
+                        id="svg"
+                        ref={boardImage}
+                      ></div>
+                    </div>
+                  ) : (
+                    <div
+                      className={`board tourBoard _meta_${metaGame}`}
+                      id="svg"
+                      ref={boardImage}
+                    ></div>
+                  )}
                 </TransformComponent>
-            </TransformWrapper>
-            <div className="boardButtons">
-            {(gameRef === undefined || gameRef === null || gameRef.current === undefined || gameRef.current === null || gameRef.current.increment === undefined || gameRef.current.increment === null || gameRef.current.increment === 0) ? null : (
-                <>
-                <button
-                  className="fabtn align-right"
-                  onClick={() => handleRotate("CW")}
-                  title={t("RotateBoardCW")}
-                >
-                  <i className="fa fa-repeat"></i>
-                </button>
-                <button
-                  className="fabtn align-right"
-                  onClick={() => handleRotate("CCW")}
-                  title={t("RotateBoardCCW")}
-                >
-                  <i className="fa fa-undo"></i>
-                </button>
-                </>
-              )}
-              {/* <button
+              </TransformWrapper>
+              <div className="boardButtons">
+                {gameRef === undefined ||
+                gameRef === null ||
+                gameRef.current === undefined ||
+                gameRef.current === null ||
+                gameRef.current.increment === undefined ||
+                gameRef.current.increment === null ||
+                gameRef.current.increment === 0 ? null : (
+                  <>
+                    <button
+                      className="fabtn align-right"
+                      onClick={() => handleRotate("CW")}
+                      title={t("RotateBoardCW")}
+                    >
+                      <i className="fa fa-repeat"></i>
+                    </button>
+                    <button
+                      className="fabtn align-right"
+                      onClick={() => handleRotate("CCW")}
+                      title={t("RotateBoardCCW")}
+                    >
+                      <i className="fa fa-undo"></i>
+                    </button>
+                  </>
+                )}
+                {/* <button
                 className="fabtn align-right"
                 onClick={handleUpdateRenderOptions}
                 title={t("BoardSettings")}
               >
                 <i className="fa fa-cog"></i>
               </button> */}
-              <button
-                className="fabtn align-right"
-                onClick={() => {
-                  showGameDetailsSetter(true);
-                }}
-                title={t("GameInfo")}
-              >
-                {gameEngine === undefined ||
-                gameEngine === null ||
-                gameEngine.notes() === undefined ? (
-                  <i className="fa fa-info"></i>
-                ) : (
-                  <span className="highlight">
+                <button
+                  className="fabtn align-right"
+                  onClick={() => {
+                    showGameDetailsSetter(true);
+                  }}
+                  title={t("GameInfo")}
+                >
+                  {gameEngine === undefined ||
+                  gameEngine === null ||
+                  gameEngine.notes() === undefined ? (
                     <i className="fa fa-info"></i>
-                  </span>
-                )}
-              </button>
-              <button
-                className="fabtn align-right"
-                onClick={() => {
-                  showGameDumpSetter(true);
-                }}
-                title={t("DebugModal")}
-              >
-                <i className="fa fa-bug"></i>
-              </button>
+                  ) : (
+                    <span className="highlight">
+                      <i className="fa fa-info"></i>
+                    </span>
+                  )}
+                </button>
+                <button
+                  className="fabtn align-right"
+                  onClick={() => {
+                    showGameDumpSetter(true);
+                  }}
+                  title={t("DebugModal")}
+                >
+                  <i className="fa fa-bug"></i>
+                </button>
+              </div>
             </div>
-          </div>
-          {/***************** GameMoves *****************/}
-            <div
-              className={`column is-narrow`}
-            >
+            {/***************** GameMoves *****************/}
+            <div className={`column is-narrow`}>
               <GameMoves
                 focus={focus}
                 game={game}
@@ -2036,15 +2110,15 @@ function Playground(props) {
                 key={`Moves|colorSet${colorsChanged}`}
               />
             </div>
-        </div>
-        <div className="control">
-          <button className="button apButton" onClick={handleResetPlayground}>
-            Reset Playground
-          </button>
-        </div>
+          </div>
+          <div className="control">
+            <button className="button apButton" onClick={handleResetPlayground}>
+              Reset Playground
+            </button>
+          </div>
 
-        {/* columns */}
-        {/* <RenderOptionsModal
+          {/* columns */}
+          {/* <RenderOptionsModal
           show={showSettings}
           game={game}
           settings={userSettings}
@@ -2055,129 +2129,133 @@ function Playground(props) {
           handleClose={handleSettingsClose}
           handleSave={handleSettingsSave}
         /> */}
-        <Modal
-          show={showDeleteSubtreeConfirm}
-          title={t("ConfirmDeleteSubtree")}
-          buttons={[
-            { label: t("Delete"), action: handleDeleteSubtreeConfirmed },
-            {
-              label: t("Cancel"),
-              action: handleCloseDeleteSubtreeConfirm,
-            },
-          ]}
-        >
-          <div className="content">
-            <p>{t("ConfirmDeleteSubtreeDesc")}</p>
-          </div>
-        </Modal>
-        <Modal
-          show={showGameDetails}
-          title={t("GameInfoFor", { metaGame: gameDeets?.name })}
-          buttons={[
-            {
-              label: t("Close"),
-              action: () => {
-                showGameDetailsSetter(false);
+          <Modal
+            show={showDeleteSubtreeConfirm}
+            title={t("ConfirmDeleteSubtree")}
+            buttons={[
+              { label: t("Delete"), action: handleDeleteSubtreeConfirmed },
+              {
+                label: t("Cancel"),
+                action: handleCloseDeleteSubtreeConfirm,
               },
-            },
-          ]}
-        >
-          {gameEngine === undefined || gameEngine === null ? null : (
+            ]}
+          >
             <div className="content">
-              <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-                {gameEngine.description() +
-                  (designerString === undefined ? "" : "\n\n" + designerString)}
-              </ReactMarkdown>
-              <ul className="contained">
-                {gameDeets.urls.map((l, i) => (
-                  <li key={i}>
-                    <a href={l} target="_blank" rel="noopener noreferrer">
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              {gameEngine.notes() === undefined ? (
+              <p>{t("ConfirmDeleteSubtreeDesc")}</p>
+            </div>
+          </Modal>
+          <Modal
+            show={showGameDetails}
+            title={t("GameInfoFor", { metaGame: gameDeets?.name })}
+            buttons={[
+              {
+                label: t("Close"),
+                action: () => {
+                  showGameDetailsSetter(false);
+                },
+              },
+            ]}
+          >
+            {gameEngine === undefined || gameEngine === null ? null : (
+              <div className="content">
+                <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+                  {gameEngine.description() +
+                    (designerString === undefined
+                      ? ""
+                      : "\n\n" + designerString)}
+                </ReactMarkdown>
+                <ul className="contained">
+                  {gameDeets.urls.map((l, i) => (
+                    <li key={i}>
+                      <a href={l} target="_blank" rel="noopener noreferrer">
+                        {l}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                {gameEngine.notes() === undefined ? (
+                  ""
+                ) : (
+                  <>
+                    <h2>{t("ImplementationNotes")}</h2>
+                    <ReactMarkdown
+                      rehypePlugins={[rehypeRaw]}
+                      className="content"
+                    >
+                      {gameEngine.notes()}
+                    </ReactMarkdown>
+                  </>
+                )}
+              </div>
+            )}
+          </Modal>
+          <Modal
+            show={showGameDump}
+            title={t("DebugModal")}
+            buttons={[
+              {
+                label: t("Close"),
+                action: () => {
+                  showGameDumpSetter(false);
+                },
+              },
+            ]}
+          >
+            <div className="content">
+              <p>
+                If there's a problem with your game, a developer may ask you to
+                come to this page and send them the current game state. You can
+                either click the "Copy" link below to copy the text to your
+                clipboard and then paste it somewhere, or you can click the
+                "Download" button to save a text file to your computer, which
+                you can then send to the developers. Thank you!
+              </p>
+              {gameRef === null ||
+              gameRef.current === null ||
+              gameRef.current.state === null ? (
                 ""
               ) : (
-                <>
-                  <h2>{t("ImplementationNotes")}</h2>
-                  <ReactMarkdown
-                    rehypePlugins={[rehypeRaw]}
-                    className="content"
-                  >
-                    {gameEngine.notes()}
-                  </ReactMarkdown>
-                </>
+                <Fragment>
+                  <ClipboardCopy
+                    copyText={getFocusNode(explorationRef.current, focus).state}
+                  />
+                  <div className="field">
+                    <div className="control">
+                      <a
+                        href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                          getFocusNode(explorationRef.current, focus).state
+                        )}`}
+                        download="AbstractPlay-Debug.json"
+                      >
+                        <button className="button apButtonNeutral">
+                          {t("Download")}
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                </Fragment>
               )}
             </div>
-          )}
-        </Modal>
-        <Modal
-          show={showGameDump}
-          title={t("DebugModal")}
-          buttons={[
-            {
-              label: t("Close"),
-              action: () => {
-                showGameDumpSetter(false);
-              },
-            },
-          ]}
-        >
-          <div className="content">
-            <p>
-              If there's a problem with your game, a developer may ask you to
-              come to this page and send them the current game state. You can
-              either click the "Copy" link below to copy the text to your
-              clipboard and then paste it somewhere, or you can click the
-              "Download" button to save a text file to your computer, which you
-              can then send to the developers. Thank you!
-            </p>
-            {gameRef === null ||
-            gameRef.current === null ||
-            gameRef.current.state === null ? (
-              ""
-            ) : (
-              <Fragment>
-                <ClipboardCopy
-                  copyText={getFocusNode(explorationRef.current, focus).state}
-                />
-                <div className="field">
-                  <div className="control">
-                    <a
-                      href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                        getFocusNode(explorationRef.current, focus).state
-                      )}`}
-                      download="AbstractPlay-Debug.json"
-                    >
-                      <button className="button apButtonNeutral">{t("Download")}</button>
-                    </a>
-                  </div>
-                </div>
-              </Fragment>
-            )}
-          </div>
-        </Modal>
-        <canvas
-          id="pngExportCanvas"
-          ref={canvasRef}
-          style={{ display: "none" }}
-        ></canvas>
-      </article>
+          </Modal>
+          <canvas
+            id="pngExportCanvas"
+            ref={canvasRef}
+            style={{ display: "none" }}
+          ></canvas>
+        </article>
       </>
     );
   } else {
     return (
-        <>
-            <h4>{errorMessageRef.current}</h4>
-            <div className="control">
-            <button className="button apButton" onClick={handleResetPlayground}>
-                Reset Playground
-            </button>
-            </div>
-        </>
-    )
+      <>
+        <h4>{errorMessageRef.current}</h4>
+        <div className="control">
+          <button className="button apButton" onClick={handleResetPlayground}>
+            Reset Playground
+          </button>
+        </div>
+      </>
+    );
   }
 }
 

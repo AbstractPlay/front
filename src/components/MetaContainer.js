@@ -112,16 +112,12 @@ function MetaContainer(props) {
         globalMeSetter(newMe);
         // update counts locally
         const newcounts = JSON.parse(JSON.stringify(counts));
-        if (
-            newMe !== null &&
-            "stars" in newMe &&
-            Array.isArray(newMe.stars)
-        ) {
-            if (newMe.stars.includes(game)) {
-                newcounts[game].stars++;
-              } else {
-                newcounts[game].stars--;
-              }
+        if (newMe !== null && "stars" in newMe && Array.isArray(newMe.stars)) {
+          if (newMe.stars.includes(game)) {
+            newcounts[game].stars++;
+          } else {
+            newcounts[game].stars--;
+          }
         }
         countsSetter(newcounts);
       }
@@ -154,46 +150,60 @@ function MetaContainer(props) {
     }
   };
 
-//   console.log(games);
-  if (metaGame === undefined  || metaGame === null || ! gameinfo.has(metaGame)) {
+  //   console.log(games);
+  if (metaGame === undefined || metaGame === null || !gameinfo.has(metaGame)) {
     return (
-        <Fragment>
-          <Helmet>
-            <meta property="og:title" content="List of available games" />
-            <meta property="og:url" content="https://play.abstractplay.com/games" />
-            <meta property="og:description" content="A sortable table of all the games currently available on Abstract Play." />
-          </Helmet>
-          <Table
-            metaGame={metaGame}
-            counts={counts}
-            games={games}
-            summary={summary}
-            toggleStar={toggleStar.bind(this)}
-            handleChallenge={handleNewChallenge.bind(this)}
-            users={users}
-            updateSetter={updateCounterSetter}
+      <Fragment>
+        <Helmet>
+          <meta property="og:title" content="List of available games" />
+          <meta
+            property="og:url"
+            content="https://play.abstractplay.com/games"
           />
-        </Fragment>
-      );
+          <meta
+            property="og:description"
+            content="A sortable table of all the games currently available on Abstract Play."
+          />
+        </Helmet>
+        <Table
+          metaGame={metaGame}
+          counts={counts}
+          games={games}
+          summary={summary}
+          toggleStar={toggleStar.bind(this)}
+          handleChallenge={handleNewChallenge.bind(this)}
+          users={users}
+          updateSetter={updateCounterSetter}
+        />
+      </Fragment>
+    );
   } else if (counts !== null) {
     return (
-        <>
-          <Helmet>
-            <meta property="og:title" content={`${gameinfo.get(metaGame).name}: Game Information`} />
-            <meta property="og:url" content="https://play.abstractplay.com/games" />
-            <meta property="og:description" content={`Information on the game ${gameinfo.get(metaGame).name}`} />
-          </Helmet>
-          <MetaItem
-            game={gameinfo.get(metaGame)}
-            counts={counts[metaGame]}
-            summary={summary}
-            toggleStar={toggleStar.bind(this)}
-            handleChallenge={handleNewChallenge.bind(this)}
+      <>
+        <Helmet>
+          <meta
+            property="og:title"
+            content={`${gameinfo.get(metaGame).name}: Game Information`}
           />
-        </>
+          <meta
+            property="og:url"
+            content="https://play.abstractplay.com/games"
+          />
+          <meta
+            property="og:description"
+            content={`Information on the game ${gameinfo.get(metaGame).name}`}
+          />
+        </Helmet>
+        <MetaItem
+          game={gameinfo.get(metaGame)}
+          counts={counts[metaGame]}
+          summary={summary}
+          toggleStar={toggleStar.bind(this)}
+          handleChallenge={handleNewChallenge.bind(this)}
+        />
+      </>
     );
   }
-
 }
 
 export default MetaContainer;

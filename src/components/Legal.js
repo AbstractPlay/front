@@ -77,9 +77,18 @@ function About(props) {
   return (
     <Fragment>
       <Helmet>
-          <meta property="og:title" content={`Terms of Service & Privacy Policy`} />
-          <meta property="og:url" content={`https://play.abstractplay.com/legal`} />
-          <meta property="og:description" content={`Terms of Service & Privacy Policy`} />
+        <meta
+          property="og:title"
+          content={`Terms of Service & Privacy Policy`}
+        />
+        <meta
+          property="og:url"
+          content={`https://play.abstractplay.com/legal`}
+        />
+        <meta
+          property="og:description"
+          content={`Terms of Service & Privacy Policy`}
+        />
       </Helmet>
       <article className="content">
         <h1 className="has-text-centered title">{t("Legal")}</h1>

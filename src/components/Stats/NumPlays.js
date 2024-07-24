@@ -5,7 +5,7 @@ import Plot from "react-plotly.js";
 import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
 
-function NumPlays({metaFilter}) {
+function NumPlays({ metaFilter }) {
   const [summary] = useContext(SummaryContext);
   const [joined, joinedSetter] = useState([]);
   const [activeChartModal, activeChartModalSetter] = useState("");
@@ -62,7 +62,12 @@ function NumPlays({metaFilter}) {
             histMax,
           };
         })
-        .filter(rec => metaFilter === undefined || rec.game === metaFilter || rec.game.startsWith(`${metaFilter} (`))
+        .filter(
+          (rec) =>
+            metaFilter === undefined ||
+            rec.game === metaFilter ||
+            rec.game.startsWith(`${metaFilter} (`)
+        )
         .sort((a, b) => b.plays - a.plays),
     [joined, metaFilter]
   );

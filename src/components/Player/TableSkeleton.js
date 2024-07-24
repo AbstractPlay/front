@@ -46,52 +46,52 @@ function TableSkeleton(props) {
   const tableNavigation = (
     <>
       <div className="smallerText tableNav">
-          <div>
-            <button
-              className="button is-small"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-double-left"></i>
-              </span>
-            </button>
-            <button
-              className="button is-small"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-left"></i>
-              </span>
-            </button>
-            <button
-              className="button is-small"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-right"></i>
-              </span>
-            </button>
-            <button
-              className="button is-small"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-double-right"></i>
-              </span>
-            </button>
-          </div>
-          <div>
-            <p>
-              Page <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
-              of <strong>{table.getPageCount()}</strong> (
-              {table.getPrePaginationRowModel()?.rows?.length || 0} total rows)
-            </p>
-          </div>
-          {/* <div className="level-item">
+        <div>
+          <button
+            className="button is-small"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <span className="icon is-small">
+              <i className="fa fa-angle-double-left"></i>
+            </span>
+          </button>
+          <button
+            className="button is-small"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <span className="icon is-small">
+              <i className="fa fa-angle-left"></i>
+            </span>
+          </button>
+          <button
+            className="button is-small"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="icon is-small">
+              <i className="fa fa-angle-right"></i>
+            </span>
+          </button>
+          <button
+            className="button is-small"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="icon is-small">
+              <i className="fa fa-angle-double-right"></i>
+            </span>
+          </button>
+        </div>
+        <div>
+          <p>
+            Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
+            <strong>{table.getPageCount()}</strong> (
+            {table.getPrePaginationRowModel()?.rows?.length || 0} total rows)
+          </p>
+        </div>
+        {/* <div className="level-item">
                     <div className="field">
                         <span>|&nbsp;Go to page:</span>
                         <input
@@ -105,24 +105,24 @@ function TableSkeleton(props) {
                         />
                     </div>
                 </div> */}
-          <div>
-            <div className="control">
-              <div className="select is-small">
-                <select
-                  value={table.getState().pagination.pageSize}
-                  onChange={(e) => {
-                    showStateSetter(Number(e.target.value));
-                  }}
-                >
-                  {[10, 20, 30, 40, 50, allSize].map((pageSize) => (
-                    <option key={pageSize} value={pageSize}>
-                      Show {pageSize === allSize ? "All" : pageSize}
-                    </option>
-                  ))}
-                </select>
-              </div>
+        <div>
+          <div className="control">
+            <div className="select is-small">
+              <select
+                value={table.getState().pagination.pageSize}
+                onChange={(e) => {
+                  showStateSetter(Number(e.target.value));
+                }}
+              >
+                {[10, 20, 30, 40, 50, allSize].map((pageSize) => (
+                  <option key={pageSize} value={pageSize}>
+                    Show {pageSize === allSize ? "All" : pageSize}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
+        </div>
       </div>
     </>
   );
@@ -136,9 +136,7 @@ function TableSkeleton(props) {
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                  >
+                  <th key={header.id}>
                     {header.isPlaceholder ? null : (
                       <div
                         {...{

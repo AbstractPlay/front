@@ -17,7 +17,7 @@ const allSize = Number.MAX_SAFE_INTEGER;
 function TableSkeleton(props) {
   const [sorting, setSorting] = useState(props.sort);
   const [globalFilter, globalFilterSetter] = useState(null);
-  const [showState, showStateSetter] = useStorageState("stats-show", 10);
+  const [showState, showStateSetter] = useStorageState("events-show", 10);
   const data = props.data;
   const columns = props.columns;
   const { t } = useTranslation();
@@ -47,19 +47,6 @@ function TableSkeleton(props) {
     <>
       <div className="level smallerText tableNav">
         <div className="level-left">
-          <div className="level-item">
-            <div className="field">
-              <div className="control">
-                <input
-                  className="input is-small"
-                  type="search"
-                  placeholder={t("Search")}
-                  onChange={(e) => globalFilterSetter(e.target.value)}
-                  value={globalFilter ?? ""}
-                />
-              </div>
-            </div>
-          </div>
           <div className="level-item">
             <button
               className="button is-small"
@@ -141,15 +128,98 @@ function TableSkeleton(props) {
       </div>
     </>
   );
+  //   const tableNavigation = (
+  //     <>
+  //       <div className="smallerText tableNav">
+  //         <div>
+  //           <button
+  //             className="button is-small"
+  //             onClick={() => table.setPageIndex(0)}
+  //             disabled={!table.getCanPreviousPage()}
+  //           >
+  //             <span className="icon is-small">
+  //               <i className="fa fa-angle-double-left"></i>
+  //             </span>
+  //           </button>
+  //           <button
+  //             className="button is-small"
+  //             onClick={() => table.previousPage()}
+  //             disabled={!table.getCanPreviousPage()}
+  //           >
+  //             <span className="icon is-small">
+  //               <i className="fa fa-angle-left"></i>
+  //             </span>
+  //           </button>
+  //           <button
+  //             className="button is-small"
+  //             onClick={() => table.nextPage()}
+  //             disabled={!table.getCanNextPage()}
+  //           >
+  //             <span className="icon is-small">
+  //               <i className="fa fa-angle-right"></i>
+  //             </span>
+  //           </button>
+  //           <button
+  //             className="button is-small"
+  //             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+  //             disabled={!table.getCanNextPage()}
+  //           >
+  //             <span className="icon is-small">
+  //               <i className="fa fa-angle-double-right"></i>
+  //             </span>
+  //           </button>
+  //         </div>
+  //         <div>
+  //           <p>
+  //             Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
+  //             <strong>{table.getPageCount()}</strong> (
+  //             {table.getPrePaginationRowModel()?.rows?.length || 0} total rows)
+  //           </p>
+  //         </div>
+  //         {/* <div className="level-item">
+  //                     <div className="field">
+  //                         <span>|&nbsp;Go to page:</span>
+  //                         <input
+  //                             type="number"
+  //                             defaultValue={table.getState().pagination.pageIndex + 1}
+  //                             onChange={e => {
+  //                                 const page = e.target.value ? Number(e.target.value) - 1 : 0
+  //                                 table.setPageIndex(page)
+  //                             }}
+  //                             className="input is-small"
+  //                         />
+  //                     </div>
+  //                 </div> */}
+  //         <div>
+  //           <div className="control">
+  //             <div className="select is-small">
+  //               <select
+  //                 value={table.getState().pagination.pageSize}
+  //                 onChange={(e) => {
+  //                   showStateSetter(Number(e.target.value));
+  //                 }}
+  //               >
+  //                 {[10, 20, 30, 40, 50, allSize].map((pageSize) => (
+  //                   <option key={pageSize} value={pageSize}>
+  //                     Show {pageSize === allSize ? "All" : pageSize}
+  //                   </option>
+  //                 ))}
+  //               </select>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </>
+  //   );
 
   return (
     <article>
       <div className="container">
-        {tableNavigation}
+        {/* {tableNavigation} */}
         <table className="table apTable">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="stickyHeader">
+              <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th key={header.id}>
                     {header.isPlaceholder ? null : (
@@ -177,20 +247,6 @@ function TableSkeleton(props) {
                             </Fragment>
                           ),
                         }[header.column.getIsSorted()] ?? null}
-                        {header.id !== "description" ? null : (
-                          <>
-                            {" "}
-                            <span
-                              style={{
-                                fontSize: "smaller",
-                                fontWeight: "normal",
-                                paddingTop: 0,
-                              }}
-                            >
-                              ({t("ClickExpand")})
-                            </span>
-                          </>
-                        )}
                       </div>
                     )}
                   </th>

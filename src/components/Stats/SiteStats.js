@@ -43,9 +43,7 @@ function SiteStats(props) {
       }),
       columnHelper.display({
         id: "flag",
-        cell: (props) => (
-            <Flag code={props.row.original.id} size="m" />
-        )
+        cell: (props) => <Flag code={props.row.original.id} size="m" />,
       }),
       columnHelper.accessor("n", {
         header: "Count",
@@ -141,14 +139,15 @@ function SiteStats(props) {
       </div>
       <div>
         <div className="content">
-            <p>
-                This shows the breakdown of countries players assert they are playing from. Only includes country codes the system can interpret.
-            </p>
+          <p>
+            This shows the breakdown of countries players assert they are
+            playing from. Only includes country codes the system can interpret.
+          </p>
         </div>
         <TableSkeleton
-            data={data}
-            columns={columns}
-            sort={[{ id: "n", desc: true }]}
+          data={data}
+          columns={columns}
+          sort={[{ id: "n", desc: true }]}
         />
         <hr />
       </div>
@@ -158,13 +157,14 @@ function SiteStats(props) {
             "Hours per move" is calculated as an average per game. Games that
             end by time out or on the first turn are not counted. A box plot
             shows the "hours per move" for each qualifying game record and gives
-            a sense of the spread of that data. Outliers &gt;100 hours are not shown but are included in the calculations.
+            a sense of the spread of that data. Outliers &gt;100 hours are not
+            shown but are included in the calculations.
           </p>
         </div>
         <Plot
           data={[
             {
-              y: summary.hoursPer.filter(x => x <= 100),
+              y: summary.hoursPer.filter((x) => x <= 100),
               type: "box",
               boxpoints: "False",
               orientation: "v",
