@@ -129,11 +129,16 @@ function setupGame(
   display,
   navigate
 ) {
+  if (game0.state === undefined)
+    throw new Error("Why no state? This shouldn't happen no more!");
+  const engine = GameFactory(game0.metaGame, game0.state);
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
   game0.simultaneous =
     info.flags !== undefined && info.flags.includes("simultaneous");
-  game0.pie = info.flags !== undefined && (info.flags.includes("pie") || info.flags.includes("pie-even"));
+  game0.pie = info.flags !== undefined &&
+    (info.flags.includes("pie") || info.flags.includes("pie-even")) &&
+    (typeof engine.shouldOfferPie !== 'function' || engine.shouldOfferPie());
   game0.pieEven = info.flags !== undefined && info.flags.includes("pie-even");
   game0.canCheck = info.flags !== undefined && info.flags.includes("check");
   game0.sharedPieces =
@@ -155,9 +160,6 @@ function setupGame(
   game0.noExploreFlag = info.flags !== undefined && info.flags.includes("no-explore");
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
-  if (game0.state === undefined)
-    throw new Error("Why no state? This shouldn't happen no more!");
-  const engine = GameFactory(game0.metaGame, game0.state);
   if (game0.simultaneous) {
     moveSetter({ ...engine.validateMove("", gameRef.current?.me + 1), rendered: "", move: "" });
   } else {
@@ -166,7 +168,8 @@ function setupGame(
   // eslint-disable-next-line no-prototype-builtins
   game0.canPie =
     game0.pie &&
-    engine.stack.length === 2 &&
+    ((typeof engine.isPieTurn === 'function' && engine.isPieTurn()) ||
+      (typeof engine.isPieTurn !== 'function' && engine.stack.length === 2)) &&
     // eslint-disable-next-line no-prototype-builtins
     (!game0.hasOwnProperty("pieInvoked") || (game0.pieInvoked === false));
   game0.me = game0.players.findIndex((p) => me && p.id === me.id);
@@ -712,7 +715,10 @@ function doView(
       isExplorer(explorer, me)
     ) {
       let automoved = false;
-      while (moves.length === 1 && !(game.pieEven && gameEngineTmp.state().stack.length === 2)) {
+      // Don't auto move through pie offer in a non-Playground game.
+      while (moves.length === 1 && !(game.pieEven &&
+          ((typeof gameEngineTmp.shouldOfferPie === 'function' && gameEngineTmp.shouldOfferPie()) ||
+            (typeof gameEngineTmp.shouldOfferPie !== 'function' && gameEngineTmp.state().stack.length === 2)))) {
         automoved = true;
         if (
           !game.gameOver ||

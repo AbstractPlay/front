@@ -89,11 +89,17 @@ function setupGame(
   display,
   navigate
 ) {
+  if (game0.state === undefined)
+    throw new Error("Why no state? This shouldn't happen no more!");
+  const engine = GameFactory(game0.metaGame, game0.state);
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
   game0.simultaneous =
     info.flags !== undefined && info.flags.includes("simultaneous");
-  game0.pie = info.flags !== undefined && info.flags.includes("pie");
+  game0.pie = info.flags !== undefined &&
+    (info.flags.includes("pie") || info.flags.includes("pie-even")) &&
+    (typeof engine.shouldOfferPie !== 'function' || engine.shouldOfferPie());
+  game0.pieEven = info.flags !== undefined && info.flags.includes("pie-even");
   game0.canCheck = info.flags !== undefined && info.flags.includes("check");
   game0.sharedPieces =
     info.flags !== undefined && info.flags.includes("shared-pieces");
@@ -114,14 +120,12 @@ function setupGame(
   game0.automove = info.flags !== undefined && info.flags.includes("automove");
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
-  if (game0.state === undefined)
-    throw new Error("Why no state? This shouldn't happen no more!");
-  const engine = GameFactory(game0.metaGame, game0.state);
   moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
   // eslint-disable-next-line no-prototype-builtins
   game0.canPie =
     game0.pie &&
-    engine.stack.length === 2 &&
+    ((typeof engine.isPieTurn === 'function' && engine.isPieTurn()) ||
+      (typeof engine.isPieTurn !== 'function' && engine.stack.length === 2)) &&
     // eslint-disable-next-line no-prototype-builtins
     (!game0.hasOwnProperty("pieInvoked") || (game0.pieInvoked = false));
   game0.me = 0; //game0.players.findIndex((p) => me && p.id === me.id);
