@@ -1,33 +1,57 @@
 import React, { useEffect, useState, Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 
-function NoMoves({engine, game, handleMove, t}) {
-    console.log("In NoMoves");
-    const elements = [];
-    if (game.customRandom) {
-        elements.push(
-            <div className="control">
-                <button className="button is-small apButtonNeutral" onClick={() => handleMove(engine.randomMove())}>Random move</button>
-            </div>
-        )
-    }
+function NoMoves({ engine, game, handleMove, t }) {
+  console.log("In NoMoves");
+  const elements = [];
+  if (game.customRandom) {
+    elements.push(
+      <div className="control">
+        <button
+          className="button is-small apButtonNeutral"
+          onClick={() => handleMove(engine.randomMove())}
+        >
+          Random move
+        </button>
+      </div>
+    );
+  }
 
-    if ( game.customButtons && engine !== undefined && engine.getButtons().length > 0 )  {
-        const buttons = engine.getButtons().map(({label, move}, idx) =>
-            <div className="control" key={`MoveButton|${idx}`}>
-                <button className="button is-small apButton" onClick={() => handleMove(move)}>{t(`buttons.${label}`)}</button>
-            </div>
-        )
-        elements.push(...buttons);
-    }
+  if (
+    game.customButtons &&
+    engine !== undefined &&
+    engine.getButtons().length > 0
+  ) {
+    const buttons = engine.getButtons().map(({ label, move }, idx) => (
+      <div className="control" key={`MoveButton|${idx}`}>
+        <button
+          className="button is-small apButton"
+          onClick={() => handleMove(move)}
+        >
+          {t(`buttons.${label}`)}
+        </button>
+      </div>
+    ));
+    elements.push(...buttons);
+  }
 
-    if (elements.length === 0) {
-        elements.push(<div/>);
-    }
-    console.log(`${elements.length} elements found`);
+  if (elements.length === 0) {
+    elements.push(<div />);
+  }
+  console.log(`${elements.length} elements found`);
 
-    return elements.reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null);
+  return elements.reduce(
+    (acc, x) =>
+      acc === null ? (
+        x
+      ) : (
+        <>
+          {acc} {x}
+        </>
+      ),
+    null
+  );
 }
 
 function MoveEntry(props) {
@@ -39,7 +63,13 @@ function MoveEntry(props) {
   const exploration = props.exploration;
   const focus = props.focus;
   const submitting = props.submitting;
-  const [handleMove, handleMark, handleView, handleReset, handleDeleteExploration] = [...props.handlers];
+  const [
+    handleMove,
+    handleMark,
+    handleView,
+    handleReset,
+    handleDeleteExploration,
+  ] = [...props.handlers];
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
@@ -57,10 +87,17 @@ function MoveEntry(props) {
     handleMove("");
   };
 
-  const delayedHandleMove = useMemo(() => debounce((value) => {
-    console.log(props.screenWidth);
-    handleMove(value);
-  }, props.screenWidth < 770 ? 1000 : 500), [handleMove, props.screenWidth]);
+  const delayedHandleMove = useMemo(
+    () =>
+      debounce(
+        (value) => {
+          console.log(props.screenWidth);
+          handleMove(value);
+        },
+        props.screenWidth < 770 ? 1000 : 500
+      ),
+    [handleMove, props.screenWidth]
+  );
 
   const handleMoveInputChange = (value) => {
     inputValueSetter(value);
@@ -71,7 +108,7 @@ function MoveEntry(props) {
       delayedHandleMove.cancel();
       handleMove(value);
     }
-  }
+  };
 
   useEffect(() => {
     inputValueSetter(move.move);
@@ -175,51 +212,75 @@ function MoveEntry(props) {
             <Fragment>
               {moves === null ? (
                 <NoMoves
-                    engine={engine}
-                    game={game}
-                    handleMove={handleMove}
-                    t={t}
+                  engine={engine}
+                  game={game}
+                  handleMove={handleMove}
+                  t={t}
                 />
               ) : (
                 <Fragment>
-                <div className="field">
-                  <div className="control">
-                    <div className="select is-small">
+                  <div className="field">
+                    <div className="control">
+                      <div className="select is-small">
                         <select
-                        name="moves"
-                        id="selectmove"
-                        value=""
-                        onChange={(e) => handleMove(e.target.value)}
+                          name="moves"
+                          id="selectmove"
+                          value=""
+                          onChange={(e) => handleMove(e.target.value)}
                         >
-                        <option value="">{t("ChooseMove")}</option>
-                        {moves.sort(sortLenAlpha).map((move, index) => {
+                          <option value="">{t("ChooseMove")}</option>
+                          {moves.sort(sortLenAlpha).map((move, index) => {
                             return (
-                            <option key={index} value={move}>
+                              <option key={index} value={move}>
                                 {move}
-                            </option>
+                              </option>
                             );
-                        })}
+                          })}
                         </select>
+                      </div>
                     </div>
+                    {game.customButtons ||
+                    !Array.isArray(moves) ||
+                    !moves.includes("pass") ? null : (
+                      <div className="control">
+                        <button
+                          className="button is-small apButton"
+                          onClick={() => handleMove("pass")}
+                        >
+                          Pass
+                        </button>
+                      </div>
+                    )}
+                    {/* Look for automated buttons */}
+                    {!game.customButtons ||
+                    engine === undefined ||
+                    engine?.getButtons().length === 0
+                      ? null
+                      : engine?.getButtons().map(({ label, move }, idx) => (
+                          <div className="control" key={`MoveButton|${idx}`}>
+                            <button
+                              className="button is-small apButton"
+                              onClick={() => handleMove(move)}
+                            >
+                              {t(`buttons.${label}`)}
+                            </button>
+                          </div>
+                        ))}
                   </div>
-                  {( game.customButtons || !Array.isArray(moves) || !moves.includes("pass") ) ? null :
+                  {!Array.isArray(moves) ? null : (
                     <div className="control">
-                        <button className="button is-small apButton" onClick={() => handleMove("pass")}>Pass</button>
+                      <button
+                        className="button is-small apButtonNeutral"
+                        onClick={() =>
+                          handleMove(
+                            moves[Math.floor(Math.random() * moves.length)]
+                          )
+                        }
+                      >
+                        Random move
+                      </button>
                     </div>
-                  }
-                  {/* Look for automated buttons */}
-                  {( !game.customButtons || engine === undefined || engine?.getButtons().length === 0 ) ? null :
-                  engine?.getButtons().map(({label, move}, idx) =>
-                    <div className="control" key={`MoveButton|${idx}`}>
-                        <button className="button is-small apButton" onClick={() => handleMove(move)}>{t(`buttons.${label}`)}</button>
-                    </div>)
-                  }
-                  </div>
-                  {! Array.isArray(moves) ? null :
-                    <div className="control">
-                        <button className="button is-small apButtonNeutral" onClick={() => handleMove(moves[Math.floor(Math.random() * moves.length)])}>Random move</button>
-                    </div>
-                  }
+                  )}
                   <p className="lined">
                     <span>{t("Or")}</span>
                   </p>

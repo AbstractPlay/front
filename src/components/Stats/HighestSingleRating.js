@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { MeContext, UsersContext, SummaryContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 
-function HighestSingleRating({metaFilter}) {
+function HighestSingleRating({ metaFilter }) {
   const [summary] = useContext(SummaryContext);
   const [globalMe] = useContext(MeContext);
   const [userNames] = useContext(UsersContext);
@@ -29,7 +29,12 @@ function HighestSingleRating({metaFilter}) {
             trueskill,
           };
         })
-        .filter(rec => metaFilter === undefined || rec.game === metaFilter || rec.game.startsWith(`${metaFilter} (`))
+        .filter(
+          (rec) =>
+            metaFilter === undefined ||
+            rec.game === metaFilter ||
+            rec.game.startsWith(`${metaFilter} (`)
+        )
         .sort((a, b) => b.rating - a.rating),
     [summary, userNames, metaFilter]
   );
@@ -41,9 +46,13 @@ function HighestSingleRating({metaFilter}) {
         header: "Player",
         cell: (props) =>
           globalMe !== null && globalMe.id === props.row.original.userid ? (
-            <Link to={`/player/${props.row.original.userid}`}><span className="bolder highlight">{props.getValue()}</span></Link>
+            <Link to={`/player/${props.row.original.userid}`}>
+              <span className="bolder highlight">{props.getValue()}</span>
+            </Link>
           ) : (
-            <Link to={`/player/${props.row.original.userid}`}>{props.getValue()}</Link>
+            <Link to={`/player/${props.row.original.userid}`}>
+              {props.getValue()}
+            </Link>
           ),
       }),
       columnHelper.accessor("game", {
@@ -55,56 +64,75 @@ function HighestSingleRating({metaFilter}) {
       columnHelper.accessor("glicko", {
         header: "Glicko",
         cell: (props) => {
-            const rating = props.getValue().rating;
-            const rd = props.getValue().rd;
-            const min = Math.round(rating - (rd * 2));
-            const max = Math.round(rating + (rd * 2));
-            return `${min}–${max}`
+          const rating = props.getValue().rating;
+          const rd = props.getValue().rd;
+          const min = Math.round(rating - rd * 2);
+          const max = Math.round(rating + rd * 2);
+          return `${min}–${max}`;
         },
         sortingFn: (rowA, rowB, columnID) => {
-            const ratingA = Math.round(rowA.getAllCells(columnID).rating);
-            const ratingB = Math.round(rowB.getAllCells(columnID).rating);
-            const rdA = Math.round(rowA.getAllCells(columnID).rd);
-            const rdB = Math.round(rowB.getAllCells(columnID).rd);
-            if (ratingA === ratingB) {
-                return rdA - rdB;
-            } else {
-                return ratingA - ratingB;
-            }
+          const ratingA = Math.round(rowA.getAllCells(columnID).rating);
+          const ratingB = Math.round(rowB.getAllCells(columnID).rating);
+          const rdA = Math.round(rowA.getAllCells(columnID).rd);
+          const rdB = Math.round(rowB.getAllCells(columnID).rd);
+          if (ratingA === ratingB) {
+            return rdA - rdB;
+          } else {
+            return ratingA - ratingB;
+          }
         },
       }),
       columnHelper.accessor("trueskill", {
         header: "Trueskill",
         cell: (props) => Math.round(props.getValue().mu * 10) / 10,
         sortingFn: (rowA, rowB, columnID) => {
-            return rowA.getValue(columnID).mu - rowB.getValue(columnID).mu;
+          return rowA.getValue(columnID).mu - rowB.getValue(columnID).mu;
         },
       }),
       columnHelper.accessor("wld", {
         header: "Win/Loss/Draw",
         cell: (props) => {
-            const sum = props.getValue().reduce((prev, curr) => prev + curr, 0);
-            if (sum > 0) {
-                const winrate = Math.trunc(((props.getValue()[0] + (props.getValue()[2] / 2)) / sum) * 1000) / 10;
-                return `${winrate}% (${props.getValue()[0]}, ${props.getValue()[1]}, ${props.getValue()[2]})`
-            } else {
-                return `---`
-            }
+          const sum = props.getValue().reduce((prev, curr) => prev + curr, 0);
+          if (sum > 0) {
+            const winrate =
+              Math.trunc(
+                ((props.getValue()[0] + props.getValue()[2] / 2) / sum) * 1000
+              ) / 10;
+            return `${winrate}% (${props.getValue()[0]}, ${
+              props.getValue()[1]
+            }, ${props.getValue()[2]})`;
+          } else {
+            return `---`;
+          }
         },
         sortingFn: (rowA, rowB, columnID) => {
-            const sumA = rowA.getValue(columnID).reduce((prev, curr) => prev + curr, 0);
-            const sumB = rowB.getValue(columnID).reduce((prev, curr) => prev + curr, 0);
-            const rateA = Math.trunc(((rowA.getValue(columnID)[0] + (rowA.getValue(columnID)[2] / 2)) / sumA) * 1000) / 10;
-            const rateB = Math.trunc(((rowB.getValue(columnID)[0] + (rowB.getValue(columnID)[2] / 2)) / sumB) * 1000) / 10;
-            // NaNs first
-            if (isNaN(rateA) && isNaN(rateB)) {
-                return 0;
-            } else if (isNaN(rateA)) {
-                return -1;
-            } else if (isNaN(rateB)) {
-                return 1;
-            }
-            return rateA < rateB ? -1 : rateA > rateB ? 1 : 0;
+          const sumA = rowA
+            .getValue(columnID)
+            .reduce((prev, curr) => prev + curr, 0);
+          const sumB = rowB
+            .getValue(columnID)
+            .reduce((prev, curr) => prev + curr, 0);
+          const rateA =
+            Math.trunc(
+              ((rowA.getValue(columnID)[0] + rowA.getValue(columnID)[2] / 2) /
+                sumA) *
+                1000
+            ) / 10;
+          const rateB =
+            Math.trunc(
+              ((rowB.getValue(columnID)[0] + rowB.getValue(columnID)[2] / 2) /
+                sumB) *
+                1000
+            ) / 10;
+          // NaNs first
+          if (isNaN(rateA) && isNaN(rateB)) {
+            return 0;
+          } else if (isNaN(rateA)) {
+            return -1;
+          } else if (isNaN(rateB)) {
+            return 1;
+          }
+          return rateA < rateB ? -1 : rateA > rateB ? 1 : 0;
         },
       }),
     ],

@@ -55,7 +55,15 @@ function PlayerStats(props) {
     () =>
       joined
         .map(
-          ({ user: userid, plays, eclectic, social, histogram, histShort, h }) => {
+          ({
+            user: userid,
+            plays,
+            eclectic,
+            social,
+            histogram,
+            histShort,
+            h,
+          }) => {
             let name = "UNKNOWN";
             const user = userNames.find((u) => u.id === userid);
             if (user !== undefined) {
@@ -78,7 +86,7 @@ function PlayerStats(props) {
   );
 
   useEffect(() => {
-    console.log(data)
+    console.log(data);
   }, [data]);
 
   const columnHelper = createColumnHelper();
@@ -88,9 +96,13 @@ function PlayerStats(props) {
         header: "Player",
         cell: (props) =>
           globalMe !== null && globalMe.id === props.row.original.id ? (
-            <Link to={`/player/${props.row.original.id}`}><span className="bolder highlight">{props.getValue()}</span></Link>
+            <Link to={`/player/${props.row.original.id}`}>
+              <span className="bolder highlight">{props.getValue()}</span>
+            </Link>
           ) : (
-            <Link to={`/player/${props.row.original.id}`}>{props.getValue()}</Link>
+            <Link to={`/player/${props.row.original.id}`}>
+              {props.getValue()}
+            </Link>
           ),
       }),
       columnHelper.accessor("plays", {

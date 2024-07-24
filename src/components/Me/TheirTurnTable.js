@@ -71,8 +71,7 @@ function TheirTurnTable(props) {
           gameName: "Unknown",
           gameStarted: g.gameStarted || 0,
           lastMove: g.lastMoveTime,
-          opponents: g.players
-            .filter((item) => item.id !== globalMe.id),
+          opponents: g.players.filter((item) => item.id !== globalMe.id),
           numMoves: g.numMoves || 0,
           myTime: them === undefined ? undefined : them.time,
           timeRemaining:
@@ -80,7 +79,8 @@ function TheirTurnTable(props) {
               ? undefined
               : them.time - (Date.now() - g.lastMoveTime),
         };
-        if (gameinfo.get(g.metaGame) !== undefined) ret.gameName = gameinfo.get(g.metaGame).name;
+        if (gameinfo.get(g.metaGame) !== undefined)
+          ret.gameName = gameinfo.get(g.metaGame).name;
         return ret;
       }),
     [props.games, globalMe.id]
@@ -93,19 +93,39 @@ function TheirTurnTable(props) {
         header: "Game",
         cell: (props) => {
           if (props.getValue() === "Unknown") {
-            return (<>Unknown</>);
+            return <>Unknown</>;
           } else {
-            return (<Link to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}>{props.getValue()}</Link>);
+            return (
+              <Link
+                to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
+              >
+                {props.getValue()}
+              </Link>
+            );
           }
-        }
+        },
       }),
       columnHelper.accessor("opponents", {
         header: "Opponents",
-        cell: (props) => props.getValue().map(u => <Link to={`/player/${u.id}`}>{u.name}</Link>).reduce((acc, x) => acc === null ? x : <>{acc}, {x}</>, null),
+        cell: (props) =>
+          props
+            .getValue()
+            .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+            .reduce(
+              (acc, x) =>
+                acc === null ? (
+                  x
+                ) : (
+                  <>
+                    {acc}, {x}
+                  </>
+                ),
+              null
+            ),
         sortingFn: (rowA, rowB, columnID) => {
-            const nameA = rowA.getValue(columnID)[0].name;
-            const nameB = rowB.getValue(columnID)[0].name;
-            return nameA.localeCompare(nameB);
+          const nameA = rowA.getValue(columnID)[0].name;
+          const nameB = rowB.getValue(columnID)[0].name;
+          return nameA.localeCompare(nameB);
         },
       }),
       columnHelper.accessor("gameStarted", {

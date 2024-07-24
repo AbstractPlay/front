@@ -26,7 +26,12 @@ import Board from "./GameMove/Board";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import ClipboardCopy from "./GameMove/ClipboardCopy";
-import { MeContext, MyTurnContext, UsersContext, ColourContext } from "../pages/Skeleton";
+import {
+  MeContext,
+  MyTurnContext,
+  UsersContext,
+  ColourContext,
+} from "../pages/Skeleton";
 import UserChats from "./GameMove/UserChats";
 import Joyride, { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
@@ -136,9 +141,10 @@ function setupGame(
   game0.name = info.name;
   game0.simultaneous =
     info.flags !== undefined && info.flags.includes("simultaneous");
-  game0.pie = info.flags !== undefined &&
+  game0.pie =
+    info.flags !== undefined &&
     (info.flags.includes("pie") || info.flags.includes("pie-even")) &&
-    (typeof engine.shouldOfferPie !== 'function' || engine.shouldOfferPie());
+    (typeof engine.shouldOfferPie !== "function" || engine.shouldOfferPie());
   game0.pieEven = info.flags !== undefined && info.flags.includes("pie-even");
   game0.canCheck = info.flags !== undefined && info.flags.includes("check");
   game0.sharedPieces =
@@ -157,21 +163,26 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("shared-stash");
   game0.noMoves = info.flags !== undefined && info.flags.includes("no-moves");
   game0.automove = info.flags !== undefined && info.flags.includes("automove");
-  game0.noExploreFlag = info.flags !== undefined && info.flags.includes("no-explore");
+  game0.noExploreFlag =
+    info.flags !== undefined && info.flags.includes("no-explore");
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
   if (game0.simultaneous) {
-    moveSetter({ ...engine.validateMove("", gameRef.current?.me + 1), rendered: "", move: "" });
+    moveSetter({
+      ...engine.validateMove("", gameRef.current?.me + 1),
+      rendered: "",
+      move: "",
+    });
   } else {
     moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
   }
   // eslint-disable-next-line no-prototype-builtins
   game0.canPie =
     game0.pie &&
-    ((typeof engine.isPieTurn === 'function' && engine.isPieTurn()) ||
-      (typeof engine.isPieTurn !== 'function' && engine.stack.length === 2)) &&
+    ((typeof engine.isPieTurn === "function" && engine.isPieTurn()) ||
+      (typeof engine.isPieTurn !== "function" && engine.stack.length === 2)) &&
     // eslint-disable-next-line no-prototype-builtins
-    (!game0.hasOwnProperty("pieInvoked") || (game0.pieInvoked === false));
+    (!game0.hasOwnProperty("pieInvoked") || game0.pieInvoked === false);
   game0.me = game0.players.findIndex((p) => me && p.id === me.id);
   game0.variants = engine.getVariants();
 
@@ -190,7 +201,11 @@ function setupGame(
   } else {
     game0.canSubmit =
       game0.toMove !== "" && me && game0.players[game0.toMove].id === me.id;
-    game0.canExplore = game0.numPlayers === 2 && isExplorer(explorer, me) && (game0.noExplore !== true || game0.gameOver) && (game0.noExploreFlag !== true);
+    game0.canExplore =
+      game0.numPlayers === 2 &&
+      isExplorer(explorer, me) &&
+      (game0.noExplore !== true || game0.gameOver) &&
+      game0.noExploreFlag !== true;
   }
   if (game0.sharedPieces) {
     game0.seatNames = [];
@@ -554,18 +569,23 @@ function setupColors(settings, game, globalMe, colourContext, node) {
     //   } else if (settings.color === "patterns") {
     //     options.patterns = true;
   }
-  if (settings.color !== "standard" && settings.color !== "blind" && globalMe !== null && globalMe.palettes !== null) {
-    const palette = globalMe.palettes.find(p => p.name === settings.color);
+  if (
+    settings.color !== "standard" &&
+    settings.color !== "blind" &&
+    globalMe !== null &&
+    globalMe.palettes !== null
+  ) {
+    const palette = globalMe.palettes.find((p) => p.name === settings.color);
     if (palette !== undefined) {
-        options.colours = [...palette.colours];
-        while (options.colours.length < 10) {
-            options.colours.push("#fff");
-        }
+      options.colours = [...palette.colours];
+      while (options.colours.length < 10) {
+        options.colours.push("#fff");
+      }
     }
   }
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
-        return { isImage: false, value: game.seatNames[i] };
+      return { isImage: false, value: game.seatNames[i] };
     } else {
       options.svgid = "player" + i + "color";
       options.colourContext = colourContext;
@@ -573,9 +593,9 @@ function setupColors(settings, game, globalMe, colourContext, node) {
       if (game.customColours) {
         let engine;
         if (node === undefined) {
-            engine = GameFactory(game.metaGame, game.state);
+          engine = GameFactory(game.metaGame, game.state);
         } else {
-            engine = GameFactory(game.metaGame, node.state);
+          engine = GameFactory(game.metaGame, node.state);
         }
         color = engine.getPlayerColour(i + 1);
       }
@@ -716,9 +736,16 @@ function doView(
     ) {
       let automoved = false;
       // Don't auto move through pie offer in a non-Playground game.
-      while (moves.length === 1 && !(game.pieEven &&
-          ((typeof gameEngineTmp.shouldOfferPie === 'function' && gameEngineTmp.shouldOfferPie()) ||
-            (typeof gameEngineTmp.shouldOfferPie !== 'function' && gameEngineTmp.state().stack.length === 2)))) {
+      while (
+        moves.length === 1 &&
+        !(
+          game.pieEven &&
+          ((typeof gameEngineTmp.shouldOfferPie === "function" &&
+            gameEngineTmp.shouldOfferPie()) ||
+            (typeof gameEngineTmp.shouldOfferPie !== "function" &&
+              gameEngineTmp.state().stack.length === 2))
+        )
+      ) {
         automoved = true;
         if (
           !game.gameOver ||
@@ -739,7 +766,9 @@ function doView(
         moves = gameEngineTmp.moves();
       }
       if (automoved) {
-        toast("At least one forced move was automatically made. Review the move tree to see each individual state.")
+        toast(
+          "At least one forced move was automatically made. Review the move tree to see each individual state."
+        );
       }
     }
   } catch (err) {
@@ -762,10 +791,13 @@ function doView(
   if (!partialMove) {
     if (
       !game.gameOver ||
-      !(newfocus.exPath.length === 0 && gameEngineTmp.sameMove(
-        m,
-        explorationRef.current[newfocus.moveNumber + 1].move
-      ))
+      !(
+        newfocus.exPath.length === 0 &&
+        gameEngineTmp.sameMove(
+          m,
+          explorationRef.current[newfocus.moveNumber + 1].move
+        )
+      )
     ) {
       const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
       if (game.gameOver)
@@ -792,9 +824,13 @@ function doView(
     );
     focusSetter(newfocus);
     if (game.simultaneous) {
-        moveSetter({ ...gameEngineTmp.validateMove("", game.me + 1), rendered: "", move: "" });
+      moveSetter({
+        ...gameEngineTmp.validateMove("", game.me + 1),
+        rendered: "",
+        move: "",
+      });
     } else {
-        moveSetter({ ...gameEngineTmp.validateMove(""), rendered: "", move: "" });
+      moveSetter({ ...gameEngineTmp.validateMove(""), rendered: "", move: "" });
     }
 
     if (newfocus.canExplore && !game.noMoves) {
@@ -806,13 +842,15 @@ function doView(
   partialMoveRenderRef.current = partialMove;
   // console.log('setting renderrep 1');
   engineRef.current = gameEngineTmp;
-  console.log(`(doView) ABOUT TO RERENDER! Display setting: ${settings?.display}`);
+  console.log(
+    `(doView) ABOUT TO RERENDER! Display setting: ${settings?.display}`
+  );
   renderrepSetter(
     replaceNames(
       gameEngineTmp.render({
         perspective: game.me + 1,
         altDisplay: settings?.display,
-        ...move.opts
+        ...move.opts,
       }),
       game.players
     )
@@ -852,7 +890,7 @@ function canExploreMove(game, exploration, focus) {
       (game.canExplore || (game.canSubmit && focus.exPath.length === 0)) && // exploring (beyond move input) is supported or it is my move and we are just looking at the current position
       exploration !== null &&
       focus.moveNumber === exploration.length - 1 && // we aren't looking at history
-      getFocusNode(exploration, focus).toMove !== "" ) || // game (at focus) isn't over
+      getFocusNode(exploration, focus).toMove !== "") || // game (at focus) isn't over
     (game.gameOver &&
       game.canExplore &&
       focus.moveNumber !== exploration.length - 1) // game is over and exploring is supported
@@ -961,7 +999,9 @@ function processNewMove(
     if (focus.canExplore && !gameRef.current.noMoves)
       movesRef.current = gameEngineTmp.moves();
     engineRef.current = gameEngineTmp;
-    console.log(`(processNewMove) ABOUT TO RERENDER! Display setting: ${settings?.display}`);
+    console.log(
+      `(processNewMove) ABOUT TO RERENDER! Display setting: ${settings?.display}`
+    );
     renderrepSetter(
       replaceNames(
         gameEngineTmp.render({
@@ -998,7 +1038,7 @@ const populateChecked = (gameRef, engineRef, t, setter) => {
   }
 };
 
-const defaultChunkOrder = ["status","move","board","moves","chat"];
+const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
 
 function GameMove(props) {
   const [dbgame, dbgameSetter] = useState(null);
@@ -1019,7 +1059,8 @@ function GameMove(props) {
   const [showSettings, showSettingsSetter] = useState(false);
   const [showMoveConfirm, showMoveConfirmSetter] = useState(false);
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
-  const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] = useState(false);
+  const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] =
+    useState(false);
   const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [showGameDump, showGameDumpSetter] = useState(false);
@@ -1042,8 +1083,14 @@ function GameMove(props) {
   const [gameNote, gameNoteSetter] = useState(null);
   const [interimNote, interimNoteSetter] = useState("");
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
-  const [mobileOrder, mobileOrderSetter] = useStorageState("play-mobile-order", [...defaultChunkOrder]);
-  const [verticalLayout, verticalLayoutSetter] = useStorageState("play-vertical-layout", false);
+  const [mobileOrder, mobileOrderSetter] = useStorageState(
+    "play-mobile-order",
+    [...defaultChunkOrder]
+  );
+  const [verticalLayout, verticalLayoutSetter] = useStorageState(
+    "play-vertical-layout",
+    false
+  );
   const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
   const [parenthetical, parentheticalSetter] = useState([]); // any description after the game name (e.g., "unrated", "exploration disabled")
   // pieInvoked is used to trigger the game reload after the function is called
@@ -1163,23 +1210,33 @@ function GameMove(props) {
 
   // initialize customcss modal
   useEffect(() => {
-    if ( (customCSS !== undefined) && (metaGame in customCSS) && (customCSS[metaGame] !== undefined) ) {
-        newCSSSetter(customCSS[metaGame].css);
-        cssActiveSetter(customCSS[metaGame].active);
+    if (
+      customCSS !== undefined &&
+      metaGame in customCSS &&
+      customCSS[metaGame] !== undefined
+    ) {
+      newCSSSetter(customCSS[metaGame].css);
+      cssActiveSetter(customCSS[metaGame].active);
     } else {
-        newCSSSetter("");
-        cssActiveSetter(true);
+      newCSSSetter("");
+      cssActiveSetter(true);
     }
   }, [customCSS, metaGame]);
 
   // apply (or not) any custom CSS
   useEffect(() => {
-    if ( (customCSS !== undefined) && (metaGame in customCSS) && (customCSS[metaGame] !== undefined) && (customCSS[metaGame].css !== "") && (customCSS[metaGame].active) ) {
-        const sheet = new CSSStyleSheet();
-        sheet.replaceSync(customCSS[metaGame].css);
-        document.adoptedStyleSheets = [sheet];
+    if (
+      customCSS !== undefined &&
+      metaGame in customCSS &&
+      customCSS[metaGame] !== undefined &&
+      customCSS[metaGame].css !== "" &&
+      customCSS[metaGame].active
+    ) {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync(customCSS[metaGame].css);
+      document.adoptedStyleSheets = [sheet];
     } else {
-        document.adoptedStyleSheets = [];
+      document.adoptedStyleSheets = [];
     }
   }, [customCSS, metaGame]);
 
@@ -1188,54 +1245,64 @@ function GameMove(props) {
   }, [verticalLayout]);
 
   const handleMoveUp = (key) => {
-    const idx = mobileOrder.findIndex(s => s === key);
+    const idx = mobileOrder.findIndex((s) => s === key);
     if (idx !== -1) {
-        // if first item, move to end
-        if (idx === 0) {
-            mobileOrderSetter([...mobileOrder.slice(1), mobileOrder[0]])
-        }
-        // otherwise, shift
-        else {
-            const left = mobileOrder.slice(0, idx-1);
-            const right = mobileOrder.slice(idx+1);
-            mobileOrderSetter([...left, mobileOrder[idx], mobileOrder[idx-1], ...right]);
-        }
-        boardKeySetter(nanoid());
+      // if first item, move to end
+      if (idx === 0) {
+        mobileOrderSetter([...mobileOrder.slice(1), mobileOrder[0]]);
+      }
+      // otherwise, shift
+      else {
+        const left = mobileOrder.slice(0, idx - 1);
+        const right = mobileOrder.slice(idx + 1);
+        mobileOrderSetter([
+          ...left,
+          mobileOrder[idx],
+          mobileOrder[idx - 1],
+          ...right,
+        ]);
+      }
+      boardKeySetter(nanoid());
     }
-  }
+  };
 
   const handleMoveDown = (key) => {
-    const idx = mobileOrder.findIndex(s => s === key);
+    const idx = mobileOrder.findIndex((s) => s === key);
     if (idx !== -1) {
-        // if last item, move to top
-        if (idx === mobileOrder.length - 1) {
-            mobileOrderSetter([mobileOrder[idx], ...mobileOrder.slice(0, idx)])
-        }
-        // otherwise, shift
-        else {
-            const left = mobileOrder.slice(0, idx);
-            const right = mobileOrder.slice(idx+2);
-            mobileOrderSetter([...left, mobileOrder[idx+1], mobileOrder[idx], ...right]);
-        }
-        boardKeySetter(nanoid());
+      // if last item, move to top
+      if (idx === mobileOrder.length - 1) {
+        mobileOrderSetter([mobileOrder[idx], ...mobileOrder.slice(0, idx)]);
+      }
+      // otherwise, shift
+      else {
+        const left = mobileOrder.slice(0, idx);
+        const right = mobileOrder.slice(idx + 2);
+        mobileOrderSetter([
+          ...left,
+          mobileOrder[idx + 1],
+          mobileOrder[idx],
+          ...right,
+        ]);
+      }
+      boardKeySetter(nanoid());
     }
-  }
+  };
 
   const saveCustomCSS = () => {
-    if ( (metaGame !== null) && (metaGame !== undefined) ) {
-        const newobj = JSON.parse(JSON.stringify(customCSS));
-        if (newCSS === "") {
-            delete newobj[metaGame];
-        } else {
-            newobj[metaGame] = {
-                css: newCSS,
-                active: cssActive
-            }
-        }
-        customCSSSetter(newobj);
+    if (metaGame !== null && metaGame !== undefined) {
+      const newobj = JSON.parse(JSON.stringify(customCSS));
+      if (newCSS === "") {
+        delete newobj[metaGame];
+      } else {
+        newobj[metaGame] = {
+          css: newCSS,
+          active: cssActive,
+        };
+      }
+      customCSSSetter(newobj);
     }
     showCustomCSSSetter(false);
-  }
+  };
 
   useEffect(() => {
     var lng = "en";
@@ -1304,7 +1371,12 @@ function GameMove(props) {
             data = await res.json();
           }
         }
-        if ( (status === 200) && (data !== null) && (data !== undefined) && ("game" in data) ) {
+        if (
+          status === 200 &&
+          data !== null &&
+          data !== undefined &&
+          "game" in data
+        ) {
           console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
           dbgameSetter(data.game);
           if (data.comments !== undefined) {
@@ -1319,13 +1391,15 @@ function GameMove(props) {
             }
           }
         } else {
-            if ("message" in data) {
-                errorMessageRef.current = data.message;
-                errorSetter(true);
-            } else {
-                errorMessageRef.current = `An unspecified error occurred while trying to fetch the game: ${JSON.stringify(data)}`;
-                errorSetter(true);
-            }
+          if ("message" in data) {
+            errorMessageRef.current = data.message;
+            errorSetter(true);
+          } else {
+            errorMessageRef.current = `An unspecified error occurred while trying to fetch the game: ${JSON.stringify(
+              data
+            )}`;
+            errorSetter(true);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -1382,7 +1456,7 @@ function GameMove(props) {
         setError(err.message);
       }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (dbgame !== null) {
@@ -1434,33 +1508,64 @@ function GameMove(props) {
       }
       populateChecked(gameRef, engineRef, t, inCheckSetter);
       parentheticalSetter([]);
-      if ("tournament" in game && game.tournament !== undefined && game.tournament !== null) {
-        parentheticalSetter(val => [...val, (<Link to={`/tournament/${game.tournament}`}>tournament</Link>)]);
+      if (
+        "tournament" in game &&
+        game.tournament !== undefined &&
+        game.tournament !== null
+      ) {
+        parentheticalSetter((val) => [
+          ...val,
+          <Link to={`/tournament/${game.tournament}`}>tournament</Link>,
+        ]);
+      }
+      if ("event" in game && game.event !== undefined && game.event !== null) {
+        parentheticalSetter((val) => [
+          ...val,
+          <Link to={`/event/${game.event}`}>event</Link>,
+        ]);
       }
       if (game.rated === false) {
-          parentheticalSetter(val => [...val, "unrated"]);
+        parentheticalSetter((val) => [...val, "unrated"]);
       }
-      if ( (game.noExplore !== undefined) && (game.noExplore === true) ) {
-          parentheticalSetter(val => [...val, "exploration disabled"]);
+      if (game.noExplore !== undefined && game.noExplore === true) {
+        parentheticalSetter((val) => [...val, "exploration disabled"]);
       }
-      if (game.toMove !== '' && !game.players.some(p => p.id === globalMe?.id)) {
+      if (
+        game.toMove !== "" &&
+        !game.players.some((p) => p.id === globalMe?.id)
+      ) {
         if (game.clockHard) {
           // If you are viewing someone else's game, and a player has timed out, let the server know.
           if (Array.isArray(game.toMove)) {
             const elapsed = Date.now() - game.lastMoveTime;
-            if (game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0 )) {
+            if (
+              game.toMove.some(
+                (p, i) => p && game.players[i].time - elapsed < 0
+              )
+            ) {
               checkTime("timeloss");
             }
           } else {
             const toMove = parseInt(game.toMove);
-            if (game.players[toMove].time - (Date.now() - game.lastMoveTime) < 0) {
+            if (
+              game.players[toMove].time - (Date.now() - game.lastMoveTime) <
+              0
+            ) {
               checkTime("timeloss");
             }
           }
         } else {
           // If you are viewing someone else's game, and both players are "red", let the server know to abandon the game.
-          const now = (new Date()).getTime();
-          if (allUsers !== null && allUsers !== undefined && game.players.every(p => allUsers.find(u => u.id === p.id)?.lastSeen < now - 1000 * 60 * 60 * 24 * 30)) {
+          const now = new Date().getTime();
+          if (
+            allUsers !== null &&
+            allUsers !== undefined &&
+            game.players.every(
+              (p) =>
+                allUsers.find((u) => u.id === p.id)?.lastSeen <
+                now - 1000 * 60 * 60 * 24 * 30
+            )
+          ) {
             checkTime("abandoned");
           }
         }
@@ -1481,7 +1586,7 @@ function GameMove(props) {
     t,
     navigate,
     checkTime,
-    colourContext
+    colourContext,
   ]);
 
   async function reportError(error) {
@@ -1489,14 +1594,18 @@ function GameMove(props) {
     url.searchParams.append("query", "report_problem");
     url.searchParams.append("error", error);
     try {
-        const res = await fetch(url);
-        const status = res.status;
-        if (status !== 200) {
-          const result = await res.json();
-          console.log(JSON.parse(result.body));
-        }
+      const res = await fetch(url);
+      const status = res.status;
+      if (status !== 200) {
+        const result = await res.json();
+        console.log(JSON.parse(result.body));
+      }
     } catch (e) {
-        console.log(`Error auto-reporting another error!\nOriginal error: ${JSON.stringify(error)}\nFetching error: ${JSON.stringify(e)}`);
+      console.log(
+        `Error auto-reporting another error!\nOriginal error: ${JSON.stringify(
+          error
+        )}\nFetching error: ${JSON.stringify(e)}`
+      );
     }
   }
 
@@ -1706,7 +1815,9 @@ function GameMove(props) {
     }
     focusSetter(foc);
     engineRef.current = engine;
-    console.log(`(handleGameMoveClick) ABOUT TO RERENDER! Display setting: ${settings?.display}`);
+    console.log(
+      `(handleGameMoveClick) ABOUT TO RERENDER! Display setting: ${settings?.display}`
+    );
     renderrepSetter(
       replaceNames(
         engine.render({
@@ -1725,14 +1836,18 @@ function GameMove(props) {
           !gameRef.current.canSubmit));
     setStatus(engine, gameRef.current, isPartialSimMove, "", statusRef.current);
     if (game.simultaneous) {
-        moveSetter({ ...engine.validateMove("", gameRef.current.me + 1), rendered: "", move: "" });
+      moveSetter({
+        ...engine.validateMove("", gameRef.current.me + 1),
+        rendered: "",
+        move: "",
+      });
     } else {
-        moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
+      moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
     }
     const metaInfo = gameinfo.get(game.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, colourContext, node);
-        colorsChangedSetter((val) => val + 1);
+      setupColors(settings, gameRef.current, globalMe, colourContext, node);
+      colorsChangedSetter((val) => val + 1);
     }
   };
 
@@ -1824,10 +1939,12 @@ function GameMove(props) {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     const metaInfo = gameinfo.get(gameRef.current.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, colourContext, {state: engineRef.current.state()});
-        colorsChangedSetter((val) => val + 1);
+      setupColors(settings, gameRef.current, globalMe, colourContext, {
+        state: engineRef.current.state(),
+      });
+      colorsChangedSetter((val) => val + 1);
     }
-};
+  };
 
   // handler when user clicks on "complete move" (for a partial move that could be complete)
   const handleView = () => {
@@ -1902,8 +2019,10 @@ function GameMove(props) {
       populateChecked(gameRef, engineRef, t, inCheckSetter);
       const metaInfo = gameinfo.get(gameRef.current.metaGame);
       if (metaInfo.flags.includes("custom-colours")) {
-          setupColors(settings, gameRef.current, globalMe, colourContext, {state: engineRef.current.state()});
-          colorsChangedSetter((val) => val + 1);
+        setupColors(settings, gameRef.current, globalMe, colourContext, {
+          state: engineRef.current.state(),
+        });
+        colorsChangedSetter((val) => val + 1);
       }
     }
 
@@ -1933,15 +2052,17 @@ function GameMove(props) {
           // } else if (settings.color === "patterns") {
           //   options.patterns = true;
         }
-        if ( (settings.color !== "standard") && (settings.color !== "blind") ) {
-            console.log(`Looking for a palette named ${settings.color}`);
-            const palette = globalMe.palettes?.find(p => p.name === settings.color);
-            if (palette !== undefined) {
-                options.colours = [...palette.colours];
-                while (options.colours.length < 10) {
-                    options.colours.push("#fff");
-                }
+        if (settings.color !== "standard" && settings.color !== "blind") {
+          console.log(`Looking for a palette named ${settings.color}`);
+          const palette = globalMe.palettes?.find(
+            (p) => p.name === settings.color
+          );
+          if (palette !== undefined) {
+            options.colours = [...palette.colours];
+            while (options.colours.length < 10) {
+              options.colours.push("#fff");
             }
+          }
         }
         if (gameRef.current.stackExpanding) {
           options.boardHover = (row, col, piece) => {
@@ -1976,10 +2097,20 @@ function GameMove(props) {
     //     // console.log(e);
     //   }
     // }
-  }, [renderrep, globalMe, focus, settings, explorer, t, navigate, boardKey, colourContext]);
+  }, [
+    renderrep,
+    globalMe,
+    focus,
+    settings,
+    explorer,
+    t,
+    navigate,
+    boardKey,
+    colourContext,
+  ]);
 
   useEffect(() => {
-    colorsChangedSetter(val => val + 1);
+    colorsChangedSetter((val) => val + 1);
   }, [colourContext]);
 
   const setError = (error) => {
@@ -1998,36 +2129,74 @@ function GameMove(props) {
      * A value of 0 means the board may not be rotated.
      */
     const getRotationIncrement = (metaGame, rep, engine, game) => {
-        if ("renderer" in rep && rep.renderer !== undefined && (rep.renderer === "stacking-tiles" || rep.renderer === "stacking-3D"|| rep.renderer === "entropy" || rep.renderer === "freespace" || rep.renderer.startsWith("conhex") || rep.renderer === "polyomino")) {
-            return 0;
-        }
-        const info = gameinfo.get(metaGame);
-        if (info === undefined) {
-            return 0;
-        }
-        if ("flags" in info && info.flags !== undefined && Array.isArray(info.flags) && info.flags.includes("custom-rotation")) {
-            const increment = engine.getCustomRotation();
-            if (increment !== undefined) {
-                return increment;
-            }
-        }
-        if ("board" in rep && rep.board !== undefined && "style" in rep.board && rep.board.style !== undefined) {
-            const style = rep.board.style;
-            if (style.startsWith("squares") || style.startsWith("vertex") || style === "pegboard" || style === "hex-slanted" || style.startsWith("hex-odd") || style.startsWith("hex-even") || style === "snubsquare" || style.startsWith("cairo") || style === "triangles-stacked") {
-                return 90;
-            }
-            if (style.startsWith("hex-of")) {
-                return 60;
-            }
-            if (style === "sowing") {
-                return 180;
-            }
-        }
+      if (
+        "renderer" in rep &&
+        rep.renderer !== undefined &&
+        (rep.renderer === "stacking-tiles" ||
+          rep.renderer === "stacking-3D" ||
+          rep.renderer === "entropy" ||
+          rep.renderer === "freespace" ||
+          rep.renderer.startsWith("conhex") ||
+          rep.renderer === "polyomino")
+      ) {
         return 0;
-    }
-    if (renderrep !== null && engineRef.current !== null && gameRef.current !== null) {
-        gameRef.current.increment = getRotationIncrement(metaGame, renderrep, engineRef.current, gameRef.current);
-        console.log(`Rotation increment: ${gameRef.current.increment}`);
+      }
+      const info = gameinfo.get(metaGame);
+      if (info === undefined) {
+        return 0;
+      }
+      if (
+        "flags" in info &&
+        info.flags !== undefined &&
+        Array.isArray(info.flags) &&
+        info.flags.includes("custom-rotation")
+      ) {
+        const increment = engine.getCustomRotation();
+        if (increment !== undefined) {
+          return increment;
+        }
+      }
+      if (
+        "board" in rep &&
+        rep.board !== undefined &&
+        "style" in rep.board &&
+        rep.board.style !== undefined
+      ) {
+        const style = rep.board.style;
+        if (
+          style.startsWith("squares") ||
+          style.startsWith("vertex") ||
+          style === "pegboard" ||
+          style === "hex-slanted" ||
+          style.startsWith("hex-odd") ||
+          style.startsWith("hex-even") ||
+          style === "snubsquare" ||
+          style.startsWith("cairo") ||
+          style === "triangles-stacked"
+        ) {
+          return 90;
+        }
+        if (style.startsWith("hex-of")) {
+          return 60;
+        }
+        if (style === "sowing") {
+          return 180;
+        }
+      }
+      return 0;
+    };
+    if (
+      renderrep !== null &&
+      engineRef.current !== null &&
+      gameRef.current !== null
+    ) {
+      gameRef.current.increment = getRotationIncrement(
+        metaGame,
+        renderrep,
+        engineRef.current,
+        gameRef.current
+      );
+      console.log(`Rotation increment: ${gameRef.current.increment}`);
     }
   }, [renderrep, metaGame]);
 
@@ -2038,15 +2207,17 @@ function GameMove(props) {
     if (rotate === undefined) rotate = 0;
     let increment = 0;
     if (gameRef.current !== null && gameRef.current.increment !== undefined) {
-        increment = gameRef.current.increment;
+      increment = gameRef.current.increment;
     }
     if (dir === "CW") {
-        rotate += increment;
+      rotate += increment;
     } else {
-        rotate -= increment;
+      rotate -= increment;
     }
     rotate = rotate % 360;
-    while (rotate < 0) { rotate += 360; }
+    while (rotate < 0) {
+      rotate += 360;
+    }
     newGameSettings.rotate = rotate;
     processNewSettings(
       newGameSettings,
@@ -2097,9 +2268,11 @@ function GameMove(props) {
       colourContext
     );
     if (newSettings?.display) {
-      console.log(`(processUpdatedSettings) ABOUT TO RERENDER! Display setting: ${newSettings.display}`);
-    //   console.log(`Current engine state:`);
-    //   console.log(engineRef.current.graph);
+      console.log(
+        `(processUpdatedSettings) ABOUT TO RERENDER! Display setting: ${newSettings.display}`
+      );
+      //   console.log(`Current engine state:`);
+      //   console.log(engineRef.current.graph);
       const newRenderRep = replaceNames(
         engineRef.current.render({
           perspective: gameRef.current.me + 1,
@@ -2210,7 +2383,9 @@ function GameMove(props) {
         mergeExistingExploration(moveNum, exploration, explorationRef);
       }
       if (gameRef.current.customColours) {
-        setupColors(settings, gameRef.current, globalMe, colourContext, {state: engineRef.current.state()});
+        setupColors(settings, gameRef.current, globalMe, colourContext, {
+          state: engineRef.current.state(),
+        });
         colorsChangedSetter((val) => val + 1);
       }
     } catch (err) {
@@ -2537,12 +2712,12 @@ function GameMove(props) {
   const handleNextGame = () => {
     // If the current game is in the list, move it to the end.
     const local = [...myMove];
-    const idx = local.findIndex(x => x.id === gameID);
+    const idx = local.findIndex((x) => x.id === gameID);
     if (idx !== -1) {
-        const thisgame = local[idx];
-        local.splice(idx, 1);
-        local.push(thisgame);
-        myMoveSetter(local);
+      const thisgame = local[idx];
+      local.splice(idx, 1);
+      local.push(thisgame);
+      myMoveSetter(local);
     }
     // Then go to the next game in the list.
     if (local.length === 0) {
@@ -2572,698 +2747,782 @@ function GameMove(props) {
       }
     }
     return (
-        <>
-      <Helmet>
-          <meta property="og:title" content={`${gameinfo.get(metaGame).name}: Game ${gameID}`} />
-          <meta property="og:url" content={`https://play.abstractplay.com/move/${metaGame}/0/${gameID}`} />
-          <meta property="og:description" content={`${gameinfo.get(metaGame).name} game ${gameID}`} />
-      </Helmet>
-      <article>
-        <Joyride
-          steps={tourState}
-          run={startTour}
-          callback={handleJoyrideCallback}
-          continuous
-          showProgress
-          showSkipButton
-          styles={{
-            options: {
-              primaryColor: "#008ca8",
-            },
-          }}
-        />
-        {!showTour ? null :
+      <>
+        <Helmet>
+          <meta
+            property="og:title"
+            content={`${gameinfo.get(metaGame).name}: Game ${gameID}`}
+          />
+          <meta
+            property="og:url"
+            content={`https://play.abstractplay.com/move/${metaGame}/0/${gameID}`}
+          />
+          <meta
+            property="og:description"
+            content={`${gameinfo.get(metaGame).name} game ${gameID}`}
+          />
+        </Helmet>
+        <article>
+          <Joyride
+            steps={tourState}
+            run={startTour}
+            callback={handleJoyrideCallback}
+            continuous
+            showProgress
+            showSkipButton
+            styles={{
+              options: {
+                primaryColor: "#008ca8",
+              },
+            }}
+          />
+          {!showTour ? null : (
             <div className="has-text-centered">
-            <div className="field">
+              <div className="field">
                 <div className="control">
-                    <button
-                        className="button apButton"
-                        onClick={() => startTourSetter(true)}
-                    >
-                        {t("tour.general.Take")
-                    }</button>
+                  <button
+                    className="button apButton"
+                    onClick={() => startTourSetter(true)}
+                  >
+                    {t("tour.general.Take")}
+                  </button>
                 </div>
                 <div className="control">
-                <label className="checkbox">
-                    <input type="checkbox"
-                        onClick={() => {showTourSetter(false); startTourSetter(false);}}
+                  <label className="checkbox">
+                    <input
+                      type="checkbox"
+                      onClick={() => {
+                        showTourSetter(false);
+                        startTourSetter(false);
+                      }}
                     />
                     {t("tour.general.Ignore")}
-                    </label>
+                  </label>
                 </div>
+              </div>
             </div>
-          </div>
-        }
-        {(screenWidth < 770 || verticalLayout) ?
+          )}
+          {screenWidth < 770 || verticalLayout ? (
             /* Mobile, stacked layout */
-            mobileOrder.map(key => {
-                let title;
-                let tourClass;
-                switch (key) {
-                    case "status":
-                        title = t("Status");
-                        tourClass = "tourStatus";
-                        break;
-                    case "move":
-                        title = t("MakeMove");
-                        tourClass = "tourMove";
-                        break;
-                    case "board":
-                        title = gameinfo.get(metaGame).name;
-                        tourClass = "tourBoard";
-                        break;
-                    case "moves":
-                        title = t("Moves");
-                        tourClass = "tourMoveList";
-                        break;
-                    case "chat":
-                        title = exploringCompletedGame ? t("GameComments") : t("GameSummary");
-                        tourClass = "tourChat";
-                        break;
-                    default:
-                        throw new Error(`Unrecognized chunk name '${key}'`);
+            mobileOrder.map((key) => {
+              let title;
+              let tourClass;
+              switch (key) {
+                case "status":
+                  title = t("Status");
+                  tourClass = "tourStatus";
+                  break;
+                case "move":
+                  title = t("MakeMove");
+                  tourClass = "tourMove";
+                  break;
+                case "board":
+                  title = gameinfo.get(metaGame).name;
+                  tourClass = "tourBoard";
+                  break;
+                case "moves":
+                  title = t("Moves");
+                  tourClass = "tourMoveList";
+                  break;
+                case "chat":
+                  title = exploringCompletedGame
+                    ? t("GameComments")
+                    : t("GameSummary");
+                  tourClass = "tourChat";
+                  break;
+                default:
+                  throw new Error(`Unrecognized chunk name '${key}'`);
+              }
+              // Skip empty status displays
+              if (key === "status") {
+                const status = statusRef.current;
+                if (
+                  !game ||
+                  game.colors === undefined ||
+                  ((!game.variants || game.variants.length === 0) &&
+                    status.statuses.length === 0 &&
+                    ((!game.scores && !game.limitedPieces) ||
+                      status.scores.length === 0) &&
+                    !game.playerStashes &&
+                    !game.sharedStash)
+                ) {
+                  return null;
                 }
-                // Skip empty status displays
-                if (key === "status") {
-                    const status = statusRef.current;
-                    if (
-                        !game ||
-                        game.colors === undefined ||
-                        (
-                            (!game.variants || game.variants.length === 0) &&
-                            status.statuses.length === 0 &&
-                            (
-                                (!game.scores && !game.limitedPieces) ||
-                                status.scores.length === 0
-                            ) &&
-                            !game.playerStashes &&
-                            !game.sharedStash
-                        )
-                    ) {
-                        return null;
-                    }
-                }
-                return (
-                <div style={{paddingBottom: "1em"}}>
-                    <div className={"card " + tourClass} key={`${key}|card`}>
-                        <header className="card-header">
-                            <p className="card-header-title">
-                                {title}
-                                {key !== "board" || parenthetical.length === 0 ? null : (
-                                <>
-                                    <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
-                                        &nbsp;(
-                                        {parenthetical.reduce((prev, curr) => [prev, ", ", curr])}
-                                        )
-                                    </span>
-                                </>
-                                )}
-                            </p>
-                            <button className="card-header-icon" aria-label="move up" title="move up" onClick={() => handleMoveUp(key)}>
-                                <span className="icon">
-                                    <i className="fa fa-angle-up" aria-hidden="true"></i>
-                                </span>
-                            </button>
-                            <button className="card-header-icon" aria-label="move down" title="move down" onClick={() => handleMoveDown(key)}>
-                                <span className="icon">
-                                    <i className="fa fa-angle-down" aria-hidden="true"></i>
-                                </span>
-                            </button>
-                        </header>
-                        <div className="card-content">
-                        {
-                            key === "status" ? (
-                                <GameStatus
-                                    status={statusRef.current}
-                                    settings={settings}
-                                    game={game}
-                                    canExplore={focus?.canExplore}
-                                    handleStashClick={handleStashClick}
-                                    key={`Status|colorSet${colorsChanged}`}
-                                />
-                            ) : key ==="move" ? (
-                            <>
-                                <MoveEntry
-                                    move={move}
-                                    toMove={toMove}
-                                    game={gameRef.current}
-                                    moves={movesRef.current}
-                                    engine={engineRef.current}
-                                    exploration={explorationRef.current}
-                                    focus={focus}
-                                    submitting={submitting}
-                                    forceUndoRight={true}
-                                    screenWidth={screenWidth}
-                                    handlers={[
-                                        handleMove,
-                                        handleMark,
-                                        handleSubmit,
-                                        handleToSubmit,
-                                        handleView,
-                                        handleResign,
-                                        handleTimeout,
-                                        handleReset,
-                                        handlePie,
-                                        handleDeleteExploration
-                                    ]}
-                                    key={`Entry|colorSet${colorsChanged}`}
-                                />
-                                <MiscButtons
-                                    metaGame={metaGame}
-                                    gameID={gameID}
-                                    toMove={toMove}
-                                    gameRec={gameRec}
-                                    canPublish={canPublish}
-                                    handlePublishExploration={handlePublishExploration}
-                                    handleExplorer={handleExplorer}
-                                    handleNextGame={handleNextGame}
-                                    explorer={explorer}
-                                    game={game}
-                                    t={t}
-                                />
-                            </>
-                            ) : key === "board" ? (
-                                <Board
-                                    metaGame={metaGame}
-                                    gameID={gameID}
-                                    t={t}
-                                    gameEngine={gameEngine}
-                                    gameNote={gameNote}
-                                    inCheck={inCheck}
-                                    gameRef={gameRef}
-                                    stackImage={stackImage}
-                                    boardImage={boardImage}
-                                    screenWidth={screenWidth}
-                                    handleRotate={handleRotate}
-                                    handleUpdateRenderOptions={handleUpdateRenderOptions}
-                                    showGameDetailsSetter={showGameDetailsSetter}
-                                    showGameNoteSetter={showGameNoteSetter}
-                                    showGameDumpSetter={showGameDumpSetter}
-                                    showCustomCSSSetter={showCustomCSSSetter}
-                                    showInjectSetter={showInjectSetter}
-                                    verticalLayout={verticalLayout}
-                                    verticalLayoutSetter={verticalLayoutSetter}
-                                />
-                            ) : key === "moves" ? (
-                                <GameMoves
-                                    focus={focus}
-                                    game={game}
-                                    exploration={explorationRef.current}
-                                    noExplore={globalMe?.settings?.all?.exploration === -1}
-                                    handleGameMoveClick={handleGameMoveClick}
-                                    getFocusNode={getFocusNode}
-                                    handlePlaygroundExport={handlePlaygroundExport}
-                                    key={`Moves|colorSet${colorsChanged}`}
-                                />
-                            ) : key === "chat" ? (
-                                <UserChats
-                                    comments={exploringCompletedGame ? nodeComments : comments}
-                                    players={gameRef.current?.players}
-                                    handleSubmit={
-                                        exploringCompletedGame ? submitNodeComment : submitComment
-                                    }
-                                    tooMuch={commentsTooLong}
-                                    gameid={gameRef.current?.id}
-                                    exploringCompletedGame={exploringCompletedGame}
-                                    userId={globalMe?.id}
-                                />
-                            ) : null
-                        }
-                        </div>
-                    </div>
-                </div>
-                );
-            }) :
-            /* Normal, full-width layout */
-            (
-                <div className="columns">
-                {/***************** MoveEntry *****************/}
-                <div
-                  className={`column is-one-fifth`}
-                >
-                    <div style={{ marginBottom: "2rem" }} className="tourStatus">
-                        <h1 className="subtitle lined">
-                            <span>{t("Status")}</span>
-                        </h1>
+              }
+              return (
+                <div style={{ paddingBottom: "1em" }}>
+                  <div className={"card " + tourClass} key={`${key}|card`}>
+                    <header className="card-header">
+                      <p className="card-header-title">
+                        {title}
+                        {key !== "board" ||
+                        parenthetical.length === 0 ? null : (
+                          <>
+                            <span
+                              style={{
+                                fontSize: "smaller",
+                                padding: 0,
+                                margin: 0,
+                              }}
+                            >
+                              &nbsp;(
+                              {parenthetical.reduce((prev, curr) => [
+                                prev,
+                                ", ",
+                                curr,
+                              ])}
+                              )
+                            </span>
+                          </>
+                        )}
+                      </p>
+                      <button
+                        className="card-header-icon"
+                        aria-label="move up"
+                        title="move up"
+                        onClick={() => handleMoveUp(key)}
+                      >
+                        <span className="icon">
+                          <i className="fa fa-angle-up" aria-hidden="true"></i>
+                        </span>
+                      </button>
+                      <button
+                        className="card-header-icon"
+                        aria-label="move down"
+                        title="move down"
+                        onClick={() => handleMoveDown(key)}
+                      >
+                        <span className="icon">
+                          <i
+                            className="fa fa-angle-down"
+                            aria-hidden="true"
+                          ></i>
+                        </span>
+                      </button>
+                    </header>
+                    <div className="card-content">
+                      {key === "status" ? (
                         <GameStatus
-                            status={statusRef.current}
-                            settings={settings}
-                            game={game}
-                            canExplore={focus?.canExplore}
-                            handleStashClick={handleStashClick}
-                            key={`Status|colorSet${colorsChanged}`}
+                          status={statusRef.current}
+                          settings={settings}
+                          game={game}
+                          canExplore={focus?.canExplore}
+                          handleStashClick={handleStashClick}
+                          key={`Status|colorSet${colorsChanged}`}
                         />
-                    </div>
-                    <div className="tourMove">
-                        <h1 className="subtitle lined">
-                        <span>{t("MakeMove")}</span>
-                        </h1>
-                        <MoveEntry
+                      ) : key === "move" ? (
+                        <>
+                          <MoveEntry
                             move={move}
                             toMove={toMove}
                             game={gameRef.current}
-                            engine={engineRef.current}
                             moves={movesRef.current}
+                            engine={engineRef.current}
                             exploration={explorationRef.current}
                             focus={focus}
                             submitting={submitting}
-                            forceUndoRight={false}
+                            forceUndoRight={true}
                             screenWidth={screenWidth}
                             handlers={[
-                                handleMove,
-                                handleMark,
-                                handleSubmit,
-                                handleToSubmit,
-                                handleView,
-                                handleResign,
-                                handleTimeout,
-                                handleReset,
-                                handlePie,
-                                handleDeleteExploration
+                              handleMove,
+                              handleMark,
+                              handleSubmit,
+                              handleToSubmit,
+                              handleView,
+                              handleResign,
+                              handleTimeout,
+                              handleReset,
+                              handlePie,
+                              handleDeleteExploration,
                             ]}
                             key={`Entry|colorSet${colorsChanged}`}
+                          />
+                          <MiscButtons
+                            metaGame={metaGame}
+                            gameID={gameID}
+                            toMove={toMove}
+                            gameRec={gameRec}
+                            canPublish={canPublish}
+                            handlePublishExploration={handlePublishExploration}
+                            handleExplorer={handleExplorer}
+                            handleNextGame={handleNextGame}
+                            explorer={explorer}
+                            game={game}
+                            t={t}
+                          />
+                        </>
+                      ) : key === "board" ? (
+                        <Board
+                          metaGame={metaGame}
+                          gameID={gameID}
+                          t={t}
+                          gameEngine={gameEngine}
+                          gameNote={gameNote}
+                          inCheck={inCheck}
+                          gameRef={gameRef}
+                          stackImage={stackImage}
+                          boardImage={boardImage}
+                          screenWidth={screenWidth}
+                          handleRotate={handleRotate}
+                          handleUpdateRenderOptions={handleUpdateRenderOptions}
+                          showGameDetailsSetter={showGameDetailsSetter}
+                          showGameNoteSetter={showGameNoteSetter}
+                          showGameDumpSetter={showGameDumpSetter}
+                          showCustomCSSSetter={showCustomCSSSetter}
+                          showInjectSetter={showInjectSetter}
+                          verticalLayout={verticalLayout}
+                          verticalLayoutSetter={verticalLayoutSetter}
                         />
+                      ) : key === "moves" ? (
+                        <GameMoves
+                          focus={focus}
+                          game={game}
+                          exploration={explorationRef.current}
+                          noExplore={
+                            globalMe?.settings?.all?.exploration === -1
+                          }
+                          handleGameMoveClick={handleGameMoveClick}
+                          getFocusNode={getFocusNode}
+                          handlePlaygroundExport={handlePlaygroundExport}
+                          key={`Moves|colorSet${colorsChanged}`}
+                        />
+                      ) : key === "chat" ? (
+                        <UserChats
+                          comments={
+                            exploringCompletedGame ? nodeComments : comments
+                          }
+                          players={gameRef.current?.players}
+                          handleSubmit={
+                            exploringCompletedGame
+                              ? submitNodeComment
+                              : submitComment
+                          }
+                          tooMuch={commentsTooLong}
+                          gameid={gameRef.current?.id}
+                          exploringCompletedGame={exploringCompletedGame}
+                          userId={globalMe?.id}
+                        />
+                      ) : null}
                     </div>
-                    <MiscButtons
-                        metaGame={metaGame}
-                        gameID={gameID}
-                        toMove={toMove}
-                        gameRec={gameRec}
-                        canPublish={canPublish}
-                        handlePublishExploration={handlePublishExploration}
-                        handleExplorer={handleExplorer}
-                        handleNextGame={handleNextGame}
-                        explorer={explorer}
-                        game={game}
-                        t={t}
-                    />
-                </div> {/* column */}
-                {/***************** Board *****************/}
-                <div className="column">
-                    <h1 className="subtitle lined tourWelcome">
-                        <span>
-                            {gameinfo.get(metaGame).name}
-                            {parenthetical.length === 0 ? null : (
-                            <>
-                                <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
-                                    &nbsp;(
-                                    {parenthetical.reduce((prev, curr) => [prev, ", ", curr])}
-                                    )
-                                </span>
-                            </>
-                            )}
-
-                        </span>
-                    </h1>
-                  <Board
-                      metaGame={metaGame}
-                      gameID={gameID}
-                      t={t}
-                      gameEngine={gameEngine}
-                      gameNote={gameNote}
-                      inCheck={inCheck}
-                      gameRef={gameRef}
-                      stackImage={stackImage}
-                      boardImage={boardImage}
-                      screenWidth={screenWidth}
-                      handleRotate={handleRotate}
-                      handleUpdateRenderOptions={handleUpdateRenderOptions}
-                      showGameDetailsSetter={showGameDetailsSetter}
-                      showGameNoteSetter={showGameNoteSetter}
-                      showGameDumpSetter={showGameDumpSetter}
-                      showCustomCSSSetter={showCustomCSSSetter}
-                      showInjectSetter={showInjectSetter}
-                      verticalLayout={verticalLayout}
-                      verticalLayoutSetter={verticalLayoutSetter}
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            /* Normal, full-width layout */
+            <div className="columns">
+              {/***************** MoveEntry *****************/}
+              <div className={`column is-one-fifth`}>
+                <div style={{ marginBottom: "2rem" }} className="tourStatus">
+                  <h1 className="subtitle lined">
+                    <span>{t("Status")}</span>
+                  </h1>
+                  <GameStatus
+                    status={statusRef.current}
+                    settings={settings}
+                    game={game}
+                    canExplore={focus?.canExplore}
+                    handleStashClick={handleStashClick}
+                    key={`Status|colorSet${colorsChanged}`}
                   />
                 </div>
-                {/***************** GameMoves *****************/}
-                <div
-                className={`column is-narrow`}
-                style={{maxWidth: "15vw"}}
-                >
+                <div className="tourMove">
+                  <h1 className="subtitle lined">
+                    <span>{t("MakeMove")}</span>
+                  </h1>
+                  <MoveEntry
+                    move={move}
+                    toMove={toMove}
+                    game={gameRef.current}
+                    engine={engineRef.current}
+                    moves={movesRef.current}
+                    exploration={explorationRef.current}
+                    focus={focus}
+                    submitting={submitting}
+                    forceUndoRight={false}
+                    screenWidth={screenWidth}
+                    handlers={[
+                      handleMove,
+                      handleMark,
+                      handleSubmit,
+                      handleToSubmit,
+                      handleView,
+                      handleResign,
+                      handleTimeout,
+                      handleReset,
+                      handlePie,
+                      handleDeleteExploration,
+                    ]}
+                    key={`Entry|colorSet${colorsChanged}`}
+                  />
+                </div>
+                <MiscButtons
+                  metaGame={metaGame}
+                  gameID={gameID}
+                  toMove={toMove}
+                  gameRec={gameRec}
+                  canPublish={canPublish}
+                  handlePublishExploration={handlePublishExploration}
+                  handleExplorer={handleExplorer}
+                  handleNextGame={handleNextGame}
+                  explorer={explorer}
+                  game={game}
+                  t={t}
+                />
+              </div>{" "}
+              {/* column */}
+              {/***************** Board *****************/}
+              <div className="column">
+                <h1 className="subtitle lined tourWelcome">
+                  <span>
+                    {gameinfo.get(metaGame).name}
+                    {parenthetical.length === 0 ? null : (
+                      <>
+                        <span
+                          style={{ fontSize: "smaller", padding: 0, margin: 0 }}
+                        >
+                          &nbsp;(
+                          {parenthetical.reduce((prev, curr) => [
+                            prev,
+                            ", ",
+                            curr,
+                          ])}
+                          )
+                        </span>
+                      </>
+                    )}
+                  </span>
+                </h1>
+                <Board
+                  metaGame={metaGame}
+                  gameID={gameID}
+                  t={t}
+                  gameEngine={gameEngine}
+                  gameNote={gameNote}
+                  inCheck={inCheck}
+                  gameRef={gameRef}
+                  stackImage={stackImage}
+                  boardImage={boardImage}
+                  screenWidth={screenWidth}
+                  handleRotate={handleRotate}
+                  handleUpdateRenderOptions={handleUpdateRenderOptions}
+                  showGameDetailsSetter={showGameDetailsSetter}
+                  showGameNoteSetter={showGameNoteSetter}
+                  showGameDumpSetter={showGameDumpSetter}
+                  showCustomCSSSetter={showCustomCSSSetter}
+                  showInjectSetter={showInjectSetter}
+                  verticalLayout={verticalLayout}
+                  verticalLayoutSetter={verticalLayoutSetter}
+                />
+              </div>
+              {/***************** GameMoves *****************/}
+              <div className={`column is-narrow`} style={{ maxWidth: "15vw" }}>
                 <div className="tourMoveList">
-                    <h1 className="subtitle lined">
-                        <span>{t("Moves")}</span>
-                    </h1>
-                    <GameMoves
-                        focus={focus}
-                        game={game}
-                        exploration={explorationRef.current}
-                        noExplore={globalMe?.settings?.all?.exploration === -1}
-                        handleGameMoveClick={handleGameMoveClick}
-                        getFocusNode={getFocusNode}
-                        handlePlaygroundExport={handlePlaygroundExport}
-                        key={`Moves|colorSet${colorsChanged}`}
-                    />
+                  <h1 className="subtitle lined">
+                    <span>{t("Moves")}</span>
+                  </h1>
+                  <GameMoves
+                    focus={focus}
+                    game={game}
+                    exploration={explorationRef.current}
+                    noExplore={globalMe?.settings?.all?.exploration === -1}
+                    handleGameMoveClick={handleGameMoveClick}
+                    getFocusNode={getFocusNode}
+                    handlePlaygroundExport={handlePlaygroundExport}
+                    key={`Moves|colorSet${colorsChanged}`}
+                  />
                 </div>
                 <div style={{ paddingTop: "1em" }} className="tourChat">
-                <h1 className="subtitle lined">
+                  <h1 className="subtitle lined">
                     <span>
-                        {exploringCompletedGame
+                      {exploringCompletedGame
                         ? t("GameComments")
                         : t("GameSummary")}
                     </span>
-                    </h1>
-                    <UserChats
-                        comments={exploringCompletedGame ? nodeComments : comments}
-                        players={gameRef.current?.players}
-                        handleSubmit={
-                            exploringCompletedGame ? submitNodeComment : submitComment
-                        }
-                        tooMuch={commentsTooLong}
-                        gameid={gameRef.current?.id}
-                        exploringCompletedGame={exploringCompletedGame}
-                        userId={globalMe?.id}
-                    />
-                </div>
+                  </h1>
+                  <UserChats
+                    comments={exploringCompletedGame ? nodeComments : comments}
+                    players={gameRef.current?.players}
+                    handleSubmit={
+                      exploringCompletedGame ? submitNodeComment : submitComment
+                    }
+                    tooMuch={commentsTooLong}
+                    gameid={gameRef.current?.id}
+                    exploringCompletedGame={exploringCompletedGame}
+                    userId={globalMe?.id}
+                  />
                 </div>
               </div>
-            )
-        }
+            </div>
+          )}
 
-        <div className="columns">
-          {/* Comments */}
-          <div className="column is-three-fifths is-offset-one-fifth" id="fullChatLog">
-            {focus ? (
-              <div>
-                <h1 className="subtitle lined">
-                  <span>{t("GameSummary")}</span>
-                </h1>
-                <MoveResults
-                  className="moveResults"
-                  results={game?.moveResults}
-                  comments={comments}
-                  players={gameRef.current?.players}
-                />
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-        </div>
-        {/* columns */}
-        <RenderOptionsModal
-          show={showSettings}
-          game={game}
-          settings={userSettings}
-          gameSettings={gameSettings}
-          processNewSettings={processUpdatedSettings}
-          showSettingsSetter={showSettingsSetter}
-          setError={setError}
-          handleClose={handleSettingsClose}
-          handleSave={handleSettingsSave}
-        />
-        <Modal
-          show={showResignConfirm}
-          title={t("ConfirmResign")}
-          buttons={[
-            { label: t("Resign"), action: handleResignConfirmed },
-            {
-              label: t("Cancel"),
-              action: handleCloseResignConfirm,
-            },
-          ]}
-        >
-          <div className="content">
-            <p>{t("ConfirmResignDesc")}</p>
-          </div>
-        </Modal>
-        <Modal
-          show={showDeleteSubtreeConfirm}
-          title={t("ConfirmDeleteSubtree")}
-          buttons={[
-            { label: t("Delete"), action: handleDeleteSubtreeConfirmed },
-            {
-              label: t("Cancel"),
-              action: handleCloseDeleteSubtreeConfirm,
-            },
-          ]}
-        >
-          <div className="content">
-            <p>{t("ConfirmDeleteSubtreeDesc")}</p>
-          </div>
-        </Modal>
-        <Modal
-          show={showMoveConfirm}
-          title={t("ConfirmMove")}
-          buttons={[
-            { label: t("Submit"), action: handleMoveConfirmed },
-            {
-              label: t("Cancel"),
-              action: handleCloseMoveConfirm,
-            },
-          ]}
-        >
-          <div className="content">
-            <p>{t("ConfirmMoveDesc")}</p>
-            <p className="help">{t("ConfirmMoveHelp")}</p>
-          </div>
-        </Modal>
-        <Modal
-          show={showTimeoutConfirm}
-          title={t("ConfirmTimeout")}
-          buttons={[
-            { label: t("Claim"), action: handleTimeoutConfirmed },
-            {
-              label: t("Cancel"),
-              action: handleCloseTimeoutConfirm,
-            },
-          ]}
-        >
-          <div className="content">
-            <p>{t("ConfirmTimeoutDesc")}</p>
-          </div>
-        </Modal>
-        <Modal
-          show={showGameDetails}
-          title={t("GameInfoFor", { metaGame: gameDeets.name })}
-          buttons={[
-            {
-              label: t("Close"),
-              action: () => {
-                showGameDetailsSetter(false);
-              },
-            },
-          ]}
-        >
-          <div className="content">
-            <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-              {gameEngine.description() +
-                (designerString === undefined ? "" : "\n\n" + designerString)}
-            </ReactMarkdown>
-            <ul className="contained">
-              {gameDeets.urls.map((l, i) => (
-                <li key={i}>
-                  <a href={l} target="_blank" rel="noopener noreferrer">
-                    {l}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            {gameEngine.notes() === undefined ? (
-              ""
-            ) : (
-              <>
-                <h2>{t("ImplementationNotes")}</h2>
-                <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-                  {gameEngine.notes()}
-                </ReactMarkdown>
-              </>
-            )}
-          </div>
-        </Modal>
-        <Modal
-          show={showGameDump}
-          title={t("DebugModal")}
-          buttons={[
-            {
-              label: t("Close"),
-              action: () => {
-                showGameDumpSetter(false);
-              },
-            },
-          ]}
-        >
-          <div className="content">
-            <p>
-              If there's a problem with your game, a developer may ask you to
-              come to this page and send them the current game state. You can
-              either click the "Copy" link below to copy the text to your
-              clipboard and then paste it somewhere, or you can click the
-              "Download" button to save a text file to your computer, which you
-              can then send to the developers. Thank you!
-            </p>
-            {gameRef === null ||
-            gameRef.current === null ||
-            gameRef.current.state === null ? (
-              ""
-            ) : (
-              <Fragment>
-                <ClipboardCopy
-                  copyText={getFocusNode(explorationRef.current, focus).state}
-                />
-                <div className="field">
-                  <div className="control">
-                    <a
-                      href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                        getFocusNode(explorationRef.current, focus).state
-                      )}`}
-                      download="AbstractPlay-Debug.json"
-                    >
-                      <button className="button apButtonNeutral">{t("Download")}</button>
-                    </a>
-                  </div>
+          <div className="columns">
+            {/* Comments */}
+            <div
+              className="column is-three-fifths is-offset-one-fifth"
+              id="fullChatLog"
+            >
+              {focus ? (
+                <div>
+                  <h1 className="subtitle lined">
+                    <span>{t("GameSummary")}</span>
+                  </h1>
+                  <MoveResults
+                    className="moveResults"
+                    results={game?.moveResults}
+                    comments={comments}
+                    players={gameRef.current?.players}
+                  />
                 </div>
-              </Fragment>
-            )}
-          </div>
-        </Modal>
-        <Modal
-          show={showInject}
-          title={"Inject state"}
-          buttons={[
-            {
-              label: t("Close"),
-              action: () => {
-                showInjectSetter(false);
-              },
-            },
-          ]}
-        >
-          <div className="content">
-            <p>
-              If you are seeing this and are not a developer, please let an
-              admin know immediately.
-            </p>
-            <p>
-              This is a destructive function. Pasting code here will obliterate
-              the existing game state and cannot be undone. You have been
-              warned.
-            </p>
-            <div className="field">
-              <label className="label" htmlFor="newState">
-                JSON to inject
-              </label>
-              <div className="control">
-                <textarea
-                  className="textarea"
-                  name="newState"
-                  placeholder="Paste JSON here"
-                  value={injectedState}
-                  onChange={handleInjectChange}
-                />
-              </div>
-              <div className="control">
-                <button className="button is-danger" onClick={handleInjection}>
-                  Inject JSON!
-                </button>
-              </div>
-            </div>
-          </div>
-        </Modal>
-        <Modal
-          show={showGameNote}
-          title={t("GameNoteModal")}
-          buttons={[
-            {
-              label: t("Close"),
-              action: () => {
-                showGameNoteSetter(false);
-                if (gameNote === undefined || gameNote === null) {
-                  interimNoteSetter("");
-                } else {
-                  interimNoteSetter(gameNote);
-                }
-              },
-            },
-          ]}
-        >
-          <div className="content">
-            <p>
-              Nobody but you can see this note. The note is tied to this game
-              and not any specific move. The note will be irretrievably lost
-              when the game concludes and is first cleared from your list of
-              concluded games.
-            </p>
-          </div>
-          <div className="field">
-            <div className="control">
-              <textarea
-                type="textarea"
-                rows={5}
-                id="enterANote"
-                name="enterANote"
-                className="textarea"
-                value={interimNote}
-                placeholder={t("Comment")}
-                onChange={(e) => {
-                  interimNoteSetter(e.target.value);
-                  return false;
-                }}
-              ></textarea>
-            </div>
-            {interimNote.length > 250 ? (
-              <p className="help is-danger" style={{ textAlign: "right" }}>
-                {interimNote.length} / 250
-              </p>
-            ) : (
-              <p className="help" style={{ textAlign: "right" }}>
-                {interimNote.length} / 250
-              </p>
-            )}
-            <div className="control">
-              {interimNote === gameNote ||
-              (interimNote === "" && gameNote === null) ? (
-                <button className="button is-small" disabled>
-                  {t("UpdateNote")}
-                </button>
               ) : (
-                <button
-                  className="button is-small"
-                  onClick={() => handleNoteUpdate(interimNote)}
-                >
-                  {t("UpdateNote")}
-                </button>
+                ""
               )}
             </div>
           </div>
-        </Modal>
-        <Modal
-          show={showCustomCSS}
-          title={t("CustomCSS")}
-          buttons={[
-            { label: t("Save"), action: saveCustomCSS },
-            {
-              label: t("Cancel"),
-              action: () => showCustomCSSSetter(false),
-            },
-          ]}
-        >
-          <div className="content">
-            <p>It is possible to customize the CSS of all instances of this particular game. <strong>This is not something to do lightly!</strong> Do not inject code you either do not understand or have not had vetted by someone you trust. Abstract Play and its developers are not responsible for any mishaps that may occur while using this feature.</p>
-            <p>If you are certain you wish to continue, paste the CSS code below and click Save. If everything blows up, open the developer console and clear the local storage key <code>custom-css</code>, and that should reset everything. See the wiki for documentation, and join us on Discord to discuss.</p>
-          </div>
-          <div className="control">
-            <textarea className="textarea is-small" id="myCustomCSS" placeholder="Paste CSS code here" rows="5" value={newCSS} onChange={(e) => newCSSSetter(e.target.value)} />
-          </div>
-          <div className="control">
-            <label className="radio">
-                <input type="checkbox" name="activeCSS" checked={cssActive} onChange={(e) => cssActiveSetter(e.target.checked)} />
+          {/* columns */}
+          <RenderOptionsModal
+            show={showSettings}
+            game={game}
+            settings={userSettings}
+            gameSettings={gameSettings}
+            processNewSettings={processUpdatedSettings}
+            showSettingsSetter={showSettingsSetter}
+            setError={setError}
+            handleClose={handleSettingsClose}
+            handleSave={handleSettingsSave}
+          />
+          <Modal
+            show={showResignConfirm}
+            title={t("ConfirmResign")}
+            buttons={[
+              { label: t("Resign"), action: handleResignConfirmed },
+              {
+                label: t("Cancel"),
+                action: handleCloseResignConfirm,
+              },
+            ]}
+          >
+            <div className="content">
+              <p>{t("ConfirmResignDesc")}</p>
+            </div>
+          </Modal>
+          <Modal
+            show={showDeleteSubtreeConfirm}
+            title={t("ConfirmDeleteSubtree")}
+            buttons={[
+              { label: t("Delete"), action: handleDeleteSubtreeConfirmed },
+              {
+                label: t("Cancel"),
+                action: handleCloseDeleteSubtreeConfirm,
+              },
+            ]}
+          >
+            <div className="content">
+              <p>{t("ConfirmDeleteSubtreeDesc")}</p>
+            </div>
+          </Modal>
+          <Modal
+            show={showMoveConfirm}
+            title={t("ConfirmMove")}
+            buttons={[
+              { label: t("Submit"), action: handleMoveConfirmed },
+              {
+                label: t("Cancel"),
+                action: handleCloseMoveConfirm,
+              },
+            ]}
+          >
+            <div className="content">
+              <p>{t("ConfirmMoveDesc")}</p>
+              <p className="help">{t("ConfirmMoveHelp")}</p>
+            </div>
+          </Modal>
+          <Modal
+            show={showTimeoutConfirm}
+            title={t("ConfirmTimeout")}
+            buttons={[
+              { label: t("Claim"), action: handleTimeoutConfirmed },
+              {
+                label: t("Cancel"),
+                action: handleCloseTimeoutConfirm,
+              },
+            ]}
+          >
+            <div className="content">
+              <p>{t("ConfirmTimeoutDesc")}</p>
+            </div>
+          </Modal>
+          <Modal
+            show={showGameDetails}
+            title={t("GameInfoFor", { metaGame: gameDeets.name })}
+            buttons={[
+              {
+                label: t("Close"),
+                action: () => {
+                  showGameDetailsSetter(false);
+                },
+              },
+            ]}
+          >
+            <div className="content">
+              <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+                {gameEngine.description() +
+                  (designerString === undefined ? "" : "\n\n" + designerString)}
+              </ReactMarkdown>
+              <ul className="contained">
+                {gameDeets.urls.map((l, i) => (
+                  <li key={i}>
+                    <a href={l} target="_blank" rel="noopener noreferrer">
+                      {l}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              {gameEngine.notes() === undefined ? (
+                ""
+              ) : (
+                <>
+                  <h2>{t("ImplementationNotes")}</h2>
+                  <ReactMarkdown
+                    rehypePlugins={[rehypeRaw]}
+                    className="content"
+                  >
+                    {gameEngine.notes()}
+                  </ReactMarkdown>
+                </>
+              )}
+            </div>
+          </Modal>
+          <Modal
+            show={showGameDump}
+            title={t("DebugModal")}
+            buttons={[
+              {
+                label: t("Close"),
+                action: () => {
+                  showGameDumpSetter(false);
+                },
+              },
+            ]}
+          >
+            <div className="content">
+              <p>
+                If there's a problem with your game, a developer may ask you to
+                come to this page and send them the current game state. You can
+                either click the "Copy" link below to copy the text to your
+                clipboard and then paste it somewhere, or you can click the
+                "Download" button to save a text file to your computer, which
+                you can then send to the developers. Thank you!
+              </p>
+              {gameRef === null ||
+              gameRef.current === null ||
+              gameRef.current.state === null ? (
+                ""
+              ) : (
+                <Fragment>
+                  <ClipboardCopy
+                    copyText={getFocusNode(explorationRef.current, focus).state}
+                  />
+                  <div className="field">
+                    <div className="control">
+                      <a
+                        href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                          getFocusNode(explorationRef.current, focus).state
+                        )}`}
+                        download="AbstractPlay-Debug.json"
+                      >
+                        <button className="button apButtonNeutral">
+                          {t("Download")}
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                </Fragment>
+              )}
+            </div>
+          </Modal>
+          <Modal
+            show={showInject}
+            title={"Inject state"}
+            buttons={[
+              {
+                label: t("Close"),
+                action: () => {
+                  showInjectSetter(false);
+                },
+              },
+            ]}
+          >
+            <div className="content">
+              <p>
+                If you are seeing this and are not a developer, please let an
+                admin know immediately.
+              </p>
+              <p>
+                This is a destructive function. Pasting code here will
+                obliterate the existing game state and cannot be undone. You
+                have been warned.
+              </p>
+              <div className="field">
+                <label className="label" htmlFor="newState">
+                  JSON to inject
+                </label>
+                <div className="control">
+                  <textarea
+                    className="textarea"
+                    name="newState"
+                    placeholder="Paste JSON here"
+                    value={injectedState}
+                    onChange={handleInjectChange}
+                  />
+                </div>
+                <div className="control">
+                  <button
+                    className="button is-danger"
+                    onClick={handleInjection}
+                  >
+                    Inject JSON!
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Modal>
+          <Modal
+            show={showGameNote}
+            title={t("GameNoteModal")}
+            buttons={[
+              {
+                label: t("Close"),
+                action: () => {
+                  showGameNoteSetter(false);
+                  if (gameNote === undefined || gameNote === null) {
+                    interimNoteSetter("");
+                  } else {
+                    interimNoteSetter(gameNote);
+                  }
+                },
+              },
+            ]}
+          >
+            <div className="content">
+              <p>
+                Nobody but you can see this note. The note is tied to this game
+                and not any specific move. The note will be irretrievably lost
+                when the game concludes and is first cleared from your list of
+                concluded games.
+              </p>
+            </div>
+            <div className="field">
+              <div className="control">
+                <textarea
+                  type="textarea"
+                  rows={5}
+                  id="enterANote"
+                  name="enterANote"
+                  className="textarea"
+                  value={interimNote}
+                  placeholder={t("Comment")}
+                  onChange={(e) => {
+                    interimNoteSetter(e.target.value);
+                    return false;
+                  }}
+                ></textarea>
+              </div>
+              {interimNote.length > 250 ? (
+                <p className="help is-danger" style={{ textAlign: "right" }}>
+                  {interimNote.length} / 250
+                </p>
+              ) : (
+                <p className="help" style={{ textAlign: "right" }}>
+                  {interimNote.length} / 250
+                </p>
+              )}
+              <div className="control">
+                {interimNote === gameNote ||
+                (interimNote === "" && gameNote === null) ? (
+                  <button className="button is-small" disabled>
+                    {t("UpdateNote")}
+                  </button>
+                ) : (
+                  <button
+                    className="button is-small"
+                    onClick={() => handleNoteUpdate(interimNote)}
+                  >
+                    {t("UpdateNote")}
+                  </button>
+                )}
+              </div>
+            </div>
+          </Modal>
+          <Modal
+            show={showCustomCSS}
+            title={t("CustomCSS")}
+            buttons={[
+              { label: t("Save"), action: saveCustomCSS },
+              {
+                label: t("Cancel"),
+                action: () => showCustomCSSSetter(false),
+              },
+            ]}
+          >
+            <div className="content">
+              <p>
+                It is possible to customize the CSS of all instances of this
+                particular game.{" "}
+                <strong>This is not something to do lightly!</strong> Do not
+                inject code you either do not understand or have not had vetted
+                by someone you trust. Abstract Play and its developers are not
+                responsible for any mishaps that may occur while using this
+                feature.
+              </p>
+              <p>
+                If you are certain you wish to continue, paste the CSS code
+                below and click Save. If everything blows up, open the developer
+                console and clear the local storage key <code>custom-css</code>,
+                and that should reset everything. See the wiki for
+                documentation, and join us on Discord to discuss.
+              </p>
+            </div>
+            <div className="control">
+              <textarea
+                className="textarea is-small"
+                id="myCustomCSS"
+                placeholder="Paste CSS code here"
+                rows="5"
+                value={newCSS}
+                onChange={(e) => newCSSSetter(e.target.value)}
+              />
+            </div>
+            <div className="control">
+              <label className="radio">
+                <input
+                  type="checkbox"
+                  name="activeCSS"
+                  checked={cssActive}
+                  onChange={(e) => cssActiveSetter(e.target.checked)}
+                />
                 Activate custom CSS?
-            </label>
-          </div>
-        </Modal>
-        <canvas
-          id="pngExportCanvas"
-          ref={canvasRef}
-          style={{ display: "none" }}
-        ></canvas>
-      </article>
+              </label>
+            </div>
+          </Modal>
+          <canvas
+            id="pngExportCanvas"
+            ref={canvasRef}
+            style={{ display: "none" }}
+          ></canvas>
+        </article>
       </>
     );
   } else {
-    reportError(`Message: ${errorMessageRef.current}, game: ${JSON.stringify(game)}, state: ${ explorationRef.current && focus ? getFocusNode(explorationRef.current, focus).state : ""}`);
+    reportError(
+      `Message: ${errorMessageRef.current}, game: ${JSON.stringify(
+        game
+      )}, state: ${
+        explorationRef.current && focus
+          ? getFocusNode(explorationRef.current, focus).state
+          : ""
+      }`
+    );
     return <h4>{errorMessageRef.current}</h4>;
   }
 }

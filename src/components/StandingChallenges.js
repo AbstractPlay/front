@@ -32,7 +32,7 @@ function StandingChallenges(props) {
   const { metaGame } = useParams();
   const [update, updateSetter] = useState(0);
   const [globalMe] = useContext(MeContext);
-  const [allUsers,] = useContext(UsersContext);
+  const [allUsers] = useContext(UsersContext);
   const [showState, showStateSetter] = useStorageState("challenges-show", 20);
   const [sorting, setSorting] = useState([]);
   const [showAccepted, showAcceptedSetter] = useState(false);
@@ -102,14 +102,17 @@ function StandingChallenges(props) {
         var result = await res.json();
         console.log(result);
         var bad;
-        [result, bad] = result.reduce((acc, c) => {
-          if (c.id) {
-            acc[0].push(c);
-          } else {
-            acc[1].push(c);
-          }
-          return acc;
-        }, [[], []]);
+        [result, bad] = result.reduce(
+          (acc, c) => {
+            if (c.id) {
+              acc[0].push(c);
+            } else {
+              acc[1].push(c);
+            }
+            return acc;
+          },
+          [[], []]
+        );
         if (bad.length > 0)
           reportError(`Bad standing challenges: ${JSON.stringify(bad)}`);
         challengesSetter(result);
@@ -265,10 +268,10 @@ function StandingChallenges(props) {
       challenges.map((rec) => {
         let lastSeen = undefined;
         if (allUsers !== null) {
-            const userRec = allUsers.find(u => u.id === rec.challenger?.id);
-            if (userRec !== undefined) {
-                lastSeen = userRec.lastSeen;
-            }
+          const userRec = allUsers.find((u) => u.id === rec.challenger?.id);
+          if (userRec !== undefined) {
+            lastSeen = userRec.lastSeen;
+          }
         }
         return {
           id: rec.id,
@@ -285,7 +288,7 @@ function StandingChallenges(props) {
           rated: rec.rated,
           seating: rec.seating,
           variants: rec.variants,
-          comment: rec.comment
+          comment: rec.comment,
         };
       }),
     [challenges, allUsers]
@@ -296,16 +299,22 @@ function StandingChallenges(props) {
     () => [
       columnHelper.accessor("challenger", {
         header: "Challenger",
-        cell: (props) =>
-            <>
-                <Link to={`/player/${props.row.original.challengerId}`}>{props.getValue()}</Link>
-                {props.row.original.lastSeen === undefined ? null :
-                    <>
-                        &nbsp;
-                        <ActivityMarker lastSeen={props.row.original.lastSeen} size="s" />
-                    </>
-                }
-            </>
+        cell: (props) => (
+          <>
+            <Link to={`/player/${props.row.original.challengerId}`}>
+              {props.getValue()}
+            </Link>
+            {props.row.original.lastSeen === undefined ? null : (
+              <>
+                &nbsp;
+                <ActivityMarker
+                  lastSeen={props.row.original.lastSeen}
+                  size="s"
+                />
+              </>
+            )}
+          </>
+        ),
       }),
       columnHelper.accessor("numPlayers", {
         header: "Players",
@@ -333,7 +342,9 @@ function StandingChallenges(props) {
       }),
       columnHelper.accessor("comment", {
         header: "Notes",
-        cell: (props) => <div className="challenge_notes">{props.getValue()}</div>,
+        cell: (props) => (
+          <div className="challenge_notes">{props.getValue()}</div>
+        ),
       }),
       columnHelper.accessor("clockHard", {
         header: "Hard clock?",
@@ -514,32 +525,43 @@ function StandingChallenges(props) {
   return (
     <>
       <Helmet>
-          <meta property="og:title" content={`${metaGameName}: Standing Challenges`} />
-          <meta property="og:url" content={`https://play.abstractplay.com/challenges/${metaGame}`} />
-          <meta property="og:description" content={`Standing challenges for ${metaGameName}`} />
+        <meta
+          property="og:title"
+          content={`${metaGameName}: Standing Challenges`}
+        />
+        <meta
+          property="og:url"
+          content={`https://play.abstractplay.com/challenges/${metaGame}`}
+        />
+        <meta
+          property="og:description"
+          content={`Standing challenges for ${metaGameName}`}
+        />
       </Helmet>
       <article>
         <h1 className="has-text-centered title">
           {t("StandingChallenges", { name: metaGameName })}
         </h1>
-        {globalMe === undefined || globalMe === null || globalMe?.id === undefined ? null :
-        (<>
+        {globalMe === undefined ||
+        globalMe === null ||
+        globalMe?.id === undefined ? null : (
+          <>
             <NewChallengeModal
-                show={showModal}
-                handleClose={() => showModalSetter(false)}
-                handleChallenge={handleNewChallenge}
-                fixedMetaGame={metaGame}
+              show={showModal}
+              handleClose={() => showModalSetter(false)}
+              handleChallenge={handleNewChallenge}
+              fixedMetaGame={metaGame}
             />
-            <div className="has-text-centered" style={{marginBottom: "1em"}}>
-                <button
+            <div className="has-text-centered" style={{ marginBottom: "1em" }}>
+              <button
                 className="button is-small apButton"
                 onClick={() => showModalSetter(true)}
-                >
+              >
                 Issue Challenge
-                </button>
+              </button>
             </div>
-        </>)
-        }
+          </>
+        )}
         <div className="container">
           {tableNavigation}
           <table

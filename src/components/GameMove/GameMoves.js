@@ -375,7 +375,9 @@ function GameMoves(props) {
                     {game.colors[i].value + ":"}
                   </span>
                 )}
-                <span className="playerName"><Link to={`/player/${p.id}`}>{p.name}</Link></span>
+                <span className="playerName">
+                  <Link to={`/player/${p.id}`}>{p.name}</Link>
+                </span>
                 {i < game.numPlayers - 1 ? <span>,&nbsp;</span> : ""}
               </Fragment>
             ))}
@@ -405,7 +407,9 @@ function GameMoves(props) {
                   {img.value + ":"}
                 </span>
               )}
-              <span className="playerName"><Link to={`/player/${game.players[i].id}`}>{player}</Link></span>
+              <span className="playerName">
+                <Link to={`/player/${game.players[i].id}`}>{player}</Link>
+              </span>
             </div>
           </th>
         );
@@ -595,7 +599,18 @@ function GameMoves(props) {
           //   let clName = j === 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
           let movenum = numcolumns * i + j;
           row.push(
-            <td key={"td0-" + i + "-" + j} className="gameMoveNums" id={(path !== null && path !== undefined && path[movenum] !== undefined && path[movenum][0].class.includes("gameMoveFocus")) ? "focusedMoveNum" : ""}>
+            <td
+              key={"td0-" + i + "-" + j}
+              className="gameMoveNums"
+              id={
+                path !== null &&
+                path !== undefined &&
+                path[movenum] !== undefined &&
+                path[movenum][0].class.includes("gameMoveFocus")
+                  ? "focusedMoveNum"
+                  : ""
+              }
+            >
               {movenum >= path.length ? "" : `${movenum + 1}`}
             </td>
           );
@@ -622,7 +637,7 @@ function GameMoves(props) {
                   )}
                   {game.pieInvoked && i === 0 && j === 1 ? (
                     <span className="icon">
-                        <i className="fa fa-pie-chart" aria-hidden="true"></i>
+                      <i className="fa fa-pie-chart" aria-hidden="true"></i>
                     </span>
                   ) : null}
                 </div>

@@ -69,7 +69,10 @@ function Me(props) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ query: "me", pars: { vars: JSON.stringify(vars), update: update } }),
+          body: JSON.stringify({
+            query: "me",
+            pars: { vars: JSON.stringify(vars), update: update },
+          }),
         });
         fetchingSetter(false);
         const result = await res.json();
@@ -293,7 +296,7 @@ function Me(props) {
 
   const handleDeleteGamesClick = async () => {
     showDeleteGamesModalSetter(true);
-  }
+  };
 
   const handleDeleteGames = async () => {
     try {
@@ -311,7 +314,7 @@ function Me(props) {
           pars: {
             metaGame: deleteGamesMetaGame,
             cbit: deleteCompletedGames ? 1 : 0,
-            gameids: deletes
+            gameids: deletes,
           },
         }),
       });
@@ -322,11 +325,11 @@ function Me(props) {
       errorSetter(error);
     }
     showDeleteGamesModalSetter(false);
-  }
+  };
 
   const handleDeleteGamesClose = () => {
     showDeleteGamesModalSetter(false);
-  }
+  };
 
   const handleStartTournamentsClick = async () => {
     try {
@@ -356,7 +359,7 @@ function Me(props) {
           body: JSON.stringify({
             query: "start_tournament",
             pars: {
-              tournamentid: genericInput
+              tournamentid: genericInput,
             },
           }),
         });
@@ -384,7 +387,7 @@ function Me(props) {
         body: JSON.stringify({
           query: "end_tournament",
           pars: {
-            tournamentid: genericInput
+            tournamentid: genericInput,
           },
         }),
       });
@@ -394,7 +397,7 @@ function Me(props) {
     } catch (error) {
       errorSetter(error);
     }
-  }
+  };
 
   const handleOneTimeFixClick = async () => {
     try {
@@ -470,11 +473,11 @@ function Me(props) {
       if (globalMe) {
         // sort myMove by time remaining
         localMyMove.sort((a, b) => {
-            const recA = a.players.find(x => x.id === globalMe.id);
-            const recB = b.players.find(x => x.id === globalMe.id);
-            const timeA = recA?.time || 0;
-            const timeB = recB?.time || 0;
-            return timeA - timeB;
+          const recA = a.players.find((x) => x.id === globalMe.id);
+          const recB = b.players.find((x) => x.id === globalMe.id);
+          const timeA = recA?.time || 0;
+          const timeB = recB?.time || 0;
+          return timeA - timeB;
         });
       }
       myMoveSetter(localMyMove);
@@ -514,11 +517,17 @@ function Me(props) {
       i18n.changeLanguage(lng);
       console.log(`changed language  to ${lng}`);
     }
-    let challengesResponded = [...(globalMe.challengesIssued ?? []), ...(globalMe.challengesAccepted ?? [])];
+    let challengesResponded = [
+      ...(globalMe.challengesIssued ?? []),
+      ...(globalMe.challengesAccepted ?? []),
+    ];
     return (
       <article id="dashboard">
         <h1 className="title has-text-centered">
-          {t("WelcomePlayer")}&nbsp;<Link to={`/player/${globalMe.id}`}><span style={{textDecoration: "underline"}}>{globalMe.name}</span></Link>
+          {t("WelcomePlayer")}&nbsp;
+          <Link to={`/player/${globalMe.id}`}>
+            <span style={{ textDecoration: "underline" }}>{globalMe.name}</span>
+          </Link>
         </h1>
         {/* Your Games */}
         <div className="columns">
@@ -531,7 +540,7 @@ function Me(props) {
                 <p className="lined">
                   <span>{t("YourMove")}</span>
                 </p>
-                <MyTurnTable games={myMove}  fetching={fetching}/>
+                <MyTurnTable games={myMove} fetching={fetching} />
               </div>
               <div className="topPad">
                 <p className="lined">
@@ -577,7 +586,8 @@ function Me(props) {
                 <span>{t("ChallengeResponse")}</span>
               </p>
               <div className="indentedContainer">
-                {!globalMe.challengesReceived || globalMe.challengesReceived.length === 0 ? (
+                {!globalMe.challengesReceived ||
+                globalMe.challengesReceived.length === 0 ? (
                   <p>{t("NoChallengeResponse")}</p>
                 ) : (
                   <ul>
@@ -632,7 +642,8 @@ function Me(props) {
                 <span>{t("StandingChallenges2")}</span>
               </p>
               <div className="indentedContainer">
-                {!globalMe.standingChallenges || globalMe.standingChallenges.length === 0 ? (
+                {!globalMe.standingChallenges ||
+                globalMe.standingChallenges.length === 0 ? (
                   <p>{t("NoStandingChallenges")}</p>
                 ) : (
                   <ul>
@@ -771,7 +782,7 @@ function Me(props) {
         >
           <Fragment>
             <div className="field">
-              { /* get metaGame */ }
+              {/* get metaGame */}
               <label className="label" htmlFor="metaGame_to_delete">
                 {"metaGame for delete:"}
               </label>
@@ -786,7 +797,7 @@ function Me(props) {
               </div>
             </div>
             <div className="field">
-              { /* completed games? */ }
+              {/* completed games? */}
               <label className="label" htmlFor="delete_completed_games">
                 {"completed games?:"}
               </label>
@@ -797,13 +808,15 @@ function Me(props) {
                     id="delete_completed_games"
                     type="checkbox"
                     checked={deleteCompletedGames}
-                    onChange={(e) => deleteCompletedGamesSetter(e.target.checked)}
+                    onChange={(e) =>
+                      deleteCompletedGamesSetter(e.target.checked)
+                    }
                   />
                 </label>
               </div>
             </div>
             <div className="field">
-              { /* Get list of game ids as a string from user */ }
+              {/* Get list of game ids as a string from user */}
               <label className="label" htmlFor="gameids_to_delete">
                 {"comma separated list of game ids to delete:"}
               </label>

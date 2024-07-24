@@ -64,13 +64,13 @@ function MyTurnTable(props) {
           metaGame: g.metaGame,
           gameName: "Unknown",
           gameStarted: g.gameStarted || 0,
-          opponents: g.players
-            .filter((item) => item.id !== globalMe.id),
+          opponents: g.players.filter((item) => item.id !== globalMe.id),
           numMoves: g.numMoves || 0,
           myTime: me.time,
           timeRemaining: me.time - (Date.now() - g.lastMoveTime),
         };
-        if (gameinfo.get(g.metaGame) !== undefined) ret.gameName = gameinfo.get(g.metaGame).name;
+        if (gameinfo.get(g.metaGame) !== undefined)
+          ret.gameName = gameinfo.get(g.metaGame).name;
         return ret;
       }),
     [globalMe.id, props.games]
@@ -83,19 +83,39 @@ function MyTurnTable(props) {
         header: "Game",
         cell: (props) => {
           if (props.getValue() === "Unknown") {
-            return (<>Unknown</>);
+            return <>Unknown</>;
           } else {
-            return (<Link to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}>{props.getValue()}</Link>);
+            return (
+              <Link
+                to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
+              >
+                {props.getValue()}
+              </Link>
+            );
           }
-        }
+        },
       }),
       columnHelper.accessor("opponents", {
         header: "Opponents",
-        cell: (props) => props.getValue().map(u => <Link to={`/player/${u.id}`}>{u.name}</Link>).reduce((acc, x) => acc === null ? x : <>{acc}, {x}</>, null),
+        cell: (props) =>
+          props
+            .getValue()
+            .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+            .reduce(
+              (acc, x) =>
+                acc === null ? (
+                  x
+                ) : (
+                  <>
+                    {acc}, {x}
+                  </>
+                ),
+              null
+            ),
         sortingFn: (rowA, rowB, columnID) => {
-            const nameA = rowA.getValue(columnID)[0].name;
-            const nameB = rowB.getValue(columnID)[0].name;
-            return nameA.localeCompare(nameB);
+          const nameA = rowA.getValue(columnID)[0].name;
+          const nameB = rowB.getValue(columnID)[0].name;
+          return nameA.localeCompare(nameB);
         },
       }),
       columnHelper.accessor("gameStarted", {
@@ -136,119 +156,122 @@ function MyTurnTable(props) {
     table.setPageSize(showState);
   }, [showState, table]);
 
-  if ( (data === null) || (data === undefined) || (data.length === 0) ) {
+  if (data === null || data === undefined || data.length === 0) {
     return (
-        <div className="content">
-            {props.fetching ? <Spinner size="20" /> : null}
-            <p>{t("NoGames")}</p>
-        </div>
+      <div className="content">
+        {props.fetching ? <Spinner size="20" /> : null}
+        <p>{t("NoGames")}</p>
+      </div>
     );
   } else {
-  return (
-    <Fragment>
-      {props.fetching ? <Spinner size="20" /> : null}
-      <table className="table apTable">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder ? null : (
-                    <div
-                      {...{
-                        className: header.column.getCanSort() ? "sortable" : "",
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {{
-                        asc: (
-                          <Fragment>
-                            &nbsp;<i className="fa fa-angle-up"></i>
-                          </Fragment>
-                        ),
-                        desc: (
-                          <Fragment>
-                            &nbsp;<i className="fa fa-angle-down"></i>
-                          </Fragment>
-                        ),
-                      }[header.column.getIsSorted()] ?? null}
-                    </div>
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className={
-                row.original.tournament !== undefined ? "tourneyGame" : ""
-              }
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    return (
+      <Fragment>
+        {props.fetching ? <Spinner size="20" /> : null}
+        <table className="table apTable">
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <div
+                        {...{
+                          className: header.column.getCanSort()
+                            ? "sortable"
+                            : "",
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: (
+                            <Fragment>
+                              &nbsp;<i className="fa fa-angle-up"></i>
+                            </Fragment>
+                          ),
+                          desc: (
+                            <Fragment>
+                              &nbsp;<i className="fa fa-angle-down"></i>
+                            </Fragment>
+                          ),
+                        }[header.column.getIsSorted()] ?? null}
+                      </div>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className={
+                  row.original.tournament !== undefined ? "tourneyGame" : ""
+                }
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <div className="level smallerText tableNav">
-        <div className="level-left">
-          <div className="level-item">
-            <button
-              className="button is-small"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-double-left"></i>
-              </span>
-            </button>
-            <button
-              className="button is-small"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-left"></i>
-              </span>
-            </button>
-            <button
-              className="button is-small"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-right"></i>
-              </span>
-            </button>
-            <button
-              className="button is-small"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-double-right"></i>
-              </span>
-            </button>
-          </div>
-          <div className="level-item">
-            <p>
-              Page <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
-              of <strong>{table.getPageCount()}</strong> (
-              {table.getPrePaginationRowModel().rows.length} total rows)
-            </p>
-          </div>
-          {/* <div className="level-item">
+        <div className="level smallerText tableNav">
+          <div className="level-left">
+            <div className="level-item">
+              <button
+                className="button is-small"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-angle-double-left"></i>
+                </span>
+              </button>
+              <button
+                className="button is-small"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-angle-left"></i>
+                </span>
+              </button>
+              <button
+                className="button is-small"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-angle-right"></i>
+                </span>
+              </button>
+              <button
+                className="button is-small"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-angle-double-right"></i>
+                </span>
+              </button>
+            </div>
+            <div className="level-item">
+              <p>
+                Page{" "}
+                <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
+                <strong>{table.getPageCount()}</strong> (
+                {table.getPrePaginationRowModel().rows.length} total rows)
+              </p>
+            </div>
+            {/* <div className="level-item">
                     <div className="field">
                         <span>|&nbsp;Go to page:</span>
                         <input
@@ -262,29 +285,29 @@ function MyTurnTable(props) {
                         />
                     </div>
                 </div> */}
-          <div className="level-item">
-            <div className="control">
-              <div className="select is-small">
-                <select
-                  value={table.getState().pagination.pageSize}
-                  onChange={(e) => {
-                    showStateSetter(Number(e.target.value));
-                  }}
-                >
-                  {[10, allSize].map((pageSize) => (
-                    <option key={pageSize} value={pageSize}>
-                      Show {pageSize === allSize ? "All" : pageSize}
-                    </option>
-                  ))}
-                </select>
+            <div className="level-item">
+              <div className="control">
+                <div className="select is-small">
+                  <select
+                    value={table.getState().pagination.pageSize}
+                    onChange={(e) => {
+                      showStateSetter(Number(e.target.value));
+                    }}
+                  >
+                    {[10, allSize].map((pageSize) => (
+                      <option key={pageSize} value={pageSize}>
+                        Show {pageSize === allSize ? "All" : pageSize}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </Fragment>
-  );
-                  }
+      </Fragment>
+    );
+  }
 }
 
 export default MyTurnTable;

@@ -14,7 +14,7 @@ function UserChats(props) {
   const players = props.players;
   const gameid = props.gameid;
   const [users] = useContext(UsersContext);
-//   const { t } = useTranslation();
+  //   const { t } = useTranslation();
 
   if (comments) {
     let results = [];
@@ -71,24 +71,27 @@ function UserChats(props) {
                       {r.log}
                     </p>
                   ) : (
-                  <>
-                    <p>
-                      <Link to={`/player/${r.userid}`}><strong>{r.player}</strong></Link>&nbsp;
-                      <small>
-                        <ReactTimeAgo
-                          date={r.timestamp}
-                          timeStyle="twitter-now"
-                        />
-                      </small>
-                    </p>
-                    <ReactMarkdown
-                      className="content"
-                      disallowedElements={["img"]}
-                      unwrapDisallowed={true}
-                    >
-                      {r.log}
-                    </ReactMarkdown>
-                  </>
+                    <>
+                      <p>
+                        <Link to={`/player/${r.userid}`}>
+                          <strong>{r.player}</strong>
+                        </Link>
+                        &nbsp;
+                        <small>
+                          <ReactTimeAgo
+                            date={r.timestamp}
+                            timeStyle="twitter-now"
+                          />
+                        </small>
+                      </p>
+                      <ReactMarkdown
+                        className="content"
+                        disallowedElements={["img"]}
+                        unwrapDisallowed={true}
+                      >
+                        {r.log}
+                      </ReactMarkdown>
+                    </>
                   )}
                 </div>
               </div>

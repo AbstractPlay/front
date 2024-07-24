@@ -49,8 +49,28 @@ function UserSettingsModal(props) {
   const [selectedColour, selectedColourSetter] = useState("");
   const [paletteName, paletteNameSetter] = useState("");
   const [showContext, showContextSetter] = useState(false);
-  const [storedContextLight, storedContextLightSetter] = useStorageState("stored-context-light", {background: "#fff", strokes: "#000", borders: "#000", labels: "#000", annotations: "#000", fill: "#000"});
-  const [storedContextDark, storedContextDarkSetter] = useStorageState("stored-context-dark", {background: "#222", strokes: "#6d6d6d", borders: "#000", labels: "#009fbf", annotations: "#99cccc", fill: "#e6f2f2"});
+  const [storedContextLight, storedContextLightSetter] = useStorageState(
+    "stored-context-light",
+    {
+      background: "#fff",
+      strokes: "#000",
+      borders: "#000",
+      labels: "#000",
+      annotations: "#000",
+      fill: "#000",
+    }
+  );
+  const [storedContextDark, storedContextDarkSetter] = useStorageState(
+    "stored-context-dark",
+    {
+      background: "#222",
+      strokes: "#6d6d6d",
+      borders: "#000",
+      labels: "#009fbf",
+      annotations: "#99cccc",
+      fill: "#e6f2f2",
+    }
+  );
   const [currContext, currContextSetter] = useState("dark");
   const [currBackground, currBackgroundSetter] = useState("");
   const [currFill, currFillSetter] = useState("");
@@ -60,10 +80,14 @@ function UserSettingsModal(props) {
   const [currNotes, currNotesSetter] = useState("");
 
   useEffect(() => {
-    if (globalMe !== undefined && globalMe !== null && globalMe.palettes !== undefined) {
-        myPalettesSetter([...globalMe.palettes]);
+    if (
+      globalMe !== undefined &&
+      globalMe !== null &&
+      globalMe.palettes !== undefined
+    ) {
+      myPalettesSetter([...globalMe.palettes]);
     } else {
-        myPalettesSetter([]);
+      myPalettesSetter([]);
     }
   }, [globalMe]);
 
@@ -97,7 +121,7 @@ function UserSettingsModal(props) {
         confirmMoveSetter(true);
       }
       if (globalMe?.settings?.all?.hideSpoilers) {
-        hideSpoilersSetter(globalMe.settings.all.hideSpoilers)
+        hideSpoilersSetter(globalMe.settings.all.hideSpoilers);
       } else {
         hideSpoilersSetter(false);
       }
@@ -257,145 +281,171 @@ function UserSettingsModal(props) {
     currContextSetter(mode);
     let context;
     if (mode === "dark") {
-        context = storedContextDark;
+      context = storedContextDark;
     } else if (mode === "light") {
-        context = storedContextLight
+      context = storedContextLight;
     }
     if (context !== undefined && context !== null) {
-        currBackgroundSetter(context.background);
-        currBordersSetter(context.borders);
-        currFillSetter(context.fill);
-        currStrokesSetter(context.strokes);
-        currLabelsSetter(context.labels);
-        currNotesSetter(context.annotations);
+      currBackgroundSetter(context.background);
+      currBordersSetter(context.borders);
+      currFillSetter(context.fill);
+      currStrokesSetter(context.strokes);
+      currLabelsSetter(context.labels);
+      currNotesSetter(context.annotations);
     }
-  }
+  };
 
   const resetContext = () => {
-      if (currContext === "light") {
-        storedContextLightSetter({background: "#fff", strokes: "#000", borders: "#000", labels: "#000", annotations: "#000", fill: "#000"});
+    if (currContext === "light") {
+      storedContextLightSetter({
+        background: "#fff",
+        strokes: "#000",
+        borders: "#000",
+        labels: "#000",
+        annotations: "#000",
+        fill: "#000",
+      });
     } else if (currContext === "dark") {
-        storedContextDarkSetter({background: "#222", strokes: "#6d6d6d", borders: "#000", labels: "#009fbf", annotations: "#99cccc", fill: "#e6f2f2"});
+      storedContextDarkSetter({
+        background: "#222",
+        strokes: "#6d6d6d",
+        borders: "#000",
+        labels: "#009fbf",
+        annotations: "#99cccc",
+        fill: "#e6f2f2",
+      });
     }
     handleContextChange(currContext);
-  }
+  };
 
   const saveContext = () => {
     let setter;
     if (currContext === "light") {
-        setter = storedContextLightSetter;
+      setter = storedContextLightSetter;
     } else if (currContext === "dark") {
-        setter = storedContextDarkSetter;
+      setter = storedContextDarkSetter;
     }
     if (setter !== null && setter !== undefined) {
-        setter({
-            background: currBackground,
-            strokes: currStrokes,
-            borders: currBorders,
-            fill: currFill,
-            labels: currLabels,
-            annotations: currNotes,
-        });
+      setter({
+        background: currBackground,
+        strokes: currStrokes,
+        borders: currBorders,
+        fill: currFill,
+        labels: currLabels,
+        annotations: currNotes,
+      });
     }
     showContextSetter(false);
-  }
+  };
 
   useEffect(() => {
     if (showContext) {
-        const svg = document.getElementById("contextSample");
-        if (svg !== null) svg.remove();
-        const json = JSON.parse(`{"board":{"style":"squares-checkered","width":4,"height":4},"legend":{"A":{"name":"piece","colour":1},"B":{"name":"piece","colour":2},"C":{"name":"piece","colour":3},"D":{"name":"piece","colour":4}},"pieces":"AAB-\\nA-BB\\nC--D\\nCCDD","annotations":[{"type":"move","targets":[{"row":0,"col":3},{"row":1,"col":2}]}]}`);
-        const options = {
-            divid: "contextSampleRender",
-            svgid: "contextSample",
-            colourContext: {
-                fill: currFill,
-                strokes: currStrokes,
-                borders: currBorders,
-                background: currBackground,
-                labels: currLabels,
-                annotations: currNotes,
-            }
-        };
-        try {
-            render(json, options);
-        } catch (e) {
-            console.log(`An error occurred while trying to render a sample:`);
-            console.log(e);
-        }
+      const svg = document.getElementById("contextSample");
+      if (svg !== null) svg.remove();
+      const json = JSON.parse(
+        `{"board":{"style":"squares-checkered","width":4,"height":4},"legend":{"A":{"name":"piece","colour":1},"B":{"name":"piece","colour":2},"C":{"name":"piece","colour":3},"D":{"name":"piece","colour":4}},"pieces":"AAB-\\nA-BB\\nC--D\\nCCDD","annotations":[{"type":"move","targets":[{"row":0,"col":3},{"row":1,"col":2}]}]}`
+      );
+      const options = {
+        divid: "contextSampleRender",
+        svgid: "contextSample",
+        colourContext: {
+          fill: currFill,
+          strokes: currStrokes,
+          borders: currBorders,
+          background: currBackground,
+          labels: currLabels,
+          annotations: currNotes,
+        },
+      };
+      try {
+        render(json, options);
+      } catch (e) {
+        console.log(`An error occurred while trying to render a sample:`);
+        console.log(e);
+      }
     }
-  }, [showContext, currFill, currStrokes, currBorders, currBackground, currLabels, currNotes]);
+  }, [
+    showContext,
+    currFill,
+    currStrokes,
+    currBorders,
+    currBackground,
+    currLabels,
+    currNotes,
+  ]);
 
   const savePalettes = async () => {
     try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-            },
-            body: JSON.stringify({
-                query: "save_palettes",
-                pars: {
-                    palettes: myPalettes,
-                },
-            }),
-        });
-        if (res.status !== 200) {
-            const result = await res.json();
-            console.log(
-                `An error occurred while saving palettes:\n${result}`
-            );
-        } else {
-            // update globalMe palettes
-            const newMe = JSON.parse(JSON.stringify(globalMe));
-            newMe.palettes = myPalettes;
-            globalMeSetter(newMe);
-        }
+      const usr = await Auth.currentAuthenticatedUser();
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "save_palettes",
+          pars: {
+            palettes: myPalettes,
+          },
+        }),
+      });
+      if (res.status !== 200) {
+        const result = await res.json();
+        console.log(`An error occurred while saving palettes:\n${result}`);
+      } else {
+        // update globalMe palettes
+        const newMe = JSON.parse(JSON.stringify(globalMe));
+        newMe.palettes = myPalettes;
+        globalMeSetter(newMe);
+      }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
     showPaletteSetter(false);
-  }
+  };
 
   const addColour = () => {
-    if (! currColours.includes(selectedColour)) {
-        currColoursSetter(lst => [...lst, selectedColour]);
+    if (!currColours.includes(selectedColour)) {
+      currColoursSetter((lst) => [...lst, selectedColour]);
     }
-  }
+  };
 
   const addPalette = () => {
     let paletteMap = new Map();
     if (myPalettes.length > 0) {
-        for (const {name, colours} of myPalettes) {
-            paletteMap.set(name, [...colours]);
-        }
+      for (const { name, colours } of myPalettes) {
+        paletteMap.set(name, [...colours]);
+      }
     }
     paletteMap.set(paletteName, [...currColours]);
-    myPalettesSetter([...paletteMap.entries()].map(([name, lst]) => {return {name, colours: [...lst]}}));
+    myPalettesSetter(
+      [...paletteMap.entries()].map(([name, lst]) => {
+        return { name, colours: [...lst] };
+      })
+    );
     paletteNameSetter("");
     currColoursSetter([]);
-  }
+  };
 
   const delPalette = (name) => {
-    const idx = myPalettes.findIndex(p => p.name === name);
+    const idx = myPalettes.findIndex((p) => p.name === name);
     if (idx !== -1) {
-        const palettes = [...myPalettes];
-        palettes.splice(idx, 1);
-        myPalettesSetter([...palettes]);
+      const palettes = [...myPalettes];
+      palettes.splice(idx, 1);
+      myPalettesSetter([...palettes]);
     }
-  }
+  };
 
   const delColour = (colour) => {
-    const idx = currColours.findIndex(c => c === colour);
+    const idx = currColours.findIndex((c) => c === colour);
     if (idx !== -1) {
-        const newlst = [...currColours];
-        newlst.splice(idx, 1);
-        currColoursSetter([...newlst]);
+      const newlst = [...currColours];
+      newlst.splice(idx, 1);
+      currColoursSetter([...newlst]);
     }
-  }
+  };
 
   const handleSettingsChange = async (newSettings) => {
     try {
@@ -447,7 +497,7 @@ function UserSettingsModal(props) {
                 Authorization: `Bearer ${token}`,
               },
               // Don't care about e.g. challenges, so size = small.
-              body: JSON.stringify({ query: "me", pars: { size: "small" }}),
+              body: JSON.stringify({ query: "me", pars: { size: "small" } }),
             });
             const result = await res.json();
             if (result.statusCode !== 200) console.log(JSON.parse(result.body));
@@ -459,9 +509,13 @@ function UserSettingsModal(props) {
                     ...JSON.parse(result.body),
                     ...(currentGlobalMe && {
                       challengesIssued: currentGlobalMe.challengesIssued ?? [],
-                      challengesReceived: currentGlobalMe.challengesReceived ?? [],
-                      challengesAccepted: currentGlobalMe.challengesAccepted ?? [],
-                      standingChallenges: currentGlobalMe.standingChallenges ?? []}),
+                      challengesReceived:
+                        currentGlobalMe.challengesReceived ?? [],
+                      challengesAccepted:
+                        currentGlobalMe.challengesAccepted ?? [],
+                      standingChallenges:
+                        currentGlobalMe.standingChallenges ?? [],
+                    }),
                   };
                 });
                 console.log(JSON.parse(result.body));
@@ -523,329 +577,347 @@ function UserSettingsModal(props) {
 
   return (
     <>
-    <Modal
-      show={show}
-      title={t("UserSettings")}
-      buttons={[
-        {
-          label: t("Close"),
-          action: () => handleUserSettingsClose(updated),
-        },
-      ]}
-    >
-      <div className="container">
-        {/********************* Display Name *********************/}
-        <div className="field" key="DisplayName">
-          <label className="label" htmlFor="user_settings_name">
-            {t("DisplayName")}
-          </label>
-          <div className="control">
-            {globalMe === null ? (
-              <Spinner />
-            ) : changingName ? (
-              <input
-                className="input is-small"
-                name="user_settings_name"
-                id="user_settings_name"
-                type="text"
-                value={name}
-                onChange={(e) => {
-                  nameErrorSetter("");
-                  nameSetter(e.target.value);
-                }}
-              />
-            ) : (
-              globalMe.name
-            )}
-          </div>
-          <div className="control is-grouped">
-            {globalMe === null ? (
-              ""
-            ) : changingName ? (
-              <Fragment>
-                <button
-                  className="button is-small apButton"
-                  onClick={handleNameChangeSubmitClick}
-                >
-                  {t("Submit")}
-                </button>
-                <button
-                  className="button is-small is-danger"
-                  onClick={handleNameChangeCancelClick}
-                >
-                  {t("Cancel")}
-                </button>
-              </Fragment>
-            ) : (
-              <button
-                className="button is-small apButton"
-                onClick={handleNameChangeClick}
-              >
-                {t("Change")}
-              </button>
-            )}
-          </div>
-          <p className="help">{t("DisplayNameHelp")}</p>
-          {globalMe === null || !changingName ? (
-            ""
-          ) : (
-            <Fragment>
-              <p
-                className={
-                  "help " + (nameError !== "" ? "is-danger" : "is-primary")
-                }
-              >
-                {nameError !== "" ? nameError : t("DisplayNameChange")}
-              </p>
-            </Fragment>
-          )}
-        </div>
-        {/********************* e-mail *********************/}
-        <div className="field" key="email">
-          <label className="label" htmlFor="user_settings_email">
-            {t("EMail")}
-          </label>
-          <div className="control">
-            {globalMe === null ? (
-              <Spinner />
-            ) : changingEMail ? (
-              <input
-                className="input is-small"
-                name="user_settings_email"
-                id="user_settings_email"
-                type="text"
-                value={email}
-                onChange={(e) => emailSetter(e.target.value)}
-              />
-            ) : (
-              user?.signInUserSession.idToken.payload.email
-            )}
-          </div>
-          <div className="control">
-            {globalMe === null ? (
-              ""
-            ) : changingEMail ? (
-              changingCodeSent ? (
-                ""
+      <Modal
+        show={show}
+        title={t("UserSettings")}
+        buttons={[
+          {
+            label: t("Close"),
+            action: () => handleUserSettingsClose(updated),
+          },
+        ]}
+      >
+        <div className="container">
+          {/********************* Display Name *********************/}
+          <div className="field" key="DisplayName">
+            <label className="label" htmlFor="user_settings_name">
+              {t("DisplayName")}
+            </label>
+            <div className="control">
+              {globalMe === null ? (
+                <Spinner />
+              ) : changingName ? (
+                <input
+                  className="input is-small"
+                  name="user_settings_name"
+                  id="user_settings_name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => {
+                    nameErrorSetter("");
+                    nameSetter(e.target.value);
+                  }}
+                />
               ) : (
+                globalMe.name
+              )}
+            </div>
+            <div className="control is-grouped">
+              {globalMe === null ? (
+                ""
+              ) : changingName ? (
                 <Fragment>
                   <button
                     className="button is-small apButton"
-                    onClick={handleEMailChangeSubmitClick}
+                    onClick={handleNameChangeSubmitClick}
                   >
                     {t("Submit")}
                   </button>
                   <button
                     className="button is-small is-danger"
-                    onClick={handleEMailChangeCancelClick}
+                    onClick={handleNameChangeCancelClick}
                   >
                     {t("Cancel")}
                   </button>
                 </Fragment>
-              )
+              ) : (
+                <button
+                  className="button is-small apButton"
+                  onClick={handleNameChangeClick}
+                >
+                  {t("Change")}
+                </button>
+              )}
+            </div>
+            <p className="help">{t("DisplayNameHelp")}</p>
+            {globalMe === null || !changingName ? (
+              ""
             ) : (
-              <button
-                className="button is-small apButton"
-                onClick={handleEMailChangeClick}
-              >
-                {t("Change")}
-              </button>
+              <Fragment>
+                <p
+                  className={
+                    "help " + (nameError !== "" ? "is-danger" : "is-primary")
+                  }
+                >
+                  {nameError !== "" ? nameError : t("DisplayNameChange")}
+                </p>
+              </Fragment>
             )}
           </div>
-          {/********************* e-mail confirmation code *********************/}
-          {changingCodeSent ? (
-            <div className="field">
-              <label className="label" htmlFor="user_settings_email_code">
-                {t("EMailCode")}:
-              </label>
-              <div className="control">
-                {globalMe === null ? (
-                  <Spinner />
-                ) : (
-                  <input
-                    className="input is-small"
-                    name="email"
-                    id="user_settings_email_code"
-                    type="text"
-                    value={emailCode}
-                    onChange={(e) => emailCodeSetter(e.target.value)}
-                  />
-                )}
-              </div>
-              <div className="control">
-                {globalMe === null ? (
-                  ""
-                ) : changingEMail ? (
-                  <button
-                    className="button is-small apButton"
-                    onClick={handleEMailChangeCodeSubmitClick}
-                  >
-                    {t("Submit")}
-                  </button>
-                ) : (
-                  <button
-                    className="button is-small apButton"
-                    onClick={handleEMailChangeClick}
-                  >
-                    {t("Change")}
-                  </button>
-                )}
-              </div>
-              <p className="help is-primary">{t("EMailCodeHelp")}</p>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
-        {/********************* country *********************/}
-        <div className="field" key="country">
-            <label className="label" htmlFor="countrySelect">Tell others what country you are playing from (optional)</label>
+          {/********************* e-mail *********************/}
+          <div className="field" key="email">
+            <label className="label" htmlFor="user_settings_email">
+              {t("EMail")}
+            </label>
             <div className="control">
-                <div className="select">
-                    <select id="countrySelect" value={country} onChange={(e) => handleCountryChange(e.target.value)}>
-                        <option value={""} key={"country|_blank"}>--Prefer not to say--</option>
-                    {countryCodeList.sort((a, b) => a.countryName.localeCompare(b.countryName)).map(entry => {
-                        return (
-                            <option value={entry.alpha2} key={`country|${entry.alpha2}`}>{entry.countryName}</option>
-                        );
-                    })}
-                    </select>
-                </div>
+              {globalMe === null ? (
+                <Spinner />
+              ) : changingEMail ? (
+                <input
+                  className="input is-small"
+                  name="user_settings_email"
+                  id="user_settings_email"
+                  type="text"
+                  value={email}
+                  onChange={(e) => emailSetter(e.target.value)}
+                />
+              ) : (
+                user?.signInUserSession.idToken.payload.email
+              )}
             </div>
-        </div>
-        {/********************* notifications *********************/}
-        <div className="field" key="notifications">
-          <label className="label">{t("NotificationSettings")}</label>
-          {!notifications
-            ? ""
-            : ["challenges", "gameStart", "gameEnd", "yourturn"].map((key) => (
-                <div className="control" key={key}>
+            <div className="control">
+              {globalMe === null ? (
+                ""
+              ) : changingEMail ? (
+                changingCodeSent ? (
+                  ""
+                ) : (
+                  <Fragment>
+                    <button
+                      className="button is-small apButton"
+                      onClick={handleEMailChangeSubmitClick}
+                    >
+                      {t("Submit")}
+                    </button>
+                    <button
+                      className="button is-small is-danger"
+                      onClick={handleEMailChangeCancelClick}
+                    >
+                      {t("Cancel")}
+                    </button>
+                  </Fragment>
+                )
+              ) : (
+                <button
+                  className="button is-small apButton"
+                  onClick={handleEMailChangeClick}
+                >
+                  {t("Change")}
+                </button>
+              )}
+            </div>
+            {/********************* e-mail confirmation code *********************/}
+            {changingCodeSent ? (
+              <div className="field">
+                <label className="label" htmlFor="user_settings_email_code">
+                  {t("EMailCode")}:
+                </label>
+                <div className="control">
+                  {globalMe === null ? (
+                    <Spinner />
+                  ) : (
+                    <input
+                      className="input is-small"
+                      name="email"
+                      id="user_settings_email_code"
+                      type="text"
+                      value={emailCode}
+                      onChange={(e) => emailCodeSetter(e.target.value)}
+                    />
+                  )}
+                </div>
+                <div className="control">
+                  {globalMe === null ? (
+                    ""
+                  ) : changingEMail ? (
+                    <button
+                      className="button is-small apButton"
+                      onClick={handleEMailChangeCodeSubmitClick}
+                    >
+                      {t("Submit")}
+                    </button>
+                  ) : (
+                    <button
+                      className="button is-small apButton"
+                      onClick={handleEMailChangeClick}
+                    >
+                      {t("Change")}
+                    </button>
+                  )}
+                </div>
+                <p className="help is-primary">{t("EMailCodeHelp")}</p>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+          {/********************* country *********************/}
+          <div className="field" key="country">
+            <label className="label" htmlFor="countrySelect">
+              Tell others what country you are playing from (optional)
+            </label>
+            <div className="control">
+              <div className="select">
+                <select
+                  id="countrySelect"
+                  value={country}
+                  onChange={(e) => handleCountryChange(e.target.value)}
+                >
+                  <option value={""} key={"country|_blank"}>
+                    --Prefer not to say--
+                  </option>
+                  {countryCodeList
+                    .sort((a, b) => a.countryName.localeCompare(b.countryName))
+                    .map((entry) => {
+                      return (
+                        <option
+                          value={entry.alpha2}
+                          key={`country|${entry.alpha2}`}
+                        >
+                          {entry.countryName}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
+            </div>
+          </div>
+          {/********************* notifications *********************/}
+          <div className="field" key="notifications">
+            <label className="label">{t("NotificationSettings")}</label>
+            {!notifications
+              ? ""
+              : ["challenges", "gameStart", "gameEnd", "yourturn"].map(
+                  (key) => (
+                    <div className="control" key={key}>
+                      <label className="checkbox">
+                        <input
+                          type="checkbox"
+                          name={key}
+                          checked={notifications[key]}
+                          onChange={() => handleNotifyCheckChange(key)}
+                        />
+                        {t(`NotifyLabel-${key}`)}
+                      </label>
+                    </div>
+                  )
+                )}
+          </div>
+          {/********************* push notifications *********************/}
+          <div className="field" key="pushNotifications">
+            <div className="control">
+              <label className="checkbox is-small">
+                <input
+                  type="checkbox"
+                  checked={
+                    globalMe !== null &&
+                    "mayPush" in globalMe &&
+                    globalMe.mayPush === true
+                  }
+                  onChange={handlePushClick}
+                />
+                {globalMe !== null &&
+                "mayPush" in globalMe &&
+                globalMe.mayPush === true
+                  ? t("DisablePush")
+                  : t("EnablePush")}
+              </label>
+            </div>
+          </div>
+
+          {/********************* exploration *********************/}
+          {exploration === null ? (
+            ""
+          ) : (
+            <div className="field" key="exploration">
+              <label className="label">{t("ExplorationSetting")}</label>
+              <div className="control" key="explore-never">
+                <label className="radio">
+                  <input
+                    type="radio"
+                    id="explore-never"
+                    value="-1"
+                    name="explore-never"
+                    checked={exploration === -1}
+                    onChange={() => handleExplorationChange(-1)}
+                  />
+                  {t(`ExploreNever`)}
+                </label>
+              </div>
+              <div className="control" key="explore-ask">
+                <label className="radio">
+                  <input
+                    type="radio"
+                    id="explore-ask"
+                    value="-1"
+                    name="explore-ask"
+                    checked={exploration === 0}
+                    onChange={() => handleExplorationChange(0)}
+                  />
+                  {t(`ExploreAsk`)}
+                </label>
+              </div>
+              <div className="control" key="explore-always">
+                <label className="radio">
+                  <input
+                    type="radio"
+                    id="explore-always"
+                    value="-1"
+                    name="explore-always"
+                    checked={exploration === 1}
+                    onChange={() => handleExplorationChange(1)}
+                  />
+                  {t(`ExploreAlways`)}
+                </label>
+              </div>
+
+              <div className="field" key="tours" style={{ paddingTop: "1em" }}>
+                <div className="control">
                   <label className="checkbox">
                     <input
                       type="checkbox"
-                      name={key}
-                      checked={notifications[key]}
-                      onChange={() => handleNotifyCheckChange(key)}
+                      checked={hideTour}
+                      onChange={handleTourCheckChange}
                     />
-                    {t(`NotifyLabel-${key}`)}
+                    {t("HideTours")}
                   </label>
                 </div>
-              ))}
-        </div>
-        {/********************* push notifications *********************/}
-        <div className="field" key="pushNotifications">
-          <div className="control">
-            <label className="checkbox is-small">
-              <input
-                type="checkbox"
-                checked={
-                  globalMe !== null &&
-                  "mayPush" in globalMe &&
-                  globalMe.mayPush === true
-                }
-                onChange={handlePushClick}
-              />
-              {globalMe !== null &&
-              "mayPush" in globalMe &&
-              globalMe.mayPush === true
-                ? t("DisablePush")
-                : t("EnablePush")}
-            </label>
-          </div>
-        </div>
-
-        {/********************* exploration *********************/}
-        {exploration === null ? (
-          ""
-        ) : (
-          <div className="field" key="exploration">
-            <label className="label">{t("ExplorationSetting")}</label>
-            <div className="control" key="explore-never">
-              <label className="radio">
-                <input
-                  type="radio"
-                  id="explore-never"
-                  value="-1"
-                  name="explore-never"
-                  checked={exploration === -1}
-                  onChange={() => handleExplorationChange(-1)}
-                />
-                {t(`ExploreNever`)}
-              </label>
-            </div>
-            <div className="control" key="explore-ask">
-              <label className="radio">
-                <input
-                  type="radio"
-                  id="explore-ask"
-                  value="-1"
-                  name="explore-ask"
-                  checked={exploration === 0}
-                  onChange={() => handleExplorationChange(0)}
-                />
-                {t(`ExploreAsk`)}
-              </label>
-            </div>
-            <div className="control" key="explore-always">
-              <label className="radio">
-                <input
-                  type="radio"
-                  id="explore-always"
-                  value="-1"
-                  name="explore-always"
-                  checked={exploration === 1}
-                  onChange={() => handleExplorationChange(1)}
-                />
-                {t(`ExploreAlways`)}
-              </label>
-            </div>
-
-            <div className="field" key="tours" style={{ paddingTop: "1em" }}>
-              <div className="control">
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={hideTour}
-                    onChange={handleTourCheckChange}
-                  />
-                  {t("HideTours")}
-                </label>
               </div>
             </div>
+          )}
+
+          {/********************* move confirmation *********************/}
+          <div className="field" key="moveConfirm">
+            <div className="control">
+              <label className="checkbox is-small">
+                <input
+                  type="checkbox"
+                  checked={confirmMove}
+                  onChange={handleMoveConfirmChange}
+                />
+                {t("DisableMoveConfirm")}
+              </label>
+            </div>
+            <p class="help">
+              May not work for all games. Let us know if we missed something.
+            </p>
           </div>
-        )}
 
-        {/********************* move confirmation *********************/}
-        <div className="field" key="moveConfirm">
-          <div className="control">
-            <label className="checkbox is-small">
-              <input
-                type="checkbox"
-                checked={confirmMove}
-                onChange={handleMoveConfirmChange}
-              />
-              {t("DisableMoveConfirm")}
-            </label>
+          {/********************* hide spoilers *********************/}
+          <div className="field" key="hideSpoilers">
+            <div className="control">
+              <label className="checkbox is-small">
+                <input
+                  type="checkbox"
+                  checked={hideSpoilers}
+                  onChange={handleHideSpoilersChange}
+                />
+                {t("HideSpoilers")}
+              </label>
+            </div>
           </div>
-          <p class="help">May not work for all games. Let us know if we missed something.</p>
-        </div>
 
-        {/********************* hide spoilers *********************/}
-        <div className="field" key="hideSpoilers">
-          <div className="control">
-            <label className="checkbox is-small">
-              <input
-                type="checkbox"
-                checked={hideSpoilers}
-                onChange={handleHideSpoilersChange}
-              />
-              {t("HideSpoilers")}
-            </label>
-          </div>
-        </div>
-
-
-        {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above
+          {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above
         ******************** Language *********************
         <div className="userSettingsLabelDiv">
           <label className="userSettingsLabel" htmlFor="user_settings_language" >{t("Language")}:</label>
@@ -871,199 +943,352 @@ function UserSettingsModal(props) {
         </div>
         */}
 
-        <div className="field is-grouped">
-            <div className="control is-small">
-                <button className="button is-small apButton" onClick={() => showPaletteSetter(true)}>Manage Palettes</button>
-            </div>
-            <div className="control is-small">
-                <button className="button is-small apButton" onClick={() => {handleContextChange("dark"); showContextSetter(true);}}>Manage Colour Contexts</button>
-            </div>
-        </div>
-
-        {/********************* Log out *********************/}
-        <div className="control" style={{ float: "right" }}>
-          <button
-            className="button is-small apButtonAlert"
-            onClick={logout}
-            id="logout-button"
-          >
-            {t("LogOut")}
-          </button>
-        </div>
-      </div>
-    </Modal>
-    {/** Palette modal */}
-    <Modal
-          show={showPalette}
-          title={t("ManagePalettes")}
-          buttons={[
-            { label: t("SaveChanges"), action: savePalettes },
-            {
-              label: t("Close"),
-              action: () => showPaletteSetter(false),
-            },
-          ]}
-        >
-          <div className="content">
-            <p>Palettes are lists of colours you want the front end to use when generating game boards. Once defined, you can then apply them to specific games. You must provide at least two colours, four is wise, and you can provide up to ten.</p>
-            <p>These palettes will <em>not</em> be visible to your fellow players. These will only affect <em>your</em> experience.</p>
-            <p>Palettes won't necessarily work for all games. Some games have hard-coded colours. If you run into any trouble, please <a href="https://discord.abstractplay.com">join us on Discord</a> and let us know.</p>
-          </div>
-          <div className="columns">
-            <div className="column">
-                <div className="field">
-                    <label className="label is-small" htmlFor="paletteName">Name the palette</label>
-                    <div className="control">
-                        <input className="input is-small" id="paletteName" type="text" value={paletteName} onChange={(e) => paletteNameSetter(e.target.value)} />
-                    </div>
-                </div>
-                <div>
-                    <p className="help">Click to delete a colour</p>
-                {currColours.map((c, i) => (
-                    <span style={{backgroundColor: c}} onClick={() => delColour(c)}>Player {i + 1} ({c})</span>
-                )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)}
-                </div>
-            </div>
-            <div className="column">
-                <div className="field">
-                    <label className="label is-small" htmlFor="colorSelect">Choose a colour</label>
-                    <div className="control" id="colorSelect">
-                        <HexColorPicker color={selectedColour} onChange={selectedColourSetter} />
-                        <HexColorInput color={selectedColour} onChange={selectedColourSetter} />
-                    </div>
-                </div>
-            </div>
-          </div>
           <div className="field is-grouped">
-            <div className="control">
-                <button className="button is-small apButton" onClick={addColour} disabled={selectedColour === ""}>Add colour</button>
-            </div>
-            <div className="control">
-                <button className="button is-small apButton" onClick={addPalette} disabled={paletteName === "" || paletteName === "standard" || paletteName === "blind" || currColours.length < 2}>Add Palette</button>
-            </div>
-          </div>
-          {myPalettes.length === 0 ? null :
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Colours</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {myPalettes.map(({name, colours}) => (
-                        <tr key={`palette|${name}`}>
-                            <td>{name}</td>
-                            <td>
-                            {colours.map((c, i) => (
-                                <span style={{backgroundColor: c}} onClick={() => delColour(c)}>Player {i + 1} ({c})</span>
-                            )).reduce((acc, x) => acc === null ? x : <>{acc} {x}</>, null)}
-                            </td>
-                            <td><span className="icon" onClick={() => delPalette(name)}><i className="fa fa-times-circle" aria-hidden="true"></i></span></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-          }
-      </Modal>
-    {/** Context modal */}
-    <Modal
-          show={showContext}
-          title={t("ManageContexts")}
-          buttons={[
-            {
-              label: t("Close"),
-              action: () => showContextSetter(false),
-            },
-          ]}
-        >
-          <div className="content">
-            <p>Colour contexts are sets of colours that the renderer uses when drawing boards in different settings, like dark mode. You can tweak how your boards appear globally by changing the six values here. Game-specific customizations are possible using the Custom CSS button below any game board.</p>
-            <p>These customizations will <em>not</em> be visible to your fellow players. These will only affect <em>your</em> experience.</p>
-            <p>If you run into any trouble, please <a href="https://discord.abstractplay.com">join us on Discord</a> and let us know.</p>
-          </div>
-          <div className="field">
-            <label className="label is-small" htmlFor="selectMode">Select the mode to customize</label>
             <div className="control is-small">
-                <div className="select is-small">
-                    <select
-                        value={currContext}
-                        name="selectMode"
-                        id="selectMode"
-                        onChange={(e) => handleContextChange(e.target.value)}
-                    >
-                        <option value="dark">Dark mode</option>
-                        <option value="light">Light mode</option>
-                    </select>
-                </div>
+              <button
+                className="button is-small apButton"
+                onClick={() => showPaletteSetter(true)}
+              >
+                Manage Palettes
+              </button>
+            </div>
+            <div className="control is-small">
+              <button
+                className="button is-small apButton"
+                onClick={() => {
+                  handleContextChange("dark");
+                  showContextSetter(true);
+                }}
+              >
+                Manage Colour Contexts
+              </button>
             </div>
           </div>
-          <div className="columns is-multiline">
-            <div className="column is-narrow">
-                <div className="field">
-                    <label className="label is-small" htmlFor="valBackground">Board background</label>
-                    <div className="control" id="valBackground">
-                        <HexColorPicker color={currBackground} onChange={currBackgroundSetter} />
-                        <HexColorInput color={currBackground} onChange={currBackgroundSetter} />
-                    </div>
-                </div>
+
+          {/********************* Log out *********************/}
+          <div className="control" style={{ float: "right" }}>
+            <button
+              className="button is-small apButtonAlert"
+              onClick={logout}
+              id="logout-button"
+            >
+              {t("LogOut")}
+            </button>
+          </div>
+        </div>
+      </Modal>
+      {/** Palette modal */}
+      <Modal
+        show={showPalette}
+        title={t("ManagePalettes")}
+        buttons={[
+          { label: t("SaveChanges"), action: savePalettes },
+          {
+            label: t("Close"),
+            action: () => showPaletteSetter(false),
+          },
+        ]}
+      >
+        <div className="content">
+          <p>
+            Palettes are lists of colours you want the front end to use when
+            generating game boards. Once defined, you can then apply them to
+            specific games. You must provide at least two colours, four is wise,
+            and you can provide up to ten.
+          </p>
+          <p>
+            These palettes will <em>not</em> be visible to your fellow players.
+            These will only affect <em>your</em> experience.
+          </p>
+          <p>
+            Palettes won't necessarily work for all games. Some games have
+            hard-coded colours. If you run into any trouble, please{" "}
+            <a href="https://discord.abstractplay.com">join us on Discord</a>{" "}
+            and let us know.
+          </p>
+        </div>
+        <div className="columns">
+          <div className="column">
+            <div className="field">
+              <label className="label is-small" htmlFor="paletteName">
+                Name the palette
+              </label>
+              <div className="control">
+                <input
+                  className="input is-small"
+                  id="paletteName"
+                  type="text"
+                  value={paletteName}
+                  onChange={(e) => paletteNameSetter(e.target.value)}
+                />
+              </div>
             </div>
-            <div className="column is-narrow">
-                <div className="field">
-                    <label className="label is-small" htmlFor="valStrokes">Gridlines and most other lines</label>
-                    <div className="control" id="valStrokes">
-                        <HexColorPicker color={currStrokes} onChange={currStrokesSetter} />
-                        <HexColorInput color={currStrokes} onChange={currStrokesSetter} />
-                    </div>
-                </div>
-            </div>
-            <div className="column is-narrow">
-                <div className="field">
-                    <label className="label is-small" htmlFor="valBorders">Borders around most pieces</label>
-                    <div className="control" id="valBorders">
-                        <HexColorPicker color={currBorders} onChange={currBordersSetter} />
-                        <HexColorInput color={currBorders} onChange={currBordersSetter} />
-                    </div>
-                </div>
-            </div>
-            <div className="column is-narrow">
-                <div className="field">
-                    <label className="label is-small" htmlFor="valFills">Fills, like blocked cells and some glyphs</label>
-                    <div className="control" id="valFills">
-                        <HexColorPicker color={currFill} onChange={currFillSetter} />
-                        <HexColorInput color={currFill} onChange={currFillSetter} />
-                    </div>
-                </div>
-            </div>
-            <div className="column is-narrow">
-                <div className="field">
-                    <label className="label is-small" htmlFor="valLabels">Board labels</label>
-                    <div className="control" id="valLabels">
-                        <HexColorPicker color={currLabels} onChange={currLabelsSetter} />
-                        <HexColorInput color={currLabels} onChange={currLabelsSetter} />
-                    </div>
-                </div>
-            </div>
-            <div className="column is-narrow">
-                <div className="field">
-                    <label className="label is-small" htmlFor="valNotes">Annotations, like movement arrows</label>
-                    <div className="control" id="valNotes">
-                        <HexColorPicker color={currNotes} onChange={currNotesSetter} />
-                        <HexColorInput color={currNotes} onChange={currNotesSetter} />
-                    </div>
-                </div>
+            <div>
+              <p className="help">Click to delete a colour</p>
+              {currColours
+                .map((c, i) => (
+                  <span
+                    style={{ backgroundColor: c }}
+                    onClick={() => delColour(c)}
+                  >
+                    Player {i + 1} ({c})
+                  </span>
+                ))
+                .reduce(
+                  (acc, x) =>
+                    acc === null ? (
+                      x
+                    ) : (
+                      <>
+                        {acc} {x}
+                      </>
+                    ),
+                  null
+                )}
             </div>
           </div>
-          <div id="contextSampleRender" width="100%" style={{backgroundColor: currBackground}}></div>
-          <div>
-            <div className="control">
-                <button className="button is-small apButton" onClick={resetContext}>Reset to defaults</button>
-            </div>
-            <div className="control">
-                <button className="button is-small apButton" onClick={saveContext}>Save changes</button>
+          <div className="column">
+            <div className="field">
+              <label className="label is-small" htmlFor="colorSelect">
+                Choose a colour
+              </label>
+              <div className="control" id="colorSelect">
+                <HexColorPicker
+                  color={selectedColour}
+                  onChange={selectedColourSetter}
+                />
+                <HexColorInput
+                  color={selectedColour}
+                  onChange={selectedColourSetter}
+                />
+              </div>
             </div>
           </div>
+        </div>
+        <div className="field is-grouped">
+          <div className="control">
+            <button
+              className="button is-small apButton"
+              onClick={addColour}
+              disabled={selectedColour === ""}
+            >
+              Add colour
+            </button>
+          </div>
+          <div className="control">
+            <button
+              className="button is-small apButton"
+              onClick={addPalette}
+              disabled={
+                paletteName === "" ||
+                paletteName === "standard" ||
+                paletteName === "blind" ||
+                currColours.length < 2
+              }
+            >
+              Add Palette
+            </button>
+          </div>
+        </div>
+        {myPalettes.length === 0 ? null : (
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Colours</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {myPalettes.map(({ name, colours }) => (
+                <tr key={`palette|${name}`}>
+                  <td>{name}</td>
+                  <td>
+                    {colours
+                      .map((c, i) => (
+                        <span
+                          style={{ backgroundColor: c }}
+                          onClick={() => delColour(c)}
+                        >
+                          Player {i + 1} ({c})
+                        </span>
+                      ))
+                      .reduce(
+                        (acc, x) =>
+                          acc === null ? (
+                            x
+                          ) : (
+                            <>
+                              {acc} {x}
+                            </>
+                          ),
+                        null
+                      )}
+                  </td>
+                  <td>
+                    <span className="icon" onClick={() => delPalette(name)}>
+                      <i className="fa fa-times-circle" aria-hidden="true"></i>
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Modal>
+      {/** Context modal */}
+      <Modal
+        show={showContext}
+        title={t("ManageContexts")}
+        buttons={[
+          {
+            label: t("Close"),
+            action: () => showContextSetter(false),
+          },
+        ]}
+      >
+        <div className="content">
+          <p>
+            Colour contexts are sets of colours that the renderer uses when
+            drawing boards in different settings, like dark mode. You can tweak
+            how your boards appear globally by changing the six values here.
+            Game-specific customizations are possible using the Custom CSS
+            button below any game board.
+          </p>
+          <p>
+            These customizations will <em>not</em> be visible to your fellow
+            players. These will only affect <em>your</em> experience.
+          </p>
+          <p>
+            If you run into any trouble, please{" "}
+            <a href="https://discord.abstractplay.com">join us on Discord</a>{" "}
+            and let us know.
+          </p>
+        </div>
+        <div className="field">
+          <label className="label is-small" htmlFor="selectMode">
+            Select the mode to customize
+          </label>
+          <div className="control is-small">
+            <div className="select is-small">
+              <select
+                value={currContext}
+                name="selectMode"
+                id="selectMode"
+                onChange={(e) => handleContextChange(e.target.value)}
+              >
+                <option value="dark">Dark mode</option>
+                <option value="light">Light mode</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div className="columns is-multiline">
+          <div className="column is-narrow">
+            <div className="field">
+              <label className="label is-small" htmlFor="valBackground">
+                Board background
+              </label>
+              <div className="control" id="valBackground">
+                <HexColorPicker
+                  color={currBackground}
+                  onChange={currBackgroundSetter}
+                />
+                <HexColorInput
+                  color={currBackground}
+                  onChange={currBackgroundSetter}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="column is-narrow">
+            <div className="field">
+              <label className="label is-small" htmlFor="valStrokes">
+                Gridlines and most other lines
+              </label>
+              <div className="control" id="valStrokes">
+                <HexColorPicker
+                  color={currStrokes}
+                  onChange={currStrokesSetter}
+                />
+                <HexColorInput
+                  color={currStrokes}
+                  onChange={currStrokesSetter}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="column is-narrow">
+            <div className="field">
+              <label className="label is-small" htmlFor="valBorders">
+                Borders around most pieces
+              </label>
+              <div className="control" id="valBorders">
+                <HexColorPicker
+                  color={currBorders}
+                  onChange={currBordersSetter}
+                />
+                <HexColorInput
+                  color={currBorders}
+                  onChange={currBordersSetter}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="column is-narrow">
+            <div className="field">
+              <label className="label is-small" htmlFor="valFills">
+                Fills, like blocked cells and some glyphs
+              </label>
+              <div className="control" id="valFills">
+                <HexColorPicker color={currFill} onChange={currFillSetter} />
+                <HexColorInput color={currFill} onChange={currFillSetter} />
+              </div>
+            </div>
+          </div>
+          <div className="column is-narrow">
+            <div className="field">
+              <label className="label is-small" htmlFor="valLabels">
+                Board labels
+              </label>
+              <div className="control" id="valLabels">
+                <HexColorPicker
+                  color={currLabels}
+                  onChange={currLabelsSetter}
+                />
+                <HexColorInput color={currLabels} onChange={currLabelsSetter} />
+              </div>
+            </div>
+          </div>
+          <div className="column is-narrow">
+            <div className="field">
+              <label className="label is-small" htmlFor="valNotes">
+                Annotations, like movement arrows
+              </label>
+              <div className="control" id="valNotes">
+                <HexColorPicker color={currNotes} onChange={currNotesSetter} />
+                <HexColorInput color={currNotes} onChange={currNotesSetter} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          id="contextSampleRender"
+          width="100%"
+          style={{ backgroundColor: currBackground }}
+        ></div>
+        <div>
+          <div className="control">
+            <button className="button is-small apButton" onClick={resetContext}>
+              Reset to defaults
+            </button>
+          </div>
+          <div className="control">
+            <button className="button is-small apButton" onClick={saveContext}>
+              Save changes
+            </button>
+          </div>
+        </div>
       </Modal>
     </>
   );

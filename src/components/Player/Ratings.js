@@ -6,10 +6,10 @@ import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "./TableSkeleton";
 import NewChallengeModal from "../NewChallengeModal";
 
-function Ratings({handleChallenge}) {
-  const [user,] = useContext(ProfileContext);
-  const [summary,] = useContext(SummaryContext);
-  const [globalMe,] = useContext(MeContext);
+function Ratings({ handleChallenge }) {
+  const [user] = useContext(ProfileContext);
+  const [summary] = useContext(SummaryContext);
+  const [globalMe] = useContext(MeContext);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
 
   const openChallengeModal = (name) => {
@@ -21,24 +21,31 @@ function Ratings({handleChallenge}) {
 
   const data = useMemo(
     () =>
-        ( (summary === null) || (summary === undefined) ) ? [] :
-        summary.ratings.highest.filter(r => r.user === user.id)
-        .map(({rating: elo, game, wld, glicko, trueskill}) => {
-          const inforec = [...gameinfo.values()].find(r => game.startsWith(r.name));
-          // get other ratings for this game
-          const gameRatings = summary.ratings.highest.filter(r => r.game === game).map(r => r.rating).sort((a, b) => b - a);
-          const rank = gameRatings.findIndex(n => n === elo) + 1;
-          return {
-            id: inforec.uid,
-            name: game,
-            elo,
-            rank,
-            wld,
-            glicko,
-            trueskill,
-          };
-        })
-        .sort((a, b) => b.elo - a.elo),
+      summary === null || summary === undefined
+        ? []
+        : summary.ratings.highest
+            .filter((r) => r.user === user.id)
+            .map(({ rating: elo, game, wld, glicko, trueskill }) => {
+              const inforec = [...gameinfo.values()].find((r) =>
+                game.startsWith(r.name)
+              );
+              // get other ratings for this game
+              const gameRatings = summary.ratings.highest
+                .filter((r) => r.game === game)
+                .map((r) => r.rating)
+                .sort((a, b) => b - a);
+              const rank = gameRatings.findIndex((n) => n === elo) + 1;
+              return {
+                id: inforec.uid,
+                name: game,
+                elo,
+                rank,
+                wld,
+                glicko,
+                trueskill,
+              };
+            })
+            .sort((a, b) => b.elo - a.elo),
     [summary, user]
   );
 
@@ -51,28 +58,47 @@ function Ratings({handleChallenge}) {
       columnHelper.accessor("wld", {
         header: "Win/Loss/Draw",
         cell: (props) => {
-            const sum = props.getValue().reduce((prev, curr) => prev + curr, 0);
-            if (sum > 0) {
-                const winrate = Math.trunc(((props.getValue()[0] + (props.getValue()[2] / 2)) / sum) * 1000) / 10;
-                return `${winrate}% (${props.getValue()[0]}, ${props.getValue()[1]}, ${props.getValue()[2]})`
-            } else {
-                return `---`
-            }
+          const sum = props.getValue().reduce((prev, curr) => prev + curr, 0);
+          if (sum > 0) {
+            const winrate =
+              Math.trunc(
+                ((props.getValue()[0] + props.getValue()[2] / 2) / sum) * 1000
+              ) / 10;
+            return `${winrate}% (${props.getValue()[0]}, ${
+              props.getValue()[1]
+            }, ${props.getValue()[2]})`;
+          } else {
+            return `---`;
+          }
         },
         sortingFn: (rowA, rowB, columnID) => {
-            const sumA = rowA.getValue(columnID).reduce((prev, curr) => prev + curr, 0);
-            const sumB = rowB.getValue(columnID).reduce((prev, curr) => prev + curr, 0);
-            const rateA = Math.trunc(((rowA.getValue(columnID)[0] + (rowA.getValue(columnID)[2] / 2)) / sumA) * 1000) / 10;
-            const rateB = Math.trunc(((rowB.getValue(columnID)[0] + (rowB.getValue(columnID)[2] / 2)) / sumB) * 1000) / 10;
-            // NaNs first
-            if (isNaN(rateA) && isNaN(rateB)) {
-                return 0;
-            } else if (isNaN(rateA)) {
-                return -1;
-            } else if (isNaN(rateB)) {
-                return 1;
-            }
-            return rateA < rateB ? -1 : rateA > rateB ? 1 : 0;
+          const sumA = rowA
+            .getValue(columnID)
+            .reduce((prev, curr) => prev + curr, 0);
+          const sumB = rowB
+            .getValue(columnID)
+            .reduce((prev, curr) => prev + curr, 0);
+          const rateA =
+            Math.trunc(
+              ((rowA.getValue(columnID)[0] + rowA.getValue(columnID)[2] / 2) /
+                sumA) *
+                1000
+            ) / 10;
+          const rateB =
+            Math.trunc(
+              ((rowB.getValue(columnID)[0] + rowB.getValue(columnID)[2] / 2) /
+                sumB) *
+                1000
+            ) / 10;
+          // NaNs first
+          if (isNaN(rateA) && isNaN(rateB)) {
+            return 0;
+          } else if (isNaN(rateA)) {
+            return -1;
+          } else if (isNaN(rateB)) {
+            return 1;
+          }
+          return rateA < rateB ? -1 : rateA > rateB ? 1 : 0;
         },
       }),
       columnHelper.accessor("elo", {
@@ -84,55 +110,55 @@ function Ratings({handleChallenge}) {
       columnHelper.accessor("glicko", {
         header: "Glicko",
         cell: (props) => {
-            const rating = props.getValue().rating;
-            const rd = props.getValue().rd;
-            const min = Math.round(rating - (rd * 2));
-            const max = Math.round(rating + (rd * 2));
-            return `${min}–${max}`
+          const rating = props.getValue().rating;
+          const rd = props.getValue().rd;
+          const min = Math.round(rating - rd * 2);
+          const max = Math.round(rating + rd * 2);
+          return `${min}–${max}`;
         },
         sortingFn: (rowA, rowB, columnID) => {
-            const ratingA = Math.round(rowA.getAllCells(columnID).rating);
-            const ratingB = Math.round(rowB.getAllCells(columnID).rating);
-            const rdA = Math.round(rowA.getAllCells(columnID).rd);
-            const rdB = Math.round(rowB.getAllCells(columnID).rd);
-            if (ratingA === ratingB) {
-                return rdA - rdB;
-            } else {
-                return ratingA - ratingB;
-            }
+          const ratingA = Math.round(rowA.getAllCells(columnID).rating);
+          const ratingB = Math.round(rowB.getAllCells(columnID).rating);
+          const rdA = Math.round(rowA.getAllCells(columnID).rd);
+          const rdB = Math.round(rowB.getAllCells(columnID).rd);
+          if (ratingA === ratingB) {
+            return rdA - rdB;
+          } else {
+            return ratingA - ratingB;
+          }
         },
       }),
       columnHelper.accessor("trueskill", {
         header: "Trueskill",
         cell: (props) => Math.round(props.getValue().mu * 10) / 10,
         sortingFn: (rowA, rowB, columnID) => {
-            return rowA.getValue(columnID).mu - rowB.getValue(columnID).mu;
+          return rowA.getValue(columnID).mu - rowB.getValue(columnID).mu;
         },
       }),
       columnHelper.display({
         id: "challenge",
         cell: (props) =>
-          (globalMe === null || globalMe.id === user.id) ? null : (
+          globalMe === null || globalMe.id === user.id ? null : (
             <>
-            <NewChallengeModal
-              show={
-                activeChallengeModal !== "" &&
-                activeChallengeModal === props.row.original.id
-              }
-              handleClose={closeChallengeModal}
-              handleChallenge={handleChallenge}
-              fixedMetaGame={props.row.original.id}
-              opponent={{
-                id: user.id,
-                name: user.name,
-              }}
-            />
-            <button
-              className="button is-small apButton"
-              onClick={() => openChallengeModal(props.row.original.id)}
-            >
-              Issue Challenge
-            </button>
+              <NewChallengeModal
+                show={
+                  activeChallengeModal !== "" &&
+                  activeChallengeModal === props.row.original.id
+                }
+                handleClose={closeChallengeModal}
+                handleChallenge={handleChallenge}
+                fixedMetaGame={props.row.original.id}
+                opponent={{
+                  id: user.id,
+                  name: user.name,
+                }}
+              />
+              <button
+                className="button is-small apButton"
+                onClick={() => openChallengeModal(props.row.original.id)}
+              >
+                Issue Challenge
+              </button>
             </>
           ),
       }),
@@ -142,11 +168,11 @@ function Ratings({handleChallenge}) {
 
   return (
     <>
-        <TableSkeleton
-            data={data}
-            columns={columns}
-            sort={[{ id: "elo", desc: true }]}
-        />
+      <TableSkeleton
+        data={data}
+        columns={columns}
+        sort={[{ id: "elo", desc: true }]}
+      />
     </>
   );
 }

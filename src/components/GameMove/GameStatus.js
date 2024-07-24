@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { MeContext, ColourContext } from "../../pages/Skeleton";
@@ -9,12 +9,12 @@ function renderGlyph(settings, glyph, id, player, globalMe, colourContext) {
     options.colourBlind = true;
   }
   if (settings.color !== "standard" && settings.color !== "blind") {
-    const palette = globalMe.palettes.find(p => p.name === settings.color);
+    const palette = globalMe.palettes.find((p) => p.name === settings.color);
     if (palette !== undefined) {
-        options.colours = [...palette.colours];
-        while (options.colours.length < 10) {
-            options.colours.push("#fff");
-        }
+      options.colours = [...palette.colours];
+      while (options.colours.length < 10) {
+        options.colours.push("#fff");
+      }
     }
   }
   options.svgid = id;
@@ -28,7 +28,7 @@ function GameStatus(props) {
   const game = props.game;
   const canExplore = props.canExplore;
   const handleStashClick = props.handleStashClick;
-  const [globalMe,] = useContext(MeContext);
+  const [globalMe] = useContext(MeContext);
   const [colourContext] = useContext(ColourContext);
 
   const { t } = useTranslation();
@@ -47,8 +47,12 @@ function GameStatus(props) {
     console.log("Statuses");
     console.log(status);
     // hide spoilers
-    if (globalMe?.settings?.all?.hideSpoilers && !game.gameOver && status?.scores?.length > 0) {
-        status.scores = status.scores.filter(s => s.spoiler !== true);
+    if (
+      globalMe?.settings?.all?.hideSpoilers &&
+      !game.gameOver &&
+      status?.scores?.length > 0
+    ) {
+      status.scores = status.scores.filter((s) => s.spoiler !== true);
     }
     let stashes = [];
     let handlers = [];

@@ -28,56 +28,63 @@ function News(props) {
     );
   } else {
     return (
-        <>
-      <Helmet>
+      <>
+        <Helmet>
           <meta property="og:title" content={`News`} />
-          <meta property="og:url" content={`https://play.abstractplay.com/news`} />
-          <meta property="og:description" content={`Copy of the #announcements channel from our Discord (https://discord.abstractplay.com)`} />
-      </Helmet>
-      <article>
-        <div className="content">
-          <h1 className="has-text-centered title">{t("News")}</h1>
-          <p>
-            The authoritative and most up-to-date source of Abstract Play news
-            is{" "}
-            <a
-              href="https://discord.abstractplay.com"
-              target="blank"
-              rel="noreferer"
-            >
-              our Discord server
-            </a>
-            . Please come join us! This list is maintained separately, only
-            includes a subset of the announcements, and may be slightly delayed.
-          </p>
-        </div>
-        <div className="columns">
-          <div className="column is-three-fifths is-offset-one-fifth">
-            {news.map((item, idx) => (
-              <article className="media" key={`news-media-${idx}`}>
-                <div className="media-content">
-                  <div className="content">
-                    <p>
-                      <small>
-                        <ReactTimeAgo
-                          date={item.time}
-                          timeStyle="twitter-now"
-                        />
-                      </small>
-                    </p>
-                  </div>
-                  <ReactMarkdown
-                    rehypePlugins={[rehypeRaw]}
-                    className="content"
-                  >
-                    {item.text}
-                  </ReactMarkdown>
-                </div>
-              </article>
-            ))}
+          <meta
+            property="og:url"
+            content={`https://play.abstractplay.com/news`}
+          />
+          <meta
+            property="og:description"
+            content={`Copy of the #announcements channel from our Discord (https://discord.abstractplay.com)`}
+          />
+        </Helmet>
+        <article>
+          <div className="content">
+            <h1 className="has-text-centered title">{t("News")}</h1>
+            <p>
+              The authoritative and most up-to-date source of Abstract Play news
+              is{" "}
+              <a
+                href="https://discord.abstractplay.com"
+                target="blank"
+                rel="noreferer"
+              >
+                our Discord server
+              </a>
+              . Please come join us! This list is maintained separately, only
+              includes a subset of the announcements, and may be slightly
+              delayed.
+            </p>
           </div>
-        </div>
-      </article>
+          <div className="columns">
+            <div className="column is-three-fifths is-offset-one-fifth">
+              {news.map((item, idx) => (
+                <article className="media" key={`news-media-${idx}`}>
+                  <div className="media-content">
+                    <div className="content">
+                      <p>
+                        <small>
+                          <ReactTimeAgo
+                            date={item.time}
+                            timeStyle="twitter-now"
+                          />
+                        </small>
+                      </p>
+                    </div>
+                    <ReactMarkdown
+                      rehypePlugins={[rehypeRaw]}
+                      className="content"
+                    >
+                      {item.text}
+                    </ReactMarkdown>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </article>
       </>
     );
   }

@@ -91,8 +91,14 @@ function RenderOptionsModal(props) {
   const [paletteName, paletteNameSetter] = useState(null);
 
   useEffect(() => {
-    if ( (globalMe !== null) && (globalMe.palettes !== null) && (globalMe.palettes.length !== 0) && ( (paletteName === null) || (! globalMe.palettes.map(p => p.name).includes(paletteName)) ) ) {
-        paletteNameSetter(globalMe.palettes[0].name);
+    if (
+      globalMe !== null &&
+      globalMe.palettes !== null &&
+      globalMe.palettes.length !== 0 &&
+      (paletteName === null ||
+        !globalMe.palettes.map((p) => p.name).includes(paletteName))
+    ) {
+      paletteNameSetter(globalMe.palettes[0].name);
     }
   }, [globalMe, paletteName]);
 
@@ -177,7 +183,9 @@ function RenderOptionsModal(props) {
     [newUserSettings, newGameSettings] = updateSettings(
       "color",
       colorLevel,
-      (color !== "standard" && color !== "blind") ? paletteName || "standard" : color,
+      color !== "standard" && color !== "blind"
+        ? paletteName || "standard"
+        : color,
       newGameSettings,
       newUserSettings,
       metaGame
@@ -333,33 +341,40 @@ function RenderOptionsModal(props) {
               {t("ColorBlind")}
             </label>
           </div>
-          {globalMe === null || globalMe.palettes === null || globalMe.palettes.length === 0 ? null :
-          <>
-            <div className="control">
-              <label className="radio">
-                <input
-                type="radio"
-                name="playerfill"
-                value="custom"
-                checked={color !== "standard" && color !== "blind"}
-                onChange={(e) =>
-                    handleColorChange(e.target.value, e.target.checked)
-                }
-                />
-                {t("Custom")}
-              </label>
-            </div>
-            <div className="control">
+          {globalMe === null ||
+          globalMe.palettes === null ||
+          globalMe.palettes.length === 0 ? null : (
+            <>
+              <div className="control">
+                <label className="radio">
+                  <input
+                    type="radio"
+                    name="playerfill"
+                    value="custom"
+                    checked={color !== "standard" && color !== "blind"}
+                    onChange={(e) =>
+                      handleColorChange(e.target.value, e.target.checked)
+                    }
+                  />
+                  {t("Custom")}
+                </label>
+              </div>
+              <div className="control">
                 <div className="select">
-                    <select defaultValue={paletteName} onChange={(e) => paletteNameSetter(e.target.value)}>
-                    {globalMe.palettes.map(({name}) => (
-                        <option value={name} key={`paletteNames|${name}`}>{name}</option>
+                  <select
+                    defaultValue={paletteName}
+                    onChange={(e) => paletteNameSetter(e.target.value)}
+                  >
+                    {globalMe.palettes.map(({ name }) => (
+                      <option value={name} key={`paletteNames|${name}`}>
+                        {name}
+                      </option>
                     ))}
-                    </select>
+                  </select>
                 </div>
-            </div>
-          </>
-          }
+              </div>
+            </>
+          )}
         </div>
         <div className="field indentedContainer">
           <label className="label">{t("Level")}</label>

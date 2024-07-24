@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./i18n";
 import * as serviceWorker from "./serviceWorker";
 import Skeleton from "./pages/Skeleton";
-import "./myBulma.css"
+import "./myBulma.css";
 import "./index.css";
 
 require("core-js/es/map");

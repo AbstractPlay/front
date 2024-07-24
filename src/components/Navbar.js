@@ -46,14 +46,14 @@ function Navbar(props) {
   const toggleColorMode = (e) => {
     // Switch to Light Mode
     if (e.currentTarget.classList.contains("light--hidden")) {
-		//Sets the user's preference in local storage
-		colorModeSetter("light");
-		return;
-	} else {
-        // Sets the user's preference in local storage
-        colorModeSetter("dark");
+      //Sets the user's preference in local storage
+      colorModeSetter("light");
+      return;
+    } else {
+      // Sets the user's preference in local storage
+      colorModeSetter("dark");
     }
-};
+  };
 
   return (
     <nav className="navbar" style={{ minHeight: "10vh" }}>
@@ -112,11 +112,6 @@ function Navbar(props) {
             </>
           )}
           <div className="navbar-item">
-            <Link to="/tournaments" className="navbar-item">
-              {t("Tournament.Tournaments")}
-            </Link>
-          </div>
-          <div className="navbar-item">
             <Link to="/games" className="navbar-item">
               {t("Games")}
             </Link>
@@ -127,29 +122,44 @@ function Navbar(props) {
             </Link>
           </div>
           <div className="navbar-item has-dropdown is-hoverable">
+            <a className="navbar-link">{t("EventsNav")}</a>
+            <div className="navbar-dropdown">
+              <div className="navbar-item">
+                <Link to="/tournaments" className="navbar-item">
+                  {t("Tournament.Tournaments")}
+                </Link>
+              </div>
+              <div className="navbar-item">
+                <Link to="/events" className="navbar-item">
+                  {t("Events.Name")}
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="navbar-item has-dropdown is-hoverable">
             <a className="navbar-link">{t("About")}</a>
             <div className="navbar-dropdown">
-                <div className="navbar-item">
-                    <Link to="/stats" className="navbar-item">
-                        {t("Statistics")}
-                    </Link>
-                </div>
-                <div className="navbar-item">
-                    <Link to="/news" className="navbar-item">
-                        {t("News")}
-                        {newsLastSeen >= maxNews ? null : (
-                            <span className="icon highlight">
-                                &nbsp;
-                                <i className="fa fa-eercast" aria-hidden="true"></i>
-                            </span>
-                            )}
-                    </Link>
-                </div>
-                <div className="navbar-item">
-                    <Link to="/about" className="navbar-item">
-                    {t("About")}
-                    </Link>
-                </div>
+              <div className="navbar-item">
+                <Link to="/stats" className="navbar-item">
+                  {t("Statistics")}
+                </Link>
+              </div>
+              <div className="navbar-item">
+                <Link to="/news" className="navbar-item">
+                  {t("News")}
+                  {newsLastSeen >= maxNews ? null : (
+                    <span className="icon highlight">
+                      &nbsp;
+                      <i className="fa fa-eercast" aria-hidden="true"></i>
+                    </span>
+                  )}
+                </Link>
+              </div>
+              <div className="navbar-item">
+                <Link to="/about" className="navbar-item">
+                  {t("About")}
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -157,20 +167,20 @@ function Navbar(props) {
           <div className="navbar-item">
             {/* <!--- Light mode button ---> */}
             <button
-                className="button is-small apButtonNeutral light--hidden"
-                aria-label="Toggle light mode"
-                onClick={toggleColorMode}
+              className="button is-small apButtonNeutral light--hidden"
+              aria-label="Toggle light mode"
+              onClick={toggleColorMode}
             >
-                Toggle Light Mode
+              Toggle Light Mode
             </button>
 
             {/* <!--- Dark mode button ---> */}
             <button
-                className="button is-small apButtonNeutral dark--hidden"
-                aria-label="Toggle dark mode"
-                onClick={toggleColorMode}
+              className="button is-small apButtonNeutral dark--hidden"
+              aria-label="Toggle dark mode"
+              onClick={toggleColorMode}
             >
-                Toggle Dark Mode
+              Toggle Dark Mode
             </button>
           </div>
           <div className="navbar-item tourSettings">

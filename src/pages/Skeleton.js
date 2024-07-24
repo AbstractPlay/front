@@ -1,4 +1,10 @@
-import React, { useState, Suspense, useEffect, createContext, lazy } from "react";
+import React, {
+  useState,
+  Suspense,
+  useEffect,
+  createContext,
+  lazy,
+} from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import {
@@ -29,6 +35,8 @@ import Players from "../components/Players";
 import Tournaments from "../components/Tournaments/Tournaments";
 import TournamentsOld from "../components/Tournaments/TournamentsOld";
 import NotFound from "../components/NotFound";
+import Event from "../components/Event";
+import Events from "../components/Events";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
@@ -58,20 +66,40 @@ function Bones(props) {
   const [users, usersSetter] = useState(null);
   const [news, newsSetter] = useState([]);
   const [summary, summarySetter] = useState(null);
-  const [colorMode,] = useStorageState("color-mode", "light");
-  const [storedContextLight,] = useStorageState("stored-context-light", {background: "#fff", strokes: "#000", borders: "#000", labels: "#000", annotations: "#000", fill: "#000"});
-  const [storedContextDark,] = useStorageState("stored-context-dark", {background: "#222", strokes: "#6d6d6d", borders: "#000", labels: "#009fbf", annotations: "#99cccc", fill: "#e6f2f2"});
-  const [colourContext, colourContextSetter] = useState({background: "#fff", strokes: "#000", borders: "#000", labels: "#000", annotations: "#000", fill: "#000"});
+  const [colorMode] = useStorageState("color-mode", "light");
+  const [storedContextLight] = useStorageState("stored-context-light", {
+    background: "#fff",
+    strokes: "#000",
+    borders: "#000",
+    labels: "#000",
+    annotations: "#000",
+    fill: "#000",
+  });
+  const [storedContextDark] = useStorageState("stored-context-dark", {
+    background: "#222",
+    strokes: "#6d6d6d",
+    borders: "#000",
+    labels: "#009fbf",
+    annotations: "#99cccc",
+    fill: "#e6f2f2",
+  });
+  const [colourContext, colourContextSetter] = useState({
+    background: "#fff",
+    strokes: "#000",
+    borders: "#000",
+    labels: "#000",
+    annotations: "#000",
+    fill: "#000",
+  });
 
   // Update colour context setting based on colour mode
   useEffect(() => {
     if (colorMode === "dark") {
-        colourContextSetter(storedContextDark);
+      colourContextSetter(storedContextDark);
     } else {
-        colourContextSetter(storedContextLight);
+      colourContextSetter(storedContextLight);
     }
   }, [colorMode, storedContextLight, storedContextDark]);
-
 
   useEffect(() => {
     const awsconfig = {
@@ -172,9 +200,9 @@ function Bones(props) {
 
   // apply stored color mode
   useEffect(() => {
-    if ( (colorMode !== null) && (colorMode !== undefined) ) {
-        // Sets the custom HTML attribute
-        document.documentElement.setAttribute("color-mode", colorMode);
+    if (colorMode !== null && colorMode !== undefined) {
+      // Sets the custom HTML attribute
+      document.documentElement.setAttribute("color-mode", colorMode);
     }
   }, [colorMode]);
 
@@ -190,86 +218,96 @@ function Bones(props) {
               : "Abstract Play (Dev)"}
           </title>
 
-          <meta property="og:title" content="Abstract Play: Make Time for Games" />
+          <meta
+            property="og:title"
+            content="Abstract Play: Make Time for Games"
+          />
           <meta property="og:url" content="https://play.abstractplay.com" />
-          <meta property="og:description" content="Abstract Play is a site that allows you to play abstract strategy board games against other players on the internet. These games are not real-time, meaning your opponent does not need to be online at the same time as you are. You can submit your move and come back later to see if your opponent has moved. We specialize in offbeat, perfect information games without any element of luck." />
+          <meta
+            property="og:description"
+            content="Abstract Play is a site that allows you to play abstract strategy board games against other players on the internet. These games are not real-time, meaning your opponent does not need to be online at the same time as you are. You can submit your move and come back later to see if your opponent has moved. We specialize in offbeat, perfect information games without any element of luck."
+          />
         </Helmet>
         <ToastContainer />
         <MeContext.Provider value={[globalMe, globalMeSetter]}>
           <UsersContext.Provider value={[users, usersSetter]}>
             <NewsContext.Provider value={[news, newsSetter]}>
-            <SummaryContext.Provider value={[summary, summarySetter]}>
-            <ColourContext.Provider value={[colourContext, colourContextSetter]}>
-              <Router>
-                <Navbar />
-                <section className="section" id="main">
-                  <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
-                    <Routes>
-                      <Route path="*" element={<NotFound />} />
-                      <Route path="/about" element={<About token={token} />} />
-                      <Route
-                        path="/games/:metaGame?"
-                        element={<MetaContainer token={token} />}
-                      />
-                      <Route
-                        path="/players"
-                        element={<Players />}
-                      />
-                      <Route
-                        path="/player/:userid"
-                        element={<Player />}
-                      />
-                      <Route
-                        path="/challenges/:metaGame"
-                        element={<StandingChallenges />}
-                      />
-                      <Route
-                        path="/listgames/:gameState/:metaGame"
-                        element={<ListGames />}
-                      />
-                      <Route
-                        path="/ratings/:metaGame"
-                        element={<Ratings />}
-                      />
-                      <Route
-                        path="/tournament/:metaGame/:tournamentid"
-                        element={<Tournament />}
-                      />
-                      <Route
-                        path="/tournament/:tournamentid"
-                        element={<Tournament />}
-                      />
-                      <Route
-                        path="/tournamenthistory/:metaGame"
-                        element={<TournamentsOld />}
-                      />
-                      <Route
-                        path="/move/:metaGame/:cbits/:gameID"
-                        element={<GameMove update={update} />}
-                      />
-                      <Route
-                        path="/legal"
-                        element={<Legal token={token} update={update} />}
-                      />
-                      <Route path="/news" element={<News />} />
-                      <Route path="/stats" element={<Stats />} />
-                      <Route
-                        path="/"
-                        element={<Welcome token={token} update={update} />}
-                      />
-                      <Route path="/playground" element={<Playground />} />
-                      <Route path="/tournaments/:metaGame?" element={<Tournaments />} />
-                    </Routes>
-                  </MyTurnContext.Provider>
-                </section>
-                {process.env.REACT_APP_REAL_MODE === "production" ? (
-                  <Footer />
-                ) : (
-                  <FooterDev />
-                )}
-              </Router>
-              </ColourContext.Provider>
-            </SummaryContext.Provider>
+              <SummaryContext.Provider value={[summary, summarySetter]}>
+                <ColourContext.Provider
+                  value={[colourContext, colourContextSetter]}
+                >
+                  <Router>
+                    <Navbar />
+                    <section className="section" id="main">
+                      <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
+                        <Routes>
+                          <Route path="*" element={<NotFound />} />
+                          <Route
+                            path="/about"
+                            element={<About token={token} />}
+                          />
+                          <Route
+                            path="/games/:metaGame?"
+                            element={<MetaContainer token={token} />}
+                          />
+                          <Route path="/players" element={<Players />} />
+                          <Route path="/player/:userid" element={<Player />} />
+                          <Route
+                            path="/challenges/:metaGame"
+                            element={<StandingChallenges />}
+                          />
+                          <Route
+                            path="/listgames/:gameState/:metaGame"
+                            element={<ListGames />}
+                          />
+                          <Route
+                            path="/ratings/:metaGame"
+                            element={<Ratings />}
+                          />
+                          <Route
+                            path="/tournament/:metaGame/:tournamentid"
+                            element={<Tournament />}
+                          />
+                          <Route
+                            path="/tournament/:tournamentid"
+                            element={<Tournament />}
+                          />
+                          <Route
+                            path="/tournamenthistory/:metaGame"
+                            element={<TournamentsOld />}
+                          />
+                          <Route path="/events" element={<Events />} />
+                          <Route path="/event/:eventid" element={<Event />} />
+                          <Route
+                            path="/move/:metaGame/:cbits/:gameID"
+                            element={<GameMove update={update} />}
+                          />
+                          <Route
+                            path="/legal"
+                            element={<Legal token={token} update={update} />}
+                          />
+                          <Route path="/news" element={<News />} />
+                          <Route path="/stats" element={<Stats />} />
+                          <Route
+                            path="/"
+                            element={<Welcome token={token} update={update} />}
+                          />
+                          <Route path="/playground" element={<Playground />} />
+                          <Route
+                            path="/tournaments/:metaGame?"
+                            element={<Tournaments />}
+                          />
+                        </Routes>
+                      </MyTurnContext.Provider>
+                    </section>
+                    {process.env.REACT_APP_REAL_MODE === "production" ? (
+                      <Footer />
+                    ) : (
+                      <FooterDev />
+                    )}
+                  </Router>
+                </ColourContext.Provider>
+              </SummaryContext.Provider>
             </NewsContext.Provider>
           </UsersContext.Provider>
         </MeContext.Provider>

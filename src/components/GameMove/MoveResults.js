@@ -75,24 +75,24 @@ function MoveResults(props) {
                     {r.log}
                   </p>
                 ) : (
-                <>
-                  <p className="chatPlayer">
-                    <strong>{r.player}</strong>&nbsp;
-                    <small>
-                      <ReactTimeAgo
-                        date={r.timestamp}
-                        timeStyle="twitter-now"
-                      />
-                    </small>
-                  </p>
-                  <ReactMarkdown
-                    className="content"
-                    disallowedElements={["img"]}
-                    unwrapDisallowed={true}
-                  >
-                    {r.log}
-                  </ReactMarkdown>
-                </>
+                  <>
+                    <p className="chatPlayer">
+                      <strong>{r.player}</strong>&nbsp;
+                      <small>
+                        <ReactTimeAgo
+                          date={r.timestamp}
+                          timeStyle="twitter-now"
+                        />
+                      </small>
+                    </p>
+                    <ReactMarkdown
+                      className="content"
+                      disallowedElements={["img"]}
+                      unwrapDisallowed={true}
+                    >
+                      {r.log}
+                    </ReactMarkdown>
+                  </>
                 )}
               </div>
             </div>

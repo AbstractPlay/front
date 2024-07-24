@@ -101,7 +101,21 @@ function ListGames(props) {
       }),
       columnHelper.accessor("players", {
         header: "Players",
-        cell: (props) => props.getValue().map(u => <Link to={`/player/${u.id}`}>{u.name}</Link>).reduce((acc, x) => acc === null ? x : <>{acc}, {x}</>, null),
+        cell: (props) =>
+          props
+            .getValue()
+            .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+            .reduce(
+              (acc, x) =>
+                acc === null ? (
+                  x
+                ) : (
+                  <>
+                    {acc}, {x}
+                  </>
+                ),
+              null
+            ),
         enableSorting: false,
       }),
       columnHelper.accessor("numMoves", {
@@ -244,9 +258,22 @@ function ListGames(props) {
   return (
     <>
       <Helmet>
-          <meta property="og:title" content={`${metaGameName}: ${gameState === "current" ? "Active" : "Completed"} Games`} />
-          <meta property="og:url" content={`https://play.abstractplay.com/${gameState}/${metaGame}`} />
-          <meta property="og:description" content={`List of ${gameState === "current" ? "Active" : "Completed"} games of ${metaGameName}`} />
+        <meta
+          property="og:title"
+          content={`${metaGameName}: ${
+            gameState === "current" ? "Active" : "Completed"
+          } Games`}
+        />
+        <meta
+          property="og:url"
+          content={`https://play.abstractplay.com/${gameState}/${metaGame}`}
+        />
+        <meta
+          property="og:description"
+          content={`List of ${
+            gameState === "current" ? "Active" : "Completed"
+          } games of ${metaGameName}`}
+        />
       </Helmet>
       <article>
         <h1 className="has-text-centered title">

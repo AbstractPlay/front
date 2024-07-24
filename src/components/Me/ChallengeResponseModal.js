@@ -102,7 +102,9 @@ function ChallengeResponseModal(props) {
         </p>
         <p>{challenge.clockHard ? t("HardTime") : t("SoftTime")}</p>
         <p>{challenge.rated ? t("RatedGame") : t("UnratedGame")}</p>
-        <p><strong>{challenge.noExplore ? t("NoExploreTrue") : ""}</strong></p>
+        <p>
+          <strong>{challenge.noExplore ? t("NoExploreTrue") : ""}</strong>
+        </p>
         <p>{players}</p>
         <p>{notes}</p>
         <div className="field">

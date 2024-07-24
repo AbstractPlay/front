@@ -48,9 +48,13 @@ function AvgRatings(props) {
         header: "Player",
         cell: (props) =>
           globalMe !== null && globalMe.id === props.row.original.userid ? (
-            <Link to={`/player/${props.row.original.userid}`}><span className="bolder highlight">{props.getValue()}</span></Link>
+            <Link to={`/player/${props.row.original.userid}`}>
+              <span className="bolder highlight">{props.getValue()}</span>
+            </Link>
           ) : (
-            <Link to={`/player/${props.row.original.userid}`}>{props.getValue()}</Link>
+            <Link to={`/player/${props.row.original.userid}`}>
+              {props.getValue()}
+            </Link>
           ),
       }),
       columnHelper.accessor("avg", {
