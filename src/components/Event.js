@@ -592,7 +592,7 @@ function Event() {
             <p>
               <b>Organizer:</b>&nbsp;
               <Link to={`/player/${eventData.event.organizer}`}>
-                {allUsers.find((u) => u.id === eventData.event.organizer)
+                {allUsers?.find((u) => u.id === eventData.event.organizer)
                   ?.name || "UNKNOWN"}
               </Link>
             </p>
