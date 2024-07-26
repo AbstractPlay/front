@@ -40,14 +40,14 @@ function GameStatus({status, settings, game, canExplore, handleStashClick, locke
     return <div>
         <div className="field is-grouped">
             <div className="control">
-                <button className="button is-small apButton" onClick={() => setRefresh(val => val + 1)}>
+                <button className="button is-small apButton" onClick={() => setRefresh(val => val + 1)} title="Trigger a refresh">
                     <span className="icon">
                         <i className="fa fa-refresh"></i>
                     </span>
                 </button>
             </div>
             <div className="control">
-                <button className={`button is-small apButton${locked ? " is-inverted" : ""}`} onClick={() => setLocked(val => !val)}>
+                <button className={`button is-small apButton${locked ? " is-inverted" : ""}`} onClick={() => setLocked(val => !val)} title="Triggers a refresh every 60 seconds for 30 minutes or until you click the button again or leave the page">
                     <span className="icon">
                         <i className="fa fa-clock-o"></i>
                     </span>
@@ -83,14 +83,14 @@ function GameStatus({status, settings, game, canExplore, handleStashClick, locke
       <>
         <div className="field is-grouped">
             <div className="control">
-                <button className="button is-small apButton" onClick={() => setRefresh(val => val + 1)}>
+                <button className="button is-small apButton" onClick={() => setRefresh(val => val + 1)} title="Trigger a refresh">
                     <span className="icon">
                         <i className="fa fa-refresh"></i>
                     </span>
                 </button>
             </div>
             <div className="control">
-                <button className={`button is-small apButton${locked ? " is-inverted" : ""}`} onClick={() => setLocked(val => !val)}>
+                <button className={`button is-small apButton${locked ? " is-inverted" : ""}`} onClick={() => setLocked(val => !val)} title="Triggers a refresh every 60 seconds for 30 minutes or until you click the button again or leave the page">
                     <span className="icon">
                         <i className="fa fa-clock-o"></i>
                     </span>
