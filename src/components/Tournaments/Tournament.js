@@ -209,7 +209,7 @@ function Tournament(props) {
                 variants: variants,
               })}
         </h1>
-        <div className="control">
+        <div className="control has-text-centered">
             <a
                 href={`https://records.abstractplay.com/event/${tournamentid}.json`}
             >
