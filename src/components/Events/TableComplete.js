@@ -54,6 +54,20 @@ function TableComplete({ events }) {
               null
             ),
       }),
+      columnHelper.display({
+        id: "actions",
+        cell: (props) => (
+          <>
+            <a
+                href={`https://records.abstractplay.com/event/${props.row.original.id}.json`}
+            >
+                <button className="button apButton is-small">
+                    Download game records
+                </button>
+            </a>
+          </>
+        ),
+      }),
     ],
     [columnHelper]
   );

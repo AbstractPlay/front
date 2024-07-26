@@ -209,6 +209,15 @@ function Tournament(props) {
                 variants: variants,
               })}
         </h1>
+        <div className="control">
+            <a
+                href={`https://records.abstractplay.com/event/${tournamentid}.json`}
+            >
+                <button className="button apButton is-small">
+                    Download all game records for this tournament
+                </button>
+            </a>
+        </div>
         <div className="columns  is-multiline">
           {divisions.map((d, i) => (
             <div
