@@ -22,12 +22,7 @@ function renderGlyph(settings, glyph, id, player, globalMe, colourContext) {
   return renderglyph(glyph, player, options);
 }
 
-function GameStatus(props) {
-  const status = props.status;
-  const settings = props.settings;
-  const game = props.game;
-  const canExplore = props.canExplore;
-  const handleStashClick = props.handleStashClick;
+function GameStatus({status, settings, game, canExplore, handleStashClick, locked, setLocked, setRefresh}) {
   const [globalMe] = useContext(MeContext);
   const [colourContext] = useContext(ColourContext);
 
@@ -42,10 +37,27 @@ function GameStatus(props) {
       !game.playerStashes &&
       !game.sharedStash)
   ) {
-    return <div></div>;
+    return <div>
+        <div className="field is-grouped">
+            <div className="control">
+                <button className="button is-small apButton" onClick={() => setRefresh(val => val + 1)}>
+                    <span className="icon">
+                        <i className="fa fa-refresh"></i>
+                    </span>
+                </button>
+            </div>
+            <div className="control">
+                <button className={`button is-small apButton${locked ? " is-inverted" : ""}`} onClick={() => setLocked(val => !val)}>
+                    <span className="icon">
+                        <i className="fa fa-clock-o"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>;
   } else {
-    console.log("Statuses");
-    console.log(status);
+    // console.log("Statuses");
+    // console.log(status);
     // hide spoilers
     if (
       globalMe?.settings?.all?.hideSpoilers &&
@@ -69,6 +81,22 @@ function GameStatus(props) {
     }
     return (
       <>
+        <div className="field is-grouped">
+            <div className="control">
+                <button className="button is-small apButton" onClick={() => setRefresh(val => val + 1)}>
+                    <span className="icon">
+                        <i className="fa fa-refresh"></i>
+                    </span>
+                </button>
+            </div>
+            <div className="control">
+                <button className={`button is-small apButton${locked ? " is-inverted" : ""}`} onClick={() => setLocked(val => !val)}>
+                    <span className="icon">
+                        <i className="fa fa-clock-o"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
         {!game.variants || game.variants.length === 0 ? (
           ""
         ) : (
