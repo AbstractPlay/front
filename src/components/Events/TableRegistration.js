@@ -12,7 +12,7 @@ function TableRegistration({ events, handleRegister }) {
 
   const data = useMemo(
     () =>
-      events
+      allUsers === null ? [] : events
         .map(({ sk: id, name, dateStart, description, organizer, players }) => {
           console.log(players);
           const organizerName = allUsers.find((u) => u.id === organizer)?.name;

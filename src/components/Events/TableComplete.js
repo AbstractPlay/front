@@ -9,7 +9,7 @@ function TableComplete({ events }) {
 
   const data = useMemo(
     () =>
-      events
+        allUsers === null ? [] : events
         .map(({ sk: id, name, dateEnd, winner }) => {
           const winners = allUsers.filter((u) => winner.includes(u.id));
           return {
