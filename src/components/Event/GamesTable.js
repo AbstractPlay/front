@@ -62,7 +62,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
               winner === undefined || winner.length === 0
                 ? undefined
                 : winner.length === 1
-                ? winner[0] === 1
+                ? winner[0] === p1.id
                   ? p1
                   : p2
                 : null,
