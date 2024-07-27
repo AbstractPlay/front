@@ -723,7 +723,7 @@ function doView(
   let newfocus = cloneDeep(focus);
   let moves;
   try {
-    gameEngineTmp.move(m, { partial: partialMove || simMove });
+    gameEngineTmp.move(m, { partial: partialMove || simMove, emulation: true });
     if (!partialMove && focus.canExplore && !game.noMoves) {
       moves = gameEngineTmp.moves();
     }
@@ -762,7 +762,7 @@ function doView(
           node = getFocusNode(explorationRef.current, newfocus);
         }
         m = moves[0];
-        gameEngineTmp.move(m, { partial: partialMove || simMove });
+        gameEngineTmp.move(m, { partial: partialMove || simMove, emulation: true });
         moves = gameEngineTmp.moves();
       }
       if (automoved) {
