@@ -34,7 +34,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
 
   const data = useMemo(
     () =>
-      games.map(
+        allUsers === null ? [] : games.map(
         ({
           metaGame,
           variants,
