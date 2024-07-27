@@ -287,6 +287,9 @@ strong {
     color: var(--high-contrast-font-color);
   }
 
+button.faded {
+    opacity: 50%;
+}
 
 .inlineButton {
   margin-left: 1em;
