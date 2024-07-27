@@ -42,7 +42,7 @@ function Board({
               </button>
           </div>
           <div className="control">
-              <button className={`button is-small apButton${locked ? " is-inverted" : ""}`} onClick={() => setLocked(val => !val)} title="Triggers a refresh every 60 seconds for 30 minutes or until you click the button again or leave the page">
+              <button className={`button is-small apButton${locked ? " faded" : ""}`} onClick={() => setLocked(val => !val)} title="Triggers a refresh every 60 seconds for 30 minutes or until you click the button again or leave the page">
                   <span className="icon">
                       <i className="fa fa-clock-o"></i>
                   </span>

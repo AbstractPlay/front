@@ -1427,6 +1427,7 @@ function GameMove(props) {
   useEffect(() => {
     if (locked) {
         console.log(`Starting periodic refresh`)
+        toast("Starting periodic refresh. The refresh will happen every 60 seconds for 30 minutes or until you click the button again or leave the page.")
         const now = Date.now();
         const interval = setInterval(() => {
             const lapsed = Date.now() - now;
@@ -1440,7 +1441,10 @@ function GameMove(props) {
         }, 60000);
         setIntervalFunc(interval);
     } else {
-        console.log(`Stopping periodic refresh`)
+        if (intervalFunc !== null) {
+            console.log(`Stopping periodic refresh`)
+            toast("Stopping periodic refresh.")
+        }
         clearInterval(intervalFunc);
     }
   }, [locked]); // ignoring intervalFunc as a dependency
