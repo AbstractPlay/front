@@ -2985,6 +2985,9 @@ function GameMove(props) {
                           metaGame={metaGame}
                           gameID={gameID}
                           t={t}
+                          locked={locked}
+                          setLocked={setLocked}
+                          setRefresh={setRefresh}
                           gameEngine={gameEngine}
                           gameNote={gameNote}
                           inCheck={inCheck}
@@ -3129,6 +3132,9 @@ function GameMove(props) {
                   metaGame={metaGame}
                   gameID={gameID}
                   t={t}
+                  locked={locked}
+                  setLocked={setLocked}
+                  setRefresh={setRefresh}
                   gameEngine={gameEngine}
                   gameNote={gameNote}
                   inCheck={inCheck}
