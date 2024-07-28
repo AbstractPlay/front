@@ -22,7 +22,16 @@ function renderGlyph(settings, glyph, id, player, globalMe, colourContext) {
   return renderglyph(glyph, player, options);
 }
 
-function GameStatus({status, settings, game, canExplore, handleStashClick, locked, setLocked, setRefresh}) {
+function GameStatus({
+  status,
+  settings,
+  game,
+  canExplore,
+  handleStashClick,
+  locked,
+  setLocked,
+  setRefresh,
+}) {
   const [globalMe] = useContext(MeContext);
   const [colourContext] = useContext(ColourContext);
 
@@ -37,8 +46,7 @@ function GameStatus({status, settings, game, canExplore, handleStashClick, locke
       !game.playerStashes &&
       !game.sharedStash)
   ) {
-    return <div>
-    </div>;
+    return <div></div>;
   } else {
     // console.log("Statuses");
     // console.log(status);

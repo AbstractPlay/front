@@ -34,42 +34,44 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
 
   const data = useMemo(
     () =>
-        allUsers === null ? [] : games.map(
-        ({
-          metaGame,
-          variants,
-          round,
-          gameid,
-          player1,
-          player2,
-          winner,
-          arbitrated,
-        }) => {
-          const p1 = allUsers.find((u) => u.id === player1);
-          const p2 = allUsers.find((u) => u.id === player2);
-          return {
-            id: gameid,
-            round,
-            metagame: metaGame,
-            gameName: gameinfo.get(metaGame)?.name,
-            variants,
-            p1,
-            p2,
-            gameover:
-              winner === undefined || winner.length === 0 ? false : true,
-            // null signals a draw
-            winner:
-              winner === undefined || winner.length === 0
-                ? undefined
-                : winner.length === 1
-                ? winner[0] === p1.id
-                  ? p1
-                  : p2
-                : null,
-            arbitrated,
-          };
-        }
-      ),
+      allUsers === null
+        ? []
+        : games.map(
+            ({
+              metaGame,
+              variants,
+              round,
+              gameid,
+              player1,
+              player2,
+              winner,
+              arbitrated,
+            }) => {
+              const p1 = allUsers.find((u) => u.id === player1);
+              const p2 = allUsers.find((u) => u.id === player2);
+              return {
+                id: gameid,
+                round,
+                metagame: metaGame,
+                gameName: gameinfo.get(metaGame)?.name,
+                variants,
+                p1,
+                p2,
+                gameover:
+                  winner === undefined || winner.length === 0 ? false : true,
+                // null signals a draw
+                winner:
+                  winner === undefined || winner.length === 0
+                    ? undefined
+                    : winner.length === 1
+                    ? winner[0] === p1.id
+                      ? p1
+                      : p2
+                    : null,
+                arbitrated,
+              };
+            }
+          ),
     [games, allUsers]
   );
 
@@ -240,7 +242,11 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
               <input
                 type="radio"
                 name="winner"
-                checked={winner !== null && winner.length === 1 && winner[0] === arbRec?.p1.id}
+                checked={
+                  winner !== null &&
+                  winner.length === 1 &&
+                  winner[0] === arbRec?.p1.id
+                }
                 onClick={() => setWinner([arbRec?.p1.id])}
                 readOnly
               />
@@ -250,7 +256,11 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
               <input
                 type="radio"
                 name="winner"
-                checked={winner !== null && winner.length === 1 && winner[0] === arbRec?.p2.id}
+                checked={
+                  winner !== null &&
+                  winner.length === 1 &&
+                  winner[0] === arbRec?.p2.id
+                }
                 onClick={() => setWinner([arbRec?.p2.id])}
                 readOnly
               />
