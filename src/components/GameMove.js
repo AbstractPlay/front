@@ -2739,6 +2739,60 @@ function GameMove(props) {
     }
   };
 
+  const refreshNextGame = () => {
+    async function fetchData() {
+        let token = null;
+        try {
+          const usr = await Auth.currentAuthenticatedUser();
+          token = usr.signInUserSession.idToken.jwtToken;
+        } catch (err) {
+          // OK, non logged in user viewing the game
+        }
+        if (token !== null) {
+            try {
+                let status;
+                const res = await fetch(API_ENDPOINT_AUTH, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                        query: "next_game",
+                      }),
+                });
+                status = res.status;
+                if (status !== 200) {
+                    const result = await res.json();
+                    errorMessageRef.current = JSON.parse(result.body);
+                    errorSetter(true);
+                    return [];
+                } else {
+                    const result = await res.json();
+                    return JSON.parse(result.body);
+                }
+            } catch (error) {
+                console.log(error);
+                errorMessageRef.current = error.message;
+                errorSetter(true);
+            }
+        } else {
+            return [];
+        }
+    }
+    fetchData()
+    .then((result) => {
+        myMoveSetter(result);
+        if (Array.isArray(result) && result.length > 0) {
+            const next = result[0];
+            navigate(`/move/${next.metaGame}/0/${next.id}`);
+        } else {
+            navigate("/");
+        }
+    });
+  }
+
   const handleNextGame = () => {
     // If the current game is in the list, move it to the end.
     const local = [...myMove];
@@ -2746,12 +2800,15 @@ function GameMove(props) {
     if (idx !== -1) {
       const thisgame = local[idx];
       local.splice(idx, 1);
-      local.push(thisgame);
-      myMoveSetter(local);
+      if (local.length > 0) {
+        local.push(thisgame);
+        myMoveSetter(local);
+      }
     }
     // Then go to the next game in the list.
     if (local.length === 0) {
-      navigate("/");
+      // transfer control to the function that fetches refreshed nextgame data
+      return refreshNextGame();
     } else {
       const next = local[0];
       navigate(`/move/${next.metaGame}/0/${next.id}`);

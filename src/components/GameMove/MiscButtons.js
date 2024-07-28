@@ -62,21 +62,19 @@ function MiscButtons({
             </button>
           </div>
         )}
-        {myMove.length < 1 ? null : (
-          <div className="control" style={{ paddingTop: "1em" }}>
-            <button
-              className="button apButton is-small"
-              onClick={handleNextGame}
-            >
-              <span>
-                {t("NextGame")} ({myMove.length})
-              </span>
-              <span className="icon">
-                <i className="fa fa-forward"></i>
-              </span>
-            </button>
-          </div>
-        )}
+        <div className="control" style={{ paddingTop: "1em" }}>
+        <button
+            className="button apButton is-small"
+            onClick={handleNextGame}
+        >
+            <span>
+            {t("NextGame")} {myMove.length > 0 ? ` (${myMove.length})` : ""}
+            </span>
+            <span className="icon">
+            <i className="fa fa-forward"></i>
+            </span>
+        </button>
+        </div>
       </div>
     </>
   );
