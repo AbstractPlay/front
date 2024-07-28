@@ -16,6 +16,7 @@ import Spinner from "./Spinner";
 import NotFound from "./NotFound";
 import Pair from "./Event/Pair";
 import GamesTable from "./Event/GamesTable";
+import ResultsTable from "./Event/ResultsTable";
 
 function Event() {
   const { eventid } = useParams();
@@ -658,14 +659,28 @@ function Event() {
                   )}
               </p>
             )}
-            {/* Show games list of games are present */}
+            {/* Show list of games and results if present */}
             {eventData.games.length === 0 ? null : (
+            <>
+              <div className="content" style={{marginTop: "1em"}}>
+                <h2 className="subtitle">Games</h2>
+                <p>An asterisk next to a result means the organizer has manually adjusted it.</p>
+              </div>
               <GamesTable
                 games={eventData.games}
                 setRefresh={setRefresh}
                 editor={editor}
                 eventid={eventid}
               />
+              <div className="content" style={{marginTop: "1em"}}>
+                <h2 className="subtitle">Results</h2>
+                <p>These results are <em>unofficial</em>. See the description for the official results as tabulated by the organizer. This table is not aware of things like byes. It simply summarizes the results of the paired games, including arbitrations.</p>
+              </div>
+              <ResultsTable
+                games={eventData.games}
+                eventid={eventid}
+              />
+            </>
             )}
           </div>
           <hr />
