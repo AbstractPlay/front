@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useMemo, Fragment } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { MeContext } from "../../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -44,7 +44,7 @@ function showMilliseconds(ms) {
   return output;
 }
 
-function MyTurnTable(props) {
+function MyTurnTable({ games, fetching }) {
   const [globalMe] = useContext(MeContext);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
@@ -57,7 +57,7 @@ function MyTurnTable(props) {
 
   const data = useMemo(
     () =>
-      props.games.map((g) => {
+      games.map((g) => {
         const me = g.players.find((item) => item.id === globalMe.id);
         const ret = {
           id: g.id,
@@ -73,7 +73,7 @@ function MyTurnTable(props) {
           ret.gameName = gameinfo.get(g.metaGame).name;
         return ret;
       }),
-    [globalMe.id, props.games]
+    [globalMe.id, games]
   );
 
   const columnHelper = createColumnHelper();
@@ -158,15 +158,17 @@ function MyTurnTable(props) {
 
   if (data === null || data === undefined || data.length === 0) {
     return (
-      <div className="content">
-        {props.fetching ? <Spinner size="20" /> : null}
-        <p>{t("NoGames")}</p>
-      </div>
+      <>
+        <div className="content">
+          {fetching ? <Spinner size="20" /> : null}
+          <p>{t("NoGames")}</p>
+        </div>
+      </>
     );
   } else {
     return (
-      <Fragment>
-        {props.fetching ? <Spinner size="20" /> : null}
+      <>
+        {fetching ? <Spinner size="20" /> : null}
         <table className="table apTable">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -188,14 +190,14 @@ function MyTurnTable(props) {
                         )}
                         {{
                           asc: (
-                            <Fragment>
+                            <>
                               &nbsp;<i className="fa fa-angle-up"></i>
-                            </Fragment>
+                            </>
                           ),
                           desc: (
-                            <Fragment>
+                            <>
                               &nbsp;<i className="fa fa-angle-down"></i>
-                            </Fragment>
+                            </>
                           ),
                         }[header.column.getIsSorted()] ?? null}
                       </div>
@@ -305,7 +307,7 @@ function MyTurnTable(props) {
             </div>
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }
