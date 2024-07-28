@@ -25,6 +25,10 @@ function Me(props) {
   // vars is just a way to trigger a new 'me' fetch (e.g. after Profile is created)
   const [vars, varsSetter] = useState({});
   const [update, updateSetter] = useState(0);
+  // I do not understand what the relationship is with the local `update` and the property `update`,
+  // which apparently comes from Skeleton and is read only. There must have been a reason for this
+  // at some point. For now, sidestepping.
+  const [refresh, setRefresh] = useState(0);
   const [fetching, fetchingSetter] = useState(true);
   const [users, usersSetter] = useState(null);
   const [showChallengeViewModal, showChallengeViewModalSetter] =
@@ -94,7 +98,7 @@ function Me(props) {
       }
     }
     fetchData();
-  }, [vars, update, globalMeSetter, location]);
+  }, [vars, update, globalMeSetter, location, refresh]);
 
   useEffect(() => {
     async function fetchData() {
@@ -528,6 +532,17 @@ function Me(props) {
           <Link to={`/player/${globalMe.id}`}>
             <span style={{ textDecoration: "underline" }}>{globalMe.name}</span>
           </Link>
+        <div className="control">
+            <button
+            className="button is-small apButton"
+            onClick={() => setRefresh((val) => val + 1)}
+            title="Trigger a refresh"
+            >
+            <span className="icon">
+                <i className="fa fa-refresh"></i>
+            </span>
+            </button>
+        </div>
         </h1>
         {/* Your Games */}
         <div className="columns">
