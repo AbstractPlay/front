@@ -762,7 +762,10 @@ function doView(
           node = getFocusNode(explorationRef.current, newfocus);
         }
         m = moves[0];
-        gameEngineTmp.move(m, { partial: partialMove || simMove, emulation: true });
+        gameEngineTmp.move(m, {
+          partial: partialMove || simMove,
+          emulation: true,
+        });
         moves = gameEngineTmp.moves();
       }
       if (automoved) {
@@ -1426,26 +1429,28 @@ function GameMove(props) {
   // handle setInterval based on locked and lockedTime
   useEffect(() => {
     if (locked) {
-        console.log(`Starting periodic refresh`)
-        toast("Starting periodic refresh. The refresh will happen every 60 seconds for 30 minutes or until you click the button again or leave the page.")
-        const now = Date.now();
-        const interval = setInterval(() => {
-            const lapsed = Date.now() - now;
-            if (lapsed < 30 * 60 * 1000) {
-                console.log(`Triggering refresh`);
-                setRefresh((val) => val + 1);
-            } else {
-                console.log("Periodic refreshing timed out");
-                setLocked(false);
-            }
-        }, 60000);
-        setIntervalFunc(interval);
-    } else {
-        if (intervalFunc !== null) {
-            console.log(`Stopping periodic refresh`)
-            toast("Stopping periodic refresh.")
+      console.log(`Starting periodic refresh`);
+      toast(
+        "Starting periodic refresh. The refresh will happen every 60 seconds for 30 minutes or until you click the button again or leave the page."
+      );
+      const now = Date.now();
+      const interval = setInterval(() => {
+        const lapsed = Date.now() - now;
+        if (lapsed < 30 * 60 * 1000) {
+          console.log(`Triggering refresh`);
+          setRefresh((val) => val + 1);
+        } else {
+          console.log("Periodic refreshing timed out");
+          setLocked(false);
         }
-        clearInterval(intervalFunc);
+      }, 60000);
+      setIntervalFunc(interval);
+    } else {
+      if (intervalFunc !== null) {
+        console.log(`Stopping periodic refresh`);
+        toast("Stopping periodic refresh.");
+      }
+      clearInterval(intervalFunc);
     }
   }, [locked]); // ignoring intervalFunc as a dependency
 
@@ -2739,6 +2744,59 @@ function GameMove(props) {
     }
   };
 
+  const refreshNextGame = () => {
+    async function fetchData() {
+      let token = null;
+      try {
+        const usr = await Auth.currentAuthenticatedUser();
+        token = usr.signInUserSession.idToken.jwtToken;
+      } catch (err) {
+        // OK, non logged in user viewing the game
+      }
+      if (token !== null) {
+        try {
+          let status;
+          const res = await fetch(API_ENDPOINT_AUTH, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              query: "next_game",
+            }),
+          });
+          status = res.status;
+          if (status !== 200) {
+            const result = await res.json();
+            errorMessageRef.current = JSON.parse(result.body);
+            errorSetter(true);
+            return [];
+          } else {
+            const result = await res.json();
+            return JSON.parse(result.body);
+          }
+        } catch (error) {
+          console.log(error);
+          errorMessageRef.current = error.message;
+          errorSetter(true);
+        }
+      } else {
+        return [];
+      }
+    }
+    fetchData().then((result) => {
+      myMoveSetter(result);
+      if (Array.isArray(result) && result.length > 0) {
+        const next = result[0];
+        navigate(`/move/${next.metaGame}/0/${next.id}`);
+      } else {
+        navigate("/");
+      }
+    });
+  };
+
   const handleNextGame = () => {
     // If the current game is in the list, move it to the end.
     const local = [...myMove];
@@ -2746,12 +2804,15 @@ function GameMove(props) {
     if (idx !== -1) {
       const thisgame = local[idx];
       local.splice(idx, 1);
-      local.push(thisgame);
-      myMoveSetter(local);
+      if (local.length > 0) {
+        local.push(thisgame);
+        myMoveSetter(local);
+      }
     }
     // Then go to the next game in the list.
     if (local.length === 0) {
-      navigate("/");
+      // transfer control to the function that fetches refreshed nextgame data
+      return refreshNextGame();
     } else {
       const next = local[0];
       navigate(`/move/${next.metaGame}/0/${next.id}`);

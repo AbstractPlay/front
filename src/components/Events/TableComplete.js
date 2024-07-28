@@ -9,17 +9,19 @@ function TableComplete({ events }) {
 
   const data = useMemo(
     () =>
-        allUsers === null ? [] : events
-        .map(({ sk: id, name, dateEnd, winner }) => {
-          const winners = allUsers.filter((u) => winner.includes(u.id));
-          return {
-            id,
-            name,
-            dateEnd,
-            winners,
-          };
-        })
-        .sort((a, b) => a.dateEnd - b.dateEnd),
+      allUsers === null
+        ? []
+        : events
+            .map(({ sk: id, name, dateEnd, winner }) => {
+              const winners = allUsers.filter((u) => winner.includes(u.id));
+              return {
+                id,
+                name,
+                dateEnd,
+                winners,
+              };
+            })
+            .sort((a, b) => a.dateEnd - b.dateEnd),
     [events, allUsers]
   );
 
@@ -59,11 +61,11 @@ function TableComplete({ events }) {
         cell: (props) => (
           <>
             <a
-                href={`https://records.abstractplay.com/event/${props.row.original.id}.json`}
+              href={`https://records.abstractplay.com/event/${props.row.original.id}.json`}
             >
-                <button className="button apButton is-small">
-                    Download game records
-                </button>
+              <button className="button apButton is-small">
+                Download game records
+              </button>
             </a>
           </>
         ),

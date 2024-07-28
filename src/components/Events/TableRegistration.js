@@ -12,30 +12,45 @@ function TableRegistration({ events, handleRegister }) {
 
   const data = useMemo(
     () =>
-      allUsers === null ? [] : events
-        .map(({ sk: id, name, dateStart, description, organizer, players }) => {
-          console.log(players);
-          const organizerName = allUsers.find((u) => u.id === organizer)?.name;
-          const playerids = players.map((p) => p.playerid);
-          const registrants = allUsers.filter((u) => playerids.includes(u.id));
-          registrants.sort((a, b) => a.name.localeCompare(b.name));
-          console.log(registrants);
-          let canRegister = false;
-          if (globalMe !== null && !playerids.includes(globalMe.id)) {
-            canRegister = true;
-          }
-          return {
-            id,
-            name,
-            dateStart,
-            description,
-            organizer,
-            organizerName,
-            registrants,
-            canRegister,
-          };
-        })
-        .sort((a, b) => a.dateStart - b.dateStart),
+      allUsers === null
+        ? []
+        : events
+            .map(
+              ({
+                sk: id,
+                name,
+                dateStart,
+                description,
+                organizer,
+                players,
+              }) => {
+                console.log(players);
+                const organizerName = allUsers.find(
+                  (u) => u.id === organizer
+                )?.name;
+                const playerids = players.map((p) => p.playerid);
+                const registrants = allUsers.filter((u) =>
+                  playerids.includes(u.id)
+                );
+                registrants.sort((a, b) => a.name.localeCompare(b.name));
+                console.log(registrants);
+                let canRegister = false;
+                if (globalMe !== null && !playerids.includes(globalMe.id)) {
+                  canRegister = true;
+                }
+                return {
+                  id,
+                  name,
+                  dateStart,
+                  description,
+                  organizer,
+                  organizerName,
+                  registrants,
+                  canRegister,
+                };
+              }
+            )
+            .sort((a, b) => a.dateStart - b.dateStart),
     [events, allUsers, globalMe]
   );
 
