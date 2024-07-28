@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
@@ -37,7 +38,7 @@ function TableActive({ events }) {
       columnHelper.accessor("description", {
         header: "Description",
         cell: (props) => (
-          <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+          <ReactMarkdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} className="content">
             {props.getValue()}
           </ReactMarkdown>
         ),
