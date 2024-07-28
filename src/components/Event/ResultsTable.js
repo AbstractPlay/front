@@ -14,16 +14,18 @@ function ResultsTable({ games, eventid }) {
         }
         const results = new Map();
         games.forEach(({winner}) => {
-            let toAdd = 1;
-            if (winner.length === 2) {
-                toAdd = 0.5;
-            }
-            for (const w of winner) {
-                if (results.has(w)) {
-                    const curr = results.get(w);
-                    results.set(w, curr + toAdd);
-                } else {
-                    results.set(w, toAdd);
+            if (winner !== null && winner !== undefined) {
+                let toAdd = 1;
+                if (winner.length === 2) {
+                    toAdd = 0.5;
+                }
+                for (const w of winner) {
+                    if (results.has(w)) {
+                        const curr = results.get(w);
+                        results.set(w, curr + toAdd);
+                    } else {
+                        results.set(w, toAdd);
+                    }
                 }
             }
         });
