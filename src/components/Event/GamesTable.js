@@ -240,8 +240,8 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
               <input
                 type="radio"
                 name="winner"
-                checked={winner === 1}
-                onClick={() => setWinner(1)}
+                checked={winner !== null && winner.length === 1 && winner[0] === arbRec?.p1.id}
+                onClick={() => setWinner([arbRec?.p1.id])}
                 readOnly
               />
               {arbRec?.p1.name}
@@ -250,8 +250,8 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
               <input
                 type="radio"
                 name="winner"
-                checked={winner === 2}
-                onClick={() => setWinner(2)}
+                checked={winner !== null && winner.length === 1 && winner[0] === arbRec?.p2.id}
+                onClick={() => setWinner([arbRec?.p2.id])}
                 readOnly
               />
               {arbRec?.p2.name}
@@ -260,8 +260,8 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
               <input
                 type="radio"
                 name="winner"
-                checked={winner === 0}
-                onClick={() => setWinner(0)}
+                checked={winner !== null && winner.length === 2}
+                onClick={() => setWinner([arbRec?.p1.id, arbRec?.p2.id])}
                 readOnly
               />
               Draw
