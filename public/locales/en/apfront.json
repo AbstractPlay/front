@@ -12,7 +12,8 @@
     "buttons": {
         "pass": "Pass",
         "takebutton": "Take button",
-        "acceptpie": "Play second"
+        "acceptpie": "Play second",
+        "draw": "Claim draw"
     },
     "Cancel": "Cancel",
     "CanPie": "This player has the option to switch seats.",
