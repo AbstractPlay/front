@@ -44,7 +44,7 @@ function showMilliseconds(ms) {
   return output;
 }
 
-function MyTurnTable({games, fetching}) {
+function MyTurnTable({ games, fetching }) {
   const [globalMe] = useContext(MeContext);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
@@ -158,12 +158,12 @@ function MyTurnTable({games, fetching}) {
 
   if (data === null || data === undefined || data.length === 0) {
     return (
-    <>
-      <div className="content">
-        {fetching ? <Spinner size="20" /> : null}
-        <p>{t("NoGames")}</p>
-      </div>
-    </>
+      <>
+        <div className="content">
+          {fetching ? <Spinner size="20" /> : null}
+          <p>{t("NoGames")}</p>
+        </div>
+      </>
     );
   } else {
     return (

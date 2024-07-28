@@ -532,17 +532,17 @@ function Me(props) {
           <Link to={`/player/${globalMe.id}`}>
             <span style={{ textDecoration: "underline" }}>{globalMe.name}</span>
           </Link>
-        <div className="control">
+          <div className="control">
             <button
-            className="button is-small apButton"
-            onClick={() => setRefresh((val) => val + 1)}
-            title="Trigger a refresh"
+              className="button is-small apButton"
+              onClick={() => setRefresh((val) => val + 1)}
+              title="Trigger a refresh"
             >
-            <span className="icon">
+              <span className="icon">
                 <i className="fa fa-refresh"></i>
-            </span>
+              </span>
             </button>
-        </div>
+          </div>
         </h1>
         {/* Your Games */}
         <div className="columns">
