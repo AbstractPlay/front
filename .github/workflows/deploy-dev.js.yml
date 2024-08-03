@@ -50,7 +50,7 @@ jobs:
       run: npm i
 
     - name: Install development renderer
-      run: npm remove @abstractplay/renerer
+      run: npm remove @abstractplay/renderer
     - run: npm install @abstractplay/renderer@development
 
     - name: install
