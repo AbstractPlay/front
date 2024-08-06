@@ -1076,6 +1076,7 @@ function GameMove(props) {
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
   const [settings, settingsSetter] = useState(null);
+  const [rotIncrement, rotIncrementSetter] = useState(0);
   const [comments, commentsSetter] = useState([]);
   const [commentsTooLong, commentsTooLongSetter] = useState(false);
   const [submitting, submittingSetter] = useState(false);
@@ -2163,7 +2164,7 @@ function GameMove(props) {
      * Takes the current renderrep and deduces the correct minimum rotation increment.
      * A value of 0 means the board may not be rotated.
      */
-    const getRotationIncrement = (metaGame, rep, engine, game) => {
+    const getRotationIncrement = (metaGame, rep, engine) => {
       if (
         "renderer" in rep &&
         rep.renderer !== undefined &&
@@ -2222,16 +2223,15 @@ function GameMove(props) {
     };
     if (
       renderrep !== null &&
-      engineRef.current !== null &&
-      gameRef.current !== null
+      engineRef.current !== null
     ) {
-      gameRef.current.increment = getRotationIncrement(
+      rotIncrementSetter(getRotationIncrement(
         metaGame,
         renderrep,
-        engineRef.current,
-        gameRef.current
-      );
-      console.log(`Rotation increment: ${gameRef.current.increment}`);
+        engineRef.current
+      ));
+    } else {
+        rotIncrementSetter(0);
     }
   }, [renderrep, metaGame]);
 
@@ -2240,14 +2240,10 @@ function GameMove(props) {
     if (newGameSettings === undefined) newGameSettings = {};
     let rotate = newGameSettings.rotate;
     if (rotate === undefined) rotate = 0;
-    let increment = 0;
-    if (gameRef.current !== null && gameRef.current.increment !== undefined) {
-      increment = gameRef.current.increment;
-    }
     if (dir === "CW") {
-      rotate += increment;
+      rotate += rotIncrement;
     } else {
-      rotate -= increment;
+      rotate -= rotIncrement;
     }
     rotate = rotate % 360;
     while (rotate < 0) {
@@ -3056,7 +3052,8 @@ function GameMove(props) {
                           gameEngine={gameEngine}
                           gameNote={gameNote}
                           inCheck={inCheck}
-                          gameRef={gameRef}
+                          stackExpanding={gameRef.current?.stackExpanding || false}
+                          increment={rotIncrement}
                           stackImage={stackImage}
                           boardImage={boardImage}
                           screenWidth={screenWidth}
@@ -3203,7 +3200,8 @@ function GameMove(props) {
                   gameEngine={gameEngine}
                   gameNote={gameNote}
                   inCheck={inCheck}
-                  gameRef={gameRef}
+                  stackExpanding={gameRef.current?.stackExpanding || false}
+                  increment={rotIncrement}
                   stackImage={stackImage}
                   boardImage={boardImage}
                   screenWidth={screenWidth}
