@@ -10,9 +10,10 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { MeContext, UsersContext } from "../pages/Skeleton";
+import { UsersContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
+import { isoToCountryCode } from "../lib/isoToCountryCode";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
 
@@ -20,7 +21,6 @@ const allSize = Number.MAX_SAFE_INTEGER;
 
 function Players() {
   const { t } = useTranslation();
-  const [globalMe] = useContext(MeContext);
   const [allUsers] = useContext(UsersContext);
   const [showState, showStateSetter] = useStorageState("players-show", 20);
   const [sorting, setSorting] = useState([{ id: "name", desc: false }]);
@@ -31,22 +31,16 @@ function Players() {
       allUsers === undefined || allUsers === null
         ? []
         : allUsers
-            .filter(
-              (u) =>
-                globalMe === undefined ||
-                globalMe === null ||
-                u.id !== globalMe.id
-            )
             .map(({ id, name, country, lastSeen }) => {
               return {
                 id,
                 name,
-                country,
+                country: isoToCountryCode(country, "numeric"),
                 lastSeen,
               };
             })
             .sort((a, b) => a.name.localeCompare(b.name)),
-    [allUsers, globalMe]
+    [allUsers]
   );
 
   const columnHelper = createColumnHelper();
