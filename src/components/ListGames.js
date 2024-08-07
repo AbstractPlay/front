@@ -17,7 +17,7 @@ import { Helmet } from "react-helmet-async";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
-function ListGames(props) {
+function ListGames({ fixedState }) {
   const { t } = useTranslation();
   const [games, gamesSetter] = useState([]);
   const { gameState, metaGame } = useParams();
@@ -40,7 +40,7 @@ function ListGames(props) {
         var url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append("query", "games");
         url.searchParams.append("metaGame", metaGame);
-        url.searchParams.append("type", gameState);
+        url.searchParams.append("type", gameState || fixedState);
         const res = await fetch(url);
         const result = await res.json();
         console.log(result);
@@ -55,7 +55,7 @@ function ListGames(props) {
       }
     }
     fetchData();
-  }, [gameState, metaGame]);
+  }, [gameState, metaGame, fixedState]);
 
   const metaGameName = gameinfo.get(metaGame).name;
 
@@ -80,10 +80,10 @@ function ListGames(props) {
               : null,
           variants:
             "variants" in rec && rec.variants !== null ? rec.variants : null,
-          cbit: gameState === "completed" ? 1 : 0,
+          cbit: fixedState === "completed" || gameState === "completed" ? 1 : 0,
         };
       }),
-    [games, gameState]
+    [games, gameState, fixedState]
   );
 
   const columnHelper = createColumnHelper();
@@ -151,8 +151,8 @@ function ListGames(props) {
     state: {
       sorting,
       columnVisibility: {
-        ended: gameState === "completed",
-        winners: gameState === "completed",
+        ended: fixedState === "completed" || gameState === "completed",
+        winners: fixedState === "completed" || gameState === "completed",
       },
     },
     onSortingChange: setSorting,
@@ -261,7 +261,9 @@ function ListGames(props) {
         <meta
           property="og:title"
           content={`${metaGameName}: ${
-            gameState === "current" ? "Active" : "Completed"
+            fixedState === "current" || gameState === "current"
+              ? "Active"
+              : "Completed"
           } Games`}
         />
         <meta
@@ -271,17 +273,19 @@ function ListGames(props) {
         <meta
           property="og:description"
           content={`List of ${
-            gameState === "current" ? "Active" : "Completed"
+            fixedState === "current" || gameState === "current"
+              ? "Active"
+              : "Completed"
           } games of ${metaGameName}`}
         />
       </Helmet>
       <article>
         <h1 className="has-text-centered title">
-          {gameState === "current"
+          {fixedState === "current" || gameState === "current"
             ? t("CurrentGamesList", { name: metaGameName })
             : t("CompletedGamesList", { name: metaGameName })}
         </h1>
-        {gameState !== "completed" ? null : (
+        {fixedState !== "completed" && gameState !== "completed" ? null : (
           <div
             className="control has-text-centered"
             style={{ paddingBottom: "1em" }}

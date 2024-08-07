@@ -12,6 +12,9 @@ import HighestSingleRating from "../Stats/HighestSingleRating";
 import GameStats from "../Stats/GameStats";
 import NumPlays from "../Stats/NumPlays";
 import Ratings from "../Ratings";
+import StandingChallenges from "../StandingChallenges";
+import ListGames from "../ListGames";
+import Tournaments from "../Tournaments/Tournaments";
 
 const MetaItem = React.forwardRef(
   (
@@ -131,10 +134,34 @@ const MetaItem = React.forwardRef(
               <a>Summary</a>
             </li>
             <li
+              className={activeTab === "challenges" ? "is-active" : ""}
+              onClick={() => activeTabSetter("challenges")}
+            >
+              <a>Challenges</a>
+            </li>
+            <li
+              className={activeTab === "games" ? "is-active" : ""}
+              onClick={() => activeTabSetter("games")}
+            >
+              <a>Current Games</a>
+            </li>
+            <li
+              className={activeTab === "completed" ? "is-active" : ""}
+              onClick={() => activeTabSetter("completed")}
+            >
+              <a>Completed Games</a>
+            </li>
+            <li
               className={activeTab === "players" ? "is-active" : ""}
               onClick={() => activeTabSetter("players")}
             >
               <a>Players</a>
+            </li>
+            <li
+              className={activeTab === "tournaments" ? "is-active" : ""}
+              onClick={() => activeTabSetter("tournaments")}
+            >
+              <a>Tournaments</a>
             </li>
             <li
               className={activeTab === "history" ? "is-active" : ""}
@@ -303,6 +330,14 @@ const MetaItem = React.forwardRef(
               </>
             )}
             {activeTab !== "players" ? null : <Ratings />}
+            {activeTab !== "challenges" ? null : <StandingChallenges />}
+            {activeTab !== "games" ? null : (
+              <ListGames fixedState={"current"} />
+            )}
+            {activeTab !== "completed" ? null : (
+              <ListGames fixedState={"completed"} />
+            )}
+            {activeTab !== "tournaments" ? null : <Tournaments />}
           </div>
           <div className="column">
             <div className="starContainer" onClick={() => toggleStar(game.uid)}>
