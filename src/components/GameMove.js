@@ -2941,7 +2941,7 @@ function GameMove(props) {
                   <div className={"card " + tourClass} key={`${key}|card`}>
                     <header className="card-header">
                       <p className="card-header-title">
-                        {title}
+                        <Link to={`/games/${metaGame}`}>{title}</Link>
                         {key !== "board" ||
                         parenthetical.length === 0 ? null : (
                           <>
@@ -3172,7 +3172,7 @@ function GameMove(props) {
               <div className="column">
                 <h1 className="subtitle lined tourWelcome">
                   <span>
-                    {gameinfo.get(metaGame).name}
+                    <Link to={`/games/${metaGame}`}>{gameinfo.get(metaGame).name}</Link>
                     {parenthetical.length === 0 ? null : (
                       <>
                         <span
