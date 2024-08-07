@@ -960,6 +960,21 @@ tr.stickyHeader {
     background-color: var(--bg-color2);
   }
 
+  .tabs.is-toggle li.is-active a {
+    background: linear-gradient(
+        180deg,
+        var(--secondary-color-3-lighter) 0%,
+        var(--secondary-color-3) 100%
+      );
+      color: var(--high-contrast-font-color);
+      border-color: var(--secondary-color-3);
+  }
+
+  .tabs.is-toggle a:hover {
+    background-color: var(--secondary-color-3-bg);
+    color: var(--main-font-color);
+  }
+
   /* Game board customimzation for light/dark mode! */
   /* gridlines for cobweb boards */
   /* div._meta_agere g#gridlines circle:not([class]) {

@@ -2221,17 +2221,12 @@ function GameMove(props) {
       }
       return 0;
     };
-    if (
-      renderrep !== null &&
-      engineRef.current !== null
-    ) {
-      rotIncrementSetter(getRotationIncrement(
-        metaGame,
-        renderrep,
-        engineRef.current
-      ));
+    if (renderrep !== null && engineRef.current !== null) {
+      rotIncrementSetter(
+        getRotationIncrement(metaGame, renderrep, engineRef.current)
+      );
     } else {
-        rotIncrementSetter(0);
+      rotIncrementSetter(0);
     }
   }, [renderrep, metaGame]);
 
@@ -2941,7 +2936,7 @@ function GameMove(props) {
                   <div className={"card " + tourClass} key={`${key}|card`}>
                     <header className="card-header">
                       <p className="card-header-title">
-                        {title}
+                        <Link to={`/games/${metaGame}`}>{title}</Link>
                         {key !== "board" ||
                         parenthetical.length === 0 ? null : (
                           <>
@@ -3052,7 +3047,9 @@ function GameMove(props) {
                           gameEngine={gameEngine}
                           gameNote={gameNote}
                           inCheck={inCheck}
-                          stackExpanding={gameRef.current?.stackExpanding || false}
+                          stackExpanding={
+                            gameRef.current?.stackExpanding || false
+                          }
                           increment={rotIncrement}
                           stackImage={stackImage}
                           boardImage={boardImage}
@@ -3172,7 +3169,9 @@ function GameMove(props) {
               <div className="column">
                 <h1 className="subtitle lined tourWelcome">
                   <span>
-                    {gameinfo.get(metaGame).name}
+                    <Link to={`/games/${metaGame}`}>
+                      {gameinfo.get(metaGame).name}
+                    </Link>
                     {parenthetical.length === 0 ? null : (
                       <>
                         <span
@@ -3378,6 +3377,15 @@ function GameMove(props) {
                     </a>
                   </li>
                 ))}
+                <li key="_wiki">
+                  <a
+                    href={`https://abstractplay.com/wiki/doku.php?id=games:${metaGame}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Abstract Play Wiki
+                  </a>
+                </li>
               </ul>
               {gameEngine.notes() === undefined ? (
                 ""

@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { MeContext, UsersContext, SummaryContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 
-function HighestSingleRating({ metaFilter }) {
+function HighestSingleRating({ metaFilter, nav }) {
   const [summary] = useContext(SummaryContext);
   const [globalMe] = useContext(MeContext);
   const [userNames] = useContext(UsersContext);
@@ -141,6 +141,7 @@ function HighestSingleRating({ metaFilter }) {
 
   return (
     <TableSkeleton
+      nav={nav}
       data={data}
       columns={columns}
       sort={[{ id: "rating", desc: true }]}

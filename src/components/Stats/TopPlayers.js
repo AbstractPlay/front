@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { MeContext, UsersContext, SummaryContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 
-function TopPlayers(props) {
+function TopPlayers({ nav }) {
   const [summary] = useContext(SummaryContext);
   const [globalMe] = useContext(MeContext);
   const [userNames] = useContext(UsersContext);
@@ -105,6 +105,7 @@ function TopPlayers(props) {
 
   return (
     <TableSkeleton
+      nav={nav}
       data={data}
       columns={columns}
       sort={[{ id: "game", desc: false }]}

@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { MeContext, UsersContext, SummaryContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 
-function AvgRatings(props) {
+function AvgRatings({ nav }) {
   const [summary] = useContext(SummaryContext);
   const [globalMe] = useContext(MeContext);
   const [userNames] = useContext(UsersContext);
@@ -69,6 +69,7 @@ function AvgRatings(props) {
 
   return (
     <TableSkeleton
+      nav={nav}
       data={data}
       columns={columns}
       sort={[{ id: "avg", desc: true }]}

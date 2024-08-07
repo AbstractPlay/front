@@ -11,6 +11,7 @@ import NewChallengeModal from "../NewChallengeModal";
 import HighestSingleRating from "../Stats/HighestSingleRating";
 import GameStats from "../Stats/GameStats";
 import NumPlays from "../Stats/NumPlays";
+import Ratings from "../Ratings";
 
 const MetaItem = React.forwardRef(
   (
@@ -20,6 +21,7 @@ const MetaItem = React.forwardRef(
     const [globalMe] = useContext(MeContext);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
+    const [activeTab, activeTabSetter] = useState("summary");
     const { t } = useTranslation();
     const image = encodeURIComponent(gameImages[game.uid]);
 
@@ -120,155 +122,187 @@ const MetaItem = React.forwardRef(
         <h1 className="subtitle lined">
           <span>{game.name}</span>
         </h1>
+        <div className="tabs is-small is-toggle is-toggle-rounded">
+          <ul>
+            <li
+              className={activeTab === "summary" ? "is-active" : ""}
+              onClick={() => activeTabSetter("summary")}
+            >
+              <a>Summary</a>
+            </li>
+            <li
+              className={activeTab === "players" ? "is-active" : ""}
+              onClick={() => activeTabSetter("players")}
+            >
+              <a>Players</a>
+            </li>
+            <li
+              className={activeTab === "history" ? "is-active" : ""}
+              onClick={() => activeTabSetter("history")}
+            >
+              <a>Historical Data</a>
+            </li>
+          </ul>
+        </div>
         <div className="columns is-mobile">
           <div className="column is-three-quarters">
-            <div className="content">
-              {hideDetails ? (
-                ""
-              ) : (
-                <Fragment>
-                  <ReactMarkdown
-                    rehypePlugins={[rehypeRaw]}
-                    className="content"
-                  >
-                    {gameEngine.description() +
-                      (designerString === undefined
-                        ? ""
-                        : "\n\n" + designerString)}
-                  </ReactMarkdown>
-                  <ul className="contained">
-                    {game.urls.map((l, i) => (
-                      <li key={i}>
-                        <a href={l} target="_blank" rel="noopener noreferrer">
-                          {l}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </Fragment>
-              )}
-              <p>
-                <a
-                  href={`https://abstractplay.com/wiki/doku.php?id=games:${game.uid}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Abstract Play Wiki
-                </a>
-              </p>
-              <div>
-                {tags
-                  .map((tag, ind) =>
-                    tag === "" ? null : (
-                      <span key={`tag_${ind}`} className="tag" title={tag.desc}>
-                        {tag.tag}
-                      </span>
-                    )
-                  )
-                  .reduce(
-                    (acc, x) =>
-                      acc === null ? (
-                        x
-                      ) : (
-                        <>
-                          {acc} {x}
-                        </>
-                      ),
-                    null
-                  )}
-              </div>
-              <div>
-                {counts === undefined ? (
+            {activeTab !== "summary" ? null : (
+              <div className="content">
+                {hideDetails ? (
                   ""
                 ) : (
-                  <ul
-                    style={{
-                      listStyle: "none",
-                      marginLeft: "0",
-                      marginTop: hideDetails ? "0" : "1em",
-                    }}
-                  >
-                    <li>
-                      {`${counts.currentgames} `}
-                      <Link to={`/listgames/current/${game.uid}`}>
-                        {t("CurrentGamesCount", {
-                          count: counts.currentgames,
-                        })}{" "}
-                      </Link>
-                    </li>
-                    <li>
-                      {`${counts.completedgames} `}
-                      <Link to={`/listgames/completed/${game.uid}`}>
-                        {t("CompletedGamesCount", {
-                          count: counts.completedgames,
-                        })}
-                      </Link>
-                    </li>
-                    <li>
-                      {`${counts.standingchallenges} `}
-                      <Link to={`/challenges/${game.uid}`}>
-                        {t("StandingChallengesCount", {
-                          count: counts.standingchallenges,
-                        })}
-                      </Link>
-                    </li>
-                    <li>
-                      {`${counts.ratings} `}
-                      <Link to={`/ratings/${game.uid}`}>
-                        {t("RatedPlayersCount", {
-                          count: counts.ratings,
-                        })}
-                      </Link>
-                    </li>
-                    <li>
-                      {`${counts.stars} `}
-                      {t("TotalStars", { count: counts.stars }).toLowerCase()}
-                    </li>
-                  </ul>
-                )}
-                {globalMe === null || globalMe === undefined ? (
-                  ""
-                ) : (
-                  <div>
-                    <NewChallengeModal
-                      show={
-                        activeChallengeModal !== "" &&
-                        activeChallengeModal === game.uid
-                      }
-                      handleClose={closeChallengeModal}
-                      handleChallenge={handleChallenge}
-                      fixedMetaGame={game.uid}
-                    />
-                    <button
-                      className="button is-small apButton"
-                      onClick={() => openChallengeModal(game.uid)}
+                  <Fragment>
+                    <ReactMarkdown
+                      rehypePlugins={[rehypeRaw]}
+                      className="content"
                     >
-                      Issue Challenge
-                    </button>
-                  </div>
+                      {gameEngine.description() +
+                        (designerString === undefined
+                          ? ""
+                          : "\n\n" + designerString)}
+                    </ReactMarkdown>
+                    <ul className="contained">
+                      {game.urls.map((l, i) => (
+                        <li key={i}>
+                          <a href={l} target="_blank" rel="noopener noreferrer">
+                            {l}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </Fragment>
                 )}
+                <p>
+                  <a
+                    href={`https://abstractplay.com/wiki/doku.php?id=games:${game.uid}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Abstract Play Wiki
+                  </a>
+                </p>
                 <div>
-                  <Link to={"/tournaments/" + game.uid}>Tournaments</Link>
+                  {tags
+                    .map((tag, ind) =>
+                      tag === "" ? null : (
+                        <span
+                          key={`tag_${ind}`}
+                          className="tag"
+                          title={tag.desc}
+                        >
+                          {tag.tag}
+                        </span>
+                      )
+                    )
+                    .reduce(
+                      (acc, x) =>
+                        acc === null ? (
+                          x
+                        ) : (
+                          <>
+                            {acc} {x}
+                          </>
+                        ),
+                      null
+                    )}
+                </div>
+                <div>
+                  {counts === undefined ? (
+                    ""
+                  ) : (
+                    <ul
+                      style={{
+                        listStyle: "none",
+                        marginLeft: "0",
+                        marginTop: hideDetails ? "0" : "1em",
+                      }}
+                    >
+                      <li>
+                        {`${counts.currentgames} `}
+                        <Link to={`/listgames/current/${game.uid}`}>
+                          {t("CurrentGamesCount", {
+                            count: counts.currentgames,
+                          })}{" "}
+                        </Link>
+                      </li>
+                      <li>
+                        {`${counts.completedgames} `}
+                        <Link to={`/listgames/completed/${game.uid}`}>
+                          {t("CompletedGamesCount", {
+                            count: counts.completedgames,
+                          })}
+                        </Link>
+                      </li>
+                      <li>
+                        {`${counts.standingchallenges} `}
+                        <Link to={`/challenges/${game.uid}`}>
+                          {t("StandingChallengesCount", {
+                            count: counts.standingchallenges,
+                          })}
+                        </Link>
+                      </li>
+                      <li>
+                        {`${counts.ratings} `}
+                        <Link to={`/ratings/${game.uid}`}>
+                          {t("RatedPlayersCount", {
+                            count: counts.ratings,
+                          })}
+                        </Link>
+                      </li>
+                      <li>
+                        {`${counts.stars} `}
+                        {t("TotalStars", { count: counts.stars }).toLowerCase()}
+                      </li>
+                    </ul>
+                  )}
+                  {globalMe === null || globalMe === undefined ? (
+                    ""
+                  ) : (
+                    <div>
+                      <NewChallengeModal
+                        show={
+                          activeChallengeModal !== "" &&
+                          activeChallengeModal === game.uid
+                        }
+                        handleClose={closeChallengeModal}
+                        handleChallenge={handleChallenge}
+                        fixedMetaGame={game.uid}
+                      />
+                      <button
+                        className="button is-small apButton"
+                        onClick={() => openChallengeModal(game.uid)}
+                      >
+                        Issue Challenge
+                      </button>
+                    </div>
+                  )}
+                  <div>
+                    <Link to={"/tournaments/" + game.uid}>Tournaments</Link>
+                  </div>
                 </div>
               </div>
-            </div>
-            <hr />
-            <p className="subtitle">Historical Data</p>
-            <p>
-              The below stats are drawn from the historical record, which is
-              only updated weekly. Historical ratings may be slightly different
-              from the static ratings found elsewhere on the site. See the
-              Statistics page for more details.
-            </p>
-            <hr width="50%" style={{ opacity: 0.1 }} />
-            <p>Play counts</p>
-            <NumPlays metaFilter={game.name} />
-            <hr width="50%" style={{ opacity: 0.1 }} />
-            <p>Game statistics</p>
-            <GameStats metaFilter={game.name} />
-            <hr width="50%" style={{ opacity: 0.1 }} />
-            <p>Ratings</p>
-            <HighestSingleRating metaFilter={game.name} />
+            )}
+            {activeTab !== "history" ? null : (
+              <>
+                <p className="subtitle">Historical Data</p>
+                <p>
+                  The below stats are drawn from the historical record, which is
+                  only updated weekly. Historical ratings may be slightly
+                  different from the static ratings found elsewhere on the site.
+                  See the Statistics page for more details.
+                </p>
+                <hr width="50%" style={{ opacity: 0.1 }} />
+                <p>Play counts</p>
+                <NumPlays metaFilter={game.name} nav="bottom" />
+                <hr width="50%" style={{ opacity: 0.1 }} />
+                <p>Game statistics</p>
+                <GameStats metaFilter={game.name} nav="bottom" />
+                <hr width="50%" style={{ opacity: 0.1 }} />
+                <p>Ratings</p>
+                <HighestSingleRating metaFilter={game.name} nav="bottom" />{" "}
+              </>
+            )}
+            {activeTab !== "players" ? null : <Ratings />}
           </div>
           <div className="column">
             <div className="starContainer" onClick={() => toggleStar(game.uid)}>

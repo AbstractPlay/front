@@ -38,7 +38,11 @@ function TableActive({ events }) {
       columnHelper.accessor("description", {
         header: "Description",
         cell: (props) => (
-          <ReactMarkdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} className="content">
+          <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
+            remarkPlugins={[remarkGfm]}
+            className="content"
+          >
             {props.getValue()}
           </ReactMarkdown>
         ),

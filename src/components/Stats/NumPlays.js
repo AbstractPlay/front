@@ -5,7 +5,7 @@ import Plot from "react-plotly.js";
 import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
 
-function NumPlays({ metaFilter }) {
+function NumPlays({ metaFilter, nav }) {
   const [summary] = useContext(SummaryContext);
   const [joined, joinedSetter] = useState([]);
   const [activeChartModal, activeChartModalSetter] = useState("");
@@ -146,6 +146,7 @@ function NumPlays({ metaFilter }) {
 
   return (
     <TableSkeleton
+      nav={nav}
       data={data}
       columns={columns}
       sort={[{ id: "plays", desc: true }]}

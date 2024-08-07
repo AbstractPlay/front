@@ -3,7 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { SummaryContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 
-function GameStats({ metaFilter }) {
+function GameStats({ metaFilter, nav }) {
   const [summary] = useContext(SummaryContext);
 
   const data = useMemo(
@@ -56,6 +56,7 @@ function GameStats({ metaFilter }) {
   return (
     <>
       <TableSkeleton
+        nav={nav}
         data={data}
         columns={columns}
         sort={[{ id: "game", desc: false }]}
