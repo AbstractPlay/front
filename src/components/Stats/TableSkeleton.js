@@ -14,12 +14,10 @@ const allSize = Number.MAX_SAFE_INTEGER;
 // props:
 //   - data
 //   - columns
-function TableSkeleton(props) {
-  const [sorting, setSorting] = useState(props.sort);
+function TableSkeleton({ sort, data, columns, nav }) {
+  const [sorting, setSorting] = useState(sort);
   const [globalFilter, globalFilterSetter] = useState(null);
   const [showState, showStateSetter] = useStorageState("stats-show", 10);
-  const data = props.data;
-  const columns = props.columns;
   const { t } = useTranslation();
 
   const table = useReactTable({
@@ -145,7 +143,7 @@ function TableSkeleton(props) {
   return (
     <article>
       <div className="container">
-        {tableNavigation}
+        {nav === "bottom" ? null : tableNavigation}
         <table className="table apTable">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -210,7 +208,7 @@ function TableSkeleton(props) {
             ))}
           </tbody>
         </table>
-        {tableNavigation}
+        {nav === "top" ? null : tableNavigation}
       </div>
     </article>
   );

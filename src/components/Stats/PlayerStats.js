@@ -6,7 +6,7 @@ import Plot from "react-plotly.js";
 import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
 
-function PlayerStats(props) {
+function PlayerStats({ nav }) {
   const [summary] = useContext(SummaryContext);
   const [globalMe] = useContext(MeContext);
   const [userNames] = useContext(UsersContext);
@@ -178,6 +178,7 @@ function PlayerStats(props) {
 
   return (
     <TableSkeleton
+      nav={nav}
       data={data}
       columns={columns}
       sort={[{ id: "plays", desc: true }]}

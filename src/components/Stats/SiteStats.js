@@ -5,7 +5,7 @@ import TableSkeleton from "./TableSkeleton";
 import Plot from "react-plotly.js";
 import Flag from "../Flag";
 
-function SiteStats(props) {
+function SiteStats({ nav }) {
   const [summary] = useContext(SummaryContext);
   const [cumulative, cumulativeSetter] = useState([]);
 
@@ -145,6 +145,7 @@ function SiteStats(props) {
           </p>
         </div>
         <TableSkeleton
+          nav={nav}
           data={data}
           columns={columns}
           sort={[{ id: "n", desc: true }]}

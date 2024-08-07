@@ -2221,17 +2221,12 @@ function GameMove(props) {
       }
       return 0;
     };
-    if (
-      renderrep !== null &&
-      engineRef.current !== null
-    ) {
-      rotIncrementSetter(getRotationIncrement(
-        metaGame,
-        renderrep,
-        engineRef.current
-      ));
+    if (renderrep !== null && engineRef.current !== null) {
+      rotIncrementSetter(
+        getRotationIncrement(metaGame, renderrep, engineRef.current)
+      );
     } else {
-        rotIncrementSetter(0);
+      rotIncrementSetter(0);
     }
   }, [renderrep, metaGame]);
 
@@ -3052,7 +3047,9 @@ function GameMove(props) {
                           gameEngine={gameEngine}
                           gameNote={gameNote}
                           inCheck={inCheck}
-                          stackExpanding={gameRef.current?.stackExpanding || false}
+                          stackExpanding={
+                            gameRef.current?.stackExpanding || false
+                          }
                           increment={rotIncrement}
                           stackImage={stackImage}
                           boardImage={boardImage}
@@ -3172,7 +3169,9 @@ function GameMove(props) {
               <div className="column">
                 <h1 className="subtitle lined tourWelcome">
                   <span>
-                    <Link to={`/games/${metaGame}`}>{gameinfo.get(metaGame).name}</Link>
+                    <Link to={`/games/${metaGame}`}>
+                      {gameinfo.get(metaGame).name}
+                    </Link>
                     {parenthetical.length === 0 ? null : (
                       <>
                         <span
@@ -3379,13 +3378,13 @@ function GameMove(props) {
                   </li>
                 ))}
                 <li key="_wiki">
-                    <a
-                        href={`https://abstractplay.com/wiki/doku.php?id=games:${metaGame}`}
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        Abstract Play Wiki
-                    </a>
+                  <a
+                    href={`https://abstractplay.com/wiki/doku.php?id=games:${metaGame}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Abstract Play Wiki
+                  </a>
                 </li>
               </ul>
               {gameEngine.notes() === undefined ? (
