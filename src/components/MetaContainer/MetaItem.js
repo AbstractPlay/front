@@ -169,18 +169,18 @@ const MetaItem = React.forwardRef(
                           </a>
                         </li>
                       ))}
+                      <li key="_wiki">
+                        <a
+                          href={`https://abstractplay.com/wiki/doku.php?id=games:${game.uid}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Abstract Play Wiki
+                        </a>
+                      </li>
                     </ul>
                   </Fragment>
                 )}
-                <p>
-                  <a
-                    href={`https://abstractplay.com/wiki/doku.php?id=games:${game.uid}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Abstract Play Wiki
-                  </a>
-                </p>
                 <div>
                   {tags
                     .map((tag, ind) =>
