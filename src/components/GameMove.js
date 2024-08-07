@@ -3378,6 +3378,15 @@ function GameMove(props) {
                     </a>
                   </li>
                 ))}
+                <li key="_wiki">
+                    <a
+                        href={`https://abstractplay.com/wiki/doku.php?id=games:${metaGame}`}
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Abstract Play Wiki
+                    </a>
+                </li>
               </ul>
               {gameEngine.notes() === undefined ? (
                 ""
