@@ -26,6 +26,7 @@ function Board({
   locked,
   setLocked,
   setRefresh,
+  copyHWDiagram,
 }) {
   const [globalMe] = useContext(MeContext);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
@@ -175,6 +176,15 @@ function Board({
             )}
           </button>
         )}
+        {metaGame !== "homeworlds" ? null :
+            <button
+                className="fabtn align-right"
+                onClick={copyHWDiagram}
+                title="Copy Homeworlds diagram"
+            >
+            <i className="fa fa-pencil-square-o"></i>
+        </button>
+      }
         <button
           className="fabtn align-right"
           onClick={() => {
