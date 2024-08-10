@@ -1251,6 +1251,28 @@ function GameMove(props) {
     boardKeySetter(nanoid());
   }, [verticalLayout]);
 
+  const copyHWDiagram = async () => {
+    if ( metaGame === "homeworlds" && gameRef !== null && renderrep !== null ) {
+        const diagram = {
+            numPlayers: gameRef.current.numPlayers,
+            universe: [],
+        };
+        for (let i = 0; i < renderrep.board.length; i++) {
+            const node = {...renderrep.board[i]};
+            node.owner = node.seat;
+            delete node.seat;
+            node.ships = [...renderrep.pieces[i].map(s => s.substring(1))];
+            diagram.universe.push(node);
+        }
+        try {
+            await navigator.clipboard.writeText(JSON.stringify(diagram));
+            toast("Current board copied to clipboard. Visit https://hwdiagrams.abstractplay.com to import the diagram.")
+        } catch (err) {
+            toast(`Failed to copy: ${err}`, {type: "error"});
+        }
+    }
+  }
+
   const handleMoveUp = (key) => {
     const idx = mobileOrder.findIndex((s) => s === key);
     if (idx !== -1) {
@@ -3063,6 +3085,7 @@ function GameMove(props) {
                           showInjectSetter={showInjectSetter}
                           verticalLayout={verticalLayout}
                           verticalLayoutSetter={verticalLayoutSetter}
+                          copyHWDiagram={copyHWDiagram}
                         />
                       ) : key === "moves" ? (
                         <GameMoves
@@ -3213,6 +3236,7 @@ function GameMove(props) {
                   showInjectSetter={showInjectSetter}
                   verticalLayout={verticalLayout}
                   verticalLayoutSetter={verticalLayoutSetter}
+                  copyHWDiagram={copyHWDiagram}
                 />
               </div>
               {/***************** GameMoves *****************/}
