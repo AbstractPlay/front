@@ -18,7 +18,6 @@
     "@tanstack/react-table": "^8.11.2",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/user-event": "13.5.0",
-    "apfront": "file:",
     "aws-amplify": "5.3.12",
     "buffer": "6.0.3",
     "i18next": "^21.10.0",
