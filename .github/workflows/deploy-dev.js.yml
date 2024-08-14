@@ -67,6 +67,9 @@ jobs:
     - name: gameslib version installed
       run: npm list @abstractplay/gameslib
 
+    - name: Svg.js version installed
+      run: npm list @svgdotjs/svg.js
+
     - name: Set CI version
       run: npm version prerelease --preid=ci-$GITHUB_RUN_ID --no-git-tag-version
 
