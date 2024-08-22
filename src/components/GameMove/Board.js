@@ -27,6 +27,7 @@ function Board({
   setLocked,
   setRefresh,
   copyHWDiagram,
+  colourContext
 }) {
   const [globalMe] = useContext(MeContext);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
@@ -76,13 +77,14 @@ function Board({
       >
         <TransformComponent>
           {stackExpanding ? (
-            <div className={`board _meta_${metaGame}`}>
+            <div className={`board _meta_${metaGame}`} style={{backgroundColor: colourContext.background}}>
               <div className="stack" id="stack" ref={stackImage}></div>
               <div className="stackboard" id="svg" ref={boardImage}></div>
             </div>
           ) : (
             <div
               className={`board tourBoard _meta_${metaGame}`}
+              style={{backgroundColor: colourContext.background}}
               id="svg"
               ref={boardImage}
             ></div>

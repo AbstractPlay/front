@@ -3086,6 +3086,7 @@ function GameMove(props) {
                           verticalLayout={verticalLayout}
                           verticalLayoutSetter={verticalLayoutSetter}
                           copyHWDiagram={copyHWDiagram}
+                          colourContext={colourContext}
                         />
                       ) : key === "moves" ? (
                         <GameMoves
@@ -3237,6 +3238,7 @@ function GameMove(props) {
                   verticalLayout={verticalLayout}
                   verticalLayoutSetter={verticalLayoutSetter}
                   copyHWDiagram={copyHWDiagram}
+                  colourContext={colourContext}
                 />
               </div>
               {/***************** GameMoves *****************/}
