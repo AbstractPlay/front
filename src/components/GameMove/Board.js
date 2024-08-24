@@ -165,28 +165,15 @@ function Board({
             )}
           </button>
         )}
-        {screenWidth < 770 ? null : (
-          <button
-            className="fabtn align-right"
-            onClick={() => verticalLayoutSetter((val) => !val)}
-            title={t("ToggleLayout")}
-          >
-            {verticalLayout ? (
-              <i className="fa fa-arrows-h"></i>
-            ) : (
-              <i className="fa fa-arrows-v"></i>
-            )}
-          </button>
-        )}
         {metaGame !== "homeworlds" ? null :
             <button
                 className="fabtn align-right"
                 onClick={copyHWDiagram}
                 title="Copy Homeworlds diagram"
             >
-            <i className="fa fa-pencil-square-o"></i>
-        </button>
-      }
+              <i className="fa fa-pencil-square-o"></i>
+            </button>
+        }
         <button
           className="fabtn align-right"
           onClick={() => {
@@ -205,6 +192,19 @@ function Board({
         >
           <i className="fa fa-css3"></i>
         </button>
+        {screenWidth < 770 ? null : (
+          <button
+            className="fabtn align-right"
+            onClick={() => verticalLayoutSetter((val) => !val)}
+            title={t("ToggleLayout")}
+          >
+            {verticalLayout ? (
+              <i className="fa fa-arrows-h"></i>
+            ) : (
+              <i className="fa fa-arrows-v"></i>
+            )}
+          </button>
+        )}
         {!globalMe || globalMe.admin !== true ? (
           ""
         ) : (
