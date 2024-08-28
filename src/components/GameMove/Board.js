@@ -27,7 +27,7 @@ function Board({
   setLocked,
   setRefresh,
   copyHWDiagram,
-  colourContext
+  colourContext,
 }) {
   const [globalMe] = useContext(MeContext);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
@@ -77,14 +77,17 @@ function Board({
       >
         <TransformComponent>
           {stackExpanding ? (
-            <div className={`board _meta_${metaGame}`} style={{backgroundColor: colourContext.background}}>
+            <div
+              className={`board _meta_${metaGame}`}
+              style={{ backgroundColor: colourContext.background }}
+            >
               <div className="stack" id="stack" ref={stackImage}></div>
               <div className="stackboard" id="svg" ref={boardImage}></div>
             </div>
           ) : (
             <div
               className={`board tourBoard _meta_${metaGame}`}
-              style={{backgroundColor: colourContext.background}}
+              style={{ backgroundColor: colourContext.background }}
               id="svg"
               ref={boardImage}
             ></div>
@@ -165,15 +168,15 @@ function Board({
             )}
           </button>
         )}
-        {metaGame !== "homeworlds" ? null :
-            <button
-                className="fabtn align-right"
-                onClick={copyHWDiagram}
-                title="Copy Homeworlds diagram"
-            >
-              <i className="fa fa-pencil-square-o"></i>
-            </button>
-        }
+        {metaGame !== "homeworlds" ? null : (
+          <button
+            className="fabtn align-right"
+            onClick={copyHWDiagram}
+            title="Copy Homeworlds diagram"
+          >
+            <i className="fa fa-pencil-square-o"></i>
+          </button>
+        )}
         <button
           className="fabtn align-right"
           onClick={() => {

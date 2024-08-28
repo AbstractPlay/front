@@ -17,6 +17,7 @@ import NotFound from "./NotFound";
 import Pair from "./Event/Pair";
 import GamesTable from "./Event/GamesTable";
 import ResultsTable from "./Event/ResultsTable";
+import Division from "./Event/Division";
 
 function Event() {
   const { eventid } = useParams();
@@ -829,7 +830,15 @@ function Event() {
           </div>
           {/* Show pairing screen if event is active */}
           {!editor || eventStatus !== "active" ? null : (
-            <Pair event={eventData} setRefresh={setRefresh} />
+            <>
+              {/* Once games have been created, you can't change the division assignments */}
+              {eventData.games.length > 0 ||
+              !eventData.players.map((p) => p.division).includes(undefined) ||
+              registrants < 12 ? null : (
+                <Division event={eventData} setRefresh={setRefresh} />
+              )}
+              <Pair event={eventData} setRefresh={setRefresh} />
+            </>
           )}
         </article>
         {/* Modal: Update start date */}

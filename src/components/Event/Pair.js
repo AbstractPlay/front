@@ -38,7 +38,7 @@ function Pair({ event, setRefresh }) {
   const [clockStart, setClockStart] = useState(36);
   const [clockInc, setClockInc] = useState(24);
   const [clockMax, setClockMax] = useState(72);
-  const [sorted, setSorted] = useState([]);
+  const [divisions, setDivisions] = useState([]);
   const [pairs, setPairs] = useState([]);
   const [manualP1, setManualP1] = useState(null);
   const [manualP2, setManualP2] = useState(null);
@@ -55,9 +55,17 @@ function Pair({ event, setRefresh }) {
       setRound(roundCalc);
 
       // get list of players, initially sorted by display name
-      const playerids = event.players.map((p) => p.playerid);
-      const players = allUsers?.filter((u) => playerids.includes(u.id));
-      setSorted(players);
+      const divNums = new Set(event.players.map((p) => p.division));
+      const divNumsSorted = [...divNums].sort((a, b) => a - b);
+      const tmpDivisions = [];
+      for (const div of divNumsSorted) {
+        const playerids = event.players
+          .filter((p) => p.division === div)
+          .map((p) => p.playerid);
+        const players = allUsers?.filter((u) => playerids.includes(u.id));
+        tmpDivisions.push(players);
+      }
+      setDivisions(tmpDivisions);
     }
     let allMeta = [...gameinfo.values()];
     if (process.env.REACT_APP_REAL_MODE === "production") {
@@ -159,10 +167,6 @@ function Pair({ event, setRefresh }) {
     setNgVars(ngVariants);
   };
 
-  const onSortEnd = (oldIndex, newIndex) => {
-    setSorted((array) => arrayMove(array, oldIndex, newIndex));
-  };
-
   const pushPairings = (pairs) => {
     if (metagame !== null && clockStart > 1 && clockInc > 1 && clockMax > 1) {
       const variants = [];
@@ -232,16 +236,16 @@ function Pair({ event, setRefresh }) {
     }
   }, [pairs]);
 
-  const pairBerger = () => {
-    const berger = bergerTable(sorted);
+  const pairBerger = (players) => {
+    const berger = bergerTable(players);
     pushPairings(berger.map(({ teamA, teamB }) => [teamA, teamB]));
   };
 
-  const pairDutch = () => {
+  const pairDutch = (players) => {
     const pairs = [];
-    const mid = Math.floor(sorted.length / 2);
+    const mid = Math.floor(players.length / 2);
     for (let i = 0; i < mid; i++) {
-      pairs.push([sorted[i], sorted[mid + i]]);
+      pairs.push([players[i], players[mid + i]]);
     }
     pushPairings(pairs);
   };
@@ -254,8 +258,8 @@ function Pair({ event, setRefresh }) {
       manualP2 !== "" &&
       manualP1 !== manualP2
     ) {
-      const p1 = sorted.find((u) => u.id === manualP1);
-      const p2 = sorted.find((u) => u.id === manualP2);
+      const p1 = divisions.flat().find((u) => u.id === manualP1);
+      const p2 = divisions.flat().find((u) => u.id === manualP2);
       if (p1 !== undefined && p2 !== undefined) {
         pushPairings([[p1, p2]]);
       }
@@ -572,46 +576,57 @@ function Pair({ event, setRefresh }) {
                 helpers only. Manual tweaking is often still necessary.
               </p>
             </div>
-            <div className="columns">
+            <div className="columns is-multiline">
               {/* Automated first */}
-              <div className="column">
-                <h3 className="subtitle lined">
-                  <span>Automated</span>
-                </h3>
-                <SortableList
-                  onSortEnd={onSortEnd}
-                  className="sortableList"
-                  draggedItemClassName="sortableItemDragged"
-                >
-                  {sorted.map((item, i) => (
-                    <SortableItem key={`sorted:${i}`}>
-                      <div className="sortableItem">{item.name}</div>
-                    </SortableItem>
-                  ))}
-                </SortableList>
-                <div className="columns is-multiline">
-                  <div className="column">
-                    <div className="control">
-                      <button
-                        className="button is-small apButton"
-                        onClick={pairBerger}
-                      >
-                        Berger round robin
-                      </button>
+              {divisions.map((div, idx) => {
+                const onSortEnd = (oldIndex, newIndex) => {
+                  div = arrayMove(div, oldIndex, newIndex);
+                  const tmpDivisions = cloneDeep(divisions);
+                  tmpDivisions[idx] = div;
+                  setDivisions(tmpDivisions);
+                };
+
+                return (
+                  <div className="column" key={`automated|${idx}`}>
+                    <h3 className="subtitle lined">
+                      <span>Automated (Division {idx + 1})</span>
+                    </h3>
+                    <SortableList
+                      onSortEnd={onSortEnd}
+                      className="sortableList"
+                      draggedItemClassName="sortableItemDragged"
+                    >
+                      {div.map((item, i) => (
+                        <SortableItem key={`sorted:${i}`}>
+                          <div className="sortableItem">{item.name}</div>
+                        </SortableItem>
+                      ))}
+                    </SortableList>
+                    <div className="columns is-multiline">
+                      <div className="column">
+                        <div className="control">
+                          <button
+                            className="button is-small apButton"
+                            onClick={() => pairBerger(div)}
+                          >
+                            Berger round robin
+                          </button>
+                        </div>
+                      </div>
+                      <div className="column">
+                        <div className="control">
+                          <button
+                            className="button is-small apButton"
+                            onClick={() => pairDutch(div)}
+                          >
+                            Dutch Swiss
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="column">
-                    <div className="control">
-                      <button
-                        className="button is-small apButton"
-                        onClick={pairDutch}
-                      >
-                        Dutch Swiss
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                );
+              })}
               {/* Now manual */}
               <div className="column">
                 <h3 className="subtitle lined">
@@ -629,7 +644,8 @@ function Pair({ event, setRefresh }) {
                         onChange={(e) => setManualP1(e.target.value)}
                       >
                         <option value=""></option>
-                        {sorted
+                        {divisions
+                          .flat()
                           .filter((u) => u.id !== manualP2)
                           .map((u, i) => (
                             <option value={u.id} key={`p1:${i}`}>
@@ -652,7 +668,8 @@ function Pair({ event, setRefresh }) {
                         onChange={(e) => setManualP2(e.target.value)}
                       >
                         <option value=""></option>
-                        {sorted
+                        {divisions
+                          .flat()
                           .filter((u) => u.id !== manualP1)
                           .map((u, i) => (
                             <option value={u.id} key={`p2:${i}`}>

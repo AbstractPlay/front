@@ -2023,7 +2023,10 @@ function Playground(props) {
               >
                 <TransformComponent>
                   {gameRef.current?.stackExpanding ? (
-                    <div className={`board _meta_${metaGame}`} style={{backgroundColor: colourContext.background}}>
+                    <div
+                      className={`board _meta_${metaGame}`}
+                      style={{ backgroundColor: colourContext.background }}
+                    >
                       <div className="stack" id="stack" ref={stackImage}></div>
                       <div
                         className="stackboard"
@@ -2034,7 +2037,7 @@ function Playground(props) {
                   ) : (
                     <div
                       className={`board tourBoard _meta_${metaGame}`}
-                      style={{backgroundColor: colourContext.background}}
+                      style={{ backgroundColor: colourContext.background }}
                       id="svg"
                       ref={boardImage}
                     ></div>

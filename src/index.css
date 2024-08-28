@@ -958,6 +958,7 @@ tr.stickyHeader {
 
   .sortableItemDragged {
     background-color: var(--bg-color2);
+    margin: 0.5em;
   }
 
   .tabs.is-toggle li.is-active a {
