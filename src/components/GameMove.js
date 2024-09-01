@@ -222,11 +222,12 @@ function setupGame(
   if (typeof engine.chatLog === "function") {
     game0.moveResults = engine
       .chatLog(game0.players.map((p) => p.name))
-      .reverse()
-      .map((e) => {
-        return { time: e[0], log: e.slice(1).join(" ") };
-      });
+      .map((e, idx) => {
+        return { time: e[0], log: e.slice(1).join(" "), ply: idx+1 };
+      })
+      .reverse();
   } else {
+    console.log("No chatlog function");
     game0.moveResults = engine.resultsHistory().reverse();
   }
   if (gameRef.current !== null && gameRef.current.colors !== undefined)
@@ -3300,6 +3301,7 @@ function GameMove(props) {
                     results={game?.moveResults}
                     comments={comments}
                     players={gameRef.current?.players}
+                    t={t}
                   />
                 </div>
               ) : (

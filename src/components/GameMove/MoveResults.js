@@ -9,8 +9,10 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 function MoveResults(props) {
   const results0 = props.results;
+  console.log(results0);
   const comments = props.comments;
   const players = props.players;
+  const t = props.t;
   const [users] = useContext(UsersContext);
 
   let results;
@@ -21,6 +23,7 @@ function MoveResults(props) {
       timestamp: new Date(r.time).getTime(),
       log: r.log,
       system: true,
+      ply: r.ply,
     }));
     comments.forEach((c) => {
       if (
@@ -56,6 +59,7 @@ function MoveResults(props) {
       }
     });
     results.sort((a, b) => b.timestamp - a.timestamp);
+    console.log(results);
 
     return (
       <Fragment>
@@ -72,7 +76,7 @@ function MoveResults(props) {
                       />
                     </small>
                     <br />
-                    {r.log}
+                    {(!("ply" in r) || r.ply === undefined) ? "" : `${t("Ply")} ${r.ply}: `}{r.log}
                   </p>
                 ) : (
                   <>
