@@ -223,7 +223,7 @@ function setupGame(
     game0.moveResults = engine
       .chatLog(game0.players.map((p) => p.name))
       .map((e, idx) => {
-        return { time: e[0], log: e.slice(1).join(" "), ply: idx+1 };
+        return { time: e[0], log: e.slice(1).join(" "), ply: idx + 1 };
       })
       .reverse();
   } else {

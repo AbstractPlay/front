@@ -160,6 +160,48 @@ function Navbar(props) {
                   {t("About")}
                 </Link>
               </div>
+              <hr className="navbar-divider" />
+              <div className="navbar-item">{t("RelatedSites")}</div>
+              <div className="navbar-item">
+                <a
+                  className="navbar-item"
+                  href="https://records.abstractplay.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Historical records
+                </a>
+              </div>
+              <div className="navbar-item">
+                <a
+                  className="navbar-item"
+                  href="https://designer.abstractplay.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Game designer
+                </a>
+              </div>
+              <div className="navbar-item">
+                <a
+                  className="navbar-item"
+                  href="https://hwdiagrams.abstractplay.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Homeworlds diagram generator
+                </a>
+              </div>
+              <div className="navbar-item">
+                <a
+                  className="navbar-item"
+                  href="https://perlkonig.com/zendo"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Zendo client (synchronous)
+                </a>
+              </div>
             </div>
           </div>
         </div>

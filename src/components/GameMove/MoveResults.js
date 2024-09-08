@@ -76,7 +76,10 @@ function MoveResults(props) {
                       />
                     </small>
                     <br />
-                    {(!("ply" in r) || r.ply === undefined) ? "" : `${t("Ply")} ${r.ply}: `}{r.log}
+                    {!("ply" in r) || r.ply === undefined
+                      ? ""
+                      : `${t("Ply")} ${r.ply}: `}
+                    {r.log}
                   </p>
                 ) : (
                   <>
