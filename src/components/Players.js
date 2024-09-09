@@ -25,6 +25,10 @@ function Players() {
   const [showState, showStateSetter] = useStorageState("players-show", 20);
   const [sorting, setSorting] = useState([{ id: "name", desc: false }]);
   const [globalFilter, globalFilterSetter] = useState(null);
+  const [hideFilter, hideFilterSetter] = useStorageState(
+    "players-hide",
+    "none"
+  );
 
   const data = useMemo(
     () =>
@@ -39,8 +43,21 @@ function Players() {
                 lastSeen,
               };
             })
+            .filter(({ lastSeen }) => {
+              const now = new Date().getTime();
+              const delta = now - lastSeen;
+              const threshYellow = 7 * 24 * 60 * 60 * 1000;
+              const threshRed = 30 * 24 * 60 * 60 * 1000;
+              if (hideFilter === "none") {
+                return true;
+              } else if (hideFilter === "red") {
+                return delta < threshRed;
+              } else {
+                return delta < threshYellow;
+              }
+            })
             .sort((a, b) => a.name.localeCompare(b.name)),
-    [allUsers]
+    [allUsers, hideFilter]
   );
 
   const columnHelper = createColumnHelper();
@@ -211,6 +228,38 @@ function Players() {
       </Helmet>
       <article>
         <h1 className="has-text-centered title">{t("PlayerList")}</h1>
+        <div className="field has-text-centered">
+          <div className="control">
+            <label className="radio">
+              <input
+                type="radio"
+                name="answer"
+                defaultChecked={hideFilter === "none"}
+                onClick={() => hideFilterSetter("none")}
+              />
+              Show all
+            </label>
+            <label className="radio">
+              <input
+                type="radio"
+                name="answer"
+                defaultChecked={hideFilter === "red"}
+                onClick={() => hideFilterSetter("red")}
+              />
+              Hide red
+            </label>
+            <label className="radio">
+              <input
+                type="radio"
+                name="answer"
+                defaultChecked={hideFilter === "yellow"}
+                onClick={() => hideFilterSetter("yellow")}
+              />
+              Hide yellow and red
+            </label>
+          </div>
+        </div>
+
         <div className="container">
           {tableNavigation}
           <table
