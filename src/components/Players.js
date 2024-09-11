@@ -29,6 +29,26 @@ function Players() {
     "players-hide",
     "none"
   );
+  const [countryFilter, countryFilterSetter] = useState("");
+  const [usedCountries, usedCountriesSetter] = useState([]);
+
+  useEffect(() => {
+    if (allUsers !== undefined && allUsers !== null && Array.isArray(allUsers)) {
+        const uniques = new Set(allUsers.map(({country}) => isoToCountryCode(country, "numeric")));
+        const used = [];
+        for (const code of uniques) {
+            if (code === undefined || code === null) {
+                continue;
+            }
+            const name = isoToCountryCode(code, "countryName");
+            if (name !== undefined && name !== null) {
+                used.push([code, name]);
+            }
+        }
+        used.sort((a, b) => a[1].localeCompare(b[1]));
+        usedCountriesSetter(used);
+    }
+  }, [allUsers]);
 
   const data = useMemo(
     () =>
@@ -42,6 +62,13 @@ function Players() {
                 country: isoToCountryCode(country, "numeric"),
                 lastSeen,
               };
+            })
+            .filter(({ country }) => {
+                if (countryFilter === "") {
+                    return true;
+                } else {
+                    return country === countryFilter;
+                }
             })
             .filter(({ lastSeen }) => {
               const now = new Date().getTime();
@@ -57,7 +84,7 @@ function Players() {
               }
             })
             .sort((a, b) => a.name.localeCompare(b.name)),
-    [allUsers, hideFilter]
+    [allUsers, hideFilter, countryFilter]
   );
 
   const columnHelper = createColumnHelper();
@@ -258,6 +285,18 @@ function Players() {
               Hide yellow and red
             </label>
           </div>
+          {usedCountries.length === 0 ? null :
+            <div className="control">
+                <div className="select">
+                <select
+                    onChange={(e) => countryFilterSetter(e.target.value)}
+                >
+                    <option value="" key={`countryFilter|all`}>--Show all--</option>
+                    {usedCountries.map(([code, name]) => <option value={code} key={`countryFilter|${code}`}>{name}</option>)}
+                </select>
+                </div>
+            </div>
+          }
         </div>
 
         <div className="container">
