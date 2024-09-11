@@ -33,20 +33,26 @@ function Players() {
   const [usedCountries, usedCountriesSetter] = useState([]);
 
   useEffect(() => {
-    if (allUsers !== undefined && allUsers !== null && Array.isArray(allUsers)) {
-        const uniques = new Set(allUsers.map(({country}) => isoToCountryCode(country, "numeric")));
-        const used = [];
-        for (const code of uniques) {
-            if (code === undefined || code === null) {
-                continue;
-            }
-            const name = isoToCountryCode(code, "countryName");
-            if (name !== undefined && name !== null) {
-                used.push([code, name]);
-            }
+    if (
+      allUsers !== undefined &&
+      allUsers !== null &&
+      Array.isArray(allUsers)
+    ) {
+      const uniques = new Set(
+        allUsers.map(({ country }) => isoToCountryCode(country, "numeric"))
+      );
+      const used = [];
+      for (const code of uniques) {
+        if (code === undefined || code === null) {
+          continue;
         }
-        used.sort((a, b) => a[1].localeCompare(b[1]));
-        usedCountriesSetter(used);
+        const name = isoToCountryCode(code, "countryName");
+        if (name !== undefined && name !== null) {
+          used.push([code, name]);
+        }
+      }
+      used.sort((a, b) => a[1].localeCompare(b[1]));
+      usedCountriesSetter(used);
     }
   }, [allUsers]);
 
@@ -64,11 +70,11 @@ function Players() {
               };
             })
             .filter(({ country }) => {
-                if (countryFilter === "") {
-                    return true;
-                } else {
-                    return country === countryFilter;
-                }
+              if (countryFilter === "") {
+                return true;
+              } else {
+                return country === countryFilter;
+              }
             })
             .filter(({ lastSeen }) => {
               const now = new Date().getTime();
@@ -285,18 +291,22 @@ function Players() {
               Hide yellow and red
             </label>
           </div>
-          {usedCountries.length === 0 ? null :
+          {usedCountries.length === 0 ? null : (
             <div className="control">
-                <div className="select">
-                <select
-                    onChange={(e) => countryFilterSetter(e.target.value)}
-                >
-                    <option value="" key={`countryFilter|all`}>--Show all--</option>
-                    {usedCountries.map(([code, name]) => <option value={code} key={`countryFilter|${code}`}>{name}</option>)}
+              <div className="select">
+                <select onChange={(e) => countryFilterSetter(e.target.value)}>
+                  <option value="" key={`countryFilter|all`}>
+                    --Show all--
+                  </option>
+                  {usedCountries.map(([code, name]) => (
+                    <option value={code} key={`countryFilter|${code}`}>
+                      {name}
+                    </option>
+                  ))}
                 </select>
-                </div>
+              </div>
             </div>
-          }
+          )}
         </div>
 
         <div className="container">
