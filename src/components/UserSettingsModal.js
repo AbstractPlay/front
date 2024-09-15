@@ -4,7 +4,10 @@ import Spinner from "./Spinner";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Auth } from "aws-amplify";
-import { MeContext } from "../pages/Skeleton";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import { MeContext, UsersContext } from "../pages/Skeleton";
 import Modal from "./Modal";
 import { useStorageState } from "react-use-storage-state";
 import { countryCodeList } from "../lib/countryCodeList";
@@ -29,7 +32,9 @@ function UserSettingsModal(props) {
   const [emailCode, emailCodeSetter] = useState("");
   const [language, languageSetter] = useState("");
   const [country, countrySetter] = useState("");
-  const [users, usersSetter] = useState([]);
+  const [bggid, bggidSetter] = useState("");
+  const [aboutMe, aboutMeSetter] = useState("");
+  const [users, usersSetter] = useContext(UsersContext);
   const [user, userSetter] = useState(null);
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
@@ -128,20 +133,14 @@ function UserSettingsModal(props) {
       if (globalMe?.country !== undefined) {
         countrySetter(globalMe.country);
       }
+      if (globalMe?.bggid !== undefined && globalMe?.bggid !== null) {
+        bggidSetter(globalMe.bggid);
+      }
+      if (globalMe?.about !== undefined && globalMe?.about !== null) {
+        aboutMeSetter(globalMe.about);
+      }
     }
   }, [show, globalMe, notificationsSetter, explorationSetter]);
-
-  useEffect(() => {
-    async function fetchData() {
-      var url = new URL(API_ENDPOINT_OPEN);
-      url.searchParams.append("query", "user_names");
-      const res = await fetch(url);
-      const result = await res.json();
-      console.log("user_names: ", result);
-      usersSetter(result.map((u) => u.name));
-    }
-    if (show && users.length === 0) fetchData();
-  }, [show, users]);
 
   const handleNameChangeClick = () => {
     nameSetter(globalMe.name);
@@ -203,6 +202,21 @@ function UserSettingsModal(props) {
         },
       }),
     });
+  };
+
+  const saveBGGid = () => {
+    handleSettingChangeSubmit("bggid", bggid);
+    globalMeSetter((val) => ({ ...val, bggid }));
+    usersSetter((val) =>
+      val.map((u) => (u.id === globalMe?.id ? { ...u, bggid } : u))
+    );
+  };
+  const saveAbout = () => {
+    handleSettingChangeSubmit("about", aboutMe);
+    globalMeSetter((val) => ({ ...val, about: aboutMe }));
+    usersSetter((val) =>
+      val.map((u) => (u.id === globalMe?.id ? { ...u, about: aboutMe } : u))
+    );
   };
 
   const handleEMailChangeClick = () => {
@@ -782,6 +796,85 @@ function UserSettingsModal(props) {
               </div>
             </div>
           </div>
+          {/********************* BGG ID *********************/}
+          {globalMe === null ? null : (
+            <div className="field" key="bggid">
+              <label className="label" htmlFor="bggid">
+                BGG user id (optional)
+              </label>
+              <div className="control">
+                <input
+                  className="input"
+                  name="bggid"
+                  type="text"
+                  value={bggid}
+                  onChange={(e) => bggidSetter(e.target.value)}
+                />
+                <p className="help">
+                  <a
+                    style={{ textDecoration: "underline" }}
+                    href={`https://boardgamegeek.com/user/${bggid}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Test link
+                  </a>
+                </p>
+              </div>
+              {globalMe === undefined || globalMe.bggid === bggid ? null : (
+                <div className="control">
+                  <button
+                    className="button is-small apButton"
+                    onClick={saveBGGid}
+                  >
+                    Save BGG id
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+          {/********************* About Me *********************/}
+          {globalMe === null ? null : (
+            <div className="field" key="aboutme">
+              <label className="label" htmlFor="aboutme">
+                Tell others about yourself (optional;{" "}
+                <a
+                  href="https://github.github.com/gfm/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Markdown enabled
+                </a>
+                )
+              </label>
+              <div className="control">
+                <textarea
+                  className="textarea"
+                  rows={5}
+                  value={aboutMe}
+                  onChange={(e) => aboutMeSetter(e.target.value)}
+                ></textarea>
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                  className="content help"
+                >
+                  {aboutMe}
+                </ReactMarkdown>
+              </div>
+              {globalMe === undefined || globalMe.about === aboutMe ? null : (
+                <div className="control">
+                  <button
+                    className="button is-small apButton"
+                    onClick={saveAbout}
+                  >
+                    Save about me
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
           {/********************* notifications *********************/}
           <div className="field" key="notifications">
             <label className="label">{t("NotificationSettings")}</label>

@@ -7,6 +7,9 @@ import { useStorageState } from "react-use-storage-state";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH } from "../config";
 import { Helmet } from "react-helmet-async";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import Spinner from "./Spinner";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
@@ -88,6 +91,7 @@ function Player() {
     if (allUsers !== null) {
       const rec = allUsers.find((u) => u.id === userid);
       if (rec !== undefined && rec !== null) {
+        console.log(rec);
         userSetter(rec);
       } else {
         userSetter(null);
@@ -193,7 +197,27 @@ function Player() {
               </>
             )}
             <ActivityMarker lastSeen={user.lastSeen} />
+            {user.bggid === undefined ? null : (
+              <span style={{ fontSize: "smaller", marginLeft: "1em" }}>
+                <a
+                  href={`https://boardgamegeek.com/user/${user.bggid}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  BGG profile
+                </a>
+              </span>
+            )}
           </div>
+          {user.about === undefined ? null : (
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+              className="content has-text-centered"
+            >
+              {user.about}
+            </ReactMarkdown>
+          )}
           <div
             className="content has-text-centered"
             style={{ fontSize: "smaller" }}
