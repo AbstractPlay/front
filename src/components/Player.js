@@ -197,7 +197,7 @@ function Player() {
               </>
             )}
             <ActivityMarker lastSeen={user.lastSeen} />
-            {user.bggid === undefined ? null : (
+            {user.bggid === undefined || /^\s*$/.test(user.bggid) ? null : (
               <span style={{ fontSize: "smaller", marginLeft: "1em" }}>
                 <a
                   href={`https://boardgamegeek.com/user/${user.bggid}`}
@@ -209,7 +209,7 @@ function Player() {
               </span>
             )}
           </div>
-          {user.about === undefined ? null : (
+          {user.about === undefined || /^\s*$/.test(user.about) ? null : (
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeRaw]}
