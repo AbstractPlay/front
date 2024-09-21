@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useTranslation } from "react-i18next";
 import { GameFactory } from "@abstractplay/gameslib";
-import { MeContext } from "../../pages/Skeleton";
+import { MeContext, UsersContext } from "../../pages/Skeleton";
 import gameImages from "../../assets/GameImages";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
@@ -22,6 +22,7 @@ const MetaItem = React.forwardRef(
     ref
   ) => {
     const [globalMe] = useContext(MeContext);
+    const [allUsers] = useContext(UsersContext);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
     const [activeTab, activeTabSetter] = useState("summary");
@@ -279,6 +280,32 @@ const MetaItem = React.forwardRef(
                       <li>
                         {`${counts.stars} `}
                         {t("TotalStars", { count: counts.stars }).toLowerCase()}
+                        {allUsers === undefined ||
+                        allUsers === null ||
+                        allUsers.length === 0 ? null : (
+                          <>
+                            <br />
+                            <span style={{ fontSize: "smaller" }}>
+                              {allUsers
+                                .filter((u) => u.stars?.includes(game.uid))
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((u) => (
+                                  <Link to={`/player/${u.id}`}>{u.name}</Link>
+                                ))
+                                .reduce(
+                                  (acc, x) =>
+                                    acc === null ? (
+                                      x
+                                    ) : (
+                                      <>
+                                        {acc}, {x}
+                                      </>
+                                    ),
+                                  null
+                                )}
+                            </span>
+                          </>
+                        )}
                       </li>
                     </ul>
                   )}
