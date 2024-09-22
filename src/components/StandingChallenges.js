@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
-import { gameinfo } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from "../config";
 import {
   getCoreRowModel,
@@ -262,6 +262,16 @@ function StandingChallenges(props) {
   const metaGameName = gameinfo.get(metaGame).name;
   console.log(metaGame);
   const showRespond = loggedin && challenges;
+  const variantMap = useMemo(() => {
+    const info = gameinfo.get(metaGame);
+    let gameEngine;
+    if (info.playercounts.length > 1) {
+      gameEngine = GameFactory(info.uid, 2);
+    } else {
+      gameEngine = GameFactory(info.uid);
+    }
+    return new Map(gameEngine.allvariants().map(rec => [rec.uid, rec.name]));
+  }, [metaGame]);
 
   const data = useMemo(
     () =>
@@ -287,11 +297,11 @@ function StandingChallenges(props) {
           players: rec.players.filter((p) => p.id !== rec.challenger?.id),
           rated: rec.rated,
           seating: rec.seating,
-          variants: rec.variants,
+          variants: rec.variants.map(id => variantMap.has(id) ? variantMap.get(id) : id),
           comment: rec.comment,
         };
       }),
-    [challenges, allUsers]
+    [challenges, allUsers, variantMap]
   );
 
   const columnHelper = createColumnHelper();
@@ -338,7 +348,7 @@ function StandingChallenges(props) {
       }),
       columnHelper.accessor("variants", {
         header: "Variants",
-        cell: (props) => props.getValue().join(", "),
+        cell: (props) => props.getValue().join("; "),
       }),
       columnHelper.accessor("comment", {
         header: "Notes",

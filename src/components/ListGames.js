@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { gameinfo } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
   getCoreRowModel,
@@ -58,6 +58,16 @@ function ListGames({ fixedState }) {
   }, [gameState, metaGame, fixedState]);
 
   const metaGameName = gameinfo.get(metaGame).name;
+  const variantMap = useMemo(() => {
+    const info = gameinfo.get(metaGame);
+    let gameEngine;
+    if (info.playercounts.length > 1) {
+      gameEngine = GameFactory(info.uid, 2);
+    } else {
+      gameEngine = GameFactory(info.uid);
+    }
+    return new Map(gameEngine.allvariants().map(rec => [rec.uid, rec.name]));
+  }, [metaGame]);
 
   const data = useMemo(
     () =>
@@ -79,11 +89,11 @@ function ListGames({ fixedState }) {
               ? rec.winner.map((w) => rec.players[w - 1].name)
               : null,
           variants:
-            "variants" in rec && rec.variants !== null ? rec.variants : null,
+            "variants" in rec && rec.variants !== null ? rec.variants.map(id => variantMap.has(id) ? variantMap.get(id) : id) : null,
           cbit: fixedState === "completed" || gameState === "completed" ? 1 : 0,
         };
       }),
-    [games, gameState, fixedState]
+    [games, gameState, fixedState, variantMap]
   );
 
   const columnHelper = createColumnHelper();
@@ -129,7 +139,7 @@ function ListGames({ fixedState }) {
       columnHelper.accessor("variants", {
         header: "Variants",
         cell: (props) =>
-          props.getValue() === null ? "" : props.getValue().join(", "),
+          props.getValue() === null ? "" : props.getValue().join("; "),
       }),
       columnHelper.display({
         id: "actions",

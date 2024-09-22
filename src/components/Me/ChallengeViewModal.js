@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { gameinfo } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import Modal from "../Modal";
 
 function ChallengeViewModal(props) {
@@ -22,7 +22,18 @@ function ChallengeViewModal(props) {
     const game = gameinfo.get(challenge.metaGame);
     const numVariants =
       challenge.variants === undefined ? 0 : challenge.variants.length;
-    const variants = numVariants > 0 ? challenge.variants.join(", ") : null;
+    let variantMap = new Map();
+    if (numVariants > 0) {
+        const info = gameinfo.get(challenge.metaGame);
+        let gameEngine;
+        if (info.playercounts.length > 1) {
+        gameEngine = GameFactory(info.uid, 2);
+        } else {
+        gameEngine = GameFactory(info.uid);
+        }
+        variantMap = new Map(gameEngine.allvariants().map(rec => [rec.uid, rec.name]));
+    }
+    const variants = numVariants > 0 ? challenge.variants.map(id => variantMap.has(id) ? variantMap.get(id) : id).join("; ") : null;
     var challengeDesc = "";
     var players = "";
     const otherplayers = challenge.players
