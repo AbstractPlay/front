@@ -10,5 +10,5 @@ for (const rec of data.messages) {
     const time = new Date(rec.timestamp).getTime();
     news.push({time, text: rec.content});
 }
-writeFileSync("public/data/news.json", JSON.stringify(news));
+writeFileSync("src/assets/news.json", JSON.stringify(news));
 console.log("done");

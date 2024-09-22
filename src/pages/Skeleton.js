@@ -42,6 +42,7 @@ import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
 import TimeAgo from "javascript-time-ago";
 import { useStorageState } from "react-use-storage-state";
+import newsData from "../assets/news.json";
 
 const Stats = lazy(() => import("../components/Stats"));
 const MetaContainer = lazy(() => import("../components/MetaContainer"));
@@ -64,7 +65,7 @@ function Bones(props) {
   const [myMove, myMoveSetter] = useState([]);
   const [globalMe, globalMeSetter] = useState(null);
   const [users, usersSetter] = useState(null);
-  const [news, newsSetter] = useState([]);
+  const [news, newsSetter] = useState(newsData.sort((a, b) => b.time - a.time));
   const [summary, summarySetter] = useState(null);
   const [colorMode] = useStorageState("color-mode", "light");
   const [storedContextLight] = useStorageState("stored-context-light", {
@@ -161,25 +162,6 @@ function Bones(props) {
         console.log(result);
       } catch (error) {
         usersSetter(null);
-      }
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await fetch("data/news.json");
-        if (result.status !== 200) {
-          console.log(`Unable to fetch news: ${JSON.stringify(result.status)}`);
-          newsSetter([]);
-        } else {
-          const json = await result.json();
-          json.sort((a, b) => b.time - a.time);
-          newsSetter(json);
-        }
-      } catch (e) {
-        console.log(`Error fetching the news file: ${JSON.stringify(e)}`);
       }
     }
     fetchData();

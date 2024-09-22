@@ -53,9 +53,8 @@ function News(props) {
               >
                 our Discord server
               </a>
-              . Please come join us! This list is maintained separately, only
-              includes a subset of the announcements, and may be slightly
-              delayed.
+              . Please come join us! This list is maintained separately, doesn't
+              include images and reactions, and may be slightly delayed.
             </p>
           </div>
           <div className="columns">

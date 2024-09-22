@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { cloneDeep } from "lodash";
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { API_ENDPOINT_AUTH } from "../config";
 import { Auth } from "aws-amplify";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
