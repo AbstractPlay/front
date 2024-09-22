@@ -270,7 +270,7 @@ function StandingChallenges(props) {
     } else {
       gameEngine = GameFactory(info.uid);
     }
-    return new Map(gameEngine.allvariants().map(rec => [rec.uid, rec.name]));
+    return new Map(gameEngine.allvariants().map((rec) => [rec.uid, rec.name]));
   }, [metaGame]);
 
   const data = useMemo(
@@ -297,7 +297,9 @@ function StandingChallenges(props) {
           players: rec.players.filter((p) => p.id !== rec.challenger?.id),
           rated: rec.rated,
           seating: rec.seating,
-          variants: rec.variants.map(id => variantMap.has(id) ? variantMap.get(id) : id),
+          variants: rec.variants.map((id) =>
+            variantMap.has(id) ? variantMap.get(id) : id
+          ),
           comment: rec.comment,
         };
       }),

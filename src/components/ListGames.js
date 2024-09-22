@@ -66,7 +66,7 @@ function ListGames({ fixedState }) {
     } else {
       gameEngine = GameFactory(info.uid);
     }
-    return new Map(gameEngine.allvariants().map(rec => [rec.uid, rec.name]));
+    return new Map(gameEngine.allvariants().map((rec) => [rec.uid, rec.name]));
   }, [metaGame]);
 
   const data = useMemo(
@@ -89,7 +89,11 @@ function ListGames({ fixedState }) {
               ? rec.winner.map((w) => rec.players[w - 1].name)
               : null,
           variants:
-            "variants" in rec && rec.variants !== null ? rec.variants.map(id => variantMap.has(id) ? variantMap.get(id) : id) : null,
+            "variants" in rec && rec.variants !== null
+              ? rec.variants.map((id) =>
+                  variantMap.has(id) ? variantMap.get(id) : id
+                )
+              : null,
           cbit: fixedState === "completed" || gameState === "completed" ? 1 : 0,
         };
       }),

@@ -24,16 +24,23 @@ function ChallengeViewModal(props) {
       challenge.variants === undefined ? 0 : challenge.variants.length;
     let variantMap = new Map();
     if (numVariants > 0) {
-        const info = gameinfo.get(challenge.metaGame);
-        let gameEngine;
-        if (info.playercounts.length > 1) {
+      const info = gameinfo.get(challenge.metaGame);
+      let gameEngine;
+      if (info.playercounts.length > 1) {
         gameEngine = GameFactory(info.uid, 2);
-        } else {
+      } else {
         gameEngine = GameFactory(info.uid);
-        }
-        variantMap = new Map(gameEngine.allvariants().map(rec => [rec.uid, rec.name]));
+      }
+      variantMap = new Map(
+        gameEngine.allvariants().map((rec) => [rec.uid, rec.name])
+      );
     }
-    const variants = numVariants > 0 ? challenge.variants.map(id => variantMap.has(id) ? variantMap.get(id) : id).join("; ") : null;
+    const variants =
+      numVariants > 0
+        ? challenge.variants
+            .map((id) => (variantMap.has(id) ? variantMap.get(id) : id))
+            .join("; ")
+        : null;
     var challengeDesc = "";
     var players = "";
     const otherplayers = challenge.players
