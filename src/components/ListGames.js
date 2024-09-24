@@ -66,7 +66,12 @@ function ListGames({ fixedState }) {
     } else {
       gameEngine = GameFactory(info.uid);
     }
-    return new Map(gameEngine.allvariants().map((rec) => [rec.uid, rec.name]));
+    const all = gameEngine.allvariants();
+    if (all !== undefined) {
+        return new Map(gameEngine.allvariants().map((rec) => [rec.uid, rec.name]));
+    } else {
+        return new Map();
+    }
   }, [metaGame]);
 
   const data = useMemo(
