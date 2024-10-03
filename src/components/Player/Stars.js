@@ -5,6 +5,7 @@ import { MeContext } from "../../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "./TableSkeleton";
 import NewChallengeModal from "../NewChallengeModal";
+import { Link } from "react-router-dom";
 
 function Stars({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
@@ -41,6 +42,7 @@ function Stars({ handleChallenge }) {
     () => [
       columnHelper.accessor("name", {
         header: "Game",
+        cell: (props) => <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>,
       }),
       columnHelper.display({
         id: "challenge",

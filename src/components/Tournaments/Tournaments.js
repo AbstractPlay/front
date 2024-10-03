@@ -307,7 +307,7 @@ function Tournaments(props) {
     () => [
       openTournamentsColumnHelper.accessor("metaGame", {
         header: t("Game"),
-        cell: (props) => props.getValue(),
+        cell: (props) => <Link to={`/games/${props.row.original.realMeta}`}>{props.getValue()}</Link>,
       }),
       openTournamentsColumnHelper.accessor("variants", {
         header: t("Variants"),
@@ -533,7 +533,7 @@ function Tournaments(props) {
     () => [
       currentTournamentsColumnHelper.accessor("metaGame", {
         header: t("Game"),
-        cell: (props) => props.getValue(),
+        cell: (props) => <Link to={`/games/${props.row.original.realMeta}`}>{props.getValue()}</Link>,
       }),
       currentTournamentsColumnHelper.accessor("variants", {
         header: t("Variants"),
@@ -727,6 +727,7 @@ function Tournaments(props) {
           dateStarted: t.dateStarted,
           dateEnded: t.dateEnded,
           winner: t.divisions[1].winner,
+          winnerid: t.divisions[1].winnerid,
           numPlayers: t.players.length,
           players: t.players,
         };
@@ -746,7 +747,7 @@ function Tournaments(props) {
     () => [
       completedTournamentsColumnHelper.accessor("metaGameName", {
         header: t("Game"),
-        cell: (props) => props.getValue(),
+        cell: (props) => <Link to={`/games/${props.row.original.metaGame}`}>{props.getValue()}</Link>,
       }),
       completedTournamentsColumnHelper.accessor("variants", {
         header: t("Variants"),
@@ -770,7 +771,7 @@ function Tournaments(props) {
       }),
       completedTournamentsColumnHelper.accessor("winner", {
         header: t("Tournament.Winner"),
-        cell: (props) => props.getValue(),
+        cell: (props) => <Link to={`/player/${props.row.original.winnerid}`}>{props.getValue()}</Link>,
       }),
       completedTournamentsColumnHelper.display({
         id: "actions",

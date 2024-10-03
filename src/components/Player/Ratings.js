@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext, SummaryContext } from "../Player";
 import { MeContext } from "../../pages/Skeleton";
@@ -54,6 +55,7 @@ function Ratings({ handleChallenge }) {
     () => [
       columnHelper.accessor("name", {
         header: "Game",
+        cell: (props) => <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>,
       }),
       columnHelper.accessor("wld", {
         header: "Win/Loss/Draw",

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext, SummaryContext } from "../Player";
 import { MeContext } from "../../pages/Skeleton";
@@ -80,6 +81,7 @@ function Counts({ handleChallenge }) {
     () => [
       columnHelper.accessor("name", {
         header: "Game",
+        cell: (props) => <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>,
       }),
       columnHelper.accessor("count", {
         header: "Play count",

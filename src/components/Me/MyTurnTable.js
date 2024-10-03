@@ -16,7 +16,7 @@ import Spinner from "../Spinner";
 import { useTranslation } from "react-i18next";
 
 const allSize = Number.MAX_SAFE_INTEGER;
-function showMilliseconds(ms) {
+function showMilliseconds(ms, hard = false) {
   let positive = true;
   if (ms < 0) {
     ms = -ms;
@@ -41,6 +41,9 @@ function showMilliseconds(ms) {
       output += Math.round(seconds) + "s";
     }
   }
+  if (hard) {
+    output += "\u2755";
+  }
   return output;
 }
 
@@ -62,6 +65,7 @@ function MyTurnTable({ games, fetching }) {
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
+          clockHard: g.clockHard,
           gameName: "Unknown",
           gameStarted: g.gameStarted || 0,
           opponents: g.players.filter((item) => item.id !== globalMe.id),
@@ -134,7 +138,7 @@ function MyTurnTable({ games, fetching }) {
       }),
       columnHelper.accessor("timeRemaining", {
         header: "Time remaining",
-        cell: (props) => showMilliseconds(props.getValue()),
+        cell: (props) => showMilliseconds(props.getValue(), props.row.original.clockHard),
       }),
     ],
     [columnHelper]
