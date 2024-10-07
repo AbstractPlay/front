@@ -9,7 +9,6 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 function MoveResults(props) {
   const results0 = props.results;
-  console.log(results0);
   const comments = props.comments;
   const players = props.players;
   const t = props.t;

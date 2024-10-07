@@ -1783,7 +1783,6 @@ function GameMove(props) {
       } else {
         const result = await res.json();
         if (result !== undefined && result.length > 0) {
-          console.log("got it");
           const data = result.map((d) => {
             if (d && typeof d.tree === "string") {
               d.tree = JSON.parse(d.tree);
@@ -1804,6 +1803,12 @@ function GameMove(props) {
             handleGameMoveClick({ moveNumber: moveNum, exPath });
           } else {
             focusSetter(cloneDeep(focus)); // just to trigger a rerender...
+          }
+        } else {
+          // even if no exploration, support moveNumberParam
+          if (moveNumberParam) {
+            const moveNum = parseInt(moveNumberParam, 10);
+            handleGameMoveClick({ moveNumber: moveNum, exPath: [] });
           }
         }
       }
