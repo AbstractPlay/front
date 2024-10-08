@@ -16,7 +16,7 @@ import Spinner from "../Spinner";
 import { useTranslation } from "react-i18next";
 
 const allSize = Number.MAX_SAFE_INTEGER;
-function showMilliseconds(ms, hard = false) {
+function showMilliseconds(ms) {
   let positive = true;
   if (ms < 0) {
     ms = -ms;
@@ -40,9 +40,6 @@ function showMilliseconds(ms, hard = false) {
       if (minutes > 0) output += ", ";
       output += Math.round(seconds) + "s";
     }
-  }
-  if (hard) {
-    output += " (hard)";
   }
   return output;
 }
@@ -138,7 +135,7 @@ function MyTurnTable({ games, fetching }) {
       }),
       columnHelper.accessor("timeRemaining", {
         header: "Time remaining",
-        cell: (props) => showMilliseconds(props.getValue(), props.row.original.clockHard),
+        cell: (props) => <span class={props.row.original.clockHard ? `hardTime` : "softTime"}>{showMilliseconds(props.getValue())}</span>,
       }),
     ],
     [columnHelper]

@@ -830,6 +830,12 @@ tr.stickyHeader {
     word-wrap: break-word;
 }
 
+span.hardTime::after {
+    content: "\00A0\0021";
+    font-weight: bolder;
+    font-size: larger;
+}
+
 /* Stuff for flags */
 .flag {
     display: inline-block;
