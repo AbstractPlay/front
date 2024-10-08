@@ -42,7 +42,7 @@ function showMilliseconds(ms, hard = false) {
     }
   }
   if (hard) {
-    output += "\u2755";
+    output += " (hard)";
   }
   return output;
 }
