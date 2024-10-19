@@ -20,6 +20,10 @@ function Navbar(props) {
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
+  const closeBurger = () => {
+    updateBurgerExpanded(false);
+  }
+
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
@@ -59,7 +63,7 @@ function Navbar(props) {
     <nav className="navbar" style={{ minHeight: "10vh" }}>
       <div className="navbar-brand">
         <div className="navbar-item">
-          <Link to="/">
+          <Link to="/" onClick={() => updateBurgerExpanded(false)}>
             {process.env.REACT_APP_REAL_MODE === "production" ? (
               <img
                 src={colorMode === "light" ? logoLight : logoDark}
@@ -100,24 +104,24 @@ function Navbar(props) {
           ) : (
             <>
               <div className="navbar-item">
-                <Link to="/" className="navbar-item">
+                <Link to="/" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
                   {t("MyDashboard")}
                 </Link>
               </div>
               <div className="navbar-item">
-                <Link to="/playground" className="navbar-item">
+                <Link to="/playground" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
                   {t("Playground")}
                 </Link>
               </div>
             </>
           )}
           <div className="navbar-item">
-            <Link to="/games" className="navbar-item">
+            <Link to="/games" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
               {t("Games")}
             </Link>
           </div>
           <div className="navbar-item">
-            <Link to="/players" className="navbar-item">
+            <Link to="/players" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
               {t("Players")}
             </Link>
           </div>
@@ -125,12 +129,12 @@ function Navbar(props) {
             <a className="navbar-link">{t("EventsNav")}</a>
             <div className="navbar-dropdown">
               <div className="navbar-item">
-                <Link to="/tournaments" className="navbar-item">
+                <Link to="/tournaments" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
                   {t("Tournament.Tournaments")}
                 </Link>
               </div>
               <div className="navbar-item">
-                <Link to="/events" className="navbar-item">
+                <Link to="/events" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
                   {t("Events.Name")}
                 </Link>
               </div>
@@ -140,12 +144,12 @@ function Navbar(props) {
             <a className="navbar-link">{t("About")}</a>
             <div className="navbar-dropdown">
               <div className="navbar-item">
-                <Link to="/stats" className="navbar-item">
+                <Link to="/stats" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
                   {t("Statistics")}
                 </Link>
               </div>
               <div className="navbar-item">
-                <Link to="/news" className="navbar-item">
+                <Link to="/news" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
                   {t("News")}
                   {newsLastSeen >= maxNews ? null : (
                     <span className="icon highlight">
@@ -156,7 +160,7 @@ function Navbar(props) {
                 </Link>
               </div>
               <div className="navbar-item">
-                <Link to="/about" className="navbar-item">
+                <Link to="/about" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
                   {t("About")}
                 </Link>
               </div>
@@ -168,6 +172,7 @@ function Navbar(props) {
                   href="https://records.abstractplay.com"
                   target="_blank"
                   rel="noreferrer"
+                  onClick={() => updateBurgerExpanded(false)}
                 >
                   Historical records
                 </a>
@@ -178,6 +183,7 @@ function Navbar(props) {
                   href="https://designer.abstractplay.com"
                   target="_blank"
                   rel="noreferrer"
+                  onClick={() => updateBurgerExpanded(false)}
                 >
                   Game designer
                 </a>
@@ -188,6 +194,7 @@ function Navbar(props) {
                   href="https://hwdiagrams.abstractplay.com"
                   target="_blank"
                   rel="noreferrer"
+                  onClick={() => updateBurgerExpanded(false)}
                 >
                   Homeworlds diagram generator
                 </a>
@@ -198,6 +205,7 @@ function Navbar(props) {
                   href="https://perlkonig.com/zendo"
                   target="_blank"
                   rel="noreferrer"
+                  onClick={() => updateBurgerExpanded(false)}
                 >
                   Zendo client (synchronous)
                 </a>
@@ -226,7 +234,7 @@ function Navbar(props) {
             </button>
           </div>
           <div className="navbar-item tourSettings">
-            <LogInOutButton />
+            <LogInOutButton closeBurger={closeBurger} />
           </div>
         </div>
       </div>
