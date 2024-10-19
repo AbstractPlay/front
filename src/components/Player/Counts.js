@@ -81,7 +81,9 @@ function Counts({ handleChallenge }) {
     () => [
       columnHelper.accessor("name", {
         header: "Game",
-        cell: (props) => <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>,
+        cell: (props) => (
+          <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
+        ),
       }),
       columnHelper.accessor("count", {
         header: "Play count",

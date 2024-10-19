@@ -45,6 +45,7 @@ function showMilliseconds(ms) {
 }
 
 function MyTurnTable({ games, fetching }) {
+  console.log(games);
   const [globalMe] = useContext(MeContext);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
@@ -69,6 +70,8 @@ function MyTurnTable({ games, fetching }) {
           numMoves: g.numMoves || 0,
           myTime: me.time,
           timeRemaining: me.time - (Date.now() - g.lastMoveTime),
+          lastSeen: g.seen || 0,
+          lastChat: g.lastChat || 0,
         };
         if (gameinfo.get(g.metaGame) !== undefined)
           ret.gameName = gameinfo.get(g.metaGame).name;
@@ -87,11 +90,19 @@ function MyTurnTable({ games, fetching }) {
             return <>Unknown</>;
           } else {
             return (
-              <Link
-                to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
+              <span
+                className={
+                  props.row.original.lastChat > props.row.original.lastSeen
+                    ? "newChat"
+                    : ""
+                }
               >
-                {props.getValue()}
-              </Link>
+                <Link
+                  to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
+                >
+                  {props.getValue()}
+                </Link>
+              </span>
             );
           }
         },
@@ -135,7 +146,11 @@ function MyTurnTable({ games, fetching }) {
       }),
       columnHelper.accessor("timeRemaining", {
         header: "Time remaining",
-        cell: (props) => <span class={props.row.original.clockHard ? `hardTime` : "softTime"}>{showMilliseconds(props.getValue())}</span>,
+        cell: (props) => (
+          <span class={props.row.original.clockHard ? `hardTime` : "softTime"}>
+            {showMilliseconds(props.getValue())}
+          </span>
+        ),
       }),
     ],
     [columnHelper]
@@ -212,9 +227,11 @@ function MyTurnTable({ games, fetching }) {
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className={
+                className={`${
                   row.original.tournament !== undefined ? "tourneyGame" : ""
-                }
+                } ${
+                  row.original.lastChat > row.original.lastSeen ? "newChat" : ""
+                }`}
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id}>

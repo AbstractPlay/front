@@ -307,7 +307,11 @@ function Tournaments(props) {
     () => [
       openTournamentsColumnHelper.accessor("metaGame", {
         header: t("Game"),
-        cell: (props) => <Link to={`/games/${props.row.original.realMeta}`}>{props.getValue()}</Link>,
+        cell: (props) => (
+          <Link to={`/games/${props.row.original.realMeta}`}>
+            {props.getValue()}
+          </Link>
+        ),
       }),
       openTournamentsColumnHelper.accessor("variants", {
         header: t("Variants"),
@@ -533,7 +537,11 @@ function Tournaments(props) {
     () => [
       currentTournamentsColumnHelper.accessor("metaGame", {
         header: t("Game"),
-        cell: (props) => <Link to={`/games/${props.row.original.realMeta}`}>{props.getValue()}</Link>,
+        cell: (props) => (
+          <Link to={`/games/${props.row.original.realMeta}`}>
+            {props.getValue()}
+          </Link>
+        ),
       }),
       currentTournamentsColumnHelper.accessor("variants", {
         header: t("Variants"),
@@ -747,7 +755,11 @@ function Tournaments(props) {
     () => [
       completedTournamentsColumnHelper.accessor("metaGameName", {
         header: t("Game"),
-        cell: (props) => <Link to={`/games/${props.row.original.metaGame}`}>{props.getValue()}</Link>,
+        cell: (props) => (
+          <Link to={`/games/${props.row.original.metaGame}`}>
+            {props.getValue()}
+          </Link>
+        ),
       }),
       completedTournamentsColumnHelper.accessor("variants", {
         header: t("Variants"),
@@ -771,7 +783,11 @@ function Tournaments(props) {
       }),
       completedTournamentsColumnHelper.accessor("winner", {
         header: t("Tournament.Winner"),
-        cell: (props) => <Link to={`/player/${props.row.original.winnerid}`}>{props.getValue()}</Link>,
+        cell: (props) => (
+          <Link to={`/player/${props.row.original.winnerid}`}>
+            {props.getValue()}
+          </Link>
+        ),
       }),
       completedTournamentsColumnHelper.display({
         id: "actions",

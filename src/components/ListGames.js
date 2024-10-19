@@ -68,9 +68,11 @@ function ListGames({ fixedState }) {
     }
     const all = gameEngine.allvariants();
     if (all !== undefined) {
-        return new Map(gameEngine.allvariants().map((rec) => [rec.uid, rec.name]));
+      return new Map(
+        gameEngine.allvariants().map((rec) => [rec.uid, rec.name])
+      );
     } else {
-        return new Map();
+      return new Map();
     }
   }, [metaGame]);
 
