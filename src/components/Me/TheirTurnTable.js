@@ -98,19 +98,18 @@ function TheirTurnTable(props) {
             return <>Unknown</>;
           } else {
             return (
-                <span
+              <span
                 className={
                   props.row.original.lastChat > props.row.original.lastSeen
                     ? "newChat"
                     : ""
                 }
               >
-
-              <Link
-                to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
-              >
-                {props.getValue()}
-              </Link>
+                <Link
+                  to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
+                >
+                  {props.getValue()}
+                </Link>
               </span>
             );
           }

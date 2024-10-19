@@ -41,44 +41,47 @@ function Board({
     <>
       <div className="level">
         <div className="level-left">
-            <div className="level-item">
-                <div className="control">
-                    <button
-                        className="button is-small apButton"
-                        onClick={() => setRefresh((val) => val + 1)}
-                        title="Trigger a refresh"
-                    >
-                        <span className="icon">
-                        <i className="fa fa-refresh"></i>
-                        </span>
-                    </button>
-                </div>
+          <div className="level-item">
+            <div className="control">
+              <button
+                className="button is-small apButton"
+                onClick={() => setRefresh((val) => val + 1)}
+                title="Trigger a refresh"
+              >
+                <span className="icon">
+                  <i className="fa fa-refresh"></i>
+                </span>
+              </button>
             </div>
-            <div className="level-item">
-                <div className="control">
-                    <button
-                        className={`button is-small apButton${locked ? " faded" : ""}`}
-                        onClick={() => setLocked((val) => !val)}
-                        title="Triggers a refresh every 60 seconds for 30 minutes or until you click the button again or leave the page"
-                    >
-                        <span className="icon">
-                        <i className="fa fa-clock-o"></i>
-                        </span>
-                    </button>
-                </div>
+          </div>
+          <div className="level-item">
+            <div className="control">
+              <button
+                className={`button is-small apButton${locked ? " faded" : ""}`}
+                onClick={() => setLocked((val) => !val)}
+                title="Triggers a refresh every 60 seconds for 30 minutes or until you click the button again or leave the page"
+              >
+                <span className="icon">
+                  <i className="fa fa-clock-o"></i>
+                </span>
+              </button>
             </div>
+          </div>
         </div>
-        {!hasNewChat ? null :
-        <div className="level-right">
+        {!hasNewChat ? null : (
+          <div className="level-right">
             <div className="level-item">
-                <div className="control">
-                    <span class="icon" style={{color: "var(--secondary-color-1)"}}>
-                        <i className="fa fa-envelope"></i>
-                    </span>
-                </div>
+              <div className="control">
+                <span
+                  class="icon"
+                  style={{ color: "var(--secondary-color-1)" }}
+                >
+                  <i className="fa fa-envelope"></i>
+                </span>
+              </div>
             </div>
-        </div>
-        }
+          </div>
+        )}
       </div>
       {inCheck.length === 0 ? (
         ""

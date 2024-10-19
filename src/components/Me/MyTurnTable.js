@@ -45,7 +45,7 @@ function showMilliseconds(ms) {
 }
 
 function MyTurnTable({ games, fetching }) {
-    console.log(games);
+  console.log(games);
   const [globalMe] = useContext(MeContext);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
@@ -90,18 +90,18 @@ function MyTurnTable({ games, fetching }) {
             return <>Unknown</>;
           } else {
             return (
-                <span
+              <span
                 className={
                   props.row.original.lastChat > props.row.original.lastSeen
                     ? "newChat"
                     : ""
                 }
               >
-              <Link
-                to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
-              >
-                {props.getValue()}
-              </Link>
+                <Link
+                  to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
+                >
+                  {props.getValue()}
+                </Link>
               </span>
             );
           }
@@ -146,7 +146,11 @@ function MyTurnTable({ games, fetching }) {
       }),
       columnHelper.accessor("timeRemaining", {
         header: "Time remaining",
-        cell: (props) => <span class={props.row.original.clockHard ? `hardTime` : "softTime"}>{showMilliseconds(props.getValue())}</span>,
+        cell: (props) => (
+          <span class={props.row.original.clockHard ? `hardTime` : "softTime"}>
+            {showMilliseconds(props.getValue())}
+          </span>
+        ),
       }),
     ],
     [columnHelper]
@@ -223,9 +227,11 @@ function MyTurnTable({ games, fetching }) {
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className={
-                  `${row.original.tournament !== undefined ? "tourneyGame" : ""} ${row.original.lastChat > row.original.lastSeen ? "newChat" : ""}`
-                }
+                className={`${
+                  row.original.tournament !== undefined ? "tourneyGame" : ""
+                } ${
+                  row.original.lastChat > row.original.lastSeen ? "newChat" : ""
+                }`}
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id}>

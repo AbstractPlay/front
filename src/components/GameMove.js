@@ -169,9 +169,9 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("stacking-expanding");
   let newchat = false;
   if (me !== undefined) {
-    const meGame = me.games.find(g => g.id === game0.id);
+    const meGame = me.games.find((g) => g.id === game0.id);
     if (meGame !== undefined) {
-        newchat = (meGame.lastChat || 0) > (meGame.seen || 0);
+      newchat = (meGame.lastChat || 0) > (meGame.seen || 0);
     }
   }
   game0.hasNewChat = newchat;
@@ -2472,8 +2472,11 @@ function GameMove(props) {
         // I don't see any reason for that, so always passing it so lastChat
         // is always calculated, even for in-progress games.
         let players;
-        if (gameRef.current !== undefined && gameRef.current.players !== undefined) {
-            players = [...gameRef.current.players];
+        if (
+          gameRef.current !== undefined &&
+          gameRef.current.players !== undefined
+        ) {
+          players = [...gameRef.current.players];
         }
         const metaIfComplete = metaGame;
         const res = await fetch(API_ENDPOINT_AUTH, {
