@@ -45,7 +45,6 @@ function showMilliseconds(ms) {
 }
 
 function MyTurnTable({ games, fetching }) {
-  console.log(games);
   const [globalMe] = useContext(MeContext);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
