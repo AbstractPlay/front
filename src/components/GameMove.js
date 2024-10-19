@@ -167,6 +167,14 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("no-explore");
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
+  let newchat = false;
+  if (me !== undefined) {
+    const meGame = me.games.find(g => g.id === game0.id);
+    if (meGame !== undefined) {
+        newchat = (meGame.lastChat || 0) > (meGame.seen || 0);
+    }
+  }
+  game0.hasNewChat = newchat;
   if (game0.simultaneous) {
     moveSetter({
       ...engine.validateMove("", gameRef.current?.me + 1),
@@ -2460,12 +2468,14 @@ function GameMove(props) {
       const usr = await Auth.currentAuthenticatedUser();
       const token = usr.signInUserSession.idToken.jwtToken;
       try {
-        let players = [];
-        let metaIfComplete = undefined;
-        if (engineRef.current !== undefined && engineRef.current.gameover) {
-          players = [...gameRef.current.players];
-          metaIfComplete = metaGame;
+        // This used to only pass players and meta if game was completed.
+        // I don't see any reason for that, so always passing it so lastChat
+        // is always calculated, even for in-progress games.
+        let players;
+        if (gameRef.current !== undefined && gameRef.current.players !== undefined) {
+            players = [...gameRef.current.players];
         }
+        const metaIfComplete = metaGame;
         const res = await fetch(API_ENDPOINT_AUTH, {
           method: "POST",
           headers: {
@@ -3095,6 +3105,7 @@ function GameMove(props) {
                           verticalLayoutSetter={verticalLayoutSetter}
                           copyHWDiagram={copyHWDiagram}
                           colourContext={colourContext}
+                          hasNewChat={gameRef.current?.hasNewChat || false}
                         />
                       ) : key === "moves" ? (
                         <GameMoves
@@ -3247,6 +3258,7 @@ function GameMove(props) {
                   verticalLayoutSetter={verticalLayoutSetter}
                   copyHWDiagram={copyHWDiagram}
                   colourContext={colourContext}
+                  hasNewChat={gameRef.current?.hasNewChat || false}
                 />
               </div>
               {/***************** GameMoves *****************/}

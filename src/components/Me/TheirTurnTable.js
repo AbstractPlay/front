@@ -78,6 +78,8 @@ function TheirTurnTable(props) {
             them === undefined
               ? undefined
               : them.time - (Date.now() - g.lastMoveTime),
+          lastSeen: g.seen || 0,
+          lastChat: g.lastChat || 0,
         };
         if (gameinfo.get(g.metaGame) !== undefined)
           ret.gameName = gameinfo.get(g.metaGame).name;
@@ -96,11 +98,20 @@ function TheirTurnTable(props) {
             return <>Unknown</>;
           } else {
             return (
+                <span
+                className={
+                  props.row.original.lastChat > props.row.original.lastSeen
+                    ? "newChat"
+                    : ""
+                }
+              >
+
               <Link
                 to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
               >
                 {props.getValue()}
               </Link>
+              </span>
             );
           }
         },
