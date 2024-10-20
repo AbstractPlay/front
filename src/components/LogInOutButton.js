@@ -8,7 +8,7 @@ import { MeContext } from "../pages/Skeleton";
 import NewProfile from "./NewProfile";
 import { subscribeUser } from "../subscription";
 
-function LogInOutButton({closeBurger}) {
+function LogInOutButton({ closeBurger }) {
   const { t } = useTranslation();
   const [user, userSetter] = useState(null);
   const [showUserSettingsModal, showUserSettingsModalSetter] = useState(false);
@@ -128,7 +128,10 @@ function LogInOutButton({closeBurger}) {
   } else {
     return (
       <div>
-        <Link to={`/player/${user.idToken.payload["sub"]}`} onClick={() => closeBurger()}>
+        <Link
+          to={`/player/${user.idToken.payload["sub"]}`}
+          onClick={() => closeBurger()}
+        >
           {user.idToken.payload["cognito:username"]}
         </Link>
         <button
