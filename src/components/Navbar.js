@@ -22,7 +22,7 @@ function Navbar(props) {
 
   const closeBurger = () => {
     updateBurgerExpanded(false);
-  }
+  };
 
   useEffect(() => {
     addResource(i18n.language);
@@ -104,24 +104,40 @@ function Navbar(props) {
           ) : (
             <>
               <div className="navbar-item">
-                <Link to="/" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
+                <Link
+                  to="/"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
                   {t("MyDashboard")}
                 </Link>
               </div>
               <div className="navbar-item">
-                <Link to="/playground" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
+                <Link
+                  to="/playground"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
                   {t("Playground")}
                 </Link>
               </div>
             </>
           )}
           <div className="navbar-item">
-            <Link to="/games" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
+            <Link
+              to="/games"
+              className="navbar-item"
+              onClick={() => updateBurgerExpanded(false)}
+            >
               {t("Games")}
             </Link>
           </div>
           <div className="navbar-item">
-            <Link to="/players" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
+            <Link
+              to="/players"
+              className="navbar-item"
+              onClick={() => updateBurgerExpanded(false)}
+            >
               {t("Players")}
             </Link>
           </div>
@@ -129,12 +145,20 @@ function Navbar(props) {
             <a className="navbar-link">{t("EventsNav")}</a>
             <div className="navbar-dropdown">
               <div className="navbar-item">
-                <Link to="/tournaments" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
+                <Link
+                  to="/tournaments"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
                   {t("Tournament.Tournaments")}
                 </Link>
               </div>
               <div className="navbar-item">
-                <Link to="/events" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
+                <Link
+                  to="/events"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
                   {t("Events.Name")}
                 </Link>
               </div>
@@ -144,12 +168,20 @@ function Navbar(props) {
             <a className="navbar-link">{t("About")}</a>
             <div className="navbar-dropdown">
               <div className="navbar-item">
-                <Link to="/stats" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
+                <Link
+                  to="/stats"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
                   {t("Statistics")}
                 </Link>
               </div>
               <div className="navbar-item">
-                <Link to="/news" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
+                <Link
+                  to="/news"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
                   {t("News")}
                   {newsLastSeen >= maxNews ? null : (
                     <span className="icon highlight">
@@ -160,7 +192,11 @@ function Navbar(props) {
                 </Link>
               </div>
               <div className="navbar-item">
-                <Link to="/about" className="navbar-item" onClick={() => updateBurgerExpanded(false)}>
+                <Link
+                  to="/about"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
                   {t("About")}
                 </Link>
               </div>

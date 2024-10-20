@@ -42,29 +42,31 @@ function Board({
       <div className="level">
         <div className="level-left">
           <div className="level-item">
-            <div className="control">
-              <button
-                className="button is-small apButton"
-                onClick={() => setRefresh((val) => val + 1)}
-                title="Trigger a refresh"
-              >
-                <span className="icon">
-                  <i className="fa fa-refresh"></i>
-                </span>
-              </button>
-            </div>
-          </div>
-          <div className="level-item">
-            <div className="control">
-              <button
-                className={`button is-small apButton${locked ? " faded" : ""}`}
-                onClick={() => setLocked((val) => !val)}
-                title="Triggers a refresh every 60 seconds for 30 minutes or until you click the button again or leave the page"
-              >
-                <span className="icon">
-                  <i className="fa fa-clock-o"></i>
-                </span>
-              </button>
+            <div className="field is-grouped">
+              <div className="control">
+                <button
+                  className="button is-small apButton"
+                  onClick={() => setRefresh((val) => val + 1)}
+                  title="Trigger a refresh"
+                >
+                  <span className="icon">
+                    <i className="fa fa-refresh"></i>
+                  </span>
+                </button>
+              </div>
+              <div className="control">
+                <button
+                  className={`button is-small apButton${
+                    locked ? " faded" : ""
+                  }`}
+                  onClick={() => setLocked((val) => !val)}
+                  title="Triggers a refresh every 60 seconds for 30 minutes or until you click the button again or leave the page"
+                >
+                  <span className="icon">
+                    <i className="fa fa-clock-o"></i>
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
