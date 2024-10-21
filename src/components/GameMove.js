@@ -169,9 +169,11 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("stacking-expanding");
   let newchat = false;
   if (me !== undefined) {
-    const meGame = me.games.find((g) => g.id === game0.id);
-    if (meGame !== undefined) {
-      newchat = (meGame.lastChat || 0) > (meGame.seen || 0);
+    if (me.games !== undefined && me.games !== null && Array.isArray(me.games)) {
+        const meGame = me.games.find((g) => g.id === game0.id);
+        if (meGame !== undefined) {
+          newchat = (meGame.lastChat || 0) > (meGame.seen || 0);
+        }
     }
   }
   game0.hasNewChat = newchat;
