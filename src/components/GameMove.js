@@ -3676,7 +3676,7 @@ function GameMove(props) {
     );
   } else {
     reportError(
-      `Message: ${errorMessageRef.current}, game: ${JSON.stringify(
+      `Message: ${errorMessageRef.current}, url: ${window.location.href}, game: ${JSON.stringify(
         game
       )}, state: ${
         explorationRef.current && focus
