@@ -168,7 +168,7 @@ function setupGame(
   game0.stackExpanding =
     info.flags !== undefined && info.flags.includes("stacking-expanding");
   let newchat = false;
-  if (me !== undefined) {
+  if (me !== undefined && me !== null) {
     if (me.games !== undefined && me.games !== null && Array.isArray(me.games)) {
         const meGame = me.games.find((g) => g.id === game0.id);
         if (meGame !== undefined) {
