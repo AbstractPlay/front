@@ -1,1 +1,16 @@
-{}
+{
+    "AnnotationLevel": "你希望将这个选择应用在哪里？",
+    "BoardSettings": "更改游戏面板设置",
+    "buttons": {
+        "takebutton": "按下按钮"
+    },
+    "categories": {
+        "board>connect>hex": {
+            "description": "细胞之间以六边形相连"
+        }
+    },
+    "404": "网页未找到",
+    "and": "和",
+    "Accepted": "同意！",
+    "Cancel": "取消"
+}
