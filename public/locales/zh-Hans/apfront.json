@@ -6,11 +6,60 @@
     },
     "categories": {
         "board>connect>hex": {
-            "description": "细胞之间以六边形相连"
+            "description": "以六边形连接的棋盘",
+            "full": "棋盘> 类型 > 六边形"
+        },
+        "components>simple": {
+            "tag": "C. 简单",
+            "full": "组件 > 简单"
+        },
+        "board>shape>tri": {
+            "tag": "形状：其他"
+        },
+        "components>dice": {
+            "description": "玩骰子",
+            "full": "组件>骰子"
+        },
+        "components>poly": {
+            "full": "构成部分1:多米诺",
+            "description": "用多米诺骨牌进行游戏",
+            "tag": "C类：多米诺骨牌"
+        },
+        "board": {
+            "description": "描述棋盘的属性",
+            "full": "棋盘",
+            "tag": "棋盘"
+        },
+        "board>3d": {
+            "description": "这是一个3D棋盘",
+            "full": "棋盘> 3D",
+            "tag": "棋盘：3D"
+        },
+        "board>connect": {
+            "description": "描述棋盘格子间的连接方式",
+            "tag": "棋盘连接方式"
+        },
+        "board>connect>other": {
+            "full": "棋盘> 类型> 其他"
+        },
+        "components>piecepack": {
+            "description": "通过Piecepack游玩",
+            "full": "组件 > Piecepack"
+        },
+        "components>pyramids": {
+            "description": "玩鲁尼金字塔",
+            "full": "组件>鲁尼金字塔",
+            "tag": "C类：鲁尼金字塔"
         }
     },
-    "404": "网页未找到",
+    "404": "啊哦，网页出现了一点小问题（404）",
     "and": "和",
     "Accepted": "同意！",
-    "Cancel": "取消"
+    "Cancel": "取消",
+    "ChallengeResponseComment": "评论",
+    "YourMove": "你的回合",
+    "About": "关于我们的网站",
+    "Accept": "接受",
+    "CanPie": "该玩家可以选择调换位置。",
+    "AcceptDraw": "接受和棋"
 }
