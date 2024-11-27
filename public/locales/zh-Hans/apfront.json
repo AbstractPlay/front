@@ -7,7 +7,8 @@
     "categories": {
         "board>connect>hex": {
             "description": "以六边形连接的棋盘",
-            "full": "棋盘> 类型 > 六边形"
+            "full": "棋盘> 类型 > 六边形",
+            "tag": "Connect: /六角棋"
         },
         "components>simple": {
             "tag": "C. 简单",
@@ -37,10 +38,13 @@
         },
         "board>connect": {
             "description": "描述棋盘格子间的连接方式",
-            "tag": "棋盘连接方式"
+            "tag": "棋盘连接方式",
+            "full": "棋盘类型"
         },
         "board>connect>other": {
-            "full": "棋盘> 类型> 其他"
+            "full": "棋盘> 类型> 其他",
+            "description": "棋格以一种独特的方式相互连接",
+            "tag": "连接：其他类型"
         },
         "components>piecepack": {
             "description": "通过Piecepack游玩",
@@ -50,6 +54,25 @@
             "description": "玩鲁尼金字塔",
             "full": "组件>鲁尼金字塔",
             "tag": "C类：鲁尼金字塔"
+        },
+        "board>connect>pent": {
+            "description": "棋盘以五边形的方式相互连接",
+            "full": "棋盘>类型>五边形棋盘"
+        },
+        "board>connect>rect": {
+            "description": "棋格可以横竖斜着连",
+            "full": "棋盘 > 类型 > 矩形",
+            "tag": "连接：矩形"
+        },
+        "board>connect>snub": {
+            "description": "棋格按照截角正方形阵列相互连接",
+            "full": "棋盘布局>连接类型>截角正方形",
+            "tag": "连接：矩形"
+        },
+        "board>dynamic": {
+            "description": "棋盘可动态扩展",
+            "full": "棋盘类型> 动态",
+            "tag": "棋盘：动态"
         }
     },
     "404": "啊哦，网页出现了一点小问题（404）",
@@ -61,5 +84,7 @@
     "About": "关于我们的网站",
     "Accept": "接受",
     "CanPie": "该玩家可以选择调换位置。",
-    "AcceptDraw": "接受和棋"
+    "AcceptDraw": "接受和棋",
+    "Annotate": "显示上一步",
+    "AvailableGames": "可用的游戏"
 }
