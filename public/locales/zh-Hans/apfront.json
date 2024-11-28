@@ -73,6 +73,43 @@
             "description": "棋盘可动态扩展",
             "full": "棋盘类型> 动态",
             "tag": "棋盘：动态"
+        },
+        "board>mancala": {
+            "description": "在传统曼卡拉风格的棋盘上玩",
+            "full": "棋盘类型>曼卡拉",
+            "tag": "棋盘类型：曼卡拉"
+        },
+        "board>none": {
+            "full": "棋盘>无需棋盘",
+            "tag": "棋盘：无需棋盘"
+        },
+        "board>other": {
+            "description": "独一无二的棋盘",
+            "full": "这个棋盘很独特",
+            "tag": "棋盘类型：其他"
+        },
+        "board>shape": {
+            "description": "描述棋盘的形状",
+            "full": "棋盘>形状",
+            "tag": "棋盘形状"
+        },
+        "board>shape>circle": {
+            "description": "这个棋盘是圆形的",
+            "full": "棋盘>形状>圆形",
+            "tag": "形状：圆形"
+        },
+        "board>shape>hex": {
+            "description": "棋盘是六边形的",
+            "full": "棋盘>形状>六边形",
+            "tag": "形状：六角形"
+        },
+        "board>shape>oct": {
+            "description": "这个棋盘的形状是八边形",
+            "full": "棋盘>形状>八边形",
+            "tag": "形状：八边形"
+        },
+        "board>shape>other": {
+            "description": "这个棋盘有独特的设计"
         }
     },
     "404": "啊哦，网页出现了一点小问题（404）",
