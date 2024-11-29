@@ -1531,8 +1531,6 @@ function GameMove(props) {
 
   useEffect(() => {
     if (dbgame !== null) {
-      const exploration = explorationRef.current;
-      const foc = cloneDeep(focus);
       const game = dbgame;
       setupGame(
         game,
@@ -1552,18 +1550,6 @@ function GameMove(props) {
         globalMe?.settings?.[game.metaGame]?.display,
         navigate
       );
-      if (exploration !== null) {
-        for (let i = 0; i < explorationRef.current.length; i++) {
-          // The following checks might be overkill, but I'm not sure about all the cases that might trigger this useEffect. 
-          // I mostly want to copy exploration for the case where the display settings were changed (which changes globalMe which triggers this useEffect).
-          if (exploration[i] && explorationRef.current[i].move === exploration[i].move && explorationRef.current[i].toMove === exploration[i].toMove) {
-            explorationRef.current[i].children = exploration[i].children;
-          } else {
-            break;
-          }
-        }
-        handleGameMoveClick(foc);
-      }
       processNewSettings(
         gameRef.current.me > -1
           ? game.players.find((p) => p.id === globalMe.id).settings
