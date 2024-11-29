@@ -406,13 +406,11 @@ th .player {
 .playerImage {
   height: 0.8rem;
   width: 0.8rem;
-  min-width: 0.8rem;
 }
 
 .toMoveImage {
   height: 1.15rem;
   width: 1.15rem;
-  min-width: 1.15rem;
 }
 
 /* Colours the "board state" indicator */
