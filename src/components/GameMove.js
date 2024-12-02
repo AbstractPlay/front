@@ -481,7 +481,7 @@ function mergeExistingExploration(moveNum, cur_exploration, exploration) {
   let subtree = undefined;
   moveNum++;
   while (true) {
-    let move = cur_exploration[moveNum].move
+    let move = exploration[moveNum].move
       .toLowerCase()
       .replace(/\s+/g, "");
     subtree = cur_exploration.children.find(
