@@ -135,7 +135,8 @@
             "description": "每个玩家有两种颜色的棋"
         },
         "components>simple>2c": {
-            "description": "每个玩家会获得两种颜色"
+            "description": "每个玩家会获得两种颜色",
+            "full": "组件<简单<两种颜色"
         }
     },
     "404": "啊哦，网页出现了一点小问题（404）",
@@ -149,5 +150,6 @@
     "CanPie": "该玩家可以选择调换位置。",
     "AcceptDraw": "接受和棋",
     "Annotate": "显示上一步",
-    "AvailableGames": "可用的游戏"
+    "AvailableGames": "可用的游戏",
+    "YourGames": "你的游戏"
 }
