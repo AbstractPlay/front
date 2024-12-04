@@ -536,7 +536,7 @@ function Me(props) {
             <button
               className="button is-small apButton"
               onClick={() => setRefresh((val) => val + 1)}
-              title="Trigger a refresh"
+              title={t("TriggerRefresh")}
             >
               <span className="icon">
                 <i className="fa fa-refresh"></i>

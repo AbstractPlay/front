@@ -1555,7 +1555,7 @@ function GameMove(props) {
       );
       if (exploration !== null) {
         let ok = explorationRef.current.nodes.length === exploration.length;
-        for (let i = 0; i < explorationRef.current.nodes.length; i++) {
+        for (let i = 0; ok && i < explorationRef.current.nodes.length; i++) {
           if (exploration[i].state !== explorationRef.current.nodes[i].state) {
             ok = false;
             break;
