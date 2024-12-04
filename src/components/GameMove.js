@@ -315,18 +315,18 @@ function setupGame(
     if (tmpEngine.stack.length === 0) break;
     tmpEngine.load();
   }
-  explorationRef.current = history;
+  explorationRef.current = {gameID: game0.id, nodes: history};
   let focus0 = { moveNumber: history.length - 1, exPath: [] };
   focus0.canExplore = canExploreMove(
     gameRef.current,
-    explorationRef.current,
+    explorationRef.current.nodes,
     focus0
   );
   setCanPublish(game0, explorer, me, publishSetter);
   focusSetter(focus0);
   console.log(`(setupGame) ABOUT TO RERENDER! Display setting: ${display}`);
   renderrepSetter(render);
-  setURL(explorationRef.current, focus0, game0, navigate);
+  setURL(explorationRef.current.nodes, focus0, game0, navigate);
 }
 
 function mergeExploration(
@@ -477,21 +477,20 @@ function fixMoveOutcomes(exploration, moveNumber) {
 }
 
 // after you submit a move, move the subtree of that explored move to the actual move.
-function mergeExistingExploration(moveNum, exploration, explorationRef) {
+function mergeExistingExploration(moveNum, cur_exploration, exploration) {
   let subtree = undefined;
   moveNum++;
   while (true) {
-    let move = explorationRef.current[moveNum].move
+    let move = exploration[moveNum].move
       .toLowerCase()
       .replace(/\s+/g, "");
-    subtree = exploration.children.find(
+    subtree = cur_exploration.children.find(
       (e) => e.move.toLowerCase().replace(/\s+/g, "") === move
     );
     if (subtree !== undefined) {
-      exploration = subtree;
       moveNum++;
-      if (moveNum === explorationRef.current.length) {
-        explorationRef.current[explorationRef.current.length - 1].children =
+      if (moveNum === exploration.length) {
+        exploration[exploration.length - 1].children =
           subtree.children;
         break;
       }
@@ -706,7 +705,7 @@ function doView(
   game,
   move,
   explorer,
-  explorationRef,
+  exploration,
   focus,
   errorMessageRef,
   errorSetter,
@@ -720,7 +719,7 @@ function doView(
   settings,
   navigate
 ) {
-  let node = getFocusNode(explorationRef.current, focus);
+  let node = getFocusNode(exploration, focus);
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
   let partialMove = false;
   if (move.valid && move.complete < 1 && move.canrender === true)
@@ -762,7 +761,7 @@ function doView(
           !game.gameOver ||
           !gameEngineTmp.sameMove(
             m,
-            explorationRef.current[newfocus.moveNumber + 1].move
+            exploration[newfocus.moveNumber + 1].move
           )
         ) {
           let pos = node.AddChild(m, gameEngineTmp);
@@ -770,7 +769,7 @@ function doView(
           node = node.children[pos];
         } else {
           newfocus = { moveNumber: newfocus.moveNumber + 1, exPath: [] };
-          node = getFocusNode(explorationRef.current, newfocus);
+          node = getFocusNode(exploration, newfocus);
         }
         m = moves[0];
         gameEngineTmp.move(m, {
@@ -809,16 +808,16 @@ function doView(
         newfocus.exPath.length === 0 &&
         gameEngineTmp.sameMove(
           m,
-          explorationRef.current[newfocus.moveNumber + 1].move
+          exploration[newfocus.moveNumber + 1].move
         )
       )
     ) {
       const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
       if (game.gameOver)
-        fixMoveOutcomes(explorationRef.current, newfocus.moveNumber + 1);
+        fixMoveOutcomes(exploration, newfocus.moveNumber + 1);
       newfocus.exPath.push(pos);
       saveExploration(
-        explorationRef.current,
+        exploration,
         newfocus.moveNumber + 1,
         game,
         me,
@@ -833,7 +832,7 @@ function doView(
     }
     newfocus.canExplore = canExploreMove(
       game,
-      explorationRef.current,
+      exploration,
       newfocus
     );
     focusSetter(newfocus);
@@ -869,7 +868,7 @@ function doView(
       game.players
     )
   );
-  setURL(explorationRef.current, newfocus, game, navigate);
+  setURL(exploration, newfocus, game, navigate);
 }
 
 function setURL(exploration, focus, game, navigate) {
@@ -965,7 +964,7 @@ function processNewMove(
   gameRef,
   movesRef,
   statusRef,
-  explorationRef,
+  exploration,
   errorMessageRef,
   partialMoveRenderRef,
   renderrepSetter,
@@ -986,7 +985,7 @@ function processNewMove(
       gameRef.current,
       newmove,
       explorer,
-      explorationRef,
+      exploration,
       focus,
       errorMessageRef,
       errorSetter,
@@ -1006,7 +1005,7 @@ function processNewMove(
     partialMoveRenderRef.current &&
     !newmove.move.startsWith(newmove.rendered)
   ) {
-    let node = getFocusNode(explorationRef.current, focus);
+    let node = getFocusNode(exploration, focus);
     let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     partialMoveRenderRef.current = false;
     setStatus(gameEngineTmp, gameRef.current, false, "", statusRef.current);
@@ -1133,8 +1132,9 @@ function GameMove(props) {
   const stackImage = useRef();
   const canvasRef = useRef();
   const gameRef = useRef(null);
-  // Array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
-  const explorationRef = useRef(null);
+  // gameID and nodes, an array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
+  // for completed games every node might hold a tree of explored moves.
+  const explorationRef = useRef({ gameID: null, nodes: null });
   // This is used for hover effects. Has the currently rendered engine state with partial moves, if any, applied.
   const engineRef = useRef(null);
   const [myMove, myMoveSetter] = useContext(MyTurnContext);
@@ -1531,6 +1531,9 @@ function GameMove(props) {
 
   useEffect(() => {
     if (dbgame !== null) {
+      // Make sure explorationRef is still for the current game (this DOES change e.g. when you click on Next Game)
+      const exploration = (explorationRef.current && explorationRef.current.gameID === dbgame.id) ? explorationRef.current.nodes : null;
+      const foc = cloneDeep(focus);
       const game = dbgame;
       setupGame(
         game,
@@ -1550,6 +1553,21 @@ function GameMove(props) {
         globalMe?.settings?.[game.metaGame]?.display,
         navigate
       );
+      if (exploration !== null) {
+        let ok = explorationRef.current.nodes.length === exploration.length;
+        for (let i = 0; ok && i < explorationRef.current.nodes.length; i++) {
+          if (exploration[i].state !== explorationRef.current.nodes[i].state) {
+            ok = false;
+            break;
+          }
+        }
+        if (ok) {
+          for (let i = 0; i < explorationRef.current.nodes.length; i++) {
+            explorationRef.current.nodes[i].children = exploration[i].children;
+          }
+          handleGameMoveClick(foc);
+        }
+      }
       processNewSettings(
         gameRef.current.me > -1
           ? game.players.find((p) => p.id === globalMe.id).settings
@@ -1743,7 +1761,7 @@ function GameMove(props) {
               query: "get_exploration",
               pars: {
                 game: gameID,
-                move: explorationRef.current.length,
+                move: explorationRef.current.nodes.length,
               },
             }),
           });
@@ -1763,7 +1781,7 @@ function GameMove(props) {
             });
             mergeExploration(
               gameRef.current,
-              explorationRef.current,
+              explorationRef.current.nodes,
               data,
               globalMe,
               errorSetter,
@@ -1799,16 +1817,16 @@ function GameMove(props) {
             }
             return d;
           });
-          mergePublicExploration(gameRef.current, explorationRef.current, data);
+          mergePublicExploration(gameRef.current, explorationRef.current.nodes, data);
           fixMoveOutcomes(
-            explorationRef.current,
-            explorationRef.current.length - 1
+            explorationRef.current.nodes,
+            explorationRef.current.nodes.length - 1
           );
           if (moveNumberParam) {
             const moveNum = parseInt(moveNumberParam, 10);
             let exPath = [];
             if (nodeidParam) {
-              exPath = explorationRef.current[moveNum].findNode(nodeidParam);
+              exPath = explorationRef.current.nodes[moveNum].findNode(nodeidParam);
             }
             handleGameMoveClick({ moveNumber: moveNum, exPath });
           } else {
@@ -1876,16 +1894,16 @@ function GameMove(props) {
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {
     // console.log("foc = ", foc);
-    let node = getFocusNode(explorationRef.current, foc);
+    let node = getFocusNode(explorationRef.current.nodes, foc);
     if (
       !(isExplorer(explorer, globalMe) && game.canExplore) &&
-      foc.moveNumber === explorationRef.current.length - 1
+      foc.moveNumber === explorationRef.current.nodes.length - 1
     ) {
       node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variation.
     }
     let engine = GameFactory(game.metaGame, node.state);
     partialMoveRenderRef.current = false;
-    foc.canExplore = canExploreMove(game, explorationRef.current, foc);
+    foc.canExplore = canExploreMove(game, explorationRef.current.nodes, foc);
     if (foc.canExplore && !game.noMoves) {
       movesRef.current = engine.moves();
     }
@@ -1903,12 +1921,12 @@ function GameMove(props) {
         gameRef.current.players
       )
     );
-    setURL(explorationRef.current, foc, game, navigate);
+    setURL(explorationRef.current.nodes, foc, game, navigate);
     const isPartialSimMove =
       gameRef.current.simultaneous &&
       (foc.exPath.length === 1 ||
         (foc.exPath.length === 0 &&
-          foc.moveNumber === explorationRef.current.length - 1 &&
+          foc.moveNumber === explorationRef.current.nodes.length - 1 &&
           !gameRef.current.canSubmit));
     setStatus(engine, gameRef.current, isPartialSimMove, "", statusRef.current);
     if (game.simultaneous) {
@@ -1930,10 +1948,10 @@ function GameMove(props) {
   function handleReset() {
     if (
       focus.moveNumber + focus.exPath.length !==
-      explorationRef.current.length - 1
+      explorationRef.current.nodes.length - 1
     ) {
       handleGameMoveClick({
-        moveNumber: explorationRef.current.length - 1,
+        moveNumber: explorationRef.current.nodes.length - 1,
         exPath: [],
       });
     }
@@ -1942,7 +1960,7 @@ function GameMove(props) {
 
   function handleToSubmit() {
     handleGameMoveClick({
-      moveNumber: explorationRef.current.length - 1,
+      moveNumber: explorationRef.current.nodes.length - 1,
       exPath: [focus.exPath[0]],
     });
     populateChecked(gameRef, engineRef, t, inCheckSetter);
@@ -1984,7 +2002,7 @@ function GameMove(props) {
 
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
-    let node = getFocusNode(explorationRef.current, focus);
+    let node = getFocusNode(explorationRef.current.nodes, focus);
     let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     let result;
     if (gameRef.current.simultaneous)
@@ -2001,7 +2019,7 @@ function GameMove(props) {
       gameRef,
       movesRef,
       statusRef,
-      explorationRef,
+      explorationRef.current.nodes,
       errorMessageRef,
       partialMoveRenderRef,
       renderrepSetter,
@@ -2034,7 +2052,7 @@ function GameMove(props) {
       gameRef,
       movesRef,
       statusRef,
-      explorationRef,
+      explorationRef.current.nodes,
       errorMessageRef,
       partialMoveRenderRef,
       renderrepSetter,
@@ -2061,7 +2079,7 @@ function GameMove(props) {
 
     function boardClick(row, col, piece) {
       // console.log(`boardClick:(${row},${col},${piece})`);
-      let node = getFocusNode(explorationRef.current, focusRef.current);
+      let node = getFocusNode(explorationRef.current.nodes, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous
         ? gameEngineTmp.handleClickSimultaneous(
@@ -2081,7 +2099,7 @@ function GameMove(props) {
         gameRef,
         movesRef,
         statusRef,
-        explorationRef,
+        explorationRef.current.nodes,
         errorMessageRef,
         partialMoveRenderRef,
         renderrepSetter,
@@ -2361,12 +2379,12 @@ function GameMove(props) {
   };
 
   const handleMark = (mark) => {
-    let node = getFocusNode(explorationRef.current, focus);
+    let node = getFocusNode(explorationRef.current.nodes, focus);
     node.SetOutcome(mark);
     if (gameRef.current.gameOver)
-      fixMoveOutcomes(explorationRef.current, focus.moveNumber);
+      fixMoveOutcomes(explorationRef.current.nodes, focus.moveNumber);
     saveExploration(
-      explorationRef.current,
+      explorationRef.current.nodes,
       focus.moveNumber + 1,
       game,
       globalMe,
@@ -2385,7 +2403,7 @@ function GameMove(props) {
       if (draw === "drawaccepted") {
         submitMove("", draw);
       } else {
-        let m = getFocusNode(explorationRef.current, focus).move;
+        let m = getFocusNode(explorationRef.current.nodes, focus).move;
         submitMove(m, draw);
       }
     } else {
@@ -2424,9 +2442,8 @@ function GameMove(props) {
       }
       myMoveSetter((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
       let game0 = JSON.parse(result.body);
-      const exploration =
-        explorationRef.current[explorationRef.current.length - 1];
-      const moveNum = explorationRef.current.length - 1;
+      const moveNum = explorationRef.current.nodes.length - 1;
+      const cur_exploration = explorationRef.current.nodes[moveNum];
       setupGame(
         game0,
         gameRef,
@@ -2446,7 +2463,7 @@ function GameMove(props) {
         navigate
       );
       if (gameRef.current.canExplore) {
-        mergeExistingExploration(moveNum, exploration, explorationRef);
+        mergeExistingExploration(moveNum, cur_exploration, explorationRef.current.nodes);
       }
       if (gameRef.current.customColours) {
         setupColors(settings, gameRef.current, globalMe, colourContext, {
@@ -2495,7 +2512,7 @@ function GameMove(props) {
               players,
               metaGame: metaIfComplete,
               comment: comment,
-              moveNumber: explorationRef.current.length - 1,
+              moveNumber: explorationRef.current.nodes.length - 1,
             },
           }),
         });
@@ -2512,10 +2529,10 @@ function GameMove(props) {
   const submitNodeComment = async (comment) => {
     // ignore blank comments
     if (comment.length > 0 && !/^\s*$/.test(comment)) {
-      const node = getFocusNode(explorationRef.current, focus);
+      const node = getFocusNode(explorationRef.current.nodes, focus);
       node.AddComment({ userId: globalMe.id, comment, timeStamp: Date.now() });
       saveExploration(
-        explorationRef.current,
+        explorationRef.current.nodes,
         focus.moveNumber + 1,
         game,
         globalMe,
@@ -2544,7 +2561,7 @@ function GameMove(props) {
     if (drawMessage === "drawaccepted") {
       submitMove("", drawMessage);
     } else {
-      const m = getFocusNode(explorationRef.current, focus).move;
+      const m = getFocusNode(explorationRef.current.nodes, focus).move;
       submitMove(m, drawMessage);
     }
   };
@@ -2560,7 +2577,7 @@ function GameMove(props) {
   };
 
   const handleDeleteExploration = () => {
-    if (getFocusNode(explorationRef.current, focus).children.length > 0) {
+    if (getFocusNode(explorationRef.current.nodes, focus).children.length > 0) {
       // only confirm if non leaf node
       showDeleteSubtreeConfirmSetter(true);
     } else {
@@ -2574,14 +2591,14 @@ function GameMove(props) {
 
   const handleDeleteSubtreeConfirmed = async () => {
     showDeleteSubtreeConfirmSetter(false);
-    let node = getFocusNode(explorationRef.current, focus);
+    let node = getFocusNode(explorationRef.current.nodes, focus);
     node.DeleteNode();
     let foc = cloneDeep(focus);
     foc.exPath.pop();
     if (gameRef.current.gameOver)
-      fixMoveOutcomes(explorationRef.current, focus.moveNumber);
+      fixMoveOutcomes(explorationRef.current.nodes, focus.moveNumber);
     saveExploration(
-      explorationRef.current,
+      explorationRef.current.nodes,
       focus.moveNumber + 1,
       game,
       globalMe,
@@ -2683,7 +2700,7 @@ function GameMove(props) {
     let focus0 = cloneDeep(focus);
     focus0.canExplore = canExploreMove(
       gameRef.current,
-      explorationRef.current,
+      explorationRef.current.nodes,
       focus0
     );
     if (
@@ -2692,13 +2709,13 @@ function GameMove(props) {
       !game.noMoves &&
       (game.canSubmit || (!game.simultaneous && game.numPlayers === 2))
     ) {
-      let node = getFocusNode(explorationRef.current, focus);
+      let node = getFocusNode(explorationRef.current.nodes, focus);
       const engine = GameFactory(game.metaGame, node.state);
       if (game.simultaneous) movesRef.current = engine.moves(game.me + 1);
       else movesRef.current = engine.moves();
     }
     focusSetter(focus0);
-    setCanPublish(game, explorationRef.current, globalMe, canPublishSetter);
+    setCanPublish(game, explorationRef.current.nodes, globalMe, canPublishSetter);
     explorerSetter(true);
   };
 
@@ -2763,7 +2780,7 @@ function GameMove(props) {
             });
             mergePrivateExploration(
               gameRef.current,
-              explorationRef.current,
+              explorationRef.current.nodes,
               data,
               globalMe,
               errorSetter,
@@ -2866,11 +2883,11 @@ function GameMove(props) {
       if (game.simultaneous) {
         toMove = game.toMove; // will only be used at current position
       } else {
-        toMove = getFocusNode(explorationRef.current, focus).toMove;
+        toMove = getFocusNode(explorationRef.current.nodes, focus).toMove;
       }
       if (game.gameOver && focus.canExplore) {
         exploringCompletedGame = true;
-        nodeComments = getFocusNode(explorationRef.current, focus).comment;
+        nodeComments = getFocusNode(explorationRef.current.nodes, focus).comment;
       }
     }
     return (
@@ -3048,7 +3065,7 @@ function GameMove(props) {
                             game={gameRef.current}
                             moves={movesRef.current}
                             engine={engineRef.current}
-                            exploration={explorationRef.current}
+                            exploration={explorationRef.current.nodes}
                             focus={focus}
                             submitting={submitting}
                             forceUndoRight={true}
@@ -3116,7 +3133,7 @@ function GameMove(props) {
                         <GameMoves
                           focus={focus}
                           game={game}
-                          exploration={explorationRef.current}
+                          exploration={explorationRef.current.nodes}
                           noExplore={
                             globalMe?.settings?.all?.exploration === -1
                           }
@@ -3178,7 +3195,7 @@ function GameMove(props) {
                     game={gameRef.current}
                     engine={engineRef.current}
                     moves={movesRef.current}
-                    exploration={explorationRef.current}
+                    exploration={explorationRef.current.nodes}
                     focus={focus}
                     submitting={submitting}
                     forceUndoRight={false}
@@ -3275,7 +3292,7 @@ function GameMove(props) {
                   <GameMoves
                     focus={focus}
                     game={game}
-                    exploration={explorationRef.current}
+                    exploration={explorationRef.current.nodes}
                     noExplore={globalMe?.settings?.all?.exploration === -1}
                     handleGameMoveClick={handleGameMoveClick}
                     getFocusNode={getFocusNode}
@@ -3482,13 +3499,13 @@ function GameMove(props) {
               ) : (
                 <Fragment>
                   <ClipboardCopy
-                    copyText={getFocusNode(explorationRef.current, focus).state}
+                    copyText={getFocusNode(explorationRef.current.nodes, focus).state}
                   />
                   <div className="field">
                     <div className="control">
                       <a
                         href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                          getFocusNode(explorationRef.current, focus).state
+                          getFocusNode(explorationRef.current.nodes, focus).state
                         )}`}
                         download="AbstractPlay-Debug.json"
                       >
@@ -3680,7 +3697,7 @@ function GameMove(props) {
         game
       )}, state: ${
         explorationRef.current && focus
-          ? getFocusNode(explorationRef.current, focus).state
+          ? getFocusNode(explorationRef.current.nodes, focus).state
           : ""
       }`
     );

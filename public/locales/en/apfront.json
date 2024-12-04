@@ -754,6 +754,7 @@
         "DivisionWinner": "Winner: {{winner}}",
         "Withdraw": "Withdraw"
     },
+    "TriggerRefresh": "Trigger a refresh",
     "TwoPlayersChallengeDescription": "You challenged {{other}} to a game of {{game}}",
     "UnratedGame": "This will be an unrated game.",
     "UpdateNote": "Update game note",
