@@ -118,6 +118,11 @@
             "full": "Components > Dice",
             "tag": "C: Dice"
         },
+        "components>decktet": {
+            "description": "Played with a Decktet deck",
+            "full": "Components > Decktet",
+            "tag": "C: Decktet"
+        },
         "components>piecepack": {
             "description": "Played with Piecepack",
             "full": "Components > Piecepack",
