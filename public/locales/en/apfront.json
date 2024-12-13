@@ -328,6 +328,11 @@
             "full": "Mechanics > Enclose",
             "tag": "M: Enclose"
         },
+        "mechanic>hidden": {
+            "description": "Game includes hidden information",
+            "full": "Mechanics > Hidden Information",
+            "tag": "M: Hidden"
+        },
         "mechanic>merge": {
             "description": "Pieces merge or split apart",
             "full": "Mechanics > Merge/Split",
