@@ -366,7 +366,6 @@ function mergeExploration(
       );
     }
   } else if (data[2] && data[2].move === moveNumber - 2) {
-    console.log("Merging 2 moves back");
     let node = exploration[moveNumber - 2];
     let gameEngine = GameFactory(game.metaGame, node.state);
     // subtree of the move I chose
@@ -478,32 +477,21 @@ function fixMoveOutcomes(exploration, moveNumber) {
 }
 
 // after you submit a move, move the subtree of that explored move to the actual move.
-function mergeExistingExploration(moveNum, cur_exploration, exploration, game = undefined, useSameMove = false) {
+function mergeExistingExploration(moveNum, cur_exploration, exploration) {
   let subtree = undefined;
   moveNum++;
   while (true) {
     let move = exploration[moveNum].move
       .toLowerCase()
       .replace(/\s+/g, "");
-    let subtree;
-    if (useSameMove) {
-      let gameEngine = GameFactory(game.metaGame, exploration[moveNum - 1].state);
-      subtree = cur_exploration.children.find(
-        (e) => gameEngine.sameMove(move, e.move)
-      );
-    } else {
-      subtree = cur_exploration.children.find(
-        (e) => e.move.toLowerCase().replace(/\s+/g, "") === move
-      );
-    }
+    subtree = cur_exploration.children.find(
+      (e) => e.move.toLowerCase().replace(/\s+/g, "") === move
+    );
     if (subtree !== undefined) {
       moveNum++;
       if (moveNum === exploration.length) {
         exploration[exploration.length - 1].children =
           subtree.children;
-        // TODO: Don't we need to save the exploration to DB here? In particular if a whole bunch of auto moves were triggered. Also if
-        // we save here, then we only need to fetch the previous move's exploration when the user looks at his game. I think existing exploration after a
-        // set of auto moves will be lost if we don't save. Maybe test with Zola, it can trigger many auto moves near the end of the game.
         break;
       }
     } else {
@@ -1461,15 +1449,7 @@ function GameMove(props) {
         errorSetter(true);
       }
     }
-
-    // Don't fetch data if user is refreshing a completed game. No point in fetching the game again, the only thing that could have changed is public exploration
-    if (explorationRef.current.gameID === gameID && game && game.gameOver) {
-      if (focus?.canExplore) {
-        explorationFetchedSetter(false);
-      }
-    } else {
-        fetchData();
-    }
+    fetchData();
   }, [
     gameID,
     metaGame,
@@ -1552,14 +1532,7 @@ function GameMove(props) {
   useEffect(() => {
     if (dbgame !== null) {
       // Make sure explorationRef is still for the current game (this DOES change e.g. when you click on Next Game)
-      let exploration = null;
-      if (explorationRef.current !== null) {
-        if (explorationRef.current.gameID === dbgame.id) {
-          exploration = explorationRef.current.nodes;
-        } else {
-          explorationFetchedSetter(false);
-        }
-      }
+      const exploration = (explorationRef.current && explorationRef.current.gameID === dbgame.id) ? explorationRef.current.nodes : null;
       const foc = cloneDeep(focus);
       const game = dbgame;
       setupGame(
@@ -1581,24 +1554,18 @@ function GameMove(props) {
         navigate
       );
       if (exploration !== null) {
-        if (explorationRef.current.nodes.length === exploration.length) {
-          let ok = true;
-          for (let i = 0; ok && i < explorationRef.current.nodes.length; i++) {
-            if (exploration[i].state !== explorationRef.current.nodes[i].state) {
-              ok = false;
-            }
+        let ok = explorationRef.current.nodes.length === exploration.length;
+        for (let i = 0; ok && i < explorationRef.current.nodes.length; i++) {
+          if (exploration[i].state !== explorationRef.current.nodes[i].state) {
+            ok = false;
+            break;
           }
-          if (ok) {
-            for (let i = 0; i < explorationRef.current.nodes.length; i++) {
-              explorationRef.current.nodes[i].children = exploration[i].children;
-            }
-            handleGameMoveClick(foc);
+        }
+        if (ok) {
+          for (let i = 0; i < explorationRef.current.nodes.length; i++) {
+            explorationRef.current.nodes[i].children = exploration[i].children;
           }
-          // if we got here from the "trigger a refresh" button, we should probably also fetch exploration in case the user is exploring on more than one device
-          explorationFetchedSetter(false);
-        } else if (explorationRef.current.nodes.length === exploration.length + 1) {
-          // page refreshed and opponent moved
-          mergeExistingExploration(exploration.length - 1, exploration[exploration.length - 1], explorationRef.current.nodes, gameRef.current, true);
+          handleGameMoveClick(foc);
         }
       }
       processNewSettings(
@@ -1832,6 +1799,7 @@ function GameMove(props) {
 
     async function fetchPublicExploration() {
       explorationFetchedSetter(true);
+      console.log("fetching public exploration");
       var url = new URL(API_ENDPOINT_OPEN);
       url.searchParams.append("query", "get_public_exploration");
       url.searchParams.append("game", gameID);
