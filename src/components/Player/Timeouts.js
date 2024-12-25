@@ -26,7 +26,7 @@ function Timeouts({ order }) {
       }
       const toIndiv = summary.players.timeouts.filter(rec => rec.user === user.id);
       timeoutsSetter(toIndiv);
-      const toLatest = Math.max(...toIndiv.map(rec => rec.value));
+      const toLatest = Math.max(0, ...toIndiv.map(rec => rec.value));
       let count = 0;
       for (const rec of allRecs) {
         const datems = new Date(rec.header["date-end"]).getTime();
