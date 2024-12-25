@@ -146,7 +146,7 @@ function MyTurnTable({ games, fetching }) {
       columnHelper.accessor("timeRemaining", {
         header: "Time remaining",
         cell: (props) => (
-          <span class={props.row.original.clockHard ? `hardTime` : "softTime"}>
+          <span className={props.row.original.clockHard ? `hardTime` : "softTime"}>
             {showMilliseconds(props.getValue())}
           </span>
         ),
