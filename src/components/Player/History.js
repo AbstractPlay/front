@@ -47,7 +47,7 @@ function History({ handleChallenge }) {
             winner = {
               id: sortedResults[0].userid,
               name,
-              lastSeen: found.lastSeen,
+              lastSeen: found.lastSeen || 0,
             };
           }
           const opponents = rec.header.players

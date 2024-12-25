@@ -17,6 +17,7 @@ import Stars from "./Player/Stars";
 import Ratings from "./Player/Ratings";
 import Counts from "./Player/Counts";
 import Opponents from "./Player/Opponents";
+import Timeouts from "./Player/Timeouts";
 import Activity from "./Player/Activity";
 import History from "./Player/History";
 
@@ -30,6 +31,7 @@ const code2ele = new Map([
   ["counts", { component: Counts, name: "Play Counts" }],
   ["opps", { component: Opponents, name: "Opponents" }],
   ["activity", { component: Activity, name: "Activity" }],
+  ["timeouts", { component: Timeouts, name: "Timeouts" }],
   ["history", { component: History, name: "Game History" }],
 ]);
 
@@ -46,6 +48,7 @@ function Player() {
     "counts",
     "opps",
     "activity",
+    "timeouts",
     "history",
   ]);
 
