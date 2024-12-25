@@ -84,6 +84,31 @@ function SiteStats({ nav }) {
       <div>
         <div className="content">
           <p>
+            Total cumulative timeout rate is {(summary.timeoutRate).toLocaleString(undefined, {style: "percent", minimumFractionDigits:2})}.
+          </p>
+        </div>
+        <Plot
+          data={[
+            {
+              y: [...summary.histograms.timeouts].reverse(),
+              type: "bar",
+            },
+          ]}
+          config={{
+            responsive: true,
+          }}
+          layout={{
+            title: "Timeout rate per week",
+            xaxis: { title: "Week #" },
+            yaxis: { title: "Timeout rate" },
+            height: 500,
+          }}
+        />
+        <hr />
+      </div>
+      <div>
+        <div className="content">
+          <p>
             Games are counted in seven-day chunks from the date the script ran.
             The right-most bar is the most recent seven days. The left-most bar
             is the first week completed games were recorded.
