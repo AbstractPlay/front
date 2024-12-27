@@ -49,7 +49,7 @@ function Response({ order }) {
             {
               y: parsed.filter(n => n < 500),
               type: "box",
-              boxpoints: "suspectedoutliers",
+              boxpoints: false,
               orientation: "v",
               name: "Time to move (hours)",
               jitter: 0.3,
