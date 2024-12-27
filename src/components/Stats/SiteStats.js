@@ -192,7 +192,7 @@ function SiteStats({ nav }) {
             {
               y: summary.hoursPer.filter((x) => x <= 100),
               type: "box",
-              boxpoints: "False",
+              boxpoints: false,
               orientation: "v",
               name: "Hours per move",
               jitter: 0.3,
