@@ -20,10 +20,12 @@ import Opponents from "./Player/Opponents";
 import Timeouts from "./Player/Timeouts";
 import Activity from "./Player/Activity";
 import History from "./Player/History";
+import Response from "./Player/Response";
 
 export const ProfileContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
 export const AllRecsContext = createContext([null, () => []]);
+export const ResponsesContext = createContext([null, () => []]);
 
 const code2ele = new Map([
   ["stars", { component: Stars, name: "Starred Games" }],
@@ -32,6 +34,7 @@ const code2ele = new Map([
   ["opps", { component: Opponents, name: "Opponents" }],
   ["activity", { component: Activity, name: "Activity" }],
   ["timeouts", { component: Timeouts, name: "Timeouts" }],
+  ["response", { component: Response, name: "Response" }],
   ["history", { component: History, name: "Game History" }],
 ]);
 
@@ -42,6 +45,7 @@ function Player() {
   const [user, userSetter] = useState(null);
   const [summary, summarySetter] = useState(null);
   const [allRecs, allRecsSetter] = useState([]);
+  const [responses, responsesSetter] = useState([]);
   const [order, orderSetter] = useStorageState("player-profile-order", [
     "stars",
     "ratings",
@@ -49,6 +53,7 @@ function Player() {
     "opps",
     "activity",
     "timeouts",
+    "response",
     "history",
   ]);
 
@@ -91,10 +96,25 @@ function Player() {
   }, [user]);
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL(
+          `https://records.abstractplay.com/ttm/${user.id}.json`
+        );
+        const res = await fetch(url);
+        const result = await res.json();
+        responsesSetter(result);
+      } catch (error) {
+        responsesSetter([]);
+      }
+    }
+    fetchData();
+  }, [user]);
+
+  useEffect(() => {
     if (allUsers !== null) {
       const rec = allUsers.find((u) => u.id === userid);
       if (rec !== undefined && rec !== null) {
-        console.log(rec);
         userSetter(rec);
       } else {
         userSetter(null);
@@ -234,6 +254,7 @@ function Player() {
           <ProfileContext.Provider value={[user, userSetter]}>
             <SummaryContext.Provider value={[summary, summarySetter]}>
               <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>
+              <ResponsesContext.Provider value={[responses, responsesSetter]}>
                 <div className="columns is-multiline">
                   {order.map((code) => {
                     const obj = code2ele.get(code);
@@ -295,6 +316,7 @@ function Player() {
                     }
                   })}
                 </div>
+                </ResponsesContext.Provider>
               </AllRecsContext.Provider>
             </SummaryContext.Provider>
           </ProfileContext.Provider>
