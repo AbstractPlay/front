@@ -44,7 +44,7 @@ function Timeouts({ order }) {
 
   return (
     <>
-      <div class="content">
+      <div className="content">
         <p>Total number of timeouts: {timeouts.length.toLocaleString()}</p>
         {gamesSince === null ? null :
           <p>Games completed since last timeout: {gamesSince.toLocaleString()}</p>
