@@ -19,7 +19,7 @@ import {
 import { Amplify, Auth } from "aws-amplify";
 import Spinner from "../components/Spinner";
 import Welcome from "./Welcome";
-import GameMove from "../components/GameMove";
+import GameMoveWrapper from "../components/GameMoveWrapper";
 import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
@@ -263,7 +263,7 @@ function Bones(props) {
                           <Route path="/event/:eventid" element={<Event />} />
                           <Route
                             path="/move/:metaGame/:cbits/:gameID"
-                            element={<GameMove update={update} />}
+                            element={<GameMoveWrapper update={update} />}
                           />
                           <Route
                             path="/legal"
