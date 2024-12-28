@@ -13,7 +13,17 @@
         "pass": "Pass",
         "takebutton": "Take button",
         "acceptpie": "Play second",
-        "draw": "Claim draw"
+        "draw": "Claim draw",
+        "pigs": {
+            "back": "Move backward",
+            "forward": "Move forward",
+            "left": "Move forward left",
+            "right": "Move forward right",
+            "cw": "Rotate clockwise",
+            "ccw": "Rotate counterclockwise",
+            "fire": "Fire laser",
+            "hit": "Swing snout"
+        }
     },
     "Cancel": "Cancel",
     "CanPie": "This player has the option to switch seats.",
