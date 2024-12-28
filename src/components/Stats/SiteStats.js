@@ -100,7 +100,7 @@ function SiteStats({ nav }) {
           layout={{
             title: "Timeout rate per week",
             xaxis: { title: "Week #" },
-            yaxis: { title: "Timeout rate" },
+            yaxis: { title: "Timeout rate", fixedrange: true, range: [0, 1] },
             height: 500,
           }}
         />
