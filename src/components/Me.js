@@ -479,8 +479,8 @@ function Me(props) {
         localMyMove.sort((a, b) => {
           const recA = a.players.find((x) => x.id === globalMe.id);
           const recB = b.players.find((x) => x.id === globalMe.id);
-          const timeA = recA?.time || 0;
-          const timeB = recB?.time || 0;
+          const timeA = (recA?.time || 0) + a.lastMoveTime;
+          const timeB = (recB?.time || 0) + b.lastMoveTime;
           return timeA - timeB;
         });
       }
