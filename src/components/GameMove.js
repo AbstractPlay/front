@@ -2260,6 +2260,14 @@ function GameMove(props) {
       ) {
         return 0;
       }
+      if (
+        "renderer" in rep &&
+        rep.renderer !== undefined &&
+        rep.renderer === "isometric"
+      ) {
+        return 90;
+      }
+
       const info = gameinfo.get(metaGame);
       if (info === undefined) {
         return 0;
