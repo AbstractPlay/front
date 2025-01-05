@@ -115,6 +115,7 @@ function Player() {
     if (allUsers !== null) {
       const rec = allUsers.find((u) => u.id === userid);
       if (rec !== undefined && rec !== null) {
+        console.log(rec);
         userSetter(rec);
       } else {
         userSetter(null);
