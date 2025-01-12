@@ -159,7 +159,6 @@ function Bones(props) {
         const res = await fetch(url);
         const result = await res.json();
         usersSetter(result);
-        console.log(result);
       } catch (error) {
         usersSetter(null);
       }
