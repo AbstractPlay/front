@@ -210,7 +210,7 @@ function MoveEntry(props) {
         <div>
           {focus.canExplore ? (
             <Fragment>
-              {moves === null ? (
+              {moves === null || game.customRandom ? (
                 <NoMoves
                   engine={engine}
                   game={game}
