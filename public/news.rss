@@ -1,0 +1,2369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <atom:link href="https://play.abstractplay.com/news.rss" rel="self" type="application/rss+xml" />
+    <title>Abstract Play News</title>
+    <link>https://play.abstractplay.com/news</link>
+    <description>Abstract Play is a site that allows you to play abstract strategy board games against other players on the internet. These games are not real-time, meaning your opponent does not need to be online at the same time as you are. You can submit your move and come back later to see if your opponent has moved. We specialize in offbeat, perfect information games without any element of luck.</description>
+
+    <item>
+      <title>Announcement</title>
+      <description>Going to start moving announcements and bug-updates to this clean channel, just to make sure they can be seen. Thank you for your patience as we try to make the server more useful. Your suggestions are always welcome.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 26 May 2023 00:43:54 GMT</pubDate>
+      <guid isPermaLink="false">1111454634654060594</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Homeworlds:** Fixed a bug that kept some sacrifice moves from completing properly. Also tweaked some of the help text to be more...helpful. Also added a CATASTROPHE button. You can still click on the background of a system to trigger a catastrophe, but that wasn&amp;apos;t particularly intuitive. We remain committed to making things as intuitive as possible. Your feedback is warmly welcomed. The most consistent lesson of my professional life has been that what&amp;apos;s obvious to one person is likely not obvious to another!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 26 May 2023 02:02:58 GMT</pubDate>
+      <guid isPermaLink="false">1111474531597557871</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The issue with the Homeworlds click handler in Firefox is still being worked on. We at least know what&amp;apos;s causing it. Hopefully we can work around it. Firefox always does things differently!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 26 May 2023 02:03:22 GMT</pubDate>
+      <guid isPermaLink="false">1111474630809628724</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Homeworlds**: The click handler has been fixed to work with Firefox. Thank you for your patience! Fixes for Volcano power moves are forthcoming.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 26 May 2023 18:18:13 GMT</pubDate>
+      <guid isPermaLink="false">1111719961983983646</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Volcano: Power plays should now be clickable in Firefox. Hover should now correctly show the stack on the side even during partial moves (including power plays). The stash labels shouldn&amp;apos;t be getting truncated anymore. I had to clear my JavaScript cache for the change to show.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 26 May 2023 19:53:11 GMT</pubDate>
+      <guid isPermaLink="false">1111743861878952006</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Realm!** This is the first time we&amp;apos;ve added a game since going live, so let me explain how this works. If you want to help with the testing, please visit &amp;lt;https://play.dev.abstractplay.com&amp;gt; and create an account. (The user accounts, game records, ratings—everything—are completely separate from the production server.) Then start some games and intentionally try to break it! I will accept all challenges. Please report any issues. Once I&amp;apos;m comfortable the code is correct and stable, we&amp;apos;ll move it over to the production server. Thanks in advance for the help!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 29 May 2023 17:49:44 GMT</pubDate>
+      <guid isPermaLink="false">1112799957024514158</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Tagging @Nienna  and @Mobynostromo , who are, I believe, our resident Realm experts.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 29 May 2023 17:50:03 GMT</pubDate>
+      <guid isPermaLink="false">1112800036359778384</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Alien City!** The rules for this game can be a little confusing, and I would be shocked if I didn&amp;apos;t make some mistake somewhere. But my basic testing is showing things as working as I expect, which again, may not be correct 🙂 I would be grateful if Alien City lovers could dive in and do some testing on the Dev server, as described above. Thanks for the help!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 03 Jun 2023 23:04:29 GMT</pubDate>
+      <guid isPermaLink="false">1114691103673823272</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Tagging @Nienna , who formally requested I transfer the game.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 03 Jun 2023 23:04:41 GMT</pubDate>
+      <guid isPermaLink="false">1114691157780336690</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I notice it&amp;apos;s running a little slow in the live environment. It needn&amp;apos;t stop people from testing. It gets more responsive as the board fills up. I am working on efficiency.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 03 Jun 2023 23:43:50 GMT</pubDate>
+      <guid isPermaLink="false">1114701008392687646</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>This Homeworlds change is a tweak to the build command click handler. You can now click directly on the ship you wish to duplicate.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 04 Jun 2023 19:19:20 GMT</pubDate>
+      <guid isPermaLink="false">1114996834268610571</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Fanorona!** Suggested by @eykca and existing on SDG 1.0, it is now available for testing. Interested parties should create an account on the dev server (https://play.dev.abstractplay.com) and try to break it. I&amp;apos;ll accept all challenges. Thank you!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 07 Jun 2023 20:36:27 GMT</pubDate>
+      <guid isPermaLink="false">1116103403379118110</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**New game Realm now live!** Thank you to all our testers!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 08 Jun 2023 18:09:15 GMT</pubDate>
+      <guid isPermaLink="false">1116428746359066724</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Focus!** Interested parties should create an account on the dev server (https://play.dev.abstractplay.com) and try to break it. I&amp;apos;ll accept all challenges. Thank you!! (Tagging @dx  and @tommynomad , who requested the game.)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 08 Jun 2023 20:23:24 GMT</pubDate>
+      <guid isPermaLink="false">1116462505498255481</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ll note that I slightly altered the notation since SDG 1.0. When placing a piece from your hand, you prefix the cell with a plus sign (e.g., `+d4`).</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 08 Jun 2023 22:33:16 GMT</pubDate>
+      <guid isPermaLink="false">1116495187653439538</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I just got a suggestion for Zendo (thank you, @Benedek). I love Zendo, but it simply won&amp;apos;t work in the infrastructure we&amp;apos;ve built here. If I can come up with a way, I will. I promise. But let me take this opportunity (a) to point people to the excellent Zendo Discord channel (https://discord.gg/gdmwPMuTyb) and (b) to point people to the *synchronous*, live-play Zendo client that I wrote a little while back: GitHub (https://github.com/AbstractPlay/zendo), **playable version** (https://www.perlkonig.com/zendo/). Just thought I&amp;apos;d put that one to bed for now. But please continue to suggest games you love! I&amp;apos;m typing like a maniac over here, as the four new games being tested attest. Thanks for playing!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 08 Jun 2023 23:29:26 GMT</pubDate>
+      <guid isPermaLink="false">1116509323703615568</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Homeworlds has been fixed so you can trigger catastrophes at any point in your turn. I&amp;apos;ve done what testing I can, but Homeworlds is very complicated code. Let me know if something doesn&amp;apos;t work as expected.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 09 Jun 2023 22:00:36 GMT</pubDate>
+      <guid isPermaLink="false">1116849356943929395</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The Homeworlds click handler has been adjusted to make use of sacrifice actions simpler. If you have remaining actions of a particular colour, the move box will autofill with the appropriate keyword. Clicking the Pass button will correctly clear the partial entry. My testing shows things functioning as I expect, but again, this is complicated code. Let me know if something isn&amp;apos;t working as you expect. (Tagging @mneme, who indirectly gave me the idea for this change.)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 10 Jun 2023 17:57:00 GMT</pubDate>
+      <guid isPermaLink="false">1117150437964005436</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>We warmly welcome concrete suggestions on how to make the click handling and gameplay more intuitive for all the games, but especially the more complicated, multi-move ones like Homeworlds.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 10 Jun 2023 17:57:36 GMT</pubDate>
+      <guid isPermaLink="false">1117150592201130024</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Pulling Strings!** This one is a simultaneous action selection game where you pull strings along the outside edge of the board to manoeuvre five or more coins onto your home spaces. This is one of those &amp;quot;get into your opponent&amp;apos;s head&amp;quot; games that can be infuriating and fun at the same time. Please come join us on the dev server and help me make sure things are working as intended.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 12 Jun 2023 19:06:48 GMT</pubDate>
+      <guid isPermaLink="false">1117892780614766603</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>By way of reminder, the following games are in testing: Alien City, Fanorona, Focus, and now Pulling Strings. Thank you to our testers!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 12 Jun 2023 19:08:01 GMT</pubDate>
+      <guid isPermaLink="false">1117893088925462670</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Witch Stones!** The migration blitz continues. In this game, four types of pieces randomly fill a board, and players take turns removing stones and scoring points. First to 50 wins! Interested parties can join us on the dev server to try to break things. Thank you, testers!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 13 Jun 2023 22:08:45 GMT</pubDate>
+      <guid isPermaLink="false">1118300958066225213</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I have a soft goal of completing the SDG 1.0 migration and fully decommissioning it by the end of this year. I&amp;apos;m down to about a dozen games left that I think really should move over (I started with a list of 50), but I&amp;apos;ll seriously consider *any* SDG 1.0 game that someone explicitly requests. So if you have a favourite that you want to make sure survives, please use the `/suggest` command to have it added to the list.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 13 Jun 2023 22:12:21 GMT</pubDate>
+      <guid isPermaLink="false">1118301865138987058</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I pushed changes (hopefully fixes) to the Your Turn notification code, so I apologize for the double emails. I&amp;apos;m sure there&amp;apos;s still something not quite right, so please continue to report issues and I&amp;apos;ll see what I can track down. A reminder that you won&amp;apos;t get emails from us unless your email address was verified when you created your account. If you&amp;apos;re not getting emails at all, let me know in DM and I&amp;apos;ll see what we can track down. Thanks for your patience.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 14 Jun 2023 15:52:29 GMT</pubDate>
+      <guid isPermaLink="false">1118568656998252594</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>New, more compact Homeworlds renderer is being pushed to production as we speak. I am certain more tweaks will be needed, but I think it&amp;apos;s a solid enough improvement to roll out immediately. Nothing else has changed yet. Simplifying the click handler is the next step. I warmly welcome feedback on how to improve things further. Thank you! (Tagging @mneme , @hoembla , and @ManaT )</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 15 Jun 2023 15:06:36 GMT</pubDate>
+      <guid isPermaLink="false">1118919497022189578</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**New Homeworlds click handler now active.** Thank you all Homeworlds players, and in particular @mneme , for your concrete suggestions about how to improve the Homeworlds experience. A new click handler is now available alongside the old one. The old one only gets triggered if you&amp;apos;re entering moves in a combination of typing and clicking or if you&amp;apos;re continuing a string of sacrifice moves. Most moves, however, are now reduced to 1 to 3 clicks, as follows:
+```txt
+enemy -&amp;gt; ATTACK
+friendly &amp;gt; same friendly -&amp;gt; BUILD
+friendly &amp;gt; stash -&amp;gt; TRADE
+friendly &amp;gt; system -&amp;gt; MOVE
+friendly &amp;gt; VOID (the space between systems) &amp;gt; stash -&amp;gt; DISCOVER
+```
+
+The help text has been similarly updated. I&amp;apos;ve done a fair bit of testing, but there are always edge cases. Please let me know if you run into any trouble, and I remain open to further discussion on how to make things better. Thanks for playing with us!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 16 Jun 2023 00:26:11 GMT</pubDate>
+      <guid isPermaLink="false">1119060319482949713</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Some more Homeworlds adjustments:**
+- For non-Firefox browsers, the ships are a little closer together, to further minimize wasted horizontal space. If something weird happens in Firefox, please let me know in the #bugs channel.
+- The global stash area has been made a little smaller and a little more compact.
+- If you click the Catastrophe button, you now only have to click once to choose both the system and the colour. Just select a star or ship in the affected system of the matching colour. Help text has been updated.
+- The new click handler will now behave as expected if you&amp;apos;ve selected a friendly ship and then hit the Sacrifice button. The Pass button now works as expected as well.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 17 Jun 2023 18:44:07 GMT</pubDate>
+      <guid isPermaLink="false">1119699010203156501</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Because I can, I created a diagram generator for Homeworlds. For now, it&amp;apos;s available here: https://www.abstractplay.com/_tools/renderer/homeworlds.html. It takes text input like the following and produces the SVG. Maybe this will be useful to someone out there. If so, let me know and I&amp;apos;ll refine it further.
+```json
+{
+    &amp;quot;numPlayers&amp;quot;: 2,
+    &amp;quot;universe&amp;quot;: [
+        {
+            &amp;quot;owner&amp;quot;: &amp;quot;N&amp;quot;,
+            &amp;quot;stars&amp;quot;: [&amp;quot;G2&amp;quot;, &amp;quot;B1&amp;quot;],
+            &amp;quot;ships&amp;quot;: [&amp;quot;Y3N&amp;quot;]
+        },
+        {
+            &amp;quot;owner&amp;quot;: &amp;quot;S&amp;quot;,
+            &amp;quot;stars&amp;quot;: [&amp;quot;G3&amp;quot;, &amp;quot;R1&amp;quot;],
+            &amp;quot;ships&amp;quot;: [&amp;quot;B3S&amp;quot;]
+        },
+        {
+            &amp;quot;stars&amp;quot;: [&amp;quot;R3&amp;quot;],
+            &amp;quot;ships&amp;quot;: [&amp;quot;Y1N&amp;quot;]
+        }
+    ]
+}
+```</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 17 Jun 2023 19:35:03 GMT</pubDate>
+      <guid isPermaLink="false">1119711831104172082</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Reiner Knizia&amp;apos;s connect-4 game Complica now live. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 18 Jun 2023 14:21:57 GMT</pubDate>
+      <guid isPermaLink="false">1119995423852089425</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A few minor changes/improvements were just pushed to production:
+- User chats are now visible &amp;quot;above the fold&amp;quot; under the exploration window. The full log that includes move results is still below, but this will hopefully make it easier to keep on top of chats with fellow players.
+- You can now export a PNG of the game board, in any past or exploration state, by clicking the &amp;quot;Download&amp;quot; icon below the game board. The issue is that the PNG export is not aware of the styles that are applied to the SVG, so the fonts will be wrong, and this may lead to slightly odd layout sometimes. There are workarounds, but they are very intrusive. If you use this feature and come across a board state that&amp;apos;s particularly egregious, let me know and I&amp;apos;ll see what I can do, but hopefully this is good enough for most situations.
+- Some general bug fixes related to exploration and stash clicking are also included.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 18 Jun 2023 20:07:49 GMT</pubDate>
+      <guid isPermaLink="false">1120082461972516904</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Robo Battle Pigs!** We&amp;apos;re doing this one a little differently from SDG 1.0. We&amp;apos;re going with the initial rules and only supporting up to four players. I&amp;apos;ve done basic testing, but I&amp;apos;d be grateful for any interested parties who would join the Dev server and try to break it. I&amp;apos;m particularly open to ways of improving the move annotations. Thank you!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 19 Jun 2023 20:18:31 GMT</pubDate>
+      <guid isPermaLink="false">1120447543109763172</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Chase has been fixed so that you can no longer bump pieces into the chamber. I apologize for the oversight. (May take a few minutes for the changes to appear.)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 19 Jun 2023 23:58:23 GMT</pubDate>
+      <guid isPermaLink="false">1120502876867928236</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Testers: The development environment might be a bit broken for the next few hours... Please be patient. I&amp;apos;ll make an announcement when I think it is stable again.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 20 Jun 2023 17:11:37 GMT</pubDate>
+      <guid isPermaLink="false">1120762895442133082</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Should be OK again. Let me know if you find issues!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 20 Jun 2023 20:38:38 GMT</pubDate>
+      <guid isPermaLink="false">1120814996352401469</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I think we may have finally, for reals this time, fixed the YourTurn notifications. If you notice incorrect counts, or if you&amp;apos;re not getting the notifications you think you should be, please reach out!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 21 Jun 2023 23:03:18 GMT</pubDate>
+      <guid isPermaLink="false">1121213790915145789</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Wizard&amp;apos;s Garden!** Another of the games we&amp;apos;re migrating over from SDG 1.0. A pair of wizards vye to harvest reagents in a single garden plot. You play until no more planting is possible, and whoever harvested the most wins! Because lots can happen in a reversi-style game, I&amp;apos;m trialing a new approach. Each move is presented across four boards. The top-left shows the piece placement, the top-right shows the flipping, the bottom-left shows any harvests, and the bottom-right is where you actually make your move. I can&amp;apos;t label the individual boards at this point, but hopefully it&amp;apos;s sufficiently clear. The help text tries to be helpful. In any case, interested testers can come join me on the dev server and help me try to break it. Thank you!!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 22 Jun 2023 01:17:30 GMT</pubDate>
+      <guid isPermaLink="false">1121247561777422416</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The games Alien City, Fanorona, Pulling Strings, and Witch Stones are now available on the production server. Thank you, testers! Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 22 Jun 2023 20:06:03 GMT</pubDate>
+      <guid isPermaLink="false">1121531569820147772</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Generatorb!** Generatorb is played on a chess board, corner to corner. Your goal is to land a piece on your opponent&amp;apos;s corner or to control the majority of the spaces on the middle line. Pieces can stack up to three high, each with different movement rules. Interested testers can join me on the dev server to try to break it. Thank you!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 24 Jun 2023 11:26:40 GMT</pubDate>
+      <guid isPermaLink="false">1122125638975889459</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;m trialing a new &amp;quot;Your Turn&amp;quot; indicator, which is a simple highlight of the &amp;quot;Soandso to move&amp;quot; line. It only appears in &amp;quot;current&amp;quot; mode, not exploration. Feedback welcome.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 24 Jun 2023 15:57:20 GMT</pubDate>
+      <guid isPermaLink="false">1122193756888780870</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>For screens 770px width and smaller (mobile), the chat window and the move tree are swapped. Let me know if you run into any difficulty.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 24 Jun 2023 17:34:32 GMT</pubDate>
+      <guid isPermaLink="false">1122218216970788864</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Mixtour!** Yet another Dieter Stein game and winner of the MinD-Spielepreis 2013, Mixtour is a game of tower building with two main twists: (1) you can move your opponent&amp;apos;s pieces and (2) move distance is determined by the height of the *target* stack and not the *moving* stack. Interested testers can join me on the dev server to try to break my code. As always, I am grateful for our testers!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 24 Jun 2023 23:43:04 GMT</pubDate>
+      <guid isPermaLink="false">1122310959684395178</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve tweaked the CSS for the &amp;quot;Accept Draw&amp;quot; button to make it larger and a contrasting colour. Further tweaks will likely be necessary, but this is certainly better. ( @Nienna )</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 25 Jun 2023 19:30:50 GMT</pubDate>
+      <guid isPermaLink="false">1122609871741784064</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>There is now a traditional &amp;quot;Pie Rule&amp;quot; function we can apply to games. All it does is swap the players. It only applies to games we explicitly apply it to. Right now, that&amp;apos;s just Zola and Monkey Queen. If there are other games where this rule should be enabled, let us know. Let us know if you run into any issues with it. ( @Mark Khan )</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 25 Jun 2023 19:32:28 GMT</pubDate>
+      <guid isPermaLink="false">1122610284687798362</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**New game: Crossway!** I&amp;apos;m pleased to announce the availability of @Mark Khan &amp;apos;s connection game Crossway. You&amp;apos;re both trying to connect opposite sides of the board, but you can&amp;apos;t cross the streams! This is going straight into production because I&amp;apos;m pretty comfortable the single rule has been correctly implemented, but do let me know if there are any issues. And yes, the pie rule is enabled 🙂 Enjoy! (Also tagging @David Jonathan Bush)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 25 Jun 2023 22:32:02 GMT</pubDate>
+      <guid isPermaLink="false">1122655470675578940</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>And just a note for the new folks that if you click the gear icon below any game board, you can change to a colour-blind-friendly palette, or to a black &amp;amp; white pattern palette, which actually works quite well for this game.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 25 Jun 2023 22:33:37 GMT</pubDate>
+      <guid isPermaLink="false">1122655869293834260</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Nobody loves to win/lose by accident. In some games, that&amp;apos;s easier to do than others. A &amp;quot;Soandso is in check&amp;quot; indicator has been added. It can only be applied to games (a) where we can generate a list of valid moves (so no Homeworlds) and (b) we can *efficiently* detect a &amp;quot;check&amp;quot; condition (so no Fabrik). Right now that includes the following games: Cannon, Lines of Action, Mixtour (in testing), Monkey Queen, and Generatorb (in testing). If there are other games where such an indicator would be helpful, feel free to let us know. If we can, we will, but we may tell you that it&amp;apos;s not possible. For now, you just get bold text above the game board. We welcome ideas on improving things.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 27 Jun 2023 00:39:09 GMT</pubDate>
+      <guid isPermaLink="false">1123049849617661975</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The games Focus, Wizard&amp;apos;s Garden, and Robo Battle Pigs are now available on the production server. Testing was light, so do let me know if you run into any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 28 Jun 2023 01:17:35 GMT</pubDate>
+      <guid isPermaLink="false">1123421909271453727</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Also, **testers wanted for new game Tintas!** Dieter Stein&amp;apos;s game of colour collection is now available on the test server. Interested testers should join me there and try to break it! (Tagging @Leòdhais ) Thank you, testers!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 28 Jun 2023 01:19:50 GMT</pubDate>
+      <guid isPermaLink="false">1123422476303609977</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The games Mixtour, Tintas, and Generatorb are now available on the production server. Enjoy!!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 01 Jul 2023 13:08:41 GMT</pubDate>
+      <guid isPermaLink="false">1124688028313583736</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>And thank you testers!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 01 Jul 2023 13:08:45 GMT</pubDate>
+      <guid isPermaLink="false">1124688042502914151</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Streetcar Suburb!** I&amp;apos;m pleased to announce the availability of @Drew Edwards (Coldsalmon) &amp;apos;s game Streetcar Suburb on the development server. Testers are welcome to come join us there to try to break it. It&amp;apos;ll be in testing until I return from vacation. Thank you to all our testers, and thank you @Drew Edwards (Coldsalmon) for letting us host the game and for working with me on polishing it up. I think the final result is beautiful, and we&amp;apos;ve expanded the types of games we can now accommodate in the future. Mobile users will have to do some zooming and panning, though, for accurate edge selection. Thanks for playing with us!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 01 Jul 2023 15:44:43 GMT</pubDate>
+      <guid isPermaLink="false">1124727294079029351</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>By way of reminder, testers can join us at https://play.dev.abstractplay.com. The accounts, game records, ratings, etc. are completely separate from the production server. Create an account (or multiple, if you want to play games against yourself) and feel free to challenge me to whatever games are being tested. Thank you in advance to all who donate some time to ensure the best quality code gets deployed.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 01 Jul 2023 16:42:29 GMT</pubDate>
+      <guid isPermaLink="false">1124741830324519104</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Pinned a message.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 01 Jul 2023 16:42:36 GMT</pubDate>
+      <guid isPermaLink="false">1124741861454647398</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I just pushed a working but still experimental &amp;quot;star&amp;quot; feature to production. We warmly welcome feedback and suggestions. From the games list, you can click the star icon to toggle it. You can then toggle showing only starred games on the page. When you create a new challenge, your starred games appear at the top of the list. That&amp;apos;s the extent of the feature for now. Let me know if something doesn&amp;apos;t work as you expect.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 01 Jul 2023 21:30:18 GMT</pubDate>
+      <guid isPermaLink="false">1124814263534506124</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Because apparently I really don&amp;apos;t want to pack, and because I&amp;apos;m going to miss all this typing while I&amp;apos;m away, I am pleased to announce the availability of @Mark Khan &amp;apos;s game King &amp;amp; Courtesan on the production server (https://www.marksteeregames.com/King_and_Courtesan_rules.pdf). I didn&amp;apos;t feel testing was necessary in this case, but let me know if you run into any issues. In this game, your king moves freely among his courtesans as you try to invade your opponent&amp;apos;s home square or capture the opposing king. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 02 Jul 2023 17:42:57 GMT</pubDate>
+      <guid isPermaLink="false">1125119435150196866</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>In Wizard&amp;apos;s Garden, the different boards are now labelled.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 02 Jul 2023 20:50:54 GMT</pubDate>
+      <guid isPermaLink="false">1125166737474715678</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to extensive testing (thank you, testers!!), @Drew Edwards (Coldsalmon) is satisfied that Streetcar Suburb is ready for production release. It&amp;apos;s available now. Enjoy!!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 03 Jul 2023 22:12:26 GMT</pubDate>
+      <guid isPermaLink="false">1125549644009717790</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>There is now a new Volcano (and Mega-Volcano) display option:</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 04 Jul 2023 14:53:18 GMT</pubDate>
+      <guid isPermaLink="false">1125801519388831765</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>You can still use the original display if you prefer. Click on the gear icon below the board.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 04 Jul 2023 14:54:02 GMT</pubDate>
+      <guid isPermaLink="false">1125801704009511103</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve converted the Discord to a &amp;quot;community&amp;quot; server, which has enabled the forum features. I created a #game-specific-chat channel for persistent discussions around specific games. There&amp;apos;s a very annoying 20-tag limit or I&amp;apos;d create a tag for every game. I hope this will change, and when it does, I will update the tags. But until then, you&amp;apos;ll have to settle for tags for the first letter of the game&amp;apos;s name. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 12 Jul 2023 14:25:13 GMT</pubDate>
+      <guid isPermaLink="false">1128693555813171290</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Streetcar Suburb:** Lines just claimed are now dashed for easy identification.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 12 Jul 2023 17:15:06 GMT</pubDate>
+      <guid isPermaLink="false">1128736306919383060</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The &amp;quot;Game Over&amp;quot; email has now been expanded. If you don&amp;apos;t get an email when you expect it, or if something weird appears in the message, do let me know.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 12 Jul 2023 18:03:22 GMT</pubDate>
+      <guid isPermaLink="false">1128748454856888460</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Losing the development blog. Discord will be the primary communications platform. Redirects (including a permanent `discord.abstractplay.com` alias) are propogating now, but it can take time for DNS servers to catch up. Let me know if weird things are happening to you even after a couple of hours.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 12 Jul 2023 20:29:09 GMT</pubDate>
+      <guid isPermaLink="false">1128785140194234398</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A new &amp;quot;Completed Games&amp;quot; table version is now rolling out to production. Feedback welcome. It shows you when games were completed and when you last saw the game. If there&amp;apos;s new chat in a closed game, then the game will appear in bold. Games will disappear from the &amp;quot;completed&amp;quot; list 48 hours after you last opened the game since it closed (so you&amp;apos;ll want to open games that closed while you were away) and will reappear if new chat is entered after that window. Old games are always visible from the Completed Games list you get to from the main Games page. As always, let us know if something weird happens, and concrete suggestions for improvement are always welcome.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 13 Jul 2023 20:08:45 GMT</pubDate>
+      <guid isPermaLink="false">1129142395557134427</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Also corrected the player display so it uses &amp;quot;Player 1&amp;quot; and &amp;quot;Player 2&amp;quot; instead of incorrectly assigning players colours. More ownership fixes are forthcoming.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 16 Jul 2023 20:00:07 GMT</pubDate>
+      <guid isPermaLink="false">1130227386701594654</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Armadas!** (Tagging suggesters, @Nienna and @Samraku ). I know this isn&amp;apos;t a more traditional abstract, but my inner math nerd wanted to play. More traditional fare is on the way. 
+
+Armadas is a miniatures-style game of naval combat played with Looney pyramids. 2-4 commanders move their fleet on an open field trying to eliminate their opponents. These sorts of games tend to have a *lot* of house rules and add-ons. I&amp;apos;m certainly open to expanding this over time, but for now there are three scenarios: (1) the default is trio against trio, (2) there&amp;apos;s also a &amp;quot;two trio&amp;quot; variant, and (3) the &amp;quot;freeform&amp;quot; variant lets players place as many pieces as they want until both players pass. This requires good-faith communication in advance.
+
+Anyway, interested testers can join us at https://play.dev.abstractplay.com and help me try to break it. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 16 Jul 2023 21:08:17 GMT</pubDate>
+      <guid isPermaLink="false">1130244542076047381</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>In games like Alien City, Streetcar Suburb, and Tintas, the player&amp;apos;s name is now substituted in the areas below the board. I went with a fast and slightly dirty approach for efficiency&amp;apos;s sake, so if something weird happens, do let me know. Still more ownership issues to resolve.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 16 Jul 2023 22:26:24 GMT</pubDate>
+      <guid isPermaLink="false">1130264199084384389</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The fix to the last of the current ownership issues is rolling out now. Alien City now correctly shows which claim colour you are and places a bar next to the appropriate stash. I *believe* this is the last of this class of problem currently. If other issues arise, do let me know. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 16 Jul 2023 23:34:23 GMT</pubDate>
+      <guid isPermaLink="false">1130281308296335522</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mark Khan &amp;apos;s &amp;quot;dots and boxes&amp;quot; style game Flume is now available on the production server. Let me know if you run into any trouble. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 17 Jul 2023 22:36:55 GMT</pubDate>
+      <guid isPermaLink="false">1130629232943435886</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>For the record, we *think* we have solved the root cause of the &amp;quot;not getting notifications&amp;quot; issue. The database should self-correct when you next log in. If you continue to not receive notifications when you think you should, do let us know.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 18 Jul 2023 17:32:44 GMT</pubDate>
+      <guid isPermaLink="false">1130915070604480573</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Ty Bomba&amp;apos;s minimalist wargame Boom &amp;amp; Zoom is now available on the production server. Score by bearing your stacks off the opposing side, but you need to minimize your opponent&amp;apos;s scoring opportunities as well. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 18 Jul 2023 19:09:22 GMT</pubDate>
+      <guid isPermaLink="false">1130939389351051444</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve created a new &amp;quot;implementation notes&amp;quot; field for games that need them (currently Armadas, Chase, Entropy, Homeworlds, Lines of Action, Robo Battle Pigs, Taiji, Witch Stones, and Wizard&amp;apos;s Garden). If a game you&amp;apos;re playing has implementation notes, then the &amp;quot;information&amp;quot; icon below the game board will be highlighted. If you feel there are further notes needed, please let us know.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 20 Jul 2023 12:43:10 GMT</pubDate>
+      <guid isPermaLink="false">1131566976079245412</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A new, tabular list of games is rolling into production as we speak. It supports filtering and sorting, and you can also issue challenges directly from there. This new format is easily expanded. I know there is more people would like to see (like game-specific &amp;quot;tags&amp;quot;), but we&amp;apos;re not ready to go that far just yet. But more to come in this space, for sure. The names and numbers don&amp;apos;t *look* clickable, but they are and take you to the same lists of games and ratings the old page took you to. Feedback and suggestions always welcome. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 20 Jul 2023 20:47:43 GMT</pubDate>
+      <guid isPermaLink="false">1131688917389807767</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I have finally added the original 8x8 board back into Lines of Action (tagging @alek ). I won&amp;apos;t bore you with the long explanation, but in short, omitting it was a mistake that I won&amp;apos;t make again. Because reasons, the 8x8 board is available as a variant. I know this is not ideal, but *fully* repairing my error was simply going to cost too much by way of time. Again, I&amp;apos;m sorry. It won&amp;apos;t happen again. Enjoy!!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 20 Jul 2023 22:17:52 GMT</pubDate>
+      <guid isPermaLink="false">1131711604396925018</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>When issuing an &amp;quot;open&amp;quot; or &amp;quot;standing&amp;quot; challenge, there is now a &amp;quot;duration&amp;quot; field. It defaults to `0`, which means that the challenge will remain active until you revoke it, no matter how many people accept it. But you can now change it to any number. After that many times people accept your challenge, the challenge will be automatically removed. So setting it to `1` means the challenge will expire once it is accepted the first time.
+
+For reasons, this can only be extended to 2-player games. Maybe one day we&amp;apos;ll find a way around that.
+
+I&amp;apos;ve done what testing I can, and everything appears to function correctly, but do let us know if something does not work as you expect or if you get some weird error. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 21 Jul 2023 20:47:56 GMT</pubDate>
+      <guid isPermaLink="false">1132051357411577960</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I am *very* excited to announce the availability of browser push notifications. **Push notifications are 100% optional!** Each browser/device has its own process for allowing/blocking push notifications. If you aren&amp;apos;t getting notifications, the first thing to do is check your browser&amp;apos;s documentation. If you&amp;apos;re getting notifications but they are &amp;quot;weird&amp;quot; in some way, do let us know.
+
+We&amp;apos;ve tried to minimize the amount of spam. There are only four types of notification (game start, your turn, game end, challenges), and later instances of the same type will simply overwrite the earlier ones, so you&amp;apos;ll never have more than four notifications active at one time. Clicking a notification will open the associated URL, focusing you on an existing tab if one exists. And if you receive a notification while already actively using the site, you&amp;apos;ll instead get a &amp;quot;toast&amp;quot; notification in the top-right corner of the screen.
+
+There is one drawback: activating these notifications brings along with it a bunch of progressive web app stuff that can interfere with getting the most recent versions of front-end code. In some cases, a hard refresh is not enough. You&amp;apos;ll instead need to close all Abstract Play tabs and then reopen. I don&amp;apos;t have a good sense of how problematic this will be. I guess we&amp;apos;ll find out together! 🙂 Thank you for your patience. Bug reports and suggestions for improvement are always welcome.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 22 Jul 2023 20:38:03 GMT</pubDate>
+      <guid isPermaLink="false">1132411258805702766</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>At the designer&amp;apos;s request, Streetcar Suburb has been updated to require drawing a second line if one is legal from your first line. Basically, it&amp;apos;s never advantageous to intentionally skip drawing a line where possible. This does *not* preclude you from drawing a single line (usually deep in enemy territory) to get access to a set of buildings. Basically, you can draw your first line anywhere, and the system will only hold you up if a second line is legally possible. Hope that&amp;apos;s clear 🙂 Let me know if you run into any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 23 Jul 2023 18:08:23 GMT</pubDate>
+      <guid isPermaLink="false">1132735980940574790</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve moved the &amp;quot;your turn&amp;quot; and &amp;quot;waiting for opponents&amp;quot; tables on your dashboards to the new format. I&amp;apos;ve also added in an estimated time remaining on the clock for both tables (@Nienna). I know the &amp;quot;Num moves&amp;quot; field is not populating. Working on it 🙂 Once fixed, it will start populating once people make a move. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 23 Jul 2023 21:00:38 GMT</pubDate>
+      <guid isPermaLink="false">1132779330200682658</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;m archiving the old #bugs channel for now (it&amp;apos;s still visible at the bottom of the channel list) and have created a #bug-reports channel. This will hopefully keep the reports more organized and ensure the devs don&amp;apos;t lose sight of important issues. For suggestions of new games and features, please continue to use the `/suggest` command. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 24 Jul 2023 13:55:36 GMT</pubDate>
+      <guid isPermaLink="false">1133034755626119168</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Homeworlds** – A number of changes have been pushed to production:
+- No more &amp;quot;white screen of death&amp;quot; when abandoning your home system temporarily. (@Samraku)
+- Kamikaze draws are now supported (in 2-player games only). (@Samraku)
+- Catastrophes can now be more easily triggered in the middle of a sacrifice chain. (@mneme)
+- The new click handler now registers a move when you click on a friendly ship followed by *any* ship or star in a different system. It used to only get triggered by clicking on the background. (@mneme)
+
+Homeworlds is the most complicated game we have. Although all unit tests and play testing have passed as expected, unintended consequences are always possible. Please let me know if anything weird happens.
+
+Thanks to everybody who takes the time to report bugs and make suggestions for improvement. I appreciate your patience and willingness to engage in the process. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 24 Jul 2023 21:54:57 GMT</pubDate>
+      <guid isPermaLink="false">1133155386556432509</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The system already auto-rotates boards for certain games so the current player is at the bottom of the screen. Homeworlds does this too, but it hasn&amp;apos;t lined up because of how the base render was orientated. While it really bothers the editor in me, I&amp;apos;ve altered the base render so North is at the bottom with ships pointing up, and then the auto-rotator should get things right from there. Let me know if it still doesn&amp;apos;t, especially in 3 and 4 player games. For the record, in games that support rotation, once you rotate to where you want it, it should stay there throughout the game.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 26 Jul 2023 12:25:01 GMT</pubDate>
+      <guid isPermaLink="false">1133736737248645210</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**New game: Clearcut!** I&amp;apos;m pleased to announce that @Mark Khan &amp;apos;s game Clearcut is now available on the production server. Let me know if you run into any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 26 Jul 2023 17:52:42 GMT</pubDate>
+      <guid isPermaLink="false">1133819201358921810</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>At the designer&amp;apos;s request, I&amp;apos;m afraid we&amp;apos;re taking Clearcut back down (the game is not finite). This situation has never arisen before. For now, I&amp;apos;m just marking the game as &amp;quot;experimental&amp;quot; so it will no longer be available on production. It *should* still let people finish existing games. At some point, we&amp;apos;ll land on a &amp;quot;best practice&amp;quot; for this sort of situation. Let me know if you run into any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 27 Jul 2023 16:49:40 GMT</pubDate>
+      <guid isPermaLink="false">1134165723028127846</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Phutball is now available on the dev server!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 29 Jul 2023 14:36:29 GMT</pubDate>
+      <guid isPermaLink="false">1134856982491308032</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Alfred&amp;apos;s Wyke:** The used moves are now also filled. The lighter colour is the one that will become available next turn.,</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 30 Jul 2023 15:47:13 GMT</pubDate>
+      <guid isPermaLink="false">1135237173591937174</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Bide!** @alek&amp;apos;s game Bide is now available on the dev server. Testers are invited to come help us break it. I&amp;apos;m pretty comfortable that the core rules are correct, but I particularly would like to get a three-player game in with some releasing, just to make sure all the code is correct at higher player counts. Thank you, testers!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 30 Jul 2023 16:56:20 GMT</pubDate>
+      <guid isPermaLink="false">1135254564120055919</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The names of commenters who are not also participants in the game now display correctly. This involved some mild refactoring. My tests show everything working, but do let us know if something wonky happens with challenges in particular. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 30 Jul 2023 20:10:08 GMT</pubDate>
+      <guid isPermaLink="false">1135303337160487082</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;m very happy to announce the availability of @Drew Edwards (Coldsalmon)&amp;apos;s game Agere on the production server, including the &amp;quot;Cobweb&amp;quot; variant played on a radial board (our first such game, but hopefully not the last). Let us know if you run into any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 31 Jul 2023 14:48:55 GMT</pubDate>
+      <guid isPermaLink="false">1135584889899585596</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>After a minor rule change, @Mark Khan&amp;apos;s Clearcut is back on the production server. See the updated rule sheet for details. Let me know if you run into any trouble.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 31 Jul 2023 19:10:37 GMT</pubDate>
+      <guid isPermaLink="false">1135650748433174548</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Will appear above the game board, next to the game&amp;apos;s name, if and only if the game is unrated. Rated is assumed. May take a couple minutes to appear.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 31 Jul 2023 19:36:13 GMT</pubDate>
+      <guid isPermaLink="false">1135657188988301474</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Push notifications are now &amp;quot;double opt-in.&amp;quot; If you wish to continue to receive push notifications, please click the gear icon in the top-right of the screen and click &amp;quot;Allow push notifications.&amp;quot; Once you do that, your browser/device takes over, so you may receive another request for permission. Notifications will then continue as previously announced (https://discord.com/channels/526483743180062720/1111447982345298121/1132411258805702766). Disabling push notifications from the user settings screen will immediately deactivate our ability to send you notifications until you reenable them.
+
+Push notifications are 100% optional. It&amp;apos;s just another way to be notified of changes in your games. Please let us know if you encounter any issues or if you have suggestions for how we can do these even better. Thanks for playing with us!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 31 Jul 2023 21:23:13 GMT</pubDate>
+      <guid isPermaLink="false">1135684115040059523</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>As a last code push of the day, I&amp;apos;m putting out two &amp;quot;tutorials&amp;quot; for trial. The first time you visit your dashboard or the game play page after the push propagates, you will see a blue &amp;quot;beacon&amp;quot; (see screen capture). Clicking it will trigger a brief tutorial walking you through the different components of the page. You will only see it once per device unless you go into the user settings screen and uncheck the &amp;quot;Hide Tutorials&amp;quot; checkbox. I welcome feedback on how helpful you find the content and what improvements you think are needed. I want to make it easy for new players to &amp;quot;get up to speed.&amp;quot; The only hiccup I see so far is that on mobile, the last screen of each tutorial won&amp;apos;t show (the one that talks about the user settings dialog) because the log in button is hidden on mobile by default. I will have to see if there&amp;apos;s a way around this. 
+
+Thank you for participating in this beta period! We launched because we wanted feedback from actual players about the features they wanted to see, and you have done that in spades. Thank you for your great ideas and your patience as they get implemented.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 01 Aug 2023 02:24:38 GMT</pubDate>
+      <guid isPermaLink="false">1135759970076475604</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>All the remaining list tables (standing challenges, ratings, current/completed games) have been moved to the new format. I&amp;apos;ve done some testing and fixed any obvious issues, but do let me know if something isn&amp;apos;t working as you expect. One thing: in the current/completed games lists, there will be some missing data in some cases (e.g., winners, variants). Those will populate correctly from here on out, but I haven&amp;apos;t gone back and retroactively fixed things yet. I will, but there are other DB changes being considered that would render that work moot, so leaving it be for now. Thanks! (I am seeing some layout weirdness. Further tweaks are forthcoming, but at least now the main migration is done.)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 02 Aug 2023 01:44:22 GMT</pubDate>
+      <guid isPermaLink="false">1136112226542043290</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve added a &amp;quot;News&amp;quot; page to the main site for those that just aren&amp;apos;t interested in joining the Discord. This server remains the authoritative and most up-to-date source of information about the site. The list on the site is manually maintained, so will only contain more major announcements and may sometimes be behind.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 09 Aug 2023 16:14:05 GMT</pubDate>
+      <guid isPermaLink="false">1138867810123120660</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I made a pretty fundamental change to how the backend applies moves and determines who the next player is. My tests show everything working as expected, but stuff happens. Please let me know if something does not work as you expect.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 09 Aug 2023 17:11:41 GMT</pubDate>
+      <guid isPermaLink="false">1138882308141744199</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Game Designer Between Baldur&amp;apos;s Gate 3 sessions, I chipped away at a game designer playground that can be found at http://designer.abstractplay.com. It&amp;apos;s rudimentary, but I&amp;apos;d be interested in your feedback. I need to add tiling at some point, but all the basic features are there. The restriction, of course, is that it&amp;apos;s tied to the pieces and boards available in our rendering engine. I am open to feature requests. Enjoy.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 18 Aug 2023 12:18:10 GMT</pubDate>
+      <guid isPermaLink="false">1142069932020990054</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Game Designer, in particular @Drew Edwards (Coldsalmon): I have added peer-to-peer networking to the designer. If you don&amp;apos;t need it, you can just collapse and ignore the networking stuff at the very top. I may find a way to hide it more fully if people find it truly irksome. For those that have said they will use it ( 👀 @Drew Edwards (Coldsalmon) ), it&amp;apos;s relatively straightforward. Simply share your connection ID with friends. They enter that ID in their own browser and it will connect the two of you directly. You can then manually pass around a &amp;quot;talking stick.&amp;quot; Whoever has the talking stick is in control, and their game state is forcibly sent to everyone else. It&amp;apos;s not particularly robust, but it seems to fundamentally work. I welcome suggestions and bug reports. If you have any questions, let me know.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 19 Aug 2023 02:02:12 GMT</pubDate>
+      <guid isPermaLink="false">1142277306455445684</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Basically it works like the Zendo client I wrote, available on GitHub and on my personal website: https://www.perlkonig.com/zendo/.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 19 Aug 2023 02:03:01 GMT</pubDate>
+      <guid isPermaLink="false">1142277513368838214</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I should clarify that there is no server involved here. This is truly peer-to-peer. You both connect to a central server to negotiate basic connection information, but after that, all communication is between the connected peers directly. There&amp;apos;s no server running in the background.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 19 Aug 2023 02:04:19 GMT</pubDate>
+      <guid isPermaLink="false">1142277840474218627</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>And it&amp;apos;s assumed that you&amp;apos;ll actually be communicating with the other involved humans through some other means, like Discord or the like. There&amp;apos;s no chat feature or anything like that. It just gets too involved.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 19 Aug 2023 02:08:59 GMT</pubDate>
+      <guid isPermaLink="false">1142279015953088644</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Mirador is now available on the dev server!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 20 Aug 2023 22:08:56 GMT</pubDate>
+      <guid isPermaLink="false">1142943379752222862</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I finally dug deeper into the configuration of our user account provider. Confirmation and password reset emails will now come from the correct domain, and email confirmation is now done by link instead of code. So regardless of how long it takes for you to receive or act on the email, everything will work as expected. You are not able to log in until the email address is verified. Please let me know if you or someone you know is having problems accessing the site. We want the onboarding experience to be as smooth as possible.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 22 Aug 2023 19:19:41 GMT</pubDate>
+      <guid isPermaLink="false">1143625562984820877</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Mirador and Phutball now live!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 25 Aug 2023 12:40:07 GMT</pubDate>
+      <guid isPermaLink="false">1144612170630443110</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Razzle Dazzle (also known as Knight Moves) and Dag en Nacht now live on the development server! Please report problems if you find them!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 09 Sep 2023 21:36:12 GMT</pubDate>
+      <guid isPermaLink="false">1150182897484050442</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Razzle Dazzle (also known as Knight Moves) and Dag en Nacht now live on the production server!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 16 Sep 2023 19:49:38 GMT</pubDate>
+      <guid isPermaLink="false">1152692796004782080</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Also, move submit confirmations. These can be turned off (to get back to the current behaviour) in your user settings.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 16 Sep 2023 19:50:23 GMT</pubDate>
+      <guid isPermaLink="false">1152692984710713484</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>It&amp;apos;s with mixed emotions that I announce that the original Super Duper Games will be shutting down permanently as of Thursday, November 30th, 2023. I will be downloading all the game records starting Monday the 27th of November. I will maintain the domain name, and a permanent landing page will be set up that will list all the games and point people to the SDG archive, already available on my Google Drive (https://drive.google.com/drive/folders/0Bw8J0V9P_9hMeEJUSXE1LXRBN00?resourcekey=0-cklbEpjB9v8pAJ8C2nHRww&amp;amp;usp=sharing).
+
+If your favourite game was not migrated, please submit a suggestion. Thank you to all the players who have been a part of the SDG community for these many years.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 18 Sep 2023 18:24:39 GMT</pubDate>
+      <guid isPermaLink="false">1153396184627564614</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Samraku is organizing an Adere tournament! See the following thread for details: https://discord.com/channels/526483743180062720/1154353344450670592</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 21 Sep 2023 13:16:32 GMT</pubDate>
+      <guid isPermaLink="false">1154405807744618568</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The game Armadas is now on its way to the production server. There is still an issue with manually typing moves, but the game otherwise functions fine, and I want to get it out of testing. I will continue to &amp;quot;chew on&amp;quot; this manual input issue. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 23 Sep 2023 16:03:26 GMT</pubDate>
+      <guid isPermaLink="false">1155172587064803378</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;m pleased to announce that @Mark Khan &amp;apos;s game Hexagonal Y is now available on the production server. Please let us know if you encounter any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 23 Sep 2023 21:33:00 GMT</pubDate>
+      <guid isPermaLink="false">1155255522593882202</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@alek &amp;apos;s game Bide is now available on the production server, supporting 2–6 players. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 25 Sep 2023 12:22:22 GMT</pubDate>
+      <guid isPermaLink="false">1155841726708199445</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>There have been a few incidents where games are not being properly concluded in the database. We are looking for the root cause. In the meantime, if you get the error `Unable to get user data for [long string of numbers and letters]`, please don&amp;apos;t try to do anything with your account, like reset passwords or stuff like that. Simply file a bug report in the #bug-reports channel. It&amp;apos;s a relatively minor fix. Hopefully we&amp;apos;ll figure this out soon. Thanks for your patience.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 02 Oct 2023 16:39:51 GMT</pubDate>
+      <guid isPermaLink="false">1158443243042771015</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A notes feature has now been added (@Avri , @alek , @Samraku). Notes are private. Only you can see them. Notes are tied to games, not to individual moves. Notes disappear when a game concludes and is first cleared from your completed list. Because I had to pick a number, I&amp;apos;ve limited notes to 250 characters. That seems reasonable, but do let me know if it&amp;apos;s too restrictive. Feedback on the UX is welcome.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 05 Oct 2023 23:11:49 GMT</pubDate>
+      <guid isPermaLink="false">1159629047001792573</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I also now hide the &amp;quot;rotate&amp;quot; button below the board if the game is not flagged as needing rotation. For example, games like Cannon and Ordo are flagged as `perspective`, and the board is autoflipped for the second player. But games like Cephalopod and Streetcar Suburb are not, and so now the rotate button won&amp;apos;t appear for those games. In an ideal world the rotation would work 100% of the time for all games, but for games with below-the-board areas, it doesn&amp;apos;t work correctly. This seemed like a good middle ground for now.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 05 Oct 2023 23:14:52 GMT</pubDate>
+      <guid isPermaLink="false">1159629812294488184</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>My apologies to all note takers! I was not rigorous enough in my testing. The notes feature is now fixed, but it doesn&amp;apos;t see existing notes. There was really no way around this. Notes are purged once a game ends. Let me know if there are further issues!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 11 Oct 2023 21:53:53 GMT</pubDate>
+      <guid isPermaLink="false">1161783759838908487</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Phil Leduc&amp;apos;s game Murus Gallicus is now available on the production server. I&amp;apos;m pretty confident I&amp;apos;ve captured all the rules correctly, but it has been a long day 🙂 If you encounter any issues, please let me know right away and I&amp;apos;ll try to salvage the game.
+
+In discussion with Phil, with the goal of ensuring the &amp;quot;best&amp;quot; version of the game is the default, here&amp;apos;s how things are configured:
+- The default ruleset is &amp;quot;Advanced Murus Gallicus&amp;quot; (with catapults).
+- By default, your first move is to redistribute one of your starting towers as walls on your second row.
+- The standard pie rule is also available.
+- There are three variants you can mix and match:
+  - &amp;quot;Basic&amp;quot; reverts the game to the &amp;quot;no catapult&amp;quot; state.
+  - &amp;quot;Static&amp;quot; disables the initial tower redistribution.
+  - &amp;quot;Escape&amp;quot; eliminates the breakthrough win condition.
+
+I should probably put that in the implementation notes, now that I think about it. Again, let me know if there are any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 25 Oct 2023 04:00:19 GMT</pubDate>
+      <guid isPermaLink="false">1166587018726342656</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mark Khan&amp;apos;s game Bounce is now available on the production server. Let me know if there are any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 29 Oct 2023 18:28:19 GMT</pubDate>
+      <guid isPermaLink="false">1168255010828714075</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Records and analysis of completed games have now been made available. These records and statistics are not real time! They are generated every Sunday (6am UTC). 
+- You can access all the records at https://records.abstractplay.com.
+- The new Statistics tab presents some analysis of the records.
+- Buttons for downloading all records, your records, and the records for specific games are visible on the Statistics page, your dashboard, and the completed games lists, respectively.
+
+I&amp;apos;ll be doing some aesthetic tweaking later this week. We warmly welcome feedback and suggestions. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 07 Nov 2023 03:09:45 GMT</pubDate>
+      <guid isPermaLink="false">1171285334181552188</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Larger versions of the standard triangular Adere board are now available (@Drew Edwards (Coldsalmon), @Samraku). Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 09 Nov 2023 17:16:51 GMT</pubDate>
+      <guid isPermaLink="false">1172223292288028682</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The clock and rated settings in the new challenge screen are now saved to your browser&amp;apos;s &amp;quot;local storage.&amp;quot; That means the persistence is per device. For those that prefer different clock settings, hopefully this is a welcome change. Let me know if there are any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 09 Nov 2023 23:30:35 GMT</pubDate>
+      <guid isPermaLink="false">1172317345755189279</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Time controls are now explicitly visible on the game screen instead of only visible via tooltip. Also, the new challenge screen now has speed presets. The custom option is of course still available. This means a change to the default game clock. The default is now &amp;quot;medium&amp;quot; speed which is 2d/1d/4d (or roughly making a move at least twice a week). These settings are still persisted per device. Let us know if you run into any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 12 Nov 2023 18:54:36 GMT</pubDate>
+      <guid isPermaLink="false">1173335054773129317</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>You can now explore variations in completed games and even annotate them. Here is an example
+    https://play.abstractplay.com/move/manalath/1/8703d405-c79d-4dd0-8e6c-ee54729a38b5?move=7&amp;amp;nodeid=d4b30785-eccb-4049-be84-cc9a97ebaba9
+Note that you can share the URL of a node somewhere in the tree. Make sure you turn on exploration. Move trees with comments are marked by a small comment icon. Just follow the icons untill you get to the comment.
+If you were playing in a completed game, there should be a &amp;quot;Publish exploration&amp;quot; button. This can be used to publish the exploration you did during the game so that anyone can see it. Note that all completed game exploration and comments are visible to anyone.
+
+When there is a lot of exploration it might be a little slow in loading...</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 12 Nov 2023 21:06:05 GMT</pubDate>
+      <guid isPermaLink="false">1173368142479773746</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Added some new stats and graphs to the Statistics page (it may take a few minutes to propagate):
+- On the Play Statistics table, a minimalist histogram of the number of completed games over the past 10 weeks is visible. If you click on the mini-graph, a full-size graph will appear with all of the data for that game.
+- A new &amp;quot;Site statistics&amp;quot; tab is available that gives you a histogram of all completed games on the site in seven-day &amp;quot;buckets,&amp;quot; and a new &amp;quot;hours per move&amp;quot; box plot will show you the spread of game speeds based on an average per game.
+- Finally, on the Games list table, there is now a &amp;quot;recent&amp;quot; column that gives the number of games completed in the past four weeks. This will give you a sense of what games are being played recently.
+
+Let me know if you see any issues or if you have feedback for other useful statistics you&amp;apos;d like to see. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 14 Nov 2023 02:03:45 GMT</pubDate>
+      <guid isPermaLink="false">1173805442292535316</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Added a couple more stats, because I&amp;apos;m a data nerd:
+- **Player statistics**: Added per-player graphs for the number of games completed in each seven-day period.
+- **Site statistics**: Added a cumulative &amp;quot;first-time game completions&amp;quot; graph that essentially shows user growth.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 16 Nov 2023 00:47:19 GMT</pubDate>
+      <guid isPermaLink="false">1174510984157736960</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The solo playground is now available through the new Playground nav option. It leverages the built-in exploration function, so it only supports non-simultaneous games and only 2-player versions of games. You can also export any move state of any current or completed game to the playground. You only have one playground, and starting or importing a new game will replace the existing one. This feature is experimental. I&amp;apos;ve done basic testing, but it&amp;apos;s possible there are edge cases that blow things up. Do let me know. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 19 Nov 2023 03:48:48 GMT</pubDate>
+      <guid isPermaLink="false">1175643816309563422</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve added *h*-index to player stats. This index gives the number of games you&amp;apos;ve played at least that many times. So an *h*-index of 4 would mean you&amp;apos;ve played at least 4 different games at least 4 times each. If you&amp;apos;ve played all the games only one time each, then your *h*-index would still only be 1. The maximum *h*-index is the total number of games available on the site (56 right now, I believe).</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 26 Nov 2023 14:18:32 GMT</pubDate>
+      <guid isPermaLink="false">1178339010343608472</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;m pleased to announce the availability of @ManaT &amp;apos;s game Quagmire on the production server. @ManaT also coded this one for us—a first! Many thanks. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 27 Nov 2023 01:43:47 GMT</pubDate>
+      <guid isPermaLink="false">1178511459647500298</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>After 18 years, the original Super Duper Games is now offline. There is a landing page up now that lists the games that used to be available (DNS propagation may take time depending on your area). I&amp;apos;ve maintained the local rules mirror as well. There&amp;apos;s a link there to Abstract Play and a link to a publicly shared Google Drive folder that contains all the historical SDG data, including updated PGN game reports. Let me know if you encounter any issues with the site. If your favourite game didn&amp;apos;t make it over, feel free to `/suggest` it. 
+
+The intent is for the landing page to be available &amp;quot;indefinitely.&amp;quot; The domain is paid up through 2025, so at least that long 🙂 
+
+My sincerest thanks to all SDGers. I hope you will find a similar home here at Abstract Play. 
+❤️</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 28 Nov 2023 00:04:14 GMT</pubDate>
+      <guid isPermaLink="false">1178848793937055784</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Testers wanted for new game Bao!** Bao is a sowing game from East Africa that I often hear called things like &amp;quot;the king of Mancala games.&amp;quot; It almost broke my brain, but thanks to the very patient @Nino , it&amp;apos;s ready now for public testing. If you are willing to spend some time helping me iron out any final kinks, then please join us on the development server and challenge away. I&amp;apos;m of course interested in issues with the game itself, but I&amp;apos;m also interested in feedback on the board representation, which is new. Thank you to all testers! (See the pinned messages in this channel for instructions on how to join us on the dev server.)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 05 Dec 2023 01:50:14 GMT</pubDate>
+      <guid isPermaLink="false">1181412185776328764</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@pasxalis1987 &amp;apos;s game AlmaTafl is now available on the production server. Let me know if you run into any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 08 Dec 2023 21:36:45 GMT</pubDate>
+      <guid isPermaLink="false">1182797947268776097</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A few things have just rolled out:
+- **Last seen indicators:** When issuing a new challenge, you can restrict the list to those active in the past 7 or 30 days. On all lists where you can accept standing challenges, an indicator appears next to the challenger&amp;apos;s name. Green means they&amp;apos;ve logged in in the past 7 days. Yellow means last 30 days. 
+- **Player profiles:** *These are still very rudimentary at this point!* But you can now see a page of information on other players. Links appear in most lists, including chat logs. The page itself consists of multiple &amp;quot;cards,&amp;quot; the order of which you can change. I appreciate and encourage continued discussion of what you want to see here, and I will continue to adjust as I can. 
+- **Country selection:** In the user settings screen (the cog in the top-right corner next to your username) you can now select the country you are playing from from a drop-down list. This is the only way we normalize the data entry. If your flag does not appear correctly on your profile page, please go into the settings and set it there. This is optional. You can set it to &amp;quot;Prefer not to say,&amp;quot; if you like.
+
+Continued feedback and suggestions welcome. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 16 Dec 2023 18:57:32 GMT</pubDate>
+      <guid isPermaLink="false">1185656981269254255</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The games Scaffold and Advanced Slither are now available on the production server. A huge thank you to @ypaul for coding these two games for us! Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 20 Dec 2023 17:51:27 GMT</pubDate>
+      <guid isPermaLink="false">1187089902555365436</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Experiment time! Players may now add tags to the game table on the Games page. Your tags are publicly visible, so not everybody needs to create all the tags. Duplicates are ignored. The single search field also searches tags. Let me know if you run into any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 22 Dec 2023 15:15:14 GMT</pubDate>
+      <guid isPermaLink="false">1187775362541830255</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mark Khan &amp;apos;s game Byte is now available on the production server. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 24 Dec 2023 14:53:00 GMT</pubDate>
+      <guid isPermaLink="false">1188494542173913128</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Michael Amundsen and @alek &amp;apos;s game Lielow is now available on the production server. Again, many thanks to @ypaul for coding this one for us. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 24 Dec 2023 22:14:05 GMT</pubDate>
+      <guid isPermaLink="false">1188605548308987994</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>And to round out the Christmas hat trick, the East African game Bao is now available on the production server. A huge thank you to the patient and persistent efforts of our testers, in particular @Samraku  and @Nino. This is one of the more complicated games on the server (top-three, methinks), so there are bound to be hiccups. Let me know if you run into any issues. But thanks to our testers and their excellent suggestions, I think the game is in a good place. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 24 Dec 2023 22:59:58 GMT</pubDate>
+      <guid isPermaLink="false">1188617093936058418</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Oh, and a note about Bao and all future sowing games: if you click the cog icon under the game board, you can switch to a pip view instead of a numeric view:</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 24 Dec 2023 23:41:36 GMT</pubDate>
+      <guid isPermaLink="false">1188627570141442128</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The central Asian mancala-style game Toguz Kumalak is now available on the production server. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 25 Dec 2023 18:54:33 GMT</pubDate>
+      <guid isPermaLink="false">1188917720490705017</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>And @ypaul is keeping the holiday cornucopia flowing with the addition of @alek &amp;apos;s game Trike. It&amp;apos;s now available on the production server. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 26 Dec 2023 15:20:06 GMT</pubDate>
+      <guid isPermaLink="false">1189226138099257524</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to the prolific @ypaul , the impossibly named game Iqishiqi is now available on the production server. I know it has been a fire hose lately, but I hope these new games will keep you busy over the last of the holidays. I&amp;apos;m sure things will slow down once the day jobs start banging at our doors again. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 28 Dec 2023 03:55:22 GMT</pubDate>
+      <guid isPermaLink="false">1189778597934813274</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>TLDR: You can now customize the player colours. Go to the main settings screen (the cog next to your username) and click the button Manage Palettes. Create as many palettes as you want. Then go to a particular game you want to customize and click the cog icon below the game board. Apply the desired palette.
+
+And now some context:
+- Most colours in most games are assigned by number. A palette simply provides custom colours for each of the player numbers.
+- This will also affect properly assigned markers and annotations.
+- Custom colours only affect *your* experience. Nobody else is affected.
+- This will not work for all games! Some (like Wizard&amp;apos;s Garden) are hard coded. And others (like Streetcar Suburb) use arbitrary colours from the palette and are not in typical player order. Some experimentation may be required. If you encounter trouble or have questions, do reach out.
+- Creating a palette with the same name as an existing one will overwrite it.
+- If you delete a palette that is assigned to a game, the game will revert to the standard palette.
+- Finally, I am *certain* there is some edge case I am missing that will blow a game up. If something goes horribly wrong, just let us know.
+
+Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 28 Dec 2023 17:22:15 GMT</pubDate>
+      <guid isPermaLink="false">1189981654257770587</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Completing a mancala trifecta, @Mark Khan &amp;apos;s game Diffusion is now available on the production server. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 30 Dec 2023 00:01:57 GMT</pubDate>
+      <guid isPermaLink="false">1190444633357029376</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Stephen Tavener&amp;apos;s game Furl is now available on the production server, thanks again to @ypaul. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 30 Dec 2023 02:47:48 GMT</pubDate>
+      <guid isPermaLink="false">1190486368690909355</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Some experimental customization features were just pushed to production:
+- There is now a global dark mode available. Simply click the button next to your username. Your selection is saved per device. I am open to feedback on how to improve it, but know that there is no &amp;quot;one right way&amp;quot; when it comes to front ends. But I will do my best to maximize its value.
+- You can now customize the appearance of your game boards using CSS. This is an advanced feature and is not without risk. Never inject code you either do not understand yourself or has not been vetted by someone you trust. I&amp;apos;m creating a new Discord channel specifically for discussions around customization. Join us there for more information (#customization).
+
+I&amp;apos;ve also added links in the footer to the official BGG list of games available here and to a new wiki. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 01 Jan 2024 22:37:22 GMT</pubDate>
+      <guid isPermaLink="false">1191510509095231538</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>And @ypaul continues his streak of awesomeness to bring to us all the game Havannah! Compete to surround at least one cell, connect two corners, or bridge three sides. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 01 Jan 2024 22:38:31 GMT</pubDate>
+      <guid isPermaLink="false">1191510797965340702</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The oldie but goodie Hex is now available on the production server. Thanks again to @ypaul for coding this one for us. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 03 Jan 2024 16:43:18 GMT</pubDate>
+      <guid isPermaLink="false">1192146180403105872</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>UI change on the way to the production server. The playground now has a &amp;quot;Random Move&amp;quot; button if you just want to play with the rules (obviously only works for games that generate move lists). A &amp;quot;Pass&amp;quot; button now appears next to the move selection drop down (a) if that game generates a move list and (b) &amp;quot;pass&amp;quot; appears in that move list. You still need to click &amp;quot;Submit&amp;quot; after clicking &amp;quot;Pass.&amp;quot; Let me know if there are any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 03 Jan 2024 17:35:34 GMT</pubDate>
+      <guid isPermaLink="false">1192159333811749045</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>And thanks again to @ypaul, the popular &amp;quot;new&amp;quot; abstract Tumbleweed is now available on the production server. Make time for games, people! There&amp;apos;s a lot of &amp;apos;em! 🙂</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 03 Jan 2024 18:02:58 GMT</pubDate>
+      <guid isPermaLink="false">1192166227733385236</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>To prevent hard errors when creating a palette with an insufficient number of colours, small palettes are automatically topped up with white. So if you find yourself in a game with a bunch of white pieces, it&amp;apos;s because the palette you assigned to that game didn&amp;apos;t have enough colours. Let me know if you run into any further issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 03 Jan 2024 21:01:39 GMT</pubDate>
+      <guid isPermaLink="false">1192211198532386977</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Kanare Kato&amp;apos;s game Meridians is now available, thanks to the efforts of @ypaul. Thank you, and enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 05 Jan 2024 18:28:26 GMT</pubDate>
+      <guid isPermaLink="false">1192897414865105047</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Drew Edwards (Coldsalmon) &amp;apos;s mining game Mattock is now available, thanks to @ypaul. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 07 Jan 2024 21:14:46 GMT</pubDate>
+      <guid isPermaLink="false">1193664048735203408</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Vincent Everaert&amp;apos;s draughts-style area control game Exxit is now available. Thanks to @eykca for the suggestion and for testing. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 08 Jan 2024 19:39:04 GMT</pubDate>
+      <guid isPermaLink="false">1194002354119393310</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Just a heads up that I&amp;apos;m cleaning up some URLs, so the login URL will soon be an `abstractplay.com` URL. The issue is that, if you use your browser&amp;apos;s password autofill, it won&amp;apos;t automatically fill the first time you log in after the change. I apologize for the inconvenience, but this change means it will (hopefully) never change again in the future. I&amp;apos;ve already added the logo and will be making some other minor aesthetic tweaks to the login screen so it&amp;apos;s more in line with the rest of the design.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 10 Jan 2024 23:49:13 GMT</pubDate>
+      <guid isPermaLink="false">1194790081626648606</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;m pleased to announce our first steps towards integrating Ai Ai with the site. Many thanks to @Mrraow for making adjustments to Ai Ai to support our goals. To start, there is only one supported game, but others will follow:
+- The only game currently supported is Furl. To play against the AI, issue a new challenge to the player `(Bot) Ai Ai`.
+- The &amp;quot;time to think&amp;quot; is hard coded to 10 seconds. Depending on various factors, it can take anywhere from 15 seconds to a couple minutes for a move to execute. But if it doesn&amp;apos;t execute in that time, do let us know.
+- Just because Ai Ai can play a certain game doesn&amp;apos;t mean we can integrate it. Games with random starts (like Tintas), for example, won&amp;apos;t work.
+- I&amp;apos;ll post here as new games get added. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 15 Jan 2024 01:24:54 GMT</pubDate>
+      <guid isPermaLink="false">1196263711522959450</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Tournaments are now live! Please check it out and propose a tournament if you want one. There is a description of how tournaments work at the tournament page: https://play.abstractplay.com/tournaments. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 17 Jan 2024 04:09:30 GMT</pubDate>
+      <guid isPermaLink="false">1197029909315457034</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The AiAi bot can now play the following games. Let me know if you run into any issues:
+- Dag en Nacht
+- Fanorona
+- Lielow
+- Trike
+- Zola
+
+Apparently the bot plays these games quite well, so the thinking time has been truncated to 1 second for these games.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 18 Jan 2024 16:55:00 GMT</pubDate>
+      <guid isPermaLink="false">1197584942025158708</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>An error in the Trike code was corrected. Games currently in progress will not be interrupted, but the board coordinates will still display incorrectly. Games starting from now will be correct.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 18 Jan 2024 17:04:03 GMT</pubDate>
+      <guid isPermaLink="false">1197587219645472848</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Two Nick Bentley games, Catchup and Blooms, are now available. Thank you, @ypaul, for coding those for us! Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 18 Jan 2024 19:48:01 GMT</pubDate>
+      <guid isPermaLink="false">1197628483078197428</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@eykca&amp;apos;s game Mimic is now available. Thank you, @ManaT, for coding it for us! Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 20 Jan 2024 22:55:12 GMT</pubDate>
+      <guid isPermaLink="false">1198400364702072882</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Gatsby&amp;apos;s game Veletas and the uncredited game Gess are now available, thanks to @ypaul. The firehose continues!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 22 Jan 2024 15:08:39 GMT</pubDate>
+      <guid isPermaLink="false">1199007731802181764</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The AiAi bot can now play Tumbleweed and Amazons. Let me know if you run into any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 22 Jan 2024 19:50:58 GMT</pubDate>
+      <guid isPermaLink="false">1199078778949861446</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The &amp;quot;completed games&amp;quot; table on your dashboard is now only pruned after a week instead of 48 hours (@Martin Grider). This should minimize any gaps between stat runs. This is not retroactive. It only affects games added to your &amp;quot;completed games&amp;quot; starting now.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 22 Jan 2024 22:12:34 GMT</pubDate>
+      <guid isPermaLink="false">1199114412829724813</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I am rolling out a &amp;quot;Disable Exploration&amp;quot; mode for new challenges. If a challenge does have this option enabled, it will appear prominently when you view the challenge and at the top of the play page (see secreenshots). Perhaps it is my personal bias, but I encourage people to use this sparingly. It&amp;apos;s the one feature that imposes restrictions on other players. It is still being determined whether this will be applied to tournament games by default. Let me know if you run into any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 24 Jan 2024 01:08:29 GMT</pubDate>
+      <guid isPermaLink="false">1199521070340907119</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A couple minor tweaks to existing games. Let me know if something doesn&amp;apos;t work as you expect:
+- **Gess**: The centres of pieces can now be moved into the gutter (not common, but is allowed) and some annotations have been tweaked to hopefully clarify things.
+- **Martian Chess**: To prevent deadlocks, if seven consecutive turns have happened without a capture, then someone can &amp;quot;call the clock.&amp;quot; Once triggered, if seven further turns pass without a capture, then the game will be terminated and scored. Also, the game now ends immediately once someone reaches 18 points.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 25 Jan 2024 16:50:50 GMT</pubDate>
+      <guid isPermaLink="false">1200120609829552170</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@emptytheory&amp;apos;s game Verge is now available. Thank you, @ManaT, for coding it for us. This is our 80th game. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 30 Jan 2024 17:48:17 GMT</pubDate>
+      <guid isPermaLink="false">1201947005296062575</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A few announcements today:
+- **New Variant**: A random start variant has been added to Veletas.
+- **New Game**: Nestor&amp;apos;s game Onager is now available. Similar in some ways to Epaminondas with the stumbling blocks variant, in Onager you walk and leap across the board, trying to reach your opponent&amp;apos;s home row. (Thank you, @ypaul, for coding this for us!)
+- **New Game**: James Ernest&amp;apos;s game Tablero di Berona is now available. This is the first AP game to include dice. I thought it was strategic enough to include, and there&amp;apos;s at least one other dice game I&amp;apos;m considering. I think a little randomness can be a good thing sometimes 🙂 I will admit that the way the dice work may take a few turns to get used to, but do read the implementation notes, and let me know if you have suggestions for how to improve things.
+
+Thanks, as always, for participating in our little community. Let me know if you run into any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 01 Feb 2024 21:13:02 GMT</pubDate>
+      <guid isPermaLink="false">1202723309809045524</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Zomulgustar&amp;apos;s simultaneous tile selection game, FNAP is now available. Let me know if you run into any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 02 Feb 2024 00:48:48 GMT</pubDate>
+      <guid isPermaLink="false">1202777608421511209</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Three minor UI changes:
+- Tablero di Berona has been fixed to work in dark mode.
+- In the Manage Palettes dialog, you can now see the hex values of your chosen colours.
+- A highlighted text notice now appears when your move still needs to be submitted. The Submit button has also been made larger. Hopefully this will alleviate some of the issues. Further discussion welcome.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 02 Feb 2024 23:01:10 GMT</pubDate>
+      <guid isPermaLink="false">1203112908016320582</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve updated Entropy as follows:
+- Annotations have been expanded to always show the previous two turns (so both placement and movement).
+- The piece you just placed or clicked on for movement is now highlighted with a dot. (Background highlighting might have been preferred, but it&amp;apos;s not really possible given the vagaries of the Entropy renderer.)
+
+To accomplish this, I had to meddle far more with the code than I would have liked. I always get very nervous when fiddling with battle-tested code. I played a test game, and everything appeared to function as I expected, but I screw things up all the time 🙂 Do let me know right away in the #bug-reports channel if you run into any issues with a game.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 03 Feb 2024 02:24:03 GMT</pubDate>
+      <guid isPermaLink="false">1203163965467926568</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mark Khan&amp;apos;s game Clusterfuss is now available. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 03 Feb 2024 18:09:13 GMT</pubDate>
+      <guid isPermaLink="false">1203401824686837820</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The game ConHex is now available, thanks to @ypaul. This includes the default 11x11 size and a larger 15x15. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 03 Feb 2024 20:37:53 GMT</pubDate>
+      <guid isPermaLink="false">1203439237425528912</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The James Ernest + Mike Selinker game Fightopia is now available. This is the first &amp;quot;multicell&amp;quot; game on AP. Maybe it will inspire one of our many game designers! Do let me know if you run into any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 04 Feb 2024 23:48:03 GMT</pubDate>
+      <guid isPermaLink="false">1203849485676052551</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Just want to clarify for Alfred&amp;apos;s Wyke players that the button bar highlighting has changed *in dark mode only*. In dark mode, the most recently used move is the lighter colour, and the oldest one is the darker. This is the inverse of how it is in light mode. Do let me know if you run into any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 06 Feb 2024 19:14:41 GMT</pubDate>
+      <guid isPermaLink="false">1204505466605019137</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>You can now filter the tournaments page by registration status (will take a few minutes to propagate).</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 06 Feb 2024 19:57:19 GMT</pubDate>
+      <guid isPermaLink="false">1204516192073547827</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A new mobile-specific play page has just been pushed to production. The changes only affect small screens (&amp;lt;770 pixels wide):
+- The undo button has been forced to the far right to give maximum space from the submit button.
+- The page layout has been broken up into &amp;quot;cards&amp;quot; that can be moved around (well, up and down). The play page consists of five sections, which you can now order as you see fit on a per-device basis.
+- This does not affect the single-player playground page.
+
+The user names above the move tree also now link to the player profiles (@abdekker). Let me know if you encounter any issues!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 13 Feb 2024 21:50:56 GMT</pubDate>
+      <guid isPermaLink="false">1207081500072345631</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Also, exploration has been focibly disabled for dice games (Tablero di Berona and the forthcoming Take-Back-Toe). It never mattered because you can&amp;apos;t cheat. The dice rolls are not finalized until after you click Submit. But it could still cause confusion and posed issues to the exploration code. This seemed like a reasonable solution.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 13 Feb 2024 21:59:28 GMT</pubDate>
+      <guid isPermaLink="false">1207083648483074078</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Three more James Ernest games are now available:
+- Hens and Chicks is a draughts-style game with two types of pieces and a unique capturing mechanic. Pieces can only move forward, and you try to reach your opponent&amp;apos;s home row.
+- Queensland is a game where you try to form long, unobstructed corridors between your own pieces. Because of the second-player advantage, you play two games sequentially, switching seats. Highest combined score wins. This is the first time we&amp;apos;ve done this mechanic.
+- Take-Back-Toe is a simple dice game where you try to form stacks of the same height on your home row.
+
+Let me know if you run into any issues. Enjoy!!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 14 Feb 2024 02:08:00 GMT</pubDate>
+      <guid isPermaLink="false">1207146195550601237</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mrraow&amp;apos;s polyomino, colour theory game Four is now available. Let me know if you encounter any issues with the new polyomino manipulation feature. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 18 Feb 2024 15:15:15 GMT</pubDate>
+      <guid isPermaLink="false">1208793865306378250</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Mitsuo Yamamoto&amp;apos;s game King&amp;apos;s Valley is now live, including the &amp;quot;labyrinth&amp;quot; variant (@tommynomad). Try to land your king on the centre space, but your pieces always have to move as far as they can. Teamwork! Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 18 Feb 2024 18:17:59 GMT</pubDate>
+      <guid isPermaLink="false">1208839849256157304</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Christian Freeling&amp;apos;s draughts game Dameo is now available. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 20 Feb 2024 02:01:27 GMT</pubDate>
+      <guid isPermaLink="false">1209318873560776754</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Three new games are now available:
+- Christian Freeling&amp;apos;s game Symple is a territory control game where you have to balance growing your existing groups and creating new ones.
+- The classic pegboard game Twixt is now available, thanks to @ypaul. This one may prove a little challenging on mobile. You&amp;apos;ll definitely need to zoom in when it comes time to rearrange your connections.
+- And finally, a whopping 10-pack of Hnefatafl games have been packaged under a single entry, thanks to the heroic efforts of @ypaul. See the wiki for details (https://abstractplay.com/wiki/doku.php?id=hnefatafl).
+
+Enjoy!!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 24 Feb 2024 15:38:38 GMT</pubDate>
+      <guid isPermaLink="false">1210974074239455262</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>It has been brought to my attention that my implementation of Bao was not entirely accurate (https://boardgamearena.com/bug?id=60693). A challenge with these complex traditional games is that it can be difficult to find comprehensive rules descriptions. According to the rules, a nyumba is &amp;quot;nonfunctional&amp;quot; if it has fewer than six stones, but my implementation allowed the placement of a sixth stone at the beginning of the kunamua phase to reactivate the nyumba. This is apparently not correct for kutakata turns. So in the screen capture below, blue cannot place a stone, reactivate the nyumba, and then tax it. Instead, they would have to sow the nyumba, thereby losing it. I know this situation has come up a few times in games I&amp;apos;ve played. I apologize for the error.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 25 Feb 2024 16:44:46 GMT</pubDate>
+      <guid isPermaLink="false">1211353106835570798</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mark Khan&amp;apos;s game Take and @ManaT&amp;apos;s game Root Bound are both now available, thanks to @ManaT. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 25 Feb 2024 16:48:07 GMT</pubDate>
+      <guid isPermaLink="false">1211353950150729819</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The ol&amp;apos; classic Reversi is now available, in a number of different board configurations, thanks to @ypaul. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 25 Feb 2024 19:57:03 GMT</pubDate>
+      <guid isPermaLink="false">1211401497103831111</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Philip Slater&amp;apos;s game Blockade is now available, thanks to @ypaul. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 10 Mar 2024 17:38:57 GMT</pubDate>
+      <guid isPermaLink="false">1216440171441160302</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Our 100th game, Markus Hagenauer&amp;apos;s Cairo Corridor, is now available, thanks to @ypaul. This one is unique. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 15 Mar 2024 17:43:06 GMT</pubDate>
+      <guid isPermaLink="false">1218253155679211611</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Connection game lovers, rejoice! @Corey L. Clark&amp;apos;s game Connecticut and @Gatsby&amp;apos;s game Saltire are now both available, thanks to @ypaul. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 17 Mar 2024 15:00:05 GMT</pubDate>
+      <guid isPermaLink="false">1218936905891184731</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve pushed some interim changes to the games list page:
+- For now, at least, user-generated tags are disabled. They may come back later, but for now, they&amp;apos;ve been replaced with fixed category tags.
+- There are a lot of tags, and maybe I&amp;apos;ll trim them down later, but for now there are four major sets of tags, presented in the following order:
+  - **Goals:** These describe how the outcome of the game is determined (abbreviated in tag form as `G:`).
+  - **Mechanics:** These attempt to describe generally how the game is played (abbreviated in tag form as `M:`).
+  - **Board:** Describes the playing surface. Because so many games have a rectangular shape and connectivity, I may eventually remove these.
+  - **Components:** Describes the components needed to play (abbreviated in tag form as `C:`). Since the vast majority of games are &amp;quot;simple,&amp;quot; I may eventually remove these.
+- Clicking on a tag will find games that contain that tag. Clicking on multiple tags does a &amp;quot;logical and&amp;quot; function (so the displayed games contain *all* the selected tags).
+- You can hover over a tag for more details.
+- There are now separate search fields specifically for game name and designer.
+
+There are many more changes I intend to make to this screen, specifically around mobile UX. Please join us in the #suggestions-archive channel if you have concrete suggestions for how we can improve the usability of this page on small screens. Feedback welcome!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 17 Mar 2024 23:01:27 GMT</pubDate>
+      <guid isPermaLink="false">1219058045603283075</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>More joy for connection game afficionados! Thanks to @ypaul, the following connection games are now available. Enjoy!
+- Bill Taylor&amp;apos;s game Quax
+- João Pedro Neto&amp;apos;s game Nex
+- @Mark Khan&amp;apos;s game Atoll</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 02 Apr 2024 14:32:07 GMT</pubDate>
+      <guid isPermaLink="false">1224728075703554058</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mark Khan&amp;apos;s game Clearcut has been transformed into Halfcut. The game records and ratings remain but will be flagged as Halfcut games with the &amp;quot;Clearcut&amp;quot; variant. To minimize the damage to the database, the unique identifier for this game has NOT changed. So while the display name is now &amp;quot;Halfcut,&amp;quot; the database key and URL have remained as `clearcut` (https://play.abstractplay.com/games/clearcut). It&amp;apos;s not ideal, but it&amp;apos;s far easier than the alternatives. Thanks to @ypaul for revamping the code. Let me know if something weird starts happening.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 19 Apr 2024 19:55:25 GMT</pubDate>
+      <guid isPermaLink="false">1230970031781838868</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I have tweaked the Next Game button so that it sorts the games by time remaining, and clicking it before submitting your move moves the game to the end of the queue so it cycles more predictably than before. There is more to do here, but you gotta start somewhere 🙂 Let me know if anything weird happens.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 19 Apr 2024 21:08:11 GMT</pubDate>
+      <guid isPermaLink="false">1230988344192667749</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The übermensch @ypaul has done it again, bringing us a whopping SIX new n-in-a-row games. Enjoy!
+- Four In A Row (your basic Connect4 with some wild gravity options)
+- Connect6
+- Gomoku
+- Irensei
+- Pente
+- Renju (this one gets a little crazy 😁 )
+
+Like with Tafl, these games involve a fair bit of jargon. See @ypaul&amp;apos;s excellent wiki article for details: https://abstractplay.com/wiki/doku.php?id=n-in-a-row_games.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 20 Apr 2024 19:03:12 GMT</pubDate>
+      <guid isPermaLink="false">1231319275533500416</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>To implement the more intricate pie rules of these games, some changes were made to the front end so that player colours update appropriately. Do let us know if something weird happens.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 20 Apr 2024 19:03:23 GMT</pubDate>
+      <guid isPermaLink="false">1231319321746346045</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>New size variants are available for Crossway, Scaffold, and Connecticut.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 21 Apr 2024 18:25:47 GMT</pubDate>
+      <guid isPermaLink="false">1231672250491473973</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Dark mode changes are now on their way to production. Let us know if something is not working as you expect, or if you have suggestions for improving the mode generally.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 27 Apr 2024 19:05:37 GMT</pubDate>
+      <guid isPermaLink="false">1233856600012357763</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>You are now able to customize the six &amp;quot;context&amp;quot; colours used in both light and dark modes for drawing boards. Click the cog in the top-right corner and click the &amp;quot;Manage Colour Contexts&amp;quot; button. These changes are global (apply to all games). You can customize boards for specific games by clicking the CSS icon below the game board. Visit the #customization channel for more information and targeted assistance. Further feedback always welcome.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 28 Apr 2024 17:36:22 GMT</pubDate>
+      <guid isPermaLink="false">1234196527430238319</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Streetcar Suburb:** The colours of buildings and taken housing limits were already being stored, but they just never made it into the chat strings. Chat logs and coloured annotations should now be visible for all past and future games. Let me know if something doesn&amp;apos;t work as expected.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 28 Apr 2024 20:39:51 GMT</pubDate>
+      <guid isPermaLink="false">1234242701168480267</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The new James Ernest game Prudh is now available. At James&amp;apos;s recommendation, only the standard rules are implemented. Enjoy, and thank you, testers!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 28 Apr 2024 20:50:19 GMT</pubDate>
+      <guid isPermaLink="false">1234245336248221716</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The list of games now includes a sortable column showing the date the game was added. I know this table is wide. Only so many hours in a day!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 28 Apr 2024 21:25:40 GMT</pubDate>
+      <guid isPermaLink="false">1234254234413957222</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Yet again, @ypaul brings us more games! The following are now available. Enjoy!
+- Two Cameron Browne three-dimensional games: Akron (connection) and Margo (Go variant)
+- Martin Windischer&amp;apos;s smaller-scale 3D connection game Sponnect
+- The @Mark Khan + @Gatsby collaboration Necklace</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 30 Apr 2024 17:27:10 GMT</pubDate>
+      <guid isPermaLink="false">1234918989478498345</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Zooming and panning should now work as expected on game boards. That includes your standard pinch gestures and mouse wheels. Let me know if something does not work as expected or if you believe there is another modality that should be supported. I have removed the &amp;quot;jerry-rigged&amp;quot; zoom button/feature as a result.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 02 May 2024 16:48:32 GMT</pubDate>
+      <guid isPermaLink="false">1235634040988499969</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Changes to the zoom feature have been pushed to production: 
+- I have disabled the new zoom features on small screens because the standard pinch and zoom has always worked fine on mobile devices.
+- On desktop, I have made some minor adjustments to try to maximize the space available to the game board.
+- On desktop, there is now a toggle button below the game board that lets you switch the game page to the vertical/mobile layout. Vertical mode disables the new zoom feature, but it does force the game board to full screen width (this is a per-device setting).
+- For the record, Ctrl++ does not work and likely will never work as you might hope. To my knowledge, there is no way around this, but if anyone out there has CSS knowledge and is able to show me how make that magic work, I am all ears.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 04 May 2024 00:32:49 GMT</pubDate>
+      <guid isPermaLink="false">1236113269056344094</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>User chat has been expanded to allow for basic Markdown, including links but *excluding* images. To force line breaks, you need an empty line between the two paragraphs of text.  This should be retroactive. Let me know if you encounter any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 04 May 2024 15:34:06 GMT</pubDate>
+      <guid isPermaLink="false">1236340085251903599</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to @ypaul, Margalith Akavya&amp;apos;s game Upper Hand is now available. Two variants have also been added to Connect6. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 05 May 2024 15:45:18 GMT</pubDate>
+      <guid isPermaLink="false">1236705292591304754</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Stephen Linhart&amp;apos;s game Susan is now available, thanks to @ypaul. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 13 May 2024 17:35:57 GMT</pubDate>
+      <guid isPermaLink="false">1239632241710071850</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mark Khan&amp;apos;s game Oust (hex and square) is now available, thanks to @ypaul. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 13 May 2024 18:07:30 GMT</pubDate>
+      <guid isPermaLink="false">1239640179455823893</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The traditional sowing game Oware is now available. It implements the more common tournament rules where &amp;quot;grand slam&amp;quot; moves are legal but don&amp;apos;t result in any captures. Let me know if there are any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 13 May 2024 20:40:43 GMT</pubDate>
+      <guid isPermaLink="false">1239678737348296755</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to @ypaul, the following games are now available. Enjoy!
+- @Gatsby&amp;apos;s Ayu
+- Dieter Stein&amp;apos;s Spook</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 26 May 2024 20:28:56 GMT</pubDate>
+      <guid isPermaLink="false">1244386817772355614</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>To keep zooming from interfering with scrolling, the zoom starts as disabled by default. Click the magnifying glass icon below the board to enable/disable zooming. Let me know if there are any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 03 Jun 2024 21:24:47 GMT</pubDate>
+      <guid isPermaLink="false">1247299975897939969</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to @ypaul  and @ManaT, we have a cornucopia of new games now available:
+- @Gatsby &amp;apos;s games Pletore and Stigmergy
+- @🪷GoldGeneral_0 &amp;apos;s game Anache
+- And *four* Shibumi games:
+  - Dieter Stein&amp;apos;s Spire
+  - Néstor&amp;apos;s Spline
+  - Matt Green&amp;apos;s Sploof
+  - @Avri&amp;apos;s Spree
+
+Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 08 Jun 2024 23:10:14 GMT</pubDate>
+      <guid isPermaLink="false">1249138451442303016</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Gatsby&amp;apos;s game Asli is now available. This is game #130. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 13 Jun 2024 20:56:57 GMT</pubDate>
+      <guid isPermaLink="false">1250916848984260710</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>We&amp;apos;ve adjusted the Homeworlds renderer so that the periphery systems are now sorted into three columns, and the systems in each column are sorted strictly by recency. See the screen captures for an example. Please let me know if you run into any issues! Feel free to join us in the #suggestions channel if you have recommendations on how to further improve the Homeworlds experience. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 13 Jun 2024 23:12:16 GMT</pubDate>
+      <guid isPermaLink="false">1250950901804433419</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mark Khan&amp;apos;s game Conect is now available, thanks to @ypaul. This includes a couple different board sizes, and an option to play the game on the flat rhombus if you prefer. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 17 Jun 2024 19:12:16 GMT</pubDate>
+      <guid isPermaLink="false">1252340055012540427</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Just a friendly reminder that it is possible to change your Discord name on a per-server basis. If you want to make it easier for others to find you here, consider changing your Discord name to your display name on the site. To do so, right-click or long-hold the server icon, then select Edit Server Profile. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 26 Jun 2024 21:20:51 GMT</pubDate>
+      <guid isPermaLink="false">1255633906892275863</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I have finally merged some fundamental renderer changes into production, which will enable more liberal board rotation options. The front-end changes to enable this will come later (but soon). Please let me know if something weird starts happening. The site is being actively developed, so odd occurrences are inevitable, and I have appreciated your patience. Thank you.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 07 Jul 2024 15:56:41 GMT</pubDate>
+      <guid isPermaLink="false">1259538592330420235</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>90-degree rotation is rolling out now. Games flagged as having &amp;quot;perspective&amp;quot; will be automatically rotated for the second player, and you can use the buttons below the board to rotate further. Let me know if you encounter any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 07 Jul 2024 17:46:33 GMT</pubDate>
+      <guid isPermaLink="false">1259566239311855736</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Six new games are now available, mostly thanks to @ypaul. Let us know if you encounter any troubles. Enjoy!
+- @Gord!&amp;apos;s free-style connection game Calculus (Many thanks to @dalewalton&amp;apos;s help testing and devising the pathfinding algorithm.)
+- Rich Gowell&amp;apos;s  Entrapment
+- Kevin Kane&amp;apos;s heXentafl
+- @Mike Zapawa&amp;apos;s Slyde
+- Jorge Gomez Arrausi&amp;apos;s Unlur
+- Dieter Stein&amp;apos;s Volo (This is the 13th Dieter Stein game.)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 14 Jul 2024 17:10:17 GMT</pubDate>
+      <guid isPermaLink="false">1262093829675155486</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>You will see that the main menu has changed a little again. Tournaments are now grouped under the general heading Events, and you&amp;apos;ll see that there&amp;apos;s now an &amp;quot;Organized Events&amp;quot; feature. This will let individuals organize one-off events of arbitrary structure and composition. I implemented this because the PerGioco folks reached out wanting to run tournaments here (https://www.pergioco.net/). They will be the first to use this new feature, and I hope we&amp;apos;ll be able to work out any kinks and make UX improvements as we go. Expect to see further announcements here as events launch. Anybody else that&amp;apos;s interested in creating events just needs to reach out to me. To keep things manageable as the feature is rolled out, people need to be authorized to create new events. 
+
+As you interact with this feature, I welcome feedback and suggestions on how to improve things. Thanks for your continued engagement.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 24 Jul 2024 22:13:46 GMT</pubDate>
+      <guid isPermaLink="false">1265794083142762619</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>We are running test tournaments for LoA, Pente, and GoMoku. All are welcome.
+https://play.abstractplay.com/events</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 25 Jul 2024 15:09:31 GMT</pubDate>
+      <guid isPermaLink="false">1266049703598882816</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Event information has now been added to historical game records, and you can now download game records grouped by event (https://records.abstractplay.com/). Buttons to do so now appear on the completed tournament and event pages. I&amp;apos;ll just note, though, that game records are still only generated weekly.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 26 Jul 2024 18:25:13 GMT</pubDate>
+      <guid isPermaLink="false">1266461340554498170</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Two new buttons now appear in the Status section of all games. The refresh button does just that. Apparently when you &amp;quot;install&amp;quot; AP as an app on some devices, you can no longer trigger a page refresh. This fixes that, at least for game play pages. The clock icon will instead trigger periodic refreshes. Every 60 seconds for 30 minutes (or until you manually refresh or leave the page, or click the button again to turn them off), the page will fetch the most recent game state. This will hopefully make realtime games a little more bearable for folks. Please let me know if something does not work as you expect. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 26 Jul 2024 22:03:49 GMT</pubDate>
+      <guid isPermaLink="false">1266516353477771285</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>New code is on the way that changes how the &amp;quot;Next game&amp;quot; button works. It now appears regardless of how you reached that page, and it will continue taking you to the next game as long as there are games needing your attention. When there are no more games, it returns you to the dashboard. Let me know if something does not work as you expect.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 28 Jul 2024 19:13:57 GMT</pubDate>
+      <guid isPermaLink="false">1267198383332786206</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Some new games are now available. This brings us to 140 total. Enjoy!
+- Nick Bentley&amp;apos;s Strands (thanks to @ypaul)
+- João Pedro Neto&amp;apos;s Gonnect (thanks to @ypaul)
+- @pokshtya&amp;apos;s Dragon Eyes (thanks to @ManaT)
+- And a misère variant of Dameo (thanks to @ypaul)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 03 Aug 2024 03:22:34 GMT</pubDate>
+      <guid isPermaLink="false">1269133285347557456</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Isometric rendering has come to AP! Its first application is to @Mark Khan&amp;apos;s Zola, where the unequal spaces are most intuitively perceived in 3D. Click the gear icon below the board and select the isometric display option. Rotation is supported through the buttons below the board. This opens things up to more 3D-style games in the future. Let me know if something doesn&amp;apos;t work as expected. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 03 Aug 2024 20:43:13 GMT</pubDate>
+      <guid isPermaLink="false">1269395171167174740</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>An isometric view of @alek&amp;apos;s game Bide is now available:</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 05 Aug 2024 21:35:40 GMT</pubDate>
+      <guid isPermaLink="false">1270133148679798784</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A few small frontend tweaks:
+- A link to the wiki has been added to the game information dialog (the &amp;apos;i&amp;apos; button below the game board).
+- The name of the game above the board now links you to the game&amp;apos;s landing page.
+- The game landing pages have been cleaned up a bit, now with tabs and quick links to rated players and other info.
+
+Always open to suggestions on how to improve these pages. Thanks for your continued input.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 07 Aug 2024 18:19:46 GMT</pubDate>
+      <guid isPermaLink="false">1270808623290781809</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve released a Homeworlds diagram generator to facilitate creating diagrams for illustration and discussion. Let me know if you run into any issues. Thanks!
+
+https://hwdiagrams.abstractplay.com/</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 09 Aug 2024 23:16:08 GMT</pubDate>
+      <guid isPermaLink="false">1271607984467738707</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>On a related note, there&amp;apos;s a new button underneath Homeworlds games now that will copy the current position onto your clipboard for importing into the new diagram generator.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 10 Aug 2024 18:03:06 GMT</pubDate>
+      <guid isPermaLink="false">1271891594051588219</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>v1.4.0 of the AP Designer is now live, which supports annotating a given board position (movement, enter/exit, and dots). Let me know if something does not work as expected, or if you have further improvement suggestions: https://designer.abstractplay.com/.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 18 Aug 2024 17:24:06 GMT</pubDate>
+      <guid isPermaLink="false">1274780881763962933</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@ypaul brings us a new bounty:
+- Crummack &amp;amp; Galley&amp;apos;s game of spreading and converting, Ataxx
+- Nick Bentley&amp;apos;s game Bug
+- Arrausi&amp;apos;s sowing game Buku
+- George S. Parker&amp;apos;s Chess/draughts-like Camelot
+- Bill Taylor&amp;apos;s game Majorities
+- And two new Tumbleweed variants:
+  - &amp;quot;Capture delay,&amp;quot; where you may not place at where your opponent just placed, and
+  - &amp;quot;Free neutral,&amp;quot; where on the first turn you place a 2-stack neutral piece and a 1-stack piece of each player&amp;apos;s colour.
+
+And finally, @Castux joins our group of @Code Contributors by coding his own territory-control game Tritium.
+
+Thanks to you both! Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 26 Aug 2024 22:19:35 GMT</pubDate>
+      <guid isPermaLink="false">1277754345265430568</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to @Castux, the game Lifeline is now available. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 01 Sep 2024 22:11:01 GMT</pubDate>
+      <guid isPermaLink="false">1279926515647381647</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>More new games! Enjoy!
+
+@ypaul brings us three new connection games:
+- Christian Freeling&amp;apos;s games Query and Lox
+- Nick Bentley&amp;apos;s game Shifty
+
+And @ManaT brings us @dalewalton&amp;apos;s first game here at AP, Natal Seas - Pods.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 05 Sep 2024 23:14:22 GMT</pubDate>
+      <guid isPermaLink="false">1281392009948434486</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Three new games now available for your intellection. Enjoy!
+- Tom McNamara&amp;apos;s game Connections (thanks, @ypaul)
+- Takuro Kawasaki&amp;apos;s game Control (thanks, @ManaT)
+- Édouard Lucas&amp;apos;s classic Dots and Boxes (thanks, @ypaul)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 14 Sep 2024 13:50:45 GMT</pubDate>
+      <guid isPermaLink="false">1284511664728707184</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>New boards now available for Adere:
+- Drew&amp;apos;s hand-crafted &amp;quot;moon&amp;quot; board (a standard hexhex5 with a subdivided central cell)
+- a &amp;quot;limping 5-6&amp;quot; hex field
+- 8x8 and 10x10 slanted hex boards
+
+Also, at @Drew Edwards (Coldsalmon)&amp;apos;s request, the four-ring cobweb variant has been removed, leaving the tighter three-ring version. This doesn&amp;apos;t change the historical record. You just can&amp;apos;t create *new* four-ring versions (well, technically, you still can on the dev server if you really want to). Let me know if something does not work as expected.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 14 Sep 2024 13:55:07 GMT</pubDate>
+      <guid isPermaLink="false">1284512763737276459</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>You can now provide your BGG username and some Markdown-enabled &amp;quot;about me&amp;quot; text (255 characters max) by clicking the cog icon in the top-right corner of your screen. This information will be visible on your player profile page. Let me know if there are any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 15 Sep 2024 19:36:13 GMT</pubDate>
+      <guid isPermaLink="false">1284960989665693767</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Apologies if you received multiple &amp;quot;Your Turn&amp;quot; notification emails this morning. Occasionally, even though I&amp;apos;m in test mode, duplicates sometimes still get sent. On the bright side, an error was fixed that should ensure that a number of people who were not receiving the emails now should. A reminder that you can disable these emails by clicking on the cog icon in the top-right corner of the screen (or in the &amp;quot;hamburger&amp;quot; menu on mobile) and adjusting to your preference. Let me know if you encounter any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 21 Sep 2024 15:09:55 GMT</pubDate>
+      <guid isPermaLink="false">1287068299980701717</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@alek&amp;apos;s game Resolve is now available (thanks, @ypaul). Also, a &amp;quot;no incursions&amp;quot; variant has been added to @Gatsby&amp;apos;s Asli, and the &amp;quot;Plus&amp;quot; variant has been added to @pasxalis1987&amp;apos;s AlmaTafl. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 22 Sep 2024 16:02:48 GMT</pubDate>
+      <guid isPermaLink="false">1287443999069700136</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The &amp;quot;Moon Labyrinth&amp;quot; variant has been added to King&amp;apos;s Valley. This variant is described in the designer&amp;apos;s new Kickstarter campaign (https://www.kickstarter.com/projects/logygames/kings-valley-labyrinth-new). Still a 7x7 board, still four towers, but the towers start in slightly different positions, and players can move them. Let me know if there are any errors. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 28 Sep 2024 21:12:27 GMT</pubDate>
+      <guid isPermaLink="false">1289696250001756302</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Stats generation is on hold, I&amp;apos;m afraid, for a bit. I&amp;apos;ve reached some hard limitations of what AWS Lambdas can do, so I need to find a dfferent way of approaching the problem.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 02 Oct 2024 15:59:27 GMT</pubDate>
+      <guid isPermaLink="false">1291067032980164700</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve worked around the major memory bottleneck for now, so the stats will be updated soon and will start generating weekly again. Other bottlenecks remain, but I&amp;apos;ll keep looking for a more sustainable approach. Thanks for your patience.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 03 Oct 2024 19:26:25 GMT</pubDate>
+      <guid isPermaLink="false">1291481505075429376</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>To help more active players keep on top of tournament games, the &amp;quot;Your move&amp;quot; table now highlights which games have &amp;quot;hard time&amp;quot; clocks with an exclamation point. I&amp;apos;m open to suggestions for how to improve the display. As a reminder, the default state of AP games is &amp;quot;soft time,&amp;quot; meaning that your opponent has to manually claim the win on time. Tournament games and some manual challenges are flagged as &amp;quot;hard time,&amp;quot; meaning the game will immediately terminate when the clock runs out.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 06 Oct 2024 15:36:33 GMT</pubDate>
+      <guid isPermaLink="false">1292510821406216254</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A few changes:
+- Dan Troyka&amp;apos;s switch-based connection game Alta is now available (thanks, @ypaul).
+- Larry Back&amp;apos;s snubsquare+ connection game Onyx is now available (thanks again, @ypaul).
+- A new &amp;quot;compressed&amp;quot; variant has been added to Tablero di Berona that compresses the ratio of the highest-value space to the lowest from 6:1 to 2:1, encouraging more active competition for the lower spaces (thanks, @Samraku, for the suggestion).
+- And finally, the dice in Tablero and Take-Back-Toe will not display until the move is committed, just to avoid any potential confusion.
+
+Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 06 Oct 2024 18:09:24 GMT</pubDate>
+      <guid isPermaLink="false">1292549285321375814</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve tweaked the hard-time indicator to be a little less &amp;quot;in your face.&amp;quot; Also, it can now be changed using CSS. See the customization channel for details: https://discord.com/channels/526483743180062720/1191510010363138108/1293317897636024372.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 08 Oct 2024 21:05:40 GMT</pubDate>
+      <guid isPermaLink="false">1293318423610130544</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to @Castux , @hoembla&amp;apos;s game Hula is now available. Be the first to create a closed loop around the centre cell. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 19 Oct 2024 19:46:56 GMT</pubDate>
+      <guid isPermaLink="false">1297284875551903814</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve made some changes so that &amp;quot;new chat&amp;quot; indicators appear in the active game tables on the dashboard. When entering a game that has new chat, an indicator will appear on the top-right of the board section. That will persist until you leave the page. (Once you view the game page, the &amp;quot;last seen&amp;quot; updates, so the chat will not appear as &amp;quot;new&amp;quot; again.) This required some minor changes on the backend, which always scares me a little 😄 Let me know if something unexpected happens. Thanks for your patience.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 19 Oct 2024 21:28:40 GMT</pubDate>
+      <guid isPermaLink="false">1297310475415195709</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Related to those &amp;quot;minor changes on the backend,&amp;quot; I&amp;apos;ve fixed a bug that was causing pretty consistent &amp;quot;failed to fetch&amp;quot; errors when loading games while not logged in. Thanks for your patience.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 22 Oct 2024 21:20:14 GMT</pubDate>
+      <guid isPermaLink="false">1298395516727591055</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to @ManaT, the traditional Hawaiian game Konane is now available. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 01 Nov 2024 19:20:20 GMT</pubDate>
+      <guid isPermaLink="false">1301989224769126521</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mark Khan &amp;apos;s game Blast Radius is now available. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 27 Nov 2024 18:21:50 GMT</pubDate>
+      <guid isPermaLink="false">1311396585996816485</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Marcos Donnantuoni&amp;apos;s simultaneous game Frames is now available. This is an old SDG game where you try to &amp;quot;get into your opponent&amp;apos;s head&amp;quot; to enclose more of your own pieces. Enjoy! ( @personman )</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 28 Nov 2024 20:48:45 GMT</pubDate>
+      <guid isPermaLink="false">1311795946610495509</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Three new pyramid games have been added. Let me know if you run into any issues. Enjoy!
+- In Erik Dresner&amp;apos;s game Logger, players grow and harvest trees for points. Supports 2-4 players. Moves are more complex than most abstracts, but there&amp;apos;s lots of highlighting and error messages to help.
+- In Carlton Noles&amp;apos;s game Subdivision, place various types of buildings in the city to maximize your score. This is an old SDG game. There are a couple setup options for diversity. Supports 2-4 players.
+- Doug Orleans&amp;apos;s game Pylon has two phases: first you fill the board with pyramids (a random &amp;quot;quick start&amp;quot; option is available), and then you build stacks. Control the most pyramids to win.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 13 Dec 2024 21:14:09 GMT</pubDate>
+      <guid isPermaLink="false">1317238157086953533</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve just enabled some new code to let us handle games with hidden information. It&amp;apos;s a backwards-compatible change, and my tests are showing things working as expected, but do let me know if you notice anything unexpected.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 14 Dec 2024 21:58:44 GMT</pubDate>
+      <guid isPermaLink="false">1317611762257760356</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The Decktet game Jacynth is now available (supports 2 or 3 players). This is our first card game and our first game that includes hidden information (but not the last). Enjoy!
+
+A few notes on hidden information:
+- Particpants will only be able to see their own hands, and observers will see none of them. The &amp;quot;cards in deck&amp;quot; display will adjust to only account for visible cards.
+- Once a game is over, all hidden information becomes public. You&amp;apos;ll be able to review the game from the beginning seeing all hands.
+- *Starting* a game in the playground will let you see all hands and play as usual.
+- *Exporting* an active game to the playground will *not* work as you expect. It will export, but you still won&amp;apos;t see the other hands. Exporting a completed game will work fine.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 15 Dec 2024 18:21:50 GMT</pubDate>
+      <guid isPermaLink="false">1317919566474776627</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Information on timeouts, both site wide (Site Statistics page) and individually (on player profile pages), is now visible. Extensive validation is challenging. The data seems right for me, so I&amp;apos;m assuming it&amp;apos;s right for everybody, but please let me know in #bug-reports if something appears to be off.  Merry Christmas! (@slimy_asparagus: Nicholas Bamber  @Samraku )</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 25 Dec 2024 21:46:06 GMT</pubDate>
+      <guid isPermaLink="false">1321594850449166357</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve added response time data to the player profile pages. There are some display challenges with this page that I need to figure out. I will work on those when I have a little more time. Thanks for your patience. Hopefully this data will be useful. (Again, validation is challenging. Let me know if your data appears to be off.)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 27 Dec 2024 19:14:52 GMT</pubDate>
+      <guid isPermaLink="false">1322281569112555541</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Drew Edwards (Coldsalmon)&amp;apos;s game Moon Squad is now available. It includes the default circular board and two different hexhex variants. Happy new year!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 29 Dec 2024 16:25:02 GMT</pubDate>
+      <guid isPermaLink="false">1322963601471967273</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The old SDG version of Robo Battle Pigs is now live. Because the internals were different enough, this is the first (and hopefully last, or at least very rare) instance where a variant is treated as a separate game. This new variant is called `Robo Battle Pigs (Continuous)`. It supports 2-8 players and is the first game to allow things to proceed after someone resigns or times out.
+
+In this version, you only issue a single command per turn (after the first), and only one order resolves for each player each turn. The game is therefore longer but more deliberate and strategic. This game has hidden information. You can see what your opponents just did, but you can&amp;apos;t see their stored order queue until the game ends, at which point all hidden information will be visible and explorable.
+
+I&amp;apos;ve done what testing I can locally, but simultaneous games with this many players is challenging. Please let me know if something does not work as you expect, and I&amp;apos;m open to ideas for making the display more clear.
+
+I have a number of challenges up. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 29 Dec 2024 22:03:46 GMT</pubDate>
+      <guid isPermaLink="false">1323048846489817099</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A &amp;quot;balanced start&amp;quot; variant has been added to Tablero di Berona in which the first player only rolls a single die on the very first turn of the game. The idea being that it better balances the second-player advantage. Let me know if there are any issues. (Thank you, @Samraku, for the suggestion.)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 05 Jan 2025 15:20:44 GMT</pubDate>
+      <guid isPermaLink="false">1325484137477574758</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The 3D game Terrace is now available. The default game is the 6x6, &amp;quot;short&amp;quot; game, but the 8x8 board and &amp;quot;long&amp;quot; versions are also available. I&amp;apos;ve also included the &amp;quot;assassination&amp;quot; rules for expanded capturing opportunities (described in the implementation notes and rules links). The default display is isometric, but you can select the flat version by clicking the cog icon below the game board. Let me know if you run into any issues. Enjoy! ( @movingtheriver @eykca )</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 07 Jan 2025 20:21:57 GMT</pubDate>
+      <guid isPermaLink="false">1326284716034363504</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The boardless dice game Cubeo is now available. It includes an unofficial movement variant that constrains movement more than usual. Let me know if you run into any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 09 Jan 2025 20:21:15 GMT</pubDate>
+      <guid isPermaLink="false">1327009315931951164</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to the herculean efforts of @ypaul, Trax is now available! This is a boardless tile game where you try to form lines or loops with unique bicoloured tiles. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 11 Jan 2025 18:45:22 GMT</pubDate>
+      <guid isPermaLink="false">1327709962734014526</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Regarding Terrace, I had misunderstood the Assassination rules. They have been corrected.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 12 Jan 2025 17:27:00 GMT</pubDate>
+      <guid isPermaLink="false">1328052627661127750</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Cameron Browne&amp;apos;s game Yavalath is now available ( @ganelon ). Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 12 Jan 2025 23:51:21 GMT</pubDate>
+      <guid isPermaLink="false">1328149350634754089</guid>
+    </item>
+    
+  </channel>
+</rss>
