@@ -169,11 +169,15 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("stacking-expanding");
   let newchat = false;
   if (me !== undefined && me !== null) {
-    if (me.games !== undefined && me.games !== null && Array.isArray(me.games)) {
-        const meGame = me.games.find((g) => g.id === game0.id);
-        if (meGame !== undefined) {
-          newchat = (meGame.lastChat || 0) > (meGame.seen || 0);
-        }
+    if (
+      me.games !== undefined &&
+      me.games !== null &&
+      Array.isArray(me.games)
+    ) {
+      const meGame = me.games.find((g) => g.id === game0.id);
+      if (meGame !== undefined) {
+        newchat = (meGame.lastChat || 0) > (meGame.seen || 0);
+      }
     }
   }
   game0.hasNewChat = newchat;
@@ -315,7 +319,7 @@ function setupGame(
     if (tmpEngine.stack.length === 0) break;
     tmpEngine.load();
   }
-  explorationRef.current = {gameID: game0.id, nodes: history};
+  explorationRef.current = { gameID: game0.id, nodes: history };
   let focus0 = { moveNumber: history.length - 1, exPath: [] };
   focus0.canExplore = canExploreMove(
     gameRef.current,
@@ -478,17 +482,24 @@ function fixMoveOutcomes(exploration, moveNumber) {
 }
 
 // after you submit a move, move the subtree of that explored move to the actual move.
-function mergeExistingExploration(moveNum, cur_exploration, exploration, game = undefined, useSameMove = false) {
+function mergeExistingExploration(
+  moveNum,
+  cur_exploration,
+  exploration,
+  game = undefined,
+  useSameMove = false
+) {
   moveNum++;
   while (true) {
-    let move = exploration[moveNum].move
-      .toLowerCase()
-      .replace(/\s+/g, "");
+    let move = exploration[moveNum].move.toLowerCase().replace(/\s+/g, "");
     let subtree;
     if (useSameMove) {
-      let gameEngine = GameFactory(game.metaGame, exploration[moveNum - 1].state);
-      subtree = cur_exploration.children.find(
-        (e) => gameEngine.sameMove(move, e.move)
+      let gameEngine = GameFactory(
+        game.metaGame,
+        exploration[moveNum - 1].state
+      );
+      subtree = cur_exploration.children.find((e) =>
+        gameEngine.sameMove(move, e.move)
       );
     } else {
       subtree = cur_exploration.children.find(
@@ -498,8 +509,7 @@ function mergeExistingExploration(moveNum, cur_exploration, exploration, game = 
     if (subtree !== undefined) {
       moveNum++;
       if (moveNum === exploration.length) {
-        exploration[exploration.length - 1].children =
-          subtree.children;
+        exploration[exploration.length - 1].children = subtree.children;
         // TODO: Don't we need to save the exploration to DB here? In particular if a whole bunch of auto moves were triggered. Also if
         // we save here, then we only need to fetch the previous move's exploration when the user looks at his game. I think existing exploration after a
         // set of auto moves will be lost if we don't save. Maybe test with Zola, it can trigger many auto moves near the end of the game.
@@ -770,10 +780,7 @@ function doView(
         automoved = true;
         if (
           !game.gameOver ||
-          !gameEngineTmp.sameMove(
-            m,
-            exploration[newfocus.moveNumber + 1].move
-          )
+          !gameEngineTmp.sameMove(m, exploration[newfocus.moveNumber + 1].move)
         ) {
           let pos = node.AddChild(m, gameEngineTmp);
           newfocus.exPath.push(pos);
@@ -817,15 +824,11 @@ function doView(
       !game.gameOver ||
       !(
         newfocus.exPath.length === 0 &&
-        gameEngineTmp.sameMove(
-          m,
-          exploration[newfocus.moveNumber + 1].move
-        )
+        gameEngineTmp.sameMove(m, exploration[newfocus.moveNumber + 1].move)
       )
     ) {
       const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
-      if (game.gameOver)
-        fixMoveOutcomes(exploration, newfocus.moveNumber + 1);
+      if (game.gameOver) fixMoveOutcomes(exploration, newfocus.moveNumber + 1);
       newfocus.exPath.push(pos);
       saveExploration(
         exploration,
@@ -841,11 +844,7 @@ function doView(
     } else {
       newfocus = { moveNumber: newfocus.moveNumber + 1, exPath: [] };
     }
-    newfocus.canExplore = canExploreMove(
-      game,
-      exploration,
-      newfocus
-    );
+    newfocus.canExplore = canExploreMove(game, exploration, newfocus);
     focusSetter(newfocus);
     if (game.simultaneous) {
       moveSetter({
@@ -1467,7 +1466,7 @@ function GameMove(props) {
         explorationFetchedSetter(false);
       }
     } else {
-        fetchData();
+      fetchData();
     }
   }, [
     gameID,
@@ -1551,7 +1550,10 @@ function GameMove(props) {
   useEffect(() => {
     if (dbgame !== null) {
       // I don't think the gameID check is still needed, but better safe than sorry
-      const exploration = (explorationRef.current && explorationRef.current.gameID === dbgame.id) ? explorationRef.current.nodes : null;
+      const exploration =
+        explorationRef.current && explorationRef.current.gameID === dbgame.id
+          ? explorationRef.current.nodes
+          : null;
       const foc = cloneDeep(focus);
       const game = dbgame;
       setupGame(
@@ -1576,21 +1578,33 @@ function GameMove(props) {
         if (explorationRef.current.nodes.length === exploration.length) {
           let ok = true;
           for (let i = 0; ok && i < explorationRef.current.nodes.length; i++) {
-            if (exploration[i].state !== explorationRef.current.nodes[i].state) {
+            if (
+              exploration[i].state !== explorationRef.current.nodes[i].state
+            ) {
               ok = false;
             }
           }
           if (ok) {
             for (let i = 0; i < explorationRef.current.nodes.length; i++) {
-              explorationRef.current.nodes[i].children = exploration[i].children;
+              explorationRef.current.nodes[i].children =
+                exploration[i].children;
             }
             handleGameMoveClick(foc);
           }
           // if we got here from the "trigger a refresh" button, we should probably also fetch exploration in case the user is exploring on more than one device
           explorationFetchedSetter(false);
-        } else if (explorationRef.current.nodes.length === exploration.length + 1) {
+        } else if (
+          explorationRef.current.nodes.length ===
+          exploration.length + 1
+        ) {
           // page refreshed and opponent moved
-          mergeExistingExploration(exploration.length - 1, exploration[exploration.length - 1], explorationRef.current.nodes, gameRef.current, true);
+          mergeExistingExploration(
+            exploration.length - 1,
+            exploration[exploration.length - 1],
+            explorationRef.current.nodes,
+            gameRef.current,
+            true
+          );
         }
       }
       processNewSettings(
@@ -1842,7 +1856,11 @@ function GameMove(props) {
             }
             return d;
           });
-          mergePublicExploration(gameRef.current, explorationRef.current.nodes, data);
+          mergePublicExploration(
+            gameRef.current,
+            explorationRef.current.nodes,
+            data
+          );
           fixMoveOutcomes(
             explorationRef.current.nodes,
             explorationRef.current.nodes.length - 1
@@ -1851,7 +1869,8 @@ function GameMove(props) {
             const moveNum = parseInt(moveNumberParam, 10);
             let exPath = [];
             if (nodeidParam) {
-              exPath = explorationRef.current.nodes[moveNum].findNode(nodeidParam);
+              exPath =
+                explorationRef.current.nodes[moveNum].findNode(nodeidParam);
             }
             handleGameMoveClick({ moveNumber: moveNum, exPath });
           } else {
@@ -2496,7 +2515,11 @@ function GameMove(props) {
         navigate
       );
       if (gameRef.current.canExplore) {
-        mergeExistingExploration(moveNum, cur_exploration, explorationRef.current.nodes);
+        mergeExistingExploration(
+          moveNum,
+          cur_exploration,
+          explorationRef.current.nodes
+        );
       }
       if (gameRef.current.customColours) {
         setupColors(settings, gameRef.current, globalMe, colourContext, {
@@ -2748,7 +2771,12 @@ function GameMove(props) {
       else movesRef.current = engine.moves();
     }
     focusSetter(focus0);
-    setCanPublish(game, explorationRef.current.nodes, globalMe, canPublishSetter);
+    setCanPublish(
+      game,
+      explorationRef.current.nodes,
+      globalMe,
+      canPublishSetter
+    );
     explorerSetter(true);
   };
 
@@ -2920,7 +2948,10 @@ function GameMove(props) {
       }
       if (game.gameOver && focus.canExplore) {
         exploringCompletedGame = true;
-        nodeComments = getFocusNode(explorationRef.current.nodes, focus).comment;
+        nodeComments = getFocusNode(
+          explorationRef.current.nodes,
+          focus
+        ).comment;
       }
     }
     return (
@@ -3002,9 +3033,7 @@ function GameMove(props) {
                   tourClass = "tourMoveList";
                   break;
                 case "chat":
-                  title = exploringCompletedGame
-                    ? t("GameComments")
-                    : t("GameSummary");
+                  title = t("GameSummary");
                   tourClass = "tourChat";
                   break;
                 default:
@@ -3176,21 +3205,33 @@ function GameMove(props) {
                           key={`Moves|colorSet${colorsChanged}`}
                         />
                       ) : key === "chat" ? (
-                        <UserChats
-                          comments={
-                            exploringCompletedGame ? nodeComments : comments
-                          }
-                          players={gameRef.current?.players}
-                          handleSubmit={
-                            exploringCompletedGame
-                              ? submitNodeComment
-                              : submitComment
-                          }
-                          tooMuch={commentsTooLong}
-                          gameid={gameRef.current?.id}
-                          exploringCompletedGame={exploringCompletedGame}
-                          userId={globalMe?.id}
-                        />
+                        <>
+                          <UserChats
+                            comments={comments}
+                            players={gameRef.current?.players}
+                            handleSubmit={submitComment}
+                            tooMuch={commentsTooLong}
+                            gameid={gameRef.current?.id}
+                            exploringCompletedGame={false}
+                            userId={globalMe?.id}
+                          />
+                          {!exploringCompletedGame ? null : (
+                            <div>
+                              <h1 className="subtitle lined">
+                                <span>{t("GameComments")}</span>
+                              </h1>
+                              <UserChats
+                                comments={nodeComments}
+                                players={gameRef.current?.players}
+                                handleSubmit={submitNodeComment}
+                                tooMuch={commentsTooLong}
+                                gameid={gameRef.current?.id}
+                                exploringCompletedGame={exploringCompletedGame}
+                                userId={globalMe?.id}
+                              />
+                            </div>
+                          )}
+                        </>
                       ) : null}
                     </div>
                   </div>
@@ -3335,23 +3376,33 @@ function GameMove(props) {
                 </div>
                 <div style={{ paddingTop: "1em" }} className="tourChat">
                   <h1 className="subtitle lined">
-                    <span>
-                      {exploringCompletedGame
-                        ? t("GameComments")
-                        : t("GameSummary")}
-                    </span>
+                    <span>{t("GameSummary")}</span>
                   </h1>
                   <UserChats
-                    comments={exploringCompletedGame ? nodeComments : comments}
+                    comments={comments}
                     players={gameRef.current?.players}
-                    handleSubmit={
-                      exploringCompletedGame ? submitNodeComment : submitComment
-                    }
+                    handleSubmit={submitComment}
                     tooMuch={commentsTooLong}
                     gameid={gameRef.current?.id}
-                    exploringCompletedGame={exploringCompletedGame}
+                    exploringCompletedGame={false}
                     userId={globalMe?.id}
                   />
+                  {!exploringCompletedGame ? null : (
+                    <div>
+                      <h1 className="subtitle lined">
+                        <span>{t("GameComments")}</span>
+                      </h1>
+                      <UserChats
+                        comments={nodeComments}
+                        players={gameRef.current?.players}
+                        handleSubmit={submitNodeComment}
+                        tooMuch={commentsTooLong}
+                        gameid={gameRef.current?.id}
+                        exploringCompletedGame={exploringCompletedGame}
+                        userId={globalMe?.id}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -3532,13 +3583,16 @@ function GameMove(props) {
               ) : (
                 <Fragment>
                   <ClipboardCopy
-                    copyText={getFocusNode(explorationRef.current.nodes, focus).state}
+                    copyText={
+                      getFocusNode(explorationRef.current.nodes, focus).state
+                    }
                   />
                   <div className="field">
                     <div className="control">
                       <a
                         href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                          getFocusNode(explorationRef.current.nodes, focus).state
+                          getFocusNode(explorationRef.current.nodes, focus)
+                            .state
                         )}`}
                         download="AbstractPlay-Debug.json"
                       >
@@ -3726,9 +3780,9 @@ function GameMove(props) {
     );
   } else {
     reportError(
-      `Message: ${errorMessageRef.current}, url: ${window.location.href}, game: ${JSON.stringify(
-        game
-      )}, state: ${
+      `Message: ${errorMessageRef.current}, url: ${
+        window.location.href
+      }, game: ${JSON.stringify(game)}, state: ${
         explorationRef.current && focus
           ? getFocusNode(explorationRef.current.nodes, focus).state
           : ""

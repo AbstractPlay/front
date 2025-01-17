@@ -142,8 +142,10 @@ function Stats(props) {
             ({recDays} day{recDays !== 1 ? "s" : ""}, or {recYears} year
             {recYears !== 1 ? "s" : ""}).
             <br />
-            In that time, {summary !== null ? summary.numPlayers.toLocaleString() : "??"} players
-            have played {summary !== null ? summary.numGames.toLocaleString() : "??"} games.
+            In that time,{" "}
+            {summary !== null ? summary.numPlayers.toLocaleString() : "??"}{" "}
+            players have played{" "}
+            {summary !== null ? summary.numGames.toLocaleString() : "??"} games.
           </p>
           <p className="help">
             Please note that the ratings given here are dynamically generated

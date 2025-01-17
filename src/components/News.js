@@ -54,7 +54,8 @@ function News(props) {
                 our Discord server
               </a>
               . Please come join us! This list is maintained separately, doesn't
-              include images and reactions, and may be slightly delayed. Also available as an <a href="/news.rss">RSS feed</a>!
+              include images and reactions, and may be slightly delayed. Also
+              available as an <a href="/news.rss">RSS feed</a>!
             </p>
           </div>
           <div className="columns">
