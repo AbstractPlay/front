@@ -53,6 +53,7 @@ function UserChats(props) {
           handleSubmit={props.handleSubmit}
           tooMuch={props.tooMuch}
           comment={mycomment}
+          exploringCompletedGame={props.exploringCompletedGame}
         />
         <div className="chatTable">
           {results.map((r, index) => (

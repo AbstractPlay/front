@@ -3002,9 +3002,7 @@ function GameMove(props) {
                   tourClass = "tourMoveList";
                   break;
                 case "chat":
-                  title = exploringCompletedGame
-                    ? t("GameComments")
-                    : t("GameSummary");
+                  title = t("GameSummary");
                   tourClass = "tourChat";
                   break;
                 default:
@@ -3176,21 +3174,33 @@ function GameMove(props) {
                           key={`Moves|colorSet${colorsChanged}`}
                         />
                       ) : key === "chat" ? (
+                        <>
                         <UserChats
-                          comments={
-                            exploringCompletedGame ? nodeComments : comments
-                          }
+                          comments={comments}
                           players={gameRef.current?.players}
-                          handleSubmit={
-                            exploringCompletedGame
-                              ? submitNodeComment
-                              : submitComment
-                          }
+                          handleSubmit={submitComment}
                           tooMuch={commentsTooLong}
                           gameid={gameRef.current?.id}
-                          exploringCompletedGame={exploringCompletedGame}
+                          exploringCompletedGame={false}
                           userId={globalMe?.id}
                         />
+                        {!exploringCompletedGame ? null :
+                        <div>
+                            <h1 className="subtitle lined">
+                                <span>{t("GameComments")}</span>
+                            </h1>
+                            <UserChats
+                                comments={nodeComments}
+                                players={gameRef.current?.players}
+                                handleSubmit={submitNodeComment}
+                                tooMuch={commentsTooLong}
+                                gameid={gameRef.current?.id}
+                                exploringCompletedGame={exploringCompletedGame}
+                                userId={globalMe?.id}
+                            />
+                        </div>
+                        }
+                        </>
                       ) : null}
                     </div>
                   </div>
@@ -3335,23 +3345,33 @@ function GameMove(props) {
                 </div>
                 <div style={{ paddingTop: "1em" }} className="tourChat">
                   <h1 className="subtitle lined">
-                    <span>
-                      {exploringCompletedGame
-                        ? t("GameComments")
-                        : t("GameSummary")}
-                    </span>
+                    <span>{t("GameSummary")}</span>
                   </h1>
                   <UserChats
-                    comments={exploringCompletedGame ? nodeComments : comments}
+                    comments={comments}
                     players={gameRef.current?.players}
-                    handleSubmit={
-                      exploringCompletedGame ? submitNodeComment : submitComment
-                    }
+                    handleSubmit={submitComment}
                     tooMuch={commentsTooLong}
                     gameid={gameRef.current?.id}
-                    exploringCompletedGame={exploringCompletedGame}
+                    exploringCompletedGame={false}
                     userId={globalMe?.id}
                   />
+                  {!exploringCompletedGame ? null :
+                  <div>
+                    <h1 className="subtitle lined">
+                        <span>{t("GameComments")}</span>
+                    </h1>
+                    <UserChats
+                        comments={nodeComments}
+                        players={gameRef.current?.players}
+                        handleSubmit={submitNodeComment}
+                        tooMuch={commentsTooLong}
+                        gameid={gameRef.current?.id}
+                        exploringCompletedGame={exploringCompletedGame}
+                        userId={globalMe?.id}
+                    />
+                  </div>
+                  }
                 </div>
               </div>
             </div>
