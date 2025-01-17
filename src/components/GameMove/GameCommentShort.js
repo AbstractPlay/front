@@ -63,11 +63,14 @@ function GameCommentShort(props) {
               </button>
             </div>
           </div>
-          {!props.exploringCompletedGame ? null :
-          <div>
-            <p className="help">This comment will be tied to the selected move and be publicly visible.</p>
-          </div>
-          }
+          {!props.exploringCompletedGame ? null : (
+            <div>
+              <p className="help">
+                This comment will be tied to the selected move and be publicly
+                visible.
+              </p>
+            </div>
+          )}
         </Fragment>
       )}
     </Fragment>

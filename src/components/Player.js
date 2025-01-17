@@ -255,68 +255,70 @@ function Player() {
           <ProfileContext.Provider value={[user, userSetter]}>
             <SummaryContext.Provider value={[summary, summarySetter]}>
               <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>
-              <ResponsesContext.Provider value={[responses, responsesSetter]}>
-                <div className="columns is-multiline">
-                  {order.map((code) => {
-                    const obj = code2ele.get(code);
-                    if (obj !== undefined) {
-                      return (
-                        <>
-                          <div
-                            className="column is-narrow"
-                            key={`${code}|column|${userid}`}
-                          >
+                <ResponsesContext.Provider value={[responses, responsesSetter]}>
+                  <div className="columns is-multiline">
+                    {order.map((code) => {
+                      const obj = code2ele.get(code);
+                      if (obj !== undefined) {
+                        return (
+                          <>
                             <div
-                              className="card"
-                              key={`${code}|card|${userid}`}
+                              className="column is-narrow"
+                              key={`${code}|column|${userid}`}
                             >
-                              <header className="card-header">
-                                <p className="card-header-title">{obj.name}</p>
-                                <button
-                                  className="card-header-icon"
-                                  aria-label="move left"
-                                  title="move left"
-                                  onClick={() => handleMoveLeft(code)}
-                                >
-                                  <span className="icon">
-                                    <i
-                                      className="fa fa-angle-left"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </span>
-                                </button>
-                                <button
-                                  className="card-header-icon"
-                                  aria-label="move right"
-                                  title="move right"
-                                  onClick={() => handleMoveRight(code)}
-                                >
-                                  <span className="icon">
-                                    <i
-                                      className="fa fa-angle-right"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </span>
-                                </button>
-                              </header>
-                              <div className="card-content">
-                                <obj.component
-                                  order={order}
-                                  key={`${code}|component|${userid}`}
-                                  handleChallenge={handleNewChallenge.bind(
-                                    this
-                                  )}
-                                />
+                              <div
+                                className="card"
+                                key={`${code}|card|${userid}`}
+                              >
+                                <header className="card-header">
+                                  <p className="card-header-title">
+                                    {obj.name}
+                                  </p>
+                                  <button
+                                    className="card-header-icon"
+                                    aria-label="move left"
+                                    title="move left"
+                                    onClick={() => handleMoveLeft(code)}
+                                  >
+                                    <span className="icon">
+                                      <i
+                                        className="fa fa-angle-left"
+                                        aria-hidden="true"
+                                      ></i>
+                                    </span>
+                                  </button>
+                                  <button
+                                    className="card-header-icon"
+                                    aria-label="move right"
+                                    title="move right"
+                                    onClick={() => handleMoveRight(code)}
+                                  >
+                                    <span className="icon">
+                                      <i
+                                        className="fa fa-angle-right"
+                                        aria-hidden="true"
+                                      ></i>
+                                    </span>
+                                  </button>
+                                </header>
+                                <div className="card-content">
+                                  <obj.component
+                                    order={order}
+                                    key={`${code}|component|${userid}`}
+                                    handleChallenge={handleNewChallenge.bind(
+                                      this
+                                    )}
+                                  />
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </>
-                      );
-                    } else {
-                      return null;
-                    }
-                  })}
-                </div>
+                          </>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </div>
                 </ResponsesContext.Provider>
               </AllRecsContext.Provider>
             </SummaryContext.Provider>

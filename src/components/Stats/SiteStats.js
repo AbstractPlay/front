@@ -84,7 +84,12 @@ function SiteStats({ nav }) {
       <div>
         <div className="content">
           <p>
-            Total cumulative timeout rate is {(summary.timeoutRate).toLocaleString(undefined, {style: "percent", minimumFractionDigits:2})}.
+            Total cumulative timeout rate is{" "}
+            {summary.timeoutRate.toLocaleString(undefined, {
+              style: "percent",
+              minimumFractionDigits: 2,
+            })}
+            .
           </p>
         </div>
         <Plot
