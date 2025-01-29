@@ -11,6 +11,7 @@ import { MeContext } from "../../pages/Skeleton";
 import { API_ENDPOINT_AUTH } from "../../config";
 import { Auth } from "aws-amplify";
 import { debounce } from "lodash";
+import { GameFactory } from "@abstractplay/gameslib";
 
 function NoMoves({ engine, game, handleMove, t }) {
   // console.log("In NoMoves");
@@ -264,7 +265,7 @@ function MoveEntry(props) {
     } else {
       // game over
       const node = getFocusNode(exploration, focus);
-      const state = JSON.parse(node.state);
+      const state = GameFactory(engine.metaGame, node.state);
       if (state.winner && state.winner.length > 0) {
         if (state.winner.length === 1) {
           const winner = game.players[state.winner[0] - 1].name;
