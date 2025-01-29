@@ -1,13 +1,13 @@
 {
-    "About": "[FR] About",
-    "Accept": "[FR] Accept",
-    "AcceptDraw": "[FR] Accept draw offer",
+    "About": "À propos",
+    "Accept": "Accepter",
+    "AcceptDraw": "Accepter l'offre de tirage au sort",
     "Accepted": "Accepté !",
-    "and": "[FR] and",
-    "Annotate": "[FR] Show last move indicators",
-    "AnnotationLevel": "Où souhaitez vous que ce choix soit appliqué ?",
-    "AvailableGames": "[FR] Available Games",
-    "Cancel": "[FR] Cancel",
+    "and": "et",
+    "Annotate": "Afficher les indicateurs de derniers mouvement",
+    "AnnotationLevel": "Où souhaitez-vous que ce choix soit appliqué ?",
+    "AvailableGames": "Jeux disponibles",
+    "Cancel": "Annuler",
     "Challenge": "[FR] Challenge",
     "Challenge Details": "[FR] Challenge Details",
     "ChallengeClock": "[FR] The clock start time will be {{start}} hours, incremented by {{inc}} hours after each move, with a maximum of {{max}} hours.",
@@ -217,7 +217,8 @@
     "categories": {
         "board": {
             "full": "Plateau",
-            "tag": "Plateau"
+            "tag": "Plateau",
+            "description": "Décrire les attributs de la surface de jeu"
         },
         "board>connect>hex": {
             "description": "Les cases sont connéctées hexagonalement",
@@ -236,6 +237,56 @@
             "description": "Décrivez comment les cases du plateau sont connectées entre elles",
             "tag": "Connectivité du plateau",
             "full": "Plateau > Connectivité"
+        },
+        "board>connect>other": {
+            "description": "Les cases se connectent les unes aux autres de façon unique",
+            "full": "Plateau > Connectivité > Autre",
+            "tag": "Connecter : Autre"
+        },
+        "board>connect>pent": {
+            "description": "Les cases se connectent les unes aux autres de façon pentagonale",
+            "full": "Plateau > Connectivité > Pentagonal",
+            "tag": "Connecter : Pent"
+        },
+        "board>connect>rect": {
+            "full": "Plateau > Connectivité > Rectangulaire",
+            "tag": "Connecter : Rect",
+            "description": "Les cases se connectent les unes aux autres de façon orthogonale et diagonale"
+        },
+        "board>connect>snub": {
+            "full": "Plateau > Connectivité > Carré de camouflet",
+            "tag": "Connecter : Camouflet",
+            "description": "Les cases se connectent les unes aux autres dans une matrice carrée de camouflet"
+        },
+        "board>dynamic": {
+            "description": "Le plateau se construit de façon dynamique",
+            "tag": "Plateau : Dynamique",
+            "full": "Plateau > Dynamique"
+        },
+        "board>mancala": {
+            "description": "Joué sur un tableau traditionnel de style Mancala",
+            "full": "Plateau > Mancala",
+            "tag": "Plateau : Mancala"
+        },
+        "board>none": {
+            "description": "Joué sur n'importe quelle surface plane",
+            "full": "Plateau > Aucun",
+            "tag": "Plateau : Aucun"
+        },
+        "board>other": {
+            "description": "Le plateau est unique",
+            "full": "Plateau > Autre",
+            "tag": "Plateau : Autre"
+        },
+        "board>shape": {
+            "description": "Décrit la forme du plateau",
+            "full": "Plateau > Forme",
+            "tag": "Plateau : Forme"
+        },
+        "board>shape>circle": {
+            "description": "Le plateau a la forme d'un cercle",
+            "full": "Plateau > Forme > Cercle",
+            "tag": "Forme : Cercle"
         }
     },
     "CanPie": "Ce joueur à l'option d'échanger les places.",
