@@ -209,9 +209,9 @@
     "WithVariants_many": "",
     "WithVariants_other": "",
     "Yes": "",
-    "YourChallenges": "[FR] Your challenges",
-    "YourGames": "[FR] Your games",
-    "YourMove": "[FR] Your move",
+    "YourChallenges": "Vos défis",
+    "YourGames": "Vos parties",
+    "YourMove": "Votre mouvement",
     "404": "404 Page non trouvée",
     "BoardSettings": "Changer les paramètres du plateau",
     "categories": {
@@ -226,7 +226,9 @@
             "tag": "Connection : Hex"
         },
         "board>shape>hex": {
-            "description": "Le plateau a une forme d'hexagone"
+            "description": "Le plateau a une forme d'hexagone",
+            "full": "Plateau > Forme > Hexagone",
+            "tag": "Forme : Hex"
         },
         "board>3d": {
             "description": "Le plateau est en trois dimensions",
@@ -281,12 +283,196 @@
         "board>shape": {
             "description": "Décrit la forme du plateau",
             "full": "Plateau > Forme",
-            "tag": "Plateau : Forme"
+            "tag": "Plateau Forme"
         },
         "board>shape>circle": {
             "description": "Le plateau a la forme d'un cercle",
             "full": "Plateau > Forme > Cercle",
             "tag": "Forme : Cercle"
+        },
+        "board>shape>oct": {
+            "description": "Le plateau a la forme d'un octogone",
+            "full": "Plateau > Forme > Octogone",
+            "tag": "Forme : Oct"
+        },
+        "board>shape>other": {
+            "description": "Le plateau a une forme unique",
+            "full": "Plateau > Forme > Autre",
+            "tag": "Forme : Autre"
+        },
+        "board>shape>rect": {
+            "description": "Le plateau a la forme d'un rectangle",
+            "full": "Plateau > Forme > Rectangle",
+            "tag": "Forme : Rect"
+        },
+        "board>shape>tri": {
+            "description": "Le plateau a la forme d'un triangle",
+            "tag": "Forme : Tri",
+            "full": "Plateau > Forme > Triangle"
+        },
+        "components>dice": {
+            "description": "Joué avec des dés",
+            "full": "Composants > Dés",
+            "tag": "C : Dés"
+        },
+        "components>piecepack": {
+            "description": "Joué avec un paquet de pièces",
+            "full": "Composants > Paquet de pièces",
+            "tag": "C : Paquet de pièces"
+        },
+        "components>poly": {
+            "description": "Joué avec des polyominos",
+            "full": "Composants > polyominos",
+            "tag": "C : polyominos"
+        },
+        "components>simple": {
+            "description": "Joué avec des pièces simples de taille uniforme, souvent empilables, parfois avec beaucoup de couleurs",
+            "full": "Composants > Simple",
+            "tag": "C : Simple"
+        },
+        "components>simple>1per": {
+            "description": "Une couleur par joueur",
+            "full": "Composants > Simple > 1 per",
+            "tag": "C : Simple, 1 per"
+        },
+        "components>simple>2per": {
+            "description": "Deux couleurs par joueur",
+            "full": "Composants > Simple > 2 per",
+            "tag": "C : Simple, 2 per"
+        },
+        "components>simple>1c": {
+            "description": "Une couleur de pièces",
+            "full": "Composants > Simple > 1 couleur",
+            "tag": "C : Simple, 1 couleur"
+        },
+        "components>simple>2c": {
+            "description": "Deux couleurs de pièces",
+            "full": "Composants > Simple > 2 couleurs",
+            "tag": "C : Simple, 2 couleurs"
+        },
+        "components>simple>3c": {
+            "description": "Trois couleurs de pièces",
+            "full": "Composants > Simple > 3 couleurs",
+            "tag": "C : Simple, 3 couleurs"
+        },
+        "components>simple>4c": {
+            "description": "Quatre couleurs de pièces",
+            "full": "Composants > Simple > 4 couleurs",
+            "tag": "C : Simple, 4 couleurs"
+        },
+        "components>simple>7c": {
+            "description": "Sept couleurs de pièces",
+            "full": "Composants > Simple > 7 couleurs",
+            "tag": "C : Simple, 7 couleurs"
+        },
+        "components>simple>pnp": {
+            "description": "Jouable avec du papier et crayon",
+            "full": "Composants > Simple > Papier & Crayon",
+            "tag": "C : Simple, P&P"
+        },
+        "components>special": {
+            "description": "Joué avec des pièces spécialisées, généralement différenciées",
+            "full": "Composants > Spécialisé",
+            "tag": "C : Spécial"
+        },
+        "goal>align": {
+            "description": "Disposez les morceaux en formes ou longueurs spécifiques (par exemple, n dans une rangée)",
+            "full": "Objectif > Aligner",
+            "tag": "G : Aligner"
+        },
+        "goal>annihilate": {
+            "description": "Anéantir toutes les pièces adverses",
+            "full": "Objectif > Anéantir",
+            "tag": "G : Anéantir"
+        },
+        "goal>area": {
+            "tag": "G : Contrôle de zone",
+            "full": "Objectif > Contrôle de zone",
+            "description": "Contrôlez une plus grande zone (ou certaines zones avec certaines forces) que votre adversaire"
+        },
+        "goal>breakthrough": {
+            "description": "Atteignez la rangée adverse ou la zone d’accueil avec une force suffisante",
+            "full": "Objectif > Percée",
+            "tag": "G : Percée"
+        },
+        "goal>connect": {
+            "description": "Connectez les bords désignés du tableau ou des zones",
+            "full": "Objectif > Connecter",
+            "tag": "G : Connecter"
+        },
+        "goal>cripple": {
+            "description": "Éliminer une majorité critique ou un sous-ensemble spécifique de pièces adverses",
+            "full": "Objectif > Infirmité",
+            "tag": "G : Infirmité"
+        },
+        "goal>evacuate": {
+            "description": "Évacuez vos pièces du plateau",
+            "full": "Objectif > Évacuer",
+            "tag": "G : Évacuer"
+        },
+        "goal>immobilize": {
+            "description": "Faites en sorte que votre adversaire ne puisse pas bouger",
+            "full": "Objectif > Immobiliser",
+            "tag": "G : Immobiliser"
+        },
+        "goal>majority": {
+            "description": "Avoir plus de pièces que votre adversaire",
+            "full": "Objectif > Majorité",
+            "tag": "G : Majorité"
+        },
+        "goal>royal-capture": {
+            "description": "Capturer une pièce adverse spécifique",
+            "full": "Objectif > Capture Royale",
+            "tag": "G : Capture Royale"
+        },
+        "goal>royal-escape": {
+            "description": "Retirer un élément spécifique du tableau",
+            "full": "Objectif > Évasion Royale",
+            "tag": "G : Évasion Royale"
+        },
+        "goal>score": {
+            "description": "Le résultat est déterminé par le score d’une manière ou d’une autre",
+            "full": "Objectif > Score",
+            "tag": "G : Score"
+        },
+        "goal>score>eog": {
+            "description": "Avoir le meilleur score à la fin de la partie",
+            "full": "Objectif> Score > Fin du match",
+            "tag": "G : Score (FDP)"
+        },
+        "goal>score>race": {
+            "description": "Soyez le premier à atteindre un score particulier",
+            "full": "Objectif > Score > Course",
+            "tag": "G : Score (Course)"
+        },
+        "mechanic>asymmetry": {
+            "tag": "M : Asymétrie",
+            "description": "Le jeu est asymétrique",
+            "full": "Mécanismes > Asymétrie"
+        },
+        "mechanic>bearoff": {
+            "description": "Les joueurs emportent des pièces hors du plateau",
+            "full": "Mécanismes > Emporter"
+        },
+        "components>pyramids": {
+            "description": "Joué avec les pyramides Looney",
+            "tag": "C : Pyramides Looney",
+            "full": "Composants > Pyramides Looney"
+        },
+        "mechanic": {
+            "full": "Mécanismes",
+            "tag": "Mécanismes",
+            "description": "Décrit les mécanismes généraux du jeu"
+        },
+        "goal>set": {
+            "full": "Objectif > Collection d’Ensembles",
+            "description": "Collectez des ensembles de pièces",
+            "tag": "G : Collection d’Ensembles"
+        },
+        "goal>unify": {
+            "tag": "G : Unifier",
+            "description": "Rassemblez toutes vos pièces",
+            "full": "Objectif > Unifier"
         }
     },
     "CanPie": "Ce joueur à l'option d'échanger les places.",
@@ -301,5 +487,8 @@
     },
     "Variants": "Variantes",
     "Variant": "Variante",
-    "VisitGame": "Voir la partie"
+    "VisitGame": "Voir la partie",
+    "buttons": {
+        "takebutton": "Bouton de prise"
+    }
 }
