@@ -2327,7 +2327,7 @@ I have a number of challenges up. Enjoy!</description>
     
     <item>
       <title>Announcement</title>
-      <description>The 3D game Terrace is now available. The default game is the 6x6, &amp;quot;short&amp;quot; game, but the 8x8 board and &amp;quot;long&amp;quot; versions are also available. I&amp;apos;ve also included the &amp;quot;assassination&amp;quot; rules for expanded capturing opportunities (described in the implementation notes and rules links). The default display is isometric, but you can select the flat version by clicking the cog icon below the game board. Let me know if you run into any issues. Enjoy! ( @movingtheriver @eykca )</description>
+      <description>The 3D game Terrace is now available. The default game is the 6x6, &amp;quot;short&amp;quot; game, but the 8x8 board and &amp;quot;long&amp;quot; versions are also available. I&amp;apos;ve also included the &amp;quot;assassination&amp;quot; rules for expanded capturing opportunities (described in the implementation notes and rules links). The default display is isometric, but you can select the flat version by clicking the cog icon below the game board. Let me know if you run into any issues. Enjoy! ( @Rollmo Down @eykca )</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Tue, 07 Jan 2025 20:21:57 GMT</pubDate>
       <guid isPermaLink="false">1326284716034363504</guid>
@@ -2435,6 +2435,66 @@ I have a number of challenges up. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Mon, 27 Jan 2025 20:14:17 GMT</pubDate>
       <guid isPermaLink="false">1333530544947855524</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I did not interpret the Owlman rules correctly. Captures now work as they should: when Owlman makes a step, the first helper along the line of movement is captured. My sincere apologies for the oversight.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 27 Jan 2025 22:28:54 GMT</pubDate>
+      <guid isPermaLink="false">1333564423008292907</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>In Yavalath three-player games, I missed a rule that required players block a next-opponent win. This has been corrected, but this required disabling the move list and automoves. Neglecting to block such a win will now result in the move being rejected with an explanation. Let me know if something does not work as you expect.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 27 Jan 2025 23:19:30 GMT</pubDate>
+      <guid isPermaLink="false">1333577155585773742</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The Storisende game states were woefully inefficient, which has led to some issues in the database. I am pushing changes out now that should (hopefully invisibly) fix these issues. Your games should be automatically updated when you next make a move. If you encounter any issues, please let me know in #bug-reports. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 29 Jan 2025 21:16:45 GMT</pubDate>
+      <guid isPermaLink="false">1334271040800555008</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@logygames&amp;apos;s game Chameleon is now available. This is a chess-like game where the pieces have different movement options depending on the colour of the cell they started from. Eliminate the opposing forces or infiltrate your enemy&amp;apos;s home row. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 31 Jan 2025 20:04:12 GMT</pubDate>
+      <guid isPermaLink="false">1334977559980544111</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Two more games are now live. Enjoy!
+- Masahiro Nakajima&amp;apos;s game Amoeba is a stacking game where you attempt to entrap the opposing kernel. There are two modes of stack movement: direct movement and sowing. See the help text for instructions ( @Clark94 ).
+- @Gatsby&amp;apos;s Gyve is a unification game where you place two stones per turn (each stone must touch the same number of friendly groups) in an effort to form fewer groups than your opponent.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 01 Feb 2025 20:32:37 GMT</pubDate>
+      <guid isPermaLink="false">1335347098182357092</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The old SDG game Pah-Tum is now available ( @Samraku ). The default game involves the first player placing the five blocked cells and the second player choosing sides, but a &amp;quot;quick start&amp;quot; variant is also available. It&amp;apos;s also possible to enable custodial captures. Highest score wins. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 01 Feb 2025 23:12:41 GMT</pubDate>
+      <guid isPermaLink="false">1335387379611078757</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Two more games are now live. Enjoy!
+- @logygames&amp;apos;s Kachit Knights is a chess-like played on a tiny 4x4 board. Pieces can change how they will move in the future after moving.
+- The joint @Gatsby  + @Mark Khan game Nakatta is a square connection game where two piece configurations are forbidden.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 02 Feb 2025 20:01:33 GMT</pubDate>
+      <guid isPermaLink="false">1335701666577645729</guid>
     </item>
     
   </channel>
