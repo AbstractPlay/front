@@ -452,7 +452,8 @@
         },
         "mechanic>bearoff": {
             "description": "Les joueurs emportent des pièces hors du plateau",
-            "full": "Mécanismes > Emporter"
+            "full": "Mécanismes > Emporter",
+            "tag": "M : Emporter"
         },
         "components>pyramids": {
             "description": "Joué avec les pyramides Looney",
@@ -473,6 +474,11 @@
             "tag": "G : Unifier",
             "description": "Rassemblez toutes vos pièces",
             "full": "Objectif > Unifier"
+        },
+        "mechanic>block": {
+            "description": "Les joueurs se neutralisent mutuellement",
+            "full": "Mécanisme > Bloquer",
+            "tag": "M : Bloquer"
         }
     },
     "CanPie": "Ce joueur à l'option d'échanger les places.",
