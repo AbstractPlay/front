@@ -2,7 +2,12 @@
     "AnnotationLevel": "你希望将这个选择应用在哪里？",
     "BoardSettings": "更改游戏面板设置",
     "buttons": {
-        "takebutton": "按下按钮"
+        "takebutton": "按下按钮",
+        "pigs": {
+            "forward": "前进",
+            "left": "向左移动",
+            "right": "向右移动"
+        }
     },
     "categories": {
         "board>connect>hex": {
@@ -46,7 +51,7 @@
         },
         "board>connect>other": {
             "full": "棋盘> 类型> 其他",
-            "description": "棋格以一种独特的方式相互连接",
+            "description": "棋格以一种特殊的方式相连",
             "tag": "连接：其他类型"
         },
         "components>piecepack": {
