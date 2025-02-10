@@ -2497,5 +2497,21 @@ I have a number of challenges up. Enjoy!</description>
       <guid isPermaLink="false">1335701666577645729</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>@Gatsby&amp;apos;s game Omny is now available ( @Drew Edwards (Coldsalmon) ). This is a generalized connection game where players try to split star cells into different regions so that no single region contains a majority of star cells. There are a lot of variants for this one. Board sizes range from 4 to 10, there are nine different star distribution scenarios (including random and freeform placement), and Adere-style captures can also be enabled. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 04 Feb 2025 23:56:06 GMT</pubDate>
+      <guid isPermaLink="false">1336485468384006236</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Just a reminder to folks that there is a #suggestions-voting channel. When I compile a list of games to code, that&amp;apos;s the list I draw from. I encourage people to take a look periodically and vote on ones they feel strongly about. There are some features there too, but ideally this list is mostly games. You can add games to the list by typing `/suggest` and hitting Enter,  then following the bot in your DMs, but if you find the bot problematic, just let me know and I&amp;apos;ll add it for you. Feature suggestions are best made in the #suggestions channel. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 10 Feb 2025 20:27:17 GMT</pubDate>
+      <guid isPermaLink="false">1338607247546384506</guid>
+    </item>
+    
   </channel>
 </rss>
