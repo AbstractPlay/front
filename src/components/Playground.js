@@ -24,6 +24,7 @@ import MoveEntry from "./Playground/MoveEntry";
 import Modal from "./Modal";
 import ClipboardCopy from "./Playground/ClipboardCopy";
 import { MeContext, ColourContext } from "../pages/Skeleton";
+import GameVariants from "./GameVariants";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -788,11 +789,7 @@ function Playground(props) {
   const [settings, settingsSetter] = useState(null);
   const [submitting] = useState(false);
   const [newGame, newGameSetter] = useState("");
-  const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
-  const [groupData, groupDataSetter] = useState([]);
-  const [nonGroupData, nonGroupDataSetter] = useState([]);
-  const [groupDefaultData, groupDefaultDataSetter] = useState({});
-  const groupVariantsRef = useRef({});
+  const [selectedVariants, selectedVariantsSetter] = useState([]);
   const [validGames, validGamesSetter] = useState([]);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
@@ -1082,104 +1079,18 @@ function Playground(props) {
   }, [focus, explorationFetched, gameID, explorer, globalMe]);
 
   const handleChangeGame = (game) => {
-    groupVariantsRef.current = {};
     if (game === "") {
       newGameSetter("");
-      nonGroupVariantsSetter({});
-      groupDataSetter([]);
-      nonGroupDataSetter([]);
-      groupDefaultDataSetter({});
     } else {
       newGameSetter(game);
-      const info = gameinfo.get(game);
-      let gameEngine;
-      if (info.playercounts.length > 1) {
-        gameEngine = GameFactory(info.uid, 2);
-      } else {
-        gameEngine = GameFactory(info.uid);
-      }
-      let ngVariants = {};
-      let rootAllVariants = gameEngine.allvariants();
-      if (process.env.REACT_APP_REAL_MODE === "production") {
-        rootAllVariants = rootAllVariants?.filter(
-          (v) => v.experimental === undefined || v.experimental === false
-        );
-      }
-      if (rootAllVariants)
-        rootAllVariants
-          .filter((v) => v.group === undefined)
-          .forEach((v) => (ngVariants[v.uid] = false));
-      nonGroupVariantsSetter(ngVariants);
-      if (rootAllVariants && rootAllVariants !== undefined) {
-        const groups = [
-          ...new Set(
-            rootAllVariants
-              .filter((v) => v.group !== undefined)
-              .map((v) => v.group)
-          ),
-        ];
-        groupDataSetter(
-          groups.map((g) => {
-            return {
-              group: g,
-              variants: rootAllVariants.filter((v) => v.group === g),
-              // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
-            };
-          })
-        );
-        const defaults = {};
-        groups.forEach((g) => {
-          const { name, description } =
-            gameEngine.describeVariantGroupDefaults(g);
-          defaults[g] = {
-            name: name || g,
-            description,
-          };
-        });
-        groupDefaultDataSetter({ ...defaults });
-        nonGroupDataSetter(
-          rootAllVariants.filter((v) => v.group === undefined)
-          // .sort((a, b) => (a.uid > b.uid ? 1 : -1))
-        );
-      } else {
-        groupDataSetter([]);
-        nonGroupDataSetter([]);
-        groupDefaultDataSetter({});
-      }
     }
     errorSetter("");
-  };
-
-  const handleGroupChange = (group, variant) => {
-    // Ref gets updated, so no rerender. The radio buttons aren't "controlled"
-    groupVariantsRef.current[group] = variant;
-  };
-
-  const handleNonGroupChange = (event) => {
-    // State get updated, so rerender. The checkboxes are controlled.
-    let ngVariants = cloneDeep(nonGroupVariants);
-    ngVariants[event.target.id] = !ngVariants[event.target.id];
-    nonGroupVariantsSetter(ngVariants);
   };
 
   const handleInitPlayground = async () => {
     if (newGame === null || newGame === undefined || newGame === "") {
       errorSetter(t("SelectAGame"));
       return;
-    }
-    let variants = [];
-    for (var group of Object.keys(groupVariantsRef.current)) {
-      if (
-        groupVariantsRef.current[group] !== null &&
-        groupVariantsRef.current[group] !== ""
-      ) {
-        variants.push(groupVariantsRef.current[group]);
-      }
-    }
-    for (var variant of Object.keys(nonGroupVariants)) {
-      if (nonGroupVariants[variant]) {
-        variants.push(variant);
-      }
     }
     try {
       const info = gameinfo.get(newGame);
@@ -1188,9 +1099,9 @@ function Playground(props) {
       }
       let g;
       if (info.playercounts.length > 1) {
-        g = GameFactory(newGame, 2, variants);
+        g = GameFactory(newGame, 2, selectedVariants);
       } else {
-        g = GameFactory(newGame, undefined, variants);
+        g = GameFactory(newGame, undefined, selectedVariants);
       }
       if (g !== undefined) {
         const usr = await Auth.currentAuthenticatedUser();
@@ -1252,7 +1163,7 @@ function Playground(props) {
       } else {
         errorSetter(
           `Could not instantiate the game ${newGame} with variants ${JSON.stringify(
-            variants
+            selectedVariants
           )}`
         );
       }
@@ -1829,120 +1740,10 @@ function Playground(props) {
             Simultaneous games have been removed from the list.
           </p>
         </div>
-        {groupData.length === 0 && nonGroupData.length === 0 ? (
-          ""
-        ) : (
-          <Fragment>
-            <div className="field">
-              <label className="label">{t("PickVariant")}</label>
-            </div>
-            <div className="indentedContainer">
-              {newGame === null || newGame === "" || groupData.length === 0
-                ? ""
-                : groupData.map((g) => (
-                    <div
-                      className="field"
-                      key={"group:" + g.group}
-                      onChange={(e) =>
-                        handleGroupChange(g.group, e.target.value)
-                      }
-                    >
-                      <label className="label">{t("PickOneVariant")}</label>
-                      <div className="control">
-                        <label className="radio">
-                          <input
-                            type="radio"
-                            id="default"
-                            value=""
-                            name={g.group}
-                            defaultChecked
-                          />
-                          {`Default ${groupDefaultData[g.group].name}`}
-                        </label>
-                        {groupDefaultData[g.group]?.description === undefined ||
-                        groupDefaultData[g.group]?.description.length === 0 ? (
-                          ""
-                        ) : (
-                          <p
-                            className="help"
-                            style={{
-                              marginTop: "-0.5%",
-                            }}
-                          >
-                            {groupDefaultData[g.group].description}
-                          </p>
-                        )}
-                      </div>
-                      {g.variants.map((v) => (
-                        <div className="control" key={v.uid}>
-                          <label className="radio">
-                            <input
-                              type="radio"
-                              id={v.uid}
-                              value={v.uid}
-                              name={g.group}
-                            />
-                            {v.name}
-                          </label>
-                          {v.description === undefined ||
-                          v.description.length === 0 ? (
-                            ""
-                          ) : (
-                            <p
-                              className="help"
-                              style={{
-                                marginTop: "-0.5%",
-                              }}
-                            >
-                              {v.description}
-                            </p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-              {newGame === null ||
-              newGame === "" ||
-              nonGroupData.length === 0 ? (
-                ""
-              ) : (
-                <Fragment>
-                  <div className="field">
-                    <label className="label">{t("PickAnyVariant")}</label>
-                  </div>
-                  <div className="field">
-                    {nonGroupData.map((v) => (
-                      <div className="control" key={v.uid}>
-                        <label className="checkbox">
-                          <input
-                            type="checkbox"
-                            id={v.uid}
-                            checked={nonGroupVariants[v.uid]}
-                            onChange={handleNonGroupChange}
-                          />
-                          {v.name}
-                        </label>
-                        {v.description === undefined ||
-                        v.description.length === 0 ? (
-                          ""
-                        ) : (
-                          <p
-                            className="help"
-                            style={{
-                              marginTop: "-0.5%",
-                            }}
-                          >
-                            {v.description}
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </Fragment>
-              )}
-            </div>
-          </Fragment>
-        )}
+        <GameVariants
+          metaGame={newGame}
+          variantsSetter={selectedVariantsSetter}
+        />
         <div className="field">
           <div className="control">
             <button className="button apButton" onClick={handleInitPlayground}>

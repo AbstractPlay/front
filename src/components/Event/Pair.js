@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import { gameinfo } from "@abstractplay/gameslib";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH } from "../../config";
 import { cloneDeep } from "lodash";
@@ -10,6 +10,7 @@ import { UsersContext } from "../../pages/Skeleton";
 import { bergerTable } from "../../lib/berger";
 import PairingTable from "./PairingTable";
 import Modal from "../Modal";
+import GameVariants from "../GameVariants";
 
 const errorDesc = new Map([
   [
@@ -29,12 +30,7 @@ function Pair({ event, setRefresh }) {
   const [round, setRound] = useState(0);
   const [validMeta, setValidMeta] = useState(null);
   const [metagame, setMetagame] = useState(null);
-  const [allVariants, setAllVariants] = useState(null);
-  const [varDefaults, setVarDefaults] = useState({});
-  const [ngVars, setNgVars] = useState({});
-  const [groupData, setGroupData] = useState([]);
-  const [nonGroupData, setNonGroupData] = useState([]);
-  const [selectedGroups, setSelectedGroups] = useState({});
+  const [selectedVariants, setSelectedVariants] = useState([]);
   const [clockStart, setClockStart] = useState(36);
   const [clockInc, setClockInc] = useState(24);
   const [clockMax, setClockMax] = useState(72);
@@ -78,110 +74,17 @@ function Pair({ event, setRefresh }) {
   const handleMetaChange = (val) => {
     if (val === "") {
       setMetagame(null);
-      setAllVariants(null);
-      setVarDefaults({});
-      setNgVars({});
-      setGroupData([]);
-      setNonGroupData([]);
-      setSelectedGroups({});
     } else {
       setMetagame(val);
-      setSelectedGroups({});
-      // calculate applicable variants
-      const info = gameinfo.get(val);
-      let gameEngine;
-      if (info.playercounts.length > 1) {
-        gameEngine = GameFactory(info.uid, 2);
-      } else {
-        gameEngine = GameFactory(info.uid);
-      }
-      let rootAllVariants = gameEngine.allvariants();
-      if (process.env.REACT_APP_REAL_MODE === "production") {
-        rootAllVariants = rootAllVariants?.filter(
-          (v) => v.experimental === undefined || v.experimental === false
-        );
-      }
-      setAllVariants(rootAllVariants);
-
-      let ngVariants = {};
-      if (rootAllVariants) {
-        rootAllVariants
-          .filter((v) => v.group === undefined)
-          .forEach((v) => (ngVariants[v.uid] = false));
-      }
-      setNgVars(ngVariants);
-
-      let defaults = {};
-      if (rootAllVariants?.length > 0) {
-        [
-          ...new Set(
-            rootAllVariants
-              .filter((v) => v.group !== undefined)
-              .map((v) => v.group)
-          ),
-        ].forEach((g) => {
-          const { name, description } =
-            gameEngine.describeVariantGroupDefaults(g);
-          defaults[g] = {
-            name: name || g,
-            description,
-          };
-        });
-      }
-      setVarDefaults(defaults);
-
-      let groupData = [];
-      let nonGroupData = [];
-      if (rootAllVariants && rootAllVariants !== undefined) {
-        const groups = [
-          ...new Set(
-            rootAllVariants
-              .filter((v) => v.group !== undefined)
-              .map((v) => v.group)
-          ),
-        ];
-        groupData = groups.map((g) => {
-          return {
-            group: g,
-            variants: rootAllVariants.filter((v) => v.group === g),
-            // .sort((a, b) => (a.uid > b.uid ? 1 : -1)),
-          };
-        });
-        nonGroupData = rootAllVariants.filter((v) => v.group === undefined);
-        // .sort((a, b) => (a.uid > b.uid ? 1 : -1));
-      }
-      setGroupData(groupData);
-      setNonGroupData(nonGroupData);
     }
-  };
-
-  const handleGroupChange = (group, variant) => {
-    const sel = cloneDeep(selectedGroups);
-    sel[group] = variant;
-    setSelectedGroups(sel);
-  };
-
-  const handleNonGroupChange = (event) => {
-    let ngVariants = cloneDeep(ngVars);
-    ngVariants[event.target.id] = !ngVariants[event.target.id];
-    setNgVars(ngVariants);
   };
 
   const pushPairings = (pairs) => {
     if (metagame !== null && clockStart > 1 && clockInc > 1 && clockMax > 1) {
-      const variants = [];
-      for (const key in selectedGroups) {
-        variants.push(selectedGroups[key]);
-      }
-      for (const key in ngVars) {
-        if (ngVars[key]) {
-          variants.push(key);
-        }
-      }
       const metaObj = {
         round,
         metagame,
-        variants,
+        variants: selectedVariants,
         clockStart,
         clockInc,
         clockMax,
@@ -371,125 +274,10 @@ function Pair({ event, setRefresh }) {
           </div>
         )}
         {/* select the variants */}
-        {groupData.length === 0 && nonGroupData.length === 0 ? null : (
-          <>
-            <div className="field">
-              <label className="label">{t("PickVariant")}</label>
-            </div>
-            <div className="indentedContainer">
-              {metagame === null || groupData.length === 0
-                ? null
-                : groupData.map((g) => (
-                    <div className="field" key={"group:" + g.group}>
-                      <label className="label">{t("PickOneVariant")}</label>
-                      <div className="control">
-                        <label className="radio">
-                          <input
-                            type="radio"
-                            id="default"
-                            value=""
-                            name={g.group}
-                            checked={
-                              // eslint-disable-next-line no-prototype-builtins
-                              !selectedGroups.hasOwnProperty(g.group) ||
-                              selectedGroups[g.group] === ""
-                            }
-                            onChange={(e) =>
-                              handleGroupChange(g.group, e.target.value)
-                            }
-                          />
-                          {`Default ${varDefaults[g.group].name}`}
-                        </label>
-                        {varDefaults[g.group]?.description === undefined ||
-                        varDefaults[g.group]?.description.length === 0 ? (
-                          ""
-                        ) : (
-                          <p
-                            className="help"
-                            style={{
-                              marginTop: "-0.5%",
-                            }}
-                          >
-                            {varDefaults[g.group].description}
-                          </p>
-                        )}
-                      </div>
-                      {g.variants.map((v) => (
-                        <div className="control" key={v.uid}>
-                          <label className="radio">
-                            <input
-                              type="radio"
-                              id={v.uid}
-                              value={v.uid}
-                              name={g.group}
-                              checked={
-                                // eslint-disable-next-line no-prototype-builtins
-                                selectedGroups.hasOwnProperty(g.group) &&
-                                selectedGroups[g.group] === v.uid
-                              }
-                              onChange={(e) =>
-                                handleGroupChange(g.group, e.target.value)
-                              }
-                            />
-                            {v.name}
-                          </label>
-                          {v.description === undefined ||
-                          v.description.length === 0 ? (
-                            ""
-                          ) : (
-                            <p
-                              className="help"
-                              style={{
-                                marginTop: "-0.5%",
-                              }}
-                            >
-                              {v.description}
-                            </p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-              {metagame === null || nonGroupData.length === 0 ? (
-                ""
-              ) : (
-                <>
-                  <div className="field">
-                    <label className="label">{t("PickAnyVariant")}</label>
-                  </div>
-                  <div className="field">
-                    {nonGroupData.map((v) => (
-                      <div className="control" key={v.uid}>
-                        <label className="checkbox">
-                          <input
-                            type="checkbox"
-                            id={v.uid}
-                            checked={ngVars[v.uid]}
-                            onChange={handleNonGroupChange}
-                          />
-                          {v.name}
-                        </label>
-                        {v.description === undefined ||
-                        v.description.length === 0 ? (
-                          ""
-                        ) : (
-                          <p
-                            className="help"
-                            style={{
-                              marginTop: "-0.5%",
-                            }}
-                          >
-                            {v.description}
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          </>
-        )}
+        <GameVariants
+          metaGame={metagame}
+          variantsSetter={setSelectedVariants}
+        />
         {/* set the clock */}
         {metagame === null ? null : (
           <div className="columns">
