@@ -59,6 +59,7 @@ function GameVariants({ metaGame, variantsSetter }) {
                 .map((v) => v.group)
             ),
           ];
+          const selected = [];
           const localGroupData = groups
             .map((g) => {
               return {
@@ -96,15 +97,21 @@ function GameVariants({ metaGame, variantsSetter }) {
               const found = cloned.find(
                 (v) => v.default !== undefined && v.default
               );
+              // if there isn't one, mark the `#` variant as default
               if (found === undefined) {
                 const idx = cloned.findIndex((v) => v.uid.startsWith("#"));
                 if (idx >= 0) {
                   cloned[idx].default = true;
                 }
               }
+              // otherwise, push the manually marked variant to the selected array
+              else {
+                selected.push(found.uid)
+              }
               return { group: entry.group, variants: cloned };
             });
           groupDataSetter(localGroupData);
+          variantsSetter(selected);
 
           nonGroupDataSetter(
             rootAllVariants.filter(
