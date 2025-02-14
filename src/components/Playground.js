@@ -1087,6 +1087,10 @@ function Playground(props) {
     errorSetter("");
   };
 
+  useEffect(() => {
+    console.log("Selected Variants:", selectedVariants);
+  }, [selectedVariants]);
+
   const handleInitPlayground = async () => {
     if (newGame === null || newGame === undefined || newGame === "") {
       errorSetter(t("SelectAGame"));

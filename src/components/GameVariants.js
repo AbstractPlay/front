@@ -49,6 +49,7 @@ function GameVariants({ metaGame, variantsSetter }) {
             .filter((v) => v.group === undefined || v.uid.startsWith("#"))
             .forEach((v) => (ngVariants[v.uid] = false));
         nonGroupVariantsSetter(ngVariants);
+        groupVariantsSetter({});
 
         // get all grouped variants, including those that start with "#"
         if (rootAllVariants && rootAllVariants !== undefined) {
@@ -60,58 +61,59 @@ function GameVariants({ metaGame, variantsSetter }) {
             ),
           ];
           const selected = [];
-          const localGroupData = groups
-            .map((g) => {
-              return {
-                group: g,
-                variants: rootAllVariants.filter(
-                  (v) => v.group === g || v.uid === `#${g}`
-                ),
-              };
-            })
-            // now process each group and either add a `#` entry with defaults
-            // or make sure the existing one is properly populated
-            .map((entry) => {
-              const cloned = cloneDeep(entry.variants);
-              const idx = cloned.findIndex((v) => v.uid.startsWith("#"));
-              // one exists
-              if (idx >= 0) {
-                if (cloned[idx].group === undefined) {
-                  cloned[idx].group = entry.group;
-                }
-                if (cloned[idx].name === undefined) {
-                  cloned[idx].name = `Default ${entry.group}`;
-                }
-              }
-              // one does not
-              else {
-                cloned.unshift({
-                  uid: `#${entry.group}`,
-                  name: `Default ${entry.group}`,
-                  description: undefined,
-                  group: entry.group,
-                });
-              }
-
-              // make sure at least one thing is marked as default
-              const found = cloned.find(
-                (v) => v.default !== undefined && v.default
-              );
-              // if there isn't one, mark the `#` variant as default
-              if (found === undefined) {
+          groupDataSetter(
+            groups
+              .map((g) => {
+                return {
+                  group: g,
+                  variants: rootAllVariants.filter(
+                    (v) => v.group === g || v.uid === `#${g}`
+                  ),
+                };
+              })
+              // now process each group and either add a `#` entry with defaults
+              // or make sure the existing one is properly populated
+              .map((entry) => {
+                const cloned = cloneDeep(entry.variants);
                 const idx = cloned.findIndex((v) => v.uid.startsWith("#"));
+                // one exists
                 if (idx >= 0) {
-                  cloned[idx].default = true;
+                  if (cloned[idx].group === undefined) {
+                    cloned[idx].group = entry.group;
+                  }
+                  if (cloned[idx].name === undefined) {
+                    cloned[idx].name = `Default ${entry.group}`;
+                  }
                 }
-              }
-              // otherwise, push the manually marked variant to the selected array
-              else {
-                selected.push(found.uid)
-              }
-              return { group: entry.group, variants: cloned };
-            });
-          groupDataSetter(localGroupData);
-          variantsSetter(selected);
+                // one does not
+                else {
+                  cloned.unshift({
+                    uid: `#${entry.group}`,
+                    name: `Default ${entry.group}`,
+                    description: undefined,
+                    group: entry.group,
+                  });
+                }
+
+                // make sure at least one thing is marked as default
+                const found = cloned.find(
+                  (v) => v.default !== undefined && v.default
+                );
+                // if there isn't one, mark the `#` variant as default
+                if (found === undefined) {
+                  const idx = cloned.findIndex((v) => v.uid.startsWith("#"));
+                  if (idx >= 0) {
+                    cloned[idx].default = true;
+                  }
+                }
+                // otherwise, push the manually marked variant to the selected array
+                else {
+                  selected.push([found.group, found.uid]);
+                }
+                return { group: entry.group, variants: cloned };
+              })
+          );
+          selected.forEach(([g, v]) => handleGroupChange(g, v));
 
           nonGroupDataSetter(
             rootAllVariants.filter(
@@ -160,6 +162,7 @@ function GameVariants({ metaGame, variantsSetter }) {
         variants.push(variant);
       }
     }
+    console.log("About to send the following variants:", variants);
     variantsSetter(variants.filter((v) => !v.startsWith("#")));
   }, [groupVariants, nonGroupVariants, variantsSetter]);
 
