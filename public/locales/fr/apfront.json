@@ -257,7 +257,7 @@
         },
         "board>connect>snub": {
             "full": "Plateau > Connectivité > Carré de camouflet",
-            "tag": "Connecter : Camouflet",
+            "tag": "Connecter : Camouflage",
             "description": "Les cases se connectent les unes aux autres dans une matrice carrée de camouflet"
         },
         "board>dynamic": {
@@ -479,6 +479,60 @@
             "description": "Les joueurs se neutralisent mutuellement",
             "full": "Mécanisme > Bloquer",
             "tag": "M : Bloquer"
+        },
+        "components>decktet": {
+            "description": "Joué avec un deck Decktet",
+            "full": "Composant > Decktet",
+            "tag": "C : Decktet"
+        },
+        "components>shibumi": {
+            "description": "Joué avec un ensemble Shibumi",
+            "full": "Composants > Shibumi",
+            "tag": "C : Shibumi"
+        },
+        "mechanic>coopt": {
+            "description": "Les joueurs peuvent interagir avec les pièces adverses",
+            "full": "Mécanisme > Co-Opt",
+            "tag": "M : Co-Opt"
+        },
+        "mechanic>differentiate": {
+            "full": "Mécanisme > Différencier",
+            "tag": "M : Différencier",
+            "description": "Les pièces sont différenciées d’une manière essentielle"
+        },
+        "mechanic>displace": {
+            "description": "Les mouvements peuvent entraîner le déplacement de pièces supplémentaires en conséquence",
+            "full": "Mécanisme > Déplacer",
+            "tag": "M : Déplacer"
+        },
+        "mechanic>economy": {
+            "tag": "M : Gérer Economie",
+            "description": "Les joueurs doivent gérer une économie centrale",
+            "full": "Mécanisme > Gérer Economie"
+        },
+        "mechanic>enclose": {
+            "full": "Mécanisme > Clôturer",
+            "tag": "M : Clôturer",
+            "description": "Les joueurs enferment activement des zones ou des pièces"
+        },
+        "mechanic>hidden": {
+            "description": "Le jeu comprend des informations cachées",
+            "full": "Mécanisme > Information Cachée",
+            "tag": "M : Caché"
+        },
+        "mechanic>merge": {
+            "description": "Les pièces fusionnent ou se séparent",
+            "full": "Mécanisme > Fusionner/Séparer"
+        },
+        "mechanic>capture": {
+            "description": "Les pièces sont capturées",
+            "full": "Mécanisme > Capturer",
+            "tag": "M : Capturer"
+        },
+        "mechanic>convert": {
+            "description": "Les joueurs peuvent convertir les pièces ennemies en leurs propres pièces",
+            "full": "Mécanisme > Convertir",
+            "tag": "M : Convertir"
         }
     },
     "CanPie": "Ce joueur à l'option d'échanger les places.",
@@ -495,6 +549,19 @@
     "Variant": "Variante",
     "VisitGame": "Voir la partie",
     "buttons": {
-        "takebutton": "Bouton de prise"
+        "takebutton": "Bouton de prise",
+        "pass": "Passer",
+        "pigs": {
+            "forward": "Avancer",
+            "back": "Reculer",
+            "left": "Avancer à gauche",
+            "right": "Avancer à droite",
+            "cw": "Rotation dans le sens horaire",
+            "ccw": "Rotation dans le sens anti-horaire",
+            "fire": "Tirer au laser",
+            "hit": "Bouger le museau"
+        },
+        "acceptpie": "Jouer en second",
+        "draw": "Réclamer un nul"
     }
 }
