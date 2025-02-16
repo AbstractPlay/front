@@ -23,6 +23,12 @@
             "ccw": "Rotate counterclockwise",
             "fire": "Fire laser",
             "hit": "Swing snout"
+        },
+        "cifra": {
+            "lt": "Light, Top",
+            "lb": "Light, Bottom",
+            "dt": "Dark, Top",
+            "db": "Dark, Bottom"
         }
     },
     "Cancel": "Cancel",
