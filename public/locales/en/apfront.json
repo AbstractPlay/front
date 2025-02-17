@@ -28,7 +28,11 @@
             "lt": "Light, Top",
             "lb": "Light, Bottom",
             "dt": "Dark, Top",
-            "db": "Dark, Bottom"
+            "db": "Dark, Bottom",
+            "ll": "Light, Left",
+            "lr": "Light, Right",
+            "dl": "Dark, Left",
+            "dr": "Dark, Right"
         }
     },
     "Cancel": "Cancel",

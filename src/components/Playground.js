@@ -601,6 +601,7 @@ function doView(
   } else {
     moveSetter(move);
   }
+  console.log(`EXPLORATION REF:`, explorationRef.current);
   partialMoveRenderRef.current = partialMove;
   // console.log('setting renderrep 1');
   engineRef.current = gameEngineTmp;
