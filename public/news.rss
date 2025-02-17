@@ -2513,5 +2513,21 @@ I have a number of challenges up. Enjoy!</description>
       <guid isPermaLink="false">1338607247546384506</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve done some relatively major restructuring of the code to allow for flexibility when choosing the preselected defaults for variants. I&amp;apos;ve done a fair bit of testing, but I would be shocked if I caught *everything*. When using the playground, issuing challenges, requesting tournaments, or pairing manual events, please let me know if things do not work as you expect. Thank you!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 14 Feb 2025 15:14:25 GMT</pubDate>
+      <guid isPermaLink="false">1339978062728790087</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve now also altered the game page status display so it shows the defaults as well. In the screen capture is a base Omny game with the two defaults (@Gatsby). It used to not display the variants display at all, but now it will show the implicit defaults. I&amp;apos;m sure this will bring to light various tweaks we can make to the game strings. Feel free to bring those to our attention, and we&amp;apos;ll keep our eyes peeled as well. Cheers.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 14 Feb 2025 18:17:49 GMT</pubDate>
+      <guid isPermaLink="false">1340024214861779035</guid>
+    </item>
+    
   </channel>
 </rss>
