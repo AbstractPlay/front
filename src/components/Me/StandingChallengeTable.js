@@ -420,11 +420,18 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
             <>
               <div className="content">
                 <p>
-                  You are about to delete the following standing challenge. Are
-                  you sure?
+                  You are about to delete the following standing challenge:{" "}
+                  <tt>
+                    {standingEntry.gameName} (
+                    {standingEntry.variants === undefined ||
+                    standingEntry.variants.length === 0
+                      ? "no variants"
+                      : standingEntry.variants.join(", ")}
+                    )
+                  </tt>
+                  . Are you sure?
                 </p>
               </div>
-              <pre>{JSON.stringify(standingEntry, null, 2)}</pre>
             </>
           )}
         </Modal>
