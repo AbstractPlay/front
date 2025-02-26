@@ -8,24 +8,38 @@ import React, {
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { gameinfo, addResource } from "@abstractplay/gameslib";
-import { MeContext, UsersContext } from "../pages/Skeleton";
+import { MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import GameVariants from "./GameVariants";
 
-const aiaiUserID = "SkQfHAjeDxs8eeEnScuYA";
+const stringArraysEqual = (lst1, lst2) => {
+  if (lst1.length !== lst2.length) {
+    return false;
+  }
+  const s1 = lst1.sort((a, b) => a.localeCompare(b));
+  const s2 = lst2.sort((a, b) => a.localeCompare(b));
+  let matches = true;
+  for (let i = 0; i < s1.length; i++) {
+    if (s1[i] !== s2[i]) {
+      matches = false;
+      break;
+    }
+  }
+  return matches;
+};
 
-function NewChallengeModal(props) {
-  const handleNewChallengeClose = props.handleClose;
-  const handleNewChallenge = props.handleChallenge;
-  const opponent = props.opponent;
-  const fixedMetaGame = props.fixedMetaGame;
-  const show = props.show;
+function StandingChallengeModal({
+  show,
+  handleClose: handleModalClose,
+  handleChallenge: handleNewChallenge,
+}) {
   const { t, i18n } = useTranslation();
   const [error, errorSetter] = useState(null);
   const [metaGame, metaGameSetter] = useState(null);
   const [playerCount, playerCountSetter] = useState(-1);
-  const [seating, seatingSetter] = useState("random");
+  const [challengeLimit, challengeLimitSetter] = useState(2);
+  const [sensitivity, sensitivitySetter] = useState("meta");
   const [clockSpeed, clockSpeedSetter] = useStorageState(
     "new-challenge-clock-speed",
     "medium"
@@ -46,66 +60,26 @@ function NewChallengeModal(props) {
     "new-challenge-clock-hard",
     false
   );
-  const [onlySee, onlySeeSetter] = useStorageState(
-    "new-challenge-onlySee",
-    "all"
-  );
-  const [minSeen, minSeenSetter] = useState(0);
   const [rated, ratedSetter] = useStorageState("new-challenge-rated", true); // rated or not
   const [noExplore, noExploreSetter] = useStorageState(
     "new-challenge-noExplore",
     false
   );
-  const [standing, standingSetter] = useState(false); // Standing challenge or not.
-  const [standingCount, standingCountSetter] = useState(0);
-  const [opponents, opponentsSetter] = useState([]);
   const [selectedVariants, setSelectedVariants] = useState([]);
-  const [comment, commentSetter] = useState("");
   const [globalMe] = useContext(MeContext);
-  const [allUsers] = useContext(UsersContext);
-  const [users, usersSetter] = useState([]);
 
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
 
-  useEffect(() => {
-    if (allUsers !== null && metaGame !== null) {
-      const info = gameinfo.get(metaGame);
-      if (!info.flags.includes("aiai")) {
-        usersSetter([...allUsers].filter((u) => u.id !== aiaiUserID));
-      } else {
-        usersSetter([...allUsers]);
-      }
-    }
-  }, [allUsers, metaGame]);
-
-  useEffect(() => {
-    const now = new Date().getTime();
-    let min = 0;
-    if (onlySee === "week") {
-      min = now - 7 * 24 * 60 * 60 * 1000;
-    } else if (onlySee === "month") {
-      min = now - 30 * 24 * 60 * 60 * 1000;
-    }
-    minSeenSetter(min);
-  }, [onlySee]);
-
   const setPlayerCount = useCallback(
     (cnt) => {
       playerCountSetter(cnt);
-      if (cnt === 2) {
-        seatingSetter("random");
-        // ratedSetter(true);
-      } else {
-        seatingSetter("random");
+      if (cnt !== 2) {
         ratedSetter(false);
       }
-      if (cnt !== -1 && cnt - 1 !== opponents.length) {
-        opponentsSetter(Array(cnt - 1).fill(""));
-      }
     },
-    [ratedSetter, opponents.length]
+    [ratedSetter]
   );
 
   const setClock = (start, inc, max) => {
@@ -125,53 +99,27 @@ function NewChallengeModal(props) {
           const playercounts = info.playercounts;
           if (playercounts.length === 1) {
             setPlayerCount(playercounts[0]);
-          } else if (props.opponent !== undefined) {
-            setPlayerCount(2);
           } else {
             playerCountSetter(-1);
-            opponentsSetter([]);
           }
-          seatingSetter("random");
         }
         errorSetter("");
       }
     },
-    [metaGame, setPlayerCount, props]
+    [metaGame, setPlayerCount]
   );
 
   useEffect(() => {
-    if (props.opponent !== undefined) {
-      playerCountSetter(2);
-      opponentsSetter([props.opponent]);
-    }
     errorSetter("");
+    sensitivitySetter("meta");
     // clockStartSetter(72);
     // clockIncSetter(24);
     // clockMaxSetter(240);
     // clockHardSetter(false);
-    if (props.fixedMetaGame !== undefined) {
-      metaGameSetter(props.fixedMetaGame);
-      handleChangeGame(props.fixedMetaGame);
-    }
-    if (props.opponent !== undefined) {
-      opponentsSetter([props.opponent]);
-    }
-  }, [show, props, handleChangeGame]);
+  }, [show, handleChangeGame]);
 
   const handleChangePlayerCount = (cnt) => {
     setPlayerCount(parseInt(cnt));
-    errorSetter("");
-  };
-
-  const handleChangeSeating = (seat) => {
-    seatingSetter(seat);
-    errorSetter("");
-  };
-
-  const handleChangeOpponent = (data) => {
-    let opps = [...opponents];
-    opps[data.player] = { id: data.id, name: data.name };
-    opponentsSetter(opps);
     errorSetter("");
   };
 
@@ -223,17 +171,18 @@ function NewChallengeModal(props) {
     ratedSetter(!rated);
   };
 
-  const handleCommentChange = (event) => {
-    errorSetter("");
-    commentSetter(event.target.value);
-  };
-
   const handleNoExploreChange = (event) => {
     // ratedSetter(event.target.checked);
     noExploreSetter(!noExplore);
   };
 
+  const handleLimitChange = (event) => {
+    isNonNegativeInteger(event.target.value, t("ChooseLimit"));
+    challengeLimitSetter(event.target.value);
+  };
+
   const handleChallenge = () => {
+    // error handling goes here
     if (metaGame === null) {
       errorSetter(t("SelectAGame"));
       return;
@@ -242,43 +191,53 @@ function NewChallengeModal(props) {
       errorSetter(t("SelectPlayerCount"));
       return;
     }
-    if (seating === null || seating === "") {
-      errorSetter(t("SelectSeating"));
-      return;
-    }
-    if (!standing) {
-      let ok = true;
-      opponents.forEach((o) => {
-        if (o === "") {
-          errorSetter(t("SelectOpponents", { count: opponents.length }));
-          ok = false;
+    if (sensitivity === "meta") {
+      if (globalMe.realStanding !== undefined) {
+        const found = globalMe.realStanding.find(
+          (e) => e.metaGame === metaGame && e.sensitivity === "meta"
+        );
+        if (found !== undefined) {
+          errorSetter(
+            'An entry with "meta" sensitivity already exists for this game.'
+          );
           return;
         }
-      });
-      if (!ok) return;
+      }
+    } else {
+      if (globalMe.realStanding !== undefined) {
+        const found = globalMe.realStanding.find(
+          (e) =>
+            e.metaGame === metaGame &&
+            stringArraysEqual(e.variants, selectedVariants) &&
+            e.sensitivity === "variants"
+        );
+        if (found !== undefined) {
+          errorSetter(
+            'An entry with "variants" sensitivity already exists for this game + variants combination.'
+          );
+          return;
+        }
+      }
     }
+
     handleNewChallenge({
       metaGame: metaGame,
       numPlayers: playerCount,
-      standing: standing,
-      duration: standingCount,
-      seating: seating,
       variants: selectedVariants,
-      challengees: opponents,
       clockStart: clockStart,
       clockInc: clockInc,
       clockMax: clockMax,
       clockHard: clockHard,
       rated: rated,
       noExplore: noExplore,
-      comment: comment,
+      limit: challengeLimit,
+      sensitivity,
     });
-    handleNewChallengeClose();
     // So that if you click on challenge again, it doesn't look like the challenge wasn't submitted:
     playerCountSetter(-1);
-    opponentsSetter([]);
+    sensitivitySetter("meta");
     metaGameSetter(null);
-    commentSetter("");
+    handleModalClose();
   };
 
   let games = [];
@@ -310,53 +269,55 @@ function NewChallengeModal(props) {
   return (
     <Modal
       show={show}
-      title={t("NewChallenge")}
+      title={t("NewRealStanding")}
       buttons={[
         { label: t("Challenge"), action: handleChallenge },
-        { label: t("Close"), action: handleNewChallengeClose },
+        { label: t("Close"), action: handleModalClose },
       ]}
     >
       <div className="container">
-        {fixedMetaGame ? (
-          <p>
-            <strong>{t("ChooseGame")}</strong>:{" "}
-            {gameinfo.get(fixedMetaGame).name}
+        <div className="content">
+          <p style={{ fontSize: "smaller" }}>
+            Standing challenges are requests to automatically create open
+            challenges for particular games or game + variant combinations as
+            long as your number of matching active games is below the limit you
+            set. Twice a day, the system will look at these requests and issue
+            open challenges if none already exist.
           </p>
-        ) : (
-          <div className="field">
-            <label className="label" htmlFor="gameName">
-              {t("ChooseGame")}
-            </label>
-            <div className="control">
-              <div className="select is-small">
-                {games === null ? (
-                  <Spinner />
-                ) : (
-                  /* Select meta game */
-                  <select
-                    value={metaGame ? metaGame : ""}
-                    name="gameName"
-                    id="gameName"
-                    onChange={(e) => handleChangeGame(e.target.value)}
-                  >
-                    <option value="">--{t("Select")}--</option>
-                    {games.map((game) => {
-                      return (
-                        <option key={game.id} value={game.id}>
-                          {game.name}
-                        </option>
-                      );
-                    })}
-                  </select>
-                )}
-              </div>
+        </div>
+        <div className="field">
+          <label className="label" htmlFor="gameName">
+            {t("ChooseGame")}
+          </label>
+          <div className="control">
+            <div className="select is-small">
+              {games === null ? (
+                <Spinner />
+              ) : (
+                /* Select meta game */
+                <select
+                  value={metaGame ? metaGame : ""}
+                  name="gameName"
+                  id="gameName"
+                  onChange={(e) => handleChangeGame(e.target.value)}
+                >
+                  <option value="">--{t("Select")}--</option>
+                  {games.map((game) => {
+                    return (
+                      <option key={game.id} value={game.id}>
+                        {game.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
             </div>
           </div>
-        )}
+        </div>
         {metaGame === null ? (
           ""
         ) : /* Number of players */
-        playercounts.length === 1 || opponent ? (
+        playercounts.length === 1 ? (
           <p>
             <strong>{t("NumPlayers")}:</strong> {playercounts[0]}
           </p>
@@ -384,201 +345,6 @@ function NewChallengeModal(props) {
             </div>
           </div>
         )}
-        {metaGame === null || playerCount === -1 ? (
-          ""
-        ) : playerCount !== 2 ? (
-          <p>
-            <strong>{t("Seating")}</strong>: {t("SeatingRandom")}
-          </p>
-        ) : (
-          <div className="field">
-            {/* Seating */}
-            <label className="label" htmlFor="seating">
-              {t("Seating")}
-            </label>
-            <div className="select is-small">
-              <select
-                value={seating}
-                name="seating"
-                id="seating"
-                onChange={(e) => handleChangeSeating(e.target.value)}
-              >
-                {/* <option key="s0" value="">--{t('Select')}--</option> */}
-                <option key="s1" value="random" defaultChecked>
-                  {t("SeatingRandom")}
-                </option>
-                <option key="s2" value="s1">
-                  {t("Seating1")}
-                </option>
-                <option key="s3" value="s2">
-                  {t("Seating2")}
-                </option>
-              </select>
-            </div>
-          </div>
-        )}
-        {metaGame === null || playerCount === -1 ? (
-          ""
-        ) : /* Standing Challenge */
-        opponent ? (
-          ""
-        ) : (
-          <div className="field">
-            <label className="label">{t("ChallengeType")}</label>
-            <div className="control">
-              <label className="radio">
-                <input
-                  type="radio"
-                  name="challengeType"
-                  value="open"
-                  readOnly={true}
-                  checked={standing}
-                  onChange={() => standingSetter(true)}
-                />
-                {t("ChallengeTypeOpen")}
-              </label>
-              <label className="radio">
-                <input
-                  type="radio"
-                  name="challengeType"
-                  value="targeted"
-                  checked={!standing}
-                  readOnly={true}
-                  onChange={() => standingSetter(false)}
-                />
-                {t("ChallengeTypeTargeted")}
-              </label>
-            </div>
-            <p className="help">
-              {standing
-                ? t("ChallengeTypeOpenDescription")
-                : t("ChallengeTypeTargetedDescription")}
-            </p>
-          </div>
-        )}
-        {playerCount === -1 || standing || props.opponent !== undefined ? (
-          ""
-        ) : (
-          /* Opponents filtering */
-          <div className="control">
-            <p className="help">Use this to filter out inactive opponents</p>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "all"}
-                value="all"
-                onChange={() => onlySeeSetter("all")}
-              />
-              All opponents
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "week"}
-                value="week"
-                onChange={() => onlySeeSetter("week")}
-              />
-              Past 7 days
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "month"}
-                value="month"
-                onChange={() => onlySeeSetter("month")}
-              />
-              Past 30 days
-            </label>
-          </div>
-        )}
-        {playerCount === -1 || standing
-          ? ""
-          : /* Opponents */
-            opponents.map((o, i) => {
-              return (
-                <div className="field" key={i}>
-                  <label className="label" htmlFor={"user_for_challenge" + i}>
-                    {playerCount === 2
-                      ? t("ChooseOpponent")
-                      : t("ChooseOpponent", i)}
-                  </label>
-                  <div className="control">
-                    {users === null && !opponent ? (
-                      <Spinner />
-                    ) : opponent ? (
-                      opponent.name
-                    ) : (
-                      <div className="select is-small">
-                        <select
-                          value={o.id || ""}
-                          name="users"
-                          id={"user_for_challenge" + i}
-                          onChange={(e) =>
-                            handleChangeOpponent({
-                              id: e.target.value,
-                              name: e.target.options[e.target.selectedIndex]
-                                .text,
-                              player: i,
-                            })
-                          }
-                        >
-                          <option value="">--{t("Select")}--</option>
-                          {users
-                            .filter(
-                              (user) =>
-                                user.id === opponents[i].id ||
-                                (user.id !== globalMe.id &&
-                                  !opponents.some((o) => user.id === o.id) &&
-                                  user.lastSeen >= minSeen)
-                            )
-                            .sort((a, b) => a.name.localeCompare(b.name))
-                            .map((item) => {
-                              return (
-                                <option key={item.id} value={item.id}>
-                                  {item.name}
-                                </option>
-                              );
-                            })}
-                        </select>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-        {!standing ? (
-          ""
-        ) : playerCount === -1 || playerCount > 2 ? (
-          ""
-        ) : (
-          <div className="field">
-            <label className="label is-small" htmlFor="duration">
-              {t("Duration")}
-            </label>
-            <div className="control">
-              <input
-                className="input is-small"
-                type="number"
-                min={0}
-                name="duration"
-                placeholder="duration"
-                style={{ width: "50%" }}
-                value={standingCount}
-                onChange={(e) =>
-                  standingCountSetter(parseInt(e.target.value, 10))
-                }
-              />
-            </div>
-            <p className="help">
-              {standingCount === 0
-                ? t("DurationHelpPersistent")
-                : t("DurationHelp", { count: standingCount })}
-            </p>
-          </div>
-        )}
         <GameVariants
           metaGame={metaGame}
           variantsSetter={setSelectedVariants}
@@ -587,6 +353,57 @@ function NewChallengeModal(props) {
           ""
         ) : (
           <Fragment>
+            <div className="columns">
+              <div className="column">
+                <div className="field">
+                  <label className="label" htmlFor="limit">
+                    Maximum number of active games
+                  </label>
+                  <div className="control">
+                    <input
+                      type="number"
+                      min={1}
+                      value={challengeLimit}
+                      name="limit"
+                      onChange={handleLimitChange}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="column">
+                <div className="field">
+                  <label className="label" htmlFor="sensitivity">
+                    Sensitivity
+                  </label>
+                  <div className="control">
+                    <label className="radio">
+                      <input
+                        type="radio"
+                        name="sensitivity"
+                        value="meta"
+                        checked={sensitivity === "meta"}
+                        onChange={() => {
+                          sensitivitySetter("meta");
+                        }}
+                      />
+                      Meta
+                    </label>
+                    <label className="radio">
+                      <input
+                        type="radio"
+                        name="sensitivity"
+                        value="variants"
+                        checked={sensitivity === "variants"}
+                        onChange={() => {
+                          sensitivitySetter("variants");
+                        }}
+                      />
+                      Meta + Variants
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="field">
               <label className="label">Choose clock speed</label>
               <div className="control">
@@ -750,30 +567,10 @@ function NewChallengeModal(props) {
             <p className="help">{rated ? t("HelpRated") : t("HelpUnRated")}</p>
           </div>
         )}
-        {/* Comment to opponent */}
-        {metaGame === null || playerCount !== 2 ? null : (
-          <div className="field">
-            <label className="label" htmlFor="comment">
-              {t("Note")}
-            </label>
-            <div className="control">
-              <textarea
-                className="textarea is-small"
-                id="comment"
-                name="comment"
-                rows="2"
-                maxLength="128"
-                value={comment}
-                onChange={handleCommentChange}
-              ></textarea>
-            </div>
-            <p className="help">{t("NotesHelp")}</p>
-          </div>
-        )}
       </div>
       <div className="is-danger">{error}</div>
     </Modal>
   );
 }
 
-export default NewChallengeModal;
+export default StandingChallengeModal;
