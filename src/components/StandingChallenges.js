@@ -546,7 +546,7 @@ function StandingChallenges(props) {
       <Helmet>
         <meta
           property="og:title"
-          content={`${metaGameName}: Standing Challenges`}
+          content={`${metaGameName}: Open Challenges`}
         />
         <meta
           property="og:url"
@@ -554,7 +554,7 @@ function StandingChallenges(props) {
         />
         <meta
           property="og:description"
-          content={`Standing challenges for ${metaGameName}`}
+          content={`Open challenges for ${metaGameName}`}
         />
       </Helmet>
       <article>

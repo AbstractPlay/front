@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { Auth } from "aws-amplify";
+import { nanoid } from "nanoid";
 import Spinner from "./Spinner";
 import Modal from "./Modal";
 import ChallengeItem from "./Me/ChallengeItem";
@@ -13,9 +14,12 @@ import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import i18n from "../i18n";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
+import { cloneDeep } from "lodash";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
 import MyTurnTable from "./Me/MyTurnTable";
 import TheirTurnTable from "./Me/TheirTurnTable";
+import StandingChallengeTable from "./Me/StandingChallengeTable";
+import StandingChallengeModal from "./StandingChallengeModal";
 import { toast } from "react-toastify";
 
 function Me(props) {
@@ -36,6 +40,7 @@ function Me(props) {
   const [showChallengeResponseModal, showChallengeResponseModalSetter] =
     useState(false);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
+  const [showNewStandingModal, showNewStandingModalSetter] = useState(false);
   const [showDeleteGamesModal, showDeleteGamesModalSetter] = useState(false);
   const [deleteGamesMetaGame, deleteGamesMetaGameSetter] = useState("");
   const [deleteCompletedGames, deleteCompletedGamesSetter] = useState(false);
@@ -120,12 +125,21 @@ function Me(props) {
     myidSetter(id);
   };
 
+  const handleNewStandingClick = (id) => {
+    showNewStandingModalSetter(true);
+    myidSetter(id);
+  };
+
   const handleNewChallengeClose = () => {
     showNewChallengeModalSetter(false);
   };
 
   const handleChallengeViewClose = () => {
     showChallengeViewModalSetter(false);
+  };
+
+  const handleStandingModalClose = () => {
+    showNewStandingModalSetter(false);
   };
 
   const handleChallengeRevoke = async (comment) => {
@@ -229,6 +243,73 @@ function Me(props) {
       varsSetter({ dummy: myid });
     } catch (error) {
       errorSetter(error);
+    }
+  };
+
+  const submitStanding = async (standing) => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log("currentAuthenticatedUser", usr);
+      await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "update_standing",
+          pars: {
+            entries: standing,
+          },
+        }),
+      });
+      showNewStandingModalSetter(false);
+      varsSetter({ dummy: myid });
+    } catch (error) {
+      errorSetter(error);
+    }
+  };
+
+  const handleNewStanding = async (challenge) => {
+    // construct entry object
+    const entry = {
+      ...challenge,
+      id: nanoid(),
+    };
+    // add to existing list
+    // this function doesn't do error checking
+    const cloned = cloneDeep(globalMe);
+    if (cloned.realStanding === undefined) {
+      cloned.realStanding = [];
+    }
+    cloned.realStanding.push(entry);
+    // send updated list to backend
+    await submitStanding(cloned.realStanding);
+    // update globalMe
+    globalMeSetter(cloned);
+  };
+
+  const handleStandingSuspend = async (id) => {
+    console.log(`suspending ${id}`);
+    const cloned = cloneDeep(globalMe);
+    const idx = cloned.realStanding.findIndex((entry) => entry.id === id);
+    if (idx >= 0) {
+      const curr = cloned.realStanding[idx].suspended || false;
+      cloned.realStanding[idx].suspended = !curr;
+      await submitStanding(cloned.realStanding);
+      globalMeSetter(cloned);
+    }
+  };
+
+  const handleStandingDelete = async (id) => {
+    console.log(`deleting ${id}`);
+    const cloned = cloneDeep(globalMe);
+    const idx = cloned.realStanding.findIndex((entry) => entry.id === id);
+    if (idx >= 0) {
+      cloned.realStanding.splice(idx, 1);
+      await submitStanding(cloned.realStanding);
+      globalMeSetter(cloned);
     }
   };
 
@@ -682,6 +763,23 @@ function Me(props) {
               </div>
               <div>
                 <p className="lined">
+                  <span>{t("NewRealStanding")}</span>
+                </p>
+                <StandingChallengeTable
+                  fetching={fetching}
+                  handleSuspend={handleStandingSuspend}
+                  handleDelete={handleStandingDelete}
+                />
+                <button
+                  style={{ marginBottom: "1em" }}
+                  className="button is-small apButton"
+                  onClick={() => handleNewStandingClick(myid)}
+                >
+                  {t("IssueStanding")}
+                </button>
+              </div>
+              <div>
+                <p className="lined">
                   <span>{t("NewChallenge")}</span>
                 </p>
                 <button
@@ -780,6 +878,11 @@ function Me(props) {
           show={showChallengeResponseModal}
           close={handleChallengeResponseClose}
           respond={handleChallengeResponse}
+        />
+        <StandingChallengeModal
+          show={showNewStandingModal}
+          handleClose={handleStandingModalClose}
+          handleChallenge={handleNewStanding}
         />
         <Modal
           show={showDeleteGamesModal}
