@@ -478,6 +478,8 @@ function Table({
       }),
       columnHelper.accessor("dateAdded", {
         header: "Added",
+        sortingFn: "datetime",
+        invertSorting: true,
       }),
       columnHelper.accessor("stars", {
         header: "Stars",
@@ -584,6 +586,7 @@ function Table({
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    enableSortingRemoval: false,
   });
 
   useEffect(() => {
