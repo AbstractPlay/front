@@ -241,10 +241,10 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
     return (
       <>
         <div className="content">
-          <p style={{ fontSize: "smaller" }}>
+          {/* <p style={{ fontSize: "smaller" }}>
             Next run: {new Date(nextDate).toLocaleString()} (
             <ReactTimeAgo future date={nextDate} />)
-          </p>
+          </p> */}
           {fetching ? <Spinner size="20" /> : null}
           <p>{t("NoRealStanding")}</p>
         </div>
@@ -253,12 +253,12 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
   } else {
     return (
       <>
-        <div className="content">
+        {/* <div className="content">
           <p style={{ fontSize: "smaller" }}>
             Next run: {new Date(nextDate).toLocaleString()} (
             <ReactTimeAgo future date={nextDate} />)
           </p>
-        </div>
+        </div> */}
         {fetching ? <Spinner size="20" /> : null}
         <table className="table apTable">
           <thead>
