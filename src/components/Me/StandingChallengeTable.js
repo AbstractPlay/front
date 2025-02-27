@@ -130,27 +130,35 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
       columnHelper.accessor("clockHard", {
         header: "Hard?",
         cell: (props) => (
-          <input type="checkbox" checked={props.getValue()} readOnly={true} />
+          <div style={{ fontSize: "larger", textAlign: "center" }}>
+            {props.getValue() === true ? "\u2611" : "\u2610"}
+          </div>
         ),
       }),
       columnHelper.accessor("rated", {
         header: "Rated?",
         cell: (props) => (
-          <input type="checkbox" checked={props.getValue()} readOnly={true} />
-        ),
-      }),
+            <div style={{ fontSize: "larger", textAlign: "center" }}>
+              {props.getValue() === true ? "\u2611" : "\u2610"}
+            </div>
+          ),
+        }),
       columnHelper.accessor("noExplore", {
         header: "NoExplore?",
         cell: (props) => (
-          <input type="checkbox" checked={props.getValue()} readOnly={true} />
-        ),
-      }),
+            <div style={{ fontSize: "larger", textAlign: "center" }}>
+              {props.getValue() === true ? "\u2611" : "\u2610"}
+            </div>
+          ),
+        }),
       columnHelper.accessor("suspended", {
         header: "Suspended?",
         cell: (props) => (
-          <input type="checkbox" checked={props.getValue()} readOnly={true} />
-        ),
-      }),
+            <div style={{ fontSize: "larger", textAlign: "center" }}>
+              {props.getValue() === true ? "\u2611" : "\u2610"}
+            </div>
+          ),
+        }),
       columnHelper.display({
         id: "delete",
         cell: (props) => (
