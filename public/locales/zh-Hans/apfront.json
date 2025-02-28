@@ -7,7 +7,8 @@
             "forward": "前进",
             "left": "向左移动",
             "right": "向右移动"
-        }
+        },
+        "pass": "跳过"
     },
     "categories": {
         "board>connect>hex": {
