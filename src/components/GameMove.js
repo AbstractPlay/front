@@ -1403,7 +1403,6 @@ function GameMove(props) {
             return;
           } else {
             const result = await res.json();
-            console.log(result);
             data = JSON.parse(result.body);
           }
         } else {
@@ -1429,7 +1428,7 @@ function GameMove(props) {
           data !== undefined &&
           "game" in data
         ) {
-          console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
+        //   console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
           dbgameSetter(data.game);
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
