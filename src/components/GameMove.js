@@ -3056,8 +3056,8 @@ function GameMove(props) {
                 }
               }
               return (
-                <div style={{ paddingBottom: "1em" }}>
-                  <div className={"card " + tourClass} key={`${key}|card`}>
+                <div style={{ paddingBottom: "1em" }} key={`${key}|card`}>
+                  <div className={"card " + tourClass}>
                     <header className="card-header">
                       <p className="card-header-title">
                         <Link to={`/games/${metaGame}`}>{title}</Link>
@@ -3524,7 +3524,7 @@ function GameMove(props) {
               </ReactMarkdown>
               <ul className="contained">
                 {gameDeets.urls.map((l, i) => (
-                  <li key={i}>
+                  <li key={`gameDeets|url|` + i}>
                     <a href={l} target="_blank" rel="noopener noreferrer">
                       {l}
                     </a>
