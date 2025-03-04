@@ -239,7 +239,7 @@ function Tournament(props) {
                           numGames: d.numGames,
                         })}
                   </p>
-                  <div class="table-container">
+                  <div className="table-container">
                     <table className="table apTable">
                       <thead>
                         <tr key={"header" + i}>

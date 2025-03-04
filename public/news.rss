@@ -2537,5 +2537,38 @@ I have a number of challenges up. Enjoy!</description>
       <guid isPermaLink="false">1341889018907857028</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>SDG-style &amp;quot;standing challenges&amp;quot; are now available:
+- The front-facing nomenclature for challenges has been changed to simply &amp;quot;open&amp;quot; challenges (those that anybody can accept) and &amp;quot;closed&amp;quot; (ones you issue to specific opponents).
+- The term &amp;quot;standing challenge&amp;quot; is now being used to refer to a longstanding request that you configure for challenges of specific games.
+- At the bottom of your dashboard is a new table and button. A standing challenge works like most other challenges but also has a &amp;quot;limit&amp;quot; and a &amp;quot;sensitivity.&amp;quot;
+  - The limit is the maximum number of matching active games you want.
+  - The sensitivity refers to how &amp;quot;matching&amp;quot; is determined. If it&amp;apos;s set to &amp;quot;meta,&amp;quot; then it counts *all* different active games you have for that specific game type. The setting &amp;quot;variants&amp;quot; also takes into account the specific variants you selected.
+- Twice a day, the system will look at all existing standing challenges. It will count up all the active games you are currently participating in that match the sensitivity of the challenge. If the number of active games is below your limit, and you have no matching open challenges already, then it will issue a single open challenge for that game + variant combination.
+- You can suspend and delete the standing challenges themselves, but suspending a challenge does not automatically revoke any challenges currently open.
+
+Let me know if something does not work as you expect or if you have any questions or further suggestions. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 26 Feb 2025 17:56:55 GMT</pubDate>
+      <guid isPermaLink="false">1344367609306550342</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I unfortunately introduced a bug in the standing challenge code that has resulted in excess challenges being issued. The situation is now corrected. Feel free to manually revoke any excess open challenges. I apologize for the error.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 28 Feb 2025 20:46:06 GMT</pubDate>
+      <guid isPermaLink="false">1345134960893235211</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Claude Leroy&amp;apos;s game Gyges is now available ( @Mrraow ). In this game, players share the pieces and bounce them off of each other in an attempt to score on the opposing goal. Be alert! A poorly placed piece can end a game pretty quickly! Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 28 Feb 2025 22:15:08 GMT</pubDate>
+      <guid isPermaLink="false">1345157369046368257</guid>
+    </item>
+    
   </channel>
 </rss>
