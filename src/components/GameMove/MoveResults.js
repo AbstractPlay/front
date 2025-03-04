@@ -58,7 +58,7 @@ function MoveResults(props) {
       }
     });
     results.sort((a, b) => b.timestamp - a.timestamp);
-    console.log(results);
+    // console.log(results);
 
     return (
       <Fragment>
