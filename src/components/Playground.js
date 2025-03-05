@@ -213,7 +213,7 @@ function setupGame(
       new GameNode(
         null,
         engine.lastmove,
-        engine.serialize(),
+        engine.cheapSerialize(),
         engine.gameover ? "" : engine.currplayer - 1
       )
     );
