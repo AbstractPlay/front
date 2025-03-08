@@ -301,7 +301,7 @@ function setupGame(
       new GameNode(
         null,
         tmpEngine.lastmove,
-        tmpEngine.serialize(),
+        tmpEngine.cheapSerialize(),
         tmpEngine.gameover ? "" : tmpEngine.currplayer - 1
       )
     );
