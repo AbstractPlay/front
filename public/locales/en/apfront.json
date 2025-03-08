@@ -423,10 +423,15 @@
             "full": "Mechanics > Stack",
             "tag": "M: Stack"
         },
-        "mechanic>traditional": {
+        "other>traditional": {
             "description": "Game is traditional",
-            "full": "Mechanics > Traditional",
-            "tag": "M: Traditional"
+            "full": "Other > Traditional",
+            "tag": "O: Traditional"
+        },
+        "other>2+players": {
+            "description": "Supports more than 2 players",
+            "full": "Other > 2+ Players",
+            "tag": "O: 2+Players"
         }
     },
     "Challenge": "Challenge",
