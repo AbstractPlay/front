@@ -401,7 +401,12 @@ function StandingChallengeModal({
                       Meta + Variants
                     </label>
                   </div>
-                  <p className="help">Determines what "matching" means when determining whether you're below your limit. <tt>Meta</tt> counts <em>all</em> games of that type. <tt>Meta + Variants</tt> only counts games with the matching variant combination.</p>
+                  <p className="help">
+                    Determines what "matching" means when determining whether
+                    you're below your limit. <tt>Meta</tt> counts <em>all</em>{" "}
+                    games of that type. <tt>Meta + Variants</tt> only counts
+                    games with the matching variant combination.
+                  </p>
                 </div>
               </div>
             </div>

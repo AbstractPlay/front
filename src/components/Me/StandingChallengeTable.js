@@ -138,27 +138,27 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
       columnHelper.accessor("rated", {
         header: "Rated?",
         cell: (props) => (
-            <div style={{ fontSize: "larger", textAlign: "center" }}>
-              {props.getValue() === true ? "\u2611" : "\u2610"}
-            </div>
-          ),
-        }),
+          <div style={{ fontSize: "larger", textAlign: "center" }}>
+            {props.getValue() === true ? "\u2611" : "\u2610"}
+          </div>
+        ),
+      }),
       columnHelper.accessor("noExplore", {
         header: "NoExplore?",
         cell: (props) => (
-            <div style={{ fontSize: "larger", textAlign: "center" }}>
-              {props.getValue() === true ? "\u2611" : "\u2610"}
-            </div>
-          ),
-        }),
+          <div style={{ fontSize: "larger", textAlign: "center" }}>
+            {props.getValue() === true ? "\u2611" : "\u2610"}
+          </div>
+        ),
+      }),
       columnHelper.accessor("suspended", {
         header: "Suspended?",
         cell: (props) => (
-            <div style={{ fontSize: "larger", textAlign: "center" }}>
-              {props.getValue() === true ? "\u2611" : "\u2610"}
-            </div>
-          ),
-        }),
+          <div style={{ fontSize: "larger", textAlign: "center" }}>
+            {props.getValue() === true ? "\u2611" : "\u2610"}
+          </div>
+        ),
+      }),
       columnHelper.display({
         id: "delete",
         cell: (props) => (
