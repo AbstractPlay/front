@@ -605,7 +605,7 @@ function Me(props) {
     let challengesResponded = [
       ...(globalMe.challengesIssued ?? []),
       ...(globalMe.challengesAccepted ?? []),
-    ].filter(c => c !== undefined && c !== null);
+    ].filter((c) => c !== undefined && c !== null);
     return (
       <article id="dashboard">
         <h1 className="title has-text-centered">

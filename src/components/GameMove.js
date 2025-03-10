@@ -1428,7 +1428,7 @@ function GameMove(props) {
           data !== undefined &&
           "game" in data
         ) {
-        //   console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
+          //   console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
           dbgameSetter(data.game);
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
