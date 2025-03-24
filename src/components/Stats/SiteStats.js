@@ -6,25 +6,25 @@ import Plot from "react-plotly.js";
 import Flag from "../Flag";
 
 const lstSummarize = (lst) => {
-    if (lst.length === 0) {
-        return undefined;
-    }
-    const sorted = [...lst].sort((a,b) => a - b);
-    const sum = sorted.reduce((acc, curr) => acc + curr, 0);
-    const avg = sum / sorted.length;
-    let median;
-    if (sorted.length % 2 === 0) {
-        const idx1 = Math.floor(sorted.length / 2);
-        const idx2 = idx1 - 1;
-        median = (sorted[idx1] + sorted[idx2]) / 2;
-    } else {
-        median = sorted[Math.floor(sorted.length / 2)];
-    }
-    const qWidth = Math.floor(sorted.length / 4);
-    const q1 = sorted[qWidth];
-    const q3 = sorted[qWidth * 3];
-    return {avg, median, q1, q3};
-}
+  if (lst.length === 0) {
+    return undefined;
+  }
+  const sorted = [...lst].sort((a, b) => a - b);
+  const sum = sorted.reduce((acc, curr) => acc + curr, 0);
+  const avg = sum / sorted.length;
+  let median;
+  if (sorted.length % 2 === 0) {
+    const idx1 = Math.floor(sorted.length / 2);
+    const idx2 = idx1 - 1;
+    median = (sorted[idx1] + sorted[idx2]) / 2;
+  } else {
+    median = sorted[Math.floor(sorted.length / 2)];
+  }
+  const qWidth = Math.floor(sorted.length / 4);
+  const q1 = sorted[qWidth];
+  const q3 = sorted[qWidth * 3];
+  return { avg, median, q1, q3 };
+};
 
 function SiteStats({ nav }) {
   const [summary] = useContext(SummaryContext);
@@ -86,25 +86,41 @@ function SiteStats({ nav }) {
             The right-most bar is the most recent seven days. The left-most bar
             is the first week completed games were recorded.
           </p>
-          {summaryGames === null ? null :
+          {summaryGames === null ? null : (
             <table>
-                <caption>Cumulative</caption>
-                <thead>
-                    <tr>
-                        <th>Average</th>
-                        <th>Median</th>
-                        <th>Middle half</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{summaryGames.avg.toLocaleString(undefined, {maximumFractionDigits: 2})}</td>
-                        <td>{summaryGames.median.toLocaleString(undefined, {maximumFractionDigits: 2})}</td>
-                        <td>{summaryGames.q1.toLocaleString(undefined, {maximumFractionDigits: 2})}–{summaryGames.q3.toLocaleString(undefined, {maximumFractionDigits: 2})}</td>
-                    </tr>
-                </tbody>
+              <caption>Cumulative</caption>
+              <thead>
+                <tr>
+                  <th>Average</th>
+                  <th>Median</th>
+                  <th>Middle half</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {summaryGames.avg.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td>
+                    {summaryGames.median.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td>
+                    {summaryGames.q1.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
+                    –
+                    {summaryGames.q3.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                </tr>
+              </tbody>
             </table>
-        }
+          )}
         </div>
         <Plot
           data={[
@@ -132,25 +148,41 @@ function SiteStats({ nav }) {
             The right-most bar is the most recent seven days. The left-most bar
             is the first week completed games were recorded.
           </p>
-          {summaryPlayers === null ? null :
+          {summaryPlayers === null ? null : (
             <table>
-                <caption>Cumulative</caption>
-                <thead>
-                    <tr>
-                        <th>Average</th>
-                        <th>Median</th>
-                        <th>Middle half</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{summaryPlayers.avg.toLocaleString(undefined, {maximumFractionDigits: 2})}</td>
-                        <td>{summaryPlayers.median.toLocaleString(undefined, {maximumFractionDigits: 2})}</td>
-                        <td>{summaryPlayers.q1.toLocaleString(undefined, {maximumFractionDigits: 2})}–{summaryPlayers.q3.toLocaleString(undefined, {maximumFractionDigits: 2})}</td>
-                    </tr>
-                </tbody>
+              <caption>Cumulative</caption>
+              <thead>
+                <tr>
+                  <th>Average</th>
+                  <th>Median</th>
+                  <th>Middle half</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {summaryPlayers.avg.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td>
+                    {summaryPlayers.median.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td>
+                    {summaryPlayers.q1.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
+                    –
+                    {summaryPlayers.q3.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                </tr>
+              </tbody>
             </table>
-        }
+          )}
         </div>
         <Plot
           data={[
