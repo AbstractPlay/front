@@ -199,6 +199,11 @@
             "full": "Components > Simple > 4 colours",
             "tag": "C: Simple, 4 colours"
         },
+        "components>simple>5c": {
+            "description": "Five colours of pieces",
+            "full": "Components > Simple > 5 colours",
+            "tag": "C: Simple, 5 colours"
+        },
         "components>simple>7c": {
             "description": "Seven colours of pieces",
             "full": "Components > Simple > 7 colours",
