@@ -15,6 +15,11 @@
         "acceptpie": "Play second",
         "playsecond": "Play second",
         "draw": "Claim draw",
+        "numbers": {
+            "one": "One (1)",
+            "two": "Two (2)",
+            "three": "Three (3)"
+        },
         "pigs": {
             "back": "Move backward",
             "forward": "Move forward",
