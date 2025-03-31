@@ -2599,5 +2599,37 @@ The board configuration is random each game. Pieces have different move options 
       <guid isPermaLink="false">1352712709141168209</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>@Gatsby&amp;apos;s game Morphos is now available. This is an OOSCG in which you can flip pieces in certain formations. There are a few different variants. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 27 Mar 2025 17:44:42 GMT</pubDate>
+      <guid isPermaLink="false">1354873784531812574</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Corey L. Clark &amp;apos;s quite unique Realm-like game Gliss is now available. Enjoy! (While a great deal of effort went into making move generation as efficient as possible, it may at times take upwards of a second for the move highlights to appear. Please let me know if you encounter something more extreme.)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 29 Mar 2025 15:58:03 GMT</pubDate>
+      <guid isPermaLink="false">1355571720425308307</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Stephen Glenn&amp;apos;s simultaneous game Assembly Line is now available. This is a lighter, simultaneous selection game where you try to trigger scoring when the highest value products are on your segments of the production line. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 30 Mar 2025 20:06:40 GMT</pubDate>
+      <guid isPermaLink="false">1355996675604480133</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A dodecahedral variant (12-sided dice) of @Mark Khan &amp;apos;s Cephalopod is now available.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 30 Mar 2025 20:07:23 GMT</pubDate>
+      <guid isPermaLink="false">1355996855346921653</guid>
+    </item>
+    
   </channel>
 </rss>
