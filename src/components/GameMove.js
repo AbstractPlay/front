@@ -1172,13 +1172,50 @@ function GameMove(props) {
   if (gameDeets.hasOwnProperty("people")) {
     let designers = gameDeets.people
       .filter((p) => p.type === "designer")
-      .map((p) => p.name);
+      .map((p) => {
+        if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
+          let str = `[${p.name}](${p.urls[0]})`;
+          if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+            str += ` [(AP)](/player/${p.apid})`;
+          }
+          return str;
+        } else if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+          return `[${p.name}](/player/${p.apid})`;
+        } else {
+          return p.name;
+        }
+      });
     if (designers.length === 1) {
       designerString = "Designer: ";
     } else {
       designerString = "Designers: ";
     }
     designerString += designers.join(", ");
+  }
+  let coderString;
+  // eslint-disable-next-line no-prototype-builtins
+  if (gameDeets.hasOwnProperty("people")) {
+    let coders = gameDeets.people
+      .filter((p) => p.type === "coder")
+      .map((p) => {
+        if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
+          let str = `[${p.name}](${p.urls[0]})`;
+          if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+            str += ` [(AP)](/player/${p.apid})`;
+          }
+          return str;
+        } else if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+          return `[${p.name}](/player/${p.apid})`;
+        } else {
+          return p.name;
+        }
+      });
+    if (coders.length === 1) {
+      coderString = "Coder: ";
+    } else {
+      coderString = "Coders: ";
+    }
+    coderString += coders.join(", ");
   }
 
   useEffect(() => {
@@ -3519,7 +3556,10 @@ function GameMove(props) {
             <div className="content">
               <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
                 {gameEngine.description() +
-                  (designerString === undefined ? "" : "\n\n" + designerString)}
+                  (designerString === undefined
+                    ? ""
+                    : "\n\n" + designerString) +
+                  (coderString === undefined ? "" : "\n\n" + coderString)}
               </ReactMarkdown>
               <ul className="contained">
                 {gameDeets.urls.map((l, i) => (

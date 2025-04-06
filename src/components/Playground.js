@@ -807,6 +807,7 @@ function Playground(props) {
   const [gameEngine, gameEngineSetter] = useState(null);
   const [gameDeets, gameDeetsSetter] = useState(null);
   const [designerString, designerStringSetter] = useState("");
+  const [coderString, coderStringSetter] = useState("");
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
@@ -848,12 +849,28 @@ function Playground(props) {
         } else {
           gameEngineSetter(GameFactory(info.uid));
         }
-        let str = "";
         // eslint-disable-next-line no-prototype-builtins
         if (info.hasOwnProperty("people")) {
+          let str = "";
           let designers = info.people
             .filter((p) => p.type === "designer")
-            .map((p) => p.name);
+            .map((p) => {
+              if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
+                let str = `[${p.name}](${p.urls[0]})`;
+                if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+                  str += ` [(AP)](/player/${p.apid})`;
+                }
+                return str;
+              } else if (
+                "apid" in p &&
+                p.apid !== undefined &&
+                p.apid.length > 0
+              ) {
+                return `[${p.name}](/player/${p.apid})`;
+              } else {
+                return p.name;
+              }
+            });
           if (designers.length === 1) {
             str = "Designer: ";
           } else {
@@ -861,6 +878,34 @@ function Playground(props) {
           }
           str += designers.join(", ");
           designerStringSetter(str);
+
+          str = "";
+          let coders = info.people
+            .filter((p) => p.type === "coder")
+            .map((p) => {
+              if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
+                let str = `[${p.name}](${p.urls[0]})`;
+                if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+                  str += ` [(AP)](/player/${p.apid})`;
+                }
+                return str;
+              } else if (
+                "apid" in p &&
+                p.apid !== undefined &&
+                p.apid.length > 0
+              ) {
+                return `[${p.name}](/player/${p.apid})`;
+              } else {
+                return p.name;
+              }
+            });
+          if (designers.length === 1) {
+            str = "Coder: ";
+          } else {
+            str = "Coders: ";
+          }
+          str += coders.join(", ");
+          coderStringSetter(str);
         }
       }
     }
@@ -1980,7 +2025,8 @@ function Playground(props) {
                   {gameEngine.description() +
                     (designerString === undefined
                       ? ""
-                      : "\n\n" + designerString)}
+                      : "\n\n" + designerString) +
+                    (coderString === undefined ? "" : "\n\n" + coderString)}
                 </ReactMarkdown>
                 <ul className="contained">
                   {gameDeets.urls.map((l, i) => (
