@@ -6,6 +6,7 @@ import { MeContext, UsersContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH } from "../config";
+import { gameinfo } from "@abstractplay/gameslib";
 import { Helmet } from "react-helmet-async";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
@@ -21,6 +22,8 @@ import Timeouts from "./Player/Timeouts";
 import Activity from "./Player/Activity";
 import History from "./Player/History";
 import Response from "./Player/Response";
+import Coded from "./Player/Coded";
+import Designed from "./Player/Designed";
 
 export const ProfileContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
@@ -29,6 +32,8 @@ export const ResponsesContext = createContext([null, () => []]);
 
 const code2ele = new Map([
   ["stars", { component: Stars, name: "Starred Games" }],
+  ["coded", { component: Coded, name: "Games Coded" }],
+  ["designed", { component: Designed, name: "Games Designed" }],
   ["ratings", { component: Ratings, name: "Ratings" }],
   ["counts", { component: Counts, name: "Play Counts" }],
   ["opps", { component: Opponents, name: "Opponents" }],
@@ -46,8 +51,12 @@ function Player() {
   const [summary, summarySetter] = useState(null);
   const [allRecs, allRecsSetter] = useState([]);
   const [responses, responsesSetter] = useState([]);
+  const [isCoder, setIsCoder] = useState(false);
+  const [isDesigner, setIsDesigner] = useState(false);
   const [order, orderSetter] = useStorageState("player-profile-order", [
     "stars",
+    "coded",
+    "designed",
     "ratings",
     "counts",
     "opps",
@@ -78,6 +87,15 @@ function Player() {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (user !== null) {
+        const coded = [...gameinfo.values()].filter(e => e.people !== undefined && e.people.filter(p => p.type === "coder" && p.apid === user.id).length > 0);
+        setIsCoder(coded.length > 0);
+        const designed = [...gameinfo.values()].filter(e => e.people !== undefined && e.people.filter(p => p.type === "designer" && p.apid === user.id).length > 0);
+        setIsDesigner(designed.length > 0);
+    }
+  }, [user]);
 
   useEffect(() => {
     async function fetchData() {
@@ -258,6 +276,12 @@ function Player() {
                 <ResponsesContext.Provider value={[responses, responsesSetter]}>
                   <div className="columns is-multiline">
                     {order.map((code) => {
+                      if (code === "coded" && !isCoder) {
+                        return null;
+                      }
+                      if (code === "designed" && !isDesigner) {
+                        return null;
+                      }
                       const obj = code2ele.get(code);
                       if (obj !== undefined) {
                         return (
