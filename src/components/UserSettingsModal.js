@@ -1,10 +1,17 @@
-import React, { useContext, useState, useEffect, Fragment } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  Fragment,
+  useCallback,
+} from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_AUTH } from "../config";
 import { Auth } from "aws-amplify";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import { debounce } from "lodash";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { MeContext, UsersContext } from "../pages/Skeleton";
@@ -165,6 +172,11 @@ function UserSettingsModal(props) {
     countrySetter(newCountry);
     updatedSetter((updated) => updated + 1);
   };
+
+  const debouncedCountryChange = useCallback(
+    debounce(handleCountryChange, 300),
+    []
+  );
 
   const handleNameChangeCancelClick = () => {
     nameSetter("");
@@ -775,7 +787,7 @@ function UserSettingsModal(props) {
                 <select
                   id="countrySelect"
                   value={country}
-                  onChange={(e) => handleCountryChange(e.target.value)}
+                  onChange={(e) => debouncedCountryChange(e.target.value)}
                 >
                   <option value={""} key={"country|_blank"}>
                     --Prefer not to say--
