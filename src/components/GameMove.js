@@ -1174,11 +1174,11 @@ function GameMove(props) {
       .filter((p) => p.type === "designer")
       .map((p) => {
         if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
-            let str = `[${p.name}](${p.urls[0]})`;
-            if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
-                str += ` [(AP)](/player/${p.apid})`;
-            }
-            return str;
+          let str = `[${p.name}](${p.urls[0]})`;
+          if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+            str += ` [(AP)](/player/${p.apid})`;
+          }
+          return str;
         } else if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
           return `[${p.name}](/player/${p.apid})`;
         } else {
@@ -1199,11 +1199,11 @@ function GameMove(props) {
       .filter((p) => p.type === "coder")
       .map((p) => {
         if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
-            let str = `[${p.name}](${p.urls[0]})`;
-            if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
-                str += ` [(AP)](/player/${p.apid})`;
-            }
-            return str;
+          let str = `[${p.name}](${p.urls[0]})`;
+          if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+            str += ` [(AP)](/player/${p.apid})`;
+          }
+          return str;
         } else if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
           return `[${p.name}](/player/${p.apid})`;
         } else {
@@ -3556,7 +3556,9 @@ function GameMove(props) {
             <div className="content">
               <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
                 {gameEngine.description() +
-                  (designerString === undefined ? "" : "\n\n" + designerString) +
+                  (designerString === undefined
+                    ? ""
+                    : "\n\n" + designerString) +
                   (coderString === undefined ? "" : "\n\n" + coderString)}
               </ReactMarkdown>
               <ul className="contained">

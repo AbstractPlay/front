@@ -21,14 +21,19 @@ function Coded({ handleChallenge }) {
 
   const data = useMemo(
     () =>
-        [...gameinfo.entries()]
-        .filter(([,entry]) => entry.people !== undefined && entry.people.filter(p => p.type === "coder" && p.apid === user.id).length > 0)
+      [...gameinfo.entries()]
+        .filter(
+          ([, entry]) =>
+            entry.people !== undefined &&
+            entry.people.filter((p) => p.type === "coder" && p.apid === user.id)
+              .length > 0
+        )
         .map(([meta, info]) => {
-            const ret = {
-                id: meta,
-                name: info.name,
-            };
-            return ret;
+          const ret = {
+            id: meta,
+            name: info.name,
+          };
+          return ret;
         })
         .sort((a, b) => a.name.localeCompare(b.name)),
     [user]
@@ -74,9 +79,7 @@ function Coded({ handleChallenge }) {
     [columnHelper, globalMe, user, activeChallengeModal, handleChallenge]
   );
 
-  if (
-    data.length === 0
-  ) {
+  if (data.length === 0) {
     return (
       <div className="content">
         <p>None</p>

@@ -90,10 +90,20 @@ function Player() {
 
   useEffect(() => {
     if (user !== null) {
-        const coded = [...gameinfo.values()].filter(e => e.people !== undefined && e.people.filter(p => p.type === "coder" && p.apid === user.id).length > 0);
-        setIsCoder(coded.length > 0);
-        const designed = [...gameinfo.values()].filter(e => e.people !== undefined && e.people.filter(p => p.type === "designer" && p.apid === user.id).length > 0);
-        setIsDesigner(designed.length > 0);
+      const coded = [...gameinfo.values()].filter(
+        (e) =>
+          e.people !== undefined &&
+          e.people.filter((p) => p.type === "coder" && p.apid === user.id)
+            .length > 0
+      );
+      setIsCoder(coded.length > 0);
+      const designed = [...gameinfo.values()].filter(
+        (e) =>
+          e.people !== undefined &&
+          e.people.filter((p) => p.type === "designer" && p.apid === user.id)
+            .length > 0
+      );
+      setIsDesigner(designed.length > 0);
     }
   }, [user]);
 

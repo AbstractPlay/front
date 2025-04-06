@@ -44,7 +44,7 @@ const MetaItem = React.forwardRef(
           if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
             let str = `[${p.name}](${p.urls[0]})`;
             if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
-                str += ` [(AP)](/player/${p.apid})`;
+              str += ` [(AP)](/player/${p.apid})`;
             }
             return str;
           } else if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
@@ -70,7 +70,7 @@ const MetaItem = React.forwardRef(
           if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
             let str = `[${p.name}](${p.urls[0]})`;
             if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
-                str += ` [(AP)](/player/${p.apid})`;
+              str += ` [(AP)](/player/${p.apid})`;
             }
             return str;
           } else if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
@@ -216,15 +216,11 @@ const MetaItem = React.forwardRef(
                       rehypePlugins={[rehypeRaw]}
                       className="content"
                     >
-                      {
-                        gameEngine.description() +
+                      {gameEngine.description() +
                         (designerString === undefined
                           ? ""
                           : "\n\n" + designerString) +
-                        (coderString === undefined
-                          ? ""
-                          : "\n\n" + coderString)
-                      }
+                        (coderString === undefined ? "" : "\n\n" + coderString)}
                     </ReactMarkdown>
                     <ul className="contained">
                       {game.urls.map((l, i) => (
