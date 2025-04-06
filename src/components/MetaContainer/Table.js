@@ -235,7 +235,7 @@ function Table({
             designers:
               info.people !== undefined && info.people.length > 0
                 ? info.people.filter((p) => p.type === "designer")
-                : undefined,
+                : [],
             description: gameEngine.description(),
             starred:
               globalMe !== null &&
@@ -370,14 +370,14 @@ function Table({
       }),
       columnHelper.accessor(
         (row) =>
-          row.designers !== undefined
+          row.designers.length > 0
             ? row.designers.map((d) => d.name).join(" ")
             : "",
         {
           header: "Designers",
           id: "designers",
           cell: (props) =>
-            props.row.original.designers === undefined
+            props.row.original.designers.length === 0
               ? ""
               : props.row.original.designers
                   .map(({ name, urls }, ind) =>
