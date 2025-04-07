@@ -2631,5 +2631,21 @@ The board configuration is random each game. Pieces have different move options 
       <guid isPermaLink="false">1355996855346921653</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>@alek &amp;amp; @emptytheory &amp;apos;s group flipping game Paintbucket is now available. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 05 Apr 2025 20:03:32 GMT</pubDate>
+      <guid isPermaLink="false">1358170211869790418</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>In the various places game metadata are listed (landing pages and the `i` dialogs beneath the boards), the people who coded the game are now listed. For both game designers and coders, if I know which AP player they are, their name will now link to that profile. (In the case where there is both an external URL and an AP userid present, then the name will link to the URL and the AP profile link will be to the `(AP)` suffix that will then appear.) Also, on player profiles, any games coded or designed will now be listed. There are lots of designers whose AP names I don&amp;apos;t know. So if you&amp;apos;ve designed a game and it&amp;apos;s not appearing on your player profile, please send me a DM and I&amp;apos;ll link the names. Thanks to @Simplicatus Games for the suggestion.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 06 Apr 2025 19:03:56 GMT</pubDate>
+      <guid isPermaLink="false">1358517604104540422</guid>
+    </item>
+    
   </channel>
 </rss>
