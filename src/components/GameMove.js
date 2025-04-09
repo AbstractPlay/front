@@ -301,7 +301,7 @@ function setupGame(
       new GameNode(
         null,
         tmpEngine.lastmove,
-        tmpEngine.cheapSerialize(),
+        null, // state will be lazy loaded later
         tmpEngine.gameover ? "" : tmpEngine.currplayer - 1
       )
     );
@@ -344,6 +344,13 @@ function mergeExploration(
   const moveNumber = exploration.length;
   if (data[0] && data[0].move === moveNumber) {
     let node = exploration[moveNumber - 1];
+    // rehydrate state if needed
+    if (node.state === null) {
+      let tmpEngine = GameFactory(game.metaGame, game.state);
+      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber+1);
+      tmpEngine.load();
+      node.state = tmpEngine.cheapSerialize();
+    }
     let gameEngine = GameFactory(game.metaGame, node.state);
     mergeMoveRecursive(gameEngine, node, data[0].tree);
   } else if (data[1] && data[1].move === moveNumber - 1) {
@@ -1981,6 +1988,15 @@ function GameMove(props) {
     ) {
       node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variation.
     }
+
+    // If historic states were not loaded on setup, lazy load them now.
+    if (node.state === null) {
+      let tmpEngine = GameFactory(game.metaGame, game.state);
+      tmpEngine.stack = tmpEngine.stack.slice(0, foc.moveNumber+1);
+      tmpEngine.load();
+      node.state = tmpEngine.cheapSerialize();
+    }
+    // Set the game to the state of the focused move.
     let engine = GameFactory(game.metaGame, node.state);
     partialMoveRenderRef.current = false;
     foc.canExplore = canExploreMove(game, explorationRef.current.nodes, foc);
