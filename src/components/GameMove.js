@@ -355,6 +355,13 @@ function mergeExploration(
     mergeMoveRecursive(gameEngine, node, data[0].tree);
   } else if (data[1] && data[1].move === moveNumber - 1) {
     let node = exploration[moveNumber - 1];
+    // rehydrate state if needed
+    if (node.state === null) {
+      let tmpEngine = GameFactory(game.metaGame, game.state);
+      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber+1);
+      tmpEngine.load();
+      node.state = tmpEngine.cheapSerialize();
+    }
     let gameEngine = GameFactory(game.metaGame, node.state);
     // subtree of the move I chose
     const subtree1 = data[1].tree.find((e) =>
@@ -379,6 +386,13 @@ function mergeExploration(
   } else if (data[2] && data[2].move === moveNumber - 2) {
     console.log("Merging 2 moves back");
     let node = exploration[moveNumber - 2];
+    // rehydrate state if needed
+    if (node.state === null) {
+      let tmpEngine = GameFactory(game.metaGame, game.state);
+      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber+1);
+      tmpEngine.load();
+      node.state = tmpEngine.cheapSerialize();
+    }
     let gameEngine = GameFactory(game.metaGame, node.state);
     // subtree of the move I chose
     const subtree1 = data[2].tree.find((e) =>
@@ -417,6 +431,13 @@ function mergePublicExploration(game, exploration, data) {
     const move = m.move;
     const tree = m.tree;
     let node = exploration[move - 1];
+    // rehydrate state if needed
+    if (node.state === null) {
+      let tmpEngine = GameFactory(game.metaGame, game.state);
+      tmpEngine.stack = tmpEngine.stack.slice(0, move+1);
+      tmpEngine.load();
+      node.state = tmpEngine.cheapSerialize();
+    }
     node.version = version;
     node.comment = m.tree.comment;
     let gameEngine = GameFactory(game.metaGame, node.state);
@@ -439,6 +460,13 @@ function mergePrivateExploration(
     const move = m.move;
     const tree = m.tree;
     let node = exploration[move - 1];
+    // rehydrate state if needed
+    if (node.state === null) {
+      let tmpEngine = GameFactory(game.metaGame, game.state);
+      tmpEngine.stack = tmpEngine.stack.slice(0, move+1);
+      tmpEngine.load();
+      node.state = tmpEngine.cheapSerialize();
+    }
     if (version) node.version = version;
     let gameEngine = GameFactory(game.metaGame, node.state);
     const added = mergeMoveRecursive2(
@@ -701,6 +729,13 @@ async function saveExploration(
       const move = data.sk;
       const tree = JSON.parse(data.tree);
       let node = exploration[move - 1];
+      // rehydrate state if needed
+      if (node.state === null) {
+        let tmpEngine = GameFactory(game.metaGame, game.state);
+        tmpEngine.stack = tmpEngine.stack.slice(0, move+1);
+        tmpEngine.load();
+        node.state = tmpEngine.cheapSerialize();
+      }
       node.version = version;
       if (tree.comment !== undefined)
         for (const comment of tree.comment) node.AddComment(comment);
@@ -748,6 +783,13 @@ function doView(
   navigate
 ) {
   let node = getFocusNode(exploration, focus);
+  // rehydrate state if needed
+  if (node.state === null) {
+    let tmpEngine = GameFactory(game.metaGame, game.state);
+    tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber+1);
+    tmpEngine.load();
+    node.state = tmpEngine.cheapSerialize();
+  }
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
   let partialMove = false;
   if (move.valid && move.complete < 1 && move.canrender === true)
@@ -1023,6 +1065,13 @@ function processNewMove(
     !newmove.move.startsWith(newmove.rendered)
   ) {
     let node = getFocusNode(exploration, focus);
+    // rehydrate state if needed
+    if (node.state === null) {
+      let tmpEngine = GameFactory(gameRef.current.metaGame, gameRef.current.state);
+      tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber+1);
+      tmpEngine.load();
+      node.state = tmpEngine.cheapSerialize();
+    }
     let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     partialMoveRenderRef.current = false;
     setStatus(gameEngineTmp, gameRef.current, false, "", statusRef.current);
@@ -1946,9 +1995,16 @@ function GameMove(props) {
     nodeidParam,
   ]);
 
-  const handlePlaygroundExport = async (state) => {
+  const handlePlaygroundExport = async (state, moveNumber) => {
     const usr = await Auth.currentAuthenticatedUser();
     console.log("currentAuthenticatedUser", usr);
+    // rehydrate state if needed
+    if (state === null) {
+      let tmpEngine = GameFactory(game.metaGame, game.state);
+      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber+1);
+      tmpEngine.load();
+      state = tmpEngine.cheapSerialize();
+    }
     const res = await fetch(API_ENDPOINT_AUTH, {
       method: "POST",
       headers: {
@@ -2099,6 +2155,13 @@ function GameMove(props) {
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
     let node = getFocusNode(explorationRef.current.nodes, focus);
+    // rehydrate state if needed
+    if (node.state === null) {
+      let tmpEngine = GameFactory(game.metaGame, game.state);
+      tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber+1);
+      tmpEngine.load();
+      node.state = tmpEngine.cheapSerialize();
+    }
     let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     let result;
     if (gameRef.current.simultaneous)
@@ -2176,6 +2239,13 @@ function GameMove(props) {
     function boardClick(row, col, piece) {
       // console.log(`boardClick:(${row},${col},${piece})`);
       let node = getFocusNode(explorationRef.current.nodes, focusRef.current);
+      // rehydrate state if needed
+      if (node.state === null) {
+        let tmpEngine = GameFactory(game.metaGame, game.state);
+        tmpEngine.stack = tmpEngine.stack.slice(0, focusRef.current.moveNumber+1);
+        tmpEngine.load();
+        node.state = tmpEngine.cheapSerialize();
+      }
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous
         ? gameEngineTmp.handleClickSimultaneous(
@@ -2818,6 +2888,13 @@ function GameMove(props) {
       (game.canSubmit || (!game.simultaneous && game.numPlayers === 2))
     ) {
       let node = getFocusNode(explorationRef.current.nodes, focus);
+      // rehydrate state if needed
+      if (node.state === null) {
+        let tmpEngine = GameFactory(game.metaGame, game.state);
+        tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber+1);
+        tmpEngine.load();
+        node.state = tmpEngine.cheapSerialize();
+      }
       const engine = GameFactory(game.metaGame, node.state);
       if (game.simultaneous) movesRef.current = engine.moves(game.me + 1);
       else movesRef.current = engine.moves();
