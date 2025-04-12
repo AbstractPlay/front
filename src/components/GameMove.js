@@ -3394,7 +3394,7 @@ function GameMove(props) {
                 />
               </div>
               {/***************** GameMoves *****************/}
-              <div className={`column is-narrow`} style={{ maxWidth: "15vw" }}>
+              <div className={`column is-narrow`} style={screenWidth < 770 || verticalLayout ? {} : { maxWidth: "15vw" }}>
                 <div className="tourMoveList">
                   <h1 className="subtitle lined">
                     <span>{t("Moves")}</span>
