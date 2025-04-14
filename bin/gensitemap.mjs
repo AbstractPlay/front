@@ -7,7 +7,7 @@ import { writeFileSync } from "fs";
 const links = [
     { url: "/about",  changefreq: "yearly", priority: 0.5  },
     { url: "/legal",  changefreq: "yearly", priority: .8  },
-    { url: "/news",  changefreq: "monthly", priority: .9  },
+    { url: "/news",  changefreq: "weekly", priority: .9  },
     { url: "/stats",  changefreq: "weekly", priority: 0.3  },
     { url: "/games",  changefreq: "monthly", priority: 1  },
     { url: "/players",  changefreq: "weekly", priority: 0.3  },
