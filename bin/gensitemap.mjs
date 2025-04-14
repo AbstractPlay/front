@@ -14,10 +14,12 @@ const links = [
     { url: "/tournaments", changefreq: "weekly", priority: 1},
 ]
 
+// add /games links
 // add /challenges links
 // add /listgames links
 // add /ratings links
 for (const meta of gameinfo.keys()) {
+    links.push({ url: `/games/${meta}`,  changefreq: "weekly", priority: 0.75  });
     links.push({ url: `/challenges/${meta}`,  changefreq: "weekly", priority: 0.5  });
     links.push({ url: `/listgames/current/${meta}`,  changefreq: "weekly", priority: 0.3  });
     links.push({ url: `/listgames/completed/${meta}`,  changefreq: "weekly", priority: 0.3  });
