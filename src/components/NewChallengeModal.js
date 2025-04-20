@@ -91,6 +91,17 @@ function NewChallengeModal(props) {
     minSeenSetter(min);
   }, [onlySee]);
 
+  const resetToDefault = () => {
+    clockSpeedSetter("medium");
+    clockStartSetter(48);
+    clockIncSetter(24);
+    clockMaxSetter(96);
+    clockHardSetter(false);
+    onlySeeSetter("all");
+    ratedSetter(true);
+    noExploreSetter(false);
+  };
+
   const setPlayerCount = useCallback(
     (cnt) => {
       playerCountSetter(cnt);
@@ -313,6 +324,7 @@ function NewChallengeModal(props) {
       title={t("NewChallenge")}
       buttons={[
         { label: t("Challenge"), action: handleChallenge },
+        { label: t("ResetDefault"), action: resetToDefault },
         { label: t("Close"), action: handleNewChallengeClose },
       ]}
     >
