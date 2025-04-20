@@ -459,7 +459,7 @@
     "ChallengeResponseCommentHelp": "Comment to challenger on your response.",
     "ChallengeRevokeCommentHelp": "Comment on revoking your challenge.",
     "ChallengeRevokeCommentHelp2": "Comment on revoking your previous acceptance.",
-    "ChallengeResponseDesc": "{{opp}} challenged you to a game of {{game}}",
+    "ChallengeResponseDesc": "{{opp}} challenged you to a game of [{{game}}](/games/{{meta}})",
     "ChallengerFirst": "Challenger plays first",
     "ChallengerNotes": "Challenger comments: ",
     "ChallengerSecond": "Challenger plays second",
@@ -805,7 +805,7 @@
         "Withdraw": "Withdraw"
     },
     "TriggerRefresh": "Trigger a refresh",
-    "TwoPlayersChallengeDescription": "You challenged {{other}} to a game of {{game}}",
+    "TwoPlayersChallengeDescription": "You challenged {{other}} to a game of [{{game}}](/games/{{meta}})",
     "UnratedGame": "This will be an unrated game.",
     "UpdateNote": "Update game note",
     "UserSettings": "User Settings",

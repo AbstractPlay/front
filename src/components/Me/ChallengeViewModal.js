@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
 
 function ChallengeViewModal(props) {
@@ -95,6 +98,7 @@ function ChallengeViewModal(props) {
           t("TwoPlayersChallengeDescription", {
             other: challenge.challengees[0].name,
             game: game.name,
+            meta: challenge.metaGame,
           }) +
           t("WithVariants", {
             count: numVariants,
@@ -140,8 +144,14 @@ function ChallengeViewModal(props) {
         { label: t("Close"), action: props.close },
       ]}
     >
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
+        className="content"
+      >
+        {challengeDesc}
+      </ReactMarkdown>
       <div className="content">
-        <p>{challengeDesc}</p>
         <p>
           {challenge.numPlayers === 2
             ? t("NumChallenge2") + " " + seating

@@ -2,6 +2,9 @@ import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { MeContext } from "../../pages/Skeleton";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
 
 function ChallengeResponseModal(props) {
@@ -72,6 +75,7 @@ function ChallengeResponseModal(props) {
       t("ChallengeResponseDesc", {
         opp: challenge.challenger.name,
         game: game.name,
+        meta: challenge.metaGame,
       }) +
       t("WithVariants", {
         count: numVariants,
@@ -101,8 +105,14 @@ function ChallengeResponseModal(props) {
         },
       ]}
     >
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
+        className="content"
+      >
+        {desc}
+      </ReactMarkdown>
       <div className="content">
-        <p>{desc}</p>
         <p>
           {challenge.numPlayers === 2
             ? t("NumChallenge2") + " " + seating
