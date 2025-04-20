@@ -202,7 +202,7 @@ function Tournament(props) {
       </Helmet>
       <article className="content">
         <h1 className="title has-text-centered">
-          <a href={"/games/" + tournament.metaGame} style={{textDecoration: "none"}}>
+          <a href={"/games/" + ((tournament && tournament.metaGame) ? tournament.metaGame : "")} style={{textDecoration: "none"}}>
           {variants === ""
             ? t("Tournament.Name", { metaGame: metaGameName })
             : t("Tournament.VariantsName", {
