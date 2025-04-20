@@ -35,10 +35,10 @@ function NewTournamentModal(props) {
 
   useEffect(() => {
     if (props.fixedMetaGame !== undefined) {
-        metaGameSetter(props.fixedMetaGame);
-        handleChangeGame(props.fixedMetaGame);
+      metaGameSetter(props.fixedMetaGame);
+      handleChangeGame(props.fixedMetaGame);
     } else {
-        metaGameSetter(null);
+      metaGameSetter(null);
     }
     errorSetter("");
   }, [show, props, handleChangeGame]);
@@ -90,41 +90,41 @@ function NewTournamentModal(props) {
       ]}
     >
       <div className="container">
-      {fixedMetaGame ? (
+        {fixedMetaGame ? (
           <p>
             <strong>{t("ChooseGame")}</strong>:{" "}
             {gameinfo.get(fixedMetaGame).name}
           </p>
         ) : (
-        <div className="field">
-          <label className="label" htmlFor="gameName">
-            {t("ChooseGame")}
-          </label>
-          <div className="control">
-            <div className="select is-small">
-              {games === null ? (
-                <Spinner />
-              ) : (
-                /* Select meta game */
-                <select
-                  value={metaGame ? metaGame : ""}
-                  name="gameName"
-                  id="gameName"
-                  onChange={(e) => handleChangeGame(e.target.value)}
-                >
-                  <option value="">--{t("Select")}--</option>
-                  {games.map((game) => {
-                    return (
-                      <option key={game.id} value={game.id}>
-                        {game.name}
-                      </option>
-                    );
-                  })}
-                </select>
-              )}
+          <div className="field">
+            <label className="label" htmlFor="gameName">
+              {t("ChooseGame")}
+            </label>
+            <div className="control">
+              <div className="select is-small">
+                {games === null ? (
+                  <Spinner />
+                ) : (
+                  /* Select meta game */
+                  <select
+                    value={metaGame ? metaGame : ""}
+                    name="gameName"
+                    id="gameName"
+                    onChange={(e) => handleChangeGame(e.target.value)}
+                  >
+                    <option value="">--{t("Select")}--</option>
+                    {games.map((game) => {
+                      return (
+                        <option key={game.id} value={game.id}>
+                          {game.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                )}
+              </div>
             </div>
           </div>
-        </div>
         )}
         <GameVariants
           metaGame={metaGame}

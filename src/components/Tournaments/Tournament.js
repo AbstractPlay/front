@@ -202,13 +202,19 @@ function Tournament(props) {
       </Helmet>
       <article className="content">
         <h1 className="title has-text-centered">
-          <a href={"/games/" + ((tournament && tournament.metaGame) ? tournament.metaGame : "")} style={{textDecoration: "none"}}>
-          {variants === ""
-            ? t("Tournament.Name", { metaGame: metaGameName })
-            : t("Tournament.VariantsName", {
-                metaGame: metaGameName,
-                variants: variants,
-              })}
+          <a
+            href={
+              "/games/" +
+              (tournament && tournament.metaGame ? tournament.metaGame : "")
+            }
+            style={{ textDecoration: "none" }}
+          >
+            {variants === ""
+              ? t("Tournament.Name", { metaGame: metaGameName })
+              : t("Tournament.VariantsName", {
+                  metaGame: metaGameName,
+                  variants: variants,
+                })}
           </a>
         </h1>
         <div className="control has-text-centered">

@@ -1964,7 +1964,10 @@ function Playground(props) {
               </div>
             </div>
             {/***************** GameMoves *****************/}
-            <div className={`column is-narrow`} style={screenWidth < 770 ? {} : { maxWidth: "15vw" }}>
+            <div
+              className={`column is-narrow`}
+              style={screenWidth < 770 ? {} : { maxWidth: "15vw" }}
+            >
               <GameMoves
                 focus={focus}
                 game={game}
