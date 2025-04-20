@@ -10,6 +10,7 @@ function NewTournamentModal(props) {
   const handleClose = props.handleClose;
   const handleNewTournament = props.handleNewTournament;
   const show = props.show;
+  const fixedMetaGame = props.fixedMetaGame;
   const [metaGame, metaGameSetter] = useState(null);
   const [selectedVariants, setSelectedVariants] = useState([]);
   const [globalMe] = useContext(MeContext);
@@ -33,7 +34,12 @@ function NewTournamentModal(props) {
   );
 
   useEffect(() => {
-    metaGameSetter(null);
+    if (props.fixedMetaGame !== undefined) {
+        metaGameSetter(props.fixedMetaGame);
+        handleChangeGame(props.fixedMetaGame);
+    } else {
+        metaGameSetter(null);
+    }
     errorSetter("");
   }, [show, props, handleChangeGame]);
 
@@ -84,6 +90,12 @@ function NewTournamentModal(props) {
       ]}
     >
       <div className="container">
+      {fixedMetaGame ? (
+          <p>
+            <strong>{t("ChooseGame")}</strong>:{" "}
+            {gameinfo.get(fixedMetaGame).name}
+          </p>
+        ) : (
         <div className="field">
           <label className="label" htmlFor="gameName">
             {t("ChooseGame")}
@@ -113,6 +125,7 @@ function NewTournamentModal(props) {
             </div>
           </div>
         </div>
+        )}
         <GameVariants
           metaGame={metaGame}
           variantsSetter={setSelectedVariants}

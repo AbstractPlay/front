@@ -1237,6 +1237,7 @@ function Tournaments(props) {
         show={showNewTournamentModal}
         handleClose={handleNewTournamentClose}
         handleNewTournament={handleNewTournament}
+        fixedMetaGame={filterMeta}
       />
     </>
   );
