@@ -417,7 +417,7 @@
     "ChallengedOthers": "{{game}}, інші гравці: {{others}}",
     "ChallengedTwoPlayers": "{{game}} проти {{other}}",
     "ChallengeFrom": "{{game}} виклик від {{challenger}}",
-    "ChallengeResponseDesc": "{{opp}} викликав вас на гру {{game}}",
+    "ChallengeResponseDesc": "{{opp}} викликав вас на гру [{{game}}](/games/{{meta}})",
     "ChallengerFirst": "Челленджер грає першим",
     "ChallengerNotes": "Коментарі претендента: ",
     "ChallengerSecond": "Челленджер грає другим",
@@ -633,7 +633,7 @@
         "RecentlyCompleted": "Нещодавно завершені турніри",
         "TieBreakHelp": "Сума очок переможеного суперника"
     },
-    "TwoPlayersChallengeDescription": "Ви викликали {{other}} на гру {{game}}",
+    "TwoPlayersChallengeDescription": "Ви викликали {{other}} на гру [{{game}}](/games/{{meta}})",
     "UpdateNote": "Оновити примітку до гри",
     "UserSettings": "Налаштування користувача",
     "Variants": "Варіанти",
@@ -836,5 +836,6 @@
     "IssueStanding": "Видайте новий постійний виклик",
     "NewRealStanding": "Новий постійний виклик",
     "ChooseLimit": "Максимальна кількість активних ігор",
-    "NoRealStanding": "Жодних постійних викликів"
+    "NoRealStanding": "Жодних постійних викликів",
+    "ResetDefault": "Відновити за замовчуванням"
 }
