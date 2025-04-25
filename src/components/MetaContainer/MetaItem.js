@@ -155,8 +155,8 @@ const MetaItem = React.forwardRef(
     };
 
     const setSelectedVariants = () => {
-        return;
-    }
+      return;
+    };
 
     return (
       <div ref={ref}>
@@ -223,19 +223,18 @@ const MetaItem = React.forwardRef(
                     >
                       {gameEngine.description()}
                     </ReactMarkdown>
-        <GameVariants
-          metaGame={game.uid}
-          variantsSetter={setSelectedVariants}
-          disableFields={true}
-        />
-
+                    <GameVariants
+                      metaGame={game.uid}
+                      variantsSetter={setSelectedVariants}
+                      disableFields={true}
+                    />
                     <ReactMarkdown
                       rehypePlugins={[rehypeRaw]}
                       className="content"
                     >
                       {(designerString === undefined
-                          ? ""
-                          : "\n\n" + designerString) +
+                        ? ""
+                        : "\n\n" + designerString) +
                         (coderString === undefined ? "" : "\n\n" + coderString)}
                     </ReactMarkdown>
                     <ul className="contained">

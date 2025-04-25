@@ -172,7 +172,11 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
     return (
       <>
         <div className="field">
-          <label className="label">{t("PickVariant", {context: disableFields ? "disabled" : "normal"})}</label>
+          <label className="label">
+            {t("PickVariant", {
+              context: disableFields ? "disabled" : "normal",
+            })}
+          </label>
         </div>
         <div className="indentedContainer">
           {groupData.length === 0
@@ -183,7 +187,11 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
                   key={"group:" + g.group}
                   onChange={(e) => handleGroupChange(g.group, e.target.value)}
                 >
-                  <label className="label">{t("PickOneVariant", {context: disableFields ? "disabled" : "normal"})}</label>
+                  <label className="label">
+                    {t("PickOneVariant", {
+                      context: disableFields ? "disabled" : "normal",
+                    })}
+                  </label>
                   {g.variants.map((v) => (
                     <div className="control" key={v.uid}>
                       <label className="radio">
@@ -219,7 +227,11 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
           ) : (
             <>
               <div className="field">
-                <label className="label">{t("PickAnyVariant", {context: disableFields ? "disabled" : "normal"})}</label>
+                <label className="label">
+                  {t("PickAnyVariant", {
+                    context: disableFields ? "disabled" : "normal",
+                  })}
+                </label>
               </div>
               <div className="field">
                 {nonGroupData.map((v) => (
