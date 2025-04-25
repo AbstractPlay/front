@@ -837,5 +837,11 @@
     "NewRealStanding": "Новий постійний виклик",
     "ChooseLimit": "Максимальна кількість активних ігор",
     "NoRealStanding": "Жодних постійних викликів",
-    "ResetDefault": "Відновити за замовчуванням"
+    "ResetDefault": "Відновити за замовчуванням",
+    "PickAnyVariant_disabled": "Ви можете вибрати будь-який із",
+    "PickOneVariant_normal": "Виберіть не більше одного з",
+    "PickVariant_normal": "Виберіть варіанти",
+    "PickVariant_disabled": "Доступні варіанти",
+    "PickAnyVariant_normal": "Виберіть будь-який із",
+    "PickOneVariant_disabled": "Ви можете вибрати не більше одного з"
 }
