@@ -7,7 +7,7 @@ import { cloneDeep } from "lodash";
  * This component parses a metaGame's variant definition and returns the form for selecting them.
  * Give it the metaGame and a function for setting the string[] of selected variants.
  */
-function GameVariants({ metaGame, variantsSetter }) {
+function GameVariants({ metaGame, variantsSetter, disableFields }) {
   //   const groupVariantsRef = useRef({});
   const [groupVariants, groupVariantsSetter] = useState({});
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
@@ -172,7 +172,7 @@ function GameVariants({ metaGame, variantsSetter }) {
     return (
       <>
         <div className="field">
-          <label className="label">{t("PickVariant")}</label>
+          <label className="label">{t("PickVariant", {context: disableFields ? "disabled" : "normal"})}</label>
         </div>
         <div className="indentedContainer">
           {groupData.length === 0
@@ -183,7 +183,7 @@ function GameVariants({ metaGame, variantsSetter }) {
                   key={"group:" + g.group}
                   onChange={(e) => handleGroupChange(g.group, e.target.value)}
                 >
-                  <label className="label">{t("PickOneVariant")}</label>
+                  <label className="label">{t("PickOneVariant", {context: disableFields ? "disabled" : "normal"})}</label>
                   {g.variants.map((v) => (
                     <div className="control" key={v.uid}>
                       <label className="radio">
@@ -193,6 +193,7 @@ function GameVariants({ metaGame, variantsSetter }) {
                           value={v.uid}
                           name={g.group}
                           defaultChecked={v.default}
+                          disabled={disableFields}
                         />
                         {v.name}
                       </label>
@@ -218,7 +219,7 @@ function GameVariants({ metaGame, variantsSetter }) {
           ) : (
             <>
               <div className="field">
-                <label className="label">{t("PickAnyVariant")}</label>
+                <label className="label">{t("PickAnyVariant", {context: disableFields ? "disabled" : "normal"})}</label>
               </div>
               <div className="field">
                 {nonGroupData.map((v) => (
@@ -229,6 +230,7 @@ function GameVariants({ metaGame, variantsSetter }) {
                         id={v.uid}
                         checked={nonGroupVariants[v.uid]}
                         onChange={handleNonGroupChange}
+                        disabled={disableFields}
                       />
                       {v.name}
                     </label>

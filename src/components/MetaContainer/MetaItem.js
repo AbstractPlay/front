@@ -15,6 +15,7 @@ import Ratings from "../Ratings";
 import StandingChallenges from "../StandingChallenges";
 import ListGames from "../ListGames";
 import Tournaments from "../Tournaments/Tournaments";
+import GameVariants from "../GameVariants";
 
 const MetaItem = React.forwardRef(
   (
@@ -153,6 +154,10 @@ const MetaItem = React.forwardRef(
       setModalIsOpen(false);
     };
 
+    const setSelectedVariants = () => {
+        return;
+    }
+
     return (
       <div ref={ref}>
         <h1 className="subtitle lined">
@@ -216,8 +221,19 @@ const MetaItem = React.forwardRef(
                       rehypePlugins={[rehypeRaw]}
                       className="content"
                     >
-                      {gameEngine.description() +
-                        (designerString === undefined
+                      {gameEngine.description()}
+                    </ReactMarkdown>
+        <GameVariants
+          metaGame={game.uid}
+          variantsSetter={setSelectedVariants}
+          disableFields={true}
+        />
+
+                    <ReactMarkdown
+                      rehypePlugins={[rehypeRaw]}
+                      className="content"
+                    >
+                      {(designerString === undefined
                           ? ""
                           : "\n\n" + designerString) +
                         (coderString === undefined ? "" : "\n\n" + coderString)}
