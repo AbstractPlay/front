@@ -2655,5 +2655,36 @@ The board configuration is random each game. Pieces have different move options 
       <guid isPermaLink="false">1360318457828347946</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>Timo Diegel&amp;apos;s game Bloqueo is now live. Move shared pawns to place your pieces and create connected groups to outscore your opponent. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 22 Apr 2025 15:49:57 GMT</pubDate>
+      <guid isPermaLink="false">1364266991724138599</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>We have now reached 200 games, and more are on the way! I know some feel this is too many, so I thought I might take this opportunity to clarify my goals:
+- I&amp;apos;m a librarian at heart, so first and foremost I want to create a place where a wide array of abstracts can be enjoyed. I have no upper limit in mind.
+- This a noncommercial, open source exercise. As long as hosting costs are covered, and someone is around to keep things going, the site will remain free to enjoy.
+- Because we are not chasing growth and financial gain, and we rely on volunteer effort, that means there will be ups and downs in developer activity. We encourage continued use of the #suggestions and #bug-reports channels, and as long as I&amp;apos;m around, those will be chipped away at. (If you know of developers who also like games, please send them our way!)
+
+We&amp;apos;re also approaching our second anniversary (May 1st). Thank you to the various @Developers  and @Code Contributors  who have generously donated time and talents, to the @Game Designers  for creating engaging rules, and to the many players who keep the community alive and whose bug reports, suggestions, and votes have helped us continue to improve. And of course thank you to Looney Labs and to a handful of individual donors who have helped ensure hosting is covered for at least the next few years. Just, thank you all ❤️</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 22 Apr 2025 15:58:34 GMT</pubDate>
+      <guid isPermaLink="false">1364269161425014834</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Two new games are now available. Enjoy!
+- In @ManaT&amp;apos;s game Pilastri, pieces are forced to climb higher and higher until someone runs out of moves. Don&amp;apos;t let it be you!
+- In Michael Lefkowitz&amp;apos;s game Tessella, pieces work in pairs to capture their enemies. First to four captures wins.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 25 Apr 2025 17:29:35 GMT</pubDate>
+      <guid isPermaLink="false">1365379228190904330</guid>
+    </item>
+    
   </channel>
 </rss>
