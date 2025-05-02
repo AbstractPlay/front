@@ -265,6 +265,13 @@ function MoveEntry(props) {
     } else {
       // game over
       const node = getFocusNode(exploration, focus);
+      // rehydrate state if need - churn-fix
+      if (node.state === null) {
+        let tmpEngine = GameFactory(game.metaGame, game.state);
+        tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber+1);
+        tmpEngine.load();
+        node.state = tmpEngine.cheapSerialize();
+      }
       const state = GameFactory(engine.metaGame, node.state);
       if (state.winner && state.winner.length > 0) {
         if (state.winner.length === 1) {
