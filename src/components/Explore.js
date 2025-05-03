@@ -985,81 +985,98 @@ function Explore(props) {
           </p>
           <hr />
         </div>
-        <div className="field">
-          <div className="control">
-            <label className="radio">
-              <input
-                type="radio"
-                name="mode"
-                value="hotRaw"
-                defaultChecked={selected === "hotRaw"}
-                disabled={mode !== undefined}
-                onClick={() => handleSelChange("hotRaw")}
-              />
-              Hot (raw)
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="mode"
-                value="hotNorm"
-                defaultChecked={selected === "hotNorm"}
-                disabled={mode !== undefined}
-                onClick={() => handleSelChange("hotNorm")}
-              />
-              Hot (debiased)
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="mode"
-                value="hotPlayers"
-                defaultChecked={selected === "hotPlayers"}
-                disabled={mode !== undefined}
-                onClick={() => handleSelChange("hotPlayers")}
-              />
-              Hot (num. players)
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="mode"
-                value="stars"
-                defaultChecked={selected === "stars"}
-                disabled={mode !== undefined}
-                onClick={() => handleSelChange("stars")}
-              />
-              Stars
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="mode"
-                value="completed"
-                defaultChecked={selected === "completed"}
-                disabled={mode !== undefined}
-                onClick={() => handleSelChange("completed")}
-              />
-              Games/week (all time)
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="mode"
-                value="completed"
-                defaultChecked={selected === "completedRecent"}
-                disabled={mode !== undefined}
-                onClick={() => handleSelChange("completedRecent")}
-              />
-              Games/week (recent)
-            </label>
+        <div className="container">
+          <div className="columns">
+            <div className="column is-narrow">
+              <div className="field">
+                <div className="control">
+                  <label className="radio">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="hotRaw"
+                      defaultChecked={selected === "hotRaw"}
+                      disabled={mode !== undefined}
+                      onClick={() => handleSelChange("hotRaw")}
+                    />
+                    Hot (raw)
+                  </label>
+                </div>
+                <div className="control">
+                  <label className="radio">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="hotNorm"
+                      defaultChecked={selected === "hotNorm"}
+                      disabled={mode !== undefined}
+                      onClick={() => handleSelChange("hotNorm")}
+                    />
+                    Hot (debiased)
+                  </label>
+                </div>
+                <div className="control">
+                  <label className="radio">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="hotPlayers"
+                      defaultChecked={selected === "hotPlayers"}
+                      disabled={mode !== undefined}
+                      onClick={() => handleSelChange("hotPlayers")}
+                    />
+                    Hot (num. players)
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="column is-narrow">
+              <div className="field">
+                <div className="control">
+                  <label className="radio">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="stars"
+                      defaultChecked={selected === "stars"}
+                      disabled={mode !== undefined}
+                      onClick={() => handleSelChange("stars")}
+                    />
+                    Stars
+                  </label>
+                </div>
+                <div className="control">
+                  <label className="radio">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="completed"
+                      defaultChecked={selected === "completed"}
+                      disabled={mode !== undefined}
+                      onClick={() => handleSelChange("completed")}
+                    />
+                    Games/week (all time)
+                  </label>
+                </div>
+                <div className="control">
+                  <label className="radio">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="completed"
+                      defaultChecked={selected === "completedRecent"}
+                      disabled={mode !== undefined}
+                      onClick={() => handleSelChange("completedRecent")}
+                    />
+                    Games/week (recent)
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <hr />
-        <div
-          className="container has-text-centered"
-          style={{ paddingBottom: "1em" }}
-        >
+        <div className="container" style={{ paddingBottom: "1em" }}>
           <h1 className="subtitle">
             {selected !== null ? titles.get(selected) : "Unknown"}
           </h1>
