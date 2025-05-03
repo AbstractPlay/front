@@ -151,7 +151,6 @@ function Table({
    *    Image
    *    Designers (maybe just the first and then an expansion)
    *    Description (perhaps an expansion)
-   *    Stars
    *    Personal star status and toggle
    *    Current games
    *    Completed games
@@ -171,13 +170,13 @@ function Table({
           } else {
             gameEngine = GameFactory(metaGame);
           }
-          let recent = 0;
-          if (props.summary !== null) {
-            const rec = props.summary.recent.find((r) => r.game === info.name);
-            if (rec !== undefined) {
-              recent = rec.value;
-            }
-          }
+          //   let recent = 0;
+          //   if (props.summary !== null) {
+          //     const rec = props.summary.recent.find((r) => r.game === info.name);
+          //     if (rec !== undefined) {
+          //       recent = rec.value;
+          //     }
+          //   }
           const tags = info.categories
             .map((cat) => {
               return {
@@ -247,10 +246,10 @@ function Table({
                 ? true
                 : false,
             tags,
-            stars:
-              props.counts !== null && metaGame in props.counts
-                ? props.counts[metaGame].stars
-                : 0,
+            // stars:
+            //   props.counts !== null && metaGame in props.counts
+            //     ? props.counts[metaGame].stars
+            //     : 0,
             completed:
               props.counts !== null && metaGame in props.counts
                 ? props.counts[metaGame].completedgames
@@ -267,11 +266,11 @@ function Table({
               props.counts !== null && metaGame in props.counts
                 ? props.counts[metaGame].standingchallenges
                 : 0,
-            recent,
+            // recent,
           };
         })
         .filter((obj) => !filterStars || obj.starred),
-    [globalMe, props.games, props.summary, props.counts, filterStars, t]
+    [globalMe, props.games, props.counts, filterStars, t]
   );
 
   const allTags = useMemo(() => {
@@ -481,16 +480,16 @@ function Table({
         sortingFn: "datetime",
         invertSorting: true,
       }),
-      columnHelper.accessor("stars", {
-        header: "Stars",
-      }),
-      columnHelper.accessor("recent", {
-        header: () => (
-          <abbr title="Number of games completed in the last four weeks">
-            Recent
-          </abbr>
-        ),
-      }),
+      //   columnHelper.accessor("stars", {
+      //     header: "Stars",
+      //   }),
+      //   columnHelper.accessor("recent", {
+      //     header: () => (
+      //       <abbr title="Number of games completed in the last four weeks">
+      //         Recent
+      //       </abbr>
+      //     ),
+      //   }),
       columnHelper.accessor("current", {
         header: "Current",
         cell: (props) => (

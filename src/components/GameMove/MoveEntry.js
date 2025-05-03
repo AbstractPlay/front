@@ -268,7 +268,7 @@ function MoveEntry(props) {
       // rehydrate state if need - churn-fix
       if (node.state === null) {
         let tmpEngine = GameFactory(game.metaGame, game.state);
-        tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber+1);
+        tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber + 1);
         tmpEngine.load();
         node.state = tmpEngine.cheapSerialize();
       }

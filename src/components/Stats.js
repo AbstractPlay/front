@@ -131,7 +131,7 @@ function Stats(props) {
         <h1 className="title has-text-centered">{t("Statistics")}</h1>
         <div className="content has-text-centered">
           <p>
-            Statistics are generated every Sunday at 6am UTC.
+            Statistics are generated daily at 6am UTC.
             <br />
             Records analyzed include games completed between{" "}
             {summary !== null

@@ -276,8 +276,7 @@ function Player() {
           >
             <p>
               The player profile page is very much "under development." It
-              currently excludes any real-time stats and relies instead on the
-              statistics tabulated weekly.
+              relies on statistics tabulated daily.
             </p>
           </div>
           <ProfileContext.Provider value={[user, userSetter]}>

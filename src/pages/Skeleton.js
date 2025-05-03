@@ -47,6 +47,7 @@ import newsData from "../assets/news.json";
 const Stats = lazy(() => import("../components/Stats"));
 const MetaContainer = lazy(() => import("../components/MetaContainer"));
 const Player = lazy(() => import("../components/Player"));
+const Explore = lazy(() => import("../components/Explore"));
 
 // TODO: Adjust locale to user selection, when supported
 TimeAgo.addDefaultLocale(en);
@@ -231,6 +232,10 @@ function Bones(props) {
                           <Route
                             path="/games/:metaGame?"
                             element={<MetaContainer token={token} />}
+                          />
+                          <Route
+                            path="/explore/:mode?"
+                            element={<Explore token={token} />}
                           />
                           <Route path="/players" element={<Players />} />
                           <Route path="/player/:userid" element={<Player />} />

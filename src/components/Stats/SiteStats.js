@@ -82,9 +82,9 @@ function SiteStats({ nav }) {
       <div>
         <div className="content">
           <p>
-            Games are counted in seven-day chunks.
-            The left-most bar is the first week completed games were recorded.
-            The right-most bar is the most recent week (or part thereof).
+            Games are counted in seven-day chunks. The left-most bar is the
+            first week completed games were recorded. The right-most bar is the
+            most recent week (or part thereof).
           </p>
           {summaryGames === null ? null : (
             <table>
@@ -125,7 +125,7 @@ function SiteStats({ nav }) {
         <Plot
           data={[
             {
-              y: [...summary.histograms.all].reverse(),
+              y: [...summary.histograms.all],
               type: "bar",
             },
           ]}
@@ -144,9 +144,9 @@ function SiteStats({ nav }) {
       <div>
         <div className="content">
           <p>
-            Games are counted in seven-day chunks.
-            The left-most bar is the first week completed games were recorded.
-            The right-most bar is the most recent week (or part thereof).
+            Games are counted in seven-day chunks. The left-most bar is the
+            first week completed games were recorded. The right-most bar is the
+            most recent week (or part thereof).
           </p>
           {summaryPlayers === null ? null : (
             <table>
@@ -187,7 +187,7 @@ function SiteStats({ nav }) {
         <Plot
           data={[
             {
-              y: [...summary.histograms.allPlayers].reverse(),
+              y: [...summary.histograms.allPlayers],
               type: "bar",
             },
           ]}
