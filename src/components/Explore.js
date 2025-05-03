@@ -1007,7 +1007,7 @@ function Explore(props) {
                 disabled={mode !== undefined}
                 onClick={() => handleSelChange("hotNorm")}
               />
-              Hot (normalized)
+              Hot (debiased)
             </label>
             <label className="radio">
               <input
