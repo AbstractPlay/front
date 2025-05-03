@@ -23,7 +23,6 @@ function PlayerStats({ nav }) {
       const histogram = summary.histograms.players.find(
         (x) => x.user === obj.user
       ).value;
-      histogram.reverse();
       let histShort = histogram.slice(-10);
       while (histShort.length < 10) {
         histShort = [0, ...histShort];

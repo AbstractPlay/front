@@ -348,7 +348,7 @@ function mergeExploration(
     // rehydrate state if need - churn-fix
     if (node.state === null) {
       let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber+1);
+      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber + 1);
       tmpEngine.load();
       node.state = tmpEngine.cheapSerialize();
     }
@@ -359,7 +359,7 @@ function mergeExploration(
     // rehydrate state if need - churn-fix
     if (node.state === null) {
       let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber+1);
+      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber + 1);
       tmpEngine.load();
       node.state = tmpEngine.cheapSerialize();
     }
@@ -435,7 +435,7 @@ function mergePublicExploration(game, exploration, data) {
     // rehydrate state if need - churn-fix
     if (node.state === null) {
       let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, move+1);
+      tmpEngine.stack = tmpEngine.stack.slice(0, move + 1);
       tmpEngine.load();
       node.state = tmpEngine.cheapSerialize();
     }
@@ -464,7 +464,7 @@ function mergePrivateExploration(
     // rehydrate state if need - churn-fix
     if (node.state === null) {
       let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, move+1);
+      tmpEngine.stack = tmpEngine.stack.slice(0, move + 1);
       tmpEngine.load();
       node.state = tmpEngine.cheapSerialize();
     }
@@ -534,14 +534,11 @@ function mergeExistingExploration(
       // rehydrate state if need - churn-fix
       if (node.state === null) {
         let tmpEngine = GameFactory(game.metaGame, game.state);
-        tmpEngine.stack = tmpEngine.stack.slice(0, moveNum+1);
+        tmpEngine.stack = tmpEngine.stack.slice(0, moveNum + 1);
         tmpEngine.load();
         node.state = tmpEngine.cheapSerialize();
       }
-      let gameEngine = GameFactory(
-        game.metaGame,
-        node.state
-      );
+      let gameEngine = GameFactory(game.metaGame, node.state);
       subtree = cur_exploration.children.find((e) =>
         gameEngine.sameMove(move, e.move)
       );
@@ -741,7 +738,7 @@ async function saveExploration(
       // rehydrate state if need - churn-fix
       if (node.state === null) {
         let tmpEngine = GameFactory(game.metaGame, game.state);
-        tmpEngine.stack = tmpEngine.stack.slice(0, move+1);
+        tmpEngine.stack = tmpEngine.stack.slice(0, move + 1);
         tmpEngine.load();
         node.state = tmpEngine.cheapSerialize();
       }
@@ -795,7 +792,7 @@ function doView(
   // rehydrate state if need - churn-fix
   if (node.state === null) {
     let tmpEngine = GameFactory(game.metaGame, game.state);
-    tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber+1);
+    tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber + 1);
     tmpEngine.load();
     node.state = tmpEngine.cheapSerialize();
   }
@@ -1077,7 +1074,7 @@ function processNewMove(
     // rehydrate state if need - churn-fix
     if (node.state === null) {
       let tmpEngine = GameFactory(gameRef.metaGame, gameRef.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber+1);
+      tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber + 1);
       tmpEngine.load();
       node.state = tmpEngine.cheapSerialize();
     }
@@ -2009,7 +2006,7 @@ function GameMove(props) {
     console.log("currentAuthenticatedUser", usr);
     if (state === null) {
       let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber+1);
+      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber + 1);
       tmpEngine.load();
       state = tmpEngine.cheapSerialize();
     }
@@ -2049,7 +2046,7 @@ function GameMove(props) {
     // rehydrate state if need - churn-fix
     if (node.state === null) {
       let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, foc.moveNumber+1);
+      tmpEngine.stack = tmpEngine.stack.slice(0, foc.moveNumber + 1);
       tmpEngine.load();
       node.state = tmpEngine.cheapSerialize();
     }
@@ -2163,8 +2160,11 @@ function GameMove(props) {
     let node = getFocusNode(explorationRef.current.nodes, focus);
     // rehydrate state if need - churn-fix
     if (node.state === null) {
-      let tmpEngine = GameFactory(gameRef.current.metaGame, gameRef.current.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber+1);
+      let tmpEngine = GameFactory(
+        gameRef.current.metaGame,
+        gameRef.current.state
+      );
+      tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber + 1);
       tmpEngine.load();
       node.state = tmpEngine.cheapSerialize();
     }
@@ -2247,8 +2247,14 @@ function GameMove(props) {
       let node = getFocusNode(explorationRef.current.nodes, focusRef.current);
       // rehydrate state if need - churn-fix
       if (node.state === null) {
-        let tmpEngine = GameFactory(gameRef.current.metaGame, gameRef.current.state);
-        tmpEngine.stack = tmpEngine.stack.slice(0, focusRef.current.moveNumber+1);
+        let tmpEngine = GameFactory(
+          gameRef.current.metaGame,
+          gameRef.current.state
+        );
+        tmpEngine.stack = tmpEngine.stack.slice(
+          0,
+          focusRef.current.moveNumber + 1
+        );
         tmpEngine.load();
         node.state = tmpEngine.cheapSerialize();
       }
@@ -2897,7 +2903,7 @@ function GameMove(props) {
       // rehydrate state if need - churn-fix
       if (node.state === null) {
         let tmpEngine = GameFactory(game.metaGame, game.state);
-        tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber+1);
+        tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber + 1);
         tmpEngine.load();
         node.state = tmpEngine.cheapSerialize();
       }

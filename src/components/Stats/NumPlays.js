@@ -17,14 +17,13 @@ function NumPlays({ metaFilter, nav }) {
       const histogram = summary.histograms.meta.find(
         (x) => x.game === obj.game
       ).value;
-      histogram.reverse();
       let histShort = histogram.slice(-10);
       while (histShort.length < 10) {
         histShort = [0, ...histShort];
       }
       const values = [];
       for (const entry of summary.histograms.meta) {
-        values.push(...[...entry.value].reverse().slice(-10));
+        values.push(...[...entry.value].slice(-10));
       }
       const histMax = Math.max(...values);
       lst.push({
