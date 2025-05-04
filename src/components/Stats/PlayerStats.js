@@ -28,6 +28,7 @@ function PlayerStats({ nav }) {
         histShort = [0, ...histShort];
       }
       const h = summary.players.h.find((u) => u.user === obj.user).value;
+      const hOpp = summary.players.hOpp.find((u) => u.user === obj.user).value;
       lst.push({
         user: obj.user,
         plays: obj.value,
@@ -36,6 +37,7 @@ function PlayerStats({ nav }) {
         histogram,
         histShort,
         h,
+        hOpp,
       });
       joinedSetter(lst);
     }
@@ -62,6 +64,7 @@ function PlayerStats({ nav }) {
             histogram,
             histShort,
             h,
+            hOpp,
           }) => {
             let name = "UNKNOWN";
             const user = userNames.find((u) => u.id === userid);
@@ -77,6 +80,7 @@ function PlayerStats({ nav }) {
               histogram,
               histShort,
               h,
+              hOpp,
             };
           }
         )
@@ -112,6 +116,9 @@ function PlayerStats({ nav }) {
       }),
       columnHelper.accessor("eclectic", {
         header: "Different games",
+      }),
+      columnHelper.accessor("hOpp", {
+        header: "h-index (opps)",
       }),
       columnHelper.accessor("social", {
         header: "Different opponents",

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import { AllRecsContext, ProfileContext } from "../Player";
+import { AllRecsContext, ProfileContext, SummaryContext } from "../Player";
 import { MeContext, UsersContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 import NewChallengeModal from "../NewChallengeModal";
@@ -11,10 +11,12 @@ function Opponents({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const [allRecs] = useContext(AllRecsContext);
   const [allUsers] = useContext(UsersContext);
+  const [summary] = useContext(SummaryContext);
   const [counts, countsSetter] = useState([]);
   const [globalMe] = useContext(MeContext);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [hIndex, hIndexSetter] = useState(null);
+  const [ptile, ptileSetter] = useState(null);
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -22,6 +24,27 @@ function Opponents({ handleChallenge }) {
   const closeChallengeModal = () => {
     activeChallengeModalSetter("");
   };
+
+  useEffect(() => {
+    if (summary !== null && user !== null) {
+      const rec = summary.players.hOpp.find((r) => r.user === user.id);
+      if (rec !== undefined) {
+        hIndexSetter(rec.value);
+        const countBelow = summary.players.hOpp.filter(
+          ({ value }) => value < rec.value
+        ).length;
+        ptileSetter(
+          Math.round((countBelow / summary.players.hOpp.length) * 100)
+        );
+      } else {
+        hIndexSetter(null);
+        ptileSetter(null);
+      }
+    } else {
+      hIndexSetter(null);
+      ptileSetter(null);
+    }
+  }, [summary, user]);
 
   useEffect(() => {
     if (allRecs !== null && allRecs.length > 0) {
@@ -47,16 +70,6 @@ function Opponents({ handleChallenge }) {
             }
             countMap.set(player.userid, { ...rec });
           }
-        }
-      }
-      // calc h-index
-      const sorted = [...countMap.values()]
-        .map((v) => v.n)
-        .sort((a, b) => b - a);
-      for (let i = 0; i < sorted.length; i++) {
-        if (sorted[i] < i + 1) {
-          hIndexSetter(i);
-          break;
         }
       }
       const lst = [];
@@ -167,9 +180,11 @@ function Opponents({ handleChallenge }) {
 
   return (
     <>
-      {hIndex === null ? null : (
+      {hIndex === null || ptile === null ? null : (
         <div className="content">
-          <p>This player's "opponents" h-index is {hIndex}</p>
+          <p>
+            This player's "opponents" h-index is {hIndex} (p{ptile})
+          </p>
         </div>
       )}
       <TableSkeleton
