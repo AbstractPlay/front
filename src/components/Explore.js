@@ -52,8 +52,7 @@ function Explore(props) {
   addResource(i18n.language);
 
   const titles = new Map([
-    ["hotRaw", "Hotness (total)"],
-    ["hotNorm", "Hotness (debiased)"],
+    ["hotRaw", "Hotness (num. moves)"],
     ["hotPlayers", "Hotness (num. players)"],
     ["stars", "Stars"],
     ["completed", "Completed games per week (all time)"],
@@ -65,12 +64,8 @@ function Explore(props) {
       "The total number of moves made in that game over the given time period.",
     ],
     [
-      "hotNorm",
-      "This measure attempts to debias the sample to account for players who make many moves in a day. In each 24-hour period, a player is limited in the number of moves that count towards the score (currently a limit of 4 per game per day).",
-    ],
-    [
       "hotPlayers",
-      "The sum of the number of players who played a particular game in each 24-hour period over the time period.",
+      "The sum of the number of unique players who played a particular game in each 24-hour period over the time period.",
     ],
     ["stars", "The number of players who have starred this game."],
     [
@@ -202,9 +197,10 @@ function Explore(props) {
               };
             })
             .filter((cat) => cat.raw.startsWith("goal"));
-          const found30 = mvTimes?.raw30.find((e) => e.metaGame === metaGame);
-          const found60 = mvTimes?.raw60.find((e) => e.metaGame === metaGame);
-          const found90 = mvTimes?.raw90.find((e) => e.metaGame === metaGame);
+          const found1w = mvTimes?.raw1w.find((e) => e.metaGame === metaGame);
+          const found1m = mvTimes?.raw1m.find((e) => e.metaGame === metaGame);
+          const found6m = mvTimes?.raw6m.find((e) => e.metaGame === metaGame);
+          const found1y = mvTimes?.raw1y.find((e) => e.metaGame === metaGame);
           return {
             id: metaGame,
             gameName: info.name,
@@ -216,59 +212,18 @@ function Explore(props) {
                 : [],
             description: gameEngine.description(),
             tags,
-            score30: found30 === undefined ? 0 : found30.score,
-            score60: found60 === undefined ? 0 : found60.score,
-            score90: found90 === undefined ? 0 : found90.score,
+            score1w: found1w === undefined ? 0 : found1w.score,
+            score1m: found1m === undefined ? 0 : found1m.score,
+            score6m: found6m === undefined ? 0 : found6m.score,
+            score1y: found1y === undefined ? 0 : found1y.score,
           };
         })
         .filter(
-          (rec) => rec.score30 !== 0 || rec.score60 !== 0 || rec.score90 !== 0
-        ),
-    [t, mvTimes, games]
-  );
-
-  const dataHotNorm = useMemo(
-    () =>
-      games
-        .map((metaGame) => {
-          const info = gameinfo.get(metaGame);
-          let gameEngine;
-          if (info.playercounts.length > 1) {
-            gameEngine = GameFactory(metaGame, 2);
-          } else {
-            gameEngine = GameFactory(metaGame);
-          }
-          const tags = info.categories
-            .map((cat) => {
-              return {
-                raw: cat,
-                tag: t(`categories.${cat}.tag`),
-                desc: t(`categories.${cat}.description`),
-                full: t(`categories.${cat}.full`),
-              };
-            })
-            .filter((cat) => cat.raw.startsWith("goal"));
-          const found30 = mvTimes?.norm30.find((e) => e.metaGame === metaGame);
-          const found60 = mvTimes?.norm60.find((e) => e.metaGame === metaGame);
-          const found90 = mvTimes?.norm90.find((e) => e.metaGame === metaGame);
-          return {
-            id: metaGame,
-            gameName: info.name,
-            image: encodeURIComponent(gameImages[metaGame]),
-            links: info.urls,
-            designers:
-              info.people !== undefined && info.people.length > 0
-                ? info.people.filter((p) => p.type === "designer")
-                : [],
-            description: gameEngine.description(),
-            tags,
-            score30: found30 === undefined ? 0 : Math.round(found30.score),
-            score60: found60 === undefined ? 0 : Math.round(found60.score),
-            score90: found90 === undefined ? 0 : Math.round(found90.score),
-          };
-        })
-        .filter(
-          (rec) => rec.score30 !== 0 || rec.score60 !== 0 || rec.score90 !== 0
+          (rec) =>
+            rec.score1w !== 0 ||
+            rec.score1m !== 0 ||
+            rec.score6m !== 0 ||
+            rec.score1y !== 0
         ),
     [t, mvTimes, games]
   );
@@ -294,13 +249,16 @@ function Explore(props) {
               };
             })
             .filter((cat) => cat.raw.startsWith("goal"));
-          const found30 = mvTimes?.players30.find(
+          const found1w = mvTimes?.players1w.find(
             (e) => e.metaGame === metaGame
           );
-          const found60 = mvTimes?.players60.find(
+          const found1m = mvTimes?.players1m.find(
             (e) => e.metaGame === metaGame
           );
-          const found90 = mvTimes?.players90.find(
+          const found6m = mvTimes?.players6m.find(
+            (e) => e.metaGame === metaGame
+          );
+          const found1y = mvTimes?.players1y.find(
             (e) => e.metaGame === metaGame
           );
           return {
@@ -314,13 +272,18 @@ function Explore(props) {
                 : [],
             description: gameEngine.description(),
             tags,
-            score30: found30 === undefined ? 0 : found30.score,
-            score60: found60 === undefined ? 0 : found60.score,
-            score90: found90 === undefined ? 0 : found90.score,
+            score1w: found1w === undefined ? 0 : found1w.score,
+            score1m: found1m === undefined ? 0 : found1m.score,
+            score6m: found6m === undefined ? 0 : found6m.score,
+            score1y: found1y === undefined ? 0 : found1y.score,
           };
         })
         .filter(
-          (rec) => rec.score30 !== 0 || rec.score60 !== 0 || rec.score90 !== 0
+          (rec) =>
+            rec.score1w !== 0 ||
+            rec.score1m !== 0 ||
+            rec.score6m !== 0 ||
+            rec.score1y !== 0
         ),
     [t, mvTimes, games]
   );
@@ -558,14 +521,17 @@ function Explore(props) {
             ),
         enableSorting: false,
       }),
-      columnHelper.accessor("score30", {
-        header: "30 days",
+      columnHelper.accessor("score1w", {
+        header: "1 week",
       }),
-      columnHelper.accessor("score60", {
-        header: "60 days",
+      columnHelper.accessor("score1m", {
+        header: "1 month",
       }),
-      columnHelper.accessor("score90", {
-        header: "90 days",
+      columnHelper.accessor("score6m", {
+        header: "6 months",
+      }),
+      columnHelper.accessor("score1y", {
+        header: "1 year",
       }),
     ],
     [columnHelper, expandedPara, togglePara]
@@ -780,17 +746,12 @@ function Explore(props) {
         case "hotRaw":
           selDataSetter(dataHotRaw);
           selColSetter(columnsHot);
-          setSorting([{ id: "score30", desc: true }]);
-          break;
-        case "hotNorm":
-          selDataSetter(dataHotNorm);
-          selColSetter(columnsHot);
-          setSorting([{ id: "score30", desc: true }]);
+          setSorting([{ id: "score1w", desc: true }]);
           break;
         case "hotPlayers":
           selDataSetter(dataHotPlayers);
           selColSetter(columnsHot);
-          setSorting([{ id: "score30", desc: true }]);
+          setSorting([{ id: "score1w", desc: true }]);
           break;
         case "stars":
           selDataSetter(dataStars);
@@ -816,7 +777,6 @@ function Explore(props) {
     },
     [
       dataHotRaw,
-      dataHotNorm,
       dataHotPlayers,
       columnsHot,
       dataStars,
@@ -1000,19 +960,6 @@ function Explore(props) {
                       onClick={() => handleSelChange("hotRaw")}
                     />
                     Hot (raw)
-                  </label>
-                </div>
-                <div className="control">
-                  <label className="radio">
-                    <input
-                      type="radio"
-                      name="mode"
-                      value="hotNorm"
-                      defaultChecked={selected === "hotNorm"}
-                      disabled={mode !== undefined}
-                      onClick={() => handleSelChange("hotNorm")}
-                    />
-                    Hot (debiased)
                   </label>
                 </div>
                 <div className="control">
