@@ -843,5 +843,6 @@
     "PickVariant_normal": "Виберіть варіанти",
     "PickVariant_disabled": "Доступні варіанти",
     "PickAnyVariant_normal": "Виберіть будь-який із",
-    "PickOneVariant_disabled": "Ви можете вибрати не більше одного з"
+    "PickOneVariant_disabled": "Ви можете вибрати не більше одного з",
+    "ExploreGames": "Огляд ігор"
 }
