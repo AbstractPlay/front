@@ -959,7 +959,7 @@ function Explore(props) {
                       disabled={mode !== undefined}
                       onClick={() => handleSelChange("hotRaw")}
                     />
-                    Hot (raw)
+                    Hot (num. moves)
                   </label>
                 </div>
                 <div className="control">
