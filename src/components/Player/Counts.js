@@ -15,6 +15,7 @@ function Counts({ handleChallenge }) {
   const [globalMe] = useContext(MeContext);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [hIndex, hIndexSetter] = useState(null);
+  const [ptile, ptileSetter] = useState(null);
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -28,11 +29,17 @@ function Counts({ handleChallenge }) {
       const rec = summary.players.h.find((r) => r.user === user.id);
       if (rec !== undefined) {
         hIndexSetter(rec.value);
+        const countBelow = summary.players.h.filter(
+          ({ value }) => value < rec.value
+        ).length;
+        ptileSetter(Math.round((countBelow / summary.players.h.length) * 100));
       } else {
         hIndexSetter(null);
+        ptileSetter(null);
       }
     } else {
       hIndexSetter(null);
+      ptileSetter(null);
     }
   }, [summary, user]);
 
@@ -123,9 +130,11 @@ function Counts({ handleChallenge }) {
 
   return (
     <>
-      {hIndex === null ? null : (
+      {hIndex === null || ptile === null ? null : (
         <div className="content">
-          <p>This player's h-index is {hIndex}</p>
+          <p>
+            This player's h-index is {hIndex} (p{ptile})
+          </p>
         </div>
       )}
       <TableSkeleton

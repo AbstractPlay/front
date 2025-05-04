@@ -75,7 +75,7 @@ const explanations = [
   ],
   [
     "playerStats",
-    `This shows each recorded player along with their total games played, a count of unique games, and the number of different opponents they played. It also provides an \`h-index\`, which represents the number of games you've played at least that many times (e.g., if you've played three different games only one time each, then your index is 1. As soon as you've played those three games at least three times *each*, the index will increase to 3). An activity histogram is also provided, showing the number of games completed each week, with the most recent week on the right. The preview shows the most recent ten weeks. Clicking on it will show you the full history.`,
+    `This shows each recorded player along with their total games played, a count of unique games, and the number of different opponents they played. It also provides an \`h-index\`, which represents the number of games you've played at least that many times (e.g., if you've played three different games only one time each, then your index is 1. As soon as you've played those three games at least three times *each*, the index will increase to 3). There's also an \`h-index\` for opponents you have faced. An activity histogram is also provided, showing the number of games completed each week, with the most recent week on the right. The preview shows the most recent ten weeks. Clicking on it will show you the full history.`,
   ],
   [
     "gameStats",
