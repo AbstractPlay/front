@@ -2649,7 +2649,7 @@ The board configuration is random each game. Pieces have different move options 
     
     <item>
       <title>Announcement</title>
-      <description>Michael Seal&amp;apos;s game C1 is now available, thanks to @ypaul. In this game, players move pieces *and board tiles* in an attempt to surround or cutoff the opposing cone. Enjoy!</description>
+      <description>Michael Seal&amp;apos;s game [C1](https://play.abstractplay.com/games/c1) is now available, thanks to @ypaul. In this game, players move pieces *and board tiles* in an attempt to surround or cutoff the opposing cone. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Fri, 11 Apr 2025 18:19:53 GMT</pubDate>
       <guid isPermaLink="false">1360318457828347946</guid>
@@ -2657,7 +2657,7 @@ The board configuration is random each game. Pieces have different move options 
     
     <item>
       <title>Announcement</title>
-      <description>Timo Diegel&amp;apos;s game Bloqueo is now live. Move shared pawns to place your pieces and create connected groups to outscore your opponent. Enjoy!</description>
+      <description>Timo Diegel&amp;apos;s game [Bloqueo](https://play.abstractplay.com/games/bloqueo) is now live. Move shared pawns to place your pieces and create connected groups to outscore your opponent. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Tue, 22 Apr 2025 15:49:57 GMT</pubDate>
       <guid isPermaLink="false">1364266991724138599</guid>
@@ -2679,11 +2679,35 @@ We&amp;apos;re also approaching our second anniversary (May 1st). Thank you to t
     <item>
       <title>Announcement</title>
       <description>Two new games are now available. Enjoy!
-- In @ManaT&amp;apos;s game Pilastri, pieces are forced to climb higher and higher until someone runs out of moves. Don&amp;apos;t let it be you!
-- In Michael Lefkowitz&amp;apos;s game Tessella, pieces work in pairs to capture their enemies. First to four captures wins.</description>
+- In @ManaT&amp;apos;s game [Pilastri](https://play.abstractplay.com/games/pilastri), pieces are forced to climb higher and higher until someone runs out of moves. Don&amp;apos;t let it be you!
+- In Michael Lefkowitz&amp;apos;s game [Tessella](https://play.abstractplay.com/games/tessella), pieces work in pairs to capture their enemies. First to four captures wins.</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Fri, 25 Apr 2025 17:29:35 GMT</pubDate>
       <guid isPermaLink="false">1365379228190904330</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@hoembla&amp;apos;s loop-forming game [Stibro](https://play.abstractplay.com/games/stibro) is now available, thanks to, well, @hoembla 🙂 Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 28 Apr 2025 22:26:51 GMT</pubDate>
+      <guid isPermaLink="false">1366541200751984640</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@logygames&amp;apos;s game [GoRoGo](https://play.abstractplay.com/games/gorogo) is now available. This is a small-board Go variant with a unique piece type where the goal is to capture more pieces than to claim territory. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 30 Apr 2025 14:39:07 GMT</pubDate>
+      <guid isPermaLink="false">1367148266252402709</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Related to GoRoGo, a reminder that it is possible to customize the AP UI. There are details on the wiki (https://abstractplay.com/wiki/doku.php?id=customizing), and you can visit the #customization channel for support. (The pinned posts in that channel also have some helpful links.)</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 30 Apr 2025 14:39:25 GMT</pubDate>
+      <guid isPermaLink="false">1367148342647197716</guid>
     </item>
     
   </channel>
