@@ -23,6 +23,7 @@ import {
 } from "@tanstack/react-table";
 import gameImages from "../assets/GameImages";
 import Modal from "./Modal";
+import TableExplore from "./MetaContainer/TableExplore";
 import ExpandableDiv from "./ExpandableDiv";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -37,7 +38,7 @@ function Explore(props) {
   const [counts, countsSetter] = useState(null);
   const [users, usersSetter] = useState(null);
   const [summary, summarySetter] = useState(null);
-  const [selected, selectedSetter] = useState("hotRaw");
+  const [selected, selectedSetter] = useState("all");
   const [mvTimes, mvTimesSetter] = useState(null);
   const [selData, selDataSetter] = useState([]);
   const [selCol, selColSetter] = useState([]);
@@ -52,6 +53,7 @@ function Explore(props) {
   addResource(i18n.language);
 
   const titles = new Map([
+    ["all", "All games"],
     ["hotRaw", "Hotness (num. moves)"],
     ["hotPlayers", "Hotness (num. players)"],
     ["stars", "Stars"],
@@ -59,6 +61,7 @@ function Explore(props) {
     ["completedRecent", "Completed games per week (recent)"],
   ]);
   const descriptions = new Map([
+    ["all", "The full list of games, sortable and filterable."],
     [
       "hotRaw",
       "The total number of moves made in that game over the given time period.",
@@ -91,6 +94,7 @@ function Explore(props) {
         const result = await res.json();
         countsSetter(result);
       } catch (error) {
+        countsSetter(null);
         console.log(error);
       }
     }
@@ -175,6 +179,73 @@ function Explore(props) {
     }
     gamesSetter([...metas]);
   }, []);
+
+  const toggleStar = async (game) => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      const res = await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "toggle_star",
+          pars: {
+            metaGame: game,
+          },
+        }),
+      });
+      if (res.status !== 200) {
+        const result = await res.json();
+        console.log(
+          `An error occurred while saving toggling a star:\n${result}`
+        );
+      } else {
+        const result = await res.json();
+        const newMe = JSON.parse(JSON.stringify(globalMe));
+        newMe.stars = JSON.parse(result.body);
+        globalMeSetter(newMe);
+        // update counts locally
+        const newcounts = JSON.parse(JSON.stringify(counts));
+        if (newMe !== null && "stars" in newMe && Array.isArray(newMe.stars)) {
+          if (newMe.stars.includes(game)) {
+            newcounts[game].stars++;
+          } else {
+            newcounts[game].stars--;
+          }
+        }
+        countsSetter(newcounts);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleNewChallenge = async (challenge) => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      console.log("currentAuthenticatedUser", usr);
+      await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "new_challenge",
+          pars: {
+            ...challenge,
+            challenger: { id: globalMe.id, name: globalMe.name },
+          },
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const dataHotRaw = useMemo(
     () =>
@@ -320,7 +391,7 @@ function Explore(props) {
                 : [],
             description: gameEngine.description(),
             tags,
-            stars: counts !== null ? counts[metaGame].stars : 0,
+            stars: counts !== null ? counts[metaGame]?.stars || 0 : 0,
           };
         })
         .filter((rec) => rec.stars > 0),
@@ -345,8 +416,9 @@ function Explore(props) {
           let gamesper = 0;
           if (counts !== null) {
             gamesper =
-              Math.round((counts[metaGame].completedgames / weeksLive) * 100) /
-              100;
+              Math.round(
+                ((counts[metaGame]?.completedgames || 0) / weeksLive) * 100
+              ) / 100;
           }
           const tags = info.categories
             .map((cat) => {
@@ -743,6 +815,8 @@ function Explore(props) {
     (sel) => {
       closeImgModal();
       switch (sel) {
+        case "all":
+          break;
         case "hotRaw":
           selDataSetter(dataHotRaw);
           selColSetter(columnsHot);
@@ -788,7 +862,7 @@ function Explore(props) {
   );
 
   useEffect(() => {
-    let sel = "hotRaw";
+    let sel = "all";
     if (mode !== undefined) {
       sel = mode;
     }
@@ -937,11 +1011,7 @@ function Explore(props) {
             This page lets you explore different ways of sorting games. Select
             your desired view using the radio buttons below. Clicking on a
             game's name will take you to that game's landing page with
-            additional information. To view the full list of games, go to{" "}
-            <a href="/games">
-              <tt>/games</tt>
-            </a>
-            .
+            additional information.
           </p>
           <hr />
         </div>
@@ -954,12 +1024,25 @@ function Explore(props) {
                     <input
                       type="radio"
                       name="mode"
+                      value="all"
+                      defaultChecked={selected === "all"}
+                      disabled={mode !== undefined}
+                      onClick={() => handleSelChange("all")}
+                    />
+                    {titles.get("all") || "UNKNOWN"}
+                  </label>
+                </div>
+                <div className="control">
+                  <label className="radio">
+                    <input
+                      type="radio"
+                      name="mode"
                       value="hotRaw"
                       defaultChecked={selected === "hotRaw"}
                       disabled={mode !== undefined}
                       onClick={() => handleSelChange("hotRaw")}
                     />
-                    Hot (num. moves)
+                    {titles.get("hotRaw") || "UNKNOWN"}
                   </label>
                 </div>
                 <div className="control">
@@ -972,7 +1055,7 @@ function Explore(props) {
                       disabled={mode !== undefined}
                       onClick={() => handleSelChange("hotPlayers")}
                     />
-                    Hot (num. players)
+                    {titles.get("hotPlayers") || "UNKNOWN"}
                   </label>
                 </div>
               </div>
@@ -989,7 +1072,7 @@ function Explore(props) {
                       disabled={mode !== undefined}
                       onClick={() => handleSelChange("stars")}
                     />
-                    Stars
+                    {titles.get("stars") || "UNKNOWN"}
                   </label>
                 </div>
                 <div className="control">
@@ -1002,7 +1085,7 @@ function Explore(props) {
                       disabled={mode !== undefined}
                       onClick={() => handleSelChange("completed")}
                     />
-                    Games/week (all time)
+                    {titles.get("completed") || "UNKNOWN"}
                   </label>
                 </div>
                 <div className="control">
@@ -1010,12 +1093,12 @@ function Explore(props) {
                     <input
                       type="radio"
                       name="mode"
-                      value="completed"
+                      value="completedRecent"
                       defaultChecked={selected === "completedRecent"}
                       disabled={mode !== undefined}
                       onClick={() => handleSelChange("completedRecent")}
                     />
-                    Games/week (recent)
+                    {titles.get("completedRecent") || "UNKNOWN"}
                   </label>
                 </div>
               </div>
@@ -1023,109 +1106,126 @@ function Explore(props) {
           </div>
         </div>
         <hr />
-        <div className="container" style={{ paddingBottom: "1em" }}>
-          <h1 className="subtitle">
-            {selected !== null ? titles.get(selected) : "Unknown"}
-          </h1>
-        </div>
-        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-          {selected !== null ? descriptions.get(selected) : ""}
-        </ReactMarkdown>
-        <div className="container">
-          {tableNavigation}
-          <table className="table apTable">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id} className="stickyHeader">
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            {...{
-                              className: header.column.getCanSort()
-                                ? "sortable"
-                                : "",
-                              onClick: header.column.getToggleSortingHandler(),
-                            }}
-                          >
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                            {{
-                              asc: (
-                                <Fragment>
-                                  &nbsp;<i className="fa fa-angle-up"></i>
-                                </Fragment>
-                              ),
-                              desc: (
-                                <Fragment>
-                                  &nbsp;<i className="fa fa-angle-down"></i>
-                                </Fragment>
-                              ),
-                            }[header.column.getIsSorted()] ?? null}
-                            {header.id !== "description" ? null : (
-                              <>
-                                {" "}
-                                <span
-                                  style={{
-                                    fontSize: "smaller",
-                                    fontWeight: "normal",
-                                    paddingTop: 0,
-                                  }}
-                                >
-                                  ({t("ClickExpand")})
-                                </span>
-                              </>
-                            )}
-                          </div>
-                        </>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {tableNavigation}
-        </div>
-      </article>
-      {games.map((metaGame) => {
-        return (
-          <Modal
-            key={metaGame}
-            buttons={[{ label: "Close", action: closeImgModal }]}
-            show={activeImgModal === metaGame}
-            title={`Board image for ${gameinfo.get(metaGame).name}`}
-          >
-            <div className="content">
-              <img
-                src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                  gameImages[metaGame]
-                )}`}
-                alt={metaGame}
-                width="100%"
-                height="auto"
-              />
+        {selected === "all" ? (
+          <TableExplore
+            counts={counts}
+            games={games}
+            summary={summary}
+            toggleStar={toggleStar.bind(this)}
+            handleChallenge={handleNewChallenge.bind(this)}
+            users={users}
+            updateSetter={updateCounterSetter}
+          />
+        ) : (
+          <>
+            <div className="container" style={{ paddingBottom: "1em" }}>
+              <h1 className="subtitle">
+                {selected !== null ? titles.get(selected) : "Unknown"}
+              </h1>
             </div>
-          </Modal>
-        );
-      })}
+            <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+              {selected !== null ? descriptions.get(selected) : ""}
+            </ReactMarkdown>
+            <div className="container">
+              {tableNavigation}
+              <table className="table apTable">
+                <thead>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <tr key={headerGroup.id} className="stickyHeader">
+                      {headerGroup.headers.map((header) => (
+                        <th key={header.id}>
+                          {header.isPlaceholder ? null : (
+                            <>
+                              <div
+                                {...{
+                                  className: header.column.getCanSort()
+                                    ? "sortable"
+                                    : "",
+                                  onClick:
+                                    header.column.getToggleSortingHandler(),
+                                }}
+                              >
+                                {flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                                {{
+                                  asc: (
+                                    <Fragment>
+                                      &nbsp;<i className="fa fa-angle-up"></i>
+                                    </Fragment>
+                                  ),
+                                  desc: (
+                                    <Fragment>
+                                      &nbsp;<i className="fa fa-angle-down"></i>
+                                    </Fragment>
+                                  ),
+                                }[header.column.getIsSorted()] ?? null}
+                                {header.id !== "description" ? null : (
+                                  <>
+                                    {" "}
+                                    <span
+                                      style={{
+                                        fontSize: "smaller",
+                                        fontWeight: "normal",
+                                        paddingTop: 0,
+                                      }}
+                                    >
+                                      ({t("ClickExpand")})
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            </>
+                          )}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody>
+                  {table.getRowModel().rows.map((row) => (
+                    <tr key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <td key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {tableNavigation}
+            </div>
+          </>
+        )}
+      </article>
+      {selected === "all"
+        ? null
+        : games.map((metaGame) => {
+            return (
+              <Modal
+                key={metaGame}
+                buttons={[{ label: "Close", action: closeImgModal }]}
+                show={activeImgModal === metaGame}
+                title={`Board image for ${gameinfo.get(metaGame).name}`}
+              >
+                <div className="content">
+                  <img
+                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                      gameImages[metaGame]
+                    )}`}
+                    alt={metaGame}
+                    width="100%"
+                    height="auto"
+                  />
+                </div>
+              </Modal>
+            );
+          })}
     </>
   );
 }
