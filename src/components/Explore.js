@@ -54,8 +54,8 @@ function Explore(props) {
 
   const titles = new Map([
     ["all", "All games"],
-    ["hotRaw", "Hotness (num. moves)"],
-    ["hotPlayers", "Hotness (num. players)"],
+    ["hotRaw", "Hotness (# moves)"],
+    ["hotPlayers", "Hotness (# players)"],
     ["stars", "Stars"],
     ["completed", "Completed games per week (all time)"],
     ["completedRecent", "Completed games per week (recent)"],
@@ -64,11 +64,11 @@ function Explore(props) {
     ["all", "The full list of games, sortable and filterable."],
     [
       "hotRaw",
-      "The total number of moves made in that game over the given time period.",
+      "The average number of moves made per day over the time period.",
     ],
     [
       "hotPlayers",
-      "The sum of the number of unique players who played a particular game in each 24-hour period over the time period.",
+      "The average number of unique players per day over the time period.",
     ],
     ["stars", "The number of players who have starred this game."],
     [
@@ -288,14 +288,7 @@ function Explore(props) {
             score6m: found6m === undefined ? 0 : found6m.score,
             score1y: found1y === undefined ? 0 : found1y.score,
           };
-        })
-        .filter(
-          (rec) =>
-            rec.score1w !== 0 ||
-            rec.score1m !== 0 ||
-            rec.score6m !== 0 ||
-            rec.score1y !== 0
-        ),
+        }),
     [t, mvTimes, games]
   );
 
@@ -348,14 +341,7 @@ function Explore(props) {
             score6m: found6m === undefined ? 0 : found6m.score,
             score1y: found1y === undefined ? 0 : found1y.score,
           };
-        })
-        .filter(
-          (rec) =>
-            rec.score1w !== 0 ||
-            rec.score1m !== 0 ||
-            rec.score6m !== 0 ||
-            rec.score1y !== 0
-        ),
+        }),
     [t, mvTimes, games]
   );
 
@@ -393,8 +379,7 @@ function Explore(props) {
             tags,
             stars: counts !== null ? counts[metaGame]?.stars || 0 : 0,
           };
-        })
-        .filter((rec) => rec.stars > 0),
+        }),
     [t, games, counts]
   );
 
@@ -443,8 +428,7 @@ function Explore(props) {
             tags,
             games: gamesper,
           };
-        })
-        .filter((rec) => rec.games > 0),
+        }),
     [t, games, counts]
   );
 
@@ -493,8 +477,7 @@ function Explore(props) {
             tags,
             games: gamesper,
           };
-        })
-        .filter((rec) => rec.games > 0),
+        }),
     [t, games, summary]
   );
 
@@ -569,7 +552,7 @@ function Explore(props) {
         enableSorting: false,
       }),
       columnHelper.accessor("tags", {
-        header: "Tags",
+        header: "Goal",
         cell: (props) =>
           props
             .getValue()
@@ -595,15 +578,19 @@ function Explore(props) {
       }),
       columnHelper.accessor("score1w", {
         header: "1 week",
+        cell: (props) => (props.getValue()/ 7).toFixed(2),
       }),
       columnHelper.accessor("score1m", {
         header: "1 month",
+        cell: (props) => (props.getValue()/ 30).toFixed(2),
       }),
       columnHelper.accessor("score6m", {
         header: "6 months",
+        cell: (props) => (props.getValue()/ 180).toFixed(2),
       }),
       columnHelper.accessor("score1y", {
         header: "1 year",
+        cell: (props) => (props.getValue()/ 365).toFixed(2),
       }),
     ],
     [columnHelper, expandedPara, togglePara]
@@ -679,7 +666,7 @@ function Explore(props) {
         enableSorting: false,
       }),
       columnHelper.accessor("tags", {
-        header: "Tags",
+        header: "Goal",
         cell: (props) =>
           props
             .getValue()
@@ -780,7 +767,7 @@ function Explore(props) {
         enableSorting: false,
       }),
       columnHelper.accessor("tags", {
-        header: "Tags",
+        header: "Goal",
         cell: (props) =>
           props
             .getValue()
@@ -806,6 +793,7 @@ function Explore(props) {
       }),
       columnHelper.accessor("games", {
         header: "Games/week",
+        cell: (props) => props.getValue().toFixed(2),
       }),
     ],
     [columnHelper, expandedPara, togglePara]
