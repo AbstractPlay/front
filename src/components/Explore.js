@@ -1152,19 +1152,17 @@ function Explore(props) {
             {[...titles.entries()].map(([key, title]) => {
               return (
                 <div className="column is-narrow" key={`radio|${key}`}>
-                  <div className="control">
-                    <label className="radio">
-                      <input
-                        type="radio"
-                        name="mode"
-                        value={key}
-                        defaultChecked={selected === key}
-                        disabled={mode !== undefined}
-                        onClick={() => handleSelChange(key)}
-                      />
-                      {title}
-                    </label>
-                  </div>
+                  <label className="radio">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value={key}
+                      defaultChecked={selected === key}
+                      disabled={mode !== undefined}
+                      onClick={() => handleSelChange(key)}
+                    />
+                    {title}
+                  </label>
                 </div>
               );
             })}
