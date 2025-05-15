@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
+import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
 import { SummaryContext } from "../../pages/Skeleton";
 import Plot from "react-plotly.js";
@@ -13,6 +14,16 @@ function NumPlays({ metaFilter, nav }) {
   useEffect(() => {
     const lst = [];
     for (const obj of summary.plays.total) {
+      let meta = null;
+      const found = [...gameinfo.values()].find((i) => i.name === obj.game);
+      if (found !== undefined) {
+        meta = found.uid;
+      }
+      let hindex = 0;
+      const hrec = summary.hMeta.find(({ user }) => user === meta);
+      if (hrec !== undefined) {
+        hindex = hrec.value;
+      }
       const opps = summary.plays.width.find((g) => g.game === obj.game);
       const histogram = summary.histograms.meta.find(
         (x) => x.game === obj.game
@@ -27,6 +38,8 @@ function NumPlays({ metaFilter, nav }) {
       }
       const histMax = Math.max(...values);
       lst.push({
+        meta,
+        hindex,
         game: obj.game,
         plays: obj.value,
         width: opps.value,
@@ -50,17 +63,20 @@ function NumPlays({ metaFilter, nav }) {
   const data = useMemo(
     () =>
       joined
-        .map(({ game, plays, width, histogram, histShort, histMax }) => {
-          return {
-            id: game,
-            game,
-            plays,
-            width,
-            histogram,
-            histShort,
-            histMax,
-          };
-        })
+        .map(
+          ({ game, plays, width, histogram, histShort, histMax, hindex }) => {
+            return {
+              id: game,
+              game,
+              plays,
+              width,
+              hindex,
+              histogram,
+              histShort,
+              histMax,
+            };
+          }
+        )
         .filter(
           (rec) =>
             metaFilter === undefined ||
@@ -82,6 +98,9 @@ function NumPlays({ metaFilter, nav }) {
       }),
       columnHelper.accessor("width", {
         header: "Num players",
+      }),
+      columnHelper.accessor("hindex", {
+        header: "h-index",
       }),
       columnHelper.accessor("histogram", {
         header: "Histogram",

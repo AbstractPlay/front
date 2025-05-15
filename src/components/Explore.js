@@ -56,6 +56,7 @@ function Explore(props) {
     ["all", "All games"],
     ["hotRaw", "Hotness (# moves)"],
     ["hotPlayers", "Hotness (# players)"],
+    ["hindex", "h-index"],
     ["stars", "Stars"],
     ["completed", "Completed games per week (all time)"],
     ["completedRecent", "Completed games per week (recent)"],
@@ -69,6 +70,10 @@ function Explore(props) {
     [
       "hotPlayers",
       "The average number of unique players per day over the time period.",
+    ],
+    [
+      "hindex",
+      "A game's `h-index` is the number of different players who have played that game at least that many times. So an `h-index` of 5 means that 5 different players have played that game at least 5 times.",
     ],
     ["stars", "The number of players who have starred this game."],
     [
@@ -249,235 +254,266 @@ function Explore(props) {
 
   const dataHotRaw = useMemo(
     () =>
-      games
-        .map((metaGame) => {
-          const info = gameinfo.get(metaGame);
-          let gameEngine;
-          if (info.playercounts.length > 1) {
-            gameEngine = GameFactory(metaGame, 2);
-          } else {
-            gameEngine = GameFactory(metaGame);
-          }
-          const tags = info.categories
-            .map((cat) => {
-              return {
-                raw: cat,
-                tag: t(`categories.${cat}.tag`),
-                desc: t(`categories.${cat}.description`),
-                full: t(`categories.${cat}.full`),
-              };
-            })
-            .filter((cat) => cat.raw.startsWith("goal"));
-          const found1w = mvTimes?.raw1w.find((e) => e.metaGame === metaGame);
-          const found1m = mvTimes?.raw1m.find((e) => e.metaGame === metaGame);
-          const found6m = mvTimes?.raw6m.find((e) => e.metaGame === metaGame);
-          const found1y = mvTimes?.raw1y.find((e) => e.metaGame === metaGame);
-          return {
-            id: metaGame,
-            gameName: info.name,
-            image: encodeURIComponent(gameImages[metaGame]),
-            links: info.urls,
-            designers:
-              info.people !== undefined && info.people.length > 0
-                ? info.people.filter((p) => p.type === "designer")
-                : [],
-            description: gameEngine.description(),
-            tags,
-            score1w: found1w === undefined ? 0 : found1w.score,
-            score1m: found1m === undefined ? 0 : found1m.score,
-            score6m: found6m === undefined ? 0 : found6m.score,
-            score1y: found1y === undefined ? 0 : found1y.score,
-          };
-        }),
+      games.map((metaGame) => {
+        const info = gameinfo.get(metaGame);
+        let gameEngine;
+        if (info.playercounts.length > 1) {
+          gameEngine = GameFactory(metaGame, 2);
+        } else {
+          gameEngine = GameFactory(metaGame);
+        }
+        const tags = info.categories
+          .map((cat) => {
+            return {
+              raw: cat,
+              tag: t(`categories.${cat}.tag`),
+              desc: t(`categories.${cat}.description`),
+              full: t(`categories.${cat}.full`),
+            };
+          })
+          .filter((cat) => cat.raw.startsWith("goal"));
+        const found1w = mvTimes?.raw1w.find((e) => e.metaGame === metaGame);
+        const found1m = mvTimes?.raw1m.find((e) => e.metaGame === metaGame);
+        const found6m = mvTimes?.raw6m.find((e) => e.metaGame === metaGame);
+        const found1y = mvTimes?.raw1y.find((e) => e.metaGame === metaGame);
+        return {
+          id: metaGame,
+          gameName: info.name,
+          image: encodeURIComponent(gameImages[metaGame]),
+          links: info.urls,
+          designers:
+            info.people !== undefined && info.people.length > 0
+              ? info.people.filter((p) => p.type === "designer")
+              : [],
+          description: gameEngine.description(),
+          tags,
+          score1w: found1w === undefined ? 0 : found1w.score,
+          score1m: found1m === undefined ? 0 : found1m.score,
+          score6m: found6m === undefined ? 0 : found6m.score,
+          score1y: found1y === undefined ? 0 : found1y.score,
+        };
+      }),
     [t, mvTimes, games]
   );
 
   const dataHotPlayers = useMemo(
     () =>
-      games
-        .map((metaGame) => {
-          const info = gameinfo.get(metaGame);
-          let gameEngine;
-          if (info.playercounts.length > 1) {
-            gameEngine = GameFactory(metaGame, 2);
-          } else {
-            gameEngine = GameFactory(metaGame);
-          }
-          const tags = info.categories
-            .map((cat) => {
-              return {
-                raw: cat,
-                tag: t(`categories.${cat}.tag`),
-                desc: t(`categories.${cat}.description`),
-                full: t(`categories.${cat}.full`),
-              };
-            })
-            .filter((cat) => cat.raw.startsWith("goal"));
-          const found1w = mvTimes?.players1w.find(
-            (e) => e.metaGame === metaGame
-          );
-          const found1m = mvTimes?.players1m.find(
-            (e) => e.metaGame === metaGame
-          );
-          const found6m = mvTimes?.players6m.find(
-            (e) => e.metaGame === metaGame
-          );
-          const found1y = mvTimes?.players1y.find(
-            (e) => e.metaGame === metaGame
-          );
-          return {
-            id: metaGame,
-            gameName: info.name,
-            image: encodeURIComponent(gameImages[metaGame]),
-            links: info.urls,
-            designers:
-              info.people !== undefined && info.people.length > 0
-                ? info.people.filter((p) => p.type === "designer")
-                : [],
-            description: gameEngine.description(),
-            tags,
-            score1w: found1w === undefined ? 0 : found1w.score,
-            score1m: found1m === undefined ? 0 : found1m.score,
-            score6m: found6m === undefined ? 0 : found6m.score,
-            score1y: found1y === undefined ? 0 : found1y.score,
-          };
-        }),
+      games.map((metaGame) => {
+        const info = gameinfo.get(metaGame);
+        let gameEngine;
+        if (info.playercounts.length > 1) {
+          gameEngine = GameFactory(metaGame, 2);
+        } else {
+          gameEngine = GameFactory(metaGame);
+        }
+        const tags = info.categories
+          .map((cat) => {
+            return {
+              raw: cat,
+              tag: t(`categories.${cat}.tag`),
+              desc: t(`categories.${cat}.description`),
+              full: t(`categories.${cat}.full`),
+            };
+          })
+          .filter((cat) => cat.raw.startsWith("goal"));
+        const found1w = mvTimes?.players1w.find((e) => e.metaGame === metaGame);
+        const found1m = mvTimes?.players1m.find((e) => e.metaGame === metaGame);
+        const found6m = mvTimes?.players6m.find((e) => e.metaGame === metaGame);
+        const found1y = mvTimes?.players1y.find((e) => e.metaGame === metaGame);
+        return {
+          id: metaGame,
+          gameName: info.name,
+          image: encodeURIComponent(gameImages[metaGame]),
+          links: info.urls,
+          designers:
+            info.people !== undefined && info.people.length > 0
+              ? info.people.filter((p) => p.type === "designer")
+              : [],
+          description: gameEngine.description(),
+          tags,
+          score1w: found1w === undefined ? 0 : found1w.score,
+          score1m: found1m === undefined ? 0 : found1m.score,
+          score6m: found6m === undefined ? 0 : found6m.score,
+          score1y: found1y === undefined ? 0 : found1y.score,
+        };
+      }),
     [t, mvTimes, games]
   );
 
   const dataStars = useMemo(
     () =>
-      games
-        .map((metaGame) => {
-          const info = gameinfo.get(metaGame);
-          let gameEngine;
-          if (info.playercounts.length > 1) {
-            gameEngine = GameFactory(metaGame, 2);
-          } else {
-            gameEngine = GameFactory(metaGame);
-          }
-          const tags = info.categories
-            .map((cat) => {
-              return {
-                raw: cat,
-                tag: t(`categories.${cat}.tag`),
-                desc: t(`categories.${cat}.description`),
-                full: t(`categories.${cat}.full`),
-              };
-            })
-            .filter((cat) => cat.raw.startsWith("goal"));
-          return {
-            id: metaGame,
-            gameName: info.name,
-            image: encodeURIComponent(gameImages[metaGame]),
-            links: info.urls,
-            designers:
-              info.people !== undefined && info.people.length > 0
-                ? info.people.filter((p) => p.type === "designer")
-                : [],
-            description: gameEngine.description(),
-            tags,
-            stars: counts !== null ? counts[metaGame]?.stars || 0 : 0,
-          };
-        }),
+      games.map((metaGame) => {
+        const info = gameinfo.get(metaGame);
+        let gameEngine;
+        if (info.playercounts.length > 1) {
+          gameEngine = GameFactory(metaGame, 2);
+        } else {
+          gameEngine = GameFactory(metaGame);
+        }
+        const tags = info.categories
+          .map((cat) => {
+            return {
+              raw: cat,
+              tag: t(`categories.${cat}.tag`),
+              desc: t(`categories.${cat}.description`),
+              full: t(`categories.${cat}.full`),
+            };
+          })
+          .filter((cat) => cat.raw.startsWith("goal"));
+        return {
+          id: metaGame,
+          gameName: info.name,
+          image: encodeURIComponent(gameImages[metaGame]),
+          links: info.urls,
+          designers:
+            info.people !== undefined && info.people.length > 0
+              ? info.people.filter((p) => p.type === "designer")
+              : [],
+          description: gameEngine.description(),
+          tags,
+          stars: counts !== null ? counts[metaGame]?.stars || 0 : 0,
+        };
+      }),
     [t, games, counts]
+  );
+
+  const dataHindex = useMemo(
+    () =>
+      games.map((metaGame) => {
+        const info = gameinfo.get(metaGame);
+        let gameEngine;
+        if (info.playercounts.length > 1) {
+          gameEngine = GameFactory(metaGame, 2);
+        } else {
+          gameEngine = GameFactory(metaGame);
+        }
+        const tags = info.categories
+          .map((cat) => {
+            return {
+              raw: cat,
+              tag: t(`categories.${cat}.tag`),
+              desc: t(`categories.${cat}.description`),
+              full: t(`categories.${cat}.full`),
+            };
+          })
+          .filter((cat) => cat.raw.startsWith("goal"));
+        let hindex = 0;
+        if (summary !== null) {
+          const hrec = summary.hMeta.find((i) => i.user === metaGame);
+          if (hrec !== undefined) {
+            hindex = hrec.value;
+          }
+        }
+        return {
+          id: metaGame,
+          gameName: info.name,
+          image: encodeURIComponent(gameImages[metaGame]),
+          links: info.urls,
+          designers:
+            info.people !== undefined && info.people.length > 0
+              ? info.people.filter((p) => p.type === "designer")
+              : [],
+          description: gameEngine.description(),
+          tags,
+          hindex,
+        };
+      }),
+    [t, games, summary]
   );
 
   const dataCompleted = useMemo(
     () =>
-      games
-        .map((metaGame) => {
-          const info = gameinfo.get(metaGame);
-          let gameEngine;
-          if (info.playercounts.length > 1) {
-            gameEngine = GameFactory(metaGame, 2);
-          } else {
-            gameEngine = GameFactory(metaGame);
-          }
-          const now = Date.now();
-          const added = new Date(info.dateAdded).getTime();
-          const week = 7 * 24 * 60 * 60 * 1000;
-          const weeksLive = Math.ceil(Math.abs(now - added) / week);
-          let gamesper = 0;
-          if (counts !== null) {
-            gamesper =
-              Math.round(
-                ((counts[metaGame]?.completedgames || 0) / weeksLive) * 100
-              ) / 100;
-          }
-          const tags = info.categories
-            .map((cat) => {
-              return {
-                raw: cat,
-                tag: t(`categories.${cat}.tag`),
-                desc: t(`categories.${cat}.description`),
-                full: t(`categories.${cat}.full`),
-              };
-            })
-            .filter((cat) => cat.raw.startsWith("goal"));
-          return {
-            id: metaGame,
-            gameName: info.name,
-            image: encodeURIComponent(gameImages[metaGame]),
-            links: info.urls,
-            designers:
-              info.people !== undefined && info.people.length > 0
-                ? info.people.filter((p) => p.type === "designer")
-                : [],
-            description: gameEngine.description(),
-            tags,
-            games: gamesper,
-          };
-        }),
+      games.map((metaGame) => {
+        const info = gameinfo.get(metaGame);
+        let gameEngine;
+        if (info.playercounts.length > 1) {
+          gameEngine = GameFactory(metaGame, 2);
+        } else {
+          gameEngine = GameFactory(metaGame);
+        }
+        const now = Date.now();
+        const added = new Date(info.dateAdded).getTime();
+        const week = 7 * 24 * 60 * 60 * 1000;
+        const weeksLive = Math.ceil(Math.abs(now - added) / week);
+        let gamesper = 0;
+        if (counts !== null) {
+          gamesper =
+            Math.round(
+              ((counts[metaGame]?.completedgames || 0) / weeksLive) * 100
+            ) / 100;
+        }
+        const tags = info.categories
+          .map((cat) => {
+            return {
+              raw: cat,
+              tag: t(`categories.${cat}.tag`),
+              desc: t(`categories.${cat}.description`),
+              full: t(`categories.${cat}.full`),
+            };
+          })
+          .filter((cat) => cat.raw.startsWith("goal"));
+        return {
+          id: metaGame,
+          gameName: info.name,
+          image: encodeURIComponent(gameImages[metaGame]),
+          links: info.urls,
+          designers:
+            info.people !== undefined && info.people.length > 0
+              ? info.people.filter((p) => p.type === "designer")
+              : [],
+          description: gameEngine.description(),
+          tags,
+          games: gamesper,
+        };
+      }),
     [t, games, counts]
   );
 
   const dataCompletedRecent = useMemo(
     () =>
-      games
-        .map((metaGame) => {
-          const info = gameinfo.get(metaGame);
-          let gameEngine;
-          if (info.playercounts.length > 1) {
-            gameEngine = GameFactory(metaGame, 2);
-          } else {
-            gameEngine = GameFactory(metaGame);
+      games.map((metaGame) => {
+        const info = gameinfo.get(metaGame);
+        let gameEngine;
+        if (info.playercounts.length > 1) {
+          gameEngine = GameFactory(metaGame, 2);
+        } else {
+          gameEngine = GameFactory(metaGame);
+        }
+        let gamesper = 0;
+        if (summary !== null) {
+          const found = summary.histograms.meta.find(
+            (x) => x.game === info.name
+          );
+          if (found !== undefined) {
+            const subset = found.value.slice(-13);
+            const sum = subset.reduce((acc, curr) => acc + curr, 0);
+            gamesper = Math.round((sum / 13) * 100) / 100;
           }
-          let gamesper = 0;
-          if (summary !== null) {
-            const found = summary.histograms.meta.find(
-              (x) => x.game === info.name
-            );
-            if (found !== undefined) {
-              const subset = found.value.slice(-13);
-              const sum = subset.reduce((acc, curr) => acc + curr, 0);
-              gamesper = Math.round((sum / 13) * 100) / 100;
-            }
-          }
-          const tags = info.categories
-            .map((cat) => {
-              return {
-                raw: cat,
-                tag: t(`categories.${cat}.tag`),
-                desc: t(`categories.${cat}.description`),
-                full: t(`categories.${cat}.full`),
-              };
-            })
-            .filter((cat) => cat.raw.startsWith("goal"));
-          return {
-            id: metaGame,
-            gameName: info.name,
-            image: encodeURIComponent(gameImages[metaGame]),
-            links: info.urls,
-            designers:
-              info.people !== undefined && info.people.length > 0
-                ? info.people.filter((p) => p.type === "designer")
-                : [],
-            description: gameEngine.description(),
-            tags,
-            games: gamesper,
-          };
-        }),
+        }
+        const tags = info.categories
+          .map((cat) => {
+            return {
+              raw: cat,
+              tag: t(`categories.${cat}.tag`),
+              desc: t(`categories.${cat}.description`),
+              full: t(`categories.${cat}.full`),
+            };
+          })
+          .filter((cat) => cat.raw.startsWith("goal"));
+        return {
+          id: metaGame,
+          gameName: info.name,
+          image: encodeURIComponent(gameImages[metaGame]),
+          links: info.urls,
+          designers:
+            info.people !== undefined && info.people.length > 0
+              ? info.people.filter((p) => p.type === "designer")
+              : [],
+          description: gameEngine.description(),
+          tags,
+          games: gamesper,
+        };
+      }),
     [t, games, summary]
   );
 
@@ -578,19 +614,19 @@ function Explore(props) {
       }),
       columnHelper.accessor("score1w", {
         header: "1 week",
-        cell: (props) => (props.getValue()/ 7).toFixed(2),
+        cell: (props) => (props.getValue() / 7).toFixed(2),
       }),
       columnHelper.accessor("score1m", {
         header: "1 month",
-        cell: (props) => (props.getValue()/ 30).toFixed(2),
+        cell: (props) => (props.getValue() / 30).toFixed(2),
       }),
       columnHelper.accessor("score6m", {
         header: "6 months",
-        cell: (props) => (props.getValue()/ 180).toFixed(2),
+        cell: (props) => (props.getValue() / 180).toFixed(2),
       }),
       columnHelper.accessor("score1y", {
         header: "1 year",
-        cell: (props) => (props.getValue()/ 365).toFixed(2),
+        cell: (props) => (props.getValue() / 365).toFixed(2),
       }),
     ],
     [columnHelper, expandedPara, togglePara]
@@ -692,6 +728,107 @@ function Explore(props) {
       }),
       columnHelper.accessor("stars", {
         header: "Stars",
+      }),
+    ],
+    [columnHelper, expandedPara, togglePara]
+  );
+
+  const columnsHindex = useMemo(
+    () => [
+      columnHelper.accessor("gameName", {
+        header: "Game",
+        cell: (props) => (
+          <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
+        ),
+        filterFn: "includesString",
+      }),
+      columnHelper.accessor(
+        (row) =>
+          row.designers.length > 0
+            ? row.designers.map((d) => d.name).join(" ")
+            : "",
+        {
+          header: "Designers",
+          id: "designers",
+          cell: (props) =>
+            props.row.original.designers.length === 0
+              ? ""
+              : props.row.original.designers
+                  .map(({ name, urls }, ind) =>
+                    urls !== undefined && urls.length > 0 ? (
+                      <a
+                        key={`designr_${ind}`}
+                        href={urls[0]}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {name}
+                      </a>
+                    ) : (
+                      <span key={`designr_${ind}`}>{name}</span>
+                    )
+                  )
+                  .reduce((prev, curr) => [prev, ", ", curr]),
+        }
+      ),
+      columnHelper.accessor("image", {
+        header: "Image",
+        cell: (props) => (
+          <>
+            <div id={"svg" + props.row.original.id}>
+              <img
+                src={`data:image/svg+xml;utf8,${props.getValue()}`}
+                alt={props.row.original.id}
+                width="auto"
+                height="auto"
+                onClick={() => openImgModal(props.row.original.id)}
+              />
+            </div>
+          </>
+        ),
+        enableSorting: false,
+      }),
+      columnHelper.accessor("description", {
+        header: "Description",
+        cell: (props) => (
+          <ExpandableDiv
+            expanded={expandedPara.includes(props.row.original.id)}
+            handleClick={() => togglePara(props.row.original.id)}
+          >
+            <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+              {props.getValue()}
+            </ReactMarkdown>
+          </ExpandableDiv>
+        ),
+        enableSorting: false,
+      }),
+      columnHelper.accessor("tags", {
+        header: "Goal",
+        cell: (props) =>
+          props
+            .getValue()
+            .map((tag, ind) =>
+              tag === "" ? null : (
+                <span key={`tag_${ind}`} className="tag" title={tag.desc}>
+                  {tag.tag}
+                </span>
+              )
+            )
+            .reduce(
+              (acc, x) =>
+                acc === null ? (
+                  x
+                ) : (
+                  <>
+                    {acc} {x}
+                  </>
+                ),
+              null
+            ),
+        enableSorting: false,
+      }),
+      columnHelper.accessor("hindex", {
+        header: "h-index",
       }),
     ],
     [columnHelper, expandedPara, togglePara]
@@ -815,6 +952,11 @@ function Explore(props) {
           selColSetter(columnsHot);
           setSorting([{ id: "score1w", desc: true }]);
           break;
+        case "hindex":
+          selDataSetter(dataHindex);
+          selColSetter(columnsHindex);
+          setSorting([{ id: "hindex", desc: true }]);
+          break;
         case "stars":
           selDataSetter(dataStars);
           selColSetter(columnsStars);
@@ -846,6 +988,8 @@ function Explore(props) {
       dataCompleted,
       columnsCompleted,
       dataCompletedRecent,
+      dataHindex,
+      columnsHindex,
     ]
   );
 
@@ -1004,93 +1148,26 @@ function Explore(props) {
           <hr />
         </div>
         <div className="container">
-          <div className="columns">
-            <div className="column is-narrow">
-              <div className="field">
-                <div className="control">
-                  <label className="radio">
-                    <input
-                      type="radio"
-                      name="mode"
-                      value="all"
-                      defaultChecked={selected === "all"}
-                      disabled={mode !== undefined}
-                      onClick={() => handleSelChange("all")}
-                    />
-                    {titles.get("all") || "UNKNOWN"}
-                  </label>
+          <div className="columns is-multiline">
+            {[...titles.entries()].map(([key, title]) => {
+              return (
+                <div className="column is-narrow" key={`radio|${key}`}>
+                  <div className="control">
+                    <label className="radio">
+                      <input
+                        type="radio"
+                        name="mode"
+                        value={key}
+                        defaultChecked={selected === key}
+                        disabled={mode !== undefined}
+                        onClick={() => handleSelChange(key)}
+                      />
+                      {title}
+                    </label>
+                  </div>
                 </div>
-                <div className="control">
-                  <label className="radio">
-                    <input
-                      type="radio"
-                      name="mode"
-                      value="hotRaw"
-                      defaultChecked={selected === "hotRaw"}
-                      disabled={mode !== undefined}
-                      onClick={() => handleSelChange("hotRaw")}
-                    />
-                    {titles.get("hotRaw") || "UNKNOWN"}
-                  </label>
-                </div>
-                <div className="control">
-                  <label className="radio">
-                    <input
-                      type="radio"
-                      name="mode"
-                      value="hotPlayers"
-                      defaultChecked={selected === "hotPlayers"}
-                      disabled={mode !== undefined}
-                      onClick={() => handleSelChange("hotPlayers")}
-                    />
-                    {titles.get("hotPlayers") || "UNKNOWN"}
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div className="column is-narrow">
-              <div className="field">
-                <div className="control">
-                  <label className="radio">
-                    <input
-                      type="radio"
-                      name="mode"
-                      value="stars"
-                      defaultChecked={selected === "stars"}
-                      disabled={mode !== undefined}
-                      onClick={() => handleSelChange("stars")}
-                    />
-                    {titles.get("stars") || "UNKNOWN"}
-                  </label>
-                </div>
-                <div className="control">
-                  <label className="radio">
-                    <input
-                      type="radio"
-                      name="mode"
-                      value="completed"
-                      defaultChecked={selected === "completed"}
-                      disabled={mode !== undefined}
-                      onClick={() => handleSelChange("completed")}
-                    />
-                    {titles.get("completed") || "UNKNOWN"}
-                  </label>
-                </div>
-                <div className="control">
-                  <label className="radio">
-                    <input
-                      type="radio"
-                      name="mode"
-                      value="completedRecent"
-                      defaultChecked={selected === "completedRecent"}
-                      disabled={mode !== undefined}
-                      onClick={() => handleSelChange("completedRecent")}
-                    />
-                    {titles.get("completedRecent") || "UNKNOWN"}
-                  </label>
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
         <hr />
