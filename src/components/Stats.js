@@ -71,7 +71,7 @@ const explanations = [
   ],
   [
     "numPlays",
-    `This table lists each game, how many times it was played, and by how many unique players. It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day "buckets," with the most recent week on the right.`,
+    `This table lists each game, how many times it was played, by how many unique players, and the game's \`h-index\`. A game's h-index is the number of players who have played that game at least that many times (so an h-index of 5 means that 5 different players have played that game at least 5 times). It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day "buckets," with the most recent week on the right.`,
   ],
   [
     "playerStats",
