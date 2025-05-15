@@ -62,7 +62,8 @@ function History({ handleChallenge }) {
               (r) =>
                 globalMe === undefined ||
                 globalMe === null ||
-                r.id !== globalMe.id
+                user === null ||
+                (user.id === globalMe.id ? r.id !== globalMe.id : true)
             );
           let variants = [];
           if (
