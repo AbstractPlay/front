@@ -54,9 +54,10 @@ function Explore(props) {
 
   const titles = new Map([
     ["all", "All games"],
-    ["hotRaw", "Hotness (# moves)"],
-    ["hotPlayers", "Hotness (# players)"],
+    ["hotRaw", "Hotness (# moves/day)"],
+    ["hotPlayers", "Hotness (# players/day)"],
     ["playerSum", "# players"],
+    ["playerSumNorm", "# players (normalized)"],
     ["hindex", "h-index"],
     ["stars", "Stars"],
     ["completed", "Completed games per week (all time)"],
@@ -75,6 +76,10 @@ function Explore(props) {
     [
       "playerSum",
       "The total number of unique players who played that game over the time period.",
+    ],
+    [
+      "playerSumNorm",
+      "The total number of unique players who played that game over the time period normalized over the course of a year. So the \"1 week\" value would be the total number of players in the past week, divided by 7 days, then multiplied by 365.",
     ],
     [
       "hindex",
@@ -391,6 +396,58 @@ function Explore(props) {
           score1w: found1w === undefined ? 0 : found1w.score,
           score1m: found1m === undefined ? 0 : found1m.score,
           score6m: found6m === undefined ? 0 : found6m.score,
+          score1y: found1y === undefined ? 0 : found1y.score,
+        };
+      }),
+    [t, mvTimes, games]
+  );
+
+  const dataPlayersSumNorm = useMemo(
+    () =>
+      games.map((metaGame) => {
+        const info = gameinfo.get(metaGame);
+        let gameEngine;
+        if (info.playercounts.length > 1) {
+          gameEngine = GameFactory(metaGame, 2);
+        } else {
+          gameEngine = GameFactory(metaGame);
+        }
+        const tags = info.categories
+          .map((cat) => {
+            return {
+              raw: cat,
+              tag: t(`categories.${cat}.tag`),
+              desc: t(`categories.${cat}.description`),
+              full: t(`categories.${cat}.full`),
+            };
+          })
+          .filter((cat) => cat.raw.startsWith("goal"));
+        const found1w = mvTimes?.playersSum1w.find(
+          (e) => e.metaGame === metaGame
+        );
+        const found1m = mvTimes?.playersSum1m.find(
+          (e) => e.metaGame === metaGame
+        );
+        const found6m = mvTimes?.playersSum6m.find(
+          (e) => e.metaGame === metaGame
+        );
+        const found1y = mvTimes?.playersSum1y.find(
+          (e) => e.metaGame === metaGame
+        );
+        return {
+          id: metaGame,
+          gameName: info.name,
+          image: encodeURIComponent(gameImages[metaGame]),
+          links: info.urls,
+          designers:
+            info.people !== undefined && info.people.length > 0
+              ? info.people.filter((p) => p.type === "designer")
+              : [],
+          description: gameEngine.description(),
+          tags,
+          score1w: ((found1w === undefined ? 0 : found1w.score) / 7 * 365).toFixed(2),
+          score1m: ((found1m === undefined ? 0 : found1m.score) / 30 * 365).toFixed(2),
+          score6m: ((found6m === undefined ? 0 : found6m.score) / 180 * 365).toFixed(2),
           score1y: found1y === undefined ? 0 : found1y.score,
         };
       }),
@@ -1124,6 +1181,11 @@ function Explore(props) {
           selColSetter(columnsSum);
           setSorting([{ id: "score1w", desc: true }]);
           break;
+        case "playerSumNorm":
+          selDataSetter(dataPlayersSumNorm);
+          selColSetter(columnsSum);
+          setSorting([{ id: "score1w", desc: true }]);
+          break;
         case "hindex":
           selDataSetter(dataHindex);
           selColSetter(columnsHindex);
@@ -1315,31 +1377,22 @@ function Explore(props) {
         <div className="content">
           <p>
             This page lets you explore different ways of sorting games. Select
-            your desired view using the radio buttons below. Clicking on a
+            your desired view below. Clicking on a
             game's name will take you to that game's landing page with
             additional information.
           </p>
-          <hr />
         </div>
         <div className="container">
-          <div className="columns is-multiline">
-            {[...titles.entries()].map(([key, title]) => {
-              return (
-                <div className="column is-narrow" key={`radio|${key}`}>
-                  <label className="radio">
-                    <input
-                      type="radio"
-                      name="mode"
-                      value={key}
-                      defaultChecked={selected === key}
-                      disabled={mode !== undefined}
-                      onClick={() => handleSelChange(key)}
-                    />
-                    {title}
-                  </label>
-                </div>
-              );
-            })}
+          <div className="control">
+            <div className="select">
+                <select onChange={(e) => handleSelChange(e.target.value)}>
+                    {[...titles.entries()].map(([key, title]) => {
+                        return (
+                            <option value={key}>{title}</option>
+                        );
+                    })}
+                </select>
+            </div>
           </div>
         </div>
         <hr />
