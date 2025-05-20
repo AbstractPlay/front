@@ -79,7 +79,7 @@ function Explore(props) {
     ],
     [
       "playerSumNorm",
-      "The total number of unique players who played that game over the time period normalized over the course of a year. So the \"1 week\" value would be the total number of players in the past week, divided by 7 days, then multiplied by 365.",
+      'The total number of unique players who played that game over the time period normalized over the course of a year. So the "1 week" value would be the total number of players in the past week, divided by 7 days, then multiplied by 365.',
     ],
     [
       "hindex",
@@ -445,9 +445,18 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
-          score1w: ((found1w === undefined ? 0 : found1w.score) / 7 * 365).toFixed(2),
-          score1m: ((found1m === undefined ? 0 : found1m.score) / 30 * 365).toFixed(2),
-          score6m: ((found6m === undefined ? 0 : found6m.score) / 180 * 365).toFixed(2),
+          score1w: (
+            ((found1w === undefined ? 0 : found1w.score) / 7) *
+            365
+          ).toFixed(2),
+          score1m: (
+            ((found1m === undefined ? 0 : found1m.score) / 30) *
+            365
+          ).toFixed(2),
+          score6m: (
+            ((found6m === undefined ? 0 : found6m.score) / 180) *
+            365
+          ).toFixed(2),
           score1y: found1y === undefined ? 0 : found1y.score,
         };
       }),
@@ -1377,21 +1386,18 @@ function Explore(props) {
         <div className="content">
           <p>
             This page lets you explore different ways of sorting games. Select
-            your desired view below. Clicking on a
-            game's name will take you to that game's landing page with
-            additional information.
+            your desired view below. Clicking on a game's name will take you to
+            that game's landing page with additional information.
           </p>
         </div>
         <div className="container">
           <div className="control">
             <div className="select">
-                <select onChange={(e) => handleSelChange(e.target.value)}>
-                    {[...titles.entries()].map(([key, title]) => {
-                        return (
-                            <option value={key}>{title}</option>
-                        );
-                    })}
-                </select>
+              <select onChange={(e) => handleSelChange(e.target.value)}>
+                {[...titles.entries()].map(([key, title]) => {
+                  return <option value={key}>{title}</option>;
+                })}
+              </select>
             </div>
           </div>
         </div>
