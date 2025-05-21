@@ -65,11 +65,23 @@ function MiscButtons({
         <div className="control" style={{ paddingTop: "1em" }}>
           <button className="button apButton is-small" onClick={handleNextGame}>
             <span>
-              {t("NextGame")} {myMove.length > 0 ? ` (${myMove.length})` : ""}
+              {t(
+                myMove.length > 0
+                  ? myMove.filter((g) => g.id !== gameID).length === 0
+                    ? "NextGameLast"
+                    : "NextGame"
+                  : "NextGameNone"
+              )}{" "}
+              {myMove.filter((g) => g.id !== gameID).length > 0
+                ? ` (${myMove.filter((g) => g.id !== gameID).length})`
+                : ""}
             </span>
-            <span className="icon">
-              <i className="fa fa-forward"></i>
-            </span>
+            {myMove.filter((g) => g.id !== gameID).length === 0 &&
+            myMove.length > 0 ? null : (
+              <span className="icon">
+                <i className="fa fa-forward"></i>
+              </span>
+            )}
           </button>
         </div>
       </div>
