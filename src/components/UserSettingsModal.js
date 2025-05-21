@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import React, {
   useContext,
   useState,
@@ -113,13 +114,34 @@ function UserSettingsModal(props) {
       emailSetter("");
       emailCodeSetter("");
       if (globalMe?.settings?.all?.notifications) {
-        notificationsSetter(globalMe.settings.all.notifications);
+        const settings = {...globalMe.settings.all.notifications};
+        if (!settings.hasOwnProperty("yourturn")) {
+            settings.yourturn = true;
+        }
+        if (!settings.hasOwnProperty("challenges")) {
+            settings.challenges = true;
+        }
+        if (!settings.hasOwnProperty("gameStart")) {
+            settings.gameStart = true;
+        }
+        if (!settings.hasOwnProperty("gameEnd")) {
+            settings.gameEnd = true;
+        }
+        if (!settings.hasOwnProperty("tournamentStart")) {
+            settings.tournamentStart = true;
+        }
+        if (!settings.hasOwnProperty("tournamentEnd")) {
+            settings.tournamentEnd = true;
+        }
+        notificationsSetter(settings);
       } else {
         notificationsSetter({
           yourturn: true,
           challenges: true,
           gameStart: true,
           gameEnd: true,
+          tournamentStart: true,
+          tournamentEnd: true,
         });
       }
       if (globalMe?.settings?.all?.exploration === undefined) {
@@ -892,7 +914,7 @@ function UserSettingsModal(props) {
             <label className="label">{t("NotificationSettings")}</label>
             {!notifications
               ? ""
-              : ["challenges", "gameStart", "gameEnd", "yourturn"].map(
+              : ["challenges", "gameStart", "gameEnd", "yourturn", "tournamentStart", "tournamentEnd"].map(
                   (key) => (
                     <div className="control" key={key}>
                       <label className="checkbox">

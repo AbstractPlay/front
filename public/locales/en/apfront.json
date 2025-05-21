@@ -626,6 +626,8 @@
     "NotifyLabel-challenges": "Challenges (every instance)",
     "NotifyLabel-gameStart": "Game started (every instance)",
     "NotifyLabel-gameEnd": "Game ended (every instance)",
+    "NotifyLabel-tournamentStart": "Tournament started (every instance)",
+    "NotifyLabel-tournamentEnd": "Tournament ended (every instance)",
     "NoWaitingResponse": "No challenges waiting on opponent response",
     "NoYourMove": "No games waiting for your move.",
     "NumChallenge": "There will be {{num}} players in this game. {{players}}. Seating will be random.",
