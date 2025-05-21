@@ -830,9 +830,9 @@ function doView(
             gameEngineTmp.shouldOfferPie()) ||
             (typeof gameEngineTmp.shouldOfferPie !== "function" &&
               gameEngineTmp.state().stack.length === 2))
-        )
+        ) &&
         // need a hack for stopping automoves in some emulated situations
-        && !gameEngineTmp.__noAutomove
+        !gameEngineTmp.__noAutomove
       ) {
         automoved = true;
         if (

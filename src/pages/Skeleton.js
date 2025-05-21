@@ -37,6 +37,7 @@ import TournamentsOld from "../components/Tournaments/TournamentsOld";
 import NotFound from "../components/NotFound";
 import Event from "../components/Event";
 import Events from "../components/Events";
+import Play from "../components/Play";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
@@ -284,6 +285,7 @@ function Bones(props) {
                             path="/tournaments/:metaGame?"
                             element={<Tournaments />}
                           />
+                          <Route path="/play" element={<Play />} />
                         </Routes>
                       </MyTurnContext.Provider>
                     </section>
