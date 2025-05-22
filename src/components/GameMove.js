@@ -3047,9 +3047,9 @@ function GameMove(props) {
       myMoveSetter(result);
       if (Array.isArray(result) && result.length > 0) {
         const next = result[0];
-        navigate(`/move/${next.metaGame}/0/${next.id}`);
+        navigateToTop(`/move/${next.metaGame}/0/${next.id}`);
       } else {
-        navigate("/");
+        navigateToTop("/");
       }
     });
   };
@@ -3072,8 +3072,13 @@ function GameMove(props) {
       return refreshNextGame();
     } else {
       const next = local[0];
-      navigate(`/move/${next.metaGame}/0/${next.id}`);
+      navigateToTop(`/move/${next.metaGame}/0/${next.id}`);
     }
+  };
+
+  const navigateToTop = (to: string) => {
+    navigate(to, { replace: true });
+    window.scrollTo(0, 0);
   };
 
   const game = gameRef.current;
