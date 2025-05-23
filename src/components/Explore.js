@@ -30,6 +30,7 @@ import rehypeRaw from "rehype-raw";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { Helmet } from "react-helmet-async";
+import MetaItem from "./MetaContainer/MetaItem";
 
 function Explore(props) {
   const allSize = Number.MAX_SAFE_INTEGER;
@@ -48,7 +49,7 @@ function Explore(props) {
   const [expandedPara, expandedParaSetter] = useState([]);
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
   const [columnFilters, setColumnFilters] = useState([]);
-  const { mode } = useParams();
+  const { metaGame } = useParams();
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
@@ -57,7 +58,6 @@ function Explore(props) {
     ["hotRaw", "Hotness (# moves/day)"],
     ["hotPlayers", "Hotness (# players/day)"],
     ["playerSum", "# players"],
-    ["playerSumNorm", "# players (normalized)"],
     ["hindex", "h-index"],
     ["stars", "Stars"],
     ["completed", "Completed games per week (all time)"],
@@ -76,10 +76,6 @@ function Explore(props) {
     [
       "playerSum",
       "The total number of unique players who played that game over the time period.",
-    ],
-    [
-      "playerSumNorm",
-      'The total number of unique players who played that game over the time period normalized over the course of a year. So the "1 week" value would be the total number of players in the past week, divided by 7 days, then multiplied by 365.',
     ],
     [
       "hindex",
@@ -396,67 +392,6 @@ function Explore(props) {
           score1w: found1w === undefined ? 0 : found1w.score,
           score1m: found1m === undefined ? 0 : found1m.score,
           score6m: found6m === undefined ? 0 : found6m.score,
-          score1y: found1y === undefined ? 0 : found1y.score,
-        };
-      }),
-    [t, mvTimes, games]
-  );
-
-  const dataPlayersSumNorm = useMemo(
-    () =>
-      games.map((metaGame) => {
-        const info = gameinfo.get(metaGame);
-        let gameEngine;
-        if (info.playercounts.length > 1) {
-          gameEngine = GameFactory(metaGame, 2);
-        } else {
-          gameEngine = GameFactory(metaGame);
-        }
-        const tags = info.categories
-          .map((cat) => {
-            return {
-              raw: cat,
-              tag: t(`categories.${cat}.tag`),
-              desc: t(`categories.${cat}.description`),
-              full: t(`categories.${cat}.full`),
-            };
-          })
-          .filter((cat) => cat.raw.startsWith("goal"));
-        const found1w = mvTimes?.playersSum1w.find(
-          (e) => e.metaGame === metaGame
-        );
-        const found1m = mvTimes?.playersSum1m.find(
-          (e) => e.metaGame === metaGame
-        );
-        const found6m = mvTimes?.playersSum6m.find(
-          (e) => e.metaGame === metaGame
-        );
-        const found1y = mvTimes?.playersSum1y.find(
-          (e) => e.metaGame === metaGame
-        );
-        return {
-          id: metaGame,
-          gameName: info.name,
-          image: encodeURIComponent(gameImages[metaGame]),
-          links: info.urls,
-          designers:
-            info.people !== undefined && info.people.length > 0
-              ? info.people.filter((p) => p.type === "designer")
-              : [],
-          description: gameEngine.description(),
-          tags,
-          score1w: (
-            ((found1w === undefined ? 0 : found1w.score) / 7) *
-            365
-          ).toFixed(2),
-          score1m: (
-            ((found1m === undefined ? 0 : found1m.score) / 30) *
-            365
-          ).toFixed(2),
-          score6m: (
-            ((found6m === undefined ? 0 : found6m.score) / 180) *
-            365
-          ).toFixed(2),
           score1y: found1y === undefined ? 0 : found1y.score,
         };
       }),
@@ -1190,11 +1125,6 @@ function Explore(props) {
           selColSetter(columnsSum);
           setSorting([{ id: "score1w", desc: true }]);
           break;
-        case "playerSumNorm":
-          selDataSetter(dataPlayersSumNorm);
-          selColSetter(columnsSum);
-          setSorting([{ id: "score1w", desc: true }]);
-          break;
         case "hindex":
           selDataSetter(dataHindex);
           selColSetter(columnsHindex);
@@ -1240,12 +1170,9 @@ function Explore(props) {
 
   useEffect(() => {
     let sel = "all";
-    if (mode !== undefined) {
-      sel = mode;
-    }
     handleSelChange(sel);
     // leaving handleSelChange out of the dep array because it causes an infinite loop
-  }, [mode, dataHotRaw]);
+  }, []);
 
   const table = useReactTable({
     data: selData,
@@ -1363,167 +1290,197 @@ function Explore(props) {
     </>
   );
 
-  return (
-    <>
-      <Helmet>
-        <meta property="og:title" content="Explore available games" />
-        <meta
-          property="og:url"
-          content="https://play.abstractplay.com/explore"
-        />
-        <meta
-          property="og:description"
-          content="Different ways of exploring what's popular on Abstract Play."
-        />
-      </Helmet>
-      <article>
-        <div
-          className="container has-text-centered"
-          style={{ paddingBottom: "1em" }}
-        >
-          <h1 className="title">{t("ExploreGames")}</h1>
-        </div>
-        <div className="content">
-          <p>
-            This page lets you explore different ways of sorting games. Select
-            your desired view below. Clicking on a game's name will take you to
-            that game's landing page with additional information.
-          </p>
-        </div>
-        <div className="container">
-          <div className="control">
-            <div className="select">
-              <select onChange={(e) => handleSelChange(e.target.value)}>
-                {[...titles.entries()].map(([key, title]) => {
-                  return <option value={key}>{title}</option>;
-                })}
-              </select>
+  if (metaGame === undefined || metaGame === null || !gameinfo.has(metaGame)) {
+    return (
+      <>
+        <Helmet>
+          <meta property="og:title" content="Explore available games" />
+          <meta
+            property="og:url"
+            content="https://play.abstractplay.com/explore"
+          />
+          <meta
+            property="og:description"
+            content="Different ways of exploring what's popular on Abstract Play."
+          />
+        </Helmet>
+        <article>
+          <div
+            className="container has-text-centered"
+            style={{ paddingBottom: "1em" }}
+          >
+            <h1 className="title">{t("ExploreGames")}</h1>
+          </div>
+          <div className="content">
+            <p>
+              This page lets you explore different ways of sorting the list of
+              games. Select your desired view below. Clicking on a game's name
+              will take you to that game's landing page with additional
+              information.
+            </p>
+          </div>
+          <div className="container">
+            <div className="control">
+              <div className="select">
+                <select onChange={(e) => handleSelChange(e.target.value)}>
+                  {[...titles.entries()].map(([key, title]) => {
+                    return <option value={key}>{title}</option>;
+                  })}
+                </select>
+              </div>
             </div>
           </div>
-        </div>
-        <hr />
-        {selected === "all" ? (
-          <TableExplore
-            counts={counts}
-            games={games}
-            summary={summary}
-            toggleStar={toggleStar.bind(this)}
-            handleChallenge={handleNewChallenge.bind(this)}
-            users={users}
-            updateSetter={updateCounterSetter}
+          <hr />
+          {selected === "all" ? (
+            <TableExplore
+              counts={counts}
+              games={games}
+              summary={summary}
+              toggleStar={toggleStar.bind(this)}
+              handleChallenge={handleNewChallenge.bind(this)}
+              users={users}
+              updateSetter={updateCounterSetter}
+            />
+          ) : (
+            <>
+              <div className="container" style={{ paddingBottom: "1em" }}>
+                <h1 className="subtitle">
+                  {selected !== null ? titles.get(selected) : "Unknown"}
+                </h1>
+              </div>
+              <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+                {selected !== null ? descriptions.get(selected) : ""}
+              </ReactMarkdown>
+              <div className="container">
+                {tableNavigation}
+                <table className="table apTable">
+                  <thead>
+                    {table.getHeaderGroups().map((headerGroup) => (
+                      <tr key={headerGroup.id} className="stickyHeader">
+                        {headerGroup.headers.map((header) => (
+                          <th key={header.id}>
+                            {header.isPlaceholder ? null : (
+                              <>
+                                <div
+                                  {...{
+                                    className: header.column.getCanSort()
+                                      ? "sortable"
+                                      : "",
+                                    onClick:
+                                      header.column.getToggleSortingHandler(),
+                                  }}
+                                >
+                                  {flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                                  {{
+                                    asc: (
+                                      <Fragment>
+                                        &nbsp;<i className="fa fa-angle-up"></i>
+                                      </Fragment>
+                                    ),
+                                    desc: (
+                                      <Fragment>
+                                        &nbsp;
+                                        <i className="fa fa-angle-down"></i>
+                                      </Fragment>
+                                    ),
+                                  }[header.column.getIsSorted()] ?? null}
+                                  {header.id !== "description" ? null : (
+                                    <>
+                                      {" "}
+                                      <span
+                                        style={{
+                                          fontSize: "smaller",
+                                          fontWeight: "normal",
+                                          paddingTop: 0,
+                                        }}
+                                      >
+                                        ({t("ClickExpand")})
+                                      </span>
+                                    </>
+                                  )}
+                                </div>
+                              </>
+                            )}
+                          </th>
+                        ))}
+                      </tr>
+                    ))}
+                  </thead>
+                  <tbody>
+                    {table.getRowModel().rows.map((row) => (
+                      <tr key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <td key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {tableNavigation}
+              </div>
+            </>
+          )}
+        </article>
+        {selected === "all"
+          ? null
+          : games.map((metaGame) => {
+              return (
+                <Modal
+                  key={metaGame}
+                  buttons={[{ label: "Close", action: closeImgModal }]}
+                  show={activeImgModal === metaGame}
+                  title={`Board image for ${gameinfo.get(metaGame).name}`}
+                >
+                  <div className="content">
+                    <img
+                      src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                        gameImages[metaGame]
+                      )}`}
+                      alt={metaGame}
+                      width="100%"
+                      height="auto"
+                    />
+                  </div>
+                </Modal>
+              );
+            })}
+      </>
+    );
+  } else if (counts !== null) {
+    return (
+      <>
+        <Helmet>
+          <meta
+            property="og:title"
+            content={`${gameinfo.get(metaGame).name}: Game Information`}
           />
-        ) : (
-          <>
-            <div className="container" style={{ paddingBottom: "1em" }}>
-              <h1 className="subtitle">
-                {selected !== null ? titles.get(selected) : "Unknown"}
-              </h1>
-            </div>
-            <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-              {selected !== null ? descriptions.get(selected) : ""}
-            </ReactMarkdown>
-            <div className="container">
-              {tableNavigation}
-              <table className="table apTable">
-                <thead>
-                  {table.getHeaderGroups().map((headerGroup) => (
-                    <tr key={headerGroup.id} className="stickyHeader">
-                      {headerGroup.headers.map((header) => (
-                        <th key={header.id}>
-                          {header.isPlaceholder ? null : (
-                            <>
-                              <div
-                                {...{
-                                  className: header.column.getCanSort()
-                                    ? "sortable"
-                                    : "",
-                                  onClick:
-                                    header.column.getToggleSortingHandler(),
-                                }}
-                              >
-                                {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                                {{
-                                  asc: (
-                                    <Fragment>
-                                      &nbsp;<i className="fa fa-angle-up"></i>
-                                    </Fragment>
-                                  ),
-                                  desc: (
-                                    <Fragment>
-                                      &nbsp;<i className="fa fa-angle-down"></i>
-                                    </Fragment>
-                                  ),
-                                }[header.column.getIsSorted()] ?? null}
-                                {header.id !== "description" ? null : (
-                                  <>
-                                    {" "}
-                                    <span
-                                      style={{
-                                        fontSize: "smaller",
-                                        fontWeight: "normal",
-                                        paddingTop: 0,
-                                      }}
-                                    >
-                                      ({t("ClickExpand")})
-                                    </span>
-                                  </>
-                                )}
-                              </div>
-                            </>
-                          )}
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody>
-                  {table.getRowModel().rows.map((row) => (
-                    <tr key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                        <td key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {tableNavigation}
-            </div>
-          </>
-        )}
-      </article>
-      {selected === "all"
-        ? null
-        : games.map((metaGame) => {
-            return (
-              <Modal
-                key={metaGame}
-                buttons={[{ label: "Close", action: closeImgModal }]}
-                show={activeImgModal === metaGame}
-                title={`Board image for ${gameinfo.get(metaGame).name}`}
-              >
-                <div className="content">
-                  <img
-                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                      gameImages[metaGame]
-                    )}`}
-                    alt={metaGame}
-                    width="100%"
-                    height="auto"
-                  />
-                </div>
-              </Modal>
-            );
-          })}
-    </>
-  );
+          <meta
+            property="og:url"
+            content="https://play.abstractplay.com/games"
+          />
+          <meta
+            property="og:description"
+            content={`Information on the game ${gameinfo.get(metaGame).name}`}
+          />
+        </Helmet>
+        <MetaItem
+          game={gameinfo.get(metaGame)}
+          counts={counts[metaGame]}
+          summary={summary}
+          toggleStar={toggleStar.bind(this)}
+          handleChallenge={handleNewChallenge.bind(this)}
+        />
+      </>
+    );
+  }
 }
 
 export default Explore;
