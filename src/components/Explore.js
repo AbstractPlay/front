@@ -55,8 +55,9 @@ function Explore(props) {
 
   const titles = new Map([
     ["all", "All games"],
-    ["hotRaw", "Hotness (# moves/day)"],
-    ["hotPlayers", "Hotness (# players/day)"],
+    ["newest", "Newest"],
+    ["hotRaw", "Hottest (# moves/day)"],
+    ["hotPlayers", "Hottest (# players/day)"],
     ["playerSum", "# players"],
     ["hindex", "h-index"],
     ["stars", "Stars"],
@@ -65,6 +66,7 @@ function Explore(props) {
   ]);
   const descriptions = new Map([
     ["all", "The full list of games, sortable and filterable."],
+    ["newest", "When the game was added to the site."],
     [
       "hotRaw",
       "The average number of moves made per day over the time period.",
@@ -396,6 +398,43 @@ function Explore(props) {
         };
       }),
     [t, mvTimes, games]
+  );
+
+  const dataNewest = useMemo(
+    () =>
+      games.map((metaGame) => {
+        const info = gameinfo.get(metaGame);
+        let gameEngine;
+        if (info.playercounts.length > 1) {
+          gameEngine = GameFactory(metaGame, 2);
+        } else {
+          gameEngine = GameFactory(metaGame);
+        }
+        const tags = info.categories
+          .map((cat) => {
+            return {
+              raw: cat,
+              tag: t(`categories.${cat}.tag`),
+              desc: t(`categories.${cat}.description`),
+              full: t(`categories.${cat}.full`),
+            };
+          })
+          .filter((cat) => cat.raw.startsWith("goal"));
+        return {
+          id: metaGame,
+          gameName: info.name,
+          image: encodeURIComponent(gameImages[metaGame]),
+          links: info.urls,
+          designers:
+            info.people !== undefined && info.people.length > 0
+              ? info.people.filter((p) => p.type === "designer")
+              : [],
+          description: gameEngine.description(),
+          tags,
+          dateAdded: info.dateAdded,
+        };
+      }),
+    [t, games]
   );
 
   const dataStars = useMemo(
@@ -901,6 +940,108 @@ function Explore(props) {
     [columnHelper, expandedPara, togglePara]
   );
 
+  const columnsNewest = useMemo(
+    () => [
+      columnHelper.accessor("gameName", {
+        header: "Game",
+        cell: (props) => (
+          <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
+        ),
+        filterFn: "includesString",
+      }),
+      columnHelper.accessor(
+        (row) =>
+          row.designers.length > 0
+            ? row.designers.map((d) => d.name).join(" ")
+            : "",
+        {
+          header: "Designers",
+          id: "designers",
+          cell: (props) =>
+            props.row.original.designers.length === 0
+              ? ""
+              : props.row.original.designers
+                  .map(({ name, urls }, ind) =>
+                    urls !== undefined && urls.length > 0 ? (
+                      <a
+                        key={`designr_${ind}`}
+                        href={urls[0]}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {name}
+                      </a>
+                    ) : (
+                      <span key={`designr_${ind}`}>{name}</span>
+                    )
+                  )
+                  .reduce((prev, curr) => [prev, ", ", curr]),
+        }
+      ),
+      columnHelper.accessor("image", {
+        header: "Image",
+        cell: (props) => (
+          <>
+            <div id={"svg" + props.row.original.id}>
+              <img
+                src={`data:image/svg+xml;utf8,${props.getValue()}`}
+                alt={props.row.original.id}
+                width="auto"
+                height="auto"
+                onClick={() => openImgModal(props.row.original.id)}
+              />
+            </div>
+          </>
+        ),
+        enableSorting: false,
+      }),
+      columnHelper.accessor("description", {
+        header: "Description",
+        cell: (props) => (
+          <ExpandableDiv
+            expanded={expandedPara.includes(props.row.original.id)}
+            handleClick={() => togglePara(props.row.original.id)}
+          >
+            <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+              {props.getValue()}
+            </ReactMarkdown>
+          </ExpandableDiv>
+        ),
+        enableSorting: false,
+      }),
+      columnHelper.accessor("tags", {
+        header: "Goal",
+        cell: (props) =>
+          props
+            .getValue()
+            .map((tag, ind) =>
+              tag === "" ? null : (
+                <span key={`tag_${ind}`} className="tag" title={tag.desc}>
+                  {tag.tag}
+                </span>
+              )
+            )
+            .reduce(
+              (acc, x) =>
+                acc === null ? (
+                  x
+                ) : (
+                  <>
+                    {acc} {x}
+                  </>
+                ),
+              null
+            ),
+        enableSorting: false,
+      }),
+      columnHelper.accessor("dateAdded", {
+        header: "Added",
+        sortingFn: "datetime",
+      }),
+    ],
+    [columnHelper, expandedPara, togglePara]
+  );
+
   const columnsHindex = useMemo(
     () => [
       columnHelper.accessor("gameName", {
@@ -1124,6 +1265,11 @@ function Explore(props) {
           selDataSetter(dataPlayersSum);
           selColSetter(columnsSum);
           setSorting([{ id: "score1w", desc: true }]);
+          break;
+        case "newest":
+          selDataSetter(dataNewest);
+          selColSetter(columnsNewest);
+          setSorting([{ id: "dateAdded", desc: true }]);
           break;
         case "hindex":
           selDataSetter(dataHindex);
