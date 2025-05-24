@@ -454,7 +454,7 @@
     "ChallengedOthers": "{{game}}, other players: {{others}}",
     "ChallengedTwoPlayers": "{{game}} against {{other}}",
     "ChallengeFrom": "{{game}} challenge from {{challenger}}",
-    "ChallengeResponse": "Challenges awaiting your resonse",
+    "ChallengeResponse": "Challenges awaiting your response",
     "ChallengeResponseComment": "Comment",
     "ChallengeResponseCommentHelp": "Comment to challenger on your response.",
     "ChallengeRevokeCommentHelp": "Comment on revoking your challenge.",
