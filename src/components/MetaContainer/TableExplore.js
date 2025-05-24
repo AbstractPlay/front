@@ -469,11 +469,11 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
         enableSorting: false,
         filterFn: multiTagSelect,
       }),
-    //   columnHelper.accessor("dateAdded", {
-    //     header: "Added",
-    //     sortingFn: "datetime",
-    //     invertSorting: true,
-    //   }),
+      //   columnHelper.accessor("dateAdded", {
+      //     header: "Added",
+      //     sortingFn: "datetime",
+      //     invertSorting: true,
+      //   }),
       //   columnHelper.accessor("stars", {
       //     header: "Stars",
       //   }),

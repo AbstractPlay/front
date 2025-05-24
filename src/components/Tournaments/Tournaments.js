@@ -16,6 +16,8 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../../config";
 import NewTournamentModal from "./NewTournamentModal";
@@ -937,7 +939,9 @@ function Tournaments(props) {
         <h1 className="title has-text-centered">
           {t("Tournament.Tournaments")}
         </h1>
-        <p>{t("Tournament.Description")}</p>
+        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+          {t("Tournament.Description")}
+        </ReactMarkdown>
         {globalMe === undefined || globalMe === null ? null : (
           <div className="field">
             <div className="control">
