@@ -21,6 +21,9 @@ import TheirTurnTable from "./Me/TheirTurnTable";
 import StandingChallengeTable from "./Me/StandingChallengeTable";
 import StandingChallengeModal from "./StandingChallengeModal";
 import { toast } from "react-toastify";
+import ChallengeMeRespond from "./Me/ChallengeMeRespond";
+import ChallengeTheyRespond from "./Me/ChallengeTheyRespond";
+import ChallengeOpen from "./Me/ChallengeOpen";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -142,7 +145,7 @@ function Me(props) {
     showNewStandingModalSetter(false);
   };
 
-  const handleChallengeRevoke = async (comment) => {
+  const handleChallengeRevoke = async (challenge, comment) => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     if (globalMe.id !== challenge.challenger.id)
@@ -180,7 +183,7 @@ function Me(props) {
     showChallengeResponseModalSetter(false);
   };
 
-  const handleChallengeResponse = async (resp, comment) => {
+  const handleChallengeResponse = async (challenge, resp, comment) => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
@@ -625,6 +628,15 @@ function Me(props) {
             </button>
           </div>
         </h1>
+        {globalMe === null ||
+        globalMe === undefined ||
+        globalMe.challengesReceived.length === 0 ? null : (
+          <div className="content has-text-centered">
+            <p style={{ color: "var(--secondary-color-1)" }}>
+              <a href="#challenged">You have been challenged!</a>
+            </p>
+          </div>
+        )}
         {/* Your Games */}
         <div className="columns">
           <div className="column content is-half is-offset-one-quarter">
@@ -677,7 +689,7 @@ function Me(props) {
             <p className="subtitle lined">
               <span>{t("YourChallenges")}</span>
             </p>
-            <div className="indentedContainer">
+            <div id="challenged" className="indentedContainer">
               <p className="lined">
                 <span>{t("ChallengeResponse")}</span>
               </p>
@@ -686,26 +698,10 @@ function Me(props) {
                 globalMe.challengesReceived.length === 0 ? (
                   <p>{t("NoChallengeResponse")}</p>
                 ) : (
-                  <ul>
-                    {globalMe.challengesReceived.map((item) =>
-                      gameinfo.get(item.metaGame) === undefined ||
-                      item.challenger.id === undefined ? null : (
-                        <ChallengeItem
-                          item={item}
-                          me={globalMe.id}
-                          key={item.id}
-                          respond={true}
-                          setters={{
-                            challengeSetter: challengeSetter,
-                            showChallengeViewModalSetter:
-                              showChallengeViewModalSetter,
-                            showChallengeResponseModalSetter:
-                              showChallengeResponseModalSetter,
-                          }}
-                        />
-                      )
-                    )}
-                  </ul>
+                  <ChallengeMeRespond
+                    fetching={fetching}
+                    handleChallengeResponse={handleChallengeResponse.bind(this)}
+                  />
                 )}
               </div>
               <p className="lined">
@@ -715,23 +711,11 @@ function Me(props) {
                 {challengesResponded.length === 0 ? (
                   <p>{t("NoWaitingResponse")}</p>
                 ) : (
-                  <ul>
-                    {challengesResponded.map((item) => (
-                      <ChallengeItem
-                        item={item}
-                        me={globalMe.id}
-                        key={item.id}
-                        respond={false}
-                        setters={{
-                          challengeSetter: challengeSetter,
-                          showChallengeViewModalSetter:
-                            showChallengeViewModalSetter,
-                          showChallengeResponseModalSetter:
-                            showChallengeResponseModalSetter,
-                        }}
-                      />
-                    ))}
-                  </ul>
+                  <ChallengeTheyRespond
+                    challenges={challengesResponded}
+                    handleChallengeRevoke={handleChallengeRevoke.bind(this)}
+                    fetching={fetching}
+                  />
                 )}
               </div>
               <p className="lined">
@@ -742,23 +726,10 @@ function Me(props) {
                 globalMe.standingChallenges.length === 0 ? (
                   <p>{t("NoStandingChallenges")}</p>
                 ) : (
-                  <ul>
-                    {globalMe.standingChallenges.map((item) => (
-                      <ChallengeItem
-                        item={item}
-                        me={globalMe.id}
-                        key={item.id}
-                        respond={false}
-                        setters={{
-                          challengeSetter: challengeSetter,
-                          showChallengeViewModalSetter:
-                            showChallengeViewModalSetter,
-                          showChallengeResponseModalSetter:
-                            showChallengeResponseModalSetter,
-                        }}
-                      />
-                    ))}
-                  </ul>
+                  <ChallengeOpen
+                    handleChallengeRevoke={handleChallengeRevoke.bind(this)}
+                    fetching={fetching}
+                  />
                 )}
               </div>
               <div>

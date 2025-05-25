@@ -1,27 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
+import { MeContext } from "../../pages/Skeleton";
 
-function ChallengeViewModal(props) {
+function ChallengeViewModal({ revoke, challenge, show, close }) {
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
+  const [globalMe] = useContext(MeContext);
 
   function handleCommentChange(event) {
     commentSetter(event.target.value);
   }
 
   function handleChallengeRevoke() {
-    props.revoke(comment);
+    revoke(challenge, comment);
     commentSetter("");
   }
 
-  const challenge = props.challenge;
-  const amChallenger = props?.myid === challenge?.challenger?.id;
-  if (props.show) {
+  const amChallenger = globalMe?.id === challenge?.challenger?.id;
+  if (show) {
     const game = gameinfo.get(challenge.metaGame);
     const numVariants =
       challenge.variants === undefined ? 0 : challenge.variants.length;
@@ -132,16 +133,16 @@ function ChallengeViewModal(props) {
     if (challenge.comment !== undefined && challenge.comment.length > 0)
       notes = t("Notes") + challenge.comment;
   }
-  return props.show ? (
+  return show ? (
     <Modal
-      show={props.show}
+      show={show}
       title={t("Challenge Details")}
       buttons={[
         {
           label: amChallenger ? t("RevokeChallenge") : t("RevokeAcceptance"),
           action: handleChallengeRevoke,
         },
-        { label: t("Close"), action: props.close },
+        { label: t("Close"), action: close },
       ]}
     >
       <ReactMarkdown
