@@ -5,15 +5,11 @@ import { Auth } from "aws-amplify";
 import { nanoid } from "nanoid";
 import Spinner from "./Spinner";
 import Modal from "./Modal";
-import ChallengeItem from "./Me/ChallengeItem";
-import ChallengeViewModal from "./Me/ChallengeViewModal";
-import ChallengeResponseModal from "./Me/ChallengeResponseModal";
 import NewChallengeModal from "./NewChallengeModal";
 import NewProfile from "./NewProfile";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import i18n from "../i18n";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
-import { gameinfo } from "@abstractplay/gameslib";
 import { cloneDeep } from "lodash";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
 import MyTurnTable from "./Me/MyTurnTable";
@@ -28,7 +24,6 @@ import ChallengeOpen from "./Me/ChallengeOpen";
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
   const [error, errorSetter] = useState(null);
-  const [challenge, challengeSetter] = useState(0);
   // vars is just a way to trigger a new 'me' fetch (e.g. after Profile is created)
   const [vars, varsSetter] = useState({});
   const [update, updateSetter] = useState(0);
@@ -38,10 +33,6 @@ function Me(props) {
   const [refresh, setRefresh] = useState(0);
   const [fetching, fetchingSetter] = useState(true);
   const [users, usersSetter] = useState(null);
-  const [showChallengeViewModal, showChallengeViewModalSetter] =
-    useState(false);
-  const [showChallengeResponseModal, showChallengeResponseModalSetter] =
-    useState(false);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
   const [showNewStandingModal, showNewStandingModalSetter] = useState(false);
   const [showDeleteGamesModal, showDeleteGamesModalSetter] = useState(false);
@@ -137,10 +128,6 @@ function Me(props) {
     showNewChallengeModalSetter(false);
   };
 
-  const handleChallengeViewClose = () => {
-    showChallengeViewModalSetter(false);
-  };
-
   const handleStandingModalClose = () => {
     showNewStandingModalSetter(false);
   };
@@ -171,16 +158,11 @@ function Me(props) {
       const result = await res.json();
       if (result.statusCode !== 200) errorSetter(JSON.parse(result.body));
       else {
-        showChallengeViewModalSetter(false);
         varsSetter(challenge.id);
       }
     } catch (error) {
       errorSetter(error);
     }
-  };
-
-  const handleChallengeResponseClose = () => {
-    showChallengeResponseModalSetter(false);
   };
 
   const handleChallengeResponse = async (challenge, resp, comment) => {
@@ -213,8 +195,6 @@ function Me(props) {
         console.log("handleChallengeResponse", result.statusCode);
         errorSetter(JSON.parse(result.body));
       } else {
-        showChallengeViewModalSetter(false);
-        showChallengeResponseModalSetter(false);
         varsSetter(challenge.id);
       }
     } catch (error) {
@@ -630,6 +610,7 @@ function Me(props) {
         </h1>
         {globalMe === null ||
         globalMe === undefined ||
+        globalMe.challengesReceived === undefined ||
         globalMe.challengesReceived.length === 0 ? null : (
           <div className="content has-text-centered">
             <p style={{ color: "var(--secondary-color-1)" }}>
@@ -836,19 +817,6 @@ function Me(props) {
           handleClose={handleNewChallengeClose}
           handleChallenge={handleNewChallenge2}
           users={users}
-        />
-        <ChallengeViewModal
-          challenge={challenge}
-          myid={globalMe.id}
-          show={showChallengeViewModal}
-          revoke={handleChallengeRevoke}
-          close={handleChallengeViewClose}
-        />
-        <ChallengeResponseModal
-          challenge={challenge}
-          show={showChallengeResponseModal}
-          close={handleChallengeResponseClose}
-          respond={handleChallengeResponse}
         />
         <StandingChallengeModal
           show={showNewStandingModal}
