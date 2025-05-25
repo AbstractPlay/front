@@ -5,15 +5,11 @@ import { Auth } from "aws-amplify";
 import { nanoid } from "nanoid";
 import Spinner from "./Spinner";
 import Modal from "./Modal";
-import ChallengeItem from "./Me/ChallengeItem";
-import ChallengeViewModal from "./Me/ChallengeViewModal";
-import ChallengeResponseModal from "./Me/ChallengeResponseModal";
 import NewChallengeModal from "./NewChallengeModal";
 import NewProfile from "./NewProfile";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import i18n from "../i18n";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
-import { gameinfo } from "@abstractplay/gameslib";
 import { cloneDeep } from "lodash";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
 import MyTurnTable from "./Me/MyTurnTable";
@@ -21,11 +17,13 @@ import TheirTurnTable from "./Me/TheirTurnTable";
 import StandingChallengeTable from "./Me/StandingChallengeTable";
 import StandingChallengeModal from "./StandingChallengeModal";
 import { toast } from "react-toastify";
+import ChallengeMeRespond from "./Me/ChallengeMeRespond";
+import ChallengeTheyRespond from "./Me/ChallengeTheyRespond";
+import ChallengeOpen from "./Me/ChallengeOpen";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
   const [error, errorSetter] = useState(null);
-  const [challenge, challengeSetter] = useState(0);
   // vars is just a way to trigger a new 'me' fetch (e.g. after Profile is created)
   const [vars, varsSetter] = useState({});
   const [update, updateSetter] = useState(0);
@@ -35,10 +33,6 @@ function Me(props) {
   const [refresh, setRefresh] = useState(0);
   const [fetching, fetchingSetter] = useState(true);
   const [users, usersSetter] = useState(null);
-  const [showChallengeViewModal, showChallengeViewModalSetter] =
-    useState(false);
-  const [showChallengeResponseModal, showChallengeResponseModalSetter] =
-    useState(false);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
   const [showNewStandingModal, showNewStandingModalSetter] = useState(false);
   const [showDeleteGamesModal, showDeleteGamesModalSetter] = useState(false);
@@ -134,15 +128,11 @@ function Me(props) {
     showNewChallengeModalSetter(false);
   };
 
-  const handleChallengeViewClose = () => {
-    showChallengeViewModalSetter(false);
-  };
-
   const handleStandingModalClose = () => {
     showNewStandingModalSetter(false);
   };
 
-  const handleChallengeRevoke = async (comment) => {
+  const handleChallengeRevoke = async (challenge, comment) => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     if (globalMe.id !== challenge.challenger.id)
@@ -168,7 +158,6 @@ function Me(props) {
       const result = await res.json();
       if (result.statusCode !== 200) errorSetter(JSON.parse(result.body));
       else {
-        showChallengeViewModalSetter(false);
         varsSetter(challenge.id);
       }
     } catch (error) {
@@ -176,11 +165,7 @@ function Me(props) {
     }
   };
 
-  const handleChallengeResponseClose = () => {
-    showChallengeResponseModalSetter(false);
-  };
-
-  const handleChallengeResponse = async (resp, comment) => {
+  const handleChallengeResponse = async (challenge, resp, comment) => {
     const usr = await Auth.currentAuthenticatedUser();
     const token = usr.signInUserSession.idToken.jwtToken;
     try {
@@ -210,8 +195,6 @@ function Me(props) {
         console.log("handleChallengeResponse", result.statusCode);
         errorSetter(JSON.parse(result.body));
       } else {
-        showChallengeViewModalSetter(false);
-        showChallengeResponseModalSetter(false);
         varsSetter(challenge.id);
       }
     } catch (error) {
@@ -625,6 +608,16 @@ function Me(props) {
             </button>
           </div>
         </h1>
+        {globalMe === null ||
+        globalMe === undefined ||
+        globalMe.challengesReceived === undefined ||
+        globalMe.challengesReceived.length === 0 ? null : (
+          <div className="content has-text-centered">
+            <p style={{ color: "var(--secondary-color-1)" }}>
+              <a href="#challenged">You have been challenged!</a>
+            </p>
+          </div>
+        )}
         {/* Your Games */}
         <div className="columns">
           <div className="column content is-half is-offset-one-quarter">
@@ -677,7 +670,7 @@ function Me(props) {
             <p className="subtitle lined">
               <span>{t("YourChallenges")}</span>
             </p>
-            <div className="indentedContainer">
+            <div id="challenged" className="indentedContainer">
               <p className="lined">
                 <span>{t("ChallengeResponse")}</span>
               </p>
@@ -686,26 +679,10 @@ function Me(props) {
                 globalMe.challengesReceived.length === 0 ? (
                   <p>{t("NoChallengeResponse")}</p>
                 ) : (
-                  <ul>
-                    {globalMe.challengesReceived.map((item) =>
-                      gameinfo.get(item.metaGame) === undefined ||
-                      item.challenger.id === undefined ? null : (
-                        <ChallengeItem
-                          item={item}
-                          me={globalMe.id}
-                          key={item.id}
-                          respond={true}
-                          setters={{
-                            challengeSetter: challengeSetter,
-                            showChallengeViewModalSetter:
-                              showChallengeViewModalSetter,
-                            showChallengeResponseModalSetter:
-                              showChallengeResponseModalSetter,
-                          }}
-                        />
-                      )
-                    )}
-                  </ul>
+                  <ChallengeMeRespond
+                    fetching={fetching}
+                    handleChallengeResponse={handleChallengeResponse.bind(this)}
+                  />
                 )}
               </div>
               <p className="lined">
@@ -715,23 +692,11 @@ function Me(props) {
                 {challengesResponded.length === 0 ? (
                   <p>{t("NoWaitingResponse")}</p>
                 ) : (
-                  <ul>
-                    {challengesResponded.map((item) => (
-                      <ChallengeItem
-                        item={item}
-                        me={globalMe.id}
-                        key={item.id}
-                        respond={false}
-                        setters={{
-                          challengeSetter: challengeSetter,
-                          showChallengeViewModalSetter:
-                            showChallengeViewModalSetter,
-                          showChallengeResponseModalSetter:
-                            showChallengeResponseModalSetter,
-                        }}
-                      />
-                    ))}
-                  </ul>
+                  <ChallengeTheyRespond
+                    challenges={challengesResponded}
+                    handleChallengeRevoke={handleChallengeRevoke.bind(this)}
+                    fetching={fetching}
+                  />
                 )}
               </div>
               <p className="lined">
@@ -742,23 +707,10 @@ function Me(props) {
                 globalMe.standingChallenges.length === 0 ? (
                   <p>{t("NoStandingChallenges")}</p>
                 ) : (
-                  <ul>
-                    {globalMe.standingChallenges.map((item) => (
-                      <ChallengeItem
-                        item={item}
-                        me={globalMe.id}
-                        key={item.id}
-                        respond={false}
-                        setters={{
-                          challengeSetter: challengeSetter,
-                          showChallengeViewModalSetter:
-                            showChallengeViewModalSetter,
-                          showChallengeResponseModalSetter:
-                            showChallengeResponseModalSetter,
-                        }}
-                      />
-                    ))}
-                  </ul>
+                  <ChallengeOpen
+                    handleChallengeRevoke={handleChallengeRevoke.bind(this)}
+                    fetching={fetching}
+                  />
                 )}
               </div>
               <div>
@@ -865,19 +817,6 @@ function Me(props) {
           handleClose={handleNewChallengeClose}
           handleChallenge={handleNewChallenge2}
           users={users}
-        />
-        <ChallengeViewModal
-          challenge={challenge}
-          myid={globalMe.id}
-          show={showChallengeViewModal}
-          revoke={handleChallengeRevoke}
-          close={handleChallengeViewClose}
-        />
-        <ChallengeResponseModal
-          challenge={challenge}
-          show={showChallengeResponseModal}
-          close={handleChallengeResponseClose}
-          respond={handleChallengeResponse}
         />
         <StandingChallengeModal
           show={showNewStandingModal}

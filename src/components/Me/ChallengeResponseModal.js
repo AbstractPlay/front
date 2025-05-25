@@ -7,7 +7,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
 
-function ChallengeResponseModal(props) {
+function ChallengeResponseModal({ respond, challenge, show, close }) {
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
   const [globalMe] = useContext(MeContext);
@@ -17,17 +17,16 @@ function ChallengeResponseModal(props) {
   }
 
   function handleChallengeAccept() {
-    props.respond(true, comment);
+    respond(challenge, true, comment);
     commentSetter("");
   }
 
   function handleChallengeReject() {
-    props.respond(false, comment);
+    respond(challenge, false, comment);
     commentSetter("");
   }
 
-  const challenge = props.challenge;
-  if (props.show) {
+  if (show) {
     var players = "";
     const game = gameinfo.get(challenge.metaGame);
     const otherPlayers = challenge.players
@@ -88,7 +87,7 @@ function ChallengeResponseModal(props) {
   }
   return (
     <Modal
-      show={props.show}
+      show={show}
       title={t("Challenge Details")}
       buttons={[
         {
@@ -101,7 +100,7 @@ function ChallengeResponseModal(props) {
         },
         {
           label: t("Close"),
-          action: props.close,
+          action: close,
         },
       ]}
     >
