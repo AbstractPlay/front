@@ -58,11 +58,11 @@ function Explore(props) {
     ["newest", "Newest"],
     ["hotRaw", "Hottest (# moves/day)"],
     ["hotPlayers", "Hottest (# players/day)"],
-    ["playerSum", "# players"],
-    ["hindex", "h-index"],
-    ["stars", "Stars"],
-    ["completed", "Completed games per week (all time)"],
-    ["completedRecent", "Completed games per week (recent)"],
+    ["playerSum", "Most players"],
+    ["hindex", "Highest h-index"],
+    ["stars", "Most stars"],
+    ["completed", "Most completed games per week (all time)"],
+    ["completedRecent", "Most completed games per week (recent)"],
   ]);
   const descriptions = new Map([
     ["all", "The full list of games, sortable and filterable."],
