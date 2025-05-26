@@ -2710,5 +2710,52 @@ We&amp;apos;re also approaching our second anniversary (May 1st). Thank you to t
       <guid isPermaLink="false">1367148342647197716</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>The domino-style Decktet game [Biscuit](https://play.abstractplay.com/games/biscuit) is now available. 2 or 3 players take turns playing cards to a shared tableau to occasionally score points. Getting rid of all your cards first earns you a bunch of bonus points. The game is played over multiple rounds until someone reaches the goal score. At the end of that round, highest score wins. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 20 May 2025 17:45:06 GMT</pubDate>
+      <guid isPermaLink="false">1374442828779880629</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>If you open your user settings panel (the cog icon next to your username, either at the top-right corner of your screen or in the &amp;quot;hamburger&amp;quot; menu on smaller screens), there is now an option to disable tournament start and end emails. This has been long requested, and I apologize for it taking so long to add. It&amp;apos;s hard to validate small changes like this, so do let me know if you keep getting emails after disabling the setting. I&amp;apos;ll note that tournament starts and ends are *only* announced by email. There is no other avenue currently to know that a tournament has ended other than actively monitoring the page. Also, tournament end emails should now include a link to the tournament in question. Let me know if you run into any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 21 May 2025 18:30:09 GMT</pubDate>
+      <guid isPermaLink="false">1374816556667895942</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Two changes:
+- There is now a [`/play`](https://play.abstractplay.com/play) route that will immediately take you to the next game in your queue (or to the dashboard if you have no available games). This also populates the &amp;quot;next game&amp;quot; queue.
+- I&amp;apos;ve tweaked the &amp;quot;Next game&amp;quot; button:
+  - The number in brackets is the number of games in the queue that are *not* the game you&amp;apos;re currently viewing.
+  - If you&amp;apos;re in the last game of your queue, the button will simply say &amp;quot;Viewing last game.&amp;quot;
+  - Once you&amp;apos;ve submitted your move in that last game, the button will then read &amp;quot;Back to dashboard.&amp;quot; But when you click it, it does actually refresh the queue first. So if an opponent made a move while you were making other moves, clicking the button will still take you to that game directly, despite what the button text says.
+
+Let me know if you encounter any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 21 May 2025 20:23:20 GMT</pubDate>
+      <guid isPermaLink="false">1374845037539754016</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The [`/games`](https://play.abstractplay.com/games) page has been tweaked. It now includes a drop-down menu letting you explore different ways of sorting the games, which will hopefully help newcomers find popular games more easily. Let me know if something does not work as expected, and I welcome further discussion of how to make the discovery process even better.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 23 May 2025 22:13:30 GMT</pubDate>
+      <guid isPermaLink="false">1375597536395661405</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Challenges are now displayed in a tabular format, similar to the rest of the dashboard. The view/respond modals continue to work as they always have. This is more of a QoL improvement for people with many challenges. Also, to help people not miss the fact that they have been challenged to a game, an alert will now appear at the top of your dashboard if you have been directly challenged. Let me know if something does not work as you expect.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 25 May 2025 16:23:19 GMT</pubDate>
+      <guid isPermaLink="false">1376234186200842380</guid>
+    </item>
+    
   </channel>
 </rss>
