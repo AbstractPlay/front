@@ -2757,5 +2757,34 @@ Let me know if you encounter any issues.</description>
       <guid isPermaLink="false">1376234186200842380</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>The rules to Morphos have changed:
+- In the standard game, there is a third formation and a new tiebreaker. Also, no more phantom edge stones.
+- In the &amp;quot;double placement&amp;quot; variant, the pie rule is now enabled (so the first player now places two stones) and the two stones must be orthogonally adjacent.
+- Aesthetically, the variant names have been updated and weak empty cells are also marked.
+
+For the half-dozen games in progress, the original rules still apply. (But let me know if something unexpected happens in one of those games.) All games that start now (including any tournaments) will use the new rules. Let me know if there are any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 27 May 2025 23:25:47 GMT</pubDate>
+      <guid isPermaLink="false">1377065280404193361</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve made some &amp;quot;under the hood&amp;quot; code changes to the multi-layer games Akron, Margo, Spire, Spline, Sploof, Sponnect, Spook, Spree, and Upper Hand. All my tests show everything working, but if you do encounter any issues, please let me know. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 30 May 2025 22:44:15 GMT</pubDate>
+      <guid isPermaLink="false">1378141993644851320</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The Decktet game Quincunx is now available. This is another tableau-building game where the grid gets built out as you play. Each card played scores in a myriad of ways (including negative points). You play as many rounds as there are players (supports 2-3), and the highest cumulative score wins. A scoring summary is in the implementation notes (the `i` icon below the board). Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 01 Jun 2025 16:17:26 GMT</pubDate>
+      <guid isPermaLink="false">1378769421027377364</guid>
+    </item>
+    
   </channel>
 </rss>
