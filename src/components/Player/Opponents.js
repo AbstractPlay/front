@@ -191,6 +191,7 @@ function Opponents({ handleChallenge }) {
         data={data}
         columns={columns}
         sort={[{ id: "count", desc: true }]}
+        key="Player|Opponent"
       />
     </>
   );

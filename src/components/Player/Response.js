@@ -41,7 +41,7 @@ function Response({ order }) {
 
   return (
     <>
-      <div>
+      <div key="Player|Response">
         <div className="content">
           <p>Average response time: {avg.toFixed(2)} hours</p>
           <p>Median response time: {median.toFixed(2)} hours</p>

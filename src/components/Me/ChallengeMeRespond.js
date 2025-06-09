@@ -92,6 +92,11 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
             {props.getValue().name}
           </Link>
         ),
+        sortingFn: (rowA, rowB, columnID) => {
+          return rowA.original.challenger.name.localeCompare(
+            rowB.original.challenger.name
+          );
+        },
       }),
       columnHelper.accessor("accepted", {
         header: "Accepted",
