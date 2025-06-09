@@ -93,6 +93,7 @@ function Designed({ handleChallenge }) {
           data={data}
           columns={columns}
           sort={[{ id: "name", desc: false }]}
+          key="Player|Designed"
         />
       </>
     );

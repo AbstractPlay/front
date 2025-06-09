@@ -107,9 +107,9 @@ function History({ handleChallenge }) {
                 </>
               ),
               sortingFn: (rowA, rowB, columnID) => {
-                return rowA
-                  .getValue("gameName")
-                  .localeCompare(rowB.getValue("gameName"));
+                return rowA.original.gameName.localeCompare(
+                  rowB.original.gameName
+                );
               },
             }),
             columnHelper.accessor("variants", {
@@ -240,6 +240,7 @@ function History({ handleChallenge }) {
         data={data}
         columns={columns}
         sort={[{ id: "dateEnd", desc: true }]}
+        key="Player|History"
       />
     </>
   );

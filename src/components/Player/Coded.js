@@ -92,6 +92,7 @@ function Coded({ handleChallenge }) {
           data={data}
           columns={columns}
           sort={[{ id: "name", desc: false }]}
+          key="Player|Coded"
         />
       </>
     );
