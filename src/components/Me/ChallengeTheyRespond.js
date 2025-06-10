@@ -96,6 +96,7 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
                   <Link to={`/player/${id}`}>{name}</Link>
                 ))
                 .reduce((prev, curr) => [prev, ", ", curr]),
+        invertSorting: true,
         sortingFn: (rowA, rowB, columnID) => {
           return rowA.original.challengees[0].name.localeCompare(
             rowB.original.challengees[0].name
