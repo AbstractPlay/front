@@ -92,6 +92,7 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
             {props.getValue().name}
           </Link>
         ),
+        invertSorting: true,
         sortingFn: (rowA, rowB, columnID) => {
           return rowA.original.challenger.name.localeCompare(
             rowB.original.challenger.name
