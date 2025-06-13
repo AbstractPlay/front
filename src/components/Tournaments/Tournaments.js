@@ -70,7 +70,7 @@ function Tournaments(props) {
       } else {
         const data = await res.json();
         let newtournaments = data.tournaments.map((t) => {
-          return { ...t, players: [] };
+          return { ...t, players: [], once: [] };
         });
         for (let player of data.tournamentPlayers) {
           const ids = player.sk.split("#");
@@ -90,6 +90,9 @@ function Tournaments(props) {
             (!tournament.started || player?.division !== undefined)
           ) {
             tournament.players.push(playerid);
+            if (player.once !== undefined && player.once) {
+              tournament.once.push(playerid);
+            }
           }
         }
         let toArchive = false;
@@ -237,7 +240,7 @@ function Tournaments(props) {
   );
 
   const handleJoinTournament = useCallback(
-    async (tournamentid) => {
+    async (tournamentid, once = false) => {
       try {
         const usr = await Auth.currentAuthenticatedUser();
         const res = await fetch(API_ENDPOINT_AUTH, {
@@ -249,7 +252,7 @@ function Tournaments(props) {
           },
           body: JSON.stringify({
             query: "join_tournament",
-            pars: { tournamentid },
+            pars: { tournamentid, once },
           }),
         });
         let status = res.status;
@@ -289,7 +292,14 @@ function Tournaments(props) {
           playerNames: t.players
             .map((uid) => {
               const rec = allUsers.find((u) => u.id === uid);
-              return rec !== undefined ? rec.name : "Unknown";
+              if (rec === undefined) {
+                return "Unknown";
+              }
+              if (t.once.includes(uid)) {
+                return rec.name + "*";
+              } else {
+                return rec.name;
+              }
             })
             .sort((a, b) => a.localeCompare(b)),
         };
@@ -378,14 +388,24 @@ function Tournaments(props) {
               {t("Tournament.Withdraw")}
             </button>
           ) : (
-            <button
-              className="button is-small apButton"
-              onClick={() =>
-                handleJoinTournament(props.row.original.tournamentid)
-              }
-            >
-              {t("Tournament.Join")}
-            </button>
+            <>
+              <button
+                className="button is-small apButton"
+                onClick={() =>
+                  handleJoinTournament(props.row.original.tournamentid, true)
+                }
+              >
+                {t("Tournament.JoinOnce")}
+              </button>
+              <button
+                className="button is-small apButton"
+                onClick={() =>
+                  handleJoinTournament(props.row.original.tournamentid, false)
+                }
+              >
+                {t("Tournament.Join")}
+              </button>
+            </>
           ),
       }),
     ],
