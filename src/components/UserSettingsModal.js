@@ -59,7 +59,7 @@ function UserSettingsModal(props) {
   const [showPalette, showPaletteSetter] = useState(false);
   const [myPalettes, myPalettesSetter] = useState([]);
   const [currColours, currColoursSetter] = useState([]);
-  const [selectedColour, selectedColourSetter] = useState("");
+  const [selectedColour, selectedColourSetter] = useState("fff");
   const [paletteName, paletteNameSetter] = useState("");
   const [showContext, showContextSetter] = useState(false);
   const [storedContextLight, storedContextLightSetter] = useStorageState(
