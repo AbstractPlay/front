@@ -2759,7 +2759,7 @@ Let me know if you encounter any issues.</description>
     
     <item>
       <title>Announcement</title>
-      <description>The rules to Morphos have changed:
+      <description>The rules to [Morphos](https://play.abstractplay.com/games/morphos) have changed:
 - In the standard game, there is a third formation and a new tiebreaker. Also, no more phantom edge stones.
 - In the &amp;quot;double placement&amp;quot; variant, the pie rule is now enabled (so the first player now places two stones) and the two stones must be orthogonally adjacent.
 - Aesthetically, the variant names have been updated and weak empty cells are also marked.
@@ -2780,10 +2780,36 @@ For the half-dozen games in progress, the original rules still apply. (But let m
     
     <item>
       <title>Announcement</title>
-      <description>The Decktet game Quincunx is now available. This is another tableau-building game where the grid gets built out as you play. Each card played scores in a myriad of ways (including negative points). You play as many rounds as there are players (supports 2-3), and the highest cumulative score wins. A scoring summary is in the implementation notes (the `i` icon below the board). Enjoy!</description>
+      <description>The Decktet game [Quincunx](https://play.abstractplay.com/games/quincunx) is now available. This is another tableau-building game where the grid gets built out as you play. Each card played scores in a myriad of ways (including negative points). You play as many rounds as there are players (supports 2-3), and the highest cumulative score wins. A scoring summary is in the implementation notes (the `i` icon below the board). Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Sun, 01 Jun 2025 16:17:26 GMT</pubDate>
       <guid isPermaLink="false">1378769421027377364</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to @mcd, Cubeo has been updated to include variants for d8, d10, and d12. One note: the move generation for Cubeo is not well optimized, and that becomes apparent in these larger games (1 second or so to apply moves in the middle game). I will try to find time to resolve this, but I don&amp;apos;t know exactly when. Enjoy, and thank you @mcd!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 09 Jun 2025 20:12:46 GMT</pubDate>
+      <guid isPermaLink="false">1381727748569038908</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The Decktet game [Siege of Jacynth](https://play.abstractplay.com/games/siegeofj) is now available. In this game, cards are armies attacking different segments of the wall around Jacynth. The goal is to be the force that breaks through the most wall segments. This one is less random than the other Decktet games. Lots of brain burning here, especially in the &amp;quot;Full Deal&amp;quot; variant. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 10 Jun 2025 16:04:38 GMT</pubDate>
+      <guid isPermaLink="false">1382027692119162940</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve added a &amp;quot;Join once&amp;quot; button to the tournament page. Joining a tournament using this button means you will only be registered in the next tournament but not any later iterations. (You&amp;apos;ll know you&amp;apos;ve &amp;quot;joined once&amp;quot; if you see an asterisk after your name in the participant list, as in the screen capture.) &amp;quot;Join recurring&amp;quot; does the normal behaviour of adding you to each following iteration until you withdraw. The withdraw button has also been relabelled &amp;quot;Withdraw from next&amp;quot; to make it clearer. You cannot withdraw from a tournament that has already started (other than resigning your games).
+
+The purpose of the automated tournaments is to keep a steady flow of games you enjoy, but apparently there is also a desire to try a new game without having to remember to withdraw afterwards. Hopefully this helps, though it does make the interface a little more cluttered. Further feedback and suggestions are welcome. Thanks for playing!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 13 Jun 2025 20:24:31 GMT</pubDate>
+      <guid isPermaLink="false">1383180257275678883</guid>
     </item>
     
   </channel>
