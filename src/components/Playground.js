@@ -163,7 +163,7 @@ function setupGame(
   partialMoveRenderRef.current = false;
   engineRef.current = cloneDeep(engine);
   const render = engine.render({
-    perspective: game0.me + 1,
+    perspective: engine.currplayer,
     altDisplay: display,
   });
   game0.stackExpanding =
@@ -607,7 +607,7 @@ function doView(
   engineRef.current = gameEngineTmp;
   renderrepSetter(
     gameEngineTmp.render({
-      perspective: game.me + 1,
+      perspective: gameEngineTmp.currplayer,
       altDisplay: settings?.display,
       ...move.opts,
     })
@@ -737,7 +737,7 @@ function processNewMove(
     engineRef.current = gameEngineTmp;
     renderrepSetter(
       gameEngineTmp.render({
-        perspective: gameRef.current.me + 1,
+        perspective: gameEngineTmp.currplayer,
         altDisplay: settings?.display,
       })
     );
@@ -1292,7 +1292,7 @@ function Playground(props) {
     engineRef.current = engine;
     renderrepSetter(
       engine.render({
-        perspective: gameRef.current.me ? gameRef.current.me + 1 : 1,
+        perspective: engine.currplayer,
         altDisplay: settings?.display,
       })
     );
