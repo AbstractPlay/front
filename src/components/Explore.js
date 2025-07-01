@@ -1533,7 +1533,7 @@ function Explore(props) {
     state: {
       sorting,
       columnVisibility: {
-        toggleStar: globalMe !== null,
+        toggleStar: globalMe !== null && !gridView,
         actions: globalMe !== null,
       },
       columnFilters,

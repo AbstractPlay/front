@@ -1017,51 +1017,34 @@ span.hardTime::after {
       border: none!important;
   }
 
-  table.gameGrid.apTable td:nth-child(1) {
-      order: 1;
-  }
+  /* omit order attributes because not changing order */
   table.gameGrid.apTable td:nth-child(1) a {
       color: var(--main-heading-color)!important;
       font-size: 20px!important;
       font-weight: var(--bulma-subtitle-weight)!important;
       text-decoration: none!important;
       font-family: Cardo, serif;
+      text-align:center!important;
   }
 
   table.gameGrid.apTable td:nth-child(2) {
       text-align:center!important;
-      order: 2;
-  }
-  table.gameGrid.apTable td:nth-child(2) a {
-      color: var(--main-heading-color)!important;
-      font-size: 20px!important;
-      font-weight: var(--bulma-subtitle-weight)!important;
-      text-decoration: none!important;
-      font-family: Cardo, serif;
-      text-align:center!important;
   }
 
   table.gameGrid.apTable td:nth-child(3) {
+      /* helps with transparent images in dark mode */
       background-color: rgba(255,255,255,0.5)!important;
       text-align:center!important;
-      order: 3;
-  }
-
-  table.gameGrid.apTable td:nth-child(4) {
-      order: 4;
-  }
-
-  table.gameGrid.apTable td:nth-child(5) {
-      /* max-height: 6em; */
-      /* overflow: scroll; */
-      order: 5;
   }
 
   table.gameGrid.apTable td:nth-child(6) {
       color: var(--secondary-font-color)!important;
-      order: 6;
+      text-align: right;
+      font-style: italic;
+      margin-top: -1em;
   }
   table.gameGrid.apTable td:nth-child(6):has(> a) {
+      /* this td happens to contain a link in the case we want to omit */
       display: none;
   }
 
