@@ -29,9 +29,16 @@ function History({ handleChallenge }) {
       allRecs
         .map((rec) => {
           const gameName = rec.header.game.name;
-          const meta = [...gameinfo.entries()].find(
-            ([, info]) => info.name === gameName
-          )[0];
+          let id = rec.header.site.gameid;
+          let meta = undefined;
+          if (id.includes("#")) {
+            [id, meta] = id.split("#");
+          }
+          if (meta === undefined) {
+            meta = [...gameinfo.entries()].find(
+                ([, info]) => info.name === gameName
+            )[0];
+          }
           let winner = undefined;
           const sortedResults = rec.header.players.sort(
             (a, b) => b.result - a.result
@@ -74,7 +81,7 @@ function History({ handleChallenge }) {
             variants = [...rec.header.game.variants];
           }
           return {
-            id: rec.header.site.gameid,
+            id,
             meta,
             gameName,
             variants: variants.sort((a, b) => a.localeCompare(b)),
@@ -84,7 +91,7 @@ function History({ handleChallenge }) {
           };
         })
         .sort((a, b) => b.dateEnd - a.dateEnd),
-    [allRecs, globalMe, allUsers]
+    [allRecs, globalMe, allUsers, user]
   );
 
   const columnHelper = createColumnHelper();
