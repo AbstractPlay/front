@@ -244,6 +244,8 @@ strong {
 }
 
 /* Only used to colour buttons until I can figure out how to override Bulma colours */
+.tableNav .apButton,
+.tableNav .apButton:hover,
 .apButton {
   background: linear-gradient(
     180deg,
@@ -982,6 +984,85 @@ span.hardTime::after {
   .tabs.is-toggle a:hover {
     background-color: var(--secondary-color-3-bg);
     color: var(--main-font-color);
+  }
+
+  /* Game tables conversion to grid via css */
+  table.gameGrid.apTable {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+  }
+
+  table.gameGrid.apTable tr {
+      display: inline-flex;
+      flex-direction:column;
+      width: 20%;
+      background-color: var(--main-bg-color)!important;
+      padding: 1em;
+      vertical-align:top;
+  }
+
+  @media screen and (max-width: 768px) {
+      table.gameGrid.apTable tr {
+	  width: unset;
+      }
+  }
+
+  table.gameGrid.apTable thead {
+      display:none;
+  }
+
+  table.gameGrid.apTable td {
+      display: block;
+      border: none!important;
+  }
+
+  table.gameGrid.apTable td:nth-child(1) {
+      order: 1;
+  }
+  table.gameGrid.apTable td:nth-child(1) a {
+      color: var(--main-heading-color)!important;
+      font-size: 20px!important;
+      font-weight: var(--bulma-subtitle-weight)!important;
+      text-decoration: none!important;
+      font-family: Cardo, serif;
+  }
+
+  table.gameGrid.apTable td:nth-child(2) {
+      text-align:center!important;
+      order: 5;
+  }
+  table.gameGrid.apTable td:nth-child(2) a {
+      color: var(--secondary-font-color);
+      text-decoration:none;
+      text-align:center!important;
+  }
+
+  table.gameGrid.apTable td:nth-child(3) {
+      background-color: rgba(255,255,255,0.5)!important;
+      order: 4;
+  }
+
+  table.gameGrid.apTable td:nth-child(4) {
+      order: 3;
+  }
+
+  table.gameGrid.apTable td:nth-child(5) {
+      max-height: 6em;
+      overflow: scroll;
+      order: 6;
+  }
+
+  table.gameGrid.apTable td:nth-child(6) {
+      color: var(--secondary-font-color)!important;
+      order: 2;
+  }
+  table.gameGrid.apTable td:nth-child(6):has(> a) {
+      display: none;
+  }
+
+  table.gameGrid.apTable td:nth-child(n+7) {
+      display: none;
   }
 
   /* Game board customimzation for light/dark mode! */
