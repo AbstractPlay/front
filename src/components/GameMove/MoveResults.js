@@ -78,7 +78,7 @@ function MoveResults(props) {
                     {!("ply" in r) || r.ply === undefined
                       ? ""
                       : `${t("Ply")} ${r.ply}: `}
-                    {r.log}
+                    {r.log.replaceAll("&#x2F;", "/")}
                   </p>
                 ) : (
                   <>
