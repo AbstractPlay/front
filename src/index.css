@@ -1030,32 +1030,36 @@ span.hardTime::after {
 
   table.gameGrid.apTable td:nth-child(2) {
       text-align:center!important;
-      order: 5;
+      order: 2;
   }
   table.gameGrid.apTable td:nth-child(2) a {
-      color: var(--secondary-font-color);
-      text-decoration:none;
+      color: var(--main-heading-color)!important;
+      font-size: 20px!important;
+      font-weight: var(--bulma-subtitle-weight)!important;
+      text-decoration: none!important;
+      font-family: Cardo, serif;
       text-align:center!important;
   }
 
   table.gameGrid.apTable td:nth-child(3) {
       background-color: rgba(255,255,255,0.5)!important;
-      order: 4;
-  }
-
-  table.gameGrid.apTable td:nth-child(4) {
+      text-align:center!important;
       order: 3;
   }
 
+  table.gameGrid.apTable td:nth-child(4) {
+      order: 4;
+  }
+
   table.gameGrid.apTable td:nth-child(5) {
-      max-height: 6em;
-      overflow: scroll;
-      order: 6;
+      /* max-height: 6em; */
+      /* overflow: scroll; */
+      order: 5;
   }
 
   table.gameGrid.apTable td:nth-child(6) {
       color: var(--secondary-font-color)!important;
-      order: 2;
+      order: 6;
   }
   table.gameGrid.apTable td:nth-child(6):has(> a) {
       display: none;

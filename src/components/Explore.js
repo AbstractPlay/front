@@ -39,12 +39,12 @@ function Explore(props) {
   const [counts, countsSetter] = useState(null);
   const [users, usersSetter] = useState(null);
   const [summary, summarySetter] = useState(null);
-  const [selected, selectedSetter] = useState("all");
+  const [selected, selectedSetter] = useStorageState("selected-module", "all");
   const [mvTimes, mvTimesSetter] = useState(null);
   const [selData, selDataSetter] = useState([]);
   const [selCol, selColSetter] = useState([]);
   const [updateCounter, updateCounterSetter] = useState(0);
-  const [showState, showStateSetter] = useStorageState("allgames-show", 10);
+  const [showState, showStateSetter] = useStorageState("1es-show", 10);
   const [activeImgModal, activeImgModalSetter] = useState("");
   const [expandedPara, expandedParaSetter] = useState([]);
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
@@ -194,7 +194,7 @@ function Explore(props) {
     gamesSetter([...metas]);
   }, []);
 
-  const toggleStar = async (game) => {
+  const toggleStar = useCallback(async (game) => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
       const res = await fetch(API_ENDPOINT_AUTH, {
@@ -235,7 +235,7 @@ function Explore(props) {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [counts, globalMe, globalMeSetter]);
 
   const handleNewChallenge = async (challenge) => {
     try {
@@ -296,13 +296,22 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+            ? true
+            : false,
           score1w: found1w === undefined ? 0 : found1w.score,
           score1m: found1m === undefined ? 0 : found1m.score,
           score6m: found6m === undefined ? 0 : found6m.score,
           score1y: found1y === undefined ? 0 : found1y.score,
         };
       }),
-    [t, mvTimes, games]
+    [t, mvTimes, games, globalMe]
   );
 
   const dataHotPlayers = useMemo(
@@ -340,13 +349,22 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+            ? true
+            : false,
           score1w: found1w === undefined ? 0 : found1w.score,
           score1m: found1m === undefined ? 0 : found1m.score,
           score6m: found6m === undefined ? 0 : found6m.score,
           score1y: found1y === undefined ? 0 : found1y.score,
         };
       }),
-    [t, mvTimes, games]
+    [t, mvTimes, games, globalMe]
   );
 
   const dataPlayersSum = useMemo(
@@ -392,13 +410,22 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+            ? true
+            : false,
           score1w: found1w === undefined ? 0 : found1w.score,
           score1m: found1m === undefined ? 0 : found1m.score,
           score6m: found6m === undefined ? 0 : found6m.score,
           score1y: found1y === undefined ? 0 : found1y.score,
         };
       }),
-    [t, mvTimes, games]
+    [t, mvTimes, games, globalMe]
   );
 
   const dataNewest = useMemo(
@@ -432,10 +459,19 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+            ? true
+            : false,
           dateAdded: info.dateAdded,
         };
       }),
-    [t, games]
+    [t, games, globalMe]
   );
 
   const dataStars = useMemo(
@@ -469,10 +505,19 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+            ? true
+            : false,
           stars: counts !== null ? counts[metaGame]?.stars || 0 : 0,
         };
       }),
-    [t, games, counts]
+    [t, games, counts, globalMe]
   );
 
   const dataHindex = useMemo(
@@ -513,10 +558,19 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+            ? true
+            : false,
           hindex,
         };
       }),
-    [t, games, summary]
+    [t, games, summary, globalMe]
   );
 
   const dataCompleted = useMemo(
@@ -561,10 +615,19 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+            ? true
+            : false,
           games: gamesper,
         };
       }),
-    [t, games, counts]
+    [t, games, counts, globalMe]
   );
 
   const dataCompletedRecent = useMemo(
@@ -609,15 +672,45 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+            ? true
+            : false,
           games: gamesper,
         };
       }),
-    [t, games, summary]
+    [t, games, summary, globalMe]
   );
 
   const columnHelper = createColumnHelper();
   const columnsHot = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -727,11 +820,32 @@ function Explore(props) {
         cell: (props) => (props.getValue() / 365).toFixed(2),
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const columnsSum = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -837,11 +951,32 @@ function Explore(props) {
         header: "1 year",
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const columnsStars = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -938,11 +1073,32 @@ function Explore(props) {
         header: "Stars",
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const columnsNewest = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -1040,11 +1196,32 @@ function Explore(props) {
         sortingFn: "datetime",
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const columnsHindex = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -1141,11 +1318,32 @@ function Explore(props) {
         header: "h-index",
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const columnsCompleted = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -1243,7 +1441,7 @@ function Explore(props) {
         cell: (props) => props.getValue().toFixed(2),
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const handleSelChange = useCallback(
@@ -1312,14 +1510,16 @@ function Explore(props) {
       columnsHindex,
       dataPlayersSum,
       columnsSum,
+      dataNewest,
+      columnsNewest,
+      selectedSetter,
     ]
   );
 
   useEffect(() => {
-    let sel = "all";
-    handleSelChange(sel);
+    handleSelChange(selected);
     // leaving handleSelChange out of the dep array because it causes an infinite loop
-  }, []);
+  }, [selected]);
 
   const table = useReactTable({
     data: selData,
@@ -1495,7 +1695,7 @@ function Explore(props) {
               <div className="select">
                 <select onChange={(e) => handleSelChange(e.target.value)}>
                   {[...titles.entries()].map(([key, title]) => {
-                    return <option value={key}>{title}</option>;
+                    return <option value={key} selected={selected === key}>{title}</option>;
                   })}
                 </select>
               </div>
