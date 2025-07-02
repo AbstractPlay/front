@@ -671,7 +671,11 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
           <div className="level-item field has-addons is-centered">
             <div className="control">
               <button
-                className={gridView ? "button is-small apButtonNeutral" : "button is-small apButton"}
+                className={
+                  gridView
+                    ? "button is-small apButtonNeutral"
+                    : "button is-small apButton"
+                }
                 onClick={() => gridViewSetter(false)}
               >
                 <span className="icon is-small">
@@ -682,7 +686,11 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
             </div>
             <div className="control">
               <button
-                className={gridView ? "button is-small apButton" : "button is-small apButtonNeutral"}
+                className={
+                  gridView
+                    ? "button is-small apButton"
+                    : "button is-small apButtonNeutral"
+                }
                 onClick={() => gridViewSetter(true)}
               >
                 <span className="icon is-small">
@@ -704,7 +712,9 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
       </div>
       <div className="container">
         {tableNavigation}
-        <table className={gridView ? "table apTable gameGrid" : "table apTable"}>
+        <table
+          className={gridView ? "table apTable gameGrid" : "table apTable"}
+        >
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="stickyHeader">
@@ -814,7 +824,7 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
                                     </>
                                   ),
                                 null
-                            )}
+                              )}
                           </>
                         )}
                       </>

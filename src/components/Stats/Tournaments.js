@@ -12,7 +12,9 @@ function Tournaments({ nav }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        var url = new URL("https://records.abstractplay.com/tournament-summary.json");
+        var url = new URL(
+          "https://records.abstractplay.com/tournament-summary.json"
+        );
         const res = await fetch(url);
         const result = await res.json();
         summarySetter(result);
@@ -25,28 +27,31 @@ function Tournaments({ nav }) {
 
   const data = useMemo(
     () =>
-      summary === null ? [] :
-      summary
-        .map(({ player, count, won, t50, scoreSum, scoreAvg, scoreMed }) => {
-          let name = "UNKNOWN";
-          const user = userNames.find((u) => u.id === player);
-          if (user !== undefined) {
-            name = user.name;
-          }
-          return {
-            userid: player,
-            name,
-            count,
-            won,
-            winrate: won / count,
-            t50,
-            t50rate: t50 / count,
-            scoreSum,
-            scoreAvg,
-            scoreMed,
-          };
-        })
-        .sort((a, b) => b.won - a.won),
+      summary === null
+        ? []
+        : summary
+            .map(
+              ({ player, count, won, t50, scoreSum, scoreAvg, scoreMed }) => {
+                let name = "UNKNOWN";
+                const user = userNames.find((u) => u.id === player);
+                if (user !== undefined) {
+                  name = user.name;
+                }
+                return {
+                  userid: player,
+                  name,
+                  count,
+                  won,
+                  winrate: won / count,
+                  t50,
+                  t50rate: t50 / count,
+                  scoreSum,
+                  scoreAvg,
+                  scoreMed,
+                };
+              }
+            )
+            .sort((a, b) => b.won - a.won),
     [summary, userNames]
   );
 
@@ -74,14 +79,26 @@ function Tournaments({ nav }) {
       }),
       columnHelper.accessor("winrate", {
         header: "Rate",
-        cell: (props) => props.getValue().toLocaleString(undefined,{style: 'percent', minimumFractionDigits:2})
+        cell: (props) =>
+          props
+            .getValue()
+            .toLocaleString(undefined, {
+              style: "percent",
+              minimumFractionDigits: 2,
+            }),
       }),
       columnHelper.accessor("t50", {
         header: "Top half",
       }),
       columnHelper.accessor("t50rate", {
         header: "Rate",
-        cell: (props) => props.getValue().toLocaleString(undefined,{style: 'percent', minimumFractionDigits:2})
+        cell: (props) =>
+          props
+            .getValue()
+            .toLocaleString(undefined, {
+              style: "percent",
+              minimumFractionDigits: 2,
+            }),
       }),
       columnHelper.accessor("scoreSum", {
         header: "Total score",

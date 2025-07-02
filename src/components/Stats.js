@@ -86,7 +86,7 @@ const explanations = [
   [
     "tourneyStats",
     `Shows each player who has participated in automated tournaments and their summary stats, including number of wins, number of top 50% finishes, and score. Your score is the sum of points received in each tournament. Points are awarded out of 100, based on your placement: first place gets 100 points, and last place gets none.`,
-  ]
+  ],
 ];
 
 function Stats(props) {

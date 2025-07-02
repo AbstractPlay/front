@@ -36,7 +36,7 @@ function History({ handleChallenge }) {
           }
           if (meta === undefined) {
             meta = [...gameinfo.entries()].find(
-                ([, info]) => info.name === gameName
+              ([, info]) => info.name === gameName
             )[0];
           }
           let winner = undefined;

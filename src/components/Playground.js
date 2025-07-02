@@ -750,23 +750,23 @@ function processNewMove(
 
 const populateChecked = (gameRef, engineRef, t, setter) => {
   setter("");
-//   if (gameRef.current?.canCheck) {
-//     const inCheckArr = engineRef.current.inCheck();
-//     if (inCheckArr.length > 0) {
-//       let newstr = "";
-//       for (const n of inCheckArr) {
-//         newstr +=
-//           "<p>" +
-//           t("InCheck", { player: gameRef.current.players[n - 1].name }) +
-//           "</p>";
-//       }
-//       setter(newstr);
-//     } else {
-//       setter("");
-//     }
-//   } else {
-//     setter("");
-//   }
+  //   if (gameRef.current?.canCheck) {
+  //     const inCheckArr = engineRef.current.inCheck();
+  //     if (inCheckArr.length > 0) {
+  //       let newstr = "";
+  //       for (const n of inCheckArr) {
+  //         newstr +=
+  //           "<p>" +
+  //           t("InCheck", { player: gameRef.current.players[n - 1].name }) +
+  //           "</p>";
+  //       }
+  //       setter(newstr);
+  //     } else {
+  //       setter("");
+  //     }
+  //   } else {
+  //     setter("");
+  //   }
 };
 
 function Playground(props) {
