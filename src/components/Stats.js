@@ -11,6 +11,7 @@ import NumPlays from "./Stats/NumPlays";
 import PlayerStats from "./Stats/PlayerStats";
 import GameStats from "./Stats/GameStats";
 import SiteStats from "./Stats/SiteStats";
+import Tournaments from "./Stats/Tournaments";
 
 const daysBetween = (startDate, endDate) => {
   // The number of milliseconds in all UTC days (no DST)
@@ -53,6 +54,7 @@ const modules = [
   ["numPlays", NumPlays],
   ["playerStats", PlayerStats],
   ["gameStats", GameStats],
+  ["tourneyStats", Tournaments],
   ["siteStats", SiteStats],
 ];
 // [code, markdown]
@@ -80,6 +82,10 @@ const explanations = [
   [
     "gameStats",
     `This table shows each game and variant combination along with the number of recorded games, the average length of the game (number of moves), the median length, and the rate of first-player wins. **The first-player win stats should be treated with care!** The sample size is small and biased. There are many confounding factors that could explain an extreme rate. Note that the rate completely ignores whether the pie rule was invoked. This is a measure of how often the first player (regardless of how many times the person sitting in that chair may change) wins the game. Draws are counted as half a win for the first player (so a game played three times with a win, a loss, and a draw would have a first-player win percentage of 50%).`,
+  ],
+  [
+    "tourneyStats",
+    `Shows each player who has participated in automated tournaments and their summary stats, including number of wins, number of top 50% finishes, and score. Your score is the sum of points received in each tournament. Points are awarded out of 100, based on your placement: first place gets 100 points, and last place gets none.`,
   ],
 ];
 

@@ -39,16 +39,17 @@ function Explore(props) {
   const [counts, countsSetter] = useState(null);
   const [users, usersSetter] = useState(null);
   const [summary, summarySetter] = useState(null);
-  const [selected, selectedSetter] = useState("all");
+  const [selected, selectedSetter] = useStorageState("selected-module", "all");
   const [mvTimes, mvTimesSetter] = useState(null);
   const [selData, selDataSetter] = useState([]);
   const [selCol, selColSetter] = useState([]);
   const [updateCounter, updateCounterSetter] = useState(0);
-  const [showState, showStateSetter] = useStorageState("allgames-show", 10);
+  const [showState, showStateSetter] = useStorageState("1es-show", 10);
   const [activeImgModal, activeImgModalSetter] = useState("");
   const [expandedPara, expandedParaSetter] = useState([]);
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
   const [columnFilters, setColumnFilters] = useState([]);
+  const [gridView, gridViewSetter] = useStorageState("grid-view", false);
   const { metaGame } = useParams();
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
@@ -193,48 +194,55 @@ function Explore(props) {
     gamesSetter([...metas]);
   }, []);
 
-  const toggleStar = async (game) => {
-    try {
-      const usr = await Auth.currentAuthenticatedUser();
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "toggle_star",
-          pars: {
-            metaGame: game,
+  const toggleStar = useCallback(
+    async (game) => {
+      try {
+        const usr = await Auth.currentAuthenticatedUser();
+        const res = await fetch(API_ENDPOINT_AUTH, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
           },
-        }),
-      });
-      if (res.status !== 200) {
-        const result = await res.json();
-        console.log(
-          `An error occurred while saving toggling a star:\n${result}`
-        );
-      } else {
-        const result = await res.json();
-        const newMe = JSON.parse(JSON.stringify(globalMe));
-        newMe.stars = JSON.parse(result.body);
-        globalMeSetter(newMe);
-        // update counts locally
-        const newcounts = JSON.parse(JSON.stringify(counts));
-        if (newMe !== null && "stars" in newMe && Array.isArray(newMe.stars)) {
-          if (newMe.stars.includes(game)) {
-            newcounts[game].stars++;
-          } else {
-            newcounts[game].stars--;
+          body: JSON.stringify({
+            query: "toggle_star",
+            pars: {
+              metaGame: game,
+            },
+          }),
+        });
+        if (res.status !== 200) {
+          const result = await res.json();
+          console.log(
+            `An error occurred while saving toggling a star:\n${result}`
+          );
+        } else {
+          const result = await res.json();
+          const newMe = JSON.parse(JSON.stringify(globalMe));
+          newMe.stars = JSON.parse(result.body);
+          globalMeSetter(newMe);
+          // update counts locally
+          const newcounts = JSON.parse(JSON.stringify(counts));
+          if (
+            newMe !== null &&
+            "stars" in newMe &&
+            Array.isArray(newMe.stars)
+          ) {
+            if (newMe.stars.includes(game)) {
+              newcounts[game].stars++;
+            } else {
+              newcounts[game].stars--;
+            }
           }
+          countsSetter(newcounts);
         }
-        countsSetter(newcounts);
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    },
+    [counts, globalMe, globalMeSetter]
+  );
 
   const handleNewChallenge = async (challenge) => {
     try {
@@ -295,13 +303,22 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+              ? true
+              : false,
           score1w: found1w === undefined ? 0 : found1w.score,
           score1m: found1m === undefined ? 0 : found1m.score,
           score6m: found6m === undefined ? 0 : found6m.score,
           score1y: found1y === undefined ? 0 : found1y.score,
         };
       }),
-    [t, mvTimes, games]
+    [t, mvTimes, games, globalMe]
   );
 
   const dataHotPlayers = useMemo(
@@ -339,13 +356,22 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+              ? true
+              : false,
           score1w: found1w === undefined ? 0 : found1w.score,
           score1m: found1m === undefined ? 0 : found1m.score,
           score6m: found6m === undefined ? 0 : found6m.score,
           score1y: found1y === undefined ? 0 : found1y.score,
         };
       }),
-    [t, mvTimes, games]
+    [t, mvTimes, games, globalMe]
   );
 
   const dataPlayersSum = useMemo(
@@ -391,13 +417,22 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+              ? true
+              : false,
           score1w: found1w === undefined ? 0 : found1w.score,
           score1m: found1m === undefined ? 0 : found1m.score,
           score6m: found6m === undefined ? 0 : found6m.score,
           score1y: found1y === undefined ? 0 : found1y.score,
         };
       }),
-    [t, mvTimes, games]
+    [t, mvTimes, games, globalMe]
   );
 
   const dataNewest = useMemo(
@@ -431,10 +466,19 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+              ? true
+              : false,
           dateAdded: info.dateAdded,
         };
       }),
-    [t, games]
+    [t, games, globalMe]
   );
 
   const dataStars = useMemo(
@@ -468,10 +512,19 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+              ? true
+              : false,
           stars: counts !== null ? counts[metaGame]?.stars || 0 : 0,
         };
       }),
-    [t, games, counts]
+    [t, games, counts, globalMe]
   );
 
   const dataHindex = useMemo(
@@ -512,10 +565,19 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+              ? true
+              : false,
           hindex,
         };
       }),
-    [t, games, summary]
+    [t, games, summary, globalMe]
   );
 
   const dataCompleted = useMemo(
@@ -560,10 +622,19 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+              ? true
+              : false,
           games: gamesper,
         };
       }),
-    [t, games, counts]
+    [t, games, counts, globalMe]
   );
 
   const dataCompletedRecent = useMemo(
@@ -608,15 +679,45 @@ function Explore(props) {
               : [],
           description: gameEngine.description(),
           tags,
+          starred:
+            globalMe !== null &&
+            "stars" in globalMe &&
+            globalMe.stars !== undefined &&
+            globalMe.stars !== null &&
+            Array.isArray(globalMe.stars) &&
+            globalMe.stars.includes(metaGame)
+              ? true
+              : false,
           games: gamesper,
         };
       }),
-    [t, games, summary]
+    [t, games, summary, globalMe]
   );
 
   const columnHelper = createColumnHelper();
   const columnsHot = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -726,11 +827,32 @@ function Explore(props) {
         cell: (props) => (props.getValue() / 365).toFixed(2),
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const columnsSum = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -836,11 +958,32 @@ function Explore(props) {
         header: "1 year",
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const columnsStars = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -937,11 +1080,32 @@ function Explore(props) {
         header: "Stars",
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const columnsNewest = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -1039,11 +1203,32 @@ function Explore(props) {
         sortingFn: "datetime",
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const columnsHindex = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -1140,11 +1325,32 @@ function Explore(props) {
         header: "h-index",
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const columnsCompleted = useMemo(
     () => [
+      columnHelper.display({
+        id: "toggleStar",
+        cell: (props) => (
+          <div className="control">
+            <div
+              className="starContainer"
+              onClick={() => toggleStar(props.row.original.id)}
+            >
+              {props.row.original.starred ? (
+                <span className="icon glowingStar">
+                  <i className="fa fa-star"></i>
+                </span>
+              ) : (
+                <span className="icon">
+                  <i className="fa fa-star-o"></i>
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+      }),
       columnHelper.accessor("gameName", {
         header: "Game",
         cell: (props) => (
@@ -1242,7 +1448,7 @@ function Explore(props) {
         cell: (props) => props.getValue().toFixed(2),
       }),
     ],
-    [columnHelper, expandedPara, togglePara]
+    [columnHelper, expandedPara, togglePara, toggleStar]
   );
 
   const handleSelChange = useCallback(
@@ -1311,14 +1517,17 @@ function Explore(props) {
       columnsHindex,
       dataPlayersSum,
       columnsSum,
+      dataNewest,
+      columnsNewest,
+      selectedSetter,
     ]
   );
 
   useEffect(() => {
-    let sel = "all";
-    handleSelChange(sel);
+    handleSelChange(selected);
     // leaving handleSelChange out of the dep array because it causes an infinite loop
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected, expandedPara, counts]);
 
   const table = useReactTable({
     data: selData,
@@ -1332,7 +1541,7 @@ function Explore(props) {
     state: {
       sorting,
       columnVisibility: {
-        toggleStar: globalMe !== null,
+        toggleStar: globalMe !== null && !gridView,
         actions: globalMe !== null,
       },
       columnFilters,
@@ -1431,6 +1640,38 @@ function Explore(props) {
               </div>
             </div>
           </div>
+          <div className="level-item field has-addons is-centered">
+            <div className="control">
+              <button
+                className={
+                  gridView
+                    ? "button is-small apButtonNeutral"
+                    : "button is-small apButton"
+                }
+                onClick={() => gridViewSetter(false)}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-th-list"></i>
+                </span>
+                <span>Table</span>
+              </button>
+            </div>
+            <div className="control">
+              <button
+                className={
+                  gridView
+                    ? "button is-small apButton"
+                    : "button is-small apButtonNeutral"
+                }
+                onClick={() => gridViewSetter(true)}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-th-large"></i>
+                </span>
+                <span>Grid</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>
@@ -1470,7 +1711,11 @@ function Explore(props) {
               <div className="select">
                 <select onChange={(e) => handleSelChange(e.target.value)}>
                   {[...titles.entries()].map(([key, title]) => {
-                    return <option value={key}>{title}</option>;
+                    return (
+                      <option value={key} selected={selected === key}>
+                        {title}
+                      </option>
+                    );
                   })}
                 </select>
               </div>
@@ -1499,7 +1744,11 @@ function Explore(props) {
               </ReactMarkdown>
               <div className="container">
                 {tableNavigation}
-                <table className="table apTable">
+                <table
+                  className={
+                    gridView ? "table apTable gameGrid" : "table apTable"
+                  }
+                >
                   <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
                       <tr key={headerGroup.id} className="stickyHeader">

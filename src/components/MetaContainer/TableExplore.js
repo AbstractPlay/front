@@ -52,6 +52,7 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
   const [columnFilters, setColumnFilters] = useState([]);
   const [showState, showStateSetter] = useStorageState("allgames-show", 10);
   const [ddSelected, ddSelectedSetter] = useState("");
+  const [gridView, gridViewSetter] = useStorageState("grid-view", false);
   addResource(i18n.language);
 
   useEffect(() => {
@@ -568,7 +569,7 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
     state: {
       sorting,
       columnVisibility: {
-        toggleStar: globalMe !== null,
+        toggleStar: globalMe !== null && !gridView,
         actions: globalMe !== null,
       },
       columnFilters,
@@ -667,6 +668,38 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
               </div>
             </div>
           </div>
+          <div className="level-item field has-addons is-centered">
+            <div className="control">
+              <button
+                className={
+                  gridView
+                    ? "button is-small apButtonNeutral"
+                    : "button is-small apButton"
+                }
+                onClick={() => gridViewSetter(false)}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-th-list"></i>
+                </span>
+                <span>Table</span>
+              </button>
+            </div>
+            <div className="control">
+              <button
+                className={
+                  gridView
+                    ? "button is-small apButton"
+                    : "button is-small apButtonNeutral"
+                }
+                onClick={() => gridViewSetter(true)}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-th-large"></i>
+                </span>
+                <span>Grid</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>
@@ -679,7 +712,9 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
       </div>
       <div className="container">
         {tableNavigation}
-        <table className="table apTable">
+        <table
+          className={gridView ? "table apTable gameGrid" : "table apTable"}
+        >
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="stickyHeader">
