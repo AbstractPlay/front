@@ -41,7 +41,7 @@ const code2ele = new Map([
   ["opps", { component: Opponents, name: "Opponents" }],
   ["activity", { component: Activity, name: "Activity" }],
   ["timeouts", { component: Timeouts, name: "Timeouts" }],
-  ["response", { component: Response, name: "Response time" }],
+  ["response", { component: Response, name: "Response Time" }],
   ["tournaments", { component: Tournaments, name: "Tournament History" }],
   ["history", { component: History, name: "Game History" }],
 ]);
