@@ -849,5 +849,6 @@
     "NextGameLast": "Перегляд останньої гри",
     "NextGameNone": "Назад до панелі інструментів",
     "NotifyLabel-tournamentStart": "Турнір розпочато (кожен випадок)",
-    "NotifyLabel-tournamentEnd": "Турнір завершено (усі випадки)"
+    "NotifyLabel-tournamentEnd": "Турнір завершено (усі випадки)",
+    "stats_module_tourneyStats": "Tournament statistics"
 }
