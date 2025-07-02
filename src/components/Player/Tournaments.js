@@ -67,6 +67,7 @@ function Tournaments() {
       }),
       columnHelper.accessor("place", {
         header: "Place",
+        invertSorting: true,
       }),
       columnHelper.accessor("participants", {
         header: "Participants",
