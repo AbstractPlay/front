@@ -713,6 +713,7 @@
     "stats_module_playerStats": "Player statistics",
     "stats_module_topPlayers": "Top players",
     "stats_module_siteStats": "Site statistics",
+    "stats_module_tourneyStats": "Tournament statistics",
     "Status": "Status",
     "Submit": "Submit",
     "SubmitMove": "Submit your move: {{move}}",

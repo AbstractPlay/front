@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -32,7 +32,7 @@ function History({ handleChallenge }) {
           let id = rec.header.site.gameid;
           let meta = undefined;
           if (id.includes("#")) {
-            [id, meta] = id.split("#");
+            [meta, id] = id.split("#");
           }
           if (meta === undefined) {
             meta = [...gameinfo.entries()].find(

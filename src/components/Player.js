@@ -24,11 +24,13 @@ import History from "./Player/History";
 import Response from "./Player/Response";
 import Coded from "./Player/Coded";
 import Designed from "./Player/Designed";
+import Tournaments from "./Player/Tournaments";
 
 export const ProfileContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
 export const AllRecsContext = createContext([null, () => []]);
 export const ResponsesContext = createContext([null, () => []]);
+export const TournamentContext = createContext([null, () => []]);
 
 const code2ele = new Map([
   ["stars", { component: Stars, name: "Starred Games" }],
@@ -40,6 +42,7 @@ const code2ele = new Map([
   ["activity", { component: Activity, name: "Activity" }],
   ["timeouts", { component: Timeouts, name: "Timeouts" }],
   ["response", { component: Response, name: "Response time" }],
+  ["tournaments", { component: Tournaments, name: "Tournament History" }],
   ["history", { component: History, name: "Game History" }],
 ]);
 
@@ -50,6 +53,7 @@ function Player() {
   const [user, userSetter] = useState(null);
   const [summary, summarySetter] = useState(null);
   const [allRecs, allRecsSetter] = useState([]);
+  const [tourneys, tourneysSetter] = useState([]);
   const [responses, responsesSetter] = useState([]);
   const [isCoder, setIsCoder] = useState(false);
   const [isDesigner, setIsDesigner] = useState(false);
@@ -63,6 +67,7 @@ function Player() {
     "activity",
     "timeouts",
     "response",
+    "tournaments",
     "history",
   ]);
 
@@ -118,6 +123,22 @@ function Player() {
         allRecsSetter(result);
       } catch (error) {
         allRecsSetter([]);
+      }
+    }
+    fetchData();
+  }, [user]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        var url = new URL(
+          `https://records.abstractplay.com/player/tournaments/${user.id}.json`
+        );
+        const res = await fetch(url);
+        const result = await res.json();
+        tourneysSetter(result);
+      } catch (error) {
+        tourneysSetter([]);
       }
     }
     fetchData();
@@ -282,6 +303,7 @@ function Player() {
           <ProfileContext.Provider value={[user, userSetter]}>
             <SummaryContext.Provider value={[summary, summarySetter]}>
               <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>
+              <TournamentContext.Provider value={[tourneys, tourneysSetter]}>
                 <ResponsesContext.Provider value={[responses, responsesSetter]}>
                   <div className="columns is-multiline">
                     {order.map((code) => {
@@ -289,6 +311,9 @@ function Player() {
                         return null;
                       }
                       if (code === "designed" && !isDesigner) {
+                        return null;
+                      }
+                      if (code === "tournaments" && tourneys.length === 0) {
                         return null;
                       }
                       const obj = code2ele.get(code);
@@ -353,6 +378,7 @@ function Player() {
                     })}
                   </div>
                 </ResponsesContext.Provider>
+              </TournamentContext.Provider>
               </AllRecsContext.Provider>
             </SummaryContext.Provider>
           </ProfileContext.Provider>

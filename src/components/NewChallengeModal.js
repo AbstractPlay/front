@@ -133,6 +133,9 @@ function NewChallengeModal(props) {
         } else {
           metaGameSetter(game);
           const info = gameinfo.get(game);
+          if (info === undefined) {
+            throw new Error(`Could not find game metadata for "${game}"`);
+          }
           const playercounts = info.playercounts;
           if (playercounts.length === 1) {
             setPlayerCount(playercounts[0]);
