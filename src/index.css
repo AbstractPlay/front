@@ -1025,6 +1025,7 @@ span.hardTime::after {
       text-decoration: none!important;
       font-family: Cardo, serif;
       text-align:center!important;
+      display: block;
   }
 
   table.gameGrid.apTable td:nth-child(2) {
