@@ -1526,7 +1526,7 @@ function Explore(props) {
   useEffect(() => {
     handleSelChange(selected);
     // leaving handleSelChange out of the dep array because it causes an infinite loop
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, expandedPara, counts]);
 
   const table = useReactTable({

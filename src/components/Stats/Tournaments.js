@@ -80,12 +80,10 @@ function Tournaments({ nav }) {
       columnHelper.accessor("winrate", {
         header: "Rate",
         cell: (props) =>
-          props
-            .getValue()
-            .toLocaleString(undefined, {
-              style: "percent",
-              minimumFractionDigits: 2,
-            }),
+          props.getValue().toLocaleString(undefined, {
+            style: "percent",
+            minimumFractionDigits: 2,
+          }),
       }),
       columnHelper.accessor("t50", {
         header: "Top half",
@@ -93,12 +91,10 @@ function Tournaments({ nav }) {
       columnHelper.accessor("t50rate", {
         header: "Rate",
         cell: (props) =>
-          props
-            .getValue()
-            .toLocaleString(undefined, {
-              style: "percent",
-              minimumFractionDigits: 2,
-            }),
+          props.getValue().toLocaleString(undefined, {
+            style: "percent",
+            minimumFractionDigits: 2,
+          }),
       }),
       columnHelper.accessor("scoreSum", {
         header: "Total score",
