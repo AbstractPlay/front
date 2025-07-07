@@ -2812,5 +2812,19 @@ The purpose of the automated tournaments is to keep a steady flow of games you e
       <guid isPermaLink="false">1383180257275678883</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>Two important frontend changes are now live:
+- Thanks to @mcd, the [Games page](https://play.abstractplay.com/games) and all its modules now have a grid view option. I do recognize that there are still issues with thumbnails in dark mode. Fundamental changes to the thumbnails are in the works. 
+- Tournament results are now summarized in two places:
+  - On the [general stats page](https://play.abstractplay.com/stats), there is now a &amp;quot;Tournament statistics&amp;quot; page. This lists all the users that have ever participated in an automated tournament and a summary of their performance, including number of tournaments, number of wins, number of top-50% finishes, and total, average, and median &amp;quot;score.&amp;quot; Your score for each tournament is a number between 0 and 100 that represents your performance (first place gets 100 points, last place gets 0).
+  - On individual player profile pages, if that player has participated in any tournaments, they are listed along with the player&amp;apos;s final result, number of participants, score received, and the date the tournament ended. There&amp;apos;s also a link here to the tournament results table.
+
+Please let us know if anything seems to be amiss. Further feedback and suggestions are welcome. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 02 Jul 2025 20:23:38 GMT</pubDate>
+      <guid isPermaLink="false">1390065405103706162</guid>
+    </item>
+    
   </channel>
 </rss>
