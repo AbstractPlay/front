@@ -3,7 +3,7 @@ import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { MeContext, ColourContext } from "../../pages/Skeleton";
 
-function renderGlyph(settings, glyph, id, player, globalMe, colourContext) {
+function renderGlyph(settings, glyph, id, player, globalMe, colourContext, game) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
@@ -12,6 +12,10 @@ function renderGlyph(settings, glyph, id, player, globalMe, colourContext) {
     const palette = globalMe.palettes.find((p) => p.name === settings.color);
     if (palette !== undefined) {
       options.colours = [...palette.colours];
+      if (globalMe?.settings?.all?.myColor && game.me > 0) {
+        const mycolor = options.colours[0];
+        options.colours = options.colours.slice(2).splice(game.me,0,mycolor);
+      }
     }
   }
   options.svgid = id;
@@ -94,7 +98,8 @@ function GameStatus(props) {
                                 "genericStatus-" + ind + "-" + i,
                                 v.colour,
                                 globalMe,
-                                colourContext
+                                colourContext,
+                                game
                               )
                             )}`}
                             alt={"color " + v.colour}
@@ -189,7 +194,8 @@ function GameStatus(props) {
                               "stack-" + index + "-" + j,
                               s.glyph.colour,
                               globalMe,
-                              colourContext
+                              colourContext,
+                              game
                             )
                           )}`}
                           alt=""
@@ -227,7 +233,8 @@ function GameStatus(props) {
                         "stack-" + j,
                         s.glyph.colour,
                         globalMe,
-                        colourContext
+                        colourContext,
+                        game
                       )
                     )}`}
                     alt=""
