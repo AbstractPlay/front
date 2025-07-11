@@ -1194,6 +1194,7 @@ function UserSettingsModal(props) {
               {currColours
                 .map((c, i) => (
                   <span
+                    className="shadowed"
                     style={{ backgroundColor: c }}
                     onClick={() => delColour(c)}
                   >
@@ -1273,6 +1274,7 @@ function UserSettingsModal(props) {
                     {colours
                       .map((c, i) => (
                         <span
+                          className="shadowed"
                           style={{ backgroundColor: c }}
                           onClick={() => delColour(c)}
                         >
