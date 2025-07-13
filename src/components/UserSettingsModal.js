@@ -55,6 +55,7 @@ function UserSettingsModal(props) {
   );
   const [hideTour, hideTourSetter] = useState(!showPlayTour);
   const [hideSpoilers, hideSpoilersSetter] = useState(false);
+  const [myColor, myColorSetter] = useState(false);
   // palettes
   const [showPalette, showPaletteSetter] = useState(false);
   const [myPalettes, myPalettesSetter] = useState([]);
@@ -158,6 +159,11 @@ function UserSettingsModal(props) {
         hideSpoilersSetter(globalMe.settings.all.hideSpoilers);
       } else {
         hideSpoilersSetter(false);
+      }
+      if (globalMe?.settings?.all?.myColor) {
+        myColorSetter(globalMe.settings.all.myColor);
+      } else {
+        myColorSetter(false);
       }
       if (globalMe?.country !== undefined) {
         countrySetter(globalMe.country);
@@ -322,6 +328,14 @@ function UserSettingsModal(props) {
     if (newSettings.all === undefined) newSettings.all = {};
     newSettings.all.hideSpoilers = !hideSpoilers;
     hideSpoilersSetter(!hideSpoilers);
+    handleSettingsChange(newSettings);
+  };
+
+  const handleMyColorChange = async () => {
+    const newSettings = cloneDeep(globalMe.settings);
+    if (newSettings.all === undefined) newSettings.all = {};
+    newSettings.all.myColor = !myColor;
+    myColorSetter(!myColor);
     handleSettingsChange(newSettings);
   };
 
@@ -1049,6 +1063,23 @@ function UserSettingsModal(props) {
             </div>
           </div>
 
+          {/********************* use my player color *********************/}
+          <div className="field" key="myColor">
+            <div className="control">
+              <label className="checkbox is-small">
+                <input
+                  type="checkbox"
+                  checked={myColor}
+                  onChange={handleMyColorChange}
+                />
+                {t("MyColor")}
+              </label>
+            </div>
+            <p class="help">
+              Also requires setting up and applying a custom palette.
+            </p>
+          </div>
+
           {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above
         ******************** Language *********************
         <div className="userSettingsLabelDiv">
@@ -1124,17 +1155,20 @@ function UserSettingsModal(props) {
         <div className="content">
           <p>
             Palettes are lists of colours you want the front end to use when
-            generating game boards. Once defined, you can then apply them to
-            specific games. You must provide at least two colours, four is wise,
-            and you can provide up to ten.
+            generating game boards.  You must provide at least two colours,
+            four is wise, and you can provide up to ten.  The first colour of
+            a palette will be your personal player colour, if you have checked
+            that option, or the first player's colour, in most cases.
           </p>
           <p>
-            These palettes will <em>not</em> be visible to your fellow players.
-            These will only affect <em>your</em> experience.
+            Once defined, you can apply a palette to some or all supported games
+            by clicking the gear icon that appears below the game board.
+            Your palettes will <em>not</em> be visible to your fellow players.
+            They will only affect <em>your</em> experience.
           </p>
           <p>
-            Palettes won't necessarily work for all games. Some games have
-            hard-coded colours. If you run into any trouble, please{" "}
+            Palettes won't necessarily work for all games. Some games
+            have hard-coded colours. If you run into any trouble, please{" "}
             <a href="https://discord.abstractplay.com">join us on Discord</a>{" "}
             and let us know.
           </p>
@@ -1160,6 +1194,7 @@ function UserSettingsModal(props) {
               {currColours
                 .map((c, i) => (
                   <span
+                    className="shadowed"
                     style={{ backgroundColor: c }}
                     onClick={() => delColour(c)}
                   >
@@ -1239,6 +1274,7 @@ function UserSettingsModal(props) {
                     {colours
                       .map((c, i) => (
                         <span
+                          className="shadowed"
                           style={{ backgroundColor: c }}
                           onClick={() => delColour(c)}
                         >

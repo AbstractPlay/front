@@ -1053,6 +1053,14 @@ span.hardTime::after {
       display: none;
   }
 
+  /* text outlining for palette colors in modal */
+  span.shadowed {
+      text-shadow: -1px -1px 0 --main-bg-color, 1px -1px 0 --main-bg-color, -1px 1px 0 --main-bg-color, 1px 1px 0 --main-bg-color;
+      display: inline-block;
+      white-space: nowrap;
+      padding: 2px 2px 0 2px;
+  }
+
   /* Game board customimzation for light/dark mode! */
   /* gridlines for cobweb boards */
   /* div._meta_agere g#gridlines circle:not([class]) {
