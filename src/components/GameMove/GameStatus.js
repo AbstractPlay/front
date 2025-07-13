@@ -3,7 +3,15 @@ import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { MeContext, ColourContext } from "../../pages/Skeleton";
 
-function renderGlyph(settings, glyph, id, player, globalMe, colourContext, game) {
+function renderGlyph(
+  settings,
+  glyph,
+  id,
+  player,
+  globalMe,
+  colourContext,
+  game
+) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
@@ -17,7 +25,7 @@ function renderGlyph(settings, glyph, id, player, globalMe, colourContext, game)
       }
       if (globalMe?.settings?.all?.myColor && game.me > 0) {
         const mycolor = options.colours[0];
-        options.colours = options.colours.slice(2).splice(game.me,0,mycolor);
+        options.colours = options.colours.slice(2).splice(game.me, 0, mycolor);
       }
     }
   }

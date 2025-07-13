@@ -299,7 +299,12 @@ function setupGame(
   while (true) {
     history.unshift(
       // state to be filled in on demand
-      new GameNode(null, tmpEngine.lastmove, null, tmpEngine.gameover ? "" : tmpEngine.currplayer - 1)
+      new GameNode(
+        null,
+        tmpEngine.lastmove,
+        null,
+        tmpEngine.gameover ? "" : tmpEngine.currplayer - 1
+      )
     );
     if (
       game0.gameOver &&
@@ -620,7 +625,7 @@ function setupColors(settings, game, globalMe, colourContext, node) {
       }
       if (globalMe?.settings?.all?.myColor && game.me > 0) {
         const mycolor = options.colours[0];
-        options.colours = options.colours.slice(2).splice(game.me,0,mycolor);
+        options.colours = options.colours.slice(2).splice(game.me, 0, mycolor);
       }
     }
   }
@@ -1626,9 +1631,7 @@ function GameMove(props) {
         if (explorationRef.current.nodes.length === exploration.length) {
           let ok = true;
           for (let i = 0; ok && i < explorationRef.current.nodes.length; i++) {
-            if (
-              exploration[i].move !== explorationRef.current.nodes[i].move
-            ) {
+            if (exploration[i].move !== explorationRef.current.nodes[i].move) {
               ok = false;
             }
           }
@@ -2100,7 +2103,11 @@ function GameMove(props) {
 
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
-    let node = getFocusNode(explorationRef.current.nodes, gameRef.current, focus);
+    let node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focus
+    );
     let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     let result;
     if (gameRef.current.simultaneous)
@@ -2177,7 +2184,11 @@ function GameMove(props) {
 
     function boardClick(row, col, piece) {
       // console.log(`boardClick:(${row},${col},${piece})`);
-      let node = getFocusNode(explorationRef.current.nodes, gameRef.current, focusRef.current);
+      let node = getFocusNode(
+        explorationRef.current.nodes,
+        gameRef.current,
+        focusRef.current
+      );
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous
         ? gameEngineTmp.handleClickSimultaneous(
@@ -2485,7 +2496,11 @@ function GameMove(props) {
   };
 
   const handleMark = (mark) => {
-    let node = getFocusNode(explorationRef.current.nodes, gameRef.current, focus);
+    let node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focus
+    );
     node.SetOutcome(mark);
     if (gameRef.current.gameOver)
       fixMoveOutcomes(explorationRef.current.nodes, focus.moveNumber);
@@ -2509,7 +2524,11 @@ function GameMove(props) {
       if (draw === "drawaccepted") {
         submitMove("", draw);
       } else {
-        let m = getFocusNode(explorationRef.current.nodes, gameRef.current, focus).move;
+        let m = getFocusNode(
+          explorationRef.current.nodes,
+          gameRef.current,
+          focus
+        ).move;
         submitMove(m, draw);
       }
     } else {
@@ -2639,7 +2658,11 @@ function GameMove(props) {
   const submitNodeComment = async (comment) => {
     // ignore blank comments
     if (comment.length > 0 && !/^\s*$/.test(comment)) {
-      const node = getFocusNode(explorationRef.current.nodes, gameRef.current, focus);
+      const node = getFocusNode(
+        explorationRef.current.nodes,
+        gameRef.current,
+        focus
+      );
       node.AddComment({ userId: globalMe.id, comment, timeStamp: Date.now() });
       saveExploration(
         explorationRef.current.nodes,
@@ -2671,7 +2694,11 @@ function GameMove(props) {
     if (drawMessage === "drawaccepted") {
       submitMove("", drawMessage);
     } else {
-      const m = getFocusNode(explorationRef.current.nodes, gameRef.current, focus).move;
+      const m = getFocusNode(
+        explorationRef.current.nodes,
+        gameRef.current,
+        focus
+      ).move;
       submitMove(m, drawMessage);
     }
   };
@@ -2687,7 +2714,10 @@ function GameMove(props) {
   };
 
   const handleDeleteExploration = () => {
-    if (getFocusNode(explorationRef.current.nodes, gameRef.current, focus).children.length > 0) {
+    if (
+      getFocusNode(explorationRef.current.nodes, gameRef.current, focus)
+        .children.length > 0
+    ) {
       // only confirm if non leaf node
       showDeleteSubtreeConfirmSetter(true);
     } else {
@@ -2701,7 +2731,11 @@ function GameMove(props) {
 
   const handleDeleteSubtreeConfirmed = async () => {
     showDeleteSubtreeConfirmSetter(false);
-    let node = getFocusNode(explorationRef.current.nodes, gameRef.current, focus);
+    let node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focus
+    );
     node.DeleteNode();
     let foc = cloneDeep(focus);
     foc.exPath.pop();
@@ -3007,7 +3041,11 @@ function GameMove(props) {
       if (game.simultaneous) {
         toMove = game.toMove; // will only be used at current position
       } else {
-        toMove = getFocusNode(explorationRef.current.nodes, gameRef.current, focus).toMove;
+        toMove = getFocusNode(
+          explorationRef.current.nodes,
+          gameRef.current,
+          focus
+        ).toMove;
       }
       if (game.gameOver && focus.canExplore) {
         exploringCompletedGame = true;
@@ -3658,15 +3696,22 @@ function GameMove(props) {
                 <Fragment>
                   <ClipboardCopy
                     copyText={
-                      getFocusNode(explorationRef.current.nodes, gameRef.current, focus).state
+                      getFocusNode(
+                        explorationRef.current.nodes,
+                        gameRef.current,
+                        focus
+                      ).state
                     }
                   />
                   <div className="field">
                     <div className="control">
                       <a
                         href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                          getFocusNode(explorationRef.current.nodes, gameRef.current, focus)
-                            .state
+                          getFocusNode(
+                            explorationRef.current.nodes,
+                            gameRef.current,
+                            focus
+                          ).state
                         )}`}
                         download="AbstractPlay-Debug.json"
                       >
@@ -3858,7 +3903,8 @@ function GameMove(props) {
         window.location.href
       }, game: ${JSON.stringify(game)}, state: ${
         explorationRef.current && focus
-          ? getFocusNode(explorationRef.current.nodes, gameRef.current, focus).state
+          ? getFocusNode(explorationRef.current.nodes, gameRef.current, focus)
+              .state
           : ""
       }`
     );

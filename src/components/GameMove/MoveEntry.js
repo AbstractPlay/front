@@ -266,7 +266,8 @@ function MoveEntry(props) {
         // Exploration in games that have finished is public. I don't think we want to allow people to delete big trees that other people might have put in
         // so only allow leaf nodes to be deleted?
         gameOverNonLeafNode =
-          game.gameOver && getFocusNode(exploration, game, focus).children.length > 0;
+          game.gameOver &&
+          getFocusNode(exploration, game, focus).children.length > 0;
       }
     } else {
       // game over

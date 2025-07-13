@@ -1155,19 +1155,22 @@ function UserSettingsModal(props) {
         <div className="content">
           <p>
             Palettes are lists of colours you want the front end to use when
-            generating game boards. You must provide at least two colours,
-            four is wise, but eight to twelve is ideal (you can create as many as you like, but very few games use a full palette). If you have checked the "Use my preferred player colour" option, then the first colour of
-            a palette will be your personal player colour, otherwise colours are simply applied to each player in order.
+            generating game boards. You must provide at least two colours, four
+            is wise, but eight to twelve is ideal (you can create as many as you
+            like, but very few games use a full palette). If you have checked
+            the "Use my preferred player colour" option, then the first colour
+            of a palette will be your personal player colour, otherwise colours
+            are simply applied to each player in order.
           </p>
           <p>
             Once defined, you can apply a palette to some or all supported games
-            by clicking the gear icon that appears below the game board.
-            Your palettes will <em>not</em> be visible to your fellow players.
-            They will only affect <em>your</em> experience.
+            by clicking the gear icon that appears below the game board. Your
+            palettes will <em>not</em> be visible to your fellow players. They
+            will only affect <em>your</em> experience.
           </p>
           <p>
-            Palettes won't necessarily work for all games. Some games
-            have hard-coded colours. If you run into any trouble, please{" "}
+            Palettes won't necessarily work for all games. Some games have
+            hard-coded colours. If you run into any trouble, please{" "}
             <a href="https://discord.abstractplay.com">join us on Discord</a>{" "}
             and let us know.
           </p>
