@@ -622,7 +622,7 @@ function UserSettingsModal(props) {
         }),
       });
       if (res.status !== 200) {
-        console.log(`An error occurred while saving push preferenes`);
+        console.log(`An error occurred while saving push preferences`);
       } else {
         const result = await res.json();
         console.log(result.body);
@@ -1076,7 +1076,7 @@ function UserSettingsModal(props) {
               </label>
             </div>
             <p class="help">
-              Also requires setting up and applying a custom palette.
+              Usually requires setting up and applying a custom palette.
             </p>
           </div>
 
@@ -1155,10 +1155,9 @@ function UserSettingsModal(props) {
         <div className="content">
           <p>
             Palettes are lists of colours you want the front end to use when
-            generating game boards.  You must provide at least two colours,
-            four is wise, and you can provide up to ten.  The first colour of
-            a palette will be your personal player colour, if you have checked
-            that option, or the first player's colour, in most cases.
+            generating game boards. You must provide at least two colours,
+            four is wise, but eight to twelve is ideal (you can create as many as you like, but very few games use a full palette). If you have checked the "Use my preferred player colour" option, then the first colour of
+            a palette will be your personal player colour, otherwise colours are simply applied to each player in order.
           </p>
           <p>
             Once defined, you can apply a palette to some or all supported games
