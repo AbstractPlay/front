@@ -298,13 +298,8 @@ function setupGame(
   const winner = tmpEngine.winner;
   while (true) {
     history.unshift(
-      new GameNode(
-        null,
-        tmpEngine.lastmove,
-        // Hard coding for Churn - churn-fix
-        game0.metaGame === "churn" ? null : tmpEngine.cheapSerialize(),
-        tmpEngine.gameover ? "" : tmpEngine.currplayer - 1
-      )
+      // state to be filled in on demand
+      new GameNode(null, tmpEngine.lastmove, null, tmpEngine.gameover ? "" : tmpEngine.currplayer - 1)
     );
     if (
       game0.gameOver &&
@@ -334,6 +329,18 @@ function setupGame(
   setURL(explorationRef.current.nodes, focus0, game0, navigate);
 }
 
+function getExplorationNode(exploration, game, moveNumber) {
+  let node = exploration[moveNumber];
+  // rehydrate state if need
+  if (node.state === null) {
+    let tmpEngine = GameFactory(game.metaGame, game.state);
+    tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber + 1);
+    tmpEngine.load();
+    node.state = tmpEngine.cheapSerialize();
+  }
+  return node;
+}
+
 function mergeExploration(
   game,
   exploration,
@@ -344,25 +351,11 @@ function mergeExploration(
 ) {
   const moveNumber = exploration.length;
   if (data[0] && data[0].move === moveNumber) {
-    let node = exploration[moveNumber - 1];
-    // rehydrate state if need - churn-fix
-    if (node.state === null) {
-      let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber + 1);
-      tmpEngine.load();
-      node.state = tmpEngine.cheapSerialize();
-    }
+    let node = getExplorationNode(exploration, game, moveNumber - 1);
     let gameEngine = GameFactory(game.metaGame, node.state);
     mergeMoveRecursive(gameEngine, node, data[0].tree);
   } else if (data[1] && data[1].move === moveNumber - 1) {
-    let node = exploration[moveNumber - 1];
-    // rehydrate state if need - churn-fix
-    if (node.state === null) {
-      let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber + 1);
-      tmpEngine.load();
-      node.state = tmpEngine.cheapSerialize();
-    }
+    let node = getExplorationNode(exploration, game, moveNumber - 1);
     let gameEngine = GameFactory(game.metaGame, node.state);
     // subtree of the move I chose
     const subtree1 = data[1].tree.find((e) =>
@@ -386,14 +379,7 @@ function mergeExploration(
     }
   } else if (data[2] && data[2].move === moveNumber - 2) {
     console.log("Merging 2 moves back");
-    let node = exploration[moveNumber - 2];
-    // rehydrate state if need - churn-fix
-    if (node.state === null) {
-      let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber);
-      tmpEngine.load();
-      node.state = tmpEngine.cheapSerialize();
-    }
+    let node = getExplorationNode(exploration, game, moveNumber - 2);
     let gameEngine = GameFactory(game.metaGame, node.state);
     // subtree of the move I chose
     const subtree1 = data[2].tree.find((e) =>
@@ -408,7 +394,7 @@ function mergeExploration(
       if (subtree2) {
         mergeMoveRecursive(
           gameEngine,
-          exploration[moveNumber - 1],
+          getExplorationNode(exploration, game, moveNumber - 1),
           subtree2.children
         );
         // save this subtree to the database at this move (we only fetch 2 moves back so this will get lost unless the player explores further)
@@ -431,14 +417,7 @@ function mergePublicExploration(game, exploration, data) {
     const version = m.version;
     const move = m.move;
     const tree = m.tree;
-    let node = exploration[move - 1];
-    // rehydrate state if need - churn-fix
-    if (node.state === null) {
-      let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, move + 1);
-      tmpEngine.load();
-      node.state = tmpEngine.cheapSerialize();
-    }
+    let node = getExplorationNode(exploration, game, move - 1);
     node.version = version;
     node.comment = m.tree.comment;
     let gameEngine = GameFactory(game.metaGame, node.state);
@@ -460,14 +439,7 @@ function mergePrivateExploration(
     const version = m.version;
     const move = m.move;
     const tree = m.tree;
-    let node = exploration[move - 1];
-    // rehydrate state if need - churn-fix
-    if (node.state === null) {
-      let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, move + 1);
-      tmpEngine.load();
-      node.state = tmpEngine.cheapSerialize();
-    }
+    let node = getExplorationNode(exploration, game, move - 1);
     if (version) node.version = version;
     let gameEngine = GameFactory(game.metaGame, node.state);
     const added = mergeMoveRecursive2(
@@ -529,15 +501,8 @@ function mergeExistingExploration(
   while (true) {
     let move = exploration[moveNum].move.toLowerCase().replace(/\s+/g, "");
     let subtree;
-    let node = exploration[moveNum - 1];
     if (useSameMove) {
-      // rehydrate state if need - churn-fix
-      if (node.state === null) {
-        let tmpEngine = GameFactory(game.metaGame, game.state);
-        tmpEngine.stack = tmpEngine.stack.slice(0, moveNum + 1);
-        tmpEngine.load();
-        node.state = tmpEngine.cheapSerialize();
-      }
+      let node = getExplorationNode(exploration, game, moveNum - 1);
       let gameEngine = GameFactory(game.metaGame, node.state);
       subtree = cur_exploration.children.find((e) =>
         gameEngine.sameMove(move, e.move)
@@ -734,14 +699,7 @@ async function saveExploration(
       const version = data.version;
       const move = data.sk;
       const tree = JSON.parse(data.tree);
-      let node = exploration[move - 1];
-      // rehydrate state if need - churn-fix
-      if (node.state === null) {
-        let tmpEngine = GameFactory(game.metaGame, game.state);
-        tmpEngine.stack = tmpEngine.stack.slice(0, move + 1);
-        tmpEngine.load();
-        node.state = tmpEngine.cheapSerialize();
-      }
+      let node = getExplorationNode(exploration, game, move - 1);
       node.version = version;
       if (tree.comment !== undefined)
         for (const comment of tree.comment) node.AddComment(comment);
@@ -788,14 +746,7 @@ function doView(
   settings,
   navigate
 ) {
-  let node = getFocusNode(exploration, focus);
-  // rehydrate state if need - churn-fix
-  if (node.state === null) {
-    let tmpEngine = GameFactory(game.metaGame, game.state);
-    tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber + 1);
-    tmpEngine.load();
-    node.state = tmpEngine.cheapSerialize();
-  }
+  let node = getFocusNode(exploration, game, focus);
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
   let partialMove = false;
   if (move.valid && move.complete < 1 && move.canrender === true)
@@ -844,7 +795,7 @@ function doView(
           node = node.children[pos];
         } else {
           newfocus = { moveNumber: newfocus.moveNumber + 1, exPath: [] };
-          node = getFocusNode(exploration, newfocus);
+          node = getFocusNode(exploration, game, newfocus);
         }
         m = moves[0];
         gameEngineTmp.move(m, {
@@ -946,7 +897,7 @@ function setURL(exploration, focus, game, navigate) {
         move: focus.moveNumber,
       }).toString();
     } else {
-      let node = getFocusNode(exploration, focus);
+      let node = getFocusNode(exploration, game, focus);
       newQueryString = new URLSearchParams({
         move: focus.moveNumber,
         nodeid: node.id,
@@ -956,8 +907,8 @@ function setURL(exploration, focus, game, navigate) {
   }
 }
 
-function getFocusNode(exp, foc) {
-  let curNode = exp[foc.moveNumber];
+function getFocusNode(exp, game, foc) {
+  let curNode = getExplorationNode(exp, game, foc.moveNumber);
   for (const p of foc.exPath) {
     curNode = curNode.children[p];
   }
@@ -970,7 +921,7 @@ function canExploreMove(game, exploration, focus) {
       (game.canExplore || (game.canSubmit && focus.exPath.length === 0)) && // exploring (beyond move input) is supported or it is my move and we are just looking at the current position
       exploration !== null &&
       focus.moveNumber === exploration.length - 1 && // we aren't looking at history
-      getFocusNode(exploration, focus).toMove !== "") || // game (at focus) isn't over
+      getFocusNode(exploration, game, focus).toMove !== "") || // game (at focus) isn't over
     (game.gameOver &&
       game.canExplore &&
       focus.moveNumber !== exploration.length - 1) // game is over and exploring is supported
@@ -1072,14 +1023,7 @@ function processNewMove(
     partialMoveRenderRef.current &&
     !newmove.move.startsWith(newmove.rendered)
   ) {
-    let node = getFocusNode(exploration, focus);
-    // rehydrate state if need - churn-fix
-    if (node.state === null) {
-      let tmpEngine = GameFactory(gameRef.metaGame, gameRef.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber + 1);
-      tmpEngine.load();
-      node.state = tmpEngine.cheapSerialize();
-    }
+    let node = getFocusNode(exploration, gameRef.current, focus);
     let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     partialMoveRenderRef.current = false;
     setStatus(gameEngineTmp, gameRef.current, false, "", statusRef.current);
@@ -1679,7 +1623,7 @@ function GameMove(props) {
           let ok = true;
           for (let i = 0; ok && i < explorationRef.current.nodes.length; i++) {
             if (
-              exploration[i].state !== explorationRef.current.nodes[i].state
+              exploration[i].move !== explorationRef.current.nodes[i].move
             ) {
               ok = false;
             }
@@ -2044,14 +1988,7 @@ function GameMove(props) {
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {
     // console.log("foc = ", foc);
-    let node = getFocusNode(explorationRef.current.nodes, foc);
-    // rehydrate state if need - churn-fix
-    if (node.state === null) {
-      let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, foc.moveNumber + 1);
-      tmpEngine.load();
-      node.state = tmpEngine.cheapSerialize();
-    }
+    let node = getFocusNode(explorationRef.current.nodes, game, foc);
     if (
       !(isExplorer(explorer, globalMe) && game.canExplore) &&
       foc.moveNumber === explorationRef.current.nodes.length - 1
@@ -2159,17 +2096,7 @@ function GameMove(props) {
 
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
-    let node = getFocusNode(explorationRef.current.nodes, focus);
-    // rehydrate state if need - churn-fix
-    if (node.state === null) {
-      let tmpEngine = GameFactory(
-        gameRef.current.metaGame,
-        gameRef.current.state
-      );
-      tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber + 1);
-      tmpEngine.load();
-      node.state = tmpEngine.cheapSerialize();
-    }
+    let node = getFocusNode(explorationRef.current.nodes, gameRef.current, focus);
     let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     let result;
     if (gameRef.current.simultaneous)
@@ -2246,20 +2173,7 @@ function GameMove(props) {
 
     function boardClick(row, col, piece) {
       // console.log(`boardClick:(${row},${col},${piece})`);
-      let node = getFocusNode(explorationRef.current.nodes, focusRef.current);
-      // rehydrate state if need - churn-fix
-      if (node.state === null) {
-        let tmpEngine = GameFactory(
-          gameRef.current.metaGame,
-          gameRef.current.state
-        );
-        tmpEngine.stack = tmpEngine.stack.slice(
-          0,
-          focusRef.current.moveNumber + 1
-        );
-        tmpEngine.load();
-        node.state = tmpEngine.cheapSerialize();
-      }
+      let node = getFocusNode(explorationRef.current.nodes, gameRef.current, focusRef.current);
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous
         ? gameEngineTmp.handleClickSimultaneous(
@@ -2567,7 +2481,7 @@ function GameMove(props) {
   };
 
   const handleMark = (mark) => {
-    let node = getFocusNode(explorationRef.current.nodes, focus);
+    let node = getFocusNode(explorationRef.current.nodes, gameRef.current, focus);
     node.SetOutcome(mark);
     if (gameRef.current.gameOver)
       fixMoveOutcomes(explorationRef.current.nodes, focus.moveNumber);
@@ -2591,7 +2505,7 @@ function GameMove(props) {
       if (draw === "drawaccepted") {
         submitMove("", draw);
       } else {
-        let m = getFocusNode(explorationRef.current.nodes, focus).move;
+        let m = getFocusNode(explorationRef.current.nodes, gameRef.current, focus).move;
         submitMove(m, draw);
       }
     } else {
@@ -2721,7 +2635,7 @@ function GameMove(props) {
   const submitNodeComment = async (comment) => {
     // ignore blank comments
     if (comment.length > 0 && !/^\s*$/.test(comment)) {
-      const node = getFocusNode(explorationRef.current.nodes, focus);
+      const node = getFocusNode(explorationRef.current.nodes, gameRef.current, focus);
       node.AddComment({ userId: globalMe.id, comment, timeStamp: Date.now() });
       saveExploration(
         explorationRef.current.nodes,
@@ -2753,7 +2667,7 @@ function GameMove(props) {
     if (drawMessage === "drawaccepted") {
       submitMove("", drawMessage);
     } else {
-      const m = getFocusNode(explorationRef.current.nodes, focus).move;
+      const m = getFocusNode(explorationRef.current.nodes, gameRef.current, focus).move;
       submitMove(m, drawMessage);
     }
   };
@@ -2769,7 +2683,7 @@ function GameMove(props) {
   };
 
   const handleDeleteExploration = () => {
-    if (getFocusNode(explorationRef.current.nodes, focus).children.length > 0) {
+    if (getFocusNode(explorationRef.current.nodes, gameRef.current, focus).children.length > 0) {
       // only confirm if non leaf node
       showDeleteSubtreeConfirmSetter(true);
     } else {
@@ -2783,7 +2697,7 @@ function GameMove(props) {
 
   const handleDeleteSubtreeConfirmed = async () => {
     showDeleteSubtreeConfirmSetter(false);
-    let node = getFocusNode(explorationRef.current.nodes, focus);
+    let node = getFocusNode(explorationRef.current.nodes, gameRef.current, focus);
     node.DeleteNode();
     let foc = cloneDeep(focus);
     foc.exPath.pop();
@@ -2823,6 +2737,10 @@ function GameMove(props) {
       injectedState !== null &&
       injectedState.length > 0
     ) {
+      // For those games that compress the state, we need to compress first, because we show the decomressed state to be copied.
+      let tmpEngine = GameFactory(metaGame, injectedState);
+      const injectedState2 = tmpEngine.serialize(); // NOT cheapSerialize!
+
       const usr = await Auth.currentAuthenticatedUser();
       try {
         let status;
@@ -2839,7 +2757,7 @@ function GameMove(props) {
               pars: {
                 id: gameID,
                 metaGame: metaGame,
-                newState: injectedState,
+                newState: injectedState2,
               },
             }),
           });
@@ -2877,7 +2795,7 @@ function GameMove(props) {
         errorSetter(true);
       }
 
-      gameRef.current.state = injectedState;
+      gameRef.current.state = injectedState2;
       showInjectSetter(false);
     }
   };
@@ -2901,14 +2819,7 @@ function GameMove(props) {
       !game.noMoves &&
       (game.canSubmit || (!game.simultaneous && game.numPlayers === 2))
     ) {
-      let node = getFocusNode(explorationRef.current.nodes, focus);
-      // rehydrate state if need - churn-fix
-      if (node.state === null) {
-        let tmpEngine = GameFactory(game.metaGame, game.state);
-        tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber + 1);
-        tmpEngine.load();
-        node.state = tmpEngine.cheapSerialize();
-      }
+      let node = getFocusNode(explorationRef.current.nodes, game, focus);
       const engine = GameFactory(game.metaGame, node.state);
       if (game.simultaneous) movesRef.current = engine.moves(game.me + 1);
       else movesRef.current = engine.moves();
@@ -3076,7 +2987,7 @@ function GameMove(props) {
     }
   };
 
-  const navigateToTop = (to: string) => {
+  const navigateToTop = (to) => {
     navigate(to, { replace: true });
     window.scrollTo(0, 0);
   };
@@ -3092,12 +3003,13 @@ function GameMove(props) {
       if (game.simultaneous) {
         toMove = game.toMove; // will only be used at current position
       } else {
-        toMove = getFocusNode(explorationRef.current.nodes, focus).toMove;
+        toMove = getFocusNode(explorationRef.current.nodes, gameRef.current, focus).toMove;
       }
       if (game.gameOver && focus.canExplore) {
         exploringCompletedGame = true;
         nodeComments = getFocusNode(
           explorationRef.current.nodes,
+          gameRef.current,
           focus
         ).comment;
       }
@@ -3742,14 +3654,14 @@ function GameMove(props) {
                 <Fragment>
                   <ClipboardCopy
                     copyText={
-                      getFocusNode(explorationRef.current.nodes, focus).state
+                      getFocusNode(explorationRef.current.nodes, gameRef.current, focus).state
                     }
                   />
                   <div className="field">
                     <div className="control">
                       <a
                         href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                          getFocusNode(explorationRef.current.nodes, focus)
+                          getFocusNode(explorationRef.current.nodes, gameRef.current, focus)
                             .state
                         )}`}
                         download="AbstractPlay-Debug.json"
@@ -3942,7 +3854,7 @@ function GameMove(props) {
         window.location.href
       }, game: ${JSON.stringify(game)}, state: ${
         explorationRef.current && focus
-          ? getFocusNode(explorationRef.current.nodes, focus).state
+          ? getFocusNode(explorationRef.current.nodes, gameRef.current, focus).state
           : ""
       }`
     );

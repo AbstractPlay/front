@@ -121,8 +121,14 @@ function MoveEntry(props) {
   const [inputValue, inputValueSetter] = useState(move.move);
   const [globalMe] = useContext(MeContext);
 
-  function getFocusNode(exp, foc) {
+  function getFocusNode(exp, game, foc) {
     let curNode = exp[foc.moveNumber];
+    if (curNode.state === null) {
+      let tmpEngine = GameFactory(game.metaGame, game.state);
+      tmpEngine.stack = tmpEngine.stack.slice(0, foc.moveNumber + 1);
+      tmpEngine.load();
+      curNode.state = tmpEngine.cheapSerialize();
+    }
     for (const p of foc.exPath) {
       curNode = curNode.children[p];
     }
@@ -260,18 +266,11 @@ function MoveEntry(props) {
         // Exploration in games that have finished is public. I don't think we want to allow people to delete big trees that other people might have put in
         // so only allow leaf nodes to be deleted?
         gameOverNonLeafNode =
-          game.gameOver && getFocusNode(exploration, focus).children.length > 0;
+          game.gameOver && getFocusNode(exploration, game, focus).children.length > 0;
       }
     } else {
       // game over
-      const node = getFocusNode(exploration, focus);
-      // rehydrate state if need - churn-fix
-      if (node.state === null) {
-        let tmpEngine = GameFactory(game.metaGame, game.state);
-        tmpEngine.stack = tmpEngine.stack.slice(0, focus.moveNumber + 1);
-        tmpEngine.load();
-        node.state = tmpEngine.cheapSerialize();
-      }
+      const node = getFocusNode(exploration, game, focus);
       const state = GameFactory(engine.metaGame, node.state);
       if (state.winner && state.winner.length > 0) {
         if (state.winner.length === 1) {
