@@ -850,5 +850,6 @@
     "NextGameNone": "Назад до панелі інструментів",
     "NotifyLabel-tournamentStart": "Турнір розпочато (кожен випадок)",
     "NotifyLabel-tournamentEnd": "Турнір завершено (усі випадки)",
-    "stats_module_tourneyStats": "Статистика турніру"
+    "stats_module_tourneyStats": "Статистика турніру",
+    "MyColor": "Використовувати мій бажаний колір гравця незалежно від порядку ходу"
 }
