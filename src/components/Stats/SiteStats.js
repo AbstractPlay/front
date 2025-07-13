@@ -9,7 +9,13 @@ const lstSummarize = (lst) => {
   if (lst.length === 0) {
     return undefined;
   }
-  const sorted = [...lst].sort((a, b) => a - b);
+  // drop the most recent (usually partial) week
+  let newLst = lst.slice(0, -1)
+  // now just keep the most recent 52 weeks
+  if (newLst.length > 52) {
+    newLst = newLst.slice(-52);
+  }
+  const sorted = [...newLst].sort((a, b) => a - b);
   const sum = sorted.reduce((acc, curr) => acc + curr, 0);
   const avg = sum / sorted.length;
   let median;
@@ -88,7 +94,7 @@ function SiteStats({ nav }) {
           </p>
           {summaryGames === null ? null : (
             <table>
-              <caption>Cumulative</caption>
+              <caption>Cumulative (past year)</caption>
               <thead>
                 <tr>
                   <th>Average</th>
@@ -150,7 +156,7 @@ function SiteStats({ nav }) {
           </p>
           {summaryPlayers === null ? null : (
             <table>
-              <caption>Cumulative</caption>
+              <caption>Cumulative (past year)</caption>
               <thead>
                 <tr>
                   <th>Average</th>
