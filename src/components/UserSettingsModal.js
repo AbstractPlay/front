@@ -1076,7 +1076,7 @@ function UserSettingsModal(props) {
               </label>
             </div>
             <p class="help">
-              Usually requires setting up and applying a custom palette.
+              Also requires setting up and applying a custom palette.
             </p>
           </div>
 
