@@ -624,8 +624,8 @@ function setupColors(settings, game, globalMe, colourContext, node) {
         options.colours.push("#fff");
       }
       if (globalMe?.settings?.all?.myColor && game.me > 0) {
-        const mycolor = options.colours[0];
-        options.colours = options.colours.slice(2).splice(game.me, 0, mycolor);
+        const mycolor = options.colours.shift();
+        options.colours.splice(game.me,0,mycolor);
       }
     }
   }
@@ -2283,10 +2283,8 @@ function GameMove(props) {
               options.colours.push("#fff");
             }
             if (globalMe?.settings?.all?.myColor && game.me > 0) {
-              const mycolor = options.colours[0];
-              options.colours = options.colours
-                .slice(2)
-                .splice(game.me, 0, mycolor);
+              const mycolor = options.colours.shift();
+              options.colours.splice(game.me,0,mycolor);
             }
           }
         }

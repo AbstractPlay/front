@@ -21,8 +21,8 @@ function renderGlyph(
     if (palette !== undefined) {
       options.colours = [...palette.colours];
       if (globalMe?.settings?.all?.myColor && game.me > 0) {
-        const mycolor = options.colours[0];
-        options.colours = options.colours.slice(2).splice(game.me, 0, mycolor);
+        const mycolor = options.colours.shift();
+        options.colours.splice(game.me,0,mycolor);
       }
     }
   }
