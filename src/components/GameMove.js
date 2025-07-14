@@ -1595,7 +1595,9 @@ function GameMove(props) {
           dbgameSetter(game0);
         }
       } catch (err) {
-        setError(`checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} and failed with error: ${err.message}`);
+        setError(
+          `checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} and failed with error: ${err.message}`
+        );
       }
     }
   }, []);
@@ -1780,14 +1782,20 @@ function GameMove(props) {
         console.log(JSON.parse(result.body));
         url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append("query", "report_problem");
-        url.searchParams.append("error", `Error reporting another error, status: ${status}, message: ${result.message}, body: ${result.body}`);
+        url.searchParams.append(
+          "error",
+          `Error reporting another error, status: ${status}, message: ${result.message}, body: ${result.body}`
+        );
         await fetch(url);
       }
     } catch (e) {
       // If we can't report the error, maybe the error is too big. Let's try to report one more time:
       url = new URL(API_ENDPOINT_OPEN);
       url.searchParams.append("query", "report_problem");
-      url.searchParams.append("error", `Error reporting another error: ${e.message}`);
+      url.searchParams.append(
+        "error",
+        `Error reporting another error: ${e.message}`
+      );
       await fetch(url);
       console.log(
         `Error auto-reporting another error!\nOriginal error: ${JSON.stringify(
@@ -2276,7 +2284,9 @@ function GameMove(props) {
             }
             if (globalMe?.settings?.all?.myColor && game.me > 0) {
               const mycolor = options.colours[0];
-              options.colours = options.colours.slice(2).splice(game.me,0,mycolor);
+              options.colours = options.colours
+                .slice(2)
+                .splice(game.me, 0, mycolor);
             }
           }
         }
@@ -2660,7 +2670,9 @@ function GameMove(props) {
         });
         const result = await res.json();
         if (result && result.statusCode && result.statusCode !== 200)
-          setError(`submit_comment failed, status: ${result.statusCode}, body: ${result.body}`);
+          setError(
+            `submit_comment failed, status: ${result.statusCode}, body: ${result.body}`
+          );
       } catch (err) {
         console.log(err);
         //setError(err.message);
