@@ -1061,6 +1061,21 @@ span.hardTime::after {
       padding: 2px 2px 0 2px;
   }
 
+  /* style text input for palettes */
+  #colorSelect input {
+      display: block;
+      box-sizing: border-box;
+      width: 6em;
+      margin: 20px 55px 0;
+      padding: 3px;
+      border: 1px solid #888;
+      border-radius: 3px;
+      background: var(--tag-background-color);
+      outline: none;
+      font-family: var(--bulma-family-code);
+      text-align: center;
+  }
+
   /* Game board customimzation for light/dark mode! */
   /* gridlines for cobweb boards */
   /* div._meta_agere g#gridlines circle:not([class]) {
