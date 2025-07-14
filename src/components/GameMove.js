@@ -698,7 +698,7 @@ async function saveExploration(
   });
   if (res.status !== 200) {
     const result = await res.json();
-    errorMessageRef.current = JSON.parse(result.body);
+    errorMessageRef.current = `save_exploration failed, status = ${res.status}, message: ${result.message}`;
     errorSetter(true);
   } else {
     const result = await res.json();
@@ -821,9 +821,9 @@ function doView(
     }
   } catch (err) {
     if (err.name === "UserFacingError") {
-      errorMessageRef.current = err.client;
+      errorMessageRef.current = `doView UserFacingError error with error ${err.client}`;
     } else {
-      errorMessageRef.current = err.message;
+      errorMessageRef.current = `doView error with error ${err.message}`;
     }
     errorSetter(true);
     return;
@@ -1452,7 +1452,7 @@ function GameMove(props) {
           status = res.status;
           if (status !== 200) {
             const result = await res.json();
-            errorMessageRef.current = JSON.parse(result.body);
+            errorMessageRef.current = `auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`;
             errorSetter(true);
             return;
           } else {
@@ -1469,7 +1469,7 @@ function GameMove(props) {
           status = res.status;
           if (status !== 200) {
             const result = await res.json();
-            errorMessageRef.current = result;
+            errorMessageRef.current = `no auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`;
             errorSetter(true);
             return;
           } else {
@@ -1497,10 +1497,10 @@ function GameMove(props) {
           }
         } else {
           if ("message" in data) {
-            errorMessageRef.current = data.message;
+            errorMessageRef.current = `get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, data.message: ${data.message}`;
             errorSetter(true);
           } else {
-            errorMessageRef.current = `An unspecified error occurred while trying to fetch the game: ${JSON.stringify(
+            errorMessageRef.current = `get_game, An unspecified error occurred while trying to fetch the game: ${JSON.stringify(
               data
             )}`;
             errorSetter(true);
@@ -1508,7 +1508,7 @@ function GameMove(props) {
         }
       } catch (error) {
         console.log(error);
-        errorMessageRef.current = error.message;
+        errorMessageRef.current = `get_game, error.message: ${error.message}`;
         errorSetter(true);
       }
     }
@@ -1595,7 +1595,7 @@ function GameMove(props) {
           dbgameSetter(game0);
         }
       } catch (err) {
-        setError(err.message);
+        setError(`checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} and failed with error: ${err.message}`);
       }
     }
   }, []);
@@ -1778,8 +1778,17 @@ function GameMove(props) {
       if (status !== 200) {
         const result = await res.json();
         console.log(JSON.parse(result.body));
+        url = new URL(API_ENDPOINT_OPEN);
+        url.searchParams.append("query", "report_problem");
+        url.searchParams.append("error", `Error reporting another error, status: ${status}, message: ${result.message}, body: ${result.body}`);
+        await fetch(url);
       }
     } catch (e) {
+      // If we can't report the error, maybe the error is too big. Let's try to report one more time:
+      url = new URL(API_ENDPOINT_OPEN);
+      url.searchParams.append("query", "report_problem");
+      url.searchParams.append("error", `Error reporting another error: ${e.message}`);
+      await fetch(url);
       console.log(
         `Error auto-reporting another error!\nOriginal error: ${JSON.stringify(
           error
@@ -1816,7 +1825,7 @@ function GameMove(props) {
           });
           const result = await res.json();
           if (result && result.statusCode && result.statusCode !== 200)
-            setError(JSON.parse(result.body));
+            setError(`update_note failed with: ${result.body}`);
         } catch (err) {
           console.log(err);
           //setError(err.message);
@@ -1858,7 +1867,7 @@ function GameMove(props) {
           status = res.status;
           if (status !== 200) {
             const result = await res.json();
-            errorMessageRef.current = JSON.parse(result.body);
+            errorMessageRef.current = `auth get_exploration failed, game = ${gameID}, move = ${explorationRef.current.nodes.length}, status = ${status}, message: ${result.message}, body: ${result.body}`;
             errorSetter(true);
           } else {
             const result = await res.json();
@@ -1882,7 +1891,7 @@ function GameMove(props) {
         }
       } catch (error) {
         console.log(error);
-        errorMessageRef.current = error.message;
+        errorMessageRef.current = `get_exploration, error.message: ${error.message}`;
         errorSetter(true);
       }
     }
@@ -1896,7 +1905,7 @@ function GameMove(props) {
       const res = await fetch(url);
       if (res.status !== 200) {
         const result = await res.json();
-        errorMessageRef.current = result;
+        errorMessageRef.current = `get_public_exploration failed, game = ${gameID}, status = ${res.status}, message: ${result.message}, body: ${result.body}`;
         errorSetter(true);
       } else {
         const result = await res.json();
@@ -1980,7 +1989,7 @@ function GameMove(props) {
     });
     if (res.status !== 200) {
       const result = await res.json();
-      errorMessageRef.current = JSON.parse(result.body);
+      errorMessageRef.current = `playground export failed, metaGame = ${game.metaGame}, state = ${state}, status = ${res.status}, message: ${result.message}, body: ${result.body}`;
       errorSetter(true);
     } else {
       navigate("/playground");
@@ -2097,7 +2106,7 @@ function GameMove(props) {
       pieInvokedSetter(true);
       gameRef.current.pieInvoked = true;
     } catch (err) {
-      setError(err.message);
+      setError(`invoke_pie failed with ${err.message}`);
     }
   };
 
@@ -2451,7 +2460,7 @@ function GameMove(props) {
           }),
         });
       } catch (error) {
-        setError(error);
+        setError(`handleRotate update_game_settings error: ${error}`);
       }
     }
   };
@@ -2601,7 +2610,7 @@ function GameMove(props) {
         colorsChangedSetter((val) => val + 1);
       }
     } catch (err) {
-      setError(err.message);
+      setError(`submitMove failed with: ${err.message}`);
     }
   };
 
@@ -2647,7 +2656,7 @@ function GameMove(props) {
         });
         const result = await res.json();
         if (result && result.statusCode && result.statusCode !== 200)
-          setError(JSON.parse(result.body));
+          setError(`submit_comment failed, status: ${result.statusCode}, body: ${result.body}`);
       } catch (err) {
         console.log(err);
         //setError(err.message);
@@ -2802,7 +2811,7 @@ function GameMove(props) {
           status = res.status;
           if (status !== 200) {
             const result = await res.json();
-            errorMessageRef.current = JSON.parse(result.body);
+            errorMessageRef.current = `set_game_state failed, game = ${gameID}, metaGame = ${metaGame}, status = ${status}, message: ${result.message}, body: ${result.body}`;
             errorSetter(true);
           } else {
             const result = await res.json();
@@ -2919,7 +2928,7 @@ function GameMove(props) {
         status = res.status;
         if (status !== 200) {
           const result = await res.json();
-          errorMessageRef.current = JSON.parse(result.body);
+          errorMessageRef.current = `get_private_exploration failed, game = ${gameID}, status = ${status}, message: ${result.message}, body: ${result.body}`;
           errorSetter(true);
         } else {
           const result = await res.json();
@@ -2944,7 +2953,7 @@ function GameMove(props) {
         }
       } catch (error) {
         console.log(error);
-        errorMessageRef.current = error.message;
+        errorMessageRef.current = `handlePublishExploration failed with: ${error.message}`;
         errorSetter(true);
       }
     }
@@ -2976,7 +2985,7 @@ function GameMove(props) {
           status = res.status;
           if (status !== 200) {
             const result = await res.json();
-            errorMessageRef.current = JSON.parse(result.body);
+            errorMessageRef.current = `next_game failed, status = ${status}, message: ${result.message}, body: ${result.body}`;
             errorSetter(true);
             return [];
           } else {
@@ -2985,7 +2994,7 @@ function GameMove(props) {
           }
         } catch (error) {
           console.log(error);
-          errorMessageRef.current = error.message;
+          errorMessageRef.current = `next_game failed with: ${error.message}`;
           errorSetter(true);
         }
       } else {
