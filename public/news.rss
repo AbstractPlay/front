@@ -2826,5 +2826,29 @@ Please let us know if anything seems to be amiss. Further feedback and suggestio
       <guid isPermaLink="false">1390065405103706162</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>The colour-blind palette has been adjusted. Further feedback is always welcome. I&amp;apos;ve also added a new alternate display for Entropy that adds a number to the different coloured pieces as well, to distinguish them even further. Let me know if you run into any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 09 Jul 2025 19:03:56 GMT</pubDate>
+      <guid isPermaLink="false">1392582062107791593</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to @mcd , Kanare Kato&amp;apos;s game [Stairs](https://play.abstractplay.com/games/stairs) is now live. Race to create the tallest stack. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 10 Jul 2025 15:33:38 GMT</pubDate>
+      <guid isPermaLink="false">1392891524672655540</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The default and the built-in colour-blind palettes have been expanded to 12 colours. For most games, the change will be imperceptible. It will be more noticeable in games like Entropy and Tintas (the first image is the original palette, the second is the new). But this change now allows us to include games with larger palette requirements. Custom palettes remain &amp;quot;a thing&amp;quot; (see the #customization channel for details). Let us know if you have any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 13 Jul 2025 16:29:00 GMT</pubDate>
+      <guid isPermaLink="false">1393992625056645220</guid>
+    </item>
+    
   </channel>
 </rss>
