@@ -10,7 +10,7 @@ const lstSummarize = (lst) => {
     return undefined;
   }
   // drop the most recent (usually partial) week
-  let newLst = lst.slice(0, -1)
+  let newLst = lst.slice(0, -1);
   // now just keep the most recent 52 weeks
   if (newLst.length > 52) {
     newLst = newLst.slice(-52);
