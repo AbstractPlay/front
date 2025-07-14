@@ -13,7 +13,7 @@ if ($null -ne $versionStrings1.Matches -and $versionStrings1.Matches -ne '') {
 }
 
 Set-Location $GAMESLIB_PATH
-$versionStrings2 = npm cache ls | Select-String '\\renderer\\abstractplay-renderer-[0-9]+\.[0-9]+\.([0-9]+)(-beta)?\.tgz' -AllMatches
+$versionStrings2 = npm cache ls | Select-String '\\gameslib\\abstractplay-gameslib-[0-9]+\.[0-9]+\.([0-9]+)(-beta)?\.tgz' -AllMatches
 $maxNumber2 = 1;
 if ($null -ne $versionStrings2.Matches -and $versionStrings2.Matches -ne '') {
   $versions2 = $versionStrings2.Matches | ForEach-Object { [int]$_.Groups[1].Value }
@@ -48,16 +48,6 @@ Set-Location $GAMESLIB_PATH
 
 # Install the package
 npm install $RENDERER_TGZ_PATH --loglevel verbose
-
-# Find new gameslib version
-Set-Location $CURRENT_DIR
-$versionStrings = npm cache ls | Select-String '\\gameslib\\abstractplay-gameslib-[0-9]+\.[0-9]+\.([0-9]+)(-beta)?\.tgz' -AllMatches
-$versions = $versionStrings.Matches | ForEach-Object { [int]$_.Groups[1].Value }
-$maxNumber = 1;
-if ($null -ne $versionStrings.Matches -and $versionStrings.Matches -ne '') {
-  $versions = $versionStrings1.Matches | ForEach-Object { [int]$_.Groups[1].Value }
-  $maxNumber = ($versions | Measure-Object -Maximum).Maximum + 1
-}
 
 $NEW_VERSION = "1.0." + $maxNumber
 Write-Output "New gameslib version is: $NEW_VERSION"

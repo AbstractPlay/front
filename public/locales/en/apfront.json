@@ -600,6 +600,7 @@
     "ManagePalettes": "Manage Palettes",
     "MaxTime": "max time {{max}} hours",
     "Moves": "Moves",
+    "MyColor": "Use my preferred player colour regardless of turn order",
     "MyDashboard": "Dashboard",
     "NameBlank": "Please enter a name",
     "NameNotAvailable": "The name {{name}} is not available.",

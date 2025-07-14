@@ -3,7 +3,15 @@ import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { MeContext, ColourContext } from "../../pages/Skeleton";
 
-function renderGlyph(settings, glyph, id, player, globalMe, colourContext) {
+function renderGlyph(
+  settings,
+  glyph,
+  id,
+  player,
+  globalMe,
+  colourContext,
+  game
+) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
@@ -14,6 +22,10 @@ function renderGlyph(settings, glyph, id, player, globalMe, colourContext) {
       options.colours = [...palette.colours];
       while (options.colours.length < 10) {
         options.colours.push("#fff");
+      }
+      if (globalMe?.settings?.all?.myColor && game.me > 0) {
+        const mycolor = options.colours.shift();
+        options.colours.splice(game.me,0,mycolor);
       }
     }
   }
@@ -104,7 +116,8 @@ function GameStatus({
                                 "genericStatus-" + ind + "-" + i,
                                 v.colour,
                                 globalMe,
-                                colourContext
+                                colourContext,
+                                game
                               )
                             )}`}
                             alt={"color " + v.colour}
@@ -199,7 +212,8 @@ function GameStatus({
                               "stack-" + index + "-" + j,
                               s.glyph.colour,
                               globalMe,
-                              colourContext
+                              colourContext,
+                              game
                             )
                           )}`}
                           alt=""
@@ -237,7 +251,8 @@ function GameStatus({
                         "stack-" + j,
                         s.glyph.colour,
                         globalMe,
-                        colourContext
+                        colourContext,
+                        game
                       )
                     )}`}
                     alt=""

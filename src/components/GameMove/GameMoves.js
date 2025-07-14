@@ -779,7 +779,7 @@ function GameMoves(props) {
             className="button is-small apButtonNeutral"
             onClick={() =>
               handlePlaygroundExport(
-                getFocusNode(exploration, focus).state,
+                getFocusNode(exploration, game, focus).state,
                 focus.moveNumber
               )
             }
