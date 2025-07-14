@@ -2274,6 +2274,10 @@ function GameMove(props) {
             while (options.colours.length < 10) {
               options.colours.push("#fff");
             }
+            if (globalMe?.settings?.all?.myColor && game.me > 0) {
+              const mycolor = options.colours[0];
+              options.colours = options.colours.slice(2).splice(game.me,0,mycolor);
+            }
           }
         }
         if (gameRef.current.stackExpanding) {

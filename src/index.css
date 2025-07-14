@@ -1055,7 +1055,7 @@ span.hardTime::after {
 
   /* text outlining for palette colors in modal */
   span.shadowed {
-      text-shadow: -1px -1px 0 --main-bg-color, 1px -1px 0 --main-bg-color, -1px 1px 0 --main-bg-color, 1px 1px 0 --main-bg-color;
+      text-shadow: -1px -1px 0 var(--main-bg-color), 1px -1px 0 var(--main-bg-color), -1px 1px 0 var(--main-bg-color), 1px 1px 0 var(--main-bg-color);
       display: inline-block;
       white-space: nowrap;
       padding: 2px 2px 0 2px;
