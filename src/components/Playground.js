@@ -1482,6 +1482,10 @@ function Playground(props) {
             while (options.colours.length < 10) {
               options.colours.push("#fff");
             }
+            if (globalMe?.settings?.all?.myColor && gameRef.current.me > 0) {
+              const mycolor = options.colours.shift();
+              options.colours.splice(gameRef.current.me,0,mycolor);
+            }
           }
         }
         if (gameRef.current.stackExpanding) {
