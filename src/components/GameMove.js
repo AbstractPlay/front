@@ -1507,8 +1507,8 @@ function GameMove(props) {
           }
         }
       } catch (error) {
-        console.log(error);
-        errorMessageRef.current = `get_game, error.message: ${error.message}`;
+        console.log(error.message);
+        errorMessageRef.current = `get_game, error.message: ${String(error)} for id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}`;
         errorSetter(true);
       }
     }
@@ -1794,7 +1794,7 @@ function GameMove(props) {
       url.searchParams.append("query", "report_problem");
       url.searchParams.append(
         "error",
-        `Error reporting another error: ${e.message}`
+        `Error reporting another error: ${String(e)}, original error (truncated): ${error.slice(0, 100)}`
       );
       await fetch(url);
       console.log(
