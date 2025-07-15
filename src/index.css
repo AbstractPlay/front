@@ -1059,9 +1059,10 @@ span.hardTime::after {
       display: inline-block;
       white-space: nowrap;
       padding: 2px 2px 0 2px;
+      font-weight: bold;
   }
 
-  /* style text input for palettes */
+  /* restyle text input for palettes */
   #colorSelect input {
       display: block;
       box-sizing: border-box;
@@ -1074,6 +1075,40 @@ span.hardTime::after {
       outline: none;
       font-family: var(--bulma-family-code);
       text-align: center;
+  }
+
+  /* adding preset colors to palette picker */
+  #colorSelect .picker {
+      width: 225px;
+      background: var(--tag-background-color);
+      border-radius: 9px;
+  }
+
+  #colorSelect .picker .react-colorful {
+      width: auto;
+  }
+
+  #colorSelect .picker .react-colorful .react-colorful__hue {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+  }
+
+  #colorSelect .picker-swatches {
+      display: flex;
+      padding: 12px;
+      flex-wrap: wrap;
+      justify-content: space-around;
+  }
+
+  #colorSelect .picker-swatch {
+      width: 24px;
+      height: 24px;
+      margin: 4px;
+      border: none;
+      padding: 0;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: none;
   }
 
   /* Game board customimzation for light/dark mode! */
