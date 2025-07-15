@@ -4,7 +4,8 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext } from "../Player";
 import { MeContext, UsersContext } from "../../pages/Skeleton";
-import TableSkeleton from "./TableSkeleton";
+// import TableSkeleton from "./TableSkeleton";
+import TableSkeletonFilter from "./TableSkeletonFilter";
 import NewChallengeModal from "../NewChallengeModal";
 import ActivityMarker from "../ActivityMarker";
 
@@ -118,6 +119,9 @@ function History({ handleChallenge }) {
                   rowB.original.gameName
                 );
               },
+              filterFn: (row, colId, val) => {
+                return row.original.gameName.includes(val);
+              },
             }),
             columnHelper.accessor("variants", {
               header: "Variants",
@@ -128,10 +132,14 @@ function History({ handleChallenge }) {
                   .join(", ")
                   .localeCompare(rowB.getValue(columnID).join(", "));
               },
+              filterFn: (row, colId, val) => {
+                return row.getValue(colId).join(",").includes(val);
+              },
             }),
             columnHelper.accessor("dateEnd", {
               header: "End date",
               cell: (props) => formatter.format(props.getValue()),
+              enableGlobalFilter: false,
             }),
             columnHelper.accessor("opponents", {
               header: "Opponents",
@@ -156,6 +164,18 @@ function History({ handleChallenge }) {
                       ),
                     null
                   ),
+              sortingFn: (rowA, rowB, columnID) => {
+                return rowA
+                  .getValue(columnID)[0]
+                  .name.localeCompare(rowB.getValue(columnID)[0].name);
+              },
+              filterFn: (row, colId, val) => {
+                return row
+                  .getValue(colId)
+                  .map((u) => u.name)
+                  .join(",")
+                  .includes(val);
+              },
             }),
             columnHelper.accessor("winner", {
               header: "Winner",
@@ -198,6 +218,9 @@ function History({ handleChallenge }) {
                   }
                 }
                 return nameA.localeCompare(nameB);
+              },
+              filterFn: (row, colId, val) => {
+                return row.getValue(colId).name.includes(val);
               },
             }),
             columnHelper.display({
@@ -243,9 +266,11 @@ function History({ handleChallenge }) {
 
   return (
     <>
-      <TableSkeleton
+      <TableSkeletonFilter
         data={data}
         columns={columns}
+        filterType="history"
+        globalMe={globalMe}
         sort={[{ id: "dateEnd", desc: true }]}
         key="Player|History"
       />

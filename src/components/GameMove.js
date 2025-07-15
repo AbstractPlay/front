@@ -625,7 +625,7 @@ function setupColors(settings, game, globalMe, colourContext, node) {
       }
       if (globalMe?.settings?.all?.myColor && game.me > 0) {
         const mycolor = options.colours.shift();
-        options.colours.splice(game.me,0,mycolor);
+        options.colours.splice(game.me, 0, mycolor);
       }
     }
   }
@@ -1508,7 +1508,9 @@ function GameMove(props) {
         }
       } catch (error) {
         console.log(error.message);
-        errorMessageRef.current = `get_game, error.message: ${String(error)} for id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}`;
+        errorMessageRef.current = `get_game, error.message: ${String(
+          error
+        )} for id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}`;
         errorSetter(true);
       }
     }
@@ -1794,7 +1796,9 @@ function GameMove(props) {
       url.searchParams.append("query", "report_problem");
       url.searchParams.append(
         "error",
-        `Error reporting another error: ${String(e)}, original error (truncated): ${error.slice(0, 100)}`
+        `Error reporting another error: ${String(
+          e
+        )}, original error (truncated): ${error.slice(0, 100)}`
       );
       await fetch(url);
       console.log(
@@ -2284,7 +2288,7 @@ function GameMove(props) {
             }
             if (globalMe?.settings?.all?.myColor && game.me > 0) {
               const mycolor = options.colours.shift();
-              options.colours.splice(game.me,0,mycolor);
+              options.colours.splice(game.me, 0, mycolor);
             }
           }
         }
