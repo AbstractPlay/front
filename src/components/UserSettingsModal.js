@@ -635,6 +635,8 @@ function UserSettingsModal(props) {
     }
   };
 
+  /* Default palette colors from the renderer. */
+  const presetColors = ["#e31a1c", "#1f78b4", "#33a02c", "#ffff99", "#6a3d9a", "#ff7f00", "#b15928", "#fb9a99", "#a6cee3", "#b2df8a", "#fdbf6f", "#cab2d6"];
   console.log(language);
 
   return (
@@ -1222,10 +1224,22 @@ function UserSettingsModal(props) {
                 Choose a colour
               </label>
               <div className="control" id="colorSelect">
-                <HexColorPicker
-                  color={selectedColour}
-                  onChange={selectedColourSetter}
-                />
+                <div className="picker">
+                  <HexColorPicker
+                    color={selectedColour}
+                    onChange={selectedColourSetter}
+                  />
+                  <div className="picker-swatches">
+                    {presetColors.map((presetColor) => (
+                      <button
+                        key={presetColor}
+                        className="picker-swatch"
+                        style={{ background: presetColor }}
+                        onClick={() => selectedColourSetter(presetColor)}
+                      />
+                    ))}
+                  </div>
+                </div>
                 <HexColorInput
                   color={selectedColour}
                   onChange={selectedColourSetter}
