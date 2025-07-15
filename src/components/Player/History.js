@@ -264,13 +264,52 @@ function History({ handleChallenge }) {
     ]
   );
 
+  const globalFilterFn = (row, colId, val) => {
+    const realVal = val.toLowerCase();
+    let winner = row.original.winner;
+    if (winner === undefined) {
+      winner = "draw";
+    } else {
+      if (
+        globalMe === null ||
+        globalMe === undefined ||
+        winner.id !== globalMe.id
+      ) {
+        winner = winner.name.toLowerCase();
+      } else {
+        winner = winner.name.toLowerCase() + ",you";
+      }
+    }
+    // game name
+    if (row.original.gameName.toLowerCase().includes(realVal)) {
+      return true;
+    }
+    // variants
+    else if (row.original.variants.join(",").toLowerCase().includes(realVal)) {
+      return true;
+    }
+    // opponents
+    else if (
+      row.original.opponents
+        .map((u) => u.name.toLowerCase())
+        .join(",")
+        .includes(val)
+    ) {
+      return true;
+    }
+    // winner
+    else if (winner.includes(realVal)) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <>
       <TableSkeletonFilter
         data={data}
         columns={columns}
-        filterType="history"
-        globalMe={globalMe}
+        globalFilterFn={globalFilterFn}
         sort={[{ id: "dateEnd", desc: true }]}
         key="Player|History"
       />

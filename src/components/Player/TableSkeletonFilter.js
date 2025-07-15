@@ -15,56 +15,11 @@ const allSize = Number.MAX_SAFE_INTEGER;
 //   - data
 //   - columns
 //   - initial sort
-function TableSkeleton({ data, columns, sort, filterType, globalMe }) {
+function TableSkeleton({ data, columns, sort, globalFilterFn }) {
   const [sorting, setSorting] = useState(sort);
   const [globalFilter, globalFilterSetter] = useState(null);
   const [showState, showStateSetter] = useStorageState("profile-show", 10);
   const { t } = useTranslation();
-
-  const globalFilterFn = (row, colId, val) => {
-    const realVal = val.toLowerCase();
-    if (filterType === "history") {
-      let winner = row.original.winner;
-      if (winner === undefined) {
-        winner = "draw";
-      } else {
-        if (
-          globalMe === null ||
-          globalMe === undefined ||
-          winner.id !== globalMe.id
-        ) {
-          winner = winner.name.toLowerCase();
-        } else {
-          winner = winner.name.toLowerCase() + ",you";
-        }
-      }
-      // game name
-      if (row.original.gameName.toLowerCase().includes(realVal)) {
-        return true;
-      }
-      // variants
-      else if (
-        row.original.variants.join(",").toLowerCase().includes(realVal)
-      ) {
-        return true;
-      }
-      // opponents
-      else if (
-        row.original.opponents
-          .map((u) => u.name.toLowerCase())
-          .join(",")
-          .includes(val)
-      ) {
-        return true;
-      }
-      // winner
-      else if (winner.includes(realVal)) {
-        return true;
-      }
-      return false;
-    }
-    return [];
-  };
 
   const table = useReactTable({
     data,
