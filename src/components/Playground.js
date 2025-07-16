@@ -364,12 +364,30 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
   });
 }
 
-function setupColors(settings, game, t, colourContext, node) {
+function setupColors(settings, game, globalMe, colourContext, node) {
   var options = {};
   if (settings.color === "blind") {
     options.colourBlind = true;
     //   } else if (settings.color === "patterns") {
     //     options.patterns = true;
+  }
+  if (
+    settings.color !== "standard" &&
+    settings.color !== "blind" &&
+    globalMe !== null &&
+    globalMe.palettes !== null
+  ) {
+    const palette = globalMe.palettes.find((p) => p.name === settings.color);
+    if (palette !== undefined) {
+      options.colours = [...palette.colours];
+      while (options.colours.length < 10) {
+        options.colours.push("#fff");
+      }
+      if (globalMe?.settings?.all?.myColor && game.me > 0) {
+        const mycolor = options.colours.shift();
+        options.colours.splice(game.me, 0, mycolor);
+      }
+    }
   }
   game.colors = [1, 2].map((p, i) => {
     if (game.sharedPieces) {
@@ -641,6 +659,7 @@ function processNewSettings(
   settingsSetter,
   gameSettingsSetter,
   userSettingsSetter,
+  globalMe,
   colourContext
 ) {
   gameSettingsSetter(newGameSettings);
@@ -673,7 +692,7 @@ function processNewSettings(
       newGameSettings === undefined || newGameSettings.rotate === undefined
         ? 0
         : newGameSettings.rotate;
-    setupColors(newSettings, game, null, colourContext);
+    setupColors(newSettings, game, globalMe, colourContext);
     settingsSetter(newSettings);
     return newSettings;
   }
@@ -1027,6 +1046,7 @@ function Playground(props) {
               settingsSetter,
               gameSettingsSetter,
               userSettingsSetter,
+              globalMe,
               colourContext
             );
             populateChecked(gameRef, engineRef, t, inCheckSetter);
@@ -1207,6 +1227,7 @@ function Playground(props) {
             settingsSetter,
             gameSettingsSetter,
             userSettingsSetter,
+            globalMe,
             colourContext
           );
           populateChecked(gameRef, engineRef, t, inCheckSetter);
@@ -1482,9 +1503,9 @@ function Playground(props) {
             while (options.colours.length < 10) {
               options.colours.push("#fff");
             }
-            if (globalMe?.settings?.all?.myColor && gameRef.current.me > 0) {
+            if (globalMe?.settings?.all?.myColor && game.me > 0) {
               const mycolor = options.colours.shift();
-              options.colours.splice(gameRef.current.me,0,mycolor);
+              options.colours.splice(game.me,0,mycolor);
             }
           }
         }
@@ -1657,6 +1678,7 @@ function Playground(props) {
       settingsSetter,
       gameSettingsSetter,
       userSettingsSetter,
+      globalMe,
       colourContext
     );
   };
