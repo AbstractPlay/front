@@ -38,6 +38,7 @@ import { useStorageState } from "react-use-storage-state";
 import { toast } from "react-toastify";
 import { nanoid } from "nanoid";
 import { Helmet } from "react-helmet-async";
+import { t } from "i18next";
 
 function useQueryString() {
   return new URLSearchParams(useLocation().search);
@@ -339,6 +340,10 @@ function getExplorationNode(exploration, game, moveNumber) {
   // rehydrate state if need
   if (node.state === null) {
     let tmpEngine = GameFactory(game.metaGame, game.state);
+    if (moveNumber + 1 < tmpEngine.stack.length) {
+      tmpEngine.gameover = false;
+      tmpEngine.winner = [];
+    }
     tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber + 1);
     tmpEngine.load();
     node.state = tmpEngine.cheapSerialize();
