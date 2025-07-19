@@ -1421,6 +1421,30 @@ function GameMove(props) {
 
   useEffect(() => {
     console.log("Fetching game data");
+    
+    // We have some evidence that get_game sometimes fails to connect (but report_problem succeeds), implying that a retry might help. Submitting the attempt count 
+    // to the backend so that we can monitor this.
+    async function fetchWithRetry(fetchFn, maxRetries = 3, baseDelay = 1000) {
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          return await fetchFn(attempt);
+        } catch (error) {
+          const isNetworkError = error.name === 'TypeError' && error.message.includes('fetch');
+          const isTemporaryError = error.message.includes('Failed to fetch') || 
+                                 error.message.includes('NetworkError') ||
+                                 error.message.includes('ERR_NETWORK');
+          
+          if (attempt === maxRetries || (!isNetworkError && !isTemporaryError)) {
+            throw error;
+          }
+          
+          const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 1000;
+          console.log(`get_game attempt ${attempt + 1} failed, retrying in ${Math.round(delay)}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      }
+    }
+
     async function fetchData() {
       let token = null;
       try {
@@ -1429,53 +1453,64 @@ function GameMove(props) {
       } catch (err) {
         // OK, non logged in user viewing the game
       }
+      
       try {
-        let data;
-        let status;
-        if (token) {
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              query: "get_game",
-              pars: {
-                id: gameID,
-                metaGame: metaGame,
-                cbit: cbit,
+        const result = await fetchWithRetry(async (attempt) => {
+          let data;
+          let status;
+          if (token) {
+            const res = await fetch(API_ENDPOINT_AUTH, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
-            }),
-          });
-          status = res.status;
-          if (status !== 200) {
-            const result = await res.json();
-            errorMessageRef.current = `auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`;
-            errorSetter(true);
-            return;
+              body: JSON.stringify({
+                query: "get_game",
+                pars: {
+                  id: gameID,
+                  metaGame: metaGame,
+                  cbit: cbit,
+                  ...(attempt > 0 && { retryAttempt: attempt }),
+                },
+              }),
+            });
+            status = res.status;
+            if (status !== 200) {
+              const result = await res.json();
+              const error = new Error(`auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`);
+              error.status = status;
+              throw error;
+            } else {
+              const result = await res.json();
+              data = JSON.parse(result.body);
+            }
           } else {
-            const result = await res.json();
-            data = JSON.parse(result.body);
+            var url = new URL(API_ENDPOINT_OPEN);
+            url.searchParams.append("query", "get_game");
+            url.searchParams.append("id", gameID);
+            url.searchParams.append("metaGame", metaGame);
+            url.searchParams.append("cbit", cbit);
+            if (attempt > 0) {
+              url.searchParams.append("retryAttempt", attempt.toString());
+            }
+            const res = await fetch(url);
+            status = res.status;
+            if (status !== 200) {
+              const result = await res.json();
+              const error = new Error(`no auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`);
+              error.status = status;
+              throw error;
+            } else {
+              data = await res.json();
+            }
           }
-        } else {
-          var url = new URL(API_ENDPOINT_OPEN);
-          url.searchParams.append("query", "get_game");
-          url.searchParams.append("id", gameID);
-          url.searchParams.append("metaGame", metaGame);
-          url.searchParams.append("cbit", cbit);
-          const res = await fetch(url);
-          status = res.status;
-          if (status !== 200) {
-            const result = await res.json();
-            errorMessageRef.current = `no auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`;
-            errorSetter(true);
-            return;
-          } else {
-            data = await res.json();
-          }
-        }
+          return { data, status };
+        });
+
+        const { data, status } = result;
+        
         if (
           status === 200 &&
           data !== null &&
@@ -1512,6 +1547,9 @@ function GameMove(props) {
           error
         )} for id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}`;
         errorSetter(true);
+        
+        // Report the error after all retries failed
+        reportError(errorMessageRef.current);
       }
     }
 
