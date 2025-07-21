@@ -2850,5 +2850,17 @@ Please let us know if anything seems to be amiss. Further feedback and suggestio
       <guid isPermaLink="false">1393992625056645220</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>Thanks to @mcd, two changes have been made on the front end:
+- There is now a &amp;quot;use preferred player colour&amp;quot; option. When set and a palette is applied, then you will always appear as that given colour, regardless of the player order. For this to work, you must create a custom palette with your preferred colour first (as &amp;quot;Player 1&amp;quot;) and apply that palette to any games where you want this feature to work (see the #customization channel for details). A reminder that this type of customization is only visible to you. It does not affect other players&amp;apos; experiences.
+- Also, the palette creation screen has been improved and now includes the default 12 colours as swatches.
+
+Let us know if you run into any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 15 Jul 2025 19:00:32 GMT</pubDate>
+      <guid isPermaLink="false">1394755531838586911</guid>
+    </item>
+    
   </channel>
 </rss>
