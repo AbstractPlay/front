@@ -503,10 +503,16 @@ function Me(props) {
         }),
       });
       const data = await response.json();
-      if (data.success) {
-        toast(`Challenge migration completed successfully. Migrated ${data.migratedUsers} users with challenges.`);
-      } else {
+      if (data.migratedUsers !== undefined) {
+        if (data.errors && data.errors.length > 0) {
+          toast.warn(`Challenge migration completed with ${data.errors.length} errors. Migrated ${data.migratedUsers} of ${data.usersWithChallenges} users with challenges.`);
+        } else {
+          toast(`Challenge migration completed successfully. Migrated ${data.migratedUsers} of ${data.usersWithChallenges} users with challenges.`);
+        }
+      } else if (data.success === false) {
         toast.error(`Challenge migration failed: ${data.message || 'Unknown error'}`);
+      } else {
+        toast.error('Challenge migration failed: Unexpected response format');
       }
     } catch (error) {
       console.error('Migration error:', error);
@@ -531,10 +537,16 @@ function Me(props) {
         }),
       });
       const data = await response.json();
-      if (data.success) {
-        toast(`Rating counts migration completed successfully. Migrated ${data.migratedGames || 'all'} games.`);
-      } else {
+      if (data.migratedMetaGames !== undefined) {
+        if (data.errors && data.errors.length > 0) {
+          toast.warn(`Rating counts migration completed with ${data.errors.length} errors. Migrated ${data.migratedMetaGames} of ${data.totalMetaGames} metagames.`);
+        } else {
+          toast(`Rating counts migration completed successfully. Migrated ${data.migratedMetaGames} of ${data.totalMetaGames} metagames.`);
+        }
+      } else if (data.success === false) {
         toast.error(`Rating counts migration failed: ${data.message || 'Unknown error'}`);
+      } else {
+        toast.error('Rating counts migration failed: Unexpected response format');
       }
     } catch (error) {
       console.error('Migration error:', error);
