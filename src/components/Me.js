@@ -296,46 +296,6 @@ function Me(props) {
     }
   };
 
-  const handleUpdateMetaGameCountsClick = async () => {
-    try {
-      const usr = await Auth.currentAuthenticatedUser();
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "update_meta_game_counts",
-          pars: {},
-        }),
-      });
-    } catch (error) {
-      errorSetter(error);
-    }
-  };
-
-  const handleUpdateMetaGameRatingsClick = async () => {
-    try {
-      const usr = await Auth.currentAuthenticatedUser();
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "update_meta_game_ratings",
-          pars: {},
-        }),
-      });
-    } catch (error) {
-      errorSetter(error);
-    }
-  };
-
   const handleTestAsyncClick = async () => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
@@ -483,74 +443,6 @@ function Me(props) {
         }),
       });
     } catch (error) {
-      errorSetter(error);
-    }
-  };
-
-  const handleMigrateChallengesClick = async () => {
-    try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("Posting migrate_challenges");
-      const response = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "migrate_challenges",
-        }),
-      });
-      const data = await response.json();
-      if (data.migratedUsers !== undefined) {
-        if (data.errors && data.errors.length > 0) {
-          toast.warn(`Challenge migration completed with ${data.errors.length} errors. Migrated ${data.migratedUsers} of ${data.usersWithChallenges} users with challenges.`);
-        } else {
-          toast(`Challenge migration completed successfully. Migrated ${data.migratedUsers} of ${data.usersWithChallenges} users with challenges.`);
-        }
-      } else if (data.success === false) {
-        toast.error(`Challenge migration failed: ${data.message || 'Unknown error'}`);
-      } else {
-        toast.error('Challenge migration failed: Unexpected response format');
-      }
-    } catch (error) {
-      console.error('Migration error:', error);
-      toast.error('Challenge migration failed');
-      errorSetter(error);
-    }
-  };
-
-  const handleMigrateRatingCountsClick = async () => {
-    try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("Posting migrate_rating_counts");
-      const response = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "migrate_rating_counts",
-        }),
-      });
-      const data = await response.json();
-      if (data.migratedMetaGames !== undefined) {
-        if (data.errors && data.errors.length > 0) {
-          toast.warn(`Rating counts migration completed with ${data.errors.length} errors. Migrated ${data.migratedMetaGames} of ${data.totalMetaGames} metagames.`);
-        } else {
-          toast(`Rating counts migration completed successfully. Migrated ${data.migratedMetaGames} of ${data.totalMetaGames} metagames.`);
-        }
-      } else if (data.success === false) {
-        toast.error(`Rating counts migration failed: ${data.message || 'Unknown error'}`);
-      } else {
-        toast.error('Rating counts migration failed: Unexpected response format');
-      }
-    } catch (error) {
-      console.error('Migration error:', error);
-      toast.error('Rating counts migration failed');
       errorSetter(error);
     }
   };
@@ -830,18 +722,6 @@ function Me(props) {
                 </div>
                 <button
                   className="button is-small apButton"
-                  onClick={() => handleUpdateMetaGameCountsClick()}
-                >
-                  Update meta game counts
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleUpdateMetaGameRatingsClick()}
-                >
-                  Update meta game ratings
-                </button>
-                <button
-                  className="button is-small apButton"
                   onClick={() => handleOneTimeFixClick()}
                 >
                   One time fix
@@ -875,18 +755,6 @@ function Me(props) {
                   onClick={() => toast("Toast test!")}
                 >
                   Test toast
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleMigrateChallengesClick()}
-                >
-                  Migrate Challenges
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleMigrateRatingCountsClick()}
-                >
-                  Migrate Rating Counts
                 </button>
               </div>
             </div>
