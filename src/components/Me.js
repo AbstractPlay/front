@@ -795,7 +795,6 @@ function Me(props) {
                 >
                   Migrate Challenges
                 </button>
-                </button>
               </div>
             </div>
           )}
