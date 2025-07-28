@@ -447,39 +447,6 @@ function Me(props) {
     }
   };
 
-  const handleMigrateChallengesClick = async () => {
-    try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("Posting migrate_challenges");
-      const response = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "migrate_challenges",
-        }),
-      });
-      const data = await response.json();
-      if (data.migratedUsers !== undefined) {
-        if (data.errors && data.errors.length > 0) {
-          toast.warn(`Challenge migration completed with ${data.errors.length} errors. Migrated ${data.migratedUsers} of ${data.usersWithChallenges} users with challenges.`);
-        } else {
-          toast(`Challenge migration completed successfully. Migrated ${data.migratedUsers} of ${data.usersWithChallenges} users with challenges.`);
-        }
-      } else if (data.success === false) {
-        toast.error(`Challenge migration failed: ${data.message || 'Unknown error'}`);
-      } else {
-        toast.error('Challenge migration failed: Unexpected response format');
-      }
-    } catch (error) {
-      console.error('Migration error:', error);
-      toast.error('Challenge migration failed');
-      errorSetter(error);
-    }
-  };
   const handleTestPushClick = async () => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
@@ -788,12 +755,6 @@ function Me(props) {
                   onClick={() => toast("Toast test!")}
                 >
                   Test toast
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleMigrateChallengesClick()}
-                >
-                  Migrate Challenges
                 </button>
               </div>
             </div>
