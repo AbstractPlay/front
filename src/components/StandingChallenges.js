@@ -39,14 +39,28 @@ function StandingChallenges(props) {
   const [showModal, showModalSetter] = useState(false);
 
   async function reportError(error) {
-    let url = new URL(API_ENDPOINT_OPEN);
-    url.searchParams.append("query", "report_problem");
-    url.searchParams.append("error", error);
-    const res = await fetch(url);
-    const status = res.status;
-    if (status !== 200) {
-      const result = await res.json();
-      console.log(JSON.parse(result.body));
+    try {
+      const res = await fetch(API_ENDPOINT_OPEN, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: "report_problem",
+          pars: {
+            error: error
+          }
+        })
+      });
+      
+      const status = res.status;
+      if (status !== 200) {
+        const result = await res.json();
+        console.log(JSON.parse(result.body));
+      }
+    } catch (e) {
+      console.log(`Error reporting error: ${e}`);
     }
   }
 
