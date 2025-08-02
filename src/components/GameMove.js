@@ -1739,9 +1739,14 @@ function GameMove(props) {
         game.tournament !== undefined &&
         game.tournament !== null
       ) {
+        // Check if tournament reference is already in the new format (metaGame#tournamentId)
+        const tournamentLink = game.tournament.includes('#') 
+          ? `/tournament/${game.tournament.replace('#', '/')}` 
+          : `/tournament/${game.tournament}?gameId=${game.id}&metaGame=${game.metaGame}`;
+        
         parentheticalSetter((val) => [
           ...val,
-          <Link to={`/tournament/${game.tournament}`}>tournament</Link>,
+          <Link to={tournamentLink}>tournament</Link>,
         ]);
       }
       if ("event" in game && game.event !== undefined && game.event !== null) {
