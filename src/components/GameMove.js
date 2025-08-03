@@ -1821,38 +1821,61 @@ function GameMove(props) {
   ]);
 
   async function reportError(error) {
-    let url = new URL(API_ENDPOINT_OPEN);
-    url.searchParams.append("query", "report_problem");
-    url.searchParams.append("error", error);
+    if (!error || error === "")
+      return;
+    
     try {
-      const res = await fetch(url);
+      const res = await fetch(API_ENDPOINT_OPEN, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: "report_problem",
+          pars: {
+            error: error
+          }
+        })
+      });
+      
       const status = res.status;
       if (status !== 200) {
         const result = await res.json();
         console.log(JSON.parse(result.body));
-        url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append("query", "report_problem");
-        url.searchParams.append(
-          "error",
-          `Error reporting another error, status: ${status}, message: ${result.message}, body: ${result.body}`
-        );
-        await fetch(url);
+        
+        // Retry with truncated error if first attempt fails
+        await fetch(API_ENDPOINT_OPEN, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query: "report_problem",
+            pars: {
+              error: `Error reporting another error, status: ${status}, message: ${result.message}, body: ${result.body}, original error (truncated): ${error.slice(0, 1000)}`
+            }
+          })
+        });
       }
     } catch (e) {
-      // If we can't report the error, maybe the error is too big. Let's try to report one more time:
-      url = new URL(API_ENDPOINT_OPEN);
-      url.searchParams.append("query", "report_problem");
-      url.searchParams.append(
-        "error",
-        `Error reporting another error: ${String(
-          e
-        )}, original error (truncated): ${error.slice(0, 100)}`
-      );
-      await fetch(url);
+      // Final fallback with truncated error
+      await fetch(API_ENDPOINT_OPEN, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: "report_problem", 
+          pars: {
+            error: `Error reporting another error: ${String(e)}, original error (truncated): ${error.slice(0, 1000)}`
+          }
+        })
+      });
       console.log(
-        `Error auto-reporting another error!\nOriginal error: ${JSON.stringify(
-          error
-        )}\nFetching error: ${JSON.stringify(e)}`
+        `Error auto-reporting another error!\nOriginal error: ${JSON.stringify(error)}\nFetching error: ${JSON.stringify(e)}`
       );
     }
   }
@@ -2674,7 +2697,7 @@ function GameMove(props) {
         colorsChangedSetter((val) => val + 1);
       }
     } catch (err) {
-      setError(`submitMove failed with: ${err.message}`);
+      setError(`submitMove (move: ${m}, draw: ${draw}) failed with: ${err.message}`);
     }
   };
 
