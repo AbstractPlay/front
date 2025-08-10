@@ -39,7 +39,7 @@ function UserChats(props) {
           userid: c.userId,
           player: personName,
         });
-        if (c.userId === props.userId && props.exploringCompletedGame) {
+        if (c.userId === props.userId && props.commentingCompletedGame) {
           mycomment = c.comment;
         }
       }
@@ -53,7 +53,7 @@ function UserChats(props) {
           handleSubmit={props.handleSubmit}
           tooMuch={props.tooMuch}
           comment={mycomment}
-          exploringCompletedGame={props.exploringCompletedGame}
+          commentingCompletedGame={props.commentingCompletedGame}
         />
         <div className="chatTable">
           {results.map((r, index) => (

@@ -3131,7 +3131,7 @@ function GameMove(props) {
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
   // console.log("game.me", game ? game.me : "nope");
-  let exploringCompletedGame = false;
+  let commentingCompletedGame = false;
   let nodeComments = [];
   if (!error) {
     let toMove;
@@ -3145,8 +3145,8 @@ function GameMove(props) {
           focus
         ).toMove;
       }
-      if (game.gameOver && focus.canExplore) {
-        exploringCompletedGame = true;
+      if (game.gameOver) {
+        commentingCompletedGame = true;
         nodeComments = getFocusNode(
           explorationRef.current.nodes,
           gameRef.current,
@@ -3412,10 +3412,10 @@ function GameMove(props) {
                             handleSubmit={submitComment}
                             tooMuch={commentsTooLong}
                             gameid={gameRef.current?.id}
-                            exploringCompletedGame={false}
+                            commentingCompletedGame={false}
                             userId={globalMe?.id}
                           />
-                          {!exploringCompletedGame ? null : (
+                          {!commentingCompletedGame ? null : (
                             <div>
                               <h1 className="subtitle lined">
                                 <span>{t("GameComments")}</span>
@@ -3426,7 +3426,7 @@ function GameMove(props) {
                                 handleSubmit={submitNodeComment}
                                 tooMuch={commentsTooLong}
                                 gameid={gameRef.current?.id}
-                                exploringCompletedGame={exploringCompletedGame}
+                                commentingCompletedGame={commentingCompletedGame}
                                 userId={globalMe?.id}
                               />
                             </div>
@@ -3591,10 +3591,10 @@ function GameMove(props) {
                     handleSubmit={submitComment}
                     tooMuch={commentsTooLong}
                     gameid={gameRef.current?.id}
-                    exploringCompletedGame={false}
+                    commentingCompletedGame={false}
                     userId={globalMe?.id}
                   />
-                  {!exploringCompletedGame ? null : (
+                  {!commentingCompletedGame ? null : (
                     <div>
                       <h1 className="subtitle lined">
                         <span>{t("GameComments")}</span>
@@ -3605,7 +3605,7 @@ function GameMove(props) {
                         handleSubmit={submitNodeComment}
                         tooMuch={commentsTooLong}
                         gameid={gameRef.current?.id}
-                        exploringCompletedGame={exploringCompletedGame}
+                        commentingCompletedGame={commentingCompletedGame}
                         userId={globalMe?.id}
                       />
                     </div>
