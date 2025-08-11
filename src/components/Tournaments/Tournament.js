@@ -17,11 +17,11 @@ async function reportError(error) {
       body: JSON.stringify({
         query: "report_problem",
         pars: {
-          error: error
-        }
-      })
+          error: error,
+        },
+      }),
     });
-    
+
     const status = res.status;
     if (status !== 200) {
       const result = await res.json();
@@ -164,25 +164,25 @@ function Tournament(props) {
   const { tournamentid } = useParams();
   const { metaGame } = useParams();
   const location = useLocation();
-  
+
   // Get query parameters for game fixing
   const searchParams = new URLSearchParams(location.search);
-  const gameId = searchParams.get('gameId');
-  const gameMetaGame = searchParams.get('metaGame');
+  const gameId = searchParams.get("gameId");
+  const gameMetaGame = searchParams.get("metaGame");
 
   useEffect(() => {
     async function fetchData() {
       let url = new URL(API_ENDPOINT_OPEN);
       url.searchParams.append("query", "get_tournament");
       url.searchParams.append("tournamentid", tournamentid);
-      
+
       // Determine the metaGame to use and whether this is a known archived tournament
-      const effectiveMetaGame = metaGame || gameMetaGame || 'undefined';
+      const effectiveMetaGame = metaGame || gameMetaGame || "undefined";
       const isArchived = !!metaGame; // If metaGame is in URL path, it's a known archived tournament
-      
+
       url.searchParams.append("metaGame", effectiveMetaGame);
       url.searchParams.append("isArchived", isArchived.toString());
-      
+
       // Add gameId for potential game reference fixing (for old games where the tournament was archived but the references to it weren't)
       if (gameId) {
         url.searchParams.append("gameId", gameId);
