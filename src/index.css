@@ -601,6 +601,44 @@ button.fabtn:hover {
     font-size: smaller;
 }
 
+/* Tighten spacing between chat messages in chatTable only */
+.chatTable .media + .media {
+    margin-top: 0.4rem;
+    padding-top: 0.4rem;
+}
+
+.chatTable .media .content {
+    margin-bottom: 0.25rem;
+}
+
+.chatTable .media .content p {
+    margin-bottom: 0.25rem;
+}
+
+/* Reduce padding inside each media element */
+.chatTable .media {
+    padding-bottom: 0 !important;
+    margin-bottom: 0.3rem !important;  /* Override Bulma's block-spacing */
+}
+
+.chatTable .media-content {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Add space between help text and chat messages */
+.tourChat .help {
+    margin-bottom: 0.75rem;
+}
+
+/* Highlight comments for the currently focused move */
+.chatTable .media.highlighted-comment {
+    background-color: rgba(255, 193, 7, 0.15);
+    border-left: 3px solid #ffc107;
+    padding-left: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
 
 /* Leaving the stuff for user settings until I'm prepared to expand it */
 .userSettings {

@@ -929,6 +929,34 @@ function getFocusNode(exp, game, foc) {
   return curNode;
 }
 
+function getAllNodeComments(exploration) {
+  const allComments = [];
+  
+  function traverseNode(node, moveNumber, exPath = []) {
+    if (node.comment && Array.isArray(node.comment)) {
+      // Add each comment with its path information
+      node.comment.forEach(c => {
+        allComments.push({
+          ...c,
+          path: { moveNumber, exPath: [...exPath] },
+          inGame: false  // These are all post-game comments
+        });
+      });
+    }
+    if (node.children && Array.isArray(node.children)) {
+      node.children.forEach((child, index) => {
+        traverseNode(child, moveNumber, [...exPath, index]);
+      });
+    }
+  }
+  
+  if (exploration && Array.isArray(exploration)) {
+    exploration.forEach((node, index) => traverseNode(node, index, []));
+  }
+  
+  return allComments;
+}
+
 function canExploreMove(game, exploration, focus) {
   return (
     (!game.gameOver && // game isn't over
@@ -1656,11 +1684,17 @@ function GameMove(props) {
           : null;
       const foc = cloneDeep(focus);
       const game = dbgame;
+      // Preserve explorer state if we're still on the same game (e.g., color change)
+      // Reset to false if it's a new game or settings changed to "always off"
+      const preserveExplorer = 
+        explorationRef.current && 
+        explorationRef.current.gameID === dbgame.id &&
+        globalMe?.settings?.all?.exploration !== -1;
       setupGame(
         game,
         gameRef,
         globalMe,
-        false,
+        preserveExplorer ? explorer : false,
         partialMoveRenderRef,
         renderrepSetter,
         engineRef,
@@ -1684,8 +1718,9 @@ function GameMove(props) {
           }
           if (ok) {
             for (let i = 0; i < explorationRef.current.nodes.length; i++) {
-              explorationRef.current.nodes[i].children =
-                exploration[i].children;
+              explorationRef.current.nodes[i].children = exploration[i].children;
+              explorationRef.current.nodes[i].comment = exploration[i].comment;
+              explorationRef.current.nodes[i].commented = exploration[i].commented;
             }
             handleGameMoveClick(foc);
           }
@@ -3132,7 +3167,7 @@ function GameMove(props) {
   // console.log("rendering at focus ", focus);
   // console.log("game.me", game ? game.me : "nope");
   let commentingCompletedGame = false;
-  let nodeComments = [];
+  let allNodeComments = [];
   if (!error) {
     let toMove;
     if (focus) {
@@ -3147,11 +3182,7 @@ function GameMove(props) {
       }
       if (game.gameOver) {
         commentingCompletedGame = true;
-        nodeComments = getFocusNode(
-          explorationRef.current.nodes,
-          gameRef.current,
-          focus
-        ).comment;
+        allNodeComments = getAllNodeComments(explorationRef.current.nodes);
       }
     }
     return (
@@ -3407,30 +3438,31 @@ function GameMove(props) {
                       ) : key === "chat" ? (
                         <>
                           <UserChats
-                            comments={comments}
+                            comments={
+                              commentingCompletedGame
+                                ? [
+                                    ...(comments || []).map(c => ({ 
+                                      ...c, 
+                                      inGame: true,
+                                      path: c.moveNumber !== undefined ? { moveNumber: c.moveNumber, exPath: [] } : undefined
+                                    })),
+                                    ...(allNodeComments || [])
+                                  ]
+                                : comments
+                            }
                             players={gameRef.current?.players}
-                            handleSubmit={submitComment}
+                            handleSubmit={
+                              commentingCompletedGame
+                                ? submitNodeComment
+                                : submitComment
+                            }
                             tooMuch={commentsTooLong}
                             gameid={gameRef.current?.id}
-                            commentingCompletedGame={false}
+                            commentingCompletedGame={commentingCompletedGame}
                             userId={globalMe?.id}
+                            handleGameMoveClick={handleGameMoveClick}
+                            focusedPath={focus}
                           />
-                          {!commentingCompletedGame ? null : (
-                            <div>
-                              <h1 className="subtitle lined">
-                                <span>{t("GameComments")}</span>
-                              </h1>
-                              <UserChats
-                                comments={nodeComments}
-                                players={gameRef.current?.players}
-                                handleSubmit={submitNodeComment}
-                                tooMuch={commentsTooLong}
-                                gameid={gameRef.current?.id}
-                                commentingCompletedGame={commentingCompletedGame}
-                                userId={globalMe?.id}
-                              />
-                            </div>
-                          )}
                         </>
                       ) : null}
                     </div>
@@ -3586,30 +3618,31 @@ function GameMove(props) {
                     <span>{t("GameSummary")}</span>
                   </h1>
                   <UserChats
-                    comments={comments}
+                    comments={
+                      commentingCompletedGame
+                        ? [
+                            ...(comments || []).map(c => ({ 
+                              ...c, 
+                              inGame: true,
+                              path: c.moveNumber !== undefined ? { moveNumber: c.moveNumber, exPath: [] } : undefined
+                            })),
+                            ...(allNodeComments || [])
+                          ]
+                        : comments
+                    }
                     players={gameRef.current?.players}
-                    handleSubmit={submitComment}
+                    handleSubmit={
+                      commentingCompletedGame
+                        ? submitNodeComment
+                        : submitComment
+                    }
                     tooMuch={commentsTooLong}
                     gameid={gameRef.current?.id}
-                    commentingCompletedGame={false}
+                    commentingCompletedGame={commentingCompletedGame}
                     userId={globalMe?.id}
+                    handleGameMoveClick={handleGameMoveClick}
+                    focusedPath={focus}
                   />
-                  {!commentingCompletedGame ? null : (
-                    <div>
-                      <h1 className="subtitle lined">
-                        <span>{t("GameComments")}</span>
-                      </h1>
-                      <UserChats
-                        comments={nodeComments}
-                        players={gameRef.current?.players}
-                        handleSubmit={submitNodeComment}
-                        tooMuch={commentsTooLong}
-                        gameid={gameRef.current?.id}
-                        commentingCompletedGame={commentingCompletedGame}
-                        userId={globalMe?.id}
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
