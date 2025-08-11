@@ -427,6 +427,26 @@ function Me(props) {
     }
   };
 
+ const handleUpdateMetaGameCountsClick = async () => {
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      await fetch(API_ENDPOINT_AUTH, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+        },
+        body: JSON.stringify({
+          query: "update_meta_game_counts",
+          pars: {},
+        }),
+      });
+    } catch (error) {
+      errorSetter(error);
+    }
+  };
+
   const handleOneTimeFixClick = async () => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
@@ -755,6 +775,12 @@ function Me(props) {
                   onClick={() => toast("Toast test!")}
                 >
                   Test toast
+                </button>
+                <button
+                  className="button is-small apButton"
+                  onClick={() => handleUpdateMetaGameCountsClick()}
+                >
+                  Update meta game counts
                 </button>
               </div>
             </div>
