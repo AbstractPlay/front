@@ -1426,26 +1426,35 @@ function GameMove(props) {
 
   useEffect(() => {
     console.log("Fetching game data");
-    
-    // We have some evidence that get_game sometimes fails to connect (but report_problem succeeds), implying that a retry might help. Submitting the attempt count 
+
+    // We have some evidence that get_game sometimes fails to connect (but report_problem succeeds), implying that a retry might help. Submitting the attempt count
     // to the backend so that we can monitor this.
     async function fetchWithRetry(fetchFn, maxRetries = 3, baseDelay = 1000) {
       for (let attempt = 0; attempt <= maxRetries; attempt++) {
         try {
           return await fetchFn(attempt);
         } catch (error) {
-          const isNetworkError = error.name === 'TypeError' && error.message.includes('fetch');
-          const isTemporaryError = error.message.includes('Failed to fetch') || 
-                                 error.message.includes('NetworkError') ||
-                                 error.message.includes('ERR_NETWORK');
-          
-          if (attempt === maxRetries || (!isNetworkError && !isTemporaryError)) {
+          const isNetworkError =
+            error.name === "TypeError" && error.message.includes("fetch");
+          const isTemporaryError =
+            error.message.includes("Failed to fetch") ||
+            error.message.includes("NetworkError") ||
+            error.message.includes("ERR_NETWORK");
+
+          if (
+            attempt === maxRetries ||
+            (!isNetworkError && !isTemporaryError)
+          ) {
             throw error;
           }
-          
+
           const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 1000;
-          console.log(`get_game attempt ${attempt + 1} failed, retrying in ${Math.round(delay)}ms...`);
-          await new Promise(resolve => setTimeout(resolve, delay));
+          console.log(
+            `get_game attempt ${attempt + 1} failed, retrying in ${Math.round(
+              delay
+            )}ms...`
+          );
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
     }
@@ -1458,7 +1467,7 @@ function GameMove(props) {
       } catch (err) {
         // OK, non logged in user viewing the game
       }
-      
+
       try {
         const result = await fetchWithRetry(async (attempt) => {
           let data;
@@ -1484,7 +1493,9 @@ function GameMove(props) {
             status = res.status;
             if (status !== 200) {
               const result = await res.json();
-              const error = new Error(`auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`);
+              const error = new Error(
+                `auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`
+              );
               error.status = status;
               throw error;
             } else {
@@ -1504,7 +1515,9 @@ function GameMove(props) {
             status = res.status;
             if (status !== 200) {
               const result = await res.json();
-              const error = new Error(`no auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`);
+              const error = new Error(
+                `no auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`
+              );
               error.status = status;
               throw error;
             } else {
@@ -1515,7 +1528,7 @@ function GameMove(props) {
         });
 
         const { data, status } = result;
-        
+
         if (
           status === 200 &&
           data !== null &&
@@ -1552,7 +1565,7 @@ function GameMove(props) {
           error
         )} for id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}`;
         errorSetter(true);
-        
+
         // Report the error after all retries failed
         reportError(errorMessageRef.current);
       }
@@ -1740,10 +1753,10 @@ function GameMove(props) {
         game.tournament !== null
       ) {
         // Check if tournament reference is already in the new format (metaGame#tournamentId)
-        const tournamentLink = game.tournament.includes('#') 
-          ? `/tournament/${game.tournament.replace('#', '/')}` 
+        const tournamentLink = game.tournament.includes("#")
+          ? `/tournament/${game.tournament.replace("#", "/")}`
           : `/tournament/${game.tournament}?gameId=${game.id}&metaGame=${game.metaGame}`;
-        
+
         parentheticalSetter((val) => [
           ...val,
           <Link to={tournamentLink}>tournament</Link>,
@@ -1821,9 +1834,8 @@ function GameMove(props) {
   ]);
 
   async function reportError(error) {
-    if (!error || error === "")
-      return;
-    
+    if (!error || error === "") return;
+
     try {
       const res = await fetch(API_ENDPOINT_OPEN, {
         method: "POST",
@@ -1834,16 +1846,16 @@ function GameMove(props) {
         body: JSON.stringify({
           query: "report_problem",
           pars: {
-            error: error
-          }
-        })
+            error: error,
+          },
+        }),
       });
-      
+
       const status = res.status;
       if (status !== 200) {
         const result = await res.json();
         console.log(JSON.parse(result.body));
-        
+
         // Retry with truncated error if first attempt fails
         await fetch(API_ENDPOINT_OPEN, {
           method: "POST",
@@ -1854,9 +1866,13 @@ function GameMove(props) {
           body: JSON.stringify({
             query: "report_problem",
             pars: {
-              error: `Error reporting another error, status: ${status}, message: ${result.message}, body: ${result.body}, original error (truncated): ${error.slice(0, 1000)}`
-            }
-          })
+              error: `Error reporting another error, status: ${status}, message: ${
+                result.message
+              }, body: ${
+                result.body
+              }, original error (truncated): ${error.slice(0, 1000)}`,
+            },
+          }),
         });
       }
     } catch (e) {
@@ -1868,14 +1884,18 @@ function GameMove(props) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          query: "report_problem", 
+          query: "report_problem",
           pars: {
-            error: `Error reporting another error: ${String(e)}, original error (truncated): ${error.slice(0, 1000)}`
-          }
-        })
+            error: `Error reporting another error: ${String(
+              e
+            )}, original error (truncated): ${error.slice(0, 1000)}`,
+          },
+        }),
       });
       console.log(
-        `Error auto-reporting another error!\nOriginal error: ${JSON.stringify(error)}\nFetching error: ${JSON.stringify(e)}`
+        `Error auto-reporting another error!\nOriginal error: ${JSON.stringify(
+          error
+        )}\nFetching error: ${JSON.stringify(e)}`
       );
     }
   }
@@ -2697,7 +2717,9 @@ function GameMove(props) {
         colorsChangedSetter((val) => val + 1);
       }
     } catch (err) {
-      setError(`submitMove (move: ${m}, draw: ${draw}) failed with: ${err.message}`);
+      setError(
+        `submitMove (move: ${m}, draw: ${draw}) failed with: ${err.message}`
+      );
     }
   };
 

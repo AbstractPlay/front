@@ -427,7 +427,7 @@ function Me(props) {
     }
   };
 
- const handleUpdateMetaGameCountsClick = async () => {
+  const handleUpdateMetaGameCountsClick = async () => {
     try {
       const usr = await Auth.currentAuthenticatedUser();
       await fetch(API_ENDPOINT_AUTH, {

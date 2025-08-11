@@ -1505,7 +1505,7 @@ function Playground(props) {
             }
             if (globalMe?.settings?.all?.myColor && game.me > 0) {
               const mycolor = options.colours.shift();
-              options.colours.splice(game.me,0,mycolor);
+              options.colours.splice(game.me, 0, mycolor);
             }
           }
         }
