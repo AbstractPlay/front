@@ -677,6 +677,7 @@ async function saveExploration(
   let pars = {
     public: game.gameOver,
     game: game.id,
+    metaGame: game.metaGame,
     move: moveNumber,
     // Note that for completed games you can comment on the parent node, so don't just save children
     tree: game.gameOver
@@ -687,6 +688,17 @@ async function saveExploration(
     pars.version = exploration[moveNumber - 1].version
       ? exploration[moveNumber - 1].version
       : 0;
+    
+    // Check if we need to update the commented flag for completed games
+    const currentFlag = game.commented || 0;
+    const newFlag = analyzeExplorationForCommentedFlag(exploration);
+    
+    // If the new flag is higher than current, signal backend to update COMPLETEDGAMES
+    if (newFlag > currentFlag) {
+      pars.updateCommentedFlag = newFlag;
+      pars.gameEnded = game.gameEnded; // Send the gameEnded timestamp for the exact key
+      game.commented = newFlag; // Update local copy
+    }
   }
   const usr = await Auth.currentAuthenticatedUser();
   const res = await fetch(API_ENDPOINT_AUTH, {
@@ -957,6 +969,35 @@ function getAllNodeComments(exploration) {
   return allComments;
 }
 
+function analyzeExplorationForCommentedFlag(exploration) {
+  let hasVariations = false;
+  let hasPostGameComments = false;
+  
+  function traverseNode(node) {
+    // Check for variations (any node with children)
+    if (node.children && Array.isArray(node.children) && node.children.length > 0) {
+      hasVariations = true;
+      node.children.forEach(child => traverseNode(child));
+    }
+    // Check for post-game comments (annotations)
+    if (node.comment && Array.isArray(node.comment) && node.comment.length > 0) {
+      hasPostGameComments = true;
+    }
+  }
+  
+  if (exploration && Array.isArray(exploration)) {
+    exploration.forEach(node => traverseNode(node));
+  }
+  
+  // Return the appropriate flag value
+  if (hasPostGameComments) {
+    return 3; // Has post-game comments (annotations)
+  } else if (hasVariations) {
+    return 2; // Has post-game variations
+  }
+  return 0; // No post-game content
+}
+
 function canExploreMove(game, exploration, focus) {
   return (
     (!game.gameOver && // game isn't over
@@ -1207,7 +1248,7 @@ function GameMove(props) {
   const [colorsChanged, colorsChangedSetter] = useState(0);
 
   const { t, i18n } = useTranslation();
-  //   const { state } = useLocation();
+  const { state } = useLocation();
   const { metaGame, cbits, gameID } = useParams();
   const cbit = parseInt(cbits, 10);
   const gameDeets = gameinfo.get(metaGame);
@@ -1575,6 +1616,31 @@ function GameMove(props) {
             ) {
               commentsTooLongSetter(true);
             }
+            // Check if commented flag needs to be updated (only for non-completed games)
+            if (data.comments.length > 0 && !data.game.gameEnded && (!data.game.commented || data.game.commented < 1)) {
+              // Send update to backend to set commented flag to 1
+              if (token) {
+                fetch(API_ENDPOINT_AUTH, {
+                  method: "POST",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify({
+                    query: "update_commented",
+                    pars: {
+                      id: gameID,
+                      metaGame: metaGame,
+                      cbit: 0,
+                      commented: 1,
+                    },
+                  }),
+                }).catch(err => {
+                  console.log("Failed to update commented flag:", err);
+                });
+              }
+            }
           }
         } else {
           if ("message" in data) {
@@ -1827,8 +1893,7 @@ function GameMove(props) {
           } else {
             const toMove = parseInt(game.toMove);
             if (
-              game.players[toMove].time - (Date.now() - game.lastMoveTime) <
-              0
+              game.players[toMove].time - (Date.now() - game.lastMoveTime) < 0
             ) {
               checkTime("timeloss");
             }
@@ -2063,6 +2128,54 @@ function GameMove(props) {
             explorationRef.current.nodes,
             explorationRef.current.nodes.length - 1
           );
+          
+          // Check and update commented flag for completed games
+          if (gameRef.current.gameOver) {
+            const correctFlag = analyzeExplorationForCommentedFlag(explorationRef.current.nodes);
+            
+            // Always store the computed correct flag on the game object for use in saveExploration
+            gameRef.current.commented = correctFlag;
+            
+            // Only update backend if we came from ListGames (state?.commented exists)
+            if (state?.commented !== undefined) {
+              const currentFlag = state.commented;
+              
+              // Only update if the correct flag is higher (more specific) than current flag
+              // correctFlag: 0 = no post-game content, 2 = variations, 3 = annotations
+              // We should update if correctFlag > currentFlag
+              if (correctFlag > currentFlag) {
+                console.log(`Updating commented flag for completed game ${gameID} from ${currentFlag} to ${correctFlag}`);
+                // Update the backend
+                Auth.currentAuthenticatedUser()
+                  .then(usr => {
+                    return fetch(API_ENDPOINT_AUTH, {
+                      method: "POST",
+                      headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
+                      },
+                      body: JSON.stringify({
+                        query: "update_commented",
+                        pars: {
+                          id: gameID,
+                          metaGame: gameRef.current.metaGame,
+                          cbit: 1, // Completed games have cbit=1
+                          commented: correctFlag,
+                        },
+                      }),
+                    });
+                  })
+                  .then(() => {
+                    console.log(`Successfully updated commented flag to ${correctFlag}`);
+                  })
+                  .catch(err => {
+                    console.log("Failed to update commented flag for completed game:", err);
+                  });
+              }
+            }
+          }
+          
           if (moveNumberParam) {
             const moveNum = parseInt(moveNumberParam, 10);
             let exPath = [];
@@ -2099,6 +2212,7 @@ function GameMove(props) {
     globalMe,
     moveNumberParam,
     nodeidParam,
+    state,
   ]);
 
   const handlePlaygroundExport = async (state, moveNumber) => {
@@ -2761,6 +2875,13 @@ function GameMove(props) {
   const submitComment = async (comment) => {
     // ignore blank comments
     if (comment.length > 0 && !/^\s*$/.test(comment)) {
+      // Check if we need to update the commented flag for ongoing games
+      // If this is the first comment (comments.length === 0 before we add this one)
+      // and the game is not ended, we should set the flag to 1
+      const shouldUpdateFlag = !gameRef.current.gameEnded && 
+                                comments.length === 0 && 
+                                (!gameRef.current.commented || gameRef.current.commented < 1);
+      
       commentsSetter([
         ...comments,
         { comment: comment, userId: globalMe.id, timeStamp: Date.now() },
@@ -2780,6 +2901,7 @@ function GameMove(props) {
           players = [...gameRef.current.players];
         }
         const metaIfComplete = metaGame;
+        
         const res = await fetch(API_ENDPOINT_AUTH, {
           method: "POST",
           headers: {
@@ -2795,6 +2917,7 @@ function GameMove(props) {
               metaGame: metaIfComplete,
               comment: comment,
               moveNumber: explorationRef.current.nodes.length - 1,
+              updateCommented: shouldUpdateFlag ? 1 : undefined,
             },
           }),
         });
@@ -2803,6 +2926,10 @@ function GameMove(props) {
           setError(
             `submit_comment failed, status: ${result.statusCode}, body: ${result.body}`
           );
+        else if (shouldUpdateFlag) {
+          // Update local game object if flag was updated
+          gameRef.current.commented = 1;
+        }
       } catch (err) {
         console.log(err);
         //setError(err.message);
