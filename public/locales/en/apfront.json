@@ -845,6 +845,7 @@
     "Waiting": "Waiting on other players to submit their moves",
     "WaitingResponse": "Challenges awaiting opponent's response",
     "WelcomePlayer": "Dashboard for",
+    "Winners": "Winners",
     "Winning": "Mark this move as winning for this player",
     "WithVariants_zero": ".",
     "WithVariants_one": " with variant {{variants}}.",
