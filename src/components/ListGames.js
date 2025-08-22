@@ -43,7 +43,6 @@ function ListGames({ fixedState }) {
         url.searchParams.append("type", gameState || fixedState);
         const res = await fetch(url);
         const result = await res.json();
-        console.log(result);
         gamesSetter(result);
         maxPlayersSetter(
           result.reduce((max, game) => Math.max(max, game.players.length), 0)
@@ -79,6 +78,7 @@ function ListGames({ fixedState }) {
   const data = useMemo(
     () =>
       games.map((rec) => {
+        console.log(`Processing game record: ${rec.id} with commented = ${rec.commented}, sk = ${rec.sk}`);
         return {
           id: rec.id,
           started:
@@ -91,6 +91,7 @@ function ListGames({ fixedState }) {
               : null,
           numMoves: rec.numMoves,
           commented: rec.commented || 0,
+          sk: rec.sk, // Include sk for the state
           players: rec.players,
           winners:
             "winner" in rec && rec.winner !== null
@@ -154,25 +155,31 @@ function ListGames({ fixedState }) {
             if (value === 3) {
               // Has annotations
               return (
-                <span className="icon has-text-success" title={t("HasAnnotations")}>
-                  <i className="fa fa-pencil"></i>
-                </span>
+                <div style={{ textAlign: "center", position: "relative", top: "-0.3em" }}>
+                  <span className="icon has-text-success" title={t("HasAnnotations")}>
+                    <i className="fa fa-pencil"></i>
+                  </span>
+                </div>
               );
             } else if (value === 2) {
               // Has variations
               return (
-                <span className="icon has-text-warning" title={t("HasVariations")}>
-                  <i className="fa fa-code-branch"></i>
-                </span>
+                <div style={{ textAlign: "center", position: "relative", top: "-0.3em" }}>
+                  <span className="icon has-text-warning" title={t("HasVariations")}>
+                    <i className="fa fa-sitemap"></i>
+                  </span>
+                </div>
               );
             }
           }
           // For current games or completed games with in-game comments (bit 0 = 1)
           else if (value > 0) {
             return (
-              <span className="icon has-text-info" title={t("HasComments")}>
-                <i className="fa fa-comment"></i>
-              </span>
+              <div style={{ textAlign: "center", position: "relative", top: "-0.3em" }}>
+                <span className="icon has-text-info" title={t("HasComments")}>
+                  <i className="fa fa-comment"></i>
+                </span>
+              </div>
             );
           }
           return "";
@@ -197,7 +204,7 @@ function ListGames({ fixedState }) {
         cell: (props) => (
           <Link
             to={`/move/${metaGame}/${props.row.original.cbit}/${props.row.original.id}`}
-            state={{ commented: props.row.original.commented }}
+            state={{ commented: props.row.original.commented, key: props.row.original.sk }}
           >
             {t("VisitGame")}
           </Link>

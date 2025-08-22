@@ -137,6 +137,7 @@ function setupGame(
 ) {
   if (game0.state === undefined)
     throw new Error("Why no state? This shouldn't happen no more!");
+  console.log("(setupGame) Setting up game:", game0.id);
   const engine = GameFactory(game0.metaGame, game0.state);
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
@@ -297,6 +298,14 @@ function setupGame(
   const tmpEngine = GameFactory(game0.metaGame, game0.state);
   game0.gameOver = tmpEngine.gameover;
   const winner = tmpEngine.winner;
+  
+  // If the game is over and gameEnded is not set, calculate it from the last move's timestamp
+  if (game0.gameOver && !game0.gameEnded && tmpEngine.stack.length > 0) {
+    const lastMove = tmpEngine.stack[tmpEngine.stack.length - 1];
+    if (lastMove && lastMove._timestamp) {
+      game0.gameEnded = new Date(lastMove._timestamp).getTime();
+    }
+  }
   while (true) {
     history.unshift(
       // state to be filled in on demand
@@ -332,6 +341,7 @@ function setupGame(
   focusSetter(focus0);
   console.log(`(setupGame) ABOUT TO RERENDER! Display setting: ${display}`);
   renderrepSetter(render);
+  console.log('calling setURL from setupGame');
   setURL(explorationRef.current.nodes, focus0, game0, navigate);
 }
 
@@ -690,11 +700,10 @@ async function saveExploration(
       : 0;
     
     // Check if we need to update the commented flag for completed games
-    const currentFlag = game.commented || 0;
+    const currentFlag = game.commented || 0; // note this should only happen after we have fetched public exploration, so should have the correct value
+                                             // from before this (the one we are saving) exploration was added
     const newFlag = analyzeExplorationForCommentedFlag(exploration);
-    
-    // If the new flag is higher than current, signal backend to update COMPLETEDGAMES
-    if (newFlag > currentFlag) {
+    if (newFlag != currentFlag) {
       pars.updateCommentedFlag = newFlag;
       pars.gameEnded = game.gameEnded; // Send the gameEnded timestamp for the exact key
       game.commented = newFlag; // Update local copy
@@ -929,6 +938,7 @@ function setURL(exploration, focus, game, navigate) {
         nodeid: node.id,
       }).toString();
     }
+    console.log(`Setting URL to ?${newQueryString} for game ${game.id}`);
     navigate(`?${newQueryString}`, { replace: true });
   }
 }
@@ -1248,7 +1258,10 @@ function GameMove(props) {
   const [colorsChanged, colorsChangedSetter] = useState(0);
 
   const { t, i18n } = useTranslation();
-  const { state } = useLocation();
+  // State is passed as a prop from GameMoveWrapper
+  const state = props.routerState;
+  console.log(`Entering GameMove component with commented = ${state?.commented}`);
+
   const { metaGame, cbits, gameID } = useParams();
   const cbit = parseInt(cbits, 10);
   const gameDeets = gameinfo.get(metaGame);
@@ -1604,6 +1617,10 @@ function GameMove(props) {
           data !== undefined &&
           "game" in data
         ) {
+          if (state) {
+            data.game.commentedFromList = state.commented;
+            data.game.completedGameKey = state.key;
+          }
           //   console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
           dbgameSetter(data.game);
           if (data.comments !== undefined) {
@@ -1641,6 +1658,7 @@ function GameMove(props) {
                 });
               }
             }
+            data.game.commented = data.comments.length > 0 ? 1 : 0;
           }
         } else {
           if ("message" in data) {
@@ -1831,6 +1849,7 @@ function GameMove(props) {
         globalMe,
         colourContext
       );
+            
       // check for note
       // note should only be defined if the user is logged in and
       // is the owner of the note.
@@ -2112,38 +2131,38 @@ function GameMove(props) {
         errorSetter(true);
       } else {
         const result = await res.json();
-        if (result !== undefined && result.length > 0) {
-          const data = result.map((d) => {
-            if (d && typeof d.tree === "string") {
-              d.tree = JSON.parse(d.tree);
-            }
-            return d;
-          });
-          mergePublicExploration(
-            gameRef.current,
-            explorationRef.current.nodes,
-            data
-          );
-          fixMoveOutcomes(
-            explorationRef.current.nodes,
-            explorationRef.current.nodes.length - 1
-          );
-          
+        console.log("get_public_exploration result:", result);
+        if (result !== undefined) {
+          if (result.length > 0) {
+            const data = result.map((d) => {
+              if (d && typeof d.tree === "string") {
+                d.tree = JSON.parse(d.tree);
+              }
+              return d;
+            });
+            mergePublicExploration(
+              gameRef.current,
+              explorationRef.current.nodes,
+              data
+            );
+            fixMoveOutcomes(
+              explorationRef.current.nodes,
+              explorationRef.current.nodes.length - 1
+            );
+          }
           // Check and update commented flag for completed games
           if (gameRef.current.gameOver) {
-            const correctFlag = analyzeExplorationForCommentedFlag(explorationRef.current.nodes);
-            
+            var correctFlag = analyzeExplorationForCommentedFlag(explorationRef.current.nodes);
+            if (correctFlag === 0 && gameRef.current.commented === 1)
+              correctFlag = 1;
             // Always store the computed correct flag on the game object for use in saveExploration
             gameRef.current.commented = correctFlag;
             
-            // Only update backend if we came from ListGames (state?.commented exists)
-            if (state?.commented !== undefined) {
-              const currentFlag = state.commented;
-              
-              // Only update if the correct flag is higher (more specific) than current flag
-              // correctFlag: 0 = no post-game content, 2 = variations, 3 = annotations
-              // We should update if correctFlag > currentFlag
-              if (correctFlag > currentFlag) {
+            // Only update backend if we came from ListGames (commentedFromList was stored)
+            console.log(`commentedFromList = ${gameRef.current.commentedFromList}, correctFlag = ${correctFlag}`);
+            if (gameRef.current.commentedFromList !== undefined) {
+              const currentFlag = gameRef.current.commentedFromList;
+              if (correctFlag !== currentFlag) {
                 console.log(`Updating commented flag for completed game ${gameID} from ${currentFlag} to ${correctFlag}`);
                 // Update the backend
                 Auth.currentAuthenticatedUser()
@@ -2162,6 +2181,7 @@ function GameMove(props) {
                           metaGame: gameRef.current.metaGame,
                           cbit: 1, // Completed games have cbit=1
                           commented: correctFlag,
+                          gameEnded: gameRef.current.completedGameKey.substring(0, 13),
                         },
                       }),
                     });
@@ -2175,17 +2195,18 @@ function GameMove(props) {
               }
             }
           }
-          
-          if (moveNumberParam) {
-            const moveNum = parseInt(moveNumberParam, 10);
-            let exPath = [];
-            if (nodeidParam) {
-              exPath =
-                explorationRef.current.nodes[moveNum].findNode(nodeidParam);
+          if (result.length > 0) {
+            if (moveNumberParam) {
+              const moveNum = parseInt(moveNumberParam, 10);
+              let exPath = [];
+              if (nodeidParam) {
+                exPath =
+                  explorationRef.current.nodes[moveNum].findNode(nodeidParam);
+              }
+              handleGameMoveClick({ moveNumber: moveNum, exPath });
+            } else {
+              focusSetter(cloneDeep(focus)); // just to trigger a rerender...
             }
-            handleGameMoveClick({ moveNumber: moveNum, exPath });
-          } else {
-            focusSetter(cloneDeep(focus)); // just to trigger a rerender...
           }
         } else {
           // even if no exploration, support moveNumberParam
