@@ -137,7 +137,6 @@ function setupGame(
 ) {
   if (game0.state === undefined)
     throw new Error("Why no state? This shouldn't happen no more!");
-  console.log("(setupGame) Setting up game:", game0.id);
   const engine = GameFactory(game0.metaGame, game0.state);
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
@@ -341,7 +340,6 @@ function setupGame(
   focusSetter(focus0);
   console.log(`(setupGame) ABOUT TO RERENDER! Display setting: ${display}`);
   renderrepSetter(render);
-  console.log('calling setURL from setupGame');
   setURL(explorationRef.current.nodes, focus0, game0, navigate);
 }
 
@@ -938,7 +936,6 @@ function setURL(exploration, focus, game, navigate) {
         nodeid: node.id,
       }).toString();
     }
-    console.log(`Setting URL to ?${newQueryString} for game ${game.id}`);
     navigate(`?${newQueryString}`, { replace: true });
   }
 }
@@ -1260,7 +1257,6 @@ function GameMove(props) {
   const { t, i18n } = useTranslation();
   // State is passed as a prop from GameMoveWrapper
   const state = props.routerState;
-  console.log(`Entering GameMove component with commented = ${state?.commented}`);
 
   const { metaGame, cbits, gameID } = useParams();
   const cbit = parseInt(cbits, 10);
@@ -2131,7 +2127,6 @@ function GameMove(props) {
         errorSetter(true);
       } else {
         const result = await res.json();
-        console.log("get_public_exploration result:", result);
         if (result !== undefined) {
           if (result.length > 0) {
             const data = result.map((d) => {
@@ -2159,11 +2154,9 @@ function GameMove(props) {
             gameRef.current.commented = correctFlag;
             
             // Only update backend if we came from ListGames (commentedFromList was stored)
-            console.log(`commentedFromList = ${gameRef.current.commentedFromList}, correctFlag = ${correctFlag}`);
             if (gameRef.current.commentedFromList !== undefined) {
               const currentFlag = gameRef.current.commentedFromList;
               if (correctFlag !== currentFlag) {
-                console.log(`Updating commented flag for completed game ${gameID} from ${currentFlag} to ${correctFlag}`);
                 // Update the backend
                 Auth.currentAuthenticatedUser()
                   .then(usr => {
