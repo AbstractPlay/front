@@ -2263,7 +2263,7 @@ function GameMove(props) {
       }
     }
 
-    if (focus && !explorationFetched && gameRef.current.canExplore) {
+    if (focus && !explorationFetched && (gameRef.current.canExplore || gameRef.current.gameOver)) {
       if (gameRef.current.gameOver) {
         fetchPublicExploration();
       } else {
