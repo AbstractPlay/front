@@ -312,7 +312,8 @@ function GameMoves(props) {
           className={m.class}
           onClick={() => props.handleGameMoveClick(m.path)}
         >
-          {m.move}
+          {m.move.endsWith("...") ? m.move.slice(0, -3) : m.move}
+          {m.move.endsWith("...") && <span style={{ fontSize: "1.3em", fontWeight: "bold" }}>...</span>}
           {m.outcome === -1 ? null : game.colors[m.outcome].isImage ? (
             <img
               className="winnerImage"

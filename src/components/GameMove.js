@@ -12,7 +12,7 @@ import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render, renderglyph } from "@abstractplay/renderer";
 import { Auth } from "aws-amplify";
-import { cloneDeep } from "lodash";
+import { cloneDeep, has } from "lodash";
 import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
 import { GameNode } from "./GameMove/GameTree";
 import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
@@ -675,9 +675,10 @@ async function saveExploration(
   errorSetter,
   errorMessageRef,
   focus = undefined,
-  navigate = undefined
+  navigate = undefined,
+  commentJustAdded = false
 ) {
-  if (!me || !isExplorer(explorer, me)) return;
+  if (!me) return;
   if (!game.gameOver) {
     if (moveNumber !== exploration.length)
       throw new Error("Can't save exploration at this move!");
@@ -703,8 +704,16 @@ async function saveExploration(
     const newFlag = analyzeExplorationForCommentedFlag(exploration);
     if (newFlag != currentFlag) {
       pars.updateCommentedFlag = newFlag;
-      pars.gameEnded = game.gameEnded; // Send the gameEnded timestamp for the exact key
+      pars.gameEnded = game.completedGameKey ? game.completedGameKey.substring(0, 13) : game.gameEnded; // Send the gameEnded timestamp for the exact key
       game.commented = newFlag; // Update local copy
+    }
+    
+    // Only update lastChat when a comment was just added
+    if (commentJustAdded) {
+      pars.updateLastChat = true;
+      pars.players = game.players;
+      pars.gameEnded = game.gameEnded; // Include gameEnded for fetching the game if needed
+      console.log(`Triggering lastChat update for game ${game.id} (comment was just added)`);
     }
   }
   const usr = await Auth.currentAuthenticatedUser();
@@ -1158,6 +1167,48 @@ const populateChecked = (gameRef, engineRef, t, setter) => {
     setter("");
   }
 };
+
+function isInterestingComment(comment) {
+  // Normalize the comment
+  const normalized = comment.toLowerCase().trim();
+  
+  // Remove punctuation for comparison
+  const withoutPunctuation = normalized.replace(/[^\w\s]/g, '');
+  
+  // Common boring phrases (exact matches)
+  const boringPhrases = new Set([
+    'gg', 'glhf', 'gl', 'hf', 'tagg', 'hi', 'hello', 'hey',
+    'thanks', 'thx', 'ty', 'yw', 'np', 'wp', 'well played',
+    'good game', 'good luck', 'have fun', 'thanks for the game',
+    'pie invoked', 'move', 'gg sir', 'gg!', 'tagg!', 'glhf!',
+    'to a good game', 'have a good game', 'good luck!', 'have fun!',
+    'thanks for playing', 'thanks for the game!', 'gg thanks',
+    'yoyo', 'yoyo gl', 'yoyo gl hf'
+  ]);
+  
+  // Check for exact matches (with or without punctuation)
+  if (boringPhrases.has(normalized) || boringPhrases.has(withoutPunctuation)) {
+    return false;
+  }
+  
+  // Split into words for further analysis
+  const words = withoutPunctuation.split(/\s+/).filter(w => w.length > 0);
+  
+  // Very short comments with only common game words are boring
+  const commonWords = new Set([
+    'gg', 'gl', 'hf', 'tagg', 'hi', 'hello', 'yoyo',
+    'thanks', 'thx', 'ty', 'wp', 'move', 'pie', 'invoked',
+    'good', 'game', 'luck', 'fun', 'for', 'the', 'a', 'to',
+    'have', 'sir', 'well', 'played', 'you', 'too'
+  ]);
+  
+  if (words.length <= 3 && words.every(w => commonWords.has(w))) {
+    return false;
+  }
+  
+  // If we got here, the comment is interesting
+  return true;
+}
 
 const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
 
@@ -1629,9 +1680,10 @@ function GameMove(props) {
             ) {
               commentsTooLongSetter(true);
             }
-            // Check if commented flag needs to be updated (only for non-completed games)
-            if (data.comments.length > 0 && !data.game.gameEnded && (!data.game.commented || data.game.commented < 1)) {
-              // Send update to backend to set commented flag to 1
+            const hasInterestingComments = data.comments.some(c => isInterestingComment(c.comment));
+            // Check if commented flag needs to be updated (only for in-progress games)
+            if (data.game.toMove !== "" && (data.game.commented ? 0 : data.game.commented) !== (hasInterestingComments ? 1 : 0)) {
+              // Send update to backend to update commented flag for in-progress game
               if (token) {
                 fetch(API_ENDPOINT_AUTH, {
                   method: "POST",
@@ -1646,7 +1698,7 @@ function GameMove(props) {
                       id: gameID,
                       metaGame: metaGame,
                       cbit: 0,
-                      commented: 1,
+                      commented: hasInterestingComments ? 1 : 0,
                     },
                   }),
                 }).catch(err => {
@@ -1654,7 +1706,7 @@ function GameMove(props) {
                 });
               }
             }
-            data.game.commented = data.comments.length > 0 ? 1 : 0;
+            data.game.commented = hasInterestingComments ? 1 : 0;
           }
         } else {
           if ("message" in data) {
@@ -2969,7 +3021,8 @@ function GameMove(props) {
         errorSetter,
         errorMessageRef,
         focus,
-        navigate
+        navigate,
+        true  // commentJustAdded
       );
       focusSetter(cloneDeep(focus));
     }

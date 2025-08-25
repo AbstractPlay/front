@@ -111,7 +111,7 @@ function CompletedGamesTable(props) {
                 }
               >
                 <Link
-                  to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
+                  to={`/move/${props.row.original.metaGame}/1/${props.row.original.id}`}
                 >
                   {props.getValue()}
                 </Link>
