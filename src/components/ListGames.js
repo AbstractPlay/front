@@ -43,7 +43,6 @@ function ListGames({ fixedState }) {
         url.searchParams.append("type", gameState || fixedState);
         const res = await fetch(url);
         const result = await res.json();
-        console.log(result);
         gamesSetter(result);
         maxPlayersSetter(
           result.reduce((max, game) => Math.max(max, game.players.length), 0)
@@ -79,6 +78,7 @@ function ListGames({ fixedState }) {
   const data = useMemo(
     () =>
       games.map((rec) => {
+        console.log(`Processing game record: ${rec.id} with commented = ${rec.commented}, sk = ${rec.sk}`);
         return {
           id: rec.id,
           started:
@@ -90,6 +90,8 @@ function ListGames({ fixedState }) {
               ? new Date(rec.gameEnded)
               : null,
           numMoves: rec.numMoves,
+          commented: rec.commented || 0,
+          sk: rec.sk, // Include sk for the state
           players: rec.players,
           winners:
             "winner" in rec && rec.winner !== null
@@ -111,17 +113,17 @@ function ListGames({ fixedState }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("started", {
-        header: "Date started",
+        header: t("DateStarted"),
         cell: (props) =>
           props.getValue() === null ? "" : props.getValue().toDateString(),
       }),
       columnHelper.accessor("ended", {
-        header: "Date ended",
+        header: t("DateEnded"),
         cell: (props) =>
           props.getValue() === null ? "" : props.getValue().toDateString(),
       }),
       columnHelper.accessor("players", {
-        header: "Players",
+        header: t("Players"),
         cell: (props) =>
           props
             .getValue()
@@ -140,15 +142,60 @@ function ListGames({ fixedState }) {
         enableSorting: false,
       }),
       columnHelper.accessor("numMoves", {
-        header: "# moves",
+        header: t("NumMoves"),
+      }),
+      columnHelper.accessor("commented", {
+        header: t("Comments"),
+        cell: (props) => {
+          const value = props.getValue();
+          const isCompleted = props.row.original.cbit === 1;
+          
+          // For completed games: 2 = variations, 3 = annotations
+          if (isCompleted && value >= 2) {
+            if (value === 3) {
+              // Has annotations
+              return (
+                <div style={{ textAlign: "center", position: "relative", top: "-0.3em" }}>
+                  <span className="icon has-text-success" title={t("HasAnnotations")}>
+                    <i className="fa fa-pencil"></i>
+                  </span>
+                </div>
+              );
+            } else if (value === 2) {
+              // Has variations
+              return (
+                <div style={{ textAlign: "center", position: "relative", top: "-0.3em" }}>
+                  <span className="icon has-text-warning" title={t("HasVariations")}>
+                    <i className="fa fa-sitemap"></i>
+                  </span>
+                </div>
+              );
+            }
+          }
+          // For current games or completed games with in-game comments (bit 0 = 1)
+          else if (value > 0) {
+            return (
+              <div style={{ textAlign: "center", position: "relative", top: "-0.3em" }}>
+                <span className="icon has-text-info" title={t("HasComments")}>
+                  <i className="fa fa-comment"></i>
+                </span>
+              </div>
+            );
+          }
+          return "";
+        },
+        sortingFn: (rowA, rowB) => {
+          // Sort by commented value directly to distinguish between different types
+          return rowA.original.commented - rowB.original.commented;
+        },
       }),
       columnHelper.accessor("winners", {
-        header: "Winners",
+        header: t("Winners"),
         cell: (props) =>
           props.getValue() === null ? "" : props.getValue().join(", "),
       }),
       columnHelper.accessor("variants", {
-        header: "Variants",
+        header: t("Variants"),
         cell: (props) =>
           props.getValue() === null ? "" : props.getValue().join("; "),
       }),
@@ -157,6 +204,7 @@ function ListGames({ fixedState }) {
         cell: (props) => (
           <Link
             to={`/move/${metaGame}/${props.row.original.cbit}/${props.row.original.id}`}
+            state={{ commented: props.row.original.commented, key: props.row.original.sk }}
           >
             {t("VisitGame")}
           </Link>
@@ -232,10 +280,10 @@ function ListGames({ fixedState }) {
             </div>
             <div className="level-item">
               <p>
-                Page{" "}
-                <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
+                {t("Page")}{" "}
+                <strong>{table.getState().pagination.pageIndex + 1}</strong> {t("of")}{" "}
                 <strong>{table.getPageCount()}</strong> (
-                {table.getPrePaginationRowModel().rows.length} total games)
+                {table.getPrePaginationRowModel().rows.length} {t("TotalGames")})
               </p>
             </div>
             {/* <div className="level-item">
@@ -263,7 +311,7 @@ function ListGames({ fixedState }) {
                   >
                     {[10, 20, 30, 40, 50, allSize].map((pageSize) => (
                       <option key={pageSize} value={pageSize}>
-                        Show {pageSize === allSize ? "All" : pageSize}
+                        {t("Show")} {pageSize === allSize ? t("All") : pageSize}
                       </option>
                     ))}
                   </select>
@@ -283,9 +331,9 @@ function ListGames({ fixedState }) {
           property="og:title"
           content={`${metaGameName}: ${
             fixedState === "current" || gameState === "current"
-              ? "Active"
-              : "Completed"
-          } Games`}
+              ? t("Active")
+              : t("Completed")
+          } ${t("Games")}`}
         />
         <meta
           property="og:url"
@@ -293,11 +341,11 @@ function ListGames({ fixedState }) {
         />
         <meta
           property="og:description"
-          content={`List of ${
+          content={`${t("ListOf")} ${
             fixedState === "current" || gameState === "current"
-              ? "Active"
-              : "Completed"
-          } games of ${metaGameName}`}
+              ? t("Active").toLowerCase()
+              : t("Completed").toLowerCase()
+          } ${t("GamesOf")} ${metaGameName}`}
         />
       </Helmet>
       <article>
@@ -313,7 +361,7 @@ function ListGames({ fixedState }) {
           >
             <a href={`https://records.abstractplay.com/meta/${metaGame}.json`}>
               <button className="button apButton is-small">
-                Download all completed game reports
+                {t("DownloadCompletedGames")}
               </button>
             </a>
           </div>
