@@ -49,11 +49,11 @@ function StandingChallenges(props) {
         body: JSON.stringify({
           query: "report_problem",
           pars: {
-            error: error
-          }
-        })
+            error: error,
+          },
+        }),
       });
-      
+
       const status = res.status;
       if (status !== 200) {
         const result = await res.json();
