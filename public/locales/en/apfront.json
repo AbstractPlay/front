@@ -121,6 +121,11 @@
             "full": "Board > Shape > Hexagon",
             "tag": "Shape: Hex"
         },
+        "board>shape>pent": {
+            "description": "The board is shaped like a pentagon",
+            "full": "Board > Shape > Pentagon",
+            "tag": "Shape: Pent"
+        },
         "board>shape>oct": {
             "description": "The board is shaped like an octagon",
             "full": "Board > Shape > Octagon",
