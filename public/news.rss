@@ -633,7 +633,7 @@ Anyway, interested testers can join us at https://play.dev.abstractplay.com and 
     
     <item>
       <title>Announcement</title>
-      <description>I have finally added the original 8x8 board back into Lines of Action (tagging @alek ). I won&amp;apos;t bore you with the long explanation, but in short, omitting it was a mistake that I won&amp;apos;t make again. Because reasons, the 8x8 board is available as a variant. I know this is not ideal, but *fully* repairing my error was simply going to cost too much by way of time. Again, I&amp;apos;m sorry. It won&amp;apos;t happen again. Enjoy!!</description>
+      <description>I have finally added the original 8x8 board back into Lines of Action (tagging @bael ). I won&amp;apos;t bore you with the long explanation, but in short, omitting it was a mistake that I won&amp;apos;t make again. Because reasons, the 8x8 board is available as a variant. I know this is not ideal, but *fully* repairing my error was simply going to cost too much by way of time. Again, I&amp;apos;m sorry. It won&amp;apos;t happen again. Enjoy!!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Thu, 20 Jul 2023 22:17:52 GMT</pubDate>
       <guid isPermaLink="false">1131711604396925018</guid>
@@ -745,7 +745,7 @@ Thanks to everybody who takes the time to report bugs and make suggestions for i
     
     <item>
       <title>Announcement</title>
-      <description>**Testers wanted for new game Bide!** @alek&amp;apos;s game Bide is now available on the dev server. Testers are invited to come help us break it. I&amp;apos;m pretty comfortable that the core rules are correct, but I particularly would like to get a three-player game in with some releasing, just to make sure all the code is correct at higher player counts. Thank you, testers!</description>
+      <description>**Testers wanted for new game Bide!** @bael&amp;apos;s game Bide is now available on the dev server. Testers are invited to come help us break it. I&amp;apos;m pretty comfortable that the core rules are correct, but I particularly would like to get a three-player game in with some releasing, just to make sure all the code is correct at higher player counts. Thank you, testers!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Sun, 30 Jul 2023 16:56:20 GMT</pubDate>
       <guid isPermaLink="false">1135254564120055919</guid>
@@ -951,7 +951,7 @@ If your favourite game was not migrated, please submit a suggestion. Thank you t
     
     <item>
       <title>Announcement</title>
-      <description>@alek &amp;apos;s game Bide is now available on the production server, supporting 2–6 players. Enjoy!</description>
+      <description>@bael &amp;apos;s game Bide is now available on the production server, supporting 2–6 players. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Mon, 25 Sep 2023 12:22:22 GMT</pubDate>
       <guid isPermaLink="false">1155841726708199445</guid>
@@ -967,7 +967,7 @@ If your favourite game was not migrated, please submit a suggestion. Thank you t
     
     <item>
       <title>Announcement</title>
-      <description>A notes feature has now been added (@Avri , @alek , @Samraku). Notes are private. Only you can see them. Notes are tied to games, not to individual moves. Notes disappear when a game concludes and is first cleared from your completed list. Because I had to pick a number, I&amp;apos;ve limited notes to 250 characters. That seems reasonable, but do let me know if it&amp;apos;s too restrictive. Feedback on the UX is welcome.</description>
+      <description>A notes feature has now been added (@Avri , @bael , @Samraku). Notes are private. Only you can see them. Notes are tied to games, not to individual moves. Notes disappear when a game concludes and is first cleared from your completed list. Because I had to pick a number, I&amp;apos;ve limited notes to 250 characters. That seems reasonable, but do let me know if it&amp;apos;s too restrictive. Feedback on the UX is welcome.</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Thu, 05 Oct 2023 23:11:49 GMT</pubDate>
       <guid isPermaLink="false">1159629047001792573</guid>
@@ -1181,7 +1181,7 @@ Continued feedback and suggestions welcome. Enjoy!</description>
     
     <item>
       <title>Announcement</title>
-      <description>Michael Amundsen and @alek &amp;apos;s game Lielow is now available on the production server. Again, many thanks to @ypaul for coding this one for us. Enjoy!</description>
+      <description>Michael Amundsen and @bael &amp;apos;s game Lielow is now available on the production server. Again, many thanks to @ypaul for coding this one for us. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Sun, 24 Dec 2023 22:14:05 GMT</pubDate>
       <guid isPermaLink="false">1188605548308987994</guid>
@@ -1213,7 +1213,7 @@ Continued feedback and suggestions welcome. Enjoy!</description>
     
     <item>
       <title>Announcement</title>
-      <description>And @ypaul is keeping the holiday cornucopia flowing with the addition of @alek &amp;apos;s game Trike. It&amp;apos;s now available on the production server. Enjoy!</description>
+      <description>And @ypaul is keeping the holiday cornucopia flowing with the addition of @bael &amp;apos;s game Trike. It&amp;apos;s now available on the production server. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Tue, 26 Dec 2023 15:20:06 GMT</pubDate>
       <guid isPermaLink="false">1189226138099257524</guid>
@@ -2009,7 +2009,7 @@ https://play.abstractplay.com/events</description>
     
     <item>
       <title>Announcement</title>
-      <description>An isometric view of @alek&amp;apos;s game Bide is now available:</description>
+      <description>An isometric view of @bael&amp;apos;s game Bide is now available:</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Mon, 05 Aug 2024 21:35:40 GMT</pubDate>
       <guid isPermaLink="false">1270133148679798784</guid>
@@ -2138,7 +2138,7 @@ Also, at @Drew Edwards (Coldsalmon)&amp;apos;s request, the four-ring cobweb var
     
     <item>
       <title>Announcement</title>
-      <description>@alek&amp;apos;s game Resolve is now available (thanks, @ypaul). Also, a &amp;quot;no incursions&amp;quot; variant has been added to @Gatsby&amp;apos;s Asli, and the &amp;quot;Plus&amp;quot; variant has been added to @pasxalis1987&amp;apos;s AlmaTafl. Enjoy!</description>
+      <description>@bael&amp;apos;s game Resolve is now available (thanks, @ypaul). Also, a &amp;quot;no incursions&amp;quot; variant has been added to @Gatsby&amp;apos;s Asli, and the &amp;quot;Plus&amp;quot; variant has been added to @pasxalis1987&amp;apos;s AlmaTafl. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Sun, 22 Sep 2024 16:02:48 GMT</pubDate>
       <guid isPermaLink="false">1287443999069700136</guid>
@@ -2383,7 +2383,7 @@ I have a number of challenges up. Enjoy!</description>
     
     <item>
       <title>Announcement</title>
-      <description>@alek&amp;apos;s and @emptytheory&amp;apos;s games Basalt and Catapult are now available. Basalt is a connection game on a triangular board that involves a unique stacking mechanism. Catapult is an annihilation game where you toss stones across the board at each other. Enjoy!</description>
+      <description>@bael&amp;apos;s and @emptytheory&amp;apos;s games Basalt and Catapult are now available. Basalt is a connection game on a triangular board that involves a unique stacking mechanism. Catapult is an annihilation game where you toss stones across the board at each other. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Sun, 19 Jan 2025 21:41:29 GMT</pubDate>
       <guid isPermaLink="false">1330653383736037477</guid>
@@ -2633,7 +2633,7 @@ The board configuration is random each game. Pieces have different move options 
     
     <item>
       <title>Announcement</title>
-      <description>@alek &amp;amp; @emptytheory &amp;apos;s group flipping game Paintbucket is now available. Enjoy!</description>
+      <description>@bael &amp;amp; @emptytheory &amp;apos;s group flipping game Paintbucket is now available. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Sat, 05 Apr 2025 20:03:32 GMT</pubDate>
       <guid isPermaLink="false">1358170211869790418</guid>
@@ -2860,6 +2860,14 @@ Let us know if you run into any issues. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Tue, 15 Jul 2025 19:00:32 GMT</pubDate>
       <guid isPermaLink="false">1394755531838586911</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@cdunc123 &amp;apos;s game Bluestone is now available (thanks to @ManaT ). This is a hybrid area-control/connection game where you try to connect your groups to more of the perimeter stones than your opponent. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 03 Sep 2025 17:02:04 GMT</pubDate>
+      <guid isPermaLink="false">1412845114077872148</guid>
     </item>
     
   </channel>
