@@ -1,75 +1,67 @@
-# Running this script will build, pack and install a new local version of the renderer and gameslib package from disc (assumed to be at ../renderer and 
-# ../gameslib).
-$GAMESLIB_PATH = "../gameslib"
-$RENDERERLIB_PATH = "../renderer"
-$CURRENT_DIR = Get-Location
+# Build, pack, and install fresh local versions of @abstractplay/renderer and @abstractplay/gameslib
+$ErrorActionPreference = "Stop"
 
-# Find max renderer version between front and gameslib
-$versionStrings1 = npm cache ls | Select-String '\\renderer\\abstractplay-renderer-[0-9]+\.[0-9]+\.([0-9]+)(-beta)?\.tgz' -AllMatches
-$maxNumber1 = 1;
-if ($null -ne $versionStrings1.Matches -and $versionStrings1.Matches -ne '') {
-  $versions1 = $versionStrings1.Matches | ForEach-Object { [int]$_.Groups[1].Value }
-  $maxNumber1 = ($versions1 | Measure-Object -Maximum).Maximum + 1
-}
+$GAMESLIB_PATH = Resolve-Path "../gameslib"
+$RENDERERLIB_PATH = Resolve-Path "../renderer"
 
-Set-Location $GAMESLIB_PATH
-$versionStrings2 = npm cache ls | Select-String '\\gameslib\\abstractplay-gameslib-[0-9]+\.[0-9]+\.([0-9]+)(-beta)?\.tgz' -AllMatches
-$maxNumber2 = 1;
-if ($null -ne $versionStrings2.Matches -and $versionStrings2.Matches -ne '') {
-  $versions2 = $versionStrings2.Matches | ForEach-Object { [int]$_.Groups[1].Value }
-  $maxNumber2 = ($versions2 | Measure-Object -Maximum).Maximum + 1
-}
-$maxNumber = if ($maxNumber1 -gt $maxNumber2) { $maxNumber1 } else { $maxNumber2 }
+# === RENDERER ===
+Push-Location $RENDERERLIB_PATH
 
-$NEW_VERSION = "1.0." + $maxNumber
-Write-Output "New renderer version is: $NEW_VERSION"
+# 1) Create a unique prerelease version (e.g., 1.0.0-dev.20250903T211500)
+$pkg = Get-Content package.json -Raw | ConvertFrom-Json
+$base = ($pkg.version -split "-")[0]
+$stamp = Get-Date -Format "yyyyMMddTHHmmss"
+$rendererVersion = "$base-dev.$stamp"
 
-Set-Location $RENDERERLIB_PATH
-# Update the version number in the package.json file
-npm version $NEW_VERSION --no-git-tag-version --allow-same-version
+# Update the version without tagging
+npm version $rendererVersion --no-git-tag-version
 
-# Remove old pack files (otherwise they seem to get added to the new package)
-Remove-Item .\abstractplay-renderer-*.tgz
-
+# 2) Build
 npm run build
-if ($LASTEXITCODE -ne 0) {
-  Set-Location $CURRENT_DIR
-  throw "npm run build failed in renderer!"
-}
+if ($LASTEXITCODE -ne 0) { Pop-Location; throw "renderer build failed" }
 
-# Package the library into a .tgz file
-npm pack
+# 3) Pack to a tarball and capture its name robustly
+$packJson = npm pack --json | ConvertFrom-Json
+$rendererTgzName = $packJson[0].filename
+$rendererTgzPath = Join-Path (Get-Location) $rendererTgzName
 
-# Save the path to the .tgz file
-$RENDERER_TGZ_PATH = "${RENDERERLIB_PATH}\abstractplay-renderer-${NEW_VERSION}.tgz"
+Pop-Location  # back to `front`
 
-# Install in gameslib
-Set-Location $GAMESLIB_PATH
+# === GAMESLIB ===
+Push-Location $GAMESLIB_PATH
 
-# Install the package
-npm install $RENDERER_TGZ_PATH --loglevel verbose
+# 1) Create a unique prerelease version (e.g., 1.0.0-dev.20250903T211500)
+$pkg = Get-Content package.json -Raw | ConvertFrom-Json
+$base = ($pkg.version -split "-")[0]
+$stamp = Get-Date -Format "yyyyMMddTHHmmss"
+$gameslibVersion = "$base-dev.$stamp"
 
-$NEW_VERSION = "1.0." + $maxNumber
-Write-Output "New gameslib version is: $NEW_VERSION"
+# Update the version without tagging
+npm version $gameslibVersion --no-git-tag-version
 
-# Change to the package directory
-Set-Location $GAMESLIB_PATH
+# 2) Install the renderer first
+npm install --force $rendererTgzPath --loglevel verbose
 
-# Update the version number in the package.json file
-npm version $NEW_VERSION --no-git-tag-version --allow-same-version
-
-# Package the library into a .tgz file
+# 3) Build
 npm run build
-if ($LASTEXITCODE -ne 0) {
-  Set-Location $CURRENT_DIR
-  throw "npm run build failed in gameslib!"
-}
+if ($LASTEXITCODE -ne 0) { Pop-Location; throw "gameslib build failed" }
 
-# Save the path to the .tgz file
-$GAMESLIB_TGZ_PATH = "${GAMESLIB_PATH}\abstractplay-gameslib-${NEW_VERSION}.tgz"
+# 4) Pack to a tarball and capture its name robustly
+$packJson = npm pack --json | ConvertFrom-Json
+$gameslibTgzName = $packJson[0].filename
+$gameslibTgzPath = Join-Path (Get-Location) $gameslibTgzName
 
-# Change back to the original directory
-Set-Location $CURRENT_DIR
+Pop-Location  # back to `front`
 
-# Install both the packages
-npm install $GAMESLIB_TGZ_PATH $RENDERER_TGZ_PATH --loglevel verbose
+# === INSTALL IN FRONT ===
+# 5) Remove any previously installed copies to be extra sure
+$rendererInstalledPath = "node_modules\@abstractplay\renderer"
+$gameslibInstalledPath = "node_modules\@abstractplay\gameslib"
+if (Test-Path $rendererInstalledPath) { Remove-Item $rendererInstalledPath -Recurse -Force }
+if (Test-Path $gameslibInstalledPath) { Remove-Item $gameslibInstalledPath -Recurse -Force }
+
+# 6) Install both packages
+npm install --force $rendererTgzPath $gameslibTgzPath --loglevel verbose
+
+Write-Host "Installed @abstractplay/renderer@$rendererVersion from $rendererTgzPath"
+Write-Host "Installed @abstractplay/gameslib@$gameslibVersion from $gameslibTgzPath"

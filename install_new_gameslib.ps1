@@ -1,39 +1,35 @@
-# Running this script will build, pack and install a new local version of the gameslib package from disc (assumed to be at ../gameslib). It assumes the renderer library didn't change.
-$versionStrings = npm cache ls | Select-String '\\gameslib\\abstractplay-gameslib-[0-9]+\.[0-9]+\.([0-9]+)(-beta)?\.tgz' -AllMatches
+# Build, pack, and install a fresh local @abstractplay/gameslib
+$ErrorActionPreference = "Stop"
 
-# Convert the matches to integers
-$versions = $versionStrings.Matches | ForEach-Object { [int]$_.Groups[1].Value }
+$PACKAGE_PATH = Resolve-Path "../gameslib"
 
-# Find the maximum plus one.
-$maxNumber = ($versions | Measure-Object -Maximum).Maximum + 1
+Push-Location $PACKAGE_PATH
 
-$NEW_VERSION = "1.0." + $maxNumber
-Write-Output "The new version is: $NEW_VERSION"
+# 1) Create a unique prerelease version (e.g., 1.0.0-dev.20250903T211500)
+$pkg = Get-Content package.json -Raw | ConvertFrom-Json
+$base = ($pkg.version -split "-")[0]
+$stamp = Get-Date -Format "yyyyMMddTHHmmss"
+$newVersion = "$base-dev.$stamp"
 
-# Save the current directory
-$CURRENT_DIR = Get-Location
+# Update the version without tagging
+npm version $newVersion --no-git-tag-version
 
-# Define the path to your package
-$PACKAGE_PATH = "../gameslib"
-
-# Change to the package directory
-Set-Location $PACKAGE_PATH
-
-# Update the version number in the package.json file
-npm version $NEW_VERSION --no-git-tag-version
-
-# Package the library into a .tgz file
+# 2) Build
 npm run build
-if ($LASTEXITCODE -ne 0) {
-  Set-Location $CURRENT_DIR
-  throw "npm run build failed in gameslib!"
-}
+if ($LASTEXITCODE -ne 0) { Pop-Location; throw "gameslib build failed" }
 
-# Save the path to the .tgz file
-$PACKAGE_TGZ_PATH = "${PACKAGE_PATH}\abstractplay-gameslib-${NEW_VERSION}.tgz"
+# 3) Pack to a tarball and capture its name robustly
+$packJson = npm pack --json | ConvertFrom-Json
+$tgzName = $packJson[0].filename
+$tgzPath = Join-Path (Get-Location) $tgzName
 
-# Change back to the original directory
-Set-Location $CURRENT_DIR
+Pop-Location  # back to `front`
 
-# Install the package
-npm install $PACKAGE_TGZ_PATH --loglevel verbose
+# 4) Remove any previously installed copy to be extra sure
+$installedPath = "node_modules\@abstractplay\gameslib"
+if (Test-Path $installedPath) { Remove-Item $installedPath -Recurse -Force }
+
+# 5) Install that exact tarball
+npm install --force $tgzPath --loglevel verbose
+
+Write-Host "Installed @abstractplay/gameslib@$newVersion from $tgzPath"
