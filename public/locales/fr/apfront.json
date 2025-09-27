@@ -563,5 +563,6 @@
         },
         "acceptpie": "Jouer en second",
         "draw": "Réclamer un nul"
-    }
+    },
+    "Active": "Actif"
 }
