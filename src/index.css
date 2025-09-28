@@ -639,6 +639,13 @@ button.fabtn:hover {
     transition: background-color 0.3s ease;
 }
 
+/* Improve spacing of status displays */
+.tourStatus p + div  {
+    margin-top: 1em;
+}
+.tourStatus div + div {
+    margin-top: 0.5em;
+}
 
 /* Leaving the stuff for user settings until I'm prepared to expand it */
 .userSettings {
