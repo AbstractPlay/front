@@ -52,7 +52,6 @@ function UserChats(props) {
 
   if (comments) {
     let results = [];
-    let mycomment = "";
     comments.forEach((c) => {
       if (c.userId !== null && c.userId !== undefined && c.userId.length > 0) {
         let personName = "Unknown";
@@ -76,10 +75,6 @@ function UserChats(props) {
           inGame: c.inGame,
           path: c.path,
         });
-        // Only show user's comment if it's at the currently focused move
-        if (c.userId === props.userId && props.commentingCompletedGame && isHighlighted) {
-          mycomment = c.comment;
-        }
       }
     });
     results.sort((a, b) => b.timestamp - a.timestamp);
@@ -90,7 +85,7 @@ function UserChats(props) {
           key={`chatkey_${gameid}`}
           handleSubmit={props.handleSubmit}
           tooMuch={props.tooMuch}
-          comment={mycomment}
+          comment={""}
           commentingCompletedGame={props.commentingCompletedGame}
         />
         <div className="chatTable" ref={chatTableRef}>

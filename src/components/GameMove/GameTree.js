@@ -46,18 +46,8 @@ export class GameNode {
   }
 
   AddComment(comment) {
-    const ind = this.comment.findIndex((c) => c.userId === comment.userId);
-    let updated = false;
-    if (ind !== -1) {
-      if (this.comment[ind].timeStamp < comment.timeStamp) {
-        this.comment[ind] = comment;
-        updated = true;
-      }
-    } else {
-      this.comment.push(comment);
-      updated = true;
-    }
-    if (updated) {
+    this.comment.push(comment);
+    if (this.commented !== true) {
       this.UpdateCommented();
     }
   }
