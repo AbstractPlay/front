@@ -3054,11 +3054,6 @@ strong {
   font-weight: var(--bulma-strong-weight);
 }
 
-svg {
-  height: auto;
-  width: auto;
-}
-
 fieldset {
   border: none;
 }
