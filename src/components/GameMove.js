@@ -1742,9 +1742,7 @@ function GameMove(props) {
 
     // Don't fetch data if user is refreshing a completed game. No point in fetching the game again, the only thing that could have changed is public exploration
     if (explorationRef.current.gameID === gameID && game && game.gameOver) {
-      if (focus?.canExplore) {
-        explorationFetchedSetter(false);
-      }
+      explorationFetchedSetter(false);
     } else {
       fetchData();
     }
