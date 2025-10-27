@@ -2870,5 +2870,29 @@ Let us know if you run into any issues. Enjoy!</description>
       <guid isPermaLink="false">1412845114077872148</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>The latest Chrome update (`Version 141.0.7390.55 (Official Build) (64-bit)`) has changed something about how they render SVGs, resulting in some very weird results on some game boards. All I can say at this point is that we&amp;apos;re aware of the issue and will do what we can to figure out the root cause and adjust. I can&amp;apos;t say how long that may take. If people have actionable information on the issue, feel free to share it: https://discord.com/channels/526483743180062720/1422984901086679081. Thank you for your patience.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 01 Oct 2025 17:10:19 GMT</pubDate>
+      <guid isPermaLink="false">1422994051623288872</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The Chrome issue *appears* to be fixed, but please let us know if something else doesn&amp;apos;t look right. Thanks to @ManaT and @mcd for helping me triangulate the issue.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 01 Oct 2025 18:06:23 GMT</pubDate>
+      <guid isPermaLink="false">1423008159437553694</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Two hex-board variants for Lines of Action are now available. Hex5 is the game Alveole: 9 pieces each, clustered in each corner. Hex6 is more traditional, 12 pieces each, with a black hole in the centre (&amp;quot;scrambled eggs&amp;quot; setup also works). Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 25 Oct 2025 14:27:31 GMT</pubDate>
+      <guid isPermaLink="false">1431650387655393541</guid>
+    </item>
+    
   </channel>
 </rss>
