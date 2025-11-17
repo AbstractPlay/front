@@ -380,7 +380,7 @@ function setupColors(settings, game, globalMe, colourContext, node) {
     const palette = globalMe.palettes.find((p) => p.name === settings.color);
     if (palette !== undefined) {
       options.colours = [...palette.colours];
-      while (options.colours.length < 10) {
+      while (options.colours.length < 12) {
         options.colours.push("#fff");
       }
       if (globalMe?.settings?.all?.myColor && game.me > 0) {
@@ -1500,7 +1500,7 @@ function Playground(props) {
           );
           if (palette !== undefined) {
             options.colours = [...palette.colours];
-            while (options.colours.length < 10) {
+            while (options.colours.length < 12) {
               options.colours.push("#fff");
             }
             if (globalMe?.settings?.all?.myColor && game.me > 0) {

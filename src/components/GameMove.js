@@ -296,7 +296,7 @@ function setupGame(
   const tmpEngine = GameFactory(game0.metaGame, game0.state);
   game0.gameOver = tmpEngine.gameover;
   const winner = tmpEngine.winner;
-  
+
   // If the game is over and gameEnded is not set, calculate it from the last move's timestamp
   if (game0.gameOver && !game0.gameEnded && tmpEngine.stack.length > 0) {
     const lastMove = tmpEngine.stack[tmpEngine.stack.length - 1];
@@ -632,7 +632,7 @@ function setupColors(settings, game, globalMe, colourContext, node) {
     const palette = globalMe.palettes.find((p) => p.name === settings.color);
     if (palette !== undefined) {
       options.colours = [...palette.colours];
-      while (options.colours.length < 10) {
+      while (options.colours.length < 12) {
         options.colours.push("#fff");
       }
       if (globalMe?.settings?.all?.myColor && game.me > 0) {
@@ -959,7 +959,7 @@ function getFocusNode(exp, game, foc) {
 
 function getAllNodeComments(exploration) {
   const allComments = [];
-  
+
   function traverseNode(node, moveNumber, exPath = []) {
     if (node.comment && Array.isArray(node.comment)) {
       // Add each comment with its path information
@@ -977,11 +977,11 @@ function getAllNodeComments(exploration) {
       });
     }
   }
-  
+
   if (exploration && Array.isArray(exploration)) {
     exploration.forEach((node, index) => traverseNode(node, index, []));
   }
-  
+
   return allComments;
 }
 
@@ -989,7 +989,7 @@ function analyzeExplorationForCommentedFlag(exploration) {
   let hasVariations = false;
   let hasAnnotations = false;
   let hasComments = false;
-  
+
   function traverseNode(node, depth) {
     // Check for variations (any node with children)
     if (node.children && Array.isArray(node.children) && node.children.length > 0) {
@@ -1002,14 +1002,14 @@ function analyzeExplorationForCommentedFlag(exploration) {
         hasAnnotations = true;
       } else if (node.comment.some(c => isInterestingComment(c.comment))) {
         hasComments = true;
-      }      
+      }
     }
   }
-  
+
   if (exploration && Array.isArray(exploration)) {
     exploration.forEach(node => traverseNode(node, 0));
   }
-  
+
   // Return the appropriate flag value
   if (hasAnnotations) {
     return 3; // Has post-game comments (annotations)
@@ -1180,10 +1180,10 @@ function isInterestingComment(comment) {
   if (!comment) return false;
   // Normalize the comment
   const normalized = comment.toLowerCase().trim();
-  
+
   // Remove punctuation for comparison
   const withoutPunctuation = normalized.replace(/[^\w\s]/g, '');
-  
+
   // Common boring phrases (exact matches)
   const boringPhrases = new Set([
     'gg', 'glhf', 'gl', 'hf', 'tagg', 'hi', 'hello', 'hey',
@@ -1194,15 +1194,15 @@ function isInterestingComment(comment) {
     'thanks for playing', 'thanks for the game!', 'gg thanks',
     'yoyo', 'yoyo gl', 'yoyo gl hf'
   ]);
-  
+
   // Check for exact matches (with or without punctuation)
   if (boringPhrases.has(normalized) || boringPhrases.has(withoutPunctuation)) {
     return false;
   }
-  
+
   // Split into words for further analysis
   const words = withoutPunctuation.split(/\s+/).filter(w => w.length > 0);
-  
+
   // Very short comments with only common game words are boring
   const commonWords = new Set([
     'gg', 'gl', 'hf', 'tagg', 'hi', 'hello', 'yoyo',
@@ -1210,11 +1210,11 @@ function isInterestingComment(comment) {
     'good', 'game', 'luck', 'fun', 'for', 'the', 'a', 'to',
     'have', 'sir', 'well', 'played', 'you', 'too'
   ]);
-  
+
   if (words.length <= 3 && words.every(w => commonWords.has(w))) {
     return false;
   }
-  
+
   // If we got here, the comment is interesting
   return true;
 }
@@ -1835,8 +1835,8 @@ function GameMove(props) {
       const game = dbgame;
       // Preserve explorer state if we're still on the same game (e.g., color change)
       // Reset to false if it's a new game or settings changed to "always off"
-      const preserveExplorer = 
-        explorationRef.current && 
+      const preserveExplorer =
+        explorationRef.current &&
         explorationRef.current.gameID === dbgame.id &&
         globalMe?.settings?.all?.exploration !== -1;
       setupGame(
@@ -1901,7 +1901,7 @@ function GameMove(props) {
         globalMe,
         colourContext
       );
-            
+
       // check for note
       // note should only be defined if the user is logged in and
       // is the owner of the note.
@@ -2208,7 +2208,7 @@ function GameMove(props) {
               correctFlag = 1;
             // Always store the computed correct flag on the game object for use in saveExploration
             gameRef.current.commented = correctFlag;
-            
+
             // Only update backend if we came from ListGames (commentedFromList was stored)
             if (gameRef.current.commentedFromList !== undefined && gameRef.current.numMoves !== undefined && gameRef.current.numMoves > gameRef.current.numPlayers) {
               const currentFlag = gameRef.current.commentedFromList;
@@ -2594,7 +2594,7 @@ function GameMove(props) {
           );
           if (palette !== undefined) {
             options.colours = [...palette.colours];
-            while (options.colours.length < 10) {
+            while (options.colours.length < 12) {
               options.colours.push("#fff");
             }
             if (globalMe?.settings?.all?.myColor && game.me > 0) {
@@ -2965,7 +2965,7 @@ function GameMove(props) {
         ) {
           players = [...gameRef.current.players];
         }
-        
+
         const res = await fetch(API_ENDPOINT_AUTH, {
           method: "POST",
           headers: {
@@ -3654,8 +3654,8 @@ function GameMove(props) {
                             comments={
                               commentingCompletedGame
                                 ? [
-                                    ...(comments || []).map(c => ({ 
-                                      ...c, 
+                                    ...(comments || []).map(c => ({
+                                      ...c,
                                       inGame: true,
                                       path: c.moveNumber !== undefined ? { moveNumber: c.moveNumber, exPath: [] } : undefined
                                     })),
@@ -3834,8 +3834,8 @@ function GameMove(props) {
                     comments={
                       commentingCompletedGame
                         ? [
-                            ...(comments || []).map(c => ({ 
-                              ...c, 
+                            ...(comments || []).map(c => ({
+                              ...c,
                               inGame: true,
                               path: c.moveNumber !== undefined ? { moveNumber: c.moveNumber, exPath: [] } : undefined
                             })),
