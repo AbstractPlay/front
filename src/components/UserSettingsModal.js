@@ -9,8 +9,8 @@ import React, {
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { cloneDeep } from "lodash";
-import { API_ENDPOINT_AUTH } from "../config";
 import { Auth } from "aws-amplify";
+import { callAuthApi } from "../lib/api";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { debounce } from "lodash";
 import remarkGfm from "remark-gfm";
@@ -226,21 +226,9 @@ function UserSettingsModal(props) {
   //   };
 
   const handleSettingChangeSubmit = async (attr, value) => {
-    const usr = await Auth.currentAuthenticatedUser();
-    fetch(API_ENDPOINT_AUTH, {
-      method: "POST", // or 'PUT'
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-      },
-      body: JSON.stringify({
-        query: "new_setting",
-        pars: {
-          attribute: attr,
-          value: value,
-        },
-      }),
+    await callAuthApi("new_setting", {
+      attribute: attr,
+      value: value,
     });
   };
 
@@ -438,21 +426,10 @@ function UserSettingsModal(props) {
 
   const savePalettes = async () => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "save_palettes",
-          pars: {
-            palettes: myPalettes,
-          },
-        }),
+      const res = await callAuthApi("save_palettes", {
+        palettes: myPalettes,
       });
+      if (!res) return;
       if (res.status !== 200) {
         const result = await res.json();
         console.log(`An error occurred while saving palettes:\n${result}`);
@@ -511,24 +488,13 @@ function UserSettingsModal(props) {
 
   const handleSettingsChange = async (newSettings) => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
       console.log(
         `About to save the following settings:\n${JSON.stringify(newSettings)}`
       );
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "update_user_settings",
-          pars: {
-            settings: newSettings,
-          },
-        }),
+      const res = await callAuthApi("update_user_settings", {
+        settings: newSettings,
       });
+      if (!res) return;
       if (res.status !== 200) {
         const result = await res.json();
         console.log(
@@ -551,16 +517,8 @@ function UserSettingsModal(props) {
         if (token !== null) {
           try {
             console.log("calling authQuery 'me' (small), with token: " + token);
-            const res = await fetch(API_ENDPOINT_AUTH, {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              // Don't care about e.g. challenges, so size = small.
-              body: JSON.stringify({ query: "me", pars: { size: "small" } }),
-            });
+            const res = await callAuthApi("me", { size: "small" });
+            if (!res) return;
             const result = await res.json();
             if (result.statusCode !== 200) console.log(JSON.parse(result.body));
             else {
@@ -606,21 +564,10 @@ function UserSettingsModal(props) {
       ) {
         state = false;
       }
-      const usr = await Auth.currentAuthenticatedUser();
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "set_push",
-          pars: {
-            state,
-          },
-        }),
+      const res = await callAuthApi("set_push", {
+        state,
       });
+      if (!res) return;
       if (res.status !== 200) {
         console.log(`An error occurred while saving push preferences`);
       } else {

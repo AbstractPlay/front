@@ -2,8 +2,7 @@ import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 // import { useTranslation } from "react-i18next";
 // import { addResource } from "@abstractplay/gameslib";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH } from "../config";
+import { callAuthApi } from "../lib/api";
 import { MyTurnContext } from "../pages/Skeleton";
 
 /*
@@ -21,29 +20,13 @@ function Play(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let token = null;
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        token = usr.signInUserSession.idToken.jwtToken;
-      } catch (err) {
-        // OK, non logged in user viewing the game
-      }
-      if (token !== null) {
-        try {
-          let status;
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              query: "next_game",
-            }),
-          });
-          status = res.status;
-          if (status !== 200) {
+        const res = await callAuthApi("next_game", {});
+        if (!res) {
+          return [];
+        }
+        const status = res.status;
+        if (status !== 200) {
             const result = await res.json();
             console.log(`An error occured:`, result.body);
             return [];
@@ -51,10 +34,8 @@ function Play(props) {
             const result = await res.json();
             return JSON.parse(result.body);
           }
-        } catch (error) {
-          console.log(`An error was thrown:`, error);
-        }
-      } else {
+      } catch (error) {
+        console.log(`An error was thrown:`, error);
         return [];
       }
     }

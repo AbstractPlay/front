@@ -8,8 +8,8 @@ import { useStorageState } from "react-use-storage-state";
 import gameImages from "../assets/GameImages";
 import Modal from "./Modal";
 import TableExplore from "./MetaContainer/TableExplore";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { callAuthApi } from "../lib/api";
+import { API_ENDPOINT_OPEN } from "../config";
 import { Helmet } from "react-helmet-async";
 import MetaItem from "./MetaContainer/MetaItem";
 import CompletedRecent from "./Explore/CompletedRecent";
@@ -134,21 +134,10 @@ function Explore(props) {
   const toggleStar = useCallback(
     async (game) => {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "toggle_star",
-            pars: {
-              metaGame: game,
-            },
-          }),
+        const res = await callAuthApi("toggle_star", {
+          metaGame: game,
         });
+        if (!res) return;
         if (res.status !== 200) {
           const result = await res.json();
           console.log(
@@ -183,22 +172,9 @@ function Explore(props) {
 
   const handleNewChallenge = async (challenge) => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("currentAuthenticatedUser", usr);
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "new_challenge",
-          pars: {
-            ...challenge,
-            challenger: { id: globalMe.id, name: globalMe.name },
-          },
-        }),
+      await callAuthApi("new_challenge", {
+        ...challenge,
+        challenger: { id: globalMe.id, name: globalMe.name },
       });
     } catch (error) {
       console.log(error);
@@ -293,26 +269,26 @@ function Explore(props) {
         {selected === "all"
           ? null
           : games.map((metaGame) => {
-              return (
-                <Modal
-                  key={metaGame}
-                  buttons={[{ label: "Close", action: closeImgModal }]}
-                  show={activeImgModal === metaGame}
-                  title={`Board image for ${gameinfo.get(metaGame).name}`}
-                >
-                  <div className="content">
-                    <img
-                      src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                        gameImages[metaGame]
-                      )}`}
-                      alt={metaGame}
-                      width="100%"
-                      height="auto"
-                    />
-                  </div>
-                </Modal>
-              );
-            })}
+            return (
+              <Modal
+                key={metaGame}
+                buttons={[{ label: "Close", action: closeImgModal }]}
+                show={activeImgModal === metaGame}
+                title={`Board image for ${gameinfo.get(metaGame).name}`}
+              >
+                <div className="content">
+                  <img
+                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                      gameImages[metaGame]
+                    )}`}
+                    alt={metaGame}
+                    width="100%"
+                    height="auto"
+                  />
+                </div>
+              </Modal>
+            );
+          })}
       </>
     );
   } else if (counts !== null) {

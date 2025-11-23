@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH } from "../config";
+import { callAuthApi } from "../lib/api";
 import { cloneDeep } from "lodash";
 import Modal from "./Modal";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
@@ -201,24 +200,11 @@ function RenderOptionsModal(props) {
     props.processNewSettings(newGameSettings, newUserSettings);
     if (newGameSettings !== undefined && game.me > -1) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        console.log("currentAuthenticatedUser", usr);
-        await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "update_game_settings",
-            pars: {
-              game: gameId,
-              metaGame: metaGame,
-              cbit: cbit,
-              settings: newGameSettings,
-            },
-          }),
+        await callAuthApi("update_game_settings", {
+          game: gameId,
+          metaGame: metaGame,
+          cbit: cbit,
+          settings: newGameSettings,
         });
       } catch (error) {
         props.setError(error);
@@ -226,21 +212,8 @@ function RenderOptionsModal(props) {
     }
     if (newUserSettings !== undefined) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        console.log("currentAuthenticatedUser", usr);
-        await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "update_user_settings",
-            pars: {
-              settings: newUserSettings,
-            },
-          }),
+        await callAuthApi("update_user_settings", {
+          settings: newUserSettings,
         });
         const newMe = cloneDeep(globalMe);
         newMe.settings = cloneDeep(newUserSettings);

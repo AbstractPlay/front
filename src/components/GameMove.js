@@ -11,9 +11,9 @@ import rehypeRaw from "rehype-raw";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render, renderglyph } from "@abstractplay/renderer";
-import { Auth } from "aws-amplify";
 import { cloneDeep } from "lodash";
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { API_ENDPOINT_OPEN } from "../config";
+import { callAuthApi } from "../lib/api";
 import { GameNode } from "./GameMove/GameTree";
 import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
 import { Buffer } from "buffer";
@@ -700,7 +700,7 @@ async function saveExploration(
     if (game.numMoves !== undefined && game.numMoves > game.numPlayers) {
       // Check if we need to update the commented flag for completed games
       const currentFlag = game.commented || 0; // note this should only happen after we have fetched public exploration, so should have the correct value
-                                             // from before this (the one we are saving) exploration was added
+      // from before this (the one we are saving) exploration was added
       const newFlag = analyzeExplorationForCommentedFlag(exploration);
       if (newFlag !== currentFlag && !(newFlag === 0 && currentFlag === 1)) { // currentFlag can be 1 for in-game comments
         pars.updateCommentedFlag = newFlag;
@@ -716,19 +716,8 @@ async function saveExploration(
       console.log(`Triggering lastChat update for game ${game.id} (comment was just added)`);
     }
   }
-  const usr = await Auth.currentAuthenticatedUser();
-  const res = await fetch(API_ENDPOINT_AUTH, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-    },
-    body: JSON.stringify({
-      query: "save_exploration",
-      pars: pars,
-    }),
-  });
+  const res = await callAuthApi("save_exploration", pars);
+  if (!res) return;
   if (res.status !== 200) {
     const result = await res.json();
     errorMessageRef.current = `save_exploration failed, status = ${res.status}, message: ${result.message}`;
@@ -794,7 +783,7 @@ function doView(
   if (move.valid && move.complete < 1 && move.canrender === true)
     partialMove = true;
   let simMove = false;
-  let m = move.move;
+  let m = move.move || "";
   if (game.simultaneous) {
     simMove = true;
     m = game.players.map((p) => (p.id === me.id ? m : "")).join(",");
@@ -1128,6 +1117,7 @@ function processNewMove(
   // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position
   else if (
     partialMoveRenderRef.current &&
+    newmove.move !== undefined &&
     !newmove.move.startsWith(newmove.rendered)
   ) {
     let node = getFocusNode(exploration, gameRef.current, focus);
@@ -1598,36 +1588,17 @@ function GameMove(props) {
     }
 
     async function fetchData() {
-      let token = null;
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        token = usr.signInUserSession.idToken.jwtToken;
-      } catch (err) {
-        // OK, non logged in user viewing the game
-      }
-
       try {
         const result = await fetchWithRetry(async (attempt) => {
           let data;
           let status;
-          if (token) {
-            const res = await fetch(API_ENDPOINT_AUTH, {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({
-                query: "get_game",
-                pars: {
-                  id: gameID,
-                  metaGame: metaGame,
-                  cbit: cbit,
-                  ...(attempt > 0 && { retryAttempt: attempt }),
-                },
-              }),
-            });
+          const res = await callAuthApi("get_game", {
+              id: gameID,
+              metaGame: metaGame,
+              cbit: cbit,
+              ...(attempt > 0 && { retryAttempt: attempt }),
+            }, false);
+          if (res) {
             status = res.status;
             if (status !== 200) {
               const result = await res.json();
@@ -1641,6 +1612,7 @@ function GameMove(props) {
               data = JSON.parse(result.body);
             }
           } else {
+            // res == null means no auth token available, probably non-logged in user, try unauthenticated fetch
             var url = new URL(API_ENDPOINT_OPEN);
             url.searchParams.append("query", "get_game");
             url.searchParams.append("id", gameID);
@@ -1693,27 +1665,14 @@ function GameMove(props) {
             // Check if commented flag needs to be updated (only for in-progress games). This is mostly to "fix" old games that already had chats but no commented flag.
             if (data.game.toMove !== "" && (data.game.commented ? 0 : data.game.commented) !== (hasInterestingComments ? 1 : 0)) {
               // Send update to backend to update commented flag for in-progress game
-              if (token) {
-                fetch(API_ENDPOINT_AUTH, {
-                  method: "POST",
-                  headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                  },
-                  body: JSON.stringify({
-                    query: "update_commented",
-                    pars: {
-                      id: gameID,
-                      metaGame: metaGame,
-                      cbit: 0,
-                      commented: hasInterestingComments ? 1 : 0,
-                    },
-                  }),
-                }).catch(err => {
-                  console.log("Failed to update commented flag:", err);
-                });
-              }
+              callAuthApi("update_commented", {
+                id: gameID,
+                metaGame: metaGame,
+                cbit: 0,
+                commented: hasInterestingComments ? 1 : 0,
+              }).catch(err => {
+                console.log("Failed to update commented flag:", err);
+              });
             }
             data.game.commented = hasInterestingComments ? 1 : 0;
           }
@@ -1784,43 +1743,20 @@ function GameMove(props) {
   }, [locked]); // ignoring intervalFunc as a dependency
 
   const checkTime = useCallback(async (query) => {
-    let token = null;
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      token = usr.signInUserSession.idToken.jwtToken;
-    } catch (err) {
-      // OK, non logged in user viewing the game
-    }
-    if (token) {
-      try {
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: query,
-            pars: {
-              id: gameRef.current.id,
-              metaGame: gameRef.current.metaGame,
-            },
-          }),
-        });
-        const result = await res.json();
-        if (result.statusCode !== 200) {
-          throw JSON.parse(result.body);
-        }
-        let game0 = JSON.parse(result.body);
-        if (game0 !== "not_a_timeloss" && game0 !== "not_abandoned") {
-          dbgameSetter(game0);
-        }
-      } catch (err) {
-        setError(
-          `checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} and failed with error: ${err.message}`
-        );
+      const res = await callAuthApi(query, {
+        id: gameRef.current.id,
+        metaGame: gameRef.current.metaGame,
+      });
+      if (!res) return;
+      let game0 = JSON.parse(res.body);
+      if (game0 !== "not_a_timeloss" && game0 !== "not_abandoned") {
+        dbgameSetter(game0);
       }
+    } catch (err) {
+      setError(
+        `checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} and failed with error: ${err.message}`
+      );
     }
   }, []);
 
@@ -2037,11 +1973,9 @@ function GameMove(props) {
           body: JSON.stringify({
             query: "report_problem",
             pars: {
-              error: `Error reporting another error, status: ${status}, message: ${
-                result.message
-              }, body: ${
-                result.body
-              }, original error (truncated): ${error.slice(0, 1000)}`,
+              error: `Error reporting another error, status: ${status}, message: ${result.message
+                }, body: ${result.body
+                }, original error (truncated): ${error.slice(0, 1000)}`,
             },
           }),
         });
@@ -2079,24 +2013,12 @@ function GameMove(props) {
         gameNoteSetter(null);
       }
       if (globalMe !== undefined) {
-        const usr = await Auth.currentAuthenticatedUser();
-        const token = usr.signInUserSession.idToken.jwtToken;
         try {
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              query: "update_note",
-              pars: {
-                gameId: gameRef.current.id,
-                note: newNote,
-              },
-            }),
+          const res = await callAuthApi("update_note", {
+            gameId: gameRef.current.id,
+            note: newNote,
           });
+          if (!res) return;
           const result = await res.json();
           if (result && result.statusCode && result.statusCode !== 200)
             setError(`update_note failed with: ${result.body}`);
@@ -2112,32 +2034,14 @@ function GameMove(props) {
   useEffect(() => {
     async function fetchPrivateExploration() {
       explorationFetchedSetter(true);
-      let token = null;
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        token = usr.signInUserSession.idToken.jwtToken;
-      } catch (err) {
-        // non logged in user viewing the game
-      }
       try {
         let data;
         let status;
-        if (token) {
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              query: "get_exploration",
-              pars: {
-                game: gameID,
-                move: explorationRef.current.nodes.length,
-              },
-            }),
-          });
+        const res = await callAuthApi("get_exploration", {
+          game: gameID,
+          move: explorationRef.current.nodes.length,
+        }, false);
+        if (res) {
           status = res.status;
           if (status !== 200) {
             const result = await res.json();
@@ -2214,33 +2118,21 @@ function GameMove(props) {
               const currentFlag = gameRef.current.commentedFromList;
               if (correctFlag !== currentFlag) {
                 // Update the backend
-                Auth.currentAuthenticatedUser()
-                  .then(usr => {
-                    return fetch(API_ENDPOINT_AUTH, {
-                      method: "POST",
-                      headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-                      },
-                      body: JSON.stringify({
-                        query: "update_commented",
-                        pars: {
-                          id: gameID,
-                          metaGame: gameRef.current.metaGame,
-                          cbit: 1, // Completed games have cbit=1
-                          commented: correctFlag,
-                          gameEnded: gameRef.current.completedGameKey.substring(0, 13),
-                        },
-                      }),
-                    });
-                  })
-                  .then(() => {
+                const res = callAuthApi("update_commented", {
+                  id: gameID,
+                  metaGame: gameRef.current.metaGame,
+                  cbit: 1, // Completed games have cbit=1
+                  commented: correctFlag,
+                  gameEnded: gameRef.current.completedGameKey.substring(0, 13),
+                }, false);
+                if (res) {
+                  res.then(() => {
                     console.log(`Successfully updated commented flag to ${correctFlag}`);
                   })
                   .catch(err => {
                     console.log("Failed to update commented flag for completed game:", err);
                   });
+                }
               }
             }
           }
@@ -2286,29 +2178,17 @@ function GameMove(props) {
   ]);
 
   const handlePlaygroundExport = async (state, moveNumber) => {
-    const usr = await Auth.currentAuthenticatedUser();
-    console.log("currentAuthenticatedUser", usr);
     if (state === null) {
       let tmpEngine = GameFactory(game.metaGame, game.state);
       tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber + 1);
       tmpEngine.load();
       state = tmpEngine.cheapSerialize();
     }
-    const res = await fetch(API_ENDPOINT_AUTH, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-      },
-      body: JSON.stringify({
-        query: "new_playground",
-        pars: {
-          metaGame: game.metaGame,
-          state,
-        },
-      }),
+    const res = await callAuthApi("new_playground", {
+      metaGame: game.metaGame,
+      state,
     });
+    if (!res) return;
     if (res.status !== 200) {
       const result = await res.json();
       errorMessageRef.current = `playground export failed, metaGame = ${game.metaGame}, state = ${state}, status = ${res.status}, message: ${result.message}, body: ${result.body}`;
@@ -2402,25 +2282,13 @@ function GameMove(props) {
   // The user has clicked the "Invoke pie rule" button
   const handlePie = async () => {
     console.log("Pie invoked!");
-    const usr = await Auth.currentAuthenticatedUser();
-    const token = usr.signInUserSession.idToken.jwtToken;
     try {
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          query: "invoke_pie",
-          pars: {
-            id: gameRef.current.id,
-            metaGame: gameRef.current.metaGame,
-            cbit: cbit,
-          },
-        }),
+      const res = await callAuthApi("invoke_pie", {
+        id: gameRef.current.id,
+        metaGame: gameRef.current.metaGame,
+        cbit: cbit,
       });
+      if (!res) return;
       const result = await res.json();
       if (result.statusCode !== 200) {
         // setError(JSON.parse(result.body));
@@ -2524,12 +2392,12 @@ function GameMove(props) {
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous
         ? gameEngineTmp.handleClickSimultaneous(
-            moveRef.current.move,
-            row,
-            col,
-            gameRef.current.me + 1,
-            piece
-          )
+          moveRef.current.move,
+          row,
+          col,
+          gameRef.current.me + 1,
+          piece
+        )
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       result.rendered = moveRef.current.rendered;
       processNewMove(
@@ -2768,23 +2636,11 @@ function GameMove(props) {
     );
     if (game.me > -1) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "update_game_settings",
-            pars: {
-              game: game.id,
-              metaGame: game.metaGame,
-              cbit: cbit,
-              settings: newGameSettings,
-            },
-          }),
+        await callAuthApi("update_game_settings", {
+          game: game.id,
+          metaGame: game.metaGame,
+          cbit: cbit,
+          settings: newGameSettings,
         });
       } catch (error) {
         setError(`handleRotate update_game_settings error: ${error}`);
@@ -2874,27 +2730,15 @@ function GameMove(props) {
   };
 
   const submitMove = async (m, draw) => {
-    const usr = await Auth.currentAuthenticatedUser();
-    const token = usr.signInUserSession.idToken.jwtToken;
     try {
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          query: "submit_move",
-          pars: {
-            id: gameRef.current.id,
-            metaGame: gameRef.current.metaGame,
-            cbit: cbit,
-            move: m,
-            draw: draw,
-          },
-        }),
+      const res = await callAuthApi("submit_move", {
+        id: gameRef.current.id,
+        metaGame: gameRef.current.metaGame,
+        cbit: cbit,
+        move: m,
+        draw: draw,
       });
+      if (!res) return;
       const result = await res.json();
       submittingSetter(false);
       if (result.statusCode !== 200) {
@@ -2952,8 +2796,6 @@ function GameMove(props) {
         { comment: comment, userId: globalMe.id, timeStamp: Date.now(), moveNumber: explorationRef.current.nodes.length - 1 },
       ]);
       // console.log(comments);
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
       try {
         // This used to only pass players and meta if game was completed.
         // I don't see any reason for that, so always passing it so lastChat
@@ -2966,24 +2808,14 @@ function GameMove(props) {
           players = [...gameRef.current.players];
         }
 
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: "submit_comment",
-            pars: {
-              id: gameRef.current.id,
-              players,
-              metaGame: metaGame,
-              comment: comment,
-              moveNumber: explorationRef.current.nodes.length - 1,
-            },
-          }),
+        const res = await callAuthApi("submit_comment", {
+          id: gameRef.current.id,
+          players,
+          metaGame: metaGame,
+          comment: comment,
+          moveNumber: explorationRef.current.nodes.length - 1,
         });
+        if (!res) return;
         const result = await res.json();
         if (result && result.statusCode && result.statusCode !== 200)
           setError(
@@ -3125,26 +2957,14 @@ function GameMove(props) {
       let tmpEngine = GameFactory(metaGame, injectedState);
       const injectedState2 = tmpEngine.serialize(); // NOT cheapSerialize!
 
-      const usr = await Auth.currentAuthenticatedUser();
       try {
         let status;
-        if (usr.signInUserSession.idToken.jwtToken) {
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-            },
-            body: JSON.stringify({
-              query: "set_game_state",
-              pars: {
-                id: gameID,
-                metaGame: metaGame,
-                newState: injectedState2,
-              },
-            }),
-          });
+        const res = await callAuthApi("set_game_state", {
+          id: gameID,
+          metaGame: metaGame,
+          newState: injectedState2,
+        });
+        if (res) {
           status = res.status;
           if (status !== 200) {
             const result = await res.json();
@@ -3221,47 +3041,18 @@ function GameMove(props) {
   const handlePublishExploration = async () => {
     console.log("Fetching private exploration data");
     canPublishSetter("publishing");
-    let token = null;
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      token = usr.signInUserSession.idToken.jwtToken;
-    } catch (err) {
-      // Not logged in...
-    }
-    if (token) {
-      try {
-        // mark game as published (don't await)
-        fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: "mark_published",
-            pars: {
-              id: gameID,
-              metagame: gameRef.current.metaGame,
-            },
-          }),
-        });
-        // fetch private exploration data
-        let status;
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: "get_private_exploration",
-            pars: {
-              id: gameID,
-            },
-          }),
-        });
+      // mark game as published (don't await)
+      callAuthApi("mark_published", {
+        id: gameID,
+        metagame: gameRef.current.metaGame,
+      }, false);
+      // fetch private exploration data
+      let status;
+      const res = await callAuthApi("get_private_exploration", {
+        id: gameID,
+      }, false);
+      if (res) {
         status = res.status;
         if (status !== 200) {
           const result = await res.json();
@@ -3288,37 +3079,20 @@ function GameMove(props) {
             canPublishSetter("no");
           }
         }
-      } catch (error) {
-        console.log(error);
-        errorMessageRef.current = `handlePublishExploration failed with: ${error.message}`;
-        errorSetter(true);
       }
+    } catch (error) {
+      console.log(error);
+      errorMessageRef.current = `handlePublishExploration failed with: ${error.message}`;
+      errorSetter(true);
     }
   };
 
   const refreshNextGame = () => {
     async function fetchData() {
-      let token = null;
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        token = usr.signInUserSession.idToken.jwtToken;
-      } catch (err) {
-        // OK, non logged in user viewing the game
-      }
-      if (token !== null) {
-        try {
-          let status;
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              query: "next_game",
-            }),
-          });
+        let status;
+        const res = await callAuthApi("next_game", {}, false);
+        if (res) {
           status = res.status;
           if (status !== 200) {
             const result = await res.json();
@@ -3329,12 +3103,13 @@ function GameMove(props) {
             const result = await res.json();
             return JSON.parse(result.body);
           }
-        } catch (error) {
-          console.log(error);
-          errorMessageRef.current = `next_game failed with: ${error.message}`;
-          errorSetter(true);
+        } else {
+          return [];
         }
-      } else {
+      } catch (error) {
+        console.log(error);
+        errorMessageRef.current = `next_game failed with: ${error.message}`;
+        errorSetter(true);
         return [];
       }
     }
@@ -3506,7 +3281,7 @@ function GameMove(props) {
                       <p className="card-header-title">
                         <Link to={`/games/${metaGame}`}>{title}</Link>
                         {key !== "board" ||
-                        parenthetical.length === 0 ? null : (
+                          parenthetical.length === 0 ? null : (
                           <>
                             <span
                               style={{
@@ -3654,13 +3429,13 @@ function GameMove(props) {
                             comments={
                               commentingCompletedGame
                                 ? [
-                                    ...(comments || []).map(c => ({
-                                      ...c,
-                                      inGame: true,
-                                      path: c.moveNumber !== undefined ? { moveNumber: c.moveNumber, exPath: [] } : undefined
-                                    })),
-                                    ...(allNodeComments || [])
-                                  ]
+                                    ...(comments || []).map(c => ({ 
+                                      ...c, 
+                                    inGame: true,
+                                    path: c.moveNumber !== undefined ? { moveNumber: c.moveNumber, exPath: [] } : undefined
+                                  })),
+                                  ...(allNodeComments || [])
+                                ]
                                 : comments
                             }
                             players={gameRef.current?.players}
@@ -3834,13 +3609,13 @@ function GameMove(props) {
                     comments={
                       commentingCompletedGame
                         ? [
-                            ...(comments || []).map(c => ({
-                              ...c,
-                              inGame: true,
-                              path: c.moveNumber !== undefined ? { moveNumber: c.moveNumber, exPath: [] } : undefined
-                            })),
-                            ...(allNodeComments || [])
-                          ]
+                            ...(comments || []).map(c => ({ 
+                              ...c, 
+                            inGame: true,
+                            path: c.moveNumber !== undefined ? { moveNumber: c.moveNumber, exPath: [] } : undefined
+                          })),
+                          ...(allNodeComments || [])
+                        ]
                         : comments
                     }
                     players={gameRef.current?.players}
@@ -4033,8 +3808,8 @@ function GameMove(props) {
                 you can then send to the developers. Thank you!
               </p>
               {gameRef === null ||
-              gameRef.current === null ||
-              gameRef.current.state === null ? (
+                gameRef.current === null ||
+                gameRef.current.state === null ? (
                 ""
               ) : (
                 <Fragment>
@@ -4167,7 +3942,7 @@ function GameMove(props) {
               )}
               <div className="control">
                 {interimNote === gameNote ||
-                (interimNote === "" && gameNote === null) ? (
+                  (interimNote === "" && gameNote === null) ? (
                   <button className="button is-small" disabled>
                     {t("UpdateNote")}
                   </button>
@@ -4250,13 +4025,11 @@ function GameMove(props) {
       || errorMessageRef.current.startsWith('save_exploration failed, status = 401, message: The incoming token has expired')
     )) {
       reportError(
-        `Message: ${errorMessageRef.current}, url: ${
-          window.location.href
-        }, game: ${JSON.stringify(game)}, state: ${
-          explorationRef.current && focus
-            ? getFocusNode(explorationRef.current.nodes, gameRef.current, focus)
-                .state
-            : ""
+        `Message: ${errorMessageRef.current}, url: ${window.location.href
+        }, game: ${JSON.stringify(game)}, state: ${explorationRef.current && focus
+          ? getFocusNode(explorationRef.current.nodes, gameRef.current, focus)
+            .state
+          : ""
         }`
       );
     }

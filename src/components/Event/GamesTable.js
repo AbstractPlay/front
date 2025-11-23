@@ -1,8 +1,7 @@
 import { useMemo, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH } from "../../config";
+import { callAuthApi } from "../../lib/api";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { UsersContext } from "../../pages/Skeleton";
@@ -157,23 +156,12 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
     console.log(`Winner: ${winner}`);
     async function saveChange(eventid, gameid, result) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_update_result",
-            pars: {
-              eventid,
-              gameid,
-              result,
-            },
-          }),
+        const res = await callAuthApi("event_update_result", {
+          eventid,
+          gameid,
+          result,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred creating the games: ${JSON.stringify(res)}`

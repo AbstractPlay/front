@@ -4,8 +4,7 @@ import { useTranslation } from "react-i18next";
 import { addResource } from "@abstractplay/gameslib";
 import { MeContext, UsersContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH } from "../config";
+import { callAuthApi } from "../lib/api";
 import { gameinfo } from "@abstractplay/gameslib";
 import { Helmet } from "react-helmet-async";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
@@ -176,22 +175,9 @@ function Player() {
 
   const handleNewChallenge = async (challenge) => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("currentAuthenticatedUser", usr);
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "new_challenge",
-          pars: {
-            ...challenge,
-            challenger: { id: globalMe.id, name: globalMe.name },
-          },
-        }),
+      await callAuthApi("new_challenge", {
+        ...challenge,
+        challenger: { id: globalMe.id, name: globalMe.name },
       });
     } catch (error) {
       console.log(error);

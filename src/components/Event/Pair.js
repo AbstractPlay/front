@@ -1,8 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH } from "../../config";
+import { callAuthApi } from "../../lib/api";
 import { cloneDeep } from "lodash";
 import SortableList, { SortableItem } from "react-easy-sort";
 import arrayMove from "array-move";
@@ -185,22 +184,11 @@ function Pair({ event, setRefresh }) {
     console.log("About to create the following pairings:", pairs);
     async function createGames(pairings) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_create_games",
-            pars: {
-              eventid: event.event.sk,
-              pairs: pairings,
-            },
-          }),
+        const res = await callAuthApi("event_create_games", {
+          eventid: event.event.sk,
+          pairs: pairings,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred creating the games: ${JSON.stringify(res)}`

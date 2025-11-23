@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
-import { Auth } from "aws-amplify";
 import { nanoid } from "nanoid";
 import Spinner from "./Spinner";
 import Modal from "./Modal";
 import NewChallengeModal from "./NewChallengeModal";
 import NewProfile from "./NewProfile";
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { API_ENDPOINT_OPEN } from "../config";
+import { callAuthApi } from "../lib/api";
 import i18n from "../i18n";
 import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import { cloneDeep } from "lodash";
@@ -60,23 +60,11 @@ function Me(props) {
     async function fetchData() {
       // Can't use props.token because it might have expired by the time the user gets here.
       // Auth.currentAuthenticatedUser() will automatically renew the token if its expired.
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
       try {
-        console.log("calling authQuery 'me', with token: " + token);
+        console.log("calling authQuery 'me'");
         fetchingSetter(true);
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: "me",
-            pars: { vars: JSON.stringify(vars), update: update },
-          }),
-        });
+        const res = await callAuthApi("me", { vars: JSON.stringify(vars), update: update });
+        if (!res) return;
         fetchingSetter(false);
         const result = await res.json();
         if (result.statusCode !== 200) errorSetter(JSON.parse(result.body));
@@ -133,28 +121,16 @@ function Me(props) {
   };
 
   const handleChallengeRevoke = async (challenge, comment) => {
-    const usr = await Auth.currentAuthenticatedUser();
-    const token = usr.signInUserSession.idToken.jwtToken;
     if (globalMe.id !== challenge.challenger.id)
       return handleChallengeResponse(false);
     try {
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          query: "challenge_revoke",
-          pars: {
-            id: challenge.id,
-            standing: challenge.standing === true,
-            metaGame: challenge.metaGame,
-            comment: comment,
-          },
-        }),
+      const res = await callAuthApi("challenge_revoke", {
+        id: challenge.id,
+        standing: challenge.standing === true,
+        metaGame: challenge.metaGame,
+        comment: comment,
       });
+      if (!res) return;
       const result = await res.json();
       if (result.statusCode !== 200) errorSetter(JSON.parse(result.body));
       else {
@@ -166,30 +142,16 @@ function Me(props) {
   };
 
   const handleChallengeResponse = async (challenge, resp, comment) => {
-    const usr = await Auth.currentAuthenticatedUser();
-    const token = usr.signInUserSession.idToken.jwtToken;
     try {
-      console.log(
-        "calling authQuery query = challenge_response with token: " + token
-      );
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          query: "challenge_response",
-          pars: {
-            id: challenge.id,
-            standing: challenge.standing === true,
-            metaGame: challenge.metaGame,
-            response: resp,
-            comment: comment,
-          },
-        }),
+      console.log("calling authQuery query = challenge_response");
+      const res = await callAuthApi("challenge_response", {
+        id: challenge.id,
+        standing: challenge.standing === true,
+        metaGame: challenge.metaGame,
+        response: resp,
+        comment: comment,
       });
+      if (!res) return;
       const result = await res.json();
       if (result.statusCode !== 200) {
         console.log("handleChallengeResponse", result.statusCode);
@@ -205,23 +167,12 @@ function Me(props) {
 
   const handleNewChallenge2 = async (challenge) => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("currentAuthenticatedUser", usr);
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "new_challenge",
-          pars: {
-            ...challenge,
-            challenger: { id: globalMe.id, name: globalMe.name },
-          },
-        }),
+      console.log("calling new_challenge");
+      const res = await callAuthApi("new_challenge", {
+        ...challenge,
+        challenger: { id: globalMe.id, name: globalMe.name },
       });
+      if (!res) return;
       showNewChallengeModalSetter(false);
       varsSetter({ dummy: myid });
     } catch (error) {
@@ -231,21 +182,8 @@ function Me(props) {
 
   const submitStanding = async (standing) => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("currentAuthenticatedUser", usr);
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "update_standing",
-          pars: {
-            entries: standing,
-          },
-        }),
+      await callAuthApi("update_standing", {
+        entries: standing,
       });
       showNewStandingModalSetter(false);
       varsSetter({ dummy: myid });
@@ -298,22 +236,11 @@ function Me(props) {
 
   const handleTestAsyncClick = async () => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
       console.log("Posting test_async");
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "test_async",
-          pars: {
-            N: 1600000000,
-          },
-        }),
+      const res = await callAuthApi("test_async", {
+        N: 1600000000,
       });
+      if (!res) return;
       const result = await res.json();
       console.log("test_async returned:");
       console.log(JSON.parse(result.body));
@@ -328,24 +255,13 @@ function Me(props) {
 
   const handleDeleteGames = async () => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
       console.log("Posting delete_games");
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "delete_games",
-          pars: {
-            metaGame: deleteGamesMetaGame,
-            cbit: deleteCompletedGames ? 1 : 0,
-            gameids: deletes,
-          },
-        }),
+      const res = await callAuthApi("delete_games", {
+        metaGame: deleteGamesMetaGame,
+        cbit: deleteCompletedGames ? 1 : 0,
+        gameids: deletes,
       });
+      if (!res) return;
       const result = await res.json();
       console.log("delete_games returned:");
       console.log(JSON.parse(result.body));
@@ -375,22 +291,11 @@ function Me(props) {
           console.log(result);
         }
       } else {
-        const usr = await Auth.currentAuthenticatedUser();
         console.log(`Posting start tournament ${genericInput}`);
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "start_tournament",
-            pars: {
-              tournamentid: genericInput,
-            },
-          }),
+        const res = await callAuthApi("start_tournament", {
+          tournamentid: genericInput,
         });
+        if (!res) return;
         const result = await res.json();
         console.log("start_tournament returned:");
         console.log(JSON.parse(result.body));
@@ -403,22 +308,11 @@ function Me(props) {
 
   const handleEndTournamentClick = async () => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
       console.log(`Posting end tournament ${genericInput}`);
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "end_tournament",
-          pars: {
-            tournamentid: genericInput,
-          },
-        }),
+      const res = await callAuthApi("end_tournament", {
+        tournamentid: genericInput,
       });
+      if (!res) return;
       const result = await res.json();
       console.log("end_tournament returned:");
       console.log(JSON.parse(result.body));
@@ -429,19 +323,7 @@ function Me(props) {
 
   const handleUpdateMetaGameCountsClick = async () => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "update_meta_game_counts",
-          pars: {},
-        }),
-      });
+      await callAuthApi("update_meta_game_counts", {});
     } catch (error) {
       errorSetter(error);
     }
@@ -449,19 +331,8 @@ function Me(props) {
 
   const handleOneTimeFixClick = async () => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
       console.log("Posting onetime_fix");
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "onetime_fix",
-        }),
-      });
+      await callAuthApi("onetime_fix");
     } catch (error) {
       errorSetter(error);
     }
@@ -469,19 +340,8 @@ function Me(props) {
 
   const handleTestPushClick = async () => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
       console.log("Posting test_push");
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "test_push",
-        }),
-      });
+      await callAuthApi("test_push");
     } catch (error) {
       errorSetter(error);
     }
@@ -589,9 +449,9 @@ function Me(props) {
           </div>
         </h1>
         {globalMe === null ||
-        globalMe === undefined ||
-        globalMe.challengesReceived === undefined ||
-        globalMe.challengesReceived.length === 0 ? null : (
+          globalMe === undefined ||
+          globalMe.challengesReceived === undefined ||
+          globalMe.challengesReceived.length === 0 ? null : (
           <div className="content has-text-centered">
             <p style={{ color: "var(--secondary-color-1)" }}>
               <a href="#challenged">You have been challenged!</a>
@@ -656,7 +516,7 @@ function Me(props) {
               </p>
               <div className="indentedContainer">
                 {!globalMe.challengesReceived ||
-                globalMe.challengesReceived.length === 0 ? (
+                  globalMe.challengesReceived.length === 0 ? (
                   <p>{t("NoChallengeResponse")}</p>
                 ) : (
                   <ChallengeMeRespond
@@ -684,7 +544,7 @@ function Me(props) {
               </p>
               <div className="indentedContainer">
                 {!globalMe.standingChallenges ||
-                globalMe.standingChallenges.length === 0 ? (
+                  globalMe.standingChallenges.length === 0 ? (
                   <p>{t("NoStandingChallenges")}</p>
                 ) : (
                   <ChallengeOpen

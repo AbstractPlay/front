@@ -8,8 +8,7 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { MeContext } from "../../pages/Skeleton";
-import { API_ENDPOINT_AUTH } from "../../config";
-import { Auth } from "aws-amplify";
+import { callAuthApi } from "../../lib/api";
 import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
 
@@ -177,24 +176,12 @@ function MoveEntry(props) {
   const pingBot = useCallback(async () => {
     if (globalMe !== undefined) {
       // console.log(`Pinging bot in the following game:\n${JSON.stringify(game, null, 2)}`);
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
       try {
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: "ping_bot",
-            pars: {
-              metaGame: game.metaGame,
-              gameid: game.id,
-            },
-          }),
+        const res = await callAuthApi("ping_bot", {
+          metaGame: game.metaGame,
+          gameid: game.id,
         });
+        if (!res) return;
         const result = await res.json();
         if (result && result.statusCode && result.statusCode !== 200)
           console.log("Ping unsuccessful");

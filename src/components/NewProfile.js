@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { API_ENDPOINT_OPEN } from "../config";
+import { callAuthApi } from "../lib/api";
 import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
 
@@ -67,48 +68,26 @@ function NewProfile(props) {
       consentErrorSetter(t("PleaseConsent"));
     } else {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        console.log("currentAuthenticatedUser", usr);
-        await fetch(API_ENDPOINT_AUTH, {
-          method: "POST", // or 'PUT'
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "new_profile",
-            pars: {
-              name: name,
-              consent: consent,
-              anonymous: anonymous,
-              country: country,
-              tagline: tagline,
-            },
-          }),
+        const res = await callAuthApi("new_profile", {
+          name: name,
+          consent: consent,
+          anonymous: anonymous,
+          country: country,
+          tagline: tagline,
         });
+        if (!res) return;
         props.handleClose(1);
         if (props.updateMe) {
           try {
+            const usr = await Auth.currentAuthenticatedUser();
             const token = usr.signInUserSession.idToken.jwtToken;
             if (token !== null) {
               try {
                 console.log(
                   "calling authQuery 'me' (small), with token: " + token
                 );
-                const res = await fetch(API_ENDPOINT_AUTH, {
-                  method: "POST",
-                  headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                  },
-                  // Don't care about e.g. challenges, so size = small.
-                  body: JSON.stringify({
-                    query: "me",
-                    pars: { size: "small" },
-                  }),
-                });
+                const res = await callAuthApi("me", { size: "small" });
+                if (!res) return;
                 const result = await res.json();
                 if (result.statusCode !== 200)
                   console.log(JSON.parse(result.body));

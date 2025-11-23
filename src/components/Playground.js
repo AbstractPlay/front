@@ -11,9 +11,8 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render, renderglyph } from "@abstractplay/renderer";
-import { Auth } from "aws-amplify";
 import { cloneDeep } from "lodash";
-import { API_ENDPOINT_AUTH } from "../config";
+import { callAuthApi } from "../lib/api";
 import { GameNode } from "./Playground/GameTree";
 import { Helmet } from "react-helmet-async";
 import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
@@ -443,19 +442,8 @@ async function saveExploration(
       ? exploration[moveNumber - 1].version
       : 0;
   }
-  const usr = await Auth.currentAuthenticatedUser();
-  const res = await fetch(API_ENDPOINT_AUTH, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-    },
-    body: JSON.stringify({
-      query: "save_exploration",
-      pars: pars,
-    }),
-  });
+  const res = await callAuthApi("save_exploration", pars);
+  if (!res) return;
   if (res.status !== 200) {
     const result = await res.json();
     errorMessageRef.current = JSON.parse(result.body);
@@ -520,7 +508,7 @@ function doView(
   if (move.valid && move.complete < 1 && move.canrender === true)
     partialMove = true;
   let simMove = false;
-  let m = move.move;
+  let m = move.move || "";
   if (game.simultaneous) {
     simMove = true;
     m = game.players.map((p) => (p.id === me.id ? m : "")).join(",");
@@ -745,6 +733,7 @@ function processNewMove(
   // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position
   else if (
     partialMoveRenderRef.current &&
+    newmove.move !== undefined &&
     !newmove.move.startsWith(newmove.rendered)
   ) {
     let node = getFocusNode(explorationRef.current, focus);
@@ -974,49 +963,24 @@ function Playground(props) {
   useEffect(() => {
     console.log("Fetching playground data");
     async function fetchData() {
-      let token = null;
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        token = usr.signInUserSession.idToken.jwtToken;
-      } catch (err) {
-        // OK, non logged in user viewing the game
-      }
       try {
         let data;
-        let status;
-        if (token) {
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              query: "get_playground",
-              pars: {},
-            }),
-          });
-          status = res.status;
-          if (status !== 200) {
-            const result = await res.json();
-            errorMessageRef.current = JSON.parse(result.body);
-            errorSetter(true);
-          } else {
-            const result = await res.json();
-            console.log(result);
-            data = JSON.parse(result.body);
-            if (data !== null) {
-              metaGameSetter(data.metaGame);
-            } else {
-              metaGameSetter(null);
-            }
-          }
-        } else {
-          errorMessageRef.current =
-            "You must be logged in to access your playground.";
+        const res = await callAuthApi("get_playground", {});
+        if (!res) return;
+        const status = res.status;
+        if (status !== 200) {
+          const result = await res.json();
+          errorMessageRef.current = JSON.parse(result.body);
           errorSetter(true);
-          metaGameSetter(null);
+        } else {
+          const result = await res.json();
+          console.log(result);
+          data = JSON.parse(result.body);
+          if (data !== null) {
+            metaGameSetter(data.metaGame);
+          } else {
+            metaGameSetter(null);
+          }
         }
         if (status === 200) {
           if (metaGame !== null && metaGame !== undefined) {
@@ -1082,56 +1046,36 @@ function Playground(props) {
   useEffect(() => {
     async function fetchPrivateExploration() {
       explorationFetchedSetter(true);
-      let token = null;
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        token = usr.signInUserSession.idToken.jwtToken;
-      } catch (err) {
-        // non logged in user viewing the game
-      }
       try {
         let data;
-        let status;
-        if (token) {
-          const res = await fetch(API_ENDPOINT_AUTH, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              query: "get_exploration",
-              pars: {
-                game: gameID,
-                move: explorationRef.current.length,
-              },
-            }),
+        const res = await callAuthApi("get_exploration", {
+          game: gameID,
+          move: explorationRef.current.length,
+        });
+        if (!res) return;
+        const status = res.status;
+        if (status !== 200) {
+          const result = await res.json();
+          errorMessageRef.current = JSON.parse(result.body);
+          errorSetter(true);
+        } else {
+          const result = await res.json();
+          data = JSON.parse(result.body);
+          data = data.map((d) => {
+            if (d && typeof d.tree === "string") {
+              d.tree = JSON.parse(d.tree);
+            }
+            return d;
           });
-          status = res.status;
-          if (status !== 200) {
-            const result = await res.json();
-            errorMessageRef.current = JSON.parse(result.body);
-            errorSetter(true);
-          } else {
-            const result = await res.json();
-            data = JSON.parse(result.body);
-            data = data.map((d) => {
-              if (d && typeof d.tree === "string") {
-                d.tree = JSON.parse(d.tree);
-              }
-              return d;
-            });
-            mergeExploration(
-              gameRef.current,
-              explorationRef.current,
-              data,
-              globalMe,
-              errorSetter,
-              errorMessageRef
-            );
-            focusSetter(cloneDeep(focus)); // just to trigger a rerender...
-          }
+          mergeExploration(
+            gameRef.current,
+            explorationRef.current,
+            data,
+            globalMe,
+            errorSetter,
+            errorMessageRef
+          );
+          focusSetter(cloneDeep(focus)); // just to trigger a rerender...
         }
       } catch (error) {
         console.log(error);
@@ -1175,23 +1119,11 @@ function Playground(props) {
         g = GameFactory(newGame, undefined, selectedVariants);
       }
       if (g !== undefined) {
-        const usr = await Auth.currentAuthenticatedUser();
-        console.log("currentAuthenticatedUser", usr);
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "new_playground",
-            pars: {
-              metaGame: newGame,
-              state: g.serialize(),
-            },
-          }),
+        const res = await callAuthApi("new_playground", {
+          metaGame: newGame,
+          state: g.serialize(),
         });
+        if (!res) return;
         if (res.status !== 200) {
           const result = await res.json();
           errorMessageRef.current = JSON.parse(result.body);
@@ -1246,38 +1178,18 @@ function Playground(props) {
   };
 
   const handleResetPlayground = async () => {
-    const usr = await Auth.currentAuthenticatedUser();
-    const token = usr.signInUserSession.idToken.jwtToken;
     try {
-      let status;
-      if (token) {
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: "reset_playground",
-            pars: {},
-          }),
-        });
-        status = res.status;
-        if (status !== 200) {
-          const result = await res.json();
-          errorMessageRef.current = JSON.parse(result.body);
-          console.log(`Status code was not 200: ${JSON.parse(result.body)}`);
-          errorSetter(true);
-        } else {
-          metaGameSetter(null);
-          errorSetter(false);
-        }
-      } else {
-        errorMessageRef.current =
-          "You must be logged in to access your playground.";
+      const res = await callAuthApi("reset_playground", {});
+      if (!res) return;
+      const status = res.status;
+      if (status !== 200) {
+        const result = await res.json();
+        errorMessageRef.current = JSON.parse(result.body);
+        console.log(`Status code was not 200: ${JSON.parse(result.body)}`);
         errorSetter(true);
+      } else {
         metaGameSetter(null);
+        errorSetter(false);
       }
     } catch (error) {
       console.log(error);
@@ -1428,12 +1340,12 @@ function Playground(props) {
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous
         ? gameEngineTmp.handleClickSimultaneous(
-            moveRef.current.move,
-            row,
-            col,
-            gameRef.current.me + 1,
-            piece
-          )
+          moveRef.current.move,
+          row,
+          col,
+          gameRef.current.me + 1,
+          piece
+        )
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       //   console.log(result);
       result.rendered = moveRef.current.rendered;
@@ -1932,12 +1844,12 @@ function Playground(props) {
               </TransformWrapper>
               <div className="boardButtons">
                 {gameRef === undefined ||
-                gameRef === null ||
-                gameRef.current === undefined ||
-                gameRef.current === null ||
-                gameRef.current.increment === undefined ||
-                gameRef.current.increment === null ||
-                gameRef.current.increment === 0 ? null : (
+                  gameRef === null ||
+                  gameRef.current === undefined ||
+                  gameRef.current === null ||
+                  gameRef.current.increment === undefined ||
+                  gameRef.current.increment === null ||
+                  gameRef.current.increment === 0 ? null : (
                   <>
                     <button
                       className="fabtn align-right"
@@ -1970,8 +1882,8 @@ function Playground(props) {
                   title={t("GameInfo")}
                 >
                   {gameEngine === undefined ||
-                  gameEngine === null ||
-                  gameEngine.notes() === undefined ? (
+                    gameEngine === null ||
+                    gameEngine.notes() === undefined ? (
                     <i className="fa fa-info"></i>
                   ) : (
                     <span className="highlight">
@@ -2105,8 +2017,8 @@ function Playground(props) {
                 you can then send to the developers. Thank you!
               </p>
               {gameRef === null ||
-              gameRef.current === null ||
-              gameRef.current.state === null ? (
+                gameRef.current === null ||
+                gameRef.current.state === null ? (
                 ""
               ) : (
                 <Fragment>

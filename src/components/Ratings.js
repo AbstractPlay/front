@@ -8,8 +8,8 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
-import { Auth } from "aws-amplify";
+import { API_ENDPOINT_OPEN } from "../config";
+import { callAuthApi } from "../lib/api";
 import {
   getCoreRowModel,
   useReactTable,
@@ -66,22 +66,9 @@ function Ratings() {
   const handleNewChallenge = useCallback(
     async (challenge) => {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        console.log("currentAuthenticatedUser", usr);
-        await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "new_challenge",
-            pars: {
-              ...challenge,
-              challenger: { id: globalMe.id, name: globalMe.name },
-            },
-          }),
+        await callAuthApi("new_challenge", {
+          ...challenge,
+          challenger: { id: globalMe.id, name: globalMe.name },
         });
         closeChallengeModal();
       } catch (error) {

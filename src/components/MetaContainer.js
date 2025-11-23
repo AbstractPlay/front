@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
 import { MeContext } from "../pages/Skeleton";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { API_ENDPOINT_OPEN } from "../config";
+import { callAuthApi } from "../lib/api";
 import { Helmet } from "react-helmet-async";
 // import Gallery from "./MetaContainer/Gallery";
 import Table from "./MetaContainer/Table";
@@ -85,21 +85,10 @@ function MetaContainer(props) {
 
   const toggleStar = async (game) => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      const res = await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "toggle_star",
-          pars: {
-            metaGame: game,
-          },
-        }),
+      const res = await callAuthApi("toggle_star", {
+        metaGame: game,
       });
+      if (!res) return;
       if (res.status !== 200) {
         const result = await res.json();
         console.log(
@@ -128,22 +117,9 @@ function MetaContainer(props) {
 
   const handleNewChallenge = async (challenge) => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("currentAuthenticatedUser", usr);
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "new_challenge",
-          pars: {
-            ...challenge,
-            challenger: { id: globalMe.id, name: globalMe.name },
-          },
-        }),
+      await callAuthApi("new_challenge", {
+        ...challenge,
+        challenger: { id: globalMe.id, name: globalMe.name },
       });
     } catch (error) {
       console.log(error);

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
-import { API_ENDPOINT_OPEN, API_ENDPOINT_AUTH } from "../config";
+import { Auth } from "aws-amplify";
+import { API_ENDPOINT_OPEN } from "../config";
 import {
   getCoreRowModel,
   useReactTable,
@@ -12,7 +13,7 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { Auth } from "aws-amplify";
+import { callAuthApi } from "../lib/api";
 import { MeContext, UsersContext } from "../pages/Skeleton";
 import Spinner from "./Spinner";
 import ActivityMarker from "./ActivityMarker";
@@ -66,23 +67,11 @@ function StandingChallenges(props) {
 
   const handleNewChallenge = async (challenge) => {
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      console.log("currentAuthenticatedUser", usr);
-      await fetch(API_ENDPOINT_AUTH, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-        },
-        body: JSON.stringify({
-          query: "new_challenge",
-          pars: {
-            ...challenge,
-            challenger: { id: globalMe.id, name: globalMe.name },
-          },
-        }),
+      const res = await callAuthApi("new_challenge", {
+        ...challenge,
+        challenger: { id: globalMe.id, name: globalMe.name },
       });
+      if (!res) return;
       showModalSetter(false);
     } catch (error) {
       console.log(error);
@@ -148,27 +137,15 @@ function StandingChallenges(props) {
 
   useEffect(() => {
     async function fetchData() {
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
       console.log(`Submitting acceptance of ${metaGame} challenge ${accepted}`);
       try {
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: "challenge_response",
-            pars: {
-              id: accepted,
-              metaGame: metaGame,
-              standing: true,
-              response: true,
-            },
-          }),
+        const res = await callAuthApi("challenge_response", {
+          id: accepted,
+          metaGame: metaGame,
+          standing: true,
+          response: true,
         });
+        if (!res) return;
         const result = await res.json();
         if (result.statusCode !== 200) {
           console.log("handleAccept", result.statusCode);
@@ -187,26 +164,13 @@ function StandingChallenges(props) {
 
   useEffect(() => {
     async function fetchData() {
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
       try {
-        console.log("calling challenge_revoke with token: " + token);
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: "challenge_revoke",
-            pars: {
-              id: revoke,
-              metaGame: metaGame,
-              standing: true,
-            },
-          }),
+        const res = await callAuthApi("challenge_revoke", {
+          id: revoke,
+          metaGame: metaGame,
+          standing: true,
         });
+        if (!res) return;
         const result = await res.json();
         if (result.statusCode !== 200) console.log(JSON.parse(result.body));
         else {
@@ -223,27 +187,15 @@ function StandingChallenges(props) {
 
   useEffect(() => {
     async function fetchData() {
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
       console.log(`Submitting reject of ${metaGame} challenge ${reject}`);
       try {
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: "challenge_response",
-            pars: {
-              id: reject,
-              metaGame: metaGame,
-              standing: true,
-              response: false,
-            },
-          }),
+        const res = await callAuthApi("challenge_response", {
+          id: reject,
+          metaGame: metaGame,
+          standing: true,
+          response: false,
         });
+        if (!res) return;
         const result = await res.json();
         if (result.statusCode !== 200) {
           console.log("Reject useEffect", result.statusCode);

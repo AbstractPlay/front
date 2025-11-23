@@ -4,8 +4,8 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import ReactTimeAgo from "react-time-ago";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { callAuthApi } from "../lib/api";
+import { API_ENDPOINT_OPEN } from "../config";
 import { cloneDeep } from "lodash";
 import { MeContext, UsersContext } from "../pages/Skeleton";
 // import { gameinfo } from "@abstractplay/gameslib";
@@ -156,22 +156,16 @@ function Event() {
   const handleChangeDate = () => {
     async function putNewDate(date) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_update_start",
-            pars: {
-              eventid,
-              newDate: date,
-            },
-          }),
+        const res = await callAuthApi("event_update_start", {
+          eventid,
+          newDate: date,
         });
+        if (!res) {
+          console.log(
+            `An error occurred updating the event: authentication required`
+          );
+          return false;
+        }
         if (res.status !== 200) {
           console.log(
             `An error occurred updating the event: ${JSON.stringify(res)}`
@@ -206,22 +200,11 @@ function Event() {
   const handleChangeName = () => {
     async function putNewName(name) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_update_name",
-            pars: {
-              eventid,
-              name,
-            },
-          }),
+        const res = await callAuthApi("event_update_name", {
+          eventid,
+          name,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred updating the event: ${JSON.stringify(res)}`
@@ -254,22 +237,11 @@ function Event() {
   const handleChangeDesc = () => {
     async function putNewDesc(desc) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_update_desc",
-            pars: {
-              eventid,
-              description: desc,
-            },
-          }),
+        const res = await callAuthApi("event_update_desc", {
+          eventid,
+          description: desc,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred updating the event: ${JSON.stringify(res)}`
@@ -302,21 +274,10 @@ function Event() {
   const handlePublish = () => {
     async function publish() {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_publish",
-            pars: {
-              eventid,
-            },
-          }),
+        const res = await callAuthApi("event_publish", {
+          eventid,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred updating the event: ${JSON.stringify(res)}`
@@ -349,21 +310,10 @@ function Event() {
   const handleDelete = () => {
     async function delEvent() {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_delete",
-            pars: {
-              eventid,
-            },
-          }),
+        const res = await callAuthApi("event_delete", {
+          eventid,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred updating the event: ${JSON.stringify(res)}`
@@ -393,21 +343,10 @@ function Event() {
   const handleRegister = () => {
     async function register() {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_register",
-            pars: {
-              eventid,
-            },
-          }),
+        const res = await callAuthApi("event_register", {
+          eventid,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred updating the event: ${JSON.stringify(res)}`
@@ -445,21 +384,10 @@ function Event() {
   const handleWithdraw = () => {
     async function withdraw() {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_withdraw",
-            pars: {
-              eventid,
-            },
-          }),
+        const res = await callAuthApi("event_withdraw", {
+          eventid,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred updating the event: ${JSON.stringify(res)}`
@@ -495,22 +423,11 @@ function Event() {
   const handleClose = () => {
     async function close(winner) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_close",
-            pars: {
-              eventid,
-              winner,
-            },
-          }),
+        const res = await callAuthApi("event_close", {
+          eventid,
+          winner,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred updating the event: ${JSON.stringify(res)}`

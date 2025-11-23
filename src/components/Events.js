@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH, API_ENDPOINT_OPEN } from "../config";
+import { API_ENDPOINT_OPEN } from "../config";
+import { callAuthApi } from "../lib/api";
 import { MeContext } from "../pages/Skeleton";
 // import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
@@ -138,23 +138,12 @@ function Events() {
     }
     if (valid) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_create",
-            pars: {
-              name: newEventName,
-              date: startSecs,
-              description: "",
-            },
-          }),
+        const res = await callAuthApi("event_create", {
+          name: newEventName,
+          date: startSecs,
+          description: "",
         });
+        if (!res) return;
         if (res.status !== 200) {
           console.log(
             `An error occurred creating the event: ${JSON.stringify(res)}`
@@ -206,21 +195,10 @@ function Events() {
   const handleRegister = (eventid) => {
     async function register() {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_register",
-            pars: {
-              eventid,
-            },
-          }),
+        const res = await callAuthApi("event_register", {
+          eventid,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred updating the event: ${JSON.stringify(res)}`

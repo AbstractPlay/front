@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH } from "../config";
+import { callAuthApi } from "../lib/api";
 import UserSettingsModal from "./UserSettingsModal";
 import { MeContext } from "../pages/Skeleton";
 import NewProfile from "./NewProfile";
@@ -26,16 +26,8 @@ function LogInOutButton({ closeBurger }) {
           userSetter(usr.signInUserSession);
           try {
             console.log("calling authQuery 'me' (small), with token: " + token);
-            const res = await fetch(API_ENDPOINT_AUTH, {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              // Don't care about e.g. challenges, so size = small.
-              body: JSON.stringify({ query: "me", pars: { size: "small" } }),
-            });
+            const res = await callAuthApi("me", { size: "small" });
+            if (!res) return;
             const result = await res.json();
             if (result.statusCode !== 200) console.log(JSON.parse(result.body));
             else {

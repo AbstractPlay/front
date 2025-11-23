@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Auth } from "aws-amplify";
-import { API_ENDPOINT_AUTH } from "../../config";
+import { callAuthApi } from "../../lib/api";
 import { cloneDeep } from "lodash";
 import invariant from "tiny-invariant";
 import {
@@ -111,22 +110,11 @@ function Division({ event, setRefresh }) {
     console.log(`About to save the following divisions:`, payload);
     async function assignDivisions(pairings) {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "event_update_divisions",
-            pars: {
-              eventid: event.event.sk,
-              divisions: payload,
-            },
-          }),
+        const res = await callAuthApi("event_update_divisions", {
+          eventid: event.event.sk,
+          divisions: payload,
         });
+        if (!res) return false;
         if (res.status !== 200) {
           console.log(
             `An error occurred assigning divisions: ${JSON.stringify(res)}`

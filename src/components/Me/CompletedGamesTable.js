@@ -8,8 +8,7 @@ import {
 } from "react";
 import { Link } from "react-router-dom";
 import { MeContext } from "../../pages/Skeleton";
-import { API_ENDPOINT_AUTH } from "../../config";
-import { Auth } from "aws-amplify";
+import { callAuthApi } from "../../lib/api";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
   getCoreRowModel,
@@ -35,21 +34,10 @@ function CompletedGamesTable(props) {
   const handleClearClick = useCallback(
     async (gameId) => {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const res = await fetch(API_ENDPOINT_AUTH, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${usr.signInUserSession.idToken.jwtToken}`,
-          },
-          body: JSON.stringify({
-            query: "set_lastSeen",
-            pars: {
-              gameId,
-            },
-          }),
+        const res = await callAuthApi("set_lastSeen", {
+          gameId,
         });
+        if (!res) return;
         if (res.status !== 200) {
           console.log(`An error occurred while setting lastSeen.`);
         } else {
