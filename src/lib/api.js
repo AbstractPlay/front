@@ -10,8 +10,7 @@ export const callAuthApi = async (query, pars, requireAuth = true) => {
         token = usr.signInUserSession.idToken.jwtToken;
     } catch (err) {
         if (requireAuth) {
-            console.log(`callAuthApi: authentication required for query "${query}"`);
-            Auth.federatedSignIn();
+            await Auth.federatedSignIn();
         }
         return;
     }
@@ -32,7 +31,7 @@ export const callAuthApi = async (query, pars, requireAuth = true) => {
     // Handle expired/invalid token from backend
     if (response.status === 401 || response.status === 403) {
         console.log(`callAuthApi: token rejected by server for query "${query}", redirecting to login`);
-        Auth.federatedSignIn();
+        await Auth.federatedSignIn();
         return;
     }
 

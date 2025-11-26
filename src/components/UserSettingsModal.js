@@ -212,6 +212,8 @@ function UserSettingsModal(props) {
   };
 
   const logout = async () => {
+    // Set flag to indicate intentional logout, so we don't auto-login on redirect
+    sessionStorage.setItem("intentionalLogout", "1");
     await Auth.signOut();
     updatedSetter((updated) => updated + 1);
     handleUserSettingsClose(updated + 1);

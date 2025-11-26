@@ -248,7 +248,7 @@ function setupGame(
     game0.colors = gameRef.current.colors; // gets used when you submit a move.
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
-  engineRef.current = cloneDeep(engine);
+  engineRef.current = engine.clone();
   const render = replaceNames(
     engine.render({ perspective: game0.me + 1, altDisplay: display }),
     game0.players

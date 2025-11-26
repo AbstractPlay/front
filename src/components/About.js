@@ -47,8 +47,9 @@ function About(props) {
       const deets = [];
       selected.forEach((metaGame) => {
         const info = gameinfo.get(metaGame);
+        if (!info) return; // Skip if game info not found
         let gameEngine;
-        if (info.playercounts.length > 1) {
+        if (info.playercounts && info.playercounts.length > 1) {
           gameEngine = GameFactory(metaGame, 2);
         } else {
           gameEngine = GameFactory(metaGame);

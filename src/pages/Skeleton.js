@@ -63,6 +63,7 @@ export const SummaryContext = createContext([null, () => {}]);
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
   const [token, tokenSetter] = useState(null);
+
   const [update] = useState(0);
   const [myMove, myMoveSetter] = useState([]);
   const [globalMe, globalMeSetter] = useState(null);
@@ -144,8 +145,25 @@ function Bones(props) {
         console.log("usr:", usr);
         // if (usr.signInUserSession !== undefined)
         tokenSetter(usr.signInUserSession.idToken.jwtToken);
+        // Mark that user is logged in for session expiry detection
+        localStorage.setItem("wasLoggedIn", "1");
       } catch (error) {
         tokenSetter(null);
+        // Check if user was previously logged in (session expired)
+        const wasLoggedIn = localStorage.getItem("wasLoggedIn") === "1";
+        const intentionalLogout = sessionStorage.getItem("intentionalLogout") === "1";
+
+        if (wasLoggedIn && !intentionalLogout) {
+          // Session expired - auto-trigger login
+          console.log("Session expired, auto-triggering login...");
+          localStorage.removeItem("wasLoggedIn");
+          Auth.federatedSignIn();
+          return;
+        }
+
+        // Clear flags
+        localStorage.removeItem("wasLoggedIn");
+        sessionStorage.removeItem("intentionalLogout");
       }
       authedSetter(true);
       console.log("authed");
