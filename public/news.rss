@@ -1128,7 +1128,7 @@ My sincerest thanks to all SDGers. I hope you will find a similar home here at A
     
     <item>
       <title>Announcement</title>
-      <description>**Testers wanted for new game Bao!** Bao is a sowing game from East Africa that I often hear called things like &amp;quot;the king of Mancala games.&amp;quot; It almost broke my brain, but thanks to the very patient @Nino , it&amp;apos;s ready now for public testing. If you are willing to spend some time helping me iron out any final kinks, then please join us on the development server and challenge away. I&amp;apos;m of course interested in issues with the game itself, but I&amp;apos;m also interested in feedback on the board representation, which is new. Thank you to all testers! (See the pinned messages in this channel for instructions on how to join us on the dev server.)</description>
+      <description>**Testers wanted for new game Bao!** Bao is a sowing game from East Africa that I often hear called things like &amp;quot;the king of Mancala games.&amp;quot; It almost broke my brain, but thanks to the very patient @Deleted User , it&amp;apos;s ready now for public testing. If you are willing to spend some time helping me iron out any final kinks, then please join us on the development server and challenge away. I&amp;apos;m of course interested in issues with the game itself, but I&amp;apos;m also interested in feedback on the board representation, which is new. Thank you to all testers! (See the pinned messages in this channel for instructions on how to join us on the dev server.)</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Tue, 05 Dec 2023 01:50:14 GMT</pubDate>
       <guid isPermaLink="false">1181412185776328764</guid>
@@ -1189,7 +1189,7 @@ Continued feedback and suggestions welcome. Enjoy!</description>
     
     <item>
       <title>Announcement</title>
-      <description>And to round out the Christmas hat trick, the East African game Bao is now available on the production server. A huge thank you to the patient and persistent efforts of our testers, in particular @Samraku  and @Nino. This is one of the more complicated games on the server (top-three, methinks), so there are bound to be hiccups. Let me know if you run into any issues. But thanks to our testers and their excellent suggestions, I think the game is in a good place. Enjoy!</description>
+      <description>And to round out the Christmas hat trick, the East African game Bao is now available on the production server. A huge thank you to the patient and persistent efforts of our testers, in particular @Samraku  and @Deleted User. This is one of the more complicated games on the server (top-three, methinks), so there are bound to be hiccups. Let me know if you run into any issues. But thanks to our testers and their excellent suggestions, I think the game is in a good place. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Sun, 24 Dec 2023 22:59:58 GMT</pubDate>
       <guid isPermaLink="false">1188617093936058418</guid>
@@ -2864,7 +2864,7 @@ Let us know if you run into any issues. Enjoy!</description>
     
     <item>
       <title>Announcement</title>
-      <description>@cdunc123 &amp;apos;s game Bluestone is now available (thanks to @ManaT ). This is a hybrid area-control/connection game where you try to connect your groups to more of the perimeter stones than your opponent. Enjoy!</description>
+      <description>@cdunc123 &amp;apos;s game [Bluestone](https://play.abstractplay.com/games/bluestone) is now available (thanks to @ManaT ). This is a hybrid area-control/connection game where you try to connect your groups to more of the perimeter stones than your opponent. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Wed, 03 Sep 2025 17:02:04 GMT</pubDate>
       <guid isPermaLink="false">1412845114077872148</guid>
@@ -2888,7 +2888,7 @@ Let us know if you run into any issues. Enjoy!</description>
     
     <item>
       <title>Announcement</title>
-      <description>Two hex-board variants for Lines of Action are now available. Hex5 is the game Alveole: 9 pieces each, clustered in each corner. Hex6 is more traditional, 12 pieces each, with a black hole in the centre (&amp;quot;scrambled eggs&amp;quot; setup also works). Enjoy!</description>
+      <description>Two hex-board variants for [Lines of Action](https://play.abstractplay.com/games/loa) are now available. Hex5 is the game Alveole: 9 pieces each, clustered in each corner. Hex6 is more traditional, 12 pieces each, with a black hole in the centre (&amp;quot;scrambled eggs&amp;quot; setup also works). Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Sat, 25 Oct 2025 14:27:31 GMT</pubDate>
       <guid isPermaLink="false">1431650387655393541</guid>
@@ -2896,7 +2896,7 @@ Let us know if you run into any issues. Enjoy!</description>
     
     <item>
       <title>Announcement</title>
-      <description>@Donegal&amp;apos;s Decktet game Deckfish is now available, thanks to @mcd. In this game players move tokens around a tableau of cards to collect suits. The highest scoring collection wins. Enjoy!</description>
+      <description>@Donegal&amp;apos;s Decktet game [Deckfish](https://play.abstractplay.com/games/deckfish) is now available, thanks to @mcd. In this game players move tokens around a tableau of cards to collect suits. The highest scoring collection wins. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Fri, 14 Nov 2025 20:07:08 GMT</pubDate>
       <guid isPermaLink="false">1438983614170664960</guid>
@@ -2904,10 +2904,18 @@ Let us know if you run into any issues. Enjoy!</description>
     
     <item>
       <title>Announcement</title>
-      <description>@hoembla&amp;apos;s game Sunspot is now available, thanks to @hoembla! Place and flip stones in an attempt to form a loop. Enjoy!</description>
+      <description>@hoembla&amp;apos;s game [Sunspot](https://play.abstractplay.com/games/sunspot) is now available, thanks to @hoembla! Place and flip stones in an attempt to form a loop. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Fri, 14 Nov 2025 22:12:05 GMT</pubDate>
       <guid isPermaLink="false">1439015058888720680</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The Decktet game [Emu Ranchers](https://play.abstractplay.com/games/emu) is now available. In this game reminiscent of Lost Cities, players hatch birds, grow them, and hopefully harvest them for a profit at the end of the year. Highest score over multiple years wins. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 22 Nov 2025 22:50:01 GMT</pubDate>
+      <guid isPermaLink="false">1441923707542175775</guid>
     </item>
     
   </channel>
