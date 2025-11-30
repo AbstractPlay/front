@@ -515,17 +515,17 @@ function mergeExistingExploration(
   useSameMove = false
 ) {
   moveNum++;
+  let subtree = cur_exploration;
   while (true) {
     let move = exploration[moveNum].move.toLowerCase().replace(/\s+/g, "");
-    let subtree;
     if (useSameMove) {
-      let node = getExplorationNode(exploration, game, moveNum - 1);
+      let node = getExplorationNode(exploration, game, moveNum);
       let gameEngine = GameFactory(game.metaGame, node.state);
-      subtree = cur_exploration.children.find((e) =>
+      subtree = subtree.children.find((e) =>
         gameEngine.sameMove(move, e.move)
       );
     } else {
-      subtree = cur_exploration.children.find(
+      subtree = subtree.children.find(
         (e) => e.move.toLowerCase().replace(/\s+/g, "") === move
       );
     }
@@ -533,9 +533,6 @@ function mergeExistingExploration(
       moveNum++;
       if (moveNum === exploration.length) {
         exploration[exploration.length - 1].children = subtree.children;
-        // TODO: Don't we need to save the exploration to DB here? In particular if a whole bunch of auto moves were triggered. Also if
-        // we save here, then we only need to fetch the previous move's exploration when the user looks at his game. I think existing exploration after a
-        // set of auto moves will be lost if we don't save. Maybe test with Zola, it can trigger many auto moves near the end of the game.
         break;
       }
     } else {
@@ -678,6 +675,7 @@ async function saveExploration(
   commentJustAdded = false
 ) {
   if (!me) return;
+  if (!isExplorer(explorer, me)) return;
   if (!game.gameOver) {
     if (moveNumber !== exploration.length)
       throw new Error("Can't save exploration at this move!");
@@ -1235,6 +1233,8 @@ function GameMove(props) {
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
   const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] =
     useState(false);
+  const [showPremoveConfirm, showPremoveConfirmSetter] = useState(false);
+  const [pendingPremoveAction, pendingPremoveActionSetter] = useState(null); // { node, isChange }
   const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [showGameDump, showGameDumpSetter] = useState(false);
@@ -1812,8 +1812,8 @@ function GameMove(props) {
           // if we got here from the "trigger a refresh" button, we should probably also fetch exploration in case the user is exploring on more than one device
           explorationFetchedSetter(false);
         } else if (
-          explorationRef.current.nodes.length ===
-          exploration.length + 1
+          explorationRef.current.nodes.length >
+          exploration.length
         ) {
           // page refreshed and opponent moved
           mergeExistingExploration(
@@ -2731,12 +2731,17 @@ function GameMove(props) {
 
   const submitMove = async (m, draw) => {
     try {
+      // Find opponent ID for premove checking (only for 2-player non-simultaneous games)
+      const opponent = gameRef.current.players.find((p) => p.id !== globalMe.id);
       const res = await callAuthApi("submit_move", {
         id: gameRef.current.id,
         metaGame: gameRef.current.metaGame,
         cbit: cbit,
         move: m,
         draw: draw,
+        moveNumber: explorationRef.current.nodes.length,
+        opponentId: opponent ? opponent.id : undefined,
+        exploration: explorationRef.current.nodes[explorationRef.current.nodes.length - 1].Deflate().children
       });
       if (!res) return;
       const result = await res.json();
@@ -2945,6 +2950,65 @@ function GameMove(props) {
     showTimeoutConfirmSetter(false);
     submittingSetter(true);
     submitMove("timeout", false);
+  };
+
+  // Handler for marking/unmarking a premove
+  const handlePremove = () => {
+    const node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focus
+    );
+
+    // If already a premove, just toggle it off without confirmation
+    if (node.premove) {
+      node.SetPremove(false);
+      saveExploration(
+        explorationRef.current.nodes,
+        focus.moveNumber + 1,
+        game,
+        globalMe,
+        explorer,
+        errorSetter,
+        errorMessageRef,
+        focus,
+        navigate
+      );
+      focusSetter(cloneDeep(focus)); // trigger rerender
+      return;
+    }
+
+    // Check if this is the first premove or if we're changing an existing one
+    const siblingHasPremove = node.HasSiblingPremove();
+
+    // Show confirmation dialog for first premove or when changing
+    pendingPremoveActionSetter({ node, isChange: siblingHasPremove });
+    showPremoveConfirmSetter(true);
+  };
+
+  const handleClosePremoveConfirm = () => {
+    showPremoveConfirmSetter(false);
+    pendingPremoveActionSetter(null);
+  };
+
+  const handlePremoveConfirmed = () => {
+    showPremoveConfirmSetter(false);
+    if (pendingPremoveAction && pendingPremoveAction.node) {
+      pendingPremoveAction.node.SetPremove(true);
+      saveExploration(
+        explorationRef.current.nodes,
+        focus.moveNumber + 1,
+        game,
+        globalMe,
+        explorer,
+        errorSetter,
+        errorMessageRef,
+        focus,
+        navigate
+      );
+      focusSetter(cloneDeep(focus)); // trigger rerender
+    }
+    pendingPremoveActionSetter(null);
   };
 
   const handleInjection = async () => {
@@ -3362,6 +3426,7 @@ function GameMove(props) {
                               handleReset,
                               handlePie,
                               handleDeleteExploration,
+                              handlePremove,
                             ]}
                             key={`Entry|colorSet${colorsChanged}`}
                           />
@@ -3505,6 +3570,7 @@ function GameMove(props) {
                       handleReset,
                       handlePie,
                       handleDeleteExploration,
+                      handlePremove,
                     ]}
                     key={`Entry|colorSet${colorsChanged}`}
                   />
@@ -3700,6 +3766,25 @@ function GameMove(props) {
           >
             <div className="content">
               <p>{t("ConfirmDeleteSubtreeDesc")}</p>
+            </div>
+          </Modal>
+          <Modal
+            show={showPremoveConfirm}
+            title={t("ConfirmPremove")}
+            buttons={[
+              { label: t("Confirm"), action: handlePremoveConfirmed },
+              {
+                label: t("Cancel"),
+                action: handleClosePremoveConfirm,
+              },
+            ]}
+          >
+            <div className="content">
+              <p>
+                {pendingPremoveAction?.isChange
+                  ? t("ConfirmPremoveChangeDesc")
+                  : t("ConfirmPremoveDesc")}
+              </p>
             </div>
           </Modal>
           <Modal

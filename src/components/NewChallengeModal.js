@@ -4,6 +4,7 @@ import React, {
   useContext,
   Fragment,
   useCallback,
+  useRef,
 } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
@@ -64,10 +65,17 @@ function NewChallengeModal(props) {
   const [globalMe] = useContext(MeContext);
   const [allUsers] = useContext(UsersContext);
   const [users, usersSetter] = useState([]);
+  const errorRef = useRef(null);
 
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
+
+  useEffect(() => {
+    if (error && errorRef.current) {
+      errorRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [error]);
 
   useEffect(() => {
     if (allUsers !== null && metaGame !== null) {
@@ -786,7 +794,11 @@ function NewChallengeModal(props) {
           </div>
         )}
       </div>
-      <div className="is-danger">{error}</div>
+      {error && (
+        <div ref={errorRef} className="has-text-danger has-text-weight-bold">
+          {error}
+        </div>
+      )}
     </Modal>
   );
 }

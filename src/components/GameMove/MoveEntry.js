@@ -114,6 +114,7 @@ function MoveEntry(props) {
   const handleReset = props.handlers[7];
   const handlePie = props.handlers[8];
   const handleDeleteExploration = props.handlers[9];
+  const handlePremove = props.handlers[10];
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
@@ -666,6 +667,23 @@ function MoveEntry(props) {
                 </svg>
               )}
               <span className="tooltiptext">{t("Winning")}</span>
+            </div>
+          ) : (
+            ""
+          )}
+          {focus.exPath.length > 0 &&
+          game.canExplore &&
+          !game.gameOver &&
+          !game.simultaneous &&
+          getFocusNode(exploration, game, focus).toMove !== game.me ? (
+            <div
+              className="winningColorButton tooltipped"
+              onClick={() => handlePremove()}
+            >
+              <i className="fa fa-clock-o premoveIcon"></i>
+              <span className="tooltiptext">
+                {getFocusNode(exploration, game, focus).premove ? t("ClearPremove") : t("MarkPremove")}
+              </span>
             </div>
           ) : (
             ""

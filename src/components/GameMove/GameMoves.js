@@ -344,7 +344,8 @@ function GameMoves(props) {
               </text>
             </svg>
           )}
-          {m.commented === "filled" ? <i className="fa fa-comment smallicon"></i> : 
+          {m.premove ? <i className="fa fa-clock-o premoveIndicator"></i> : null}
+          {m.commented === "filled" ? <i className="fa fa-comment smallicon"></i> :
            m.commented === "outline" ? <i className="fa fa-comment-o smallicon"></i> : null}
         </span>
       </span>
@@ -462,7 +463,8 @@ function GameMoves(props) {
               {
                 class: className,
                 outcome: node.outcome,
-                commented: (node.comment && node.comment.length > 0) ? "filled" : 
+                premove: node.premove || false,
+                commented: (node.comment && node.comment.length > 0) ? "filled" :
                           node.commented ? "outline" : false,
                 move: node.move,
                 path: {
@@ -481,7 +483,8 @@ function GameMoves(props) {
               next.push({
                 class: className,
                 outcome: c.outcome,
-                commented: (c.comment && c.comment.length > 0) ? "filled" : 
+                premove: c.premove || false,
+                commented: (c.comment && c.comment.length > 0) ? "filled" :
                           c.commented ? "outline" : false,
                 move: c.move,
                 path: {

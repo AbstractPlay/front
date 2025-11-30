@@ -15,6 +15,7 @@ export class GameNode {
     else if (this.parent !== null) this.toMove = 1 - this.parent.toMove;
     else throw new Error("Can't decide whose move it is!");
     this.outcome = -1; // 0 for player1 win, 1 for player2 win, -1 for undecided.
+    this.premove = false; // If true, this move will be automatically submitted when the opponent plays the parent move.
   }
 
   AddChild(move, gameEngine) {
@@ -80,6 +81,45 @@ export class GameNode {
     }
   }
 
+  // Set or clear premove on this node. When setting, clears premove from siblings also fix up grandparents.
+  // When clearing, also clear grandchildren.
+  // Returns true if a sibling had premove set (i.e., we're changing an existing premove).
+  SetPremove(value) {
+    let siblingHadPremove = false;
+    if (value && this.parent !== null) {
+      // Clear premove from all siblings
+      this.parent.children.forEach((sibling) => {
+        if (sibling !== this && sibling.premove) {
+          siblingHadPremove = true;
+          sibling.premove = false;
+        }
+      });
+      // Set premove on all grandparents
+      if (this.parent.parent !== null) {
+        siblingHadPremove |= this.parent.parent.SetPremove(true);
+      }
+    }
+    else if (!value) {
+      // Clear premove from all grandchildren
+      this.children.forEach((child) => {
+        child.children.forEach((grandchild) => {
+          if (grandchild.premove) {
+            delete grandchild.premove;
+          }
+        }
+        );
+      });
+    }   
+    this.premove = value;
+    return siblingHadPremove;
+  }
+
+  // Check if any sibling has premove set, including grandparents (used for confirmation dialog)
+  HasSiblingPremove() {
+    if (this.parent === null) return false;
+    return this.parent.children.some((sibling) => sibling !== this && sibling.premove) || (this.parent.parent !== null && this.parent.parent.HasSiblingPremove());
+  }
+
   Deflate(gameOver = false) {
     const deflated = {
       move: this.move,
@@ -94,6 +134,8 @@ export class GameNode {
     });
     if (this.children.length === 0 && this.outcome !== -1)
       deflated.outcome = this.outcome;
+    if (this.premove)
+      deflated.premove = true;
     return deflated;
   }
 

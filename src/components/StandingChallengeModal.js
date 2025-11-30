@@ -4,6 +4,7 @@ import React, {
   useContext,
   Fragment,
   useCallback,
+  useRef,
 } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
@@ -67,10 +68,17 @@ function StandingChallengeModal({
   );
   const [selectedVariants, setSelectedVariants] = useState([]);
   const [globalMe] = useContext(MeContext);
+  const errorRef = useRef(null);
 
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
+
+  useEffect(() => {
+    if (error && errorRef.current) {
+      errorRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [error]);
 
   const setPlayerCount = useCallback(
     (cnt) => {
@@ -574,7 +582,11 @@ function StandingChallengeModal({
           </div>
         )}
       </div>
-      <div className="is-danger">{error}</div>
+      {error && (
+        <div ref={errorRef} className="has-text-danger has-text-weight-bold">
+          {error}
+        </div>
+      )}
     </Modal>
   );
 }
