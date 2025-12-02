@@ -16,6 +16,7 @@ import StandingChallenges from "../StandingChallenges";
 import ListGames from "../ListGames";
 import Tournaments from "../Tournaments/Tournaments";
 import GameVariants from "../GameVariants";
+import Thumbnail from "../Thumbnail";
 
 const MetaItem = React.forwardRef(
   (
@@ -433,13 +434,17 @@ const MetaItem = React.forwardRef(
               )}
             </div>
             <div id={"svg" + game.uid}>
-              <img
+                <Thumbnail
+                    meta={game.uid}
+                    onClick={openModal}
+                />
+              {/* <img
                 src={`data:image/svg+xml;utf8,${image}`}
                 alt={game.uid}
                 width="100%"
                 height="auto"
                 onClick={openModal}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -449,12 +454,15 @@ const MetaItem = React.forwardRef(
           title={`Board image for ${game.name}`}
         >
           <div className="content">
-            <img
+            <Thumbnail
+                meta={game.uid}
+            />
+            {/* <img
               src={`data:image/svg+xml;utf8,${image}`}
               alt={game.uid}
               width="100%"
               height="auto"
-            />
+            /> */}
           </div>
         </Modal>
       </div>
