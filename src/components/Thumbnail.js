@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { MeContext, ColourContext } from "../pages/Skeleton";
 import { customAlphabet } from 'nanoid'
-import { renderStatic } from "@abstractplay/renderer";
+import { render, addPrefix } from "@abstractplay/renderer";
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 5);
 
 function Thumbnail({
@@ -9,8 +9,10 @@ function Thumbnail({
 }) {
   const [json, setJson] = useState(null);
   const [svg, setSvg] = useState(null);
+  const [prefix,] = useState(nanoid());
   const [globalMe,] = useContext(MeContext);
   const [colourContext,] = useContext(ColourContext);
+  const shadowEle = useRef(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -50,6 +52,13 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
 }
 
   useEffect(() => {
+    // remove previous image
+      if (shadowEle.current !== null) {
+        const svg = shadowEle.current.querySelector("svg");
+        if (svg !== null) {
+          svg.remove();
+        }
+      }
     // process settings
     const settings = {};
     settings.display = getSetting(
@@ -67,7 +76,7 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
       meta
     );
     // setup rendering options
-    const options = {};
+    const options = { divid: `shadow${prefix}`};
     if (json !== null && settings !== null) {
         if (settings.color === "blind") {
             options.colourBlind = true;
@@ -85,34 +94,38 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
                 }
             }
         }
-        const nano = nanoid();
         options.showAnnotations = true;
-        options.svgid = nano;
-        options.prefix = nano;
+        options.svgid = prefix;
+        options.prefix = prefix;
         options.colourContext = colourContext;
         console.log("rendering", meta, json, options);
 
         // render it
-        let svgText = null;
         try {
-            svgText = renderStatic(json, options);
-            if (svgText !== null && svgText !== undefined && svgText !== "") {
-                const idx = svgText.indexOf(">");
-                console.log("svg tag", svgText.substring(0, idx+1));
-                const encoded = encodeURIComponent(svgText)
-                    .replace(/'/g, "%27")
-                    .replace(/"/g, "%22");
-                setSvg(encoded);
-            } else {
-                console.log(`DID NOT GET SVG TEXT BACK FOR ${meta}`)
-                setSvg(null);
+            if (shadowEle !== null) {
+                render(json, options);
+                const svgEle = shadowEle.current.querySelector("svg");
+                if (svgEle !== undefined) {
+                    const svgText = addPrefix(svgEle.outerHTML, options);
+                    if (svgText !== null && svgText !== undefined && svgText !== "") {
+                        const idx = svgText.indexOf(">");
+                        console.log("svg tag", svgText.substring(0, idx+1));
+                        const encoded = encodeURIComponent(svgText)
+                            .replace(/'/g, "%27")
+                            .replace(/"/g, "%22");
+                        setSvg(encoded);
+                    } else {
+                        console.log(`DID NOT GET SVG TEXT BACK FOR ${meta}`)
+                        setSvg(null);
+                    }
+                }
             }
         } catch (e) {
             console.error(`An error occurred while generating SVG for ${meta}:`, e);
             setSvg(null);
         }
     }
-  }, [meta, json, colourContext, globalMe]);
+  }, [meta, json, colourContext, globalMe, prefix, shadowEle]);
 
   return (
     <>
@@ -125,6 +138,9 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
             height="auto"
             />
         </div>
+      )}
+      {svg !== null ? null : (
+          <div id={`shadow${prefix}`} ref={shadowEle} />
       )}
     </>
   );
