@@ -5,7 +5,6 @@ import rehypeRaw from "rehype-raw";
 import { useTranslation } from "react-i18next";
 import { GameFactory } from "@abstractplay/gameslib";
 import { MeContext, UsersContext } from "../../pages/Skeleton";
-import gameImages from "../../assets/GameImages";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import HighestSingleRating from "../Stats/HighestSingleRating";
@@ -29,7 +28,6 @@ const MetaItem = React.forwardRef(
     const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
     const [activeTab, activeTabSetter] = useState("summary");
     const { t } = useTranslation();
-    const image = encodeURIComponent(gameImages[game.uid]);
 
     let gameEngine;
     if (game.playercounts.length > 1) {
@@ -433,10 +431,9 @@ const MetaItem = React.forwardRef(
                 </span>
               )}
             </div>
-            <div id={"svg" + game.uid}>
+            <div id={"svg" + game.uid} onClick={openModal}>
                 <Thumbnail
                     meta={game.uid}
-                    onClick={openModal}
                 />
               {/* <img
                 src={`data:image/svg+xml;utf8,${image}`}

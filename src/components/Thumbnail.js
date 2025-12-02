@@ -67,7 +67,7 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
       meta
     );
     // setup rendering options
-    const options = { divid: "thumbnailSvg"};
+    const options = {};
     if (json !== null && settings !== null) {
         if (settings.color === "blind") {
             options.colourBlind = true;
@@ -90,21 +90,25 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
         options.svgid = nano;
         options.prefix = nano;
         options.colourContext = colourContext;
-        console.log("rendering", json, options);
+        console.log("rendering", meta, json, options);
 
         // render it
         let svgText = null;
         try {
             svgText = renderStatic(json, options);
             if (svgText !== null && svgText !== undefined && svgText !== "") {
+                const idx = svgText.indexOf(">");
+                console.log("svg tag", svgText.substring(0, idx+1));
                 const encoded = encodeURIComponent(svgText)
                     .replace(/'/g, "%27")
                     .replace(/"/g, "%22");
                 setSvg(encoded);
             } else {
+                console.log(`DID NOT GET SVG TEXT BACK FOR ${meta}`)
                 setSvg(null);
             }
-        } catch {
+        } catch (e) {
+            console.error(`An error occurred while generating SVG for ${meta}:`, e);
             setSvg(null);
         }
     }
@@ -113,9 +117,7 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   return (
     <>
       {svg === null ? null : (
-        <div
-            id="thumbnailSvg"
-        >
+        <div>
             <img
             src={`data:image/svg+xml;utf8,${svg}`}
             alt={`Thumbnail for ${meta}`}
