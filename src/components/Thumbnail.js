@@ -56,14 +56,14 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
       "display",
       undefined,
       {},
-      globalMe.settings,
+      globalMe?.settings,
       meta
     );
     settings.color = getSetting(
       "color",
       "standard",
       {},
-      globalMe.settings,
+      globalMe?.settings,
       meta
     );
     // setup rendering options
@@ -97,7 +97,10 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
         try {
             svgText = renderStatic(json, options);
             if (svgText !== null && svgText !== undefined && svgText !== "") {
-                setSvg(svgText);
+                const encoded = encodeURIComponent(svgText)
+                    .replace(/'/g, "%27")
+                    .replace(/"/g, "%22");
+                setSvg(encoded);
             } else {
                 setSvg(null);
             }
