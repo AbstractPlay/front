@@ -449,13 +449,7 @@ const MetaItem = React.forwardRef(
           title={`Board image for ${game.name}`}
         >
           <div className="content">
-<<<<<<< HEAD
-            <Thumbnail
-                meta={game.uid}
-            />
-=======
             <Thumbnail meta={game.uid} />
->>>>>>> develop
             {/* <img
               src={`data:image/svg+xml;utf8,${image}`}
               alt={game.uid}
