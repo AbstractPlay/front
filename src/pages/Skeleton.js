@@ -151,8 +151,7 @@ function Bones(props) {
         tokenSetter(null);
         // Check if user was previously logged in (session expired)
         const wasLoggedIn = localStorage.getItem("wasLoggedIn") === "1";
-        const intentionalLogout =
-          sessionStorage.getItem("intentionalLogout") === "1";
+        const intentionalLogout = sessionStorage.getItem("intentionalLogout") === "1";
 
         if (wasLoggedIn && !intentionalLogout) {
           // Session expired - auto-trigger login

@@ -1340,12 +1340,12 @@ function Playground(props) {
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous
         ? gameEngineTmp.handleClickSimultaneous(
-            moveRef.current.move,
-            row,
-            col,
-            gameRef.current.me + 1,
-            piece
-          )
+          moveRef.current.move,
+          row,
+          col,
+          gameRef.current.me + 1,
+          piece
+        )
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       //   console.log(result);
       result.rendered = moveRef.current.rendered;
@@ -1844,12 +1844,12 @@ function Playground(props) {
               </TransformWrapper>
               <div className="boardButtons">
                 {gameRef === undefined ||
-                gameRef === null ||
-                gameRef.current === undefined ||
-                gameRef.current === null ||
-                gameRef.current.increment === undefined ||
-                gameRef.current.increment === null ||
-                gameRef.current.increment === 0 ? null : (
+                  gameRef === null ||
+                  gameRef.current === undefined ||
+                  gameRef.current === null ||
+                  gameRef.current.increment === undefined ||
+                  gameRef.current.increment === null ||
+                  gameRef.current.increment === 0 ? null : (
                   <>
                     <button
                       className="fabtn align-right"
@@ -1882,8 +1882,8 @@ function Playground(props) {
                   title={t("GameInfo")}
                 >
                   {gameEngine === undefined ||
-                  gameEngine === null ||
-                  gameEngine.notes() === undefined ? (
+                    gameEngine === null ||
+                    gameEngine.notes() === undefined ? (
                     <i className="fa fa-info"></i>
                   ) : (
                     <span className="highlight">
@@ -2017,8 +2017,8 @@ function Playground(props) {
                 you can then send to the developers. Thank you!
               </p>
               {gameRef === null ||
-              gameRef.current === null ||
-              gameRef.current.state === null ? (
+                gameRef.current === null ||
+                gameRef.current.state === null ? (
                 ""
               ) : (
                 <Fragment>

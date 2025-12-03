@@ -78,9 +78,7 @@ function ListGames({ fixedState }) {
   const data = useMemo(
     () =>
       games.map((rec) => {
-        console.log(
-          `Processing game record: ${rec.id} with commented = ${rec.commented}, sk = ${rec.sk}`
-        );
+        console.log(`Processing game record: ${rec.id} with commented = ${rec.commented}, sk = ${rec.sk}`);
         return {
           id: rec.id,
           started:
@@ -151,23 +149,14 @@ function ListGames({ fixedState }) {
         cell: (props) => {
           const value = props.getValue();
           const isCompleted = props.row.original.cbit === 1;
-
+          
           // For completed games: 2 = variations, 3 = annotations
           if (isCompleted && value >= 2) {
             if (value === 3) {
               // Has annotations
               return (
-                <div
-                  style={{
-                    textAlign: "center",
-                    position: "relative",
-                    top: "-0.3em",
-                  }}
-                >
-                  <span
-                    className="icon has-text-success"
-                    title={t("HasAnnotations")}
-                  >
+                <div style={{ textAlign: "center", position: "relative", top: "-0.3em" }}>
+                  <span className="icon has-text-success" title={t("HasAnnotations")}>
                     <i className="fa fa-pencil"></i>
                   </span>
                 </div>
@@ -175,17 +164,8 @@ function ListGames({ fixedState }) {
             } else if (value === 2) {
               // Has variations
               return (
-                <div
-                  style={{
-                    textAlign: "center",
-                    position: "relative",
-                    top: "-0.3em",
-                  }}
-                >
-                  <span
-                    className="icon has-text-warning"
-                    title={t("HasVariations")}
-                  >
+                <div style={{ textAlign: "center", position: "relative", top: "-0.3em" }}>
+                  <span className="icon has-text-warning" title={t("HasVariations")}>
                     <i className="fa fa-sitemap"></i>
                   </span>
                 </div>
@@ -195,13 +175,7 @@ function ListGames({ fixedState }) {
           // For current games or completed games with in-game comments (bit 0 = 1)
           else if (value > 0) {
             return (
-              <div
-                style={{
-                  textAlign: "center",
-                  position: "relative",
-                  top: "-0.3em",
-                }}
-              >
+              <div style={{ textAlign: "center", position: "relative", top: "-0.3em" }}>
                 <span className="icon has-text-info" title={t("HasComments")}>
                   <i className="fa fa-comment"></i>
                 </span>
@@ -230,10 +204,7 @@ function ListGames({ fixedState }) {
         cell: (props) => (
           <Link
             to={`/move/${metaGame}/${props.row.original.cbit}/${props.row.original.id}`}
-            state={{
-              commented: props.row.original.commented,
-              key: props.row.original.sk,
-            }}
+            state={{ commented: props.row.original.commented, key: props.row.original.sk }}
           >
             {t("VisitGame")}
           </Link>
@@ -310,10 +281,9 @@ function ListGames({ fixedState }) {
             <div className="level-item">
               <p>
                 {t("Page")}{" "}
-                <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
-                {t("of")} <strong>{table.getPageCount()}</strong> (
-                {table.getPrePaginationRowModel().rows.length} {t("TotalGames")}
-                )
+                <strong>{table.getState().pagination.pageIndex + 1}</strong> {t("of")}{" "}
+                <strong>{table.getPageCount()}</strong> (
+                {table.getPrePaginationRowModel().rows.length} {t("TotalGames")})
               </p>
             </div>
             {/* <div className="level-item">

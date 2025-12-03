@@ -27,13 +27,13 @@ function Play(props) {
         }
         const status = res.status;
         if (status !== 200) {
-          const result = await res.json();
-          console.log(`An error occured:`, result.body);
-          return [];
-        } else {
-          const result = await res.json();
-          return JSON.parse(result.body);
-        }
+            const result = await res.json();
+            console.log(`An error occured:`, result.body);
+            return [];
+          } else {
+            const result = await res.json();
+            return JSON.parse(result.body);
+          }
       } catch (error) {
         console.log(`An error was thrown:`, error);
         return [];

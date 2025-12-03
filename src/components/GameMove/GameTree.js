@@ -98,16 +98,18 @@ export class GameNode {
       if (this.parent.parent !== null) {
         siblingHadPremove |= this.parent.parent.SetPremove(true);
       }
-    } else if (!value) {
+    }
+    else if (!value) {
       // Clear premove from all grandchildren
       this.children.forEach((child) => {
         child.children.forEach((grandchild) => {
           if (grandchild.premove) {
             delete grandchild.premove;
           }
-        });
+        }
+        );
       });
-    }
+    }   
     this.premove = value;
     return siblingHadPremove;
   }
@@ -115,12 +117,7 @@ export class GameNode {
   // Check if any sibling has premove set, including grandparents (used for confirmation dialog)
   HasSiblingPremove() {
     if (this.parent === null) return false;
-    return (
-      this.parent.children.some(
-        (sibling) => sibling !== this && sibling.premove
-      ) ||
-      (this.parent.parent !== null && this.parent.parent.HasSiblingPremove())
-    );
+    return this.parent.children.some((sibling) => sibling !== this && sibling.premove) || (this.parent.parent !== null && this.parent.parent.HasSiblingPremove());
   }
 
   Deflate(gameOver = false) {
@@ -137,7 +134,8 @@ export class GameNode {
     });
     if (this.children.length === 0 && this.outcome !== -1)
       deflated.outcome = this.outcome;
-    if (this.premove) deflated.premove = true;
+    if (this.premove)
+      deflated.premove = true;
     return deflated;
   }
 

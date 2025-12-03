@@ -6,12 +6,7 @@ function GameMoveWrapper() {
   const params = useParams();
   const location = useLocation();
   // Pass the location as a prop so GameMove can access the state
-  return (
-    <GameMove
-      key={`${params.metaGame}-${params.gameID}`}
-      routerState={location.state}
-    />
-  );
+  return <GameMove key={`${params.metaGame}-${params.gameID}`} routerState={location.state} />;
 }
 
 export default GameMoveWrapper;

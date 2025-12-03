@@ -432,7 +432,9 @@ const MetaItem = React.forwardRef(
               )}
             </div>
             <div id={"svg" + game.uid} onClick={openModal}>
-              <Thumbnail meta={game.uid} />
+                <Thumbnail
+                    meta={game.uid}
+                />
               {/* <img
                 src={`data:image/svg+xml;utf8,${image}`}
                 alt={game.uid}
@@ -449,7 +451,9 @@ const MetaItem = React.forwardRef(
           title={`Board image for ${game.name}`}
         >
           <div className="content">
-            <Thumbnail meta={game.uid} />
+            <Thumbnail
+                meta={game.uid}
+            />
             {/* <img
               src={`data:image/svg+xml;utf8,${image}`}
               alt={game.uid}
