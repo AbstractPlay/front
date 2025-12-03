@@ -130,7 +130,9 @@ function Thumbnail({ meta }) {
 
   return (
     <>
-      {svg === null ? null : (
+      {svg === null ? (
+        <div id={`shadow${prefix}`} ref={shadowEle} />
+      ) : (
         <div>
           <img
             src={`data:image/svg+xml;utf8,${svg}`}
@@ -140,7 +142,6 @@ function Thumbnail({ meta }) {
           />
         </div>
       )}
-      {svg !== null ? null : <div id={`shadow${prefix}`} ref={shadowEle} />}
     </>
   );
 }
