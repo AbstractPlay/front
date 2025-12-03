@@ -126,7 +126,7 @@ function Thumbnail({ meta }) {
         setSvg(null);
       }
     }
-  }, [meta, json, colourContext, globalMe, prefix, shadowEle]);
+  }, [meta, json, colourContext, globalMe, prefix]);
 
   return (
     <>

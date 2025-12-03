@@ -1092,8 +1092,9 @@ span.hardTime::after {
   }
 
   table.gameGrid.apTable td:nth-child(3) {
+      /* Not needed if the thumbnails are dynamically rendered */
       /* helps with transparent images in dark mode */
-      background-color: rgba(255,255,255,0.5)!important;
+      /* background-color: rgba(255,255,255,0.5)!important; */
       text-align:center!important;
   }
 
