@@ -521,9 +521,7 @@ function mergeExistingExploration(
     if (useSameMove) {
       let node = getExplorationNode(exploration, game, moveNum);
       let gameEngine = GameFactory(game.metaGame, node.state);
-      subtree = subtree.children.find((e) =>
-        gameEngine.sameMove(move, e.move)
-      );
+      subtree = subtree.children.find((e) => gameEngine.sameMove(move, e.move));
     } else {
       subtree = subtree.children.find(
         (e) => e.move.toLowerCase().replace(/\s+/g, "") === move
@@ -700,9 +698,12 @@ async function saveExploration(
       const currentFlag = game.commented || 0; // note this should only happen after we have fetched public exploration, so should have the correct value
       // from before this (the one we are saving) exploration was added
       const newFlag = analyzeExplorationForCommentedFlag(exploration);
-      if (newFlag !== currentFlag && !(newFlag === 0 && currentFlag === 1)) { // currentFlag can be 1 for in-game comments
+      if (newFlag !== currentFlag && !(newFlag === 0 && currentFlag === 1)) {
+        // currentFlag can be 1 for in-game comments
         pars.updateCommentedFlag = newFlag;
-        pars.gameEnded = game.completedGameKey ? game.completedGameKey.substring(0, 13) : game.gameEnded; // Send the gameEnded timestamp for the exact key
+        pars.gameEnded = game.completedGameKey
+          ? game.completedGameKey.substring(0, 13)
+          : game.gameEnded; // Send the gameEnded timestamp for the exact key
         game.commented = newFlag; // Update local copy
       }
     }
@@ -710,8 +711,12 @@ async function saveExploration(
     if (commentJustAdded) {
       pars.updateLastChat = true;
       pars.players = game.players;
-      pars.gameEnded = game.completedGameKey ? game.completedGameKey.substring(0, 13) : game.gameEnded; // Include gameEnded for fetching the game if needed
-      console.log(`Triggering lastChat update for game ${game.id} (comment was just added)`);
+      pars.gameEnded = game.completedGameKey
+        ? game.completedGameKey.substring(0, 13)
+        : game.gameEnded; // Include gameEnded for fetching the game if needed
+      console.log(
+        `Triggering lastChat update for game ${game.id} (comment was just added)`
+      );
     }
   }
   const res = await callAuthApi("save_exploration", pars);
@@ -950,11 +955,11 @@ function getAllNodeComments(exploration) {
   function traverseNode(node, moveNumber, exPath = []) {
     if (node.comment && Array.isArray(node.comment)) {
       // Add each comment with its path information
-      node.comment.forEach(c => {
+      node.comment.forEach((c) => {
         allComments.push({
           ...c,
           path: { moveNumber, exPath: [...exPath] },
-          inGame: false  // These are all post-game comments
+          inGame: false, // These are all post-game comments
         });
       });
     }
@@ -979,22 +984,30 @@ function analyzeExplorationForCommentedFlag(exploration) {
 
   function traverseNode(node, depth) {
     // Check for variations (any node with children)
-    if (node.children && Array.isArray(node.children) && node.children.length > 0) {
+    if (
+      node.children &&
+      Array.isArray(node.children) &&
+      node.children.length > 0
+    ) {
       hasVariations = true;
-      node.children.forEach(child => traverseNode(child, depth + 1));
+      node.children.forEach((child) => traverseNode(child, depth + 1));
     }
     // Check for post-game comments (annotations)
-    if (node.comment && Array.isArray(node.comment) && node.comment.length > 0) {
+    if (
+      node.comment &&
+      Array.isArray(node.comment) &&
+      node.comment.length > 0
+    ) {
       if (depth > 0) {
         hasAnnotations = true;
-      } else if (node.comment.some(c => isInterestingComment(c.comment))) {
+      } else if (node.comment.some((c) => isInterestingComment(c.comment))) {
         hasComments = true;
       }
     }
   }
 
   if (exploration && Array.isArray(exploration)) {
-    exploration.forEach(node => traverseNode(node, 0));
+    exploration.forEach((node) => traverseNode(node, 0));
   }
 
   // Return the appropriate flag value
@@ -1170,17 +1183,45 @@ function isInterestingComment(comment) {
   const normalized = comment.toLowerCase().trim();
 
   // Remove punctuation for comparison
-  const withoutPunctuation = normalized.replace(/[^\w\s]/g, '');
+  const withoutPunctuation = normalized.replace(/[^\w\s]/g, "");
 
   // Common boring phrases (exact matches)
   const boringPhrases = new Set([
-    'gg', 'glhf', 'gl', 'hf', 'tagg', 'hi', 'hello', 'hey',
-    'thanks', 'thx', 'ty', 'yw', 'np', 'wp', 'well played',
-    'good game', 'good luck', 'have fun', 'thanks for the game',
-    'pie invoked', 'move', 'gg sir', 'gg!', 'tagg!', 'glhf!',
-    'to a good game', 'have a good game', 'good luck!', 'have fun!',
-    'thanks for playing', 'thanks for the game!', 'gg thanks',
-    'yoyo', 'yoyo gl', 'yoyo gl hf'
+    "gg",
+    "glhf",
+    "gl",
+    "hf",
+    "tagg",
+    "hi",
+    "hello",
+    "hey",
+    "thanks",
+    "thx",
+    "ty",
+    "yw",
+    "np",
+    "wp",
+    "well played",
+    "good game",
+    "good luck",
+    "have fun",
+    "thanks for the game",
+    "pie invoked",
+    "move",
+    "gg sir",
+    "gg!",
+    "tagg!",
+    "glhf!",
+    "to a good game",
+    "have a good game",
+    "good luck!",
+    "have fun!",
+    "thanks for playing",
+    "thanks for the game!",
+    "gg thanks",
+    "yoyo",
+    "yoyo gl",
+    "yoyo gl hf",
   ]);
 
   // Check for exact matches (with or without punctuation)
@@ -1189,17 +1230,41 @@ function isInterestingComment(comment) {
   }
 
   // Split into words for further analysis
-  const words = withoutPunctuation.split(/\s+/).filter(w => w.length > 0);
+  const words = withoutPunctuation.split(/\s+/).filter((w) => w.length > 0);
 
   // Very short comments with only common game words are boring
   const commonWords = new Set([
-    'gg', 'gl', 'hf', 'tagg', 'hi', 'hello', 'yoyo',
-    'thanks', 'thx', 'ty', 'wp', 'move', 'pie', 'invoked',
-    'good', 'game', 'luck', 'fun', 'for', 'the', 'a', 'to',
-    'have', 'sir', 'well', 'played', 'you', 'too'
+    "gg",
+    "gl",
+    "hf",
+    "tagg",
+    "hi",
+    "hello",
+    "yoyo",
+    "thanks",
+    "thx",
+    "ty",
+    "wp",
+    "move",
+    "pie",
+    "invoked",
+    "good",
+    "game",
+    "luck",
+    "fun",
+    "for",
+    "the",
+    "a",
+    "to",
+    "have",
+    "sir",
+    "well",
+    "played",
+    "you",
+    "too",
   ]);
 
-  if (words.length <= 3 && words.every(w => commonWords.has(w))) {
+  if (words.length <= 3 && words.every((w) => commonWords.has(w))) {
     return false;
   }
 
@@ -1592,12 +1657,16 @@ function GameMove(props) {
         const result = await fetchWithRetry(async (attempt) => {
           let data;
           let status;
-          const res = await callAuthApi("get_game", {
+          const res = await callAuthApi(
+            "get_game",
+            {
               id: gameID,
               metaGame: metaGame,
               cbit: cbit,
               ...(attempt > 0 && { retryAttempt: attempt }),
-            }, false);
+            },
+            false
+          );
           if (res) {
             status = res.status;
             if (status !== 200) {
@@ -1661,16 +1730,22 @@ function GameMove(props) {
             ) {
               commentsTooLongSetter(true);
             }
-            const hasInterestingComments = data.comments.some(c => isInterestingComment(c.comment));
+            const hasInterestingComments = data.comments.some((c) =>
+              isInterestingComment(c.comment)
+            );
             // Check if commented flag needs to be updated (only for in-progress games). This is mostly to "fix" old games that already had chats but no commented flag.
-            if (data.game.toMove !== "" && (data.game.commented ? 0 : data.game.commented) !== (hasInterestingComments ? 1 : 0)) {
+            if (
+              data.game.toMove !== "" &&
+              (data.game.commented ? 0 : data.game.commented) !==
+                (hasInterestingComments ? 1 : 0)
+            ) {
               // Send update to backend to update commented flag for in-progress game
               callAuthApi("update_commented", {
                 id: gameID,
                 metaGame: metaGame,
                 cbit: 0,
                 commented: hasInterestingComments ? 1 : 0,
-              }).catch(err => {
+              }).catch((err) => {
                 console.log("Failed to update commented flag:", err);
               });
             }
@@ -1803,18 +1878,17 @@ function GameMove(props) {
           }
           if (ok) {
             for (let i = 0; i < explorationRef.current.nodes.length; i++) {
-              explorationRef.current.nodes[i].children = exploration[i].children;
+              explorationRef.current.nodes[i].children =
+                exploration[i].children;
               explorationRef.current.nodes[i].comment = exploration[i].comment;
-              explorationRef.current.nodes[i].commented = exploration[i].commented;
+              explorationRef.current.nodes[i].commented =
+                exploration[i].commented;
             }
             handleGameMoveClick(foc);
           }
           // if we got here from the "trigger a refresh" button, we should probably also fetch exploration in case the user is exploring on more than one device
           explorationFetchedSetter(false);
-        } else if (
-          explorationRef.current.nodes.length >
-          exploration.length
-        ) {
+        } else if (explorationRef.current.nodes.length > exploration.length) {
           // page refreshed and opponent moved
           mergeExistingExploration(
             exploration.length - 1,
@@ -1900,7 +1974,8 @@ function GameMove(props) {
           } else {
             const toMove = parseInt(game.toMove);
             if (
-              game.players[toMove].time - (Date.now() - game.lastMoveTime) < 0
+              game.players[toMove].time - (Date.now() - game.lastMoveTime) <
+              0
             ) {
               checkTime("timeloss");
             }
@@ -1973,9 +2048,11 @@ function GameMove(props) {
           body: JSON.stringify({
             query: "report_problem",
             pars: {
-              error: `Error reporting another error, status: ${status}, message: ${result.message
-                }, body: ${result.body
-                }, original error (truncated): ${error.slice(0, 1000)}`,
+              error: `Error reporting another error, status: ${status}, message: ${
+                result.message
+              }, body: ${
+                result.body
+              }, original error (truncated): ${error.slice(0, 1000)}`,
             },
           }),
         });
@@ -2037,10 +2114,14 @@ function GameMove(props) {
       try {
         let data;
         let status;
-        const res = await callAuthApi("get_exploration", {
-          game: gameID,
-          move: explorationRef.current.nodes.length,
-        }, false);
+        const res = await callAuthApi(
+          "get_exploration",
+          {
+            game: gameID,
+            move: explorationRef.current.nodes.length,
+          },
+          false
+        );
         if (res) {
           status = res.status;
           if (status !== 200) {
@@ -2107,31 +2188,50 @@ function GameMove(props) {
           }
           // Check and update commented flag for completed games
           if (gameRef.current.gameOver) {
-            var correctFlag = analyzeExplorationForCommentedFlag(explorationRef.current.nodes);
+            var correctFlag = analyzeExplorationForCommentedFlag(
+              explorationRef.current.nodes
+            );
             if (correctFlag === 0 && gameRef.current.commented === 1)
               correctFlag = 1;
             // Always store the computed correct flag on the game object for use in saveExploration
             gameRef.current.commented = correctFlag;
 
             // Only update backend if we came from ListGames (commentedFromList was stored)
-            if (gameRef.current.commentedFromList !== undefined && gameRef.current.numMoves !== undefined && gameRef.current.numMoves > gameRef.current.numPlayers) {
+            if (
+              gameRef.current.commentedFromList !== undefined &&
+              gameRef.current.numMoves !== undefined &&
+              gameRef.current.numMoves > gameRef.current.numPlayers
+            ) {
               const currentFlag = gameRef.current.commentedFromList;
               if (correctFlag !== currentFlag) {
                 // Update the backend
-                const res = callAuthApi("update_commented", {
-                  id: gameID,
-                  metaGame: gameRef.current.metaGame,
-                  cbit: 1, // Completed games have cbit=1
-                  commented: correctFlag,
-                  gameEnded: gameRef.current.completedGameKey.substring(0, 13),
-                }, false);
+                const res = callAuthApi(
+                  "update_commented",
+                  {
+                    id: gameID,
+                    metaGame: gameRef.current.metaGame,
+                    cbit: 1, // Completed games have cbit=1
+                    commented: correctFlag,
+                    gameEnded: gameRef.current.completedGameKey.substring(
+                      0,
+                      13
+                    ),
+                  },
+                  false
+                );
                 if (res) {
-                  res.then(() => {
-                    console.log(`Successfully updated commented flag to ${correctFlag}`);
-                  })
-                  .catch(err => {
-                    console.log("Failed to update commented flag for completed game:", err);
-                  });
+                  res
+                    .then(() => {
+                      console.log(
+                        `Successfully updated commented flag to ${correctFlag}`
+                      );
+                    })
+                    .catch((err) => {
+                      console.log(
+                        "Failed to update commented flag for completed game:",
+                        err
+                      );
+                    });
                 }
               }
             }
@@ -2159,7 +2259,11 @@ function GameMove(props) {
       }
     }
 
-    if (focus && !explorationFetched && (gameRef.current.canExplore || gameRef.current.gameOver)) {
+    if (
+      focus &&
+      !explorationFetched &&
+      (gameRef.current.canExplore || gameRef.current.gameOver)
+    ) {
       if (gameRef.current.gameOver) {
         fetchPublicExploration();
       } else {
@@ -2392,12 +2496,12 @@ function GameMove(props) {
       let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
       let result = gameRef.current.simultaneous
         ? gameEngineTmp.handleClickSimultaneous(
-          moveRef.current.move,
-          row,
-          col,
-          gameRef.current.me + 1,
-          piece
-        )
+            moveRef.current.move,
+            row,
+            col,
+            gameRef.current.me + 1,
+            piece
+          )
         : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
       result.rendered = moveRef.current.rendered;
       processNewMove(
@@ -2732,7 +2836,9 @@ function GameMove(props) {
   const submitMove = async (m, draw) => {
     try {
       // Find opponent ID for premove checking (only for 2-player non-simultaneous games)
-      const opponent = gameRef.current.players.find((p) => p.id !== globalMe.id);
+      const opponent = gameRef.current.players.find(
+        (p) => p.id !== globalMe.id
+      );
       const res = await callAuthApi("submit_move", {
         id: gameRef.current.id,
         metaGame: gameRef.current.metaGame,
@@ -2741,7 +2847,10 @@ function GameMove(props) {
         draw: draw,
         moveNumber: explorationRef.current.nodes.length,
         opponentId: opponent ? opponent.id : undefined,
-        exploration: explorationRef.current.nodes[explorationRef.current.nodes.length - 1].Deflate().children
+        exploration:
+          explorationRef.current.nodes[
+            explorationRef.current.nodes.length - 1
+          ].Deflate().children,
       });
       if (!res) return;
       const result = await res.json();
@@ -2795,10 +2904,14 @@ function GameMove(props) {
   const submitComment = async (comment) => {
     // ignore blank comments
     if (comment.length > 0 && !/^\s*$/.test(comment)) {
-
       commentsSetter([
         ...comments,
-        { comment: comment, userId: globalMe.id, timeStamp: Date.now(), moveNumber: explorationRef.current.nodes.length - 1 },
+        {
+          comment: comment,
+          userId: globalMe.id,
+          timeStamp: Date.now(),
+          moveNumber: explorationRef.current.nodes.length - 1,
+        },
       ]);
       // console.log(comments);
       try {
@@ -2826,7 +2939,10 @@ function GameMove(props) {
           setError(
             `submit_comment failed, status: ${result.statusCode}, body: ${result.body}`
           );
-        else if ((!gameRef.current.commented || gameRef.current.commented < 1) && isInterestingComment(comment)) {
+        else if (
+          (!gameRef.current.commented || gameRef.current.commented < 1) &&
+          isInterestingComment(comment)
+        ) {
           // Update local game object if flag was updated
           gameRef.current.commented = 1;
         }
@@ -2856,7 +2972,7 @@ function GameMove(props) {
         errorMessageRef,
         focus,
         navigate,
-        true  // commentJustAdded
+        true // commentJustAdded
       );
       focusSetter(cloneDeep(focus));
     }
@@ -3107,15 +3223,23 @@ function GameMove(props) {
     canPublishSetter("publishing");
     try {
       // mark game as published (don't await)
-      callAuthApi("mark_published", {
-        id: gameID,
-        metagame: gameRef.current.metaGame,
-      }, false);
+      callAuthApi(
+        "mark_published",
+        {
+          id: gameID,
+          metagame: gameRef.current.metaGame,
+        },
+        false
+      );
       // fetch private exploration data
       let status;
-      const res = await callAuthApi("get_private_exploration", {
-        id: gameID,
-      }, false);
+      const res = await callAuthApi(
+        "get_private_exploration",
+        {
+          id: gameID,
+        },
+        false
+      );
       if (res) {
         status = res.status;
         if (status !== 200) {
@@ -3345,7 +3469,7 @@ function GameMove(props) {
                       <p className="card-header-title">
                         <Link to={`/games/${metaGame}`}>{title}</Link>
                         {key !== "board" ||
-                          parenthetical.length === 0 ? null : (
+                        parenthetical.length === 0 ? null : (
                           <>
                             <span
                               style={{
@@ -3494,13 +3618,19 @@ function GameMove(props) {
                             comments={
                               commentingCompletedGame
                                 ? [
-                                    ...(comments || []).map(c => ({ 
-                                      ...c, 
-                                    inGame: true,
-                                    path: c.moveNumber !== undefined ? { moveNumber: c.moveNumber, exPath: [] } : undefined
-                                  })),
-                                  ...(allNodeComments || [])
-                                ]
+                                    ...(comments || []).map((c) => ({
+                                      ...c,
+                                      inGame: true,
+                                      path:
+                                        c.moveNumber !== undefined
+                                          ? {
+                                              moveNumber: c.moveNumber,
+                                              exPath: [],
+                                            }
+                                          : undefined,
+                                    })),
+                                    ...(allNodeComments || []),
+                                  ]
                                 : comments
                             }
                             players={gameRef.current?.players}
@@ -3675,13 +3805,16 @@ function GameMove(props) {
                     comments={
                       commentingCompletedGame
                         ? [
-                            ...(comments || []).map(c => ({ 
-                              ...c, 
-                            inGame: true,
-                            path: c.moveNumber !== undefined ? { moveNumber: c.moveNumber, exPath: [] } : undefined
-                          })),
-                          ...(allNodeComments || [])
-                        ]
+                            ...(comments || []).map((c) => ({
+                              ...c,
+                              inGame: true,
+                              path:
+                                c.moveNumber !== undefined
+                                  ? { moveNumber: c.moveNumber, exPath: [] }
+                                  : undefined,
+                            })),
+                            ...(allNodeComments || []),
+                          ]
                         : comments
                     }
                     players={gameRef.current?.players}
@@ -3893,8 +4026,8 @@ function GameMove(props) {
                 you can then send to the developers. Thank you!
               </p>
               {gameRef === null ||
-                gameRef.current === null ||
-                gameRef.current.state === null ? (
+              gameRef.current === null ||
+              gameRef.current.state === null ? (
                 ""
               ) : (
                 <Fragment>
@@ -4027,7 +4160,7 @@ function GameMove(props) {
               )}
               <div className="control">
                 {interimNote === gameNote ||
-                  (interimNote === "" && gameNote === null) ? (
+                (interimNote === "" && gameNote === null) ? (
                   <button className="button is-small" disabled>
                     {t("UpdateNote")}
                   </button>
@@ -4102,19 +4235,31 @@ function GameMove(props) {
       </>
     );
   } else {
-    if (!(
-      (errorMessageRef.current.startsWith('"submitMove (') && errorMessageRef.current.endsWith(') failed with: Failed to fetch"'))
-      || (errorMessageRef.current.startsWith('"submitMove (') && errorMessageRef.current.endsWith(') failed with: Load failed"'))
-      || errorMessageRef.current.startsWith('get_game, error.message: Error: no auth get_game failed')
-      || errorMessageRef.current === '"The user is not authenticated"'
-      || errorMessageRef.current.startsWith('save_exploration failed, status = 401, message: The incoming token has expired')
-    )) {
+    if (
+      !(
+        (errorMessageRef.current.startsWith('"submitMove (') &&
+          errorMessageRef.current.endsWith(
+            ') failed with: Failed to fetch"'
+          )) ||
+        (errorMessageRef.current.startsWith('"submitMove (') &&
+          errorMessageRef.current.endsWith(') failed with: Load failed"')) ||
+        errorMessageRef.current.startsWith(
+          "get_game, error.message: Error: no auth get_game failed"
+        ) ||
+        errorMessageRef.current === '"The user is not authenticated"' ||
+        errorMessageRef.current.startsWith(
+          "save_exploration failed, status = 401, message: The incoming token has expired"
+        )
+      )
+    ) {
       reportError(
-        `Message: ${errorMessageRef.current}, url: ${window.location.href
-        }, game: ${JSON.stringify(game)}, state: ${explorationRef.current && focus
-          ? getFocusNode(explorationRef.current.nodes, gameRef.current, focus)
-            .state
-          : ""
+        `Message: ${errorMessageRef.current}, url: ${
+          window.location.href
+        }, game: ${JSON.stringify(game)}, state: ${
+          explorationRef.current && focus
+            ? getFocusNode(explorationRef.current.nodes, gameRef.current, focus)
+                .state
+            : ""
         }`
       );
     }

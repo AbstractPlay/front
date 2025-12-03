@@ -63,7 +63,10 @@ function Me(props) {
       try {
         console.log("calling authQuery 'me'");
         fetchingSetter(true);
-        const res = await callAuthApi("me", { vars: JSON.stringify(vars), update: update });
+        const res = await callAuthApi("me", {
+          vars: JSON.stringify(vars),
+          update: update,
+        });
         if (!res) return;
         fetchingSetter(false);
         const result = await res.json();
@@ -449,9 +452,9 @@ function Me(props) {
           </div>
         </h1>
         {globalMe === null ||
-          globalMe === undefined ||
-          globalMe.challengesReceived === undefined ||
-          globalMe.challengesReceived.length === 0 ? null : (
+        globalMe === undefined ||
+        globalMe.challengesReceived === undefined ||
+        globalMe.challengesReceived.length === 0 ? null : (
           <div className="content has-text-centered">
             <p style={{ color: "var(--secondary-color-1)" }}>
               <a href="#challenged">You have been challenged!</a>
@@ -516,7 +519,7 @@ function Me(props) {
               </p>
               <div className="indentedContainer">
                 {!globalMe.challengesReceived ||
-                  globalMe.challengesReceived.length === 0 ? (
+                globalMe.challengesReceived.length === 0 ? (
                   <p>{t("NoChallengeResponse")}</p>
                 ) : (
                   <ChallengeMeRespond
@@ -544,7 +547,7 @@ function Me(props) {
               </p>
               <div className="indentedContainer">
                 {!globalMe.standingChallenges ||
-                  globalMe.standingChallenges.length === 0 ? (
+                globalMe.standingChallenges.length === 0 ? (
                   <p>{t("NoStandingChallenges")}</p>
                 ) : (
                   <ChallengeOpen

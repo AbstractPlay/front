@@ -682,7 +682,9 @@ function MoveEntry(props) {
             >
               <i className="fa fa-clock-o premoveIcon"></i>
               <span className="tooltiptext">
-                {getFocusNode(exploration, game, focus).premove ? t("ClearPremove") : t("MarkPremove")}
+                {getFocusNode(exploration, game, focus).premove
+                  ? t("ClearPremove")
+                  : t("MarkPremove")}
               </span>
             </div>
           ) : (

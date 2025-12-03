@@ -191,12 +191,10 @@ function CompletedAll({ toggleStar, openImgModal, counts }) {
         cell: (props) => (
           <>
             <div
-                id={"svg" + props.row.original.id}
-                onClick={() => openImgModal(props.row.original.id)}
+              id={"svg" + props.row.original.id}
+              onClick={() => openImgModal(props.row.original.id)}
             >
-                <Thumbnail
-                    meta={props.row.original.id}
-                />
+              <Thumbnail meta={props.row.original.id} />
             </div>
           </>
         ),

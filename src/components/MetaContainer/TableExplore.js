@@ -395,12 +395,10 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
         cell: (props) => (
           <Fragment>
             <div
-                id={"svg" + props.row.original.id}
-                onClick={() => openImgModal(props.row.original.id)}
+              id={"svg" + props.row.original.id}
+              onClick={() => openImgModal(props.row.original.id)}
             >
-                <Thumbnail
-                    meta={props.row.original.id}
-                />
+              <Thumbnail meta={props.row.original.id} />
             </div>
             <Modal
               buttons={[{ label: "Close", action: closeImgModal }]}
@@ -411,9 +409,7 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
               title={`Board image for ${props.row.original.gameName}`}
             >
               <div className="content">
-                <Thumbnail
-                    meta={props.row.original.id}
-                />
+                <Thumbnail meta={props.row.original.id} />
               </div>
             </Modal>
           </Fragment>

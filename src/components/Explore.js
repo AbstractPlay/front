@@ -269,21 +269,19 @@ function Explore(props) {
         {selected === "all"
           ? null
           : games.map((metaGame) => {
-            return (
-              <Modal
-                key={metaGame}
-                buttons={[{ label: "Close", action: closeImgModal }]}
-                show={activeImgModal === metaGame}
-                title={`Board image for ${gameinfo.get(metaGame).name}`}
-              >
-                <div className="content">
-                    <Thumbnail
-                        meta={metaGame}
-                    />
-                </div>
-              </Modal>
-            );
-          })}
+              return (
+                <Modal
+                  key={metaGame}
+                  buttons={[{ label: "Close", action: closeImgModal }]}
+                  show={activeImgModal === metaGame}
+                  title={`Board image for ${gameinfo.get(metaGame).name}`}
+                >
+                  <div className="content">
+                    <Thumbnail meta={metaGame} />
+                  </div>
+                </Modal>
+              );
+            })}
       </>
     );
   } else if (counts !== null) {
