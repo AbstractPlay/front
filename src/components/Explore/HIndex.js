@@ -21,10 +21,10 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
+import gameImages from "../../assets/GameImages";
 import ExpandableDiv from "../ExpandableDiv";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import Thumbnail from "../Thumbnail";
 
 function HIndex({ toggleStar, openImgModal }) {
   const allSize = Number.MAX_SAFE_INTEGER;
@@ -116,6 +116,7 @@ function HIndex({ toggleStar, openImgModal }) {
         return {
           id: metaGame,
           gameName: info.name,
+          image: encodeURIComponent(gameImages[metaGame]),
           links: info.urls,
           designers:
             info.people !== undefined && info.people.length > 0
@@ -202,13 +203,14 @@ function HIndex({ toggleStar, openImgModal }) {
         header: "Image",
         cell: (props) => (
           <>
-            <div
-                id={"svg" + props.row.original.id}
+            <div id={"svg" + props.row.original.id}>
+              <img
+                src={`data:image/svg+xml;utf8,${props.getValue()}`}
+                alt={props.row.original.id}
+                width="auto"
+                height="auto"
                 onClick={() => openImgModal(props.row.original.id)}
-            >
-                <Thumbnail
-                    meta={props.row.original.id}
-                />
+              />
             </div>
           </>
         ),

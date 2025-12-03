@@ -23,11 +23,11 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
+import gameImages from "../../assets/GameImages";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import ExpandableDiv from "../ExpandableDiv";
 import { useStorageState } from "react-use-storage-state";
-import Thumbnail from "../Thumbnail";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 // props:
@@ -223,6 +223,7 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
           return {
             id: metaGame,
             gameName: info.name,
+            image: encodeURIComponent(gameImages[metaGame]),
             links: info.urls,
             dateAdded: info.dateAdded,
             designers:
@@ -394,13 +395,14 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
         header: "Image",
         cell: (props) => (
           <Fragment>
-            <div
-                id={"svg" + props.row.original.id}
+            <div id={"svg" + props.row.original.id}>
+              <img
+                src={`data:image/svg+xml;utf8,${props.getValue()}`}
+                alt={props.row.original.id}
+                width="auto"
+                height="auto"
                 onClick={() => openImgModal(props.row.original.id)}
-            >
-                <Thumbnail
-                    meta={props.row.original.id}
-                />
+              />
             </div>
             <Modal
               buttons={[{ label: "Close", action: closeImgModal }]}
@@ -411,8 +413,11 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
               title={`Board image for ${props.row.original.gameName}`}
             >
               <div className="content">
-                <Thumbnail
-                    meta={props.row.original.id}
+                <img
+                  src={`data:image/svg+xml;utf8,${props.getValue()}`}
+                  alt={props.row.original.gameName}
+                  width="100%"
+                  height="auto"
                 />
               </div>
             </Modal>
@@ -701,7 +706,7 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
   );
 
   return (
-    <>
+    <container>
       <div className="container" style={{ paddingBottom: "1em" }}>
         <h1 className="subtitle">{t("AvailableGames")}</h1>
       </div>
@@ -843,7 +848,7 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
         </table>
         {tableNavigation}
       </div>
-    </>
+    </container>
   );
 }
 

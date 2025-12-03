@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
 import { MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
+import gameImages from "../assets/GameImages";
 import Modal from "./Modal";
 import TableExplore from "./MetaContainer/TableExplore";
 import { callAuthApi } from "../lib/api";
@@ -19,7 +20,6 @@ import NumPlayers from "./Explore/NumPlayers";
 import Newest from "./Explore/Newest";
 import HIndex from "./Explore/HIndex";
 import Stars from "./Explore/Stars";
-import Thumbnail from "./Thumbnail";
 
 function Explore(props) {
   const [globalMe, globalMeSetter] = useContext(MeContext);
@@ -277,9 +277,14 @@ function Explore(props) {
                 title={`Board image for ${gameinfo.get(metaGame).name}`}
               >
                 <div className="content">
-                    <Thumbnail
-                        meta={metaGame}
-                    />
+                  <img
+                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                      gameImages[metaGame]
+                    )}`}
+                    alt={metaGame}
+                    width="100%"
+                    height="auto"
+                  />
                 </div>
               </Modal>
             );
