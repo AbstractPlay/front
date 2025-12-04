@@ -5,7 +5,7 @@ import rehypeRaw from "rehype-raw";
 import { useTranslation } from "react-i18next";
 import { GameFactory } from "@abstractplay/gameslib";
 import { MeContext, UsersContext } from "../../pages/Skeleton";
-import gameImages from "../../assets/GameImages";
+import { useGameImages } from "../../hooks/useGameImages";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import HighestSingleRating from "../Stats/HighestSingleRating";
@@ -28,7 +28,8 @@ const MetaItem = React.forwardRef(
     const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
     const [activeTab, activeTabSetter] = useState("summary");
     const { t } = useTranslation();
-    const image = encodeURIComponent(gameImages[game.uid]);
+    const { getImage } = useGameImages();
+    const image = getImage(game.uid);
 
     let gameEngine;
     if (game.playercounts.length > 1) {
@@ -433,13 +434,17 @@ const MetaItem = React.forwardRef(
               )}
             </div>
             <div id={"svg" + game.uid}>
-              <img
-                src={`data:image/svg+xml;utf8,${image}`}
-                alt={game.uid}
-                width="100%"
-                height="auto"
-                onClick={openModal}
-              />
+              {image ? (
+                <img
+                  src={`data:image/svg+xml;utf8,${image}`}
+                  alt={game.uid}
+                  width="100%"
+                  height="auto"
+                  onClick={openModal}
+                />
+              ) : (
+                <div style={{ width: "100%", aspectRatio: "1", background: "#f0f0f0" }} />
+              )}
             </div>
           </div>
         </div>
@@ -449,12 +454,14 @@ const MetaItem = React.forwardRef(
           title={`Board image for ${game.name}`}
         >
           <div className="content">
-            <img
-              src={`data:image/svg+xml;utf8,${image}`}
-              alt={game.uid}
-              width="100%"
-              height="auto"
-            />
+            {image && (
+              <img
+                src={`data:image/svg+xml;utf8,${image}`}
+                alt={game.uid}
+                width="100%"
+                height="auto"
+              />
+            )}
           </div>
         </Modal>
       </div>

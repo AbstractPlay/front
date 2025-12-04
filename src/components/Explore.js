@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
 import { MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
-import gameImages from "../assets/GameImages";
+import { useGameImages } from "../hooks/useGameImages";
 import Modal from "./Modal";
 import TableExplore from "./MetaContainer/TableExplore";
 import { callAuthApi } from "../lib/api";
@@ -30,6 +30,7 @@ function Explore(props) {
   const [selected, selectedSetter] = useStorageState("selected-module", "all");
   const [updateCounter, updateCounterSetter] = useState(0);
   const [activeImgModal, activeImgModalSetter] = useState("");
+  const { gameImages } = useGameImages();
   const { metaGame } = useParams();
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
@@ -277,14 +278,16 @@ function Explore(props) {
                 title={`Board image for ${gameinfo.get(metaGame).name}`}
               >
                 <div className="content">
-                  <img
-                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                      gameImages[metaGame]
-                    )}`}
-                    alt={metaGame}
-                    width="100%"
-                    height="auto"
-                  />
+                  {gameImages && gameImages[metaGame] && (
+                    <img
+                      src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                        gameImages[metaGame]
+                      )}`}
+                      alt={metaGame}
+                      width="100%"
+                      height="auto"
+                    />
+                  )}
                 </div>
               </Modal>
             );

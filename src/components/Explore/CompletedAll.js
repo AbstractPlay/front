@@ -21,7 +21,7 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import gameImages from "../../assets/GameImages";
+import { useGameImages } from "../../hooks/useGameImages";
 import ExpandableDiv from "../ExpandableDiv";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -29,6 +29,7 @@ import rehypeRaw from "rehype-raw";
 function CompletedAll({ toggleStar, openImgModal, counts }) {
   const allSize = Number.MAX_SAFE_INTEGER;
   const [globalMe] = useContext(MeContext);
+  const { gameImages } = useGameImages();
   const [games, gamesSetter] = useState([]);
   const [showState, showStateSetter] = useStorageState("1es-show", 10);
   const [expandedPara, expandedParaSetter] = useState([]);
@@ -104,7 +105,7 @@ function CompletedAll({ toggleStar, openImgModal, counts }) {
         return {
           id: metaGame,
           gameName: info.name,
-          image: encodeURIComponent(gameImages[metaGame]),
+          image: gameImages ? encodeURIComponent(gameImages[metaGame]) : null,
           links: info.urls,
           designers:
             info.people !== undefined && info.people.length > 0
@@ -124,7 +125,7 @@ function CompletedAll({ toggleStar, openImgModal, counts }) {
           games: gamesper,
         };
       }),
-    [t, games, counts, globalMe]
+    [t, games, counts, globalMe, gameImages]
   );
 
   const columnHelper = createColumnHelper();

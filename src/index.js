@@ -5,6 +5,7 @@ import * as serviceWorker from "./serviceWorker";
 import Skeleton from "./pages/Skeleton";
 import "./myBulma.css";
 import "./index.css";
+import { preloadGameImages } from "./hooks/useGameImages";
 
 require("core-js/es/map");
 require("core-js/es/set");
@@ -18,6 +19,9 @@ const env = process.env.NODE_ENV;
 const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(<Skeleton />);
+
+// Start loading game images in background after initial render
+preloadGameImages();
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

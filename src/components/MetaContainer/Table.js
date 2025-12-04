@@ -23,7 +23,7 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import gameImages from "../../assets/GameImages";
+import { useGameImages } from "../../hooks/useGameImages";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import ExpandableDiv from "../ExpandableDiv";
@@ -45,6 +45,7 @@ function Table({
   ...props
 }) {
   const [globalMe] = useContext(MeContext);
+  const { gameImages } = useGameImages();
   const [activeImgModal, activeImgModalSetter] = useState("");
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [expandedPara, expandedParaSetter] = useState([]);
@@ -228,7 +229,7 @@ function Table({
           return {
             id: metaGame,
             gameName: info.name,
-            image: encodeURIComponent(gameImages[metaGame]),
+            image: gameImages ? encodeURIComponent(gameImages[metaGame]) : null,
             links: info.urls,
             dateAdded: info.dateAdded,
             designers:
@@ -270,7 +271,7 @@ function Table({
           };
         })
         .filter((obj) => !filterStars || obj.starred),
-    [globalMe, props.games, props.counts, filterStars, t]
+    [globalMe, props.games, props.counts, filterStars, t, gameImages]
   );
 
   const allTags = useMemo(() => {

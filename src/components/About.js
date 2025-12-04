@@ -5,13 +5,14 @@ import { addResource } from "@abstractplay/gameslib";
 import { Link } from "react-router-dom";
 import { shuffle } from "../lib/shuffle";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
-import gameImages from "../assets/GameImages";
+import { useGameImages } from "../hooks/useGameImages";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
 function About(props) {
   const [mvTimes, mvTimesSetter] = useState(null);
   const [highlights, setHighlights] = useState(null);
+  const { gameImages } = useGameImages();
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
@@ -35,7 +36,7 @@ function About(props) {
   }, []);
 
   useEffect(() => {
-    if (mvTimes !== null) {
+    if (mvTimes !== null && gameImages !== null) {
       const num = 5;
       const top = 20;
       const metas = new Set();
@@ -67,7 +68,7 @@ function About(props) {
       });
       setHighlights(deets);
     }
-  }, [mvTimes]);
+  }, [mvTimes, gameImages]);
 
   return (
     <Fragment>
