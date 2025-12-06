@@ -12,6 +12,15 @@ import { callAuthApi } from "../../lib/api";
 import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
 
+// Safely get buttons from engine, returning empty array if engine isn't ready or throws
+function safeGetButtons(engine) {
+  try {
+    return engine?.getButtons?.() ?? [];
+  } catch {
+    return [];
+  }
+}
+
 function NoMoves({ engine, game, handleMove, t }) {
   // console.log("In NoMoves");
   const elements = [];
@@ -28,12 +37,8 @@ function NoMoves({ engine, game, handleMove, t }) {
     );
   }
 
-  if (
-    game.customButtons &&
-    engine !== undefined &&
-    engine.getButtons().length > 0
-  ) {
-    const buttons = engine.getButtons().map(({ label, move }, idx) => (
+  if (game.customButtons) {
+    const buttons = safeGetButtons(engine).map(({ label, move }, idx) => (
       <div className="control" key={`MoveButton|${idx}`}>
         <button
           className="button is-small apButton"
@@ -445,20 +450,17 @@ function MoveEntry(props) {
                       </div>
                     )}
                     {/* Look for automated buttons */}
-                    {!game.customButtons ||
-                    engine === undefined ||
-                    engine?.getButtons().length === 0
-                      ? null
-                      : engine?.getButtons().map(({ label, move }, idx) => (
-                          <div className="control" key={`MoveButton|${idx}`}>
-                            <button
-                              className="button is-small apButton"
-                              onClick={() => handleMove(move)}
-                            >
-                              {t(`buttons.${label}`)}
-                            </button>
-                          </div>
-                        ))}
+                    {game.customButtons &&
+                      safeGetButtons(engine).map(({ label, move }, idx) => (
+                        <div className="control" key={`MoveButton|${idx}`}>
+                          <button
+                            className="button is-small apButton"
+                            onClick={() => handleMove(move)}
+                          >
+                            {t(`buttons.${label}`)}
+                          </button>
+                        </div>
+                      ))}
                   </div>
                   <p className="lined">
                     <span>{t("Or")}</span>
