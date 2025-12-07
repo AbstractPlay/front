@@ -675,7 +675,7 @@ async function saveExploration(
   commentJustAdded = false
 ) {
   if (!me) return;
-  if (!isExplorer(explorer, me)) return;
+  if (!isExplorer(explorer, me) && !commentJustAdded) return;
   if (!game.gameOver) {
     if (moveNumber !== exploration.length)
       throw new Error("Can't save exploration at this move!");
