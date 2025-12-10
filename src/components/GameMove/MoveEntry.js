@@ -673,7 +673,7 @@ function MoveEntry(props) {
           ) : (
             ""
           )}
-          {focus.exPath.length > 2 &&
+          {focus.exPath.length > 1 &&
           game.canExplore &&
           !game.gameOver &&
           !game.simultaneous &&
