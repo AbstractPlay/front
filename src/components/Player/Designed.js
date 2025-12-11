@@ -27,7 +27,8 @@ function Designed({ handleChallenge }) {
             entry.people !== undefined &&
             entry.people.filter(
               (p) => p.type === "designer" && p.apid === user.id
-            ).length > 0
+            ).length > 0 &&
+            !entry.flags.includes("experimental")
         )
         .map(([meta, info]) => {
           const ret = {
