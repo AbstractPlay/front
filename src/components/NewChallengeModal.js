@@ -329,478 +329,483 @@ function NewChallengeModal(props) {
     playercounts = info.playercounts;
   }
 
-  return (
-    <Modal
-      show={show}
-      title={t("NewChallenge")}
-      buttons={[
-        { label: t("Challenge"), action: handleChallenge },
-        { label: t("ResetDefault"), action: resetToDefault },
-        { label: t("Close"), action: handleNewChallengeClose },
-      ]}
-    >
-      <div className="container">
-        {fixedMetaGame ? (
-          <p>
-            <strong>{t("ChooseGame")}</strong>:{" "}
-            {gameinfo.get(fixedMetaGame).name}
-          </p>
-        ) : (
-          <div className="field">
-            <label className="label" htmlFor="gameName">
-              {t("ChooseGame")}
-            </label>
-            <div className="control">
-              <div className="select is-small">
-                {games === null ? (
-                  <Spinner />
-                ) : (
-                  /* Select meta game */
-                  <select
-                    value={metaGame ? metaGame : ""}
-                    name="gameName"
-                    id="gameName"
-                    onChange={(e) => handleChangeGame(e.target.value)}
-                  >
-                    <option value="">--{t("Select")}--</option>
-                    {games.map((game) => {
-                      return (
-                        <option key={game.id} value={game.id}>
-                          {game.name}
-                        </option>
-                      );
-                    })}
-                  </select>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-        {metaGame === null ? (
-          ""
-        ) : /* Number of players */
-        playercounts.length === 1 || opponent ? (
-          <p>
-            <strong>{t("NumPlayers")}:</strong> {playercounts[0]}
-          </p>
-        ) : (
-          <div className="field">
-            <label className="label" htmlFor="numPlayers">
-              {t("NumPlayers")}
-            </label>
-            <div className="select is-small">
-              <select
-                value={playerCount}
-                name="numPlayers"
-                id="numPlayers"
-                onChange={(e) => handleChangePlayerCount(e.target.value)}
-              >
-                <option value="">--{t("Select")}--</option>
-                {playercounts.map((cnt) => {
-                  return (
-                    <option key={cnt} value={cnt}>
-                      {cnt}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-          </div>
-        )}
-        {metaGame === null || playerCount === -1 ? (
-          ""
-        ) : playerCount !== 2 ? (
-          <p>
-            <strong>{t("Seating")}</strong>: {t("SeatingRandom")}
-          </p>
-        ) : (
-          <div className="field">
-            {/* Seating */}
-            <label className="label" htmlFor="seating">
-              {t("Seating")}
-            </label>
-            <div className="select is-small">
-              <select
-                value={seating}
-                name="seating"
-                id="seating"
-                onChange={(e) => handleChangeSeating(e.target.value)}
-              >
-                {/* <option key="s0" value="">--{t('Select')}--</option> */}
-                <option key="s1" value="random" defaultChecked>
-                  {t("SeatingRandom")}
-                </option>
-                <option key="s2" value="s1">
-                  {t("Seating1")}
-                </option>
-                <option key="s3" value="s2">
-                  {t("Seating2")}
-                </option>
-              </select>
-            </div>
-          </div>
-        )}
-        {metaGame === null || playerCount === -1 ? (
-          ""
-        ) : /* Standing Challenge */
-        opponent ? (
-          ""
-        ) : (
-          <div className="field">
-            <label className="label">{t("ChallengeType")}</label>
-            <div className="control">
-              <label className="radio">
-                <input
-                  type="radio"
-                  name="challengeType"
-                  value="open"
-                  readOnly={true}
-                  checked={standing}
-                  onChange={() => standingSetter(true)}
-                />
-                {t("ChallengeTypeOpen")}
-              </label>
-              <label className="radio">
-                <input
-                  type="radio"
-                  name="challengeType"
-                  value="targeted"
-                  checked={!standing}
-                  readOnly={true}
-                  onChange={() => standingSetter(false)}
-                />
-                {t("ChallengeTypeTargeted")}
-              </label>
-            </div>
-            <p className="help">
-              {standing
-                ? t("ChallengeTypeOpenDescription")
-                : t("ChallengeTypeTargetedDescription")}
+  if (process.env.REACT_APP_REAL_MODE === "production" && (!gameinfo.has(metaGame) || gameinfo.get(metaGame).flags.includes("experimental"))) {
+    return null;
+  } else {
+    return (
+        <Modal
+        show={show}
+        title={t("NewChallenge")}
+        buttons={[
+            { label: t("Challenge"), action: handleChallenge },
+            { label: t("ResetDefault"), action: resetToDefault },
+            { label: t("Close"), action: handleNewChallengeClose },
+        ]}
+        >
+        <div className="container">
+            {fixedMetaGame ? (
+            <p>
+                <strong>{t("ChooseGame")}</strong>:{" "}
+                {gameinfo.get(fixedMetaGame).name}
             </p>
-          </div>
-        )}
-        {playerCount === -1 || standing || props.opponent !== undefined ? (
-          ""
-        ) : (
-          /* Opponents filtering */
-          <div className="control">
-            <p className="help">Use this to filter out inactive opponents</p>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "all"}
-                value="all"
-                onChange={() => onlySeeSetter("all")}
-              />
-              All opponents
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "week"}
-                value="week"
-                onChange={() => onlySeeSetter("week")}
-              />
-              Past 7 days
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "month"}
-                value="month"
-                onChange={() => onlySeeSetter("month")}
-              />
-              Past 30 days
-            </label>
-          </div>
-        )}
-        {playerCount === -1 || standing
-          ? ""
-          : /* Opponents */
-            opponents.map((o, i) => {
-              return (
-                <div className="field" key={i}>
-                  <label className="label" htmlFor={"user_for_challenge" + i}>
-                    {playerCount === 2
-                      ? t("ChooseOpponent")
-                      : t("ChooseOpponent", i)}
-                  </label>
-                  <div className="control">
-                    {users === null && !opponent ? (
-                      <Spinner />
-                    ) : opponent ? (
-                      opponent.name
+            ) : (
+            <div className="field">
+                <label className="label" htmlFor="gameName">
+                {t("ChooseGame")}
+                </label>
+                <div className="control">
+                <div className="select is-small">
+                    {games === null ? (
+                    <Spinner />
                     ) : (
-                      <div className="select is-small">
-                        <select
-                          value={o.id || ""}
-                          name="users"
-                          id={"user_for_challenge" + i}
-                          onChange={(e) =>
-                            handleChangeOpponent({
-                              id: e.target.value,
-                              name: e.target.options[e.target.selectedIndex]
-                                .text,
-                              player: i,
-                            })
-                          }
-                        >
-                          <option value="">--{t("Select")}--</option>
-                          {users
-                            .filter(
-                              (user) =>
-                                user.id === opponents[i].id ||
-                                (user.id !== globalMe.id &&
-                                  !opponents.some((o) => user.id === o.id) &&
-                                  user.lastSeen >= minSeen)
-                            )
-                            .sort((a, b) => a.name.localeCompare(b.name))
-                            .map((item) => {
-                              return (
-                                <option key={item.id} value={item.id}>
-                                  {item.name}
-                                </option>
-                              );
-                            })}
-                        </select>
-                      </div>
+                    /* Select meta game */
+                    <select
+                        value={metaGame ? metaGame : ""}
+                        name="gameName"
+                        id="gameName"
+                        onChange={(e) => handleChangeGame(e.target.value)}
+                    >
+                        <option value="">--{t("Select")}--</option>
+                        {games.map((game) => {
+                        return (
+                            <option key={game.id} value={game.id}>
+                            {game.name}
+                            </option>
+                        );
+                        })}
+                    </select>
                     )}
-                  </div>
                 </div>
-              );
-            })}
-        {!standing ? (
-          ""
-        ) : playerCount === -1 || playerCount > 2 ? (
-          ""
-        ) : (
-          <div className="field">
-            <label className="label is-small" htmlFor="duration">
-              {t("Duration")}
-            </label>
-            <div className="control">
-              <input
-                className="input is-small"
-                type="number"
-                min={0}
-                name="duration"
-                placeholder="duration"
-                style={{ width: "50%" }}
-                value={standingCount}
-                onChange={(e) =>
-                  standingCountSetter(parseInt(e.target.value, 10))
-                }
-              />
+                </div>
             </div>
-            <p className="help">
-              {standingCount === 0
-                ? t("DurationHelpPersistent")
-                : t("DurationHelp", { count: standingCount })}
+            )}
+            {metaGame === null ? (
+            ""
+            ) : /* Number of players */
+            playercounts.length === 1 || opponent ? (
+            <p>
+                <strong>{t("NumPlayers")}:</strong> {playercounts[0]}
             </p>
-          </div>
-        )}
-        <GameVariants
-          metaGame={metaGame}
-          variantsSetter={setSelectedVariants}
-        />
-        {metaGame === null ? (
-          ""
-        ) : (
-          <Fragment>
+            ) : (
             <div className="field">
-              <label className="label">Choose clock speed</label>
-              <div className="control">
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="clockSpeed"
-                    value="fast"
-                    checked={clockSpeed === "fast"}
-                    onChange={() => {
-                      clockSpeedSetter("fast");
-                      setClock(24, 8, 48);
-                    }}
-                  />
-                  Fast (daily)
+                <label className="label" htmlFor="numPlayers">
+                {t("NumPlayers")}
                 </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="clockSpeed"
-                    value="medium"
-                    checked={clockSpeed === "medium"}
-                    onChange={() => {
-                      clockSpeedSetter("medium");
-                      setClock(48, 24, 96);
-                    }}
-                  />
-                  Medium (twice weekly)
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="clockSpeed"
-                    value="slow"
-                    checked={clockSpeed === "slow"}
-                    onChange={() => {
-                      clockSpeedSetter("slow");
-                      setClock(72, 48, 168);
-                    }}
-                  />
-                  Slow (weekly)
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="clockSpeed"
-                    value="custom"
-                    checked={clockSpeed === "custom"}
-                    onChange={() => clockSpeedSetter("custom")}
-                  />
-                  Custom
-                </label>
-              </div>
+                <div className="select is-small">
+                <select
+                    value={playerCount}
+                    name="numPlayers"
+                    id="numPlayers"
+                    onChange={(e) => handleChangePlayerCount(e.target.value)}
+                >
+                    <option value="">--{t("Select")}--</option>
+                    {playercounts.map((cnt) => {
+                    return (
+                        <option key={cnt} value={cnt}>
+                        {cnt}
+                        </option>
+                    );
+                    })}
+                </select>
+                </div>
             </div>
-            <div className="columns">
-              <div className="column">
-                <div className="field">
-                  <label className="label" htmlFor="clock_start">
-                    {t("ChooseClockStart")}
-                  </label>
-                  <div className="control">
-                    <input
-                      className="input is-small"
-                      type="text"
-                      id="clock_start"
-                      name="clock_start"
-                      size="3"
-                      value={clockStart}
-                      onChange={handleClockStartChange}
-                    />
-                  </div>
-                  <p className="help">{t("HelpClockStart")}</p>
-                </div>
-              </div>
-              <div className="column">
-                <div className="field">
-                  <label className="label" htmlFor="clock_inc">
-                    {t("ChooseClockIncrement")}
-                  </label>
-                  <div className="control">
-                    <input
-                      className="input is-small"
-                      type="text"
-                      id="clock_inc"
-                      name="clock_inc"
-                      size="3"
-                      value={clockInc}
-                      onChange={handleClockIncChange}
-                    />
-                  </div>
-                  <p className="help">{t("HelpClockIncrement")}</p>
-                </div>
-              </div>
-              <div className="column">
-                <div className="field">
-                  <label className="label" htmlFor="clock_max">
-                    {t("ChooseClockMax")}
-                  </label>
-                  <div className="control">
-                    <input
-                      className="input is-small"
-                      type="text"
-                      id="clock_start"
-                      name="clock_max"
-                      size="3"
-                      value={clockMax}
-                      onChange={handleClockMaxChange}
-                    />
-                  </div>
-                  <p className="help">{t("HelpClockMax")}</p>
-                </div>
-              </div>
-            </div>
+            )}
+            {metaGame === null || playerCount === -1 ? (
+            ""
+            ) : playerCount !== 2 ? (
+            <p>
+                <strong>{t("Seating")}</strong>: {t("SeatingRandom")}
+            </p>
+            ) : (
             <div className="field">
-              <div className="control">
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    id="clock_hard"
-                    checked={clockHard}
-                    onChange={handleClockHardChange}
-                  />
-                  {t("ChooseClockHard")}
+                {/* Seating */}
+                <label className="label" htmlFor="seating">
+                {t("Seating")}
                 </label>
-              </div>
-              <p className="help">
-                {clockHard ? t("HelpClockHard") : t("HelpClockSoft")}
-              </p>
+                <div className="select is-small">
+                <select
+                    value={seating}
+                    name="seating"
+                    id="seating"
+                    onChange={(e) => handleChangeSeating(e.target.value)}
+                >
+                    {/* <option key="s0" value="">--{t('Select')}--</option> */}
+                    <option key="s1" value="random" defaultChecked>
+                    {t("SeatingRandom")}
+                    </option>
+                    <option key="s2" value="s1">
+                    {t("Seating1")}
+                    </option>
+                    <option key="s3" value="s2">
+                    {t("Seating2")}
+                    </option>
+                </select>
+                </div>
             </div>
+            )}
+            {metaGame === null || playerCount === -1 ? (
+            ""
+            ) : /* Standing Challenge */
+            opponent ? (
+            ""
+            ) : (
             <div className="field">
-              <div className="control">
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    id="noExplore"
-                    checked={noExplore}
-                    onChange={handleNoExploreChange}
-                  />
-                  {t("ChooseNoExplore")}
+                <label className="label">{t("ChallengeType")}</label>
+                <div className="control">
+                <label className="radio">
+                    <input
+                    type="radio"
+                    name="challengeType"
+                    value="open"
+                    readOnly={true}
+                    checked={standing}
+                    onChange={() => standingSetter(true)}
+                    />
+                    {t("ChallengeTypeOpen")}
                 </label>
-              </div>
-              <p className="help">
-                {noExplore ? t("HelpNoExploreTrue") : t("HelpNoExploreFalse")}
-              </p>
+                <label className="radio">
+                    <input
+                    type="radio"
+                    name="challengeType"
+                    value="targeted"
+                    checked={!standing}
+                    readOnly={true}
+                    onChange={() => standingSetter(false)}
+                    />
+                    {t("ChallengeTypeTargeted")}
+                </label>
+                </div>
+                <p className="help">
+                {standing
+                    ? t("ChallengeTypeOpenDescription")
+                    : t("ChallengeTypeTargetedDescription")}
+                </p>
             </div>
-          </Fragment>
-        )}
-        {metaGame === null || playerCount !== 2 ? null : (
-          <div className="field">
+            )}
+            {playerCount === -1 || standing || props.opponent !== undefined ? (
+            ""
+            ) : (
+            /* Opponents filtering */
             <div className="control">
-              <label className="checkbox">
+                <p className="help">Use this to filter out inactive opponents</p>
+                <label className="radio">
                 <input
-                  type="checkbox"
-                  id="rated"
-                  checked={rated}
-                  onChange={handleRatedChange}
+                    type="radio"
+                    name="oppFilter"
+                    checked={onlySee === "all"}
+                    value="all"
+                    onChange={() => onlySeeSetter("all")}
                 />
-                {t("ChooseRated")}
-              </label>
+                All opponents
+                </label>
+                <label className="radio">
+                <input
+                    type="radio"
+                    name="oppFilter"
+                    checked={onlySee === "week"}
+                    value="week"
+                    onChange={() => onlySeeSetter("week")}
+                />
+                Past 7 days
+                </label>
+                <label className="radio">
+                <input
+                    type="radio"
+                    name="oppFilter"
+                    checked={onlySee === "month"}
+                    value="month"
+                    onChange={() => onlySeeSetter("month")}
+                />
+                Past 30 days
+                </label>
             </div>
-            <p className="help">{rated ? t("HelpRated") : t("HelpUnRated")}</p>
-          </div>
-        )}
-        {/* Comment to opponent */}
-        {metaGame === null || playerCount !== 2 ? null : (
-          <div className="field">
-            <label className="label" htmlFor="comment">
-              {t("Note")}
-            </label>
-            <div className="control">
-              <textarea
-                className="textarea is-small"
-                id="comment"
-                name="comment"
-                rows="2"
-                maxLength="128"
-                value={comment}
-                onChange={handleCommentChange}
-              ></textarea>
+            )}
+            {playerCount === -1 || standing
+            ? ""
+            : /* Opponents */
+                opponents.map((o, i) => {
+                return (
+                    <div className="field" key={i}>
+                    <label className="label" htmlFor={"user_for_challenge" + i}>
+                        {playerCount === 2
+                        ? t("ChooseOpponent")
+                        : t("ChooseOpponent", i)}
+                    </label>
+                    <div className="control">
+                        {users === null && !opponent ? (
+                        <Spinner />
+                        ) : opponent ? (
+                        opponent.name
+                        ) : (
+                        <div className="select is-small">
+                            <select
+                            value={o.id || ""}
+                            name="users"
+                            id={"user_for_challenge" + i}
+                            onChange={(e) =>
+                                handleChangeOpponent({
+                                id: e.target.value,
+                                name: e.target.options[e.target.selectedIndex]
+                                    .text,
+                                player: i,
+                                })
+                            }
+                            >
+                            <option value="">--{t("Select")}--</option>
+                            {users
+                                .filter(
+                                (user) =>
+                                    user.id === opponents[i].id ||
+                                    (user.id !== globalMe.id &&
+                                    !opponents.some((o) => user.id === o.id) &&
+                                    user.lastSeen >= minSeen)
+                                )
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((item) => {
+                                return (
+                                    <option key={item.id} value={item.id}>
+                                    {item.name}
+                                    </option>
+                                );
+                                })}
+                            </select>
+                        </div>
+                        )}
+                    </div>
+                    </div>
+                );
+                })}
+            {!standing ? (
+            ""
+            ) : playerCount === -1 || playerCount > 2 ? (
+            ""
+            ) : (
+            <div className="field">
+                <label className="label is-small" htmlFor="duration">
+                {t("Duration")}
+                </label>
+                <div className="control">
+                <input
+                    className="input is-small"
+                    type="number"
+                    min={0}
+                    name="duration"
+                    placeholder="duration"
+                    style={{ width: "50%" }}
+                    value={standingCount}
+                    onChange={(e) =>
+                    standingCountSetter(parseInt(e.target.value, 10))
+                    }
+                />
+                </div>
+                <p className="help">
+                {standingCount === 0
+                    ? t("DurationHelpPersistent")
+                    : t("DurationHelp", { count: standingCount })}
+                </p>
             </div>
-            <p className="help">{t("NotesHelp")}</p>
-          </div>
-        )}
-      </div>
-      {error && (
-        <div ref={errorRef} className="has-text-danger has-text-weight-bold">
-          {error}
+            )}
+            <GameVariants
+            metaGame={metaGame}
+            variantsSetter={setSelectedVariants}
+            />
+            {metaGame === null ? (
+            ""
+            ) : (
+            <Fragment>
+                <div className="field">
+                <label className="label">Choose clock speed</label>
+                <div className="control">
+                    <label className="radio">
+                    <input
+                        type="radio"
+                        name="clockSpeed"
+                        value="fast"
+                        checked={clockSpeed === "fast"}
+                        onChange={() => {
+                        clockSpeedSetter("fast");
+                        setClock(24, 8, 48);
+                        }}
+                    />
+                    Fast (daily)
+                    </label>
+                    <label className="radio">
+                    <input
+                        type="radio"
+                        name="clockSpeed"
+                        value="medium"
+                        checked={clockSpeed === "medium"}
+                        onChange={() => {
+                        clockSpeedSetter("medium");
+                        setClock(48, 24, 96);
+                        }}
+                    />
+                    Medium (twice weekly)
+                    </label>
+                    <label className="radio">
+                    <input
+                        type="radio"
+                        name="clockSpeed"
+                        value="slow"
+                        checked={clockSpeed === "slow"}
+                        onChange={() => {
+                        clockSpeedSetter("slow");
+                        setClock(72, 48, 168);
+                        }}
+                    />
+                    Slow (weekly)
+                    </label>
+                    <label className="radio">
+                    <input
+                        type="radio"
+                        name="clockSpeed"
+                        value="custom"
+                        checked={clockSpeed === "custom"}
+                        onChange={() => clockSpeedSetter("custom")}
+                    />
+                    Custom
+                    </label>
+                </div>
+                </div>
+                <div className="columns">
+                <div className="column">
+                    <div className="field">
+                    <label className="label" htmlFor="clock_start">
+                        {t("ChooseClockStart")}
+                    </label>
+                    <div className="control">
+                        <input
+                        className="input is-small"
+                        type="text"
+                        id="clock_start"
+                        name="clock_start"
+                        size="3"
+                        value={clockStart}
+                        onChange={handleClockStartChange}
+                        />
+                    </div>
+                    <p className="help">{t("HelpClockStart")}</p>
+                    </div>
+                </div>
+                <div className="column">
+                    <div className="field">
+                    <label className="label" htmlFor="clock_inc">
+                        {t("ChooseClockIncrement")}
+                    </label>
+                    <div className="control">
+                        <input
+                        className="input is-small"
+                        type="text"
+                        id="clock_inc"
+                        name="clock_inc"
+                        size="3"
+                        value={clockInc}
+                        onChange={handleClockIncChange}
+                        />
+                    </div>
+                    <p className="help">{t("HelpClockIncrement")}</p>
+                    </div>
+                </div>
+                <div className="column">
+                    <div className="field">
+                    <label className="label" htmlFor="clock_max">
+                        {t("ChooseClockMax")}
+                    </label>
+                    <div className="control">
+                        <input
+                        className="input is-small"
+                        type="text"
+                        id="clock_start"
+                        name="clock_max"
+                        size="3"
+                        value={clockMax}
+                        onChange={handleClockMaxChange}
+                        />
+                    </div>
+                    <p className="help">{t("HelpClockMax")}</p>
+                    </div>
+                </div>
+                </div>
+                <div className="field">
+                <div className="control">
+                    <label className="checkbox">
+                    <input
+                        type="checkbox"
+                        id="clock_hard"
+                        checked={clockHard}
+                        onChange={handleClockHardChange}
+                    />
+                    {t("ChooseClockHard")}
+                    </label>
+                </div>
+                <p className="help">
+                    {clockHard ? t("HelpClockHard") : t("HelpClockSoft")}
+                </p>
+                </div>
+                <div className="field">
+                <div className="control">
+                    <label className="checkbox">
+                    <input
+                        type="checkbox"
+                        id="noExplore"
+                        checked={noExplore}
+                        onChange={handleNoExploreChange}
+                    />
+                    {t("ChooseNoExplore")}
+                    </label>
+                </div>
+                <p className="help">
+                    {noExplore ? t("HelpNoExploreTrue") : t("HelpNoExploreFalse")}
+                </p>
+                </div>
+            </Fragment>
+            )}
+            {metaGame === null || playerCount !== 2 ? null : (
+            <div className="field">
+                <div className="control">
+                <label className="checkbox">
+                    <input
+                    type="checkbox"
+                    id="rated"
+                    checked={rated}
+                    onChange={handleRatedChange}
+                    />
+                    {t("ChooseRated")}
+                </label>
+                </div>
+                <p className="help">{rated ? t("HelpRated") : t("HelpUnRated")}</p>
+            </div>
+            )}
+            {/* Comment to opponent */}
+            {metaGame === null || playerCount !== 2 ? null : (
+            <div className="field">
+                <label className="label" htmlFor="comment">
+                {t("Note")}
+                </label>
+                <div className="control">
+                <textarea
+                    className="textarea is-small"
+                    id="comment"
+                    name="comment"
+                    rows="2"
+                    maxLength="128"
+                    value={comment}
+                    onChange={handleCommentChange}
+                ></textarea>
+                </div>
+                <p className="help">{t("NotesHelp")}</p>
+            </div>
+            )}
         </div>
-      )}
-    </Modal>
-  );
+        {error && (
+            <div ref={errorRef} className="has-text-danger has-text-weight-bold">
+            {error}
+            </div>
+        )}
+        </Modal>
+    );
+
+  }
 }
 
 export default NewChallengeModal;
