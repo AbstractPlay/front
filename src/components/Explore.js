@@ -195,7 +195,7 @@ function Explore(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
-  if (metaGame === undefined || metaGame === null || !gameinfo.has(metaGame)) {
+  if (metaGame === undefined || metaGame === null || !gameinfo.has(metaGame) || !games.includes(metaGame) ) {
     return (
       <>
         <Helmet>
