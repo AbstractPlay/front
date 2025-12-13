@@ -5,9 +5,9 @@ import { addResource } from "@abstractplay/gameslib";
 import { Link } from "react-router-dom";
 import { shuffle } from "../lib/shuffle";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
-import gameImages from "../assets/GameImages";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import Thumbnail from "./Thumbnail";
 
 function About(props) {
   const [mvTimes, mvTimesSetter] = useState(null);
@@ -57,7 +57,6 @@ function About(props) {
         deets.push({
           metaGame,
           name: info.name,
-          image: encodeURIComponent(gameImages[metaGame]),
           description: gameEngine.description(),
           designers:
             info.people !== undefined && info.people.length > 0
@@ -115,12 +114,8 @@ function About(props) {
                     {e.description}
                   </ReactMarkdown>
                   <div>
-                    <img
-                      src={`data:image/svg+xml;utf8,${e.image}`}
-                      alt={e.name}
-                      width="auto"
-                      height="auto"
-                      // onClick={() => openImgModal(props.row.original.id)}
+                    <Thumbnail
+                        meta={e.metaGame}
                     />
                   </div>
                 </div>
