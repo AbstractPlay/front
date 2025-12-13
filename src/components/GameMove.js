@@ -371,61 +371,6 @@ function mergeExploration(
     let node = getExplorationNode(exploration, game, moveNumber - 1);
     let gameEngine = GameFactory(game.metaGame, node.state);
     mergeMoveRecursive(gameEngine, node, data[0].tree);
-  } else if (data[1] && data[1].move === moveNumber - 1) {
-    let node = getExplorationNode(exploration, game, moveNumber - 1);
-    let gameEngine = GameFactory(game.metaGame, node.state);
-    // subtree of the move I chose
-    const subtree1 = data[1].tree.find((e) =>
-      gameEngine.sameMove(exploration[moveNumber - 1].move, e.move)
-    );
-    if (subtree1) {
-      mergeMoveRecursive(
-        gameEngine,
-        exploration[moveNumber - 1],
-        subtree1.children
-      );
-      saveExploration(
-        exploration,
-        moveNumber,
-        game,
-        me,
-        true,
-        errorSetter,
-        errorMessageRef
-      );
-    }
-  } else if (data[2] && data[2].move === moveNumber - 2) {
-    console.log("Merging 2 moves back");
-    let node = getExplorationNode(exploration, game, moveNumber - 2);
-    let gameEngine = GameFactory(game.metaGame, node.state);
-    // subtree of the move I chose
-    const subtree1 = data[2].tree.find((e) =>
-      gameEngine.sameMove(exploration[moveNumber - 2].move, e.move)
-    );
-    if (subtree1) {
-      gameEngine.move(exploration[moveNumber - 1].move, { trusted: true });
-      // subtree of the move my opponent chose
-      const subtree2 = subtree1.children.find((e) =>
-        gameEngine.sameMove(exploration[moveNumber - 1].move, e.move)
-      );
-      if (subtree2) {
-        mergeMoveRecursive(
-          gameEngine,
-          getExplorationNode(exploration, game, moveNumber - 1),
-          subtree2.children
-        );
-        // save this subtree to the database at this move (we only fetch 2 moves back so this will get lost unless the player explores further)
-        saveExploration(
-          exploration,
-          moveNumber,
-          game,
-          me,
-          true,
-          errorSetter,
-          errorMessageRef
-        );
-      }
-    }
   }
 }
 
@@ -560,6 +505,8 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
     }
     if (n.comment !== undefined)
       for (const comment of n.comment) node.children[pos].AddComment(comment);
+    if (!node.children[pos].premove && n.premove === true)
+      node.children[pos].premove = true;
     mergeMoveRecursive(gameEngine, node.children[pos], n.children, newids);
     gameEngine.stack.pop();
     gameEngine.load();
