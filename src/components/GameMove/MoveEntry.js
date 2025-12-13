@@ -682,7 +682,13 @@ function MoveEntry(props) {
               className="winningColorButton tooltipped"
               onClick={() => handlePremove()}
             >
-              <i className="fa fa-clock-o premoveIcon"></i>
+              {getFocusNode(exploration, game, focus).premove ? (
+                <span className="highlight">
+                  <i className="fa fa-clock-o premoveIcon"></i>
+                </span>
+              ) : (
+                <i className="fa fa-clock-o premoveIcon"></i>
+              )}
               <span className="tooltiptext">
                 {getFocusNode(exploration, game, focus).premove
                   ? t("ClearPremove")
