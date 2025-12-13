@@ -21,10 +21,10 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import gameImages from "../../assets/GameImages";
 import ExpandableDiv from "../ExpandableDiv";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import Thumbnail from "../Thumbnail";
 
 function CompletedAll({ toggleStar, openImgModal, counts }) {
   const allSize = Number.MAX_SAFE_INTEGER;
@@ -104,7 +104,7 @@ function CompletedAll({ toggleStar, openImgModal, counts }) {
         return {
           id: metaGame,
           gameName: info.name,
-          image: encodeURIComponent(gameImages[metaGame]),
+          image: undefined,
           links: info.urls,
           designers:
             info.people !== undefined && info.people.length > 0
@@ -190,17 +190,9 @@ function CompletedAll({ toggleStar, openImgModal, counts }) {
       columnHelper.accessor("image", {
         header: "Image",
         cell: (props) => (
-          <>
-            <div id={"svg" + props.row.original.id}>
-              <img
-                src={`data:image/svg+xml;utf8,${props.getValue()}`}
-                alt={props.row.original.id}
-                width="auto"
-                height="auto"
-                onClick={() => openImgModal(props.row.original.id)}
-              />
-            </div>
-          </>
+          <div onClick={() => openImgModal(props.row.original.id)}>
+            <Thumbnail meta={props.row.original.id} />
+          </div>
         ),
         enableSorting: false,
       }),

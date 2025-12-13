@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
 import { MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
-import gameImages from "../assets/GameImages";
 import Modal from "./Modal";
 import TableExplore from "./MetaContainer/TableExplore";
 import { callAuthApi } from "../lib/api";
@@ -20,6 +19,7 @@ import NumPlayers from "./Explore/NumPlayers";
 import Newest from "./Explore/Newest";
 import HIndex from "./Explore/HIndex";
 import Stars from "./Explore/Stars";
+import Thumbnail from "./Thumbnail";
 
 function Explore(props) {
   const [globalMe, globalMeSetter] = useContext(MeContext);
@@ -109,9 +109,11 @@ function Explore(props) {
   }, []);
 
   const openImgModal = (name) => {
+    console.log(`Opening modal for ${name}`);
     activeImgModalSetter(name);
   };
   const closeImgModal = () => {
+    console.log(`Closing modal`);
     activeImgModalSetter("");
   };
 
@@ -195,7 +197,12 @@ function Explore(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
-  if (metaGame === undefined || metaGame === null || !gameinfo.has(metaGame) || !games.includes(metaGame) ) {
+  if (
+    metaGame === undefined ||
+    metaGame === null ||
+    !gameinfo.has(metaGame) ||
+    !games.includes(metaGame)
+  ) {
     return (
       <>
         <Helmet>
@@ -269,26 +276,19 @@ function Explore(props) {
         {selected === "all"
           ? null
           : games.map((metaGame) => {
-            return (
-              <Modal
-                key={metaGame}
-                buttons={[{ label: "Close", action: closeImgModal }]}
-                show={activeImgModal === metaGame}
-                title={`Board image for ${gameinfo.get(metaGame).name}`}
-              >
-                <div className="content">
-                  <img
-                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                      gameImages[metaGame]
-                    )}`}
-                    alt={metaGame}
-                    width="100%"
-                    height="auto"
-                  />
-                </div>
-              </Modal>
-            );
-          })}
+              return (
+                <Modal
+                  key={metaGame}
+                  buttons={[{ label: "Close", action: closeImgModal }]}
+                  show={activeImgModal === metaGame}
+                  title={`Board image for ${gameinfo.get(metaGame).name}`}
+                >
+                  <div className="content">
+                    <Thumbnail meta={metaGame} />
+                  </div>
+                </Modal>
+              );
+            })}
       </>
     );
   } else if (counts !== null) {
