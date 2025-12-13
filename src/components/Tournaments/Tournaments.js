@@ -80,9 +80,9 @@ function Tournaments(props) {
           if (tournament === undefined) {
             console.log(
               "Error: player " +
-              playerid +
-              " is in an unknown tournament " +
-              tournamentid
+                playerid +
+                " is in an unknown tournament " +
+                tournamentid
             );
           }
           if (
@@ -220,7 +220,10 @@ function Tournaments(props) {
   const handleJoinTournament = useCallback(
     async (tournamentid, once = false) => {
       try {
-        const res = await callAuthApi("join_tournament", { tournamentid, once });
+        const res = await callAuthApi("join_tournament", {
+          tournamentid,
+          once,
+        });
         if (!res) return;
         let status = res.status;
         if (status !== 200) {
@@ -306,8 +309,8 @@ function Tournaments(props) {
           props.getValue() < 0
             ? t("Tournament.StartsWhen4")
             : props.getValue() > 3000000000000
-              ? t("Tournament.StartsWhenPreviousDone")
-              : new Date(props.getValue()).toLocaleDateString(),
+            ? t("Tournament.StartsWhenPreviousDone")
+            : new Date(props.getValue()).toLocaleDateString(),
         sortingFn: (rowA, rowB, columnId) => {
           const dateA = rowA.getValue(columnId);
           const dateB = rowB.getValue(columnId);
@@ -316,7 +319,7 @@ function Tournaments(props) {
           if (typeA === typeB) {
             return typeA === 1
               ? rowA.getValue("players").length -
-              rowB.getValue("players").length
+                  rowB.getValue("players").length
               : dateB - dateA;
           } else {
             return typeA - typeB;
@@ -344,8 +347,8 @@ function Tournaments(props) {
         id: "actions",
         cell: (props) =>
           !globalMe ? null : props.row.original.players.includes(
-            globalMe.id
-          ) ? (
+              globalMe.id
+            ) ? (
             <button
               className="button is-small apButton"
               onClick={() =>
@@ -557,8 +560,9 @@ function Tournaments(props) {
         header: t("Tournament.Completion"),
         cell: (props) =>
           t("Tournament.CompletionRate", {
-            ratio: `${props.getValue().numCompleted}/${props.getValue().numGames
-              }`,
+            ratio: `${props.getValue().numCompleted}/${
+              props.getValue().numGames
+            }`,
             percent: Math.round(
               (props.getValue().numCompleted / props.getValue().numGames) * 100
             ).toString(),

@@ -114,9 +114,7 @@ function About(props) {
                     {e.description}
                   </ReactMarkdown>
                   <div>
-                    <Thumbnail
-                        meta={e.metaGame}
-                    />
+                    <Thumbnail meta={e.metaGame} />
                   </div>
                 </div>
               );

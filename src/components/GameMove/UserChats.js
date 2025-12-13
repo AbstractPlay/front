@@ -32,17 +32,25 @@ function UserChats(props) {
 
   // Scroll to highlighted comments when focus changes
   useEffect(() => {
-    if (comments && chatTableRef.current && highlightedRefs.current.length > 0) {
+    if (
+      comments &&
+      chatTableRef.current &&
+      highlightedRefs.current.length > 0
+    ) {
       const firstHighlighted = highlightedRefs.current[0];
       if (firstHighlighted) {
         // Get the container's position
         const containerRect = chatTableRef.current.getBoundingClientRect();
         const elementRect = firstHighlighted.getBoundingClientRect();
-        
+
         // Calculate if element is outside visible area
-        if (elementRect.top < containerRect.top || elementRect.bottom > containerRect.bottom) {
+        if (
+          elementRect.top < containerRect.top ||
+          elementRect.bottom > containerRect.bottom
+        ) {
           // Scroll the element to the top of the container
-          chatTableRef.current.scrollTop = firstHighlighted.offsetTop - chatTableRef.current.offsetTop;
+          chatTableRef.current.scrollTop =
+            firstHighlighted.offsetTop - chatTableRef.current.offsetTop;
         }
       }
     }
@@ -64,7 +72,8 @@ function UserChats(props) {
             personName = player.name;
           }
         }
-        const isHighlighted = focusedPath && c.path && pathsMatch(focusedPath, c.path);
+        const isHighlighted =
+          focusedPath && c.path && pathsMatch(focusedPath, c.path);
         results.push({
           timestamp: c.timeStamp,
           time: new Date(c.timeStamp).toLocaleString(),
@@ -90,71 +99,80 @@ function UserChats(props) {
         />
         <div className="chatTable" ref={chatTableRef}>
           {results.map((r, index) => {
-            const isHighlighted = focusedPath && r.path && pathsMatch(focusedPath, r.path);
+            const isHighlighted =
+              focusedPath && r.path && pathsMatch(focusedPath, r.path);
             return (
-              <div 
-                key={"result" + index} 
-                className={`media ${isHighlighted ? 'highlighted-comment' : ''}`}
-                ref={isHighlighted ? (el) => { if (el) highlightedRefs.current.push(el); } : null}
+              <div
+                key={"result" + index}
+                className={`media ${
+                  isHighlighted ? "highlighted-comment" : ""
+                }`}
+                ref={
+                  isHighlighted
+                    ? (el) => {
+                        if (el) highlightedRefs.current.push(el);
+                      }
+                    : null
+                }
               >
                 <div className="media-content">
-                <div className="content">
-                  {r.system ? (
-                    <p className="chatSystem">
-                      <small>
-                        <ReactTimeAgo
-                          date={r.timestamp}
-                          timeStyle="twitter-now"
-                        />
-                      </small>
-                      <br />
-                      {r.log}
-                    </p>
-                  ) : (
-                    <>
-                      <p>
-                        <Link to={`/player/${r.userid}`}>
-                          <strong>{r.player}</strong>
-                        </Link>
-                        &nbsp;
-                        <small style={{ opacity: 0.7 }}>
+                  <div className="content">
+                    {r.system ? (
+                      <p className="chatSystem">
+                        <small>
                           <ReactTimeAgo
                             date={r.timestamp}
                             timeStyle="twitter-now"
                           />
-                          {props.commentingCompletedGame && (
-                            <span>
-                              {r.inGame ? ", in-game" : ", post-game"}
-                            </span>
-                          )}
-                          {r.path && handleGameMoveClick && (
-                            <span>
-                              {" "}
-                              <a
-                                href="#"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleGameMoveClick(r.path);
-                                }}
-                                style={{ textDecoration: "underline" }}
-                              >
-                                move
-                              </a>
-                            </span>
-                          )}
                         </small>
-                      </p>
-                      <ReactMarkdown
-                        className="content"
-                        disallowedElements={["img"]}
-                        unwrapDisallowed={true}
-                      >
+                        <br />
                         {r.log}
-                      </ReactMarkdown>
-                    </>
-                  )}
+                      </p>
+                    ) : (
+                      <>
+                        <p>
+                          <Link to={`/player/${r.userid}`}>
+                            <strong>{r.player}</strong>
+                          </Link>
+                          &nbsp;
+                          <small style={{ opacity: 0.7 }}>
+                            <ReactTimeAgo
+                              date={r.timestamp}
+                              timeStyle="twitter-now"
+                            />
+                            {props.commentingCompletedGame && (
+                              <span>
+                                {r.inGame ? ", in-game" : ", post-game"}
+                              </span>
+                            )}
+                            {r.path && handleGameMoveClick && (
+                              <span>
+                                {" "}
+                                <a
+                                  href="#"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handleGameMoveClick(r.path);
+                                  }}
+                                  style={{ textDecoration: "underline" }}
+                                >
+                                  move
+                                </a>
+                              </span>
+                            )}
+                          </small>
+                        </p>
+                        <ReactMarkdown
+                          className="content"
+                          disallowedElements={["img"]}
+                          unwrapDisallowed={true}
+                        >
+                          {r.log}
+                        </ReactMarkdown>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
               </div>
             );
           })}

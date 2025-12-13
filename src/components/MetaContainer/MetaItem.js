@@ -432,7 +432,7 @@ const MetaItem = React.forwardRef(
               )}
             </div>
             <div id={"svg" + game.uid} onClick={openModal}>
-                <Thumbnail meta={game.uid} />
+              <Thumbnail meta={game.uid} />
             </div>
           </div>
         </div>

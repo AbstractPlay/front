@@ -109,11 +109,11 @@ function Explore(props) {
   }, []);
 
   const openImgModal = (name) => {
-    console.log(`Opening modal for ${name}`)
+    console.log(`Opening modal for ${name}`);
     activeImgModalSetter(name);
   };
   const closeImgModal = () => {
-    console.log(`Closing modal`)
+    console.log(`Closing modal`);
     activeImgModalSetter("");
   };
 
@@ -197,7 +197,12 @@ function Explore(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
-  if (metaGame === undefined || metaGame === null || !gameinfo.has(metaGame) || !games.includes(metaGame) ) {
+  if (
+    metaGame === undefined ||
+    metaGame === null ||
+    !gameinfo.has(metaGame) ||
+    !games.includes(metaGame)
+  ) {
     return (
       <>
         <Helmet>
@@ -271,19 +276,19 @@ function Explore(props) {
         {selected === "all"
           ? null
           : games.map((metaGame) => {
-            return (
-              <Modal
-                key={metaGame}
-                buttons={[{ label: "Close", action: closeImgModal }]}
-                show={activeImgModal === metaGame}
-                title={`Board image for ${gameinfo.get(metaGame).name}`}
-              >
-                <div className="content">
+              return (
+                <Modal
+                  key={metaGame}
+                  buttons={[{ label: "Close", action: closeImgModal }]}
+                  show={activeImgModal === metaGame}
+                  title={`Board image for ${gameinfo.get(metaGame).name}`}
+                >
+                  <div className="content">
                     <Thumbnail meta={metaGame} />
-                </div>
-              </Modal>
-            );
-          })}
+                  </div>
+                </Modal>
+              );
+            })}
       </>
     );
   } else if (counts !== null) {

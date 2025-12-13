@@ -206,9 +206,9 @@ function CompletedRecent({ toggleStar, openImgModal }) {
       columnHelper.accessor("image", {
         header: "Image",
         cell: (props) => (
-            <div onClick={() => openImgModal(props.row.original.id)}>
-                <Thumbnail meta={props.row.original.id} />
-            </div>
+          <div onClick={() => openImgModal(props.row.original.id)}>
+            <Thumbnail meta={props.row.original.id} />
+          </div>
         ),
         enableSorting: false,
       }),
