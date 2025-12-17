@@ -1,1 +1,25 @@
-{}
+{
+    "404": "404 Não encontrado",
+    "About": "Sobre",
+    "Accept": "Aceitar",
+    "Active": "Ativo",
+    "AcceptDraw": "Aceitar oferta de empate",
+    "Accepted": "Aceito!",
+    "All": "Todos",
+    "and": "e",
+    "Annotate": "Mostrar indicadores de última movimentação",
+    "AnnotationLevel": "Onde você gostaria que essa escolha fosse aplicada?",
+    "AvailableGames": "Jogos Disponíveis",
+    "BoardSettings": "Alterar configurações do tabuleiro de jogo",
+    "buttons": {
+        "pass": "Passar",
+        "takebutton": "Botão de captura",
+        "acceptpie": "Jogar em segundo",
+        "playsecond": "Jogar em segundo",
+        "draw": "Solicite o empate",
+        "numbers": {
+            "one": "Um (1)",
+            "two": "Dois (2)"
+        }
+    }
+}
