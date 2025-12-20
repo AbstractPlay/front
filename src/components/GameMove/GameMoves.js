@@ -474,7 +474,7 @@ function GameMoves(props) {
               {
                 class: className,
                 outcome: node.outcome,
-                premove: node.premove || false,
+                premove: node.premove || node?.children?.some(n => n.premove) || false,
                 commented:
                   node.comment && node.comment.length > 0
                     ? "filled"
@@ -498,7 +498,7 @@ function GameMoves(props) {
               next.push({
                 class: className,
                 outcome: c.outcome,
-                premove: c.premove || false,
+                premove: c.premove || c?.children?.some(n => n.premove) || false,
                 commented:
                   c.comment && c.comment.length > 0
                     ? "filled"

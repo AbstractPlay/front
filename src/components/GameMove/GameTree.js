@@ -107,6 +107,13 @@ export class GameNode {
           }
         });
       });
+      // If grandparent is root, clear it (this is just to fix a display issue)
+      if (
+        this?.parent?.parent?.parent?.parent === null &&
+        this?.parent?.parent.premove
+      ) {
+        this.parent.parent.premove = false;
+      }
     }
     this.premove = value;
     return siblingHadPremove;
