@@ -163,6 +163,7 @@ function setupGame(
     info.flags !== undefined && info.flags.includes("shared-stash");
   game0.noMoves = info.flags !== undefined && info.flags.includes("no-moves");
   game0.automove = info.flags !== undefined && info.flags.includes("automove");
+  game0.autopass = info.flags !== undefined && info.flags.includes("autopass");
   game0.noExploreFlag =
     info.flags !== undefined && info.flags.includes("no-explore");
   game0.stackExpanding =
@@ -745,17 +746,18 @@ function doView(
     if (!partialMove && focus.canExplore && !game.noMoves) {
       moves = gameEngineTmp.moves();
     }
-    // check for auto moves
+    // check for auto moves (automove: any forced move; autopass: only forced pass)
     if (
       !partialMove &&
       focus.canExplore &&
-      game.automove &&
+      (game.automove || game.autopass) &&
       isExplorer(explorer, me)
     ) {
       let automoved = false;
       // Don't auto move through pie offer in a non-Playground game.
       while (
         moves.length === 1 &&
+        (game.automove || moves[0] === "pass") &&
         !(
           game.pieEven &&
           ((typeof gameEngineTmp.shouldOfferPie === "function" &&
@@ -978,7 +980,8 @@ function canExploreMove(game, exploration, focus) {
       getFocusNode(exploration, game, focus).toMove !== "") || // game (at focus) isn't over
     (game.gameOver &&
       game.canExplore &&
-      focus.moveNumber !== exploration.length - 1) // game is over and exploring is supported
+      focus.moveNumber !== exploration.length - 1 && // game is over and exploring is supported
+      getFocusNode(exploration, game, focus).toMove !== "") // game (at focus) isn't over
   );
 }
 
