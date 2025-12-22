@@ -109,11 +109,9 @@ function Explore(props) {
   }, []);
 
   const openImgModal = (name) => {
-    console.log(`Opening modal for ${name}`);
     activeImgModalSetter(name);
   };
   const closeImgModal = () => {
-    console.log(`Closing modal`);
     activeImgModalSetter("");
   };
 
