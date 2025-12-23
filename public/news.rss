@@ -2918,5 +2918,44 @@ Let us know if you run into any issues. Enjoy!</description>
       <guid isPermaLink="false">1441923707542175775</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>Russ Williams&amp;apos;s pyramid game [Stawvs](https://play.abstractplay.com/games/stawvs) is now available, thanks to @mcd. This is a sort of hybrid of Amazons and Volcano. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 12 Dec 2025 17:23:48 GMT</pubDate>
+      <guid isPermaLink="false">1449089371536887993</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The way the site generates thumbnails has finally been updated.
+- Once a day, the site chooses a random active instance of a game (or a random completed game if no games are currently being played).
+- The current state is rendered in light and dark modes.
+- The thumbnails you see in the browser will adjust based on the colour mode you&amp;apos;ve chosen.
+
+This means that thumbnails will more accurately reflect actual game play and will change from day to day. It also *greatly* reduces the size of the payload your browser downloads when you visit the site.
+
+The rendering doesn&amp;apos;t know about user settings, so they are still rendered using the default colours, and if you&amp;apos;ve edited your &amp;quot;colour context&amp;quot; (very few have), then the thumbnails may look a little odd because they&amp;apos;re rendered using the default contexts. If you encounter any broken or otherwise weird thumbnails, please let me know. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 13 Dec 2025 00:46:17 GMT</pubDate>
+      <guid isPermaLink="false">1449200726302523544</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Emanuel Lasker&amp;apos;s Draughts variant [Lasca](https://play.abstractplay.com/games/lasca), and @christianF&amp;apos;s variation on the theme, [Emergo](https://play.abstractplay.com/games/emergo), are both now available. Both employ a capturing mechanic where captured pieces remain on the board and can be freed later. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 15 Dec 2025 17:45:57 GMT</pubDate>
+      <guid isPermaLink="false">1450182106688000060</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve moved the &amp;quot;wishlist&amp;quot; to BGG, abandoning entirely the `/suggest` bot. I&amp;apos;ve created a redirect at https://wishlist.abstractplay.com (but until DNS fully propagates, here&amp;apos;s a direct link too: https://boardgamegeek.com/geeklist/369284/abstract-play-wishlist). Please visit, add games you recommend, and thumb the games you&amp;apos;re most excited about. Comments are open too. I moved most of the existing suggestions already, and I&amp;apos;ve archived the old channel. Thanks for your continued involvement!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 16 Dec 2025 18:52:30 GMT</pubDate>
+      <guid isPermaLink="false">1450561244388917408</guid>
+    </item>
+    
   </channel>
 </rss>
