@@ -293,7 +293,7 @@ function History({ handleChallenge }) {
       row.original.opponents
         .map((u) => u.name.toLowerCase())
         .join(",")
-        .includes(val)
+        .includes(realVal)
     ) {
       return true;
     }
