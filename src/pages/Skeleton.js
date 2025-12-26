@@ -44,6 +44,7 @@ import en from "javascript-time-ago/locale/en.json";
 import TimeAgo from "javascript-time-ago";
 import { useStorageState } from "react-use-storage-state";
 import newsData from "../assets/news.json";
+import MyWebSocket from "../components/MyWebSocket";
 
 const Stats = lazy(() => import("../components/Stats"));
 // const MetaContainer = lazy(() => import("../components/MetaContainer"));
@@ -59,6 +60,7 @@ export const UsersContext = createContext([null, () => {}]);
 export const NewsContext = createContext([[], () => []]);
 export const ColourContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
+export const ConnectedContext = createContext([false, () => {}]);
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -95,6 +97,7 @@ function Bones(props) {
     annotations: "#000",
     fill: "#000",
   });
+  const [connected, setConnected] = useState(false);
 
   // Update colour context setting based on colour mode
   useEffect(() => {
@@ -239,81 +242,92 @@ function Bones(props) {
                 <ColourContext.Provider
                   value={[colourContext, colourContextSetter]}
                 >
-                  <Router>
-                    <Navbar />
-                    <section className="section" id="main">
-                      <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
-                        <Routes>
-                          <Route path="*" element={<NotFound />} />
-                          <Route
-                            path="/about"
-                            element={<About token={token} />}
-                          />
-                          <Route
-                            path="/games/:metaGame?"
-                            element={<Explore token={token} />}
-                          />
-                          {/* <Route
+                  <ConnectedContext.Provider value={[connected, setConnected]}>
+                    <Router>
+                      <MyWebSocket />
+                      <Navbar />
+                      <section className="section" id="main">
+                        <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
+                          <Routes>
+                            <Route path="*" element={<NotFound />} />
+                            <Route
+                              path="/about"
+                              element={<About token={token} />}
+                            />
+                            <Route
+                              path="/games/:metaGame?"
+                              element={<Explore token={token} />}
+                            />
+                            {/* <Route
                             path="/explore/:mode?"
                             element={<Explore token={token} />}
                           /> */}
-                          <Route path="/players" element={<Players />} />
-                          <Route path="/player/:userid" element={<Player />} />
-                          <Route
-                            path="/challenges/:metaGame"
-                            element={<StandingChallenges />}
-                          />
-                          <Route
-                            path="/listgames/:gameState/:metaGame"
-                            element={<ListGames />}
-                          />
-                          <Route
-                            path="/ratings/:metaGame"
-                            element={<Ratings />}
-                          />
-                          <Route
-                            path="/tournament/:metaGame/:tournamentid"
-                            element={<Tournament />}
-                          />
-                          <Route
-                            path="/tournament/:tournamentid"
-                            element={<Tournament />}
-                          />
-                          <Route
-                            path="/tournamenthistory/:metaGame"
-                            element={<TournamentsOld />}
-                          />
-                          <Route path="/events" element={<Events />} />
-                          <Route path="/event/:eventid" element={<Event />} />
-                          <Route
-                            path="/move/:metaGame/:cbits/:gameID"
-                            element={<GameMoveWrapper update={update} />}
-                          />
-                          <Route
-                            path="/legal"
-                            element={<Legal token={token} update={update} />}
-                          />
-                          <Route path="/news" element={<News />} />
-                          <Route path="/stats" element={<Stats />} />
-                          <Route
-                            path="/"
-                            element={<Welcome token={token} update={update} />}
-                          />
-                          <Route path="/playground" element={<Playground />} />
-                          <Route
-                            path="/tournaments/:metaGame?"
-                            element={<Tournaments />}
-                          />
-                          <Route path="/play" element={<Play />} />
-                        </Routes>
-                      </MyTurnContext.Provider>
-                    </section>
-                    {process.env.REACT_APP_REAL_MODE === "production" ? (
-                      <Footer />
-                    ) : (
-                      <FooterDev />
-                    )}
-                  </Router>
+                            <Route path="/players" element={<Players />} />
+                            <Route
+                              path="/player/:userid"
+                              element={<Player />}
+                            />
+                            <Route
+                              path="/challenges/:metaGame"
+                              element={<StandingChallenges />}
+                            />
+                            <Route
+                              path="/listgames/:gameState/:metaGame"
+                              element={<ListGames />}
+                            />
+                            <Route
+                              path="/ratings/:metaGame"
+                              element={<Ratings />}
+                            />
+                            <Route
+                              path="/tournament/:metaGame/:tournamentid"
+                              element={<Tournament />}
+                            />
+                            <Route
+                              path="/tournament/:tournamentid"
+                              element={<Tournament />}
+                            />
+                            <Route
+                              path="/tournamenthistory/:metaGame"
+                              element={<TournamentsOld />}
+                            />
+                            <Route path="/events" element={<Events />} />
+                            <Route path="/event/:eventid" element={<Event />} />
+                            <Route
+                              path="/move/:metaGame/:cbits/:gameID"
+                              element={<GameMoveWrapper update={update} />}
+                            />
+                            <Route
+                              path="/legal"
+                              element={<Legal token={token} update={update} />}
+                            />
+                            <Route path="/news" element={<News />} />
+                            <Route path="/stats" element={<Stats />} />
+                            <Route
+                              path="/"
+                              element={
+                                <Welcome token={token} update={update} />
+                              }
+                            />
+                            <Route
+                              path="/playground"
+                              element={<Playground />}
+                            />
+                            <Route
+                              path="/tournaments/:metaGame?"
+                              element={<Tournaments />}
+                            />
+                            <Route path="/play" element={<Play />} />
+                          </Routes>
+                        </MyTurnContext.Provider>
+                      </section>
+                      {process.env.REACT_APP_REAL_MODE === "production" ? (
+                        <Footer />
+                      ) : (
+                        <FooterDev />
+                      )}
+                    </Router>
+                  </ConnectedContext.Provider>
                 </ColourContext.Provider>
               </SummaryContext.Provider>
             </NewsContext.Provider>
