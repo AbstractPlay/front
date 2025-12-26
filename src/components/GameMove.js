@@ -1738,14 +1738,14 @@ function GameMove(props) {
     refresh,
   ]);
 
-useEffect(() => {
-  const handler = () => {
-    setRefresh((val) => val + 1);
-  };
+  useEffect(() => {
+    const handler = () => {
+      setRefresh((val) => val + 1);
+    };
 
-  window.addEventListener("refresh-data", handler);
-  return () => window.removeEventListener("refresh-data", handler);
-}, []);
+    window.addEventListener("refresh-data", handler);
+    return () => window.removeEventListener("refresh-data", handler);
+  }, []);
 
   const checkTime = useCallback(async (query) => {
     try {

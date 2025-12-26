@@ -22,11 +22,13 @@ export default function MyWebSocket() {
 
       ws.onopen = () => {
         try {
-            ws.send(JSON.stringify({ action: "subscribe", token }));
-            setConnected(true);
-            console.log("WS connected");
+          ws.send(JSON.stringify({ action: "subscribe", token }));
+          setConnected(true);
+          console.log("WS connected");
         } catch (ex) {
-            console.error(`An error occured while subscribing to the channel: ${ex}`);
+          console.error(
+            `An error occured while subscribing to the channel: ${ex}`
+          );
         }
       };
 
@@ -44,35 +46,33 @@ export default function MyWebSocket() {
       ws.onmessage = (event) => {
         let msg;
         try {
-            msg = JSON.parse(event.data);
+          msg = JSON.parse(event.data);
         } catch (e) {
-            console.warn("Invalid WS message", event.data);
-            return;
+          console.warn("Invalid WS message", event.data);
+          return;
         }
         console.log(`Received message: ${JSON.stringify(msg)}`);
 
         if (msg.verb === "game") {
-            if (msg.verb !== "game") return;
+          if (msg.verb !== "game") return;
 
-            const { meta, id } = msg.payload;
-            const path = window.location.pathname; // e.g. "/move/mchess/0/123456"
+          const { meta, id } = msg.payload;
+          const path = window.location.pathname; // e.g. "/move/mchess/0/123456"
 
-            // Check if both appear in order
-            const metaIndex = path.indexOf(`/${meta}`);
-            const idIndex = path.indexOf(`/${id}`);
+          // Check if both appear in order
+          const metaIndex = path.indexOf(`/${meta}`);
+          const idIndex = path.indexOf(`/${id}`);
 
-            const matches =
-                metaIndex !== -1 &&
-                idIndex !== -1 &&
-                idIndex > metaIndex;
+          const matches =
+            metaIndex !== -1 && idIndex !== -1 && idIndex > metaIndex;
 
-            if (matches) {
-                window.dispatchEvent(new CustomEvent("refresh-data"));
-            }
+          if (matches) {
+            window.dispatchEvent(new CustomEvent("refresh-data"));
+          }
         } else if (msg.verb === "test") {
-            toast(`Test message: ${msg.payload}`);
+          toast(`Test message: ${msg.payload}`);
         } else {
-            return;
+          return;
         }
       };
     };
@@ -85,11 +85,11 @@ export default function MyWebSocket() {
     };
   }, [navigate]);
 
-//   const send = (payload) => {
-//     if (wsRef.current && connected) {
-//       wsRef.current.send(JSON.stringify(payload));
-//     }
-//   };
+  //   const send = (payload) => {
+  //     if (wsRef.current && connected) {
+  //       wsRef.current.send(JSON.stringify(payload));
+  //     }
+  //   };
 
   return null; // or return UI showing connection status
 }

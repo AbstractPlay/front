@@ -12,14 +12,14 @@ export const getAuthToken = async () => {
     // don't do anything if not logged in
   }
   return token;
-}
+};
 
 // Set requireAuth to false to you are calling this from a flow that is supported for non-logged in users
 export const callAuthApi = async (query, pars, requireAuth = true) => {
   const token = await getAuthToken();
   if (token === null) {
     if (requireAuth) {
-        await Auth.federatedSignIn();
+      await Auth.federatedSignIn();
     }
     return;
   }

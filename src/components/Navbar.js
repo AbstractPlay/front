@@ -252,13 +252,13 @@ function Navbar(props) {
           </div>
         </div>
         <div className="navbar-end">
-          {globalMe === null ? null :
+          {globalMe === null ? null : (
             <div className="navbar-item">
-                <ActivityMarker lastSeen={new Date().getTime()} />
-                &nbsp;
-                {globalMe.connections}
+              <ActivityMarker lastSeen={new Date().getTime()} />
+              &nbsp;
+              {globalMe.connections}
             </div>
-          }
+          )}
           <div className="navbar-item">
             {/* <!--- Light mode button ---> */}
             <button
