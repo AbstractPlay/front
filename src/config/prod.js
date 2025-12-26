@@ -1,5 +1,7 @@
 const API_ENDPOINT =
   "https://7n1lziet28.execute-api.us-east-1.amazonaws.com/prod/";
+const WS_ENDPOINT =
+  "wss://2ce8ziwh86.execute-api.us-east-1.amazonaws.com/prod";
 
 module.exports = {
   COGNITO_USER_POOL_ID: "us-east-1_YCjgSZHJm",
@@ -11,4 +13,6 @@ module.exports = {
   API_ENDPOINT_OPEN: API_ENDPOINT + "query",
   API_ENDPOINT_AUTH: API_ENDPOINT + "authQuery",
   PUSH_API_URL: API_ENDPOINT + "authQuery",
+  API_ENDPOINT,
+  WS_ENDPOINT,
 };

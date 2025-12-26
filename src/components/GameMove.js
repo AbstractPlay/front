@@ -1238,7 +1238,6 @@ function GameMove(props) {
   });
   const [refresh, setRefresh] = useState(0);
   const [locked, setLocked] = useState(false);
-  const [intervalFunc, setIntervalFunc] = useState(null);
   const [error, errorSetter] = useState(false);
   const [tourState, tourStateSetter] = useState([]);
   const [showTour, showTourSetter] = useStorageState("joyride-play-show", true);
@@ -1739,33 +1738,14 @@ function GameMove(props) {
     refresh,
   ]);
 
-  // handle setInterval based on locked and lockedTime
-  useEffect(() => {
-    if (locked) {
-      console.log(`Starting periodic refresh`);
-      toast(
-        "Starting periodic refresh. The refresh will happen every 60 seconds for 30 minutes or until you click the button again or leave the page."
-      );
-      const now = Date.now();
-      const interval = setInterval(() => {
-        const lapsed = Date.now() - now;
-        if (lapsed < 30 * 60 * 1000) {
-          console.log(`Triggering refresh`);
-          setRefresh((val) => val + 1);
-        } else {
-          console.log("Periodic refreshing timed out");
-          setLocked(false);
-        }
-      }, 60000);
-      setIntervalFunc(interval);
-    } else {
-      if (intervalFunc !== null) {
-        console.log(`Stopping periodic refresh`);
-        toast("Stopping periodic refresh.");
-      }
-      clearInterval(intervalFunc);
-    }
-  }, [locked]); // ignoring intervalFunc as a dependency
+useEffect(() => {
+  const handler = () => {
+    setRefresh((val) => val + 1);
+  };
+
+  window.addEventListener("refresh-data", handler);
+  return () => window.removeEventListener("refresh-data", handler);
+}, []);
 
   const checkTime = useCallback(async (query) => {
     try {

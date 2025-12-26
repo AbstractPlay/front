@@ -7,13 +7,15 @@ import { Auth } from "aws-amplify";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
-import { NewsContext } from "../pages/Skeleton";
+import { NewsContext, MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
+import ActivityMarker from "./ActivityMarker";
 
 function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
   const [burgerExpanded, updateBurgerExpanded] = useState(false);
   const [news] = useContext(NewsContext);
+  const [globalMe] = useContext(MeContext);
   const [newsLastSeen] = useStorageState("news-last-seen", 0);
   const [maxNews, maxNewsSetter] = useState(Infinity);
   const [colorMode, colorModeSetter] = useStorageState("color-mode", "light");
@@ -250,6 +252,13 @@ function Navbar(props) {
           </div>
         </div>
         <div className="navbar-end">
+          {globalMe === null ? null :
+            <div className="navbar-item">
+                <ActivityMarker lastSeen={new Date().getTime()} />
+                &nbsp;
+                {globalMe.connections}
+            </div>
+          }
           <div className="navbar-item">
             {/* <!--- Light mode button ---> */}
             <button

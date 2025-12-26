@@ -63,8 +63,8 @@
   "scripts": {
     "start": "cross-env REACT_APP_REAL_MODE=local react-scripts start",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "build-dev": "cross-env REACT_APP_REAL_MODE=development react-scripts build --profile && shx cp src/robots/robots.txt.dev build/robots.txt",
-    "build-prod": "node bin/gensitemap.mjs && cross-env REACT_APP_REAL_MODE=production react-scripts build && shx cp src/robots/robots.txt.prod build/robots.txt",
+    "build-dev": "cross-env REACT_APP_REAL_MODE=development REACT_APP_WEBSOCKET_URL=$(aws ssm get-parameter --name \"/abstract-play/dev/websocket-url\" --query \"Parameter.Value\" --output text) react-scripts build --profile && shx cp src/robots/robots.txt.dev build/robots.txt",
+    "build-prod": "node bin/gensitemap.mjs && cross-env REACT_APP_REAL_MODE=production REACT_APP_WEBSOCKET_URL=$(aws ssm get-parameter --name \"/abstract-play/prod/websocket-url\" --query \"Parameter.Value\" --output text)react-scripts build && shx cp src/robots/robots.txt.prod build/robots.txt",
     "full-dev": "npm run build-dev && npm run invalidate && npm run deploy",
     "full-prod": "npm run build-prod && npm run invalidate-prod && npm run deploy-prod",
     "test": "react-scripts test",

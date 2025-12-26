@@ -44,6 +44,7 @@ import en from "javascript-time-ago/locale/en.json";
 import TimeAgo from "javascript-time-ago";
 import { useStorageState } from "react-use-storage-state";
 import newsData from "../assets/news.json";
+import MyWebSocket from "../components/MyWebSocket";
 
 const Stats = lazy(() => import("../components/Stats"));
 // const MetaContainer = lazy(() => import("../components/MetaContainer"));
@@ -59,6 +60,7 @@ export const UsersContext = createContext([null, () => {}]);
 export const NewsContext = createContext([[], () => []]);
 export const ColourContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
+export const ConnectedContext = createContext([false, () => {}]);
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -95,6 +97,7 @@ function Bones(props) {
     annotations: "#000",
     fill: "#000",
   });
+  const [connected, setConnected] = useState(false);
 
   // Update colour context setting based on colour mode
   useEffect(() => {
@@ -239,7 +242,9 @@ function Bones(props) {
                 <ColourContext.Provider
                   value={[colourContext, colourContextSetter]}
                 >
+                <ConnectedContext.Provider value={[connected, setConnected]}>
                   <Router>
+                    <MyWebSocket />
                     <Navbar />
                     <section className="section" id="main">
                       <MyTurnContext.Provider value={[myMove, myMoveSetter]}>
@@ -314,6 +319,7 @@ function Bones(props) {
                       <FooterDev />
                     )}
                   </Router>
+                </ConnectedContext.Provider>
                 </ColourContext.Provider>
               </SummaryContext.Provider>
             </NewsContext.Provider>
