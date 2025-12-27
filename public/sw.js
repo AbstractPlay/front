@@ -2,15 +2,23 @@
 /* eslint-disable no-restricted-globals */
 self.addEventListener('push', event => {
     const promiseChain = isClientFocused().then((clientIsFocused) => {
-        const data = event.data.json()
-        const options = {
-          body: data.body,
-          tag: data.topic,
-          icon: "/favicon.ico",
-          data: {
-            url: data.url,
-          }
+        let data = {};
+        try {
+            if (event.data) {
+                data = event.data.json()
+            }
+        } catch (err) {
+            console.error('[SW] Failed to parse push payload', err)
         }
+        const options = {
+            body: data.body || '',
+            tag: data.topic || 'default',
+            icon: "/favicon.ico",
+            data: {
+                url: data.url || '/'
+            }
+        }
+
         if (clientIsFocused) {
             console.log("is focused");
             clients
