@@ -62,7 +62,7 @@ function Board({
             <div className="level-item">
               <div className="control">
                 <span
-                  class="icon"
+                  className="icon"
                   style={{ color: "var(--secondary-color-1)" }}
                 >
                   <i className="fa fa-envelope"></i>
