@@ -566,6 +566,7 @@ function UserSettingsModal(props) {
       ) {
         state = false;
       }
+    //   console.log(`Changing mayPush state to ${state}`);
       const res = await callAuthApi("set_push", {
         state,
       });
@@ -578,6 +579,7 @@ function UserSettingsModal(props) {
         const newMe = JSON.parse(JSON.stringify(globalMe));
         newMe.mayPush = state;
         globalMeSetter(newMe);
+        // console.log(`mayPush set to ${newMe.mayPush}`);
       }
     } catch (error) {
       console.log(error);
@@ -1008,7 +1010,7 @@ function UserSettingsModal(props) {
                 {t("DisableMoveConfirm")}
               </label>
             </div>
-            <p class="help">
+            <p className="help">
               May not work for all games. Let us know if we missed something.
             </p>
           </div>
@@ -1039,7 +1041,7 @@ function UserSettingsModal(props) {
                 {t("MyColor")}
               </label>
             </div>
-            <p class="help">
+            <p className="help">
               Also requires setting up and applying a custom palette.
             </p>
           </div>
