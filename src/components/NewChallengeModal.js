@@ -331,6 +331,7 @@ function NewChallengeModal(props) {
 
   if (
     process.env.REACT_APP_REAL_MODE === "production" &&
+    metaGame !== null &&
     (!gameinfo.has(metaGame) ||
       gameinfo.get(metaGame).flags.includes("experimental"))
   ) {
