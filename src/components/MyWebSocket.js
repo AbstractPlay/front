@@ -2,45 +2,136 @@ import { useEffect, useRef, useContext } from "react";
 import { getAuthToken } from "../lib/api";
 import { WS_ENDPOINT } from "../config";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { ConnectedContext } from "../pages/Skeleton";
 
+// WebSocket close codes for logging
+const WS_CLOSE_CODES = {
+  1000: "Normal closure",
+  1001: "Going away (browser navigating)",
+  1002: "Protocol error",
+  1003: "Unsupported data",
+  1005: "No status received",
+  1006: "Abnormal closure (no close frame)",
+  1007: "Invalid frame payload data",
+  1008: "Policy violation",
+  1009: "Message too big",
+  1010: "Missing extension",
+  1011: "Internal server error",
+  1012: "Service restart",
+  1013: "Try again later",
+  1014: "Bad gateway",
+  1015: "TLS handshake failure",
+};
+
 export default function MyWebSocket() {
-  const navigate = useNavigate();
   const wsRef = useRef(null);
+  const reconnectTimeoutRef = useRef(null);
+  const isConnectingRef = useRef(false);
+  const isMountedRef = useRef(true);
   const [, setConnected] = useContext(ConnectedContext);
 
   useEffect(() => {
-    let timeout;
+    isMountedRef.current = true;
 
     const connect = async () => {
+      // Guard: Don't connect if component is unmounted
+      if (!isMountedRef.current) {
+        console.log("WS: Skipping connect - component unmounted");
+        return;
+      }
+
+      // Guard: Don't create duplicate connections
+      if (isConnectingRef.current) {
+        console.log("WS: Skipping connect - already connecting");
+        return;
+      }
+
+      // Guard: Don't connect if already connected
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        console.log("WS: Skipping connect - already connected");
+        return;
+      }
+
+      // Guard: Don't connect if connection is in progress
+      if (wsRef.current?.readyState === WebSocket.CONNECTING) {
+        console.log("WS: Skipping connect - connection in progress");
+        return;
+      }
+
       const token = await getAuthToken();
-      if (token === null) return;
+      if (token === null) {
+        console.log("WS: No auth token, skipping connection");
+        return;
+      }
+
+      // Clear any pending reconnect timeout
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = null;
+      }
+
+      // Close any existing connection before creating new one
+      if (wsRef.current) {
+        console.log("WS: Closing existing connection before reconnect");
+        wsRef.current.onclose = null; // Prevent onclose from firing during cleanup
+        wsRef.current.onerror = null;
+        wsRef.current.onopen = null;
+        wsRef.current.onmessage = null;
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+
+      isConnectingRef.current = true;
+      console.log("WS: Initiating connection...");
+
       const url = WS_ENDPOINT;
       const ws = new WebSocket(url);
       wsRef.current = ws;
 
       ws.onopen = () => {
+        isConnectingRef.current = false;
+
+        if (!isMountedRef.current) {
+          console.log("WS: Connected but component unmounted, closing");
+          ws.close();
+          return;
+        }
+
         try {
           ws.send(JSON.stringify({ action: "subscribe", token }));
           setConnected(true);
-          console.log("WS connected");
+          console.log("WS: Connected and subscribed");
         } catch (ex) {
-          console.error(
-            `An error occured while subscribing to the channel: ${ex}`
-          );
+          console.error(`WS: Error subscribing to channel: ${ex}`);
         }
       };
 
-      ws.onclose = () => {
-        setConnected(false);
-        console.log("WS disconnected");
-        timeout = setTimeout(connect, 2000); // simple reconnect
+      ws.onclose = (event) => {
+        isConnectingRef.current = false;
+
+        const codeDescription = WS_CLOSE_CODES[event.code] || "Unknown";
+        console.log(
+          `WS: Disconnected - code: ${event.code} (${codeDescription}), reason: "${event.reason || "none"}", wasClean: ${event.wasClean}`
+        );
+
+        // Only update state and reconnect if this is still the current connection
+        if (wsRef.current === ws) {
+          wsRef.current = null;
+          setConnected(false);
+
+          // Only reconnect if component is still mounted
+          if (isMountedRef.current) {
+            console.log("WS: Scheduling reconnect in 2 seconds...");
+            reconnectTimeoutRef.current = setTimeout(connect, 2000);
+          }
+        } else {
+          console.log("WS: Ignoring close from stale connection");
+        }
       };
 
       ws.onerror = (err) => {
-        console.error("WS error", err);
-        ws.close();
+        console.error("WS: Error occurred", err);
+        // Don't call ws.close() here - the error will trigger onclose automatically
       };
 
       ws.onmessage = (event) => {
@@ -48,18 +139,15 @@ export default function MyWebSocket() {
         try {
           msg = JSON.parse(event.data);
         } catch (e) {
-          console.warn("Invalid WS message", event.data);
+          console.warn("WS: Invalid message format", event.data);
           return;
         }
-        console.log(`Received message: ${JSON.stringify(msg)}`);
+        console.log(`WS: Received message: ${JSON.stringify(msg)}`);
 
         if (msg.verb === "game") {
-          if (msg.verb !== "game") return;
-
           const { meta, id } = msg.payload;
-          const path = window.location.pathname; // e.g. "/move/mchess/0/123456"
+          const path = window.location.pathname;
 
-          // Check if both appear in order
           const metaIndex = path.indexOf(`/${meta}`);
           const idIndex = path.indexOf(`/${id}`);
 
@@ -71,8 +159,6 @@ export default function MyWebSocket() {
           }
         } else if (msg.verb === "test") {
           toast(`Test message: ${msg.payload}`);
-        } else {
-          return;
         }
       };
     };
@@ -80,10 +166,26 @@ export default function MyWebSocket() {
     connect();
 
     return () => {
-      clearTimeout(timeout);
-      wsRef.current?.close();
+      console.log("WS: Cleanup - unmounting component");
+      isMountedRef.current = false;
+      isConnectingRef.current = false;
+
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = null;
+      }
+
+      if (wsRef.current) {
+        // Remove handlers to prevent any callbacks after unmount
+        wsRef.current.onclose = null;
+        wsRef.current.onerror = null;
+        wsRef.current.onopen = null;
+        wsRef.current.onmessage = null;
+        wsRef.current.close();
+        wsRef.current = null;
+      }
     };
-  }, [navigate]);
+  }, [setConnected]);
 
   //   const send = (payload) => {
   //     if (wsRef.current && connected) {

@@ -158,7 +158,7 @@ function NewChallengeModal(props) {
         errorSetter("");
       }
     },
-    [metaGame, setPlayerCount, props]
+    [metaGame, setPlayerCount, props.opponent]
   );
 
   useEffect(() => {
@@ -178,7 +178,7 @@ function NewChallengeModal(props) {
     if (props.opponent !== undefined) {
       opponentsSetter([props.opponent]);
     }
-  }, [show, props, handleChangeGame]);
+  }, [show, props.opponent, props.fixedMetaGame, handleChangeGame]);
 
   const handleChangePlayerCount = (cnt) => {
     setPlayerCount(parseInt(cnt));
