@@ -367,12 +367,24 @@ function MoveEntry(props) {
                         {showMilliseconds(
                           p.time - (Date.now() - game.lastMoveTime)
                         )}
+                        {globalMe === null || !globalMe?.connected.includes(p.id) ? null :
+                            <span className="icon" title="Player is online">
+                                <i className="fa fa-wifi" aria-hidden="true"></i>
+                            </span>
+                        }
                       </td>
                     </tr>
                   ) : (
                     <tr key={"player" + ind}>
                       <td key={"player" + ind}>{p.name}</td>
-                      <td>{showMilliseconds(p.time)}</td>
+                      <td>
+                        {showMilliseconds(p.time)}
+                        {globalMe === null || !globalMe?.connected.includes(p.id) ? null :
+                            <span className="icon" title="Player is online">
+                                <i className="fa fa-wifi" aria-hidden="true"></i>
+                            </span>
+                        }
+                      </td>
                     </tr>
                   )
                 )}
