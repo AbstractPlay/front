@@ -61,6 +61,7 @@ export const NewsContext = createContext([[], () => []]);
 export const ColourContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
 export const ConnectedContext = createContext([false, () => {}]);
+export const VisibilityContext = createContext([false, () => {}]);
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -98,6 +99,7 @@ function Bones(props) {
     fill: "#000",
   });
   const [connected, setConnected] = useState(false);
+  const [invisible, setInvisible] = useState(false);
 
   // Update colour context setting based on colour mode
   useEffect(() => {
@@ -239,10 +241,9 @@ function Bones(props) {
           <UsersContext.Provider value={[users, usersSetter]}>
             <NewsContext.Provider value={[news, newsSetter]}>
               <SummaryContext.Provider value={[summary, summarySetter]}>
-                <ColourContext.Provider
-                  value={[colourContext, colourContextSetter]}
-                >
+                <ColourContext.Provider value={[colourContext, colourContextSetter]}>
                   <ConnectedContext.Provider value={[connected, setConnected]}>
+                    <VisibilityContext.Provider value={[invisible, setInvisible]}>
                     <Router>
                       <MyWebSocket />
                       <Navbar />
@@ -327,6 +328,7 @@ function Bones(props) {
                         <FooterDev />
                       )}
                     </Router>
+                    </VisibilityContext.Provider>
                   </ConnectedContext.Provider>
                 </ColourContext.Provider>
               </SummaryContext.Provider>
