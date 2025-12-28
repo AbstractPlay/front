@@ -40,12 +40,6 @@ function Navbar(props) {
   };
 
   useEffect(() => {
-    if (globalMe !== null) {
-      console.log(globalMe.connections, globalMe.connected);
-    }
-  }, [globalMe]);
-
-  useEffect(() => {
     if (news !== undefined && news.length > 0) {
       maxNewsSetter(Math.max(...news.map((n) => n.time)));
     } else {
