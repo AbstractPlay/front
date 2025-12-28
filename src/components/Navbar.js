@@ -7,7 +7,7 @@ import { Auth } from "aws-amplify";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
-import { NewsContext, MeContext } from "../pages/Skeleton";
+import { NewsContext, MeContext, VisibilityContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import ActivityMarker from "./ActivityMarker";
 
@@ -19,6 +19,8 @@ function Navbar(props) {
   const [newsLastSeen] = useStorageState("news-last-seen", 0);
   const [maxNews, maxNewsSetter] = useState(Infinity);
   const [colorMode, colorModeSetter] = useStorageState("color-mode", "light");
+  const [, setInvisible] = useContext(VisibilityContext);
+  const [storedInvis, setStoredInvis] = useStorageState("invisible", false);
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
@@ -29,6 +31,20 @@ function Navbar(props) {
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
+
+  useEffect(() => {
+    setInvisible(storedInvis);
+  }, [storedInvis, setInvisible]);
+
+  const toggleStoredInvis = () => {
+    setStoredInvis((val) => !val);
+  };
+
+  useEffect(() => {
+    if (globalMe !== null) {
+      console.log(globalMe.connections, globalMe.connected);
+    }
+  }, [globalMe]);
 
   useEffect(() => {
     if (news !== undefined && news.length > 0) {
@@ -253,11 +269,26 @@ function Navbar(props) {
         </div>
         <div className="navbar-end">
           {globalMe === null ? null : (
-            <div className="navbar-item">
-              <ActivityMarker lastSeen={new Date().getTime()} />
-              &nbsp;
-              {globalMe.connections}
-            </div>
+            <>
+              <div className="navbar-item">
+                <ActivityMarker lastSeen={new Date().getTime()} />
+                &nbsp;
+                {globalMe.connections}
+              </div>
+              <div className="navbar-item">
+                <button className="fabtn" onClick={toggleStoredInvis}>
+                  {storedInvis ? (
+                    <span className="icon">
+                      <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                    </span>
+                  ) : (
+                    <span className="icon">
+                      <i className="fa fa-eye" aria-hidden="true"></i>
+                    </span>
+                  )}
+                </button>
+              </div>
+            </>
           )}
           <div className="navbar-item">
             {/* <!--- Light mode button ---> */}

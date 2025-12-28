@@ -2,7 +2,7 @@ import { useEffect, useRef, useContext } from "react";
 import { getAuthToken } from "../lib/api";
 import { WS_ENDPOINT } from "../config";
 import { toast } from "react-toastify";
-import { ConnectedContext } from "../pages/Skeleton";
+import { ConnectedContext, VisibilityContext } from "../pages/Skeleton";
 
 // WebSocket close codes for logging
 const WS_CLOSE_CODES = {
@@ -29,6 +29,7 @@ export default function MyWebSocket() {
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(true);
   const [, setConnected] = useContext(ConnectedContext);
+  const [invisible] = useContext(VisibilityContext);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -98,7 +99,7 @@ export default function MyWebSocket() {
         }
 
         try {
-          ws.send(JSON.stringify({ action: "subscribe", token }));
+          ws.send(JSON.stringify({ action: "subscribe", token, invisible }));
           setConnected(true);
           console.log("WS: Connected and subscribed");
         } catch (ex) {
@@ -111,7 +112,11 @@ export default function MyWebSocket() {
 
         const codeDescription = WS_CLOSE_CODES[event.code] || "Unknown";
         console.log(
-          `WS: Disconnected - code: ${event.code} (${codeDescription}), reason: "${event.reason || "none"}", wasClean: ${event.wasClean}`
+          `WS: Disconnected - code: ${
+            event.code
+          } (${codeDescription}), reason: "${
+            event.reason || "none"
+          }", wasClean: ${event.wasClean}`
         );
 
         // Only update state and reconnect if this is still the current connection
@@ -185,7 +190,7 @@ export default function MyWebSocket() {
         wsRef.current = null;
       }
     };
-  }, [setConnected]);
+  }, [setConnected, invisible]);
 
   //   const send = (payload) => {
   //     if (wsRef.current && connected) {
