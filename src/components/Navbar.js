@@ -9,7 +9,6 @@ import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
 import { NewsContext, MeContext, VisibilityContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
-import ActivityMarker from "./ActivityMarker";
 
 function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
@@ -270,13 +269,15 @@ function Navbar(props) {
         <div className="navbar-end">
           {globalMe === null ? null : (
             <>
-              <div className="navbar-item">
-                <ActivityMarker lastSeen={new Date().getTime()} />
+              <div className="navbar-item" title="Number of active connections">
+                <span className="icon">
+                    <i className="fa fa-wifi" aria-hidden="true"></i>
+                </span>
                 &nbsp;
                 {globalMe.connections}
               </div>
-              <div className="navbar-item">
-                <button className="fabtn" onClick={toggleStoredInvis}>
+              <div className="navbar-item" title="Toggle your own visibility">
+                <button onClick={toggleStoredInvis}>
                   {storedInvis ? (
                     <span className="icon">
                       <i className="fa fa-eye-slash" aria-hidden="true"></i>
