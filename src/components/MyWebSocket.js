@@ -29,7 +29,7 @@ export default function MyWebSocket() {
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(true);
   const [, setConnected] = useContext(ConnectedContext);
-  const [invisible,] = useContext(VisibilityContext);
+  const [invisible] = useContext(VisibilityContext);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -112,7 +112,11 @@ export default function MyWebSocket() {
 
         const codeDescription = WS_CLOSE_CODES[event.code] || "Unknown";
         console.log(
-          `WS: Disconnected - code: ${event.code} (${codeDescription}), reason: "${event.reason || "none"}", wasClean: ${event.wasClean}`
+          `WS: Disconnected - code: ${
+            event.code
+          } (${codeDescription}), reason: "${
+            event.reason || "none"
+          }", wasClean: ${event.wasClean}`
         );
 
         // Only update state and reconnect if this is still the current connection

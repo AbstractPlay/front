@@ -37,16 +37,16 @@ function Navbar(props) {
   }, [storedInvis, setInvisible]);
 
   const toggleStoredInvis = () => {
-    setStoredInvis(val => !val);
-  }
+    setStoredInvis((val) => !val);
+  };
 
   useEffect(() => {
     if (globalMe !== null) {
-        console.log(globalMe.connections, globalMe.connected);
+      console.log(globalMe.connections, globalMe.connected);
     }
   }, [globalMe]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (news !== undefined && news.length > 0) {
       maxNewsSetter(Math.max(...news.map((n) => n.time)));
     } else {
@@ -270,24 +270,24 @@ function Navbar(props) {
         <div className="navbar-end">
           {globalMe === null ? null : (
             <>
-                <div className="navbar-item">
-                    <ActivityMarker lastSeen={new Date().getTime()} />
-                    &nbsp;
-                    {globalMe.connections}
-                </div>
-                <div className="navbar-item">
-                    <button className="fabtn" onClick={toggleStoredInvis}>
-                    {storedInvis ?
-                        <span className="icon">
-                            <i className="fa fa-eye-slash" aria-hidden="true"></i>
-                        </span>
-                    :
-                        <span className="icon">
-                            <i className="fa fa-eye" aria-hidden="true"></i>
-                        </span>
-                    }
-                    </button>
-                </div>
+              <div className="navbar-item">
+                <ActivityMarker lastSeen={new Date().getTime()} />
+                &nbsp;
+                {globalMe.connections}
+              </div>
+              <div className="navbar-item">
+                <button className="fabtn" onClick={toggleStoredInvis}>
+                  {storedInvis ? (
+                    <span className="icon">
+                      <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                    </span>
+                  ) : (
+                    <span className="icon">
+                      <i className="fa fa-eye" aria-hidden="true"></i>
+                    </span>
+                  )}
+                </button>
+              </div>
             </>
           )}
           <div className="navbar-item">

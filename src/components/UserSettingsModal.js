@@ -566,7 +566,7 @@ function UserSettingsModal(props) {
       ) {
         state = false;
       }
-    //   console.log(`Changing mayPush state to ${state}`);
+      //   console.log(`Changing mayPush state to ${state}`);
       const res = await callAuthApi("set_push", {
         state,
       });
