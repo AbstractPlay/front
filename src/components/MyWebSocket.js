@@ -23,16 +23,35 @@ const WS_CLOSE_CODES = {
   1015: "TLS handshake failure",
 };
 
+// Reconnection settings
+const INITIAL_RECONNECT_DELAY = 2000; // 2 seconds
+const MAX_RECONNECT_DELAY = 30000; // 30 seconds cap
+
 export default function MyWebSocket() {
   const wsRef = useRef(null);
   const reconnectTimeoutRef = useRef(null);
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(true);
+  const reconnectDelayRef = useRef(INITIAL_RECONNECT_DELAY);
   const [, setConnected] = useContext(ConnectedContext);
   const [invisible] = useContext(VisibilityContext);
 
   useEffect(() => {
     isMountedRef.current = true;
+    reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
+
+    const scheduleReconnect = (reason) => {
+      if (!isMountedRef.current) {
+        return;
+      }
+
+      const delay = reconnectDelayRef.current;
+      console.log(`WS: Scheduling reconnect in ${delay / 1000}s (${reason})`);
+      reconnectTimeoutRef.current = setTimeout(connect, delay);
+
+      // Exponential backoff: double the delay for next time, capped at max
+      reconnectDelayRef.current = Math.min(delay * 2, MAX_RECONNECT_DELAY);
+    };
 
     const connect = async () => {
       // Guard: Don't connect if component is unmounted
@@ -59,16 +78,25 @@ export default function MyWebSocket() {
         return;
       }
 
-      const token = await getAuthToken();
-      if (token === null) {
-        console.log("WS: No auth token, skipping connection");
-        return;
-      }
-
       // Clear any pending reconnect timeout
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
         reconnectTimeoutRef.current = null;
+      }
+
+      let token;
+      try {
+        token = await getAuthToken();
+      } catch (err) {
+        console.warn("WS: Error getting auth token", err);
+        scheduleReconnect("token fetch error");
+        return;
+      }
+
+      if (token === null) {
+        console.log("WS: No auth token (user not logged in)");
+        scheduleReconnect("no auth token");
+        return;
       }
 
       // Close any existing connection before creating new one
@@ -101,6 +129,8 @@ export default function MyWebSocket() {
         try {
           ws.send(JSON.stringify({ action: "subscribe", token, invisible }));
           setConnected(true);
+          // Reset backoff on successful connection
+          reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
           console.log("WS: Connected and subscribed");
         } catch (ex) {
           console.error(`WS: Error subscribing to channel: ${ex}`);
@@ -123,12 +153,7 @@ export default function MyWebSocket() {
         if (wsRef.current === ws) {
           wsRef.current = null;
           setConnected(false);
-
-          // Only reconnect if component is still mounted
-          if (isMountedRef.current) {
-            console.log("WS: Scheduling reconnect in 2 seconds...");
-            reconnectTimeoutRef.current = setTimeout(connect, 2000);
-          }
+          scheduleReconnect("connection closed");
         } else {
           console.log("WS: Ignoring close from stale connection");
         }
