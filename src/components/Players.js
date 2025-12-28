@@ -10,7 +10,7 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { UsersContext } from "../pages/Skeleton";
+import { UsersContext, MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import { isoToCountryCode } from "../lib/isoToCountryCode";
@@ -22,6 +22,7 @@ const allSize = Number.MAX_SAFE_INTEGER;
 function Players() {
   const { t } = useTranslation();
   const [allUsers] = useContext(UsersContext);
+  const [globalMe,] = useContext(MeContext);
   const [showState, showStateSetter] = useStorageState("players-show", 20);
   const [sorting, setSorting] = useState([{ id: "name", desc: false }]);
   const [globalFilter, globalFilterSetter] = useState(null);
@@ -56,6 +57,12 @@ function Players() {
     }
   }, [allUsers]);
 
+  useEffect(() => {
+    if (hideFilter === "offline" && globalMe === null) {
+        hideFilterSetter("none");
+    }
+  }, [globalMe, hideFilter, hideFilterSetter]);
+
   const data = useMemo(
     () =>
       allUsers === undefined || allUsers === null
@@ -76,13 +83,15 @@ function Players() {
                 return country === countryFilter;
               }
             })
-            .filter(({ lastSeen }) => {
+            .filter(({ lastSeen, id: userId }) => {
               const now = new Date().getTime();
               const delta = now - lastSeen;
               const threshYellow = 7 * 24 * 60 * 60 * 1000;
               const threshRed = 30 * 24 * 60 * 60 * 1000;
               if (hideFilter === "none") {
                 return true;
+              } else if (hideFilter === "offline" && globalMe !== null) {
+                return globalMe.connected.includes(userId);
               } else if (hideFilter === "red") {
                 return delta < threshRed;
               } else {
@@ -90,7 +99,7 @@ function Players() {
               }
             })
             .sort((a, b) => a.name.localeCompare(b.name)),
-    [allUsers, hideFilter, countryFilter]
+    [allUsers, hideFilter, countryFilter, globalMe]
   );
 
   const columnHelper = createColumnHelper();
@@ -290,6 +299,17 @@ function Players() {
               />
               Hide yellow and red
             </label>
+            {globalMe === null ? null :
+                <label className="radio">
+                    <input
+                        type="radio"
+                        name="answer"
+                        defaultChecked={hideFilter === "offline"}
+                        onClick={() => hideFilterSetter("offline")}
+                    />
+                    Hide offline players
+                </label>
+            }
           </div>
           {usedCountries.length === 0 ? null : (
             <div className="control">
