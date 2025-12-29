@@ -2957,5 +2957,33 @@ The rendering doesn&amp;apos;t know about user settings, so they are still rende
       <guid isPermaLink="false">1450561244388917408</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>I have now added basic websocket support to the site. This doesn&amp;apos;t change anything about how the backend currently functions, but this lays the foundation for more real-time features in the future. Two new features are available now, though:
+- Next to the button for toggling colour modes, there&amp;apos;s now a green dot and a number. That number is the number of players currently using the site at that moment (including yourself).
+- More importantly, though, games will now auto-reload when a move is made or a chat is added, whether you&amp;apos;re participating or observing. Basically, if you&amp;apos;re looking at the page, it will refresh when someone changes the state. This will hopefully make playing realtime games more bearable. I&amp;apos;ve removed the &amp;quot;periodic refresh&amp;quot; button as a result.
+
+Let me know if you encounter any issues. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 26 Dec 2025 14:18:45 GMT</pubDate>
+      <guid isPermaLink="false">1454116230276448452</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Next to the connection count will shortly appear an &amp;quot;eye&amp;quot; icon. You can click it to mark yourself as &amp;quot;invisible.&amp;quot; You will still be reflected in the count, but your userid will not be flagged as &amp;quot;online.&amp;quot; This setting is persisted *per device*. So you&amp;apos;ll have to set it on your desktop and your phone if you want it to consistently persist. Eventually I will be adding some filters/indicators in a few places of when people are online. I will be tweaking the UI for sure, so suggestions on how to better display this information are welcome.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 28 Dec 2025 01:28:54 GMT</pubDate>
+      <guid isPermaLink="false">1454647265195987081</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>On the Players page, you can now hide offline players, and on game play pages, there&amp;apos;s a wifi icon next to players who are currently online. Invisibility mode disables this. Further suggestions welcome.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 28 Dec 2025 17:40:06 GMT</pubDate>
+      <guid isPermaLink="false">1454891678669340813</guid>
+    </item>
+    
   </channel>
 </rss>
