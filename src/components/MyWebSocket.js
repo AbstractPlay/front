@@ -196,10 +196,9 @@ export default function MyWebSocket() {
             window.dispatchEvent(new CustomEvent("refresh-data"));
           }
         } else if (msg.verb === "connections") {
-            if (msg.payload !== undefined && typeof msg.payload === "object") {
-              console.log(`WS: Setting connection payload to ${JSON.stringify(msg.payload)}`);
-              setConnections(msg.payload);
-            }
+          if (msg.payload !== undefined && typeof msg.payload === "object") {
+            setConnections(msg.payload);
+          }
         } else if (msg.verb === "test") {
           toast(`Test message: ${msg.payload}`);
         }

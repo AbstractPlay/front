@@ -125,7 +125,7 @@ function MoveEntry(props) {
   const [moveState, moveStateSetter] = useState("is-success");
   const [inputValue, inputValueSetter] = useState(move.move);
   const [globalMe] = useContext(MeContext);
-  const [connections,] = useContext(ConnectionContext);
+  const [connections] = useContext(ConnectionContext);
 
   function getFocusNode(exp, game, foc) {
     let curNode = exp[foc.moveNumber];
@@ -368,11 +368,12 @@ function MoveEntry(props) {
                         {showMilliseconds(
                           p.time - (Date.now() - game.lastMoveTime)
                         )}
-                        {globalMe === null || !connections?.visibleUserIds.includes(p.id) ? null :
-                            <span className="icon" title="Player is online">
-                                <i className="fa fa-wifi" aria-hidden="true"></i>
-                            </span>
-                        }
+                        {globalMe === null ||
+                        !connections?.visibleUserIds.includes(p.id) ? null : (
+                          <span className="icon" title="Player is online">
+                            <i className="fa fa-wifi" aria-hidden="true"></i>
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ) : (
@@ -380,11 +381,12 @@ function MoveEntry(props) {
                       <td key={"player" + ind}>{p.name}</td>
                       <td>
                         {showMilliseconds(p.time)}
-                        {globalMe === null || !connections?.visibleUserIds.includes(p.id) ? null :
-                            <span className="icon" title="Player is online">
-                                <i className="fa fa-wifi" aria-hidden="true"></i>
-                            </span>
-                        }
+                        {globalMe === null ||
+                        !connections?.visibleUserIds.includes(p.id) ? null : (
+                          <span className="icon" title="Player is online">
+                            <i className="fa fa-wifi" aria-hidden="true"></i>
+                          </span>
+                        )}
                       </td>
                     </tr>
                   )

@@ -22,8 +22,8 @@ const allSize = Number.MAX_SAFE_INTEGER;
 function Players() {
   const { t } = useTranslation();
   const [allUsers] = useContext(UsersContext);
-  const [globalMe,] = useContext(MeContext);
-  const [connections,] = useContext(ConnectionContext);
+  const [globalMe] = useContext(MeContext);
+  const [connections] = useContext(ConnectionContext);
   const [showState, showStateSetter] = useStorageState("players-show", 20);
   const [sorting, setSorting] = useState([{ id: "name", desc: false }]);
   const [globalFilter, globalFilterSetter] = useState(null);
@@ -60,7 +60,7 @@ function Players() {
 
   useEffect(() => {
     if (hideFilter === "offline" && globalMe === null) {
-        hideFilterSetter("none");
+      hideFilterSetter("none");
     }
   }, [globalMe, hideFilter, hideFilterSetter]);
 
@@ -300,17 +300,17 @@ function Players() {
               />
               Hide yellow and red
             </label>
-            {globalMe === null ? null :
-                <label className="radio">
-                    <input
-                        type="radio"
-                        name="answer"
-                        defaultChecked={hideFilter === "offline"}
-                        onClick={() => hideFilterSetter("offline")}
-                    />
-                    Hide offline players
-                </label>
-            }
+            {globalMe === null ? null : (
+              <label className="radio">
+                <input
+                  type="radio"
+                  name="answer"
+                  defaultChecked={hideFilter === "offline"}
+                  onClick={() => hideFilterSetter("offline")}
+                />
+                Hide offline players
+              </label>
+            )}
           </div>
           {usedCountries.length === 0 ? null : (
             <div className="control">

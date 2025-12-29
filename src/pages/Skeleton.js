@@ -98,7 +98,10 @@ function Bones(props) {
     annotations: "#000",
     fill: "#000",
   });
-  const [connections, setConnections] = useState({totalCount: 0, visibleUserIds: []});
+  const [connections, setConnections] = useState({
+    totalCount: 0,
+    visibleUserIds: [],
+  });
   const [invisible, setInvisible] = useState(false);
 
   // Update colour context setting based on colour mode
@@ -244,7 +247,9 @@ function Bones(props) {
                 <ColourContext.Provider
                   value={[colourContext, colourContextSetter]}
                 >
-                  <ConnectionContext.Provider value={[connections, setConnections]}>
+                  <ConnectionContext.Provider
+                    value={[connections, setConnections]}
+                  >
                     <VisibilityContext.Provider
                       value={[invisible, setInvisible]}
                     >
