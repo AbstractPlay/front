@@ -7,7 +7,7 @@ import { Auth } from "aws-amplify";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
-import { NewsContext, MeContext, VisibilityContext } from "../pages/Skeleton";
+import { NewsContext, MeContext, VisibilityContext, ConnectionContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 
 function Navbar(props) {
@@ -15,6 +15,7 @@ function Navbar(props) {
   const [burgerExpanded, updateBurgerExpanded] = useState(false);
   const [news] = useContext(NewsContext);
   const [globalMe] = useContext(MeContext);
+  const [connections,] = useContext(ConnectionContext);
   const [newsLastSeen] = useStorageState("news-last-seen", 0);
   const [maxNews, maxNewsSetter] = useState(Infinity);
   const [colorMode, colorModeSetter] = useStorageState("color-mode", "light");
@@ -268,7 +269,7 @@ function Navbar(props) {
                     <i className="fa fa-wifi" aria-hidden="true"></i>
                 </span>
                 &nbsp;
-                {globalMe.connections}
+                {connections.totalCount}
               </div>
               <div className="navbar-item" title="Toggle your own visibility">
                 <button onClick={toggleStoredInvis}>

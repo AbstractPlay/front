@@ -10,7 +10,7 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { UsersContext, MeContext } from "../pages/Skeleton";
+import { UsersContext, MeContext, ConnectionContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import { isoToCountryCode } from "../lib/isoToCountryCode";
@@ -23,6 +23,7 @@ function Players() {
   const { t } = useTranslation();
   const [allUsers] = useContext(UsersContext);
   const [globalMe,] = useContext(MeContext);
+  const [connections,] = useContext(ConnectionContext);
   const [showState, showStateSetter] = useStorageState("players-show", 20);
   const [sorting, setSorting] = useState([{ id: "name", desc: false }]);
   const [globalFilter, globalFilterSetter] = useState(null);
@@ -91,7 +92,7 @@ function Players() {
               if (hideFilter === "none") {
                 return true;
               } else if (hideFilter === "offline" && globalMe !== null) {
-                return globalMe.connected.includes(userId);
+                return connections.visibleUserIds.includes(userId);
               } else if (hideFilter === "red") {
                 return delta < threshRed;
               } else {
@@ -99,7 +100,7 @@ function Players() {
               }
             })
             .sort((a, b) => a.name.localeCompare(b.name)),
-    [allUsers, hideFilter, countryFilter, globalMe]
+    [allUsers, hideFilter, countryFilter, connections, globalMe]
   );
 
   const columnHelper = createColumnHelper();

@@ -60,7 +60,7 @@ export const UsersContext = createContext([null, () => {}]);
 export const NewsContext = createContext([[], () => []]);
 export const ColourContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
-export const ConnectedContext = createContext([false, () => {}]);
+export const ConnectionContext = createContext([false, () => {}]);
 export const VisibilityContext = createContext([false, () => {}]);
 
 function Bones(props) {
@@ -98,7 +98,7 @@ function Bones(props) {
     annotations: "#000",
     fill: "#000",
   });
-  const [connected, setConnected] = useState(false);
+  const [connections, setConnections] = useState({totalCount: 0, visibleUserIds: []});
   const [invisible, setInvisible] = useState(false);
 
   // Update colour context setting based on colour mode
@@ -244,7 +244,7 @@ function Bones(props) {
                 <ColourContext.Provider
                   value={[colourContext, colourContextSetter]}
                 >
-                  <ConnectedContext.Provider value={[connected, setConnected]}>
+                  <ConnectionContext.Provider value={[connections, setConnections]}>
                     <VisibilityContext.Provider
                       value={[invisible, setInvisible]}
                     >
@@ -340,7 +340,7 @@ function Bones(props) {
                         )}
                       </Router>
                     </VisibilityContext.Provider>
-                  </ConnectedContext.Provider>
+                  </ConnectionContext.Provider>
                 </ColourContext.Provider>
               </SummaryContext.Provider>
             </NewsContext.Provider>

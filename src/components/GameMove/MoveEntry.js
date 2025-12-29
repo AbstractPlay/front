@@ -7,7 +7,7 @@ import React, {
   useMemo,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { MeContext } from "../../pages/Skeleton";
+import { MeContext, ConnectionContext } from "../../pages/Skeleton";
 import { callAuthApi } from "../../lib/api";
 import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
@@ -125,6 +125,7 @@ function MoveEntry(props) {
   const [moveState, moveStateSetter] = useState("is-success");
   const [inputValue, inputValueSetter] = useState(move.move);
   const [globalMe] = useContext(MeContext);
+  const [connections,] = useContext(ConnectionContext);
 
   function getFocusNode(exp, game, foc) {
     let curNode = exp[foc.moveNumber];
@@ -367,7 +368,7 @@ function MoveEntry(props) {
                         {showMilliseconds(
                           p.time - (Date.now() - game.lastMoveTime)
                         )}
-                        {globalMe === null || !globalMe?.connected.includes(p.id) ? null :
+                        {globalMe === null || !connections?.visibleUserIds.includes(p.id) ? null :
                             <span className="icon" title="Player is online">
                                 <i className="fa fa-wifi" aria-hidden="true"></i>
                             </span>
@@ -379,7 +380,7 @@ function MoveEntry(props) {
                       <td key={"player" + ind}>{p.name}</td>
                       <td>
                         {showMilliseconds(p.time)}
-                        {globalMe === null || !globalMe?.connected.includes(p.id) ? null :
+                        {globalMe === null || !connections?.visibleUserIds.includes(p.id) ? null :
                             <span className="icon" title="Player is online">
                                 <i className="fa fa-wifi" aria-hidden="true"></i>
                             </span>

@@ -2,7 +2,7 @@ import { useEffect, useRef, useContext } from "react";
 import { getAuthToken } from "../lib/api";
 import { WS_ENDPOINT } from "../config";
 import { toast } from "react-toastify";
-import { ConnectedContext, VisibilityContext } from "../pages/Skeleton";
+import { ConnectionContext, VisibilityContext } from "../pages/Skeleton";
 
 // WebSocket close codes for logging
 const WS_CLOSE_CODES = {
@@ -33,7 +33,7 @@ export default function MyWebSocket() {
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(true);
   const reconnectDelayRef = useRef(INITIAL_RECONNECT_DELAY);
-  const [, setConnected] = useContext(ConnectedContext);
+  const [, setConnections] = useContext(ConnectionContext);
   const [invisible] = useContext(VisibilityContext);
 
   useEffect(() => {
@@ -128,7 +128,6 @@ export default function MyWebSocket() {
 
         try {
           ws.send(JSON.stringify({ action: "subscribe", token, invisible }));
-          setConnected(true);
           // Reset backoff on successful connection
           reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
           console.log("WS: Connected and subscribed");
@@ -152,7 +151,6 @@ export default function MyWebSocket() {
         // Only update state and reconnect if this is still the current connection
         if (wsRef.current === ws) {
           wsRef.current = null;
-          setConnected(false);
 
           // Don't auto-reconnect on idle timeout (code 1001)
           // The visibilitychange handler will reconnect when user returns
@@ -197,6 +195,11 @@ export default function MyWebSocket() {
           if (matches) {
             window.dispatchEvent(new CustomEvent("refresh-data"));
           }
+        } else if (msg.verb === "connections") {
+            if (msg.payload !== undefined && typeof msg.payload === "object") {
+              console.log(`WS: Setting connection payload to ${JSON.stringify(msg.payload)}`);
+              setConnections(msg.payload);
+            }
         } else if (msg.verb === "test") {
           toast(`Test message: ${msg.payload}`);
         }
@@ -234,7 +237,7 @@ export default function MyWebSocket() {
         wsRef.current = null;
       }
     };
-  }, [setConnected, invisible]);
+  }, [invisible, setConnections]);
 
   // Immediately reconnect when browser tab becomes visible
   useEffect(() => {
