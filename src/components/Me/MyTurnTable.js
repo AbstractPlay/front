@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { MeContext } from "../../pages/Skeleton";
+import { MeContext, ConnectionContext } from "../../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
   getCoreRowModel,
@@ -46,6 +46,7 @@ function showMilliseconds(ms) {
 
 function MyTurnTable({ games, fetching }) {
   const [globalMe] = useContext(MeContext);
+  const [connections] = useContext(ConnectionContext);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
   ]);
@@ -111,7 +112,16 @@ function MyTurnTable({ games, fetching }) {
         cell: (props) =>
           props
             .getValue()
-            .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+            .map((u) =>
+                <>
+                    <Link to={`/player/${u.id}`}>{u.name}</Link>
+                    {!connections?.visibleUserIds.includes(u.id) ? null :
+                        <span className="icon" title="Player is online">
+                            <i className="fa fa-wifi" aria-hidden="true"></i>
+                        </span>
+                    }
+                </>
+            )
             .reduce(
               (acc, x) =>
                 acc === null ? (

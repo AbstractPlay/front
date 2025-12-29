@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, useMemo, Fragment } from "react";
-import { MeContext } from "../../pages/Skeleton";
+import { MeContext, ConnectionContext } from "../../pages/Skeleton";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
@@ -44,6 +44,7 @@ const allSize = Number.MAX_SAFE_INTEGER;
 
 function TheirTurnTable(props) {
   const [globalMe] = useContext(MeContext);
+  const [connections] = useContext(ConnectionContext);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
   ]);
@@ -120,7 +121,16 @@ function TheirTurnTable(props) {
         cell: (props) =>
           props
             .getValue()
-            .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+            .map((u) =>
+                <>
+                    <Link to={`/player/${u.id}`}>{u.name}</Link>
+                    {!connections?.visibleUserIds.includes(u.id) ? null :
+                        <span className="icon" title="Player is online">
+                            <i className="fa fa-wifi" aria-hidden="true"></i>
+                        </span>
+                    }
+                </>
+            )
             .reduce(
               (acc, x) =>
                 acc === null ? (
