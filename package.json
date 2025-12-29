@@ -62,6 +62,7 @@
   },
   "scripts": {
     "start": "cross-env REACT_APP_REAL_MODE=local react-scripts start",
+    "start-prod": "npm run build-prod && npx serve -s build -l 3000",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "build-dev": "cross-env REACT_APP_REAL_MODE=development react-scripts build --profile && shx cp src/robots/robots.txt.dev build/robots.txt",
     "build-prod": "node bin/gensitemap.mjs && cross-env REACT_APP_REAL_MODE=production react-scripts build && shx cp src/robots/robots.txt.prod build/robots.txt",
