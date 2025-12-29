@@ -2,12 +2,12 @@ import { useEffect, useRef, useContext } from "react";
 import { getAuthToken } from "../lib/api";
 import { WS_ENDPOINT } from "../config";
 import { toast } from "react-toastify";
-import { ConnectedContext, VisibilityContext } from "../pages/Skeleton";
+import { ConnectionContext, VisibilityContext } from "../pages/Skeleton";
 
 // WebSocket close codes for logging
 const WS_CLOSE_CODES = {
   1000: "Normal closure",
-  1001: "Going away (browser navigating)",
+  1001: "Going away (server/client closing or idle timeout)",
   1002: "Protocol error",
   1003: "Unsupported data",
   1005: "No status received",
@@ -33,7 +33,7 @@ export default function MyWebSocket() {
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(true);
   const reconnectDelayRef = useRef(INITIAL_RECONNECT_DELAY);
-  const [, setConnected] = useContext(ConnectedContext);
+  const [, setConnections] = useContext(ConnectionContext);
   const [invisible] = useContext(VisibilityContext);
 
   useEffect(() => {
@@ -128,7 +128,6 @@ export default function MyWebSocket() {
 
         try {
           ws.send(JSON.stringify({ action: "subscribe", token, invisible }));
-          setConnected(true);
           // Reset backoff on successful connection
           reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
           console.log("WS: Connected and subscribed");
@@ -152,8 +151,17 @@ export default function MyWebSocket() {
         // Only update state and reconnect if this is still the current connection
         if (wsRef.current === ws) {
           wsRef.current = null;
-          setConnected(false);
-          scheduleReconnect("connection closed");
+
+          // Don't auto-reconnect on idle timeout (code 1001)
+          // The visibilitychange handler will reconnect when user returns
+          if (event.code === 1001) {
+            console.log(
+              "WS: Idle timeout - will reconnect when tab becomes visible"
+            );
+          } else {
+            // For other disconnects (network errors, etc.), auto-reconnect
+            scheduleReconnect("connection closed");
+          }
         } else {
           console.log("WS: Ignoring close from stale connection");
         }
@@ -187,11 +195,22 @@ export default function MyWebSocket() {
           if (matches) {
             window.dispatchEvent(new CustomEvent("refresh-data"));
           }
+        } else if (msg.verb === "connections") {
+          if (msg.payload !== undefined && typeof msg.payload === "object") {
+            setConnections(msg.payload);
+          }
         } else if (msg.verb === "test") {
           toast(`Test message: ${msg.payload}`);
         }
       };
     };
+
+    // Listen for force reconnect events (e.g., when tab becomes visible)
+    const handleForceReconnect = () => {
+      console.log("WS: Force reconnect requested");
+      connect();
+    };
+    window.addEventListener("ws-force-reconnect", handleForceReconnect);
 
     connect();
 
@@ -199,6 +218,8 @@ export default function MyWebSocket() {
       console.log("WS: Cleanup - unmounting component");
       isMountedRef.current = false;
       isConnectingRef.current = false;
+
+      window.removeEventListener("ws-force-reconnect", handleForceReconnect);
 
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
@@ -215,13 +236,43 @@ export default function MyWebSocket() {
         wsRef.current = null;
       }
     };
-  }, [setConnected, invisible]);
+  }, [invisible, setConnections]);
 
-  //   const send = (payload) => {
-  //     if (wsRef.current && connected) {
-  //       wsRef.current.send(JSON.stringify(payload));
-  //     }
-  //   };
+  // Immediately reconnect when browser tab becomes visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        const isConnected = wsRef.current?.readyState === WebSocket.OPEN;
+        const isConnecting =
+          wsRef.current?.readyState === WebSocket.CONNECTING ||
+          isConnectingRef.current;
+
+        if (!isConnected && !isConnecting && isMountedRef.current) {
+          console.log("WS: Tab became visible, triggering immediate reconnect");
+          // Clear any pending reconnect timeout
+          if (reconnectTimeoutRef.current) {
+            clearTimeout(reconnectTimeoutRef.current);
+            reconnectTimeoutRef.current = null;
+          }
+          // Reset backoff since user is actively returning
+          reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
+          // Trigger reconnect with minimal delay
+          reconnectTimeoutRef.current = setTimeout(() => {
+            // Re-check conditions in case something changed
+            const stillDisconnected =
+              !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN;
+            if (stillDisconnected && isMountedRef.current) {
+              window.dispatchEvent(new CustomEvent("ws-force-reconnect"));
+            }
+          }, 100);
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
 
   return null; // or return UI showing connection status
 }
