@@ -566,7 +566,6 @@ function UserSettingsModal(props) {
       ) {
         state = false;
       }
-      //   console.log(`Changing mayPush state to ${state}`);
       const res = await callAuthApi("set_push", {
         state,
       });
@@ -576,10 +575,7 @@ function UserSettingsModal(props) {
       } else {
         const result = await res.json();
         console.log(result.body);
-        const newMe = JSON.parse(JSON.stringify(globalMe));
-        newMe.mayPush = state;
-        globalMeSetter(newMe);
-        // console.log(`mayPush set to ${newMe.mayPush}`);
+        globalMeSetter(val => ({...val, mayPush: state}));
       }
     } catch (error) {
       console.log(error);
