@@ -269,7 +269,7 @@ function Navbar(props) {
         <div className="navbar-end">
           {globalMe === null ? null : (
             <>
-              <div className="navbar-item" title="Number of active connections">
+              <div className="navbar-item" title="Number of active players">
                 <span className="icon">
                   <i className="fa fa-wifi" aria-hidden="true"></i>
                 </span>
