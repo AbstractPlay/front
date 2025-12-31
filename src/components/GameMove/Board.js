@@ -40,8 +40,23 @@ function Board({
   return (
     <>
       <div className="level">
-        {/* <div className="level-left">
-        </div> */}
+        <div className="level-left">
+          <div className="level-item">
+            <div className="field is-grouped">
+              <div className="control">
+                <button
+                  className="button is-small apButton"
+                  onClick={() => setRefresh((val) => val + 1)}
+                  title={t("TriggerRefresh")}
+                >
+                  <span className="icon">
+                    <i className="fa fa-refresh"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         {!hasNewChat ? null : (
           <div className="level-right">
             <div className="level-item">
