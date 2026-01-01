@@ -41,6 +41,11 @@
             "lr": "Light, Right",
             "dl": "Dark, Left",
             "dr": "Dark, Right"
+        },
+        "arimaa": {
+            "gold99": "99of9 setup",
+            "silver99e7": "99of9 setup, elephant e7",
+            "silver99d7": "99of9 setup, elephant d7"
         }
     },
     "Cancel": "Cancel",
