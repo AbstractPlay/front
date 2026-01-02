@@ -570,6 +570,7 @@
     "Explore": "Explore",
     "ExportPNG": "Export PNG image",
     "FilterStars": "Only show starred games",
+    "ForcedUnrated": "This game will not be rated due to selected variants.",
     "Game": "Game",
     "GameAgainst": "{{game}} against {{opp}}",
     "GameInfo": "Game information",

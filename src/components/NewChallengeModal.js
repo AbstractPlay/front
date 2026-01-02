@@ -796,7 +796,7 @@ function NewChallengeModal(props) {
                 </label>
               </div>
               <p className="help">
-                {rated ? t("HelpRated") : t("HelpUnRated")}
+                {forceUnrated ? t("ForcedUnrated") : rated ? t("HelpRated") : t("HelpUnRated")}
               </p>
             </div>
           )}
