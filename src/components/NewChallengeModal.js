@@ -65,11 +65,27 @@ function NewChallengeModal(props) {
   const [globalMe] = useContext(MeContext);
   const [allUsers] = useContext(UsersContext);
   const [users, usersSetter] = useState([]);
+  const [forceUnrated, setForceUnrated] = useState(false);
   const errorRef = useRef(null);
 
   useEffect(() => {
     addResource(i18n.language);
   }, [i18n.language]);
+
+  useEffect(() => {
+    let forced = false;
+    if (metaGame !== null) {
+        const info = gameinfo.get(metaGame);
+        for (const vname of selectedVariants) {
+            const variant = info.variants.find((v) => v.uid === vname);
+            if (variant.unrated === true) {
+                forced = true;
+                break;
+            }
+        }
+    }
+    setForceUnrated(forced);
+  }, [metaGame, selectedVariants]);
 
   useEffect(() => {
     if (error && errorRef.current) {
@@ -291,7 +307,7 @@ function NewChallengeModal(props) {
       clockInc: clockInc,
       clockMax: clockMax,
       clockHard: clockHard,
-      rated: rated,
+      rated: forceUnrated ? false : rated,
       noExplore: noExplore,
       comment: comment,
     });
@@ -774,6 +790,7 @@ function NewChallengeModal(props) {
                     id="rated"
                     checked={rated}
                     onChange={handleRatedChange}
+                    disabled={forceUnrated}
                   />
                   {t("ChooseRated")}
                 </label>
