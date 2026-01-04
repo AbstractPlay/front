@@ -47,7 +47,7 @@ custom:
   ## For S3 upload
   client:
     bucketName: ${self:custom.rootName}
-    distributionFolder: build
+    distributionFolder: /
 
     objectHeaders:
       # Cache-bustable assets (fingerprinted)
