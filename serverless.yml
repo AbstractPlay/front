@@ -48,6 +48,27 @@ custom:
   client:
     bucketName: ${self:custom.rootName}
     distributionFolder: build
+
+    objectHeaders:
+      # Cache-bustable assets (fingerprinted)
+      "static/*":
+        - name: Cache-Control
+          value: "public, max-age=31536000, immutable"
+
+      # HTML should never be cached
+      "index.html":
+        - name: Cache-Control
+          value: "no-cache, no-store, must-revalidate"
+
+      "error.html":
+        - name: Cache-Control
+          value: "no-cache, no-store, must-revalidate"
+
+      # Optional: catch-all fallback
+      ALL_OBJECTS:
+        - name: Cache-Control
+          value: "public, max-age=3600"
+
   # s3LocalPath: C:\Projects\AbstractPlay\front\build\
   s3LocalPath: ./build/
 
