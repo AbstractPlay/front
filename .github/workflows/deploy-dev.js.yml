@@ -85,14 +85,14 @@ jobs:
     #     aws-secret-access-key: ${{ secrets.AWS_SECRET }}
     #     aws-region: us-east-1
 
+    - name: Deploy
+      run: serverless client deploy --no-confirm
+
     - name: Create CloudFront invalidation
       uses: josemando/aws-cloudfront-create-invalidation@v1
       with:
-        distribution-id: E2FD1T2JUN28HB
+        distribution-id: E621UP8SM3SXE
         paths: /*
-
-    - name: Deploy
-      run: serverless client deploy --no-confirm
 
     # Optional (to use with serverless-finch serverless plugin)
     #- name: Deploy assets to S3
