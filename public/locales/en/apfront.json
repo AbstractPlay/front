@@ -276,6 +276,11 @@
             "full": "Goal > Immobilize",
             "tag": "G: Immobilize"
         },
+        "goal>isolate": {
+            "description": "Isolate a piece or subset of pieces in a specific way",
+            "full": "Goal > Isolate",
+            "tag": "G: Isolate"
+        },
         "goal>majority": {
             "description": "Have more pieces than your opponent",
             "full": "Goal > Majority",
