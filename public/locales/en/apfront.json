@@ -71,6 +71,11 @@
             "full": "Board > Connectivity > Hexagonal",
             "tag": "Connect: Hex"
         },
+        "board>connect>linear": {
+            "description": "Cells connect to each other linearly",
+            "full": "Board > Connectivity > Linear",
+            "tag": "Connect: Linear"
+        },
         "board>connect>other": {
             "description": "Cells connect to each other in a unique way",
             "full": "Board > Connectivity > Other",
