@@ -156,6 +156,11 @@
             "full": "Board > Shape > Triangle",
             "tag": "Shape: Tri"
         },
+        "components>chess": {
+            "description": "Played with a Chess set",
+            "full": "Components > Chess",
+            "tag": "C: Chess"
+        },
         "components>dice": {
             "description": "Played with dice",
             "full": "Components > Dice",
