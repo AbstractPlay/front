@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
   getCoreRowModel,
@@ -14,6 +14,7 @@ import {
 } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
+import { useExpandVariants } from "../hooks/useExpandVariants";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -24,6 +25,7 @@ function ListGames({ fixedState }) {
   const [, maxPlayersSetter] = useState(2);
   const [showState, showStateSetter] = useStorageState("listgames-show", 20);
   const [sorting, setSorting] = useState([]);
+  const { expandVariants } = useExpandVariants(metaGame);
 
   useEffect(() => {
     if (gameState === "completed") {
@@ -57,23 +59,6 @@ function ListGames({ fixedState }) {
   }, [gameState, metaGame, fixedState]);
 
   const metaGameName = gameinfo.get(metaGame).name;
-  const variantMap = useMemo(() => {
-    const info = gameinfo.get(metaGame);
-    let gameEngine;
-    if (info.playercounts.length > 1) {
-      gameEngine = GameFactory(info.uid, 2);
-    } else {
-      gameEngine = GameFactory(info.uid);
-    }
-    const all = gameEngine.allvariants();
-    if (all !== undefined) {
-      return new Map(
-        gameEngine.allvariants().map((rec) => [rec.uid, rec.name])
-      );
-    } else {
-      return new Map();
-    }
-  }, [metaGame]);
 
   const data = useMemo(
     () =>
@@ -101,14 +86,12 @@ function ListGames({ fixedState }) {
               : null,
           variants:
             "variants" in rec && rec.variants !== null
-              ? rec.variants.map((id) =>
-                  variantMap.has(id) ? variantMap.get(id) : id
-                )
+              ? expandVariants(rec.variants)
               : null,
           cbit: fixedState === "completed" || gameState === "completed" ? 1 : 0,
         };
       }),
-    [games, gameState, fixedState, variantMap]
+    [games, gameState, fixedState, expandVariants]
   );
 
   const columnHelper = createColumnHelper();
