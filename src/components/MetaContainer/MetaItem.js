@@ -14,6 +14,7 @@ import Ratings from "../Ratings";
 import StandingChallenges from "../StandingChallenges";
 import ListGames from "../ListGames";
 import Tournaments from "../Tournaments/Tournaments";
+import GameDisplays from "../GameDisplays";
 import GameVariants from "../GameVariants";
 import Thumbnail from "../Thumbnail";
 
@@ -226,6 +227,9 @@ const MetaItem = React.forwardRef(
                       metaGame={game.uid}
                       variantsSetter={setSelectedVariants}
                       disableFields={true}
+                    />
+                    <GameDisplays
+                      metaGame={game.uid}
                     />
                     <ReactMarkdown
                       rehypePlugins={[rehypeRaw]}
