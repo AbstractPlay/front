@@ -40,12 +40,11 @@ function Board({
     zoomEnabledSetter((val) => !val);
   };
 
-
   if (rendered.length === 0) return null;
 
   const next = () => setIndex((i) => (i + 1) % rendered.length);
-  const prev = () => setIndex((i) => (i - 1 + rendered.length) % rendered.length);
-
+  const prev = () =>
+    setIndex((i) => (i - 1 + rendered.length) % rendered.length);
 
   console.log("Rebuilding the board component", rendered);
 
@@ -118,15 +117,14 @@ function Board({
                 className="stackboard"
                 id="svg"
                 ref={(el) => {
-                    // internalRef.current = el;      // internal ref for appending SVG
-                    if (boardImage) boardImage.current = el; // external ref for parent
-                    if (el) {
-                        el.innerHTML = ''; // Clear previous
-                        el.appendChild(rendered[index]); // Insert current SVG
-                    }
+                  // internalRef.current = el;      // internal ref for appending SVG
+                  if (boardImage) boardImage.current = el; // external ref for parent
+                  if (el) {
+                    el.innerHTML = ""; // Clear previous
+                    el.appendChild(rendered[index]); // Insert current SVG
+                  }
                 }}
-              >
-              </div>
+              ></div>
             </div>
           ) : (
             <div
@@ -137,12 +135,11 @@ function Board({
                 // internalRef.current = el;      // internal ref for appending SVG
                 if (boardImage) boardImage.current = el; // external ref for parent
                 if (el) {
-                    el.innerHTML = ''; // Clear previous
-                    el.appendChild(rendered[index]); // Insert current SVG
+                  el.innerHTML = ""; // Clear previous
+                  el.appendChild(rendered[index]); // Insert current SVG
                 }
               }}
-            >
-            </div>
+            ></div>
           )}
         </TransformComponent>
       </TransformWrapper>

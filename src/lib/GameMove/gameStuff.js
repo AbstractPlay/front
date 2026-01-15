@@ -1,5 +1,13 @@
 import { GameFactory, gameinfo } from "@abstractplay/gameslib";
-import { isExplorer, canExploreMove, setCanPublish, setURL, getFocusNode, fixMoveOutcomes, saveExploration } from "./exploration";
+import {
+  isExplorer,
+  canExploreMove,
+  setCanPublish,
+  setURL,
+  getFocusNode,
+  fixMoveOutcomes,
+  saveExploration,
+} from "./exploration";
 import { replaceNames, setStatus } from "./misc";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { cloneDeep } from "lodash";

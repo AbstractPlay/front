@@ -39,11 +39,32 @@ import { nanoid } from "nanoid";
 import { Helmet } from "react-helmet-async";
 
 // import helpers
-import { isInterestingComment, replaceNames, setStatus } from "../lib/GameMove/misc";
-import { setupGame, populateChecked, processNewMove } from "../lib/GameMove/gameStuff";
-import { mergeExistingExploration, mergeExploration, mergePublicExploration, fixMoveOutcomes, analyzeExplorationForCommentedFlag, getFocusNode, isExplorer, canExploreMove, setURL, saveExploration, setCanPublish, mergePrivateExploration, getAllNodeComments } from "../lib/GameMove/exploration";
+import {
+  isInterestingComment,
+  replaceNames,
+  setStatus,
+} from "../lib/GameMove/misc";
+import {
+  setupGame,
+  populateChecked,
+  processNewMove,
+} from "../lib/GameMove/gameStuff";
+import {
+  mergeExistingExploration,
+  mergeExploration,
+  mergePublicExploration,
+  fixMoveOutcomes,
+  analyzeExplorationForCommentedFlag,
+  getFocusNode,
+  isExplorer,
+  canExploreMove,
+  setURL,
+  saveExploration,
+  setCanPublish,
+  mergePrivateExploration,
+  getAllNodeComments,
+} from "../lib/GameMove/exploration";
 import { processNewSettings, setupColors } from "../lib/GameMove/settings";
-
 
 // sets the default order of components in the vertical layouts
 const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
@@ -752,13 +773,13 @@ function GameMove(props) {
         }
       }
       // Somehow react loses track of this, so explicitly remove this.
-    //   if (boardImage.current !== null) {
-    //     console.log("deleting board image");
-    //     const svg = boardImage.current.querySelector("svg");
-    //     if (svg !== null) {
-    //       svg.remove();
-    //     }
-    //   }
+      //   if (boardImage.current !== null) {
+      //     console.log("deleting board image");
+      //     const svg = boardImage.current.querySelector("svg");
+      //     if (svg !== null) {
+      //       svg.remove();
+      //     }
+      //   }
     }
   }, [
     dbgame,
@@ -1299,12 +1320,12 @@ function GameMove(props) {
     }
 
     if (boardImage.current !== null) {
-    //   const svg =
-    //     boardImage.current.parentElement.querySelector("#theBoardSVG");
-    //   if (svg !== null) {
-    //     console.log("deleting board image in preparation of rerendering");
-    //     svg.remove();
-    //   }
+      //   const svg =
+      //     boardImage.current.parentElement.querySelector("#theBoardSVG");
+      //   if (svg !== null) {
+      //     console.log("deleting board image in preparation of rerendering");
+      //     svg.remove();
+      //   }
       if (renderrep !== null && settings !== null) {
         options = {};
         if (focus.canExplore) {
@@ -1344,20 +1365,24 @@ function GameMove(props) {
         const tmpRendered = [];
         const renders = [];
         if (!Array.isArray(renderrep)) {
-            renders.push(renderrep);
+          renders.push(renderrep);
         } else {
-            renders.push(...renderrep);
+          renders.push(...renderrep);
         }
         for (let i = 0; i < renders.length; i++) {
-            const r = renders[i];
-            const container = document.createElement('div');
-            container.style.position = 'absolute';
-            container.style.left = '-9999px'; // hide off-screen
-            document.body.appendChild(container); // ✅ attach to DOM
-            render(r, {...options, divelem: container, boardClick: i === renders.length - 1 ? boardClick : undefined});
-            const svgNode = container.firstChild;
-            tmpRendered.push(svgNode);
-            document.body.removeChild(container); // ✅ clean up
+          const r = renders[i];
+          const container = document.createElement("div");
+          container.style.position = "absolute";
+          container.style.left = "-9999px"; // hide off-screen
+          document.body.appendChild(container); // ✅ attach to DOM
+          render(r, {
+            ...options,
+            divelem: container,
+            boardClick: i === renders.length - 1 ? boardClick : undefined,
+          });
+          const svgNode = container.firstChild;
+          tmpRendered.push(svgNode);
+          document.body.removeChild(container); // ✅ clean up
         }
         setRendered([...tmpRendered]);
       }

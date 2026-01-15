@@ -75,14 +75,14 @@ function NewChallengeModal(props) {
   useEffect(() => {
     let forced = false;
     if (metaGame !== null) {
-        const info = gameinfo.get(metaGame);
-        for (const vname of selectedVariants) {
-            const variant = info.variants.find((v) => v.uid === vname);
-            if (variant.unrated === true) {
-                forced = true;
-                break;
-            }
+      const info = gameinfo.get(metaGame);
+      for (const vname of selectedVariants) {
+        const variant = info.variants.find((v) => v.uid === vname);
+        if (variant.unrated === true) {
+          forced = true;
+          break;
         }
+      }
     }
     setForceUnrated(forced);
   }, [metaGame, selectedVariants]);
@@ -796,7 +796,11 @@ function NewChallengeModal(props) {
                 </label>
               </div>
               <p className="help">
-                {forceUnrated ? t("ForcedUnrated") : rated ? t("HelpRated") : t("HelpUnRated")}
+                {forceUnrated
+                  ? t("ForcedUnrated")
+                  : rated
+                  ? t("HelpRated")
+                  : t("HelpUnRated")}
               </p>
             </div>
           )}

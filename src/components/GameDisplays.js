@@ -41,24 +41,22 @@ function GameDisplays({ metaGame }) {
       } else {
         displaysSetter([]);
       }
-    }  else {
+    } else {
       displaysSetter([]);
     }
   }, [metaGame]);
 
-  if ( displays.length === 0 ) {
+  if (displays.length === 0) {
     return null;
   } else {
     return (
       <>
         <div className="field">
-          <label className="label">
-            {t("AlternativeDisplays")}
-          </label>
+          <label className="label">{t("AlternativeDisplays")}</label>
         </div>
         <div className="indentedContainer">
           {displays.map((v) => (
-           <div className="control" key={v.uid}>
+            <div className="control" key={v.uid}>
               <label className="radio">
                 <input
                   type="radio"
@@ -66,14 +64,11 @@ function GameDisplays({ metaGame }) {
                   value={v.uid}
                   disabled="disabled"
                 />
-                {v.description === undefined ||
-                 v.description.length === 0 ? (
-                   v.name
-                 ) : (
-                   v.description
-                )}
+                {v.description === undefined || v.description.length === 0
+                  ? v.name
+                  : v.description}
               </label>
-           </div>
+            </div>
           ))}
         </div>
       </>

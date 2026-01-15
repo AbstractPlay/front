@@ -1,13 +1,14 @@
-
 function BoardNav({ currentIndex, total, onPrev, onNext }) {
   return (
-    <nav className="level"
+    <nav
+      className="level"
       style={{
-        marginTop: '1rem',
-        border: '1px solid var(--main-font-color)',
-        borderRadius: '6px',
-        padding: '0.5rem',
-      }}>
+        marginTop: "1rem",
+        border: "1px solid var(--main-font-color)",
+        borderRadius: "6px",
+        padding: "0.5rem",
+      }}
+    >
       <div className="level-left">
         <button
           className="button is-small apButton"
@@ -32,7 +33,6 @@ function BoardNav({ currentIndex, total, onPrev, onNext }) {
           onClick={onNext}
           disabled={currentIndex === total - 1}
         >
-
           <span className="icon">
             <i className="fa fa-chevron-right"></i>
           </span>

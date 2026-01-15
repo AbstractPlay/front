@@ -119,4 +119,3 @@ export function isInterestingComment(comment) {
   // If we got here, the comment is interesting
   return true;
 }
-

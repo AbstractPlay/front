@@ -575,7 +575,7 @@ function UserSettingsModal(props) {
       } else {
         const result = await res.json();
         console.log(result.body);
-        globalMeSetter(val => ({...val, mayPush: state}));
+        globalMeSetter((val) => ({ ...val, mayPush: state }));
       }
     } catch (error) {
       console.log(error);

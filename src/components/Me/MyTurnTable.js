@@ -112,16 +112,16 @@ function MyTurnTable({ games, fetching }) {
         cell: (props) =>
           props
             .getValue()
-            .map((u) =>
-                <>
-                    <Link to={`/player/${u.id}`}>{u.name}</Link>
-                    {!connections?.visibleUserIds.includes(u.id) ? null :
-                        <span className="icon" title="Player is online">
-                            <i className="fa fa-wifi" aria-hidden="true"></i>
-                        </span>
-                    }
-                </>
-            )
+            .map((u) => (
+              <>
+                <Link to={`/player/${u.id}`}>{u.name}</Link>
+                {!connections?.visibleUserIds.includes(u.id) ? null : (
+                  <span className="icon" title="Player is online">
+                    <i className="fa fa-wifi" aria-hidden="true"></i>
+                  </span>
+                )}
+              </>
+            ))
             .reduce(
               (acc, x) =>
                 acc === null ? (

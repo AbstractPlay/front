@@ -455,4 +455,3 @@ export function canExploreMove(game, exploration, focus) {
       getFocusNode(exploration, game, focus).toMove !== "") // game (at focus) isn't over
   );
 }
-

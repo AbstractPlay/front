@@ -117,4 +117,3 @@ export function setupColors(settings, game, globalMe, colourContext, node) {
     }
   });
 }
-
