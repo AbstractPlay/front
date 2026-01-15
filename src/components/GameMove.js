@@ -1470,7 +1470,8 @@ function GameMove(props) {
           style.startsWith("hex-even") ||
           style === "snubsquare" ||
           style.startsWith("cairo") ||
-          style === "triangles-stacked"
+          style === "triangles-stacked" ||
+          style === "sowing-round"
         ) {
           return 90;
         }
