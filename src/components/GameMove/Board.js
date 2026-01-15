@@ -34,13 +34,20 @@ function Board({
 }) {
   const [globalMe] = useContext(MeContext);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(null);
+
+
+  useEffect(() => {
+    if (rendered.length > 0) {
+        setIndex(rendered.length - 1);
+    }
+  }, [rendered]);
 
   const toggleZoom = () => {
     zoomEnabledSetter((val) => !val);
   };
 
-  if (rendered.length === 0) return null;
+  if (index === null || rendered.length === 0) return null;
 
   const next = () => setIndex((i) => (i + 1) % rendered.length);
   const prev = () =>
