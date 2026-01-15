@@ -50,12 +50,10 @@ export function useExpandVariants(metaGame) {
                 groups.delete(g);
             }
         }
-        console.log(`Some groups not defined: ${[...groups]}`);
         // if any groups are not defined, add the defaults to vars
         for (const g of groups) {
             vars.push(`#${g}`);
         }
-        console.log(`About to return: ${vars}`);
         return vars.map((v) => variantMap.get(v)).filter(Boolean);
     }
   }, [variantMap, variantGroups, varId2Group]);
