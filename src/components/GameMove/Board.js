@@ -47,7 +47,7 @@ function Board({
     zoomEnabledSetter((val) => !val);
   };
 
-  if (index === null || rendered.length === 0) return null;
+  if (index === null || rendered.length === 0 || index >= rendered.length) return null;
 
   const next = () => setIndex((i) => (i + 1) % rendered.length);
   const prev = () =>
