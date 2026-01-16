@@ -1430,7 +1430,11 @@ function Playground(props) {
         options.svgid = "theBoardSVG";
         options.colourContext = colourContext;
         console.log("rendering", renderrep, options);
-        render(renderrep, options);
+        let tmpRender = renderrep;
+        if (Array.isArray(tmpRender)) {
+            tmpRender = tmpRender[tmpRender.length - 1];
+        }
+        render(tmpRender, options);
       }
     }
     // render to PNG
@@ -1536,7 +1540,8 @@ function Playground(props) {
           style.startsWith("hex-even") ||
           style === "snubsquare" ||
           style.startsWith("cairo") ||
-          style === "triangles-stacked"
+          style === "triangles-stacked" ||
+          style === "sowing-round"
         ) {
           return 90;
         }
