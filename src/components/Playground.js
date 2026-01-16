@@ -8,7 +8,7 @@ import React, {
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render, renderglyph } from "@abstractplay/renderer";
 import { cloneDeep } from "lodash";
@@ -1805,7 +1805,7 @@ function Playground(props) {
             <div className="column">
               <h1 className="subtitle lined">
                 <span>
-                  {gameDeets?.name}
+                  <Link to={`/games/${metaGame}`}>{gameDeets?.name}</Link>
                   <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>
                     {" (playground)"}
                   </span>
