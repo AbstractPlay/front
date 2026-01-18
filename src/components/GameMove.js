@@ -152,6 +152,7 @@ function GameMove(props) {
   // gameID and nodes, an array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
   // for completed games every node might hold a tree of explored moves.
   const explorationRef = useRef({ gameID: null, nodes: null });
+  const explorationFetchingRef = useRef(false);
   // This is used for hover effects. Has the currently rendered engine state with partial moves, if any, applied.
   const engineRef = useRef(null);
   const [myMove, myMoveSetter] = useContext(MyTurnContext);
@@ -568,6 +569,7 @@ function GameMove(props) {
 
     // Don't fetch data if user is refreshing a completed game. No point in fetching the game again, the only thing that could have changed is public exploration
     if (explorationRef.current.gameID === gameID && game && game.gameOver) {
+      explorationFetchingRef.current = false;
       explorationFetchedSetter(false);
     } else {
       fetchData();
@@ -663,6 +665,7 @@ function GameMove(props) {
             handleGameMoveClick(foc);
           }
           // if we got here from the "trigger a refresh" button, we should probably also fetch exploration in case the user is exploring on more than one device
+          explorationFetchingRef.current = false;
           explorationFetchedSetter(false);
         } else if (explorationRef.current.nodes.length > exploration.length) {
           // page refreshed and opponent moved
@@ -887,6 +890,9 @@ function GameMove(props) {
 
   useEffect(() => {
     async function fetchPrivateExploration() {
+      // Use ref to prevent concurrent fetches (state updates are async)
+      if (explorationFetchingRef.current) return;
+      explorationFetchingRef.current = true;
       explorationFetchedSetter(true);
       try {
         let data;
@@ -933,6 +939,9 @@ function GameMove(props) {
     }
 
     async function fetchPublicExploration() {
+      // Use ref to prevent concurrent fetches (state updates are async)
+      if (explorationFetchingRef.current) return;
+      explorationFetchingRef.current = true;
       explorationFetchedSetter(true);
       console.log("fetching public exploration");
       var url = new URL(API_ENDPOINT_OPEN);

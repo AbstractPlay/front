@@ -47,7 +47,13 @@ export class GameNode {
   }
 
   AddComment(comment) {
-    this.comment.push(comment);
+    // Check for duplicate (same user, same timestamp)
+    const isDuplicate = this.comment.some(
+      (c) => c.userId === comment.userId && c.timeStamp === comment.timeStamp
+    );
+    if (!isDuplicate) {
+      this.comment.push(comment);
+    }
     if (this.commented !== true) {
       this.UpdateCommented();
     }
