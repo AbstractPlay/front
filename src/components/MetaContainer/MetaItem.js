@@ -228,9 +228,7 @@ const MetaItem = React.forwardRef(
                       variantsSetter={setSelectedVariants}
                       disableFields={true}
                     />
-                    <GameDisplays
-                      metaGame={game.uid}
-                    />
+                    <GameDisplays metaGame={game.uid} />
                     <ReactMarkdown
                       rehypePlugins={[rehypeRaw]}
                       className="content"

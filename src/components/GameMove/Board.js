@@ -1,10 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { MeContext } from "../../pages/Skeleton";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import BoardNav from "./BoardNav";
 
 function Board({
   metaGame,
   gameID,
+  rendered,
   t,
   inCheck,
   stackExpanding,
@@ -32,10 +34,24 @@ function Board({
 }) {
   const [globalMe] = useContext(MeContext);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
+  const [index, setIndex] = useState(null);
+
+
+  useEffect(() => {
+    if (rendered.length > 0) {
+        setIndex(rendered.length - 1);
+    }
+  }, [rendered]);
 
   const toggleZoom = () => {
     zoomEnabledSetter((val) => !val);
   };
+
+  if (index === null || rendered.length === 0 || index >= rendered.length) return null;
+
+  const next = () => setIndex((i) => (i + 1) % rendered.length);
+  const prev = () =>
+    setIndex((i) => (i - 1 + rendered.length) % rendered.length);
 
   return (
     <>
@@ -80,6 +96,16 @@ function Board({
           dangerouslySetInnerHTML={{ __html: inCheck }}
         ></div>
       )}
+
+      {rendered.length > 1 && (
+        <BoardNav
+          currentIndex={index}
+          total={rendered.length}
+          onPrev={prev}
+          onNext={next}
+        />
+      )}
+
       <TransformWrapper
         disabled={screenWidth < 770 || verticalLayout || !zoomEnabled}
         doubleClick={{ disabled: true }}
@@ -92,14 +118,32 @@ function Board({
               style={{ backgroundColor: colourContext.background }}
             >
               <div className="stack" id="stack" ref={stackImage}></div>
-              <div className="stackboard" id="svg" ref={boardImage}></div>
+              <div
+                className="stackboard"
+                id="svg"
+                ref={(el) => {
+                  // internalRef.current = el;      // internal ref for appending SVG
+                  if (boardImage) boardImage.current = el; // external ref for parent
+                  if (el) {
+                    el.innerHTML = ""; // Clear previous
+                    el.appendChild(rendered[index]); // Insert current SVG
+                  }
+                }}
+              ></div>
             </div>
           ) : (
             <div
               className={`board tourBoard _meta_${metaGame}`}
               style={{ backgroundColor: colourContext.background }}
               id="svg"
-              ref={boardImage}
+              ref={(el) => {
+                // internalRef.current = el;      // internal ref for appending SVG
+                if (boardImage) boardImage.current = el; // external ref for parent
+                if (el) {
+                  el.innerHTML = ""; // Clear previous
+                  el.appendChild(rendered[index]); // Insert current SVG
+                }
+              }}
             ></div>
           )}
         </TransformComponent>

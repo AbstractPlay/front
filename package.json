@@ -13,8 +13,8 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/gameslib": "^1.0.0-ci-20664066000.0",
-    "@abstractplay/renderer": "latest",
+    "@abstractplay/gameslib": "^1.0.0-ci-21078173550.0",
+    "@abstractplay/renderer": "^1.0.0-ci-20966259367.0",
     "@atlaskit/pragmatic-drag-and-drop": "^1.3.0",
     "@tanstack/react-table": "^8.11.2",
     "@testing-library/jest-dom": "5.16.5",
