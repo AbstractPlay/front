@@ -53,8 +53,6 @@ function Board({
   const prev = () =>
     setIndex((i) => (i - 1 + rendered.length) % rendered.length);
 
-  console.log("Rebuilding the board component", rendered);
-
   return (
     <>
       <div className="level">
