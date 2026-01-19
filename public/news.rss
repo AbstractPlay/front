@@ -2960,7 +2960,7 @@ The rendering doesn&amp;apos;t know about user settings, so they are still rende
     <item>
       <title>Announcement</title>
       <description>I have now added basic websocket support to the site. This doesn&amp;apos;t change anything about how the backend currently functions, but this lays the foundation for more real-time features in the future. Two new features are available now, though:
-- Next to the button for toggling colour modes, there&amp;apos;s now a green dot and a number. That number is the number of players currently using the site at that moment (including yourself).
+- Next to the button for toggling colour modes, there&amp;apos;s now a wifi icon and a number. That number is the number of players currently using the site at that moment (including yourself).
 - More importantly, though, games will now auto-reload when a move is made or a chat is added, whether you&amp;apos;re participating or observing. Basically, if you&amp;apos;re looking at the page, it will refresh when someone changes the state. This will hopefully make playing realtime games more bearable. I&amp;apos;ve removed the &amp;quot;periodic refresh&amp;quot; button as a result.
 
 Let me know if you encounter any issues. Enjoy!</description>
@@ -2983,6 +2983,24 @@ Let me know if you encounter any issues. Enjoy!</description>
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Sun, 28 Dec 2025 17:40:06 GMT</pubDate>
       <guid isPermaLink="false">1454891678669340813</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Marino Carpignano PerGioco &amp;apos;s four-in-a-row game Krypte is now available, thanks to @hoembla. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 10 Jan 2026 14:57:51 GMT</pubDate>
+      <guid isPermaLink="false">1459561887720144916</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Two new games are now available. Enjoy!
+- Dieter Stein&amp;apos;s newest game [Enso](https://play.abstractplay.com/games/enso) is a move and capture game where the goal is surround one of your pieces with eight empty spaces.
+- @Corey L. Clark&amp;apos;s annihilation game [Rampart](https://play.abstractplay.com/games/rampart) starts with a predetermined set of groups; grow your own and starve your opponent&amp;apos;s. Includes 11x11, 13x13, and hexhex7 boards, and includes a &amp;quot;free placement&amp;quot; option if two well-communicating opponents want to experiment with different setups.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 12 Jan 2026 19:46:26 GMT</pubDate>
+      <guid isPermaLink="false">1460359288299192564</guid>
     </item>
     
   </channel>
