@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, Fragment } from "react";
+import React, { useEffect, useRef, Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { gameinfo } from "@abstractplay/gameslib";
 
 function useEventListener(eventName, handler, element = window) {
   const savedHandler = useRef();
@@ -132,6 +133,7 @@ function GameMoves(props) {
   const getFocusNode = props.getFocusNode;
   const handlePlaygroundExport = props.handlePlaygroundExport;
   let handleGameMoveClick = props.handleGameMoveClick;
+  const [validGames, validGamesSetter] = useState([]);
 
   useEventListener("keydown", keyDownHandler);
 
@@ -178,6 +180,25 @@ function GameMoves(props) {
   useEffect(() => {
     scroll();
   });
+
+  useEffect(() => {
+    let lst = [];
+    for (const info of gameinfo.values()) {
+      if (
+        info.playercounts.includes(2) &&
+        !info.flags.includes("simultaneous")
+      ) {
+        lst.push([info.uid, info.name]);
+      }
+    }
+    if (process.env.REACT_APP_REAL_MODE === "production") {
+      lst = lst.filter(
+        (id) => !gameinfo.get(id[0]).flags.includes("experimental")
+      );
+    }
+    lst.sort((a, b) => a[1].localeCompare(b[1]));
+    validGamesSetter(lst);
+  }, []);
 
   function nextVarFocus(curNumVariations) {
     if (!game.gameOver || focus.exPath.length > 1) {
@@ -827,17 +848,18 @@ function GameMoves(props) {
           </table>
         </div>
         <div className="control">
-          <div
-            className="button is-small apButtonNeutral"
+          <button
+            className={`button is-small apButtonNeutral`}
             onClick={() =>
               handlePlaygroundExport(
                 getFocusNode(exploration, game, focus).state,
                 focus.moveNumber
               )
             }
+            disabled={!validGames.find(([uid,]) => game.metaGame === uid)}
           >
             Export to playground
-          </div>
+          </button>
         </div>
       </>
     );
