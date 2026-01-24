@@ -41,7 +41,7 @@ function GameStatus(props) {
   const canExplore = props.canExplore;
   const handleStashClick = props.handleStashClick;
   const [globalMe] = useContext(MeContext);
-  const colourContext = useStore((state) => state.colourContext)
+  const colourContext = useStore((state) => state.colourContext);
 
   const { t } = useTranslation();
 

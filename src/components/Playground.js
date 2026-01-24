@@ -1433,7 +1433,7 @@ function Playground(props) {
         console.log("rendering", renderrep, options);
         let tmpRender = renderrep;
         if (Array.isArray(tmpRender)) {
-            tmpRender = tmpRender[tmpRender.length - 1];
+          tmpRender = tmpRender[tmpRender.length - 1];
         }
         render(tmpRender, options);
       }

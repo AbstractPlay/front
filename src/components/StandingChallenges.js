@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useMemo,
+  useCallback,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -67,18 +73,21 @@ function StandingChallenges(props) {
     }
   }
 
-  const handleNewChallenge = useCallback(async (challenge) => {
-    try {
-      const res = await callAuthApi("new_challenge", {
-        ...challenge,
-        challenger: { id: globalMe.id, name: globalMe.name },
-      });
-      if (!res) return;
-      showModalSetter(false);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [globalMe]);
+  const handleNewChallenge = useCallback(
+    async (challenge) => {
+      try {
+        const res = await callAuthApi("new_challenge", {
+          ...challenge,
+          challenger: { id: globalMe.id, name: globalMe.name },
+        });
+        if (!res) return;
+        showModalSetter(false);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [globalMe]
+  );
 
   useEffect(() => {
     async function fetchAuth() {

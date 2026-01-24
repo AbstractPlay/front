@@ -36,10 +36,9 @@ function Board({
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
   const [index, setIndex] = useState(null);
 
-
   useEffect(() => {
     if (rendered.length > 0) {
-        setIndex(rendered.length - 1);
+      setIndex(rendered.length - 1);
     }
   }, [rendered]);
 
@@ -47,7 +46,8 @@ function Board({
     zoomEnabledSetter((val) => !val);
   };
 
-  if (index === null || rendered.length === 0 || index >= rendered.length) return null;
+  if (index === null || rendered.length === 0 || index >= rendered.length)
+    return null;
 
   const next = () => setIndex((i) => (i + 1) % rendered.length);
   const prev = () =>

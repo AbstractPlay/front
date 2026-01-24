@@ -8,7 +8,12 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
 
-const ChallengeResponseModal = React.memo(function ChallengeResponseModal({ respond, challenge, show, close }) {
+const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
+  respond,
+  challenge,
+  show,
+  close,
+}) {
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
   const [globalMe] = useContext(MeContext);
@@ -86,7 +91,7 @@ const ChallengeResponseModal = React.memo(function ChallengeResponseModal({ resp
     if (challenge.comment !== undefined && challenge.comment.length > 0)
       notes = t("Notes") + challenge.comment;
   }
-  return ReactDom.createPortal((
+  return ReactDom.createPortal(
     <Modal
       show={show}
       title={t("Challenge Details")}
@@ -153,8 +158,9 @@ const ChallengeResponseModal = React.memo(function ChallengeResponseModal({ resp
           <p className="help">{t("ChallengeResponseCommentHelp")}</p>
         </div>
       </div>
-    </Modal>
-  ), document.getElementById('modal-root'));
+    </Modal>,
+    document.getElementById("modal-root")
+  );
 });
 
 export default ChallengeResponseModal;

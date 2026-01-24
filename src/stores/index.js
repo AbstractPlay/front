@@ -1,11 +1,11 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 export const useStore = create((set) => ({
-//   globalMe: null,
-//   setGlobalMe: (me) => set({ globalMe: me }),
+  //   globalMe: null,
+  //   setGlobalMe: (me) => set({ globalMe: me }),
 
-//   users: [],
-//   setUsers: (users) => set({ users }),
+  //   users: [],
+  //   setUsers: (users) => set({ users }),
 
   news: [],
   setNews: (news) => set({ news }),
@@ -32,6 +32,6 @@ export const useStore = create((set) => ({
   invisible: false,
   setInvisible: (val) => set({ invisible: val }),
 
-//   myMove: null,
-//   setMyMove: (move) => set({ myMove: move }),
+  //   myMove: null,
+  //   setMyMove: (move) => set({ myMove: move }),
 }));

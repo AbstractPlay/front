@@ -7,9 +7,7 @@ import { Auth } from "aws-amplify";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
-import {
-  MeContext,
-} from "../pages/Skeleton";
+import { MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../stores";
 
@@ -23,7 +21,7 @@ function Navbar(props) {
   const [maxNews, maxNewsSetter] = useState(Infinity);
   const [colorMode, colorModeSetter] = useStorageState("color-mode", "light");
   const setInvisible = useStore((state) => state.setInvisible);
-  const [storedInvis, setStoredInvis] = useStorageState("invisible", false)
+  const [storedInvis, setStoredInvis] = useStorageState("invisible", false);
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 

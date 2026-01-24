@@ -8,7 +8,12 @@ import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
 import { MeContext } from "../../pages/Skeleton";
 
-const ChallengeViewModal = React.memo(function ChallengeViewModal({ revoke, challenge, show, close }) {
+const ChallengeViewModal = React.memo(function ChallengeViewModal({
+  revoke,
+  challenge,
+  show,
+  close,
+}) {
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
   const [globalMe] = useContext(MeContext);
@@ -134,76 +139,81 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({ revoke, chal
     if (challenge.comment !== undefined && challenge.comment.length > 0)
       notes = t("Notes") + challenge.comment;
   }
-  return show ? ReactDom.createPortal((
-    <Modal
-      show={show}
-      title={t("Challenge Details")}
-      buttons={[
-        {
-          label: amChallenger ? t("RevokeChallenge") : t("RevokeAcceptance"),
-          action: handleChallengeRevoke,
-        },
-        { label: t("Close"), action: close },
-      ]}
-    >
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
-        className="content"
-      >
-        {challengeDesc}
-      </ReactMarkdown>
-      <div className="content">
-        <p>
-          {challenge.numPlayers === 2
-            ? t("NumChallenge2") + " " + seating
-            : challenge.standing === true
-            ? t("NumStandingChallenge", { num: challenge.numPlayers })
-            : t("NumChallenge", {
-                num: challenge.numPlayers,
-                players: allPlayers,
-              })}
-        </p>
-        <p>
-          {t("ChallengeClock", {
-            start: challenge.clockStart,
-            inc: challenge.clockInc,
-            max: challenge.clockMax,
-          })}
-        </p>
-        <p>{challenge.clockHard ? t("HardTime") : t("SoftTime")}</p>
-        <p>{challenge.rated ? t("RatedGame") : t("UnratedGame")}</p>
-        <p>
-          <strong>{challenge.noExplore ? t("NoExploreTrue") : ""}</strong>
-        </p>
-        <p>{players}</p>
-        <p>{notes}</p>
-        {challenge.standing ? null : (
-          <div className="field">
-            <label className="label" htmlFor="comment">
-              {t("ChallengeResponseComment")}
-            </label>
-            <div className="control">
-              <textarea
-                className="textarea is-small"
-                id="comment"
-                name="comment"
-                rows="2"
-                maxLength="128"
-                value={comment}
-                onChange={handleCommentChange}
-              ></textarea>
-            </div>
-            <p className="help">
-              {amChallenger
-                ? t("ChallengeRevokeCommentHelp")
-                : t("ChallengeRevokeCommentHelp2")}
+  return show
+    ? ReactDom.createPortal(
+        <Modal
+          show={show}
+          title={t("Challenge Details")}
+          buttons={[
+            {
+              label: amChallenger
+                ? t("RevokeChallenge")
+                : t("RevokeAcceptance"),
+              action: handleChallengeRevoke,
+            },
+            { label: t("Close"), action: close },
+          ]}
+        >
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+            className="content"
+          >
+            {challengeDesc}
+          </ReactMarkdown>
+          <div className="content">
+            <p>
+              {challenge.numPlayers === 2
+                ? t("NumChallenge2") + " " + seating
+                : challenge.standing === true
+                ? t("NumStandingChallenge", { num: challenge.numPlayers })
+                : t("NumChallenge", {
+                    num: challenge.numPlayers,
+                    players: allPlayers,
+                  })}
             </p>
+            <p>
+              {t("ChallengeClock", {
+                start: challenge.clockStart,
+                inc: challenge.clockInc,
+                max: challenge.clockMax,
+              })}
+            </p>
+            <p>{challenge.clockHard ? t("HardTime") : t("SoftTime")}</p>
+            <p>{challenge.rated ? t("RatedGame") : t("UnratedGame")}</p>
+            <p>
+              <strong>{challenge.noExplore ? t("NoExploreTrue") : ""}</strong>
+            </p>
+            <p>{players}</p>
+            <p>{notes}</p>
+            {challenge.standing ? null : (
+              <div className="field">
+                <label className="label" htmlFor="comment">
+                  {t("ChallengeResponseComment")}
+                </label>
+                <div className="control">
+                  <textarea
+                    className="textarea is-small"
+                    id="comment"
+                    name="comment"
+                    rows="2"
+                    maxLength="128"
+                    value={comment}
+                    onChange={handleCommentChange}
+                  ></textarea>
+                </div>
+                <p className="help">
+                  {amChallenger
+                    ? t("ChallengeRevokeCommentHelp")
+                    : t("ChallengeRevokeCommentHelp2")}
+                </p>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </Modal>
-  ), document.getElementById('modal-root')) : null;
+        </Modal>,
+        document.getElementById("modal-root")
+      )
+    : null;
 });
 
 export default ChallengeViewModal;

@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-table";
 import ReactTimeAgo from "react-time-ago";
 import { useStorageState } from "react-use-storage-state";
-import { useStore } from "../../stores"
+import { useStore } from "../../stores";
 
 function showMilliseconds(ms) {
   let positive = true;

@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useContext, Fragment, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  Fragment,
+  useCallback,
+  useMemo,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { nanoid } from "nanoid";
@@ -170,51 +177,60 @@ function Me(props) {
     }
   };
 
-  const handleNewChallenge2 = useCallback(async (challenge) => {
-    try {
-      console.log("calling new_challenge");
-      const res = await callAuthApi("new_challenge", {
+  const handleNewChallenge2 = useCallback(
+    async (challenge) => {
+      try {
+        console.log("calling new_challenge");
+        const res = await callAuthApi("new_challenge", {
+          ...challenge,
+          challenger: { id: globalMe.id, name: globalMe.name },
+        });
+        if (!res) return;
+        showNewChallengeModalSetter(false);
+        varsSetter({ dummy: myid });
+      } catch (error) {
+        errorSetter(error);
+      }
+    },
+    [globalMe, myid]
+  );
+
+  const submitStanding = useCallback(
+    async (standing) => {
+      try {
+        await callAuthApi("update_standing", {
+          entries: standing,
+        });
+        showNewStandingModalSetter(false);
+        varsSetter({ dummy: myid });
+      } catch (error) {
+        errorSetter(error);
+      }
+    },
+    [myid]
+  );
+
+  const handleNewStanding = useCallback(
+    async (challenge) => {
+      // construct entry object
+      const entry = {
         ...challenge,
-        challenger: { id: globalMe.id, name: globalMe.name },
-      });
-      if (!res) return;
-      showNewChallengeModalSetter(false);
-      varsSetter({ dummy: myid });
-    } catch (error) {
-      errorSetter(error);
-    }
-  }, [globalMe, myid]);
-
-  const submitStanding = useCallback(async (standing) => {
-    try {
-      await callAuthApi("update_standing", {
-        entries: standing,
-      });
-      showNewStandingModalSetter(false);
-      varsSetter({ dummy: myid });
-    } catch (error) {
-      errorSetter(error);
-    }
-  }, [myid]);
-
-  const handleNewStanding = useCallback(async (challenge) => {
-    // construct entry object
-    const entry = {
-      ...challenge,
-      id: nanoid(),
-    };
-    // add to existing list
-    // this function doesn't do error checking
-    const cloned = cloneDeep(globalMe);
-    if (cloned.realStanding === undefined) {
-      cloned.realStanding = [];
-    }
-    cloned.realStanding.push(entry);
-    // send updated list to backend
-    await submitStanding(cloned.realStanding);
-    // update globalMe
-    globalMeSetter(cloned);
-  }, [globalMe, globalMeSetter, submitStanding]);
+        id: nanoid(),
+      };
+      // add to existing list
+      // this function doesn't do error checking
+      const cloned = cloneDeep(globalMe);
+      if (cloned.realStanding === undefined) {
+        cloned.realStanding = [];
+      }
+      cloned.realStanding.push(entry);
+      // send updated list to backend
+      await submitStanding(cloned.realStanding);
+      // update globalMe
+      globalMeSetter(cloned);
+    },
+    [globalMe, globalMeSetter, submitStanding]
+  );
 
   const handleStandingSuspend = async (id) => {
     console.log(`suspending ${id}`);
@@ -239,20 +255,20 @@ function Me(props) {
     }
   };
 
-//   const handleTestAsyncClick = async () => {
-//     try {
-//       console.log("Posting test_async");
-//       const res = await callAuthApi("test_async", {
-//         N: 1600000000,
-//       });
-//       if (!res) return;
-//       const result = await res.json();
-//       console.log("test_async returned:");
-//       console.log(JSON.parse(result.body));
-//     } catch (error) {
-//       errorSetter(error);
-//     }
-//   };
+  //   const handleTestAsyncClick = async () => {
+  //     try {
+  //       console.log("Posting test_async");
+  //       const res = await callAuthApi("test_async", {
+  //         N: 1600000000,
+  //       });
+  //       if (!res) return;
+  //       const result = await res.json();
+  //       console.log("test_async returned:");
+  //       console.log(JSON.parse(result.body));
+  //     } catch (error) {
+  //       errorSetter(error);
+  //     }
+  //   };
 
   const handleDeleteGamesClick = async () => {
     showDeleteGamesModalSetter(true);

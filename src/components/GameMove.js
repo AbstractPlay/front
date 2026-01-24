@@ -25,11 +25,7 @@ import Board from "./GameMove/Board";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import ClipboardCopy from "./GameMove/ClipboardCopy";
-import {
-  MeContext,
-  MyTurnContext,
-  UsersContext,
-} from "../pages/Skeleton";
+import { MeContext, MyTurnContext, UsersContext } from "../pages/Skeleton";
 import UserChats from "./GameMove/UserChats";
 import Joyride, { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";

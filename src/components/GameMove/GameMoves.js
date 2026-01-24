@@ -856,7 +856,7 @@ function GameMoves(props) {
                 focus.moveNumber
               )
             }
-            disabled={!validGames.find(([uid,]) => game.metaGame === uid)}
+            disabled={!validGames.find(([uid]) => game.metaGame === uid)}
           >
             Export to playground
           </button>
