@@ -30,7 +30,7 @@ const stringArraysEqual = (lst1, lst2) => {
   return matches;
 };
 
-function StandingChallengeModal({
+const StandingChallengeModal = React.memo(function StandingChallengeModal({
   show,
   handleClose: handleModalClose,
   handleChallenge: handleNewChallenge,
@@ -589,6 +589,6 @@ function StandingChallengeModal({
       )}
     </Modal>
   );
-}
+});
 
 export default StandingChallengeModal;

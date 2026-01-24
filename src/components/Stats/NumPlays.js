@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
-import { SummaryContext } from "../../pages/Skeleton";
 import Plot from "react-plotly.js";
 import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
+import { useStore } from "../../stores";
 
 function NumPlays({ metaFilter, nav }) {
-  const [summary] = useContext(SummaryContext);
+  const summary = useStore((state) => state.summary);
   const [joined, joinedSetter] = useState([]);
   const [activeChartModal, activeChartModalSetter] = useState("");
 

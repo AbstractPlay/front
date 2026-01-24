@@ -16,7 +16,7 @@ import GameVariants from "./GameVariants";
 
 const aiaiUserID = "SkQfHAjeDxs8eeEnScuYA";
 
-function NewChallengeModal(props) {
+const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
   const handleNewChallenge = props.handleChallenge;
   const opponent = props.opponent;
@@ -833,6 +833,6 @@ function NewChallengeModal(props) {
       </Modal>
     );
   }
-}
+});
 
 export default NewChallengeModal;

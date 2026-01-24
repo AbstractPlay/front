@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import { Helmet } from "react-helmet-async";
-import { SummaryContext } from "../pages/Skeleton";
 import rehypeRaw from "rehype-raw";
 import HighestSingleRating from "./Stats/HighestSingleRating";
 import AvgRatings from "./Stats/AvgRatings";
@@ -12,6 +11,7 @@ import PlayerStats from "./Stats/PlayerStats";
 import GameStats from "./Stats/GameStats";
 import SiteStats from "./Stats/SiteStats";
 import Tournaments from "./Stats/Tournaments";
+import { useStore } from "../stores";
 
 const daysBetween = (startDate, endDate) => {
   // The number of milliseconds in all UTC days (no DST)
@@ -91,7 +91,7 @@ const explanations = [
 
 function Stats(props) {
   const { t } = useTranslation();
-  const [summary] = useContext(SummaryContext);
+  const summary = useStore((state) => state.summary);
   const [error] = useState(null);
   const [recDays, recDaysSetter] = useState(0);
   const [recYears, recYearsSetter] = useState(0);

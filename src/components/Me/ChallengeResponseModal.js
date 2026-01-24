@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import ReactDom from "react-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { MeContext } from "../../pages/Skeleton";
@@ -7,7 +8,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
 
-function ChallengeResponseModal({ respond, challenge, show, close }) {
+const ChallengeResponseModal = React.memo(function ChallengeResponseModal({ respond, challenge, show, close }) {
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
   const [globalMe] = useContext(MeContext);
@@ -85,7 +86,7 @@ function ChallengeResponseModal({ respond, challenge, show, close }) {
     if (challenge.comment !== undefined && challenge.comment.length > 0)
       notes = t("Notes") + challenge.comment;
   }
-  return (
+  return ReactDom.createPortal((
     <Modal
       show={show}
       title={t("Challenge Details")}
@@ -153,7 +154,7 @@ function ChallengeResponseModal({ respond, challenge, show, close }) {
         </div>
       </div>
     </Modal>
-  );
-}
+  ), document.getElementById('modal-root'));
+});
 
 export default ChallengeResponseModal;

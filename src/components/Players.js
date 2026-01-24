@@ -10,12 +10,13 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { UsersContext, MeContext, ConnectionContext } from "../pages/Skeleton";
+import { UsersContext, MeContext} from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import { isoToCountryCode } from "../lib/isoToCountryCode";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
+import { useStore } from "../stores";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -23,7 +24,7 @@ function Players() {
   const { t } = useTranslation();
   const [allUsers] = useContext(UsersContext);
   const [globalMe] = useContext(MeContext);
-  const [connections] = useContext(ConnectionContext);
+  const connections = useStore((state) => state.connections);
   const [showState, showStateSetter] = useStorageState("players-show", 20);
   const [sorting, setSorting] = useState([{ id: "name", desc: false }]);
   const [globalFilter, globalFilterSetter] = useState(null);

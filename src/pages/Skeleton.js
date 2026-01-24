@@ -45,6 +45,7 @@ import TimeAgo from "javascript-time-ago";
 import { useStorageState } from "react-use-storage-state";
 import newsData from "../assets/news.json";
 import MyWebSocket from "../components/MyWebSocket";
+import { useStore } from "../stores";
 
 const Stats = lazy(() => import("../components/Stats"));
 // const MetaContainer = lazy(() => import("../components/MetaContainer"));
@@ -57,11 +58,6 @@ TimeAgo.addDefaultLocale(en);
 export const MyTurnContext = createContext([[], () => []]);
 export const MeContext = createContext([null, () => {}]);
 export const UsersContext = createContext([null, () => {}]);
-export const NewsContext = createContext([[], () => []]);
-export const ColourContext = createContext([null, () => {}]);
-export const SummaryContext = createContext([null, () => {}]);
-export const ConnectionContext = createContext([false, () => {}]);
-export const VisibilityContext = createContext([false, () => {}]);
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
@@ -71,8 +67,8 @@ function Bones(props) {
   const [myMove, myMoveSetter] = useState([]);
   const [globalMe, globalMeSetter] = useState(null);
   const [users, usersSetter] = useState(null);
-  const [news, newsSetter] = useState(newsData.sort((a, b) => b.time - a.time));
-  const [summary, summarySetter] = useState(null);
+  const setNews = useStore((state) => state.setNews);
+  const setSummary = useStore((state) => state.setSummary);
   const [colorMode] = useStorageState("color-mode", "light");
   const [storedContextLight] = useStorageState("stored-context-light", {
     background: "#fff",
@@ -90,28 +86,24 @@ function Bones(props) {
     annotations: "#99cccc",
     fill: "#e6f2f2",
   });
-  const [colourContext, colourContextSetter] = useState({
-    background: "#fff",
-    strokes: "#000",
-    borders: "#000",
-    labels: "#000",
-    annotations: "#000",
-    fill: "#000",
-  });
-  const [connections, setConnections] = useState({
-    totalCount: 0,
-    visibleUserIds: [],
-  });
-  const [invisible, setInvisible] = useState(false);
+  const setColourContext = useStore((state) => state.setColourContext);
 
   // Update colour context setting based on colour mode
   useEffect(() => {
     if (colorMode === "dark") {
-      colourContextSetter(storedContextDark);
+      setColourContext(storedContextDark);
     } else {
-      colourContextSetter(storedContextLight);
+      setColourContext(storedContextLight);
     }
-  }, [colorMode, storedContextLight, storedContextDark]);
+  }, [colorMode, storedContextLight, storedContextDark, setColourContext]);
+
+  useEffect(() => {
+    if (newsData !== null && newsData !== undefined) {
+        setNews(newsData.sort((a, b) => b.time - a.time));
+    } else {
+        setNews([]);
+    }
+  }, [setNews]);
 
   useEffect(() => {
     const awsconfig = {
@@ -201,13 +193,13 @@ function Bones(props) {
         var url = new URL("https://records.abstractplay.com/_summary.json");
         const res = await fetch(url);
         const result = await res.json();
-        summarySetter(result);
+        setSummary(result);
       } catch (error) {
-        summarySetter(null);
+        setSummary(null);
       }
     }
     fetchData();
-  }, []);
+  }, [setSummary]);
 
   // apply stored color mode
   useEffect(() => {
@@ -242,17 +234,6 @@ function Bones(props) {
         <ToastContainer />
         <MeContext.Provider value={[globalMe, globalMeSetter]}>
           <UsersContext.Provider value={[users, usersSetter]}>
-            <NewsContext.Provider value={[news, newsSetter]}>
-              <SummaryContext.Provider value={[summary, summarySetter]}>
-                <ColourContext.Provider
-                  value={[colourContext, colourContextSetter]}
-                >
-                  <ConnectionContext.Provider
-                    value={[connections, setConnections]}
-                  >
-                    <VisibilityContext.Provider
-                      value={[invisible, setInvisible]}
-                    >
                       <Router>
                         <MyWebSocket />
                         <Navbar />
@@ -344,11 +325,6 @@ function Bones(props) {
                           <FooterDev />
                         )}
                       </Router>
-                    </VisibilityContext.Provider>
-                  </ConnectionContext.Provider>
-                </ColourContext.Provider>
-              </SummaryContext.Provider>
-            </NewsContext.Provider>
           </UsersContext.Provider>
         </MeContext.Provider>
       </HelmetProvider>

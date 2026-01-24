@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext, SummaryContext } from "../Player";
@@ -16,9 +16,9 @@ function Ratings({ handleChallenge }) {
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
   };
-  const closeChallengeModal = () => {
+  const closeChallengeModal = useCallback(() => {
     activeChallengeModalSetter("");
-  };
+  }, []);
 
   const data = useMemo(
     () =>

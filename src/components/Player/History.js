@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -21,9 +21,9 @@ function History({ handleChallenge }) {
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
   };
-  const closeChallengeModal = () => {
+  const closeChallengeModal = useCallback(() => {
     activeChallengeModalSetter("");
-  };
+  }, []);
 
   const data = useMemo(
     () =>

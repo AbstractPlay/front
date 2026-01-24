@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -143,9 +143,9 @@ const MetaItem = React.forwardRef(
     const openChallengeModal = (name) => {
       activeChallengeModalSetter(name);
     };
-    const closeChallengeModal = () => {
+    const closeChallengeModal = useCallback(() => {
       activeChallengeModalSetter("");
-    };
+    }, []);
 
     const openModal = () => {
       setModalIsOpen(true);

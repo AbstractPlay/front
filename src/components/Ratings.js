@@ -59,9 +59,9 @@ function Ratings() {
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
   };
-  const closeChallengeModal = () => {
+  const closeChallengeModal = useCallback(() => {
     activeChallengeModalSetter("");
-  };
+  }, []);
 
   const handleNewChallenge = useCallback(
     async (challenge) => {
@@ -75,7 +75,7 @@ function Ratings() {
         console.log(error);
       }
     },
-    [globalMe]
+    [globalMe, closeChallengeModal]
   );
 
   const metaGameName = gameinfo.get(metaGame).name;

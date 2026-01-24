@@ -7,10 +7,11 @@ import React, {
   useMemo,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { MeContext, ConnectionContext } from "../../pages/Skeleton";
+import { MeContext } from "../../pages/Skeleton";
 import { callAuthApi } from "../../lib/api";
 import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
+import { useStore } from "../../stores";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -125,7 +126,7 @@ function MoveEntry(props) {
   const [moveState, moveStateSetter] = useState("is-success");
   const [inputValue, inputValueSetter] = useState(move.move);
   const [globalMe] = useContext(MeContext);
-  const [connections] = useContext(ConnectionContext);
+  const connections = useStore((state) => state.connections);
 
   function getFocusNode(exp, game, foc) {
     let curNode = exp[foc.moveNumber];

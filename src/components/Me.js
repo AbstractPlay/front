@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, Fragment } from "react";
+import React, { useState, useEffect, useContext, Fragment, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { nanoid } from "nanoid";
@@ -55,6 +55,8 @@ function Me(props) {
       updateSetter((update) => update + 1);
     }
   };
+
+  const usersMemo = useMemo(() => users, [users]);
 
   useEffect(() => {
     async function fetchData() {
@@ -115,13 +117,13 @@ function Me(props) {
     myidSetter(id);
   };
 
-  const handleNewChallengeClose = () => {
+  const handleNewChallengeClose = useCallback(() => {
     showNewChallengeModalSetter(false);
-  };
+  }, []);
 
-  const handleStandingModalClose = () => {
+  const handleStandingModalClose = useCallback(() => {
     showNewStandingModalSetter(false);
-  };
+  }, []);
 
   const handleChallengeRevoke = async (challenge, comment) => {
     if (globalMe.id !== challenge.challenger.id)
@@ -168,7 +170,7 @@ function Me(props) {
     }
   };
 
-  const handleNewChallenge2 = async (challenge) => {
+  const handleNewChallenge2 = useCallback(async (challenge) => {
     try {
       console.log("calling new_challenge");
       const res = await callAuthApi("new_challenge", {
@@ -181,9 +183,9 @@ function Me(props) {
     } catch (error) {
       errorSetter(error);
     }
-  };
+  }, [globalMe, myid]);
 
-  const submitStanding = async (standing) => {
+  const submitStanding = useCallback(async (standing) => {
     try {
       await callAuthApi("update_standing", {
         entries: standing,
@@ -193,9 +195,9 @@ function Me(props) {
     } catch (error) {
       errorSetter(error);
     }
-  };
+  }, [myid]);
 
-  const handleNewStanding = async (challenge) => {
+  const handleNewStanding = useCallback(async (challenge) => {
     // construct entry object
     const entry = {
       ...challenge,
@@ -212,7 +214,7 @@ function Me(props) {
     await submitStanding(cloned.realStanding);
     // update globalMe
     globalMeSetter(cloned);
-  };
+  }, [globalMe, globalMeSetter, submitStanding]);
 
   const handleStandingSuspend = async (id) => {
     console.log(`suspending ${id}`);
@@ -237,20 +239,20 @@ function Me(props) {
     }
   };
 
-  const handleTestAsyncClick = async () => {
-    try {
-      console.log("Posting test_async");
-      const res = await callAuthApi("test_async", {
-        N: 1600000000,
-      });
-      if (!res) return;
-      const result = await res.json();
-      console.log("test_async returned:");
-      console.log(JSON.parse(result.body));
-    } catch (error) {
-      errorSetter(error);
-    }
-  };
+//   const handleTestAsyncClick = async () => {
+//     try {
+//       console.log("Posting test_async");
+//       const res = await callAuthApi("test_async", {
+//         N: 1600000000,
+//       });
+//       if (!res) return;
+//       const result = await res.json();
+//       console.log("test_async returned:");
+//       console.log(JSON.parse(result.body));
+//     } catch (error) {
+//       errorSetter(error);
+//     }
+//   };
 
   const handleDeleteGamesClick = async () => {
     showDeleteGamesModalSetter(true);
@@ -653,7 +655,7 @@ function Me(props) {
           show={showNewChallengeModal}
           handleClose={handleNewChallengeClose}
           handleChallenge={handleNewChallenge2}
-          users={users}
+          users={usersMemo}
         />
         <StandingChallengeModal
           show={showNewStandingModal}

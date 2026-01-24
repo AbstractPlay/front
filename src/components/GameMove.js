@@ -29,7 +29,6 @@ import {
   MeContext,
   MyTurnContext,
   UsersContext,
-  ColourContext,
 } from "../pages/Skeleton";
 import UserChats from "./GameMove/UserChats";
 import Joyride, { STATUS } from "react-joyride";
@@ -37,6 +36,7 @@ import { useStorageState } from "react-use-storage-state";
 import { toast } from "react-toastify";
 import { nanoid } from "nanoid";
 import { Helmet } from "react-helmet-async";
+import { useStore } from "../stores";
 
 // import helpers
 import {
@@ -161,7 +161,7 @@ function GameMove(props) {
   const [nodeidParam] = useState(params.get("nodeid"));
   const navigate = useNavigate();
   const [allUsers] = useContext(UsersContext);
-  const [colourContext] = useContext(ColourContext);
+  const colourContext = useStore((state) => state.colourContext);
   const [colorsChanged, colorsChangedSetter] = useState(0);
 
   const { t, i18n } = useTranslation();

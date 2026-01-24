@@ -8,24 +8,22 @@ import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
 import {
-  NewsContext,
   MeContext,
-  VisibilityContext,
-  ConnectionContext,
 } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
+import { useStore } from "../stores";
 
 function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
   const [burgerExpanded, updateBurgerExpanded] = useState(false);
-  const [news] = useContext(NewsContext);
+  const news = useStore((state) => state.news);
   const [globalMe] = useContext(MeContext);
-  const [connections] = useContext(ConnectionContext);
+  const connections = useStore((state) => state.connections);
   const [newsLastSeen] = useStorageState("news-last-seen", 0);
   const [maxNews, maxNewsSetter] = useState(Infinity);
   const [colorMode, colorModeSetter] = useStorageState("color-mode", "light");
-  const [, setInvisible] = useContext(VisibilityContext);
-  const [storedInvis, setStoredInvis] = useStorageState("invisible", false);
+  const setInvisible = useStore((state) => state.setInvisible);
+  const [storedInvis, setStoredInvis] = useStorageState("invisible", false)
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 

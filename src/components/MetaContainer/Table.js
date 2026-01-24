@@ -73,9 +73,9 @@ function Table({
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
   };
-  const closeChallengeModal = () => {
+  const closeChallengeModal = useCallback(() => {
     activeChallengeModalSetter("");
-  };
+  }, []);
   const togglePara = useCallback(
     (name) => {
       if (expandedPara.includes(name)) {

@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
-import { SummaryContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 import Plot from "react-plotly.js";
 import Flag from "../Flag";
+import { useStore } from "../../stores";
 
 const lstSummarize = (lst) => {
   if (lst.length === 0) {
@@ -33,7 +33,7 @@ const lstSummarize = (lst) => {
 };
 
 function SiteStats({ nav }) {
-  const [summary] = useContext(SummaryContext);
+  const summary = useStore((state) => state.summary);
   const [cumulative, cumulativeSetter] = useState([]);
   const [summaryGames, setSummaryGames] = useState(null);
   const [summaryPlayers, setSummaryPlayers] = useState(null);

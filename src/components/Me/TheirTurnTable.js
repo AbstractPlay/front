@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, useMemo, Fragment } from "react";
-import { MeContext, ConnectionContext } from "../../pages/Skeleton";
+import { MeContext } from "../../pages/Skeleton";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@tanstack/react-table";
 import ReactTimeAgo from "react-time-ago";
 import { useStorageState } from "react-use-storage-state";
+import { useStore } from "../../stores"
 
 function showMilliseconds(ms) {
   let positive = true;
@@ -44,7 +45,7 @@ const allSize = Number.MAX_SAFE_INTEGER;
 
 function TheirTurnTable(props) {
   const [globalMe] = useContext(MeContext);
-  const [connections] = useContext(ConnectionContext);
+  const connections = useStore((state) => state.connections);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
   ]);
@@ -178,7 +179,7 @@ function TheirTurnTable(props) {
             : showMilliseconds(props.getValue()),
       }),
     ],
-    [columnHelper]
+    [columnHelper, connections]
   );
 
   const table = useReactTable({

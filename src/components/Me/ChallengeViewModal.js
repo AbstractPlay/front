@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import ReactDom from "react-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
@@ -7,7 +8,7 @@ import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
 import { MeContext } from "../../pages/Skeleton";
 
-function ChallengeViewModal({ revoke, challenge, show, close }) {
+const ChallengeViewModal = React.memo(function ChallengeViewModal({ revoke, challenge, show, close }) {
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
   const [globalMe] = useContext(MeContext);
@@ -133,7 +134,7 @@ function ChallengeViewModal({ revoke, challenge, show, close }) {
     if (challenge.comment !== undefined && challenge.comment.length > 0)
       notes = t("Notes") + challenge.comment;
   }
-  return show ? (
+  return show ? ReactDom.createPortal((
     <Modal
       show={show}
       title={t("Challenge Details")}
@@ -202,7 +203,7 @@ function ChallengeViewModal({ revoke, challenge, show, close }) {
         )}
       </div>
     </Modal>
-  ) : null;
-}
+  ), document.getElementById('modal-root')) : null;
+});
 
 export default ChallengeViewModal;

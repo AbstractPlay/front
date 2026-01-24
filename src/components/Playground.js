@@ -22,8 +22,9 @@ import MoveEntry from "./Playground/MoveEntry";
 // import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import ClipboardCopy from "./Playground/ClipboardCopy";
-import { MeContext, ColourContext } from "../pages/Skeleton";
+import { MeContext } from "../pages/Skeleton";
 import GameVariants from "./GameVariants";
+import { useStore } from "../stores";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -803,7 +804,7 @@ function Playground(props) {
   const [validGames, validGamesSetter] = useState([]);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
   const [globalMe] = useContext(MeContext);
-  const [colourContext] = useContext(ColourContext);
+  const colourContext = useStore((state) => state.colourContext);
   const [, gameRecSetter] = useState(undefined);
   const [explorer, explorerSetter] = useState(true); // just whether the user clicked on the explore button. Also see isExplorer.
   // pieInvoked is used to trigger the game reload after the function is called

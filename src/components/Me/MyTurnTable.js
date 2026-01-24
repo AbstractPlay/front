@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { MeContext, ConnectionContext } from "../../pages/Skeleton";
+import { MeContext } from "../../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
   getCoreRowModel,
@@ -14,6 +14,7 @@ import ReactTimeAgo from "react-time-ago";
 import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
 import { useTranslation } from "react-i18next";
+import { useStore } from "../../stores";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 function showMilliseconds(ms) {
@@ -46,7 +47,7 @@ function showMilliseconds(ms) {
 
 function MyTurnTable({ games, fetching }) {
   const [globalMe] = useContext(MeContext);
-  const [connections] = useContext(ConnectionContext);
+  const connections = useStore((state) => state.connections);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
   ]);
@@ -164,7 +165,7 @@ function MyTurnTable({ games, fetching }) {
         ),
       }),
     ],
-    [columnHelper]
+    [columnHelper, connections]
   );
 
   const table = useReactTable({

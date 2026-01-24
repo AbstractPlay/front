@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import { MeContext, UsersContext, SummaryContext } from "../../pages/Skeleton";
+import { MeContext, UsersContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
+import { useStore } from "../../stores";
 
 function AvgRatings({ nav }) {
-  const [summary] = useContext(SummaryContext);
+  const summary = useStore((state) => state.summary);
   const [globalMe] = useContext(MeContext);
   const [userNames] = useContext(UsersContext);
   const [joined, joinedSetter] = useState([]);

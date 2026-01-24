@@ -1,17 +1,17 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 // import i18n from "../i18n";
 import ReactTimeAgo from "react-time-ago";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
-import { NewsContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
+import { useStore } from "../stores";
 
 function News(props) {
   const { t } = useTranslation();
-  const [news] = useContext(NewsContext);
+  const news = useStore((state) => state.news);
   const [, setNewsLastSeen] = useStorageState("news-last-seen", 0);
 
   useEffect(() => {

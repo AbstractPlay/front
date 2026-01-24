@@ -1,8 +1,8 @@
-import { useEffect, useRef, useContext } from "react";
+import { useEffect, useRef } from "react";
 import { getAuthToken } from "../lib/api";
 import { WS_ENDPOINT } from "../config";
 import { toast } from "react-toastify";
-import { ConnectionContext, VisibilityContext } from "../pages/Skeleton";
+import { useStore } from "../stores";
 
 // WebSocket close codes for logging
 const WS_CLOSE_CODES = {
@@ -33,8 +33,8 @@ export default function MyWebSocket() {
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(true);
   const reconnectDelayRef = useRef(INITIAL_RECONNECT_DELAY);
-  const [, setConnections] = useContext(ConnectionContext);
-  const [invisible] = useContext(VisibilityContext);
+  const setConnections = useStore((state) => state.setConnections);
+  const invisible = useStore((state) => state.invisible);
 
   useEffect(() => {
     isMountedRef.current = true;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useMemo } from "react";
+import React, { useState, useEffect, useContext, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -67,7 +67,7 @@ function StandingChallenges(props) {
     }
   }
 
-  const handleNewChallenge = async (challenge) => {
+  const handleNewChallenge = useCallback(async (challenge) => {
     try {
       const res = await callAuthApi("new_challenge", {
         ...challenge,
@@ -78,7 +78,7 @@ function StandingChallenges(props) {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [globalMe]);
 
   useEffect(() => {
     async function fetchAuth() {

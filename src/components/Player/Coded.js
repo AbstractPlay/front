@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
 import { MeContext } from "../../pages/Skeleton";
@@ -15,9 +15,9 @@ function Coded({ handleChallenge }) {
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
   };
-  const closeChallengeModal = () => {
+  const closeChallengeModal = useCallback(() => {
     activeChallengeModalSetter("");
-  };
+  }, []);
 
   const data = useMemo(
     () =>

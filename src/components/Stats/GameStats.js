@@ -1,10 +1,10 @@
-import React, { useContext, useMemo } from "react";
+import React, { useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
-import { SummaryContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
+import { useStore } from "../../stores";
 
 function GameStats({ metaFilter, nav }) {
-  const [summary] = useContext(SummaryContext);
+  const summary = useStore((state) => state.summary);
 
   const data = useMemo(
     () =>
