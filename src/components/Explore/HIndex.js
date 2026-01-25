@@ -1,8 +1,16 @@
-import { useState, useEffect, Fragment, useMemo, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  Fragment,
+  useContext,
+  useMemo,
+  useCallback,
+} from "react";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
+import { MeContext } from "../../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import {
   getCoreRowModel,
@@ -17,11 +25,10 @@ import ExpandableDiv from "../ExpandableDiv";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Thumbnail from "../Thumbnail";
-import { useStore } from "../../stores";
 
 function HIndex({ toggleStar, openImgModal }) {
   const allSize = Number.MAX_SAFE_INTEGER;
-  const globalMe = useStore((state) => state.globalMe);
+  const [globalMe] = useContext(MeContext);
   const [games, gamesSetter] = useState([]);
   const [summary, summarySetter] = useState(null);
   const [showState, showStateSetter] = useStorageState("1es-show", 10);

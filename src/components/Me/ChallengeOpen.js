@@ -1,5 +1,6 @@
-import { useEffect, useState, useMemo } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { MeContext } from "../../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
   getCoreRowModel,
@@ -14,12 +15,11 @@ import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
 import ChallengeViewModal from "./ChallengeViewModal";
 import { useTranslation } from "react-i18next";
-import { useStore } from "../../stores";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function ChallengeOpen({ fetching, handleChallengeRevoke }) {
-  const globalMe = useStore((state) => state.globalMe);
+  const [globalMe] = useContext(MeContext);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [sorting, setSorting] = useState([{ id: "dateIssued", desc: true }]);
   const [showState, showStateSetter] = useStorageState(

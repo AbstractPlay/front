@@ -1,14 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 // import { useTranslation } from "react-i18next";
 // import { addResource } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
-import { useStore } from "../stores";
+import { MyTurnContext } from "../pages/Skeleton";
 
 /*
  * This component loads the "next game" data and immediately redirects you.
  */
 function Play(props) {
+  const [, myMoveSetter] = useContext(MyTurnContext);
   const navigate = useNavigate();
   //   const { t, i18n } = useTranslation();
   //   addResource(i18n.language);
@@ -18,7 +19,6 @@ function Play(props) {
   //   }, [i18n.language]);
 
   useEffect(() => {
-    const { setMyMove: myMoveSetter } = useStore.getState();
     async function fetchData() {
       try {
         const res = await callAuthApi("next_game", {});
@@ -49,7 +49,7 @@ function Play(props) {
         navigate("/");
       }
     });
-  }, [navigate]);
+  }, [myMoveSetter, navigate]);
 
   return;
 }

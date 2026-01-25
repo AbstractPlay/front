@@ -1,6 +1,7 @@
 import React, {
   useState,
   useEffect,
+  useContext,
   Fragment,
   useCallback,
   useMemo,
@@ -15,6 +16,7 @@ import NewProfile from "./NewProfile";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import i18n from "../i18n";
+import { MeContext, MyTurnContext } from "../pages/Skeleton";
 import { cloneDeep } from "lodash";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
 import MyTurnTable from "./Me/MyTurnTable";
@@ -25,7 +27,6 @@ import { toast } from "react-toastify";
 import ChallengeMeRespond from "./Me/ChallengeMeRespond";
 import ChallengeTheyRespond from "./Me/ChallengeTheyRespond";
 import ChallengeOpen from "./Me/ChallengeOpen";
-import { useStore } from "../stores";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -50,7 +51,8 @@ function Me(props) {
   const [myMove, myMoveSetter] = useState([]);
   const [waiting, waitingSetter] = useState([]);
   const [over, overSetter] = useState([]);
-  const globalMe = useStore((state) => state.globalMe);
+  const [, myTurnSetter] = useContext(MyTurnContext);
+  const [globalMe, globalMeSetter] = useContext(MeContext);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
   const location = useLocation();
 
@@ -64,7 +66,6 @@ function Me(props) {
   const usersMemo = useMemo(() => users, [users]);
 
   useEffect(() => {
-    const { setGlobalMe } = useStore.getState();
     async function fetchData() {
       // Can't use props.token because it might have expired by the time the user gets here.
       // Auth.currentAuthenticatedUser() will automatically renew the token if its expired.
@@ -80,13 +81,13 @@ function Me(props) {
         const result = await res.json();
         if (result.statusCode !== 200) errorSetter(JSON.parse(result.body));
         else {
-          if (result === null) setGlobalMe({});
+          if (result === null) globalMeSetter({});
           else {
             const me = JSON.parse(result.body);
             if (me.id === undefined) {
               showNewProfileModalSetter(true);
             }
-            setGlobalMe(me);
+            globalMeSetter(me);
             console.log(JSON.parse(result.body));
           }
         }
@@ -96,7 +97,7 @@ function Me(props) {
       }
     }
     fetchData();
-  }, [vars, update, location, refresh]);
+  }, [vars, update, globalMeSetter, location, refresh]);
 
   useEffect(() => {
     async function fetchData() {
@@ -209,43 +210,48 @@ function Me(props) {
     [myid]
   );
 
-  const handleNewStanding = useCallback(async (challenge) => {
-    const { setGlobalMe } = useStore.getState();
-    const entry = { ...challenge, id: nanoid() };
-
-    let updatedStanding;
-    setGlobalMe((prev) => {
-      const realStanding = prev?.realStanding ? [...prev.realStanding] : [];
-      realStanding.push(entry);
-      updatedStanding = realStanding; // capture for API call
-      return { ...prev, realStanding };
-    });
-
-    await callAuthApi("update_standing", { entries: updatedStanding });
-  }, []);
+  const handleNewStanding = useCallback(
+    async (challenge) => {
+      // construct entry object
+      const entry = {
+        ...challenge,
+        id: nanoid(),
+      };
+      // add to existing list
+      // this function doesn't do error checking
+      const cloned = cloneDeep(globalMe);
+      if (cloned.realStanding === undefined) {
+        cloned.realStanding = [];
+      }
+      cloned.realStanding.push(entry);
+      // send updated list to backend
+      await submitStanding(cloned.realStanding);
+      // update globalMe
+      globalMeSetter(cloned);
+    },
+    [globalMe, globalMeSetter, submitStanding]
+  );
 
   const handleStandingSuspend = async (id) => {
     console.log(`suspending ${id}`);
-    const { setGlobalMe } = useStore.getState();
     const cloned = cloneDeep(globalMe);
     const idx = cloned.realStanding.findIndex((entry) => entry.id === id);
     if (idx >= 0) {
       const curr = cloned.realStanding[idx].suspended || false;
       cloned.realStanding[idx].suspended = !curr;
       await submitStanding(cloned.realStanding);
-      setGlobalMe(cloned);
+      globalMeSetter(cloned);
     }
   };
 
   const handleStandingDelete = async (id) => {
     console.log(`deleting ${id}`);
-    const { setGlobalMe } = useStore.getState();
     const cloned = cloneDeep(globalMe);
     const idx = cloned.realStanding.findIndex((entry) => entry.id === id);
     if (idx >= 0) {
       cloned.realStanding.splice(idx, 1);
       await submitStanding(cloned.realStanding);
-      setGlobalMe(cloned);
+      globalMeSetter(cloned);
     }
   };
 
@@ -363,57 +369,50 @@ function Me(props) {
   };
 
   useEffect(() => {
-    const unsubscribe = useStore.subscribe(
-      (state) => state.globalMe, // selector
-      (globalMe) => {
-        console.log("globalMe changed:", globalMe);
-        const { setMyMove: setMyTurn } = useStore.getState();
-        if (globalMe && globalMe.games) {
-          let games = globalMe.games;
-          if (games === undefined) games = [];
-          const localMyMove = [];
-          waitingSetter([]);
-          overSetter([]);
-          for (const game of games) {
-            if (Array.isArray(game.toMove)) {
-              let found = false;
-              for (let i = 0; i < game.players.length; i++) {
-                if (game.players[i].id === globalMe.id) {
-                  if (game.toMove[i]) {
-                    localMyMove.push(game);
-                    found = true;
-                  }
-                }
-              }
-              if (!found) waitingSetter((waiting) => [...waiting, game]);
-            } else {
-              if (game.toMove === "" || game.toMove === null) {
-                overSetter((over) => [...over, game]);
-              } else if (game.players[game.toMove].id === globalMe.id) {
+    if (globalMe && globalMe.games) {
+      let games = globalMe.games;
+      if (games === undefined) games = [];
+      const localMyMove = [];
+      waitingSetter([]);
+      overSetter([]);
+      for (const game of games) {
+        if (Array.isArray(game.toMove)) {
+          let found = false;
+          for (let i = 0; i < game.players.length; i++) {
+            if (game.players[i].id === globalMe.id) {
+              if (game.toMove[i]) {
                 localMyMove.push(game);
-              } else {
-                waitingSetter((waiting) => [...waiting, game]);
+                found = true;
               }
             }
           }
-
-          // sort myMove by time remaining
-          localMyMove.sort((a, b) => {
-            const recA = a.players.find((x) => x.id === globalMe.id);
-            const recB = b.players.find((x) => x.id === globalMe.id);
-            const timeA = (recA?.time || 0) + a.lastMoveTime;
-            const timeB = (recB?.time || 0) + b.lastMoveTime;
-            return timeA - timeB;
-          });
-
-          myMoveSetter(localMyMove);
-          setMyTurn(localMyMove);
+          if (!found) waitingSetter((waiting) => [...waiting, game]);
+        } else {
+          if (game.toMove === "" || game.toMove === null) {
+            overSetter((over) => [...over, game]);
+          } else if (game.players[game.toMove].id === globalMe.id) {
+            localMyMove.push(game);
+          } else {
+            waitingSetter((waiting) => [...waiting, game]);
+          }
         }
       }
-    );
-
-    return unsubscribe;
-  }, []);
+      // console.log(`Passing myMove as context: ${JSON.stringify(myMove)}`);
+      // console.log(myMove.length);
+      if (globalMe) {
+        // sort myMove by time remaining
+        localMyMove.sort((a, b) => {
+          const recA = a.players.find((x) => x.id === globalMe.id);
+          const recB = b.players.find((x) => x.id === globalMe.id);
+          const timeA = (recA?.time || 0) + a.lastMoveTime;
+          const timeB = (recB?.time || 0) + b.lastMoveTime;
+          return timeA - timeB;
+        });
+      }
+      myMoveSetter(localMyMove);
+      myTurnSetter(localMyMove);
+    }
+  }, [globalMe, myTurnSetter]);
 
   if (error) {
     return (

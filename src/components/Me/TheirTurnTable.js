@@ -1,4 +1,5 @@
-import { useEffect, useState, useMemo, Fragment } from "react";
+import { useContext, useEffect, useState, useMemo, Fragment } from "react";
+import { MeContext } from "../../pages/Skeleton";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
@@ -43,7 +44,7 @@ function showMilliseconds(ms) {
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function TheirTurnTable(props) {
-  const globalMe = useStore((state) => state.globalMe);
+  const [globalMe] = useContext(MeContext);
   const connections = useStore((state) => state.connections);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },

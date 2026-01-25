@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
@@ -10,6 +10,7 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
+import { UsersContext, MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import { isoToCountryCode } from "../lib/isoToCountryCode";
@@ -21,8 +22,8 @@ const allSize = Number.MAX_SAFE_INTEGER;
 
 function Players() {
   const { t } = useTranslation();
-  const allUsers = useStore((state) => state.users);
-  const globalMe = useStore((state) => state.globalMe);
+  const [allUsers] = useContext(UsersContext);
+  const [globalMe] = useContext(MeContext);
   const connections = useStore((state) => state.connections);
   const [showState, showStateSetter] = useStorageState("players-show", 20);
   const [sorting, setSorting] = useState([{ id: "name", desc: false }]);

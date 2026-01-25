@@ -1,9 +1,9 @@
 /* eslint-disable no-prototype-builtins */
 import React, {
+  useContext,
   useState,
   useEffect,
   Fragment,
-  useMemo,
   useCallback,
 } from "react";
 import { useTranslation } from "react-i18next";
@@ -15,12 +15,12 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { debounce } from "lodash";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import { MeContext, UsersContext } from "../pages/Skeleton";
 import Modal from "./Modal";
 import { useStorageState } from "react-use-storage-state";
 import { countryCodeList } from "../lib/countryCodeList";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import { render } from "@abstractplay/renderer";
-import { useStore } from "../stores";
 
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
@@ -42,13 +42,13 @@ function UserSettingsModal(props) {
   const [country, countrySetter] = useState("");
   const [bggid, bggidSetter] = useState("");
   const [aboutMe, aboutMeSetter] = useState("");
-  const users = useStore((state) => state.users);
+  const [users, usersSetter] = useContext(UsersContext);
   const [user, userSetter] = useState(null);
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
   const [exploration, explorationSetter] = useState(null);
   const [confirmMove, confirmMoveSetter] = useState(true);
-  const globalMe = useStore((state) => state.globalMe);
+  const [globalMe, globalMeSetter] = useContext(MeContext);
   const [showPlayTour, showPlayTourSetter] = useStorageState(
     "joyride-play-show",
     true
@@ -94,25 +94,16 @@ function UserSettingsModal(props) {
   const [currNotes, currNotesSetter] = useState("");
 
   useEffect(() => {
-    const unsubscribe = useStore.subscribe(
-      (state) => state.globalMe, // selector
-      (globalMe) => {
-        console.log("globalMe changed:", globalMe);
-        // Trigger your logic here
-        if (
-          globalMe !== undefined &&
-          globalMe !== null &&
-          globalMe.palettes !== undefined
-        ) {
-          myPalettesSetter([...globalMe.palettes]);
-        } else {
-          myPalettesSetter([]);
-        }
-      }
-    );
-
-    return unsubscribe;
-  }, []);
+    if (
+      globalMe !== undefined &&
+      globalMe !== null &&
+      globalMe.palettes !== undefined
+    ) {
+      myPalettesSetter([...globalMe.palettes]);
+    } else {
+      myPalettesSetter([]);
+    }
+  }, [globalMe]);
 
   useEffect(() => {
     if (show) {
@@ -204,27 +195,16 @@ function UserSettingsModal(props) {
     }
   };
 
-  const handleSettingChangeSubmit = useCallback(async (attr, value) => {
-    await callAuthApi("new_setting", {
-      attribute: attr,
-      value: value,
-    });
-  }, []);
+  const handleCountryChange = async (newCountry) => {
+    await handleSettingChangeSubmit("country", newCountry);
+    countrySetter(newCountry);
+    updatedSetter((updated) => updated + 1);
+  };
 
-  const debouncedCountryChange = useMemo(() => {
-    return debounce(async (newCountry) => {
-      await handleSettingChangeSubmit("country", newCountry);
-      countrySetter(newCountry);
-      updatedSetter((updated) => updated + 1);
-    }, 300);
-  }, [handleSettingChangeSubmit]); // ✅ Only depends on submit function
-
-  // ✅ Cleanup on unmount to prevent memory leaks
-  useEffect(() => {
-    return () => {
-      debouncedCountryChange.cancel();
-    };
-  }, [debouncedCountryChange]);
+  const debouncedCountryChange = useCallback(
+    debounce(handleCountryChange, 300),
+    []
+  );
 
   const handleNameChangeCancelClick = () => {
     nameSetter("");
@@ -247,21 +227,25 @@ function UserSettingsModal(props) {
   //     updatedSetter((updated) => updated + 1);
   //   };
 
-  const saveBGGid = () => {
-    const { setGlobalMe, setUsers } = useStore.getState();
-    handleSettingChangeSubmit("bggid", bggid);
-    setGlobalMe((val) => ({ ...val, bggid }));
-    setUsers((prev) =>
-      prev.map((u) => (u.id === globalMe?.id ? { ...u, bggid } : u))
-    );
+  const handleSettingChangeSubmit = async (attr, value) => {
+    await callAuthApi("new_setting", {
+      attribute: attr,
+      value: value,
+    });
   };
 
+  const saveBGGid = () => {
+    handleSettingChangeSubmit("bggid", bggid);
+    globalMeSetter((val) => ({ ...val, bggid }));
+    usersSetter((val) =>
+      val.map((u) => (u.id === globalMe?.id ? { ...u, bggid } : u))
+    );
+  };
   const saveAbout = () => {
-    const { setGlobalMe, setUsers } = useStore.getState();
     handleSettingChangeSubmit("about", aboutMe);
-    setGlobalMe((val) => ({ ...val, about: aboutMe }));
-    setUsers((prev) =>
-      prev.map((u) => (u.id === globalMe?.id ? { ...u, about: aboutMe } : u))
+    globalMeSetter((val) => ({ ...val, about: aboutMe }));
+    usersSetter((val) =>
+      val.map((u) => (u.id === globalMe?.id ? { ...u, about: aboutMe } : u))
     );
   };
 
@@ -444,7 +428,6 @@ function UserSettingsModal(props) {
 
   const savePalettes = async () => {
     try {
-      const { setGlobalMe } = useStore.getState();
       const res = await callAuthApi("save_palettes", {
         palettes: myPalettes,
       });
@@ -456,7 +439,7 @@ function UserSettingsModal(props) {
         // update globalMe palettes
         const newMe = JSON.parse(JSON.stringify(globalMe));
         newMe.palettes = myPalettes;
-        setGlobalMe(newMe);
+        globalMeSetter(newMe);
       }
     } catch (error) {
       console.log(error);
@@ -528,7 +511,6 @@ function UserSettingsModal(props) {
   };
 
   useEffect(() => {
-    const { setGlobalMe } = useStore.getState();
     async function fetchAuth() {
       try {
         const usr = await Auth.currentAuthenticatedUser();
@@ -542,17 +524,20 @@ function UserSettingsModal(props) {
             const result = await res.json();
             if (result.statusCode !== 200) console.log(JSON.parse(result.body));
             else {
-              if (result === null) setGlobalMe({});
+              if (result === null) globalMeSetter({});
               else {
-                setGlobalMe((prev) => {
-                  const backendData = JSON.parse(result.body);
+                globalMeSetter((currentGlobalMe) => {
                   return {
-                    ...prev,
-                    ...backendData,
-                    challengesIssued: prev?.challengesIssued ?? [],
-                    challengesReceived: prev?.challengesReceived ?? [],
-                    challengesAccepted: prev?.challengesAccepted ?? [],
-                    standingChallenges: prev?.standingChallenges ?? [],
+                    ...JSON.parse(result.body),
+                    ...(currentGlobalMe && {
+                      challengesIssued: currentGlobalMe.challengesIssued ?? [],
+                      challengesReceived:
+                        currentGlobalMe.challengesReceived ?? [],
+                      challengesAccepted:
+                        currentGlobalMe.challengesAccepted ?? [],
+                      standingChallenges:
+                        currentGlobalMe.standingChallenges ?? [],
+                    }),
                   };
                 });
                 console.log(JSON.parse(result.body));
@@ -569,11 +554,10 @@ function UserSettingsModal(props) {
     if (show) {
       fetchAuth();
     }
-  }, [updated, show]);
+  }, [globalMeSetter, updated, show]);
 
   const handlePushClick = async () => {
     try {
-      const { setGlobalMe } = useStore.getState();
       let state = true;
       if (
         globalMe !== null &&
@@ -591,7 +575,7 @@ function UserSettingsModal(props) {
       } else {
         const result = await res.json();
         console.log(result.body);
-        setGlobalMe((val) => ({ ...val, mayPush: state }));
+        globalMeSetter((val) => ({ ...val, mayPush: state }));
       }
     } catch (error) {
       console.log(error);

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
+import { MeContext } from "../../pages/Skeleton";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import BoardNav from "./BoardNav";
-import { useStore } from "../../stores";
 
 function Board({
   metaGame,
@@ -32,7 +32,7 @@ function Board({
   colourContext,
   hasNewChat,
 }) {
-  const globalMe = useStore((state) => state.globalMe);
+  const [globalMe] = useContext(MeContext);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
   const [index, setIndex] = useState(null);
 

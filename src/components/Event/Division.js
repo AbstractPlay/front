@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-// import { useTranslation } from "react-i18next";
+import { useState, useEffect, useContext, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { callAuthApi } from "../../lib/api";
 import { cloneDeep } from "lodash";
 import invariant from "tiny-invariant";
@@ -8,11 +8,11 @@ import {
   dropTargetForElements,
   monitorForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { useStore } from "../../stores";
+import { UsersContext } from "../../pages/Skeleton";
 
 function Division({ event, setRefresh }) {
-  //   const { t } = useTranslation();
-  const allUsers = useStore((state) => state.users);
+  const { t } = useTranslation();
+  const [allUsers] = useContext(UsersContext);
   const [unassigned, setUnassigned] = useState([]);
   const [divisions, setDivisions] = useState([]);
   const [canSave, setCanSave] = useState(false);

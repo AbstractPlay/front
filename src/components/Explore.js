@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
+import { MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import TableExplore from "./MetaContainer/TableExplore";
@@ -19,10 +20,9 @@ import Newest from "./Explore/Newest";
 import HIndex from "./Explore/HIndex";
 import Stars from "./Explore/Stars";
 import Thumbnail from "./Thumbnail";
-import { useStore } from "../stores";
 
 function Explore(props) {
-  const globalMe = useStore((state) => state.globalMe);
+  const [globalMe, globalMeSetter] = useContext(MeContext);
   const [games, gamesSetter] = useState([]);
   const [counts, countsSetter] = useState(null);
   const [users, usersSetter] = useState(null);
@@ -133,7 +133,6 @@ function Explore(props) {
 
   const toggleStar = useCallback(
     async (game) => {
-      const { setGlobalMe, globalMe } = useStore.getState();
       try {
         const res = await callAuthApi("toggle_star", {
           metaGame: game,
@@ -148,7 +147,7 @@ function Explore(props) {
           const result = await res.json();
           const newMe = JSON.parse(JSON.stringify(globalMe));
           newMe.stars = JSON.parse(result.body);
-          setGlobalMe(newMe);
+          globalMeSetter(newMe);
           // update counts locally
           const newcounts = JSON.parse(JSON.stringify(counts));
           if (
@@ -168,7 +167,7 @@ function Explore(props) {
         console.log(error);
       }
     },
-    [counts]
+    [counts, globalMe, globalMeSetter]
   );
 
   const handleNewChallenge = async (challenge) => {

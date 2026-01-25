@@ -3,19 +3,19 @@ import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext } from "../Player";
+import { MeContext, UsersContext } from "../../pages/Skeleton";
 // import TableSkeleton from "./TableSkeleton";
 import TableSkeletonFilter from "./TableSkeletonFilter";
 import NewChallengeModal from "../NewChallengeModal";
 import ActivityMarker from "../ActivityMarker";
-import { useStore } from "../../stores";
 
 const formatter = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
 
 function History({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const [allRecs] = useContext(AllRecsContext);
-  const allUsers = useStore((state) => state.users);
-  const globalMe = useStore((state) => state.globalMe);
+  const [allUsers] = useContext(UsersContext);
+  const [globalMe] = useContext(MeContext);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
 
   const openChallengeModal = (name) => {
@@ -261,7 +261,6 @@ function History({ handleChallenge }) {
       handleChallenge,
       allUsers,
       user,
-      closeChallengeModal,
     ]
   );
 

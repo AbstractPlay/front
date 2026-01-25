@@ -1,6 +1,7 @@
 import React, {
   useState,
   useEffect,
+  useContext,
   Fragment,
   useCallback,
   useRef,
@@ -8,10 +9,10 @@ import React, {
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { gameinfo, addResource } from "@abstractplay/gameslib";
+import { MeContext, UsersContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import GameVariants from "./GameVariants";
-import { useStore } from "../stores";
 
 const aiaiUserID = "SkQfHAjeDxs8eeEnScuYA";
 
@@ -61,8 +62,8 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const [opponents, opponentsSetter] = useState([]);
   const [selectedVariants, setSelectedVariants] = useState([]);
   const [comment, commentSetter] = useState("");
-  const globalMe = useStore((state) => state.globalMe);
-  const allUsers = useStore((state) => state.users);
+  const [globalMe] = useContext(MeContext);
+  const [allUsers] = useContext(UsersContext);
   const [users, usersSetter] = useState([]);
   const [forceUnrated, setForceUnrated] = useState(false);
   const errorRef = useRef(null);

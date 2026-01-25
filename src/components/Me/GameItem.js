@@ -1,11 +1,12 @@
+import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
-import { useStore } from "../../stores";
+import { MeContext } from "../../pages/Skeleton";
 
 function GameItem(props) {
   const { t } = useTranslation();
-  const globalMe = useStore((state) => state.globalMe);
+  const [globalMe] = useContext(MeContext);
 
   const game = props.item;
   const currentGameBit = props.gameOver ? "1" : "0";

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Auth } from "aws-amplify";
 import { callAuthApi } from "../lib/api";
 import UserSettingsModal from "./UserSettingsModal";
+import { MeContext } from "../pages/Skeleton";
 import NewProfile from "./NewProfile";
 import { subscribeUser } from "../subscription";
-import { useStore } from "../stores";
 
 function LogInOutButton({ closeBurger }) {
   const { t } = useTranslation();
@@ -14,9 +14,9 @@ function LogInOutButton({ closeBurger }) {
   const [showUserSettingsModal, showUserSettingsModalSetter] = useState(false);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
   const [updated, updatedSetter] = useState(false);
+  const [globalMe, globalMeSetter] = useContext(MeContext);
 
   useEffect(() => {
-    const { setGlobalMe } = useStore.getState();
     async function fetchAuth() {
       try {
         const usr = await Auth.currentAuthenticatedUser();
@@ -31,17 +31,20 @@ function LogInOutButton({ closeBurger }) {
             const result = await res.json();
             if (result.statusCode !== 200) console.log(JSON.parse(result.body));
             else {
-              if (result === null) setGlobalMe({});
+              if (result === null) globalMeSetter({});
               else {
-                setGlobalMe((prev) => {
-                  const backendData = JSON.parse(result.body);
+                globalMeSetter((currentGlobalMe) => {
                   return {
-                    ...prev,
-                    ...backendData,
-                    challengesIssued: prev?.challengesIssued ?? [],
-                    challengesReceived: prev?.challengesReceived ?? [],
-                    challengesAccepted: prev?.challengesAccepted ?? [],
-                    standingChallenges: prev?.standingChallenges ?? [],
+                    ...JSON.parse(result.body),
+                    ...(currentGlobalMe && {
+                      challengesIssued: currentGlobalMe.challengesIssued ?? [],
+                      challengesReceived:
+                        currentGlobalMe.challengesReceived ?? [],
+                      challengesAccepted:
+                        currentGlobalMe.challengesAccepted ?? [],
+                      standingChallenges:
+                        currentGlobalMe.standingChallenges ?? [],
+                    }),
                   };
                 });
                 console.log(JSON.parse(result.body));
@@ -57,41 +60,30 @@ function LogInOutButton({ closeBurger }) {
       }
     }
     fetchAuth();
-  }, [updated]);
+  }, [globalMeSetter, updated]);
 
   useEffect(() => {
-    const unsubscribe = useStore.subscribe(
-      (state) => state.globalMe, // selector
-      (globalMe) => {
-        console.log("globalMe changed:", globalMe);
-        // Trigger your logic here
-        async function fetchAuth() {
-          if (
-            globalMe !== null &&
-            "mayPush" in globalMe &&
-            globalMe.mayPush === true
-          ) {
-            const usr = await Auth.currentAuthenticatedUser();
-            console.log("usr: ", usr);
-            const token = usr.signInUserSession.idToken.jwtToken;
-            if (token !== null) {
-              subscribeUser(token);
-            }
-          }
+    async function fetchAuth() {
+      if (
+        globalMe !== null &&
+        "mayPush" in globalMe &&
+        globalMe.mayPush === true
+      ) {
+        const usr = await Auth.currentAuthenticatedUser();
+        console.log("usr: ", usr);
+        const token = usr.signInUserSession.idToken.jwtToken;
+        if (token !== null) {
+          subscribeUser(token);
         }
-        fetchAuth();
       }
-    );
-
-    return unsubscribe;
-  }, []);
+    }
+    fetchAuth();
+  }, [globalMe]);
 
   const handleSettingsClick = () => {
     console.log(user);
-    const { globalMe } = useStore.getState();
     if (!globalMe || globalMe.id === undefined) {
       console.log("showNewProfileModalSetter(true);");
-      console.log(globalMe);
       showNewProfileModalSetter(true);
     } else {
       showUserSettingsModalSetter(true);
@@ -103,7 +95,6 @@ function LogInOutButton({ closeBurger }) {
     console.log("handleUserSettingsClose, cnt: ", cnt);
     if (cnt > 0) {
       // Refresh globalMe
-      console.log(`Refreshing globalMe (${updated})`);
       updatedSetter(!updated);
     }
   };

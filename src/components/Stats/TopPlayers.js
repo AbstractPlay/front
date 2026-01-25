@@ -1,13 +1,14 @@
-import { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
+import { MeContext, UsersContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
 
 function TopPlayers({ nav }) {
   const summary = useStore((state) => state.summary);
-  const globalMe = useStore((state) => state.globalMe);
-  const userNames = useStore((state) => state.users);
+  const [globalMe] = useContext(MeContext);
+  const [userNames] = useContext(UsersContext);
 
   const data = useMemo(
     () =>

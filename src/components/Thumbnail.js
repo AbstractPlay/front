@@ -1,5 +1,6 @@
 // import React, { useState, useEffect, useContext, useRef } from "react";
 import { useStorageState } from "react-use-storage-state";
+// import { MeContext, ColourContext } from "../pages/Skeleton";
 // import { customAlphabet } from "nanoid";
 // import { render, addPrefix } from "@abstractplay/renderer";
 // const nanoid = customAlphabet(
@@ -11,6 +12,8 @@ function Thumbnail({ meta }) {
   //   const [json, setJson] = useState(null);
   //   const [svg, setSvg] = useState(null);
   //   const [prefix] = useState(nanoid());
+  //   const [globalMe] = useContext(MeContext);
+  //   const [colourContext] = useContext(ColourContext);
   const [colorMode] = useStorageState("color-mode", "light");
   //   const shadowEle = useRef(null);
   //   const broken = React.useMemo(() => [], []);

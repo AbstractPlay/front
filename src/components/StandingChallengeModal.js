@@ -1,6 +1,7 @@
 import React, {
   useState,
   useEffect,
+  useContext,
   Fragment,
   useCallback,
   useRef,
@@ -8,10 +9,10 @@ import React, {
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { gameinfo, addResource } from "@abstractplay/gameslib";
+import { MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import GameVariants from "./GameVariants";
-import { useStore } from "../stores";
 
 const stringArraysEqual = (lst1, lst2) => {
   if (lst1.length !== lst2.length) {
@@ -66,7 +67,7 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
     false
   );
   const [selectedVariants, setSelectedVariants] = useState([]);
-  const globalMe = useStore((state) => state.globalMe);
+  const [globalMe] = useContext(MeContext);
   const errorRef = useRef(null);
 
   useEffect(() => {

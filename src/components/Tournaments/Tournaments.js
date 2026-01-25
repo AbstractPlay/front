@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useContext,
+  useCallback,
+} from "react";
 import { Link, useParams } from "react-router-dom";
 import { callAuthApi } from "../../lib/api";
 import {
@@ -15,10 +21,10 @@ import rehypeRaw from "rehype-raw";
 import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import NewTournamentModal from "./NewTournamentModal";
+import { MeContext, UsersContext } from "../../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
-import { useStore } from "../../stores";
 
 function Tournaments(props) {
   const { t } = useTranslation();
@@ -27,8 +33,8 @@ function Tournaments(props) {
     useState(false);
   const [tournaments, tournamentsSetter] = useState([]);
   const [tournamentsToArchive, tournamentsToArchiveSetter] = useState(false);
-  const globalMe = useStore((state) => state.globalMe);
-  const allUsers = useStore((state) => state.allUsers);
+  const [globalMe] = useContext(MeContext);
+  const [allUsers] = useContext(UsersContext);
   const [openTournamentSorting, openTournamentSortingSetter] = useState([
     { id: "startDate", desc: true },
   ]);

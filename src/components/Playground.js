@@ -1,4 +1,10 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, {
+  Fragment,
+  useEffect,
+  useState,
+  useRef,
+  useContext,
+} from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -16,6 +22,7 @@ import MoveEntry from "./Playground/MoveEntry";
 // import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import ClipboardCopy from "./Playground/ClipboardCopy";
+import { MeContext } from "../pages/Skeleton";
 import GameVariants from "./GameVariants";
 import { useStore } from "../stores";
 
@@ -796,7 +803,7 @@ function Playground(props) {
   const [selectedVariants, selectedVariantsSetter] = useState([]);
   const [validGames, validGamesSetter] = useState([]);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
-  const globalMe = useStore((state) => state.globalMe);
+  const [globalMe] = useContext(MeContext);
   const colourContext = useStore((state) => state.colourContext);
   const [, gameRecSetter] = useState(undefined);
   const [explorer, explorerSetter] = useState(true); // just whether the user clicked on the explore button. Also see isExplorer.
@@ -947,20 +954,12 @@ function Playground(props) {
   }, [i18n, globalMe]);
 
   useEffect(() => {
-    const unsubscribe = useStore.subscribe(
-      (state) => state.globalMe, // selector
-      (globalMe) => {
-        console.log("globalMe changed:", globalMe);
-        if (globalMe !== null && globalMe !== undefined) {
-          gameIDSetter(globalMe.id);
-        } else {
-          gameIDSetter(null);
-        }
-      }
-    );
-
-    return unsubscribe;
-  }, []);
+    if (globalMe !== null && globalMe !== undefined) {
+      gameIDSetter(globalMe.id);
+    } else {
+      gameIDSetter(null);
+    }
+  }, [globalMe]);
 
   useEffect(() => {
     console.log("Fetching playground data");
@@ -1460,7 +1459,6 @@ function Playground(props) {
     //     // console.log(e);
     //   }
     // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     renderrep,
     globalMe,
