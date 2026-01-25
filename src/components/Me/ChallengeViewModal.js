@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import ReactDom from "react-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
@@ -6,7 +6,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
-import { MeContext } from "../../pages/Skeleton";
+import { useStore } from "../../stores";
 
 const ChallengeViewModal = React.memo(function ChallengeViewModal({
   revoke,
@@ -16,7 +16,7 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
 }) {
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
 
   function handleCommentChange(event) {
     commentSetter(event.target.value);

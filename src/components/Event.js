@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
@@ -7,7 +7,6 @@ import ReactTimeAgo from "react-time-ago";
 import { callAuthApi } from "../lib/api";
 import { API_ENDPOINT_OPEN } from "../config";
 import { cloneDeep } from "lodash";
-import { MeContext, UsersContext } from "../pages/Skeleton";
 // import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
@@ -18,12 +17,13 @@ import Pair from "./Event/Pair";
 import GamesTable from "./Event/GamesTable";
 import ResultsTable from "./Event/ResultsTable";
 import Division from "./Event/Division";
+import { useStore } from "../stores";
 
 function Event() {
   const { eventid } = useParams();
   const { t } = useTranslation();
-  const [globalMe] = useContext(MeContext);
-  const [allUsers] = useContext(UsersContext);
+  const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [eventData, eventDataSetter] = useState(null);
   const [status, statusSetter] = useState("loading");
   const [editor, editorSetter] = useState(false);

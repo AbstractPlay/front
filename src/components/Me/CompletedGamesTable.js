@@ -1,13 +1,5 @@
-import {
-  useCallback,
-  useContext,
-  useState,
-  useMemo,
-  Fragment,
-  useEffect,
-} from "react";
+import { useCallback, useState, useMemo, Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { MeContext } from "../../pages/Skeleton";
 import { callAuthApi } from "../../lib/api";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
@@ -20,11 +12,12 @@ import {
 } from "@tanstack/react-table";
 import ReactTimeAgo from "react-time-ago";
 import { useStorageState } from "react-use-storage-state";
+import { useStore } from "../../stores";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function CompletedGamesTable(props) {
-  const [globalMe, globalMeSetter] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [sorting, setSorting] = useState([{ id: "completed", desc: true }]);
   const [showState, showStateSetter] = useStorageState(
     "dashboard-tables-completed-show",
@@ -34,6 +27,7 @@ function CompletedGamesTable(props) {
   const handleClearClick = useCallback(
     async (gameId) => {
       try {
+        const { setGlobalMe } = useStore.getState();
         const res = await callAuthApi("set_lastSeen", {
           gameId,
         });
@@ -51,14 +45,14 @@ function CompletedGamesTable(props) {
             );
           } else {
             newMe.games.splice(idx, 1);
-            globalMeSetter(newMe);
+            setGlobalMe(newMe);
           }
         }
       } catch (error) {
         props.setError(error);
       }
     },
-    [globalMe, globalMeSetter, props]
+    [globalMe, props]
   );
 
   const data = useMemo(

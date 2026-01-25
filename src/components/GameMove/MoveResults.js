@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
 import { Fragment } from "react";
 import ReactTimeAgo from "react-time-ago";
-import { UsersContext } from "../../pages/Skeleton";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import { useStore } from "../../stores";
 
 //TODO:
 // Fix react-time-ago to be language/locale sensitive
@@ -12,7 +11,7 @@ function MoveResults(props) {
   const comments = props.comments;
   const players = props.players;
   const t = props.t;
-  const [users] = useContext(UsersContext);
+  const users = useStore((state) => state.users);
 
   let results;
 

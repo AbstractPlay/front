@@ -1,13 +1,13 @@
-import React, { useContext, useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import { MeContext, UsersContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
+import { useStore } from "../../stores";
 
 function Tournaments({ nav }) {
   const [summary, summarySetter] = useState(null);
-  const [globalMe] = useContext(MeContext);
-  const [userNames] = useContext(UsersContext);
+  const globalMe = useStore((state) => state.globalMe);
+  const userNames = useStore((state) => state.users);
 
   useEffect(() => {
     async function fetchData() {

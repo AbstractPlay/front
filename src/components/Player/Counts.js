@@ -1,24 +1,18 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext, SummaryContext } from "../Player";
-import { MeContext } from "../../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "./TableSkeleton";
 import NewChallengeModal from "../NewChallengeModal";
+import { useStore } from "../../stores";
 
 function Counts({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const [summary] = useContext(SummaryContext);
   const [allRecs] = useContext(AllRecsContext);
   const [counts, countsSetter] = useState([]);
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [hIndex, hIndexSetter] = useState(null);
   const [ptile, ptileSetter] = useState(null);
@@ -131,7 +125,14 @@ function Counts({ handleChallenge }) {
           ),
       }),
     ],
-    [columnHelper, globalMe, user, activeChallengeModal, handleChallenge]
+    [
+      columnHelper,
+      globalMe,
+      user,
+      activeChallengeModal,
+      handleChallenge,
+      closeChallengeModal,
+    ]
   );
 
   return (

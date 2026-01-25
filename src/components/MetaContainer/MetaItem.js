@@ -1,10 +1,9 @@
-import React, { Fragment, useState, useContext, useCallback } from "react";
+import React, { Fragment, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useTranslation } from "react-i18next";
 import { GameFactory } from "@abstractplay/gameslib";
-import { MeContext, UsersContext } from "../../pages/Skeleton";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import HighestSingleRating from "../Stats/HighestSingleRating";
@@ -17,14 +16,15 @@ import Tournaments from "../Tournaments/Tournaments";
 import GameDisplays from "../GameDisplays";
 import GameVariants from "../GameVariants";
 import Thumbnail from "../Thumbnail";
+import { useStore } from "../../stores";
 
 const MetaItem = React.forwardRef(
   (
     { toggleStar, game, counts, hideDetails, highlight, handleChallenge },
     ref
   ) => {
-    const [globalMe] = useContext(MeContext);
-    const [allUsers] = useContext(UsersContext);
+    const globalMe = useStore((state) => state.globalMe);
+    const allUsers = useStore((state) => state.users);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
     const [activeTab, activeTabSetter] = useState("summary");

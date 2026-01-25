@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
-import { MeContext } from "../pages/Skeleton";
 import Modal from "./Modal";
+import { useStore } from "../stores";
 
 function NewProfile(props) {
   const [name, nameSetter] = useState("");
@@ -17,7 +17,6 @@ function NewProfile(props) {
   const [tagline, taglineSetter] = useState("");
   const [error, errorSetter] = useState(false);
   const [errorMessage, errorMessageSetter] = useState("");
-  const [, globalMeSetter] = useContext(MeContext);
   const { t } = useTranslation();
 
   const show = props.show;
@@ -68,6 +67,7 @@ function NewProfile(props) {
       consentErrorSetter(t("PleaseConsent"));
     } else {
       try {
+        const { setGlobalMe } = useStore.getState();
         const res = await callAuthApi("new_profile", {
           name: name,
           consent: consent,
@@ -92,21 +92,17 @@ function NewProfile(props) {
                 if (result.statusCode !== 200)
                   console.log(JSON.parse(result.body));
                 else {
-                  if (result === null) globalMeSetter({});
+                  if (result === null) setGlobalMe({});
                   else {
-                    globalMeSetter((currentGlobalMe) => {
+                    setGlobalMe((prev) => {
+                      const backendData = JSON.parse(result.body);
                       return {
-                        ...JSON.parse(result.body),
-                        ...(currentGlobalMe && {
-                          challengesIssued:
-                            currentGlobalMe.challengesIssued ?? [],
-                          challengesReceived:
-                            currentGlobalMe.challengesReceived ?? [],
-                          challengesAccepted:
-                            currentGlobalMe.challengesAccepted ?? [],
-                          standingChallenges:
-                            currentGlobalMe.standingChallenges ?? [],
-                        }),
+                        ...prev,
+                        ...backendData,
+                        challengesIssued: prev?.challengesIssued ?? [],
+                        challengesReceived: prev?.challengesReceived ?? [],
+                        challengesAccepted: prev?.challengesAccepted ?? [],
+                        standingChallenges: prev?.standingChallenges ?? [],
                       };
                     });
                     console.log(JSON.parse(result.body));

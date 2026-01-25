@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
-import { MeContext } from "../pages/Skeleton";
 // import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
@@ -11,10 +10,11 @@ import TableDrafts from "./Events/TableDrafts";
 import TableRegistration from "./Events/TableRegistration";
 import TableActive from "./Events/TableActive";
 import TableComplete from "./Events/TableComplete";
+import { useStore } from "../stores";
 
 function Events() {
   const { t } = useTranslation();
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [allData, allDataSetter] = useState(null);
   const [drafts, draftsSetter] = useState([]);
   const [open, openSetter] = useState([]);

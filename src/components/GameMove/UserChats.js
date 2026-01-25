@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 // import { useTranslation } from "react-i18next";
 import ReactTimeAgo from "react-time-ago";
-import { UsersContext } from "../../pages/Skeleton";
 import GameCommentShort from "./GameCommentShort";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import { useStore } from "../../stores";
 
 //TODO:
 // Fix react-time-ago to be language/locale sensitive
@@ -13,7 +13,7 @@ function UserChats(props) {
   const comments = props.comments;
   const players = props.players;
   const gameid = props.gameid;
-  const [users] = useContext(UsersContext);
+  const users = useStore((state) => state.users);
   const handleGameMoveClick = props.handleGameMoveClick;
   const focusedPath = props.focusedPath;
   const chatTableRef = useRef(null);

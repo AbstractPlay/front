@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  Suspense,
-  useEffect,
-  createContext,
-  lazy,
-} from "react";
+import React, { useState, Suspense, useEffect, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import {
@@ -55,20 +49,11 @@ const Explore = lazy(() => import("../components/Explore"));
 // TODO: Adjust locale to user selection, when supported
 TimeAgo.addDefaultLocale(en);
 
-export const MyTurnContext = createContext([[], () => []]);
-export const MeContext = createContext([null, () => {}]);
-export const UsersContext = createContext([null, () => {}]);
-
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
   const [token, tokenSetter] = useState(null);
 
   const [update] = useState(0);
-  const [myMove, myMoveSetter] = useState([]);
-  const [globalMe, globalMeSetter] = useState(null);
-  const [users, usersSetter] = useState(null);
-  const setNews = useStore((state) => state.setNews);
-  const setSummary = useStore((state) => state.setSummary);
   const [colorMode] = useStorageState("color-mode", "light");
   const [storedContextLight] = useStorageState("stored-context-light", {
     background: "#fff",
@@ -86,24 +71,25 @@ function Bones(props) {
     annotations: "#99cccc",
     fill: "#e6f2f2",
   });
-  const setColourContext = useStore((state) => state.setColourContext);
 
   // Update colour context setting based on colour mode
   useEffect(() => {
+    const { setColourContext } = useStore.getState();
     if (colorMode === "dark") {
       setColourContext(storedContextDark);
     } else {
       setColourContext(storedContextLight);
     }
-  }, [colorMode, storedContextLight, storedContextDark, setColourContext]);
+  }, [colorMode, storedContextLight, storedContextDark]);
 
   useEffect(() => {
+    const { setNews } = useStore.getState();
     if (newsData !== null && newsData !== undefined) {
       setNews(newsData.sort((a, b) => b.time - a.time));
     } else {
       setNews([]);
     }
-  }, [setNews]);
+  }, []);
 
   useEffect(() => {
     const awsconfig = {
@@ -173,21 +159,23 @@ function Bones(props) {
   }, []);
 
   useEffect(() => {
+    const { setUsers } = useStore.getState();
     async function fetchData() {
       try {
         var url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append("query", "user_names");
         const res = await fetch(url);
         const result = await res.json();
-        usersSetter(result);
+        setUsers(result);
       } catch (error) {
-        usersSetter(null);
+        setUsers([]);
       }
     }
     fetchData();
   }, []);
 
   useEffect(() => {
+    const { setSummary } = useStore.getState();
     async function fetchData() {
       try {
         var url = new URL("https://records.abstractplay.com/_summary.json");
@@ -199,7 +187,7 @@ function Bones(props) {
       }
     }
     fetchData();
-  }, [setSummary]);
+  }, []);
 
   // apply stored color mode
   useEffect(() => {
@@ -232,6 +220,7 @@ function Bones(props) {
           />
         </Helmet>
         <ToastContainer />
+<<<<<<< HEAD
         <MeContext.Provider value={[globalMe, globalMeSetter]}>
           <UsersContext.Provider value={[users, usersSetter]}>
             <Router>
@@ -306,6 +295,73 @@ function Bones(props) {
             </Router>
           </UsersContext.Provider>
         </MeContext.Provider>
+=======
+        <Router>
+          <MyWebSocket />
+          <Navbar />
+          <section className="section" id="main">
+            <Routes>
+              <Route path="*" element={<NotFound />} />
+              <Route path="/about" element={<About token={token} />} />
+              <Route
+                path="/games/:metaGame?"
+                element={<Explore token={token} />}
+              />
+              {/* <Route
+                            path="/explore/:mode?"
+                            element={<Explore token={token} />}
+                          /> */}
+              <Route path="/players" element={<Players />} />
+              <Route path="/player/:userid" element={<Player />} />
+              <Route
+                path="/challenges/:metaGame"
+                element={<StandingChallenges />}
+              />
+              <Route
+                path="/listgames/:gameState/:metaGame"
+                element={<ListGames />}
+              />
+              <Route path="/ratings/:metaGame" element={<Ratings />} />
+              <Route
+                path="/tournament/:metaGame/:tournamentid"
+                element={<Tournament />}
+              />
+              <Route
+                path="/tournament/:tournamentid"
+                element={<Tournament />}
+              />
+              <Route
+                path="/tournamenthistory/:metaGame"
+                element={<TournamentsOld />}
+              />
+              <Route path="/events" element={<Events />} />
+              <Route path="/event/:eventid" element={<Event />} />
+              <Route
+                path="/move/:metaGame/:cbits/:gameID"
+                element={<GameMoveWrapper update={update} />}
+              />
+              <Route
+                path="/legal"
+                element={<Legal token={token} update={update} />}
+              />
+              <Route path="/news" element={<News />} />
+              <Route path="/stats" element={<Stats />} />
+              <Route
+                path="/"
+                element={<Welcome token={token} update={update} />}
+              />
+              <Route path="/playground" element={<Playground />} />
+              <Route path="/tournaments/:metaGame?" element={<Tournaments />} />
+              <Route path="/play" element={<Play />} />
+            </Routes>
+          </section>
+          {process.env.REACT_APP_REAL_MODE === "production" ? (
+            <Footer />
+          ) : (
+            <FooterDev />
+          )}
+        </Router>
+>>>>>>> feature/portals
       </HelmetProvider>
     );
 }

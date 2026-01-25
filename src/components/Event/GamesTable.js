@@ -1,16 +1,16 @@
-import { useMemo, useContext, useEffect, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { callAuthApi } from "../../lib/api";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
-import { UsersContext } from "../../pages/Skeleton";
 import TableSkeleton from "../Events/TableSkeleton";
 import Modal from "../Modal";
+import { useStore } from "../../stores";
 
 function GamesTable({ games, setRefresh, editor, eventid }) {
   const { t } = useTranslation();
-  const [allUsers] = useContext(UsersContext);
+  const allUsers = useStore((state) => state.users);
   const [showModalArbitrate, showModalArbitrateSetter] = useState(false);
   const [arbRec, setArbRec] = useState(null);
   const [winner, setWinner] = useState(null);

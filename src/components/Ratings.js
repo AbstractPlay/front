@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -19,11 +13,11 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { MeContext, UsersContext } from "../pages/Skeleton";
 import NewChallengeModal from "./NewChallengeModal";
 import ActivityMarker from "./ActivityMarker";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
+import { useStore } from "../stores";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -32,8 +26,8 @@ function Ratings() {
   const [ratings, ratingsSetter] = useState([]);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const { metaGame } = useParams();
-  const [globalMe] = useContext(MeContext);
-  const [allUsers] = useContext(UsersContext);
+  const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [showState, showStateSetter] = useStorageState("ratings-show", 20);
   const [sorting, setSorting] = useState([{ id: "rank", desc: false }]);
 
@@ -175,7 +169,14 @@ function Ratings() {
           ),
       }),
     ],
-    [activeChallengeModal, columnHelper, globalMe, handleNewChallenge, metaGame]
+    [
+      activeChallengeModal,
+      columnHelper,
+      globalMe,
+      handleNewChallenge,
+      metaGame,
+      closeChallengeModal,
+    ]
   );
 
   const table = useReactTable({

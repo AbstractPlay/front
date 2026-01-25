@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { callAuthApi } from "../lib/api";
 import { cloneDeep } from "lodash";
 import Modal from "./Modal";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
-import { MeContext } from "../pages/Skeleton";
+import { useStore } from "../stores";
 
 function getSettingAndLevel(
   setting,
@@ -86,7 +86,7 @@ function RenderOptionsModal(props) {
   const [annotate, annotateSetter] = useState(null);
   const [annotateLevel, annotateLevelSetter] = useState(null);
   const { t } = useTranslation();
-  const [globalMe, globalMeSetter] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [paletteName, paletteNameSetter] = useState(null);
 
   useEffect(() => {
@@ -212,12 +212,13 @@ function RenderOptionsModal(props) {
     }
     if (newUserSettings !== undefined) {
       try {
+        const { setGlobalMe } = useStore.getState();
         await callAuthApi("update_user_settings", {
           settings: newUserSettings,
         });
         const newMe = cloneDeep(globalMe);
         newMe.settings = cloneDeep(newUserSettings);
-        globalMeSetter(newMe);
+        setGlobalMe(newMe);
       } catch (error) {
         props.setError(error);
       }

@@ -1,8 +1,7 @@
-import React, { useEffect, useContext, useState, createContext } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { addResource } from "@abstractplay/gameslib";
-import { MeContext, UsersContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -24,6 +23,7 @@ import Response from "./Player/Response";
 import Coded from "./Player/Coded";
 import Designed from "./Player/Designed";
 import Tournaments from "./Player/Tournaments";
+import { useStore } from "../stores";
 
 export const ProfileContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
@@ -47,8 +47,8 @@ const code2ele = new Map([
 
 function Player() {
   const { userid } = useParams();
-  const [globalMe] = useContext(MeContext);
-  const [allUsers] = useContext(UsersContext);
+  const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [user, userSetter] = useState(null);
   const [summary, summarySetter] = useState(null);
   const [allRecs, allRecsSetter] = useState([]);

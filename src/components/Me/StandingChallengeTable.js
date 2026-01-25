@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState, useMemo } from "react";
-import { MeContext } from "../../pages/Skeleton";
+import { useEffect, useState, useMemo } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
   getCoreRowModel,
@@ -9,16 +8,16 @@ import {
   getSortedRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import ReactTimeAgo from "react-time-ago";
 import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
 import { useTranslation } from "react-i18next";
 import Modal from "../Modal";
+import { useStore } from "../../stores";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
   const [showState, showStateSetter] = useStorageState(
     "dashboard-tables-mine-show",
@@ -218,7 +217,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
         ),
       }),
     ],
-    [columnHelper, handleDelete, handleSuspend]
+    [columnHelper, handleSuspend]
   );
 
   const table = useReactTable({

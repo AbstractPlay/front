@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Spinner from "../Spinner";
 import { useTranslation } from "react-i18next";
-import { MeContext } from "../../pages/Skeleton";
 import { gameinfo, addResource } from "@abstractplay/gameslib";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
+import { useStore } from "../../stores";
 
 function NewTournamentModal(props) {
   const handleClose = props.handleClose;
@@ -13,7 +13,7 @@ function NewTournamentModal(props) {
   const fixedMetaGame = props.fixedMetaGame;
   const [metaGame, metaGameSetter] = useState(null);
   const [selectedVariants, setSelectedVariants] = useState([]);
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [error, errorSetter] = useState("");
   const { t, i18n } = useTranslation();
 
