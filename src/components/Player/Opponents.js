@@ -134,10 +134,10 @@ function Opponents({ handleChallenge }) {
                 </>
               ),
               sortingFn: (rowA, rowB, columnID) => {
-                const nameA = allUsers.find(
+                const nameA = allUsers?.find(
                   (u) => u.id === rowA.getValue(columnID)
                 ).name;
-                const nameB = allUsers.find(
+                const nameB = allUsers?.find(
                   (u) => u.id === rowB.getValue(columnID)
                 ).name;
                 return nameA.localeCompare(nameB);
@@ -166,7 +166,7 @@ function Opponents({ handleChallenge }) {
                       handleChallenge={handleChallenge}
                       opponent={{
                         id: props.row.original.id,
-                        name: allUsers.find(
+                        name: allUsers?.find(
                           (u) => u.id === props.row.original.id
                         ).name,
                       }}

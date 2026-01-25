@@ -46,7 +46,7 @@ function History({ handleChallenge }) {
           );
           if (sortedResults[0].result !== sortedResults[1].result) {
             let name = "UNKNOWN";
-            const found = allUsers.find(
+            const found = allUsers?.find(
               (u) => u.id === sortedResults[0].userid
             );
             if (found !== undefined) {
@@ -62,8 +62,8 @@ function History({ handleChallenge }) {
             .map((r) => {
               return {
                 id: r.userid,
-                name: allUsers.find((u) => u.id === r.userid)?.name,
-                lastSeen: allUsers.find((u) => u.id === r.userid)?.lastSeen,
+                name: allUsers?.find((u) => u.id === r.userid)?.name,
+                lastSeen: allUsers?.find((u) => u.id === r.userid)?.lastSeen,
               };
             })
             .filter(

@@ -255,7 +255,7 @@ function Tournaments(props) {
           players: t.players,
           playerNames: t.players
             .map((uid) => {
-              const rec = allUsers.find((u) => u.id === uid);
+              const rec = allUsers?.find((u) => u.id === uid);
               if (rec === undefined) {
                 return "Unknown";
               }
