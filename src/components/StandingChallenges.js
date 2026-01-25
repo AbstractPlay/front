@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -20,13 +14,13 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { callAuthApi } from "../lib/api";
-import { MeContext, UsersContext } from "../pages/Skeleton";
 import Spinner from "./Spinner";
 import ActivityMarker from "./ActivityMarker";
 import NewChallengeModal from "./NewChallengeModal";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import { useExpandVariants } from "../hooks/useExpandVariants";
+import { useStore } from "../stores";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -39,8 +33,8 @@ function StandingChallenges(props) {
   const [reject, rejectSetter] = useState(null);
   const { metaGame } = useParams();
   const [update, updateSetter] = useState(0);
-  const [globalMe] = useContext(MeContext);
-  const [allUsers] = useContext(UsersContext);
+  const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [showState, showStateSetter] = useStorageState("challenges-show", 20);
   const [sorting, setSorting] = useState([]);
   const [showAccepted, showAcceptedSetter] = useState(false);

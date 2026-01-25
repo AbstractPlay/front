@@ -1,7 +1,6 @@
 import React, {
   useState,
   useEffect,
-  useContext,
   useMemo,
   Fragment,
   useCallback,
@@ -13,7 +12,6 @@ import { addResource } from "@abstractplay/gameslib";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { GameFactory } from "@abstractplay/gameslib";
-import { MeContext } from "../../pages/Skeleton";
 import {
   getCoreRowModel,
   useReactTable,
@@ -28,6 +26,7 @@ import NewChallengeModal from "../NewChallengeModal";
 import ExpandableDiv from "../ExpandableDiv";
 import { useStorageState } from "react-use-storage-state";
 import Thumbnail from "../Thumbnail";
+import { useStore } from "../../stores";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 // props:
@@ -44,7 +43,7 @@ function Table({
   updateSetter,
   ...props
 }) {
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [activeImgModal, activeImgModalSetter] = useState("");
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [expandedPara, expandedParaSetter] = useState([]);

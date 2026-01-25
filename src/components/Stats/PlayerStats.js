@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import { MeContext, UsersContext } from "../../pages/Skeleton";
 import Plot from "react-plotly.js";
 import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
@@ -9,8 +8,8 @@ import { useStore } from "../../stores";
 
 function PlayerStats({ nav }) {
   const summary = useStore((state) => state.summary);
-  const [globalMe] = useContext(MeContext);
-  const [userNames] = useContext(UsersContext);
+  const globalMe = useStore((state) => state.globalMe);
+  const userNames = useStore((state) => state.users);
   const [joined, joinedSetter] = useState([]);
   const [activeChartModal, activeChartModalSetter] = useState("");
 

@@ -1,11 +1,11 @@
-import { useMemo, useContext } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import { UsersContext } from "../../pages/Skeleton";
 import TableSkeleton from "../Events/TableSkeleton";
+import { useStore } from "../../stores";
 
 function ResultsTable({ games, eventid }) {
-  const [allUsers] = useContext(UsersContext);
+  const allUsers = useStore((state) => state.users);
 
   const data = useMemo(() => {
     if (allUsers === null) {

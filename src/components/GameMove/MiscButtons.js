@@ -1,6 +1,5 @@
-import { useContext } from "react";
-import { MeContext, MyTurnContext } from "../../pages/Skeleton";
 import DownloadDataUri from "./DownloadDataUri";
+import { useStore } from "../../stores";
 
 function MiscButtons({
   toMove,
@@ -15,8 +14,8 @@ function MiscButtons({
   handleExplorer,
   handleNextGame,
 }) {
-  const [globalMe] = useContext(MeContext);
-  const [myMove] = useContext(MyTurnContext);
+  const globalMe = useStore((state) => state.globalMe);
+  const myMove = useStore((state) => state.myMove);
 
   return (
     <>

@@ -1,18 +1,18 @@
-import React, { useState, useEffect, Fragment, useContext } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
-import { MeContext } from "../pages/Skeleton";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { Helmet } from "react-helmet-async";
 // import Gallery from "./MetaContainer/Gallery";
 import Table from "./MetaContainer/Table";
 import MetaItem from "./MetaContainer/MetaItem";
+import { useStore } from "../stores";
 
 function MetaContainer(props) {
-  const [globalMe, globalMeSetter] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [counts, countsSetter] = useState(null);
   const [users, usersSetter] = useState(null);
   const [summary, summarySetter] = useState(null);
@@ -85,6 +85,7 @@ function MetaContainer(props) {
 
   const toggleStar = async (game) => {
     try {
+      const { setGlobalMe } = useStore.getState();
       const res = await callAuthApi("toggle_star", {
         metaGame: game,
       });
@@ -98,7 +99,7 @@ function MetaContainer(props) {
         const result = await res.json();
         const newMe = JSON.parse(JSON.stringify(globalMe));
         newMe.stars = JSON.parse(result.body);
-        globalMeSetter(newMe);
+        setGlobalMe(newMe);
         // update counts locally
         const newcounts = JSON.parse(JSON.stringify(counts));
         if (newMe !== null && "stars" in newMe && Array.isArray(newMe.stars)) {

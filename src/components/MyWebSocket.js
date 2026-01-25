@@ -33,10 +33,10 @@ export default function MyWebSocket() {
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(true);
   const reconnectDelayRef = useRef(INITIAL_RECONNECT_DELAY);
-  const setConnections = useStore((state) => state.setConnections);
   const invisible = useStore((state) => state.invisible);
 
   useEffect(() => {
+    const { setConnections } = useStore.getState();
     isMountedRef.current = true;
     reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
 
@@ -236,7 +236,7 @@ export default function MyWebSocket() {
         wsRef.current = null;
       }
     };
-  }, [invisible, setConnections]);
+  }, [invisible]);
 
   // Immediately reconnect when browser tab becomes visible
   useEffect(() => {

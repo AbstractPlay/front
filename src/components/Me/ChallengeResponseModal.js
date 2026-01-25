@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import ReactDom from "react-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
-import { MeContext } from "../../pages/Skeleton";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
+import { useStore } from "../../stores";
 
 const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
   respond,
@@ -16,7 +16,7 @@ const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
 }) {
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
 
   function handleCommentChange(event) {
     commentSetter(event.target.value);

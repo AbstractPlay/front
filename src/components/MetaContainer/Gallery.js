@@ -1,15 +1,9 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useRef,
-  createRef,
-} from "react";
+import React, { useState, useEffect, useRef, createRef } from "react";
 import MetaItem from "./MetaItem";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { addResource } from "@abstractplay/gameslib";
-import { MeContext } from "../../pages/Skeleton";
+import { useStore } from "../../stores";
 
 // props:
 //   - metaGame
@@ -18,7 +12,7 @@ import { MeContext } from "../../pages/Skeleton";
 function Gallery(props) {
   const [theMetaGame, theMetaGameSetter] = useState(props.metaGame);
   const counts = props.counts;
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const gameDivs = useRef({});
   const [hideDetails, hideDetailsSetter] = useState(false);
   const [filterStars, filterStarsSetter] = useState(false);

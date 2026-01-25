@@ -1,15 +1,15 @@
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
-import { MeContext } from "../../pages/Skeleton";
 import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "./TableSkeleton";
 import NewChallengeModal from "../NewChallengeModal";
 import { Link } from "react-router-dom";
+import { useStore } from "../../stores";
 
 function Designed({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
 
   const openChallengeModal = (name) => {
@@ -78,7 +78,14 @@ function Designed({ handleChallenge }) {
           ),
       }),
     ],
-    [columnHelper, globalMe, user, activeChallengeModal, handleChallenge]
+    [
+      columnHelper,
+      globalMe,
+      user,
+      activeChallengeModal,
+      handleChallenge,
+      closeChallengeModal,
+    ]
   );
 
   if (data.length === 0) {

@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
-import { MeContext } from "../../pages/Skeleton";
 import { useStore } from "../../stores";
 
 function renderGlyph(
@@ -45,7 +44,7 @@ function GameStatus({
   setLocked,
   setRefresh,
 }) {
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const colourContext = useStore((state) => state.colourContext);
 
   const { t } = useTranslation();

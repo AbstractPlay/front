@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
@@ -7,7 +7,6 @@ import { Auth } from "aws-amplify";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
-import { MeContext } from "../pages/Skeleton";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../stores";
 
@@ -15,12 +14,11 @@ function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
   const [burgerExpanded, updateBurgerExpanded] = useState(false);
   const news = useStore((state) => state.news);
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const connections = useStore((state) => state.connections);
   const [newsLastSeen] = useStorageState("news-last-seen", 0);
   const [maxNews, maxNewsSetter] = useState(Infinity);
   const [colorMode, colorModeSetter] = useStorageState("color-mode", "light");
-  const setInvisible = useStore((state) => state.setInvisible);
   const [storedInvis, setStoredInvis] = useStorageState("invisible", false);
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
@@ -34,8 +32,9 @@ function Navbar(props) {
   }, [i18n.language]);
 
   useEffect(() => {
+    const { setInvisible } = useStore.getState();
     setInvisible(storedInvis);
-  }, [storedInvis, setInvisible]);
+  }, [storedInvis]);
 
   const toggleStoredInvis = () => {
     setStoredInvis((val) => !val);

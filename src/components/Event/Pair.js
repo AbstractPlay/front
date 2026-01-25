@@ -1,15 +1,15 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "../../lib/api";
 import { cloneDeep } from "lodash";
 import SortableList, { SortableItem } from "react-easy-sort";
 import arrayMove from "array-move";
-import { UsersContext } from "../../pages/Skeleton";
 import { bergerTable } from "../../lib/berger";
 import PairingTable from "./PairingTable";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
+import { useStore } from "../../stores";
 
 const errorDesc = new Map([
   [
@@ -25,7 +25,7 @@ const errorDesc = new Map([
 
 function Pair({ event, setRefresh }) {
   const { t } = useTranslation();
-  const [allUsers] = useContext(UsersContext);
+  const allUsers = useStore((state) => state.users);
   const [round, setRound] = useState(0);
   const [validMeta, setValidMeta] = useState(null);
   const [metagame, setMetagame] = useState(null);

@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useState,
   useRef,
-  useContext,
   useCallback,
 } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
@@ -25,7 +24,6 @@ import Board from "./GameMove/Board";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import ClipboardCopy from "./GameMove/ClipboardCopy";
-import { MeContext, MyTurnContext, UsersContext } from "../pages/Skeleton";
 import UserChats from "./GameMove/UserChats";
 import Joyride, { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
@@ -105,7 +103,7 @@ function GameMove(props) {
   const [commentsTooLong, commentsTooLongSetter] = useState(false);
   const [submitting, submittingSetter] = useState(false);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [gameRec, gameRecSetter] = useState(undefined);
   const [showCustomCSS, showCustomCSSSetter] = useState(false);
   const [customCSS, customCSSSetter] = useStorageState("custom-css", {});
@@ -151,12 +149,15 @@ function GameMove(props) {
   const explorationFetchingRef = useRef(false);
   // This is used for hover effects. Has the currently rendered engine state with partial moves, if any, applied.
   const engineRef = useRef(null);
-  const [myMove, myMoveSetter] = useContext(MyTurnContext);
+  const { myMove, setMyMove } = useStore((state) => ({
+    myMove: state.myMove,
+    setMyMove: state.setMyMove,
+  }));
   const params = new URLSearchParams(useLocation().search);
   const [moveNumberParam] = useState(params.get("move"));
   const [nodeidParam] = useState(params.get("nodeid"));
   const navigate = useNavigate();
-  const [allUsers] = useContext(UsersContext);
+  const allUsers = useStore((state) => state.users);
   const colourContext = useStore((state) => state.colourContext);
   const [colorsChanged, colorsChangedSetter] = useState(0);
 
@@ -1644,7 +1645,7 @@ function GameMove(props) {
         // setError(JSON.parse(result.body));
         throw JSON.parse(result.body);
       }
-      myMoveSetter((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
+      setMyMove((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
       let game0 = JSON.parse(result.body);
       const moveNum = explorationRef.current.nodes.length - 1;
       const cur_exploration = explorationRef.current.nodes[moveNum];
@@ -2087,7 +2088,7 @@ function GameMove(props) {
       }
     }
     fetchData().then((result) => {
-      myMoveSetter(result);
+      setMyMove(result);
       if (Array.isArray(result) && result.length > 0) {
         const next = result[0];
         navigateToTop(`/move/${next.metaGame}/0/${next.id}`);
@@ -2106,7 +2107,7 @@ function GameMove(props) {
       local.splice(idx, 1);
       if (local.length > 0) {
         local.push(thisgame);
-        myMoveSetter(local);
+        setMyMove(local);
       }
     }
     // Then go to the next game in the list.

@@ -2,12 +2,10 @@ import React, {
   useEffect,
   useState,
   Fragment,
-  useContext,
   useCallback,
   useMemo,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { MeContext } from "../../pages/Skeleton";
 import { callAuthApi } from "../../lib/api";
 import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
@@ -125,7 +123,7 @@ function MoveEntry(props) {
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
   const [inputValue, inputValueSetter] = useState(move.move);
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const connections = useStore((state) => state.connections);
 
   function getFocusNode(exp, game, foc) {

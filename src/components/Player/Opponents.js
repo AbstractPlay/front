@@ -8,18 +8,18 @@ import React, {
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext, SummaryContext } from "../Player";
-import { MeContext, UsersContext } from "../../pages/Skeleton";
 import TableSkeleton from "./TableSkeleton";
 import NewChallengeModal from "../NewChallengeModal";
 import ActivityMarker from "../ActivityMarker";
+import { useStore } from "../../stores";
 
 function Opponents({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const [allRecs] = useContext(AllRecsContext);
-  const [allUsers] = useContext(UsersContext);
+  const allUsers = useStore((state) => state.users);
   const [summary] = useContext(SummaryContext);
   const [counts, countsSetter] = useState([]);
-  const [globalMe] = useContext(MeContext);
+  const globalMe = useStore((state) => state.globalMe);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [hIndex, hIndexSetter] = useState(null);
   const [ptile, ptileSetter] = useState(null);
@@ -181,7 +181,14 @@ function Opponents({ handleChallenge }) {
                 ),
             }),
           ],
-    [columnHelper, globalMe, activeChallengeModal, handleChallenge, allUsers]
+    [
+      columnHelper,
+      globalMe,
+      activeChallengeModal,
+      handleChallenge,
+      allUsers,
+      closeChallengeModal,
+    ]
   );
 
   return (
