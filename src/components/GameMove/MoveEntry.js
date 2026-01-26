@@ -687,6 +687,19 @@ function MoveEntry(props) {
           ) : (
             ""
           )}
+          {focus.exPath.length > 0 &&
+          game.canExplore &&
+          !gameOverNonLeafNode ? (
+            <div
+              className="winningColorButton tooltipped"
+              onClick={() => handleDeleteExploration()}
+            >
+              <i className="fa fa-trash resetExploreIcon"></i>
+              <span className="tooltiptext">{t("DeleteSubtree")}</span>
+            </div>
+          ) : (
+            ""
+          )}
           {focus.exPath.length > 1 &&
           game.canExplore &&
           !game.gameOver &&
@@ -708,19 +721,6 @@ function MoveEntry(props) {
                   ? t("ClearPremove")
                   : t("MarkPremove")}
               </span>
-            </div>
-          ) : (
-            ""
-          )}
-          {focus.exPath.length > 0 &&
-          game.canExplore &&
-          !gameOverNonLeafNode ? (
-            <div
-              className="winningColorButton tooltipped"
-              onClick={() => handleDeleteExploration()}
-            >
-              <i className="fa fa-trash resetExploreIcon"></i>
-              <span className="tooltiptext">{t("DeleteSubtree")}</span>
             </div>
           ) : (
             ""
