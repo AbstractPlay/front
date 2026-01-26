@@ -28,7 +28,7 @@ function Tournaments(props) {
   const [tournaments, tournamentsSetter] = useState([]);
   const [tournamentsToArchive, tournamentsToArchiveSetter] = useState(false);
   const globalMe = useStore((state) => state.globalMe);
-  const allUsers = useStore((state) => state.allUsers);
+  const allUsers = useStore((state) => state.users);
   const [openTournamentSorting, openTournamentSortingSetter] = useState([
     { id: "startDate", desc: true },
   ]);
