@@ -15,6 +15,7 @@ import Spinner from "../Spinner";
 import ChallengeViewModal from "./ChallengeViewModal";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
+import { expandVariants } from "../../lib/expandVariants";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -34,7 +35,7 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
-          variants: g.variants,
+          variants: expandVariants(g.metaGame, g.variants),
           numPlayers: g.numPlayers,
           gameName: "Unknown",
           dateIssued: g.dateIssued,
@@ -69,9 +70,6 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
       }),
       columnHelper.accessor("variants", {
         header: "Variants",
-        cell: (props) => {
-          props.getValue().join(", ");
-        },
       }),
       columnHelper.accessor("numPlayers", {
         header: "# players",
