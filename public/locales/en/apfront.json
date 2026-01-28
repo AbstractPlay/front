@@ -18,6 +18,7 @@
         "acceptpie": "Play second",
         "playsecond": "Play second",
         "draw": "Claim draw",
+        "playfirst": "Play first",
         "numbers": {
             "one": "One (1)",
             "two": "Two (2)",
