@@ -3011,5 +3011,65 @@ Let me know if you encounter any issues. Enjoy!</description>
       <guid isPermaLink="false">1464276006906105956</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>Two new games are available:
+- The Decktet game [Frogger (or Xing)](https://play.abstractplay.com/games/frogger) is now available thanks to @mcd. In this game, 2-5 players play cards to navigate their frogs across a busy expanse. First to get them all across wins!
+- Dieter Stein&amp;apos;s round sowing game [Rincala](https://play.abstractplay.com/games/rincala) is now available. This is a lighter game where you attempt to capture more valuable pieces than your opponent.
+
+Both games take advantage of a new rendering feature: frames. You will now sometimes see a frame selector above the game board (see screenshot). You can use the arrows to navigate over the various steps of the move. Only the last frame is clickable. Multiframe rendering is only available in live games. Thumbnails and the Playground will only ever show the last frame of the series. If you encounter any issues, please let us know. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 26 Jan 2026 21:27:58 GMT</pubDate>
+      <guid isPermaLink="false">1465458269446340639</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Corey L. Clark has tweaked the rules to Surmount. This only effects games that start after the change. Existing games will continue to operate under the previous rules. Now, when capturing a strictly smaller group, all adjacent enemy groups smaller than the created group are captured as well. In his words, this change is &amp;quot;to prevent a tedious wrap-up phase once the game has already reached a conclusion.&amp;quot;</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 27 Jan 2026 23:07:33 GMT</pubDate>
+      <guid isPermaLink="false">1465845718391455886</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@cdunc123&amp;apos;s game [Wunchunk](https://play.abstractplay.com/games/wunchunk) is now available. The ultimate goal is to unite your pieces more than your opponent does, but you don&amp;apos;t want to do so too early as having many groups gives you many placement options. You can also place pieces of any colour. The game supports 2-4 players. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 29 Jan 2026 19:30:38 GMT</pubDate>
+      <guid isPermaLink="false">1466515904153256023</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mark Khan&amp;apos;s game [Bamboo](https://play.abstractplay.com/games/bamboo) is now available. Place stones following a single rule: no group may contain more stones than the number of friendly groups on the board. Last person to place a stone wins. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 30 Jan 2026 21:41:27 GMT</pubDate>
+      <guid isPermaLink="false">1466911214692204717</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A new Tintas variant is now available called Modular Tintas. This creates a random 49-space board constructed from seven hexhex2s randomly placed such that they touch each other at two hexes (previously seen in Storisende). I am pretty sure that I didn&amp;apos;t break normal Tintas at all, but do let me know if something seems wonky. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 01 Feb 2026 15:57:23 GMT</pubDate>
+      <guid isPermaLink="false">1467549401525522526</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Sorry! The Modular Tintas variant is now properly visible! Apologies!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 02 Feb 2026 19:18:15 GMT</pubDate>
+      <guid isPermaLink="false">1467962341441405221</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>The Abande Libre variant is now available. Here there&amp;apos;s no fixed board, just an ever-growing hexagonal field. Still the same rules with some modifications around where you can legally place new pieces. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 03 Feb 2026 13:32:53 GMT</pubDate>
+      <guid isPermaLink="false">1468237813806928147</guid>
+    </item>
+    
   </channel>
 </rss>

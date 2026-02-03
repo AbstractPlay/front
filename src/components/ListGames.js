@@ -51,7 +51,7 @@ function ListGames({ fixedState }) {
         );
       } catch (error) {
         maxPlayersSetter(2);
-        gamesSetter(null);
+        gamesSetter([]);
         console.log(error);
       }
     }
