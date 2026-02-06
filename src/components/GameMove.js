@@ -1382,7 +1382,7 @@ function GameMove(props) {
           render(r, {
             ...options,
             divelem: container,
-            boardClick: i === renders.length - 1 ? boardClick : undefined,
+            boardClick: i === renders.length - 1 ? (focus.canExplore ? boardClick : undefined) : undefined,
           });
           const svgNode = container.firstChild;
           tmpRendered.push(svgNode);
