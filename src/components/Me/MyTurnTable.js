@@ -173,6 +173,7 @@ function MyTurnTable({ games, fetching }) {
     state: {
       sorting,
     },
+    autoResetPageIndex: false,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

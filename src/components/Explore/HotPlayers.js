@@ -277,6 +277,7 @@ function HotPlayers({ toggleStar, openImgModal }) {
       },
       columnFilters,
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

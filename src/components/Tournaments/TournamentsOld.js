@@ -117,6 +117,7 @@ function TournamentsOld(props) {
     state: {
       sorting,
     },
+    autoResetPageIndex: false,
     onSortingChange: sortingSetter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

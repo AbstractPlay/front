@@ -236,6 +236,7 @@ function ListGames({ fixedState }) {
         winners: fixedState === "completed" || gameState === "completed",
       },
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

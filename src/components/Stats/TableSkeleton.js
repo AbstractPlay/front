@@ -28,6 +28,7 @@ function TableSkeleton({ sort, data, columns, nav }) {
       columnVisibility: {},
       globalFilter,
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onGlobalFilterChange: globalFilterSetter,
     globalFilterFn: "includesString",

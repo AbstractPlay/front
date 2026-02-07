@@ -566,6 +566,7 @@ function TableExplore({ toggleStar, handleChallenge, updateSetter, ...props }) {
       },
       columnFilters,
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

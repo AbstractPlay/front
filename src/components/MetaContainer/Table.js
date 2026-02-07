@@ -570,6 +570,7 @@ function Table({
       },
       columnFilters,
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

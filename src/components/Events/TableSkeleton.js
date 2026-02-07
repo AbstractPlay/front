@@ -30,6 +30,7 @@ function TableSkeleton(props) {
       columnVisibility: {},
       globalFilter,
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onGlobalFilterChange: globalFilterSetter,
     globalFilterFn: "includesString",

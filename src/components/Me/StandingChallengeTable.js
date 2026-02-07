@@ -226,6 +226,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
     state: {
       sorting,
     },
+    autoResetPageIndex: false,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

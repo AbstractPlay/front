@@ -148,6 +148,7 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
     state: {
       sorting,
     },
+    autoResetPageIndex: false,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

@@ -141,6 +141,7 @@ function Players() {
       sorting,
       globalFilter,
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onGlobalFilterChange: globalFilterSetter,
     globalFilterFn: "includesString",

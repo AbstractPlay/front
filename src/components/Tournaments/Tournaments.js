@@ -391,6 +391,7 @@ function Tournaments(props) {
     columnVisibility: {
       actions: globalMe !== null,
     },
+    autoResetPageIndex: false,
     onSortingChange: openTournamentSortingSetter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -599,6 +600,7 @@ function Tournaments(props) {
     columnVisibility: {
       actions: globalMe !== null,
     },
+    autoResetPageIndex: false,
     onSortingChange: currentTournamentSortingSetter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -805,6 +807,7 @@ function Tournaments(props) {
     columnVisibility: {
       actions: globalMe !== null,
     },
+    autoResetPageIndex: false,
     onSortingChange: completedTournamentSortingSetter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

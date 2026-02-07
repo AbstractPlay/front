@@ -393,6 +393,7 @@ function StandingChallenges(props) {
         players: showAccepted,
       },
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

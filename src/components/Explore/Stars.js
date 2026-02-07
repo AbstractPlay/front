@@ -241,6 +241,7 @@ function Stars({ toggleStar, openImgModal, counts }) {
       },
       columnFilters,
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

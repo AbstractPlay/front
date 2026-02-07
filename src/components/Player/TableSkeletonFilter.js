@@ -29,6 +29,7 @@ function TableSkeleton({ data, columns, sort, globalFilterFn }) {
       columnVisibility: {},
       globalFilter,
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onGlobalFilterChange: globalFilterSetter,
     globalFilterFn,

@@ -171,6 +171,7 @@ function CompletedGamesTable(props) {
     state: {
       sorting,
     },
+    autoResetPageIndex: false,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

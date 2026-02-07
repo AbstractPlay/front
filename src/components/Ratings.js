@@ -188,6 +188,7 @@ function Ratings() {
         actions: globalMe !== null,
       },
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

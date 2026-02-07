@@ -253,6 +253,7 @@ function CompletedAll({ toggleStar, openImgModal, counts }) {
       },
       columnFilters,
     },
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
