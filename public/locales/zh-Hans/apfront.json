@@ -8,7 +8,8 @@
             "left": "向左移动",
             "right": "向右移动"
         },
-        "pass": "跳过"
+        "pass": "跳过",
+        "acceptpie": "再次播放"
     },
     "categories": {
         "board>connect>hex": {
@@ -157,5 +158,7 @@
     "AcceptDraw": "接受和棋",
     "Annotate": "显示上一步",
     "AvailableGames": "可用的游戏",
-    "YourGames": "你的游戏"
+    "YourGames": "你的游戏",
+    "All": "所有",
+    "AlternativeDisplays": "备选显示选项"
 }
