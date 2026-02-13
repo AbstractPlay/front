@@ -1,3 +1,38 @@
 {
-    "Accept": "Kabul et"
+    "Accept": "Kabul et",
+    "404": "404 Bulunamadı",
+    "About": "Hakkında",
+    "Active": "Aktif",
+    "AcceptDraw": "Beraberlik teklifini kabul et",
+    "Accepted": "Kabul Edildi!",
+    "All": "Hepsi",
+    "AlternativeDisplays": "Alternatif görüntüleme seçenekleri",
+    "and": "ve",
+    "Annotate": "Son hamle göstergelerini göster",
+    "AnnotationLevel": "Bu seçeneğin nerede uygulanmasını istersiniz?",
+    "AvailableGames": "Mevcut Oyunlar",
+    "BoardSettings": "Oyun tahtası ayarlarını değiştir",
+    "buttons": {
+        "pass": "Geç",
+        "takebutton": "Düğmeyi al",
+        "acceptpie": "İkinci oynat",
+        "playsecond": "İkinci oynat",
+        "draw": "Beraberlik talep et",
+        "playfirst": "İlk oyna",
+        "numbers": {
+            "one": "Bir (1)",
+            "two": "İki (2)",
+            "three": "Üç (3)"
+        },
+        "pigs": {
+            "back": "Geri git",
+            "forward": "Öne git",
+            "left": "Sol öne doğru ilerle",
+            "right": "Sağ öne doğru ilerle",
+            "cw": "Saat yönünde döndür",
+            "ccw": "Saat yönünün tersine döndür",
+            "fire": "Lazer ateşle",
+            "hit": "Sallanan namlu"
+        }
+    }
 }
