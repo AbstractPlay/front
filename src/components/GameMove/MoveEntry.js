@@ -254,17 +254,18 @@ function MoveEntry(props) {
           mover = "";
         }
       } else {
-        mover = t("ToMove", { player: game.players[toMove].name });
+        mover = t("ToMove", { player: game.players[toMove]?.name });
         if (game.colors !== undefined) img = game.colors[toMove];
         // Exploration in games that have finished is public. I don't think we want to allow people to delete big trees that other people might have put in
         // so only allow leaf nodes to be deleted?
         gameOverNonLeafNode =
           game.gameOver &&
-          getFocusNode(exploration, game, focus).children.length > 0;
+          getFocusNode(exploration, game, focus)?.children?.length > 0;
       }
     } else {
       // game over
       const node = getFocusNode(exploration, game, focus);
+      if (!node) return null;
       const state = GameFactory(engine.metaGame, node.state);
       if (state.winner && state.winner.length > 0) {
         if (state.winner.length === 1) {
@@ -321,7 +322,7 @@ function MoveEntry(props) {
             "yourTurn" + (game.canSubmit && uiState === 0 ? " myTurn" : "")
           }
         >
-          {img === null ? (
+          {img == null ? (
             ""
           ) : img.isImage ? (
             <img
@@ -704,12 +705,12 @@ function MoveEntry(props) {
           game.canExplore &&
           !game.gameOver &&
           !game.simultaneous &&
-          getFocusNode(exploration, game, focus).toMove !== game.me ? (
+          getFocusNode(exploration, game, focus)?.toMove !== game.me ? (
             <div
               className="winningColorButton tooltipped"
               onClick={() => handlePremove()}
             >
-              {getFocusNode(exploration, game, focus).premove ? (
+              {getFocusNode(exploration, game, focus)?.premove ? (
                 <span className="highlight">
                   <i className="fa fa-clock-o premoveIcon"></i>
                 </span>
@@ -717,7 +718,7 @@ function MoveEntry(props) {
                 <i className="fa fa-clock-o premoveIcon"></i>
               )}
               <span className="tooltiptext">
-                {getFocusNode(exploration, game, focus).premove
+                {getFocusNode(exploration, game, focus)?.premove
                   ? t("ClearPremove")
                   : t("MarkPremove")}
               </span>

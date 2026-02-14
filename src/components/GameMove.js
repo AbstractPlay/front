@@ -2824,7 +2824,7 @@ function GameMove(props) {
                         explorationRef.current.nodes,
                         gameRef.current,
                         focus
-                      ).state
+                      )?.state
                     }
                   />
                   <div className="field">
@@ -2835,7 +2835,7 @@ function GameMove(props) {
                             explorationRef.current.nodes,
                             gameRef.current,
                             focus
-                          ).state
+                          )?.state
                         )}`}
                         download="AbstractPlay-Debug.json"
                       >
