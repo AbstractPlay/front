@@ -215,6 +215,10 @@ function RenderOptionsModal(props) {
         await callAuthApi("update_user_settings", {
           settings: newUserSettings,
         });
+        const { setGlobalMe } = useStore.getState();
+        const newMe = cloneDeep(globalMe);
+        newMe.settings = cloneDeep(newUserSettings);
+        setGlobalMe(newMe);
       } catch (error) {
         props.setError(error);
       }

@@ -1538,6 +1538,13 @@ function GameMove(props) {
 
   const processUpdatedSettings = (newGameSettings, newUserSettings) => {
     // console.log("processUpdatedSettings", newGameSettings, newUserSettings);
+    // Update dbgame's player settings so the main useEffect always has correct data
+    if (dbgame !== null && gameRef.current?.me > -1) {
+      const player = dbgame.players.find((p) => p.id === globalMe.id);
+      if (player) {
+        player.settings = cloneDeep(newGameSettings);
+      }
+    }
     const newSettings = processNewSettings(
       newGameSettings,
       newUserSettings,
