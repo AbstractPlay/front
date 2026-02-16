@@ -332,7 +332,7 @@ function Customize(props) {
 
       <div className="columns">
         <div className="column is-one-third">
-          <h2 className="subtitle">Colour Context</h2>
+          <h2 className="subtitle">Board Colours</h2>
           <div className="columns is-multiline">
             {[
               { label: "Background", val: background, set: setBackground },
@@ -364,11 +364,11 @@ function Customize(props) {
           </div>
         </div>
         <div className="column is-one-third">
-          <h2 className="subtitle">Palette</h2>
+          <h2 className="subtitle">Player Colours</h2>
           <div className="field">
-            <label className="label is-small">Add Color</label>
+            <label className="label is-small">Add Colour</label>
             <div className="help">
-              Select a colour and click the "Add to Palette" button. The default
+              Select a colour and click the "Add Colour" button. The default
               colours can be selected by clicking on the swatch. If the palette
               is empty, the default palette will be used.
             </div>
@@ -398,7 +398,7 @@ function Customize(props) {
                 ))}
               </div>
               <button className="button is-small apButton" onClick={addColor}>
-                Add to Palette
+                Add Colour
               </button>
             </div>
           </div>
