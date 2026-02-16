@@ -1374,10 +1374,6 @@ function GameMove(props) {
             while (options.colours.length < 12) {
               options.colours.push("#fff");
             }
-            if (globalMe?.settings?.all?.myColor && game.me > 0) {
-              const mycolor = options.colours.shift();
-              options.colours.splice(game.me, 0, mycolor);
-            }
           }
         }
         if (gameRef.current.stackExpanding) {
@@ -1406,6 +1402,11 @@ function GameMove(props) {
           ) {
             options.colours = custom.palette;
           }
+        }
+        // handle "Always use my colour" preference
+        if (globalMe?.settings?.all?.myColor && game.me > 0) {
+            const mycolor = options.colours.shift();
+            options.colours.splice(game.me, 0, mycolor);
         }
         console.log("rendering", renderrep, options);
         const tmpRendered = [];
