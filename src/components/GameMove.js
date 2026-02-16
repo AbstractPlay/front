@@ -1149,7 +1149,13 @@ function GameMove(props) {
     }
     const metaInfo = gameinfo.get(game.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-      setupColors(settings, gameRef.current, globalMe, effectiveColourContext, node);
+      setupColors(
+        settings,
+        gameRef.current,
+        globalMe,
+        effectiveColourContext,
+        node
+      );
       colorsChangedSetter((val) => val + 1);
     }
   };
@@ -1318,9 +1324,15 @@ function GameMove(props) {
       populateChecked(gameRef, engineRef, t, inCheckSetter);
       const metaInfo = gameinfo.get(gameRef.current.metaGame);
       if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, effectiveColourContext, {
-          state: engineRef.current.state(),
-        });
+        setupColors(
+          settings,
+          gameRef.current,
+          globalMe,
+          effectiveColourContext,
+          {
+            state: engineRef.current.state(),
+          }
+        );
         colorsChangedSetter((val) => val + 1);
       }
     }
@@ -1373,7 +1385,7 @@ function GameMove(props) {
             expand(col, row);
           };
         }
-       options.showAnnotations = settings.annotate;
+        options.showAnnotations = settings.annotate;
         options.svgid = "theBoardSVG";
         options.colourContext = effectiveColourContext;
         if (globalMe?.customizations?.[metaGame]) {
@@ -1412,7 +1424,12 @@ function GameMove(props) {
           render(r, {
             ...options,
             divelem: container,
-            boardClick: i === renders.length - 1 ? (focus.canExplore ? boardClick : undefined) : undefined,
+            boardClick:
+              i === renders.length - 1
+                ? focus.canExplore
+                  ? boardClick
+                  : undefined
+                : undefined,
           });
           const svgNode = container.firstChild;
           tmpRendered.push(svgNode);
@@ -1710,9 +1727,15 @@ function GameMove(props) {
         );
       }
       if (gameRef.current.customColours) {
-        setupColors(settings, gameRef.current, globalMe, effectiveColourContext, {
-          state: engineRef.current.state(),
-        });
+        setupColors(
+          settings,
+          gameRef.current,
+          globalMe,
+          effectiveColourContext,
+          {
+            state: engineRef.current.state(),
+          }
+        );
         colorsChangedSetter((val) => val + 1);
       }
     } catch (err) {

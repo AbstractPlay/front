@@ -15,19 +15,20 @@ function Customize(props) {
   const metaGame =
     scope === "global" || !providedMetaGame ? "_default" : providedMetaGame;
   const inJSON = props.inJSON || location.state?.inJSON;
-  const [rendererJson, setRendererJson] = useState(inJSON ??
-    JSON.stringify(
-      {
-        board: { style: "squares-checkered", width: 4, height: 4 },
-        legend: {
-          A: { name: "piece", colour: 1 },
-          B: { name: "piece", colour: 2 },
+  const [rendererJson, setRendererJson] = useState(
+    inJSON ??
+      JSON.stringify(
+        {
+          board: { style: "squares-checkered", width: 4, height: 4 },
+          legend: {
+            A: { name: "piece", colour: 1 },
+            B: { name: "piece", colour: 2 },
+          },
+          pieces: "AAB-\nA-BB\n----\n----",
         },
-        pieces: "AAB-\nA-BB\n----\n----",
-      },
-      null,
-      2
-    )
+        null,
+        2
+      )
   );
   const [gameName, setGameName] = useState("");
   const globalMe = useStore((state) => state.globalMe);
@@ -366,7 +367,11 @@ function Customize(props) {
           <h2 className="subtitle">Palette</h2>
           <div className="field">
             <label className="label is-small">Add Color</label>
-            <div className="help">Select a colour and click the "Add to Palette" button. The default colours can be selected by clicking on the swatch. If the palette is empty, the default palette will be used.</div>
+            <div className="help">
+              Select a colour and click the "Add to Palette" button. The default
+              colours can be selected by clicking on the swatch. If the palette
+              is empty, the default palette will be used.
+            </div>
             <div className="control">
               <HexColorPicker
                 color={selectedColor}

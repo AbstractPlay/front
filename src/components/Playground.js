@@ -956,7 +956,6 @@ function Playground(props) {
     }
   }, [i18n, globalMe]);
 
-
   useEffect(() => {
     const unsubscribe = useStore.subscribe(
       (state) => state.globalMe, // selector
@@ -969,11 +968,11 @@ function Playground(props) {
         }
       }
     );
-    console.log('globalMe changed:', globalMe);
+    console.log("globalMe changed:", globalMe);
     if (globalMe !== null && globalMe !== undefined) {
-        gameIDSetter(globalMe.id);
+      gameIDSetter(globalMe.id);
     } else {
-        gameIDSetter(null);
+      gameIDSetter(null);
     }
     return unsubscribe;
   }, [globalMe]);
@@ -1265,7 +1264,13 @@ function Playground(props) {
     moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
     const metaInfo = gameinfo.get(game.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-      setupColors(settings, gameRef.current, globalMe, effectiveColourContext, node);
+      setupColors(
+        settings,
+        gameRef.current,
+        globalMe,
+        effectiveColourContext,
+        node
+      );
       colorsChangedSetter((val) => val + 1);
     }
   };
@@ -1398,9 +1403,15 @@ function Playground(props) {
       populateChecked(gameRef, engineRef, t, inCheckSetter);
       const metaInfo = gameinfo.get(gameRef.current.metaGame);
       if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, effectiveColourContext, {
-          state: engineRef.current.state(),
-        });
+        setupColors(
+          settings,
+          gameRef.current,
+          globalMe,
+          effectiveColourContext,
+          {
+            state: engineRef.current.state(),
+          }
+        );
         colorsChangedSetter((val) => val + 1);
       }
     }
@@ -1504,7 +1515,7 @@ function Playground(props) {
     //   }
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     renderrep,
     globalMe,
@@ -1875,7 +1886,9 @@ function Playground(props) {
                   {gameRef.current?.stackExpanding ? (
                     <div
                       className={`board _meta_${metaGame}`}
-                      style={{ backgroundColor: effectiveColourContext.background }}
+                      style={{
+                        backgroundColor: effectiveColourContext.background,
+                      }}
                     >
                       <div className="stack" id="stack" ref={stackImage}></div>
                       <div
@@ -1887,7 +1900,9 @@ function Playground(props) {
                   ) : (
                     <div
                       className={`board tourBoard _meta_${metaGame}`}
-                      style={{ backgroundColor: effectiveColourContext.background }}
+                      style={{
+                        backgroundColor: effectiveColourContext.background,
+                      }}
                       id="svg"
                       ref={boardImage}
                     ></div>
