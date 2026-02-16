@@ -32,6 +32,7 @@ import NotFound from "../components/NotFound";
 import Event from "../components/Event";
 import Events from "../components/Events";
 import Play from "../components/Play";
+import Customize from "../components/Customize";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
@@ -277,6 +278,7 @@ function Bones(props) {
               <Route path="/playground" element={<Playground />} />
               <Route path="/tournaments/:metaGame?" element={<Tournaments />} />
               <Route path="/play" element={<Play />} />
+              <Route path="/customize/:metaGame" element={<Customize />} />
             </Routes>
           </section>
           {process.env.REACT_APP_REAL_MODE === "production" ? (

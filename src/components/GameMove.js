@@ -4,6 +4,7 @@ import React, {
   useState,
   useRef,
   useCallback,
+  useMemo,
 } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -223,6 +224,16 @@ function GameMove(props) {
     }
     coderString += coders.join(", ");
   }
+
+  const effectiveColourContext = useMemo(() => {
+    let ctx = { ...colourContext };
+    if (globalMe?.customizations?.[metaGame]?.colourContext) {
+      ctx = { ...ctx, ...globalMe.customizations[metaGame].colourContext };
+    } else if (globalMe?.customizations?._default?.colourContext) {
+      ctx = { ...ctx, ...globalMe.customizations._default.colourContext };
+    }
+    return ctx;
+  }, [colourContext, globalMe, metaGame]);
 
   useEffect(() => {
     addResource(i18n.language);
@@ -683,7 +694,7 @@ function GameMove(props) {
         gameSettingsSetter,
         userSettingsSetter,
         globalMe,
-        colourContext
+        effectiveColourContext
       );
 
       // check for note
@@ -1138,7 +1149,7 @@ function GameMove(props) {
     }
     const metaInfo = gameinfo.get(game.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-      setupColors(settings, gameRef.current, globalMe, colourContext, node);
+      setupColors(settings, gameRef.current, globalMe, effectiveColourContext, node);
       colorsChangedSetter((val) => val + 1);
     }
   };
@@ -1223,7 +1234,7 @@ function GameMove(props) {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     const metaInfo = gameinfo.get(gameRef.current.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-      setupColors(settings, gameRef.current, globalMe, colourContext, {
+      setupColors(settings, gameRef.current, globalMe, effectiveColourContext, {
         state: engineRef.current.state(),
       });
       colorsChangedSetter((val) => val + 1);
@@ -1307,7 +1318,7 @@ function GameMove(props) {
       populateChecked(gameRef, engineRef, t, inCheckSetter);
       const metaInfo = gameinfo.get(gameRef.current.metaGame);
       if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, colourContext, {
+        setupColors(settings, gameRef.current, globalMe, effectiveColourContext, {
           state: engineRef.current.state(),
         });
         colorsChangedSetter((val) => val + 1);
@@ -1319,7 +1330,7 @@ function GameMove(props) {
       if (svg !== null) svg.remove();
       options.divid = "stack";
       options.svgid = "theStackSVG";
-      options.colourContext = colourContext;
+      options.colourContext = effectiveColourContext;
       render(engineRef.current.renderColumn(row, col), options);
     }
 
@@ -1362,9 +1373,28 @@ function GameMove(props) {
             expand(col, row);
           };
         }
-        options.showAnnotations = settings.annotate;
+       options.showAnnotations = settings.annotate;
         options.svgid = "theBoardSVG";
-        options.colourContext = colourContext;
+        options.colourContext = effectiveColourContext;
+        if (globalMe?.customizations?.[metaGame]) {
+          const custom = globalMe.customizations[metaGame];
+          if (
+            custom.palette &&
+            Array.isArray(custom.palette) &&
+            custom.palette.length > 0
+          ) {
+            options.colours = custom.palette;
+          }
+        } else if (globalMe?.customizations?._default) {
+          const custom = globalMe.customizations._default;
+          if (
+            custom.palette &&
+            Array.isArray(custom.palette) &&
+            custom.palette.length > 0
+          ) {
+            options.colours = custom.palette;
+          }
+        }
         console.log("rendering", renderrep, options);
         const tmpRendered = [];
         const renders = [];
@@ -1400,12 +1430,12 @@ function GameMove(props) {
     t,
     navigate,
     boardKey,
-    colourContext,
+    effectiveColourContext,
   ]);
 
   useEffect(() => {
     colorsChangedSetter((val) => val + 1);
-  }, [colourContext]);
+  }, [effectiveColourContext]);
 
   const setError = (error) => {
     if (error.Message !== undefined) errorMessageRef.current = error.Message;
@@ -1520,7 +1550,7 @@ function GameMove(props) {
       gameSettingsSetter,
       userSettingsSetter,
       globalMe,
-      colourContext
+      effectiveColourContext
     );
     if (game.me > -1) {
       try {
@@ -1553,7 +1583,7 @@ function GameMove(props) {
       gameSettingsSetter,
       userSettingsSetter,
       globalMe,
-      colourContext
+      effectiveColourContext
     );
     if (newSettings?.display) {
       console.log(
@@ -1680,7 +1710,7 @@ function GameMove(props) {
         );
       }
       if (gameRef.current.customColours) {
-        setupColors(settings, gameRef.current, globalMe, colourContext, {
+        setupColors(settings, gameRef.current, globalMe, effectiveColourContext, {
           state: engineRef.current.state(),
         });
         colorsChangedSetter((val) => val + 1);
@@ -1972,6 +2002,14 @@ function GameMove(props) {
 
       gameRef.current.state = injectedState2;
       showInjectSetter(false);
+    }
+  };
+
+  const handleCustomize = () => {
+    if (renderrep) {
+      navigate(`/customize/${metaGame}`, {
+        state: { inJSON: JSON.stringify(renderrep, null, 2) },
+      });
     }
   };
 
@@ -2389,8 +2427,9 @@ function GameMove(props) {
                           verticalLayout={verticalLayout}
                           verticalLayoutSetter={verticalLayoutSetter}
                           copyHWDiagram={copyHWDiagram}
-                          colourContext={colourContext}
+                          colourContext={effectiveColourContext}
                           hasNewChat={gameRef.current?.hasNewChat || false}
+                          handleCustomize={handleCustomize}
                         />
                       ) : key === "moves" ? (
                         <GameMoves
@@ -2563,8 +2602,9 @@ function GameMove(props) {
                   verticalLayout={verticalLayout}
                   verticalLayoutSetter={verticalLayoutSetter}
                   copyHWDiagram={copyHWDiagram}
-                  colourContext={colourContext}
+                  colourContext={effectiveColourContext}
                   hasNewChat={gameRef.current?.hasNewChat || false}
+                  handleCustomize={handleCustomize}
                 />
               </div>
               {/***************** GameMoves *****************/}

@@ -31,6 +31,7 @@ function Board({
   copyHWDiagram,
   colourContext,
   hasNewChat,
+  handleCustomize,
 }) {
   const globalMe = useStore((state) => state.globalMe);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
@@ -249,6 +250,15 @@ function Board({
         >
           <i className="fa fa-css3"></i>
         </button>
+        {!globalMe ? null : (
+          <button
+            className="fabtn align-right"
+            onClick={handleCustomize}
+            title={t("Customize")}
+          >
+            <i className="fa fa-paint-brush"></i>
+          </button>
+        )}
         {screenWidth < 770 ? null : (
           <button
             className="fabtn align-right"

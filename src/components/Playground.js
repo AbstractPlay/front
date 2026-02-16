@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, { Fragment, useEffect, useState, useRef, useMemo } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -834,6 +834,16 @@ function Playground(props) {
   const engineRef = useRef(null);
   const navigate = useNavigate();
 
+  const effectiveColourContext = useMemo(() => {
+    let ctx = { ...colourContext };
+    if (metaGame && globalMe?.customizations?.[metaGame]?.colourContext) {
+      ctx = { ...ctx, ...globalMe.customizations[metaGame].colourContext };
+    } else if (globalMe?.customizations?._default?.colourContext) {
+      ctx = { ...ctx, ...globalMe.customizations._default.colourContext };
+    }
+    return ctx;
+  }, [colourContext, globalMe, metaGame]);
+
   const { t, i18n } = useTranslation();
   //   const { state } = useLocation();
 
@@ -1019,7 +1029,7 @@ function Playground(props) {
               gameSettingsSetter,
               userSettingsSetter,
               globalMe,
-              colourContext
+              effectiveColourContext
             );
             populateChecked(gameRef, engineRef, t, inCheckSetter);
           }
@@ -1048,7 +1058,7 @@ function Playground(props) {
     pieInvoked,
     t,
     navigate,
-    colourContext,
+    effectiveColourContext,
   ]);
 
   useEffect(() => {
@@ -1168,7 +1178,7 @@ function Playground(props) {
             gameSettingsSetter,
             userSettingsSetter,
             globalMe,
-            colourContext
+            effectiveColourContext
           );
           populateChecked(gameRef, engineRef, t, inCheckSetter);
         }
@@ -1213,6 +1223,14 @@ function Playground(props) {
     }
   };
 
+  const handleCustomize = () => {
+    if (renderrep) {
+      navigate(`/customize/${metaGame}`, {
+        state: { inJSON: JSON.stringify(renderrep, null, 2) },
+      });
+    }
+  };
+
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc) => {
     // console.log("foc = ", foc);
@@ -1247,7 +1265,7 @@ function Playground(props) {
     moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
     const metaInfo = gameinfo.get(game.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-      setupColors(settings, gameRef.current, globalMe, colourContext, node);
+      setupColors(settings, gameRef.current, globalMe, effectiveColourContext, node);
       colorsChangedSetter((val) => val + 1);
     }
   };
@@ -1298,7 +1316,7 @@ function Playground(props) {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     const metaInfo = gameinfo.get(gameRef.current.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
-      setupColors(settings, gameRef.current, globalMe, colourContext, {
+      setupColors(settings, gameRef.current, globalMe, effectiveColourContext, {
         state: engineRef.current.state(),
       });
       colorsChangedSetter((val) => val + 1);
@@ -1380,7 +1398,7 @@ function Playground(props) {
       populateChecked(gameRef, engineRef, t, inCheckSetter);
       const metaInfo = gameinfo.get(gameRef.current.metaGame);
       if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(settings, gameRef.current, globalMe, colourContext, {
+        setupColors(settings, gameRef.current, globalMe, effectiveColourContext, {
           state: engineRef.current.state(),
         });
         colorsChangedSetter((val) => val + 1);
@@ -1392,7 +1410,7 @@ function Playground(props) {
       if (svg !== null) svg.remove();
       options.divid = "stack";
       options.svgid = "theStackSVG";
-      options.colourContext = colourContext;
+      options.colourContext = effectiveColourContext;
       render(engineRef.current.renderColumn(row, col), options);
     }
 
@@ -1436,7 +1454,26 @@ function Playground(props) {
         }
         options.showAnnotations = settings.annotate;
         options.svgid = "theBoardSVG";
-        options.colourContext = colourContext;
+        options.colourContext = effectiveColourContext;
+        if (globalMe?.customizations?.[metaGame]) {
+          const custom = globalMe.customizations[metaGame];
+          if (
+            custom.palette &&
+            Array.isArray(custom.palette) &&
+            custom.palette.length > 0
+          ) {
+            options.colours = custom.palette;
+          }
+        } else if (globalMe?.customizations?._default) {
+          const custom = globalMe.customizations._default;
+          if (
+            custom.palette &&
+            Array.isArray(custom.palette) &&
+            custom.palette.length > 0
+          ) {
+            options.colours = custom.palette;
+          }
+        }
         console.log("rendering", renderrep, options);
         let tmpRender = renderrep;
         if (Array.isArray(tmpRender)) {
@@ -1476,12 +1513,12 @@ function Playground(props) {
     explorer,
     t,
     navigate,
-    colourContext,
+    effectiveColourContext,
   ]);
 
   useEffect(() => {
     colorsChangedSetter((val) => val + 1);
-  }, [colourContext]);
+  }, [effectiveColourContext]);
 
   //   const setError = (error) => {
   //     if (error.Message !== undefined) errorMessageRef.current = error.Message;
@@ -1606,7 +1643,7 @@ function Playground(props) {
       gameSettingsSetter,
       userSettingsSetter,
       globalMe,
-      colourContext
+      effectiveColourContext
     );
   };
 
@@ -1838,7 +1875,7 @@ function Playground(props) {
                   {gameRef.current?.stackExpanding ? (
                     <div
                       className={`board _meta_${metaGame}`}
-                      style={{ backgroundColor: colourContext.background }}
+                      style={{ backgroundColor: effectiveColourContext.background }}
                     >
                       <div className="stack" id="stack" ref={stackImage}></div>
                       <div
@@ -1850,7 +1887,7 @@ function Playground(props) {
                   ) : (
                     <div
                       className={`board tourBoard _meta_${metaGame}`}
-                      style={{ backgroundColor: colourContext.background }}
+                      style={{ backgroundColor: effectiveColourContext.background }}
                       id="svg"
                       ref={boardImage}
                     ></div>
@@ -1915,6 +1952,15 @@ function Playground(props) {
                 >
                   <i className="fa fa-bug"></i>
                 </button>
+                {!globalMe ? null : (
+                  <button
+                    className="fabtn align-right"
+                    onClick={handleCustomize}
+                    title={t("Customize")}
+                  >
+                    <i className="fa fa-paint-brush"></i>
+                  </button>
+                )}
               </div>
             </div>
             {/***************** GameMoves *****************/}
