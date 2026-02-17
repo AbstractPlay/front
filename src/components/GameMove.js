@@ -1371,9 +1371,6 @@ function GameMove(props) {
           );
           if (palette !== undefined) {
             options.colours = [...palette.colours];
-            while (options.colours.length < 12) {
-              options.colours.push("#fff");
-            }
           }
         }
         if (gameRef.current.stackExpanding) {
@@ -1403,15 +1400,26 @@ function GameMove(props) {
             options.colours = custom.palette;
           }
         }
+        // extend all palettes to 12 colours
+        if (
+          options.colours !== undefined &&
+          Array.isArray(options.colours) &&
+          options.colours.length < 12
+        ) {
+          while (options.colours.length < 12) {
+            options.colours.push("#fff");
+          }
+        }
         // handle "Always use my colour" preference
         if (
-            options.colours !== undefined &&
-            Array.isArray(options.colours) &&
-            options.colours.length > 0 &&
-            globalMe?.settings?.all?.myColor && game.me > 0
+          options.colours !== undefined &&
+          Array.isArray(options.colours) &&
+          options.colours.length > 0 &&
+          globalMe?.settings?.all?.myColor &&
+          game.me > 0
         ) {
-            const mycolor = options.colours.shift();
-            options.colours.splice(game.me, 0, mycolor);
+          const mycolor = options.colours.shift();
+          options.colours.splice(game.me, 0, mycolor);
         }
         console.log("rendering", renderrep, options);
         const tmpRendered = [];
