@@ -1404,7 +1404,12 @@ function GameMove(props) {
           }
         }
         // handle "Always use my colour" preference
-        if (globalMe?.settings?.all?.myColor && game.me > 0) {
+        if (
+            options.colours !== undefined &&
+            Array.isArray(options.colours) &&
+            options.colours.length > 0 &&
+            globalMe?.settings?.all?.myColor && game.me > 0
+        ) {
             const mycolor = options.colours.shift();
             options.colours.splice(game.me, 0, mycolor);
         }
