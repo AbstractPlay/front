@@ -62,6 +62,21 @@ function Customize(props) {
     "#cab2d6",
   ];
 
+  const colorBlindColors = [
+    "#9f0162",
+    "#8400cd",
+    "#a40122",
+    "#009f81",
+    "#008df9",
+    "#e20134",
+    "#ff5aaf",
+    "#00c2f9",
+    "#ff6e3a",
+    "#00fccf",
+    "#ffb2fd",
+    "#ffc33b",
+  ];
+
   const settingsJson = useMemo(() => {
     return JSON.stringify(
       {
@@ -178,6 +193,18 @@ function Customize(props) {
 
   const addColor = () => {
     setPalette([...palette, selectedColor]);
+  };
+
+  const selectDefaultPalette = () => {
+    setPalette([...presetColors]);
+  };
+
+  const selectColorBlindPalette = () => {
+    setPalette([...colorBlindColors]);
+  };
+
+  const clearPalette = () => {
+    setPalette([]);
   };
 
   const removeColor = (index) => {
@@ -397,9 +424,32 @@ function Customize(props) {
                   </button>
                 ))}
               </div>
-              <button className="button is-small apButton" onClick={addColor}>
-                Add Colour
-              </button>
+              <div className="buttons">
+                <button
+                  className="button is-small apButton"
+                  onClick={addColor}
+                >
+                  Add Colour
+                </button>
+                <button
+                  className="button is-small apButton"
+                  onClick={selectDefaultPalette}
+                >
+                  Select default colours
+                </button>
+                <button
+                  className="button is-small apButton"
+                  onClick={selectColorBlindPalette}
+                >
+                  Select colour blind colours
+                </button>
+                <button
+                  className="button is-small apButtonNeutral"
+                  onClick={clearPalette}
+                >
+                  Clear colours
+                </button>
+              </div>
             </div>
           </div>
           <div className="tags">
