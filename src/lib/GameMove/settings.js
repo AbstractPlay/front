@@ -71,6 +71,7 @@ export function processNewSettings(
 
 export function setupColors(settings, game, globalMe, colourContext, node) {
   var options = {};
+	let optioncolours = [];
   if (settings.color === "blind") {
     options.colourBlind = true;
     //   } else if (settings.color === "patterns") {
@@ -84,7 +85,7 @@ export function setupColors(settings, game, globalMe, colourContext, node) {
   ) {
     const palette = globalMe.palettes.find((p) => p.name === settings.color);
     if (palette !== undefined) {
-      options.colours = [...palette.colours];
+      optioncolours = [...palette.colours];
     }
   }
   if (globalMe?.customizations?.[game.metaGame]) {
@@ -94,7 +95,7 @@ export function setupColors(settings, game, globalMe, colourContext, node) {
       Array.isArray(custom.palette) &&
       custom.palette.length > 0
     ) {
-      options.colours = custom.palette;
+      optioncolours = [...custom.palette];
     }
   } else if (globalMe?.customizations?._default) {
     const custom = globalMe.customizations._default;
@@ -103,29 +104,33 @@ export function setupColors(settings, game, globalMe, colourContext, node) {
       Array.isArray(custom.palette) &&
       custom.palette.length > 0
     ) {
-      options.colours = custom.palette;
+      optioncolours = [...custom.palette];
     }
   }
   // extend all palettes to 12 colours
   if (
-    options.colours !== undefined &&
-    Array.isArray(options.colours) &&
-    options.colours.length < 12
+    optioncolours !== undefined &&
+    Array.isArray(optioncolours) &&
+    optioncolours.length < 12
   ) {
-    while (options.colours.length < 12) {
-      options.colours.push("#fff");
+    while (optioncolours.length < 12) {
+      optioncolours.push("#fff");
     }
   }
   // handle "Always use my colour" preference
   if (
-    options.colours !== undefined &&
-    Array.isArray(options.colours) &&
-    options.colours.length > 0 &&
+    optioncolours !== undefined &&
+    Array.isArray(optioncolours) &&
+    optioncolours.length > 0 &&
     globalMe?.settings?.all?.myColor &&
     game.me > 0
   ) {
-    const mycolor = options.colours.shift();
-    options.colours.splice(game.me, 0, mycolor);
+    const mycolor = optioncolours.shift();
+    optioncolours.splice(game.me, 0, mycolor);
+  }
+  // set option
+  if (optioncolours.length > 0) {
+    options.colours = [...optioncolours];
   }
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
