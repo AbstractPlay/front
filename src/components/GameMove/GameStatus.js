@@ -44,8 +44,7 @@ function renderGlyph(
   }
   // extend all palettes to 12 colours
   if (
-    optioncolours !== undefined &&
-    Array.isArray(optioncolours) &&
+    optioncolours.length > 0 &&
     optioncolours.length < 12
   ) {
     while (optioncolours.length < 12) {

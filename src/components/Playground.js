@@ -397,8 +397,7 @@ function setupColors(settings, game, globalMe, colourContext, node) {
   }
   // extend all palettes to 12 colours
   if (
-    optioncolours !== undefined &&
-    Array.isArray(optioncolours) &&
+    optioncolours.length > 0 &&
     optioncolours.length < 12
   ) {
     while (optioncolours.length < 12) {
@@ -1519,8 +1518,7 @@ function Playground(props) {
         }
         // extend all palettes to 12 colours
         if (
-          optioncolours !== undefined &&
-          Array.isArray(optioncolours) &&
+          optioncolours.length > 0 &&
           optioncolours.length < 12
         ) {
           while (optioncolours.length < 12) {
