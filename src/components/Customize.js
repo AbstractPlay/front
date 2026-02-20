@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import { render } from "@abstractplay/renderer";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -10,6 +10,7 @@ import { isEqual, cloneDeep } from "lodash";
 function Customize(props) {
   const params = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const providedMetaGame = props.metaGame || params.metaGame;
   const [scope, setScope] = useState("game");
   const metaGame =
@@ -308,6 +309,14 @@ function Customize(props) {
 
   return (
     <div className="container">
+      <div style={{ marginBottom: "1em" }}>
+        <button className="button is-small" onClick={() => navigate(-1)}>
+          <span className="icon">
+            <i className="fa fa-arrow-left"></i>
+          </span>
+          <span>Back</span>
+        </button>
+      </div>
       <h1 className="title">Customize Settings for {gameName}</h1>
       {providedMetaGame && providedMetaGame !== "_default" && (
         <div className="tabs is-toggle is-centered is-small">
