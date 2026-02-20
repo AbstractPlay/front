@@ -1,1 +1,215 @@
-{}
+{
+    "404": "Die angeforderte Seite wurde nicht gefunden",
+    "About": "Über uns",
+    "Accept": "Akzeptieren",
+    "Active": "Aktiv",
+    "AcceptDraw": "Ich akzeptiere das Angebot zum Unentschieden",
+    "Accepted": "Akzeptiert!",
+    "All": "Alle",
+    "AlternativeDisplays": "Weitere Anzeigemöglichkeiten",
+    "and": "und",
+    "Annotate": "Zeige die letzten Zughinweise an",
+    "AnnotationLevel": "Wo soll diese Einstellung vorgenommen werden?",
+    "AvailableGames": "Verfügbare Spiele",
+    "BoardSettings": "Spielbretteinstellungen anpassen",
+    "buttons": {
+        "pass": "Verzögern",
+        "takebutton": "Aufnehmen-Taste",
+        "acceptpie": "Als zweiter spielen",
+        "playsecond": "Als zweiter spielen",
+        "draw": "Unentschieden fordern",
+        "playfirst": "Als erster spielen",
+        "numbers": {
+            "one": "Eins (1)",
+            "two": "Zwei (2)",
+            "three": "Drei (3)"
+        },
+        "pigs": {
+            "back": "Zurück bewegen",
+            "forward": "Forwärts bewegen",
+            "left": "Vorwärts, links bewegen",
+            "right": "Vorwärts, rechts bewegen",
+            "cw": "Im Uhrzeigersinn drehen",
+            "ccw": "Gegen den Uhrzeigersinn drehen",
+            "fire": "Laser abfeuern",
+            "hit": "Die Nase schwingen"
+        },
+        "cifra": {
+            "lt": "Hell, Oben",
+            "lb": "Hell, unten",
+            "dt": "Dunkel, oben",
+            "db": "Dunkel, unten",
+            "ll": "Hell, links",
+            "lr": "Hell, rechts",
+            "dl": "Dunkel, links",
+            "dr": "Dunkel, rechts"
+        },
+        "arimaa": {
+            "gold99": "Schnelle Konfiguration",
+            "silver99e7": "Schnelle Einrichtung, Elefant E7",
+            "silver99d7": "Schnelle Einrichtung, Elefant D7"
+        }
+    },
+    "Cancel": "Abbrechen",
+    "CanPie": "Dieser Spieler hat die Möglichkeit, die Sitzplätze zu tauschen.",
+    "categories": {
+        "board": {
+            "description": "Beschreibt die Eigenschaften der Spielfläche",
+            "full": "Spielbrett",
+            "tag": "Spielbrett"
+        },
+        "board>3d": {
+            "description": "Das Spielbrett ist dreidimensional",
+            "full": "Spielbrett > 3D",
+            "tag": "Spielbrett: 3D"
+        },
+        "board>connect": {
+            "description": "Beschreibt, wie sich die Zellen des Spielbrettes miteinander verbinden",
+            "full": "Spielbrett > Vernetzung",
+            "tag": "Verbindungen des Brettes"
+        },
+        "board>connect>hex": {
+            "description": "Die Zellen verbinden sich hexagonal",
+            "full": "Spielbrett > Verbindungen > Hexagonal",
+            "tag": "Verbindung: Hex"
+        },
+        "board>connect>linear": {
+            "description": "Die Zellen verbinden sich linear",
+            "full": "Spielbrett > Verbindungen > Linear",
+            "tag": "Verbindung: Linear"
+        },
+        "board>connect>other": {
+            "description": "Die Zellen verbinden sich auf eine einzigartige Weise",
+            "full": "Spielbrett > Verbindungen > Andere",
+            "tag": "Verbindung: Andere"
+        },
+        "board>connect>pent": {
+            "description": "Die Zellen verbinden sich pentagonal",
+            "full": "Spielbrett > Verbindungen > Pentagonal",
+            "tag": "Verbindung: Pent"
+        },
+        "board>connect>rect": {
+            "description": "Die Zellen verbinden sich orthogonal und diagonal",
+            "full": "Spielbrett > Verbindungen > Rechteckig",
+            "tag": "Verbindung: Rect"
+        },
+        "board>connect>snub": {
+            "description": "Die Zellen bilden eine schiefrechteckige Matrix",
+            "full": "Spielbrett > Verbindungen > Schiefrechteckig",
+            "tag": "Verbindung: SchReEck"
+        },
+        "board>dynamic": {
+            "description": "Das Spielbrett wird dynamisch aufgebaut",
+            "full": "Spielbrett > Dynamisch",
+            "tag": "Spielbrett: Dynamisch"
+        },
+        "board>mancala": {
+            "description": "Auf einem traditionellen Mancala-ähnlichen Brett gespielt",
+            "full": "Spielbrett > Mancala",
+            "tag": "Spielbrett: Mancala"
+        },
+        "board>none": {
+            "description": "Auf jeder ebenen Fläche gespielt",
+            "full": "Spielbrett > Keins",
+            "tag": "Spielbrett: Keins"
+        },
+        "board>other": {
+            "description": "Das Spielbrett ist außergewöhnlich",
+            "full": "Spielbrett > Andere",
+            "tag": "Spielbrett: Andere"
+        },
+        "board>shape": {
+            "description": "Beschreibt die Form des Brettes",
+            "full": "Spielbrett > Form",
+            "tag": "Spielbrettform"
+        },
+        "board>shape>circle": {
+            "description": "Das Spielbrett ist kreisförmig",
+            "full": "Spielbrett > Form > Kreis",
+            "tag": "Form: Kreis"
+        },
+        "board>shape>hex": {
+            "description": "Das Spielbrett ist hexagonal",
+            "full": "Spielbrett > Form > Hexagon",
+            "tag": "Form: Hex"
+        },
+        "board>shape>pent": {
+            "description": "Das Spielbrett ist pentagonal",
+            "full": "Spielbrett > Form > Pentagon",
+            "tag": "Form: Pent"
+        },
+        "board>shape>oct": {
+            "description": "Das Spielbrett ist octagonal",
+            "full": "Spielbrett > Form > Octagon",
+            "tag": "Form: Oct"
+        },
+        "board>shape>other": {
+            "description": "Das Spielbrett ist individuell",
+            "full": "Spielbrett > Form > Andere",
+            "tag": "Form: Andere"
+        },
+        "board>shape>rect": {
+            "description": "Das Spielbrett ist rechteckig",
+            "full": "Spielbrett > Form > Rechteckig",
+            "tag": "Form: Recht"
+        },
+        "board>shape>tri": {
+            "description": "Das Spielbrett ist dreieckig",
+            "full": "Spielbrett > Form > Dreieckig",
+            "tag": "Form: Drei"
+        },
+        "components>chess": {
+            "description": "Gespielt mit Schachfiguren",
+            "full": "Teile > Schach",
+            "tag": "C: Schach"
+        },
+        "components>dice": {
+            "description": "Gespielt mit Würfeln",
+            "full": "Teile > Würfel",
+            "tag": "C: Würfel"
+        },
+        "components>decktet": {
+            "description": "Gespielt mit Decktet-karten",
+            "full": "Teile > Decktet",
+            "tag": "C: Decktet"
+        },
+        "components>piecepack": {
+            "description": "Gespielt mit Piecepack",
+            "full": "Teile > Piecepack",
+            "tag": "C: Piecepack"
+        },
+        "components>poly": {
+            "description": "Gespielt mit Polyominoes",
+            "full": "Teile > Polyominoes",
+            "tag": "C: Polyominoes"
+        },
+        "components>pyramids": {
+            "description": "Gespielt mit Looney Pyramiden",
+            "full": "Teile > Looney Pyramiden",
+            "tag": "C: Looney Pyramiden"
+        },
+        "components>shibumi": {
+            "description": "Gespielt mit Shibumi-Set",
+            "full": "Teile > Shibumi",
+            "tag": "C: Shibumi"
+        },
+        "components>simple": {
+            "description": "Gespielt mit einfachen, gleichgroßen Stücken, die oft stapelbar sind und manchmal viele Farben haben",
+            "full": "Teile > Einfach",
+            "tag": "C: Einfach"
+        },
+        "components>simple>1per": {
+            "description": "Eine Farbe pro Spieler",
+            "full": "Teile > Einfach > 1 pro",
+            "tag": "C: Einfach, 1 pro"
+        },
+        "components>simple>2per": {
+            "description": "Zwei Farben pro Spieler",
+            "full": "Teile > Einfach > 2 pro",
+            "tag": "C: Einfach, 2 pro"
+        },
+        "components>simple>1c": {
+            "description": "Einfarbige Stücke"
+        }
+    }
+}
