@@ -1,6 +1,7 @@
 import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
+import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
 
 function renderGlyph(
   settings,
@@ -12,61 +13,8 @@ function renderGlyph(
   game
 ) {
   var options = {};
-  let optioncolours = [];
-  if (settings.color === "blind") {
-    options.colourBlind = true;
-  }
-  if (settings.color !== "standard" && settings.color !== "blind") {
-    const palette = globalMe.palettes.find((p) => p.name === settings.color);
-    if (palette !== undefined) {
-      optioncolours = [...palette.colours];
-    }
-  }
-  if (globalMe?.customizations?.[game.metaGame]) {
-    const custom = globalMe.customizations[game.metaGame];
-    if (
-      custom.palette &&
-      Array.isArray(custom.palette) &&
-      custom.palette.length > 0
-    ) {
-      optioncolours = [...custom.palette];
-    }
-  } else if (globalMe?.customizations?._default) {
-    const custom = globalMe.customizations._default;
-    if (
-      custom.palette &&
-      Array.isArray(custom.palette) &&
-      custom.palette.length > 0
-    ) {
-      optioncolours = [...custom.palette];
-    }
-  }
-  // extend all palettes to 12 colours
-  if (
-    optioncolours.length > 0 &&
-    optioncolours.length < 12
-  ) {
-    while (optioncolours.length < 12) {
-      optioncolours.push("#fff");
-    }
-  }
-  // handle "Always use my colour" preference
-  if (
-    optioncolours !== undefined &&
-    Array.isArray(optioncolours) &&
-    optioncolours.length > 0 &&
-    globalMe?.settings?.all?.myColor &&
-    game.me > 0
-  ) {
-    const mycolor = optioncolours.shift();
-    optioncolours.splice(game.me, 0, mycolor);
-  }
-	// set option
-  if (optioncolours.length > 0) {
-    options.colours = [...optioncolours];
-  }
+  setRendererColourOpts({options, metaGame: game.metaGame, isParticipant: game.me, settings, context: colourContext, globalMe});
   options.svgid = id;
-  options.colourContext = colourContext;
   return renderglyph(glyph, player, options);
 }
 

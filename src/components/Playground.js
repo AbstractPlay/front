@@ -18,6 +18,7 @@ import Modal from "./Modal";
 import ClipboardCopy from "./Playground/ClipboardCopy";
 import GameVariants from "./GameVariants";
 import { useStore } from "../stores";
+import { setRendererColourOpts } from "../lib/setRendererColourOpts";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -1470,25 +1471,12 @@ function Playground(props) {
         svg.remove();
       }
       if (renderrep !== null && settings !== null) {
-        let optioncolours = [];
         options = { divid: "svg" };
+        setRendererColourOpts({options, metaGame, isParticipant: game.me, settings, context: effectiveColourContext, globalMe})
         if (focus.canExplore) {
           options.boardClick = boardClick;
         }
         options.rotate = settings.rotate;
-        if (settings.color === "blind") {
-          options.colourBlind = true;
-          // } else if (settings.color === "patterns") {
-          //   options.patterns = true;
-        }
-        if (settings.color !== "standard" && settings.color !== "blind") {
-          const palette = globalMe.palettes?.find(
-            (p) => p.name === settings.color
-          );
-          if (palette !== undefined) {
-            optioncolours = [...palette.colours];
-          }
-        }
         if (gameRef.current.stackExpanding) {
           options.boardHover = (row, col, piece) => {
             expand(col, row);
@@ -1496,50 +1484,6 @@ function Playground(props) {
         }
         options.showAnnotations = settings.annotate;
         options.svgid = "theBoardSVG";
-        options.colourContext = effectiveColourContext;
-        if (globalMe?.customizations?.[metaGame]) {
-          const custom = globalMe.customizations[metaGame];
-          if (
-            custom.palette &&
-            Array.isArray(custom.palette) &&
-            custom.palette.length > 0
-          ) {
-            optioncolours = [...custom.palette];
-          }
-        } else if (globalMe?.customizations?._default) {
-          const custom = globalMe.customizations._default;
-          if (
-            custom.palette &&
-            Array.isArray(custom.palette) &&
-            custom.palette.length > 0
-          ) {
-            optioncolours = [...custom.palette];
-          }
-        }
-        // extend all palettes to 12 colours
-        if (
-          optioncolours.length > 0 &&
-          optioncolours.length < 12
-        ) {
-          while (optioncolours.length < 12) {
-            optioncolours.push("#fff");
-          }
-        }
-        // handle "Always use my colour" preference
-        if (
-          optioncolours !== undefined &&
-          Array.isArray(optioncolours) &&
-          optioncolours.length > 0 &&
-          globalMe?.settings?.all?.myColor &&
-          game.me > 0
-        ) {
-          const mycolor = optioncolours.shift();
-          optioncolours.splice(game.me, 0, mycolor);
-        }
-        // set option
-        if (optioncolours.length > 0) {
-          options.colours = [...optioncolours];
-        }
         console.log("rendering", renderrep, options);
         let tmpRender = renderrep;
         if (Array.isArray(tmpRender)) {

@@ -1,5 +1,6 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import { renderglyph } from "@abstractplay/renderer";
+import { setRendererColourOpts } from "../setRendererColourOpts";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -71,66 +72,7 @@ export function processNewSettings(
 
 export function setupColors(settings, game, globalMe, colourContext, node) {
   var options = {};
-	let optioncolours = [];
-  if (settings.color === "blind") {
-    options.colourBlind = true;
-    //   } else if (settings.color === "patterns") {
-    //     options.patterns = true;
-  }
-  if (
-    settings.color !== "standard" &&
-    settings.color !== "blind" &&
-    globalMe !== null &&
-    globalMe.palettes !== null
-  ) {
-    const palette = globalMe.palettes.find((p) => p.name === settings.color);
-    if (palette !== undefined) {
-      optioncolours = [...palette.colours];
-    }
-  }
-  if (globalMe?.customizations?.[game.metaGame]) {
-    const custom = globalMe.customizations[game.metaGame];
-    if (
-      custom.palette &&
-      Array.isArray(custom.palette) &&
-      custom.palette.length > 0
-    ) {
-      optioncolours = [...custom.palette];
-    }
-  } else if (globalMe?.customizations?._default) {
-    const custom = globalMe.customizations._default;
-    if (
-      custom.palette &&
-      Array.isArray(custom.palette) &&
-      custom.palette.length > 0
-    ) {
-      optioncolours = [...custom.palette];
-    }
-  }
-  // extend all palettes to 12 colours
-  if (
-    optioncolours.length > 0 &&
-    optioncolours.length < 12
-  ) {
-    while (optioncolours.length < 12) {
-      optioncolours.push("#fff");
-    }
-  }
-  // handle "Always use my colour" preference
-  if (
-    optioncolours !== undefined &&
-    Array.isArray(optioncolours) &&
-    optioncolours.length > 0 &&
-    globalMe?.settings?.all?.myColor &&
-    game.me > 0
-  ) {
-    const mycolor = optioncolours.shift();
-    optioncolours.splice(game.me, 0, mycolor);
-  }
-  // set option
-  if (optioncolours.length > 0) {
-    options.colours = [...optioncolours];
-  }
+  setRendererColourOpts({options, metaGame: game.metaGame, isParticipant: game.me, settings, context: colourContext, globalMe})
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
       return { isImage: false, value: game.seatNames[i] };
