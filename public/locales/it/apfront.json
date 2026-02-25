@@ -2,7 +2,7 @@
     "About": "[IT] About",
     "Accept": "[IT] Accept",
     "AcceptDraw": "[IT] Accept draw offer",
-    "Accepted": "",
+    "Accepted": "Accettato!",
     "and": "[IT] and",
     "Annotate": "[IT] Show last move indicators",
     "AnnotationLevel": "[IT] Where would you like this choice applied?",
@@ -211,5 +211,16 @@
     "Yes": "",
     "YourChallenges": "[IT] Your challenges",
     "YourGames": "[IT] Your games",
-    "YourMove": "[IT] Your move"
+    "YourMove": "[IT] Your move",
+    "Active": "Attivo",
+    "All": "Tutti",
+    "AlternativeDisplays": "Opzioni di visualizzazione alternative",
+    "categories": {
+        "board": {
+            "description": "Descrive gli attributi della superficie di gioco"
+        },
+        "board>connect>other": {
+            "description": "Le celle si connettono alle altre in un unico modo"
+        }
+    }
 }
