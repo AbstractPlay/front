@@ -147,6 +147,20 @@ function Customize(props) {
   ];
   const [selectedContextProp, setSelectedContextProp] = useState("background");
 
+  const customizationHints = useMemo(() => {
+    if (!metaGame || metaGame === "_default") return [];
+    const info = gameinfo.get(metaGame);
+    return info?.customizations || [];
+  }, [metaGame]);
+
+  const contextHints = useMemo(() => {
+    return customizationHints.filter((h) => "name" in h);
+  }, [customizationHints]);
+
+  const paletteHints = useMemo(() => {
+    return customizationHints.filter((h) => "num" in h);
+  }, [customizationHints]);
+
   const settingsJson = useMemo(() => {
     return JSON.stringify(
       {
@@ -442,6 +456,8 @@ function Customize(props) {
           annotations,
           fill,
         },
+        contextGlobal: false,
+        coloursGlobal: false,
         colours: palette.length > 0 ? palette : undefined,
         glyphmap: glyphMap.length > 0 ? glyphMap : undefined,
       };
@@ -583,6 +599,36 @@ function Customize(props) {
               />
             </div>
           </div>
+          {contextHints.length > 0 && (
+            <div
+              className="notification is-info is-light"
+              style={{ fontSize: "0.85rem", padding: "1em" }}
+            >
+              <p>
+                <strong>Developer Hints:</strong>
+              </p>
+              <ul
+                style={{
+                  marginTop: 0,
+                  marginLeft: "1.5em",
+                  listStyleType: "disc",
+                }}
+              >
+                {contextHints.map((h, i) => (
+                  <li key={i}>
+                    <strong>
+                      {contextProps.find((p) => p.value === h.name)?.label ||
+                        h.name}
+                    </strong>
+                    : {h.explanation}{" "}
+                    {h.default !== undefined && (
+                      <span style={{ opacity: 0.8 }}>(Default: {h.default})</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <hr />
           <h2 className="subtitle">Player Colours</h2>
           <div className="field">
@@ -664,6 +710,34 @@ function Customize(props) {
               </span>
             ))}
           </div>
+          {paletteHints.length > 0 && (
+            <div
+              className="notification is-info is-light"
+              style={{ fontSize: "0.85rem", padding: "1em" }}
+            >
+              <p>
+                <strong>Developer Hints:</strong>
+              </p>
+              <ul
+                style={{
+                  marginTop: 0,
+                  marginLeft: "1.5em",
+                  listStyleType: "disc",
+                }}
+              >
+                {paletteHints.map((h, i) => (
+                  <li key={i}>
+                    <strong>Palette #{h.num}</strong>: {h.explanation}{" "}
+                    {h.default !== undefined && (
+                      <span style={{ opacity: 0.8 }}>
+                        (Default: {h.default})
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <hr />
           <h2 className="subtitle">Glyph Replacements</h2>
           <div className="field">
