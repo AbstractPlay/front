@@ -46,7 +46,7 @@ function Customize(props) {
       } else {
         fetch(`https://thumbnails.abstractplay.com/${metaGame}.json`)
           .then((res) => (res.ok ? res.json() : Promise.reject(res)))
-          .then((data) => setRendererJson(JSON.stringify(data, null, 2)))
+          .then((data) => setRendererJson(data))
           .catch(() => {
             setRendererJson(defaultRendererJson);
           });
