@@ -17,21 +17,27 @@ function Customize(props) {
   const metaGame =
     scope === "global" || !providedMetaGame ? "_default" : providedMetaGame;
   const inJSON = props.inJSON || location.state?.inJSON;
-  const defaultRendererJson = useMemo(() => JSON.stringify(
-    {
-      board: { style: "squares-checkered", width: 4, height: 4 },
-      legend: {
-        A: { name: "piece", colour: 1 },
-        B: { name: "piece", colour: 2 },
-        C: { name: "piece", colour: 3 },
-        D: { name: "piece", colour: 4 }
-      },
-      pieces: "AABB\nA--B\nD--C\nDDCC",
-    },
-    null,
-    2
-  ), []);
-  const [rendererJson, setRendererJson] = useState(inJSON ?? defaultRendererJson);
+  const defaultRendererJson = useMemo(
+    () =>
+      JSON.stringify(
+        {
+          board: { style: "squares-checkered", width: 4, height: 4 },
+          legend: {
+            A: { name: "piece", colour: 1 },
+            B: { name: "piece", colour: 2 },
+            C: { name: "piece", colour: 3 },
+            D: { name: "piece", colour: 4 },
+          },
+          pieces: "AABB\nA--B\nD--C\nDDCC",
+        },
+        null,
+        2
+      ),
+    []
+  );
+  const [rendererJson, setRendererJson] = useState(
+    inJSON ?? defaultRendererJson
+  );
 
   useEffect(() => {
     if (inJSON === undefined || inJSON === null) {
@@ -136,7 +142,7 @@ function Customize(props) {
     {
       label: "Fill",
       value: "fill",
-      help: "The colour used to fill certain board elements. Basically, the \"opposite\" of the background.",
+      help: 'The colour used to fill certain board elements. Basically, the "opposite" of the background.',
     },
   ];
   const [selectedContextProp, setSelectedContextProp] = useState("background");
@@ -159,7 +165,17 @@ function Customize(props) {
       null,
       2
     );
-  }, [background, board, strokes, borders, labels, annotations, fill, palette, glyphMap]);
+  }, [
+    background,
+    board,
+    strokes,
+    borders,
+    labels,
+    annotations,
+    fill,
+    palette,
+    glyphMap,
+  ]);
 
   const [settingsInput, setSettingsInput] = useState(settingsJson);
   const [isDirty, setIsDirty] = useState(false);
@@ -177,7 +193,8 @@ function Customize(props) {
       if (settings.colourContext) {
         if (settings.colourContext.background)
           setBackground(settings.colourContext.background);
-        if (settings.colourContext.board) setBoard(settings.colourContext.board);
+        if (settings.colourContext.board)
+          setBoard(settings.colourContext.board);
         else if (settings.colourContext.background)
           setBoard(settings.colourContext.background);
         if (settings.colourContext.strokes)
@@ -547,10 +564,7 @@ function Customize(props) {
               </div>
             </div>
             <p className="help">
-              {
-                contextProps.find((p) => p.value === selectedContextProp)
-                  ?.help
-              }
+              {contextProps.find((p) => p.value === selectedContextProp)?.help}
             </p>
           </div>
           <div className="field">
@@ -607,10 +621,7 @@ function Customize(props) {
                 ))}
               </div>
               <div className="buttons">
-                <button
-                  className="button is-small apButton"
-                  onClick={addColor}
-                >
+                <button className="button is-small apButton" onClick={addColor}>
                   Add Colour
                 </button>
                 <button

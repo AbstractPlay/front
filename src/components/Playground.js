@@ -398,10 +398,7 @@ function setupColors(settings, game, globalMe, colourContext, node) {
     }
   }
   // extend all palettes to 12 colours
-  if (
-    optioncolours.length > 0 &&
-    optioncolours.length < 12
-  ) {
+  if (optioncolours.length > 0 && optioncolours.length < 12) {
     while (optioncolours.length < 12) {
       optioncolours.push("#fff");
     }
@@ -1473,8 +1470,15 @@ function Playground(props) {
       }
       if (renderrep !== null && settings !== null) {
         options = { divid: "svg" };
-        setRendererColourOpts({options, metaGame, isParticipant: game.me, settings, context: effectiveColourContext, globalMe})
-        setGlyphMapOpt({options, metaGame, globalMe});
+        setRendererColourOpts({
+          options,
+          metaGame,
+          isParticipant: game.me,
+          settings,
+          context: effectiveColourContext,
+          globalMe,
+        });
+        setGlyphMapOpt({ options, metaGame, globalMe });
         if (focus.canExplore) {
           options.boardClick = boardClick;
         }

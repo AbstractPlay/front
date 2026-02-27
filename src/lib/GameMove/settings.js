@@ -72,7 +72,14 @@ export function processNewSettings(
 
 export function setupColors(settings, game, globalMe, colourContext, node) {
   var options = {};
-  setRendererColourOpts({options, metaGame: game.metaGame, isParticipant: game.me, settings, context: colourContext, globalMe})
+  setRendererColourOpts({
+    options,
+    metaGame: game.metaGame,
+    isParticipant: game.me,
+    settings,
+    context: colourContext,
+    globalMe,
+  });
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
       return { isImage: false, value: game.seatNames[i] };

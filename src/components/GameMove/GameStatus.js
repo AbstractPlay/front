@@ -14,7 +14,14 @@ function renderGlyph(
   game
 ) {
   var options = {};
-  setRendererColourOpts({options, metaGame: game.metaGame, isParticipant: game.me, settings, context: colourContext, globalMe})
+  setRendererColourOpts({
+    options,
+    metaGame: game.metaGame,
+    isParticipant: game.me,
+    settings,
+    context: colourContext,
+    globalMe,
+  });
   options.svgid = id;
   return renderglyph(glyph, player, options);
 }

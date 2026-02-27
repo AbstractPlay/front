@@ -1357,8 +1357,15 @@ function GameMove(props) {
       //   }
       if (renderrep !== null && settings !== null) {
         options = {};
-        setRendererColourOpts({options, metaGame, isParticipant: game.me, settings, context: effectiveColourContext, globalMe});
-        setGlyphMapOpt({options, metaGame, globalMe});
+        setRendererColourOpts({
+          options,
+          metaGame,
+          isParticipant: game.me,
+          settings,
+          context: effectiveColourContext,
+          globalMe,
+        });
+        setGlyphMapOpt({ options, metaGame, globalMe });
         if (focus.canExplore) {
           options.boardClick = boardClick;
         }
