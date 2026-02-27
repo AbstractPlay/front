@@ -61,6 +61,7 @@ import {
 } from "../lib/GameMove/exploration";
 import { processNewSettings, setupColors } from "../lib/GameMove/settings";
 import { setRendererColourOpts } from "../lib/setRendererColourOpts";
+import { setGlyphMapOpt } from "../lib/setGlyphMapOpt";
 
 // sets the default order of components in the vertical layouts
 const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
@@ -1357,6 +1358,7 @@ function GameMove(props) {
       if (renderrep !== null && settings !== null) {
         options = {};
         setRendererColourOpts({options, metaGame, isParticipant: game.me, settings, context: effectiveColourContext, globalMe});
+        setGlyphMapOpt({options, metaGame, globalMe});
         if (focus.canExplore) {
           options.boardClick = boardClick;
         }

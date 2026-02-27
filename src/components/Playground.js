@@ -19,6 +19,7 @@ import ClipboardCopy from "./Playground/ClipboardCopy";
 import GameVariants from "./GameVariants";
 import { useStore } from "../stores";
 import { setRendererColourOpts } from "../lib/setRendererColourOpts";
+import { setGlyphMapOpt } from "../lib/setGlyphMapOpt";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -1473,6 +1474,7 @@ function Playground(props) {
       if (renderrep !== null && settings !== null) {
         options = { divid: "svg" };
         setRendererColourOpts({options, metaGame, isParticipant: game.me, settings, context: effectiveColourContext, globalMe})
+        setGlyphMapOpt({options, metaGame, globalMe});
         if (focus.canExplore) {
           options.boardClick = boardClick;
         }
