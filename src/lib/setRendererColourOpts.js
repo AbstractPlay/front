@@ -21,6 +21,7 @@ export const setRendererColourOpts = ({
     if (palette !== undefined) {
       optioncolours = [...palette.colours];
     }
+    options.coloursGlobal = false;
   }
   if (globalMe?.customizations?.[metaGame]) {
     const custom = globalMe.customizations[metaGame];
@@ -30,7 +31,9 @@ export const setRendererColourOpts = ({
       custom.palette.length > 0
     ) {
       optioncolours = [...custom.palette];
+      options.coloursGlobal = false;
     }
+    options.contextGlobal = false;
   } else if (globalMe?.customizations?._default) {
     const custom = globalMe.customizations._default;
     if (
@@ -39,7 +42,9 @@ export const setRendererColourOpts = ({
       custom.palette.length > 0
     ) {
       optioncolours = [...custom.palette];
+      options.coloursGlobal = true;
     }
+    options.contextGlobal = true;
   }
   // extend all palettes to 12 colours
   if (optioncolours.length > 0 && optioncolours.length < 12) {
