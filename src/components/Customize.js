@@ -480,6 +480,8 @@ function Customize(props) {
     glyphMap,
   ]);
 
+  useEffect(() => {console.log(rendererJson)}, [rendererJson]);
+
   const getContextValue = () => {
     switch (selectedContextProp) {
       case "background":
