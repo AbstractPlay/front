@@ -564,74 +564,6 @@ function Customize(props) {
       )}
       <div className="columns">
         <div className="column is-half">
-          <h2 className="subtitle">Board Colours</h2>
-          <div className="field">
-            <label className="label is-small">Select Property</label>
-            <div className="control">
-              <div className="select is-small">
-                <select
-                  value={selectedContextProp}
-                  onChange={(e) => setSelectedContextProp(e.target.value)}
-                >
-                  {contextProps.map((p) => (
-                    <option key={p.value} value={p.value}>
-                      {p.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <p className="help">
-              {contextProps.find((p) => p.value === selectedContextProp)?.help}
-            </p>
-          </div>
-          <div className="field">
-            <div className="control">
-              <HexColorPicker
-                color={getContextValue()}
-                onChange={setContextValue}
-                style={{ width: "100%", height: "150px" }}
-              />
-              <HexColorInput
-                className="input is-small"
-                color={getContextValue()}
-                onChange={setContextValue}
-                style={{ marginTop: "0.5em", marginBottom: "0.5em" }}
-                prefixed
-              />
-            </div>
-          </div>
-          {contextHints.length > 0 && (
-            <div
-              className="notification is-info is-light"
-              style={{ fontSize: "0.85rem", padding: "1em" }}
-            >
-              <p>
-                <strong>Developer Hints:</strong>
-              </p>
-              <ul
-                style={{
-                  marginTop: 0,
-                  marginLeft: "1.5em",
-                  listStyleType: "disc",
-                }}
-              >
-                {contextHints.map((h, i) => (
-                  <li key={i}>
-                    <strong>
-                      {contextProps.find((p) => p.value === h.name)?.label ||
-                        h.name}
-                    </strong>
-                    : {h.explanation}{" "}
-                    {h.default !== undefined && (
-                      <span style={{ opacity: 0.8 }}>(Default: {h.default})</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <hr />
           <h2 className="subtitle">Player Colours</h2>
           <div className="field">
             <label className="label is-small">Add Colour</label>
@@ -734,6 +666,74 @@ function Customize(props) {
                       <span style={{ opacity: 0.8 }}>
                         (Default: {h.default})
                       </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <hr />
+          <h2 className="subtitle">Board Colours</h2>
+          <div className="field">
+            <label className="label is-small">Select Property</label>
+            <div className="control">
+              <div className="select is-small">
+                <select
+                  value={selectedContextProp}
+                  onChange={(e) => setSelectedContextProp(e.target.value)}
+                >
+                  {contextProps.map((p) => (
+                    <option key={p.value} value={p.value}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <p className="help">
+              {contextProps.find((p) => p.value === selectedContextProp)?.help}
+            </p>
+          </div>
+          <div className="field">
+            <div className="control">
+              <HexColorPicker
+                color={getContextValue()}
+                onChange={setContextValue}
+                style={{ width: "100%", height: "150px" }}
+              />
+              <HexColorInput
+                className="input is-small"
+                color={getContextValue()}
+                onChange={setContextValue}
+                style={{ marginTop: "0.5em", marginBottom: "0.5em" }}
+                prefixed
+              />
+            </div>
+          </div>
+          {contextHints.length > 0 && (
+            <div
+              className="notification is-info is-light"
+              style={{ fontSize: "0.85rem", padding: "1em" }}
+            >
+              <p>
+                <strong>Developer Hints:</strong>
+              </p>
+              <ul
+                style={{
+                  marginTop: 0,
+                  marginLeft: "1.5em",
+                  listStyleType: "disc",
+                }}
+              >
+                {contextHints.map((h, i) => (
+                  <li key={i}>
+                    <strong>
+                      {contextProps.find((p) => p.value === h.name)?.label ||
+                        h.name}
+                    </strong>
+                    : {h.explanation}{" "}
+                    {h.default !== undefined && (
+                      <span style={{ opacity: 0.8 }}>(Default: {h.default})</span>
                     )}
                   </li>
                 ))}
