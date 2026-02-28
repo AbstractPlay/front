@@ -1080,6 +1080,7 @@ function UserSettingsModal(props) {
           <div className="field is-grouped">
             <div className="control is-small">
               <button
+                disabled={true}
                 className="button is-small apButton"
                 onClick={() => showPaletteSetter(true)}
               >
@@ -1088,6 +1089,7 @@ function UserSettingsModal(props) {
             </div>
             <div className="control is-small">
               <button
+                disabled={true}
                 className="button is-small apButton"
                 onClick={() => {
                   handleContextChange("dark");
