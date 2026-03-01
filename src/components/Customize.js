@@ -500,7 +500,7 @@ function Customize(props) {
     glyphMap,
   ]);
 
-//   useEffect(() => {console.log(rendererJson)}, [rendererJson]);
+  //   useEffect(() => {console.log(rendererJson)}, [rendererJson]);
 
   const getContextValue = () => {
     switch (selectedContextProp) {
@@ -781,7 +781,9 @@ function Customize(props) {
                     </strong>
                     : {h.explanation}{" "}
                     {h.default !== undefined && (
-                      <span style={{ opacity: 0.8 }}>(Default: {h.default})</span>
+                      <span style={{ opacity: 0.8 }}>
+                        (Default: {h.default})
+                      </span>
                     )}
                   </li>
                 ))}
