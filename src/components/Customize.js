@@ -635,6 +635,19 @@ function Customize(props) {
                 >
                   &nbsp;
                 </button>
+                {["#000000", "#ffffff", "#808080"].map((c) => (
+                  <button
+                    key={c}
+                    className="button is-small"
+                    style={{ backgroundColor: c, width: "20px", padding: 0 }}
+                    onClick={() => {
+                      setSelectedColor(c);
+                      setPalette([...palette, c]);
+                    }}
+                  >
+                    &nbsp;
+                  </button>
+                ))}
               </div>
               <div className="buttons">
                 <button className="button is-small apButton" onClick={addColor}>
