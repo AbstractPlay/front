@@ -49,7 +49,7 @@ export const setRendererColourOpts = ({
   // extend all palettes to 12 colours
   if (optioncolours.length > 0 && optioncolours.length < 12) {
     while (optioncolours.length < 12) {
-      optioncolours.push("#fff");
+      optioncolours.push(null);
     }
   }
   // handle "Always use my colour" preference

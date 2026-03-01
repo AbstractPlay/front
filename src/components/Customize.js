@@ -326,6 +326,26 @@ function Customize(props) {
     setPalette(newPalette);
   };
 
+  const handleDragStart = (e, index) => {
+    e.dataTransfer.setData("text/plain", index);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e, index) => {
+    e.preventDefault();
+    const draggedIndex = parseInt(e.dataTransfer.getData("text/plain"), 10);
+    if (draggedIndex !== index && !isNaN(draggedIndex)) {
+      const newPalette = [...palette];
+      const [draggedItem] = newPalette.splice(draggedIndex, 1);
+      newPalette.splice(index, 0, draggedItem);
+      setPalette(newPalette);
+    }
+  };
+
   const availableGlyphs = useMemo(() => {
     try {
       const json = JSON.parse(rendererJson);
@@ -599,6 +619,22 @@ function Customize(props) {
                     &nbsp;
                   </button>
                 ))}
+                <button
+                  className="button is-small"
+                  style={{
+                    background:
+                      "linear-gradient(to top right, transparent calc(50% - 1px), red, transparent calc(50% + 1px))",
+                    backgroundColor: "white",
+                    width: "20px",
+                    padding: 0,
+                  }}
+                  onClick={() => {
+                    setPalette([...palette, null]);
+                  }}
+                  title="Default"
+                >
+                  &nbsp;
+                </button>
               </div>
               <div className="buttons">
                 <button className="button is-small apButton" onClick={addColor}>
@@ -630,10 +666,22 @@ function Customize(props) {
               <span
                 key={i}
                 className="tag is-medium"
+                draggable
+                onDragStart={(e) => handleDragStart(e, i)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, i)}
                 style={{
                   backgroundColor: c,
                   color: "#000",
                   border: "1px solid #ccc",
+                  cursor: "move",
+                  ...(c === null
+                    ? {
+                        background:
+                          "linear-gradient(to top right, transparent calc(50% - 1px), red, transparent calc(50% + 1px))",
+                        backgroundColor: "white",
+                      }
+                    : {}),
                 }}
               >
                 {c}
