@@ -4,59 +4,34 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
 import { useStorageState } from "react-use-storage-state";
-import Modal from "./Modal";
-import TableExplore from "./MetaContainer/TableExplore";
 import { callAuthApi } from "../lib/api";
 import { API_ENDPOINT_OPEN } from "../config";
 import { Helmet } from "react-helmet-async";
 import MetaItem from "./MetaContainer/MetaItem";
-import CompletedRecent from "./Explore/CompletedRecent";
-import CompletedAll from "./Explore/CompletedAll";
-import HotMoves from "./Explore/HotMoves";
-import HotPlayers from "./Explore/HotPlayers";
-import NumPlayers from "./Explore/NumPlayers";
-import Newest from "./Explore/Newest";
-import HIndex from "./Explore/HIndex";
-import Stars from "./Explore/Stars";
-import Thumbnail from "./Thumbnail";
+import ExploreView from "./Explore/ExploreView";
+import { viewConfigs } from "./Explore/exploreViewConfigs";
 import { useStore } from "../stores";
 
 function Explore(props) {
   const globalMe = useStore((state) => state.globalMe);
-  const [games, gamesSetter] = useState([]);
   const [counts, countsSetter] = useState(null);
-  const [users, usersSetter] = useState(null);
-  const [summary, summarySetter] = useState(null);
   const [selected, selectedSetter] = useStorageState("selected-module", "all");
-  const [updateCounter, updateCounterSetter] = useState(0);
-  const [activeImgModal, activeImgModalSetter] = useState("");
   const { metaGame } = useParams();
   const { t, i18n } = useTranslation();
   addResource(i18n.language);
 
   const components = [
-    ["all", null],
-    ["newest", Newest],
-    ["hotRaw", HotMoves],
-    ["hotPlayers", HotPlayers],
-    ["playerSum", NumPlayers],
-    ["hindex", HIndex],
-    ["stars", Stars],
-    ["completed", CompletedAll],
-    ["completedRecent", CompletedRecent],
+    ["all", viewConfigs.all],
+    ["newest", viewConfigs.newest],
+    ["hotRaw", viewConfigs.hotRaw],
+    ["hotPlayers", viewConfigs.hotPlayers],
+    ["playerSum", viewConfigs.playerSum],
+    ["hindex", viewConfigs.hindex],
+    ["stars", viewConfigs.stars],
+    ["completed", viewConfigs.completed],
+    ["completedRecent", viewConfigs.completedRecent],
+    ["random", viewConfigs.random],
   ];
-
-  const titles = new Map([
-    ["all", "All games"],
-    ["newest", "Newest"],
-    ["hotRaw", "Hottest (# moves/day)"],
-    ["hotPlayers", "Hottest (# players/day)"],
-    ["playerSum", "Most players"],
-    ["hindex", "Highest h-index"],
-    ["stars", "Most stars"],
-    ["completed", "Most completed games per week (all time)"],
-    ["completedRecent", "Most completed games per week (recent)"],
-  ]);
 
   useEffect(() => {
     addResource(i18n.language);
@@ -76,59 +51,6 @@ function Explore(props) {
       }
     }
     fetchData();
-  }, [updateCounter]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        var url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append("query", "user_names");
-        const res = await fetch(url);
-        const result = await res.json();
-        usersSetter(result);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        var url = new URL("https://records.abstractplay.com/_summary.json");
-        const res = await fetch(url);
-        const result = await res.json();
-        summarySetter(result);
-      } catch (error) {
-        console.log(error);
-        summarySetter(null);
-      }
-    }
-    fetchData();
-  }, []);
-
-  const openImgModal = (name) => {
-    activeImgModalSetter(name);
-  };
-  const closeImgModal = () => {
-    activeImgModalSetter("");
-  };
-
-  useEffect(() => {
-    let metas = [...gameinfo.keys()].sort((a, b) => {
-      const na = gameinfo.get(a).name;
-      const nb = gameinfo.get(b).name;
-      if (na < nb) return -1;
-      else if (na > nb) return 1;
-      return 0;
-    });
-    if (process.env.REACT_APP_REAL_MODE === "production") {
-      metas = metas.filter(
-        (id) => !gameinfo.get(id).flags.includes("experimental")
-      );
-    }
-    gamesSetter([...metas]);
   }, []);
 
   const toggleStar = useCallback(
@@ -184,23 +106,17 @@ function Explore(props) {
 
   const handleSelChange = useCallback(
     (sel) => {
-      closeImgModal();
       selectedSetter(sel);
     },
     [selectedSetter]
   );
 
-  useEffect(() => {
-    handleSelChange(selected);
-    // leaving handleSelChange out of the dep array because it causes an infinite loop
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
-
   if (
     metaGame === undefined ||
     metaGame === null ||
     !gameinfo.has(metaGame) ||
-    !games.includes(metaGame)
+    (process.env.REACT_APP_REAL_MODE === "production" &&
+      gameinfo.get(metaGame)?.flags?.includes("experimental"))
   ) {
     return (
       <>
@@ -234,60 +150,31 @@ function Explore(props) {
             <div className="control">
               <div className="select">
                 <select onChange={(e) => handleSelChange(e.target.value)}>
-                  {[...titles.entries()].map(([key, title]) => {
-                    return (
-                      <option value={key} selected={selected === key}>
-                        {title}
-                      </option>
-                    );
-                  })}
+                  {components.map(([key, cfg]) => (
+                    <option key={key} value={key} selected={selected === key}>
+                      {cfg.title}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
           </div>
           <hr />
-          {selected === "all" ? (
-            <TableExplore
-              counts={counts}
-              games={games}
-              summary={summary}
-              toggleStar={toggleStar.bind(this)}
-              handleChallenge={handleNewChallenge.bind(this)}
-              users={users}
-              updateSetter={updateCounterSetter}
-            />
-          ) : (
-            components.map(([key, Component]) => {
-              if (selected === key) {
-                return (
-                  <Component
-                    toggleStar={toggleStar.bind(this)}
-                    openImgModal={openImgModal.bind(this)}
-                    counts={counts}
-                  />
-                );
-              } else {
-                return null;
-              }
-            })
+          {components.map(([key, cfg]) =>
+            selected === key ? (
+              <ExploreView
+                key={key}
+                viewKey={key}
+                config={cfg}
+                toggleStar={toggleStar}
+                counts={counts}
+                handleChallenge={
+                  key === "all" ? handleNewChallenge : undefined
+                }
+              />
+            ) : null
           )}
         </article>
-        {selected === "all"
-          ? null
-          : games.map((metaGame) => {
-              return (
-                <Modal
-                  key={metaGame}
-                  buttons={[{ label: "Close", action: closeImgModal }]}
-                  show={activeImgModal === metaGame}
-                  title={`Board image for ${gameinfo.get(metaGame).name}`}
-                >
-                  <div className="content">
-                    <Thumbnail meta={metaGame} />
-                  </div>
-                </Modal>
-              );
-            })}
       </>
     );
   } else if (counts !== null) {
@@ -310,9 +197,8 @@ function Explore(props) {
         <MetaItem
           game={gameinfo.get(metaGame)}
           counts={counts[metaGame]}
-          summary={summary}
-          toggleStar={toggleStar.bind(this)}
-          handleChallenge={handleNewChallenge.bind(this)}
+          toggleStar={toggleStar}
+          handleChallenge={handleNewChallenge}
         />
       </>
     );

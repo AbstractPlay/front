@@ -1708,6 +1708,10 @@ function GameMove(props) {
         );
         colorsChangedSetter((val) => val + 1);
       }
+      // Keep dbgame in sync so the main useEffect (which re-runs on
+      // globalMe changes, e.g. color settings) doesn't revert to
+      // the pre-move state.
+      dbgameSetter(game0);
     } catch (err) {
       setError(
         `submitMove (move: ${m}, draw: ${draw}) failed with: ${err.message}`
