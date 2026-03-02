@@ -3071,5 +3071,57 @@ Both games take advantage of a new rendering feature: frames. You will now somet
       <guid isPermaLink="false">1468237813806928147</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>Andreas Kuhnekath-Häbler&amp;apos;s game [WaldMeister](https://play.abstractplay.com/games/waldmeister) is now available. Players plant trees of various colours and sizes in an attempt to form the largest groups of either colours or sizes. A game consists of two seasons, with the players switching goals. Highest score after both seasons wins. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 12 Feb 2026 14:12:41 GMT</pubDate>
+      <guid isPermaLink="false">1471509320976957624</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve pushed out a new approach to customization for testing. You can now set the board and player colours on a single screen, with a preview (see screenshots) and a way to copy/paste settings. To reach this screen, click the paintbrush icon below any game board, including within the Playground. From this screen, you can change your game-specific settings, and you can switch to the &amp;quot;Global Defaults&amp;quot; area where you can change the settings you want to be applied to all games that don&amp;apos;t have a game-specific setting.
+
+The &amp;quot;colour context&amp;quot; and the named palette screens are still available and will still work as they have to this point, if you wish to ignore this new feature. But if you do set any new customizations, they will take precedence over the other settings. 
+
+This is a test. I welcome continued conversations on how to improve our customization options and the UI around it. Feel free to join us in the #customization channel. Thank you.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 16 Feb 2026 19:31:46 GMT</pubDate>
+      <guid isPermaLink="false">1473039173152932063</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@João Pedro Neto&amp;apos;s area-control game [Plurality](https://play.abstractplay.com/games/plurality) is now available, and it was @João Pedro Neto himself who coded it for us! Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 18 Feb 2026 16:16:34 GMT</pubDate>
+      <guid isPermaLink="false">1473714824939569235</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A number of customization changes have been made. If you have any questions or run into any issues, join us in the #customization channel. Enjoy!
+
+- The paintbrush screen has been revamped to make it cleaner and, hopefully, a little more user friendly.
+- There&amp;apos;s a new `board` colour context option for adding a separate colour just behind the board. The extent of the fill depends on the type of board.
+- You can now swap out glyphs. I suspect the most common will be mapping the default `piece` to `piece-borderless`.
+- Games that use custom colours can now be customized. If properly documented, hints will appear on the paintbrush screen telling you what to adjust. I have tried to make adjustments to the games code as part of this release, but I am certain that there are things I have missed. Please let us know if you run into any issues.
+- To avoid surprises, the only way to override customized colours is to make a game-specific customization. Global customizations will not override custom colours.
+
+Again, if you run into any issues, don&amp;apos;t hesitate to join us in #customization or #bug-reports. A lot of code changed, so I&amp;apos;ll be monitoring for a bit tonight and will be available all weekend if something unexpected happens. Thank you for your patience and continued feedback!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 28 Feb 2026 03:20:32 GMT</pubDate>
+      <guid isPermaLink="false">1477143408614047846</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@Mrraow (Stephen Tavener)&amp;apos;s, often requested game Crosshairs is now available.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 02 Mar 2026 03:31:14 GMT</pubDate>
+      <guid isPermaLink="false">1477870875192590379</guid>
+    </item>
+    
   </channel>
 </rss>
