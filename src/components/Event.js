@@ -42,6 +42,11 @@ function Event() {
   const [showModalDelete, showModalDeleteSetter] = useState(false);
   const [showModalClose, showModalCloseSetter] = useState(false);
   const [eventWinner, eventWinnerSetter] = useState({});
+  const [showModalInvites, showModalInvitesSetter] = useState(false);
+  const [invited, invitedSetter] = useState([]);
+  const [blocked, blockedSetter] = useState([]);
+  const [selectedInvite, selectedInviteSetter] = useState("");
+  const [selectedBlock, selectedBlockSetter] = useState("");
   const [refresh, setRefresh] = useState(0);
   const navigate = useNavigate();
 
@@ -150,6 +155,10 @@ function Event() {
       eventNameSetter(eventData.event.name);
       // description, for modification
       descriptionSetter(eventData.event.description);
+
+      // invited/blocked
+      invitedSetter(eventData.event.invited || []);
+      blockedSetter(eventData.event.blocked || []);
     }
   }, [eventData, globalMe, allUsers]);
 
@@ -455,6 +464,56 @@ function Event() {
     showModalCloseSetter(false);
   };
 
+  const handleUpdateInvites = async () => {
+    try {
+      const res = await callAuthApi("event_update_invites", {
+        eventid,
+        invited,
+        blocked,
+      });
+      if (!res) return;
+      if (res.status !== 200) {
+        console.log(
+          `An error occurred updating the event: ${JSON.stringify(res)}`
+        );
+      } else {
+        const newRec = cloneDeep(eventData.event);
+        newRec.invited = invited;
+        newRec.blocked = blocked;
+        const newData = cloneDeep(eventData);
+        newData.event = newRec;
+        eventDataSetter(newData);
+        showModalInvitesSetter(false);
+      }
+    } catch (error) {
+      console.log(
+        `An error occurred updating the event: ${JSON.stringify(error)}`
+      );
+    }
+  };
+
+  const addInvite = () => {
+    if (selectedInvite && !invited.includes(selectedInvite)) {
+      invitedSetter([...invited, selectedInvite]);
+      selectedInviteSetter("");
+    }
+  };
+
+  const removeInvite = (id) => {
+    invitedSetter(invited.filter((u) => u !== id));
+  };
+
+  const addBlock = () => {
+    if (selectedBlock && !blocked.includes(selectedBlock)) {
+      blockedSetter([...blocked, selectedBlock]);
+      selectedBlockSetter("");
+    }
+  };
+
+  const removeBlock = (id) => {
+    blockedSetter(blocked.filter((u) => u !== id));
+  };
+
   const toggleWinner = (e) => {
     const id = e.target.id;
     const winners = cloneDeep(eventWinner);
@@ -507,6 +566,13 @@ function Event() {
               ) : (
                 <>This event has concluded.</>
               )}
+            </p>
+            <p>
+              <b>Max players:</b>&nbsp;
+              {eventData.event.maxPlayers === 0 ||
+              eventData.event.maxPlayers === undefined
+                ? "Unlimited"
+                : eventData.event.maxPlayers}
             </p>
             <p>
               <b>Organizer:</b>&nbsp;
@@ -563,6 +629,52 @@ function Event() {
               <p>
                 <b>Registrants:</b>&nbsp;
                 {registrants
+                  .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+                  .reduce(
+                    (acc, x) =>
+                      acc === null ? (
+                        x
+                      ) : (
+                        <>
+                          {acc}, {x}
+                        </>
+                      ),
+                    null
+                  )}
+              </p>
+            )}
+            {!editor || invited.length === 0 ? null : (
+              <p>
+                <b>Invited:</b>&nbsp;
+                {invited
+                  .map((id) => {
+                    const u = allUsers?.find((u) => u.id === id);
+                    return { id, name: u ? u.name : id };
+                  })
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+                  .reduce(
+                    (acc, x) =>
+                      acc === null ? (
+                        x
+                      ) : (
+                        <>
+                          {acc}, {x}
+                        </>
+                      ),
+                    null
+                  )}
+              </p>
+            )}
+            {!editor || blocked.length === 0 ? null : (
+              <p>
+                <b>Blocked:</b>&nbsp;
+                {blocked
+                  .map((id) => {
+                    const u = allUsers?.find((u) => u.id === id);
+                    return { id, name: u ? u.name : id };
+                  })
+                  .sort((a, b) => a.name.localeCompare(b.name))
                   .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
                   .reduce(
                     (acc, x) =>
@@ -698,18 +810,33 @@ function Event() {
                 </button>
               </div>
             )}
+            {!editor ? null : (
+              <div className="column is-narrow">
+                <button
+                  className="button is-small apButton"
+                  onClick={() => showModalInvitesSetter(true)}
+                >
+                  Invite/Block Players
+                </button>
+              </div>
+            )}
             {/* If open for registration, allow person to leave/join */}
             {eventStatus === "open" &&
             globalMe !== null &&
             globalMe !== undefined ? (
               <div className="column is-narrow">
                 {registrants.find((r) => r.id === globalMe.id) === undefined ? (
-                  <button
-                    className="button is-small apButton"
-                    onClick={handleRegister}
-                  >
-                    Register
-                  </button>
+                  (eventData.event.maxPlayers > 0 &&
+                    registrants.length >= eventData.event.maxPlayers) ||
+                  (invited.length > 0 && !invited.includes(globalMe.id)) ||
+                  blocked.includes(globalMe.id) ? null : (
+                    <button
+                      className="button is-small apButton"
+                      onClick={handleRegister}
+                    >
+                      Register
+                    </button>
+                  )
                 ) : (
                   <button
                     className="button is-small apButton"
@@ -984,6 +1111,101 @@ function Event() {
                 </div>
               ))}
             </div>
+          </div>
+        </Modal>
+        <Modal
+          show={showModalInvites}
+          title={"Invite/Block Players"}
+          buttons={[
+            {
+              label: "Save",
+              action: handleUpdateInvites,
+            },
+            {
+              label: t("Cancel"),
+              action: () => showModalInvitesSetter(false),
+            },
+          ]}
+        >
+          <div className="content">
+            <h3 className="subtitle">Invite</h3>
+            <div className="field has-addons">
+              <div className="control">
+                <div className="select">
+                  <select
+                    value={selectedInvite}
+                    onChange={(e) => selectedInviteSetter(e.target.value)}
+                  >
+                    <option value="">-- Select Player --</option>
+                    {(allUsers || [])
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((u) => (
+                        <option key={u.id} value={u.id}>
+                          {u.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </div>
+              <div className="control">
+                <button className="button apButton" onClick={addInvite}>
+                  Add
+                </button>
+              </div>
+            </div>
+            <ul>
+              {invited.map((id) => {
+                const user = (allUsers || []).find((u) => u.id === id);
+                return (
+                  <li key={id}>
+                    {user ? user.name : id}{" "}
+                    <button
+                      className="delete is-small"
+                      onClick={() => removeInvite(id)}
+                    ></button>
+                  </li>
+                );
+              })}
+            </ul>
+            <h3 className="subtitle">Block</h3>
+            <div className="field has-addons">
+              <div className="control">
+                <div className="select">
+                  <select
+                    value={selectedBlock}
+                    onChange={(e) => selectedBlockSetter(e.target.value)}
+                  >
+                    <option value="">-- Select Player --</option>
+                    {(allUsers || [])
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((u) => (
+                        <option key={u.id} value={u.id}>
+                          {u.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </div>
+              <div className="control">
+                <button className="button apButton" onClick={addBlock}>
+                  Add
+                </button>
+              </div>
+            </div>
+            <ul>
+              {blocked.map((id) => {
+                const user = (allUsers || []).find((u) => u.id === id);
+                return (
+                  <li key={id}>
+                    {user ? user.name : id}{" "}
+                    <button
+                      className="delete is-small"
+                      onClick={() => removeBlock(id)}
+                    ></button>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </Modal>
       </>

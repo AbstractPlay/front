@@ -24,6 +24,7 @@ function Events() {
   const [newEventName, newEventNameSetter] = useState("");
   const [newEventDate, newEventDateSetter] = useState("");
   const [newEventTime, newEventTimeSetter] = useState("");
+  const [maxPlayers, maxPlayersSetter] = useState(0);
   const [refetch, refetchSetter] = useState(0);
   const navigate = useNavigate();
 
@@ -136,12 +137,17 @@ function Events() {
     if (startSecs < Date.now()) {
       valid = false;
     }
+    const mp = maxPlayers === "" ? 0 : parseInt(maxPlayers, 10);
+    if (mp < 0) {
+      valid = false;
+    }
     if (valid) {
       try {
         const res = await callAuthApi("event_create", {
           name: newEventName,
           date: startSecs,
           description: "",
+          maxPlayers: mp,
         });
         if (!res) return;
         if (res.status !== 200) {
@@ -165,6 +171,7 @@ function Events() {
             newEventNameSetter("");
             newEventDateSetter("");
             newEventTimeSetter("");
+            maxPlayersSetter(0);
             console.log(
               `Post result was not interpretable: ${JSON.stringify(result)}`
             );
@@ -178,7 +185,7 @@ function Events() {
     } else {
       console.log(
         `Did not attempt to create the event with the following parameters: ${JSON.stringify(
-          { newEventName, newEventDate, newEventTime }
+          { newEventName, newEventDate, newEventTime, maxPlayers }
         )}`
       );
     }
@@ -189,6 +196,7 @@ function Events() {
     newEventNameSetter("");
     newEventDateSetter("");
     newEventTimeSetter("");
+    maxPlayersSetter(0);
     showModalSetter(false);
   };
 
@@ -377,6 +385,22 @@ function Events() {
           {/^\s*$/.test(newEventName) ? (
             <p className="help is-danger">The event must have a name.</p>
           ) : null}
+        </div>
+        <div className="field">
+          <label className="label" htmlFor="maxPlayers">
+            Maximum players
+          </label>
+          <div className="control">
+            <input
+              className="input"
+              type="number"
+              min="0"
+              name="maxPlayers"
+              value={maxPlayers}
+              onChange={(e) => maxPlayersSetter(e.target.value)}
+            />
+          </div>
+          <p className="help">A value of 0 means no limit.</p>
         </div>
         <div className="field is-grouped">
           <label className="label" htmlFor="eventDate">
