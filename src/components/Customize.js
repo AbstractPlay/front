@@ -77,6 +77,7 @@ function Customize(props) {
   const [selectedOriginalGlyph, setSelectedOriginalGlyph] = useState("");
   const [selectedSheet, setSelectedSheet] = useState("core");
   const [selectedReplacementGlyph, setSelectedReplacementGlyph] = useState("");
+  const [selectedScale, setSelectedScale] = useState("1");
 
   const presetColors = [
     "#e31a1c",
@@ -382,10 +383,20 @@ function Customize(props) {
     if (selectedOriginalGlyph && selectedReplacementGlyph) {
       const newMap = [...glyphMap];
       const idx = newMap.findIndex((p) => p[0] === selectedOriginalGlyph);
+      const scale = parseFloat(selectedScale);
+      const finalScale = isNaN(scale) ? 1 : scale;
       if (idx >= 0) {
-        newMap[idx] = [selectedOriginalGlyph, selectedReplacementGlyph];
+        newMap[idx] = [
+          selectedOriginalGlyph,
+          selectedReplacementGlyph,
+          finalScale,
+        ];
       } else {
-        newMap.push([selectedOriginalGlyph, selectedReplacementGlyph]);
+        newMap.push([
+          selectedOriginalGlyph,
+          selectedReplacementGlyph,
+          finalScale,
+        ]);
       }
       setGlyphMap(newMap);
     }
@@ -847,6 +858,15 @@ function Customize(props) {
                   ))}
                 </select>
               </div>
+              <span style={{ margin: "0 0.5em" }}>at scale</span>
+              <input
+                className="input is-small"
+                type="number"
+                step="0.1"
+                value={selectedScale}
+                onChange={(e) => setSelectedScale(e.target.value)}
+                style={{ width: "5em" }}
+              />
               <button
                 className="button is-small apButton"
                 onClick={addGlyphMapping}
@@ -860,6 +880,7 @@ function Customize(props) {
             {glyphMap.map((p, i) => (
               <span key={i} className="tag is-medium">
                 {p[0]} &rarr; {p[1]}
+                {p[2] !== undefined && p[2] !== 1 ? ` (@ ${p[2]}x)` : ""}
                 <button
                   className="delete is-small"
                   onClick={() => removeGlyphMapping(i)}
