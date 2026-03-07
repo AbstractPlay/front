@@ -98,7 +98,28 @@ function Events() {
           } else if (now >= event.dateStart) {
             a.push(realEvent);
           } else {
-            o.push(realEvent);
+            let show = true;
+            if (globalMe && globalMe.id) {
+              const registrants = event.players || [];
+              const amRegistered = registrants.some(
+                (p) => p.playerid === globalMe.id
+              );
+
+              if (!amRegistered) {
+                const blocked = event.blocked || [];
+                const invited = event.invited || [];
+                const maxPlayers = event.maxPlayers || 0;
+
+                if (blocked.includes(globalMe.id)) show = false;
+                if (invited.length > 0 && !invited.includes(globalMe.id))
+                  show = false;
+                if (maxPlayers > 0 && registrants.length >= maxPlayers)
+                  show = false;
+              }
+            }
+            if (show) {
+              o.push(realEvent);
+            }
           }
         }
       }
