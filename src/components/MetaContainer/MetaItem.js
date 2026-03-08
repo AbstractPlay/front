@@ -223,6 +223,24 @@ const MetaItem = React.forwardRef(
                     >
                       {gameEngine.description()}
                     </ReactMarkdown>
+                    {gameEngine.notes() === undefined ? null : (
+                      <div
+                        style={{
+                          fontSize: "smaller",
+                          backgroundColor: "rgba(128,128,128,0.15)",
+                          padding: "0.5em",
+                          borderRadius: "0.5em",
+                          marginBottom: "1em",
+                        }}
+                      >
+                        <ReactMarkdown
+                          rehypePlugins={[rehypeRaw]}
+                          className="content"
+                        >
+                          {gameEngine.notes()}
+                        </ReactMarkdown>
+                      </div>
+                    )}
                     <GameVariants
                       metaGame={game.uid}
                       variantsSetter={setSelectedVariants}
