@@ -3123,5 +3123,26 @@ Again, if you run into any issues, don&amp;apos;t hesitate to join us in #custom
       <guid isPermaLink="false">1477870875192590379</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>A bevy of new games! Enjoy!
+- @hoembla has brought us his own game [Oonpia](https://play.abstractplay.com/games/oonpia): a Go-like game on a hex board with multiple piece types.
+- And @João Pedro Neto has been on a coding tear, bringing us three new games!
+  - First, the classic game [Go](https://play.abstractplay.com/games/go) with Chinese area rules and super-Ko.
+  - Then [Product](https://play.abstractplay.com/games/product) where your score is the product of your two largest groups.
+  - Finally [Stiletto](https://play.abstractplay.com/games/stiletto) where you try to make five in a row with players handing back and forth the dagger, allowing you to place two pieces.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 07 Mar 2026 17:06:25 GMT</pubDate>
+      <guid isPermaLink="false">1479887962845216768</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Some balance changes have been made to [Wunchunk](https://play.abstractplay.com/games/wunchunk). See #game-specific-chat for details (https://discord.com/channels/526483743180062720/1480268414021931128/1480268414021931128).</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 08 Mar 2026 19:45:00 GMT</pubDate>
+      <guid isPermaLink="false">1480290259429490919</guid>
+    </item>
+    
   </channel>
 </rss>
