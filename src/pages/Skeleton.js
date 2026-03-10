@@ -39,6 +39,7 @@ import en from "javascript-time-ago/locale/en.json";
 import TimeAgo from "javascript-time-ago";
 import { useStorageState } from "react-use-storage-state";
 import newsData from "../assets/news.json";
+import ThemeApplicator from "../components/ThemeApplicator";
 import MyWebSocket from "../components/MyWebSocket";
 import { useStore } from "../stores";
 
@@ -222,6 +223,7 @@ function Bones(props) {
         </Helmet>
         <ToastContainer />
         <Router>
+          <ThemeApplicator />
           <MyWebSocket />
           <Navbar />
           <section className="section" id="main">

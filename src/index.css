@@ -16,9 +16,6 @@
     --tag-background-color: #f5f5f5;
     --dropshadow-target-start: rgba(10,10,10,0.1);
     --dropshadow-target-end: rgba(10,10,10,0.02);
-    --svg-label-color: black;
-    --svg-annotation-color: black;
-    --svg-gridline-color: black;
     --svg-default-fill: black;
     --svg-volcano-caps: black;
 
@@ -26,6 +23,9 @@
     /* --main-fg-color-lighter: #c3d6f1; */
     /* --secondary-color-1-bg: #ffe8e0; */
     /* --secondary-color-2-lighter: #e6f2f2; */
+    /* --svg-label-color: black; */
+    /* --svg-annotation-color: black; */
+    /* --svg-gridline-color: black; */
 }
 
 :root[color-mode="dark"] {
@@ -43,13 +43,15 @@
   --secondary-color-3-lighter: #009fbf;
   --secondary-color-3-bg: #333;
   --tag-background-color: #444;
-  --svg-label-color: var(--main-fg-color);
-  --svg-annotation-color: var(--secondary-color-2);
-  --svg-gridline-color: var(--main-font-color);
   --svg-default-fill: var(--main-font-color);
   --svg-volcano-caps: #888;
   --dropshadow-target-start: rgba(245,245,245,0.1);
   --dropshadow-target-end: rgba(245,245,245,0.02);
+
+  /* Currently unused */
+  /* --svg-label-color: var(--main-fg-color); */
+  /* --svg-annotation-color: var(--secondary-color-2); */
+  /* --svg-gridline-color: var(--main-font-color); */
 }
 
 /* Any element with the class "light--hidden" will be hidden when the site is set to Light Mode */
@@ -1196,4 +1198,3 @@ span.hardTime::after {
   :root[color-mode="dark"] svg#_btnBar symbol.aprender-button-0ca07818d5ffc > rect {
     fill: #999999;
   }
-

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { addResource } from "@abstractplay/gameslib";
@@ -9,6 +9,9 @@ import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../stores";
+import Spinner from "./Spinner";
+
+const ThemeCustomizer = lazy(() => import("./ThemeCustomizer"));
 
 function Navbar(props) {
   const [loggedin, loggedinSetter] = useState(false);
@@ -21,6 +24,7 @@ function Navbar(props) {
   const [colorMode, colorModeSetter] = useStorageState("color-mode", "light");
   const [storedInvis, setStoredInvis] = useStorageState("invisible", false);
   const { t, i18n } = useTranslation();
+  const [showThemeModal, setShowThemeModal] = useState(false);
   addResource(i18n.language);
 
   const closeBurger = () => {
@@ -304,12 +308,24 @@ function Navbar(props) {
             >
               Toggle Dark Mode
             </button>
+            <button
+              className="button is-small apButtonNeutral ml-2"
+              aria-label="Customize Theme"
+              onClick={() => setShowThemeModal(true)}
+            >
+              Customize Theme
+            </button>
           </div>
           <div className="navbar-item tourSettings">
             <LogInOutButton closeBurger={closeBurger} />
           </div>
         </div>
       </div>
+      <Suspense fallback={<Spinner />}>
+        {showThemeModal ? (
+          <ThemeCustomizer show={showThemeModal} handleClose={() => setShowThemeModal(false)} />
+        ) : null}
+      </Suspense>
     </nav>
   );
 }
