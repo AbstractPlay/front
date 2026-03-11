@@ -110,9 +110,22 @@ function ThemeCustomizer({ show, handleClose }) {
         }));
     }
 
-    const jsonOutput = useMemo(() => {
+    const jsonString = useMemo(() => {
         return JSON.stringify(localCustomThemes, null, 2);
     }, [localCustomThemes]);
+
+    const [jsonInput, setJsonInput] = useState(jsonString);
+
+    useEffect(() => {
+        setJsonInput(jsonString);
+    }, [jsonString]);
+
+    const handleJsonInputChange = (e) => {
+        setJsonInput(e.target.value);
+        try {
+            setLocalCustomThemes(JSON.parse(e.target.value));
+        } catch (err) { console.error("Error parsing json input:", err); }
+    };
 
     const previewWrapperStyle = useMemo(() => {
         const defaults = colorMode === 'light' ? lightDefaults : darkDefaults;
@@ -159,7 +172,7 @@ function ThemeCustomizer({ show, handleClose }) {
                     <div className="field mt-4">
                         <label className="label">Customizations (JSON)</label>
                         <div className="control">
-                            <textarea className="textarea" readOnly value={jsonOutput} rows={10}></textarea>
+                            <textarea className="textarea" value={jsonInput} onChange={handleJsonInputChange} rows={10}></textarea>
                         </div>
                     </div>
                     <div className="buttons mt-4">

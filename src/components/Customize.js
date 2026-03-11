@@ -5,7 +5,7 @@ import { render } from "@abstractplay/renderer";
 import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
 import { useStore } from "../stores";
-import { isEqual, cloneDeep } from "lodash";
+import { isEqual, cloneDeep, debounce } from "lodash";
 import { sheets } from "@abstractplay/renderer";
 
 function Customize(props) {
@@ -194,6 +194,7 @@ function Customize(props) {
 
   const [settingsInput, setSettingsInput] = useState(settingsJson);
   const [isDirty, setIsDirty] = useState(false);
+  const [settingsError, setSettingsError] = useState(null);
   const firstUpdate = useRef(true);
 
   useEffect(() => {
@@ -273,6 +274,8 @@ function Customize(props) {
     }
   }, [metaGame]);
 
+  const debouncedSetError = useMemo(() => debounce(setSettingsError, 500), []);
+
   const handleSettingsChange = (e) => {
     const newVal = e.target.value;
     setSettingsInput(newVal);
@@ -300,8 +303,10 @@ function Customize(props) {
       if (parsed.glyphmap && Array.isArray(parsed.glyphmap)) {
         setGlyphMap(parsed.glyphmap);
       }
+      setSettingsError(null);
+      debouncedSetError.cancel();
     } catch (err) {
-      // ignore
+      debouncedSetError(err.message);
     }
   };
 
@@ -929,7 +934,11 @@ function Customize(props) {
                 onChange={handleSettingsChange}
               />
             </div>
-            <p className="help">Paste settings JSON here to apply.</p>
+            {settingsError ? (
+              <p className="help is-danger">{settingsError}</p>
+            ) : (
+              <p className="help">Paste settings JSON here to apply.</p>
+            )}
           </div>
           <div className="control">
             <button
