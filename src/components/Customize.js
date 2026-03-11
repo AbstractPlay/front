@@ -448,18 +448,33 @@ function Customize(props) {
   };
 
   const handleReset = () => {
-    if (globalColourContext) {
-      if (globalColourContext.background)
-        setBackground(globalColourContext.background);
-      if (globalColourContext.board) setBoard(globalColourContext.board);
-      else if (globalColourContext.background)
-        setBoard(globalColourContext.background);
-      if (globalColourContext.strokes) setStrokes(globalColourContext.strokes);
-      if (globalColourContext.borders) setBorders(globalColourContext.borders);
-      if (globalColourContext.labels) setLabels(globalColourContext.labels);
-      if (globalColourContext.annotations)
-        setAnnotations(globalColourContext.annotations);
-      if (globalColourContext.fill) setFill(globalColourContext.fill);
+    // If we are on a game-specific page, reset to global defaults if they exist.
+    // Otherwise (or if on global page), reset to system defaults.
+    if (scope === "game" && globalMe?.customizations?._default) {
+      const settings = globalMe.customizations._default;
+      const sys_ctx = globalColourContext || {};
+      const ctx = settings.colourContext || {};
+      setBackground(ctx.background || sys_ctx.background);
+      setBoard(
+        ctx.board || ctx.background || sys_ctx.board || sys_ctx.background
+      );
+      setStrokes(ctx.strokes || sys_ctx.strokes);
+      setBorders(ctx.borders || sys_ctx.borders);
+      setLabels(ctx.labels || sys_ctx.labels);
+      setAnnotations(ctx.annotations || sys_ctx.annotations);
+      setFill(ctx.fill || sys_ctx.fill);
+      setPalette(settings.palette || []);
+      setGlyphMap(settings.glyphmap || []);
+    } else if (globalColourContext) {
+      // Reset to system defaults
+      const sys_ctx = globalColourContext;
+      setBackground(sys_ctx.background);
+      setBoard(sys_ctx.board || sys_ctx.background);
+      setStrokes(sys_ctx.strokes);
+      setBorders(sys_ctx.borders);
+      setLabels(sys_ctx.labels);
+      setAnnotations(sys_ctx.annotations);
+      setFill(sys_ctx.fill);
       setPalette([]);
       setGlyphMap([]);
     }
