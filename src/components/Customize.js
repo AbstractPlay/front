@@ -198,13 +198,7 @@ function Customize(props) {
   const firstUpdate = useRef(true);
 
   useEffect(() => {
-    if (
-      globalMe !== null &&
-      globalMe !== undefined &&
-      globalMe.customizations !== undefined &&
-      globalMe.customizations !== null &&
-      metaGame in globalMe.customizations
-    ) {
+    if (globalMe?.customizations?.[metaGame]) {
       const settings = globalMe.customizations[metaGame];
       if (settings.colourContext) {
         if (settings.colourContext.background)
@@ -223,12 +217,23 @@ function Customize(props) {
           setAnnotations(settings.colourContext.annotations);
         if (settings.colourContext.fill) setFill(settings.colourContext.fill);
       }
-      if (settings.palette && Array.isArray(settings.palette)) {
-        setPalette(settings.palette);
-      }
-      if (settings.glyphmap && Array.isArray(settings.glyphmap)) {
-        setGlyphMap(settings.glyphmap);
-      }
+      setPalette(settings.palette || []);
+      setGlyphMap(settings.glyphmap || []);
+    } else if (globalMe?.customizations?._default) {
+      const settings = globalMe.customizations._default;
+      const sys_ctx = globalColourContext || {};
+      const ctx = settings.colourContext || {};
+      setBackground(ctx.background || sys_ctx.background);
+      setBoard(
+        ctx.board || ctx.background || sys_ctx.board || sys_ctx.background
+      );
+      setStrokes(ctx.strokes || sys_ctx.strokes);
+      setBorders(ctx.borders || sys_ctx.borders);
+      setLabels(ctx.labels || sys_ctx.labels);
+      setAnnotations(ctx.annotations || sys_ctx.annotations);
+      setFill(ctx.fill || sys_ctx.fill);
+      setPalette(settings.palette || []);
+      setGlyphMap(settings.glyphmap || []);
     } else if (globalColourContext) {
       if (globalColourContext.background)
         setBackground(globalColourContext.background);

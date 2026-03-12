@@ -177,7 +177,7 @@ function ThemeCustomizer({ show, handleClose }) {
                     </div>
                     <div className="buttons mt-4">
                         <button className="button apButton" onClick={handleResetCurrent}>Reset Current Theme</button>
-                        <button className="button apButtonNeutral" onClick={handleReset}>Reset All Themes</button>
+                        <button className="button apButtonNeutral" onClick={handleReset}>Reset Both Themes</button>
                     </div>
                 </div>
                 <div className="column" style={previewWrapperStyle}>
