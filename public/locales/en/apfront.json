@@ -791,6 +791,7 @@
     "tblHeaderStarted": "Game started",
     "tblHeaderVariants": "Variants",
     "TimeRemaining": "Time remaining",
+    "ToggleFullSize": "Toggle full-height board image",
     "ToggleLayout": "Toggle vertical/horizontal layout",
     "ToggleZoom": "Toggle zoom",
     "ToMove": "{{player}} to move.",

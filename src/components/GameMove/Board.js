@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import useStorageState from "react-use-storage-state";
 import BoardNav from "./BoardNav";
 import { useStore } from "../../stores";
 
@@ -35,7 +36,16 @@ function Board({
 }) {
   const globalMe = useStore((state) => state.globalMe);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
+  const [fullSize, setFullSize] = useStorageState("fullSize", false);
   const [index, setIndex] = useState(null);
+
+  const boardStyle = useMemo(() => {
+    const style = { backgroundColor: colourContext.background };
+    if (fullSize) {
+      style.maxHeight = "unset";
+    }
+    return style;
+  }, [colourContext.background, fullSize]);
 
   useEffect(() => {
     if (rendered.length > 0) {
@@ -53,6 +63,20 @@ function Board({
   const next = () => setIndex((i) => (i + 1) % rendered.length);
   const prev = () =>
     setIndex((i) => (i - 1 + rendered.length) % rendered.length);
+
+  const boardRef = (el) => {
+    if (boardImage) boardImage.current = el;
+    if (el) {
+      el.innerHTML = ""; // Clear previous
+      if (rendered[index]) {
+        const svg = rendered[index].cloneNode(true);
+        if (fullSize) {
+          svg.style.height = "auto";
+        }
+        el.appendChild(svg);
+      }
+    }
+  };
 
   return (
     <>
@@ -116,35 +140,21 @@ function Board({
           {stackExpanding ? (
             <div
               className={`board _meta_${metaGame}`}
-              style={{ backgroundColor: colourContext.background }}
+              style={boardStyle}
             >
               <div className="stack" id="stack" ref={stackImage}></div>
               <div
                 className="stackboard"
                 id="svg"
-                ref={(el) => {
-                  // internalRef.current = el;      // internal ref for appending SVG
-                  if (boardImage) boardImage.current = el; // external ref for parent
-                  if (el) {
-                    el.innerHTML = ""; // Clear previous
-                    el.appendChild(rendered[index]); // Insert current SVG
-                  }
-                }}
+                ref={boardRef}
               ></div>
             </div>
           ) : (
             <div
               className={`board tourBoard _meta_${metaGame}`}
-              style={{ backgroundColor: colourContext.background }}
+              style={boardStyle}
               id="svg"
-              ref={(el) => {
-                // internalRef.current = el;      // internal ref for appending SVG
-                if (boardImage) boardImage.current = el; // external ref for parent
-                if (el) {
-                  el.innerHTML = ""; // Clear previous
-                  el.appendChild(rendered[index]); // Insert current SVG
-                }
-              }}
+              ref={boardRef}
             ></div>
           )}
         </TransformComponent>
@@ -206,6 +216,13 @@ function Board({
             )}
           </button>
         )}
+        <button
+          className="fabtn align-right"
+          onClick={() => setFullSize((val) => !val)}
+          title={t("ToggleFullSize")}
+        >
+          <i className="fa fa-arrows-alt"></i>
+        </button>
         {!globalMe ? null : (
           <button
             className="fabtn align-right"
