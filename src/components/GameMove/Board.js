@@ -69,9 +69,11 @@ function Board({
     if (el) {
       el.innerHTML = ""; // Clear previous
       if (rendered[index]) {
-        const svg = rendered[index].cloneNode(true);
+        const svg = rendered[index];
         if (fullSize) {
           svg.style.height = "auto";
+        } else {
+          svg.style.height = "";
         }
         el.appendChild(svg);
       }
