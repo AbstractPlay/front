@@ -1080,7 +1080,6 @@ function UserSettingsModal(props) {
           <div className="field is-grouped">
             <div className="control is-small">
               <button
-                disabled={true}
                 className="button is-small apButton"
                 onClick={() => showPaletteSetter(true)}
               >
@@ -1089,7 +1088,6 @@ function UserSettingsModal(props) {
             </div>
             <div className="control is-small">
               <button
-                disabled={true}
                 className="button is-small apButton"
                 onClick={() => {
                   handleContextChange("dark");
@@ -1126,6 +1124,9 @@ function UserSettingsModal(props) {
         ]}
       >
         <div className="content">
+          <div className="notification is-warning">
+            This feature is deprecated and will be removed sometime after April 13th, 2026.
+          </div>
           <p>
             Palettes are lists of colours you want the front end to use when
             generating game boards. You must provide at least two colours, four
@@ -1303,6 +1304,9 @@ function UserSettingsModal(props) {
         ]}
       >
         <div className="content">
+          <div className="notification is-warning">
+            This feature is deprecated and will be removed sometime after April 13th, 2026.
+          </div>
           <p>
             Colour contexts are sets of colours that the renderer uses when
             drawing boards in different settings, like dark mode. You can tweak
