@@ -19,7 +19,17 @@
         "draw": "Solicite o empate",
         "numbers": {
             "one": "Um (1)",
-            "two": "Dois (2)"
+            "two": "Dois (2)",
+            "three": "Três (3)"
+        },
+        "playfirst": "Jogar primeiro",
+        "pigs": {
+            "back": "Mova-se para atrás",
+            "forward": "Mova-se à frente",
+            "left": "Mova-se para frente à esquerda",
+            "right": "Mova-se para frente à direita",
+            "cw": "Gire na direção horária"
         }
-    }
+    },
+    "AlternativeDisplays": "Opções alternativas para display"
 }
