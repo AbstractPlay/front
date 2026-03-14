@@ -35,22 +35,43 @@ function Customize(props) {
       ),
     []
   );
-  const [rendererJson, setRendererJson] = useState(
-    inJSON ?? defaultRendererJson
-  );
+
+  const normalizeData = (input) => {
+    try {
+      let data = typeof input === "string" ? JSON.parse(input) : input;
+      // Handle potential double stringification
+      if (typeof data === "string") data = JSON.parse(data);
+      // Recursively pick the last item if it's an array
+      while (Array.isArray(data) && data.length > 0) {
+        data = data[data.length - 1];
+      }
+      return data ? JSON.stringify(data, null, 2) : null;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  const [rendererJson, setRendererJson] = useState(() => {
+    const normalized = normalizeData(inJSON);
+    return normalized ?? defaultRendererJson;
+  });
 
   useEffect(() => {
-    if (inJSON === undefined || inJSON === null) {
-      if (metaGame === "_default") {
-        setRendererJson(defaultRendererJson);
-      } else {
-        fetch(`https://thumbnails.abstractplay.com/${metaGame}.json`)
-          .then((res) => (res.ok ? res.json() : Promise.reject(res)))
-          .then((data) => setRendererJson(data))
-          .catch(() => {
-            setRendererJson(defaultRendererJson);
-          });
-      }
+    if (inJSON !== undefined && inJSON !== null) {
+      const normalized = normalizeData(inJSON);
+      setRendererJson(normalized ?? defaultRendererJson);
+    } else if (metaGame === "_default") {
+      setRendererJson(defaultRendererJson);
+    } else {
+      fetch(`https://thumbnails.abstractplay.com/${metaGame}.json`)
+        .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+        .then((data) => {
+          const normalized = normalizeData(data);
+          setRendererJson(normalized ?? defaultRendererJson);
+        })
+        .catch(() => {
+          setRendererJson(defaultRendererJson);
+        });
     }
   }, [metaGame, inJSON, defaultRendererJson]);
 
@@ -360,7 +381,7 @@ function Customize(props) {
   const availableGlyphs = useMemo(() => {
     try {
       const json = JSON.parse(rendererJson);
-      if (!json.legend) return [];
+      if (!json || !json.legend) return [];
       const names = new Set();
       const processGlyph = (g) => {
         if (typeof g === "string") {
@@ -500,6 +521,7 @@ function Customize(props) {
 
     try {
       const json = JSON.parse(rendererJson);
+      console.log("Preview JSON:", json);
       const options = {
         divid: divId,
         svgid: svgId,
