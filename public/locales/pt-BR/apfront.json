@@ -30,11 +30,55 @@
             "right": "Mova-se para frente à direita",
             "cw": "Gire na direção horária",
             "ccw": "Gire em direção anti-horária",
-            "fire": "Atirar laser"
+            "fire": "Atirar laser",
+            "hit": "Balançar focinho"
         },
         "cifra": {
-            "dt": "Escuro, Topo"
+            "dt": "Escuro, Topo",
+            "lt": "Claro, Topo",
+            "lr": "Claro, Direita",
+            "dl": "Escuro, Esquerda",
+            "dr": "Escuro, Direito",
+            "ll": "Claro, Esquerda"
+        },
+        "arimaa": {
+            "gold99": "Configuração rápida",
+            "silver99e7": "Configuração rápida, elefante e7",
+            "silver99d7": "Configuração rápida, elefante d7"
         }
     },
-    "AlternativeDisplays": "Opções alternativas para display"
+    "AlternativeDisplays": "Opções alternativas para display",
+    "Cancel": "Cancelar",
+    "CanPie": "Esse jogador possui a opção de trocar de assentos.",
+    "categories": {
+        "board": {
+            "description": "Descreve os atributos da superfície em jogo",
+            "full": "Tabuleiro",
+            "tag": "Tabuleiro"
+        },
+        "board>3d": {
+            "description": "O tabuleiro é de três dimensões"
+        },
+        "board>connect>linear": {
+            "description": "Células conectam-se linearmente",
+            "full": "Tabuleiro > Conectividade > Linear",
+            "tag": "Conectar: Linear"
+        },
+        "board>connect>other": {
+            "description": "Células conectam-se de um jeito único",
+            "full": "Tabuleiro > Conectividade > Outro",
+            "tag": "Conectar: Outro"
+        },
+        "board>connect>pent": {
+            "description": "Células conectam-se de modo pentagonal",
+            "full": "Tabuleiro > Conectividade > Pentagonal"
+        },
+        "board>connect>rect": {
+            "description": "Células conectam-se ortogonalmente e diagonalmente",
+            "full": "Tabuleiro > Conectividade > Retangular"
+        },
+        "board>connect>snub": {
+            "description": "Células conectam-se em uma matriz antiprisma quadricular"
+        }
+    }
 }
