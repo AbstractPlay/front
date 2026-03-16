@@ -51,9 +51,6 @@ export function setupGame(
   game0.customButtons =
     info.flags !== undefined && info.flags.includes("custom-buttons");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
-  game0.scores = info.flags !== undefined && info.flags.includes("scores");
-  game0.limitedPieces =
-    info.flags !== undefined && info.flags.includes("limited-pieces");
   game0.playerStashes =
     info.flags !== undefined && info.flags.includes("player-stashes");
   game0.sharedStash =

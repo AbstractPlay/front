@@ -46,7 +46,7 @@ function GameStatus({
     game.colors === undefined ||
     ((!game.variants || game.variants.length === 0) &&
       status.statuses.length === 0 &&
-      ((!game.scores && !game.limitedPieces) || status.scores.length === 0) &&
+      status.scores.length === 0 &&
       !game.playerStashes &&
       !game.sharedStash)
   ) {
@@ -123,9 +123,8 @@ function GameStatus({
             </tbody>
           </table>
         )}
-        {(!game.scores && !game.limitedPieces) || status.scores.length === 0
-          ? ""
-          : status.scores.map((scores, i) => (
+        {status.scores.length === 0 ? "" :
+          status.scores.map((scores, i) => (
               <div
                 key={i}
                 style={{ overflowX: "auto", scrollbarWidth: "thin" }}

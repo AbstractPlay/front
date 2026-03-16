@@ -8,10 +8,8 @@ export const replaceNames = (rep, players) => {
 };
 
 export function setStatus(engine, game, isPartial, partialMove, status) {
-  status.statuses = engine.statuses(isPartial, partialMove);
-  if (game.scores || game.limitedPieces) {
-    status.scores = engine.getPlayersScores();
-  }
+  status.statuses = engine.sidebarStatuses(isPartial, partialMove);
+  status.scores = engine.sidebarScores();
   if (game.playerStashes) {
     status.stashes = [];
     for (let i = 1; i <= game.numPlayers; i++) {

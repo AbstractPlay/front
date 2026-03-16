@@ -44,10 +44,8 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
 }
 
 function setStatus(engine, game, isPartial, partialMove, status) {
-  status.statuses = engine.statuses(isPartial, partialMove);
-  if (game.scores || game.limitedPieces) {
-    status.scores = engine.getPlayersScores();
-  }
+  status.statuses = engine.sidebarStatuses(isPartial, partialMove);
+  status.scores = engine.sidebarScores();
   if (game.playerStashes) {
     status.stashes = [];
     for (let i = 1; i <= game.numPlayers; i++) {
@@ -104,9 +102,6 @@ function setupGame(
   game0.customButtons =
     info.flags !== undefined && info.flags.includes("custom-buttons");
   game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
-  game0.scores = info.flags !== undefined && info.flags.includes("scores");
-  game0.limitedPieces =
-    info.flags !== undefined && info.flags.includes("limited-pieces");
   game0.playerStashes =
     info.flags !== undefined && info.flags.includes("player-stashes");
   game0.sharedStash =
