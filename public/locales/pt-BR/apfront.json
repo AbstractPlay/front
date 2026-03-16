@@ -57,7 +57,9 @@
             "tag": "Tabuleiro"
         },
         "board>3d": {
-            "description": "O tabuleiro é de três dimensões"
+            "description": "O tabuleiro é de três dimensões",
+            "full": "Tabuleiro > 3D",
+            "tag": "Tabuleiro: 3D"
         },
         "board>connect>linear": {
             "description": "Células conectam-se linearmente",
@@ -71,14 +73,36 @@
         },
         "board>connect>pent": {
             "description": "Células conectam-se de modo pentagonal",
-            "full": "Tabuleiro > Conectividade > Pentagonal"
+            "full": "Tabuleiro > Conectividade > Pentagonal",
+            "tag": "Conectar: Pent"
         },
         "board>connect>rect": {
             "description": "Células conectam-se ortogonalmente e diagonalmente",
-            "full": "Tabuleiro > Conectividade > Retangular"
+            "full": "Tabuleiro > Conectividade > Retangular",
+            "tag": "Conectar: Rect"
         },
         "board>connect>snub": {
-            "description": "Células conectam-se em uma matriz antiprisma quadricular"
+            "description": "Células conectam-se em uma matriz antiprisma quadricular",
+            "full": "Tabuleiro > Conectividade > Quadrado Antiprisma",
+            "tag": "Connectar: Antiprisma"
+        },
+        "board>connect": {
+            "description": "Descreve como as células do tabuleiro conectam-se uma com as outras",
+            "full": "Tabuleiro > Conectividade",
+            "tag": "Conectividade do Tabuleiro"
+        },
+        "board>connect>hex": {
+            "description": "Células conectam entre sí de maneira hexagonal",
+            "full": "Tabuleiro > Conectividade > Hexagonal",
+            "tag": "Conectar: Hexágono"
+        },
+        "board>dynamic": {
+            "description": "O tabuleiro é construído dinamicamente",
+            "full": "Tabuleiro > Dinâmica",
+            "tag": "Tabuleiro: Dinâmica"
+        },
+        "board>mancala": {
+            "description": "Jogado em um tabuleiro tradicional Mancala"
         }
     }
 }
