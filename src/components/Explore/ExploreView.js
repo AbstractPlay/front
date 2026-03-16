@@ -1,4 +1,11 @@
-import { useState, useEffect, useRef, Fragment, useMemo, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  Fragment,
+  useMemo,
+  useCallback,
+} from "react";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -30,7 +37,8 @@ function tagSortFn(a, b) {
     if (raw.startsWith("board")) return 3;
     return 4;
   };
-  const va = priority(a.raw), vb = priority(b.raw);
+  const va = priority(a.raw),
+    vb = priority(b.raw);
   return va === vb ? a.tag.localeCompare(b.tag) : va - vb;
 }
 
@@ -47,7 +55,8 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     try {
       const stored = sessionStorage.getItem(`explore-page-${viewKey}`);
       return stored !== null ? parseInt(stored, 10) : 0;
-    } catch { /* ignore */
+    } catch {
+      /* ignore */
       return 0;
     }
   });
@@ -69,7 +78,9 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
           filters.push({ id: "designers", value: parsed.designerSearch });
         }
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     return filters;
   });
   const [gridView, gridViewSetter] = useStorageState("grid-view", false);
@@ -83,7 +94,9 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     try {
       const stored = sessionStorage.getItem(`explore-filters-${viewKey}`);
       if (stored) return JSON.parse(stored).tagFilter || [];
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     return [];
   });
   const [ddSelected, ddSelectedSetter] = useState("");
@@ -91,14 +104,18 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     try {
       const stored = sessionStorage.getItem(`explore-filters-${viewKey}`);
       if (stored) return JSON.parse(stored).nameSearch || "";
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     return "";
   });
   const [designerSearch, designerSearchSetter] = useState(() => {
     try {
       const stored = sessionStorage.getItem(`explore-filters-${viewKey}`);
       if (stored) return JSON.parse(stored).designerSearch || "";
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     return "";
   });
   const { t, i18n } = useTranslation();
@@ -218,26 +235,29 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     [columnFilters]
   );
 
-  const loadGames = useCallback((forceNew) => {
-    let metas = [...gameinfo.keys()];
-    if (process.env.REACT_APP_REAL_MODE === "production") {
-      metas = metas.filter(
-        (id) => !gameinfo.get(id).flags.includes("experimental")
-      );
-    }
-    if (config.loadGames) {
-      gamesSetter(config.loadGames(metas, forceNew));
-    } else {
-      metas.sort((a, b) => {
-        const na = gameinfo.get(a).name;
-        const nb = gameinfo.get(b).name;
-        if (na < nb) return -1;
-        else if (na > nb) return 1;
-        return 0;
-      });
-      gamesSetter([...metas]);
-    }
-  }, [config]);
+  const loadGames = useCallback(
+    (forceNew) => {
+      let metas = [...gameinfo.keys()];
+      if (process.env.REACT_APP_REAL_MODE === "production") {
+        metas = metas.filter(
+          (id) => !gameinfo.get(id).flags.includes("experimental")
+        );
+      }
+      if (config.loadGames) {
+        gamesSetter(config.loadGames(metas, forceNew));
+      } else {
+        metas.sort((a, b) => {
+          const na = gameinfo.get(a).name;
+          const nb = gameinfo.get(b).name;
+          if (na < nb) return -1;
+          else if (na > nb) return 1;
+          return 0;
+        });
+        gamesSetter([...metas]);
+      }
+    },
+    [config]
+  );
 
   useEffect(() => {
     loadGames(false);
@@ -434,9 +454,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
                   className="tag"
                   title={tag.desc}
                   onClick={
-                    config.enableTagFilter
-                      ? () => addTag(tag.raw)
-                      : undefined
+                    config.enableTagFilter ? () => addTag(tag.raw) : undefined
                   }
                 >
                   {tag.tag}
@@ -675,9 +693,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
                               className="input is-small"
                               type="search"
                               value={nameSearch}
-                              onChange={(e) =>
-                                updateNameFilter(e.target.value)
-                              }
+                              onChange={(e) => updateNameFilter(e.target.value)}
                             />
                           </div>
                         ) : null}
@@ -720,9 +736,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
                                   <span
                                     key={`tag_${ind}`}
                                     className="tag"
-                                    title={t(
-                                      `categories.${tag}.description`
-                                    )}
+                                    title={t(`categories.${tag}.description`)}
                                     onClick={() => delTag(tag)}
                                   >
                                     {t(`categories.${tag}.tag`)}
@@ -777,7 +791,9 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         show={activeImgModal !== ""}
         title={
           activeImgModal
-            ? `Board image for ${gameinfo.get(activeImgModal)?.name || activeImgModal}`
+            ? `Board image for ${
+                gameinfo.get(activeImgModal)?.name || activeImgModal
+              }`
             : ""
         }
       >

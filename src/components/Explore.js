@@ -168,9 +168,7 @@ function Explore(props) {
                 config={cfg}
                 toggleStar={toggleStar}
                 counts={counts}
-                handleChallenge={
-                  key === "all" ? handleNewChallenge : undefined
-                }
+                handleChallenge={key === "all" ? handleNewChallenge : undefined}
               />
             ) : null
           )}

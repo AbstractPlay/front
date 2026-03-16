@@ -1125,7 +1125,8 @@ function UserSettingsModal(props) {
       >
         <div className="content">
           <div className="notification is-warning">
-            This feature is deprecated and will be removed sometime after April 13th, 2026.
+            This feature is deprecated and will be removed sometime after April
+            13th, 2026.
           </div>
           <p>
             Palettes are lists of colours you want the front end to use when
@@ -1305,7 +1306,8 @@ function UserSettingsModal(props) {
       >
         <div className="content">
           <div className="notification is-warning">
-            This feature is deprecated and will be removed sometime after April 13th, 2026.
+            This feature is deprecated and will be removed sometime after April
+            13th, 2026.
           </div>
           <p>
             Colour contexts are sets of colours that the renderer uses when

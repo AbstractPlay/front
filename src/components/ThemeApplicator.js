@@ -2,21 +2,28 @@ import { useEffect } from "react";
 import { useStorageState } from "react-use-storage-state";
 
 function ThemeApplicator() {
-    const [customThemes] = useStorageState("site-theme-customizations", { light: {}, dark: {} });
+  const [customThemes] = useStorageState("site-theme-customizations", {
+    light: {},
+    dark: {},
+  });
 
-    useEffect(() => {
-        const styleElId = 'custom-theme-styles';
-        let styleEl = document.getElementById(styleElId);
-        if (!styleEl) {
-            styleEl = document.createElement('style');
-            styleEl.id = styleElId;
-            document.head.appendChild(styleEl);
-        }
+  useEffect(() => {
+    const styleElId = "custom-theme-styles";
+    let styleEl = document.getElementById(styleElId);
+    if (!styleEl) {
+      styleEl = document.createElement("style");
+      styleEl.id = styleElId;
+      document.head.appendChild(styleEl);
+    }
 
-        const lightCustomizations = Object.entries(customThemes.light).map(([key, val]) => `${key}: ${val};`).join('\n');
-        const darkCustomizations = Object.entries(customThemes.dark).map(([key, val]) => `${key}: ${val};`).join('\n');
+    const lightCustomizations = Object.entries(customThemes.light)
+      .map(([key, val]) => `${key}: ${val};`)
+      .join("\n");
+    const darkCustomizations = Object.entries(customThemes.dark)
+      .map(([key, val]) => `${key}: ${val};`)
+      .join("\n");
 
-        styleEl.innerHTML = `
+    styleEl.innerHTML = `
             :root[color-mode="light"] {
                 ${lightCustomizations}
             }
@@ -24,10 +31,10 @@ function ThemeApplicator() {
                 ${darkCustomizations}
             }
         `;
-        // No cleanup function needed if we want styles to persist
-    }, [customThemes]);
+    // No cleanup function needed if we want styles to persist
+  }, [customThemes]);
 
-    return null;
+  return null;
 }
 
 export default ThemeApplicator;

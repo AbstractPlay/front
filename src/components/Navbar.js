@@ -323,7 +323,10 @@ function Navbar(props) {
       </div>
       <Suspense fallback={<Spinner />}>
         {showThemeModal ? (
-          <ThemeCustomizer show={showThemeModal} handleClose={() => setShowThemeModal(false)} />
+          <ThemeCustomizer
+            show={showThemeModal}
+            handleClose={() => setShowThemeModal(false)}
+          />
         ) : null}
       </Suspense>
     </nav>

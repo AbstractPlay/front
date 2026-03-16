@@ -123,8 +123,9 @@ function GameStatus({
             </tbody>
           </table>
         )}
-        {status.scores.length === 0 ? "" :
-          status.scores.map((scores, i) => (
+        {status.scores.length === 0
+          ? ""
+          : status.scores.map((scores, i) => (
               <div
                 key={i}
                 style={{ overflowX: "auto", scrollbarWidth: "thin" }}

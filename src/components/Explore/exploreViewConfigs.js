@@ -10,10 +10,18 @@ function shuffle(array) {
 }
 
 function scoreLookup(fetchedData, prefix, metaGame) {
-  const found1w = fetchedData?.[prefix + "1w"]?.find((e) => e.metaGame === metaGame);
-  const found1m = fetchedData?.[prefix + "1m"]?.find((e) => e.metaGame === metaGame);
-  const found6m = fetchedData?.[prefix + "6m"]?.find((e) => e.metaGame === metaGame);
-  const found1y = fetchedData?.[prefix + "1y"]?.find((e) => e.metaGame === metaGame);
+  const found1w = fetchedData?.[prefix + "1w"]?.find(
+    (e) => e.metaGame === metaGame
+  );
+  const found1m = fetchedData?.[prefix + "1m"]?.find(
+    (e) => e.metaGame === metaGame
+  );
+  const found6m = fetchedData?.[prefix + "6m"]?.find(
+    (e) => e.metaGame === metaGame
+  );
+  const found1y = fetchedData?.[prefix + "1y"]?.find(
+    (e) => e.metaGame === metaGame
+  );
   return {
     score1w: found1w === undefined ? 0 : found1w.score,
     score1m: found1m === undefined ? 0 : found1m.score,
@@ -137,7 +145,8 @@ export const viewConfigs = {
 
   hotRaw: {
     title: "Hottest (# moves/day)",
-    description: "The average number of moves made per day over the time period.",
+    description:
+      "The average number of moves made per day over the time period.",
     defaultSort: [{ id: "score1w", desc: true }],
     fetchUrl: "https://records.abstractplay.com/mvtimes.json",
     extraFields: (metaGame, info, fetchedData) =>
@@ -150,7 +159,8 @@ export const viewConfigs = {
 
   hotPlayers: {
     title: "Hottest (# players/day)",
-    description: "The average number of unique players per day over the time period.",
+    description:
+      "The average number of unique players per day over the time period.",
     defaultSort: [{ id: "score1w", desc: true }],
     fetchUrl: "https://records.abstractplay.com/mvtimes.json",
     extraFields: (metaGame, info, fetchedData) =>
@@ -296,9 +306,7 @@ export const viewConfigs = {
     fetchUrl: null,
     extraFields: (metaGame, info, fetchedData, counts) => ({
       current:
-        counts !== null && counts[metaGame]
-          ? counts[metaGame].currentgames
-          : 0,
+        counts !== null && counts[metaGame] ? counts[metaGame].currentgames : 0,
       completed:
         counts !== null && counts[metaGame]
           ? counts[metaGame].completedgames
@@ -308,9 +316,7 @@ export const viewConfigs = {
           ? counts[metaGame].standingchallenges
           : 0,
       ratings:
-        counts !== null && counts[metaGame]
-          ? counts[metaGame].ratings
-          : 0,
+        counts !== null && counts[metaGame] ? counts[metaGame].ratings : 0,
     }),
     extraColumns: (columnHelper) => [
       columnHelper.accessor("current", {

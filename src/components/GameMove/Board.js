@@ -140,16 +140,9 @@ function Board({
       >
         <TransformComponent>
           {stackExpanding ? (
-            <div
-              className={`board _meta_${metaGame}`}
-              style={boardStyle}
-            >
+            <div className={`board _meta_${metaGame}`} style={boardStyle}>
               <div className="stack" id="stack" ref={stackImage}></div>
-              <div
-                className="stackboard"
-                id="svg"
-                ref={boardRef}
-              ></div>
+              <div className="stackboard" id="svg" ref={boardRef}></div>
             </div>
           ) : (
             <div
