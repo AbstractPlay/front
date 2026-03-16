@@ -77,12 +77,7 @@ function About(props) {
           others asynchronously (you don't have to be online at the same time).
           We specialize in offbeat, perfect information games without any
           element of luck, but we also include a number of games that involve
-          randomness (e.g., dice and cards).
-        </p>
-        <p>
-          The site is completely free to join and play. We thank our corporate
-          sponsor, <a href="https://store.looneylabs.com/">Looney Labs</a>, for
-          helping us keep the lights on!
+          randomness (e.g., dice and cards). The site is completely free to join and play.
         </p>
         {/* <p style={{ fontSize: "smaller", textAlign: "right" }}>
           Build: {pkgInfo.version}

@@ -3144,5 +3144,31 @@ Again, if you run into any issues, don&amp;apos;t hesitate to join us in #custom
       <guid isPermaLink="false">1480290259429490919</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve added a &amp;quot;Customize Theme&amp;quot; button next to the toggle switch. This lets you alter the site&amp;apos;s CSS variables (like the background and font colours). I don&amp;apos;t think it will get tons of use, but it has come up from time to time, and AI makes mocking something like this up pretty straightforward. If you&amp;apos;re a hardcore customizer, give it a shot. I&amp;apos;m open to thoughts. A couple notes:
+- Customizations are device specific, but there&amp;apos;s a text box for easy sharing of settings.
+- The thumbnails are generated using the default settings, so depending on how dramatic your customizations are, the thumbnails may look odd.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 10 Mar 2026 23:37:39 GMT</pubDate>
+      <guid isPermaLink="false">1481073586071539954</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve added a new button under game boards that will remove the current height restriction that can make taller boards a little cramped. It&amp;apos;s a toggle that is persisted per device. So once you click it, you don&amp;apos;t have to ever click it again unless you want to go back to the &amp;quot;75% of screen height&amp;quot; default view. Let me know if there are any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 13 Mar 2026 18:04:03 GMT</pubDate>
+      <guid isPermaLink="false">1482076793425891449</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>**Deprecation alert:** The new paintbrush screen seems to be working quite well and is superior to the old named palettes and colour context screens. Sometime the week of April 13th, 2026, I will begin stripping all the old named palette and colour context code and its mentions in various screens, including the settings screen when you click the cog icon under game boards (see screen capture). If you want to write down what your old values were, please do so before April 13th. If you have any questions or concerns, join us in the #customization channel. We&amp;apos;re happy to help. Thanks!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 13 Mar 2026 21:40:57 GMT</pubDate>
+      <guid isPermaLink="false">1482131378433949909</guid>
+    </item>
+    
   </channel>
 </rss>
