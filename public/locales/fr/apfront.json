@@ -564,5 +564,7 @@
         "acceptpie": "Jouer en second",
         "draw": "Réclamer un nul"
     },
-    "Active": "Actif"
+    "Active": "Actif",
+    "All": "Tout",
+    "AlternativeDisplays": "Options alternatives d'affichage"
 }
