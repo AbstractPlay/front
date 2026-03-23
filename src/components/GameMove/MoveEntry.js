@@ -222,7 +222,7 @@ function MoveEntry(props) {
     let moveToSubmit = null;
     if (focus.exPath.length > 0 && game.canSubmit) {
       moveToSubmit =
-        exploration[exploration.length - 1].children[focus.exPath[0]].move;
+        exploration[exploration.length - 1].children[focus.exPath[0]]?.move;
     }
 
     let uiState = null;
