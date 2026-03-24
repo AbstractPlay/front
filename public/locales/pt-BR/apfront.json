@@ -247,6 +247,126 @@
             "description": "Se joga usando peças especializadas, normalmente diferenciadas",
             "full": "Componentes > Especializado",
             "tag": "C: Especial"
+        },
+        "goal>align": {
+            "description": "Organiza as peças em formatos ou larguras específicas (ex.: n vezes em sequência)",
+            "full": "Objetivo > Alinhar",
+            "tag": "G: Alinhar"
+        },
+        "goal>annihilate": {
+            "description": "Aniquila todas as peças inimigas",
+            "full": "Objetivo > Aniquilar",
+            "tag": "G: Aniquilar"
+        },
+        "goal>area": {
+            "description": "Controla mais áreas (ou algumas áreas com certos tipos de capacidades) que o seu oponente",
+            "full": "Objetivo > Controle de Área",
+            "tag": "G: Controle de Área"
+        },
+        "goal>breakthrough": {
+            "description": "Alcance a fileira inicial do oponente ou a área inicial com poder suficiente",
+            "full": "Objetivo > Avanço Imediato",
+            "tag": "G: Avanço Imediato"
+        },
+        "goal>connect": {
+            "description": "Conecta as arestas designadas do tabuleiro ou das áreas",
+            "full": "Objetivo > Conectar",
+            "tag": "G: Conectar"
+        },
+        "goal>cripple": {
+            "description": "Elimina uma maioria essencial ou um subconjunto específico de peças inimigas",
+            "full": "Objetivo > Incapacitar",
+            "tag": "G: Incapacitar"
+        },
+        "goal>evacuate": {
+            "description": "Evacua as suas peças do tabuleiro",
+            "full": "Objetivo > Evacuar",
+            "tag": "G: Evacuar"
+        },
+        "goal>immobilize": {
+            "description": "Imobiliza o seu oponente",
+            "full": "Objetivo > Imobilizar",
+            "tag": "G: Imobilizar"
+        },
+        "goal>isolate": {
+            "description": "Isola uma peça ou subconjunto de uma maneira específica",
+            "full": "Objetivo > Isolar",
+            "tag": "G: Isolar"
+        },
+        "goal>majority": {
+            "description": "Possua mais peças que o seu oponente",
+            "full": "Objetivo > Maioria",
+            "tag": "G: Maioria"
+        },
+        "goal>royal-capture": {
+            "description": "Captura uma peça específica do oponente",
+            "full": "Objetivo > Captura Real",
+            "tag": "G: Captura Real"
+        },
+        "goal>royal-escape": {
+            "description": "Remova uma peça específica do tabuleiro",
+            "full": "Objetivo > Fuga Real",
+            "tag": "G: Fuga Real"
+        },
+        "goal>score": {
+            "description": "O resultado é determinado pela pontuação em um certo nível",
+            "full": "Objetivo > Pontuação",
+            "tag": "G: Pontuação"
+        },
+        "goal>score>eog": {
+            "description": "Obtenha a maior pontuação ao final do jogo",
+            "full": "Objetivo > Pontuação > Fim de jogo",
+            "tag": "G: Pontuação ao final do jogo"
+        },
+        "goal>score>race": {
+            "description": "Seja o primeiro a alcançar uma pontuação pessoal",
+            "full": "Objetivo > Pontuação > Corrida",
+            "tag": "G: Pontuação da Corrida"
+        },
+        "goal>set": {
+            "description": "Coleta conjuntos de peças",
+            "full": "Objetivo > Organizar Coleção",
+            "tag": "G: Organizar Coleção"
+        },
+        "goal>unify": {
+            "description": "Junta todas as suas peças",
+            "full": "Objetivo > Unificar",
+            "tag": "G: Unificar"
+        },
+        "mechanic": {
+            "description": "Descreve as mecânicas gerais do jogo",
+            "full": "Mecânicas",
+            "tag": "Mecânicas"
+        },
+        "mechanic>asymmetry": {
+            "description": "O jogo é assimétrico",
+            "full": "Mecânica > Assimetria",
+            "tag": "M: Assimetria"
+        },
+        "mechanic>bearoff": {
+            "description": "Jogadores distanciaram peças para fora do tabuleiro",
+            "full": "Mecânica > Distanciar",
+            "tag": "M: Distanciar"
+        },
+        "mechanic>block": {
+            "description": "Jogadores bloqueam entre sí",
+            "full": "Mecânica > Bloqueio",
+            "tag": "M: Bloqueio"
+        },
+        "mechanic>capture": {
+            "description": "Peças foram capturadas",
+            "full": "Mecânica > Captura",
+            "tag": "M: Captura"
+        },
+        "mechanic>convert": {
+            "description": "Jogadores podem coverter peças inimigas para aliadas",
+            "full": "Mecânica > Conversão",
+            "tag": "M: Conversão"
+        },
+        "mechanic>coopt": {
+            "description": "Jogadores podem interagir com as peças do oponente",
+            "full": "Mecânica > Opção Co-op",
+            "tag": "M: Opção Co-op"
         }
     }
 }
