@@ -48,7 +48,7 @@ function setStatus(engine, game, isPartial, partialMove, status) {
   status.scores = engine.sidebarScores();
   if (game.playerStashes) {
     status.stashes = [];
-    for (let i = 1; i <= game.numPlayers; i++) {
+    for (let i = 1; i <= engine.numplayers; i++) {
       const stash = engine.getPlayerStash(i);
       status.stashes.push(stash);
     }
