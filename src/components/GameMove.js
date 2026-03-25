@@ -1149,6 +1149,7 @@ function GameMove(props) {
     } else {
       moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
     }
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
     const metaInfo = gameinfo.get(game.metaGame);
     if (metaInfo.flags.includes("custom-colours")) {
       setupColors(

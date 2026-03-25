@@ -775,7 +775,7 @@ button.fabtn:hover {
 /* text notification of being in check */
 .inCheck {
     color: var(--secondary-color-1);
-    font-size: larger;
+    /* font-size: larger; */
     font-weight: bolder;
 }
 
