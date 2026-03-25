@@ -344,12 +344,12 @@
             "tag": "M: Assimetria"
         },
         "mechanic>bearoff": {
-            "description": "Jogadores distanciaram peças para fora do tabuleiro",
+            "description": "Os jogadores distanciaram peças para fora do tabuleiro",
             "full": "Mecânica > Distanciar",
             "tag": "M: Distanciar"
         },
         "mechanic>block": {
-            "description": "Jogadores bloqueam entre sí",
+            "description": "Os jogadores bloqueam entre sí",
             "full": "Mecânica > Bloqueio",
             "tag": "M: Bloqueio"
         },
@@ -359,14 +359,89 @@
             "tag": "M: Captura"
         },
         "mechanic>convert": {
-            "description": "Jogadores podem coverter peças inimigas para aliadas",
+            "description": "Os jogadores podem coverter peças inimigas para aliadas",
             "full": "Mecânica > Conversão",
             "tag": "M: Conversão"
         },
         "mechanic>coopt": {
-            "description": "Jogadores podem interagir com as peças do oponente",
+            "description": "Os jogadores podem interagir com as peças do oponente",
             "full": "Mecânica > Opção Co-op",
             "tag": "M: Opção Co-op"
+        },
+        "mechanic>differentiate": {
+            "description": "Peças são diferenciadas de modo essencial",
+            "full": "Mecânica > Diferenciar",
+            "tag": "M: Diferenciar"
+        },
+        "mechanic>displace": {
+            "description": "Mover-se pode fazer com que peças adicionais se movam também",
+            "full": "Mecânica > Deslocar",
+            "tag": "M: Deslocar"
+        },
+        "mechanic>economy": {
+            "description": "Os jogadores devem gerenciar alguma economía central",
+            "full": "Mecânica > Gerenciar Economía",
+            "tag": "M: Gerenciar Economía"
+        },
+        "mechanic>enclose": {
+            "description": "Os jogadores delimitam áreas ou peças ativamente",
+            "full": "Mecânica > Delimitar",
+            "tag": "M: Delimitar"
+        },
+        "mechanic>hidden": {
+            "description": "O jogo inclui informações ocultas",
+            "full": "Mecânica > Informação Oculta",
+            "tag": "M: Informação Oculta"
+        },
+        "mechanic>merge": {
+            "description": "Peças podem fundir ou repartir entre sí",
+            "full": "Mecânica > Fundir/Repartir",
+            "tag": "M: Fundir/Repartir"
+        },
+        "mechanic>move": {
+            "description": "Peças podem ser movidas",
+            "full": "Mecânica > Mover",
+            "tag": "M: Mover"
+        },
+        "mechanic>move>group": {
+            "description": "Peças podem ser movidas em grupo",
+            "full": "Mecânica > Mover > Grupo",
+            "tag": "M: Mover (Grupo)"
+        },
+        "mechanic>move>sow": {
+            "description": "Peças podem ser disseminadas",
+            "full": "Mecânica > Mover > Disseminar",
+            "tag": "M: Mover (Disseminar)"
+        },
+        "mechanic>network": {
+            "description": "Os jogadores desenvolveram redes",
+            "full": "Mecânica > Rede",
+            "tag": "M: Rede"
+        },
+        "mechanic>place": {
+            "description": "Peças foram implantadas",
+            "full": "Mecânica > Colocar",
+            "tag": "M: Colocar"
+        },
+        "mechanic>program": {
+            "description": "Sequencias de movimentos foram programadas",
+            "full": "Mecânica > Programar",
+            "tag": "M: Programar"
+        },
+        "mechanic>random": {
+            "description": "O jogo contém elementos aleatórios",
+            "full": "Mecânica > Elementos Aleatórios",
+            "tag": "M: Elementos Aleatórios"
+        },
+        "mechanic>random>play": {
+            "description": "Movimentos individuais do jogo incluem elementos de aleatoriedade",
+            "full": "Mecânica > Aleatório > Jogar",
+            "tag": "M: Aleatório (Jogar)"
+        },
+        "mechanic>random>setup": {
+            "description": "As configurações são aleatórias",
+            "full": "Mecânica > Aleatório > Configuração",
+            "tag": "M: Aleatório (Configuração)"
         }
     }
 }
