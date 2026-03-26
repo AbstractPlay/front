@@ -259,7 +259,7 @@ function doView(
   let node = getFocusNode(exploration, game, focus);
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
   let partialMove = false;
-  if (move.valid && move.complete < 0 && move.canrender === true)
+  if (move.valid && move.complete < 1 && move.canrender === true)
     partialMove = true;
   let simMove = false;
   let m = move.move || "";
@@ -421,7 +421,7 @@ export function processNewMove(
 ) {
   // if the move is complete, or partial and renderable, update board
   if (
-    (newmove.valid && newmove.complete >= 0 && newmove.move !== "") ||
+    (newmove.valid && newmove.complete > 0 && newmove.move !== "") ||
     newmove.canrender === true
   ) {
     doView(
