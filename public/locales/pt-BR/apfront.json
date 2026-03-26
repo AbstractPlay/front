@@ -442,6 +442,38 @@
             "description": "As configurações são aleatórias",
             "full": "Mecânica > Aleatório > Configuração",
             "tag": "M: Aleatório (Configuração)"
+        },
+        "mechanic>set": {
+            "description": "Os jogadores coletam coleções",
+            "full": "Mecânica > Coletar Coleção",
+            "tag": "M: Coletar Coleção"
+        },
+        "mechanic>share": {
+            "description": "Algumas peças serão compartilhadas entre os dois jogadores",
+            "full": "Mecânica > Compartilhar",
+            "tag": "M: Compartilhar"
+        },
+        "mechanic>simultaneous": {
+            "description": "O jogo inclui ação simultânea de seleção",
+            "full": "Mecânica > Simultaneamente",
+            "tag": "M: Simultaneamente"
+        },
+        "mechanic>stack": {
+            "description": "Os jogadores manipulam pilhas de peças",
+            "full": "Mecânica > Empilhar",
+            "tag": "M: Empilhar"
+        },
+        "other>traditional": {
+            "description": "O jogo é tradicional",
+            "full": "Outro > Tradicional",
+            "tag": "O: Tradicional"
+        },
+        "other>2+players": {
+            "description": "Suporta mais de 2 jogadores",
+            "full": "Outro > 2+ Jogadores",
+            "tag": "O: 2+ Jogadores"
         }
-    }
+    },
+    "Challenge": "Desafio",
+    "Challenge Details": "Detalhes do Desafio"
 }
