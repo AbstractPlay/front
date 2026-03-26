@@ -531,7 +531,7 @@ function MoveEntry(props) {
           )}
         </div>
         {moveToSubmit !== null && focus.exPath.length === 1 && !drawOffered ? (
-          <div className="field">
+          <div className="field" style={{fontSize: "smaller", paddingBottom: "1em"}}>
             <label className="checkbox">
               <input
                 type="checkbox"
