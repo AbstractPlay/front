@@ -63,18 +63,6 @@ function Navbar(props) {
     });
   }, []);
 
-  const toggleColorMode = (e) => {
-    // Switch to Light Mode
-    if (e.currentTarget.classList.contains("light--hidden")) {
-      //Sets the user's preference in local storage
-      colorModeSetter("light");
-      return;
-    } else {
-      // Sets the user's preference in local storage
-      colorModeSetter("dark");
-    }
-  };
-
   return (
     <nav className="navbar" style={{ minHeight: "10vh" }}>
       <div className="navbar-brand">
@@ -291,29 +279,25 @@ function Navbar(props) {
             </>
           )}
           <div className="navbar-item">
-            {/* <!--- Light mode button ---> */}
             <button
-              className="button is-small apButtonNeutral light--hidden"
-              aria-label="Toggle light mode"
-              onClick={toggleColorMode}
+              className="button is-small apButtonNeutral"
+              aria-label={colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"}
+              onClick={() => colorModeSetter(colorMode === "light" ? "dark" : "light")}
+              title={colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"}
             >
-              Toggle Light Mode
-            </button>
-
-            {/* <!--- Dark mode button ---> */}
-            <button
-              className="button is-small apButtonNeutral dark--hidden"
-              aria-label="Toggle dark mode"
-              onClick={toggleColorMode}
-            >
-              Toggle Dark Mode
+              <span className="icon">
+                <i className={colorMode === "light" ? "fa fa-moon-o" : "fa fa-sun-o"}></i>
+              </span>
             </button>
             <button
               className="button is-small apButtonNeutral ml-2"
               aria-label="Customize Theme"
               onClick={() => setShowThemeModal(true)}
+              title="Customize Theme"
             >
-              Customize Theme
+              <span className="icon">
+                <i className="fa fa-paint-brush"></i>
+              </span>
             </button>
           </div>
           <div className="navbar-item tourSettings">
