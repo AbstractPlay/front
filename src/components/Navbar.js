@@ -280,17 +280,18 @@ function Navbar(props) {
           )}
           <div className="navbar-item">
             <button
-              className="button is-small apButtonNeutral"
               aria-label={colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"}
               onClick={() => colorModeSetter(colorMode === "light" ? "dark" : "light")}
               title={colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"}
             >
-              <span className="icon">
-                <i className={colorMode === "light" ? "fa fa-moon-o" : "fa fa-sun-o"}></i>
+              <span className="icon" style={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+                {colorMode === "light" ? "\u263E" : "\u263C"}
               </span>
             </button>
+            </div>
+          <div className="navbar-item">
             <button
-              className="button is-small apButtonNeutral ml-2"
+              className="ml-2"
               aria-label="Customize Theme"
               onClick={() => setShowThemeModal(true)}
               title="Customize Theme"
