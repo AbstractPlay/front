@@ -146,14 +146,14 @@
             "full": "组件<简单<两种颜色"
         }
     },
-    "404": "啊哦，网页出现了一点小问题（404）",
+    "404": "啊哦，网页出现了一点小问题",
     "and": "和",
     "Accepted": "同意！",
     "Cancel": "取消",
     "ChallengeResponseComment": "评论",
     "YourMove": "你的回合",
-    "About": "关于我们的网站",
-    "Accept": "接受",
+    "About": "关于我们",
+    "Accept": "接受/同意",
     "CanPie": "该玩家可以选择调换位置。",
     "AcceptDraw": "接受和棋",
     "Annotate": "显示上一步",
