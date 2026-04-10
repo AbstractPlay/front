@@ -47,6 +47,10 @@ function Tournaments(props) {
     "tournaments-registered-only",
     false
   );
+  const [starredOnly, starredOnlySetter] = useStorageState(
+    "tournaments-starred-only",
+    false
+  );
   const { metaGame } = useParams();
   const [filterMeta, filterMetaSetter] = useState(null);
 
@@ -274,9 +278,13 @@ function Tournaments(props) {
       .filter((rec) => filterMeta === null || rec.realMeta === filterMeta)
       .filter(
         (rec) =>
+          !globalMe || !starredOnly || globalMe.stars.includes(rec.realMeta)
+      )
+      .filter(
+        (rec) =>
           !globalMe || !registeredOnly || rec.players.includes(globalMe.id)
       );
-  }, [tournaments, registeredOnly, globalMe, filterMeta, allUsers]);
+  }, [tournaments, registeredOnly, starredOnly, globalMe, filterMeta, allUsers]);
 
   const openTournamentsColumnHelper = createColumnHelper();
   const openTournamentsColumns = useMemo(
@@ -515,9 +523,13 @@ function Tournaments(props) {
       .filter((rec) => filterMeta === null || rec.realMeta === filterMeta)
       .filter(
         (rec) =>
+          !globalMe || !starredOnly || globalMe.stars.includes(rec.realMeta)
+      )
+      .filter(
+        (rec) =>
           !globalMe || !registeredOnly || rec.players.includes(globalMe.id)
       );
-  }, [tournaments, registeredOnly, globalMe, filterMeta]);
+  }, [tournaments, registeredOnly, starredOnly, globalMe, filterMeta]);
 
   const currentTournamentsColumnHelper = createColumnHelper();
   const currentTournamentsColumns = useMemo(
@@ -734,9 +746,13 @@ function Tournaments(props) {
       .filter((rec) => filterMeta === null || rec.metaGame === filterMeta)
       .filter(
         (rec) =>
+          !globalMe || !starredOnly || globalMe.stars.includes(rec.metaGame)
+      )
+      .filter(
+        (rec) =>
           !globalMe || !registeredOnly || rec.players.includes(globalMe.id)
       );
-  }, [tournaments, registeredOnly, globalMe, filterMeta]);
+  }, [tournaments, registeredOnly, starredOnly, globalMe, filterMeta]);
 
   const completedTournamentsColumnHelper = createColumnHelper();
   const completedTournamentsColumns = useMemo(
@@ -941,6 +957,18 @@ function Tournaments(props) {
                 Only show tournaments you're participating in
               </label>
             </div>
+            { !("stars" in globalMe && Array.isArray(globalMe.stars) && globalMe.stars.length > 0) ? null : (
+            <div className="control">
+              <label className="checkbox">
+                <input
+                  type="checkbox"
+                  defaultChecked={starredOnly}
+                  onClick={() => starredOnlySetter(!starredOnly)}
+                />
+                Only show tournaments for your starred games
+              </label>
+            </div>
+            )}
           </div>
         )}
         <div className="control" style={{ paddingBottom: "1em" }}>
