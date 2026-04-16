@@ -580,7 +580,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                                     !opponents.some((o) => user.id === o.id) &&
                                     user.lastSeen >= minSeen)
                               )
-                              .sort((a, b) => a.name.localeCompare(b.name))
+                              .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
                               .map((item) => {
                                 return (
                                   <option key={item.id} value={item.id}>
