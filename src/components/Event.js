@@ -651,7 +651,7 @@ function Event() {
                     const u = allUsers?.find((u) => u.id === id);
                     return { id, name: u ? u.name : id };
                   })
-                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
                   .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
                   .reduce(
                     (acc, x) =>
@@ -674,7 +674,7 @@ function Event() {
                     const u = allUsers?.find((u) => u.id === id);
                     return { id, name: u ? u.name : id };
                   })
-                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
                   .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
                   .reduce(
                     (acc, x) =>
@@ -1138,7 +1138,7 @@ function Event() {
                   >
                     <option value="">-- Select Player --</option>
                     {(allUsers || [])
-                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
                       .map((u) => (
                         <option key={u.id} value={u.id}>
                           {u.name}
@@ -1177,7 +1177,7 @@ function Event() {
                   >
                     <option value="">-- Select Player --</option>
                     {(allUsers || [])
-                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
                       .map((u) => (
                         <option key={u.id} value={u.id}>
                           {u.name}
