@@ -1,5 +1,42 @@
 {
     "404": "404 No encontrado",
     "About": "Acerca de",
-    "Accept": "Aceptar"
+    "Accept": "Aceptar",
+    "Active": "Activo",
+    "Accepted": "¡Aceptado!",
+    "All": "Todo",
+    "AlternativeDisplays": "Opciones alternativas de pantalla",
+    "and": "y",
+    "Annotate": "Muestra últimos indicadores de movimiento",
+    "AnnotationLevel": "¿Dónde le gustaría ser aplicada esta elección?",
+    "AvailableGames": "Juegos disponibles",
+    "BoardSettings": "Cambia los ajuste del tablero de juego",
+    "buttons": {
+        "pass": "Aprobar",
+        "takebutton": "Botón de tomar",
+        "acceptpie": "Jugar segundo",
+        "draw": "Reclamar sorteo",
+        "playfirst": "Juega primero",
+        "numbers": {
+            "one": "Uno (1)",
+            "two": "Dos (2)",
+            "three": "Tres (3)"
+        },
+        "pigs": {
+            "back": "Retrocede",
+            "forward": "Avanzar",
+            "left": "Avanza a la izquierda",
+            "right": "Avanza a la derecha",
+            "cw": "Rotar según las agujas del reloj",
+            "ccw": "Rotar en sentido contrario a las agujas del reloj",
+            "fire": "Fuego láser",
+            "hit": "Hocico oscilante"
+        },
+        "cifra": {
+            "lt": "Claro, Cima",
+            "lb": "Claro, Suelo",
+            "dt": "Oscuro, Cima"
+        }
+    },
+    "AcceptDraw": "Aceptar oferta"
 }
