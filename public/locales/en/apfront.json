@@ -248,11 +248,6 @@
             "full": "Components > Specialized",
             "tag": "C: Special"
         },
-        "goal>align": {
-            "description": "Arrange pieces into specific shapes or lengths (e.g., n in a row)",
-            "full": "Goal > Align",
-            "tag": "G: Align"
-        },
         "goal>annihilate": {
             "description": "Annihilate all opposing pieces",
             "full": "Goal > Annihilate",
@@ -262,6 +257,11 @@
             "description": "Control more area (or certain areas with certain strengths) than your opponent",
             "full": "Goal > Area Control",
             "tag": "G: Area Control"
+        },
+        "goal>arrange": {
+            "description": "Arrange pieces into specific shapes or lengths (e.g., n in a row)",
+            "full": "Goal > Arrange",
+            "tag": "G: Arrange"
         },
         "goal>breakthrough": {
             "description": "Reach opposing home row or home area with sufficient strength",
@@ -332,6 +332,11 @@
             "description": "Bring all your pieces together",
             "full": "Goal > Unify",
             "tag": "G: Unify"
+        },
+        "goal>vigil": {
+            "description": "All (or some defined subset of) pieces must have line of sight to some board element",
+            "full": "Goal > Vigil",
+            "tag": "G: Vigil"
         },
         "mechanic": {
             "description": "Describes the general game mechanics",
@@ -462,6 +467,11 @@
             "description": "Players manipulate stacks of pieces",
             "full": "Mechanics > Stack",
             "tag": "M: Stack"
+        },
+        "mechanic>vigil": {
+            "description": "At least one piece must have line of sight to some board element",
+            "full": "Mechanics > Vigil",
+            "tag": "M: Vigil"
         },
         "other>traditional": {
             "description": "Game is traditional",
