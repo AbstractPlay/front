@@ -35,8 +35,75 @@
         "cifra": {
             "lt": "Claro, Cima",
             "lb": "Claro, Suelo",
-            "dt": "Oscuro, Cima"
+            "dt": "Oscuro, Cima",
+            "db": "Oscuro, Botón",
+            "ll": "Claro, Izquierdo",
+            "lr": "Claro, Derecho",
+            "dl": "Oscuro, Izquierdo",
+            "dr": "Oscuro, Derecho"
+        },
+        "playsecond": "Reproducir segundo",
+        "arimaa": {
+            "gold99": "Configuración rápida"
         }
     },
-    "AcceptDraw": "Aceptar oferta"
+    "AcceptDraw": "Aceptar oferta",
+    "Cancel": "Cancelar",
+    "CanPie": "Este reproductor tiene la opción para intercambiar asientos.",
+    "categories": {
+        "board": {
+            "description": "Describe los atributos de la superficie del juego",
+            "full": "Tablero",
+            "tag": "Tablero"
+        },
+        "board>3d": {
+            "description": "El tablero es de tres dimensiones",
+            "full": "Tablero > 3D",
+            "tag": "Tablero: 3D"
+        },
+        "board>connect": {
+            "description": "Describe como las celdas del tablero conectan a cada otra",
+            "full": "Tablero > Conectividad",
+            "tag": "Conectividad del tablero"
+        },
+        "board>connect>hex": {
+            "description": "Las celdas se conectan a cada otro hexagonalmente",
+            "full": "Tablero > Conectividad > Hexagonal",
+            "tag": "Conexión: Hex"
+        },
+        "board>connect>linear": {
+            "description": "Celdas conectan a cada otra linealmente",
+            "full": "Tablero > Conectividad > Lineal",
+            "tag": "Conectar: Lineal"
+        },
+        "board>connect>other": {
+            "description": "Celdas conectan a cada otro en una manera única",
+            "tag": "Conectar: otro"
+        },
+        "board>connect>pent": {
+            "description": "Celdas conectan a cada otro pentagonalmente",
+            "full": "Tablero > Conectividad > Pentagonal",
+            "tag": "Conexión: pent"
+        },
+        "board>connect>rect": {
+            "description": "Celdas conectan a cada otra ortogonalmente y diagonalmente",
+            "full": "Tablero > Conectividad > Rectangular",
+            "tag": "Conexión: Rect"
+        },
+        "board>connect>snub": {
+            "description": "Las celdas conectan a cada otro en una matriz repulsada cuadrada"
+        },
+        "board>dynamic": {
+            "description": "El tablero se construye dinámicamente",
+            "full": "Tablero > Dinámica",
+            "tag": "Tablero: Dinámica"
+        },
+        "board>mancala": {
+            "description": "Jugado en un tablero tradicional de estilo Mancala",
+            "full": "Tablero > Mancala",
+            "tag": "Tablero: Mancala"
+        }
+    },
+    "ChallengeResponseComment": "Comentario",
+    "YourMove": "Tú mueves"
 }
