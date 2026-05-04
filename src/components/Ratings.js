@@ -93,7 +93,7 @@ function Ratings() {
           n: rec.rating.N,
           wins: rec.rating.wins,
           draws: rec.rating.draws,
-          winrate: rec.rating.wins / rec.rating.N,
+          winrate: (rec.rating.wins + (rec.rating.draws * 0.5)) / rec.rating.N,
         };
       }),
     [ratings, allUsers]
