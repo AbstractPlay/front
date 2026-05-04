@@ -99,7 +99,7 @@ function Players() {
                 return delta < threshYellow;
               }
             })
-            .sort((a, b) => a.name.localeCompare(b.name)),
+            .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "")),
     [allUsers, hideFilter, countryFilter, connections, globalMe]
   );
 
