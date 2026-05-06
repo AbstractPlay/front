@@ -19,6 +19,7 @@
         "playsecond": "Play second",
         "draw": "Claim draw",
         "playfirst": "Play first",
+        "swap": "Swap colours",
         "numbers": {
             "one": "One (1)",
             "two": "Two (2)",
