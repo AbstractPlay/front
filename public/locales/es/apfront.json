@@ -47,7 +47,8 @@
             "gold99": "Configuración rápida",
             "silver99e7": "Configuración rápida, elefante e7",
             "silver99d7": "Configuración rápida, elefante d7"
-        }
+        },
+        "swap": "Intercambiar colores"
     },
     "AcceptDraw": "Aceptar oferta",
     "Cancel": "Cancelar",
@@ -748,7 +749,7 @@
     "Seating1": "Toco primero",
     "Seating2": "Toco segundo",
     "seatingMeFirst": "Tocarás primero.",
-    "seatingMeSecond": "Tu oponente jugará primero.",
+    "seatingMeSecond": "Tu oponente tocará primero.",
     "seatingRandom": "El asiento será al azar.",
     "SeatingRandom": "Aleatorio",
     "Select": "Seleccionar",
@@ -761,7 +762,7 @@
     "StandardColors": "Estándar",
     "StandingChallengeDescription": "Reto abierto para un juego de {{game}}",
     "StandingChallenges": "Retos abiertos para {{name}}",
-    "StandingChallenges2": "Retos abiertos",
+    "StandingChallenges2": "Abrir Retos",
     "Statistics": "Estadística",
     "stats_module_avgRatings": "Promedio de calificaciones",
     "stats_module_gameStats": "Estadísticas del juego",
