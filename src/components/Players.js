@@ -72,7 +72,7 @@ function Players() {
             .map(({ id, name, country, lastSeen }) => {
               return {
                 id,
-                name,
+                name: name ?? "",
                 country: isoToCountryCode(country, "numeric"),
                 lastSeen,
               };
@@ -99,7 +99,7 @@ function Players() {
                 return delta < threshYellow;
               }
             })
-            .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "")),
+            .sort((a, b) => a.name.localeCompare(b.name)),
     [allUsers, hideFilter, countryFilter, connections, globalMe]
   );
 
