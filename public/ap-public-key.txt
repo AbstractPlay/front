@@ -1,5 +1,5 @@
 ---- BEGIN SSH2 PUBLIC KEY ----
 Comment: "Abstract Play Outgoing Bot Requests"
-AAAAC3NzaC1lZDI1NTE5AAAAINBTbzcpb7MaQM3TIFzsS8YmPqqT2y+/fJgevp20
-lzLm
+AAAAC3NzaC1lZDI1NTE5AAAAIAQw6QGQqOa0rDaPLdq+wGPkrzMCQzJRlMxwzjKN
+kILE
 ---- END SSH2 PUBLIC KEY ----
