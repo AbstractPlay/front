@@ -21,6 +21,8 @@ import { countryCodeList } from "../lib/countryCodeList";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import { render } from "@abstractplay/renderer";
 import { useStore } from "../stores";
+import BotsModal from "./Bots/BotsModal";
+import { validateDisplayName } from "./Bots/botUtils";
 
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
@@ -58,6 +60,7 @@ function UserSettingsModal(props) {
   const [myColor, myColorSetter] = useState(false);
   // palettes
   const [showPalette, showPaletteSetter] = useState(false);
+  const [showBots, showBotsSetter] = useState(false);
   const [myPalettes, myPalettesSetter] = useState([]);
   const [currColours, currColoursSetter] = useState([]);
   const [selectedColour, selectedColourSetter] = useState("fff");
@@ -191,6 +194,11 @@ function UserSettingsModal(props) {
     } else if (name === "") {
       nameErrorSetter(t("NameBlank"));
     } else {
+      const nameValidationError = validateDisplayName(name);
+      if (nameValidationError) {
+        nameErrorSetter(nameValidationError);
+        return;
+      }
       changingNameSetter(false);
       await handleSettingChangeSubmit("name", name);
       updatedSetter((updated) => updated + 1);
@@ -546,6 +554,7 @@ function UserSettingsModal(props) {
                     challengesReceived: prev?.challengesReceived ?? [],
                     challengesAccepted: prev?.challengesAccepted ?? [],
                     standingChallenges: prev?.standingChallenges ?? [],
+                    bots: backendData.bots ?? prev?.bots ?? [],
                   };
                 });
                 console.log(JSON.parse(result.body));
@@ -1097,6 +1106,14 @@ function UserSettingsModal(props) {
                 Manage Colour Contexts
               </button>
             </div>
+            <div className="control is-small">
+              <button
+                className="button is-small apButton"
+                onClick={() => showBotsSetter(true)}
+              >
+                Manage Bots
+              </button>
+            </div>
           </div>
 
           {/********************* Log out *********************/}
@@ -1451,6 +1468,7 @@ function UserSettingsModal(props) {
           </div>
         </div>
       </Modal>
+      <BotsModal show={showBots} onClose={() => showBotsSetter(false)} />
     </>
   );
 }

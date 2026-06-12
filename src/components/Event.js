@@ -18,6 +18,8 @@ import GamesTable from "./Event/GamesTable";
 import ResultsTable from "./Event/ResultsTable";
 import Division from "./Event/Division";
 import { useStore } from "../stores";
+import BotAwareName from "./Bots/BotAwareName";
+import { formatUserDisplayName } from "./Bots/botUtils";
 
 function Event() {
   const { eventid } = useParams();
@@ -576,10 +578,18 @@ function Event() {
             </p>
             <p>
               <b>Organizer:</b>&nbsp;
-              <Link to={`/player/${eventData.event.organizer}`}>
-                {allUsers?.find((u) => u.id === eventData.event.organizer)
-                  ?.name || "UNKNOWN"}
-              </Link>
+              <BotAwareName
+                id={eventData.event.organizer}
+                name={
+                  allUsers?.find((u) => u.id === eventData.event.organizer)
+                    ?.name || "UNKNOWN"
+                }
+                bot={
+                  allUsers?.find((u) => u.id === eventData.event.organizer)?.bot
+                }
+                users={allUsers}
+                link
+              />
             </p>
             <p>
               <b>Start date:</b>&nbsp;
@@ -601,7 +611,16 @@ function Event() {
               <p>
                 <b>Winner:</b>&nbsp;
                 {winners
-                  .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+                  .map((u) => (
+                    <BotAwareName
+                      key={u.id}
+                      id={u.id}
+                      name={u.name}
+                      bot={u.bot}
+                      users={allUsers}
+                      link
+                    />
+                  ))
                   .reduce(
                     (acc, x) =>
                       acc === null ? (
@@ -629,7 +648,16 @@ function Event() {
               <p>
                 <b>Registrants:</b>&nbsp;
                 {registrants
-                  .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+                  .map((u) => (
+                    <BotAwareName
+                      key={u.id}
+                      id={u.id}
+                      name={u.name}
+                      bot={u.bot}
+                      users={allUsers}
+                      link
+                    />
+                  ))
                   .reduce(
                     (acc, x) =>
                       acc === null ? (
@@ -652,7 +680,15 @@ function Event() {
                     return { id, name: u ? u.name : id };
                   })
                   .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
-                  .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+                  .map((u) => (
+                    <BotAwareName
+                      key={u.id}
+                      id={u.id}
+                      name={u.name}
+                      users={allUsers}
+                      link
+                    />
+                  ))
                   .reduce(
                     (acc, x) =>
                       acc === null ? (
@@ -675,7 +711,15 @@ function Event() {
                     return { id, name: u ? u.name : id };
                   })
                   .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
-                  .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+                  .map((u) => (
+                    <BotAwareName
+                      key={u.id}
+                      id={u.id}
+                      name={u.name}
+                      users={allUsers}
+                      link
+                    />
+                  ))
                   .reduce(
                     (acc, x) =>
                       acc === null ? (
@@ -1105,7 +1149,7 @@ function Event() {
                         checked={u.id in eventWinner && eventWinner[u.id]}
                         onChange={toggleWinner}
                       />
-                      {u.name}
+                      {formatUserDisplayName(u, allUsers)}
                     </label>
                   </div>
                 </div>
@@ -1141,7 +1185,7 @@ function Event() {
                       .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
                       .map((u) => (
                         <option key={u.id} value={u.id}>
-                          {u.name}
+                          {formatUserDisplayName(u, allUsers)}
                         </option>
                       ))}
                   </select>
@@ -1158,7 +1202,7 @@ function Event() {
                 const user = (allUsers || []).find((u) => u.id === id);
                 return (
                   <li key={id}>
-                    {user ? user.name : id}{" "}
+                    {user ? formatUserDisplayName(user, allUsers) : id}{" "}
                     <button
                       className="delete is-small"
                       onClick={() => removeInvite(id)}
@@ -1180,7 +1224,7 @@ function Event() {
                       .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
                       .map((u) => (
                         <option key={u.id} value={u.id}>
-                          {u.name}
+                          {formatUserDisplayName(u, allUsers)}
                         </option>
                       ))}
                   </select>
@@ -1197,7 +1241,7 @@ function Event() {
                 const user = (allUsers || []).find((u) => u.id === id);
                 return (
                   <li key={id}>
-                    {user ? user.name : id}{" "}
+                    {user ? formatUserDisplayName(user, allUsers) : id}{" "}
                     <button
                       className="delete is-small"
                       onClick={() => removeBlock(id)}

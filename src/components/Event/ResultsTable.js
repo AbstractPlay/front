@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "../Events/TableSkeleton";
 import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 function ResultsTable({ games, eventid }) {
   const allUsers = useStore((state) => state.users);
@@ -45,16 +46,20 @@ function ResultsTable({ games, eventid }) {
           props.getValue() === undefined ? (
             "UNKNOWN"
           ) : (
-            <Link to={`/player/${props.getValue().id}`}>
-              {props.getValue().name}
-            </Link>
+            <BotAwareName
+              id={props.getValue().id}
+              name={props.getValue().name}
+              bot={props.getValue().bot}
+              users={allUsers}
+              link
+            />
           ),
       }),
       columnHelper.accessor("total", {
         header: "Total",
       }),
     ],
-    [columnHelper]
+    [columnHelper, allUsers]
   );
 
   return (

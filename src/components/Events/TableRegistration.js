@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 function TableRegistration({ events, handleRegister }) {
   const globalMe = useStore((state) => state.globalMe);
@@ -70,9 +71,12 @@ function TableRegistration({ events, handleRegister }) {
       columnHelper.accessor("organizer", {
         header: "Organizer",
         cell: (props) => (
-          <Link to={`/player/${props.getValue()}`}>
-            {props.row.original.organizerName}
-          </Link>
+          <BotAwareName
+            id={props.getValue()}
+            name={props.row.original.organizerName}
+            users={allUsers}
+            link
+          />
         ),
       }),
       columnHelper.accessor("registrants", {
@@ -93,7 +97,16 @@ function TableRegistration({ events, handleRegister }) {
             <span style={{ fontSize: "smaller" }}>
               {props
                 .getValue()
-                .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+                .map((u) => (
+                  <BotAwareName
+                    key={u.id}
+                    id={u.id}
+                    name={u.name}
+                    bot={u.bot}
+                    users={allUsers}
+                    link
+                  />
+                ))
                 .reduce(
                   (acc, x) =>
                     acc === null ? (
@@ -110,7 +123,7 @@ function TableRegistration({ events, handleRegister }) {
         ),
       }),
     ],
-    [columnHelper, handleRegister]
+    [columnHelper, handleRegister, allUsers]
   );
 
   return (

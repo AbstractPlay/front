@@ -1,9 +1,12 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
+import { useStore } from "../../stores";
+import { formatPlayerDisplayName } from "../Bots/botUtils";
 
 function ChallengeItem(props) {
   const { t } = useTranslation();
+  const allUsers = useStore((state) => state.users);
 
   const handleChallengeResponseClick = (challenge) => {
     props.setters.showChallengeResponseModalSetter(true);
@@ -26,7 +29,7 @@ function ChallengeItem(props) {
         <i className="fa fa-circle apBullet"></i>
         {t("ChallengeFrom", {
           game: game.name,
-          challenger: challenge.challenger.name,
+          challenger: formatPlayerDisplayName(challenge.challenger, allUsers),
         })}
         <button
           className="button is-small apButton inlineButton"
@@ -39,11 +42,15 @@ function ChallengeItem(props) {
   } else {
     var desc = "";
     const otherplayers = (
-      challenge.standing ? [] : challenge.challengees.map((item) => item.name)
+      challenge.standing
+        ? []
+        : challenge.challengees.map((item) =>
+            formatPlayerDisplayName(item, allUsers)
+          )
     ).concat(
       challenge.players
         .filter((p) => p.id !== props.me)
-        .map((item) => item.name)
+        .map((item) => formatPlayerDisplayName(item, allUsers))
     );
     if (challenge.numPlayers === 2) {
       if (otherplayers.length === 0) desc = game.name;

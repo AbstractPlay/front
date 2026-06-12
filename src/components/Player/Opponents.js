@@ -12,6 +12,7 @@ import TableSkeleton from "./TableSkeleton";
 import NewChallengeModal from "../NewChallengeModal";
 import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
+import { formatUserDisplayName } from "../Bots/botUtils";
 
 function Opponents({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
@@ -122,7 +123,10 @@ function Opponents({ handleChallenge }) {
               cell: (props) => (
                 <>
                   <Link to={`/player/${props.getValue()}`}>
-                    {allUsers.find((u) => u.id === props.getValue())?.name}
+                    {formatUserDisplayName(
+                      allUsers.find((u) => u.id === props.getValue()),
+                      allUsers
+                    )}
                   </Link>
                   &nbsp;
                   <ActivityMarker

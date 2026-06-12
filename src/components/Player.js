@@ -24,6 +24,7 @@ import Coded from "./Player/Coded";
 import Designed from "./Player/Designed";
 import Tournaments from "./Player/Tournaments";
 import { useStore } from "../stores";
+import { formatUserDisplayName } from "./Bots/botUtils";
 
 export const ProfileContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
@@ -246,7 +247,9 @@ function Player() {
         </Helmet>
         <article id="playerProfile">
           <h1 className="title has-text-centered">
-            {t("ProfileFor", { player: user.name })}
+            {t("ProfileFor", {
+              player: formatUserDisplayName(user, allUsers),
+            })}
           </h1>
           <div className="subtitle has-text-centered">
             {user.country === undefined ? null : (

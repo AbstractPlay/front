@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
 import { useStore } from "../../stores";
+import { formatPlayerDisplayName } from "../Bots/botUtils";
 
 const ChallengeViewModal = React.memo(function ChallengeViewModal({
   revoke,
@@ -17,6 +18,7 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
 
   function handleCommentChange(event) {
     commentSetter(event.target.value);
@@ -55,7 +57,7 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
     var players = "";
     const otherplayers = challenge.players
       .filter((item) => !amChallenger || item.id !== challenge.challenger.id)
-      .map((item) => item.name);
+      .map((item) => formatPlayerDisplayName(item, allUsers));
     var seating = t("seatingRandom");
     if (challenge.numPlayers > 2) {
       if (amChallenger) {
@@ -69,7 +71,10 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
       } else {
         challengeDesc =
           t("ChallengeDescriptionAccepter", {
-            challenger: challenge.challenger.name,
+            challenger: formatPlayerDisplayName(
+              challenge.challenger,
+              allUsers
+            ),
             game: game.name,
           }) +
           t("WithVariants", {
@@ -103,7 +108,10 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
       } else {
         challengeDesc =
           t("TwoPlayersChallengeDescription", {
-            other: challenge.challengees[0].name,
+            other: formatPlayerDisplayName(
+              challenge.challengees[0],
+              allUsers
+            ),
             game: game.name,
             meta: challenge.metaGame,
           }) +
@@ -129,9 +137,13 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
       }
     }
     const all = challenge.players
-      .map((item) => item.name)
+      .map((item) => formatPlayerDisplayName(item, allUsers))
       .concat(
-        challenge.standing ? [] : challenge.challengees.map((item) => item.name)
+        challenge.standing
+          ? []
+          : challenge.challengees.map((item) =>
+              formatPlayerDisplayName(item, allUsers)
+            )
       );
     var allPlayers =
       all.slice(0, -1).join(", ") + " " + t("and") + " " + all[all.length - 1];

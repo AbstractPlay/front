@@ -5,6 +5,8 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { Helmet } from "react-helmet-async";
+import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 async function reportError(error) {
   try {
@@ -158,6 +160,7 @@ function processData(tournament, players, games) {
 
 function Tournament(props) {
   const { t } = useTranslation();
+  const allUsers = useStore((state) => state.users);
   const [tournament, tournamentSetter] = useState(null);
   const [divisions, divisionsSetter] = useState([]);
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
@@ -321,9 +324,12 @@ function Tournament(props) {
                           <tr key={"player-" + i}>
                             <td>
                               <span className="playerName">
-                                <Link to={`/player/${p.playerid}`}>
-                                  {p.playername}
-                                </Link>
+                                <BotAwareName
+                                  id={p.playerid}
+                                  name={p.playername}
+                                  users={allUsers}
+                                  link
+                                />
                               </span>
                             </td>
                             <td>{i + 1}</td>

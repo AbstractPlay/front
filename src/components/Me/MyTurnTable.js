@@ -14,6 +14,7 @@ import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 function showMilliseconds(ms) {
@@ -46,6 +47,7 @@ function showMilliseconds(ms) {
 
 function MyTurnTable({ games, fetching }) {
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const connections = useStore((state) => state.connections);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
@@ -114,7 +116,12 @@ function MyTurnTable({ games, fetching }) {
             .getValue()
             .map((u) => (
               <>
-                <Link to={`/player/${u.id}`}>{u.name}</Link>
+                <BotAwareName
+                  id={u.id}
+                  name={u.name}
+                  users={allUsers}
+                  link
+                />
                 {!connections?.visibleUserIds.includes(u.id) ? null : (
                   <span className="icon" title="Player is online">
                     <i className="fa fa-wifi" aria-hidden="true"></i>
@@ -164,7 +171,7 @@ function MyTurnTable({ games, fetching }) {
         ),
       }),
     ],
-    [columnHelper, connections]
+    [columnHelper, connections, allUsers]
   );
 
   const table = useReactTable({

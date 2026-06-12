@@ -7,6 +7,8 @@ import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "../Events/TableSkeleton";
 import Modal from "../Modal";
 import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
+import { formatPlayerDisplayName } from "../Bots/botUtils";
 
 function GamesTable({ games, setRefresh, editor, eventid }) {
   const { t } = useTranslation();
@@ -103,17 +105,23 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
       columnHelper.accessor("p1", {
         header: "Player 1",
         cell: (props) => (
-          <Link to={`/player/${props.getValue().id}`}>
-            {props.getValue().name}
-          </Link>
+          <BotAwareName
+            id={props.getValue().id}
+            name={props.getValue().name}
+            users={allUsers}
+            link
+          />
         ),
       }),
       columnHelper.accessor("p2", {
         header: "Player 2",
         cell: (props) => (
-          <Link to={`/player/${props.getValue().id}`}>
-            {props.getValue().name}
-          </Link>
+          <BotAwareName
+            id={props.getValue().id}
+            name={props.getValue().name}
+            users={allUsers}
+            link
+          />
         ),
       }),
       columnHelper.accessor("winner", {
@@ -123,9 +131,12 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
             <>Draw{props.row.original.arbitrated ? <span>*</span> : null}</>
           ) : (
             <>
-              <Link to={`/player/${props.getValue().id}`}>
-                {props.getValue().name}
-              </Link>
+              <BotAwareName
+                id={props.getValue().id}
+                name={props.getValue().name}
+                users={allUsers}
+                link
+              />
               {props.row.original.arbitrated ? <span>*</span> : null}
             </>
           ),
@@ -148,7 +159,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
           ),
       }),
     ],
-    [columnHelper, editor]
+    [columnHelper, editor, allUsers]
   );
 
   const changeResult = () => {
@@ -238,7 +249,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
                 onClick={() => setWinner([arbRec?.p1.id])}
                 readOnly
               />
-              {arbRec?.p1.name}
+              {formatPlayerDisplayName(arbRec?.p1, allUsers)}
             </label>
             <label className="radio">
               <input
@@ -252,7 +263,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
                 onClick={() => setWinner([arbRec?.p2.id])}
                 readOnly
               />
-              {arbRec?.p2.name}
+              {formatPlayerDisplayName(arbRec?.p2, allUsers)}
             </label>
             <label className="radio">
               <input

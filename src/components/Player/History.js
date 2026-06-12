@@ -8,6 +8,7 @@ import TableSkeletonFilter from "./TableSkeletonFilter";
 import NewChallengeModal from "../NewChallengeModal";
 import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 const formatter = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
 
@@ -148,7 +149,12 @@ function History({ handleChallenge }) {
                   .getValue()
                   .map((u) => (
                     <>
-                      <Link to={`/player/${u.id}`}>{u.name}</Link>
+                      <BotAwareName
+                        id={u.id}
+                        name={u.name}
+                        users={allUsers}
+                        link
+                      />
                       &nbsp;
                       <ActivityMarker lastSeen={u.lastSeen} size="s" />
                     </>
@@ -186,9 +192,12 @@ function History({ handleChallenge }) {
                   globalMe === undefined ||
                   props.getValue().id !== globalMe.id ? (
                   <>
-                    <Link to={`/player/${props.getValue().id}`}>
-                      {props.getValue().name}
-                    </Link>
+                    <BotAwareName
+                      id={props.getValue().id}
+                      name={props.getValue().name}
+                      users={allUsers}
+                      link
+                    />
                     &nbsp;
                     <ActivityMarker
                       lastSeen={props.getValue().lastSeen}

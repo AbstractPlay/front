@@ -15,6 +15,9 @@ import {
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import { useExpandVariants } from "../hooks/useExpandVariants";
+import { useStore } from "../stores";
+import BotAwareName from "./Bots/BotAwareName";
+import { formatPlayerDisplayName } from "./Bots/botUtils";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -26,6 +29,7 @@ function ListGames({ fixedState }) {
   const [showState, showStateSetter] = useStorageState("listgames-show", 20);
   const [sorting, setSorting] = useState([]);
   const { expandVariants } = useExpandVariants(metaGame);
+  const allUsers = useStore((state) => state.users);
 
   useEffect(() => {
     if (gameState === "completed") {
@@ -82,7 +86,7 @@ function ListGames({ fixedState }) {
           players: rec.players,
           winners:
             "winner" in rec && rec.winner !== null
-              ? rec.winner.map((w) => rec.players[w - 1].name)
+              ? rec.winner.map((w) => rec.players[w - 1])
               : null,
           variants:
             "variants" in rec && rec.variants !== null
@@ -112,7 +116,14 @@ function ListGames({ fixedState }) {
         cell: (props) =>
           props
             .getValue()
-            .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+            .map((u) => (
+              <BotAwareName
+                id={u.id}
+                name={u.name}
+                users={allUsers}
+                link
+              />
+            ))
             .reduce(
               (acc, x) =>
                 acc === null ? (
@@ -201,7 +212,12 @@ function ListGames({ fixedState }) {
       columnHelper.accessor("winners", {
         header: t("Winners"),
         cell: (props) =>
-          props.getValue() === null ? "" : props.getValue().join(", "),
+          props.getValue() === null
+            ? ""
+            : props
+                .getValue()
+                .map((p) => formatPlayerDisplayName(p, allUsers))
+                .join(", "),
       }),
       columnHelper.accessor("variants", {
         header: t("Variants"),
@@ -223,7 +239,7 @@ function ListGames({ fixedState }) {
         ),
       }),
     ],
-    [columnHelper, metaGame, t]
+    [columnHelper, metaGame, t, allUsers]
   );
 
   const table = useReactTable({

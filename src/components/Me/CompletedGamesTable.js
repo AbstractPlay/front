@@ -13,11 +13,13 @@ import {
 import ReactTimeAgo from "react-time-ago";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function CompletedGamesTable(props) {
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [sorting, setSorting] = useState([{ id: "completed", desc: true }]);
   const [showState, showStateSetter] = useStorageState(
     "dashboard-tables-completed-show",
@@ -107,7 +109,14 @@ function CompletedGamesTable(props) {
         cell: (props) =>
           props
             .getValue()
-            .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+            .map((u) => (
+              <BotAwareName
+                id={u.id}
+                name={u.name}
+                users={allUsers}
+                link
+              />
+            ))
             .reduce(
               (acc, x) =>
                 acc === null ? (
@@ -162,7 +171,7 @@ function CompletedGamesTable(props) {
         ),
       }),
     ],
-    [columnHelper, handleClearClick]
+    [columnHelper, handleClearClick, allUsers]
   );
 
   const table = useReactTable({

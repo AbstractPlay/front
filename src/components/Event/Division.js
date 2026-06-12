@@ -9,6 +9,7 @@ import {
   monitorForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { useStore } from "../../stores";
+import { formatUserDisplayName } from "../Bots/botUtils";
 
 function Division({ event, setRefresh }) {
   //   const { t } = useTranslation();
@@ -171,6 +172,7 @@ function Division({ event, setRefresh }) {
           <DivisionTarget
             num={null}
             players={unassigned}
+            users={allUsers}
             noRemove={true}
             key={`division|unassigned`}
           />
@@ -179,6 +181,7 @@ function Division({ event, setRefresh }) {
             <DivisionTarget
               num={idx}
               players={div}
+              users={allUsers}
               delDivision={delDivision}
               key={`division|${idx}`}
             />
@@ -209,7 +212,7 @@ function Division({ event, setRefresh }) {
 
 export default Division;
 
-function NameEntry({ name, userid }) {
+function NameEntry({ name, userid, users }) {
   const ref = useRef(null);
   const [dragging, setDragging] = useState(false);
 
@@ -230,12 +233,18 @@ function NameEntry({ name, userid }) {
       className={dragging ? "sortableItemDragged" : "sortableItem"}
       ref={ref}
     >
-      {name}
+      {formatUserDisplayName({ id: userid, name }, users)}
     </div>
   );
 }
 
-function DivisionTarget({ num, players, delDivision, noRemove = false }) {
+function DivisionTarget({
+  num,
+  players,
+  users,
+  delDivision,
+  noRemove = false,
+}) {
   const ref = useRef(null);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
 
@@ -266,7 +275,12 @@ function DivisionTarget({ num, players, delDivision, noRemove = false }) {
       >
         {players
           .map((u) => (
-            <NameEntry name={u.name} userid={u.id} key={`nameEntry|${u.id}`} />
+            <NameEntry
+              name={u.name}
+              userid={u.id}
+              users={users}
+              key={`nameEntry|${u.id}`}
+            />
           ))
           .reduce(
             (acc, x) =>

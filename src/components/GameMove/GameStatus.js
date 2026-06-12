@@ -2,6 +2,7 @@ import React from "react";
 import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
+import { formatPlayerDisplayName } from "../Bots/botUtils";
 import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
 
 function renderGlyph(
@@ -37,6 +38,7 @@ function GameStatus({
   setRefresh,
 }) {
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const colourContext = useStore((state) => state.colourContext);
 
   const { t } = useTranslation();
@@ -148,7 +150,12 @@ function GameStatus({
                             <span>{game.colors[index].value + ":"}</span>
                           )}
                         </td>
-                        <td>{game.players[index].name}</td>
+                        <td>
+                          {formatPlayerDisplayName(
+                            game.players[index],
+                            allUsers
+                          )}
+                        </td>
                         <td>{score}</td>
                       </tr>
                     ))}
@@ -178,7 +185,9 @@ function GameStatus({
                         <span>{game.colors[index].value + ":"}</span>
                       )}
                     </td>
-                    <td>{game.players[index].name}</td>
+                    <td>
+                      {formatPlayerDisplayName(game.players[index], allUsers)}
+                    </td>
                     {stash.map((s, j) => (
                       <td
                         key={"stashentry" + j}

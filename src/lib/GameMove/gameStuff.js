@@ -12,6 +12,8 @@ import { replaceNames, setStatus } from "./misc";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { cloneDeep } from "lodash";
 import { toast } from "react-toastify";
+import { useStore } from "../../stores";
+import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 
 export function setupGame(
   game0,
@@ -34,6 +36,7 @@ export function setupGame(
   if (game0.state === undefined)
     throw new Error("Why no state? This shouldn't happen no more!");
   const engine = GameFactory(game0.metaGame, game0.state);
+  const users = useStore.getState().users;
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
   game0.simultaneous =
@@ -130,7 +133,9 @@ export function setupGame(
   }
   if (typeof engine.chatLog === "function") {
     game0.moveResults = engine
-      .chatLog(game0.players.map((p) => p.name))
+      .chatLog(
+        game0.players.map((p) => formatPlayerDisplayName(p, users))
+      )
       .map((e, idx) => {
         return { time: e[0], log: e.slice(1).join(" "), ply: idx + 1 };
       })
@@ -146,7 +151,8 @@ export function setupGame(
   engineRef.current = engine.clone();
   const render = replaceNames(
     engine.render({ perspective: game0.me + 1, altDisplay: display }),
-    game0.players
+    game0.players,
+    users
   );
   game0.stackExpanding =
     game0.stackExpanding && render.renderer === "stacking-expanding";
@@ -394,7 +400,8 @@ function doView(
         altDisplay: settings?.display,
         ...move.opts,
       }),
-      game.players
+      game.players,
+      useStore.getState().users
     )
   );
   setURL(exploration, newfocus, game, navigate);
@@ -466,7 +473,8 @@ export function processNewMove(
           perspective: gameRef.current.me + 1,
           altDisplay: settings?.display,
         }),
-        gameRef.current.players
+        gameRef.current.players,
+        useStore.getState().users
       )
     );
     newmove.rendered = "";
@@ -484,7 +492,12 @@ export const populateChecked = (gameRef, engineRef, t, setter) => {
       for (const n of inCheckArr) {
         newstr +=
           "<p>" +
-          t("InCheck", { player: gameRef.current.players[n - 1].name }) +
+          t("InCheck", {
+            player: formatPlayerDisplayName(
+              gameRef.current.players[n - 1],
+              useStore.getState().users
+            ),
+          }) +
           "</p>";
       }
       setter(newstr);

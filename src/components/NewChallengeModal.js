@@ -12,8 +12,10 @@ import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import GameVariants from "./GameVariants";
 import { useStore } from "../stores";
-
-const aiaiUserID = "SkQfHAjeDxs8eeEnScuYA";
+import {
+  AIAI_USER_ID,
+  formatUserDisplayName,
+} from "./Bots/botUtils";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
@@ -96,7 +98,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     if (allUsers !== null && metaGame !== null) {
       const info = gameinfo.get(metaGame);
       if (!info.flags.includes("aiai")) {
-        usersSetter([...allUsers].filter((u) => u.id !== aiaiUserID));
+        usersSetter([...allUsers].filter((u) => u.id !== AIAI_USER_ID));
       } else {
         usersSetter([...allUsers]);
       }
@@ -555,21 +557,23 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                       {users === null && !opponent ? (
                         <Spinner />
                       ) : opponent ? (
-                        opponent.name
+                        formatUserDisplayName(opponent, allUsers)
                       ) : (
                         <div className="select is-small">
                           <select
                             value={o.id || ""}
                             name="users"
                             id={"user_for_challenge" + i}
-                            onChange={(e) =>
+                            onChange={(e) => {
+                              const selected = users.find(
+                                (user) => user.id === e.target.value
+                              );
                               handleChangeOpponent({
                                 id: e.target.value,
-                                name: e.target.options[e.target.selectedIndex]
-                                  .text,
+                                name: selected?.name ?? "",
                                 player: i,
-                              })
-                            }
+                              });
+                            }}
                           >
                             <option value="">--{t("Select")}--</option>
                             {users
@@ -584,7 +588,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                               .map((item) => {
                                 return (
                                   <option key={item.id} value={item.id}>
-                                    {item.name}
+                                    {formatUserDisplayName(item, users)}
                                   </option>
                                 );
                               })}

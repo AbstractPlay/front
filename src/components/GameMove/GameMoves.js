@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, Fragment, useState } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
+import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 function useEventListener(eventName, handler, element = window) {
   const savedHandler = useRef();
@@ -134,6 +135,7 @@ function GameMoves(props) {
   const handlePlaygroundExport = props.handlePlaygroundExport;
   let handleGameMoveClick = props.handleGameMoveClick;
   const [validGames, validGamesSetter] = useState([]);
+  const allUsers = useStore((state) => state.users);
 
   useEventListener("keydown", keyDownHandler);
 
@@ -407,7 +409,12 @@ function GameMoves(props) {
                   </span>
                 )}
                 <span className="playerName">
-                  <Link to={`/player/${p.id}`}>{p.name}</Link>
+                  <BotAwareName
+                    id={p.id}
+                    name={p.name}
+                    users={allUsers}
+                    link
+                  />
                 </span>
                 {i < game.numPlayers - 1 ? <span>,&nbsp;</span> : ""}
               </Fragment>
@@ -417,7 +424,7 @@ function GameMoves(props) {
       );
     } else {
       for (let i = 0; i < numcolumns; i++) {
-        let player = game.players[i].name;
+        const playerRec = game.players[i];
         let img = null;
         if (game.colors !== undefined) img = game.colors[i];
         header.push(
@@ -439,7 +446,12 @@ function GameMoves(props) {
                 </span>
               )}
               <span className="playerName">
-                <Link to={`/player/${game.players[i].id}`}>{player}</Link>
+                <BotAwareName
+                  id={playerRec.id}
+                  name={playerRec.name}
+                  users={allUsers}
+                  link
+                />
               </span>
             </div>
           </th>

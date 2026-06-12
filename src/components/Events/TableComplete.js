@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 function TableComplete({ events }) {
   const allUsers = useStore((state) => state.users);
@@ -43,7 +44,16 @@ function TableComplete({ events }) {
         cell: (props) =>
           props
             .getValue()
-            .map((u) => <Link to={`/player/${u.id}`}>{u.name}</Link>)
+            .map((u) => (
+              <BotAwareName
+                key={u.id}
+                id={u.id}
+                name={u.name}
+                bot={u.bot}
+                users={allUsers}
+                link
+              />
+            ))
             .reduce(
               (acc, x) =>
                 acc === null ? (
@@ -71,7 +81,7 @@ function TableComplete({ events }) {
         ),
       }),
     ],
-    [columnHelper]
+    [columnHelper, allUsers]
   );
 
   return (

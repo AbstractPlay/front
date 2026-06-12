@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
 import { useStore } from "../../stores";
+import { formatPlayerDisplayName } from "../Bots/botUtils";
 
 const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
   respond,
@@ -17,6 +18,7 @@ const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
 
   function handleCommentChange(event) {
     commentSetter(event.target.value);
@@ -37,10 +39,14 @@ const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
     const game = gameinfo.get(challenge.metaGame);
     const otherPlayers = challenge.players
       .filter((x) => x.id !== globalMe.id)
-      .map((x) => x.name);
+      .map((x) => formatPlayerDisplayName(x, allUsers));
     const all = challenge.players
-      .map((item) => item.name)
-      .concat(challenge.challengees.map((item) => item.name));
+      .map((item) => formatPlayerDisplayName(item, allUsers))
+      .concat(
+        challenge.challengees.map((item) =>
+          formatPlayerDisplayName(item, allUsers)
+        )
+      );
     var allPlayers =
       all.slice(0, -1).join(", ") + " " + t("and") + " " + all[all.length - 1];
     var seating = t("seatingRandom");
@@ -78,7 +84,7 @@ const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
         : null;
     desc =
       t("ChallengeResponseDesc", {
-        opp: challenge.challenger.name,
+        opp: formatPlayerDisplayName(challenge.challenger, allUsers),
         game: game.name,
         meta: challenge.metaGame,
       }) +

@@ -16,6 +16,7 @@ import { isoToCountryCode } from "../lib/isoToCountryCode";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
 import { useStore } from "../stores";
+import { formatUserDisplayName } from "./Bots/botUtils";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -69,10 +70,11 @@ function Players() {
       allUsers === undefined || allUsers === null
         ? []
         : allUsers
-            .map(({ id, name, country, lastSeen }) => {
+            .map(({ id, name, country, lastSeen, bot }) => {
               return {
                 id,
                 name: name ?? "",
+                bot,
                 country: isoToCountryCode(country, "numeric"),
                 lastSeen,
               };
@@ -113,7 +115,7 @@ function Players() {
               header: "Name",
               cell: (props) => (
                 <Link to={`/player/${props.row.original.id}`}>
-                  {props.getValue()}
+                  {formatUserDisplayName(props.row.original, allUsers)}
                 </Link>
               ),
             }),

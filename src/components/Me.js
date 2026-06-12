@@ -26,6 +26,7 @@ import ChallengeMeRespond from "./Me/ChallengeMeRespond";
 import ChallengeTheyRespond from "./Me/ChallengeTheyRespond";
 import ChallengeOpen from "./Me/ChallengeOpen";
 import { useStore } from "../stores";
+import { testBotStatus } from "./Bots/botApi";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -45,6 +46,10 @@ function Me(props) {
   const [deleteGamesMetaGame, deleteGamesMetaGameSetter] = useState("");
   const [deleteCompletedGames, deleteCompletedGamesSetter] = useState(false);
   const [genericInput, genericInputSetter] = useState("");
+  const [showTestBotStatusModal, showTestBotStatusModalSetter] =
+    useState(false);
+  const [testBotStatusResult, testBotStatusResultSetter] = useState("");
+  const [testBotStatusLoading, testBotStatusLoadingSetter] = useState(false);
   const [deletes, deletesSetter] = useState("");
   const { t } = useTranslation();
   const [myMove, myMoveSetter] = useState([]);
@@ -381,6 +386,31 @@ function Me(props) {
     }
   };
 
+  const handleTestBotStatusClick = async () => {
+    showTestBotStatusModalSetter(true);
+    testBotStatusLoadingSetter(true);
+    testBotStatusResultSetter("");
+    try {
+      const result = await testBotStatus();
+      if (!result.ok) {
+        testBotStatusResultSetter(result.error || "Request failed");
+      } else if (result.data === null || result.data === undefined) {
+        testBotStatusResultSetter("(empty response)");
+      } else {
+        testBotStatusResultSetter(JSON.stringify(result.data, null, 2));
+      }
+    } catch (error) {
+      testBotStatusResultSetter(String(error));
+    }
+    testBotStatusLoadingSetter(false);
+  };
+
+  const handleTestBotStatusClose = () => {
+    showTestBotStatusModalSetter(false);
+    testBotStatusResultSetter("");
+    testBotStatusLoadingSetter(false);
+  };
+
   useEffect(() => {
     console.log("globalMe changed:", globalMe);
     const { setMyMove: setMyTurn } = useStore.getState();
@@ -674,6 +704,12 @@ function Me(props) {
                 </button>
                 <button
                   className="button is-small apButton"
+                  onClick={() => handleTestBotStatusClick()}
+                >
+                  Test bot status
+                </button>
+                <button
+                  className="button is-small apButton"
                   onClick={() => toast("Toast test!")}
                 >
                   Test toast
@@ -764,6 +800,27 @@ function Me(props) {
               </div>
             </div>
           </Fragment>
+        </Modal>
+        <Modal
+          show={showTestBotStatusModal}
+          title={"Test bot status"}
+          buttons={[
+            {
+              label: t("Close"),
+              action: handleTestBotStatusClose,
+            },
+          ]}
+        >
+          {testBotStatusLoading ? (
+            <Spinner />
+          ) : (
+            <pre
+              className="content"
+              style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+            >
+              {testBotStatusResult}
+            </pre>
+          )}
         </Modal>
       </article>
     );

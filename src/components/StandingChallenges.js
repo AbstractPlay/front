@@ -21,6 +21,8 @@ import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import { useExpandVariants } from "../hooks/useExpandVariants";
 import { useStore } from "../stores";
+import BotAwareName from "./Bots/BotAwareName";
+import { formatPlayerDisplayName } from "./Bots/botUtils";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -272,9 +274,12 @@ function StandingChallenges(props) {
         header: "Challenger",
         cell: (props) => (
           <>
-            <Link to={`/player/${props.row.original.challengerId}`}>
-              {props.getValue()}
-            </Link>
+            <BotAwareName
+              id={props.row.original.challengerId}
+              name={props.getValue()}
+              users={allUsers}
+              link
+            />
             {props.row.original.lastSeen === undefined ? null : (
               <>
                 &nbsp;
@@ -295,7 +300,7 @@ function StandingChallenges(props) {
         cell: (props) =>
           props
             .getValue()
-            .map((p) => p.name)
+            .map((p) => formatPlayerDisplayName(p, allUsers))
             .join(","),
       }),
       columnHelper.accessor("seating", {
@@ -380,7 +385,7 @@ function StandingChallenges(props) {
           ),
       }),
     ],
-    [columnHelper, globalMe, t, accepted, revoke, reject, showRespond]
+    [columnHelper, globalMe, t, accepted, revoke, reject, showRespond, allUsers]
   );
 
   const table = useReactTable({

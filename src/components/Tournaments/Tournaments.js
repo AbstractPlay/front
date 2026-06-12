@@ -19,6 +19,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { useStore } from "../../stores";
+import { formatUserDisplayName } from "../Bots/botUtils";
 
 function Tournaments(props) {
   const { t } = useTranslation();
@@ -257,6 +258,7 @@ function Tournaments(props) {
           number: t.number,
           startDate: date1,
           players: t.players,
+          once: t.once,
           playerNames: t.players
             .map((uid) => {
               const rec = allUsers?.find((u) => u.id === uid);
@@ -335,7 +337,21 @@ function Tournaments(props) {
             {props.getValue().length}
             <br />
             <span style={{ fontSize: "smaller" }}>
-              {props.row.original.playerNames.join(", ")}
+              {props.row.original.players
+                .map((uid) => {
+                  const rec = allUsers?.find((u) => u.id === uid);
+                  if (rec === undefined) {
+                    return { raw: "Unknown", display: "Unknown" };
+                  }
+                  let display = formatUserDisplayName(rec, allUsers);
+                  if (props.row.original.once.includes(uid)) {
+                    display += "*";
+                  }
+                  return { raw: rec.name, display };
+                })
+                .sort((a, b) => a.raw.localeCompare(b.raw))
+                .map((x) => x.display)
+                .join(", ")}
             </span>
           </>
         ),
@@ -387,6 +403,7 @@ function Tournaments(props) {
       handleJoinTournament,
       handleWithdrawTournament,
       t,
+      allUsers,
     ]
   );
 
@@ -787,11 +804,19 @@ function Tournaments(props) {
       }),
       completedTournamentsColumnHelper.accessor("winner", {
         header: t("Tournament.Winner"),
-        cell: (props) => (
-          <Link to={`/player/${props.row.original.winnerid}`}>
-            {props.getValue()}
-          </Link>
-        ),
+        cell: (props) => {
+          const user = allUsers?.find(
+            (u) => u.id === props.row.original.winnerid
+          );
+          const displayName = user
+            ? formatUserDisplayName(user, allUsers)
+            : props.getValue();
+          return (
+            <Link to={`/player/${props.row.original.winnerid}`}>
+              {displayName}
+            </Link>
+          );
+        },
       }),
       completedTournamentsColumnHelper.display({
         id: "actions",
@@ -811,7 +836,7 @@ function Tournaments(props) {
           ) : null,
       }),
     ],
-    [completedTournamentsColumnHelper, t]
+    [completedTournamentsColumnHelper, t, allUsers]
   );
 
   const completedTournamentsTable = useReactTable({

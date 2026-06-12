@@ -15,12 +15,14 @@ import Spinner from "../Spinner";
 import ChallengeViewModal from "./ChallengeViewModal";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 import { expandVariants } from "../../lib/expandVariants";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [sorting, setSorting] = useState([{ id: "dateIssued", desc: true }]);
   const [showState, showStateSetter] = useStorageState(
@@ -90,8 +92,14 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
             ? ""
             : props
                 .getValue()
-                .map(({ name, id }, ind) => (
-                  <Link to={`/player/${id}`}>{name}</Link>
+                .map(({ name, id }) => (
+                  <BotAwareName
+                    key={id}
+                    id={id}
+                    name={name}
+                    users={allUsers}
+                    link
+                  />
                 ))
                 .reduce((prev, curr) => [prev, ", ", curr]),
         invertSorting: true,
@@ -108,8 +116,14 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
             ? ""
             : props
                 .getValue()
-                .map(({ name, id }, ind) => (
-                  <Link to={`/player/${id}`}>{name}</Link>
+                .map(({ name, id }) => (
+                  <BotAwareName
+                    key={id}
+                    id={id}
+                    name={name}
+                    users={allUsers}
+                    link
+                  />
                 ))
                 .reduce((prev, curr) => [prev, ", ", curr]),
       }),
@@ -139,7 +153,7 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
         ),
       }),
     ],
-    [columnHelper, activeChallengeModal, handleChallengeRevoke]
+    [columnHelper, activeChallengeModal, handleChallengeRevoke, allUsers]
   );
 
   const table = useReactTable({

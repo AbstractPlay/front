@@ -10,6 +10,10 @@ import { callAuthApi } from "../../lib/api";
 import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../../stores";
+import {
+  formatPlayerDisplayName,
+  isClientBotTurn,
+} from "../Bots/botUtils";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -124,6 +128,7 @@ function MoveEntry(props) {
   const [moveState, moveStateSetter] = useState("is-success");
   const [inputValue, inputValueSetter] = useState(move.move);
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const connections = useStore((state) => state.connections);
 
   function getFocusNode(exp, game, foc) {
@@ -244,7 +249,10 @@ function MoveEntry(props) {
         if (uiState === 0) {
           if (game.canSubmit) {
             mover = t("ToMove", {
-              player: game.players[game.me].name,
+              player: formatPlayerDisplayName(
+                game.players[game.me],
+                allUsers
+              ),
             });
             if (game.colors !== undefined) img = game.colors[game.me];
           } else {
@@ -254,7 +262,9 @@ function MoveEntry(props) {
           mover = "";
         }
       } else {
-        mover = t("ToMove", { player: game.players[toMove]?.name });
+        mover = t("ToMove", {
+          player: formatPlayerDisplayName(game.players[toMove], allUsers),
+        });
         if (game.colors !== undefined) img = game.colors[toMove];
         // Exploration in games that have finished is public. I don't think we want to allow people to delete big trees that other people might have put in
         // so only allow leaf nodes to be deleted?
@@ -269,10 +279,15 @@ function MoveEntry(props) {
       const state = GameFactory(engine.metaGame, node.state);
       if (state.winner && state.winner.length > 0) {
         if (state.winner.length === 1) {
-          const winner = game.players[state.winner[0] - 1].name;
+          const winner = formatPlayerDisplayName(
+            game.players[state.winner[0] - 1],
+            allUsers
+          );
           mover = t("GameIsOver1", { winner });
         } else {
-          const winners = state.winner.map((w) => game.players[w - 1].name);
+          const winners = state.winner.map((w) =>
+            formatPlayerDisplayName(game.players[w - 1], allUsers)
+          );
           const lastWinner = winners.pop();
           const winnersStr = winners.join(", ");
           mover = t("GameIsOver2", { winners: winnersStr, lastWinner });
@@ -363,7 +378,9 @@ function MoveEntry(props) {
                 {game.players.map((p, ind) =>
                   (Array.isArray(toMove) ? toMove[ind] : ind === toMove) ? (
                     <tr key={"player" + ind} style={{ fontWeight: "bolder" }}>
-                      <td key={"player" + ind}>{p.name}</td>
+                      <td key={"player" + ind}>
+                        {formatPlayerDisplayName(p, allUsers)}
+                      </td>
                       <td>
                         {showMilliseconds(
                           p.time - (Date.now() - game.lastMoveTime)
@@ -378,7 +395,9 @@ function MoveEntry(props) {
                     </tr>
                   ) : (
                     <tr key={"player" + ind}>
-                      <td key={"player" + ind}>{p.name}</td>
+                      <td key={"player" + ind}>
+                        {formatPlayerDisplayName(p, allUsers)}
+                      </td>
                       <td>
                         {showMilliseconds(p.time)}
                         {globalMe === null ||
@@ -393,7 +412,7 @@ function MoveEntry(props) {
                 )}
               </tbody>
             </table>
-            {!mover.includes("(Bot)") ||
+            {!isClientBotTurn(game, toMove, allUsers) ||
             !globalMe ||
             globalMe.admin !== true ? null : (
               <div className="control">

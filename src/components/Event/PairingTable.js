@@ -1,10 +1,12 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "../Events/TableSkeleton";
+import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 function PairingTable({ pairs, delPairing, swapPairing }) {
+  const allUsers = useStore((state) => state.users);
   const data = useMemo(
     () =>
       pairs.map(
@@ -38,9 +40,12 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
       columnHelper.accessor("p1", {
         header: "Player 1",
         cell: (props) => (
-          <Link to={`/player/${props.getValue().id}`}>
-            {props.getValue().name}
-          </Link>
+          <BotAwareName
+            id={props.getValue().id}
+            name={props.getValue().name}
+            users={allUsers}
+            link
+          />
         ),
       }),
       columnHelper.display({
@@ -58,9 +63,12 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
       columnHelper.accessor("p2", {
         header: "Player 2",
         cell: (props) => (
-          <Link to={`/player/${props.getValue().id}`}>
-            {props.getValue().name}
-          </Link>
+          <BotAwareName
+            id={props.getValue().id}
+            name={props.getValue().name}
+            users={allUsers}
+            link
+          />
         ),
       }),
       columnHelper.accessor("metagame", {
@@ -87,7 +95,7 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
         ),
       }),
     ],
-    [columnHelper, delPairing, swapPairing]
+    [columnHelper, delPairing, swapPairing, allUsers]
   );
 
   return (

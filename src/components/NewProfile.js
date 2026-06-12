@@ -5,6 +5,7 @@ import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import Modal from "./Modal";
 import { useStore } from "../stores";
+import { validateDisplayName } from "./Bots/botUtils";
 
 function NewProfile(props) {
   const [name, nameSetter] = useState("");
@@ -61,63 +62,68 @@ function NewProfile(props) {
   const handleNewProfile = async () => {
     if (name === "") {
       nameErrorSetter(t("NameBlank"));
-    } else if (users.find((u) => u === name)) {
-      nameErrorSetter(t("NameNotAvailable", { name }));
-    } else if (!consent) {
-      consentErrorSetter(t("PleaseConsent"));
     } else {
-      try {
-        const { setGlobalMe } = useStore.getState();
-        const res = await callAuthApi("new_profile", {
-          name: name,
-          consent: consent,
-          anonymous: anonymous,
-          country: country,
-          tagline: tagline,
-        });
-        if (!res) return;
-        props.handleClose(1);
-        if (props.updateMe) {
-          try {
-            const usr = await Auth.currentAuthenticatedUser();
-            const token = usr.signInUserSession.idToken.jwtToken;
-            if (token !== null) {
-              try {
-                console.log(
-                  "calling authQuery 'me' (small), with token: " + token
-                );
-                const res = await callAuthApi("me", { size: "small" });
-                if (!res) return;
-                const result = await res.json();
-                if (result.statusCode !== 200)
-                  console.log(JSON.parse(result.body));
-                else {
-                  if (result === null) setGlobalMe({});
-                  else {
-                    setGlobalMe((prev) => {
-                      const backendData = JSON.parse(result.body);
-                      return {
-                        ...prev,
-                        ...backendData,
-                        challengesIssued: prev?.challengesIssued ?? [],
-                        challengesReceived: prev?.challengesReceived ?? [],
-                        challengesAccepted: prev?.challengesAccepted ?? [],
-                        standingChallenges: prev?.standingChallenges ?? [],
-                      };
-                    });
+      const nameValidationError = validateDisplayName(name);
+      if (nameValidationError) {
+        nameErrorSetter(nameValidationError);
+      } else if (users.find((u) => u === name)) {
+        nameErrorSetter(t("NameNotAvailable", { name }));
+      } else if (!consent) {
+        consentErrorSetter(t("PleaseConsent"));
+      } else {
+        try {
+          const { setGlobalMe } = useStore.getState();
+          const res = await callAuthApi("new_profile", {
+            name: name,
+            consent: consent,
+            anonymous: anonymous,
+            country: country,
+            tagline: tagline,
+          });
+          if (!res) return;
+          props.handleClose(1);
+          if (props.updateMe) {
+            try {
+              const usr = await Auth.currentAuthenticatedUser();
+              const token = usr.signInUserSession.idToken.jwtToken;
+              if (token !== null) {
+                try {
+                  console.log(
+                    "calling authQuery 'me' (small), with token: " + token
+                  );
+                  const res = await callAuthApi("me", { size: "small" });
+                  if (!res) return;
+                  const result = await res.json();
+                  if (result.statusCode !== 200)
                     console.log(JSON.parse(result.body));
+                  else {
+                    if (result === null) setGlobalMe({});
+                    else {
+                      setGlobalMe((prev) => {
+                        const backendData = JSON.parse(result.body);
+                        return {
+                          ...prev,
+                          ...backendData,
+                          challengesIssued: prev?.challengesIssued ?? [],
+                          challengesReceived: prev?.challengesReceived ?? [],
+                          challengesAccepted: prev?.challengesAccepted ?? [],
+                          standingChallenges: prev?.standingChallenges ?? [],
+                        };
+                      });
+                      console.log(JSON.parse(result.body));
+                    }
                   }
+                } catch (error) {
+                  console.log(error);
                 }
-              } catch (error) {
-                console.log(error);
               }
+            } catch (error) {
+              // not logged in, ok.
             }
-          } catch (error) {
-            // not logged in, ok.
           }
+        } catch (err) {
+          setError(err.message);
         }
-      } catch (err) {
-        setError(err.message);
       }
     }
   };

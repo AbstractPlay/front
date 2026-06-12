@@ -1,6 +1,12 @@
 import PropTypes from "prop-types";
 
-const Modal = ({ children, show, title, buttons }) => {
+const Modal = ({
+  children,
+  show,
+  title,
+  buttons,
+  disableBackdropClose = false,
+}) => {
   if (!show) {
     return null;
   }
@@ -19,14 +25,16 @@ const Modal = ({ children, show, title, buttons }) => {
     }
   }
   const closeModal = buttons[buttons.length - 1].action;
+  const handleBackdropClose = disableBackdropClose ? undefined : closeModal;
+  const handleHeaderClose = disableBackdropClose ? undefined : closeModal;
 
   return (
     <div className="modal is-active">
-      <div className="modal-background" onClick={closeModal} />
+      <div className="modal-background" onClick={handleBackdropClose} />
       <div className="modal-card">
         <header className="modal-card-head">
           <p className="modal-card-title">{title}</p>
-          <button className="delete" onClick={closeModal} />
+          <button className="delete" onClick={handleHeaderClose} />
         </header>
         <section className="modal-card-body">{children}</section>
         <footer className="modal-card-foot">
@@ -38,6 +46,7 @@ const Modal = ({ children, show, title, buttons }) => {
                   i !== buttons.length - 1 ? " apButton" : " apButtonNeutral"
                 }`}
                 onClick={btn.action}
+                disabled={btn.disabled}
               >
                 {btn.label}
               </button>
@@ -53,6 +62,7 @@ Modal.propTypes = {
   show: PropTypes.bool.isRequired,
   title: PropTypes.string,
   buttons: PropTypes.array,
+  disableBackdropClose: PropTypes.bool,
 };
 
 export default Modal;

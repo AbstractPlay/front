@@ -1,8 +1,13 @@
-export const replaceNames = (rep, players) => {
+import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
+
+export const replaceNames = (rep, players, users) => {
   let stringRep = JSON.stringify(rep);
   for (let i = 0; i < players.length; i++) {
     const re = new RegExp(`player ${i + 1}`, "gi");
-    stringRep = stringRep.replace(re, players[i].name);
+    stringRep = stringRep.replace(
+      re,
+      formatPlayerDisplayName(players[i], users)
+    );
   }
   return JSON.parse(stringRep);
 };

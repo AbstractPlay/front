@@ -1129,7 +1129,8 @@ function GameMove(props) {
           perspective: gameRef.current.me ? gameRef.current.me + 1 : 1,
           altDisplay: settings?.display,
         }),
-        gameRef.current.players
+        gameRef.current.players,
+        allUsers
       )
     );
     setURL(explorationRef.current.nodes, foc, game, navigate);
@@ -1584,7 +1585,8 @@ function GameMove(props) {
           perspective: gameRef.current.me + 1,
           altDisplay: newSettings.display,
         }),
-        gameRef.current.players
+        gameRef.current.players,
+        allUsers
       );
       renderrepSetter(newRenderRep);
       gameRef.current.stackExpanding =

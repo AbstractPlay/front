@@ -15,11 +15,13 @@ import Spinner from "../Spinner";
 import ChallengeResponseModal from "./ChallengeResponseModal";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [sorting, setSorting] = useState([{ id: "dateIssued", desc: true }]);
   const [showState, showStateSetter] = useStorageState(
@@ -88,9 +90,12 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
       columnHelper.accessor("challenger", {
         header: "Challenger",
         cell: (props) => (
-          <Link to={`/player/${props.getValue().id}`}>
-            {props.getValue().name}
-          </Link>
+          <BotAwareName
+            id={props.getValue().id}
+            name={props.getValue().name}
+            users={allUsers}
+            link
+          />
         ),
         invertSorting: true,
         sortingFn: (rowA, rowB, columnID) => {
@@ -106,8 +111,14 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
             ? ""
             : props
                 .getValue()
-                .map(({ name, id }, ind) => (
-                  <Link to={`/player/${id}`}>{name}</Link>
+                .map(({ name, id }) => (
+                  <BotAwareName
+                    key={id}
+                    id={id}
+                    name={name}
+                    users={allUsers}
+                    link
+                  />
                 ))
                 .reduce((prev, curr) => [prev, ", ", curr]),
       }),
@@ -137,7 +148,7 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
         ),
       }),
     ],
-    [columnHelper, activeChallengeModal, handleChallengeResponse]
+    [columnHelper, activeChallengeModal, handleChallengeResponse, allUsers]
   );
 
   const table = useReactTable({

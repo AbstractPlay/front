@@ -5,6 +5,7 @@ import Plot from "react-plotly.js";
 import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
+import { formatUserDisplayName } from "../Bots/botUtils";
 
 function PlayerStats({ nav }) {
   const summary = useStore((state) => state.summary);
@@ -97,16 +98,24 @@ function PlayerStats({ nav }) {
     () => [
       columnHelper.accessor("name", {
         header: "Player",
-        cell: (props) =>
-          globalMe !== null && globalMe.id === props.row.original.id ? (
+        cell: (props) => {
+          const displayName = formatUserDisplayName(
+            userNames.find((u) => u.id === props.row.original.id) ?? {
+              id: props.row.original.id,
+              name: props.getValue(),
+            },
+            userNames
+          );
+          return globalMe !== null && globalMe.id === props.row.original.id ? (
             <Link to={`/player/${props.row.original.id}`}>
-              <span className="bolder highlight">{props.getValue()}</span>
+              <span className="bolder highlight">{displayName}</span>
             </Link>
           ) : (
             <Link to={`/player/${props.row.original.id}`}>
-              {props.getValue()}
+              {displayName}
             </Link>
-          ),
+          );
+        },
       }),
       columnHelper.accessor("plays", {
         header: "Total plays",
@@ -150,7 +159,13 @@ function PlayerStats({ nav }) {
                 activeChartModal !== "" &&
                 activeChartModal === props.row.original.id
               }
-              title={`Histogram for ${props.row.original.name}`}
+              title={`Histogram for ${formatUserDisplayName(
+                userNames.find((u) => u.id === props.row.original.id) ?? {
+                  id: props.row.original.id,
+                  name: props.row.original.name,
+                },
+                userNames
+              )}`}
             >
               <div style={{ overflow: "hidden" }}>
                 <Plot
@@ -179,7 +194,7 @@ function PlayerStats({ nav }) {
         enableSorting: false,
       }),
     ],
-    [columnHelper, globalMe, activeChartModal]
+    [columnHelper, globalMe, activeChartModal, userNames]
   );
 
   return (

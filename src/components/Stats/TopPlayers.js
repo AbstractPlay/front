@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
+import { formatUserDisplayName } from "../Bots/botUtils";
 
 function TopPlayers({ nav }) {
   const summary = useStore((state) => state.summary);
@@ -39,16 +40,25 @@ function TopPlayers({ nav }) {
       }),
       columnHelper.accessor("name", {
         header: "Player",
-        cell: (props) =>
-          globalMe !== null && globalMe.id === props.row.original.userid ? (
+        cell: (props) => {
+          const displayName = formatUserDisplayName(
+            userNames.find((u) => u.id === props.row.original.userid) ?? {
+              id: props.row.original.userid,
+              name: props.getValue(),
+            },
+            userNames
+          );
+          return globalMe !== null &&
+            globalMe.id === props.row.original.userid ? (
             <Link to={`/player/${props.row.original.userid}`}>
-              <span className="bolder highlight">{props.getValue()}</span>
+              <span className="bolder highlight">{displayName}</span>
             </Link>
           ) : (
             <Link to={`/player/${props.row.original.userid}`}>
-              {props.getValue()}
+              {displayName}
             </Link>
-          ),
+          );
+        },
       }),
       columnHelper.accessor("rating", {
         header: "Rating",
@@ -100,7 +110,7 @@ function TopPlayers({ nav }) {
         },
       }),
     ],
-    [columnHelper, globalMe]
+    [columnHelper, globalMe, userNames]
   );
 
   return (

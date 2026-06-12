@@ -43,6 +43,7 @@ function LogInOutButton({ closeBurger }) {
                     challengesReceived: prev?.challengesReceived ?? [],
                     challengesAccepted: prev?.challengesAccepted ?? [],
                     standingChallenges: prev?.standingChallenges ?? [],
+                    bots: backendData.bots ?? prev?.bots ?? [],
                   };
                 });
                 console.log(JSON.parse(result.body));

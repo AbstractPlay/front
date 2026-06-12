@@ -12,6 +12,7 @@ import {
 import ReactTimeAgo from "react-time-ago";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 function showMilliseconds(ms) {
   let positive = true;
@@ -44,6 +45,7 @@ const allSize = Number.MAX_SAFE_INTEGER;
 
 function TheirTurnTable(props) {
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const connections = useStore((state) => state.connections);
   const [sorting, setSorting] = useState([
     { id: "timeRemaining", desc: false },
@@ -123,7 +125,12 @@ function TheirTurnTable(props) {
             .getValue()
             .map((u) => (
               <>
-                <Link to={`/player/${u.id}`}>{u.name}</Link>
+                <BotAwareName
+                  id={u.id}
+                  name={u.name}
+                  users={allUsers}
+                  link
+                />
                 {!connections?.visibleUserIds.includes(u.id) ? null : (
                   <span className="icon" title="Player is online">
                     <i className="fa fa-wifi" aria-hidden="true"></i>
@@ -178,7 +185,7 @@ function TheirTurnTable(props) {
             : showMilliseconds(props.getValue()),
       }),
     ],
-    [columnHelper, connections]
+    [columnHelper, connections, allUsers]
   );
 
   const table = useReactTable({

@@ -2,6 +2,10 @@ import { Fragment } from "react";
 import ReactTimeAgo from "react-time-ago";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { useStore } from "../../stores";
+import {
+  formatPlayerDisplayName,
+  formatUserDisplayName,
+} from "../Bots/botUtils";
 
 //TODO:
 // Fix react-time-ago to be language/locale sensitive
@@ -39,11 +43,11 @@ function MoveResults(props) {
         let personName = "Unknown";
         let player = players.find((p) => p.id === c.userId);
         if (player !== undefined) {
-          personName = player.name;
+          personName = formatPlayerDisplayName(player, users);
         } else if (users !== null) {
           player = users.find((p) => p.id === c.userId);
           if (player !== undefined) {
-            personName = player.name;
+            personName = formatUserDisplayName(player, users);
           }
         }
         results.push({

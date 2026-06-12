@@ -10,6 +10,7 @@ import PairingTable from "./PairingTable";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
 import { useStore } from "../../stores";
+import { formatUserDisplayName } from "../Bots/botUtils";
 
 const errorDesc = new Map([
   [
@@ -374,7 +375,9 @@ function Pair({ event, setRefresh }) {
                     >
                       {div.map((item, i) => (
                         <SortableItem key={`sorted:${i}`}>
-                          <div className="sortableItem">{item.name}</div>
+                          <div className="sortableItem">
+                            {formatUserDisplayName(item, allUsers)}
+                          </div>
                         </SortableItem>
                       ))}
                     </SortableList>
@@ -425,7 +428,7 @@ function Pair({ event, setRefresh }) {
                           .filter((u) => u.id !== manualP2)
                           .map((u, i) => (
                             <option value={u.id} key={`p1:${i}`}>
-                              {u.name}
+                              {formatUserDisplayName(u, allUsers)}
                             </option>
                           ))}
                       </select>
@@ -449,7 +452,7 @@ function Pair({ event, setRefresh }) {
                           .filter((u) => u.id !== manualP1)
                           .map((u, i) => (
                             <option value={u.id} key={`p2:${i}`}>
-                              {u.name}
+                              {formatUserDisplayName(u, allUsers)}
                             </option>
                           ))}
                       </select>
