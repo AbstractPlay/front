@@ -893,5 +893,11 @@
     "RotateBoardCCW": "Rotar tablero en sentido contrario",
     "RotateBoardCW": "Rotar tablero en sentido del reloj",
     "TriggerRefresh": "Disparador de refresco",
-    "WelcomePlayer": "Panel para"
+    "WelcomePlayer": "Panel para",
+    "RatedPlayersCount_one": "Jugador rankeado",
+    "RatedPlayersCount_many": "Jugadores rankeados",
+    "RatedPlayersCount_other": "Jugadores rankeados",
+    "SelectOpponents_one": "Seleccionar un oponente",
+    "SelectOpponents_many": "Seleccionar a un o varios oponentes",
+    "SelectOpponents_other": "Seleccionar {{count}} oponentes"
 }
