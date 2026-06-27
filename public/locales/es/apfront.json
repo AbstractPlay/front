@@ -504,7 +504,7 @@
     "ChallengerFirst": "El retador juega primero",
     "ChallengerNotes": "Comentarios del retador: ",
     "ChallengerSecond": "Retador juega segundo",
-    "ChallengeType": "Tipo de reto",
+    "ChallengeType": "Tipo de desafío",
     "ChallengeTypeOpen": "Abrir",
     "ChallengeTypeOpenDescription": "Cualquiera puede aceptar este desafío.",
     "ChallengeTypeTargeted": "Cerrado",
@@ -579,7 +579,7 @@
     "DurationHelp_one": "Este desafío caducará tras ser aceptado la primera vez.",
     "DurationHelp_many": "Este desafío caducará tras ser aceptado las {{count}} veces.",
     "DurationHelp_other": "Este desafío caducará tras ser aceptado las {{count}} veces.",
-    "DurationHelpPersistent": "Este reto permanecerá disponible hasta que lo revoque.",
+    "DurationHelpPersistent": "Este desafío permanecerá disponible hasta que lo revoque.",
     "EditTags": "Editar Etiquetas",
     "EMail": "Dirección de correo-e",
     "EMailCode": "Código del correo-e",
@@ -693,7 +693,7 @@
     "NotifyLabel-gameEnd": "Juego finalizado (cada instancia)",
     "NotifyLabel-tournamentStart": "Torneo iniciado (cada instancia)",
     "NotifyLabel-tournamentEnd": "Torneo finalizado (cada instancia)",
-    "NoWaitingResponse": "No hay retos pendientes de respuesta del oponente",
+    "NoWaitingResponse": "No hay desafíos pendientes para respuesta al oponente",
     "NoYourMove": "No hay ningún juego esperando su movimiento.",
     "NumChallenge": "En este juego habrá {{num}} jugadores. {{players}}. La distribución de los asientos será aleatoria.",
     "NumChallenge2": "En este juego habrá 2 jugadores.",
@@ -762,7 +762,7 @@
     "StandardColors": "Estándar",
     "StandingChallengeDescription": "Convocatoria abierta para una partida de {{game}}",
     "StandingChallenges": "Abrir convocatorias para {{name}}",
-    "StandingChallenges2": "Abrir Retos",
+    "StandingChallenges2": "Abrir Desafíos",
     "Statistics": "Estadística",
     "stats_module_avgRatings": "Promedio de clasificación",
     "stats_module_gameStats": "Estadísticas del juego",
@@ -826,9 +826,9 @@
             "chat": "La parte mejor aproximadamente tocando los juegos es las personas tocas con. Esto es donde te puede hablar atrás y adelante con vuestro adversario. Los chats de usuario están reunidos aquí para vuestra comodidad, pero una lista de todos* los chats, incluyendo descripciones textuales de qué está pasando en el juego, es visible en el fondo de la pantalla. Recuerda que estos chats son públicos. Complacer ver nuestros plazos de servicio y política de privacidad para detalles.",
             "move": "Aquí es donde entras en tu movimiento. La mayor parte del tiempo, puede hacer su movimiento simplemente haciendo clic en el tablero, pero algunos juegos tienen una selección de movimiento desplegable, y siempre puede escribir manualmente su movimiento también. Las sugerencias útiles aparecerán por encima de la caja de movimiento mientras entras en tus movimientos. Una característica importante es la exploración. Antes de presentar su movimiento, y mientras espera que su oponente se mueva, puede hacer nuevos movimientos para predecir cómo el juego podría proceder y formular su estrategia.",
             "movelist": "Hablando de exploración, aquí puedes ver una lista de todos los movimientos realizados en el juego. Esto también incluirá los estados futuros previstos que hayas explorado. Mientras exploras, el estado actual del juego aparecerá resaltado con un recuadro. Puedes utilizar los botones situados encima de la lista de movimientos para desplazarte. También puedes usar las teclas de flecha y las teclas Inicio y Fin.",
-            "settings": "Y finalmente, abre la configuración de tu usuario para cambiar tu perfil, preferencias de notificación y ajustes de exploración. Usted puede deshabilitar estos tours allí también.",
+            "settings": "Y finalmente, abre los ajustes para cambiar tu perfil, preferencias de notación, y ajustes de exploración. Puede deshabilitar estos torneos también allí.",
             "status": "En el área de estado se le dirá si cualquier variante está activa para este juego, así como otros datos específicos del juego como puntuaciones o número de piezas en mano.",
-            "welcome": "Esto es donde la acción pasa! La pantalla de juego para cada juego está estructurada la misma manera. El nombre del juego siempre parecerá aquí, frente y centro, junto con a cualesquier descriptors les gusta si el juego es parte de un torneo."
+            "welcome": "¡Esto es donde la acción sucede! La pantalla de juego para cada juego está estructurada de la misma manera. El nombre del juego siempre aparecerá aquí, frente y centro, junto con cualesquiera descriptores si el juego es parte de un torneo."
         }
     },
     "Tournament": {
@@ -862,8 +862,8 @@
         "RecentlyCompleted": "Torneos recientemente completados",
         "Score": "Puntuación",
         "Starts": "Inicio del torneo",
-        "StartsWhen4": "Dentro de un día de llegar a 4 participantes",
-        "StartsWhenPreviousDone": "Una semana después del final del torneo actual",
+        "StartsWhen4": "Dentro de un día de culminar 4 participantes",
+        "StartsWhenPreviousDone": "Una semana tras el final del torneo actual",
         "Started": "Fecha iniciada",
         "TieBreakHelp": "Suma de los oponentes derrotados",
         "VariantsName": "{{metaGame}} Torneo ({{variants}})",
@@ -899,5 +899,8 @@
     "RatedPlayersCount_other": "Jugadores rankeados",
     "SelectOpponents_one": "Seleccionar un oponente",
     "SelectOpponents_many": "Seleccionar a un o varios oponentes",
-    "SelectOpponents_other": "Seleccionar {{count}} oponentes"
+    "SelectOpponents_other": "Seleccionar {{count}} oponentes",
+    "StandingChallengesCount_one": "abrir desafío",
+    "StandingChallengesCount_many": "abrir desafíos",
+    "StandingChallengesCount_other": "abrir desafíos"
 }
