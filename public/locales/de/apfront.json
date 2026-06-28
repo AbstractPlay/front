@@ -1,9 +1,9 @@
 {
-    "404": "Die angeforderte Seite wurde nicht gefunden",
+    "404": "404 Nicht Gefunden",
     "About": "Über uns",
     "Accept": "Akzeptieren",
     "Active": "Aktiv",
-    "AcceptDraw": "Ich akzeptiere das Angebot zum Unentschieden",
+    "AcceptDraw": "Unentschieden akzeptieren",
     "Accepted": "Akzeptiert!",
     "All": "Alle",
     "AlternativeDisplays": "Weitere Anzeigemöglichkeiten",
@@ -26,7 +26,7 @@
         },
         "pigs": {
             "back": "Zurück bewegen",
-            "forward": "Forwärts bewegen",
+            "forward": "Vorwärts bewegen",
             "left": "Vorwärts, links bewegen",
             "right": "Vorwärts, rechts bewegen",
             "cw": "Im Uhrzeigersinn drehen",
@@ -35,7 +35,7 @@
             "hit": "Die Nase schwingen"
         },
         "cifra": {
-            "lt": "Hell, Oben",
+            "lt": "Hell, oben",
             "lb": "Hell, unten",
             "dt": "Dunkel, oben",
             "db": "Dunkel, unten",
@@ -45,10 +45,11 @@
             "dr": "Dunkel, rechts"
         },
         "arimaa": {
-            "gold99": "Schnelle Konfiguration",
+            "gold99": "Schnelle Einrichtung",
             "silver99e7": "Schnelle Einrichtung, Elefant E7",
             "silver99d7": "Schnelle Einrichtung, Elefant D7"
-        }
+        },
+        "swap": "Farben wechseln"
     },
     "Cancel": "Abbrechen",
     "CanPie": "Dieser Spieler hat die Möglichkeit, die Sitzplätze zu tauschen.",
@@ -65,7 +66,7 @@
         },
         "board>connect": {
             "description": "Beschreibt, wie sich die Zellen des Spielbrettes miteinander verbinden",
-            "full": "Spielbrett > Vernetzung",
+            "full": "Spielbrett > Verbindungen",
             "tag": "Verbindungen des Brettes"
         },
         "board>connect>hex": {
@@ -94,7 +95,7 @@
             "tag": "Verbindung: Rect"
         },
         "board>connect>snub": {
-            "description": "Die Zellen bilden eine schiefrechteckige Matrix",
+            "description": "Die Zellen verbinden sich zu einer schiefrechteckige Matrix",
             "full": "Spielbrett > Verbindungen > Schiefrechteckig",
             "tag": "Verbindung: SchReEck"
         },
@@ -114,7 +115,7 @@
             "tag": "Spielbrett: Keins"
         },
         "board>other": {
-            "description": "Das Spielbrett ist außergewöhnlich",
+            "description": "Das Spielbrett ist einzigartig",
             "full": "Spielbrett > Andere",
             "tag": "Spielbrett: Andere"
         },
@@ -144,7 +145,7 @@
             "tag": "Form: Oct"
         },
         "board>shape>other": {
-            "description": "Das Spielbrett ist individuell",
+            "description": "Das Spielbrett ist einzigartig geformt",
             "full": "Spielbrett > Form > Andere",
             "tag": "Form: Andere"
         },
@@ -194,7 +195,7 @@
             "tag": "C: Shibumi"
         },
         "components>simple": {
-            "description": "Gespielt mit einfachen, gleichgroßen Stücken, die oft stapelbar sind und manchmal viele Farben haben",
+            "description": "Gespielt mit einfachen, gleichgroßen Spielsteinen, die oft stapelbar sind und manchmal viele Farben haben",
             "full": "Teile > Einfach",
             "tag": "C: Einfach"
         },
@@ -209,7 +210,89 @@
             "tag": "C: Einfach, 2 pro"
         },
         "components>simple>1c": {
-            "description": "Einfarbige Stücke"
+            "description": "Einfarbige Spielsteine",
+            "full": "Teile > Einfach > 1 Farbe",
+            "tag": "C: Einfach, 1 Farbe"
+        },
+        "components>simple>2c": {
+            "description": "Zwei Farben von Spielsteinen",
+            "full": "Teile > Einfach > 2 Farben",
+            "tag": "C: Einfach, 2 Farben"
+        },
+        "components>simple>3c": {
+            "full": "Teile > Einfach > 3 Farben",
+            "description": "Drei Farben von Spielsteinen",
+            "tag": "C: Einfach, 3 Farben"
+        },
+        "components>simple>4c": {
+            "full": "Teile > Einfach > 4 Farben",
+            "description": "Vier Farben von Spielsteinen",
+            "tag": "C: Einfach, 4 Farben"
+        },
+        "components>simple>5c": {
+            "full": "Teile > Einfach > 5 Farben",
+            "description": "Fünf Farben von Spielsteinen",
+            "tag": "C: Einfach, 5 Farben"
+        },
+        "components>simple>7c": {
+            "full": "Teile > Einfach > 7 Farben",
+            "description": "Sieben Farben von Spielsteinen",
+            "tag": "C: Einfach, 7 Farben"
+        },
+        "components>simple>pnp": {
+            "description": "Mit Papier und Stift spielbar",
+            "full": "Teile > Einfach > Papier & Stift",
+            "tag": "C: Einfach, P&S"
+        },
+        "goal>annihilate": {
+            "description": "Zerstöre alle gegnerischen Spielsteine",
+            "full": "Ziel > Zerstörung",
+            "tag": "G: Zerstörung"
+        },
+        "goal>area": {
+            "description": "Kontrolliere mehr Fläche (oder bestimmte Abschnitte mit bestimmten Stärken) als dein Gegner",
+            "full": "Ziel > Flächenkontrolle",
+            "tag": "G: Flächenkontrolle"
+        },
+        "goal>arrange": {
+            "description": "Ordne Spielsteine in bestimmten Formen oder Längen an (z.B. n in einer Reihe)",
+            "full": "Ziel > Anordnung",
+            "tag": "G: Anordnung"
+        },
+        "goal>breakthrough": {
+            "description": "Erreiche gegnerische Heimreihe oder -fläche mit ausreichender Stärke",
+            "full": "Ziel > Durchbruch",
+            "tag": "G: Durchbruch"
+        },
+        "goal>connect": {
+            "description": "Verbinde bestimmte Kanten des Spielbretts oder von Flächen",
+            "full": "Ziel > Verbindung",
+            "tag": "G: Verbindung"
+        },
+        "goal>cripple": {
+            "description": "Eliminiere kritische Mehrheit oder bestimmte Untereinheit von gegnerischen Spielsteinen",
+            "full": "Ziel > Schwächen",
+            "tag": "G: Schwächen"
+        },
+        "goal>evacuate": {
+            "description": "Evakuiere deine Spielsteine von Spielbrett",
+            "full": "Ziel > Evakuierung",
+            "tag": "G: Evakuierung"
+        },
+        "goal>immobilize": {
+            "description": "Mache deinen Gegner bewegungsunfähig",
+            "full": "Ziel > Immobilisierung",
+            "tag": "G: Immobilisierung"
+        },
+        "goal>isolate": {
+            "description": "Isoliere einen oder eine Untereinheit an Spielsteinen auf bestimmte Weise",
+            "full": "Ziel > Isolierung",
+            "tag": "G: Isolierung"
+        },
+        "goal>majority": {
+            "description": "Habe mehr Spielsteine als dein Gegner",
+            "full": "Ziel > Mehrheit",
+            "tag": "G: Mehrheit"
         }
     }
 }
