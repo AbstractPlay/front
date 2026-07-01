@@ -81,25 +81,10 @@ function RenderOptionsModal(props) {
   const gameSettings = props.gameSettings;
   const show = props.show;
   const [display, displaySetter] = useState(null);
-  const [color, colorSetter] = useState(null);
-  const [colorLevel, colorLevelSetter] = useState(null);
   const [annotate, annotateSetter] = useState(null);
   const [annotateLevel, annotateLevelSetter] = useState(null);
   const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
-  const [paletteName, paletteNameSetter] = useState(null);
-
-  useEffect(() => {
-    if (
-      globalMe !== null &&
-      globalMe.palettes !== null &&
-      globalMe.palettes.length !== 0 &&
-      (paletteName === null ||
-        !globalMe.palettes.map((p) => p.name).includes(paletteName))
-    ) {
-      paletteNameSetter(globalMe.palettes[0].name);
-    }
-  }, [globalMe, paletteName]);
 
   useEffect(() => {
     const displaySetting = getSettingAndLevel(
@@ -110,15 +95,6 @@ function RenderOptionsModal(props) {
       metaGame
     );
     displaySetter(displaySetting[0]);
-    const colorSetting = getSettingAndLevel(
-      "color",
-      "standard",
-      gameSettings,
-      settings,
-      metaGame
-    );
-    colorSetter(colorSetting[0]);
-    colorLevelSetter(colorSetting[1]);
     const annotateSetting = getSettingAndLevel(
       "annotate",
       true,
@@ -136,22 +112,6 @@ function RenderOptionsModal(props) {
       displaySetter(display);
     } else {
       displaySetter(null);
-    }
-  };
-
-  const handleColorChange = (color, checked) => {
-    if (checked) {
-      colorSetter(color);
-    } else {
-      colorSetter(null);
-    }
-  };
-
-  const handleColorLevelChange = (level, checked) => {
-    if (checked) {
-      colorLevelSetter(level);
-    } else {
-      colorLevelSetter(null);
     }
   };
 
@@ -175,16 +135,6 @@ function RenderOptionsModal(props) {
       "display",
       "meta",
       display,
-      newGameSettings,
-      newUserSettings,
-      metaGame
-    );
-    [newUserSettings, newGameSettings] = updateSettings(
-      "color",
-      colorLevel,
-      color !== "standard" && color !== "blind"
-        ? paletteName || "standard"
-        : color,
       newGameSettings,
       newUserSettings,
       metaGame
@@ -285,116 +235,6 @@ function RenderOptionsModal(props) {
         ) : (
           ""
         )}
-        <div className="field">
-          <label className="label">{t("ChooseColors")}</label>
-          <div className="control">
-            <label className="radio">
-              <input
-                type="radio"
-                name="playerfill"
-                value="standard"
-                checked={color === "standard"}
-                onChange={(e) =>
-                  handleColorChange(e.target.value, e.target.checked)
-                }
-              />
-              {t("StandardColors")}
-            </label>
-          </div>
-          <div className="control">
-            <label className="radio">
-              <input
-                type="radio"
-                name="playerfill"
-                value="blind"
-                checked={color === "blind"}
-                onChange={(e) =>
-                  handleColorChange(e.target.value, e.target.checked)
-                }
-              />
-              {t("ColorBlind")}
-            </label>
-          </div>
-          {globalMe === null ||
-          globalMe.palettes === null ||
-          globalMe.palettes.length === 0 ? null : (
-            <>
-              <div className="control">
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="playerfill"
-                    value="custom"
-                    checked={color !== "standard" && color !== "blind"}
-                    onChange={(e) =>
-                      handleColorChange(e.target.value, e.target.checked)
-                    }
-                  />
-                  {t("Custom")}
-                </label>
-              </div>
-              <div className="control">
-                <div className="select">
-                  <select
-                    defaultValue={paletteName}
-                    onChange={(e) => paletteNameSetter(e.target.value)}
-                  >
-                    {globalMe.palettes.map(({ name }) => (
-                      <option value={name} key={`paletteNames|${name}`}>
-                        {name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-        <div className="field indentedContainer">
-          <label className="label">{t("Level")}</label>
-          <div className="control">
-            <label className="radio">
-              <input
-                type="radio"
-                name="playerfilllevel"
-                value="all"
-                checked={colorLevel === "all"}
-                onChange={(e) =>
-                  handleColorLevelChange(e.target.value, e.target.checked)
-                }
-              />
-              {t("LevelAll")}
-            </label>
-          </div>
-          <div className="control">
-            <label className="radio">
-              <input
-                type="radio"
-                name="playerfilllevel"
-                value="meta"
-                checked={colorLevel === "meta"}
-                onChange={(e) =>
-                  handleColorLevelChange(e.target.value, e.target.checked)
-                }
-              />
-              {t("LevelMetaGame", { game: metaName })}
-            </label>
-          </div>
-          <div className="control">
-            <label className="radio">
-              <input
-                type="radio"
-                name="playerfilllevel"
-                value="game"
-                checked={colorLevel === "game"}
-                onChange={(e) =>
-                  handleColorLevelChange(e.target.value, e.target.checked)
-                }
-              />
-              {t("LevelGame")}
-            </label>
-          </div>
-        </div>
         <div className="field">
           <div className="control">
             <label className="checkbox">

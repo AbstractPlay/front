@@ -162,7 +162,7 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
         variants.push(variant);
       }
     }
-    console.log("About to send the following variants:", variants);
+    // console.log("About to send the following variants:", variants);
     variantsSetter(variants.filter((v) => !v.startsWith("#")));
   }, [groupVariants, nonGroupVariants, variantsSetter]);
 

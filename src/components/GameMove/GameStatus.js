@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
@@ -43,6 +43,21 @@ function GameStatus({
 
   const { t } = useTranslation();
 
+  const displayScores = useMemo(() => {
+    if (
+      globalMe?.settings?.all?.hideSpoilers &&
+      !game?.gameOver &&
+      status?.scores?.length > 0
+    ) {
+      return status.scores.filter((s) => s.spoiler !== true);
+    }
+    return status?.scores ?? [];
+  }, [
+    globalMe?.settings?.all?.hideSpoilers,
+    game?.gameOver,
+    status?.scores,
+  ]);
+
   if (
     !game ||
     game.colors === undefined ||
@@ -54,16 +69,6 @@ function GameStatus({
   ) {
     return <div></div>;
   } else {
-    // console.log("Statuses");
-    // console.log(status);
-    // hide spoilers
-    if (
-      globalMe?.settings?.all?.hideSpoilers &&
-      !game.gameOver &&
-      status?.scores?.length > 0
-    ) {
-      status.scores = status.scores.filter((s) => s.spoiler !== true);
-    }
     let stashes = [];
     let handlers = [];
     if (game.playerStashes) {
@@ -125,9 +130,9 @@ function GameStatus({
             </tbody>
           </table>
         )}
-        {status.scores.length === 0
+        {displayScores.length === 0
           ? ""
-          : status.scores.map((scores, i) => (
+          : displayScores.map((scores, i) => (
               <div
                 key={i}
                 style={{ overflowX: "auto", scrollbarWidth: "thin" }}

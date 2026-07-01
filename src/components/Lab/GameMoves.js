@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, Fragment } from "react";
 import { useTranslation } from "react-i18next";
+import { useStore } from "../../stores";
+import BotAwareName from "../Bots/BotAwareName";
 
 function useEventListener(eventName, handler, element = window) {
   const savedHandler = useRef();
@@ -126,14 +128,17 @@ function GameMoves(props) {
   const { t } = useTranslation();
   let focus = props.focus;
   let game = props.game;
+  let neverExplore = props.noExplore;
   let exploration = props.exploration;
+  const getFocusNode = props.getFocusNode;
   let handleGameMoveClick = props.handleGameMoveClick;
+  const allUsers = useStore((state) => state.users);
 
   useEventListener("keydown", keyDownHandler);
 
   const scroll = () => {
     // 300 is the maxHeight of the table from the CSS (for .movesTable)
-    let maxHeight = 600;
+    let maxHeight = 300;
     if (focusRowRef.current) {
       // If there's a horizontal scrollbar, adjust maxHeight
       if (tableRef.current.scrollWidth > tableRef.current.clientWidth) {
@@ -173,7 +178,13 @@ function GameMoves(props) {
 
   useEffect(() => {
     scroll();
-  });
+  }, [
+    focus?.moveNumber,
+    focus?.exPath?.join(","),
+    exploration?.length,
+    game?.gameOver,
+    props.explorationVersion,
+  ]);
 
   function nextVarFocus(curNumVariations) {
     if (!game.gameOver || focus.exPath.length > 1) {
@@ -240,7 +251,6 @@ function GameMoves(props) {
       document.activeElement.id === "enterAMove" ||
       document.activeElement.id === "enterAComment" ||
       document.activeElement.id === "enterANote" ||
-      document.activeElement.id === "paletteName" ||
       document.activeElement.id === "myCustomCSS" ||
       exploration === null
     )
@@ -308,7 +318,10 @@ function GameMoves(props) {
           className={m.class}
           onClick={() => props.handleGameMoveClick(m.path)}
         >
-          {m.move}
+          {m.move.endsWith("...") ? m.move.slice(0, -3) : m.move}
+          {m.move.endsWith("...") && (
+            <span style={{ fontSize: "1.3em", fontWeight: "bold" }}>...</span>
+          )}
           {m.outcome === -1 ? null : game.colors[m.outcome].isImage ? (
             <img
               className="winnerImage"
@@ -339,6 +352,9 @@ function GameMoves(props) {
               </text>
             </svg>
           )}
+          {m.premove ? (
+            <i className="fa fa-clock-o premoveIndicator"></i>
+          ) : null}
           {m.commented === "filled" ? (
             <i className="fa fa-comment smallicon"></i>
           ) : m.commented === "outline" ? (
@@ -351,30 +367,79 @@ function GameMoves(props) {
 
   if (focus !== null) {
     // Prepare header
-    let numcolumns = 2;
+    const simul = game.simultaneous;
+    let numcolumns = simul ? 1 : game.numPlayers;
     let header = [];
-    for (let i = 0; i < numcolumns; i++) {
-      let player = `Player ${i + 1}`;
-      let img = null;
-      if (game.colors !== undefined) img = game.colors[i];
+    if (simul) {
       header.push(
-        <th colSpan="2" key={"th-" + i}>
+        <th colSpan="2" key="th-1">
           <div className="player">
-            {img === null ? (
-              ""
-            ) : img.isImage ? (
-              <img
-                className="toMoveImage"
-                src={`data:image/svg+xml;utf8,${encodeURIComponent(img.value)}`}
-                alt=""
-              />
-            ) : (
-              <span style={{ verticalAlign: "middle" }}>{img.value + ":"}</span>
-            )}
-            <span className="playerName">{player}</span>
+            {game.players.map((p, i) => (
+              <Fragment key={i}>
+                {game.colors === undefined ? (
+                  ""
+                ) : game.colors[i].isImage ? (
+                  <img
+                    className="toMoveImage"
+                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                      game.colors[i].value
+                    )}`}
+                    alt=""
+                  />
+                ) : (
+                  <span style={{ verticalAlign: "middle" }}>
+                    {game.colors[i].value + ":"}
+                  </span>
+                )}
+                <span className="playerName">
+                  <BotAwareName
+                    id={p.id}
+                    name={p.name}
+                    users={allUsers}
+                    link
+                  />
+                </span>
+                {i < game.numPlayers - 1 ? <span>,&nbsp;</span> : ""}
+              </Fragment>
+            ))}
           </div>
         </th>
       );
+    } else {
+      for (let i = 0; i < numcolumns; i++) {
+        const playerRec = game.players[i];
+        let img = null;
+        if (game.colors !== undefined) img = game.colors[i];
+        header.push(
+          <th colSpan="2" key={"th-" + i}>
+            <div className="player">
+              {img === null ? (
+                ""
+              ) : img.isImage ? (
+                <img
+                  className="toMoveImage"
+                  src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                    img.value
+                  )}`}
+                  alt=""
+                />
+              ) : (
+                <span style={{ verticalAlign: "middle" }}>
+                  {img.value + ":"}
+                </span>
+              )}
+              <span className="playerName">
+                <BotAwareName
+                  id={playerRec.id}
+                  name={playerRec.name}
+                  users={allUsers}
+                  link
+                />
+              </span>
+            </div>
+          </th>
+        );
+      }
     }
     // Prepare the list of moves
     let moveRows = [];
@@ -384,7 +449,13 @@ function GameMoves(props) {
     let focusRow = 0;
     let numRows = 0;
     if (exploration !== null) {
-      if (!game.gameOver) {
+      const atTipWithNoBranches =
+        !game.gameOver &&
+        focus.moveNumber === exploration.length - 1 &&
+        focus.exPath.length === 0 &&
+        exploration[focus.moveNumber].children.length === 0;
+
+      if (atTipWithNoBranches) {
         for (let i = 1; i < exploration.length; i++) {
           let className = "gameMove";
           if (
@@ -425,6 +496,10 @@ function GameMoves(props) {
               {
                 class: className,
                 outcome: node.outcome,
+                premove:
+                  node.premove ||
+                  node?.children?.some((n) => n.premove) ||
+                  false,
                 commented:
                   node.comment && node.comment.length > 0
                     ? "filled"
@@ -448,6 +523,8 @@ function GameMoves(props) {
               next.push({
                 class: className,
                 outcome: c.outcome,
+                premove:
+                  c.premove || c?.children?.some((n) => n.premove) || false,
                 commented:
                   c.comment && c.comment.length > 0
                     ? "filled"
@@ -596,7 +673,18 @@ function GameMoves(props) {
           //   let clName = j === 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
           let movenum = numcolumns * i + j;
           row.push(
-            <td key={"td0-" + i + "-" + j} className="gameMoveNums">
+            <td
+              key={"td0-" + i + "-" + j}
+              className="gameMoveNums"
+              id={
+                path !== null &&
+                path !== undefined &&
+                path[movenum] !== undefined &&
+                path[movenum][0].class.includes("gameMoveFocus")
+                  ? "focusedMoveNum"
+                  : ""
+              }
+            >
               {movenum >= path.length ? "" : `${movenum + 1}`}
             </td>
           );
@@ -621,6 +709,11 @@ function GameMoves(props) {
                       ))}
                     </div>
                   )}
+                  {game.pieInvoked && i === 0 && j === 1 ? (
+                    <span className="icon">
+                      <i className="fa fa-pie-chart" aria-hidden="true"></i>
+                    </span>
+                  ) : null}
                 </div>
               </td>
             );
@@ -633,10 +726,7 @@ function GameMoves(props) {
     }
 
     return (
-      <div>
-        <h1 className="subtitle lined">
-          <span>{t("Moves")}</span>
-        </h1>
+      <>
         <div className="field is-grouped" id="MoveTreeBtnBar">
           <button
             className="button is-small tooltipped"
@@ -663,30 +753,34 @@ function GameMoves(props) {
             <i className="fa fa-angle-left"></i>
             <span className="tooltiptext">{t("GoPrev")}</span>
           </button>
-          <button
-            className="button is-small tooltipped"
-            disabled={curNumVariations > 1 ? false : true}
-            onClick={
-              curNumVariations > 1
-                ? () => handleGameMoveClick(nextVarFocus(curNumVariations))
-                : undefined
-            }
-          >
-            <i className="fa fa-angle-up"></i>
-            <span className="tooltiptext">{t("GoNextVar")}</span>
-          </button>
-          <button
-            className="button is-small tooltipped"
-            disabled={curNumVariations > 1 ? false : true}
-            onClick={
-              curNumVariations > 1
-                ? () => handleGameMoveClick(prevVarFocus(curNumVariations))
-                : undefined
-            }
-          >
-            <i className="fa fa-angle-down"></i>
-            <span className="tooltiptext">{t("GoPrevVar")}</span>
-          </button>
+          {neverExplore ? null : (
+            <button
+              className="button is-small tooltipped"
+              disabled={curNumVariations > 1 ? false : true}
+              onClick={
+                curNumVariations > 1
+                  ? () => handleGameMoveClick(nextVarFocus(curNumVariations))
+                  : undefined
+              }
+            >
+              <i className="fa fa-angle-up"></i>
+              <span className="tooltiptext">{t("GoNextVar")}</span>
+            </button>
+          )}
+          {neverExplore ? null : (
+            <button
+              className="button is-small tooltipped"
+              disabled={curNumVariations > 1 ? false : true}
+              onClick={
+                curNumVariations > 1
+                  ? () => handleGameMoveClick(prevVarFocus(curNumVariations))
+                  : undefined
+              }
+            >
+              <i className="fa fa-angle-down"></i>
+              <span className="tooltiptext">{t("GoPrevVar")}</span>
+            </button>
+          )}
           <button
             className="button is-small tooltipped"
             disabled={
@@ -728,7 +822,7 @@ function GameMoves(props) {
             <span className="tooltiptext">{t("GoCurrent")}</span>
           </button>
         </div>
-        <div className="movesTablePlayground" ref={tableRef}>
+        <div className="movesTable" ref={tableRef}>
           <table className="table apTable is-narrow">
             <tbody>
               <tr ref={headerRef}>{header}</tr>
@@ -754,7 +848,7 @@ function GameMoves(props) {
             </tbody>
           </table>
         </div>
-      </div>
+      </>
     );
   } else {
     return (

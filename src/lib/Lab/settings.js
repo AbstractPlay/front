@@ -1,8 +1,8 @@
-import { GameFactory } from "@abstractplay/gameslib";
+import { GameFactory, gameinfo } from "@abstractplay/gameslib";
 import { renderglyph } from "@abstractplay/renderer";
 import { setRendererColourOpts } from "../setRendererColourOpts";
 
-function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
+export function getLabSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
     return gameSettings[setting];
   } else if (userSettings !== undefined) {
@@ -24,16 +24,6 @@ function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   }
 }
 
-export function resolveDisplay(
-  gameSettings,
-  userSettings,
-  metaGame,
-  sessionOverride
-) {
-  if (sessionOverride != null) return sessionOverride;
-  return getSetting("display", undefined, gameSettings, userSettings, metaGame);
-}
-
 export function processNewSettings(
   newGameSettings,
   newUserSettings,
@@ -49,21 +39,15 @@ export function processNewSettings(
   if (gameRef.current !== null) {
     var newSettings = {};
     const game = gameRef.current;
-    newSettings.display = getSetting(
+    newSettings.display = getLabSetting(
       "display",
       undefined,
       newGameSettings,
       newUserSettings,
       game.metaGame
     );
-    newSettings.color = getSetting(
-      "color",
-      "standard",
-      newGameSettings,
-      newUserSettings,
-      game.metaGame
-    );
-    newSettings.annotate = getSetting(
+    newSettings.color = "standard";
+    newSettings.annotate = getLabSetting(
       "annotate",
       true,
       newGameSettings,
@@ -112,4 +96,25 @@ export function setupColors(settings, game, globalMe, colourContext, node) {
       };
     }
   });
+}
+
+export function getAltDisplaysForMetaGame(metaGame) {
+  const info = gameinfo.get(metaGame);
+  if (!info) return [];
+  let gameEngine;
+  if (info.playercounts.length > 1) {
+    gameEngine = GameFactory(info.uid, 2);
+  } else {
+    gameEngine = GameFactory(info.uid);
+  }
+  return gameEngine.alternativeDisplays() ?? [];
+}
+
+export function nextDisplayOption(current, altDisplays) {
+  const options = ["default", ...altDisplays.map((d) => d.uid)];
+  const normalized =
+    current === undefined || current === null ? "default" : current;
+  let idx = options.indexOf(normalized);
+  if (idx < 0) idx = 0;
+  return options[(idx + 1) % options.length];
 }

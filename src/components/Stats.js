@@ -186,13 +186,10 @@ function Stats(props) {
               return <Component key={`${code}|component`} />;
             } else {
               return (
-                <>
+                <React.Fragment key={code}>
                   {explanations.find(([c]) => c === code) ===
                   undefined ? null : (
-                    <div
-                      style={{ fontSize: "smaller", paddingBottom: "1em" }}
-                      key={`${code}|explanation`}
-                    >
+                    <div style={{ fontSize: "smaller", paddingBottom: "1em" }}>
                       <ReactMarkdown
                         rehypePlugins={[rehypeRaw]}
                         className="content"
@@ -201,15 +198,12 @@ function Stats(props) {
                       </ReactMarkdown>
                     </div>
                   )}
-                  <div className="columns" key={`${code}|columns`}>
-                    <div
-                      className="column is-one-half is-offset-one-quarter"
-                      key={`${code}|column`}
-                    >
-                      <Component key={`${code}|component`} />
+                  <div className="columns">
+                    <div className="column is-one-half is-offset-one-quarter">
+                      <Component />
                     </div>
                   </div>
-                </>
+                </React.Fragment>
               );
             }
           } else {

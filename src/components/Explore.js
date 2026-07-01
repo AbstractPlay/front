@@ -149,9 +149,12 @@ function Explore(props) {
           <div className="container">
             <div className="control">
               <div className="select">
-                <select onChange={(e) => handleSelChange(e.target.value)}>
+                <select
+                  value={selected}
+                  onChange={(e) => handleSelChange(e.target.value)}
+                >
                   {components.map(([key, cfg]) => (
-                    <option key={key} value={key} selected={selected === key}>
+                    <option key={key} value={key}>
                       {cfg.title}
                     </option>
                   ))}

@@ -15,17 +15,13 @@ function Board({
   stackImage,
   boardImage,
   gameEngine,
-  gameNote,
   handleRotate,
   handleUpdateRenderOptions,
   handleCycleAltDisplay,
   hasAltDisplays,
   screenWidth,
   showGameDetailsSetter,
-  showGameNoteSetter,
   showGameDumpSetter,
-  showCustomCSSSetter,
-  showInjectSetter,
   verticalLayout,
   verticalLayoutSetter,
   locked,
@@ -245,23 +241,6 @@ function Board({
         >
           <i className="fa fa-arrows-alt"></i>
         </button>
-        {!globalMe ? null : (
-          <button
-            className="fabtn align-right"
-            onClick={() => showGameNoteSetter(true)}
-            title={t("GameNoteModal")}
-          >
-            {gameNote === undefined ||
-            gameNote === null ||
-            gameNote.length === 0 ? (
-              <i className="fa fa-sticky-note"></i>
-            ) : (
-              <span className="highlight">
-                <i className="fa fa-sticky-note"></i>
-              </span>
-            )}
-          </button>
-        )}
         {metaGame !== "homeworlds" ? null : (
           <button
             className="fabtn align-right"
@@ -279,15 +258,6 @@ function Board({
           title={t("DebugModal")}
         >
           <i className="fa fa-bug"></i>
-        </button>
-        <button
-          className="fabtn align-right"
-          onClick={() => {
-            showCustomCSSSetter(true);
-          }}
-          title={t("CustomCSS")}
-        >
-          <i className="fa fa-css3"></i>
         </button>
         {!globalMe ? null : (
           <button
@@ -309,19 +279,6 @@ function Board({
             ) : (
               <i className="fa fa-arrows-v"></i>
             )}
-          </button>
-        )}
-        {!globalMe || globalMe.admin !== true ? (
-          ""
-        ) : (
-          <button
-            className="fabtn align-right"
-            onClick={() => {
-              showInjectSetter(true);
-            }}
-            title={"Inject state"}
-          >
-            <i className="fa fa-magic"></i>
           </button>
         )}
       </div>

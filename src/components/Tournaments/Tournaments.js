@@ -999,28 +999,21 @@ function Tournaments(props) {
         <div className="control" style={{ paddingBottom: "1em" }}>
           <div className="select is-small">
             <select
+              value={filterMeta ?? ""}
               onChange={(e) =>
                 e.target.value === ""
                   ? filterMetaSetter(null)
                   : filterMetaSetter(e.target.value)
               }
             >
-              <option
-                value=""
-                key="filterMetaBlank"
-                selected={filterMeta === null}
-              >
+              <option value="" key="filterMetaBlank">
                 --Show all--
               </option>
               {[...gameinfo.values()]
                 .filter((rec) => !rec.flags.includes("experimental"))
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((rec) => (
-                  <option
-                    value={rec.uid}
-                    key={"filterMeta" + rec.uid}
-                    selected={filterMeta === rec.uid}
-                  >
+                  <option value={rec.uid} key={"filterMeta" + rec.uid}>
                     {rec.name}
                   </option>
                 ))}

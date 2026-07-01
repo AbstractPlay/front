@@ -1,5 +1,5 @@
 import React, { useState, Suspense, useEffect, lazy } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import {
   API_ENDPOINT_OPEN,
@@ -19,7 +19,7 @@ import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
 import Tournament from "../components/Tournaments/Tournament";
-import Playground from "../components/Playground";
+import Lab from "../components/Lab/Lab";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import News from "../components/News";
@@ -277,7 +277,8 @@ function Bones(props) {
                 path="/"
                 element={<Welcome token={token} update={update} />}
               />
-              <Route path="/playground" element={<Playground />} />
+              <Route path="/playground" element={<Navigate to="/lab" replace />} />
+              <Route path="/lab" element={<Lab />} />
               <Route path="/tournaments/:metaGame?" element={<Tournaments />} />
               <Route path="/play" element={<Play />} />
               <Route path="/customize/:metaGame" element={<Customize />} />

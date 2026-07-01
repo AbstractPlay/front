@@ -1,6 +1,8 @@
+import React, { useMemo } from "react";
 import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
+import { formatPlayerDisplayName } from "../Bots/botUtils";
 import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
 
 function renderGlyph(
@@ -25,18 +27,36 @@ function renderGlyph(
   return renderglyph(glyph, player, options);
 }
 
-function GameStatus(props) {
-  const status = props.status;
-  console.log("Status", status);
-  const settings = props.settings;
-  const game = props.game;
-  console.log("Game", game);
-  const canExplore = props.canExplore;
-  const handleStashClick = props.handleStashClick;
+function GameStatus({
+  status,
+  settings,
+  game,
+  canExplore,
+  handleStashClick,
+  locked,
+  setLocked,
+  setRefresh,
+}) {
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const colourContext = useStore((state) => state.colourContext);
 
   const { t } = useTranslation();
+
+  const displayScores = useMemo(() => {
+    if (
+      globalMe?.settings?.all?.hideSpoilers &&
+      !game?.gameOver &&
+      status?.scores?.length > 0
+    ) {
+      return status.scores.filter((s) => s.spoiler !== true);
+    }
+    return status?.scores ?? [];
+  }, [
+    globalMe?.settings?.all?.hideSpoilers,
+    game?.gameOver,
+    status?.scores,
+  ]);
 
   if (
     !game ||
@@ -49,8 +69,6 @@ function GameStatus(props) {
   ) {
     return <div></div>;
   } else {
-    console.log("Statuses");
-    console.log(status);
     let stashes = [];
     let handlers = [];
     if (game.playerStashes) {
@@ -65,10 +83,7 @@ function GameStatus(props) {
       });
     }
     return (
-      <div style={{ marginBottom: "2rem" }} className="tourStatus">
-        <h1 className="subtitle lined">
-          <span>{t("Status")}</span>
-        </h1>
+      <>
         {!game.variants || game.variants.length === 0 ? (
           ""
         ) : (
@@ -115,9 +130,9 @@ function GameStatus(props) {
             </tbody>
           </table>
         )}
-        {status.scores.length === 0
+        {displayScores.length === 0
           ? ""
-          : status.scores.map((scores, i) => (
+          : displayScores.map((scores, i) => (
               <div
                 key={i}
                 style={{ overflowX: "auto", scrollbarWidth: "thin" }}
@@ -140,7 +155,12 @@ function GameStatus(props) {
                             <span>{game.colors[index].value + ":"}</span>
                           )}
                         </td>
-                        <td>{`Player ${index + 1}`}</td>
+                        <td>
+                          {formatPlayerDisplayName(
+                            game.players[index],
+                            allUsers
+                          )}
+                        </td>
                         <td>{score}</td>
                       </tr>
                     ))}
@@ -170,7 +190,9 @@ function GameStatus(props) {
                         <span>{game.colors[index].value + ":"}</span>
                       )}
                     </td>
-                    <td>{`Player ${index + 1}`}</td>
+                    <td>
+                      {formatPlayerDisplayName(game.players[index], allUsers)}
+                    </td>
                     {stash.map((s, j) => (
                       <td
                         key={"stashentry" + j}
@@ -246,7 +268,7 @@ function GameStatus(props) {
             </div>
           </div>
         )}
-      </div>
+      </>
     );
   }
 }

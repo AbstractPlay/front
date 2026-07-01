@@ -181,7 +181,12 @@ function GameMoves(props) {
 
   useEffect(() => {
     scroll();
-  });
+  }, [
+    focus?.moveNumber,
+    focus?.exPath?.join(","),
+    exploration?.length,
+    game?.gameOver,
+  ]);
 
   useEffect(() => {
     let lst = [];
@@ -267,7 +272,6 @@ function GameMoves(props) {
       document.activeElement.id === "enterAMove" ||
       document.activeElement.id === "enterAComment" ||
       document.activeElement.id === "enterANote" ||
-      document.activeElement.id === "paletteName" ||
       document.activeElement.id === "myCustomCSS" ||
       exploration === null
     )
@@ -862,15 +866,10 @@ function GameMoves(props) {
         <div className="control">
           <button
             className={`button is-small apButtonNeutral`}
-            onClick={() =>
-              handlePlaygroundExport(
-                getFocusNode(exploration, game, focus).state,
-                focus.moveNumber
-              )
-            }
+            onClick={() => handlePlaygroundExport()}
             disabled={!validGames.find(([uid]) => game.metaGame === uid)}
           >
-            Export to playground
+            {t("ExportToLab")}
           </button>
         </div>
       </>

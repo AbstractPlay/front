@@ -106,27 +106,25 @@ function Navbar(props) {
           {!loggedin ? (
             ""
           ) : (
-            <>
-              <div className="navbar-item">
-                <Link
-                  to="/"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("MyDashboard")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/playground"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("Playground")}
-                </Link>
-              </div>
-            </>
+            <div className="navbar-item">
+              <Link
+                to="/"
+                className="navbar-item"
+                onClick={() => updateBurgerExpanded(false)}
+              >
+                {t("MyDashboard")}
+              </Link>
+            </div>
           )}
+          <div className="navbar-item">
+            <Link
+              to="/lab"
+              className="navbar-item"
+              onClick={() => updateBurgerExpanded(false)}
+            >
+              {t("Lab")}
+            </Link>
+          </div>
           <div className="navbar-item">
             <Link
               to="/games"

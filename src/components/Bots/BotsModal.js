@@ -199,7 +199,7 @@ function BotsModal({ show, onClose }) {
         {bots.length === 0 ? (
           <p className="help">No bots yet.</p>
         ) : (
-          <table className="table is-fullwidth is-hoverable">
+          <table className="table is-fullwidth apTable">
             <thead>
               <tr>
                 <th>Name</th>

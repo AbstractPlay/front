@@ -24,7 +24,7 @@ import MiscButtons from "./GameMove/MiscButtons";
 import Board from "./GameMove/Board";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
-import ClipboardCopy from "./GameMove/ClipboardCopy";
+import ClipboardCopy from "../lib/ClipboardCopy";
 import UserChats from "./GameMove/UserChats";
 import Joyride, { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
@@ -59,9 +59,23 @@ import {
   mergePrivateExploration,
   getAllNodeComments,
 } from "../lib/GameMove/exploration";
-import { processNewSettings, setupColors } from "../lib/GameMove/settings";
+import { processNewSettings, setupColors, resolveDisplay } from "../lib/GameMove/settings";
+import {
+  getAltDisplaysForMetaGame,
+  nextDisplayOption,
+} from "../lib/Lab/settings";
+import {
+  readSessionDisplayOverride,
+  writeSessionDisplayOverride,
+  clearSessionDisplayOverride,
+  markGameMovePageReload,
+  isGameMovePageReload,
+} from "../lib/GameMove/sessionDisplay";
 import { setRendererColourOpts } from "../lib/setRendererColourOpts";
 import { setGlyphMapOpt } from "../lib/setGlyphMapOpt";
+import { isLabSupportedGame } from "../lib/Lab/buildGame";
+import { launchLabFromExport } from "../lib/Lab/storage";
+import { serializeSessionExploration } from "../lib/Lab/exploration";
 
 // sets the default order of components in the vertical layouts
 const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
@@ -101,6 +115,8 @@ function GameMove(props) {
   const [userSettings, userSettingsSetter] = useState();
   const [gameSettings, gameSettingsSetter] = useState();
   const [settings, settingsSetter] = useState(null);
+  const [sessionDisplayOverride, sessionDisplayOverrideSetter] = useState(null);
+  const sessionGameIDRef = useRef(null);
   const [rotIncrement, rotIncrementSetter] = useState(0);
   const [comments, commentsSetter] = useState([]);
   const [commentsTooLong, commentsTooLongSetter] = useState(false);
@@ -139,6 +155,15 @@ function GameMove(props) {
   const partialMoveRenderRef = useRef(false);
   const focusRef = useRef();
   focusRef.current = focus;
+  const explorerRef = useRef();
+  const globalMeRef = useRef();
+  const navigateRef = useRef();
+  const displaySettingsRef = useRef();
+  const tRef = useRef();
+  const publishGameColorsRef = useRef();
+  const boardClickHandlerRef = useRef();
+  const moveEntryHandlersRef = useRef({});
+  const handleGameMoveClickRef = useRef();
   // Revisit this moveRef variable. It works, but is it really needed? It was changed to deal with missing dependency warnings on the useEffect that updates the svg board. Is that really needed?
   // Does it have to be a Ref, or can it just be a regular variable? Or even just the state variable?
   const moveRef = useRef();
@@ -158,9 +183,10 @@ function GameMove(props) {
   const [moveNumberParam] = useState(params.get("move"));
   const [nodeidParam] = useState(params.get("nodeid"));
   const navigate = useNavigate();
-  const allUsers = useStore((state) => state.users);
   const colourContext = useStore((state) => state.colourContext);
-  const [colorsChanged, colorsChangedSetter] = useState(0);
+  const [, bumpGameColorsRevision] = useState(0);
+  const [explorationVersion, bumpExplorationVersion] = useState(0);
+  const bumpExploration = () => bumpExplorationVersion((v) => v + 1);
 
   const { t, i18n } = useTranslation();
   // State is passed as a prop from GameMoveWrapper
@@ -168,6 +194,37 @@ function GameMove(props) {
 
   const { metaGame, cbits, gameID } = useParams();
   const cbit = parseInt(cbits, 10);
+
+  const altDisplays = useMemo(
+    () => getAltDisplaysForMetaGame(metaGame),
+    [metaGame]
+  );
+
+  const displaySettings = useMemo(() => {
+    if (!settings) return settings;
+    const display = sessionDisplayOverride ?? settings.display;
+    if (display === settings.display) return settings;
+    return { ...settings, display };
+  }, [settings, sessionDisplayOverride]);
+
+  useEffect(() => {
+    if (sessionGameIDRef.current !== gameID) {
+      sessionDisplayOverrideSetter(readSessionDisplayOverride(gameID));
+      sessionGameIDRef.current = gameID;
+    }
+
+    const handleBeforeUnload = () => {
+      markGameMovePageReload();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (!isGameMovePageReload()) {
+        clearSessionDisplayOverride(gameID);
+      }
+    };
+  }, [gameID]);
   // these are the details that appear in the `i` icon modal
   const gameDeets = gameinfo.get(metaGame);
   let gameEngine;
@@ -236,6 +293,88 @@ function GameMove(props) {
     }
     return ctx;
   }, [colourContext, globalMe, metaGame]);
+
+  const publishGameColors = useCallback(
+    (node) => {
+      const game = gameRef.current;
+      if (!game?.customColours || !displaySettings) return;
+      setupColors(
+        displaySettings,
+        game,
+        globalMe,
+        effectiveColourContext,
+        node
+      );
+      gameRef.current = { ...game, colors: game.colors };
+      bumpGameColorsRevision((v) => v + 1);
+    },
+    [displaySettings, globalMe, effectiveColourContext]
+  );
+
+  explorerRef.current = explorer;
+  globalMeRef.current = globalMe;
+  navigateRef.current = navigate;
+  displaySettingsRef.current = displaySettings;
+  tRef.current = t;
+  publishGameColorsRef.current = publishGameColors;
+
+  boardClickHandlerRef.current = (row, col, piece) => {
+    let node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focusRef.current
+    );
+    let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
+    let result = gameRef.current.simultaneous
+      ? gameEngineTmp.handleClickSimultaneous(
+          moveRef.current.move,
+          row,
+          col,
+          gameRef.current.me + 1,
+          piece
+        )
+      : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
+    result.rendered = moveRef.current.rendered;
+    processNewMove(
+      result,
+      explorerRef.current,
+      globalMeRef.current,
+      focusRef.current,
+      gameRef,
+      movesRef,
+      statusRef,
+      explorationRef.current.nodes,
+      errorMessageRef,
+      partialMoveRenderRef,
+      renderrepSetter,
+      engineRef,
+      errorSetter,
+      focusSetter,
+      moveSetter,
+      displaySettingsRef.current,
+      navigateRef.current
+    );
+    populateChecked(gameRef, engineRef, tRef.current, inCheckSetter);
+    publishGameColorsRef.current({ state: engineRef.current.state() });
+  };
+
+  const moveEntryHandlers = useMemo(
+    () => [
+      (...args) => moveEntryHandlersRef.current.handleMove(...args),
+      (...args) => moveEntryHandlersRef.current.handleMark(...args),
+      (...args) => moveEntryHandlersRef.current.handleSubmit(...args),
+      (...args) => moveEntryHandlersRef.current.handleToSubmit(...args),
+      (...args) => moveEntryHandlersRef.current.handleView(...args),
+      (...args) => moveEntryHandlersRef.current.handleResign(...args),
+      (...args) => moveEntryHandlersRef.current.handleTimeout(...args),
+      (...args) => moveEntryHandlersRef.current.handleReset(...args),
+      (...args) => moveEntryHandlersRef.current.handlePie(...args),
+      (...args) =>
+        moveEntryHandlersRef.current.handleDeleteExploration(...args),
+      (...args) => moveEntryHandlersRef.current.handlePremove(...args),
+    ],
+    []
+  );
 
   useEffect(() => {
     addResource(i18n.language);
@@ -622,186 +761,211 @@ function GameMove(props) {
   }, []);
 
   useEffect(() => {
-    if (dbgame !== null) {
-      // I don't think the gameID check is still needed, but better safe than sorry
-      const exploration =
-        explorationRef.current && explorationRef.current.gameID === dbgame.id
-          ? explorationRef.current.nodes
-          : null;
-      const foc = cloneDeep(focus);
-      const game = dbgame;
-      // Preserve explorer state if we're still on the same game (e.g., color change)
-      // Reset to false if it's a new game or settings changed to "always off"
-      const preserveExplorer =
-        explorationRef.current &&
-        explorationRef.current.gameID === dbgame.id &&
-        globalMe?.settings?.all?.exploration !== -1;
-      setupGame(
-        game,
-        gameRef,
-        globalMe,
-        preserveExplorer ? explorer : false,
-        partialMoveRenderRef,
-        renderrepSetter,
-        engineRef,
-        statusRef,
-        movesRef,
-        focusSetter,
-        explorationRef,
-        moveSetter,
-        gameRecSetter,
-        canPublishSetter,
-        globalMe?.settings?.[game.metaGame]?.display,
-        navigate
-      );
-      if (exploration !== null) {
-        if (explorationRef.current.nodes.length === exploration.length) {
-          let ok = true;
-          for (let i = 0; ok && i < explorationRef.current.nodes.length; i++) {
-            if (exploration[i].move !== explorationRef.current.nodes[i].move) {
-              ok = false;
-            }
+    if (dbgame === null) return;
+
+    const me = globalMeRef.current;
+    const exploration =
+      explorationRef.current && explorationRef.current.gameID === dbgame.id
+        ? explorationRef.current.nodes
+        : null;
+    const foc = cloneDeep(focus);
+    const game = dbgame;
+    const preserveExplorer =
+      explorationRef.current &&
+      explorationRef.current.gameID === dbgame.id &&
+      me?.settings?.all?.exploration !== -1;
+    const perGameSettings =
+      game.me > -1 && me
+        ? game.players.find((p) => p.id === me.id)?.settings
+        : {};
+    const displayForRender = resolveDisplay(
+      perGameSettings,
+      me?.settings,
+      game.metaGame,
+      sessionDisplayOverride
+    );
+    setupGame(
+      game,
+      gameRef,
+      me,
+      preserveExplorer ? explorer : false,
+      partialMoveRenderRef,
+      renderrepSetter,
+      engineRef,
+      statusRef,
+      movesRef,
+      focusSetter,
+      explorationRef,
+      moveSetter,
+      gameRecSetter,
+      canPublishSetter,
+      displayForRender,
+      navigate
+    );
+    if (exploration !== null) {
+      if (explorationRef.current.nodes.length === exploration.length) {
+        let ok = true;
+        for (let i = 0; ok && i < explorationRef.current.nodes.length; i++) {
+          if (exploration[i].move !== explorationRef.current.nodes[i].move) {
+            ok = false;
           }
-          if (ok) {
-            for (let i = 0; i < explorationRef.current.nodes.length; i++) {
-              explorationRef.current.nodes[i].children =
-                exploration[i].children;
-              explorationRef.current.nodes[i].comment = exploration[i].comment;
-              explorationRef.current.nodes[i].commented =
-                exploration[i].commented;
-            }
-            handleGameMoveClick(foc);
-          }
-          // if we got here from the "trigger a refresh" button, we should probably also fetch exploration in case the user is exploring on more than one device
-          explorationFetchingRef.current = false;
-          explorationFetchedSetter(false);
-        } else if (explorationRef.current.nodes.length > exploration.length) {
-          // page refreshed and opponent moved
-          mergeExistingExploration(
-            exploration.length - 1,
-            exploration[exploration.length - 1],
-            explorationRef.current.nodes,
-            gameRef.current,
-            true
-          );
         }
-      }
-      processNewSettings(
-        gameRef.current.me > -1
-          ? game.players.find((p) => p.id === globalMe.id).settings
-          : {},
-        globalMe?.settings,
-        gameRef,
-        settingsSetter,
-        gameSettingsSetter,
-        userSettingsSetter,
-        globalMe,
-        effectiveColourContext
-      );
-
-      // check for note
-      // note should only be defined if the user is logged in and
-      // is the owner of the note.
-      if (
-        "note" in game &&
-        game.note !== undefined &&
-        game.note !== null &&
-        game.note.length > 0
-      ) {
-        gameNoteSetter(game.note);
-        interimNoteSetter(game.note);
-      } else {
-        gameNoteSetter(null);
-        interimNoteSetter("");
-      }
-      populateChecked(gameRef, engineRef, t, inCheckSetter);
-      parentheticalSetter([]);
-      if (
-        "tournament" in game &&
-        game.tournament !== undefined &&
-        game.tournament !== null
-      ) {
-        // Check if tournament reference is already in the new format (metaGame#tournamentId)
-        const tournamentLink = game.tournament.includes("#")
-          ? `/tournament/${game.tournament.replace("#", "/")}`
-          : `/tournament/${game.tournament}?gameId=${game.id}&metaGame=${game.metaGame}`;
-
-        parentheticalSetter((val) => [
-          ...val,
-          <Link to={tournamentLink}>tournament</Link>,
-        ]);
-      }
-      if ("event" in game && game.event !== undefined && game.event !== null) {
-        parentheticalSetter((val) => [
-          ...val,
-          <Link to={`/event/${game.event}`}>event</Link>,
-        ]);
-      }
-      if (game.rated === false) {
-        parentheticalSetter((val) => [...val, "unrated"]);
-      }
-      if (game.noExplore !== undefined && game.noExplore === true) {
-        parentheticalSetter((val) => [...val, "exploration disabled"]);
-      }
-      if (
-        game.toMove !== "" &&
-        !game.players.some((p) => p.id === globalMe?.id)
-      ) {
-        if (game.clockHard) {
-          // If you are viewing someone else's game, and a player has timed out, let the server know.
-          if (Array.isArray(game.toMove)) {
-            const elapsed = Date.now() - game.lastMoveTime;
-            if (
-              game.toMove.some(
-                (p, i) => p && game.players[i].time - elapsed < 0
-              )
-            ) {
-              checkTime("timeloss");
-            }
-          } else {
-            const toMove = parseInt(game.toMove);
-            if (
-              game.players[toMove].time - (Date.now() - game.lastMoveTime) <
-              0
-            ) {
-              checkTime("timeloss");
-            }
+        if (ok) {
+          for (let i = 0; i < explorationRef.current.nodes.length; i++) {
+            explorationRef.current.nodes[i].children =
+              exploration[i].children;
+            explorationRef.current.nodes[i].comment = exploration[i].comment;
+            explorationRef.current.nodes[i].commented =
+              exploration[i].commented;
           }
-        } else {
-          // If you are viewing someone else's game, and both players are "red", let the server know to abandon the game.
-          const now = new Date().getTime();
+          handleGameMoveClickRef.current?.(foc, displayForRender);
+        }
+        explorationFetchingRef.current = false;
+        explorationFetchedSetter(false);
+      } else if (explorationRef.current.nodes.length > exploration.length) {
+        mergeExistingExploration(
+          exploration.length - 1,
+          exploration[exploration.length - 1],
+          explorationRef.current.nodes,
+          gameRef.current,
+          true
+        );
+      }
+    }
+
+    if (
+      "note" in game &&
+      game.note !== undefined &&
+      game.note !== null &&
+      game.note.length > 0
+    ) {
+      gameNoteSetter(game.note);
+      interimNoteSetter(game.note);
+    } else if ("note" in game) {
+      gameNoteSetter(null);
+      interimNoteSetter("");
+    }
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+    parentheticalSetter([]);
+    if (
+      "tournament" in game &&
+      game.tournament !== undefined &&
+      game.tournament !== null
+    ) {
+      const tournamentLink = game.tournament.includes("#")
+        ? `/tournament/${game.tournament.replace("#", "/")}`
+        : `/tournament/${game.tournament}?gameId=${game.id}&metaGame=${game.metaGame}`;
+
+      parentheticalSetter((val) => [
+        ...val,
+        <Link to={tournamentLink}>tournament</Link>,
+      ]);
+    }
+    if ("event" in game && game.event !== undefined && game.event !== null) {
+      parentheticalSetter((val) => [
+        ...val,
+        <Link to={`/event/${game.event}`}>event</Link>,
+      ]);
+    }
+    if (game.rated === false) {
+      parentheticalSetter((val) => [...val, "unrated"]);
+    }
+    if (game.noExplore !== undefined && game.noExplore === true) {
+      parentheticalSetter((val) => [...val, "exploration disabled"]);
+    }
+    if (
+      game.toMove !== "" &&
+      !game.players.some((p) => p.id === me?.id)
+    ) {
+      if (game.clockHard) {
+        if (Array.isArray(game.toMove)) {
+          const elapsed = Date.now() - game.lastMoveTime;
           if (
-            allUsers !== null &&
-            allUsers !== undefined &&
-            game.players.every(
-              (p) =>
-                allUsers.find((u) => u.id === p.id)?.lastSeen <
-                now - 1000 * 60 * 60 * 24 * 30
+            game.toMove.some(
+              (p, i) => p && game.players[i].time - elapsed < 0
             )
           ) {
-            checkTime("abandoned");
+            checkTime("timeloss");
+          }
+        } else {
+          const toMove = parseInt(game.toMove);
+          if (
+            game.players[toMove].time - (Date.now() - game.lastMoveTime) <
+            0
+          ) {
+            checkTime("timeloss");
           }
         }
       }
-      // Somehow react loses track of this, so explicitly remove this.
-      //   if (boardImage.current !== null) {
-      //     console.log("deleting board image");
-      //     const svg = boardImage.current.querySelector("svg");
-      //     if (svg !== null) {
-      //       svg.remove();
-      //     }
-      //   }
     }
-  }, [
-    dbgame,
-    globalMe,
-    allUsers,
-    pieInvoked,
-    t,
-    navigate,
-    checkTime,
-    colourContext,
-  ]);
+  }, [dbgame, pieInvoked, globalMe?.id, navigate, checkTime, t, explorer]);
+
+  useEffect(() => {
+    if (dbgame === null || gameRef.current === null) return;
+    const me = globalMeRef.current;
+    const game = gameRef.current;
+    processNewSettings(
+      game.me > -1
+        ? game.players.find((p) => p.id === me?.id)?.settings ?? {}
+        : {},
+      me?.settings,
+      gameRef,
+      settingsSetter,
+      gameSettingsSetter,
+      userSettingsSetter,
+      me,
+      effectiveColourContext
+    );
+  }, [dbgame?.id, effectiveColourContext, globalMe?.settings]);
+
+  useEffect(() => {
+    if (
+      dbgame === null ||
+      sessionDisplayOverride == null ||
+      focusRef.current === null ||
+      !engineRef.current
+    ) {
+      return;
+    }
+    const me = globalMeRef.current;
+    const game = gameRef.current;
+    if (!game) return;
+    const perGameSettings =
+      game.me > -1 && me
+        ? game.players.find((p) => p.id === me.id)?.settings
+        : {};
+    const displayForRender = resolveDisplay(
+      perGameSettings,
+      me?.settings,
+      game.metaGame,
+      sessionDisplayOverride
+    );
+    handleGameMoveClickRef.current?.(focusRef.current, displayForRender);
+  }, [sessionDisplayOverride, dbgame?.id]);
+
+  useEffect(() => {
+    if (dbgame === null) return;
+    const game = dbgame;
+    const me = globalMeRef.current;
+    if (game.toMove === "" || game.players.some((p) => p.id === me?.id)) {
+      return;
+    }
+    if (game.clockHard) return;
+
+    const users = useStore.getState().users;
+    if (users === null || users === undefined) return;
+
+    const now = Date.now();
+    if (
+      game.players.every(
+        (p) =>
+          users.find((u) => u.id === p.id)?.lastSeen <
+          now - 1000 * 60 * 60 * 24 * 30
+      )
+    ) {
+      checkTime("abandoned");
+    }
+  }, [dbgame, checkTime]);
 
   async function reportError(error) {
     if (!error || error === "") return;
@@ -936,7 +1100,7 @@ function GameMove(props) {
               errorSetter,
               errorMessageRef
             );
-            focusSetter(cloneDeep(focus)); // just to trigger a rerender...
+            bumpExploration();
           }
         }
       } catch (error) {
@@ -1040,7 +1204,7 @@ function GameMove(props) {
               }
               handleGameMoveClick({ moveNumber: moveNum, exPath });
             } else {
-              focusSetter(cloneDeep(focus)); // just to trigger a rerender...
+              bumpExploration();
             }
           }
         } else {
@@ -1075,34 +1239,41 @@ function GameMove(props) {
     state,
   ]);
 
-  const handlePlaygroundExport = async (state, moveNumber) => {
-    if (state === null) {
-      let tmpEngine = GameFactory(game.metaGame, game.state);
-      tmpEngine.stack = tmpEngine.stack.slice(0, moveNumber + 1);
-      tmpEngine.load();
-      state = tmpEngine.cheapSerialize();
-    }
-    const res = await callAuthApi("new_playground", {
-      metaGame: game.metaGame,
-      state,
-    });
-    if (!res) return;
-    if (res.status !== 200) {
-      const result = await res.json();
-      errorMessageRef.current = `playground export failed, metaGame = ${game.metaGame}, state = ${state}, status = ${res.status}, message: ${result.message}, body: ${result.body}`;
+  const handlePlaygroundExport = async () => {
+    if (!isLabSupportedGame(game.metaGame)) return;
+    const nodes = explorationRef.current?.nodes;
+    if (!nodes || !focus) return;
+    try {
+      const info = gameinfo.get(game.metaGame);
+      launchLabFromExport({
+        metaGame: game.metaGame,
+        state: game.state,
+        variants: game.selectedVariants ?? [],
+        playerCount: game.numPlayers,
+        focus: {
+          moveNumber: focus.moveNumber,
+          exPath: [...(focus.exPath ?? [])],
+        },
+        exploration: serializeSessionExploration(nodes, game.gameOver),
+        name: `${info?.name ?? game.metaGame} (exported)`,
+      });
+      navigate("/lab");
+    } catch (err) {
+      errorMessageRef.current = err.message || String(err);
       errorSetter(true);
-    } else {
-      navigate("/playground");
     }
   };
 
-  const handleResize = () => {
-    screenWidthSetter(window.innerWidth);
-  };
-  window.addEventListener("resize", handleResize);
+  useEffect(() => {
+    const handleResize = () => {
+      screenWidthSetter(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // when the user clicks on the list of moves (or move list navigation)
-  const handleGameMoveClick = (foc) => {
+  const handleGameMoveClick = (foc, altDisplayOverride) => {
     // console.log("foc = ", foc);
     let node = getFocusNode(explorationRef.current.nodes, game, foc);
     if (
@@ -1116,21 +1287,19 @@ function GameMove(props) {
     foc.canExplore = canExploreMove(game, explorationRef.current.nodes, foc);
     if (foc.canExplore && !game.noMoves) {
       movesRef.current = engine.moves();
-      console.log(`Number of possible moves: ${movesRef.current.length}`);
     }
     focusSetter(foc);
     engineRef.current = engine;
-    console.log(
-      `(handleGameMoveClick) ABOUT TO RERENDER! Display setting: ${settings?.display}`
-    );
+    const altDisplay =
+      altDisplayOverride ?? displaySettings?.display;
     renderrepSetter(
       replaceNames(
         engine.render({
           perspective: gameRef.current.me ? gameRef.current.me + 1 : 1,
-          altDisplay: settings?.display,
+          altDisplay,
         }),
         gameRef.current.players,
-        allUsers
+        useStore.getState().users
       )
     );
     setURL(explorationRef.current.nodes, foc, game, navigate);
@@ -1151,18 +1320,9 @@ function GameMove(props) {
       moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
     }
     populateChecked(gameRef, engineRef, t, inCheckSetter);
-    const metaInfo = gameinfo.get(game.metaGame);
-    if (metaInfo.flags.includes("custom-colours")) {
-      setupColors(
-        settings,
-        gameRef.current,
-        globalMe,
-        effectiveColourContext,
-        node
-      );
-      colorsChangedSetter((val) => val + 1);
-    }
+    publishGameColors(node);
   };
+  handleGameMoveClickRef.current = handleGameMoveClick;
 
   function handleReset() {
     if (
@@ -1238,17 +1398,11 @@ function GameMove(props) {
       errorSetter,
       focusSetter,
       moveSetter,
-      settings,
+      displaySettings,
       navigate
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
-    const metaInfo = gameinfo.get(gameRef.current.metaGame);
-    if (metaInfo.flags.includes("custom-colours")) {
-      setupColors(settings, gameRef.current, globalMe, effectiveColourContext, {
-        state: engineRef.current.state(),
-      });
-      colorsChangedSetter((val) => val + 1);
-    }
+    publishGameColors({ state: engineRef.current.state() });
   };
 
   // handler when user clicks on "complete move" (for a partial move that could be complete)
@@ -1271,7 +1425,7 @@ function GameMove(props) {
       errorSetter,
       focusSetter,
       moveSetter,
-      settings,
+      displaySettings,
       navigate
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
@@ -1285,61 +1439,15 @@ function GameMove(props) {
     }
   };
 
+  const focusCanExplore = focus?.canExplore;
+  const focusExPathKey = focus?.exPath?.join(",") ?? "";
+
   useEffect(() => {
     let options = {};
 
-    function boardClick(row, col, piece) {
-      // console.log(`boardClick:(${row},${col},${piece})`);
-      let node = getFocusNode(
-        explorationRef.current.nodes,
-        gameRef.current,
-        focusRef.current
-      );
-      let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-      let result = gameRef.current.simultaneous
-        ? gameEngineTmp.handleClickSimultaneous(
-            moveRef.current.move,
-            row,
-            col,
-            gameRef.current.me + 1,
-            piece
-          )
-        : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
-      result.rendered = moveRef.current.rendered;
-      processNewMove(
-        result,
-        explorer,
-        globalMe,
-        focus,
-        gameRef,
-        movesRef,
-        statusRef,
-        explorationRef.current.nodes,
-        errorMessageRef,
-        partialMoveRenderRef,
-        renderrepSetter,
-        engineRef,
-        errorSetter,
-        focusSetter,
-        moveSetter,
-        settings,
-        navigate
-      );
-      populateChecked(gameRef, engineRef, t, inCheckSetter);
-      const metaInfo = gameinfo.get(gameRef.current.metaGame);
-      if (metaInfo.flags.includes("custom-colours")) {
-        setupColors(
-          settings,
-          gameRef.current,
-          globalMe,
-          effectiveColourContext,
-          {
-            state: engineRef.current.state(),
-          }
-        );
-        colorsChangedSetter((val) => val + 1);
-      }
-    }
+    const boardClick = (row, col, piece) => {
+      boardClickHandlerRef.current(row, col, piece);
+    };
 
     function expand(row, col) {
       const svg = stackImage.current.querySelector("svg");
@@ -1351,35 +1459,34 @@ function GameMove(props) {
     }
 
     if (boardImage.current !== null) {
-      //   const svg =
-      //     boardImage.current.parentElement.querySelector("#theBoardSVG");
-      //   if (svg !== null) {
-      //     console.log("deleting board image in preparation of rerendering");
-      //     svg.remove();
-      //   }
-      if (renderrep !== null && settings !== null) {
+      if (renderrep !== null && displaySettings !== null) {
         options = {};
+        const currentGame = gameRef.current;
         setRendererColourOpts({
           options,
           metaGame,
-          isParticipant: game.me,
-          settings,
+          isParticipant: currentGame?.me,
+          settings: displaySettings,
           context: effectiveColourContext,
-          globalMe,
+          globalMe: globalMeRef.current,
         });
-        setGlyphMapOpt({ options, metaGame, globalMe });
-        if (focus.canExplore) {
+        setGlyphMapOpt({
+          options,
+          metaGame,
+          globalMe: globalMeRef.current,
+        });
+        const canExplore = focusCanExplore;
+        if (canExplore) {
           options.boardClick = boardClick;
         }
-        options.rotate = settings.rotate;
-        if (gameRef.current.stackExpanding) {
+        options.rotate = displaySettings.rotate;
+        if (currentGame?.stackExpanding) {
           options.boardHover = (row, col, piece) => {
             expand(col, row);
           };
         }
-        options.showAnnotations = settings.annotate;
+        options.showAnnotations = displaySettings.annotate;
         options.svgid = "theBoardSVG";
-        console.log("rendering", renderrep, options);
         const tmpRendered = [];
         const renders = [];
         if (!Array.isArray(renderrep)) {
@@ -1398,7 +1505,7 @@ function GameMove(props) {
             divelem: container,
             boardClick:
               i === renders.length - 1
-                ? focus.canExplore
+                ? canExplore
                   ? boardClick
                   : undefined
                 : undefined,
@@ -1412,18 +1519,24 @@ function GameMove(props) {
     }
   }, [
     renderrep,
-    globalMe,
-    focus,
-    settings,
-    explorer,
-    t,
-    navigate,
-    boardKey,
+    displaySettings,
     effectiveColourContext,
+    boardKey,
+    metaGame,
+    focusCanExplore,
   ]);
 
   useEffect(() => {
-    colorsChangedSetter((val) => val + 1);
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+  }, [t, focus?.moveNumber, focusExPathKey]);
+
+  useEffect(() => {
+    if (!gameRef.current?.customColours) return;
+    gameRef.current = {
+      ...gameRef.current,
+      colors: gameRef.current.colors,
+    };
+    bumpGameColorsRevision((v) => v + 1);
   }, [effectiveColourContext]);
 
   const setError = (error) => {
@@ -1556,6 +1669,8 @@ function GameMove(props) {
   };
 
   const processUpdatedSettings = (newGameSettings, newUserSettings) => {
+    sessionDisplayOverrideSetter(null);
+    clearSessionDisplayOverride(gameID);
     // console.log("processUpdatedSettings", newGameSettings, newUserSettings);
     // Update dbgame's player settings so the main useEffect always has correct data
     if (dbgame !== null && gameRef.current?.me > -1) {
@@ -1575,18 +1690,13 @@ function GameMove(props) {
       effectiveColourContext
     );
     if (newSettings?.display) {
-      console.log(
-        `(processUpdatedSettings) ABOUT TO RERENDER! Display setting: ${newSettings.display}`
-      );
-      //   console.log(`Current engine state:`);
-      //   console.log(engineRef.current.graph);
       const newRenderRep = replaceNames(
         engineRef.current.render({
           perspective: gameRef.current.me + 1,
           altDisplay: newSettings.display,
         }),
         gameRef.current.players,
-        allUsers
+        useStore.getState().users
       );
       renderrepSetter(newRenderRep);
       gameRef.current.stackExpanding =
@@ -1600,6 +1710,12 @@ function GameMove(props) {
 
   const handleSettingsSave = () => {
     showSettingsSetter(false);
+  };
+
+  const handleCycleAltDisplay = () => {
+    const next = nextDisplayOption(displaySettings?.display, altDisplays);
+    sessionDisplayOverrideSetter(next);
+    writeSessionDisplayOverride(gameID, next);
   };
 
   const handleMark = (mark) => {
@@ -1622,7 +1738,7 @@ function GameMove(props) {
       focus,
       navigate
     );
-    focusSetter(cloneDeep(focus)); // just to trigger a rerender...
+    bumpExploration();
   };
 
   const handleSubmit = async (draw) => {
@@ -1674,6 +1790,10 @@ function GameMove(props) {
       let game0 = JSON.parse(result.body);
       const moveNum = explorationRef.current.nodes.length - 1;
       const cur_exploration = explorationRef.current.nodes[moveNum];
+      const perGameSettings =
+        game0.me > -1 && globalMe
+          ? game0.players.find((p) => p.id === globalMe.id)?.settings
+          : {};
       setupGame(
         game0,
         gameRef,
@@ -1689,7 +1809,12 @@ function GameMove(props) {
         moveSetter,
         gameRecSetter,
         canPublishSetter,
-        globalMe?.settings?.[metaGame]?.display,
+        resolveDisplay(
+          perGameSettings,
+          globalMe?.settings,
+          game0.metaGame,
+          sessionDisplayOverride
+        ),
         navigate
       );
       if (gameRef.current.canExplore) {
@@ -1700,16 +1825,7 @@ function GameMove(props) {
         );
       }
       if (gameRef.current.customColours) {
-        setupColors(
-          settings,
-          gameRef.current,
-          globalMe,
-          effectiveColourContext,
-          {
-            state: engineRef.current.state(),
-          }
-        );
-        colorsChangedSetter((val) => val + 1);
+        publishGameColors({ state: engineRef.current.state() });
       }
       // Keep dbgame in sync so the main useEffect (which re-runs on
       // globalMe changes, e.g. color settings) doesn't revert to
@@ -1795,7 +1911,7 @@ function GameMove(props) {
         navigate,
         true // commentJustAdded
       );
-      focusSetter(cloneDeep(focus));
+      bumpExploration();
     }
   };
 
@@ -1911,7 +2027,7 @@ function GameMove(props) {
         focus,
         navigate
       );
-      focusSetter(cloneDeep(focus)); // trigger rerender
+      bumpExploration();
       return;
     }
 
@@ -1921,6 +2037,20 @@ function GameMove(props) {
     // Show confirmation dialog for first premove or when changing
     pendingPremoveActionSetter({ node, isChange: siblingHasPremove });
     showPremoveConfirmSetter(true);
+  };
+
+  moveEntryHandlersRef.current = {
+    handleMove,
+    handleMark,
+    handleSubmit,
+    handleToSubmit,
+    handleView,
+    handleResign,
+    handleTimeout,
+    handleReset,
+    handlePie,
+    handleDeleteExploration,
+    handlePremove,
   };
 
   const handleClosePremoveConfirm = () => {
@@ -1943,7 +2073,7 @@ function GameMove(props) {
         focus,
         navigate
       );
-      focusSetter(cloneDeep(focus)); // trigger rerender
+      bumpExploration();
     }
     pendingPremoveActionSetter(null);
   };
@@ -1974,6 +2104,10 @@ function GameMove(props) {
           } else {
             const result = await res.json();
             let game0 = JSON.parse(result.body);
+            const perGameSettings =
+              game0.me > -1 && globalMe
+                ? game0.players.find((p) => p.id === globalMe.id)?.settings
+                : {};
             setupGame(
               game0,
               gameRef,
@@ -1989,7 +2123,12 @@ function GameMove(props) {
               moveSetter,
               gameRecSetter,
               canPublishSetter,
-              globalMe?.settings?.[metaGame]?.display,
+              resolveDisplay(
+                perGameSettings,
+                globalMe?.settings,
+                game0.metaGame,
+                sessionDisplayOverride
+              ),
               navigate
             );
           }
@@ -2168,11 +2307,30 @@ function GameMove(props) {
     window.scrollTo(0, 0);
   };
 
+  const commentingCompletedGame =
+    !error && !!focus && !!gameRef.current && gameRef.current.gameOver;
+
+  const chatComments = useMemo(() => {
+    void explorationVersion;
+    if (!commentingCompletedGame) {
+      return comments;
+    }
+    return [
+      ...(comments || []).map((c) => ({
+        ...c,
+        inGame: true,
+        path:
+          c.moveNumber !== undefined
+            ? { moveNumber: c.moveNumber, exPath: [] }
+            : undefined,
+      })),
+      ...getAllNodeComments(explorationRef.current.nodes),
+    ];
+  }, [commentingCompletedGame, comments, explorationVersion]);
+
   const game = gameRef.current;
   // console.log("rendering at focus ", focus);
   // console.log("game.me", game ? game.me : "nope");
-  let commentingCompletedGame = false;
-  let allNodeComments = [];
   if (!error) {
     let toMove;
     if (focus && game) {
@@ -2185,10 +2343,6 @@ function GameMove(props) {
           focus
         );
         toMove = node?.toMove;
-      }
-      if (game.gameOver) {
-        commentingCompletedGame = true;
-        allNodeComments = getAllNodeComments(explorationRef.current.nodes);
       }
     }
     return (
@@ -2353,7 +2507,6 @@ function GameMove(props) {
                           locked={locked}
                           setLocked={setLocked}
                           setRefresh={setRefresh}
-                          key={`Status|colorSet${colorsChanged}`}
                         />
                       ) : key === "move" ? (
                         <>
@@ -2368,20 +2521,7 @@ function GameMove(props) {
                             submitting={submitting}
                             forceUndoRight={true}
                             screenWidth={screenWidth}
-                            handlers={[
-                              handleMove,
-                              handleMark,
-                              handleSubmit,
-                              handleToSubmit,
-                              handleView,
-                              handleResign,
-                              handleTimeout,
-                              handleReset,
-                              handlePie,
-                              handleDeleteExploration,
-                              handlePremove,
-                            ]}
-                            key={`Entry|colorSet${colorsChanged}`}
+                            handlers={moveEntryHandlers}
                           />
                           <MiscButtons
                             metaGame={metaGame}
@@ -2418,6 +2558,8 @@ function GameMove(props) {
                           screenWidth={screenWidth}
                           handleRotate={handleRotate}
                           handleUpdateRenderOptions={handleUpdateRenderOptions}
+                          handleCycleAltDisplay={handleCycleAltDisplay}
+                          hasAltDisplays={altDisplays.length > 0}
                           showGameDetailsSetter={showGameDetailsSetter}
                           showGameNoteSetter={showGameNoteSetter}
                           showGameDumpSetter={showGameDumpSetter}
@@ -2441,29 +2583,11 @@ function GameMove(props) {
                           handleGameMoveClick={handleGameMoveClick}
                           getFocusNode={getFocusNode}
                           handlePlaygroundExport={handlePlaygroundExport}
-                          key={`Moves|colorSet${colorsChanged}`}
                         />
                       ) : key === "chat" ? (
                         <>
                           <UserChats
-                            comments={
-                              commentingCompletedGame
-                                ? [
-                                    ...(comments || []).map((c) => ({
-                                      ...c,
-                                      inGame: true,
-                                      path:
-                                        c.moveNumber !== undefined
-                                          ? {
-                                              moveNumber: c.moveNumber,
-                                              exPath: [],
-                                            }
-                                          : undefined,
-                                    })),
-                                    ...(allNodeComments || []),
-                                  ]
-                                : comments
-                            }
+                            comments={chatComments}
                             players={gameRef.current?.players}
                             handleSubmit={
                               commentingCompletedGame // && !(focus.moveNumber === explorationRef.current.nodes.length - 1 && focus.exPath.length === 0)
@@ -2502,7 +2626,6 @@ function GameMove(props) {
                     locked={locked}
                     setLocked={setLocked}
                     setRefresh={setRefresh}
-                    key={`Status|colorSet${colorsChanged}`}
                   />
                 </div>
                 <div className="tourMove">
@@ -2520,20 +2643,7 @@ function GameMove(props) {
                     submitting={submitting}
                     forceUndoRight={false}
                     screenWidth={screenWidth}
-                    handlers={[
-                      handleMove,
-                      handleMark,
-                      handleSubmit,
-                      handleToSubmit,
-                      handleView,
-                      handleResign,
-                      handleTimeout,
-                      handleReset,
-                      handlePie,
-                      handleDeleteExploration,
-                      handlePremove,
-                    ]}
-                    key={`Entry|colorSet${colorsChanged}`}
+                    handlers={moveEntryHandlers}
                   />
                 </div>
                 <MiscButtons
@@ -2593,6 +2703,8 @@ function GameMove(props) {
                   screenWidth={screenWidth}
                   handleRotate={handleRotate}
                   handleUpdateRenderOptions={handleUpdateRenderOptions}
+                  handleCycleAltDisplay={handleCycleAltDisplay}
+                  hasAltDisplays={altDisplays.length > 0}
                   showGameDetailsSetter={showGameDetailsSetter}
                   showGameNoteSetter={showGameNoteSetter}
                   showGameDumpSetter={showGameDumpSetter}
@@ -2627,7 +2739,6 @@ function GameMove(props) {
                     handleGameMoveClick={handleGameMoveClick}
                     getFocusNode={getFocusNode}
                     handlePlaygroundExport={handlePlaygroundExport}
-                    key={`Moves|colorSet${colorsChanged}`}
                   />
                 </div>
                 <div style={{ paddingTop: "1em" }} className="tourChat">
@@ -2635,21 +2746,7 @@ function GameMove(props) {
                     <span>{t("GameSummary")}</span>
                   </h1>
                   <UserChats
-                    comments={
-                      commentingCompletedGame
-                        ? [
-                            ...(comments || []).map((c) => ({
-                              ...c,
-                              inGame: true,
-                              path:
-                                c.moveNumber !== undefined
-                                  ? { moveNumber: c.moveNumber, exPath: [] }
-                                  : undefined,
-                            })),
-                            ...(allNodeComments || []),
-                          ]
-                        : comments
-                    }
+                    comments={chatComments}
                     players={gameRef.current?.players}
                     handleSubmit={
                       commentingCompletedGame // && !(focus.moveNumber === explorationRef.current.nodes.length - 1 && focus.exPath.length === 0)

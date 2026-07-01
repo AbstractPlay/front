@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Modal from "../Modal";
-import ClipboardCopy from "../Playground/ClipboardCopy";
+import ClipboardCopy from "../../lib/ClipboardCopy";
 
 function BotCredentialsModal({
   show,
