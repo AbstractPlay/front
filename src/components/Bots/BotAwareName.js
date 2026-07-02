@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 import { formatDisplayName, isAnyBot } from "./botUtils";
 
 function BotAwareName({ id, name, bot, users, link, className }) {
-  const displayName = formatDisplayName(name, isAnyBot({ id, name, bot }, users));
+  const displayName = formatDisplayName(
+    name,
+    isAnyBot({ id, name, bot }, users)
+  );
   if (link && id) {
     return (
       <Link to={`/player/${id}`} className={className}>

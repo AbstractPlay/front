@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { cloneDeep } from "lodash";
 import Modal from "../Modal";
-import { getLabSetting, getAltDisplaysForMetaGame } from "../../lib/Lab/settings";
+import {
+  getLabSetting,
+  getAltDisplaysForMetaGame,
+} from "../../lib/Lab/settings";
 
 function LabRenderOptionsModal({
   show,
@@ -21,7 +24,13 @@ function LabRenderOptionsModal({
 
   useEffect(() => {
     displaySetter(
-      getLabSetting("display", "default", gameSettings, labBoardSettings, metaGame)
+      getLabSetting(
+        "display",
+        "default",
+        gameSettings,
+        labBoardSettings,
+        metaGame
+      )
     );
     annotateSetter(
       getLabSetting("annotate", true, gameSettings, labBoardSettings, metaGame)

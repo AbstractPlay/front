@@ -290,7 +290,11 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
       >
         <div className="content">
           <p>
-            You are about to delete the bot <tt>{bot.name}</tt>. This will unlink all past game records from this bot. If you just lost your client secret, you can generate a new one using the "Rotate secret" button. Deleting a bot cannot be undone! Are you sure you want to delete this bot?
+            You are about to delete the bot <tt>{bot.name}</tt>. This will
+            unlink all past game records from this bot. If you just lost your
+            client secret, you can generate a new one using the "Rotate secret"
+            button. Deleting a bot cannot be undone! Are you sure you want to
+            delete this bot?
           </p>
         </div>
       </Modal>

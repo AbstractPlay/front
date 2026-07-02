@@ -278,15 +278,24 @@ function Navbar(props) {
           )}
           <div className="navbar-item">
             <button
-              aria-label={colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"}
-              onClick={() => colorModeSetter(colorMode === "light" ? "dark" : "light")}
-              title={colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"}
+              aria-label={
+                colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"
+              }
+              onClick={() =>
+                colorModeSetter(colorMode === "light" ? "dark" : "light")
+              }
+              title={
+                colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"
+              }
             >
-              <span className="icon" style={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+              <span
+                className="icon"
+                style={{ fontSize: "1.4rem", fontWeight: "bold" }}
+              >
                 {colorMode === "light" ? "\u263E" : "\u263C"}
               </span>
             </button>
-            </div>
+          </div>
           <div className="navbar-item">
             <button
               className="ml-2"

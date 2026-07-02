@@ -1182,7 +1182,9 @@ function Event() {
                   >
                     <option value="">-- Select Player --</option>
                     {(allUsers || [])
-                      .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+                      .sort((a, b) =>
+                        (a.name ?? "").localeCompare(b.name ?? "")
+                      )
                       .map((u) => (
                         <option key={u.id} value={u.id}>
                           {formatUserDisplayName(u, allUsers)}
@@ -1221,7 +1223,9 @@ function Event() {
                   >
                     <option value="">-- Select Player --</option>
                     {(allUsers || [])
-                      .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+                      .sort((a, b) =>
+                        (a.name ?? "").localeCompare(b.name ?? "")
+                      )
                       .map((u) => (
                         <option key={u.id} value={u.id}>
                           {formatUserDisplayName(u, allUsers)}

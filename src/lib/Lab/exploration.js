@@ -26,7 +26,12 @@ function inflateRecursive(gameEngine, node, children) {
   });
 }
 
-export function restoreExplorationTree(nodes, metaGame, gameState, deflatedChildren) {
+export function restoreExplorationTree(
+  nodes,
+  metaGame,
+  gameState,
+  deflatedChildren
+) {
   if (!deflatedChildren || deflatedChildren.length === 0) return;
   const tmpEngine = GameFactory(metaGame, gameState);
   const moveCount = nodes.length;

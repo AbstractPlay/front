@@ -286,7 +286,14 @@ function Tournaments(props) {
         (rec) =>
           !globalMe || !registeredOnly || rec.players.includes(globalMe.id)
       );
-  }, [tournaments, registeredOnly, starredOnly, globalMe, filterMeta, allUsers]);
+  }, [
+    tournaments,
+    registeredOnly,
+    starredOnly,
+    globalMe,
+    filterMeta,
+    allUsers,
+  ]);
 
   const openTournamentsColumnHelper = createColumnHelper();
   const openTournamentsColumns = useMemo(
@@ -982,17 +989,21 @@ function Tournaments(props) {
                 Only show tournaments you're participating in
               </label>
             </div>
-            { !("stars" in globalMe && Array.isArray(globalMe.stars) && globalMe.stars.length > 0) ? null : (
-            <div className="control">
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  defaultChecked={starredOnly}
-                  onClick={() => starredOnlySetter(!starredOnly)}
-                />
-                Only show tournaments for your starred games
-              </label>
-            </div>
+            {!(
+              "stars" in globalMe &&
+              Array.isArray(globalMe.stars) &&
+              globalMe.stars.length > 0
+            ) ? null : (
+              <div className="control">
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    defaultChecked={starredOnly}
+                    onClick={() => starredOnlySetter(!starredOnly)}
+                  />
+                  Only show tournaments for your starred games
+                </label>
+              </div>
             )}
           </div>
         )}

@@ -133,9 +133,7 @@ export function setupGame(
   }
   if (typeof engine.chatLog === "function") {
     game0.moveResults = engine
-      .chatLog(
-        game0.players.map((p) => formatPlayerDisplayName(p, users))
-      )
+      .chatLog(game0.players.map((p) => formatPlayerDisplayName(p, users)))
       .map((e, idx) => {
         return { time: e[0], log: e.slice(1).join(" "), ply: idx + 1 };
       })

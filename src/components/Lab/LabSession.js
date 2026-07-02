@@ -30,7 +30,13 @@ import {
   sanitizeFocus,
 } from "../../lib/Lab/exploration";
 import { setStatus, replaceNames } from "../../lib/Lab/misc";
-import { getLabSetting, processNewSettings, setupColors, getAltDisplaysForMetaGame, nextDisplayOption } from "../../lib/Lab/settings";
+import {
+  getLabSetting,
+  processNewSettings,
+  setupColors,
+  getAltDisplaysForMetaGame,
+  nextDisplayOption,
+} from "../../lib/Lab/settings";
 import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
 import { setGlyphMapOpt } from "../../lib/setGlyphMapOpt";
 import {
@@ -42,9 +48,7 @@ import {
   setLabSessionPersistCallback,
   saveLabExploration,
 } from "../../lib/Lab/exploration";
-import {
-  serializeSessionExploration,
-} from "../../lib/Lab/exploration";
+import { serializeSessionExploration } from "../../lib/Lab/exploration";
 import {
   addSave,
   createSaveRecord,
@@ -122,8 +126,11 @@ function LabSession({
   const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [showGameDump, showGameDumpSetter] = useState(false);
   const [showSettings, showSettingsSetter] = useState(false);
-  const [labBoardSettings, labBoardSettingsSetter] = useState(getLabBoardSettings);
-  const [gameSettings, gameSettingsSetter] = useState(initialGameSettings ?? {});
+  const [labBoardSettings, labBoardSettingsSetter] =
+    useState(getLabBoardSettings);
+  const [gameSettings, gameSettingsSetter] = useState(
+    initialGameSettings ?? {}
+  );
   const [settings, settingsSetter] = useState(null);
   const [rotIncrement, rotIncrementSetter] = useState(0);
   const [gameEngine, gameEngineSetter] = useState(null);
@@ -184,13 +191,7 @@ function LabSession({
     (node) => {
       const game = gameRef.current;
       if (!game?.customColours || !settings) return;
-      setupColors(
-        settings,
-        game,
-        globalMe,
-        effectiveColourContext,
-        node
-      );
+      setupColors(settings, game, globalMe, effectiveColourContext, node);
       gameRef.current = { ...game, colors: game.colors };
       bumpGameColorsRevision((v) => v + 1);
     },
@@ -209,11 +210,11 @@ function LabSession({
       state: focusNode.state ?? gameRef.current.state,
       variants: gameRef.current.selectedVariants ?? [],
       playerCount: gameRef.current.numPlayers,
-      focus: { moveNumber: safeFocus.moveNumber, exPath: [...safeFocus.exPath] },
-      exploration: serializeSessionExploration(
-        nodes,
-        gameRef.current.gameOver
-      ),
+      focus: {
+        moveNumber: safeFocus.moveNumber,
+        exPath: [...safeFocus.exPath],
+      },
+      exploration: serializeSessionExploration(nodes, gameRef.current.gameOver),
       explorationFormat: 2,
       gameSettings: gameSettings ?? {},
       id: gameRef.current.id,
@@ -270,7 +271,9 @@ function LabSession({
         if (p.apid) return `[${p.name}](/player/${p.apid})`;
         return p.name;
       };
-      const designers = info.people.filter((p) => p.type === "designer").map(fmt);
+      const designers = info.people
+        .filter((p) => p.type === "designer")
+        .map(fmt);
       const coders = info.people.filter((p) => p.type === "coder").map(fmt);
       designerStringSetter(
         (designers.length === 1 ? "Designer: " : "Designers: ") +
@@ -361,18 +364,19 @@ function LabSession({
       globalMe,
       effectiveColourContext
     );
-  }, [effectiveColourContext, gameSettings, labBoardSettings, globalMe?.settings]);
+  }, [
+    effectiveColourContext,
+    gameSettings,
+    labBoardSettings,
+    globalMe?.settings,
+  ]);
 
   const handleGameMoveClick = (foc) => {
     const game = gameRef.current;
     const node = getFocusNode(explorationRef.current.nodes, game, foc);
     const engine = GameFactory(game.metaGame, node.state);
     partialMoveRenderRef.current = false;
-    foc.canExplore = canExploreMove(
-      game,
-      explorationRef.current.nodes,
-      foc
-    );
+    foc.canExplore = canExploreMove(game, explorationRef.current.nodes, foc);
     if (!game.noMoves) {
       movesRef.current = engine.moves();
     }
@@ -572,7 +576,11 @@ function LabSession({
 
   const handleDeleteSubtreeConfirmed = () => {
     showDeleteSubtreeConfirmSetter(false);
-    getFocusNode(explorationRef.current.nodes, gameRef.current, focus).DeleteNode();
+    getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focus
+    ).DeleteNode();
     const foc = cloneDeep(focus);
     foc.exPath.pop();
     if (gameRef.current.gameOver) {
@@ -672,7 +680,10 @@ function LabSession({
   };
 
   const handleSaveNamed = () => {
-    const name = window.prompt("Name for this saved position:", sessionNameRef.current);
+    const name = window.prompt(
+      "Name for this saved position:",
+      sessionNameRef.current
+    );
     if (!name) return;
     sessionNameRef.current = name;
     const nodes = explorationRef.current.nodes;
@@ -726,8 +737,7 @@ function LabSession({
     if (renderrep !== null && settings !== null && currentFocus) {
       const tmpRendered = [];
       const renders = Array.isArray(renderrep) ? [...renderrep] : [renderrep];
-      const canClick =
-        currentFocus.canExplore || gameRef.current?.canSubmit;
+      const canClick = currentFocus.canExplore || gameRef.current?.canSubmit;
       for (let i = 0; i < renders.length; i++) {
         const r = renders[i];
         const container = document.createElement("div");
@@ -751,7 +761,11 @@ function LabSession({
           context: effectiveColourContext,
           globalMe: globalMeRef.current,
         });
-        setGlyphMapOpt({ options: opts, metaGame, globalMe: globalMeRef.current });
+        setGlyphMapOpt({
+          options: opts,
+          metaGame,
+          globalMe: globalMeRef.current,
+        });
         if (gameRef.current?.stackExpanding) {
           opts.boardHover = (row, col, piece) => expand(col, row);
         }
@@ -894,10 +908,7 @@ function LabSession({
           <div className="columns">
             <div className="column is-one-fifth">{statusSection}</div>
             <div className="column">{boardSection}</div>
-            <div
-              className="column is-narrow"
-              style={{ maxWidth: "15vw" }}
-            >
+            <div className="column is-narrow" style={{ maxWidth: "15vw" }}>
               {movesSection}
             </div>
           </div>
@@ -916,7 +927,10 @@ function LabSession({
           title={t("ConfirmDeleteSubtree")}
           buttons={[
             { label: t("Delete"), action: handleDeleteSubtreeConfirmed },
-            { label: t("Cancel"), action: () => showDeleteSubtreeConfirmSetter(false) },
+            {
+              label: t("Cancel"),
+              action: () => showDeleteSubtreeConfirmSetter(false),
+            },
           ]}
         >
           <div className="content">
@@ -949,7 +963,10 @@ function LabSession({
               {gameEngine.notes() ? (
                 <>
                   <h2>{t("ImplementationNotes")}</h2>
-                  <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
+                  <ReactMarkdown
+                    rehypePlugins={[rehypeRaw]}
+                    className="content"
+                  >
                     {gameEngine.notes()}
                   </ReactMarkdown>
                 </>

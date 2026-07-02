@@ -413,12 +413,7 @@ function GameMoves(props) {
                   </span>
                 )}
                 <span className="playerName">
-                  <BotAwareName
-                    id={p.id}
-                    name={p.name}
-                    users={allUsers}
-                    link
-                  />
+                  <BotAwareName id={p.id} name={p.name} users={allUsers} link />
                 </span>
                 {i < game.numPlayers - 1 ? <span>,&nbsp;</span> : ""}
               </Fragment>

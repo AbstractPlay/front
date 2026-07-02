@@ -117,12 +117,7 @@ function ListGames({ fixedState }) {
           props
             .getValue()
             .map((u) => (
-              <BotAwareName
-                id={u.id}
-                name={u.name}
-                users={allUsers}
-                link
-              />
+              <BotAwareName id={u.id} name={u.name} users={allUsers} link />
             ))
             .reduce(
               (acc, x) =>

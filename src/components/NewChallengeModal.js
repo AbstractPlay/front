@@ -12,10 +12,7 @@ import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import GameVariants from "./GameVariants";
 import { useStore } from "../stores";
-import {
-  AIAI_USER_ID,
-  formatUserDisplayName,
-} from "./Bots/botUtils";
+import { AIAI_USER_ID, formatUserDisplayName } from "./Bots/botUtils";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
@@ -584,7 +581,9 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                                     !opponents.some((o) => user.id === o.id) &&
                                     user.lastSeen >= minSeen)
                               )
-                              .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+                              .sort((a, b) =>
+                                (a.name ?? "").localeCompare(b.name ?? "")
+                              )
                               .map((item) => {
                                 return (
                                   <option key={item.id} value={item.id}>

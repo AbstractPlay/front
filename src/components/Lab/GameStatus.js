@@ -52,11 +52,7 @@ function GameStatus({
       return status.scores.filter((s) => s.spoiler !== true);
     }
     return status?.scores ?? [];
-  }, [
-    globalMe?.settings?.all?.hideSpoilers,
-    game?.gameOver,
-    status?.scores,
-  ]);
+  }, [globalMe?.settings?.all?.hideSpoilers, game?.gameOver, status?.scores]);
 
   if (
     !game ||

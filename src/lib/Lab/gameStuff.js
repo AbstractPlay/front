@@ -126,7 +126,11 @@ export function setupLabGame(
   if (typeof engine.chatLog === "function") {
     game0.moveResults = engine
       .chatLog(game0.players.map((p) => formatPlayerDisplayName(p, users)))
-      .map((e, idx) => ({ time: e[0], log: e.slice(1).join(" "), ply: idx + 1 }))
+      .map((e, idx) => ({
+        time: e[0],
+        log: e.slice(1).join(" "),
+        ply: idx + 1,
+      }))
       .reverse();
   } else {
     game0.moveResults = engine.resultsHistory().reverse();
@@ -166,11 +170,7 @@ export function setupLabGame(
         tmpEngine.gameover ? "" : tmpEngine.currplayer - 1
       )
     );
-    if (
-      game0.gameOver &&
-      winner.length === 1 &&
-      !game0.simultaneous
-    ) {
+    if (game0.gameOver && winner.length === 1 && !game0.simultaneous) {
       history[0].outcome = winner[0] - 1;
     }
     tmpEngine.stack.pop();
@@ -251,11 +251,7 @@ function doView(
     if (!partialMove && !game.noMoves) {
       moves = gameEngineTmp.moves();
     }
-    if (
-      !partialMove &&
-      focus.canExplore &&
-      (game.automove || game.autopass)
-    ) {
+    if (!partialMove && focus.canExplore && (game.automove || game.autopass)) {
       let automoved = false;
       while (
         moves.length === 1 &&

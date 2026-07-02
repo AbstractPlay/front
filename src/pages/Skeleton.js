@@ -1,5 +1,10 @@
 import React, { useState, Suspense, useEffect, lazy } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import {
   API_ENDPOINT_OPEN,
@@ -277,7 +282,10 @@ function Bones(props) {
                 path="/"
                 element={<Welcome token={token} update={update} />}
               />
-              <Route path="/playground" element={<Navigate to="/lab" replace />} />
+              <Route
+                path="/playground"
+                element={<Navigate to="/lab" replace />}
+              />
               <Route path="/lab" element={<Lab />} />
               <Route path="/tournaments/:metaGame?" element={<Tournaments />} />
               <Route path="/play" element={<Play />} />

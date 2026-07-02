@@ -10,10 +10,7 @@ import { callAuthApi } from "../../lib/api";
 import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../../stores";
-import {
-  formatPlayerDisplayName,
-  isClientBotTurn,
-} from "../Bots/botUtils";
+import { formatPlayerDisplayName, isClientBotTurn } from "../Bots/botUtils";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -249,10 +246,7 @@ function MoveEntry(props) {
         if (uiState === 0) {
           if (game.canSubmit) {
             mover = t("ToMove", {
-              player: formatPlayerDisplayName(
-                game.players[game.me],
-                allUsers
-              ),
+              player: formatPlayerDisplayName(game.players[game.me], allUsers),
             });
             if (game.colors !== undefined) img = game.colors[game.me];
           } else {
@@ -550,7 +544,10 @@ function MoveEntry(props) {
           )}
         </div>
         {moveToSubmit !== null && focus.exPath.length === 1 && !drawOffered ? (
-          <div className="field" style={{fontSize: "smaller", paddingBottom: "1em"}}>
+          <div
+            className="field"
+            style={{ fontSize: "smaller", paddingBottom: "1em" }}
+          >
             <label className="checkbox">
               <input
                 type="checkbox"

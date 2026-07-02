@@ -71,10 +71,7 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
       } else {
         challengeDesc =
           t("ChallengeDescriptionAccepter", {
-            challenger: formatPlayerDisplayName(
-              challenge.challenger,
-              allUsers
-            ),
+            challenger: formatPlayerDisplayName(challenge.challenger, allUsers),
             game: game.name,
           }) +
           t("WithVariants", {
@@ -108,10 +105,7 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
       } else {
         challengeDesc =
           t("TwoPlayersChallengeDescription", {
-            other: formatPlayerDisplayName(
-              challenge.challengees[0],
-              allUsers
-            ),
+            other: formatPlayerDisplayName(challenge.challengees[0], allUsers),
             game: game.name,
             meta: challenge.metaGame,
           }) +

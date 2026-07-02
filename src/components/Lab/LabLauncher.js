@@ -48,8 +48,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
       return;
     }
     const counts = getLabPlayerCounts(metaGame);
-    const count =
-      counts.length === 1 ? counts[0] : parseInt(playerCount, 10);
+    const count = counts.length === 1 ? counts[0] : parseInt(playerCount, 10);
     if (!count || !counts.includes(count)) {
       setError("Select the number of players.");
       return;
@@ -197,7 +196,10 @@ function LabLauncher({ onLaunch, onLoadSave }) {
               </div>
             </div>
           ) : null}
-          <GameVariants metaGame={metaGame} variantsSetter={setSelectedVariants} />
+          <GameVariants
+            metaGame={metaGame}
+            variantsSetter={setSelectedVariants}
+          />
           <div className="field">
             <div className="control">
               <button className="button apButton" onClick={handleLaunchNew}>

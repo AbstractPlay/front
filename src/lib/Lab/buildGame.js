@@ -42,7 +42,10 @@ export function listLabGames() {
   return lst;
 }
 
-export function createEngine(metaGame, { variants = [], state, numPlayers } = {}) {
+export function createEngine(
+  metaGame,
+  { variants = [], state, numPlayers } = {}
+) {
   const info = gameinfo.get(metaGame);
   if (!info) {
     throw new Error(`Unknown game: ${metaGame}`);
@@ -104,7 +107,8 @@ export function buildLabGame(metaGame, state, options = {}) {
     players,
     toMove,
     rated: false,
-    variants: typeof engine.getVariants === "function" ? engine.getVariants() : [],
+    variants:
+      typeof engine.getVariants === "function" ? engine.getVariants() : [],
     selectedVariants: variants,
   };
 }

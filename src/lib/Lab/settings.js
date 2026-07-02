@@ -2,7 +2,13 @@ import { GameFactory, gameinfo } from "@abstractplay/gameslib";
 import { renderglyph } from "@abstractplay/renderer";
 import { setRendererColourOpts } from "../setRendererColourOpts";
 
-export function getLabSetting(setting, deflt, gameSettings, userSettings, metaGame) {
+export function getLabSetting(
+  setting,
+  deflt,
+  gameSettings,
+  userSettings,
+  metaGame
+) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
     return gameSettings[setting];
   } else if (userSettings !== undefined) {

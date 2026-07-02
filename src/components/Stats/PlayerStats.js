@@ -111,9 +111,7 @@ function PlayerStats({ nav }) {
               <span className="bolder highlight">{displayName}</span>
             </Link>
           ) : (
-            <Link to={`/player/${props.row.original.id}`}>
-              {displayName}
-            </Link>
+            <Link to={`/player/${props.row.original.id}`}>{displayName}</Link>
           );
         },
       }),

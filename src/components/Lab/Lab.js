@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { buildLabGame } from "../../lib/Lab/buildGame";
-import {
-  clearLastSession,
-  getLastSession,
-} from "../../lib/Lab/storage";
+import { clearLastSession, getLastSession } from "../../lib/Lab/storage";
 import LabLauncher from "./LabLauncher";
 import LabSession from "./LabSession";
 

@@ -59,7 +59,11 @@ import {
   mergePrivateExploration,
   getAllNodeComments,
 } from "../lib/GameMove/exploration";
-import { processNewSettings, setupColors, resolveDisplay } from "../lib/GameMove/settings";
+import {
+  processNewSettings,
+  setupColors,
+  resolveDisplay,
+} from "../lib/GameMove/settings";
 import {
   getAltDisplaysForMetaGame,
   nextDisplayOption,
@@ -812,8 +816,7 @@ function GameMove(props) {
         }
         if (ok) {
           for (let i = 0; i < explorationRef.current.nodes.length; i++) {
-            explorationRef.current.nodes[i].children =
-              exploration[i].children;
+            explorationRef.current.nodes[i].children = exploration[i].children;
             explorationRef.current.nodes[i].comment = exploration[i].comment;
             explorationRef.current.nodes[i].commented =
               exploration[i].commented;
@@ -873,17 +876,12 @@ function GameMove(props) {
     if (game.noExplore !== undefined && game.noExplore === true) {
       parentheticalSetter((val) => [...val, "exploration disabled"]);
     }
-    if (
-      game.toMove !== "" &&
-      !game.players.some((p) => p.id === me?.id)
-    ) {
+    if (game.toMove !== "" && !game.players.some((p) => p.id === me?.id)) {
       if (game.clockHard) {
         if (Array.isArray(game.toMove)) {
           const elapsed = Date.now() - game.lastMoveTime;
           if (
-            game.toMove.some(
-              (p, i) => p && game.players[i].time - elapsed < 0
-            )
+            game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0)
           ) {
             checkTime("timeloss");
           }
@@ -1290,8 +1288,7 @@ function GameMove(props) {
     }
     focusSetter(foc);
     engineRef.current = engine;
-    const altDisplay =
-      altDisplayOverride ?? displaySettings?.display;
+    const altDisplay = altDisplayOverride ?? displaySettings?.display;
     renderrepSetter(
       replaceNames(
         engine.render({

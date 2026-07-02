@@ -125,12 +125,7 @@ function TheirTurnTable(props) {
             .getValue()
             .map((u) => (
               <>
-                <BotAwareName
-                  id={u.id}
-                  name={u.name}
-                  users={allUsers}
-                  link
-                />
+                <BotAwareName id={u.id} name={u.name} users={allUsers} link />
                 {!connections?.visibleUserIds.includes(u.id) ? null : (
                   <span className="icon" title="Player is online">
                     <i className="fa fa-wifi" aria-hidden="true"></i>
