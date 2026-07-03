@@ -36,6 +36,12 @@
             "fire": "Fire laser",
             "hit": "Swing snout"
         },
+        "carnac": {
+            "tip_n": "Tip north",
+            "tip_e": "Tip east",
+            "tip_s": "Tip south",
+            "tip_w": "Tip west"
+        },
         "cifra": {
             "lt": "Light, Top",
             "lb": "Light, Bottom",
