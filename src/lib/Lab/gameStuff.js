@@ -243,7 +243,7 @@ function doView(
   if (move.valid && move.complete < 1 && move.canrender === true) {
     partialMove = true;
   }
-  const m = move.move || "";
+  let m = move.move || "";
   const newfocus = cloneDeep(focus);
   let moves;
   try {
