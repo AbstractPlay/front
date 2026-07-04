@@ -110,7 +110,7 @@
             "tag": "Spielbrett: Mancala"
         },
         "board>none": {
-            "description": "Auf jeder ebenen Fläche gespielt",
+            "description": "Auf einer ebenen Fläche gespielt",
             "full": "Spielbrett > Keins",
             "tag": "Spielbrett: Keins"
         },
