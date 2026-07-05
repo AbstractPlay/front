@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
@@ -16,9 +16,38 @@ import { isoToCountryCode } from "../lib/isoToCountryCode";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
 import { useStore } from "../stores";
+import { callAuthApi } from "../lib/api";
 import { formatUserDisplayName } from "./Bots/botUtils";
 
 const allSize = Number.MAX_SAFE_INTEGER;
+
+function blockedPlayerIds(blocked) {
+  if (blocked === undefined || blocked === null) {
+    return [];
+  }
+  if (Array.isArray(blocked)) {
+    return blocked;
+  }
+  if (blocked instanceof Set) {
+    return [...blocked];
+  }
+  if (typeof blocked === "object") {
+    const values = Object.values(blocked);
+    if (values.every((value) => typeof value === "string")) {
+      return values;
+    }
+    return Object.keys(blocked);
+  }
+  return [];
+}
+
+function parseBlockedBody(body) {
+  if (body === undefined || body === null || body === "") {
+    return null;
+  }
+  const parsed = typeof body === "string" ? JSON.parse(body) : body;
+  return blockedPlayerIds(parsed);
+}
 
 function Players() {
   const { t } = useTranslation();
@@ -31,6 +60,10 @@ function Players() {
   const [hideFilter, hideFilterSetter] = useStorageState(
     "players-hide",
     "none"
+  );
+  const [blockedFilter, blockedFilterSetter] = useStorageState(
+    "players-blocked",
+    "all"
   );
   const [countryFilter, countryFilterSetter] = useState("");
   const [usedCountries, usedCountriesSetter] = useState([]);
@@ -64,6 +97,69 @@ function Players() {
       hideFilterSetter("none");
     }
   }, [globalMe, hideFilter, hideFilterSetter]);
+
+  useEffect(() => {
+    if (globalMe === null && blockedFilter !== "all") {
+      blockedFilterSetter("all");
+    }
+  }, [globalMe, blockedFilter, blockedFilterSetter]);
+
+  const toggleBlock = useCallback(
+    async (playerId, isBlocked) => {
+      const { globalMe, setGlobalMe } = useStore.getState();
+      if (globalMe === null || playerId === globalMe.id) {
+        return;
+      }
+      try {
+        const res = await callAuthApi(
+          isBlocked ? "unblock_player" : "block_player",
+          { playerId }
+        );
+        if (!res) return;
+        if (res.status !== 200) {
+          const result = await res.json();
+          console.log(
+            `An error occurred while ${isBlocked ? "unblocking" : "blocking"} a player:\n${result}`
+          );
+        } else {
+          const result = await res.json();
+          setGlobalMe((prev) => {
+            if (prev === null) {
+              return prev;
+            }
+            const current = blockedPlayerIds(prev.blocked);
+            let next = isBlocked
+              ? current.filter((id) => id !== playerId)
+              : current.includes(playerId)
+                ? current
+                : [...current, playerId];
+
+            if (result.body) {
+              try {
+                const fromApi = parseBlockedBody(result.body);
+                if (fromApi !== null) {
+                  const shouldBeBlocked = !isBlocked;
+                  const apiMatches = shouldBeBlocked
+                    ? fromApi.includes(playerId)
+                    : !fromApi.includes(playerId);
+                  if (apiMatches) {
+                    next = fromApi;
+                  }
+                }
+              } catch (error) {
+                console.log(error);
+              }
+            }
+
+            return { ...prev, blocked: next };
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    []
+  );
 
   const data = useMemo(
     () =>
@@ -101,40 +197,77 @@ function Players() {
                 return delta < threshYellow;
               }
             })
+            .filter(({ id: userId }) => {
+              if (globalMe === null || blockedFilter === "all") {
+                return true;
+              }
+              const blocked = blockedPlayerIds(globalMe.blocked);
+              const isBlocked = blocked.includes(userId);
+              if (blockedFilter === "hide") {
+                return !isBlocked;
+              } else if (blockedFilter === "only") {
+                return isBlocked;
+              }
+              return true;
+            })
             .sort((a, b) => a.name.localeCompare(b.name)),
-    [allUsers, hideFilter, countryFilter, connections, globalMe]
+    [allUsers, hideFilter, blockedFilter, countryFilter, connections, globalMe]
   );
 
   const columnHelper = createColumnHelper();
-  const columns = useMemo(
-    () =>
-      allUsers === null
-        ? []
-        : [
-            columnHelper.accessor("name", {
-              header: "Name",
-              cell: (props) => (
-                <Link to={`/player/${props.row.original.id}`}>
-                  {formatUserDisplayName(props.row.original, allUsers)}
-                </Link>
-              ),
-            }),
-            columnHelper.accessor("lastSeen", {
-              header: "Activity",
-              cell: (props) => (
-                <ActivityMarker lastSeen={props.getValue()} size="m" />
-              ),
-            }),
-            columnHelper.accessor("country", {
-              header: "Country",
-              cell: (props) =>
-                !props.getValue() ? null : (
-                  <Flag code={props.getValue()} size="m" />
-                ),
-            }),
-          ],
-    [allUsers, columnHelper]
-  );
+  const columns = useMemo(() => {
+    if (allUsers === null) {
+      return [];
+    }
+    const cols = [
+      columnHelper.accessor("name", {
+        header: "Name",
+        cell: (props) => (
+          <Link to={`/player/${props.row.original.id}`}>
+            {formatUserDisplayName(props.row.original, allUsers)}
+          </Link>
+        ),
+      }),
+      columnHelper.accessor("lastSeen", {
+        header: "Activity",
+        cell: (props) => (
+          <ActivityMarker lastSeen={props.getValue()} size="m" />
+        ),
+      }),
+      columnHelper.accessor("country", {
+        header: "Country",
+        cell: (props) =>
+          !props.getValue() ? null : (
+            <Flag code={props.getValue()} size="m" />
+          ),
+      }),
+    ];
+    if (globalMe !== null) {
+      cols.push(
+        columnHelper.display({
+          id: "block",
+          header: "",
+          cell: (props) => {
+            const playerId = props.row.original.id;
+            if (playerId === globalMe.id) {
+              return null;
+            }
+            const blocked = blockedPlayerIds(globalMe.blocked);
+            const isBlocked = blocked.includes(playerId);
+            return (
+              <button
+                className="button is-small apButton"
+                onClick={() => toggleBlock(playerId, isBlocked)}
+              >
+                {isBlocked ? "Unblock" : "Block"}
+              </button>
+            );
+          },
+        })
+      );
+    }
+    return cols;
+  }, [allUsers, columnHelper, globalMe, toggleBlock]);
 
   const table = useReactTable({
     data,
@@ -315,6 +448,37 @@ function Players() {
               </label>
             )}
           </div>
+          {globalMe === null ? null : (
+            <div className="control">
+              <label className="radio">
+                <input
+                  type="radio"
+                  name="blockedFilter"
+                  defaultChecked={blockedFilter === "all"}
+                  onClick={() => blockedFilterSetter("all")}
+                />
+                Show all
+              </label>
+              <label className="radio">
+                <input
+                  type="radio"
+                  name="blockedFilter"
+                  defaultChecked={blockedFilter === "hide"}
+                  onClick={() => blockedFilterSetter("hide")}
+                />
+                Hide blocked
+              </label>
+              <label className="radio">
+                <input
+                  type="radio"
+                  name="blockedFilter"
+                  defaultChecked={blockedFilter === "only"}
+                  onClick={() => blockedFilterSetter("only")}
+                />
+                Show only blocked
+              </label>
+            </div>
+          )}
           {usedCountries.length === 0 ? null : (
             <div className="control">
               <div className="select">

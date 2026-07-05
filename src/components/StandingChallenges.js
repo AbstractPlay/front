@@ -108,6 +108,9 @@ function StandingChallenges(props) {
         var url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append("query", "standing_challenges");
         url.searchParams.append("metaGame", metaGame);
+        if (globalMe?.id) {
+          url.searchParams.append("userId", globalMe.id);
+        }
         const res = await fetch(url);
         var result = await res.json();
         console.log(result);
@@ -133,7 +136,7 @@ function StandingChallenges(props) {
       }
     }
     fetchData();
-  }, [metaGame, update]);
+  }, [metaGame, update, globalMe?.id]);
 
   useEffect(() => {
     showAcceptedSetter(
