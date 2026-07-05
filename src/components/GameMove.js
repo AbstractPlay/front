@@ -80,6 +80,7 @@ import { setGlyphMapOpt } from "../lib/setGlyphMapOpt";
 import { isLabSupportedGame } from "../lib/Lab/buildGame";
 import { launchLabFromExport } from "../lib/Lab/storage";
 import { serializeSessionExploration } from "../lib/Lab/exploration";
+import { getEffectiveColourContext } from "../lib/effectiveColourContext";
 
 // sets the default order of components in the vertical layouts
 const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
@@ -188,6 +189,7 @@ function GameMove(props) {
   const [nodeidParam] = useState(params.get("nodeid"));
   const navigate = useNavigate();
   const colourContext = useStore((state) => state.colourContext);
+  const [colorMode] = useStorageState("color-mode", "light");
   const [, bumpGameColorsRevision] = useState(0);
   const [explorationVersion, bumpExplorationVersion] = useState(0);
   const bumpExploration = () => bumpExplorationVersion((v) => v + 1);
@@ -288,15 +290,10 @@ function GameMove(props) {
     coderString += coders.join(", ");
   }
 
-  const effectiveColourContext = useMemo(() => {
-    let ctx = { ...colourContext };
-    if (globalMe?.customizations?.[metaGame]?.colourContext) {
-      ctx = { ...ctx, ...globalMe.customizations[metaGame].colourContext };
-    } else if (globalMe?.customizations?._default?.colourContext) {
-      ctx = { ...ctx, ...globalMe.customizations._default.colourContext };
-    }
-    return ctx;
-  }, [colourContext, globalMe, metaGame]);
+  const effectiveColourContext = useMemo(
+    () => getEffectiveColourContext(colourContext, globalMe, metaGame),
+    [colourContext, globalMe, metaGame]
+  );
 
   const publishGameColors = useCallback(
     (node) => {
@@ -470,6 +467,10 @@ function GameMove(props) {
   useEffect(() => {
     boardKeySetter(nanoid());
   }, [verticalLayout]);
+
+  useEffect(() => {
+    boardKeySetter(nanoid());
+  }, [colorMode]);
 
   const copyHWDiagram = async () => {
     if (metaGame === "homeworlds" && gameRef !== null && renderrep !== null) {
@@ -1455,10 +1456,9 @@ function GameMove(props) {
       render(engineRef.current.renderColumn(row, col), options);
     }
 
-    if (boardImage.current !== null) {
-      if (renderrep !== null && displaySettings !== null) {
-        options = {};
-        const currentGame = gameRef.current;
+    if (renderrep !== null && displaySettings !== null) {
+      options = {};
+      const currentGame = gameRef.current;
         setRendererColourOpts({
           options,
           metaGame,
@@ -1511,8 +1511,7 @@ function GameMove(props) {
           tmpRendered.push(svgNode);
           document.body.removeChild(container); // ✅ clean up
         }
-        setRendered([...tmpRendered]);
-      }
+      setRendered([...tmpRendered]);
     }
   }, [
     renderrep,
@@ -1521,6 +1520,7 @@ function GameMove(props) {
     boardKey,
     metaGame,
     focusCanExplore,
+    colorMode,
   ]);
 
   useEffect(() => {

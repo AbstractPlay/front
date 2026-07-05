@@ -10,6 +10,10 @@ import LogInOutButton from "./LogInOutButton";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../stores";
 import Spinner from "./Spinner";
+import {
+  DEFAULT_COLOUR_CONTEXT_DARK,
+  DEFAULT_COLOUR_CONTEXT_LIGHT,
+} from "../lib/colourContextDefaults";
 
 const ThemeCustomizer = lazy(() => import("./ThemeCustomizer"));
 
@@ -22,6 +26,14 @@ function Navbar(props) {
   const [newsLastSeen] = useStorageState("news-last-seen", 0);
   const [maxNews, maxNewsSetter] = useState(Infinity);
   const [colorMode, colorModeSetter] = useStorageState("color-mode", "light");
+  const [storedContextLight] = useStorageState(
+    "stored-context-light",
+    DEFAULT_COLOUR_CONTEXT_LIGHT
+  );
+  const [storedContextDark] = useStorageState(
+    "stored-context-dark",
+    DEFAULT_COLOUR_CONTEXT_DARK
+  );
   const [storedInvis, setStoredInvis] = useStorageState("invisible", false);
   const { t, i18n } = useTranslation();
   const [showThemeModal, setShowThemeModal] = useState(false);
@@ -281,9 +293,16 @@ function Navbar(props) {
               aria-label={
                 colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"
               }
-              onClick={() =>
-                colorModeSetter(colorMode === "light" ? "dark" : "light")
-              }
+              onClick={() => {
+                const next = colorMode === "light" ? "dark" : "light";
+                colorModeSetter(next);
+                document.documentElement.setAttribute("color-mode", next);
+                useStore
+                  .getState()
+                  .setColourContext(
+                    next === "dark" ? storedContextDark : storedContextLight
+                  );
+              }}
               title={
                 colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"
               }

@@ -57,6 +57,7 @@ import {
   getLabBoardSettings,
   saveLabBoardSettings,
 } from "../../lib/Lab/storage";
+import { getEffectiveColourContext } from "../../lib/effectiveColourContext";
 
 const noop = () => {};
 
@@ -148,6 +149,7 @@ function LabSession({
   const [inCheck, inCheckSetter] = useState("");
   const globalMe = useStore((state) => state.globalMe);
   const colourContext = useStore((state) => state.colourContext);
+  const [colorMode] = useStorageState("color-mode", "light");
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
   const statusRef = useRef({});
@@ -170,15 +172,10 @@ function LabSession({
   const sessionNameRef = useRef(sessionName);
   const pendingFocusRestore = useRef(initialFocus);
 
-  const effectiveColourContext = useMemo(() => {
-    let ctx = { ...colourContext };
-    if (metaGame && globalMe?.customizations?.[metaGame]?.colourContext) {
-      ctx = { ...ctx, ...globalMe.customizations[metaGame].colourContext };
-    } else if (globalMe?.customizations?._default?.colourContext) {
-      ctx = { ...ctx, ...globalMe.customizations._default.colourContext };
-    }
-    return ctx;
-  }, [colourContext, globalMe, metaGame]);
+  const effectiveColourContext = useMemo(
+    () => getEffectiveColourContext(colourContext, globalMe, metaGame),
+    [colourContext, globalMe, metaGame]
+  );
 
   const { t, i18n } = useTranslation();
 
@@ -718,6 +715,8 @@ function LabSession({
   const focusExPathKey = focus?.exPath?.join(",") ?? "";
 
   useEffect(() => {
+    const currentFocus = focusRef.current;
+
     const boardClick = (row, col, piece) => {
       boardClickHandlerRef.current(row, col, piece);
     };
@@ -733,7 +732,6 @@ function LabSession({
       render(engineRef.current.renderColumn(row, col), expandOpts);
     }
 
-    const currentFocus = focusRef.current;
     if (renderrep !== null && settings !== null && currentFocus) {
       const tmpRendered = [];
       const renders = Array.isArray(renderrep) ? [...renderrep] : [renderrep];
@@ -775,7 +773,7 @@ function LabSession({
       }
       setRendered(tmpRendered);
     }
-  }, [renderrep, settings, effectiveColourContext, metaGame, focusCanExplore]);
+  }, [renderrep, settings, effectiveColourContext, metaGame, focusCanExplore, colorMode]);
 
   useEffect(() => {
     populateChecked(gameRef, engineRef, t, inCheckSetter);

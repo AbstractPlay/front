@@ -44,8 +44,24 @@ function Board({
       if (boardImage) {
         boardImage.current = el;
       }
+      if (
+        el &&
+        index !== null &&
+        rendered.length > 0 &&
+        index < rendered.length &&
+        rendered[index]
+      ) {
+        el.innerHTML = "";
+        const svg = rendered[index];
+        if (fullSize) {
+          svg.style.height = "auto";
+        } else {
+          svg.style.height = "";
+        }
+        el.appendChild(svg);
+      }
     },
-    [boardImage]
+    [boardImage, index, rendered, fullSize, colourContext]
   );
 
   const boardStyle = useMemo(() => {
@@ -61,27 +77,6 @@ function Board({
       setIndex(rendered.length - 1);
     }
   }, [rendered]);
-
-  useEffect(() => {
-    const el = boardContainerRef.current;
-    if (
-      el === null ||
-      index === null ||
-      rendered.length === 0 ||
-      index >= rendered.length ||
-      !rendered[index]
-    ) {
-      return;
-    }
-    el.innerHTML = "";
-    const svg = rendered[index];
-    if (fullSize) {
-      svg.style.height = "auto";
-    } else {
-      svg.style.height = "";
-    }
-    el.appendChild(svg);
-  }, [index, rendered, fullSize]);
 
   const toggleZoom = () => {
     zoomEnabledSetter((val) => !val);
