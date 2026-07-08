@@ -1459,58 +1459,58 @@ function GameMove(props) {
     if (renderrep !== null && displaySettings !== null) {
       options = {};
       const currentGame = gameRef.current;
-        setRendererColourOpts({
-          options,
-          metaGame,
-          isParticipant: currentGame?.me,
-          settings: displaySettings,
-          context: effectiveColourContext,
-          globalMe: globalMeRef.current,
+      setRendererColourOpts({
+        options,
+        metaGame,
+        isParticipant: currentGame?.me,
+        settings: displaySettings,
+        context: effectiveColourContext,
+        globalMe: globalMeRef.current,
+      });
+      setGlyphMapOpt({
+        options,
+        metaGame,
+        globalMe: globalMeRef.current,
+      });
+      const canExplore = focusCanExplore;
+      if (canExplore) {
+        options.boardClick = boardClick;
+      }
+      options.rotate = displaySettings.rotate;
+      if (currentGame?.stackExpanding) {
+        options.boardHover = (row, col, piece) => {
+          expand(col, row);
+        };
+      }
+      options.showAnnotations = displaySettings.annotate;
+      options.svgid = "theBoardSVG";
+      const tmpRendered = [];
+      const renders = [];
+      if (!Array.isArray(renderrep)) {
+        renders.push(renderrep);
+      } else {
+        renders.push(...renderrep);
+      }
+      for (let i = 0; i < renders.length; i++) {
+        const r = renders[i];
+        const container = document.createElement("div");
+        container.style.position = "absolute";
+        container.style.left = "-9999px"; // hide off-screen
+        document.body.appendChild(container); // ✅ attach to DOM
+        render(r, {
+          ...options,
+          divelem: container,
+          boardClick:
+            i === renders.length - 1
+              ? canExplore
+                ? boardClick
+                : undefined
+              : undefined,
         });
-        setGlyphMapOpt({
-          options,
-          metaGame,
-          globalMe: globalMeRef.current,
-        });
-        const canExplore = focusCanExplore;
-        if (canExplore) {
-          options.boardClick = boardClick;
-        }
-        options.rotate = displaySettings.rotate;
-        if (currentGame?.stackExpanding) {
-          options.boardHover = (row, col, piece) => {
-            expand(col, row);
-          };
-        }
-        options.showAnnotations = displaySettings.annotate;
-        options.svgid = "theBoardSVG";
-        const tmpRendered = [];
-        const renders = [];
-        if (!Array.isArray(renderrep)) {
-          renders.push(renderrep);
-        } else {
-          renders.push(...renderrep);
-        }
-        for (let i = 0; i < renders.length; i++) {
-          const r = renders[i];
-          const container = document.createElement("div");
-          container.style.position = "absolute";
-          container.style.left = "-9999px"; // hide off-screen
-          document.body.appendChild(container); // ✅ attach to DOM
-          render(r, {
-            ...options,
-            divelem: container,
-            boardClick:
-              i === renders.length - 1
-                ? canExplore
-                  ? boardClick
-                  : undefined
-                : undefined,
-          });
-          const svgNode = container.firstChild;
-          tmpRendered.push(svgNode);
-          document.body.removeChild(container); // ✅ clean up
-        }
+        const svgNode = container.firstChild;
+        tmpRendered.push(svgNode);
+        document.body.removeChild(container); // ✅ clean up
+      }
       setRendered([...tmpRendered]);
     }
   }, [

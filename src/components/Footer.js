@@ -41,6 +41,14 @@ function Footer(props) {
           </a>
           &nbsp;|&nbsp;
           <a
+            href="https://wishlist.abstractplay.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Wishlist
+          </a>
+          &nbsp;|&nbsp;
+          <a
             href="https://github.com/AbstractPlay"
             target="_blank"
             rel="noreferrer"

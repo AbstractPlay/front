@@ -773,7 +773,14 @@ function LabSession({
       }
       setRendered(tmpRendered);
     }
-  }, [renderrep, settings, effectiveColourContext, metaGame, focusCanExplore, colorMode]);
+  }, [
+    renderrep,
+    settings,
+    effectiveColourContext,
+    metaGame,
+    focusCanExplore,
+    colorMode,
+  ]);
 
   useEffect(() => {
     populateChecked(gameRef, engineRef, t, inCheckSetter);

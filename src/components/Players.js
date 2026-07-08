@@ -104,62 +104,61 @@ function Players() {
     }
   }, [globalMe, blockedFilter, blockedFilterSetter]);
 
-  const toggleBlock = useCallback(
-    async (playerId, isBlocked) => {
-      const { globalMe, setGlobalMe } = useStore.getState();
-      if (globalMe === null || playerId === globalMe.id) {
-        return;
-      }
-      try {
-        const res = await callAuthApi(
-          isBlocked ? "unblock_player" : "block_player",
-          { playerId }
+  const toggleBlock = useCallback(async (playerId, isBlocked) => {
+    const { globalMe, setGlobalMe } = useStore.getState();
+    if (globalMe === null || playerId === globalMe.id) {
+      return;
+    }
+    try {
+      const res = await callAuthApi(
+        isBlocked ? "unblock_player" : "block_player",
+        { playerId }
+      );
+      if (!res) return;
+      if (res.status !== 200) {
+        const result = await res.json();
+        console.log(
+          `An error occurred while ${
+            isBlocked ? "unblocking" : "blocking"
+          } a player:\n${result}`
         );
-        if (!res) return;
-        if (res.status !== 200) {
-          const result = await res.json();
-          console.log(
-            `An error occurred while ${isBlocked ? "unblocking" : "blocking"} a player:\n${result}`
-          );
-        } else {
-          const result = await res.json();
-          setGlobalMe((prev) => {
-            if (prev === null) {
-              return prev;
-            }
-            const current = blockedPlayerIds(prev.blocked);
-            let next = isBlocked
-              ? current.filter((id) => id !== playerId)
-              : current.includes(playerId)
-                ? current
-                : [...current, playerId];
+      } else {
+        const result = await res.json();
+        setGlobalMe((prev) => {
+          if (prev === null) {
+            return prev;
+          }
+          const current = blockedPlayerIds(prev.blocked);
+          let next = isBlocked
+            ? current.filter((id) => id !== playerId)
+            : current.includes(playerId)
+            ? current
+            : [...current, playerId];
 
-            if (result.body) {
-              try {
-                const fromApi = parseBlockedBody(result.body);
-                if (fromApi !== null) {
-                  const shouldBeBlocked = !isBlocked;
-                  const apiMatches = shouldBeBlocked
-                    ? fromApi.includes(playerId)
-                    : !fromApi.includes(playerId);
-                  if (apiMatches) {
-                    next = fromApi;
-                  }
+          if (result.body) {
+            try {
+              const fromApi = parseBlockedBody(result.body);
+              if (fromApi !== null) {
+                const shouldBeBlocked = !isBlocked;
+                const apiMatches = shouldBeBlocked
+                  ? fromApi.includes(playerId)
+                  : !fromApi.includes(playerId);
+                if (apiMatches) {
+                  next = fromApi;
                 }
-              } catch (error) {
-                console.log(error);
               }
+            } catch (error) {
+              console.log(error);
             }
+          }
 
-            return { ...prev, blocked: next };
-          });
-        }
-      } catch (error) {
-        console.log(error);
+          return { ...prev, blocked: next };
+        });
       }
-    },
-    []
-  );
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const data = useMemo(
     () =>
@@ -237,9 +236,7 @@ function Players() {
       columnHelper.accessor("country", {
         header: "Country",
         cell: (props) =>
-          !props.getValue() ? null : (
-            <Flag code={props.getValue()} size="m" />
-          ),
+          !props.getValue() ? null : <Flag code={props.getValue()} size="m" />,
       }),
     ];
     if (globalMe !== null) {
