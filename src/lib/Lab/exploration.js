@@ -7,12 +7,18 @@ export function serializeExploration(nodes, gameOver = false) {
   return tip.Deflate(gameOver).children;
 }
 
+function applyNodeAnnotations(target, source) {
+  if (source.nag) target.SetNag(source.nag);
+  if (source.textComment) target.SetTextComment(source.textComment);
+}
+
 function inflateRecursive(gameEngine, node, children) {
   if (!Array.isArray(children)) return;
   children.forEach((n) => {
     if (!n?.move) return;
     gameEngine.move(n.move, { trusted: true });
     const pos = node.AddChild(n.move, gameEngine);
+    applyNodeAnnotations(node.children[pos], n);
     if (n.outcome !== undefined && (!n.children || n.children.length === 0)) {
       node.children[pos].SetOutcome(n.outcome);
     }
@@ -149,6 +155,35 @@ export function fixMoveOutcomes(exploration, moveNumber) {
     else parent.outcome = -1;
     child = parent;
   }
+}
+
+function serializeNodeAnnotation(node) {
+  if (!node) return null;
+  const entry = {};
+  if (node.nag) entry.nag = node.nag;
+  if (node.textComment) entry.textComment = node.textComment;
+  return Object.keys(entry).length > 0 ? entry : null;
+}
+
+export function serializeMainLineAnnotations(nodes) {
+  if (!nodes?.length) return null;
+  const annotations = nodes.map((node) => serializeNodeAnnotation(node));
+  return annotations.some(Boolean) ? annotations : null;
+}
+
+export function restoreMainLineAnnotations(nodes, annotations) {
+  if (!nodes?.length || !Array.isArray(annotations)) return;
+  const limit = Math.min(nodes.length, annotations.length);
+  for (let i = 0; i < limit; i++) {
+    const entry = annotations[i];
+    if (!entry) continue;
+    applyNodeAnnotations(nodes[i], entry);
+  }
+}
+
+export function getMainLineTipState(nodes, game) {
+  if (!nodes?.length) return game?.state;
+  return getExplorationNode(nodes, game, nodes.length - 1).state;
 }
 
 export function canExploreMove(game, exploration, focus) {

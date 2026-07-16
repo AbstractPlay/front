@@ -17,7 +17,7 @@ export function assertLabSupportedGame(metaGame) {
     const info = gameinfo.get(metaGame);
     const name = info?.name ?? metaGame;
     throw new Error(
-      `${name} is not supported in Lab. Simultaneous games are not available.`
+      `${name} is not supported in Playground. Simultaneous games are not available.`
     );
   }
 }

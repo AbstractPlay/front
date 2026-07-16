@@ -1,5 +1,7 @@
 import { v4 as uuid } from "uuid";
 
+export const VALID_NAGS = ["!", "?", "!!", "??", "!?", "?!"];
+
 export class GameNode {
   constructor(parent, move, state, toMove) {
     this.parent = parent;
@@ -9,6 +11,8 @@ export class GameNode {
     this.id = uuid();
     this.comment = [];
     this.commented = false;
+    this.nag = undefined;
+    this.textComment = undefined;
     this.version = undefined; // Only the base node has a version. This is really the version of the tree.
     this.toMove = null; // 0 for player1, 1 for player2
     if (toMove !== undefined) this.toMove = toMove;
@@ -62,6 +66,28 @@ export class GameNode {
   UpdateCommented() {
     this.commented = true;
     if (this.parent !== null) this.parent.UpdateCommented();
+  }
+
+  SetNag(value) {
+    if (!value) {
+      this.nag = undefined;
+      return;
+    }
+    if (VALID_NAGS.includes(value)) {
+      this.nag = value;
+    }
+  }
+
+  SetTextComment(value) {
+    const trimmed = typeof value === "string" ? value.trim() : "";
+    if (trimmed) {
+      this.textComment = value;
+      if (this.commented !== true) {
+        this.UpdateCommented();
+      }
+    } else {
+      this.textComment = undefined;
+    }
   }
 
   UpdateOutcome() {
@@ -151,6 +177,8 @@ export class GameNode {
     if (this.children.length === 0 && this.outcome !== -1)
       deflated.outcome = this.outcome;
     if (this.premove) deflated.premove = true;
+    if (this.nag) deflated.nag = this.nag;
+    if (this.textComment) deflated.textComment = this.textComment;
     return deflated;
   }
 

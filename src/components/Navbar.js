@@ -130,11 +130,11 @@ function Navbar(props) {
           )}
           <div className="navbar-item">
             <Link
-              to="/lab"
+              to="/playground"
               className="navbar-item"
               onClick={() => updateBurgerExpanded(false)}
             >
-              {t("Lab")}
+              {t("Playground")}
             </Link>
           </div>
           <div className="navbar-item">

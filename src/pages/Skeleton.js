@@ -282,11 +282,11 @@ function Bones(props) {
                 path="/"
                 element={<Welcome token={token} update={update} />}
               />
+              <Route path="/playground" element={<Lab />} />
               <Route
-                path="/playground"
-                element={<Navigate to="/lab" replace />}
+                path="/lab"
+                element={<Navigate to="/playground" replace />}
               />
-              <Route path="/lab" element={<Lab />} />
               <Route path="/tournaments/:metaGame?" element={<Tournaments />} />
               <Route path="/play" element={<Play />} />
               <Route path="/customize/:metaGame" element={<Customize />} />

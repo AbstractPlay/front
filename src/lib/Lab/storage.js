@@ -53,10 +53,11 @@ export function createSaveRecord({
   variants = [],
   playerCount,
   exploration = null,
+  moveAnnotations = null,
   gameSettings = {},
   id,
 }) {
-  return {
+  const record = {
     id: id ?? nanoid(),
     name,
     metaGame,
@@ -67,6 +68,10 @@ export function createSaveRecord({
     gameSettings,
     savedAt: Date.now(),
   };
+  if (moveAnnotations) {
+    record.moveAnnotations = moveAnnotations;
+  }
+  return record;
 }
 
 export function saveLastSession(session) {

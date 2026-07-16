@@ -3,6 +3,13 @@ import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 
+function moveCommentedState(node) {
+  if (node.textComment) return "filled";
+  if (node.comment && node.comment.length > 0) return "filled";
+  if (node.commented) return "outline";
+  return false;
+}
+
 function useEventListener(eventName, handler, element = window) {
   const savedHandler = useRef();
 
@@ -250,6 +257,7 @@ function GameMoves(props) {
     if (
       document.activeElement.id === "enterAMove" ||
       document.activeElement.id === "enterAComment" ||
+      document.activeElement.id === "playgroundMoveComment" ||
       document.activeElement.id === "enterANote" ||
       document.activeElement.id === "myCustomCSS" ||
       exploration === null
@@ -319,6 +327,7 @@ function GameMoves(props) {
           onClick={() => props.handleGameMoveClick(m.path)}
         >
           {m.move.endsWith("...") ? m.move.slice(0, -3) : m.move}
+          {m.nag ? <span className="moveNag">{m.nag}</span> : null}
           {m.move.endsWith("...") && (
             <span style={{ fontSize: "1.3em", fontWeight: "bold" }}>...</span>
           )}
@@ -469,12 +478,8 @@ function GameMoves(props) {
             {
               class: className,
               outcome: -1,
-              commented:
-                exploration[i].comment && exploration[i].comment.length > 0
-                  ? "filled"
-                  : exploration[i].commented
-                  ? "outline"
-                  : false,
+              commented: moveCommentedState(exploration[i]),
+              nag: exploration[i].nag,
               move: exploration[i].move,
               path: { moveNumber: i, exPath: [] },
             },
@@ -495,12 +500,8 @@ function GameMoves(props) {
                   node.premove ||
                   node?.children?.some((n) => n.premove) ||
                   false,
-                commented:
-                  node.comment && node.comment.length > 0
-                    ? "filled"
-                    : node.commented
-                    ? "outline"
-                    : false,
+                commented: moveCommentedState(node),
+                nag: node.nag,
                 move: node.move,
                 path: {
                   moveNumber: focus.moveNumber,
@@ -520,12 +521,8 @@ function GameMoves(props) {
                 outcome: c.outcome,
                 premove:
                   c.premove || c?.children?.some((n) => n.premove) || false,
-                commented:
-                  c.comment && c.comment.length > 0
-                    ? "filled"
-                    : c.commented
-                    ? "outline"
-                    : false,
+                commented: moveCommentedState(c),
+                nag: c.nag,
                 move: c.move,
                 path: {
                   moveNumber: focus.moveNumber,
@@ -567,12 +564,8 @@ function GameMoves(props) {
             {
               class: className,
               outcome: exploration[i].outcome,
-              commented:
-                exploration[i].comment && exploration[i].comment.length > 0
-                  ? "filled"
-                  : exploration[i].commented
-                  ? "outline"
-                  : false,
+              commented: moveCommentedState(exploration[i]),
+              nag: exploration[i].nag,
               move:
                 exploration[i].move +
                 (exploration[i].children.length > 0 && focus.moveNumber !== i
@@ -596,12 +589,8 @@ function GameMoves(props) {
             {
               class: className,
               outcome: node.outcome,
-              commented:
-                node.comment && node.comment.length > 0
-                  ? "filled"
-                  : node.commented
-                  ? "outline"
-                  : false,
+              commented: moveCommentedState(node),
+              nag: node.nag,
               move: node.move,
               path: {
                 moveNumber: focus.moveNumber,
@@ -622,13 +611,8 @@ function GameMoves(props) {
             next.push({
               class: className,
               outcome: exploration[focus.moveNumber + 1].outcome,
-              commented:
-                exploration[focus.moveNumber + 1].comment &&
-                exploration[focus.moveNumber + 1].comment.length > 0
-                  ? "filled"
-                  : exploration[focus.moveNumber + 1].commented
-                  ? "outline"
-                  : false,
+              commented: moveCommentedState(exploration[focus.moveNumber + 1]),
+              nag: exploration[focus.moveNumber + 1].nag,
               move: exploration[focus.moveNumber + 1].move,
               path: {
                 moveNumber: focus.moveNumber + 1,
@@ -642,12 +626,8 @@ function GameMoves(props) {
             next.push({
               class: className,
               outcome: c.outcome,
-              commented:
-                c.comment && c.comment.length > 0
-                  ? "filled"
-                  : c.commented
-                  ? "outline"
-                  : false,
+              commented: moveCommentedState(c),
+              nag: c.nag,
               move: c.move,
               path: {
                 moveNumber: focus.moveNumber,

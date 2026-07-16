@@ -19,6 +19,7 @@ import { useStore } from "../../stores";
 import GameMoves from "./GameMoves";
 import GameStatus from "./GameStatus";
 import MoveEntry from "./MoveEntry";
+import MoveAnnotations from "./MoveAnnotations";
 import Board from "./Board";
 import Modal from "../Modal";
 import ClipboardCopy from "../../lib/ClipboardCopy";
@@ -28,6 +29,11 @@ import {
   fixMoveOutcomes,
   canExploreMove,
   sanitizeFocus,
+  setLabSessionPersistCallback,
+  saveLabExploration,
+  serializeSessionExploration,
+  serializeMainLineAnnotations,
+  getMainLineTipState,
 } from "../../lib/Lab/exploration";
 import { setStatus, replaceNames } from "../../lib/Lab/misc";
 import {
@@ -45,11 +51,6 @@ import {
   populateChecked,
 } from "../../lib/Lab/gameStuff";
 import {
-  setLabSessionPersistCallback,
-  saveLabExploration,
-} from "../../lib/Lab/exploration";
-import { serializeSessionExploration } from "../../lib/Lab/exploration";
-import {
   addSave,
   createSaveRecord,
   saveLastSession,
@@ -58,6 +59,7 @@ import {
   saveLabBoardSettings,
 } from "../../lib/Lab/storage";
 import { getEffectiveColourContext } from "../../lib/effectiveColourContext";
+import { serializePlaygroundExport } from "../../lib/Lab/export";
 
 const noop = () => {};
 
@@ -104,6 +106,7 @@ function getRotationIncrement(metaGame, rep, engine) {
 function LabSession({
   initialGame,
   savedExploration,
+  savedMoveAnnotations,
   initialFocus,
   initialGameSettings,
   sessionName,
@@ -199,12 +202,10 @@ function LabSession({
     if (!gameRef.current || !explorationRef.current?.nodes || !focus) return;
     const nodes = explorationRef.current.nodes;
     const safeFocus = sanitizeFocus(nodes, focus);
-    const focusNode = getFocusNode(nodes, gameRef.current, safeFocus);
-    if (!focusNode) return;
     const payload = {
       name: sessionNameRef.current,
       metaGame: gameRef.current.metaGame,
-      state: focusNode.state ?? gameRef.current.state,
+      state: getMainLineTipState(nodes, gameRef.current),
       variants: gameRef.current.selectedVariants ?? [],
       playerCount: gameRef.current.numPlayers,
       focus: {
@@ -213,6 +214,7 @@ function LabSession({
       },
       exploration: serializeSessionExploration(nodes, gameRef.current.gameOver),
       explorationFormat: 2,
+      moveAnnotations: serializeMainLineAnnotations(nodes),
       gameSettings: gameSettings ?? {},
       id: gameRef.current.id,
     };
@@ -307,6 +309,7 @@ function LabSession({
         moveSetter,
         initialDisplay,
         savedExploration,
+        savedMoveAnnotations,
         initialFocus
       );
       processNewSettings(
@@ -682,25 +685,26 @@ function LabSession({
       sessionNameRef.current
     );
     if (!name) return;
+    debouncedPersist.flush();
     sessionNameRef.current = name;
     const nodes = explorationRef.current.nodes;
-    const focusNode = getFocusNode(nodes, gameRef.current, focus);
     const record = createSaveRecord({
-      id: gameRef.current.id,
       name,
       metaGame: gameRef.current.metaGame,
-      state: focusNode.state ?? gameRef.current.state,
+      state: getMainLineTipState(nodes, gameRef.current),
       variants: gameRef.current.selectedVariants ?? [],
       playerCount: gameRef.current.numPlayers,
-      exploration:
-        focusNode.children.length > 0
-          ? focusNode.Deflate(gameRef.current.gameOver).children
-          : null,
+      exploration: serializeSessionExploration(
+        nodes,
+        gameRef.current.gameOver
+      ),
+      moveAnnotations: serializeMainLineAnnotations(nodes),
       gameSettings: gameSettings ?? {},
     });
     addSave(record);
+    gameRef.current = { ...gameRef.current, id: record.id };
     persistSession();
-    window.alert("Saved to Lab.");
+    window.alert("Saved to Playground.");
   };
 
   moveEntryHandlersRef.current = {
@@ -788,6 +792,19 @@ function LabSession({
 
   const game = gameRef.current;
 
+  const playgroundExportText = useMemo(() => {
+    void explorationVersion;
+    if (!game || !explorationRef.current?.nodes || !focus) return "";
+    return serializePlaygroundExport(
+      game,
+      explorationRef.current.nodes,
+      focus
+    );
+  }, [game, focus, explorationVersion]);
+
+  const focusStateText =
+    getFocusNode(explorationRef.current?.nodes, game, focus)?.state ?? "";
+
   if (error) {
     return (
       <>
@@ -807,6 +824,15 @@ function LabSession({
     explorationRef.current?.nodes != null
       ? getFocusNode(explorationRef.current.nodes, game, focus)?.toMove ?? ""
       : "";
+
+  const focusNode = getFocusNode(
+    explorationRef.current?.nodes,
+    game,
+    focus
+  );
+  const showMoveAnnotations =
+    focusNode?.move &&
+    (focus.moveNumber > 0 || (focus.exPath?.length ?? 0) > 0);
 
   const statusSection = (
     <>
@@ -840,7 +866,7 @@ function LabSession({
       <h1 className="subtitle lined">
         <span>
           <Link to={`/games/${metaGame}`}>{gameDeets?.name}</Link>
-          <span style={{ fontSize: "smaller" }}> (Lab)</span>
+          <span style={{ fontSize: "smaller" }}> (Playground)</span>
         </span>
       </h1>
       {inCheck ? (
@@ -894,13 +920,16 @@ function LabSession({
         getFocusNode={getFocusNode}
         explorationVersion={explorationVersion}
       />
+      {showMoveAnnotations ? (
+        <MoveAnnotations focusNode={focusNode} onChange={bumpExploration} />
+      ) : null}
     </>
   );
 
   return (
     <>
       <Helmet>
-        <title>{sessionNameRef.current} — Lab</title>
+        <title>{sessionNameRef.current} — Playground</title>
       </Helmet>
       <article>
         {screenWidth < 770 || verticalLayout ? (
@@ -920,7 +949,7 @@ function LabSession({
         )}
         <div className="buttons">
           <button className="button apButton" onClick={handleSaveNamed}>
-            Save to Lab
+            Save to Playground
           </button>
           <button className="button apButtonNeutral" onClick={onExit}>
             Exit to launcher
@@ -987,36 +1016,43 @@ function LabSession({
           ]}
         >
           <div className="content">
-            <p>Copy or download the current position state.</p>
-            <Fragment>
-              <ClipboardCopy
-                copyText={
-                  getFocusNode(
-                    explorationRef.current.nodes,
-                    gameRef.current,
-                    focus
-                  )?.state
-                }
-              />
-              <div className="field">
-                <div className="control">
-                  <a
-                    href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                      getFocusNode(
-                        explorationRef.current.nodes,
-                        gameRef.current,
-                        focus
-                      )?.state ?? ""
-                    )}`}
-                    download="AbstractPlay-Lab.json"
-                  >
-                    <button className="button apButtonNeutral">
-                      {t("Download")}
-                    </button>
-                  </a>
-                </div>
+            <h2>Copy position</h2>
+            <p>Raw engine state at the current focus (for debugging).</p>
+            <ClipboardCopy copyText={focusStateText} />
+            <div className="field">
+              <div className="control">
+                <a
+                  href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                    focusStateText
+                  )}`}
+                  download="AbstractPlay-Playground-position.json"
+                >
+                  <button className="button apButtonNeutral">
+                    {t("Download")}
+                  </button>
+                </a>
               </div>
-            </Fragment>
+            </div>
+            <h2>Copy game</h2>
+            <p>
+              Full Playground export including move tree, focus, and
+              annotations — paste into Playground to share.
+            </p>
+            <ClipboardCopy copyText={playgroundExportText} />
+            <div className="field">
+              <div className="control">
+                <a
+                  href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                    playgroundExportText
+                  )}`}
+                  download="AbstractPlay-Playground.json"
+                >
+                  <button className="button apButtonNeutral">
+                    {t("Download")}
+                  </button>
+                </a>
+              </div>
+            </div>
           </div>
         </Modal>
         <LabRenderOptionsModal

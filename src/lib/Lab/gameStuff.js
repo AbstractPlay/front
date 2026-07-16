@@ -5,10 +5,10 @@ import {
   fixMoveOutcomes,
   saveLabExploration,
   restoreExplorationTree,
-  serializeSessionExploration,
   isSessionExplorationBranches,
   restoreSessionExploration,
   sanitizeFocus,
+  restoreMainLineAnnotations,
 } from "./exploration";
 import { replaceNames, setStatus } from "./misc";
 import { GameNode } from "../../components/Lab/GameTree";
@@ -56,6 +56,7 @@ export function setupLabGame(
   moveSetter,
   display,
   savedExploration = null,
+  savedMoveAnnotations = null,
   initialFocus = null
 ) {
   const explorer = true;
@@ -200,6 +201,8 @@ export function setupLabGame(
       );
     }
   }
+
+  restoreMainLineAnnotations(history, savedMoveAnnotations);
 
   explorationRef.current = { gameID: game0.id, nodes: history };
   const sanitized = sanitizeFocus(

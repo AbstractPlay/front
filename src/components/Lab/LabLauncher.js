@@ -6,8 +6,8 @@ import {
   buildLabGame,
   getLabPlayerCounts,
   listLabGames,
-  parsePastedState,
 } from "../../lib/Lab/buildGame";
+import { parsePlaygroundImport } from "../../lib/Lab/export";
 import { listSaves, deleteSave } from "../../lib/Lab/storage";
 
 function LabLauncher({ onLaunch, onLoadSave }) {
@@ -72,13 +72,18 @@ function LabLauncher({ onLaunch, onLoadSave }) {
   const handleLoadPasted = () => {
     setError("");
     try {
-      const { metaGame: pastedMetaGame, state } = parsePastedState(pastedState);
-      const game = buildLabGame(pastedMetaGame, state);
+      const imported = parsePlaygroundImport(pastedState);
+      const game = buildLabGame(imported.metaGame, imported.state, {
+        variants: imported.variants,
+        numPlayers: imported.playerCount,
+      });
       onLaunch({
         game,
-        savedExploration: null,
+        savedExploration: imported.exploration,
+        savedMoveAnnotations: imported.moveAnnotations,
+        initialFocus: imported.focus,
         gameSettings: {},
-        sessionName: `${gameinfo.get(pastedMetaGame).name} (imported)`,
+        sessionName: `${gameinfo.get(imported.metaGame).name} (imported)`,
       });
     } catch (err) {
       setError(err.message || String(err));
@@ -93,13 +98,13 @@ function LabLauncher({ onLaunch, onLoadSave }) {
   return (
     <article>
       <div className="content">
-        <h1 className="title">Lab</h1>
+        <h1 className="title">Playground</h1>
         <p>
           A local play area for experimenting with games. Nothing here touches
           the server — positions and saved games live in your browser only.
         </p>
         <p>
-          Lab supports sequential games only. Simultaneous games are not
+          Playground supports sequential games only. Simultaneous games are not
           available.
         </p>
       </div>
@@ -227,9 +232,9 @@ function LabLauncher({ onLaunch, onLoadSave }) {
               />
             </div>
             <p className="help">
-              Paste a serialized state from a live game debug dump or elsewhere.
-              The game type is read from the state automatically. Simultaneous
-              games are not supported.
+              Paste a serialized state from a live game debug dump, a Playground
+              game export, or elsewhere. The game type is read from the state
+              automatically. Simultaneous games are not supported.
             </p>
           </div>
           <div className="field">
@@ -246,7 +251,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
         <>
           {saves.length === 0 ? (
             <div className="content">
-              <p>No saved Lab games yet.</p>
+              <p>No saved Playground games yet.</p>
             </div>
           ) : (
             <table className="table apTable">

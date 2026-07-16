@@ -14,6 +14,7 @@ function sessionFromAutosave(last) {
   return {
     game,
     savedExploration: last.exploration ?? null,
+    savedMoveAnnotations: last.moveAnnotations ?? null,
     initialFocus: last.focus ?? null,
     gameSettings: last.gameSettings ?? {},
     sessionName: last.name,
@@ -30,7 +31,7 @@ function Lab() {
       try {
         setSession(sessionFromAutosave(last));
       } catch (err) {
-        console.error("Failed to restore Lab session:", err);
+        console.error("Failed to restore Playground session:", err);
         clearLastSession();
       }
     }
@@ -40,13 +41,16 @@ function Lab() {
   const handleLaunch = ({
     game,
     savedExploration,
+    savedMoveAnnotations,
+    initialFocus,
     gameSettings,
     sessionName,
   }) => {
     setSession({
       game,
       savedExploration,
-      initialFocus: null,
+      savedMoveAnnotations: savedMoveAnnotations ?? null,
+      initialFocus: initialFocus ?? null,
       gameSettings,
       sessionName,
     });
@@ -63,6 +67,7 @@ function Lab() {
       handleLaunch({
         game,
         savedExploration: save.exploration,
+        savedMoveAnnotations: save.moveAnnotations ?? null,
         gameSettings: save.gameSettings ?? {},
         sessionName: save.name,
       });
@@ -85,6 +90,7 @@ function Lab() {
       <LabSession
         initialGame={session.game}
         savedExploration={session.savedExploration}
+        savedMoveAnnotations={session.savedMoveAnnotations}
         initialFocus={session.initialFocus}
         initialGameSettings={session.gameSettings}
         sessionName={session.sessionName}
