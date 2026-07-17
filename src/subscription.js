@@ -28,6 +28,91 @@ function vapidKeysMatch(existingKey) {
   return existingBytes.every((byte, index) => byte === convertedVapidKey[index]);
 }
 
+function isPushServiceError(error) {
+  return (
+    error?.name === "AbortError" ||
+    String(error?.message || "").toLowerCase().includes("push service error")
+  );
+}
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function waitForServiceWorkerActive(registration) {
+  if (registration.active) {
+    return registration;
+  }
+
+  const worker = registration.installing || registration.waiting;
+  if (!worker) {
+    await delay(100);
+    if (registration.active) {
+      return registration;
+    }
+    throw new Error("Service worker is not active.");
+  }
+
+  if (worker.state === "activated") {
+    return registration;
+  }
+
+  await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      reject(new Error("Service worker activation timed out."));
+    }, 10000);
+
+    worker.addEventListener("statechange", () => {
+      if (worker.state === "activated") {
+        clearTimeout(timeout);
+        resolve();
+      } else if (worker.state === "redundant") {
+        clearTimeout(timeout);
+        reject(new Error("Service worker failed to activate."));
+      }
+    });
+  });
+
+  return registration;
+}
+
+async function getServiceWorkerRegistration() {
+  if (!("serviceWorker" in navigator)) {
+    return null;
+  }
+
+  let registration = await navigator.serviceWorker.getRegistration("/");
+  if (!registration) {
+    registration = await navigator.serviceWorker.register("/sw.js", {
+      scope: "/",
+    });
+  }
+
+  return waitForServiceWorkerActive(registration);
+}
+
+async function formatSubscribeFailure(error) {
+  if (isPushServiceError(error)) {
+    let isBrave = false;
+    try {
+      isBrave = Boolean(
+        navigator.brave && (await navigator.brave.isBrave())
+      );
+    } catch {
+      // ignore
+    }
+    return {
+      errorCode: "pushServiceError",
+      isBrave,
+      error: "Push service unavailable.",
+    };
+  }
+
+  return {
+    error: error?.message || "Failed to subscribe to push notifications.",
+  };
+}
+
 async function clearPushSubscription(registration) {
   const subscription = await registration.pushManager.getSubscription();
   if (subscription !== null) {
@@ -37,7 +122,7 @@ async function clearPushSubscription(registration) {
 
 async function createPushSubscription(registration) {
   return registration.pushManager.subscribe({
-    applicationServerKey: convertedVapidKey,
+    applicationServerKey: convertedVapidKey.slice(),
     userVisibleOnly: true,
   });
 }
@@ -57,20 +142,23 @@ async function ensurePushSubscription(registration) {
     return subscription;
   }
 
-  try {
-    return await createPushSubscription(registration);
-  } catch (error) {
-    const isPushServiceError =
-      error?.name === "AbortError" ||
-      String(error?.message || "").includes("push service error");
-
-    if (!isPushServiceError) {
-      throw error;
+  let lastError;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      if (attempt > 0) {
+        await clearPushSubscription(registration);
+        await delay(250 * attempt);
+      }
+      return await createPushSubscription(registration);
+    } catch (error) {
+      lastError = error;
+      if (!isPushServiceError(error)) {
+        throw error;
+      }
     }
-
-    await clearPushSubscription(registration);
-    return createPushSubscription(registration);
   }
+
+  throw lastError;
 }
 
 async function sendSubscription(subscription) {
@@ -154,8 +242,8 @@ export async function subscribeUser({
   }
 
   try {
-    const registration = await navigator.serviceWorker.ready;
-    if (!registration.pushManager) {
+    const registration = await getServiceWorkerRegistration();
+    if (!registration?.pushManager) {
       return { success: false, error: "Push manager is unavailable." };
     }
 
@@ -165,10 +253,7 @@ export async function subscribeUser({
   } catch (error) {
     const log = silent ? console.debug : console.error;
     log("An error occurred during the subscription process.", error);
-    return {
-      success: false,
-      error: error?.message || "Failed to subscribe to push notifications.",
-    };
+    return { success: false, ...(await formatSubscribeFailure(error)) };
   }
 }
 

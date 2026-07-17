@@ -578,6 +578,8 @@
     "PushOnThisDevice": "Enable push notifications on this device",
     "PushOnThisDeviceEnabled": "Push notifications are enabled on this device",
     "PushEnableFailed": "Failed to enable push notifications on this device.",
+    "PushServiceError": "Your browser could not register for push notifications. Check that notifications are allowed for this site and that browser push messaging is enabled.",
+    "PushServiceErrorBrave": "Brave could not register for push notifications. Allow notifications for this site, then in Brave Settings → Privacy enable \"Use Google services for push messaging\", and try again.",
     "PushDisableFailed": "Failed to disable push notifications on this device.",
     "PushUpdateFailed": "Failed to update push notification settings.",
     "UnregisterAllDevices": "Unregister all devices",

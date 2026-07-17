@@ -382,8 +382,17 @@ function UserSettingsModal(props) {
       if (enabling) {
         const subscribeResult = await subscribeUser({ requestPermission: true });
         if (!subscribeResult.success) {
-          toast(subscribeResult.error || t("PushEnableFailed"), {
+          const message =
+            subscribeResult.errorCode === "pushServiceError"
+              ? t(
+                  subscribeResult.isBrave
+                    ? "PushServiceErrorBrave"
+                    : "PushServiceError"
+                )
+              : subscribeResult.error || t("PushEnableFailed");
+          toast(message, {
             type: "error",
+            autoClose: subscribeResult.errorCode === "pushServiceError" ? 12000 : 5000,
           });
           return;
         }
