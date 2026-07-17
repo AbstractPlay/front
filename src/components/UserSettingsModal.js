@@ -21,7 +21,12 @@ import { countryCodeList } from "../lib/countryCodeList";
 import { useStore } from "../stores";
 import BotsModal from "./Bots/BotsModal";
 import { validateDisplayName } from "./Bots/botUtils";
-import { subscribeUser, unsubscribeUser } from "../subscription";
+import {
+  subscribeUser,
+  deletePushSubscription,
+  unregisterAllDevices,
+  isPushEnabledOnDevice,
+} from "../subscription";
 import { toast } from "react-toastify";
 
 function UserSettingsModal(props) {
@@ -59,6 +64,7 @@ function UserSettingsModal(props) {
   const [hideSpoilers, hideSpoilersSetter] = useState(false);
   const [myColor, myColorSetter] = useState(false);
   const [showBots, showBotsSetter] = useState(false);
+  const [pushOnThisDevice, pushOnThisDeviceSetter] = useState(false);
 
   useEffect(() => {
     if (show) {
@@ -363,41 +369,55 @@ function UserSettingsModal(props) {
     }
   }, [updated, show]);
 
+  useEffect(() => {
+    if (show) {
+      isPushEnabledOnDevice().then(pushOnThisDeviceSetter);
+    }
+  }, [show]);
+
   const handlePushClick = async () => {
-    const { setGlobalMe } = useStore.getState();
-    const enabling = !(globalMe?.mayPush === true);
+    const enabling = !pushOnThisDevice;
 
     try {
       if (enabling) {
-        const subscribeResult = await subscribeUser();
+        const subscribeResult = await subscribeUser({ requestPermission: true });
         if (!subscribeResult.success) {
-          toast(subscribeResult.error || "Failed to enable push notifications.", {
+          toast(subscribeResult.error || t("PushEnableFailed"), {
             type: "error",
           });
           return;
         }
-
-        const res = await callAuthApi("set_push", { state: true });
-        if (!res || res.status !== 200) {
-          await unsubscribeUser();
-          toast("Failed to enable push notifications.", { type: "error" });
-          return;
-        }
-
-        setGlobalMe((val) => ({ ...val, mayPush: true }));
+        pushOnThisDeviceSetter(true);
       } else {
-        const res = await callAuthApi("set_push", { state: false });
-        if (!res || res.status !== 200) {
-          toast("Failed to disable push notifications.", { type: "error" });
+        const result = await deletePushSubscription();
+        if (!result.success) {
+          toast(result.error || t("PushDisableFailed"), { type: "error" });
           return;
         }
-
-        await unsubscribeUser();
-        setGlobalMe((val) => ({ ...val, mayPush: false }));
+        pushOnThisDeviceSetter(false);
       }
     } catch (error) {
       console.log(error);
-      toast("Failed to update push notification settings.", { type: "error" });
+      toast(t("PushUpdateFailed"), { type: "error" });
+    }
+  };
+
+  const handleUnregisterAllDevices = async () => {
+    if (!window.confirm(t("UnregisterAllDevicesConfirm"))) {
+      return;
+    }
+
+    try {
+      const result = await unregisterAllDevices();
+      if (!result.success) {
+        toast(result.error || t("PushUpdateFailed"), { type: "error" });
+        return;
+      }
+      pushOnThisDeviceSetter(false);
+      toast(t("UnregisterAllDevicesSuccess"));
+    } catch (error) {
+      console.log(error);
+      toast(t("PushUpdateFailed"), { type: "error" });
     }
   };
 
@@ -721,19 +741,22 @@ function UserSettingsModal(props) {
               <label className="checkbox is-small">
                 <input
                   type="checkbox"
-                  checked={
-                    globalMe !== null &&
-                    "mayPush" in globalMe &&
-                    globalMe.mayPush === true
-                  }
+                  checked={pushOnThisDevice}
                   onChange={handlePushClick}
                 />
-                {globalMe !== null &&
-                "mayPush" in globalMe &&
-                globalMe.mayPush === true
-                  ? t("DisablePush")
-                  : t("EnablePush")}
+                {pushOnThisDevice
+                  ? t("PushOnThisDeviceEnabled")
+                  : t("PushOnThisDevice")}
               </label>
+            </div>
+            <div className="control">
+              <button
+                type="button"
+                className="button is-small is-danger is-light"
+                onClick={handleUnregisterAllDevices}
+              >
+                {t("UnregisterAllDevices")}
+              </button>
             </div>
           </div>
 

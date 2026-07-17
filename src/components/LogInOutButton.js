@@ -5,7 +5,7 @@ import { Auth } from "aws-amplify";
 import { callAuthApi } from "../lib/api";
 import UserSettingsModal from "./UserSettingsModal";
 import NewProfile from "./NewProfile";
-import { subscribeUser } from "../subscription";
+import { resyncPushSubscription } from "../subscription";
 import { useStore } from "../stores";
 
 function LogInOutButton({ closeBurger }) {
@@ -61,19 +61,8 @@ function LogInOutButton({ closeBurger }) {
   }, [updated]);
 
   useEffect(() => {
-    console.log("globalMe changed:", globalMe);
-    // Trigger your logic here
-    async function resyncPushSubscription() {
-      if (
-        globalMe !== null &&
-        "mayPush" in globalMe &&
-        globalMe.mayPush === true
-      ) {
-        await subscribeUser({ requestPermission: false, silent: true });
-      }
-    }
     resyncPushSubscription();
-  }, [globalMe]);
+  }, [updated]);
 
   const handleSettingsClick = () => {
     console.log(user);

@@ -86,6 +86,47 @@ async function sendSubscription(subscription) {
   return res;
 }
 
+async function localUnsubscribe() {
+  if (!("serviceWorker" in navigator)) {
+    return;
+  }
+
+  const registration = await navigator.serviceWorker.ready;
+  if (!registration.pushManager) {
+    return;
+  }
+
+  const subscription = await registration.pushManager.getSubscription();
+  if (subscription !== null) {
+    await subscription.unsubscribe();
+  }
+}
+
+export async function getLocalPushSubscription() {
+  if (!("serviceWorker" in navigator)) {
+    return null;
+  }
+
+  const registration = await navigator.serviceWorker.ready;
+  if (!registration.pushManager) {
+    return null;
+  }
+
+  return registration.pushManager.getSubscription();
+}
+
+export async function isPushEnabledOnDevice() {
+  if (!("Notification" in window)) {
+    return false;
+  }
+  if (Notification.permission !== "granted") {
+    return false;
+  }
+
+  const subscription = await getLocalPushSubscription();
+  return subscription !== null;
+}
+
 export async function subscribeUser({
   requestPermission = true,
   silent = false,
@@ -131,27 +172,52 @@ export async function subscribeUser({
   }
 }
 
-export async function unsubscribeUser() {
-  if (!("serviceWorker" in navigator)) {
-    return { success: true };
-  }
+export async function resyncPushSubscription() {
+  return subscribeUser({ requestPermission: false, silent: true });
+}
 
+export async function deletePushSubscription() {
   try {
-    const registration = await navigator.serviceWorker.ready;
-    if (!registration.pushManager) {
-      return { success: true };
-    }
-
-    const subscription = await registration.pushManager.getSubscription();
+    const subscription = await getLocalPushSubscription();
     if (subscription !== null) {
+      const res = await callAuthApi("delete_push", {
+        endpoint: subscription.endpoint,
+      });
+      if (!res) {
+        throw new Error("Not authenticated");
+      }
+      if (!res.ok) {
+        throw new Error(`delete_push failed with status ${res.status}`);
+      }
       await subscription.unsubscribe();
     }
     return { success: true };
   } catch (error) {
-    console.error("An error occurred during unsubscribe.", error);
+    console.error("An error occurred during deletePushSubscription.", error);
     return {
       success: false,
-      error: error?.message || "Failed to unsubscribe from push notifications.",
+      error: error?.message || "Failed to disable push on this device.",
+    };
+  }
+}
+
+export async function unregisterAllDevices() {
+  try {
+    const res = await callAuthApi("set_push", { state: false });
+    if (!res) {
+      throw new Error("Not authenticated");
+    }
+    if (!res.ok) {
+      throw new Error(`set_push failed with status ${res.status}`);
+    }
+    await localUnsubscribe();
+    return { success: true };
+  } catch (error) {
+    console.error("An error occurred during unregisterAllDevices.", error);
+    return {
+      success: false,
+      error:
+        error?.message || "Failed to unregister push on all devices.",
     };
   }
 }
