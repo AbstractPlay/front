@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { toast } from "react-toastify";
 import "./i18n";
 import Skeleton from "./pages/Skeleton";
 import "./myBulma.css";
@@ -19,6 +20,23 @@ const root = createRoot(container);
 root.render(<Skeleton />);
 
 if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    const data = event.data;
+    if (!data || data.body === undefined) {
+      return;
+    }
+
+    const message = data.title ? `${data.title}: ${data.body}` : data.body;
+    const url = data.data?.url;
+    toast(message, {
+      onClick: () => {
+        if (url) {
+          window.location.href = url;
+        }
+      },
+    });
+  });
+
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/sw.js", { scope: "/" })

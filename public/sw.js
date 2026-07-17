@@ -10,6 +10,7 @@ self.addEventListener('push', event => {
         } catch (err) {
             console.error('[SW] Failed to parse push payload', err)
         }
+        const title = data.title || 'Abstract Play';
         const options = {
             body: data.body || '',
             tag: data.topic || 'default',
@@ -20,22 +21,19 @@ self.addEventListener('push', event => {
         }
 
         if (clientIsFocused) {
-            console.log("is focused");
-            clients
+            return clients
             .matchAll({
               type: 'window',
               includeUncontrolled: true,
             }).then((windowClients) => {
                 windowClients.forEach((windowClient) => {
-                    console.log("sending message");
-                    windowClient.postMessage(options);
+                    windowClient.postMessage({ title, ...options });
                 });
             });
-          return;
         }
 
         // Client isn't focused, we need to show a notification.
-        return self.registration.showNotification(data.title, options);
+        return self.registration.showNotification(title, options);
     });
     event.waitUntil(promiseChain);
 });

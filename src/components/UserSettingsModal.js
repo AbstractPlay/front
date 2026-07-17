@@ -21,6 +21,8 @@ import { countryCodeList } from "../lib/countryCodeList";
 import { useStore } from "../stores";
 import BotsModal from "./Bots/BotsModal";
 import { validateDisplayName } from "./Bots/botUtils";
+import { subscribeUser, unsubscribeUser } from "../subscription";
+import { toast } from "react-toastify";
 
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
@@ -362,29 +364,40 @@ function UserSettingsModal(props) {
   }, [updated, show]);
 
   const handlePushClick = async () => {
+    const { setGlobalMe } = useStore.getState();
+    const enabling = !(globalMe?.mayPush === true);
+
     try {
-      const { setGlobalMe } = useStore.getState();
-      let state = true;
-      if (
-        globalMe !== null &&
-        "mayPush" in globalMe &&
-        globalMe.mayPush === true
-      ) {
-        state = false;
-      }
-      const res = await callAuthApi("set_push", {
-        state,
-      });
-      if (!res) return;
-      if (res.status !== 200) {
-        console.log(`An error occurred while saving push preferences`);
+      if (enabling) {
+        const subscribeResult = await subscribeUser();
+        if (!subscribeResult.success) {
+          toast(subscribeResult.error || "Failed to enable push notifications.", {
+            type: "error",
+          });
+          return;
+        }
+
+        const res = await callAuthApi("set_push", { state: true });
+        if (!res || res.status !== 200) {
+          await unsubscribeUser();
+          toast("Failed to enable push notifications.", { type: "error" });
+          return;
+        }
+
+        setGlobalMe((val) => ({ ...val, mayPush: true }));
       } else {
-        const result = await res.json();
-        console.log(result.body);
-        setGlobalMe((val) => ({ ...val, mayPush: state }));
+        const res = await callAuthApi("set_push", { state: false });
+        if (!res || res.status !== 200) {
+          toast("Failed to disable push notifications.", { type: "error" });
+          return;
+        }
+
+        await unsubscribeUser();
+        setGlobalMe((val) => ({ ...val, mayPush: false }));
       }
     } catch (error) {
       console.log(error);
+      toast("Failed to update push notification settings.", { type: "error" });
     }
   };
 

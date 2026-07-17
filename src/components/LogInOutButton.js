@@ -47,7 +47,6 @@ function LogInOutButton({ closeBurger }) {
                   };
                 });
                 console.log(JSON.parse(result.body));
-                subscribeUser(token);
               }
             }
           } catch (error) {
@@ -64,21 +63,16 @@ function LogInOutButton({ closeBurger }) {
   useEffect(() => {
     console.log("globalMe changed:", globalMe);
     // Trigger your logic here
-    async function fetchAuth() {
+    async function resyncPushSubscription() {
       if (
         globalMe !== null &&
         "mayPush" in globalMe &&
         globalMe.mayPush === true
       ) {
-        const usr = await Auth.currentAuthenticatedUser();
-        console.log("usr: ", usr);
-        const token = usr.signInUserSession.idToken.jwtToken;
-        if (token !== null) {
-          subscribeUser(token);
-        }
+        await subscribeUser();
       }
     }
-    fetchAuth();
+    resyncPushSubscription();
   }, [globalMe]);
 
   const handleSettingsClick = () => {
