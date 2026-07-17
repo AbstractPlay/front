@@ -69,7 +69,7 @@ function LogInOutButton({ closeBurger }) {
         "mayPush" in globalMe &&
         globalMe.mayPush === true
       ) {
-        await subscribeUser();
+        await subscribeUser({ requestPermission: false, silent: true });
       }
     }
     resyncPushSubscription();

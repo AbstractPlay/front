@@ -17,6 +17,62 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
+function vapidKeysMatch(existingKey) {
+  if (!existingKey) {
+    return false;
+  }
+  const existingBytes = new Uint8Array(existingKey);
+  if (existingBytes.length !== convertedVapidKey.length) {
+    return false;
+  }
+  return existingBytes.every((byte, index) => byte === convertedVapidKey[index]);
+}
+
+async function clearPushSubscription(registration) {
+  const subscription = await registration.pushManager.getSubscription();
+  if (subscription !== null) {
+    await subscription.unsubscribe();
+  }
+}
+
+async function createPushSubscription(registration) {
+  return registration.pushManager.subscribe({
+    applicationServerKey: convertedVapidKey,
+    userVisibleOnly: true,
+  });
+}
+
+async function ensurePushSubscription(registration) {
+  let subscription = await registration.pushManager.getSubscription();
+
+  if (
+    subscription !== null &&
+    !vapidKeysMatch(subscription.options?.applicationServerKey)
+  ) {
+    await subscription.unsubscribe();
+    subscription = null;
+  }
+
+  if (subscription !== null) {
+    return subscription;
+  }
+
+  try {
+    return await createPushSubscription(registration);
+  } catch (error) {
+    const isPushServiceError =
+      error?.name === "AbortError" ||
+      String(error?.message || "").includes("push service error");
+
+    if (!isPushServiceError) {
+      throw error;
+    }
+
+    await clearPushSubscription(registration);
+    return createPushSubscription(registration);
+  }
+}
+
 async function sendSubscription(subscription) {
   const res = await callAuthApi("save_push", {
     payload: subscription.toJSON(),
@@ -30,7 +86,10 @@ async function sendSubscription(subscription) {
   return res;
 }
 
-export async function subscribeUser() {
+export async function subscribeUser({
+  requestPermission = true,
+  silent = false,
+} = {}) {
   if (!("serviceWorker" in navigator)) {
     return { success: false, error: "Service workers are not supported." };
   }
@@ -40,10 +99,17 @@ export async function subscribeUser() {
 
   let permission = Notification.permission;
   if (permission === "default") {
+    if (!requestPermission) {
+      return { success: false, skipped: true };
+    }
     permission = await Notification.requestPermission();
   }
   if (permission !== "granted") {
-    return { success: false, error: "Notification permission was not granted." };
+    return {
+      success: false,
+      skipped: !requestPermission,
+      error: "Notification permission was not granted.",
+    };
   }
 
   try {
@@ -52,18 +118,12 @@ export async function subscribeUser() {
       return { success: false, error: "Push manager is unavailable." };
     }
 
-    let subscription = await registration.pushManager.getSubscription();
-    if (subscription === null) {
-      subscription = await registration.pushManager.subscribe({
-        applicationServerKey: convertedVapidKey,
-        userVisibleOnly: true,
-      });
-    }
-
+    const subscription = await ensurePushSubscription(registration);
     await sendSubscription(subscription);
     return { success: true };
   } catch (error) {
-    console.error("An error occurred during the subscription process.", error);
+    const log = silent ? console.debug : console.error;
+    log("An error occurred during the subscription process.", error);
     return {
       success: false,
       error: error?.message || "Failed to subscribe to push notifications.",
