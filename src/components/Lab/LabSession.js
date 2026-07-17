@@ -146,6 +146,10 @@ function LabSession({
     "play-vertical-layout",
     false
   );
+  const [mctsSeconds, mctsSecondsSetter] = useStorageState(
+    "ap-lab-mcts-seconds",
+    3
+  );
   const [, bumpGameColorsRevision] = useState(0);
   const [explorationVersion, bumpExplorationVersion] = useState(0);
   const bumpExploration = () => bumpExplorationVersion((v) => v + 1);
@@ -857,6 +861,8 @@ function LabSession({
         submitting={false}
         screenWidth={screenWidth}
         handlers={moveEntryHandlers}
+        mctsSeconds={mctsSeconds}
+        onMctsSecondsChange={mctsSecondsSetter}
       />
     </>
   );

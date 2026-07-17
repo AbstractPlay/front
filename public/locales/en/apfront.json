@@ -2,9 +2,9 @@
     "404": "404 Not Found",
     "About": "About",
     "Accept": "Accept",
-    "Active": "Active",
     "AcceptDraw": "Accept draw offer",
     "Accepted": "Accepted!",
+    "Active": "Active",
     "All": "All",
     "AlternativeDisplays": "Alternative display options",
     "and": "and",
@@ -12,486 +12,8 @@
     "AnnotationLevel": "Where would you like this choice applied?",
     "AvailableGames": "Available Games",
     "BoardSettings": "Change game board settings",
-    "CycleBoardDisplay": "Cycle board display",
-    "buttons": {
-        "pass": "Pass",
-        "takebutton": "Take button",
-        "acceptpie": "Play second",
-        "playsecond": "Play second",
-        "draw": "Claim draw",
-        "playfirst": "Play first",
-        "swap": "Swap colours",
-        "numbers": {
-            "one": "One (1)",
-            "two": "Two (2)",
-            "three": "Three (3)"
-        },
-        "pigs": {
-            "back": "Move backward",
-            "forward": "Move forward",
-            "left": "Move forward left",
-            "right": "Move forward right",
-            "cw": "Rotate clockwise",
-            "ccw": "Rotate counterclockwise",
-            "fire": "Fire laser",
-            "hit": "Swing snout"
-        },
-        "carnac": {
-            "tip_n": "Tip north",
-            "tip_e": "Tip east",
-            "tip_s": "Tip south",
-            "tip_w": "Tip west"
-        },
-        "cifra": {
-            "lt": "Light, Top",
-            "lb": "Light, Bottom",
-            "dt": "Dark, Top",
-            "db": "Dark, Bottom",
-            "ll": "Light, Left",
-            "lr": "Light, Right",
-            "dl": "Dark, Left",
-            "dr": "Dark, Right"
-        },
-        "arimaa": {
-            "gold99": "Quick setup",
-            "silver99e7": "Quick setup, elephant e7",
-            "silver99d7": "Quick setup, elephant d7"
-        }
-    },
     "Cancel": "Cancel",
     "CanPie": "This player has the option to switch seats.",
-    "categories": {
-        "board": {
-            "description": "Describes the attributes of the playing surface",
-            "full": "Board",
-            "tag": "Board"
-        },
-        "board>3d": {
-            "description": "The board is three dimensional",
-            "full": "Board > 3D",
-            "tag": "Board: 3D"
-        },
-        "board>connect": {
-            "description": "Describes how the cells of the board connect to each other",
-            "full": "Board > Connectivity",
-            "tag": "Board Connectivity"
-        },
-        "board>connect>hex": {
-            "description": "Cells connect to each other hexagonally",
-            "full": "Board > Connectivity > Hexagonal",
-            "tag": "Connect: Hex"
-        },
-        "board>connect>linear": {
-            "description": "Cells connect to each other linearly",
-            "full": "Board > Connectivity > Linear",
-            "tag": "Connect: Linear"
-        },
-        "board>connect>other": {
-            "description": "Cells connect to each other in a unique way",
-            "full": "Board > Connectivity > Other",
-            "tag": "Connect: Other"
-        },
-        "board>connect>pent": {
-            "description": "Cells connect to each other pentagonally",
-            "full": "Board > Connectivity > Pentagonal",
-            "tag": "Connect: Pent"
-        },
-        "board>connect>rect": {
-            "description": "Cells connect to each other orthogonally and diagonally",
-            "full": "Board > Connectivity > Rectangular",
-            "tag": "Connect: Rect"
-        },
-        "board>connect>snub": {
-            "description": "Cells connect to each other in a snubsquare matrix",
-            "full": "Board > Connectivity > Snubsquare",
-            "tag": "Connect: Snub"
-        },
-        "board>dynamic": {
-            "description": "The board builds out dynamically",
-            "full": "Board > Dynamic",
-            "tag": "Board: Dynamic"
-        },
-        "board>mancala": {
-            "description": "Played on a traditional Mancala-style board",
-            "full": "Board > Mancala",
-            "tag": "Board: Mancala"
-        },
-        "board>none": {
-            "description": "Played on any flat surface",
-            "full": "Board > None",
-            "tag": "Board: None"
-        },
-        "board>other": {
-            "description": "The board is unique",
-            "full": "Board > Other",
-            "tag": "Board: Other"
-        },
-        "board>shape": {
-            "description": "Describes the shape of the board",
-            "full": "Board > Shape",
-            "tag": "Board Shape"
-        },
-        "board>shape>circle": {
-            "description": "The board is shaped like a circle",
-            "full": "Board > Shape > Circle",
-            "tag": "Shape: Circle"
-        },
-        "board>shape>hex": {
-            "description": "The board is shaped like a hexagon",
-            "full": "Board > Shape > Hexagon",
-            "tag": "Shape: Hex"
-        },
-        "board>shape>pent": {
-            "description": "The board is shaped like a pentagon",
-            "full": "Board > Shape > Pentagon",
-            "tag": "Shape: Pent"
-        },
-        "board>shape>oct": {
-            "description": "The board is shaped like an octagon",
-            "full": "Board > Shape > Octagon",
-            "tag": "Shape: Oct"
-        },
-        "board>shape>other": {
-            "description": "The board has a unique shape",
-            "full": "Board > Shape > Other",
-            "tag": "Shape: Other"
-        },
-        "board>shape>rect": {
-            "description": "The board is shaped like a rectangle",
-            "full": "Board > Shape > Rectangle",
-            "tag": "Shape: Rect"
-        },
-        "board>shape>tri": {
-            "description": "The board is shaped like a triangle",
-            "full": "Board > Shape > Triangle",
-            "tag": "Shape: Tri"
-        },
-        "components>chess": {
-            "description": "Played with a Chess set",
-            "full": "Components > Chess",
-            "tag": "C: Chess"
-        },
-        "components>dice": {
-            "description": "Played with dice",
-            "full": "Components > Dice",
-            "tag": "C: Dice"
-        },
-        "components>decktet": {
-            "description": "Played with a Decktet deck",
-            "full": "Components > Decktet",
-            "tag": "C: Decktet"
-        },
-        "components>piecepack": {
-            "description": "Played with Piecepack",
-            "full": "Components > Piecepack",
-            "tag": "C: Piecepack"
-        },
-        "components>poly": {
-            "description": "Played with polyominoes",
-            "full": "Components > Polyominoes",
-            "tag": "C: Polyominoes"
-        },
-        "components>pyramids": {
-            "description": "Played with Looney pyramids",
-            "full": "Components > Looney Pyramids",
-            "tag": "C: Looney Pyramids"
-        },
-        "components>shibumi": {
-            "description": "Played with a Shibumi set",
-            "full": "Components > Shibumi",
-            "tag": "C: Shibumi"
-        },
-        "components>simple": {
-            "description": "Played with simple pieces of uniform size, often stackable, sometimes with lots of colours",
-            "full": "Components > Simple",
-            "tag": "C: Simple"
-        },
-        "components>simple>1per": {
-            "description": "One colour per player",
-            "full": "Components > Simple > 1 per",
-            "tag": "C: Simple, 1 per"
-        },
-        "components>simple>2per": {
-            "description": "Two colours per player",
-            "full": "Components > Simple > 2 per",
-            "tag": "C: Simple, 2 per"
-        },
-        "components>simple>1c": {
-            "description": "One colour of pieces",
-            "full": "Components > Simple > 1 colour",
-            "tag": "C: Simple, 1 colour"
-        },
-        "components>simple>2c": {
-            "description": "Two colours of pieces",
-            "full": "Components > Simple > 2 colours",
-            "tag": "C: Simple, 2 colours"
-        },
-        "components>simple>3c": {
-            "description": "Three colours of pieces",
-            "full": "Components > Simple > 3 colours",
-            "tag": "C: Simple, 3 colours"
-        },
-        "components>simple>4c": {
-            "description": "Four colours of pieces",
-            "full": "Components > Simple > 4 colours",
-            "tag": "C: Simple, 4 colours"
-        },
-        "components>simple>5c": {
-            "description": "Five colours of pieces",
-            "full": "Components > Simple > 5 colours",
-            "tag": "C: Simple, 5 colours"
-        },
-        "components>simple>7c": {
-            "description": "Seven colours of pieces",
-            "full": "Components > Simple > 7 colours",
-            "tag": "C: Simple, 7 colours"
-        },
-        "components>simple>pnp": {
-            "description": "Playable with paper and pencil",
-            "full": "Components > Simple > Paper & Pencil",
-            "tag": "C: Simple, P&P"
-        },
-        "components>special": {
-            "description": "Played with specialized pieces, usually differentiated",
-            "full": "Components > Specialized",
-            "tag": "C: Special"
-        },
-        "goal>annihilate": {
-            "description": "Annihilate all opposing pieces",
-            "full": "Goal > Annihilate",
-            "tag": "G: Annihilate"
-        },
-        "goal>area": {
-            "description": "Control more area (or certain areas with certain strengths) than your opponent",
-            "full": "Goal > Area Control",
-            "tag": "G: Area Control"
-        },
-        "goal>arrange": {
-            "description": "Arrange pieces into specific shapes or lengths (e.g., n in a row)",
-            "full": "Goal > Arrange",
-            "tag": "G: Arrange"
-        },
-        "goal>breakthrough": {
-            "description": "Reach opposing home row or home area with sufficient strength",
-            "full": "Goal > Breakthrough",
-            "tag": "G: Breakthrough"
-        },
-        "goal>connect": {
-            "description": "Connect designated edges of the board or areas",
-            "full": "Goal > Connect",
-            "tag": "G: Connect"
-        },
-        "goal>cripple": {
-            "description": "Eliminate some critical majority or specific subset of opposing pieces",
-            "full": "Goal > Cripple",
-            "tag": "G: Cripple"
-        },
-        "goal>evacuate": {
-            "description": "Evacuate your pieces from the board",
-            "full": "Goal > Evacuate",
-            "tag": "G: Evacuate"
-        },
-        "goal>immobilize": {
-            "description": "Make it so your opponent cannot move",
-            "full": "Goal > Immobilize",
-            "tag": "G: Immobilize"
-        },
-        "goal>isolate": {
-            "description": "Isolate a piece or subset of pieces in a specific way",
-            "full": "Goal > Isolate",
-            "tag": "G: Isolate"
-        },
-        "goal>majority": {
-            "description": "Have more pieces than your opponent",
-            "full": "Goal > Majority",
-            "tag": "G: Majority"
-        },
-        "goal>royal-capture": {
-            "description": "Capture a specific opposing piece",
-            "full": "Goal > Royal Capture",
-            "tag": "G: Royal Capture"
-        },
-        "goal>royal-escape": {
-            "description": "Get a specific piece off the board",
-            "full": "Goal > Royal Escape",
-            "tag": "G: Royal Escape"
-        },
-        "goal>score": {
-            "description": "Outcome is determined by score in some way",
-            "full": "Goal > Score",
-            "tag": "G: Score"
-        },
-        "goal>score>eog": {
-            "description": "Have the highest score at the end of the game",
-            "full": "Goal > Score > End of game",
-            "tag": "G: Score (EOG)"
-        },
-        "goal>score>race": {
-            "description": "Be the first to reach a particular score",
-            "full": "Goal > Score > Race",
-            "tag": "G: Score (Race)"
-        },
-        "goal>set": {
-            "description": "Collect sets of pieces",
-            "full": "Goal > Set Collection",
-            "tag": "G: Set Collection"
-        },
-        "goal>unify": {
-            "description": "Bring all your pieces together",
-            "full": "Goal > Unify",
-            "tag": "G: Unify"
-        },
-        "goal>vigil": {
-            "description": "All (or some defined subset of) pieces must have line of sight to some board element",
-            "full": "Goal > Vigil",
-            "tag": "G: Vigil"
-        },
-        "mechanic": {
-            "description": "Describes the general game mechanics",
-            "full": "Mechanics",
-            "tag": "Mechanics"
-        },
-        "mechanic>asymmetry": {
-            "description": "Game is asymmetrical",
-            "full": "Mechanics > Asymmetry",
-            "tag": "M: Asymmetry"
-        },
-        "mechanic>bearoff": {
-            "description": "Players bear pieces off the board",
-            "full": "Mechanics > Bear off",
-            "tag": "M: Bear off"
-        },
-        "mechanic>block": {
-            "description": "Players block each other",
-            "full": "Mechanics > Block",
-            "tag": "M: Block"
-        },
-        "mechanic>capture": {
-            "description": "Pieces are captured",
-            "full": "Mechanics > Capture",
-            "tag": "M: Capture"
-        },
-        "mechanic>convert": {
-            "description": "Players can convert enemy pieces into their own",
-            "full": "Mechanics > Convert",
-            "tag": "M: Convert"
-        },
-        "mechanic>coopt": {
-            "description": "Players can interact with opposing pieces",
-            "full": "Mechanics > Co-Opt",
-            "tag": "M: Co-Opt"
-        },
-        "mechanic>differentiate": {
-            "description": "Pieces are differentiated in some essential way",
-            "full": "Mechanics > Differentiate",
-            "tag": "M: Differentiate"
-        },
-        "mechanic>displace": {
-            "description": "Moves can cause additional pieces to move as a result",
-            "full": "Mechanics > Displace",
-            "tag": "M: Displace"
-        },
-        "mechanic>economy": {
-            "description": "Players must manage some central economy",
-            "full": "Mechanics > Manage Economy",
-            "tag": "M: Manage Economy"
-        },
-        "mechanic>enclose": {
-            "description": "Players actively enclose areas or pieces",
-            "full": "Mechanics > Enclose",
-            "tag": "M: Enclose"
-        },
-        "mechanic>hidden": {
-            "description": "Game includes hidden information",
-            "full": "Mechanics > Hidden Information",
-            "tag": "M: Hidden"
-        },
-        "mechanic>merge": {
-            "description": "Pieces merge or split apart",
-            "full": "Mechanics > Merge/Split",
-            "tag": "M: Merge/Split"
-        },
-        "mechanic>move": {
-            "description": "Pieces can be moved",
-            "full": "Mechanics > Move",
-            "tag": "M: Move"
-        },
-        "mechanic>move>group": {
-            "description": "Pieces can be moved as a group",
-            "full": "Mechanics > Move > Group",
-            "tag": "M: Move (Group)"
-        },
-        "mechanic>move>sow": {
-            "description": "Pieces move by sowing",
-            "full": "Mechanics > Move > Sow",
-            "tag": "M: Move (Sow)"
-        },
-        "mechanic>network": {
-            "description": "Players build networks",
-            "full": "Mechanics > Network",
-            "tag": "M: Network"
-        },
-        "mechanic>place": {
-            "description": "Pieces are placed",
-            "full": "Mechanics > Place",
-            "tag": "M: Place"
-        },
-        "mechanic>program": {
-            "description": "Sequences of moves are programmed",
-            "full": "Mechanics > Program",
-            "tag": "M: Program"
-        },
-        "mechanic>random": {
-            "description": "Game contains some random element",
-            "full": "Mechanics > Random Elements",
-            "tag": "M: Random Elements"
-        },
-        "mechanic>random>play": {
-            "description": "Individual moves of the game include some element of randomness",
-            "full": "Mechanics > Random > Play",
-            "tag": "M: Random (Play)"
-        },
-        "mechanic>random>setup": {
-            "description": "Setup is randomized in some way",
-            "full": "Mechanics > Random > Setup",
-            "tag": "M: Random (Setup)"
-        },
-        "mechanic>set": {
-            "description": "Players collect sets",
-            "full": "Mechanics > Set Collection",
-            "tag": "M: Set Collection"
-        },
-        "mechanic>share": {
-            "description": "At least some pieces in the game are shared by both players",
-            "full": "Mechanics > Share",
-            "tag": "M: Share"
-        },
-        "mechanic>simultaneous": {
-            "description": "The game includes simultaneous action selection",
-            "full": "Mechanics > Simultaneous",
-            "tag": "M: Simultaneous"
-        },
-        "mechanic>stack": {
-            "description": "Players manipulate stacks of pieces",
-            "full": "Mechanics > Stack",
-            "tag": "M: Stack"
-        },
-        "mechanic>vigil": {
-            "description": "At least one piece must have line of sight to some board element",
-            "full": "Mechanics > Vigil",
-            "tag": "M: Vigil"
-        },
-        "other>traditional": {
-            "description": "Game is traditional",
-            "full": "Other > Traditional",
-            "tag": "O: Traditional"
-        },
-        "other>2+players": {
-            "description": "Supports more than 2 players",
-            "full": "Other > 2+ Players",
-            "tag": "O: 2+Players"
-        }
-    },
     "Challenge": "Challenge",
     "Challenge Details": "Challenge Details",
     "ChallengeClock": "The clock start time will be {{start}} hours, incremented by {{inc}} hours after each move, with a maximum of {{max}} hours.",
@@ -504,12 +26,9 @@
     "ChallengeResponse": "Challenges awaiting your response",
     "ChallengeResponseComment": "Comment",
     "ChallengeResponseCommentHelp": "Comment to challenger on your response.",
+    "ChallengeResponseDesc": "{{opp}} challenged you to a game of [{{game}}](/games/{{meta}})",
     "ChallengeRevokeCommentHelp": "Comment on revoking your challenge.",
     "ChallengeRevokeCommentHelp2": "Comment on revoking your previous acceptance.",
-    "ChallengeResponseDesc": "{{opp}} challenged you to a game of [{{game}}](/games/{{meta}})",
-    "ChallengerFirst": "Challenger plays first",
-    "ChallengerNotes": "Challenger comments: ",
-    "ChallengerSecond": "Challenger plays second",
     "ChallengeType": "Challenge type",
     "ChallengeTypeOpen": "Open",
     "ChallengeTypeOpenDescription": "Anybody can accept this challenge.",
@@ -517,12 +36,11 @@
     "ChallengeTypeTargetedDescription": "You are challenging specific players.",
     "Change": "Change",
     "ChangeRenderOptions": "Change board display options",
-    "ChooseDisplay": "Choose how the board should be displayed",
     "ChooseClockHard": "Hard Time?",
     "ChooseClockIncrement": "Clock increment (hours)",
     "ChooseClockMax": "Clock max (hours)",
     "ChooseClockStart": "Clock start (hours)",
-    "ChooseColors": "Choose color scheme",
+    "ChooseDisplay": "Choose how the board should be displayed",
     "ChooseGame": "Choose a game",
     "ChooseLimit": "Maximum number of active games",
     "ChooseMove": "Choose move",
@@ -532,10 +50,9 @@
     "Claim": "Claim",
     "ClaimTimeOut": "Claim win on time",
     "ClearMove": "Clear move input",
+    "ClearPremove": "Clear premove",
     "ClickExpand": "Click to expand",
     "Close": "Close",
-    "ColorBlind": "Colour blind",
-    "ColorPatterns": "Black and white",
     "Comment": "Comment",
     "Comments": "Comments",
     "CommentTooLong": "Comments can be at most 4K characters",
@@ -543,8 +60,8 @@
     "CompletedGames": "Completed Games",
     "CompletedGamesCount_one": "completed game",
     "CompletedGamesCount_other": "completed games",
-    "CompletedGamesList": "Completed {{name}} Games",
     "CompletedGamesHelp": "To keep the dashboard manageable, games drop off this list 7 days after the \"last seen\" date. Click the Clear button to remove it immediately. New chat will cause older games to resurface, restarting the 7-day clock. Visit the Games page to access older completed games.",
+    "CompletedGamesList": "Completed {{name}} Games",
     "CompleteMove": "Complete move",
     "Confirm": "Confirm",
     "ConfirmDeleteSubtree": "Delete exploration subtree",
@@ -552,55 +69,41 @@
     "ConfirmMove": "Confirm move submission",
     "ConfirmMoveDesc": "Are you sure you want to submit this move?",
     "ConfirmMoveHelp": "If you prefer not to get asked for confirmation, you can disable this in your user settings.",
+    "ConfirmPremove": "Set premove",
+    "ConfirmPremoveChangeDesc": "Another move at this position (or its subtree) is already set as a premove. Change to this move instead?",
+    "ConfirmPremoveDesc": "This move will be automatically submitted when your opponent plays the previous move. Set this premove?",
     "ConfirmResign": "Confirm resignation",
     "ConfirmResignDesc": "Are you sure you want to resign?",
     "ConfirmTimeout": "Out of time",
     "ConfirmTimeoutDesc": "Your opponent is out of time. Are you sure you want to claim the win?",
-    "ConfirmPremove": "Set premove",
-    "ConfirmPremoveDesc": "This move will be automatically submitted when your opponent plays the previous move. Set this premove?",
-    "ConfirmPremoveChangeDesc": "Another move at this position (or its subtree) is already set as a premove. Change to this move instead?",
-    "ClearPremove": "Clear premove",
     "Current": "Current",
     "CurrentGamesCount_one": "current game",
     "CurrentGamesCount_other": "current games",
     "CurrentGamesList": "Current {{name}} Games",
-    "Custom": "Custom",
-    "DateEnded": "Date ended",
-    "DateStarted": "Date started",
     "CustomCSS": "Customize CSS",
     "Customize": "Customize",
+    "CycleBoardDisplay": "Cycle board display",
+    "DateEnded": "Date ended",
+    "DateStarted": "Date started",
     "DebugModal": "Debugging information",
     "DefaultDisplay": "Default display",
     "Delete": "Delete",
     "DeleteSubtree": "Delete exploration subtree",
     "DisableMoveConfirm": "Ask for confirmation before a move is submitted",
-    "DisablePush": "Push notifications are currently enabled",
-    "PushOnThisDevice": "Enable push notifications on this device",
-    "PushOnThisDeviceEnabled": "Push notifications are enabled on this device",
-    "PushEnableFailed": "Failed to enable push notifications on this device.",
-    "PushServiceError": "Your browser could not register for push notifications. Check that notifications are allowed for this site and that browser push messaging is enabled.",
-    "PushServiceErrorBrave": "Brave could not register for push notifications. Allow notifications for this site, then in Brave Settings → Privacy enable \"Use Google services for push messaging\", and try again.",
-    "PushDisableFailed": "Failed to disable push notifications on this device.",
-    "PushUpdateFailed": "Failed to update push notification settings.",
-    "UnregisterAllDevices": "Unregister all devices",
-    "UnregisterAllDevicesConfirm": "Remove push notifications from every device registered to your account?",
-    "UnregisterAllDevicesSuccess": "Push notifications removed from all devices.",
     "DisplayName": "Display name",
-    "DisplayNameHelp": "Your display name is the name people will see. It is distinct from the username you use when logging in. The display name can contain special characters like diacritics. See the terms of service as they relate to display names.",
     "DisplayNameChange": "The new name will only be used for new games, not existing or completed games.",
     "DisplayNameError": "{{name}} is not available, please choose a different name.",
+    "DisplayNameHelp": "Your display name is the name people will see. It is distinct from the username you use when logging in. The display name can contain special characters like diacritics. See the terms of service as they relate to display names.",
     "Download": "Download",
     "DownloadCompletedGames": "Download all completed game reports",
     "Duration": "Duration",
     "DurationHelp_one": "This challenge will expire after being accepted the first time.",
     "DurationHelp_other": "This challenge will expire after being accepted {{count}} times.",
     "DurationHelpPersistent": "This challenge will remain available until you revoke it.",
-    "EditTags": "Edit Tags",
     "EMail": "Email address",
     "EMailCode": "Emailed code",
     "EMailCodeHelp": "The login system just sent a code to the email address you provided. Please enter it here.",
-    "EnableMoveConfirm": "Do not ask for confirmation before a move is submitted",
-    "EnablePush": "Push notifications are currently disabled",
+    "EnableZoom": "Enable zoom",
     "EnterMove": "Enter/Click a move",
     "Error": "Error!",
     "Events": {
@@ -609,12 +112,11 @@
     },
     "EventsNav": "Events",
     "ExplorationSetting": "Exploration setting",
+    "Explore": "Explore",
+    "ExploreAlways": "Always explore",
+    "ExploreAsk": "Always ask",
     "ExploreGames": "Explore Games",
     "ExploreNever": "Never explore",
-    "ExploreAsk": "Always ask",
-    "ExploreAlways": "Always explore",
-    "Explore": "Explore",
-    "ExportPNG": "Export PNG image",
     "ExportToLab": "Export to Playground",
     "FilterStars": "Only show starred games",
     "ForcedUnrated": "This game will not be rated due to selected variants.",
@@ -627,9 +129,8 @@
     "GameIsOver2": "The game has ended. The following players won: {{winners}} and {{lastWinner}}.",
     "GameNoteModal": "Game note",
     "Games": "Games",
-    "GameSummary": "Chat log",
-    "GameComments": "Move comments",
     "GamesOf": "games of",
+    "GameSummary": "Chat log",
     "GoBegin": "Show beginning of game. Keys: Home or 'h'.",
     "GoCurrent": "Show current position. Keys: End or 'l'.",
     "GoNext": "Show next move (and first variant if any). Keys: right arrow or 'k'.",
@@ -646,8 +147,8 @@
     "HelpClockMax": "Remaining time won't become more than this.",
     "HelpClockSoft": "The opponent must manually claim the win.",
     "HelpClockStart": "Time on clock at the start of the game.",
-    "HelpNoExploreTrue": "Players will be forcibly prevented from using the built-in exploration feature.",
     "HelpNoExploreFalse": "Players may choose to use the built-in exploration feature.",
+    "HelpNoExploreTrue": "Players will be forcibly prevented from using the built-in exploration feature.",
     "HelpRated": "This game will be rated.",
     "HelpUnRated": "This game will not be rated.",
     "HideDetails": "Hide descriptions",
@@ -663,7 +164,6 @@
     "IssueChallenge": "Issue a new challenge",
     "IssueStanding": "Issue a new standing challenge",
     "Legal": "Legal",
-    "Level": "Where would you like these colors applied?",
     "LevelAll": "For all games",
     "LevelGame": "Only for this game",
     "LevelMetaGame": "For all {{game}} games",
@@ -673,6 +173,16 @@
     "MakeMove": "Make a move",
     "MarkPremove": "Mark as pre-move",
     "MaxTime": "max time {{max}} hours",
+    "MctsNoResult": "Could not recommend a move",
+    "MctsResult": "{{move}} — {{winRate}}% ({{visits}} visits)",
+    "MctsSeconds": "sec",
+    "MctsSecondsMax": "max {{max}}",
+    "MctsThinking": "Thinking…",
+    "MctsToast": "{{move}} — {{winRate}}% win rate · {{iterations}} simulations in {{elapsedSec}}s · {{visitShare}}% of search",
+    "MctsToastCloseCall": "(close vs {{move}} at {{winRate}}%)",
+    "MctsToastCoverage": "· explored {{explored}}/{{total}} moves",
+    "MctsToastLowConfidence": "(low confidence — try more time)",
+    "MctsToastMargin": "(+{{margin}}% vs runner-up)",
     "Moves": "Moves",
     "MyColor": "Use my preferred player colour regardless of turn order",
     "MyDashboard": "Dashboard",
@@ -682,15 +192,10 @@
     "NewProfile": "Create profile",
     "NewRealStanding": "New standing challenge",
     "News": "News",
-    "NewsPreamble": "The authoritative and most up-to-date source of Abstract Play news is on our Discord Server (https://discord.abstractplay.com). Please come join us!",
-    "NextGame": "Next game",
-    "NextGameLast": "Viewing last game",
-    "NextGameNone": "Back to dashboard",
     "No": "No",
     "NoChallengeResponse": "No challenges needing your response",
     "NoExploreTrue": "The built-in exploration feature will be forcibly disabled for this game.",
     "NoGames": "No games currently need your attention.",
-    "NoOpponentMove": "No games waiting on opponent's move.",
     "NoOtherPlayersAccepted": "No other players have accepted yet.",
     "NoRealStanding": "No standing challenges issued",
     "NoStandingChallenges": "No open challenges",
@@ -699,14 +204,7 @@
     "NotesHelp": "Notes for this challenge (max 128 characters).",
     "NotHardTime": "No hard limit",
     "NotificationSettings": "Notification settings (save instantly)",
-    "NotifyLabel-yourturn": "Your turn (twice daily)",
-    "NotifyLabel-challenges": "Challenges (every instance)",
-    "NotifyLabel-gameStart": "Game started (every instance)",
-    "NotifyLabel-gameEnd": "Game ended (every instance)",
-    "NotifyLabel-tournamentStart": "Tournament started (every instance)",
-    "NotifyLabel-tournamentEnd": "Tournament ended (every instance)",
     "NoWaitingResponse": "No challenges waiting on opponent response",
-    "NoYourMove": "No games waiting for your move.",
     "NumChallenge": "There will be {{num}} players in this game. {{players}}. Seating will be random.",
     "NumChallenge2": "There will be 2 players in this game.",
     "NumMoves": "# moves",
@@ -714,26 +212,26 @@
     "NumStandingChallenge": "There will be {{num}} players in this game. Seating will be random.",
     "of": "of",
     "OpponentMove": "Opponent's move",
+    "Or": "or",
     "OtherPlayers": "So far the following other players are willing to participate in the game: {{others}}.",
     "OtherPlayersAccepted": "The following other players have already accepted: {{others}}",
-    "Or": "or",
     "Page": "Page",
     "PendingSubmit": "Your move still needs to be submitted.",
-    "PickAnyVariant_normal": "Select any of",
+    "PickAnyVariant": "",
     "PickAnyVariant_disabled": "You can select any of",
-    "PickOneVariant_normal": "Select one of",
+    "PickAnyVariant_normal": "Select any of",
+    "PickOneVariant": "",
     "PickOneVariant_disabled": "You can select one of",
-    "PickVariant_normal": "Select variants",
+    "PickOneVariant_normal": "Select one of",
+    "PickVariant": "",
     "PickVariant_disabled": "Available variants",
+    "PickVariant_normal": "Select variants",
     "PlayerList": "Players",
     "Players": "Players",
-    "PleaseConsent": "Your consent is needed!",
     "PlayersAccepted": "So far the following players are willing to participate in the game: {{others}}.",
     "Playground": "Playground",
-    "Lab": "Playground",
+    "PleaseConsent": "Your consent is needed!",
     "Ply": "Ply",
-    "ProfileAnon": "Would you like to be anonymous?",
-    "ProfileAnonHelp": "Being anonymous means nobody will know who they're playing against, and your completed games will not be attributed to you. As a result, they will not be rated. Even if you change this setting later, past games cannot be reattributed to you.",
     "ProfileConsent": "Do you consent to the Abstract Play's terms of service and the privacy policy?",
     "ProfileCountry": "Country code",
     "ProfileCountryHelp": "Tell people where you're from! You can enter anything you want here, but if you enter a valid two- or three-character ISO country code, the appropriate flag will be displayed in your profile.",
@@ -743,11 +241,16 @@
     "ProfileTagline": "A free-form tagline (255 characters max)",
     "Publish": "Publish exploration",
     "PublishHelp": "Publish the exploration you did during the game so that anyone can see it.",
-    "Random": "Random",
+    "PushDisableFailed": "Failed to disable push notifications on this device.",
+    "PushEnableFailed": "Failed to enable push notifications on this device.",
+    "PushOnThisDevice": "Enable push notifications on this device",
+    "PushOnThisDeviceEnabled": "Push notifications are enabled on this device",
+    "PushUpdateFailed": "Failed to update push notification settings.",
     "RatedGame": "This will be a rated game.",
     "RatedPlayersCount_one": "rated player",
     "RatedPlayersCount_other": "rated players",
     "RatingsList": "{{name}} Ratings",
+    "RecommendMove": "Recommend move",
     "Reject": "Reject",
     "RelatedSites": "Related sites",
     "ResetDefault": "Reset to defaults",
@@ -757,11 +260,9 @@
     "Revoke": "Revoke",
     "RevokeAcceptance": "Revoke acceptance",
     "RevokeChallenge": "Revoke challenge",
-    "RotateBoard": "Rotate board",
     "RotateBoardCCW": "Rotate board counterclockwise",
     "RotateBoardCW": "Rotate board clockwise",
     "Save": "Save",
-    "SaveChanges": "Save Changes",
     "Search": "Search",
     "Seating": "Seating",
     "Seating1": "I play first",
@@ -779,50 +280,18 @@
     "SelectSeating": "Select seating, that is in what order players will start the game.",
     "Show": "Show",
     "SoftTime": "No hard time: a loss on time needs to be claimed by the opponent.",
-    "StandardColors": "Standard",
     "StandingChallengeDescription": "Open challenge for a game of {{game}}",
     "StandingChallenges": "Open Challenges for {{name}}",
     "StandingChallenges2": "Open Challenges",
     "StandingChallengesCount_one": "open challenge",
     "StandingChallengesCount_other": "open challenges",
     "Statistics": "Statistics",
-    "stats_module_avgRatings": "Average ratings",
-    "stats_module_gameStats": "Game statistics",
-    "stats_module_highestSingle": "All individual ratings",
-    "stats_module_numPlays": "Play statistics",
-    "stats_module_playerStats": "Player statistics",
-    "stats_module_topPlayers": "Top players",
-    "stats_module_siteStats": "Site statistics",
-    "stats_module_tourneyStats": "Tournament statistics",
     "Status": "Status",
     "Submit": "Submit",
     "SubmitMove": "Submit your move: {{move}}",
-    "tblHeaderAccepted": "Accepted",
-    "tblHeaderChallenger": "Challenger",
-    "tblHeaderClockIncrement": "Clock increment",
-    "tblHeaderClockMax": "Clock max",
-    "tblHeaderClockStart": "Clock start",
-    "tblHeaderFinished": "Game ended",
-    "tblHeaderGameNumber": "Game number",
-    "tblHeaderGamesDrawn": "Games drawn",
-    "tblHeaderGamesPlayed": "Games played",
-    "tblHeaderGamesWon": "Games won",
-    "tblHeaderHardClock": "Hard clock?",
-    "tblHeaderMoves": "Moves",
-    "tblHeaderPlayer": "Player {{num}}",
-    "tblHeaderPlayers": "Players",
-    "tblHeaderRated": "Rated?",
-    "tblHeaderRatedPlayer": "Player",
-    "tblHeaderRating": "Rating",
-    "tblHeaderRatingRank": "Rank",
-    "tblHeaderRespond": "Respond",
-    "tblHeaderSeating": "Seating",
-    "tblHeaderStarted": "Game started",
-    "tblHeaderVariants": "Variants",
     "TimeRemaining": "Time remaining",
     "ToggleFullSize": "Toggle full-height board image",
     "ToggleLayout": "Toggle vertical/horizontal layout",
-    "ToggleZoom": "Toggle zoom",
     "ToMove": "{{player}} to move.",
     "ToS": "Terms of Service",
     "ToSubmit": "To submit",
@@ -834,15 +303,6 @@
         "general": {
             "Ignore": "Skip this tour",
             "Take": "Tell me about this page"
-        },
-        "me": {
-            "challenges": "This section lists all the challenges you've received and issued.",
-            "completed": "Once you've finished a game, you'll find it here. Games automatically drop off this list 48 hours after you last visited it. You can manually remove a game from this list by clicking the Clear button. If someone comments on a completed game, it will reappear on this list and will be bolded.",
-            "issueChallenge": "This is how you issue challenges for all the various games. You can also issue challenges from the list of games or from any of the other list pages (like the ratings page).",
-            "settings": "And finally, open your user settings to change your profile, notification preferences, and exploration settings. You can disable these tours there as well.",
-            "theirturn": "If it's your opponent's turn in any games, they'll be listed here. You can sort this table too.",
-            "welcome": "Welcome to your personalized dashboard!",
-            "yourturn": "If it's your turn in any games, they will be listed here. You can sort the table by clicking on any of the headers. By default, the table is sorted by time remaining on your clock."
         },
         "play": {
             "board": "This is the heart and soul of any game: the board. Click on the board to make your move. Helpful hints will appear above the move entry box as you do so.",
@@ -856,54 +316,56 @@
         }
     },
     "Tournament": {
-        "Number": "Tournament Number",
-        "Tournaments": "Automated Tournaments",
         "Completion": "Completion",
         "CompletionRate": "{{ratio}} games ({{percent}}%)",
         "Current": "Ongoing tournaments",
         "Description": "These are recurring tournaments for any game and variant combination. As long as there is enough interest, the next tournament starts automatically after the previous tournament ends. If you've joined the recurring series, then you will be automatically registered for the next tournament. If you \"joined once\" (an asterisk next to your name in the list of participants), then you will be removed after the next tournament starts.\n\nAfter being requested, a tournament is open for registration for 2 weeks. If after the 2 week registration period there aren't at least 4 players registered, the tournament will stay open until the minimum number of players join. Otherwise the tournament starts, and the next tournament for the same game/variant combination is opened for registration. The next tournament starts a week after the current tournament ends.\n\nTournaments consist of divisions, with each division being a round-robin having at most 10 players. All games are played simultaneously. The time controls are: 36 hour increment, 72 hours starting time and 120 hours max time (hard time). Players are divided into divisions purely by their rating at the time the tournament starts. The highest rated players play in division 1, the next highest in division 2 and so on. Players are divided into divisions in such a way that all divisions have approximately the same number of players. First tiebreak is Sonneborn-Berger, that is, sum of defeated opponent scores. Second tiebreak is rating at the time the tournament started.",
         "Division": "Division {{num}}",
+        "DivisionWinner": "Winner: {{winner}}",
         "Duplicate": "There is already a tournament for this game and variant/s",
         "Ended": "Date ended",
         "History": "History",
         "Join": "Join recurring",
         "JoinOnce": "Join once",
         "Name": "{{metaGame}} Tournament",
-        "ProposeNew": "Request a new tournament",
-        "New2": "New tournaments",
         "New1": "New tournament",
+        "New2": "New tournaments",
         "NoneCompleted": "No tournaments have been completed yet.",
         "NoneOld": "No tournament history yet.",
+        "Number": "Tournament Number",
         "NumCompleted": "{{numCompleted}} of {{numGames}} games have been completed",
-        "OldTitle": "Tournament History",
         "Old": "History of completed {{metaGameName}} tournaments",
+        "OldTitle": "Tournament History",
         "Open": "Tournaments open for registration",
         "Participants": "Participants",
         "Player": "Player",
         "Position": "Position",
+        "ProposeNew": "Request a new tournament",
         "Rating": "Rating",
         "RatingHelp": "Rating at beginning of tournament. Final tiebreak.",
         "RecentlyCompleted": "Recently completed tournaments",
         "Score": "Score",
+        "Started": "Date started",
         "Starts": "Tournament starts",
         "StartsWhen4": "Within a day of reaching 4 participants",
         "StartsWhenPreviousDone": "One week after current tournament ends",
-        "Started": "Date started",
         "TieBreak": "Tiebreak",
         "TieBreakHelp": "Sum of defeated opponent scores",
+        "Tournaments": "Automated Tournaments",
         "VariantsName": "{{metaGame}} Tournament ({{variants}})",
         "Visit": "Visit tournament",
         "Winner": "Winner",
-        "DivisionWinner": "Winner: {{winner}}",
         "Withdraw": "Withdraw from next"
     },
     "TriggerRefresh": "Trigger a refresh",
     "TwoPlayersChallengeDescription": "You challenged {{other}} to a game of [{{game}}](/games/{{meta}})",
     "UnratedGame": "This will be an unrated game.",
+    "UnregisterAllDevices": "Unregister all devices",
+    "UnregisterAllDevicesConfirm": "Remove push notifications from every device registered to your account?",
+    "UnregisterAllDevicesSuccess": "Push notifications removed from all devices.",
     "UpdateNote": "Update game note",
     "UserSettings": "User Settings",
     "Variants": "Variants",
-    "Variant": "Variant",
     "View": "View",
     "VisitGame": "Visit game",
     "Waiting": "Waiting on other players to submit their moves",
@@ -917,6 +379,5 @@
     "Yes": "Yes",
     "YourChallenges": "Your challenges",
     "YourGames": "Your games",
-    "YourMove": "Your move",
-    "EnableZoom": "Enable zoom"
+    "YourMove": "Your move"
 }

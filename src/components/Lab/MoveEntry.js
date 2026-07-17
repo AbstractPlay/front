@@ -1,7 +1,23 @@
-import React, { useEffect, useState, Fragment, useMemo } from "react";
+import React, {
+  useEffect,
+  useState,
+  Fragment,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
+import { flushSync } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { debounce } from "lodash";
+import { toast } from "react-toastify";
 import { GameFactory } from "@abstractplay/gameslib";
+import {
+  getMctsRootState,
+  isMctsSupported,
+  MCTS_MAX_SECONDS,
+  runMcts,
+} from "../../lib/Lab/mcts";
+import { formatMctsToast, logMctsStats, logMctsFailure } from "../../lib/Lab/mctsToast";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -77,9 +93,14 @@ function MoveEntry(props) {
     handleDeleteExploration,
   ] = [...props.handlers];
   const { t } = useTranslation();
+  const mctsSeconds = props.mctsSeconds ?? 3;
+  const onMctsSecondsChange = props.onMctsSecondsChange;
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
   const [inputValue, inputValueSetter] = useState(move.move);
+  const [mctsRunning, mctsRunningSetter] = useState(false);
+  const [mctsResult, mctsResultSetter] = useState(null);
+  const mctsAbortRef = useRef(null);
 
   function getFocusNode(exp, foc) {
     let curNode = exp[foc.moveNumber];
@@ -127,6 +148,127 @@ function MoveEntry(props) {
       return a.length - b.length;
     }
   };
+
+  const focusKey = `${focus?.moveNumber ?? ""}:${focus?.exPath?.join(",") ?? ""}`;
+  const mctsFocusKeyRef = useRef(focusKey);
+
+  const focusLegalMoves = useMemo(() => {
+    if (game.noMoves || toMove === "") return null;
+    if (!engine) return Array.isArray(moves) ? moves : null;
+    try {
+      return engine.moves();
+    } catch {
+      return Array.isArray(moves) ? moves : null;
+    }
+  }, [game.noMoves, toMove, engine, moves, focusKey]);
+
+  const mctsPartialMove =
+    move.valid && move.complete === 0 && move.move.length > 0;
+
+  const showMcts =
+    focus?.canExplore &&
+    isMctsSupported(game) &&
+    toMove !== "" &&
+    Array.isArray(focusLegalMoves) &&
+    focusLegalMoves.length > 0;
+
+  const mctsSecondsValue = Math.min(
+    MCTS_MAX_SECONDS,
+    Math.max(1, Number(mctsSeconds) || 3)
+  );
+
+  const handleMctsSecondsChange = (event) => {
+    const value = parseInt(event.target.value, 10);
+    if (!Number.isFinite(value)) return;
+    onMctsSecondsChange?.(Math.min(MCTS_MAX_SECONDS, Math.max(1, value)));
+  };
+
+  const handleRecommendMove = useCallback(async () => {
+    if (mctsRunning || !showMcts || !engine) return;
+    mctsAbortRef.current?.abort();
+    const controller = new AbortController();
+    mctsAbortRef.current = controller;
+    flushSync(() => {
+      mctsRunningSetter(true);
+      mctsResultSetter(null);
+    });
+    try {
+      const state = getMctsRootState({
+        exploration,
+        focus,
+        game,
+        engine,
+      });
+      const gameFlags = {
+        noMoves: game.noMoves,
+        automove: game.automove,
+        autopass: game.autopass,
+        pieEven: game.pieEven,
+      };
+      const result = await runMcts({
+        metaGame: engine.metaGame,
+        state,
+        rootPlayer: toMove,
+        gameFlags,
+        timeMs: mctsSecondsValue * 1000,
+        signal: controller.signal,
+      });
+      if (result?.move) {
+        mctsResultSetter(result);
+        handleMove(result.move);
+        toast.info(formatMctsToast(result, t), { autoClose: 6000 });
+        logMctsStats(result, {
+          metaGame: engine.metaGame,
+          rootPlayer: toMove,
+        });
+      } else {
+        logMctsFailure(new Error("MCTS returned no move"), {
+          metaGame: engine.metaGame,
+          rootPlayer: toMove,
+        });
+        toast.info(t("MctsNoResult"));
+      }
+    } catch (err) {
+      if (err.name !== "AbortError") {
+        logMctsFailure(err, {
+          metaGame: engine.metaGame,
+          rootPlayer: toMove,
+        });
+        toast.info(t("MctsNoResult"));
+      }
+    } finally {
+      if (mctsAbortRef.current === controller) {
+        mctsAbortRef.current = null;
+      }
+      mctsRunningSetter(false);
+    }
+  }, [
+    mctsRunning,
+    showMcts,
+    engine,
+    exploration,
+    focus,
+    game,
+    toMove,
+    mctsSecondsValue,
+    handleMove,
+    t,
+  ]);
+
+  useEffect(() => {
+    return () => {
+      mctsAbortRef.current?.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    const prevKey = mctsFocusKeyRef.current;
+    mctsFocusKeyRef.current = focusKey;
+    if (prevKey !== focusKey) {
+      mctsAbortRef.current?.abort();
+      mctsResultSetter(null);
+    }
+  }, [focusKey, toMove]);
 
   useEffect(() => {
     if (move.valid && move.complete === 0 && move.move.length > 0) {
@@ -271,19 +413,88 @@ function MoveEntry(props) {
                       ))}
                   </div>
                   {!Array.isArray(moves) ? null : (
-                    <div className="control">
-                      <button
-                        className="button is-small apButtonNeutral"
-                        onClick={() =>
-                          handleMove(
-                            moves[Math.floor(Math.random() * moves.length)]
-                          )
-                        }
-                      >
-                        Random move
-                      </button>
+                    <div className="field is-grouped is-grouped-multiline">
+                      <div className="control">
+                        <button
+                          className="button is-small apButtonNeutral"
+                          onClick={() =>
+                            handleMove(
+                              moves[Math.floor(Math.random() * moves.length)]
+                            )
+                          }
+                        >
+                          Random move
+                        </button>
+                      </div>
+                      {showMcts ? (
+                        <div className="control">
+                          <div>
+                            <div className="field is-grouped is-grouped-multiline mb-0">
+                              <div className="control">
+                                <button
+                                  type="button"
+                                  className={
+                                    "button is-small apButton" +
+                                    (mctsRunning ? " is-loading" : "")
+                                  }
+                                  onClick={handleRecommendMove}
+                                  disabled={mctsRunning || mctsPartialMove}
+                                  aria-busy={mctsRunning}
+                                >
+                                  {t("RecommendMove")}
+                                </button>
+                              </div>
+                              <div
+                                className="control"
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "0.35rem",
+                                }}
+                              >
+                                <input
+                                  className="input is-small"
+                                  type="number"
+                                  min={1}
+                                  max={MCTS_MAX_SECONDS}
+                                  step={1}
+                                  value={mctsSecondsValue}
+                                  onChange={handleMctsSecondsChange}
+                                  disabled={mctsRunning}
+                                  style={{ width: "3.75rem" }}
+                                  aria-label={t("MctsSeconds")}
+                                  title={t("MctsSecondsMax", {
+                                    max: MCTS_MAX_SECONDS,
+                                  })}
+                                />
+                                <span style={{ fontSize: "0.875rem" }}>
+                                  {t("MctsSeconds")}
+                                </span>
+                              </div>
+                            </div>
+                            {mctsRunning ? (
+                              <p
+                                className="help is-link"
+                                style={{ marginTop: "0.5em" }}
+                                aria-live="polite"
+                              >
+                                {t("MctsThinking")}
+                              </p>
+                            ) : null}
+                          </div>
+                        </div>
+                      ) : null}
                     </div>
                   )}
+                  {mctsResult ? (
+                    <p className="help is-link">
+                      {t("MctsResult", {
+                        move: mctsResult.move,
+                        winRate: mctsResult.winRate,
+                        visits: mctsResult.visits,
+                      })}
+                    </p>
+                  ) : null}
                   <p className="lined">
                     <span>{t("Or")}</span>
                   </p>
