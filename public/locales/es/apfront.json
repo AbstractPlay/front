@@ -897,9 +897,9 @@
     "RatedPlayersCount_one": "Jugador rankeado",
     "RatedPlayersCount_many": "Jugadores rankeados",
     "RatedPlayersCount_other": "Jugadores rankeados",
-    "SelectOpponents_one": "Seleccionar un oponente",
-    "SelectOpponents_many": "Seleccionar a un o varios oponentes",
-    "SelectOpponents_other": "Seleccionar {{count}} oponentes",
+    "SelectOpponents_one": "Seleccionar un oponente.",
+    "SelectOpponents_many": "Seleccionar a varios oponentes.",
+    "SelectOpponents_other": "Seleccionar {{count}} oponentes.",
     "StandingChallengesCount_one": "abrir desafío",
     "StandingChallengesCount_many": "abrir desafíos",
     "StandingChallengesCount_other": "abrir desafíos"
