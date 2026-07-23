@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import useStorageState from "react-use-storage-state";
 import BoardNav from "./BoardNav";
@@ -35,11 +35,12 @@ function Board({
   colourContext,
   hasNewChat,
   handleCustomize,
+  boardRenderIndex,
+  setBoardRenderIndex,
 }) {
   const globalMe = useStore((state) => state.globalMe);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
   const [fullSize, setFullSize] = useStorageState("fullSize", false);
-  const [index, setIndex] = useState(null);
   const boardContainerRef = useRef(null);
 
   const assignBoardContainer = useCallback(
@@ -50,13 +51,12 @@ function Board({
       }
       if (
         el &&
-        index !== null &&
         rendered.length > 0 &&
-        index < rendered.length &&
-        rendered[index]
+        boardRenderIndex < rendered.length &&
+        rendered[boardRenderIndex]
       ) {
         el.innerHTML = "";
-        const svg = rendered[index];
+        const svg = rendered[boardRenderIndex];
         if (fullSize) {
           svg.style.height = "auto";
         } else {
@@ -65,7 +65,7 @@ function Board({
         el.appendChild(svg);
       }
     },
-    [boardImage, index, rendered, fullSize, colourContext]
+    [boardImage, boardRenderIndex, rendered, fullSize, colourContext]
   );
 
   const boardStyle = useMemo(() => {
@@ -76,22 +76,17 @@ function Board({
     return style;
   }, [colourContext.background, fullSize]);
 
-  useEffect(() => {
-    if (rendered.length > 0) {
-      setIndex(rendered.length - 1);
-    }
-  }, [rendered]);
-
   const toggleZoom = () => {
     zoomEnabledSetter((val) => !val);
   };
 
-  if (index === null || rendered.length === 0 || index >= rendered.length)
+  if (rendered.length === 0 || boardRenderIndex >= rendered.length)
     return null;
 
-  const next = () => setIndex((i) => (i + 1) % rendered.length);
+  const next = () =>
+    setBoardRenderIndex((i) => (i + 1) % rendered.length);
   const prev = () =>
-    setIndex((i) => (i - 1 + rendered.length) % rendered.length);
+    setBoardRenderIndex((i) => (i - 1 + rendered.length) % rendered.length);
 
   return (
     <>
@@ -139,7 +134,7 @@ function Board({
 
       {rendered.length > 1 && (
         <BoardNav
-          currentIndex={index}
+          currentIndex={boardRenderIndex}
           total={rendered.length}
           onPrev={prev}
           onNext={next}

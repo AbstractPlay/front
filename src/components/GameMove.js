@@ -25,6 +25,7 @@ import Board from "./GameMove/Board";
 import RenderOptionsModal from "./RenderOptionsModal";
 import Modal from "./Modal";
 import ClipboardCopy from "../lib/ClipboardCopy";
+import { getDisplayedRenderRepJson } from "../lib/displayRenderRepJson";
 import UserChats from "./GameMove/UserChats";
 import Joyride, { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
@@ -89,6 +90,7 @@ function GameMove(props) {
   const [dbgame, dbgameSetter] = useState(null);
   const [renderrep, renderrepSetter] = useState(null);
   const [rendered, setRendered] = useState([]);
+  const [boardRenderIndex, setBoardRenderIndex] = useState(0);
   // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
   const [focus, focusSetter] = useState(null);
   const [move, moveSetter] = useState({
@@ -1524,6 +1526,12 @@ function GameMove(props) {
   ]);
 
   useEffect(() => {
+    if (rendered.length > 0) {
+      setBoardRenderIndex(Math.max(0, rendered.length - 1));
+    }
+  }, [rendered]);
+
+  useEffect(() => {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   }, [t, focus?.moveNumber, focusExPathKey]);
 
@@ -2149,6 +2157,11 @@ function GameMove(props) {
     }
   };
 
+  const displayRenderRepJson = useMemo(
+    () => getDisplayedRenderRepJson(renderrep, boardRenderIndex),
+    [renderrep, boardRenderIndex]
+  );
+
   const handleInjectChange = (e) => {
     injectedStateSetter(e.target.value);
   };
@@ -2568,6 +2581,8 @@ function GameMove(props) {
                           colourContext={effectiveColourContext}
                           hasNewChat={gameRef.current?.hasNewChat || false}
                           handleCustomize={handleCustomize}
+                          boardRenderIndex={boardRenderIndex}
+                          setBoardRenderIndex={setBoardRenderIndex}
                         />
                       ) : key === "moves" ? (
                         <GameMoves
@@ -2713,6 +2728,8 @@ function GameMove(props) {
                   colourContext={effectiveColourContext}
                   hasNewChat={gameRef.current?.hasNewChat || false}
                   handleCustomize={handleCustomize}
+                  boardRenderIndex={boardRenderIndex}
+                  setBoardRenderIndex={setBoardRenderIndex}
                 />
               </div>
               {/***************** GameMoves *****************/}
@@ -2985,6 +3002,30 @@ function GameMove(props) {
                       </a>
                     </div>
                   </div>
+                  {displayRenderRepJson ? (
+                    <>
+                      <h2>Copy renderer JSON</h2>
+                      <p>
+                        Renderer input for the board view currently shown (for
+                        Customize or debugging).
+                      </p>
+                      <ClipboardCopy copyText={displayRenderRepJson} />
+                      <div className="field">
+                        <div className="control">
+                          <a
+                            href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                              displayRenderRepJson
+                            )}`}
+                            download="AbstractPlay-Renderer.json"
+                          >
+                            <button className="button apButtonNeutral">
+                              {t("Download")}
+                            </button>
+                          </a>
+                        </div>
+                      </div>
+                    </>
+                  ) : null}
                 </Fragment>
               )}
             </div>

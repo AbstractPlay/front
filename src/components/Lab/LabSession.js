@@ -23,6 +23,7 @@ import MoveAnnotations from "./MoveAnnotations";
 import Board from "./Board";
 import Modal from "../Modal";
 import ClipboardCopy from "../../lib/ClipboardCopy";
+import { getDisplayedRenderRepJson } from "../../lib/displayRenderRepJson";
 import LabRenderOptionsModal from "./LabRenderOptionsModal";
 import {
   getFocusNode,
@@ -116,6 +117,7 @@ function LabSession({
   const navigate = useNavigate();
   const [renderrep, renderrepSetter] = useState(null);
   const [rendered, setRendered] = useState([]);
+  const [boardRenderIndex, setBoardRenderIndex] = useState(0);
   const [focus, focusSetter] = useState(null);
   const [move, moveSetter] = useState({
     move: "",
@@ -787,6 +789,12 @@ function LabSession({
   ]);
 
   useEffect(() => {
+    if (rendered.length > 0) {
+      setBoardRenderIndex(Math.max(0, rendered.length - 1));
+    }
+  }, [rendered]);
+
+  useEffect(() => {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   }, [t, focus?.moveNumber, focusExPathKey]);
 
@@ -804,6 +812,11 @@ function LabSession({
 
   const focusStateText =
     getFocusNode(explorationRef.current?.nodes, game, focus)?.state ?? "";
+
+  const displayRenderRepJson = useMemo(
+    () => getDisplayedRenderRepJson(renderrep, boardRenderIndex),
+    [renderrep, boardRenderIndex]
+  );
 
   if (error) {
     return (
@@ -902,6 +915,8 @@ function LabSession({
         colourContext={effectiveColourContext}
         hasNewChat={false}
         handleCustomize={handleCustomize}
+        boardRenderIndex={boardRenderIndex}
+        setBoardRenderIndex={setBoardRenderIndex}
       />
     </>
   );
@@ -1053,6 +1068,30 @@ function LabSession({
                 </a>
               </div>
             </div>
+            {displayRenderRepJson ? (
+              <>
+                <h2>Copy renderer JSON</h2>
+                <p>
+                  Renderer input for the board view currently shown (for
+                  Customize or debugging).
+                </p>
+                <ClipboardCopy copyText={displayRenderRepJson} />
+                <div className="field">
+                  <div className="control">
+                    <a
+                      href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                        displayRenderRepJson
+                      )}`}
+                      download="AbstractPlay-Playground-renderer.json"
+                    >
+                      <button className="button apButtonNeutral">
+                        {t("Download")}
+                      </button>
+                    </a>
+                  </div>
+                </div>
+              </>
+            ) : null}
           </div>
         </Modal>
         <LabRenderOptionsModal
