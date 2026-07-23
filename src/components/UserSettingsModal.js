@@ -380,7 +380,9 @@ function UserSettingsModal(props) {
 
     try {
       if (enabling) {
-        const subscribeResult = await subscribeUser({ requestPermission: true });
+        const subscribeResult = await subscribeUser({
+          requestPermission: true,
+        });
         if (!subscribeResult.success) {
           const message =
             subscribeResult.errorCode === "pushServiceError"
@@ -392,7 +394,8 @@ function UserSettingsModal(props) {
               : subscribeResult.error || t("PushEnableFailed");
           toast(message, {
             type: "error",
-            autoClose: subscribeResult.errorCode === "pushServiceError" ? 12000 : 5000,
+            autoClose:
+              subscribeResult.errorCode === "pushServiceError" ? 12000 : 5000,
           });
           return;
         }

@@ -25,13 +25,17 @@ function vapidKeysMatch(existingKey) {
   if (existingBytes.length !== convertedVapidKey.length) {
     return false;
   }
-  return existingBytes.every((byte, index) => byte === convertedVapidKey[index]);
+  return existingBytes.every(
+    (byte, index) => byte === convertedVapidKey[index]
+  );
 }
 
 function isPushServiceError(error) {
   return (
     error?.name === "AbortError" ||
-    String(error?.message || "").toLowerCase().includes("push service error")
+    String(error?.message || "")
+      .toLowerCase()
+      .includes("push service error")
   );
 }
 
@@ -95,9 +99,7 @@ async function formatSubscribeFailure(error) {
   if (isPushServiceError(error)) {
     let isBrave = false;
     try {
-      isBrave = Boolean(
-        navigator.brave && (await navigator.brave.isBrave())
-      );
+      isBrave = Boolean(navigator.brave && (await navigator.brave.isBrave()));
     } catch {
       // ignore
     }
@@ -301,8 +303,7 @@ export async function unregisterAllDevices() {
     console.error("An error occurred during unregisterAllDevices.", error);
     return {
       success: false,
-      error:
-        error?.message || "Failed to unregister push on all devices.",
+      error: error?.message || "Failed to unregister push on all devices.",
     };
   }
 }

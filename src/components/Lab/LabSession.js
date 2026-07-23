@@ -696,10 +696,7 @@ function LabSession({
       state: getMainLineTipState(nodes, gameRef.current),
       variants: gameRef.current.selectedVariants ?? [],
       playerCount: gameRef.current.numPlayers,
-      exploration: serializeSessionExploration(
-        nodes,
-        gameRef.current.gameOver
-      ),
+      exploration: serializeSessionExploration(nodes, gameRef.current.gameOver),
       moveAnnotations: serializeMainLineAnnotations(nodes),
       gameSettings: gameSettings ?? {},
     });
@@ -803,11 +800,7 @@ function LabSession({
   const playgroundExportText = useMemo(() => {
     void explorationVersion;
     if (!game || !explorationRef.current?.nodes || !focus) return "";
-    return serializePlaygroundExport(
-      game,
-      explorationRef.current.nodes,
-      focus
-    );
+    return serializePlaygroundExport(game, explorationRef.current.nodes, focus);
   }, [game, focus, explorationVersion]);
 
   const focusStateText =
@@ -838,11 +831,7 @@ function LabSession({
       ? getFocusNode(explorationRef.current.nodes, game, focus)?.toMove ?? ""
       : "";
 
-  const focusNode = getFocusNode(
-    explorationRef.current?.nodes,
-    game,
-    focus
-  );
+  const focusNode = getFocusNode(explorationRef.current?.nodes, game, focus);
   const showMoveAnnotations =
     focusNode?.move &&
     (focus.moveNumber > 0 || (focus.exPath?.length ?? 0) > 0);
@@ -1050,8 +1039,8 @@ function LabSession({
             </div>
             <h2>Copy game</h2>
             <p>
-              Full Playground export including move tree, focus, and
-              annotations — paste into Playground to share.
+              Full Playground export including move tree, focus, and annotations
+              — paste into Playground to share.
             </p>
             <ClipboardCopy copyText={playgroundExportText} />
             <div className="field">

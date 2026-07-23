@@ -127,7 +127,10 @@ function MoveAnnotations({ focusNode, onChange }) {
         ) : (
           <div className="content moveAnnotationPreview">
             {textComment.trim() ? (
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+              >
                 {textComment}
               </ReactMarkdown>
             ) : (

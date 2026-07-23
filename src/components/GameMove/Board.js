@@ -80,11 +80,9 @@ function Board({
     zoomEnabledSetter((val) => !val);
   };
 
-  if (rendered.length === 0 || boardRenderIndex >= rendered.length)
-    return null;
+  if (rendered.length === 0 || boardRenderIndex >= rendered.length) return null;
 
-  const next = () =>
-    setBoardRenderIndex((i) => (i + 1) % rendered.length);
+  const next = () => setBoardRenderIndex((i) => (i + 1) % rendered.length);
   const prev = () =>
     setBoardRenderIndex((i) => (i - 1 + rendered.length) % rendered.length);
 
