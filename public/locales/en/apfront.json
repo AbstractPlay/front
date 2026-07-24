@@ -181,6 +181,11 @@
             "full": "Components > Decktet",
             "tag": "C: Decktet"
         },
+        "components>dominoes": {
+            "description": "Played with dominoes",
+            "full": "Components > Dominoes",
+            "tag": "C: Dominoes"
+        },
         "components>piecepack": {
             "description": "Played with Piecepack",
             "full": "Components > Piecepack",

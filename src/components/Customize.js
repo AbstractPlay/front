@@ -1,12 +1,97 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { HexColorPicker, HexColorInput } from "react-colorful";
-import { render } from "@abstractplay/renderer";
+import { render, renderglyph, sheets } from "@abstractplay/renderer";
 import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
 import { useStore } from "../stores";
 import { isEqual, cloneDeep, debounce } from "lodash";
-import { sheets } from "@abstractplay/renderer";
+const patternNames = [
+  "microbial",
+  "chevrons",
+  "honeycomb",
+  "triangles",
+  "wavy",
+  "slant",
+  "dots",
+  "starsWhite",
+  "cross",
+  "houndstooth",
+];
+
+const isPatternName = (value) =>
+  typeof value === "string" && patternNames.includes(value);
+
+const swatchButtonStyle = {
+  width: "20px",
+  height: "20px",
+  padding: 0,
+  lineHeight: 0,
+};
+
+function ColourSwatchButton({ color, onClick, title }) {
+  return (
+    <button
+      className="button is-small"
+      title={title}
+      style={{ ...swatchButtonStyle, backgroundColor: color }}
+      onClick={onClick}
+    >
+      &nbsp;
+    </button>
+  );
+}
+
+function renderPatternGlyph(patternName, idPrefix) {
+  return renderglyph("piece", patternName, {
+    prefix: `${idPrefix}-${patternName}-`,
+  });
+}
+
+function patternSwatchDataUri(patternName, idPrefix) {
+  const svg = renderPatternGlyph(patternName, idPrefix);
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
+function PatternSwatchButton({ patternName, onClick }) {
+  const src = useMemo(
+    () => patternSwatchDataUri(patternName, "swatch"),
+    [patternName]
+  );
+  return (
+    <button
+      className="button is-small"
+      title={patternName}
+      style={{ ...swatchButtonStyle, overflow: "hidden", padding: 0 }}
+      onClick={onClick}
+    >
+      <img
+        src={src}
+        alt={patternName}
+        style={{ display: "block", width: "20px", height: "20px" }}
+      />
+    </button>
+  );
+}
+
+function PatternGlyphPreview({ patternName, size = 16 }) {
+  const src = useMemo(
+    () => patternSwatchDataUri(patternName, "palette-tag"),
+    [patternName]
+  );
+  return (
+    <img
+      src={src}
+      alt={patternName}
+      style={{
+        display: "block",
+        width: size,
+        height: size,
+        flexShrink: 0,
+      }}
+    />
+  );
+}
 
 function Customize(props) {
   const params = useParams();
@@ -348,6 +433,10 @@ function Customize(props) {
     setPalette([...colorBlindColors]);
   };
 
+  const selectPatternsPalette = () => {
+    setPalette([...patternNames]);
+  };
+
   const clearPalette = () => {
     setPalette([]);
   };
@@ -665,26 +754,22 @@ function Customize(props) {
               />
               <div className="buttons">
                 {presetColors.map((c) => (
-                  <button
+                  <ColourSwatchButton
                     key={c}
-                    className="button is-small"
-                    style={{ backgroundColor: c, width: "20px", padding: 0 }}
+                    color={c}
                     onClick={() => {
                       setSelectedColor(c);
                       setPalette([...palette, c]);
                     }}
-                  >
-                    &nbsp;
-                  </button>
+                  />
                 ))}
                 <button
                   className="button is-small"
                   style={{
+                    ...swatchButtonStyle,
                     background:
                       "linear-gradient(to top right, transparent calc(50% - 1px), red, transparent calc(50% + 1px))",
                     backgroundColor: "white",
-                    width: "20px",
-                    padding: 0,
                   }}
                   onClick={() => {
                     setPalette([...palette, null]);
@@ -694,17 +779,35 @@ function Customize(props) {
                   &nbsp;
                 </button>
                 {["#000000", "#ffffff", "#808080"].map((c) => (
-                  <button
+                  <ColourSwatchButton
                     key={c}
-                    className="button is-small"
-                    style={{ backgroundColor: c, width: "20px", padding: 0 }}
+                    color={c}
                     onClick={() => {
                       setSelectedColor(c);
                       setPalette([...palette, c]);
                     }}
-                  >
-                    &nbsp;
-                  </button>
+                  />
+                ))}
+              </div>
+              <div className="buttons">
+                {colorBlindColors.map((c) => (
+                  <ColourSwatchButton
+                    key={c}
+                    color={c}
+                    onClick={() => {
+                      setSelectedColor(c);
+                      setPalette([...palette, c]);
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="buttons">
+                {patternNames.map((name) => (
+                  <PatternSwatchButton
+                    key={name}
+                    patternName={name}
+                    onClick={() => setPalette([...palette, name])}
+                  />
                 ))}
               </div>
               <div className="buttons">
@@ -722,6 +825,12 @@ function Customize(props) {
                   onClick={selectColorBlindPalette}
                 >
                   Select colour blind colours
+                </button>
+                <button
+                  className="button is-small apButton"
+                  onClick={selectPatternsPalette}
+                >
+                  Select patterns
                 </button>
                 <button
                   className="button is-small apButtonNeutral"
@@ -742,7 +851,6 @@ function Customize(props) {
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, i)}
                 style={{
-                  backgroundColor: c,
                   color: "#000",
                   border: "1px solid #ccc",
                   cursor: "move",
@@ -752,10 +860,24 @@ function Customize(props) {
                           "linear-gradient(to top right, transparent calc(50% - 1px), red, transparent calc(50% + 1px))",
                         backgroundColor: "white",
                       }
-                    : {}),
+                    : isPatternName(c)
+                      ? {
+                          backgroundColor: "#fff",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.35em",
+                        }
+                      : { backgroundColor: c }),
                 }}
               >
-                {c}
+                {isPatternName(c) ? (
+                  <>
+                    <PatternGlyphPreview patternName={c} size={18} />
+                    {c}
+                  </>
+                ) : (
+                  c
+                )}
                 <button
                   className="delete is-small"
                   onClick={() => removeColor(i)}
