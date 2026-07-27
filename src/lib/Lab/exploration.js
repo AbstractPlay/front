@@ -12,18 +12,65 @@ function applyNodeAnnotations(target, source) {
   if (source.textComment) target.SetTextComment(source.textComment);
 }
 
-function inflateRecursive(gameEngine, node, children) {
+function parseReferenceStack(gameState) {
+  if (!gameState) return null;
+  try {
+    const parsed =
+      typeof gameState === "string" ? JSON.parse(gameState) : gameState;
+    return parsed?.stack ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function syncEmulatedMoveFromReference(
+  gameEngine,
+  referenceStack,
+  targetDepth,
+  move
+) {
+  const ref = referenceStack?.[targetDepth];
+  if (
+    !ref ||
+    typeof gameEngine.syncFromStackEntry !== "function" ||
+    !gameEngine.sameMove(move, ref.lastmove ?? "")
+  ) {
+    return;
+  }
+  gameEngine.syncFromStackEntry(ref);
+}
+
+function inflateRecursive(
+  gameEngine,
+  node,
+  children,
+  referenceStack,
+  stackDepth
+) {
   if (!Array.isArray(children)) return;
   children.forEach((n) => {
     if (!n?.move) return;
-    gameEngine.move(n.move, { trusted: true });
+    gameEngine.move(n.move, { trusted: true, emulation: true });
+    const targetDepth = stackDepth + 1;
+    syncEmulatedMoveFromReference(
+      gameEngine,
+      referenceStack,
+      targetDepth,
+      n.move
+    );
     const pos = node.AddChild(n.move, gameEngine);
     applyNodeAnnotations(node.children[pos], n);
     if (n.outcome !== undefined && (!n.children || n.children.length === 0)) {
       node.children[pos].SetOutcome(n.outcome);
     }
     if (n.children && n.children.length > 0) {
-      inflateRecursive(gameEngine, node.children[pos], n.children);
+      inflateRecursive(
+        gameEngine,
+        node.children[pos],
+        n.children,
+        referenceStack,
+        targetDepth
+      );
     }
     gameEngine.stack.pop();
     gameEngine.load();
@@ -46,7 +93,14 @@ export function restoreExplorationTree(
     tmpEngine.load();
   }
   nodes[moveCount - 1].state = tmpEngine.cheapSerialize();
-  inflateRecursive(tmpEngine, nodes[moveCount - 1], deflatedChildren);
+  const referenceStack = parseReferenceStack(gameState);
+  inflateRecursive(
+    tmpEngine,
+    nodes[moveCount - 1],
+    deflatedChildren,
+    referenceStack,
+    moveCount - 1
+  );
 }
 
 let sessionPersistCallback = null;
@@ -81,12 +135,13 @@ export function isSessionExplorationBranches(exploration) {
 
 export function restoreSessionExploration(nodes, metaGame, game, branches) {
   if (!branches || !Array.isArray(branches)) return;
+  const referenceStack = parseReferenceStack(game.state);
   const limit = Math.min(nodes.length, branches.length);
   for (let i = 0; i < limit; i++) {
     if (!branches[i]) continue;
     const node = getExplorationNode(nodes, game, i);
     const tmpEngine = GameFactory(metaGame, node.state);
-    inflateRecursive(tmpEngine, node, branches[i]);
+    inflateRecursive(tmpEngine, node, branches[i], referenceStack, i);
   }
 }
 
@@ -183,7 +238,19 @@ export function restoreMainLineAnnotations(nodes, annotations) {
 
 export function getMainLineTipState(nodes, game) {
   if (!nodes?.length) return game?.state;
-  return getExplorationNode(nodes, game, nodes.length - 1).state;
+  const tipMoveNumber = nodes.length - 1;
+  try {
+    const parsed =
+      typeof game?.state === "string"
+        ? JSON.parse(game.state)
+        : game?.state;
+    if (parsed?.stack?.length > tipMoveNumber + 1) {
+      return game.state;
+    }
+  } catch {
+    // fall through to slice rebuild
+  }
+  return getExplorationNode(nodes, game, tipMoveNumber).state;
 }
 
 export function canExploreMove(game, exploration, focus) {

@@ -305,6 +305,7 @@ function doView(
   move.rendered = m;
   setStatus(gameEngineTmp, game, partialMove, m, statusRef.current);
   if (!partialMove) {
+    game.state = gameEngineTmp.serialize();
     const nextMain = exploration[newfocus.moveNumber + 1];
     const advanceAlongMainLine =
       game.gameOver &&
