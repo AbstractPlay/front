@@ -28,25 +28,21 @@ import {
   isPushEnabledOnDevice,
 } from "../subscription";
 import { toast } from "react-toastify";
+import LanguageSelect from "./LanguageSelect";
 
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
   const show = props.show;
-  // const handleLanguageChange = props.handleLanguageChange;
-  // const handleEMailChange = props.handleEMailChange;
-  // eslint-disable-next-line no-unused-vars
   const { t } = useTranslation();
   const [changingName, changingNameSetter] = useState(false);
   const [changingEMail, changingEMailSetter] = useState(false);
   const [changingCodeSent, changingCodeSentSetter] = useState(false);
-  /*eslint-disable no-unused-vars*/
-  //   const [changingLanguage, changingLanguageSetter] = useState(false);
   const [name, nameSetter] = useState("");
   const [nameError, nameErrorSetter] = useState("");
   const [email, emailSetter] = useState("");
   const [emailCode, emailCodeSetter] = useState("");
-  const [language, languageSetter] = useState("");
   const [country, countrySetter] = useState("");
+  const [communicationLanguage, communicationLanguageSetter] = useState("en");
   const [bggid, bggidSetter] = useState("");
   const [aboutMe, aboutMeSetter] = useState("");
   const users = useStore((state) => state.users);
@@ -70,9 +66,7 @@ function UserSettingsModal(props) {
     if (show) {
       changingNameSetter(false);
       changingEMailSetter(false);
-      //   changingLanguageSetter(false);
       nameSetter("");
-      languageSetter("en");
       emailSetter("");
       emailCodeSetter("");
       if (globalMe?.settings?.all?.notifications) {
@@ -129,6 +123,7 @@ function UserSettingsModal(props) {
       if (globalMe?.country !== undefined) {
         countrySetter(globalMe.country);
       }
+      communicationLanguageSetter(globalMe?.language ?? "en");
       if (globalMe?.bggid !== undefined && globalMe?.bggid !== null) {
         bggidSetter(globalMe.bggid);
       }
@@ -183,6 +178,14 @@ function UserSettingsModal(props) {
     };
   }, [debouncedCountryChange]);
 
+  const handleCommunicationLanguageChange = async (newLanguage) => {
+    const { setGlobalMe } = useStore.getState();
+    await handleSettingChangeSubmit("language", newLanguage);
+    communicationLanguageSetter(newLanguage);
+    setGlobalMe((val) => ({ ...val, language: newLanguage }));
+    updatedSetter((updated) => updated + 1);
+  };
+
   const handleNameChangeCancelClick = () => {
     nameSetter("");
     changingNameSetter(false);
@@ -195,14 +198,6 @@ function UserSettingsModal(props) {
     updatedSetter((updated) => updated + 1);
     handleUserSettingsClose(updated + 1);
   };
-
-  //   const handleLanguageChangeSubmitClick = async () => {
-  //     changingLanguageSetter(false);
-  //     await handleSettingChangeSubmit("language", language);
-  //     i18n.changeLanguage(language);
-  //     languageSetter(language);
-  //     updatedSetter((updated) => updated + 1);
-  //   };
 
   const saveBGGid = () => {
     const { setGlobalMe, setUsers } = useStore.getState();
@@ -226,10 +221,6 @@ function UserSettingsModal(props) {
     emailSetter(user.signInUserSession.idToken.payload.email);
     changingEMailSetter(true);
   };
-
-  //   const handleLanguageChangeClick = () => {
-  //     changingLanguageSetter(true);
-  //   };
 
   const handleEMailChangeSubmitClick = async () => {
     const usr = await Auth.currentAuthenticatedUser();
@@ -432,8 +423,6 @@ function UserSettingsModal(props) {
       toast(t("PushUpdateFailed"), { type: "error" });
     }
   };
-
-  console.log(language);
 
   return (
     <>
@@ -747,6 +736,24 @@ function UserSettingsModal(props) {
                   </div>
                 ))}
           </div>
+          {/********************* communication language *********************/}
+          <div className="field" key="communicationLanguage">
+            <label className="label" htmlFor="user_settings_communication_language">
+              {t("CommunicationLanguage")}
+            </label>
+            <div className="control">
+              <div className="select is-small">
+                <LanguageSelect
+                  id="user_settings_communication_language"
+                  value={communicationLanguage}
+                  onChange={(e) =>
+                    handleCommunicationLanguageChange(e.target.value)
+                  }
+                />
+              </div>
+            </div>
+            <p className="help">{t("CommunicationLanguageHelp")}</p>
+          </div>
           {/********************* push notifications *********************/}
           <div className="field" key="pushNotifications">
             <div className="control">
@@ -880,32 +887,6 @@ function UserSettingsModal(props) {
               Also requires setting up and applying a custom palette.
             </p>
           </div>
-
-          {/* Uncomment this once we have a translation. Also remove the eslint-disable no-unused-vars above
-        ******************** Language *********************
-        <div className="userSettingsLabelDiv">
-          <label className="userSettingsLabel" htmlFor="user_settings_language" >{t("Language")}:</label>
-        </div>
-        <div className="userSettingsInputDiv">
-          { mySettings === null ? <Spinner/> :
-            changingLanguage ?
-              <select value={language} name="language" id="user_settings_language" onChange={(e) => languageSetter(e.target.value)}>
-              <option value="">--{t('Select')}--</option>
-              <option value="en">English</option>
-              <option value="fr">French</option>
-              <option value="it">Italian</option>
-              </select>
-              : mySettings.language === undefined ? i18n.language : mySettings.language
-          }
-        </div>
-        <div className="userSettingsButtonDiv">
-          { mySettings === null ? '' :
-            changingLanguage ?
-            <button className="apButton inlineButton" onClick={handleLanguageChangeSubmitClick}>{t("Submit")}</button>
-            : <button className="apButton inlineButton" onClick={handleLanguageChangeClick}>{t("Change")}</button>
-          }
-        </div>
-        */}
 
           <div className="field is-grouped">
             <div className="control is-small">

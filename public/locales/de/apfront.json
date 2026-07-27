@@ -925,6 +925,8 @@
   "_src_YourGames": "Your games",
   "_src_YourMove": "Your move",
   "_src_EnableZoom": "Enable zoom",
+  "_src_CommunicationLanguage": "Language for emails and notifications",
+  "_src_CommunicationLanguageHelp": "Choose the language for emails and push notifications from Abstract Play. This does not change the language of the website — use the language menu in the page footer for that.",
   "About": "Über",
   "Accept": "Annehmen",
   "Active": "Aktiv",
@@ -940,7 +942,7 @@
   "CycleBoardDisplay": "Brettanzeige umschalten",
   "buttons": {
     "pass": "Passen",
-    "takebutton": "Knopf nehmen",
+    "takebutton": "Button nehmen",
     "acceptpie": "Als Zweiter spielen",
     "playsecond": "Als Zweiter spielen",
     "draw": "Remis beanspruchen",
@@ -959,7 +961,7 @@
       "cw": "Im Uhrzeigersinn drehen",
       "ccw": "Gegen den Uhrzeigersinn drehen",
       "fire": "Laser feuern",
-      "hit": "Schnauze schwingen"
+      "hit": "Rüssel schwingen"
     },
     "carnac": {
       "tip_n": "Nach Norden kippen",
@@ -988,208 +990,208 @@
   "categories": {
     "board": {
       "description": "Beschreibt die Eigenschaften der Spielfläche",
-      "full": "Brett",
-      "tag": "Brett"
+      "full": "Spielfeld",
+      "tag": "Spielfeld"
     },
     "board>3d": {
-      "description": "Das Spielbrett ist dreidimensional",
-      "full": "Brett > 3D",
-      "tag": "Brett: 3D"
+      "description": "Das Spielfeld ist dreidimensional",
+      "full": "Spielfeld > 3D",
+      "tag": "Spielfeld: 3D"
     },
     "board>connect": {
-      "description": "Beschreibt, wie die Felder des Bretts miteinander verbunden sind",
-      "full": "Brett > Verbindungen",
-      "tag": "Brett-Verbindung"
+      "description": "Beschreibt, wie die Felder des Spielfelds miteinander verbunden sind",
+      "full": "Spielfeld > Verbindung",
+      "tag": "Spielfeld-Verbindung"
     },
     "board>connect>hex": {
       "description": "Felder sind hexagonal miteinander verbunden",
-      "full": "Brett > Verbindungen > Hexagonal",
+      "full": "Spielfeld > Verbindung > Hexagonal",
       "tag": "Verbindung: Hex"
     },
     "board>connect>linear": {
       "description": "Felder sind linear miteinander verbunden",
-      "full": "Brett > Verbindungen > Linear",
+      "full": "Spielfeld > Verbindung > Linear",
       "tag": "Verbindung: Linear"
     },
     "board>connect>other": {
       "description": "Felder sind auf einzigartige Weise miteinander verbunden",
-      "full": "Brett > Verbindungen > Sonstige",
+      "full": "Spielfeld > Verbindung > Sonstige",
       "tag": "Verbindung: Sonstige"
     },
     "board>connect>pent": {
       "description": "Felder sind pentagonal miteinander verbunden",
-      "full": "Brett > Verbindungen > Pentagonal",
+      "full": "Spielfeld > Verbindung > Pentagonal",
       "tag": "Verbindung: Pent"
     },
     "board>connect>rect": {
       "description": "Felder sind orthogonal und diagonal miteinander verbunden",
-      "full": "Brett > Verbindungen > Rechteckig",
-      "tag": "Verbindung: Rechteck"
+      "full": "Spielfeld > Verbindung > Rechteckig",
+      "tag": "Verbindung: Rechteckig"
     },
     "board>connect>snub": {
-      "description": "Felder sind in einer Snub-Quadrat-Matrix verbunden",
-      "full": "Brett > Verbindungen > Snub-Quadrat",
+      "description": "Felder sind in einer Snubsquare-Matrix miteinander verbunden",
+      "full": "Spielfeld > Verbindung > Snubsquare",
       "tag": "Verbindung: Snub"
     },
     "board>dynamic": {
-      "description": "Das Spielbrett baut sich dynamisch auf",
-      "full": "Brett > Dynamisch",
-      "tag": "Brett: Dynamisch"
+      "description": "Das Spielfeld baut sich dynamisch auf",
+      "full": "Spielfeld > Dynamisch",
+      "tag": "Spielfeld: Dynamisch"
     },
     "board>mancala": {
-      "description": "Gespielt auf einem traditionellen Mancala-Spielbrett",
-      "full": "Brett > Mancala",
-      "tag": "Brett: Mancala"
+      "description": "Wird auf einem traditionellen Mancala-Spielfeld gespielt",
+      "full": "Spielfeld > Mancala",
+      "tag": "Spielfeld: Mancala"
     },
     "board>none": {
-      "description": "Gespielt auf jeder beliebigen flachen Oberfläche",
-      "full": "Brett > Keines",
-      "tag": "Brett: Keines"
+      "description": "Wird auf einer beliebigen flachen Oberfläche gespielt",
+      "full": "Spielfeld > Keines",
+      "tag": "Spielfeld: Keines"
     },
     "board>other": {
-      "description": "Das Spielbrett ist einzigartig",
-      "full": "Brett > Sonstige",
-      "tag": "Brett: Sonstige"
+      "description": "Das Spielfeld ist einzigartig",
+      "full": "Spielfeld > Sonstiges",
+      "tag": "Spielfeld: Sonstiges"
     },
     "board>shape": {
-      "description": "Beschreibt die Form des Spielbretts",
-      "full": "Brett > Form",
-      "tag": "Brettform"
+      "description": "Beschreibt die Form des Spielfelds",
+      "full": "Spielfeld > Form",
+      "tag": "Spielfeldform"
     },
     "board>shape>circle": {
-      "description": "Das Spielbrett ist kreisförmig",
-      "full": "Brett > Form > Kreis",
+      "description": "Das Spielfeld ist kreisförmig",
+      "full": "Spielfeld > Form > Kreis",
       "tag": "Form: Kreis"
     },
     "board>shape>hex": {
-      "description": "Das Spielbrett ist sechseckig",
-      "full": "Brett > Form > Sechseck",
+      "description": "Das Spielfeld ist sechseckig",
+      "full": "Spielfeld > Form > Sechseck",
       "tag": "Form: Hex"
     },
     "board>shape>pent": {
-      "description": "Das Spielbrett ist fünfeckig",
-      "full": "Brett > Form > Fünfeck",
+      "description": "Das Spielfeld ist fünfeckig",
+      "full": "Spielfeld > Form > Fünfeck",
       "tag": "Form: Pent"
     },
     "board>shape>oct": {
-      "description": "Das Spielbrett ist achteckig",
-      "full": "Brett > Form > Achteck",
+      "description": "Das Spielfeld ist achteckig",
+      "full": "Spielfeld > Form > Achteck",
       "tag": "Form: Okt"
     },
     "board>shape>other": {
-      "description": "Das Spielbrett hat eine einzigartige Form",
-      "full": "Brett > Form > Sonstige",
+      "description": "Das Spielfeld hat eine einzigartige Form",
+      "full": "Spielfeld > Form > Sonstige",
       "tag": "Form: Sonstige"
     },
     "board>shape>rect": {
-      "description": "Das Spielbrett ist rechteckig",
-      "full": "Brett > Form > Rechteck",
+      "description": "Das Spielfeld ist rechteckig",
+      "full": "Spielfeld > Form > Rechteck",
       "tag": "Form: Rechteck"
     },
     "board>shape>tri": {
-      "description": "Das Spielbrett ist dreieckig",
-      "full": "Brett > Form > Dreieck",
+      "description": "Das Spielfeld ist dreieckig",
+      "full": "Spielfeld > Form > Dreieck",
       "tag": "Form: Dreieck"
     },
     "components>chess": {
-      "description": "Gespielt mit einem Schachset",
-      "full": "Material > Schach",
+      "description": "Wird mit einem Schachset gespielt",
+      "full": "Spielmaterial > Schach",
       "tag": "M: Schach"
     },
     "components>dice": {
-      "description": "Gespielt mit Würfeln",
-      "full": "Material > Würfel",
+      "description": "Wird mit Würfeln gespielt",
+      "full": "Spielmaterial > Würfel",
       "tag": "M: Würfel"
     },
     "components>decktet": {
-      "description": "Gespielt mit einem Decktet-Deck",
-      "full": "Material > Decktet",
+      "description": "Wird mit einem Decktet-Deck gespielt",
+      "full": "Spielmaterial > Decktet",
       "tag": "M: Decktet"
     },
     "components>dominoes": {
-      "description": "Gespielt mit Dominosteinen",
-      "full": "Material > Domino",
+      "description": "Wird mit Dominosteinen gespielt",
+      "full": "Spielmaterial > Domino",
       "tag": "M: Domino"
     },
     "components>piecepack": {
-      "description": "Gespielt mit Piecepack",
-      "full": "Material > Piecepack",
+      "description": "Wird mit Piecepack gespielt",
+      "full": "Spielmaterial > Piecepack",
       "tag": "M: Piecepack"
     },
     "components>poly": {
-      "description": "Gespielt mit Polyominos",
-      "full": "Material > Polyominos",
+      "description": "Wird mit Polyominos gespielt",
+      "full": "Spielmaterial > Polyominos",
       "tag": "M: Polyominos"
     },
     "components>pyramids": {
-      "description": "Gespielt mit Looney Pyramids",
-      "full": "Material > Looney Pyramids",
+      "description": "Wird mit Looney Pyramids gespielt",
+      "full": "Spielmaterial > Looney Pyramids",
       "tag": "M: Looney Pyramids"
     },
     "components>shibumi": {
-      "description": "Gespielt mit einem Shibumi-Set",
-      "full": "Material > Shibumi",
+      "description": "Wird mit einem Shibumi-Set gespielt",
+      "full": "Spielmaterial > Shibumi",
       "tag": "M: Shibumi"
     },
     "components>simple": {
-      "description": "Gespielt mit einfachen Spielsteinen einheitlicher Größe, oft stapelbar, manchmal in vielen Farben",
-      "full": "Material > Einfach",
+      "description": "Wird mit einfachen Spielsteinen einheitlicher Größe gespielt, oft stapelbar, manchmal in vielen Farben",
+      "full": "Spielmaterial > Einfach",
       "tag": "M: Einfach"
     },
     "components>simple>1per": {
       "description": "Eine Farbe pro Spieler",
-      "full": "Material > Einfach > 1 pro Spieler",
-      "tag": "M: Einfach, 1 pro Spieler"
+      "full": "Spielmaterial > Einfach > 1 pro Spieler",
+      "tag": "M: Einfach, 1 pro"
     },
     "components>simple>2per": {
       "description": "Zwei Farben pro Spieler",
-      "full": "Material > Einfach > 2 pro Spieler",
-      "tag": "M: Einfach, 2 pro Spieler"
+      "full": "Spielmaterial > Einfach > 2 pro Spieler",
+      "tag": "M: Einfach, 2 pro"
     },
     "components>simple>1c": {
-      "description": "Eine Steinfarbe",
-      "full": "Material > Einfach > 1 Farbe",
+      "description": "Eine Farbe von Spielsteinen",
+      "full": "Spielmaterial > Einfach > 1 Farbe",
       "tag": "M: Einfach, 1 Farbe"
     },
     "components>simple>2c": {
-      "description": "Zwei Steinfarben",
-      "full": "Material > Einfach > 2 Farben",
+      "description": "Zwei Farben von Spielsteinen",
+      "full": "Spielmaterial > Einfach > 2 Farben",
       "tag": "M: Einfach, 2 Farben"
     },
     "components>simple>3c": {
-      "description": "Drei Steinfarben",
-      "full": "Material > Einfach > 3 Farben",
+      "description": "Drei Farben von Spielsteinen",
+      "full": "Spielmaterial > Einfach > 3 Farben",
       "tag": "M: Einfach, 3 Farben"
     },
     "components>simple>4c": {
-      "description": "Vier Steinfarben",
-      "full": "Material > Einfach > 4 Farben",
+      "description": "Vier Farben von Spielsteinen",
+      "full": "Spielmaterial > Einfach > 4 Farben",
       "tag": "M: Einfach, 4 Farben"
     },
     "components>simple>5c": {
-      "description": "Fünf Steinfarben",
-      "full": "Material > Einfach > 5 Farben",
+      "description": "Fünf Farben von Spielsteinen",
+      "full": "Spielmaterial > Einfach > 5 Farben",
       "tag": "M: Einfach, 5 Farben"
     },
     "components>simple>7c": {
-      "description": "Sieben Steinfarben",
-      "full": "Material > Einfach > 7 Farben",
+      "description": "Sieben Farben von Spielsteinen",
+      "full": "Spielmaterial > Einfach > 7 Farben",
       "tag": "M: Einfach, 7 Farben"
     },
     "components>simple>pnp": {
-      "description": "Spielbar mit Papier und Stift",
-      "full": "Material > Einfach > Papier & Stift",
-      "tag": "M: Einfach, P&S"
+      "description": "Spielbar mit Stift und Papier",
+      "full": "Spielmaterial > Einfach > Stift & Papier",
+      "tag": "M: Einfach, S&P"
     },
     "components>special": {
-      "description": "Gespielt mit spezialisierten, meist unterschiedlichen Spielsteinen",
-      "full": "Material > Spezialisiert",
+      "description": "Wird mit spezialisierten Spielsteinen gespielt, meist unterschiedlich",
+      "full": "Spielmaterial > Spezialisiert",
       "tag": "M: Spezial"
     },
     "goal>annihilate": {
-      "description": "Alle gegnerischen Steine vernichten",
-      "full": "Ziel > Vernichtung",
-      "tag": "Z: Vernichtung"
+      "description": "Alle gegnerischen Spielsteine vernichten",
+      "full": "Ziel > Vernichten",
+      "tag": "Z: Vernichten"
     },
     "goal>area": {
       "description": "Mehr Fläche (oder bestimmte Bereiche mit bestimmter Stärke) als der Gegner kontrollieren",
@@ -1197,57 +1199,57 @@
       "tag": "Z: Gebietskontrolle"
     },
     "goal>arrange": {
-      "description": "Steine in bestimmten Formen oder Längen anordnen (z. B. n in einer Reihe)",
+      "description": "Spielsteine in bestimmten Formen oder Längen anordnen (z. B. n in einer Reihe)",
       "full": "Ziel > Anordnen",
       "tag": "Z: Anordnen"
     },
     "goal>breakthrough": {
-      "description": "Gegnerische Grundlinie oder Heimatregion mit ausreichender Stärke erreichen",
+      "description": "Die gegnerische Grundlinie oder das Zielgebiet mit ausreichender Stärke erreichen",
       "full": "Ziel > Durchbruch",
       "tag": "Z: Durchbruch"
     },
     "goal>connect": {
-      "description": "Bestimmte Ränder des Bretts oder Bereiche verbinden",
+      "description": "Bestimmte Ränder des Spielfelds oder Bereiche verbinden",
       "full": "Ziel > Verbinden",
       "tag": "Z: Verbinden"
     },
     "goal>cripple": {
-      "description": "Eine kritische Mehrheit oder eine bestimmte Teilmenge gegnerischer Steine eliminieren",
+      "description": "Eine kritische Mehrheit oder eine bestimmte Teilmenge gegnerischer Spielsteine eliminieren",
       "full": "Ziel > Schwächen",
       "tag": "Z: Schwächen"
     },
     "goal>evacuate": {
-      "description": "Eigene Steine vom Brett evakuieren",
+      "description": "Eigene Spielsteine vom Spielfeld evakuieren",
       "full": "Ziel > Evakuieren",
       "tag": "Z: Evakuieren"
     },
     "goal>immobilize": {
-      "description": "Den Gegner bewegungsunfähig machen",
-      "full": "Ziel > Blockieren",
-      "tag": "Z: Blockieren"
+      "description": "Den Gegner zugunfähig machen",
+      "full": "Ziel > Bewegungsunfähig machen",
+      "tag": "Z: Unbeweglich"
     },
     "goal>isolate": {
-      "description": "Einen Stein oder eine Teilmenge von Steinen auf eine bestimmte Weise isolieren",
+      "description": "Einen Spielstein oder eine Teilmenge von Spielsteinen auf bestimmte Weise isolieren",
       "full": "Ziel > Isolieren",
       "tag": "Z: Isolieren"
     },
     "goal>majority": {
-      "description": "Mehr Steine als der Gegner haben",
+      "description": "Mehr Spielsteine als der Gegner haben",
       "full": "Ziel > Mehrheit",
       "tag": "Z: Mehrheit"
     },
     "goal>royal-capture": {
-      "description": "Einen bestimmten gegnerischen Stein schlagen",
+      "description": "Einen bestimmten gegnerischen Spielstein schlagen",
       "full": "Ziel > Königsschlag",
       "tag": "Z: Königsschlag"
     },
     "goal>royal-escape": {
-      "description": "Einen bestimmten Stein vom Brett entkommen lassen",
+      "description": "Einen bestimmten Spielstein vom Spielfeld bringen",
       "full": "Ziel > Königsflucht",
       "tag": "Z: Königsflucht"
     },
     "goal>score": {
-      "description": "Ergebnis wird auf irgendeine Weise durch Punkte bestimmt",
+      "description": "Das Ergebnis wird auf irgendeine Weise durch die Punktzahl bestimmt",
       "full": "Ziel > Punkte",
       "tag": "Z: Punkte"
     },
@@ -1262,32 +1264,32 @@
       "tag": "Z: Punkte (Rennen)"
     },
     "goal>set": {
-      "description": "Sets von Steinen sammeln",
-      "full": "Ziel > Sets sammeln",
-      "tag": "Z: Sets sammeln"
+      "description": "Sets von Spielsteinen sammeln",
+      "full": "Ziel > Set-Sammlung",
+      "tag": "Z: Set-Sammlung"
     },
     "goal>unify": {
-      "description": "Alle eigenen Steine zusammenführen",
+      "description": "Alle eigenen Spielsteine zusammenführen",
       "full": "Ziel > Vereinigen",
       "tag": "Z: Vereinigen"
     },
     "goal>vigil": {
-      "description": "Alle (oder eine definierte Teilmenge) Steine müssen Sichtlinie zu einem Brettelement haben",
+      "description": "Alle (oder eine definierte Teilmenge von) Spielsteine müssen Sichtlinie zu einem Spielfeldelement haben",
       "full": "Ziel > Sichtlinie",
       "tag": "Z: Sichtlinie"
     },
     "mechanic": {
-      "description": "Beschreibt allgemeine Spielmechaniken",
+      "description": "Beschreibt die allgemeinen Spielmechaniken",
       "full": "Mechaniken",
       "tag": "Mechaniken"
     },
     "mechanic>asymmetry": {
-      "description": "Spiel ist asymmetrisch",
+      "description": "Das Spiel ist asymmetrisch",
       "full": "Mechaniken > Asymmetrie",
       "tag": "M: Asymmetrie"
     },
     "mechanic>bearoff": {
-      "description": "Spieler tragen Steine vom Brett ab",
+      "description": "Spieler tragen Spielsteine vom Spielfeld ab",
       "full": "Mechaniken > Abtragen",
       "tag": "M: Abtragen"
     },
@@ -1297,62 +1299,62 @@
       "tag": "M: Blockieren"
     },
     "mechanic>capture": {
-      "description": "Steine werden geschlagen",
+      "description": "Spielsteine werden geschlagen",
       "full": "Mechaniken > Schlagen",
       "tag": "M: Schlagen"
     },
     "mechanic>convert": {
-      "description": "Spieler können gegnerische Steine in eigene umwandeln",
+      "description": "Spieler können gegnerische Spielsteine in eigene umwandeln",
       "full": "Mechaniken > Umwandeln",
       "tag": "M: Umwandeln"
     },
     "mechanic>coopt": {
-      "description": "Spieler können mit gegnerischen Steinen interagieren",
+      "description": "Spieler können mit gegnerischen Spielsteinen interagieren",
       "full": "Mechaniken > Interagieren",
       "tag": "M: Interagieren"
     },
     "mechanic>differentiate": {
-      "description": "Steine unterscheiden sich in wesentlicher Weise",
-      "full": "Mechaniken > Differenzieren",
-      "tag": "M: Differenzieren"
+      "description": "Spielsteine unterscheiden sich auf eine wesentliche Weise",
+      "full": "Mechaniken > Differenzierung",
+      "tag": "M: Differenzierung"
     },
     "mechanic>displace": {
-      "description": "Züge können dazu führen, dass sich weitere Steine bewegen",
+      "description": "Züge können dazu führen, dass sich weitere Spielsteine bewegen",
       "full": "Mechaniken > Verschieben",
       "tag": "M: Verschieben"
     },
     "mechanic>economy": {
-      "description": "Spieler müssen eine zentrale Ökonomie verwalten",
-      "full": "Mechaniken > Ökonomie verwalten",
-      "tag": "M: Ökonomie verwalten"
+      "description": "Spieler müssen eine zentrale Wirtschaft verwalten",
+      "full": "Mechaniken > Wirtschaft verwalten",
+      "tag": "M: Wirtschaft"
     },
     "mechanic>enclose": {
-      "description": "Spieler umzingeln aktiv Bereiche oder Steine",
-      "full": "Mechaniken > Umzingeln",
-      "tag": "M: Umzingeln"
+      "description": "Spieler schließen Bereiche oder Spielsteine aktiv ein",
+      "full": "Mechaniken > Einschließen",
+      "tag": "M: Einschließen"
     },
     "mechanic>hidden": {
-      "description": "Spiel enthält verborgene Informationen",
-      "full": "Mechaniken > Verborgene Informationen",
-      "tag": "M: Verborgene Info"
+      "description": "Das Spiel enthält verdeckte Informationen",
+      "full": "Mechaniken > Verdeckte Informationen",
+      "tag": "M: Verdeckt"
     },
     "mechanic>merge": {
-      "description": "Steine verschmelzen oder teilen sich",
+      "description": "Spielsteine verschmelzen oder teilen sich",
       "full": "Mechaniken > Verschmelzen/Teilen",
       "tag": "M: Verschmelzen/Teilen"
     },
     "mechanic>move": {
-      "description": "Steine können bewegt werden",
+      "description": "Spielsteine können bewegt werden",
       "full": "Mechaniken > Bewegen",
       "tag": "M: Bewegen"
     },
     "mechanic>move>group": {
-      "description": "Steine können als Gruppe bewegt werden",
+      "description": "Spielsteine können als Gruppe bewegt werden",
       "full": "Mechaniken > Bewegen > Gruppe",
       "tag": "M: Bewegen (Gruppe)"
     },
     "mechanic>move>sow": {
-      "description": "Steine bewegen sich durch Säen",
+      "description": "Spielsteine bewegen sich durch Säen",
       "full": "Mechaniken > Bewegen > Säen",
       "tag": "M: Bewegen (Säen)"
     },
@@ -1362,7 +1364,7 @@
       "tag": "M: Netzwerk"
     },
     "mechanic>place": {
-      "description": "Steine werden platziert",
+      "description": "Spielsteine werden platziert",
       "full": "Mechaniken > Platzieren",
       "tag": "M: Platzieren"
     },
@@ -1372,14 +1374,14 @@
       "tag": "M: Programmieren"
     },
     "mechanic>random": {
-      "description": "Spiel enthält Zufallselemente",
+      "description": "Das Spiel enthält ein Zufallselement",
       "full": "Mechaniken > Zufallselemente",
       "tag": "M: Zufallselemente"
     },
     "mechanic>random>play": {
-      "description": "Einzelne Züge des Spiels enthalten Zufallselemente",
-      "full": "Mechaniken > Zufall > Spielablauf",
-      "tag": "M: Zufall (Spielablauf)"
+      "description": "Einzelne Züge des Spiels enthalten ein Zufallselement",
+      "full": "Mechaniken > Zufall > Spielverlauf",
+      "tag": "M: Zufall (Spiel)"
     },
     "mechanic>random>setup": {
       "description": "Der Aufbau ist auf irgendeine Weise zufällig",
@@ -1388,11 +1390,11 @@
     },
     "mechanic>set": {
       "description": "Spieler sammeln Sets",
-      "full": "Mechaniken > Sets sammeln",
-      "tag": "M: Sets sammeln"
+      "full": "Mechaniken > Set-Sammlung",
+      "tag": "M: Set-Sammlung"
     },
     "mechanic>share": {
-      "description": "Mindestens einige Steine im Spiel werden von beiden Spielern geteilt",
+      "description": "Mindestens einige Spielsteine im Spiel werden von beiden Spielern geteilt",
       "full": "Mechaniken > Teilen",
       "tag": "M: Teilen"
     },
@@ -1402,17 +1404,17 @@
       "tag": "M: Gleichzeitig"
     },
     "mechanic>stack": {
-      "description": "Spieler manipulieren Stapel von Steinen",
+      "description": "Spieler manipulieren Stapel von Spielsteinen",
       "full": "Mechaniken > Stapeln",
       "tag": "M: Stapeln"
     },
     "mechanic>vigil": {
-      "description": "Mindestens ein Stein muss eine Sichtlinie zu einem Brettelement haben",
+      "description": "Mindestens ein Spielstein muss eine Sichtlinie zu einem Spielfeldelement haben",
       "full": "Mechaniken > Sichtlinie",
       "tag": "M: Sichtlinie"
     },
     "other>traditional": {
-      "description": "Spiel ist traditionell",
+      "description": "Das Spiel ist traditionell",
       "full": "Sonstige > Traditionell",
       "tag": "S: Traditionell"
     },
@@ -1534,7 +1536,7 @@
   "EnterMove": "Zug eingeben/klicken",
   "Error": "Fehler!",
   "Events": {
-    "Description": "Organisierte Events werden von Einzelpersonen verwaltet. Das System ermöglicht es Organisatoren, Events zu erstellen, Spielern, sich zu registrieren, und Organisatoren anschließend, Spiele zwischen registrierten Spielern zu starten. Die Nachverfolgung der Ergebnisse, die Durchsetzung detaillierter Zeitbeschränkungen und die Bekanntgabe der Sieger obliegen dem Organisator.",
+    "Description": "Organisierte Events werden von Einzelpersonen verwaltet. Das System ermöglicht es Organisatoren, Events zu erstellen, Spielern, sich zu registrieren, und Organisatoren anschließend, Spiele zwischen registrierten Spielern zu starten. Das Verfolgen von Ergebnissen, das Durchsetzen detaillierter Zeitbeschränkungen und das Bekanntgeben von Gewinnern obliegt dem Organisator.",
     "Name": "Organisierte Events"
   },
   "EventsNav": "Events",
@@ -1629,6 +1631,8 @@
   "NotesHelp": "Notizen für diese Herausforderung (max. 128 Zeichen).",
   "NotHardTime": "Kein hartes Zeitlimit",
   "NotificationSettings": "Benachrichtigungseinstellungen (speichert sofort)",
+  "CommunicationLanguage": "Sprache für E-Mails und Benachrichtigungen",
+  "CommunicationLanguageHelp": "Wähle die Sprache für E-Mails und Push-Benachrichtigungen von Abstract Play. Dies ändert nicht die Sprache der Website — verwende dafür das Sprachmenü in der Fußzeile der Seite.",
   "NotifyLabel-yourturn": "Du bist am Zug (zweimal täglich)",
   "NotifyLabel-challenges": "Herausforderungen (jedes Vorkommen)",
   "NotifyLabel-gameStart": "Spiel gestartet (jedes Vorkommen)",
@@ -1762,36 +1766,36 @@
   "TotalStars_other": "Sterne insgesamt",
   "tour": {
     "general": {
-      "Ignore": "Überspringe diese Tour",
-      "Take": "Erzähle mir von dieser Seite"
+      "Ignore": "Diese Tour überspringen",
+      "Take": "Erzähl mir mehr über diese Seite"
     },
     "me": {
       "challenges": "Dieser Bereich listet alle Herausforderungen auf, die du erhalten und ausgesprochen hast.",
-      "completed": "Sobald du ein Spiel beendet hast, findest du es hier. Spiele werden 48 Stunden nach deinem letzten Besuch automatisch aus dieser Liste entfernt. Du kannst ein Spiel manuell aus dieser Liste entfernen, indem du auf die Schaltfläche 'Löschen' klickst. Wenn jemand ein abgeschlossenes Spiel kommentiert, erscheint es wieder auf dieser Liste und wird fett gedruckt.",
-      "issueChallenge": "Hier forderst du andere zu allen möglichen Spielen heraus. Du kannst Herausforderungen auch aus der Liste der Spiele oder von jeder anderen Listenseite aus aussprechen (z. B. der Wertungsseite).",
-      "settings": "Öffne schließlich deine Benutzereinstellungen, um dein Profil, deine Benachrichtigungseinstellungen und deine Analyse-Einstellungen zu ändern. Du kannst diese Touren dort ebenfalls deaktivieren.",
-      "theirturn": "Wenn dein Gegner in irgendwelchen Spielen am Zug ist, werden sie hier aufgelistet. Du kannst diese Tabelle ebenfalls sortieren.",
-      "welcome": "Willkommen auf deiner persönlichen Übersicht!",
-      "yourturn": "Wenn du in irgendwelchen Spielen am Zug bist, werden sie hier aufgelistet. Du kannst die Tabelle sortieren, indem du auf einen der Spaltenköpfe klickst. Standardmäßig ist die Tabelle nach der verbleibenden Bedenkzeit auf deiner Uhr sortiert."
+      "completed": "Sobald du ein Spiel beendet hast, findest du es hier. Spiele werden 48 Stunden nach deinem letzten Besuch automatisch aus dieser Liste entfernt. Du kannst ein Spiel manuell aus dieser Liste entfernen, indem du auf die Schaltfläche „Löschen“ klickst. Wenn jemand ein beendetes Spiel kommentiert, erscheint es wieder in dieser Liste und wird fett gedruckt.",
+      "issueChallenge": "Hierüber kannst du Herausforderungen für all die verschiedenen Spiele aussprechen. Du kannst Herausforderungen auch aus der Spieleliste oder von einer der anderen Listenseiten (wie der Bewertungsseite) aussprechen.",
+      "settings": "Und schließlich öffne deine Benutzereinstellungen, um dein Profil, deine Benachrichtigungseinstellungen und deine Erkundungseinstellungen zu ändern. Du kannst diese Touren dort ebenfalls deaktivieren.",
+      "theirturn": "Wenn dein Gegner in einem Spiel am Zug ist, wird es hier aufgelistet. Du kannst diese Tabelle ebenfalls sortieren.",
+      "welcome": "Willkommen auf deinem persönlichen Dashboard!",
+      "yourturn": "Wenn du in einem Spiel am Zug bist, wird es hier aufgelistet. Du kannst die Tabelle sortieren, indem du auf eine der Spaltenüberschriften klickst. Standardmäßig ist die Tabelle nach der verbleibenden Bedenkzeit sortiert."
     },
     "play": {
-      "board": "Das ist das Herzstück eines jeden Spiels: das Brett. Klicke auf das Brett, um deinen Zug zu machen. Währenddessen erscheinen nützliche Hinweise über dem Zugeingabefeld.",
-      "boardbuttons": "Unter dem Brett befindet sich eine Reihe von Schaltflächen, mit denen du Aktionen wie das Drehen des Bretts und das Anfertigen von Notizen durchführen kannst. Das Zahnrad-Symbol öffnet die Anzeigeoptionen für das Brett und ermöglicht das Ein- und Ausschalten von Indikatoren für den letzten Zug. Das Pinsel-Symbol öffnet die visuelle Anpassung pro Spiel. Keine dieser Schaltflächen wird deinem Spiel schaden, also klicke ruhig herum und erkunde die Optionen!",
-      "chat": "Das Beste am Spielen sind die Leute, mit denen man spielt. Hier kannst du mit deinem Gegner hin und her schreiben. Die Benutzer-Chats sind hier übersichtlich zusammengefasst, aber eine Liste *aller* Chats, einschließlich textlicher Beschreibungen des Spielgeschehens, ist am unteren Bildschirmrand sichtbar. Denke daran, dass diese Chats öffentlich sind. Details findest du in unseren Nutzungsbedingungen und Datenschutzrichtlinien.",
-      "move": "Hier gibst du deinen Zug ein. Meistens kannst du deinen Zug einfach durch Klicken auf das Brett machen, aber einige Spiele haben ein Dropdown-Menü zur Zugauswahl, und du kannst deinen Zug auch jederzeit manuell eingeben. Hilfreiche Hinweise erscheinen über dem Zugfeld, während du deine Züge eingibst. Eine wichtige Funktion ist die Analyse. Bevor du deinen Zug absendest und während du darauf wartest, dass dein Gegner am Zug ist, kannst du weitere Züge ausführen, um den möglichen Spielverlauf vorherzusehen und deine Strategie zu entwickeln.",
-      "movelist": "Apropos Analyse: Eine Liste aller im Spiel gemachten Züge ist hier sichtbar. Diese enthält auch vorhergesagte zukünftige Zustände, die du möglicherweise analysiert hast. Beim Analysieren ist der aktuelle Spielzustand mit einem Rahmen versehen. Du kannst die Schaltflächen über der Zugliste nutzen, um zu navigieren. Du kannst auch die Pfeiltasten sowie die Tasten Pos1 und Ende verwenden.",
-      "settings": "Öffne schließlich deine Benutzereinstellungen, um dein Profil, deine Benachrichtigungseinstellungen und deine Analyse-Einstellungen zu ändern. Du kannst diese Touren dort ebenfalls deaktivieren.",
+      "board": "Das ist das Herzstück jedes Spiels: das Spielfeld. Klicke auf das Spielfeld, um deinen Zug zu machen. Hilfreiche Hinweise erscheinen beim Auswählen über dem Zugeingabefeld.",
+      "boardbuttons": "Unter dem Spielfeld befindet sich eine Reihe von Schaltflächen, mit denen du Aktionen wie das Drehen des Spielfelds oder das Machen von Notizen ausführen kannst. Das Zahnrad-Symbol öffnet die Spielfeld-Anzeigeeinstellungen und ermöglicht das Ein- und Ausschalten von Annotationen des letzten Zugs. Das Pinsel-Symbol öffnet die visuelle Anpassung pro Spiel. Keine dieser Schaltflächen schadet deinem Spiel, also klicke dich gerne durch!",
+      "chat": "Das Beste am Spielen sind die Menschen, mit denen man spielt. Hier kannst du mit deinem Gegner chatten. Die Benutzer-Chats sind hier übersichtlich zusammengefasst, aber eine Liste *aller* Chats, einschließlich textlicher Beschreibungen dessen, was im Spiel passiert, ist unten auf dem Bildschirm sichtbar. Denke daran, dass diese Chats öffentlich sind. Bitte beachte unsere Nutzungsbedingungen und Datenschutzrichtlinien für Details.",
+      "move": "Hier gibst du deinen Zug ein. Meistens kannst du deinen Zug einfach durch Klicken auf das Spielfeld ausführen, aber einige Spiele verfügen über ein Dropdown-Menü zur Zugauswahl, und du kannst deinen Zug auch jederzeit manuell eintippen. Hilfreiche Hinweise erscheinen über dem Zugfeld, wenn du deine Züge eingibst. Eine wichtige Funktion ist die Erkundung. Bevor du deinen Zug abschickst und während du darauf wartest, dass dein Gegner zieht, kannst du weitere Züge ausprobieren, um den möglichen Spielverlauf vorherzusehen und deine Strategie zu formulieren.",
+      "movelist": "Apropos Erkundung: Eine Liste aller im Spiel gemachten Züge ist hier sichtbar. Diese enthält auch vorhergesagte zukünftige Zustände, die du möglicherweise erkundet hast. Beim Erkunden wird der aktuelle Spielzustand mit einem Rahmen versehen. Du kannst die Schaltflächen über der Zugliste nutzen, um zu navigieren. Du kannst auch die Pfeiltasten sowie die Tasten Pos1 (Home) und Ende nutzen.",
+      "settings": "Und schließlich öffne deine Benutzereinstellungen, um dein Profil, deine Benachrichtigungseinstellungen und deine Erkundungseinstellungen zu ändern. Du kannst diese Touren dort ebenfalls deaktivieren.",
       "status": "Im Statusbereich wird dir mitgeteilt, ob Varianten für dieses Spiel aktiv sind, sowie andere spielspezifische Daten wie Punktestände oder die Anzahl der Steine auf der Hand.",
-      "welcome": "Hier findet die Action statt! Der Spielfeld-Bildschirm für jedes Spiel ist gleich aufgebaut. Der Name des Spiels erscheint immer hier, zentral im Vordergrund, zusammen mit Zusatzangaben, etwa ob das Spiel Teil eines Turniers ist."
+      "welcome": "Hier spielt die Musik! Der Spielbildschirm ist für jedes Spiel gleich aufgebaut. Der Name des Spiels erscheint immer zentral hier oben, zusammen mit Zusatzangaben wie z. B. ob das Spiel Teil eines Turniers ist."
     }
   },
   "Tournament": {
     "Number": "Turniernummer",
     "Tournaments": "Automatisierte Turniere",
-    "Completion": "Fortschritt",
+    "Completion": "Fertigstellung",
     "CompletionRate": "{{ratio}} Spiele ({{percent}}%)",
     "Current": "Laufende Turniere",
-    "Description": "Dies sind wiederkehrende Turniere für jede Spiel- und Variantenkombination. Solange genügend Interesse besteht, startet das nächste Turnier automatisch nach dem Ende des vorherigen Turniers. Wenn du der wiederkehrenden Serie beigetreten bist, wirst du automatisch für das nächste Turnier registriert. Wenn du \"einmalig beigetreten\" bist (ein Sternchen neben deinem Namen in der Teilnehmerliste), wirst du nach dem Start des nächsten Turniers entfernt.\n\nNach der Anforderung ist ein Turnier 2 Wochen lang für Anmeldungen geöffnet. Wenn sich nach der 2-wöchigen Anmeldefrist nicht mindestens 4 Spieler registriert haben, bleibt das Turnier so lange geöffnet, bis die Mindestanzahl an Spielern erreicht ist. Andernfalls startet das Turnier, und das nächste Turnier für dieselbe Spiel-/Variantenkombination wird zur Anmeldung freigegeben. Das nächste Turnier startet eine Woche nach dem Ende des aktuellen Turniers.\n\nTurniere bestehen aus Divisionen, wobei jede Division ein Rundenturnier mit höchstens 10 Spielern ist. Alle Spiele werden gleichzeitig gespielt. Die Zeitkontrollen sind: 36 Stunden Zeitzuschlag, 72 Stunden Startzeit und 120 Stunden maximale Bedenkzeit (harte Bedenkzeit). Die Spieler werden rein nach ihrer Wertung zum Zeitpunkt des Turnierstarts in Divisionen eingeteilt. Die am höchsten gewerteten Spieler spielen in Division 1, die nächsthöheren in Division 2 und so weiter. Die Spieler werden so auf die Divisionen verteilt, dass alle Divisionen ungefähr die gleiche Anzahl an Spielern haben. Der erste Feinwertungsparameter ist Sonneborn-Berger (die Summe der Punkte der besiegten Gegner). Der zweite Feinwertungsparameter ist die Wertung zum Zeitpunkt des Turnierstarts.",
+    "Description": "Dies sind wiederkehrende Turniere für beliebige Spiel- und Variantenkombinationen. Solange genügend Interesse besteht, startet das nächste Turnier automatisch nach dem Ende des vorherigen Turniers. Wenn du der wiederkehrenden Serie beigetreten bist, wirst du automatisch für das nächste Turnier registriert. Wenn du „einmalig beigetreten“ bist (ein Sternchen neben deinem Namen in der Teilnehmerliste), wirst du nach dem Start des nächsten Turniers entfernt.\n\nNach der Beantragung ist ein Turnier 2 Wochen lang für die Registrierung geöffnet. Wenn sich nach der 2-wöchigen Registrierungsfrist nicht mindestens 4 Spieler registriert haben, bleibt das Turnier geöffnet, bis die Mindestanzahl an Spielern erreicht ist. Andernfalls startet das Turnier und das nächste Turnier für dieselbe Spiel-/Variantenkombination wird zur Registrierung freigegeben. Das nächste Turnier startet eine Woche nach Ende des aktuellen Turniers.\n\nTurniere bestehen aus Divisionen, wobei jede Division ein Jeder-gegen-Jeden-Turnier (Round Robin) mit höchstens 10 Spielern ist. Alle Spiele werden gleichzeitig gespielt. Die Zeitkontrollen sind: 36 Stunden Inkrement, 72 Stunden Startzeit und 120 Stunden maximale Zeit (Hard Time). Die Einteilung der Spieler in Divisionen erfolgt rein nach ihrer Wertung zum Zeitpunkt des Turnierstarts. Die am höchsten bewerteten Spieler spielen in Division 1, die nächsthöheren in Division 2 und so weiter. Die Spieler werden so auf die Divisionen verteilt, dass alle Divisionen etwa die gleiche Anzahl an Spielern haben. Die erste Feinwertung ist Sonneborn-Berger, das heißt die Summe der Punkte besiegter Gegner. Die zweite Feinwertung ist die Wertung zum Zeitpunkt des Turnierstarts.",
     "Division": "Division {{num}}",
     "Duplicate": "Es gibt bereits ein Turnier für dieses Spiel und diese Variante(n)",
     "Ended": "Enddatum",
@@ -1799,7 +1803,7 @@
     "Join": "Wiederkehrend beitreten",
     "JoinOnce": "Einmalig beitreten",
     "Name": "{{metaGame}}-Turnier",
-    "ProposeNew": "Ein neues Turnier anfordern",
+    "ProposeNew": "Ein neues Turnier beantragen",
     "New2": "Neue Turniere",
     "New1": "Neues Turnier",
     "NoneCompleted": "Es wurden noch keine Turniere abgeschlossen.",
@@ -1807,12 +1811,12 @@
     "NumCompleted": "{{numCompleted}} von {{numGames}} Spielen wurden abgeschlossen",
     "OldTitle": "Turnierverlauf",
     "Old": "Verlauf abgeschlossener {{metaGameName}}-Turniere",
-    "Open": "Für Anmeldungen offene Turniere",
+    "Open": "Für Registrierung offene Turniere",
     "Participants": "Teilnehmer",
     "Player": "Spieler",
-    "Position": "Position",
+    "Position": "Platzierung",
     "Rating": "Wertung",
-    "RatingHelp": "Wertung zu Beginn des Turniers. Letzter Feinwertungsparameter.",
+    "RatingHelp": "Wertung zu Beginn des Turniers. Letzte Feinwertung.",
     "RecentlyCompleted": "Kürzlich abgeschlossene Turniere",
     "Score": "Punkte",
     "Starts": "Turnierstart",
@@ -1820,12 +1824,12 @@
     "StartsWhenPreviousDone": "Eine Woche nach Ende des aktuellen Turniers",
     "Started": "Startdatum",
     "TieBreak": "Feinwertung",
-    "TieBreakHelp": "Summe der Punkte der besiegten Gegner",
+    "TieBreakHelp": "Summe der Punkte besiegter Gegner",
     "VariantsName": "{{metaGame}}-Turnier ({{variants}})",
     "Visit": "Turnier besuchen",
     "Winner": "Sieger",
     "DivisionWinner": "Sieger: {{winner}}",
-    "Withdraw": "Vom nächsten Turnier zurückziehen"
+    "Withdraw": "Vom nächsten zurückziehen"
   },
   "TriggerRefresh": "Aktualisierung auslösen",
   "TwoPlayersChallengeDescription": "Du hast {{other}} zu einer Partie [{{game}}](/games/{{meta}}) herausgefordert",

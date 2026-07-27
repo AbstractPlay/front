@@ -925,6 +925,8 @@
   "_src_YourGames": "Your games",
   "_src_YourMove": "Your move",
   "_src_EnableZoom": "Enable zoom",
+  "_src_CommunicationLanguage": "Language for emails and notifications",
+  "_src_CommunicationLanguageHelp": "Choose the language for emails and push notifications from Abstract Play. This does not change the language of the website — use the language menu in the page footer for that.",
   "About": "À propos",
   "Accept": "Accepter",
   "Active": "Actives",
@@ -940,12 +942,12 @@
   "CycleBoardDisplay": "Changer le mode d'affichage du plateau",
   "buttons": {
     "pass": "Passer",
-    "takebutton": "Bouton de prise",
+    "takebutton": "Prendre le bouton",
     "acceptpie": "Jouer en second",
     "playsecond": "Jouer en second",
     "draw": "Réclamer la nulle",
     "playfirst": "Jouer en premier",
-    "swap": "Inverser les couleurs",
+    "swap": "Changer les couleurs",
     "numbers": {
       "one": "Un (1)",
       "two": "Deux (2)",
@@ -956,16 +958,16 @@
       "forward": "Avancer",
       "left": "Avancer vers la gauche",
       "right": "Avancer vers la droite",
-      "cw": "Pivoter dans le sens horaire",
-      "ccw": "Pivoter dans le sens antihoraire",
-      "fire": "Tirer le laser",
+      "cw": "Tourner dans le sens horaire",
+      "ccw": "Tourner dans le sens antihoraire",
+      "fire": "Tirer au laser",
       "hit": "Coup de groin"
     },
     "carnac": {
-      "tip_n": "Basculez au nord",
-      "tip_e": "Basculez à l'est",
-      "tip_s": "Basculez au sud",
-      "tip_w": "Basculez à l'ouest"
+      "tip_n": "Basculer vers le nord",
+      "tip_e": "Basculer vers l'est",
+      "tip_s": "Basculer vers le sud",
+      "tip_w": "Basculer vers l'ouest"
     },
     "cifra": {
       "lt": "Clair, Haut",
@@ -978,9 +980,9 @@
       "dr": "Foncé, Droite"
     },
     "arimaa": {
-      "gold99": "Configuration rapide",
-      "silver99e7": "Configuration rapide, éléphant e7",
-      "silver99d7": "Configuration rapide, éléphant d7"
+      "gold99": "Placement rapide",
+      "silver99e7": "Placement rapide, éléphant e7",
+      "silver99d7": "Placement rapide, éléphant d7"
     }
   },
   "Cancel": "Annuler",
@@ -997,39 +999,39 @@
       "tag": "Plateau : 3D"
     },
     "board>connect": {
-      "description": "Décrit la façon dont les cases du plateau sont connectées entre elles",
+      "description": "Décrit la façon dont les cases du plateau sont reliées entre elles",
       "full": "Plateau > Connectivité",
       "tag": "Connectivité du plateau"
     },
     "board>connect>hex": {
-      "description": "Les cases se connectent de manière hexagonale",
+      "description": "Les cases sont reliées de manière hexagonale",
       "full": "Plateau > Connectivité > Hexagonale",
-      "tag": "Connect : Hex"
+      "tag": "Connexion : Hex"
     },
     "board>connect>linear": {
-      "description": "Les cases se connectent de manière linéaire",
+      "description": "Les cases sont reliées de manière linéaire",
       "full": "Plateau > Connectivité > Linéaire",
-      "tag": "Connect : Linéaire"
+      "tag": "Connexion : Linéaire"
     },
     "board>connect>other": {
-      "description": "Les cases se connectent de manière unique",
+      "description": "Les cases sont reliées de manière unique",
       "full": "Plateau > Connectivité > Autre",
-      "tag": "Connect : Autre"
+      "tag": "Connexion : Autre"
     },
     "board>connect>pent": {
-      "description": "Les cases se connectent de manière pentagonale",
+      "description": "Les cases sont reliées de manière pentagonale",
       "full": "Plateau > Connectivité > Pentagonale",
-      "tag": "Connect : Pent"
+      "tag": "Connexion : Pent"
     },
     "board>connect>rect": {
-      "description": "Les cases se connectent orthogonalement et diagonalement",
+      "description": "Les cases sont reliées de manière orthogonale et diagonale",
       "full": "Plateau > Connectivité > Rectangulaire",
-      "tag": "Connect : Rect"
+      "tag": "Connexion : Rect"
     },
     "board>connect>snub": {
-      "description": "Les cases se connectent selon une grille adoucie (snubsquare)",
-      "full": "Plateau > Connectivité > Snubsquare",
-      "tag": "Connect : Snub"
+      "description": "Les cases sont reliées selon une matrice adoucie (snubsquare)",
+      "full": "Plateau > Connectivité > Matrice adoucie",
+      "tag": "Connexion : Adoucie"
     },
     "board>dynamic": {
       "description": "Le plateau se construit de manière dynamique",
@@ -1037,12 +1039,12 @@
       "tag": "Plateau : Dynamique"
     },
     "board>mancala": {
-      "description": "Joué sur un plateau traditionnel de type Mancala",
+      "description": "Jeu sur un plateau traditionnel de type Mancala",
       "full": "Plateau > Mancala",
       "tag": "Plateau : Mancala"
     },
     "board>none": {
-      "description": "Joué sur n'importe quelle surface plane",
+      "description": "Jeu sur n'importe quelle surface plane",
       "full": "Plateau > Aucun",
       "tag": "Plateau : Aucun"
     },
@@ -1057,7 +1059,7 @@
       "tag": "Forme du plateau"
     },
     "board>shape>circle": {
-      "description": "Le plateau a une forme circulaire",
+      "description": "Le plateau a la forme d'un cercle",
       "full": "Plateau > Forme > Cercle",
       "tag": "Forme : Cercle"
     },
@@ -1092,59 +1094,59 @@
       "tag": "Forme : Tri"
     },
     "components>chess": {
-      "description": "Joué avec un jeu d'échecs",
+      "description": "Jeu avec un jeu d'Échecs",
       "full": "Matériel > Échecs",
       "tag": "M : Échecs"
     },
     "components>dice": {
-      "description": "Joué avec des dés",
+      "description": "Jeu avec des dés",
       "full": "Matériel > Dés",
       "tag": "M : Dés"
     },
     "components>decktet": {
-      "description": "Joué avec un paquet Decktet",
+      "description": "Jeu avec un paquet Decktet",
       "full": "Matériel > Decktet",
       "tag": "M : Decktet"
     },
     "components>dominoes": {
-      "description": "Joué avec des dominos",
+      "description": "Jeu avec des dominos",
       "full": "Matériel > Dominos",
       "tag": "M : Dominos"
     },
     "components>piecepack": {
-      "description": "Joué avec un Piecepack",
+      "description": "Jeu avec Piecepack",
       "full": "Matériel > Piecepack",
       "tag": "M : Piecepack"
     },
     "components>poly": {
-      "description": "Joué avec des polyominos",
+      "description": "Jeu avec des polyominos",
       "full": "Matériel > Polyominos",
       "tag": "M : Polyominos"
     },
     "components>pyramids": {
-      "description": "Joué avec des pyramides Looney",
+      "description": "Jeu avec des pyramides Looney",
       "full": "Matériel > Pyramides Looney",
       "tag": "M : Pyramides Looney"
     },
     "components>shibumi": {
-      "description": "Joué avec un ensemble Shibumi",
+      "description": "Jeu avec un ensemble Shibumi",
       "full": "Matériel > Shibumi",
       "tag": "M : Shibumi"
     },
     "components>simple": {
-      "description": "Joué avec des pièces simples de taille uniforme, souvent empilables, parfois de couleurs variées",
+      "description": "Jeu avec des pièces simples de taille uniforme, souvent empilables, parfois de nombreuses couleurs",
       "full": "Matériel > Simple",
       "tag": "M : Simple"
     },
     "components>simple>1per": {
       "description": "Une couleur par joueur",
       "full": "Matériel > Simple > 1 par joueur",
-      "tag": "M : Simple, 1/joueur"
+      "tag": "M : Simple, 1 par joueur"
     },
     "components>simple>2per": {
       "description": "Deux couleurs par joueur",
       "full": "Matériel > Simple > 2 par joueur",
-      "tag": "M : Simple, 2/joueur"
+      "tag": "M : Simple, 2 par joueur"
     },
     "components>simple>1c": {
       "description": "Une couleur de pièces",
@@ -1182,19 +1184,19 @@
       "tag": "M : Simple, P&C"
     },
     "components>special": {
-      "description": "Joué avec des pièces spécialisées, généralement différenciées",
+      "description": "Jeu avec des pièces spécialisées, généralement différenciées",
       "full": "Matériel > Spécialisé",
       "tag": "M : Spécial"
     },
     "goal>annihilate": {
       "description": "Anéantir toutes les pièces adverses",
-      "full": "Objectif > Anéantissement",
-      "tag": "O : Anéantissement"
+      "full": "Objectif > Anéantir",
+      "tag": "O : Anéantir"
     },
     "goal>area": {
-      "description": "Contrôler plus de zones (ou des zones spécifiques avec une force suffisante) que votre adversaire",
-      "full": "Objectif > Contrôle de zone",
-      "tag": "O : Contrôle de zone"
+      "description": "Contrôler plus de territoire (ou certaines zones avec une certaine force) que l'adversaire",
+      "full": "Objectif > Contrôle de territoire",
+      "tag": "O : Contrôle de territoire"
     },
     "goal>arrange": {
       "description": "Disposer les pièces selon des formes ou longueurs spécifiques (ex. n d'affilée)",
@@ -1202,52 +1204,52 @@
       "tag": "O : Alignement"
     },
     "goal>breakthrough": {
-      "description": "Atteindre la ligne de départ ou la zone adverse avec une force suffisante",
+      "description": "Atteindre la ligne ou la zone de départ adverse avec une force suffisante",
       "full": "Objectif > Percée",
       "tag": "O : Percée"
     },
     "goal>connect": {
-      "description": "Relier des bords spécifiques du plateau ou des zones",
+      "description": "Relier des bords ou zones désignés du plateau",
       "full": "Objectif > Connexion",
       "tag": "O : Connexion"
     },
     "goal>cripple": {
       "description": "Éliminer une majorité critique ou un sous-ensemble spécifique de pièces adverses",
-      "full": "Objectif > Paralysie",
-      "tag": "O : Paralysie"
+      "full": "Objectif > Mutiler",
+      "tag": "O : Mutiler"
     },
     "goal>evacuate": {
       "description": "Évacuer vos pièces du plateau",
-      "full": "Objectif > Évacuation",
-      "tag": "O : Évacuation"
+      "full": "Objectif > Évacuer",
+      "tag": "O : Évacuer"
     },
     "goal>immobilize": {
       "description": "Faire en sorte que votre adversaire ne puisse plus bouger",
-      "full": "Objectif > Immobilisation",
-      "tag": "O : Immobilisation"
+      "full": "Objectif > Immobiliser",
+      "tag": "O : Immobiliser"
     },
     "goal>isolate": {
       "description": "Isoler une pièce ou un sous-ensemble de pièces d'une manière spécifique",
-      "full": "Objectif > Isolement",
-      "tag": "O : Isolement"
+      "full": "Objectif > Isoler",
+      "tag": "O : Isoler"
     },
     "goal>majority": {
-      "description": "Avoir plus de pièces que votre adversaire",
+      "description": "Avoir plus de pièces que l'adversaire",
       "full": "Objectif > Majorité",
       "tag": "O : Majorité"
     },
     "goal>royal-capture": {
-      "description": "Capturer une pièce spécifique adverse",
+      "description": "Capturer une pièce adverse spécifique",
       "full": "Objectif > Capture royale",
       "tag": "O : Capture royale"
     },
     "goal>royal-escape": {
       "description": "Faire sortir une pièce spécifique du plateau",
-      "full": "Objectif > Fuite royale",
-      "tag": "O : Fuite royale"
+      "full": "Objectif > Évasion royale",
+      "tag": "O : Évasion royale"
     },
     "goal>score": {
-      "description": "L'issue est déterminée par le score d'une manière ou d'une autre",
+      "description": "Le résultat est déterminé par le score d'une manière ou d'une autre",
       "full": "Objectif > Score",
       "tag": "O : Score"
     },
@@ -1262,19 +1264,19 @@
       "tag": "O : Score (Course)"
     },
     "goal>set": {
-      "description": "Collectionner des ensembles de pièces",
+      "description": "Rassemblez des ensembles de pièces",
       "full": "Objectif > Collection d'ensembles",
-      "tag": "O : Collection"
+      "tag": "O : Collection d'ensembles"
     },
     "goal>unify": {
-      "description": "Rassembler toutes vos pièces",
-      "full": "Objectif > Unification",
-      "tag": "O : Unification"
+      "description": "Rassemblez toutes vos pièces",
+      "full": "Objectif > Unifier",
+      "tag": "O : Unifier"
     },
     "goal>vigil": {
       "description": "Toutes les pièces (ou un sous-ensemble défini) doivent avoir une ligne de vue sur un élément du plateau",
-      "full": "Objectif > Surveillance",
-      "tag": "O : Surveillance"
+      "full": "Objectif > Vigilance",
+      "tag": "O : Vigilance"
     },
     "mechanic": {
       "description": "Décrit les mécaniques générales du jeu",
@@ -1282,14 +1284,14 @@
       "tag": "Mécaniques"
     },
     "mechanic>asymmetry": {
-      "description": "Le jeu est asymétrique",
+      "description": "Le jeu est dissymétrique",
       "full": "Mécaniques > Asymétrie",
       "tag": "M : Asymétrie"
     },
     "mechanic>bearoff": {
-      "description": "Les joueurs retirent leurs pièces du plateau",
-      "full": "Mécaniques > Sortie des pièces",
-      "tag": "M : Sortie"
+      "description": "Les joueurs sortent des pièces du plateau",
+      "full": "Mécaniques > Sortie de pièces",
+      "tag": "M : Sortie de pièces"
     },
     "mechanic>block": {
       "description": "Les joueurs se bloquent les uns les autres",
@@ -1302,7 +1304,7 @@
       "tag": "M : Capture"
     },
     "mechanic>convert": {
-      "description": "Les joueurs peuvent convertir les pièces ennemies dans leur propre couleur",
+      "description": "Les joueurs peuvent convertir les pièces ennemies en pièces à eux",
       "full": "Mécaniques > Conversion",
       "tag": "M : Conversion"
     },
@@ -1312,19 +1314,19 @@
       "tag": "M : Cooptation"
     },
     "mechanic>differentiate": {
-      "description": "Les pièces sont différenciées d'une façon essentielle",
+      "description": "Les pièces sont différenciées d'une manière essentielle",
       "full": "Mécaniques > Différenciation",
       "tag": "M : Différenciation"
     },
     "mechanic>displace": {
-      "description": "Les déplacements peuvent entraîner le mouvement d'autres pièces",
-      "full": "Mécaniques > Déplacement indirect",
-      "tag": "M : Déplacement indirect"
+      "description": "Les déplacements peuvent faire bouger d'autres pièces en conséquence",
+      "full": "Mécaniques > Déplacement",
+      "tag": "M : Déplacement"
     },
     "mechanic>economy": {
       "description": "Les joueurs doivent gérer une économie centrale",
       "full": "Mécaniques > Gestion d'économie",
-      "tag": "M : Économie"
+      "tag": "M : Gestion d'économie"
     },
     "mechanic>enclose": {
       "description": "Les joueurs encerclent activement des zones ou des pièces",
@@ -1332,9 +1334,9 @@
       "tag": "M : Encerclement"
     },
     "mechanic>hidden": {
-      "description": "Le jeu inclut des informations cachées",
+      "description": "Le jeu comporte de l'information cachée",
       "full": "Mécaniques > Information cachée",
-      "tag": "M : Info cachée"
+      "tag": "M : Caché"
     },
     "mechanic>merge": {
       "description": "Les pièces fusionnent ou se séparent",
@@ -1343,18 +1345,18 @@
     },
     "mechanic>move": {
       "description": "Les pièces peuvent être déplacées",
-      "full": "Mécaniques > Déplacement",
-      "tag": "M : Déplacement"
+      "full": "Mécaniques > Mouvement",
+      "tag": "M : Mouvement"
     },
     "mechanic>move>group": {
       "description": "Les pièces peuvent être déplacées en groupe",
-      "full": "Mécaniques > Déplacement > Groupe",
-      "tag": "M : Déplacement (Groupe)"
+      "full": "Mécaniques > Mouvement > Groupe",
+      "tag": "M : Mouvement (Groupe)"
     },
     "mechanic>move>sow": {
-      "description": "Les pièces se déplacent par semailles",
-      "full": "Mécaniques > Déplacement > Semailles",
-      "tag": "M : Déplacement (Semaille)"
+      "description": "Les pièces se déplacent par égrenage",
+      "full": "Mécaniques > Mouvement > Égrenage",
+      "tag": "M : Mouvement (Égrenage)"
     },
     "mechanic>network": {
       "description": "Les joueurs construisent des réseaux",
@@ -1362,34 +1364,34 @@
       "tag": "M : Réseau"
     },
     "mechanic>place": {
-      "description": "Des pièces sont placées",
-      "full": "Mécaniques > Placement",
-      "tag": "M : Placement"
+      "description": "Les pièces sont posées",
+      "full": "Mécaniques > Pose",
+      "tag": "M : Pose"
     },
     "mechanic>program": {
-      "description": "Des séquences de coups sont programmées",
+      "description": "Les séquences de coups sont programmées",
       "full": "Mécaniques > Programmation",
       "tag": "M : Programmation"
     },
     "mechanic>random": {
-      "description": "Le jeu contient un élément d'aléa",
+      "description": "Le jeu contient un élément aléatoire",
       "full": "Mécaniques > Éléments aléatoires",
-      "tag": "M : Aléa"
+      "tag": "M : Éléments aléatoires"
     },
     "mechanic>random>play": {
-      "description": "Les coups individuels incluent un élément d'aléa",
-      "full": "Mécaniques > Aléa > En jeu",
-      "tag": "M : Aléa (Jeu)"
+      "description": "Les coups individuels du jeu incluent un élément d'aléa",
+      "full": "Mécaniques > Aléatoire > En jeu",
+      "tag": "M : Aléatoire (Jeu)"
     },
     "mechanic>random>setup": {
-      "description": "La mise en place est aléatoire d'une manière ou d'une autre",
-      "full": "Mécaniques > Aléa > Mise en place",
-      "tag": "M : Aléa (Mise en place)"
+      "description": "Mise en place aléatoire d'une manière ou d'une autre",
+      "full": "Mécaniques > Aléatoire > Mise en place",
+      "tag": "M : Aléatoire (Mise en place)"
     },
     "mechanic>set": {
-      "description": "Les joueurs collectionnent des ensembles",
+      "description": "Les joueurs rassemblent des ensembles",
       "full": "Mécaniques > Collection d'ensembles",
-      "tag": "M : Collection"
+      "tag": "M : Collection d'ensembles"
     },
     "mechanic>share": {
       "description": "Au moins certaines pièces du jeu sont partagées par les deux joueurs",
@@ -1397,19 +1399,19 @@
       "tag": "M : Partage"
     },
     "mechanic>simultaneous": {
-      "description": "Le jeu inclut une sélection simultanée des actions",
+      "description": "Le jeu inclut une sélection d'actions simultanée",
       "full": "Mécaniques > Simultané",
       "tag": "M : Simultané"
     },
     "mechanic>stack": {
-      "description": "Les joueurs manipulent des empilements de pièces",
+      "description": "Les joueurs manipulent des piles de pièces",
       "full": "Mécaniques > Empilement",
       "tag": "M : Empilement"
     },
     "mechanic>vigil": {
       "description": "Au moins une pièce doit avoir une ligne de vue sur un élément du plateau",
-      "full": "Mécaniques > Surveillance",
-      "tag": "M : Surveillance"
+      "full": "Mécaniques > Vigilance",
+      "tag": "M : Vigilance"
     },
     "other>traditional": {
       "description": "Le jeu est traditionnel",
@@ -1534,7 +1536,7 @@
   "EnterMove": "Saisir/Cliquer un coup",
   "Error": "Erreur !",
   "Events": {
-    "Description": "Les événements organisés sont gérés par des particuliers. Le système permet aux organisateurs de créer des événements, aux joueurs de s'inscrire, puis aux organisateurs de lancer des parties entre les joueurs inscrits. Le suivi des résultats, l'application de limites de temps détaillées et l'annonce des gagnants incombent à l'organisateur.",
+    "Description": "Les événements organisés sont gérés par des organisateurs individuels. Le système permet aux organisateurs de créer des événements, aux joueurs de s'inscrire, puis aux organisateurs de lancer des parties entre les joueurs inscrits. Suivre les résultats, appliquer des limites de temps détaillées et annoncer les gagnants incombe à l'organisateur.",
     "Name": "Événements organisés"
   },
   "EventsNav": "Événements",
@@ -1629,6 +1631,8 @@
   "NotesHelp": "Notes pour ce défi (128 caractères max).",
   "NotHardTime": "Pas de limite stricte",
   "NotificationSettings": "Paramètres de notification (sauvegarde instantanée)",
+  "CommunicationLanguage": "Langue pour les e-mails et les notifications",
+  "CommunicationLanguageHelp": "Choisissez la langue pour les e-mails et notifications push d'Abstract Play. Cela ne change pas la langue du site web — utilisez le menu des langues dans le pied de page pour cela.",
   "NotifyLabel-yourturn": "À votre tour (deux fois par jour)",
   "NotifyLabel-challenges": "Défis (à chaque événement)",
   "NotifyLabel-gameStart": "Partie commencée (à chaque événement)",
@@ -1762,51 +1766,51 @@
   "TotalStars_other": "Total d'étoiles",
   "tour": {
     "general": {
-      "Ignore": "Ignorer ce tutoriel",
+      "Ignore": "Passer cette visite",
       "Take": "Découvrir cette page"
     },
     "me": {
-      "challenges": "Cette section répertorie tous les défis que vous avez reçus et lancés.",
-      "completed": "Une fois que vous avez terminé une partie, vous la trouverez ici. Les parties sont automatiquement retirées de cette liste 48 heures après votre dernière visite. Vous pouvez supprimer manuellement une partie de cette liste en cliquant sur le bouton Effacer. Si quelqu'un commente une partie terminée, elle réapparaîtra dans cette liste en gras.",
-      "issueChallenge": "C'est ainsi que vous lancez des défis pour les différents jeux. Vous pouvez également lancer des défis à partir de la liste des jeux ou de n'importe quelle autre page de liste (comme la page des classements).",
-      "settings": "Et enfin, ouvrez vos paramètres d'utilisateur pour modifier votre profil, vos préférences de notification et vos paramètres d'exploration. Vous pouvez également y désactiver ces tutoriels.",
-      "theirturn": "S'il s'agit du tour de votre adversaire dans une partie, elle sera répertoriée ici. Vous pouvez également trier ce tableau.",
+      "challenges": "Cette section liste tous les défis reçus et envoyés.",
+      "completed": "Une fois une partie terminée, vous la trouverez ici. Les parties sont automatiquement retirées de cette liste 48 heures après votre dernière visite. Vous pouvez retirer manuellement une partie de cette liste en cliquant sur le bouton Effacer. Si quelqu'un commente une partie terminée, elle réapparaîtra dans cette liste et sera en gras.",
+      "issueChallenge": "C'est ainsi que vous lancez des défis pour tous les différents jeux. Vous pouvez également lancer des défis depuis la liste des jeux ou depuis n'importe quelle autre page de liste (comme la page des classements).",
+      "settings": "Et enfin, ouvrez vos paramètres utilisateur pour modifier votre profil, vos préférences de notification et vos paramètres d'exploration. Vous pouvez également y désactiver ces visites guidées.",
+      "theirturn": "Si c'est au tour de votre adversaire dans certaines parties, elles seront listées ici. Vous pouvez également trier ce tableau.",
       "welcome": "Bienvenue sur votre tableau de bord personnalisé !",
-      "yourturn": "Si c'est à votre tour de jouer dans une partie, elle sera répertoriée ici. Vous pouvez trier le tableau en cliquant sur l'un des en-têtes. Par défaut, le tableau est trié par temps restant à votre cadran."
+      "yourturn": "Si c'est à votre tour dans des parties, elles seront listées ici. Vous pouvez trier le tableau en cliquant sur l'un des en-têtes. Par défaut, le tableau est trié par le temps restant à votre pendule."
     },
     "play": {
-      "board": "C'est le cœur de n'importe quel jeu : le plateau. Cliquez sur le plateau pour jouer votre coup. Des conseils utiles apparaîtront au-dessus de la zone de saisie du coup à mesure que vous jouez.",
-      "boardbuttons": "Sous le plateau se trouve une série de boutons qui vous permettent d'effectuer des actions comme faire pivoter le plateau et prendre des notes. L'icône d'engrenage ouvre les paramètres d'affichage du plateau et vous permet d'activer ou de désactiver les annotations du dernier coup. L'icône de pinceau ouvre la personnalisation visuelle spécifique à la partie. Aucun de ces boutons n'endommagera votre partie, alors n'hésitez pas à explorer !",
-      "chat": "Le plus beau dans les jeux de société, ce sont les personnes avec qui vous jouez. C'est ici que vous pouvez échanger avec votre adversaire. Les tchats des utilisateurs sont regroupés ici pour votre commodité, mais une liste de *tous* les messages, y compris les descriptions textuelles de ce qui se passe dans la partie, est visible en bas de l'écran. N'oubliez pas que ces tchats sont publics. Veuillez consulter nos conditions d'utilisation et notre politique de confidentialité pour plus de détails.",
-      "move": "C'est ici que vous saisissez votre coup. La plupart du temps, vous pouvez simplement jouer votre coup en cliquant sur le plateau, mais certains jeux disposent d'un menu déroulant de sélection de coups, et vous pouvez toujours taper votre coup manuellement. Des conseils apparaîtront au-dessus de la zone de texte. Une fonctionnalité importante à noter est l'exploration. Avant de valider votre coup, et pendant que vous attendez le coup de votre adversaire, vous pouvez jouer d'autres coups pour anticiper le déroulement de la partie et élaborer votre stratégie.",
-      "movelist": "En parlant d'exploration, une liste de tous les coups joués dans la partie est visible ici. Elle inclura également les coups futurs explorés. Lors de l'exploration, l'état actuel de la partie sera encadré. Vous pouvez utiliser les boutons au-dessus de la liste des coups pour naviguer. Vous pouvez également utiliser les touches fléchées ainsi que les touches Début et Fin.",
-      "settings": "Et enfin, ouvrez vos paramètres d'utilisateur pour modifier votre profil, vos préférences de notification et vos paramètres d'exploration. Vous pouvez également y désactiver ces tutoriels.",
-      "status": "Dans la zone de statut, il vous sera indiqué si des variantes sont actives pour cette partie, ainsi que d'autres données spécifiques au jeu telles que les scores ou le nombre de pièces en main.",
-      "welcome": "C'est ici que ça se passe ! L'écran de jeu de chaque partie est structuré de la même manière. Le nom du jeu apparaîtra toujours ici, bien au centre, ainsi que tous les descripteurs indiquant par exemple si la partie fait partie d'un tournoi."
+      "board": "C'est le cœur et l'âme de tout jeu : le plateau. Cliquez sur le plateau pour jouer votre coup. Des conseils utiles apparaîtront au-dessus de la zone de saisie au fur et à mesure.",
+      "boardbuttons": "Sous le plateau se trouve une série de boutons qui vous permettent d'effectuer des actions comme faire pivoter le plateau et prendre des notes. L'icône de rouage ouvre les paramètres d'affichage du plateau et vous permet d'activer ou de désactiver les annotations du dernier coup. L'icône de pinceau ouvre la personnalisation visuelle par jeu. Aucun de ces boutons n'endommagera votre partie, alors cliquez et explorez !",
+      "chat": "Le meilleur aspect des jeux, ce sont les personnes avec qui l'on joue. C'est ici que vous pouvez échanger avec votre adversaire. Les discussions des utilisateurs sont regroupées ici pour votre commodité, mais une liste de *toutes* les discussions, y compris les descriptions textuelles de ce qui se passe dans la partie, est visible au bas de l'écran. N'oubliez pas que ces discussions sont publiques. Veuillez consulter nos conditions d'utilisation et notre politique de confidentialité pour plus de détails.",
+      "move": "C'est ici que vous saisissez votre coup. La plupart du temps, vous pouvez jouer votre coup en cliquant simplement sur le plateau, mais certains jeux disposent d'un menu déroulant de sélection de coups, et vous pouvez toujours taper votre coup manuellement. Des conseils utiles apparaîtront au-dessus de la zone de coup lorsque vous saisirez vos coups. Une fonctionnalité importante à noter est l'exploration. Avant de soumettre votre coup, et pendant que vous attendez que votre adversaire joue, vous pouvez effectuer d'autres coups pour anticiper la suite de la partie et élaborer votre stratégie.",
+      "movelist": "En parlant d'exploration, une liste de tous les coups joués dans la partie est visible ici. Cela inclut également les états futurs anticipés que vous auriez pu explorer. Lors de l'exploration, l'état actuel de la partie sera encadré. Vous pouvez utiliser les boutons au-dessus de la liste des coups pour naviguer. Vous pouvez également utiliser les touches fléchées ainsi que les touches Origine et Fin.",
+      "settings": "Et enfin, ouvrez vos paramètres utilisateur pour modifier votre profil, vos préférences de notification et vos paramètres d'exploration. Vous pouvez également y désactiver ces visites guidées.",
+      "status": "Dans la zone de statut, vous serez informé si des variantes sont actives pour cette partie, ainsi que d'autres données spécifiques au jeu comme les scores ou le nombre de pièces en main.",
+      "welcome": "C'est ici que tout se passe ! L'écran de jeu de chaque jeu est structuré de la même manière. Le nom du jeu apparaîtra toujours ici, au centre, ainsi que tous les descripteurs indiquant par exemple si la partie fait partie d'un tournoi."
     }
   },
   "Tournament": {
     "Number": "Numéro du tournoi",
     "Tournaments": "Tournois automatisés",
     "Completion": "Progression",
-    "CompletionRate": "{{ratio}} parties ({{percent}}%)",
+    "CompletionRate": "{{ratio}} parties ({{percent}} %)",
     "Current": "Tournois en cours",
-    "Description": "Il s'agit de tournois récurrents pour toutes les combinaisons de jeux et de variantes. Tant qu'il y a suffisamment d'intérêt, le tournoi suivant commence automatiquement après la fin du précédent. Si vous avez rejoint la série récurrente, vous serez automatiquement inscrit pour le tournoi suivant. Si vous avez choisi \"s'inscrire une fois\" (un astérisque à côté de votre nom dans la liste des participants), vous serez retiré après le début du tournoi suivant.\n\nAprès sa création, un tournoi reste ouvert aux inscriptions pendant 2 semaines. Si après cette période il n'y a pas au moins 4 joueurs inscrits, le tournoi reste ouvert jusqu'à ce que le nombre minimum de joueurs soit atteint. Sinon, le tournoi commence et le tournoi suivant pour la même combinaison est ouvert aux inscriptions. Le tournoi suivant commence une semaine après la fin du tournoi en cours.\n\nLes tournois se composent de divisions, chaque division étant une ronde complète d'au plus 10 joueurs. Toutes les parties sont jouées simultanément. Les cadences de temps sont : incrément de 36 heures, 72 heures de temps initial et 120 heures de temps max. (temps strict). Les joueurs sont répartis dans les divisions uniquement en fonction de leur classement au moment où le tournoi commence. Les joueurs les mieux classés jouent dans la division 1, les suivants dans la division 2, et ainsi de suite, de manière à ce que toutes les divisions aient approximativement le même nombre de joueurs. Le premier départage est le système Sonneborn-Berger (somme des scores des adversaires battus). Le second départage est le classement au moment où le tournoi a commencé.",
+    "Description": "Il s'agit de tournois récurrents pour toutes les combinaisons de jeux et de variantes. Tant qu'il y a suffisamment d'intérêt, le tournoi suivant démarre automatiquement après la fin du précédent. Si vous avez rejoint la série récurrente, vous serez automatiquement inscrit au prochain tournoi. Si vous avez « rejoint une fois » (un astérisque à côté de votre nom dans la liste des participants), vous serez retiré après le début du tournoi suivant.\n\nAprès avoir été demandé, un tournoi est ouvert aux inscriptions pendant 2 semaines. Si après cette période d'inscription de 2 semaines il n'y a pas au moins 4 joueurs inscrits, le tournoi reste ouvert jusqu'à ce que le nombre minimum de joueurs soit atteint. Sinon, le tournoi commence et le tournoi suivant pour la même combinaison jeu/variante est ouvert aux inscriptions. Le tournoi suivant commence une semaine après la fin du tournoi actuel.\n\nLes tournois se composent de divisions, chaque division étant une poule (round-robin) comprenant au maximum 10 joueurs. Toutes les parties sont jouées simultanément. Les cadences de jeu sont : incrément de 36 heures, temps de départ de 72 heures et temps maximum de 120 heures (temps fixe). Les joueurs sont répartis dans les divisions uniquement selon leur classement au moment du début du tournoi. Les joueurs les mieux classés jouent en division 1, les suivants en division 2, et ainsi de suite. Les joueurs sont répartis de manière à ce que toutes les divisions aient approximativement le même nombre de joueurs. Le premier départage est le Sonneborn-Berger, c'est-à-dire la somme des scores des adversaires battus. Le deuxième départage est le classement au moment où le tournoi a commencé.",
     "Division": "Division {{num}}",
     "Duplicate": "Il existe déjà un tournoi pour ce jeu et cette/ces variante(s)",
     "Ended": "Date de fin",
     "History": "Historique",
-    "Join": "Rejoindre la série",
+    "Join": "Rejoindre la série récurrente",
     "JoinOnce": "Rejoindre une seule fois",
-    "Name": "Tournoi de {{metaGame}}",
+    "Name": "Tournoi {{metaGame}}",
     "ProposeNew": "Demander un nouveau tournoi",
     "New2": "Nouveaux tournois",
     "New1": "Nouveau tournoi",
-    "NoneCompleted": "Aucun tournoi n'a encore été terminé.",
-    "NoneOld": "Aucun historique de tournoi pour l'instant.",
+    "NoneCompleted": "Aucun tournoi n'est encore terminé.",
+    "NoneOld": "Aucun historique de tournoi pour le moment.",
     "NumCompleted": "{{numCompleted}} des {{numGames}} parties sont terminées",
     "OldTitle": "Historique des tournois",
-    "Old": "Historique des tournois terminés de {{metaGameName}}",
+    "Old": "Historique des tournois {{metaGameName}} terminés",
     "Open": "Tournois ouverts aux inscriptions",
     "Participants": "Participants",
     "Player": "Joueur",
@@ -1815,17 +1819,17 @@
     "RatingHelp": "Classement au début du tournoi. Départage final.",
     "RecentlyCompleted": "Tournois récemment terminés",
     "Score": "Score",
-    "Starts": "Le tournoi commence",
+    "Starts": "Début du tournoi",
     "StartsWhen4": "Dans la journée suivant l'atteinte de 4 participants",
-    "StartsWhenPreviousDone": "Une semaine après la fin du tournoi en cours",
+    "StartsWhenPreviousDone": "Une semaine après la fin du tournoi actuel",
     "Started": "Date de début",
     "TieBreak": "Départage",
     "TieBreakHelp": "Somme des scores des adversaires battus",
-    "VariantsName": "Tournoi de {{metaGame}} ({{variants}})",
+    "VariantsName": "Tournoi {{metaGame}} ({{variants}})",
     "Visit": "Voir le tournoi",
     "Winner": "Gagnant",
     "DivisionWinner": "Gagnant : {{winner}}",
-    "Withdraw": "Se désinscrire du prochain"
+    "Withdraw": "Se désinscrire du suivant"
   },
   "TriggerRefresh": "Lancer un rafraîchissement",
   "TwoPlayersChallengeDescription": "Vous avez défié {{other}} à une partie de [{{game}}](/games/{{meta}})",

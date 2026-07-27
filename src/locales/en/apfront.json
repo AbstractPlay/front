@@ -704,6 +704,8 @@
     "NotesHelp": "Notes for this challenge (max 128 characters).",
     "NotHardTime": "No hard limit",
     "NotificationSettings": "Notification settings (save instantly)",
+    "CommunicationLanguage": "Language for emails and notifications",
+    "CommunicationLanguageHelp": "Choose the language for emails and push notifications from Abstract Play. This does not change the language of the website — use the language menu in the page footer for that.",
     "NotifyLabel-yourturn": "Your turn (twice daily)",
     "NotifyLabel-challenges": "Challenges (every instance)",
     "NotifyLabel-gameStart": "Game started (every instance)",

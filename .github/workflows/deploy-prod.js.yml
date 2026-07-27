@@ -61,6 +61,19 @@ jobs:
     - name: gameslib version installed
       run: npm list @abstractplay/gameslib
 
+# --- MACHINE TRANSLATION PIPELINE START ---
+    - name: Run Machine Translation on Locales
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      run: node bin/translate.mjs public/locales/en/apfront.json
+
+    - name: Auto-commit Updated Translations Back to Branch
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "i18n: Auto-translate locale files [skip ci]"
+        file_pattern: '**/locales/*/*.json'
+    # --- MACHINE TRANSLATION PIPELINE END ---
+
     - name: Set CI version
       run: npm version prerelease --preid=ci-$GITHUB_RUN_ID --no-git-tag-version
 

@@ -559,15 +559,6 @@ function GameMove(props) {
   };
 
   useEffect(() => {
-    var lng = "en";
-    if (globalMe && globalMe.language !== undefined) lng = globalMe.language;
-    if (i18n.language !== lng) {
-      i18n.changeLanguage(lng);
-      console.log(`changed language  to ${lng}`);
-    }
-  }, [i18n, globalMe]);
-
-  useEffect(() => {
     console.log("Fetching game data");
 
     // We have some evidence that get_game sometimes fails to connect (but report_problem succeeds), implying that a retry might help. Submitting the attempt count

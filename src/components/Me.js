@@ -14,7 +14,6 @@ import NewChallengeModal from "./NewChallengeModal";
 import NewProfile from "./NewProfile";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
-import i18n from "../i18n";
 import { cloneDeep } from "lodash";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
 import MyTurnTable from "./Me/MyTurnTable";
@@ -485,12 +484,6 @@ function Me(props) {
   } else {
     if (update !== props.update) updateSetter(props.update);
 
-    var lng = "en";
-    if (globalMe.language !== undefined) lng = globalMe.language;
-    if (i18n.language !== lng) {
-      i18n.changeLanguage(lng);
-      console.log(`changed language  to ${lng}`);
-    }
     let challengesResponded = [
       ...(globalMe.challengesIssued ?? []),
       ...(globalMe.challengesAccepted ?? []),

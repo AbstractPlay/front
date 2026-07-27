@@ -215,6 +215,17 @@ strong {
     background-color: var(--secondary-color-3-bg);
 }
 
+.language-picker__select {
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    background: transparent;
+    border: 1px solid var(--secondary-color-3);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+    cursor: pointer;
+}
+
 .modal-card-head, .modal-card-foot {
     background-color: var(--secondary-color-3-bg);
 }

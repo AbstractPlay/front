@@ -4,6 +4,13 @@ import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import en from "./locales/en/apfront.json";
 
+export const SUPPORTED_LANGUAGES = [
+  { code: "en", label: "English" },
+  { code: "fr", label: "Français" },
+  { code: "de", label: "Deutsch" },
+  { code: "it", label: "Italiano" },
+];
+
 i18n
   .use(HttpApi)
   .use(LanguageDetector)
@@ -11,8 +18,10 @@ i18n
   .init({
     ns: ["apfront"],
     defaultNS: "apfront",
-    lng: "en",
     fallbackLng: "en",
+    supportedLngs: SUPPORTED_LANGUAGES.map((l) => l.code),
+    nonExplicitSupportedLngs: true,
+    load: "languageOnly",
     debug: true,
     partialBundledLanguages: true,
     resources: {
@@ -20,6 +29,11 @@ i18n
     },
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
+    },
+    detection: {
+      order: ["localStorage", "navigator"],
+      caches: ["localStorage"],
+      lookupLocalStorage: "i18nextLng",
     },
 
     keySeparator: ".", // we do not use keys in form messages.welcome

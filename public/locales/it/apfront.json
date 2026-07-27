@@ -925,6 +925,8 @@
   "_src_YourGames": "Your games",
   "_src_YourMove": "Your move",
   "_src_EnableZoom": "Enable zoom",
+  "_src_CommunicationLanguage": "Language for emails and notifications",
+  "_src_CommunicationLanguageHelp": "Choose the language for emails and push notifications from Abstract Play. This does not change the language of the website — use the language menu in the page footer for that.",
   "About": "Informazioni",
   "Accept": "Accetta",
   "Active": "Attivo",
@@ -940,7 +942,7 @@
   "CycleBoardDisplay": "Scorri modalità di visualizzazione del tabellone",
   "buttons": {
     "pass": "Passa",
-    "takebutton": "Prendi il bottone",
+    "takebutton": "Prendi pulsante",
     "acceptpie": "Gioca per secondo",
     "playsecond": "Gioca per secondo",
     "draw": "Reclama patta",
@@ -952,20 +954,20 @@
       "three": "Tre (3)"
     },
     "pigs": {
-      "back": "Muovi indietro",
-      "forward": "Muovi avanti",
-      "left": "Muovi avanti a sinistra",
-      "right": "Muovi avanti a destra",
+      "back": "Muovi all'indietro",
+      "forward": "Muovi in avanti",
+      "left": "Muovi in avanti a sinistra",
+      "right": "Muovi in avanti a destra",
       "cw": "Ruota in senso orario",
       "ccw": "Ruota in senso antiorario",
       "fire": "Spara laser",
       "hit": "Colpisci con il grugno"
     },
     "carnac": {
-      "tip_n": "Rovescia a nord",
-      "tip_e": "Rovescia a est",
-      "tip_s": "Rovescia a sud",
-      "tip_w": "Rovescia a ovest"
+      "tip_n": "Inclina verso nord",
+      "tip_e": "Inclina verso est",
+      "tip_s": "Inclina verso sud",
+      "tip_w": "Inclina verso ovest"
     },
     "cifra": {
       "lt": "Chiaro, Alto",
@@ -979,15 +981,15 @@
     },
     "arimaa": {
       "gold99": "Setup rapido",
-      "silver99e7": "Setup rapido, elefante in e7",
-      "silver99d7": "Setup rapido, elefante in d7"
+      "silver99e7": "Setup rapido, elefante e7",
+      "silver99d7": "Setup rapido, elefante d7"
     }
   },
   "Cancel": "Annulla",
   "CanPie": "Questo giocatore ha l'opzione di scambiare i posti.",
   "categories": {
     "board": {
-      "description": "Descrive gli attributi della superficie di gioco",
+      "description": "Descrive le caratteristiche della superficie di gioco",
       "full": "Tabellone",
       "tag": "Tabellone"
     },
@@ -997,9 +999,9 @@
       "tag": "Tabellone: 3D"
     },
     "board>connect": {
-      "description": "Descrive come le caselle del tabellone sono connesse tra loro",
+      "description": "Descrive come le caselle del tabellone si connettono tra loro",
       "full": "Tabellone > Connettività",
-      "tag": "Connettività tabellone"
+      "tag": "Connettività del tabellone"
     },
     "board>connect>hex": {
       "description": "Le caselle si connettono tra loro in modo esagonale",
@@ -1022,14 +1024,14 @@
       "tag": "Connessione: Pentagonale"
     },
     "board>connect>rect": {
-      "description": "Le caselle si connettono tra loro ortogonalmente e diagonalmente",
+      "description": "Le caselle si connettono tra loro in modo ortogonale e diagonale",
       "full": "Tabellone > Connettività > Rettangolare",
       "tag": "Connessione: Rettangolare"
     },
     "board>connect>snub": {
-      "description": "Le caselle si connettono tra loro in una matrice a quadretti smussati",
+      "description": "Le caselle si connettono tra loro in una matrice snubsquare",
       "full": "Tabellone > Connettività > Snubsquare",
-      "tag": "Connessione: Snubsquare"
+      "tag": "Connessione: Snub"
     },
     "board>dynamic": {
       "description": "Il tabellone si sviluppa in modo dinamico",
@@ -1037,12 +1039,12 @@
       "tag": "Tabellone: Dinamico"
     },
     "board>mancala": {
-      "description": "Giocato su un tabellone tradizionale in stile Mancala",
+      "description": "Si gioca su un tabellone tradizionale stile Mancala",
       "full": "Tabellone > Mancala",
       "tag": "Tabellone: Mancala"
     },
     "board>none": {
-      "description": "Giocato su qualsiasi superficie piana",
+      "description": "Si gioca su qualsiasi superficie piana",
       "full": "Tabellone > Nessuno",
       "tag": "Tabellone: Nessuno"
     },
@@ -1054,25 +1056,25 @@
     "board>shape": {
       "description": "Descrive la forma del tabellone",
       "full": "Tabellone > Forma",
-      "tag": "Forma tabellone"
+      "tag": "Forma del tabellone"
     },
     "board>shape>circle": {
-      "description": "Il tabellone ha forma circolare",
+      "description": "Il tabellone ha la forma di un cerchio",
       "full": "Tabellone > Forma > Cerchio",
       "tag": "Forma: Cerchio"
     },
     "board>shape>hex": {
-      "description": "Il tabellone ha forma esagonale",
+      "description": "Il tabellone ha la forma di un esagono",
       "full": "Tabellone > Forma > Esagono",
       "tag": "Forma: Esagono"
     },
     "board>shape>pent": {
-      "description": "Il tabellone ha forma pentagonale",
+      "description": "Il tabellone ha la forma di un pentagono",
       "full": "Tabellone > Forma > Pentagono",
       "tag": "Forma: Pentagono"
     },
     "board>shape>oct": {
-      "description": "Il tabellone ha forma ottagonale",
+      "description": "Il tabellone ha la forma di un ottagono",
       "full": "Tabellone > Forma > Ottagono",
       "tag": "Forma: Ottagono"
     },
@@ -1082,57 +1084,57 @@
       "tag": "Forma: Altro"
     },
     "board>shape>rect": {
-      "description": "Il tabellone ha forma rettangolare",
+      "description": "Il tabellone ha la forma di un rettangolo",
       "full": "Tabellone > Forma > Rettangolo",
       "tag": "Forma: Rettangolo"
     },
     "board>shape>tri": {
-      "description": "Il tabellone ha forma triangolare",
+      "description": "Il tabellone ha la forma di un triangolo",
       "full": "Tabellone > Forma > Triangolo",
       "tag": "Forma: Triangolo"
     },
     "components>chess": {
-      "description": "Giocato con un set di Scacchi",
+      "description": "Si gioca con un set da scacchi",
       "full": "Componenti > Scacchi",
       "tag": "C: Scacchi"
     },
     "components>dice": {
-      "description": "Giocato con i dadi",
+      "description": "Si gioca con i dadi",
       "full": "Componenti > Dadi",
       "tag": "C: Dadi"
     },
     "components>decktet": {
-      "description": "Giocato con un mazzo Decktet",
+      "description": "Si gioca con un mazzo Decktet",
       "full": "Componenti > Decktet",
       "tag": "C: Decktet"
     },
     "components>dominoes": {
-      "description": "Giocato con il domino",
+      "description": "Si gioca con i domino",
       "full": "Componenti > Domino",
       "tag": "C: Domino"
     },
     "components>piecepack": {
-      "description": "Giocato con Piecepack",
+      "description": "Si gioca con Piecepack",
       "full": "Componenti > Piecepack",
       "tag": "C: Piecepack"
     },
     "components>poly": {
-      "description": "Giocato con poliamini",
+      "description": "Si gioca con i poliamini",
       "full": "Componenti > Poliamini",
       "tag": "C: Poliamini"
     },
     "components>pyramids": {
-      "description": "Giocato con piramidi di Looney",
+      "description": "Si gioca con le piramidi di Looney",
       "full": "Componenti > Piramidi di Looney",
       "tag": "C: Piramidi di Looney"
     },
     "components>shibumi": {
-      "description": "Giocato con un set Shibumi",
+      "description": "Si gioca con un set Shibumi",
       "full": "Componenti > Shibumi",
       "tag": "C: Shibumi"
     },
     "components>simple": {
-      "description": "Giocato con pezzi semplici di dimensione uniforme, spesso impilabili, talvolta in molti colori",
+      "description": "Si gioca con pezzi semplici di dimensioni uniformi, spesso impilabili, a volte di molti colori",
       "full": "Componenti > Semplici",
       "tag": "C: Semplici"
     },
@@ -1178,11 +1180,11 @@
     },
     "components>simple>pnp": {
       "description": "Giocabile con carta e matita",
-      "full": "Componenti > Semplici > Carta & Matita",
-      "tag": "C: Semplici, C&M"
+      "full": "Componenti > Semplici > Carta e Matita",
+      "tag": "C: Semplici, Carta e Matita"
     },
     "components>special": {
-      "description": "Giocato con pezzi specializzati, solitamente differenziati",
+      "description": "Si gioca con pezzi specializzati, solitamente differenziati",
       "full": "Componenti > Specializzati",
       "tag": "C: Speciali"
     },
@@ -1192,22 +1194,22 @@
       "tag": "O: Annientamento"
     },
     "goal>area": {
-      "description": "Controllare più territorio (o determinate aree con determinate forze) rispetto all'avversario",
-      "full": "Obiettivo > Controllo di area",
-      "tag": "O: Controllo di area"
+      "description": "Controllare più area (o determinate aree con determinate forze) rispetto all'avversario",
+      "full": "Obiettivo > Controllo Area",
+      "tag": "O: Controllo Area"
     },
     "goal>arrange": {
-      "description": "Disporre i pezzi in forme o lunghezze specifiche (es. n in fila)",
+      "description": "Disporre i pezzi in forme o lunghezze specifiche (ad es. n in fila)",
       "full": "Obiettivo > Disposizione",
       "tag": "O: Disposizione"
     },
     "goal>breakthrough": {
-      "description": "Raggiungere la traversa di partenza o l'area iniziale avversaria con sufficiente forza",
+      "description": "Raggiungere la traversa o l'area casa avversaria con forza sufficiente",
       "full": "Obiettivo > Sfondamento",
       "tag": "O: Sfondamento"
     },
     "goal>connect": {
-      "description": "Connettere bordi designati del tabellone o aree",
+      "description": "Connettere bordi o aree designate del tabellone",
       "full": "Obiettivo > Connessione",
       "tag": "O: Connessione"
     },
@@ -1238,13 +1240,13 @@
     },
     "goal>royal-capture": {
       "description": "Catturare uno specifico pezzo avversario",
-      "full": "Obiettivo > Cattura reale",
-      "tag": "O: Cattura reale"
+      "full": "Obiettivo > Cattura Reale",
+      "tag": "O: Cattura Reale"
     },
     "goal>royal-escape": {
-      "description": "Portare un pezzo specifico fuori dal tabellone",
-      "full": "Obiettivo > Fuga reale",
-      "tag": "O: Fuga reale"
+      "description": "Far uscire un pezzo specifico dal tabellone",
+      "full": "Obiettivo > Fuga Reale",
+      "tag": "O: Fuga Reale"
     },
     "goal>score": {
       "description": "L'esito è determinato dal punteggio in qualche modo",
@@ -1252,7 +1254,7 @@
       "tag": "O: Punteggio"
     },
     "goal>score>eog": {
-      "description": "Avere il punteggio più alto alla fine della partita",
+      "description": "Avere il punteggio più alto a fine partita",
       "full": "Obiettivo > Punteggio > Fine partita",
       "tag": "O: Punteggio (Fine)"
     },
@@ -1262,22 +1264,22 @@
       "tag": "O: Punteggio (Corsa)"
     },
     "goal>set": {
-      "description": "Collezionare set di pezzi",
-      "full": "Obiettivo > Collezione di set",
-      "tag": "O: Collezione di set"
+      "description": "Raccogliere set di pezzi",
+      "full": "Obiettivo > Collezione Set",
+      "tag": "O: Collezione Set"
     },
     "goal>unify": {
-      "description": "Riunire tutti i propri pezzi",
+      "description": "Riunire tutti i propri pezzi insieme",
       "full": "Obiettivo > Unificazione",
       "tag": "O: Unificazione"
     },
     "goal>vigil": {
-      "description": "Tutti i pezzi (o un sottoinsieme definito) devono avere una linea di vista verso qualche elemento del tabellone",
+      "description": "Tutti (o un sottoinsieme definito di) pezzi devono avere una linea di vista verso un elemento del tabellone",
       "full": "Obiettivo > Sorveglianza",
       "tag": "O: Sorveglianza"
     },
     "mechanic": {
-      "description": "Descrive le meccaniche generali del gioco",
+      "description": "Descrive le meccaniche generali di gioco",
       "full": "Meccaniche",
       "tag": "Meccaniche"
     },
@@ -1287,9 +1289,9 @@
       "tag": "M: Asimmetria"
     },
     "mechanic>bearoff": {
-      "description": "I giocatori rimuovono pezzi dal tabellone",
-      "full": "Meccaniche > Chiusura",
-      "tag": "M: Chiusura"
+      "description": "I giocatori portano fuori i pezzi dal tabellone",
+      "full": "Meccaniche > Levare dal tabellone",
+      "tag": "M: Levare dal tabellone"
     },
     "mechanic>block": {
       "description": "I giocatori si bloccano a vicenda",
@@ -1312,7 +1314,7 @@
       "tag": "M: Cooptazione"
     },
     "mechanic>differentiate": {
-      "description": "I pezzi si differenziano in qualche modo essenziale",
+      "description": "I pezzi si differenziano in un modo essenziale",
       "full": "Meccaniche > Differenziazione",
       "tag": "M: Differenziazione"
     },
@@ -1323,23 +1325,23 @@
     },
     "mechanic>economy": {
       "description": "I giocatori devono gestire un'economia centrale",
-      "full": "Meccaniche > Gestisci economia",
-      "tag": "M: Gestione economia"
+      "full": "Meccaniche > Gestione Economia",
+      "tag": "M: Gestione Economia"
     },
     "mechanic>enclose": {
       "description": "I giocatori racchiudono attivamente aree o pezzi",
-      "full": "Meccaniche > Circondamento",
-      "tag": "M: Circondamento"
+      "full": "Meccaniche > Racchiudere",
+      "tag": "M: Racchiudere"
     },
     "mechanic>hidden": {
       "description": "Il gioco include informazioni nascoste",
-      "full": "Meccaniche > Informazione nascosta",
+      "full": "Meccaniche > Informazione Nascosta",
       "tag": "M: Nascosta"
     },
     "mechanic>merge": {
-      "description": "I pezzi si uniscono o si dividono",
-      "full": "Meccaniche > Unione/Scissione",
-      "tag": "M: Unione/Scissione"
+      "description": "I pezzi si fondono o si dividono",
+      "full": "Meccaniche > Fusione/Divisione",
+      "tag": "M: Fusione/Divisione"
     },
     "mechanic>move": {
       "description": "I pezzi possono essere mossi",
@@ -1372,32 +1374,32 @@
       "tag": "M: Programmazione"
     },
     "mechanic>random": {
-      "description": "Il gioco contiene elementi casuali",
-      "full": "Meccaniche > Elementi casuali",
-      "tag": "M: Elementi casuali"
+      "description": "Il gioco contiene qualche elemento casuale",
+      "full": "Meccaniche > Elementi Casuali",
+      "tag": "M: Elementi Casuali"
     },
     "mechanic>random>play": {
       "description": "Le singole mosse del gioco includono un elemento di casualità",
-      "full": "Meccaniche > Casuale > Gioco",
-      "tag": "M: Casuale (Gioco)"
+      "full": "Meccaniche > Casualità > Gioco",
+      "tag": "M: Casualità (Gioco)"
     },
     "mechanic>random>setup": {
-      "description": "Il setup è casuale in qualche modo",
-      "full": "Meccaniche > Casuale > Setup",
-      "tag": "M: Casuale (Setup)"
+      "description": "La configurazione iniziale è casuale in qualche modo",
+      "full": "Meccaniche > Casualità > Setup",
+      "tag": "M: Casualità (Setup)"
     },
     "mechanic>set": {
       "description": "I giocatori collezionano set",
-      "full": "Meccaniche > Collezione di set",
-      "tag": "M: Collezione di set"
+      "full": "Meccaniche > Collezione Set",
+      "tag": "M: Collezione Set"
     },
     "mechanic>share": {
-      "description": "Almeno alcuni pezzi del gioco sono condivisi da entrambi i giocatori",
+      "description": "Almeno alcuni pezzi nel gioco sono condivisi da entrambi i giocatori",
       "full": "Meccaniche > Condivisione",
       "tag": "M: Condivisione"
     },
     "mechanic>simultaneous": {
-      "description": "Il gioco prevede la selezione simultanea delle azioni",
+      "description": "Il gioco include la selezione simultanea delle azioni",
       "full": "Meccaniche > Simultaneo",
       "tag": "M: Simultaneo"
     },
@@ -1407,19 +1409,19 @@
       "tag": "M: Impilamento"
     },
     "mechanic>vigil": {
-      "description": "Almeno un pezzo deve avere una linea di vista verso qualche elemento del tabellone",
+      "description": "Almeno un pezzo deve avere una linea di vista verso un elemento del tabellone",
       "full": "Meccaniche > Sorveglianza",
       "tag": "M: Sorveglianza"
     },
     "other>traditional": {
       "description": "Il gioco è tradizionale",
       "full": "Altro > Tradizionale",
-      "tag": "O: Tradizionale"
+      "tag": "A: Tradizionale"
     },
     "other>2+players": {
       "description": "Supporta più di 2 giocatori",
       "full": "Altro > 2+ Giocatori",
-      "tag": "O: 2+Giocatori"
+      "tag": "A: 2+Giocatori"
     }
   },
   "Challenge": "Sfida",
@@ -1534,7 +1536,7 @@
   "EnterMove": "Inserisci/Clicca una mossa",
   "Error": "Errore!",
   "Events": {
-    "Description": "Gli eventi organizzati sono gestiti da singoli individui. Il sistema consente agli organizzatori di creare eventi, ai giocatori di registrarsi e agli organizzatori di avviare le partite tra i giocatori registrati. Il tracciamento dei risultati, l'applicazione delle restrizioni di tempo dettagliate e l'annuncio dei vincitori spettano all'organizzatore.",
+    "Description": "Gli eventi organizzati sono gestiti da singoli individui. Il sistema consente agli organizzatori di creare eventi, ai giocatori di registrarsi, e agli organizzatori di avviare le partite tra i giocatori registrati. Il tracciamento dei risultati, l'applicazione di restrizioni di tempo dettagliate e l'annuncio dei vincitori spettano all'organizzatore.",
     "Name": "Eventi Organizzati"
   },
   "EventsNav": "Eventi",
@@ -1629,6 +1631,8 @@
   "NotesHelp": "Note per questa sfida (max 128 caratteri).",
   "NotHardTime": "Nessun limite severo",
   "NotificationSettings": "Impostazioni notifiche (salvate all'istante)",
+  "CommunicationLanguage": "Lingua per e-mail e notifiche",
+  "CommunicationLanguageHelp": "Scegli la lingua per le e-mail e le notifiche push di Abstract Play. Questo non modifica la lingua del sito web — per quello usa il menu della lingua nel piè di pagina.",
   "NotifyLabel-yourturn": "Il tuo turno (due volte al giorno)",
   "NotifyLabel-challenges": "Sfide (ogni occorrenza)",
   "NotifyLabel-gameStart": "Partita iniziata (ogni occorrenza)",
@@ -1763,61 +1767,61 @@
   "tour": {
     "general": {
       "Ignore": "Salta questo tour",
-      "Take": "Parlami di questa pagina"
+      "Take": "Spiegami questa pagina"
     },
     "me": {
-      "challenges": "Questa sezione elenca tutte le sfide che hai ricevuto e lanciato.",
-      "completed": "Una volta terminata una partita, la troverai qui. Le partite vengono rimosse automaticamente da questo elenco 48 ore dopo la tua ultima visita. Puoi rimuovere manualmente una partita cliccando sul pulsante Pulisci. Se qualcuno commenta una partita completata, riapparirà in questo elenco in grassetto.",
-      "issueChallenge": "Ecco come puoi lanciare sfide per tutti i vari giochi. Puoi anche lanciare sfide dall'elenco dei giochi o da qualsiasi altra pagina con elenchi (come la pagina delle classifiche).",
-      "settings": "Infine, apri le impostazioni utente per modificare il tuo profilo, le preferenze di notifica e le impostazioni di esplorazione. Puoi anche disabilitare questi tour da lì.",
-      "theirturn": "Se è il turno del tuo avversario in qualsiasi partita, verrà elencata qui. Puoi anche ordinare questa tabella.",
-      "welcome": "Benvenuto nella tua bacheca personalizzata!",
-      "yourturn": "Se è il tuo turno in qualsiasi partita, le partite verranno elencate qui. Puoi ordinare la tabella cliccando su una qualsiasi delle intestazioni. Di default, la tabella è ordinata in base al tempo rimanente sul tuo orologio."
+      "challenges": "Questa sezione elenca tutte le sfide che hai ricevuto e inviato.",
+      "completed": "Una volta terminata una partita, la troverai qui. Le partite vengono rimosse automaticamente da questo elenco 48 ore dopo la tua ultima visita. Puoi rimuovere manualmente una partita da questo elenco facendo clic sul pulsante Cancella. Se qualcuno commenta una partita completata, riapparirà in questo elenco e sarà in grassetto.",
+      "issueChallenge": "Da qui puoi inviare sfide per tutti i vari giochi. Puoi anche inviare sfide dall'elenco dei giochi o da qualsiasi altra pagina con elenchi (come la pagina delle valutazioni).",
+      "settings": "Infine, apri le tue impostazioni utente per modificare il tuo profilo, le preferenze di notifica e le impostazioni di esplorazione. Puoi anche disabilitare questi tour da lì.",
+      "theirturn": "Se è il turno del tuo avversario in qualche partita, sarà elencata qui. Puoi ordinare anche questa tabella.",
+      "welcome": "Benvenuto nella tua dashboard personalizzata!",
+      "yourturn": "Se è il tuo turno in qualche partita, sarà elencata qui. Puoi ordinare la tabella facendo clic su una qualsiasi delle intestazioni. Di default, la tabella è ordinata in base al tempo rimanente sul tuo orologio."
     },
     "play": {
-      "board": "Questo è il cuore e l'anima di ogni gioco: il tabellone. Clicca sul tabellone per fare la tua mossa. Suggerimenti utili appariranno sopra la casella di inserimento della mossa mentre giochi.",
-      "boardbuttons": "Sotto il tabellone c'è una serie di pulsanti che ti permettono di fare cose come ruotare il tabellone e prendere note. L'icona dell'ingranaggio apre le impostazioni di visualizzazione del tabellone e ti consente di attivare o disattivare le annotazioni dell'ultima mossa. L'icona del pennello apre la personalizzazione visiva per singola partita. Nessuno di questi pulsanti influenzerà negativamente la tua partita, quindi esplora liberamente!",
-      "chat": "La parte migliore del giocare è rappresentata dalle persone con cui giochi. Qui è dove puoi parlare avanti e indietro con il tuo avversario. Le chat degli utenti sono raccolte qui per tua comodità, ma un elenco di *tutte* le chat, incluse le descrizioni testuali di ciò che sta accadendo nella partita, è visibile in fondo allo schermo. Ricorda che queste chat sono pubbliche. Per dettagli, consulta i nostri termini di servizio e l'informativa sulla privacy.",
-      "move": "Qui è dove inserisci la tua mossa. La maggior parte delle volte puoi fare la mossa semplicemente cliccando sul tabellone, ma alcuni giochi hanno un menu a tendina per la selezione della mossa e puoi sempre digitarla manualmente. Suggerimenti utili appariranno sopra la casella della mossa mentre inserisci le tue mosse. Una funzione importante da notare è l'esplorazione. Prima di inviare la mossa, e mentre aspetti la mossa dell'avversario, puoi fare ulteriori mosse per prevedere come potrebbe proseguire la partita e formulare la tua strategia.",
-      "movelist": "A proposito di esplorazione, qui è visibile un elenco di tutte le mosse effettuate nella partita. Questo includerà anche gli stati futuri previsti che potresti aver esplorato. Durante l'esplorazione, lo stato corrente della partita avrà una casella attorno. Puoi usare i pulsanti sopra l'elenco delle mosse per navigare. Puoi anche usare le frecce della tastiera e i tasti Home ed End.",
-      "settings": "Infine, apri le impostazioni utente per modificare il tuo profilo, le preferenze di notifica e le impostazioni di esplorazione. Puoi anche disabilitare questi tour da lì.",
-      "status": "Nell'area di stato ti verrà comunicato se ci sono varianti attive per questa partita, oltre ad altri dati specifici del gioco come i punteggi o il numero di pezzi in mano.",
-      "welcome": "È qui che si svolge l'azione! La schermata di gioco per ogni partita è strutturata allo stesso modo. Il nome del gioco apparirà sempre qui, in primo piano e al centro, insieme a eventuali descrittori, come ad esempio se la partita fa parte di un torneo."
+      "board": "Questo è il cuore e l'anima di ogni gioco: il tabellone. Fai clic sul tabellone per fare la tua mossa. Durante la composizione della mossa appariranno suggerimenti utili sopra la casella d'inserimento.",
+      "boardbuttons": "Sotto il tabellone c'è una serie di pulsanti che ti permettono di fare cose come ruotare il tabellone e prendere appunti. L'icona dell'ingranaggio apre le impostazioni di visualizzazione del tabellone e ti consente di attivare e disattivare le annotazioni dell'ultima mossa. L'icona del pennello apre la personalizzazione visiva per singola partita. Nessuno di questi pulsanti danneggerà la tua partita, quindi fai clic in giro ed esplora!",
+      "chat": "La parte migliore del giocare è la gente con cui giochi. Qui è dove puoi conversare con il tuo avversario. Le chat utente sono raccolte qui per tua comodità, ma un elenco di *tutte* le chat, comprese le descrizioni testuali di ciò che sta accadendo nella partita, è visibile nella parte inferiore dello schermo. Ricorda che queste chat sono pubbliche. Consulta i nostri termini di servizio e l'informativa sulla privacy per i dettagli.",
+      "move": "Qui è dove inserisci la tua mossa. La maggior parte delle volte puoi fare la tua mossa semplicemente facendo clic sul tabellone, ma alcuni giochi hanno un menu a tendina per la selezione della mossa, e puoi sempre digitare manualmente la tua mossa. Man mano che inserisci le mosse, sopra la casella delle mosse appariranno utili suggerimenti. Un'importante funzionalità da notare è l'esplorazione. Prima di inviare la tua mossa, e mentre aspetti che muova il tuo avversario, puoi fare ulteriori mosse per prevedere come potrebbe proseguire la partita e formulare la tua strategia.",
+      "movelist": "A proposito di esplorazione, qui è visibile un elenco di tutte le mosse fatte nella partita. Questo includerà anche gli stati futuri previsti che potresti aver esplorato. Durante l'esplorazione, lo stato attuale del gioco avrà un riquadro attorno. Puoi usare i pulsanti sopra l'elenco delle mosse per navigare. Puoi anche usare i tasti freccia e i tasti Inizio e Fine.",
+      "settings": "Infine, apri le tue impostazioni utente per modificare il tuo profilo, le preferenze di notifica e le impostazioni di esplorazione. Puoi anche disabilitare questi tour da lì.",
+      "status": "Nell'area di stato ti verrà comunicato se ci sono varianti attive per questa partita, così come altri dati specifici del gioco come punteggi o numero di pezzi in mano.",
+      "welcome": "Qui è dove si svolge l'azione! La schermata di gioco per ogni partita è strutturata allo stesso modo. Il nome del gioco apparirà sempre qui, al centro, insieme a eventuali descrittori come ad esempio se la partita fa parte di un torneo."
     }
   },
   "Tournament": {
-    "Number": "Numero del torneo",
+    "Number": "Numero torneo",
     "Tournaments": "Tornei automatizzati",
     "Completion": "Completamento",
     "CompletionRate": "{{ratio}} partite ({{percent}}%)",
     "Current": "Tornei in corso",
-    "Description": "Questi sono tornei ricorrenti per qualsiasi combinazione di gioco e varianti. Finché c'è abbastanza interesse, il torneo successivo inizia automaticamente al termine del torneo precedente. Se ti sei iscritto alla serie ricorrente, verrai automaticamente registrato al torneo successivo. Se ti sei iscritto una sola volta (un asterisco accanto al tuo nome nell'elenco dei partecipanti), verrai rimosso all'inizio del torneo successivo.\n\nDopo essere stato richiesto, un torneo rimane aperto per le iscrizioni per 2 settimane. Se dopo il periodo di iscrizione di 2 settimane non ci sono almeno 4 giocatori registrati, il torneo rimarrà aperto finché non si iscrive il numero minimo di giocatori. In caso contrario, il torneo inizia e il torneo successivo per la stessa combinazione di gioco/variante viene aperto alle iscrizioni. Il torneo successivo inizia una settimana dopo il termine del torneo corrente.\n\nI tornei sono composti da gironi, e ciascun girone è un torneo all'italiana con un massimo di 10 giocatori. Tutte le partite si giocano contemporaneamente. I controlli del tempo sono: incremento di 36 ore, tempo iniziale di 72 ore e tempo massimo di 120 ore (tempo severo). I giocatori sono suddivisi nei gironi esclusivamente in base al loro punteggio (rating) al momento dell'inizio del torneo. I giocatori con il punteggio più alto giocano nel girone 1, i successivi nel girone 2 e così via. I giocatori sono divisi in modo tale che tutti i gironi abbiano all'incirca lo stesso numero di giocatori. Il primo criterio di spareggio è il Sonneborn-Berger, cioè la somma dei punteggi degli avversari sconfitti. Il secondo criterio di spareggio è il punteggio al momento dell'inizio del torneo.",
-    "Division": "Girone {{num}}",
+    "Description": "Questi sono tornei ricorrenti per qualsiasi combinazione di gioco e variante. Finché c'è abbastanza interesse, il torneo successivo inizia automaticamente dopo la fine del torneo precedente. Se ti sei iscritto alla serie ricorrente, sarai registrato automaticamente per il torneo successivo. Se ti sei iscritto \"una sola volta\" (un asterisco accanto al tuo nome nell'elenco dei partecipanti), verrai rimosso dopo l'inizio del torneo successivo.\n\nDopo essere stato richiesto, un torneo è aperto alle registrazioni per 2 settimane. Se dopo il periodo di registrazione di 2 settimane non ci sono almeno 4 giocatori registrati, il torneo rimarrà aperto finché non si aggiungerà il numero minimo di giocatori. In caso contrario, il torneo inizia e il torneo successivo per la stessa combinazione di gioco/variante viene aperto alle registrazioni. Il torneo successivo inizia una settimana dopo la fine del torneo corrente.\n\nI tornei sono composti da divisioni, con ogni divisione che è un girone all'italiana con al massimo 10 giocatori. Tutte le partite si giocano contemporaneamente. I controlli del tempo sono: incremento di 36 ore, tempo iniziale di 72 ore e tempo massimo di 120 ore (tempo limite rigido). I giocatori sono divisi in divisioni puramente in base alla loro valutazione al momento dell'inizio del torneo. I giocatori con la valutazione più alta giocano nella divisione 1, i successivi nella divisione 2 e così via. I giocatori sono divisi nelle divisioni in modo tale che tutte le divisioni abbiano all'incirca lo stesso numero di giocatori. Il primo criterio di spareggio è il Sonneborn-Berger, ovvero la somma dei punteggi degli avversari sconfitti. Il secondo criterio di spareggio è la valutazione al momento dell'inizio del torneo.",
+    "Division": "Divisione {{num}}",
     "Duplicate": "Esiste già un torneo per questo gioco e questa/e variante/i",
     "Ended": "Data di fine",
-    "History": "Cronologia",
-    "Join": "Iscriviti a quelli ricorrenti",
+    "History": "Storico",
+    "Join": "Iscriviti alla serie ricorrente",
     "JoinOnce": "Iscriviti una sola volta",
     "Name": "Torneo di {{metaGame}}",
     "ProposeNew": "Richiedi un nuovo torneo",
     "New2": "Nuovi tornei",
     "New1": "Nuovo torneo",
     "NoneCompleted": "Nessun torneo è stato ancora completato.",
-    "NoneOld": "Nessuna cronologia di tornei al momento.",
+    "NoneOld": "Nessun storico tornei ancora presente.",
     "NumCompleted": "{{numCompleted}} su {{numGames}} partite sono state completate",
-    "OldTitle": "Cronologia tornei",
-    "Old": "Cronologia dei tornei di {{metaGameName}} completati",
+    "OldTitle": "Storico tornei",
+    "Old": "Storico dei tornei completati di {{metaGameName}}",
     "Open": "Tornei aperti alle iscrizioni",
     "Participants": "Partecipanti",
     "Player": "Giocatore",
     "Position": "Posizione",
-    "Rating": "Punteggio",
-    "RatingHelp": "Punteggio all'inizio del torneo. Criterio di spareggio finale.",
+    "Rating": "Valutazione",
+    "RatingHelp": "Valutazione all'inizio del torneo. Spareggio finale.",
     "RecentlyCompleted": "Tornei completati di recente",
     "Score": "Punteggio",
-    "Starts": "Inizio del torneo",
+    "Starts": "Inizio torneo",
     "StartsWhen4": "Entro un giorno dal raggiungimento di 4 partecipanti",
-    "StartsWhenPreviousDone": "Una settimana dopo il termine del torneo corrente",
+    "StartsWhenPreviousDone": "Una settimana dopo la fine del torneo corrente",
     "Started": "Data di inizio",
     "TieBreak": "Spareggio",
     "TieBreakHelp": "Somma dei punteggi degli avversari sconfitti",

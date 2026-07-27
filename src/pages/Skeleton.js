@@ -42,6 +42,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
 import TimeAgo from "javascript-time-ago";
+import TimeAgoLocaleSync from "../components/TimeAgoLocaleSync";
 import { useStorageState } from "react-use-storage-state";
 import newsData from "../assets/news.json";
 import ThemeApplicator from "../components/ThemeApplicator";
@@ -54,7 +55,7 @@ const Stats = lazy(() => import("../components/Stats"));
 const Player = lazy(() => import("../components/Player"));
 const Explore = lazy(() => import("../components/Explore"));
 
-// TODO: Adjust locale to user selection, when supported
+// Register default English locale; TimeAgoLocaleSync updates on language change
 TimeAgo.addDefaultLocale(en);
 
 function Bones(props) {
@@ -229,6 +230,7 @@ function Bones(props) {
         </Helmet>
         <ToastContainer />
         <Router>
+          <TimeAgoLocaleSync />
           <ThemeApplicator />
           <MyWebSocket />
           <Navbar />
