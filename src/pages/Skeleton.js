@@ -237,63 +237,66 @@ function Bones(props) {
           <section className="section" id="main">
             <ErrorBoundary inline>
               <Routes>
-              <Route path="*" element={<NotFound />} />
-              <Route path="/about" element={<About token={token} />} />
-              <Route
-                path="/games/:metaGame?"
-                element={<Explore token={token} />}
-              />
-              {/* <Route
+                <Route path="*" element={<NotFound />} />
+                <Route path="/about" element={<About token={token} />} />
+                <Route
+                  path="/games/:metaGame?"
+                  element={<Explore token={token} />}
+                />
+                {/* <Route
                             path="/explore/:mode?"
                             element={<Explore token={token} />}
                           /> */}
-              <Route path="/players" element={<Players />} />
-              <Route path="/player/:userid" element={<Player />} />
-              <Route
-                path="/challenges/:metaGame"
-                element={<StandingChallenges />}
-              />
-              <Route
-                path="/listgames/:gameState/:metaGame"
-                element={<ListGames />}
-              />
-              <Route path="/ratings/:metaGame" element={<Ratings />} />
-              <Route
-                path="/tournament/:metaGame/:tournamentid"
-                element={<Tournament />}
-              />
-              <Route
-                path="/tournament/:tournamentid"
-                element={<Tournament />}
-              />
-              <Route
-                path="/tournamenthistory/:metaGame"
-                element={<TournamentsOld />}
-              />
-              <Route path="/events" element={<Events />} />
-              <Route path="/event/:eventid" element={<Event />} />
-              <Route
-                path="/move/:metaGame/:cbits/:gameID"
-                element={<GameMoveWrapper update={update} />}
-              />
-              <Route
-                path="/legal"
-                element={<Legal token={token} update={update} />}
-              />
-              <Route path="/news" element={<News />} />
-              <Route path="/stats" element={<Stats />} />
-              <Route
-                path="/"
-                element={<Welcome token={token} update={update} />}
-              />
-              <Route path="/playground" element={<Lab />} />
-              <Route
-                path="/lab"
-                element={<Navigate to="/playground" replace />}
-              />
-              <Route path="/tournaments/:metaGame?" element={<Tournaments />} />
-              <Route path="/play" element={<Play />} />
-              <Route path="/customize/:metaGame" element={<Customize />} />
+                <Route path="/players" element={<Players />} />
+                <Route path="/player/:userid" element={<Player />} />
+                <Route
+                  path="/challenges/:metaGame"
+                  element={<StandingChallenges />}
+                />
+                <Route
+                  path="/listgames/:gameState/:metaGame"
+                  element={<ListGames />}
+                />
+                <Route path="/ratings/:metaGame" element={<Ratings />} />
+                <Route
+                  path="/tournament/:metaGame/:tournamentid"
+                  element={<Tournament />}
+                />
+                <Route
+                  path="/tournament/:tournamentid"
+                  element={<Tournament />}
+                />
+                <Route
+                  path="/tournamenthistory/:metaGame"
+                  element={<TournamentsOld />}
+                />
+                <Route path="/events" element={<Events />} />
+                <Route path="/event/:eventid" element={<Event />} />
+                <Route
+                  path="/move/:metaGame/:cbits/:gameID"
+                  element={<GameMoveWrapper update={update} />}
+                />
+                <Route
+                  path="/legal"
+                  element={<Legal token={token} update={update} />}
+                />
+                <Route path="/news" element={<News />} />
+                <Route path="/stats" element={<Stats />} />
+                <Route
+                  path="/"
+                  element={<Welcome token={token} update={update} />}
+                />
+                <Route path="/playground" element={<Lab />} />
+                <Route
+                  path="/lab"
+                  element={<Navigate to="/playground" replace />}
+                />
+                <Route
+                  path="/tournaments/:metaGame?"
+                  element={<Tournaments />}
+                />
+                <Route path="/play" element={<Play />} />
+                <Route path="/customize/:metaGame" element={<Customize />} />
               </Routes>
             </ErrorBoundary>
           </section>

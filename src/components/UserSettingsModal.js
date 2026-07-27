@@ -738,7 +738,10 @@ function UserSettingsModal(props) {
           </div>
           {/********************* communication language *********************/}
           <div className="field" key="communicationLanguage">
-            <label className="label" htmlFor="user_settings_communication_language">
+            <label
+              className="label"
+              htmlFor="user_settings_communication_language"
+            >
               {t("CommunicationLanguage")}
             </label>
             <div className="control">

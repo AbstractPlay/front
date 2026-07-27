@@ -861,13 +861,13 @@ function Customize(props) {
                         backgroundColor: "white",
                       }
                     : isPatternName(c)
-                      ? {
-                          backgroundColor: "#fff",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "0.35em",
-                        }
-                      : { backgroundColor: c }),
+                    ? {
+                        backgroundColor: "#fff",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.35em",
+                      }
+                    : { backgroundColor: c }),
                 }}
               >
                 {isPatternName(c) ? (

@@ -241,9 +241,7 @@ export function getMainLineTipState(nodes, game) {
   const tipMoveNumber = nodes.length - 1;
   try {
     const parsed =
-      typeof game?.state === "string"
-        ? JSON.parse(game.state)
-        : game?.state;
+      typeof game?.state === "string" ? JSON.parse(game.state) : game?.state;
     if (parsed?.stack?.length > tipMoveNumber + 1) {
       return game.state;
     }
