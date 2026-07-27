@@ -26,4 +26,5 @@ yarn-error.log*
 __generated__
 .serverless
 scratch*
+bin/translate-debug/
 public/sitemap.xml
