@@ -7,6 +7,7 @@ import { Auth } from "aws-amplify";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
+import ErrorBoundary from "./ErrorBoundary";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../stores";
 import Spinner from "./Spinner";
@@ -332,14 +333,16 @@ function Navbar(props) {
           </div>
         </div>
       </div>
-      <Suspense fallback={<Spinner />}>
-        {showThemeModal ? (
-          <ThemeCustomizer
-            show={showThemeModal}
-            handleClose={() => setShowThemeModal(false)}
-          />
-        ) : null}
-      </Suspense>
+      <ErrorBoundary inline>
+        <Suspense fallback={<Spinner />}>
+          {showThemeModal ? (
+            <ThemeCustomizer
+              show={showThemeModal}
+              handleClose={() => setShowThemeModal(false)}
+            />
+          ) : null}
+        </Suspense>
+      </ErrorBoundary>
     </nav>
   );
 }

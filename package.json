@@ -71,7 +71,7 @@
     "full-dev": "npm run build-dev && npm run invalidate && npm run deploy",
     "full-prod": "npm run build-prod && npm run invalidate-prod && npm run deploy-prod",
     "test": "react-scripts test",
-    "extract": "i18next 'src/**/*.{js,jsx}'",
+    "extract": "i18next 'src/**/*.{js,jsx}' && shx cp public/locales/en/apfront.json src/locales/en/apfront.json",
     "deploy": "serverless client deploy --no-confirm",
     "deploy-prod": "serverless client deploy --no-confirm --stage prod",
     "invalidate": "aws cloudfront create-invalidation --profile AbstractPlayDev --distribution-id E2FD1T2JUN28HB --paths /*",

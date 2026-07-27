@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import { toast } from "react-toastify";
 import "./i18n";
 import Skeleton from "./pages/Skeleton";
+import ErrorBoundary from "./components/ErrorBoundary";
+import I18nGate from "./components/I18nGate";
 import "./myBulma.css";
 import "./index.css";
 
@@ -17,7 +19,13 @@ const env = process.env.NODE_ENV;
 
 const container = document.getElementById("root");
 const root = createRoot(container);
-root.render(<Skeleton />);
+root.render(
+  <ErrorBoundary>
+    <I18nGate>
+      <Skeleton />
+    </I18nGate>
+  </ErrorBoundary>
+);
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.addEventListener("message", (event) => {

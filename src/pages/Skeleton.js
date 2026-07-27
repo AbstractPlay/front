@@ -46,6 +46,7 @@ import { useStorageState } from "react-use-storage-state";
 import newsData from "../assets/news.json";
 import ThemeApplicator from "../components/ThemeApplicator";
 import MyWebSocket from "../components/MyWebSocket";
+import ErrorBoundary from "../components/ErrorBoundary";
 import { useStore } from "../stores";
 
 const Stats = lazy(() => import("../components/Stats"));
@@ -232,7 +233,8 @@ function Bones(props) {
           <MyWebSocket />
           <Navbar />
           <section className="section" id="main">
-            <Routes>
+            <ErrorBoundary inline>
+              <Routes>
               <Route path="*" element={<NotFound />} />
               <Route path="/about" element={<About token={token} />} />
               <Route
@@ -290,7 +292,8 @@ function Bones(props) {
               <Route path="/tournaments/:metaGame?" element={<Tournaments />} />
               <Route path="/play" element={<Play />} />
               <Route path="/customize/:metaGame" element={<Customize />} />
-            </Routes>
+              </Routes>
+            </ErrorBoundary>
           </section>
           {process.env.REACT_APP_REAL_MODE === "production" ? (
             <Footer />
