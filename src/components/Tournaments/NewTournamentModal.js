@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Spinner from "../Spinner";
 import { useTranslation } from "react-i18next";
-import { gameinfo, addResource } from "@abstractplay/gameslib";
+import { gameinfo } from "@abstractplay/gameslib";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
 import { useStore } from "../../stores";
@@ -15,11 +15,7 @@ function NewTournamentModal(props) {
   const [selectedVariants, setSelectedVariants] = useState([]);
   const globalMe = useStore((state) => state.globalMe);
   const [error, errorSetter] = useState("");
-  const { t, i18n } = useTranslation();
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   const handleChangeGame = useCallback(
     (game) => {

@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { addResource } from "@abstractplay/gameslib";
 import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
 import { API_ENDPOINT_OPEN } from "../config";
@@ -17,8 +16,7 @@ function Explore(props) {
   const [counts, countsSetter] = useState(null);
   const [selected, selectedSetter] = useStorageState("selected-module", "all");
   const { metaGame } = useParams();
-  const { t, i18n } = useTranslation();
-  addResource(i18n.language);
+  const { t } = useTranslation();
 
   const components = [
     ["all", viewConfigs.all],
@@ -32,10 +30,6 @@ function Explore(props) {
     ["completedRecent", viewConfigs.completedRecent],
     ["random", viewConfigs.random],
   ];
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
 
   useEffect(() => {
     async function fetchData() {

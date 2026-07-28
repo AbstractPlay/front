@@ -1,16 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { addResource } from "@abstractplay/gameslib";
 import LanguagePicker from "./LanguagePicker";
 
 function FooterDev(props) {
   // eslint-disable-next-line no-unused-vars
-  const { t, i18n } = useTranslation();
-  addResource(i18n.language);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   return (
     <footer className="footer">

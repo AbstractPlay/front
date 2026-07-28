@@ -16,13 +16,13 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
-    ns: ["apfront"],
+    ns: ["apfront", "apgames", "apresults"],
     defaultNS: "apfront",
     fallbackLng: "en",
     supportedLngs: SUPPORTED_LANGUAGES.map((l) => l.code),
     nonExplicitSupportedLngs: true,
     load: "languageOnly",
-    debug: true,
+    debug: process.env.NODE_ENV !== "production",
     partialBundledLanguages: true,
     resources: {
       en: { apfront: en },

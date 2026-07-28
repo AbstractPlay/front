@@ -9,7 +9,6 @@ import {
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { addResource } from "@abstractplay/gameslib";
 import { useStorageState } from "react-use-storage-state";
 import {
   getCoreRowModel,
@@ -118,12 +117,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     }
     return "";
   });
-  const { t, i18n } = useTranslation();
-  addResource(i18n.language);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     sessionStorage.setItem(`explore-page-${viewKey}`, String(pageIndex));

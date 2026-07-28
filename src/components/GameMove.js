@@ -14,7 +14,7 @@ import { render } from "@abstractplay/renderer";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
-import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { Buffer } from "buffer";
 import GameMoves from "./GameMove/GameMoves";
 import GameStatus from "./GameMove/GameStatus";
@@ -196,7 +196,7 @@ function GameMove(props) {
   const [explorationVersion, bumpExplorationVersion] = useState(0);
   const bumpExploration = () => bumpExplorationVersion((v) => v + 1);
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   // State is passed as a prop from GameMoveWrapper
   const state = props.routerState;
 
@@ -378,10 +378,6 @@ function GameMove(props) {
     ],
     []
   );
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
 
   useEffect(() => {
     tourStateSetter([

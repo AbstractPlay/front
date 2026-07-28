@@ -1,6 +1,5 @@
 import React, { useEffect, Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { addResource } from "@abstractplay/gameslib";
 // import pkgInfo from "../../package.json";
 import { Link } from "react-router-dom";
 import { shuffle } from "../lib/shuffle";
@@ -12,12 +11,7 @@ import Thumbnail from "./Thumbnail";
 function About(props) {
   const [mvTimes, mvTimesSetter] = useState(null);
   const [highlights, setHighlights] = useState(null);
-  const { t, i18n } = useTranslation();
-  addResource(i18n.language);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function fetchData() {

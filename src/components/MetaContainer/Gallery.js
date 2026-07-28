@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, createRef } from "react";
 import MetaItem from "./MetaItem";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
-import { addResource } from "@abstractplay/gameslib";
 import { useStore } from "../../stores";
 
 // props:
@@ -16,12 +15,7 @@ function Gallery(props) {
   const gameDivs = useRef({});
   const [hideDetails, hideDetailsSetter] = useState(false);
   const [filterStars, filterStarsSetter] = useState(false);
-  const { t, i18n } = useTranslation();
-  addResource(i18n.language);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (theMetaGame !== undefined) {

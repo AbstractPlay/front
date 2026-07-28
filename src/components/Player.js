@@ -1,7 +1,6 @@
 import React, { useEffect, useState, createContext } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { addResource } from "@abstractplay/gameslib";
 import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -72,12 +71,7 @@ function Player() {
   ]);
 
   // eslint-disable-next-line no-unused-vars
-  const { t, i18n } = useTranslation();
-  addResource(i18n.language);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function fetchData() {

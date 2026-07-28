@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { cloneDeep } from "lodash";
 
@@ -13,11 +13,7 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const [groupData, groupDataSetter] = useState([]);
   const [nonGroupData, nonGroupDataSetter] = useState([]);
-  const { t, i18n } = useTranslation();
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   // This does the initial parse of the data
   useEffect(() => {

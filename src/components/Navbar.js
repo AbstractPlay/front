@@ -2,7 +2,6 @@
 import React, { useState, useEffect, Suspense, lazy } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { addResource } from "@abstractplay/gameslib";
 import { Auth } from "aws-amplify";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
@@ -36,17 +35,12 @@ function Navbar(props) {
     DEFAULT_COLOUR_CONTEXT_DARK
   );
   const [storedInvis, setStoredInvis] = useStorageState("invisible", false);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [showThemeModal, setShowThemeModal] = useState(false);
-  addResource(i18n.language);
 
   const closeBurger = () => {
     updateBurgerExpanded(false);
   };
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
 
   useEffect(() => {
     const { setInvisible } = useStore.getState();

@@ -1,6 +1,5 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { addResource } from "@abstractplay/gameslib";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { Helmet } from "react-helmet-async";
@@ -67,12 +66,7 @@ If this policy is changed, we will announce it on the [Abstract Play website](ht
 `;
 
 function About(props) {
-  const { t, i18n } = useTranslation();
-  addResource(i18n.language);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   return (
     <Fragment>

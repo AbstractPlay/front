@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -9,11 +9,7 @@ import { useTranslation } from "react-i18next";
  */
 function GameDisplays({ metaGame }) {
   const [displays, displaysSetter] = useState([]);
-  const { t, i18n } = useTranslation();
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   // This does the initial parse of the data
   useEffect(() => {

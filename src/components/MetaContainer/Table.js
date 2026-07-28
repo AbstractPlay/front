@@ -8,7 +8,6 @@ import React, {
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
-import { addResource } from "@abstractplay/gameslib";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { GameFactory } from "@abstractplay/gameslib";
@@ -47,7 +46,7 @@ function Table({
   const [activeImgModal, activeImgModalSetter] = useState("");
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [expandedPara, expandedParaSetter] = useState([]);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
   const [filterStars, filterStarsSetter] = useStorageState(
     "allgames-filter-stars",
@@ -57,11 +56,6 @@ function Table({
   const [columnFilters, setColumnFilters] = useState([]);
   const [showState, showStateSetter] = useStorageState("allgames-show", 10);
   const [ddSelected, ddSelectedSetter] = useState("");
-  addResource(i18n.language);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
 
   const openImgModal = (name) => {
     activeImgModalSetter(name);

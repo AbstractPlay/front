@@ -1,16 +1,10 @@
 import React, { useEffect, Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { addResource } from "@abstractplay/gameslib";
 
 function NotFound(props) {
-  const { t, i18n } = useTranslation();
-  addResource(i18n.language);
+  const { t } = useTranslation();
 
   const [path, pathSetter] = useState(window.location.pathname);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
 
   useEffect(() => {
     if (

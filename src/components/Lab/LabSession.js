@@ -12,7 +12,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { render } from "@abstractplay/renderer";
 import { cloneDeep, debounce } from "lodash";
-import { gameinfo, GameFactory, addResource } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { Helmet } from "react-helmet-async";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
@@ -182,7 +182,7 @@ function LabSession({
     [colourContext, globalMe, metaGame]
   );
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const altDisplays = useMemo(
     () => getAltDisplaysForMetaGame(metaGame),
@@ -242,10 +242,6 @@ function LabSession({
       debouncedPersist();
     }
   }, [focus, debouncedPersist]);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
 
   useEffect(() => {
     const onResize = () => screenWidthSetter(window.innerWidth);

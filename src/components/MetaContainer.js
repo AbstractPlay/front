@@ -1,8 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
-import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { addResource } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { Helmet } from "react-helmet-async";
@@ -18,12 +16,6 @@ function MetaContainer(props) {
   const [summary, summarySetter] = useState(null);
   const [updateCounter, updateCounterSetter] = useState(0);
   const { metaGame } = useParams();
-  const { i18n } = useTranslation();
-  addResource(i18n.language);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
 
   useEffect(() => {
     async function fetchData() {

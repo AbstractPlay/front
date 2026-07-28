@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
@@ -10,11 +10,19 @@ const TIME_AGO_LOCALES = { en, fr, de, it };
 
 function TimeAgoLocaleSync() {
   const { i18n } = useTranslation();
+  const addedLocalesRef = useRef(new Set());
 
   useEffect(() => {
     const locale =
       TIME_AGO_LOCALES[i18n.resolvedLanguage] || TIME_AGO_LOCALES.en;
-    TimeAgo.addDefaultLocale(locale);
+    const code = i18n.resolvedLanguage || "en";
+
+    if (addedLocalesRef.current.has(code)) {
+      return;
+    }
+
+    TimeAgo.addLocale(locale);
+    addedLocalesRef.current.add(code);
   }, [i18n.resolvedLanguage]);
 
   return null;

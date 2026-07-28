@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
-import { gameinfo, addResource } from "@abstractplay/gameslib";
+import { gameinfo } from "@abstractplay/gameslib";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import GameVariants from "./GameVariants";
@@ -34,7 +34,7 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
   handleClose: handleModalClose,
   handleChallenge: handleNewChallenge,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [error, errorSetter] = useState(null);
   const [metaGame, metaGameSetter] = useState(null);
   const [playerCount, playerCountSetter] = useState(-1);
@@ -68,10 +68,6 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
   const [selectedVariants, setSelectedVariants] = useState([]);
   const globalMe = useStore((state) => state.globalMe);
   const errorRef = useRef(null);
-
-  useEffect(() => {
-    addResource(i18n.language);
-  }, [i18n.language]);
 
   useEffect(() => {
     if (error && errorRef.current) {
