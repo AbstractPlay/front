@@ -16,10 +16,11 @@ export const SUPPORTED_LANGUAGES = [
 const HTTP_NAMESPACE = "apfront";
 
 const ensureGamesLibResources = () => {
-  addResource();
+  addResource(i18n.language, i18n);
 };
 
 i18n.on("initialized", ensureGamesLibResources);
+i18n.on("languageChanged", ensureGamesLibResources);
 
 i18n
   .use(HttpApi)
