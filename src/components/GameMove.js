@@ -196,7 +196,7 @@ function GameMove(props) {
   const [explorationVersion, bumpExplorationVersion] = useState(0);
   const bumpExploration = () => bumpExplorationVersion((v) => v + 1);
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   // State is passed as a prop from GameMoveWrapper
   const state = props.routerState;
 
@@ -886,7 +886,7 @@ function GameMove(props) {
         }
       }
     }
-  }, [dbgame, pieInvoked, globalMe?.id, navigate, checkTime, t, explorer]);
+  }, [dbgame, pieInvoked, globalMe?.id, navigate, checkTime, t, i18n.language, explorer]);
 
   useEffect(() => {
     if (dbgame === null || gameRef.current === null) return;

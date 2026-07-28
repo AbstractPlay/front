@@ -19,7 +19,10 @@ const ensureGamesLibResources = () => {
   // Do not pass the host i18n instance: gameslib's chatLog() uses its own i18next
   // import, which can be a separate object in the webpack bundle. Passing the host
   // caused addResource to skip gameslib's fallback init, so t() returned undefined.
-  addResource(i18n.language);
+  const gamesLibI18n = addResource(i18n.language);
+  if (gamesLibI18n.language !== i18n.language) {
+    void gamesLibI18n.changeLanguage(i18n.language);
+  }
 };
 
 i18n.on("initialized", ensureGamesLibResources);
