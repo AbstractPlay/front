@@ -2,6 +2,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
+import { addResource } from "@abstractplay/gameslib";
 import en from "./locales/en/apfront.json";
 
 export const SUPPORTED_LANGUAGES = [
@@ -11,13 +12,16 @@ export const SUPPORTED_LANGUAGES = [
   { code: "it", label: "Italiano" },
 ];
 
+// Only apfront is loaded via HTTP; apgames/apresults come from gameslib bundles.
+const HTTP_NAMESPACE = "apfront";
+
 i18n
   .use(HttpApi)
   .use(LanguageDetector)
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
-    ns: ["apfront", "apgames", "apresults"],
-    defaultNS: "apfront",
+    ns: [HTTP_NAMESPACE],
+    defaultNS: HTTP_NAMESPACE,
     fallbackLng: "en",
     supportedLngs: SUPPORTED_LANGUAGES.map((l) => l.code),
     nonExplicitSupportedLngs: true,
@@ -46,7 +50,14 @@ i18n
     console.error("i18n init failed:", err);
   });
 
+i18n.on("initialized", () => {
+  addResource();
+});
+
 i18n.on("failedLoading", (lng, ns) => {
+  if (ns !== HTTP_NAMESPACE) {
+    return;
+  }
   console.warn(`i18n: failed to load ${lng}/${ns}, falling back to en`);
   if (lng !== "en" && !i18n.hasResourceBundle("en", ns)) {
     console.error(`i18n: bundled fallback missing for ${ns}`);

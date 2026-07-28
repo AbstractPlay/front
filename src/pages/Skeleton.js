@@ -43,7 +43,6 @@ import "react-toastify/dist/ReactToastify.css";
 import en from "javascript-time-ago/locale/en.json";
 import TimeAgo from "javascript-time-ago";
 import TimeAgoLocaleSync from "../components/TimeAgoLocaleSync";
-import GamesLibLocaleSync from "../components/GamesLibLocaleSync";
 import { useStorageState } from "react-use-storage-state";
 import newsData from "../assets/news.json";
 import ThemeApplicator from "../components/ThemeApplicator";
@@ -232,7 +231,6 @@ function Bones(props) {
         <ToastContainer />
         <Router>
           <TimeAgoLocaleSync />
-          <GamesLibLocaleSync />
           <ThemeApplicator />
           <MyWebSocket />
           <Navbar />
