@@ -9,6 +9,7 @@ import NewChallengeModal from "../NewChallengeModal";
 import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { useTranslation } from "react-i18next";
 
 const formatter = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
 
@@ -18,6 +19,7 @@ function History({ handleChallenge }) {
   const allUsers = useStore((state) => state.users);
   const globalMe = useStore((state) => state.globalMe);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
+  const { t } = useTranslation();
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -103,7 +105,7 @@ function History({ handleChallenge }) {
         ? []
         : [
             columnHelper.accessor("id", {
-              header: "Game",
+              header: t("tables.game"),
               cell: (props) => (
                 <>
                   <Link
@@ -125,7 +127,7 @@ function History({ handleChallenge }) {
               },
             }),
             columnHelper.accessor("variants", {
-              header: "Variants",
+              header: t("tables.variants"),
               cell: (props) => props.getValue().join(", "),
               sortingFn: (rowA, rowB, columnID) => {
                 return rowA
@@ -138,12 +140,12 @@ function History({ handleChallenge }) {
               },
             }),
             columnHelper.accessor("dateEnd", {
-              header: "End date",
+              header: t("tables.endDate"),
               cell: (props) => formatter.format(props.getValue()),
               enableGlobalFilter: false,
             }),
             columnHelper.accessor("opponents", {
-              header: "Opponents",
+              header: t("tables.opponents"),
               cell: (props) =>
                 props
                   .getValue()
@@ -184,7 +186,7 @@ function History({ handleChallenge }) {
               },
             }),
             columnHelper.accessor("winner", {
-              header: "Winner",
+              header: t("tables.winner"),
               cell: (props) =>
                 props.getValue() === undefined ? (
                   <p>Draw</p>
@@ -271,6 +273,7 @@ function History({ handleChallenge }) {
       allUsers,
       user,
       closeChallengeModal,
+      t,
     ]
   );
 

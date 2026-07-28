@@ -70,11 +70,11 @@ function TournamentsOld(props) {
   const oldTournamentsColumns = useMemo(
     () => [
       oldTournamentsColumnHelper.accessor("metaGameName", {
-        header: t("Game"),
+        header: t("tables.game"),
         cell: (props) => props.getValue(),
       }),
       oldTournamentsColumnHelper.accessor("variants", {
-        header: t("Variants"),
+        header: t("tables.variants"),
         cell: (props) => props.getValue(),
       }),
       oldTournamentsColumnHelper.accessor("number", {

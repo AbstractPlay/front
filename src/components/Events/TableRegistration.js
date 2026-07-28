@@ -4,10 +4,12 @@ import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { useTranslation } from "react-i18next";
 
 function TableRegistration({ events, handleRegister }) {
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
+  const { t } = useTranslation();
 
   console.log(events);
 
@@ -59,17 +61,17 @@ function TableRegistration({ events, handleRegister }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Name",
+        header: t("tables.name"),
         cell: (props) => (
           <Link to={`/event/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
       }),
       columnHelper.accessor("dateStart", {
-        header: "Start date",
+        header: t("tables.startDate"),
         cell: (props) => new Date(props.getValue()).toLocaleString(),
       }),
       columnHelper.accessor("organizer", {
-        header: "Organizer",
+        header: t("tables.organizer"),
         cell: (props) => (
           <BotAwareName
             id={props.getValue()}
@@ -80,7 +82,7 @@ function TableRegistration({ events, handleRegister }) {
         ),
       }),
       columnHelper.accessor("registrants", {
-        header: "Registrants",
+        header: t("tables.registrants"),
         cell: (props) => (
           <>
             {!props.row.original.canRegister ? null : (
@@ -123,7 +125,7 @@ function TableRegistration({ events, handleRegister }) {
         ),
       }),
     ],
-    [columnHelper, handleRegister, allUsers]
+    [columnHelper, handleRegister, allUsers, t]
   );
 
   return (

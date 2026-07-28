@@ -2,8 +2,10 @@ import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
+import { useTranslation } from "react-i18next";
 
 function TableDrafts({ events }) {
+  const { t } = useTranslation();
   const data = useMemo(
     () =>
       events
@@ -22,17 +24,17 @@ function TableDrafts({ events }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Name",
+        header: t("tables.name"),
         cell: (props) => (
           <Link to={`/event/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
       }),
       columnHelper.accessor("dateStart", {
-        header: "Start date",
+        header: t("tables.startDate"),
         cell: (props) => new Date(props.getValue()).toLocaleString(),
       }),
     ],
-    [columnHelper]
+    [columnHelper, t]
   );
 
   return (

@@ -103,10 +103,10 @@ function Ratings() {
   const columns = useMemo(
     () => [
       columnHelper.accessor("rank", {
-        header: "Rank",
+        header: t("tables.rank"),
       }),
       columnHelper.accessor("player", {
-        header: "Player",
+        header: t("tables.player"),
         cell: (props) => (
           <>
             <Link to={`/player/${props.row.original.id}`}>
@@ -125,21 +125,21 @@ function Ratings() {
         ),
       }),
       columnHelper.accessor("rating", {
-        header: "Rating",
+        header: t("tables.rating"),
         cell: (props) => Math.trunc(props.getValue()),
       }),
       columnHelper.accessor("n", {
-        header: "Games played",
+        header: t("tables.gamesPlayed"),
       }),
       columnHelper.accessor("wins", {
-        header: "Games won",
+        header: t("tables.gamesWon"),
       }),
       columnHelper.accessor("winrate", {
-        header: "Win rate",
+        header: t("tables.winRate"),
         cell: (props) => Math.round(props.getValue() * 10000) / 100 + "%",
       }),
       columnHelper.accessor("draws", {
-        header: "Games drawn",
+        header: t("tables.gamesDrawn"),
       }),
       columnHelper.display({
         id: "actions",
@@ -176,6 +176,7 @@ function Ratings() {
       handleNewChallenge,
       metaGame,
       closeChallengeModal,
+      t,
     ]
   );
 

@@ -220,7 +220,7 @@ function Players() {
     }
     const cols = [
       columnHelper.accessor("name", {
-        header: "Name",
+        header: t("tables.name"),
         cell: (props) => (
           <Link to={`/player/${props.row.original.id}`}>
             {formatUserDisplayName(props.row.original, allUsers)}
@@ -228,13 +228,13 @@ function Players() {
         ),
       }),
       columnHelper.accessor("lastSeen", {
-        header: "Activity",
+        header: t("tables.activity"),
         cell: (props) => (
           <ActivityMarker lastSeen={props.getValue()} size="m" />
         ),
       }),
       columnHelper.accessor("country", {
-        header: "Country",
+        header: t("tables.country"),
         cell: (props) =>
           !props.getValue() ? null : <Flag code={props.getValue()} size="m" />,
       }),
@@ -264,7 +264,7 @@ function Players() {
       );
     }
     return cols;
-  }, [allUsers, columnHelper, globalMe, toggleBlock]);
+  }, [allUsers, columnHelper, globalMe, toggleBlock, t]);
 
   const table = useReactTable({
     data,

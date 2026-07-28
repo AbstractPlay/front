@@ -13,6 +13,7 @@ import NewChallengeModal from "../NewChallengeModal";
 import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
+import { useTranslation } from "react-i18next";
 
 function Opponents({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
@@ -24,6 +25,7 @@ function Opponents({ handleChallenge }) {
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [hIndex, hIndexSetter] = useState(null);
   const [ptile, ptileSetter] = useState(null);
+  const { t } = useTranslation();
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -119,7 +121,7 @@ function Opponents({ handleChallenge }) {
         ? []
         : [
             columnHelper.accessor("id", {
-              header: "Player",
+              header: t("tables.player"),
               cell: (props) => (
                 <>
                   <Link to={`/player/${props.getValue()}`}>
@@ -148,10 +150,10 @@ function Opponents({ handleChallenge }) {
               },
             }),
             columnHelper.accessor("count", {
-              header: "Play count",
+              header: t("tables.playCount"),
             }),
             columnHelper.accessor("winrate", {
-              header: "Win/Loss/Draw",
+              header: t("tables.winLossDraw"),
               cell: (props) =>
                 `${props.getValue()}% (${props.row.original.wld.join("/")})`,
             }),
@@ -192,6 +194,7 @@ function Opponents({ handleChallenge }) {
       handleChallenge,
       allUsers,
       closeChallengeModal,
+      t,
     ]
   );
 

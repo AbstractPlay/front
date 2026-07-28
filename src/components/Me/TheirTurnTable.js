@@ -13,6 +13,7 @@ import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { useTranslation } from "react-i18next";
 
 function showMilliseconds(ms) {
   let positive = true;
@@ -54,6 +55,7 @@ function TheirTurnTable(props) {
     "dashboard-tables-theirs-show",
     10
   );
+  const { t } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -95,7 +97,7 @@ function TheirTurnTable(props) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("gameName", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => {
           if (props.getValue() === "Unknown") {
             return <>Unknown</>;
@@ -119,7 +121,7 @@ function TheirTurnTable(props) {
         },
       }),
       columnHelper.accessor("opponents", {
-        header: "Opponents",
+        header: t("tables.opponents"),
         cell: (props) =>
           props
             .getValue()
@@ -151,7 +153,7 @@ function TheirTurnTable(props) {
         },
       }),
       columnHelper.accessor("gameStarted", {
-        header: "Started",
+        header: t("tables.started"),
         cell: (props) =>
           props.getValue() === 0 ? (
             ""
@@ -160,7 +162,7 @@ function TheirTurnTable(props) {
           ),
       }),
       columnHelper.accessor("lastMove", {
-        header: "Last move",
+        header: t("tables.lastMove"),
         cell: (props) =>
           props.getValue() === 0 ? (
             ""
@@ -169,18 +171,18 @@ function TheirTurnTable(props) {
           ),
       }),
       columnHelper.accessor("numMoves", {
-        header: "# moves",
+        header: t("tables.numMoves"),
         cell: (props) => (props.getValue() === 0 ? "" : props.getValue()),
       }),
       columnHelper.accessor("timeRemaining", {
-        header: "Time remaining",
+        header: t("tables.timeRemaining"),
         cell: (props) =>
           props.getValue() === undefined
             ? ""
             : showMilliseconds(props.getValue()),
       }),
     ],
-    [columnHelper, connections, allUsers]
+    [columnHelper, connections, allUsers, t]
   );
 
   const table = useReactTable({

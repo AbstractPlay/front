@@ -378,7 +378,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         ),
       }),
       columnHelper.accessor("gameName", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => (
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
@@ -390,7 +390,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
             ? row.designers.map((d) => d.name).join(" ")
             : "",
         {
-          header: "Designers",
+          header: t("tables.designers"),
           id: "designers",
           cell: (props) =>
             props.row.original.designers.length === 0
@@ -414,7 +414,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         }
       ),
       columnHelper.accessor("image", {
-        header: "Image",
+        header: t("tables.image"),
         cell: (props) => (
           <div onClick={() => openImgModal(props.row.original.id)}>
             <Thumbnail meta={props.row.original.id} />
@@ -423,7 +423,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         enableSorting: false,
       }),
       columnHelper.accessor("description", {
-        header: "Description",
+        header: t("tables.description"),
         cell: (props) => (
           <ExpandableDiv
             expanded={expandedPara.includes(props.row.original.id)}
@@ -437,7 +437,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         enableSorting: false,
       }),
       columnHelper.accessor("tags", {
-        header: config.tagColumnHeader || "Goal",
+        header: config.showAllTags ? t("tables.tags") : t("tables.goal"),
         cell: (props) =>
           props
             .getValue()
@@ -469,7 +469,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         enableSorting: false,
         ...(config.enableTagFilter ? { filterFn: multiTagSelect } : {}),
       }),
-      ...config.extraColumns(columnHelper, { openChallengeModal }),
+      ...config.extraColumns(columnHelper, { openChallengeModal }, t),
     ],
     [
       columnHelper,
@@ -483,6 +483,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       filterStarsSetter,
       addTag,
       multiTagSelect,
+      t,
     ]
   );
 

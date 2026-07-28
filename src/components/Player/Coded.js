@@ -6,11 +6,13 @@ import TableSkeleton from "./TableSkeleton";
 import NewChallengeModal from "../NewChallengeModal";
 import { Link } from "react-router-dom";
 import { useStore } from "../../stores";
+import { useTranslation } from "react-i18next";
 
 function Coded({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const globalMe = useStore((state) => state.globalMe);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
+  const { t } = useTranslation();
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -44,7 +46,7 @@ function Coded({ handleChallenge }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => (
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
@@ -84,6 +86,7 @@ function Coded({ handleChallenge }) {
       activeChallengeModal,
       handleChallenge,
       closeChallengeModal,
+      t,
     ]
   );
 

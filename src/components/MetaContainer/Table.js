@@ -354,7 +354,7 @@ function Table({
         ),
       }),
       columnHelper.accessor("gameName", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => (
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
@@ -366,7 +366,7 @@ function Table({
             ? row.designers.map((d) => d.name).join(" ")
             : "",
         {
-          header: "Designers",
+          header: t("tables.designers"),
           id: "designers",
           cell: (props) =>
             props.row.original.designers.length === 0
@@ -390,7 +390,7 @@ function Table({
         }
       ),
       columnHelper.accessor("image", {
-        header: "Image",
+        header: t("tables.image"),
         cell: (props) => (
           <Fragment>
             <div
@@ -416,7 +416,7 @@ function Table({
         enableSorting: false,
       }),
       columnHelper.accessor("description", {
-        header: "Description",
+        header: t("tables.description"),
         cell: (props) => (
           <ExpandableDiv
             expanded={expandedPara.includes(props.row.original.id)}
@@ -430,7 +430,7 @@ function Table({
         enableSorting: false,
       }),
       columnHelper.accessor("tags", {
-        header: "Tags",
+        header: t("tables.tags"),
         cell: (props) =>
           props
             .getValue()
@@ -461,7 +461,7 @@ function Table({
         filterFn: multiTagSelect,
       }),
       columnHelper.accessor("dateAdded", {
-        header: "Added",
+        header: t("tables.added"),
         sortingFn: "datetime",
         invertSorting: true,
       }),
@@ -476,7 +476,7 @@ function Table({
       //     ),
       //   }),
       columnHelper.accessor("current", {
-        header: "Current",
+        header: t("tables.current"),
         cell: (props) => (
           <Link to={`/listgames/current/${props.row.original.id}`}>
             {props.getValue()}
@@ -484,7 +484,7 @@ function Table({
         ),
       }),
       columnHelper.accessor("completed", {
-        header: "Completed",
+        header: t("tables.completed"),
         cell: (props) => (
           <Link to={`/listgames/completed/${props.row.original.id}`}>
             {props.getValue()}
@@ -492,7 +492,7 @@ function Table({
         ),
       }),
       columnHelper.accessor("challenges", {
-        header: "Challenges",
+        header: t("tables.challenges"),
         cell: (props) => (
           <Link to={`/challenges/${props.row.original.id}`}>
             {props.getValue()}
@@ -500,7 +500,7 @@ function Table({
         ),
       }),
       columnHelper.accessor("ratings", {
-        header: "Ratings",
+        header: t("tables.ratings"),
         cell: (props) => (
           <Link to={`/ratings/${props.row.original.id}`}>
             {props.getValue()}
@@ -544,6 +544,7 @@ function Table({
       expandedPara,
       togglePara,
       addTag,
+      t,
     ]
   );
 

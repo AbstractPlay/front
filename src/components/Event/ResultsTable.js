@@ -4,9 +4,11 @@ import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "../Events/TableSkeleton";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { useTranslation } from "react-i18next";
 
 function ResultsTable({ games, eventid }) {
   const allUsers = useStore((state) => state.users);
+  const { t } = useTranslation();
 
   const data = useMemo(() => {
     if (allUsers === null) {
@@ -41,7 +43,7 @@ function ResultsTable({ games, eventid }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("player", {
-        header: "Player",
+        header: t("tables.player"),
         cell: (props) =>
           props.getValue() === undefined ? (
             "UNKNOWN"
@@ -56,10 +58,10 @@ function ResultsTable({ games, eventid }) {
           ),
       }),
       columnHelper.accessor("total", {
-        header: "Total",
+        header: t("tables.total"),
       }),
     ],
-    [columnHelper, allUsers]
+    [columnHelper, allUsers, t]
   );
 
   return (

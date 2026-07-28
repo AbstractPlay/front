@@ -4,11 +4,13 @@ import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
+import { useTranslation } from "react-i18next";
 
 function AvgRatings({ nav }) {
   const summary = useStore((state) => state.summary);
   const globalMe = useStore((state) => state.globalMe);
   const userNames = useStore((state) => state.users);
+  const { t } = useTranslation();
   const [joined, joinedSetter] = useState([]);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ function AvgRatings({ nav }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Player",
+        header: t("tables.player"),
         cell: (props) => {
           const displayName = formatUserDisplayName(
             userNames.find((u) => u.id === props.row.original.userid) ?? {
@@ -68,13 +70,13 @@ function AvgRatings({ nav }) {
         },
       }),
       columnHelper.accessor("avg", {
-        header: "Average",
+        header: t("tables.average"),
       }),
       columnHelper.accessor("weighted", {
-        header: "Weighted average",
+        header: t("tables.weightedAverage"),
       }),
     ],
-    [columnHelper, globalMe, userNames]
+    [columnHelper, globalMe, userNames, t]
   );
 
   return (

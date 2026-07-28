@@ -4,11 +4,13 @@ import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
+import { useTranslation } from "react-i18next";
 
 function Tournaments({ nav }) {
   const [summary, summarySetter] = useState(null);
   const globalMe = useStore((state) => state.globalMe);
   const userNames = useStore((state) => state.users);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function fetchData() {
@@ -60,7 +62,7 @@ function Tournaments({ nav }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Player",
+        header: t("tables.player"),
         cell: (props) => {
           const displayName = formatUserDisplayName(
             userNames.find((u) => u.id === props.row.original.userid) ?? {
@@ -82,13 +84,13 @@ function Tournaments({ nav }) {
         },
       }),
       columnHelper.accessor("count", {
-        header: "Total",
+        header: t("tables.total"),
       }),
       columnHelper.accessor("won", {
-        header: "Wins",
+        header: t("tables.wins"),
       }),
       columnHelper.accessor("winrate", {
-        header: "Rate",
+        header: t("tables.rate"),
         cell: (props) =>
           props.getValue().toLocaleString(undefined, {
             style: "percent",
@@ -96,10 +98,10 @@ function Tournaments({ nav }) {
           }),
       }),
       columnHelper.accessor("t50", {
-        header: "Top half",
+        header: t("tables.topHalf"),
       }),
       columnHelper.accessor("t50rate", {
-        header: "Rate",
+        header: t("tables.topHalfRate"),
         cell: (props) =>
           props.getValue().toLocaleString(undefined, {
             style: "percent",
@@ -107,19 +109,19 @@ function Tournaments({ nav }) {
           }),
       }),
       columnHelper.accessor("scoreSum", {
-        header: "Total score",
+        header: t("tables.totalScore"),
         cell: (props) => props.getValue().toFixed(2),
       }),
       columnHelper.accessor("scoreAvg", {
-        header: "Avg score",
+        header: t("tables.avgScore"),
         cell: (props) => props.getValue().toFixed(2),
       }),
       columnHelper.accessor("scoreMed", {
-        header: "Median score",
+        header: t("tables.medianScore"),
         cell: (props) => props.getValue().toFixed(2),
       }),
     ],
-    [columnHelper, globalMe, userNames]
+    [columnHelper, globalMe, userNames, t]
   );
 
   return (

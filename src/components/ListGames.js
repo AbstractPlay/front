@@ -102,17 +102,17 @@ function ListGames({ fixedState }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("started", {
-        header: t("DateStarted"),
+        header: t("tables.dateStarted"),
         cell: (props) =>
           props.getValue() === null ? "" : props.getValue().toDateString(),
       }),
       columnHelper.accessor("ended", {
-        header: t("DateEnded"),
+        header: t("tables.dateEnded"),
         cell: (props) =>
           props.getValue() === null ? "" : props.getValue().toDateString(),
       }),
       columnHelper.accessor("players", {
-        header: t("Players"),
+        header: t("tables.players"),
         cell: (props) =>
           props
             .getValue()
@@ -133,10 +133,10 @@ function ListGames({ fixedState }) {
         enableSorting: false,
       }),
       columnHelper.accessor("numMoves", {
-        header: t("NumMoves"),
+        header: t("tables.numMoves"),
       }),
       columnHelper.accessor("commented", {
-        header: t("Comments"),
+        header: t("tables.comments"),
         cell: (props) => {
           const value = props.getValue();
           const isCompleted = props.row.original.cbit === 1;
@@ -205,7 +205,7 @@ function ListGames({ fixedState }) {
         },
       }),
       columnHelper.accessor("winners", {
-        header: t("Winners"),
+        header: t("tables.winners"),
         cell: (props) =>
           props.getValue() === null
             ? ""
@@ -215,7 +215,7 @@ function ListGames({ fixedState }) {
                 .join(", "),
       }),
       columnHelper.accessor("variants", {
-        header: t("Variants"),
+        header: t("tables.variants"),
         cell: (props) =>
           props.getValue() === null ? "" : props.getValue().join("; "),
       }),

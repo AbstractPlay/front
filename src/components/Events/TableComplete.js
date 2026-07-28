@@ -4,9 +4,11 @@ import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { useTranslation } from "react-i18next";
 
 function TableComplete({ events }) {
   const allUsers = useStore((state) => state.users);
+  const { t } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -30,17 +32,17 @@ function TableComplete({ events }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Name",
+        header: t("tables.name"),
         cell: (props) => (
           <Link to={`/event/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
       }),
       columnHelper.accessor("dateEnd", {
-        header: "End date",
+        header: t("tables.endDate"),
         cell: (props) => new Date(props.getValue()).toLocaleString(),
       }),
       columnHelper.accessor("winners", {
-        header: "Winner",
+        header: t("tables.winner"),
         cell: (props) =>
           props
             .getValue()
@@ -81,7 +83,7 @@ function TableComplete({ events }) {
         ),
       }),
     ],
-    [columnHelper, allUsers]
+    [columnHelper, allUsers, t]
   );
 
   return (

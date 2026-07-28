@@ -6,6 +6,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "./TableSkeleton";
 import NewChallengeModal from "../NewChallengeModal";
 import { useStore } from "../../stores";
+import { useTranslation } from "react-i18next";
 
 function Counts({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
@@ -16,6 +17,7 @@ function Counts({ handleChallenge }) {
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [hIndex, hIndexSetter] = useState(null);
   const [ptile, ptileSetter] = useState(null);
+  const { t } = useTranslation();
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -87,13 +89,13 @@ function Counts({ handleChallenge }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => (
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
       }),
       columnHelper.accessor("count", {
-        header: "Play count",
+        header: t("tables.playCount"),
       }),
       columnHelper.display({
         id: "challenge",
@@ -132,6 +134,7 @@ function Counts({ handleChallenge }) {
       activeChallengeModal,
       handleChallenge,
       closeChallengeModal,
+      t,
     ]
   );
 

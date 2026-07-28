@@ -4,9 +4,11 @@ import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "../Events/TableSkeleton";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { useTranslation } from "react-i18next";
 
 function PairingTable({ pairs, delPairing, swapPairing }) {
   const allUsers = useStore((state) => state.users);
+  const { t } = useTranslation();
   const data = useMemo(
     () =>
       pairs.map(
@@ -32,13 +34,13 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("id", {
-        header: "Index",
+        header: t("tables.index"),
       }),
       columnHelper.accessor("round", {
-        header: "Round",
+        header: t("tables.round"),
       }),
       columnHelper.accessor("p1", {
-        header: "Player 1",
+        header: t("tables.player1"),
         cell: (props) => (
           <BotAwareName
             id={props.getValue().id}
@@ -61,7 +63,7 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
         ),
       }),
       columnHelper.accessor("p2", {
-        header: "Player 2",
+        header: t("tables.player2"),
         cell: (props) => (
           <BotAwareName
             id={props.getValue().id}
@@ -72,14 +74,14 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
         ),
       }),
       columnHelper.accessor("metagame", {
-        header: "Game",
+        header: t("tables.game"),
       }),
       columnHelper.accessor("variants", {
-        header: "Variants",
+        header: t("tables.variants"),
         cell: (props) => props.getValue().join(", "),
       }),
       columnHelper.accessor("clock", {
-        header: "Clock",
+        header: t("tables.clock"),
       }),
       columnHelper.display({
         id: "actions",
@@ -95,7 +97,7 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
         ),
       }),
     ],
-    [columnHelper, delPairing, swapPairing, allUsers]
+    [columnHelper, delPairing, swapPairing, allUsers, t]
   );
 
   return (

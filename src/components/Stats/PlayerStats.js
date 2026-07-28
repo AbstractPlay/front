@@ -6,6 +6,7 @@ import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
+import { useTranslation } from "react-i18next";
 
 function PlayerStats({ nav }) {
   const summary = useStore((state) => state.summary);
@@ -13,6 +14,7 @@ function PlayerStats({ nav }) {
   const userNames = useStore((state) => state.users);
   const [joined, joinedSetter] = useState([]);
   const [activeChartModal, activeChartModalSetter] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     const lst = [];
@@ -97,7 +99,7 @@ function PlayerStats({ nav }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Player",
+        header: t("tables.player"),
         cell: (props) => {
           const displayName = formatUserDisplayName(
             userNames.find((u) => u.id === props.row.original.id) ?? {
@@ -116,22 +118,22 @@ function PlayerStats({ nav }) {
         },
       }),
       columnHelper.accessor("plays", {
-        header: "Total plays",
+        header: t("tables.totalPlays"),
       }),
       columnHelper.accessor("h", {
-        header: "h-index",
+        header: t("tables.hIndex"),
       }),
       columnHelper.accessor("eclectic", {
-        header: "Different games",
+        header: t("tables.differentGames"),
       }),
       columnHelper.accessor("hOpp", {
-        header: "h-index (opps)",
+        header: t("tables.hIndexOpponents"),
       }),
       columnHelper.accessor("social", {
-        header: "Different opponents",
+        header: t("tables.differentOpponents"),
       }),
       columnHelper.accessor("histogram", {
-        header: "Histogram",
+        header: t("tables.histogram"),
         cell: (props) => (
           <>
             <div
@@ -192,7 +194,7 @@ function PlayerStats({ nav }) {
         enableSorting: false,
       }),
     ],
-    [columnHelper, globalMe, activeChartModal, userNames]
+    [columnHelper, globalMe, activeChartModal, userNames, t]
   );
 
   return (

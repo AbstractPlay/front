@@ -274,7 +274,7 @@ function StandingChallenges(props) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("challenger", {
-        header: "Challenger",
+        header: t("tables.challenger"),
         cell: (props) => (
           <>
             <BotAwareName
@@ -296,10 +296,10 @@ function StandingChallenges(props) {
         ),
       }),
       columnHelper.accessor("numPlayers", {
-        header: "Players",
+        header: t("tables.players"),
       }),
       columnHelper.accessor("players", {
-        header: "Accepted",
+        header: t("tables.accepted"),
         cell: (props) =>
           props
             .getValue()
@@ -307,7 +307,7 @@ function StandingChallenges(props) {
             .join(","),
       }),
       columnHelper.accessor("seating", {
-        header: "Seating",
+        header: t("tables.seating"),
         cell: (props) =>
           props.getValue() === "random"
             ? t("SeatingRandom")
@@ -316,34 +316,34 @@ function StandingChallenges(props) {
             : t("seatingMeFirst"),
       }),
       columnHelper.accessor("variants", {
-        header: "Variants",
+        header: t("tables.variants"),
         cell: (props) => props.getValue().join("; "),
       }),
       columnHelper.accessor("comment", {
-        header: "Notes",
+        header: t("tables.notes"),
         cell: (props) => (
           <div className="challenge_notes">{props.getValue()}</div>
         ),
       }),
       columnHelper.accessor("clockHard", {
-        header: "Hard clock?",
+        header: t("tables.hardClock"),
         cell: (props) => (props.getValue() ? t("Yes") : t("No")),
       }),
       columnHelper.accessor("clockStart", {
-        header: "Clock start",
+        header: t("tables.clockStart"),
       }),
       columnHelper.accessor("clockInc", {
-        header: "Clock increment",
+        header: t("tables.clockIncrement"),
       }),
       columnHelper.accessor("clockMax", {
-        header: "Clock max",
+        header: t("tables.clockMax"),
       }),
       columnHelper.accessor("rated", {
-        header: "Rated?",
+        header: t("tables.rated"),
         cell: (props) => (props.getValue() ? t("Yes") : t("No")),
       }),
       columnHelper.accessor("noExplore", {
-        header: "Exploration disabled?",
+        header: t("tables.explorationDisabled"),
         cell: (props) => (props.getValue() ? t("Yes") : t("No")),
       }),
       columnHelper.display({

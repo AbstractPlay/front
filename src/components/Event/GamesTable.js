@@ -84,7 +84,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("id", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => (
           <Link
             to={`/move/${props.row.original.metagame}/${
@@ -96,14 +96,14 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
         ),
       }),
       columnHelper.accessor("variants", {
-        header: "Variants",
+        header: t("tables.variants"),
         cell: (props) => props.getValue()?.join(", ") || null,
       }),
       columnHelper.accessor("round", {
-        header: "Round",
+        header: t("tables.round"),
       }),
       columnHelper.accessor("p1", {
-        header: "Player 1",
+        header: t("tables.player1"),
         cell: (props) => (
           <BotAwareName
             id={props.getValue().id}
@@ -114,7 +114,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
         ),
       }),
       columnHelper.accessor("p2", {
-        header: "Player 2",
+        header: t("tables.player2"),
         cell: (props) => (
           <BotAwareName
             id={props.getValue().id}
@@ -125,7 +125,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
         ),
       }),
       columnHelper.accessor("winner", {
-        header: "Winner",
+        header: t("tables.winner"),
         cell: (props) =>
           props.getValue() === undefined ? null : props.getValue() === null ? (
             <>Draw{props.row.original.arbitrated ? <span>*</span> : null}</>
@@ -159,7 +159,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
           ),
       }),
     ],
-    [columnHelper, editor, allUsers]
+    [columnHelper, editor, allUsers, t]
   );
 
   const changeResult = () => {

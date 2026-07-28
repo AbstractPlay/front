@@ -6,12 +6,14 @@ import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "./TableSkeleton";
 import NewChallengeModal from "../NewChallengeModal";
 import { useStore } from "../../stores";
+import { useTranslation } from "react-i18next";
 
 function Ratings({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const [summary] = useContext(SummaryContext);
   const globalMe = useStore((state) => state.globalMe);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
+  const { t } = useTranslation();
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -54,13 +56,13 @@ function Ratings({ handleChallenge }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => (
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
       }),
       columnHelper.accessor("wld", {
-        header: "Win/Loss/Draw",
+        header: t("tables.winLossDraw"),
         cell: (props) => {
           const sum = props.getValue().reduce((prev, curr) => prev + curr, 0);
           if (sum > 0) {
@@ -106,13 +108,13 @@ function Ratings({ handleChallenge }) {
         },
       }),
       columnHelper.accessor("elo", {
-        header: "Elo",
+        header: t("tables.elo"),
       }),
       columnHelper.accessor("rank", {
-        header: "Elo rank",
+        header: t("tables.eloRank"),
       }),
       columnHelper.accessor("glicko", {
-        header: "Glicko",
+        header: t("tables.glicko"),
         cell: (props) => {
           const rating = props.getValue().rating;
           const rd = props.getValue().rd;
@@ -133,7 +135,7 @@ function Ratings({ handleChallenge }) {
         },
       }),
       columnHelper.accessor("trueskill", {
-        header: "Trueskill",
+        header: t("tables.trueskill"),
         cell: (props) => Math.round(props.getValue().mu * 10) / 10,
         sortingFn: (rowA, rowB, columnID) => {
           return rowA.getValue(columnID).mu - rowB.getValue(columnID).mu;
@@ -174,6 +176,7 @@ function Ratings({ handleChallenge }) {
       activeChallengeModal,
       handleChallenge,
       closeChallengeModal,
+      t,
     ]
   );
 

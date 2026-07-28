@@ -4,11 +4,13 @@ import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
+import { useTranslation } from "react-i18next";
 
 function TopPlayers({ nav }) {
   const summary = useStore((state) => state.summary);
   const globalMe = useStore((state) => state.globalMe);
   const userNames = useStore((state) => state.users);
+  const { t } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -36,10 +38,10 @@ function TopPlayers({ nav }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("game", {
-        header: "Game",
+        header: t("tables.game"),
       }),
       columnHelper.accessor("name", {
-        header: "Player",
+        header: t("tables.player"),
         cell: (props) => {
           const displayName = formatUserDisplayName(
             userNames.find((u) => u.id === props.row.original.userid) ?? {
@@ -61,10 +63,10 @@ function TopPlayers({ nav }) {
         },
       }),
       columnHelper.accessor("rating", {
-        header: "Rating",
+        header: t("tables.rating"),
       }),
       columnHelper.accessor("wld", {
-        header: "Win/Loss/Draw",
+        header: t("tables.winLossDraw"),
         cell: (props) => {
           const sum = props.getValue().reduce((prev, curr) => prev + curr, 0);
           if (sum > 0) {
@@ -110,7 +112,7 @@ function TopPlayers({ nav }) {
         },
       }),
     ],
-    [columnHelper, globalMe, userNames]
+    [columnHelper, globalMe, userNames, t]
   );
 
   return (

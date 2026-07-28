@@ -30,22 +30,22 @@ function scoreLookup(fetchedData, prefix, metaGame) {
   };
 }
 
-function dividedScoreColumns(columnHelper, divisors) {
+function dividedScoreColumns(columnHelper, divisors, t) {
   return [
     columnHelper.accessor("score1w", {
-      header: "1 week",
+      header: t("tables.oneWeek"),
       cell: (props) => (props.getValue() / divisors[0]).toFixed(2),
     }),
     columnHelper.accessor("score1m", {
-      header: "1 month",
+      header: t("tables.oneMonth"),
       cell: (props) => (props.getValue() / divisors[1]).toFixed(2),
     }),
     columnHelper.accessor("score6m", {
-      header: "6 months",
+      header: t("tables.sixMonths"),
       cell: (props) => (props.getValue() / divisors[2]).toFixed(2),
     }),
     columnHelper.accessor("score1y", {
-      header: "1 year",
+      header: t("tables.oneYear"),
       cell: (props) => (props.getValue() / divisors[3]).toFixed(2),
     }),
   ];
@@ -63,9 +63,9 @@ export const viewConfigs = {
       challenges: counts?.[metaGame]?.standingchallenges || 0,
       ratings: counts?.[metaGame]?.ratings || 0,
     }),
-    extraColumns: (columnHelper, { openChallengeModal }) => [
+    extraColumns: (columnHelper, { openChallengeModal }, t) => [
       columnHelper.accessor("current", {
-        header: "Current",
+        header: t("tables.current"),
         cell: (props) => (
           <Link to={`/listgames/current/${props.row.original.id}`}>
             {props.getValue()}
@@ -73,7 +73,7 @@ export const viewConfigs = {
         ),
       }),
       columnHelper.accessor("completed", {
-        header: "Completed",
+        header: t("tables.completed"),
         cell: (props) => (
           <Link to={`/listgames/completed/${props.row.original.id}`}>
             {props.getValue()}
@@ -81,7 +81,7 @@ export const viewConfigs = {
         ),
       }),
       columnHelper.accessor("challenges", {
-        header: "Challenges",
+        header: t("tables.challenges"),
         cell: (props) => (
           <Link to={`/challenges/${props.row.original.id}`}>
             {props.getValue()}
@@ -89,7 +89,7 @@ export const viewConfigs = {
         ),
       }),
       columnHelper.accessor("ratings", {
-        header: "Ratings",
+        header: t("tables.ratings"),
         cell: (props) => (
           <Link to={`/ratings/${props.row.original.id}`}>
             {props.getValue()}
@@ -120,7 +120,6 @@ export const viewConfigs = {
     enableNameSearch: true,
     enableDesignerSearch: true,
     enableStarFilter: true,
-    tagColumnHeader: "Tags",
     pageSizeStorageKey: "allgames-show",
     starFilterStorageKey: "allgames-filter-stars",
   },
@@ -133,9 +132,9 @@ export const viewConfigs = {
     extraFields: (metaGame, info) => ({
       dateAdded: info.dateAdded,
     }),
-    extraColumns: (columnHelper) => [
+    extraColumns: (columnHelper, _context, t) => [
       columnHelper.accessor("dateAdded", {
-        header: "Added",
+        header: t("tables.added"),
         sortingFn: "datetime",
       }),
     ],
@@ -151,8 +150,8 @@ export const viewConfigs = {
     fetchUrl: "https://records.abstractplay.com/mvtimes.json",
     extraFields: (metaGame, info, fetchedData) =>
       scoreLookup(fetchedData, "raw", metaGame),
-    extraColumns: (columnHelper) =>
-      dividedScoreColumns(columnHelper, [7, 30, 180, 365]),
+    extraColumns: (columnHelper, _context, t) =>
+      dividedScoreColumns(columnHelper, [7, 30, 180, 365], t),
     loadGames: null,
     renderExtra: null,
   },
@@ -165,8 +164,8 @@ export const viewConfigs = {
     fetchUrl: "https://records.abstractplay.com/mvtimes.json",
     extraFields: (metaGame, info, fetchedData) =>
       scoreLookup(fetchedData, "players", metaGame),
-    extraColumns: (columnHelper) =>
-      dividedScoreColumns(columnHelper, [7, 30, 180, 365]),
+    extraColumns: (columnHelper, _context, t) =>
+      dividedScoreColumns(columnHelper, [7, 30, 180, 365], t),
     loadGames: null,
     renderExtra: null,
   },
@@ -179,18 +178,18 @@ export const viewConfigs = {
     fetchUrl: "https://records.abstractplay.com/mvtimes.json",
     extraFields: (metaGame, info, fetchedData) =>
       scoreLookup(fetchedData, "playersSum", metaGame),
-    extraColumns: (columnHelper) => [
+    extraColumns: (columnHelper, _context, t) => [
       columnHelper.accessor("score1w", {
-        header: "1 week",
+        header: t("tables.oneWeek"),
       }),
       columnHelper.accessor("score1m", {
-        header: "1 month",
+        header: t("tables.oneMonth"),
       }),
       columnHelper.accessor("score6m", {
-        header: "6 months",
+        header: t("tables.sixMonths"),
       }),
       columnHelper.accessor("score1y", {
-        header: "1 year",
+        header: t("tables.oneYear"),
       }),
     ],
     loadGames: null,
@@ -213,9 +212,9 @@ export const viewConfigs = {
       }
       return { hindex };
     },
-    extraColumns: (columnHelper) => [
+    extraColumns: (columnHelper, _context, t) => [
       columnHelper.accessor("hindex", {
-        header: "h-index",
+        header: t("tables.hIndex"),
       }),
     ],
     loadGames: null,
@@ -230,9 +229,9 @@ export const viewConfigs = {
     extraFields: (metaGame, info, fetchedData, counts) => ({
       stars: counts !== null ? counts[metaGame]?.stars || 0 : 0,
     }),
-    extraColumns: (columnHelper) => [
+    extraColumns: (columnHelper, _context, t) => [
       columnHelper.accessor("stars", {
-        header: "Stars",
+        header: t("tables.stars"),
       }),
     ],
     loadGames: null,
@@ -259,9 +258,9 @@ export const viewConfigs = {
       }
       return { games: gamesper };
     },
-    extraColumns: (columnHelper) => [
+    extraColumns: (columnHelper, _context, t) => [
       columnHelper.accessor("games", {
-        header: "Games/week",
+        header: t("tables.gamesPerWeek"),
         cell: (props) => props.getValue().toFixed(2),
       }),
     ],
@@ -289,9 +288,9 @@ export const viewConfigs = {
       }
       return { games: gamesper };
     },
-    extraColumns: (columnHelper) => [
+    extraColumns: (columnHelper, _context, t) => [
       columnHelper.accessor("games", {
-        header: "Games/week",
+        header: t("tables.gamesPerWeek"),
         cell: (props) => props.getValue().toFixed(2),
       }),
     ],
@@ -318,9 +317,9 @@ export const viewConfigs = {
       ratings:
         counts !== null && counts[metaGame] ? counts[metaGame].ratings : 0,
     }),
-    extraColumns: (columnHelper) => [
+    extraColumns: (columnHelper, _context, t) => [
       columnHelper.accessor("current", {
-        header: "Current",
+        header: t("tables.current"),
         cell: (props) => (
           <Link to={`/listgames/current/${props.row.original.id}`}>
             {props.getValue()}
@@ -328,7 +327,7 @@ export const viewConfigs = {
         ),
       }),
       columnHelper.accessor("completed", {
-        header: "Completed",
+        header: t("tables.completed"),
         cell: (props) => (
           <Link to={`/listgames/completed/${props.row.original.id}`}>
             {props.getValue()}
@@ -336,7 +335,7 @@ export const viewConfigs = {
         ),
       }),
       columnHelper.accessor("challenges", {
-        header: "Challenges",
+        header: t("tables.challenges"),
         cell: (props) => (
           <Link to={`/challenges/${props.row.original.id}`}>
             {props.getValue()}
@@ -344,7 +343,7 @@ export const viewConfigs = {
         ),
       }),
       columnHelper.accessor("ratings", {
-        header: "Ratings",
+        header: t("tables.ratings"),
         cell: (props) => (
           <Link to={`/ratings/${props.row.original.id}`}>
             {props.getValue()}

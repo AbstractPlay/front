@@ -299,7 +299,7 @@ function Tournaments(props) {
   const openTournamentsColumns = useMemo(
     () => [
       openTournamentsColumnHelper.accessor("metaGame", {
-        header: t("Game"),
+        header: t("tables.game"),
         cell: (props) => (
           <Link to={`/games/${props.row.original.realMeta}`}>
             {props.getValue()}
@@ -307,7 +307,7 @@ function Tournaments(props) {
         ),
       }),
       openTournamentsColumnHelper.accessor("variants", {
-        header: t("Variants"),
+        header: t("tables.variants"),
         cell: (props) => props.getValue(),
       }),
       openTournamentsColumnHelper.accessor("number", {
@@ -559,7 +559,7 @@ function Tournaments(props) {
   const currentTournamentsColumns = useMemo(
     () => [
       currentTournamentsColumnHelper.accessor("metaGame", {
-        header: t("Game"),
+        header: t("tables.game"),
         cell: (props) => (
           <Link to={`/games/${props.row.original.realMeta}`}>
             {props.getValue()}
@@ -567,7 +567,7 @@ function Tournaments(props) {
         ),
       }),
       currentTournamentsColumnHelper.accessor("variants", {
-        header: t("Variants"),
+        header: t("tables.variants"),
         cell: (props) => props.getValue(),
       }),
       currentTournamentsColumnHelper.accessor("number", {
@@ -782,7 +782,7 @@ function Tournaments(props) {
   const completedTournamentsColumns = useMemo(
     () => [
       completedTournamentsColumnHelper.accessor("metaGameName", {
-        header: t("Game"),
+        header: t("tables.game"),
         cell: (props) => (
           <Link to={`/games/${props.row.original.metaGame}`}>
             {props.getValue()}
@@ -790,7 +790,7 @@ function Tournaments(props) {
         ),
       }),
       completedTournamentsColumnHelper.accessor("variants", {
-        header: t("Variants"),
+        header: t("tables.variants"),
         cell: (props) => props.getValue(),
       }),
       completedTournamentsColumnHelper.accessor("number", {

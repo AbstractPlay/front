@@ -14,6 +14,7 @@ import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { useTranslation } from "react-i18next";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -25,6 +26,7 @@ function CompletedGamesTable(props) {
     "dashboard-tables-completed-show",
     10
   );
+  const { t } = useTranslation();
 
   const handleClearClick = useCallback(
     async (gameId) => {
@@ -81,7 +83,7 @@ function CompletedGamesTable(props) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("gameName", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => {
           if (props.getValue() === "Unknown") {
             return <>Unknown</>;
@@ -105,7 +107,7 @@ function CompletedGamesTable(props) {
         },
       }),
       columnHelper.accessor("opponents", {
-        header: "Opponents",
+        header: t("tables.opponents"),
         cell: (props) =>
           props
             .getValue()
@@ -130,7 +132,7 @@ function CompletedGamesTable(props) {
         },
       }),
       columnHelper.accessor("gameEnded", {
-        header: "Completed",
+        header: t("tables.completed"),
         cell: (props) =>
           props.getValue() === 0 ? (
             ""
@@ -140,7 +142,7 @@ function CompletedGamesTable(props) {
         id: "completed",
       }),
       columnHelper.accessor("lastSeen", {
-        header: "Last seen",
+        header: t("tables.lastSeen"),
         cell: (props) =>
           props.getValue() === 0 ? (
             ""
@@ -149,7 +151,7 @@ function CompletedGamesTable(props) {
           ),
       }),
       columnHelper.accessor("numMoves", {
-        header: "# moves",
+        header: t("tables.numMoves"),
         cell: (props) => (props.getValue() === 0 ? "" : props.getValue()),
       }),
       columnHelper.display({
@@ -166,7 +168,7 @@ function CompletedGamesTable(props) {
         ),
       }),
     ],
-    [columnHelper, handleClearClick, allUsers]
+    [columnHelper, handleClearClick, allUsers, t]
   );
 
   const table = useReactTable({

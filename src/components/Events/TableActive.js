@@ -5,8 +5,10 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
+import { useTranslation } from "react-i18next";
 
 function TableActive({ events }) {
+  const { t } = useTranslation();
   const data = useMemo(
     () =>
       events
@@ -26,17 +28,17 @@ function TableActive({ events }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Name",
+        header: t("tables.name"),
         cell: (props) => (
           <Link to={`/event/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
       }),
       columnHelper.accessor("dateStart", {
-        header: "Start date",
+        header: t("tables.startDate"),
         cell: (props) => new Date(props.getValue()).toLocaleString(),
       }),
       columnHelper.accessor("description", {
-        header: "Description",
+        header: t("tables.description"),
         cell: (props) => (
           <ReactMarkdown
             rehypePlugins={[rehypeRaw]}
@@ -48,7 +50,7 @@ function TableActive({ events }) {
         ),
       }),
     ],
-    [columnHelper]
+    [columnHelper, t]
   );
 
   return (

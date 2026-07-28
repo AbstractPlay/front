@@ -5,9 +5,11 @@ import Plot from "react-plotly.js";
 import Modal from "../Modal";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
+import { useTranslation } from "react-i18next";
 
 function NumPlays({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
+  const { t } = useTranslation();
   const [joined, joinedSetter] = useState([]);
   const [activeChartModal, activeChartModalSetter] = useState("");
 
@@ -91,19 +93,19 @@ function NumPlays({ metaFilter, nav }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("game", {
-        header: "Game",
+        header: t("tables.game"),
       }),
       columnHelper.accessor("plays", {
-        header: "Num plays",
+        header: t("tables.numPlays"),
       }),
       columnHelper.accessor("width", {
-        header: "Num players",
+        header: t("tables.numPlayersCount"),
       }),
       columnHelper.accessor("hindex", {
-        header: "h-index",
+        header: t("tables.hIndex"),
       }),
       columnHelper.accessor("histogram", {
-        header: "Histogram",
+        header: t("tables.histogram"),
         cell: (props) => (
           <>
             <div
@@ -159,7 +161,7 @@ function NumPlays({ metaFilter, nav }) {
         enableSorting: false,
       }),
     ],
-    [columnHelper, activeChartModal]
+    [columnHelper, activeChartModal, t]
   );
 
   return (

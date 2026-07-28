@@ -108,27 +108,27 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("gameName", {
-        header: "Game",
+        header: t("tables.game"),
       }),
       columnHelper.accessor("variants", {
-        header: "Variants",
+        header: t("tables.variants"),
         cell: (props) =>
           props.getValue() !== undefined ? props.getValue().join(", ") : "none",
       }),
       columnHelper.accessor("limit", {
-        header: "Limit",
+        header: t("tables.limit"),
       }),
       columnHelper.accessor("sensitivity", {
-        header: "Sensitivity",
+        header: t("tables.sensitivity"),
       }),
       columnHelper.accessor("numPlayers", {
-        header: "Num Players",
+        header: t("tables.numPlayersHeader"),
       }),
       columnHelper.accessor("clockCombined", {
-        header: "Clock",
+        header: t("tables.clock"),
       }),
       columnHelper.accessor("clockHard", {
-        header: "Hard?",
+        header: t("tables.hard"),
         cell: (props) => (
           <div style={{ fontSize: "larger", textAlign: "center" }}>
             {props.getValue() === true ? "\u2611" : "\u2610"}
@@ -136,7 +136,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
         ),
       }),
       columnHelper.accessor("rated", {
-        header: "Rated?",
+        header: t("tables.rated"),
         cell: (props) => (
           <div style={{ fontSize: "larger", textAlign: "center" }}>
             {props.getValue() === true ? "\u2611" : "\u2610"}
@@ -144,7 +144,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
         ),
       }),
       columnHelper.accessor("noExplore", {
-        header: "NoExplore?",
+        header: t("tables.noExplore"),
         cell: (props) => (
           <div style={{ fontSize: "larger", textAlign: "center" }}>
             {props.getValue() === true ? "\u2611" : "\u2610"}
@@ -152,7 +152,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
         ),
       }),
       columnHelper.accessor("suspended", {
-        header: "Suspended?",
+        header: t("tables.suspended"),
         cell: (props) => (
           <div style={{ fontSize: "larger", textAlign: "center" }}>
             {props.getValue() === true ? "\u2611" : "\u2610"}
@@ -218,7 +218,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
         ),
       }),
     ],
-    [columnHelper, handleSuspend]
+    [columnHelper, handleSuspend, t]
   );
 
   const table = useReactTable({

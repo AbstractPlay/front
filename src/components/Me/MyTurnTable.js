@@ -86,7 +86,7 @@ function MyTurnTable({ games, fetching }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("gameName", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => {
           if (props.getValue() === "Unknown") {
             return <>Unknown</>;
@@ -110,7 +110,7 @@ function MyTurnTable({ games, fetching }) {
         },
       }),
       columnHelper.accessor("opponents", {
-        header: "Opponents",
+        header: t("tables.opponents"),
         cell: (props) =>
           props
             .getValue()
@@ -142,7 +142,7 @@ function MyTurnTable({ games, fetching }) {
         },
       }),
       columnHelper.accessor("gameStarted", {
-        header: "Started",
+        header: t("tables.started"),
         cell: (props) =>
           props.getValue() === 0 ? (
             ""
@@ -152,11 +152,11 @@ function MyTurnTable({ games, fetching }) {
         id: "started",
       }),
       columnHelper.accessor("numMoves", {
-        header: "# moves",
+        header: t("tables.numMoves"),
         cell: (props) => (props.getValue() === 0 ? "" : props.getValue()),
       }),
       columnHelper.accessor("timeRemaining", {
-        header: "Time remaining",
+        header: t("tables.timeRemaining"),
         cell: (props) => (
           <span
             className={props.row.original.clockHard ? `hardTime` : "softTime"}
@@ -166,7 +166,7 @@ function MyTurnTable({ games, fetching }) {
         ),
       }),
     ],
-    [columnHelper, connections, allUsers]
+    [columnHelper, connections, allUsers, t]
   );
 
   const table = useReactTable({

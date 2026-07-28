@@ -4,11 +4,13 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
 import { TournamentContext } from "../Player";
 import TableSkeleton from "./TableSkeleton";
+import { useTranslation } from "react-i18next";
 
 const formatter = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
 
 function Tournaments() {
   const [tourneys] = useContext(TournamentContext);
+  const { t } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -49,7 +51,7 @@ function Tournaments() {
   const columns = useMemo(
     () => [
       columnHelper.accessor("tourneyName", {
-        header: "Tournament",
+        header: t("tables.tournament"),
         cell: (props) => (
           <>
             <Link
@@ -66,22 +68,22 @@ function Tournaments() {
         },
       }),
       columnHelper.accessor("place", {
-        header: "Place",
+        header: t("tables.place"),
         invertSorting: true,
       }),
       columnHelper.accessor("participants", {
-        header: "Participants",
+        header: t("tables.participants"),
       }),
       columnHelper.accessor("score", {
-        header: "Score",
+        header: t("tables.score"),
         cell: (props) => props.getValue().toFixed(2),
       }),
       columnHelper.accessor("dateEnded", {
-        header: "Ended",
+        header: t("tables.ended"),
         cell: (props) => formatter.format(props.getValue()),
       }),
     ],
-    [columnHelper]
+    [columnHelper, t]
   );
 
   return (

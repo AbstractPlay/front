@@ -2,9 +2,11 @@ import React, { useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableSkeleton from "./TableSkeleton";
 import { useStore } from "../../stores";
+import { useTranslation } from "react-i18next";
 
 function GameStats({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
+  const { t } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -34,23 +36,23 @@ function GameStats({ metaFilter, nav }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("game", {
-        header: "Game",
+        header: t("tables.game"),
       }),
       columnHelper.accessor("n", {
-        header: "Num records",
+        header: t("tables.numRecords"),
       }),
       columnHelper.accessor("lenAvg", {
-        header: "Average length",
+        header: t("tables.averageLength"),
       }),
       columnHelper.accessor("lenMedian", {
-        header: "Median length",
+        header: t("tables.medianLength"),
       }),
       columnHelper.accessor("winsFirst", {
-        header: "First-player wins",
+        header: t("tables.firstPlayerWins"),
         cell: (props) => props.getValue() + "%",
       }),
     ],
-    [columnHelper]
+    [columnHelper, t]
   );
 
   return (

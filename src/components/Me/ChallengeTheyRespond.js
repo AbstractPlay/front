@@ -57,7 +57,7 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("gameName", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => {
           if (props.getValue() === "Unknown") {
             return <>Unknown</>;
@@ -71,13 +71,13 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
         },
       }),
       columnHelper.accessor("variants", {
-        header: "Variants",
+        header: t("tables.variants"),
       }),
       columnHelper.accessor("numPlayers", {
-        header: "# players",
+        header: t("tables.numPlayers"),
       }),
       columnHelper.accessor("dateIssued", {
-        header: "Issued",
+        header: t("tables.issued"),
         cell: (props) =>
           props.getValue() === 0 || props.getValue() === undefined ? (
             ""
@@ -86,7 +86,7 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
           ),
       }),
       columnHelper.accessor("challengees", {
-        header: "Challenged",
+        header: t("tables.challenged"),
         cell: (props) =>
           props.getValue().length === 0
             ? ""
@@ -110,7 +110,7 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
         },
       }),
       columnHelper.accessor("accepted", {
-        header: "Accepted",
+        header: t("tables.accepted"),
         cell: (props) =>
           props.getValue().length === 0
             ? ""
@@ -128,7 +128,7 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
                 .reduce((prev, curr) => [prev, ", ", curr]),
       }),
       columnHelper.accessor("comment", {
-        header: "Comment",
+        header: t("tables.comment"),
       }),
       columnHelper.display({
         id: "actions",
@@ -153,7 +153,7 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
         ),
       }),
     ],
-    [columnHelper, activeChallengeModal, handleChallengeRevoke, allUsers]
+    [columnHelper, activeChallengeModal, handleChallengeRevoke, allUsers, t]
   );
 
   const table = useReactTable({

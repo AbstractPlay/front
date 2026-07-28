@@ -55,7 +55,7 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("gameName", {
-        header: "Game",
+        header: t("tables.game"),
         cell: (props) => {
           if (props.getValue() === "Unknown") {
             return <>Unknown</>;
@@ -69,13 +69,13 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
         },
       }),
       columnHelper.accessor("variants", {
-        header: "Variants",
+        header: t("tables.variants"),
       }),
       columnHelper.accessor("numPlayers", {
-        header: "# players",
+        header: t("tables.numPlayers"),
       }),
       columnHelper.accessor("dateIssued", {
-        header: "Issued",
+        header: t("tables.issued"),
         cell: (props) =>
           props.getValue() === 0 || props.getValue() === undefined ? (
             ""
@@ -84,7 +84,7 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
           ),
       }),
       columnHelper.accessor("accepted", {
-        header: "Accepted",
+        header: t("tables.accepted"),
         cell: (props) =>
           props.getValue().length === 0
             ? ""
@@ -96,10 +96,10 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
                 .reduce((prev, curr) => [prev, ", ", curr]),
       }),
       columnHelper.accessor("duration", {
-        header: "Duration",
+        header: t("tables.duration"),
       }),
       columnHelper.accessor("comment", {
-        header: "Comment",
+        header: t("tables.comment"),
       }),
       columnHelper.display({
         id: "actions",
@@ -124,7 +124,7 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
         ),
       }),
     ],
-    [columnHelper, activeChallengeModal, handleChallengeRevoke]
+    [columnHelper, activeChallengeModal, handleChallengeRevoke, t]
   );
 
   const table = useReactTable({

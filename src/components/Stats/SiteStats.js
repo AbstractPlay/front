@@ -4,6 +4,7 @@ import TableSkeleton from "./TableSkeleton";
 import Plot from "react-plotly.js";
 import Flag from "../Flag";
 import { useStore } from "../../stores";
+import { useTranslation } from "react-i18next";
 
 const lstSummarize = (lst) => {
   if (lst.length === 0) {
@@ -34,6 +35,7 @@ const lstSummarize = (lst) => {
 
 function SiteStats({ nav }) {
   const summary = useStore((state) => state.summary);
+  const { t } = useTranslation();
   const [cumulative, cumulativeSetter] = useState([]);
   const [summaryGames, setSummaryGames] = useState(null);
   const [summaryPlayers, setSummaryPlayers] = useState(null);
@@ -70,17 +72,17 @@ function SiteStats({ nav }) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Country",
+        header: t("tables.country"),
       }),
       columnHelper.display({
         id: "flag",
         cell: (props) => <Flag code={props.row.original.id} size="m" />,
       }),
       columnHelper.accessor("n", {
-        header: "Count",
+        header: t("tables.count"),
       }),
     ],
-    [columnHelper]
+    [columnHelper, t]
   );
 
   return (
