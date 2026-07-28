@@ -15,6 +15,12 @@ export const SUPPORTED_LANGUAGES = [
 // Only apfront is loaded via HTTP; apgames/apresults come from gameslib bundles.
 const HTTP_NAMESPACE = "apfront";
 
+const ensureGamesLibResources = () => {
+  addResource();
+};
+
+i18n.on("initialized", ensureGamesLibResources);
+
 i18n
   .use(HttpApi)
   .use(LanguageDetector)
@@ -46,13 +52,10 @@ i18n
       escapeValue: false, // react already safes from xss
     },
   })
+  .then(ensureGamesLibResources)
   .catch((err) => {
     console.error("i18n init failed:", err);
   });
-
-i18n.on("initialized", () => {
-  addResource();
-});
 
 i18n.on("failedLoading", (lng, ns) => {
   if (ns !== HTTP_NAMESPACE) {
