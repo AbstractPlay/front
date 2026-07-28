@@ -11,6 +11,7 @@ import {
 import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
 import { useTranslation } from "react-i18next";
+import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import Modal from "../Modal";
 import { useStore } from "../../stores";
 
@@ -243,7 +244,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
         <div className="content">
           {/* <p style={{ fontSize: "smaller" }}>
             Next run: {new Date(nextDate).toLocaleString()} (
-            <ReactTimeAgo future date={nextDate} />)
+            <LocalizedTimeAgo future date={nextDate} />)
           </p> */}
           {fetching ? <Spinner size="20" /> : null}
           <p>{t("NoRealStanding")}</p>
@@ -256,7 +257,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
         {/* <div className="content">
           <p style={{ fontSize: "smaller" }}>
             Next run: {new Date(nextDate).toLocaleString()} (
-            <ReactTimeAgo future date={nextDate} />)
+            <LocalizedTimeAgo future date={nextDate} />)
           </p>
         </div> */}
         {fetching ? <Spinner size="20" /> : null}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 // import { useTranslation } from "react-i18next";
-import ReactTimeAgo from "react-time-ago";
+import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import GameCommentShort from "./GameCommentShort";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { useStore } from "../../stores";
@@ -9,9 +9,6 @@ import {
   formatPlayerDisplayName,
   formatUserDisplayName,
 } from "../Bots/botUtils";
-
-//TODO:
-// Fix react-time-ago to be language/locale sensitive
 
 function UserChats(props) {
   const comments = props.comments;
@@ -124,7 +121,7 @@ function UserChats(props) {
                     {r.system ? (
                       <p className="chatSystem">
                         <small>
-                          <ReactTimeAgo
+                          <LocalizedTimeAgo
                             date={r.timestamp}
                             timeStyle="twitter-now"
                           />
@@ -140,7 +137,7 @@ function UserChats(props) {
                           </Link>
                           &nbsp;
                           <small style={{ opacity: 0.7 }}>
-                            <ReactTimeAgo
+                            <LocalizedTimeAgo
                               date={r.timestamp}
                               timeStyle="twitter-now"
                             />

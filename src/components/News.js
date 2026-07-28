@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 // import i18n from "../i18n";
-import ReactTimeAgo from "react-time-ago";
+import LocalizedTimeAgo from "./LocalizedTimeAgo";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useStorageState } from "react-use-storage-state";
@@ -66,7 +66,7 @@ function News(props) {
                     <div className="content">
                       <p>
                         <small>
-                          <ReactTimeAgo
+                          <LocalizedTimeAgo
                             date={item.time}
                             timeStyle="twitter-now"
                           />

@@ -8,21 +8,25 @@ import it from "javascript-time-ago/locale/it.json";
 
 const TIME_AGO_LOCALES = { en, fr, de, it };
 
+function resolveTimeAgoLocale(language) {
+  const code = (language || "en").split("-")[0];
+  return TIME_AGO_LOCALES[code] ? code : "en";
+}
+
 function TimeAgoLocaleSync() {
   const { i18n } = useTranslation();
   const addedLocalesRef = useRef(new Set());
 
   useEffect(() => {
-    const locale =
-      TIME_AGO_LOCALES[i18n.resolvedLanguage] || TIME_AGO_LOCALES.en;
-    const code = i18n.resolvedLanguage || "en";
+    const code = resolveTimeAgoLocale(i18n.resolvedLanguage);
+    const locale = TIME_AGO_LOCALES[code];
 
-    if (addedLocalesRef.current.has(code)) {
-      return;
+    if (!addedLocalesRef.current.has(code)) {
+      TimeAgo.addLocale(locale);
+      addedLocalesRef.current.add(code);
     }
 
-    TimeAgo.addLocale(locale);
-    addedLocalesRef.current.add(code);
+    TimeAgo.setDefaultLocale(code);
   }, [i18n.resolvedLanguage]);
 
   return null;

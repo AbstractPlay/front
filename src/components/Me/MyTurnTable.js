@@ -9,7 +9,7 @@ import {
   getSortedRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import ReactTimeAgo from "react-time-ago";
+import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
 import { useTranslation } from "react-i18next";
@@ -147,7 +147,7 @@ function MyTurnTable({ games, fetching }) {
           props.getValue() === 0 ? (
             ""
           ) : (
-            <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />
+            <LocalizedTimeAgo date={props.getValue()} timeStyle="twitter-now" />
           ),
         id: "started",
       }),

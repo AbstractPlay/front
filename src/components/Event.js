@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import ReactTimeAgo from "react-time-ago";
+import LocalizedTimeAgo from "./LocalizedTimeAgo";
 import { callAuthApi } from "../lib/api";
 import { API_ENDPOINT_OPEN } from "../config";
 import { cloneDeep } from "lodash";
@@ -597,7 +597,7 @@ function Event() {
               {eventData.event.dateStart <= Date.now() ? null : (
                 <span>
                   &nbsp;(
-                  <ReactTimeAgo future date={eventData.event.dateStart} />)
+                  <LocalizedTimeAgo future date={eventData.event.dateStart} />)
                 </span>
               )}
             </p>

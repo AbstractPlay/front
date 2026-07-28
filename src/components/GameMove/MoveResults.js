@@ -1,14 +1,11 @@
 import { Fragment } from "react";
-import ReactTimeAgo from "react-time-ago";
+import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { useStore } from "../../stores";
 import {
   formatPlayerDisplayName,
   formatUserDisplayName,
 } from "../Bots/botUtils";
-
-//TODO:
-// Fix react-time-ago to be language/locale sensitive
 
 function MoveResults(props) {
   const results0 = props.results;
@@ -72,7 +69,7 @@ function MoveResults(props) {
                 {r.system ? (
                   <p className="chatSystem">
                     <small>
-                      <ReactTimeAgo
+                      <LocalizedTimeAgo
                         date={r.timestamp}
                         timeStyle="twitter-now"
                       />
@@ -88,7 +85,7 @@ function MoveResults(props) {
                     <p className="chatPlayer">
                       <strong>{r.player}</strong>&nbsp;
                       <small>
-                        <ReactTimeAgo
+                        <LocalizedTimeAgo
                           date={r.timestamp}
                           timeStyle="twitter-now"
                         />

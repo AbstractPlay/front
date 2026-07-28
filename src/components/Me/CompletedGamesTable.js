@@ -10,7 +10,7 @@ import {
   getSortedRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import ReactTimeAgo from "react-time-ago";
+import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
@@ -135,7 +135,7 @@ function CompletedGamesTable(props) {
           props.getValue() === 0 ? (
             ""
           ) : (
-            <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />
+            <LocalizedTimeAgo date={props.getValue()} timeStyle="twitter-now" />
           ),
         id: "completed",
       }),
@@ -145,7 +145,7 @@ function CompletedGamesTable(props) {
           props.getValue() === 0 ? (
             ""
           ) : (
-            <ReactTimeAgo date={props.getValue()} timeStyle="twitter-now" />
+            <LocalizedTimeAgo date={props.getValue()} timeStyle="twitter-now" />
           ),
       }),
       columnHelper.accessor("numMoves", {
