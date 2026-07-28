@@ -16,7 +16,10 @@ export const SUPPORTED_LANGUAGES = [
 const HTTP_NAMESPACE = "apfront";
 
 const ensureGamesLibResources = () => {
-  addResource(i18n.language, i18n);
+  // Do not pass the host i18n instance: gameslib's chatLog() uses its own i18next
+  // import, which can be a separate object in the webpack bundle. Passing the host
+  // caused addResource to skip gameslib's fallback init, so t() returned undefined.
+  addResource(i18n.language);
 };
 
 i18n.on("initialized", ensureGamesLibResources);
