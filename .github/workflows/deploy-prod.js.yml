@@ -95,12 +95,6 @@ jobs:
     #     aws-secret-access-key: ${{ secrets.AWS_SECRET }}
     #     aws-region: us-east-1
 
-    - name: Create CloudFront invalidation
-      uses: josemando/aws-cloudfront-create-invalidation@v1
-      with:
-        distribution-id: EZ7B67NVBQ903
-        paths: /*
-
     - name: Deploy
       run: serverless client deploy --stage prod --no-confirm
 

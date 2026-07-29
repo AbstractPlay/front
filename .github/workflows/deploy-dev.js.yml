@@ -104,12 +104,6 @@ jobs:
     - name: Publish locale files to S3
       run: node bin/publish-locales.mjs --stage dev
 
-    - name: Create CloudFront invalidation
-      uses: josemando/aws-cloudfront-create-invalidation@v1
-      with:
-        distribution-id: E621UP8SM3SXE
-        paths: /*
-
     - name: Trigger docs rebuild
       if: github.event_name == 'push'
       run: |

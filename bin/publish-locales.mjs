@@ -11,12 +11,10 @@ const ROOT = path.resolve(__dirname, "..");
 const STAGE_CONFIG = {
   dev: {
     bucket: "abstract-play-dev",
-    distributionId: "E621UP8SM3SXE",
     profile: "AbstractPlayDev",
   },
   prod: {
     bucket: "abstract-play-prod",
-    distributionId: "EZ7B67NVBQ903",
     profile: "AbstractPlayProd",
   },
 };
@@ -108,24 +106,6 @@ function uploadLocaleDir(localDir, config) {
   return count;
 }
 
-function invalidateCloudFront(config) {
-  console.log("Invalidating CloudFront /locales/*");
-  execFileSync(
-    "aws",
-    [
-      "cloudfront",
-      "create-invalidation",
-      "--distribution-id",
-      config.distributionId,
-      "--paths",
-      "/locales/*",
-      "--profile",
-      config.profile,
-    ],
-    { stdio: "inherit" },
-  );
-}
-
 function main() {
   const { stage, config } = parseArgs();
   console.log(`Publishing locale files to ${config.bucket} (${stage})`);
@@ -150,7 +130,6 @@ function main() {
     process.exit(1);
   }
 
-  invalidateCloudFront(config);
   console.log(`Done. Published ${total} locale file(s).`);
 }
 
