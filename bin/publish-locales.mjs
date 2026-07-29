@@ -1,5 +1,5 @@
 /* eslint-env node */
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 import fs from "fs";
 import os from "os";
 import path from "path";
@@ -55,21 +55,23 @@ function prepareLocaleFile(sourcePath, lang) {
 
 function uploadFile(localPath, s3Key, config) {
   const s3Uri = `s3://${config.bucket}/${s3Key}`;
-  const cmd = [
-    "aws",
-    "s3",
-    "cp",
-    JSON.stringify(localPath),
-    JSON.stringify(s3Uri),
-    "--content-type",
-    "application/json",
-    "--cache-control",
-    CACHE_CONTROL,
-    "--profile",
-    config.profile,
-  ].join(" ");
   console.log(`Uploading ${s3Key}`);
-  execSync(cmd, { stdio: "inherit" });
+  execFileSync(
+    "aws",
+    [
+      "s3",
+      "cp",
+      localPath,
+      s3Uri,
+      "--content-type",
+      "application/json",
+      "--cache-control",
+      CACHE_CONTROL,
+      "--profile",
+      config.profile,
+    ],
+    { stdio: "inherit" },
+  );
 }
 
 function uploadLocaleDir(localDir, config) {
@@ -107,19 +109,21 @@ function uploadLocaleDir(localDir, config) {
 }
 
 function invalidateCloudFront(config) {
-  const cmd = [
-    "aws",
-    "cloudfront",
-    "create-invalidation",
-    "--distribution-id",
-    config.distributionId,
-    "--paths",
-    "/locales/*",
-    "--profile",
-    config.profile,
-  ].join(" ");
   console.log("Invalidating CloudFront /locales/*");
-  execSync(cmd, { stdio: "inherit" });
+  execFileSync(
+    "aws",
+    [
+      "cloudfront",
+      "create-invalidation",
+      "--distribution-id",
+      config.distributionId,
+      "--paths",
+      "/locales/*",
+      "--profile",
+      config.profile,
+    ],
+    { stdio: "inherit" },
+  );
 }
 
 function main() {
