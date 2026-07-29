@@ -11,6 +11,13 @@ export const SUPPORTED_LANGUAGES = [
   { code: "it", label: "Italiano" },
 ];
 
+/** Backend email/push locales (apback); may exceed UI footer languages. */
+export const COMMUNICATION_LANGUAGES = [
+  ...SUPPORTED_LANGUAGES,
+  { code: "pt", label: "Português" },
+  { code: "ta", label: "தமிழ்" },
+];
+
 const HTTP_NAMESPACES = ["apfront", "apgames", "apresults"];
 
 const ensureGamesLibResources = () => {
