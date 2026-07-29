@@ -2,7 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import { SUPPORTED_LANGUAGES } from "../i18n";
 
-function LanguageSelect({ id, value, onChange, className, ariaLabel }) {
+function LanguageSelect({
+  id,
+  value,
+  onChange,
+  className,
+  ariaLabel,
+  languages = SUPPORTED_LANGUAGES,
+}) {
   return (
     <select
       className={className}
@@ -11,7 +18,7 @@ function LanguageSelect({ id, value, onChange, className, ariaLabel }) {
       value={value}
       onChange={onChange}
     >
-      {SUPPORTED_LANGUAGES.map(({ code, label }) => (
+      {languages.map(({ code, label }) => (
         <option key={code} value={code}>
           {label}
         </option>
@@ -26,6 +33,12 @@ LanguageSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
   className: PropTypes.string,
   ariaLabel: PropTypes.string,
+  languages: PropTypes.arrayOf(
+    PropTypes.shape({
+      code: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    }),
+  ),
 };
 
 export default LanguageSelect;

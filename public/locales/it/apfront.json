@@ -926,7 +926,7 @@
       "tag": "Connettività: Lineare"
     },
     "board>connect>other": {
-      "description": "Le caselle si collegano tra loro in un modo unico",
+      "description": "Le celle si connettono alle altre in un unico modo",
       "full": "Tavoliere > Connettività > Altro",
       "tag": "Connettività: Altro"
     },

@@ -29,6 +29,7 @@ import {
 } from "../subscription";
 import { toast } from "react-toastify";
 import LanguageSelect from "./LanguageSelect";
+import { COMMUNICATION_LANGUAGES } from "../i18n";
 
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
@@ -748,6 +749,7 @@ function UserSettingsModal(props) {
               <div className="select is-small">
                 <LanguageSelect
                   id="user_settings_communication_language"
+                  languages={COMMUNICATION_LANGUAGES}
                   value={communicationLanguage}
                   onChange={(e) =>
                     handleCommunicationLanguageChange(e.target.value)
