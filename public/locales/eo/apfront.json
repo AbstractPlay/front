@@ -1,0 +1,36 @@
+{
+    "AvailableGames": "Haveblaj ludoj",
+    "Accepted": "Akceptita!",
+    "categories": {
+        "board>3d": {
+            "tag": "Tabulo: tridimensia",
+            "full": "Tabulo > tridimensia"
+        },
+        "board": {
+            "full": "Tabulo",
+            "tag": "Tabulo"
+        },
+        "mechanic": {
+            "tag": "Meĥaniko",
+            "full": "Meĥaniko"
+        }
+    },
+    "ChooseMove": "Elekti movon",
+    "ChooseGame": "Elekti ludon",
+    "ChooseOpponent": "Elekti kontraŭulon",
+    "and": "kaj",
+    "About": "Pri",
+    "Accept": "Akcepti",
+    "Cancel": "Nuligi",
+    "Close": "Fermi",
+    "Challenge": "Defio",
+    "ChallengeResponseComment": "Komento",
+    "ChallengeTypeOpen": "Malfermita",
+    "ChallengeTypeTargeted": "Fermita",
+    "Change": "Ŝanĝi",
+    "ColorPatterns": "Nigra kaj blanka",
+    "YourGames": "Viaj ludoj",
+    "YourMove": "Via movo",
+    "404": "404 Ne troviĝis",
+    "AcceptDraw": "Akceptis proponon por vana partio"
+}

@@ -1,0 +1,906 @@
+{
+    "404": "404 No encontrado",
+    "About": "Acerca de",
+    "Accept": "Aceptar",
+    "Active": "Activo",
+    "Accepted": "¡Aceptado!",
+    "All": "Todo",
+    "AlternativeDisplays": "Opciones alternativas de pantalla",
+    "and": "y",
+    "Annotate": "Muestra últimos indicadores de movimiento",
+    "AnnotationLevel": "¿Dónde le gustaría ser aplicada esta elección?",
+    "AvailableGames": "Juegos disponibles",
+    "BoardSettings": "Cambia los ajuste del tablero de juego",
+    "buttons": {
+        "pass": "Aprobar",
+        "takebutton": "Botón de tomar",
+        "acceptpie": "Jugar segundo",
+        "draw": "Reclamar sorteo",
+        "playfirst": "Juega primero",
+        "numbers": {
+            "one": "Uno (1)",
+            "two": "Dos (2)",
+            "three": "Tres (3)"
+        },
+        "pigs": {
+            "back": "Retrocede",
+            "forward": "Avanzar",
+            "left": "Avanza a la izquierda",
+            "right": "Avanza a la derecha",
+            "cw": "Rotar según las agujas del reloj",
+            "ccw": "Rotar en sentido contrario a las agujas del reloj",
+            "fire": "Fuego láser",
+            "hit": "Hocico oscilante"
+        },
+        "cifra": {
+            "lt": "Claro, Cima",
+            "lb": "Claro, Suelo",
+            "dt": "Oscuro, Cima",
+            "db": "Oscuro, Botón",
+            "ll": "Claro, Izquierdo",
+            "lr": "Claro, Derecho",
+            "dl": "Oscuro, Izquierdo",
+            "dr": "Oscuro, Derecho"
+        },
+        "playsecond": "Reproducir segundo",
+        "arimaa": {
+            "gold99": "Configuración rápida",
+            "silver99e7": "Configuración rápida, elefante e7",
+            "silver99d7": "Configuración rápida, elefante d7"
+        },
+        "swap": "Intercambiar colores"
+    },
+    "AcceptDraw": "Aceptar oferta",
+    "Cancel": "Cancelar",
+    "CanPie": "Este reproductor tiene la opción para intercambiar asientos.",
+    "categories": {
+        "board": {
+            "description": "Describe los atributos de la superficie del juego",
+            "full": "Tablero",
+            "tag": "Tablero"
+        },
+        "board>3d": {
+            "description": "El tablero es de tres dimensiones",
+            "full": "Tablero > 3D",
+            "tag": "Tablero: 3D"
+        },
+        "board>connect": {
+            "description": "Describe como las celdas del tablero conectan a cada otra",
+            "full": "Tablero > Conectividad",
+            "tag": "Conectividad del tablero"
+        },
+        "board>connect>hex": {
+            "description": "Las celdas se conectan a cada otro hexagonalmente",
+            "full": "Tablero > Conectividad > Hexagonal",
+            "tag": "Conexión: Hex"
+        },
+        "board>connect>linear": {
+            "description": "Celdas conectan a cada otra linealmente",
+            "full": "Tablero > Conectividad > Lineal",
+            "tag": "Conectar: Lineal"
+        },
+        "board>connect>other": {
+            "description": "Celdas conectan a cada otro en una manera única",
+            "tag": "Conectar: otro",
+            "full": "Tablero > Conectividad > Otro"
+        },
+        "board>connect>pent": {
+            "description": "Celdas conectan a cada otro pentagonalmente",
+            "full": "Tablero > Conectividad > Pentagonal",
+            "tag": "Conexión: pent"
+        },
+        "board>connect>rect": {
+            "description": "Celdas conectan a cada otra ortogonalmente y diagonalmente",
+            "full": "Tablero > Conectividad > Rectangular",
+            "tag": "Conexión: Rect"
+        },
+        "board>connect>snub": {
+            "description": "Las celdas conectan a cada otro en una matriz repulsada cuadrada",
+            "full": "Tablero > Conectividad > Cuadrado corto",
+            "tag": "Conectar: Repulsa"
+        },
+        "board>dynamic": {
+            "description": "El tablero se construye dinámicamente",
+            "full": "Tablero > Dinámica",
+            "tag": "Tablero: Dinámica"
+        },
+        "board>mancala": {
+            "description": "Jugado en un tablero tradicional de estilo Mancala",
+            "full": "Tablero > Mancala",
+            "tag": "Tablero: Mancala"
+        },
+        "board>none": {
+            "description": "Se puede jugar en cualquier superficie plana",
+            "full": "Tablero > Ninguno",
+            "tag": "Tablero: Ninguno"
+        },
+        "board>other": {
+            "description": "El tablero es único",
+            "full": "Tablero > Otro",
+            "tag": "Tablero: Otro"
+        },
+        "board>shape": {
+            "description": "Describe la forma del tablero",
+            "full": "Tablero > Forma",
+            "tag": "Forma del Tablero"
+        },
+        "board>shape>circle": {
+            "description": "El tablero está formado como un círculo",
+            "full": "Tablero > Forma > Círculo",
+            "tag": "Forma: Círculo"
+        },
+        "board>shape>hex": {
+            "description": "El tablero tiene forma de hexágono",
+            "full": "Tablero > Forma > Hexágono",
+            "tag": "Forma: Hex"
+        },
+        "board>shape>pent": {
+            "description": "El tablero tiene forma de pentágono",
+            "full": "Tablero > Forma > Pentágono",
+            "tag": "Forma: Pentágono"
+        },
+        "board>shape>oct": {
+            "description": "El tablero está tiene forma de octógono",
+            "full": "Tablero > Forma > Octógono",
+            "tag": "Forma: Oct"
+        },
+        "board>shape>other": {
+            "description": "El tablero tiene una forma única",
+            "full": "Tablero > Forma > Otra",
+            "tag": "Forma: Otra"
+        },
+        "board>shape>rect": {
+            "description": "El tablero tiene forma de rectángulo",
+            "full": "Tablero > Forma > Rectángulo",
+            "tag": "Forma: Rectángulo"
+        },
+        "board>shape>tri": {
+            "description": "El tablero tiene forma como un triángulo",
+            "full": "Tablero > Forma > Triángulo",
+            "tag": "Forma: Tri"
+        },
+        "components>chess": {
+            "description": "Jugado con un juego de Ajedrez",
+            "full": "Componentes > Ajedrez",
+            "tag": "A: Ajedrez"
+        },
+        "components>dice": {
+            "description": "Jugado con dado",
+            "full": "Componentes > Dado",
+            "tag": "C: Dado"
+        },
+        "components>decktet": {
+            "description": "Jugado con una cubierta Decktet",
+            "full": "Componentes > Decktet",
+            "tag": "C: Decktet"
+        },
+        "components>piecepack": {
+            "description": "Jugado con Paquete de Piezas",
+            "full": "Componentes > Paquete de Pieza",
+            "tag": "C: Paquete de Piezas"
+        },
+        "components>poly": {
+            "description": "Se juega con poliominós",
+            "full": "cpmponentes > Poliominós",
+            "tag": "C: Poliominoes"
+        },
+        "components>pyramids": {
+            "description": "Jugaba con Pirámides de locos",
+            "full": "Componentes > Pirámides de locos",
+            "tag": "C: Pirámides de locos"
+        },
+        "components>shibumi": {
+            "description": "Jugado con un set Shibumi",
+            "full": "Componentes > Shibumi",
+            "tag": "C: Shibumi"
+        },
+        "components>simple": {
+            "description": "Se juega con piezas sencillas de tamaño uniforme, a menudo apilables, a veces con muchos colores",
+            "full": "Componentes > Simple",
+            "tag": "C: Simple"
+        },
+        "components>simple>1per": {
+            "description": "Un color por jugador",
+            "full": "Componentes > Simple > 1 por",
+            "tag": "C: Simple, 1 por"
+        },
+        "components>simple>2per": {
+            "description": "Dos colores por jugador",
+            "full": "Componentes > Simple > 2 por",
+            "tag": "C: Simple, 2 por"
+        },
+        "components>simple>1c": {
+            "description": "Piezas de un solo color",
+            "full": "Componentes > Simple > 1 color",
+            "tag": "C: Simple, 1 color"
+        },
+        "components>simple>2c": {
+            "description": "Piezas de dos colores",
+            "full": "Componentes > Simple > 2 colores",
+            "tag": "C: Simple, 2 colores"
+        },
+        "components>simple>3c": {
+            "description": "Piezas de tres colores",
+            "full": "Componentes > Simple > 3 colores",
+            "tag": "C: Simple, 3 colores"
+        },
+        "components>simple>4c": {
+            "description": "Piezas de cuatro colores",
+            "full": "Componentes > Simple > 4 colores",
+            "tag": "C: Simple, 4 colores"
+        },
+        "components>simple>5c": {
+            "description": "Cinco colores de piezas",
+            "full": "Componentes > Simple > 5 colores",
+            "tag": "C: Simple, 5 colores"
+        },
+        "goal>connect": {
+            "tag": "M: Conectar",
+            "full": "Objetivo > Conectar",
+            "description": "Conecte los bordes designados del tablero o las áreas"
+        },
+        "goal>cripple": {
+            "description": "Eliminar una mayoría crítica o un subconjunto específico de piezas opuestas",
+            "full": "Objetivo > Lisiado",
+            "tag": "G: Lisiado"
+        },
+        "goal>evacuate": {
+            "description": "Retira tus piezas del tablero",
+            "full": "Meta > Evacuar",
+            "tag": "M: Evacuar"
+        },
+        "goal>immobilize": {
+            "description": "Haz que tu oponente no pueda moverse",
+            "full": "Meta > Inmovilizar",
+            "tag": "M: Inmovilizar"
+        },
+        "goal>isolate": {
+            "description": "Aislar una pieza o un subconjunto de piezas de una manera específica",
+            "full": "Meta > Aislar",
+            "tag": "M: Aislar"
+        },
+        "goal>breakthrough": {
+            "tag": "G: Avance",
+            "full": "Objetivo > Avance",
+            "description": "Alcanza la línea de home o el área de home del oponente con la fuerza suficiente"
+        },
+        "goal>arrange": {
+            "tag": "M: Arreglar",
+            "full": "Objetivo > Organizar",
+            "description": "Coloca las piezas en formas o longitudes específicas (p.ej. n en una fila)"
+        },
+        "components>simple>7c": {
+            "description": "Siete colores de piezas",
+            "full": "Componentes > Simple > 7 colores",
+            "tag": "C: Simple, 7 colores"
+        },
+        "components>simple>pnp": {
+            "description": "Se puede jugar con papel y lápiz",
+            "full": "Componentes > Simple > Papel y lápiz",
+            "tag": "C: Simple, P&P"
+        },
+        "components>special": {
+            "description": "Se toca con piezas especializadas, generalmente diferenciadas",
+            "full": "Componentes > Especializados",
+            "tag": "C: Especial"
+        },
+        "goal>annihilate": {
+            "description": "Aniquila todas las piezas opuestas",
+            "full": "Objetivo > Aniquilar",
+            "tag": "G: Aniquilar"
+        },
+        "goal>area": {
+            "description": "Controla más área (o ciertas áreas con ciertas fortalezas) que tu oponente",
+            "full": "Objetivo > Control de área",
+            "tag": "G: Control de área"
+        },
+        "goal>majority": {
+            "description": "Ten más piezas que tu oponente",
+            "full": "Meta > Mayoría",
+            "tag": "M: Mayoría"
+        },
+        "goal>royal-capture": {
+            "description": "Capturar una pieza específica del oponente",
+            "full": "Meta > Captura Real",
+            "tag": "M: Captura Real"
+        },
+        "goal>royal-escape": {
+            "description": "Quita una pieza específica del tablero",
+            "full": "Meta > Escape Real",
+            "tag": "M: Escape real"
+        },
+        "goal>score": {
+            "description": "El resultado está determinado por la puntuación de alguna manera",
+            "full": "Meta > Puntuación",
+            "tag": "M: Puntuación"
+        },
+        "goal>score>eog": {
+            "description": "Tener la puntuación más alta al final del juego",
+            "full": "Meta > Puntuación > Fin del juego",
+            "tag": "M: Puntuación (FDJ)"
+        },
+        "mechanic>capture": {
+            "description": "Piezas están capturadas",
+            "full": "Mecanismo > Captura",
+            "tag": "M: Captura"
+        },
+        "mechanic>convert": {
+            "description": "Los jugadores pueden convertir piezas enemigas en las suyas propias",
+            "full": "Mecanismos > Convertir",
+            "tag": "M: Convertir"
+        },
+        "mechanic>asymmetry": {
+            "description": "El juego es asimétrico",
+            "full": "Mecanismos > Asimetría",
+            "tag": "M: Asimetría"
+        },
+        "mechanic>hidden": {
+            "tag": "M: Oculto",
+            "description": "El juego incluye información oculta",
+            "full": "Mecánica > Información oculta"
+        },
+        "mechanic>merge": {
+            "description": "Las piezas se fusionan o se separan",
+            "full": "Mecanismos > Unir/Desglosar",
+            "tag": "M: Unir/Desglosar"
+        },
+        "mechanic>move": {
+            "description": "Las piezas pueden ser movidas",
+            "full": "Mecanismos > Mover",
+            "tag": "M: Mover"
+        },
+        "mechanic>move>group": {
+            "description": "Piezas pueden ser movidas como un grupo",
+            "full": "Mecanismos > Mover > Grupo",
+            "tag": "M: Mover (Grupo)"
+        },
+        "mechanic>move>sow": {
+            "description": "Las piezas se mueven sembrando",
+            "full": "Mecanismos > Mover > Sembrar",
+            "tag": "M: Mover (Sembrar)"
+        },
+        "mechanic>network": {
+            "description": "Los jugadores construyen redes",
+            "full": "Mecanismos > Red",
+            "tag": "M: Red"
+        },
+        "mechanic>place": {
+            "description": "Las piezas son colocadas",
+            "full": "Mecanismos > Lugar",
+            "tag": "M: Lugar"
+        },
+        "mechanic>program": {
+            "description": "Se programan secuencias de movimientos",
+            "full": "Mecanismos > Programa",
+            "tag": "M: Programa"
+        },
+        "mechanic>random": {
+            "description": "El juego contiene algún elemento aleatorio",
+            "full": "Mecanismos > Elementos aleatorios",
+            "tag": "M: Elementos aleatorios"
+        },
+        "mechanic>random>play": {
+            "description": "Los movimientos individuales del juego incluyen cierto grado de aleatoriedad",
+            "full": "Mecánicas > Aleatorio > Jugar",
+            "tag": "M: Aleatorio (Jugar)"
+        },
+        "mechanic>random>setup": {
+            "description": "La configuración se genera aleatoriamente de alguna manera",
+            "full": "Mecánica > Aleatorio > Configuración",
+            "tag": "M: Aleatorio (Configuración)"
+        },
+        "mechanic>set": {
+            "description": "Los jugadores recogen sets",
+            "full": "Mecánica > Colección de conjuntos",
+            "tag": "M: Colección de conjunto"
+        },
+        "mechanic>share": {
+            "description": "Al menos algunas piezas en el juego son compartidas por ambos jugadores",
+            "full": "Mecánica > Compartir",
+            "tag": "M: Compartir"
+        },
+        "mechanic>simultaneous": {
+            "description": "El juego incluye selección de acción simultánea",
+            "full": "Mecánica > Simultánea",
+            "tag": "M: Simultánea"
+        },
+        "mechanic>stack": {
+            "description": "Los jugadores manipulan pilas de piezas",
+            "full": "Mecánica > Pila",
+            "tag": "M: Pila"
+        },
+        "mechanic>vigil": {
+            "description": "Al menos una pieza debe tener línea de visión hacia algún elemento del tablero",
+            "full": "Mecánica > Vigilia",
+            "tag": "M: Vigilia"
+        },
+        "other>traditional": {
+            "description": "El juego es tradicional",
+            "full": "Otro > Tradicional",
+            "tag": "O: Tradicional"
+        },
+        "other>2+players": {
+            "description": "Admite más de 2 jugadores",
+            "full": "Otro > 2+ jugadores",
+            "tag": "O: 2+Jugadores"
+        },
+        "goal>score>race": {
+            "description": "Ser el primero del resto de na puntuación particular",
+            "full": "Meta > Puntuación > Competición",
+            "tag": "M: Puntuación (Competición)"
+        },
+        "goal>set": {
+            "description": "Recolecta conjuntos de piezas",
+            "full": "Meta > Establecer colección",
+            "tag": "M: Establece colección"
+        },
+        "goal>unify": {
+            "description": "Reúne todas tus piezas",
+            "full": "Meta > Unidad",
+            "tag": "M: Unidad"
+        },
+        "goal>vigil": {
+            "description": "Todas las piezas (o un subconjunto definido de ellas) deben tener línea de visión hacia algún elemento del tablero",
+            "full": "Meta > Vigilia",
+            "tag": "G: Vigilia"
+        },
+        "mechanic": {
+            "description": "Describe los mecanismos del juego en general",
+            "full": "Mecanismos",
+            "tag": "Mecanismos"
+        },
+        "mechanic>bearoff": {
+            "description": "Las jugadores llevan piezas del tablero",
+            "full": "Mecánica > Desenganchar",
+            "tag": "M: Desenganchar"
+        },
+        "mechanic>block": {
+            "description": "Los jugadores bloquean a cada otro",
+            "full": "Mecánica > Bloque",
+            "tag": "M: Bloque"
+        },
+        "mechanic>coopt": {
+            "description": "Los jugadores pueden interactuar con piezas opuestas",
+            "full": "Mecánicas > Co-opc",
+            "tag": "M: Co-Opc"
+        },
+        "mechanic>differentiate": {
+            "description": "Las piezas se diferencian de alguna manera esencial",
+            "full": "Mecánica > Diferenciar",
+            "tag": "M: Diferenciar"
+        },
+        "mechanic>displace": {
+            "description": "Los movimientos pueden provocar que piezas adicionales se muevan como un resultado",
+            "full": "Mecánica > Desplazamiento",
+            "tag": "M: Desplazamiento"
+        },
+        "mechanic>economy": {
+            "description": "Los jugadores deben gestionar alguna economía central",
+            "full": "Mecánicas > Gestionar economía",
+            "tag": "M: Gestionar economía"
+        },
+        "mechanic>enclose": {
+            "description": "Jugadores activamente encierran áreas o piezas",
+            "full": "Mecánicos > Encierre",
+            "tag": "M: Encierre"
+        }
+    },
+    "ChallengeResponseComment": "Comentario",
+    "YourMove": "Tú mueves",
+    "Challenge": "Desafío",
+    "Challenge Details": "Detalles de desafío",
+    "ChallengeClock": "La hora de inicio del reloj será de {{start}} horas, incrementada en {{inc}} horas después de cada movimiento, con un máximo de {{max}} horas.",
+    "ChallengeDescription": "Lanzaste un desafío para una partida de {{game}}",
+    "ChallengeDescriptionAccepter": "Aceptaste el desafío de {{challenger}} para una partida de {{game}}",
+    "ChallengedNoOthers": "{{game}}, no hay otros jugadores todavía.",
+    "ChallengedOthers": "{{game}}, otros jugadores: {{others}}",
+    "ChallengedTwoPlayers": "{{game}} contra {{other}}",
+    "ChallengeFrom": "{{game}} desafía desde {{challenger}}",
+    "ChallengeResponse": "Desafía esperando tu respuesta",
+    "ChallengeResponseCommentHelp": "Comenta al retador sobre tu respuesta.",
+    "ChallengeRevokeCommentHelp": "Comentario sobre la revocación de tu desafío.",
+    "ChallengeRevokeCommentHelp2": "Comentario sobre la revocación de tu aceptación previa.",
+    "ChallengeResponseDesc": "{{opp}} te retó a una partida de [{{game}}](/games/{{meta}})",
+    "ChallengerFirst": "El retador juega primero",
+    "ChallengerNotes": "Comentarios del retador: ",
+    "ChallengerSecond": "Retador juega segundo",
+    "ChallengeType": "Tipo de desafío",
+    "ChallengeTypeOpen": "Abrir",
+    "ChallengeTypeOpenDescription": "Cualquiera puede aceptar este desafío.",
+    "ChallengeTypeTargeted": "Cerrado",
+    "ChallengeTypeTargetedDescription": "Puede desafiar a jugadores específicos.",
+    "Change": "Cambiar",
+    "ChangeRenderOptions": "Cambiar opciones de pantalla del tablero",
+    "ChooseDisplay": "Elija como el tablero sería exhibido",
+    "ChooseClockHard": "¿Tiempo difícil?",
+    "ChooseClockIncrement": "Incremento del reloj (horas)",
+    "ChooseClockMax": "Reloj máximo (horas)",
+    "ChooseClockStart": "Inicio del reloj (horas)",
+    "ChooseColors": "Elige la combinación de colores",
+    "ChooseGame": "Elige un juego",
+    "ChooseLimit": "Número máximo de juegos activos",
+    "ChooseMove": "Elegir movimiento",
+    "ChooseNoExplore": "¿Inhabilitar la exploración?",
+    "ChooseOpponent": "Elija un oponente",
+    "ChooseRated": "¿Puntuado?",
+    "Claim": "Reclamar",
+    "ClaimTimeOut": "Reclama la victoria a tiempo",
+    "Close": "Cerrar",
+    "ColorBlind": "Daltónico",
+    "ColorPatterns": "Blanco y Negro",
+    "Comment": "Comentario",
+    "Comments": "Comentarios",
+    "CommentTooLong": "Los comentarios pueden ser como mucho 4K caracteres",
+    "Completed": "Completado",
+    "CompletedGames": "Juegos Completados",
+    "CompletedGamesCount_one": "juego completado",
+    "CompletedGamesCount_many": "juegos completados",
+    "CompletedGamesCount_other": "juegos completados",
+    "CompletedGamesList": "{{name}} Juegos Completados",
+    "CompletedGamesHelp": "Para que el panel de control sea más fácil de gestionar, los juegos desaparecen de esta lista 7 días después de la fecha de \"última vez vistos\". Haz clic en el botón \"Borrar\" para eliminarlo inmediatamente. Si se publican nuevos mensajes, los juegos antiguos volverán a aparecer, reiniciando el contador de 7 días. Visita la página de Juegos para acceder a los juegos que ya has completado.",
+    "CompleteMove": "Movimiento completo",
+    "Confirm": "Confirmar",
+    "ConfirmDeleteSubtree": "Elimina subárbol de exploración",
+    "ConfirmDeleteSubtreeDesc": "Esto eliminará el movimiento actual (explorado) y su subárbol. ¿Está seguro de que desea eliminar el subárbol?",
+    "ConfirmMove": "Confirmar mover submisión",
+    "ConfirmMoveDesc": "¿Estás seguro que quieres enviar este movimiento?",
+    "ConfirmMoveHelp": "Si prefiere que no se le solicite confirmación, puede inhabilitar esta opción en sus ajustes del usuario.",
+    "ConfirmResign": "Confirmar renuncia",
+    "ConfirmResignDesc": "¿Segura que quieres renunciar?",
+    "ConfirmTimeout": "Tiempo vencido",
+    "ConfirmTimeoutDesc": "Tu oponente se ha quedado sin tiempo. ¿Seguro que quieres reclamar la victoria?",
+    "ConfirmPremove": "Establecer movimiento previo",
+    "ConfirmPremoveDesc": "Este movimiento se enviará automáticamente cuando tu oponente realice el movimiento anterior. ¿Establezco este movimiento anticipado?",
+    "ConfirmPremoveChangeDesc": "Ya hay otro movimiento establecido como premovimiento en esta posición (o en su subárbol). ¿Desea cambiar a este movimiento en su lugar?",
+    "ClearPremove": "Vaciar movimiento previo",
+    "Current": "Actual",
+    "CurrentGamesCount_one": "juego actual",
+    "CurrentGamesCount_many": "juegos actuales",
+    "CurrentGamesCount_other": "juegos actuales",
+    "CurrentGamesList": "Juegos{{name}} Actuales",
+    "Custom": "Personales",
+    "DateEnded": "Fecha terminada",
+    "DateStarted": "Fecha iniciada",
+    "CustomCSS": "Adaptar CSS",
+    "Customize": "Personalizar",
+    "DebugModal": "Información depurante",
+    "DefaultDisplay": "Pantalla por defecto",
+    "Delete": "Eliminar",
+    "DeleteSubtree": "Elimina al subárbol de exploración",
+    "DisableMoveConfirm": "Pedir confirmación antes que el movimiento sea enviado",
+    "DisablePush": "Elevar notificación son actualmente habilitados",
+    "DisplayName": "Exhibir nombre",
+    "DisplayNameHelp": "Su nombre de pantalla es el nombre de la gente que verá. Es distinto del alias como usuario que utiliza cuando acceda. El nombre de la pantalla puede contener caracteres especiales como diacríticas. Consulte los términos de servicio como relacionado para nombres de pantalla.",
+    "DisplayNameChange": "El nombre nuevo solo será utilizado para juegos nuevos, no los juegos existentes o completados.",
+    "DisplayNameError": "{{name}} no está disponible, elija un nombre distinto.",
+    "Download": "Descargar",
+    "DownloadCompletedGames": "Descarga todos los informes de juego completados",
+    "Duration": "Duración",
+    "DurationHelp_one": "Este desafío caducará tras ser aceptado la primera vez.",
+    "DurationHelp_many": "Este desafío caducará tras ser aceptado las {{count}} veces.",
+    "DurationHelp_other": "Este desafío caducará tras ser aceptado las {{count}} veces.",
+    "DurationHelpPersistent": "Este desafío permanecerá disponible hasta que lo revoque.",
+    "EditTags": "Editar Etiquetas",
+    "EMail": "Dirección de correo-e",
+    "EMailCode": "Código del correo-e",
+    "EMailCodeHelp": "El sistema de acceso tan solo envía un código para la dirección del correo proporcionado. Introdúzcalo aquí.",
+    "EnableMoveConfirm": "No pregunte confirmación antes que sea enviado un movimiento",
+    "EnablePush": "Enviar notificaciones actualmente está inhabilitado",
+    "EnterMove": "Entrar/Pulsar un movimiento",
+    "Error": "¡Error!",
+    "EventsNav": "Eventos",
+    "ExplorationSetting": "Ajustes de exploración",
+    "ExploreGames": "Explorar Juegos",
+    "ExploreNever": "Nunca explorar",
+    "ExploreAsk": "Siempre preguntar",
+    "ExploreAlways": "Siempre explorar",
+    "Explore": "Explorar",
+    "ExportPNG": "Exportar imagen PNG",
+    "FilterStars": "Solo mostrar juegos con estrellas",
+    "ForcedUnrated": "Este juego no será puntuado debido a variantes seleccionadas.",
+    "Game": "Juego",
+    "GameAgainst": "{{game}} frente a {{opp}}",
+    "GameInfo": "Información del juego",
+    "GameInfoFor": "Información del juego para {{metaGame}}",
+    "GameIsOver": "El juego ha finalizado",
+    "GameIsOver1": "El juego ha finalizado. Ha ganado {{winner}}.",
+    "GameIsOver2": "El juego ha finalizado. Los siguientes jugadores han ganado: {{winners}} y {{lastWinner}}.",
+    "GameNoteModal": "Nota de juego",
+    "Games": "Juegos",
+    "GameSummary": "Bitácora de charla",
+    "GameComments": "Mover comentarios",
+    "GamesOf": "juegos de",
+    "GoBegin": "Muestra al comienzo del juego. Teclas: Inicio o 'h'.",
+    "GoCurrent": "Muestra la posición actual. Teclas: Fin o 'l'.",
+    "GoNext": "Muestra el siguiente movimiento (y primera variante si alguna). Teclas: flecha derecha o 'k'.",
+    "GoNextVar": "Muestra variante de movimiento siguiente. Teclas: flecha bajar o 'm'.",
+    "GoPrev": "Muestra movimiento anterior. Teclas: flecha izquierda o 'j'.",
+    "GoPrevVar": "Muestra variante previa. Teclas: flecha arriba o 'i'.",
+    "HardTime": "Tiempo difícil: el sistema forzará los límites del tiempo.",
+    "HardTimeSet": "Tiempo dificil",
+    "HasAnnotations": "Tiene comentarios tras el juego",
+    "HasComments": "Tiene comentarios",
+    "HasVariations": "Tiene variaciones post-juego",
+    "HelpClockHard": "Un jugador que se queda sin tiempo pierde automáticamente.",
+    "HelpClockIncrement": "Se añade tiempo tras cada movimiento.",
+    "HelpClockMax": "El tiempo restante no será mayor que éste.",
+    "HelpClockSoft": "El oponente debe reclamar manualmente la victoria.",
+    "HelpClockStart": "Tiempo transcurrido al inicio del juego.",
+    "HelpNoExploreTrue": "Se impedirá por la fuerza a los jugadores el uso de la función de exploración integrada.",
+    "HelpNoExploreFalse": "Los jugadores pueden optar por utilizar la función de exploración integrada.",
+    "HelpRated": "Este juego será puntuado.",
+    "HelpUnRated": "Este juego no será puntuado.",
+    "HideDetails": "Ocultar descripciones",
+    "HideSpoilers": "Oculta puntuaciones/evaluaciones estimadas hasta que el juego haya concluido",
+    "HideTours": "Ocultar tutoriales",
+    "History": "Historia",
+    "ImplementationNotes": "Notas de Implementación",
+    "InCheck": "¡El {{player}} está bajo control!",
+    "IncludeAcceptDrawOffer": "se ha ofrecido un sorteo. ¿Lo acepta?",
+    "IncludeDrawOffer": "incluir oferta de sorteo con movimiento",
+    "Increment": "incrementa {{inc}} horas",
+    "InvokePie": "Intercambiar asientos de jugadores",
+    "IssueChallenge": "Plantea un nuevo desafío",
+    "IssueStanding": "Plantea un nuevo desafío permanente",
+    "Legal": "Legal",
+    "Level": "¿Dónde le gustaría que se aplicaran estos colores?",
+    "LevelAll": "Para todos los juegos",
+    "LevelGame": "Solo para este juego",
+    "LevelMetaGame": "Para todo ({{game}} juegos",
+    "ListOf": "Listado de",
+    "LogIn": "Iniciar sesión",
+    "ClearMove": "Vaciar movimiento de entrada",
+    "ClickExpand": "Pulsar para expandir",
+    "Events": {
+        "Description": "Los eventos organizados son gestionados por particulares. El sistema permite a los organizadores crear eventos, a los jugadores registrarse y, posteriormente, a los organizadores lanzar partidas entre los jugadores registrados. El seguimiento de los resultados, la aplicación de límites de tiempo específicos y el anuncio de los ganadores son responsabilidad del organizador.",
+        "Name": "Eventos organizados"
+    },
+    "LogOut": "Salir de sesión",
+    "MakeMove": "Hacer un movimiento",
+    "ManageContexts": "Gestionar contextos de color",
+    "ManagePalettes": "Gestionar paletas",
+    "MarkPremove": "Marcar como pre‐movimiento",
+    "MaxTime": "tiempo máximo {{max}} en horas",
+    "Moves": "Mueve",
+    "MyColor": "Utilice mi color de reproductor preferido a pesar del orden del turno",
+    "MyDashboard": "Panel",
+    "NameBlank": "Introduzca un nombre",
+    "NameNotAvailable": "El nombre {{name}} no está disponible.",
+    "NewChallenge": "Desafío nuevo",
+    "NewProfile": "Crear perfil",
+    "NewRealStanding": "Nuevo desafío permanente",
+    "News": "Noticias",
+    "NewsPreamble": "La fuente autorizada y más actualizada de noticias sobre Abstract Play se encuentra en nuestro servidor de Discord (https://discord.abstractplay.com). ¡Únete a nosotros!",
+    "NextGame": "Juego siguiente",
+    "NextGameLast": "Viendo el último partido",
+    "NextGameNone": "Volver al panel de control",
+    "No": "No",
+    "NoChallengeResponse": "No hay desafíos que requieran su respuesta",
+    "NoExploreTrue": "La función de exploración integrada se desactivará de forma forzosa para este juego.",
+    "NoGames": "Actualmente no hay juegos que requieran tu atención.",
+    "NoOpponentMove": "No hay juegos que dependan del movimiento del oponente.",
+    "NoOtherPlayersAccepted": "Ningún otro jugador ha aceptado todavía.",
+    "NoRealStanding": "No se han presentado impugnaciones de legitimación",
+    "NoStandingChallenges": "No hay incidencias abiertas",
+    "Note": "Notas",
+    "Notes": "Notas: ",
+    "NotesHelp": "Notas para esta impugnación (máx. 128 caracteres).",
+    "NotHardTime": "Sin límite estricto",
+    "NotificationSettings": "Ajustes de notificaciones (guardar al instante)",
+    "NotifyLabel-yourturn": "su turno (dos veces diariamente)",
+    "NotifyLabel-challenges": "Impugnaciones (cada instancia)",
+    "NotifyLabel-gameStart": "Juego iniciado (cada instancia)",
+    "NotifyLabel-gameEnd": "Juego finalizado (cada instancia)",
+    "NotifyLabel-tournamentStart": "Torneo iniciado (cada instancia)",
+    "NotifyLabel-tournamentEnd": "Torneo finalizado (cada instancia)",
+    "NoWaitingResponse": "No hay desafíos pendientes para respuesta al oponente",
+    "NoYourMove": "No hay ningún juego esperando su movimiento.",
+    "NumChallenge": "En este juego habrá {{num}} jugadores. {{players}}. La distribución de los asientos será aleatoria.",
+    "NumChallenge2": "En este juego habrá 2 jugadores.",
+    "NumMoves": "# mueve",
+    "NumPlayers": "Número de jugadores",
+    "NumStandingChallenge": "En esta juego habrá {{num}} jugadores. La distribución de los asientos será aleatoria.",
+    "of": "de",
+    "OpponentMove": "Mueven los oponentes",
+    "OtherPlayers": "Hasta el momento, los siguientes jugadores están dispuestos a participar en el juego: {{others}}.",
+    "OtherPlayersAccepted": "Los siguientes jugadores ya han aceptado: {{others}}",
+    "Or": "o",
+    "Page": "Página",
+    "PendingSubmit": "Su solicitud de traslado aún debe ser presentada.",
+    "PickAnyVariant_normal": "Seleccione cualquiera de",
+    "PickAnyVariant_disabled": "Puede seleccionar cualquiera de",
+    "PickOneVariant_normal": "Selecciona uno de",
+    "PickOneVariant_disabled": "Puede seleccionar uno de",
+    "PickVariant_normal": "Selecciona variantes",
+    "PickVariant_disabled": "Variantes disponibles",
+    "PlayerList": "Jugadores",
+    "Players": "Jugadores",
+    "PleaseConsent": "¡Es necesario su consentimiento!",
+    "PlayersAccepted": "Hasta el momento, los siguientes jugadores están dispuestos a participar en el juego: {{others}}.",
+    "Playground": "Patio",
+    "Ply": "Capa",
+    "ProfileAnon": "¿Te gustaría ser anónimo?",
+    "ProfileAnonHelp": "Ser anónimo significa que nadie sabrá contra quién juega, y tus partidas completadas no se te atribuirán. Por lo tanto, no se calificarán. Incluso si cambias esta configuración más adelante, las partidas anteriores no se te podrán volver a atribuir.",
+    "ProfileConsent": "¿Acepta los términos de servicio y la directiva de privacidad de Abstract Play?",
+    "ProfileCountry": "Código del país",
+    "ProfileCountryHelp": "¡Cuéntale a la gente de dónde eres! Puedes escribir lo que quieras, pero si introduces un código de país ISO válido de dos o tres caracteres, se mostrará la bandera correspondiente en tu perfil.",
+    "ProfileFor": "Perfil del jugador {{player}}",
+    "ProfileName": "Exhibir nombre",
+    "ProfileNameHelp": "Este es el nombre que verán los demás usuarios del sitio. Se puede cambiar posteriormente. Debe ser único entre los nombres que se utilizan actualmente y los que se han utilizado recientemente.",
+    "ProfileTagline": "Un eslogan de formato libre (máx. 255 caracteres)",
+    "Publish": "Publicar exploración",
+    "PublishHelp": "Publica la exploración que realizaste durante el juego para que cualquiera pueda verla.",
+    "Random": "Aleatorio",
+    "RatedGame": "Este será un juego clasificado.",
+    "RatingsList": "{{name}} Clasificación",
+    "Reject": "Rechazar",
+    "RelatedSites": "Sitios relacionados",
+    "ResetDefault": "Restablecer a predeterminados",
+    "ResetExploration": "Volver a posición actual",
+    "Resign": "Renunciar",
+    "Respond": "Responder",
+    "Revoke": "Revocar",
+    "RevokeAcceptance": "Revocar aceptación",
+    "RevokeChallenge": "Revocar desafío",
+    "Save": "Guardar",
+    "SaveChanges": "Guardar Cambios",
+    "Search": "Buscar",
+    "Seating": "Asientos",
+    "Seating1": "Yo juego primero",
+    "Seating2": "Toco segundo",
+    "seatingMeFirst": "Tú jugarás primero.",
+    "seatingMeSecond": "Tu rival jugará primero.",
+    "seatingRandom": "Los asientos se asignarán al azar.",
+    "SeatingRandom": "Aleatorio",
+    "Select": "Seleccionar",
+    "SelectAGame": "Seleccione un juego",
+    "SelectGameDropdown": "seleccione un juego",
+    "SelectPlayerCount": "Seleccione un número de jugadores para este juego.",
+    "SelectSeating": "Selecciona la alineación, es decir, el orden en el que los jugadores comenzarán el partido.",
+    "Show": "Mostrar",
+    "SoftTime": "No se considera derrota por incomparecencia: para que se considere derrota por incomparecencia, el rival debe reclamarla.",
+    "StandardColors": "Estándar",
+    "StandingChallengeDescription": "Convocatoria abierta para una partida de {{game}}",
+    "StandingChallenges": "Abrir convocatorias para {{name}}",
+    "StandingChallenges2": "Abrir Desafíos",
+    "Statistics": "Estadística",
+    "stats_module_avgRatings": "Promedio de clasificación",
+    "stats_module_gameStats": "Estadísticas del juego",
+    "stats_module_highestSingle": "Todas las clasificaciones individuales",
+    "stats_module_numPlays": "Estadísticas del juego",
+    "stats_module_playerStats": "Estadística de jugador",
+    "stats_module_topPlayers": "Mejores jugadores",
+    "stats_module_siteStats": "Estadísticas del sitio",
+    "stats_module_tourneyStats": "Estadísticas del torneo",
+    "Status": "Estado",
+    "Submit": "Remitir",
+    "SubmitMove": "Entrega tu movimiento: {{move}}",
+    "tblHeaderAccepted": "Aceptado",
+    "tblHeaderChallenger": "Logro",
+    "tblHeaderClockIncrement": "Incrementar reloj",
+    "tblHeaderClockMax": "Reloj max",
+    "tblHeaderClockStart": "Inicio de reloj",
+    "tblHeaderFinished": "Juego finalizado",
+    "tblHeaderGameNumber": "Número de juego",
+    "tblHeaderGamesDrawn": "Juegos dibujados",
+    "tblHeaderGamesPlayed": "Juegos jugados",
+    "tblHeaderGamesWon": "Juegos ganados",
+    "tblHeaderHardClock": "¿Reloj por hardware?",
+    "tblHeaderMoves": "Mueves",
+    "tblHeaderPlayer": "Jugador {{num}}",
+    "tblHeaderPlayers": "Jugadores",
+    "tblHeaderRated": "¿Valorado?",
+    "tblHeaderRatedPlayer": "Jugador",
+    "tblHeaderRating": "Clasificación",
+    "tblHeaderRatingRank": "Intervalo",
+    "tblHeaderRespond": "Responder",
+    "tblHeaderSeating": "Asiento",
+    "tblHeaderStarted": "Juego iniciado",
+    "tblHeaderVariants": "Variantes",
+    "TimeRemaining": "Tiempo restante",
+    "ToggleFullSize": "Conmuta imagen de tablero de anchura completa",
+    "ToggleLayout": "Conmuta disposición vert/hor",
+    "ToggleZoom": "Conmutar zum",
+    "ToMove": "{{player}} para mover.",
+    "ToS": "Términos de servicio",
+    "ToSubmit": "Para entregar",
+    "ToSubmitMove": "Vaya a la posición donde puede entregar",
+    "TotalGames": "total de juegos",
+    "tour": {
+        "general": {
+            "Ignore": "Omite este torneo",
+            "Take": "Háblame de esta página"
+        },
+        "me": {
+            "challenges": "Esta sección enumera todos los desafíos que ha recibido y emitido.",
+            "completed": "Una vez que hayas terminado un juego, lo encontrarás aquí. Los juegos dejan automáticamente esta lista 48 horas tras la última visita. Puede eliminar manualmente un juego de esta lista pulsando en el botón Vaciar. Si alguien comenta sobre un juego completado, volverá a aparecer en esta lista y será en negrita.",
+            "issueChallenge": "Así es como se emiten desafíos para todos los diversos juegos. También puede emitir desafíos de la lista de juegos o de cualquiera de las otras páginas de lista (como la página de calificaciones).",
+            "settings": "Y finalmente, abre los ajustes de tu usuario para cambiar tu perfil, preferencias de notificación y ajustes de exploración. Puede inhabilitar estos torneos también allí.",
+            "theirturn": "Si es el turno de tu oponente en algún juego, se enumerarán aquí. También puedes ordenar esta tabla.",
+            "welcome": "¡Bienvenido a tu panel personalizado!",
+            "yourturn": "Si es tu turno en cualquier juego, se enumerarán aquí. Puede ordenar la tabla pulsando en cualquiera de los encabezados. Por defecto, la tabla está ordenada por el tiempo que queda en su reloj."
+        },
+        "play": {
+            "board": "Este es el corazón y el alma de cualquier juego: el tablero. Pulse en el tablero para hacer su movimiento. A medida que escribas, aparecerán sugerencias útiles encima del cuadro de entrada.",
+            "boardbuttons": "Bajo la junta es una serie de botones que dejó haces a cosas les gusta rotate la junta y tomar notas. La mayoría de importante es el icono de #tren, el cual deja escoges paletas de color alternativo y turno último-anotaciones de movimiento fuera y encima. Un color-ciego-la paleta amistosa es disponible para todos los juegos! Ninguno de estos botones hará daño vuestro juego, así que clic alrededor y explorar!",
+            "chat": "La parte mejor aproximadamente tocando los juegos es las personas tocas con. Esto es donde te puede hablar atrás y adelante con vuestro adversario. Los chats de usuario están reunidos aquí para vuestra comodidad, pero una lista de todos* los chats, incluyendo descripciones textuales de qué está pasando en el juego, es visible en el fondo de la pantalla. Recuerda que estos chats son públicos. Complacer ver nuestros plazos de servicio y política de privacidad para detalles.",
+            "move": "Aquí es donde entras en tu movimiento. La mayor parte del tiempo, puede hacer su movimiento simplemente haciendo clic en el tablero, pero algunos juegos tienen una selección de movimiento desplegable, y siempre puede escribir manualmente su movimiento también. Las sugerencias útiles aparecerán por encima de la caja de movimiento mientras entras en tus movimientos. Una característica importante es la exploración. Antes de presentar su movimiento, y mientras espera que su oponente se mueva, puede hacer nuevos movimientos para predecir cómo el juego podría proceder y formular su estrategia.",
+            "movelist": "Hablando de exploración, aquí puedes ver una lista de todos los movimientos realizados en el juego. Esto también incluirá los estados futuros previstos que hayas explorado. Mientras exploras, el estado actual del juego aparecerá resaltado con un recuadro. Puedes utilizar los botones situados encima de la lista de movimientos para desplazarte. También puedes usar las teclas de flecha y las teclas Inicio y Fin.",
+            "settings": "Y finalmente, abre los ajustes para cambiar tu perfil, preferencias de notación, y ajustes de exploración. Puede deshabilitar estos torneos también allí.",
+            "status": "En el área de estado se le dirá si cualquier variante está activa para este juego, así como otros datos específicos del juego como puntuaciones o número de piezas en mano.",
+            "welcome": "¡Esto es donde la acción sucede! La pantalla de juego para cada juego está estructurada de la misma manera. El nombre del juego siempre aparecerá aquí, frente y centro, junto con cualesquiera descriptores si el juego es parte de un torneo."
+        }
+    },
+    "Tournament": {
+        "Number": "Número de torneos",
+        "Tournaments": "Torneos automatizados",
+        "Completion": "Completado",
+        "CompletionRate": "{{ratio}} juegos ({{percent}}%)",
+        "Current": "Torneos en curso",
+        "Description": "Se trata de torneos que se celebran periódicamente para cualquier combinación de juego y variante. Siempre que haya suficiente interés, el siguiente torneo comenzará automáticamente una vez finalizado el anterior. Si has unido el recurring serie, entonces serás automáticamente registrado para el torneo próximo. Si ya te has «inscrito una vez» (indicado por un asterisco junto a tu nombre en la lista de participantes), serás eliminado cuando comience el próximo torneo.\n\nDespués de ser pedido, un torneo es abierto para inscripción para 2 semanas. Si después de la 2 inscripción de semana el periodo allí no es al menos 4 jugadores registraron, el torneo se quedará abierto hasta el número mínimo de jugadores une. Por otra parte los inicios de torneo, y el torneo próximo para la misma combinación/de variante del juego está abierto para inscripción. El torneo próximo empieza una semana después de los fines de torneo actuales.\n\nLos torneos constan de divisiones, con cada división siendo un Round-Robin teniendo como máximo 10 jugadores. Todos los juegos se desarrollan simultáneamente. Los controles de tiempo son: 36 horas de incremento, 72 horas de tiempo de inicio y 120 horas max de tiempo (sin descanso). Los jugadores se dividen en divisiones únicamente según su clasificación en el momento en que comienza el torneo. Los jugadores mejor clasificados juegan en la división 1, los siguientes en la división 2, y así sucesivamente. Los jugadores se dividen en divisiones de tal manera que todas tengan aproximadamente el mismo número de jugadores. El segundo criterio de desempate es la clasificación en el momento en que comenzó el torneo.",
+        "Division": "División {{num}}",
+        "Duplicate": "Ya hay un torneo para este juego y variante/s",
+        "Ended": "Fecha finalizada",
+        "History": "Historia",
+        "Join": "Unión recurrente",
+        "JoinOnce": "Unión única vez",
+        "Name": "Torneo {{metaGame}}",
+        "ProposeNew": "Solicita un torneo nuevo",
+        "New2": "Nuevos torneos",
+        "New1": "Nuevo torneo",
+        "NoneCompleted": "Aún no han sido completados los torneos.",
+        "NoneOld": "Aún no hay historia del torneo.",
+        "NumCompleted": "{{numCompleted}} de {{numGames}} juegos han sido completados",
+        "OldTitle": "Historia del Torneo",
+        "Old": "Historia de los torneos completados {{metaGameName}}",
+        "Open": "Torneos abiertos para dar de alta",
+        "Participants": "Participantes",
+        "Player": "Jugador",
+        "Position": "Posición",
+        "Rating": "Clasificación",
+        "RatingHelp": "Clasificación al inicio del torneo. Desempate final.",
+        "RecentlyCompleted": "Torneos recientemente completados",
+        "Score": "Puntuación",
+        "Starts": "Inicio del torneo",
+        "StartsWhen4": "Dentro de un día de culminar 4 participantes",
+        "StartsWhenPreviousDone": "Una semana tras el final del torneo actual",
+        "Started": "Fecha iniciada",
+        "TieBreakHelp": "Suma de los oponentes derrotados",
+        "VariantsName": "{{metaGame}} Torneo ({{variants}})",
+        "Visit": "Visita del torneo",
+        "Winner": "Ganador",
+        "DivisionWinner": "Ganador: {{winner}}",
+        "Withdraw": "Retiro del siguiente",
+        "TieBreak": "Desempate"
+    },
+    "TwoPlayersChallengeDescription": "Desafiaste a {{other}} en un juego de {{game}}(/games/{{meta}}",
+    "UnratedGame": "Esto será un juego sin puntuación.",
+    "UpdateNote": "Actualiza la nota del juego",
+    "UserSettings": "Ajustes de usuario",
+    "Variants": "Variantes",
+    "Variant": "Variante",
+    "View": "Vista",
+    "VisitGame": "Visitar juego",
+    "Waiting": "Esperando a otros jugadores para presentar sus movimientos",
+    "WaitingResponse": "Desafíos en espera de la respuesta del oponente",
+    "Winners": "Ganadores",
+    "Winning": "Marca este movimiento como ganador para este jugador",
+    "Yes": "Sí",
+    "YourChallenges": "Sus desafíos",
+    "YourGames": "Tus juegos",
+    "EnableZoom": "Habilita zum",
+    "RotateBoard": "Rotar tablero",
+    "RotateBoardCCW": "Rotar tablero en sentido contrario",
+    "RotateBoardCW": "Rotar tablero en sentido del reloj",
+    "TriggerRefresh": "Disparador de refresco",
+    "WelcomePlayer": "Panel para",
+    "RatedPlayersCount_one": "Jugador rankeado",
+    "RatedPlayersCount_many": "Jugadores rankeados",
+    "RatedPlayersCount_other": "Jugadores rankeados",
+    "SelectOpponents_one": "Seleccionar un oponente.",
+    "SelectOpponents_many": "Seleccionar a varios oponentes.",
+    "SelectOpponents_other": "Seleccionar {{count}} oponentes.",
+    "StandingChallengesCount_one": "abrir desafío",
+    "StandingChallengesCount_many": "abrir desafíos",
+    "StandingChallengesCount_other": "abrir desafíos"
+}

@@ -1,5 +1,5 @@
 {
-  "404": "404 Nicht gefunden",
+  "404": "404 Nicht Gefunden",
   "_src": {
     "404": "404 Not Found",
     "About": "About",
@@ -839,41 +839,41 @@
     "tour.play.status": "In the status area you'll be told if any variants are active for this game as well as other game-specific data like scores or number of pieces in hand.",
     "tour.play.welcome": "This is where the action happens! The play screen for every game is structured the same way. The name of the game will always appear here, front and centre, along with any descriptors like whether the game is part of a tournament."
   },
-  "About": "Über",
-  "Accept": "Annehmen",
+  "About": "Über uns",
+  "Accept": "Akzeptieren",
   "Active": "Aktiv",
-  "AcceptDraw": "Remisangebot annehmen",
-  "Accepted": "Angenommen!",
+  "AcceptDraw": "Unentschieden akzeptieren",
+  "Accepted": "Akzeptiert!",
   "All": "Alle",
-  "AlternativeDisplays": "Alternative Anzeigeoptionen",
+  "AlternativeDisplays": "Weitere Anzeigemöglichkeiten",
   "and": "und",
-  "Annotate": "Indikatoren für den letzten Zug anzeigen",
-  "AnnotationLevel": "Wo soll diese Auswahl angewendet werden?",
+  "Annotate": "Zeige die letzten Zughinweise an",
+  "AnnotationLevel": "Wo soll diese Einstellung vorgenommen werden?",
   "AvailableGames": "Verfügbare Spiele",
-  "BoardSettings": "Spielbretteinstellungen ändern",
+  "BoardSettings": "Spielbretteinstellungen anpassen",
   "CycleBoardDisplay": "Brettanzeige umschalten",
   "buttons": {
-    "pass": "Passen",
-    "takebutton": "Button nehmen",
-    "acceptpie": "Als Zweiter spielen",
-    "playsecond": "Als Zweiter spielen",
-    "draw": "Remis beanspruchen",
-    "playfirst": "Als Erster spielen",
-    "swap": "Farben tauschen",
+    "pass": "Verzögern",
+    "takebutton": "Aufnehmen-Taste",
+    "acceptpie": "Als zweiter spielen",
+    "playsecond": "Als zweiter spielen",
+    "draw": "Unentschieden fordern",
+    "playfirst": "Als erster spielen",
+    "swap": "Farben wechseln",
     "numbers": {
       "one": "Eins (1)",
       "two": "Zwei (2)",
       "three": "Drei (3)"
     },
     "pigs": {
-      "back": "Rückwärts bewegen",
+      "back": "Zurück bewegen",
       "forward": "Vorwärts bewegen",
-      "left": "Vorwärts nach links bewegen",
-      "right": "Vorwärts nach rechts bewegen",
+      "left": "Vorwärts, links bewegen",
+      "right": "Vorwärts, rechts bewegen",
       "cw": "Im Uhrzeigersinn drehen",
       "ccw": "Gegen den Uhrzeigersinn drehen",
-      "fire": "Laser feuern",
-      "hit": "Mit Rüssel schlagen"
+      "fire": "Laser abfeuern",
+      "hit": "Die Nase schwingen"
     },
     "carnac": {
       "tip_n": "Nach Norden kippen",
@@ -882,142 +882,142 @@
       "tip_w": "Nach Westen kippen"
     },
     "cifra": {
-      "lt": "Hell, Oben",
-      "lb": "Hell, Unten",
-      "dt": "Dunkel, Oben",
-      "db": "Dunkel, Unten",
-      "ll": "Hell, Links",
-      "lr": "Hell, Rechts",
-      "dl": "Dunkel, Links",
-      "dr": "Dunkel, Rechts"
+      "lt": "Hell, oben",
+      "lb": "Hell, unten",
+      "dt": "Dunkel, oben",
+      "db": "Dunkel, unten",
+      "ll": "Hell, links",
+      "lr": "Hell, rechts",
+      "dl": "Dunkel, links",
+      "dr": "Dunkel, rechts"
     },
     "arimaa": {
-      "gold99": "Schnelle Aufstellung",
-      "silver99e7": "Schnelle Aufstellung, Elefant e7",
-      "silver99d7": "Schnelle Aufstellung, Elefant d7"
+      "gold99": "Schnelle Einrichtung",
+      "silver99e7": "Schnelle Einrichtung, Elefant E7",
+      "silver99d7": "Schnelle Einrichtung, Elefant D7"
     }
   },
   "Cancel": "Abbrechen",
-  "CanPie": "Dieser Spieler hat die Option, den Sitzplatz zu wechseln.",
+  "CanPie": "Dieser Spieler hat die Möglichkeit, die Sitzplätze zu tauschen.",
   "categories": {
     "board": {
       "description": "Beschreibt die Eigenschaften der Spielfläche",
-      "full": "Brett",
-      "tag": "Brett"
+      "full": "Spielbrett",
+      "tag": "Spielbrett"
     },
     "board>3d": {
       "description": "Das Spielbrett ist dreidimensional",
-      "full": "Brett > 3D",
-      "tag": "Brett: 3D"
+      "full": "Spielbrett > 3D",
+      "tag": "Spielbrett: 3D"
     },
     "board>connect": {
-      "description": "Beschreibt, wie die Felder des Spielbretts miteinander verbunden sind",
-      "full": "Brett > Verbindung",
-      "tag": "Brett-Verbindung"
+      "description": "Beschreibt, wie sich die Zellen des Spielbrettes miteinander verbinden",
+      "full": "Spielbrett > Verbindungen",
+      "tag": "Verbindungen des Brettes"
     },
     "board>connect>hex": {
-      "description": "Felder sind hexagonal miteinander verbunden",
-      "full": "Brett > Verbindung > Hexagonal",
+      "description": "Die Zellen verbinden sich hexagonal",
+      "full": "Spielbrett > Verbindungen > Hexagonal",
       "tag": "Verbindung: Hex"
     },
     "board>connect>linear": {
-      "description": "Felder sind linear miteinander verbunden",
-      "full": "Brett > Verbindung > Linear",
+      "description": "Die Zellen verbinden sich linear",
+      "full": "Spielbrett > Verbindungen > Linear",
       "tag": "Verbindung: Linear"
     },
     "board>connect>other": {
-      "description": "Felder sind auf eine einzigartige Weise miteinander verbunden",
-      "full": "Brett > Verbindung > Sonstige",
-      "tag": "Verbindung: Sonstige"
+      "description": "Die Zellen verbinden sich auf eine einzigartige Weise",
+      "full": "Spielbrett > Verbindungen > Andere",
+      "tag": "Verbindung: Andere"
     },
     "board>connect>pent": {
-      "description": "Felder sind pentagonal miteinander verbunden",
-      "full": "Brett > Verbindung > Pentagonal",
+      "description": "Die Zellen verbinden sich pentagonal",
+      "full": "Spielbrett > Verbindungen > Pentagonal",
       "tag": "Verbindung: Pent"
     },
     "board>connect>rect": {
-      "description": "Felder sind orthogonal und diagonal miteinander verbunden",
-      "full": "Brett > Verbindung > Rechteckig",
-      "tag": "Verbindung: Rechteckig"
+      "description": "Die Zellen verbinden sich orthogonal und diagonal",
+      "full": "Spielbrett > Verbindungen > Rechteckig",
+      "tag": "Verbindung: Rect"
     },
     "board>connect>snub": {
-      "description": "Felder sind in einer Snubsquare-Matrix miteinander verbunden",
-      "full": "Brett > Verbindung > Snubsquare",
-      "tag": "Verbindung: Snub"
+      "description": "Die Zellen verbinden sich zu einer schiefrechteckige Matrix",
+      "full": "Spielbrett > Verbindungen > Schiefrechteckig",
+      "tag": "Verbindung: SchReEck"
     },
     "board>dynamic": {
-      "description": "Das Spielbrett baut sich dynamisch auf",
-      "full": "Brett > Dynamisch",
-      "tag": "Brett: Dynamisch"
+      "description": "Das Spielbrett wird dynamisch aufgebaut",
+      "full": "Spielbrett > Dynamisch",
+      "tag": "Spielbrett: Dynamisch"
     },
     "board>mancala": {
-      "description": "Wird auf einem traditionellen Mancala-Brett gespielt",
-      "full": "Brett > Mancala",
-      "tag": "Brett: Mancala"
+      "description": "Auf einem traditionellen Mancala-ähnlichen Brett gespielt",
+      "full": "Spielbrett > Mancala",
+      "tag": "Spielbrett: Mancala"
     },
     "board>none": {
-      "description": "Wird auf jeder flachen Oberfläche gespielt",
-      "full": "Brett > Keines",
-      "tag": "Brett: Keines"
+      "description": "Auf einer ebenen Fläche gespielt",
+      "full": "Spielbrett > Keins",
+      "tag": "Spielbrett: Keins"
     },
     "board>other": {
       "description": "Das Spielbrett ist einzigartig",
-      "full": "Brett > Sonstiges",
-      "tag": "Brett: Sonstiges"
+      "full": "Spielbrett > Andere",
+      "tag": "Spielbrett: Andere"
     },
     "board>shape": {
-      "description": "Beschreibt die Form des Spielbretts",
-      "full": "Brett > Form",
-      "tag": "Brettform"
+      "description": "Beschreibt die Form des Brettes",
+      "full": "Spielbrett > Form",
+      "tag": "Spielbrettform"
     },
     "board>shape>circle": {
       "description": "Das Spielbrett ist kreisförmig",
-      "full": "Brett > Form > Kreis",
+      "full": "Spielbrett > Form > Kreis",
       "tag": "Form: Kreis"
     },
     "board>shape>hex": {
-      "description": "Das Spielbrett hat die Form eines Sechsecks",
-      "full": "Brett > Form > Sechseck",
-      "tag": "Form: Hexagon"
+      "description": "Das Spielbrett ist hexagonal",
+      "full": "Spielbrett > Form > Hexagon",
+      "tag": "Form: Hex"
     },
     "board>shape>pent": {
-      "description": "Das Spielbrett hat die Form eines Fünfecks",
-      "full": "Brett > Form > Fünfeck",
-      "tag": "Form: Pentagon"
+      "description": "Das Spielbrett ist pentagonal",
+      "full": "Spielbrett > Form > Pentagon",
+      "tag": "Form: Pent"
     },
     "board>shape>oct": {
-      "description": "Das Spielbrett hat die Form eines Achtecks",
-      "full": "Brett > Form > Achteck",
-      "tag": "Form: Oktagon"
+      "description": "Das Spielbrett ist octagonal",
+      "full": "Spielbrett > Form > Octagon",
+      "tag": "Form: Oct"
     },
     "board>shape>other": {
-      "description": "Das Spielbrett hat eine einzigartige Form",
-      "full": "Brett > Form > Sonstige",
-      "tag": "Form: Sonstige"
+      "description": "Das Spielbrett ist einzigartig geformt",
+      "full": "Spielbrett > Form > Andere",
+      "tag": "Form: Andere"
     },
     "board>shape>rect": {
       "description": "Das Spielbrett ist rechteckig",
-      "full": "Brett > Form > Rechteck",
-      "tag": "Form: Rechteck"
+      "full": "Spielbrett > Form > Rechteckig",
+      "tag": "Form: Recht"
     },
     "board>shape>tri": {
-      "description": "Das Spielbrett hat die Form eines Dreiecks",
-      "full": "Brett > Form > Dreieck",
-      "tag": "Form: Dreieck"
+      "description": "Das Spielbrett ist dreieckig",
+      "full": "Spielbrett > Form > Dreieckig",
+      "tag": "Form: Drei"
     },
     "components>chess": {
-      "description": "Wird mit einem Schachset gespielt",
-      "full": "Material > Schach",
-      "tag": "M: Schach"
+      "description": "Gespielt mit Schachfiguren",
+      "full": "Teile > Schach",
+      "tag": "C: Schach"
     },
     "components>dice": {
-      "description": "Wird mit Würfeln gespielt",
-      "full": "Material > Würfel",
-      "tag": "M: Würfel"
+      "description": "Gespielt mit Würfeln",
+      "full": "Teile > Würfel",
+      "tag": "C: Würfel"
     },
     "components>decktet": {
-      "description": "Wird mit einem Decktet-Deck gespielt",
-      "full": "Material > Decktet",
+      "description": "Gespielt mit Decktet-karten",
+      "full": "Teile > Decktet",
       "tag": "M: Decktet"
     },
     "components>dominoes": {
@@ -1026,74 +1026,74 @@
       "tag": "M: Domino"
     },
     "components>piecepack": {
-      "description": "Wird mit Piecepack gespielt",
-      "full": "Material > Piecepack",
+      "description": "Gespielt mit Piecepack",
+      "full": "Teile > Piecepack",
       "tag": "M: Piecepack"
     },
     "components>poly": {
-      "description": "Wird mit Polyominos gespielt",
-      "full": "Material > Polyominos",
+      "description": "Gespielt mit Polyominoes",
+      "full": "Teile > Polyominoes",
       "tag": "M: Polyominos"
     },
     "components>pyramids": {
-      "description": "Wird mit Looney-Pyramiden gespielt",
-      "full": "Material > Looney Pyramids",
-      "tag": "M: Looney Pyramids"
+      "description": "Gespielt mit Looney Pyramiden",
+      "full": "Teile > Looney Pyramiden",
+      "tag": "C: Looney Pyramiden"
     },
     "components>shibumi": {
-      "description": "Wird mit einem Shibumi-Set gespielt",
-      "full": "Material > Shibumi",
+      "description": "Gespielt mit Shibumi-Set",
+      "full": "Teile > Shibumi",
       "tag": "M: Shibumi"
     },
     "components>simple": {
-      "description": "Wird mit einfachen Spielsteinen einheitlicher Größe gespielt, oft stapelbar, manchmal in vielen Farben",
-      "full": "Material > Einfach",
-      "tag": "M: Einfach"
+      "description": "Gespielt mit einfachen, gleichgroßen Spielsteinen, die oft stapelbar sind und manchmal viele Farben haben",
+      "full": "Teile > Einfach",
+      "tag": "C: Einfach"
     },
     "components>simple>1per": {
       "description": "Eine Farbe pro Spieler",
-      "full": "Material > Einfach > 1 pro Spieler",
-      "tag": "M: Einfach, 1/Spieler"
+      "full": "Teile > Einfach > 1 pro",
+      "tag": "C: Einfach, 1 pro"
     },
     "components>simple>2per": {
       "description": "Zwei Farben pro Spieler",
-      "full": "Material > Einfach > 2 pro Spieler",
-      "tag": "M: Einfach, 2/Spieler"
+      "full": "Teile > Einfach > 2 pro",
+      "tag": "C: Einfach, 2 pro"
     },
     "components>simple>1c": {
-      "description": "Eine Steinfarbe",
-      "full": "Material > Einfach > 1 Farbe",
-      "tag": "M: Einfach, 1 Farbe"
+      "description": "Einfarbige Spielsteine",
+      "full": "Teile > Einfach > 1 Farbe",
+      "tag": "C: Einfach, 1 Farbe"
     },
     "components>simple>2c": {
-      "description": "Zwei Steinfarben",
-      "full": "Material > Einfach > 2 Farben",
-      "tag": "M: Einfach, 2 Farben"
+      "description": "Zwei Farben von Spielsteinen",
+      "full": "Teile > Einfach > 2 Farben",
+      "tag": "C: Einfach, 2 Farben"
     },
     "components>simple>3c": {
-      "description": "Drei Steinfarben",
-      "full": "Material > Einfach > 3 Farben",
-      "tag": "M: Einfach, 3 Farben"
+      "description": "Drei Farben von Spielsteinen",
+      "full": "Teile > Einfach > 3 Farben",
+      "tag": "C: Einfach, 3 Farben"
     },
     "components>simple>4c": {
-      "description": "Vier Steinfarben",
-      "full": "Material > Einfach > 4 Farben",
-      "tag": "M: Einfach, 4 Farben"
+      "description": "Vier Farben von Spielsteinen",
+      "full": "Teile > Einfach > 4 Farben",
+      "tag": "C: Einfach, 4 Farben"
     },
     "components>simple>5c": {
-      "description": "Fünf Steinfarben",
-      "full": "Material > Einfach > 5 Farben",
-      "tag": "M: Einfach, 5 Farben"
+      "description": "Fünf Farben von Spielsteinen",
+      "full": "Teile > Einfach > 5 Farben",
+      "tag": "C: Einfach, 5 Farben"
     },
     "components>simple>7c": {
-      "description": "Sieben Steinfarben",
-      "full": "Material > Einfach > 7 Farben",
-      "tag": "M: Einfach, 7 Farben"
+      "description": "Sieben Farben von Spielsteinen",
+      "full": "Teile > Einfach > 7 Farben",
+      "tag": "C: Einfach, 7 Farben"
     },
     "components>simple>pnp": {
       "description": "Mit Papier und Stift spielbar",
-      "full": "Material > Einfach > Papier & Stift",
-      "tag": "M: Einfach, P&S"
+      "full": "Teile > Einfach > Papier & Stift",
+      "tag": "C: Einfach, P&S"
     },
     "components>special": {
       "description": "Wird mit spezialisierten Spielsteinen gespielt, meist unterschiedlich",
@@ -1101,54 +1101,54 @@
       "tag": "M: Spezial"
     },
     "goal>annihilate": {
-      "description": "Vernichte alle gegnerischen Spielsteine",
-      "full": "Ziel > Vernichten",
-      "tag": "Z: Vernichten"
+      "description": "Zerstöre alle gegnerischen Spielsteine",
+      "full": "Ziel > Zerstörung",
+      "tag": "G: Zerstörung"
     },
     "goal>area": {
-      "description": "Kontrolliere mehr Fläche (oder bestimmte Bereiche mit bestimmter Stärke) als dein Gegner",
-      "full": "Ziel > Gebietskontrolle",
-      "tag": "Z: Gebietskontrolle"
+      "description": "Kontrolliere mehr Fläche (oder bestimmte Abschnitte mit bestimmten Stärken) als dein Gegner",
+      "full": "Ziel > Flächenkontrolle",
+      "tag": "G: Flächenkontrolle"
     },
     "goal>arrange": {
-      "description": "Ordne Spielsteine in bestimmten Formen oder Längen an (z. B. n in einer Reihe)",
-      "full": "Ziel > Anordnen",
-      "tag": "Z: Anordnen"
+      "description": "Ordne Spielsteine in bestimmten Formen oder Längen an (z.B. n in einer Reihe)",
+      "full": "Ziel > Anordnung",
+      "tag": "G: Anordnung"
     },
     "goal>breakthrough": {
-      "description": "Erreiche die gegnerische Grundreihe oder das gegnerische Heimatgebiet mit ausreichender Stärke",
+      "description": "Erreiche gegnerische Heimreihe oder -fläche mit ausreichender Stärke",
       "full": "Ziel > Durchbruch",
-      "tag": "Z: Durchbruch"
+      "tag": "G: Durchbruch"
     },
     "goal>connect": {
-      "description": "Verbinde vorgegebene Ränder des Bretts oder Bereiche",
-      "full": "Ziel > Verbinden",
-      "tag": "Z: Verbinden"
+      "description": "Verbinde bestimmte Kanten des Spielbretts oder von Flächen",
+      "full": "Ziel > Verbindung",
+      "tag": "G: Verbindung"
     },
     "goal>cripple": {
-      "description": "Eliminiere eine kritische Mehrheit oder eine bestimmte Teilmenge gegnerischer Spielsteine",
+      "description": "Eliminiere kritische Mehrheit oder bestimmte Untereinheit von gegnerischen Spielsteinen",
       "full": "Ziel > Schwächen",
-      "tag": "Z: Schwächen"
+      "tag": "G: Schwächen"
     },
     "goal>evacuate": {
-      "description": "Evakuiere deine Spielsteine vom Spielbrett",
-      "full": "Ziel > Evakuieren",
-      "tag": "Z: Evakuieren"
+      "description": "Evakuiere deine Spielsteine von Spielbrett",
+      "full": "Ziel > Evakuierung",
+      "tag": "G: Evakuierung"
     },
     "goal>immobilize": {
-      "description": "Bringe den Gegner in eine Lage, in der er nicht mehr ziehen kann",
-      "full": "Ziel > Blockieren",
-      "tag": "Z: Blockieren"
+      "description": "Mache deinen Gegner bewegungsunfähig",
+      "full": "Ziel > Immobilisierung",
+      "tag": "G: Immobilisierung"
     },
     "goal>isolate": {
-      "description": "Isoliere einen Spielstein oder eine Teilmenge von Spielsteinen auf bestimmte Weise",
-      "full": "Ziel > Isolieren",
-      "tag": "Z: Isolieren"
+      "description": "Isoliere einen oder eine Untereinheit an Spielsteinen auf bestimmte Weise",
+      "full": "Ziel > Isolierung",
+      "tag": "G: Isolierung"
     },
     "goal>majority": {
-      "description": "Besitze mehr Spielsteine als der Gegner",
+      "description": "Habe mehr Spielsteine als dein Gegner",
       "full": "Ziel > Mehrheit",
-      "tag": "Z: Mehrheit"
+      "tag": "G: Mehrheit"
     },
     "goal>royal-capture": {
       "description": "Schlage einen bestimmten gegnerischen Spielstein",
