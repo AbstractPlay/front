@@ -104,6 +104,9 @@ jobs:
     - name: Deploy
       run: serverless client deploy --stage prod --no-confirm
 
+    - name: Publish locale files to S3
+      run: node bin/publish-locales.mjs --stage prod
+
     - name: Trigger docs rebuild
       if: github.event_name == 'push'
       run: |

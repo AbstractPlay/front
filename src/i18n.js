@@ -3,7 +3,6 @@ import { initReactI18next } from "react-i18next";
 import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { addResource } from "@abstractplay/gameslib";
-import en from "./locales/en/apfront.json";
 
 export const SUPPORTED_LANGUAGES = [
   { code: "en", label: "English" },
@@ -12,14 +11,10 @@ export const SUPPORTED_LANGUAGES = [
   { code: "it", label: "Italiano" },
 ];
 
-// Only apfront is loaded via HTTP; apgames/apresults come from gameslib bundles.
-const HTTP_NAMESPACE = "apfront";
+const HTTP_NAMESPACES = ["apfront", "apgames", "apresults"];
 
 const ensureGamesLibResources = () => {
-  // Do not pass the host i18n instance: gameslib's chatLog() uses its own i18next
-  // import, which can be a separate object in the webpack bundle. Passing the host
-  // caused addResource to skip gameslib's fallback init, so t() returned undefined.
-  const gamesLibI18n = addResource(i18n.language);
+  const gamesLibI18n = addResource(i18n.language, i18n);
   if (gamesLibI18n.language !== i18n.language) {
     void gamesLibI18n.changeLanguage(i18n.language);
   }
@@ -33,17 +28,14 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
-    ns: [HTTP_NAMESPACE],
-    defaultNS: HTTP_NAMESPACE,
+    ns: HTTP_NAMESPACES,
+    defaultNS: "apfront",
     fallbackLng: "en",
     supportedLngs: SUPPORTED_LANGUAGES.map((l) => l.code),
     nonExplicitSupportedLngs: true,
     load: "languageOnly",
     debug: process.env.NODE_ENV !== "production",
-    partialBundledLanguages: true,
-    resources: {
-      en: { apfront: en },
-    },
+    partialBundledLanguages: false,
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
@@ -65,12 +57,12 @@ i18n
   });
 
 i18n.on("failedLoading", (lng, ns) => {
-  if (ns !== HTTP_NAMESPACE) {
+  if (!HTTP_NAMESPACES.includes(ns)) {
     return;
   }
   console.warn(`i18n: failed to load ${lng}/${ns}, falling back to en`);
   if (lng !== "en" && !i18n.hasResourceBundle("en", ns)) {
-    console.error(`i18n: bundled fallback missing for ${ns}`);
+    console.error(`i18n: fallback missing for ${ns}`);
     return;
   }
   if (lng !== "en" && i18n.language === lng) {

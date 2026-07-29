@@ -101,6 +101,9 @@ jobs:
     - name: Deploy
       run: serverless client deploy --no-confirm
 
+    - name: Publish locale files to S3
+      run: node bin/publish-locales.mjs --stage dev
+
     - name: Create CloudFront invalidation
       uses: josemando/aws-cloudfront-create-invalidation@v1
       with:
