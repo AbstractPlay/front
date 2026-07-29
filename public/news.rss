@@ -3245,5 +3245,77 @@ Again, if you run into any issues, don&amp;apos;t hesitate to join us in #custom
       <guid isPermaLink="false">1518677092018159646</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>The front end has been modified in a few ways. Please let me know if something doesn&amp;apos;t work as you expect!
+- The main thing is a new playground, for now called &amp;quot;Lab.&amp;quot; It is now fully local, does not require you to be logged in, lets you properly explore in imported completed games, and doesn&amp;apos;t reset when changing colour modes. It also supports 2+ player games (but still not simultaneous games). It lets you save games for reloading and reviewing later.
+- I&amp;apos;ve added a &amp;quot;cycle display&amp;quot; button for quick flipping between alternative displays in fewer clicks (in both live games and the Lab). Clicking the Cog icon lets you select your default preferred view. Whenever you first visit a game, it defaults to your selected default. When you cycle, it remembers your current setting until you visit a different page or different game. (F5 refresh will keep your currently cycled view.) Picking icons for these functions is always a challenge. I always welcome concrete suggestions.
+- I made a number of pretty major changes to the live game play page that fixes a memory leak and streamlines a whole bunch of unnecessary rerenders, which should fix a number of longstanding issues.
+- I&amp;apos;ve implemented basic player blocking. **This only affects open challenges!** Blocking a player does not preclude you or them extending a direct challenge to the other, nor does it affect automated tournaments. Blocking a player simply means that they cannot see and accept your open challenges. Visit the Players page and click the button to block.
+- I&amp;apos;ve also removed the deprecated custom palette and context editing features (https://discord.com/channels/526483743180062720/1111447982345298121/1482131378433949909). Stored values will continue to be honoured until the database is fully cleaned out. The primary customization tool is the paintbrush icon under any game board. You can customize the overall site values by clicking the paintbrush icon in the navbar.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 06 Jul 2026 19:26:54 GMT</pubDate>
+      <guid isPermaLink="false">1523772248308191493</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>@João Pedro Neto  brings us five more games! Enjoy!
+- [Intermedium](https://play.abstractplay.com/games/intermedium) is a sowing game on a square board where the two players play on different diagonals. Capture by surrounding. Capture the opposing city to win.
+- In [Mutternland](https://play.abstractplay.com/games/mutternland), the board is initialized differently each game. Create a tower of four pieces to win.
+- [Stapeldammen](https://play.abstractplay.com/games/stapeldammen) is a Draughts variant in the style of Bashni, Lasca, and Emergo.
+- In [Swarm](https://play.abstractplay.com/games/swarm), singletons surround and capture opposing pieces, forming towers.
+- And finally, [Unstack](https://play.abstractplay.com/games/unstack) (similar to Intermedium) is a square sowing game but this time moves are orthogonal and capture is by replacement.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 13 Jul 2026 21:53:24 GMT</pubDate>
+      <guid isPermaLink="false">1526345832767557633</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve made some changes to the push notification system:
+- It now properly supports multiple devices.
+- From whatever device you&amp;apos;re using, you can still go to the user settings window (the cog icon next to your username in the nav) and enable/disable notifications *on that device*.
+- There&amp;apos;s an &amp;quot;Unregister all devices&amp;quot; button that will purge *all* your devices from your account at once.
+- I&amp;apos;ve made some general bug fixes to the service worker that will hopefully mean much more reliable push notifications going forward.
+
+To be clear, you have to opt in to the push notification system. It is off by default. If you want to try it, just go to the user settings as described above. You&amp;apos;ll then be notified whenever it&amp;apos;s your turn in a game. Let me know if you have any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 17 Jul 2026 19:53:24 GMT</pubDate>
+      <guid isPermaLink="false">1527765182560997419</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>When I published the push notification changes, I also pushed the playground changes, but I neglected to mention them. I renamed the Lab back to Playground (though both URLs work) and I&amp;apos;ve added basic annotation features to Playground. You can explore, mark moves with the default 1-2 character &amp;quot;nags,&amp;quot; and you can add commentary. You can save commented games to the Playground (stored on your device), and clicking the bug icon below the board gives you the option to copy your annotated game state to share it with others (they can just paste it into their on Playground). Let me know if something doesn&amp;apos;t work as you expect.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 21 Jul 2026 19:54:19 GMT</pubDate>
+      <guid isPermaLink="false">1529214964785745971</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve made changes to the renderer to make B&amp;amp;W patterns a more normal colour option. There are a few edge cases (like you can&amp;apos;t use patterns as strokes), but for the most part everything should work as you expect, and things should revert to sensible defaults on those edge cases. The paintbrush screen has changed to now include swatches for the colour blind colours and patterns. This will support mixing of colours like the second screen capture. This is the most prominent these built-in patterns have been, and I am certain issues will arise and people will have suggestions for changes/improvements. Absolutely reach out if something blows up, and feedback is always welcome. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 24 Jul 2026 19:46:36 GMT</pubDate>
+      <guid isPermaLink="false">1530300186243371089</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I have pushed a couple changes to production---one minor and one major:
+- Minor first: Spectators can no longer comment on in-progress games. You can still watch the game and see the chat, but you can&amp;apos;t contribute until the game has ended.
+- Major: I have rolled out site-wide translations for German, French, and Italian. These translations were done by AI, so I&amp;apos;m certain there will be oddities. I&amp;apos;m equally certain there will be some chunks of text here and there that are not translated. I will keep looking for and correcting every instance I can find, and feel free to report any such instances you come across.
+
+The language selection box is in the footer of every page. It does normal browser detection, and you can override by changing the dropdown. The preference is stored per device. If you want the *backend* to also translate (emails and push notifications), then you need to go to the user settings dialog (click the cog next to your username in the navigation) and select your preferred language there. It&amp;apos;s completely separate from the dropdown in the footer.
+
+The next thing I need to figure out is how to get [Weblate](https://hosted.weblate.org/projects/abstract-play/) to start synching again so that people can continue to contribute and can correct errors in the translation. I apologize for letting that linger so long. It will take me some time, but I will figure it out.
+
+As always, please let me know if anything does not work as you expect. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 29 Jul 2026 00:37:38 GMT</pubDate>
+      <guid isPermaLink="false">1531822979523153941</guid>
+    </item>
+    
   </channel>
 </rss>
