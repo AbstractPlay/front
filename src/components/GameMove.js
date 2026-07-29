@@ -2307,6 +2307,12 @@ function GameMove(props) {
   const commentingCompletedGame =
     !error && !!focus && !!gameRef.current && gameRef.current.gameOver;
 
+  const canComment =
+    !!globalMe &&
+    (commentingCompletedGame ||
+      gameRef.current?.me > -1 ||
+      globalMe.admin === true);
+
   const chatComments = useMemo(() => {
     void explorationVersion;
     if (!commentingCompletedGame) {
@@ -2596,6 +2602,7 @@ function GameMove(props) {
                             tooMuch={commentsTooLong}
                             gameid={gameRef.current?.id}
                             commentingCompletedGame={commentingCompletedGame}
+                            canComment={canComment}
                             userId={globalMe?.id}
                             handleGameMoveClick={handleGameMoveClick}
                             focusedPath={focus}
@@ -2757,6 +2764,7 @@ function GameMove(props) {
                     tooMuch={commentsTooLong}
                     gameid={gameRef.current?.id}
                     commentingCompletedGame={commentingCompletedGame}
+                    canComment={canComment}
                     userId={globalMe?.id}
                     handleGameMoveClick={handleGameMoveClick}
                     focusedPath={focus}

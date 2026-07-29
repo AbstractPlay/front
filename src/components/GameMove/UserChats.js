@@ -91,13 +91,15 @@ function UserChats(props) {
 
     return (
       <>
-        <GameCommentShort
-          key={`chatkey_${gameid}`}
-          handleSubmit={props.handleSubmit}
-          tooMuch={props.tooMuch}
-          comment={""}
-          commentingCompletedGame={props.commentingCompletedGame}
-        />
+        {props.canComment && (
+          <GameCommentShort
+            key={`chatkey_${gameid}`}
+            handleSubmit={props.handleSubmit}
+            tooMuch={props.tooMuch}
+            comment={""}
+            commentingCompletedGame={props.commentingCompletedGame}
+          />
+        )}
         <div className="chatTable" ref={chatTableRef}>
           {results.map((r, index) => {
             const isHighlighted =
