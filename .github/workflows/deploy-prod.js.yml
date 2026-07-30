@@ -18,9 +18,15 @@ on:
     types: [dep_update_prod]
   workflow_dispatch:
 
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: true
+
 jobs:
   deploy-prod:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/checkout@v3
@@ -47,19 +53,24 @@ jobs:
     - run: echo "//npm.pkg.github.com/:_authToken=${{secrets.PAT_READ_PACKAGES}}" >> .npmrc
 
     - name: Install NPM dependencies
-      run: npm i
+      run: npm ci
 
-    - name: Install latest renderer
-      run: npm install @abstractplay/renderer
+    - name: Install pinned AP dependencies
+      env:
+        AP_GAMESLIB_VERSION: ${{ github.event.client_payload.gameslib_version }}
+        AP_RENDERER_VERSION: ${{ github.event.client_payload.renderer_version }}
+        AP_SOURCE: ${{ github.event.client_payload.source_run_id && format('gameslib-ci-{0}', github.event.client_payload.source_run_id) || '' }}
+      run: node bin/install-ap-deps.mjs --stage prod
 
-    - name: install
-      run: npm list @abstractplay/renderer
-
-    - name: Install latest gameslib
-      run: npm install @abstractplay/gameslib
-
-    - name: gameslib version installed
-      run: npm list @abstractplay/gameslib
+    - name: Sync dependency manifests
+      if: github.event_name == 'repository_dispatch'
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "deps: sync AP versions [skip ci]"
+        file_pattern: |
+          ci-deps.json
+          package-lock.json
+          package.json
 
 # --- MACHINE TRANSLATION PIPELINE START ---
     - name: Run Machine Translation on Locales
