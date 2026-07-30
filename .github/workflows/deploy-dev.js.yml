@@ -63,6 +63,7 @@ jobs:
       run: node bin/install-ap-deps.mjs --stage dev
 
     - name: Sync dependency manifests
+      if: github.event_name == 'repository_dispatch'
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: "deps: sync AP versions [skip ci]"
