@@ -7,7 +7,7 @@ The front end is a static SPA deployed to S3 and served through CloudFront using
 | Stage | URL | S3 bucket | Branch / trigger |
 |-------|-----|-----------|-------------------|
 | `dev` | [play.dev.abstractplay.com](https://play.dev.abstractplay.com) | `abstract-play-dev` | `develop` push |
-| `prod` | [play.abstractplay.com](https://play.abstractplay.com) | `abstract-play-prod` | Version tags (`v*`) |
+| `prod` | [play.abstractplay.com](https://play.abstractplay.com) | `abstract-play-prod` | `main` push |
 
 Defined in [`serverless.yml`](../serverless.yml).
 
@@ -34,15 +34,16 @@ Defined in [`serverless.yml`](../serverless.yml).
 GitHub Actions workflows:
 
 - [`.github/workflows/deploy-dev.js.yml`](../.github/workflows/deploy-dev.js.yml) — push to `develop`
-- [`.github/workflows/deploy-prod.js.yml`](../.github/workflows/deploy-prod.js.yml) — version tags
+- [`.github/workflows/deploy-prod.js.yml`](../.github/workflows/deploy-prod.js.yml) — push to `main`
 
 CI steps:
 
-1. Install Serverless and npm dependencies (with GitHub Packages auth).
-2. Install `@abstractplay/renderer@development` and `@abstractplay/gameslib@development`.
-3. `npm run build-dev` or `build-prod`.
-4. `serverless client deploy`.
-5. Publish locale JSON files to S3 (`bin/publish-locales.mjs`).
+1. Install Serverless and run `npm ci` (with GitHub Packages auth).
+2. Run `bin/install-ap-deps.mjs` to install the pinned `@abstractplay/gameslib` and `@abstractplay/renderer` versions (see cascade below).
+3. Auto-commit `ci-deps.json`, `package-lock.json`, and synced `package.json` AP version fields when they change.
+4. `npm run build-dev` or `build-prod`.
+5. `serverless client deploy`.
+6. Publish locale JSON files to S3 (`bin/publish-locales.mjs`).
 
 Deployments do **not** use CloudFront invalidations. Cache freshness is handled by upload headers (see below) and content-hashed JS/CSS bundle filenames from Create React App.
 
@@ -62,7 +63,13 @@ The `serverless-single-page-app-plugin` rewrites unknown paths to `index.html` s
 
 ## Dependencies on other repos
 
-CI installs `@development` tags of gameslib and renderer on each deploy. Gameslib CI can also trigger a front rebuild via `repository_dispatch` when rules engine changes land.
+Published `gameslib` and `renderer` packages use immutable `1.0.0-ci-{GITHUB_RUN_ID}` versions. The cascade works like this:
+
+1. **renderer** publishes and dispatches `renderer_version` to **gameslib** and **designer**.
+2. **gameslib** installs that renderer, tests, publishes, then dispatches `gameslib_version` + `renderer_version` to front and the backends.
+3. Each consumer runs `npm ci`, then `bin/install-ap-deps.mjs`, which installs the exact versions from the dispatch payload (or falls back to [`ci-deps.json`](../ci-deps.json) on consumer-only pushes).
+
+You do not need to manually bump AP dependency versions in `package.json` after a gameslib or renderer publish — CI updates `ci-deps.json` and the lockfile automatically.
 
 ## Related
 
