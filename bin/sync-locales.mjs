@@ -7,6 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 
 const FRONT_LOCALES = path.join(ROOT, "public", "locales");
+const BUNDLE_LOCALES_EN = path.join(ROOT, "src", "locales", "en");
 const GAMESLIB_LOCALES = path.join(
   ROOT,
   "node_modules",
@@ -14,6 +15,8 @@ const GAMESLIB_LOCALES = path.join(
   "gameslib",
   "locales",
 );
+
+const BUNDLED_EN_NAMESPACES = ["apfront", "apgames", "apresults"];
 
 function copyLocaleTree(sourceRoot, namespaces) {
   if (!fs.existsSync(sourceRoot)) {
@@ -43,6 +46,31 @@ function copyLocaleTree(sourceRoot, namespaces) {
   }
 }
 
+function syncBundledEnglish() {
+  fs.mkdirSync(BUNDLE_LOCALES_EN, { recursive: true });
+
+  const missing = [];
+  for (const ns of BUNDLED_EN_NAMESPACES) {
+    const sourcePath = path.join(FRONT_LOCALES, "en", `${ns}.json`);
+    if (!fs.existsSync(sourcePath)) {
+      missing.push(sourcePath);
+      continue;
+    }
+    fs.copyFileSync(sourcePath, path.join(BUNDLE_LOCALES_EN, `${ns}.json`));
+  }
+
+  if (missing.length > 0) {
+    console.error("Missing English locale files required for bundled fallback:");
+    for (const p of missing) {
+      console.error(`  ${p}`);
+    }
+    process.exit(1);
+  }
+
+  console.log("Synced English locale files into src/locales/en for bundling");
+}
+
 fs.mkdirSync(FRONT_LOCALES, { recursive: true });
 copyLocaleTree(GAMESLIB_LOCALES, ["apgames", "apresults"]);
 console.log("Synced gameslib locale files into public/locales");
+syncBundledEnglish();

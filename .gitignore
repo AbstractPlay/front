@@ -30,4 +30,5 @@ bin/translate-debug/
 public/sitemap.xml
 public/locales/*/apgames.json
 public/locales/*/apresults.json
+src/locales/en/
 
