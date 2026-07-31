@@ -192,7 +192,19 @@ function deepMerge(target, source) {
   return target;
 }
 
-function getSrcTracking(targetData) {
+function localeRoots(sourcePath) {
+  const abs = path.resolve(sourcePath);
+  const localesDir = path.dirname(path.dirname(abs));
+  const parent = path.dirname(localesDir);
+  const repoRoot = path.basename(parent) === "public" ? path.dirname(parent) : parent;
+  return { localesDir, repoRoot };
+}
+
+function srcPathFor(repoRoot, langCode, fileName) {
+  return path.join(repoRoot, "locale-src", langCode, fileName);
+}
+
+function getEmbeddedSrcTracking(targetData) {
   if (targetData._src && typeof targetData._src === "object") {
     return { ...targetData._src };
   }
@@ -205,9 +217,30 @@ function getSrcTracking(targetData) {
   return legacy;
 }
 
-function getDiffLeaves(sourceData, targetData) {
+function loadSrcTracking(repoRoot, langCode, fileName, targetData) {
+  const srcPath = srcPathFor(repoRoot, langCode, fileName);
+  if (fs.existsSync(srcPath)) {
+    try {
+      return JSON.parse(fs.readFileSync(srcPath, "utf-8"));
+    } catch (error) {
+      console.error(`[${langCode}] ${fileName}: Invalid locale-src JSON, using embedded fallback: ${error.message}`);
+    }
+  }
+  return getEmbeddedSrcTracking(targetData);
+}
+
+function writeSrcTracking(repoRoot, langCode, fileName, srcTracking) {
+  const srcPath = srcPathFor(repoRoot, langCode, fileName);
+  const sortedSrc = {};
+  for (const key of Object.keys(srcTracking).sort()) {
+    sortedSrc[key] = srcTracking[key];
+  }
+  fs.mkdirSync(path.dirname(srcPath), { recursive: true });
+  fs.writeFileSync(srcPath, JSON.stringify(sortedSrc, null, 2) + "\n");
+}
+
+function getDiffLeaves(sourceData, targetData, srcTracking) {
   const sourceLeaves = collectLeaves(sourceData);
-  const srcTracking = getSrcTracking(targetData);
   const diff = {};
 
   for (const [leafPath, sourceValue] of Object.entries(sourceLeaves)) {
@@ -347,14 +380,8 @@ function writeDebugSuccess({ langCode, fileName, chunkIndex, rawText }) {
   console.log(`[${langCode}] ${fileName}: Debug response saved to ${rawPath}`);
 }
 
-function reconstructTargetData(sourceData, targetData) {
-  const srcTracking = getSrcTracking(targetData);
-  const sortedSrc = {};
-  for (const key of Object.keys(srcTracking).sort()) {
-    sortedSrc[key] = srcTracking[key];
-  }
-
-  const cleanTargetData = { _src: sortedSrc };
+function buildCleanTargetData(sourceData, targetData) {
+  const cleanTargetData = {};
   for (const key of Object.keys(sourceData)) {
     if (key.startsWith("_")) continue;
     if (targetData[key] !== undefined) {
@@ -364,9 +391,10 @@ function reconstructTargetData(sourceData, targetData) {
   return cleanTargetData;
 }
 
-function writeTargetFile(targetPath, sourceData, targetData) {
-  const cleanTargetData = reconstructTargetData(sourceData, targetData);
+function writeTargetFile(targetPath, repoRoot, langCode, fileName, sourceData, targetData, srcTracking) {
+  const cleanTargetData = buildCleanTargetData(sourceData, targetData);
   fs.writeFileSync(targetPath, JSON.stringify(cleanTargetData, null, 2) + "\n");
+  writeSrcTracking(repoRoot, langCode, fileName, srcTracking);
 }
 
 function summarizeChunkKeys(chunk) {
@@ -478,8 +506,7 @@ async function translateFile(ai, sourcePath) {
   }
 
   const sourceData = JSON.parse(fs.readFileSync(sourcePath, "utf-8"));
-  const dirPath = path.dirname(sourcePath);
-  const baseDir = path.dirname(dirPath);
+  const { localesDir, repoRoot } = localeRoots(sourcePath);
   const fileName = path.basename(sourcePath);
 
   for (const lang of TARGET_LANGUAGES) {
@@ -487,7 +514,7 @@ async function translateFile(ai, sourcePath) {
       break;
     }
 
-    const targetDir = path.join(baseDir, lang.code);
+    const targetDir = path.join(localesDir, lang.code);
     const targetPath = path.join(targetDir, fileName);
 
     if (!fs.existsSync(targetDir)) {
@@ -504,7 +531,8 @@ async function translateFile(ai, sourcePath) {
       }
     }
 
-    const diffLeaves = getDiffLeaves(sourceData, targetData);
+    let srcTracking = loadSrcTracking(repoRoot, lang.code, fileName, targetData);
+    const diffLeaves = getDiffLeaves(sourceData, targetData, srcTracking);
     const leavesToTranslate = Object.keys(diffLeaves);
 
     if (leavesToTranslate.length === 0) {
@@ -516,10 +544,6 @@ async function translateFile(ai, sourcePath) {
     console.log(
       `[${lang.code}] ${fileName}: Translating ${leavesToTranslate.length} new/updated leaves in ${chunks.length} chunk(s)...`,
     );
-
-    if (!targetData._src || typeof targetData._src !== "object") {
-      targetData._src = getSrcTracking(targetData);
-    }
 
     let langFailed = false;
     let completedChunks = 0;
@@ -541,10 +565,10 @@ async function translateFile(ai, sourcePath) {
         deepMerge(targetData, nestedChunk);
 
         for (const leafPath of Object.keys(chunk)) {
-          targetData._src[leafPath] = diffLeaves[leafPath];
+          srcTracking[leafPath] = diffLeaves[leafPath];
         }
 
-        writeTargetFile(targetPath, sourceData, targetData);
+        writeTargetFile(targetPath, repoRoot, lang.code, fileName, sourceData, targetData, srcTracking);
         completedChunks++;
         partialProgress = true;
 
