@@ -3,6 +3,9 @@ import { initReactI18next } from "react-i18next";
 import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { addResource } from "@abstractplay/gameslib";
+import enApfront from "./locales/en/apfront.json";
+import enApgames from "./locales/en/apgames.json";
+import enApresults from "./locales/en/apresults.json";
 
 export const SUPPORTED_LANGUAGES = [
   { code: "en", label: "English" },
@@ -42,7 +45,14 @@ i18n
     nonExplicitSupportedLngs: true,
     load: "languageOnly",
     debug: process.env.NODE_ENV !== "production",
-    partialBundledLanguages: false,
+    partialBundledLanguages: true,
+    resources: {
+      en: {
+        apfront: enApfront,
+        apgames: enApgames,
+        apresults: enApresults,
+      },
+    },
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
@@ -69,7 +79,7 @@ i18n.on("failedLoading", (lng, ns) => {
   }
   console.warn(`i18n: failed to load ${lng}/${ns}, falling back to en`);
   if (lng !== "en" && !i18n.hasResourceBundle("en", ns)) {
-    console.error(`i18n: fallback missing for ${ns}`);
+    console.error(`i18n: bundled fallback missing for ${ns}`);
     return;
   }
   if (lng !== "en" && i18n.language === lng) {
