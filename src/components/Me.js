@@ -519,7 +519,7 @@ function Me(props) {
         globalMe.challengesReceived.length === 0 ? null : (
           <div className="content has-text-centered">
             <p style={{ color: "var(--secondary-color-1)" }}>
-              <a href="#challenged">You have been challenged!</a>
+              <a href="#challenged">{t("me.challengedNotice")}</a>
             </p>
           </div>
         )}
@@ -561,7 +561,7 @@ function Me(props) {
                     href={`https://records.abstractplay.com/player/${globalMe.id}.json`}
                   >
                     <button className="button apButton is-small">
-                      Download all your completed game reports
+                      {t("me.downloadCompletedReports")}
                     </button>
                   </a>
                 </div>

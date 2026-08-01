@@ -612,7 +612,24 @@
   "Error": "Erreur !",
   "Events": {
     "Description": "Les événements organisés sont gérés par des particuliers. Le système permet aux organisateurs de créer des événements, aux joueurs de s'inscrire, puis aux organisateurs de lancer des parties entre les joueurs inscrits. Le suivi des résultats, l'application des limites de temps détaillées et l'annonce des gagnants incombent à l'organisateur.",
-    "Name": "Événements organisés"
+    "Name": "Événements organisés",
+    "newEvent": "Nouvel événement",
+    "draftEvents": "Brouillons d'événements",
+    "openForRegistration": "Inscriptions ouvertes",
+    "activeEvents": "Événements en cours",
+    "completedEvents": "Événements terminés",
+    "createEvent": "Créer un événement",
+    "createEventModalTitle": "Créer un nouvel événement",
+    "createEventHelp": "Ces valeurs pourront être modifiées ultérieurement. Les dates et heures doivent être fournies en UTC.",
+    "createEventContact": "Pour créer un événement, veuillez contacter l'un des développeurs sur <1>Discord</1>.",
+    "noOpenRegistration": "Aucun événement n'est actuellement ouvert aux inscriptions.",
+    "eventNameLabel": "Nom de l'événement",
+    "eventNameRequired": "L'événement doit avoir un nom.",
+    "maxPlayersLabel": "Nombre maximum de joueurs",
+    "maxPlayersHelp": "Une valeur de 0 signifie sans limite.",
+    "eventDateLabel": "Date de l'événement",
+    "eventTimeLabel": "Heure de l'événement",
+    "dateTimeRequired": "La date et l'heure sont requises et doivent être situées dans le futur."
   },
   "EventsNav": "Événements",
   "ExplorationSetting": "Paramètre d'exploration",
@@ -1016,5 +1033,173 @@
   "YourChallenges": "Vos défis",
   "YourGames": "Vos parties",
   "YourMove": "Votre tour",
-  "EnableZoom": "Activer le zoom"
+  "EnableZoom": "Activer le zoom",
+  "IssueChallengeLabel": "Lancer un défi",
+  "TournamentsLink": "Tournois",
+  "Block": "Bloquer",
+  "Unblock": "Débloquer",
+  "TotalPlayers": "joueurs au total",
+  "TotalChallenges": "défis au total",
+  "TableView": "Tableau",
+  "GridView": "Grille",
+  "Reshuffle": "Mélanger à nouveau",
+  "ShowAll": "Tout afficher",
+  "ShowAllCountries": "--Tout afficher--",
+  "a11y": {
+    "hideShow": "masquer/afficher",
+    "moveLeft": "déplacer vers la gauche",
+    "moveRight": "déplacer vers la droite"
+  },
+  "about": {
+    "intro": "Abstract Play est un espace permettant de jouer à des jeux de stratégie abstraite contre d'autres joueurs en mode asynchrone (vous n'avez pas besoin d'être en ligne en même temps). Nous sommes spécialisés dans les jeux originaux à information pure et parfaite sans aucun élément de hasard, mais nous proposons également plusieurs jeux incluant du hasard (par exemple, des dés et des cartes). L'inscription et le jeu sur le site sont entièrement gratuits.",
+    "highlights": "Voici quelques-uns des jeux les plus actifs cette semaine. Consultez la <1>liste complète des jeux</1> pour plus de détails.",
+    "highlightsLink": "liste complète des jeux"
+  },
+  "notFound": {
+    "body": "Aucune page n'a été trouvée à l'adresse <1>{{path}}</1>. Veuillez utiliser la barre de navigation pour réessayer. Si le problème persiste, veuillez <2>publier un rapport de bogue sur notre serveur Discord</2>.",
+    "reportLink": "publier un rapport de bogue sur notre serveur Discord"
+  },
+  "footer": {
+    "wiki": "Wiki",
+    "discord": "Discord",
+    "boardGameGeek": "BoardGameGeek",
+    "wishlist": "Liste de souhaits",
+    "github": "GitHub",
+    "legalLink": "Conditions d'utilisation et Politique de confidentialité",
+    "betaBanner": "Le site est actuellement en version BETA !",
+    "feedback": "Nous sommes très satisfaits des fonctionnalités principales, mais nous aimerions avoir des retours concrets des utilisateurs pour améliorer le site.",
+    "feedbackJoin": "N'hésitez pas à nous rejoindre sur <1>Discord</1> et à nous faire savoir si vous rencontrez des difficultés ou si vous avez des idées."
+  },
+  "explore": {
+    "intro": "Cette page vous permet d'explorer différentes manières de trier la liste des jeux. Sélectionnez la vue souhaitée ci-dessous. En cliquant sur le nom d'un jeu, vous accéderez à sa page de présentation contenant des informations supplémentaires.",
+    "views": {
+      "all": {
+        "title": "Tous les jeux"
+      },
+      "newest": {
+        "title": "Plus récents",
+        "description": "Date à laquelle le jeu a été ajouté au site."
+      },
+      "hotRaw": {
+        "title": "Les plus populaires (nb de coups/jour)",
+        "description": "Nombre moyen de coups joués par jour sur la période."
+      },
+      "hotPlayers": {
+        "title": "Les plus populaires (nb de joueurs/jour)",
+        "description": "Nombre moyen de joueurs uniques par jour sur la période."
+      },
+      "playerSum": {
+        "title": "Plus grand nombre de joueurs",
+        "description": "Nombre total de joueurs uniques ayant joué à ce jeu sur la période."
+      },
+      "hindex": {
+        "title": "h-index le plus élevé",
+        "description": "L'`h-index` d'un jeu correspond au nombre de joueurs différents ayant joué à ce jeu au moins autant de fois. Ainsi, un `h-index` de 5 signifie que 5 joueurs différents ont joué à ce jeu au moins 5 fois."
+      },
+      "stars": {
+        "title": "Plus d'étoiles",
+        "description": "Nombre de joueurs ayant ajouté ce jeu à leurs favoris."
+      },
+      "completed": {
+        "title": "Plus grand nombre de parties terminées par semaine (global)",
+        "description": "Le nombre de parties terminées divisé par le nombre total de semaines (ou fractions de semaine) pendant lesquelles le jeu a été disponible."
+      },
+      "completedRecent": {
+        "title": "Plus grand nombre de parties terminées par semaine (récent)",
+        "description": "Nombre de parties terminées par semaine au cours des trois derniers mois (environ)."
+      },
+      "random": {
+        "title": "Ordre aléatoire",
+        "description": "Jeux dans un ordre aléatoire. Cliquez sur le bouton pour mélanger à nouveau."
+      }
+    }
+  },
+  "stats": {
+    "selectStatistic": "Sélectionner une statistique",
+    "downloadSummary": "Télécharger toutes les statistiques de synthèse",
+    "downloadReports": "Télécharger tous les rapports de parties",
+    "ratingsNote": "Veuillez noter que les classements indiqués ici sont générés de manière dynamique et peuvent différer du classement statique visible ailleurs. Nous travaillons à harmoniser tout cela.",
+    "generatedDaily": "Les statistiques sont générées quotidiennement à 6h00 UTC.",
+    "recordsBetween": "Les données analysées incluent les parties terminées entre {{oldest}} et {{newest}} ({{days}}).",
+    "day_one": "{{count}} jour",
+    "day_other": "{{count}} jours",
+    "year_one": "{{count}} an",
+    "year_other": "{{count}} ans",
+    "playersPlayedGames": "Pendant cette période, {{numPlayers}} joueurs ont joué {{numGames}} parties.",
+    "explanations": {
+      "highestSingle": "Liste de tous les classements enregistrés. Le système ignore les parties explicitement marquées comme non classées, ainsi que celles qui se terminent avant la réalisation de trois coups. Le classement Elo commence à 1200 avec un facteur *K* fixe de 30. Le classement Glicko utilise l'algorithme version 2, les valeurs de départ par défaut (classement initial à 1500) et une période d'évaluation de soixante jours (à compter du premier jour où un jeu particulier a été enregistré). Les classements Glicko sont présentés sous la forme d'un intervalle de confiance à 95 %. Plus cet intervalle est étroit, plus le système est confiant dans l'évaluation. Enfin, TrueSkill est un système de classement utilisé par Microsoft dans divers jeux en ligne. Les paramètres par défaut ont été utilisés (plage de 0 à 50, départ à 25).",
+      "avgRatings": "Le classement moyen est simplement la moyenne brute de tous les classements Elo enregistrés pour ce joueur. La moyenne pondérée est pondérée par le nombre de parties jouées. Par exemple, si vous aviez un classement de 1300 dans un jeu joué 10 fois et de 1200 dans un jeu joué seulement 2 fois, votre classement moyen serait de 1250, mais votre moyenne pondérée serait de 1283.",
+      "topPlayers": "Ce tableau liste chaque combinaison de jeu et de variante disponible, ainsi que le joueur ayant le classement Elo le plus élevé pour cette combinaison.",
+      "numPlays": "Ce tableau indique pour chaque jeu le nombre de parties jouées, le nombre de joueurs uniques et l'`h-index` du jeu. L'h-index d'un jeu est le nombre de joueurs ayant joué à ce jeu au moins autant de fois (un h-index de 5 signifie donc que 5 joueurs différents ont joué à ce jeu au moins 5 fois). Un histogramme des parties terminées pour ce jeu est également proposé. L'aperçu affiche les 10 dernières semaines, la semaine la plus récente étant à droite. En cliquant sur l'aperçu, vous afficherez l'historique complet des parties terminées, par tranche de sept jours, avec la semaine la plus récente à droite.",
+      "playerStats": "Ceci affiche chaque joueur enregistré avec son nombre total de parties jouées, le nombre de jeux uniques et le nombre d'adversaires différents affrontés. Cela fournit également un `h-index`, qui représente le nombre de jeux auxquels vous avez joué au moins autant de fois (ex. si vous avez joué à trois jeux différents une seule fois chacun, votre indice est de 1. Dès que vous aurez joué à ces trois jeux au moins trois fois *chacun*, l'indice passera à 3). Il existe également un `h-index` pour les adversaires affrontés. Un histogramme d'activité est également fourni, montrant le nombre de parties terminées chaque semaine, la semaine la plus récente étant à droite. L'aperçu montre les dix semaines les plus récentes. En cliquant dessus, vous verrez l'historique complet.",
+      "gameStats": "Ce tableau montre chaque combinaison de jeu et de variante avec le nombre de parties enregistrées, la durée moyenne de la partie (nombre de coups), la durée médiane et le taux de victoires du premier joueur. **Les statistiques de victoire du premier joueur doivent être traitées avec précaution !** La taille de l'échantillon est réduite et biaisée. De nombreux facteurs confondants pourraient expliquer un taux extrême. Notez que ce taux ne prend absolument pas en compte l'utilisation de la règle du gâteau (pie rule). Il s'agit d'une mesure de la fréquence à laquelle le premier joueur (quel que soit le nombre de fois où la personne assise à cette place change) remporte la partie. Les nuls comptent pour une demi-victoire pour le premier joueur (ainsi, un jeu joué trois fois avec une victoire, une défaite et une partie nulle aurait un pourcentage de victoires du premier joueur de 50 %).",
+      "tourneyStats": "Affiche chaque joueur ayant participé aux tournois automatisés ainsi que leurs statistiques récapitulatives, notamment le nombre de victoires, le nombre de classements dans le top 50 % et le score. Votre score est la somme des points reçus dans chaque tournoi. Les points sont attribués sur 100 en fonction de votre classement : la première place obtient 100 points et la dernière place n'en obtient aucun."
+    },
+    "siteStats": {
+      "weekBuckets": "Les parties sont comptabilisées par tranches de sept jours. La barre la plus à gauche correspond à la première semaine où des parties terminées ont été enregistrées. La barre la plus à droite est la semaine la plus récente (ou sa fraction).",
+      "cumulativePastYear": "Cumulé (année écoulée)",
+      "average": "Moyenne",
+      "median": "Médiane",
+      "middleHalf": "Moitié centrale",
+      "gamesCompletedPerWeek": "Parties terminées par semaine",
+      "weekNumber": "Semaine n°",
+      "completedGames": "Parties terminées",
+      "playersCompletedPerWeek": "Nombre de joueurs terminant des parties par semaine",
+      "numberOfPlayers": "Nombre de joueurs",
+      "firstTimersIntro": "Ce graphique suit le nombre d'utilisateurs ayant terminé leur première partie cette semaine-là. Les chiffres sont cumulatifs, ce qui signifie qu'ils ne diminueront jamais, et le point le plus à droite devrait toujours indiquer le nombre actuel d'utilisateurs enregistrés. Il est bien sûr attendu que les chiffres finissent par se stabiliser à un moment donné, mais cela donne une indication de la croissance.",
+      "firstTimersCumulative": "Premières parties terminées, cumulatif",
+      "usersFirstGame": "Utilisateurs ayant terminé leur première partie",
+      "countryIntro": "Ceci montre la répartition des pays depuis lesquels les joueurs déclarent jouer. Inclut uniquement les codes pays que le système peut interpréter.",
+      "timeoutRate": "Le taux cumulé total de dépassement de temps est de {{rate}}.",
+      "timeoutRatePerWeek": "Taux de dépassement de temps par semaine",
+      "timeoutRateAxis": "Taux de dépassement de temps",
+      "hoursPerMoveIntro": "Les \"heures par coup\" sont calculées comme une moyenne par partie. Les parties qui se terminent par un dépassement de temps ou dès le premier tour ne sont pas prises en compte. Une boîte à moustaches montre les \"heures par coup\" pour chaque partie éligible et donne une idée de la dispersion de ces données. Les valeurs extrêmes >100 heures ne sont pas affichées mais sont incluses dans les calculs.",
+      "hoursPerMove": "Heures par coup"
+    }
+  },
+  "players": {
+    "filters": {
+      "hideRed": "Masquer les rouges",
+      "hideYellowRed": "Masquer les jaunes et les rouges",
+      "hideOffline": "Masquer les joueurs hors ligne",
+      "hideBlocked": "Masquer les joueurs bloqués",
+      "showOnlyBlocked": "Afficher uniquement les joueurs bloqués"
+    }
+  },
+  "player": {
+    "underDevelopment": "La page de profil du joueur est fortement \"en cours de développement\". Elle s'appuie sur des statistiques calculées quotidiennement.",
+    "modules": {
+      "stars": "Jeux favoris",
+      "coded": "Jeux programmés",
+      "designed": "Jeux conçus",
+      "ratings": "Classements",
+      "counts": "Nombre de parties",
+      "opponents": "Adversaires",
+      "activity": "Activité",
+      "timeouts": "Dépassements de temps",
+      "response": "Temps de réponse",
+      "tournaments": "Historique des tournois",
+      "history": "Historique des parties"
+    }
+  },
+  "meta": {
+    "tabs": {
+      "summary": "Résumé",
+      "challenges": "Défis",
+      "currentGames": "Parties en cours",
+      "completedGames": "Parties terminées",
+      "players": "Joueurs",
+      "tournaments": "Tournois",
+      "historicalData": "Données historiques"
+    },
+    "wikiLink": "Wiki Abstract Play",
+    "historicalIntro": "Les statistiques ci-dessous sont issues des archives historiques, qui ne sont mises à jour qu'une fois par semaine. Les classements historiques peuvent être légèrement différents des classements statiques trouvés ailleurs sur le site. Consultez la page Statistiques pour plus de détails.",
+    "playCounts": "Nombre de parties",
+    "gameStatistics": "Statistiques de jeu",
+    "ratings": "Classements"
+  },
+  "me": {
+    "challengedNotice": "On vous a lancé un défi !",
+    "downloadCompletedReports": "Télécharger tous vos rapports de parties terminées"
+  }
 }

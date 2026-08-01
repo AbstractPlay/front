@@ -169,43 +169,43 @@ const MetaItem = React.forwardRef(
               className={activeTab === "summary" ? "is-active" : ""}
               onClick={() => activeTabSetter("summary")}
             >
-              <a>Summary</a>
+              <a>{t("meta.tabs.summary")}</a>
             </li>
             <li
               className={activeTab === "challenges" ? "is-active" : ""}
               onClick={() => activeTabSetter("challenges")}
             >
-              <a>Challenges</a>
+              <a>{t("meta.tabs.challenges")}</a>
             </li>
             <li
               className={activeTab === "games" ? "is-active" : ""}
               onClick={() => activeTabSetter("games")}
             >
-              <a>Current Games</a>
+              <a>{t("meta.tabs.currentGames")}</a>
             </li>
             <li
               className={activeTab === "completed" ? "is-active" : ""}
               onClick={() => activeTabSetter("completed")}
             >
-              <a>Completed Games</a>
+              <a>{t("meta.tabs.completedGames")}</a>
             </li>
             <li
               className={activeTab === "players" ? "is-active" : ""}
               onClick={() => activeTabSetter("players")}
             >
-              <a>Players</a>
+              <a>{t("meta.tabs.players")}</a>
             </li>
             <li
               className={activeTab === "tournaments" ? "is-active" : ""}
               onClick={() => activeTabSetter("tournaments")}
             >
-              <a>Tournaments</a>
+              <a>{t("meta.tabs.tournaments")}</a>
             </li>
             <li
               className={activeTab === "history" ? "is-active" : ""}
               onClick={() => activeTabSetter("history")}
             >
-              <a>Historical Data</a>
+              <a>{t("meta.tabs.historicalData")}</a>
             </li>
           </ul>
         </div>
@@ -270,7 +270,7 @@ const MetaItem = React.forwardRef(
                           target="_blank"
                           rel="noreferrer"
                         >
-                          Abstract Play Wiki
+                          {t("meta.wikiLink")}
                         </a>
                       </li>
                     </ul>
@@ -393,33 +393,30 @@ const MetaItem = React.forwardRef(
                         className="button is-small apButton"
                         onClick={() => openChallengeModal(game.uid)}
                       >
-                        Issue Challenge
+                        {t("IssueChallengeLabel")}
                       </button>
                     </div>
                   )}
                   <div>
-                    <Link to={"/tournaments/" + game.uid}>Tournaments</Link>
+                    <Link to={"/tournaments/" + game.uid}>
+                      {t("TournamentsLink")}
+                    </Link>
                   </div>
                 </div>
               </div>
             )}
             {activeTab !== "history" ? null : (
               <>
-                <p className="subtitle">Historical Data</p>
-                <p>
-                  The below stats are drawn from the historical record, which is
-                  only updated weekly. Historical ratings may be slightly
-                  different from the static ratings found elsewhere on the site.
-                  See the Statistics page for more details.
-                </p>
+                <p className="subtitle">{t("meta.tabs.historicalData")}</p>
+                <p>{t("meta.historicalIntro")}</p>
                 <hr width="50%" style={{ opacity: 0.1 }} />
-                <p>Play counts</p>
+                <p>{t("meta.playCounts")}</p>
                 <NumPlays metaFilter={game.name} nav="bottom" />
                 <hr width="50%" style={{ opacity: 0.1 }} />
-                <p>Game statistics</p>
+                <p>{t("meta.gameStatistics")}</p>
                 <GameStats metaFilter={game.name} nav="bottom" />
                 <hr width="50%" style={{ opacity: 0.1 }} />
-                <p>Ratings</p>
+                <p>{t("meta.ratings")}</p>
                 <HighestSingleRating metaFilter={game.name} nav="bottom" />{" "}
               </>
             )}

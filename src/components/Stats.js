@@ -57,37 +57,6 @@ const modules = [
   ["tourneyStats", Tournaments],
   ["siteStats", SiteStats],
 ];
-// [code, markdown]
-const explanations = [
-  [
-    "highestSingle",
-    `List of every recorded rating. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made. The Elo rating starts at 1200 with a static *K* of 30. The Glicko rating uses the version 2 algorithm, the default starting values (initial rating 1500), and a rating period of sixty days (starting from the first day a particular game was recorded). Glicko ratings are presented as a 95% confidence range. The narrower that range, the more confident the system is in the rating. And finally, Trueskill is a rating system used by Microsoft in various online games. I used the default settings (rating range 0–50, starting at 25).`,
-  ],
-  [
-    "avgRatings",
-    `The average rating is just that: a straight average of all the Elo ratings recorded for that player. The weighted average is weighted by number of games played. For example, if you had a rating of 1300 in a game you played 10 times and 1200 in a game you only played twice, your average rating would be 1250, but your weighted average would be 1283.`,
-  ],
-  [
-    "topPlayers",
-    `This table lists each available game and variant combination along with the player with the highest Elo rating for that combination.`,
-  ],
-  [
-    "numPlays",
-    `This table lists each game, how many times it was played, by how many unique players, and the game's \`h-index\`. A game's h-index is the number of players who have played that game at least that many times (so an h-index of 5 means that 5 different players have played that game at least 5 times). It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day "buckets," with the most recent week on the right.`,
-  ],
-  [
-    "playerStats",
-    `This shows each recorded player along with their total games played, a count of unique games, and the number of different opponents they played. It also provides an \`h-index\`, which represents the number of games you've played at least that many times (e.g., if you've played three different games only one time each, then your index is 1. As soon as you've played those three games at least three times *each*, the index will increase to 3). There's also an \`h-index\` for opponents you have faced. An activity histogram is also provided, showing the number of games completed each week, with the most recent week on the right. The preview shows the most recent ten weeks. Clicking on it will show you the full history.`,
-  ],
-  [
-    "gameStats",
-    `This table shows each game and variant combination along with the number of recorded games, the average length of the game (number of moves), the median length, and the rate of first-player wins. **The first-player win stats should be treated with care!** The sample size is small and biased. There are many confounding factors that could explain an extreme rate. Note that the rate completely ignores whether the pie rule was invoked. This is a measure of how often the first player (regardless of how many times the person sitting in that chair may change) wins the game. Draws are counted as half a win for the first player (so a game played three times with a win, a loss, and a draw would have a first-player win percentage of 50%).`,
-  ],
-  [
-    "tourneyStats",
-    `Shows each player who has participated in automated tournaments and their summary stats, including number of wins, number of top 50% finishes, and score. Your score is the sum of points received in each tournament. Points are awarded out of 100, based on your placement: first place gets 100 points, and last place gets none.`,
-  ],
-];
 
 function Stats(props) {
   const { t } = useTranslation();
@@ -137,30 +106,35 @@ function Stats(props) {
         <h1 className="title has-text-centered">{t("Statistics")}</h1>
         <div className="content has-text-centered">
           <p>
-            Statistics are generated daily at 6am UTC.
+            {t("stats.generatedDaily")}
             <br />
-            Records analyzed include games completed between{" "}
-            {summary !== null
-              ? formatDate(new Date(summary.oldestRec))
-              : "??"}{" "}
-            and{" "}
-            {summary !== null ? formatDate(new Date(summary.newestRec)) : "??"}{" "}
-            ({recDays} day{recDays !== 1 ? "s" : ""}, or {recYears} year
-            {recYears !== 1 ? "s" : ""}).
+            {t("stats.recordsBetween", {
+              oldest:
+                summary !== null
+                  ? formatDate(new Date(summary.oldestRec))
+                  : "??",
+              newest:
+                summary !== null
+                  ? formatDate(new Date(summary.newestRec))
+                  : "??",
+              days: `${t("stats.day", { count: recDays })}, ${t("stats.year", {
+                count: recYears,
+              })}`,
+            })}
             <br />
-            In that time,{" "}
-            {summary !== null ? summary.numPlayers.toLocaleString() : "??"}{" "}
-            players have played{" "}
-            {summary !== null ? summary.numGames.toLocaleString() : "??"} games.
+            {t("stats.playersPlayedGames", {
+              numPlayers:
+                summary !== null
+                  ? summary.numPlayers.toLocaleString()
+                  : "??",
+              numGames:
+                summary !== null ? summary.numGames.toLocaleString() : "??",
+            })}
           </p>
-          <p className="help">
-            Please note that the ratings given here are dynamically generated
-            and may differ from the static rating visible elsewhere. We're
-            working on harmonizing things eventually.
-          </p>
+          <p className="help">{t("stats.ratingsNote")}</p>
         </div>
         <div className="field has-text-centered">
-          <label className="label">Select a statistic</label>
+          <label className="label">{t("stats.selectStatistic")}</label>
           <div className="control">
             <div
               className="select"
@@ -187,14 +161,13 @@ function Stats(props) {
             } else {
               return (
                 <React.Fragment key={code}>
-                  {explanations.find(([c]) => c === code) ===
-                  undefined ? null : (
+                  {code === "siteStats" ? null : (
                     <div style={{ fontSize: "smaller", paddingBottom: "1em" }}>
                       <ReactMarkdown
                         rehypePlugins={[rehypeRaw]}
                         className="content"
                       >
-                        {explanations.find(([c]) => c === code)[1]}
+                        {t(`stats.explanations.${code}`)}
                       </ReactMarkdown>
                     </div>
                   )}
@@ -214,14 +187,14 @@ function Stats(props) {
           <div className="control">
             <a href="https://records.abstractplay.com/_summary.json">
               <button className="button is-small apButton">
-                Download all summary stats
+                {t("stats.downloadSummary")}
               </button>
             </a>
           </div>
           <div className="control">
             <a href="https://records.abstractplay.com/ALL.json">
               <button className="button is-small apButton">
-                Download all game reports
+                {t("stats.downloadReports")}
               </button>
             </a>
           </div>

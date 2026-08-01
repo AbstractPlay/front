@@ -612,7 +612,24 @@
     "Error": "Error!",
     "Events": {
         "Description": "Organized events are managed by individuals. The system allows organizers to create events, for players to register, and then for organizers to launch games between registered players. Tracking results, enforcing detailed time restrictions, and announcing winners is up to the organizer.",
-        "Name": "Organized Events"
+        "Name": "Organized Events",
+        "newEvent": "New event",
+        "draftEvents": "Draft events",
+        "openForRegistration": "Open for registration",
+        "activeEvents": "Active events",
+        "completedEvents": "Completed events",
+        "createEvent": "Create event",
+        "createEventModalTitle": "Create new event",
+        "createEventHelp": "These values can be changed later. Dates and times must be given in UTC.",
+        "createEventContact": "To create an event, please reach out to one of the developers through <1>Discord</1>.",
+        "noOpenRegistration": "No events are currently open for registration.",
+        "eventNameLabel": "Event name",
+        "eventNameRequired": "The event must have a name.",
+        "maxPlayersLabel": "Maximum players",
+        "maxPlayersHelp": "A value of 0 means no limit.",
+        "eventDateLabel": "Event date",
+        "eventTimeLabel": "Event time",
+        "dateTimeRequired": "Date and time is required and must be in the future."
     },
     "EventsNav": "Events",
     "ExplorationSetting": "Exploration setting",
@@ -1016,5 +1033,173 @@
     "YourChallenges": "Your challenges",
     "YourGames": "Your games",
     "YourMove": "Your move",
-    "EnableZoom": "Enable zoom"
+    "EnableZoom": "Enable zoom",
+    "IssueChallengeLabel": "Issue Challenge",
+    "TournamentsLink": "Tournaments",
+    "Block": "Block",
+    "Unblock": "Unblock",
+    "TotalPlayers": "total players",
+    "TotalChallenges": "total challenges",
+    "TableView": "Table",
+    "GridView": "Grid",
+    "Reshuffle": "Reshuffle",
+    "ShowAll": "Show all",
+    "ShowAllCountries": "--Show all--",
+    "a11y": {
+        "hideShow": "hide/show",
+        "moveLeft": "move left",
+        "moveRight": "move right"
+    },
+    "about": {
+        "intro": "Abstract Play is a place to play abstract strategy games against others asynchronously (you don't have to be online at the same time). We specialize in offbeat, perfect information games without any element of luck, but we also include a number of games that involve randomness (e.g., dice and cards). The site is completely free to join and play.",
+        "highlights": "Here are some of the most active games this week. Visit the <1>full games list</1> for more details.",
+        "highlightsLink": "full games list"
+    },
+    "notFound": {
+        "body": "No page could be found at <1>{{path}}</1>. Please use the navigation bar to try again. If the problem persists, please <2>post a bug report on our Discord server</2>.",
+        "reportLink": "post a bug report on our Discord server"
+    },
+    "footer": {
+        "wiki": "Wiki",
+        "discord": "Discord",
+        "boardGameGeek": "BoardGameGeek",
+        "wishlist": "Wishlist",
+        "github": "GitHub",
+        "legalLink": "Terms of Service & Privacy Policy",
+        "betaBanner": "The site is currently in BETA testing!",
+        "feedback": "We're very happy with the core functionality, but we'd love some concrete feedback from users on how to make things better.",
+        "feedbackJoin": "Please come join us on <1>Discord</1> and let us know if you run into any trouble or have any ideas."
+    },
+    "explore": {
+        "intro": "This page lets you explore different ways of sorting the list of games. Select your desired view below. Clicking on a game's name will take you to that game's landing page with additional information.",
+        "views": {
+            "all": {
+                "title": "All games"
+            },
+            "newest": {
+                "title": "Newest",
+                "description": "When the game was added to the site."
+            },
+            "hotRaw": {
+                "title": "Hottest (# moves/day)",
+                "description": "The average number of moves made per day over the time period."
+            },
+            "hotPlayers": {
+                "title": "Hottest (# players/day)",
+                "description": "The average number of unique players per day over the time period."
+            },
+            "playerSum": {
+                "title": "Most players",
+                "description": "The total number of unique players who played that game over the time period."
+            },
+            "hindex": {
+                "title": "Highest h-index",
+                "description": "A game's `h-index` is the number of different players who have played that game at least that many times. So an `h-index` of 5 means that 5 different players have played that game at least 5 times."
+            },
+            "stars": {
+                "title": "Most stars",
+                "description": "The number of players who have starred this game."
+            },
+            "completed": {
+                "title": "Most completed games per week (all time)",
+                "description": "The number of games completed divided by the total number of weeks (or parts thereof) that the game has been available."
+            },
+            "completedRecent": {
+                "title": "Most completed games per week (recent)",
+                "description": "The number of games completed per week over the past three months (roughly)."
+            },
+            "random": {
+                "title": "Random Order",
+                "description": "Games in random order. Click the button to reshuffle."
+            }
+        }
+    },
+    "stats": {
+        "selectStatistic": "Select a statistic",
+        "downloadSummary": "Download all summary stats",
+        "downloadReports": "Download all game reports",
+        "ratingsNote": "Please note that the ratings given here are dynamically generated and may differ from the static rating visible elsewhere. We're working on harmonizing things eventually.",
+        "generatedDaily": "Statistics are generated daily at 6am UTC.",
+        "recordsBetween": "Records analyzed include games completed between {{oldest}} and {{newest}} ({{days}}).",
+        "day_one": "{{count}} day",
+        "day_other": "{{count}} days",
+        "year_one": "{{count}} year",
+        "year_other": "{{count}} years",
+        "playersPlayedGames": "In that time, {{numPlayers}} players have played {{numGames}} games.",
+        "explanations": {
+            "highestSingle": "List of every recorded rating. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made. The Elo rating starts at 1200 with a static *K* of 30. The Glicko rating uses the version 2 algorithm, the default starting values (initial rating 1500), and a rating period of sixty days (starting from the first day a particular game was recorded). Glicko ratings are presented as a 95% confidence range. The narrower that range, the more confident the system is in the rating. And finally, Trueskill is a rating system used by Microsoft in various online games. I used the default settings (rating range 0–50, starting at 25).",
+            "avgRatings": "The average rating is just that: a straight average of all the Elo ratings recorded for that player. The weighted average is weighted by number of games played. For example, if you had a rating of 1300 in a game you played 10 times and 1200 in a game you only played twice, your average rating would be 1250, but your weighted average would be 1283.",
+            "topPlayers": "This table lists each available game and variant combination along with the player with the highest Elo rating for that combination.",
+            "numPlays": "This table lists each game, how many times it was played, by how many unique players, and the game's `h-index`. A game's h-index is the number of players who have played that game at least that many times (so an h-index of 5 means that 5 different players have played that game at least 5 times). It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day \"buckets,\" with the most recent week on the right.",
+            "playerStats": "This shows each recorded player along with their total games played, a count of unique games, and the number of different opponents they played. It also provides an `h-index`, which represents the number of games you've played at least that many times (e.g., if you've played three different games only one time each, then your index is 1. As soon as you've played those three games at least three times *each*, the index will increase to 3). There's also an `h-index` for opponents you have faced. An activity histogram is also provided, showing the number of games completed each week, with the most recent week on the right. The preview shows the most recent ten weeks. Clicking on it will show you the full history.",
+            "gameStats": "This table shows each game and variant combination along with the number of recorded games, the average length of the game (number of moves), the median length, and the rate of first-player wins. **The first-player win stats should be treated with care!** The sample size is small and biased. There are many confounding factors that could explain an extreme rate. Note that the rate completely ignores whether the pie rule was invoked. This is a measure of how often the first player (regardless of how many times the person sitting in that chair may change) wins the game. Draws are counted as half a win for the first player (so a game played three times with a win, a loss, and a draw would have a first-player win percentage of 50%).",
+            "tourneyStats": "Shows each player who has participated in automated tournaments and their summary stats, including number of wins, number of top 50% finishes, and score. Your score is the sum of points received in each tournament. Points are awarded out of 100, based on your placement: first place gets 100 points, and last place gets none."
+        },
+        "siteStats": {
+            "weekBuckets": "Games are counted in seven-day chunks. The left-most bar is the first week completed games were recorded. The right-most bar is the most recent week (or part thereof).",
+            "cumulativePastYear": "Cumulative (past year)",
+            "average": "Average",
+            "median": "Median",
+            "middleHalf": "Middle half",
+            "gamesCompletedPerWeek": "Games completed per week",
+            "weekNumber": "Week #",
+            "completedGames": "Completed games",
+            "playersCompletedPerWeek": "Number of players completing games per week",
+            "numberOfPlayers": "Number of players",
+            "firstTimersIntro": "This graph tracks the number of users who completed their first game that week. The numbers are cumulative, meaning they will never decrease, and the right-most point should always show the current recorded user count. It is of course expected that the numbers will plateau at some point, but it gives an indication of growth.",
+            "firstTimersCumulative": "First-time game completions, cumulative",
+            "usersFirstGame": "Users who completed their first game",
+            "countryIntro": "This shows the breakdown of countries players assert they are playing from. Only includes country codes the system can interpret.",
+            "timeoutRate": "Total cumulative timeout rate is {{rate}}.",
+            "timeoutRatePerWeek": "Timeout rate per week",
+            "timeoutRateAxis": "Timeout rate",
+            "hoursPerMoveIntro": "\"Hours per move\" is calculated as an average per game. Games that end by time out or on the first turn are not counted. A box plot shows the \"hours per move\" for each qualifying game record and gives a sense of the spread of that data. Outliers >100 hours are not shown but are included in the calculations.",
+            "hoursPerMove": "Hours per move"
+        }
+    },
+    "players": {
+        "filters": {
+            "hideRed": "Hide red",
+            "hideYellowRed": "Hide yellow and red",
+            "hideOffline": "Hide offline players",
+            "hideBlocked": "Hide blocked",
+            "showOnlyBlocked": "Show only blocked"
+        }
+    },
+    "player": {
+        "underDevelopment": "The player profile page is very much \"under development.\" It relies on statistics tabulated daily.",
+        "modules": {
+            "stars": "Starred Games",
+            "coded": "Games Coded",
+            "designed": "Games Designed",
+            "ratings": "Ratings",
+            "counts": "Play Counts",
+            "opponents": "Opponents",
+            "activity": "Activity",
+            "timeouts": "Timeouts",
+            "response": "Response Time",
+            "tournaments": "Tournament History",
+            "history": "Game History"
+        }
+    },
+    "meta": {
+        "tabs": {
+            "summary": "Summary",
+            "challenges": "Challenges",
+            "currentGames": "Current Games",
+            "completedGames": "Completed Games",
+            "players": "Players",
+            "tournaments": "Tournaments",
+            "historicalData": "Historical Data"
+        },
+        "wikiLink": "Abstract Play Wiki",
+        "historicalIntro": "The below stats are drawn from the historical record, which is only updated weekly. Historical ratings may be slightly different from the static ratings found elsewhere on the site. See the Statistics page for more details.",
+        "playCounts": "Play counts",
+        "gameStatistics": "Game statistics",
+        "ratings": "Ratings"
+    },
+    "me": {
+        "challengedNotice": "You have been challenged!",
+        "downloadCompletedReports": "Download all your completed game reports"
+    }
 }

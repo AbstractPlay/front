@@ -458,10 +458,11 @@ function StandingChallenges(props) {
             </div>
             <div className="level-item">
               <p>
-                Page{" "}
-                <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
-                <strong>{table.getPageCount()}</strong> (
-                {table.getPrePaginationRowModel().rows.length} total challenges)
+                {t("Page")}{" "}
+                <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
+                {t("of")} <strong>{table.getPageCount()}</strong> (
+                {table.getPrePaginationRowModel().rows.length}{" "}
+                {t("TotalChallenges")})
               </p>
             </div>
             {/* <div className="level-item">
@@ -489,7 +490,7 @@ function StandingChallenges(props) {
                   >
                     {[10, 20, 30, 40, 50, allSize].map((pageSize) => (
                       <option key={pageSize} value={pageSize}>
-                        Show {pageSize === allSize ? "All" : pageSize}
+                        {t("Show")} {pageSize === allSize ? t("All") : pageSize}
                       </option>
                     ))}
                   </select>
@@ -537,7 +538,7 @@ function StandingChallenges(props) {
                 className="button is-small apButton"
                 onClick={() => showModalSetter(true)}
               >
-                Issue Challenge
+                {t("IssueChallengeLabel")}
               </button>
             </div>
           </>

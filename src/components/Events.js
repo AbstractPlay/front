@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 // import { gameinfo } from "@abstractplay/gameslib";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import Modal from "./Modal";
 import TableDrafts from "./Events/TableDrafts";
@@ -272,8 +272,8 @@ function Events() {
         {/* New event */}
         <div className="card">
           <header className="card-header">
-            <p className="card-header-title">New event</p>
-            <button className="card-header-icon" aria-label="hide/show">
+            <p className="card-header-title">{t("Events.newEvent")}</p>
+            <button className="card-header-icon" aria-label={t("a11y.hideShow")}>
               <span className="icon">
                 <i className="fa fa-angle-down" aria-hidden="true"></i>
               </span>
@@ -286,13 +286,19 @@ function Events() {
                   className="button is-small apButton"
                   onClick={() => showModalSetter(true)}
                 >
-                  Create event
+                  {t("Events.createEvent")}
                 </button>
               ) : (
                 <p>
-                  To create an event, please reach out to one of the developers
-                  through <a href="https://discord.abstractplay.com">Discord</a>
-                  .
+                  <Trans
+                    i18nKey="Events.createEventContact"
+                    components={[
+                      <a
+                        key="discord"
+                        href="https://discord.abstractplay.com"
+                      />,
+                    ]}
+                  />
                 </p>
               )}
             </div>
@@ -302,8 +308,8 @@ function Events() {
         {drafts.length === 0 ? null : (
           <div className="card">
             <header className="card-header">
-              <p className="card-header-title">Draft events</p>
-              <button className="card-header-icon" aria-label="hide/show">
+              <p className="card-header-title">{t("Events.draftEvents")}</p>
+              <button className="card-header-icon" aria-label={t("a11y.hideShow")}>
                 <span className="icon">
                   <i className="fa fa-angle-down" aria-hidden="true"></i>
                 </span>
@@ -317,8 +323,8 @@ function Events() {
         {/* Open for registration */}
         <div className="card">
           <header className="card-header">
-            <p className="card-header-title">Open for registration</p>
-            <button className="card-header-icon" aria-label="hide/show">
+            <p className="card-header-title">{t("Events.openForRegistration")}</p>
+            <button className="card-header-icon" aria-label={t("a11y.hideShow")}>
               <span className="icon">
                 <i className="fa fa-angle-down" aria-hidden="true"></i>
               </span>
@@ -332,7 +338,7 @@ function Events() {
               />
             ) : (
               <div className="content">
-                <p>No events are currently open for registration.</p>
+                <p>{t("Events.noOpenRegistration")}</p>
               </div>
             )}
           </div>
@@ -341,8 +347,8 @@ function Events() {
         {active.length === 0 ? null : (
           <div className="card">
             <header className="card-header">
-              <p className="card-header-title">Active events</p>
-              <button className="card-header-icon" aria-label="hide/show">
+              <p className="card-header-title">{t("Events.activeEvents")}</p>
+              <button className="card-header-icon" aria-label={t("a11y.hideShow")}>
                 <span className="icon">
                   <i className="fa fa-angle-down" aria-hidden="true"></i>
                 </span>
@@ -357,8 +363,8 @@ function Events() {
         {complete.length === 0 ? null : (
           <div className="card">
             <header className="card-header">
-              <p className="card-header-title">Completed events</p>
-              <button className="card-header-icon" aria-label="hide/show">
+              <p className="card-header-title">{t("Events.completedEvents")}</p>
+              <button className="card-header-icon" aria-label={t("a11y.hideShow")}>
                 <span className="icon">
                   <i className="fa fa-angle-down" aria-hidden="true"></i>
                 </span>
@@ -372,7 +378,7 @@ function Events() {
       </article>
       <Modal
         show={showModal}
-        title={"Create new event"}
+        title={t("Events.createEventModalTitle")}
         buttons={[
           {
             label: t("Submit"),
@@ -385,14 +391,11 @@ function Events() {
         ]}
       >
         <div className="content">
-          <p>
-            These values can be changed later. Dates and times must be given in
-            UTC.
-          </p>
+          <p>{t("Events.createEventHelp")}</p>
         </div>
         <div className="field">
           <label className="label" htmlFor="eventName">
-            Event name
+            {t("Events.eventNameLabel")}
           </label>
           <div className="control">
             <input
@@ -404,12 +407,12 @@ function Events() {
             />
           </div>
           {/^\s*$/.test(newEventName) ? (
-            <p className="help is-danger">The event must have a name.</p>
+            <p className="help is-danger">{t("Events.eventNameRequired")}</p>
           ) : null}
         </div>
         <div className="field">
           <label className="label" htmlFor="maxPlayers">
-            Maximum players
+            {t("Events.maxPlayersLabel")}
           </label>
           <div className="control">
             <input
@@ -421,11 +424,11 @@ function Events() {
               onChange={(e) => maxPlayersSetter(e.target.value)}
             />
           </div>
-          <p className="help">A value of 0 means no limit.</p>
+          <p className="help">{t("Events.maxPlayersHelp")}</p>
         </div>
         <div className="field is-grouped">
           <label className="label" htmlFor="eventDate">
-            Event date
+            {t("Events.eventDateLabel")}
           </label>
           <div className="control">
             <input
@@ -437,7 +440,7 @@ function Events() {
             />
           </div>
           <label className="label" htmlFor="eventTime">
-            Event date
+            {t("Events.eventTimeLabel")}
           </label>
           <div className="control">
             <input
@@ -452,9 +455,7 @@ function Events() {
         {newEventDate === "" ||
         newEventTime === "" ||
         new Date(`${newEventDate}T${newEventTime}Z`).getTime() < Date.now() ? (
-          <p className="help is-danger">
-            Date and time is required and must be in the future.
-          </p>
+          <p className="help is-danger">{t("Events.dateTimeRequired")}</p>
         ) : null}
       </Modal>
     </>

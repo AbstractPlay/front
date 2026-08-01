@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import LanguagePicker from "./LanguagePicker";
 
 function Footer(props) {
-  // eslint-disable-next-line no-unused-vars
   const { t } = useTranslation();
 
   return (
@@ -16,7 +15,7 @@ function Footer(props) {
             target="_blank"
             rel="noreferrer"
           >
-            Wiki
+            {t("footer.wiki")}
           </a>
           &nbsp;|&nbsp;
           <a
@@ -24,7 +23,7 @@ function Footer(props) {
             target="_blank"
             rel="noreferrer"
           >
-            Discord
+            {t("footer.discord")}
           </a>
           &nbsp;|&nbsp;
           <a
@@ -32,7 +31,7 @@ function Footer(props) {
             target="_blank"
             rel="noreferrer"
           >
-            BoardGameGeek
+            {t("footer.boardGameGeek")}
           </a>
           &nbsp;|&nbsp;
           <a
@@ -40,7 +39,7 @@ function Footer(props) {
             target="_blank"
             rel="noreferrer"
           >
-            Wishlist
+            {t("footer.wishlist")}
           </a>
           &nbsp;|&nbsp;
           <a
@@ -48,29 +47,30 @@ function Footer(props) {
             target="_blank"
             rel="noreferrer"
           >
-            GitHub
+            {t("footer.github")}
           </a>
           &nbsp;|&nbsp;
           <LanguagePicker />
           <br />
-          <Link to="/legal">Terms of Service &amp; Privacy Policy</Link>
+          <Link to="/legal">{t("footer.legalLink")}</Link>
         </p>
         <p style={{ fontWeight: "bolder", color: "red" }}>
-          The site is currently in BETA testing!
+          {t("footer.betaBanner")}
         </p>
         <p>
-          We're very happy with the core functionality, but we'd love some
-          concrete feedback from users on how to make things better.
+          {t("footer.feedback")}
           <br />
-          Please come join us on{" "}
-          <a
-            href="https://discord.gg/7dmx7BwRzg"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Discord
-          </a>{" "}
-          and let us know if you run into any trouble or have any ideas.
+          <Trans
+            i18nKey="footer.feedbackJoin"
+            components={[
+              <a
+                key="discord"
+                href="https://discord.gg/7dmx7BwRzg"
+                target="_blank"
+                rel="noreferrer"
+              />,
+            ]}
+          />
         </p>
       </div>
     </footer>
