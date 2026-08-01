@@ -1314,6 +1314,21 @@
       "response": "Reaktionszeit",
       "tournaments": "Turnierverlauf",
       "history": "Spielverlauf"
+    },
+    "stats": {
+      "response": {
+        "average": "Durchschnittliche Antwortzeit: {{hours}} Stunden",
+        "median": "Median der Antwortzeit: {{hours}} Stunden",
+        "middleHalf": "Mittlere Hälfte der Antwortzeiten: {{q1}} bis {{q3}} Stunden"
+      },
+      "timeouts": {
+        "total": "Gesamtzahl der Zeitüberschreitungen: {{count}}",
+        "gamesSince": "Abgeschlossene Spiele seit der letzten Zeitüberschreitung: {{count}}",
+        "axisY": "Zeitüberschreitungen"
+      },
+      "activity": {
+        "axisY": "Abgeschlossene Spiele"
+      }
     }
   },
   "meta": {
@@ -1406,6 +1421,15 @@
       "customCssWarning2": "Wenn du sicher bist, dass du fortfahren möchtest, füge den CSS-Code unten ein und klicke auf Speichern. Wenn alles schiefgeht, öffne die Entwicklerkonsole und lösche den Local-Storage-Schlüssel <1>custom-css</1>, um alles zurückzusetzen. Dokumentation findest du im Wiki, und tritt unserem Discord bei, um darüber zu diskutieren.",
       "pasteCssPlaceholder": "CSS-Code hier einfügen",
       "activateCustomCss": "Benutzerdefiniertes CSS aktivieren?"
+    },
+    "unrated": "ungewertet",
+    "explorationDisabled": "Erkundung deaktiviert",
+    "tournamentLink": "Turnier",
+    "eventLink": "Event",
+    "chats": {
+      "inGame": ", im Spiel",
+      "postGame": ", nach dem Spiel",
+      "moveLink": "Zug"
     }
   },
   "Back": "Zurück",
@@ -1531,5 +1555,7 @@
       "commentPlaceholder": "Füge einen Kommentar in Markdown hinzu…",
       "nothingToPreview": "Noch nichts für die Vorschau vorhanden."
     }
-  }
+  },
+  "Wikipedia": "Wikipedia",
+  "Welcome": "Willkommen"
 }

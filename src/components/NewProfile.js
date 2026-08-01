@@ -175,7 +175,7 @@ function NewProfile(props) {
                 href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes"
                 target="_NEW"
               >
-                Wikipedia
+                {t("Wikipedia")}
               </a>
               ]
             </p>

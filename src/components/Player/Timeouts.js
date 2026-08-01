@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ProfileContext, SummaryContext, AllRecsContext } from "../Player";
 import Plot from "react-plotly.js";
 
 function Timeouts({ order }) {
+  const { t } = useTranslation();
   const [user] = useContext(ProfileContext);
   const [summary] = useContext(SummaryContext);
   const [allRecs] = useContext(AllRecsContext);
@@ -49,10 +51,16 @@ function Timeouts({ order }) {
   return (
     <>
       <div className="content">
-        <p>Total number of timeouts: {timeouts.length.toLocaleString()}</p>
+        <p>
+          {t("player.stats.timeouts.total", {
+            count: timeouts.length.toLocaleString(),
+          })}
+        </p>
         {gamesSince === null ? null : (
           <p>
-            Games completed since last timeout: {gamesSince.toLocaleString()}
+            {t("player.stats.timeouts.gamesSince", {
+              count: gamesSince.toLocaleString(),
+            })}
           </p>
         )}
       </div>
@@ -69,14 +77,10 @@ function Timeouts({ order }) {
             displayModeBar: false,
           }}
           layout={{
-            xaxis: { title: "Week #" },
-            yaxis: { title: "Timeouts" },
+            xaxis: { title: t("stats.siteStats.weekNumber") },
+            yaxis: { title: t("player.stats.timeouts.axisY") },
             autosize: true,
           }}
-          // style={{
-          //     height: "100%",
-          //     width: "100%",
-          // }}
         />
       </div>
     </>

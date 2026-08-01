@@ -1314,6 +1314,21 @@
       "response": "Tempo di risposta",
       "tournaments": "Cronologia tornei",
       "history": "Cronologia partite"
+    },
+    "stats": {
+      "response": {
+        "average": "Tempo medio di risposta: {{hours}} ore",
+        "median": "Tempo mediano di risposta: {{hours}} ore",
+        "middleHalf": "Metà centrale dei tempi di risposta: da {{q1}} a {{q3}} ore"
+      },
+      "timeouts": {
+        "total": "Numero totale di timeout: {{count}}",
+        "gamesSince": "Partite completate dall'ultimo timeout: {{count}}",
+        "axisY": "Timeout"
+      },
+      "activity": {
+        "axisY": "Partite completate"
+      }
     }
   },
   "meta": {
@@ -1406,6 +1421,15 @@
       "customCssWarning2": "Se sei sicuro di voler continuare, incolla il codice CSS qui sotto e fai clic su Salva. Se qualcosa va storto, apri la console per sviluppatori ed elimina la chiave di local storage <1>custom-css</1>: questo dovrebbe ripristinare tutto. Consulta la wiki per la documentazione e unisciti a noi su Discord per discuterne.",
       "pasteCssPlaceholder": "Incolla qui il codice CSS",
       "activateCustomCss": "Attivare il CSS personalizzato?"
+    },
+    "unrated": "non classificata",
+    "explorationDisabled": "esplorazione disabilitata",
+    "tournamentLink": "torneo",
+    "eventLink": "evento",
+    "chats": {
+      "inGame": ", in partita",
+      "postGame": ", post-partita",
+      "moveLink": "mossa"
     }
   },
   "Back": "Indietro",
@@ -1531,5 +1555,7 @@
       "commentPlaceholder": "Aggiungi un commento in Markdown…",
       "nothingToPreview": "Niente da mostrare in anteprima per ora."
     }
-  }
+  },
+  "Wikipedia": "Wikipedia",
+  "Welcome": "Benvenuto"
 }

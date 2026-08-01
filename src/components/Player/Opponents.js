@@ -181,7 +181,7 @@ function Opponents({ handleChallenge }) {
                       className="button is-small apButton"
                       onClick={() => openChallengeModal(props.row.original.id)}
                     >
-                      Issue Challenge
+                      {t("IssueChallengeLabel")}
                     </button>
                   </>
                 ),

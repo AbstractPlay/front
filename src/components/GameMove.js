@@ -260,9 +260,9 @@ function GameMove(props) {
         }
       });
     if (designers.length === 1) {
-      designerString = "Designer: ";
+      designerString = t("lab.designerOne");
     } else {
-      designerString = "Designers: ";
+      designerString = t("lab.designersMany");
     }
     designerString += designers.join(", ");
   }
@@ -285,9 +285,9 @@ function GameMove(props) {
         }
       });
     if (coders.length === 1) {
-      coderString = "Coder: ";
+      coderString = t("lab.coderOne");
     } else {
-      coderString = "Coders: ";
+      coderString = t("lab.codersMany");
     }
     coderString += coders.join(", ");
   }
@@ -850,20 +850,20 @@ function GameMove(props) {
 
       parentheticalSetter((val) => [
         ...val,
-        <Link to={tournamentLink}>tournament</Link>,
+        <Link to={tournamentLink}>{t("gameMove.tournamentLink")}</Link>,
       ]);
     }
     if ("event" in game && game.event !== undefined && game.event !== null) {
       parentheticalSetter((val) => [
         ...val,
-        <Link to={`/event/${game.event}`}>event</Link>,
+        <Link to={`/event/${game.event}`}>{t("gameMove.eventLink")}</Link>,
       ]);
     }
     if (game.rated === false) {
-      parentheticalSetter((val) => [...val, "unrated"]);
+      parentheticalSetter((val) => [...val, t("gameMove.unrated")]);
     }
     if (game.noExplore !== undefined && game.noExplore === true) {
-      parentheticalSetter((val) => [...val, "exploration disabled"]);
+      parentheticalSetter((val) => [...val, t("gameMove.explorationDisabled")]);
     }
     if (game.toMove !== "" && !game.players.some((p) => p.id === me?.id)) {
       if (game.clockHard) {

@@ -1314,6 +1314,21 @@
             "response": "Response Time",
             "tournaments": "Tournament History",
             "history": "Game History"
+        },
+        "stats": {
+            "response": {
+                "average": "Average response time: {{hours}} hours",
+                "median": "Median response time: {{hours}} hours",
+                "middleHalf": "Middle half of response times: {{q1}} to {{q3}} hours"
+            },
+            "timeouts": {
+                "total": "Total number of timeouts: {{count}}",
+                "gamesSince": "Games completed since last timeout: {{count}}",
+                "axisY": "Timeouts"
+            },
+            "activity": {
+                "axisY": "Completed games"
+            }
         }
     },
     "meta": {
@@ -1406,6 +1421,15 @@
             "customCssWarning2": "If you are certain you wish to continue, paste the CSS code below and click Save. If everything blows up, open the developer console and clear the local storage key <1>custom-css</1>, and that should reset everything. See the wiki for documentation, and join us on Discord to discuss.",
             "pasteCssPlaceholder": "Paste CSS code here",
             "activateCustomCss": "Activate custom CSS?"
+        },
+        "unrated": "unrated",
+        "explorationDisabled": "exploration disabled",
+        "tournamentLink": "tournament",
+        "eventLink": "event",
+        "chats": {
+            "inGame": ", in-game",
+            "postGame": ", post-game",
+            "moveLink": "move"
         }
     },
     "Back": "Back",
@@ -1531,5 +1555,7 @@
             "commentPlaceholder": "Add a comment in Markdown…",
             "nothingToPreview": "Nothing to preview yet."
         }
-    }
+    },
+    "Wikipedia": "Wikipedia",
+    "Welcome": "Welcome"
 }

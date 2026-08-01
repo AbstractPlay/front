@@ -55,9 +55,9 @@ const MetaItem = React.forwardRef(
           }
         });
       if (designers.length === 1) {
-        designerString = "Designer: ";
+        designerString = t("lab.designerOne");
       } else {
-        designerString = "Designers: ";
+        designerString = t("lab.designersMany");
       }
       designerString += designers.join(", ");
     }
@@ -81,9 +81,9 @@ const MetaItem = React.forwardRef(
           }
         });
       if (coders.length === 1) {
-        coderString = "Coder: ";
+        coderString = t("lab.coderOne");
       } else {
-        coderString = "Coders: ";
+        coderString = t("lab.codersMany");
       }
       coderString += coders.join(", ");
     }

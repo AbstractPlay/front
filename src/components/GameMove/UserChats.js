@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import GameCommentShort from "./GameCommentShort";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
@@ -19,7 +19,7 @@ function UserChats(props) {
   const focusedPath = props.focusedPath;
   const chatTableRef = useRef(null);
   const highlightedRefs = useRef([]);
-  //   const { t } = useTranslation();
+  const { t } = useTranslation();
 
   // Helper function to check if two paths match
   const pathsMatch = (path1, path2) => {
@@ -63,7 +63,7 @@ function UserChats(props) {
     let results = [];
     comments.forEach((c) => {
       if (c.userId !== null && c.userId !== undefined && c.userId.length > 0) {
-        let personName = "Unknown";
+        let personName = t("Unknown");
         let player = players?.find((p) => p.id === c.userId);
         if (player !== undefined) {
           personName = formatPlayerDisplayName(player, users);
@@ -145,7 +145,9 @@ function UserChats(props) {
                             />
                             {props.commentingCompletedGame && (
                               <span>
-                                {r.inGame ? ", in-game" : ", post-game"}
+                                {r.inGame
+                                  ? t("gameMove.chats.inGame")
+                                  : t("gameMove.chats.postGame")}
                               </span>
                             )}
                             {r.path && handleGameMoveClick && (
@@ -159,7 +161,7 @@ function UserChats(props) {
                                   }}
                                   style={{ textDecoration: "underline" }}
                                 >
-                                  move
+                                  {t("gameMove.chats.moveLink")}
                                 </a>
                               </span>
                             )}

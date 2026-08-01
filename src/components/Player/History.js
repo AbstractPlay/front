@@ -11,15 +11,18 @@ import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
 
-const formatter = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
-
 function History({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const [allRecs] = useContext(AllRecsContext);
   const allUsers = useStore((state) => state.users);
   const globalMe = useStore((state) => state.globalMe);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const formatter = useMemo(
+    () => new Intl.DateTimeFormat(i18n.language, { dateStyle: "long" }),
+    [i18n.language]
+  );
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -274,6 +277,7 @@ function History({ handleChallenge }) {
       user,
       closeChallengeModal,
       t,
+      formatter,
     ]
   );
 

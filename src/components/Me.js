@@ -699,25 +699,25 @@ function Me(props) {
                   className="button is-small apButton"
                   onClick={() => handleTestPushClick()}
                 >
-                  Test push notifications
+                  {t("me.dev.testPush")}
                 </button>
                 <button
                   className="button is-small apButton"
                   onClick={() => handleTestBotStatusClick()}
                 >
-                  Test bot status
+                  {t("me.dev.testBotStatus")}
                 </button>
                 <button
                   className="button is-small apButton"
-                  onClick={() => toast("Toast test!")}
+                  onClick={() => toast(t("me.dev.toastMessage"))}
                 >
-                  Test toast
+                  {t("me.dev.testToast")}
                 </button>
                 <button
                   className="button is-small apButton"
                   onClick={() => handleUpdateMetaGameCountsClick()}
                 >
-                  Update meta game counts
+                  {t("me.dev.updateMetaGameCounts")}
                 </button>
               </div>
             </div>
@@ -802,7 +802,7 @@ function Me(props) {
         </Modal>
         <Modal
           show={showTestBotStatusModal}
-          title={"Test bot status"}
+          title={t("me.dev.testBotStatusTitle")}
           buttons={[
             {
               label: t("Close"),
