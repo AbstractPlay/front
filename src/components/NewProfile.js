@@ -63,7 +63,7 @@ function NewProfile(props) {
     if (name === "") {
       nameErrorSetter(t("NameBlank"));
     } else {
-      const nameValidationError = validateDisplayName(name);
+      const nameValidationError = validateDisplayName(name, t);
       if (nameValidationError) {
         nameErrorSetter(nameValidationError);
       } else if (users.find((u) => u === name)) {

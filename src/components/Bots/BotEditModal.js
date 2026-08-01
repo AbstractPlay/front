@@ -12,7 +12,7 @@ import {
 } from "./botApi";
 import { getBotClientId, findBotByClientId } from "./botUtils";
 import { useStore } from "../../stores";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
   const { t } = useTranslation();
@@ -60,11 +60,11 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
   const handleSave = async () => {
     if (!bot) return;
     if (!name.trim()) {
-      errorSetter("Name is required.");
+      errorSetter(t("bots.errors.nameRequired"));
       return;
     }
     if (!isHttps(endpoint)) {
-      errorSetter("Endpoint must be a valid HTTPS URL.");
+      errorSetter(t("bots.errors.httpsRequired"));
       return;
     }
     savingSetter(true);
@@ -77,7 +77,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
     });
     savingSetter(false);
     if (!result.ok) {
-      errorSetter(result.error || "Failed to update bot.");
+      errorSetter(result.error || t("bots.errors.updateFailed"));
       return;
     }
     onBotUpdated({
@@ -97,7 +97,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
     savingSetter(false);
     showDeleteConfirmSetter(false);
     if (!result.ok) {
-      errorSetter(result.error || "Failed to delete bot.");
+      errorSetter(result.error || t("bots.errors.deleteFailed"));
       return;
     }
     onBotDeleted(getBotClientId(bot));
@@ -113,19 +113,18 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
     });
     rotatingSetter(false);
     if (!result.ok) {
-      errorSetter(result.error || "Failed to begin secret rotation.");
+      errorSetter(result.error || t("bots.errors.rotationBeginFailed"));
       return;
     }
     const clientSecret = result.data?.clientSecret;
     if (!clientSecret) {
-      errorSetter("Server did not return a new client secret.");
+      errorSetter(t("bots.errors.noSecretReturned"));
       return;
     }
     const refreshResult = await refreshMe();
     if (!refreshResult.ok) {
       errorSetter(
-        refreshResult.error ||
-          "Secret rotation started but failed to refresh bot status."
+        refreshResult.error || t("bots.errors.rotationRefreshFailed")
       );
     } else {
       syncBotFromMe();
@@ -142,14 +141,13 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
     });
     finalizingSetter(false);
     if (!result.ok) {
-      errorSetter(result.error || "Failed to finalize secret rotation.");
+      errorSetter(result.error || t("bots.errors.finalizeFailed"));
       return;
     }
     const refreshResult = await refreshMe();
     if (!refreshResult.ok) {
       errorSetter(
-        refreshResult.error ||
-          "Rotation finalized but failed to refresh bot status."
+        refreshResult.error || t("bots.errors.finalizeRefreshFailed")
       );
       return;
     }
@@ -165,10 +163,10 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
     <>
       <Modal
         show={show && !showDeleteConfirm && credentials === null}
-        title={`Edit bot: ${bot.name}`}
+        title={t("bots.editTitle", { name: bot.name })}
         buttons={[
           {
-            label: saving ? "Saving…" : "Save",
+            label: saving ? t("bots.saving") : t("Save"),
             action: handleSave,
             disabled: saving || rotating || finalizing,
           },
@@ -184,7 +182,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
         ) : null}
         <div className="field">
           <label className="label is-small" htmlFor="botEditName">
-            Name
+            {t("bots.name")}
           </label>
           <div className="control">
             <input
@@ -198,7 +196,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
         </div>
         <div className="field">
           <label className="label is-small" htmlFor="botEditEndpoint">
-            HTTPS endpoint
+            {t("bots.httpsEndpoint")}
           </label>
           <div className="control">
             <input
@@ -207,13 +205,13 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
               type="url"
               value={endpoint}
               onChange={(e) => endpointSetter(e.target.value)}
-              placeholder="https://example.com/bot"
+              placeholder={t("bots.endpointPlaceholder")}
             />
           </div>
         </div>
         <div className="field">
           <label className="label is-small" htmlFor="botEditDescription">
-            Description
+            {t("bots.description")}
           </label>
           <div className="control">
             <textarea
@@ -226,7 +224,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
           </div>
         </div>
         <div className="field">
-          <label className="label is-small">Client ID</label>
+          <label className="label is-small">{t("bots.clientId")}</label>
           <div className="control">
             <input
               className="input is-small"
@@ -238,8 +236,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
         </div>
         {bot.secretRotationPending ? (
           <div className="notification is-info is-light">
-            Secret rotation is in progress. Deploy the new secret to your bot,
-            verify it works, then finalize the rotation.
+            {t("bots.rotationInProgress")}
           </div>
         ) : null}
         <div className="field is-grouped">
@@ -249,7 +246,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
               onClick={handleBeginRotation}
               disabled={saving || rotating || finalizing}
             >
-              {rotating ? <Spinner /> : "Rotate secret"}
+              {rotating ? <Spinner /> : t("bots.rotateSecret")}
             </button>
           </div>
           {bot.secretRotationPending ? (
@@ -259,7 +256,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
                 onClick={handleFinalizeRotation}
                 disabled={saving || rotating || finalizing}
               >
-                {finalizing ? <Spinner /> : "Finalize rotation"}
+                {finalizing ? <Spinner /> : t("bots.finalizeRotation")}
               </button>
             </div>
           ) : null}
@@ -269,22 +266,22 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
               onClick={() => showDeleteConfirmSetter(true)}
               disabled={saving || rotating || finalizing}
             >
-              Delete bot
+              {t("bots.deleteBot")}
             </button>
           </div>
         </div>
       </Modal>
       <Modal
         show={showDeleteConfirm}
-        title="Delete bot"
+        title={t("bots.deleteTitle")}
         buttons={[
           {
-            label: saving ? "Deleting…" : "Yes, delete it",
+            label: saving ? t("bots.deleting") : t("bots.yesDelete"),
             action: handleDelete,
             disabled: saving,
           },
           {
-            label: "No, cancel",
+            label: t("bots.noCancel"),
             action: () => showDeleteConfirmSetter(false),
             disabled: saving,
           },
@@ -292,11 +289,11 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
       >
         <div className="content">
           <p>
-            You are about to delete the bot <tt>{bot.name}</tt>. This will
-            unlink all past game records from this bot. If you just lost your
-            client secret, you can generate a new one using the "Rotate secret"
-            button. Deleting a bot cannot be undone! Are you sure you want to
-            delete this bot?
+            <Trans
+              i18nKey="bots.deleteConfirm"
+              values={{ name: bot.name }}
+              components={[<tt key="tt" />]}
+            />
           </p>
         </div>
       </Modal>
@@ -305,7 +302,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
         clientId={credentials?.clientId}
         clientSecret={credentials?.clientSecret}
         showClientId={credentials?.showClientId ?? true}
-        title="New bot secret"
+        title={t("bots.newSecretTitle")}
         onClose={() => credentialsSetter(null)}
       />
     </>

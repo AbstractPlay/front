@@ -8,7 +8,7 @@ import { callAuthApi } from "../lib/api";
 import { API_ENDPOINT_OPEN } from "../config";
 import { cloneDeep } from "lodash";
 // import { gameinfo } from "@abstractplay/gameslib";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import Modal from "./Modal";
 import Spinner from "./Spinner";
@@ -558,31 +558,31 @@ function Event() {
           </h1>
           <div className="content">
             <p>
-              <b>Status:</b>&nbsp;
+              <b>{t("Events.admin.statusLabel")}</b>&nbsp;
               {eventStatus === "draft" ? (
-                <>Draft. Only the organizer and admins can see this event.</>
+                <>{t("Events.admin.statusDraft")}</>
               ) : eventStatus === "open" ? (
-                <>Registration is open.</>
+                <>{t("Events.admin.statusOpen")}</>
               ) : eventStatus === "active" ? (
-                <>The event is currently active. Registration is closed.</>
+                <>{t("Events.admin.statusActive")}</>
               ) : (
-                <>This event has concluded.</>
+                <>{t("Events.admin.statusComplete")}</>
               )}
             </p>
             <p>
-              <b>Max players:</b>&nbsp;
+              <b>{t("Events.admin.maxPlayersLabel")}</b>&nbsp;
               {eventData.event.maxPlayers === 0 ||
               eventData.event.maxPlayers === undefined
-                ? "Unlimited"
+                ? t("Unlimited")
                 : eventData.event.maxPlayers}
             </p>
             <p>
-              <b>Organizer:</b>&nbsp;
+              <b>{t("Events.admin.organizerLabel")}</b>&nbsp;
               <BotAwareName
                 id={eventData.event.organizer}
                 name={
                   allUsers?.find((u) => u.id === eventData.event.organizer)
-                    ?.name || "UNKNOWN"
+                    ?.name || t("Unknown")
                 }
                 bot={
                   allUsers?.find((u) => u.id === eventData.event.organizer)?.bot
@@ -592,7 +592,7 @@ function Event() {
               />
             </p>
             <p>
-              <b>Start date:</b>&nbsp;
+              <b>{t("Events.admin.startDateLabel")}</b>&nbsp;
               {new Date(eventData.event.dateStart).toLocaleString()}
               {eventData.event.dateStart <= Date.now() ? null : (
                 <span>
@@ -603,13 +603,13 @@ function Event() {
             </p>
             {eventData.event.dateEnd === undefined ? null : (
               <p>
-                <b>End date:</b>&nbsp;
+                <b>{t("Events.admin.endDateLabel")}</b>&nbsp;
                 {new Date(eventData.event.dateEnd).toLocaleString()}
               </p>
             )}
             {winners.length === 0 ? null : (
               <p>
-                <b>Winner:</b>&nbsp;
+                <b>{t("Events.admin.winnerLabel")}</b>&nbsp;
                 {winners
                   .map((u) => (
                     <BotAwareName
@@ -635,7 +635,7 @@ function Event() {
               </p>
             )}
             <p>
-              <b>Description:</b>
+              <b>{t("Events.admin.descriptionLabel")}</b>
             </p>
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
@@ -646,7 +646,7 @@ function Event() {
             </ReactMarkdown>
             {registrants.length === 0 ? null : (
               <p>
-                <b>Registrants:</b>&nbsp;
+                <b>{t("Events.admin.registrantsLabel")}</b>&nbsp;
                 {registrants
                   .map((u) => (
                     <BotAwareName
@@ -673,7 +673,7 @@ function Event() {
             )}
             {!editor || invited.length === 0 ? null : (
               <p>
-                <b>Invited:</b>&nbsp;
+                <b>{t("Events.admin.invitedLabel")}</b>&nbsp;
                 {invited
                   .map((id) => {
                     const u = allUsers?.find((u) => u.id === id);
@@ -704,7 +704,7 @@ function Event() {
             )}
             {!editor || blocked.length === 0 ? null : (
               <p>
-                <b>Blocked:</b>&nbsp;
+                <b>{t("Events.admin.blockedLabel")}</b>&nbsp;
                 {blocked
                   .map((id) => {
                     const u = allUsers?.find((u) => u.id === id);
@@ -737,11 +737,8 @@ function Event() {
             {eventData.games.length === 0 ? null : (
               <>
                 <div className="content" style={{ marginTop: "1em" }}>
-                  <h2 className="subtitle">Games</h2>
-                  <p>
-                    An asterisk next to a result means the organizer has
-                    manually adjusted it.
-                  </p>
+                  <h2 className="subtitle">{t("Events.admin.gamesTitle")}</h2>
+                  <p>{t("Events.admin.gamesAsteriskNote")}</p>
                 </div>
                 <GamesTable
                   games={eventData.games}
@@ -750,12 +747,12 @@ function Event() {
                   eventid={eventid}
                 />
                 <div className="content" style={{ marginTop: "1em" }}>
-                  <h2 className="subtitle">Results</h2>
+                  <h2 className="subtitle">{t("Events.admin.resultsTitle")}</h2>
                   <p>
-                    These results are <em>unofficial</em>. See the description
-                    for the official results as tabulated by the organizer. This
-                    table is not aware of things like byes. It simply summarizes
-                    the results of the paired games, including arbitrations.
+                    <Trans
+                      i18nKey="Events.admin.resultsDisclaimer"
+                      components={[<em key="em" />]}
+                    />
                   </p>
                 </div>
                 <ResultsTable games={eventData.games} eventid={eventid} />
@@ -767,24 +764,12 @@ function Event() {
           {!editor ? null : (
             <div className="content" style={{ fontSize: "smaller" }}>
               <ul>
-                <li>
-                  Draft events can be published as long as it's at least 24
-                  hours from the start date and the description is not empty.
-                </li>
-                <li>
-                  Events can be fully deleted if they are draft, open for
-                  registration, or active before any games have been created.
-                </li>
-                <li>
-                  The start date can be changed up until games have been
-                  created.
-                </li>
-                <li>The name and description can be updated at any time.</li>
-                <li>
-                  An active event with games created can be marked as completed
-                  at any point, and winners assigned.
-                </li>
-                <li>Winners can be updated after the event is closed.</li>
+                <li>{t("Events.admin.editorHelp1")}</li>
+                <li>{t("Events.admin.editorHelp2")}</li>
+                <li>{t("Events.admin.editorHelp3")}</li>
+                <li>{t("Events.admin.editorHelp4")}</li>
+                <li>{t("Events.admin.editorHelp5")}</li>
+                <li>{t("Events.admin.editorHelp6")}</li>
               </ul>
             </div>
           )}
@@ -798,11 +783,11 @@ function Event() {
                     className="button is-small apButton"
                     onClick={() => showModalPublishSetter(true)}
                   >
-                    Publish
+                    {t("Events.admin.publish")}
                   </button>
                 ) : (
                   <button className="button is-small apButton" disabled>
-                    Publish
+                    {t("Events.admin.publish")}
                   </button>
                 )}
               </div>
@@ -817,7 +802,7 @@ function Event() {
                   className="button is-small apButton"
                   onClick={() => showModalDeleteSetter(true)}
                 >
-                  Delete event
+                  {t("Events.admin.deleteEvent")}
                 </button>
               </div>
             ) : null}
@@ -828,7 +813,7 @@ function Event() {
                   className="button is-small apButton"
                   onClick={() => showModalNameSetter(true)}
                 >
-                  Update name
+                  {t("Events.admin.updateName")}
                 </button>
               </div>
             )}
@@ -839,7 +824,7 @@ function Event() {
                   className="button is-small apButton"
                   onClick={() => showModalStartSetter(true)}
                 >
-                  Change start date
+                  {t("Events.admin.changeStartDate")}
                 </button>
               </div>
             )}
@@ -850,7 +835,7 @@ function Event() {
                   className="button is-small apButton"
                   onClick={() => showModalDescSetter(true)}
                 >
-                  Update description
+                  {t("Events.admin.updateDescription")}
                 </button>
               </div>
             )}
@@ -860,7 +845,7 @@ function Event() {
                   className="button is-small apButton"
                   onClick={() => showModalInvitesSetter(true)}
                 >
-                  Invite/Block Players
+                  {t("Events.admin.inviteBlockPlayers")}
                 </button>
               </div>
             )}
@@ -878,7 +863,7 @@ function Event() {
                       className="button is-small apButton"
                       onClick={handleRegister}
                     >
-                      Register
+                      {t("Events.admin.register")}
                     </button>
                   )
                 ) : (
@@ -886,7 +871,7 @@ function Event() {
                     className="button is-small apButton"
                     onClick={handleWithdraw}
                   >
-                    Withdraw
+                    {t("Events.admin.withdraw")}
                   </button>
                 )}
               </div>
@@ -900,7 +885,7 @@ function Event() {
                   className="button is-small apButton"
                   onClick={() => showModalCloseSetter(true)}
                 >
-                  Close event
+                  {t("Events.admin.closeEvent")}
                 </button>
               </div>
             )}
@@ -911,7 +896,7 @@ function Event() {
                   className="button is-small apButton"
                   onClick={() => showModalCloseSetter(true)}
                 >
-                  Update winner
+                  {t("Events.admin.updateWinner")}
                 </button>
               </div>
             )}
@@ -932,10 +917,10 @@ function Event() {
         {/* Modal: Update start date */}
         <Modal
           show={showModalStart}
-          title={"Change start date"}
+          title={t("Events.admin.changeStartDateTitle")}
           buttons={[
             {
-              label: "Change date",
+              label: t("Events.admin.changeDate"),
               action: handleChangeDate,
             },
             {
@@ -944,10 +929,10 @@ function Event() {
             },
           ]}
         >
-          <p>The date must be in the future and in UTC.</p>
+          <p>{t("Events.admin.dateFutureUtc")}</p>
           <div className="field">
             <label className="label" htmlFor="dateStart">
-              Date
+              {t("Date")}
             </label>
             <div className="control">
               <input
@@ -959,7 +944,7 @@ function Event() {
               />
             </div>
             <label className="label" htmlFor="timeStart">
-              Time
+              {t("Time")}
             </label>
             <div className="control">
               <input
@@ -971,17 +956,19 @@ function Event() {
               />
             </div>
             {new Date(`${startDate}T${startTime}Z`).getTime() < Date.now() ? (
-              <p className="help is-danger">The date must be in the future.</p>
+              <p className="help is-danger">
+                {t("Events.admin.dateMustBeFuture")}
+              </p>
             ) : null}
           </div>
         </Modal>
         {/* Modal: Update name */}
         <Modal
           show={showModalName}
-          title={"Change name"}
+          title={t("Events.admin.changeNameTitle")}
           buttons={[
             {
-              label: "Update name",
+              label: t("Events.admin.updateName"),
               action: handleChangeName,
             },
             {
@@ -992,7 +979,7 @@ function Event() {
         >
           <div className="field">
             <label className="label" htmlFor="eventName">
-              Event name
+              {t("Events.eventNameLabel")}
             </label>
             <div className="control">
               <input
@@ -1004,17 +991,17 @@ function Event() {
               />
             </div>
             {/^\s*$/.test(eventName) ? (
-              <p className="help is-danger">The name may not be empty.</p>
+              <p className="help is-danger">{t("Events.admin.nameNotEmpty")}</p>
             ) : null}
           </div>
         </Modal>
         {/* Modal: Update description */}
         <Modal
           show={showModalDesc}
-          title={"Change description"}
+          title={t("Events.admin.changeDescriptionTitle")}
           buttons={[
             {
-              label: "Update description",
+              label: t("Events.admin.updateDescription"),
               action: handleChangeDesc,
             },
             {
@@ -1025,13 +1012,13 @@ function Event() {
         >
           <div className="field">
             <label className="label" htmlFor="description">
-              Description (
+              {t("Events.admin.descriptionLabel")} (
               <a
                 href="https://github.github.com/gfm/"
                 target="_blank"
                 rel="noreferrer"
               >
-                Markdown enabled
+                {t("Events.admin.descriptionMarkdown")}
               </a>
               )
             </label>
@@ -1045,12 +1032,12 @@ function Event() {
             </div>
             {/^\s*$/.test(description) ? (
               <p className="help is-danger">
-                The description may not be empty.
+                {t("Events.admin.descriptionNotEmpty")}
               </p>
             ) : null}
           </div>
           <h1 className="subtitle lined">
-            <span>Preview</span>
+            <span>{t("Preview")}</span>
           </h1>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
@@ -1063,10 +1050,10 @@ function Event() {
         {/* Modal: Confirm publication */}
         <Modal
           show={showModalPublish}
-          title={"Publish event"}
+          title={t("Events.admin.publishEventTitle")}
           buttons={[
             {
-              label: "Publish event",
+              label: t("Events.admin.publishEventTitle"),
               action: handlePublish,
             },
             {
@@ -1077,18 +1064,20 @@ function Event() {
         >
           <div className="content">
             <p>
-              You are about to open this event up for registration. It will be
-              immediately visible to all players. <b>This cannot be undone!</b>
+              <Trans
+                i18nKey="Events.admin.publishEventBody"
+                components={[<strong key="strong" />]}
+              />
             </p>
           </div>
         </Modal>
         {/* Modal: Confirm delete */}
         <Modal
           show={showModalDelete}
-          title={"Delete event"}
+          title={t("Events.admin.deleteEvent")}
           buttons={[
             {
-              label: "Delete event",
+              label: t("Events.admin.deleteEvent"),
               action: handleDelete,
             },
             {
@@ -1099,20 +1088,23 @@ function Event() {
         >
           <div className="content">
             <p>
-              You are about to delete this event entirely.{" "}
-              <b>This cannot be undone!</b> This is only possible up until games
-              have been created for this event.
+              <Trans
+                i18nKey="Events.admin.deleteEventBody"
+                components={[<strong key="strong" />]}
+              />
             </p>
           </div>
         </Modal>
         {/* Modal: Close event */}
         <Modal
           show={showModalClose}
-          title={"Close event"}
+          title={t("Events.admin.closeEventTitle")}
           buttons={[
             {
               label:
-                eventStatus === "complete" ? "Update winners" : "Close event",
+                eventStatus === "complete"
+                  ? t("Events.admin.updateWinners")
+                  : t("Events.admin.closeEvent"),
               action: handleClose,
             },
             {
@@ -1126,18 +1118,20 @@ function Event() {
         >
           <div className="content">
             {eventStatus === "complete" ? (
-              <p>Select the winner (or winners) and click "Update winners."</p>
+              <p>{t("Events.admin.closeEventSelectWinners")}</p>
             ) : (
               <p>
-                You are about to mark this event as complete.{" "}
-                <b>This cannot be undone!</b> Please select the winner (or
-                winners) and click "Close Event." The winner can be updated at
-                any time after the event is over.
+                <Trans
+                  i18nKey="Events.admin.closeEventBody"
+                  components={[<strong key="strong" />]}
+                />
               </p>
             )}
           </div>
           <div className="field">
-            <label className="label">Select one or more event winners:</label>
+            <label className="label">
+              {t("Events.admin.selectWinnersLabel")}
+            </label>
             <div className="columns is-multiline">
               {registrants.map((u, i) => (
                 <div className="column" key={`reg:${i}`}>
@@ -1159,10 +1153,10 @@ function Event() {
         </Modal>
         <Modal
           show={showModalInvites}
-          title={"Invite/Block Players"}
+          title={t("Events.admin.inviteBlockTitle")}
           buttons={[
             {
-              label: "Save",
+              label: t("Save"),
               action: handleUpdateInvites,
             },
             {
@@ -1172,7 +1166,7 @@ function Event() {
           ]}
         >
           <div className="content">
-            <h3 className="subtitle">Invite</h3>
+            <h3 className="subtitle">{t("Events.admin.inviteSection")}</h3>
             <div className="field has-addons">
               <div className="control">
                 <div className="select">
@@ -1180,7 +1174,7 @@ function Event() {
                     value={selectedInvite}
                     onChange={(e) => selectedInviteSetter(e.target.value)}
                   >
-                    <option value="">-- Select Player --</option>
+                    <option value="">{t("Events.admin.selectPlayer")}</option>
                     {(allUsers || [])
                       .sort((a, b) =>
                         (a.name ?? "").localeCompare(b.name ?? "")
@@ -1195,7 +1189,7 @@ function Event() {
               </div>
               <div className="control">
                 <button className="button apButton" onClick={addInvite}>
-                  Add
+                  {t("Add")}
                 </button>
               </div>
             </div>
@@ -1213,7 +1207,7 @@ function Event() {
                 );
               })}
             </ul>
-            <h3 className="subtitle">Block</h3>
+            <h3 className="subtitle">{t("Events.admin.blockSection")}</h3>
             <div className="field has-addons">
               <div className="control">
                 <div className="select">
@@ -1221,7 +1215,7 @@ function Event() {
                     value={selectedBlock}
                     onChange={(e) => selectedBlockSetter(e.target.value)}
                   >
-                    <option value="">-- Select Player --</option>
+                    <option value="">{t("Events.admin.selectPlayer")}</option>
                     {(allUsers || [])
                       .sort((a, b) =>
                         (a.name ?? "").localeCompare(b.name ?? "")
@@ -1236,7 +1230,7 @@ function Event() {
               </div>
               <div className="control">
                 <button className="button apButton" onClick={addBlock}>
-                  Add
+                  {t("Add")}
                 </button>
               </div>
             </div>
@@ -1261,7 +1255,7 @@ function Event() {
   } else {
     return (
       <div className="content">
-        <p>Could not load event {eventid}.</p>
+        <p>{t("Events.admin.loadFailed", { eventid })}</p>
       </div>
     );
   }

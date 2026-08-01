@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "../../lib/api";
 import { cloneDeep } from "lodash";
@@ -12,17 +12,11 @@ import GameVariants from "../GameVariants";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 
-const errorDesc = new Map([
-  [
-    "dupeExact",
-    "This combination of p1, p2, and game is an exact duplicate of an earlier entry. This is almost never desirable.",
-  ],
-  [
-    "dupeReversed",
-    "This combination of p1, p2, and game is a mirror image of an earlier entry. This is usually not intended.",
-  ],
-  ["selfPlay", "p1 and p2 are the same!"],
-]);
+const errorDescKey = {
+  dupeExact: "Events.pairing.errors.dupeExact",
+  dupeReversed: "Events.pairing.errors.dupeReversed",
+  selfPlay: "Events.pairing.errors.selfPlay",
+};
 
 function Pair({ event, setRefresh }) {
   const { t } = useTranslation();
@@ -219,13 +213,13 @@ function Pair({ event, setRefresh }) {
   return (
     <>
       <h2 className="subtitle lined">
-        <span>Pairing</span>
+        <span>{t("Events.pairing.title")}</span>
       </h2>
       <div className="container">
         {/* Set the round number */}
         <div className="field">
           <label className="label" htmlFor="round">
-            Round
+            {t("Events.pairing.round")}
           </label>
           <div className="control">
             <input
@@ -242,7 +236,7 @@ function Pair({ event, setRefresh }) {
         {validMeta === null ? null : (
           <div className="field">
             <label className="label" htmlFor="metagame">
-              Game
+              {t("Events.pairing.game")}
             </label>
             <div className="control">
               <div className="select">
@@ -336,22 +330,12 @@ function Pair({ event, setRefresh }) {
         {metagame === null ? null : (
           <>
             <div className="content">
-              <p>There are two pairing options:</p>
+              <p>{t("Events.pairing.optionsIntro")}</p>
               <ol>
-                <li>
-                  Sort the players in whatever order you choose and then click
-                  one of the automated buttons to quickly generate common
-                  pairings.
-                </li>
-                <li>
-                  Manually select players 1 and 2 and add each pair to the list.
-                </li>
+                <li>{t("Events.pairing.optionAutomated")}</li>
+                <li>{t("Events.pairing.optionManual")}</li>
               </ol>
-              <p>
-                This framework gives the organizer maximum flexibility but also
-                requires extra care and attention. The automated buttons are
-                helpers only. Manual tweaking is often still necessary.
-              </p>
+              <p>{t("Events.pairing.frameworkNote")}</p>
             </div>
             <div className="columns is-multiline">
               {/* Automated first */}
@@ -366,7 +350,11 @@ function Pair({ event, setRefresh }) {
                 return (
                   <div className="column" key={`automated|${idx}`}>
                     <h3 className="subtitle lined">
-                      <span>Automated (Division {idx + 1})</span>
+                      <span>
+                        {t("Events.pairing.automatedDivision", {
+                          num: idx + 1,
+                        })}
+                      </span>
                     </h3>
                     <SortableList
                       onSortEnd={onSortEnd}
@@ -388,7 +376,7 @@ function Pair({ event, setRefresh }) {
                             className="button is-small apButton"
                             onClick={() => pairBerger(div)}
                           >
-                            Berger round robin
+                            {t("Events.pairing.bergerRoundRobin")}
                           </button>
                         </div>
                       </div>
@@ -398,7 +386,7 @@ function Pair({ event, setRefresh }) {
                             className="button is-small apButton"
                             onClick={() => pairDutch(div)}
                           >
-                            Dutch Swiss
+                            {t("Events.pairing.dutchSwiss")}
                           </button>
                         </div>
                       </div>
@@ -409,11 +397,11 @@ function Pair({ event, setRefresh }) {
               {/* Now manual */}
               <div className="column">
                 <h3 className="subtitle lined">
-                  <span>Manual</span>
+                  <span>{t("Events.pairing.manual")}</span>
                 </h3>
                 <div className="field">
                   <label className="label" htmlFor="p1">
-                    Player 1
+                    {t("Events.pairing.player1")}
                   </label>
                   <div className="control">
                     <div className="select">
@@ -437,7 +425,7 @@ function Pair({ event, setRefresh }) {
                 </div>
                 <div className="field">
                   <label className="label" htmlFor="p2">
-                    Player 1
+                    {t("Events.pairing.player2")}
                   </label>
                   <div className="control">
                     <div className="select">
@@ -471,7 +459,7 @@ function Pair({ event, setRefresh }) {
                     }
                     onClick={handleManualPairing}
                   >
-                    Add pairing
+                    {t("Events.pairing.addPairing")}
                   </button>
                 </div>
               </div>
@@ -483,12 +471,9 @@ function Pair({ event, setRefresh }) {
         <>
           <div className="content" style={{ marginTop: "1em" }}>
             <h3 className="subtitle lined">
-              <span>Pairings</span>
+              <span>{t("Events.pairing.pairings")}</span>
             </h3>
-            <p>
-              Below are the pairings you requested. Please confirm that
-              everything is correct and then click the Create Games button.
-            </p>
+            <p>{t("Events.pairing.pairingsConfirm")}</p>
           </div>
           <div className="container" style={{ marginTop: "1em" }}>
             <PairingTable
@@ -499,11 +484,14 @@ function Pair({ event, setRefresh }) {
           </div>
           {errors === null ? null : (
             <div className="content" style={{ marginTop: "1em", color: "red" }}>
-              <p>The following errors were found:</p>
+              <p>{t("Events.pairing.errorsFound")}</p>
               <ul>
                 {errors.map((e, i) => (
                   <li key={`err:${i}`}>
-                    Index {e.idx}: {errorDesc.get(e.type)}
+                    {t("Events.pairing.indexError", {
+                      idx: e.idx,
+                      message: t(errorDescKey[e.type]),
+                    })}
                   </li>
                 ))}
               </ul>
@@ -518,16 +506,16 @@ function Pair({ event, setRefresh }) {
                   : showModalErrorsSetter(true)
               }
             >
-              Create games
+              {t("Events.pairing.createGames")}
             </button>
           </div>
           {/* Modal: Errors exist */}
           <Modal
             show={showModalErrors}
-            title={"Possible errors"}
+            title={t("Events.pairing.possibleErrors")}
             buttons={[
               {
-                label: "Proceed anyway",
+                label: t("Events.pairing.proceedAnyway"),
                 action: () => {
                   showModalErrorsSetter(false);
                   showModalConfirmSetter(true);
@@ -540,20 +528,16 @@ function Pair({ event, setRefresh }) {
             ]}
           >
             <div className="content">
-              <p>
-                Your pairings contain potential errors. Please review the table
-                and resolve any duplications. You should only proceed if you are
-                certain your pairings are correct.
-              </p>
+              <p>{t("Events.pairing.errorsModalBody")}</p>
             </div>
           </Modal>
           {/* Modal: Final confirmation */}
           <Modal
             show={showModalConfirm}
-            title={"Confirm game creation"}
+            title={t("Events.pairing.confirmGameCreation")}
             buttons={[
               {
-                label: "Create games",
+                label: t("Events.pairing.createGames"),
                 action: handleCreateGames,
               },
               {
@@ -564,9 +548,10 @@ function Pair({ event, setRefresh }) {
           >
             <div className="content">
               <p>
-                You are about to create games, which will start immediately.{" "}
-                <b>This cannot be undone!</b> Please review your pairings and be
-                very certain they are correct before proceeding.
+                <Trans
+                  i18nKey="Events.pairing.confirmCreateBody"
+                  components={[<strong key="strong" />]}
+                />
               </p>
             </div>
           </Modal>

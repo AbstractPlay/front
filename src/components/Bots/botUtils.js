@@ -65,9 +65,11 @@ export function formatPlayerDisplayName(player, users) {
   return formatDisplayName(player.name, isAnyBot(player, users));
 }
 
-export function validateDisplayName(name) {
+export function validateDisplayName(name, t) {
   if (containsBotEmoji(name)) {
-    return "Display names cannot contain the robot emoji.";
+    return t
+      ? t("bots.noRobotEmoji")
+      : "Display names cannot contain the robot emoji.";
   }
   return null;
 }

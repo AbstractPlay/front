@@ -146,7 +146,7 @@ function UserSettingsModal(props) {
     } else if (name === "") {
       nameErrorSetter(t("NameBlank"));
     } else {
-      const nameValidationError = validateDisplayName(name);
+      const nameValidationError = validateDisplayName(name, t);
       if (nameValidationError) {
         nameErrorSetter(nameValidationError);
         return;

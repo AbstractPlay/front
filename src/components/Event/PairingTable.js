@@ -91,7 +91,7 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
               className="button is-small apButton"
               onClick={() => delPairing(props.row.original.id)}
             >
-              Delete pairing
+              {t("Events.pairing.deletePairing")}
             </button>
           </>
         ),

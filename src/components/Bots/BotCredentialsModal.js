@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import Modal from "../Modal";
 import ClipboardCopy from "../../lib/ClipboardCopy";
 
@@ -8,11 +9,13 @@ function BotCredentialsModal({
   clientId,
   clientSecret,
   showClientId = true,
-  idLabel = "Client ID",
+  idLabel,
   title,
   onClose,
 }) {
+  const { t } = useTranslation();
   const [acknowledged, acknowledgedSetter] = useState(false);
+  const resolvedIdLabel = idLabel ?? t("bots.clientId");
 
   useEffect(() => {
     if (show) {
@@ -37,7 +40,7 @@ function BotCredentialsModal({
       disableBackdropClose={!acknowledged}
       buttons={[
         {
-          label: "Done",
+          label: t("Done"),
           action: handleClose,
           disabled: !acknowledged,
         },
@@ -45,17 +48,17 @@ function BotCredentialsModal({
     >
       <div className="notification is-warning">
         {showClientId
-          ? "These credentials are shown only once. Copy the client ID and client secret and store them securely before closing this dialog."
-          : "Your client ID is unchanged. This new client secret is shown only once — copy and store it securely before closing this dialog."}
+          ? t("bots.credentialsWarningBoth")
+          : t("bots.credentialsWarningSecretOnly")}
       </div>
       {showClientId ? (
         <div className="field">
-          <label className="label is-small">{idLabel}</label>
+          <label className="label is-small">{resolvedIdLabel}</label>
           <ClipboardCopy copyText={clientId || ""} />
         </div>
       ) : null}
       <div className="field">
-        <label className="label is-small">Client secret</label>
+        <label className="label is-small">{t("bots.clientSecret")}</label>
         <ClipboardCopy copyText={clientSecret || ""} />
       </div>
       <div className="field">
@@ -65,7 +68,7 @@ function BotCredentialsModal({
             checked={acknowledged}
             onChange={(e) => acknowledgedSetter(e.target.checked)}
           />{" "}
-          I have copied and securely stored the client secret
+          {t("bots.ackSecretStored")}
         </label>
       </div>
     </Modal>
