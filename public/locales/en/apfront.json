@@ -52,6 +52,10 @@
             "dl": "Dark, Left",
             "dr": "Dark, Right"
         },
+        "evenatodds": {
+            "evens": "Evens",
+            "odds": "Odds"
+        },
         "arimaa": {
             "gold99": "Quick setup",
             "silver99e7": "Quick setup, elephant e7",

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export const useStore = create((set) => ({
+export const useStore = create((set, get) => ({
   globalMe: null,
   setGlobalMe: (me) =>
     set((state) => ({
@@ -115,6 +115,16 @@ export const useStore = create((set) => ({
 
   wsSend: null,
   setWsSend: (fn) => set({ wsSend: fn }),
+
+  desiredWatchGames: [],
+  setDesiredWatchGames: (games) =>
+    set({
+      desiredWatchGames: Array.isArray(games) ? games : [],
+    }),
+  syncWatchGames: () => {
+    const { wsSend, desiredWatchGames } = get();
+    wsSend?.("watchGames", { games: desiredWatchGames });
+  },
 
   invisible: false,
   setInvisible: (val) =>
