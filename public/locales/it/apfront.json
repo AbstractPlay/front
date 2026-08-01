@@ -56,6 +56,10 @@
       "gold99": "Configurazione rapida",
       "silver99e7": "Configurazione rapida, elefante in e7",
       "silver99d7": "Configurazione rapida, elefante in d7"
+    },
+    "evenatodds": {
+      "evens": "Pari",
+      "odds": "Dispari"
     }
   },
   "Cancel": "Annulla",
