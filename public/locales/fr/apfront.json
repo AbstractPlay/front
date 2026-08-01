@@ -1407,5 +1407,129 @@
       "pasteCssPlaceholder": "Coller le code CSS ici",
       "activateCustomCss": "Activer le CSS personnalisé ?"
     }
+  },
+  "Back": "Retour",
+  "theme": {
+    "title": "Personnaliser le thème du site",
+    "lightMode": "Mode clair",
+    "darkMode": "Mode sombre",
+    "cssVariable": "Variable CSS",
+    "customizationsJson": "Personnalisations (JSON)",
+    "resetCurrent": "Réinitialiser le thème actuel",
+    "resetBoth": "Réinitialiser les deux thèmes",
+    "resetAll": "Réinitialiser tous les thèmes",
+    "sampleHeading": "Exemple de titre",
+    "sampleText": "Ceci est un exemple de texte.",
+    "sampleLink": "Ceci est un lien.",
+    "secondaryFontColor": "Ceci est la couleur de police secondaire.",
+    "primaryButton": "Bouton principal",
+    "alertButton": "Bouton d'alerte",
+    "tag1": "Tag 1",
+    "tag2": "Tag 2"
+  },
+  "customize": {
+    "title": "Personnaliser les paramètres pour {{gameName}}",
+    "globalDefaults": "Valeurs par défaut globales",
+    "playerColours": "Couleurs des joueurs",
+    "addColour": "Ajouter une couleur",
+    "addColourHelp": "Sélectionnez une couleur et cliquez sur le bouton \"Ajouter une couleur\". Les couleurs par défaut peuvent être sélectionnées en cliquant sur l'échantillon. Si la palette est vide, la palette par défaut sera utilisée.",
+    "defaultSwatch": "Par défaut",
+    "addColourBtn": "Ajouter une couleur",
+    "selectDefaultColours": "Sélectionner les couleurs par défaut",
+    "selectColourBlind": "Sélectionner les couleurs pour daltoniens",
+    "selectPatterns": "Sélectionner les motifs",
+    "clearColours": "Effacer les couleurs",
+    "developerHints": "Indications pour développeurs :",
+    "paletteHint": "Palette n° {{num}}",
+    "defaultValue": "(Par défaut : {{value}})",
+    "boardColours": "Couleurs du plateau",
+    "selectProperty": "Sélectionner une propriété",
+    "context": {
+      "background": {
+        "label": "Arrière-plan",
+        "help": "La couleur de la zone entourant le plateau."
+      },
+      "board": {
+        "label": "Plateau",
+        "help": "La couleur du plateau lui-même. Prend la couleur de l'arrière-plan par défaut si elle n'est pas définie."
+      },
+      "strokes": {
+        "label": "Tracés",
+        "help": "La couleur des lignes dessinées sur le plateau."
+      },
+      "borders": {
+        "label": "Bordures",
+        "help": "La couleur des bordures fixes des pièces."
+      },
+      "labels": {
+        "label": "Étiquettes",
+        "help": "La couleur des repères de coordonnées."
+      },
+      "annotations": {
+        "label": "Annotations",
+        "help": "La couleur des annotations de coup."
+      },
+      "fill": {
+        "label": "Remplissage",
+        "help": "La couleur utilisée pour remplir certains éléments du plateau. En gros, l'\"opposé\" de l'arrière-plan."
+      }
+    },
+    "glyphReplacements": "Remplacement de glyphes",
+    "addReplacement": "Ajouter un remplacement",
+    "selectOriginal": "-- Sélectionner l'original --",
+    "with": "par",
+    "selectReplacement": "-- Sélectionner le remplacement --",
+    "atScale": "à l'échelle",
+    "scaleSuffix": "(@ {{scale}}x)",
+    "output": "Sortie",
+    "settingsJson": "JSON des paramètres",
+    "pasteSettingsHelp": "Collez le JSON des paramètres ici pour l'appliquer.",
+    "saveSettings": "Enregistrer les paramètres",
+    "resetToDefaults": "Réinitialiser aux valeurs par défaut",
+    "deleteCustomization": "Supprimer la personnalisation"
+  },
+  "lab": {
+    "intro": "Un espace de jeu local pour expérimenter avec les jeux. Rien ici ne touche le serveur — les positions et les parties sauvegardées résident uniquement dans votre navigateur.",
+    "noSimultaneous": "Le Playground ne prend en charge que les jeux au tour par tour (séquentiels). Les jeux simultanés ne sont pas disponibles.",
+    "tabNew": "Nouvelle partie",
+    "tabPaste": "Coller l'état",
+    "tabSaved": "Charger une sauvegarde",
+    "selectPlayerCount": "Sélectionnez le nombre de joueurs.",
+    "launch": "Lancer",
+    "gameState": "État de la partie",
+    "pastePlaceholder": "Collez l'état sérialisé de la partie ici",
+    "pasteHelp": "Collez un état sérialisé issu d'un dump de débogage d'une partie en direct, d'un export de partie du Playground ou d'ailleurs. Le type de jeu est extrait automatiquement de l'état. Les jeux simultanés ne sont pas pris en charge.",
+    "loadState": "Charger l'état",
+    "noSavedGames": "Aucune partie sauvegardée dans le Playground pour l'instant.",
+    "savedAt": "Sauvegardé",
+    "load": "Charger",
+    "importedSuffix": " (importé)",
+    "playgroundSuffix": " (Playground)",
+    "backToLauncher": "Retour au lanceur",
+    "saveToPlayground": "Sauvegarder dans le Playground",
+    "exitToLauncher": "Quitter le lanceur",
+    "savePrompt": "Nom de cette position sauvegardée :",
+    "savedAlert": "Sauvegardé dans le Playground.",
+    "designerOne": "Auteur : ",
+    "designersMany": "Auteurs : ",
+    "coderOne": "Développeur : ",
+    "codersMany": "Développeurs : ",
+    "titleSuffix": " — Playground",
+    "debug": {
+      "copyPosition": "Copier la position",
+      "copyPositionHelp": "État brut du moteur sur le coup actuel (pour le débogage).",
+      "copyGame": "Copier la partie",
+      "copyGameHelp": "Export complet du Playground incluant l'arbre des coups, le coup actuel et les annotations — à coller dans le Playground pour partager.",
+      "copyRendererJson": "Copier le JSON du moteur de rendu",
+      "copyRendererJsonHelp": "Données fournies au moteur de rendu pour l'affichage actuel du plateau (pour la personnalisation ou le débogage)."
+    },
+    "annotations": {
+      "title": "Annotations",
+      "moveQuality": "Qualité du coup",
+      "clear": "Effacer",
+      "commentMarkdown": "Commentaire (Markdown)",
+      "commentPlaceholder": "Ajouter un commentaire en Markdown…",
+      "nothingToPreview": "Rien à prévisualiser pour l'instant."
+    }
   }
 }

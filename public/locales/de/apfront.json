@@ -1407,5 +1407,129 @@
       "pasteCssPlaceholder": "CSS-Code hier einfügen",
       "activateCustomCss": "Benutzerdefiniertes CSS aktivieren?"
     }
+  },
+  "Back": "Zurück",
+  "theme": {
+    "title": "Website-Design anpassen",
+    "lightMode": "Hellmodus",
+    "darkMode": "Dunkelmodus",
+    "cssVariable": "CSS-Variable",
+    "customizationsJson": "Anpassungen (JSON)",
+    "resetCurrent": "Aktuelles Design zurücksetzen",
+    "resetBoth": "Beide Designs zurücksetzen",
+    "resetAll": "Alle Designs zurücksetzen",
+    "sampleHeading": "Beispielüberschrift",
+    "sampleText": "Dies ist ein Beispieltext.",
+    "sampleLink": "Dies ist ein Link.",
+    "secondaryFontColor": "Dies ist die sekundäre Schriftfarbe.",
+    "primaryButton": "Primäre Schaltfläche",
+    "alertButton": "Warn-Schaltfläche",
+    "tag1": "Tag 1",
+    "tag2": "Tag 2"
+  },
+  "customize": {
+    "title": "Einstellungen für {{gameName}} anpassen",
+    "globalDefaults": "Globale Standardwerte",
+    "playerColours": "Spielerfarben",
+    "addColour": "Farbe hinzufügen",
+    "addColourHelp": "Wähle eine Farbe aus und klicke auf die Schaltfläche \"Farbe hinzufügen\". Die Standardfarben können durch Klicken auf das Farbfeld ausgewählt werden. Wenn die Palette leer ist, wird die Standardpalette verwendet.",
+    "defaultSwatch": "Standard",
+    "addColourBtn": "Farbe hinzufügen",
+    "selectDefaultColours": "Standardfarben auswählen",
+    "selectColourBlind": "Farben für Farbenblinde auswählen",
+    "selectPatterns": "Muster auswählen",
+    "clearColours": "Farben löschen",
+    "developerHints": "Entwicklerhinweise:",
+    "paletteHint": "Palette #{{num}}",
+    "defaultValue": "(Standard: {{value}})",
+    "boardColours": "Brettfarben",
+    "selectProperty": "Eigenschaft auswählen",
+    "context": {
+      "background": {
+        "label": "Hintergrund",
+        "help": "Die Farbe des Bereichs um das Spielbrett herum."
+      },
+      "board": {
+        "label": "Spielbrett",
+        "help": "Die Farbe des Spielbretts selbst. Fällt auf die Hintergrundfarbe zurück, wenn nicht festgelegt."
+      },
+      "strokes": {
+        "label": "Linien",
+        "help": "Die Farbe der auf dem Spielbrett gezeichneten Linien."
+      },
+      "borders": {
+        "label": "Ränder",
+        "help": "Die Farbe der festen Spielsteinränder."
+      },
+      "labels": {
+        "label": "Beschriftungen",
+        "help": "Die Farbe der Koordinatenbeschriftungen."
+      },
+      "annotations": {
+        "label": "Anmerkungen",
+        "help": "Die Farbe von Zuganmerkungen."
+      },
+      "fill": {
+        "label": "Füllung",
+        "help": "Die Farbe zum Ausfüllen bestimmter Brettelemente. Im Grunde das \"Gegenteil\" des Hintergrunds."
+      }
+    },
+    "glyphReplacements": "Glyphen-Ersetzungen",
+    "addReplacement": "Ersetzung hinzufügen",
+    "selectOriginal": "-- Original auswählen --",
+    "with": "durch",
+    "selectReplacement": "-- Ersatz auswählen --",
+    "atScale": "im Maßstab",
+    "scaleSuffix": "(@ {{scale}}x)",
+    "output": "Ausgabe",
+    "settingsJson": "Einstellungen-JSON",
+    "pasteSettingsHelp": "Füge das Einstellungen-JSON hier ein, um es anzuwenden.",
+    "saveSettings": "Einstellungen speichern",
+    "resetToDefaults": "Auf Standardwerte zurücksetzen",
+    "deleteCustomization": "Anpassung löschen"
+  },
+  "lab": {
+    "intro": "Ein lokaler Spielbereich zum Experimentieren mit Spielen. Nichts hier gelangt auf den Server – Stellungen und gespeicherte Spiele verbleiben ausschließlich in deinem Browser.",
+    "noSimultaneous": "Playground unterstützt nur sequenzielle Spiele. Simultanspiele sind nicht verfügbar.",
+    "tabNew": "Neues Spiel",
+    "tabPaste": "Spielstand einfügen",
+    "tabSaved": "Gespeicherte laden",
+    "selectPlayerCount": "Wähle die Anzahl der Spieler.",
+    "launch": "Starten",
+    "gameState": "Spielzustand",
+    "pastePlaceholder": "Serialisierten Spielzustand hier einfügen",
+    "pasteHelp": "Füge einen serialisierten Zustand aus dem Debug-Dump eines Live-Spiels, einem Playground-Spielexport oder von woanders ein. Der Spieltyp wird automatisch aus dem Zustand gelesen. Simultanspiele werden nicht unterstützt.",
+    "loadState": "Zustand laden",
+    "noSavedGames": "Noch keine gespeicherten Playground-Spiele vorhanden.",
+    "savedAt": "Gespeichert",
+    "load": "Laden",
+    "importedSuffix": " (importiert)",
+    "playgroundSuffix": " (Playground)",
+    "backToLauncher": "Zurück zum Launcher",
+    "saveToPlayground": "In Playground speichern",
+    "exitToLauncher": "Beenden zum Launcher",
+    "savePrompt": "Name für diese gespeicherte Stellung:",
+    "savedAlert": "In Playground gespeichert.",
+    "designerOne": "Designer: ",
+    "designersMany": "Designer: ",
+    "coderOne": "Entwickler: ",
+    "codersMany": "Entwickler: ",
+    "titleSuffix": " — Playground",
+    "debug": {
+      "copyPosition": "Stellung kopieren",
+      "copyPositionHelp": "Roher Engine-Zustand des aktuellen Fokus (für Debugging).",
+      "copyGame": "Partie kopieren",
+      "copyGameHelp": "Vollständiger Playground-Export einschließlich Zugbaum, Fokus und Anmerkungen — in Playground einfügen, um zu teilen.",
+      "copyRendererJson": "Renderer-JSON kopieren",
+      "copyRendererJsonHelp": "Renderer-Eingabe für die aktuell angezeigte Brettansicht (für Anpassungen oder Debugging)."
+    },
+    "annotations": {
+      "title": "Anmerkungen",
+      "moveQuality": "Zugqualität",
+      "clear": "Löschen",
+      "commentMarkdown": "Kommentar (Markdown)",
+      "commentPlaceholder": "Füge einen Kommentar in Markdown hinzu…",
+      "nothingToPreview": "Noch nichts für die Vorschau vorhanden."
+    }
   }
 }

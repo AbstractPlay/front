@@ -1407,5 +1407,129 @@
       "pasteCssPlaceholder": "Incolla qui il codice CSS",
       "activateCustomCss": "Attivare il CSS personalizzato?"
     }
+  },
+  "Back": "Indietro",
+  "theme": {
+    "title": "Personalizza tema del sito",
+    "lightMode": "Modalità chiara",
+    "darkMode": "Modalità scura",
+    "cssVariable": "Variabile CSS",
+    "customizationsJson": "Personalizzazioni (JSON)",
+    "resetCurrent": "Ripristina tema corrente",
+    "resetBoth": "Ripristina entrambi i temi",
+    "resetAll": "Ripristina tutti i temi",
+    "sampleHeading": "Intestazione di esempio",
+    "sampleText": "Questo è un testo di esempio.",
+    "sampleLink": "Questo è un link.",
+    "secondaryFontColor": "Questo è il colore del carattere secondario.",
+    "primaryButton": "Pulsante primario",
+    "alertButton": "Pulsante di avviso",
+    "tag1": "Tag 1",
+    "tag2": "Tag 2"
+  },
+  "customize": {
+    "title": "Personalizza impostazioni per {{gameName}}",
+    "globalDefaults": "Impostazioni predefinite globali",
+    "playerColours": "Colori dei giocatori",
+    "addColour": "Aggiungi colore",
+    "addColourHelp": "Seleziona un colore e fai clic sul pulsante \"Aggiungi colore\". I colori predefiniti possono essere selezionati facendo clic sul campione. Se la tavolozza è vuota, verrà usata quella predefinita.",
+    "defaultSwatch": "Predefinito",
+    "addColourBtn": "Aggiungi colore",
+    "selectDefaultColours": "Seleziona colori predefiniti",
+    "selectColourBlind": "Seleziona colori per daltonici",
+    "selectPatterns": "Seleziona trame",
+    "clearColours": "Cancella colori",
+    "developerHints": "Suggerimenti per sviluppatori:",
+    "paletteHint": "Tavolozza #{{num}}",
+    "defaultValue": "(Predefinito: {{value}})",
+    "boardColours": "Colori del tabellone",
+    "selectProperty": "Seleziona proprietà",
+    "context": {
+      "background": {
+        "label": "Sfondo",
+        "help": "Il colore dell'area che circonda il tabellone."
+      },
+      "board": {
+        "label": "Tabellone",
+        "help": "Il colore del tabellone stesso. Se non impostato, viene usato il colore dello sfondo."
+      },
+      "strokes": {
+        "label": "Tratti",
+        "help": "Il colore delle linee disegnate sul tabellone."
+      },
+      "borders": {
+        "label": "Bordi",
+        "help": "Il colore dei bordi dei pezzi fissi."
+      },
+      "labels": {
+        "label": "Etichette",
+        "help": "Il colore delle coordinate."
+      },
+      "annotations": {
+        "label": "Annotazioni",
+        "help": "Il colore delle annotazioni di mossa."
+      },
+      "fill": {
+        "label": "Riempimento",
+        "help": "Il colore usato per riempire alcuni elementi del tabellone. In pratica, l'\"opposto\" dello sfondo."
+      }
+    },
+    "glyphReplacements": "Sostituzioni di simboli",
+    "addReplacement": "Aggiungi sostituzione",
+    "selectOriginal": "-- Seleziona originale --",
+    "with": "con",
+    "selectReplacement": "-- Seleziona sostituto --",
+    "atScale": "in scala",
+    "scaleSuffix": "(@ {{scale}}x)",
+    "output": "Output",
+    "settingsJson": "JSON impostazioni",
+    "pasteSettingsHelp": "Incolla qui il JSON delle impostazioni per applicarle.",
+    "saveSettings": "Salva impostazioni",
+    "resetToDefaults": "Ripristina predefiniti",
+    "deleteCustomization": "Elimina personalizzazione"
+  },
+  "lab": {
+    "intro": "Un'area di gioco locale per sperimentare con i giochi. Nulla qui interagisce con il server: le posizioni e le partite salvate risiedono solo nel tuo browser.",
+    "noSimultaneous": "Il laboratorio supporta solo giochi a turni sequenziali. I giochi simultanei non sono disponibili.",
+    "tabNew": "Nuova partita",
+    "tabPaste": "Incolla stato",
+    "tabSaved": "Carica salvata",
+    "selectPlayerCount": "Seleziona il numero di giocatori.",
+    "launch": "Avvia",
+    "gameState": "Stato della partita",
+    "pastePlaceholder": "Incolla qui lo stato serializzato della partita",
+    "pasteHelp": "Incolla uno stato serializzato da un dump di debug di una partita dal vivo, da un'esportazione del laboratorio o da un'altra fonte. Il tipo di gioco viene letto automaticamente dallo stato. I giochi simultanei non sono supportati.",
+    "loadState": "Carica stato",
+    "noSavedGames": "Nessuna partita salvata nel laboratorio.",
+    "savedAt": "Salvato il",
+    "load": "Carica",
+    "importedSuffix": " (importato)",
+    "playgroundSuffix": " (Laboratorio)",
+    "backToLauncher": "Torna alla schermata iniziale",
+    "saveToPlayground": "Salva nel Laboratorio",
+    "exitToLauncher": "Esci alla schermata iniziale",
+    "savePrompt": "Nome per questa posizione salvata:",
+    "savedAlert": "Salvato nel Laboratorio.",
+    "designerOne": "Autore: ",
+    "designersMany": "Autori: ",
+    "coderOne": "Programmatore: ",
+    "codersMany": "Programmatori: ",
+    "titleSuffix": " — Laboratorio",
+    "debug": {
+      "copyPosition": "Copia posizione",
+      "copyPositionHelp": "Stato grezzo del motore di gioco al punto corrente (per il debug).",
+      "copyGame": "Copia partita",
+      "copyGameHelp": "Esportazione completa del Laboratorio, inclusi albero delle mosse, punto corrente e annotazioni — incolla nel Laboratorio per condividere.",
+      "copyRendererJson": "Copia JSON del renderer",
+      "copyRendererJsonHelp": "Input del renderer per la vista del tabellone attualmente mostrata (per Personalizza o debug)."
+    },
+    "annotations": {
+      "title": "Annotazioni",
+      "moveQuality": "Qualità della mossa",
+      "clear": "Cancella",
+      "commentMarkdown": "Commento (Markdown)",
+      "commentPlaceholder": "Aggiungi un commento in Markdown…",
+      "nothingToPreview": "Niente da mostrare in anteprima per ora."
+    }
   }
 }

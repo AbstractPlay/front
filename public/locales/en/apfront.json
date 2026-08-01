@@ -1407,5 +1407,129 @@
             "pasteCssPlaceholder": "Paste CSS code here",
             "activateCustomCss": "Activate custom CSS?"
         }
+    },
+    "Back": "Back",
+    "theme": {
+        "title": "Customize Site Theme",
+        "lightMode": "Light Mode",
+        "darkMode": "Dark Mode",
+        "cssVariable": "CSS Variable",
+        "customizationsJson": "Customizations (JSON)",
+        "resetCurrent": "Reset Current Theme",
+        "resetBoth": "Reset Both Themes",
+        "resetAll": "Reset All Themes",
+        "sampleHeading": "Sample Heading",
+        "sampleText": "This is some sample text.",
+        "sampleLink": "This is a link.",
+        "secondaryFontColor": "This is secondary font color.",
+        "primaryButton": "Primary Button",
+        "alertButton": "Alert Button",
+        "tag1": "Tag 1",
+        "tag2": "Tag 2"
+    },
+    "customize": {
+        "title": "Customize Settings for {{gameName}}",
+        "globalDefaults": "Global Defaults",
+        "playerColours": "Player Colours",
+        "addColour": "Add Colour",
+        "addColourHelp": "Select a colour and click the \"Add Colour\" button. The default colours can be selected by clicking on the swatch. If the palette is empty, the default palette will be used.",
+        "defaultSwatch": "Default",
+        "addColourBtn": "Add Colour",
+        "selectDefaultColours": "Select default colours",
+        "selectColourBlind": "Select colour blind colours",
+        "selectPatterns": "Select patterns",
+        "clearColours": "Clear colours",
+        "developerHints": "Developer Hints:",
+        "paletteHint": "Palette #{{num}}",
+        "defaultValue": "(Default: {{value}})",
+        "boardColours": "Board Colours",
+        "selectProperty": "Select Property",
+        "context": {
+            "background": {
+                "label": "Background",
+                "help": "The colour of the area surrounding the board."
+            },
+            "board": {
+                "label": "Board",
+                "help": "The colour of the board itself. Defaults to background colour if not set."
+            },
+            "strokes": {
+                "label": "Strokes",
+                "help": "The colour of lines drawn on the board."
+            },
+            "borders": {
+                "label": "Borders",
+                "help": "The colour of fixed piece borders."
+            },
+            "labels": {
+                "label": "Labels",
+                "help": "The colour of coordinate labels."
+            },
+            "annotations": {
+                "label": "Annotations",
+                "help": "The colour of move annotations."
+            },
+            "fill": {
+                "label": "Fill",
+                "help": "The colour used to fill certain board elements. Basically, the \"opposite\" of the background."
+            }
+        },
+        "glyphReplacements": "Glyph Replacements",
+        "addReplacement": "Add Replacement",
+        "selectOriginal": "-- Select Original --",
+        "with": "with",
+        "selectReplacement": "-- Select Replacement --",
+        "atScale": "at scale",
+        "scaleSuffix": "(@ {{scale}}x)",
+        "output": "Output",
+        "settingsJson": "Settings JSON",
+        "pasteSettingsHelp": "Paste settings JSON here to apply.",
+        "saveSettings": "Save Settings",
+        "resetToDefaults": "Reset to Defaults",
+        "deleteCustomization": "Delete Customization"
+    },
+    "lab": {
+        "intro": "A local play area for experimenting with games. Nothing here touches the server — positions and saved games live in your browser only.",
+        "noSimultaneous": "Playground supports sequential games only. Simultaneous games are not available.",
+        "tabNew": "New game",
+        "tabPaste": "Paste state",
+        "tabSaved": "Load saved",
+        "selectPlayerCount": "Select the number of players.",
+        "launch": "Launch",
+        "gameState": "Game state",
+        "pastePlaceholder": "Paste serialized game state here",
+        "pasteHelp": "Paste a serialized state from a live game debug dump, a Playground game export, or elsewhere. The game type is read from the state automatically. Simultaneous games are not supported.",
+        "loadState": "Load state",
+        "noSavedGames": "No saved Playground games yet.",
+        "savedAt": "Saved",
+        "load": "Load",
+        "importedSuffix": " (imported)",
+        "playgroundSuffix": " (Playground)",
+        "backToLauncher": "Back to launcher",
+        "saveToPlayground": "Save to Playground",
+        "exitToLauncher": "Exit to launcher",
+        "savePrompt": "Name for this saved position:",
+        "savedAlert": "Saved to Playground.",
+        "designerOne": "Designer: ",
+        "designersMany": "Designers: ",
+        "coderOne": "Coder: ",
+        "codersMany": "Coders: ",
+        "titleSuffix": " — Playground",
+        "debug": {
+            "copyPosition": "Copy position",
+            "copyPositionHelp": "Raw engine state at the current focus (for debugging).",
+            "copyGame": "Copy game",
+            "copyGameHelp": "Full Playground export including move tree, focus, and annotations — paste into Playground to share.",
+            "copyRendererJson": "Copy renderer JSON",
+            "copyRendererJsonHelp": "Renderer input for the board view currently shown (for Customize or debugging)."
+        },
+        "annotations": {
+            "title": "Annotations",
+            "moveQuality": "Move quality",
+            "clear": "Clear",
+            "commentMarkdown": "Comment (Markdown)",
+            "commentPlaceholder": "Add a comment in Markdown…",
+            "nothingToPreview": "Nothing to preview yet."
+        }
     }
 }
