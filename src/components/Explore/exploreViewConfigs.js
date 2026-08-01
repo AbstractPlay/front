@@ -53,8 +53,8 @@ function dividedScoreColumns(columnHelper, divisors, t) {
 
 export const viewConfigs = {
   all: {
-    title: "All games",
-    description: null,
+    titleKey: "explore.views.all.title",
+    descriptionKey: null,
     defaultSort: [{ id: "gameName", desc: false }],
     fetchUrl: null,
     extraFields: (metaGame, info, fetchedData, counts) => ({
@@ -104,10 +104,10 @@ export const viewConfigs = {
               className="button is-small apButton"
               onClick={() => openChallengeModal(props.row.original.id)}
             >
-              Issue Challenge
+              {t("IssueChallengeLabel")}
             </button>
             <Link to={"/tournaments/" + props.row.original.id}>
-              Tournaments
+              {t("TournamentsLink")}
             </Link>
           </>
         ),
@@ -125,8 +125,8 @@ export const viewConfigs = {
   },
 
   newest: {
-    title: "Newest",
-    description: "When the game was added to the site.",
+    titleKey: "explore.views.newest.title",
+    descriptionKey: "explore.views.newest.description",
     defaultSort: [{ id: "dateAdded", desc: true }],
     fetchUrl: null,
     extraFields: (metaGame, info) => ({
@@ -143,9 +143,8 @@ export const viewConfigs = {
   },
 
   hotRaw: {
-    title: "Hottest (# moves/day)",
-    description:
-      "The average number of moves made per day over the time period.",
+    titleKey: "explore.views.hotRaw.title",
+    descriptionKey: "explore.views.hotRaw.description",
     defaultSort: [{ id: "score1w", desc: true }],
     fetchUrl: "https://records.abstractplay.com/mvtimes.json",
     extraFields: (metaGame, info, fetchedData) =>
@@ -157,9 +156,8 @@ export const viewConfigs = {
   },
 
   hotPlayers: {
-    title: "Hottest (# players/day)",
-    description:
-      "The average number of unique players per day over the time period.",
+    titleKey: "explore.views.hotPlayers.title",
+    descriptionKey: "explore.views.hotPlayers.description",
     defaultSort: [{ id: "score1w", desc: true }],
     fetchUrl: "https://records.abstractplay.com/mvtimes.json",
     extraFields: (metaGame, info, fetchedData) =>
@@ -171,9 +169,8 @@ export const viewConfigs = {
   },
 
   playerSum: {
-    title: "Most players",
-    description:
-      "The total number of unique players who played that game over the time period.",
+    titleKey: "explore.views.playerSum.title",
+    descriptionKey: "explore.views.playerSum.description",
     defaultSort: [{ id: "score1w", desc: true }],
     fetchUrl: "https://records.abstractplay.com/mvtimes.json",
     extraFields: (metaGame, info, fetchedData) =>
@@ -197,9 +194,8 @@ export const viewConfigs = {
   },
 
   hindex: {
-    title: "Highest h-index",
-    description:
-      "A game's `h-index` is the number of different players who have played that game at least that many times. So an `h-index` of 5 means that 5 different players have played that game at least 5 times.",
+    titleKey: "explore.views.hindex.title",
+    descriptionKey: "explore.views.hindex.description",
     defaultSort: [{ id: "hindex", desc: true }],
     fetchUrl: "https://records.abstractplay.com/_summary.json",
     extraFields: (metaGame, info, fetchedData) => {
@@ -222,8 +218,8 @@ export const viewConfigs = {
   },
 
   stars: {
-    title: "Most stars",
-    description: "The number of players who have starred this game.",
+    titleKey: "explore.views.stars.title",
+    descriptionKey: "explore.views.stars.description",
     defaultSort: [{ id: "stars", desc: true }],
     fetchUrl: null,
     extraFields: (metaGame, info, fetchedData, counts) => ({
@@ -239,9 +235,8 @@ export const viewConfigs = {
   },
 
   completed: {
-    title: "Most completed games per week (all time)",
-    description:
-      "The number of games completed divided by the total number of weeks (or parts thereof) that the game has been available.",
+    titleKey: "explore.views.completed.title",
+    descriptionKey: "explore.views.completed.description",
     defaultSort: [{ id: "games", desc: true }],
     fetchUrl: null,
     extraFields: (metaGame, info, fetchedData, counts) => {
@@ -269,9 +264,8 @@ export const viewConfigs = {
   },
 
   completedRecent: {
-    title: "Most completed games per week (recent)",
-    description:
-      "The number of games completed per week over the past three months (roughly).",
+    titleKey: "explore.views.completedRecent.title",
+    descriptionKey: "explore.views.completedRecent.description",
     defaultSort: [{ id: "games", desc: true }],
     fetchUrl: "https://records.abstractplay.com/_summary.json",
     extraFields: (metaGame, info, fetchedData) => {
@@ -299,8 +293,8 @@ export const viewConfigs = {
   },
 
   random: {
-    title: "Random Order",
-    description: "Games in random order. Click the button to reshuffle.",
+    titleKey: "explore.views.random.title",
+    descriptionKey: "explore.views.random.description",
     defaultSort: [],
     fetchUrl: null,
     extraFields: (metaGame, info, fetchedData, counts) => ({
@@ -372,13 +366,13 @@ export const viewConfigs = {
       sessionStorage.setItem("explore-random-order", JSON.stringify(shuffled));
       return shuffled;
     },
-    renderExtra: (reloadGames) => (
+    renderExtra: (reloadGames, t) => (
       <div className="container" style={{ paddingBottom: "0.5em" }}>
         <button className="button is-small apButton" onClick={reloadGames}>
           <span className="icon is-small">
             <i className="fa fa-random"></i>
           </span>
-          <span>Reshuffle</span>
+          <span>{t("Reshuffle")}</span>
         </button>
       </div>
     ),

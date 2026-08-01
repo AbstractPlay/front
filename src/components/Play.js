@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useTranslation } from "react-i18next";
-// import { addResource } from "@abstractplay/gameslib";
+import { useTranslation } from "react-i18next";
+import { addResource } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
 import { useStore } from "../stores";
 
@@ -10,12 +10,12 @@ import { useStore } from "../stores";
  */
 function Play(props) {
   const navigate = useNavigate();
-  //   const { t, i18n } = useTranslation();
-  //   addResource(i18n.language);
+  const { i18n } = useTranslation();
+  addResource(i18n.language);
 
-  //   useEffect(() => {
-  //     addResource(i18n.language);
-  //   }, [i18n.language]);
+  useEffect(() => {
+    addResource(i18n.language);
+  }, [i18n.language]);
 
   useEffect(() => {
     const { setMyMove: myMoveSetter } = useStore.getState();

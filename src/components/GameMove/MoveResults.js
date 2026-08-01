@@ -37,7 +37,7 @@ function MoveResults(props) {
           system: true,
         });
       } else {
-        let personName = "Unknown";
+        let personName = t("Unknown");
         let player = players.find((p) => p.id === c.userId);
         if (player !== undefined) {
           personName = formatPlayerDisplayName(player, users);

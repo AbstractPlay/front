@@ -63,7 +63,7 @@ function NewProfile(props) {
     if (name === "") {
       nameErrorSetter(t("NameBlank"));
     } else {
-      const nameValidationError = validateDisplayName(name);
+      const nameValidationError = validateDisplayName(name, t);
       if (nameValidationError) {
         nameErrorSetter(nameValidationError);
       } else if (users.find((u) => u === name)) {
@@ -175,7 +175,7 @@ function NewProfile(props) {
                 href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes"
                 target="_NEW"
               >
-                Wikipedia
+                {t("Wikipedia")}
               </a>
               ]
             </p>

@@ -168,7 +168,7 @@ function GameStatus({
           ""
         ) : (
           <div style={{ overflowX: "auto" }}>
-            <h2>Stash</h2>
+            <h2>{t("Stash")}</h2>
             <table className="table">
               <tbody>
                 {stashes.map((stash, index) => (
@@ -232,7 +232,7 @@ function GameStatus({
           ""
         ) : (
           <div>
-            <h2>Stash</h2>
+            <h2>{t("Stash")}</h2>
             <div>
               {status.sharedstash.map((s, j) => (
                 <span

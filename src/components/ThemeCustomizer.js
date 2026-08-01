@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useStorageState } from "react-use-storage-state";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import Modal from "./Modal";
+import { useTranslation } from "react-i18next";
 
 const lightDefaults = {
   "--main-bg-color": "white",
@@ -58,6 +59,7 @@ const customizableProperties = [
 ];
 
 function ThemeCustomizer({ show, handleClose }) {
+  const { t } = useTranslation();
   const [colorMode, setColorMode] = useStorageState("color-mode", "light");
   const [customThemes, setCustomThemes] = useStorageState(
     "site-theme-customizations",
@@ -143,10 +145,10 @@ function ThemeCustomizer({ show, handleClose }) {
   return (
     <Modal
       show={show}
-      title="Customize Site Theme"
+      title={t("theme.title")}
       buttons={[
-        { label: "Save", action: handleSave },
-        { label: "Close", action: handleClose },
+        { label: t("Save"), action: handleSave },
+        { label: t("Close"), action: handleClose },
       ]}
     >
       <div className="columns">
@@ -154,15 +156,15 @@ function ThemeCustomizer({ show, handleClose }) {
           <div className="tabs is-toggle is-fullwidth">
             <ul>
               <li className={colorMode === "light" ? "is-active" : ""}>
-                <a onClick={() => setColorMode("light")}>Light Mode</a>
+                <a onClick={() => setColorMode("light")}>{t("theme.lightMode")}</a>
               </li>
               <li className={colorMode === "dark" ? "is-active" : ""}>
-                <a onClick={() => setColorMode("dark")}>Dark Mode</a>
+                <a onClick={() => setColorMode("dark")}>{t("theme.darkMode")}</a>
               </li>
             </ul>
           </div>
           <div className="field">
-            <label className="label">CSS Variable</label>
+            <label className="label">{t("theme.cssVariable")}</label>
             <div className="control">
               <div className="select is-fullwidth">
                 <select
@@ -187,7 +189,7 @@ function ThemeCustomizer({ show, handleClose }) {
           />
 
           <div className="field mt-4">
-            <label className="label">Customizations (JSON)</label>
+            <label className="label">{t("theme.customizationsJson")}</label>
             <div className="control">
               <textarea
                 className="textarea"
@@ -199,16 +201,16 @@ function ThemeCustomizer({ show, handleClose }) {
           </div>
           <div className="buttons mt-4">
             <button className="button apButton" onClick={handleResetCurrent}>
-              Reset Current Theme
+              {t("theme.resetCurrent")}
             </button>
             <button className="button apButtonNeutral" onClick={handleReset}>
-              Reset Both Themes
+              {t("theme.resetBoth")}
             </button>
           </div>
         </div>
         <div className="column" style={previewWrapperStyle}>
           <h3 className="subtitle" style={{ color: "var(--main-font-color)" }}>
-            Preview
+            {t("Preview")}
           </h3>
           <div
             style={{
@@ -222,20 +224,20 @@ function ThemeCustomizer({ show, handleClose }) {
               className="title"
               style={{ color: "var(--main-heading-color)" }}
             >
-              Sample Heading
+              {t("theme.sampleHeading")}
             </h1>
             <p>
-              This is some sample text.{" "}
+              {t("theme.sampleText")}{" "}
               <a href="#" style={{ color: "var(--secondary-color-3)" }}>
-                This is a link.
+                {t("theme.sampleLink")}
               </a>
             </p>
             <p style={{ color: "var(--secondary-font-color)" }}>
-              This is secondary font color.
+              {t("theme.secondaryFontColor")}
             </p>
             <div className="buttons">
-              <button className="button apButton">Primary Button</button>
-              <button className="button apButtonAlert">Alert Button</button>
+              <button className="button apButton">{t("theme.primaryButton")}</button>
+              <button className="button apButtonAlert">{t("theme.alertButton")}</button>
             </div>
             <div className="tags mt-2">
               <span
@@ -245,7 +247,7 @@ function ThemeCustomizer({ show, handleClose }) {
                   color: "var(--main-font-color)",
                 }}
               >
-                Tag 1
+                {t("theme.tag1")}
               </span>
               <span
                 className="tag"
@@ -254,7 +256,7 @@ function ThemeCustomizer({ show, handleClose }) {
                   color: "var(--main-font-color)",
                 }}
               >
-                Tag 2
+                {t("theme.tag2")}
               </span>
             </div>
           </div>

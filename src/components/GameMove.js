@@ -9,7 +9,7 @@ import React, {
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { render } from "@abstractplay/renderer";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_OPEN } from "../config";
@@ -260,9 +260,9 @@ function GameMove(props) {
         }
       });
     if (designers.length === 1) {
-      designerString = "Designer: ";
+      designerString = t("lab.designerOne");
     } else {
-      designerString = "Designers: ";
+      designerString = t("lab.designersMany");
     }
     designerString += designers.join(", ");
   }
@@ -285,9 +285,9 @@ function GameMove(props) {
         }
       });
     if (coders.length === 1) {
-      coderString = "Coder: ";
+      coderString = t("lab.coderOne");
     } else {
-      coderString = "Coders: ";
+      coderString = t("lab.codersMany");
     }
     coderString += coders.join(", ");
   }
@@ -355,7 +355,8 @@ function GameMove(props) {
       focusSetter,
       moveSetter,
       displaySettingsRef.current,
-      navigateRef.current
+      navigateRef.current,
+      tRef.current
     );
     populateChecked(gameRef, engineRef, tRef.current, inCheckSetter);
     publishGameColorsRef.current({ state: engineRef.current.state() });
@@ -485,11 +486,9 @@ function GameMove(props) {
       }
       try {
         await navigator.clipboard.writeText(JSON.stringify(diagram));
-        toast(
-          "Current board copied to clipboard. Visit https://hwdiagrams.abstractplay.com to import the diagram."
-        );
+        toast(t("CopyBoardSuccess"));
       } catch (err) {
-        toast(`Failed to copy: ${err}`, { type: "error" });
+        toast(t("FailedToCopy", { error: err }), { type: "error" });
       }
     }
   };
@@ -851,20 +850,20 @@ function GameMove(props) {
 
       parentheticalSetter((val) => [
         ...val,
-        <Link to={tournamentLink}>tournament</Link>,
+        <Link to={tournamentLink}>{t("gameMove.tournamentLink")}</Link>,
       ]);
     }
     if ("event" in game && game.event !== undefined && game.event !== null) {
       parentheticalSetter((val) => [
         ...val,
-        <Link to={`/event/${game.event}`}>event</Link>,
+        <Link to={`/event/${game.event}`}>{t("gameMove.eventLink")}</Link>,
       ]);
     }
     if (game.rated === false) {
-      parentheticalSetter((val) => [...val, "unrated"]);
+      parentheticalSetter((val) => [...val, t("gameMove.unrated")]);
     }
     if (game.noExplore !== undefined && game.noExplore === true) {
-      parentheticalSetter((val) => [...val, "exploration disabled"]);
+      parentheticalSetter((val) => [...val, t("gameMove.explorationDisabled")]);
     }
     if (game.toMove !== "" && !game.players.some((p) => p.id === me?.id)) {
       if (game.clockHard) {
@@ -1386,7 +1385,8 @@ function GameMove(props) {
       focusSetter,
       moveSetter,
       displaySettings,
-      navigate
+      navigate,
+      t
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     publishGameColors({ state: engineRef.current.state() });
@@ -1413,7 +1413,8 @@ function GameMove(props) {
       focusSetter,
       moveSetter,
       displaySettings,
-      navigate
+      navigate,
+      t
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   };
@@ -2477,8 +2478,8 @@ function GameMove(props) {
                       </p>
                       <button
                         className="card-header-icon"
-                        aria-label="move up"
-                        title="move up"
+                        aria-label={t("a11y.moveUp")}
+                        title={t("a11y.moveUp")}
                         onClick={() => handleMoveUp(key)}
                       >
                         <span className="icon">
@@ -2487,8 +2488,8 @@ function GameMove(props) {
                       </button>
                       <button
                         className="card-header-icon"
-                        aria-label="move down"
-                        title="move down"
+                        aria-label={t("a11y.moveDown")}
+                        title={t("a11y.moveDown")}
                         onClick={() => handleMoveDown(key)}
                       >
                         <span className="icon">
@@ -2956,14 +2957,7 @@ function GameMove(props) {
             ]}
           >
             <div className="content">
-              <p>
-                If there's a problem with your game, a developer may ask you to
-                come to this page and send them the current game state. You can
-                either click the "Copy" link below to copy the text to your
-                clipboard and then paste it somewhere, or you can click the
-                "Download" button to save a text file to your computer, which
-                you can then send to the developers. Thank you!
-              </p>
+              <p>{t("gameMove.dev.debugIntro")}</p>
               {gameRef === null ||
               gameRef.current === null ||
               gameRef.current.state === null ? (
@@ -2999,11 +2993,8 @@ function GameMove(props) {
                   </div>
                   {displayRenderRepJson ? (
                     <>
-                      <h2>Copy renderer JSON</h2>
-                      <p>
-                        Renderer input for the board view currently shown (for
-                        Customize or debugging).
-                      </p>
+                      <h2>{t("gameMove.dev.copyRendererJson")}</h2>
+                      <p>{t("gameMove.dev.copyRendererJsonHelp")}</p>
                       <ClipboardCopy copyText={displayRenderRepJson} />
                       <div className="field">
                         <div className="control">
@@ -3027,7 +3018,7 @@ function GameMove(props) {
           </Modal>
           <Modal
             show={showInject}
-            title={"Inject state"}
+            title={t("gameMove.dev.injectState")}
             buttons={[
               {
                 label: t("Close"),
@@ -3038,24 +3029,17 @@ function GameMove(props) {
             ]}
           >
             <div className="content">
-              <p>
-                If you are seeing this and are not a developer, please let an
-                admin know immediately.
-              </p>
-              <p>
-                This is a destructive function. Pasting code here will
-                obliterate the existing game state and cannot be undone. You
-                have been warned.
-              </p>
+              <p>{t("gameMove.dev.injectNonDevWarning")}</p>
+              <p>{t("gameMove.dev.injectDestructiveWarning")}</p>
               <div className="field">
                 <label className="label" htmlFor="newState">
-                  JSON to inject
+                  {t("gameMove.dev.jsonToInject")}
                 </label>
                 <div className="control">
                   <textarea
                     className="textarea"
                     name="newState"
-                    placeholder="Paste JSON here"
+                    placeholder={t("gameMove.dev.pasteJsonPlaceholder")}
                     value={injectedState}
                     onChange={handleInjectChange}
                   />
@@ -3065,7 +3049,7 @@ function GameMove(props) {
                     className="button is-danger"
                     onClick={handleInjection}
                   >
-                    Inject JSON!
+                    {t("gameMove.dev.injectJson")}
                   </button>
                 </div>
               </div>
@@ -3151,27 +3135,23 @@ function GameMove(props) {
           >
             <div className="content">
               <p>
-                It is possible to customize the CSS of all instances of this
-                particular game.{" "}
-                <strong>This is not something to do lightly!</strong> Do not
-                inject code you either do not understand or have not had vetted
-                by someone you trust. Abstract Play and its developers are not
-                responsible for any mishaps that may occur while using this
-                feature.
+                <Trans
+                  i18nKey="gameMove.dev.customCssWarning1"
+                  components={[<strong key="strong" />]}
+                />
               </p>
               <p>
-                If you are certain you wish to continue, paste the CSS code
-                below and click Save. If everything blows up, open the developer
-                console and clear the local storage key <code>custom-css</code>,
-                and that should reset everything. See the wiki for
-                documentation, and join us on Discord to discuss.
+                <Trans
+                  i18nKey="gameMove.dev.customCssWarning2"
+                  components={[<code key="code" />]}
+                />
               </p>
             </div>
             <div className="control">
               <textarea
                 className="textarea is-small"
                 id="myCustomCSS"
-                placeholder="Paste CSS code here"
+                placeholder={t("gameMove.dev.pasteCssPlaceholder")}
                 rows="5"
                 value={newCSS}
                 onChange={(e) => newCSSSetter(e.target.value)}
@@ -3185,7 +3165,7 @@ function GameMove(props) {
                   checked={cssActive}
                   onChange={(e) => cssActiveSetter(e.target.checked)}
                 />
-                Activate custom CSS?
+                {t("gameMove.dev.activateCustomCss")}
               </label>
             </div>
           </Modal>

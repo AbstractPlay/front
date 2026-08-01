@@ -258,7 +258,7 @@ function Board({
           <button
             className="fabtn align-right"
             onClick={copyHWDiagram}
-            title="Copy Homeworlds diagram"
+            title={t("gameMove.dev.copyHomeworldsDiagram")}
           >
             <i className="fa fa-pencil-square-o"></i>
           </button>
@@ -311,7 +311,7 @@ function Board({
             onClick={() => {
               showInjectSetter(true);
             }}
-            title={"Inject state"}
+            title={t("gameMove.dev.injectState")}
           >
             <i className="fa fa-magic"></i>
           </button>

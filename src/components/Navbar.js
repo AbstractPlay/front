@@ -95,7 +95,7 @@ function Navbar(props) {
         <a
           role="button"
           className={"navbar-burger" + (burgerExpanded ? " is-active" : "")}
-          aria-label="menu"
+          aria-label={t("a11y.menu")}
           aria-expanded="false"
           data-target="navbarMain"
           onClick={() => updateBurgerExpanded(!burgerExpanded)}
@@ -261,14 +261,14 @@ function Navbar(props) {
         <div className="navbar-end">
           {globalMe === null ? null : (
             <>
-              <div className="navbar-item" title="Number of active players">
+              <div className="navbar-item" title={t("a11y.activePlayers")}>
                 <span className="icon">
                   <i className="fa fa-wifi" aria-hidden="true"></i>
                 </span>
                 &nbsp;
                 {connections.totalCount}
               </div>
-              <div className="navbar-item" title="Toggle your own visibility">
+              <div className="navbar-item" title={t("a11y.toggleVisibility")}>
                 <button onClick={toggleStoredInvis}>
                   {storedInvis ? (
                     <span className="icon">
@@ -286,7 +286,9 @@ function Navbar(props) {
           <div className="navbar-item">
             <button
               aria-label={
-                colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"
+                colorMode === "light"
+                  ? t("a11y.toggleDarkMode")
+                  : t("a11y.toggleLightMode")
               }
               onClick={() => {
                 const next = colorMode === "light" ? "dark" : "light";
@@ -299,7 +301,9 @@ function Navbar(props) {
                   );
               }}
               title={
-                colorMode === "light" ? "Toggle dark mode" : "Toggle light mode"
+                colorMode === "light"
+                  ? t("a11y.toggleDarkMode")
+                  : t("a11y.toggleLightMode")
               }
             >
               <span
@@ -313,9 +317,9 @@ function Navbar(props) {
           <div className="navbar-item">
             <button
               className="ml-2"
-              aria-label="Customize Theme"
+              aria-label={t("a11y.customizeTheme")}
               onClick={() => setShowThemeModal(true)}
-              title="Customize Theme"
+              title={t("a11y.customizeTheme")}
             >
               <span className="icon">
                 <i className="fa fa-paint-brush"></i>

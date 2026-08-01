@@ -127,7 +127,7 @@ function NumPlays({ metaFilter, nav }) {
               </ul>
             </div>
             <Modal
-              buttons={[{ label: "Close", action: closeChartModal }]}
+              buttons={[{ label: t("Close"), action: closeChartModal }]}
               show={
                 activeChartModal !== "" &&
                 activeChartModal === props.row.original.id

@@ -133,12 +133,7 @@ function Explore(props) {
             <h1 className="title">{t("ExploreGames")}</h1>
           </div>
           <div className="content">
-            <p>
-              This page lets you explore different ways of sorting the list of
-              games. Select your desired view below. Clicking on a game's name
-              will take you to that game's landing page with additional
-              information.
-            </p>
+            <p>{t("explore.intro")}</p>
           </div>
           <div className="container">
             <div className="control">
@@ -149,7 +144,7 @@ function Explore(props) {
                 >
                   {components.map(([key, cfg]) => (
                     <option key={key} value={key}>
-                      {cfg.title}
+                      {t(cfg.titleKey)}
                     </option>
                   ))}
                 </select>

@@ -237,7 +237,7 @@ function Board({
           <button
             className="fabtn align-right"
             onClick={copyHWDiagram}
-            title="Copy Homeworlds diagram"
+            title={t("gameMove.dev.copyHomeworldsDiagram")}
           >
             <i className="fa fa-pencil-square-o"></i>
           </button>

@@ -72,7 +72,6 @@
     "full-dev": "npm run build-dev && npm run deploy",
     "full-prod": "npm run build-prod && npm run deploy-prod",
     "test": "react-scripts test",
-    "extract": "i18next 'src/**/*.{js,jsx}' && shx mkdir -p src/locales/en && shx cp public/locales/en/apfront.json src/locales/en/apfront.json",
     "sync-locales": "node bin/sync-locales.mjs",
     "deploy": "serverless client deploy --no-confirm",
     "deploy-prod": "serverless client deploy --no-confirm --stage prod",

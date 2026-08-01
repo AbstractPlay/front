@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ResponsesContext } from "../Player";
 
 function Response({ order }) {
+  const { t } = useTranslation();
   const [responses] = useContext(ResponsesContext);
   const [, movedSetter] = useState(0);
   const [avg, avgSetter] = useState(0);
@@ -43,11 +45,21 @@ function Response({ order }) {
     <>
       <div key="Player|Response">
         <div className="content">
-          <p>Average response time: {avg.toFixed(2)} hours</p>
-          <p>Median response time: {median.toFixed(2)} hours</p>
           <p>
-            Middle half of response times: {q1.toFixed(2)} to {q3.toFixed(2)}{" "}
-            hours
+            {t("player.stats.response.average", {
+              hours: avg.toFixed(2),
+            })}
+          </p>
+          <p>
+            {t("player.stats.response.median", {
+              hours: median.toFixed(2),
+            })}
+          </p>
+          <p>
+            {t("player.stats.response.middleHalf", {
+              q1: q1.toFixed(2),
+              q3: q3.toFixed(2),
+            })}
           </p>
         </div>
       </div>

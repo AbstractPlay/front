@@ -32,17 +32,17 @@ export const ResponsesContext = createContext([null, () => []]);
 export const TournamentContext = createContext([null, () => []]);
 
 const code2ele = new Map([
-  ["stars", { component: Stars, name: "Starred Games" }],
-  ["coded", { component: Coded, name: "Games Coded" }],
-  ["designed", { component: Designed, name: "Games Designed" }],
-  ["ratings", { component: Ratings, name: "Ratings" }],
-  ["counts", { component: Counts, name: "Play Counts" }],
-  ["opps", { component: Opponents, name: "Opponents" }],
-  ["activity", { component: Activity, name: "Activity" }],
-  ["timeouts", { component: Timeouts, name: "Timeouts" }],
-  ["response", { component: Response, name: "Response Time" }],
-  ["tournaments", { component: Tournaments, name: "Tournament History" }],
-  ["history", { component: History, name: "Game History" }],
+  ["stars", { component: Stars, nameKey: "player.modules.stars" }],
+  ["coded", { component: Coded, nameKey: "player.modules.coded" }],
+  ["designed", { component: Designed, nameKey: "player.modules.designed" }],
+  ["ratings", { component: Ratings, nameKey: "player.modules.ratings" }],
+  ["counts", { component: Counts, nameKey: "player.modules.counts" }],
+  ["opps", { component: Opponents, nameKey: "player.modules.opponents" }],
+  ["activity", { component: Activity, nameKey: "player.modules.activity" }],
+  ["timeouts", { component: Timeouts, nameKey: "player.modules.timeouts" }],
+  ["response", { component: Response, nameKey: "player.modules.response" }],
+  ["tournaments", { component: Tournaments, nameKey: "player.modules.tournaments" }],
+  ["history", { component: History, nameKey: "player.modules.history" }],
 ]);
 
 function Player() {
@@ -278,10 +278,7 @@ function Player() {
             className="content has-text-centered"
             style={{ fontSize: "smaller" }}
           >
-            <p>
-              The player profile page is very much "under development." It
-              relies on statistics tabulated daily.
-            </p>
+            <p>{t("player.underDevelopment")}</p>
           </div>
           <ProfileContext.Provider value={[user, userSetter]}>
             <SummaryContext.Provider value={[summary, summarySetter]}>
@@ -315,12 +312,12 @@ function Player() {
                                 >
                                   <header className="card-header">
                                     <p className="card-header-title">
-                                      {obj.name}
+                                      {t(obj.nameKey)}
                                     </p>
                                     <button
                                       className="card-header-icon"
-                                      aria-label="move left"
-                                      title="move left"
+                                      aria-label={t("a11y.moveLeft")}
+                                      title={t("a11y.moveLeft")}
                                       onClick={() => handleMoveLeft(code)}
                                     >
                                       <span className="icon">
@@ -332,8 +329,8 @@ function Player() {
                                     </button>
                                     <button
                                       className="card-header-icon"
-                                      aria-label="move right"
-                                      title="move right"
+                                      aria-label={t("a11y.moveRight")}
+                                      title={t("a11y.moveRight")}
                                       onClick={() => handleMoveRight(code)}
                                     >
                                       <span className="icon">

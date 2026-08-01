@@ -612,7 +612,122 @@
     "Error": "Error!",
     "Events": {
         "Description": "Organized events are managed by individuals. The system allows organizers to create events, for players to register, and then for organizers to launch games between registered players. Tracking results, enforcing detailed time restrictions, and announcing winners is up to the organizer.",
-        "Name": "Organized Events"
+        "Name": "Organized Events",
+        "newEvent": "New event",
+        "draftEvents": "Draft events",
+        "openForRegistration": "Open for registration",
+        "activeEvents": "Active events",
+        "completedEvents": "Completed events",
+        "createEvent": "Create event",
+        "createEventModalTitle": "Create new event",
+        "createEventHelp": "These values can be changed later. Dates and times must be given in UTC.",
+        "createEventContact": "To create an event, please reach out to one of the developers through <1>Discord</1>.",
+        "noOpenRegistration": "No events are currently open for registration.",
+        "eventNameLabel": "Event name",
+        "eventNameRequired": "The event must have a name.",
+        "maxPlayersLabel": "Maximum players",
+        "maxPlayersHelp": "A value of 0 means no limit.",
+        "eventDateLabel": "Event date",
+        "eventTimeLabel": "Event time",
+        "dateTimeRequired": "Date and time is required and must be in the future.",
+        "admin": {
+            "statusLabel": "Status:",
+            "statusDraft": "Draft. Only the organizer and admins can see this event.",
+            "statusOpen": "Registration is open.",
+            "statusActive": "The event is currently active. Registration is closed.",
+            "statusComplete": "This event has concluded.",
+            "maxPlayersLabel": "Max players:",
+            "organizerLabel": "Organizer:",
+            "startDateLabel": "Start date:",
+            "endDateLabel": "End date:",
+            "winnerLabel": "Winner:",
+            "descriptionLabel": "Description:",
+            "registrantsLabel": "Registrants:",
+            "invitedLabel": "Invited:",
+            "blockedLabel": "Blocked:",
+            "gamesTitle": "Games",
+            "gamesAsteriskNote": "An asterisk next to a result means the organizer has manually adjusted it.",
+            "resultsTitle": "Results",
+            "resultsDisclaimer": "These results are <1>unofficial</1>. See the description for the official results as tabulated by the organizer. This table is not aware of things like byes. It simply summarizes the results of the paired games, including arbitrations.",
+            "editorHelp1": "Draft events can be published as long as it's at least 24 hours from the start date and the description is not empty.",
+            "editorHelp2": "Events can be fully deleted if they are draft, open for registration, or active before any games have been created.",
+            "editorHelp3": "The start date can be changed up until games have been created.",
+            "editorHelp4": "The name and description can be updated at any time.",
+            "editorHelp5": "An active event with games created can be marked as completed at any point, and winners assigned.",
+            "editorHelp6": "Winners can be updated after the event is closed.",
+            "publish": "Publish",
+            "deleteEvent": "Delete event",
+            "updateName": "Update name",
+            "changeStartDate": "Change start date",
+            "updateDescription": "Update description",
+            "inviteBlockPlayers": "Invite/Block Players",
+            "register": "Register",
+            "withdraw": "Withdraw",
+            "closeEvent": "Close event",
+            "updateWinner": "Update winner",
+            "changeStartDateTitle": "Change start date",
+            "changeDate": "Change date",
+            "dateFutureUtc": "The date must be in the future and in UTC.",
+            "dateMustBeFuture": "The date must be in the future.",
+            "changeNameTitle": "Change name",
+            "nameNotEmpty": "The name may not be empty.",
+            "changeDescriptionTitle": "Change description",
+            "descriptionMarkdown": "Markdown enabled",
+            "descriptionNotEmpty": "The description may not be empty.",
+            "publishEventTitle": "Publish event",
+            "publishEventBody": "You are about to open this event up for registration. It will be immediately visible to all players. <1>This cannot be undone!</1>",
+            "deleteEventBody": "You are about to delete this event entirely. <1>This cannot be undone!</1> This is only possible up until games have been created for this event.",
+            "closeEventTitle": "Close event",
+            "closeEventSelectWinners": "Select the winner (or winners) and click \"Update winners.\"",
+            "closeEventBody": "You are about to mark this event as complete. <1>This cannot be undone!</1> Please select the winner (or winners) and click \"Close Event.\" The winner can be updated at any time after the event is over.",
+            "selectWinnersLabel": "Select one or more event winners:",
+            "updateWinners": "Update winners",
+            "inviteBlockTitle": "Invite/Block Players",
+            "inviteSection": "Invite",
+            "blockSection": "Block",
+            "selectPlayer": "-- Select Player --",
+            "loadFailed": "Could not load event {{eventid}}."
+        },
+        "pairing": {
+            "title": "Pairing",
+            "round": "Round",
+            "game": "Game",
+            "optionsIntro": "There are two pairing options:",
+            "optionAutomated": "Sort the players in whatever order you choose and then click one of the automated buttons to quickly generate common pairings.",
+            "optionManual": "Manually select players 1 and 2 and add each pair to the list.",
+            "frameworkNote": "This framework gives the organizer maximum flexibility but also requires extra care and attention. The automated buttons are helpers only. Manual tweaking is often still necessary.",
+            "automatedDivision": "Automated (Division {{num}})",
+            "bergerRoundRobin": "Berger round robin",
+            "dutchSwiss": "Dutch Swiss",
+            "manual": "Manual",
+            "player1": "Player 1",
+            "player2": "Player 2",
+            "addPairing": "Add pairing",
+            "pairings": "Pairings",
+            "pairingsConfirm": "Below are the pairings you requested. Please confirm that everything is correct and then click the Create Games button.",
+            "errorsFound": "The following errors were found:",
+            "indexError": "Index {{idx}}: {{message}}",
+            "createGames": "Create games",
+            "possibleErrors": "Possible errors",
+            "proceedAnyway": "Proceed anyway",
+            "errorsModalBody": "Your pairings contain potential errors. Please review the table and resolve any duplications. You should only proceed if you are certain your pairings are correct.",
+            "confirmGameCreation": "Confirm game creation",
+            "confirmCreateBody": "You are about to create games, which will start immediately. <1>This cannot be undone!</1> Please review your pairings and be very certain they are correct before proceeding.",
+            "deletePairing": "Delete pairing",
+            "errors": {
+                "dupeExact": "This combination of p1, p2, and game is an exact duplicate of an earlier entry. This is almost never desirable.",
+                "dupeReversed": "This combination of p1, p2, and game is a mirror image of an earlier entry. This is usually not intended.",
+                "selfPlay": "p1 and p2 are the same!"
+            }
+        },
+        "gamesTable": {
+            "changeResult": "Change result",
+            "arbitrateTitle": "Arbitrate result",
+            "saveResult": "Save result",
+            "arbitrateNote": "Please note that arbitrated results will not be visible in the auto-generated game reports. They only apply within the context of this event.",
+            "selectWinner": "Select the arbitrated winner of <1>{{gameName}} game</1>:",
+            "gameSuffix": "game"
+        }
     },
     "EventsNav": "Events",
     "ExplorationSetting": "Exploration setting",
@@ -1016,5 +1131,431 @@
     "YourChallenges": "Your challenges",
     "YourGames": "Your games",
     "YourMove": "Your move",
-    "EnableZoom": "Enable zoom"
+    "EnableZoom": "Enable zoom",
+    "IssueChallengeLabel": "Issue Challenge",
+    "TournamentsLink": "Tournaments",
+    "Block": "Block",
+    "Unblock": "Unblock",
+    "TotalPlayers": "total players",
+    "TotalChallenges": "total challenges",
+    "TableView": "Table",
+    "GridView": "Grid",
+    "Reshuffle": "Reshuffle",
+    "ShowAll": "Show all",
+    "ShowAllCountries": "--Show all--",
+    "a11y": {
+        "hideShow": "hide/show",
+        "moveLeft": "move left",
+        "moveRight": "move right",
+        "menu": "menu",
+        "language": "Language",
+        "activePlayers": "Number of active players",
+        "toggleVisibility": "Toggle your own visibility",
+        "customizeTheme": "Customize Theme",
+        "toggleDarkMode": "Toggle dark mode",
+        "toggleLightMode": "Toggle light mode",
+        "moveUp": "move up",
+        "moveDown": "move down"
+    },
+    "None": "None",
+    "Draw": "Draw",
+    "You": "You",
+    "Unknown": "Unknown",
+    "Stash": "Stash",
+    "Refresh": "Refresh",
+    "PlayerOnline": "Player is online",
+    "DownloadCompletedRecord": "Download completed game record",
+    "CopyBoardSuccess": "Current board copied to clipboard. Visit https://hwdiagrams.abstractplay.com to import the diagram.",
+    "FailedToCopy": "Failed to copy: {{error}}",
+    "AutoMoveToast": "At least one forced move was automatically made. Review the move tree to see each individual state.",
+    "fatalError": {
+        "title": "Something went wrong",
+        "chunkMessage": "A new version of the site may be available. Please refresh the page.",
+        "genericMessage": "Please refresh the page. If the problem persists, please <1>report it on our Discord server</1>.",
+        "discordLink": "report it on our Discord server"
+    },
+    "standingChallenge": {
+        "resume": "Resume",
+        "suspend": "Suspend",
+        "deleteTitle": "Delete standing challenge",
+        "yesDelete": "Yes, delete it",
+        "noCancel": "No, cancel",
+        "missingEntry": "No standing challenge entry was provided. This should never happen.",
+        "deleteConfirm": "You are about to delete the following standing challenge: <1>{{description}}</1>. Are you sure?",
+        "noVariants": "no variants"
+    },
+    "about": {
+        "intro": "Abstract Play is a place to play abstract strategy games against others asynchronously (you don't have to be online at the same time). We specialize in offbeat, perfect information games without any element of luck, but we also include a number of games that involve randomness (e.g., dice and cards). The site is completely free to join and play.",
+        "highlights": "Here are some of the most active games this week. Visit the <1>full games list</1> for more details.",
+        "highlightsLink": "full games list"
+    },
+    "notFound": {
+        "body": "No page could be found at <1>{{path}}</1>. Please use the navigation bar to try again. If the problem persists, please <2>post a bug report on our Discord server</2>.",
+        "reportLink": "post a bug report on our Discord server"
+    },
+    "footer": {
+        "wiki": "Wiki",
+        "discord": "Discord",
+        "boardGameGeek": "BoardGameGeek",
+        "wishlist": "Wishlist",
+        "github": "GitHub",
+        "legalLink": "Terms of Service & Privacy Policy",
+        "betaBanner": "The site is currently in BETA testing!",
+        "feedback": "We're very happy with the core functionality, but we'd love some concrete feedback from users on how to make things better.",
+        "feedbackJoin": "Please come join us on <1>Discord</1> and let us know if you run into any trouble or have any ideas."
+    },
+    "explore": {
+        "intro": "This page lets you explore different ways of sorting the list of games. Select your desired view below. Clicking on a game's name will take you to that game's landing page with additional information.",
+        "views": {
+            "all": {
+                "title": "All games"
+            },
+            "newest": {
+                "title": "Newest",
+                "description": "When the game was added to the site."
+            },
+            "hotRaw": {
+                "title": "Hottest (# moves/day)",
+                "description": "The average number of moves made per day over the time period."
+            },
+            "hotPlayers": {
+                "title": "Hottest (# players/day)",
+                "description": "The average number of unique players per day over the time period."
+            },
+            "playerSum": {
+                "title": "Most players",
+                "description": "The total number of unique players who played that game over the time period."
+            },
+            "hindex": {
+                "title": "Highest h-index",
+                "description": "A game's `h-index` is the number of different players who have played that game at least that many times. So an `h-index` of 5 means that 5 different players have played that game at least 5 times."
+            },
+            "stars": {
+                "title": "Most stars",
+                "description": "The number of players who have starred this game."
+            },
+            "completed": {
+                "title": "Most completed games per week (all time)",
+                "description": "The number of games completed divided by the total number of weeks (or parts thereof) that the game has been available."
+            },
+            "completedRecent": {
+                "title": "Most completed games per week (recent)",
+                "description": "The number of games completed per week over the past three months (roughly)."
+            },
+            "random": {
+                "title": "Random Order",
+                "description": "Games in random order. Click the button to reshuffle."
+            }
+        }
+    },
+    "stats": {
+        "selectStatistic": "Select a statistic",
+        "downloadSummary": "Download all summary stats",
+        "downloadReports": "Download all game reports",
+        "ratingsNote": "Please note that the ratings given here are dynamically generated and may differ from the static rating visible elsewhere. We're working on harmonizing things eventually.",
+        "generatedDaily": "Statistics are generated daily at 6am UTC.",
+        "recordsBetween": "Records analyzed include games completed between {{oldest}} and {{newest}} ({{days}}).",
+        "day_one": "{{count}} day",
+        "day_other": "{{count}} days",
+        "year_one": "{{count}} year",
+        "year_other": "{{count}} years",
+        "playersPlayedGames": "In that time, {{numPlayers}} players have played {{numGames}} games.",
+        "explanations": {
+            "highestSingle": "List of every recorded rating. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made. The Elo rating starts at 1200 with a static *K* of 30. The Glicko rating uses the version 2 algorithm, the default starting values (initial rating 1500), and a rating period of sixty days (starting from the first day a particular game was recorded). Glicko ratings are presented as a 95% confidence range. The narrower that range, the more confident the system is in the rating. And finally, Trueskill is a rating system used by Microsoft in various online games. I used the default settings (rating range 0–50, starting at 25).",
+            "avgRatings": "The average rating is just that: a straight average of all the Elo ratings recorded for that player. The weighted average is weighted by number of games played. For example, if you had a rating of 1300 in a game you played 10 times and 1200 in a game you only played twice, your average rating would be 1250, but your weighted average would be 1283.",
+            "topPlayers": "This table lists each available game and variant combination along with the player with the highest Elo rating for that combination.",
+            "numPlays": "This table lists each game, how many times it was played, by how many unique players, and the game's `h-index`. A game's h-index is the number of players who have played that game at least that many times (so an h-index of 5 means that 5 different players have played that game at least 5 times). It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day \"buckets,\" with the most recent week on the right.",
+            "playerStats": "This shows each recorded player along with their total games played, a count of unique games, and the number of different opponents they played. It also provides an `h-index`, which represents the number of games you've played at least that many times (e.g., if you've played three different games only one time each, then your index is 1. As soon as you've played those three games at least three times *each*, the index will increase to 3). There's also an `h-index` for opponents you have faced. An activity histogram is also provided, showing the number of games completed each week, with the most recent week on the right. The preview shows the most recent ten weeks. Clicking on it will show you the full history.",
+            "gameStats": "This table shows each game and variant combination along with the number of recorded games, the average length of the game (number of moves), the median length, and the rate of first-player wins. **The first-player win stats should be treated with care!** The sample size is small and biased. There are many confounding factors that could explain an extreme rate. Note that the rate completely ignores whether the pie rule was invoked. This is a measure of how often the first player (regardless of how many times the person sitting in that chair may change) wins the game. Draws are counted as half a win for the first player (so a game played three times with a win, a loss, and a draw would have a first-player win percentage of 50%).",
+            "tourneyStats": "Shows each player who has participated in automated tournaments and their summary stats, including number of wins, number of top 50% finishes, and score. Your score is the sum of points received in each tournament. Points are awarded out of 100, based on your placement: first place gets 100 points, and last place gets none."
+        },
+        "siteStats": {
+            "weekBuckets": "Games are counted in seven-day chunks. The left-most bar is the first week completed games were recorded. The right-most bar is the most recent week (or part thereof).",
+            "cumulativePastYear": "Cumulative (past year)",
+            "average": "Average",
+            "median": "Median",
+            "middleHalf": "Middle half",
+            "gamesCompletedPerWeek": "Games completed per week",
+            "weekNumber": "Week #",
+            "completedGames": "Completed games",
+            "playersCompletedPerWeek": "Number of players completing games per week",
+            "numberOfPlayers": "Number of players",
+            "firstTimersIntro": "This graph tracks the number of users who completed their first game that week. The numbers are cumulative, meaning they will never decrease, and the right-most point should always show the current recorded user count. It is of course expected that the numbers will plateau at some point, but it gives an indication of growth.",
+            "firstTimersCumulative": "First-time game completions, cumulative",
+            "usersFirstGame": "Users who completed their first game",
+            "countryIntro": "This shows the breakdown of countries players assert they are playing from. Only includes country codes the system can interpret.",
+            "timeoutRate": "Total cumulative timeout rate is {{rate}}.",
+            "timeoutRatePerWeek": "Timeout rate per week",
+            "timeoutRateAxis": "Timeout rate",
+            "hoursPerMoveIntro": "\"Hours per move\" is calculated as an average per game. Games that end by time out or on the first turn are not counted. A box plot shows the \"hours per move\" for each qualifying game record and gives a sense of the spread of that data. Outliers >100 hours are not shown but are included in the calculations.",
+            "hoursPerMove": "Hours per move"
+        }
+    },
+    "players": {
+        "filters": {
+            "hideRed": "Hide red",
+            "hideYellowRed": "Hide yellow and red",
+            "hideOffline": "Hide offline players",
+            "hideBlocked": "Hide blocked",
+            "showOnlyBlocked": "Show only blocked"
+        }
+    },
+    "player": {
+        "underDevelopment": "The player profile page is very much \"under development.\" It relies on statistics tabulated daily.",
+        "modules": {
+            "stars": "Starred Games",
+            "coded": "Games Coded",
+            "designed": "Games Designed",
+            "ratings": "Ratings",
+            "counts": "Play Counts",
+            "opponents": "Opponents",
+            "activity": "Activity",
+            "timeouts": "Timeouts",
+            "response": "Response Time",
+            "tournaments": "Tournament History",
+            "history": "Game History"
+        },
+        "stats": {
+            "response": {
+                "average": "Average response time: {{hours}} hours",
+                "median": "Median response time: {{hours}} hours",
+                "middleHalf": "Middle half of response times: {{q1}} to {{q3}} hours"
+            },
+            "timeouts": {
+                "total": "Total number of timeouts: {{count}}",
+                "gamesSince": "Games completed since last timeout: {{count}}",
+                "axisY": "Timeouts"
+            },
+            "activity": {
+                "axisY": "Completed games"
+            }
+        }
+    },
+    "meta": {
+        "tabs": {
+            "summary": "Summary",
+            "challenges": "Challenges",
+            "currentGames": "Current Games",
+            "completedGames": "Completed Games",
+            "players": "Players",
+            "tournaments": "Tournaments",
+            "historicalData": "Historical Data"
+        },
+        "wikiLink": "Abstract Play Wiki",
+        "historicalIntro": "The below stats are drawn from the historical record, which is only updated weekly. Historical ratings may be slightly different from the static ratings found elsewhere on the site. See the Statistics page for more details.",
+        "playCounts": "Play counts",
+        "gameStatistics": "Game statistics",
+        "ratings": "Ratings"
+    },
+    "me": {
+        "challengedNotice": "You have been challenged!",
+        "downloadCompletedReports": "Download all your completed game reports"
+    },
+    "Edit": "Edit",
+    "Done": "Done",
+    "Preview": "Preview",
+    "Add": "Add",
+    "Date": "Date",
+    "Time": "Time",
+    "Unlimited": "Unlimited",
+    "bots": {
+        "manageTitle": "Manage Bots",
+        "intro": "Bots receive game notifications at an HTTPS endpoint you provide. After creating a bot you receive a client ID and secret once — store the secret securely.",
+        "createTitle": "Create bot",
+        "name": "Name",
+        "httpsEndpoint": "HTTPS endpoint",
+        "endpointPlaceholder": "https://example.com/bot",
+        "createBot": "Create bot",
+        "yourBots": "Your bots",
+        "noBotsYet": "No bots yet.",
+        "clientId": "Client ID",
+        "clientSecret": "Client secret",
+        "rotationPending": "rotation pending",
+        "edit": "Edit",
+        "credentialsTitle": "Bot credentials",
+        "newSecretTitle": "New bot secret",
+        "editTitle": "Edit bot: {{name}}",
+        "description": "Description",
+        "rotationInProgress": "Secret rotation is in progress. Deploy the new secret to your bot, verify it works, then finalize the rotation.",
+        "rotateSecret": "Rotate secret",
+        "finalizeRotation": "Finalize rotation",
+        "deleteBot": "Delete bot",
+        "deleteTitle": "Delete bot",
+        "deleting": "Deleting…",
+        "yesDelete": "Yes, delete it",
+        "noCancel": "No, cancel",
+        "deleteConfirm": "You are about to delete the bot <1>{{name}}</1>. This will unlink all past game records from this bot. If you just lost your client secret, you can generate a new one using the \"Rotate secret\" button. Deleting a bot cannot be undone! Are you sure you want to delete this bot?",
+        "saving": "Saving…",
+        "credentialsWarningBoth": "These credentials are shown only once. Copy the client ID and client secret and store them securely before closing this dialog.",
+        "credentialsWarningSecretOnly": "Your client ID is unchanged. This new client secret is shown only once — copy and store it securely before closing this dialog.",
+        "ackSecretStored": "I have copied and securely stored the client secret",
+        "noRobotEmoji": "Display names cannot contain the robot emoji.",
+        "errors": {
+            "nameRequired": "Name is required.",
+            "httpsRequired": "Endpoint must be a valid HTTPS URL.",
+            "createFailed": "Failed to create bot.",
+            "missingCredentials": "Server response was missing bot credentials.",
+            "refreshFailed": "Bot created but failed to refresh bot list. Reload settings to see it.",
+            "updateFailed": "Failed to update bot.",
+            "deleteFailed": "Failed to delete bot.",
+            "rotationBeginFailed": "Failed to begin secret rotation.",
+            "noSecretReturned": "Server did not return a new client secret.",
+            "rotationRefreshFailed": "Secret rotation started but failed to refresh bot status.",
+            "finalizeFailed": "Failed to finalize secret rotation.",
+            "finalizeRefreshFailed": "Rotation finalized but failed to refresh bot status."
+        }
+    },
+    "gameMove": {
+        "dev": {
+            "copyHomeworldsDiagram": "Copy Homeworlds diagram",
+            "injectState": "Inject state",
+            "debugIntro": "If there's a problem with your game, a developer may ask you to come to this page and send them the current game state. You can either click the \"Copy\" link below to copy the text to your clipboard and then paste it somewhere, or you can click the \"Download\" button to save a text file to your computer, which you can then send to the developers. Thank you!",
+            "copyRendererJson": "Copy renderer JSON",
+            "copyRendererJsonHelp": "Renderer input for the board view currently shown (for Customize or debugging).",
+            "injectNonDevWarning": "If you are seeing this and are not a developer, please let an admin know immediately.",
+            "injectDestructiveWarning": "This is a destructive function. Pasting code here will obliterate the existing game state and cannot be undone. You have been warned.",
+            "jsonToInject": "JSON to inject",
+            "pasteJsonPlaceholder": "Paste JSON here",
+            "injectJson": "Inject JSON!",
+            "customCssWarning1": "It is possible to customize the CSS of all instances of this particular game. <1>This is not something to do lightly!</1> Do not inject code you either do not understand or have not had vetted by someone you trust. Abstract Play and its developers are not responsible for any mishaps that may occur while using this feature.",
+            "customCssWarning2": "If you are certain you wish to continue, paste the CSS code below and click Save. If everything blows up, open the developer console and clear the local storage key <1>custom-css</1>, and that should reset everything. See the wiki for documentation, and join us on Discord to discuss.",
+            "pasteCssPlaceholder": "Paste CSS code here",
+            "activateCustomCss": "Activate custom CSS?"
+        },
+        "unrated": "unrated",
+        "explorationDisabled": "exploration disabled",
+        "tournamentLink": "tournament",
+        "eventLink": "event",
+        "chats": {
+            "inGame": ", in-game",
+            "postGame": ", post-game",
+            "moveLink": "move"
+        }
+    },
+    "Back": "Back",
+    "theme": {
+        "title": "Customize Site Theme",
+        "lightMode": "Light Mode",
+        "darkMode": "Dark Mode",
+        "cssVariable": "CSS Variable",
+        "customizationsJson": "Customizations (JSON)",
+        "resetCurrent": "Reset Current Theme",
+        "resetBoth": "Reset Both Themes",
+        "resetAll": "Reset All Themes",
+        "sampleHeading": "Sample Heading",
+        "sampleText": "This is some sample text.",
+        "sampleLink": "This is a link.",
+        "secondaryFontColor": "This is secondary font color.",
+        "primaryButton": "Primary Button",
+        "alertButton": "Alert Button",
+        "tag1": "Tag 1",
+        "tag2": "Tag 2"
+    },
+    "customize": {
+        "title": "Customize Settings for {{gameName}}",
+        "globalDefaults": "Global Defaults",
+        "playerColours": "Player Colours",
+        "addColour": "Add Colour",
+        "addColourHelp": "Select a colour and click the \"Add Colour\" button. The default colours can be selected by clicking on the swatch. If the palette is empty, the default palette will be used.",
+        "defaultSwatch": "Default",
+        "addColourBtn": "Add Colour",
+        "selectDefaultColours": "Select default colours",
+        "selectColourBlind": "Select colour blind colours",
+        "selectPatterns": "Select patterns",
+        "clearColours": "Clear colours",
+        "developerHints": "Developer Hints:",
+        "paletteHint": "Palette #{{num}}",
+        "defaultValue": "(Default: {{value}})",
+        "boardColours": "Board Colours",
+        "selectProperty": "Select Property",
+        "context": {
+            "background": {
+                "label": "Background",
+                "help": "The colour of the area surrounding the board."
+            },
+            "board": {
+                "label": "Board",
+                "help": "The colour of the board itself. Defaults to background colour if not set."
+            },
+            "strokes": {
+                "label": "Strokes",
+                "help": "The colour of lines drawn on the board."
+            },
+            "borders": {
+                "label": "Borders",
+                "help": "The colour of fixed piece borders."
+            },
+            "labels": {
+                "label": "Labels",
+                "help": "The colour of coordinate labels."
+            },
+            "annotations": {
+                "label": "Annotations",
+                "help": "The colour of move annotations."
+            },
+            "fill": {
+                "label": "Fill",
+                "help": "The colour used to fill certain board elements. Basically, the \"opposite\" of the background."
+            }
+        },
+        "glyphReplacements": "Glyph Replacements",
+        "addReplacement": "Add Replacement",
+        "selectOriginal": "-- Select Original --",
+        "with": "with",
+        "selectReplacement": "-- Select Replacement --",
+        "atScale": "at scale",
+        "scaleSuffix": "(@ {{scale}}x)",
+        "output": "Output",
+        "settingsJson": "Settings JSON",
+        "pasteSettingsHelp": "Paste settings JSON here to apply.",
+        "saveSettings": "Save Settings",
+        "resetToDefaults": "Reset to Defaults",
+        "deleteCustomization": "Delete Customization"
+    },
+    "lab": {
+        "intro": "A local play area for experimenting with games. Nothing here touches the server — positions and saved games live in your browser only.",
+        "noSimultaneous": "Playground supports sequential games only. Simultaneous games are not available.",
+        "tabNew": "New game",
+        "tabPaste": "Paste state",
+        "tabSaved": "Load saved",
+        "selectPlayerCount": "Select the number of players.",
+        "launch": "Launch",
+        "gameState": "Game state",
+        "pastePlaceholder": "Paste serialized game state here",
+        "pasteHelp": "Paste a serialized state from a live game debug dump, a Playground game export, or elsewhere. The game type is read from the state automatically. Simultaneous games are not supported.",
+        "loadState": "Load state",
+        "noSavedGames": "No saved Playground games yet.",
+        "savedAt": "Saved",
+        "load": "Load",
+        "importedSuffix": " (imported)",
+        "playgroundSuffix": " (Playground)",
+        "backToLauncher": "Back to launcher",
+        "saveToPlayground": "Save to Playground",
+        "exitToLauncher": "Exit to launcher",
+        "savePrompt": "Name for this saved position:",
+        "savedAlert": "Saved to Playground.",
+        "designerOne": "Designer: ",
+        "designersMany": "Designers: ",
+        "coderOne": "Coder: ",
+        "codersMany": "Coders: ",
+        "titleSuffix": " — Playground",
+        "debug": {
+            "copyPosition": "Copy position",
+            "copyPositionHelp": "Raw engine state at the current focus (for debugging).",
+            "copyGame": "Copy game",
+            "copyGameHelp": "Full Playground export including move tree, focus, and annotations — paste into Playground to share.",
+            "copyRendererJson": "Copy renderer JSON",
+            "copyRendererJsonHelp": "Renderer input for the board view currently shown (for Customize or debugging)."
+        },
+        "annotations": {
+            "title": "Annotations",
+            "moveQuality": "Move quality",
+            "clear": "Clear",
+            "commentMarkdown": "Comment (Markdown)",
+            "commentPlaceholder": "Add a comment in Markdown…",
+            "nothingToPreview": "Nothing to preview yet."
+        }
+    },
+    "Wikipedia": "Wikipedia",
+    "Welcome": "Welcome"
 }

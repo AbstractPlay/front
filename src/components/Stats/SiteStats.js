@@ -89,19 +89,15 @@ function SiteStats({ nav }) {
     <>
       <div>
         <div className="content">
-          <p>
-            Games are counted in seven-day chunks. The left-most bar is the
-            first week completed games were recorded. The right-most bar is the
-            most recent week (or part thereof).
-          </p>
+          <p>{t("stats.siteStats.weekBuckets")}</p>
           {summaryGames === null ? null : (
             <table>
-              <caption>Cumulative (past year)</caption>
+              <caption>{t("stats.siteStats.cumulativePastYear")}</caption>
               <thead>
                 <tr>
-                  <th>Average</th>
-                  <th>Median</th>
-                  <th>Middle half</th>
+                  <th>{t("stats.siteStats.average")}</th>
+                  <th>{t("stats.siteStats.median")}</th>
+                  <th>{t("stats.siteStats.middleHalf")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -141,9 +137,9 @@ function SiteStats({ nav }) {
             responsive: true,
           }}
           layout={{
-            title: "Games completed per week",
-            xaxis: { title: "Week #" },
-            yaxis: { title: "Completed games" },
+            title: t("stats.siteStats.gamesCompletedPerWeek"),
+            xaxis: { title: t("stats.siteStats.weekNumber") },
+            yaxis: { title: t("stats.siteStats.completedGames") },
             height: 500,
           }}
         />
@@ -151,19 +147,15 @@ function SiteStats({ nav }) {
       </div>
       <div>
         <div className="content">
-          <p>
-            Games are counted in seven-day chunks. The left-most bar is the
-            first week completed games were recorded. The right-most bar is the
-            most recent week (or part thereof).
-          </p>
+          <p>{t("stats.siteStats.weekBuckets")}</p>
           {summaryPlayers === null ? null : (
             <table>
-              <caption>Cumulative (past year)</caption>
+              <caption>{t("stats.siteStats.cumulativePastYear")}</caption>
               <thead>
                 <tr>
-                  <th>Average</th>
-                  <th>Median</th>
-                  <th>Middle half</th>
+                  <th>{t("stats.siteStats.average")}</th>
+                  <th>{t("stats.siteStats.median")}</th>
+                  <th>{t("stats.siteStats.middleHalf")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -203,9 +195,9 @@ function SiteStats({ nav }) {
             responsive: true,
           }}
           layout={{
-            title: "Number of players completing games per week",
-            xaxis: { title: "Week #" },
-            yaxis: { title: "Number of players" },
+            title: t("stats.siteStats.playersCompletedPerWeek"),
+            xaxis: { title: t("stats.siteStats.weekNumber") },
+            yaxis: { title: t("stats.siteStats.numberOfPlayers") },
             height: 500,
           }}
         />
@@ -213,13 +205,7 @@ function SiteStats({ nav }) {
       </div>
       <div>
         <div className="content">
-          <p>
-            This graph tracks the number of users who completed their first game
-            that week. The numbers are cumulative, meaning they will never
-            decrease, and the right-most point should always show the current
-            recorded user count. It is of course expected that the numbers will
-            plateau at some point, but it gives an indication of growth.
-          </p>
+          <p>{t("stats.siteStats.firstTimersIntro")}</p>
         </div>
         <Plot
           data={[
@@ -232,9 +218,9 @@ function SiteStats({ nav }) {
             responsive: true,
           }}
           layout={{
-            title: "First-time game completions, cumulative",
-            xaxis: { title: "Week #" },
-            yaxis: { title: "Users who completed their first game" },
+            title: t("stats.siteStats.firstTimersCumulative"),
+            xaxis: { title: t("stats.siteStats.weekNumber") },
+            yaxis: { title: t("stats.siteStats.usersFirstGame") },
             height: 500,
           }}
         />
@@ -242,10 +228,7 @@ function SiteStats({ nav }) {
       </div>
       <div>
         <div className="content">
-          <p>
-            This shows the breakdown of countries players assert they are
-            playing from. Only includes country codes the system can interpret.
-          </p>
+          <p>{t("stats.siteStats.countryIntro")}</p>
         </div>
         <TableSkeleton
           nav={nav}
@@ -258,12 +241,12 @@ function SiteStats({ nav }) {
       <div>
         <div className="content">
           <p>
-            Total cumulative timeout rate is{" "}
-            {summary.timeoutRate.toLocaleString(undefined, {
-              style: "percent",
-              minimumFractionDigits: 2,
+            {t("stats.siteStats.timeoutRate", {
+              rate: summary.timeoutRate.toLocaleString(undefined, {
+                style: "percent",
+                minimumFractionDigits: 2,
+              }),
             })}
-            .
           </p>
         </div>
         <Plot
@@ -277,9 +260,13 @@ function SiteStats({ nav }) {
             responsive: true,
           }}
           layout={{
-            title: "Timeout rate per week",
-            xaxis: { title: "Week #" },
-            yaxis: { title: "Timeout rate", fixedrange: true, range: [0, 1] },
+            title: t("stats.siteStats.timeoutRatePerWeek"),
+            xaxis: { title: t("stats.siteStats.weekNumber") },
+            yaxis: {
+              title: t("stats.siteStats.timeoutRateAxis"),
+              fixedrange: true,
+              range: [0, 1],
+            },
             height: 500,
           }}
         />
@@ -287,13 +274,7 @@ function SiteStats({ nav }) {
       </div>
       <div>
         <div className="content">
-          <p>
-            "Hours per move" is calculated as an average per game. Games that
-            end by time out or on the first turn are not counted. A box plot
-            shows the "hours per move" for each qualifying game record and gives
-            a sense of the spread of that data. Outliers &gt;100 hours are not
-            shown but are included in the calculations.
-          </p>
+          <p>{t("stats.siteStats.hoursPerMoveIntro")}</p>
         </div>
         <Plot
           data={[
@@ -302,7 +283,7 @@ function SiteStats({ nav }) {
               type: "box",
               boxpoints: false,
               orientation: "v",
-              name: "Hours per move",
+              name: t("stats.siteStats.hoursPerMove"),
               jitter: 0.3,
             },
           ]}
@@ -310,7 +291,7 @@ function SiteStats({ nav }) {
             responsive: true,
           }}
           layout={{
-            title: "Hours per move",
+            title: t("stats.siteStats.hoursPerMove"),
             height: 500,
           }}
         />

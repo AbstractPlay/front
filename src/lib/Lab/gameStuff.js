@@ -236,7 +236,8 @@ function doView(
   engineRef,
   movesRef,
   statusRef,
-  settings
+  settings,
+  t
 ) {
   const me = LAB_ME;
   void me;
@@ -288,9 +289,7 @@ function doView(
         moves = gameEngineTmp.moves();
       }
       if (automoved) {
-        toast(
-          "At least one forced move was automatically made. Review the move tree to see each individual state."
-        );
+        toast(t("AutoMoveToast"));
       }
     }
   } catch (err) {
@@ -361,7 +360,8 @@ export function processNewMove(
   errorSetter,
   focusSetter,
   moveSetter,
-  settings
+  settings,
+  t
 ) {
   if (
     (newmove.valid && newmove.complete > 0 && newmove.move !== "") ||
@@ -381,7 +381,8 @@ export function processNewMove(
       engineRef,
       movesRef,
       statusRef,
-      settings
+      settings,
+      t
     );
   } else if (
     partialMoveRenderRef.current &&

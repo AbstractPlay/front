@@ -6,6 +6,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
 import { useStore } from "../stores";
 import { isEqual, cloneDeep, debounce } from "lodash";
+import { useTranslation } from "react-i18next";
 const patternNames = [
   "microbial",
   "chevrons",
@@ -94,6 +95,7 @@ function PatternGlyphPreview({ patternName, size = 16 }) {
 }
 
 function Customize(props) {
+  const { t } = useTranslation();
   const params = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -215,43 +217,46 @@ function Customize(props) {
     "#ffc33b",
   ];
 
-  const contextProps = [
-    {
-      label: "Background",
-      value: "background",
-      help: "The colour of the area surrounding the board.",
-    },
-    {
-      label: "Board",
-      value: "board",
-      help: "The colour of the board itself. Defaults to background colour if not set.",
-    },
-    {
-      label: "Strokes",
-      value: "strokes",
-      help: "The colour of lines drawn on the board.",
-    },
-    {
-      label: "Borders",
-      value: "borders",
-      help: "The colour of fixed piece borders.",
-    },
-    {
-      label: "Labels",
-      value: "labels",
-      help: "The colour of coordinate labels.",
-    },
-    {
-      label: "Annotations",
-      value: "annotations",
-      help: "The colour of move annotations.",
-    },
-    {
-      label: "Fill",
-      value: "fill",
-      help: 'The colour used to fill certain board elements. Basically, the "opposite" of the background.',
-    },
-  ];
+  const contextProps = useMemo(
+    () => [
+      {
+        label: t("customize.context.background.label"),
+        value: "background",
+        help: t("customize.context.background.help"),
+      },
+      {
+        label: t("customize.context.board.label"),
+        value: "board",
+        help: t("customize.context.board.help"),
+      },
+      {
+        label: t("customize.context.strokes.label"),
+        value: "strokes",
+        help: t("customize.context.strokes.help"),
+      },
+      {
+        label: t("customize.context.borders.label"),
+        value: "borders",
+        help: t("customize.context.borders.help"),
+      },
+      {
+        label: t("customize.context.labels.label"),
+        value: "labels",
+        help: t("customize.context.labels.help"),
+      },
+      {
+        label: t("customize.context.annotations.label"),
+        value: "annotations",
+        help: t("customize.context.annotations.help"),
+      },
+      {
+        label: t("customize.context.fill.label"),
+        value: "fill",
+        help: t("customize.context.fill.help"),
+      },
+    ],
+    [t]
+  );
   const [selectedContextProp, setSelectedContextProp] = useState("background");
 
   const customizationHints = useMemo(() => {
@@ -376,14 +381,14 @@ function Customize(props) {
   useEffect(() => {
     if (metaGame !== undefined && metaGame !== null && metaGame !== "") {
       if (metaGame === "_default") {
-        setGameName("Global Defaults");
+        setGameName(t("customize.globalDefaults"));
       } else {
         setGameName(gameinfo.get(metaGame)?.name || metaGame);
       }
     } else {
       setGameName("");
     }
-  }, [metaGame]);
+  }, [metaGame, t]);
 
   const debouncedSetError = useMemo(() => debounce(setSettingsError, 500), []);
 
@@ -705,10 +710,10 @@ function Customize(props) {
           <span className="icon">
             <i className="fa fa-arrow-left"></i>
           </span>
-          <span>Back</span>
+          <span>{t("Back")}</span>
         </button>
       </div>
-      <h1 className="title">Customize Settings for {gameName}</h1>
+      <h1 className="title">{t("customize.title", { gameName })}</h1>
       {providedMetaGame && providedMetaGame !== "_default" && (
         <div className="tabs is-toggle is-centered is-small">
           <ul>
@@ -723,7 +728,7 @@ function Customize(props) {
             <li className={scope === "global" ? "is-active" : ""}>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a onClick={() => setScope("global")}>
-                <span>Global Defaults</span>
+                <span>{t("customize.globalDefaults")}</span>
               </a>
             </li>
           </ul>
@@ -731,14 +736,10 @@ function Customize(props) {
       )}
       <div className="columns">
         <div className="column is-half">
-          <h2 className="subtitle">Player Colours</h2>
+          <h2 className="subtitle">{t("customize.playerColours")}</h2>
           <div className="field">
-            <label className="label is-small">Add Colour</label>
-            <div className="help">
-              Select a colour and click the "Add Colour" button. The default
-              colours can be selected by clicking on the swatch. If the palette
-              is empty, the default palette will be used.
-            </div>
+            <label className="label is-small">{t("customize.addColour")}</label>
+            <div className="help">{t("customize.addColourHelp")}</div>
             <div className="control">
               <HexColorPicker
                 color={selectedColor}
@@ -774,7 +775,7 @@ function Customize(props) {
                   onClick={() => {
                     setPalette([...palette, null]);
                   }}
-                  title="Default"
+                  title={t("customize.defaultSwatch")}
                 >
                   &nbsp;
                 </button>
@@ -812,31 +813,31 @@ function Customize(props) {
               </div>
               <div className="buttons">
                 <button className="button is-small apButton" onClick={addColor}>
-                  Add Colour
+                  {t("customize.addColourBtn")}
                 </button>
                 <button
                   className="button is-small apButton"
                   onClick={selectDefaultPalette}
                 >
-                  Select default colours
+                  {t("customize.selectDefaultColours")}
                 </button>
                 <button
                   className="button is-small apButton"
                   onClick={selectColorBlindPalette}
                 >
-                  Select colour blind colours
+                  {t("customize.selectColourBlind")}
                 </button>
                 <button
                   className="button is-small apButton"
                   onClick={selectPatternsPalette}
                 >
-                  Select patterns
+                  {t("customize.selectPatterns")}
                 </button>
                 <button
                   className="button is-small apButtonNeutral"
                   onClick={clearPalette}
                 >
-                  Clear colours
+                  {t("customize.clearColours")}
                 </button>
               </div>
             </div>
@@ -891,7 +892,7 @@ function Customize(props) {
               style={{ fontSize: "0.85rem", padding: "1em" }}
             >
               <p>
-                <strong>Developer Hints:</strong>
+                <strong>{t("customize.developerHints")}</strong>
               </p>
               <ul
                 style={{
@@ -902,10 +903,13 @@ function Customize(props) {
               >
                 {paletteHints.map((h, i) => (
                   <li key={i}>
-                    <strong>Palette #{h.num}</strong>: {h.explanation}{" "}
+                    <strong>
+                      {t("customize.paletteHint", { num: h.num })}
+                    </strong>
+                    : {h.explanation}{" "}
                     {h.default !== undefined && (
                       <span style={{ opacity: 0.8 }}>
-                        (Default: {h.default})
+                        {t("customize.defaultValue", { value: h.default })}
                       </span>
                     )}
                   </li>
@@ -914,9 +918,11 @@ function Customize(props) {
             </div>
           )}
           <hr />
-          <h2 className="subtitle">Board Colours</h2>
+          <h2 className="subtitle">{t("customize.boardColours")}</h2>
           <div className="field">
-            <label className="label is-small">Select Property</label>
+            <label className="label is-small">
+              {t("customize.selectProperty")}
+            </label>
             <div className="control">
               <div className="select is-small">
                 <select
@@ -957,7 +963,7 @@ function Customize(props) {
               style={{ fontSize: "0.85rem", padding: "1em" }}
             >
               <p>
-                <strong>Developer Hints:</strong>
+                <strong>{t("customize.developerHints")}</strong>
               </p>
               <ul
                 style={{
@@ -975,7 +981,7 @@ function Customize(props) {
                     : {h.explanation}{" "}
                     {h.default !== undefined && (
                       <span style={{ opacity: 0.8 }}>
-                        (Default: {h.default})
+                        {t("customize.defaultValue", { value: h.default })}
                       </span>
                     )}
                   </li>
@@ -984,16 +990,18 @@ function Customize(props) {
             </div>
           )}
           <hr />
-          <h2 className="subtitle">Glyph Replacements</h2>
+          <h2 className="subtitle">{t("customize.glyphReplacements")}</h2>
           <div className="field">
-            <label className="label is-small">Add Replacement</label>
+            <label className="label is-small">
+              {t("customize.addReplacement")}
+            </label>
             <div className="control">
               <div className="select is-small">
                 <select
                   value={selectedOriginalGlyph}
                   onChange={(e) => setSelectedOriginalGlyph(e.target.value)}
                 >
-                  <option value="">-- Select Original --</option>
+                  <option value="">{t("customize.selectOriginal")}</option>
                   {availableGlyphs.map((g) => (
                     <option key={g} value={g}>
                       {g}
@@ -1001,7 +1009,7 @@ function Customize(props) {
                   ))}
                 </select>
               </div>
-              <span style={{ margin: "0 0.5em" }}>with</span>
+              <span style={{ margin: "0 0.5em" }}>{t("customize.with")}</span>
               <div className="select is-small">
                 <select
                   value={selectedSheet}
@@ -1019,7 +1027,7 @@ function Customize(props) {
                   value={selectedReplacementGlyph}
                   onChange={(e) => setSelectedReplacementGlyph(e.target.value)}
                 >
-                  <option value="">-- Select Replacement --</option>
+                  <option value="">{t("customize.selectReplacement")}</option>
                   {availableReplacements.map((g) => (
                     <option key={g} value={g}>
                       {g}
@@ -1027,7 +1035,7 @@ function Customize(props) {
                   ))}
                 </select>
               </div>
-              <span style={{ margin: "0 0.5em" }}>at scale</span>
+              <span style={{ margin: "0 0.5em" }}>{t("customize.atScale")}</span>
               <input
                 className="input is-small"
                 type="number"
@@ -1041,7 +1049,7 @@ function Customize(props) {
                 onClick={addGlyphMapping}
                 disabled={!selectedOriginalGlyph || !selectedReplacementGlyph}
               >
-                Add
+                {t("Add")}
               </button>
             </div>
           </div>
@@ -1049,7 +1057,9 @@ function Customize(props) {
             {glyphMap.map((p, i) => (
               <span key={i} className="tag is-medium">
                 {p[0]} &rarr; {p[1]}
-                {p[2] !== undefined && p[2] !== 1 ? ` (@ ${p[2]}x)` : ""}
+                {p[2] !== undefined && p[2] !== 1
+                  ? ` ${t("customize.scaleSuffix", { scale: p[2] })}`
+                  : ""}
                 <button
                   className="delete is-small"
                   onClick={() => removeGlyphMapping(i)}
@@ -1059,7 +1069,7 @@ function Customize(props) {
           </div>
         </div>
         <div className="column is-half">
-          <label className="label">Output</label>
+          <label className="label">{t("customize.output")}</label>
           <div
             id="renderer-demo-output"
             style={{
@@ -1073,7 +1083,7 @@ function Customize(props) {
       </div>
       <div className="columns">
         <div className="column is-full">
-          <h2 className="subtitle">Settings JSON</h2>
+          <h2 className="subtitle">{t("customize.settingsJson")}</h2>
           <div className="field">
             <div className="control">
               <textarea
@@ -1086,7 +1096,7 @@ function Customize(props) {
             {settingsError ? (
               <p className="help is-danger">{settingsError}</p>
             ) : (
-              <p className="help">Paste settings JSON here to apply.</p>
+              <p className="help">{t("customize.pasteSettingsHelp")}</p>
             )}
           </div>
           <div className="control">
@@ -1095,7 +1105,7 @@ function Customize(props) {
               onClick={handleSave}
               disabled={!isDirty}
             >
-              Save Settings
+              {t("customize.saveSettings")}
             </button>
           </div>
           <div className="control">
@@ -1103,7 +1113,7 @@ function Customize(props) {
               className="button is-small apButtonNeutral"
               onClick={handleReset}
             >
-              Reset to Defaults
+              {t("customize.resetToDefaults")}
             </button>
           </div>
           <div className="control">
@@ -1112,7 +1122,7 @@ function Customize(props) {
               onClick={handleDelete}
               disabled={!globalMe?.customizations?.[metaGame]}
             >
-              Delete Customization
+              {t("customize.deleteCustomization")}
             </button>
           </div>
         </div>

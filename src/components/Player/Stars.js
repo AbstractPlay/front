@@ -70,7 +70,7 @@ function Stars({ handleChallenge }) {
                 className="button is-small apButton"
                 onClick={() => openChallengeModal(props.row.original.id)}
               >
-                Issue Challenge
+                {t("IssueChallengeLabel")}
               </button>
             </>
           ),
@@ -95,7 +95,7 @@ function Stars({ handleChallenge }) {
   ) {
     return (
       <div className="content">
-        <p>None</p>
+        <p>{t("None")}</p>
       </div>
     );
   } else {

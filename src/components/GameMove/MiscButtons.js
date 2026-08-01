@@ -22,7 +22,7 @@ function MiscButtons({
       {toMove !== "" || gameRec === undefined ? null : (
         <DownloadDataUri
           filename={`AbstractPlay-${metaGame}-${gameID}.json`}
-          label="Download completed game record"
+          label={t("DownloadCompletedRecord")}
           uri={
             gameRec === undefined
               ? null

@@ -256,7 +256,7 @@ function Players() {
                 className="button is-small apButton"
                 onClick={() => toggleBlock(playerId, isBlocked)}
               >
-                {isBlocked ? "Unblock" : "Block"}
+                {isBlocked ? t("Unblock") : t("Block")}
               </button>
             );
           },
@@ -345,10 +345,11 @@ function Players() {
             </div>
             <div className="level-item">
               <p>
-                Page{" "}
-                <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
-                <strong>{table.getPageCount()}</strong> (
-                {table.getPrePaginationRowModel().rows.length} total players)
+                {t("Page")}{" "}
+                <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
+                {t("of")} <strong>{table.getPageCount()}</strong> (
+                {table.getPrePaginationRowModel().rows.length}{" "}
+                {t("TotalPlayers")})
               </p>
             </div>
             {/* <div className="level-item">
@@ -376,7 +377,7 @@ function Players() {
                   >
                     {[10, 20, 30, 40, 50, allSize].map((pageSize) => (
                       <option key={pageSize} value={pageSize}>
-                        Show {pageSize === allSize ? "All" : pageSize}
+                        {t("Show")} {pageSize === allSize ? t("All") : pageSize}
                       </option>
                     ))}
                   </select>
@@ -413,7 +414,7 @@ function Players() {
                 defaultChecked={hideFilter === "none"}
                 onClick={() => hideFilterSetter("none")}
               />
-              Show all
+              {t("ShowAll")}
             </label>
             <label className="radio">
               <input
@@ -422,7 +423,7 @@ function Players() {
                 defaultChecked={hideFilter === "red"}
                 onClick={() => hideFilterSetter("red")}
               />
-              Hide red
+              {t("players.filters.hideRed")}
             </label>
             <label className="radio">
               <input
@@ -431,7 +432,7 @@ function Players() {
                 defaultChecked={hideFilter === "yellow"}
                 onClick={() => hideFilterSetter("yellow")}
               />
-              Hide yellow and red
+              {t("players.filters.hideYellowRed")}
             </label>
             {globalMe === null ? null : (
               <label className="radio">
@@ -441,7 +442,7 @@ function Players() {
                   defaultChecked={hideFilter === "offline"}
                   onClick={() => hideFilterSetter("offline")}
                 />
-                Hide offline players
+                {t("players.filters.hideOffline")}
               </label>
             )}
           </div>
@@ -454,7 +455,7 @@ function Players() {
                   defaultChecked={blockedFilter === "all"}
                   onClick={() => blockedFilterSetter("all")}
                 />
-                Show all
+                {t("ShowAll")}
               </label>
               <label className="radio">
                 <input
@@ -463,7 +464,7 @@ function Players() {
                   defaultChecked={blockedFilter === "hide"}
                   onClick={() => blockedFilterSetter("hide")}
                 />
-                Hide blocked
+                {t("players.filters.hideBlocked")}
               </label>
               <label className="radio">
                 <input
@@ -472,7 +473,7 @@ function Players() {
                   defaultChecked={blockedFilter === "only"}
                   onClick={() => blockedFilterSetter("only")}
                 />
-                Show only blocked
+                {t("players.filters.showOnlyBlocked")}
               </label>
             </div>
           )}
@@ -481,7 +482,7 @@ function Players() {
               <div className="select">
                 <select onChange={(e) => countryFilterSetter(e.target.value)}>
                   <option value="" key={`countryFilter|all`}>
-                    --Show all--
+                    {t("ShowAllCountries")}
                   </option>
                   {usedCountries.map(([code, name]) => (
                     <option value={code} key={`countryFilter|${code}`}>

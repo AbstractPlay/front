@@ -519,7 +519,7 @@ function Me(props) {
         globalMe.challengesReceived.length === 0 ? null : (
           <div className="content has-text-centered">
             <p style={{ color: "var(--secondary-color-1)" }}>
-              <a href="#challenged">You have been challenged!</a>
+              <a href="#challenged">{t("me.challengedNotice")}</a>
             </p>
           </div>
         )}
@@ -561,7 +561,7 @@ function Me(props) {
                     href={`https://records.abstractplay.com/player/${globalMe.id}.json`}
                   >
                     <button className="button apButton is-small">
-                      Download all your completed game reports
+                      {t("me.downloadCompletedReports")}
                     </button>
                   </a>
                 </div>
@@ -699,25 +699,25 @@ function Me(props) {
                   className="button is-small apButton"
                   onClick={() => handleTestPushClick()}
                 >
-                  Test push notifications
+                  {t("me.dev.testPush")}
                 </button>
                 <button
                   className="button is-small apButton"
                   onClick={() => handleTestBotStatusClick()}
                 >
-                  Test bot status
+                  {t("me.dev.testBotStatus")}
                 </button>
                 <button
                   className="button is-small apButton"
-                  onClick={() => toast("Toast test!")}
+                  onClick={() => toast(t("me.dev.toastMessage"))}
                 >
-                  Test toast
+                  {t("me.dev.testToast")}
                 </button>
                 <button
                   className="button is-small apButton"
                   onClick={() => handleUpdateMetaGameCountsClick()}
                 >
-                  Update meta game counts
+                  {t("me.dev.updateMetaGameCounts")}
                 </button>
               </div>
             </div>
@@ -802,7 +802,7 @@ function Me(props) {
         </Modal>
         <Modal
           show={showTestBotStatusModal}
-          title={"Test bot status"}
+          title={t("me.dev.testBotStatusTitle")}
           buttons={[
             {
               label: t("Close"),

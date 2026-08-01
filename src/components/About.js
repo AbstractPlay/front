@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 // import pkgInfo from "../../package.json";
 import { Link } from "react-router-dom";
 import { shuffle } from "../lib/shuffle";
@@ -66,21 +66,17 @@ function About(props) {
     <Fragment>
       <article className="content">
         <h1 className="has-text-centered title">{t("About")}</h1>
-        <p>
-          Abstract Play is a place to play abstract strategy games against
-          others asynchronously (you don't have to be online at the same time).
-          We specialize in offbeat, perfect information games without any
-          element of luck, but we also include a number of games that involve
-          randomness (e.g., dice and cards). The site is completely free to join
-          and play.
-        </p>
+        <p>{t("about.intro")}</p>
         {/* <p style={{ fontSize: "smaller", textAlign: "right" }}>
           Build: {pkgInfo.version}
         </p> */}
         {highlights === null ? null : (
           <p>
-            Here are some of the most active games this week. Visit the{" "}
-            <Link to="/games">full games list</Link> for more details.
+            <Trans i18nKey="about.highlights">
+              Here are some of the most active games this week. Visit the{" "}
+              <Link to="/games">{t("about.highlightsLink")}</Link> for more
+              details.
+            </Trans>
           </p>
         )}
       </article>

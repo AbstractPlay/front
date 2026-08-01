@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 function NotFound(props) {
   const { t } = useTranslation();
@@ -23,12 +23,19 @@ function NotFound(props) {
       <article className="content">
         <h1 className="has-text-centered title">{t("404")}</h1>
         <p>
-          No page could be found at <code>{path}</code>. Please use the
-          navigation bar to try again. If the problem persists, please{" "}
-          <a href="https://discord.abstractplay.com">
-            post a bug report on our Discord server
-          </a>
-          .
+          <Trans
+            i18nKey="notFound.body"
+            values={{ path }}
+            components={[
+              <code key="code" />,
+              <a
+                key="link"
+                href="https://discord.abstractplay.com"
+                target="_blank"
+                rel="noreferrer"
+              />,
+            ]}
+          />
         </p>
       </article>
     </Fragment>

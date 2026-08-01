@@ -2,7 +2,7 @@ import { useMemo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { callAuthApi } from "../../lib/api";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "../Events/TableSkeleton";
 import Modal from "../Modal";
@@ -128,7 +128,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
         header: t("tables.winner"),
         cell: (props) =>
           props.getValue() === undefined ? null : props.getValue() === null ? (
-            <>Draw{props.row.original.arbitrated ? <span>*</span> : null}</>
+            <>{t("Draw")}{props.row.original.arbitrated ? <span>*</span> : null}</>
           ) : (
             <>
               <BotAwareName
@@ -153,7 +153,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
                   showModalArbitrateSetter(true);
                 }}
               >
-                Change result
+                {t("Events.gamesTable.changeResult")}
               </button>
             </>
           ),
@@ -209,10 +209,10 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
       />
       <Modal
         show={showModalArbitrate}
-        title={"Arbitrate result"}
+        title={t("Events.gamesTable.arbitrateTitle")}
         buttons={[
           {
-            label: "Save result",
+            label: t("Events.gamesTable.saveResult"),
             action: changeResult,
           },
           {
@@ -222,19 +222,22 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
         ]}
       >
         <div className="content">
-          <p>
-            Please note that arbitrated results will not be visible in the
-            auto-generated game reports. They only apply within the context of
-            this event.
-          </p>
+          <p>{t("Events.gamesTable.arbitrateNote")}</p>
         </div>
         <div className="field">
           <label className="label">
-            Select the arbitrated winner of{" "}
-            <Link to={`/move/${arbRec?.metagame}/1/${arbRec?.id}`}>
-              {arbRec?.gameName} game
-            </Link>
-            :
+            <Trans
+              i18nKey="Events.gamesTable.selectWinner"
+              values={{
+                gameName: arbRec?.gameName,
+              }}
+              components={[
+                <Link
+                  key="link"
+                  to={`/move/${arbRec?.metagame}/1/${arbRec?.id}`}
+                />,
+              ]}
+            />
           </label>
           <div className="control">
             <label className="radio">
@@ -273,7 +276,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
                 onClick={() => setWinner([arbRec?.p1.id, arbRec?.p2.id])}
                 readOnly
               />
-              Draw
+              {t("Draw")}
             </label>
           </div>
         </div>

@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ProfileContext, SummaryContext } from "../Player";
 import Plot from "react-plotly.js";
 
 function Activity({ order }) {
+  const { t } = useTranslation();
   const [user] = useContext(ProfileContext);
   const [summary] = useContext(SummaryContext);
   const [histogram, histogramSetter] = useState([]);
@@ -41,14 +43,10 @@ function Activity({ order }) {
             displayModeBar: false,
           }}
           layout={{
-            xaxis: { title: "Week #" },
-            yaxis: { title: "Completed games" },
+            xaxis: { title: t("stats.siteStats.weekNumber") },
+            yaxis: { title: t("player.stats.activity.axisY") },
             autosize: true,
           }}
-          // style={{
-          //     height: "100%",
-          //     width: "100%",
-          // }}
         />
       </div>
     </>

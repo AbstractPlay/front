@@ -273,14 +273,15 @@ function LabSession({
         .map(fmt);
       const coders = info.people.filter((p) => p.type === "coder").map(fmt);
       designerStringSetter(
-        (designers.length === 1 ? "Designer: " : "Designers: ") +
+        (designers.length === 1 ? t("lab.designerOne") : t("lab.designersMany")) +
           designers.join(", ")
       );
       coderStringSetter(
-        (coders.length === 1 ? "Coder: " : "Coders: ") + coders.join(", ")
+        (coders.length === 1 ? t("lab.coderOne") : t("lab.codersMany")) +
+          coders.join(", ")
       );
     }
-  }, [metaGame]);
+  }, [metaGame, t]);
 
   useEffect(() => {
     try {
@@ -427,7 +428,8 @@ function LabSession({
       errorSetter,
       focusSetter,
       moveSetter,
-      settingsRef.current
+      settingsRef.current,
+      tRef.current
     );
     populateChecked(gameRef, engineRef, tRef.current, inCheckSetter);
     const metaInfo = gameinfo.get(gameRef.current.metaGame);
@@ -501,7 +503,8 @@ function LabSession({
       errorSetter,
       focusSetter,
       moveSetter,
-      settings
+      settings,
+      t
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     const metaInfo = gameinfo.get(gameRef.current.metaGame);
@@ -527,7 +530,8 @@ function LabSession({
       errorSetter,
       focusSetter,
       moveSetter,
-      settings
+      settings,
+      t
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   };
@@ -678,10 +682,7 @@ function LabSession({
   };
 
   const handleSaveNamed = () => {
-    const name = window.prompt(
-      "Name for this saved position:",
-      sessionNameRef.current
-    );
+    const name = window.prompt(t("lab.savePrompt"), sessionNameRef.current);
     if (!name) return;
     debouncedPersist.flush();
     sessionNameRef.current = name;
@@ -699,7 +700,7 @@ function LabSession({
     addSave(record);
     gameRef.current = { ...gameRef.current, id: record.id };
     persistSession();
-    window.alert("Saved to Playground.");
+    window.alert(t("lab.savedAlert"));
   };
 
   moveEntryHandlersRef.current = {
@@ -812,7 +813,7 @@ function LabSession({
       <>
         <p>{errorMessageRef.current}</p>
         <button className="button apButton" onClick={onExit}>
-          Back to launcher
+          {t("lab.backToLauncher")}
         </button>
       </>
     );
@@ -864,7 +865,7 @@ function LabSession({
       <h1 className="subtitle lined">
         <span>
           <Link to={`/games/${metaGame}`}>{gameDeets?.name}</Link>
-          <span style={{ fontSize: "smaller" }}> (Playground)</span>
+          <span style={{ fontSize: "smaller" }}>{t("lab.playgroundSuffix")}</span>
         </span>
       </h1>
       {inCheck ? (
@@ -929,7 +930,10 @@ function LabSession({
   return (
     <>
       <Helmet>
-        <title>{sessionNameRef.current} — Playground</title>
+        <title>
+          {sessionNameRef.current}
+          {t("lab.titleSuffix")}
+        </title>
       </Helmet>
       <article>
         {screenWidth < 770 || verticalLayout ? (
@@ -949,10 +953,10 @@ function LabSession({
         )}
         <div className="buttons">
           <button className="button apButton" onClick={handleSaveNamed}>
-            Save to Playground
+            {t("lab.saveToPlayground")}
           </button>
           <button className="button apButtonNeutral" onClick={onExit}>
-            Exit to launcher
+            {t("lab.exitToLauncher")}
           </button>
         </div>
 
@@ -1016,8 +1020,8 @@ function LabSession({
           ]}
         >
           <div className="content">
-            <h2>Copy position</h2>
-            <p>Raw engine state at the current focus (for debugging).</p>
+            <h2>{t("lab.debug.copyPosition")}</h2>
+            <p>{t("lab.debug.copyPositionHelp")}</p>
             <ClipboardCopy copyText={focusStateText} />
             <div className="field">
               <div className="control">
@@ -1033,11 +1037,8 @@ function LabSession({
                 </a>
               </div>
             </div>
-            <h2>Copy game</h2>
-            <p>
-              Full Playground export including move tree, focus, and annotations
-              — paste into Playground to share.
-            </p>
+            <h2>{t("lab.debug.copyGame")}</h2>
+            <p>{t("lab.debug.copyGameHelp")}</p>
             <ClipboardCopy copyText={playgroundExportText} />
             <div className="field">
               <div className="control">
@@ -1055,11 +1056,8 @@ function LabSession({
             </div>
             {displayRenderRepJson ? (
               <>
-                <h2>Copy renderer JSON</h2>
-                <p>
-                  Renderer input for the board view currently shown (for
-                  Customize or debugging).
-                </p>
+                <h2>{t("lab.debug.copyRendererJson")}</h2>
+                <p>{t("lab.debug.copyRendererJsonHelp")}</p>
                 <ClipboardCopy copyText={displayRenderRepJson} />
                 <div className="field">
                   <div className="control">

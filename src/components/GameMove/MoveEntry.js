@@ -381,7 +381,7 @@ function MoveEntry(props) {
                         )}
                         {globalMe === null ||
                         !connections?.visibleUserIds.includes(p.id) ? null : (
-                          <span className="icon" title="Player is online">
+                          <span className="icon" title={t("PlayerOnline")}>
                             <i className="fa fa-wifi" aria-hidden="true"></i>
                           </span>
                         )}
@@ -396,7 +396,7 @@ function MoveEntry(props) {
                         {showMilliseconds(p.time)}
                         {globalMe === null ||
                         !connections?.visibleUserIds.includes(p.id) ? null : (
-                          <span className="icon" title="Player is online">
+                          <span className="icon" title={t("PlayerOnline")}>
                             <i className="fa fa-wifi" aria-hidden="true"></i>
                           </span>
                         )}

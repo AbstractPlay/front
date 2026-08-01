@@ -258,7 +258,8 @@ function doView(
   movesRef,
   statusRef,
   settings,
-  navigate
+  navigate,
+  t
 ) {
   let node = getFocusNode(exploration, game, focus);
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
@@ -320,9 +321,7 @@ function doView(
         moves = gameEngineTmp.moves();
       }
       if (automoved) {
-        toast(
-          "At least one forced move was automatically made. Review the move tree to see each individual state."
-        );
+        toast(t("AutoMoveToast"));
       }
     }
   } catch (err) {
@@ -422,7 +421,8 @@ export function processNewMove(
   focusSetter,
   moveSetter,
   settings,
-  navigate
+  navigate,
+  t
 ) {
   // if the move is complete, or partial and renderable, update board
   if (
@@ -446,7 +446,8 @@ export function processNewMove(
       movesRef,
       statusRef,
       settings,
-      navigate
+      navigate,
+      t
     );
   }
   // if the user is starting a new move attempt, it isn't yet renderable and the current render is for a partial move, go back to showing the current position

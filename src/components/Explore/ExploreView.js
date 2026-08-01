@@ -559,9 +559,10 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
           </div>
           <div className="level-item">
             <p>
-              Page <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
-              of <strong>{table.getPageCount()}</strong> (
-              {table.getPrePaginationRowModel().rows.length} total games)
+              {t("Page")}{" "}
+              <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
+              {t("of")} <strong>{table.getPageCount()}</strong> (
+              {table.getPrePaginationRowModel().rows.length} {t("TotalGames")})
             </p>
           </div>
           <div className="level-item">
@@ -575,7 +576,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
                 >
                   {[10, 20, 30, 40, 50, allSize].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>
-                      Show {pageSize === allSize ? "All" : pageSize}
+                      {t("Show")} {pageSize === allSize ? t("All") : pageSize}
                     </option>
                   ))}
                 </select>
@@ -595,7 +596,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
                 <span className="icon is-small">
                   <i className="fa fa-th-list"></i>
                 </span>
-                <span>Table</span>
+                <span>{t("TableView")}</span>
               </button>
             </div>
             <div className="control">
@@ -610,7 +611,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
                 <span className="icon is-small">
                   <i className="fa fa-th-large"></i>
                 </span>
-                <span>Grid</span>
+                <span>{t("GridView")}</span>
               </button>
             </div>
           </div>
@@ -622,14 +623,14 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
   return (
     <>
       <div className="container" style={{ paddingBottom: "1em" }}>
-        <h1 className="subtitle">{config.title}</h1>
+        <h1 className="subtitle">{t(config.titleKey)}</h1>
       </div>
-      {config.description ? (
+      {config.descriptionKey ? (
         <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-          {config.description}
+          {t(config.descriptionKey)}
         </ReactMarkdown>
       ) : null}
-      {config.renderExtra ? config.renderExtra(handleReload) : null}
+      {config.renderExtra ? config.renderExtra(handleReload, t) : null}
       <div className="container">
         {tableNavigation}
         <table
@@ -782,7 +783,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         {tableNavigation}
       </div>
       <Modal
-        buttons={[{ label: "Close", action: closeImgModal }]}
+        buttons={[{ label: t("Close"), action: closeImgModal }]}
         show={activeImgModal !== ""}
         title={
           activeImgModal

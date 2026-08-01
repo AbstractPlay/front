@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Modal from "../Modal";
 import Spinner from "../Spinner";
 import { useStore } from "../../stores";
+import { useTranslation } from "react-i18next";
 import BotEditModal from "./BotEditModal";
 import BotCredentialsModal from "./BotCredentialsModal";
 import { createBot, refreshMe } from "./botApi";
@@ -18,6 +19,7 @@ function truncate(str, max = 40) {
 }
 
 function BotsModal({ show, onClose }) {
+  const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
   const bots = globalMe?.bots ?? [];
 
@@ -87,11 +89,11 @@ function BotsModal({ show, onClose }) {
 
   const handleCreate = async () => {
     if (!newName.trim()) {
-      errorSetter("Name is required.");
+      errorSetter(t("bots.errors.nameRequired"));
       return;
     }
     if (!isHttps(newEndpoint)) {
-      errorSetter("Endpoint must be a valid HTTPS URL.");
+      errorSetter(t("bots.errors.httpsRequired"));
       return;
     }
     creatingSetter(true);
@@ -102,19 +104,18 @@ function BotsModal({ show, onClose }) {
     });
     creatingSetter(false);
     if (!result.ok) {
-      errorSetter(result.error || "Failed to create bot.");
+      errorSetter(result.error || t("bots.errors.createFailed"));
       return;
     }
     const { clientId, clientSecret } = result.data ?? {};
     if (!clientId || !clientSecret) {
-      errorSetter("Server response was missing bot credentials.");
+      errorSetter(t("bots.errors.missingCredentials"));
       return;
     }
     const refreshResult = await refreshMe();
     if (!refreshResult.ok) {
       errorSetter(
-        refreshResult.error ||
-          "Bot created but failed to refresh bot list. Reload settings to see it."
+        refreshResult.error || t("bots.errors.refreshFailed")
       );
     }
     resetCreateForm();
@@ -132,30 +133,26 @@ function BotsModal({ show, onClose }) {
     <>
       <Modal
         show={show}
-        title="Manage Bots"
+        title={t("bots.manageTitle")}
         buttons={[
           {
-            label: "Close",
+            label: t("Close"),
             action: handleClose,
           },
         ]}
       >
         <div className="content">
-          <p>
-            Bots receive game notifications at an HTTPS endpoint you provide.
-            After creating a bot you receive a client ID and secret once — store
-            the secret securely.
-          </p>
+          <p>{t("bots.intro")}</p>
         </div>
         {error ? (
           <div className="notification is-danger is-light">{error}</div>
         ) : null}
-        <h4 className="title is-6">Create bot</h4>
+        <h4 className="title is-6">{t("bots.createTitle")}</h4>
         <div className="field is-horizontal">
           <div className="field-body">
             <div className="field">
               <label className="label is-small" htmlFor="newBotName">
-                Name
+                {t("bots.name")}
               </label>
               <div className="control">
                 <input
@@ -169,7 +166,7 @@ function BotsModal({ show, onClose }) {
             </div>
             <div className="field">
               <label className="label is-small" htmlFor="newBotEndpoint">
-                HTTPS endpoint
+                {t("bots.httpsEndpoint")}
               </label>
               <div className="control">
                 <input
@@ -178,7 +175,7 @@ function BotsModal({ show, onClose }) {
                   type="url"
                   value={newEndpoint}
                   onChange={(e) => newEndpointSetter(e.target.value)}
-                  placeholder="https://example.com/bot"
+                  placeholder={t("bots.endpointPlaceholder")}
                 />
               </div>
             </div>
@@ -191,20 +188,20 @@ function BotsModal({ show, onClose }) {
               onClick={handleCreate}
               disabled={creating}
             >
-              {creating ? <Spinner /> : "Create bot"}
+              {creating ? <Spinner /> : t("bots.createBot")}
             </button>
           </div>
         </div>
-        <h4 className="title is-6">Your bots</h4>
+        <h4 className="title is-6">{t("bots.yourBots")}</h4>
         {bots.length === 0 ? (
-          <p className="help">No bots yet.</p>
+          <p className="help">{t("bots.noBotsYet")}</p>
         ) : (
           <table className="table is-fullwidth apTable">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Endpoint</th>
-                <th>Client ID</th>
+                <th>{t("bots.name")}</th>
+                <th>{t("bots.httpsEndpoint")}</th>
+                <th>{t("bots.clientId")}</th>
                 <th></th>
               </tr>
             </thead>
@@ -215,7 +212,7 @@ function BotsModal({ show, onClose }) {
                     {formatDisplayName(bot.name, true)}
                     {bot.secretRotationPending ? (
                       <span className="tag is-warning is-light ml-2">
-                        rotation pending
+                        {t("bots.rotationPending")}
                       </span>
                     ) : null}
                   </td>
@@ -234,7 +231,7 @@ function BotsModal({ show, onClose }) {
                         )
                       }
                     >
-                      Edit
+                      {t("Edit")}
                     </button>
                   </td>
                 </tr>
@@ -254,7 +251,7 @@ function BotsModal({ show, onClose }) {
         show={credentials !== null}
         clientId={credentials?.clientId}
         clientSecret={credentials?.clientSecret}
-        title="Bot credentials"
+        title={t("bots.credentialsTitle")}
         onClose={() => credentialsSetter(null)}
       />
     </>

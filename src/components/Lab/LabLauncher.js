@@ -50,7 +50,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
     const counts = getLabPlayerCounts(metaGame);
     const count = counts.length === 1 ? counts[0] : parseInt(playerCount, 10);
     if (!count || !counts.includes(count)) {
-      setError("Select the number of players.");
+      setError(t("lab.selectPlayerCount"));
       return;
     }
     try {
@@ -83,7 +83,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
         savedMoveAnnotations: imported.moveAnnotations,
         initialFocus: imported.focus,
         gameSettings: {},
-        sessionName: `${gameinfo.get(imported.metaGame).name} (imported)`,
+        sessionName: `${gameinfo.get(imported.metaGame).name}${t("lab.importedSuffix")}`,
       });
     } catch (err) {
       setError(err.message || String(err));
@@ -98,15 +98,9 @@ function LabLauncher({ onLaunch, onLoadSave }) {
   return (
     <article>
       <div className="content">
-        <h1 className="title">Playground</h1>
-        <p>
-          A local play area for experimenting with games. Nothing here touches
-          the server — positions and saved games live in your browser only.
-        </p>
-        <p>
-          Playground supports sequential games only. Simultaneous games are not
-          available.
-        </p>
+        <h1 className="title">{t("Playground")}</h1>
+        <p>{t("lab.intro")}</p>
+        <p>{t("lab.noSimultaneous")}</p>
       </div>
 
       <div className="tabs is-small is-toggle is-toggle-rounded">
@@ -119,7 +113,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
                 setMode("new");
               }}
             >
-              New game
+              {t("lab.tabNew")}
             </a>
           </li>
           <li className={mode === "paste" ? "is-active" : ""}>
@@ -130,7 +124,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
                 setMode("paste");
               }}
             >
-              Paste state
+              {t("lab.tabPaste")}
             </a>
           </li>
           <li className={mode === "saved" ? "is-active" : ""}>
@@ -142,7 +136,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
                 refreshSaves();
               }}
             >
-              Load saved
+              {t("lab.tabSaved")}
             </a>
           </li>
         </ul>
@@ -208,7 +202,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
           <div className="field">
             <div className="control">
               <button className="button apButton" onClick={handleLaunchNew}>
-                Launch
+                {t("lab.launch")}
               </button>
             </div>
           </div>
@@ -219,28 +213,24 @@ function LabLauncher({ onLaunch, onLoadSave }) {
         <>
           <div className="field">
             <label className="label" htmlFor="labPastedState">
-              Game state
+              {t("lab.gameState")}
             </label>
             <div className="control">
               <textarea
                 id="labPastedState"
                 className="textarea"
                 rows={8}
-                placeholder="Paste serialized game state here"
+                placeholder={t("lab.pastePlaceholder")}
                 value={pastedState}
                 onChange={(e) => setPastedState(e.target.value)}
               />
             </div>
-            <p className="help">
-              Paste a serialized state from a live game debug dump, a Playground
-              game export, or elsewhere. The game type is read from the state
-              automatically. Simultaneous games are not supported.
-            </p>
+            <p className="help">{t("lab.pasteHelp")}</p>
           </div>
           <div className="field">
             <div className="control">
               <button className="button apButton" onClick={handleLoadPasted}>
-                Load state
+                {t("lab.loadState")}
               </button>
             </div>
           </div>
@@ -251,15 +241,15 @@ function LabLauncher({ onLaunch, onLoadSave }) {
         <>
           {saves.length === 0 ? (
             <div className="content">
-              <p>No saved Playground games yet.</p>
+              <p>{t("lab.noSavedGames")}</p>
             </div>
           ) : (
             <table className="table apTable">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Game</th>
-                  <th>Saved</th>
+                  <th>{t("tables.name")}</th>
+                  <th>{t("Game")}</th>
+                  <th>{t("lab.savedAt")}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -277,14 +267,14 @@ function LabLauncher({ onLaunch, onLoadSave }) {
                         className="button is-small apButton"
                         onClick={() => onLoadSave(save)}
                       >
-                        Load
+                        {t("lab.load")}
                       </button>{" "}
                       <button
                         type="button"
                         className="button is-small apButtonNeutral"
                         onClick={() => handleDeleteSave(save.id)}
                       >
-                        Delete
+                        {t("Delete")}
                       </button>
                     </td>
                   </tr>

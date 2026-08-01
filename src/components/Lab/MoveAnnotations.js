@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -7,6 +8,7 @@ import { VALID_NAGS } from "./GameTree";
 import { saveLabExploration } from "../../lib/Lab/exploration";
 
 function MoveAnnotations({ focusNode, onChange }) {
+  const { t } = useTranslation();
   const [nag, nagSetter] = useState("");
   const [textComment, textCommentSetter] = useState("");
   const [tab, tabSetter] = useState("edit");
@@ -55,10 +57,12 @@ function MoveAnnotations({ focusNode, onChange }) {
   return (
     <div className="moveAnnotations">
       <h2 className="subtitle lined">
-        <span>Annotations</span>
+        <span>{t("lab.annotations.title")}</span>
       </h2>
       <div className="field">
-        <label className="label is-small">Move quality</label>
+        <label className="label is-small">
+          {t("lab.annotations.moveQuality")}
+        </label>
         <div className="buttons are-small">
           {VALID_NAGS.map((symbol) => (
             <button
@@ -78,14 +82,14 @@ function MoveAnnotations({ focusNode, onChange }) {
               className="button is-small"
               onClick={() => handleNagClick(nag)}
             >
-              Clear
+              {t("lab.annotations.clear")}
             </button>
           ) : null}
         </div>
       </div>
       <div className="field">
         <label className="label is-small" htmlFor="playgroundMoveComment">
-          Comment (Markdown)
+          {t("lab.annotations.commentMarkdown")}
         </label>
         <div className="tabs is-small">
           <ul>
@@ -97,7 +101,7 @@ function MoveAnnotations({ focusNode, onChange }) {
                   tabSetter("edit");
                 }}
               >
-                Edit
+                {t("Edit")}
               </a>
             </li>
             <li className={tab === "preview" ? "is-active" : ""}>
@@ -108,7 +112,7 @@ function MoveAnnotations({ focusNode, onChange }) {
                   tabSetter("preview");
                 }}
               >
-                Preview
+                {t("Preview")}
               </a>
             </li>
           </ul>
@@ -120,7 +124,7 @@ function MoveAnnotations({ focusNode, onChange }) {
               className="textarea is-small"
               rows={4}
               value={textComment}
-              placeholder="Add a comment in Markdown…"
+              placeholder={t("lab.annotations.commentPlaceholder")}
               onChange={(e) => handleCommentChange(e.target.value)}
             />
           </div>
@@ -134,7 +138,7 @@ function MoveAnnotations({ focusNode, onChange }) {
                 {textComment}
               </ReactMarkdown>
             ) : (
-              <p className="help">Nothing to preview yet.</p>
+              <p className="help">{t("lab.annotations.nothingToPreview")}</p>
             )}
           </div>
         )}

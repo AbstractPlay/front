@@ -6,11 +6,14 @@ import { TournamentContext } from "../Player";
 import TableSkeleton from "./TableSkeleton";
 import { useTranslation } from "react-i18next";
 
-const formatter = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
-
 function Tournaments() {
   const [tourneys] = useContext(TournamentContext);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const formatter = useMemo(
+    () => new Intl.DateTimeFormat(i18n.language, { dateStyle: "long" }),
+    [i18n.language]
+  );
 
   const data = useMemo(
     () =>
@@ -33,7 +36,9 @@ function Tournaments() {
               gameName,
               variants,
               tourneyName: `${gameName} (${
-                variants.length === 0 ? "no variants" : variants.join("|")
+                variants.length === 0
+                  ? t("standingChallenge.noVariants")
+                  : variants.join("|")
               })`,
               dateEnded,
               archived,
@@ -44,7 +49,7 @@ function Tournaments() {
           }
         )
         .sort((a, b) => b.dateEnded - a.dateEnded),
-    [tourneys]
+    [tourneys, t]
   );
 
   const columnHelper = createColumnHelper();
@@ -83,7 +88,7 @@ function Tournaments() {
         cell: (props) => formatter.format(props.getValue()),
       }),
     ],
-    [columnHelper, t]
+    [columnHelper, t, formatter]
   );
 
   return (

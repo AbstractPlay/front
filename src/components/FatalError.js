@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useTranslation, Trans } from "react-i18next";
 
 function isChunkLoadError(error) {
   if (!error) {
@@ -12,22 +13,22 @@ function isChunkLoadError(error) {
 }
 
 const FatalError = ({ error, inline = false }) => {
+  const { t } = useTranslation();
   const chunkError = isChunkLoadError(error);
 
   const content = (
     <article className="content">
-      <h1 className="has-text-centered title">Something went wrong</h1>
+      <h1 className="has-text-centered title">{t("fatalError.title")}</h1>
       {chunkError ? (
-        <p>
-          A new version of the site may be available. Please refresh the page.
-        </p>
+        <p>{t("fatalError.chunkMessage")}</p>
       ) : (
         <p>
-          Please refresh the page. If the problem persists, please{" "}
-          <a href="https://discord.abstractplay.com">
-            report it on our Discord server
-          </a>
-          .
+          <Trans
+            i18nKey="fatalError.genericMessage"
+            components={[
+              <a key="link" href="https://discord.abstractplay.com" />,
+            ]}
+          />
         </p>
       )}
       <p className="has-text-centered">
@@ -36,7 +37,7 @@ const FatalError = ({ error, inline = false }) => {
           className="button apButton"
           onClick={() => window.location.reload()}
         >
-          Refresh
+          {t("Refresh")}
         </button>
       </p>
     </article>
