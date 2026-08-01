@@ -1048,7 +1048,43 @@
   "a11y": {
     "hideShow": "masquer/afficher",
     "moveLeft": "déplacer vers la gauche",
-    "moveRight": "déplacer vers la droite"
+    "moveRight": "déplacer vers la droite",
+    "menu": "menu",
+    "language": "Langue",
+    "activePlayers": "Nombre de joueurs actifs",
+    "toggleVisibility": "Basculer votre visibilité",
+    "customizeTheme": "Personnaliser le thème",
+    "toggleDarkMode": "Basculer le mode sombre",
+    "toggleLightMode": "Basculer le mode clair",
+    "moveUp": "déplacer vers le haut",
+    "moveDown": "déplacer vers le bas"
+  },
+  "None": "Aucun",
+  "Draw": "Égalité",
+  "You": "Vous",
+  "Unknown": "Inconnu",
+  "Stash": "Réserve",
+  "Refresh": "Actualiser",
+  "PlayerOnline": "Le joueur est en ligne",
+  "DownloadCompletedRecord": "Télécharger la partie terminée",
+  "CopyBoardSuccess": "Plateau actuel copié dans le presse-papiers. Visitez https://hwdiagrams.abstractplay.com pour importer le diagramme.",
+  "FailedToCopy": "Échec de la copie : {{error}}",
+  "AutoMoveToast": "Au moins un coup forcé a été joué automatiquement. Consultez l'arbre des coups pour voir chaque état individuel.",
+  "fatalError": {
+    "title": "Une erreur est survenue",
+    "chunkMessage": "Une nouvelle version du site est peut-être disponible. Veuillez rafraîchir la page.",
+    "genericMessage": "Veuillez rafraîchir la page. Si le problème persiste, veuillez <1>le signaler sur notre serveur Discord</1>.",
+    "discordLink": "le signaler sur notre serveur Discord"
+  },
+  "standingChallenge": {
+    "resume": "Reprendre",
+    "suspend": "Suspendre",
+    "deleteTitle": "Supprimer le défi permanent",
+    "yesDelete": "Oui, supprimer",
+    "noCancel": "Non, annuler",
+    "missingEntry": "Aucune entrée de défi permanent n'a été fournie. Cela ne devrait jamais arriver.",
+    "deleteConfirm": "Vous êtes sur le point de supprimer le défi permanent suivant : <1>{{description}}</1>. Êtes-vous sûr ?",
+    "noVariants": "aucune variante"
   },
   "about": {
     "intro": "Abstract Play est un espace permettant de jouer à des jeux de stratégie abstraite contre d'autres joueurs en mode asynchrone (vous n'avez pas besoin d'être en ligne en même temps). Nous sommes spécialisés dans les jeux originaux à information pure et parfaite sans aucun élément de hasard, mais nous proposons également plusieurs jeux incluant du hasard (par exemple, des dés et des cartes). L'inscription et le jeu sur le site sont entièrement gratuits.",

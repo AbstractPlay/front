@@ -454,7 +454,7 @@ const MetaItem = React.forwardRef(
           </div>
         </div>
         <Modal
-          buttons={[{ label: "Close", action: closeModal }]}
+          buttons={[{ label: t("Close"), action: closeModal }]}
           show={modalIsOpen}
           title={`Board image for ${game.name}`}
         >

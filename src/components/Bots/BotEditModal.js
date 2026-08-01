@@ -12,8 +12,10 @@ import {
 } from "./botApi";
 import { getBotClientId, findBotByClientId } from "./botUtils";
 import { useStore } from "../../stores";
+import { useTranslation } from "react-i18next";
 
 function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
+  const { t } = useTranslation();
   const [name, nameSetter] = useState("");
   const [endpoint, endpointSetter] = useState("");
   const [description, descriptionSetter] = useState("");
@@ -171,7 +173,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
             disabled: saving || rotating || finalizing,
           },
           {
-            label: "Close",
+            label: t("Close"),
             action: onClose,
             disabled: saving || rotating || finalizing,
           },

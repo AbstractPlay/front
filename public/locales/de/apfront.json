@@ -1048,7 +1048,43 @@
   "a11y": {
     "hideShow": "verbergen/anzeigen",
     "moveLeft": "nach links bewegen",
-    "moveRight": "nach rechts bewegen"
+    "moveRight": "nach rechts bewegen",
+    "menu": "Menü",
+    "language": "Sprache",
+    "activePlayers": "Anzahl aktiver Spieler",
+    "toggleVisibility": "Eigene Sichtbarkeit umschalten",
+    "customizeTheme": "Design anpassen",
+    "toggleDarkMode": "Dunkelmodus umschalten",
+    "toggleLightMode": "Hellmodus umschalten",
+    "moveUp": "nach oben bewegen",
+    "moveDown": "nach unten bewegen"
+  },
+  "None": "Keine",
+  "Draw": "Unentschieden",
+  "You": "Du",
+  "Unknown": "Unbekannt",
+  "Stash": "Vorrat",
+  "Refresh": "Aktualisieren",
+  "PlayerOnline": "Spieler ist online",
+  "DownloadCompletedRecord": "Abgeschlossene Partieaufzeichnung herunterladen",
+  "CopyBoardSuccess": "Aktuelles Spielbrett in die Zwischenablage kopiert. Besuche https://hwdiagrams.abstractplay.com, um das Diagramm zu importieren.",
+  "FailedToCopy": "Kopieren fehlgeschlagen: {{error}}",
+  "AutoMoveToast": "Mindestens ein Pflichtzug wurde automatisch ausgeführt. Überprüfe den Zugbaum, um jeden einzelnen Zustand zu sehen.",
+  "fatalError": {
+    "title": "Etwas ist schiefgelaufen",
+    "chunkMessage": "Eine neue Version der Seite ist möglicherweise verfügbar. Bitte aktualisiere die Seite.",
+    "genericMessage": "Bitte aktualisiere die Seite. Wenn das Problem weiterhin besteht, <1>melde es bitte auf unserem Discord-Server</1>.",
+    "discordLink": "auf unserem Discord-Server melden"
+  },
+  "standingChallenge": {
+    "resume": "Fortsetzen",
+    "suspend": "Pausieren",
+    "deleteTitle": "Dauerherausforderung löschen",
+    "yesDelete": "Ja, löschen",
+    "noCancel": "Nein, abbrechen",
+    "missingEntry": "Es wurde kein Eintrag für die Dauerherausforderung angegeben. Das sollte nie passieren.",
+    "deleteConfirm": "Du bist dabei, die folgende Dauerherausforderung zu löschen: <1>{{description}}</1>. Bist du sicher?",
+    "noVariants": "keine Varianten"
   },
   "about": {
     "intro": "Abstract Play ist ein Ort, um abstrakte Strategiespiele asynchron gegen andere zu spielen (ihr müsst nicht zur selben Zeit online sein). Wir sind auf ausgefallene Spiele mit perfekter Information ohne Glückselement spezialisiert, bieten aber auch einige Spiele mit Zufallselementen (z. B. Würfel und Karten) an. Die Teilnahme und das Spielen auf der Seite sind vollkommen kostenlos.",

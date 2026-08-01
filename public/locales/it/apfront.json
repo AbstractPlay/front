@@ -1048,7 +1048,43 @@
   "a11y": {
     "hideShow": "nascondi/mostra",
     "moveLeft": "sposta a sinistra",
-    "moveRight": "sposta a destra"
+    "moveRight": "sposta a destra",
+    "menu": "menu",
+    "language": "Lingua",
+    "activePlayers": "Numero di giocatori attivi",
+    "toggleVisibility": "Attiva/disattiva la tua visibilità",
+    "customizeTheme": "Personalizza tema",
+    "toggleDarkMode": "Attiva/disattiva modalità scura",
+    "toggleLightMode": "Attiva/disattiva modalità chiara",
+    "moveUp": "sposta su",
+    "moveDown": "sposta giù"
+  },
+  "None": "Nessuno",
+  "Draw": "Patta",
+  "You": "Tu",
+  "Unknown": "Sconosciuto",
+  "Stash": "Riserva",
+  "Refresh": "Aggiorna",
+  "PlayerOnline": "Il giocatore è online",
+  "DownloadCompletedRecord": "Scarica il registro della partita completata",
+  "CopyBoardSuccess": "Tavoliere attuale copiato negli appunti. Visita https://hwdiagrams.abstractplay.com per importare il diagramma.",
+  "FailedToCopy": "Copia non riuscita: {{error}}",
+  "AutoMoveToast": "È stata eseguita automaticamente almeno una mossa forzata. Esamina l'albero delle mosse per vedere ogni singolo stato.",
+  "fatalError": {
+    "title": "Qualcosa è andato storto",
+    "chunkMessage": "Potrebbe essere disponibile una nuova versione del sito. Ricarica la pagina.",
+    "genericMessage": "Ricarica la pagina. Se il problema persiste, <1>segnalalo sul nostro server Discord</1>.",
+    "discordLink": "segnalalo sul nostro server Discord"
+  },
+  "standingChallenge": {
+    "resume": "Riprendi",
+    "suspend": "Sospendi",
+    "deleteTitle": "Elimina sfida permanente",
+    "yesDelete": "Sì, eliminala",
+    "noCancel": "No, annulla",
+    "missingEntry": "Non è stata fornita alcuna sfida permanente. Questo non dovrebbe mai accadere.",
+    "deleteConfirm": "Stai per eliminare la seguente sfida permanente: <1>{{description}}</1>. Sei sicuro?",
+    "noVariants": "nessuna variante"
   },
   "about": {
     "intro": "Abstract Play è un luogo dove giocare ad astratti di strategia contro altri utenti in modo asincrono (non è necessario essere online contemporaneamente). Ci specializziamo in giochi insoliti ad informazione perfetta senza alcun elemento di fortuna, ma includiamo anche diversi giochi che comportano casualità (ad es. dadi e carte). L'iscrizione e il gioco sul sito sono completamente gratuiti.",

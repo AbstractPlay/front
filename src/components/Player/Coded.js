@@ -73,7 +73,7 @@ function Coded({ handleChallenge }) {
                 className="button is-small apButton"
                 onClick={() => openChallengeModal(props.row.original.id)}
               >
-                Issue Challenge
+                {t("IssueChallengeLabel")}
               </button>
             </>
           ),
@@ -93,7 +93,7 @@ function Coded({ handleChallenge }) {
   if (data.length === 0) {
     return (
       <div className="content">
-        <p>None</p>
+        <p>{t("None")}</p>
       </div>
     );
   } else {

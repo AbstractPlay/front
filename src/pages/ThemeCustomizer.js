@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useStorageState } from "react-use-storage-state";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import Modal from "./Modal";
+import { useTranslation } from "react-i18next";
 
 const lightDefaults = {
   "--main-bg-color": "white",
@@ -67,6 +68,7 @@ const customizableProperties = [
 ];
 
 function ThemeCustomizer({ show, handleClose }) {
+  const { t } = useTranslation();
   const [colorMode, setColorMode] = useStorageState("color-mode", "light");
   const [customThemes, setCustomThemes] = useStorageState(
     "site-theme-customizations",
@@ -120,7 +122,7 @@ function ThemeCustomizer({ show, handleClose }) {
     <Modal
       show={show}
       title="Customize Site Theme"
-      buttons={[{ label: "Close", action: handleClose }]}
+      buttons={[{ label: t("Close"), action: handleClose }]}
     >
       <div className="columns">
         <div className="column">

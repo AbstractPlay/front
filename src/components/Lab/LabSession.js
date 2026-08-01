@@ -427,7 +427,8 @@ function LabSession({
       errorSetter,
       focusSetter,
       moveSetter,
-      settingsRef.current
+      settingsRef.current,
+      tRef.current
     );
     populateChecked(gameRef, engineRef, tRef.current, inCheckSetter);
     const metaInfo = gameinfo.get(gameRef.current.metaGame);
@@ -501,7 +502,8 @@ function LabSession({
       errorSetter,
       focusSetter,
       moveSetter,
-      settings
+      settings,
+      t
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     const metaInfo = gameinfo.get(gameRef.current.metaGame);
@@ -527,7 +529,8 @@ function LabSession({
       errorSetter,
       focusSetter,
       moveSetter,
-      settings
+      settings,
+      t
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   };

@@ -400,7 +400,7 @@ function Table({
               <Thumbnail meta={props.row.original.id} />
             </div>
             <Modal
-              buttons={[{ label: "Close", action: closeImgModal }]}
+              buttons={[{ label: t("Close"), action: closeImgModal }]}
               show={
                 activeImgModal !== "" &&
                 activeImgModal === props.row.original.id

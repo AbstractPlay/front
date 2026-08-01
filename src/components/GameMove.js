@@ -355,7 +355,8 @@ function GameMove(props) {
       focusSetter,
       moveSetter,
       displaySettingsRef.current,
-      navigateRef.current
+      navigateRef.current,
+      tRef.current
     );
     populateChecked(gameRef, engineRef, tRef.current, inCheckSetter);
     publishGameColorsRef.current({ state: engineRef.current.state() });
@@ -485,11 +486,9 @@ function GameMove(props) {
       }
       try {
         await navigator.clipboard.writeText(JSON.stringify(diagram));
-        toast(
-          "Current board copied to clipboard. Visit https://hwdiagrams.abstractplay.com to import the diagram."
-        );
+        toast(t("CopyBoardSuccess"));
       } catch (err) {
-        toast(`Failed to copy: ${err}`, { type: "error" });
+        toast(t("FailedToCopy", { error: err }), { type: "error" });
       }
     }
   };
@@ -1386,7 +1385,8 @@ function GameMove(props) {
       focusSetter,
       moveSetter,
       displaySettings,
-      navigate
+      navigate,
+      t
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     publishGameColors({ state: engineRef.current.state() });
@@ -1413,7 +1413,8 @@ function GameMove(props) {
       focusSetter,
       moveSetter,
       displaySettings,
-      navigate
+      navigate,
+      t
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   };
@@ -2477,8 +2478,8 @@ function GameMove(props) {
                       </p>
                       <button
                         className="card-header-icon"
-                        aria-label="move up"
-                        title="move up"
+                        aria-label={t("a11y.moveUp")}
+                        title={t("a11y.moveUp")}
                         onClick={() => handleMoveUp(key)}
                       >
                         <span className="icon">
@@ -2487,8 +2488,8 @@ function GameMove(props) {
                       </button>
                       <button
                         className="card-header-icon"
-                        aria-label="move down"
-                        title="move down"
+                        aria-label={t("a11y.moveDown")}
+                        title={t("a11y.moveDown")}
                         onClick={() => handleMoveDown(key)}
                       >
                         <span className="icon">

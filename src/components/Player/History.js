@@ -189,7 +189,7 @@ function History({ handleChallenge }) {
               header: t("tables.winner"),
               cell: (props) =>
                 props.getValue() === undefined ? (
-                  <p>Draw</p>
+                  <p>{t("Draw")}</p>
                 ) : globalMe === null ||
                   globalMe === undefined ||
                   props.getValue().id !== globalMe.id ? (
@@ -207,7 +207,7 @@ function History({ handleChallenge }) {
                     />
                   </>
                 ) : (
-                  <p>You</p>
+                  <p>{t("You")}</p>
                 ),
               sortingFn: (rowA, rowB, columnID) => {
                 const valA = rowA.getValue(columnID);

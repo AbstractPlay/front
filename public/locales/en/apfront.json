@@ -1048,7 +1048,43 @@
     "a11y": {
         "hideShow": "hide/show",
         "moveLeft": "move left",
-        "moveRight": "move right"
+        "moveRight": "move right",
+        "menu": "menu",
+        "language": "Language",
+        "activePlayers": "Number of active players",
+        "toggleVisibility": "Toggle your own visibility",
+        "customizeTheme": "Customize Theme",
+        "toggleDarkMode": "Toggle dark mode",
+        "toggleLightMode": "Toggle light mode",
+        "moveUp": "move up",
+        "moveDown": "move down"
+    },
+    "None": "None",
+    "Draw": "Draw",
+    "You": "You",
+    "Unknown": "Unknown",
+    "Stash": "Stash",
+    "Refresh": "Refresh",
+    "PlayerOnline": "Player is online",
+    "DownloadCompletedRecord": "Download completed game record",
+    "CopyBoardSuccess": "Current board copied to clipboard. Visit https://hwdiagrams.abstractplay.com to import the diagram.",
+    "FailedToCopy": "Failed to copy: {{error}}",
+    "AutoMoveToast": "At least one forced move was automatically made. Review the move tree to see each individual state.",
+    "fatalError": {
+        "title": "Something went wrong",
+        "chunkMessage": "A new version of the site may be available. Please refresh the page.",
+        "genericMessage": "Please refresh the page. If the problem persists, please <1>report it on our Discord server</1>.",
+        "discordLink": "report it on our Discord server"
+    },
+    "standingChallenge": {
+        "resume": "Resume",
+        "suspend": "Suspend",
+        "deleteTitle": "Delete standing challenge",
+        "yesDelete": "Yes, delete it",
+        "noCancel": "No, cancel",
+        "missingEntry": "No standing challenge entry was provided. This should never happen.",
+        "deleteConfirm": "You are about to delete the following standing challenge: <1>{{description}}</1>. Are you sure?",
+        "noVariants": "no variants"
     },
     "about": {
         "intro": "Abstract Play is a place to play abstract strategy games against others asynchronously (you don't have to be online at the same time). We specialize in offbeat, perfect information games without any element of luck, but we also include a number of games that involve randomness (e.g., dice and cards). The site is completely free to join and play.",

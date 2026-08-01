@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import Modal from "../Modal";
 import { useStore } from "../../stores";
@@ -169,7 +169,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
                   <button
                     className="button is-small apButtonNeutral"
                     onClick={() => handleSuspend(props.row.original.id)}
-                    title="Resume"
+                    title={t("standingChallenge.resume")}
                   >
                     <span className="icon">
                       <i className="fa fa-play"></i>
@@ -181,7 +181,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
                       standingEntrySetter(props.row.original);
                       showDeleteModalSetter(true);
                     }}
-                    title="Delete"
+                    title={t("Delete")}
                   >
                     <span className="icon">
                       <i className="fa fa-trash"></i>
@@ -193,7 +193,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
                   <button
                     className="button is-small apButtonNeutral"
                     onClick={() => handleSuspend(props.row.original.id)}
-                    title="Suspend"
+                    title={t("standingChallenge.suspend")}
                   >
                     <span className="icon">
                       <i className="fa fa-pause"></i>
@@ -205,7 +205,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
                       standingEntrySetter(props.row.original);
                       showDeleteModalSetter(true);
                     }}
-                    title="Delete"
+                    title={t("Delete")}
                   >
                     <span className="icon">
                       <i className="fa fa-trash"></i>
@@ -403,42 +403,41 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
         </div>
         <Modal
           show={showDeleteModal}
-          title={"Delete standing challenge"}
+          title={t("standingChallenge.deleteTitle")}
           buttons={[
             {
-              label: "Yes, delete it",
+              label: t("standingChallenge.yesDelete"),
               action: () => {
                 showDeleteModalSetter(false);
                 handleDelete(standingEntry.id);
               },
             },
             {
-              label: "No, cancel",
+              label: t("standingChallenge.noCancel"),
               action: resetModal,
             },
           ]}
         >
           {standingEntry === null ? (
             <div className="content">
-              <p>
-                No standing challenge entry was provided. This should never
-                happen.
-              </p>
+              <p>{t("standingChallenge.missingEntry")}</p>
             </div>
           ) : (
             <>
               <div className="content">
                 <p>
-                  You are about to delete the following standing challenge:{" "}
-                  <tt>
-                    {standingEntry.gameName} (
-                    {standingEntry.variants === undefined ||
-                    standingEntry.variants.length === 0
-                      ? "no variants"
-                      : standingEntry.variants.join(", ")}
-                    )
-                  </tt>
-                  . Are you sure?
+                  <Trans
+                    i18nKey="standingChallenge.deleteConfirm"
+                    values={{
+                      description: `${standingEntry.gameName} (${
+                        standingEntry.variants === undefined ||
+                        standingEntry.variants.length === 0
+                          ? t("standingChallenge.noVariants")
+                          : standingEntry.variants.join(", ")
+                      })`,
+                    }}
+                    components={[<tt key="tt" />]}
+                  />
                 </p>
               </div>
             </>

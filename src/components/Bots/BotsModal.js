@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Modal from "../Modal";
 import Spinner from "../Spinner";
 import { useStore } from "../../stores";
+import { useTranslation } from "react-i18next";
 import BotEditModal from "./BotEditModal";
 import BotCredentialsModal from "./BotCredentialsModal";
 import { createBot, refreshMe } from "./botApi";
@@ -18,6 +19,7 @@ function truncate(str, max = 40) {
 }
 
 function BotsModal({ show, onClose }) {
+  const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
   const bots = globalMe?.bots ?? [];
 
@@ -135,7 +137,7 @@ function BotsModal({ show, onClose }) {
         title="Manage Bots"
         buttons={[
           {
-            label: "Close",
+            label: t("Close"),
             action: handleClose,
           },
         ]}
