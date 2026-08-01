@@ -103,6 +103,12 @@ function Me(props) {
   }, [vars, update, location, refresh]);
 
   useEffect(() => {
+    const handler = () => setRefresh((r) => r + 1);
+    window.addEventListener("refresh-me", handler);
+    return () => window.removeEventListener("refresh-me", handler);
+  }, []);
+
+  useEffect(() => {
     async function fetchData() {
       try {
         var url = new URL(API_ENDPOINT_OPEN);

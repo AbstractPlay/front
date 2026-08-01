@@ -47,6 +47,7 @@ import { useStorageState } from "react-use-storage-state";
 import newsData from "../assets/news.json";
 import ThemeApplicator from "../components/ThemeApplicator";
 import MyWebSocket from "../components/MyWebSocket";
+import GameWatch from "../components/GameWatch";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { useStore } from "../stores";
 
@@ -233,6 +234,7 @@ function Bones(props) {
           <TimeAgoLocaleSync />
           <ThemeApplicator />
           <MyWebSocket />
+          <GameWatch />
           <Navbar />
           <section className="section" id="main">
             <ErrorBoundary inline>
