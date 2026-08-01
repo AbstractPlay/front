@@ -397,6 +397,8 @@
   "buttons.cifra.ll": "Light, Left",
   "buttons.cifra.lr": "Light, Right",
   "buttons.cifra.lt": "Light, Top",
+  "buttons.evenatodds.evens": "Evens",
+  "buttons.evenatodds.odds": "Odds",
   "buttons.draw": "Claim draw",
   "buttons.numbers.one": "One (1)",
   "buttons.numbers.three": "Three (3)",
