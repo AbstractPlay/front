@@ -3,6 +3,10 @@ import { getAuthToken } from "../lib/api";
 import { WS_ENDPOINT } from "../config";
 import { toast } from "react-toastify";
 import { useStore } from "../stores";
+import {
+  cancelWatchGamesSync,
+  scheduleWatchGamesSync,
+} from "../lib/wsWatchSync";
 
 const WS_CLOSE_CODES = {
   1000: "Normal closure",
@@ -148,17 +152,20 @@ export default function MyWebSocket() {
         }
 
         try {
+          const games = useStore.getState().desiredWatchGames;
           ws.send(
             JSON.stringify({
               action: "subscribe",
               token,
               invisible,
               watchVersion: 1,
+              games,
             })
           );
           reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
           setWsSend(send);
           startPresenceResync(send);
+          scheduleWatchGamesSync();
           console.log("WS: Connected and subscribed");
         } catch (ex) {
           console.error(`WS: Error subscribing to channel: ${ex}`);
@@ -168,6 +175,7 @@ export default function MyWebSocket() {
       ws.onclose = (event) => {
         isConnectingRef.current = false;
         clearPresenceResync();
+        cancelWatchGamesSync();
         setWsSend(null);
 
         const codeDescription = WS_CLOSE_CODES[event.code] || "Unknown";
@@ -245,6 +253,7 @@ export default function MyWebSocket() {
       isMountedRef.current = false;
       isConnectingRef.current = false;
       clearPresenceResync();
+      cancelWatchGamesSync();
       setWsSend(null);
 
       window.removeEventListener("ws-force-reconnect", handleForceReconnect);
@@ -276,6 +285,7 @@ export default function MyWebSocket() {
         if (isConnected) {
           const { wsSend } = useStore.getState();
           wsSend?.("syncPresence", {});
+          scheduleWatchGamesSync();
           if (!presenceResyncRef.current && wsSend) {
             presenceResyncRef.current = setInterval(() => {
               if (
