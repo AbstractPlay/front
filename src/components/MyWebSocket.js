@@ -4,7 +4,6 @@ import { WS_ENDPOINT } from "../config";
 import { toast } from "react-toastify";
 import { useStore } from "../stores";
 
-// WebSocket close codes for logging
 const WS_CLOSE_CODES = {
   1000: "Normal closure",
   1001: "Going away (server/client closing or idle timeout)",
@@ -23,22 +22,46 @@ const WS_CLOSE_CODES = {
   1015: "TLS handshake failure",
 };
 
-// Reconnection settings
-const INITIAL_RECONNECT_DELAY = 2000; // 2 seconds
-const MAX_RECONNECT_DELAY = 30000; // 30 seconds cap
+const INITIAL_RECONNECT_DELAY = 2000;
+const MAX_RECONNECT_DELAY = 30000;
+const PRESENCE_RESYNC_INTERVAL_MS = 10 * 60 * 1000;
 
 export default function MyWebSocket() {
   const wsRef = useRef(null);
   const reconnectTimeoutRef = useRef(null);
+  const presenceResyncRef = useRef(null);
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(true);
   const reconnectDelayRef = useRef(INITIAL_RECONNECT_DELAY);
   const invisible = useStore((state) => state.invisible);
 
   useEffect(() => {
-    const { setConnections } = useStore.getState();
+    const { setConnections, applyPresenceMessage, setWsSend } =
+      useStore.getState();
     isMountedRef.current = true;
     reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
+
+    const clearPresenceResync = () => {
+      if (presenceResyncRef.current) {
+        clearInterval(presenceResyncRef.current);
+        presenceResyncRef.current = null;
+      }
+    };
+
+    const startPresenceResync = (send) => {
+      clearPresenceResync();
+      if (document.visibilityState !== "visible") {
+        return;
+      }
+      presenceResyncRef.current = setInterval(() => {
+        if (
+          document.visibilityState === "visible" &&
+          wsRef.current?.readyState === WebSocket.OPEN
+        ) {
+          send("syncPresence", {});
+        }
+      }, PRESENCE_RESYNC_INTERVAL_MS);
+    };
 
     const scheduleReconnect = (reason) => {
       if (!isMountedRef.current) {
@@ -48,37 +71,30 @@ export default function MyWebSocket() {
       const delay = reconnectDelayRef.current;
       console.log(`WS: Scheduling reconnect in ${delay / 1000}s (${reason})`);
       reconnectTimeoutRef.current = setTimeout(connect, delay);
-
-      // Exponential backoff: double the delay for next time, capped at max
       reconnectDelayRef.current = Math.min(delay * 2, MAX_RECONNECT_DELAY);
     };
 
     const connect = async () => {
-      // Guard: Don't connect if component is unmounted
       if (!isMountedRef.current) {
         console.log("WS: Skipping connect - component unmounted");
         return;
       }
 
-      // Guard: Don't create duplicate connections
       if (isConnectingRef.current) {
         console.log("WS: Skipping connect - already connecting");
         return;
       }
 
-      // Guard: Don't connect if already connected
       if (wsRef.current?.readyState === WebSocket.OPEN) {
         console.log("WS: Skipping connect - already connected");
         return;
       }
 
-      // Guard: Don't connect if connection is in progress
       if (wsRef.current?.readyState === WebSocket.CONNECTING) {
         console.log("WS: Skipping connect - connection in progress");
         return;
       }
 
-      // Clear any pending reconnect timeout
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
         reconnectTimeoutRef.current = null;
@@ -99,10 +115,9 @@ export default function MyWebSocket() {
         return;
       }
 
-      // Close any existing connection before creating new one
       if (wsRef.current) {
         console.log("WS: Closing existing connection before reconnect");
-        wsRef.current.onclose = null; // Prevent onclose from firing during cleanup
+        wsRef.current.onclose = null;
         wsRef.current.onerror = null;
         wsRef.current.onopen = null;
         wsRef.current.onmessage = null;
@@ -113,9 +128,15 @@ export default function MyWebSocket() {
       isConnectingRef.current = true;
       console.log("WS: Initiating connection...");
 
-      const url = WS_ENDPOINT;
-      const ws = new WebSocket(url);
+      const ws = new WebSocket(WS_ENDPOINT);
       wsRef.current = ws;
+
+      const send = (action, body = {}) => {
+        if (ws.readyState !== WebSocket.OPEN) {
+          return;
+        }
+        ws.send(JSON.stringify({ action, ...body }));
+      };
 
       ws.onopen = () => {
         isConnectingRef.current = false;
@@ -127,9 +148,17 @@ export default function MyWebSocket() {
         }
 
         try {
-          ws.send(JSON.stringify({ action: "subscribe", token, invisible }));
-          // Reset backoff on successful connection
+          ws.send(
+            JSON.stringify({
+              action: "subscribe",
+              token,
+              invisible,
+              watchVersion: 1,
+            })
+          );
           reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
+          setWsSend(send);
+          startPresenceResync(send);
           console.log("WS: Connected and subscribed");
         } catch (ex) {
           console.error(`WS: Error subscribing to channel: ${ex}`);
@@ -138,6 +167,8 @@ export default function MyWebSocket() {
 
       ws.onclose = (event) => {
         isConnectingRef.current = false;
+        clearPresenceResync();
+        setWsSend(null);
 
         const codeDescription = WS_CLOSE_CODES[event.code] || "Unknown";
         console.log(
@@ -148,18 +179,14 @@ export default function MyWebSocket() {
           }", wasClean: ${event.wasClean}`
         );
 
-        // Only update state and reconnect if this is still the current connection
         if (wsRef.current === ws) {
           wsRef.current = null;
 
-          // Don't auto-reconnect on idle timeout (code 1001)
-          // The visibilitychange handler will reconnect when user returns
           if (event.code === 1001) {
             console.log(
               "WS: Idle timeout - will reconnect when tab becomes visible"
             );
           } else {
-            // For other disconnects (network errors, etc.), auto-reconnect
             scheduleReconnect("connection closed");
           }
         } else {
@@ -169,7 +196,6 @@ export default function MyWebSocket() {
 
       ws.onerror = (err) => {
         console.error("WS: Error occurred", err);
-        // Don't call ws.close() here - the error will trigger onclose automatically
       };
 
       ws.onmessage = (event) => {
@@ -183,21 +209,22 @@ export default function MyWebSocket() {
         console.log(`WS: Received message: ${JSON.stringify(msg)}`);
 
         if (msg.verb === "game") {
-          const { meta, id } = msg.payload;
-          const path = window.location.pathname;
-
-          const metaIndex = path.indexOf(`/${meta}`);
-          const idIndex = path.indexOf(`/${id}`);
-
-          const matches =
-            metaIndex !== -1 && idIndex !== -1 && idIndex > metaIndex;
-
-          if (matches) {
-            window.dispatchEvent(new CustomEvent("refresh-data"));
-          }
+          window.dispatchEvent(new CustomEvent("refresh-me"));
+          window.dispatchEvent(new CustomEvent("refresh-data"));
         } else if (msg.verb === "connections") {
-          if (msg.payload !== undefined && typeof msg.payload === "object") {
-            setConnections(msg.payload);
+          const payload = msg.payload;
+          if (
+            payload &&
+            typeof payload === "object" &&
+            (payload.type === "snapshot" || payload.type === "delta")
+          ) {
+            const gap = applyPresenceMessage(payload);
+            if (gap) {
+              const { wsSend } = useStore.getState();
+              wsSend?.("syncPresence", {});
+            }
+          } else if (payload !== undefined && typeof payload === "object") {
+            setConnections(payload);
           }
         } else if (msg.verb === "test") {
           toast(`Test message: ${msg.payload}`);
@@ -205,7 +232,6 @@ export default function MyWebSocket() {
       };
     };
 
-    // Listen for force reconnect events (e.g., when tab becomes visible)
     const handleForceReconnect = () => {
       console.log("WS: Force reconnect requested");
       connect();
@@ -218,6 +244,8 @@ export default function MyWebSocket() {
       console.log("WS: Cleanup - unmounting component");
       isMountedRef.current = false;
       isConnectingRef.current = false;
+      clearPresenceResync();
+      setWsSend(null);
 
       window.removeEventListener("ws-force-reconnect", handleForceReconnect);
 
@@ -227,7 +255,6 @@ export default function MyWebSocket() {
       }
 
       if (wsRef.current) {
-        // Remove handlers to prevent any callbacks after unmount
         wsRef.current.onclose = null;
         wsRef.current.onerror = null;
         wsRef.current.onopen = null;
@@ -238,7 +265,6 @@ export default function MyWebSocket() {
     };
   }, [invisible]);
 
-  // Immediately reconnect when browser tab becomes visible
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
@@ -247,18 +273,27 @@ export default function MyWebSocket() {
           wsRef.current?.readyState === WebSocket.CONNECTING ||
           isConnectingRef.current;
 
-        if (!isConnected && !isConnecting && isMountedRef.current) {
+        if (isConnected) {
+          const { wsSend } = useStore.getState();
+          wsSend?.("syncPresence", {});
+          if (!presenceResyncRef.current && wsSend) {
+            presenceResyncRef.current = setInterval(() => {
+              if (
+                document.visibilityState === "visible" &&
+                wsRef.current?.readyState === WebSocket.OPEN
+              ) {
+                useStore.getState().wsSend?.("syncPresence", {});
+              }
+            }, PRESENCE_RESYNC_INTERVAL_MS);
+          }
+        } else if (!isConnecting && isMountedRef.current) {
           console.log("WS: Tab became visible, triggering immediate reconnect");
-          // Clear any pending reconnect timeout
           if (reconnectTimeoutRef.current) {
             clearTimeout(reconnectTimeoutRef.current);
             reconnectTimeoutRef.current = null;
           }
-          // Reset backoff since user is actively returning
           reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
-          // Trigger reconnect with minimal delay
           reconnectTimeoutRef.current = setTimeout(() => {
-            // Re-check conditions in case something changed
             const stillDisconnected =
               !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN;
             if (stillDisconnected && isMountedRef.current) {
@@ -266,6 +301,9 @@ export default function MyWebSocket() {
             }
           }, 100);
         }
+      } else if (presenceResyncRef.current) {
+        clearInterval(presenceResyncRef.current);
+        presenceResyncRef.current = null;
       }
     };
 
@@ -274,5 +312,5 @@ export default function MyWebSocket() {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
-  return null; // or return UI showing connection status
+  return null;
 }

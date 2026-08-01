@@ -58,6 +58,7 @@ export const useStore = create((set) => ({
   connections: {
     totalCount: 0,
     visibleUserIds: [],
+    seq: 0,
   },
   setConnections: (connections) =>
     set((state) => ({
@@ -66,6 +67,54 @@ export const useStore = create((set) => ({
           ? connections(state.connections)
           : connections,
     })),
+  applyPresenceMessage: (msg) => {
+    let gap = false;
+    set((state) => {
+      if (msg.type === "snapshot") {
+        return {
+          connections: {
+            totalCount: msg.totalCount ?? 0,
+            visibleUserIds: [...(msg.visibleUserIds ?? [])],
+            seq: msg.seq ?? 0,
+          },
+        };
+      }
+      if (msg.type === "delta") {
+        const lastSeq = state.connections.seq ?? 0;
+        if (msg.seq <= lastSeq) {
+          return state;
+        }
+        if (msg.seq > lastSeq + 1) {
+          gap = true;
+          return state;
+        }
+        const visible = new Set(state.connections.visibleUserIds);
+        for (const id of msg.leaves ?? []) {
+          visible.delete(id);
+        }
+        for (const id of msg.joins ?? []) {
+          visible.add(id);
+        }
+        return {
+          connections: {
+            totalCount: Math.max(
+              0,
+              state.connections.totalCount +
+                (msg.joins?.length ?? 0) -
+                (msg.leaves?.length ?? 0)
+            ),
+            visibleUserIds: [...visible],
+            seq: msg.seq,
+          },
+        };
+      }
+      return state;
+    });
+    return gap;
+  },
+
+  wsSend: null,
+  setWsSend: (fn) => set({ wsSend: fn }),
 
   invisible: false,
   setInvisible: (val) =>
