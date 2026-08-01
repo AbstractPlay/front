@@ -56,6 +56,10 @@
       "gold99": "Configuration rapide",
       "silver99e7": "Configuration rapide, éléphant e7",
       "silver99d7": "Configuration rapide, éléphant d7"
+    },
+    "evenatodds": {
+      "evens": "Pair",
+      "odds": "Impair"
     }
   },
   "Cancel": "Annuler",

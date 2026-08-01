@@ -56,6 +56,10 @@
       "gold99": "Schnelle Einrichtung",
       "silver99e7": "Schnelle Einrichtung, Elefant E7",
       "silver99d7": "Schnelle Einrichtung, Elefant D7"
+    },
+    "evenatodds": {
+      "evens": "Gerade",
+      "odds": "Ungerade"
     }
   },
   "Cancel": "Abbrechen",
