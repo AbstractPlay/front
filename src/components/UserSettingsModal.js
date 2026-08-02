@@ -31,6 +31,55 @@ import { toast } from "react-toastify";
 import LanguageSelect from "./LanguageSelect";
 import { COMMUNICATION_LANGUAGES } from "../i18n";
 
+async function parseNewSettingResponse(res) {
+  if (!res) {
+    return { ok: false, error: "Not authenticated" };
+  }
+  if (res.status === 200) {
+    try {
+      const text = await res.text();
+      if (!text) return { ok: true };
+      const parsed = JSON.parse(text);
+      if (
+        parsed !== null &&
+        typeof parsed === "object" &&
+        Object.prototype.hasOwnProperty.call(parsed, "statusCode")
+      ) {
+        if (parsed.statusCode !== 200) {
+          let message = `Request failed (${parsed.statusCode})`;
+          try {
+            const body = JSON.parse(parsed.body);
+            if (body?.error) message = body.error;
+            else if (typeof body === "string") message = body;
+          } catch {
+            if (parsed.body) message = parsed.body;
+          }
+          return { ok: false, error: message };
+        }
+        return { ok: true };
+      }
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: err.message || "Failed to parse response" };
+    }
+  }
+  let error = `Request failed (${res.status})`;
+  try {
+    const parsed = await res.json();
+    if (parsed?.body) {
+      try {
+        const body = JSON.parse(parsed.body);
+        if (body?.error) error = body.error;
+      } catch {
+        error = parsed.body;
+      }
+    }
+  } catch {
+    // keep default error
+  }
+  return { ok: false, error };
+}
+
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
   const show = props.show;
@@ -42,6 +91,7 @@ function UserSettingsModal(props) {
   const [nameError, nameErrorSetter] = useState("");
   const [email, emailSetter] = useState("");
   const [emailCode, emailCodeSetter] = useState("");
+  const [emailError, emailErrorSetter] = useState("");
   const [country, countrySetter] = useState("");
   const [communicationLanguage, communicationLanguageSetter] = useState("en");
   const [bggid, bggidSetter] = useState("");
@@ -67,9 +117,11 @@ function UserSettingsModal(props) {
     if (show) {
       changingNameSetter(false);
       changingEMailSetter(false);
+      changingCodeSentSetter(false);
       nameSetter("");
       emailSetter("");
       emailCodeSetter("");
+      emailErrorSetter("");
       if (globalMe?.settings?.all?.notifications) {
         const settings = { ...globalMe.settings.all.notifications };
         if (!settings.hasOwnProperty("yourturn")) {
@@ -140,28 +192,34 @@ function UserSettingsModal(props) {
   };
 
   const handleNameChangeSubmitClick = async () => {
-    if (users.find((u) => u === name)) {
-      nameSetter("");
-      nameErrorSetter(t("DisplayNameError", { name }));
-    } else if (name === "") {
+    if (name === "") {
       nameErrorSetter(t("NameBlank"));
-    } else {
-      const nameValidationError = validateDisplayName(name, t);
-      if (nameValidationError) {
-        nameErrorSetter(nameValidationError);
-        return;
-      }
-      changingNameSetter(false);
-      await handleSettingChangeSubmit("name", name);
-      updatedSetter((updated) => updated + 1);
+      return;
     }
+    const nameValidationError = validateDisplayName(name, t);
+    if (nameValidationError) {
+      nameErrorSetter(nameValidationError);
+      return;
+    }
+    if (users?.some((u) => u.name === name && u.id !== globalMe?.id)) {
+      nameErrorSetter(t("DisplayNameError", { name }));
+      return;
+    }
+    const result = await handleSettingChangeSubmit("name", name);
+    if (!result.ok) {
+      nameErrorSetter(result.error || t("DisplayNameError", { name }));
+      return;
+    }
+    changingNameSetter(false);
+    updatedSetter((updated) => updated + 1);
   };
 
   const handleSettingChangeSubmit = useCallback(async (attr, value) => {
-    await callAuthApi("new_setting", {
+    const res = await callAuthApi("new_setting", {
       attribute: attr,
       value: value,
     });
+    return parseNewSettingResponse(res);
   }, []);
 
   const debouncedCountryChange = useMemo(() => {
@@ -219,29 +277,52 @@ function UserSettingsModal(props) {
   };
 
   const handleEMailChangeClick = () => {
+    emailErrorSetter("");
     emailSetter(user.signInUserSession.idToken.payload.email);
     changingEMailSetter(true);
   };
 
   const handleEMailChangeSubmitClick = async () => {
-    const usr = await Auth.currentAuthenticatedUser();
-    // await Auth.updateUserAttributes(usr, { email });
-    Auth.updateUserAttributes(usr, { email });
-    changingCodeSentSetter(true);
+    emailErrorSetter("");
+    try {
+      const usr = await Auth.currentAuthenticatedUser();
+      await Auth.updateUserAttributes(usr, { email });
+      changingCodeSentSetter(true);
+    } catch (error) {
+      if (error?.code === "AliasExistsException") {
+        emailErrorSetter(t("EMailInUse"));
+      } else {
+        emailErrorSetter(error?.message || t("EMailUpdateFailed"));
+      }
+    }
   };
 
   const handleEMailChangeCancelClick = () => {
     emailSetter("");
+    emailCodeSetter("");
+    emailErrorSetter("");
+    changingCodeSentSetter(false);
     changingEMailSetter(false);
   };
 
   const handleEMailChangeCodeSubmitClick = async () => {
-    await Auth.currentAuthenticatedUser();
-    Auth.verifyCurrentUserAttributeSubmit("email", emailCode);
-    changingEMailSetter(false);
-    changingCodeSentSetter(false);
-    emailCodeSetter("");
-    updatedSetter((updated) => updated + 1);
+    emailErrorSetter("");
+    try {
+      await Auth.verifyCurrentUserAttributeSubmit("email", emailCode);
+      changingEMailSetter(false);
+      changingCodeSentSetter(false);
+      emailCodeSetter("");
+      updatedSetter((updated) => updated + 1);
+    } catch (error) {
+      if (
+        error?.code === "CodeMismatchException" ||
+        error?.code === "ExpiredCodeException"
+      ) {
+        emailErrorSetter(t("EMailCodeInvalid"));
+      } else {
+        emailErrorSetter(error?.message || t("EMailVerifyFailed"));
+      }
+    }
   };
 
   const handleNotifyCheckChange = async (key) => {
@@ -519,12 +600,20 @@ function UserSettingsModal(props) {
                   id="user_settings_email"
                   type="text"
                   value={email}
-                  onChange={(e) => emailSetter(e.target.value)}
+                  onChange={(e) => {
+                    emailErrorSetter("");
+                    emailSetter(e.target.value);
+                  }}
                 />
               ) : (
                 user?.signInUserSession.idToken.payload.email
               )}
             </div>
+            {emailError !== "" ? (
+              <p className="help is-danger">{emailError}</p>
+            ) : (
+              ""
+            )}
             <div className="control">
               {globalMe === null ? (
                 ""
@@ -572,7 +661,10 @@ function UserSettingsModal(props) {
                       id="user_settings_email_code"
                       type="text"
                       value={emailCode}
-                      onChange={(e) => emailCodeSetter(e.target.value)}
+                      onChange={(e) => {
+                        emailErrorSetter("");
+                        emailCodeSetter(e.target.value);
+                      }}
                     />
                   )}
                 </div>
@@ -595,7 +687,11 @@ function UserSettingsModal(props) {
                     </button>
                   )}
                 </div>
-                <p className="help is-primary">{t("EMailCodeHelp")}</p>
+                {emailError !== "" ? (
+                  <p className="help is-danger">{emailError}</p>
+                ) : (
+                  <p className="help is-primary">{t("EMailCodeHelp")}</p>
+                )}
               </div>
             ) : (
               ""

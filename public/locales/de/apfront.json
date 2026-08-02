@@ -606,6 +606,10 @@
   "EMail": "E-Mail-Adresse",
   "EMailCode": "Per E-Mail gesendeter Code",
   "EMailCodeHelp": "Das Anmeldesystem hat gerade einen Code an die von dir angegebene E-Mail-Adresse gesendet. Bitte gib ihn hier ein.",
+  "EMailCodeInvalid": "Dieser Code ist ungültig oder abgelaufen. Bitte versuche es erneut.",
+  "EMailInUse": "Diese E-Mail-Adresse ist bereits mit einem anderen Konto verknüpft.",
+  "EMailUpdateFailed": "Deine E-Mail-Adresse konnte nicht aktualisiert werden. Bitte versuche es erneut.",
+  "EMailVerifyFailed": "Deine E-Mail-Adresse konnte nicht bestätigt werden. Bitte versuche es erneut.",
   "EnableMoveConfirm": "Vor der Zugabgabe nicht um Bestätigung bitten",
   "EnablePush": "Push-Benachrichtigungen sind derzeit deaktiviert",
   "EnterMove": "Zug eingeben/klicken",
@@ -1556,6 +1560,5 @@
       "nothingToPreview": "Noch nichts für die Vorschau vorhanden."
     }
   },
-  "Wikipedia": "Wikipedia",
-  "Welcome": "Willkommen"
+  "Wikipedia": "Wikipedia"
 }

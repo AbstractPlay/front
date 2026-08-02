@@ -606,6 +606,10 @@
   "EMail": "Adresse e-mail",
   "EMailCode": "Code envoyé par e-mail",
   "EMailCodeHelp": "Le système de connexion vient d'envoyer un code à l'adresse e-mail que vous avez fournie. Veuillez le saisir ici.",
+  "EMailCodeInvalid": "Ce code est invalide ou a expiré. Veuillez réessayer.",
+  "EMailInUse": "Cette adresse e-mail est déjà associée à un autre compte.",
+  "EMailUpdateFailed": "Impossible de mettre à jour votre adresse e-mail. Veuillez réessayer.",
+  "EMailVerifyFailed": "Impossible de vérifier votre adresse e-mail. Veuillez réessayer.",
   "EnableMoveConfirm": "Ne pas demander de confirmation avant d'envoyer un coup",
   "EnablePush": "Les notifications push sont actuellement désactivées",
   "EnterMove": "Entrez/Cliquez sur le bouton",
@@ -1556,6 +1560,5 @@
       "nothingToPreview": "Rien à prévisualiser pour l'instant."
     }
   },
-  "Wikipedia": "Wikipédia",
-  "Welcome": "Bienvenue"
+  "Wikipedia": "Wikipédia"
 }

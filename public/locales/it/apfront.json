@@ -606,6 +606,10 @@
   "EMail": "Indirizzo e-mail",
   "EMailCode": "Codice inviato via e-mail",
   "EMailCodeHelp": "Il sistema di accesso ha appena inviato un codice all'indirizzo e-mail fornito. Inseriscilo qui.",
+  "EMailCodeInvalid": "Questo codice non è valido o è scaduto. Riprova.",
+  "EMailInUse": "Questo indirizzo email è già associato a un altro account.",
+  "EMailUpdateFailed": "Impossibile aggiornare il tuo indirizzo email. Riprova.",
+  "EMailVerifyFailed": "Impossibile verificare il tuo indirizzo email. Riprova.",
   "EnableMoveConfirm": "Non chiedere conferma prima di inviare una mossa",
   "EnablePush": "Le notifiche push sono attualmente disabilitate",
   "EnterMove": "Inserisci/Clicca una mossa",
@@ -1556,6 +1560,5 @@
       "nothingToPreview": "Niente da mostrare in anteprima per ora."
     }
   },
-  "Wikipedia": "Wikipedia",
-  "Welcome": "Benvenuto"
+  "Wikipedia": "Wikipedia"
 }
