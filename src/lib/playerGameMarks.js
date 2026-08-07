@@ -8,6 +8,7 @@ export function isParticipant(game, userId) {
 
 export function isGameCompleted(game) {
   if (!game) return false;
+  if (game.gameEnded !== undefined && game.gameEnded !== 0) return true;
   if (Array.isArray(game.toMove)) {
     return (game.players?.length ?? 0) > 0 && game.toMove.every((t) => !t);
   }

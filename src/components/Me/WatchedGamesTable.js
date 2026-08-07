@@ -21,10 +21,11 @@ import { toast } from "react-toastify";
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function isGameCompleted(game) {
-  if (Array.isArray(game.toMove)) {
-    return game.toMove.every((t) => !t);
-  }
-  return game.toMove === "" || game.toMove === null;
+    return game.gameEnded !== undefined && game.gameEnded !== 0;
+//   if (Array.isArray(game.toMove)) {
+//     return game.toMove.every((t) => !t);
+//   }
+//   return game.toMove === "" || game.toMove === null;
 }
 
 function WatchedGamesTable(props) {
