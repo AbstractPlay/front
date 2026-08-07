@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ProfileContext, SummaryContext } from "../Player";
 import PlayerWeeklyChart from "./PlayerWeeklyChart";
-import { getActivityHistogram } from "../../lib/playerProfileSections";
+import { getActivityHistogram, getSiteWeekCount } from "../../lib/playerProfileSections";
 
 function Activity() {
   const { t } = useTranslation();
@@ -14,6 +14,8 @@ function Activity() {
     histogramSetter(getActivityHistogram(summary, user?.id));
   }, [summary, user]);
 
+  const siteWeekCount = getSiteWeekCount(summary);
+
   if (histogram.length === 0 || !histogram.some((v) => v > 0)) {
     return null;
   }
@@ -21,6 +23,7 @@ function Activity() {
   return (
     <PlayerWeeklyChart
       histogram={histogram}
+      siteWeekCount={siteWeekCount}
       weekAxisTitle={t("stats.siteStats.weekNumber")}
       yAxisTitle={t("player.stats.activity.axisY")}
     />
