@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import LocalizedTimeAgo from "../LocalizedTimeAgo";
 
 /** Set true once player_highlights returns reliable gameEnded timestamps. */
-const SHOW_HIGHLIGHTS_END_DATE = false;
+const SHOW_HIGHLIGHTS_END_DATE = true;
 
 function Highlights() {
   const [user] = useContext(ProfileContext);
