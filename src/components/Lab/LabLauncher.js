@@ -83,7 +83,9 @@ function LabLauncher({ onLaunch, onLoadSave }) {
         savedMoveAnnotations: imported.moveAnnotations,
         initialFocus: imported.focus,
         gameSettings: {},
-        sessionName: `${gameinfo.get(imported.metaGame).name}${t("lab.importedSuffix")}`,
+        sessionName: `${gameinfo.get(imported.metaGame).name}${t(
+          "lab.importedSuffix"
+        )}`,
       });
     } catch (err) {
       setError(err.message || String(err));

@@ -1355,6 +1355,23 @@
       "activity": {
         "axisY": "Partite completate"
       }
+    },
+    "tabs": {
+      "competition": "Competizione",
+      "activity": "Attività",
+      "games": "Partite",
+      "record": "Risultati",
+      "empty": "Nessuna informazione disponibile in questa sezione."
+    },
+    "hero": {
+      "topRatings": "Migliori rating",
+      "hIndex": "Indice H",
+      "medianResponse": "Tempo di risposta mediano",
+      "recentActivity": "Attività recente"
+    },
+    "pin": {
+      "add": "Fissa questa sezione in alto",
+      "remove": "Rimuovi questa sezione dall'alto"
     }
   },
   "meta": {

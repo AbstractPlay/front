@@ -1355,6 +1355,23 @@
       "activity": {
         "axisY": "Parties terminées"
       }
+    },
+    "tabs": {
+      "competition": "Compétition",
+      "activity": "Activité",
+      "games": "Parties",
+      "record": "Bilan",
+      "empty": "Aucune information disponible dans cette section."
+    },
+    "hero": {
+      "topRatings": "Meilleurs classements",
+      "hIndex": "Indice h",
+      "medianResponse": "Temps de réponse médian",
+      "recentActivity": "Activité récente"
+    },
+    "pin": {
+      "add": "Épingler cette section en haut",
+      "remove": "Désépingler cette section"
     }
   },
   "meta": {

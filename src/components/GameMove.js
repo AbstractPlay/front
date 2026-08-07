@@ -901,7 +901,16 @@ function GameMove(props) {
         }
       }
     }
-  }, [dbgame, pieInvoked, globalMe?.id, navigate, checkTime, t, i18n.language, explorer]);
+  }, [
+    dbgame,
+    pieInvoked,
+    globalMe?.id,
+    navigate,
+    checkTime,
+    t,
+    i18n.language,
+    explorer,
+  ]);
 
   useEffect(() => {
     if (dbgame === null || gameRef.current === null) return;
@@ -2178,19 +2187,22 @@ function GameMove(props) {
     };
   }, [dbgame, metaGame]);
 
-  const runMarkAction = useCallback(async (action) => {
-    if (marksBusy) return;
-    marksBusySetter(true);
-    try {
-      const res = await action();
-      if (res?.cancelled) return;
-      if (!res?.ok) {
-        toast.error(res.error || t("Error"));
+  const runMarkAction = useCallback(
+    async (action) => {
+      if (marksBusy) return;
+      marksBusySetter(true);
+      try {
+        const res = await action();
+        if (res?.cancelled) return;
+        if (!res?.ok) {
+          toast.error(res.error || t("Error"));
+        }
+      } finally {
+        marksBusySetter(false);
       }
-    } finally {
-      marksBusySetter(false);
-    }
-  }, [marksBusy, t]);
+    },
+    [marksBusy, t]
+  );
 
   const handleWatchToggle = useCallback(() => {
     const watching = isWatched(globalMe, gameID);
@@ -2223,10 +2235,7 @@ function GameMove(props) {
 
   const handleRecommendToggle = useCallback(() => {
     const recommended = isRecommended(globalMe, metaGame, gameID);
-    if (
-      !recommended &&
-      recommendCountForMeta(globalMe, metaGame) >= 2
-    ) {
+    if (!recommended && recommendCountForMeta(globalMe, metaGame) >= 2) {
       toast.error(t("gameMarks.recommendLimit"));
       return;
     }

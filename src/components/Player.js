@@ -1,4 +1,10 @@
-import React, { useEffect, useState, createContext } from "react";
+import React, {
+  useEffect,
+  useState,
+  createContext,
+  useCallback,
+  useMemo,
+} from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
@@ -23,8 +29,16 @@ import Response from "./Player/Response";
 import Coded from "./Player/Coded";
 import Designed from "./Player/Designed";
 import Tournaments from "./Player/Tournaments";
+import Hero from "./Player/Hero";
+import ProfileModule from "./Player/ProfileModule";
 import { useStore } from "../stores";
 import { formatUserDisplayName } from "./Bots/botUtils";
+import {
+  PROFILE_TABS,
+  MODULE_NAME_KEYS,
+  isModuleVisible,
+  sortModulesForTab,
+} from "../lib/playerProfileSections";
 
 export const ProfileContext = createContext([null, () => {}]);
 export const SummaryContext = createContext([null, () => {}]);
@@ -32,20 +46,20 @@ export const AllRecsContext = createContext([null, () => []]);
 export const ResponsesContext = createContext([null, () => []]);
 export const TournamentContext = createContext([null, () => []]);
 
-const code2ele = new Map([
-  ["stars", { component: Stars, nameKey: "player.modules.stars" }],
-  ["coded", { component: Coded, nameKey: "player.modules.coded" }],
-  ["designed", { component: Designed, nameKey: "player.modules.designed" }],
-  ["ratings", { component: Ratings, nameKey: "player.modules.ratings" }],
-  ["counts", { component: Counts, nameKey: "player.modules.counts" }],
-  ["opps", { component: Opponents, nameKey: "player.modules.opponents" }],
-  ["activity", { component: Activity, nameKey: "player.modules.activity" }],
-  ["timeouts", { component: Timeouts, nameKey: "player.modules.timeouts" }],
-  ["response", { component: Response, nameKey: "player.modules.response" }],
-  ["tournaments", { component: Tournaments, nameKey: "player.modules.tournaments" }],
-  ["history", { component: History, nameKey: "player.modules.history" }],
-  ["highlights", { component: Highlights, nameKey: "player.modules.highlights" }],
-]);
+const code2component = {
+  stars: Stars,
+  coded: Coded,
+  designed: Designed,
+  ratings: Ratings,
+  counts: Counts,
+  opps: Opponents,
+  activity: Activity,
+  timeouts: Timeouts,
+  response: Response,
+  tournaments: Tournaments,
+  history: History,
+  highlights: Highlights,
+};
 
 function Player() {
   const { userid } = useParams();
@@ -58,23 +72,29 @@ function Player() {
   const [responses, responsesSetter] = useState([]);
   const [isCoder, setIsCoder] = useState(false);
   const [isDesigner, setIsDesigner] = useState(false);
-  const [order, orderSetter] = useStorageState("player-profile-order", [
-    "stars",
-    "coded",
-    "designed",
-    "ratings",
-    "counts",
-    "opps",
-    "activity",
-    "timeouts",
-    "response",
-    "tournaments",
-    "history",
-    "highlights",
-  ]);
+  const [activeTab, activeTabSetter] = useStorageState(
+    "player-profile-tab",
+    "competition"
+  );
+  const [pinnedModule, pinnedModuleSetter] = useStorageState(
+    "player-profile-pin",
+    null
+  );
 
-  // eslint-disable-next-line no-unused-vars
   const { t } = useTranslation();
+
+  const visibilityCtx = useMemo(
+    () => ({
+      user,
+      summary,
+      allRecs,
+      tourneys,
+      responses,
+      isCoder,
+      isDesigner,
+    }),
+    [user, summary, allRecs, tourneys, responses, isCoder, isDesigner]
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -161,7 +181,6 @@ function Player() {
     if (allUsers !== null) {
       const rec = allUsers.find((u) => u.id === userid);
       if (rec !== undefined && rec !== null) {
-        console.log(rec);
         userSetter(rec);
       } else {
         userSetter(null);
@@ -169,7 +188,7 @@ function Player() {
     } else {
       userSetter(null);
     }
-  }, [userid, allUsers, userSetter]);
+  }, [userid, allUsers]);
 
   const handleNewChallenge = async (challenge) => {
     try {
@@ -182,51 +201,25 @@ function Player() {
     }
   };
 
-  const handleMoveLeft = (code) => {
-    const idx = order.findIndex((c) => c === code);
-    let newlst;
-    if (idx !== -1) {
-      // if first element, move to end
-      if (idx === 0) {
-        newlst = [...order.slice(1), order[0]];
-      }
-      // otherwise, swap with adjacent
-      else {
-        newlst = [
-          ...order.slice(0, idx - 1),
-          order[idx],
-          order[idx - 1],
-          ...order.slice(idx + 1),
-        ];
-      }
-      if (newlst !== undefined) {
-        orderSetter(newlst);
-      }
-    }
-  };
+  const handleTogglePin = useCallback(
+    (code) => {
+      pinnedModuleSetter((current) => (current === code ? null : code));
+    },
+    [pinnedModuleSetter]
+  );
 
-  const handleMoveRight = (code) => {
-    const idx = order.findIndex((c) => c === code);
-    let newlst;
-    if (idx !== -1) {
-      // if last element, move to start
-      if (idx === order.length - 1) {
-        newlst = [order[order.length - 1], ...order.slice(0, -1)];
-      }
-      // otherwise, swap with adjacent
-      else {
-        newlst = [
-          ...order.slice(0, idx),
-          order[idx + 1],
-          order[idx],
-          ...order.slice(idx + 2),
-        ];
-      }
-      if (newlst !== undefined) {
-        orderSetter(newlst);
-      }
-    }
-  };
+  const activeTabConfig = PROFILE_TABS.find((tab) => tab.id === activeTab);
+
+  const modulesToRender = useMemo(() => {
+    if (!activeTabConfig) return [];
+    const sorted = sortModulesForTab(activeTabConfig.modules, pinnedModule);
+    return sorted.filter((code) => {
+      if (code === "highlights") return true;
+      return isModuleVisible(code, visibilityCtx);
+    });
+  }, [activeTabConfig, pinnedModule, visibilityCtx]);
+
+  const tabMayHaveContent = modulesToRender.length > 0;
 
   if (user !== null) {
     return (
@@ -277,12 +270,6 @@ function Player() {
               {user.about}
             </ReactMarkdown>
           )}
-          <div
-            className="content has-text-centered"
-            style={{ fontSize: "smaller" }}
-          >
-            <p>{t("player.underDevelopment")}</p>
-          </div>
           <ProfileContext.Provider value={[user, userSetter]}>
             <SummaryContext.Provider value={[summary, summarySetter]}>
               <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>
@@ -290,77 +277,72 @@ function Player() {
                   <ResponsesContext.Provider
                     value={[responses, responsesSetter]}
                   >
-                    <div className="columns is-multiline">
-                      {order.map((code) => {
-                        if (code === "coded" && !isCoder) {
-                          return null;
-                        }
-                        if (code === "designed" && !isDesigner) {
-                          return null;
-                        }
-                        if (code === "tournaments" && tourneys.length === 0) {
-                          return null;
-                        }
-                        const obj = code2ele.get(code);
-                        if (obj !== undefined) {
-                          return (
-                            <>
-                              <div
-                                className="column is-narrow"
-                                key={`${code}|column|${userid}`}
+                    <div className="columns is-centered">
+                      <div className="column is-10">
+                        <Hero handleChallenge={handleNewChallenge} />
+                        <div
+                          className="notification is-light is-size-7 has-text-centered player-dev-banner"
+                          role="note"
+                        >
+                          {t("player.underDevelopment")}
+                        </div>
+                        <div className="tabs is-small is-toggle is-toggle-rounded player-profile-tabs">
+                          <ul>
+                            {PROFILE_TABS.map((tab) => (
+                              <li
+                                key={tab.id}
+                                className={
+                                  activeTab === tab.id ? "is-active" : ""
+                                }
                               >
-                                <div
-                                  className="card"
-                                  key={`${code}|card|${userid}`}
+                                <a
+                                  href={`#${tab.id}`}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    activeTabSetter(tab.id);
+                                  }}
                                 >
-                                  <header className="card-header">
-                                    <p className="card-header-title">
-                                      {t(obj.nameKey)}
-                                    </p>
-                                    <button
-                                      className="card-header-icon"
-                                      aria-label={t("a11y.moveLeft")}
-                                      title={t("a11y.moveLeft")}
-                                      onClick={() => handleMoveLeft(code)}
-                                    >
-                                      <span className="icon">
-                                        <i
-                                          className="fa fa-angle-left"
-                                          aria-hidden="true"
-                                        ></i>
-                                      </span>
-                                    </button>
-                                    <button
-                                      className="card-header-icon"
-                                      aria-label={t("a11y.moveRight")}
-                                      title={t("a11y.moveRight")}
-                                      onClick={() => handleMoveRight(code)}
-                                    >
-                                      <span className="icon">
-                                        <i
-                                          className="fa fa-angle-right"
-                                          aria-hidden="true"
-                                        ></i>
-                                      </span>
-                                    </button>
-                                  </header>
-                                  <div className="card-content">
-                                    <obj.component
-                                      order={order}
-                                      key={`${code}|component|${userid}`}
-                                      handleChallenge={handleNewChallenge.bind(
-                                        this
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </>
-                          );
-                        } else {
-                          return null;
-                        }
-                      })}
+                                  {t(tab.nameKey)}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        {tabMayHaveContent ? (
+                          <div className="columns is-multiline player-tab-modules">
+                            {modulesToRender.map((code) => {
+                              const Component = code2component[code];
+                              if (Component === undefined) return null;
+                              if (code === "highlights") {
+                                return (
+                                  <Highlights
+                                    key={`${code}|${userid}`}
+                                    pinned={pinnedModule === code}
+                                    onTogglePin={handleTogglePin}
+                                  />
+                                );
+                              }
+                              return (
+                                <ProfileModule
+                                  key={`${code}|${userid}`}
+                                  code={code}
+                                  nameKey={MODULE_NAME_KEYS[code]}
+                                  pinned={pinnedModule === code}
+                                  onTogglePin={handleTogglePin}
+                                  Component={Component}
+                                  componentProps={{
+                                    handleChallenge: handleNewChallenge,
+                                  }}
+                                />
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <p className="has-text-centered has-text-grey player-tab-empty">
+                            {t("player.tabs.empty")}
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </ResponsesContext.Provider>
                 </TournamentContext.Provider>

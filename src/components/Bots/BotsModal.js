@@ -114,9 +114,7 @@ function BotsModal({ show, onClose }) {
     }
     const refreshResult = await refreshMe();
     if (!refreshResult.ok) {
-      errorSetter(
-        refreshResult.error || t("bots.errors.refreshFailed")
-      );
+      errorSetter(refreshResult.error || t("bots.errors.refreshFailed"));
     }
     resetCreateForm();
     credentialsSetter({ clientId, clientSecret });

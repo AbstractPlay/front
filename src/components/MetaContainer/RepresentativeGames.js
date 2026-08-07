@@ -34,9 +34,7 @@ function RepresentativeGames({ metaGame }) {
         const res = await fetch(url);
         const result = await res.json();
         if (!cancelled) {
-          entriesSetter(
-            dedupeByGameId(Array.isArray(result) ? result : [])
-          );
+          entriesSetter(dedupeByGameId(Array.isArray(result) ? result : []));
         }
       } catch (error) {
         console.log(error);

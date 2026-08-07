@@ -16,9 +16,7 @@ export function isGameCompleted(game) {
 }
 
 export function isWatched(globalMe, gameId) {
-  return (
-    globalMe?.watchedGames?.some((g) => g.id === gameId) ?? false
-  );
+  return globalMe?.watchedGames?.some((g) => g.id === gameId) ?? false;
 }
 
 export function isHighlighted(globalMe, gameId) {
@@ -101,7 +99,12 @@ export async function toggleWatch({ metaGame, id, gameSummary, watching }) {
   return res;
 }
 
-export async function toggleHighlight({ metaGame, id, gameSummary, highlighted }) {
+export async function toggleHighlight({
+  metaGame,
+  id,
+  gameSummary,
+  highlighted,
+}) {
   const query = highlighted ? "unhighlight_game" : "highlight_game";
   const res = await callMarkMutation(query, { metaGame, id });
   if (res.cancelled) return res;
@@ -139,9 +142,7 @@ export async function toggleRecommend({
       );
     } else if (
       gameSummary &&
-      !me.representatives.some(
-        (g) => g.id === id && g.metaGame === metaGame
-      )
+      !me.representatives.some((g) => g.id === id && g.metaGame === metaGame)
     ) {
       me.representatives.push({ ...gameSummary, metaGame });
     } else if (res.payload?.representatives) {

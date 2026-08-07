@@ -273,8 +273,9 @@ function LabSession({
         .map(fmt);
       const coders = info.people.filter((p) => p.type === "coder").map(fmt);
       designerStringSetter(
-        (designers.length === 1 ? t("lab.designerOne") : t("lab.designersMany")) +
-          designers.join(", ")
+        (designers.length === 1
+          ? t("lab.designerOne")
+          : t("lab.designersMany")) + designers.join(", ")
       );
       coderStringSetter(
         (coders.length === 1 ? t("lab.coderOne") : t("lab.codersMany")) +
@@ -865,7 +866,9 @@ function LabSession({
       <h1 className="subtitle lined">
         <span>
           <Link to={`/games/${metaGame}`}>{gameDeets?.name}</Link>
-          <span style={{ fontSize: "smaller" }}>{t("lab.playgroundSuffix")}</span>
+          <span style={{ fontSize: "smaller" }}>
+            {t("lab.playgroundSuffix")}
+          </span>
         </span>
       </h1>
       {inCheck ? (

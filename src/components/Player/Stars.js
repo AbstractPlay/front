@@ -1,25 +1,14 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useContext, useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "./TableSkeleton";
-import NewChallengeModal from "../NewChallengeModal";
 import { Link } from "react-router-dom";
-import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
 
-function Stars({ handleChallenge }) {
+function Stars() {
   const [user] = useContext(ProfileContext);
-  const globalMe = useStore((state) => state.globalMe);
-  const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const { t } = useTranslation();
-
-  const openChallengeModal = (name) => {
-    activeChallengeModalSetter(name);
-  };
-  const closeChallengeModal = useCallback(() => {
-    activeChallengeModalSetter("");
-  }, []);
 
   const data = useMemo(
     () =>
@@ -48,68 +37,22 @@ function Stars({ handleChallenge }) {
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
       }),
-      columnHelper.display({
-        id: "challenge",
-        cell: (props) =>
-          globalMe === null || globalMe.id === user.id ? null : (
-            <>
-              <NewChallengeModal
-                show={
-                  activeChallengeModal !== "" &&
-                  activeChallengeModal === props.row.original.id
-                }
-                handleClose={closeChallengeModal}
-                handleChallenge={handleChallenge}
-                fixedMetaGame={props.row.original.id}
-                opponent={{
-                  id: user.id,
-                  name: user.name,
-                }}
-              />
-              <button
-                className="button is-small apButton"
-                onClick={() => openChallengeModal(props.row.original.id)}
-              >
-                {t("IssueChallengeLabel")}
-              </button>
-            </>
-          ),
-      }),
     ],
-    [
-      columnHelper,
-      globalMe,
-      user,
-      activeChallengeModal,
-      handleChallenge,
-      closeChallengeModal,
-      t,
-    ]
+    [columnHelper, t]
   );
 
-  if (
-    !("stars" in user) ||
-    user.stars === undefined ||
-    user.stars === null ||
-    user.stars.length === 0
-  ) {
-    return (
-      <div className="content">
-        <p>{t("None")}</p>
-      </div>
-    );
-  } else {
-    return (
-      <>
-        <TableSkeleton
-          data={data}
-          columns={columns}
-          sort={[{ id: "name", desc: false }]}
-          key="Player|Stars"
-        />
-      </>
-    );
+  if (data.length === 0) {
+    return null;
   }
+
+  return (
+    <TableSkeleton
+      data={data}
+      columns={columns}
+      sort={[{ id: "name", desc: false }]}
+      key="Player|Stars"
+    />
+  );
 }
 
 export default Stars;

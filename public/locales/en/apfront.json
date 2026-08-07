@@ -1341,6 +1341,23 @@
             "history": "Game History",
             "highlights": "Highlights"
         },
+        "tabs": {
+            "competition": "Competition",
+            "activity": "Activity",
+            "games": "Games",
+            "record": "Record",
+            "empty": "No information available in this section."
+        },
+        "hero": {
+            "topRatings": "Top ratings",
+            "hIndex": "H-index",
+            "medianResponse": "Median response time",
+            "recentActivity": "Recent activity"
+        },
+        "pin": {
+            "add": "Pin this section to the top",
+            "remove": "Unpin this section"
+        },
         "stats": {
             "response": {
                 "average": "Average response time: {{hours}} hours",

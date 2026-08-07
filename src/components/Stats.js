@@ -124,9 +124,7 @@ function Stats(props) {
             <br />
             {t("stats.playersPlayedGames", {
               numPlayers:
-                summary !== null
-                  ? summary.numPlayers.toLocaleString()
-                  : "??",
+                summary !== null ? summary.numPlayers.toLocaleString() : "??",
               numGames:
                 summary !== null ? summary.numGames.toLocaleString() : "??",
             })}

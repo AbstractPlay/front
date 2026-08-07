@@ -1035,7 +1035,9 @@ function Customize(props) {
                   ))}
                 </select>
               </div>
-              <span style={{ margin: "0 0.5em" }}>{t("customize.atScale")}</span>
+              <span style={{ margin: "0 0.5em" }}>
+                {t("customize.atScale")}
+              </span>
               <input
                 className="input is-small"
                 type="number"

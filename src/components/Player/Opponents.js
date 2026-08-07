@@ -198,6 +198,10 @@ function Opponents({ handleChallenge }) {
     ]
   );
 
+  if (data.length === 0 && hIndex === null) {
+    return null;
+  }
+
   return (
     <>
       {hIndex === null || ptile === null ? null : (
@@ -207,12 +211,14 @@ function Opponents({ handleChallenge }) {
           </p>
         </div>
       )}
-      <TableSkeleton
-        data={data}
-        columns={columns}
-        sort={[{ id: "count", desc: true }]}
-        key="Player|Opponent"
-      />
+      {data.length === 0 ? null : (
+        <TableSkeleton
+          data={data}
+          columns={columns}
+          sort={[{ id: "count", desc: true }]}
+          key="Player|Opponent"
+        />
+      )}
     </>
   );
 }
