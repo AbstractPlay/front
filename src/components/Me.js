@@ -16,6 +16,7 @@ import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { cloneDeep } from "lodash";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
+import WatchedGamesTable from "./Me/WatchedGamesTable";
 import MyTurnTable from "./Me/MyTurnTable";
 import TheirTurnTable from "./Me/TheirTurnTable";
 import StandingChallengeTable from "./Me/StandingChallengeTable";
@@ -565,6 +566,27 @@ function Me(props) {
                     </button>
                   </a>
                 </div>
+              </div>
+              <div className="topPad">
+                <p className="lined">
+                  <span>{t("WatchedGames")}</span>
+                </p>
+                {!globalMe.watchedGames ||
+                globalMe.watchedGames.length === 0 ? (
+                  <p className="help">
+                    <em>{t("WatchedGamesHelp")}</em>
+                  </p>
+                ) : (
+                  <>
+                    <p className="help">
+                      <em>{t("WatchedGamesHelp")}</em>
+                    </p>
+                    <WatchedGamesTable
+                      games={globalMe.watchedGames}
+                      setError={errorSetter}
+                    />
+                  </>
+                )}
               </div>
             </div>
           </div>

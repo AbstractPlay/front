@@ -16,6 +16,7 @@ import Tournaments from "../Tournaments/Tournaments";
 import GameDisplays from "../GameDisplays";
 import GameVariants from "../GameVariants";
 import Thumbnail from "../Thumbnail";
+import RepresentativeGames from "./RepresentativeGames";
 import { useStore } from "../../stores";
 
 const MetaItem = React.forwardRef(
@@ -301,6 +302,7 @@ const MetaItem = React.forwardRef(
                       null
                     )}
                 </div>
+                <RepresentativeGames metaGame={game.uid} />
                 <div>
                   {counts === undefined ? (
                     ""

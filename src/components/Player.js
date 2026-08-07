@@ -18,6 +18,7 @@ import Opponents from "./Player/Opponents";
 import Timeouts from "./Player/Timeouts";
 import Activity from "./Player/Activity";
 import History from "./Player/History";
+import Highlights from "./Player/Highlights";
 import Response from "./Player/Response";
 import Coded from "./Player/Coded";
 import Designed from "./Player/Designed";
@@ -43,6 +44,7 @@ const code2ele = new Map([
   ["response", { component: Response, nameKey: "player.modules.response" }],
   ["tournaments", { component: Tournaments, nameKey: "player.modules.tournaments" }],
   ["history", { component: History, nameKey: "player.modules.history" }],
+  ["highlights", { component: Highlights, nameKey: "player.modules.highlights" }],
 ]);
 
 function Player() {
@@ -68,6 +70,7 @@ function Player() {
     "response",
     "tournaments",
     "history",
+    "highlights",
   ]);
 
   // eslint-disable-next-line no-unused-vars

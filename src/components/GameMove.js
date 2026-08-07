@@ -82,6 +82,17 @@ import { isLabSupportedGame } from "../lib/Lab/buildGame";
 import { launchLabFromExport } from "../lib/Lab/storage";
 import { serializeSessionExploration } from "../lib/Lab/exploration";
 import { getEffectiveColourContext } from "../lib/effectiveColourContext";
+import {
+  isParticipant,
+  isGameCompleted,
+  isWatched,
+  isHighlighted,
+  isRecommended,
+  recommendCountForMeta,
+  toggleWatch,
+  toggleHighlight,
+  toggleRecommend,
+} from "../lib/playerGameMarks";
 
 // sets the default order of components in the vertical layouts
 const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
@@ -101,6 +112,8 @@ function GameMove(props) {
     rendered: "",
   });
   const [refresh, setRefresh] = useState(0);
+  const [watchCount, watchCountSetter] = useState(0);
+  const [marksBusy, marksBusySetter] = useState(false);
   const [locked, setLocked] = useState(false);
   const [error, errorSetter] = useState(false);
   const [tourState, tourStateSetter] = useState([]);
@@ -656,6 +669,9 @@ function GameMove(props) {
           }
           //   console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
           dbgameSetter(data.game);
+          watchCountSetter(
+            typeof data.watchCount === "number" ? data.watchCount : 0
+          );
           if (data.comments !== undefined) {
             commentsSetter(data.comments);
             if (
@@ -2145,6 +2161,118 @@ function GameMove(props) {
     }
   };
 
+  const buildGameSummary = useCallback(() => {
+    if (!dbgame) return null;
+    return {
+      id: dbgame.id,
+      metaGame: dbgame.metaGame || metaGame,
+      players: dbgame.players,
+      toMove: dbgame.toMove,
+      lastMoveTime: dbgame.lastMoveTime,
+      lastChat: dbgame.lastChat,
+      seen: dbgame.seen,
+      numMoves: dbgame.numMoves,
+      gameStarted: dbgame.gameStarted,
+      gameEnded: dbgame.gameEnded,
+      variants: dbgame.variants,
+    };
+  }, [dbgame, metaGame]);
+
+  const runMarkAction = useCallback(async (action) => {
+    if (marksBusy) return;
+    marksBusySetter(true);
+    try {
+      const res = await action();
+      if (res?.cancelled) return;
+      if (!res?.ok) {
+        toast.error(res.error || t("Error"));
+      }
+    } finally {
+      marksBusySetter(false);
+    }
+  }, [marksBusy, t]);
+
+  const handleWatchToggle = useCallback(() => {
+    const watching = isWatched(globalMe, gameID);
+    const gameSummary = buildGameSummary();
+    runMarkAction(async () => {
+      const res = await toggleWatch({
+        metaGame,
+        id: gameID,
+        gameSummary,
+        watching,
+      });
+      if (res.ok) {
+        watchCountSetter((c) => Math.max(0, c + (watching ? -1 : 1)));
+      }
+      return res;
+    });
+  }, [globalMe, gameID, metaGame, buildGameSummary, runMarkAction]);
+
+  const handleHighlightToggle = useCallback(() => {
+    const highlighted = isHighlighted(globalMe, gameID);
+    runMarkAction(() =>
+      toggleHighlight({
+        metaGame,
+        id: gameID,
+        gameSummary: buildGameSummary(),
+        highlighted,
+      })
+    );
+  }, [globalMe, gameID, metaGame, buildGameSummary, runMarkAction]);
+
+  const handleRecommendToggle = useCallback(() => {
+    const recommended = isRecommended(globalMe, metaGame, gameID);
+    if (
+      !recommended &&
+      recommendCountForMeta(globalMe, metaGame) >= 2
+    ) {
+      toast.error(t("gameMarks.recommendLimit"));
+      return;
+    }
+    runMarkAction(() =>
+      toggleRecommend({
+        metaGame,
+        id: gameID,
+        gameSummary: buildGameSummary(),
+        recommended,
+      })
+    );
+  }, [globalMe, gameID, metaGame, buildGameSummary, runMarkAction, t]);
+
+  const gameMarkProps = useMemo(() => {
+    if (!globalMe?.id || !dbgame) return null;
+    const participant = isParticipant(dbgame, globalMe.id);
+    const completed = isGameCompleted(dbgame);
+    const showWatch = !participant;
+    const showHighlight = participant && completed;
+    const showRecommend = completed;
+    if (!showWatch && !showHighlight && !showRecommend) return null;
+    return {
+      screenWidth,
+      showWatch,
+      showHighlight,
+      showRecommend,
+      watching: isWatched(globalMe, gameID),
+      highlighted: isHighlighted(globalMe, gameID),
+      recommended: isRecommended(globalMe, metaGame, gameID),
+      onWatch: handleWatchToggle,
+      onHighlight: handleHighlightToggle,
+      onRecommend: handleRecommendToggle,
+      busy: marksBusy,
+    };
+  }, [
+    globalMe,
+    dbgame,
+    gameID,
+    metaGame,
+    screenWidth,
+    marksBusy,
+    handleWatchToggle,
+    handleHighlightToggle,
+    handleRecommendToggle,
+  ]);
+
   const displayRenderRepJson = useMemo(
     () => getDisplayedRenderRepJson(renderrep, boardRenderIndex),
     [renderrep, boardRenderIndex]
@@ -2577,6 +2705,8 @@ function GameMove(props) {
                           handleCustomize={handleCustomize}
                           boardRenderIndex={boardRenderIndex}
                           setBoardRenderIndex={setBoardRenderIndex}
+                          watchCount={watchCount}
+                          gameMarkProps={gameMarkProps}
                         />
                       ) : key === "moves" ? (
                         <GameMoves
@@ -2725,6 +2855,8 @@ function GameMove(props) {
                   handleCustomize={handleCustomize}
                   boardRenderIndex={boardRenderIndex}
                   setBoardRenderIndex={setBoardRenderIndex}
+                  watchCount={watchCount}
+                  gameMarkProps={gameMarkProps}
                 />
               </div>
               {/***************** GameMoves *****************/}
