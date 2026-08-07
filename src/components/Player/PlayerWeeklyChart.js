@@ -9,12 +9,17 @@ function notifyPlotlyResize() {
   window.dispatchEvent(new Event("resize"));
 }
 
-function PlayerWeeklyChart({ histogram, weekAxisTitle, yAxisTitle }) {
+function PlayerWeeklyChart({
+  histogram,
+  siteWeekCount,
+  weekAxisTitle,
+  yAxisTitle,
+}) {
   const containerRef = useRef(null);
   const [plotReady, setPlotReady] = useState(false);
   const { x, y } = useMemo(
-    () => getPastYearBarChartData(histogram),
-    [histogram]
+    () => getPastYearBarChartData(histogram, { siteWeekCount }),
+    [histogram, siteWeekCount]
   );
 
   useEffect(() => {

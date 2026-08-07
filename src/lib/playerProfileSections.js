@@ -99,23 +99,61 @@ export const PAST_YEAR_WEEKS = 52;
 /** Fixed x-axis range for past-year charts (week 0 … week 52). */
 export const PAST_YEAR_AXIS_MAX = 52;
 
+/** Site-wide week count from summary (`histograms.all`). */
+export function getSiteWeekCount(summary) {
+  const len = summary?.histograms?.all?.length;
+  return len > 0 ? len : null;
+}
+
 /**
- * Last `weeks` buckets for chart display. Shorter histories are zero-padded at
- * the start so recent weeks stay right-aligned and the window length is fixed.
+ * Pad a per-player histogram to the site week timeline (index = site week).
+ * Trailing site weeks without player data become zero.
  */
-export function getPastYearHistogramWindow(histogram, weeks = PAST_YEAR_WEEKS) {
+export function alignHistogramToSiteWeeks(histogram, siteWeekCount) {
   if (!Array.isArray(histogram) || histogram.length === 0) {
+    return siteWeekCount > 0 ? Array(siteWeekCount).fill(0) : [];
+  }
+  if (siteWeekCount == null || siteWeekCount <= 0) {
+    return [...histogram];
+  }
+  if (histogram.length >= siteWeekCount) {
+    return histogram.slice(0, siteWeekCount);
+  }
+  return [
+    ...histogram,
+    ...Array(siteWeekCount - histogram.length).fill(0),
+  ];
+}
+
+/**
+ * Last `weeks` site buckets for chart display. When `siteWeekCount` is given,
+ * activity and timeout charts share the same calendar window (recent on the
+ * right). Shorter site histories are zero-padded at the start.
+ */
+export function getPastYearHistogramWindow(
+  histogram,
+  weeks = PAST_YEAR_WEEKS,
+  siteWeekCount = null
+) {
+  const aligned =
+    siteWeekCount != null
+      ? alignHistogramToSiteWeeks(histogram, siteWeekCount)
+      : histogram;
+  if (!Array.isArray(aligned) || aligned.length === 0) {
     return Array(weeks).fill(0);
   }
-  if (histogram.length >= weeks) {
-    return histogram.slice(-weeks);
+  if (aligned.length >= weeks) {
+    return aligned.slice(-weeks);
   }
-  return [...Array(weeks - histogram.length).fill(0), ...histogram];
+  return [...Array(weeks - aligned.length).fill(0), ...aligned];
 }
 
 /** Plotly bar trace for the past-year window (x = 0 … weeks − 1). */
-export function getPastYearBarChartData(histogram, weeks = PAST_YEAR_WEEKS) {
-  const y = getPastYearHistogramWindow(histogram, weeks);
+export function getPastYearBarChartData(
+  histogram,
+  { weeks = PAST_YEAR_WEEKS, siteWeekCount = null } = {}
+) {
+  const y = getPastYearHistogramWindow(histogram, weeks, siteWeekCount);
   return {
     x: y.map((_, week) => week),
     y,

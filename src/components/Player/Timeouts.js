@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ProfileContext, SummaryContext, AllRecsContext } from "../Player";
 import PlayerWeeklyChart from "./PlayerWeeklyChart";
+import { getSiteWeekCount } from "../../lib/playerProfileSections";
 
 function Timeouts() {
   const { t } = useTranslation();
@@ -18,7 +19,7 @@ function Timeouts() {
         (r) => r.user === user.id
       );
       if (rec !== undefined) {
-        histogramSetter(rec.value);
+        histogramSetter([...rec.value]);
       } else {
         histogramSetter([]);
       }
@@ -46,6 +47,8 @@ function Timeouts() {
     timeouts.length > 0 ||
     (histogram.length > 0 && histogram.some((v) => v > 0));
 
+  const siteWeekCount = getSiteWeekCount(summary);
+
   if (!hasData) {
     return null;
   }
@@ -68,6 +71,7 @@ function Timeouts() {
       </div>
       <PlayerWeeklyChart
         histogram={histogram}
+        siteWeekCount={siteWeekCount}
         weekAxisTitle={t("stats.siteStats.weekNumber")}
         yAxisTitle={t("player.stats.timeouts.axisY")}
       />
