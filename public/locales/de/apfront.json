@@ -554,6 +554,8 @@
   "CompletedGamesCount_other": "abgeschlossene Spiele",
   "CompletedGamesList": "Abgeschlossene {{name}}-Spiele",
   "CompletedGamesHelp": "Um die Übersicht übersichtlich zu halten, werden Spiele 7 Tage nach dem Datum des letzten Aufrufs aus dieser Liste entfernt. Klicke auf die Schaltfläche 'Löschen', um sie sofort zu entfernen. Neue Chat-Nachrichten lassen ältere Spiele wieder auftauchen und starten den 7-Tage-Countdown erneut. Besuche die Spiele-Seite, um auf ältere abgeschlossene Spiele zuzugreifen.",
+  "WatchedGames": "Beobachtete Spiele",
+  "WatchedGamesHelp": "Spiele, die du als Zuschauer verfolgst. Nicht mehr beobachten, um sie aus dieser Liste zu entfernen. Neue Chatnachrichten oder Züge aktualisieren diese Einträge.",
   "CompleteMove": "Zug abschließen",
   "Confirm": "Bestätigen",
   "ConfirmDeleteSubtree": "Analyse-Teilbaum löschen",
@@ -1034,7 +1036,13 @@
     "winner": "Sieger",
     "winners": "Sieger",
     "wins": "Siege",
-    "rate": "Rate"
+    "rate": "Rate",
+    "clear": "Zurücksetzen",
+    "inProgress": "Laufend",
+    "lastActivity": "Letzte Aktivität",
+    "status": "Status",
+    "unhighlight": "Hervorhebung aufheben",
+    "unwatch": "Nicht mehr beobachten"
   },
   "TimeRemaining": "Verbleibende Zeit",
   "ToggleFullSize": "Brettbild in voller Höhe umschalten",
@@ -1163,6 +1171,19 @@
   },
   "None": "Keine",
   "Draw": "Unentschieden",
+  "gameMarks": {
+    "watch": "Dieses Spiel beobachten",
+    "unwatch": "Nicht mehr beobachten",
+    "watching": "Beobachtet",
+    "highlight": "Dieses Spiel hervorheben",
+    "unhighlight": "Hervorhebung entfernen",
+    "recommend": "Als repräsentatives Spiel empfehlen",
+    "unrecommend": "Empfehlung entfernen",
+    "recommendLimit": "Du kannst maximal 2 Spiele pro Spieltyp empfehlen.",
+    "watchCount_one": "{{count}} Zuschauer",
+    "watchCount_other": "{{count}} Zuschauer",
+    "moreActions": "Spielaktionen"
+  },
   "You": "Du",
   "Unknown": "Unbekannt",
   "Stash": "Vorrat",
@@ -1317,7 +1338,8 @@
       "timeouts": "Zeitüberschreitungen",
       "response": "Reaktionszeit",
       "tournaments": "Turnierverlauf",
-      "history": "Spielverlauf"
+      "history": "Spielverlauf",
+      "highlights": "Highlights"
     },
     "stats": {
       "response": {
@@ -1349,7 +1371,9 @@
     "historicalIntro": "Die folgenden Statistiken stammen aus den historischen Aufzeichnungen, die nur wöchentlich aktualisiert werden. Historische Wertungen können leicht von den statischen Wertungen an anderer Stelle auf der Website abweichen. Weitere Details findest du auf der Statistikseite.",
     "playCounts": "Anzahl der Partien",
     "gameStatistics": "Spielstatistiken",
-    "ratings": "Wertungen"
+    "ratings": "Wertungen",
+    "recommendedGames": "Empfohlene Spiele",
+    "recommendedBy": "Empfohlen von {{name}}"
   },
   "me": {
     "challengedNotice": "Du wurdest herausgefordert!",

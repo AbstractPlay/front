@@ -33,6 +33,7 @@ Partial `me` data may already be in Zustand `globalMe` from navbar login; `Me` m
 | [`MyTurnTable.js`](../src/components/Me/MyTurnTable.js) | Games where it is the user's turn |
 | [`TheirTurnTable.js`](../src/components/Me/TheirTurnTable.js) | Games waiting on opponent |
 | [`CompletedGamesTable.js`](../src/components/Me/CompletedGamesTable.js) | Finished games |
+| [`WatchedGamesTable.js`](../src/components/Me/WatchedGamesTable.js) | Spectated games (persistent watch list) |
 | [`StandingChallengeTable.js`](../src/components/Me/StandingChallengeTable.js) | Active standing challenges |
 
 ## Challenges

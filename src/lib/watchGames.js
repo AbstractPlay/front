@@ -29,6 +29,17 @@ export function collectWatchGames(globalMe, pathname) {
     keys.set(`${meta}#${id}`, { meta, id });
   }
 
+  if (globalMe?.watchedGames) {
+    for (const game of globalMe.watchedGames) {
+      if (game.metaGame && game.id) {
+        keys.set(`${game.metaGame}#${game.id}`, {
+          meta: game.metaGame,
+          id: game.id,
+        });
+      }
+    }
+  }
+
   return [...keys.values()];
 }
 

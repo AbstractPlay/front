@@ -554,6 +554,8 @@
     "CompletedGamesCount_other": "completed games",
     "CompletedGamesList": "Completed {{name}} Games",
     "CompletedGamesHelp": "To keep the dashboard manageable, games drop off this list 7 days after the \"last seen\" date. Click the Clear button to remove it immediately. New chat will cause older games to resurface, restarting the 7-day clock. Visit the Games page to access older completed games.",
+    "WatchedGames": "Watched Games",
+    "WatchedGamesHelp": "Games you are watching as a spectator. Unwatch to remove from this list. New chat or moves will update these entries.",
     "CompleteMove": "Complete move",
     "Confirm": "Confirm",
     "ConfirmDeleteSubtree": "Delete exploration subtree",
@@ -1034,6 +1036,12 @@
         "winner": "Winner",
         "winners": "Winners",
         "wins": "Wins",
+        "clear": "Clear",
+        "inProgress": "In progress",
+        "lastActivity": "Last activity",
+        "status": "Status",
+        "unhighlight": "Unhighlight",
+        "unwatch": "Unwatch",
         "rate": "Rate"
     },
     "TimeRemaining": "Time remaining",
@@ -1163,6 +1171,19 @@
     },
     "None": "None",
     "Draw": "Draw",
+    "gameMarks": {
+        "watch": "Watch this game",
+        "unwatch": "Stop watching",
+        "watching": "Watching",
+        "highlight": "Highlight this game",
+        "unhighlight": "Remove highlight",
+        "recommend": "Recommend as representative game",
+        "unrecommend": "Remove recommendation",
+        "recommendLimit": "You can recommend at most 2 games per game type.",
+        "watchCount_one": "{{count}} watcher",
+        "watchCount_other": "{{count}} watchers",
+        "moreActions": "Game actions"
+    },
     "You": "You",
     "Unknown": "Unknown",
     "Stash": "Stash",
@@ -1317,7 +1338,8 @@
             "timeouts": "Timeouts",
             "response": "Response Time",
             "tournaments": "Tournament History",
-            "history": "Game History"
+            "history": "Game History",
+            "highlights": "Highlights"
         },
         "stats": {
             "response": {
@@ -1349,7 +1371,9 @@
         "historicalIntro": "The below stats are drawn from the historical record, which is only updated weekly. Historical ratings may be slightly different from the static ratings found elsewhere on the site. See the Statistics page for more details.",
         "playCounts": "Play counts",
         "gameStatistics": "Game statistics",
-        "ratings": "Ratings"
+        "ratings": "Ratings",
+        "recommendedGames": "Recommended games",
+        "recommendedBy": "Recommended by {{name}}"
     },
     "me": {
         "challengedNotice": "You have been challenged!",

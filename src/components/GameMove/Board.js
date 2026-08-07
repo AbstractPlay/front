@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useCallback } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import useStorageState from "react-use-storage-state";
 import BoardNav from "./BoardNav";
+import GameMarkButtons from "./GameMarkButtons";
 import { useStore } from "../../stores";
 
 function Board({
@@ -37,6 +38,8 @@ function Board({
   handleCustomize,
   boardRenderIndex,
   setBoardRenderIndex,
+  watchCount,
+  gameMarkProps,
 }) {
   const globalMe = useStore((state) => state.globalMe);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
@@ -103,11 +106,26 @@ function Board({
                   </span>
                 </button>
               </div>
+              {gameMarkProps ? <GameMarkButtons {...gameMarkProps} /> : null}
             </div>
           </div>
         </div>
-        {!hasNewChat ? null : (
-          <div className="level-right">
+        <div className="level-right">
+          {watchCount > 0 ? (
+            <div className="level-item">
+              <span
+                className="smallerText"
+                style={{ color: "var(--bg-color2)" }}
+                title={t("gameMarks.watchCount", { count: watchCount })}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-eye"></i>
+                </span>
+                {t("gameMarks.watchCount", { count: watchCount })}
+              </span>
+            </div>
+          ) : null}
+          {!hasNewChat ? null : (
             <div className="level-item">
               <div className="control">
                 <span
@@ -118,8 +136,8 @@ function Board({
                 </span>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       {inCheck.length === 0 ? (
         ""

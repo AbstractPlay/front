@@ -554,6 +554,8 @@
   "CompletedGamesCount_other": "parties terminées",
   "CompletedGamesList": "Parties terminées de {{name}}",
   "CompletedGamesHelp": "Pour garder le tableau de bord lisible, les parties sont retirées de cette liste 7 jours après la date de \"dernière consultation\". Cliquez sur le bouton Effacer pour la supprimer immédiatement. Un nouveau message dans le tchat fera réapparaître les parties plus anciennes, réinitialisant le délai de 7 jours. Visitez la page des Parties pour accéder aux parties terminées plus anciennes.",
+  "WatchedGames": "Parties observées",
+  "WatchedGamesHelp": "Parties que vous observez en tant que spectateur. Arrêtez de les observer pour les retirer de cette liste. Un nouveau coup ou message dans le tchat mettra à jour ces entrées.",
   "CompleteMove": "Valider le coup",
   "Confirm": "Confirmer",
   "ConfirmDeleteSubtree": "Supprimer la sous-arborescence d'exploration",
@@ -1034,7 +1036,13 @@
     "winner": "Vainqueur",
     "winners": "Vainqueurs",
     "wins": "Victoires",
-    "rate": "Taux"
+    "rate": "Taux",
+    "clear": "Effacer",
+    "inProgress": "En cours",
+    "lastActivity": "Dernière activité",
+    "status": "Statut",
+    "unhighlight": "Retirer la surbrillance",
+    "unwatch": "Ne plus observer"
   },
   "TimeRemaining": "Temps restant :",
   "ToggleFullSize": "Basculer l'image du plateau en pleine hauteur",
@@ -1163,6 +1171,19 @@
   },
   "None": "Aucun",
   "Draw": "Égalité",
+  "gameMarks": {
+    "watch": "Observer cette partie",
+    "unwatch": "Arrêter d'observer",
+    "watching": "Observée",
+    "highlight": "Mettre cette partie en surbrillance",
+    "unhighlight": "Retirer la surbrillance",
+    "recommend": "Recommander comme partie représentative",
+    "unrecommend": "Retirer la recommandation",
+    "recommendLimit": "Vous pouvez recommander au maximum 2 parties par type de jeu.",
+    "watchCount_one": "{{count}} spectateur",
+    "watchCount_other": "{{count}} spectateurs",
+    "moreActions": "Actions de la partie"
+  },
   "You": "Vous",
   "Unknown": "Inconnu",
   "Stash": "Réserve",
@@ -1317,7 +1338,8 @@
       "timeouts": "Dépassements de temps",
       "response": "Temps de réponse",
       "tournaments": "Historique des tournois",
-      "history": "Historique des parties"
+      "history": "Historique des parties",
+      "highlights": "Mises en surbrillance"
     },
     "stats": {
       "response": {
@@ -1349,7 +1371,9 @@
     "historicalIntro": "Les statistiques ci-dessous sont issues des archives historiques, qui ne sont mises à jour qu'une fois par semaine. Les classements historiques peuvent être légèrement différents des classements statiques trouvés ailleurs sur le site. Consultez la page Statistiques pour plus de détails.",
     "playCounts": "Nombre de parties",
     "gameStatistics": "Statistiques de jeu",
-    "ratings": "Classements"
+    "ratings": "Classements",
+    "recommendedGames": "Parties recommandées",
+    "recommendedBy": "Recommandé par {{name}}"
   },
   "me": {
     "challengedNotice": "On vous a lancé un défi !",

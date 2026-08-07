@@ -554,6 +554,8 @@
   "CompletedGamesCount_other": "partite completate",
   "CompletedGamesList": "Partite a {{name}} completate",
   "CompletedGamesHelp": "Per mantenere la bacheca ordinata, le partite vengono rimosse da questo elenco 7 giorni dopo la data di \"ultima visione\". Clicca sul pulsante Pulisci per rimuoverle immediatamente. Messaggi di chat recenti faranno riapparire le vecchie partite, riavviando il conteggio di 7 giorni. Visita la pagina Partite per accedere alle vecchie partite completate.",
+  "WatchedGames": "Partite osservate",
+  "WatchedGamesHelp": "Partite che stai osservando come spettatore. Smetti di osservare per rimuoverle da questo elenco. Nuovi messaggi in chat o mosse aggiorneranno queste voci.",
   "CompleteMove": "Completa mossa",
   "Confirm": "Conferma",
   "ConfirmDeleteSubtree": "Elimina sottoalbero di esplorazione",
@@ -1034,7 +1036,13 @@
     "winner": "Vincitore",
     "winners": "Vincitori",
     "wins": "Vittorie",
-    "rate": "Percentuale"
+    "rate": "Percentuale",
+    "clear": "Cancella",
+    "inProgress": "In corso",
+    "lastActivity": "Ultima attività",
+    "status": "Stato",
+    "unhighlight": "Rimuovi evidenziazione",
+    "unwatch": "Smetti di osservare"
   },
   "TimeRemaining": "Tempo rimanente",
   "ToggleFullSize": "Attiva/disattiva immagine del tabellone ad altezza intera",
@@ -1163,6 +1171,19 @@
   },
   "None": "Nessuno",
   "Draw": "Patta",
+  "gameMarks": {
+    "watch": "Osserva questa partita",
+    "unwatch": "Smetti di osservare",
+    "watching": "In osservazione",
+    "highlight": "Evidenzia questa partita",
+    "unhighlight": "Rimuovi evidenziazione",
+    "recommend": "Consiglia come partita rappresentativa",
+    "unrecommend": "Rimuovi consiglio",
+    "recommendLimit": "Puoi consigliare al massimo 2 partite per tipo di gioco.",
+    "watchCount_one": "{{count}} spettatore",
+    "watchCount_other": "{{count}} spettatori",
+    "moreActions": "Azioni partita"
+  },
   "You": "Tu",
   "Unknown": "Sconosciuto",
   "Stash": "Riserva",
@@ -1317,7 +1338,8 @@
       "timeouts": "Tempi scaduti",
       "response": "Tempo di risposta",
       "tournaments": "Cronologia tornei",
-      "history": "Cronologia partite"
+      "history": "Cronologia partite",
+      "highlights": "In evidenza"
     },
     "stats": {
       "response": {
@@ -1349,7 +1371,9 @@
     "historicalIntro": "Le statistiche sottostanti sono tratte dallo storico, che viene aggiornato solo settimanalmente. I punteggi storici potrebbero differire leggermente dai punteggi statici presenti altrove sul sito. Consulta la pagina Statistiche per maggiori dettagli.",
     "playCounts": "Conteggio partite",
     "gameStatistics": "Statistiche di gioco",
-    "ratings": "Punteggi"
+    "ratings": "Punteggi",
+    "recommendedGames": "Partite consigliate",
+    "recommendedBy": "Consigliata da {{name}}"
   },
   "me": {
     "challengedNotice": "Sei stato sfidato!",

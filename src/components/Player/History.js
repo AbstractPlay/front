@@ -10,6 +10,11 @@ import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
+import {
+  isHighlighted,
+  toggleHighlight,
+} from "../../lib/playerGameMarks";
+import { toast } from "react-toastify";
 
 function History({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
@@ -30,6 +35,36 @@ function History({ handleChallenge }) {
   const closeChallengeModal = useCallback(() => {
     activeChallengeModalSetter("");
   }, []);
+
+  const isOwnProfile = globalMe?.id === user?.id;
+
+  const handleHighlightToggle = useCallback(
+    async (meta, gameId, row) => {
+      const highlighted = isHighlighted(globalMe, gameId);
+      const gameSummary = highlighted
+        ? null
+        : {
+            id: gameId,
+            metaGame: meta,
+            players: row.opponents.concat(
+              globalMe ? [{ id: globalMe.id, name: globalMe.name }] : []
+            ),
+            toMove: "",
+            gameEnded: row.dateEnd,
+          };
+      const res = await toggleHighlight({
+        metaGame: meta,
+        id: gameId,
+        gameSummary,
+        highlighted,
+      });
+      if (res.cancelled) return;
+      if (!res.ok) {
+        toast.error(res.error || t("Error"));
+      }
+    },
+    [globalMe, t]
+  );
 
   const data = useMemo(
     () =>
@@ -238,6 +273,37 @@ function History({ handleChallenge }) {
               },
             }),
             columnHelper.display({
+              id: "highlight",
+              cell: (props) =>
+                !isOwnProfile || props.row.original.meta === undefined ? null : (
+                  <button
+                    className="button is-small apButtonNeutral"
+                    onClick={() =>
+                      handleHighlightToggle(
+                        props.row.original.meta,
+                        props.row.original.id,
+                        props.row.original
+                      )
+                    }
+                    title={
+                      isHighlighted(globalMe, props.row.original.id)
+                        ? t("gameMarks.unhighlight")
+                        : t("gameMarks.highlight")
+                    }
+                  >
+                    <span className="icon is-small">
+                      {isHighlighted(globalMe, props.row.original.id) ? (
+                        <span className="highlight">
+                          <i className="fa fa-bookmark"></i>
+                        </span>
+                      ) : (
+                        <i className="fa fa-bookmark-o"></i>
+                      )}
+                    </span>
+                  </button>
+                ),
+            }),
+            columnHelper.display({
               id: "challenge",
               cell: (props) =>
                 globalMe === null ||
@@ -278,6 +344,8 @@ function History({ handleChallenge }) {
       closeChallengeModal,
       t,
       formatter,
+      isOwnProfile,
+      handleHighlightToggle,
     ]
   );
 
