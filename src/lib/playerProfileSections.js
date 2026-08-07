@@ -1,0 +1,209 @@
+export const PROFILE_TABS = [
+  {
+    id: "competition",
+    nameKey: "player.tabs.competition",
+    modules: ["ratings", "opps", "counts"],
+  },
+  {
+    id: "activity",
+    nameKey: "player.tabs.activity",
+    modules: ["activity", "timeouts", "response"],
+  },
+  {
+    id: "games",
+    nameKey: "player.tabs.games",
+    modules: ["stars", "designed", "coded", "highlights"],
+  },
+  {
+    id: "record",
+    nameKey: "player.tabs.record",
+    modules: ["history", "tournaments"],
+  },
+];
+
+export const MODULE_NAME_KEYS = {
+  stars: "player.modules.stars",
+  coded: "player.modules.coded",
+  designed: "player.modules.designed",
+  ratings: "player.modules.ratings",
+  counts: "player.modules.counts",
+  opps: "player.modules.opponents",
+  activity: "player.modules.activity",
+  timeouts: "player.modules.timeouts",
+  response: "player.modules.response",
+  tournaments: "player.modules.tournaments",
+  history: "player.modules.history",
+  highlights: "player.modules.highlights",
+};
+
+/** Bulma column width within a tab: "full" | "half" */
+export const MODULE_WIDTH = {
+  ratings: "full",
+  opps: "full",
+  counts: "full",
+  activity: "half",
+  timeouts: "half",
+  response: "full",
+  stars: "half",
+  designed: "half",
+  coded: "half",
+  highlights: "half",
+  history: "full",
+  tournaments: "full",
+};
+
+export function getPlayerHIndex(summary, userId) {
+  if (!summary?.players?.h || userId == null) return null;
+  return summary.players.h.find((r) => r.user === userId) ?? null;
+}
+
+export function getTopRatings(summary, userId, limit = 3) {
+  if (!summary?.ratings?.highest || userId == null) return [];
+  return summary.ratings.highest
+    .filter((r) => r.user === userId)
+    .map(({ rating: elo, game }) => ({ elo, game }))
+    .sort((a, b) => b.elo - a.elo)
+    .slice(0, limit);
+}
+
+/**
+ * Weekly games-played histogram for a player (`histograms.players` in summary).
+ *
+ * Bucket semantics (see backend `summarize.ts`): index 0 is the oldest week
+ * since the site's first completed game; each index is one 7-day bucket;
+ * higher indices are more recent. Player arrays run through that player's last
+ * active bucket (length may be shorter than `histograms.all` if they stopped
+ * playing earlier). Oldest week is left, most recent is right.
+ */
+export function getActivityHistogram(summary, userId) {
+  if (!summary?.histograms?.players || userId == null) return [];
+  const rec = summary.histograms.players.find((r) => r.user === userId);
+  return rec?.value ? [...rec.value] : [];
+}
+
+/** Last `count` weekly buckets, chronological (oldest left, newest right). */
+export function getRecentActivitySparklineWeeks(histogram, count = 12) {
+  if (!Array.isArray(histogram) || histogram.length === 0) return [];
+  return histogram.slice(-Math.min(count, histogram.length));
+}
+
+/** Local ymax for sparkline bars (recent window only). */
+export function getRecentActivitySparklineMax(recentWeeks) {
+  if (!Array.isArray(recentWeeks) || recentWeeks.length === 0) return 1;
+  return Math.max(1, ...recentWeeks);
+}
+
+/** Weeks shown on player profile activity/timeout charts. */
+export const PAST_YEAR_WEEKS = 52;
+
+/** Fixed x-axis range for past-year charts (week 0 … week 52). */
+export const PAST_YEAR_AXIS_MAX = 52;
+
+/**
+ * Last `weeks` buckets for chart display. Shorter histories are zero-padded at
+ * the start so recent weeks stay right-aligned and the window length is fixed.
+ */
+export function getPastYearHistogramWindow(histogram, weeks = PAST_YEAR_WEEKS) {
+  if (!Array.isArray(histogram) || histogram.length === 0) {
+    return Array(weeks).fill(0);
+  }
+  if (histogram.length >= weeks) {
+    return histogram.slice(-weeks);
+  }
+  return [...Array(weeks - histogram.length).fill(0), ...histogram];
+}
+
+/** Plotly bar trace for the past-year window (x = 0 … weeks − 1). */
+export function getPastYearBarChartData(histogram, weeks = PAST_YEAR_WEEKS) {
+  const y = getPastYearHistogramWindow(histogram, weeks);
+  return {
+    x: y.map((_, week) => week),
+    y,
+  };
+}
+
+/** Plotly bar trace for a weekly activity histogram (full history). */
+export function getActivityBarChartData(histogram) {
+  if (!Array.isArray(histogram) || histogram.length === 0) {
+    return { x: [], y: [] };
+  }
+  return {
+    x: histogram.map((_, week) => week),
+    y: [...histogram],
+  };
+}
+
+export function getMedianResponseHours(responses) {
+  if (!Array.isArray(responses) || responses.length === 0) return null;
+  const hours = responses
+    .map((n) => n / (1000 * 60 * 60))
+    .sort((a, b) => a - b);
+  return hours[Math.floor(hours.length / 2)];
+}
+
+/**
+ * Static visibility for tab/module pre-filtering. Async modules (highlights)
+ * return false here and rely on returning null after load.
+ */
+export function isModuleVisible(code, ctx) {
+  const { user, summary, allRecs, tourneys, responses, isCoder, isDesigner } =
+    ctx;
+
+  switch (code) {
+    case "stars":
+      return Array.isArray(user?.stars) && user.stars.length > 0;
+    case "coded":
+      return isCoder;
+    case "designed":
+      return isDesigner;
+    case "ratings":
+      return (
+        summary?.ratings?.highest?.some((r) => r.user === user?.id) ?? false
+      );
+    case "counts":
+      return (
+        (Array.isArray(allRecs) && allRecs.length > 0) ||
+        getPlayerHIndex(summary, user?.id) !== null
+      );
+    case "opps":
+      return Array.isArray(allRecs) && allRecs.length > 0;
+    case "activity": {
+      const hist = getActivityHistogram(summary, user?.id);
+      return hist.length > 0 && hist.some((v) => v > 0);
+    }
+    case "timeouts":
+      return (
+        summary?.histograms?.playerTimeouts?.some(
+          (r) => r.user === user?.id && r.value?.length > 0
+        ) ||
+        summary?.players?.timeouts?.some((r) => r.user === user?.id) ||
+        false
+      );
+    case "response":
+      return Array.isArray(responses) && responses.length > 0;
+    case "tournaments":
+      return Array.isArray(tourneys) && tourneys.length > 0;
+    case "history":
+      return Array.isArray(allRecs) && allRecs.length > 0;
+    case "highlights":
+      return false;
+    default:
+      return false;
+  }
+}
+
+export function tabHasVisibleModules(tabId, ctx) {
+  const tab = PROFILE_TABS.find((t) => t.id === tabId);
+  if (!tab) return false;
+  if (tabId === "games") {
+    return tab.modules.some(
+      (code) => code === "highlights" || isModuleVisible(code, ctx)
+    );
+  }
+  return tab.modules.some((code) => isModuleVisible(code, ctx));
+}
+
+export function sortModulesForTab(modules, pinnedCode) {
+  if (!pinnedCode || !modules.includes(pinnedCode)) return modules;
+  return [pinnedCode, ...modules.filter((c) => c !== pinnedCode)];
+}

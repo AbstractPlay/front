@@ -1,44 +1,29 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext, SummaryContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "./TableSkeleton";
-import NewChallengeModal from "../NewChallengeModal";
-import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
+import { getPlayerHIndex } from "../../lib/playerProfileSections";
 
-function Counts({ handleChallenge }) {
+function Counts() {
   const [user] = useContext(ProfileContext);
   const [summary] = useContext(SummaryContext);
   const [allRecs] = useContext(AllRecsContext);
   const [counts, countsSetter] = useState([]);
-  const globalMe = useStore((state) => state.globalMe);
-  const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [hIndex, hIndexSetter] = useState(null);
   const [ptile, ptileSetter] = useState(null);
   const { t } = useTranslation();
 
-  const openChallengeModal = (name) => {
-    activeChallengeModalSetter(name);
-  };
-  const closeChallengeModal = useCallback(() => {
-    activeChallengeModalSetter("");
-  }, []);
-
   useEffect(() => {
-    if (summary !== null && user !== null) {
-      const rec = summary.players.h.find((r) => r.user === user.id);
-      if (rec !== undefined) {
-        hIndexSetter(rec.value);
-        const countBelow = summary.players.h.filter(
-          ({ value }) => value < rec.value
-        ).length;
-        ptileSetter(Math.round((countBelow / summary.players.h.length) * 100));
-      } else {
-        hIndexSetter(null);
-        ptileSetter(null);
-      }
+    const rec = getPlayerHIndex(summary, user?.id);
+    if (rec !== null) {
+      hIndexSetter(rec.value);
+      const countBelow = summary.players.h.filter(
+        ({ value }) => value < rec.value
+      ).length;
+      ptileSetter(Math.round((countBelow / summary.players.h.length) * 100));
     } else {
       hIndexSetter(null);
       ptileSetter(null);
@@ -97,46 +82,13 @@ function Counts({ handleChallenge }) {
       columnHelper.accessor("count", {
         header: t("tables.playCount"),
       }),
-      columnHelper.display({
-        id: "challenge",
-        cell: (props) =>
-          globalMe === null ||
-          globalMe.id === user.id ||
-          props.row.original.id === undefined ? null : (
-            <>
-              <NewChallengeModal
-                show={
-                  activeChallengeModal !== "" &&
-                  activeChallengeModal === props.row.original.id
-                }
-                handleClose={closeChallengeModal}
-                handleChallenge={handleChallenge}
-                fixedMetaGame={props.row.original.id}
-                opponent={{
-                  id: user.id,
-                  name: user.name,
-                }}
-              />
-              <button
-                className="button is-small apButton"
-                onClick={() => openChallengeModal(props.row.original.id)}
-              >
-                {t("IssueChallengeLabel")}
-              </button>
-            </>
-          ),
-      }),
     ],
-    [
-      columnHelper,
-      globalMe,
-      user,
-      activeChallengeModal,
-      handleChallenge,
-      closeChallengeModal,
-      t,
-    ]
+    [columnHelper, t]
   );
+
+  if (data.length === 0 && hIndex === null) {
+    return null;
+  }
 
   return (
     <>
@@ -147,12 +99,14 @@ function Counts({ handleChallenge }) {
           </p>
         </div>
       )}
-      <TableSkeleton
-        data={data}
-        columns={columns}
-        sort={[{ id: "count", desc: true }]}
-        key="Player|Count"
-      />
+      {data.length === 0 ? null : (
+        <TableSkeleton
+          data={data}
+          columns={columns}
+          sort={[{ id: "count", desc: true }]}
+          key="Player|Count"
+        />
+      )}
     </>
   );
 }

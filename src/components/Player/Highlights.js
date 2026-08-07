@@ -4,6 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
 import TableSkeleton from "./TableSkeleton";
+import ProfileModule from "./ProfileModule";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
@@ -15,50 +16,12 @@ import LocalizedTimeAgo from "../LocalizedTimeAgo";
 /** Set true once player_highlights returns reliable gameEnded timestamps. */
 const SHOW_HIGHLIGHTS_END_DATE = true;
 
-function Highlights() {
-  const [user] = useContext(ProfileContext);
-  const globalMe = useStore((state) => state.globalMe);
-  const allUsers = useStore((state) => state.users);
-  const [highlights, highlightsSetter] = useState(null);
+function HighlightsTable({ highlights, user, allUsers, isOwnProfile, onUnhighlight }) {
   const { t } = useTranslation();
-  const isOwnProfile = globalMe?.id === user?.id;
-
-  const fetchHighlights = useCallback(async () => {
-    try {
-      const url = new URL(API_ENDPOINT_OPEN);
-      url.searchParams.append("query", "player_highlights");
-      url.searchParams.append("userId", user.id);
-      const res = await fetch(url);
-      const result = await res.json();
-      highlightsSetter(Array.isArray(result) ? result : []);
-    } catch (error) {
-      console.log(error);
-      highlightsSetter([]);
-    }
-  }, [user.id]);
-
-  useEffect(() => {
-    fetchHighlights();
-  }, [fetchHighlights]);
-
-  const handleUnhighlight = useCallback(
-    async (metaGame, gameId) => {
-      const res = await unhighlightGame({ metaGame, id: gameId });
-      if (res.cancelled) return;
-      if (!res.ok) {
-        toast.error(res.error || t("Error"));
-        return;
-      }
-      highlightsSetter((prev) =>
-        prev ? prev.filter((g) => g.id !== gameId) : []
-      );
-    },
-    [t]
-  );
 
   const data = useMemo(
     () =>
-      (highlights ?? []).map((g) => {
+      highlights.map((g) => {
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
@@ -142,7 +105,7 @@ function Highlights() {
                 <button
                   className="button is-small is-rounded apButtonNeutral"
                   onClick={() =>
-                    handleUnhighlight(
+                    onUnhighlight(
                       props.row.original.metaGame,
                       props.row.original.id
                     )
@@ -158,20 +121,8 @@ function Highlights() {
           ]
         : []),
     ],
-    [columnHelper, allUsers, handleUnhighlight, isOwnProfile, t]
+    [columnHelper, allUsers, isOwnProfile, onUnhighlight, t]
   );
-
-  if (highlights === null) {
-    return null;
-  }
-
-  if (highlights.length === 0) {
-    return (
-      <div className="content">
-        <p>{t("None")}</p>
-      </div>
-    );
-  }
 
   return (
     <TableSkeleton
@@ -183,6 +134,69 @@ function Highlights() {
           : [{ id: "gameName", desc: false }]
       }
       key="Player|Highlights"
+    />
+  );
+}
+
+function Highlights({ pinned, onTogglePin }) {
+  const [user] = useContext(ProfileContext);
+  const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
+  const [highlights, highlightsSetter] = useState(null);
+  const { t } = useTranslation();
+  const isOwnProfile = globalMe?.id === user?.id;
+
+  const fetchHighlights = useCallback(async () => {
+    try {
+      const url = new URL(API_ENDPOINT_OPEN);
+      url.searchParams.append("query", "player_highlights");
+      url.searchParams.append("userId", user.id);
+      const res = await fetch(url);
+      const result = await res.json();
+      highlightsSetter(Array.isArray(result) ? result : []);
+    } catch (error) {
+      console.log(error);
+      highlightsSetter([]);
+    }
+  }, [user.id]);
+
+  useEffect(() => {
+    fetchHighlights();
+  }, [fetchHighlights]);
+
+  const handleUnhighlight = useCallback(
+    async (metaGame, gameId) => {
+      const res = await unhighlightGame({ metaGame, id: gameId });
+      if (res.cancelled) return;
+      if (!res.ok) {
+        toast.error(res.error || t("Error"));
+        return;
+      }
+      highlightsSetter((prev) =>
+        prev ? prev.filter((g) => g.id !== gameId) : []
+      );
+    },
+    [t]
+  );
+
+  if (highlights === null || highlights.length === 0) {
+    return null;
+  }
+
+  return (
+    <ProfileModule
+      code="highlights"
+      nameKey="player.modules.highlights"
+      pinned={pinned}
+      onTogglePin={onTogglePin}
+      Component={HighlightsTable}
+      componentProps={{
+        highlights,
+        user,
+        allUsers,
+        isOwnProfile,
+        onUnhighlight: handleUnhighlight,
+      }}
     />
   );
 }

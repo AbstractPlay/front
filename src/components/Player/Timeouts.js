@@ -1,22 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ProfileContext, SummaryContext, AllRecsContext } from "../Player";
-import Plot from "react-plotly.js";
+import PlayerWeeklyChart from "./PlayerWeeklyChart";
 
-function Timeouts({ order }) {
+function Timeouts() {
   const { t } = useTranslation();
   const [user] = useContext(ProfileContext);
   const [summary] = useContext(SummaryContext);
   const [allRecs] = useContext(AllRecsContext);
   const [histogram, histogramSetter] = useState([]);
-  const [moved, movedSetter] = useState(0);
   const [timeouts, timeoutsSetter] = useState([]);
   const [gamesSince, gamesSinceSetter] = useState(null);
-
-  useEffect(() => {
-    console.log("Update forced");
-    movedSetter((m) => m + 1);
-  }, [order]);
 
   useEffect(() => {
     if (summary !== null && user !== null) {
@@ -48,6 +42,13 @@ function Timeouts({ order }) {
     }
   }, [summary, user, allRecs]);
 
+  const hasData =
+    timeouts.length > 0 || (histogram.length > 0 && histogram.some((v) => v > 0));
+
+  if (!hasData) {
+    return null;
+  }
+
   return (
     <>
       <div className="content">
@@ -64,25 +65,11 @@ function Timeouts({ order }) {
           </p>
         )}
       </div>
-      <div style={{ overflow: "hidden" }} key={`PlotContainer|${moved}`}>
-        <Plot
-          data={[
-            {
-              y: [...histogram].reverse(),
-              type: "bar",
-            },
-          ]}
-          config={{
-            responsive: true,
-            displayModeBar: false,
-          }}
-          layout={{
-            xaxis: { title: t("stats.siteStats.weekNumber") },
-            yaxis: { title: t("player.stats.timeouts.axisY") },
-            autosize: true,
-          }}
-        />
-      </div>
+      <PlayerWeeklyChart
+        histogram={histogram}
+        weekAxisTitle={t("stats.siteStats.weekNumber")}
+        yAxisTitle={t("player.stats.timeouts.axisY")}
+      />
     </>
   );
 }

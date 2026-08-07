@@ -180,15 +180,17 @@ function Ratings({ handleChallenge }) {
     ]
   );
 
+  if (data.length === 0) {
+    return null;
+  }
+
   return (
-    <>
-      <TableSkeleton
-        data={data}
-        columns={columns}
-        sort={[{ id: "elo", desc: true }]}
-        key="Player|Ratings"
-      />
-    </>
+    <TableSkeleton
+      data={data}
+      columns={columns}
+      sort={[{ id: "elo", desc: true }]}
+      key="Player|Ratings"
+    />
   );
 }
 

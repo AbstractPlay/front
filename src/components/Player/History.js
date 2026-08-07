@@ -389,6 +389,10 @@ function History({ handleChallenge }) {
     return false;
   };
 
+  if (!Array.isArray(allRecs) || allRecs.length === 0) {
+    return null;
+  }
+
   return (
     <>
       <TableSkeletonFilter

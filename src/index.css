@@ -1203,3 +1203,79 @@ span.hardTime::after {
   :root[color-mode="dark"] svg#_btnBar symbol.aprender-button-0ca07818d5ffc > rect {
     fill: #999999;
   }
+
+  /* Player profile tabbed layout */
+  #playerProfile .player-hero {
+    margin-bottom: 1rem;
+  }
+
+  #playerProfile .player-hero-ratings {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #playerProfile .player-hero-ratings li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.15rem 0;
+  }
+
+  #playerProfile .player-hero-elo {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  #playerProfile .player-hero-ptile {
+    font-size: 0.85em;
+    font-weight: normal;
+    opacity: 0.8;
+  }
+
+  #playerProfile .player-weekly-chart {
+    width: 100%;
+    min-height: 14rem;
+  }
+
+  #playerProfile .player-hero-sparkline {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 3rem;
+  }
+
+  #playerProfile .player-hero-sparkline-bar {
+    flex: 1;
+    min-width: 4px;
+    background: var(--bulma-link);
+    border-radius: 1px 1px 0 0;
+    opacity: 0.85;
+  }
+
+  #playerProfile .player-hero-challenge {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--bulma-border);
+  }
+
+  #playerProfile .player-dev-banner {
+    margin-bottom: 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  #playerProfile .player-profile-tabs {
+    margin-bottom: 1rem;
+  }
+
+  #playerProfile .player-tab-modules {
+    margin-top: 0.5rem;
+  }
+
+  #playerProfile .player-tab-empty {
+    padding: 2rem 1rem;
+  }
+
+  #playerProfile .profile-module {
+    height: 100%;
+  }

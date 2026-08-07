@@ -1355,6 +1355,23 @@
       "activity": {
         "axisY": "Abgeschlossene Spiele"
       }
+    },
+    "tabs": {
+      "competition": "Wettbewerb",
+      "activity": "Aktivität",
+      "games": "Partien",
+      "record": "Bilanz",
+      "empty": "In diesem Bereich sind keine Informationen verfügbar."
+    },
+    "hero": {
+      "topRatings": "Beste Wertungen",
+      "hIndex": "H-Index",
+      "medianResponse": "Mediane Antwortzeit",
+      "recentActivity": "Letzte Aktivität"
+    },
+    "pin": {
+      "add": "Diesen Bereich oben anheften",
+      "remove": "Anheftung dieses Bereichs aufheben"
     }
   },
   "meta": {
