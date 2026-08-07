@@ -128,7 +128,10 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
         header: t("tables.winner"),
         cell: (props) =>
           props.getValue() === undefined ? null : props.getValue() === null ? (
-            <>{t("Draw")}{props.row.original.arbitrated ? <span>*</span> : null}</>
+            <>
+              {t("Draw")}
+              {props.row.original.arbitrated ? <span>*</span> : null}
+            </>
           ) : (
             <>
               <BotAwareName

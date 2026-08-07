@@ -156,10 +156,14 @@ function ThemeCustomizer({ show, handleClose }) {
           <div className="tabs is-toggle is-fullwidth">
             <ul>
               <li className={colorMode === "light" ? "is-active" : ""}>
-                <a onClick={() => setColorMode("light")}>{t("theme.lightMode")}</a>
+                <a onClick={() => setColorMode("light")}>
+                  {t("theme.lightMode")}
+                </a>
               </li>
               <li className={colorMode === "dark" ? "is-active" : ""}>
-                <a onClick={() => setColorMode("dark")}>{t("theme.darkMode")}</a>
+                <a onClick={() => setColorMode("dark")}>
+                  {t("theme.darkMode")}
+                </a>
               </li>
             </ul>
           </div>
@@ -236,8 +240,12 @@ function ThemeCustomizer({ show, handleClose }) {
               {t("theme.secondaryFontColor")}
             </p>
             <div className="buttons">
-              <button className="button apButton">{t("theme.primaryButton")}</button>
-              <button className="button apButtonAlert">{t("theme.alertButton")}</button>
+              <button className="button apButton">
+                {t("theme.primaryButton")}
+              </button>
+              <button className="button apButtonAlert">
+                {t("theme.alertButton")}
+              </button>
             </div>
             <div className="tags mt-2">
               <span

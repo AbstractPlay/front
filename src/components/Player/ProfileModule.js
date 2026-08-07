@@ -25,9 +25,7 @@ function ProfileModule({
           <button
             type="button"
             className={`card-header-icon${pinned ? " has-text-warning" : ""}`}
-            aria-label={
-              pinned ? t("player.pin.remove") : t("player.pin.add")
-            }
+            aria-label={pinned ? t("player.pin.remove") : t("player.pin.add")}
             title={pinned ? t("player.pin.remove") : t("player.pin.add")}
             onClick={() => onTogglePin(code)}
           >

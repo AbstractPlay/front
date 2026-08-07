@@ -1,4 +1,10 @@
-import React, { useEffect, useState, createContext, useCallback, useMemo } from "react";
+import React, {
+  useEffect,
+  useState,
+  createContext,
+  useCallback,
+  useMemo,
+} from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
@@ -206,10 +212,7 @@ function Player() {
 
   const modulesToRender = useMemo(() => {
     if (!activeTabConfig) return [];
-    const sorted = sortModulesForTab(
-      activeTabConfig.modules,
-      pinnedModule
-    );
+    const sorted = sortModulesForTab(activeTabConfig.modules, pinnedModule);
     return sorted.filter((code) => {
       if (code === "highlights") return true;
       return isModuleVisible(code, visibilityCtx);

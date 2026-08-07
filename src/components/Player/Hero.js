@@ -107,11 +107,7 @@ function Hero({ handleChallenge }) {
                     const uid = inforec?.uid;
                     return (
                       <li key={game}>
-                        {uid ? (
-                          <Link to={`/games/${uid}`}>{game}</Link>
-                        ) : (
-                          game
-                        )}
+                        {uid ? <Link to={`/games/${uid}`}>{game}</Link> : game}
                         <span className="player-hero-elo">{elo}</span>
                       </li>
                     );

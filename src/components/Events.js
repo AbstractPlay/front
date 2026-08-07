@@ -273,7 +273,10 @@ function Events() {
         <div className="card">
           <header className="card-header">
             <p className="card-header-title">{t("Events.newEvent")}</p>
-            <button className="card-header-icon" aria-label={t("a11y.hideShow")}>
+            <button
+              className="card-header-icon"
+              aria-label={t("a11y.hideShow")}
+            >
               <span className="icon">
                 <i className="fa fa-angle-down" aria-hidden="true"></i>
               </span>
@@ -309,7 +312,10 @@ function Events() {
           <div className="card">
             <header className="card-header">
               <p className="card-header-title">{t("Events.draftEvents")}</p>
-              <button className="card-header-icon" aria-label={t("a11y.hideShow")}>
+              <button
+                className="card-header-icon"
+                aria-label={t("a11y.hideShow")}
+              >
                 <span className="icon">
                   <i className="fa fa-angle-down" aria-hidden="true"></i>
                 </span>
@@ -323,8 +329,13 @@ function Events() {
         {/* Open for registration */}
         <div className="card">
           <header className="card-header">
-            <p className="card-header-title">{t("Events.openForRegistration")}</p>
-            <button className="card-header-icon" aria-label={t("a11y.hideShow")}>
+            <p className="card-header-title">
+              {t("Events.openForRegistration")}
+            </p>
+            <button
+              className="card-header-icon"
+              aria-label={t("a11y.hideShow")}
+            >
               <span className="icon">
                 <i className="fa fa-angle-down" aria-hidden="true"></i>
               </span>
@@ -348,7 +359,10 @@ function Events() {
           <div className="card">
             <header className="card-header">
               <p className="card-header-title">{t("Events.activeEvents")}</p>
-              <button className="card-header-icon" aria-label={t("a11y.hideShow")}>
+              <button
+                className="card-header-icon"
+                aria-label={t("a11y.hideShow")}
+              >
                 <span className="icon">
                   <i className="fa fa-angle-down" aria-hidden="true"></i>
                 </span>
@@ -364,7 +378,10 @@ function Events() {
           <div className="card">
             <header className="card-header">
               <p className="card-header-title">{t("Events.completedEvents")}</p>
-              <button className="card-header-icon" aria-label={t("a11y.hideShow")}>
+              <button
+                className="card-header-icon"
+                aria-label={t("a11y.hideShow")}
+              >
                 <span className="icon">
                   <i className="fa fa-angle-down" aria-hidden="true"></i>
                 </span>

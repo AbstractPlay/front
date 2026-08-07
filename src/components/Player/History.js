@@ -10,10 +10,7 @@ import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
-import {
-  isHighlighted,
-  toggleHighlight,
-} from "../../lib/playerGameMarks";
+import { isHighlighted, toggleHighlight } from "../../lib/playerGameMarks";
 import { toast } from "react-toastify";
 
 function History({ handleChallenge }) {
@@ -275,7 +272,8 @@ function History({ handleChallenge }) {
             columnHelper.display({
               id: "highlight",
               cell: (props) =>
-                !isOwnProfile || props.row.original.meta === undefined ? null : (
+                !isOwnProfile ||
+                props.row.original.meta === undefined ? null : (
                   <button
                     className="button is-small apButtonNeutral"
                     onClick={() =>

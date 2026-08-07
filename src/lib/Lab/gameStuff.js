@@ -84,7 +84,8 @@ export function setupLabGame(
   game0.customButtons =
     info.flags !== undefined && info.flags.includes("custom-buttons");
   game0.customRandom =
-    info.flags !== undefined && info.flags.includes("custom-randomization");  game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
+    info.flags !== undefined && info.flags.includes("custom-randomization");
+  game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
   game0.playerStashes =
     info.flags !== undefined && info.flags.includes("player-stashes");
   game0.sharedStash =

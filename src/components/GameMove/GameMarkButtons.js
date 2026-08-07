@@ -1,7 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-function MarkIconButton({ title, active, onClick, iconClass, activeIconClass }) {
+function MarkIconButton({
+  title,
+  active,
+  onClick,
+  iconClass,
+  activeIconClass,
+}) {
   return (
     <div className="control">
       <button
@@ -66,7 +72,9 @@ function GameMarkButtons({
   if (showHighlight) {
     items.push({
       key: "highlight",
-      title: highlighted ? t("gameMarks.unhighlight") : t("gameMarks.highlight"),
+      title: highlighted
+        ? t("gameMarks.unhighlight")
+        : t("gameMarks.highlight"),
       active: highlighted,
       iconClass: highlighted ? "fa-bookmark" : "fa-bookmark-o",
       onClick: onHighlight,
@@ -75,7 +83,9 @@ function GameMarkButtons({
   if (showRecommend) {
     items.push({
       key: "recommend",
-      title: recommended ? t("gameMarks.unrecommend") : t("gameMarks.recommend"),
+      title: recommended
+        ? t("gameMarks.unrecommend")
+        : t("gameMarks.recommend"),
       active: recommended,
       iconClass: recommended ? "fa-thumbs-up" : "fa-thumbs-o-up",
       onClick: onRecommend,
@@ -134,7 +144,10 @@ function GameMarkButtons({
                   item.onClick();
                 }}
               >
-                <span className="icon is-small" style={{ marginRight: "0.35rem" }}>
+                <span
+                  className="icon is-small"
+                  style={{ marginRight: "0.35rem" }}
+                >
                   <i className={`fa ${item.iconClass}`}></i>
                 </span>
                 {item.title}

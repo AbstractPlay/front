@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
@@ -16,7 +22,13 @@ import LocalizedTimeAgo from "../LocalizedTimeAgo";
 /** Set true once player_highlights returns reliable gameEnded timestamps. */
 const SHOW_HIGHLIGHTS_END_DATE = true;
 
-function HighlightsTable({ highlights, user, allUsers, isOwnProfile, onUnhighlight }) {
+function HighlightsTable({
+  highlights,
+  user,
+  allUsers,
+  isOwnProfile,
+  onUnhighlight,
+}) {
   const { t } = useTranslation();
 
   const data = useMemo(

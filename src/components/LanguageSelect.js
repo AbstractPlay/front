@@ -37,7 +37,7 @@ LanguageSelect.propTypes = {
     PropTypes.shape({
       code: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
-    }),
+    })
   ),
 };
 

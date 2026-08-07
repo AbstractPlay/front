@@ -43,7 +43,8 @@ function Timeouts() {
   }, [summary, user, allRecs]);
 
   const hasData =
-    timeouts.length > 0 || (histogram.length > 0 && histogram.some((v) => v > 0));
+    timeouts.length > 0 ||
+    (histogram.length > 0 && histogram.some((v) => v > 0));
 
   if (!hasData) {
     return null;
