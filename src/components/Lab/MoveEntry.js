@@ -338,7 +338,9 @@ function MoveEntry(props) {
           )}
         </div>
         <div className="submitOrMark">
-          {focus.exPath.length > 0 && game.canExplore && game.colors
+          {(focus.moveNumber > 0 || focus.exPath.length > 0) &&
+          game.canExplore &&
+          game.colors
             ? game.colors.map((color, i) => (
                 <div
                   key={`winner|${i}`}
@@ -379,7 +381,7 @@ function MoveEntry(props) {
                 </div>
               ))
             : null}
-          {focus.exPath.length > 0 && game.canExplore ? (
+          {(focus.moveNumber > 0 || focus.exPath.length > 0) && game.canExplore ? (
             <div
               className="winningColorButton tooltipped"
               onClick={() => handleDeleteExploration()}

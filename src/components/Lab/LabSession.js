@@ -28,6 +28,7 @@ import LabRenderOptionsModal from "./LabRenderOptionsModal";
 import {
   getFocusNode,
   fixMoveOutcomes,
+  recalculateLabOutcomes,
   canExploreMove,
   sanitizeFocus,
   setLabSessionPersistCallback,
@@ -35,6 +36,7 @@ import {
   serializeSessionExploration,
   serializeMainLineAnnotations,
   getMainLineTipState,
+  deleteSpineEntry,
 } from "../../lib/Lab/exploration";
 import { setStatus, replaceNames } from "../../lib/Lab/misc";
 import {
@@ -557,20 +559,20 @@ function LabSession({
       focus
     );
     node.SetOutcome(mark);
-    if (gameRef.current.gameOver) {
-      fixMoveOutcomes(explorationRef.current.nodes, focus.moveNumber);
-    }
+    fixMoveOutcomes(explorationRef.current.nodes, focus.moveNumber);
     saveLabExploration();
     bumpExploration();
   };
 
   const handleDeleteExploration = () => {
-    const node = getFocusNode(
-      explorationRef.current.nodes,
-      gameRef.current,
-      focus
-    );
-    if (node.children.length > 0) {
+    const nodes = explorationRef.current.nodes;
+    const node = getFocusNode(nodes, gameRef.current, focus);
+    const hasSubtree =
+      focus.exPath.length > 0
+        ? node.children.length > 0
+        : node.children.length > 0 ||
+          focus.moveNumber < nodes.length - 1;
+    if (hasSubtree) {
       showDeleteSubtreeConfirmSetter(true);
     } else {
       handleDeleteSubtreeConfirmed();
@@ -579,18 +581,35 @@ function LabSession({
 
   const handleDeleteSubtreeConfirmed = () => {
     showDeleteSubtreeConfirmSetter(false);
-    getFocusNode(
-      explorationRef.current.nodes,
-      gameRef.current,
-      focus
-    ).DeleteNode();
-    const foc = cloneDeep(focus);
-    foc.exPath.pop();
-    if (gameRef.current.gameOver) {
-      fixMoveOutcomes(explorationRef.current.nodes, focus.moveNumber);
+    const nodes = explorationRef.current.nodes;
+
+    if (focus.exPath.length > 0) {
+      getFocusNode(nodes, gameRef.current, focus).DeleteNode();
+      recalculateLabOutcomes(nodes, gameRef.current, focus.moveNumber);
+      const foc = cloneDeep(focus);
+      foc.exPath.pop();
+      saveLabExploration();
+      bumpExplorationVersion();
+      handleGameMoveClick(foc);
+      return;
     }
-    saveLabExploration();
-    handleGameMoveClick(foc);
+
+    if (focus.moveNumber > 0) {
+      const { focus: newFocus } = deleteSpineEntry(nodes, focus.moveNumber);
+      newFocus.canExplore = canExploreMove(
+        gameRef.current,
+        nodes,
+        newFocus
+      );
+      recalculateLabOutcomes(nodes, gameRef.current, newFocus.moveNumber);
+      const focusNode = getFocusNode(nodes, gameRef.current, newFocus);
+      if (focusNode?.state) {
+        gameRef.current.state = focusNode.state;
+      }
+      saveLabExploration();
+      bumpExplorationVersion();
+      handleGameMoveClick(newFocus);
+    }
   };
 
   const handleStashClick = (player, count, movePart, handler) => {

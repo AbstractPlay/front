@@ -9,6 +9,10 @@ import {
   restoreSessionExploration,
   sanitizeFocus,
   restoreMainLineAnnotations,
+  normalizeSessionExploration,
+  shouldReplayAlongMainLine,
+  shouldExtendMainLine,
+  createSpineNode,
 } from "./exploration";
 import { replaceNames, setStatus } from "./misc";
 import { GameNode } from "../../components/Lab/GameTree";
@@ -184,17 +188,28 @@ export function setupLabGame(
   }
 
   if (savedExploration) {
+    const normalized = normalizeSessionExploration(history, savedExploration);
     if (
-      isSessionExplorationBranches(savedExploration) &&
-      savedExploration.length === history.length
+      isSessionExplorationBranches(normalized) &&
+      normalized.length === history.length
     ) {
       restoreSessionExploration(
         history,
         game0.metaGame,
         gameRef.current,
-        savedExploration
+        normalized
       );
-    } else if (savedExploration.length > 0) {
+    } else if (
+      normalized?.length > 0 &&
+      typeof normalized[0]?.move === "string"
+    ) {
+      restoreExplorationTree(
+        history,
+        game0.metaGame,
+        game0.state,
+        normalized
+      );
+    } else if (normalized?.length > 0) {
       restoreExplorationTree(
         history,
         game0.metaGame,
@@ -222,6 +237,29 @@ export function setupLabGame(
   );
   focusSetter(focus0);
   renderrepSetter(render);
+}
+
+function routeLabMove(exploration, game, focus, node, gameEngineTmp, move) {
+  const newfocus = cloneDeep(focus);
+  let currentNode = node;
+
+  if (shouldReplayAlongMainLine(exploration, newfocus, gameEngineTmp, move)) {
+    newfocus.moveNumber += 1;
+    newfocus.exPath = [];
+    currentNode = getFocusNode(exploration, game, newfocus);
+  } else if (shouldExtendMainLine(exploration, newfocus)) {
+    exploration.push(createSpineNode(move, gameEngineTmp, game));
+    newfocus.moveNumber = exploration.length - 1;
+    newfocus.exPath = [];
+    if (game.gameOver) fixMoveOutcomes(exploration, newfocus.moveNumber);
+  } else {
+    const pos = currentNode.AddChild(move, gameEngineTmp);
+    if (game.gameOver) fixMoveOutcomes(exploration, newfocus.moveNumber + 1);
+    newfocus.exPath.push(pos);
+    currentNode = currentNode.children[pos];
+  }
+
+  return { newfocus, node: currentNode };
 }
 
 function doView(
@@ -272,20 +310,17 @@ function doView(
         !gameEngineTmp.__noAutomove
       ) {
         automoved = true;
-        const nextMain = exploration[newfocus.moveNumber + 1];
-        if (
-          !game.gameOver ||
-          !nextMain ||
-          !gameEngineTmp.sameMove(m, nextMain.move)
-        ) {
-          const pos = node.AddChild(m, gameEngineTmp);
-          newfocus.exPath.push(pos);
-          node = node.children[pos];
-        } else {
-          newfocus.moveNumber = newfocus.moveNumber + 1;
-          newfocus.exPath = [];
-          node = getFocusNode(exploration, game, newfocus);
-        }
+        const routed = routeLabMove(
+          exploration,
+          game,
+          newfocus,
+          node,
+          gameEngineTmp,
+          m
+        );
+        newfocus.moveNumber = routed.newfocus.moveNumber;
+        newfocus.exPath = routed.newfocus.exPath;
+        node = routed.node;
         m = moves[0];
         gameEngineTmp.move(m, { partial: partialMove });
         moves = gameEngineTmp.moves();
@@ -307,25 +342,19 @@ function doView(
   setStatus(gameEngineTmp, game, partialMove, m, statusRef.current);
   if (!partialMove) {
     game.state = gameEngineTmp.serialize();
-    const nextMain = exploration[newfocus.moveNumber + 1];
-    const advanceAlongMainLine =
-      game.gameOver &&
-      newfocus.exPath.length === 0 &&
-      newfocus.moveNumber < exploration.length - 1 &&
-      nextMain &&
-      gameEngineTmp.sameMove(m, nextMain.move);
-
-    if (!advanceAlongMainLine) {
-      const pos = node.AddChild(m, gameEngineTmp);
-      if (game.gameOver) fixMoveOutcomes(exploration, newfocus.moveNumber + 1);
-      newfocus.exPath.push(pos);
-      saveLabExploration();
-    } else {
-      newfocus.moveNumber = newfocus.moveNumber + 1;
-      newfocus.exPath = [];
-    }
+    const routed = routeLabMove(
+      exploration,
+      game,
+      newfocus,
+      node,
+      gameEngineTmp,
+      m
+    );
+    newfocus.moveNumber = routed.newfocus.moveNumber;
+    newfocus.exPath = routed.newfocus.exPath;
     newfocus.canExplore = canExploreMove(game, exploration, newfocus);
     focusSetter(newfocus);
+    saveLabExploration();
     moveSetter({ ...gameEngineTmp.validateMove(""), rendered: "", move: "" });
     if (!partialMove && !game.noMoves) {
       movesRef.current = moves;
