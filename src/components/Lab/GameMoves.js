@@ -34,9 +34,18 @@ function useEventListener(eventName, handler, element = window) {
   );
 }
 
+function shouldUseCompletedPath(focus, exploration, gameOver) {
+  if (gameOver) return true;
+  return !(
+    focus.moveNumber === exploration.length - 1 &&
+    focus.exPath.length === 0 &&
+    exploration[focus.moveNumber].children.length === 0
+  );
+}
+
 function getPath(focus, exploration, path, gameOver) {
   let curNumVariations = 0;
-  if (!gameOver) {
+  if (!shouldUseCompletedPath(focus, exploration, gameOver)) {
     for (let i = 1; i < exploration.length; i++) {
       path.push([{ moveNumber: i, exPath: [] }]);
     }
@@ -194,7 +203,10 @@ function GameMoves(props) {
   ]);
 
   function nextVarFocus(curNumVariations) {
-    if (!game.gameOver || focus.exPath.length > 1) {
+    if (
+      !shouldUseCompletedPath(focus, exploration, game.gameOver) ||
+      focus.exPath.length > 1
+    ) {
       return {
         moveNumber: focus.moveNumber,
         exPath: [
@@ -223,7 +235,10 @@ function GameMoves(props) {
   }
 
   function prevVarFocus(curNumVariations) {
-    if (!game.gameOver || focus.exPath.length > 1) {
+    if (
+      !shouldUseCompletedPath(focus, exploration, game.gameOver) ||
+      focus.exPath.length > 1
+    ) {
       return {
         moveNumber: focus.moveNumber,
         exPath: [

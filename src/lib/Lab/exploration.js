@@ -1,4 +1,5 @@
 import { GameFactory } from "@abstractplay/gameslib";
+import { GameNode } from "../../components/Lab/GameTree";
 
 export function serializeExploration(nodes, gameOver = false) {
   if (!nodes || nodes.length === 0) return null;
@@ -212,6 +213,56 @@ export function fixMoveOutcomes(exploration, moveNumber) {
   }
 }
 
+function outcomeFromEngineState(metaGame, state, simultaneous) {
+  if (!state) return -1;
+  const engine = GameFactory(metaGame, state);
+  if (engine.gameover && engine.winner.length === 1 && !simultaneous) {
+    return engine.winner[0] - 1;
+  }
+  return -1;
+}
+
+function recalcVariationOutcomes(node, game) {
+  if (node.children.length === 0) {
+    node.outcome = outcomeFromEngineState(
+      game.metaGame,
+      node.state,
+      game.simultaneous
+    );
+    return;
+  }
+  node.outcome = -1;
+  node.children.forEach((child) => recalcVariationOutcomes(child, game));
+}
+
+export function syncLabGameOver(game, state) {
+  const engine = GameFactory(game.metaGame, state);
+  game.gameOver = engine.gameover;
+}
+
+export function recalculateLabOutcomes(nodes, game, fromMoveNumber = 0) {
+  if (!nodes?.length) {
+    game.gameOver = false;
+    return;
+  }
+
+  const start = Math.max(0, fromMoveNumber);
+  for (let i = start; i < nodes.length; i++) {
+    const hasSpineContinuation = i < nodes.length - 1;
+    if (hasSpineContinuation) {
+      nodes[i].outcome = -1;
+      nodes[i].children.forEach((child) =>
+        recalcVariationOutcomes(child, game)
+      );
+    } else {
+      recalcVariationOutcomes(nodes[i], game);
+    }
+  }
+
+  syncLabGameOver(game, nodes[nodes.length - 1].state);
+  fixMoveOutcomes(nodes, nodes.length - 1);
+}
+
 function serializeNodeAnnotation(node) {
   if (!node) return null;
   const entry = {};
@@ -239,16 +290,139 @@ export function restoreMainLineAnnotations(nodes, annotations) {
 export function getMainLineTipState(nodes, game) {
   if (!nodes?.length) return game?.state;
   const tipMoveNumber = nodes.length - 1;
-  try {
-    const parsed =
-      typeof game?.state === "string" ? JSON.parse(game.state) : game?.state;
-    if (parsed?.stack?.length > tipMoveNumber + 1) {
-      return game.state;
-    }
-  } catch {
-    // fall through to slice rebuild
-  }
   return getExplorationNode(nodes, game, tipMoveNumber).state;
+}
+
+export function shouldReplayAlongMainLine(exploration, focus, gameEngine, move) {
+  const nextMain = exploration[focus.moveNumber + 1];
+  return (
+    focus.exPath.length === 0 &&
+    focus.moveNumber < exploration.length - 1 &&
+    nextMain &&
+    gameEngine.sameMove(move, nextMain.move)
+  );
+}
+
+export function shouldExtendMainLine(exploration, focus) {
+  return (
+    focus.exPath.length === 0 &&
+    focus.moveNumber === exploration.length - 1
+  );
+}
+
+export function createSpineNode(move, gameEngine, game) {
+  const toMove = gameEngine.gameover ? "" : gameEngine.currplayer - 1;
+  const newNode = new GameNode(null, move, gameEngine.serialize(), toMove);
+  if (
+    gameEngine.gameover &&
+    gameEngine.winner.length === 1 &&
+    !game.simultaneous
+  ) {
+    newNode.outcome = gameEngine.winner[0] - 1;
+  }
+  return newNode;
+}
+
+function isDeflatedBranch(entry) {
+  return entry && typeof entry.move === "string";
+}
+
+function normalizedMoveEqual(moveA, moveB) {
+  return (
+    (moveA ?? "").toLowerCase().replace(/\s+/g, "") ===
+    (moveB ?? "").toLowerCase().replace(/\s+/g, "")
+  );
+}
+
+function unwrapChainToSessionBranches(history, rootBranches) {
+  const branches = new Array(history.length).fill(null);
+  let siblings = rootBranches;
+
+  for (let i = 1; i < history.length; i++) {
+    const targetMove = history[i].move;
+    let found = -1;
+    for (let j = 0; j < siblings.length; j++) {
+      if (normalizedMoveEqual(siblings[j].move, targetMove)) {
+        found = j;
+        break;
+      }
+    }
+    if (found === -1) return null;
+
+    const matched = siblings[found];
+    applyNodeAnnotations(history[i], matched);
+
+    const side = siblings.filter((_, j) => j !== found);
+    if (side.length > 0) {
+      branches[i - 1] = side;
+    }
+
+    siblings = matched.children ?? [];
+  }
+
+  if (siblings.length > 0) {
+    branches[history.length - 1] = siblings;
+  }
+
+  return branches;
+}
+
+export function normalizeSessionExploration(history, savedExploration) {
+  if (!savedExploration || !history?.length) return savedExploration;
+  if (
+    savedExploration.length === history.length &&
+    isSessionExplorationBranches(savedExploration)
+  ) {
+    return savedExploration;
+  }
+
+  if (
+    Array.isArray(savedExploration) &&
+    savedExploration.length > 0 &&
+    isDeflatedBranch(savedExploration[0])
+  ) {
+    return savedExploration;
+  }
+
+  if (
+    !isSessionExplorationBranches(savedExploration) ||
+    savedExploration.length !== 1
+  ) {
+    return savedExploration;
+  }
+
+  const rootBranches = savedExploration[0];
+  if (!Array.isArray(rootBranches) || rootBranches.length === 0) {
+    return savedExploration;
+  }
+
+  const padded = unwrapChainToSessionBranches(history, rootBranches);
+  if (!padded) return savedExploration;
+  return padded;
+}
+
+export function deleteSpineEntry(exploration, moveNumber, promoteIndex = 0) {
+  if (moveNumber <= 0 || moveNumber >= exploration.length) {
+    return { focus: { moveNumber: 0, exPath: [] } };
+  }
+
+  const forwardBranches = [...exploration[moveNumber].children];
+  exploration.length = moveNumber;
+
+  if (forwardBranches.length > 0) {
+    const idx = Math.min(
+      Math.max(0, promoteIndex),
+      forwardBranches.length - 1
+    );
+    const promoted = forwardBranches[idx];
+    const siblings = forwardBranches.filter((_, i) => i !== idx);
+    promoted.parent = null;
+    promoted.children = [...promoted.children, ...siblings];
+    exploration.push(promoted);
+    return { focus: { moveNumber, exPath: [] } };
+  }
+
+  return { focus: { moveNumber: moveNumber - 1, exPath: [] } };
 }
 
 export function canExploreMove(game, exploration, focus) {
