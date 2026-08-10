@@ -62,6 +62,7 @@ import {
   saveLabBoardSettings,
 } from "../../lib/Lab/storage";
 import { persistNamedPlaygroundSave } from "../../lib/Lab/persistNamedSave";
+import { getAuthToken } from "../../lib/api";
 import { getEffectiveColourContext } from "../../lib/effectiveColourContext";
 import { serializePlaygroundExport } from "../../lib/Lab/export";
 
@@ -719,9 +720,10 @@ function LabSession({
     try {
       debouncedPersist.flush();
       sessionNameRef.current = name;
+      const token = await getAuthToken();
       const nextLoadedSave = await persistNamedPlaygroundSave({
         action,
-        isLoggedIn: Boolean(globalMe),
+        isLoggedIn: Boolean(token),
         loadedSave: loadedSaveRef.current,
         name,
         metaGame: gameRef.current.metaGame,

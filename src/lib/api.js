@@ -39,11 +39,14 @@ export const callAuthApi = async (query, pars, requireAuth = true) => {
 
   // Handle expired/invalid token from backend
   if (response.status === 401 || response.status === 403) {
-    console.log(
-      `callAuthApi: token rejected by server for query "${query}", redirecting to login`
-    );
-    await Auth.federatedSignIn();
-    return;
+    if (requireAuth) {
+      console.log(
+        `callAuthApi: token rejected by server for query "${query}", redirecting to login`
+      );
+      await Auth.federatedSignIn();
+      return;
+    }
+    return response;
   }
 
   return response;

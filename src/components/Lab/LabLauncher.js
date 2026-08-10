@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { gameinfo } from "@abstractplay/gameslib";
 import GameVariants from "../GameVariants";
-import { useStore } from "../../stores";
+import { getAuthToken } from "../../lib/api";
 import {
   buildLabGame,
   getLabPlayerCounts,
@@ -70,7 +70,6 @@ function SavesTable({ saves, dateField, onLoad, onDelete, t }) {
 
 function LabLauncher({ onLaunch, onLoadSave }) {
   const { t } = useTranslation();
-  const globalMe = useStore((state) => state.globalMe);
   const games = useMemo(() => listLabGames(), []);
   const [mode, setMode] = useState("new");
   const [metaGame, setMetaGame] = useState("");
@@ -85,16 +84,28 @@ function LabLauncher({ onLaunch, onLoadSave }) {
   const [importBusy, setImportBusy] = useState(false);
   const [showImportBanner, setShowImportBanner] = useState(false);
   const [showLocalSection, setShowLocalSection] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const refreshLocalSaves = () => {
-    const saves = listSaves();
-    setLocalSaves(saves);
-    setShowImportBanner(Boolean(globalMe) && shouldShowImportBanner(saves));
-    return saves;
-  };
+  const refreshAuth = useCallback(async () => {
+    const token = await getAuthToken();
+    const authed = Boolean(token);
+    setIsAuthenticated(authed);
+    return authed;
+  }, []);
+
+  const refreshLocalSaves = useCallback(
+    (authed = isAuthenticated) => {
+      const saves = listSaves();
+      setLocalSaves(saves);
+      setShowImportBanner(authed && shouldShowImportBanner(saves));
+      return saves;
+    },
+    [isAuthenticated]
+  );
 
   const refreshCloudSaves = useCallback(async () => {
-    if (!globalMe) {
+    const token = await getAuthToken();
+    if (!token) {
       setCloudSaves([]);
       return;
     }
@@ -109,17 +120,24 @@ function LabLauncher({ onLaunch, onLoadSave }) {
     } finally {
       setCloudLoading(false);
     }
-  }, [globalMe]);
+  }, []);
 
   useEffect(() => {
-    refreshLocalSaves();
-  }, [globalMe]);
+    refreshAuth().then((authed) => refreshLocalSaves(authed));
+  }, [refreshAuth, refreshLocalSaves]);
 
   useEffect(() => {
-    if (mode === "saved" && globalMe) {
-      refreshCloudSaves();
+    if (mode === "saved") {
+      refreshAuth().then((authed) => {
+        refreshLocalSaves(authed);
+        if (authed) {
+          refreshCloudSaves();
+        } else {
+          setCloudSaves([]);
+        }
+      });
     }
-  }, [mode, globalMe, refreshCloudSaves]);
+  }, [mode, refreshAuth, refreshCloudSaves, refreshLocalSaves]);
 
   const playercounts = useMemo(
     () => (metaGame ? getLabPlayerCounts(metaGame) : []),
@@ -251,7 +269,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
     }
   };
 
-  const introKey = globalMe ? "lab.introLoggedIn" : "lab.intro";
+  const introKey = isAuthenticated ? "lab.introLoggedIn" : "lab.intro";
 
   return (
     <article>
@@ -291,10 +309,14 @@ function LabLauncher({ onLaunch, onLoadSave }) {
               onClick={(e) => {
                 e.preventDefault();
                 setMode("saved");
-                refreshLocalSaves();
-                if (globalMe) {
-                  refreshCloudSaves();
-                }
+                refreshAuth().then((authed) => {
+                  refreshLocalSaves(authed);
+                  if (authed) {
+                    refreshCloudSaves();
+                  } else {
+                    setCloudSaves([]);
+                  }
+                });
               }}
             >
               {t("lab.tabSaved")}
@@ -400,7 +422,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
 
       {mode === "saved" ? (
         <>
-          {globalMe ? (
+          {isAuthenticated ? (
             <>
               {showImportBanner ? (
                 <div className="notification is-info">

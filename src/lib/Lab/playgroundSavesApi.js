@@ -6,9 +6,18 @@ import {
   saveToLaunchPayload,
 } from "./savePayload";
 
+const NOT_SIGNED_IN = "Not signed in.";
+
+function isAuthFailure(res) {
+  return res && (res.status === 401 || res.status === 403);
+}
+
 async function parseAuthResponse(res, query) {
   if (!res) {
-    throw new Error("Not signed in.");
+    throw new Error(NOT_SIGNED_IN);
+  }
+  if (isAuthFailure(res)) {
+    throw new Error(NOT_SIGNED_IN);
   }
   const result = await res.json();
   const statusCode = result.statusCode ?? res.status;
@@ -33,13 +42,16 @@ async function parseAuthResponse(res, query) {
 }
 
 export async function listPlaygroundSaves() {
-  const res = await callAuthApi("list_playground_saves", {});
+  const res = await callAuthApi("list_playground_saves", {}, false);
+  if (!res || isAuthFailure(res)) {
+    return [];
+  }
   const result = await parseAuthResponse(res, "list_playground_saves");
   return Array.isArray(result) ? result : [];
 }
 
 export async function getPlaygroundSave(id) {
-  const res = await callAuthApi("get_playground_save", { id });
+  const res = await callAuthApi("get_playground_save", { id }, false);
   const result = await parseAuthResponse(res, "get_playground_save");
   const body = playgroundSaveBodyFromJson(result.body);
   return saveToLaunchPayload({
@@ -52,29 +64,37 @@ export async function getPlaygroundSave(id) {
 }
 
 export async function createPlaygroundSave({ name, metaGame, body, date }) {
-  const res = await callAuthApi("create_playground_save", {
-    name,
-    metaGame,
-    date: date ?? Date.now(),
-    body: playgroundSaveBodyToJson(body),
-  });
+  const res = await callAuthApi(
+    "create_playground_save",
+    {
+      name,
+      metaGame,
+      date: date ?? Date.now(),
+      body: playgroundSaveBodyToJson(body),
+    },
+    false
+  );
   const result = await parseAuthResponse(res, "create_playground_save");
   return result.id;
 }
 
 export async function updatePlaygroundSave({ id, name, metaGame, body, date }) {
-  const res = await callAuthApi("save_playground_save", {
-    id,
-    name,
-    metaGame,
-    date: date ?? Date.now(),
-    body: playgroundSaveBodyToJson(body),
-  });
+  const res = await callAuthApi(
+    "save_playground_save",
+    {
+      id,
+      name,
+      metaGame,
+      date: date ?? Date.now(),
+      body: playgroundSaveBodyToJson(body),
+    },
+    false
+  );
   await parseAuthResponse(res, "save_playground_save");
 }
 
 export async function deletePlaygroundSave(id) {
-  const res = await callAuthApi("delete_playground_save", { id });
+  const res = await callAuthApi("delete_playground_save", { id }, false);
   await parseAuthResponse(res, "delete_playground_save");
 }
 
