@@ -1933,7 +1933,7 @@ Enjoy!</description>
     <item>
       <title>Announcement</title>
       <description>Six new games are now available, mostly thanks to @ypaul. Let us know if you encounter any troubles. Enjoy!
-- @Gord!&amp;apos;s free-style connection game Calculus (Many thanks to @dalewalton&amp;apos;s help testing and devising the pathfinding algorithm.)
+- @Gord! (Ireland)&amp;apos;s free-style connection game Calculus (Many thanks to @dalewalton&amp;apos;s help testing and devising the pathfinding algorithm.)
 - Rich Gowell&amp;apos;s  Entrapment
 - Kevin Kane&amp;apos;s heXentafl
 - @Mike Zapawa&amp;apos;s Slyde
@@ -3315,6 +3315,72 @@ As always, please let me know if anything does not work as you expect. Enjoy!</d
       <link>https://play.abstractplay.com/news</link>
       <pubDate>Wed, 29 Jul 2026 00:37:38 GMT</pubDate>
       <guid isPermaLink="false">1531822979523153941</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I have finally gotten Weblate to sync up with the rest of the code. The permalink to the Weblate project is https://weblate.abstractplay.com. I want to thank everyone who has contributed! I know there are a lot of strings 😄 Now it is possible for folks to contribute adjustments to the German, French, and Italian machine translations. Also, because the backend is separate and quite small, two more languages are now available for system emails and push notifications: Portuguese and Tamil. These do not exist for the front end! It&amp;apos;s just the backend that supports these languages. There&amp;apos;s lots I don&amp;apos;t know about Weblate, but if you run into any issues, do let me know. Thanks again!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 29 Jul 2026 23:34:09 GMT</pubDate>
+      <guid isPermaLink="false">1532169392367075479</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Five new games are now available. Let me know if you run into any issues. Enjoy!
+- [Canoe](https://play.abstractplay.com/games/canoe) is a dice game with similarities to Backgammon. A modern game that feels like an old classic.
+- [Carnac](https://play.abstractplay.com/games/carnac) is a 3D game of placing and tipping megaliths (two stacked cubes) to create groups of three or more of your colour when viewed from above.
+- [Druid](https://play.abstractplay.com/games/druid) is a 3D game of edge connection. Place single stones or multicell lintels to connect your edges when viewed from above. Square, triangular, and hex boards are available. The &amp;quot;Druid&amp;apos;s Walk&amp;quot; variant is also available for the square version.
+- [Even at Odds](https://play.abstractplay.com/games/evenatodds) is a domino stacking game where the evens (2/4/6) and odds (1/3/5) try to create the largest connected group of their own faces when viewed from above.
+- @Mrraow&amp;apos;s [Knight Line](https://play.abstractplay.com/games/knightline) is a four-in-a-row game played on a dynamic square board that supports 2 and 3 players. Thanks to @mcd for coding this for us!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 03 Aug 2026 21:02:12 GMT</pubDate>
+      <guid isPermaLink="false">1533943093181681958</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Dieter expanded Fendo to include size 9 and 11 boards. Our implementation has been updated. I also made some efficiency changes. I&amp;apos;ve done some regression testing, but do let me know if something weird happens. Oh, and the game now ends once someone claims more than half of the board, as Dieter recommends. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 05 Aug 2026 02:41:31 GMT</pubDate>
+      <guid isPermaLink="false">1534390872471371866</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve added game watching, highlighting, and recommending. These are mostly accessed by buttons above the game board next to the refresh button, and there are a few other buttons scattered in (hopefully) useful places:
+- **Watching:** You can watch any game you are not participating in. A new section will appear on your dashboard that will include &amp;quot;new chat&amp;quot; notification. Games that are being watched will have a counter appear.
+- **Highlighting:** You can highlight any of your completed games. These games will appear on your player profile in a new module. There is currently no limit to the number of your games you can highlight. You can highlight them either while viewing the game itself or from your Game History module in your player profile.
+- **Recommending:** You may now flag a particular game instance as being &amp;quot;representative&amp;quot; of the overall game. You may flag up to two specific games per meta game. Recommended games will appear on the meta game&amp;apos;s landing page.
+
+Let me know if something does not work as you expect. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 07 Aug 2026 01:02:55 GMT</pubDate>
+      <guid isPermaLink="false">1535090834670887042</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve been slowly working at making some significant backend changes to make it more robust and cost efficient. I just now executed a read cutover where your dashboards are now being populated from the new structure while maintaining the old structure at the same time as a fallback. Please let me know if something odd happens with your dashboard! I&amp;apos;m going to let the change soak for at least 3-4 days before doing some final spot checks and moving on to the *write* cutover where the real benefits kick in. Thanks for your patience and for reporting any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 07 Aug 2026 19:03:50 GMT</pubDate>
+      <guid isPermaLink="false">1535362853807198240</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;m rolling out a revamped player profile page to try to bring some order to the chaos (I added a new module yesterday and hope to add more in the future). It&amp;apos;s not perfect, but I think it&amp;apos;s better in many respects. I warmly welcome feedback and suggestions for improvement.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 07 Aug 2026 20:29:22 GMT</pubDate>
+      <guid isPermaLink="false">1535384379734491216</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve updated the playground to support online saves if you&amp;apos;re logged in. You can still use the playground anonymously, though! But if you are logged in, it will automatically save to your account. When first visiting the loading screen, you will be prompted to move any local saves to the cloud (but you aren&amp;apos;t required to). Let me know if there are any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 10 Aug 2026 03:25:47 GMT</pubDate>
+      <guid isPermaLink="false">1536213952222990348</guid>
     </item>
     
   </channel>
