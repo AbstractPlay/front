@@ -27,8 +27,9 @@ function LogInOutButton({ closeBurger }) {
           userSetter(usr.signInUserSession);
           try {
             console.log("calling authQuery 'me' (small), with token: " + token);
-            const res = await callAuthApi("me", { size: "small" });
+            const res = await callAuthApi("me", { size: "small" }, false);
             if (!res) return;
+            if (res.status === 401 || res.status === 403) return;
             const result = await res.json();
             if (result.statusCode !== 200) console.log(JSON.parse(result.body));
             else {

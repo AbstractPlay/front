@@ -1,5 +1,5 @@
 import { PUSH_VAPID_PUBLIC_KEY } from "./config";
-import { callAuthApi } from "./lib/api";
+import { callAuthApi, getAuthToken } from "./lib/api";
 
 const convertedVapidKey = urlBase64ToUint8Array(PUSH_VAPID_PUBLIC_KEY);
 
@@ -164,10 +164,14 @@ async function ensurePushSubscription(registration) {
 }
 
 async function sendSubscription(subscription) {
-  const res = await callAuthApi("save_push", {
-    payload: subscription.toJSON(),
-  });
-  if (!res) {
+  const res = await callAuthApi(
+    "save_push",
+    {
+      payload: subscription.toJSON(),
+    },
+    false
+  );
+  if (!res || res.status === 401 || res.status === 403) {
     throw new Error("Not authenticated");
   }
   if (!res.ok) {
@@ -260,6 +264,10 @@ export async function subscribeUser({
 }
 
 export async function resyncPushSubscription() {
+  const token = await getAuthToken();
+  if (!token) {
+    return { success: false, skipped: true };
+  }
   return subscribeUser({ requestPermission: false, silent: true });
 }
 

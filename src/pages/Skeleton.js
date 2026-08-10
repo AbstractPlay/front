@@ -50,6 +50,7 @@ import MyWebSocket from "../components/MyWebSocket";
 import GameWatch from "../components/GameWatch";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { useStore } from "../stores";
+import { isAnonymousFriendlyPath } from "../lib/publicPaths";
 
 const Stats = lazy(() => import("../components/Stats"));
 // const MetaContainer = lazy(() => import("../components/MetaContainer"));
@@ -150,8 +151,12 @@ function Bones(props) {
         const intentionalLogout =
           sessionStorage.getItem("intentionalLogout") === "1";
 
-        if (wasLoggedIn && !intentionalLogout) {
-          // Session expired - auto-trigger login
+        if (
+          wasLoggedIn &&
+          !intentionalLogout &&
+          !isAnonymousFriendlyPath()
+        ) {
+          // Session expired - auto-trigger login (except on public routes)
           console.log("Session expired, auto-triggering login...");
           localStorage.removeItem("wasLoggedIn");
           Auth.federatedSignIn();
