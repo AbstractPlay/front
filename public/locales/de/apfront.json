@@ -1599,7 +1599,21 @@
       "commentMarkdown": "Kommentar (Markdown)",
       "commentPlaceholder": "Füge einen Kommentar in Markdown hinzu…",
       "nothingToPreview": "Noch nichts für die Vorschau vorhanden."
-    }
+    },
+    "introLoggedIn": "Experimentiere mit Spielen im Playground. Gespeicherte Stellungen werden mit deinem Konto synchronisiert; deine aktuelle Sitzung wird ebenfalls auf diesem Gerät gespeichert, sodass du sie nach einem Neuladen fortsetzen kannst.",
+    "loading": "Wird geladen",
+    "save": "Speichern",
+    "saveNameLabel": "Name",
+    "updateSave": "\"{{name}}\" aktualisieren",
+    "saveAsNew": "Als neu speichern…",
+    "copyOfName": "Kopie von {{name}}",
+    "savedToast": "Gespeichert.",
+    "importLocalBanner": "Du hast {{count}} Playground-Spielstände auf diesem Gerät. In dein Konto kopieren?",
+    "importLocal": "In Konto kopieren",
+    "importLocalDismiss": "Nicht jetzt",
+    "importLocalSuccess": "{{count}} Spielstände in dein Konto kopiert.",
+    "importLocalPartial": "Einige Spielstände konnten nicht kopiert werden: {{names}}",
+    "onThisDevice": "Auf diesem Gerät"
   },
   "Wikipedia": "Wikipedia"
 }
