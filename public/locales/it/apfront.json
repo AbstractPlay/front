@@ -1599,7 +1599,21 @@
       "commentMarkdown": "Commento (Markdown)",
       "commentPlaceholder": "Aggiungi un commento in Markdown…",
       "nothingToPreview": "Niente da mostrare in anteprima per ora."
-    }
+    },
+    "introLoggedIn": "Sperimenta con le partite nel Playground. Le posizioni salvate si sincronizzano con il tuo account; la tua sessione corrente viene conservata anche su questo dispositivo, così da poter riprendere dopo un aggiornamento.",
+    "loading": "Caricamento",
+    "save": "Salva",
+    "saveNameLabel": "Nome",
+    "updateSave": "Aggiorna \"{{name}}\"",
+    "saveAsNew": "Salva come nuovo…",
+    "copyOfName": "Copia di {{name}}",
+    "savedToast": "Salvato.",
+    "importLocalBanner": "Hai {{count}} salvataggi del Playground su questo dispositivo. Vuoi copiarli nel tuo account?",
+    "importLocal": "Copia nell'account",
+    "importLocalDismiss": "Non ora",
+    "importLocalSuccess": "Copiati {{count}} salvataggi nel tuo account.",
+    "importLocalPartial": "Impossibile copiare alcuni salvataggi: {{names}}",
+    "onThisDevice": "Su questo dispositivo"
   },
   "Wikipedia": "Wikipedia"
 }

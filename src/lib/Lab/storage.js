@@ -1,7 +1,13 @@
 import { nanoid } from "nanoid";
+import {
+  buildPlaygroundSaveBody,
+  bodyFromLocalSaveRecord,
+  toLocalSaveRecord,
+} from "./savePayload";
 
 const STORAGE_KEY = "ap-lab-saves";
 const BOARD_SETTINGS_KEY = "ap-lab-board-settings";
+const IMPORT_DISMISS_KEY = "ap-lab-import-dismissed";
 
 function defaultBoardSettings() {
   return { all: { annotate: true } };
@@ -46,32 +52,60 @@ export function deleteSave(id) {
   writeStorage(data);
 }
 
+export function removeSavesById(ids) {
+  const idSet = new Set(ids);
+  const data = loadStorage();
+  data.saves = data.saves.filter((s) => !idSet.has(s.id));
+  writeStorage(data);
+}
+
+/**
+ * @param {{ name: string, metaGame: string, game: object, nodes: object[], focus: object, gameSettings?: object, id?: string, savedAt?: number }} fields
+ */
 export function createSaveRecord({
   name,
   metaGame,
-  state,
-  variants = [],
-  playerCount,
-  exploration = null,
-  moveAnnotations = null,
+  game,
+  nodes,
+  focus,
   gameSettings = {},
   id,
+  savedAt,
 }) {
-  const record = {
+  const body = buildPlaygroundSaveBody({
+    game,
+    nodes,
+    focus,
+    gameSettings,
+  });
+  return toLocalSaveRecord({
     id: id ?? nanoid(),
     name,
     metaGame,
-    state,
-    variants,
-    playerCount,
-    exploration,
-    gameSettings,
-    savedAt: Date.now(),
+    savedAt: savedAt ?? Date.now(),
+    body,
+  });
+}
+
+/**
+ * Convert a local save record to launch payload fields.
+ * @param {Record<string, unknown>} record
+ */
+export function localSaveToLaunchPayload(record) {
+  const body = bodyFromLocalSaveRecord(record);
+  return {
+    id: record.id,
+    name: record.name,
+    metaGame: record.metaGame,
+    source: "local",
+    state: body.state,
+    variants: body.variants,
+    playerCount: body.playerCount,
+    exploration: body.exploration,
+    moveAnnotations: body.moveAnnotations,
+    focus: body.focus,
+    gameSettings: body.gameSettings,
   };
-  if (moveAnnotations) {
-    record.moveAnnotations = moveAnnotations;
-  }
-  return record;
 }
 
 export function saveLastSession(session) {
@@ -128,5 +162,24 @@ export function launchLabFromExport({
     exploration,
     explorationFormat: 2,
     gameSettings: {},
+    loadedSave: null,
   });
+}
+
+function localSaveFingerprint(saves) {
+  return saves.map((s) => s.id).sort().join(",");
+}
+
+export function shouldShowImportBanner(saves) {
+  if (!saves?.length) return false;
+  try {
+    const dismissed = localStorage.getItem(IMPORT_DISMISS_KEY);
+    return dismissed !== localSaveFingerprint(saves);
+  } catch {
+    return true;
+  }
+}
+
+export function dismissImportBanner(saves) {
+  localStorage.setItem(IMPORT_DISMISS_KEY, localSaveFingerprint(saves));
 }

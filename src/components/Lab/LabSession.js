@@ -24,6 +24,8 @@ import Board from "./Board";
 import Modal from "../Modal";
 import ClipboardCopy from "../../lib/ClipboardCopy";
 import { getDisplayedRenderRepJson } from "../../lib/displayRenderRepJson";
+import { toast } from "react-toastify";
+import LabSaveModal from "./LabSaveModal";
 import LabRenderOptionsModal from "./LabRenderOptionsModal";
 import {
   getFocusNode,
@@ -54,13 +56,12 @@ import {
   populateChecked,
 } from "../../lib/Lab/gameStuff";
 import {
-  addSave,
-  createSaveRecord,
   saveLastSession,
   clearLastSession,
   getLabBoardSettings,
   saveLabBoardSettings,
 } from "../../lib/Lab/storage";
+import { persistNamedPlaygroundSave } from "../../lib/Lab/persistNamedSave";
 import { getEffectiveColourContext } from "../../lib/effectiveColourContext";
 import { serializePlaygroundExport } from "../../lib/Lab/export";
 
@@ -113,6 +114,8 @@ function LabSession({
   initialFocus,
   initialGameSettings,
   sessionName,
+  loadedSave: initialLoadedSave,
+  onLoadedSaveChange,
   onExit,
 }) {
   const metaGame = initialGame.metaGame;
@@ -154,6 +157,9 @@ function LabSession({
   const [explorationVersion, bumpExplorationVersion] = useState(0);
   const bumpExploration = () => bumpExplorationVersion((v) => v + 1);
   const [inCheck, inCheckSetter] = useState("");
+  const [showSaveModal, showSaveModalSetter] = useState(false);
+  const [saveBusy, saveBusySetter] = useState(false);
+  const [loadedSave, loadedSaveSetter] = useState(initialLoadedSave ?? null);
   const globalMe = useStore((state) => state.globalMe);
   const colourContext = useStore((state) => state.colourContext);
   const [colorMode] = useStorageState("color-mode", "light");
@@ -177,7 +183,12 @@ function LabSession({
   const explorationRef = useRef(null);
   const engineRef = useRef(null);
   const sessionNameRef = useRef(sessionName);
+  const loadedSaveRef = useRef(initialLoadedSave ?? null);
   const pendingFocusRestore = useRef(initialFocus);
+
+  useEffect(() => {
+    loadedSaveRef.current = loadedSave;
+  }, [loadedSave]);
 
   const effectiveColourContext = useMemo(
     () => getEffectiveColourContext(colourContext, globalMe, metaGame),
@@ -221,6 +232,7 @@ function LabSession({
       moveAnnotations: serializeMainLineAnnotations(nodes),
       gameSettings: gameSettings ?? {},
       id: gameRef.current.id,
+      loadedSave: loadedSaveRef.current,
     };
     saveLastSession(payload);
   }, [gameSettings, focus]);
@@ -701,27 +713,46 @@ function LabSession({
     }
   };
 
-  const handleSaveNamed = () => {
-    const name = window.prompt(t("lab.savePrompt"), sessionNameRef.current);
-    if (!name) return;
-    debouncedPersist.flush();
-    sessionNameRef.current = name;
-    const nodes = explorationRef.current.nodes;
-    const record = createSaveRecord({
-      name,
-      metaGame: gameRef.current.metaGame,
-      state: getMainLineTipState(nodes, gameRef.current),
-      variants: gameRef.current.selectedVariants ?? [],
-      playerCount: gameRef.current.numPlayers,
-      exploration: serializeSessionExploration(nodes, gameRef.current.gameOver),
-      moveAnnotations: serializeMainLineAnnotations(nodes),
-      gameSettings: gameSettings ?? {},
-    });
-    addSave(record);
-    gameRef.current = { ...gameRef.current, id: record.id };
-    persistSession();
-    window.alert(t("lab.savedAlert"));
+  const runNamedSave = async (action, name) => {
+    if (!gameRef.current || !explorationRef.current?.nodes || !focus) return;
+    saveBusySetter(true);
+    try {
+      debouncedPersist.flush();
+      sessionNameRef.current = name;
+      const nextLoadedSave = await persistNamedPlaygroundSave({
+        action,
+        isLoggedIn: Boolean(globalMe),
+        loadedSave: loadedSaveRef.current,
+        name,
+        metaGame: gameRef.current.metaGame,
+        game: gameRef.current,
+        nodes: explorationRef.current.nodes,
+        focus,
+        gameSettings: gameSettings ?? {},
+      });
+      gameRef.current = { ...gameRef.current, id: nextLoadedSave.id };
+      loadedSaveSetter(nextLoadedSave);
+      loadedSaveRef.current = nextLoadedSave;
+      onLoadedSaveChange?.(nextLoadedSave);
+      persistSession();
+      showSaveModalSetter(false);
+      toast(t("lab.savedToast"));
+    } catch (err) {
+      toast.error(err.message || String(err));
+    } finally {
+      saveBusySetter(false);
+    }
   };
+
+  const handleOpenSave = () => {
+    showSaveModalSetter(true);
+  };
+
+  const handleSaveCreate = (name) => runNamedSave("create", name);
+
+  const handleSaveUpdate = (name) => runNamedSave("update", name);
+
+  const handleSaveAsNew = (name) => runNamedSave("saveAsNew", name);
 
   moveEntryHandlersRef.current = {
     handleMove,
@@ -974,13 +1005,25 @@ function LabSession({
           </div>
         )}
         <div className="buttons">
-          <button className="button apButton" onClick={handleSaveNamed}>
-            {t("lab.saveToPlayground")}
+          <button className="button apButton" onClick={handleOpenSave}>
+            {t("lab.save")}
           </button>
           <button className="button apButtonNeutral" onClick={onExit}>
             {t("lab.exitToLauncher")}
           </button>
         </div>
+
+        <LabSaveModal
+          show={showSaveModal}
+          mode={loadedSave ? "update" : "create"}
+          loadedSaveName={loadedSave?.name}
+          initialName={sessionNameRef.current}
+          onCancel={() => showSaveModalSetter(false)}
+          onCreate={handleSaveCreate}
+          onUpdate={handleSaveUpdate}
+          onSaveAsNew={handleSaveAsNew}
+          busy={saveBusy}
+        />
 
         <Modal
           show={showDeleteSubtreeConfirm}

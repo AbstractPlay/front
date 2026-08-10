@@ -1,17 +1,76 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import { gameinfo } from "@abstractplay/gameslib";
 import GameVariants from "../GameVariants";
+import { useStore } from "../../stores";
 import {
   buildLabGame,
   getLabPlayerCounts,
   listLabGames,
 } from "../../lib/Lab/buildGame";
 import { parsePlaygroundImport } from "../../lib/Lab/export";
-import { listSaves, deleteSave } from "../../lib/Lab/storage";
+import {
+  listSaves,
+  deleteSave,
+  localSaveToLaunchPayload,
+  shouldShowImportBanner,
+  dismissImportBanner,
+  removeSavesById,
+} from "../../lib/Lab/storage";
+import {
+  listPlaygroundSaves,
+  getPlaygroundSave,
+  deletePlaygroundSave,
+  importLocalSavesToCloud,
+} from "../../lib/Lab/playgroundSavesApi";
+
+function SavesTable({ saves, dateField, onLoad, onDelete, t }) {
+  if (saves.length === 0) {
+    return null;
+  }
+  return (
+    <table className="table apTable">
+      <thead>
+        <tr>
+          <th>{t("tables.name")}</th>
+          <th>{t("Game")}</th>
+          <th>{t("lab.savedAt")}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {saves.map((save) => (
+          <tr key={save.id}>
+            <td>{save.name}</td>
+            <td>{gameinfo.get(save.metaGame)?.name ?? save.metaGame}</td>
+            <td>{new Date(save[dateField]).toLocaleString()}</td>
+            <td>
+              <button
+                type="button"
+                className="button is-small apButton"
+                onClick={() => onLoad(save)}
+              >
+                {t("lab.load")}
+              </button>{" "}
+              <button
+                type="button"
+                className="button is-small apButtonNeutral"
+                onClick={() => onDelete(save.id)}
+              >
+                {t("Delete")}
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
 
 function LabLauncher({ onLaunch, onLoadSave }) {
   const { t } = useTranslation();
+  const globalMe = useStore((state) => state.globalMe);
   const games = useMemo(() => listLabGames(), []);
   const [mode, setMode] = useState("new");
   const [metaGame, setMetaGame] = useState("");
@@ -19,9 +78,48 @@ function LabLauncher({ onLaunch, onLoadSave }) {
   const [selectedVariants, setSelectedVariants] = useState([]);
   const [pastedState, setPastedState] = useState("");
   const [error, setError] = useState("");
-  const [saves, setSaves] = useState(() => listSaves());
+  const [localSaves, setLocalSaves] = useState(() => listSaves());
+  const [cloudSaves, setCloudSaves] = useState([]);
+  const [cloudLoading, setCloudLoading] = useState(false);
+  const [cloudError, setCloudError] = useState("");
+  const [importBusy, setImportBusy] = useState(false);
+  const [showImportBanner, setShowImportBanner] = useState(false);
+  const [showLocalSection, setShowLocalSection] = useState(false);
 
-  const refreshSaves = () => setSaves(listSaves());
+  const refreshLocalSaves = () => {
+    const saves = listSaves();
+    setLocalSaves(saves);
+    setShowImportBanner(Boolean(globalMe) && shouldShowImportBanner(saves));
+    return saves;
+  };
+
+  const refreshCloudSaves = useCallback(async () => {
+    if (!globalMe) {
+      setCloudSaves([]);
+      return;
+    }
+    setCloudLoading(true);
+    setCloudError("");
+    try {
+      const saves = await listPlaygroundSaves();
+      setCloudSaves(saves);
+    } catch (err) {
+      setCloudError(err.message || String(err));
+      setCloudSaves([]);
+    } finally {
+      setCloudLoading(false);
+    }
+  }, [globalMe]);
+
+  useEffect(() => {
+    refreshLocalSaves();
+  }, [globalMe]);
+
+  useEffect(() => {
+    if (mode === "saved" && globalMe) {
+      refreshCloudSaves();
+    }
+  }, [mode, globalMe, refreshCloudSaves]);
 
   const playercounts = useMemo(
     () => (metaGame ? getLabPlayerCounts(metaGame) : []),
@@ -92,16 +190,74 @@ function LabLauncher({ onLaunch, onLoadSave }) {
     }
   };
 
-  const handleDeleteSave = (id) => {
+  const handleDeleteLocalSave = (id) => {
     deleteSave(id);
-    refreshSaves();
+    refreshLocalSaves();
   };
+
+  const handleDeleteCloudSave = async (id) => {
+    try {
+      await deletePlaygroundSave(id);
+      await refreshCloudSaves();
+    } catch (err) {
+      toast.error(err.message || String(err));
+    }
+  };
+
+  const handleLoadLocalSave = (save) => {
+    onLoadSave(localSaveToLaunchPayload(save));
+  };
+
+  const handleLoadCloudSave = async (save) => {
+    setError("");
+    try {
+      const payload = await getPlaygroundSave(save.id);
+      onLoadSave(payload);
+    } catch (err) {
+      setError(err.message || String(err));
+    }
+  };
+
+  const handleDismissImport = () => {
+    dismissImportBanner(localSaves);
+    setShowImportBanner(false);
+  };
+
+  const handleImportLocal = async () => {
+    setImportBusy(true);
+    setError("");
+    try {
+      const { imported, failed } = await importLocalSavesToCloud(localSaves);
+      if (imported.length > 0) {
+        removeSavesById(imported);
+      }
+      const remaining = refreshLocalSaves();
+      await refreshCloudSaves();
+      if (failed.length === 0) {
+        toast(t("lab.importLocalSuccess", { count: imported.length }));
+        dismissImportBanner(remaining);
+        setShowImportBanner(false);
+      } else {
+        const names = failed.map((f) => f.name).join(", ");
+        setError(t("lab.importLocalPartial", { names }));
+        if (imported.length > 0) {
+          toast(t("lab.importLocalSuccess", { count: imported.length }));
+        }
+      }
+    } catch (err) {
+      setError(err.message || String(err));
+    } finally {
+      setImportBusy(false);
+    }
+  };
+
+  const introKey = globalMe ? "lab.introLoggedIn" : "lab.intro";
 
   return (
     <article>
       <div className="content">
         <h1 className="title">{t("Playground")}</h1>
-        <p>{t("lab.intro")}</p>
+        <p>{t(introKey)}</p>
         <p>{t("lab.noSimultaneous")}</p>
       </div>
 
@@ -135,7 +291,10 @@ function LabLauncher({ onLaunch, onLoadSave }) {
               onClick={(e) => {
                 e.preventDefault();
                 setMode("saved");
-                refreshSaves();
+                refreshLocalSaves();
+                if (globalMe) {
+                  refreshCloudSaves();
+                }
               }}
             >
               {t("lab.tabSaved")}
@@ -241,48 +400,85 @@ function LabLauncher({ onLaunch, onLoadSave }) {
 
       {mode === "saved" ? (
         <>
-          {saves.length === 0 ? (
-            <div className="content">
-              <p>{t("lab.noSavedGames")}</p>
-            </div>
+          {globalMe ? (
+            <>
+              {showImportBanner ? (
+                <div className="notification is-info">
+                  <p>{t("lab.importLocalBanner", { count: localSaves.length })}</p>
+                  <div className="buttons">
+                    <button
+                      type="button"
+                      className="button is-small apButton"
+                      onClick={handleImportLocal}
+                      disabled={importBusy}
+                    >
+                      {t("lab.importLocal")}
+                    </button>
+                    <button
+                      type="button"
+                      className="button is-small apButtonNeutral"
+                      onClick={handleDismissImport}
+                      disabled={importBusy}
+                    >
+                      {t("lab.importLocalDismiss")}
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+              {cloudLoading ? <p>{t("lab.loading")}…</p> : null}
+              {cloudError ? (
+                <div className="notification is-danger">{cloudError}</div>
+              ) : null}
+              {!cloudLoading && cloudSaves.length === 0 && !cloudError ? (
+                <div className="content">
+                  <p>{t("lab.noSavedGames")}</p>
+                </div>
+              ) : null}
+              <SavesTable
+                saves={cloudSaves}
+                dateField="date"
+                onLoad={handleLoadCloudSave}
+                onDelete={handleDeleteCloudSave}
+                t={t}
+              />
+              {localSaves.length > 0 ? (
+                <div className="content" style={{ marginTop: "1.5rem" }}>
+                  <button
+                    type="button"
+                    className="button is-small apButtonNeutral"
+                    onClick={() => setShowLocalSection((v) => !v)}
+                  >
+                    {showLocalSection ? "▼" : "▶"} {t("lab.onThisDevice")} (
+                    {localSaves.length})
+                  </button>
+                  {showLocalSection ? (
+                    <SavesTable
+                      saves={localSaves}
+                      dateField="savedAt"
+                      onLoad={handleLoadLocalSave}
+                      onDelete={handleDeleteLocalSave}
+                      t={t}
+                    />
+                  ) : null}
+                </div>
+              ) : null}
+            </>
           ) : (
-            <table className="table apTable">
-              <thead>
-                <tr>
-                  <th>{t("tables.name")}</th>
-                  <th>{t("Game")}</th>
-                  <th>{t("lab.savedAt")}</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {saves.map((save) => (
-                  <tr key={save.id}>
-                    <td>{save.name}</td>
-                    <td>
-                      {gameinfo.get(save.metaGame)?.name ?? save.metaGame}
-                    </td>
-                    <td>{new Date(save.savedAt).toLocaleString()}</td>
-                    <td>
-                      <button
-                        type="button"
-                        className="button is-small apButton"
-                        onClick={() => onLoadSave(save)}
-                      >
-                        {t("lab.load")}
-                      </button>{" "}
-                      <button
-                        type="button"
-                        className="button is-small apButtonNeutral"
-                        onClick={() => handleDeleteSave(save.id)}
-                      >
-                        {t("Delete")}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <>
+              {localSaves.length === 0 ? (
+                <div className="content">
+                  <p>{t("lab.noSavedGames")}</p>
+                </div>
+              ) : (
+                <SavesTable
+                  saves={localSaves}
+                  dateField="savedAt"
+                  onLoad={handleLoadLocalSave}
+                  onDelete={handleDeleteLocalSave}
+                  t={t}
+                />
+              )}
+            </>
           )}
         </>
       ) : null}

@@ -1599,7 +1599,21 @@
       "commentMarkdown": "Commentaire (Markdown)",
       "commentPlaceholder": "Ajouter un commentaire en Markdown…",
       "nothingToPreview": "Rien à prévisualiser pour l'instant."
-    }
+    },
+    "introLoggedIn": "Expérimentez des parties dans le Playground. Les positions sauvegardées sont synchronisées avec votre compte ; votre session actuelle est également conservée sur cet appareil pour vous permettre de reprendre après avoir rafraîchi la page.",
+    "loading": "Chargement",
+    "save": "Enregistrer",
+    "saveNameLabel": "Nom",
+    "updateSave": "Mettre à jour \"{{name}}\"",
+    "saveAsNew": "Enregistrer sous un nouveau nom…",
+    "copyOfName": "Copie de {{name}}",
+    "savedToast": "Enregistré.",
+    "importLocalBanner": "Vous avez {{count}} sauvegarde(s) du Playground sur cet appareil. Les copier sur votre compte ?",
+    "importLocal": "Copier sur le compte",
+    "importLocalDismiss": "Pas maintenant",
+    "importLocalSuccess": "{{count}} sauvegarde(s) copiée(s) sur votre compte.",
+    "importLocalPartial": "Certaines sauvegardes n'ont pas pu être copiées : {{names}}",
+    "onThisDevice": "Sur cet appareil"
   },
   "Wikipedia": "Wikipédia"
 }

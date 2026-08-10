@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { buildLabGame } from "../../lib/Lab/buildGame";
-import { clearLastSession, getLastSession } from "../../lib/Lab/storage";
+import {
+  clearLastSession,
+  getLastSession,
+  localSaveToLaunchPayload,
+} from "../../lib/Lab/storage";
 import LabLauncher from "./LabLauncher";
 import LabSession from "./LabSession";
 
@@ -18,6 +22,33 @@ function sessionFromAutosave(last) {
     initialFocus: last.focus ?? null,
     gameSettings: last.gameSettings ?? {},
     sessionName: last.name,
+    loadedSave: last.loadedSave ?? null,
+  };
+}
+
+function launchPayloadFromSave(save) {
+  const payload =
+    save.source != null
+      ? save
+      : localSaveToLaunchPayload(save);
+  const game = buildLabGame(payload.metaGame, payload.state, {
+    variants: payload.variants ?? [],
+    numPlayers: payload.playerCount,
+  });
+  game.id = payload.id;
+  game.selectedVariants = payload.variants ?? [];
+  return {
+    game,
+    savedExploration: payload.exploration,
+    savedMoveAnnotations: payload.moveAnnotations ?? null,
+    initialFocus: payload.focus ?? null,
+    gameSettings: payload.gameSettings ?? {},
+    sessionName: payload.name,
+    loadedSave: {
+      id: payload.id,
+      name: payload.name,
+      source: payload.source ?? "local",
+    },
   };
 }
 
@@ -53,27 +84,20 @@ function Lab() {
       initialFocus: initialFocus ?? null,
       gameSettings,
       sessionName,
+      loadedSave: null,
     });
   };
 
   const handleLoadSave = (save) => {
     try {
-      const game = buildLabGame(save.metaGame, save.state, {
-        variants: save.variants ?? [],
-        numPlayers: save.playerCount,
-      });
-      game.id = save.id;
-      game.selectedVariants = save.variants ?? [];
-      handleLaunch({
-        game,
-        savedExploration: save.exploration,
-        savedMoveAnnotations: save.moveAnnotations ?? null,
-        gameSettings: save.gameSettings ?? {},
-        sessionName: save.name,
-      });
+      setSession(launchPayloadFromSave(save));
     } catch (err) {
       window.alert(err.message || String(err));
     }
+  };
+
+  const handleLoadedSaveChange = (loadedSave) => {
+    setSession((prev) => (prev ? { ...prev, loadedSave } : prev));
   };
 
   const handleExit = () => {
@@ -94,6 +118,8 @@ function Lab() {
         initialFocus={session.initialFocus}
         initialGameSettings={session.gameSettings}
         sessionName={session.sessionName}
+        loadedSave={session.loadedSave}
+        onLoadedSaveChange={handleLoadedSaveChange}
         onExit={handleExit}
       />
     );
