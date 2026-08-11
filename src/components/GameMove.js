@@ -59,6 +59,7 @@ import {
   setCanPublish,
   mergePrivateExploration,
   getAllNodeComments,
+  explorationTreeForSave,
 } from "../lib/GameMove/exploration";
 import {
   processNewSettings,
@@ -1792,10 +1793,11 @@ function GameMove(props) {
         draw: draw,
         moveNumber: explorationRef.current.nodes.length,
         opponentId: opponent ? opponent.id : undefined,
-        exploration:
-          explorationRef.current.nodes[
-            explorationRef.current.nodes.length - 1
-          ].Deflate().children,
+        exploration: explorationTreeForSave(
+          gameRef.current,
+          explorationRef.current.nodes,
+          explorationRef.current.nodes.length
+        ),
       });
       if (!res) return;
       const result = await res.json();

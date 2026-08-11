@@ -1,6 +1,18 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import { callAuthApi } from "../api";
 import { isInterestingComment } from "./misc";
+import {
+  applyExplorationMove,
+  filterPersistableExplorationTree,
+} from "./explorationMoves";
+
+export {
+  isMoveInLegalList,
+  validateExplorationMove,
+  isPersistableExplorationMove,
+  applyExplorationMove,
+  filterPersistableExplorationTree,
+} from "./explorationMoves";
 
 // Whether the user wants to explore
 export function isExplorer(explorer, me) {
@@ -42,6 +54,25 @@ export function setCanPublish(game, explorer, me, canPublishSetter) {
   } else {
     canPublishSetter("no");
   }
+}
+
+export function explorationTreeForSave(game, exploration, moveNumber) {
+  const node = getExplorationNode(exploration, game, moveNumber - 1);
+  const gameEngine = GameFactory(game.metaGame, node.state);
+  const deflated = exploration[moveNumber - 1].Deflate(game.gameOver);
+  if (game.gameOver) {
+    return {
+      ...deflated,
+      children: filterPersistableExplorationTree(
+        gameEngine,
+        deflated.children || []
+      ),
+    };
+  }
+  return filterPersistableExplorationTree(
+    gameEngine,
+    deflated.children || []
+  );
 }
 
 function getExplorationNode(exploration, game, moveNumber) {
@@ -188,7 +219,13 @@ export function mergeExistingExploration(
 
 function mergeMoveRecursive(gameEngine, node, children, newids = true) {
   children.forEach((n) => {
-    gameEngine.move(n.move, { trusted: true });
+    if (!n?.move) return;
+    try {
+      applyExplorationMove(gameEngine, n.move);
+    } catch (err) {
+      console.warn(`Skipping invalid exploration branch: ${n.move}`, err);
+      return;
+    }
     const pos = node.AddChild(n.move, gameEngine);
     if (newids) node.children[pos].id = n.id;
     if (n.outcome !== undefined && n.children.length === 0) {
@@ -223,7 +260,13 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
   if (moveNum === exploration.length - 1) return movesUpdated;
   const actualNextMove = exploration[moveNum + 1].move;
   children.forEach((n) => {
-    gameEngine.move(n.move, { trusted: true });
+    if (!n?.move) return;
+    try {
+      applyExplorationMove(gameEngine, n.move);
+    } catch (err) {
+      console.warn(`Skipping invalid exploration branch: ${n.move}`, err);
+      return;
+    }
     if (gameEngine.sameMove(n.move, actualNextMove)) {
       const updated = mergeMoveRecursive2(
         gameEngine,
@@ -284,9 +327,7 @@ export async function saveExploration(
     metaGame: game.metaGame,
     move: moveNumber,
     // Note that for completed games you can comment on the parent node, so don't just save children
-    tree: game.gameOver
-      ? exploration[moveNumber - 1].Deflate(game.gameOver)
-      : exploration[moveNumber - 1].Deflate(game.gameOver).children,
+    tree: explorationTreeForSave(game, exploration, moveNumber),
   };
   if (game.gameOver) {
     pars.version = exploration[moveNumber - 1].version
