@@ -100,7 +100,7 @@ i18n
     nonExplicitSupportedLngs: true,
     // "all" so regional codes like es-US load /locales/es-US/ (not /locales/es/).
     load: "all",
-    debug: process.env.NODE_ENV !== "production",
+    debug: process.env.REACT_APP_REAL_MODE !== "production",
     partialBundledLanguages: true,
     resources: {
       en: {
@@ -123,6 +123,11 @@ i18n
 
     interpolation: {
       escapeValue: false, // react already safes from xss
+    },
+    react: {
+      useSuspense: true,
+      bindI18n: "languageChanged",
+      bindI18nStore: "added loaded",
     },
   })
   .then(ensureGamesLibResources)
