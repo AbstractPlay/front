@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 
-const MANAGED_LANGS = ["de", "fr", "it"];
+const MANAGED_LANGS = ["de", "fr", "it", "es-US"];
 const LOCALE_FILE = "apfront.json";
 const GAMESLIB_LOCALES = path.resolve(ROOT, "..", "gameslib", "locales");
 const GAMES_NAMESPACES = ["apgames.json", "apresults.json"];

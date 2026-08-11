@@ -5,6 +5,8 @@ jest.mock("@abstractplay/gameslib", () => ({
     return {
       sameMove: (a, b) => a === b,
       move: () => {},
+      validateMove: () => ({ valid: true, complete: 1 }),
+      moves: () => [],
       serialize: () => "{}",
       cheapSerialize: () => "{}",
       stack: { pop: () => {}, length: 1, slice: () => [] },

@@ -1,5 +1,6 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import { GameNode } from "../../components/Lab/GameTree";
+import { applyExplorationMove } from "../GameMove/explorationMoves";
 
 export function serializeExploration(nodes, gameOver = false) {
   if (!nodes || nodes.length === 0) return null;
@@ -51,7 +52,12 @@ function inflateRecursive(
   if (!Array.isArray(children)) return;
   children.forEach((n) => {
     if (!n?.move) return;
-    gameEngine.move(n.move, { trusted: true, emulation: true });
+    try {
+      applyExplorationMove(gameEngine, n.move, { emulation: true });
+    } catch (err) {
+      console.warn(`Skipping invalid exploration branch: ${n.move}`, err);
+      return;
+    }
     const targetDepth = stackDepth + 1;
     syncEmulatedMoveFromReference(
       gameEngine,

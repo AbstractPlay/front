@@ -8,6 +8,7 @@ import {
   fixMoveOutcomes,
   saveExploration,
 } from "./exploration";
+import { isPersistableExplorationMove } from "./explorationMoves";
 import { replaceNames, setStatus } from "./misc";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { cloneDeep } from "lodash";
@@ -263,15 +264,16 @@ function doView(
 ) {
   let node = getFocusNode(exploration, game, focus);
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
-  let partialMove = false;
-  if (move.valid && move.complete < 1 && move.canrender === true)
-    partialMove = true;
   let simMove = false;
   let m = move.move || "";
   if (game.simultaneous) {
     simMove = true;
     m = game.players.map((p) => (p.id === me.id ? m : "")).join(",");
   }
+  const persistable =
+    m.length > 0 && isPersistableExplorationMove(gameEngineTmp, m);
+  let partialMove =
+    !persistable && move.valid && move.complete < 1 && move.canrender === true;
   let newfocus = cloneDeep(focus);
   let moves;
   try {
@@ -341,7 +343,7 @@ function doView(
     simMove ? move.move : m,
     statusRef.current
   );
-  if (!partialMove) {
+  if (persistable) {
     if (
       !game.gameOver ||
       !(
