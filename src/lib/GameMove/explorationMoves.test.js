@@ -51,6 +51,26 @@ describe("validateExplorationMove", () => {
     expect(isPersistableExplorationMove(engine, ">e,12-d1")).toBe(true);
   });
 
+  it("treats sameMove errors as not in the legal move list", () => {
+    const engine = {
+      moves: () => [">e,12-d1"],
+      sameMove() {
+        throw new Error(
+          "To compare moves the current state must be the one after move1 was made >n !== 11-e4"
+        );
+      },
+      validateMove(m) {
+        if (m === ">n") return { valid: true, complete: 0, canrender: true };
+        return { valid: false };
+      },
+    };
+    expect(validateExplorationMove(engine, ">n")).toEqual({
+      valid: true,
+      partial: true,
+    });
+    expect(isPersistableExplorationMove(engine, ">n")).toBe(false);
+  });
+
   it("treats complete=0 moves in the legal list as persistable", () => {
     const engine = {
       moves: () => ["action one", "action two"],

@@ -2,10 +2,14 @@ export function isMoveInLegalList(gameEngine, move) {
   if (typeof gameEngine.moves !== "function") return false;
   const legal = gameEngine.moves();
   if (legal.includes(move)) return true;
-  if (typeof gameEngine.sameMove === "function") {
-    return legal.some((m) => gameEngine.sameMove(move, m));
-  }
-  return false;
+  if (typeof gameEngine.sameMove !== "function") return false;
+  return legal.some((m) => {
+    try {
+      return gameEngine.sameMove(move, m);
+    } catch {
+      return false;
+    }
+  });
 }
 
 // Whether a move string is a complete exploration branch (not a render-only prefix).
