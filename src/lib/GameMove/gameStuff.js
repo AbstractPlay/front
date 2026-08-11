@@ -7,8 +7,8 @@ import {
   getFocusNode,
   fixMoveOutcomes,
   saveExploration,
-  isPersistableExplorationMove,
-} from "./explorationMoves";
+} from "./exploration";
+import { isPersistableExplorationMove } from "./explorationMoves";
 import { replaceNames, setStatus } from "./misc";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { cloneDeep } from "lodash";
