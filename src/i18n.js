@@ -23,8 +23,62 @@ export const COMMUNICATION_LANGUAGES = [
 ];
 
 const HTTP_NAMESPACES = ["apfront", "apgames", "apresults"];
+const SUPPORTED_LANGUAGE_CODES = new Set(
+  SUPPORTED_LANGUAGES.map((language) => language.code)
+);
+
+/** Map es / es-* tags to the published locale folder (es-US). */
+function mapSpanishLocale(language) {
+  const lower = String(language ?? "").toLowerCase();
+  if (lower === "es" || lower.startsWith("es-")) {
+    return "es-US";
+  }
+  return null;
+}
+
+/** Map detector/localStorage tags to a supported UI locale (es → es-US). */
+export function normalizeUiLanguage(language) {
+  if (!language) {
+    return "en";
+  }
+  if (SUPPORTED_LANGUAGE_CODES.has(language)) {
+    return language;
+  }
+  const spanish = mapSpanishLocale(language);
+  if (spanish) {
+    return spanish;
+  }
+  const base = String(language).toLowerCase().split("-")[0];
+  for (const code of SUPPORTED_LANGUAGE_CODES) {
+    if (code.toLowerCase() === base) {
+      return code;
+    }
+  }
+  return "en";
+}
+
+function convertDetectedLanguage(language) {
+  const normalized = normalizeUiLanguage(language);
+  if (normalized !== "en" || String(language ?? "").toLowerCase().startsWith("en")) {
+    return normalized;
+  }
+  // Preserve regional tags (fr-CA, de-AT) for nonExplicitSupportedLngs matching.
+  return language;
+}
+
+/** Language code for the footer picker while HTTP bundles are loading. */
+export function getPickerLanguage(i18nInstance) {
+  return normalizeUiLanguage(
+    i18nInstance.language ?? i18nInstance.resolvedLanguage ?? "en"
+  );
+}
 
 const ensureGamesLibResources = () => {
+  const uiLanguage = normalizeUiLanguage(i18n.language);
+  if (i18n.language !== uiLanguage) {
+    void i18n.changeLanguage(uiLanguage);
+    return;
+  }
   const gamesLibI18n = addResource(i18n.language, i18n);
   if (gamesLibI18n.language !== i18n.language) {
     void gamesLibI18n.changeLanguage(i18n.language);
@@ -62,6 +116,7 @@ i18n
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],
       lookupLocalStorage: "i18nextLng",
+      convertDetectedLanguage,
     },
 
     keySeparator: ".", // we do not use keys in form messages.welcome
@@ -75,11 +130,17 @@ i18n
     console.error("i18n init failed:", err);
   });
 
-i18n.on("failedLoading", (lng, ns) => {
+i18n.on("failedLoading", (lng, ns, msg) => {
   if (!HTTP_NAMESPACES.includes(ns)) {
     return;
   }
-  console.warn(`i18n: failed to load ${lng}/${ns}, falling back to en`);
+  console.warn(
+    `i18n: failed to load ${lng}/${ns}${msg ? `: ${msg}` : ""}, using fallback`
+  );
+  // UI strings live in apfront; missing game namespaces should not revert the UI.
+  if (ns !== "apfront") {
+    return;
+  }
   if (lng !== "en" && !i18n.hasResourceBundle("en", ns)) {
     console.error(`i18n: bundled fallback missing for ${ns}`);
     return;
