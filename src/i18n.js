@@ -12,6 +12,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: "fr", label: "Français" },
   { code: "de", label: "Deutsch" },
   { code: "it", label: "Italiano" },
+  { code: "es-US", label: "Español (EE. UU.)" },
 ];
 
 /** Backend email/push locales (apback); may exceed UI footer languages. */
@@ -43,7 +44,8 @@ i18n
     fallbackLng: "en",
     supportedLngs: SUPPORTED_LANGUAGES.map((l) => l.code),
     nonExplicitSupportedLngs: true,
-    load: "languageOnly",
+    // "all" so regional codes like es-US load /locales/es-US/ (not /locales/es/).
+    load: "all",
     debug: process.env.NODE_ENV !== "production",
     partialBundledLanguages: true,
     resources: {
