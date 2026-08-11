@@ -12,7 +12,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: "fr", label: "Français" },
   { code: "de", label: "Deutsch" },
   { code: "it", label: "Italiano" },
-  { code: "es-US", label: "Español (EE. UU.)" },
+  { code: "es", label: "Español (EE. UU.)" },
 ];
 
 /** Backend email/push locales (apback); may exceed UI footer languages. */
@@ -23,20 +23,30 @@ export const COMMUNICATION_LANGUAGES = [
 ];
 
 const HTTP_NAMESPACES = ["apfront", "apgames", "apresults"];
+const SPANISH_LOCALE_FOLDER = "es-US";
 const SUPPORTED_LANGUAGE_CODES = new Set(
   SUPPORTED_LANGUAGES.map((language) => language.code)
 );
 
-/** Map es / es-* tags to the published locale folder (es-US). */
+/** Published S3 folder for Spanish bundles (es-US), while i18n language code is es. */
+function localeFolder(language) {
+  const lower = String(language ?? "").toLowerCase();
+  if (lower === "es" || lower.startsWith("es-")) {
+    return SPANISH_LOCALE_FOLDER;
+  }
+  return language;
+}
+
+/** Map es / es-* tags to supported UI locale code es. */
 function mapSpanishLocale(language) {
   const lower = String(language ?? "").toLowerCase();
   if (lower === "es" || lower.startsWith("es-")) {
-    return "es-US";
+    return "es";
   }
   return null;
 }
 
-/** Map detector/localStorage tags to a supported UI locale (es → es-US). */
+/** Map detector/localStorage tags to a supported UI locale (es-* → es). */
 export function normalizeUiLanguage(language) {
   if (!language) {
     return "en";
@@ -98,8 +108,8 @@ i18n
     fallbackLng: "en",
     supportedLngs: SUPPORTED_LANGUAGES.map((l) => l.code),
     nonExplicitSupportedLngs: true,
-    // "all" so regional codes like es-US load /locales/es-US/ (not /locales/es/).
-    load: "all",
+    // Regional Spanish files live under /locales/es-US/; i18n language code is es.
+    load: "languageOnly",
     debug: process.env.REACT_APP_REAL_MODE !== "production",
     partialBundledLanguages: true,
     resources: {
@@ -110,7 +120,8 @@ i18n
       },
     },
     backend: {
-      loadPath: "/locales/{{lng}}/{{ns}}.json",
+      loadPath: (languages, namespaces) =>
+        `/locales/${localeFolder(languages[0])}/${namespaces[0]}.json`,
     },
     detection: {
       order: ["localStorage", "navigator"],

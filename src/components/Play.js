@@ -11,10 +11,10 @@ import { useStore } from "../stores";
 function Play(props) {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
-  addResource(i18n.language);
+  addResource(i18n.language, i18n);
 
   useEffect(() => {
-    addResource(i18n.language);
+    addResource(i18n.language, i18n);
   }, [i18n.language]);
 
   useEffect(() => {
