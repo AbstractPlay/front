@@ -13,8 +13,8 @@
   },
   "private": true,
   "dependencies": {
-    "@abstractplay/gameslib": "1.0.0-ci-31535565163.0",
-    "@abstractplay/renderer": "1.0.0-ci-31451686503.0",
+    "@abstractplay/gameslib": "1.0.0-ci-31612862671.0",
+    "@abstractplay/renderer": "1.0.0-ci-31612296797.0",
     "@atlaskit/pragmatic-drag-and-drop": "^1.3.0",
     "@tanstack/react-table": "^8.11.2",
     "array-move": "^3.0.1",
@@ -96,7 +96,7 @@
     ]
   },
   "overrides": {
-    "@abstractplay/renderer": "1.0.0-ci-31451686503.0"
+    "@abstractplay/renderer": "1.0.0-ci-31612296797.0"
   },
   "jest": {
     "resetMocks": false,

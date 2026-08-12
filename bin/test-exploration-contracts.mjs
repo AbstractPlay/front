@@ -34,13 +34,39 @@ const [
   import(src("lib/GameMove/fixtures/index.js")),
   import(src("components/GameMove/GameTree.js")),
 ]);
-const { GameFactory } = require("@abstractplay/gameslib");
+// Use compiled build output (matches Jest moduleNameMapper and avoids TS/ESM resolution drift).
+const { GameFactory } = require("@abstractplay/gameslib/build/index.js");
+const { games: gamesRegistry } = require("@abstractplay/gameslib/build/games/index.js");
+const gameslibVersion = require("@abstractplay/gameslib/package.json").version;
+
+function assertGameslibReady(contracts) {
+  console.log(`@abstractplay/gameslib@${gameslibVersion}`);
+  assert.equal(
+    typeof GameFactory,
+    "function",
+    "GameFactory missing from @abstractplay/gameslib/build"
+  );
+
+  const metaGames = [...new Set(contracts.map((c) => c.metaGame))];
+  const missing = metaGames.filter((uid) => !gamesRegistry.has(uid));
+  assert.equal(
+    missing.length,
+    0,
+    `gameslib@${gameslibVersion} is missing registry entries for: ${missing.join(", ")}. ` +
+      "Ensure ci-deps.json pins a gameslib build that includes these games " +
+      "(production gameslib builds omit experimental games from the registry)."
+  );
+}
 
 function createEngine(contract) {
-  if (contract.state) {
-    return GameFactory(contract.metaGame, contract.state);
-  }
-  return GameFactory(contract.metaGame);
+  const engine = contract.state
+    ? GameFactory(contract.metaGame, contract.state)
+    : GameFactory(contract.metaGame);
+  assert.ok(
+    engine,
+    `${contract.id}: GameFactory returned undefined for metaGame "${contract.metaGame}" (not in this gameslib build?)`
+  );
+  return engine;
 }
 
 function assertContract(contract) {
@@ -194,6 +220,7 @@ function testCarnacFilterTree() {
 }
 
 let passed = 0;
+assertGameslibReady(EXPLORATION_CONTRACTS);
 for (const contract of EXPLORATION_CONTRACTS) {
   assertContract(contract);
   assertIntegration(contract);

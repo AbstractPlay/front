@@ -1,0 +1,58 @@
+name: CI Test
+
+on:
+  workflow_call:
+    inputs:
+      ap_deps_stage:
+        description: "dev or prod — passed to bin/install-ap-deps.mjs --stage"
+        required: true
+        type: string
+      ap_gameslib_version:
+        description: "Optional gameslib version from repository_dispatch"
+        required: false
+        type: string
+      ap_renderer_version:
+        description: "Optional renderer version from repository_dispatch"
+        required: false
+        type: string
+      ap_source:
+        description: "Optional source label from repository_dispatch"
+        required: false
+        type: string
+    secrets:
+      PAT_READ_PACKAGES:
+        required: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: npm
+
+      - name: Create .npmrc
+        run: echo "@abstractplay:registry=https://npm.pkg.github.com/" > .npmrc
+
+      - name: Add GitHub Packages auth
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT_READ_PACKAGES }}" >> .npmrc
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Install pinned AP dependencies
+        env:
+          AP_GAMESLIB_VERSION: ${{ inputs.ap_gameslib_version }}
+          AP_RENDERER_VERSION: ${{ inputs.ap_renderer_version }}
+          AP_SOURCE: ${{ inputs.ap_source }}
+        run: node bin/install-ap-deps.mjs --stage ${{ inputs.ap_deps_stage }}
+
+      - name: Run tests
+        run: npm run test:ci
+
+      - name: Lint
+        run: npm run lint
