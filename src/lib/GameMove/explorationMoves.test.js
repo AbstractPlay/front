@@ -1,6 +1,7 @@
 import {
   applyExplorationMove,
   filterPersistableExplorationTree,
+  isPartialExplorationMove,
   isPersistableExplorationMove,
   validateExplorationMove,
 } from "./explorationMoves";
@@ -32,75 +33,70 @@ function mockTipEngine() {
   };
 }
 
-describe("validateExplorationMove", () => {
-  it("treats tip-only prefixes as partial when not in the legal move list", () => {
+describe("isPartialExplorationMove", () => {
+  it("treats tip-only prefixes as partial", () => {
     const engine = mockTipEngine();
-    expect(validateExplorationMove(engine, ">e")).toEqual({
-      valid: true,
-      partial: true,
-    });
+    expect(isPartialExplorationMove(engine, ">e")).toBe(true);
     expect(isPersistableExplorationMove(engine, ">e")).toBe(false);
   });
 
-  it("treats complete compound tips as persistable", () => {
+  it("treats complete compound tips as not partial", () => {
     const engine = mockTipEngine();
-    expect(validateExplorationMove(engine, ">e,12-d1")).toEqual({
-      valid: true,
-      partial: false,
-    });
+    expect(isPartialExplorationMove(engine, ">e,12-d1")).toBe(false);
     expect(isPersistableExplorationMove(engine, ">e,12-d1")).toBe(true);
   });
 
-  it("treats sameMove errors as not in the legal move list", () => {
+  it("throws when valid without complete", () => {
     const engine = {
-      moves: () => [">e,12-d1"],
-      sameMove() {
-        throw new Error(
-          "To compare moves the current state must be the one after move1 was made >n !== 11-e4"
-        );
-      },
-      validateMove(m) {
-        if (m === ">n") return { valid: true, complete: 0, canrender: true };
-        return { valid: false };
-      },
-    };
-    expect(validateExplorationMove(engine, ">n")).toEqual({
-      valid: true,
-      partial: true,
-    });
-    expect(isPersistableExplorationMove(engine, ">n")).toBe(false);
-  });
-
-  it("treats valid moves without complete as partial", () => {
-    const engine = {
-      moves: () => [],
       validateMove(m) {
         if (m === ">n") return { valid: true, canrender: true };
         return { valid: false };
       },
     };
-    expect(validateExplorationMove(engine, ">n")).toEqual({
-      valid: true,
-      partial: true,
-    });
-    expect(isPersistableExplorationMove(engine, ">n")).toBe(false);
+    expect(() => isPartialExplorationMove(engine, ">n")).toThrow(
+      "validateMove returned valid without complete for move: >n"
+    );
+    expect(() => validateExplorationMove(engine, ">n")).toThrow(
+      "validateMove returned valid without complete for move: >n"
+    );
   });
 
-  it("treats complete=0 moves in the legal list as persistable", () => {
+  it("treats complete=0 without canrender as not partial", () => {
     const engine = {
-      moves: () => ["action one", "action two"],
-      sameMove: (a, b) => a === b,
       validateMove(m) {
         if (m === "action one") return { valid: true, complete: 0 };
         return { valid: false };
       },
-      move: jest.fn(),
-      stack: { pop: jest.fn(), length: 1 },
-      load: jest.fn(),
-      gameover: false,
-      winner: [],
     };
+    expect(isPartialExplorationMove(engine, "action one")).toBe(false);
     expect(isPersistableExplorationMove(engine, "action one")).toBe(true);
+  });
+
+  it("treats complete=-1 with canrender as partial", () => {
+    const engine = {
+      validateMove(m) {
+        if (m === ">n,11") {
+          return { valid: true, complete: -1, canrender: true };
+        }
+        return { valid: false };
+      },
+    };
+    expect(isPartialExplorationMove(engine, ">n,11")).toBe(true);
+    expect(isPersistableExplorationMove(engine, ">n,11")).toBe(false);
+  });
+});
+
+describe("validateExplorationMove", () => {
+  it("returns partial flag consistent with isPartialExplorationMove", () => {
+    const engine = mockTipEngine();
+    expect(validateExplorationMove(engine, ">e")).toEqual({
+      valid: true,
+      partial: true,
+    });
+    expect(validateExplorationMove(engine, ">e,12-d1")).toEqual({
+      valid: true,
+      partial: false,
+    });
   });
 });
 

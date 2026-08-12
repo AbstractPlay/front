@@ -7,7 +7,8 @@ import {
 } from "./explorationMoves";
 
 export {
-  isMoveInLegalList,
+  assertValidMoveHasComplete,
+  isPartialExplorationMove,
   validateExplorationMove,
   isPersistableExplorationMove,
   applyExplorationMove,
