@@ -32,12 +32,12 @@ function CompletedGamesTable(props) {
     async (gameId) => {
       try {
         const { setGlobalMe } = useStore.getState();
-        const res = await callAuthApi("set_lastSeen", {
+        const res = await callAuthApi("dismiss_completed_game", {
           gameId,
         });
         if (!res) return;
         if (res.status !== 200) {
-          console.log(`An error occurred while setting lastSeen.`);
+          console.log(`An error occurred while dismissing completed game.`);
         } else {
           const newMe = JSON.parse(JSON.stringify(globalMe));
           const idx = newMe.games.findIndex((g) => g.id === gameId);
@@ -162,7 +162,7 @@ function CompletedGamesTable(props) {
               className="button is-small is-rounded apButtonNeutral"
               onClick={() => handleClearClick(props.row.original.id)}
             >
-              Clear
+              {t("tables.clear")}
             </button>
           </div>
         ),
