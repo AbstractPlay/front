@@ -6,11 +6,41 @@ export function assertValidMoveHasComplete(v, move) {
   }
 }
 
-export function isPartialExplorationMove(gameEngine, move) {
+export function requiresPartialExplorationApply(gameEngine, move) {
   const v = gameEngine.validateMove(move);
   if (!v.valid) return false;
   assertValidMoveHasComplete(v, move);
-  return v.complete < 1 && v.canrender === true;
+  if (v.complete === 1) return false;
+
+  if (typeof gameEngine.clone !== "function") {
+    throw new Error(`Game engine missing clone() for move: ${move}`);
+  }
+  try {
+    gameEngine
+      .clone()
+      .move(move, { trusted: true, partial: false, emulation: true });
+    return false;
+  } catch {
+    return true;
+  }
+}
+
+export function isPartialExplorationMove(
+  gameEngine,
+  move,
+  { userCompleted = false } = {}
+) {
+  const v = gameEngine.validateMove(move);
+  if (!v.valid) return false;
+  assertValidMoveHasComplete(v, move);
+  if (v.complete === 1) return false;
+
+  const renderPartial = v.complete < 1 && v.canrender === true;
+  if (!renderPartial) return false;
+
+  if (!userCompleted) return true;
+
+  return requiresPartialExplorationApply(gameEngine, move);
 }
 
 export function validateExplorationMove(gameEngine, move) {
@@ -19,7 +49,7 @@ export function validateExplorationMove(gameEngine, move) {
   assertValidMoveHasComplete(v, move);
   return {
     valid: true,
-    partial: v.complete < 1 && v.canrender === true,
+    partial: requiresPartialExplorationApply(gameEngine, move),
   };
 }
 
