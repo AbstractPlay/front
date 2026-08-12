@@ -20,7 +20,7 @@ CI runs `npm run test:ci` on pull requests and pushes to `develop` / `main` (see
 | **Real-engine contracts** | [`bin/test-exploration-contracts.mjs`](../../bin/test-exploration-contracts.mjs) | Partial/persist probe + Submit visibility against actual gameslib |
 | Other lib tests | [`exploration.test.js`](../src/lib/GameMove/exploration.test.js), [`Lab/`](../src/lib/Lab/), etc. | Save/merge, playground payloads |
 
-**Why a Node script for real engines?** Create React App's Jest resolver loads `@abstractplay/gameslib`'s TypeScript sources (and chokes on ESM deps like `js-combinatorics`) instead of the compiled `build/` output. [`bin/test-exploration-contracts.mjs`](../../bin/test-exploration-contracts.mjs) uses the same resolver as production until the Vite migration. Jest still has a `moduleNameMapper` pointing at `build/` for future component tests.
+**Why a Node script for real engines?** Create React App's Jest resolver loads `@abstractplay/gameslib`'s TypeScript sources (and chokes on ESM deps like `js-combinatorics`) instead of the compiled `build/` output. [`bin/test-exploration-contracts.mjs`](../../bin/test-exploration-contracts.mjs) uses the same resolver as production until the Vite migration. It requires **Node 20+** (CRA-style `import` in `.js` files without `"type": "module"`). Jest still has a `moduleNameMapper` pointing at `build/` for future component tests.
 
 ### Fixtures
 

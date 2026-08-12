@@ -5,6 +5,9 @@
  * Jest cannot reliably load @abstractplay/gameslib/build (CRA resolves the
  * package's TypeScript sources instead). This script uses Node's resolver
  * until the Vite migration gives us a cleaner test runner setup.
+ *
+ * Requires Node 20+ (CI matches this) so Node can load CRA-style ESM in .js
+ * files under src/ without "type": "module" in package.json.
  */
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
@@ -13,24 +16,25 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
+const src = (rel) =>
+  pathToFileURL(path.join(__dirname, "../src", rel)).href;
 
-const {
-  isPartialExplorationMove,
-  isPersistableExplorationMove,
-  filterPersistableExplorationTree,
-} = require(path.join(__dirname, "../src/lib/GameMove/explorationMoves.js"));
-const { getPendingSubmitMove } = require(
-  path.join(__dirname, "../src/lib/GameMove/submitMove.js")
-);
-const { EXPLORATION_CONTRACTS } = await import(
-  pathToFileURL(
-    path.join(__dirname, "../src/lib/GameMove/fixtures/index.js")
-  ).href
-);
+const [
+  {
+    isPartialExplorationMove,
+    isPersistableExplorationMove,
+    filterPersistableExplorationTree,
+  },
+  { getPendingSubmitMove },
+  { EXPLORATION_CONTRACTS },
+  { GameNode },
+] = await Promise.all([
+  import(src("lib/GameMove/explorationMoves.js")),
+  import(src("lib/GameMove/submitMove.js")),
+  import(src("lib/GameMove/fixtures/index.js")),
+  import(src("components/GameMove/GameTree.js")),
+]);
 const { GameFactory } = require("@abstractplay/gameslib");
-const { GameNode } = require(
-  path.join(__dirname, "../src/components/GameMove/GameTree.js")
-);
 
 function createEngine(contract) {
   if (contract.state) {
