@@ -210,6 +210,43 @@ function assertIntegration(contract) {
   }
 }
 
+function testPendingSubmitAfterAutomove() {
+  const exploration = [new GameNode(null, "", "{}", 0)];
+  exploration[0].children = [
+    new GameNode(exploration[0], "h6-i5", "{}", 1),
+  ];
+  exploration[0].children[0].children = [
+    new GameNode(exploration[0].children[0], "forced-reply", "{}", 0),
+  ];
+
+  const afterAutomove = { moveNumber: 0, exPath: [0, 0] };
+
+  assert.equal(
+    getPendingSubmitMove(exploration, afterAutomove, { canSubmit: true }),
+    "h6-i5",
+    "pending submit after automove (exPath depth > 1)"
+  );
+  assert.equal(
+    getPendingSubmitMove(exploration, { moveNumber: 0, exPath: [0] }, {
+      canSubmit: true,
+    }),
+    "h6-i5",
+    "pending submit at submit node (exPath depth 1)"
+  );
+  assert.equal(
+    getPendingSubmitMove(exploration, { moveNumber: 0, exPath: [] }, {
+      canSubmit: true,
+    }),
+    null,
+    "no pending submit at current position"
+  );
+  assert.equal(
+    getPendingSubmitMove(exploration, afterAutomove, { canSubmit: false }),
+    null,
+    "no pending submit when canSubmit is false"
+  );
+}
+
 function testCarnacFilterTree() {
   const tip = EXPLORATION_CONTRACTS.find((c) => c.id === "carnac-tip-prefix");
   const compound = EXPLORATION_CONTRACTS.find(
@@ -240,9 +277,11 @@ for (const contract of activeContracts) {
   assertIntegration(contract);
   passed += 1;
 }
+testPendingSubmitAfterAutomove();
+passed += 1;
 testCarnacFilterTree();
 passed += 1;
 
 console.log(
-  `exploration engine tests: ${passed} scenarios passed (${activeContracts.length} contracts + filter tree)`
+  `exploration engine tests: ${passed} scenarios passed (${activeContracts.length} contracts + pending submit after automove + filter tree)`
 );
