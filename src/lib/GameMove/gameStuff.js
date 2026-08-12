@@ -8,7 +8,7 @@ import {
   fixMoveOutcomes,
   saveExploration,
 } from "./exploration";
-import { isPersistableExplorationMove, isCompoundTipMove, isPartialTipPrefixMove } from "./explorationMoves";
+import { isPartialExplorationMove } from "./explorationMoves";
 import { replaceNames, setStatus } from "./misc";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { cloneDeep } from "lodash";
@@ -270,10 +270,7 @@ function doView(
     simMove = true;
     m = game.players.map((p) => (p.id === me.id ? m : "")).join(",");
   }
-  const persistable =
-    m.length > 0 && isPersistableExplorationMove(gameEngineTmp, m);
-  let partialMove =
-    !persistable && move.valid && move.complete < 1 && move.canrender === true;
+  const partialMove = isPartialExplorationMove(gameEngineTmp, m);
   let newfocus = cloneDeep(focus);
   let moves;
   try {
@@ -343,7 +340,7 @@ function doView(
     simMove ? move.move : m,
     statusRef.current
   );
-  if (persistable) {
+  if (!partialMove && m.length > 0) {
     if (
       !game.gameOver ||
       !(
@@ -351,11 +348,6 @@ function doView(
         gameEngineTmp.sameMove(m, exploration[newfocus.moveNumber + 1].move)
       )
     ) {
-      if (isCompoundTipMove(m)) {
-        node.children = node.children.filter(
-          (child) => !isPartialTipPrefixMove(child.move)
-        );
-      }
       const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
       if (game.gameOver) fixMoveOutcomes(exploration, newfocus.moveNumber + 1);
       newfocus.exPath.push(pos);
