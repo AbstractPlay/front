@@ -46,3 +46,7 @@ export function collectWatchGames(globalMe, pathname) {
 export function gamesWatchKey(games) {
   return JSON.stringify(games);
 }
+
+export function gameUpdateMatchesGame(payload, meta, id) {
+  return payload?.meta === meta && payload?.id === id;
+}

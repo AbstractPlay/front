@@ -94,6 +94,7 @@ import {
   toggleHighlight,
   toggleRecommend,
 } from "../lib/playerGameMarks";
+import { gameUpdateMatchesGame } from "../lib/watchGames";
 
 // sets the default order of components in the vertical layouts
 const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
@@ -744,13 +745,15 @@ function GameMove(props) {
   ]);
 
   useEffect(() => {
-    const handler = () => {
-      setRefresh((val) => val + 1);
+    const handler = (event) => {
+      if (gameUpdateMatchesGame(event.detail, metaGame, gameID)) {
+        setRefresh((val) => val + 1);
+      }
     };
 
     window.addEventListener("refresh-data", handler);
     return () => window.removeEventListener("refresh-data", handler);
-  }, []);
+  }, [gameID, metaGame]);
 
   const checkTime = useCallback(async (query) => {
     try {

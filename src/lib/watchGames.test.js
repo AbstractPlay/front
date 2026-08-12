@@ -1,4 +1,4 @@
-import { collectWatchGames } from "./watchGames";
+import { collectWatchGames, gameUpdateMatchesGame } from "./watchGames";
 
 describe("collectWatchGames", () => {
   it("includes the current game route", () => {
@@ -39,5 +39,31 @@ describe("collectWatchGames", () => {
     };
     const games = collectWatchGames(globalMe, "/");
     expect(games).toEqual([]);
+  });
+});
+
+describe("gameUpdateMatchesGame", () => {
+  it("returns true when meta and id match", () => {
+    expect(
+      gameUpdateMatchesGame({ meta: "chess", id: "abc123" }, "chess", "abc123")
+    ).toBe(true);
+  });
+
+  it("returns false when id differs", () => {
+    expect(
+      gameUpdateMatchesGame({ meta: "chess", id: "other" }, "chess", "abc123")
+    ).toBe(false);
+  });
+
+  it("returns false when meta differs", () => {
+    expect(
+      gameUpdateMatchesGame({ meta: "go", id: "abc123" }, "chess", "abc123")
+    ).toBe(false);
+  });
+
+  it("returns false when payload is missing", () => {
+    expect(gameUpdateMatchesGame(undefined, "chess", "abc123")).toBe(false);
+    expect(gameUpdateMatchesGame(null, "chess", "abc123")).toBe(false);
+    expect(gameUpdateMatchesGame({}, "chess", "abc123")).toBe(false);
   });
 });

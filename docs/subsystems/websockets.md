@@ -33,8 +33,8 @@ When the set changes, the client sends `watchGames` with the full desired list. 
 
 On `game` messages, `MyWebSocket` dispatches:
 
-- `refresh-me` — dashboard refetches `me()`
-- `refresh-data` — open game page refetches
+- `refresh-me` — dashboard refetches `me()` for any watched-game update
+- `refresh-data` — carries `{ meta, id }` from the WS payload; the open game page (`GameMove`) refetches only when those match the current route
 
 ## Reconnection
 
