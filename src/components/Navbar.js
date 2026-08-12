@@ -9,6 +9,7 @@ import LogInOutButton from "./LogInOutButton";
 import ErrorBoundary from "./ErrorBoundary";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../stores";
+import { REAL_MODE } from "../lib/realMode";
 import Spinner from "./Spinner";
 import {
   DEFAULT_COLOUR_CONTEXT_DARK,
@@ -75,7 +76,7 @@ function Navbar(props) {
       <div className="navbar-brand">
         <div className="navbar-item">
           <Link to="/" onClick={() => updateBurgerExpanded(false)}>
-            {process.env.REACT_APP_REAL_MODE === "production" ? (
+            {REAL_MODE === "production" ? (
               <img
                 src={colorMode === "light" ? logoLight : logoDark}
                 alt="Abstract Play logo"

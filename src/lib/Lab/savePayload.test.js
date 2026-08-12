@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   parsePlaygroundSaveBody,
   bodyFromLocalSaveRecord,
@@ -6,7 +7,7 @@ import {
   playgroundSaveBodyFromJson,
 } from "./savePayload";
 
-jest.mock("./exploration", () => ({
+vi.mock("./exploration", () => ({
   sanitizeFocus: (_nodes, focus) => focus,
   serializeSessionExploration: () => null,
   serializeMainLineAnnotations: () => null,

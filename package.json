@@ -23,6 +23,7 @@
     "i18next": "^21.10.0",
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.2.0",
+    "lodash": "^4.17.21",
     "nanoid": "^5.1.16",
     "plotly.js": "^2.27.1",
     "prop-types": "15.8.1",
@@ -36,7 +37,6 @@
     "react-markdown": "8.0.7",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "6.30.4",
-    "react-scripts": "5.0.1",
     "react-time-ago": "7.2.1",
     "react-toastify": "^9.1.3",
     "react-use-storage-state": "^1.0.6",
@@ -44,64 +44,61 @@
     "rehype-raw": "6.1.1",
     "remark-gfm": "^3.0.1",
     "tiny-invariant": "^1.3.3",
-    "web-vitals": "2.1.4",
     "zustand": "^5.0.10"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.0",
     "@google/genai": "^2.13.0",
     "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "13.5.0",
+    "@vitejs/plugin-react": "^4.7.0",
     "bulma": "^1.0.1",
     "cross-env": "7.0.3",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "i18next-parser": "7.7.0",
+    "jsdom": "^29.1.1",
     "prettier": "2.8.8",
     "sass": "^1.77.5",
     "serverless-finch": "4.0.4",
     "serverless-single-page-app-plugin": "1.0.4",
     "shx": "^0.3.4",
     "sitemap": "^7.1.1",
-    "source-map-explorer": "^2.5.3"
+    "source-map-explorer": "^2.5.3",
+    "vite": "^6.4.1",
+    "vitest": "^4.1.10"
   },
   "scripts": {
-    "start": "npm run sync-locales && cross-env REACT_APP_REAL_MODE=local react-scripts start",
+    "start": "npm run sync-locales && cross-env VITE_REAL_MODE=local npx vite",
     "start-prod": "npm run build-prod && npx serve -s build -l 3000",
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "build-dev": "npm run sync-locales && cross-env REACT_APP_REAL_MODE=development react-scripts build --profile && shx cp src/robots/robots.txt.dev build/robots.txt && shx rm -rf build/locales",
-    "build-prod": "node bin/gensitemap.mjs && npm run sync-locales && cross-env REACT_APP_REAL_MODE=production react-scripts build && shx cp src/robots/robots.txt.prod build/robots.txt && shx rm -rf build/locales",
-    "full-dev": "npm run build-dev && npm run deploy",
-    "full-prod": "npm run build-prod && npm run deploy-prod",
-    "test": "react-scripts test",
-    "test:ci": "react-scripts test --watchAll=false --ci && npm run test:engines",
+    "analyze": "npm run sync-locales && cross-env VITE_REAL_MODE=development npx vite build --mode development && npm run analyze:only",
+    "analyze:only": "source-map-explorer \"build/static/js/*.js\"",
+    "build-dev": "npm run sync-locales && cross-env VITE_REAL_MODE=development npx vite build --mode development && shx cp src/robots/robots.txt.dev build/robots.txt && shx rm -rf build/locales",
+    "build-prod": "node bin/gensitemap.mjs && npm run sync-locales && cross-env VITE_REAL_MODE=production npx vite build --mode production && shx cp src/robots/robots.txt.prod build/robots.txt && shx rm -rf build/locales",
+    "full-dev": "npm run build-dev && npm run deploy && npm run publish-locales",
+    "full-prod": "npm run build-prod && npm run deploy-prod && npm run publish-locales:prod",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ci": "vitest run && npm run test:engines",
     "test:engines": "node bin/test-exploration-contracts.mjs",
     "lint": "eslint src bin --ext .js,.jsx,.mjs",
     "lint:fix": "eslint src bin --ext .js,.jsx,.mjs --fix",
     "sync-locales": "node bin/sync-locales.mjs",
     "deploy": "serverless client deploy --no-confirm",
     "deploy-prod": "serverless client deploy --no-confirm --stage prod",
+    "publish-locales": "node bin/publish-locales.mjs --stage dev",
+    "publish-locales:prod": "node bin/publish-locales.mjs --stage prod",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "npm-login": "npm login --scope=@abstractplay --auth-type=legacy --registry=https://npm.pkg.github.com",
     "build-bulma": "sass --no-source-map --load-path=node_modules src/myBulma.scss src/myBulma.css"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    "defaults"
+  ],
   "overrides": {
     "@abstractplay/renderer": "1.0.0-ci-31612296797.0"
-  },
-  "jest": {
-    "resetMocks": false,
-    "moduleNameMapper": {
-      "^@abstractplay/gameslib$": "<rootDir>/node_modules/@abstractplay/gameslib/build/index.js"
-    }
   }
 }

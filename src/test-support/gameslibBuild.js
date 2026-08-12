@@ -1,7 +1,6 @@
 /**
- * Jest-safe entry to real gameslib engines (compiled build output).
- * Use via jest.mock in tests that need real GameFactory — do not import
- * @abstractplay/gameslib directly in those files without the mock in place.
+ * Vitest alias target for real gameslib engines (compiled build output).
+ * Do not import @abstractplay/gameslib directly in tests without mocking.
  */
 const path = require("path");
 

@@ -1,11 +1,12 @@
+import { vi } from "vitest";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { mergeExploration } from "./exploration";
 
-jest.mock("../api", () => ({
-  callAuthApi: jest.fn(),
+vi.mock("../api", () => ({
+  callAuthApi: vi.fn(),
 }));
 
-jest.mock("@abstractplay/gameslib", () => ({
+vi.mock("@abstractplay/gameslib", () => ({
   GameFactory: (_metaGame, state) => {
     const legal = [">e,12-d1", ">w,12-d1"];
 
@@ -28,7 +29,7 @@ jest.mock("@abstractplay/gameslib", () => ({
         },
         serialize: () => state,
         cheapSerialize: () => state,
-        load: jest.fn(),
+        load: vi.fn(),
         gameover: false,
         winner: [],
       };

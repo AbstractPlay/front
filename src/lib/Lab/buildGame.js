@@ -1,5 +1,6 @@
 import { GameFactory, gameinfo } from "@abstractplay/gameslib";
 import { nanoid } from "nanoid";
+import { REAL_MODE } from "../realMode";
 
 export const LAB_ME = {
   id: "lab-p0",
@@ -35,7 +36,7 @@ export function listLabGames() {
       lst.push({ uid: info.uid, name: info.name, info });
     }
   }
-  if (process.env.REACT_APP_REAL_MODE === "production") {
+  if (REAL_MODE === "production") {
     lst = lst.filter(({ info }) => !info.flags.includes("experimental"));
   }
   lst.sort((a, b) => a.name.localeCompare(b.name));

@@ -5,6 +5,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
 import { useStore } from "../../stores";
+import { REAL_MODE } from "../../lib/realMode";
 
 function NewTournamentModal(props) {
   const handleClose = props.handleClose;
@@ -59,7 +60,7 @@ function NewTournamentModal(props) {
   let games = [];
   gameinfo.forEach((game) => games.push({ id: game.uid, name: game.name }));
   games.sort((a, b) => (a.name > b.name ? 1 : -1));
-  if (process.env.REACT_APP_REAL_MODE === "production") {
+  if (REAL_MODE === "production") {
     games = games.filter(
       (g) => !gameinfo.get(g.id).flags.includes("experimental")
     );

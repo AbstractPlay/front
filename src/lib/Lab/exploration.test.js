@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { GameNode } from "../../components/Lab/GameTree";
 import {
   shouldExtendMainLine,
@@ -11,7 +12,7 @@ import {
   restoreSessionExploration,
 } from "./exploration";
 
-jest.mock("@abstractplay/gameslib", () => ({
+vi.mock("@abstractplay/gameslib", () => ({
   GameFactory: (_metaGame, state) => {
     const isTerminal =
       typeof state === "string" && state.includes('"terminal":true');

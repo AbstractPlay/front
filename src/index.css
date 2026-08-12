@@ -1,3 +1,5 @@
+/* Cardo + Josefin Sans loaded via <link> in index.html / public/index.html */
+
 /* Colour definitions */
 :root[color-mode="light"] {
     --main-bg-color: white;
@@ -63,13 +65,6 @@
 :root[color-mode="dark"] .dark--hidden {
     display: none;
 }
-
-/* Overall font definitions */
-@import url("https://fonts.googleapis.com/css2?family=Cardo:wght@700&family=Josefin+Sans&display=swap");
-/* @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Source+Sans+Pro&display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Quattrocento&display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Proza+Libre&display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Fauna+One&display=swap'); */
 
 h1,
 h2,

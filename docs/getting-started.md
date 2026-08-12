@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- **Node.js 18** (matches CI; CRA supports 18.x)
+- **Node.js 20** (matches CI)
 - **npm**
 - Access to the `@abstractplay` GitHub Packages scope
 - A deployed [node-backend](/backend/getting-started/) dev stack (for API and Cognito)
@@ -13,7 +13,8 @@
 ```bash
 git clone https://github.com/AbstractPlay/front.git
 cd front
-npm install
+npm ci
+node bin/install-ap-deps.mjs
 ```
 
 ## GitHub Packages
@@ -58,13 +59,15 @@ Cognito app client callback URLs must include `http://localhost:3000`. See [Back
 npm start
 ```
 
-This sets `REACT_APP_REAL_MODE=local` and starts the dev server on port 3000.
+This sets `VITE_REAL_MODE=local` and starts the Vite dev server on port 3000.
 
-To preview a production build locally:
+To preview a production build locally (Cognito uses prod config — auth will not work on localhost):
 
 ```bash
 npm run start-prod
 ```
+
+For a minified local build with dev Cognito settings, build with `VITE_REAL_MODE=local` and serve `build/`.
 
 ## Bulma CSS
 
@@ -94,9 +97,10 @@ See [Internationalization](/front/subsystems/i18n/).
 | `src/stores/` | Zustand global store |
 | `src/config/` | Per-environment endpoints |
 | `src/hooks/` | Custom React hooks |
+| `index.html` | Vite HTML entry (CSP injected at build time) |
 | `public/` | Static assets, locales, service worker |
 | `bin/` | Build helpers (sitemap, RSS, news) |
-| `config/` | CRA/webpack/jest overrides |
+| `csp-policy.mjs` | Production Content-Security-Policy source |
 
 See [Project structure](/front/guides/project-structure/) for conventions.
 

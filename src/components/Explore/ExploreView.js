@@ -27,6 +27,7 @@ import Thumbnail from "../Thumbnail";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import { useStore } from "../../stores";
+import { REAL_MODE } from "../../lib/realMode";
 
 function tagSortFn(a, b) {
   const priority = (raw) => {
@@ -233,7 +234,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
   const loadGames = useCallback(
     (forceNew) => {
       let metas = [...gameinfo.keys()];
-      if (process.env.REACT_APP_REAL_MODE === "production") {
+      if (REAL_MODE === "production") {
         metas = metas.filter(
           (id) => !gameinfo.get(id).flags.includes("experimental")
         );

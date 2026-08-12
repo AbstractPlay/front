@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { cloneDeep } from "lodash";
+import { REAL_MODE } from "../lib/realMode";
 
 /**
  * This component parses a metaGame's variant definition and returns the form for selecting them.
@@ -31,7 +32,7 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
 
         // filter out `experimental` variants in production
         let rootAllVariants = gameEngine.allvariants();
-        if (process.env.REACT_APP_REAL_MODE === "production") {
+        if (REAL_MODE === "production") {
           rootAllVariants = rootAllVariants?.filter(
             (v) => v.experimental === undefined || v.experimental === false
           );
