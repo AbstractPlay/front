@@ -10,7 +10,7 @@ npm run test:ci       # Jest single-run + real-engine contract tests
 npm run test:engines  # Real gameslib contract/integration tests only
 ```
 
-CI runs `npm run test:ci` on pull requests and pushes to `develop` / `main` (see `.github/workflows/test.yml`). The workflow installs pinned `@abstractplay/gameslib` / `@abstractplay/renderer` from `ci-deps.json`, same as deploy.
+CI runs `npm run test:ci` via the reusable [`.github/workflows/ci-test.yml`](../../.github/workflows/ci-test.yml) workflow. That job is a **prerequisite** for both dev and prod deploys (`deploy-dev.js.yml` / `deploy-prod.js.yml` use `needs: test`). It also runs standalone on pull requests and pushes to `develop` / `main` (`.github/workflows/test.yml`). The workflow installs pinned `@abstractplay/gameslib` / `@abstractplay/renderer` from `ci-deps.json` (same as deploy).
 
 ### Test layers
 
@@ -24,7 +24,11 @@ CI runs `npm run test:ci` on pull requests and pushes to `develop` / `main` (see
 
 ### Fixtures
 
-Regression scenarios live under `src/lib/GameMove/fixtures/`. Each fixture is **inline JSON** (never read from `bin/` or external files at runtime).
+Regression scenarios live under `src/lib/GameMove/fixtures/`. Each fixture is **inline JSON** (never read from `bin/` or external files at runtime). The `metaGame` must be registered in the pinned gameslib build — `GameFactory(uid)` returns `undefined` if the game is missing. Production gameslib builds omit **experimental** games from the registry (`APGAMES_PRODUCTION=1` in gameslib); only add contracts for games present in the `ci-deps.json` gameslib package.
+
+`bin/test-exploration-contracts.mjs` prints `@abstractplay/gameslib@<version>` and fails fast with a list of missing registry UIDs before running contracts.
+
+Clear-move-after-partial is covered by both `gameStuff.test.js` (mocked routing) and the Pinch `pinch-partial-f7` engine contract.
 
 To add a new regression case when you find a play-page bug:
 
@@ -84,7 +88,7 @@ npm run lint:fix   # auto-fix where ESLint can
 npm run format     # Prettier on src/**/*.{js,jsx}
 ```
 
-CI runs `npm run lint` after tests (see [`.github/workflows/test.yml`](../../.github/workflows/test.yml)). Lint fails on **errors** only; hook-deps and a11y findings are warnings for now.
+CI runs `npm run lint` after tests (see [`.github/workflows/ci-test.yml`](../../.github/workflows/ci-test.yml)). Lint fails on **errors** only; hook-deps and a11y findings are warnings for now.
 
 ## Related
 

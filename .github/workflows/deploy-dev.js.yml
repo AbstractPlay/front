@@ -23,7 +23,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  test:
+    uses: ./.github/workflows/ci-test.yml
+    with:
+      ap_deps_stage: dev
+      ap_gameslib_version: ${{ github.event.client_payload.gameslib_version }}
+      ap_renderer_version: ${{ github.event.client_payload.renderer_version }}
+      ap_source: ${{ github.event.client_payload.source_run_id && format('gameslib-ci-{0}', github.event.client_payload.source_run_id) || '' }}
+    secrets:
+      PAT_READ_PACKAGES: ${{ secrets.PAT_READ_PACKAGES }}
+
   deploy-dev:
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: write
