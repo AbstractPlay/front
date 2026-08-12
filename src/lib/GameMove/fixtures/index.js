@@ -1,6 +1,7 @@
 import { carnacContracts } from "./carnac.js";
 import { estateContracts } from "./estate.js";
 import { jacynthContracts } from "./jacynth.js";
+import { pinchContracts } from "./pinch.js";
 
 /**
  * Registry of real-engine exploration contract scenarios.
@@ -17,6 +18,7 @@ export const EXPLORATION_CONTRACTS = [
   ...carnacContracts,
   ...estateContracts,
   ...jacynthContracts,
+  ...pinchContracts,
 ];
 
 export { CARNAC_TIP_STATE } from "./carnac.js";

@@ -429,7 +429,7 @@ export function processNewMove(
   // if the move is complete, or partial and renderable, update board
   if (
     (newmove.valid && newmove.complete > 0 && newmove.move !== "") ||
-    newmove.canrender === true
+    (newmove.canrender === true && newmove.move !== "")
   ) {
     doView(
       me,
