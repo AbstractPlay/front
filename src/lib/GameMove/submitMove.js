@@ -6,9 +6,6 @@ export function getPendingSubmitMove(exploration, focus, { canSubmit } = {}) {
   if (!canSubmit || !focus?.exPath?.length) {
     return null;
   }
-  if (focus.exPath.length !== 1) {
-    return null;
-  }
   const spine = exploration[exploration.length - 1];
   return spine?.children?.[focus.exPath[0]]?.move ?? null;
 }
