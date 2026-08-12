@@ -2,6 +2,7 @@
 
 /* Colour definitions */
 :root[color-mode="light"] {
+    color-scheme: light;
     --main-bg-color: white;
     --main-font-color: black;
     --secondary-font-color: #333;
@@ -31,6 +32,7 @@
 }
 
 :root[color-mode="dark"] {
+  color-scheme: dark;
   --main-bg-color: #222;
   --main-font-color: #e6f2f2;
   --secondary-font-color: #c3d6f1;
@@ -210,15 +212,22 @@ strong {
     background-color: var(--secondary-color-3-bg);
 }
 
-.language-picker__select {
+.language-picker__select,
+.language-select {
     font-size: inherit;
     font-family: inherit;
-    color: inherit;
-    background: transparent;
+    color: var(--main-font-color);
+    background-color: var(--main-bg-color);
     border: 1px solid var(--secondary-color-3);
     border-radius: 4px;
     padding: 0.1em 0.4em;
     cursor: pointer;
+}
+
+.language-picker__select option,
+.language-select option {
+    color: var(--main-font-color);
+    background-color: var(--main-bg-color);
 }
 
 .modal-card-head, .modal-card-foot {

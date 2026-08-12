@@ -128,7 +128,19 @@ jobs:
     - name: Trigger docs rebuild
       if: github.event_name == 'push'
       run: |
-        if git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" | grep -q '^docs/'; then
+        BEFORE="${{ github.event.before }}"
+        SHA="${{ github.sha }}"
+        if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
+          CHANGED=""
+          for commit in ${{ join(github.event.commits.*.id, ' ') }}; do
+            git fetch --depth=1 origin "$commit"
+            CHANGED+="$(git show --name-only --pretty=format: "$commit")"$'\n'
+          done
+        else
+          git fetch --depth=1 origin "$BEFORE"
+          CHANGED="$(git diff --name-only "$BEFORE" "$SHA")"
+        fi
+        if echo "$CHANGED" | grep -q '^docs/'; then
           curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
