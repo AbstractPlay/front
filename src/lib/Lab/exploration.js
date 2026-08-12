@@ -47,13 +47,14 @@ function inflateRecursive(
   node,
   children,
   referenceStack,
-  stackDepth
+  stackDepth,
+  metaGame
 ) {
   if (!Array.isArray(children)) return;
   children.forEach((n) => {
     if (!n?.move) return;
     try {
-      applyExplorationMove(gameEngine, n.move, { emulation: true });
+      applyExplorationMove(gameEngine, n.move, { emulation: true, metaGame });
     } catch (err) {
       console.warn(`Skipping invalid exploration branch: ${n.move}`, err);
       return;
@@ -76,7 +77,8 @@ function inflateRecursive(
         node.children[pos],
         n.children,
         referenceStack,
-        targetDepth
+        targetDepth,
+        metaGame
       );
     }
     gameEngine.stack.pop();
@@ -106,7 +108,8 @@ export function restoreExplorationTree(
     nodes[moveCount - 1],
     deflatedChildren,
     referenceStack,
-    moveCount - 1
+    moveCount - 1,
+    metaGame
   );
 }
 
@@ -148,7 +151,7 @@ export function restoreSessionExploration(nodes, metaGame, game, branches) {
     if (!branches[i]) continue;
     const node = getExplorationNode(nodes, game, i);
     const tmpEngine = GameFactory(metaGame, node.state);
-    inflateRecursive(tmpEngine, node, branches[i], referenceStack, i);
+    inflateRecursive(tmpEngine, node, branches[i], referenceStack, i, metaGame);
   }
 }
 
