@@ -12,7 +12,7 @@ function LanguageSelect({
 }) {
   return (
     <select
-      className={className}
+      className={[className, "language-select"].filter(Boolean).join(" ")}
       id={id}
       aria-label={ariaLabel}
       value={value}
