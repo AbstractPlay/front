@@ -6,7 +6,8 @@ import {
   useMemo,
   useCallback,
 } from "react";
-import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import { gameinfo } from "@abstractplay/gameslib";
+import { gameDescription } from "../../lib/gameDescription";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useStorageState } from "react-use-storage-state";
@@ -284,12 +285,6 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       games
         .map((metaGame) => {
           const info = gameinfo.get(metaGame);
-          let gameEngine;
-          if (info.playercounts.length > 1) {
-            gameEngine = GameFactory(metaGame, 2);
-          } else {
-            gameEngine = GameFactory(metaGame);
-          }
           const tagsRaw = info.categories.map((cat) => ({
             raw: cat,
             tag: t(`categories.${cat}.tag`),
@@ -308,7 +303,6 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
               info.people !== undefined && info.people.length > 0
                 ? info.people.filter((p) => p.type === "designer")
                 : [],
-            description: gameEngine.description(),
             tags,
             starred:
               globalMe !== null &&
@@ -422,7 +416,8 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         ),
         enableSorting: false,
       }),
-      columnHelper.accessor("description", {
+      columnHelper.display({
+        id: "description",
         header: t("tables.description"),
         cell: (props) => (
           <ExpandableDiv
@@ -430,7 +425,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
             handleClick={() => togglePara(props.row.original.id)}
           >
             <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-              {props.getValue()}
+              {gameDescription(props.row.original.id)}
             </ReactMarkdown>
           </ExpandableDiv>
         ),
