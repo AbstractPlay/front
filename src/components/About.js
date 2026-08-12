@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment, useMemo, useState } from "react";
 import { useTranslation, Trans } from "react-i18next";
-// import pkgInfo from "../../package.json";
+import pkgInfo from "../../package.json";
 import { Link } from "react-router-dom";
 import { shuffle } from "../lib/shuffle";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -65,9 +65,9 @@ function About(props) {
       <article className="content">
         <h1 className="has-text-centered title">{t("About")}</h1>
         <p>{t("about.intro")}</p>
-        {/* <p style={{ fontSize: "smaller", textAlign: "right" }}>
-          Build: {pkgInfo.version}
-        </p> */}
+        <p style={{ fontSize: "smaller", textAlign: "right" }}>
+          <span className="tag">{pkgInfo.version}</span>
+        </p>
         {highlights === null ? null : (
           <p>
             <Trans i18nKey="about.highlights">
