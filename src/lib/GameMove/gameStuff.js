@@ -270,7 +270,9 @@ function doView(
     simMove = true;
     m = game.players.map((p) => (p.id === me.id ? m : "")).join(",");
   }
-  const partialMove = isPartialExplorationMove(gameEngineTmp, m);
+  const partialMove = isPartialExplorationMove(gameEngineTmp, m, {
+    userCompleted: move.complete === 1,
+  });
   let newfocus = cloneDeep(focus);
   let moves;
   try {
