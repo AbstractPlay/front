@@ -1,3 +1,5 @@
+import { GameFactory } from "@abstractplay/gameslib";
+
 export function assertValidMoveHasComplete(v, move) {
   if (v.valid && v.complete == null) {
     throw new Error(
@@ -6,19 +8,30 @@ export function assertValidMoveHasComplete(v, move) {
   }
 }
 
-export function requiresPartialExplorationApply(gameEngine, move) {
+function createProbeEngine(gameEngine, metaGame) {
+  if (metaGame && typeof gameEngine.cheapSerialize === "function") {
+    return GameFactory(metaGame, gameEngine.cheapSerialize());
+  }
+  if (typeof gameEngine.clone === "function") {
+    const probe = gameEngine.clone();
+    if (typeof probe.load === "function") probe.load();
+    return probe;
+  }
+  throw new Error(`Cannot probe move without metaGame or clone(): ${metaGame}`);
+}
+
+export function requiresPartialExplorationApply(gameEngine, move, metaGame) {
   const v = gameEngine.validateMove(move);
   if (!v.valid) return false;
   assertValidMoveHasComplete(v, move);
   if (v.complete === 1) return false;
 
-  if (typeof gameEngine.clone !== "function") {
-    throw new Error(`Game engine missing clone() for move: ${move}`);
-  }
   try {
-    gameEngine
-      .clone()
-      .move(move, { trusted: true, partial: false, emulation: true });
+    createProbeEngine(gameEngine, metaGame).move(move, {
+      trusted: true,
+      partial: false,
+      emulation: true,
+    });
     return false;
   } catch {
     return true;
@@ -28,7 +41,7 @@ export function requiresPartialExplorationApply(gameEngine, move) {
 export function isPartialExplorationMove(
   gameEngine,
   move,
-  { userCompleted = false } = {}
+  { userCompleted = false, metaGame } = {}
 ) {
   const v = gameEngine.validateMove(move);
   if (!v.valid) return false;
@@ -40,45 +53,58 @@ export function isPartialExplorationMove(
 
   if (!userCompleted) return true;
 
-  return requiresPartialExplorationApply(gameEngine, move);
+  return requiresPartialExplorationApply(gameEngine, move, metaGame);
 }
 
-export function validateExplorationMove(gameEngine, move) {
+export function validateExplorationMove(gameEngine, move, { metaGame } = {}) {
   const v = gameEngine.validateMove(move);
   if (!v.valid) return { valid: false, partial: false };
   assertValidMoveHasComplete(v, move);
   return {
     valid: true,
-    partial: requiresPartialExplorationApply(gameEngine, move),
+    partial: requiresPartialExplorationApply(gameEngine, move, metaGame),
   };
 }
 
-export function isPersistableExplorationMove(gameEngine, move) {
-  const { valid, partial } = validateExplorationMove(gameEngine, move);
+export function isPersistableExplorationMove(gameEngine, move, metaGame) {
+  const { valid, partial } = validateExplorationMove(gameEngine, move, {
+    metaGame,
+  });
   return valid && !partial;
 }
 
-export function applyExplorationMove(gameEngine, move, { emulation = false } = {}) {
-  const { valid, partial } = validateExplorationMove(gameEngine, move);
+export function applyExplorationMove(
+  gameEngine,
+  move,
+  { emulation = false, metaGame } = {}
+) {
+  const { valid, partial } = validateExplorationMove(gameEngine, move, {
+    metaGame,
+  });
   if (!valid) {
     throw new Error(`Invalid exploration move: ${move}`);
   }
   gameEngine.move(move, { trusted: true, partial, emulation });
 }
 
-export function filterPersistableExplorationTree(gameEngine, children) {
+export function filterPersistableExplorationTree(
+  gameEngine,
+  children,
+  metaGame
+) {
   if (!Array.isArray(children)) return [];
   const result = [];
   for (const child of children) {
     if (!child?.move) continue;
-    if (!isPersistableExplorationMove(gameEngine, child.move)) continue;
+    if (!isPersistableExplorationMove(gameEngine, child.move, metaGame)) continue;
     try {
-      applyExplorationMove(gameEngine, child.move);
+      applyExplorationMove(gameEngine, child.move, { metaGame });
       result.push({
         ...child,
         children: filterPersistableExplorationTree(
           gameEngine,
-          child.children || []
+          child.children || [],
+          metaGame
         ),
       });
       gameEngine.stack.pop();

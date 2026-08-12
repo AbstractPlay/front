@@ -66,13 +66,15 @@ export function explorationTreeForSave(game, exploration, moveNumber) {
       ...deflated,
       children: filterPersistableExplorationTree(
         gameEngine,
-        deflated.children || []
+        deflated.children || [],
+        game.metaGame
       ),
     };
   }
   return filterPersistableExplorationTree(
     gameEngine,
-    deflated.children || []
+    deflated.children || [],
+    game.metaGame
   );
 }
 
@@ -104,7 +106,7 @@ export function mergeExploration(
   if (data[0] && data[0].move === moveNumber) {
     let node = getExplorationNode(exploration, game, moveNumber - 1);
     let gameEngine = GameFactory(game.metaGame, node.state);
-    mergeMoveRecursive(gameEngine, node, data[0].tree);
+    mergeMoveRecursive(gameEngine, node, data[0].tree, true, game.metaGame);
   }
 }
 
@@ -117,7 +119,7 @@ export function mergePublicExploration(game, exploration, data) {
     node.version = version;
     node.comment = m.tree.comment;
     let gameEngine = GameFactory(game.metaGame, node.state);
-    mergeMoveRecursive(gameEngine, node, tree.children);
+    mergeMoveRecursive(gameEngine, node, tree.children, true, game.metaGame);
   }
 }
 
@@ -143,7 +145,8 @@ export function mergePrivateExploration(
       exploration,
       move - 1,
       node,
-      tree
+      tree,
+      game.metaGame
     );
     added.forEach((e) => moveNumbersUpdated.add(e));
   }
@@ -218,11 +221,17 @@ export function mergeExistingExploration(
   }
 }
 
-function mergeMoveRecursive(gameEngine, node, children, newids = true) {
+function mergeMoveRecursive(
+  gameEngine,
+  node,
+  children,
+  newids = true,
+  metaGame
+) {
   children.forEach((n) => {
     if (!n?.move) return;
     try {
-      applyExplorationMove(gameEngine, n.move);
+      applyExplorationMove(gameEngine, n.move, { metaGame });
     } catch (err) {
       console.warn(`Skipping invalid exploration branch: ${n.move}`, err);
       return;
@@ -247,7 +256,13 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
       for (const comment of n.comment) node.children[pos].AddComment(comment);
     if (!node.children[pos].premove && n.premove === true)
       node.children[pos].premove = true;
-    mergeMoveRecursive(gameEngine, node.children[pos], n.children, newids);
+    mergeMoveRecursive(
+      gameEngine,
+      node.children[pos],
+      n.children,
+      newids,
+      metaGame
+    );
     gameEngine.stack.pop();
     gameEngine.load();
     gameEngine.gameover = false;
@@ -256,14 +271,21 @@ function mergeMoveRecursive(gameEngine, node, children, newids = true) {
 }
 
 // This version will check if exploration followed the actual game. It also returns those move numbers that were actually updated.
-function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
+function mergeMoveRecursive2(
+  gameEngine,
+  exploration,
+  moveNum,
+  node,
+  children,
+  metaGame
+) {
   let movesUpdated = new Set();
   if (moveNum === exploration.length - 1) return movesUpdated;
   const actualNextMove = exploration[moveNum + 1].move;
   children.forEach((n) => {
     if (!n?.move) return;
     try {
-      applyExplorationMove(gameEngine, n.move);
+      applyExplorationMove(gameEngine, n.move, { metaGame });
     } catch (err) {
       console.warn(`Skipping invalid exploration branch: ${n.move}`, err);
       return;
@@ -274,7 +296,8 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
         exploration,
         moveNum + 1,
         exploration[moveNum + 1],
-        n.children
+        n.children,
+        metaGame
       );
       updated.forEach((e) => movesUpdated.add(e));
     } else {
@@ -294,7 +317,13 @@ function mergeMoveRecursive2(gameEngine, exploration, moveNum, node, children) {
         }
       }
       movesUpdated.add(moveNum);
-      mergeMoveRecursive(gameEngine, node.children[pos], n.children, false);
+      mergeMoveRecursive(
+        gameEngine,
+        node.children[pos],
+        n.children,
+        false,
+        metaGame
+      );
     }
     gameEngine.stack.pop();
     gameEngine.load();
@@ -380,7 +409,7 @@ export async function saveExploration(
       if (tree.comment !== undefined)
         for (const comment of tree.comment) node.AddComment(comment);
       let gameEngine = GameFactory(game.metaGame, node.state);
-      mergeMoveRecursive(gameEngine, node, tree.children);
+      mergeMoveRecursive(gameEngine, node, tree.children, true, game.metaGame);
       if (focus !== undefined) setURL(exploration, focus, game, navigate);
       // Try to save again
       saveExploration(

@@ -1,3 +1,22 @@
+jest.mock("@abstractplay/gameslib", () => ({
+  GameFactory: (metaGame, _state) => {
+    if (metaGame === "jacynth") {
+      return {
+        move(m, { partial = false } = {}) {
+          if (partial) return;
+          if (m === "5ml-e1") return;
+          throw new Error("VALIDATION_GENERAL");
+        },
+        validateMove(m) {
+          if (m === "5ml-e1") return { valid: true, complete: 0, canrender: true };
+          return { valid: false };
+        },
+      };
+    }
+    throw new Error(`Unexpected GameFactory probe for ${metaGame}`);
+  },
+}));
+
 import {
   applyExplorationMove,
   filterPersistableExplorationTree,
@@ -5,6 +24,9 @@ import {
   isPersistableExplorationMove,
   validateExplorationMove,
 } from "./explorationMoves";
+
+const META_CARNAC = "carnac";
+const META_ESTATE = "estate";
 
 function mockTipEngine() {
   const legal = [">e,12-d1", ">w,12-d1"];
@@ -105,33 +127,109 @@ function mockArmadasStyleEngine() {
   return createEngine();
 }
 
+function mockJacynthEngine() {
+  return {
+    validateMove(m) {
+      if (m === "5ml-e1") {
+        return { valid: true, complete: 0, canrender: true };
+      }
+      return { valid: false };
+    },
+    cheapSerialize() {
+      return jacynthFixtureState;
+    },
+  };
+}
+
+const jacynthFixtureState = {
+  game: "jacynth",
+  numplayers: 2,
+  variants: [],
+  gameover: false,
+  winner: [],
+  stack: [
+    {
+      _version: "20241212",
+      _results: [],
+      _timestamp: "2026-08-12T03:02:19.512Z",
+      currplayer: 1,
+      board: {
+        dataType: "Map",
+        value: [
+          ["a6", "4VL"],
+          ["b5", "NL"],
+          ["c4", "6SY"],
+          ["d3", "9LK"],
+          ["e2", "6MV"],
+          ["f1", "5YK"],
+        ],
+      },
+      claimed: { dataType: "Map", value: [] },
+      influence: [4, 4],
+      hands: [["5ML", "2SY", "1L"], ["7VY", "7ML", "2VL"]],
+    },
+  ],
+};
+
 describe("isPartialExplorationMove", () => {
   it("treats tip-only prefixes as partial while editing", () => {
     const engine = mockTipEngine();
-    expect(isPartialExplorationMove(engine, ">e")).toBe(true);
-    expect(isPersistableExplorationMove(engine, ">e")).toBe(false);
+    expect(
+      isPartialExplorationMove(engine, ">e", { metaGame: META_CARNAC })
+    ).toBe(true);
+    expect(isPersistableExplorationMove(engine, ">e", META_CARNAC)).toBe(false);
   });
 
   it("keeps tip-only prefixes partial after Complete Move", () => {
     const engine = mockTipEngine();
     expect(
-      isPartialExplorationMove(engine, ">e", { userCompleted: true })
+      isPartialExplorationMove(engine, ">e", {
+        userCompleted: true,
+        metaGame: META_CARNAC,
+      })
     ).toBe(true);
   });
 
   it("treats complete compound tips as not partial", () => {
     const engine = mockTipEngine();
-    expect(isPartialExplorationMove(engine, ">e,12-d1")).toBe(false);
-    expect(isPersistableExplorationMove(engine, ">e,12-d1")).toBe(true);
+    expect(
+      isPartialExplorationMove(engine, ">e,12-d1", { metaGame: META_CARNAC })
+    ).toBe(false);
+    expect(isPersistableExplorationMove(engine, ">e,12-d1", META_CARNAC)).toBe(
+      true
+    );
   });
 
   it("treats Estate-style complete=0 as partial until Complete Move", () => {
     const engine = mockEstateEngine();
-    expect(isPartialExplorationMove(engine, "g3,h2")).toBe(true);
     expect(
-      isPartialExplorationMove(engine, "g3,h2", { userCompleted: true })
+      isPartialExplorationMove(engine, "g3,h2", { metaGame: META_ESTATE })
+    ).toBe(true);
+    expect(
+      isPartialExplorationMove(engine, "g3,h2", {
+        userCompleted: true,
+        metaGame: META_ESTATE,
+      })
     ).toBe(false);
-    expect(isPersistableExplorationMove(engine, "g3,h2")).toBe(true);
+    expect(isPersistableExplorationMove(engine, "g3,h2", META_ESTATE)).toBe(
+      true
+    );
+  });
+
+  it("treats Jacynth optional-influence placements as partial until Complete Move", () => {
+    const engine = mockJacynthEngine();
+    const move = "5ml-e1";
+    expect(engine.validateMove(move).complete).toBe(0);
+    expect(
+      isPartialExplorationMove(engine, move, { metaGame: "jacynth" })
+    ).toBe(true);
+    expect(
+      isPartialExplorationMove(engine, move, {
+        userCompleted: true,
+        metaGame: "jacynth",
+      })
+    ).toBe(false);
+    expect(isPersistableExplorationMove(engine, move, "jacynth")).toBe(true);
   });
 
   it("throws when valid without complete", () => {
@@ -141,35 +239,47 @@ describe("isPartialExplorationMove", () => {
         return { valid: false };
       },
     };
-    expect(() => isPartialExplorationMove(engine, ">n")).toThrow(
-      "validateMove returned valid without complete for move: >n"
-    );
-    expect(() => validateExplorationMove(engine, ">n")).toThrow(
-      "validateMove returned valid without complete for move: >n"
-    );
+    expect(() =>
+      isPartialExplorationMove(engine, ">n", { metaGame: META_CARNAC })
+    ).toThrow("validateMove returned valid without complete for move: >n");
+    expect(() =>
+      validateExplorationMove(engine, ">n", { metaGame: META_CARNAC })
+    ).toThrow("validateMove returned valid without complete for move: >n");
   });
 
   it("treats complete=0 without canrender as not partial", () => {
     const engine = mockArmadasStyleEngine();
-    expect(isPartialExplorationMove(engine, "action one")).toBe(false);
-    expect(isPersistableExplorationMove(engine, "action one")).toBe(true);
+    expect(
+      isPartialExplorationMove(engine, "action one", { metaGame: "armadas" })
+    ).toBe(false);
+    expect(isPersistableExplorationMove(engine, "action one", "armadas")).toBe(
+      true
+    );
   });
 
   it("treats complete=-1 with canrender as partial while editing", () => {
     const engine = mockPrefixEngine();
-    expect(isPartialExplorationMove(engine, ">n,11")).toBe(true);
-    expect(isPersistableExplorationMove(engine, ">n,11")).toBe(false);
+    expect(
+      isPartialExplorationMove(engine, ">n,11", { metaGame: META_CARNAC })
+    ).toBe(true);
+    expect(isPersistableExplorationMove(engine, ">n,11", META_CARNAC)).toBe(
+      false
+    );
   });
 });
 
 describe("validateExplorationMove", () => {
   it("returns partial flag from apply probe, not canrender alone", () => {
     const engine = mockTipEngine();
-    expect(validateExplorationMove(engine, ">e")).toEqual({
+    expect(
+      validateExplorationMove(engine, ">e", { metaGame: META_CARNAC })
+    ).toEqual({
       valid: true,
       partial: true,
     });
-    expect(validateExplorationMove(engine, ">e,12-d1")).toEqual({
+    expect(
+      validateExplorationMove(engine, ">e,12-d1", { metaGame: META_CARNAC })
+    ).toEqual({
       valid: true,
       partial: false,
     });
@@ -179,13 +289,15 @@ describe("validateExplorationMove", () => {
 describe("applyExplorationMove", () => {
   it("replays tip-only moves with partial trusted application", () => {
     const engine = mockTipEngine();
-    expect(() => applyExplorationMove(engine, ">e")).not.toThrow();
+    expect(() =>
+      applyExplorationMove(engine, ">e", { metaGame: META_CARNAC })
+    ).not.toThrow();
     expect(engine.last).toBe(">e");
   });
 
   it("replays complete tips as full moves", () => {
     const engine = mockTipEngine();
-    applyExplorationMove(engine, ">e,12-d1");
+    applyExplorationMove(engine, ">e,12-d1", { metaGame: META_CARNAC });
     expect(engine.last).toBe(">e,12-d1");
   });
 });
@@ -193,11 +305,15 @@ describe("applyExplorationMove", () => {
 describe("filterPersistableExplorationTree", () => {
   it("drops partial tips but keeps complete branches", () => {
     const engine = mockTipEngine();
-    const filtered = filterPersistableExplorationTree(engine, [
-      { move: ">e", children: [] },
-      { move: ">e,12-d1", children: [] },
-      { move: ">w,12-d1", children: [] },
-    ]);
+    const filtered = filterPersistableExplorationTree(
+      engine,
+      [
+        { move: ">e", children: [] },
+        { move: ">e,12-d1", children: [] },
+        { move: ">w,12-d1", children: [] },
+      ],
+      META_CARNAC
+    );
     expect(filtered.map((c) => c.move)).toEqual([">e,12-d1", ">w,12-d1"]);
   });
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useState } from "react";
+import React, { useEffect, Fragment, useMemo, useState } from "react";
 import { useTranslation, Trans } from "react-i18next";
 // import pkgInfo from "../../package.json";
 import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ import Thumbnail from "./Thumbnail";
 
 function About(props) {
   const [mvTimes, mvTimesSetter] = useState(null);
-  const [highlights, setHighlights] = useState(null);
+  const [highlightMetas, setHighlightMetas] = useState(null);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -37,18 +37,23 @@ function About(props) {
       const sortedPs = [...mvTimes.players1w].sort((a, b) => b.score - a.score);
       sortedMvs.slice(0, top).forEach((e) => metas.add(e.metaGame));
       sortedPs.slice(0, top).forEach((e) => metas.add(e.metaGame));
-      const selected = shuffle([...metas]).slice(0, num);
-      const deets = [];
-      selected.forEach((metaGame) => {
+      setHighlightMetas(shuffle([...metas]).slice(0, num));
+    }
+  }, [mvTimes]);
+
+  const highlights = useMemo(() => {
+    if (highlightMetas === null) return null;
+    return highlightMetas
+      .map((metaGame) => {
         const info = gameinfo.get(metaGame);
-        if (!info) return; // Skip if game info not found
+        if (!info) return null;
         let gameEngine;
         if (info.playercounts && info.playercounts.length > 1) {
           gameEngine = GameFactory(metaGame, 2);
         } else {
           gameEngine = GameFactory(metaGame);
         }
-        deets.push({
+        return {
           metaGame,
           name: info.name,
           description: gameEngine.description(),
@@ -56,11 +61,10 @@ function About(props) {
             info.people !== undefined && info.people.length > 0
               ? info.people.filter((p) => p.type === "designer")
               : [],
-        });
-      });
-      setHighlights(deets);
-    }
-  }, [mvTimes]);
+        };
+      })
+      .filter(Boolean);
+  }, [highlightMetas, t]);
 
   return (
     <Fragment>

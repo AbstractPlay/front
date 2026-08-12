@@ -272,6 +272,7 @@ function doView(
   }
   const partialMove = isPartialExplorationMove(gameEngineTmp, m, {
     userCompleted: move.complete === 1,
+    metaGame: game.metaGame,
   });
   let newfocus = cloneDeep(focus);
   let moves;
