@@ -8,6 +8,7 @@ function escapeXml(unsafe) {
             case '&': return '&amp;';
             case '\'': return '&apos;';
             case '"': return '&quot;';
+            default: return c;
         }
     });
 }

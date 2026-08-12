@@ -1,3 +1,11 @@
+import {
+  applyExplorationMove,
+  filterPersistableExplorationTree,
+  isPartialExplorationMove,
+  isPersistableExplorationMove,
+  validateExplorationMove,
+} from "./explorationMoves";
+
 jest.mock("@abstractplay/gameslib", () => ({
   GameFactory: (metaGame, _state) => {
     if (metaGame === "jacynth") {
@@ -16,14 +24,6 @@ jest.mock("@abstractplay/gameslib", () => ({
     throw new Error(`Unexpected GameFactory probe for ${metaGame}`);
   },
 }));
-
-import {
-  applyExplorationMove,
-  filterPersistableExplorationTree,
-  isPartialExplorationMove,
-  isPersistableExplorationMove,
-  validateExplorationMove,
-} from "./explorationMoves";
 
 const META_CARNAC = "carnac";
 const META_ESTATE = "estate";

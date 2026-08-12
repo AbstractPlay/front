@@ -1,12 +1,24 @@
 {
-    "extends": ["eslint:recommended", "react-app"],
-    "plugins": [
-        "react-hooks"
-    ],
-    "rules": {
-        "react-hooks/rules-of-hooks": 2,
-        "react-hooks/exhaustive-deps": 1,
-        "no-console": "off",
-        "no-constant-condition": "off"
+  "extends": ["eslint:recommended", "react-app"],
+  "plugins": ["react-hooks"],
+  "rules": {
+    "react-hooks/rules-of-hooks": 2,
+    "react-hooks/exhaustive-deps": 1,
+    "no-console": "off",
+    "no-constant-condition": "off"
+  },
+  "overrides": [
+    {
+      "files": ["bin/**/*.mjs"],
+      "env": {
+        "node": true
+      }
+    },
+    {
+      "files": ["**/*.test.js"],
+      "env": {
+        "jest": true
+      }
     }
+  ]
 }

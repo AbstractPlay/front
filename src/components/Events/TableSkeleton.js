@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { useTranslation } from "react-i18next";
 import {
   getCoreRowModel,
   useReactTable,
@@ -20,7 +19,6 @@ function TableSkeleton(props) {
   const [showState, showStateSetter] = useStorageState("events-show", 10);
   const data = props.data;
   const columns = props.columns;
-  const { t } = useTranslation();
 
   const table = useReactTable({
     data,

@@ -131,7 +131,6 @@ function GameMoves(props) {
   let game = props.game;
   let neverExplore = props.noExplore;
   let exploration = props.exploration;
-  const getFocusNode = props.getFocusNode;
   const handlePlaygroundExport = props.handlePlaygroundExport;
   let handleGameMoveClick = props.handleGameMoveClick;
   const [validGames, validGamesSetter] = useState([]);

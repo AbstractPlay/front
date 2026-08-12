@@ -76,7 +76,15 @@ High-value targets if expanding coverage:
 
 ## Linting
 
-ESLint config: `.eslintrc.json` (`eslint:recommended`, `react-app`, `react-hooks`).
+ESLint config: [`.eslintrc.json`](../.eslintrc.json) (`eslint:recommended`, `react-app`, `react-hooks`).
+
+```bash
+npm run lint       # report issues in src/ and bin/
+npm run lint:fix   # auto-fix where ESLint can
+npm run format     # Prettier on src/**/*.{js,jsx}
+```
+
+CI runs `npm run lint` after tests (see [`.github/workflows/test.yml`](../../.github/workflows/test.yml)). Lint fails on **errors** only; hook-deps and a11y findings are warnings for now.
 
 ## Related
 

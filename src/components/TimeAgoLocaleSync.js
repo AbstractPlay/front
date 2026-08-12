@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";

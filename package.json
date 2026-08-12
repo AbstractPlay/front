@@ -74,6 +74,8 @@
     "test": "react-scripts test",
     "test:ci": "react-scripts test --watchAll=false --ci && npm run test:engines",
     "test:engines": "node bin/test-exploration-contracts.mjs",
+    "lint": "eslint src bin --ext .js,.jsx,.mjs",
+    "lint:fix": "eslint src bin --ext .js,.jsx,.mjs --fix",
     "sync-locales": "node bin/sync-locales.mjs",
     "deploy": "serverless client deploy --no-confirm",
     "deploy-prod": "serverless client deploy --no-confirm --stage prod",
