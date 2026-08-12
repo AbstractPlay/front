@@ -7,7 +7,7 @@
  *   2. ci-deps.json
  *   3. fallback: @development (dev) or @latest (prod)
  *
- * Usage: node bin/install-ap-deps.mjs --stage dev|prod [--renderer-only]
+ * Usage: node bin/install-ap-deps.mjs --stage dev|prod [--renderer-only] [--for-tests]
  */
 import fs from "fs";
 import path from "path";
@@ -21,14 +21,17 @@ const PACKAGE_JSON_PATH = path.join(ROOT, "package.json");
 function parseArgs(argv) {
   let stage = "dev";
   let rendererOnly = false;
+  let forTests = false;
   for (let i = 2; i < argv.length; i++) {
     if (argv[i] === "--stage" && argv[i + 1]) {
       stage = argv[++i];
     } else if (argv[i] === "--renderer-only") {
       rendererOnly = true;
+    } else if (argv[i] === "--for-tests") {
+      forTests = true;
     }
   }
-  return { stage, rendererOnly };
+  return { stage, rendererOnly, forTests };
 }
 
 function readJson(filePath) {
@@ -74,7 +77,7 @@ function detectRendererOnly(pkgJson, flag) {
   return !("@abstractplay/gameslib" in (pkgJson.dependencies ?? {}));
 }
 
-function resolveVersions({ stage, rendererOnly, pkgJson }) {
+function resolveVersions({ stage, rendererOnly, forTests, pkgJson }) {
   const dispatchGameslib = process.env.AP_GAMESLIB_VERSION?.trim() || null;
   const dispatchRenderer = process.env.AP_RENDERER_VERSION?.trim() || null;
   const manifest = readJson(CI_DEPS_PATH);
@@ -84,7 +87,13 @@ function resolveVersions({ stage, rendererOnly, pkgJson }) {
   let renderer = dispatchRenderer || manifest?.renderer || null;
   let source = "ci-deps.json";
 
-  if (dispatchGameslib || dispatchRenderer) {
+  if (forTests) {
+    gameslib = process.env.AP_GAMESLIB_TEST_VERSION?.trim() || "development";
+    source = "for-tests@development";
+    console.log(
+      `Installing gameslib for tests: @${gameslib} (full registry, not synced to package.json)`
+    );
+  } else if (dispatchGameslib || dispatchRenderer) {
     source = process.env.AP_SOURCE || "repository_dispatch";
   }
 
@@ -104,7 +113,7 @@ function resolveVersions({ stage, rendererOnly, pkgJson }) {
     }
   }
 
-  return { gameslib, renderer, rendererOnly: onlyRenderer, source };
+  return { gameslib, renderer, rendererOnly: onlyRenderer, source, forTests };
 }
 
 function syncPackageJson(pkgJson, versions) {
@@ -114,7 +123,7 @@ function syncPackageJson(pkgJson, versions) {
     pkgJson.dependencies["@abstractplay/renderer"] = versions.renderer;
   }
 
-  if (!versions.rendererOnly && versions.gameslib) {
+  if (!versions.rendererOnly && versions.gameslib && !versions.forTests) {
     pkgJson.dependencies["@abstractplay/gameslib"] = versions.gameslib;
   }
 
@@ -175,6 +184,20 @@ function verify(versions) {
 }
 
 function writeCiDeps(versions) {
+  if (versions.forTests) {
+    const existing = readJson(CI_DEPS_PATH);
+    if (!existing) {
+      return;
+    }
+    const data = { ...existing };
+    if (versions.renderer) {
+      data.renderer = versions.renderer;
+      data.updatedAt = new Date().toISOString();
+    }
+    writeJson(CI_DEPS_PATH, data);
+    return;
+  }
+
   const data = {
     renderer: versions.renderer,
     updatedAt: new Date().toISOString(),

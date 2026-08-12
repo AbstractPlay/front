@@ -39,11 +39,12 @@ GitHub Actions workflows:
 CI steps:
 
 1. Install Serverless and run `npm ci` (with GitHub Packages auth).
-2. Run `bin/install-ap-deps.mjs` to install the pinned `@abstractplay/gameslib` and `@abstractplay/renderer` versions (see cascade below).
-3. Auto-commit `ci-deps.json`, `package-lock.json`, and synced `package.json` AP version fields when they change.
-4. `npm run build-dev` or `build-prod`.
-5. `serverless client deploy`.
-6. Publish locale JSON files to S3 (`bin/publish-locales.mjs`).
+2. **Test job** (required before deploy): `bin/install-ap-deps.mjs --for-tests` installs `@abstractplay/gameslib` (full registry) plus pinned renderer, then runs `npm run test:ci` and lint.
+3. **Deploy job**: `bin/install-ap-deps.mjs` installs the pinned **production** gameslib and renderer from `ci-deps.json` (or dispatch payload).
+4. Auto-commit `ci-deps.json`, `package-lock.json`, and synced `package.json` AP version fields when they change (dispatch only).
+5. `npm run build-dev` or `build-prod`.
+6. `serverless client deploy`.
+7. Publish locale JSON files to S3 (`bin/publish-locales.mjs`).
 
 Deployments do **not** use CloudFront invalidations. Cache freshness is handled by upload headers (see below) and content-hashed JS/CSS bundle filenames from Create React App.
 
@@ -70,6 +71,12 @@ Published `gameslib` and `renderer` packages use immutable `1.0.0-ci-{GITHUB_RUN
 3. Each consumer runs `npm ci`, then `bin/install-ap-deps.mjs`, which installs the exact versions from the dispatch payload (or falls back to [`ci-deps.json`](../ci-deps.json) on consumer-only pushes).
 
 You do not need to manually bump AP dependency versions in `package.json` after a gameslib or renderer publish — CI updates `ci-deps.json` and the lockfile automatically.
+
+### Test vs deploy gameslib
+
+Engine contract tests (`test:engines`) need the full gameslib registry (including experimental games). The CI test job installs `@abstractplay/gameslib@development` via `install-ap-deps.mjs --for-tests` without changing the pinned production version in `ci-deps.json`. Deploy builds use the production gameslib artifact from `ci-deps.json`, which matches what production users receive.
+
+A future improvement: gameslib CI could publish a paired dev-registry version (same run ID) into `ci-deps.json` to avoid `@development` tag drift.
 
 ## Related
 

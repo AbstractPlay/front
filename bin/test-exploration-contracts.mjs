@@ -39,7 +39,7 @@ const { GameFactory } = require("@abstractplay/gameslib/build/index.js");
 const { games: gamesRegistry } = require("@abstractplay/gameslib/build/games/index.js");
 const gameslibVersion = require("@abstractplay/gameslib/package.json").version;
 
-function assertGameslibReady(contracts) {
+function partitionContracts(contracts) {
   console.log(`@abstractplay/gameslib@${gameslibVersion}`);
   assert.equal(
     typeof GameFactory,
@@ -47,15 +47,29 @@ function assertGameslibReady(contracts) {
     "GameFactory missing from @abstractplay/gameslib/build"
   );
 
-  const metaGames = [...new Set(contracts.map((c) => c.metaGame))];
-  const missing = metaGames.filter((uid) => !gamesRegistry.has(uid));
-  assert.equal(
-    missing.length,
-    0,
-    `gameslib@${gameslibVersion} is missing registry entries for: ${missing.join(", ")}. ` +
-      "Ensure ci-deps.json pins a gameslib build that includes these games " +
-      "(production gameslib builds omit experimental games from the registry)."
+  const active = [];
+  const skipped = [];
+
+  for (const contract of contracts) {
+    if (gamesRegistry.has(contract.metaGame)) {
+      active.push(contract);
+    } else if (contract.developmentOnly) {
+      skipped.push(contract);
+      console.log(
+        `skip ${contract.id}: ${contract.metaGame} not in registry (developmentOnly)`
+      );
+    } else {
+      assert.fail(
+        `${contract.id}: metaGame "${contract.metaGame}" is missing from gameslib@${gameslibVersion} ` +
+          "(production gameslib builds omit experimental games from the registry)"
+      );
+    }
+  }
+
+  console.log(
+    `contracts: ${active.length} active, ${skipped.length} skipped (developmentOnly)`
   );
+  return active;
 }
 
 function createEngine(contract) {
@@ -220,8 +234,8 @@ function testCarnacFilterTree() {
 }
 
 let passed = 0;
-assertGameslibReady(EXPLORATION_CONTRACTS);
-for (const contract of EXPLORATION_CONTRACTS) {
+const activeContracts = partitionContracts(EXPLORATION_CONTRACTS);
+for (const contract of activeContracts) {
   assertContract(contract);
   assertIntegration(contract);
   passed += 1;
@@ -230,5 +244,5 @@ testCarnacFilterTree();
 passed += 1;
 
 console.log(
-  `exploration engine tests: ${passed} scenarios passed (${EXPLORATION_CONTRACTS.length} contracts + filter tree)`
+  `exploration engine tests: ${passed} scenarios passed (${activeContracts.length} contracts + filter tree)`
 );

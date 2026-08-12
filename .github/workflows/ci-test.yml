@@ -49,7 +49,7 @@ jobs:
           AP_GAMESLIB_VERSION: ${{ inputs.ap_gameslib_version }}
           AP_RENDERER_VERSION: ${{ inputs.ap_renderer_version }}
           AP_SOURCE: ${{ inputs.ap_source }}
-        run: node bin/install-ap-deps.mjs --stage ${{ inputs.ap_deps_stage }}
+        run: node bin/install-ap-deps.mjs --stage ${{ inputs.ap_deps_stage }} --for-tests
 
       - name: Run tests
         run: npm run test:ci

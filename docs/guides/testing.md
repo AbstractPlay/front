@@ -10,7 +10,16 @@ npm run test:ci       # Jest single-run + real-engine contract tests
 npm run test:engines  # Real gameslib contract/integration tests only
 ```
 
-CI runs `npm run test:ci` via the reusable [`.github/workflows/ci-test.yml`](../../.github/workflows/ci-test.yml) workflow. That job is a **prerequisite** for both dev and prod deploys (`deploy-dev.js.yml` / `deploy-prod.js.yml` use `needs: test`). It also runs standalone on pull requests and pushes to `develop` / `main` (`.github/workflows/test.yml`). The workflow installs pinned `@abstractplay/gameslib` / `@abstractplay/renderer` from `ci-deps.json` (same as deploy).
+CI runs `npm run test:ci` via the reusable [`.github/workflows/ci-test.yml`](../../.github/workflows/ci-test.yml) workflow. That job is a **prerequisite** for both dev and prod deploys (`deploy-dev.js.yml` / `deploy-prod.js.yml` use `needs: test`). It also runs standalone on pull requests and pushes to `develop` / `main` (`.github/workflows/test.yml`).
+
+**Two gameslib installs in CI:**
+
+| Step | gameslib | Purpose |
+|------|----------|---------|
+| Test job (`install-ap-deps --for-tests`) | `@development` (full registry) | `test:engines` — includes experimental games |
+| Deploy build (`install-ap-deps`) | Pinned production version from `ci-deps.json` | What ships to users |
+
+Renderer stays on the pinned `ci-deps.json` version in both cases.
 
 ### Test layers
 
@@ -24,9 +33,14 @@ CI runs `npm run test:ci` via the reusable [`.github/workflows/ci-test.yml`](../
 
 ### Fixtures
 
-Regression scenarios live under `src/lib/GameMove/fixtures/`. Each fixture is **inline JSON** (never read from `bin/` or external files at runtime). The `metaGame` must be registered in the pinned gameslib build — `GameFactory(uid)` returns `undefined` if the game is missing. Production gameslib builds omit **experimental** games from the registry (`APGAMES_PRODUCTION=1` in gameslib); only add contracts for games present in the `ci-deps.json` gameslib package.
+Regression scenarios live under `src/lib/GameMove/fixtures/`. Each fixture is **inline JSON** (never read from `bin/` or external files at runtime).
 
-`bin/test-exploration-contracts.mjs` prints `@abstractplay/gameslib@<version>` and fails fast with a list of missing registry UIDs before running contracts.
+- **Production contracts** (default): `metaGame` must exist in the production gameslib registry. The runner fails if missing.
+- **Experimental contracts**: set `developmentOnly: true` (e.g. Estate). Skipped with a log when the installed registry omits that game; still run when CI installs `@development` for tests.
+
+Production gameslib builds omit experimental games from the registry (`APGAMES_PRODUCTION=1` in gameslib).
+
+`bin/test-exploration-contracts.mjs` prints `@abstractplay/gameslib@<version>`, active/skipped contract counts, and runs only applicable contracts.
 
 Clear-move-after-partial is covered by both `gameStuff.test.js` (mocked routing) and the Pinch `pinch-partial-f7` engine contract.
 
@@ -41,6 +55,7 @@ To add a new regression case when you find a play-page bug:
   metaGame: "mygame",
   state: JSON.stringify({...}), // or null for a fresh GameFactory(game)
   move: "the-move-string",
+  developmentOnly: true,         // optional — experimental game; skipped if not in registry
   whileEditing: { partial: true, persistable: false },
   afterComplete: { partial: false, persistable: true },
   submitAfterComplete: true,    // enables integration assertions in test:engines
