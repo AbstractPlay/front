@@ -8,7 +8,7 @@ import {
   fixMoveOutcomes,
   saveExploration,
 } from "./exploration";
-import { isPersistableExplorationMove } from "./explorationMoves";
+import { isPersistableExplorationMove, isCompoundTipMove, isPartialTipPrefixMove } from "./explorationMoves";
 import { replaceNames, setStatus } from "./misc";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { cloneDeep } from "lodash";
@@ -351,6 +351,11 @@ function doView(
         gameEngineTmp.sameMove(m, exploration[newfocus.moveNumber + 1].move)
       )
     ) {
+      if (isCompoundTipMove(m)) {
+        node.children = node.children.filter(
+          (child) => !isPartialTipPrefixMove(child.move)
+        );
+      }
       const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
       if (game.gameOver) fixMoveOutcomes(exploration, newfocus.moveNumber + 1);
       newfocus.exPath.push(pos);

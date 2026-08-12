@@ -71,6 +71,21 @@ describe("validateExplorationMove", () => {
     expect(isPersistableExplorationMove(engine, ">n")).toBe(false);
   });
 
+  it("treats valid moves without complete as partial", () => {
+    const engine = {
+      moves: () => [],
+      validateMove(m) {
+        if (m === ">n") return { valid: true, canrender: true };
+        return { valid: false };
+      },
+    };
+    expect(validateExplorationMove(engine, ">n")).toEqual({
+      valid: true,
+      partial: true,
+    });
+    expect(isPersistableExplorationMove(engine, ">n")).toBe(false);
+  });
+
   it("treats complete=0 moves in the legal list as persistable", () => {
     const engine = {
       moves: () => ["action one", "action two"],

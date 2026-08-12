@@ -24,7 +24,13 @@ export class GameNode {
 
   AddChild(move, gameEngine) {
     for (let i = 0; i < this.children.length; i++) {
-      if (gameEngine.sameMove(move, this.children[i].move)) return i;
+      let same = false;
+      try {
+        same = gameEngine.sameMove(move, this.children[i].move);
+      } catch {
+        same = false;
+      }
+      if (same) return i;
     }
     const toMove = gameEngine.gameover ? "" : gameEngine.currplayer - 1;
     const child = new GameNode(this, move, gameEngine.serialize(), toMove);
