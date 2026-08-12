@@ -218,7 +218,11 @@ export default function MyWebSocket() {
 
         if (msg.verb === "game") {
           window.dispatchEvent(new CustomEvent("refresh-me"));
-          window.dispatchEvent(new CustomEvent("refresh-data"));
+          window.dispatchEvent(
+            new CustomEvent("refresh-data", {
+              detail: { meta: msg.payload?.meta, id: msg.payload?.id },
+            })
+          );
         } else if (msg.verb === "connections") {
           const payload = msg.payload;
           if (
