@@ -72,6 +72,8 @@
     "full-dev": "npm run build-dev && npm run deploy",
     "full-prod": "npm run build-prod && npm run deploy-prod",
     "test": "react-scripts test",
+    "test:ci": "react-scripts test --watchAll=false --ci && npm run test:engines",
+    "test:engines": "node bin/test-exploration-contracts.mjs",
     "sync-locales": "node bin/sync-locales.mjs",
     "deploy": "serverless client deploy --no-confirm",
     "deploy-prod": "serverless client deploy --no-confirm --stage prod",
@@ -93,5 +95,11 @@
   },
   "overrides": {
     "@abstractplay/renderer": "1.0.0-ci-31451686503.0"
+  },
+  "jest": {
+    "resetMocks": false,
+    "moduleNameMapper": {
+      "^@abstractplay/gameslib$": "<rootDir>/node_modules/@abstractplay/gameslib/build/index.js"
+    }
   }
 }

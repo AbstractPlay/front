@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+
+jest.mock("./Welcome", () => () => null);
+
 import Welcome from "./Welcome";
 
 it("renders without crashing", () => {

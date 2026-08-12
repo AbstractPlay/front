@@ -11,6 +11,7 @@ import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName, isClientBotTurn } from "../Bots/botUtils";
+import { getPendingSubmitMove } from "../../lib/GameMove/submitMove";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -221,11 +222,9 @@ function MoveEntry(props) {
   }, [move.move]);
 
   if (focus) {
-    let moveToSubmit = null;
-    if (focus.exPath.length > 0 && game.canSubmit) {
-      moveToSubmit =
-        exploration[exploration.length - 1].children[focus.exPath[0]]?.move;
-    }
+    const moveToSubmit = getPendingSubmitMove(exploration, focus, {
+      canSubmit: game.canSubmit,
+    });
 
     let uiState = null;
     if (focus.moveNumber < exploration.length - 1) {
