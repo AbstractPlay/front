@@ -3,7 +3,8 @@ import { useTranslation, Trans } from "react-i18next";
 // import pkgInfo from "../../package.json";
 import { Link } from "react-router-dom";
 import { shuffle } from "../lib/shuffle";
-import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import { gameinfo } from "@abstractplay/gameslib";
+import { gameDescription } from "../lib/gameDescription";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Thumbnail from "./Thumbnail";
@@ -47,16 +48,9 @@ function About(props) {
       .map((metaGame) => {
         const info = gameinfo.get(metaGame);
         if (!info) return null;
-        let gameEngine;
-        if (info.playercounts && info.playercounts.length > 1) {
-          gameEngine = GameFactory(metaGame, 2);
-        } else {
-          gameEngine = GameFactory(metaGame);
-        }
         return {
           metaGame,
           name: info.name,
-          description: gameEngine.description(),
           designers:
             info.people !== undefined && info.people.length > 0
               ? info.people.filter((p) => p.type === "designer")
@@ -64,7 +58,7 @@ function About(props) {
         };
       })
       .filter(Boolean);
-  }, [highlightMetas, t]);
+  }, [highlightMetas]);
 
   return (
     <Fragment>
@@ -101,7 +95,7 @@ function About(props) {
                     rehypePlugins={[rehypeRaw]}
                     className="content"
                   >
-                    {e.description}
+                    {gameDescription(e.metaGame)}
                   </ReactMarkdown>
                   <div>
                     <Thumbnail meta={e.metaGame} />

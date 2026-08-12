@@ -1,4 +1,5 @@
 import { GameNode } from "../../components/GameMove/GameTree";
+import { mergeExploration } from "./exploration";
 
 jest.mock("../api", () => ({
   callAuthApi: jest.fn(),
@@ -36,8 +37,6 @@ jest.mock("@abstractplay/gameslib", () => ({
     return createEngine();
   },
 }));
-
-import { mergeExploration } from "./exploration";
 
 describe("mergeExploration", () => {
   const game = {

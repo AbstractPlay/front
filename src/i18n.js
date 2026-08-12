@@ -2,7 +2,11 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
-import { addResource } from "@abstractplay/gameslib";
+import {
+  addResource,
+  i18n as gamesLibI18n,
+  resolveLocale,
+} from "@abstractplay/gameslib";
 import enApfront from "./locales/en/apfront.json";
 import enApgames from "./locales/en/apgames.json";
 import enApresults from "./locales/en/apresults.json";
@@ -23,6 +27,7 @@ export const COMMUNICATION_LANGUAGES = [
 ];
 
 const HTTP_NAMESPACES = ["apfront", "apgames", "apresults"];
+const GAMESLIB_NAMESPACES = ["apgames", "apresults"];
 const SPANISH_LOCALE_FOLDER = "es-US";
 const SUPPORTED_LANGUAGE_CODES = new Set(
   SUPPORTED_LANGUAGES.map((language) => language.code)
@@ -83,20 +88,44 @@ export function getPickerLanguage(i18nInstance) {
   );
 }
 
+/** Copy host bundles into gameslib (host "es" → gameslib "es-US"). */
+const syncGamesLibBundles = () => {
+  if (!gamesLibI18n?.isInitialized || !i18n.isInitialized) {
+    return;
+  }
+  const hostLang = normalizeUiLanguage(i18n.language);
+  const gamesLibLang = resolveLocale(hostLang);
+  for (const ns of GAMESLIB_NAMESPACES) {
+    const bundle = i18n.getResourceBundle(hostLang, ns);
+    if (bundle) {
+      gamesLibI18n.addResourceBundle(gamesLibLang, ns, bundle, true, true);
+    }
+  }
+  if (gamesLibI18n.language !== gamesLibLang) {
+    void gamesLibI18n.changeLanguage(gamesLibLang);
+  }
+};
+
 const ensureGamesLibResources = () => {
   const uiLanguage = normalizeUiLanguage(i18n.language);
   if (i18n.language !== uiLanguage) {
     void i18n.changeLanguage(uiLanguage);
     return;
   }
-  const gamesLibI18n = addResource(i18n.language, i18n);
-  if (gamesLibI18n.language !== i18n.language) {
-    void gamesLibI18n.changeLanguage(i18n.language);
+  addResource(i18n.language, i18n);
+  syncGamesLibBundles();
+};
+
+const onHostGamesNamespaceUpdated = (_lng, ns) => {
+  if (GAMESLIB_NAMESPACES.includes(ns)) {
+    ensureGamesLibResources();
   }
 };
 
 i18n.on("initialized", ensureGamesLibResources);
 i18n.on("languageChanged", ensureGamesLibResources);
+i18n.on("loaded", onHostGamesNamespaceUpdated);
+i18n.on("added", onHostGamesNamespaceUpdated);
 
 i18n
   .use(HttpApi)

@@ -1,3 +1,16 @@
+import { GameNode } from "../../components/Lab/GameTree";
+import {
+  shouldExtendMainLine,
+  shouldReplayAlongMainLine,
+  createSpineNode,
+  serializeSessionExploration,
+  normalizeSessionExploration,
+  getMainLineTipState,
+  deleteSpineEntry,
+  recalculateLabOutcomes,
+  restoreSessionExploration,
+} from "./exploration";
+
 jest.mock("@abstractplay/gameslib", () => ({
   GameFactory: (_metaGame, state) => {
     const isTerminal =
@@ -17,19 +30,6 @@ jest.mock("@abstractplay/gameslib", () => ({
     };
   },
 }));
-
-import { GameNode } from "../../components/Lab/GameTree";
-import {
-  shouldExtendMainLine,
-  shouldReplayAlongMainLine,
-  createSpineNode,
-  serializeSessionExploration,
-  normalizeSessionExploration,
-  getMainLineTipState,
-  deleteSpineEntry,
-  recalculateLabOutcomes,
-  restoreSessionExploration,
-} from "./exploration";
 
 function makeSpine(moves) {
   const nodes = [new GameNode(null, "", null, 0)];

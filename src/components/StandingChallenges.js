@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_OPEN } from "../config";

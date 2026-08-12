@@ -11,7 +11,6 @@ import {
 import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
 import { useTranslation, Trans } from "react-i18next";
-import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import Modal from "../Modal";
 import { useStore } from "../../stores";
 

@@ -73,8 +73,6 @@ function UserChats(props) {
             personName = formatUserDisplayName(player, users);
           }
         }
-        const isHighlighted =
-          focusedPath && c.path && pathsMatch(focusedPath, c.path);
         results.push({
           timestamp: c.timeStamp,
           time: new Date(c.timeStamp).toLocaleString(),

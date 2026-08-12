@@ -1,10 +1,3 @@
-jest.mock("./exploration", () => ({
-  sanitizeFocus: (_nodes, focus) => focus,
-  serializeSessionExploration: () => null,
-  serializeMainLineAnnotations: () => null,
-  getMainLineTipState: () => '{"game":"chess"}',
-}));
-
 import {
   parsePlaygroundSaveBody,
   bodyFromLocalSaveRecord,
@@ -12,6 +5,13 @@ import {
   playgroundSaveBodyToJson,
   playgroundSaveBodyFromJson,
 } from "./savePayload";
+
+jest.mock("./exploration", () => ({
+  sanitizeFocus: (_nodes, focus) => focus,
+  serializeSessionExploration: () => null,
+  serializeMainLineAnnotations: () => null,
+  getMainLineTipState: () => '{"game":"chess"}',
+}));
 
 describe("parsePlaygroundSaveBody", () => {
   it("round-trips through JSON", () => {

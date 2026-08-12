@@ -7,10 +7,10 @@ import React, {
 } from "react";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
+import { gameDescription } from "../../lib/gameDescription";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import { GameFactory } from "@abstractplay/gameslib";
 import {
   getCoreRowModel,
   useReactTable,
@@ -157,12 +157,6 @@ function Table({
       props.games
         .map((metaGame) => {
           const info = gameinfo.get(metaGame);
-          let gameEngine;
-          if (info.playercounts.length > 1) {
-            gameEngine = GameFactory(metaGame, 2);
-          } else {
-            gameEngine = GameFactory(metaGame);
-          }
           //   let recent = 0;
           //   if (props.summary !== null) {
           //     const rec = props.summary.recent.find((r) => r.game === info.name);
@@ -228,7 +222,6 @@ function Table({
               info.people !== undefined && info.people.length > 0
                 ? info.people.filter((p) => p.type === "designer")
                 : [],
-            description: gameEngine.description(),
             starred:
               globalMe !== null &&
               "stars" in globalMe &&
@@ -415,7 +408,8 @@ function Table({
         ),
         enableSorting: false,
       }),
-      columnHelper.accessor("description", {
+      columnHelper.display({
+        id: "description",
         header: t("tables.description"),
         cell: (props) => (
           <ExpandableDiv
@@ -423,7 +417,7 @@ function Table({
             handleClick={() => togglePara(props.row.original.id)}
           >
             <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-              {props.getValue()}
+              {gameDescription(props.row.original.id)}
             </ReactMarkdown>
           </ExpandableDiv>
         ),

@@ -13,10 +13,6 @@ require("core-js/es/set");
 require("core-js/es/promise");
 require("core-js/es/object");
 
-//identify if you are on development or production
-//when you build your app process.env.NODE_ENV is set to 'production'
-const env = process.env.NODE_ENV;
-
 const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(

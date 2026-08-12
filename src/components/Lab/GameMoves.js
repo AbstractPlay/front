@@ -146,7 +146,6 @@ function GameMoves(props) {
   let game = props.game;
   let neverExplore = props.noExplore;
   let exploration = props.exploration;
-  const getFocusNode = props.getFocusNode;
   let handleGameMoveClick = props.handleGameMoveClick;
   const allUsers = useStore((state) => state.users);
 
