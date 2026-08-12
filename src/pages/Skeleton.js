@@ -15,6 +15,7 @@ import {
   COGNITO_REDIRECT_LOGIN,
   COGNITO_REDIRECT_LOGOUT,
 } from "../config";
+import { REAL_MODE } from "../lib/realMode";
 import { Amplify, Auth } from "aws-amplify";
 import Spinner from "../components/Spinner";
 import Welcome from "./Welcome";
@@ -219,7 +220,7 @@ function Bones(props) {
       <HelmetProvider>
         <Helmet>
           <title>
-            {process.env.REACT_APP_REAL_MODE === "production"
+            {REAL_MODE === "production"
               ? "Abstract Play"
               : "Abstract Play (Dev)"}
           </title>
@@ -307,7 +308,7 @@ function Bones(props) {
               </Routes>
             </ErrorBoundary>
           </section>
-          {process.env.REACT_APP_REAL_MODE === "production" ? (
+          {REAL_MODE === "production" ? (
             <Footer />
           ) : (
             <FooterDev />

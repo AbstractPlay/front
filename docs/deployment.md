@@ -15,12 +15,16 @@ Defined in [`serverless.yml`](../serverless.yml).
 
 | Command | Effect |
 |---------|--------|
-| `npm run build-dev` | Production build with `REACT_APP_REAL_MODE=development` |
-| `npm run build-prod` | Production build with `REACT_APP_REAL_MODE=production`; generates sitemap |
+| `npm run build-dev` | Vite build with `VITE_REAL_MODE=development`; copies dev `robots.txt`, strips `build/locales` |
+| `npm run build-prod` | Vite build with `VITE_REAL_MODE=production`; generates sitemap; copies prod `robots.txt`, strips `build/locales` |
+| `npm run analyze` | Bundle size report via `source-map-explorer` (runs a dev-mode Vite build first — prod builds omit source maps) |
+| `npm run analyze:only` | Re-run explorer on an existing dev build in `build/` |
 | `npm run deploy` | Upload `build/` to dev S3 bucket |
 | `npm run deploy-prod` | Upload `build/` to prod S3 bucket (`--stage prod`) |
-| `npm run full-dev` | `build-dev` + deploy |
-| `npm run full-prod` | `build-prod` + deploy |
+| `npm run full-dev` | `build-dev` + deploy + publish locales to dev S3 |
+| `npm run full-prod` | `build-prod` + deploy + publish locales to prod S3 |
+| `npm run publish-locales` | Upload `public/locales/` (+ gameslib) to dev bucket (`locales/` prefix) |
+| `npm run publish-locales:prod` | Same for prod bucket |
 
 ## AWS setup
 
@@ -46,7 +50,7 @@ CI steps:
 6. `serverless client deploy`.
 7. Publish locale JSON files to S3 (`bin/publish-locales.mjs`).
 
-Deployments do **not** use CloudFront invalidations. Cache freshness is handled by upload headers (see below) and content-hashed JS/CSS bundle filenames from Create React App.
+Deployments do **not** use CloudFront invalidations. Cache freshness is handled by upload headers (see below) and content-hashed JS/CSS bundle filenames under `build/static/` (Vite `rollupOptions.output`, matching the former CRA layout).
 
 ## Cache headers
 

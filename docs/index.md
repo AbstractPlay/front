@@ -7,7 +7,7 @@ The Abstract Play browser client is a React single-page application (SPA) deploy
 | Layer | Technology |
 |-------|------------|
 | UI | React 18, Bulma CSS |
-| Build | Create React App (`react-scripts`) |
+| Build | Vite 6 |
 | Routing | React Router v6 |
 | State | Zustand |
 | Auth | AWS Amplify + Cognito OAuth |

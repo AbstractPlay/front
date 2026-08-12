@@ -12,6 +12,7 @@ import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import GameVariants from "./GameVariants";
 import { useStore } from "../stores";
+import { REAL_MODE } from "../lib/realMode";
 
 const stringArraysEqual = (lst1, lst2) => {
   if (lst1.length !== lst2.length) {
@@ -246,7 +247,7 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
   let games = [];
   gameinfo.forEach((game) => games.push({ id: game.uid, name: game.name }));
   games.sort((a, b) => (a.name > b.name ? 1 : -1));
-  if (process.env.REACT_APP_REAL_MODE === "production") {
+  if (REAL_MODE === "production") {
     games = games.filter(
       (g) => !gameinfo.get(g.id).flags.includes("experimental")
     );

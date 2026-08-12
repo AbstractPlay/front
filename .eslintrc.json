@@ -1,11 +1,65 @@
 {
-  "extends": ["eslint:recommended", "react-app"],
-  "plugins": ["react-hooks"],
+  "root": true,
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  "plugins": ["react", "jsx-a11y"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
-    "react-hooks/rules-of-hooks": 2,
-    "react-hooks/exhaustive-deps": 1,
+    "react/jsx-uses-vars": "warn",
+    "react/jsx-uses-react": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "no-console": "off",
-    "no-constant-condition": "off"
+    "no-constant-condition": "off",
+    "no-unused-vars": [
+      "warn",
+      {
+        "args": "none",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "jsx-a11y/alt-text": "warn",
+    "jsx-a11y/anchor-has-content": "warn",
+    "jsx-a11y/anchor-is-valid": [
+      "warn",
+      {
+        "aspects": ["noHref", "invalidHref"]
+      }
+    ],
+    "jsx-a11y/aria-activedescendant-has-tabindex": "warn",
+    "jsx-a11y/aria-props": "warn",
+    "jsx-a11y/aria-proptypes": "warn",
+    "jsx-a11y/aria-role": ["warn", { "ignoreNonDOM": true }],
+    "jsx-a11y/aria-unsupported-elements": "warn",
+    "jsx-a11y/heading-has-content": "warn",
+    "jsx-a11y/iframe-has-title": "warn",
+    "jsx-a11y/img-redundant-alt": "warn",
+    "jsx-a11y/no-access-key": "warn",
+    "jsx-a11y/no-distracting-elements": "warn",
+    "jsx-a11y/no-redundant-roles": "warn",
+    "jsx-a11y/role-has-required-aria-props": "warn",
+    "jsx-a11y/role-supports-aria-props": "warn",
+    "jsx-a11y/scope": "warn"
   },
   "overrides": [
     {
@@ -15,9 +69,24 @@
       }
     },
     {
-      "files": ["**/*.test.js"],
+      "files": ["src/test-support/**/*.js"],
       "env": {
-        "jest": true
+        "node": true,
+        "commonjs": true
+      },
+      "parserOptions": {
+        "sourceType": "script"
+      }
+    },
+    {
+      "files": ["**/*.test.js"],
+      "globals": {
+        "describe": "readonly",
+        "it": "readonly",
+        "expect": "readonly",
+        "beforeEach": "readonly",
+        "afterEach": "readonly",
+        "vi": "readonly"
       }
     }
   ]

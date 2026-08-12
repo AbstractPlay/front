@@ -1,3 +1,4 @@
+import { REAL_MODE } from "./lib/realMode";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import HttpApi from "i18next-http-backend";
@@ -139,7 +140,7 @@ i18n
     nonExplicitSupportedLngs: true,
     // Regional Spanish files live under /locales/es-US/; i18n language code is es.
     load: "languageOnly",
-    debug: process.env.REACT_APP_REAL_MODE !== "production",
+    debug: REAL_MODE !== "production",
     partialBundledLanguages: true,
     resources: {
       en: {

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The front end is a Create React App (CRA) project. The production bundle is a static SPA served from S3 via CloudFront. All application logic runs in the browser; the backend is accessed over HTTPS (REST-style RPC) and WebSockets.
+The front end is a **Vite + React** single-page application. The production bundle is a static SPA served from S3 via CloudFront. All application logic runs in the browser; the backend is accessed over HTTPS (REST-style RPC) and WebSockets.
 
 ## Boot sequence
 

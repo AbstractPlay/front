@@ -2,6 +2,7 @@ import React, { useEffect, useRef, Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useStore } from "../../stores";
+import { REAL_MODE } from "../../lib/realMode";
 import BotAwareName from "../Bots/BotAwareName";
 
 function useEventListener(eventName, handler, element = window) {
@@ -197,7 +198,7 @@ function GameMoves(props) {
         lst.push([info.uid, info.name]);
       }
     }
-    if (process.env.REACT_APP_REAL_MODE === "production") {
+    if (REAL_MODE === "production") {
       lst = lst.filter(
         (id) => !gameinfo.get(id[0]).flags.includes("experimental")
       );

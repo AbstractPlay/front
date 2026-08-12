@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   applyExplorationMove,
   filterPersistableExplorationTree,
@@ -6,7 +7,7 @@ import {
   validateExplorationMove,
 } from "./explorationMoves";
 
-jest.mock("@abstractplay/gameslib", () => ({
+vi.mock("@abstractplay/gameslib", () => ({
   GameFactory: (metaGame, _state) => {
     if (metaGame === "jacynth") {
       return {
@@ -53,8 +54,8 @@ function mockTipEngine() {
       clone() {
         return createEngine();
       },
-      stack: { pop: jest.fn(), length: 2 },
-      load: jest.fn(),
+      stack: { pop: vi.fn(), length: 2 },
+      load: vi.fn(),
       gameover: false,
       winner: [],
     };

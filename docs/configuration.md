@@ -1,11 +1,11 @@
 # Configuration
 
-Environment-specific settings live in [`src/config/`](../src/config/index.js). The active file is selected at build time by `REACT_APP_REAL_MODE`.
+Environment-specific settings live in [`src/config/`](../src/config/index.js). The active file is selected at build time by `VITE_REAL_MODE` (see [`src/lib/realMode.js`](../src/lib/realMode.js)).
 
 ## Environment modes
 
-| Mode | `REACT_APP_REAL_MODE` | npm script | Config file |
-|------|----------------------|------------|-------------|
+| Mode | `VITE_REAL_MODE` | npm script | Config file |
+|------|------------------|------------|-------------|
 | Local dev | `local` | `npm start` | [`local.js`](../src/config/local.js) |
 | Dev deploy | `development` | `npm run build-dev` | [`dev.js`](../src/config/dev.js) |
 | Prod deploy | `production` | `npm run build-prod` | [`prod.js`](../src/config/prod.js) |

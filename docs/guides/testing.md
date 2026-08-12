@@ -5,8 +5,9 @@
 Two layers:
 
 ```bash
-npm test              # Jest watch mode (unit tests with mocks)
-npm run test:ci       # Jest single-run + real-engine contract tests
+npm test              # Vitest single-run (unit tests with mocks)
+npm run test:watch    # Vitest watch mode
+npm run test:ci       # Vitest single-run + real-engine contract tests
 npm run test:engines  # Real gameslib contract/integration tests only
 ```
 
@@ -29,7 +30,7 @@ Renderer stays on the pinned `ci-deps.json` version in both cases.
 | **Real-engine contracts** | `bin/test-exploration-contracts.mjs` | Partial/persist probe + Submit visibility against actual gameslib (includes Pinch partial F7) |
 | Other lib tests | `src/lib/GameMove/exploration.test.js`, `src/lib/Lab/`, etc. | Save/merge, playground payloads |
 
-**Why a Node script for real engines?** Create React App's Jest resolver loads `@abstractplay/gameslib`'s TypeScript sources (and chokes on ESM deps like `js-combinatorics`) instead of the compiled `build/` output. `bin/test-exploration-contracts.mjs` uses the same resolver as production until the Vite migration. It requires **Node 20+** (CRA-style `import` in `.js` files without `"type": "module"`). Jest still has a `moduleNameMapper` pointing at `build/` for future component tests.
+**Why a Node script for real engines?** Jest (via the old CRA toolchain) loaded `@abstractplay/gameslib`'s TypeScript sources instead of the compiled `build/` output. `bin/test-exploration-contracts.mjs` uses the same resolver as production. Vitest unit tests use a `resolve.alias` to the compiled gameslib `build/` output (see [`vite.config.js`](../../vite.config.js)).
 
 ### Fixtures
 
@@ -70,11 +71,9 @@ The engine runner in `bin/` picks up new contracts automatically.
 
 - `src/lib/GameMove/submitMove.js` — `getPendingSubmitMove()` (used by `MoveEntry` and engine tests)
 
-### Jest config
+### Vitest config
 
-CRA overrides live in `config/jest/babelTransform.js` and `config/jest/fileTransform.js`. `src/setupTests.js` is reserved for future global setup.
-
-Package.json `jest` section maps `@abstractplay/gameslib` to the compiled build (for tests that do not mock the package).
+[`vite.config.js`](../../vite.config.js) `test` block: `jsdom` environment, `src/setupTests.js` (jest-dom matchers), `@abstractplay/gameslib` alias to compiled `build/`.
 
 ## Adding component tests
 
@@ -95,7 +94,7 @@ High-value targets if expanding coverage:
 
 ## Linting
 
-ESLint config: [`.eslintrc.json`](../.eslintrc.json) (`eslint:recommended`, `react-app`, `react-hooks`).
+ESLint config: [`.eslintrc.json`](../.eslintrc.json) (`eslint:recommended`, `eslint-plugin-react`, `react-hooks`, `jsx-a11y`, `eslint-config-prettier`).
 
 ```bash
 npm run lint       # report issues in src/ and bin/

@@ -1,18 +1,18 @@
+import { vi } from "vitest";
 import {
   maybeSyncInProgressCommentedFlag,
   runCheckTimeQuery,
 } from "./spectatorHousekeeping";
+import { getAuthToken, callAuthApi } from "../api";
 
-jest.mock("../api", () => ({
-  getAuthToken: jest.fn(),
-  callAuthApi: jest.fn(),
+vi.mock("../api", () => ({
+  getAuthToken: vi.fn(),
+  callAuthApi: vi.fn(),
 }));
-
-const { getAuthToken, callAuthApi } = require("../api");
 
 describe("spectatorHousekeeping", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     callAuthApi.mockResolvedValue({ status: 200 });
   });
 

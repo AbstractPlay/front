@@ -6,10 +6,12 @@
 front/
 ├── .github/workflows/   # CI deploy
 ├── bin/                 # Build scripts (sitemap, RSS, news)
-├── config/              # CRA webpack/jest overrides
 ├── docs/                # Developer documentation (this site)
 ├── public/              # Static assets, locales, service worker
 ├── src/                 # Application source
+├── index.html           # Vite HTML entry
+├── vite.config.js       # Vite dev/build/test config
+├── csp-policy.mjs       # Production CSP (injected at build)
 ├── serverless.yml       # AWS deploy config
 └── package.json
 ```
@@ -23,7 +25,7 @@ front/
 | `lib/` | Shared non-UI logic: API helpers, game-move utilities, Lab builders, clipboard, colour helpers. |
 | `stores/` | Zustand global store (`index.js`). |
 | `hooks/` | Custom React hooks. |
-| `config/` | Environment-specific endpoints (not to be confused with root `config/` CRA overrides). |
+| `config/` | Environment-specific endpoints (runtime Cognito/API settings). |
 | `assets/` | Static JSON bundled at build time (e.g. `news.json`). |
 
 ## Component organization
@@ -44,8 +46,7 @@ Example: exploration tree logic is in `lib/GameMove/exploration.js`; the board i
 
 ## Config vs environment
 
-- **`src/config/`** — runtime endpoints and Cognito settings (imported as `../config`).
-- **Root `config/`** — Create React App eject-style overrides for webpack, jest, paths. Rarely edited.
+- **`src/config/`** — runtime endpoints and Cognito settings (imported as `../config`), selected by `VITE_REAL_MODE`.
 
 ## Static assets
 

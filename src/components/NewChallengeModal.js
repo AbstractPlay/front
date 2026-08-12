@@ -12,6 +12,7 @@ import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import GameVariants from "./GameVariants";
 import { useStore } from "../stores";
+import { REAL_MODE } from "../lib/realMode";
 import { AIAI_USER_ID, formatUserDisplayName } from "./Bots/botUtils";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
@@ -316,7 +317,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   let games = [];
   gameinfo.forEach((game) => games.push({ id: game.uid, name: game.name }));
   games.sort((a, b) => (a.name > b.name ? 1 : -1));
-  if (process.env.REACT_APP_REAL_MODE === "production") {
+  if (REAL_MODE === "production") {
     games = games.filter(
       (g) => !gameinfo.get(g.id).flags.includes("experimental")
     );
@@ -340,7 +341,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   }
 
   if (
-    process.env.REACT_APP_REAL_MODE === "production" &&
+    REAL_MODE === "production" &&
     metaGame !== null &&
     (!gameinfo.has(metaGame) ||
       gameinfo.get(metaGame).flags.includes("experimental"))

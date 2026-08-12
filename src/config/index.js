@@ -1,17 +1,34 @@
-const merge = require("lodash/merge");
-const global = require("./global");
+import merge from "lodash/merge";
+import { REAL_MODE } from "../lib/realMode";
+import globalConfig from "./global";
+import local from "./local";
+import dev from "./dev";
+import prod from "./prod";
 
-var env; // let doesn't seem to work here
-console.log(`Env: ${JSON.stringify(process.env)}`);
-if (process.env.REACT_APP_REAL_MODE === "local") {
-  console.log("Loading local environment");
-  env = require("./local");
-} else if (process.env.REACT_APP_REAL_MODE === "development") {
-  console.log("Loading dev environment");
-  env = require("./dev");
+let env;
+if (REAL_MODE === "local") {
+  env = local;
+} else if (REAL_MODE === "development") {
+  env = dev;
 } else {
-  console.log("Loading prod environment");
-  env = require("./prod");
+  env = prod;
 }
 
-module.exports = merge(global, env);
+const config = merge({}, globalConfig, env);
+
+export const {
+  PUSH_VAPID_PUBLIC_KEY,
+  COGNITO_USER_POOL_ID,
+  COGNITO_DOMAIN,
+  COGNITO_APPID,
+  COGNITO_COOKIE_DOMAIN,
+  COGNITO_REDIRECT_LOGIN,
+  COGNITO_REDIRECT_LOGOUT,
+  API_ENDPOINT_OPEN,
+  API_ENDPOINT_AUTH,
+  PUSH_API_URL,
+  API_ENDPOINT,
+  WS_ENDPOINT,
+} = config;
+
+export default config;

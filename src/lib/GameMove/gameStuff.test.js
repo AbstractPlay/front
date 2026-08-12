@@ -1,32 +1,33 @@
+import { vi } from "vitest";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { processNewMove } from "./gameStuff";
 
-jest.mock("react-toastify", () => ({
-  toast: jest.fn(),
+vi.mock("react-toastify", () => ({
+  toast: vi.fn(),
 }));
 
-jest.mock("../../stores", () => ({
+vi.mock("../../stores", () => ({
   useStore: {
     getState: () => ({ users: {} }),
   },
 }));
 
-jest.mock("./exploration", () => ({
+vi.mock("./exploration", () => ({
   isExplorer: () => false,
   canExploreMove: () => false,
-  setCanPublish: jest.fn(),
-  setURL: jest.fn(),
+  setCanPublish: vi.fn(),
+  setURL: vi.fn(),
   getFocusNode: () => ({ state: "{}" }),
-  fixMoveOutcomes: jest.fn(),
-  saveExploration: jest.fn(),
+  fixMoveOutcomes: vi.fn(),
+  saveExploration: vi.fn(),
 }));
 
-jest.mock("./misc", () => ({
+vi.mock("./misc", () => ({
   replaceNames: (render) => render,
-  setStatus: jest.fn(),
+  setStatus: vi.fn(),
 }));
 
-jest.mock("@abstractplay/gameslib", () => ({
+vi.mock("@abstractplay/gameslib", () => ({
   GameFactory: () => ({
     validateMove(m) {
       if (m === "") {
@@ -89,17 +90,17 @@ describe("processNewMove", () => {
       exploration,
       errorMessageRef,
       partialMoveRenderRef,
-      jest.fn(),
+      vi.fn(),
       engineRef,
       (v) => {
         if (v) errorShown = true;
       },
-      jest.fn(),
+      vi.fn(),
       (m) => {
         moveState = m;
       },
       null,
-      jest.fn(),
+      vi.fn(),
       (key) => key
     );
 
