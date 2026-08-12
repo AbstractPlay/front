@@ -14,6 +14,10 @@ import { render } from "@abstractplay/renderer";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
+import {
+  maybeSyncInProgressCommentedFlag,
+  runCheckTimeQuery,
+} from "../lib/GameMove/spectatorHousekeeping";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { Buffer } from "buffer";
 import GameMoves from "./GameMove/GameMoves";
@@ -688,21 +692,12 @@ function GameMove(props) {
               isInterestingComment(c.comment)
             );
             // Check if commented flag needs to be updated (only for in-progress games). This is mostly to "fix" old games that already had chats but no commented flag.
-            if (
-              data.game.toMove !== "" &&
-              (data.game.commented ? 0 : data.game.commented) !==
-                (hasInterestingComments ? 1 : 0)
-            ) {
-              // Send update to backend to update commented flag for in-progress game
-              callAuthApi("update_commented", {
-                id: gameID,
-                metaGame: metaGame,
-                cbit: 0,
-                commented: hasInterestingComments ? 1 : 0,
-              }).catch((err) => {
-                console.log("Failed to update commented flag:", err);
-              });
-            }
+            await maybeSyncInProgressCommentedFlag({
+              gameID,
+              metaGame,
+              game: data.game,
+              hasInterestingComments,
+            });
             data.game.commented = hasInterestingComments ? 1 : 0;
           }
         } else {
@@ -757,8 +752,9 @@ function GameMove(props) {
 
   const checkTime = useCallback(async (query) => {
     try {
-      const res = await callAuthApi(query, {
-        id: gameRef.current.id,
+      const res = await runCheckTimeQuery({
+        query,
+        gameId: gameRef.current.id,
         metaGame: gameRef.current.metaGame,
       });
       if (!res) return;
