@@ -12,14 +12,21 @@ export function isMoveInLegalList(gameEngine, move) {
   });
 }
 
+export function isPartialTipPrefixMove(move) {
+  return /^>[nesw]$/i.test(String(move ?? "").replace(/\s+/g, ""));
+}
+
+export function isCompoundTipMove(move) {
+  return /^>[nesw],/i.test(String(move ?? "").replace(/\s+/g, ""));
+}
+
 // Whether a move string is a complete exploration branch (not a render-only prefix).
 export function validateExplorationMove(gameEngine, move) {
   const v = gameEngine.validateMove(move);
   if (!v.valid) return { valid: false, partial: false };
   if (v.complete === 1) return { valid: true, partial: false };
   if (isMoveInLegalList(gameEngine, move)) return { valid: true, partial: false };
-  if (v.complete < 1) return { valid: true, partial: true };
-  return { valid: true, partial: false };
+  return { valid: true, partial: true };
 }
 
 export function isPersistableExplorationMove(gameEngine, move) {
