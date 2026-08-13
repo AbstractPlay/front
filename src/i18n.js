@@ -17,7 +17,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: "fr", label: "Français" },
   { code: "de", label: "Deutsch" },
   { code: "it", label: "Italiano" },
-  { code: "es", label: "Español (EE. UU.)" },
+  { code: "es", label: "Español" },
 ];
 
 /** Backend email/push locales (apback); may exceed UI footer languages. */
