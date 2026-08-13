@@ -17,7 +17,7 @@ vi.mock("./exploration", () => ({
   canExploreMove: () => false,
   setCanPublish: vi.fn(),
   setURL: vi.fn(),
-  getFocusNode: () => ({ state: "{}" }),
+  getFocusNode: (exploration, _game, focus) => exploration[focus.moveNumber],
   fixMoveOutcomes: vi.fn(),
   saveExploration: vi.fn(),
 }));
@@ -29,7 +29,15 @@ vi.mock("./misc", () => ({
 
 vi.mock("@abstractplay/gameslib", () => ({
   GameFactory: () => ({
-    validateMove(m) {
+    validateMove(m, player) {
+      if (player === 1) {
+        if (m === "d5") {
+          return { valid: true, complete: -1, canrender: true };
+        }
+        if (m === "d5-e4") {
+          return { valid: true, complete: 1 };
+        }
+      }
       if (m === "") {
         return { valid: true, complete: -1, canrender: true };
       }
@@ -45,6 +53,11 @@ vi.mock("@abstractplay/gameslib", () => ({
     },
     render: () => ({}),
     cheapSerialize: () => ({}),
+    serialize: () => ({}),
+    currplayer: 1,
+    gameover: false,
+    winner: [],
+    sameMove: (a, b) => a === b,
     moves: () => [],
     state: () => ({}),
   }),
@@ -139,5 +152,78 @@ describe("processNewMove", () => {
     expect(cleared.moveState).toEqual(
       expect.objectContaining({ move: "", rendered: "" })
     );
+  });
+
+  it("keeps exPath empty for simultaneous partial order moves", () => {
+    const simGame = {
+      ...game,
+      metaGame: "entropy",
+      simultaneous: true,
+    };
+    let simFocus = { moveNumber: 0, exPath: [], canExplore: true };
+    const partialMoveRenderRef = { current: false };
+
+    processNewMove(
+      {
+        valid: true,
+        complete: -1,
+        canrender: true,
+        move: "d5",
+        rendered: "",
+      },
+      null,
+      { id: "p1" },
+      simFocus,
+      { current: simGame },
+      { current: [] },
+      { current: {} },
+      exploration,
+      { current: "" },
+      partialMoveRenderRef,
+      vi.fn(),
+      { current: {} },
+      vi.fn(),
+      (focus) => {
+        simFocus = focus;
+      },
+      vi.fn(),
+      null,
+      vi.fn(),
+      (key) => key
+    );
+
+    expect(simFocus.exPath).toEqual([]);
+    expect(partialMoveRenderRef.current).toBe(true);
+
+    processNewMove(
+      {
+        valid: true,
+        complete: 1,
+        move: "d5-e4",
+        rendered: "",
+      },
+      null,
+      { id: "p1" },
+      simFocus,
+      { current: simGame },
+      { current: [] },
+      { current: {} },
+      exploration,
+      { current: "" },
+      partialMoveRenderRef,
+      vi.fn(),
+      { current: {} },
+      vi.fn(),
+      (focus) => {
+        simFocus = focus;
+      },
+      vi.fn(),
+      null,
+      vi.fn(),
+      (key) => key
+    );
+
+    expect(simFocus.exPath).toEqual([0]);
+    expect(partialMoveRenderRef.current).toBe(false);
   });
 });

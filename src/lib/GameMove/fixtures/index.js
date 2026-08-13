@@ -1,4 +1,5 @@
 import { carnacContracts } from "./carnac.js";
+import { entropyContracts } from "./entropy.js";
 import { estateContracts } from "./estate.js";
 import { jacynthContracts } from "./jacynth.js";
 import { pinchContracts } from "./pinch.js";
@@ -19,6 +20,7 @@ import { pinchContracts } from "./pinch.js";
  */
 export const EXPLORATION_CONTRACTS = [
   ...carnacContracts,
+  ...entropyContracts,
   ...estateContracts,
   ...jacynthContracts,
   ...pinchContracts,

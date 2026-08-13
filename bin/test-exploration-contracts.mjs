@@ -83,17 +83,28 @@ function createEngine(contract) {
   return engine;
 }
 
+function moveContext(contract) {
+  const ctx = { metaGame: contract.metaGame };
+  if (contract.simultaneous) {
+    ctx.simultaneous = true;
+    ctx.playerIndex = contract.playerIndex ?? 0;
+    ctx.numPlayers = contract.numPlayers ?? 2;
+  }
+  return ctx;
+}
+
 function assertContract(contract) {
-  const { move, metaGame, whileEditing, afterComplete } = contract;
+  const { move, whileEditing, afterComplete } = contract;
+  const ctx = moveContext(contract);
 
   const editingEngine = createEngine(contract);
   assert.equal(
-    isPartialExplorationMove(editingEngine, move, { metaGame }),
+    isPartialExplorationMove(editingEngine, move, ctx),
     whileEditing.partial,
     `${contract.id}: whileEditing.partial`
   );
   assert.equal(
-    isPersistableExplorationMove(editingEngine, move, metaGame),
+    isPersistableExplorationMove(editingEngine, move, ctx),
     whileEditing.persistable,
     `${contract.id}: whileEditing.persistable`
   );
@@ -102,13 +113,13 @@ function assertContract(contract) {
   assert.equal(
     isPartialExplorationMove(completeEngine, move, {
       userCompleted: true,
-      metaGame,
+      ...ctx,
     }),
     afterComplete.partial,
     `${contract.id}: afterComplete.partial`
   );
   assert.equal(
-    isPersistableExplorationMove(completeEngine, move, metaGame),
+    isPersistableExplorationMove(completeEngine, move, ctx),
     afterComplete.persistable,
     `${contract.id}: afterComplete.persistable`
   );
@@ -127,10 +138,13 @@ function runCompleteMoveFlow(contract) {
   ];
   let focus = { moveNumber: 0, exPath: [] };
 
-  engine.validateMove(contract.move);
-  const editingPartial = isPartialExplorationMove(engine, contract.move, {
-    metaGame: contract.metaGame,
-  });
+  const ctx = moveContext(contract);
+  if (contract.simultaneous) {
+    engine.validateMove(contract.move, (contract.playerIndex ?? 0) + 1);
+  } else {
+    engine.validateMove(contract.move);
+  }
+  const editingPartial = isPartialExplorationMove(engine, contract.move, ctx);
 
   const afterEditing = {
     pendingSubmit: getPendingSubmitMove(exploration, focus, {
@@ -142,7 +156,7 @@ function runCompleteMoveFlow(contract) {
 
   const completePartial = isPartialExplorationMove(engine, contract.move, {
     userCompleted: true,
-    metaGame: contract.metaGame,
+    ...ctx,
   });
 
   if (!completePartial && contract.move.length > 0) {
@@ -270,6 +284,46 @@ function testCarnacFilterTree() {
   );
 }
 
+function testEntropyFilterTree() {
+  const partial = EXPLORATION_CONTRACTS.find(
+    (c) => c.id === "entropy-order-partial-d5"
+  );
+  const complete = EXPLORATION_CONTRACTS.find(
+    (c) => c.id === "entropy-order-complete-d5-d4"
+  );
+  const chaos = EXPLORATION_CONTRACTS.find(
+    (c) => c.id === "entropy-chaos-placement-d4"
+  );
+  const ctx = moveContext(partial);
+  const orderEngine = createEngine(partial);
+
+  const orderFiltered = filterPersistableExplorationTree(
+    orderEngine,
+    [
+      { move: partial.move, children: [] },
+      { move: complete.move, children: [] },
+    ],
+    ctx
+  );
+  assert.deepEqual(
+    orderFiltered.map((c) => c.move),
+    [complete.move],
+    "entropy order filter tree"
+  );
+
+  const chaosEngine = createEngine(chaos);
+  const chaosFiltered = filterPersistableExplorationTree(
+    chaosEngine,
+    [{ move: chaos.move, children: [] }],
+    moveContext(chaos)
+  );
+  assert.deepEqual(
+    chaosFiltered.map((c) => c.move),
+    [chaos.move],
+    "entropy chaos filter tree"
+  );
+}
+
 let passed = 0;
 const activeContracts = partitionContracts(EXPLORATION_CONTRACTS);
 for (const contract of activeContracts) {
@@ -281,7 +335,9 @@ testPendingSubmitAfterAutomove();
 passed += 1;
 testCarnacFilterTree();
 passed += 1;
+testEntropyFilterTree();
+passed += 1;
 
 console.log(
-  `exploration engine tests: ${passed} scenarios passed (${activeContracts.length} contracts + pending submit after automove + filter tree)`
+  `exploration engine tests: ${passed} scenarios passed (${activeContracts.length} contracts + pending submit after automove + filter trees)`
 );

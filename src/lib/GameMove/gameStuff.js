@@ -8,7 +8,10 @@ import {
   fixMoveOutcomes,
   saveExploration,
 } from "./exploration";
-import { isPartialExplorationMove } from "./explorationMoves";
+import {
+  explorationMoveContext,
+  isPartialExplorationMove,
+} from "./explorationMoves";
 import { replaceNames, setStatus } from "./misc";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { cloneDeep } from "lodash";
@@ -270,20 +273,25 @@ function doView(
     simMove = true;
     m = game.players.map((p) => (p.id === me.id ? m : "")).join(",");
   }
+  const moveContext = explorationMoveContext(game);
   const partialMove = isPartialExplorationMove(gameEngineTmp, m, {
     userCompleted: move.complete === 1,
-    metaGame: game.metaGame,
+    ...moveContext,
   });
+  const exploringPartial = partialMove || (simMove && move.complete !== 1);
   let newfocus = cloneDeep(focus);
   let moves;
   try {
-    gameEngineTmp.move(m, { partial: partialMove || simMove, emulation: true });
-    if (!partialMove && focus.canExplore && !game.noMoves) {
+    gameEngineTmp.move(m, {
+      partial: exploringPartial || simMove,
+      emulation: true,
+    });
+    if (!exploringPartial && focus.canExplore && !game.noMoves) {
       moves = gameEngineTmp.moves();
     }
     // check for auto moves (automove: any forced move; autopass: only forced pass)
     if (
-      !partialMove &&
+      !exploringPartial &&
       focus.canExplore &&
       (game.automove || game.autopass) &&
       isExplorer(explorer, me)
@@ -317,7 +325,7 @@ function doView(
         }
         m = moves[0];
         gameEngineTmp.move(m, {
-          partial: partialMove || simMove,
+          partial: exploringPartial || simMove,
           emulation: true,
         });
         moves = gameEngineTmp.moves();
@@ -339,11 +347,11 @@ function doView(
   setStatus(
     gameEngineTmp,
     game,
-    partialMove || simMove,
+    exploringPartial || simMove,
     simMove ? move.move : m,
     statusRef.current
   );
-  if (!partialMove && m.length > 0) {
+  if (!exploringPartial && m.length > 0) {
     if (
       !game.gameOver ||
       !(
@@ -386,7 +394,7 @@ function doView(
   } else {
     moveSetter(move);
   }
-  partialMoveRenderRef.current = partialMove;
+  partialMoveRenderRef.current = exploringPartial;
   // console.log('setting renderrep 1');
   engineRef.current = gameEngineTmp;
   console.log(

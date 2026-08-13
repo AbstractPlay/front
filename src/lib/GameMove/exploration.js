@@ -3,16 +3,19 @@ import { callAuthApi } from "../api";
 import { isInterestingComment } from "./misc";
 import {
   applyExplorationMove,
+  explorationMoveContext,
   filterPersistableExplorationTree,
 } from "./explorationMoves";
 
 export {
   assertValidMoveHasComplete,
+  explorationMoveContext,
   isPartialExplorationMove,
   validateExplorationMove,
   isPersistableExplorationMove,
   applyExplorationMove,
   filterPersistableExplorationTree,
+  toSimultaneousMoveString,
 } from "./explorationMoves";
 
 // Whether the user wants to explore
@@ -61,20 +64,21 @@ export function explorationTreeForSave(game, exploration, moveNumber) {
   const node = getExplorationNode(exploration, game, moveNumber - 1);
   const gameEngine = GameFactory(game.metaGame, node.state);
   const deflated = exploration[moveNumber - 1].Deflate(game.gameOver);
+  const moveContext = explorationMoveContext(game);
   if (game.gameOver) {
     return {
       ...deflated,
       children: filterPersistableExplorationTree(
         gameEngine,
         deflated.children || [],
-        game.metaGame
+        moveContext
       ),
     };
   }
   return filterPersistableExplorationTree(
     gameEngine,
     deflated.children || [],
-    game.metaGame
+    moveContext
   );
 }
 
