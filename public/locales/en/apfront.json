@@ -1557,6 +1557,24 @@
         "resetToDefaults": "Reset to Defaults",
         "deleteCustomization": "Delete Customization"
     },
+    "gamePicker": {
+        "choose": "Choose a game…",
+        "searchLabel": "Search",
+        "searchPlaceholder": "Type to filter games…",
+        "noResults": "No games match your search.",
+        "starredOnly": "Starred games only",
+        "loadingQuickPicks": "Loading your games…",
+        "matchCount": "{{count}} of {{total}} games",
+        "filterGoal": "Goal",
+        "filterBoard": "Board",
+        "filterAny": "Any",
+        "quickPicks": {
+            "starred": "Starred",
+            "mostPlayed": "Most played",
+            "topRated": "Top rated",
+            "recent": "Recently played"
+        }
+    },
     "lab": {
         "intro": "A local play area for experimenting with games. Nothing here touches the server — positions and saved games live in your browser only.",
         "introLoggedIn": "Experiment with games in the Playground. Saved positions sync to your account; your current session is also kept on this device so you can resume after a refresh.",

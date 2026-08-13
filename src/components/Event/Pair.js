@@ -6,7 +6,6 @@ import { cloneDeep } from "lodash";
 import SortableList, { SortableItem } from "react-easy-sort";
 import arrayMove from "array-move";
 import { bergerTable } from "../../lib/berger";
-import { REAL_MODE } from "../../lib/realMode";
 import PairingTable from "./PairingTable";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
@@ -59,9 +58,6 @@ function Pair({ event, setRefresh }) {
       setDivisions(tmpDivisions);
     }
     let allMeta = [...gameinfo.values()];
-    if (REAL_MODE === "production") {
-      allMeta = allMeta.filter((i) => !i.flags.includes("experimental"));
-    }
     allMeta.sort((a, b) => a.name.localeCompare(b.name));
     setValidMeta(allMeta.map((i) => [i.uid, i.name]));
   }, [event, allUsers]);

@@ -8,7 +8,6 @@ import { Helmet } from "react-helmet-async";
 import Table from "./MetaContainer/Table";
 import MetaItem from "./MetaContainer/MetaItem";
 import { useStore } from "../stores";
-import { REAL_MODE } from "../lib/realMode";
 
 function MetaContainer(props) {
   const globalMe = useStore((state) => state.globalMe);
@@ -70,12 +69,6 @@ function MetaContainer(props) {
     else if (na > nb) return 1;
     return 0;
   });
-  if (REAL_MODE === "production") {
-    games = games.filter(
-      (id) => !gameinfo.get(id).flags.includes("experimental")
-    );
-  }
-
   const toggleStar = async (game) => {
     try {
       const { setGlobalMe } = useStore.getState();

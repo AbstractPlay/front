@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
 import { API_ENDPOINT_OPEN } from "../config";
-import { REAL_MODE } from "../lib/realMode";
 import { Helmet } from "react-helmet-async";
 import MetaItem from "./MetaContainer/MetaItem";
 import ExploreView from "./Explore/ExploreView";
@@ -106,13 +105,7 @@ function Explore(props) {
     [selectedSetter]
   );
 
-  if (
-    metaGame === undefined ||
-    metaGame === null ||
-    !gameinfo.has(metaGame) ||
-    (REAL_MODE === "production" &&
-      gameinfo.get(metaGame)?.flags?.includes("experimental"))
-  ) {
+  if (metaGame === undefined || metaGame === null || !gameinfo.has(metaGame)) {
     return (
       <>
         <Helmet>
