@@ -128,6 +128,56 @@ function mockArmadasStyleEngine() {
   return createEngine();
 }
 
+function mockEntropySimEngine() {
+  function createEngine() {
+    return {
+      validateMove(m, player) {
+        if (player === 1) {
+          if (m === "d5") {
+            return { valid: true, complete: -1, canrender: true };
+          }
+          if (m === "d5-e4") {
+            return { valid: true, complete: 1 };
+          }
+          if (m === "d4") {
+            return { valid: true, complete: 1 };
+          }
+        }
+        return { valid: false };
+      },
+      move(m, { partial = false } = {}) {
+        const parts = m.split(",");
+        if (parts.length !== 2) {
+          throw new Error("MOVES_SIMULTANEOUS_PARTIAL");
+        }
+        if (!partial && parts[0] === "d5" && !parts[0].includes("-")) {
+          throw new Error("VALIDATION_GENERAL");
+        }
+        this.last = m;
+      },
+      clone() {
+        return createEngine();
+      },
+      cheapSerialize() {
+        return {};
+      },
+      stack: { pop: vi.fn(), length: 2 },
+      load: vi.fn(),
+      gameover: false,
+      winner: [],
+    };
+  }
+
+  return createEngine();
+}
+
+const entropySimContext = {
+  metaGame: "entropy",
+  simultaneous: true,
+  playerIndex: 0,
+  numPlayers: 2,
+};
+
 function mockJacynthEngine() {
   return {
     validateMove(m) {
@@ -316,5 +366,53 @@ describe("filterPersistableExplorationTree", () => {
       META_CARNAC
     );
     expect(filtered.map((c) => c.move)).toEqual([">e,12-d1", ">w,12-d1"]);
+  });
+
+  it("wraps single-player simultaneous moves before probing", () => {
+    const engine = mockEntropySimEngine();
+    const filtered = filterPersistableExplorationTree(
+      engine,
+      [
+        { move: "d5", children: [] },
+        { move: "d5-e4", children: [] },
+        { move: "d4", children: [] },
+      ],
+      entropySimContext
+    );
+    expect(filtered.map((c) => c.move)).toEqual(["d5-e4", "d4"]);
+  });
+});
+
+describe("simultaneous exploration moves", () => {
+  it("treats partial order source as partial with player-aware validation", () => {
+    const engine = mockEntropySimEngine();
+    expect(
+      isPartialExplorationMove(engine, "d5", entropySimContext)
+    ).toBe(true);
+    expect(
+      isPartialExplorationMove(engine, "d5,", entropySimContext)
+    ).toBe(true);
+    expect(isPersistableExplorationMove(engine, "d5", entropySimContext)).toBe(
+      false
+    );
+  });
+
+  it("treats complete order and chaos placements as persistable", () => {
+    const engine = mockEntropySimEngine();
+    expect(
+      isPartialExplorationMove(engine, "d5-e4", entropySimContext)
+    ).toBe(false);
+    expect(
+      isPersistableExplorationMove(engine, "d5-e4", entropySimContext)
+    ).toBe(true);
+    expect(
+      isPersistableExplorationMove(engine, "d4", entropySimContext)
+    ).toBe(true);
+  });
+
+  it("applies wrapped simultaneous moves to the engine", () => {
+    const engine = mockEntropySimEngine();
+    applyExplorationMove(engine, "d4", entropySimContext);
+    expect(engine.last).toBe("d4,");
   });
 });
