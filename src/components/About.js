@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment, useMemo, useState } from "react";
-import { useTranslation, Trans } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import pkgInfo from "../../package.json";
 import { Link } from "react-router-dom";
 import { shuffle } from "../lib/shuffle";
@@ -8,6 +8,22 @@ import { gameDescription } from "../lib/gameDescription";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Thumbnail from "./Thumbnail";
+
+function aboutHighlightsLine(t) {
+  const text = t("about.highlights");
+  const match = text.match(/^(.*)<1>([\s\S]*?)<\/1>(.*)$/);
+  if (!match) {
+    return text.replace(/<\/?1>/g, "");
+  }
+  const [, before, linkText, after] = match;
+  return (
+    <>
+      {before}
+      <Link to="/games">{linkText}</Link>
+      {after}
+    </>
+  );
+}
 
 function About(props) {
   const [mvTimes, mvTimesSetter] = useState(null);
@@ -70,11 +86,7 @@ function About(props) {
         </p>
         {highlights === null ? null : (
           <p>
-            <Trans i18nKey="about.highlights">
-              Here are some of the most active games this week. Visit the{" "}
-              <Link to="/games">{t("about.highlightsLink")}</Link> for more
-              details.
-            </Trans>
+            {aboutHighlightsLine(t)}
           </p>
         )}
       </article>
