@@ -18,8 +18,7 @@ function Designed() {
             entry.people !== undefined &&
             entry.people.filter(
               (p) => p.type === "designer" && p.apid === user.id
-            ).length > 0 &&
-            !entry.flags.includes("experimental")
+            ).length > 0
         )
         .map(([meta, info]) => {
           const ret = {

@@ -11,8 +11,8 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import GameVariants from "./GameVariants";
+import GamePickerTrigger from "./GamePickerTrigger";
 import { useStore } from "../stores";
-import { REAL_MODE } from "../lib/realMode";
 import { AIAI_USER_ID, formatUserDisplayName } from "./Bots/botUtils";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
@@ -314,38 +314,13 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     commentSetter("");
   };
 
-  let games = [];
-  gameinfo.forEach((game) => games.push({ id: game.uid, name: game.name }));
-  games.sort((a, b) => (a.name > b.name ? 1 : -1));
-  if (REAL_MODE === "production") {
-    games = games.filter(
-      (g) => !gameinfo.get(g.id).flags.includes("experimental")
-    );
-  }
-  // sort by stars
-  if (
-    globalMe !== null &&
-    "stars" in globalMe &&
-    Array.isArray(globalMe.stars) &&
-    globalMe.stars.length > 0
-  ) {
-    const starred = games.filter((g) => globalMe.stars.includes(g.id));
-    const others = games.filter((g) => !globalMe.stars.includes(g.id));
-    games = [...starred, { id: "", name: "-----" }, ...others];
-  }
-
   let playercounts = [];
   if (metaGame !== null) {
     const info = gameinfo.get(metaGame);
     playercounts = info.playercounts;
   }
 
-  if (
-    REAL_MODE === "production" &&
-    metaGame !== null &&
-    (!gameinfo.has(metaGame) ||
-      gameinfo.get(metaGame).flags.includes("experimental"))
-  ) {
+  if (metaGame !== null && !gameinfo.has(metaGame)) {
     return null;
   } else {
     return (
@@ -370,28 +345,11 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                 {t("ChooseGame")}
               </label>
               <div className="control">
-                <div className="select is-small">
-                  {games === null ? (
-                    <Spinner />
-                  ) : (
-                    /* Select meta game */
-                    <select
-                      value={metaGame ? metaGame : ""}
-                      name="gameName"
-                      id="gameName"
-                      onChange={(e) => handleChangeGame(e.target.value)}
-                    >
-                      <option value="">--{t("Select")}--</option>
-                      {games.map((game) => {
-                        return (
-                          <option key={game.id} value={game.id}>
-                            {game.name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  )}
-                </div>
+                <GamePickerTrigger
+                  id="gameName"
+                  value={metaGame ?? ""}
+                  onChange={handleChangeGame}
+                />
               </div>
             </div>
           )}

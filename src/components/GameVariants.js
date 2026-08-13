@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { cloneDeep } from "lodash";
-import { REAL_MODE } from "../lib/realMode";
-
 /**
  * This component parses a metaGame's variant definition and returns the form for selecting them.
  * Give it the metaGame and a function for setting the string[] of selected variants.
@@ -30,13 +28,7 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
           gameEngine = GameFactory(info.uid);
         }
 
-        // filter out `experimental` variants in production
         let rootAllVariants = gameEngine.allvariants();
-        if (REAL_MODE === "production") {
-          rootAllVariants = rootAllVariants?.filter(
-            (v) => v.experimental === undefined || v.experimental === false
-          );
-        }
 
         // get all non-group variants
         // but ignore variant UIDs that start with `#` as reserved
