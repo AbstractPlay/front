@@ -1580,6 +1580,7 @@
         "introLoggedIn": "Experiment with games in the Playground. Saved positions sync to your account; your current session is also kept on this device so you can resume after a refresh.",
         "noSimultaneous": "Playground supports sequential games only. Simultaneous games are not available.",
         "tabNew": "New game",
+        "feelingAdventurous": "I'm feeling adventurous",
         "tabPaste": "Paste state",
         "tabSaved": "Load saved",
         "selectPlayerCount": "Select the number of players.",

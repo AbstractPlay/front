@@ -5,6 +5,7 @@ import {
   collectBoardFilterOptions,
   filterGameOptions,
   isBoardRootCategory,
+  pickRandomGameOption,
 } from "./gameOptions";
 
 describe("buildGameOptions", () => {
@@ -22,6 +23,15 @@ describe("buildGameOptions", () => {
     for (const { id } of lab) {
       expect(gameinfo.get(id).flags.includes("simultaneous")).toBe(false);
     }
+  });
+});
+
+describe("pickRandomGameOption", () => {
+  it("returns a lab-supported game", () => {
+    const picked = pickRandomGameOption({ labOnly: true });
+    expect(picked).not.toBeNull();
+    expect(gameinfo.has(picked.id)).toBe(true);
+    expect(gameinfo.get(picked.id).flags.includes("simultaneous")).toBe(false);
   });
 });
 

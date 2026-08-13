@@ -52,6 +52,18 @@ export function buildGameOptions({ labOnly = false } = {}) {
 
 /**
  * @param {{ labOnly?: boolean }} options
+ * @returns {{ id: string, name: string } | null}
+ */
+export function pickRandomGameOption({ labOnly = false } = {}) {
+  const options = buildGameOptions({ labOnly });
+  if (options.length === 0) {
+    return null;
+  }
+  return options[Math.floor(Math.random() * options.length)];
+}
+
+/**
+ * @param {{ labOnly?: boolean }} options
  * @returns {Array<{
  *   id: string,
  *   name: string,

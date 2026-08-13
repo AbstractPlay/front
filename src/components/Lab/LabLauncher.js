@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { gameinfo } from "@abstractplay/gameslib";
 import GameVariants from "../GameVariants";
 import GamePickerTrigger from "../GamePickerTrigger";
+import { pickRandomGameOption } from "../../lib/gameOptions";
 import { getAuthToken } from "../../lib/api";
 import {
   buildLabGame,
@@ -155,6 +156,14 @@ function LabLauncher({ onLaunch, onLoadSave }) {
       setPlayerCount("");
     }
   }, [metaGame]);
+
+  const handleRandomGame = () => {
+    setError("");
+    const picked = pickRandomGameOption({ labOnly: true });
+    if (picked) {
+      setMetaGame(picked.id);
+    }
+  };
 
   const handleLaunchNew = () => {
     setError("");
@@ -333,12 +342,24 @@ function LabLauncher({ onLaunch, onLoadSave }) {
               {t("ChooseGame")}
             </label>
             <div className="control">
-              <GamePickerTrigger
-                id="labGameSelect"
-                value={metaGame}
-                onChange={setMetaGame}
-                labOnly
-              />
+              <div className="buttons">
+                <GamePickerTrigger
+                  id="labGameSelect"
+                  value={metaGame}
+                  onChange={setMetaGame}
+                  labOnly
+                />
+                <button
+                  type="button"
+                  className="button is-small is-text"
+                  onClick={handleRandomGame}
+                >
+                  <span className="icon is-small">
+                    <i className="fa fa-random" aria-hidden="true" />
+                  </span>
+                  <span>{t("lab.feelingAdventurous")}</span>
+                </button>
+              </div>
             </div>
           </div>
           {metaGame && playercounts.length === 1 ? (
