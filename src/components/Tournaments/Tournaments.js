@@ -1021,7 +1021,6 @@ function Tournaments(props) {
                 --Show all--
               </option>
               {[...gameinfo.values()]
-                .filter((rec) => !rec.flags.includes("experimental"))
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((rec) => (
                   <option value={rec.uid} key={"filterMeta" + rec.uid}>

@@ -1,7 +1,5 @@
 import { GameFactory, gameinfo } from "@abstractplay/gameslib";
 import { nanoid } from "nanoid";
-import { REAL_MODE } from "../realMode";
-
 export const LAB_ME = {
   id: "lab-p0",
   settings: { all: { exploration: 1 } },
@@ -27,20 +25,6 @@ export function getLabPlayerCounts(metaGame) {
   const info = gameinfo.get(metaGame);
   if (!info) return [];
   return [...info.playercounts];
-}
-
-export function listLabGames() {
-  let lst = [];
-  for (const info of gameinfo.values()) {
-    if (isLabSupportedGame(info.uid)) {
-      lst.push({ uid: info.uid, name: info.name, info });
-    }
-  }
-  if (REAL_MODE === "production") {
-    lst = lst.filter(({ info }) => !info.flags.includes("experimental"));
-  }
-  lst.sort((a, b) => a.name.localeCompare(b.name));
-  return lst;
 }
 
 export function createEngine(

@@ -3,11 +3,12 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { gameinfo } from "@abstractplay/gameslib";
 import GameVariants from "../GameVariants";
+import GamePickerTrigger from "../GamePickerTrigger";
+import { pickRandomGameOption } from "../../lib/gameOptions";
 import { getAuthToken } from "../../lib/api";
 import {
   buildLabGame,
   getLabPlayerCounts,
-  listLabGames,
 } from "../../lib/Lab/buildGame";
 import { parsePlaygroundImport } from "../../lib/Lab/export";
 import {
@@ -70,7 +71,6 @@ function SavesTable({ saves, dateField, onLoad, onDelete, t }) {
 
 function LabLauncher({ onLaunch, onLoadSave }) {
   const { t } = useTranslation();
-  const games = useMemo(() => listLabGames(), []);
   const [mode, setMode] = useState("new");
   const [metaGame, setMetaGame] = useState("");
   const [playerCount, setPlayerCount] = useState("");
@@ -156,6 +156,14 @@ function LabLauncher({ onLaunch, onLoadSave }) {
       setPlayerCount("");
     }
   }, [metaGame]);
+
+  const handleRandomGame = () => {
+    setError("");
+    const picked = pickRandomGameOption({ labOnly: true });
+    if (picked) {
+      setMetaGame(picked.id);
+    }
+  };
 
   const handleLaunchNew = () => {
     setError("");
@@ -334,19 +342,23 @@ function LabLauncher({ onLaunch, onLoadSave }) {
               {t("ChooseGame")}
             </label>
             <div className="control">
-              <div className="select">
-                <select
+              <div className="buttons">
+                <GamePickerTrigger
                   id="labGameSelect"
                   value={metaGame}
-                  onChange={(e) => setMetaGame(e.target.value)}
+                  onChange={setMetaGame}
+                  labOnly
+                />
+                <button
+                  type="button"
+                  className="button is-small is-text"
+                  onClick={handleRandomGame}
                 >
-                  <option value="">--{t("Select")}--</option>
-                  {games.map(({ uid, name }) => (
-                    <option key={uid} value={uid}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
+                  <span className="icon is-small">
+                    <i className="fa fa-random" aria-hidden="true" />
+                  </span>
+                  <span>{t("lab.feelingAdventurous")}</span>
+                </button>
               </div>
             </div>
           </div>
