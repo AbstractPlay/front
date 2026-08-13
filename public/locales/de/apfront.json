@@ -1563,7 +1563,7 @@
     "searchPlaceholder": "Tippen, um Spiele zu filtern…",
     "noResults": "Keine Spiele entsprechen deiner Suche.",
     "starredOnly": "Nur Favoriten",
-    "loadingQuickPicks": "Deine Spiele werden geladen…",
+    "loadingQuickPicks": "Lade deine Spiele…",
     "matchCount": "{{count}} von {{total}} Spielen",
     "filterGoal": "Ziel",
     "filterBoard": "Brett",
@@ -1571,7 +1571,7 @@
     "quickPicks": {
       "starred": "Favoriten",
       "mostPlayed": "Meistgespielt",
-      "topRated": "Am besten bewertet",
+      "topRated": "Bestbewertet",
       "recent": "Zuletzt gespielt"
     }
   },
@@ -1632,7 +1632,7 @@
     "importLocalSuccess": "{{count}} Spielstände in dein Konto kopiert.",
     "importLocalPartial": "Einige Spielstände konnten nicht kopiert werden: {{names}}",
     "onThisDevice": "Auf diesem Gerät",
-    "feelingAdventurous": "Ich fühle mich abenteuerlustig"
+    "feelingAdventurous": "Ich bin abenteuerlustig"
   },
   "Wikipedia": "Wikipedia"
 }

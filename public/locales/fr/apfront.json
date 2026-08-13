@@ -1560,7 +1560,7 @@
   "gamePicker": {
     "choose": "Choisir un jeu…",
     "searchLabel": "Rechercher",
-    "searchPlaceholder": "Saisissez du texte pour filtrer les jeux…",
+    "searchPlaceholder": "Tapez pour filtrer les jeux…",
     "noResults": "Aucun jeu ne correspond à votre recherche.",
     "starredOnly": "Jeux favoris uniquement",
     "loadingQuickPicks": "Chargement de vos jeux…",
@@ -1632,7 +1632,7 @@
     "importLocalSuccess": "{{count}} sauvegarde(s) copiée(s) sur votre compte.",
     "importLocalPartial": "Certaines sauvegardes n'ont pas pu être copiées : {{names}}",
     "onThisDevice": "Sur cet appareil",
-    "feelingAdventurous": "Je me sens d'humeur aventureuse"
+    "feelingAdventurous": "Je me sens aventureux"
   },
   "Wikipedia": "Wikipédia"
 }
