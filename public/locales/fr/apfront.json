@@ -1557,6 +1557,24 @@
     "resetToDefaults": "Réinitialiser aux valeurs par défaut",
     "deleteCustomization": "Supprimer la personnalisation"
   },
+  "gamePicker": {
+    "choose": "Choisir un jeu…",
+    "searchLabel": "Rechercher",
+    "searchPlaceholder": "Saisissez du texte pour filtrer les jeux…",
+    "noResults": "Aucun jeu ne correspond à votre recherche.",
+    "starredOnly": "Jeux favoris uniquement",
+    "loadingQuickPicks": "Chargement de vos jeux…",
+    "matchCount": "{{count}} sur {{total}} jeux",
+    "filterGoal": "Objectif",
+    "filterBoard": "Plateau",
+    "filterAny": "Tous",
+    "quickPicks": {
+      "starred": "Favoris",
+      "mostPlayed": "Les plus joués",
+      "topRated": "Les mieux notés",
+      "recent": "Récemment joués"
+    }
+  },
   "lab": {
     "intro": "Un espace de jeu local pour expérimenter avec les jeux. Rien ici ne touche le serveur — les positions et les parties sauvegardées résident uniquement dans votre navigateur.",
     "noSimultaneous": "Le Playground ne prend en charge que les jeux au tour par tour (séquentiels). Les jeux simultanés ne sont pas disponibles.",
@@ -1613,7 +1631,8 @@
     "importLocalDismiss": "Pas maintenant",
     "importLocalSuccess": "{{count}} sauvegarde(s) copiée(s) sur votre compte.",
     "importLocalPartial": "Certaines sauvegardes n'ont pas pu être copiées : {{names}}",
-    "onThisDevice": "Sur cet appareil"
+    "onThisDevice": "Sur cet appareil",
+    "feelingAdventurous": "Je me sens d'humeur aventureuse"
   },
   "Wikipedia": "Wikipédia"
 }

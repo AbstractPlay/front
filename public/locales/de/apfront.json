@@ -1557,6 +1557,24 @@
     "resetToDefaults": "Auf Standardwerte zurücksetzen",
     "deleteCustomization": "Anpassung löschen"
   },
+  "gamePicker": {
+    "choose": "Spiel auswählen…",
+    "searchLabel": "Suche",
+    "searchPlaceholder": "Tippen, um Spiele zu filtern…",
+    "noResults": "Keine Spiele entsprechen deiner Suche.",
+    "starredOnly": "Nur Favoriten",
+    "loadingQuickPicks": "Deine Spiele werden geladen…",
+    "matchCount": "{{count}} von {{total}} Spielen",
+    "filterGoal": "Ziel",
+    "filterBoard": "Brett",
+    "filterAny": "Beliebig",
+    "quickPicks": {
+      "starred": "Favoriten",
+      "mostPlayed": "Meistgespielt",
+      "topRated": "Am besten bewertet",
+      "recent": "Zuletzt gespielt"
+    }
+  },
   "lab": {
     "intro": "Ein lokaler Spielbereich zum Experimentieren mit Spielen. Nichts hier gelangt auf den Server – Stellungen und gespeicherte Spiele verbleiben ausschließlich in deinem Browser.",
     "noSimultaneous": "Playground unterstützt nur sequenzielle Spiele. Simultanspiele sind nicht verfügbar.",
@@ -1613,7 +1631,8 @@
     "importLocalDismiss": "Nicht jetzt",
     "importLocalSuccess": "{{count}} Spielstände in dein Konto kopiert.",
     "importLocalPartial": "Einige Spielstände konnten nicht kopiert werden: {{names}}",
-    "onThisDevice": "Auf diesem Gerät"
+    "onThisDevice": "Auf diesem Gerät",
+    "feelingAdventurous": "Ich fühle mich abenteuerlustig"
   },
   "Wikipedia": "Wikipedia"
 }

@@ -1557,6 +1557,24 @@
     "resetToDefaults": "Ripristina predefiniti",
     "deleteCustomization": "Elimina personalizzazione"
   },
+  "gamePicker": {
+    "choose": "Scegli un gioco…",
+    "searchLabel": "Cerca",
+    "searchPlaceholder": "Digita per filtrare i giochi…",
+    "noResults": "Nessun gioco corrisponde alla ricerca.",
+    "starredOnly": "Solo giochi preferiti",
+    "loadingQuickPicks": "Caricamento dei tuoi giochi…",
+    "matchCount": "{{count}} di {{total}} giochi",
+    "filterGoal": "Obiettivo",
+    "filterBoard": "Tavoliere",
+    "filterAny": "Qualsiasi",
+    "quickPicks": {
+      "starred": "Preferiti",
+      "mostPlayed": "Più giocati",
+      "topRated": "I più votati",
+      "recent": "Giocati di recente"
+    }
+  },
   "lab": {
     "intro": "Un'area di gioco locale per sperimentare con i giochi. Nulla qui interagisce con il server: le posizioni e le partite salvate risiedono solo nel tuo browser.",
     "noSimultaneous": "Il laboratorio supporta solo giochi a turni sequenziali. I giochi simultanei non sono disponibili.",
@@ -1613,7 +1631,8 @@
     "importLocalDismiss": "Non ora",
     "importLocalSuccess": "Copiati {{count}} salvataggi nel tuo account.",
     "importLocalPartial": "Impossibile copiare alcuni salvataggi: {{names}}",
-    "onThisDevice": "Su questo dispositivo"
+    "onThisDevice": "Su questo dispositivo",
+    "feelingAdventurous": "Mi sento avventuroso"
   },
   "Wikipedia": "Wikipedia"
 }

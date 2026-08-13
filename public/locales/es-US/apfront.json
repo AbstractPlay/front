@@ -1557,6 +1557,24 @@
     "resetToDefaults": "Restablecer a valores predeterminados",
     "deleteCustomization": "Eliminar personalización"
   },
+  "gamePicker": {
+    "choose": "Elige un juego…",
+    "searchLabel": "Buscar",
+    "searchPlaceholder": "Escribe para filtrar juegos…",
+    "noResults": "Ningún juego coincide con tu búsqueda.",
+    "starredOnly": "Solo juegos favoritos",
+    "loadingQuickPicks": "Cargando tus juegos…",
+    "matchCount": "{{count}} de {{total}} juegos",
+    "filterGoal": "Objetivo",
+    "filterBoard": "Tablero",
+    "filterAny": "Cualquiera",
+    "quickPicks": {
+      "starred": "Favoritos",
+      "mostPlayed": "Más jugados",
+      "topRated": "Mejor calificados",
+      "recent": "Jugados recientemente"
+    }
+  },
   "lab": {
     "intro": "Un área de juego local para experimentar con juegos. Nada de lo que hagas aquí llega al servidor; las posiciones y partidas guardadas permanecen únicamente en tu navegador.",
     "introLoggedIn": "Experimenta con juegos en el laboratorio de pruebas (Playground). Las posiciones guardadas se sincronizan con tu cuenta; tu sesión actual también se conserva en este dispositivo para que puedas reanudarla después de actualizar la página.",
@@ -1613,7 +1631,8 @@
       "commentMarkdown": "Comentario (Markdown)",
       "commentPlaceholder": "Agrega un comentario en Markdown…",
       "nothingToPreview": "Aún no hay nada para previsualizar."
-    }
+    },
+    "feelingAdventurous": "Me siento aventurero"
   },
   "Wikipedia": "Wikipedia"
 }
