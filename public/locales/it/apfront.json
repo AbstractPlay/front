@@ -1271,7 +1271,8 @@
         "title": "Ordine casuale",
         "description": "Giochi in ordine casuale. Clicca sul pulsante per rimescolare."
       }
-    }
+    },
+    "filterRecommended": "Solo giochi consigliati"
   },
   "stats": {
     "selectStatistic": "Seleziona una statistica",
@@ -1566,14 +1567,18 @@
     "loadingQuickPicks": "Caricamento dei tuoi giochi…",
     "matchCount": "{{count}} di {{total}} giochi",
     "filterGoal": "Obiettivo",
-    "filterBoard": "Tavoliere",
+    "filterBoard": "Tabellone",
     "filterAny": "Qualsiasi",
     "quickPicks": {
       "starred": "Preferiti",
       "mostPlayed": "Più giocati",
       "topRated": "Più votati",
-      "recent": "Giocati di recente"
-    }
+      "recent": "Giocati di recente",
+      "recommended": "Potrebbero piacerti"
+    },
+    "loadingRecommendations": "Caricamento suggerimenti…",
+    "showRecommendations": "Mostra suggerimenti sui giochi",
+    "hideRecommendations": "Nascondi"
   },
   "lab": {
     "intro": "Un'area di gioco locale per sperimentare con i giochi. Nulla qui interagisce con il server: le posizioni e le partite salvate risiedono solo nel tuo browser.",
@@ -1632,7 +1637,7 @@
     "importLocalSuccess": "Copiati {{count}} salvataggi nel tuo account.",
     "importLocalPartial": "Impossibile copiare alcuni salvataggi: {{names}}",
     "onThisDevice": "Su questo dispositivo",
-    "feelingAdventurous": "Mi sento avventuroso"
+    "feelingAdventurous": "Mi sento audace"
   },
   "Wikipedia": "Wikipedia"
 }

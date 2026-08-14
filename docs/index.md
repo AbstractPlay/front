@@ -30,6 +30,7 @@ The Abstract Play browser client is a React single-page application (SPA) deploy
 - [Game move](/front/subsystems/game-move/) — live game UI and move submission
 - [Dashboard](/front/subsystems/dashboard/) — home page, my-turn tables
 - [Explore](/front/subsystems/explore/) — game catalog
+- [Recommendations](/front/subsystems/recommendations/) — personalized game suggestions
 - [Challenges](/front/subsystems/challenges/) — standing challenges
 - [Tournaments](/front/subsystems/tournaments/)
 - [Events](/front/subsystems/events/)

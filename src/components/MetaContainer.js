@@ -3,6 +3,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { useParams } from "react-router-dom";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
+import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { Helmet } from "react-helmet-async";
 // import Gallery from "./MetaContainer/Gallery";
 import Table from "./MetaContainer/Table";
@@ -108,6 +109,7 @@ function MetaContainer(props) {
         ...challenge,
         challenger: { id: globalMe.id, name: globalMe.name },
       });
+      maybeTrackRecommendationChallenge(challenge.metaGame);
     } catch (error) {
       console.log(error);
     }

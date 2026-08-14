@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
+import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { API_ENDPOINT_OPEN } from "../config";
 import { Helmet } from "react-helmet-async";
 import MetaItem from "./MetaContainer/MetaItem";
@@ -93,6 +94,7 @@ function Explore(props) {
         ...challenge,
         challenger: { id: globalMe.id, name: globalMe.name },
       });
+      maybeTrackRecommendationChallenge(challenge.metaGame);
     } catch (error) {
       console.log(error);
     }

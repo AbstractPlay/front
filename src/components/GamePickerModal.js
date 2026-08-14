@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import Thumbnail from "./Thumbnail";
+import { useGameRecommendations } from "../hooks/useGameRecommendations";
 import { usePlayerQuickPicks } from "../hooks/usePlayerQuickPicks";
 import {
   buildGameBrowseEntries,
@@ -10,12 +12,17 @@ import {
   filterGameOptions,
   tagSortFn,
 } from "../lib/gameOptions";
+import {
+  clearRecommendationAttribution,
+  saveRecommendationAttribution,
+} from "../lib/recommendationAttribution";
 
 const SECTION_LABEL_KEYS = {
   starred: "gamePicker.quickPicks.starred",
   mostPlayed: "gamePicker.quickPicks.mostPlayed",
   topRated: "gamePicker.quickPicks.topRated",
   recent: "gamePicker.quickPicks.recent",
+  recommended: "gamePicker.quickPicks.recommended",
 };
 
 function GamePickerModal({ show, value, onChange, onClose, labOnly = false }) {
@@ -24,10 +31,19 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false }) {
   const [starredOnly, setStarredOnly] = useState(false);
   const [goalTag, setGoalTag] = useState("");
   const [boardTag, setBoardTag] = useState("");
+  const [showRecommendationsPref, setShowRecommendationsPref] = useStorageState(
+    "game-picker-show-recommendations",
+    true
+  );
   const { sections, starredIds, loading, isLoggedIn } = usePlayerQuickPicks({
     enabled: show,
     labOnly,
   });
+
+  const quickPickExcludeIds = useMemo(
+    () => sections.flatMap((section) => section.games.map((game) => game.id)),
+    [sections]
+  );
 
   const allGames = useMemo(
     () => buildGameBrowseEntries({ labOnly }),
@@ -62,7 +78,26 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false }) {
     goalTag !== "" ||
     boardTag !== "";
 
+  const {
+    recommendations,
+    loading: recommendationsLoading,
+    trackClick,
+    batchId,
+    tier,
+  } = useGameRecommendations({
+    enabled: show && showRecommendationsPref,
+    labOnly,
+    excludeIds: quickPickExcludeIds,
+    surface: "gamePicker",
+    trackShows:
+      show && showRecommendationsPref && isLoggedIn && !hasBrowseFilters,
+  });
+
   const showQuickPicks = isLoggedIn && !hasBrowseFilters;
+  const showRecommendations =
+    showRecommendationsPref &&
+    !hasBrowseFilters &&
+    (recommendations.length > 0 || recommendationsLoading);
 
   const resetFilters = () => {
     setQuery("");
@@ -71,10 +106,25 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false }) {
     setBoardTag("");
   };
 
-  const handleSelect = (metaGame) => {
+  const handleSelect = (metaGame, { fromRecommendation = false } = {}) => {
+    if (fromRecommendation) {
+      saveRecommendationAttribution({
+        batchId,
+        surface: "gamePicker",
+        tier,
+        metaGame,
+      });
+    } else {
+      clearRecommendationAttribution();
+    }
     onChange(metaGame);
     resetFilters();
     onClose();
+  };
+
+  const handleRecommendedSelect = (game, index) => {
+    trackClick(game.id, index, game.reasonType ?? "content");
+    handleSelect(game.id, { fromRecommendation: true });
   };
 
   const handleClose = () => {
@@ -202,6 +252,69 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false }) {
           {loading ? (
             <p className="help">{t("gamePicker.loadingQuickPicks")}</p>
           ) : null}
+        </div>
+      ) : null}
+
+      {showRecommendations ? (
+        <div className="game-picker-recommendations">
+          <div className="game-picker-recommendations-header">
+            <p className="label is-size-7 mb-0">
+              {t(SECTION_LABEL_KEYS.recommended)}
+            </p>
+            <button
+              type="button"
+              className="button is-small apButtonNeutral"
+              onClick={() => setShowRecommendationsPref(false)}
+            >
+              {t("gamePicker.hideRecommendations")}
+            </button>
+          </div>
+          {recommendationsLoading && recommendations.length === 0 ? (
+            <p className="help">{t("gamePicker.loadingRecommendations")}</p>
+          ) : (
+            <div
+              className="game-picker-recommendations-track"
+              role="list"
+              aria-label={t(SECTION_LABEL_KEYS.recommended)}
+            >
+              {recommendations.map((game, index) => (
+                <button
+                  key={`recommended-${game.id}`}
+                  type="button"
+                  role="listitem"
+                  className={
+                    value === game.id
+                      ? "game-picker-recommendation-card button apButton"
+                      : "game-picker-recommendation-card button apButtonNeutral"
+                  }
+                  onClick={() => handleRecommendedSelect(game, index)}
+                  title={game.reason || game.name}
+                >
+                  <span className="game-picker-recommendation-thumb">
+                    <Thumbnail meta={game.id} />
+                  </span>
+                  <span className="game-picker-recommendation-name">
+                    {game.name}
+                  </span>
+                  {game.reason ? (
+                    <span className="game-picker-recommendation-reason">
+                      {game.reason}
+                    </span>
+                  ) : null}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : !hasBrowseFilters && !showRecommendationsPref ? (
+        <div className="game-picker-recommendations game-picker-recommendations-collapsed">
+          <button
+            type="button"
+            className="button is-small apButtonNeutral is-fullwidth"
+            onClick={() => setShowRecommendationsPref(true)}
+          >
+            {t("gamePicker.showRecommendations")}
+          </button>
         </div>
       ) : null}
 

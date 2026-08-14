@@ -9,6 +9,7 @@
   { "slug": "subsystems/game-move", "title": "Game move" },
   { "slug": "subsystems/dashboard", "title": "Dashboard" },
   { "slug": "subsystems/explore", "title": "Explore" },
+  { "slug": "subsystems/recommendations", "title": "Recommendations" },
   { "slug": "subsystems/challenges", "title": "Challenges" },
   { "slug": "subsystems/tournaments" },
   { "slug": "subsystems/events" },
