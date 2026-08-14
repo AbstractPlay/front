@@ -20,6 +20,7 @@ function GameStats({ metaFilter, nav }) {
             lenAvg: Math.trunc(rec.lenAvg * 100) / 100,
             lenMedian: Math.trunc(rec.lenMedian * 100) / 100,
             winsFirst: Math.trunc(rec.winsFirst * 10000) / 100,
+            drawRate: Math.trunc((rec.drawRate ?? 0) * 10000) / 100,
           };
         })
         .filter(
@@ -30,6 +31,18 @@ function GameStats({ metaFilter, nav }) {
         )
         .sort((a, b) => a.game.localeCompare(b.game)),
     [summary, metaFilter]
+  );
+
+  const pieRateData = useMemo(
+    () =>
+      (summary.pieRates ?? []).map(({ game, n, pied, rate }) => ({
+        id: game,
+        game,
+        n,
+        pied,
+        rate: Math.trunc(rate * 10000) / 100,
+      })),
+    [summary]
   );
 
   const columnHelper = createColumnHelper();
@@ -51,6 +64,29 @@ function GameStats({ metaFilter, nav }) {
         header: t("tables.firstPlayerWins"),
         cell: (props) => props.getValue() + "%",
       }),
+      columnHelper.accessor("drawRate", {
+        header: t("tables.drawRate"),
+        cell: (props) => props.getValue() + "%",
+      }),
+    ],
+    [columnHelper, t]
+  );
+
+  const pieColumns = useMemo(
+    () => [
+      columnHelper.accessor("game", {
+        header: t("tables.game"),
+      }),
+      columnHelper.accessor("n", {
+        header: t("tables.numRecords"),
+      }),
+      columnHelper.accessor("pied", {
+        header: t("tables.pieInvoked"),
+      }),
+      columnHelper.accessor("rate", {
+        header: t("tables.pieRate"),
+        cell: (props) => props.getValue() + "%",
+      }),
     ],
     [columnHelper, t]
   );
@@ -63,6 +99,20 @@ function GameStats({ metaFilter, nav }) {
         columns={columns}
         sort={[{ id: "game", desc: false }]}
       />
+      {pieRateData.length > 0 ? (
+        <>
+          <hr />
+          <div className="content">
+            <p>{t("stats.gameStats.pieRateIntro")}</p>
+          </div>
+          <TableSkeleton
+            nav={nav}
+            data={pieRateData}
+            columns={pieColumns}
+            sort={[{ id: "game", desc: false }]}
+          />
+        </>
+      ) : null}
     </>
   );
 }
