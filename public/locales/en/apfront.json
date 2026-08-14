@@ -1328,7 +1328,7 @@
             "abandonedRate": "Abandoned game rate (stale soft-clock games closed after prolonged inactivity) is {{rate}}.",
             "abandonedRatePerWeek": "Abandonment rate per week",
             "abandonedRateAxis": "Abandonment rate",
-            "hoursPerMoveIntro": "Hours per move summarizes overall site pacing from completed games. Games ending by clock timeout, abandonment, or with fewer than two turns are excluded, as are per-game rates above 200 hours per move. The mean is weighted by move count; the median treats each qualifying game equally. The trend chart shows the median hours per move for games completed each week (partial current week omitted).",
+            "hoursPerMoveIntro": "Hours per move summarizes overall site pacing from completed games. Games ending by clock timeout, abandonment, or with fewer than two turns are excluded. Per-game rates are winsorized at the 2nd and 98th percentiles so extreme outliers do not dominate the summary. The mean is weighted by move count; the median treats each qualifying game equally. The trend chart shows the median hours per move for games completed each week (partial current week omitted).",
             "hoursPerMove": "Hours per move",
             "hoursPerMoveMean": "Move-weighted mean (hours)",
             "hoursPerMoveMedian": "Median per game (hours)",
