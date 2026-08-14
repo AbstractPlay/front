@@ -410,23 +410,21 @@ export function normalizeSessionExploration(history, savedExploration) {
   return padded;
 }
 
-export function deleteSpineEntry(exploration, moveNumber, promoteIndex = 0) {
+export function deleteSpineEntry(exploration, moveNumber) {
   if (moveNumber <= 0 || moveNumber >= exploration.length) {
     return { focus: { moveNumber: 0, exPath: [] } };
   }
 
-  const forwardBranches = [...exploration[moveNumber].children];
+  const parent = exploration[moveNumber - 1];
+  const plyAlternatives = [...parent.children];
   exploration.length = moveNumber;
+  parent.children = [];
 
-  if (forwardBranches.length > 0) {
-    const idx = Math.min(
-      Math.max(0, promoteIndex),
-      forwardBranches.length - 1
-    );
-    const promoted = forwardBranches[idx];
-    const siblings = forwardBranches.filter((_, i) => i !== idx);
+  if (plyAlternatives.length > 0) {
+    const promoted = plyAlternatives[0];
+    const remainingSiblings = plyAlternatives.slice(1);
     promoted.parent = null;
-    promoted.children = [...promoted.children, ...siblings];
+    promoted.children = [...promoted.children, ...remainingSiblings];
     exploration.push(promoted);
     return { focus: { moveNumber, exPath: [] } };
   }

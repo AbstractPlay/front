@@ -215,21 +215,37 @@ describe("recalculateLabOutcomes", () => {
 });
 
 describe("deleteSpineEntry", () => {
-  it("promotes the first forward branch when deleting a spine node", () => {
+  it("promotes the first ply alternative from the parent when deleting a spine node", () => {
     const exploration = makeSpine(["a", "b", "c"]);
     const branchA = new GameNode(exploration[1], "branchA", "{}", 0);
     const branchB = new GameNode(exploration[1], "branchB", "{}", 0);
     exploration[1].children.push(branchA, branchB);
 
-    const { focus } = deleteSpineEntry(exploration, 1);
-    expect(exploration).toHaveLength(2);
-    expect(exploration[1].move).toBe("branchA");
-    expect(exploration[1].children).toHaveLength(1);
-    expect(exploration[1].children[0].move).toBe("branchB");
-    expect(focus).toEqual({ moveNumber: 1, exPath: [] });
+    const { focus } = deleteSpineEntry(exploration, 2);
+    expect(exploration).toHaveLength(3);
+    expect(exploration[1].move).toBe("a");
+    expect(exploration[1].children).toHaveLength(0);
+    expect(exploration[2].move).toBe("branchA");
+    expect(exploration[2].children).toHaveLength(1);
+    expect(exploration[2].children[0].move).toBe("branchB");
+    expect(focus).toEqual({ moveNumber: 2, exPath: [] });
   });
 
-  it("focuses the parent when deleting a spine node with no branches", () => {
+  it("does not promote continuations from the deleted spine node", () => {
+    const exploration = makeSpine(["a", "b", "c"]);
+    const plyAlt = new GameNode(exploration[1], "altAtPly2", "{}", 0);
+    exploration[1].children.push(plyAlt);
+    const afterDeleted = new GameNode(exploration[2], "afterB", "{}", 0);
+    exploration[2].children.push(afterDeleted);
+
+    const { focus } = deleteSpineEntry(exploration, 2);
+    expect(exploration).toHaveLength(3);
+    expect(exploration[2].move).toBe("altAtPly2");
+    expect(exploration[2].children.map((c) => c.move)).not.toContain("afterB");
+    expect(focus).toEqual({ moveNumber: 2, exPath: [] });
+  });
+
+  it("focuses the parent when deleting a spine node with no ply alternatives", () => {
     const exploration = makeSpine(["a", "b"]);
     const { focus } = deleteSpineEntry(exploration, 1);
     expect(exploration).toHaveLength(1);
