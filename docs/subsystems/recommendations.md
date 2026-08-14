@@ -175,6 +175,9 @@ Diversity cap: max **2** per top-level goal bucket (`goal>{firstSegment}`); rela
 | Popularity | `records.abstractplay.com/mvtimes.json` | Nightly |
 | Player history | `records.abstractplay.com/player/{id}.json` | Nightly |
 | Impression events | `log_recommendation_event` → DynamoDB `RECOMMENDS#<userid>` | Real-time write; no live reads by recommender |
+| Impression analytics | Private ops S3 `recommendations/analytics/` | Nightly 03:00 UTC (`records-rec-analytics`) — **not consumed by the client** |
+
+Offline funnel/CTR rollups (shows, clicks, challenges by surface/tier/reason) are written to a private ops bucket for human or agent review. See [Recommendation analytics](/crons/recommendations-analytics/) in backend-crons. The live recommender does **not** read these artifacts; `tuning.json` remains deferred.
 
 Co-occurrence artifact schema (simplified):
 
@@ -225,3 +228,4 @@ Tab close clears attribution; no server-side session.
 - [Gameslib](/gameslib/) — `gameinfo.categories`, `dateAdded`
 - [Backend recommendations](/backend/subsystems/recommendations/) — DynamoDB events, API schema
 - Records: `docs/recommendations-cooccur.md` (backend repo) — PMI batch job
+- [Recommendation analytics](/crons/recommendations-analytics/) — nightly impression funnel rollups (ops S3)
