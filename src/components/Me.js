@@ -14,6 +14,7 @@ import NewChallengeModal from "./NewChallengeModal";
 import NewProfile from "./NewProfile";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
+import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { cloneDeep } from "lodash";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
 import WatchedGamesTable from "./Me/WatchedGamesTable";
@@ -196,6 +197,7 @@ function Me(props) {
           challenger: { id: globalMe.id, name: globalMe.name },
         });
         if (!res) return;
+        maybeTrackRecommendationChallenge(challenge.metaGame);
         showNewChallengeModalSetter(false);
         varsSetter({ dummy: myid });
       } catch (error) {
@@ -233,6 +235,7 @@ function Me(props) {
     });
 
     await callAuthApi("update_standing", { entries: updatedStanding });
+    maybeTrackRecommendationChallenge(challenge.metaGame);
   }, []);
 
   const handleStandingSuspend = async (id) => {

@@ -26,6 +26,7 @@ import rehypeRaw from "rehype-raw";
 import Thumbnail from "../Thumbnail";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
+import { useGameRecommendations } from "../../hooks/useGameRecommendations";
 import { useStore } from "../../stores";
 
 function tagSortFn(a, b) {
@@ -89,6 +90,18 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
   const [filterStars, filterStarsSetter] = useStorageState(
     config.starFilterStorageKey || "explore-filter-stars",
     false
+  );
+  const [filterRecommended, filterRecommendedSetter] = useStorageState(
+    config.recommendedFilterStorageKey || "explore-filter-recommended",
+    false
+  );
+  const { recommendations, loading: recommendationsLoading } =
+    useGameRecommendations({
+      enabled: Boolean(config.enableRecommendedFilter),
+    });
+  const recommendedIds = useMemo(
+    () => new Set(recommendations.map((game) => game.id)),
+    [recommendations]
   );
   const [tagFilter, tagFilterSetter] = useState(() => {
     try {
@@ -311,8 +324,19 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
             ...config.extraFields(metaGame, info, fetchedData, counts),
           };
         })
-        .filter((obj) => !filterStars || obj.starred),
-    [t, games, globalMe, fetchedData, counts, config, filterStars]
+        .filter((obj) => !filterStars || obj.starred)
+        .filter((obj) => !filterRecommended || recommendedIds.has(obj.id)),
+    [
+      t,
+      games,
+      globalMe,
+      fetchedData,
+      counts,
+      config,
+      filterStars,
+      filterRecommended,
+      recommendedIds,
+    ]
   );
 
   const scrolledRef = useRef(false);
@@ -621,6 +645,21 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         </ReactMarkdown>
       ) : null}
       {config.renderExtra ? config.renderExtra(handleReload, t) : null}
+      {config.enableRecommendedFilter ? (
+        <div className="container content" style={{ paddingBottom: "0.75em" }}>
+          <label className="checkbox">
+            <input
+              type="checkbox"
+              checked={filterRecommended}
+              onChange={() => filterRecommendedSetter(!filterRecommended)}
+            />
+            {t("explore.filterRecommended")}
+          </label>
+          {filterRecommended && recommendationsLoading ? (
+            <p className="help">{t("gamePicker.loadingRecommendations")}</p>
+          ) : null}
+        </div>
+      ) : null}
       <div className="container">
         {tableNavigation}
         <table

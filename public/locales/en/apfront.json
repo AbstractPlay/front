@@ -1231,6 +1231,7 @@
     },
     "explore": {
         "intro": "This page lets you explore different ways of sorting the list of games. Select your desired view below. Clicking on a game's name will take you to that game's landing page with additional information.",
+        "filterRecommended": "Recommended games only",
         "views": {
             "all": {
                 "title": "All games"
@@ -1572,8 +1573,12 @@
             "starred": "Starred",
             "mostPlayed": "Most played",
             "topRated": "Top rated",
-            "recent": "Recently played"
-        }
+            "recent": "Recently played",
+            "recommended": "You might like"
+        },
+        "loadingRecommendations": "Loading suggestions…",
+        "showRecommendations": "Show game suggestions",
+        "hideRecommendations": "Hide"
     },
     "lab": {
         "intro": "A local play area for experimenting with games. Nothing here touches the server — positions and saved games live in your browser only.",

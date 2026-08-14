@@ -1283,3 +1283,74 @@ span.hardTime::after {
   #playerProfile .profile-module {
     height: 100%;
   }
+
+  .game-picker-recommendations {
+    margin-bottom: 1rem;
+  }
+
+  .game-picker-recommendations-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .game-picker-recommendations-collapsed {
+    margin-bottom: 0.75rem;
+  }
+
+  .game-picker-recommendations-track {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+    padding-bottom: 0.25rem;
+  }
+
+  .game-picker-recommendation-card {
+    flex: 0 0 auto;
+    width: 8.75rem;
+    min-height: 7.5rem;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    padding: 0.5rem;
+    white-space: normal;
+    text-align: center;
+    height: auto;
+  }
+
+  .game-picker-recommendation-thumb {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .game-picker-recommendation-name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    width: 100%;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .game-picker-recommendation-reason {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    width: 100%;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    opacity: 0.8;
+  }

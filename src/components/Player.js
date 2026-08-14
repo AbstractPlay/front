@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
+import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { gameinfo } from "@abstractplay/gameslib";
 import { Helmet } from "react-helmet-async";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
@@ -196,6 +197,7 @@ function Player() {
         ...challenge,
         challenger: { id: globalMe.id, name: globalMe.name },
       });
+      maybeTrackRecommendationChallenge(challenge.metaGame);
     } catch (error) {
       console.log(error);
     }
