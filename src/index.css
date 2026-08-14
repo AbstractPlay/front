@@ -1354,3 +1354,97 @@ span.hardTime::after {
     line-height: 1.2;
     opacity: 0.8;
   }
+
+  #leaderboard .stats-page-tabs {
+    margin-bottom: 1rem;
+  }
+
+  #leaderboard .stats-tab-modules {
+    margin-top: 0.5rem;
+  }
+
+  #leaderboard .stats-module {
+    height: 100%;
+  }
+
+  #leaderboard .stats-module-explanation {
+    margin-bottom: 1rem;
+  }
+
+  #leaderboard .stats-downloads {
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #leaderboard .stats-site-subnav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--main-bg-color);
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--secondary-color-3-bg);
+  }
+
+  #leaderboard .stats-site-subnav ul {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #leaderboard .stats-site-subnav a {
+    display: block;
+    white-space: nowrap;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: var(--secondary-color-3-bg);
+    color: var(--main-font-color);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  #leaderboard .stats-site-section {
+    margin-bottom: 2rem;
+    scroll-margin-top: 3.5rem;
+  }
+
+  #leaderboard .stats-site-section .subtitle {
+    margin-bottom: 0.75rem;
+  }
+
+  .stats-histogram-sparkline {
+    width: 10em;
+    cursor: pointer;
+  }
+
+  #leaderboard .stats-table-nav .level-left {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    #leaderboard .stats-table-nav .level-left {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    #leaderboard .stats-table-nav-pager {
+      display: flex;
+      justify-content: center;
+    }
+
+    #leaderboard .stats-table-nav-status {
+      text-align: center;
+    }
+
+    #leaderboard .stats-page-tabs ul {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+
