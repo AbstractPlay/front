@@ -33,7 +33,6 @@ Board colours are separate from page chrome. User customizations flow through Zu
 ## Third-party CSS
 
 - `react-toastify/dist/ReactToastify.css` — toast notifications
-- Plotly styles bundled with `react-plotly.js` (stats page)
 
 ## Formatting
 

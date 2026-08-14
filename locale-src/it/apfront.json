@@ -4556,7 +4556,7 @@
     "out": "Mostra il mio nome nella tabella pubblica delle rivalità (entrambi i giocatori devono acconsentire)"
   },
   "stats.playerStats.rivalriesIntro": {
-    "src": "Most frequent two-player pairings (at least five games together). Pairs are anonymized until players opt in to be named.",
+    "src": "Two-player pairings with at least fifty games together, ordered by games played. Pairs are anonymized until players opt in to be named.",
     "out": "Accoppiamenti a due giocatori più frequenti (almeno cinque partite insieme). Le coppie sono anonimizzate finché i giocatori non acconsentono a mostrare il proprio nome."
   },
   "stats.playersPlayedGames": {
@@ -4772,7 +4772,7 @@
     "out": "Giocatori abituali per settimana"
   },
   "stats.siteStats.rivalriesIntro": {
-    "src": "Most frequent two-player pairings (at least five games together). Pairs are anonymized until players opt in to be named.",
+    "src": "Two-player pairings with at least fifty games together, ordered by games played. Pairs are anonymized until players opt in to be named.",
     "out": "Coppie di giocatori a due più frequenti (almeno cinque partite insieme). Le coppie sono rese anonime fino a quando i giocatori non acconsentono a mostrare il proprio nome."
   },
   "stats.siteStats.seasonalityIntro": {

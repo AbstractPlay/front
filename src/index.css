@@ -931,6 +931,64 @@ tr.stickyHeader {
     word-wrap: break-word;
 }
 
+.ap-chart {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 1.5rem;
+    overflow: hidden;
+}
+
+.ap-chart-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+}
+
+.ap-chart-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.ap-chart-grid {
+    stroke: var(--secondary-color-3-bg);
+    stroke-width: 1;
+    pointer-events: none;
+}
+
+.ap-chart-grid-layer {
+    pointer-events: none;
+}
+
+.ap-chart-bar {
+    fill: var(--secondary-color-3);
+    cursor: default;
+}
+
+.ap-chart-hit {
+    fill: transparent;
+    cursor: default;
+}
+
+.ap-chart-line {
+    stroke: var(--secondary-color-1);
+    stroke-width: 2;
+    pointer-events: none;
+}
+
+.ap-chart-tick {
+    fill: var(--main-text-color);
+    font-size: 11px;
+    pointer-events: none;
+}
+
+.ap-chart-axis-title {
+    fill: var(--main-text-color);
+    font-size: 12px;
+    pointer-events: none;
+}
+
 span.hardTime::after {
     content: "\00A0\0021";
     font-weight: bolder;
@@ -1266,7 +1324,9 @@ span.hardTime::after {
 
   #playerProfile .player-weekly-chart {
     width: 100%;
+    max-width: 100%;
     min-height: 14rem;
+    overflow: hidden;
   }
 
   #playerProfile .player-hero-sparkline {
@@ -1317,6 +1377,16 @@ span.hardTime::after {
 
   #playerProfile .profile-module {
     height: 100%;
+    min-width: 0;
+  }
+
+  #playerProfile .profile-module .card-content {
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  #playerProfile .player-tab-modules > .column {
+    min-width: 0;
   }
 
   .game-picker-recommendations {

@@ -1332,7 +1332,7 @@
             "pieRateIntro": "Games that support the pie rule, showing how often the pie was invoked."
         },
         "playerStats": {
-            "rivalriesIntro": "Most frequent two-player pairings (at least five games together). Pairs are anonymized until players opt in to be named.",
+            "rivalriesIntro": "Two-player pairings with at least fifty games together, ordered by games played. Pairs are anonymized until players opt in to be named.",
             "publicRivalriesOptIn": "Show my name in the public rivalries table (both players must opt in)"
         },
         "siteStats": {
@@ -1373,7 +1373,7 @@
             "hoursPerMoveMedian": "Median per game (hours)",
             "hoursPerMoveGames": "Qualifying games",
             "hoursPerMovePerWeek": "Median hours per move per week",
-            "rivalriesIntro": "Most frequent two-player pairings (at least five games together). Pairs are anonymized until players opt in to be named.",
+            "rivalriesIntro": "Two-player pairings with at least fifty games together, ordered by games played. Pairs are anonymized until players opt in to be named.",
             "seasonalityIntro": "When players make moves, by UTC day of week and hour, over the last {{days}} days. Better reflects site activity than game completion times for asynchronous games.",
             "movesByDow": "Moves by day of week (UTC)",
             "playersByDow": "Active players by day of week (UTC)",
