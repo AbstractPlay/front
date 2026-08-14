@@ -14,6 +14,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { callAuthApi } from "../lib/api";
+import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import Spinner from "./Spinner";
 import ActivityMarker from "./ActivityMarker";
 import NewChallengeModal from "./NewChallengeModal";
@@ -77,6 +78,7 @@ function StandingChallenges(props) {
           challenger: { id: globalMe.id, name: globalMe.name },
         });
         if (!res) return;
+        maybeTrackRecommendationChallenge(challenge.metaGame);
         showModalSetter(false);
       } catch (error) {
         console.log(error);

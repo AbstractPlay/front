@@ -1271,7 +1271,8 @@
         "title": "Zufällige Reihenfolge",
         "description": "Spiele in zufälliger Reihenfolge. Klicke auf die Schaltfläche, um neu zu mischen."
       }
-    }
+    },
+    "filterRecommended": "Nur empfohlene Spiele"
   },
   "stats": {
     "selectStatistic": "Wähle eine Statistik",
@@ -1558,8 +1559,8 @@
     "deleteCustomization": "Anpassung löschen"
   },
   "gamePicker": {
-    "choose": "Spiel auswählen…",
-    "searchLabel": "Suche",
+    "choose": "Wähle ein Spiel…",
+    "searchLabel": "Suchen",
     "searchPlaceholder": "Tippen, um Spiele zu filtern…",
     "noResults": "Keine Spiele entsprechen deiner Suche.",
     "starredOnly": "Nur Favoriten",
@@ -1571,9 +1572,13 @@
     "quickPicks": {
       "starred": "Favoriten",
       "mostPlayed": "Meistgespielt",
-      "topRated": "Am besten bewertet",
-      "recent": "Zuletzt gespielt"
-    }
+      "topRated": "Bestbewertet",
+      "recent": "Zuletzt gespielt",
+      "recommended": "Das könnte dir gefallen"
+    },
+    "loadingRecommendations": "Vorschläge werden geladen…",
+    "showRecommendations": "Spielvorschläge anzeigen",
+    "hideRecommendations": "Ausblenden"
   },
   "lab": {
     "intro": "Ein lokaler Spielbereich zum Experimentieren mit Spielen. Nichts hier gelangt auf den Server – Stellungen und gespeicherte Spiele verbleiben ausschließlich in deinem Browser.",
@@ -1632,7 +1637,7 @@
     "importLocalSuccess": "{{count}} Spielstände in dein Konto kopiert.",
     "importLocalPartial": "Einige Spielstände konnten nicht kopiert werden: {{names}}",
     "onThisDevice": "Auf diesem Gerät",
-    "feelingAdventurous": "Ich fühle mich abenteuerlustig"
+    "feelingAdventurous": "Ich bin abenteuerlustig"
   },
   "Wikipedia": "Wikipedia"
 }

@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
+import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import {
   getCoreRowModel,
   useReactTable,
@@ -64,6 +65,7 @@ function Ratings() {
           ...challenge,
           challenger: { id: globalMe.id, name: globalMe.name },
         });
+        maybeTrackRecommendationChallenge(challenge.metaGame);
         closeChallengeModal();
       } catch (error) {
         console.log(error);

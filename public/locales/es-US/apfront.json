@@ -1271,7 +1271,8 @@
         "title": "Orden aleatorio",
         "description": "Juegos en orden aleatorio. Haz clic en el botón para rebarajar."
       }
-    }
+    },
+    "filterRecommended": "Solo juegos recomendados"
   },
   "stats": {
     "selectStatistic": "Selecciona una estadística",
@@ -1571,9 +1572,13 @@
     "quickPicks": {
       "starred": "Favoritos",
       "mostPlayed": "Más jugados",
-      "topRated": "Mejor calificados",
-      "recent": "Jugados recientemente"
-    }
+      "topRated": "Mejor valorados",
+      "recent": "Jugados recientemente",
+      "recommended": "Te podrían gustar"
+    },
+    "loadingRecommendations": "Cargando sugerencias…",
+    "showRecommendations": "Mostrar sugerencias de juegos",
+    "hideRecommendations": "Ocultar"
   },
   "lab": {
     "intro": "Un área de juego local para experimentar con juegos. Nada de lo que hagas aquí llega al servidor; las posiciones y partidas guardadas permanecen únicamente en tu navegador.",

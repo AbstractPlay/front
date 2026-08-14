@@ -120,8 +120,10 @@ export const viewConfigs = {
     enableNameSearch: true,
     enableDesignerSearch: true,
     enableStarFilter: true,
+    enableRecommendedFilter: true,
     pageSizeStorageKey: "allgames-show",
     starFilterStorageKey: "allgames-filter-stars",
+    recommendedFilterStorageKey: "allgames-filter-recommended",
   },
 
   newest: {

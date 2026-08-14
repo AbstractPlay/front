@@ -12,7 +12,7 @@ const sessionCache = new Map();
 /** @type {Map<string, Promise<{ allRecs: unknown[], summary: object|null }>>} */
 const inflight = new Map();
 
-async function fetchPlayerQuickPickData(userId) {
+export async function fetchPlayerQuickPickData(userId) {
   if (sessionCache.has(userId)) {
     return sessionCache.get(userId);
   }
@@ -116,6 +116,11 @@ export function usePlayerQuickPicks({ enabled = true, labOnly = false } = {}) {
     error: remote.error,
     isLoggedIn: Boolean(userId),
   };
+}
+
+/** @visibleForTesting */
+export function getCachedPlayerQuickPickData(userId) {
+  return sessionCache.get(userId) ?? null;
 }
 
 /** @visibleForTesting */
