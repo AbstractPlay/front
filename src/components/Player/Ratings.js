@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext, SummaryContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import NewChallengeModal from "../NewChallengeModal";
 import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
@@ -185,7 +185,8 @@ function Ratings({ handleChallenge }) {
   }
 
   return (
-    <TableSkeleton
+    <DataTable
+      {...PROFILE_TABLE_PROPS}
       data={data}
       columns={columns}
       sort={[{ id: "elo", desc: true }]}

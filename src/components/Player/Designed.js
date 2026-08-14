@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -49,7 +49,8 @@ function Designed() {
   }
 
   return (
-    <TableSkeleton
+    <DataTable
+      {...PROFILE_TABLE_PROPS}
       data={data}
       columns={columns}
       sort={[{ id: "name", desc: false }]}

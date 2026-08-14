@@ -8,7 +8,7 @@ import React, {
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext, SummaryContext } from "../Player";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import NewChallengeModal from "../NewChallengeModal";
 import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
@@ -212,7 +212,8 @@ function Opponents({ handleChallenge }) {
         </div>
       )}
       {data.length === 0 ? null : (
-        <TableSkeleton
+        <DataTable
+          {...PROFILE_TABLE_PROPS}
           data={data}
           columns={columns}
           sort={[{ id: "count", desc: true }]}

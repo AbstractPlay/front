@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
 
@@ -93,7 +93,8 @@ function GameStats({ metaFilter, nav }) {
 
   return (
     <>
-      <TableSkeleton
+      <DataTable
+        {...STATS_TABLE_PROPS}
         nav={nav}
         data={data}
         columns={columns}
@@ -105,7 +106,8 @@ function GameStats({ metaFilter, nav }) {
           <div className="content">
             <p>{t("stats.gameStats.pieRateIntro")}</p>
           </div>
-          <TableSkeleton
+          <DataTable
+        {...STATS_TABLE_PROPS}
             nav={nav}
             data={pieRateData}
             columns={pieColumns}

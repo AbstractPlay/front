@@ -4,7 +4,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { createColumnHelper } from "@tanstack/react-table";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { EVENTS_TABLE_PROPS } from "../shared/DataTable";
 import { useTranslation } from "react-i18next";
 
 function TableActive({ events }) {
@@ -54,7 +54,8 @@ function TableActive({ events }) {
   );
 
   return (
-    <TableSkeleton
+    <DataTable
+      {...EVENTS_TABLE_PROPS}
       data={data}
       columns={columns}
       sort={[{ id: "dateStart", desc: false }]}

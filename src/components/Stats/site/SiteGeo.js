@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 import Flag from "../../Flag";
-import TableSkeleton from "../TableSkeleton";
+import DataTable, { STATS_TABLE_PROPS } from "../../shared/DataTable";
 import { useStore } from "../../../stores";
 
 function SiteGeo({ nav }) {
@@ -57,7 +57,8 @@ function SiteGeo({ nav }) {
       <div className="content">
         <p>{t("stats.siteStats.countryIntro")}</p>
       </div>
-      <TableSkeleton
+      <DataTable
+        {...STATS_TABLE_PROPS}
         nav={nav}
         data={data}
         columns={columns}

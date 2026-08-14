@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { EVENTS_TABLE_PROPS } from "../shared/DataTable";
 import { useTranslation } from "react-i18next";
 
 function TableDrafts({ events }) {
@@ -38,7 +38,8 @@ function TableDrafts({ events }) {
   );
 
   return (
-    <TableSkeleton
+    <DataTable
+      {...EVENTS_TABLE_PROPS}
       data={data}
       columns={columns}
       sort={[{ id: "name", desc: false }]}

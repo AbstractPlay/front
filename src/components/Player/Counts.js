@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext, SummaryContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { useTranslation } from "react-i18next";
 import { getPlayerHIndex } from "../../lib/playerProfileSections";
 
@@ -100,7 +100,8 @@ function Counts() {
         </div>
       )}
       {data.length === 0 ? null : (
-        <TableSkeleton
+        <DataTable
+          {...PROFILE_TABLE_PROPS}
           data={data}
           columns={columns}
           sort={[{ id: "count", desc: true }]}

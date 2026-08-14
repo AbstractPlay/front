@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { EVENTS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
@@ -87,7 +87,8 @@ function TableComplete({ events }) {
   );
 
   return (
-    <TableSkeleton
+    <DataTable
+      {...EVENTS_TABLE_PROPS}
       data={data}
       columns={columns}
       sort={[{ id: "dateEnd", desc: true }]}

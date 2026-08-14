@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
-import TableSkeleton from "../Events/TableSkeleton";
+import DataTable, { EVENTS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
@@ -65,7 +65,8 @@ function ResultsTable({ games, eventid }) {
 
   return (
     <>
-      <TableSkeleton
+      <DataTable
+        {...EVENTS_TABLE_PROPS}
         data={data}
         columns={columns}
         sort={[{ id: "total", desc: true }]}
