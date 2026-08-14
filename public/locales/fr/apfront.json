@@ -1710,7 +1710,7 @@
     "importLocalSuccess": "{{count}} sauvegarde(s) copiée(s) sur votre compte.",
     "importLocalPartial": "Certaines sauvegardes n'ont pas pu être copiées : {{names}}",
     "onThisDevice": "Sur cet appareil",
-    "feelingAdventurous": "Je me sens aventureux"
+    "feelingAdventurous": "Je me sens d'humeur aventureuse"
   },
   "Wikipedia": "Wikipédia"
 }
