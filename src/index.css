@@ -260,6 +260,33 @@ strong {
     color: var(--main-font-color);
 }
 
+/* Bulma "is-light" notification variants keep pale backgrounds while the app
+   uses color-mode for dark theme, which can yield light-on-light text. */
+:root[color-mode="dark"] .notification.is-light,
+:root[color-mode="dark"] .notification.is-info.is-light,
+:root[color-mode="dark"] .notification.is-danger.is-light,
+:root[color-mode="dark"] .notification.is-warning.is-light,
+:root[color-mode="dark"] .notification.is-success.is-light,
+:root[color-mode="dark"] .notification.is-primary.is-light,
+:root[color-mode="dark"] .notification.is-link.is-light {
+    background-color: var(--secondary-color-3-bg);
+    color: var(--main-font-color);
+}
+
+:root[color-mode="dark"] .notification.is-light strong,
+:root[color-mode="dark"] .notification.is-info.is-light strong,
+:root[color-mode="dark"] .notification.is-danger.is-light strong,
+:root[color-mode="dark"] .notification.is-warning.is-light strong,
+:root[color-mode="dark"] .notification.is-success.is-light strong,
+:root[color-mode="dark"] .notification.is-primary.is-light strong,
+:root[color-mode="dark"] .notification.is-link.is-light strong {
+    color: var(--main-font-color);
+}
+
+:root[color-mode="dark"] .notification.is-danger.is-light {
+    border-left: 4px solid var(--secondary-color-1);
+}
+
 /* Only used to colour buttons until I can figure out how to override Bulma colours */
 .tableNav .apButton,
 .tableNav .apButton:hover,
@@ -1266,6 +1293,13 @@ span.hardTime::after {
   #playerProfile .player-dev-banner {
     margin-bottom: 1rem;
     padding: 0.5rem 0.75rem;
+    background-color: var(--secondary-color-3-bg);
+    color: var(--main-font-color);
+  }
+
+  #playerProfile .player-hero.box {
+    background-color: var(--main-bg-color);
+    color: var(--main-font-color);
   }
 
   #playerProfile .player-profile-tabs {
@@ -1278,6 +1312,7 @@ span.hardTime::after {
 
   #playerProfile .player-tab-empty {
     padding: 2rem 1rem;
+    color: var(--secondary-font-color);
   }
 
   #playerProfile .profile-module {
