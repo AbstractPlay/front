@@ -4807,6 +4807,14 @@
     "src": "Week #",
     "out": "Semana n.º"
   },
+  "stats.table.filter": {
+    "src": "Filter",
+    "out": "Filtrar"
+  },
+  "stats.table.filterPlaceholder": {
+    "src": "Filter...",
+    "out": "Filtrar..."
+  },
   "stats.table.of": {
     "src": "of",
     "out": "de"

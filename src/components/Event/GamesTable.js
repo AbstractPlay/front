@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { callAuthApi } from "../../lib/api";
 import { useTranslation, Trans } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
-import TableSkeleton from "../Events/TableSkeleton";
+import DataTable, { EVENTS_TABLE_PROPS } from "../shared/DataTable";
 import Modal from "../Modal";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
@@ -205,7 +205,8 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
 
   return (
     <>
-      <TableSkeleton
+      <DataTable
+        {...EVENTS_TABLE_PROPS}
         data={data}
         columns={columns}
         sort={[{ id: "round", desc: false }]}

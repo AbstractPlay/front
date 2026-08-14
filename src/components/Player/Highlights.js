@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import ProfileModule from "./ProfileModule";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { useStore } from "../../stores";
@@ -137,7 +137,8 @@ function HighlightsTable({
   );
 
   return (
-    <TableSkeleton
+    <DataTable
+      {...PROFILE_TABLE_PROPS}
       data={data}
       columns={columns}
       sort={

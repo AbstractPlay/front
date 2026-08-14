@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import HistogramSparkline from "./shared/HistogramSparkline";
 import PlayContextSummary from "./shared/PlayContextSummary";
 import { useStore } from "../../stores";
@@ -106,7 +106,8 @@ function NumPlays({ metaFilter, nav }) {
   return (
     <>
       {metaFilter === undefined ? <PlayContextSummary /> : null}
-      <TableSkeleton
+      <DataTable
+        {...STATS_TABLE_PROPS}
         nav={nav}
         data={data}
         columns={columns}

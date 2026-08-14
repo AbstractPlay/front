@@ -1527,22 +1527,26 @@ span.hardTime::after {
     cursor: pointer;
   }
 
+  #leaderboard .data-table-nav .level-left,
   #leaderboard .stats-table-nav .level-left {
     flex-wrap: wrap;
     gap: 0.5rem;
   }
 
   @media screen and (max-width: 768px) {
+    #leaderboard .data-table-nav .level-left,
     #leaderboard .stats-table-nav .level-left {
       flex-direction: column;
       align-items: stretch;
     }
 
+    #leaderboard .data-table-nav-pager,
     #leaderboard .stats-table-nav-pager {
       display: flex;
       justify-content: center;
     }
 
+    #leaderboard .data-table-nav-status,
     #leaderboard .stats-table-nav-status {
       text-align: center;
     }

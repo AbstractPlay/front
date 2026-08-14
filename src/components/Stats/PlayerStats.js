@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import HistogramSparkline from "./shared/HistogramSparkline";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
@@ -201,7 +201,8 @@ function PlayerStats({ nav }) {
 
   return (
     <>
-      <TableSkeleton
+      <DataTable
+        {...STATS_TABLE_PROPS}
         nav={nav}
         data={data}
         columns={columns}
@@ -227,7 +228,8 @@ function PlayerStats({ nav }) {
             ) : null}
           </div>
           {rivalryData.length > 0 ? (
-            <TableSkeleton
+            <DataTable
+        {...STATS_TABLE_PROPS}
               nav={nav}
               data={rivalryData}
               columns={rivalryColumns}

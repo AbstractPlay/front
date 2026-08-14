@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
 import { TournamentContext } from "../Player";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { useTranslation } from "react-i18next";
 
 function Tournaments() {
@@ -93,7 +93,8 @@ function Tournaments() {
 
   return (
     <>
-      <TableSkeleton
+      <DataTable
+        {...PROFILE_TABLE_PROPS}
         data={data}
         columns={columns}
         sort={[{ id: "dateEnded", desc: true }]}
