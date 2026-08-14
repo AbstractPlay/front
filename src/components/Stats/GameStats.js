@@ -20,6 +20,7 @@ function GameStats({ metaFilter, nav }) {
             lenAvg: Math.trunc(rec.lenAvg * 100) / 100,
             lenMedian: Math.trunc(rec.lenMedian * 100) / 100,
             winsFirst: Math.trunc(rec.winsFirst * 10000) / 100,
+            drawRate: Math.trunc((rec.drawRate ?? 0) * 10000) / 100,
           };
         })
         .filter(
@@ -49,6 +50,10 @@ function GameStats({ metaFilter, nav }) {
       }),
       columnHelper.accessor("winsFirst", {
         header: t("tables.firstPlayerWins"),
+        cell: (props) => props.getValue() + "%",
+      }),
+      columnHelper.accessor("drawRate", {
+        header: t("tables.drawRate"),
         cell: (props) => props.getValue() + "%",
       }),
     ],
