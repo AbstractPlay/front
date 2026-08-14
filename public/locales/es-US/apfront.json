@@ -1372,7 +1372,8 @@
       "pieRateIntro": "Partidas que admiten la regla del pastel, mostrando con qué frecuencia se aplicó."
     },
     "playerStats": {
-      "rivalriesIntro": "Emparejamientos de dos jugadores más frecuentes (al menos cinco partidas juntos). Las parejas son anónimas hasta que los jugadores elijan mostrar sus nombres."
+      "rivalriesIntro": "Emparejamientos de dos jugadores más frecuentes (al menos cinco partidas juntos). Las parejas son anónimas hasta que los jugadores elijan mostrar sus nombres.",
+      "publicRivalriesOptIn": "Mostrar mi nombre en la tabla pública de rivalidades (ambos jugadores deben optar por participar)"
     },
     "histogramFor": "Histograma de {{name}}",
     "tabs": {
