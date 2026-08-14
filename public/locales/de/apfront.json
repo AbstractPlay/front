@@ -1362,7 +1362,8 @@
       "pieRateIntro": "Spiele, die die Pie-Regel unterstützen, und wie oft diese angewendet wurde."
     },
     "playerStats": {
-      "rivalriesIntro": "Häufigste Zwei-Spieler-Paarungen (mindestens fünf gemeinsame Spiele). Paarungen werden anonymisiert, bis die Spieler der Namensnennung zustimmen."
+      "rivalriesIntro": "Häufigste Zwei-Spieler-Paarungen (mindestens fünf gemeinsame Spiele). Paarungen werden anonymisiert, bis die Spieler der Namensnennung zustimmen.",
+      "publicRivalriesOptIn": "Meinen Namen in der öffentlichen Rivalitäten-Tabelle anzeigen (beide Spieler müssen zustimmen)"
     },
     "histogramFor": "Histogramm für {{name}}",
     "tabs": {

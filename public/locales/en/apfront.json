@@ -1332,7 +1332,8 @@
             "pieRateIntro": "Games that support the pie rule, showing how often the pie was invoked."
         },
         "playerStats": {
-            "rivalriesIntro": "Most frequent two-player pairings (at least five games together). Pairs are anonymized until players opt in to be named."
+            "rivalriesIntro": "Most frequent two-player pairings (at least five games together). Pairs are anonymized until players opt in to be named.",
+            "publicRivalriesOptIn": "Show my name in the public rivalries table (both players must opt in)"
         },
         "siteStats": {
             "weekBuckets": "Games are counted in seven-day chunks. The left-most bar is the first week completed games were recorded. The right-most bar is the most recent week (or part thereof).",

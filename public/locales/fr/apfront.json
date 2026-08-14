@@ -1362,7 +1362,8 @@
       "pieRateIntro": "Parties prenant en charge la règle du gâteau, montrant la fréquence à laquelle la règle a été invoquée."
     },
     "playerStats": {
-      "rivalriesIntro": "Paires de deux joueurs les plus fréquentes (au moins cinq parties ensemble). Les paires sont anonymisées jusqu'à ce que les joueurs acceptent de faire apparaître leur nom."
+      "rivalriesIntro": "Paires de deux joueurs les plus fréquentes (au moins cinq parties ensemble). Les paires sont anonymisées jusqu'à ce que les joueurs acceptent de faire apparaître leur nom.",
+      "publicRivalriesOptIn": "Afficher mon nom dans le tableau public des rivalités (les deux joueurs doivent donner leur accord)"
     },
     "histogramFor": "Histogramme pour {{name}}",
     "tabs": {

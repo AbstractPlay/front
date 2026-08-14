@@ -1362,7 +1362,8 @@
       "pieRateIntro": "Partite che supportano la regola della torta, che mostrano quanto spesso è stata invocata."
     },
     "playerStats": {
-      "rivalriesIntro": "Accoppiamenti a due giocatori più frequenti (almeno cinque partite insieme). Le coppie sono anonimizzate finché i giocatori non acconsentono a mostrare il proprio nome."
+      "rivalriesIntro": "Accoppiamenti a due giocatori più frequenti (almeno cinque partite insieme). Le coppie sono anonimizzate finché i giocatori non acconsentono a mostrare il proprio nome.",
+      "publicRivalriesOptIn": "Mostra il mio nome nella tabella pubblica delle rivalità (entrambi i giocatori devono acconsentire)"
     },
     "histogramFor": "Istogramma per {{name}}",
     "tabs": {
