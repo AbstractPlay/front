@@ -1,6 +1,6 @@
 import React from "react";
-import Plot from "react-plotly.js";
-import { PLOTLY_CONFIG, useChartHeight } from "./plotlyLayout";
+import BarChart from "../../shared/BarChart";
+import { useChartHeight } from "../../shared/useChartHeight";
 
 function WeekBarChart({
   title,
@@ -14,21 +14,19 @@ function WeekBarChart({
   heightMobile = 350,
 }) {
   const height = useChartHeight(heightDesktop, heightMobile);
-  const trace = { y: [...y], type: chartType };
-  if (x !== undefined) {
-    trace.x = [...x];
-  }
+  const labels = x !== undefined ? x.map(String) : undefined;
 
   return (
-    <Plot
-      data={[trace]}
-      config={PLOTLY_CONFIG}
-      layout={{
-        title,
-        xaxis: { title: xaxisTitle },
-        yaxis: { title: yaxisTitle, ...yaxis },
-        height,
-      }}
+    <BarChart
+      data={[...y]}
+      labels={labels}
+      title={title}
+      xTitle={xaxisTitle}
+      yTitle={yaxisTitle}
+      height={height}
+      yMin={yaxis?.range?.[0]}
+      yMax={yaxis?.range?.[1]}
+      chartType={chartType}
     />
   );
 }

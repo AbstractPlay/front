@@ -92,8 +92,6 @@ export default defineConfig(({ mode }) => {
       include: [
         "lodash",
         "lodash/merge",
-        "plotly.js",
-        "react-plotly.js",
         "buffer",
         "aws-amplify",
         "amazon-cognito-identity-js",
