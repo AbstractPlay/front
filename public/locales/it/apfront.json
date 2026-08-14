@@ -1373,6 +1373,31 @@
     },
     "playerStats": {
       "rivalriesIntro": "Accoppiamenti a due giocatori più frequenti (almeno cinque partite insieme). Le coppie sono anonimizzate finché i giocatori non acconsentono a mostrare il proprio nome."
+    },
+    "histogramFor": "Istogramma per {{name}}",
+    "tabs": {
+      "ratings": "Punteggi",
+      "games": "Partite",
+      "players": "Giocatori",
+      "tournaments": "Tornei",
+      "site": "Sito"
+    },
+    "table": {
+      "page": "Pagina",
+      "of": "di",
+      "rows": "righe totali",
+      "showAll": "Mostra tutto",
+      "showCount": "Mostra {{count}}"
+    },
+    "site": {
+      "subnavLabel": "Sezioni statistiche del sito",
+      "sections": {
+        "growth": "Crescita e attività",
+        "geo": "Geografia",
+        "seasonality": "Stagionalità",
+        "reliability": "Affidabilità",
+        "pace": "Ritmo"
+      }
     }
   },
   "players": {

@@ -1294,6 +1294,31 @@
         "year_one": "{{count}} year",
         "year_other": "{{count}} years",
         "playersPlayedGames": "In that time, {{numPlayers}} players have played {{numGames}} games.",
+        "histogramFor": "Histogram for {{name}}",
+        "tabs": {
+            "ratings": "Ratings",
+            "games": "Games",
+            "players": "Players",
+            "tournaments": "Tournaments",
+            "site": "Site"
+        },
+        "table": {
+            "page": "Page",
+            "of": "of",
+            "rows": "total rows",
+            "showAll": "Show all",
+            "showCount": "Show {{count}}"
+        },
+        "site": {
+            "subnavLabel": "Site statistics sections",
+            "sections": {
+                "growth": "Growth & activity",
+                "geo": "Geography",
+                "seasonality": "Seasonality",
+                "reliability": "Reliability",
+                "pace": "Pace"
+            }
+        },
         "explanations": {
             "highestSingle": "List of every recorded rating. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made. The Elo rating starts at 1200 with a static *K* of 30. The Glicko rating uses the version 2 algorithm, the default starting values (initial rating 1500), and a rating period of sixty days (starting from the first day a particular game was recorded). Glicko ratings are presented as a 95% confidence range. The narrower that range, the more confident the system is in the rating. And finally, Trueskill is a rating system used by Microsoft in various online games. I used the default settings (rating range 0–50, starting at 25).",
             "avgRatings": "The average rating is just that: a straight average of all the Elo ratings recorded for that player. The weighted average is weighted by number of games played. For example, if you had a rating of 1300 in a game you played 10 times and 1200 in a game you only played twice, your average rating would be 1250, but your weighted average would be 1283.",
@@ -1325,7 +1350,7 @@
             "firstTimersIntro": "This graph tracks the number of users who completed their first game that week. The numbers are cumulative, meaning they will never decrease, and the right-most point should always show the current recorded user count. It is of course expected that the numbers will plateau at some point, but it gives an indication of growth.",
             "firstTimersCumulative": "First-time game completions, cumulative",
             "usersFirstGame": "Users who completed their first game",
-            "countryIntro": "Registered users by country (from profile settings). Only includes country codes the system can interpret. The second count shows players who completed at least one game in the past 30 days.",
+            "countryIntro": "Registered users by country (from profile settings). Only includes players who have elected to identify their country, and only includes country codes the system can interpret. The second count shows players who completed at least one game in the past 30 days.",
             "activeCountryIntro": "Players who completed at least one game in the past 30 days, grouped by the country on their profile.",
             "playContext": "Casual games: {{casual}} ({{casualRate}}). Tournament or org-event games: {{event}} ({{eventRate}}).",
             "pieRateIntro": "Games that support the pie rule, showing how often the pie was invoked.",

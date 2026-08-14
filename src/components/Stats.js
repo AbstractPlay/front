@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import ReactMarkdown from "react-markdown";
+import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
-import rehypeRaw from "rehype-raw";
-import HighestSingleRating from "./Stats/HighestSingleRating";
-import AvgRatings from "./Stats/AvgRatings";
-import TopPlayers from "./Stats/TopPlayers";
-import NumPlays from "./Stats/NumPlays";
-import PlayerStats from "./Stats/PlayerStats";
-import GameStats from "./Stats/GameStats";
-import SiteStats from "./Stats/SiteStats";
-import Tournaments from "./Stats/Tournaments";
+import StatsModule from "./Stats/StatsModule";
 import { useStore } from "../stores";
+import {
+  STATS_TABS,
+  STATS_MODULES,
+  DEFAULT_STATS_TAB,
+  isValidStatsTab,
+  getStatsTab,
+  sortStatsModules,
+} from "../lib/statsSections";
 
 const daysBetween = (startDate, endDate) => {
-  // The number of milliseconds in all UTC days (no DST)
   const oneDay = 1000 * 60 * 60 * 24;
-
-  // A day in UTC always lasts 24 hours (unlike in other time formats)
   const start = Date.UTC(
     endDate.getFullYear(),
     endDate.getMonth(),
@@ -28,43 +26,31 @@ const daysBetween = (startDate, endDate) => {
     startDate.getMonth(),
     startDate.getDate()
   );
-
-  // so it's safe to divide by 24 hours
   return Math.round((start - end) / oneDay);
 };
 
 const formatDate = (date) => {
-  const lpad = (n) => {
-    if (n.toString().length < 2) {
-      return `0${n}`;
-    } else {
-      return n;
-    }
-  };
+  const lpad = (n) => (n.toString().length < 2 ? `0${n}` : n);
   return `${date.getFullYear()}-${lpad(date.getMonth() + 1)}-${lpad(
     date.getDate()
   )}`;
 };
 
-// [code, component]
-const modules = [
-  ["highestSingle", HighestSingleRating],
-  ["avgRatings", AvgRatings],
-  ["topPlayers", TopPlayers],
-  ["numPlays", NumPlays],
-  ["playerStats", PlayerStats],
-  ["gameStats", GameStats],
-  ["tourneyStats", Tournaments],
-  ["siteStats", SiteStats],
-];
-
-function Stats(props) {
+function Stats() {
+  const { tab: tabParam } = useParams();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const summary = useStore((state) => state.summary);
-  const [error] = useState(null);
+  const [storedTab, setStoredTab] = useStorageState(
+    "stats-tab",
+    DEFAULT_STATS_TAB
+  );
+  const [pinnedModule, pinnedModuleSetter] = useStorageState(
+    "stats-pin",
+    null
+  );
   const [recDays, recDaysSetter] = useState(0);
   const [recYears, recYearsSetter] = useState(0);
-  const [statSelected, statSelectedSetter] = useState(null);
 
   useEffect(() => {
     if (summary !== null) {
@@ -80,14 +66,38 @@ function Stats(props) {
     recYearsSetter(Math.trunc((recDays / 365) * 100) / 100);
   }, [recDays]);
 
-  if (error) {
-    return (
-      <div>
-        <p>{t("Error")}</p>
-        <p>{error.message}</p>
-      </div>
-    );
+  useEffect(() => {
+    if (tabParam !== undefined && isValidStatsTab(tabParam)) {
+      setStoredTab(tabParam);
+    }
+  }, [tabParam, setStoredTab]);
+
+  const handleTogglePin = useCallback(
+    (code) => {
+      pinnedModuleSetter((current) => (current === code ? null : code));
+    },
+    [pinnedModuleSetter]
+  );
+
+  if (tabParam !== undefined && !isValidStatsTab(tabParam)) {
+    return <Navigate to={`/stats/${DEFAULT_STATS_TAB}`} replace />;
   }
+
+  if (tabParam === undefined) {
+    const target = isValidStatsTab(storedTab) ? storedTab : DEFAULT_STATS_TAB;
+    return <Navigate to={`/stats/${target}`} replace />;
+  }
+
+  const activeTab = getStatsTab(tabParam);
+  if (activeTab === undefined) {
+    return <Navigate to={`/stats/${DEFAULT_STATS_TAB}`} replace />;
+  }
+
+  const modulesToRender = sortStatsModules(
+    activeTab.modules,
+    pinnedModule
+  );
+  const showPin = activeTab.modules.length > 1;
 
   return (
     <>
@@ -95,7 +105,7 @@ function Stats(props) {
         <meta property="og:title" content={`Site Statistics`} />
         <meta
           property="og:url"
-          content={`https://play.abstractplay.com/stats`}
+          content={`https://play.abstractplay.com/stats/${tabParam}`}
         />
         <meta
           property="og:description"
@@ -131,70 +141,67 @@ function Stats(props) {
           </p>
           <p className="help">{t("stats.ratingsNote")}</p>
         </div>
-        <div className="field has-text-centered">
-          <label className="label">{t("stats.selectStatistic")}</label>
-          <div className="control">
-            <div
-              className="select"
-              onChange={(e) => statSelectedSetter(e.target.value)}
-            >
-              <select>
-                <option value="" key=""></option>
-                {modules.map(([name]) => {
-                  return (
-                    <option value={name} key={name}>
-                      {t(`stats_module_${name}`)}
-                    </option>
-                  );
-                })}
-              </select>
+
+        <div className="columns is-centered">
+          <div className="column is-12 is-10-desktop">
+            <div className="tabs is-small is-toggle is-toggle-rounded stats-page-tabs">
+              <ul>
+                {STATS_TABS.map((tab) => (
+                  <li
+                    key={tab.id}
+                    className={tabParam === tab.id ? "is-active" : ""}
+                  >
+                    <a
+                      href={`/stats/${tab.id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(`/stats/${tab.id}`);
+                      }}
+                    >
+                      {t(tab.nameKey)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-        </div>
-        <hr />
-        {modules.map(([code, Component]) => {
-          if (code === statSelected) {
-            if (code === "siteStats") {
-              return <Component key={`${code}|component`} />;
-            } else {
-              return (
-                <React.Fragment key={code}>
-                  {code === "siteStats" ? null : (
-                    <div style={{ fontSize: "smaller", paddingBottom: "1em" }}>
-                      <ReactMarkdown
-                        rehypePlugins={[rehypeRaw]}
-                        className="content"
-                      >
-                        {t(`stats.explanations.${code}`)}
-                      </ReactMarkdown>
-                    </div>
-                  )}
-                  <div className="columns">
-                    <div className="column is-one-half is-offset-one-quarter">
-                      <Component />
-                    </div>
-                  </div>
-                </React.Fragment>
-              );
-            }
-          } else {
-            return null;
-          }
-        })}
-        <div className="field is-grouped topPad">
-          <div className="control">
-            <a href="https://records.abstractplay.com/_summary.json">
-              <button className="button is-small apButton">
-                {t("stats.downloadSummary")}
-              </button>
-            </a>
-          </div>
-          <div className="control">
-            <a href="https://records.abstractplay.com/ALL.json">
-              <button className="button is-small apButton">
-                {t("stats.downloadReports")}
-              </button>
-            </a>
+
+            <div className="columns is-multiline stats-tab-modules">
+              {modulesToRender.map((code) => {
+                const config = STATS_MODULES[code];
+                if (config === undefined) {
+                  return null;
+                }
+                const { component: Component } = config;
+                return (
+                  <StatsModule
+                    key={code}
+                    code={code}
+                    Component={Component}
+                    componentProps={{}}
+                    pinned={pinnedModule === code}
+                    onTogglePin={handleTogglePin}
+                    showPin={showPin}
+                  />
+                );
+              })}
+            </div>
+
+            <div className="field is-grouped stats-downloads topPad">
+              <div className="control">
+                <a href="https://records.abstractplay.com/_summary.json">
+                  <button type="button" className="button is-small apButton">
+                    {t("stats.downloadSummary")}
+                  </button>
+                </a>
+              </div>
+              <div className="control">
+                <a href="https://records.abstractplay.com/ALL.json">
+                  <button type="button" className="button is-small apButton">
+                    {t("stats.downloadReports")}
+                  </button>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </article>
