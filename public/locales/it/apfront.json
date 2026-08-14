@@ -1609,7 +1609,7 @@
   "gamePicker": {
     "choose": "Scegli un gioco…",
     "searchLabel": "Cerca",
-    "searchPlaceholder": "Scrivi per filtrare i giochi…",
+    "searchPlaceholder": "Digita per filtrare i giochi…",
     "noResults": "Nessun gioco corrisponde alla ricerca.",
     "starredOnly": "Solo giochi preferiti",
     "loadingQuickPicks": "Caricamento dei tuoi giochi…",

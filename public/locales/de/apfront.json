@@ -1612,7 +1612,7 @@
     "searchPlaceholder": "Tippen, um Spiele zu filtern…",
     "noResults": "Keine Spiele entsprechen deiner Suche.",
     "starredOnly": "Nur Favoriten",
-    "loadingQuickPicks": "Lade deine Spiele…",
+    "loadingQuickPicks": "Deine Spiele werden geladen…",
     "matchCount": "{{count}} von {{total}} Spielen",
     "filterGoal": "Ziel",
     "filterBoard": "Brett",
