@@ -148,7 +148,7 @@ export function getPastYearHistogramWindow(
   return [...Array(weeks - aligned.length).fill(0), ...aligned];
 }
 
-/** Plotly bar trace for the past-year window (x = 0 … weeks − 1). */
+/** Bar chart series for the past-year window (x = 0 … weeks − 1). */
 export function getPastYearBarChartData(
   histogram,
   { weeks = PAST_YEAR_WEEKS, siteWeekCount = null } = {}
@@ -160,7 +160,7 @@ export function getPastYearBarChartData(
   };
 }
 
-/** Plotly bar trace for a weekly activity histogram (full history). */
+/** Bar chart series for a weekly activity histogram (full history). */
 export function getActivityBarChartData(histogram) {
   if (!Array.isArray(histogram) || histogram.length === 0) {
     return { x: [], y: [] };

@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
-import Plot from "react-plotly.js";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../../stores";
-import { PLOTLY_CONFIG, useChartHeight } from "../shared/plotlyLayout";
+import BarChart from "../../shared/BarChart";
+import { useChartHeight } from "../../shared/useChartHeight";
 
 const DOW_ORDER = [1, 2, 3, 4, 5, 6, 0];
 
@@ -58,35 +58,30 @@ function SiteSeasonality() {
           })}
         </p>
       </div>
-      <Plot
-        data={[{ x: dowLabels, y: movesByDow, type: "bar" }]}
-        config={PLOTLY_CONFIG}
-        layout={{
-          title: t("stats.siteStats.movesByDow"),
-          xaxis: { title: t("stats.siteStats.dayOfWeekUtc") },
-          yaxis: { title: t("stats.siteStats.movesMade") },
-          height,
-        }}
+      <BarChart
+        data={movesByDow}
+        labels={dowLabels}
+        title={t("stats.siteStats.movesByDow")}
+        xTitle={t("stats.siteStats.dayOfWeekUtc")}
+        yTitle={t("stats.siteStats.movesMade")}
+        height={height}
       />
-      <Plot
-        data={[{ x: dowLabels, y: playersByDow, type: "bar" }]}
-        config={PLOTLY_CONFIG}
-        layout={{
-          title: t("stats.siteStats.playersByDow"),
-          xaxis: { title: t("stats.siteStats.dayOfWeekUtc") },
-          yaxis: { title: t("stats.siteStats.activePlayers") },
-          height,
-        }}
+      <BarChart
+        data={playersByDow}
+        labels={dowLabels}
+        title={t("stats.siteStats.playersByDow")}
+        xTitle={t("stats.siteStats.dayOfWeekUtc")}
+        yTitle={t("stats.siteStats.activePlayers")}
+        height={height}
       />
-      <Plot
-        data={[{ x: hourLabels, y: movesByHour, type: "bar" }]}
-        config={PLOTLY_CONFIG}
-        layout={{
-          title: t("stats.siteStats.movesByHour"),
-          xaxis: { title: t("stats.siteStats.hourOfDayUtc") },
-          yaxis: { title: t("stats.siteStats.movesMade") },
-          height,
-        }}
+      <BarChart
+        data={movesByHour}
+        labels={hourLabels}
+        title={t("stats.siteStats.movesByHour")}
+        xTitle={t("stats.siteStats.hourOfDayUtc")}
+        yTitle={t("stats.siteStats.movesMade")}
+        height={height}
+        xTickStep={3}
       />
     </>
   );

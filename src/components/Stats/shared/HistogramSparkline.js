@@ -1,8 +1,7 @@
 import React from "react";
-import Plot from "react-plotly.js";
 import Modal from "../../Modal";
+import BarChart from "../../shared/BarChart";
 import { useTranslation } from "react-i18next";
-import { PLOTLY_CONFIG } from "./plotlyLayout";
 
 function HistogramSparkline({
   rowId,
@@ -46,17 +45,12 @@ function HistogramSparkline({
         show={isOpen}
         title={modalTitle}
       >
-        <div style={{ overflow: "hidden" }}>
-          <Plot
-            data={[{ y: [...histogram], type: "bar" }]}
-            config={{ ...PLOTLY_CONFIG, displayModeBar: false }}
-            layout={{
-              xaxis: { title: t("stats.siteStats.weekNumber") },
-              yaxis: { title: t("stats.siteStats.completedGames") },
-              margin: { r: 160 },
-            }}
-          />
-        </div>
+        <BarChart
+          data={[...histogram]}
+          xTitle={t("stats.siteStats.weekNumber")}
+          yTitle={t("stats.siteStats.completedGames")}
+          height={400}
+        />
       </Modal>
     </>
   );
