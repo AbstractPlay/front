@@ -283,7 +283,7 @@ function Player() {
                       <div className="column is-10">
                         <Hero handleChallenge={handleNewChallenge} />
                         <div
-                          className="notification is-light is-size-7 has-text-centered player-dev-banner"
+                          className="box is-size-7 has-text-centered player-dev-banner"
                           role="note"
                         >
                           {t("player.underDevelopment")}
@@ -340,7 +340,7 @@ function Player() {
                             })}
                           </div>
                         ) : (
-                          <p className="has-text-centered has-text-grey player-tab-empty">
+                          <p className="has-text-centered player-tab-empty">
                             {t("player.tabs.empty")}
                           </p>
                         )}
