@@ -33,6 +33,18 @@ function GameStats({ metaFilter, nav }) {
     [summary, metaFilter]
   );
 
+  const pieRateData = useMemo(
+    () =>
+      (summary.pieRates ?? []).map(({ game, n, pied, rate }) => ({
+        id: game,
+        game,
+        n,
+        pied,
+        rate: Math.trunc(rate * 10000) / 100,
+      })),
+    [summary]
+  );
+
   const columnHelper = createColumnHelper();
   const columns = useMemo(
     () => [
@@ -60,6 +72,25 @@ function GameStats({ metaFilter, nav }) {
     [columnHelper, t]
   );
 
+  const pieColumns = useMemo(
+    () => [
+      columnHelper.accessor("game", {
+        header: t("tables.game"),
+      }),
+      columnHelper.accessor("n", {
+        header: t("tables.numRecords"),
+      }),
+      columnHelper.accessor("pied", {
+        header: t("tables.pieInvoked"),
+      }),
+      columnHelper.accessor("rate", {
+        header: t("tables.pieRate"),
+        cell: (props) => props.getValue() + "%",
+      }),
+    ],
+    [columnHelper, t]
+  );
+
   return (
     <>
       <TableSkeleton
@@ -68,6 +99,20 @@ function GameStats({ metaFilter, nav }) {
         columns={columns}
         sort={[{ id: "game", desc: false }]}
       />
+      {pieRateData.length > 0 ? (
+        <>
+          <hr />
+          <div className="content">
+            <p>{t("stats.gameStats.pieRateIntro")}</p>
+          </div>
+          <TableSkeleton
+            nav={nav}
+            data={pieRateData}
+            columns={pieColumns}
+            sort={[{ id: "game", desc: false }]}
+          />
+        </>
+      ) : null}
     </>
   );
 }

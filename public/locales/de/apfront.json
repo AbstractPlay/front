@@ -958,7 +958,7 @@
     "endDate": "Enddatum",
     "ended": "Beendet",
     "explorationDisabled": "Erkundung deaktiviert?",
-    "firstPlayerWins": "Erstspieler-Siege",
+    "firstPlayerWins": "Erster Spieler gewinnt",
     "game": "Spiel",
     "gameEnded": "Spiel beendet",
     "gameNumber": "Spielnummer",
@@ -1048,7 +1048,9 @@
     "rivalryPair": "Paarung",
     "gamesTogether": "Gemeinsame Spiele",
     "pieRate": "Pie-Regel-Quote",
-    "playerCount": "Spieleranzahl"
+    "playerCount": "Spieleranzahl",
+    "allUsers": "Alle Benutzer",
+    "past30Days": "Letzte 30 Tage"
   },
   "TimeRemaining": "Verbleibende Zeit",
   "ToggleFullSize": "Brettbild in voller Höhe umschalten",
@@ -1336,10 +1338,12 @@
       "hoursPerMoveGames": "Qualifizierte Partien",
       "hoursPerMovePerWeek": "Median der Stunden pro Zug pro Woche",
       "rivalriesIntro": "Häufigste Zwei-Spieler-Paarungen (mindestens fünf gemeinsame Partien). Paarungen werden anonymisiert, bis die Spieler der Namensnennung zustimmen.",
-      "seasonalityIntro": "Wann Partien enden, nach UTC-Wochentag und -Uhrzeit. Nützlich zum Erkennen von wöchentlichen Rhythmen und Hauptspielzeiten.",
-      "gamesByDow": "Abgeschlossene Partien nach Wochentag (UTC)",
-      "playersByDow": "Eindeutige Spieler nach Wochentag (UTC)",
-      "gamesByHour": "Abgeschlossene Partien nach Tageszeit (UTC)",
+      "seasonalityIntro": "Wann Spieler Züge ausführen, nach UTC-Wochentag und -Stunde, in den letzten {{days}} Tagen. Spiegelt die Website-Aktivität für asynchrone Spiele besser wider als die Spielabschlusszeiten.",
+      "movesByDow": "Züge nach Wochentag (UTC)",
+      "playersByDow": "Aktive Spieler nach Wochentag (UTC)",
+      "movesByHour": "Züge nach Uhrzeit (UTC)",
+      "movesMade": "Züge",
+      "activePlayers": "Aktive Spieler",
       "dayOfWeekUtc": "Wochentag (UTC)",
       "hourOfDayUtc": "Stunde (UTC)",
       "dowMon": "Mo",
@@ -1348,7 +1352,17 @@
       "dowThu": "Do",
       "dowFri": "Fr",
       "dowSat": "Sa",
-      "dowSun": "So"
+      "dowSun": "So",
+      "activeMoversIntro": "Eindeutige Spieler, die pro Woche mindestens einen Zug gemacht haben. Verwendet dieselben Sieben-Tage-Zeiträume wie die obigen Diagramme. Die Zugdaten decken etwa das letzte Jahr ab, sodass frühere Wochen möglicherweise Null anzeigen, selbst wenn Spiele beendet wurden.",
+      "activeMoversPerWeek": "Aktive Spieler (≥1 Zug) pro Woche",
+      "timeoutAbandonRatePerWeek": "Timeout- und Abbruchrate pro Woche",
+      "timeoutAbandonRateAxis": "Timeout- und Abbruchrate"
+    },
+    "gameStats": {
+      "pieRateIntro": "Spiele, die die Pie-Regel unterstützen, und wie oft diese angewendet wurde."
+    },
+    "playerStats": {
+      "rivalriesIntro": "Häufigste Zwei-Spieler-Paarungen (mindestens fünf gemeinsame Spiele). Paarungen werden anonymisiert, bis die Spieler der Namensnennung zustimmen."
     }
   },
   "players": {

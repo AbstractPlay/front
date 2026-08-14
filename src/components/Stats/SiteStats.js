@@ -33,13 +33,27 @@ const lstSummarize = (lst) => {
   return { avg, median, q1, q3 };
 };
 
+const weekHistogramChart = (values) => {
+  if (values.length === 0) {
+    return { x: [], y: [] };
+  }
+  const start = values.findIndex((n) => n > 0);
+  const from = start === -1 ? 0 : start;
+  const y = values.slice(from);
+  const x = y.map((_, i) => from + i);
+  return { x, y };
+};
+
 function SiteStats({ nav }) {
   const summary = useStore((state) => state.summary);
   const { t } = useTranslation();
   const [cumulative, cumulativeSetter] = useState([]);
   const [summaryGames, setSummaryGames] = useState(null);
   const [summaryPlayers, setSummaryPlayers] = useState(null);
+  const [summaryActiveMovers, setSummaryActiveMovers] = useState(null);
+  const [summaryReturningPlayers, setSummaryReturningPlayers] = useState(null);
   const [hoursPerTrend, setHoursPerTrend] = useState([]);
+  const [combinedTimeoutAbandon, setCombinedTimeoutAbandon] = useState([]);
 
   useEffect(() => {
     const lst = [];
@@ -52,6 +66,20 @@ function SiteStats({ nav }) {
     cumulativeSetter([...lst]);
     setSummaryGames(lstSummarize(summary.histograms.all));
     setSummaryPlayers(lstSummarize(summary.histograms.allPlayers));
+    setSummaryActiveMovers(
+      lstSummarize(summary.histograms.activeMovers ?? [])
+    );
+    setSummaryReturningPlayers(
+      lstSummarize(summary.histograms.returningPlayers ?? [])
+    );
+    const timeouts = [...summary.histograms.timeouts].reverse();
+    const abandoned =
+      summary.histograms.abandoned !== undefined
+        ? [...summary.histograms.abandoned].reverse()
+        : timeouts.map(() => 0);
+    setCombinedTimeoutAbandon(
+      timeouts.map((rate, i) => rate + (abandoned[i] ?? 0))
+    );
     const byWeek = summary.hoursPer?.byWeek;
     if (Array.isArray(byWeek) && byWeek.length > 0) {
       let trend = byWeek.slice(0, -1);
@@ -69,77 +97,32 @@ function SiteStats({ nav }) {
       ? summary.hoursPer
       : null;
 
-  const data = useMemo(
-    () =>
-      summary.geoStats
-        .map(({ code, name, n }) => {
-          return {
-            id: code,
-            code,
-            name,
-            n,
-          };
-        })
-        .sort((a, b) => b.n - a.n),
-    [summary]
-  );
-
-  const activeGeoData = useMemo(
-    () =>
-      (summary.activeGeoStats ?? [])
-        .map(({ code, name, n }) => ({
-          id: code,
-          code,
-          name,
-          n,
-        }))
-        .sort((a, b) => b.n - a.n),
-    [summary]
-  );
-
-  const pieRateData = useMemo(
-    () =>
-      (summary.pieRates ?? []).map(({ game, n, pied, rate }) => ({
-        id: game,
-        game,
-        n,
-        pied,
-        rate: Math.trunc(rate * 10000) / 100,
-      })),
-    [summary]
-  );
-
-  const playerCountMixData = useMemo(() => {
-    const rows = [];
-    for (const { game, byCount } of summary.playerCountMix ?? []) {
-      for (const [playerCount, n] of Object.entries(byCount)) {
-        rows.push({
-          id: `${game}-${playerCount}`,
-          game,
-          playerCount: Number(playerCount),
-          n,
-        });
-      }
-    }
-    return rows.sort(
-      (a, b) => a.game.localeCompare(b.game) || a.playerCount - b.playerCount
+  const data = useMemo(() => {
+    const allUsersByCode = new Map(
+      summary.geoStats.map(({ code, name, n }) => [code, { name, n }])
     );
+    const activeByCode = new Map(
+      (summary.activeGeoStats ?? []).map(({ code, name, n }) => [
+        code,
+        { name, n },
+      ])
+    );
+    const codes = new Set([...allUsersByCode.keys(), ...activeByCode.keys()]);
+    return [...codes]
+      .map((code) => ({
+        id: code,
+        code,
+        name:
+          allUsersByCode.get(code)?.name ?? activeByCode.get(code)?.name ?? code,
+        n: allUsersByCode.get(code)?.n ?? 0,
+        activeN: activeByCode.get(code)?.n ?? 0,
+      }))
+      .sort((a, b) => b.n - a.n);
   }, [summary]);
 
   const playContext = summary.playContext;
   const totalPlayContext =
     playContext !== undefined ? playContext.casual + playContext.event : 0;
-
-  const rivalryData = useMemo(
-    () =>
-      (summary.rivalries ?? []).map(({ rank, label, n }) => ({
-        id: String(rank),
-        rank,
-        label,
-        n,
-      })),
-    [summary]
-  );
 
   const seasonality = summary.seasonality;
   const dowOrder = [1, 2, 3, 4, 5, 6, 0];
@@ -155,11 +138,11 @@ function SiteStats({ nav }) {
     ],
     [t]
   );
-  const gamesByDow = useMemo(() => {
-    if (seasonality?.gamesByDow === undefined) {
+  const movesByDow = useMemo(() => {
+    if (seasonality?.movesByDow === undefined) {
       return [];
     }
-    return dowOrder.map((i) => seasonality.gamesByDow[i] ?? 0);
+    return dowOrder.map((i) => seasonality.movesByDow[i] ?? 0);
   }, [seasonality]);
   const playersByDow = useMemo(() => {
     if (seasonality?.playersByDow === undefined) {
@@ -167,10 +150,15 @@ function SiteStats({ nav }) {
     }
     return dowOrder.map((i) => seasonality.playersByDow[i] ?? 0);
   }, [seasonality]);
-  const gamesByHour = seasonality?.gamesByHour ?? [];
+  const movesByHour = seasonality?.movesByHour ?? [];
   const hourLabels = useMemo(
     () => Array.from({ length: 24 }, (_, i) => String(i)),
     []
+  );
+
+  const activeMoversChart = useMemo(
+    () => weekHistogramChart(summary.histograms.activeMovers ?? []),
+    [summary]
   );
 
   const columnHelper = createColumnHelper();
@@ -184,56 +172,10 @@ function SiteStats({ nav }) {
         cell: (props) => <Flag code={props.row.original.id} size="m" />,
       }),
       columnHelper.accessor("n", {
-        header: t("tables.count"),
+        header: t("tables.allUsers"),
       }),
-    ],
-    [columnHelper, t]
-  );
-
-  const pieColumns = useMemo(
-    () => [
-      columnHelper.accessor("game", {
-        header: t("tables.game"),
-      }),
-      columnHelper.accessor("n", {
-        header: t("tables.numRecords"),
-      }),
-      columnHelper.accessor("pied", {
-        header: t("tables.pieInvoked"),
-      }),
-      columnHelper.accessor("rate", {
-        header: t("tables.pieRate"),
-        cell: (props) => props.getValue() + "%",
-      }),
-    ],
-    [columnHelper, t]
-  );
-
-  const playerCountColumns = useMemo(
-    () => [
-      columnHelper.accessor("game", {
-        header: t("tables.game"),
-      }),
-      columnHelper.accessor("playerCount", {
-        header: t("tables.playerCount"),
-      }),
-      columnHelper.accessor("n", {
-        header: t("tables.numRecords"),
-      }),
-    ],
-    [columnHelper, t]
-  );
-
-  const rivalryColumns = useMemo(
-    () => [
-      columnHelper.accessor("rank", {
-        header: t("tables.rank"),
-      }),
-      columnHelper.accessor("label", {
-        header: t("tables.rivalryPair"),
-      }),
-      columnHelper.accessor("n", {
-        header: t("tables.gamesTogether"),
+      columnHelper.accessor("activeN", {
+        header: t("tables.past30Days"),
       }),
     ],
     [columnHelper, t]
@@ -357,6 +299,67 @@ function SiteStats({ nav }) {
         />
         <hr />
       </div>
+      {summary.histograms.activeMovers !== undefined ? (
+        <div>
+          <div className="content">
+            <p>{t("stats.siteStats.activeMoversIntro")}</p>
+            {summaryActiveMovers === null ? null : (
+              <table>
+                <caption>{t("stats.siteStats.cumulativePastYear")}</caption>
+                <thead>
+                  <tr>
+                    <th>{t("stats.siteStats.average")}</th>
+                    <th>{t("stats.siteStats.median")}</th>
+                    <th>{t("stats.siteStats.middleHalf")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {summaryActiveMovers.avg.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                    </td>
+                    <td>
+                      {summaryActiveMovers.median.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                    </td>
+                    <td>
+                      {summaryActiveMovers.q1.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                      –
+                      {summaryActiveMovers.q3.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            )}
+          </div>
+          <Plot
+            data={[
+              {
+                x: activeMoversChart.x,
+                y: activeMoversChart.y,
+                type: "bar",
+              },
+            ]}
+            config={{
+              responsive: true,
+            }}
+            layout={{
+              title: t("stats.siteStats.activeMoversPerWeek"),
+              xaxis: { title: t("stats.siteStats.weekNumber") },
+              yaxis: { title: t("stats.siteStats.numberOfPlayers") },
+              height: 500,
+            }}
+          />
+          <hr />
+        </div>
+      ) : null}
       <div>
         <div className="content">
           <p>{t("stats.siteStats.firstTimersIntro")}</p>
@@ -384,6 +387,41 @@ function SiteStats({ nav }) {
         <div>
           <div className="content">
             <p>{t("stats.siteStats.returningPlayersIntro")}</p>
+            {summaryReturningPlayers === null ? null : (
+              <table>
+                <caption>{t("stats.siteStats.cumulativePastYear")}</caption>
+                <thead>
+                  <tr>
+                    <th>{t("stats.siteStats.average")}</th>
+                    <th>{t("stats.siteStats.median")}</th>
+                    <th>{t("stats.siteStats.middleHalf")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {summaryReturningPlayers.avg.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                    </td>
+                    <td>
+                      {summaryReturningPlayers.median.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                    </td>
+                    <td>
+                      {summaryReturningPlayers.q1.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                      –
+                      {summaryReturningPlayers.q3.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            )}
           </div>
           <Plot
             data={[
@@ -442,74 +480,22 @@ function SiteStats({ nav }) {
           columns={columns}
           sort={[{ id: "n", desc: true }]}
         />
-        {activeGeoData.length > 0 ? (
-          <>
-            <p>{t("stats.siteStats.activeCountryIntro")}</p>
-            <TableSkeleton
-              nav={nav}
-              data={activeGeoData}
-              columns={columns}
-              sort={[{ id: "n", desc: true }]}
-            />
-          </>
-        ) : null}
         <hr />
       </div>
-      {pieRateData.length > 0 ? (
+      {seasonality?.movesByDow !== undefined ? (
         <div>
           <div className="content">
-            <p>{t("stats.siteStats.pieRateIntro")}</p>
-          </div>
-          <TableSkeleton
-            nav={nav}
-            data={pieRateData}
-            columns={pieColumns}
-            sort={[{ id: "game", desc: false }]}
-          />
-          <hr />
-        </div>
-      ) : null}
-      {playerCountMixData.length > 0 ? (
-        <div>
-          <div className="content">
-            <p>{t("stats.siteStats.playerCountMixIntro")}</p>
-          </div>
-          <TableSkeleton
-            nav={nav}
-            data={playerCountMixData}
-            columns={playerCountColumns}
-            sort={[
-              { id: "game", desc: false },
-              { id: "playerCount", desc: false },
-            ]}
-          />
-          <hr />
-        </div>
-      ) : null}
-      {rivalryData.length > 0 ? (
-        <div>
-          <div className="content">
-            <p>{t("stats.siteStats.rivalriesIntro")}</p>
-          </div>
-          <TableSkeleton
-            nav={nav}
-            data={rivalryData}
-            columns={rivalryColumns}
-            sort={[{ id: "rank", desc: false }]}
-          />
-          <hr />
-        </div>
-      ) : null}
-      {seasonality !== undefined ? (
-        <div>
-          <div className="content">
-            <p>{t("stats.siteStats.seasonalityIntro")}</p>
+            <p>
+              {t("stats.siteStats.seasonalityIntro", {
+                days: seasonality.windowDays ?? 365,
+              })}
+            </p>
           </div>
           <Plot
             data={[
               {
                 x: dowLabels,
-                y: gamesByDow,
+                y: movesByDow,
                 type: "bar",
               },
             ]}
@@ -517,9 +503,9 @@ function SiteStats({ nav }) {
               responsive: true,
             }}
             layout={{
-              title: t("stats.siteStats.gamesByDow"),
+              title: t("stats.siteStats.movesByDow"),
               xaxis: { title: t("stats.siteStats.dayOfWeekUtc") },
-              yaxis: { title: t("stats.siteStats.completedGames") },
+              yaxis: { title: t("stats.siteStats.movesMade") },
               height: 400,
             }}
           />
@@ -537,7 +523,7 @@ function SiteStats({ nav }) {
             layout={{
               title: t("stats.siteStats.playersByDow"),
               xaxis: { title: t("stats.siteStats.dayOfWeekUtc") },
-              yaxis: { title: t("stats.siteStats.numberOfPlayers") },
+              yaxis: { title: t("stats.siteStats.activePlayers") },
               height: 400,
             }}
           />
@@ -545,7 +531,7 @@ function SiteStats({ nav }) {
             data={[
               {
                 x: hourLabels,
-                y: gamesByHour,
+                y: movesByHour,
                 type: "bar",
               },
             ]}
@@ -553,9 +539,9 @@ function SiteStats({ nav }) {
               responsive: true,
             }}
             layout={{
-              title: t("stats.siteStats.gamesByHour"),
+              title: t("stats.siteStats.movesByHour"),
               xaxis: { title: t("stats.siteStats.hourOfDayUtc") },
-              yaxis: { title: t("stats.siteStats.completedGames") },
+              yaxis: { title: t("stats.siteStats.movesMade") },
               height: 400,
             }}
           />
@@ -586,7 +572,7 @@ function SiteStats({ nav }) {
         <Plot
           data={[
             {
-              y: [...summary.histograms.timeouts].reverse(),
+              y: combinedTimeoutAbandon,
               type: "bar",
             },
           ]}
@@ -594,41 +580,16 @@ function SiteStats({ nav }) {
             responsive: true,
           }}
           layout={{
-            title: t("stats.siteStats.timeoutRatePerWeek"),
+            title: t("stats.siteStats.timeoutAbandonRatePerWeek"),
             xaxis: { title: t("stats.siteStats.weekNumber") },
             yaxis: {
-              title: t("stats.siteStats.timeoutRateAxis"),
+              title: t("stats.siteStats.timeoutAbandonRateAxis"),
               fixedrange: true,
               range: [0, 1],
             },
             height: 500,
           }}
         />
-        {summary.histograms.abandoned !== undefined ? (
-          <>
-            <Plot
-              data={[
-                {
-                  y: [...summary.histograms.abandoned].reverse(),
-                  type: "bar",
-                },
-              ]}
-              config={{
-                responsive: true,
-              }}
-              layout={{
-                title: t("stats.siteStats.abandonedRatePerWeek"),
-                xaxis: { title: t("stats.siteStats.weekNumber") },
-                yaxis: {
-                  title: t("stats.siteStats.abandonedRateAxis"),
-                  fixedrange: true,
-                  range: [0, 1],
-                },
-                height: 500,
-              }}
-            />
-          </>
-        ) : null}
         <hr />
       </div>
       <div>

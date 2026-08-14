@@ -958,7 +958,7 @@
     "endDate": "Date de fin",
     "ended": "Terminé",
     "explorationDisabled": "Exploration désactivée ?",
-    "firstPlayerWins": "Victoires du premier joueur",
+    "firstPlayerWins": "Le premier joueur gagne",
     "game": "Jeu",
     "gameEnded": "Partie terminée",
     "gameNumber": "Numéro de partie",
@@ -1048,7 +1048,9 @@
     "rivalryPair": "Paire",
     "gamesTogether": "Parties ensemble",
     "pieRate": "Taux de règle du gâteau",
-    "playerCount": "Joueurs"
+    "playerCount": "Joueurs",
+    "allUsers": "Tous les utilisateurs",
+    "past30Days": "30 derniers jours"
   },
   "TimeRemaining": "Temps restant :",
   "ToggleFullSize": "Basculer l'image du plateau en pleine hauteur",
@@ -1336,10 +1338,12 @@
       "hoursPerMoveGames": "Parties éligibles",
       "hoursPerMovePerWeek": "Médiane d'heures par coup par semaine",
       "rivalriesIntro": "Affrontements à deux joueurs les plus fréquents (au moins cinq parties ensemble). Les duos sont anonymisés jusqu'à ce que les joueurs acceptent de révéler leur nom.",
-      "seasonalityIntro": "Moment où les parties se terminent, par jour de la semaine et heure (UTC). Utile pour repérer les rythmes hebdomadaires et les heures de pointe.",
-      "gamesByDow": "Parties terminées par jour de la semaine (UTC)",
-      "playersByDow": "Joueurs distincts par jour de la semaine (UTC)",
-      "gamesByHour": "Parties terminées par heure de la journée (UTC)",
+      "seasonalityIntro": "Moments où les joueurs jouent leurs coups, par jour de la semaine et heure UTC, au cours des {{days}} derniers jours. Reflète mieux l'activité du site que les heures de fin de partie pour les parties asynchrones.",
+      "movesByDow": "Coups par jour de la semaine (UTC)",
+      "playersByDow": "Joueurs actifs par jour de la semaine (UTC)",
+      "movesByHour": "Coups par heure de la journée (UTC)",
+      "movesMade": "Coups",
+      "activePlayers": "Joueurs actifs",
       "dayOfWeekUtc": "Jour de la semaine (UTC)",
       "hourOfDayUtc": "Heure (UTC)",
       "dowMon": "Lun",
@@ -1348,7 +1352,17 @@
       "dowThu": "Jeu",
       "dowFri": "Ven",
       "dowSat": "Sam",
-      "dowSun": "Dim"
+      "dowSun": "Dim",
+      "activeMoversIntro": "Joueurs distincts ayant joué au moins un coup chaque semaine. Utilise les mêmes intervalles de sept jours que les graphiques ci-dessus. Les données de coups couvrent environ la dernière année, donc les semaines plus anciennes peuvent afficher zéro même si des parties se sont terminées.",
+      "activeMoversPerWeek": "Joueurs actifs (≥1 coup) par semaine",
+      "timeoutAbandonRatePerWeek": "Taux de dépassement de temps et d'abandon par semaine",
+      "timeoutAbandonRateAxis": "Taux de dépassement de temps et d'abandon"
+    },
+    "gameStats": {
+      "pieRateIntro": "Parties prenant en charge la règle du gâteau, montrant la fréquence à laquelle la règle a été invoquée."
+    },
+    "playerStats": {
+      "rivalriesIntro": "Paires de deux joueurs les plus fréquentes (au moins cinq parties ensemble). Les paires sont anonymisées jusqu'à ce que les joueurs acceptent de faire apparaître leur nom."
     }
   },
   "players": {

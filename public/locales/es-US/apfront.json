@@ -958,7 +958,7 @@
     "endDate": "Fecha de fin",
     "ended": "Finalizado",
     "explorationDisabled": "¿Exploración desactivada?",
-    "firstPlayerWins": "Victorias del primer jugador",
+    "firstPlayerWins": "Gana el primer jugador",
     "game": "Juego",
     "gameEnded": "Juego finalizado",
     "gameNumber": "Número de juego",
@@ -1048,7 +1048,9 @@
     "rivalryPair": "Pareja",
     "gamesTogether": "Partidas juntos",
     "pieRate": "Tasa de regla del pastel",
-    "playerCount": "Jugadores"
+    "playerCount": "Jugadores",
+    "allUsers": "Todos los usuarios",
+    "past30Days": "Últimos 30 días"
   },
   "TimeRemaining": "Tiempo restante",
   "ToggleFullSize": "Alternar imagen del tablero de altura completa",
@@ -1336,10 +1338,12 @@
       "hoursPerMoveGames": "Partidas elegibles",
       "hoursPerMovePerWeek": "Mediana de horas por movimiento por semana",
       "rivalriesIntro": "Parejas de dos jugadores más frecuentes (al menos cinco partidas juntos). Las parejas son anónimas hasta que los jugadores elijan mostrar sus nombres.",
-      "seasonalityIntro": "Cuándo terminan las partidas, por día de la semana y hora (UTC). Útil para detectar ritmos semanales y horas pico de juego.",
-      "gamesByDow": "Partidas completadas por día de la semana (UTC)",
-      "playersByDow": "Jugadores distintos por día de la semana (UTC)",
-      "gamesByHour": "Partidas completadas por hora del día (UTC)",
+      "seasonalityIntro": "Cuándo los jugadores hacen sus jugadas, por día de la semana y hora (UTC), en los últimos {{days}} días. Refleja mejor la actividad del sitio que la hora de finalización de las partidas asincrónicas.",
+      "movesByDow": "Jugadas por día de la semana (UTC)",
+      "playersByDow": "Jugadores activos por día de la semana (UTC)",
+      "movesByHour": "Jugadas por hora del día (UTC)",
+      "movesMade": "Jugadas",
+      "activePlayers": "Jugadores activos",
       "dayOfWeekUtc": "Día de la semana (UTC)",
       "hourOfDayUtc": "Hora (UTC)",
       "dowMon": "Lun",
@@ -1348,7 +1352,17 @@
       "dowThu": "Jue",
       "dowFri": "Vie",
       "dowSat": "Sáb",
-      "dowSun": "Dom"
+      "dowSun": "Dom",
+      "activeMoversIntro": "Jugadores distintos que realizaron al menos un movimiento cada semana. Usa los mismos períodos de siete días que los gráficos de arriba. Los datos de movimientos cubren aproximadamente el último año, por lo que las semanas anteriores pueden mostrar cero incluso si se completaron partidas.",
+      "activeMoversPerWeek": "Jugadores activos (≥1 movimiento) por semana",
+      "timeoutAbandonRatePerWeek": "Tasa de tiempo agotado y abandono por semana",
+      "timeoutAbandonRateAxis": "Tasa de tiempo agotado y abandono"
+    },
+    "gameStats": {
+      "pieRateIntro": "Partidas que admiten la regla del pastel, mostrando con qué frecuencia se aplicó."
+    },
+    "playerStats": {
+      "rivalriesIntro": "Emparejamientos de dos jugadores más frecuentes (al menos cinco partidas juntos). Las parejas son anónimas hasta que los jugadores elijan mostrar sus nombres."
     }
   },
   "players": {

@@ -4539,9 +4539,17 @@
     "src": "Shows each player who has participated in automated tournaments and their summary stats, including number of wins, number of top 50% finishes, and score. Your score is the sum of points received in each tournament. Points are awarded out of 100, based on your placement: first place gets 100 points, and last place gets none.",
     "out": "Mostra ciascun giocatore che ha partecipato ai tornei automatizzati e le sue statistiche riassuntive, inclusi il numero di vittorie, il numero di piazzamenti nel primo 50% e il punteggio. Il tuo punteggio è la somma dei punti ricevuti in ciascun torneo. I punti vengono assegnati su una scala da 0 a 100 in base al piazzamento: il primo posto ottiene 100 punti e l'ultimo posto non ne ottiene nessuno."
   },
+  "stats.gameStats.pieRateIntro": {
+    "src": "Games that support the pie rule, showing how often the pie was invoked.",
+    "out": "Partite che supportano la regola della torta, che mostrano quanto spesso è stata invocata."
+  },
   "stats.generatedDaily": {
     "src": "Statistics are generated daily at 6am UTC.",
     "out": "Le statistiche vengono generate quotidianamente alle 06:00 UTC."
+  },
+  "stats.playerStats.rivalriesIntro": {
+    "src": "Most frequent two-player pairings (at least five games together). Pairs are anonymized until players opt in to be named.",
+    "out": "Accoppiamenti a due giocatori più frequenti (almeno cinque partite insieme). Le coppie sono anonimizzate finché i giocatori non acconsentono a mostrare il proprio nome."
   },
   "stats.playersPlayedGames": {
     "src": "In that time, {{numPlayers}} players have played {{numGames}} games.",
@@ -4572,8 +4580,20 @@
     "out": "Tasso di abbandono per settimana"
   },
   "stats.siteStats.activeCountryIntro": {
-    "src": "Players with at least one completed game in the records archive, grouped by the country on their profile.",
+    "src": "Players who completed at least one game in the past 30 days, grouped by the country on their profile.",
     "out": "Giocatori con almeno una partita completata nell'archivio storico, raggruppati per il paese indicato nel loro profilo."
+  },
+  "stats.siteStats.activeMoversIntro": {
+    "src": "Distinct players who made at least one move each week. Uses the same seven-day buckets as the charts above. Move data covers roughly the last year, so earlier weeks may show zero even if completions occurred.",
+    "out": "Giocatori distinti che hanno effettuato almeno una mossa ogni settimana. Utilizza gli stessi intervalli di sette giorni dei grafici soprastanti. I dati sulle mosse coprono all'incirca l'ultimo anno, quindi le settimane precedenti potrebbero mostrare zero anche se sono state completate delle partite."
+  },
+  "stats.siteStats.activeMoversPerWeek": {
+    "src": "Active players (≥1 move) per week",
+    "out": "Giocatori attivi (≥1 mossa) a settimana"
+  },
+  "stats.siteStats.activePlayers": {
+    "src": "Active players",
+    "out": "Giocatori attivi"
   },
   "stats.siteStats.average": {
     "src": "Average",
@@ -4584,7 +4604,7 @@
     "out": "Partite completate"
   },
   "stats.siteStats.countryIntro": {
-    "src": "Registered users by country (from profile settings). Only includes country codes the system can interpret.",
+    "src": "Registered users by country (from profile settings). Only includes country codes the system can interpret. The second count shows players who completed at least one game in the past 30 days.",
     "out": "Questo mostra la ripartizione dei paesi da cui i giocatori dichiarano di giocare. Include solo i codici paese che il sistema è in grado di interpretare."
   },
   "stats.siteStats.cumulativePastYear": {
@@ -4631,14 +4651,6 @@
     "src": "This graph tracks the number of users who completed their first game that week. The numbers are cumulative, meaning they will never decrease, and the right-most point should always show the current recorded user count. It is of course expected that the numbers will plateau at some point, but it gives an indication of growth.",
     "out": "Questo grafico traccia il numero di utenti che hanno completato la loro prima partita in quella settimana. I numeri sono cumulativi, il che significa che non diminuiranno mai, e il punto più a destra mostrerà sempre il conteggio attuale degli utenti registrati. È ovviamente previsto che i numeri si stabilizzino a un certo punto, ma fornisce un'indicazione della crescita."
   },
-  "stats.siteStats.gamesByDow": {
-    "src": "Games completed by day of week (UTC)",
-    "out": "Partite completate per giorno della settimana (UTC)"
-  },
-  "stats.siteStats.gamesByHour": {
-    "src": "Games completed by hour of day (UTC)",
-    "out": "Partite completate per ora del giorno (UTC)"
-  },
   "stats.siteStats.gamesCompletedPerWeek": {
     "src": "Games completed per week",
     "out": "Partite completate a settimana"
@@ -4679,6 +4691,18 @@
     "src": "Middle half",
     "out": "Metà centrale"
   },
+  "stats.siteStats.movesByDow": {
+    "src": "Moves by day of week (UTC)",
+    "out": "Mosse per giorno della settimana (UTC)"
+  },
+  "stats.siteStats.movesByHour": {
+    "src": "Moves by hour of day (UTC)",
+    "out": "Mosse per ora del giorno (UTC)"
+  },
+  "stats.siteStats.movesMade": {
+    "src": "Moves",
+    "out": "Mosse"
+  },
   "stats.siteStats.numberOfPlayers": {
     "src": "Number of players",
     "out": "Numero di giocatori"
@@ -4696,8 +4720,8 @@
     "out": "Partite che supportano più di due giocatori, che mostrano quanto spesso è stato utilizzato ciascun numero di giocatori."
   },
   "stats.siteStats.playersByDow": {
-    "src": "Distinct players by day of week (UTC)",
-    "out": "Giocatori unici per giorno della settimana (UTC)"
+    "src": "Active players by day of week (UTC)",
+    "out": "Giocatori attivi per giorno della settimana (UTC)"
   },
   "stats.siteStats.playersCompletedPerWeek": {
     "src": "Number of players completing games per week",
@@ -4720,8 +4744,16 @@
     "out": "Coppie di giocatori a due più frequenti (almeno cinque partite insieme). Le coppie sono rese anonime fino a quando i giocatori non acconsentono a mostrare il proprio nome."
   },
   "stats.siteStats.seasonalityIntro": {
-    "src": "When games finish, by UTC day of week and hour. Useful for spotting weekly rhythms and peak play times.",
-    "out": "Momento in cui terminano le partite, per giorno della settimana e ora (UTC). Utile per individuare i ritmi settimanali e le ore di punta."
+    "src": "When players make moves, by UTC day of week and hour, over the last {{days}} days. Better reflects site activity than game completion times for asynchronous games.",
+    "out": "Quando i giocatori effettuano le mosse, per giorno della settimana e ora (UTC), negli ultimi {{days}} giorni. Riflette l'attività del sito meglio dei tempi di completamento delle partite per le partite asincrone."
+  },
+  "stats.siteStats.timeoutAbandonRateAxis": {
+    "src": "Timeout and abandonment rate",
+    "out": "Tasso di timeout e abbandono"
+  },
+  "stats.siteStats.timeoutAbandonRatePerWeek": {
+    "src": "Timeout and abandonment rate per week",
+    "out": "Tasso di timeout e abbandono a settimana"
   },
   "stats.siteStats.timeoutRate": {
     "src": "Total cumulative rate of games ending by clock timeout or abandonment is {{rate}}.",
@@ -4798,6 +4830,10 @@
   "tables.added": {
     "src": "Added",
     "out": "Aggiunto"
+  },
+  "tables.allUsers": {
+    "src": "All users",
+    "out": "Tutti gli utenti"
   },
   "tables.average": {
     "src": "Average",
@@ -4919,7 +4955,10 @@
     "src": "Exploration disabled?",
     "out": "Esplorazione disabilitata?"
   },
-  "tables.firstPlayerWins": "First-player wins",
+  "tables.firstPlayerWins": {
+    "src": "First player wins",
+    "out": "Vince il primo giocatore"
+  },
   "tables.game": {
     "src": "Game",
     "out": "Partita"
@@ -5087,6 +5126,10 @@
   "tables.participants": {
     "src": "Participants",
     "out": "Partecipanti"
+  },
+  "tables.past30Days": {
+    "src": "Past 30 days",
+    "out": "Ultimi 30 giorni"
   },
   "tables.pieInvoked": {
     "src": "Pie invoked",

@@ -95,6 +95,17 @@ function PlayerStats({ nav }) {
     console.log(data);
   }, [data]);
 
+  const rivalryData = useMemo(
+    () =>
+      (summary.rivalries ?? []).map(({ rank, label, n }) => ({
+        id: String(rank),
+        rank,
+        label,
+        n,
+      })),
+    [summary]
+  );
+
   const columnHelper = createColumnHelper();
   const columns = useMemo(
     () => [
@@ -197,13 +208,44 @@ function PlayerStats({ nav }) {
     [columnHelper, globalMe, activeChartModal, userNames, t]
   );
 
+  const rivalryColumns = useMemo(
+    () => [
+      columnHelper.accessor("rank", {
+        header: t("tables.rank"),
+      }),
+      columnHelper.accessor("label", {
+        header: t("tables.rivalryPair"),
+      }),
+      columnHelper.accessor("n", {
+        header: t("tables.gamesTogether"),
+      }),
+    ],
+    [columnHelper, t]
+  );
+
   return (
-    <TableSkeleton
-      nav={nav}
-      data={data}
-      columns={columns}
-      sort={[{ id: "plays", desc: true }]}
-    />
+    <>
+      <TableSkeleton
+        nav={nav}
+        data={data}
+        columns={columns}
+        sort={[{ id: "plays", desc: true }]}
+      />
+      {rivalryData.length > 0 ? (
+        <>
+          <hr />
+          <div className="content">
+            <p>{t("stats.playerStats.rivalriesIntro")}</p>
+          </div>
+          <TableSkeleton
+            nav={nav}
+            data={rivalryData}
+            columns={rivalryColumns}
+            sort={[{ id: "rank", desc: false }]}
+          />
+        </>
+      ) : null}
+    </>
   );
 }
 

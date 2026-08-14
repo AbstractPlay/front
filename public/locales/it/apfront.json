@@ -958,7 +958,7 @@
     "endDate": "Data di fine",
     "ended": "Terminata",
     "explorationDisabled": "Esplorazione disabilitata?",
-    "firstPlayerWins": "Vittorie del primo giocatore",
+    "firstPlayerWins": "Vince il primo giocatore",
     "game": "Partita",
     "gameEnded": "Partita terminata",
     "gameNumber": "Numero partita",
@@ -1048,7 +1048,9 @@
     "rivalryPair": "Coppia",
     "gamesTogether": "Partite insieme",
     "pieRate": "Percentuale regola della torta",
-    "playerCount": "Giocatori"
+    "playerCount": "Giocatori",
+    "allUsers": "Tutti gli utenti",
+    "past30Days": "Ultimi 30 giorni"
   },
   "TimeRemaining": "Tempo rimanente",
   "ToggleFullSize": "Attiva/disattiva immagine del tabellone ad altezza intera",
@@ -1336,10 +1338,12 @@
       "hoursPerMoveGames": "Partite valide",
       "hoursPerMovePerWeek": "Mediana delle ore per mossa alla settimana",
       "rivalriesIntro": "Coppie di giocatori a due più frequenti (almeno cinque partite insieme). Le coppie sono rese anonime fino a quando i giocatori non acconsentono a mostrare il proprio nome.",
-      "seasonalityIntro": "Momento in cui terminano le partite, per giorno della settimana e ora (UTC). Utile per individuare i ritmi settimanali e le ore di punta.",
-      "gamesByDow": "Partite completate per giorno della settimana (UTC)",
-      "playersByDow": "Giocatori unici per giorno della settimana (UTC)",
-      "gamesByHour": "Partite completate per ora del giorno (UTC)",
+      "seasonalityIntro": "Quando i giocatori effettuano le mosse, per giorno della settimana e ora (UTC), negli ultimi {{days}} giorni. Riflette l'attività del sito meglio dei tempi di completamento delle partite per le partite asincrone.",
+      "movesByDow": "Mosse per giorno della settimana (UTC)",
+      "playersByDow": "Giocatori attivi per giorno della settimana (UTC)",
+      "movesByHour": "Mosse per ora del giorno (UTC)",
+      "movesMade": "Mosse",
+      "activePlayers": "Giocatori attivi",
       "dayOfWeekUtc": "Giorno della settimana (UTC)",
       "hourOfDayUtc": "Ora (UTC)",
       "dowMon": "Lun",
@@ -1348,7 +1352,17 @@
       "dowThu": "Gio",
       "dowFri": "Ven",
       "dowSat": "Sab",
-      "dowSun": "Dom"
+      "dowSun": "Dom",
+      "activeMoversIntro": "Giocatori distinti che hanno effettuato almeno una mossa ogni settimana. Utilizza gli stessi intervalli di sette giorni dei grafici soprastanti. I dati sulle mosse coprono all'incirca l'ultimo anno, quindi le settimane precedenti potrebbero mostrare zero anche se sono state completate delle partite.",
+      "activeMoversPerWeek": "Giocatori attivi (≥1 mossa) a settimana",
+      "timeoutAbandonRatePerWeek": "Tasso di timeout e abbandono a settimana",
+      "timeoutAbandonRateAxis": "Tasso di timeout e abbandono"
+    },
+    "gameStats": {
+      "pieRateIntro": "Partite che supportano la regola della torta, che mostrano quanto spesso è stata invocata."
+    },
+    "playerStats": {
+      "rivalriesIntro": "Accoppiamenti a due giocatori più frequenti (almeno cinque partite insieme). Le coppie sono anonimizzate finché i giocatori non acconsentono a mostrare il proprio nome."
     }
   },
   "players": {
