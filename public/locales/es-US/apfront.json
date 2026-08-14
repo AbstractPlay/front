@@ -1378,7 +1378,9 @@
       "of": "de",
       "rows": "filas en total",
       "showAll": "Mostrar todo",
-      "showCount": "Mostrar {{count}}"
+      "showCount": "Mostrar {{count}}",
+      "filter": "Filtrar",
+      "filterPlaceholder": "Filtrar..."
     },
     "site": {
       "subnavLabel": "Secciones de estadísticas del sitio",

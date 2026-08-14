@@ -1307,7 +1307,9 @@
             "of": "of",
             "rows": "total rows",
             "showAll": "Show all",
-            "showCount": "Show {{count}}"
+            "showCount": "Show {{count}}",
+            "filter": "Filter",
+            "filterPlaceholder": "Filter..."
         },
         "site": {
             "subnavLabel": "Site statistics sections",

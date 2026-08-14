@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
-import TableSkeleton from "./TableSkeleton";
+import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 import { useTranslation } from "react-i18next";
@@ -152,7 +152,8 @@ function HighestSingleRating({ metaFilter, nav }) {
   );
 
   return (
-    <TableSkeleton
+    <DataTable
+      {...STATS_TABLE_PROPS}
       nav={nav}
       data={data}
       columns={columns}

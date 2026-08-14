@@ -1378,7 +1378,9 @@
       "of": "von",
       "rows": "Zeilen insgesamt",
       "showAll": "Alle anzeigen",
-      "showCount": "{{count}} anzeigen"
+      "showCount": "{{count}} anzeigen",
+      "filter": "Filter",
+      "filterPlaceholder": "Filtern..."
     },
     "site": {
       "subnavLabel": "Bereiche der Website-Statistik",

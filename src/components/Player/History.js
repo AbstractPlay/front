@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext } from "../Player";
-// import TableSkeleton from "./TableSkeleton";
-import TableSkeletonFilter from "./TableSkeletonFilter";
+import DataTable, { PROFILE_FILTER_TABLE_PROPS } from "../shared/DataTable";
 import NewChallengeModal from "../NewChallengeModal";
 import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
@@ -393,7 +392,9 @@ function History({ handleChallenge }) {
 
   return (
     <>
-      <TableSkeletonFilter
+      <DataTable
+        {...PROFILE_FILTER_TABLE_PROPS}
+        filterFieldId="filterInput"
         data={data}
         columns={columns}
         globalFilterFn={globalFilterFn}
