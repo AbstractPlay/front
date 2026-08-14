@@ -289,7 +289,7 @@ function Bones(props) {
                   element={<Legal token={token} update={update} />}
                 />
                 <Route path="/news" element={<News />} />
-                <Route path="/stats" element={<Stats />} />
+                <Route path="/stats/:tab?" element={<Stats />} />
                 <Route
                   path="/"
                   element={<Welcome token={token} update={update} />}

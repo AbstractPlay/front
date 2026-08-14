@@ -4543,6 +4543,10 @@
     "src": "Statistics are generated daily at 6am UTC.",
     "out": "Las estadísticas se generan diariamente a las 6:00 a. m. UTC."
   },
+  "stats.histogramFor": {
+    "src": "Histogram for {{name}}",
+    "out": "Histograma de {{name}}"
+  },
   "stats.playerStats.rivalriesIntro": {
     "src": "Most frequent two-player pairings (at least five games together). Pairs are anonymized until players opt in to be named.",
     "out": "Emparejamientos de dos jugadores más frecuentes (al menos cinco partidas juntos). Las parejas son anónimas hasta que los jugadores elijan mostrar sus nombres."
@@ -4562,6 +4566,30 @@
   "stats.selectStatistic": {
     "src": "Select a statistic",
     "out": "Selecciona una estadística"
+  },
+  "stats.site.sections.geo": {
+    "src": "Geography",
+    "out": "Geografía"
+  },
+  "stats.site.sections.growth": {
+    "src": "Growth & activity",
+    "out": "Crecimiento y actividad"
+  },
+  "stats.site.sections.pace": {
+    "src": "Pace",
+    "out": "Ritmo"
+  },
+  "stats.site.sections.reliability": {
+    "src": "Reliability",
+    "out": "Confiabilidad"
+  },
+  "stats.site.sections.seasonality": {
+    "src": "Seasonality",
+    "out": "Estacionalidad"
+  },
+  "stats.site.subnavLabel": {
+    "src": "Site statistics sections",
+    "out": "Secciones de estadísticas del sitio"
   },
   "stats.siteStats.abandonedRate": {
     "src": "Abandoned game rate (stale soft-clock games closed after prolonged inactivity) is {{rate}}.",
@@ -4600,7 +4628,7 @@
     "out": "Partidas completadas"
   },
   "stats.siteStats.countryIntro": {
-    "src": "Registered users by country (from profile settings). Only includes country codes the system can interpret. The second count shows players who completed at least one game in the past 30 days.",
+    "src": "Registered users by country (from profile settings). Only includes players who have elected to identify their country, and only includes country codes the system can interpret. The second count shows players who completed at least one game in the past 30 days.",
     "out": "Esto muestra el desglose de los países desde los cuales los jugadores afirman estar jugando. Solo incluye códigos de país que el sistema pueda interpretar."
   },
   "stats.siteStats.cumulativePastYear": {
@@ -4774,6 +4802,46 @@
   "stats.siteStats.weekNumber": {
     "src": "Week #",
     "out": "Semana n.º"
+  },
+  "stats.table.of": {
+    "src": "of",
+    "out": "de"
+  },
+  "stats.table.page": {
+    "src": "Page",
+    "out": "Página"
+  },
+  "stats.table.rows": {
+    "src": "total rows",
+    "out": "filas en total"
+  },
+  "stats.table.showAll": {
+    "src": "Show all",
+    "out": "Mostrar todo"
+  },
+  "stats.table.showCount": {
+    "src": "Show {{count}}",
+    "out": "Mostrar {{count}}"
+  },
+  "stats.tabs.games": {
+    "src": "Games",
+    "out": "Partidas"
+  },
+  "stats.tabs.players": {
+    "src": "Players",
+    "out": "Jugadores"
+  },
+  "stats.tabs.ratings": {
+    "src": "Ratings",
+    "out": "Clasificaciones"
+  },
+  "stats.tabs.site": {
+    "src": "Site",
+    "out": "Sitio"
+  },
+  "stats.tabs.tournaments": {
+    "src": "Tournaments",
+    "out": "Torneos"
   },
   "stats.year_one": {
     "src": "{{count}} year",
