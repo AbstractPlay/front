@@ -4551,6 +4551,10 @@
     "src": "Histogram for {{name}}",
     "out": "Istogramma per {{name}}"
   },
+  "stats.playerStats.publicRivalriesOptIn": {
+    "src": "Show my name in the public rivalries table (both players must opt in)",
+    "out": "Mostra il mio nome nella tabella pubblica delle rivalità (entrambi i giocatori devono acconsentire)"
+  },
   "stats.playerStats.rivalriesIntro": {
     "src": "Most frequent two-player pairings (at least five games together). Pairs are anonymized until players opt in to be named.",
     "out": "Accoppiamenti a due giocatori più frequenti (almeno cinque partite insieme). Le coppie sono anonimizzate finché i giocatori non acconsentono a mostrare il proprio nome."
