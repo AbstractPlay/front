@@ -32,7 +32,6 @@ const allSize = Number.MAX_SAFE_INTEGER;
 //   - metaGame
 //   - counts
 //   - games
-//   - summary
 //   - toggleStar
 //   - handleChallenge
 function Table({

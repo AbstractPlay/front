@@ -4507,6 +4507,12 @@
     "src": "Download all summary stats",
     "out": "Descargar todas las estadísticas resumidas"
   },
+  "stats.loadingSummary": {
+    "src": "Loading statistics…"
+  },
+  "stats.summaryLoadError": {
+    "src": "Statistics could not be loaded. You can try again later or download the raw data."
+  },
   "stats.explanations.avgRatings": {
     "src": "The average rating is just that: a straight average of all the Elo ratings recorded for that player. The weighted average is weighted by number of games played. For example, if you had a rating of 1300 in a game you played 10 times and 1200 in a game you only played twice, your average rating would be 1250, but your weighted average would be 1283.",
     "out": "La calificación promedio es solo eso: un promedio directo de todas las calificaciones Elo registradas para ese jugador. El promedio ponderado se pondera según la cantidad de partidas jugadas. Por ejemplo, si tuviste una calificación de 1300 en un juego que jugaste 10 veces y de 1200 en un juego que solo jugaste dos veces, tu calificación promedio sería 1250, pero tu promedio ponderado sería 1283."

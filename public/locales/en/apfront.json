@@ -1285,6 +1285,8 @@
     "stats": {
         "selectStatistic": "Select a statistic",
         "downloadSummary": "Download all summary stats",
+        "loadingSummary": "Loading statistics…",
+        "summaryLoadError": "Statistics could not be loaded. You can try again later or download the raw data.",
         "downloadReports": "Download all game reports",
         "ratingsNote": "Please note that the ratings given here are dynamically generated and may differ from the static rating visible elsewhere. We're working on harmonizing things eventually.",
         "generatedDaily": "Statistics are generated daily at 6am UTC.",
