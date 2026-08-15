@@ -396,7 +396,8 @@ export function processNewMove(
 ) {
   if (
     (newmove.valid && newmove.complete > 0 && newmove.move !== "") ||
-    (newmove.canrender === true && newmove.move !== "")
+    (newmove.canrender === true &&
+      (newmove.move !== "" || newmove.opts !== undefined))
   ) {
     doView(
       gameRef.current,
