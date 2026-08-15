@@ -4,6 +4,7 @@ import {
   filterPersistableExplorationTree,
   isPartialExplorationMove,
   isPersistableExplorationMove,
+  requiresPartialExplorationApply,
   validateExplorationMove,
 } from "./explorationMoves";
 
@@ -79,6 +80,39 @@ function mockEstateEngine() {
       },
       clone() {
         return createEngine();
+      },
+    };
+  }
+
+  return createEngine();
+}
+
+function mockHomeworldsSacrificeEngine() {
+  const CMD_PARAMETERS = "The wrong number of parameters were provided.";
+  const partialMoves = ["sacrifice g2 Eyuf", "sacrifice g2 Eyuf, build"];
+
+  function createEngine() {
+    return {
+      validateMove(m) {
+        if (partialMoves.includes(m)) {
+          return { valid: true, complete: -1, canrender: true };
+        }
+        return { valid: false };
+      },
+      move(m, { partial = false } = {}) {
+        if (!partial && partialMoves.includes(m)) {
+          const err = new Error(CMD_PARAMETERS);
+          err.name = "UserFacingError";
+          err.client = CMD_PARAMETERS;
+          throw err;
+        }
+        this.last = m;
+      },
+      clone() {
+        return createEngine();
+      },
+      cheapSerialize() {
+        return {};
       },
     };
   }
@@ -316,6 +350,38 @@ describe("isPartialExplorationMove", () => {
     expect(isPersistableExplorationMove(engine, ">n,11", META_CARNAC)).toBe(
       false
     );
+  });
+
+  it("keeps complete=-1 partial after Complete Move", () => {
+    const engine = mockPrefixEngine();
+    expect(
+      isPartialExplorationMove(engine, ">n,11", {
+        userCompleted: true,
+        metaGame: META_CARNAC,
+      })
+    ).toBe(true);
+    expect(
+      requiresPartialExplorationApply(engine, ">n,11", { metaGame: META_CARNAC })
+    ).toBe(true);
+  });
+
+  it("treats Homeworlds sacrifice chains as partial with and without Complete Move", () => {
+    const engine = mockHomeworldsSacrificeEngine();
+    for (const move of ["sacrifice g2 Eyuf", "sacrifice g2 Eyuf, build"]) {
+      expect(
+        isPartialExplorationMove(engine, move, { metaGame: "homeworlds" })
+      ).toBe(true);
+      expect(
+        isPartialExplorationMove(engine, move, {
+          userCompleted: true,
+          metaGame: "homeworlds",
+        })
+      ).toBe(true);
+      expect(() =>
+        applyExplorationMove(engine, move, { metaGame: "homeworlds" })
+      ).not.toThrow();
+      expect(engine.last).toBe(move);
+    }
   });
 });
 

@@ -102,10 +102,14 @@ export function isPartialExplorationMove(
   if (!v.valid) return false;
   assertValidMoveHasComplete(v, singlePlayerMove(move, ctx));
   if (v.complete === 1) return false;
+  // gameslib complete:-1 — always partial while editing (even without canrender)
+  if (v.complete === -1) {
+    if (!userCompleted) return true;
+    return requiresPartialExplorationApply(gameEngine, move, ctx);
+  }
 
-  const renderPartial = v.complete < 1 && v.canrender === true;
-  if (!renderPartial) return false;
-
+  // complete === 0 — legal full apply, but UI may defer commit until Complete move
+  if (!v.canrender) return false;
   if (!userCompleted) return true;
 
   return requiresPartialExplorationApply(gameEngine, move, ctx);
