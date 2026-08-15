@@ -566,6 +566,8 @@
   "ConfirmMoveHelp": "Si prefieres que no se te pida confirmación, puedes deshabilitarlo en tu configuración de usuario.",
   "ConfirmResign": "Confirmar rendición",
   "ConfirmResignDesc": "¿Estás seguro de que deseas rendirte?",
+  "ConfirmDrawOffer": "Ofrecer empate",
+  "ConfirmDrawOfferDesc": "¿Estás seguro de que quieres ofrecer un empate?",
   "ConfirmTimeout": "Tiempo agotado",
   "ConfirmTimeoutDesc": "A tu oponente se le agotó el tiempo. ¿Estás seguro de que deseas reclamar la victoria?",
   "ConfirmPremove": "Establecer premovimiento",

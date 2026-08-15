@@ -565,6 +565,8 @@
   "ConfirmMoveHelp": "Wenn du nicht um Bestätigung gebeten werden möchtest, kannst du dies in deinen Benutzereinstellungen deaktivieren.",
   "ConfirmResign": "Aufgabe bestätigen",
   "ConfirmResignDesc": "Bist du sicher, dass du aufgeben möchtest?",
+  "ConfirmDrawOffer": "Remis anbieten",
+  "ConfirmDrawOfferDesc": "Bist du sicher, dass du ein Remis anbieten möchtest?",
   "ConfirmTimeout": "Bedenkzeit abgelaufen",
   "ConfirmTimeoutDesc": "Die Bedenkzeit deines Gegners ist abgelaufen. Bist du sicher, dass du den Sieg beanspruchen möchtest?",
   "ConfirmPremove": "Zugvorauswahl festlegen",
