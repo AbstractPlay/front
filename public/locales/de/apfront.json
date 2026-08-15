@@ -1390,7 +1390,9 @@
         "reliability": "Zuverlässigkeit",
         "pace": "Tempo"
       }
-    }
+    },
+    "loadingSummary": "Statistiken werden geladen…",
+    "summaryLoadError": "Die Statistiken konnten nicht geladen werden. Sie können es später erneut versuchen oder die Rohdaten herunterladen."
   },
   "players": {
     "filters": {
