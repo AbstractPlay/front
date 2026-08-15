@@ -191,7 +191,7 @@ function Bones(props) {
   }, []);
 
   useEffect(() => {
-    const { setSummary } = useStore.getState();
+    const { setSummary, setSummaryLoadState } = useStore.getState();
     async function fetchData() {
       try {
         var url = new URL("https://records.abstractplay.com/_summary.json");
@@ -200,6 +200,7 @@ function Bones(props) {
         setSummary(result);
       } catch (error) {
         setSummary(null);
+        setSummaryLoadState("error");
       }
     }
     fetchData();

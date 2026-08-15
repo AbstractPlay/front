@@ -4511,6 +4511,12 @@
     "src": "Download all summary stats",
     "out": "Alle Zusammenfassungen herunterladen"
   },
+  "stats.loadingSummary": {
+    "src": "Loading statistics…"
+  },
+  "stats.summaryLoadError": {
+    "src": "Statistics could not be loaded. You can try again later or download the raw data."
+  },
   "stats.explanations.avgRatings": {
     "src": "The average rating is just that: a straight average of all the Elo ratings recorded for that player. The weighted average is weighted by number of games played. For example, if you had a rating of 1300 in a game you played 10 times and 1200 in a game you only played twice, your average rating would be 1250, but your weighted average would be 1283.",
     "out": "Die durchschnittliche Wertung ist genau das: ein einfacher Durchschnitt aller für diesen Spieler aufgezeichneten Elo-Wertungen. Der gewichtete Durchschnitt wird nach der Anzahl der gespielten Spiele gewichtet. Wenn du beispielsweise eine Wertung von 1300 in einem Spiel hättest, das du 10-mal gespielt hast, und 1200 in einem Spiel, das du nur zweimal gespielt hast, läge deine durchschnittliche Wertung bei 1250, aber dein gewichteter Durchschnitt bei 1283."

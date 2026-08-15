@@ -13,8 +13,6 @@ import { useStore } from "../stores";
 function MetaContainer(props) {
   const globalMe = useStore((state) => state.globalMe);
   const [counts, countsSetter] = useState(null);
-  const [users, usersSetter] = useState(null);
-  const [summary, summarySetter] = useState(null);
   const [updateCounter, updateCounterSetter] = useState(0);
   const { metaGame } = useParams();
 
@@ -32,36 +30,6 @@ function MetaContainer(props) {
     }
     fetchData();
   }, [updateCounter]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        var url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append("query", "user_names");
-        const res = await fetch(url);
-        const result = await res.json();
-        usersSetter(result);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        var url = new URL("https://records.abstractplay.com/_summary.json");
-        const res = await fetch(url);
-        const result = await res.json();
-        summarySetter(result);
-      } catch (error) {
-        console.log(error);
-        summarySetter(null);
-      }
-    }
-    fetchData();
-  }, []);
 
   let games = [...gameinfo.keys()].sort((a, b) => {
     const na = gameinfo.get(a).name;
@@ -134,10 +102,8 @@ function MetaContainer(props) {
           metaGame={metaGame}
           counts={counts}
           games={games}
-          summary={summary}
           toggleStar={toggleStar.bind(this)}
           handleChallenge={handleNewChallenge.bind(this)}
-          users={users}
           updateSetter={updateCounterSetter}
         />
       </Fragment>
@@ -162,7 +128,6 @@ function MetaContainer(props) {
         <MetaItem
           game={gameinfo.get(metaGame)}
           counts={counts[metaGame]}
-          summary={summary}
           toggleStar={toggleStar.bind(this)}
           handleChallenge={handleNewChallenge.bind(this)}
         />

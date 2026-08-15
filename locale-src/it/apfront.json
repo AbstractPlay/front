@@ -4511,6 +4511,12 @@
     "src": "Download all summary stats",
     "out": "Scarica tutte le statistiche riassuntive"
   },
+  "stats.loadingSummary": {
+    "src": "Loading statistics…"
+  },
+  "stats.summaryLoadError": {
+    "src": "Statistics could not be loaded. You can try again later or download the raw data."
+  },
   "stats.explanations.avgRatings": {
     "src": "The average rating is just that: a straight average of all the Elo ratings recorded for that player. The weighted average is weighted by number of games played. For example, if you had a rating of 1300 in a game you played 10 times and 1200 in a game you only played twice, your average rating would be 1250, but your weighted average would be 1283.",
     "out": "La valutazione media è semplicemente la media aritmetica di tutti i punteggi Elo registrati per quel giocatore. La media ponderata è ponderata in base al numero di partite giocate. Ad esempio, se hai una valutazione di 1300 in un gioco a cui hai giocato 10 volte e 1200 in un gioco a cui hai giocato solo due volte, la tua valutazione media sarà 1250, ma la tua media ponderata sarà 1283."

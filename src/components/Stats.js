@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import StatsModule from "./Stats/StatsModule";
+import SummaryGate from "./shared/SummaryGate";
 import { useStore } from "../stores";
 import {
   STATS_TABS,
@@ -166,24 +167,26 @@ function Stats() {
             </div>
 
             <div className="columns is-multiline stats-tab-modules">
-              {modulesToRender.map((code) => {
-                const config = STATS_MODULES[code];
-                if (config === undefined) {
-                  return null;
-                }
-                const { component: Component } = config;
-                return (
-                  <StatsModule
-                    key={code}
-                    code={code}
-                    Component={Component}
-                    componentProps={{}}
-                    pinned={pinnedModule === code}
-                    onTogglePin={handleTogglePin}
-                    showPin={showPin}
-                  />
-                );
-              })}
+              <SummaryGate>
+                {modulesToRender.map((code) => {
+                  const config = STATS_MODULES[code];
+                  if (config === undefined) {
+                    return null;
+                  }
+                  const { component: Component } = config;
+                  return (
+                    <StatsModule
+                      key={code}
+                      code={code}
+                      Component={Component}
+                      componentProps={{}}
+                      pinned={pinnedModule === code}
+                      onTogglePin={handleTogglePin}
+                      showPin={showPin}
+                    />
+                  );
+                })}
+              </SummaryGate>
             </div>
 
             <div className="field is-grouped stats-downloads topPad">

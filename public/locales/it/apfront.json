@@ -1391,7 +1391,9 @@
         "reliability": "Affidabilità",
         "pace": "Ritmo"
       }
-    }
+    },
+    "loadingSummary": "Caricamento statistiche…",
+    "summaryLoadError": "Impossibile caricare le statistiche. Puoi riprovare più tardi o scaricare i dati grezzi."
   },
   "players": {
     "filters": {

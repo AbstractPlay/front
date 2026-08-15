@@ -1391,7 +1391,9 @@
         "reliability": "Confiabilidad",
         "pace": "Ritmo"
       }
-    }
+    },
+    "loadingSummary": "Cargando estadísticas…",
+    "summaryLoadError": "No se pudieron cargar las estadísticas. Puedes intentarlo de nuevo más tarde o descargar los datos sin procesar."
   },
   "players": {
     "filters": {
