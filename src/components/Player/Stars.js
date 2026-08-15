@@ -1,14 +1,25 @@
-import React, { useContext, useMemo } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import NewChallengeModal from "../NewChallengeModal";
+import { useStore } from "../../stores";
 
-function Stars() {
+function Stars({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
+  const globalMe = useStore((state) => state.globalMe);
+  const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const { t } = useTranslation();
+
+  const openChallengeModal = (name) => {
+    activeChallengeModalSetter(name);
+  };
+  const closeChallengeModal = useCallback(() => {
+    activeChallengeModalSetter("");
+  }, []);
 
   const data = useMemo(
     () =>
@@ -37,8 +48,43 @@ function Stars() {
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
       }),
+      columnHelper.display({
+        id: "challenge",
+        cell: (props) =>
+          globalMe === null || globalMe.id === user.id ? null : (
+            <>
+              <NewChallengeModal
+                show={
+                  activeChallengeModal !== "" &&
+                  activeChallengeModal === props.row.original.id
+                }
+                handleClose={closeChallengeModal}
+                handleChallenge={handleChallenge}
+                fixedMetaGame={props.row.original.id}
+                opponent={{
+                  id: user.id,
+                  name: user.name,
+                }}
+              />
+              <button
+                className="button is-small apButton"
+                onClick={() => openChallengeModal(props.row.original.id)}
+              >
+                {t("IssueChallengeLabel")}
+              </button>
+            </>
+          ),
+      }),
     ],
-    [columnHelper, t]
+    [
+      columnHelper,
+      globalMe,
+      user,
+      activeChallengeModal,
+      handleChallenge,
+      closeChallengeModal,
+      t,
+    ]
   );
 
   if (data.length === 0) {

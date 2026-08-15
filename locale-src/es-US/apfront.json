@@ -312,10 +312,12 @@
     "out": "Esto eliminará el movimiento actual (explorado) y su subárbol. ¿Estás seguro de que deseas eliminar el subárbol?"
   },
   "ConfirmDrawOffer": {
-    "src": "Offer draw"
+    "src": "Offer draw",
+    "out": "Ofrecer empate"
   },
   "ConfirmDrawOfferDesc": {
-    "src": "Are you sure you wish to offer a draw?"
+    "src": "Are you sure you wish to offer a draw?",
+    "out": "¿Estás seguro de que quieres ofrecer un empate?"
   },
   "ConfirmMove": {
     "src": "Confirm move submission",
@@ -4570,7 +4572,8 @@
     "out": "Copiar enlace a esta sección"
   },
   "stats.loadingSummary": {
-    "src": "Loading statistics…"
+    "src": "Loading statistics…",
+    "out": "Cargando estadísticas…"
   },
   "stats.playerStats.publicRivalriesOptIn": {
     "src": "Show my name in the public rivalries table (both players must opt in)",
@@ -4833,7 +4836,8 @@
     "out": "Semana n.º"
   },
   "stats.summaryLoadError": {
-    "src": "Statistics could not be loaded. You can try again later or download the raw data."
+    "src": "Statistics could not be loaded. You can try again later or download the raw data.",
+    "out": "No se pudieron cargar las estadísticas. Puedes intentarlo de nuevo más tarde o descargar los datos sin procesar."
   },
   "stats.table.filter": {
     "src": "Filter",
