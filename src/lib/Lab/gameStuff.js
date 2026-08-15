@@ -21,6 +21,7 @@ import { useStore } from "../../stores";
 import { LAB_ME } from "./buildGame";
 import { cloneDeep } from "lodash";
 import { toast } from "react-toastify";
+import { isPartialExplorationMove } from "../GameMove/explorationMoves";
 
 export const populateChecked = (gameRef, engineRef, t, setter) => {
   if (gameRef.current?.canCheck) {
@@ -283,11 +284,11 @@ function doView(
   void me;
   let node = getFocusNode(exploration, game, focus);
   let gameEngineTmp = GameFactory(game.metaGame, node.state);
-  let partialMove = false;
-  if (move.valid && move.complete < 1 && move.canrender === true) {
-    partialMove = true;
-  }
   let m = move.move || "";
+  const partialMove = isPartialExplorationMove(gameEngineTmp, m, {
+    userCompleted: move.complete === 1,
+    metaGame: game.metaGame,
+  });
   const newfocus = cloneDeep(focus);
   let moves;
   try {
