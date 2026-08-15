@@ -46,8 +46,8 @@ vi.mock("@abstractplay/gameslib", () => ({
       }
       return { valid: false };
     },
-    move(m) {
-      if (m === "") {
+    move(m, opts = {}) {
+      if (m === "" && !opts.partial && !opts.emulation) {
         throw new Error("The algebraic notation is invalid: ");
       }
     },
@@ -83,7 +83,11 @@ describe("processNewMove", () => {
   const exploration = [new GameNode(null, "", gameState, 0)];
   const focus = { moveNumber: 0, exPath: [], canExplore: false };
 
-  function runProcessNewMove(newmove, partialMoveRenderRef) {
+  function runProcessNewMove(
+    newmove,
+    partialMoveRenderRef,
+    renderrepSetter = vi.fn()
+  ) {
     const gameRef = { current: game };
     const movesRef = { current: [] };
     const statusRef = { current: {} };
@@ -103,7 +107,7 @@ describe("processNewMove", () => {
       exploration,
       errorMessageRef,
       partialMoveRenderRef,
-      vi.fn(),
+      renderrepSetter,
       engineRef,
       (v) => {
         if (v) errorShown = true;
@@ -152,6 +156,28 @@ describe("processNewMove", () => {
     expect(cleared.moveState).toEqual(
       expect.objectContaining({ move: "", rendered: "" })
     );
+  });
+
+  it("re-renders on canrender move with render opts but empty move string", () => {
+    const renderrepSetter = vi.fn();
+    const partialMoveRenderRef = { current: false };
+
+    const { errorShown } = runProcessNewMove(
+      {
+        valid: true,
+        complete: -1,
+        canrender: true,
+        move: "",
+        rendered: "",
+        opts: { hideLayer: 1 },
+      },
+      partialMoveRenderRef,
+      renderrepSetter
+    );
+
+    expect(errorShown).toBe(false);
+    expect(renderrepSetter).toHaveBeenCalledTimes(1);
+    expect(partialMoveRenderRef.current).toBe(true);
   });
 
   it("keeps exPath empty for simultaneous partial order moves", () => {

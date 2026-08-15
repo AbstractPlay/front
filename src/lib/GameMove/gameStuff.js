@@ -434,10 +434,11 @@ export function processNewMove(
   navigate,
   t
 ) {
-  // if the move is complete, or partial and renderable, update board
+  // if the move is complete, partial and renderable, or a UI-only update (e.g. scrollbar)
   if (
     (newmove.valid && newmove.complete > 0 && newmove.move !== "") ||
-    (newmove.canrender === true && newmove.move !== "")
+    (newmove.canrender === true &&
+      (newmove.move !== "" || newmove.opts !== undefined))
   ) {
     doView(
       me,
