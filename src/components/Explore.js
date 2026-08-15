@@ -185,6 +185,7 @@ function Explore(props) {
           counts={counts[metaGame]}
           toggleStar={toggleStar}
           handleChallenge={handleNewChallenge}
+          syncTabToUrl
         />
       </>
     );

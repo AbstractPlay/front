@@ -42,6 +42,7 @@ function Stats() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const summary = useStore((state) => state.summary);
+  const globalMe = useStore((state) => state.globalMe);
   const [storedTab, setStoredTab] = useStorageState(
     "stats-tab",
     DEFAULT_STATS_TAB
@@ -97,7 +98,19 @@ function Stats() {
   const modulesToRender = sortStatsModules(
     activeTab.modules,
     pinnedModule
-  );
+  ).filter((code) => {
+    if (code === "pieStats" && !(summary?.pieRates?.length > 0)) {
+      return false;
+    }
+    if (
+      code === "rivalryStats" &&
+      globalMe === null &&
+      !(summary?.rivalries?.length > 0)
+    ) {
+      return false;
+    }
+    return true;
+  });
   const showPin = activeTab.modules.length > 1;
 
   return (
@@ -183,6 +196,7 @@ function Stats() {
                       pinned={pinnedModule === code}
                       onTogglePin={handleTogglePin}
                       showPin={showPin}
+                      tabId={tabParam}
                     />
                   );
                 })}

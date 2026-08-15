@@ -919,9 +919,11 @@
   "Statistics": "Estadísticas",
   "stats_module_avgRatings": "Promedio de clasificaciones",
   "stats_module_gameStats": "Estadísticas de juegos",
+  "stats_module_pieStats": "Estadísticas de la regla del pastel",
   "stats_module_highestSingle": "Todas las clasificaciones individuales",
   "stats_module_numPlays": "Estadísticas de partidas",
   "stats_module_playerStats": "Estadísticas de jugadores",
+  "stats_module_rivalryStats": "Rivalidades",
   "stats_module_topPlayers": "Mejores jugadores",
   "stats_module_siteStats": "Estadísticas del sitio",
   "stats_module_tourneyStats": "Estadísticas de torneos",
@@ -1303,7 +1305,9 @@
       "numPlays": "Esta tabla enumera cada juego, cuántas veces se jugó, por cuántos jugadores únicos y el `índice h` del juego. El índice h de un juego es el número de jugadores que han jugado a ese juego al menos ese número de veces (por lo que un índice h de 5 significa que 5 jugadores diferentes han jugado a ese juego al menos 5 veces). También proporciona un histograma de partidas completadas para ese juego. La vista previa muestra las últimas 10 semanas, con la semana más reciente a la derecha. Al hacer clic en la vista previa se mostrará el historial completo de partidas completadas, en \"bloques\" de siete días, con la semana más reciente a la derecha.",
       "playerStats": "Muestra cada jugador registrado junto con el total de sus partidas jugadas, un recuento de juegos únicos y la cantidad de oponentes diferentes contra los que jugó. También proporciona un `índice h`, que representa la cantidad de juegos a los que has jugado al menos esa cantidad de veces (por ejemplo, si has jugado tres juegos diferentes solo una vez cada uno, tu índice es 1. Tan pronto como hayas jugado a esos tres juegos al menos tres veces *cada uno*, el índice aumentará a 3). También hay un `índice h` para los oponentes a los que te has enfrentado. Se incluye un histograma de actividad que muestra el número de partidas completadas cada semana, con la semana más reciente a la derecha. La vista previa muestra las diez semanas más recientes. Al hacer clic en ella, se mostrará el historial completo.",
       "gameStats": "Esta tabla muestra cada combinación de juego y variante junto con la cantidad de partidas registradas, la duración promedio de la partida (número de movimientos), la mediana de la duración, la tasa de victorias del primer jugador y la tasa de empates (solo en partidas de dos jugadores con más de dos movimientos). **¡Las estadísticas de victorias del primer jugador y de empates deben tratarse con cuidado!** El tamaño de la muestra es pequeño y sesgado. Hay muchos factores de confusión que podrían explicar una tasa extrema. Ten en cuenta que la tasa de victorias del primer jugador ignora por completo si se invocó la regla del pastel. Los empates se cuentan como media victoria para el primer jugador al calcular la tasa de victorias del primer jugador.",
-      "tourneyStats": "Muestra a cada jugador que ha participado en torneos automatizados y sus estadísticas resumidas, incluyendo la cantidad de victorias, la cantidad de posiciones entre el 50% superior y la puntuación. Tu puntuación es la suma de los puntos recibidos en cada torneo. Los puntos se otorgan sobre 100, según tu posición: el primer lugar obtiene 100 puntos y el último no obtiene ninguno."
+      "tourneyStats": "Muestra a cada jugador que ha participado en torneos automatizados y sus estadísticas resumidas, incluyendo la cantidad de victorias, la cantidad de posiciones entre el 50% superior y la puntuación. Tu puntuación es la suma de los puntos recibidos en cada torneo. Los puntos se otorgan sobre 100, según tu posición: el primer lugar obtiene 100 puntos y el último no obtiene ninguno.",
+      "pieStats": "Partidas que admiten la regla del pastel, mostrando con qué frecuencia se invocó.",
+      "rivalryStats": "Emparejamientos de dos jugadores con al menos cincuenta partidas jugadas entre sí, ordenados por partidas jugadas. Las parejas se mantienen en el anonimato hasta que los jugadores elijan mostrar sus nombres."
     },
     "siteStats": {
       "weekBuckets": "Las partidas se cuentan en bloques de siete días. La barra más a la izquierda es la primera semana en que se registraron partidas completadas. La barra más a la derecha es la semana más reciente (o parte de ella).",
@@ -1395,7 +1399,11 @@
       }
     },
     "loadingSummary": "Cargando estadísticas…",
-    "summaryLoadError": "No se pudieron cargar las estadísticas. Puedes intentarlo de nuevo más tarde o descargar los datos sin procesar."
+    "summaryLoadError": "No se pudieron cargar las estadísticas. Puedes intentarlo de nuevo más tarde o descargar los datos sin procesar.",
+    "link": {
+      "copy": "Copiar enlace a esta sección",
+      "copied": "¡Copiado!"
+    }
   },
   "players": {
     "filters": {
