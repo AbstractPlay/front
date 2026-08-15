@@ -15,6 +15,8 @@ function Play(props) {
 
   useEffect(() => {
     addResource(i18n.language, i18n);
+    // Only i18n.language matters; the full i18n object changes identity each render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   useEffect(() => {

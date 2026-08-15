@@ -121,6 +121,8 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
       groupDataSetter([]);
       nonGroupDataSetter([]);
     }
+    // Only re-run when metaGame changes; handleGroupChange is recreated each render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [metaGame]);
 
   const handleGroupChange = (group, variant) => {

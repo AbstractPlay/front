@@ -565,6 +565,8 @@
   "ConfirmMoveHelp": "Si vous préférez ne pas avoir de demande de confirmation, vous pouvez la désactiver dans vos paramètres d'utilisateur.",
   "ConfirmResign": "Confirmer l'abandon",
   "ConfirmResignDesc": "Êtes-vous sûr de vouloir abandonner ?",
+  "ConfirmDrawOffer": "Proposer la nulle",
+  "ConfirmDrawOfferDesc": "Êtes-vous sûr de vouloir proposer la nulle ?",
   "ConfirmTimeout": "Temps écoulé",
   "ConfirmTimeoutDesc": "Votre adversaire n'a plus de temps. Êtes-vous sûr de vouloir réclamer la victoire ?",
   "ConfirmPremove": "Définir le coup anticipé",

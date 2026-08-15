@@ -565,6 +565,8 @@
     "ConfirmMoveHelp": "If you prefer not to get asked for confirmation, you can disable this in your user settings.",
     "ConfirmResign": "Confirm resignation",
     "ConfirmResignDesc": "Are you sure you want to resign?",
+    "ConfirmDrawOffer": "Offer draw",
+    "ConfirmDrawOfferDesc": "Are you sure you wish to offer a draw?",
     "ConfirmTimeout": "Out of time",
     "ConfirmTimeoutDesc": "Your opponent is out of time. Are you sure you want to claim the win?",
     "ConfirmPremove": "Set premove",

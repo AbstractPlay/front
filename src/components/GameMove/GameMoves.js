@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, Fragment, useState } from "react";
+import React, { useEffect, useRef, Fragment, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useStore } from "../../stores";
@@ -138,7 +138,9 @@ function GameMoves(props) {
 
   useEventListener("keydown", keyDownHandler);
 
-  const scroll = () => {
+  const focusExPathKey = focus?.exPath?.join(",");
+
+  const scroll = useCallback(() => {
     // 300 is the maxHeight of the table from the CSS (for .movesTable)
     let maxHeight = 300;
     if (focusRowRef.current) {
@@ -176,13 +178,14 @@ function GameMoves(props) {
       if (newScrollTop !== tableRef.current.scrollTop)
         tableRef.current.scrollTop = newScrollTop;
     }
-  };
+  }, [focus, exploration]);
 
   useEffect(() => {
     scroll();
   }, [
+    scroll,
     focus?.moveNumber,
-    focus?.exPath?.join(","),
+    focusExPathKey,
     exploration?.length,
     game?.gameOver,
   ]);

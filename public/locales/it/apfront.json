@@ -565,6 +565,8 @@
   "ConfirmMoveHelp": "Se preferisci non ricevere la richiesta di conferma, puoi disabilitare questa opzione nelle impostazioni utente.",
   "ConfirmResign": "Conferma abbandono",
   "ConfirmResignDesc": "Sei sicuro di volerti arrendere?",
+  "ConfirmDrawOffer": "Proponi patta",
+  "ConfirmDrawOfferDesc": "Sei sicuro di voler proporre la patta?",
   "ConfirmTimeout": "Tempo scaduto",
   "ConfirmTimeoutDesc": "Il tempo del tuo avversario è scaduto. Sei sicuro di voler reclamare la vittoria?",
   "ConfirmPremove": "Imposta premossa",
