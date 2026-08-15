@@ -312,10 +312,12 @@
     "out": "Dadurch wird der aktuelle (analysierte) Zug und sein Teilbaum gelöscht. Bist du sicher, dass du den Teilbaum löschen möchtest?"
   },
   "ConfirmDrawOffer": {
-    "src": "Offer draw"
+    "src": "Offer draw",
+    "out": "Remis anbieten"
   },
   "ConfirmDrawOfferDesc": {
-    "src": "Are you sure you wish to offer a draw?"
+    "src": "Are you sure you wish to offer a draw?",
+    "out": "Bist du sicher, dass du ein Remis anbieten möchtest?"
   },
   "ConfirmMove": {
     "src": "Confirm move submission",
@@ -4574,7 +4576,8 @@
     "out": "Link zu diesem Abschnitt kopieren"
   },
   "stats.loadingSummary": {
-    "src": "Loading statistics…"
+    "src": "Loading statistics…",
+    "out": "Statistiken werden geladen…"
   },
   "stats.playerStats.publicRivalriesOptIn": {
     "src": "Show my name in the public rivalries table (both players must opt in)",
@@ -4837,7 +4840,8 @@
     "out": "Woche #"
   },
   "stats.summaryLoadError": {
-    "src": "Statistics could not be loaded. You can try again later or download the raw data."
+    "src": "Statistics could not be loaded. You can try again later or download the raw data.",
+    "out": "Die Statistiken konnten nicht geladen werden. Sie können es später erneut versuchen oder die Rohdaten herunterladen."
   },
   "stats.table.filter": {
     "src": "Filter",
