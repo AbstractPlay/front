@@ -9,6 +9,7 @@ import NewChallengeModal from "../NewChallengeModal";
 import HighestSingleRating from "../Stats/HighestSingleRating";
 import GameStats from "../Stats/GameStats";
 import NumPlays from "../Stats/NumPlays";
+import SummaryGate from "../shared/SummaryGate";
 import Ratings from "../Ratings";
 import StandingChallenges from "../StandingChallenges";
 import ListGames from "../ListGames";
@@ -408,19 +409,21 @@ const MetaItem = React.forwardRef(
               </div>
             )}
             {activeTab !== "history" ? null : (
-              <>
-                <p className="subtitle">{t("meta.tabs.historicalData")}</p>
-                <p>{t("meta.historicalIntro")}</p>
-                <hr width="50%" style={{ opacity: 0.1 }} />
-                <p>{t("meta.playCounts")}</p>
-                <NumPlays metaFilter={game.name} nav="bottom" />
-                <hr width="50%" style={{ opacity: 0.1 }} />
-                <p>{t("meta.gameStatistics")}</p>
-                <GameStats metaFilter={game.name} nav="bottom" />
-                <hr width="50%" style={{ opacity: 0.1 }} />
-                <p>{t("meta.ratings")}</p>
-                <HighestSingleRating metaFilter={game.name} nav="bottom" />{" "}
-              </>
+              <SummaryGate>
+                <>
+                  <p className="subtitle">{t("meta.tabs.historicalData")}</p>
+                  <p>{t("meta.historicalIntro")}</p>
+                  <hr width="50%" style={{ opacity: 0.1 }} />
+                  <p>{t("meta.playCounts")}</p>
+                  <NumPlays metaFilter={game.name} nav="bottom" />
+                  <hr width="50%" style={{ opacity: 0.1 }} />
+                  <p>{t("meta.gameStatistics")}</p>
+                  <GameStats metaFilter={game.name} nav="bottom" />
+                  <hr width="50%" style={{ opacity: 0.1 }} />
+                  <p>{t("meta.ratings")}</p>
+                  <HighestSingleRating metaFilter={game.name} nav="bottom" />{" "}
+                </>
+              </SummaryGate>
             )}
             {activeTab !== "players" ? null : <Ratings />}
             {activeTab !== "challenges" ? null : <StandingChallenges />}

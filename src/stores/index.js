@@ -36,9 +36,25 @@ export const useStore = create((set, get) => ({
     })),
 
   summary: null,
+  summaryLoadState: "pending",
   setSummary: (summary) =>
+    set((state) => {
+      const nextSummary =
+        typeof summary === "function" ? summary(state.summary) : summary;
+      return {
+        summary: nextSummary,
+        summaryLoadState:
+          nextSummary !== null && nextSummary !== undefined
+            ? "ready"
+            : state.summaryLoadState,
+      };
+    }),
+  setSummaryLoadState: (loadState) =>
     set((state) => ({
-      summary: typeof summary === "function" ? summary(state.summary) : summary,
+      summaryLoadState:
+        typeof loadState === "function"
+          ? loadState(state.summaryLoadState)
+          : loadState,
     })),
 
   colourContext: {

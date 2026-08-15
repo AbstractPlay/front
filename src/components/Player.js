@@ -32,6 +32,7 @@ import Designed from "./Player/Designed";
 import Tournaments from "./Player/Tournaments";
 import Hero from "./Player/Hero";
 import ProfileModule from "./Player/ProfileModule";
+import SummaryGate from "./shared/SummaryGate";
 import { useStore } from "../stores";
 import { formatUserDisplayName } from "./Bots/botUtils";
 import {
@@ -66,8 +67,8 @@ function Player() {
   const { userid } = useParams();
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
+  const summary = useStore((state) => state.summary);
   const [user, userSetter] = useState(null);
-  const [summary, summarySetter] = useState(null);
   const [allRecs, allRecsSetter] = useState([]);
   const [tourneys, tourneysSetter] = useState([]);
   const [responses, responsesSetter] = useState([]);
@@ -96,20 +97,6 @@ function Player() {
     }),
     [user, summary, allRecs, tourneys, responses, isCoder, isDesigner]
   );
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        var url = new URL("https://records.abstractplay.com/_summary.json");
-        const res = await fetch(url);
-        const result = await res.json();
-        summarySetter(result);
-      } catch (error) {
-        summarySetter(null);
-      }
-    }
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (user !== null) {
@@ -273,7 +260,7 @@ function Player() {
             </ReactMarkdown>
           )}
           <ProfileContext.Provider value={[user, userSetter]}>
-            <SummaryContext.Provider value={[summary, summarySetter]}>
+            <SummaryContext.Provider value={[summary, () => {}]}>
               <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>
                 <TournamentContext.Provider value={[tourneys, tourneysSetter]}>
                   <ResponsesContext.Provider
@@ -311,34 +298,36 @@ function Player() {
                           </ul>
                         </div>
                         {tabMayHaveContent ? (
-                          <div className="columns is-multiline player-tab-modules">
-                            {modulesToRender.map((code) => {
-                              const Component = code2component[code];
-                              if (Component === undefined) return null;
-                              if (code === "highlights") {
+                          <SummaryGate>
+                            <div className="columns is-multiline player-tab-modules">
+                              {modulesToRender.map((code) => {
+                                const Component = code2component[code];
+                                if (Component === undefined) return null;
+                                if (code === "highlights") {
+                                  return (
+                                    <Highlights
+                                      key={`${code}|${userid}`}
+                                      pinned={pinnedModule === code}
+                                      onTogglePin={handleTogglePin}
+                                    />
+                                  );
+                                }
                                 return (
-                                  <Highlights
+                                  <ProfileModule
                                     key={`${code}|${userid}`}
+                                    code={code}
+                                    nameKey={MODULE_NAME_KEYS[code]}
                                     pinned={pinnedModule === code}
                                     onTogglePin={handleTogglePin}
+                                    Component={Component}
+                                    componentProps={{
+                                      handleChallenge: handleNewChallenge,
+                                    }}
                                   />
                                 );
-                              }
-                              return (
-                                <ProfileModule
-                                  key={`${code}|${userid}`}
-                                  code={code}
-                                  nameKey={MODULE_NAME_KEYS[code]}
-                                  pinned={pinnedModule === code}
-                                  onTogglePin={handleTogglePin}
-                                  Component={Component}
-                                  componentProps={{
-                                    handleChallenge: handleNewChallenge,
-                                  }}
-                                />
-                              );
-                            })}
-                          </div>
+                              })}
+                            </div>
+                          </SummaryGate>
                         ) : (
                           <p className="has-text-centered player-tab-empty">
                             {t("player.tabs.empty")}
