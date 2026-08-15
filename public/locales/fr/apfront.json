@@ -1391,7 +1391,9 @@
         "reliability": "Fiabilité",
         "pace": "Cadence"
       }
-    }
+    },
+    "loadingSummary": "Chargement des statistiques…",
+    "summaryLoadError": "Impossible de charger les statistiques. Vous pouvez réessayer plus tard ou télécharger les données brutes."
   },
   "players": {
     "filters": {
