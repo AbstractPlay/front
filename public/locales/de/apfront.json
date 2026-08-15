@@ -919,9 +919,11 @@
   "Statistics": "Statistiken",
   "stats_module_avgRatings": "Durchschnittliche Wertungen",
   "stats_module_gameStats": "Spielstatistiken",
+  "stats_module_pieStats": "Kuchenregel-Statistiken",
   "stats_module_highestSingle": "Alle Einzelwertungen",
   "stats_module_numPlays": "Partiestatistiken",
   "stats_module_playerStats": "Spielerstatistiken",
+  "stats_module_rivalryStats": "Rivalitäten",
   "stats_module_topPlayers": "Top-Spieler",
   "stats_module_siteStats": "Website-Statistiken",
   "stats_module_tourneyStats": "Turnierstatistiken",
@@ -1302,7 +1304,9 @@
       "numPlays": "Diese Tabelle listet jedes Spiel auf, wie oft es gespielt wurde, von wie vielen eindeutigen Spielern und den `h-index` des Spiels. Der h-Index eines Spiels ist die Anzahl der Spieler, die dieses Spiel mindestens so oft gespielt haben (ein h-Index von 5 bedeutet also, dass 5 verschiedene Spieler dieses Spiel mindestens 5-mal gespielt haben). Sie bietet auch ein Histogramm der beendeten Spiele für dieses Spiel. Die Vorschau zeigt die letzten 10 Wochen, wobei die aktuellste Woche rechts steht. Ein Klick auf die Vorschau zeigt den vollständigen Verlauf der beendeten Spiele in Sieben-Tage-\"Blöcken\", wobei die aktuellste Woche rechts steht.",
       "playerStats": "Dies zeigt jeden erfassten Spieler zusammen mit seinen gespielten Spielen insgesamt, einer Anzahl eindeutiger Spiele und der Anzahl verschiedener Gegner, gegen die er gespielt hat. Es bietet auch einen `h-index`, der die Anzahl der Spiele darstellt, die du mindestens so oft gespielt hast (z. B. wenn du drei verschiedene Spiele jeweils nur einmal gespielt hast, beträgt dein Index 1. Sobald du diese drei Spiele jeweils mindestens drei *Mal* gespielt hast, steigt der Index auf 3). Es gibt auch einen `h-index` für Gegner, gegen die du angetreten bist. Ein Aktivitätshistogramm wird ebenfalls bereitgestellt, das die Anzahl der jede Woche beendeten Spiele zeigt, wobei die aktuellste Woche rechts steht. Die Vorschau zeigt die letzten zehn Wochen. Ein Klick darauf zeigt den vollständigen Verlauf.",
       "gameStats": "Diese Tabelle zeigt jede Kombination aus Spiel und Variante zusammen mit der Anzahl der aufgezeichneten Spiele, der durchschnittlichen Spiellänge (Anzahl der Züge), der Median-Länge, der Siegquote des ersten Spielers und der Remisquote (nur bei Zwei-Spieler-Spielen mit mehr als zwei Zügen). **Die Statistiken zu Siegen des ersten Spielers und zu Remis sollten mit Vorsicht behandelt werden!** Die Stichprobengröße ist klein und verzerrt. Es gibt viele Störfaktoren, die eine extreme Quote erklären könnten. Beachten Sie, dass die Siegquote des ersten Spielers völlig ignoriert, ob die Pie-Regel angewendet wurde. Remis werden bei der Berechnung der Siegquote des ersten Spielers als halber Sieg gewertet.",
-      "tourneyStats": "Zeigt jeden Spieler, der an automatisierten Turnieren teilgenommen hat, und seine zusammenfassenden Statistiken, einschließlich der Anzahl der Siege, der Anzahl der Platzierungen in den oberen 50% und der Punktzahl. Deine Punktzahl ist die Summe der in jedem Turnier erhaltenen Punkte. Die Punkte werden aus 100 basierend auf deiner Platzierung vergeben: Der erste Platz erhält 100 Punkte, der letzte Platz keine."
+      "tourneyStats": "Zeigt jeden Spieler, der an automatisierten Turnieren teilgenommen hat, und seine zusammenfassenden Statistiken, einschließlich der Anzahl der Siege, der Anzahl der Platzierungen in den oberen 50% und der Punktzahl. Deine Punktzahl ist die Summe der in jedem Turnier erhaltenen Punkte. Die Punkte werden aus 100 basierend auf deiner Platzierung vergeben: Der erste Platz erhält 100 Punkte, der letzte Platz keine.",
+      "pieStats": "Spiele, die die Kuchenregel unterstützen, und wie oft diese angewendet wurde.",
+      "rivalryStats": "Paarungen aus zwei Spielern mit mindestens fünfzig gemeinsamen Partien, sortiert nach gespielten Partien. Die Paare bleiben anonym, bis die Spieler der Nennung ihres Namens zustimmen."
     },
     "siteStats": {
       "weekBuckets": "Spiele werden in Sieben-Tage-Abschnitten gezählt. Der Balken ganz links ist die erste Woche, in der beendete Spiele aufgezeichnet wurden. Der Balken ganz rechts ist die aktuellste Woche (oder ein Teil davon).",
@@ -1394,7 +1398,11 @@
       }
     },
     "loadingSummary": "Statistiken werden geladen…",
-    "summaryLoadError": "Die Statistiken konnten nicht geladen werden. Sie können es später erneut versuchen oder die Rohdaten herunterladen."
+    "summaryLoadError": "Die Statistiken konnten nicht geladen werden. Sie können es später erneut versuchen oder die Rohdaten herunterladen.",
+    "link": {
+      "copy": "Link zu diesem Abschnitt kopieren",
+      "copied": "Kopiert!"
+    }
   },
   "players": {
     "filters": {

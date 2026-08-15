@@ -919,9 +919,11 @@
     "Statistics": "Statistics",
     "stats_module_avgRatings": "Average ratings",
     "stats_module_gameStats": "Game statistics",
+    "stats_module_pieStats": "Pie rule statistics",
     "stats_module_highestSingle": "All individual ratings",
     "stats_module_numPlays": "Play statistics",
     "stats_module_playerStats": "Player statistics",
+    "stats_module_rivalryStats": "Rivalries",
     "stats_module_topPlayers": "Top players",
     "stats_module_siteStats": "Site statistics",
     "stats_module_tourneyStats": "Tournament statistics",
@@ -1299,6 +1301,10 @@
         "year_other": "{{count}} years",
         "playersPlayedGames": "In that time, {{numPlayers}} players have played {{numGames}} games.",
         "histogramFor": "Histogram for {{name}}",
+        "link": {
+            "copy": "Copy link to this section",
+            "copied": "Copied!"
+        },
         "tabs": {
             "ratings": "Ratings",
             "games": "Games",
@@ -1332,6 +1338,8 @@
             "numPlays": "This table lists each game, how many times it was played, by how many unique players, and the game's `h-index`. A game's h-index is the number of players who have played that game at least that many times (so an h-index of 5 means that 5 different players have played that game at least 5 times). It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day \"buckets,\" with the most recent week on the right.",
             "playerStats": "This shows each recorded player along with their total games played, a count of unique games, and the number of different opponents they played. It also provides an `h-index`, which represents the number of games you've played at least that many times (e.g., if you've played three different games only one time each, then your index is 1. As soon as you've played those three games at least three times *each*, the index will increase to 3). There's also an `h-index` for opponents you have faced. An activity histogram is also provided, showing the number of games completed each week, with the most recent week on the right. The preview shows the most recent ten weeks. Clicking on it will show you the full history.",
             "gameStats": "This table shows each game and variant combination along with the number of recorded games, the average length of the game (number of moves), the median length, the rate of first-player wins, and the draw rate (two-player games with more than two moves only). **The first-player win and draw stats should be treated with care!** The sample size is small and biased. There are many confounding factors that could explain an extreme rate. Note that the first-player win rate completely ignores whether the pie rule was invoked. Draws are counted as half a win for the first player when computing first-player win rate.",
+            "pieStats": "Games that support the pie rule, showing how often the pie was invoked.",
+            "rivalryStats": "Two-player pairings with at least fifty games together, ordered by games played. Pairs are anonymized until players opt in to be named.",
             "tourneyStats": "Shows each player who has participated in automated tournaments and their summary stats, including number of wins, number of top 50% finishes, and score. Your score is the sum of points received in each tournament. Points are awarded out of 100, based on your placement: first place gets 100 points, and last place gets none."
         },
         "gameStats": {

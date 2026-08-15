@@ -6,7 +6,17 @@ import SiteGeo from "./site/SiteGeo";
 import SiteSeasonality from "./site/SiteSeasonality";
 import SiteReliability from "./site/SiteReliability";
 import SitePace from "./site/SitePace";
+import CopyDeepLinkButton from "./CopyDeepLinkButton";
 import { useStore } from "../../stores";
+
+function SiteSectionHeading({ sectionId, children }) {
+  return (
+    <div className="stats-section-heading">
+      <h3 className="subtitle">{children}</h3>
+      <CopyDeepLinkButton hash={`#${sectionId}`} pathname="/stats/site" />
+    </div>
+  );
+}
 
 function SiteStats({ nav }) {
   const { t } = useTranslation();
@@ -18,25 +28,35 @@ function SiteStats({ nav }) {
     <>
       {showSubNav ? <SiteSubNav /> : null}
       <section id="site-growth" className="stats-site-section">
-        <h3 className="subtitle">{t("stats.site.sections.growth")}</h3>
+        <SiteSectionHeading sectionId="site-growth">
+          {t("stats.site.sections.growth")}
+        </SiteSectionHeading>
         <SiteGrowth />
       </section>
       <section id="site-geo" className="stats-site-section">
-        <h3 className="subtitle">{t("stats.site.sections.geo")}</h3>
+        <SiteSectionHeading sectionId="site-geo">
+          {t("stats.site.sections.geo")}
+        </SiteSectionHeading>
         <SiteGeo nav={nav} />
       </section>
       {hasSeasonality ? (
         <section id="site-seasonality" className="stats-site-section">
-          <h3 className="subtitle">{t("stats.site.sections.seasonality")}</h3>
+          <SiteSectionHeading sectionId="site-seasonality">
+            {t("stats.site.sections.seasonality")}
+          </SiteSectionHeading>
           <SiteSeasonality />
         </section>
       ) : null}
       <section id="site-reliability" className="stats-site-section">
-        <h3 className="subtitle">{t("stats.site.sections.reliability")}</h3>
+        <SiteSectionHeading sectionId="site-reliability">
+          {t("stats.site.sections.reliability")}
+        </SiteSectionHeading>
         <SiteReliability />
       </section>
       <section id="site-pace" className="stats-site-section">
-        <h3 className="subtitle">{t("stats.site.sections.pace")}</h3>
+        <SiteSectionHeading sectionId="site-pace">
+          {t("stats.site.sections.pace")}
+        </SiteSectionHeading>
         <SitePace />
       </section>
     </>

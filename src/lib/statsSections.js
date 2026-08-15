@@ -3,7 +3,9 @@ import AvgRatings from "../components/Stats/AvgRatings";
 import TopPlayers from "../components/Stats/TopPlayers";
 import NumPlays from "../components/Stats/NumPlays";
 import PlayerStats from "../components/Stats/PlayerStats";
+import RivalryStats from "../components/Stats/RivalryStats";
 import GameStats from "../components/Stats/GameStats";
+import PieStats from "../components/Stats/PieStats";
 import SiteStats from "../components/Stats/SiteStats";
 import Tournaments from "../components/Stats/Tournaments";
 
@@ -18,12 +20,12 @@ export const STATS_TABS = [
   {
     id: "games",
     nameKey: "stats.tabs.games",
-    modules: ["numPlays", "gameStats"],
+    modules: ["numPlays", "gameStats", "pieStats"],
   },
   {
     id: "players",
     nameKey: "stats.tabs.players",
-    modules: ["playerStats"],
+    modules: ["playerStats", "rivalryStats"],
   },
   {
     id: "tournaments",
@@ -70,10 +72,22 @@ export const STATS_MODULES = {
     explanationKey: "stats.explanations.gameStats",
     width: "full",
   },
+  pieStats: {
+    component: PieStats,
+    nameKey: "stats_module_pieStats",
+    explanationKey: "stats.explanations.pieStats",
+    width: "full",
+  },
   playerStats: {
     component: PlayerStats,
     nameKey: "stats_module_playerStats",
     explanationKey: "stats.explanations.playerStats",
+    width: "full",
+  },
+  rivalryStats: {
+    component: RivalryStats,
+    nameKey: "stats_module_rivalryStats",
+    explanationKey: "stats.explanations.rivalryStats",
     width: "full",
   },
   tourneyStats: {
