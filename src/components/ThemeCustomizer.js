@@ -156,14 +156,14 @@ function ThemeCustomizer({ show, handleClose }) {
           <div className="tabs is-toggle is-fullwidth">
             <ul>
               <li className={colorMode === "light" ? "is-active" : ""}>
-                <a onClick={() => setColorMode("light")}>
+                <button type="button" onClick={() => setColorMode("light")}>
                   {t("theme.lightMode")}
-                </a>
+                </button>
               </li>
               <li className={colorMode === "dark" ? "is-active" : ""}>
-                <a onClick={() => setColorMode("dark")}>
+                <button type="button" onClick={() => setColorMode("dark")}>
                   {t("theme.darkMode")}
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -232,9 +232,9 @@ function ThemeCustomizer({ show, handleClose }) {
             </h1>
             <p>
               {t("theme.sampleText")}{" "}
-              <a href="#" style={{ color: "var(--secondary-color-3)" }}>
+              <span style={{ color: "var(--secondary-color-3)" }}>
                 {t("theme.sampleLink")}
-              </a>
+              </span>
             </p>
             <p style={{ color: "var(--secondary-font-color)" }}>
               {t("theme.secondaryFontColor")}

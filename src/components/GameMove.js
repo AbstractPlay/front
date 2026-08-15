@@ -727,6 +727,8 @@ function GameMove(props) {
     } else {
       fetchData();
     }
+    // game/state are fetch outputs — including them would refetch in a loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     gameID,
     metaGame,
@@ -901,6 +903,8 @@ function GameMove(props) {
         }
       }
     }
+    // Runs on dbgame updates; focus/sessionDisplayOverride read via refs/stable setup paths.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dbgame,
     pieInvoked,
@@ -928,6 +932,8 @@ function GameMove(props) {
       me,
       effectiveColourContext
     );
+    // Intentionally keyed on dbgame id only, not the full dbgame object.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dbgame?.id, effectiveColourContext, globalMe?.settings]);
 
   useEffect(() => {
@@ -953,6 +959,8 @@ function GameMove(props) {
       sessionDisplayOverride
     );
     handleGameMoveClickRef.current?.(focusRef.current, displayForRender);
+    // Uses handleGameMoveClickRef; full dbgame would over-trigger re-renders.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionDisplayOverride, dbgame?.id]);
 
   useEffect(() => {
@@ -1240,6 +1248,8 @@ function GameMove(props) {
         fetchPrivateExploration();
       }
     }
+    // handleGameMoveClick is accessed via handleGameMoveClickRef to avoid re-binding.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     focus,
     explorationFetched,

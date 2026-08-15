@@ -28,6 +28,7 @@ function NotFound(props) {
             values={{ path }}
             components={[
               <code key="code" />,
+              // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans injects anchor text from i18n
               <a
                 key="link"
                 href="https://discord.abstractplay.com"

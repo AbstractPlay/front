@@ -151,16 +151,13 @@ function UserChats(props) {
                             {r.path && handleGameMoveClick && (
                               <span>
                                 {" "}
-                                <a
-                                  href="#"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    handleGameMoveClick(r.path);
-                                  }}
-                                  style={{ textDecoration: "underline" }}
+                                <button
+                                  type="button"
+                                  className="inlineLinkButton"
+                                  onClick={() => handleGameMoveClick(r.path)}
                                 >
                                   {t("gameMove.chats.moveLink")}
-                                </a>
+                                </button>
                               </span>
                             )}
                           </small>

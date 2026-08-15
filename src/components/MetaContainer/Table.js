@@ -537,6 +537,7 @@ function Table({
       expandedPara,
       togglePara,
       addTag,
+      closeChallengeModal,
       t,
     ]
   );
