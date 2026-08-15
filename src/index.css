@@ -1126,7 +1126,8 @@ span.hardTime::after {
     margin: 0.5em;
   }
 
-  .tabs.is-toggle li.is-active a {
+  .tabs.is-toggle li.is-active a,
+  .tabs.is-toggle li.is-active button {
     background: linear-gradient(
         180deg,
         var(--secondary-color-3-lighter) 0%,
@@ -1136,9 +1137,62 @@ span.hardTime::after {
       border-color: var(--secondary-color-3);
   }
 
-  .tabs.is-toggle a:hover {
+  .tabs.is-toggle a:hover,
+  .tabs.is-toggle button:hover {
     background-color: var(--secondary-color-3-bg);
     color: var(--main-font-color);
+  }
+
+  .tabs.is-toggle button {
+    appearance: none;
+    background: transparent;
+    border-color: var(--bulma-tabs-toggle-link-border-color);
+    border-style: var(--bulma-tabs-toggle-link-border-style);
+    border-width: var(--bulma-tabs-toggle-link-border-width);
+    color: inherit;
+    cursor: pointer;
+    display: block;
+    font: inherit;
+    line-height: inherit;
+    margin-bottom: 0;
+    padding: 0.5em 1em;
+    position: relative;
+    text-align: center;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  .tabs.is-toggle li:first-child button {
+    border-start-start-radius: var(--bulma-tabs-toggle-link-radius);
+    border-end-start-radius: var(--bulma-tabs-toggle-link-radius);
+  }
+
+  .tabs.is-toggle li:last-child button {
+    border-start-end-radius: var(--bulma-tabs-toggle-link-radius);
+    border-end-end-radius: var(--bulma-tabs-toggle-link-radius);
+  }
+
+  .tabs.is-toggle.is-toggle-rounded li:first-child button {
+    border-start-start-radius: var(--bulma-radius-rounded);
+    border-end-start-radius: var(--bulma-radius-rounded);
+    padding-inline-start: 1.25em;
+  }
+
+  .tabs.is-toggle.is-toggle-rounded li:last-child button {
+    border-start-end-radius: var(--bulma-radius-rounded);
+    border-end-end-radius: var(--bulma-radius-rounded);
+    padding-inline-end: 1.25em;
+  }
+
+  .inlineLinkButton {
+    appearance: none;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+    text-decoration: underline;
   }
 
   /* Game tables conversion to grid via css */

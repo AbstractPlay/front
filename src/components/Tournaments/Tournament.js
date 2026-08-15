@@ -207,7 +207,7 @@ function Tournament(props) {
       }
     }
     fetchData();
-  }, [tournamentid, metaGame]);
+  }, [tournamentid, metaGame, gameId, gameMetaGame]);
 
   const handleResize = () => {
     screenWidthSetter(window.innerWidth);

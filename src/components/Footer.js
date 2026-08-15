@@ -63,6 +63,7 @@ function Footer(props) {
           <Trans
             i18nKey="footer.feedbackJoin"
             components={[
+              // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans injects anchor text from i18n
               <a
                 key="discord"
                 href="https://discord.gg/7dmx7BwRzg"

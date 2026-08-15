@@ -68,7 +68,7 @@ function Board({
         el.appendChild(svg);
       }
     },
-    [boardImage, boardRenderIndex, rendered, fullSize, colourContext]
+    [boardImage, boardRenderIndex, rendered, fullSize]
   );
 
   const boardStyle = useMemo(() => {

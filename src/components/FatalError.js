@@ -26,6 +26,7 @@ const FatalError = ({ error, inline = false }) => {
           <Trans
             i18nKey="fatalError.genericMessage"
             components={[
+              // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans injects anchor text from i18n
               <a key="link" href="https://discord.abstractplay.com" />,
             ]}
           />

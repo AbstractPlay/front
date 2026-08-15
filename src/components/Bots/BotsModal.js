@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import Modal from "../Modal";
 import Spinner from "../Spinner";
@@ -21,7 +21,7 @@ function truncate(str, max = 40) {
 function BotsModal({ show, onClose }) {
   const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
-  const bots = globalMe?.bots ?? [];
+  const bots = useMemo(() => globalMe?.bots ?? [], [globalMe?.bots]);
 
   const [newName, newNameSetter] = useState("");
   const [newEndpoint, newEndpointSetter] = useState("");

@@ -167,47 +167,49 @@ const MetaItem = React.forwardRef(
         </h1>
         <div className="tabs is-small is-toggle is-toggle-rounded">
           <ul>
-            <li
-              className={activeTab === "summary" ? "is-active" : ""}
-              onClick={() => activeTabSetter("summary")}
-            >
-              <a>{t("meta.tabs.summary")}</a>
+            <li className={activeTab === "summary" ? "is-active" : ""}>
+              <button type="button" onClick={() => activeTabSetter("summary")}>
+                {t("meta.tabs.summary")}
+              </button>
             </li>
-            <li
-              className={activeTab === "challenges" ? "is-active" : ""}
-              onClick={() => activeTabSetter("challenges")}
-            >
-              <a>{t("meta.tabs.challenges")}</a>
+            <li className={activeTab === "challenges" ? "is-active" : ""}>
+              <button
+                type="button"
+                onClick={() => activeTabSetter("challenges")}
+              >
+                {t("meta.tabs.challenges")}
+              </button>
             </li>
-            <li
-              className={activeTab === "games" ? "is-active" : ""}
-              onClick={() => activeTabSetter("games")}
-            >
-              <a>{t("meta.tabs.currentGames")}</a>
+            <li className={activeTab === "games" ? "is-active" : ""}>
+              <button type="button" onClick={() => activeTabSetter("games")}>
+                {t("meta.tabs.currentGames")}
+              </button>
             </li>
-            <li
-              className={activeTab === "completed" ? "is-active" : ""}
-              onClick={() => activeTabSetter("completed")}
-            >
-              <a>{t("meta.tabs.completedGames")}</a>
+            <li className={activeTab === "completed" ? "is-active" : ""}>
+              <button
+                type="button"
+                onClick={() => activeTabSetter("completed")}
+              >
+                {t("meta.tabs.completedGames")}
+              </button>
             </li>
-            <li
-              className={activeTab === "players" ? "is-active" : ""}
-              onClick={() => activeTabSetter("players")}
-            >
-              <a>{t("meta.tabs.players")}</a>
+            <li className={activeTab === "players" ? "is-active" : ""}>
+              <button type="button" onClick={() => activeTabSetter("players")}>
+                {t("meta.tabs.players")}
+              </button>
             </li>
-            <li
-              className={activeTab === "tournaments" ? "is-active" : ""}
-              onClick={() => activeTabSetter("tournaments")}
-            >
-              <a>{t("meta.tabs.tournaments")}</a>
+            <li className={activeTab === "tournaments" ? "is-active" : ""}>
+              <button
+                type="button"
+                onClick={() => activeTabSetter("tournaments")}
+              >
+                {t("meta.tabs.tournaments")}
+              </button>
             </li>
-            <li
-              className={activeTab === "history" ? "is-active" : ""}
-              onClick={() => activeTabSetter("history")}
-            >
-              <a>{t("meta.tabs.historicalData")}</a>
+            <li className={activeTab === "history" ? "is-active" : ""}>
+              <button type="button" onClick={() => activeTabSetter("history")}>
+                {t("meta.tabs.historicalData")}
+              </button>
             </li>
           </ul>
         </div>
