@@ -343,6 +343,12 @@
     "src": "Are you sure you want to resign?",
     "out": "Sei sicuro di volerti arrendere?"
   },
+  "ConfirmDrawOffer": {
+    "src": "Offer draw"
+  },
+  "ConfirmDrawOfferDesc": {
+    "src": "Are you sure you wish to offer a draw?"
+  },
   "ConfirmTimeout": {
     "src": "Out of time",
     "out": "Tempo scaduto"

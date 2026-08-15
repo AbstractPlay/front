@@ -12,6 +12,7 @@ import { GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName, isClientBotTurn } from "../Bots/botUtils";
 import { getPendingSubmitMove } from "../../lib/GameMove/submitMove";
+import Modal from "../Modal";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -100,6 +101,7 @@ function showMilliseconds(ms) {
 
 function MoveEntry(props) {
   const [drawoffer, drawofferSetter] = useState(false);
+  const [showDrawOfferConfirm, showDrawOfferConfirmSetter] = useState(false);
 
   const move = props.move;
   const toMove = props.toMove;
@@ -143,8 +145,21 @@ function MoveEntry(props) {
     return curNode;
   }
 
-  const handleDrawOfferChange = (value) => {
+  const handleDrawOfferChange = (value, { confirmOffer = false } = {}) => {
+    if (value && confirmOffer) {
+      showDrawOfferConfirmSetter(true);
+      return;
+    }
     drawofferSetter(value);
+  };
+
+  const handleDrawOfferConfirmed = () => {
+    showDrawOfferConfirmSetter(false);
+    drawofferSetter(true);
+  };
+
+  const handleCloseDrawOfferConfirm = () => {
+    showDrawOfferConfirmSetter(false);
   };
 
   const handleClear = () => {
@@ -550,8 +565,10 @@ function MoveEntry(props) {
             <label className="checkbox">
               <input
                 type="checkbox"
-                onChange={(e) => handleDrawOfferChange(e.target.checked)}
-                defaultChecked={false}
+                onChange={(e) =>
+                  handleDrawOfferChange(e.target.checked, { confirmOffer: true })
+                }
+                checked={drawoffer}
               />
               {t("IncludeDrawOffer")}
             </label>
@@ -754,6 +771,18 @@ function MoveEntry(props) {
             ""
           )}
         </div>
+        <Modal
+          show={showDrawOfferConfirm}
+          title={t("ConfirmDrawOffer")}
+          buttons={[
+            { label: t("Confirm"), action: handleDrawOfferConfirmed },
+            { label: t("Cancel"), action: handleCloseDrawOfferConfirm },
+          ]}
+        >
+          <div className="content">
+            <p>{t("ConfirmDrawOfferDesc")}</p>
+          </div>
+        </Modal>
       </>
     );
   } else {
