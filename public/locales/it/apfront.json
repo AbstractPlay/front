@@ -919,9 +919,11 @@
   "Statistics": "Statistiche",
   "stats_module_avgRatings": "Punteggi medi",
   "stats_module_gameStats": "Statistiche di gioco",
+  "stats_module_pieStats": "Statistiche sulla regola della torta",
   "stats_module_highestSingle": "Tutti i punteggi individuali",
   "stats_module_numPlays": "Statistiche partite",
   "stats_module_playerStats": "Statistiche giocatori",
+  "stats_module_rivalryStats": "Rivalità",
   "stats_module_topPlayers": "Migliori giocatori",
   "stats_module_siteStats": "Statistiche del sito",
   "stats_module_tourneyStats": "Statistiche tornei",
@@ -1303,7 +1305,9 @@
       "numPlays": "Questa tabella elenca ogni gioco, quante volte è stato giocato, da quanti giocatori unici e l'`h-index` del gioco. L'h-index di un gioco è il numero di giocatori che hanno giocato a quel gioco almeno quel numero di volte (quindi un h-index di 5 significa che 5 giocatori diversi hanno giocato a quel gioco almeno 5 volte). Fornisce anche un istogramma delle partite completate per quel gioco. L'anteprima mostra le ultime 10 settimane, con la settimana più recente a destra. Cliccando sull'anteprima verrà mostrata la cronologia completa delle partite completate, suddivisa in \"intervalli\" di sette giorni, con la settimana più recente a destra.",
       "playerStats": "Questo mostra ogni giocatore registrato insieme al totale delle partite giocate, al conteggio dei giochi unici e al numero di avversari diversi affrontati. Fornisce anche un `h-index`, che rappresenta il numero di giochi a cui hai giocato almeno quel numero di volte (ad es., se hai giocato a tre giochi diversi solo una volta ciascuno, il tuo indice è 1. Non appena avrai giocato a quei tre giochi almeno tre volte *ciascuno*, l'indice salirà a 3). È presente anche un `h-index` per gli avversari che hai affrontato. Viene fornito anche un istogramma dell'attività, che mostra il numero di partite completate ogni settimana, con la settimana più recente a destra. L'anteprima mostra le dieci settimane più recenti. Cliccando su di essa verrà mostrata la cronologia completa.",
       "gameStats": "Questa tabella mostra ogni combinazione di gioco e variante insieme al numero di partite registrate, la lunghezza media della partita (numero di mosse), la lunghezza mediana, la percentuale di vittorie del primo giocatore e la percentuale di patte (solo per partite a due giocatori con più di due mosse). **Le statistiche sulle vittorie del primo giocatore e sulle patte vanno interpretate con cautela!** Il campione è ridotto e distorto. Ci sono molti fattori di confondimento che potrebbero spiegare una percentuale estrema. Nota che la percentuale di vittorie del primo giocatore ignora completamente se sia stata invocata la regola della torta. Le patte vengono calcolate come mezza vittoria per il primo giocatore nel calcolo della sua percentuale di vittorie.",
-      "tourneyStats": "Mostra ciascun giocatore che ha partecipato ai tornei automatizzati e le sue statistiche riassuntive, inclusi il numero di vittorie, il numero di piazzamenti nel primo 50% e il punteggio. Il tuo punteggio è la somma dei punti ricevuti in ciascun torneo. I punti vengono assegnati su una scala da 0 a 100 in base al piazzamento: il primo posto ottiene 100 punti e l'ultimo posto non ne ottiene nessuno."
+      "tourneyStats": "Mostra ciascun giocatore che ha partecipato ai tornei automatizzati e le sue statistiche riassuntive, inclusi il numero di vittorie, il numero di piazzamenti nel primo 50% e il punteggio. Il tuo punteggio è la somma dei punti ricevuti in ciascun torneo. I punti vengono assegnati su una scala da 0 a 100 in base al piazzamento: il primo posto ottiene 100 punti e l'ultimo posto non ne ottiene nessuno.",
+      "pieStats": "Partite che supportano la regola della torta, mostrando la frequenza con cui è stata invocata.",
+      "rivalryStats": "Coppie di giocatori con almeno cinquanta partite insieme, ordinate per partite giocate. Le coppie sono anonimizzate finché i giocatori non scelgono di mostrare il proprio nome."
     },
     "siteStats": {
       "weekBuckets": "Le partite sono conteggiate in blocchi di sette giorni. La barra più a sinistra è la prima settimana in cui sono state registrate partite completate. La barra più a destra è la settimana più recente (o frazione di essa).",
@@ -1395,7 +1399,11 @@
       }
     },
     "loadingSummary": "Caricamento statistiche…",
-    "summaryLoadError": "Impossibile caricare le statistiche. Puoi riprovare più tardi o scaricare i dati grezzi."
+    "summaryLoadError": "Impossibile caricare le statistiche. Puoi riprovare più tardi o scaricare i dati grezzi.",
+    "link": {
+      "copy": "Copia link a questa sezione",
+      "copied": "Copiato!"
+    }
   },
   "players": {
     "filters": {

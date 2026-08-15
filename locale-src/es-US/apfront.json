@@ -311,6 +311,12 @@
     "src": "This will delete the current (explored) move and it's subtree. Are you sure you want to delete the subtree?",
     "out": "Esto eliminará el movimiento actual (explorado) y su subárbol. ¿Estás seguro de que deseas eliminar el subárbol?"
   },
+  "ConfirmDrawOffer": {
+    "src": "Offer draw"
+  },
+  "ConfirmDrawOfferDesc": {
+    "src": "Are you sure you wish to offer a draw?"
+  },
   "ConfirmMove": {
     "src": "Confirm move submission",
     "out": "Confirmar envío de movimiento"
@@ -342,12 +348,6 @@
   "ConfirmResignDesc": {
     "src": "Are you sure you want to resign?",
     "out": "¿Estás seguro de que deseas rendirte?"
-  },
-  "ConfirmDrawOffer": {
-    "src": "Offer draw"
-  },
-  "ConfirmDrawOfferDesc": {
-    "src": "Are you sure you wish to offer a draw?"
   },
   "ConfirmTimeout": {
     "src": "Out of time",
@@ -4513,12 +4513,6 @@
     "src": "Download all summary stats",
     "out": "Descargar todas las estadísticas resumidas"
   },
-  "stats.loadingSummary": {
-    "src": "Loading statistics…"
-  },
-  "stats.summaryLoadError": {
-    "src": "Statistics could not be loaded. You can try again later or download the raw data."
-  },
   "stats.explanations.avgRatings": {
     "src": "The average rating is just that: a straight average of all the Elo ratings recorded for that player. The weighted average is weighted by number of games played. For example, if you had a rating of 1300 in a game you played 10 times and 1200 in a game you only played twice, your average rating would be 1250, but your weighted average would be 1283.",
     "out": "La calificación promedio es solo eso: un promedio directo de todas las calificaciones Elo registradas para ese jugador. El promedio ponderado se pondera según la cantidad de partidas jugadas. Por ejemplo, si tuviste una calificación de 1300 en un juego que jugaste 10 veces y de 1200 en un juego que solo jugaste dos veces, tu calificación promedio sería 1250, pero tu promedio ponderado sería 1283."
@@ -4535,9 +4529,17 @@
     "src": "This table lists each game, how many times it was played, by how many unique players, and the game's `h-index`. A game's h-index is the number of players who have played that game at least that many times (so an h-index of 5 means that 5 different players have played that game at least 5 times). It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day \"buckets,\" with the most recent week on the right.",
     "out": "Esta tabla enumera cada juego, cuántas veces se jugó, por cuántos jugadores únicos y el `índice h` del juego. El índice h de un juego es el número de jugadores que han jugado a ese juego al menos ese número de veces (por lo que un índice h de 5 significa que 5 jugadores diferentes han jugado a ese juego al menos 5 veces). También proporciona un histograma de partidas completadas para ese juego. La vista previa muestra las últimas 10 semanas, con la semana más reciente a la derecha. Al hacer clic en la vista previa se mostrará el historial completo de partidas completadas, en \"bloques\" de siete días, con la semana más reciente a la derecha."
   },
+  "stats.explanations.pieStats": {
+    "src": "Games that support the pie rule, showing how often the pie was invoked.",
+    "out": "Partidas que admiten la regla del pastel, mostrando con qué frecuencia se invocó."
+  },
   "stats.explanations.playerStats": {
     "src": "This shows each recorded player along with their total games played, a count of unique games, and the number of different opponents they played. It also provides an `h-index`, which represents the number of games you've played at least that many times (e.g., if you've played three different games only one time each, then your index is 1. As soon as you've played those three games at least three times *each*, the index will increase to 3). There's also an `h-index` for opponents you have faced. An activity histogram is also provided, showing the number of games completed each week, with the most recent week on the right. The preview shows the most recent ten weeks. Clicking on it will show you the full history.",
     "out": "Muestra cada jugador registrado junto con el total de sus partidas jugadas, un recuento de juegos únicos y la cantidad de oponentes diferentes contra los que jugó. También proporciona un `índice h`, que representa la cantidad de juegos a los que has jugado al menos esa cantidad de veces (por ejemplo, si has jugado tres juegos diferentes solo una vez cada uno, tu índice es 1. Tan pronto como hayas jugado a esos tres juegos al menos tres veces *cada uno*, el índice aumentará a 3). También hay un `índice h` para los oponentes a los que te has enfrentado. Se incluye un histograma de actividad que muestra el número de partidas completadas cada semana, con la semana más reciente a la derecha. La vista previa muestra las diez semanas más recientes. Al hacer clic en ella, se mostrará el historial completo."
+  },
+  "stats.explanations.rivalryStats": {
+    "src": "Two-player pairings with at least fifty games together, ordered by games played. Pairs are anonymized until players opt in to be named.",
+    "out": "Emparejamientos de dos jugadores con al menos cincuenta partidas jugadas entre sí, ordenados por partidas jugadas. Las parejas se mantienen en el anonimato hasta que los jugadores elijan mostrar sus nombres."
   },
   "stats.explanations.topPlayers": {
     "src": "This table lists each available game and variant combination along with the player with the highest Elo rating for that combination.",
@@ -4558,6 +4560,17 @@
   "stats.histogramFor": {
     "src": "Histogram for {{name}}",
     "out": "Histograma de {{name}}"
+  },
+  "stats.link.copied": {
+    "src": "Copied!",
+    "out": "¡Copiado!"
+  },
+  "stats.link.copy": {
+    "src": "Copy link to this section",
+    "out": "Copiar enlace a esta sección"
+  },
+  "stats.loadingSummary": {
+    "src": "Loading statistics…"
   },
   "stats.playerStats.publicRivalriesOptIn": {
     "src": "Show my name in the public rivalries table (both players must opt in)",
@@ -4819,6 +4832,9 @@
     "src": "Week #",
     "out": "Semana n.º"
   },
+  "stats.summaryLoadError": {
+    "src": "Statistics could not be loaded. You can try again later or download the raw data."
+  },
   "stats.table.filter": {
     "src": "Filter",
     "out": "Filtrar"
@@ -4891,9 +4907,17 @@
     "src": "Play statistics",
     "out": "Estadísticas de partidas"
   },
+  "stats_module_pieStats": {
+    "src": "Pie rule statistics",
+    "out": "Estadísticas de la regla del pastel"
+  },
   "stats_module_playerStats": {
     "src": "Player statistics",
     "out": "Estadísticas de jugadores"
+  },
+  "stats_module_rivalryStats": {
+    "src": "Rivalries",
+    "out": "Rivalidades"
   },
   "stats_module_siteStats": {
     "src": "Site statistics",

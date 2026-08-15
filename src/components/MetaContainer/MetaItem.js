@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useTranslation } from "react-i18next";
@@ -19,18 +19,60 @@ import GameVariants from "../GameVariants";
 import Thumbnail from "../Thumbnail";
 import RepresentativeGames from "./RepresentativeGames";
 import { useStore } from "../../stores";
+import {
+  DEFAULT_META_TAB,
+  META_TABS,
+  metaTabFromHash,
+  metaTabHash,
+} from "../../lib/metaItemTabs";
 
 const MetaItem = React.forwardRef(
   (
-    { toggleStar, game, counts, hideDetails, highlight, handleChallenge },
+    {
+      toggleStar,
+      game,
+      counts,
+      hideDetails,
+      highlight,
+      handleChallenge,
+      syncTabToUrl = false,
+    },
     ref
   ) => {
     const globalMe = useStore((state) => state.globalMe);
     const allUsers = useStore((state) => state.users);
+    const location = useLocation();
+    const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
-    const [activeTab, activeTabSetter] = useState("summary");
+    const [localTab, localTabSetter] = useState(DEFAULT_META_TAB);
     const { t } = useTranslation();
+
+    const activeTab = syncTabToUrl
+      ? metaTabFromHash(location.hash)
+      : localTab;
+
+    const handleTabChange = useCallback(
+      (tabId) => {
+        if (syncTabToUrl) {
+          navigate({
+            pathname: `/games/${game.uid}`,
+            hash: metaTabHash(tabId),
+          });
+        } else {
+          localTabSetter(tabId);
+        }
+      },
+      [syncTabToUrl, navigate, game.uid]
+    );
+
+    const tabHref = useCallback(
+      (tabId) => {
+        const hash = metaTabHash(tabId);
+        return hash ? `/games/${game.uid}#${hash}` : `/games/${game.uid}`;
+      },
+      [game.uid]
+    );
 
     let gameEngine;
     if (game.playercounts.length > 1) {
@@ -167,50 +209,31 @@ const MetaItem = React.forwardRef(
         </h1>
         <div className="tabs is-small is-toggle is-toggle-rounded">
           <ul>
-            <li className={activeTab === "summary" ? "is-active" : ""}>
-              <button type="button" onClick={() => activeTabSetter("summary")}>
-                {t("meta.tabs.summary")}
-              </button>
-            </li>
-            <li className={activeTab === "challenges" ? "is-active" : ""}>
-              <button
-                type="button"
-                onClick={() => activeTabSetter("challenges")}
+            {META_TABS.map((tab) => (
+              <li
+                key={tab.id}
+                className={activeTab === tab.id ? "is-active" : ""}
               >
-                {t("meta.tabs.challenges")}
-              </button>
-            </li>
-            <li className={activeTab === "games" ? "is-active" : ""}>
-              <button type="button" onClick={() => activeTabSetter("games")}>
-                {t("meta.tabs.currentGames")}
-              </button>
-            </li>
-            <li className={activeTab === "completed" ? "is-active" : ""}>
-              <button
-                type="button"
-                onClick={() => activeTabSetter("completed")}
-              >
-                {t("meta.tabs.completedGames")}
-              </button>
-            </li>
-            <li className={activeTab === "players" ? "is-active" : ""}>
-              <button type="button" onClick={() => activeTabSetter("players")}>
-                {t("meta.tabs.players")}
-              </button>
-            </li>
-            <li className={activeTab === "tournaments" ? "is-active" : ""}>
-              <button
-                type="button"
-                onClick={() => activeTabSetter("tournaments")}
-              >
-                {t("meta.tabs.tournaments")}
-              </button>
-            </li>
-            <li className={activeTab === "history" ? "is-active" : ""}>
-              <button type="button" onClick={() => activeTabSetter("history")}>
-                {t("meta.tabs.historicalData")}
-              </button>
-            </li>
+                {syncTabToUrl ? (
+                  <a
+                    href={tabHref(tab.id)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleTabChange(tab.id);
+                    }}
+                  >
+                    {t(tab.nameKey)}
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => handleTabChange(tab.id)}
+                  >
+                    {t(tab.nameKey)}
+                  </button>
+                )}
+              </li>
+            ))}
           </ul>
         </div>
         <div className="columns is-mobile">

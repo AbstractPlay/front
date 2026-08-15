@@ -1524,6 +1524,19 @@ span.hardTime::after {
 
   #leaderboard .stats-module {
     height: 100%;
+    scroll-margin-top: 3.5rem;
+  }
+
+  #leaderboard .stats-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  #leaderboard .stats-section-heading .subtitle {
+    margin-bottom: 0;
+    flex: 1 1 auto;
   }
 
   #leaderboard .stats-module-explanation {
