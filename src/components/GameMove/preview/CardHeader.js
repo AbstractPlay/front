@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { formatParenthetical } from "../../../lib/GameMove/gameMoveLayoutHelpers";
 import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
 
@@ -38,7 +39,7 @@ function CardHeader({
           </h1>
           {parenthetical.length > 0 ? (
             <p className="game-move-queue-card__meta">
-              {parenthetical.join(", ")}
+              {formatParenthetical(parenthetical)}
             </p>
           ) : null}
           {lastMoveLine ? (

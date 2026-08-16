@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../../stores";
-import { getLayoutContext } from "../../../lib/GameMove/gameMoveLayoutHelpers";
+import {
+  getLayoutContext,
+  formatParenthetical,
+  buildMiscButtonsProps,
+} from "../../../lib/GameMove/gameMoveLayoutHelpers";
 import GameMoveHelmetTour from "./GameMoveHelmetTour";
 import GameMoveLayoutError from "./GameMoveLayoutError";
 import GameMoveLayoutModals from "./GameMoveLayoutModals";
@@ -17,7 +21,6 @@ import {
 import PlayerColourChip from "../preview/PlayerColourChip";
 import QueueNavButtons from "../preview/QueueNavButtons";
 import DockMiscButtons from "../preview/DockMiscButtons";
-import { buildMiscButtonsProps } from "../../../lib/GameMove/gameMoveLayoutHelpers";
 
 export default function GameMoveNarrativeLayout({ session }) {
   const { t } = useTranslation();
@@ -44,7 +47,7 @@ export default function GameMoveNarrativeLayout({ session }) {
             <h1 className="title is-5">{gameName}</h1>
             {parenthetical.length > 0 ? (
               <p className="game-move-narrative-header__meta">
-                {parenthetical.join(", ")}
+                {formatParenthetical(parenthetical)}
               </p>
             ) : null}
             {myColourLabel ? (
