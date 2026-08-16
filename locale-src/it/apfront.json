@@ -3947,6 +3947,178 @@
     "src": "exploration disabled",
     "out": "esplorazione disabilitata"
   },
+  "gameMove.layout.backToClassic": {
+    "src": "Back to classic layout",
+    "out": "Torna al layout classico"
+  },
+  "gameMove.layout.bannerAria": {
+    "src": "Try the new play layout",
+    "out": "Prova il nuovo layout di gioco"
+  },
+  "gameMove.layout.bannerBody": {
+    "src": "Help us test a redesigned game page built for faster queue play. Your current layout stays available anytime.",
+    "out": "Aiutaci a testare una pagina di gioco riprogettata per giocare più velocemente in coda. Il tuo layout attuale rimarrà sempre disponibile."
+  },
+  "gameMove.layout.bannerDismiss": {
+    "src": "Dismiss",
+    "out": "Chiudi"
+  },
+  "gameMove.layout.bannerTitle": {
+    "src": "New play layouts are in preview",
+    "out": "I nuovi layout di gioco sono in anteprima"
+  },
+  "gameMove.layout.bannerTry": {
+    "src": "Try the preview",
+    "out": "Prova l'anteprima"
+  },
+  "gameMove.layout.betaBadge": {
+    "src": "Beta layout",
+    "out": "Layout Beta"
+  },
+  "gameMove.layout.cardDescription": {
+    "src": "Single inbox card optimized for playing through your queue",
+    "out": "Singola scheda ottimizzata per scorrere la tua coda di partite"
+  },
+  "gameMove.layout.cardName": {
+    "src": "Queue card",
+    "out": "Scheda coda"
+  },
+  "gameMove.layout.classicName": {
+    "src": "Classic",
+    "out": "Classico"
+  },
+  "gameMove.layout.dockCollapse": {
+    "src": "Fewer options",
+    "out": "Meno opzioni"
+  },
+  "gameMove.layout.dockExpand": {
+    "src": "More options",
+    "out": "Più opzioni"
+  },
+  "gameMove.layout.eventLog": {
+    "src": "Event log",
+    "out": "Registro eventi"
+  },
+  "gameMove.layout.feedbackAria": {
+    "src": "Layout experiment feedback",
+    "out": "Feedback sull'esperimento di layout"
+  },
+  "gameMove.layout.feedbackCollapse": {
+    "src": "Hide layout feedback",
+    "out": "Nascondi feedback sul layout"
+  },
+  "gameMove.layout.feedbackCommentLabel": {
+    "src": "Comments",
+    "out": "Commenti"
+  },
+  "gameMove.layout.feedbackCommentPlaceholder": {
+    "src": "Optional feedback (one line)",
+    "out": "Feedback opzionale (una sola riga)"
+  },
+  "gameMove.layout.feedbackCommentTooLong": {
+    "src": "Comment must be {{max}} characters or fewer.",
+    "out": "Il commento deve contenere al massimo {{max}} caratteri."
+  },
+  "gameMove.layout.feedbackDown": {
+    "src": "Dislike this layout",
+    "out": "Non mi piace questo layout"
+  },
+  "gameMove.layout.feedbackExpand": {
+    "src": "Show layout feedback",
+    "out": "Mostra feedback sul layout"
+  },
+  "gameMove.layout.feedbackNotePosted": {
+    "src": "Thanks — your note was sent.",
+    "out": "Grazie — la tua nota è stata inviata."
+  },
+  "gameMove.layout.feedbackPost": {
+    "src": "Post",
+    "out": "Invia"
+  },
+  "gameMove.layout.feedbackPrompt": {
+    "src": "How is this layout?",
+    "out": "Cosa ne pensi di questo layout?"
+  },
+  "gameMove.layout.feedbackThanks": {
+    "src": "Thanks for the feedback!",
+    "out": "Grazie per il feedback!"
+  },
+  "gameMove.layout.feedbackUp": {
+    "src": "Like this layout",
+    "out": "Mi piace questo layout"
+  },
+  "gameMove.layout.fullHistory": {
+    "src": "Full move history",
+    "out": "Cronologia completa delle mosse"
+  },
+  "gameMove.layout.hideEventLog": {
+    "src": "Hide event log",
+    "out": "Nascondi registro eventi"
+  },
+  "gameMove.layout.hideMoves": {
+    "src": "Hide move list",
+    "out": "Nascondi elenco mosse"
+  },
+  "gameMove.layout.lastMove": {
+    "src": "Last move: {{move}}",
+    "out": "Ultima mossa: {{move}}"
+  },
+  "gameMove.layout.lastMoveBy": {
+    "src": "{{player}} played {{move}}",
+    "out": "{{player}} ha giocato {{move}}"
+  },
+  "gameMove.layout.moreActions": {
+    "src": "More",
+    "out": "Altro"
+  },
+  "gameMove.layout.movePly": {
+    "src": "Move {{n}}",
+    "out": "Mossa {{n}}"
+  },
+  "gameMove.layout.narrativeDescription": {
+    "src": "Story column with board beside you",
+    "out": "Colonna della cronologia con tavoliere a fianco"
+  },
+  "gameMove.layout.narrativeName": {
+    "src": "Narrative",
+    "out": "Narrativo"
+  },
+  "gameMove.layout.queueWaiting": {
+    "src": "{{count}} more in queue",
+    "out": "Ancora {{count}} in coda"
+  },
+  "gameMove.layout.recentMoves": {
+    "src": "Recent moves",
+    "out": "Mosse recenti"
+  },
+  "gameMove.layout.showEventLog": {
+    "src": "Show event log",
+    "out": "Mostra registro eventi"
+  },
+  "gameMove.layout.showMoves": {
+    "src": "Show move list",
+    "out": "Mostra elenco mosse"
+  },
+  "gameMove.layout.stripDescription": {
+    "src": "Board hero with sticky action dock and tabbed drawer",
+    "out": "Tavoliere in evidenza con dock azioni fisso e pannello a schede"
+  },
+  "gameMove.layout.stripName": {
+    "src": "Strip and dock",
+    "out": "Striscia e dock"
+  },
+  "gameMove.layout.switchLayout": {
+    "src": "Layout",
+    "out": "Layout"
+  },
+  "gameMove.layout.switcherAria": {
+    "src": "Choose play page layout",
+    "out": "Scegli il layout della pagina di gioco"
+  },
+  "gameMove.layout.youAreColour": {
+    "src": "You are player {{colour}}",
+    "out": "Sei il giocatore {{colour}}"
+  },
   "gameMove.tournamentLink": {
     "src": "tournament",
     "out": "torneo"

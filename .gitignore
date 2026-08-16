@@ -32,3 +32,5 @@ public/locales/*/apgames.json
 public/locales/*/apresults.json
 src/locales/en/
 
+.cursor/
+!.cursor/rules/

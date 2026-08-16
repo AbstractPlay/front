@@ -1,0 +1,63 @@
+---
+description: Verify new HTML/CSS is legible in both light and dark modes
+alwaysApply: true
+---
+
+# Light and dark mode contrast
+
+The site theme is controlled by `color-mode` on `:root` (`light` | `dark`), not by `prefers-color-scheme` alone. New UI must be legible in **both** modes before the task is done.
+
+## Use AP theme tokens
+
+Prefer tokens from `src/index.css` that switch with `color-mode`:
+
+- Backgrounds: `--main-bg-color`, `--secondary-color-3-bg`, `--tag-background-color`
+- Text: `--main-font-color`, `--secondary-font-color`, `--main-heading-color`
+- Accents / buttons: `--secondary-color-3`, `--secondary-color-3-lighter`, `--secondary-color-1`
+- Shadows / borders: `--tag-background-color`, `--dropshadow-target-start`
+
+```css
+/* ❌ BAD — hardcoded or Bulma scheme vars */
+.panel { background: white; color: #333; }
+.widget { background: var(--bulma-scheme-main); }
+
+/* ✅ GOOD — AP tokens follow color-mode */
+.panel {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+}
+```
+
+## Avoid Bulma scheme for themed surfaces
+
+Bulma `--bulma-scheme-*` follows `prefers-color-scheme`, which can disagree with `color-mode`. Do not use Bulma scheme variables for backgrounds, text, or borders on custom UI. Use AP tokens or existing helpers (`.apButton`, `.apButtonNeutral`, `.table`).
+
+## Button and hover states
+
+Define **both** default and `:hover` / `:focus-visible` colors. Do not rely on global rules that set `--high-contrast-font-color` (white in light mode) without a contrasting background.
+
+```css
+/* ✅ GOOD */
+.btn-neutral {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+}
+.btn-neutral:hover,
+.btn-neutral:focus-visible {
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
+}
+```
+
+## React / inline styles
+
+Avoid fixed hex colors for text or backgrounds in JSX unless they are board/game colours. Use `className` + CSS variables instead.
+
+## Before finishing UI work
+
+1. Mentally check (or describe checking) the change in **light** and **dark** mode.
+2. Confirm text, borders, icons, and disabled/hover/selected states are readable on their backgrounds.
+3. Confirm layered elements (headings with `.lined`, sticky docks, fixed panels) use matching background tokens so boxes do not “float” in the wrong colour.
+
+If you cannot verify in a browser, say so and call out what should be checked manually.

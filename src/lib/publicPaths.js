@@ -12,7 +12,7 @@ export function isAnonymousFriendlyPath(pathname = window.location.pathname) {
   if (pathname === "/explore" || pathname.startsWith("/explore/")) {
     return true;
   }
-  if (pathname.startsWith("/move/")) {
+  if (pathname.startsWith("/move/") || pathname.startsWith("/move-beta/")) {
     return true;
   }
   return false;
