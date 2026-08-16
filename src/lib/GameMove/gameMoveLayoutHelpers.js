@@ -21,6 +21,14 @@ export function hasStatusContent(session) {
   return true;
 }
 
+/** Render parenthetical meta (tournament link, unrated, etc.) without stringifying React nodes. */
+export function formatParenthetical(parenthetical) {
+  if (!parenthetical?.length) {
+    return null;
+  }
+  return parenthetical.reduce((prev, curr) => [prev, ", ", curr]);
+}
+
 export function buildBoardProps(session) {
   const {
     metaGame,
