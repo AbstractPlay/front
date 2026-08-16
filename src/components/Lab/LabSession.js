@@ -379,14 +379,14 @@ function LabSession({
       globalMe,
       effectiveColourContext
     );
-    // globalMe object identity changes often; globalMe?.settings is the meaningful dep.
+    // settings is read only for the null guard but is output of processNewSettings — listing
+    // it as a dep causes an infinite update loop. globalMe?.settings is the meaningful dep.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     effectiveColourContext,
     gameSettings,
     labBoardSettings,
     globalMe?.settings,
-    settings,
   ]);
 
   const handleGameMoveClick = (foc) => {
