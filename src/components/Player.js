@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
@@ -38,7 +38,11 @@ import { formatUserDisplayName } from "./Bots/botUtils";
 import {
   PROFILE_TABS,
   MODULE_NAME_KEYS,
+  DEFAULT_PROFILE_TAB,
+  isValidProfileTab,
   isModuleVisible,
+  playerTabOverrideFromHash,
+  playerTabHash,
   sortModulesForTab,
 } from "../lib/playerProfileSections";
 
@@ -65,6 +69,8 @@ const code2component = {
 
 function Player() {
   const { userid } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
   const summary = useStore((state) => state.summary);
@@ -74,9 +80,9 @@ function Player() {
   const [responses, responsesSetter] = useState([]);
   const [isCoder, setIsCoder] = useState(false);
   const [isDesigner, setIsDesigner] = useState(false);
-  const [activeTab, activeTabSetter] = useStorageState(
+  const [storedTab, setStoredTab] = useStorageState(
     "player-profile-tab",
-    "competition"
+    DEFAULT_PROFILE_TAB
   );
   const [pinnedModule, pinnedModuleSetter] = useStorageState(
     "player-profile-pin",
@@ -84,6 +90,36 @@ function Player() {
   );
 
   const { t } = useTranslation();
+
+  const hashTabOverride = playerTabOverrideFromHash(location.hash);
+  const activeTab =
+    hashTabOverride !== null
+      ? hashTabOverride
+      : isValidProfileTab(storedTab)
+        ? storedTab
+        : DEFAULT_PROFILE_TAB;
+
+  useEffect(() => {
+    if (hashTabOverride !== null) {
+      setStoredTab(hashTabOverride);
+    }
+  }, [hashTabOverride, setStoredTab]);
+
+  const handleTabChange = useCallback(
+    (tabId) => {
+      setStoredTab(tabId);
+      navigate({
+        pathname: `/player/${userid}`,
+        hash: playerTabHash(tabId),
+      });
+    },
+    [navigate, setStoredTab, userid]
+  );
+
+  const tabHref = useCallback(
+    (tabId) => `/player/${userid}#${playerTabHash(tabId)}`,
+    [userid]
+  );
 
   const visibilityCtx = useMemo(
     () => ({
@@ -285,10 +321,10 @@ function Player() {
                                 }
                               >
                                 <a
-                                  href={`#${tab.id}`}
+                                  href={tabHref(tab.id)}
                                   onClick={(e) => {
                                     e.preventDefault();
-                                    activeTabSetter(tab.id);
+                                    handleTabChange(tab.id);
                                   }}
                                 >
                                   {t(tab.nameKey)}
