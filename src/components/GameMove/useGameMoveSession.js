@@ -5,7 +5,7 @@ import {
   useCallback,
   useMemo,
 } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render } from "@abstractplay/renderer";
 import { cloneDeep } from "lodash";
