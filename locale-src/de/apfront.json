@@ -3947,6 +3947,178 @@
     "src": "exploration disabled",
     "out": "Erkundung deaktiviert"
   },
+  "gameMove.layout.backToClassic": {
+    "src": "Back to classic layout",
+    "out": "Zurück zum klassischen Layout"
+  },
+  "gameMove.layout.bannerAria": {
+    "src": "Try the new play layout",
+    "out": "Neues Spiel-Layout ausprobieren"
+  },
+  "gameMove.layout.bannerBody": {
+    "src": "Help us test a redesigned game page built for faster queue play. Your current layout stays available anytime.",
+    "out": "Hilf uns beim Testen einer neugestalteten Spielseite, die für schnelleres Spielen in der Warteschlange entwickelt wurde. Dein aktuelles Layout bleibt jederzeit verfügbar."
+  },
+  "gameMove.layout.bannerDismiss": {
+    "src": "Dismiss",
+    "out": "Schließen"
+  },
+  "gameMove.layout.bannerTitle": {
+    "src": "New play layouts are in preview",
+    "out": "Neue Spiel-Layouts befinden sich in der Vorschau"
+  },
+  "gameMove.layout.bannerTry": {
+    "src": "Try the preview",
+    "out": "Vorschau ausprobieren"
+  },
+  "gameMove.layout.betaBadge": {
+    "src": "Beta layout",
+    "out": "Beta-Layout"
+  },
+  "gameMove.layout.cardDescription": {
+    "src": "Single inbox card optimized for playing through your queue",
+    "out": "Einzelne Karte, optimiert für das Abarbeiten deiner Warteschlange"
+  },
+  "gameMove.layout.cardName": {
+    "src": "Queue card",
+    "out": "Warteschlangen-Karte"
+  },
+  "gameMove.layout.classicName": {
+    "src": "Classic",
+    "out": "Klassisch"
+  },
+  "gameMove.layout.dockCollapse": {
+    "src": "Fewer options",
+    "out": "Weniger Optionen"
+  },
+  "gameMove.layout.dockExpand": {
+    "src": "More options",
+    "out": "Mehr Optionen"
+  },
+  "gameMove.layout.eventLog": {
+    "src": "Event log",
+    "out": "Ereignisprotokoll"
+  },
+  "gameMove.layout.feedbackAria": {
+    "src": "Layout experiment feedback",
+    "out": "Feedback zum Layout-Experiment"
+  },
+  "gameMove.layout.feedbackCollapse": {
+    "src": "Hide layout feedback",
+    "out": "Layout-Feedback ausblenden"
+  },
+  "gameMove.layout.feedbackCommentLabel": {
+    "src": "Comments",
+    "out": "Kommentare"
+  },
+  "gameMove.layout.feedbackCommentPlaceholder": {
+    "src": "Optional feedback (one line)",
+    "out": "Optionales Feedback (eine Zeile)"
+  },
+  "gameMove.layout.feedbackCommentTooLong": {
+    "src": "Comment must be {{max}} characters or fewer.",
+    "out": "Kommentar darf maximal {{max}} Zeichen lang sein."
+  },
+  "gameMove.layout.feedbackDown": {
+    "src": "Dislike this layout",
+    "out": "Layout gefällt mir nicht"
+  },
+  "gameMove.layout.feedbackExpand": {
+    "src": "Show layout feedback",
+    "out": "Layout-Feedback anzeigen"
+  },
+  "gameMove.layout.feedbackNotePosted": {
+    "src": "Thanks — your note was sent.",
+    "out": "Vielen Dank – deine Anmerkung wurde gesendet."
+  },
+  "gameMove.layout.feedbackPost": {
+    "src": "Post",
+    "out": "Absenden"
+  },
+  "gameMove.layout.feedbackPrompt": {
+    "src": "How is this layout?",
+    "out": "Wie gefällt dir dieses Layout?"
+  },
+  "gameMove.layout.feedbackThanks": {
+    "src": "Thanks for the feedback!",
+    "out": "Vielen Dank für das Feedback!"
+  },
+  "gameMove.layout.feedbackUp": {
+    "src": "Like this layout",
+    "out": "Layout gefällt mir"
+  },
+  "gameMove.layout.fullHistory": {
+    "src": "Full move history",
+    "out": "Vollständiger Zugverlauf"
+  },
+  "gameMove.layout.hideEventLog": {
+    "src": "Hide event log",
+    "out": "Ereignisprotokoll ausblenden"
+  },
+  "gameMove.layout.hideMoves": {
+    "src": "Hide move list",
+    "out": "Zugliste ausblenden"
+  },
+  "gameMove.layout.lastMove": {
+    "src": "Last move: {{move}}",
+    "out": "Letzter Zug: {{move}}"
+  },
+  "gameMove.layout.lastMoveBy": {
+    "src": "{{player}} played {{move}}",
+    "out": "{{player}} spielte {{move}}"
+  },
+  "gameMove.layout.moreActions": {
+    "src": "More",
+    "out": "Mehr"
+  },
+  "gameMove.layout.movePly": {
+    "src": "Move {{n}}",
+    "out": "Zug {{n}}"
+  },
+  "gameMove.layout.narrativeDescription": {
+    "src": "Story column with board beside you",
+    "out": "Verlaufsspalte mit Spielfeld an der Seite"
+  },
+  "gameMove.layout.narrativeName": {
+    "src": "Narrative",
+    "out": "Narrativ"
+  },
+  "gameMove.layout.queueWaiting": {
+    "src": "{{count}} more in queue",
+    "out": "Noch {{count}} in der Warteschlange"
+  },
+  "gameMove.layout.recentMoves": {
+    "src": "Recent moves",
+    "out": "Letzte Züge"
+  },
+  "gameMove.layout.showEventLog": {
+    "src": "Show event log",
+    "out": "Ereignisprotokoll anzeigen"
+  },
+  "gameMove.layout.showMoves": {
+    "src": "Show move list",
+    "out": "Zugliste anzeigen"
+  },
+  "gameMove.layout.stripDescription": {
+    "src": "Board hero with sticky action dock and tabbed drawer",
+    "out": "Spielfeld im Fokus mit fixiertem Aktions-Dock und Tab-Menü"
+  },
+  "gameMove.layout.stripName": {
+    "src": "Strip and dock",
+    "out": "Leiste und Dock"
+  },
+  "gameMove.layout.switchLayout": {
+    "src": "Layout",
+    "out": "Layout"
+  },
+  "gameMove.layout.switcherAria": {
+    "src": "Choose play page layout",
+    "out": "Spielseiten-Layout auswählen"
+  },
+  "gameMove.layout.youAreColour": {
+    "src": "You are player {{colour}}",
+    "out": "Du spielst {{colour}}"
+  },
   "gameMove.tournamentLink": {
     "src": "tournament",
     "out": "Turnier"

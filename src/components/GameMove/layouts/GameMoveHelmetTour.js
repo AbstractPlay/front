@@ -1,0 +1,75 @@
+import { Helmet } from "react-helmet-async";
+import Joyride from "react-joyride";
+import { gameinfo } from "@abstractplay/gameslib";
+
+export default function GameMoveHelmetTour({ session }) {
+  const {
+    metaGame,
+    gameID,
+    tourState,
+    startTour,
+    showTour,
+    showTourSetter,
+    startTourSetter,
+    handleJoyrideCallback,
+    t,
+  } = session;
+
+  return (
+    <>
+      <Helmet>
+        <meta
+          property="og:title"
+          content={`${gameinfo.get(metaGame).name}: Game ${gameID}`}
+        />
+        <meta
+          property="og:url"
+          content={`https://play.abstractplay.com/move/${metaGame}/0/${gameID}`}
+        />
+        <meta
+          property="og:description"
+          content={`${gameinfo.get(metaGame).name} game ${gameID}`}
+        />
+      </Helmet>
+      <Joyride
+        steps={tourState}
+        run={startTour}
+        callback={handleJoyrideCallback}
+        continuous
+        showProgress
+        showSkipButton
+        styles={{
+          options: {
+            primaryColor: "#008ca8",
+          },
+        }}
+      />
+      {!showTour ? null : (
+        <div className="has-text-centered">
+          <div className="field">
+            <div className="control">
+              <button
+                className="button apButton"
+                onClick={() => startTourSetter(true)}
+              >
+                {t("tour.general.Take")}
+              </button>
+            </div>
+            <div className="control">
+              <label className="checkbox">
+                <input
+                  type="checkbox"
+                  onClick={() => {
+                    showTourSetter(false);
+                    startTourSetter(false);
+                  }}
+                />
+                {t("tour.general.Ignore")}
+              </label>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
