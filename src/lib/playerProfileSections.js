@@ -21,6 +21,27 @@ export const PROFILE_TABS = [
   },
 ];
 
+export const DEFAULT_PROFILE_TAB = "competition";
+
+export const PROFILE_TAB_IDS = PROFILE_TABS.map((tab) => tab.id);
+
+export function isValidProfileTab(tab) {
+  return PROFILE_TAB_IDS.includes(tab);
+}
+
+/** Tab id from URL hash when present and valid; otherwise `null` (use stored tab). */
+export function playerTabOverrideFromHash(hash) {
+  if (!hash || hash === "#") {
+    return null;
+  }
+  const tab = hash.startsWith("#") ? hash.slice(1) : hash;
+  return isValidProfileTab(tab) ? tab : null;
+}
+
+export function playerTabHash(tabId) {
+  return tabId;
+}
+
 export const MODULE_NAME_KEYS = {
   stars: "player.modules.stars",
   coded: "player.modules.coded",
