@@ -89,13 +89,13 @@ export function GameMoveMovesSection({ session, title }) {
 }
 
 export function GameMoveChatSection({ session }) {
-  const { t } = session;
+  const { t, explorationVersion } = session;
   return (
     <div className="game-move-section game-move-section--chat tourChat">
       <h2 className="subtitle lined">
         <span>{t("GameSummary")}</span>
       </h2>
-      <UserChats {...buildUserChatsProps(session)} />
+      <UserChats key={explorationVersion} {...buildUserChatsProps(session)} />
     </div>
   );
 }
