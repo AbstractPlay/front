@@ -75,12 +75,11 @@ function getRotationIncrement(metaGame, rep, engine) {
       rep.renderer === "stacking-3D" ||
       rep.renderer === "entropy" ||
       rep.renderer === "freespace" ||
-      rep.renderer.startsWith("conhex") ||
       rep.renderer === "polyomino")
   ) {
     return 0;
   }
-  if (rep?.renderer === "isometric") return 90;
+  if (rep?.renderer === "isometric" || rep?.renderer.startsWith("conhex")) return 90;
   const info = gameinfo.get(metaGame);
   if (!info) return 0;
   if (info.flags?.includes("custom-rotation")) {

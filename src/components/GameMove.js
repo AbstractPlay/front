@@ -1590,7 +1590,6 @@ function GameMove(props) {
           rep.renderer === "stacking-3D" ||
           rep.renderer === "entropy" ||
           rep.renderer === "freespace" ||
-          rep.renderer.startsWith("conhex") ||
           rep.renderer === "polyomino")
       ) {
         return 0;
@@ -1598,7 +1597,7 @@ function GameMove(props) {
       if (
         "renderer" in rep &&
         rep.renderer !== undefined &&
-        rep.renderer === "isometric"
+        (rep.renderer === "isometric" || rep.renderer.startsWith("conhex"))
       ) {
         return 90;
       }
