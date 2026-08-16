@@ -815,6 +815,7 @@ export function useGameMoveSession(props) {
               exploration[i].commented;
           }
           handleGameMoveClickRef.current?.(foc, displayForRender);
+          bumpExploration();
         }
         explorationFetchingRef.current = false;
         explorationFetchedSetter(false);
@@ -826,6 +827,10 @@ export function useGameMoveSession(props) {
           gameRef.current,
           true
         );
+        if (game.gameOver) {
+          explorationFetchingRef.current = false;
+          explorationFetchedSetter(false);
+        }
       }
     }
 
@@ -2551,6 +2556,7 @@ export function useGameMoveSession(props) {
     globalMe,
     chatComments,
     comments,
+    explorationVersion,
     commentingCompletedGame,
     canComment,
     submitNodeComment,
