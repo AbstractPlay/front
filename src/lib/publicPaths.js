@@ -9,6 +9,9 @@ export function isAnonymousFriendlyPath(pathname = window.location.pathname) {
   if (pathname === "/games" || pathname.startsWith("/games/")) {
     return true;
   }
+  if (pathname === "/explore" || pathname.startsWith("/explore/")) {
+    return true;
+  }
   if (pathname.startsWith("/move/")) {
     return true;
   }
