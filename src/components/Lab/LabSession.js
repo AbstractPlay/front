@@ -79,7 +79,12 @@ function getRotationIncrement(metaGame, rep, engine) {
   ) {
     return 0;
   }
-  if (rep?.renderer === "isometric" || rep?.renderer.startsWith("conhex")) return 90;
+  if (
+    rep?.renderer &&
+    (rep.renderer === "isometric" || rep.renderer.startsWith("conhex"))
+  ) {
+    return 90;
+  }
   const info = gameinfo.get(metaGame);
   if (!info) return 0;
   if (info.flags?.includes("custom-rotation")) {
