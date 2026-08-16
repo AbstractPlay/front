@@ -249,13 +249,17 @@ function Bones(props) {
                 <Route path="*" element={<NotFound />} />
                 <Route path="/about" element={<About token={token} />} />
                 <Route
-                  path="/games/:metaGame?"
+                  path="/explore/:mode?"
                   element={<Explore token={token} />}
                 />
-                {/* <Route
-                            path="/explore/:mode?"
-                            element={<Explore token={token} />}
-                          /> */}
+                <Route
+                  path="/games/:metaGame"
+                  element={<Explore token={token} />}
+                />
+                <Route
+                  path="/games"
+                  element={<Navigate to="/explore" replace />}
+                />
                 <Route path="/players" element={<Players />} />
                 <Route path="/player/:userid" element={<Player />} />
                 <Route
