@@ -1154,6 +1154,7 @@ export function useGameMoveSession(props) {
               explorationRef.current.nodes,
               explorationRef.current.nodes.length - 1
             );
+            bumpExploration();
           }
           // Check and update commented flag for completed games
           if (gameRef.current.gameOver) {
@@ -1205,18 +1206,14 @@ export function useGameMoveSession(props) {
               }
             }
           }
-          if (result.length > 0) {
-            if (moveNumberParam) {
-              const moveNum = parseInt(moveNumberParam, 10);
-              let exPath = [];
-              if (nodeidParam) {
-                exPath =
-                  explorationRef.current.nodes[moveNum].findNode(nodeidParam);
-              }
-              handleGameMoveClick({ moveNumber: moveNum, exPath });
-            } else {
-              bumpExploration();
+          if (moveNumberParam) {
+            const moveNum = parseInt(moveNumberParam, 10);
+            let exPath = [];
+            if (nodeidParam && explorationRef.current.nodes[moveNum]) {
+              exPath =
+                explorationRef.current.nodes[moveNum].findNode(nodeidParam);
             }
+            handleGameMoveClick({ moveNumber: moveNum, exPath });
           }
         } else {
           // even if no exploration, support moveNumberParam
