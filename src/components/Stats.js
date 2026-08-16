@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
@@ -39,6 +39,9 @@ const formatDate = (date) => {
 
 function Stats() {
   const { tab: tabParam } = useParams();
+  const location = useLocation();
+  const tabFromPath =
+    tabParam === undefined || tabParam === "" ? undefined : tabParam;
   const navigate = useNavigate();
   const { t } = useTranslation();
   const summary = useStore((state) => state.summary);
@@ -69,10 +72,10 @@ function Stats() {
   }, [recDays]);
 
   useEffect(() => {
-    if (tabParam !== undefined && isValidStatsTab(tabParam)) {
-      setStoredTab(tabParam);
+    if (tabFromPath !== undefined && isValidStatsTab(tabFromPath)) {
+      setStoredTab(tabFromPath);
     }
-  }, [tabParam, setStoredTab]);
+  }, [tabFromPath, setStoredTab]);
 
   const handleTogglePin = useCallback(
     (code) => {
@@ -81,18 +84,33 @@ function Stats() {
     [pinnedModuleSetter]
   );
 
-  if (tabParam !== undefined && !isValidStatsTab(tabParam)) {
-    return <Navigate to={`/stats/${DEFAULT_STATS_TAB}`} replace />;
+  if (tabFromPath !== undefined && !isValidStatsTab(tabFromPath)) {
+    return (
+      <Navigate
+        to={{ pathname: `/stats/${DEFAULT_STATS_TAB}`, hash: location.hash }}
+        replace
+      />
+    );
   }
 
-  if (tabParam === undefined) {
+  if (tabFromPath === undefined) {
     const target = isValidStatsTab(storedTab) ? storedTab : DEFAULT_STATS_TAB;
-    return <Navigate to={`/stats/${target}`} replace />;
+    return (
+      <Navigate
+        to={{ pathname: `/stats/${target}`, hash: location.hash }}
+        replace
+      />
+    );
   }
 
-  const activeTab = getStatsTab(tabParam);
+  const activeTab = getStatsTab(tabFromPath);
   if (activeTab === undefined) {
-    return <Navigate to={`/stats/${DEFAULT_STATS_TAB}`} replace />;
+    return (
+      <Navigate
+        to={{ pathname: `/stats/${DEFAULT_STATS_TAB}`, hash: location.hash }}
+        replace
+      />
+    );
   }
 
   const modulesToRender = sortStatsModules(
@@ -119,7 +137,7 @@ function Stats() {
         <meta property="og:title" content={`Site Statistics`} />
         <meta
           property="og:url"
-          content={`https://play.abstractplay.com/stats/${tabParam}`}
+          content={`https://play.abstractplay.com/stats/${tabFromPath}`}
         />
         <meta
           property="og:description"
@@ -163,7 +181,7 @@ function Stats() {
                 {STATS_TABS.map((tab) => (
                   <li
                     key={tab.id}
-                    className={tabParam === tab.id ? "is-active" : ""}
+                    className={tabFromPath === tab.id ? "is-active" : ""}
                   >
                     <a
                       href={`/stats/${tab.id}`}
@@ -196,7 +214,7 @@ function Stats() {
                       pinned={pinnedModule === code}
                       onTogglePin={handleTogglePin}
                       showPin={showPin}
-                      tabId={tabParam}
+                      tabId={tabFromPath}
                     />
                   );
                 })}
