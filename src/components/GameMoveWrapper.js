@@ -1,16 +1,27 @@
 import { useParams, useLocation } from "react-router-dom";
 import GameMove from "./GameMove";
+import LayoutExperimentBanner from "./GameMove/LayoutExperimentBanner";
+import { useGameMoveLayout } from "../hooks/useGameMoveLayout";
+import { MOVE_CLASSIC_BASE } from "../lib/GameMove/layoutPreference";
 
-// A wrapper that is used to remount GameMove in case metaGame or gameID changes (e.g. when we navigate to GameMove when user clicks on "Next Game")
 function GameMoveWrapper() {
   const params = useParams();
   const location = useLocation();
-  // Pass the location as a prop so GameMove can access the state
+  const { moveBasePath, showExperimentBanner, dismissBanner } =
+    useGameMoveLayout();
+
   return (
-    <GameMove
-      key={`${params.metaGame}-${params.gameID}`}
-      routerState={location.state}
-    />
+    <>
+      {showExperimentBanner ? (
+        <LayoutExperimentBanner onDismiss={dismissBanner} />
+      ) : null}
+      <GameMove
+        key={`${params.metaGame}-${params.gameID}`}
+        routerState={location.state}
+        moveBasePath={moveBasePath ?? MOVE_CLASSIC_BASE}
+        showExperimentBanner={false}
+      />
+    </>
   );
 }
 

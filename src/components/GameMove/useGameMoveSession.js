@@ -1,0 +1,2606 @@
+import {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { render } from "@abstractplay/renderer";
+import { cloneDeep } from "lodash";
+import { API_ENDPOINT_OPEN } from "../../config";
+import { callAuthApi } from "../../lib/api";
+import {
+  maybeSyncInProgressCommentedFlag,
+  runCheckTimeQuery,
+} from "../../lib/GameMove/spectatorHousekeeping";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import { Buffer } from "buffer";
+import { getDisplayedRenderRepJson } from "../../lib/displayRenderRepJson";
+import { STATUS } from "react-joyride";
+import { useStorageState } from "react-use-storage-state";
+import { toast } from "react-toastify";
+import { nanoid } from "nanoid";
+import { useStore } from "../../stores";
+
+// import helpers
+import {
+  isInterestingComment,
+  replaceNames,
+  setStatus,
+} from "../../lib/GameMove/misc";
+import {
+  setupGame,
+  populateChecked,
+  processNewMove,
+} from "../../lib/GameMove/gameStuff";
+import {
+  mergeExistingExploration,
+  mergeExploration,
+  mergePublicExploration,
+  fixMoveOutcomes,
+  analyzeExplorationForCommentedFlag,
+  getFocusNode,
+  isExplorer,
+  canExploreMove,
+  setURL,
+  saveExploration,
+  setCanPublish,
+  mergePrivateExploration,
+  getAllNodeComments,
+  explorationTreeForSave,
+} from "../../lib/GameMove/exploration";
+import {
+  processNewSettings,
+  setupColors,
+  resolveDisplay,
+} from "../../lib/GameMove/settings";
+import {
+  getAltDisplaysForMetaGame,
+  nextDisplayOption,
+} from "../../lib/Lab/settings";
+import {
+  readSessionDisplayOverride,
+  writeSessionDisplayOverride,
+  clearSessionDisplayOverride,
+  markGameMovePageReload,
+  isGameMovePageReload,
+} from "../../lib/GameMove/sessionDisplay";
+import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
+import { setGlyphMapOpt } from "../../lib/setGlyphMapOpt";
+import { isLabSupportedGame } from "../../lib/Lab/buildGame";
+import { launchLabFromExport } from "../../lib/Lab/storage";
+import { serializeSessionExploration } from "../../lib/Lab/exploration";
+import { getEffectiveColourContext } from "../../lib/effectiveColourContext";
+import {
+  isParticipant,
+  isGameCompleted,
+  isWatched,
+  isHighlighted,
+  isRecommended,
+  recommendCountForMeta,
+  toggleWatch,
+  toggleHighlight,
+  toggleRecommend,
+} from "../../lib/playerGameMarks";
+import { gameUpdateMatchesGame } from "../../lib/watchGames";
+
+export const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
+
+export function useGameMoveSession(props) {
+  const moveBasePath = props.moveBasePath ?? "/move";
+  const [dbgame, dbgameSetter] = useState(null);
+  const [renderrep, renderrepSetter] = useState(null);
+  const [rendered, setRendered] = useState([]);
+  const [boardRenderIndex, setBoardRenderIndex] = useState(0);
+  // The place in the tree the display is currently showing. If history, just the move number. If exploration, the move from which we are exploring and then the path through the tree.
+  const [focus, focusSetter] = useState(null);
+  const [move, moveSetter] = useState({
+    move: "",
+    valid: true,
+    message: "",
+    complete: 0,
+    rendered: "",
+  });
+  const [refresh, setRefresh] = useState(0);
+  const [watchCount, watchCountSetter] = useState(0);
+  const [marksBusy, marksBusySetter] = useState(false);
+  const [locked, setLocked] = useState(false);
+  const [error, errorSetter] = useState(false);
+  const [tourState, tourStateSetter] = useState([]);
+  const [showTour, showTourSetter] = useStorageState("joyride-play-show", true);
+  const [startTour, startTourSetter] = useState(false);
+  const [showSettings, showSettingsSetter] = useState(false);
+  const [showMoveConfirm, showMoveConfirmSetter] = useState(false);
+  const [showResignConfirm, showResignConfirmSetter] = useState(false);
+  const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] =
+    useState(false);
+  const [showPremoveConfirm, showPremoveConfirmSetter] = useState(false);
+  const [pendingPremoveAction, pendingPremoveActionSetter] = useState(null); // { node, isChange }
+  const [showTimeoutConfirm, showTimeoutConfirmSetter] = useState(false);
+  const [showGameDetails, showGameDetailsSetter] = useState(false);
+  const [showGameDump, showGameDumpSetter] = useState(false);
+  const [showGameNote, showGameNoteSetter] = useState(false);
+  const [showInject, showInjectSetter] = useState(false);
+  const [injectedState, injectedStateSetter] = useState("");
+  const [userSettings, userSettingsSetter] = useState();
+  const [gameSettings, gameSettingsSetter] = useState();
+  const [settings, settingsSetter] = useState(null);
+  const [sessionDisplayOverride, sessionDisplayOverrideSetter] = useState(null);
+  const sessionGameIDRef = useRef(null);
+  const [rotIncrement, rotIncrementSetter] = useState(0);
+  const [comments, commentsSetter] = useState([]);
+  const [commentsTooLong, commentsTooLongSetter] = useState(false);
+  const [submitting, submittingSetter] = useState(false);
+  const [explorationFetched, explorationFetchedSetter] = useState(false);
+  const globalMe = useStore((state) => state.globalMe);
+  const [gameRec, gameRecSetter] = useState(undefined);
+  const [showCustomCSS, showCustomCSSSetter] = useState(false);
+  const [customCSS, customCSSSetter] = useStorageState("custom-css", {});
+  const [newCSS, newCSSSetter] = useState("");
+  const [cssActive, cssActiveSetter] = useState(true);
+  const [gameNote, gameNoteSetter] = useState(null);
+  const [interimNote, interimNoteSetter] = useState("");
+  const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
+  const [mobileOrder, mobileOrderSetter] = useStorageState(
+    "play-mobile-order",
+    [...defaultChunkOrder]
+  );
+  const [verticalLayout, verticalLayoutSetter] = useStorageState(
+    "play-vertical-layout",
+    false
+  );
+  const [explorer, explorerSetter] = useState(false); // just whether the user clicked on the explore button. Also see isExplorer.
+  const [parenthetical, parentheticalSetter] = useState([]); // any description after the game name (e.g., "unrated", "exploration disabled")
+  // pieInvoked is used to trigger the game reload after the function is called
+  const [pieInvoked, pieInvokedSetter] = useState(false);
+  // used to construct the localized string of players in check
+  const [inCheck, inCheckSetter] = useState("");
+  const [drawMessage, drawMessageSetter] = useState("");
+  const [canPublish, canPublishSetter] = useState("no");
+  const [boardKey, boardKeySetter] = useState(nanoid()); // used to trigger board redrawing
+  const errorMessageRef = useRef("");
+  const movesRef = useRef(null);
+  const statusRef = useRef({});
+  // whether user has entered a partial move that can be rendered
+  const partialMoveRenderRef = useRef(false);
+  const focusRef = useRef();
+  focusRef.current = focus;
+  const explorerRef = useRef();
+  const globalMeRef = useRef();
+  const navigateRef = useRef();
+  const displaySettingsRef = useRef();
+  const tRef = useRef();
+  const publishGameColorsRef = useRef();
+  const boardClickHandlerRef = useRef();
+  const moveEntryHandlersRef = useRef({});
+  const handleGameMoveClickRef = useRef();
+  // Revisit this moveRef variable. It works, but is it really needed? It was changed to deal with missing dependency warnings on the useEffect that updates the svg board. Is that really needed?
+  // Does it have to be a Ref, or can it just be a regular variable? Or even just the state variable?
+  const moveRef = useRef();
+  moveRef.current = move;
+  const boardImage = useRef();
+  const stackImage = useRef();
+  const gameRef = useRef(null);
+  // gameID and nodes, an array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
+  // for completed games every node might hold a tree of explored moves.
+  const explorationRef = useRef({ gameID: null, nodes: null });
+  const explorationFetchingRef = useRef(false);
+  // This is used for hover effects. Has the currently rendered engine state with partial moves, if any, applied.
+  const engineRef = useRef(null);
+  const myMove = useStore((state) => state.myMove);
+  const setMyMove = useStore((state) => state.setMyMove);
+  const params = new URLSearchParams(useLocation().search);
+  const [moveNumberParam] = useState(params.get("move"));
+  const [nodeidParam] = useState(params.get("nodeid"));
+  const navigate = useNavigate();
+  const colourContext = useStore((state) => state.colourContext);
+  const [colorMode] = useStorageState("color-mode", "light");
+  const [, bumpGameColorsRevision] = useState(0);
+  const [explorationVersion, bumpExplorationVersion] = useState(0);
+  const bumpExploration = () => bumpExplorationVersion((v) => v + 1);
+
+  const { t, i18n } = useTranslation();
+  // State is passed as a prop from GameMoveWrapper
+  const state = props.routerState;
+
+  const { metaGame, cbits, gameID } = useParams();
+  const cbit = parseInt(cbits, 10);
+
+  const altDisplays = useMemo(
+    () => getAltDisplaysForMetaGame(metaGame),
+    [metaGame]
+  );
+
+  const displaySettings = useMemo(() => {
+    if (!settings) return settings;
+    const display = sessionDisplayOverride ?? settings.display;
+    if (display === settings.display) return settings;
+    return { ...settings, display };
+  }, [settings, sessionDisplayOverride]);
+
+  useEffect(() => {
+    if (sessionGameIDRef.current !== gameID) {
+      sessionDisplayOverrideSetter(readSessionDisplayOverride(gameID));
+      sessionGameIDRef.current = gameID;
+    }
+
+    const handleBeforeUnload = () => {
+      markGameMovePageReload();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (!isGameMovePageReload()) {
+        clearSessionDisplayOverride(gameID);
+      }
+    };
+  }, [gameID]);
+  // these are the details that appear in the `i` icon modal
+  const gameDeets = gameinfo.get(metaGame);
+  let gameEngine;
+  if (gameDeets.playercounts.length > 1) {
+    gameEngine = GameFactory(gameDeets.uid, 2);
+  } else {
+    gameEngine = GameFactory(gameDeets.uid);
+  }
+  let designerString;
+  // eslint-disable-next-line no-prototype-builtins
+  if (gameDeets.hasOwnProperty("people")) {
+    let designers = gameDeets.people
+      .filter((p) => p.type === "designer")
+      .map((p) => {
+        if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
+          let str = `[${p.name}](${p.urls[0]})`;
+          if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+            str += ` [(AP)](/player/${p.apid})`;
+          }
+          return str;
+        } else if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+          return `[${p.name}](/player/${p.apid})`;
+        } else {
+          return p.name;
+        }
+      });
+    if (designers.length === 1) {
+      designerString = t("lab.designerOne");
+    } else {
+      designerString = t("lab.designersMany");
+    }
+    designerString += designers.join(", ");
+  }
+  let coderString;
+  // eslint-disable-next-line no-prototype-builtins
+  if (gameDeets.hasOwnProperty("people")) {
+    let coders = gameDeets.people
+      .filter((p) => p.type === "coder")
+      .map((p) => {
+        if ("urls" in p && p.urls !== undefined && p.urls.length > 0) {
+          let str = `[${p.name}](${p.urls[0]})`;
+          if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+            str += ` [(AP)](/player/${p.apid})`;
+          }
+          return str;
+        } else if ("apid" in p && p.apid !== undefined && p.apid.length > 0) {
+          return `[${p.name}](/player/${p.apid})`;
+        } else {
+          return p.name;
+        }
+      });
+    if (coders.length === 1) {
+      coderString = t("lab.coderOne");
+    } else {
+      coderString = t("lab.codersMany");
+    }
+    coderString += coders.join(", ");
+  }
+
+  const effectiveColourContext = useMemo(
+    () => getEffectiveColourContext(colourContext, globalMe, metaGame),
+    [colourContext, globalMe, metaGame]
+  );
+
+  const publishGameColors = useCallback(
+    (node) => {
+      const game = gameRef.current;
+      if (!game?.customColours || !displaySettings) return;
+      setupColors(
+        displaySettings,
+        game,
+        globalMe,
+        effectiveColourContext,
+        node
+      );
+      gameRef.current = { ...game, colors: game.colors };
+      bumpGameColorsRevision((v) => v + 1);
+    },
+    [displaySettings, globalMe, effectiveColourContext]
+  );
+
+  explorerRef.current = explorer;
+  globalMeRef.current = globalMe;
+  navigateRef.current = navigate;
+  displaySettingsRef.current = displaySettings;
+  tRef.current = t;
+  publishGameColorsRef.current = publishGameColors;
+
+  boardClickHandlerRef.current = (row, col, piece) => {
+    let node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focusRef.current
+    );
+    let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
+    let result = gameRef.current.simultaneous
+      ? gameEngineTmp.handleClickSimultaneous(
+          moveRef.current.move,
+          row,
+          col,
+          gameRef.current.me + 1,
+          piece
+        )
+      : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
+    result.rendered = moveRef.current.rendered;
+    processNewMove(
+      result,
+      explorerRef.current,
+      globalMeRef.current,
+      focusRef.current,
+      gameRef,
+      movesRef,
+      statusRef,
+      explorationRef.current.nodes,
+      errorMessageRef,
+      partialMoveRenderRef,
+      renderrepSetter,
+      engineRef,
+      errorSetter,
+      focusSetter,
+      moveSetter,
+      displaySettingsRef.current,
+      navigateRef.current,
+      tRef.current
+    );
+    populateChecked(gameRef, engineRef, tRef.current, inCheckSetter);
+    publishGameColorsRef.current({ state: engineRef.current.state() });
+  };
+
+  const moveEntryHandlers = useMemo(
+    () => [
+      (...args) => moveEntryHandlersRef.current.handleMove(...args),
+      (...args) => moveEntryHandlersRef.current.handleMark(...args),
+      (...args) => moveEntryHandlersRef.current.handleSubmit(...args),
+      (...args) => moveEntryHandlersRef.current.handleToSubmit(...args),
+      (...args) => moveEntryHandlersRef.current.handleView(...args),
+      (...args) => moveEntryHandlersRef.current.handleResign(...args),
+      (...args) => moveEntryHandlersRef.current.handleTimeout(...args),
+      (...args) => moveEntryHandlersRef.current.handleReset(...args),
+      (...args) => moveEntryHandlersRef.current.handlePie(...args),
+      (...args) =>
+        moveEntryHandlersRef.current.handleDeleteExploration(...args),
+      (...args) => moveEntryHandlersRef.current.handlePremove(...args),
+    ],
+    []
+  );
+
+  useEffect(() => {
+    tourStateSetter([
+      {
+        target: ".tourWelcome",
+        content: t("tour.play.welcome"),
+        disableBeacon: true,
+      },
+      {
+        target: ".tourStatus",
+        content: t("tour.play.status"),
+        disableBeacon: true,
+      },
+      {
+        target: ".tourMove",
+        content: t("tour.play.move"),
+        disableBeacon: true,
+      },
+      {
+        target: ".tourMoveList",
+        content: t("tour.play.movelist"),
+        disableBeacon: true,
+      },
+      {
+        target: ".tourChat",
+        content: t("tour.play.chat"),
+        disableBeacon: true,
+      },
+      {
+        target: ".tourBoard",
+        content: t("tour.play.board"),
+        disableBeacon: true,
+      },
+      {
+        target: ".tourBoardButtons",
+        content: t("tour.play.boardbuttons"),
+        disableBeacon: true,
+      },
+      {
+        target: ".tourSettings",
+        content: t("tour.play.settings"),
+        disableBeacon: true,
+      },
+    ]);
+  }, [t, tourStateSetter]);
+
+  const handleJoyrideCallback = (data) => {
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(data.status)) {
+      showTourSetter(false);
+    }
+  };
+
+  // initialize customcss modal
+  useEffect(() => {
+    if (
+      customCSS !== undefined &&
+      metaGame in customCSS &&
+      customCSS[metaGame] !== undefined
+    ) {
+      newCSSSetter(customCSS[metaGame].css);
+      cssActiveSetter(customCSS[metaGame].active);
+    } else {
+      newCSSSetter("");
+      cssActiveSetter(true);
+    }
+  }, [customCSS, metaGame]);
+
+  // apply (or not) any custom CSS
+  useEffect(() => {
+    if (
+      customCSS !== undefined &&
+      metaGame in customCSS &&
+      customCSS[metaGame] !== undefined &&
+      customCSS[metaGame].css !== "" &&
+      customCSS[metaGame].active
+    ) {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync(customCSS[metaGame].css);
+      document.adoptedStyleSheets = [sheet];
+    } else {
+      document.adoptedStyleSheets = [];
+    }
+  }, [customCSS, metaGame]);
+
+  useEffect(() => {
+    boardKeySetter(nanoid());
+  }, [verticalLayout]);
+
+  useEffect(() => {
+    boardKeySetter(nanoid());
+  }, [colorMode]);
+
+  const copyHWDiagram = async () => {
+    if (metaGame === "homeworlds" && gameRef !== null && renderrep !== null) {
+      const diagram = {
+        numPlayers: gameRef.current.numPlayers,
+        universe: [],
+      };
+      for (let i = 0; i < renderrep.board.length; i++) {
+        const node = { ...renderrep.board[i] };
+        node.owner = node.seat;
+        delete node.seat;
+        node.ships = [...renderrep.pieces[i].map((s) => s.substring(1))];
+        diagram.universe.push(node);
+      }
+      try {
+        await navigator.clipboard.writeText(JSON.stringify(diagram));
+        toast(t("CopyBoardSuccess"));
+      } catch (err) {
+        toast(t("FailedToCopy", { error: err }), { type: "error" });
+      }
+    }
+  };
+
+  const handleMoveUp = (key) => {
+    const idx = mobileOrder.findIndex((s) => s === key);
+    if (idx !== -1) {
+      // if first item, move to end
+      if (idx === 0) {
+        mobileOrderSetter([...mobileOrder.slice(1), mobileOrder[0]]);
+      }
+      // otherwise, shift
+      else {
+        const left = mobileOrder.slice(0, idx - 1);
+        const right = mobileOrder.slice(idx + 1);
+        mobileOrderSetter([
+          ...left,
+          mobileOrder[idx],
+          mobileOrder[idx - 1],
+          ...right,
+        ]);
+      }
+      boardKeySetter(nanoid());
+    }
+  };
+
+  const handleMoveDown = (key) => {
+    const idx = mobileOrder.findIndex((s) => s === key);
+    if (idx !== -1) {
+      // if last item, move to top
+      if (idx === mobileOrder.length - 1) {
+        mobileOrderSetter([mobileOrder[idx], ...mobileOrder.slice(0, idx)]);
+      }
+      // otherwise, shift
+      else {
+        const left = mobileOrder.slice(0, idx);
+        const right = mobileOrder.slice(idx + 2);
+        mobileOrderSetter([
+          ...left,
+          mobileOrder[idx + 1],
+          mobileOrder[idx],
+          ...right,
+        ]);
+      }
+      boardKeySetter(nanoid());
+    }
+  };
+
+  const saveCustomCSS = () => {
+    if (metaGame !== null && metaGame !== undefined) {
+      const newobj = JSON.parse(JSON.stringify(customCSS));
+      if (newCSS === "") {
+        delete newobj[metaGame];
+      } else {
+        newobj[metaGame] = {
+          css: newCSS,
+          active: cssActive,
+        };
+      }
+      customCSSSetter(newobj);
+    }
+    showCustomCSSSetter(false);
+  };
+
+  useEffect(() => {
+    console.log("Fetching game data");
+
+    // We have some evidence that get_game sometimes fails to connect (but report_problem succeeds), implying that a retry might help. Submitting the attempt count
+    // to the backend so that we can monitor this.
+    async function fetchWithRetry(fetchFn, maxRetries = 3, baseDelay = 1000) {
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          return await fetchFn(attempt);
+        } catch (error) {
+          const isNetworkError =
+            error.name === "TypeError" && error.message.includes("fetch");
+          const isTemporaryError =
+            error.message.includes("Failed to fetch") ||
+            error.message.includes("NetworkError") ||
+            error.message.includes("ERR_NETWORK");
+
+          if (
+            attempt === maxRetries ||
+            (!isNetworkError && !isTemporaryError)
+          ) {
+            throw error;
+          }
+
+          const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 1000;
+          console.log(
+            `get_game attempt ${attempt + 1} failed, retrying in ${Math.round(
+              delay
+            )}ms...`
+          );
+          await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+      }
+    }
+
+    async function fetchData() {
+      try {
+        const result = await fetchWithRetry(async (attempt) => {
+          let data;
+          let status;
+          const res = await callAuthApi(
+            "get_game",
+            {
+              id: gameID,
+              metaGame: metaGame,
+              cbit: cbit,
+              ...(attempt > 0 && { retryAttempt: attempt }),
+            },
+            false
+          );
+          if (res) {
+            status = res.status;
+            if (status !== 200) {
+              const result = await res.json();
+              const error = new Error(
+                `auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`
+              );
+              error.status = status;
+              throw error;
+            } else {
+              const result = await res.json();
+              data = JSON.parse(result.body);
+            }
+          } else {
+            // res == null means no auth token available, probably non-logged in user, try unauthenticated fetch
+            var url = new URL(API_ENDPOINT_OPEN);
+            url.searchParams.append("query", "get_game");
+            url.searchParams.append("id", gameID);
+            url.searchParams.append("metaGame", metaGame);
+            url.searchParams.append("cbit", cbit);
+            if (attempt > 0) {
+              url.searchParams.append("retryAttempt", attempt.toString());
+            }
+            const res = await fetch(url);
+            status = res.status;
+            if (status !== 200) {
+              const result = await res.json();
+              const error = new Error(
+                `no auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`
+              );
+              error.status = status;
+              throw error;
+            } else {
+              data = await res.json();
+            }
+          }
+          return { data, status };
+        });
+
+        const { data, status } = result;
+
+        if (
+          status === 200 &&
+          data !== null &&
+          data !== undefined &&
+          "game" in data
+        ) {
+          if (state) {
+            data.game.commentedFromList = state.commented;
+            data.game.completedGameKey = state.key;
+          }
+          //   console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
+          dbgameSetter(data.game);
+          watchCountSetter(
+            typeof data.watchCount === "number" ? data.watchCount : 0
+          );
+          if (data.comments !== undefined) {
+            commentsSetter(data.comments);
+            if (
+              data.comments.reduce(
+                (s, a) => s + 110 + Buffer.byteLength(a.comment, "utf8"),
+                0
+              ) > 350000
+            ) {
+              commentsTooLongSetter(true);
+            }
+            const hasInterestingComments = data.comments.some((c) =>
+              isInterestingComment(c.comment)
+            );
+            // Check if commented flag needs to be updated (only for in-progress games). This is mostly to "fix" old games that already had chats but no commented flag.
+            await maybeSyncInProgressCommentedFlag({
+              gameID,
+              metaGame,
+              game: data.game,
+              hasInterestingComments,
+            });
+            data.game.commented = hasInterestingComments ? 1 : 0;
+          }
+        } else {
+          if ("message" in data) {
+            errorMessageRef.current = `get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, data.message: ${data.message}`;
+            errorSetter(true);
+          } else {
+            errorMessageRef.current = `get_game, An unspecified error occurred while trying to fetch the game: ${JSON.stringify(
+              data
+            )}`;
+            errorSetter(true);
+          }
+        }
+      } catch (error) {
+        console.log(error.message);
+        errorMessageRef.current = `get_game, error.message: ${String(
+          error
+        )} for id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}`;
+        errorSetter(true);
+      }
+    }
+
+    // Don't fetch data if user is refreshing a completed game. No point in fetching the game again, the only thing that could have changed is public exploration
+    if (explorationRef.current.gameID === gameID && game && game.gameOver) {
+      explorationFetchingRef.current = false;
+      explorationFetchedSetter(false);
+    } else {
+      fetchData();
+    }
+    // game/state are fetch outputs — including them would refetch in a loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    gameID,
+    metaGame,
+    cbit,
+    errorSetter,
+    errorMessageRef,
+    pieInvoked,
+    commentsSetter,
+    commentsTooLongSetter,
+    refresh,
+  ]);
+
+  useEffect(() => {
+    const handler = (event) => {
+      if (gameUpdateMatchesGame(event.detail, metaGame, gameID)) {
+        setRefresh((val) => val + 1);
+      }
+    };
+
+    window.addEventListener("refresh-data", handler);
+    return () => window.removeEventListener("refresh-data", handler);
+  }, [gameID, metaGame]);
+
+  const checkTime = useCallback(async (query) => {
+    try {
+      const res = await runCheckTimeQuery({
+        query,
+        gameId: gameRef.current.id,
+        metaGame: gameRef.current.metaGame,
+      });
+      if (!res) return;
+      let game0 = JSON.parse(res.body);
+      if (game0 !== "not_a_timeloss" && game0 !== "not_abandoned") {
+        dbgameSetter(game0);
+      }
+    } catch (err) {
+      setError(
+        `checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} and failed with error: ${err.message}`
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (dbgame === null) return;
+
+    const me = globalMeRef.current;
+    const exploration =
+      explorationRef.current && explorationRef.current.gameID === dbgame.id
+        ? explorationRef.current.nodes
+        : null;
+    const foc = cloneDeep(focus);
+    const game = dbgame;
+    const preserveExplorer =
+      explorationRef.current &&
+      explorationRef.current.gameID === dbgame.id &&
+      me?.settings?.all?.exploration !== -1;
+    const perGameSettings =
+      game.me > -1 && me
+        ? game.players.find((p) => p.id === me.id)?.settings
+        : {};
+    const displayForRender = resolveDisplay(
+      perGameSettings,
+      me?.settings,
+      game.metaGame,
+      sessionDisplayOverride
+    );
+    setupGame(
+      game,
+      gameRef,
+      me,
+      preserveExplorer ? explorer : false,
+      partialMoveRenderRef,
+      renderrepSetter,
+      engineRef,
+      statusRef,
+      movesRef,
+      focusSetter,
+      explorationRef,
+      moveSetter,
+      gameRecSetter,
+      canPublishSetter,
+      displayForRender,
+      navigate
+    );
+    if (exploration !== null) {
+      if (explorationRef.current.nodes.length === exploration.length) {
+        let ok = true;
+        for (let i = 0; ok && i < explorationRef.current.nodes.length; i++) {
+          if (exploration[i].move !== explorationRef.current.nodes[i].move) {
+            ok = false;
+          }
+        }
+        if (ok) {
+          for (let i = 0; i < explorationRef.current.nodes.length; i++) {
+            explorationRef.current.nodes[i].children = exploration[i].children;
+            explorationRef.current.nodes[i].comment = exploration[i].comment;
+            explorationRef.current.nodes[i].commented =
+              exploration[i].commented;
+          }
+          handleGameMoveClickRef.current?.(foc, displayForRender);
+        }
+        explorationFetchingRef.current = false;
+        explorationFetchedSetter(false);
+      } else if (explorationRef.current.nodes.length > exploration.length) {
+        mergeExistingExploration(
+          exploration.length - 1,
+          exploration[exploration.length - 1],
+          explorationRef.current.nodes,
+          gameRef.current,
+          true
+        );
+      }
+    }
+
+    if (
+      "note" in game &&
+      game.note !== undefined &&
+      game.note !== null &&
+      game.note.length > 0
+    ) {
+      gameNoteSetter(game.note);
+      interimNoteSetter(game.note);
+    } else if ("note" in game) {
+      gameNoteSetter(null);
+      interimNoteSetter("");
+    }
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+    parentheticalSetter([]);
+    if (
+      "tournament" in game &&
+      game.tournament !== undefined &&
+      game.tournament !== null
+    ) {
+      const tournamentLink = game.tournament.includes("#")
+        ? `/tournament/${game.tournament.replace("#", "/")}`
+        : `/tournament/${game.tournament}?gameId=${game.id}&metaGame=${game.metaGame}`;
+
+      parentheticalSetter((val) => [
+        ...val,
+        <Link to={tournamentLink}>{t("gameMove.tournamentLink")}</Link>,
+      ]);
+    }
+    if ("event" in game && game.event !== undefined && game.event !== null) {
+      parentheticalSetter((val) => [
+        ...val,
+        <Link to={`/event/${game.event}`}>{t("gameMove.eventLink")}</Link>,
+      ]);
+    }
+    if (game.rated === false) {
+      parentheticalSetter((val) => [...val, t("gameMove.unrated")]);
+    }
+    if (game.noExplore !== undefined && game.noExplore === true) {
+      parentheticalSetter((val) => [...val, t("gameMove.explorationDisabled")]);
+    }
+    if (game.toMove !== "" && !game.players.some((p) => p.id === me?.id)) {
+      if (game.clockHard) {
+        if (Array.isArray(game.toMove)) {
+          const elapsed = Date.now() - game.lastMoveTime;
+          if (
+            game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0)
+          ) {
+            checkTime("timeloss");
+          }
+        } else {
+          const toMove = parseInt(game.toMove);
+          if (
+            game.players[toMove].time - (Date.now() - game.lastMoveTime) <
+            0
+          ) {
+            checkTime("timeloss");
+          }
+        }
+      }
+    }
+    // Runs on dbgame updates; focus/sessionDisplayOverride read via refs/stable setup paths.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dbgame,
+    pieInvoked,
+    globalMe?.id,
+    navigate,
+    checkTime,
+    t,
+    i18n.language,
+    explorer,
+  ]);
+
+  useEffect(() => {
+    if (dbgame === null || gameRef.current === null) return;
+    const me = globalMeRef.current;
+    const game = gameRef.current;
+    processNewSettings(
+      game.me > -1
+        ? game.players.find((p) => p.id === me?.id)?.settings ?? {}
+        : {},
+      me?.settings,
+      gameRef,
+      settingsSetter,
+      gameSettingsSetter,
+      userSettingsSetter,
+      me,
+      effectiveColourContext
+    );
+    // Intentionally keyed on dbgame id only, not the full dbgame object.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dbgame?.id, effectiveColourContext, globalMe?.settings]);
+
+  useEffect(() => {
+    if (
+      dbgame === null ||
+      sessionDisplayOverride == null ||
+      focusRef.current === null ||
+      !engineRef.current
+    ) {
+      return;
+    }
+    const me = globalMeRef.current;
+    const game = gameRef.current;
+    if (!game) return;
+    const perGameSettings =
+      game.me > -1 && me
+        ? game.players.find((p) => p.id === me.id)?.settings
+        : {};
+    const displayForRender = resolveDisplay(
+      perGameSettings,
+      me?.settings,
+      game.metaGame,
+      sessionDisplayOverride
+    );
+    handleGameMoveClickRef.current?.(focusRef.current, displayForRender);
+    // Uses handleGameMoveClickRef; full dbgame would over-trigger re-renders.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionDisplayOverride, dbgame?.id]);
+
+  useEffect(() => {
+    if (dbgame === null) return;
+    const game = dbgame;
+    const me = globalMeRef.current;
+    if (game.toMove === "" || game.players.some((p) => p.id === me?.id)) {
+      return;
+    }
+    if (game.clockHard) return;
+
+    const users = useStore.getState().users;
+    if (users === null || users === undefined) return;
+
+    const now = Date.now();
+    if (
+      game.players.every(
+        (p) =>
+          users.find((u) => u.id === p.id)?.lastSeen <
+          now - 1000 * 60 * 60 * 24 * 30
+      )
+    ) {
+      checkTime("abandoned");
+    }
+  }, [dbgame, checkTime]);
+
+  async function reportError(error) {
+    if (!error || error === "") return;
+
+    try {
+      const res = await fetch(API_ENDPOINT_OPEN, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: "report_problem",
+          pars: {
+            error: error,
+          },
+        }),
+      });
+
+      const status = res.status;
+      if (status !== 200) {
+        const result = await res.json();
+        console.log(JSON.parse(result.body));
+
+        // Retry with truncated error if first attempt fails
+        await fetch(API_ENDPOINT_OPEN, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query: "report_problem",
+            pars: {
+              error: `Error reporting another error, status: ${status}, message: ${
+                result.message
+              }, body: ${
+                result.body
+              }, original error (truncated): ${error.slice(0, 1000)}`,
+            },
+          }),
+        });
+      }
+    } catch (e) {
+      // Final fallback with truncated error
+      await fetch(API_ENDPOINT_OPEN, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: "report_problem",
+          pars: {
+            error: `Error reporting another error: ${String(
+              e
+            )}, original error (truncated): ${error.slice(0, 1000)}`,
+          },
+        }),
+      });
+      console.log(
+        `Error auto-reporting another error!\nOriginal error: ${JSON.stringify(
+          error
+        )}\nFetching error: ${JSON.stringify(e)}`
+      );
+    }
+  }
+
+  const handleNoteUpdate = useCallback(
+    async (newNote) => {
+      if (newNote.length > 0 && !/^\s*$/.test(newNote)) {
+        gameNoteSetter(newNote);
+      } else {
+        gameNoteSetter(null);
+      }
+      if (globalMe !== undefined) {
+        try {
+          const res = await callAuthApi("update_note", {
+            gameId: gameRef.current.id,
+            note: newNote,
+          });
+          if (!res) return;
+          const result = await res.json();
+          if (result && result.statusCode && result.statusCode !== 200)
+            setError(`update_note failed with: ${result.body}`);
+        } catch (err) {
+          console.log(err);
+          //setError(err.message);
+        }
+      }
+    },
+    [globalMe, gameNoteSetter]
+  );
+
+  useEffect(() => {
+    async function fetchPrivateExploration() {
+      // Use ref to prevent concurrent fetches (state updates are async)
+      if (explorationFetchingRef.current) return;
+      explorationFetchingRef.current = true;
+      explorationFetchedSetter(true);
+      try {
+        let data;
+        let status;
+        const res = await callAuthApi(
+          "get_exploration",
+          {
+            game: gameID,
+            move: explorationRef.current.nodes.length,
+          },
+          false
+        );
+        if (res) {
+          status = res.status;
+          if (status !== 200) {
+            const result = await res.json();
+            errorMessageRef.current = `auth get_exploration failed, game = ${gameID}, move = ${explorationRef.current.nodes.length}, status = ${status}, message: ${result.message}, body: ${result.body}`;
+            errorSetter(true);
+          } else {
+            const result = await res.json();
+            data = JSON.parse(result.body);
+            data = data.map((d) => {
+              if (d && typeof d.tree === "string") {
+                d.tree = JSON.parse(d.tree);
+              }
+              return d;
+            });
+            mergeExploration(
+              gameRef.current,
+              explorationRef.current.nodes,
+              data,
+              globalMe,
+              errorSetter,
+              errorMessageRef
+            );
+            bumpExploration();
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        errorMessageRef.current = `get_exploration, error.message: ${error.message}`;
+        errorSetter(true);
+      }
+    }
+
+    async function fetchPublicExploration() {
+      // Use ref to prevent concurrent fetches (state updates are async)
+      if (explorationFetchingRef.current) return;
+      explorationFetchingRef.current = true;
+      explorationFetchedSetter(true);
+      console.log("fetching public exploration");
+      var url = new URL(API_ENDPOINT_OPEN);
+      url.searchParams.append("query", "get_public_exploration");
+      url.searchParams.append("game", gameID);
+      const res = await fetch(url);
+      if (res.status !== 200) {
+        const result = await res.json();
+        errorMessageRef.current = `get_public_exploration failed, game = ${gameID}, status = ${res.status}, message: ${result.message}, body: ${result.body}`;
+        errorSetter(true);
+      } else {
+        const result = await res.json();
+        if (result !== undefined) {
+          if (result.length > 0) {
+            const data = result.map((d) => {
+              if (d && typeof d.tree === "string") {
+                d.tree = JSON.parse(d.tree);
+              }
+              return d;
+            });
+            mergePublicExploration(
+              gameRef.current,
+              explorationRef.current.nodes,
+              data
+            );
+            fixMoveOutcomes(
+              explorationRef.current.nodes,
+              explorationRef.current.nodes.length - 1
+            );
+          }
+          // Check and update commented flag for completed games
+          if (gameRef.current.gameOver) {
+            var correctFlag = analyzeExplorationForCommentedFlag(
+              explorationRef.current.nodes
+            );
+            if (correctFlag === 0 && gameRef.current.commented === 1)
+              correctFlag = 1;
+            // Always store the computed correct flag on the game object for use in saveExploration
+            gameRef.current.commented = correctFlag;
+
+            // Only update backend if we came from ListGames (commentedFromList was stored)
+            if (
+              gameRef.current.commentedFromList !== undefined &&
+              gameRef.current.numMoves !== undefined &&
+              gameRef.current.numMoves > gameRef.current.numPlayers
+            ) {
+              const currentFlag = gameRef.current.commentedFromList;
+              if (correctFlag !== currentFlag) {
+                // Update the backend
+                const res = callAuthApi(
+                  "update_commented",
+                  {
+                    id: gameID,
+                    metaGame: gameRef.current.metaGame,
+                    cbit: 1, // Completed games have cbit=1
+                    commented: correctFlag,
+                    gameEnded: gameRef.current.completedGameKey.substring(
+                      0,
+                      13
+                    ),
+                  },
+                  false
+                );
+                if (res) {
+                  res
+                    .then(() => {
+                      console.log(
+                        `Successfully updated commented flag to ${correctFlag}`
+                      );
+                    })
+                    .catch((err) => {
+                      console.log(
+                        "Failed to update commented flag for completed game:",
+                        err
+                      );
+                    });
+                }
+              }
+            }
+          }
+          if (result.length > 0) {
+            if (moveNumberParam) {
+              const moveNum = parseInt(moveNumberParam, 10);
+              let exPath = [];
+              if (nodeidParam) {
+                exPath =
+                  explorationRef.current.nodes[moveNum].findNode(nodeidParam);
+              }
+              handleGameMoveClick({ moveNumber: moveNum, exPath });
+            } else {
+              bumpExploration();
+            }
+          }
+        } else {
+          // even if no exploration, support moveNumberParam
+          if (moveNumberParam) {
+            const moveNum = parseInt(moveNumberParam, 10);
+            handleGameMoveClick({ moveNumber: moveNum, exPath: [] });
+          }
+        }
+      }
+    }
+
+    if (
+      focus &&
+      !explorationFetched &&
+      (gameRef.current.canExplore || gameRef.current.gameOver)
+    ) {
+      if (gameRef.current.gameOver) {
+        fetchPublicExploration();
+      } else {
+        fetchPrivateExploration();
+      }
+    }
+    // handleGameMoveClick is accessed via handleGameMoveClickRef to avoid re-binding.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    focus,
+    explorationFetched,
+    gameID,
+    explorer,
+    globalMe,
+    moveNumberParam,
+    nodeidParam,
+    state,
+  ]);
+
+  const handlePlaygroundExport = async () => {
+    if (!isLabSupportedGame(game.metaGame)) return;
+    const nodes = explorationRef.current?.nodes;
+    if (!nodes || !focus) return;
+    try {
+      const info = gameinfo.get(game.metaGame);
+      launchLabFromExport({
+        metaGame: game.metaGame,
+        state: game.state,
+        variants: game.selectedVariants ?? [],
+        playerCount: game.numPlayers,
+        focus: {
+          moveNumber: focus.moveNumber,
+          exPath: [...(focus.exPath ?? [])],
+        },
+        exploration: serializeSessionExploration(nodes, game.gameOver),
+        name: `${info?.name ?? game.metaGame} (exported)`,
+      });
+      navigate("/lab");
+    } catch (err) {
+      errorMessageRef.current = err.message || String(err);
+      errorSetter(true);
+    }
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      screenWidthSetter(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // when the user clicks on the list of moves (or move list navigation)
+  const handleGameMoveClick = (foc, altDisplayOverride) => {
+    // console.log("foc = ", foc);
+    let node = getFocusNode(explorationRef.current.nodes, game, foc);
+    if (
+      !(isExplorer(explorer, globalMe) && game.canExplore) &&
+      foc.moveNumber === explorationRef.current.nodes.length - 1
+    ) {
+      node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variation.
+    }
+    let engine = GameFactory(game.metaGame, node.state);
+    partialMoveRenderRef.current = false;
+    foc.canExplore = canExploreMove(game, explorationRef.current.nodes, foc);
+    if (foc.canExplore && !game.noMoves) {
+      movesRef.current = engine.moves();
+    }
+    focusSetter(foc);
+    engineRef.current = engine;
+    const altDisplay = altDisplayOverride ?? displaySettings?.display;
+    renderrepSetter(
+      replaceNames(
+        engine.render({
+          perspective: gameRef.current.me ? gameRef.current.me + 1 : 1,
+          altDisplay,
+        }),
+        gameRef.current.players,
+        useStore.getState().users
+      )
+    );
+    setURL(explorationRef.current.nodes, foc, game, navigate);
+    const isPartialSimMove =
+      gameRef.current.simultaneous &&
+      (foc.exPath.length === 1 ||
+        (foc.exPath.length === 0 &&
+          foc.moveNumber === explorationRef.current.nodes.length - 1 &&
+          !gameRef.current.canSubmit));
+    setStatus(engine, gameRef.current, isPartialSimMove, "", statusRef.current);
+    if (game.simultaneous) {
+      moveSetter({
+        ...engine.validateMove("", gameRef.current.me + 1),
+        rendered: "",
+        move: "",
+      });
+    } else {
+      moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
+    }
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+    publishGameColors(node);
+  };
+  handleGameMoveClickRef.current = handleGameMoveClick;
+
+  function handleReset() {
+    if (
+      focus.moveNumber + focus.exPath.length !==
+      explorationRef.current.nodes.length - 1
+    ) {
+      handleGameMoveClick({
+        moveNumber: explorationRef.current.nodes.length - 1,
+        exPath: [],
+      });
+    }
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+  }
+
+  function handleToSubmit() {
+    handleGameMoveClick({
+      moveNumber: explorationRef.current.nodes.length - 1,
+      exPath: [focus.exPath[0]],
+    });
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+  }
+
+  // The user has clicked the "Invoke pie rule" button
+  const handlePie = async () => {
+    console.log("Pie invoked!");
+    try {
+      const res = await callAuthApi("invoke_pie", {
+        id: gameRef.current.id,
+        metaGame: gameRef.current.metaGame,
+        cbit: cbit,
+      });
+      if (!res) return;
+      const result = await res.json();
+      if (result.statusCode !== 200) {
+        // setError(JSON.parse(result.body));
+        throw JSON.parse(result.body);
+      }
+      pieInvokedSetter(true);
+      gameRef.current.pieInvoked = true;
+    } catch (err) {
+      setError(`invoke_pie failed with ${err.message}`);
+    }
+  };
+
+  // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
+  const handleMove = (value) => {
+    let node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focus
+    );
+    let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
+    let result;
+    if (gameRef.current.simultaneous)
+      result = gameEngineTmp.validateMove(value, gameRef.current.me + 1);
+    else result = gameEngineTmp.validateMove(value);
+    result.move = value;
+    result.rendered = move.rendered;
+    // console.log(result);
+    processNewMove(
+      result,
+      explorer,
+      globalMe,
+      focus,
+      gameRef,
+      movesRef,
+      statusRef,
+      explorationRef.current.nodes,
+      errorMessageRef,
+      partialMoveRenderRef,
+      renderrepSetter,
+      engineRef,
+      errorSetter,
+      focusSetter,
+      moveSetter,
+      displaySettings,
+      navigate,
+      t
+    );
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+    publishGameColors({ state: engineRef.current.state() });
+  };
+
+  // handler when user clicks on "complete move" (for a partial move that could be complete)
+  const handleView = () => {
+    const newmove = cloneDeep(move);
+    newmove.complete = 1;
+    processNewMove(
+      newmove,
+      explorer,
+      globalMe,
+      focus,
+      gameRef,
+      movesRef,
+      statusRef,
+      explorationRef.current.nodes,
+      errorMessageRef,
+      partialMoveRenderRef,
+      renderrepSetter,
+      engineRef,
+      errorSetter,
+      focusSetter,
+      moveSetter,
+      displaySettings,
+      navigate,
+      t
+    );
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+  };
+
+  const handleStashClick = (player, count, movePart, handler) => {
+    if (handler) {
+      handleMove(handler(move.move, movePart));
+    } else {
+      handleMove(move.move + movePart);
+    }
+  };
+
+  const focusCanExplore = focus?.canExplore;
+  const focusExPathKey = focus?.exPath?.join(",") ?? "";
+
+  useEffect(() => {
+    let options = {};
+
+    const boardClick = (row, col, piece) => {
+      boardClickHandlerRef.current(row, col, piece);
+    };
+
+    function expand(row, col) {
+      const svg = stackImage.current.querySelector("svg");
+      if (svg !== null) svg.remove();
+      options.divid = "stack";
+      options.svgid = "theStackSVG";
+      options.colourContext = effectiveColourContext;
+      render(engineRef.current.renderColumn(row, col), options);
+    }
+
+    if (renderrep !== null && displaySettings !== null) {
+      options = {};
+      const currentGame = gameRef.current;
+      setRendererColourOpts({
+        options,
+        metaGame,
+        isParticipant: currentGame?.me,
+        settings: displaySettings,
+        context: effectiveColourContext,
+        globalMe: globalMeRef.current,
+      });
+      setGlyphMapOpt({
+        options,
+        metaGame,
+        globalMe: globalMeRef.current,
+      });
+      const canExplore = focusCanExplore;
+      if (canExplore) {
+        options.boardClick = boardClick;
+      }
+      options.rotate = displaySettings.rotate;
+      if (currentGame?.stackExpanding) {
+        options.boardHover = (row, col, piece) => {
+          expand(col, row);
+        };
+      }
+      options.showAnnotations = displaySettings.annotate;
+      options.svgid = "theBoardSVG";
+      const tmpRendered = [];
+      const renders = [];
+      if (!Array.isArray(renderrep)) {
+        renders.push(renderrep);
+      } else {
+        renders.push(...renderrep);
+      }
+      for (let i = 0; i < renders.length; i++) {
+        const r = renders[i];
+        const container = document.createElement("div");
+        container.style.position = "absolute";
+        container.style.left = "-9999px"; // hide off-screen
+        document.body.appendChild(container); // ✅ attach to DOM
+        render(r, {
+          ...options,
+          divelem: container,
+          boardClick:
+            i === renders.length - 1
+              ? canExplore
+                ? boardClick
+                : undefined
+              : undefined,
+        });
+        const svgNode = container.firstChild;
+        tmpRendered.push(svgNode);
+        document.body.removeChild(container); // ✅ clean up
+      }
+      setRendered([...tmpRendered]);
+    }
+  }, [
+    renderrep,
+    displaySettings,
+    effectiveColourContext,
+    boardKey,
+    metaGame,
+    focusCanExplore,
+    colorMode,
+  ]);
+
+  useEffect(() => {
+    if (rendered.length > 0) {
+      setBoardRenderIndex(Math.max(0, rendered.length - 1));
+    }
+  }, [rendered]);
+
+  useEffect(() => {
+    populateChecked(gameRef, engineRef, t, inCheckSetter);
+  }, [t, focus?.moveNumber, focusExPathKey]);
+
+  useEffect(() => {
+    if (!gameRef.current?.customColours) return;
+    gameRef.current = {
+      ...gameRef.current,
+      colors: gameRef.current.colors,
+    };
+    bumpGameColorsRevision((v) => v + 1);
+  }, [effectiveColourContext]);
+
+  const setError = (error) => {
+    if (error.Message !== undefined) errorMessageRef.current = error.Message;
+    else errorMessageRef.current = JSON.stringify(error);
+    errorSetter(true);
+  };
+
+  const handleUpdateRenderOptions = () => {
+    showSettingsSetter(true);
+  };
+
+  useEffect(() => {
+    /**
+     * Takes the current renderrep and deduces the correct minimum rotation increment.
+     * A value of 0 means the board may not be rotated.
+     */
+    const getRotationIncrement = (metaGame, rep, engine) => {
+      if (
+        "renderer" in rep &&
+        rep.renderer !== undefined &&
+        (rep.renderer === "stacking-tiles" ||
+          rep.renderer === "stacking-3D" ||
+          rep.renderer === "entropy" ||
+          rep.renderer === "freespace" ||
+          rep.renderer === "polyomino")
+      ) {
+        return 0;
+      }
+      if (
+        "renderer" in rep &&
+        rep.renderer !== undefined &&
+        (rep.renderer === "isometric" || rep.renderer.startsWith("conhex"))
+      ) {
+        return 90;
+      }
+
+      const info = gameinfo.get(metaGame);
+      if (info === undefined) {
+        return 0;
+      }
+      if (
+        "flags" in info &&
+        info.flags !== undefined &&
+        Array.isArray(info.flags) &&
+        info.flags.includes("custom-rotation")
+      ) {
+        const increment = engine.getCustomRotation();
+        if (increment !== undefined) {
+          return increment;
+        }
+      }
+      if (
+        "board" in rep &&
+        rep.board !== undefined &&
+        "style" in rep.board &&
+        rep.board.style !== undefined
+      ) {
+        const style = rep.board.style;
+        if (
+          style.startsWith("squares") ||
+          style.startsWith("vertex") ||
+          style === "pegboard" ||
+          style === "hex-slanted" ||
+          style.startsWith("hex-odd") ||
+          style.startsWith("hex-even") ||
+          style === "snubsquare" ||
+          style.startsWith("cairo") ||
+          style === "triangles-stacked" ||
+          style === "sowing-round"
+        ) {
+          return 90;
+        }
+        if (style.startsWith("hex-of")) {
+          return 60;
+        }
+        if (style === "sowing") {
+          return 180;
+        }
+      }
+      return 0;
+    };
+    if (renderrep !== null && engineRef.current !== null) {
+      rotIncrementSetter(
+        getRotationIncrement(metaGame, renderrep, engineRef.current)
+      );
+    } else {
+      rotIncrementSetter(0);
+    }
+  }, [renderrep, metaGame]);
+
+  const handleRotate = async (dir) => {
+    let newGameSettings = cloneDeep(gameSettings);
+    if (newGameSettings === undefined) newGameSettings = {};
+    let rotate = newGameSettings.rotate;
+    if (rotate === undefined) rotate = 0;
+    if (dir === "CW") {
+      rotate += rotIncrement;
+    } else {
+      rotate -= rotIncrement;
+    }
+    rotate = rotate % 360;
+    while (rotate < 0) {
+      rotate += 360;
+    }
+    newGameSettings.rotate = rotate;
+    processNewSettings(
+      newGameSettings,
+      userSettings,
+      gameRef,
+      settingsSetter,
+      gameSettingsSetter,
+      userSettingsSetter,
+      globalMe,
+      effectiveColourContext
+    );
+    if (game.me > -1) {
+      try {
+        await callAuthApi("update_game_settings", {
+          game: game.id,
+          metaGame: game.metaGame,
+          cbit: cbit,
+          settings: newGameSettings,
+        });
+      } catch (error) {
+        setError(`handleRotate update_game_settings error: ${error}`);
+      }
+    }
+  };
+
+  const processUpdatedSettings = (newGameSettings, newUserSettings) => {
+    sessionDisplayOverrideSetter(null);
+    clearSessionDisplayOverride(gameID);
+    // console.log("processUpdatedSettings", newGameSettings, newUserSettings);
+    // Update dbgame's player settings so the main useEffect always has correct data
+    if (dbgame !== null && gameRef.current?.me > -1) {
+      const player = dbgame.players.find((p) => p.id === globalMe.id);
+      if (player) {
+        player.settings = cloneDeep(newGameSettings);
+      }
+    }
+    const newSettings = processNewSettings(
+      newGameSettings,
+      newUserSettings,
+      gameRef,
+      settingsSetter,
+      gameSettingsSetter,
+      userSettingsSetter,
+      globalMe,
+      effectiveColourContext
+    );
+    if (newSettings?.display) {
+      const newRenderRep = replaceNames(
+        engineRef.current.render({
+          perspective: gameRef.current.me + 1,
+          altDisplay: newSettings.display,
+        }),
+        gameRef.current.players,
+        useStore.getState().users
+      );
+      renderrepSetter(newRenderRep);
+      gameRef.current.stackExpanding =
+        newRenderRep.renderer === "stacking-expanding";
+    }
+  };
+
+  const handleSettingsClose = () => {
+    showSettingsSetter(false);
+  };
+
+  const handleSettingsSave = () => {
+    showSettingsSetter(false);
+  };
+
+  const handleCycleAltDisplay = () => {
+    const next = nextDisplayOption(displaySettings?.display, altDisplays);
+    sessionDisplayOverrideSetter(next);
+    writeSessionDisplayOverride(gameID, next);
+  };
+
+  const handleMark = (mark) => {
+    let node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focus
+    );
+    node.SetOutcome(mark);
+    if (gameRef.current.gameOver)
+      fixMoveOutcomes(explorationRef.current.nodes, focus.moveNumber);
+    saveExploration(
+      explorationRef.current.nodes,
+      focus.moveNumber + 1,
+      game,
+      globalMe,
+      explorer,
+      errorSetter,
+      errorMessageRef,
+      focus,
+      navigate
+    );
+    bumpExploration();
+  };
+
+  const handleSubmit = async (draw) => {
+    submittingSetter(true);
+    if (globalMe?.settings?.all?.moveConfirmOff) {
+      if (draw === "drawaccepted") {
+        submitMove("", draw);
+      } else {
+        let m = getFocusNode(
+          explorationRef.current.nodes,
+          gameRef.current,
+          focus
+        ).move;
+        submitMove(m, draw);
+      }
+    } else {
+      drawMessageSetter(draw);
+      showMoveConfirmSetter(true);
+    }
+  };
+
+  const submitMove = async (m, draw) => {
+    try {
+      // Find opponent ID for premove checking (only for 2-player non-simultaneous games)
+      const opponent = gameRef.current.players.find(
+        (p) => p.id !== globalMe.id
+      );
+      const res = await callAuthApi("submit_move", {
+        id: gameRef.current.id,
+        metaGame: gameRef.current.metaGame,
+        cbit: cbit,
+        move: m,
+        draw: draw,
+        moveNumber: explorationRef.current.nodes.length,
+        opponentId: opponent ? opponent.id : undefined,
+        exploration: explorationTreeForSave(
+          gameRef.current,
+          explorationRef.current.nodes,
+          explorationRef.current.nodes.length
+        ),
+      });
+      if (!res) return;
+      const result = await res.json();
+      submittingSetter(false);
+      if (result.statusCode !== 200) {
+        // setError(JSON.parse(result.body));
+        throw JSON.parse(result.body);
+      }
+      setMyMove((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
+      let game0 = JSON.parse(result.body);
+      const moveNum = explorationRef.current.nodes.length - 1;
+      const cur_exploration = explorationRef.current.nodes[moveNum];
+      const perGameSettings =
+        game0.me > -1 && globalMe
+          ? game0.players.find((p) => p.id === globalMe.id)?.settings
+          : {};
+      setupGame(
+        game0,
+        gameRef,
+        globalMe,
+        explorer,
+        partialMoveRenderRef,
+        renderrepSetter,
+        engineRef,
+        statusRef,
+        movesRef,
+        focusSetter,
+        explorationRef,
+        moveSetter,
+        gameRecSetter,
+        canPublishSetter,
+        resolveDisplay(
+          perGameSettings,
+          globalMe?.settings,
+          game0.metaGame,
+          sessionDisplayOverride
+        ),
+        navigate
+      );
+      if (gameRef.current.canExplore) {
+        mergeExistingExploration(
+          moveNum,
+          cur_exploration,
+          explorationRef.current.nodes
+        );
+      }
+      if (gameRef.current.customColours) {
+        publishGameColors({ state: engineRef.current.state() });
+      }
+      // Keep dbgame in sync so the main useEffect (which re-runs on
+      // globalMe changes, e.g. color settings) doesn't revert to
+      // the pre-move state.
+      dbgameSetter(game0);
+    } catch (err) {
+      setError(
+        `submitMove (move: ${m}, draw: ${draw}) failed with: ${err.message}`
+      );
+    }
+  };
+
+  const submitComment = async (comment) => {
+    // ignore blank comments
+    if (comment.length > 0 && !/^\s*$/.test(comment)) {
+      commentsSetter([
+        ...comments,
+        {
+          comment: comment,
+          userId: globalMe.id,
+          timeStamp: Date.now(),
+          moveNumber: explorationRef.current.nodes.length - 1,
+        },
+      ]);
+      // console.log(comments);
+      try {
+        // This used to only pass players and meta if game was completed.
+        // I don't see any reason for that, so always passing it so lastChat
+        // is always calculated, even for in-progress games.
+        let players;
+        if (
+          gameRef.current !== undefined &&
+          gameRef.current.players !== undefined
+        ) {
+          players = [...gameRef.current.players];
+        }
+
+        const res = await callAuthApi("submit_comment", {
+          id: gameRef.current.id,
+          players,
+          metaGame: metaGame,
+          comment: comment,
+          moveNumber: explorationRef.current.nodes.length - 1,
+        });
+        if (!res) return;
+        const result = await res.json();
+        if (result && result.statusCode && result.statusCode !== 200)
+          setError(
+            `submit_comment failed, status: ${result.statusCode}, body: ${result.body}`
+          );
+        else if (
+          (!gameRef.current.commented || gameRef.current.commented < 1) &&
+          isInterestingComment(comment)
+        ) {
+          // Update local game object if flag was updated
+          gameRef.current.commented = 1;
+        }
+      } catch (err) {
+        console.log(err);
+        //setError(err.message);
+      }
+    }
+  };
+
+  const submitNodeComment = async (comment) => {
+    // ignore blank comments
+    if (comment.length > 0 && !/^\s*$/.test(comment)) {
+      const node = getFocusNode(
+        explorationRef.current.nodes,
+        gameRef.current,
+        focus
+      );
+      node.AddComment({ userId: globalMe.id, comment, timeStamp: Date.now() });
+      saveExploration(
+        explorationRef.current.nodes,
+        focus.moveNumber + 1,
+        game,
+        globalMe,
+        explorer,
+        errorSetter,
+        errorMessageRef,
+        focus,
+        navigate,
+        true // commentJustAdded
+      );
+      bumpExploration();
+    }
+  };
+
+  const handleResign = () => {
+    showResignConfirmSetter(true);
+  };
+
+  const handleCloseMoveConfirm = () => {
+    submittingSetter(false);
+    showMoveConfirmSetter(false);
+  };
+
+  const handleMoveConfirmed = async () => {
+    showMoveConfirmSetter(false);
+    submittingSetter(true);
+    if (drawMessage === "drawaccepted") {
+      submitMove("", drawMessage);
+    } else {
+      const m = getFocusNode(
+        explorationRef.current.nodes,
+        gameRef.current,
+        focus
+      ).move;
+      submitMove(m, drawMessage);
+    }
+  };
+
+  const handleCloseResignConfirm = () => {
+    showResignConfirmSetter(false);
+  };
+
+  const handleResignConfirmed = async () => {
+    showResignConfirmSetter(false);
+    submittingSetter(true);
+    submitMove("resign", false);
+  };
+
+  const handleDeleteExploration = () => {
+    if (
+      getFocusNode(explorationRef.current.nodes, gameRef.current, focus)
+        .children.length > 0
+    ) {
+      // only confirm if non leaf node
+      showDeleteSubtreeConfirmSetter(true);
+    } else {
+      handleDeleteSubtreeConfirmed();
+    }
+  };
+
+  const handleCloseDeleteSubtreeConfirm = () => {
+    showDeleteSubtreeConfirmSetter(false);
+  };
+
+  const handleDeleteSubtreeConfirmed = async () => {
+    showDeleteSubtreeConfirmSetter(false);
+    let node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focus
+    );
+    node.DeleteNode();
+    let foc = cloneDeep(focus);
+    foc.exPath.pop();
+    if (gameRef.current.gameOver)
+      fixMoveOutcomes(explorationRef.current.nodes, focus.moveNumber);
+    saveExploration(
+      explorationRef.current.nodes,
+      focus.moveNumber + 1,
+      game,
+      globalMe,
+      explorer,
+      errorSetter,
+      errorMessageRef,
+      foc,
+      navigate
+    );
+    handleGameMoveClick(foc);
+  };
+
+  const handleTimeout = () => {
+    showTimeoutConfirmSetter(true);
+  };
+
+  const handleCloseTimeoutConfirm = () => {
+    showTimeoutConfirmSetter(false);
+  };
+
+  const handleTimeoutConfirmed = async () => {
+    showTimeoutConfirmSetter(false);
+    submittingSetter(true);
+    submitMove("timeout", false);
+  };
+
+  // Handler for marking/unmarking a premove
+  const handlePremove = () => {
+    const node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focus
+    );
+
+    // If already a premove, just toggle it off without confirmation
+    if (node.premove) {
+      node.SetPremove(false);
+      saveExploration(
+        explorationRef.current.nodes,
+        focus.moveNumber + 1,
+        game,
+        globalMe,
+        explorer,
+        errorSetter,
+        errorMessageRef,
+        focus,
+        navigate
+      );
+      bumpExploration();
+      return;
+    }
+
+    // Check if this is the first premove or if we're changing an existing one
+    const siblingHasPremove = node.HasSiblingPremove();
+
+    // Show confirmation dialog for first premove or when changing
+    pendingPremoveActionSetter({ node, isChange: siblingHasPremove });
+    showPremoveConfirmSetter(true);
+  };
+
+  moveEntryHandlersRef.current = {
+    handleMove,
+    handleMark,
+    handleSubmit,
+    handleToSubmit,
+    handleView,
+    handleResign,
+    handleTimeout,
+    handleReset,
+    handlePie,
+    handleDeleteExploration,
+    handlePremove,
+  };
+
+  const handleClosePremoveConfirm = () => {
+    showPremoveConfirmSetter(false);
+    pendingPremoveActionSetter(null);
+  };
+
+  const handlePremoveConfirmed = () => {
+    showPremoveConfirmSetter(false);
+    if (pendingPremoveAction && pendingPremoveAction.node) {
+      pendingPremoveAction.node.SetPremove(true);
+      saveExploration(
+        explorationRef.current.nodes,
+        focus.moveNumber + 1,
+        game,
+        globalMe,
+        explorer,
+        errorSetter,
+        errorMessageRef,
+        focus,
+        navigate
+      );
+      bumpExploration();
+    }
+    pendingPremoveActionSetter(null);
+  };
+
+  const handleInjection = async () => {
+    if (
+      injectedState !== undefined &&
+      injectedState !== null &&
+      injectedState.length > 0
+    ) {
+      // For those games that compress the state, we need to compress first, because we show the decomressed state to be copied.
+      let tmpEngine = GameFactory(metaGame, injectedState);
+      const injectedState2 = tmpEngine.serialize(); // NOT cheapSerialize!
+
+      try {
+        let status;
+        const res = await callAuthApi("set_game_state", {
+          id: gameID,
+          metaGame: metaGame,
+          newState: injectedState2,
+        });
+        if (res) {
+          status = res.status;
+          if (status !== 200) {
+            const result = await res.json();
+            errorMessageRef.current = `set_game_state failed, game = ${gameID}, metaGame = ${metaGame}, status = ${status}, message: ${result.message}, body: ${result.body}`;
+            errorSetter(true);
+          } else {
+            const result = await res.json();
+            let game0 = JSON.parse(result.body);
+            const perGameSettings =
+              game0.me > -1 && globalMe
+                ? game0.players.find((p) => p.id === globalMe.id)?.settings
+                : {};
+            setupGame(
+              game0,
+              gameRef,
+              globalMe,
+              explorer,
+              partialMoveRenderRef,
+              renderrepSetter,
+              engineRef,
+              statusRef,
+              movesRef,
+              focusSetter,
+              explorationRef,
+              moveSetter,
+              gameRecSetter,
+              canPublishSetter,
+              resolveDisplay(
+                perGameSettings,
+                globalMe?.settings,
+                game0.metaGame,
+                sessionDisplayOverride
+              ),
+              navigate
+            );
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        errorMessageRef.current = error.message;
+        errorSetter(true);
+      }
+
+      gameRef.current.state = injectedState2;
+      showInjectSetter(false);
+    }
+  };
+
+  const handleCustomize = () => {
+    if (renderrep) {
+      navigate(`/customize/${metaGame}`, {
+        state: { inJSON: JSON.stringify(renderrep, null, 2) },
+      });
+    }
+  };
+
+  const buildGameSummary = useCallback(() => {
+    if (!dbgame) return null;
+    return {
+      id: dbgame.id,
+      metaGame: dbgame.metaGame || metaGame,
+      players: dbgame.players,
+      toMove: dbgame.toMove,
+      lastMoveTime: dbgame.lastMoveTime,
+      lastChat: dbgame.lastChat,
+      seen: dbgame.seen,
+      numMoves: dbgame.numMoves,
+      gameStarted: dbgame.gameStarted,
+      gameEnded: dbgame.gameEnded,
+      variants: dbgame.variants,
+    };
+  }, [dbgame, metaGame]);
+
+  const runMarkAction = useCallback(
+    async (action) => {
+      if (marksBusy) return;
+      marksBusySetter(true);
+      try {
+        const res = await action();
+        if (res?.cancelled) return;
+        if (!res?.ok) {
+          toast.error(res.error || t("Error"));
+        }
+      } finally {
+        marksBusySetter(false);
+      }
+    },
+    [marksBusy, t]
+  );
+
+  const handleWatchToggle = useCallback(() => {
+    const watching = isWatched(globalMe, gameID);
+    const gameSummary = buildGameSummary();
+    runMarkAction(async () => {
+      const res = await toggleWatch({
+        metaGame,
+        id: gameID,
+        gameSummary,
+        watching,
+      });
+      if (res.ok) {
+        watchCountSetter((c) => Math.max(0, c + (watching ? -1 : 1)));
+      }
+      return res;
+    });
+  }, [globalMe, gameID, metaGame, buildGameSummary, runMarkAction]);
+
+  const handleHighlightToggle = useCallback(() => {
+    const highlighted = isHighlighted(globalMe, gameID);
+    runMarkAction(() =>
+      toggleHighlight({
+        metaGame,
+        id: gameID,
+        gameSummary: buildGameSummary(),
+        highlighted,
+      })
+    );
+  }, [globalMe, gameID, metaGame, buildGameSummary, runMarkAction]);
+
+  const handleRecommendToggle = useCallback(() => {
+    const recommended = isRecommended(globalMe, metaGame, gameID);
+    if (!recommended && recommendCountForMeta(globalMe, metaGame) >= 2) {
+      toast.error(t("gameMarks.recommendLimit"));
+      return;
+    }
+    runMarkAction(() =>
+      toggleRecommend({
+        metaGame,
+        id: gameID,
+        gameSummary: buildGameSummary(),
+        recommended,
+      })
+    );
+  }, [globalMe, gameID, metaGame, buildGameSummary, runMarkAction, t]);
+
+  const gameMarkProps = useMemo(() => {
+    if (!globalMe?.id || !dbgame) return null;
+    const participant = isParticipant(dbgame, globalMe.id);
+    const completed = isGameCompleted(dbgame);
+    const showWatch = !participant;
+    const showHighlight = participant && completed;
+    const showRecommend = completed;
+    if (!showWatch && !showHighlight && !showRecommend) return null;
+    return {
+      screenWidth,
+      showWatch,
+      showHighlight,
+      showRecommend,
+      watching: isWatched(globalMe, gameID),
+      highlighted: isHighlighted(globalMe, gameID),
+      recommended: isRecommended(globalMe, metaGame, gameID),
+      onWatch: handleWatchToggle,
+      onHighlight: handleHighlightToggle,
+      onRecommend: handleRecommendToggle,
+      busy: marksBusy,
+    };
+  }, [
+    globalMe,
+    dbgame,
+    gameID,
+    metaGame,
+    screenWidth,
+    marksBusy,
+    handleWatchToggle,
+    handleHighlightToggle,
+    handleRecommendToggle,
+  ]);
+
+  const displayRenderRepJson = useMemo(
+    () => getDisplayedRenderRepJson(renderrep, boardRenderIndex),
+    [renderrep, boardRenderIndex]
+  );
+
+  const handleInjectChange = (e) => {
+    injectedStateSetter(e.target.value);
+  };
+
+  const handleExplorer = () => {
+    let game = gameRef.current;
+    game.canExplore = !game.simultaneous && game.numPlayers === 2;
+    let focus0 = cloneDeep(focus);
+    focus0.canExplore = canExploreMove(
+      gameRef.current,
+      explorationRef.current.nodes,
+      focus0
+    );
+    if (
+      focus0.canExplore &&
+      !focus.canExplore &&
+      !game.noMoves &&
+      (game.canSubmit || (!game.simultaneous && game.numPlayers === 2))
+    ) {
+      let node = getFocusNode(explorationRef.current.nodes, game, focus);
+      const engine = GameFactory(game.metaGame, node.state);
+      if (game.simultaneous) movesRef.current = engine.moves(game.me + 1);
+      else movesRef.current = engine.moves();
+    }
+    focusSetter(focus0);
+    setCanPublish(
+      game,
+      explorationRef.current.nodes,
+      globalMe,
+      canPublishSetter
+    );
+    explorerSetter(true);
+  };
+
+  const handlePublishExploration = async () => {
+    console.log("Fetching private exploration data");
+    canPublishSetter("publishing");
+    try {
+      // mark game as published (don't await)
+      callAuthApi(
+        "mark_published",
+        {
+          id: gameID,
+          metagame: gameRef.current.metaGame,
+        },
+        false
+      );
+      // fetch private exploration data
+      let status;
+      const res = await callAuthApi(
+        "get_private_exploration",
+        {
+          id: gameID,
+        },
+        false
+      );
+      if (res) {
+        status = res.status;
+        if (status !== 200) {
+          const result = await res.json();
+          errorMessageRef.current = `get_private_exploration failed, game = ${gameID}, status = ${status}, message: ${result.message}, body: ${result.body}`;
+          errorSetter(true);
+        } else {
+          const result = await res.json();
+          if (result && result.body) {
+            let data = JSON.parse(result.body);
+            data = data.map((d) => {
+              if (d && typeof d.tree === "string") {
+                d.tree = JSON.parse(d.tree);
+              }
+              return d;
+            });
+            mergePrivateExploration(
+              gameRef.current,
+              explorationRef.current.nodes,
+              data,
+              globalMe,
+              errorSetter,
+              errorMessageRef
+            );
+            canPublishSetter("no");
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      errorMessageRef.current = `handlePublishExploration failed with: ${error.message}`;
+      errorSetter(true);
+    }
+  };
+
+  const refreshNextGame = () => {
+    async function fetchData() {
+      try {
+        let status;
+        const res = await callAuthApi("next_game", {}, false);
+        if (res) {
+          status = res.status;
+          if (status !== 200) {
+            const result = await res.json();
+            errorMessageRef.current = `next_game failed, status = ${status}, message: ${result.message}, body: ${result.body}`;
+            errorSetter(true);
+            return [];
+          } else {
+            const result = await res.json();
+            return JSON.parse(result.body);
+          }
+        } else {
+          return [];
+        }
+      } catch (error) {
+        console.log(error);
+        errorMessageRef.current = `next_game failed with: ${error.message}`;
+        errorSetter(true);
+        return [];
+      }
+    }
+    fetchData().then((result) => {
+      setMyMove(result);
+      if (Array.isArray(result) && result.length > 0) {
+        const next = result[0];
+        navigateToTop(`${moveBasePath}/${next.metaGame}/0/${next.id}`);
+      } else {
+        navigateToTop("/");
+      }
+    });
+  };
+
+  const handleNextGame = () => {
+    // If the current game is in the list, move it to the end.
+    const local = [...myMove];
+    const idx = local.findIndex((x) => x.id === gameID);
+    if (idx !== -1) {
+      const thisgame = local[idx];
+      local.splice(idx, 1);
+      if (local.length > 0) {
+        local.push(thisgame);
+        setMyMove(local);
+      }
+    }
+    // Then go to the next game in the list.
+    if (local.length === 0) {
+      // transfer control to the function that fetches refreshed nextgame data
+      return refreshNextGame();
+    } else {
+      const next = local[0];
+      navigateToTop(`${moveBasePath}/${next.metaGame}/0/${next.id}`);
+    }
+  };
+
+  const navigateToTop = (to) => {
+    navigate(to, { replace: true });
+    window.scrollTo(0, 0);
+  };
+
+  const commentingCompletedGame =
+    !error && !!focus && !!gameRef.current && gameRef.current.gameOver;
+
+  const canComment =
+    !!globalMe &&
+    (commentingCompletedGame ||
+      gameRef.current?.me > -1 ||
+      globalMe.admin === true);
+
+  const chatComments = useMemo(() => {
+    void explorationVersion;
+    if (!commentingCompletedGame) {
+      return comments;
+    }
+    return [
+      ...(comments || []).map((c) => ({
+        ...c,
+        inGame: true,
+        path:
+          c.moveNumber !== undefined
+            ? { moveNumber: c.moveNumber, exPath: [] }
+            : undefined,
+      })),
+      ...getAllNodeComments(explorationRef.current.nodes),
+    ];
+  }, [commentingCompletedGame, comments, explorationVersion]);
+
+  const game = gameRef.current;
+  let toMove;
+  if (!error && focus && game) {
+    if (game.simultaneous) {
+      toMove = game.toMove;
+    } else {
+      const node = getFocusNode(
+        explorationRef.current.nodes,
+        gameRef.current,
+        focus
+      );
+      toMove = node?.toMove;
+    }
+  }
+
+  return {
+    moveBasePath,
+    error,
+    errorMessageRef,
+    game,
+    toMove,
+    metaGame,
+    gameID,
+    parenthetical,
+    tourState,
+    startTour,
+    showTour,
+    showTourSetter,
+    startTourSetter,
+    handleJoyrideCallback,
+    screenWidth,
+    verticalLayout,
+    verticalLayoutSetter,
+    mobileOrder,
+    handleMoveUp,
+    handleMoveDown,
+    statusRef,
+    gameRef,
+    explorationRef,
+    movesRef,
+    engineRef,
+    focus,
+    move,
+    moveEntryHandlers,
+    submitting,
+    gameRec,
+    canPublish,
+    handlePublishExploration,
+    handleExplorer,
+    handleNextGame,
+    explorer,
+    rendered,
+    boardRenderIndex,
+    setBoardRenderIndex,
+    t,
+    locked,
+    setLocked,
+    setRefresh,
+    gameEngine,
+    gameNote,
+    inCheck,
+    rotIncrement,
+    stackImage,
+    boardImage,
+    handleRotate,
+    handleUpdateRenderOptions,
+    handleCycleAltDisplay,
+    altDisplays,
+    showGameDetailsSetter,
+    showGameNoteSetter,
+    showGameDumpSetter,
+    showCustomCSSSetter,
+    showInjectSetter,
+    colourContext: effectiveColourContext,
+    handleCustomize,
+    watchCount,
+    gameMarkProps,
+    handleStashClick,
+    copyHWDiagram,
+    settings,
+    handleGameMoveClick,
+    getFocusNode,
+    handlePlaygroundExport,
+    globalMe,
+    chatComments,
+    comments,
+    commentingCompletedGame,
+    canComment,
+    submitNodeComment,
+    submitComment,
+    commentsTooLong,
+    showSettings,
+    showSettingsSetter,
+    setError,
+    userSettings,
+    gameSettings,
+    processUpdatedSettings,
+    handleSettingsClose,
+    handleSettingsSave,
+    showResignConfirm,
+    handleResignConfirmed,
+    handleCloseResignConfirm,
+    showDeleteSubtreeConfirm,
+    handleDeleteSubtreeConfirmed,
+    handleCloseDeleteSubtreeConfirm,
+    showPremoveConfirm,
+    pendingPremoveAction,
+    handlePremoveConfirmed,
+    handleClosePremoveConfirm,
+    showMoveConfirm,
+    handleMoveConfirmed,
+    handleCloseMoveConfirm,
+    showTimeoutConfirm,
+    handleTimeoutConfirmed,
+    handleCloseTimeoutConfirm,
+    showGameDetails,
+    gameDeets,
+    designerString,
+    coderString,
+    showGameDump,
+    displayRenderRepJson,
+    showInject,
+    injectedState,
+    handleInjectChange,
+    handleInjection,
+    showGameNote,
+    interimNote,
+    interimNoteSetter,
+    handleNoteUpdate,
+    showCustomCSS,
+    saveCustomCSS,
+    newCSS,
+    newCSSSetter,
+    cssActive,
+    cssActiveSetter,
+    reportError,
+  };
+}
+
