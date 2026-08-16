@@ -29,6 +29,46 @@ import NewChallengeModal from "../NewChallengeModal";
 import { useGameRecommendations } from "../../hooks/useGameRecommendations";
 import { useStore } from "../../stores";
 
+function readStoredValue(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw !== null) {
+      return JSON.parse(raw);
+    }
+  } catch {
+    /* ignore */
+  }
+  return undefined;
+}
+
+function initialPageSize(viewKey) {
+  const fromNew = readStoredValue(`explore-show-${viewKey}`);
+  if (fromNew !== undefined) {
+    return fromNew;
+  }
+  const legacyKeys =
+    viewKey === "all" ? ["allgames-show", "1es-show"] : ["1es-show"];
+  for (const legacyKey of legacyKeys) {
+    const fromLegacy = readStoredValue(legacyKey);
+    if (fromLegacy !== undefined) {
+      return fromLegacy;
+    }
+  }
+  return 10;
+}
+
+function initialGridView(viewKey) {
+  const fromNew = readStoredValue(`explore-grid-${viewKey}`);
+  if (fromNew !== undefined) {
+    return fromNew;
+  }
+  const fromLegacy = readStoredValue("grid-view");
+  if (fromLegacy !== undefined) {
+    return fromLegacy;
+  }
+  return false;
+}
+
 function tagSortFn(a, b) {
   const priority = (raw) => {
     if (raw.startsWith("goal")) return 1;
@@ -49,8 +89,8 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
   const [games, gamesSetter] = useState([]);
   const [fetchedData, fetchedDataSetter] = useState(null);
   const [showState, showStateSetter] = useStorageState(
-    config.pageSizeStorageKey || "1es-show",
-    10
+    `explore-show-${viewKey}`,
+    initialPageSize(viewKey)
   );
   const [pageIndex, pageIndexSetter] = useState(() => {
     try {
@@ -84,7 +124,10 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     }
     return filters;
   });
-  const [gridView, gridViewSetter] = useStorageState("grid-view", false);
+  const [gridView, gridViewSetter] = useStorageState(
+    `explore-grid-${viewKey}`,
+    initialGridView(viewKey)
+  );
   const [activeImgModal, activeImgModalSetter] = useState("");
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [filterStars, filterStarsSetter] = useStorageState(

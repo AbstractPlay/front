@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
@@ -9,28 +9,31 @@ import { API_ENDPOINT_OPEN } from "../config";
 import { Helmet } from "react-helmet-async";
 import MetaItem from "./MetaContainer/MetaItem";
 import ExploreView from "./Explore/ExploreView";
-import { viewConfigs } from "./Explore/exploreViewConfigs";
+import {
+  DEFAULT_EXPLORE_VIEW,
+  EXPLORE_VIEW_ORDER,
+  getExploreViewConfig,
+  isValidExploreView,
+} from "../lib/exploreSections";
 import { useStore } from "../stores";
 
 function Explore(props) {
   const globalMe = useStore((state) => state.globalMe);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { mode: modeParam, metaGame } = useParams();
+  const isGameDetail = location.pathname.startsWith("/games/");
   const [counts, countsSetter] = useState(null);
-  const [selected, selectedSetter] = useStorageState("selected-module", "all");
-  const { metaGame } = useParams();
+  const [storedView, setStoredView] = useStorageState(
+    "selected-module",
+    DEFAULT_EXPLORE_VIEW
+  );
   const { t } = useTranslation();
 
-  const components = [
-    ["all", viewConfigs.all],
-    ["newest", viewConfigs.newest],
-    ["hotRaw", viewConfigs.hotRaw],
-    ["hotPlayers", viewConfigs.hotPlayers],
-    ["playerSum", viewConfigs.playerSum],
-    ["hindex", viewConfigs.hindex],
-    ["stars", viewConfigs.stars],
-    ["completed", viewConfigs.completed],
-    ["completedRecent", viewConfigs.completedRecent],
-    ["random", viewConfigs.random],
-  ];
+  const modeFromPath =
+    !isGameDetail && modeParam !== undefined && modeParam !== ""
+      ? modeParam
+      : undefined;
 
   useEffect(() => {
     async function fetchData() {
@@ -47,6 +50,12 @@ function Explore(props) {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (modeFromPath !== undefined && isValidExploreView(modeFromPath)) {
+      setStoredView(modeFromPath);
+    }
+  }, [modeFromPath, setStoredView]);
 
   const toggleStar = useCallback(
     async (game) => {
@@ -102,94 +111,124 @@ function Explore(props) {
 
   const handleSelChange = useCallback(
     (sel) => {
-      selectedSetter(sel);
+      setStoredView(sel);
+      navigate(`/explore/${sel}`);
     },
-    [selectedSetter]
+    [navigate, setStoredView]
   );
 
-  if (metaGame === undefined || metaGame === null || !gameinfo.has(metaGame)) {
+  if (isGameDetail) {
+    if (!gameinfo.has(metaGame)) {
+      if (isValidExploreView(metaGame)) {
+        return <Navigate to={`/explore/${metaGame}`} replace />;
+      }
+      return <Navigate to="/explore" replace />;
+    }
+    if (counts !== null) {
+      return (
+        <>
+          <Helmet>
+            <meta
+              property="og:title"
+              content={`${gameinfo.get(metaGame).name}: Game Information`}
+            />
+            <meta
+              property="og:url"
+              content={`https://play.abstractplay.com/games/${metaGame}`}
+            />
+            <meta
+              property="og:description"
+              content={`Information on the game ${gameinfo.get(metaGame).name}`}
+            />
+          </Helmet>
+          <MetaItem
+            game={gameinfo.get(metaGame)}
+            counts={counts[metaGame]}
+            toggleStar={toggleStar}
+            handleChallenge={handleNewChallenge}
+            syncTabToUrl
+          />
+        </>
+      );
+    }
+    return null;
+  }
+
+  if (modeFromPath !== undefined && !isValidExploreView(modeFromPath)) {
     return (
-      <>
-        <Helmet>
-          <meta property="og:title" content="Explore available games" />
-          <meta
-            property="og:url"
-            content="https://play.abstractplay.com/explore"
-          />
-          <meta
-            property="og:description"
-            content="Different ways of exploring what's popular on Abstract Play."
-          />
-        </Helmet>
-        <article>
-          <div
-            className="container has-text-centered"
-            style={{ paddingBottom: "1em" }}
-          >
-            <h1 className="title">{t("ExploreGames")}</h1>
-          </div>
-          <div className="content">
-            <p>{t("explore.intro")}</p>
-          </div>
-          <div className="container">
-            <div className="control">
-              <div className="select">
-                <select
-                  value={selected}
-                  onChange={(e) => handleSelChange(e.target.value)}
-                >
-                  {components.map(([key, cfg]) => (
+      <Navigate to={`/explore/${DEFAULT_EXPLORE_VIEW}`} replace />
+    );
+  }
+
+  if (modeFromPath === undefined) {
+    const target = isValidExploreView(storedView)
+      ? storedView
+      : DEFAULT_EXPLORE_VIEW;
+    return <Navigate to={`/explore/${target}`} replace />;
+  }
+
+  const activeMode = modeFromPath;
+
+  return (
+    <>
+      <Helmet>
+        <meta property="og:title" content="Explore available games" />
+        <meta
+          property="og:url"
+          content={`https://play.abstractplay.com/explore/${activeMode}`}
+        />
+        <meta
+          property="og:description"
+          content="Different ways of exploring what's popular on Abstract Play."
+        />
+      </Helmet>
+      <article>
+        <div
+          className="container has-text-centered"
+          style={{ paddingBottom: "1em" }}
+        >
+          <h1 className="title">{t("ExploreGames")}</h1>
+        </div>
+        <div className="content">
+          <p>{t("explore.intro")}</p>
+        </div>
+        <div className="container">
+          <div className="control">
+            <div className="select">
+              <select
+                value={activeMode}
+                onChange={(e) => handleSelChange(e.target.value)}
+              >
+                {EXPLORE_VIEW_ORDER.map((key) => {
+                  const cfg = getExploreViewConfig(key);
+                  return (
                     <option key={key} value={key}>
                       {t(cfg.titleKey)}
                     </option>
-                  ))}
-                </select>
-              </div>
+                  );
+                })}
+              </select>
             </div>
           </div>
-          <hr />
-          {components.map(([key, cfg]) =>
-            selected === key ? (
-              <ExploreView
-                key={key}
-                viewKey={key}
-                config={cfg}
-                toggleStar={toggleStar}
-                counts={counts}
-                handleChallenge={key === "all" ? handleNewChallenge : undefined}
-              />
-            ) : null
-          )}
-        </article>
-      </>
-    );
-  } else if (counts !== null) {
-    return (
-      <>
-        <Helmet>
-          <meta
-            property="og:title"
-            content={`${gameinfo.get(metaGame).name}: Game Information`}
-          />
-          <meta
-            property="og:url"
-            content="https://play.abstractplay.com/games"
-          />
-          <meta
-            property="og:description"
-            content={`Information on the game ${gameinfo.get(metaGame).name}`}
-          />
-        </Helmet>
-        <MetaItem
-          game={gameinfo.get(metaGame)}
-          counts={counts[metaGame]}
-          toggleStar={toggleStar}
-          handleChallenge={handleNewChallenge}
-          syncTabToUrl
-        />
-      </>
-    );
-  }
+        </div>
+        <hr />
+        {EXPLORE_VIEW_ORDER.map((key) => {
+          if (activeMode !== key) return null;
+          const cfg = getExploreViewConfig(key);
+          return (
+            <ExploreView
+              key={key}
+              viewKey={key}
+              config={cfg}
+              toggleStar={toggleStar}
+              counts={counts}
+              handleChallenge={key === "all" ? handleNewChallenge : undefined}
+            />
+          );
+        })}
+      </article>
+    </>
+  );
 }
 
 export default Explore;

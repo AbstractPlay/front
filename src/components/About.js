@@ -19,7 +19,7 @@ function aboutHighlightsLine(t) {
   return (
     <>
       {before}
-      <Link to="/games">{linkText}</Link>
+      <Link to="/explore">{linkText}</Link>
       {after}
     </>
   );

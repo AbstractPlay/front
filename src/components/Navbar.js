@@ -138,7 +138,7 @@ function Navbar(props) {
           </div>
           <div className="navbar-item">
             <Link
-              to="/games"
+              to="/explore"
               className="navbar-item"
               onClick={() => updateBurgerExpanded(false)}
             >
