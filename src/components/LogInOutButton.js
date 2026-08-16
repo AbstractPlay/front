@@ -8,7 +8,7 @@ import NewProfile from "./NewProfile";
 import { resyncPushSubscription } from "../subscription";
 import { useStore } from "../stores";
 
-function LogInOutButton({ closeBurger }) {
+function LogInOutButton({ closeBurger, variant = "default" }) {
   const { t } = useTranslation();
   const [user, userSetter] = useState(null);
   const [showUserSettingsModal, showUserSettingsModalSetter] = useState(false);
@@ -99,38 +99,65 @@ function LogInOutButton({ closeBurger }) {
       <button
         className="button is-small apButton"
         onClick={() => Auth.federatedSignIn()}
-        id="login-button"
+        id={variant === "compact" ? "login-button" : undefined}
       >
         {t("LogIn")}
       </button>
     );
-  } else {
+  }
+
+  const username = user.idToken.payload["cognito:username"];
+  const playerPath = `/player/${user.idToken.payload["sub"]}`;
+  const settingsModals = (
+    <>
+      <UserSettingsModal
+        show={showUserSettingsModal}
+        handleClose={handleUserSettingsClose}
+      />
+      <NewProfile
+        show={showNewProfileModal}
+        handleClose={handleNewProfileClose}
+        updateMe={true}
+      />
+    </>
+  );
+
+  if (variant === "compact") {
     return (
-      <div>
-        <Link
-          to={`/player/${user.idToken.payload["sub"]}`}
-          onClick={() => closeBurger()}
-        >
-          {user.idToken.payload["cognito:username"]}
-        </Link>
+      <>
         <button
-          className="fabtn align-right userSettingsBtn"
-          onClick={handleSettingsClick}
+          type="button"
+          className="navbar-login-compact-profile"
+          aria-label={t("UserSettings")}
+          title={username}
+          onClick={() => {
+            closeBurger();
+            handleSettingsClick();
+          }}
         >
-          <i className="fa fa-cog"></i>
+          <span className="icon">
+            <i className="fa fa-user" aria-hidden="true"></i>
+          </span>
         </button>
-        <UserSettingsModal
-          show={showUserSettingsModal}
-          handleClose={handleUserSettingsClose}
-        />
-        <NewProfile
-          show={showNewProfileModal}
-          handleClose={handleNewProfileClose}
-          updateMe={true}
-        />
-      </div>
+        {settingsModals}
+      </>
     );
   }
+
+  return (
+    <div>
+      <Link to={playerPath} onClick={() => closeBurger()}>
+        {username}
+      </Link>
+      <button
+        className="fabtn align-right userSettingsBtn"
+        onClick={handleSettingsClick}
+      >
+        <i className="fa fa-cog"></i>
+      </button>
+      {settingsModals}
+    </div>
+  );
 }
 
 export default LogInOutButton;

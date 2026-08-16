@@ -93,11 +93,14 @@ function Navbar(props) {
             )}
           </Link>
         </div>
+        <div className="navbar-item navbar-login-mobile-only">
+          <LogInOutButton variant="compact" closeBurger={closeBurger} />
+        </div>
         <a
           role="button"
           className={"navbar-burger" + (burgerExpanded ? " is-active" : "")}
           aria-label={t("a11y.menu")}
-          aria-expanded="false"
+          aria-expanded={burgerExpanded}
           data-target="navbarMain"
           onClick={() => updateBurgerExpanded(!burgerExpanded)}
         >
@@ -327,7 +330,12 @@ function Navbar(props) {
               </span>
             </button>
           </div>
-          <div className="navbar-item tourSettings">
+          <div
+            className={
+              "navbar-item tourSettings" +
+              (loggedin ? "" : " navbar-login-hide-mobile")
+            }
+          >
             <LogInOutButton closeBurger={closeBurger} />
           </div>
         </div>
