@@ -5734,5 +5734,62 @@
   "tour.play.welcome": {
     "src": "This is where the action happens! The play screen for every game is structured the same way. The name of the game will always appear here, front and centre, along with any descriptors like whether the game is part of a tournament.",
     "out": "¡Aquí es donde ocurre la acción! La pantalla de juego para cada partida está estructurada de la misma manera. El nombre del juego siempre aparecerá aquí, al frente y al centro, junto con cualquier descriptor, como si la partida es parte de un torneo."
+  },
+  "boardExport.delayLabel": {
+    "src": "Delay between frames (seconds)"
+  },
+  "boardExport.endLabel": {
+    "src": "End position"
+  },
+  "boardExport.export": {
+    "src": "Export GIF"
+  },
+  "boardExport.failed": {
+    "src": "Export failed: {{error}}"
+  },
+  "boardExport.frameCap": {
+    "src": "Too many frames (maximum {{max}}). Choose a shorter range."
+  },
+  "boardExport.frameCount": {
+    "src": "{{count}} frame(s)"
+  },
+  "boardExport.gifButton": {
+    "src": "Download animated board (GIF)"
+  },
+  "boardExport.gifHelp": {
+    "src": "Exports the board along the current line (main line and any variation you are viewing). Stacked column expansions are not included."
+  },
+  "boardExport.gifSuccess": {
+    "src": "Animated GIF downloaded."
+  },
+  "boardExport.gifTitle": {
+    "src": "Export animated GIF"
+  },
+  "boardExport.pathInitial": {
+    "src": "Initial position"
+  },
+  "boardExport.pathMove": {
+    "src": "After move {{number}}: {{move}}"
+  },
+  "boardExport.pathStep": {
+    "src": "Step {{number}}"
+  },
+  "boardExport.pathVariation": {
+    "src": "Variation: {{move}}"
+  },
+  "boardExport.pathVariationUnknown": {
+    "src": "Variation"
+  },
+  "boardExport.pngButton": {
+    "src": "Download board image (PNG)"
+  },
+  "boardExport.pngSuccess": {
+    "src": "Board image downloaded."
+  },
+  "boardExport.progress": {
+    "src": "Exporting frame {{current}} of {{total}}…"
+  },
+  "boardExport.startLabel": {
+    "src": "Start position"
   }
 }

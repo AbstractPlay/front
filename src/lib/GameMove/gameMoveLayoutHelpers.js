@@ -64,6 +64,9 @@ export function buildBoardProps(session) {
     watchCount,
     gameMarkProps,
     gameRef,
+    handleExportBoardPng,
+    showBoardExportGifSetter,
+    boardExportDisabled,
   } = session;
 
   return {
@@ -101,6 +104,9 @@ export function buildBoardProps(session) {
     setBoardRenderIndex,
     watchCount,
     gameMarkProps,
+    onExportPng: handleExportBoardPng,
+    onOpenExportGif: () => showBoardExportGifSetter(true),
+    boardExportDisabled: boardExportDisabled ?? rendered.length === 0,
   };
 }
 
