@@ -35,8 +35,8 @@
     <meta property="og:url" content="https://play.abstractplay.com" />
     <meta property="og:description" content="Play abstract strategy board games online asynchronously!" />
 
-    <!-- CSP omitted for Vite dev (HMR). Injected at build time via vite.config.js
-         (source: csp-policy.mjs). -->
+    <!-- CSP is set on CloudFront response headers from csp-policy.mjs
+         (bin/sync-cloudfront-csp.mjs). Dev server has no CSP (HMR). -->
 
     <title>Abstract Play</title>
   </head>
