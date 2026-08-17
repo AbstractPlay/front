@@ -67,5 +67,13 @@ jobs:
 
       - name: Docs link check
         run: |
-          rsync -a --exclude node_modules --exclude build ./ _ap_docs/vendor/front/
-          cd _ap_docs && npm ci && npm run docs:check
+          cd _ap_docs
+          git submodule sync --recursive
+          git submodule update --init --recursive
+          for path in vendor/renderer vendor/gameslib vendor/node-backend vendor/recranks vendor/backend-crons; do
+            git -C "$path" fetch --depth=1 origin develop
+            git -C "$path" checkout FETCH_HEAD
+          done
+          rsync -a --exclude node_modules --exclude build ../ ./vendor/front/
+          npm ci
+          npm run docs:check
