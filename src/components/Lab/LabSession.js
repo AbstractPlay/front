@@ -1,5 +1,4 @@
 import React, {
-  Fragment,
   useCallback,
   useEffect,
   useMemo,
@@ -24,6 +23,16 @@ import Board from "./Board";
 import Modal from "../Modal";
 import ClipboardCopy from "../../lib/ClipboardCopy";
 import { getDisplayedRenderRepJson } from "../../lib/displayRenderRepJson";
+import {
+  exportBoardGif,
+  exportCurrentBoardPng,
+} from "../../lib/boardExport/exportBoard";
+import {
+  buildPathFrameOptions,
+  getPathToFocus,
+  MAX_GIF_FRAMES,
+} from "../../lib/boardExport/enumeratePathFrames";
+import BoardExportGifModal from "../BoardExport/BoardExportGifModal";
 import { toast } from "react-toastify";
 import LabSaveModal from "./LabSaveModal";
 import LabRenderOptionsModal from "./LabRenderOptionsModal";
@@ -868,6 +877,120 @@ function LabSession({
     [renderrep, boardRenderIndex]
   );
 
+  const [showBoardExportGif, showBoardExportGifSetter] = useState(false);
+  const [boardExportBusy, boardExportBusySetter] = useState(false);
+
+  const boardExportPathFrames = useMemo(() => {
+    void explorationVersion;
+    const currentGame = gameRef.current;
+    const nodes = explorationRef.current?.nodes;
+    if (!currentGame || !nodes?.length || !focus) return [];
+    const path = getPathToFocus(nodes, currentGame, focus);
+    return buildPathFrameOptions(path, nodes, getFocusNode, currentGame, t);
+  }, [focus, explorationVersion, t]);
+
+  const handleExportBoardPng = useCallback(async () => {
+    const currentGame = gameRef.current;
+    if (!currentGame || rendered.length === 0) return;
+    try {
+      await exportCurrentBoardPng({
+        renderrep,
+        boardRenderIndex,
+        rendered,
+        metaGame,
+        gameId: currentGame.id,
+        settings,
+        colourContext: effectiveColourContext,
+        globalMe: globalMeRef.current,
+        isParticipant: currentGame.me,
+      });
+      toast(t("boardExport.pngSuccess"));
+    } catch (err) {
+      toast(t("boardExport.failed", { error: err.message || String(err) }), {
+        type: "error",
+      });
+    }
+  }, [
+    rendered,
+    renderrep,
+    boardRenderIndex,
+    metaGame,
+    settings,
+    effectiveColourContext,
+    t,
+  ]);
+
+  const handleExportBoardGif = useCallback(
+    async ({ delaySec, startPathIndex, endPathIndex }) => {
+      const currentGame = gameRef.current;
+      const nodes = explorationRef.current?.nodes;
+      if (!currentGame || !nodes?.length || !focus || rendered.length === 0) {
+        return;
+      }
+      boardExportBusySetter(true);
+      let progressToast;
+      try {
+        await exportBoardGif({
+          exploration: nodes,
+          game: currentGame,
+          focus,
+          getFocusNode,
+          replaceNames,
+          players: currentGame.players,
+          users: useStore.getState().users,
+          getPerspective: (engine) => engine.currplayer,
+          altDisplay: settings?.display,
+          metaGame,
+          gameId: currentGame.id,
+          settings,
+          colourContext: effectiveColourContext,
+          globalMe: globalMeRef.current,
+          isParticipant: currentGame.me,
+          delaySec,
+          startPathIndex,
+          endPathIndex,
+          onProgress: (current, total) => {
+            if (progressToast) {
+              toast.dismiss(progressToast);
+            }
+            progressToast = toast(
+              t("boardExport.progress", { current, total }),
+              { autoClose: false }
+            );
+          },
+        });
+        if (progressToast) {
+          toast.dismiss(progressToast);
+        }
+        toast(t("boardExport.gifSuccess"));
+        showBoardExportGifSetter(false);
+      } catch (err) {
+        if (progressToast) {
+          toast.dismiss(progressToast);
+        }
+        const message =
+          err.message?.startsWith("FRAME_CAP:")
+            ? t("boardExport.frameCap", {
+                max: MAX_GIF_FRAMES,
+              })
+            : t("boardExport.failed", {
+                error: err.message || String(err),
+              });
+        toast(message, { type: "error" });
+      } finally {
+        boardExportBusySetter(false);
+      }
+    },
+    [
+      focus,
+      rendered.length,
+      metaGame,
+      settings,
+      effectiveColourContext,
+      t,
+    ]
+  );
+
   if (error) {
     return (
       <>
@@ -930,12 +1053,6 @@ function LabSession({
           </span>
         </span>
       </h1>
-      {inCheck ? (
-        <div
-          className="content inCheck"
-          dangerouslySetInnerHTML={{ __html: inCheck }}
-        />
-      ) : null}
       <Board
         metaGame={metaGame}
         gameID={game.id}
@@ -965,6 +1082,9 @@ function LabSession({
         handleCustomize={handleCustomize}
         boardRenderIndex={boardRenderIndex}
         setBoardRenderIndex={setBoardRenderIndex}
+        onExportPng={handleExportBoardPng}
+        onOpenExportGif={() => showBoardExportGifSetter(true)}
+        boardExportDisabled={rendered.length === 0}
       />
     </>
   );
@@ -1159,6 +1279,14 @@ function LabSession({
           processNewSettings={processUpdatedLabSettings}
           showSettingsSetter={showSettingsSetter}
           handleClose={handleSettingsClose}
+        />
+        <BoardExportGifModal
+          show={showBoardExportGif}
+          onClose={() => showBoardExportGifSetter(false)}
+          onExport={handleExportBoardGif}
+          pathFrames={boardExportPathFrames}
+          busy={boardExportBusy}
+          t={t}
         />
       </article>
     </>

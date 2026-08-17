@@ -14,6 +14,7 @@ import Board from "./Board";
 import RenderOptionsModal from "../RenderOptionsModal";
 import Modal from "../Modal";
 import ClipboardCopy from "../../lib/ClipboardCopy";
+import BoardExportGifModal from "../BoardExport/BoardExportGifModal";
 import UserChats from "./UserChats";
 import Joyride from "react-joyride";
 
@@ -138,7 +139,20 @@ export default function GameMoveClassicLayout({ session }) {
     cssActive,
     cssActiveSetter,
     reportError,
+    handleExportBoardPng,
+    handleExportBoardGif,
+    showBoardExportGif,
+    showBoardExportGifSetter,
+    boardExportBusy,
+    boardExportPathFrames,
+    boardExportDisabled,
   } = session;
+
+  const boardExportProps = {
+    onExportPng: handleExportBoardPng,
+    onOpenExportGif: () => showBoardExportGifSetter(true),
+    boardExportDisabled,
+  };
 
   if (error) {
       if (
@@ -402,6 +416,7 @@ export default function GameMoveClassicLayout({ session }) {
                           setBoardRenderIndex={setBoardRenderIndex}
                           watchCount={watchCount}
                           gameMarkProps={gameMarkProps}
+                          {...boardExportProps}
                         />
                       ) : key === "moves" ? (
                         <GameMoves
@@ -552,6 +567,7 @@ export default function GameMoveClassicLayout({ session }) {
                   setBoardRenderIndex={setBoardRenderIndex}
                   watchCount={watchCount}
                   gameMarkProps={gameMarkProps}
+                  {...boardExportProps}
                 />
               </div>
               {/***************** GameMoves *****************/}
@@ -996,6 +1012,14 @@ export default function GameMoveClassicLayout({ session }) {
               </label>
             </div>
           </Modal>
+          <BoardExportGifModal
+            show={showBoardExportGif}
+            onClose={() => showBoardExportGifSetter(false)}
+            onExport={handleExportBoardGif}
+            pathFrames={boardExportPathFrames}
+            busy={boardExportBusy}
+            t={t}
+          />
         </article>
       </>
     );

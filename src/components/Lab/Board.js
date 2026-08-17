@@ -33,6 +33,9 @@ function Board({
   handleCustomize,
   boardRenderIndex,
   setBoardRenderIndex,
+  onExportPng,
+  onOpenExportGif,
+  boardExportDisabled,
 }) {
   const globalMe = useStore((state) => state.globalMe);
   const [zoomEnabled, zoomEnabledSetter] = useState(false);
@@ -211,6 +214,26 @@ function Board({
             </span>
           )}
         </button>
+        {onExportPng ? (
+          <button
+            className="fabtn align-right"
+            onClick={onExportPng}
+            disabled={boardExportDisabled}
+            title={t("boardExport.pngButton")}
+          >
+            <i className="fa fa-image"></i>
+          </button>
+        ) : null}
+        {onOpenExportGif ? (
+          <button
+            className="fabtn align-right"
+            onClick={onOpenExportGif}
+            disabled={boardExportDisabled}
+            title={t("boardExport.gifButton")}
+          >
+            <i className="fa fa-film"></i>
+          </button>
+        ) : null}
         {screenWidth < 770 ? null : (
           <button
             className="fabtn align-right"

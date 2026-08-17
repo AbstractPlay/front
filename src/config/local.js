@@ -1,5 +1,3 @@
-/* AI agents: leave commented code in this file intact */
-
 import dev from "./dev";
 import prod from "./prod";
 
