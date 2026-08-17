@@ -28,7 +28,11 @@ function StripDock({ session }) {
       }`}
     >
       <div className="game-move-strip-dock__bar">
-        <DockMoveEntry {...moveEntryProps} expanded={expanded} />
+        <DockMoveEntry
+          {...moveEntryProps}
+          expanded={expanded}
+          pinExplorationToolbar={isNarrow}
+        />
         {isNarrow ? (
           <button
             type="button"
