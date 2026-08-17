@@ -9,11 +9,27 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 const XLINK_NS = "http://www.w3.org/1999/xlink";
 const imageDataCache = new Map();
 
-async function fetchAsDataUrl(url) {
-  if (imageDataCache.has(url)) {
-    return imageDataCache.get(url);
+function normalizeFetchUrl(url) {
+  if (!url || url.startsWith("data:") || url.startsWith("blob:")) {
+    return url;
   }
-  const response = await fetch(url);
+  try {
+    const parsed = new URL(url, window.location.href);
+    if (parsed.origin === window.location.origin) {
+      return `${parsed.pathname}${parsed.search}`;
+    }
+  } catch {
+    // Keep original URL when parsing fails.
+  }
+  return url;
+}
+
+async function fetchAsDataUrl(url) {
+  const fetchUrl = normalizeFetchUrl(url);
+  if (imageDataCache.has(fetchUrl)) {
+    return imageDataCache.get(fetchUrl);
+  }
+  const response = await fetch(fetchUrl);
   if (!response.ok) {
     throw new Error(`Failed to fetch asset: ${url}`);
   }
@@ -24,7 +40,7 @@ async function fetchAsDataUrl(url) {
     reader.onerror = reject;
     reader.readAsDataURL(blob);
   });
-  imageDataCache.set(url, dataUrl);
+  imageDataCache.set(fetchUrl, dataUrl);
   return dataUrl;
 }
 
