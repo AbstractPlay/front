@@ -3383,5 +3383,61 @@ Let me know if something does not work as you expect. Enjoy!</description>
       <guid isPermaLink="false">1536213952222990348</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>I have added Latin American Spanish to the list of managed translations (https://discord.com/channels/526483743180062720/1111447982345298121/1531822979523153941). You can now select it from the page footers and the user settings dialog if you want the notifications and emails to also be translated. Let me know if there are any issues.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 11 Aug 2026 22:48:20 GMT</pubDate>
+      <guid isPermaLink="false">1536868903248994435</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I have just pushed some major tooling changes to the front end (just all the code that builds the code; I didn&amp;apos;t change the actual page code). Everything appears to be working, but I&amp;apos;m forcing myself to walk away from the keyboard and let this change sit overnight before making further improvements. Let me know if something weird happens (it really shouldn&amp;apos;t, but I want to make sure).</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 12 Aug 2026 22:16:09 GMT</pubDate>
+      <guid isPermaLink="false">1537223193440555111</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve launched a new game selection modal to hopefully help mobile users specifically. We&amp;apos;re about to have 280 games, and that makes scrolling those dropdown menus brutally painful, especially on mobile. The new approach lets you search on mobile and offers a number of other helpful quick picks based on your player profile. This new component is reused everywhere game selection happens (Playground, issuing new challenges, and tournaments/events). I warmly welcome further feedback and suggestions on how to continue making this better.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 13 Aug 2026 22:21:09 GMT</pubDate>
+      <guid isPermaLink="false">1537586839836426260</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve also launched a game recommendation engine. When in the new game selection screen, a carousel appears at the top. If you&amp;apos;re interested, details are available here (AI drafted): https://docs.abstractplay.com/front/subsystems/recommendations/. Weighting decisions are mostly guesses at this point, but I&amp;apos;ll monitor things and adjust as needed. I&amp;apos;m always open to suggestions or reports of weirdness. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 14 Aug 2026 01:41:05 GMT</pubDate>
+      <guid isPermaLink="false">1537637152366661683</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve rejiggered the stats page layout and added some new stats. Feedback always welcome.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 14 Aug 2026 20:00:45 GMT</pubDate>
+      <guid isPermaLink="false">1537913893639168141</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I have launched a beta program of sorts around a redesign of our main game play page. This is an important but complex page that has been mostly unchanged since we first launched. We&amp;apos;ve tweaked things here and there, but its core design is mostly untouched. Today I have launched three alternative layouts for your perusal and feedback. 
+
+When visiting the game page, a banner will now appear at the top asking if you want to preview the new layouts. You can simply click the &amp;quot;x&amp;quot; if you don&amp;apos;t want to be asked again. If you do choose to preview, the URL will change and you&amp;apos;ll have access to three new layouts that you can freely switch between. You can provide short text comments and thumbs up and down. You can also return to &amp;quot;Classic&amp;quot; mode at any time. All are mobile friendly but focus on slightly different things.
+
+- The &amp;quot;Strip and dock&amp;quot; layout puts critical information in a top bar, then the board with a floating box with the essentials, and then the context below as drawers.
+- The &amp;quot;Queue card&amp;quot; layout tries to focus on a more vertical approach with some different hierarchy choices.
+- The &amp;quot;Narrative&amp;quot; layout has a single sidebar reordered to focus on information a user likely needs in what order, with the board always available on the right.
+
+All are actually functional and will accurately make moves, so you can see how well they suit you in real play. I&amp;apos;ve created a special topic in Suggestions to discuss things in detail: https://discord.com/channels/526483743180062720/1538580144468262932. I&amp;apos;m going to let this soak for at least a week before making another round of changes. Thank you for your feedback!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 16 Aug 2026 16:20:41 GMT</pubDate>
+      <guid isPermaLink="false">1538583289932152832</guid>
+    </item>
+    
   </channel>
 </rss>
