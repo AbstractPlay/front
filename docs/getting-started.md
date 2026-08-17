@@ -97,7 +97,7 @@ See [Internationalization](/front/subsystems/i18n/).
 | `src/stores/` | Zustand global store |
 | `src/config/` | Per-environment endpoints |
 | `src/hooks/` | Custom React hooks |
-| `index.html` | Vite HTML entry (CSP injected at build time) |
+| `index.html` | Vite HTML entry |
 | `public/` | Static assets, locales, service worker |
 | `bin/` | Build helpers (sitemap, RSS, news) |
 | `csp-policy.mjs` | Production Content-Security-Policy source (synced to CloudFront via `bin/sync-cloudfront-csp.mjs`) |

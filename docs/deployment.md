@@ -64,7 +64,7 @@ Locale files uploaded by `publish-locales.mjs` use `max-age=3600`.
 
 ## Content Security Policy
 
-[`csp-policy.mjs`](../csp-policy.mjs) is the single source of truth. **Production CSP is enforced by a CloudFront response header**, not an HTML meta tag (duplicate policies are intersected by the browser, so an outdated CloudFront header can block features even after `csp-policy.mjs` changes are deployed to S3).
+`csp-policy.mjs` is the single source of truth. **Production CSP is enforced by a CloudFront response header**, not an HTML meta tag (duplicate policies are intersected by the browser, so an outdated CloudFront header can block features even after `csp-policy.mjs` changes are deployed to S3).
 
 After editing `csp-policy.mjs`, deploy as usual; CI runs `node bin/sync-cloudfront-csp.mjs --stage dev|prod` after `serverless client deploy`. To sync manually:
 
