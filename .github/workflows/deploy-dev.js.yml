@@ -122,6 +122,9 @@ jobs:
     - name: Deploy
       run: serverless client deploy --no-confirm
 
+    - name: Sync CloudFront CSP
+      run: node bin/sync-cloudfront-csp.mjs --stage dev
+
     - name: Publish locale files to S3
       run: node bin/publish-locales.mjs --stage dev
 

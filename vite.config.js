@@ -2,7 +2,6 @@ import { defineConfig, loadEnv, transformWithEsbuild } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { fileURLToPath } from "url";
-import { CONTENT_SECURITY_POLICY } from "./csp-policy.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -22,23 +21,6 @@ function jsxInJsFiles() {
   };
 }
 
-/** Inject production CSP on `vite build` (dev server omits CSP for HMR). */
-function productionCsp() {
-  return {
-    name: "production-csp",
-    apply: "build",
-    transformIndexHtml(html) {
-      if (html.includes("Content-Security-Policy")) {
-        return html;
-      }
-      return html.replace(
-        "<title>Abstract Play</title>",
-        `<meta http-equiv="Content-Security-Policy" content="${CONTENT_SECURITY_POLICY}">\n    <title>Abstract Play</title>`
-      );
-    },
-  };
-}
-
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const realMode = env.VITE_REAL_MODE ?? "local";
@@ -49,7 +31,6 @@ export default defineConfig(({ mode }) => {
       react({
         include: /\.(jsx|js|tsx|ts)$/,
       }),
-      productionCsp(),
     ],
     resolve: {
       alias: {
