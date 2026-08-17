@@ -11,7 +11,7 @@ front/
 ├── src/                 # Application source
 ├── index.html           # Vite HTML entry
 ├── vite.config.js       # Vite dev/build/test config
-├── csp-policy.mjs       # Production CSP (injected at build)
+├── csp-policy.mjs       # Production CSP (synced to CloudFront; see Deployment)
 ├── serverless.yml       # AWS deploy config
 └── package.json
 ```

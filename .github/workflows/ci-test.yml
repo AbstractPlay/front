@@ -56,3 +56,16 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Checkout docs site
+        uses: actions/checkout@v4
+        with:
+          repository: AbstractPlay/docs
+          path: _ap_docs
+          token: ${{ secrets.PAT_READ_PACKAGES }}
+
+      - name: Docs link check
+        run: |
+          mkdir -p _ap_docs/vendor/front
+          rsync -a --exclude node_modules --exclude build ./ _ap_docs/vendor/front/
+          cd _ap_docs && npm ci && npm run docs:check
