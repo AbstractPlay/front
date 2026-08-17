@@ -18,6 +18,15 @@ import {
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { Buffer } from "buffer";
 import { getDisplayedRenderRepJson } from "../../lib/displayRenderRepJson";
+import {
+  exportBoardGif,
+  exportCurrentBoardPng,
+} from "../../lib/boardExport/exportBoard";
+import {
+  buildPathFrameOptions,
+  getPathToFocus,
+  MAX_GIF_FRAMES,
+} from "../../lib/boardExport/enumeratePathFrames";
 import { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
 import { toast } from "react-toastify";
@@ -2285,6 +2294,123 @@ export function useGameMoveSession(props) {
     [renderrep, boardRenderIndex]
   );
 
+  const [showBoardExportGif, showBoardExportGifSetter] = useState(false);
+  const [boardExportBusy, boardExportBusySetter] = useState(false);
+
+  const boardExportPathFrames = useMemo(() => {
+    void explorationVersion;
+    const currentGame = gameRef.current;
+    const nodes = explorationRef.current?.nodes;
+    if (!currentGame || !nodes?.length || !focus) return [];
+    const path = getPathToFocus(nodes, currentGame, focus);
+    return buildPathFrameOptions(path, nodes, getFocusNode, currentGame, t);
+  }, [focus, explorationVersion, t]);
+
+  const handleExportBoardPng = useCallback(async () => {
+    const currentGame = gameRef.current;
+    if (!currentGame || rendered.length === 0) return;
+    try {
+      await exportCurrentBoardPng({
+        renderrep,
+        boardRenderIndex,
+        rendered,
+        metaGame,
+        gameId: gameID,
+        settings: displaySettings,
+        colourContext: effectiveColourContext,
+        globalMe: globalMeRef.current,
+        isParticipant: currentGame.me,
+      });
+      toast(t("boardExport.pngSuccess"));
+    } catch (err) {
+      toast(t("boardExport.failed", { error: err.message || String(err) }), {
+        type: "error",
+      });
+    }
+  }, [
+    rendered,
+    renderrep,
+    boardRenderIndex,
+    metaGame,
+    gameID,
+    displaySettings,
+    effectiveColourContext,
+    t,
+  ]);
+
+  const handleExportBoardGif = useCallback(
+    async ({ delaySec, startPathIndex, endPathIndex }) => {
+      const currentGame = gameRef.current;
+      const nodes = explorationRef.current?.nodes;
+      if (!currentGame || !nodes?.length || !focus || rendered.length === 0) {
+        return;
+      }
+      boardExportBusySetter(true);
+      let progressToast;
+      try {
+        await exportBoardGif({
+          exploration: nodes,
+          game: currentGame,
+          focus,
+          getFocusNode,
+          replaceNames,
+          players: currentGame.players,
+          users: useStore.getState().users,
+          getPerspective: (_engine, game) =>
+            game.me ? game.me + 1 : 1,
+          altDisplay: displaySettings?.display,
+          metaGame,
+          gameId: gameID,
+          settings: displaySettings,
+          colourContext: effectiveColourContext,
+          globalMe: globalMeRef.current,
+          isParticipant: currentGame.me,
+          delaySec,
+          startPathIndex,
+          endPathIndex,
+          onProgress: (current, total) => {
+            if (progressToast) {
+              toast.dismiss(progressToast);
+            }
+            progressToast = toast(
+              t("boardExport.progress", { current, total }),
+              { autoClose: false }
+            );
+          },
+        });
+        if (progressToast) {
+          toast.dismiss(progressToast);
+        }
+        toast(t("boardExport.gifSuccess"));
+        showBoardExportGifSetter(false);
+      } catch (err) {
+        if (progressToast) {
+          toast.dismiss(progressToast);
+        }
+        const message =
+          err.message?.startsWith("FRAME_CAP:")
+            ? t("boardExport.frameCap", {
+                max: MAX_GIF_FRAMES,
+              })
+            : t("boardExport.failed", {
+                error: err.message || String(err),
+              });
+        toast(message, { type: "error" });
+      } finally {
+        boardExportBusySetter(false);
+      }
+    },
+    [
+      focus,
+      rendered.length,
+      metaGame,
+      gameID,
+      displaySettings,
+      effectiveColourContext,
+      t,
+    ]
+  );
+
   const handleInjectChange = (e) => {
     injectedStateSetter(e.target.value);
   };
@@ -2604,6 +2730,13 @@ export function useGameMoveSession(props) {
     cssActive,
     cssActiveSetter,
     reportError,
+    handleExportBoardPng,
+    handleExportBoardGif,
+    showBoardExportGif,
+    showBoardExportGifSetter,
+    boardExportBusy,
+    boardExportPathFrames,
+    boardExportDisabled: rendered.length === 0,
   };
 }
 
