@@ -25,7 +25,7 @@ function TurnIndicator({ img, mover, isMyTurn }) {
 }
 
 function DockMoveEntry(props) {
-  const { expanded = false } = props;
+  const { expanded = false, pinExplorationToolbar = false } = props;
   const state = useDockMoveEntry(props);
 
   if (!state.ready) {
@@ -61,6 +61,24 @@ function DockMoveEntry(props) {
 
   const isMyTurn = game.canSubmit && uiState === 0;
   const showPrimaryRow = uiState === 0 && toMove !== "" && focus.canExplore;
+  const showExplorationToolbar =
+    (focus.exPath.length > 0 && game.canExplore) || uiState !== 0;
+
+  const explorationToolbar = showExplorationToolbar ? (
+    <ExplorationToolbar
+      t={t}
+      game={game}
+      focus={focus}
+      exploration={exploration}
+      gameOverNonLeafNode={gameOverNonLeafNode}
+      handlers={handlers}
+      className={
+        pinExplorationToolbar
+          ? "game-move-dock-entry__explore-tools game-move-dock-entry__explore-tools--pinned"
+          : "game-move-dock-entry__explore-tools"
+      }
+    />
+  ) : null;
 
   return (
     <div className="game-move-dock-entry">
@@ -192,6 +210,8 @@ function DockMoveEntry(props) {
         </div>
       </div>
 
+      {pinExplorationToolbar ? explorationToolbar : null}
+
       {expanded ? (
         <div className="game-move-dock-entry__expanded">
           {!game.pie ||
@@ -305,16 +325,7 @@ function DockMoveEntry(props) {
             </button>
           ) : null}
 
-          {(focus.exPath.length > 0 && game.canExplore) || uiState !== 0 ? (
-            <ExplorationToolbar
-              t={t}
-              game={game}
-              focus={focus}
-              exploration={exploration}
-              gameOverNonLeafNode={gameOverNonLeafNode}
-              handlers={handlers}
-            />
-          ) : null}
+          {!pinExplorationToolbar && explorationToolbar}
         </div>
       ) : null}
 
