@@ -62,6 +62,19 @@ Deployments do **not** use CloudFront invalidations. Cache freshness is handled 
 
 Locale files uploaded by `publish-locales.mjs` use `max-age=3600`.
 
+## Content Security Policy
+
+[`csp-policy.mjs`](../csp-policy.mjs) is the single source of truth. **Production CSP is enforced by a CloudFront response header**, not an HTML meta tag (duplicate policies are intersected by the browser, so an outdated CloudFront header can block features even after `csp-policy.mjs` changes are deployed to S3).
+
+After editing `csp-policy.mjs`, deploy as usual; CI runs `node bin/sync-cloudfront-csp.mjs --stage dev|prod` after `serverless client deploy`. To sync manually:
+
+```bash
+node bin/sync-cloudfront-csp.mjs --stage dev
+node bin/sync-cloudfront-csp.mjs --stage prod
+```
+
+Use `--dry-run` to print the policy without calling AWS. Local `npm start` has no CSP (Vite HMR).
+
 ## SPA routing
 
 The `serverless-single-page-app-plugin` rewrites unknown paths to `index.html` so client-side routing works on refresh.

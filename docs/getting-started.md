@@ -100,7 +100,7 @@ See [Internationalization](/front/subsystems/i18n/).
 | `index.html` | Vite HTML entry (CSP injected at build time) |
 | `public/` | Static assets, locales, service worker |
 | `bin/` | Build helpers (sitemap, RSS, news) |
-| `csp-policy.mjs` | Production Content-Security-Policy source |
+| `csp-policy.mjs` | Production Content-Security-Policy source (synced to CloudFront via `bin/sync-cloudfront-csp.mjs`) |
 
 See [Project structure](/front/guides/project-structure/) for conventions.
 
