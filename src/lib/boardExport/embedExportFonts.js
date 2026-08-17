@@ -39,13 +39,17 @@ function extractFontFaceBlocks(cssText) {
 }
 
 async function inlineFontFaceBlock(block, cssUrl) {
-  const urlMatch = block.match(/url\(([^)]+)\)/);
-  if (!urlMatch) return `@font-face { ${block} }`;
-  const rawUrl = urlMatch[1].replace(/['"]/g, "");
-  const absoluteUrl = resolveFontUrl(rawUrl, cssUrl);
-  const dataUrl = await fetchAsDataUrl(absoluteUrl);
-  const inlined = block.replace(urlMatch[0], `url(${dataUrl})`);
-  return `@font-face { ${inlined} }`;
+  try {
+    const urlMatch = block.match(/url\(([^)]+)\)/);
+    if (!urlMatch) return `@font-face { ${block} }`;
+    const rawUrl = urlMatch[1].replace(/['"]/g, "");
+    const absoluteUrl = resolveFontUrl(rawUrl, cssUrl);
+    const dataUrl = await fetchAsDataUrl(absoluteUrl);
+    const inlined = block.replace(urlMatch[0], `url(${dataUrl})`);
+    return `@font-face { ${inlined} }`;
+  } catch {
+    return "";
+  }
 }
 
 /**
@@ -56,18 +60,22 @@ export async function buildEmbeddedExportFontCss() {
     return fontCssCache.get(GOOGLE_FONTS_STYLESHEET);
   }
 
-  const response = await fetch(GOOGLE_FONTS_STYLESHEET);
-  if (!response.ok) {
+  try {
+    const response = await fetch(GOOGLE_FONTS_STYLESHEET);
+    if (!response.ok) {
+      return "";
+    }
+    const cssText = await response.text();
+    const blocks = extractFontFaceBlocks(cssText);
+    const inlined = await Promise.all(
+      blocks.map((block) => inlineFontFaceBlock(block, GOOGLE_FONTS_STYLESHEET))
+    );
+    const css = inlined.filter(Boolean).join("\n");
+    fontCssCache.set(GOOGLE_FONTS_STYLESHEET, css);
+    return css;
+  } catch {
     return "";
   }
-  const cssText = await response.text();
-  const blocks = extractFontFaceBlocks(cssText);
-  const inlined = await Promise.all(
-    blocks.map((block) => inlineFontFaceBlock(block, GOOGLE_FONTS_STYLESHEET))
-  );
-  const css = inlined.join("\n");
-  fontCssCache.set(GOOGLE_FONTS_STYLESHEET, css);
-  return css;
 }
 
 export function primaryFontFamily(fontFamily) {
