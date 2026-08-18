@@ -181,6 +181,45 @@ a.navbar-item,
     color: var(--secondary-font-color);
 }
 
+:root {
+  --ap-navbar-logo-height: 3rem;
+  --ap-navbar-bar-height: min(calc(var(--ap-navbar-logo-height) + 1rem), 10vh);
+}
+
+@media screen and (min-width: 425px) {
+  :root {
+    --ap-navbar-logo-height: 3.75rem;
+  }
+}
+
+@media screen and (min-width: 1220px) {
+  :root {
+    --ap-navbar-logo-height: calc(10vh - 1rem);
+  }
+}
+
+.navbar {
+  --bulma-navbar-height: var(--ap-navbar-bar-height);
+  max-height: 10vh;
+  min-height: var(--ap-navbar-bar-height);
+}
+
+.navbar-brand {
+  max-height: 10vh;
+  min-height: var(--ap-navbar-bar-height);
+}
+
+.navbar-brand .navbar-item {
+  align-items: center;
+}
+
+.navbar-brand .navbar-item img {
+  height: var(--ap-navbar-logo-height);
+  max-height: calc(10vh - 1rem) !important;
+  max-width: none;
+  width: auto;
+}
+
 @media screen and (max-width: 1219px) {
   .navbar-brand {
     max-width: 100%;
@@ -188,16 +227,7 @@ a.navbar-item,
   }
 
   .navbar-brand > .navbar-item:first-child {
-    flex: 1 1 auto;
-    min-width: 0;
-    overflow: hidden;
-  }
-
-  .navbar-brand .navbar-item img {
-    height: auto;
-    max-height: 2.25rem;
-    max-width: 100%;
-    width: auto;
+    flex-shrink: 0;
   }
 
   .navbar-login-mobile-only {
