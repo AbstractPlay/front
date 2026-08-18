@@ -11,7 +11,7 @@ npm run test:ci       # Vitest single-run + real-engine contract tests
 npm run test:engines  # Real gameslib contract/integration tests only
 ```
 
-CI runs `npm run test:ci` via the reusable [`.github/workflows/ci-test.yml`](../../.github/workflows/ci-test.yml) workflow. That job is a **prerequisite** for both dev and prod deploys (`deploy-dev.js.yml` / `deploy-prod.js.yml` use `needs: test`). It also runs standalone on pull requests and pushes to `develop` / `main` (`.github/workflows/test.yml`).
+CI runs `npm run test:ci` via the reusable [`.github/workflows/ci-test.yml`](../../.github/workflows/ci-test.yml) workflow. That job is a **prerequisite** for both dev and prod deploys (`deploy-dev.js.yml` / `deploy-prod.js.yml` use `needs: test`). The same job also runs standalone on pull requests via [`.github/workflows/test.yml`](../../.github/workflows/test.yml); pushes to `develop` / `main` only run tests inside the deploy workflows (no duplicate run).
 
 **Two gameslib installs in CI:**
 
