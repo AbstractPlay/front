@@ -182,6 +182,24 @@ a.navbar-item,
 }
 
 @media screen and (max-width: 1219px) {
+  .navbar-brand {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .navbar-brand > .navbar-item:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .navbar-brand .navbar-item img {
+    height: auto;
+    max-height: 2.25rem;
+    max-width: 100%;
+    width: auto;
+  }
+
   .navbar-login-mobile-only {
     align-items: center;
     display: flex;
@@ -210,6 +228,7 @@ a.navbar-item,
   }
 
   .navbar-brand .navbar-burger {
+    flex-shrink: 0;
     margin-inline-start: 0;
   }
 }
