@@ -72,7 +72,7 @@ function Navbar(props) {
   }, []);
 
   return (
-    <nav className="navbar" style={{ minHeight: "10vh" }}>
+    <nav className="navbar">
       <div className="navbar-brand">
         <div className="navbar-item">
           <Link to="/" onClick={() => updateBurgerExpanded(false)}>
@@ -80,9 +80,6 @@ function Navbar(props) {
               <img
                 src={colorMode === "light" ? logoLight : logoDark}
                 alt="Abstract Play logo"
-                width="100%"
-                height="auto"
-                style={{ maxHeight: "none" }}
               />
             ) : (
               <span>
