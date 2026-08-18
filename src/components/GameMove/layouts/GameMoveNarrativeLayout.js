@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../../stores";
 import {
@@ -36,7 +37,7 @@ export default function GameMoveNarrativeLayout({ session }) {
   const layoutContext = getLayoutContext(session, users, myMove, t);
   const { gameName, parenthetical, queueCount, myColourLabel, myColour } =
     layoutContext;
-  const { handleNextGame, game } = session;
+  const { handleNextGame, game, metaGame } = session;
 
   return (
     <>
@@ -44,7 +45,9 @@ export default function GameMoveNarrativeLayout({ session }) {
       <article className="game-move-beta game-move-beta--narrative">
         <div className="game-move-beta--narrative__story">
           <header className="game-move-narrative-header">
-            <h1 className="title is-5">{gameName}</h1>
+            <h1 className="title is-5">
+              <Link to={`/games/${metaGame}`}>{gameName}</Link>
+            </h1>
             {parenthetical.length > 0 ? (
               <p className="game-move-narrative-header__meta">
                 {formatParenthetical(parenthetical)}

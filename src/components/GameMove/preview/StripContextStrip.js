@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useStore } from "../../../stores";
 import { getPlayerClockChips } from "./moveEntryUtils";
 import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
 
 function StripContextStrip({ session, layoutContext }) {
-  const { t, handleNextGame, game, toMove } = session;
+  const { t, handleNextGame, game, toMove, metaGame } = session;
   const users = useStore((state) => state.users);
   const [now, setNow] = useState(Date.now());
 
@@ -35,7 +36,9 @@ function StripContextStrip({ session, layoutContext }) {
     <header className="game-move-context-strip game-move-strip-context">
       <div className="game-move-context-strip__primary">
         <span className="game-move-context-strip__game">
-          <strong>{gameName}</strong>
+          <strong>
+            <Link to={`/games/${metaGame}`}>{gameName}</Link>
+          </strong>
           {parenthetical.length === 0 ? null : (
             <span className="game-move-context-strip__meta">
               {" "}
