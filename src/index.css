@@ -1965,6 +1965,15 @@ span.hardTime::after {
   color: var(--main-font-color);
 }
 
+.game-move-context-strip__game a {
+  color: var(--main-heading-color);
+}
+
+.game-move-context-strip__game a:hover,
+.game-move-context-strip__game a:focus-visible {
+  color: var(--secondary-color-3-lighter);
+}
+
 .game-move-context-strip__meta {
   color: var(--secondary-font-color);
 }
@@ -2568,6 +2577,15 @@ span.hardTime::after {
 
 .game-move-narrative-header .title {
   color: var(--main-heading-color);
+}
+
+.game-move-narrative-header .title a {
+  color: var(--main-heading-color);
+}
+
+.game-move-narrative-header .title a:hover,
+.game-move-narrative-header .title a:focus-visible {
+  color: var(--secondary-color-3-lighter);
 }
 
 .game-move-narrative-header p {
