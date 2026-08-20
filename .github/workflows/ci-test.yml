@@ -58,6 +58,7 @@ jobs:
         run: npm run lint
 
       - name: Checkout docs site
+        if: github.event_name == 'push'
         uses: actions/checkout@v4
         with:
           repository: AbstractPlay/docs
@@ -66,14 +67,7 @@ jobs:
           submodules: recursive
 
       - name: Docs link check
-        run: |
-          cd _ap_docs
-          git submodule sync --recursive
-          git submodule update --init --recursive
-          for path in vendor/renderer vendor/gameslib vendor/node-backend vendor/recranks vendor/backend-crons; do
-            git -C "$path" fetch --depth=1 origin develop
-            git -C "$path" checkout FETCH_HEAD
-          done
-          rsync -a --exclude node_modules --exclude build ../ ./vendor/front/
-          npm ci
-          npm run docs:check
+        if: github.event_name == 'push'
+        env:
+          AP_DOCS_ROOT: _ap_docs
+        run: npm run docs:check
