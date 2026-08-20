@@ -11,7 +11,8 @@ import { effectiveTurnModel } from "./effectiveTurnModel";
  */
 
 /**
- * Round-grid layout activates only when header or engine confirms null-slot export.
+ * Round-grid layout activates when header or engine confirms null-slot export
+ * (skip-turn, simultaneous) or sparse sequenced rows (Frogger refills, Gnostica).
  * Legacy `game.simultaneous` alone keeps single-column stride layout.
  * @param {{ game: { simultaneous?: boolean, numPlayers: number }, engine?: { turnModel?: () => TurnModel, getRounds?: () => unknown[][] }, gameRec?: { header?: Record<string, unknown> } }} ctx
  * @returns {MoveTableLayout}
@@ -24,6 +25,8 @@ export function resolveMoveTableLayout({ game, engine, gameRec }) {
 
   const useRoundGrid =
     model === "skip-turn" ||
+    (model === "sequenced" &&
+      (headerFromRecord === "sequenced" || engineModel === "sequenced")) ||
     (model === "simultaneous" &&
       (headerFromRecord === "simultaneous" || engineModel === "simultaneous"));
 

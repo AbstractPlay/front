@@ -26,6 +26,15 @@ describe("effectiveTurnModel", () => {
     ).toBe("skip-turn");
   });
 
+  it("resolves sequenced from engine when header absent", () => {
+    expect(
+      effectiveTurnModel({
+        engine: { turnModel: () => "sequenced" },
+        game: {},
+      })
+    ).toBe("sequenced");
+  });
+
   it("uses legacy simultaneous flag when no header or engine hook", () => {
     expect(
       effectiveTurnModel({
@@ -67,6 +76,34 @@ describe("resolveMoveTableLayout", () => {
     expect(layout.useRoundGrid).toBe(true);
     expect(layout.numcolumns).toBe(4);
     expect(layout.legacySimulHeader).toBe(false);
+  });
+
+  it("keeps stride layout for sequenced without header or engine confirmation", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 2, simultaneous: false },
+    });
+    expect(layout.model).toBe("sequential");
+    expect(layout.useRoundGrid).toBe(false);
+  });
+
+  it("uses round grid for sequenced when engine confirms (Frogger refills)", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 4, simultaneous: false },
+      engine: { turnModel: () => "sequenced" },
+    });
+    expect(layout.model).toBe("sequenced");
+    expect(layout.useRoundGrid).toBe(true);
+    expect(layout.numcolumns).toBe(4);
+    expect(layout.legacySimulHeader).toBe(false);
+  });
+
+  it("uses round grid for sequenced from record header", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 2, simultaneous: false },
+      gameRec: { header: { "turn-model": "sequenced" } },
+    });
+    expect(layout.useRoundGrid).toBe(true);
+    expect(layout.numcolumns).toBe(2);
   });
 });
 
@@ -144,5 +181,52 @@ describe("pathIndexForMoveCell", () => {
     expect(
       moveTableRowCount({ pathLength: 5, layout, engine })
     ).toBe(3);
+  });
+
+  it("maps sparse sequenced rows (one ply per row) to exploration path", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 4, simultaneous: false },
+      engine: { turnModel: () => "sequenced" },
+    });
+    const engine = {
+      turnModel: () => "sequenced",
+      getRounds: () => [
+        [{ move: "p1" }, null, null, null],
+        [null, { move: "p2" }, null, null],
+        [null, null, { move: "p3" }, null],
+        [null, null, null, { move: "p4" }],
+        [{ move: "p1b" }, null, null, null],
+      ],
+    };
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 0,
+        seatIdx: 0,
+        pathLength: 5,
+        layout,
+        engine,
+      })
+    ).toBe(0);
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 1,
+        seatIdx: 1,
+        pathLength: 5,
+        layout,
+        engine,
+      })
+    ).toBe(1);
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 0,
+        seatIdx: 1,
+        pathLength: 5,
+        layout,
+        engine,
+      })
+    ).toBe(null);
+    expect(
+      moveTableRowCount({ pathLength: 5, layout, engine })
+    ).toBe(5);
   });
 });
