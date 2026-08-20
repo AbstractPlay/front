@@ -2,6 +2,11 @@ import React, { useEffect, useRef, Fragment, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import {
+  moveTableRowCount,
+  pathIndexForMoveCell,
+  resolveMoveTableLayout,
+} from "../../lib/GameMove/moveTableLayout";
 
 function moveCommentedState(node) {
   if (node.textComment) return "filled";
@@ -393,10 +398,14 @@ function GameMoves(props) {
 
   if (focus !== null) {
     // Prepare header
-    const simul = game.simultaneous;
-    let numcolumns = simul ? 1 : game.numPlayers;
+    const layout = resolveMoveTableLayout({
+      game,
+      engine: props.engine,
+      gameRec: props.gameRec,
+    });
+    const { numcolumns, legacySimulHeader } = layout;
     let header = [];
-    if (simul) {
+    if (legacySimulHeader) {
       header.push(
         <th colSpan="2" key="th-1">
           <div className="player">
@@ -658,17 +667,27 @@ function GameMoves(props) {
           node = node.children[0];
         }
       }
-      numRows = Math.ceil(path.length / numcolumns);
+      numRows = moveTableRowCount({
+        pathLength: path.length,
+        layout,
+        engine: props.engine,
+      });
       for (let i = 0; i < numRows; i++) {
         let row = [];
         for (let j = 0; j < numcolumns; j++) {
-          //   let clName = j === 0 ? "gameMoveLeftCol" : "gameMoveMiddleCol";
-          let movenum = numcolumns * i + j;
+          const movenum = pathIndexForMoveCell({
+            rowIdx: i,
+            seatIdx: j,
+            pathLength: path.length,
+            layout,
+            engine: props.engine,
+          });
           row.push(
             <td
               key={"td0-" + i + "-" + j}
               className="gameMoveNums"
               id={
+                movenum !== null &&
                 path !== null &&
                 path !== undefined &&
                 path[movenum] !== undefined &&
@@ -677,10 +696,10 @@ function GameMoves(props) {
                   : ""
               }
             >
-              {movenum >= path.length ? "" : `${movenum + 1}`}
+              {movenum === null ? "" : `${movenum + 1}`}
             </td>
           );
-          if (movenum < path.length) {
+          if (movenum !== null && movenum < path.length) {
             if (path[movenum][0].class.includes("gameMoveFocus")) focusRow = i;
             row.push(
               <td key={"td1-" + i + "-" + j}>

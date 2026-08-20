@@ -429,6 +429,8 @@ export default function GameMoveClassicLayout({ session }) {
                           handleGameMoveClick={handleGameMoveClick}
                           getFocusNode={getFocusNode}
                           handlePlaygroundExport={handlePlaygroundExport}
+                          engine={engineRef.current}
+                          gameRec={gameRec}
                         />
                       ) : key === "chat" ? (
                         <>
@@ -591,6 +593,8 @@ export default function GameMoveClassicLayout({ session }) {
                     handleGameMoveClick={handleGameMoveClick}
                     getFocusNode={getFocusNode}
                     handlePlaygroundExport={handlePlaygroundExport}
+                    engine={engineRef.current}
+                    gameRec={gameRec}
                   />
                 </div>
                 <div style={{ paddingTop: "1em" }} className="tourChat">
