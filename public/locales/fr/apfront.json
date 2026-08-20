@@ -81,7 +81,9 @@
     "evenatodds": {
       "evens": "Pair",
       "odds": "Impair"
-    }
+    },
+    "roll1": "Lancer un dé",
+    "roll2": "Lancer deux dés"
   },
   "Cancel": "Annuler",
   "CanPie": "Ce joueur à l'option d'échanger les places.",
