@@ -81,7 +81,9 @@
     "evenatodds": {
       "evens": "Pari",
       "odds": "Dispari"
-    }
+    },
+    "roll1": "Lancia un dado",
+    "roll2": "Lancia due dadi"
   },
   "Cancel": "Annulla",
   "CanPie": "Questo giocatore ha l'opzione di scambiare i posti.",

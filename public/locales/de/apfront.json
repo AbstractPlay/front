@@ -81,7 +81,9 @@
     "evenatodds": {
       "evens": "Gerade",
       "odds": "Ungerade"
-    }
+    },
+    "roll1": "Einen Würfel werfen",
+    "roll2": "Zwei Würfel werfen"
   },
   "Cancel": "Abbrechen",
   "CanPie": "Dieser Spieler hat die Möglichkeit, die Sitzplätze zu tauschen.",

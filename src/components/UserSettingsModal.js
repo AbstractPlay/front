@@ -8,11 +8,10 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
-import { cloneDeep } from "lodash";
+import { cloneDeep, debounce } from "lodash";
 import { Auth } from "aws-amplify";
 import { callAuthApi } from "../lib/api";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { debounce } from "lodash";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import Modal from "./Modal";
