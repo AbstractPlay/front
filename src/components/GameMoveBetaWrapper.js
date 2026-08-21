@@ -63,7 +63,7 @@ function GameMoveBetaWrapper() {
 
   return (
     <GameMoveBetaShell
-      key={`${params.metaGame}-${params.gameID}-${location.search}`}
+      key={`${params.metaGame}-${params.gameID}`}
     />
   );
 }

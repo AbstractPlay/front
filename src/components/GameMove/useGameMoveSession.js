@@ -94,8 +94,26 @@ import {
   toggleRecommend,
 } from "../../lib/playerGameMarks";
 import { gameUpdateMatchesGame } from "../../lib/watchGames";
+import {
+  buildBoardRenderCacheKey,
+  cloneRenderedFrames,
+  createBoardRenderCache,
+} from "../../lib/GameMove/boardRenderCache";
+import { useGameMoveKeyboardNav } from "./useGameMoveKeyboardNav";
 
 export const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
+
+/** True when setupGame must rebuild history (new move, state change, etc.). */
+function gamePlayfieldChanged(prev, next) {
+  if (!prev || prev.id !== next.id) return true;
+  if (prev.numMoves !== next.numMoves) return true;
+  if (prev.toMove !== next.toMove) return true;
+  if (prev.state !== next.state) return true;
+  if (prev.partialMove !== next.partialMove) return true;
+  if (prev.gameOver !== next.gameOver) return true;
+  if (prev.pieInvoked !== next.pieInvoked) return true;
+  return false;
+}
 
 export function useGameMoveSession(props) {
   const moveBasePath = props.moveBasePath ?? "/move";
@@ -176,6 +194,8 @@ export function useGameMoveSession(props) {
   const partialMoveRenderRef = useRef(false);
   const focusRef = useRef();
   focusRef.current = focus;
+  const focusExPathKey = focus?.exPath?.join(",") ?? "";
+  const focusReady = focus !== null;
   const explorerRef = useRef();
   const globalMeRef = useRef();
   const navigateRef = useRef();
@@ -185,6 +205,11 @@ export function useGameMoveSession(props) {
   const boardClickHandlerRef = useRef();
   const moveEntryHandlersRef = useRef({});
   const handleGameMoveClickRef = useRef();
+  const initialMoveFromUrlAppliedRef = useRef(false);
+  const boardRenderCacheRef = useRef(createBoardRenderCache());
+  const boardRenderGenerationRef = useRef(0);
+  const renderrepRef = useRef(renderrep);
+  renderrepRef.current = renderrep;
   // Revisit this moveRef variable. It works, but is it really needed? It was changed to deal with missing dependency warnings on the useEffect that updates the svg board. Is that really needed?
   // Does it have to be a Ref, or can it just be a regular variable? Or even just the state variable?
   const moveRef = useRef();
@@ -770,12 +795,14 @@ export function useGameMoveSession(props) {
     if (dbgame === null) return;
 
     const me = globalMeRef.current;
+    const game = dbgame;
+    const priorGame = gameRef.current;
     const exploration =
       explorationRef.current && explorationRef.current.gameID === dbgame.id
         ? explorationRef.current.nodes
         : null;
-    const foc = cloneDeep(focus);
-    const game = dbgame;
+    const priorMoveCount = exploration?.length ?? 0;
+    const savedFocus = cloneDeep(focusRef.current ?? focus);
     const preserveExplorer =
       explorationRef.current &&
       explorationRef.current.gameID === dbgame.id &&
@@ -790,6 +817,77 @@ export function useGameMoveSession(props) {
       game.metaGame,
       sessionDisplayOverride
     );
+
+    const runGameMetaTail = () => {
+      if (
+        "note" in game &&
+        game.note !== undefined &&
+        game.note !== null &&
+        game.note.length > 0
+      ) {
+        gameNoteSetter(game.note);
+        interimNoteSetter(game.note);
+      } else if ("note" in game) {
+        gameNoteSetter(null);
+        interimNoteSetter("");
+      }
+      populateChecked(gameRef, engineRef, t, inCheckSetter);
+      parentheticalSetter([]);
+      if (
+        "tournament" in game &&
+        game.tournament !== undefined &&
+        game.tournament !== null
+      ) {
+        const tournamentLink = game.tournament.includes("#")
+          ? `/tournament/${game.tournament.replace("#", "/")}`
+          : `/tournament/${game.tournament}?gameId=${game.id}&metaGame=${game.metaGame}`;
+
+        parentheticalSetter((val) => [
+          ...val,
+          <Link to={tournamentLink}>{t("gameMove.tournamentLink")}</Link>,
+        ]);
+      }
+      if ("event" in game && game.event !== undefined && game.event !== null) {
+        parentheticalSetter((val) => [
+          ...val,
+          <Link to={`/event/${game.event}`}>{t("gameMove.eventLink")}</Link>,
+        ]);
+      }
+      if (game.rated === false) {
+        parentheticalSetter((val) => [...val, t("gameMove.unrated")]);
+      }
+      if (game.noExplore !== undefined && game.noExplore === true) {
+        parentheticalSetter((val) => [...val, t("gameMove.explorationDisabled")]);
+      }
+      if (game.toMove !== "" && !game.players.some((p) => p.id === me?.id)) {
+        if (game.clockHard) {
+          if (Array.isArray(game.toMove)) {
+            const elapsed = Date.now() - game.lastMoveTime;
+            if (
+              game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0)
+            ) {
+              checkTime("timeloss");
+            }
+          } else {
+            const toMove = parseInt(game.toMove);
+            if (
+              game.players[toMove].time - (Date.now() - game.lastMoveTime) <
+              0
+            ) {
+              checkTime("timeloss");
+            }
+          }
+        }
+      }
+    };
+
+    // Clock / metadata refresh only — keep exploration tree and move-tree focus.
+    if (!gamePlayfieldChanged(priorGame, game) && priorGame) {
+      gameRef.current = { ...game, colors: priorGame.colors };
+      runGameMetaTail();
+      return;
+    }
+
     setupGame(
       game,
       gameRef,
@@ -808,6 +906,13 @@ export function useGameMoveSession(props) {
       displayForRender,
       navigate
     );
+    const newMoveCount = explorationRef.current.nodes.length;
+    const newMovePlayed = newMoveCount > priorMoveCount;
+    const shouldRestoreFocus =
+      !newMovePlayed &&
+      savedFocus !== null &&
+      savedFocus.moveNumber < newMoveCount;
+
     if (exploration !== null) {
       if (explorationRef.current.nodes.length === exploration.length) {
         let ok = true;
@@ -823,8 +928,12 @@ export function useGameMoveSession(props) {
             explorationRef.current.nodes[i].commented =
               exploration[i].commented;
           }
-          handleGameMoveClickRef.current?.(foc, displayForRender);
-          bumpExploration();
+        }
+        if (shouldRestoreFocus) {
+          handleGameMoveClickRef.current?.(savedFocus, displayForRender);
+          if (ok) {
+            bumpExploration();
+          }
         }
         explorationFetchingRef.current = false;
         explorationFetchedSetter(false);
@@ -836,6 +945,9 @@ export function useGameMoveSession(props) {
           gameRef.current,
           true
         );
+        if (shouldRestoreFocus) {
+          handleGameMoveClickRef.current?.(savedFocus, displayForRender);
+        }
         if (game.gameOver) {
           explorationFetchingRef.current = false;
           explorationFetchedSetter(false);
@@ -843,66 +955,7 @@ export function useGameMoveSession(props) {
       }
     }
 
-    if (
-      "note" in game &&
-      game.note !== undefined &&
-      game.note !== null &&
-      game.note.length > 0
-    ) {
-      gameNoteSetter(game.note);
-      interimNoteSetter(game.note);
-    } else if ("note" in game) {
-      gameNoteSetter(null);
-      interimNoteSetter("");
-    }
-    populateChecked(gameRef, engineRef, t, inCheckSetter);
-    parentheticalSetter([]);
-    if (
-      "tournament" in game &&
-      game.tournament !== undefined &&
-      game.tournament !== null
-    ) {
-      const tournamentLink = game.tournament.includes("#")
-        ? `/tournament/${game.tournament.replace("#", "/")}`
-        : `/tournament/${game.tournament}?gameId=${game.id}&metaGame=${game.metaGame}`;
-
-      parentheticalSetter((val) => [
-        ...val,
-        <Link to={tournamentLink}>{t("gameMove.tournamentLink")}</Link>,
-      ]);
-    }
-    if ("event" in game && game.event !== undefined && game.event !== null) {
-      parentheticalSetter((val) => [
-        ...val,
-        <Link to={`/event/${game.event}`}>{t("gameMove.eventLink")}</Link>,
-      ]);
-    }
-    if (game.rated === false) {
-      parentheticalSetter((val) => [...val, t("gameMove.unrated")]);
-    }
-    if (game.noExplore !== undefined && game.noExplore === true) {
-      parentheticalSetter((val) => [...val, t("gameMove.explorationDisabled")]);
-    }
-    if (game.toMove !== "" && !game.players.some((p) => p.id === me?.id)) {
-      if (game.clockHard) {
-        if (Array.isArray(game.toMove)) {
-          const elapsed = Date.now() - game.lastMoveTime;
-          if (
-            game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0)
-          ) {
-            checkTime("timeloss");
-          }
-        } else {
-          const toMove = parseInt(game.toMove);
-          if (
-            game.players[toMove].time - (Date.now() - game.lastMoveTime) <
-            0
-          ) {
-            checkTime("timeloss");
-          }
-        }
-      }
-    }
+    runGameMetaTail();
     // Runs on dbgame updates; focus/sessionDisplayOverride read via refs/stable setup paths.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -1215,27 +1268,29 @@ export function useGameMoveSession(props) {
               }
             }
           }
-          if (moveNumberParam) {
+          if (moveNumberParam && !initialMoveFromUrlAppliedRef.current) {
+            initialMoveFromUrlAppliedRef.current = true;
             const moveNum = parseInt(moveNumberParam, 10);
             let exPath = [];
             if (nodeidParam && explorationRef.current.nodes[moveNum]) {
               exPath =
                 explorationRef.current.nodes[moveNum].findNode(nodeidParam);
             }
-            handleGameMoveClick({ moveNumber: moveNum, exPath });
+            handleGameMoveClickRef.current?.({ moveNumber: moveNum, exPath });
           }
         } else {
           // even if no exploration, support moveNumberParam
-          if (moveNumberParam) {
+          if (moveNumberParam && !initialMoveFromUrlAppliedRef.current) {
+            initialMoveFromUrlAppliedRef.current = true;
             const moveNum = parseInt(moveNumberParam, 10);
-            handleGameMoveClick({ moveNumber: moveNum, exPath: [] });
+            handleGameMoveClickRef.current?.({ moveNumber: moveNum, exPath: [] });
           }
         }
       }
     }
 
     if (
-      focus &&
+      focusReady &&
       !explorationFetched &&
       (gameRef.current.canExplore || gameRef.current.gameOver)
     ) {
@@ -1248,7 +1303,7 @@ export function useGameMoveSession(props) {
     // handleGameMoveClick is accessed via handleGameMoveClickRef to avoid re-binding.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    focus,
+    focusReady,
     explorationFetched,
     gameID,
     explorer,
@@ -1293,44 +1348,70 @@ export function useGameMoveSession(props) {
 
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc, altDisplayOverride) => {
-    // console.log("foc = ", foc);
-    let node = getFocusNode(explorationRef.current.nodes, game, foc);
+    const currentGame = gameRef.current;
+    if (!currentGame || !explorationRef.current?.nodes) {
+      return;
+    }
+    const nextFocus = cloneDeep(foc);
+    let node = getFocusNode(
+      explorationRef.current.nodes,
+      currentGame,
+      nextFocus
+    );
     if (
-      !(isExplorer(explorer, globalMe) && game.canExplore) &&
-      foc.moveNumber === explorationRef.current.nodes.length - 1
+      !(isExplorer(explorer, globalMe) && currentGame.canExplore) &&
+      nextFocus.moveNumber === explorationRef.current.nodes.length - 1
     ) {
       node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variation.
     }
-    let engine = GameFactory(game.metaGame, node.state);
+    let engine = GameFactory(currentGame.metaGame, node.state);
     partialMoveRenderRef.current = false;
-    foc.canExplore = canExploreMove(game, explorationRef.current.nodes, foc);
-    if (foc.canExplore && !game.noMoves) {
+    nextFocus.canExplore = canExploreMove(
+      currentGame,
+      explorationRef.current.nodes,
+      nextFocus
+    );
+    if (nextFocus.canExplore && !currentGame.noMoves) {
       movesRef.current = engine.moves();
     }
-    focusSetter(foc);
+    const cacheKey = buildBoardRenderCacheKey({
+      focus: nextFocus,
+      displaySettings,
+      metaGame,
+      boardKey,
+      colorMode,
+      canExplore: nextFocus.canExplore,
+    });
+    const cachedFrames = boardRenderCacheRef.current.get(cacheKey);
+    focusSetter(nextFocus);
     engineRef.current = engine;
-    const altDisplay = altDisplayOverride ?? displaySettings?.display;
-    renderrepSetter(
-      replaceNames(
-        engine.render({
-          perspective: gameRef.current.me ? gameRef.current.me + 1 : 1,
-          altDisplay,
-        }),
-        gameRef.current.players,
-        useStore.getState().users
-      )
-    );
-    setURL(explorationRef.current.nodes, foc, game, navigate);
+    if (!cachedFrames) {
+      const altDisplay = altDisplayOverride ?? displaySettings?.display;
+      renderrepSetter(
+        replaceNames(
+          engine.render({
+            perspective: currentGame.me ? currentGame.me + 1 : 1,
+            altDisplay,
+          }),
+          currentGame.players,
+          useStore.getState().users
+        )
+      );
+    } else {
+      setBoardRenderIndex(Math.max(0, cachedFrames.length - 1));
+      setRendered(cloneRenderedFrames(cachedFrames));
+    }
+    setURL(explorationRef.current.nodes, nextFocus, currentGame, navigate);
     const isPartialSimMove =
-      gameRef.current.simultaneous &&
-      (foc.exPath.length === 1 ||
-        (foc.exPath.length === 0 &&
-          foc.moveNumber === explorationRef.current.nodes.length - 1 &&
-          !gameRef.current.canSubmit));
-    setStatus(engine, gameRef.current, isPartialSimMove, "", statusRef.current);
-    if (game.simultaneous) {
+      currentGame.simultaneous &&
+      (nextFocus.exPath.length === 1 ||
+        (nextFocus.exPath.length === 0 &&
+          nextFocus.moveNumber === explorationRef.current.nodes.length - 1 &&
+          !currentGame.canSubmit));
+    setStatus(engine, currentGame, isPartialSimMove, "", statusRef.current);
+    if (currentGame.simultaneous) {
       moveSetter({
-        ...engine.validateMove("", gameRef.current.me + 1),
+        ...engine.validateMove("", currentGame.me + 1),
         rendered: "",
         move: "",
       });
@@ -1341,6 +1422,13 @@ export function useGameMoveSession(props) {
     publishGameColors(node);
   };
   handleGameMoveClickRef.current = handleGameMoveClick;
+
+  useGameMoveKeyboardNav({
+    focus,
+    gameRef,
+    explorationRef,
+    handleGameMoveClickRef,
+  });
 
   function handleReset() {
     if (
@@ -1459,8 +1547,10 @@ export function useGameMoveSession(props) {
     }
   };
 
-  const focusCanExplore = focus?.canExplore;
-  const focusExPathKey = focus?.exPath?.join(",") ?? "";
+  useEffect(() => {
+    boardRenderCacheRef.current.clear();
+    initialMoveFromUrlAppliedRef.current = false;
+  }, [gameID]);
 
   useEffect(() => {
     let options = {};
@@ -1479,6 +1569,25 @@ export function useGameMoveSession(props) {
     }
 
     if (renderrep !== null && displaySettings !== null) {
+      const generation = ++boardRenderGenerationRef.current;
+      const cacheKey = buildBoardRenderCacheKey({
+        focus: focusRef.current,
+        displaySettings,
+        metaGame,
+        boardKey,
+        colorMode,
+        canExplore: focusRef.current?.canExplore,
+      });
+      const cachedFrames = boardRenderCacheRef.current.get(cacheKey);
+      if (cachedFrames) {
+        if (generation !== boardRenderGenerationRef.current) {
+          return;
+        }
+        setBoardRenderIndex(Math.max(0, cachedFrames.length - 1));
+        setRendered(cloneRenderedFrames(cachedFrames));
+        return;
+      }
+
       options = {};
       const currentGame = gameRef.current;
       setRendererColourOpts({
@@ -1494,7 +1603,7 @@ export function useGameMoveSession(props) {
         metaGame,
         globalMe: globalMeRef.current,
       });
-      const canExplore = focusCanExplore;
+      const canExplore = focusRef.current?.canExplore;
       if (canExplore) {
         options.boardClick = boardClick;
       }
@@ -1533,6 +1642,15 @@ export function useGameMoveSession(props) {
         tmpRendered.push(svgNode);
         document.body.removeChild(container); // ✅ clean up
       }
+      if (generation !== boardRenderGenerationRef.current) {
+        return;
+      }
+      if (renderrepRef.current !== renderrep) {
+        return;
+      }
+      boardRenderCacheRef.current.set(cacheKey, cloneRenderedFrames(tmpRendered));
+      const nextIndex = Math.max(0, tmpRendered.length - 1);
+      setBoardRenderIndex(nextIndex);
       setRendered([...tmpRendered]);
     }
   }, [
@@ -1541,15 +1659,9 @@ export function useGameMoveSession(props) {
     effectiveColourContext,
     boardKey,
     metaGame,
-    focusCanExplore,
     colorMode,
+    focus?.canExplore,
   ]);
-
-  useEffect(() => {
-    if (rendered.length > 0) {
-      setBoardRenderIndex(Math.max(0, rendered.length - 1));
-    }
-  }, [rendered]);
 
   useEffect(() => {
     populateChecked(gameRef, engineRef, t, inCheckSetter);

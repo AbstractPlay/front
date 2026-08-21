@@ -85,11 +85,11 @@ describe("Board", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("returns null when boardRenderIndex is out of range", () => {
-    const { container } = render(
-      <Board {...makeProps({ boardRenderIndex: 2 })} />
-    );
-    expect(container).toBeEmptyDOMElement();
+  it("clamps boardRenderIndex when out of range", () => {
+    render(<Board {...makeProps({ boardRenderIndex: 2 })} />);
+    const board = document.getElementById("svg");
+    expect(board).not.toBeNull();
+    expect(board.children[0].getAttribute("data-label")).toBe("board-1");
   });
 
   it("mounts the active SVG into the board container", () => {
