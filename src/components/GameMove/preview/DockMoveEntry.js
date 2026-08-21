@@ -110,41 +110,38 @@ function DockMoveEntry(props) {
                 handleMove={handlers.handleMove}
                 t={t}
               />
-            ) : (
-              <>
-                {!move.valid || (move.valid && move.complete !== 1) ? (
-                  <p
-                    className={`help game-move-dock-entry__help ${
-                      move.valid ? "is-link" : "is-danger"
-                    }`}
-                    dangerouslySetInnerHTML={{ __html: move.message }}
-                  />
-                ) : null}
-                <div className="control input-icon game-move-dock-entry__input">
-                  <input
-                    className={`input is-small ${moveState}`}
-                    name="move"
-                    id="enterAMove"
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => handlers.handleMoveInputChange(e.target.value)}
-                    placeholder={t("EnterMove")}
-                    aria-label={t("EnterMove")}
-                  />
-                  {move.move.length === 0 ? null : (
-                    <button
-                      type="button"
-                      className="game-move-dock-entry__clear tooltipped"
-                      onClick={() => handlers.handleClear()}
-                      aria-label={t("ClearMove")}
-                    >
-                      <i className="fa fa-trash resetIcon" aria-hidden="true" />
-                      <span className="tooltiptext">{t("ClearMove")}</span>
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
+            ) : null}
+            {!move.valid || (move.valid && move.complete !== 1) ? (
+              <p
+                className={`help game-move-dock-entry__help ${
+                  move.valid ? "is-link" : "is-danger"
+                }`}
+                dangerouslySetInnerHTML={{ __html: move.message }}
+              />
+            ) : null}
+            <div className="control input-icon game-move-dock-entry__input">
+              <input
+                className={`input is-small ${moveState}`}
+                name="move"
+                id="enterAMove"
+                type="text"
+                value={inputValue}
+                onChange={(e) => handlers.handleMoveInputChange(e.target.value)}
+                placeholder={t("EnterMove")}
+                aria-label={t("EnterMove")}
+              />
+              {move.move.length === 0 ? null : (
+                <button
+                  type="button"
+                  className="game-move-dock-entry__clear tooltipped"
+                  onClick={() => handlers.handleClear()}
+                  aria-label={t("ClearMove")}
+                >
+                  <i className="fa fa-trash resetIcon" aria-hidden="true" />
+                  <span className="tooltiptext">{t("ClearMove")}</span>
+                </button>
+              )}
+            </div>
           </div>
         ) : null}
 

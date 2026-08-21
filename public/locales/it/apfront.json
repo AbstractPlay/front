@@ -1641,7 +1641,9 @@
       "feedbackCommentPlaceholder": "Feedback opzionale (una sola riga)",
       "feedbackPost": "Invia",
       "feedbackNotePosted": "Grazie — la tua nota è stata inviata.",
-      "feedbackCommentTooLong": "Il commento deve contenere al massimo {{max}} caratteri."
+      "feedbackCommentTooLong": "Il commento deve contenere al massimo {{max}} caratteri.",
+      "moveTableDensityAuto": "Righe delle mosse compatte (clicca per una riga per mossa)",
+      "moveTableDensitySparse": "Una riga per mossa (clicca per righe compatte)"
     }
   },
   "Back": "Indietro",

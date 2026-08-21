@@ -1641,7 +1641,9 @@
       "feedbackCommentPlaceholder": "Comentario opcional (una línea)",
       "feedbackPost": "Enviar",
       "feedbackNotePosted": "Gracias; se envió tu nota.",
-      "feedbackCommentTooLong": "El comentario debe tener {{max}} caracteres o menos."
+      "feedbackCommentTooLong": "El comentario debe tener {{max}} caracteres o menos.",
+      "moveTableDensityAuto": "Filas de jugadas compactas (haz clic para ver una fila por jugada)",
+      "moveTableDensitySparse": "Una fila por jugada (haz clic para ver filas compactas)"
     }
   },
   "Back": "Volver",
