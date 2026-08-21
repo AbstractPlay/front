@@ -1719,7 +1719,7 @@
   "gamePicker": {
     "choose": "Choisir un jeu…",
     "searchLabel": "Rechercher",
-    "searchPlaceholder": "Tapez pour filtrer les jeux…",
+    "searchPlaceholder": "Saisissez pour filtrer les jeux…",
     "noResults": "Aucun jeu ne correspond à votre recherche.",
     "starredOnly": "Jeux favoris uniquement",
     "loadingQuickPicks": "Chargement de vos jeux…",
