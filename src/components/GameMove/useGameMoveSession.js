@@ -94,11 +94,6 @@ import {
   toggleRecommend,
 } from "../../lib/playerGameMarks";
 import { gameUpdateMatchesGame } from "../../lib/watchGames";
-import {
-  buildBoardRenderCacheKey,
-  cloneRenderedFrames,
-  createBoardRenderCache,
-} from "../../lib/GameMove/boardRenderCache";
 import { useGameMoveKeyboardNav } from "./useGameMoveKeyboardNav";
 
 export const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
@@ -206,7 +201,6 @@ export function useGameMoveSession(props) {
   const moveEntryHandlersRef = useRef({});
   const handleGameMoveClickRef = useRef();
   const initialMoveFromUrlAppliedRef = useRef(false);
-  const boardRenderCacheRef = useRef(createBoardRenderCache());
   const boardRenderGenerationRef = useRef(0);
   const renderrepRef = useRef(renderrep);
   renderrepRef.current = renderrep;
@@ -1374,33 +1368,19 @@ export function useGameMoveSession(props) {
     if (nextFocus.canExplore && !currentGame.noMoves) {
       movesRef.current = engine.moves();
     }
-    const cacheKey = buildBoardRenderCacheKey({
-      focus: nextFocus,
-      displaySettings,
-      metaGame,
-      boardKey,
-      colorMode,
-      canExplore: nextFocus.canExplore,
-    });
-    const cachedFrames = boardRenderCacheRef.current.get(cacheKey);
     focusSetter(nextFocus);
     engineRef.current = engine;
-    if (!cachedFrames) {
-      const altDisplay = altDisplayOverride ?? displaySettings?.display;
-      renderrepSetter(
-        replaceNames(
-          engine.render({
-            perspective: currentGame.me ? currentGame.me + 1 : 1,
-            altDisplay,
-          }),
-          currentGame.players,
-          useStore.getState().users
-        )
-      );
-    } else {
-      setBoardRenderIndex(Math.max(0, cachedFrames.length - 1));
-      setRendered(cloneRenderedFrames(cachedFrames));
-    }
+    const altDisplay = altDisplayOverride ?? displaySettings?.display;
+    renderrepSetter(
+      replaceNames(
+        engine.render({
+          perspective: currentGame.me ? currentGame.me + 1 : 1,
+          altDisplay,
+        }),
+        currentGame.players,
+        useStore.getState().users
+      )
+    );
     setURL(explorationRef.current.nodes, nextFocus, currentGame, navigate);
     const isPartialSimMove =
       currentGame.simultaneous &&
@@ -1548,7 +1528,6 @@ export function useGameMoveSession(props) {
   };
 
   useEffect(() => {
-    boardRenderCacheRef.current.clear();
     initialMoveFromUrlAppliedRef.current = false;
   }, [gameID]);
 
@@ -1570,23 +1549,6 @@ export function useGameMoveSession(props) {
 
     if (renderrep !== null && displaySettings !== null) {
       const generation = ++boardRenderGenerationRef.current;
-      const cacheKey = buildBoardRenderCacheKey({
-        focus: focusRef.current,
-        displaySettings,
-        metaGame,
-        boardKey,
-        colorMode,
-        canExplore: focusRef.current?.canExplore,
-      });
-      const cachedFrames = boardRenderCacheRef.current.get(cacheKey);
-      if (cachedFrames) {
-        if (generation !== boardRenderGenerationRef.current) {
-          return;
-        }
-        setBoardRenderIndex(Math.max(0, cachedFrames.length - 1));
-        setRendered(cloneRenderedFrames(cachedFrames));
-        return;
-      }
 
       options = {};
       const currentGame = gameRef.current;
@@ -1648,7 +1610,6 @@ export function useGameMoveSession(props) {
       if (renderrepRef.current !== renderrep) {
         return;
       }
-      boardRenderCacheRef.current.set(cacheKey, cloneRenderedFrames(tmpRendered));
       const nextIndex = Math.max(0, tmpRendered.length - 1);
       setBoardRenderIndex(nextIndex);
       setRendered([...tmpRendered]);
