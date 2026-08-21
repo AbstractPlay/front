@@ -202,6 +202,8 @@ export function buildGameMovesProps(session) {
     handleGameMoveClick,
     getFocusNode,
     handlePlaygroundExport,
+    engineRef,
+    gameRec,
   } = session;
 
   return {
@@ -212,6 +214,8 @@ export function buildGameMovesProps(session) {
     handleGameMoveClick,
     getFocusNode,
     handlePlaygroundExport,
+    engine: engineRef?.current,
+    gameRec,
   };
 }
 

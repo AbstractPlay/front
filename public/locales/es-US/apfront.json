@@ -81,7 +81,9 @@
       "gold99": "Configuración rápida",
       "silver99e7": "Configuración rápida, elefante en e7",
       "silver99d7": "Configuración rápida, elefante en d7"
-    }
+    },
+    "roll1": "Lanzar un dado",
+    "roll2": "Lanzar dos dados"
   },
   "Cancel": "Cancelar",
   "CanPie": "Este jugador tiene la opción de cambiar de lugar.",
