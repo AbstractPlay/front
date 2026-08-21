@@ -1102,6 +1102,7 @@ function LabSession({
         handleGameMoveClick={handleGameMoveClick}
         getFocusNode={getFocusNode}
         explorationVersion={explorationVersion}
+        engine={engineRef.current}
       />
       {showMoveAnnotations ? (
         <MoveAnnotations focusNode={focusNode} onChange={bumpExploration} />

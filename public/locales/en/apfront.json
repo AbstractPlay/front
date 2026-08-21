@@ -1631,7 +1631,9 @@
             "feedbackCommentPlaceholder": "Optional feedback (one line)",
             "feedbackPost": "Post",
             "feedbackNotePosted": "Thanks — your note was sent.",
-            "feedbackCommentTooLong": "Comment must be {{max}} characters or fewer."
+            "feedbackCommentTooLong": "Comment must be {{max}} characters or fewer.",
+            "moveTableDensityAuto": "Compact move rows (click for one row per move)",
+            "moveTableDensitySparse": "One row per move (click for compact rows)"
         }
     },
     "Back": "Back",

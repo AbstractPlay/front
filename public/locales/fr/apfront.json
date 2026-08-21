@@ -1631,7 +1631,9 @@
       "feedbackCommentPlaceholder": "Remarque facultative (une ligne)",
       "feedbackPost": "Envoyer",
       "feedbackNotePosted": "Merci, votre remarque a été envoyée.",
-      "feedbackCommentTooLong": "Le commentaire doit contenir au maximum {{max}} caractères."
+      "feedbackCommentTooLong": "Le commentaire doit contenir au maximum {{max}} caractères.",
+      "moveTableDensityAuto": "Lignes de coups compactes (cliquer pour une ligne par coup)",
+      "moveTableDensitySparse": "Une ligne par coup (cliquer pour des lignes compactes)"
     }
   },
   "Back": "Retour",
