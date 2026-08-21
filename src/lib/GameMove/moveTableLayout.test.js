@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { effectiveTurnModel } from "./effectiveTurnModel";
 import {
+  buildDisplayRounds,
   moveTableRowCount,
   pathIndexForMoveCell,
   resolveMoveTableLayout,
@@ -95,6 +96,7 @@ describe("resolveMoveTableLayout", () => {
     expect(layout.useRoundGrid).toBe(true);
     expect(layout.numcolumns).toBe(4);
     expect(layout.legacySimulHeader).toBe(false);
+    expect(layout.density).toBe("auto");
   });
 
   it("uses round grid for sequenced from record header", () => {
@@ -183,11 +185,14 @@ describe("pathIndexForMoveCell", () => {
     ).toBe(3);
   });
 
-  it("maps sparse sequenced rows (one ply per row) to exploration path", () => {
-    const layout = resolveMoveTableLayout({
-      game: { numPlayers: 4, simultaneous: false },
-      engine: { turnModel: () => "sequenced" },
-    });
+  it("maps sparse export rows when density is sparse (sequenced)", () => {
+    const layout = {
+      ...resolveMoveTableLayout({
+        game: { numPlayers: 4, simultaneous: false },
+        engine: { turnModel: () => "sequenced" },
+      }),
+      density: "sparse",
+    };
     const engine = {
       turnModel: () => "sequenced",
       getRounds: () => [
@@ -217,16 +222,113 @@ describe("pathIndexForMoveCell", () => {
       })
     ).toBe(1);
     expect(
+      moveTableRowCount({ pathLength: 5, layout, engine })
+    ).toBe(5);
+  });
+
+  it("auto density merges unique-actor seat cycle into one row", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 4, simultaneous: false },
+      engine: { turnModel: () => "sequenced" },
+    });
+    const engine = {
+      numplayers: 4,
+      turnModel: () => "sequenced",
+      getPlies: () => [
+        { actor: 1, move: "p1", round: 0, playOrder: 1 },
+        { actor: 2, move: "p2", round: 0, playOrder: 2 },
+        { actor: 3, move: "p3", round: 0, playOrder: 3 },
+        { actor: 4, move: "p4", round: 0, playOrder: 4 },
+        { actor: 1, move: "p1b", round: 1, playOrder: 1 },
+      ],
+      getRounds: () => [
+        [{ move: "p1" }, null, null, null],
+        [null, { move: "p2" }, null, null],
+        [null, null, { move: "p3" }, null],
+        [null, null, null, { move: "p4" }],
+        [{ move: "p1b" }, null, null, null],
+      ],
+    };
+    expect(moveTableRowCount({ pathLength: 5, layout, engine })).toBe(2);
+    expect(
       pathIndexForMoveCell({
         rowIdx: 0,
-        seatIdx: 1,
+        seatIdx: 0,
         pathLength: 5,
         layout,
         engine,
       })
-    ).toBe(null);
+    ).toBe(0);
     expect(
-      moveTableRowCount({ pathLength: 5, layout, engine })
-    ).toBe(5);
+      pathIndexForMoveCell({
+        rowIdx: 0,
+        seatIdx: 3,
+        pathLength: 5,
+        layout,
+        engine,
+      })
+    ).toBe(3);
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 1,
+        seatIdx: 0,
+        pathLength: 5,
+        layout,
+        engine,
+      })
+    ).toBe(4);
+  });
+
+  it("auto density keeps duplicate-actor round sparse", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 2, simultaneous: false },
+      engine: { turnModel: () => "sequenced" },
+    });
+    const engine = {
+      numplayers: 2,
+      getPlies: () => [
+        { actor: 2, move: "refill", round: 0, playOrder: 1 },
+        { actor: 1, move: "pass", round: 0, playOrder: 2 },
+        { actor: 2, move: "follow", round: 0, playOrder: 3 },
+      ],
+    };
+    const display = buildDisplayRounds(engine);
+    expect(display).toHaveLength(3);
+    expect(moveTableRowCount({ pathLength: 3, layout, engine })).toBe(3);
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 2,
+        seatIdx: 1,
+        pathLength: 3,
+        layout,
+        engine,
+      })
+    ).toBe(2);
+  });
+
+  it("path indices increase left-to-right across dense rows", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 4, simultaneous: false },
+      engine: { turnModel: () => "sequenced" },
+    });
+    const engine = {
+      numplayers: 4,
+      getPlies: () => [
+        { actor: 1, move: "a", round: 0, playOrder: 1 },
+        { actor: 2, move: "b", round: 0, playOrder: 2 },
+        { actor: 3, move: "c", round: 0, playOrder: 3 },
+        { actor: 4, move: "d", round: 0, playOrder: 4 },
+      ],
+    };
+    const indices = [0, 1, 2, 3].map((seatIdx) =>
+      pathIndexForMoveCell({
+        rowIdx: 0,
+        seatIdx,
+        pathLength: 4,
+        layout,
+        engine,
+      })
+    );
+    expect(indices).toEqual([0, 1, 2, 3]);
   });
 });

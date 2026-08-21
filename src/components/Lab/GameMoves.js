@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, Fragment, useCallback } from "react";
+import React, { useEffect, useRef, Fragment, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
@@ -6,6 +6,8 @@ import {
   moveTableRowCount,
   pathIndexForMoveCell,
   resolveMoveTableLayout,
+  MOVE_TREE_DENSITY_STORAGE_KEY,
+  readMoveTableDensityPreference,
 } from "../../lib/GameMove/moveTableLayout";
 
 function moveCommentedState(node) {
@@ -147,6 +149,8 @@ function GameMoves(props) {
   const tableRef = useRef();
   const headerRef = useRef();
   const { t } = useTranslation();
+  const [moveTableDensityRev, setMoveTableDensityRev] = useState(0);
+  void moveTableDensityRev;
   let focus = props.focus;
   let game = props.game;
   let neverExplore = props.noExplore;
@@ -832,6 +836,25 @@ function GameMoves(props) {
             <i className="fa fa-angle-double-right"></i>
             <span className="tooltiptext">{t("GoCurrent")}</span>
           </button>
+          {layout.model === "sequenced" ? (
+            <button
+              className="button is-small tooltipped"
+              type="button"
+              onClick={() => {
+                const next =
+                  readMoveTableDensityPreference() === "auto" ? "sparse" : "auto";
+                localStorage.setItem(MOVE_TREE_DENSITY_STORAGE_KEY, next);
+                setMoveTableDensityRev((n) => n + 1);
+              }}
+            >
+              <i className="fa fa-th" aria-hidden="true"></i>
+              <span className="tooltiptext">
+                {readMoveTableDensityPreference() === "auto"
+                  ? t("gameMove.layout.moveTableDensityAuto")
+                  : t("gameMove.layout.moveTableDensitySparse")}
+              </span>
+            </button>
+          ) : null}
         </div>
         <div className="movesTable" ref={tableRef}>
           <table className="table apTable is-narrow">
