@@ -1631,7 +1631,9 @@
       "feedbackCommentPlaceholder": "Optionales Feedback (eine Zeile)",
       "feedbackPost": "Absenden",
       "feedbackNotePosted": "Vielen Dank – deine Anmerkung wurde gesendet.",
-      "feedbackCommentTooLong": "Kommentar darf maximal {{max}} Zeichen lang sein."
+      "feedbackCommentTooLong": "Kommentar darf maximal {{max}} Zeichen lang sein.",
+      "moveTableDensityAuto": "Kompakte Zugzeilen (Klick für eine Zeile pro Zug)",
+      "moveTableDensitySparse": "Eine Zeile pro Zug (Klick für kompakte Zeilen)"
     }
   },
   "Back": "Zurück",
