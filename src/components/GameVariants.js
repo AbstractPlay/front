@@ -28,7 +28,10 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
           gameEngine = GameFactory(info.uid);
         }
 
-        let rootAllVariants = gameEngine.allvariants();
+        const rootAllVariants =
+          typeof gameEngine.challengeVariants === "function"
+            ? gameEngine.challengeVariants()
+            : gameEngine.allvariants();
 
         // get all non-group variants
         // but ignore variant UIDs that start with `#` as reserved
