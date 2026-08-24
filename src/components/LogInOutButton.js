@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Auth } from "aws-amplify";
 import UserSettingsModal from "./UserSettingsModal";
 import NewProfile from "./NewProfile";
-import { resyncPushSubscription } from "../subscription";
 import { useStore } from "../stores";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { fetchProfile } from "../lib/globalMeBootstrap";
@@ -15,12 +14,6 @@ function LogInOutButton({ closeBurger, variant = "default" }) {
   const [showUserSettingsModal, showUserSettingsModalSetter] = useState(false);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
   const globalMe = useStore((state) => state.globalMe);
-
-  useEffect(() => {
-    if (status === "ready") {
-      resyncPushSubscription();
-    }
-  }, [status]);
 
   const handleSettingsClick = () => {
     if (!globalMe || globalMe.id === undefined) {

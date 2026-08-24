@@ -22,7 +22,7 @@ Each browser/device is registered independently. The settings checkbox applies t
 callAuthApi("save_push", { payload: subscription.toJSON() })
 ```
 
-4. On login, [`LogInOutButton.js`](../src/components/LogInOutButton.js) calls `resyncPushSubscription()` to refresh the server record if this browser already has a subscription (no permission prompt).
+4. On login, [`ProfileBootstrap.js`](../src/components/ProfileBootstrap.js) calls `resyncPushSubscription()` once to refresh the server record if this browser already has a subscription (no permission prompt).
 
 ### Disable on this device
 
