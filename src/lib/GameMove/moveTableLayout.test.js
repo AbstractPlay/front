@@ -1,10 +1,15 @@
 import { describe, expect, it } from "vitest";
+import { GameFactory } from "@abstractplay/gameslib";
+import { ENTROPY_DEV_MOVE_TABLE_STATE } from "./fixtures/entropy.js";
 import { effectiveTurnModel } from "./effectiveTurnModel";
 import {
   buildDisplayRounds,
+  moveNumberForCell,
   moveTableRowCount,
+  moveTextForCell,
   pathIndexForMoveCell,
   resolveMoveTableLayout,
+  roundSlotToMoveText,
 } from "./moveTableLayout";
 
 describe("effectiveTurnModel", () => {
@@ -330,5 +335,168 @@ describe("pathIndexForMoveCell", () => {
       })
     );
     expect(indices).toEqual([0, 1, 2, 3]);
+  });
+});
+
+describe("simultaneous round grid", () => {
+  const mockEngine = {
+    turnModel: () => "simultaneous",
+    getRounds: () => [
+      ["BNd4", "BNd5"],
+      ["x", "y"],
+      ["p", "q"],
+    ],
+  };
+
+  const layout = resolveMoveTableLayout({
+    game: { numPlayers: 2, simultaneous: true },
+    engine: mockEngine,
+  });
+
+  it("keeps round grid enabled when engine confirms simultaneous", () => {
+    expect(layout.useRoundGrid).toBe(true);
+    expect(layout.model).toBe("simultaneous");
+    expect(layout.legacySimulHeader).toBe(false);
+    expect(layout.numcolumns).toBe(2);
+  });
+
+  it("maps both seats in a row to the same path index", () => {
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 0,
+        seatIdx: 0,
+        pathLength: 3,
+        layout,
+        engine: mockEngine,
+      })
+    ).toBe(0);
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 0,
+        seatIdx: 1,
+        pathLength: 3,
+        layout,
+        engine: mockEngine,
+      })
+    ).toBe(0);
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 1,
+        seatIdx: 1,
+        pathLength: 3,
+        layout,
+        engine: mockEngine,
+      })
+    ).toBe(1);
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 2,
+        seatIdx: 0,
+        pathLength: 2,
+        layout,
+        engine: mockEngine,
+      })
+    ).toBe(null);
+  });
+
+  it("row count follows round count, not seat count", () => {
+    expect(
+      moveTableRowCount({ pathLength: 3, layout, engine: mockEngine })
+    ).toBe(3);
+  });
+
+  it("formats move numbers and per-seat text", () => {
+    const path = [[{ move: "BNd4,BNd5" }], [{ move: "x,y" }], [{ move: "p,q" }]];
+    expect(moveNumberForCell({ layout, seatIdx: 0, movenum: 0 })).toBe("1");
+    expect(moveNumberForCell({ layout, seatIdx: 1, movenum: 0 })).toBe("");
+    expect(roundSlotToMoveText("BNd4")).toBe("BNd4");
+    expect(roundSlotToMoveText({ move: "BNd5" })).toBe("BNd5");
+    expect(
+      moveTextForCell({
+        layout,
+        rounds: mockEngine.getRounds(),
+        rowIdx: 0,
+        seatIdx: 0,
+        path,
+        movenum: 0,
+      })
+    ).toBe("BNd4");
+    expect(
+      moveTextForCell({
+        layout,
+        rounds: mockEngine.getRounds(),
+        rowIdx: 0,
+        seatIdx: 1,
+        path,
+        movenum: 0,
+      })
+    ).toBe("BNd5");
+  });
+
+  it("integration: dev entropy fixture has seven rounds with per-seat moves", () => {
+    const engine = GameFactory("entropy", ENTROPY_DEV_MOVE_TABLE_STATE);
+    const devLayout = resolveMoveTableLayout({
+      game: { numPlayers: 2, simultaneous: true },
+      engine,
+    });
+    expect(devLayout.useRoundGrid).toBe(true);
+    expect(devLayout.model).toBe("simultaneous");
+
+    const rounds = engine.getRounds();
+    const pathLength = engine.stack.length - 1;
+    expect(pathLength).toBe(7);
+    expect(rounds).toHaveLength(7);
+
+    for (const row of rounds) {
+      expect(row).toHaveLength(2);
+      for (const slot of row) {
+        if (slot != null) {
+          expect(roundSlotToMoveText(slot)).not.toMatch(/,/);
+        }
+      }
+    }
+
+    expect(
+      moveTableRowCount({ pathLength, layout: devLayout, engine })
+    ).toBe(pathLength);
+
+    for (let rowIdx = 0; rowIdx < pathLength; rowIdx++) {
+      for (let seatIdx = 0; seatIdx < 2; seatIdx++) {
+        const expected =
+          rounds[rowIdx][seatIdx] == null
+            ? null
+            : rowIdx;
+        expect(
+          pathIndexForMoveCell({
+            rowIdx,
+            seatIdx,
+            pathLength,
+            layout: devLayout,
+            engine,
+          })
+        ).toBe(expected);
+      }
+    }
+
+    expect(
+      moveTextForCell({
+        layout: devLayout,
+        rounds,
+        rowIdx: 0,
+        seatIdx: 0,
+        path: [[{ move: rounds[0][0] }]],
+        movenum: 0,
+      })
+    ).toBe(roundSlotToMoveText(rounds[0][0]));
+    expect(
+      moveTextForCell({
+        layout: devLayout,
+        rounds,
+        rowIdx: 0,
+        seatIdx: 1,
+        path: [[{ move: rounds[0] }]],
+        movenum: 0,
+      })
+    ).toBe(roundSlotToMoveText(rounds[0][1]));
   });
 });
