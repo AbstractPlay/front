@@ -1,75 +1,214 @@
 /* eslint-env node */
 /**
- * Run AbstractPlay/docs link check against this repo's working tree.
+ * Validate front/docs only: nav.json and internal /front/ doc links.
  *
- * Local: requires a sibling checkout ../docs (same parent as front/).
- * CI: set AP_DOCS_ROOT to the checked-out docs repo (e.g. _ap_docs).
- *
- * Copies the current front tree into docs/vendor/front (excluding node_modules
- * and build) so docs:check validates your branch, not a stale submodule pin.
+ * Cross-repo links (/backend/, /crons/, /gameslib/, etc.) are not checked here.
+ * The AbstractPlay/docs repo runs the full multi-vendor check before publish.
  */
-import { execFileSync, execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FRONT_ROOT = path.resolve(__dirname, "..");
-const DOCS_ROOT = process.env.AP_DOCS_ROOT
-  ? path.resolve(process.env.AP_DOCS_ROOT)
-  : path.resolve(FRONT_ROOT, "..", "docs");
-const DOCS_CHECK = path.join(DOCS_ROOT, "scripts", "docs-check.js");
-const VENDOR_FRONT = path.join(DOCS_ROOT, "vendor", "front");
+const DOCS_ROOT = path.join(FRONT_ROOT, "docs");
+const REPO_PREFIX = "front";
+const WARN_ONLY = process.env.DOCS_CHECK_WARN === "1";
 
-const EXCLUDED_TOP_LEVEL = new Set(["node_modules", "build", ".git", "_ap_docs"]);
+const errors = [];
+const warnings = [];
 
-const OTHER_VENDORS = ["renderer", "gameslib", "node-backend", "recranks", "backend-crons"];
-
-function shouldCopyEntry(name) {
-  return !EXCLUDED_TOP_LEVEL.has(name);
+function fail(msg) {
+  errors.push(msg);
 }
 
-function syncFrontToVendor() {
-  fs.mkdirSync(path.join(DOCS_ROOT, "vendor"), { recursive: true });
-  if (fs.existsSync(VENDOR_FRONT)) {
-    fs.rmSync(VENDOR_FRONT, { recursive: true, force: true });
-  }
-  fs.mkdirSync(VENDOR_FRONT, { recursive: true });
+function warn(msg) {
+  warnings.push(msg);
+}
 
-  for (const entry of fs.readdirSync(FRONT_ROOT, { withFileTypes: true })) {
-    if (!shouldCopyEntry(entry.name)) continue;
-    const src = path.join(FRONT_ROOT, entry.name);
-    const dest = path.join(VENDOR_FRONT, entry.name);
-    fs.cpSync(src, dest, { recursive: true });
+function relPathToSlug(relPath) {
+  return relPath
+    .replace(/\\/g, "/")
+    .replace(/\.md$/, "")
+    .replace(/\/index$/, "")
+    .replace(/^index$/, "index");
+}
+
+function slugToUrl(slug) {
+  return slug === "index" ? `/${REPO_PREFIX}/` : `/${REPO_PREFIX}/${slug}/`;
+}
+
+function defaultTitle(slug) {
+  if (slug === "index") return "Overview";
+  const leaf = slug.split("/").pop();
+  return leaf.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function titleFromMarkdown(content) {
+  const body = content.startsWith("---")
+    ? content.replace(/^---[\s\S]*?---\n*/, "")
+    : content;
+  const match = body.match(/^#\s+(.+)$/m);
+  return match ? match[1].trim() : null;
+}
+
+function collectDocSlugs(docsRoot) {
+  const slugs = new Map();
+
+  function walk(dir, base = "") {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const rel = path.join(base, entry.name).replace(/\\/g, "/");
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full, rel);
+      } else if (entry.name.endsWith(".md") && !entry.name.startsWith("_")) {
+        const slug = relPathToSlug(rel);
+        const content = fs.readFileSync(full, "utf8");
+        slugs.set(slug, { filePath: full, title: titleFromMarkdown(content) });
+      }
+    }
+  }
+
+  walk(docsRoot);
+  return slugs;
+}
+
+function collectDocPages(docsRoot) {
+  const pages = new Map();
+  for (const [slug, meta] of collectDocSlugs(docsRoot)) {
+    pages.set(slugToUrl(slug), meta.filePath);
+  }
+  return pages;
+}
+
+function loadNavOrder(docsRoot) {
+  const navPath = path.join(docsRoot, "nav.json");
+  if (!fs.existsSync(navPath)) {
+    return { order: [], source: null };
+  }
+  return {
+    order: JSON.parse(fs.readFileSync(navPath, "utf8")),
+    source: navPath,
+  };
+}
+
+function normalizeNavItem(item) {
+  if (typeof item === "string") return { slug: item, title: null };
+  return { slug: item.slug, title: item.title || null };
+}
+
+function validateNavConfig(orderConfig, discoveredSlugs) {
+  const listedSlugs = new Set();
+
+  for (const raw of orderConfig) {
+    const { slug } = normalizeNavItem(raw);
+    if (!slug) {
+      fail("Nav entry missing slug in docs/nav.json");
+      continue;
+    }
+    const url = slugToUrl(slug);
+    if (listedSlugs.has(slug)) {
+      fail(`Duplicate nav entry ${url} in docs/nav.json`);
+    }
+    listedSlugs.add(slug);
+    if (!discoveredSlugs.has(slug)) {
+      fail(`Nav entry ${url} in docs/nav.json has no matching doc page`);
+    }
+  }
+
+  for (const slug of discoveredSlugs.keys()) {
+    if (!listedSlugs.has(slug)) {
+      const url = slugToUrl(slug);
+      const title = discoveredSlugs.get(slug).title || defaultTitle(slug);
+      warn(
+        `Doc page ${url} ("${title}") is not in docs/nav.json — it will appear at the end of the nav; add its slug to set order`
+      );
+    }
   }
 }
 
-function prepareDocsCheckout() {
-  execSync("git submodule sync --recursive", { cwd: DOCS_ROOT, stdio: "inherit" });
-  execSync("git submodule update --init --recursive", { cwd: DOCS_ROOT, stdio: "inherit" });
-  for (const vendor of OTHER_VENDORS) {
-    const vendorPath = path.join(DOCS_ROOT, "vendor", vendor);
-    execSync("git fetch --depth=1 origin develop", { cwd: vendorPath, stdio: "inherit" });
-    execSync("git checkout FETCH_HEAD", { cwd: vendorPath, stdio: "inherit" });
+function resolveDocLink(pageUrl, href) {
+  const pathPart = href.split("#")[0];
+  if (!pathPart || pathPart.startsWith("http") || pathPart.startsWith("mailto:")) {
+    return null;
   }
-  execSync("npm ci", { cwd: DOCS_ROOT, stdio: "inherit" });
+  if (pathPart.startsWith("/")) return pathPart;
+  const base = pageUrl.endsWith("/") ? pageUrl : `${pageUrl}/`;
+  return new URL(pathPart, `http://local${base}`).pathname;
 }
 
-if (!fs.existsSync(DOCS_CHECK)) {
-  console.error(
-    "docs-check: clone https://github.com/AbstractPlay/docs as a sibling of front/ " +
-      `(expected ${DOCS_ROOT}) or set AP_DOCS_ROOT for CI`
-  );
+function isPublishedDocTarget(pathOnly, pageUrls) {
+  if (pageUrls.has(pathOnly)) return true;
+  if (!pathOnly.endsWith("/") && pageUrls.has(`${pathOnly}/`)) return true;
+  return false;
+}
+
+function shouldSkipLinkCheck(resolved) {
+  if (/\.(ts|tsx|js|jsx|mjs|cjs|yml|yaml|json|css|scss)$/i.test(resolved)) {
+    return true;
+  }
+  if (!resolved.startsWith(`/${REPO_PREFIX}/`)) {
+    return true;
+  }
+  if (
+    /^\/front\/(.*\/)?(src|public|config|\.github)\//.test(resolved)
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function checkFrontDocLinks() {
+  if (!fs.existsSync(DOCS_ROOT)) {
+    fail("docs/ directory missing");
+    return;
+  }
+
+  const discovered = collectDocSlugs(DOCS_ROOT);
+  const pageUrls = new Set(collectDocPages(DOCS_ROOT).keys());
+  const { order } = loadNavOrder(DOCS_ROOT);
+  validateNavConfig(order, discovered);
+
+  const linkRe = /\[([^\]]*)\]\(([^)]+)\)/g;
+
+  for (const [pageUrl, filePath] of collectDocPages(DOCS_ROOT)) {
+    const content = fs.readFileSync(filePath, "utf8");
+    let match;
+    while ((match = linkRe.exec(content)) !== null) {
+      const href = match[2].trim();
+      if (
+        !href ||
+        href.startsWith("#") ||
+        href.startsWith("{%") ||
+        /^https?:/.test(href) ||
+        href.startsWith("mailto:")
+      ) {
+        continue;
+      }
+
+      const resolved = resolveDocLink(pageUrl, href);
+      if (!resolved || shouldSkipLinkCheck(resolved)) {
+        continue;
+      }
+
+      if (!isPublishedDocTarget(resolved, pageUrls)) {
+        const relFile = path.relative(FRONT_ROOT, filePath).replace(/\\/g, "/");
+        fail(
+          `Broken doc link in ${relFile}: […](${href}) resolves to ${resolved} (page is ${pageUrl})`
+        );
+      }
+    }
+  }
+}
+
+checkFrontDocLinks();
+
+for (const w of warnings) console.warn("WARN:", w);
+for (const e of errors) console.error("ERROR:", e);
+
+if (errors.length > 0 && !WARN_ONLY) {
+  console.error(`\ndocs:check failed with ${errors.length} error(s)`);
   process.exit(1);
 }
 
-if (process.env.AP_DOCS_ROOT) {
-  prepareDocsCheckout();
-}
-
-syncFrontToVendor();
-
-execFileSync(process.execPath, [DOCS_CHECK], {
-  cwd: DOCS_ROOT,
-  stdio: "inherit",
-});
+console.log(`docs:check passed (${warnings.length} warning(s))`);

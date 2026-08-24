@@ -13,22 +13,22 @@ Published URL prefix: `/front/` (e.g. `/front/getting-started/`).
 
 ## Link rules (docs:check)
 
-`docs:check` resolves relative links against the **published page URL**, not the file path on disk.
+`npm run docs:check` in this repo validates **front docs only**:
+
+- `docs/nav.json` entries match published pages under `/front/`
+- Internal `/front/…` links resolve to those pages
+- Cross-repo links (`/backend/`, `/crons/`, `/gameslib/`, etc.) are **not** checked here
+
+Relative links resolve against the **published page URL**, not the file path on disk.
 
 - **Cross-page doc links:** use absolute URLs (`/front/deployment/`, `/backend/getting-started/`).
 - **Source under `src/`, `public/`, `config/`, `.github/`:** relative paths are OK (e.g. [`../src/lib/api.js`](../src/lib/api.js)).
-- **Repo-root files** (`csp-policy.mjs`, `vite.config.js`, `bin/…`): use inline `` `backticks` `` or a GitHub URL — not `[text](../file.mjs)`. Root paths resolve to `/front/file.mjs`, which is not a published doc page and is not on the checker’s source-code allowlist (only `.js`, `.json`, `.yml`, etc. extensions are skipped automatically; `.mjs` is not).
+- **Repo-root files** (`csp-policy.mjs`, `vite.config.js`, `bin/…`): use inline `` `backticks` `` or a GitHub URL — not `[text](../file.mjs)`.
 
-After editing `docs/**/*.md`, run from a sibling docs checkout:
-
-```bash
-npm run docs:check
-```
-
-Or from this repo (with `../docs` cloned):
+From this repo:
 
 ```bash
 npm run docs:check
 ```
 
-CI in the docs repo runs the full check before publish. New pages must be listed in [`docs/nav.json`](nav.json).
+The [AbstractPlay/docs](https://github.com/AbstractPlay/docs) repo runs the full multi-vendor check before publish. New pages must be listed in [`docs/nav.json`](nav.json).
