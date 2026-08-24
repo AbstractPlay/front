@@ -25,6 +25,7 @@ import StandingChallengeTable from "./Me/StandingChallengeTable";
 import StandingChallengeModal from "./StandingChallengeModal";
 import { toast } from "react-toastify";
 import ChallengeMeRespond from "./Me/ChallengeMeRespond";
+import NotificationsTable from "./Me/NotificationsTable";
 import ChallengeTheyRespond from "./Me/ChallengeTheyRespond";
 import ChallengeOpen from "./Me/ChallengeOpen";
 import { useStore } from "../stores";
@@ -508,16 +509,14 @@ function Me(props) {
             </button>
           </div>
         </h1>
-        {globalMe === null ||
-        globalMe === undefined ||
-        globalMe.challengesReceived === undefined ||
-        globalMe.challengesReceived.length === 0 ? null : (
-          <div className="content has-text-centered">
-            <p style={{ color: "var(--secondary-color-1)" }}>
-              <a href="#challenged">{t("me.challengedNotice")}</a>
-            </p>
+        <div className="columns">
+          <div className="column content is-half is-offset-one-quarter">
+            <NotificationsTable
+              handleChallengeResponse={handleChallengeResponse.bind(this)}
+              setError={errorSetter}
+            />
           </div>
-        )}
+        </div>
         {/* Your Games */}
         <div className="columns">
           <div className="column content is-half is-offset-one-quarter">
