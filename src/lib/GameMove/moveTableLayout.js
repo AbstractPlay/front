@@ -173,6 +173,76 @@ export function resolveMoveTableLayout({ game, engine, gameRec }) {
 }
 
 /**
+ * @param {unknown} slot
+ * @returns {string}
+ */
+export function roundSlotToMoveText(slot) {
+  if (slot == null) {
+    return "";
+  }
+  if (typeof slot === "string") {
+    return slot;
+  }
+  if (typeof slot === "object" && slot !== null && "move" in slot) {
+    return String(/** @type {{ move: unknown }} */ (slot).move ?? "");
+  }
+  return String(slot);
+}
+
+/**
+ * @param {{ layout: MoveTableLayout, seatIdx: number, movenum: number | null }} ctx
+ * @returns {string}
+ */
+export function moveNumberForCell({ layout, seatIdx, movenum }) {
+  if (movenum === null) {
+    return "";
+  }
+  if (layout.model === "simultaneous" && layout.useRoundGrid && seatIdx !== 0) {
+    return "";
+  }
+  return `${movenum + 1}`;
+}
+
+/**
+ * @param {{ layout: MoveTableLayout, rounds?: unknown[][] | null, rowIdx: number, seatIdx: number, path: { move?: unknown }[][], movenum: number | null }} ctx
+ * @returns {string}
+ */
+export function moveTextForCell({
+  layout,
+  rounds,
+  rowIdx,
+  seatIdx,
+  path,
+  movenum,
+}) {
+  const slot = Array.isArray(rounds?.[rowIdx]) ? rounds[rowIdx][seatIdx] : null;
+  if (layout.model === "simultaneous" && layout.useRoundGrid && slot != null) {
+    return roundSlotToMoveText(slot);
+  }
+
+  if (movenum === null || movenum >= path.length) {
+    return "";
+  }
+
+  const entry = path[movenum]?.[0];
+  const move = entry?.move;
+  if (layout.model === "simultaneous" && move != null) {
+    if (Array.isArray(move)) {
+      return String(move[seatIdx] ?? "");
+    }
+    if (typeof move === "string" && move.includes(",")) {
+      const parts = move.split(",");
+      if (parts.length > seatIdx) {
+        return parts[seatIdx] ?? "";
+      }
+    }
+    return seatIdx === 0 ? String(move) : "";
+  }
+
+  return move == null ? "" : String(move);
+}
+
+/**
  * Map table cell (row, seat) to exploration path index, or null for empty seat.
  * @param {{ rowIdx: number, seatIdx: number, pathLength: number, layout: MoveTableLayout, engine?: { getRounds?: () => unknown[][], getPlies?: () => unknown[] } }} ctx
  * @returns {number | null}
@@ -202,6 +272,10 @@ export function pathIndexForMoveCell({
     return null;
   }
 
+  if (layout.model === "simultaneous") {
+    return rowIdx < pathLength ? rowIdx : null;
+  }
+
   let plyIndex = 0;
   for (let r = 0; r < rowIdx; r++) {
     for (let s = 0; s < rounds[r].length; s++) {
@@ -225,6 +299,9 @@ export function moveTableRowCount({ pathLength, layout, engine }) {
   }
   const rounds = getRoundsForLayout(engine, layout);
   if (Array.isArray(rounds) && rounds.length > 0) {
+    if (layout.model === "simultaneous") {
+      return Math.min(rounds.length, pathLength);
+    }
     return rounds.length;
   }
   return Math.ceil(pathLength / numcolumns);
