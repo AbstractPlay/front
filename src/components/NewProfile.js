@@ -1,10 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Auth } from "aws-amplify";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
+import { fetchProfile } from "../lib/globalMeBootstrap";
 import Modal from "./Modal";
-import { useStore } from "../stores";
 import { validateDisplayName } from "./Bots/botUtils";
 
 function NewProfile(props) {
@@ -72,7 +71,6 @@ function NewProfile(props) {
         consentErrorSetter(t("PleaseConsent"));
       } else {
         try {
-          const { setGlobalMe } = useStore.getState();
           const res = await callAuthApi("new_profile", {
             name: name,
             consent: consent,
@@ -83,43 +81,7 @@ function NewProfile(props) {
           if (!res) return;
           props.handleClose(1);
           if (props.updateMe) {
-            try {
-              const usr = await Auth.currentAuthenticatedUser();
-              const token = usr.signInUserSession.idToken.jwtToken;
-              if (token !== null) {
-                try {
-                  console.log(
-                    "calling authQuery 'me' (small), with token: " + token
-                  );
-                  const res = await callAuthApi("me", { size: "small" });
-                  if (!res) return;
-                  const result = await res.json();
-                  if (result.statusCode !== 200)
-                    console.log(JSON.parse(result.body));
-                  else {
-                    if (result === null) setGlobalMe({});
-                    else {
-                      setGlobalMe((prev) => {
-                        const backendData = JSON.parse(result.body);
-                        return {
-                          ...prev,
-                          ...backendData,
-                          challengesIssued: prev?.challengesIssued ?? [],
-                          challengesReceived: prev?.challengesReceived ?? [],
-                          challengesAccepted: prev?.challengesAccepted ?? [],
-                          standingChallenges: prev?.standingChallenges ?? [],
-                        };
-                      });
-                      console.log(JSON.parse(result.body));
-                    }
-                  }
-                } catch (error) {
-                  console.log(error);
-                }
-              }
-            } catch (error) {
-              // not logged in, ok.
-            }
+            await fetchProfile();
           }
         } catch (err) {
           setError(err.message);

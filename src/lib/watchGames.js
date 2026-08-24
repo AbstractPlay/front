@@ -8,7 +8,16 @@ function isActiveGame(game) {
 export function collectWatchGames(globalMe, pathname) {
   const keys = new Map();
 
-  if (globalMe?.games) {
+  if (globalMe?.activeGames) {
+    for (const game of globalMe.activeGames) {
+      if (game.metaGame && game.id) {
+        keys.set(`${game.metaGame}#${game.id}`, {
+          meta: game.metaGame,
+          id: game.id,
+        });
+      }
+    }
+  } else if (globalMe?.games) {
     for (const game of globalMe.games) {
       if (!isActiveGame(game)) {
         continue;

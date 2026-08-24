@@ -11,6 +11,8 @@ import Spinner from "./Spinner";
 import { cloneDeep, debounce } from "lodash";
 import { Auth } from "aws-amplify";
 import { callAuthApi } from "../lib/api";
+import { fetchProfile } from "../lib/globalMeBootstrap";
+import { useAuthSession } from "../hooks/useAuthSession";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -96,7 +98,7 @@ function UserSettingsModal(props) {
   const [bggid, bggidSetter] = useState("");
   const [aboutMe, aboutMeSetter] = useState("");
   const users = useStore((state) => state.users);
-  const [user, userSetter] = useState(null);
+  const { user } = useAuthSession();
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
   const [exploration, explorationSetter] = useState(null);
@@ -250,11 +252,11 @@ function UserSettingsModal(props) {
   };
 
   const logout = async () => {
-    // Set flag to indicate intentional logout, so we don't auto-login on redirect
     localStorage.removeItem("wasLoggedIn");
     sessionStorage.setItem("intentionalLogout", "1");
-    const { setGlobalMe } = useStore.getState();
+    const { setGlobalMe, clearAuthSession } = useStore.getState();
     await Auth.signOut();
+    clearAuthSession();
     setGlobalMe(null);
     updatedSetter((updated) => updated + 1);
     handleUserSettingsClose(updated + 1);
@@ -280,7 +282,7 @@ function UserSettingsModal(props) {
 
   const handleEMailChangeClick = () => {
     emailErrorSetter("");
-    emailSetter(user.signInUserSession.idToken.payload.email);
+    emailSetter(user?.signInUserSession.idToken.payload.email ?? "");
     changingEMailSetter(true);
   };
 
@@ -400,47 +402,8 @@ function UserSettingsModal(props) {
   };
 
   useEffect(() => {
-    const { setGlobalMe } = useStore.getState();
-    async function fetchAuth() {
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        userSetter(usr);
-        const token = usr.signInUserSession.idToken.jwtToken;
-        if (token !== null) {
-          try {
-            console.log("calling authQuery 'me' (small), with token: " + token);
-            const res = await callAuthApi("me", { size: "small" });
-            if (!res) return;
-            const result = await res.json();
-            if (result.statusCode !== 200) console.log(JSON.parse(result.body));
-            else {
-              if (result === null) setGlobalMe({});
-              else {
-                setGlobalMe((prev) => {
-                  const backendData = JSON.parse(result.body);
-                  return {
-                    ...prev,
-                    ...backendData,
-                    challengesIssued: prev?.challengesIssued ?? [],
-                    challengesReceived: prev?.challengesReceived ?? [],
-                    challengesAccepted: prev?.challengesAccepted ?? [],
-                    standingChallenges: prev?.standingChallenges ?? [],
-                    bots: backendData.bots ?? prev?.bots ?? [],
-                  };
-                });
-                console.log(JSON.parse(result.body));
-              }
-            }
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      } catch (error) {
-        // not logged in, ok.
-      }
-    }
     if (show) {
-      fetchAuth();
+      fetchProfile();
     }
   }, [updated, show]);
 

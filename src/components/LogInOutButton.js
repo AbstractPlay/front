@@ -2,99 +2,49 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Auth } from "aws-amplify";
-import { callAuthApi } from "../lib/api";
 import UserSettingsModal from "./UserSettingsModal";
 import NewProfile from "./NewProfile";
 import { resyncPushSubscription } from "../subscription";
 import { useStore } from "../stores";
+import { useAuthSession } from "../hooks/useAuthSession";
+import { fetchProfile } from "../lib/globalMeBootstrap";
 
 function LogInOutButton({ closeBurger, variant = "default" }) {
   const { t } = useTranslation();
-  const [user, userSetter] = useState(null);
+  const { status, user } = useAuthSession();
   const [showUserSettingsModal, showUserSettingsModalSetter] = useState(false);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
-  const [updated, updatedSetter] = useState(false);
   const globalMe = useStore((state) => state.globalMe);
 
   useEffect(() => {
-    const { setGlobalMe } = useStore.getState();
-    async function fetchAuth() {
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        console.log("usr: ", usr);
-        const token = usr.signInUserSession.idToken.jwtToken;
-        if (token !== null) {
-          userSetter(usr.signInUserSession);
-          try {
-            console.log("calling authQuery 'me' (small), with token: " + token);
-            const res = await callAuthApi("me", { size: "small" }, false);
-            if (!res) return;
-            if (res.status === 401 || res.status === 403) return;
-            const result = await res.json();
-            if (result.statusCode !== 200) console.log(JSON.parse(result.body));
-            else {
-              if (result === null) setGlobalMe({});
-              else {
-                setGlobalMe((prev) => {
-                  const backendData = JSON.parse(result.body);
-                  return {
-                    ...prev,
-                    ...backendData,
-                    challengesIssued: prev?.challengesIssued ?? [],
-                    challengesReceived: prev?.challengesReceived ?? [],
-                    challengesAccepted: prev?.challengesAccepted ?? [],
-                    standingChallenges: prev?.standingChallenges ?? [],
-                    bots: backendData.bots ?? prev?.bots ?? [],
-                  };
-                });
-                console.log(JSON.parse(result.body));
-              }
-            }
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      } catch (error) {
-        // not logged in, ok.
-      }
+    if (status === "ready") {
+      resyncPushSubscription();
     }
-    fetchAuth();
-  }, [updated]);
-
-  useEffect(() => {
-    resyncPushSubscription();
-  }, [updated]);
+  }, [status]);
 
   const handleSettingsClick = () => {
-    console.log(user);
     if (!globalMe || globalMe.id === undefined) {
-      console.log("showNewProfileModalSetter(true);");
-      console.log(globalMe);
       showNewProfileModalSetter(true);
     } else {
       showUserSettingsModalSetter(true);
     }
   };
 
-  const handleUserSettingsClose = (cnt) => {
+  const handleUserSettingsClose = async (cnt) => {
     showUserSettingsModalSetter(false);
-    console.log("handleUserSettingsClose, cnt: ", cnt);
     if (cnt > 0) {
-      // Refresh globalMe
-      console.log(`Refreshing globalMe (${updated})`);
-      updatedSetter(!updated);
+      await fetchProfile();
     }
   };
 
-  const handleNewProfileClose = (cnt) => {
+  const handleNewProfileClose = async (cnt) => {
     showNewProfileModalSetter(false);
     if (cnt > 0) {
-      updatedSetter(!updated);
+      await fetchProfile();
     }
   };
 
-  console.log("showUserSettingsModal", showUserSettingsModal);
-  if (user === null) {
+  if (status !== "ready" || user === null) {
     return (
       <button
         className="button is-small apButton"
@@ -106,8 +56,8 @@ function LogInOutButton({ closeBurger, variant = "default" }) {
     );
   }
 
-  const username = user.idToken.payload["cognito:username"];
-  const playerPath = `/player/${user.idToken.payload["sub"]}`;
+  const username = user.signInUserSession.idToken.payload["cognito:username"];
+  const playerPath = `/player/${user.signInUserSession.idToken.payload.sub}`;
   const settingsModals = (
     <>
       <UserSettingsModal

@@ -1,6 +1,20 @@
 import { create } from "zustand";
 
 export const useStore = create((set, get) => ({
+  authSession: {
+    status: "unknown",
+    user: null,
+    token: null,
+  },
+  setAuthSession: (session) =>
+    set((state) => ({
+      authSession: { ...state.authSession, ...session },
+    })),
+  clearAuthSession: () =>
+    set({
+      authSession: { status: "guest", user: null, token: null },
+    }),
+
   globalMe: null,
   setGlobalMe: (me) =>
     set((state) => ({
@@ -109,12 +123,20 @@ export const useStore = create((set, get) => ({
           return state;
         }
         const visible = new Set(state.connections.visibleUserIds);
+        const joinedIds = msg.joins ?? [];
         for (const id of msg.leaves ?? []) {
           visible.delete(id);
         }
-        for (const id of msg.joins ?? []) {
+        for (const id of joinedIds) {
           visible.add(id);
         }
+        const now = Date.now();
+        const users =
+          joinedIds.length > 0
+            ? state.users.map((u) =>
+                joinedIds.includes(u.id) ? { ...u, lastSeen: now } : u
+              )
+            : state.users;
         return {
           connections: {
             totalCount: Math.max(
@@ -126,6 +148,7 @@ export const useStore = create((set, get) => ({
             visibleUserIds: [...visible],
             seq: msg.seq,
           },
+          users,
         };
       }
       return state;
