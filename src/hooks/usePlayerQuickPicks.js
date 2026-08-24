@@ -2,9 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { useStore } from "../stores";
 import { isLabSupportedGame } from "../lib/Lab/buildGame";
 import { buildPlayerQuickPickSections } from "../lib/playerGameQuickPicks";
+import {
+  fetchPlayerSummarySlice,
+  summaryFromPlayerSlice,
+  SUMMARY_URLS,
+} from "../lib/summaryFetch";
 
 const PLAYER_RECORDS_URL = "https://records.abstractplay.com/player";
-const SUMMARY_URL = "https://records.abstractplay.com/_summary.json";
 
 /** @type {Map<string, { allRecs: unknown[], summary: object|null }>} */
 const sessionCache = new Map();
@@ -20,12 +24,15 @@ export async function fetchPlayerQuickPickData(userId) {
     return inflight.get(userId);
   }
   const promise = (async () => {
-    const [recsRes, summaryRes] = await Promise.all([
+    const [recsRes, slice] = await Promise.all([
       fetch(`${PLAYER_RECORDS_URL}/${userId}.json`),
-      fetch(SUMMARY_URL),
+      fetchPlayerSummarySlice(userId),
     ]);
     const allRecs = recsRes.ok ? await recsRes.json() : [];
-    const summary = summaryRes.ok ? await summaryRes.json() : null;
+    const summary =
+      slice != null
+        ? summaryFromPlayerSlice(slice)
+        : useStore.getState().summary;
     const payload = {
       allRecs: Array.isArray(allRecs) ? allRecs : [],
       summary,
@@ -128,3 +135,6 @@ export function clearPlayerQuickPicksCache() {
   sessionCache.clear();
   inflight.clear();
 }
+
+/** @visibleForTesting */
+export { PLAYER_RECORDS_URL, SUMMARY_URLS };

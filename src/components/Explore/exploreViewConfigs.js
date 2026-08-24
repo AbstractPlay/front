@@ -198,7 +198,7 @@ export const viewConfigs = {
     titleKey: "explore.views.hindex.title",
     descriptionKey: "explore.views.hindex.description",
     defaultSort: [{ id: "hindex", desc: true }],
-    fetchUrl: "https://records.abstractplay.com/_summary.json",
+    summaryTier: "site",
     extraFields: (metaGame, info, fetchedData) => {
       let hindex = 0;
       if (fetchedData !== null) {
@@ -268,7 +268,7 @@ export const viewConfigs = {
     titleKey: "explore.views.completedRecent.title",
     descriptionKey: "explore.views.completedRecent.description",
     defaultSort: [{ id: "games", desc: true }],
-    fetchUrl: "https://records.abstractplay.com/_summary.json",
+    summaryTier: "site",
     extraFields: (metaGame, info, fetchedData) => {
       let gamesper = 0;
       if (fetchedData !== null) {

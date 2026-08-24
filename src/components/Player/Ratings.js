@@ -22,35 +22,33 @@ function Ratings({ handleChallenge }) {
     activeChallengeModalSetter("");
   }, []);
 
-  const data = useMemo(
-    () =>
-      summary === null || summary === undefined
-        ? []
-        : summary.ratings.highest
-            .filter((r) => r.user === user.id)
-            .map(({ rating: elo, game, wld, glicko, trueskill }) => {
-              const inforec = [...gameinfo.values()].find((r) =>
-                game.startsWith(r.name)
-              );
-              // get other ratings for this game
-              const gameRatings = summary.ratings.highest
-                .filter((r) => r.game === game)
-                .map((r) => r.rating)
-                .sort((a, b) => b - a);
-              const rank = gameRatings.findIndex((n) => n === elo) + 1;
-              return {
-                id: inforec.uid,
-                name: game,
-                elo,
-                rank,
-                wld,
-                glicko,
-                trueskill,
-              };
-            })
-            .sort((a, b) => b.elo - a.elo),
-    [summary, user]
-  );
+  const data = useMemo(() => {
+    if (summary == null || !summary.ratings?.highest) {
+      return [];
+    }
+    return summary.ratings.highest
+      .filter((r) => r.user === user.id)
+      .map(({ rating: elo, game, wld, glicko, trueskill }) => {
+        const inforec = [...gameinfo.values()].find((r) =>
+          game.startsWith(r.name)
+        );
+        const gameRatings = summary.ratings.highest
+          .filter((r) => r.game === game)
+          .map((r) => r.rating)
+          .sort((a, b) => b - a);
+        const rank = gameRatings.findIndex((n) => n === elo) + 1;
+        return {
+          id: inforec.uid,
+          name: game,
+          elo,
+          rank,
+          wld,
+          glicko,
+          trueskill,
+        };
+      })
+      .sort((a, b) => b.elo - a.elo);
+  }, [summary, user]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(
