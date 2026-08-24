@@ -310,7 +310,7 @@ function getDiffLeaves(sourceData, targetData, srcTracking) {
   for (const [leafPath, sourceValue] of Object.entries(sourceLeaves)) {
     const translated = getLeafValue(targetData, leafPath);
     const tracking = srcTracking[leafPath];
-    const { src, out } = normalizeTrackingEntry(tracking);
+    const { src } = normalizeTrackingEntry(tracking);
 
     if (!translated) {
       diff[leafPath] = sourceValue;
@@ -322,10 +322,8 @@ function getDiffLeaves(sourceData, targetData, srcTracking) {
       continue;
     }
 
-    if (out !== undefined && out !== translated) {
-      diff[leafPath] = sourceValue;
-      continue;
-    }
+    // Human / Weblate edits in public/locales are authoritative when English is unchanged.
+    // Mismatched locale-src out stamps are backfilled from the file, not re-translated.
 
     if (translated === sourceValue) {
       if (isVerifiedSame(tracking, sourceValue, translated)) {
