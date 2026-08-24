@@ -3,7 +3,10 @@ import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import {
+  getRoundsForLayout,
+  moveNumberForCell,
   moveTableRowCount,
+  moveTextForCell,
   pathIndexForMoveCell,
   resolveMoveTableLayout,
   MOVE_TREE_DENSITY_STORAGE_KEY,
@@ -676,6 +679,7 @@ function GameMoves(props) {
         layout,
         engine: props.engine,
       });
+      const rounds = getRoundsForLayout(props.engine, layout);
       for (let i = 0; i < numRows; i++) {
         let row = [];
         for (let j = 0; j < numcolumns; j++) {
@@ -700,7 +704,7 @@ function GameMoves(props) {
                   : ""
               }
             >
-              {movenum === null ? "" : `${movenum + 1}`}
+              {moveNumberForCell({ layout, seatIdx: j, movenum })}
             </td>
           );
           if (movenum !== null && movenum < path.length) {
@@ -709,7 +713,17 @@ function GameMoves(props) {
               <td key={"td1-" + i + "-" + j}>
                 <div className="move">
                   {path[movenum].length === 1 ? (
-                    AMove(game, path[movenum][0])
+                    AMove(game, {
+                      ...path[movenum][0],
+                      move: moveTextForCell({
+                        layout,
+                        rounds,
+                        rowIdx: i,
+                        seatIdx: j,
+                        path,
+                        movenum,
+                      }),
+                    })
                   ) : (
                     <div className="variation-list">
                       {path[movenum].map((m, k) => (
