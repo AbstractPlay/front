@@ -6,6 +6,14 @@ describe("collectWatchGames", () => {
     expect(games).toEqual([{ meta: "chess", id: "abc123" }]);
   });
 
+  it("includes active games from activeGames", () => {
+    const globalMe = {
+      activeGames: [{ metaGame: "go", id: "g1" }],
+    };
+    const games = collectWatchGames(globalMe, "/");
+    expect(games).toEqual([{ meta: "go", id: "g1" }]);
+  });
+
   it("includes active dashboard games", () => {
     const globalMe = {
       games: [

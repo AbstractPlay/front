@@ -1,5 +1,5 @@
 import { callAuthApi } from "../../lib/api";
-import { useStore } from "../../stores";
+import { fetchProfile } from "../../lib/globalMeBootstrap";
 
 async function parseAuthResponse(res) {
   if (!res) {
@@ -90,19 +90,9 @@ export async function testBotStatus() {
 }
 
 export async function refreshMe() {
-  const res = await callAuthApi("me", { size: "small" });
-  const result = await parseAuthResponse(res);
-  if (!result.ok) return result;
-  const backendData = result.data ?? {};
-  const { setGlobalMe } = useStore.getState();
-  setGlobalMe((prev) => ({
-    ...prev,
-    ...backendData,
-    challengesIssued: prev?.challengesIssued ?? [],
-    challengesReceived: prev?.challengesReceived ?? [],
-    challengesAccepted: prev?.challengesAccepted ?? [],
-    standingChallenges: prev?.standingChallenges ?? [],
-    bots: backendData.bots ?? prev?.bots ?? [],
-  }));
-  return result;
+  const profile = await fetchProfile();
+  if (profile === null) {
+    return { ok: false, error: "Not authenticated" };
+  }
+  return { ok: true, data: profile };
 }

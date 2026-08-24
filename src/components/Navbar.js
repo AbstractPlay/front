@@ -2,13 +2,13 @@
 import React, { useState, useEffect, Suspense, lazy } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Auth } from "aws-amplify";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import LogInOutButton from "./LogInOutButton";
 import ErrorBoundary from "./ErrorBoundary";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../stores";
+import { useAuthSession } from "../hooks/useAuthSession";
 import { REAL_MODE } from "../lib/realMode";
 import Spinner from "./Spinner";
 import {
@@ -19,7 +19,8 @@ import {
 const ThemeCustomizer = lazy(() => import("./ThemeCustomizer"));
 
 function Navbar(props) {
-  const [loggedin, loggedinSetter] = useState(false);
+  const { status } = useAuthSession();
+  const loggedin = status === "ready";
   const [burgerExpanded, updateBurgerExpanded] = useState(false);
   const news = useStore((state) => state.news);
   const globalMe = useStore((state) => state.globalMe);
@@ -59,17 +60,6 @@ function Navbar(props) {
       maxNewsSetter(Infinity);
     }
   }, [news]);
-
-  useEffect(() => {
-    async function fetchAuth() {
-      const usr = await Auth.currentAuthenticatedUser();
-      const token = usr.signInUserSession.idToken.jwtToken;
-      if (token !== null) loggedinSetter(true);
-    }
-    fetchAuth().catch(() => {
-      /* Not authenticated, and that's OK */
-    });
-  }, []);
 
   return (
     <nav className="navbar">
