@@ -2,11 +2,12 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "../Spinner";
 import { useSiteSummary } from "../../hooks/useSiteSummary";
-
-const SUMMARY_JSON_URL = "https://records.abstractplay.com/_summary.json";
+import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
+import { SUMMARY_URLS } from "../../lib/summaryFetch";
 
 function SummaryGate({ children }) {
   const { t } = useTranslation();
+  useEnsureSummaryTier("site");
   const { isPending, isReady, isError } = useSiteSummary();
 
   if (isPending) {
@@ -23,7 +24,7 @@ function SummaryGate({ children }) {
       <div className="content has-text-centered summary-gate-error">
         <p>{t("stats.summaryLoadError")}</p>
         <p>
-          <a href={SUMMARY_JSON_URL}>{t("stats.downloadSummary")}</a>
+          <a href={SUMMARY_URLS.monolith}>{t("stats.downloadSummary")}</a>
         </p>
       </div>
     );

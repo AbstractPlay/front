@@ -34,6 +34,7 @@ import Hero from "./Player/Hero";
 import ProfileModule from "./Player/ProfileModule";
 import SummaryGate from "./shared/SummaryGate";
 import { useStore } from "../stores";
+import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
 import { formatUserDisplayName } from "./Bots/botUtils";
 import {
   PROFILE_TABS,
@@ -90,6 +91,10 @@ function Player() {
   );
 
   const { t } = useTranslation();
+
+  useEnsureSummaryTier("site");
+  useEnsureSummaryTier("players");
+  useEnsureSummaryTier("ratings");
 
   const hashTabOverride = playerTabOverrideFromHash(location.hash);
   const activeTab =

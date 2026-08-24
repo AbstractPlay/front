@@ -5,33 +5,48 @@ import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 import { useTranslation } from "react-i18next";
+import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
+import {
+  buildGlickoByGameMap,
+  formatGlickoLowWithRd,
+  glickoRatingLow,
+} from "../../lib/glickoDisplay";
 
 function HighestSingleRating({ metaFilter, nav }) {
+  useEnsureSummaryTier("site");
+  useEnsureSummaryTier("ratings");
   const summary = useStore((state) => state.summary);
   const globalMe = useStore((state) => state.globalMe);
   const userNames = useStore((state) => state.users);
   const { t } = useTranslation();
 
+  const glickoByGameMap = useMemo(
+    () => buildGlickoByGameMap(summary?.ratings?.glickoByGame),
+    [summary]
+  );
+
   const data = useMemo(
     () =>
-      summary.ratings.highest
-        .map(({ user: userid, game, rating, wld, glicko, trueskill }) => {
-          let name = "UNKNOWN";
-          const user = userNames.find((u) => u.id === userid);
-          if (user !== undefined) {
-            name = user.name;
-          }
-          return {
-            uuid: `${userid}|${game}`,
-            userid,
-            name,
-            game,
-            rating,
-            wld,
-            glicko,
-            trueskill,
-          };
-        })
+      !summary?.ratings?.highest
+        ? []
+        : summary.ratings.highest
+            .map(({ user: userid, game, rating, wld, trueskill }) => {
+              let name = "UNKNOWN";
+              const user = userNames.find((u) => u.id === userid);
+              if (user !== undefined) {
+                name = user.name;
+              }
+              return {
+                uuid: `${userid}|${game}`,
+                userid,
+                name,
+                game,
+                rating,
+                wld,
+                glicko: glickoByGameMap.get(`${userid}|${game}`) ?? null,
+                trueskill,
+              };
+            })
         .filter(
           (rec) =>
             metaFilter === undefined ||
@@ -39,7 +54,7 @@ function HighestSingleRating({ metaFilter, nav }) {
             rec.game.startsWith(`${metaFilter} (`)
         )
         .sort((a, b) => b.rating - a.rating),
-    [summary, userNames, metaFilter]
+    [summary, userNames, metaFilter, glickoByGameMap]
   );
 
   const columnHelper = createColumnHelper();
@@ -75,23 +90,16 @@ function HighestSingleRating({ metaFilter, nav }) {
       }),
       columnHelper.accessor("glicko", {
         header: t("tables.glicko"),
-        cell: (props) => {
-          const rating = props.getValue().rating;
-          const rd = props.getValue().rd;
-          const min = Math.round(rating - rd * 2);
-          const max = Math.round(rating + rd * 2);
-          return `${min}–${max}`;
-        },
+        cell: (props) => formatGlickoLowWithRd(props.getValue()),
         sortingFn: (rowA, rowB, columnID) => {
-          const ratingA = Math.round(rowA.getAllCells(columnID).rating);
-          const ratingB = Math.round(rowB.getAllCells(columnID).rating);
-          const rdA = Math.round(rowA.getAllCells(columnID).rd);
-          const rdB = Math.round(rowB.getAllCells(columnID).rd);
-          if (ratingA === ratingB) {
+          const lowA = glickoRatingLow(rowA.getValue(columnID)) ?? -Infinity;
+          const lowB = glickoRatingLow(rowB.getValue(columnID)) ?? -Infinity;
+          if (lowA === lowB) {
+            const rdA = rowA.getValue(columnID)?.rd ?? 0;
+            const rdB = rowB.getValue(columnID)?.rd ?? 0;
             return rdA - rdB;
-          } else {
-            return ratingA - ratingB;
           }
+          return lowA - lowB;
         },
       }),
       columnHelper.accessor("trueskill", {

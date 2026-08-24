@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ProfileContext, SummaryContext, AllRecsContext } from "../Player";
 import PlayerWeeklyChart from "./PlayerWeeklyChart";
 import { getSiteWeekCount } from "../../lib/playerProfileSections";
+import { getPlayerTimeoutStats } from "../../lib/summaryFetch";
 
 function Timeouts() {
   const { t } = useTranslation();
@@ -10,12 +11,12 @@ function Timeouts() {
   const [summary] = useContext(SummaryContext);
   const [allRecs] = useContext(AllRecsContext);
   const [histogram, histogramSetter] = useState([]);
-  const [timeouts, timeoutsSetter] = useState([]);
+  const [timeoutCount, timeoutCountSetter] = useState(0);
   const [gamesSince, gamesSinceSetter] = useState(null);
 
   useEffect(() => {
     if (summary !== null && user !== null) {
-      const rec = summary.histograms.playerTimeouts.find(
+      const rec = summary.histograms?.playerTimeouts?.find(
         (r) => r.user === user.id
       );
       if (rec !== undefined) {
@@ -23,28 +24,27 @@ function Timeouts() {
       } else {
         histogramSetter([]);
       }
-      const toIndiv = summary.players.timeouts.filter(
-        (rec) => rec.user === user.id
-      );
-      timeoutsSetter(toIndiv);
-      const toLatest = Math.max(0, ...toIndiv.map((rec) => rec.value));
-      let count = 0;
+      const timeoutStats = getPlayerTimeoutStats(summary, user.id);
+      const count = timeoutStats?.count ?? 0;
+      timeoutCountSetter(count);
+      const toLatest = timeoutStats?.latestTimeoutMs ?? 0;
+      let completedSince = 0;
       for (const rec of allRecs) {
         const datems = new Date(rec.header["date-end"]).getTime();
         if (datems > toLatest) {
-          count++;
+          completedSince++;
         }
       }
-      gamesSinceSetter(count);
+      gamesSinceSetter(count > 0 ? completedSince : null);
     } else {
       gamesSinceSetter(null);
-      timeoutsSetter([]);
+      timeoutCountSetter(0);
       histogramSetter([]);
     }
   }, [summary, user, allRecs]);
 
   const hasData =
-    timeouts.length > 0 ||
+    timeoutCount > 0 ||
     (histogram.length > 0 && histogram.some((v) => v > 0));
 
   const siteWeekCount = getSiteWeekCount(summary);
@@ -58,7 +58,7 @@ function Timeouts() {
       <div className="content">
         <p>
           {t("player.stats.timeouts.total", {
-            count: timeouts.length.toLocaleString(),
+            count: timeoutCount.toLocaleString(),
           })}
         </p>
         {gamesSince === null ? null : (

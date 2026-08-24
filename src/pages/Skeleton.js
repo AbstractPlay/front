@@ -191,22 +191,6 @@ function Bones(props) {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const { setSummary, setSummaryLoadState } = useStore.getState();
-    async function fetchData() {
-      try {
-        var url = new URL("https://records.abstractplay.com/_summary.json");
-        const res = await fetch(url);
-        const result = await res.json();
-        setSummary(result);
-      } catch (error) {
-        setSummary(null);
-        setSummaryLoadState("error");
-      }
-    }
-    fetchData();
-  }, []);
-
   // apply stored color mode
   useEffect(() => {
     if (colorMode !== null && colorMode !== undefined) {

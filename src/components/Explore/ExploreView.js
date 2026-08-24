@@ -28,6 +28,7 @@ import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import { useGameRecommendations } from "../../hooks/useGameRecommendations";
 import { useStore } from "../../stores";
+import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
 
 function readStoredValue(key) {
   try {
@@ -86,8 +87,20 @@ function tagSortFn(a, b) {
 function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
   const allSize = Number.MAX_SAFE_INTEGER;
   const globalMe = useStore((state) => state.globalMe);
+  const summarySite = useStore((state) => state.summary);
+  const summarySiteLoadState = useStore((state) => state.summarySiteLoadState);
   const [games, gamesSetter] = useState([]);
-  const [fetchedData, fetchedDataSetter] = useState(null);
+  useEnsureSummaryTier(config.summaryTier ?? null);
+
+  const fetchedData = useMemo(() => {
+    if (!config.summaryTier) {
+      return null;
+    }
+    if (config.summaryTier === "site" && summarySiteLoadState === "ready") {
+      return summarySite;
+    }
+    return null;
+  }, [config.summaryTier, summarySite, summarySiteLoadState]);
   const [showState, showStateSetter] = useStorageState(
     `explore-show-${viewKey}`,
     initialPageSize(viewKey)
@@ -187,22 +200,6 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       JSON.stringify(filterState)
     );
   }, [tagFilter, nameSearch, designerSearch, viewKey]);
-
-  useEffect(() => {
-    if (!config.fetchUrl) return;
-    async function fetchData() {
-      try {
-        var url = new URL(config.fetchUrl);
-        const res = await fetch(url);
-        const result = await res.json();
-        fetchedDataSetter(result);
-      } catch (error) {
-        console.log(error);
-        fetchedDataSetter(null);
-      }
-    }
-    fetchData();
-  }, [config.fetchUrl]);
 
   const openImgModal = useCallback((name) => {
     activeImgModalSetter(name);

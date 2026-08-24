@@ -1,3 +1,5 @@
+import { getPlayerTimeoutStats } from "./summaryFetch";
+
 export const PROFILE_TABS = [
   {
     id: "competition",
@@ -230,14 +232,16 @@ export function isModuleVisible(code, ctx) {
       const hist = getActivityHistogram(summary, user?.id);
       return hist.length > 0 && hist.some((v) => v > 0);
     }
-    case "timeouts":
+    case "timeouts": {
+      const timeoutStats = getPlayerTimeoutStats(summary, user?.id);
       return (
         summary?.histograms?.playerTimeouts?.some(
           (r) => r.user === user?.id && r.value?.length > 0
         ) ||
-        summary?.players?.timeouts?.some((r) => r.user === user?.id) ||
+        (timeoutStats?.count ?? 0) > 0 ||
         false
       );
+    }
     case "response":
       return Array.isArray(responses) && responses.length > 0;
     case "tournaments":
