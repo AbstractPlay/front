@@ -1506,7 +1506,27 @@
     },
     "me": {
         "challengedNotice": "You have been challenged!",
-        "downloadCompletedReports": "Download all your completed game reports"
+        "downloadCompletedReports": "Download all your completed game reports",
+        "notifications": {
+            "title": "Notifications",
+            "dismiss": "Dismiss",
+            "columns": {
+                "message": "Message",
+                "note": "Note",
+                "time": "Time"
+            },
+            "message": {
+                "gameStart": "{{opponentName}} started a game of {{metaGame}} with you",
+                "gameEnd_win": "You won your game of {{metaGame}}",
+                "gameEnd_lose": "You lost your game of {{metaGame}}",
+                "gameEnd_draw": "Your game of {{metaGame}} ended in a draw",
+                "ratingChange": "Your {{metaGame}} rating changed by {{delta}} (now {{newRating}})",
+                "challengeIssued": "{{challengerName}} challenged you to {{metaGame}}",
+                "challengeDeclined": "{{declinerName}} declined your {{metaGame}} challenge",
+                "challengeRevoked": "{{revokerName}} revoked the {{metaGame}} challenge",
+                "eventInvitation": "{{organizerName}} invited you to {{eventName}}"
+            }
+        }
     },
     "Edit": "Edit",
     "Done": "Done",
