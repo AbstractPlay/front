@@ -1,18 +1,9 @@
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_AUTH } from "../config";
+import { getAuthTokenFromSession } from "./authSession";
 
 // token is null if not logged in
-export const getAuthToken = async () => {
-  let usr;
-  let token = null;
-  try {
-    usr = await Auth.currentAuthenticatedUser();
-    token = usr.signInUserSession.idToken.jwtToken;
-  } catch (err) {
-    // don't do anything if not logged in
-  }
-  return token;
-};
+export const getAuthToken = getAuthTokenFromSession;
 
 // Set requireAuth to false to you are calling this from a flow that is supported for non-logged in users
 export const callAuthApi = async (query, pars, requireAuth = true) => {

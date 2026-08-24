@@ -50,6 +50,8 @@ import newsData from "../assets/news.json";
 import ThemeApplicator from "../components/ThemeApplicator";
 import MyWebSocket from "../components/MyWebSocket";
 import GameWatch from "../components/GameWatch";
+import ProfileBootstrap from "../components/ProfileBootstrap";
+import { resolveAuthSession } from "../lib/authSession";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { useStore } from "../stores";
 import { isAnonymousFriendlyPath } from "../lib/publicPaths";
@@ -140,32 +142,32 @@ function Bones(props) {
     Auth.configure({ oauth: awsauth });
     async function getToken() {
       try {
-        const usr = await Auth.currentAuthenticatedUser();
-        console.log("usr:", usr);
-        // if (usr.signInUserSession !== undefined)
-        tokenSetter(usr.signInUserSession.idToken.jwtToken);
-        // Mark that user is logged in for session expiry detection
-        localStorage.setItem("wasLoggedIn", "1");
+        const session = await resolveAuthSession();
+        if (session.status === "ready") {
+          tokenSetter(session.token);
+          localStorage.setItem("wasLoggedIn", "1");
+        } else {
+          tokenSetter(null);
+          const wasLoggedIn = localStorage.getItem("wasLoggedIn") === "1";
+          const intentionalLogout =
+            sessionStorage.getItem("intentionalLogout") === "1";
+
+          if (
+            wasLoggedIn &&
+            !intentionalLogout &&
+            !isAnonymousFriendlyPath()
+          ) {
+            console.log("Session expired, auto-triggering login...");
+            localStorage.removeItem("wasLoggedIn");
+            Auth.federatedSignIn();
+            return;
+          }
+
+          localStorage.removeItem("wasLoggedIn");
+          sessionStorage.removeItem("intentionalLogout");
+        }
       } catch (error) {
         tokenSetter(null);
-        // Check if user was previously logged in (session expired)
-        const wasLoggedIn = localStorage.getItem("wasLoggedIn") === "1";
-        const intentionalLogout =
-          sessionStorage.getItem("intentionalLogout") === "1";
-
-        if (
-          wasLoggedIn &&
-          !intentionalLogout &&
-          !isAnonymousFriendlyPath()
-        ) {
-          // Session expired - auto-trigger login (except on public routes)
-          console.log("Session expired, auto-triggering login...");
-          localStorage.removeItem("wasLoggedIn");
-          Auth.federatedSignIn();
-          return;
-        }
-
-        // Clear flags
         localStorage.removeItem("wasLoggedIn");
         sessionStorage.removeItem("intentionalLogout");
       }
@@ -227,6 +229,7 @@ function Bones(props) {
           <ThemeApplicator />
           <MyWebSocket />
           <GameWatch />
+          <ProfileBootstrap />
           <Navbar />
           <section className="section" id="main">
             <ErrorBoundary inline>

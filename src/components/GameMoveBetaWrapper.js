@@ -1,42 +1,29 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams, useLocation } from "react-router-dom";
-import { Auth } from "aws-amplify";
 import { useStore } from "../stores";
+import { useAuthSession } from "../hooks/useAuthSession";
 import GameMoveBetaShell from "./GameMoveBetaShell";
 import Spinner from "./Spinner";
 import { gameMovePath } from "../lib/GameMove/layoutPreference";
 
 /**
  * Beta play page is logged-in only. On refresh/HMR, globalMe starts null until
- * Navbar auth finishes — wait for Cognito before redirecting to classic.
+ * profile bootstrap finishes — wait for Cognito before redirecting to classic.
  */
 function GameMoveBetaWrapper() {
   const params = useParams();
   const location = useLocation();
   const globalMe = useStore((state) => state.globalMe);
+  const { status } = useAuthSession();
   const [sessionState, setSessionState] = useState("checking");
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function checkSession() {
-      try {
-        await Auth.currentAuthenticatedUser();
-        if (!cancelled) {
-          setSessionState("authed");
-        }
-      } catch {
-        if (!cancelled) {
-          setSessionState("anonymous");
-        }
-      }
+    if (status === "unknown" || status === "loading") {
+      setSessionState("checking");
+      return;
     }
-
-    checkSession();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    setSessionState(status === "ready" ? "authed" : "anonymous");
+  }, [status]);
 
   const classicPath = gameMovePath(
     params.metaGame,
@@ -50,20 +37,18 @@ function GameMoveBetaWrapper() {
   }
 
   if (sessionState === "anonymous") {
-    return <Navigate to={classicPath} replace state={location.state} />;
+    return <Navigate to={classicPath} replace state={{ from: location }} />;
   }
 
   if (globalMe === null) {
     return <Spinner />;
   }
 
-  if (!globalMe?.id) {
-    return <Navigate to={classicPath} replace state={location.state} />;
-  }
-
   return (
     <GameMoveBetaShell
-      key={`${params.metaGame}-${params.gameID}`}
+      metaGame={params.metaGame}
+      cbits={params.cbits}
+      gameID={params.gameID}
     />
   );
 }

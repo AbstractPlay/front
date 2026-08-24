@@ -14,6 +14,7 @@ import NewChallengeModal from "./NewChallengeModal";
 import NewProfile from "./NewProfile";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
+import { fetchDashboard } from "../lib/globalMeBootstrap";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { cloneDeep } from "lodash";
 import CompletedGamesTable from "./Me/CompletedGamesTable";
@@ -70,32 +71,22 @@ function Me(props) {
   const usersMemo = useMemo(() => users, [users]);
 
   useEffect(() => {
-    const { setGlobalMe } = useStore.getState();
     async function fetchData() {
-      // Can't use props.token because it might have expired by the time the user gets here.
-      // Auth.currentAuthenticatedUser() will automatically renew the token if its expired.
       try {
-        console.log("calling authQuery 'me'");
+        console.log("calling authQuery me_dashboard");
         fetchingSetter(true);
-        const res = await callAuthApi("me", {
+        const dashboard = await fetchDashboard({
           vars: JSON.stringify(vars),
           update: update,
         });
-        if (!res) return;
         fetchingSetter(false);
-        const result = await res.json();
-        if (result.statusCode !== 200) errorSetter(JSON.parse(result.body));
-        else {
-          if (result === null) setGlobalMe({});
-          else {
-            const me = JSON.parse(result.body);
-            if (me.id === undefined) {
-              showNewProfileModalSetter(true);
-            }
-            setGlobalMe(me);
-            console.log(JSON.parse(result.body));
-          }
+        if (dashboard === null) {
+          return;
         }
+        if (dashboard.id === undefined) {
+          showNewProfileModalSetter(true);
+        }
+        console.log(dashboard);
       } catch (error) {
         fetchingSetter(false);
         errorSetter(error);
