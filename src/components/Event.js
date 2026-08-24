@@ -466,6 +466,22 @@ function Event() {
     showModalCloseSetter(false);
   };
 
+  const openInvitesModal = () => {
+    invitedSetter(eventData?.event?.invited || []);
+    blockedSetter(eventData?.event?.blocked || []);
+    selectedInviteSetter("");
+    selectedBlockSetter("");
+    showModalInvitesSetter(true);
+  };
+
+  const closeInvitesModal = () => {
+    invitedSetter(eventData?.event?.invited || []);
+    blockedSetter(eventData?.event?.blocked || []);
+    selectedInviteSetter("");
+    selectedBlockSetter("");
+    showModalInvitesSetter(false);
+  };
+
   const handleUpdateInvites = async () => {
     try {
       const res = await callAuthApi("event_update_invites", {
@@ -536,6 +552,8 @@ function Event() {
   ) {
     return <NotFound path={`/event/${eventid}`} />;
   } else if (eventData !== null) {
+    const savedInvited = eventData.event.invited || [];
+    const savedBlocked = eventData.event.blocked || [];
     return (
       <>
         <Helmet>
@@ -671,10 +689,10 @@ function Event() {
                   )}
               </p>
             )}
-            {!editor || invited.length === 0 ? null : (
+            {!editor || savedInvited.length === 0 ? null : (
               <p>
                 <b>{t("Events.admin.invitedLabel")}</b>&nbsp;
-                {invited
+                {savedInvited
                   .map((id) => {
                     const u = allUsers?.find((u) => u.id === id);
                     return { id, name: u ? u.name : id };
@@ -702,10 +720,10 @@ function Event() {
                   )}
               </p>
             )}
-            {!editor || blocked.length === 0 ? null : (
+            {!editor || savedBlocked.length === 0 ? null : (
               <p>
                 <b>{t("Events.admin.blockedLabel")}</b>&nbsp;
-                {blocked
+                {savedBlocked
                   .map((id) => {
                     const u = allUsers?.find((u) => u.id === id);
                     return { id, name: u ? u.name : id };
@@ -843,7 +861,7 @@ function Event() {
               <div className="column is-narrow">
                 <button
                   className="button is-small apButton"
-                  onClick={() => showModalInvitesSetter(true)}
+                  onClick={openInvitesModal}
                 >
                   {t("Events.admin.inviteBlockPlayers")}
                 </button>
@@ -857,8 +875,8 @@ function Event() {
                 {registrants.find((r) => r.id === globalMe.id) === undefined ? (
                   (eventData.event.maxPlayers > 0 &&
                     registrants.length >= eventData.event.maxPlayers) ||
-                  (invited.length > 0 && !invited.includes(globalMe.id)) ||
-                  blocked.includes(globalMe.id) ? null : (
+                  (savedInvited.length > 0 && !savedInvited.includes(globalMe.id)) ||
+                  savedBlocked.includes(globalMe.id) ? null : (
                     <button
                       className="button is-small apButton"
                       onClick={handleRegister}
@@ -1161,7 +1179,7 @@ function Event() {
             },
             {
               label: t("Cancel"),
-              action: () => showModalInvitesSetter(false),
+              action: closeInvitesModal,
             },
           ]}
         >
@@ -1176,6 +1194,7 @@ function Event() {
                   >
                     <option value="">{t("Events.admin.selectPlayer")}</option>
                     {(allUsers || [])
+                      .filter((u) => !u.bot)
                       .sort((a, b) =>
                         (a.name ?? "").localeCompare(b.name ?? "")
                       )

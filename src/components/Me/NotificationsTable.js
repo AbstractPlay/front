@@ -10,7 +10,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import ChallengeResponseModal from "./ChallengeResponseModal";
 import { callAuthApi } from "../../lib/api";
@@ -40,18 +40,42 @@ function withVariants(message, metaGame, variants) {
   return label ? `${message} (${label})` : message;
 }
 
-function notificationMessage(t, body) {
+function variantsSuffix(metaGame, variants) {
+  const label = variantsLabel(metaGame, variants);
+  return label ? ` (${label})` : "";
+}
+
+function challengeNotificationMessage(i18nKey, metaGame, values) {
+  return (
+    <Trans
+      i18nKey={i18nKey}
+      values={{ ...values, metaGame: metaGameLabel(metaGame) }}
+      components={{
+        gameLink: <Link to={`/games/${metaGame}`} />,
+      }}
+    />
+  );
+}
+
+function NotificationMessage({ body }) {
+  const { t } = useTranslation();
   const metaGame = metaGameLabel(body.metaGame);
 
   switch (body.type) {
     case "gameStart":
-      return withVariants(
-        t("me.notifications.message.gameStart", {
-          opponentName: body.opponentName,
-          metaGame,
-        }),
-        body.metaGame,
-        body.variants
+      return (
+        <>
+          <Trans
+            i18nKey="me.notifications.message.gameStart"
+            values={{ opponentName: body.opponentName, metaGame }}
+            components={{
+              gameLink: (
+                <Link to={`/move/${body.metaGame}/0/${body.gameId}`} />
+              ),
+            }}
+          />
+          {variantsSuffix(body.metaGame, body.variants)}
+        </>
       );
     case "gameEnd":
       return withVariants(
@@ -73,25 +97,36 @@ function notificationMessage(t, body) {
         body.variants
       );
     case "challengeIssued":
-      return t("me.notifications.message.challengeIssued", {
-        challengerName: body.challengerName,
-        metaGame,
-      });
+      return challengeNotificationMessage(
+        "me.notifications.message.challengeIssued",
+        body.metaGame,
+        { challengerName: body.challengerName }
+      );
     case "challengeDeclined":
-      return t("me.notifications.message.challengeDeclined", {
-        declinerName: body.declinerName,
-        metaGame,
-      });
+      return challengeNotificationMessage(
+        "me.notifications.message.challengeDeclined",
+        body.metaGame,
+        { declinerName: body.declinerName }
+      );
     case "challengeRevoked":
-      return t("me.notifications.message.challengeRevoked", {
-        revokerName: body.revokerName,
-        metaGame,
-      });
+      return challengeNotificationMessage(
+        "me.notifications.message.challengeRevoked",
+        body.metaGame,
+        { revokerName: body.revokerName }
+      );
     case "eventInvitation":
-      return t("me.notifications.message.eventInvitation", {
-        organizerName: body.organizerName,
-        eventName: body.eventName,
-      });
+      return (
+        <Trans
+          i18nKey="me.notifications.message.eventInvitation"
+          values={{
+            organizerName: body.organizerName,
+            eventName: body.eventName,
+          }}
+          components={{
+            eventLink: <Link to={`/event/${body.eventId}`} />,
+          }}
+        />
+      );
     default:
       return "";
   }
@@ -115,11 +150,10 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
         sk: n.sk,
         createdAt: n.createdAt,
         body: n.body,
-        message: notificationMessage(t, n.body),
         note:
           n.body.note && String(n.body.note).trim() !== "" ? n.body.note : "",
       })),
-    [notifications, t]
+    [notifications]
   );
 
   const handleDismiss = useCallback(
@@ -158,9 +192,10 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
   const columnHelper = createColumnHelper();
   const columns = useMemo(
     () => [
-      columnHelper.accessor("message", {
+      columnHelper.accessor("body", {
+        id: "message",
         header: t("me.notifications.columns.message"),
-        cell: (props) => props.getValue(),
+        cell: (props) => <NotificationMessage body={props.getValue()} />,
       }),
       columnHelper.accessor("note", {
         header: t("me.notifications.columns.note"),
@@ -231,26 +266,11 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
             );
           }
 
-          if (body.type === "eventInvitation") {
-            return (
-              <>
-                <Link
-                  to={`/event/${body.eventId}`}
-                  className="button is-small apButton"
-                >
-                  {t("View")}
-                </Link>
-                &nbsp;
-                {dismissButton}
-              </>
-            );
+          if (body.type === "eventInvitation" || body.type === "gameStart") {
+            return dismissButton;
           }
 
-          if (
-            body.type === "gameStart" ||
-            body.type === "gameEnd" ||
-            body.type === "ratingChange"
-          ) {
+          if (body.type === "gameEnd" || body.type === "ratingChange") {
             return (
               <>
                 <Link
