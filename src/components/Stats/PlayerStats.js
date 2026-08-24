@@ -6,8 +6,11 @@ import HistogramSparkline from "./shared/HistogramSparkline";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 import { useTranslation } from "react-i18next";
+import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
 
 function PlayerStats({ nav }) {
+  useEnsureSummaryTier("site");
+  useEnsureSummaryTier("players");
   const summary = useStore((state) => state.summary);
   const globalMe = useStore((state) => state.globalMe);
   const userNames = useStore((state) => state.users);
@@ -16,7 +19,9 @@ function PlayerStats({ nav }) {
 
   const data = useMemo(
     () =>
-      summary.players.allPlays
+      !summary?.players?.allPlays
+        ? []
+        : summary.players.allPlays
         .map((obj) => {
           const eclectic = summary.players.eclectic.find(
             (u) => u.user === obj.user

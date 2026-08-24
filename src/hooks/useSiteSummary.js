@@ -6,7 +6,7 @@ export function useSiteSummary() {
   return {
     summary,
     loadState,
-    isPending: loadState === "pending",
+    isPending: loadState === "pending" || loadState === "idle",
     isReady: loadState === "ready",
     isError: loadState === "error",
   };

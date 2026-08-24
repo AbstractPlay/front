@@ -11,6 +11,16 @@ describe("useSiteSummary", () => {
     });
   });
 
+  it("reports idle as pending before site tier loads", () => {
+    useStore.setState({
+      summary: null,
+      summaryLoadState: "idle",
+    });
+    const { result } = renderHook(() => useSiteSummary());
+    expect(result.current.isPending).toBe(true);
+    expect(result.current.isReady).toBe(false);
+  });
+
   it("reports pending before summary is loaded", () => {
     const { result } = renderHook(() => useSiteSummary());
     expect(result.current.isPending).toBe(true);

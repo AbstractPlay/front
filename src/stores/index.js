@@ -36,7 +36,11 @@ export const useStore = create((set, get) => ({
     })),
 
   summary: null,
-  summaryLoadState: "pending",
+  /** Site tier (`_summary-site.json`); mirrors legacy bootstrap gate. */
+  summaryLoadState: "idle",
+  summarySiteLoadState: "idle",
+  summaryPlayersLoadState: "idle",
+  summaryRatingsLoadState: "idle",
   setSummary: (summary) =>
     set((state) => {
       const nextSummary =

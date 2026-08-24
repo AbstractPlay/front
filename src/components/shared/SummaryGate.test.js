@@ -9,15 +9,21 @@ vi.mock("react-i18next", () => ({
   }),
 }));
 
+vi.mock("../../hooks/useEnsureSummaryTier", () => ({
+  useEnsureSummaryTier: vi.fn(),
+}));
+
 describe("SummaryGate", () => {
   beforeEach(() => {
     useStore.setState({
       summary: null,
-      summaryLoadState: "pending",
+      summaryLoadState: "idle",
+      summarySiteLoadState: "idle",
     });
   });
 
-  it("shows loading state and hides children while pending", () => {
+  it("shows loading state and hides children while idle or pending", () => {
+    useStore.setState({ summaryLoadState: "pending" });
     render(
       <SummaryGate>
         <div data-testid="summary-child">child</div>

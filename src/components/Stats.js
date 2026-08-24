@@ -6,6 +6,8 @@ import { Helmet } from "react-helmet-async";
 import StatsModule from "./Stats/StatsModule";
 import SummaryGate from "./shared/SummaryGate";
 import { useStore } from "../stores";
+import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
+import { SUMMARY_URLS } from "../lib/summaryFetch";
 import {
   STATS_TABS,
   STATS_MODULES,
@@ -39,6 +41,7 @@ const formatDate = (date) => {
 
 function Stats() {
   const { tab: tabParam } = useParams();
+  useEnsureSummaryTier("site");
   const location = useLocation();
   const tabFromPath =
     tabParam === undefined || tabParam === "" ? undefined : tabParam;
@@ -223,7 +226,7 @@ function Stats() {
 
             <div className="field is-grouped stats-downloads topPad">
               <div className="control">
-                <a href="https://records.abstractplay.com/_summary.json">
+                <a href={SUMMARY_URLS.monolith}>
                   <button type="button" className="button is-small apButton">
                     {t("stats.downloadSummary")}
                   </button>
