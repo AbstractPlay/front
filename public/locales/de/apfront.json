@@ -1507,7 +1507,27 @@
   },
   "me": {
     "challengedNotice": "Du wurdest herausgefordert!",
-    "downloadCompletedReports": "Alle Berichte deiner beendeten Spiele herunterladen"
+    "downloadCompletedReports": "Alle Berichte deiner beendeten Spiele herunterladen",
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "dismiss": "Verwerfen",
+      "columns": {
+        "message": "Nachricht",
+        "note": "Notiz",
+        "time": "Zeit"
+      },
+      "message": {
+        "gameStart": "{{opponentName}} hat eine Partie {{metaGame}} mit dir gestartet",
+        "gameEnd_win": "Du hast deine Partie {{metaGame}} gewonnen",
+        "gameEnd_lose": "Du hast deine Partie {{metaGame}} verloren",
+        "gameEnd_draw": "Deine Partie {{metaGame}} endete unentschieden",
+        "ratingChange": "Deine Wertung für {{metaGame}} hat sich um {{delta}} geändert (jetzt {{newRating}})",
+        "challengeIssued": "{{challengerName}} hat dich zu {{metaGame}} herausgefordert",
+        "challengeDeclined": "{{declinerName}} hat deine Herausforderung zu {{metaGame}} abgelehnt",
+        "challengeRevoked": "{{revokerName}} hat die Herausforderung zu {{metaGame}} zurückgezogen",
+        "eventInvitation": "{{organizerName}} hat dich zu {{eventName}} eingeladen"
+      }
+    }
   },
   "Edit": "Bearbeiten",
   "Done": "Fertig",

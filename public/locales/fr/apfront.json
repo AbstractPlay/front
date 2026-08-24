@@ -1507,7 +1507,27 @@
   },
   "me": {
     "challengedNotice": "On vous a lancé un défi !",
-    "downloadCompletedReports": "Télécharger tous vos rapports de parties terminées"
+    "downloadCompletedReports": "Télécharger tous vos rapports de parties terminées",
+    "notifications": {
+      "title": "Notifications",
+      "dismiss": "Ignorer",
+      "columns": {
+        "message": "Message",
+        "note": "Note",
+        "time": "Heure"
+      },
+      "message": {
+        "gameStart": "{{opponentName}} a commencé une partie de {{metaGame}} avec vous",
+        "gameEnd_win": "Vous avez gagné votre partie de {{metaGame}}",
+        "gameEnd_lose": "Vous avez perdu votre partie de {{metaGame}}",
+        "gameEnd_draw": "Votre partie de {{metaGame}} s'est terminée par un nul",
+        "ratingChange": "Votre classement de {{metaGame}} a changé de {{delta}} (actuellement {{newRating}})",
+        "challengeIssued": "{{challengerName}} vous a défié à {{metaGame}}",
+        "challengeDeclined": "{{declinerName}} a refusé votre défi à {{metaGame}}",
+        "challengeRevoked": "{{revokerName}} a annulé le défi à {{metaGame}}",
+        "eventInvitation": "{{organizerName}} vous a invité à {{eventName}}"
+      }
+    }
   },
   "Edit": "Modifier",
   "Done": "Terminé",
