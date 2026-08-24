@@ -1,7 +1,10 @@
 import { PUSH_VAPID_PUBLIC_KEY } from "./config";
 import { callAuthApi, getAuthToken } from "./lib/api";
+import { resolveAuthSession } from "./lib/authSession";
 
 const convertedVapidKey = urlBase64ToUint8Array(PUSH_VAPID_PUBLIC_KEY);
+const PUSH_SYNC_CACHE_KEY = "ap-push-last-sync";
+let resyncInflight = null;
 
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -163,7 +166,45 @@ async function ensurePushSubscription(registration) {
   throw lastError;
 }
 
+function getLastSyncedPushKey() {
+  try {
+    return sessionStorage.getItem(PUSH_SYNC_CACHE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function setLastSyncedPushKey(cacheKey) {
+  try {
+    sessionStorage.setItem(PUSH_SYNC_CACHE_KEY, cacheKey);
+  } catch {
+    // ignore
+  }
+}
+
+function clearLastSyncedPushKey() {
+  try {
+    sessionStorage.removeItem(PUSH_SYNC_CACHE_KEY);
+  } catch {
+    // ignore
+  }
+}
+
+async function getPushSyncCacheKey(subscription) {
+  const session = await resolveAuthSession();
+  if (session.status !== "ready") {
+    return null;
+  }
+  const userId = session.user.signInUserSession.idToken.payload.sub;
+  return `${userId}:${subscription.endpoint}`;
+}
+
 async function sendSubscription(subscription) {
+  const cacheKey = await getPushSyncCacheKey(subscription);
+  if (cacheKey && cacheKey === getLastSyncedPushKey()) {
+    return { ok: true, skipped: true };
+  }
+
   const res = await callAuthApi(
     "save_push",
     {
@@ -176,6 +217,9 @@ async function sendSubscription(subscription) {
   }
   if (!res.ok) {
     throw new Error(`save_push failed with status ${res.status}`);
+  }
+  if (cacheKey) {
+    setLastSyncedPushKey(cacheKey);
   }
   return res;
 }
@@ -268,7 +312,16 @@ export async function resyncPushSubscription() {
   if (!token) {
     return { success: false, skipped: true };
   }
-  return subscribeUser({ requestPermission: false, silent: true });
+  if (resyncInflight) {
+    return resyncInflight;
+  }
+
+  resyncInflight = subscribeUser({ requestPermission: false, silent: true }).finally(
+    () => {
+      resyncInflight = null;
+    }
+  );
+  return resyncInflight;
 }
 
 export async function deletePushSubscription() {
@@ -285,6 +338,7 @@ export async function deletePushSubscription() {
         throw new Error(`delete_push failed with status ${res.status}`);
       }
       await subscription.unsubscribe();
+      clearLastSyncedPushKey();
     }
     return { success: true };
   } catch (error) {
@@ -306,6 +360,7 @@ export async function unregisterAllDevices() {
       throw new Error(`set_push failed with status ${res.status}`);
     }
     await localUnsubscribe();
+    clearLastSyncedPushKey();
     return { success: true };
   } catch (error) {
     console.error("An error occurred during unregisterAllDevices.", error);

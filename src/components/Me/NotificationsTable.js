@@ -169,9 +169,7 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
           if (!note) {
             return "";
           }
-          return (
-            <blockquote className="notificationNote">{note}</blockquote>
-          );
+          return <span className="notificationNote">{note}</span>;
         },
       }),
       columnHelper.accessor("createdAt", {

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuthSession } from "./useAuthSession";
 import { fetchProfile } from "../lib/globalMeBootstrap";
+import { resyncPushSubscription } from "../subscription";
 
 export function useProfileBootstrap() {
   const { status } = useAuthSession();
@@ -9,6 +10,7 @@ export function useProfileBootstrap() {
   useEffect(() => {
     if (status === "ready") {
       fetchProfile();
+      resyncPushSubscription();
     }
   }, [status]);
 }
