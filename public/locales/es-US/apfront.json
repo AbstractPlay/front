@@ -1083,7 +1083,8 @@
     "pieRate": "Tasa de regla del pastel",
     "playerCount": "Jugadores",
     "allUsers": "Todos los usuarios",
-    "past30Days": "Últimos 30 días"
+    "past30Days": "Últimos 30 días",
+    "highConfidenceGlicko": "Glicko de alta confianza"
   },
   "TimeRemaining": "Tiempo restante",
   "ToggleFullSize": "Alternar imagen del tablero de altura completa",

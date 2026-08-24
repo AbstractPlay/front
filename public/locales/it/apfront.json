@@ -1083,7 +1083,8 @@
     "pieRate": "Percentuale regola della torta",
     "playerCount": "Giocatori",
     "allUsers": "Tutti gli utenti",
-    "past30Days": "Ultimi 30 giorni"
+    "past30Days": "Ultimi 30 giorni",
+    "highConfidenceGlicko": "Glicko ad alta affidabilità"
   },
   "TimeRemaining": "Tempo rimanente",
   "ToggleFullSize": "Attiva/disattiva immagine del tabellone ad altezza intera",
