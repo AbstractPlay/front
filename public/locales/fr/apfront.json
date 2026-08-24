@@ -1077,7 +1077,8 @@
     "pieRate": "Taux de règle du gâteau",
     "playerCount": "Joueurs",
     "allUsers": "Tous les utilisateurs",
-    "past30Days": "30 derniers jours"
+    "past30Days": "30 derniers jours",
+    "highConfidenceGlicko": "Glicko à haute confiance"
   },
   "TimeRemaining": "Temps restant :",
   "ToggleFullSize": "Basculer l'image du plateau en pleine hauteur",
