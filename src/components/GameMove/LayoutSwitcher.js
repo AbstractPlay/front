@@ -7,7 +7,6 @@ import {
   layoutLabelKey,
   writeBetaLayoutPreference,
 } from "../../lib/GameMove/layoutPreference";
-import { logLayoutFeedbackEvent } from "../../lib/GameMove/layoutFeedback";
 
 export default function LayoutSwitcher({ layoutId }) {
   const { t } = useTranslation();
@@ -15,14 +14,6 @@ export default function LayoutSwitcher({ layoutId }) {
 
   const handleLayoutClick = (toLayoutId) => {
     writeBetaLayoutPreference(toLayoutId);
-    if (toLayoutId !== layoutId) {
-      logLayoutFeedbackEvent({
-        type: "layout_switch",
-        layoutId,
-        toLayoutId,
-        gameId: gameID,
-      });
-    }
   };
 
   return (
