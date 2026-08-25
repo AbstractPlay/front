@@ -24,6 +24,7 @@ import {
   formatGlickoLowWithRd,
   glickoColumnSortingFn,
 } from "../lib/glickoDisplay";
+import { formatBatchRatingVariantLabel } from "../lib/batchRatingLabels";
 import Spinner from "./Spinner";
 import { SUMMARY_URLS } from "../lib/summaryFetch";
 
@@ -89,10 +90,16 @@ function RatingsTable({
         }
       }
       return {
-        id: rec.user,
+        id: `${rec.user}|${rec.game}`,
         rank: idx + 1,
         player: userRecName(allUsers, rec.user),
         lastSeen,
+        variant: formatBatchRatingVariantLabel(
+          metaGame,
+          rec.game,
+          metaGameName,
+          t
+        ),
         glicko: rec.glicko ?? null,
         rating: rec.rating,
         n,
@@ -101,7 +108,7 @@ function RatingsTable({
         winrate: n > 0 ? (wld[0] + wld[2] * 0.5) / n : 0,
       };
     });
-  }, [summary, metaGameName, allUsers]);
+  }, [summary, metaGameName, metaGame, allUsers, t]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(
@@ -113,7 +120,7 @@ function RatingsTable({
         header: t("tables.player"),
         cell: (props) => (
           <>
-            <Link to={`/player/${props.row.original.id}`}>
+            <Link to={`/player/${props.row.original.id.split("|")[0]}`}>
               {props.getValue()}
             </Link>
             {props.row.original.lastSeen === undefined ? null : (
@@ -127,6 +134,9 @@ function RatingsTable({
             )}
           </>
         ),
+      }),
+      columnHelper.accessor("variant", {
+        header: t("tables.variants"),
       }),
       columnHelper.accessor("glicko", {
         header: t("tables.glicko"),
@@ -148,30 +158,32 @@ function RatingsTable({
       }),
       columnHelper.display({
         id: "actions",
-        cell: (props) =>
-          globalMe !== null && globalMe.id === props.row.original.id ? null : (
+        cell: (props) => {
+          const userId = props.row.original.id.split("|")[0];
+          return globalMe !== null && globalMe.id === userId ? null : (
             <>
               <NewChallengeModal
                 show={
                   activeChallengeModal !== "" &&
-                  activeChallengeModal === props.row.original.id
+                  activeChallengeModal === userId
                 }
                 handleClose={closeChallengeModal}
                 handleChallenge={handleNewChallenge}
                 fixedMetaGame={metaGame}
                 opponent={{
-                  id: props.row.original.id,
+                  id: userId,
                   name: props.row.original.player,
                 }}
               />
               <button
                 className="button is-small apButton"
-                onClick={() => openChallengeModal(props.row.original.id)}
+                onClick={() => openChallengeModal(userId)}
               >
                 {t("IssueChallengeLabel")}
               </button>
             </>
-          ),
+          );
+        },
       }),
     ],
     [
