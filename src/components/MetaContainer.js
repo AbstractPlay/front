@@ -8,6 +8,7 @@ import { Helmet } from "react-helmet-async";
 // import Gallery from "./MetaContainer/Gallery";
 import Table from "./MetaContainer/Table";
 import MetaItem from "./MetaContainer/MetaItem";
+import { listPublicCatalogMetas } from "../lib/gameOptions";
 import { useStore } from "../stores";
 
 function MetaContainer(props) {
@@ -31,7 +32,7 @@ function MetaContainer(props) {
     fetchData();
   }, [updateCounter]);
 
-  let games = [...gameinfo.keys()].sort((a, b) => {
+  let games = listPublicCatalogMetas().sort((a, b) => {
     const na = gameinfo.get(a).name;
     const nb = gameinfo.get(b).name;
     if (na < nb) return -1;

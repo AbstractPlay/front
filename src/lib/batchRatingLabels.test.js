@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
-import { gameinfo } from "@abstractplay/gameslib";
+import { describe, expect, it, beforeAll } from "vitest";
+import { addResource } from "@abstractplay/gameslib";
+import enApgames from "../locales/en/apgames.json";
 import {
   formatBatchRatingVariantLabel,
   variantSuffixFromBatchGameKey,
@@ -8,49 +9,46 @@ import {
 const t = (key) =>
   key === "standingChallenge.noVariants" ? "no variants" : key;
 
+beforeAll(async () => {
+  addResource("en", undefined, { bundles: { apgames: enApgames } });
+  await import("../i18n.js");
+});
+
 describe("variantSuffixFromBatchGameKey", () => {
   it("extracts no variants suffix", () => {
-    expect(variantSuffixFromBatchGameKey("Chess (no variants)", "Chess")).toBe(
+    expect(variantSuffixFromBatchGameKey("chess (no variants)")).toBe(
       "no variants"
     );
   });
 
   it("extracts pipe-separated variant uids", () => {
-    expect(variantSuffixFromBatchGameKey("Go (9x9|handicap)", "Go")).toBe(
+    expect(variantSuffixFromBatchGameKey("go (9x9|handicap)")).toBe(
       "9x9|handicap"
     );
   });
 
-  it("treats bare meta name as no variants", () => {
-    expect(variantSuffixFromBatchGameKey("Chess", "Chess")).toBe("no variants");
+  it("treats bare meta uid as no variants", () => {
+    expect(variantSuffixFromBatchGameKey("chess")).toBe("no variants");
+  });
+
+  it("supports legacy display-name keys", () => {
+    expect(variantSuffixFromBatchGameKey("Go (9x9|handicap)")).toBe(
+      "9x9|handicap"
+    );
   });
 });
 
 describe("formatBatchRatingVariantLabel", () => {
-  it("formats no variants", () => {
-    expect(
-      formatBatchRatingVariantLabel(
-        "chess",
-        "Chess (no variants)",
-        "Chess",
-        t
-      )
-    ).toBe("no variants");
+  it("formats no variants as empty", () => {
+    expect(formatBatchRatingVariantLabel("chess", "chess (no variants)", t)).toBe(
+      ""
+    );
+    expect(formatBatchRatingVariantLabel("chess", "chess", t)).toBe("");
   });
 
   it("resolves variant uids via gameslib when possible", () => {
-    const info = [...gameinfo.values()].find((g) =>
-      g.variants?.some((v) => v.name)
-    );
-    expect(info).toBeDefined();
-    const variant = info.variants.find((v) => v.name);
-    const gameKey = `${info.name} (${variant.uid})`;
-    const label = formatBatchRatingVariantLabel(
-      info.uid,
-      gameKey,
-      info.name,
-      t
-    );
-    expect(label).toBe(variant.name);
+    const gameKey = "archimedes (8x10)";
+    const label = formatBatchRatingVariantLabel("archimedes", gameKey, t);
+    expect(label).toBe("8x10 board");
   });
 });

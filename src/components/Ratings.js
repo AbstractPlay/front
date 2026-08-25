@@ -25,15 +25,14 @@ import {
   glickoColumnSortingFn,
 } from "../lib/glickoDisplay";
 import { formatBatchRatingVariantLabel } from "../lib/batchRatingLabels";
+import { matchesSummaryGameKey } from "../lib/summaryGameKeys";
 import Spinner from "./Spinner";
 import { SUMMARY_URLS } from "../lib/summaryFetch";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
-function matchesMetaGame(rec, metaGameName) {
-  return (
-    rec.game === metaGameName || rec.game.startsWith(`${metaGameName} (`)
-  );
+function matchesMetaGame(rec, metaUid) {
+  return matchesSummaryGameKey(rec.game, metaUid);
 }
 
 function RatingsTable({
@@ -76,7 +75,7 @@ function RatingsTable({
       return [];
     }
     const filtered = summary.ratings.highest
-      .filter((rec) => matchesMetaGame(rec, metaGameName))
+      .filter((rec) => matchesMetaGame(rec, metaGame))
       .sort((a, b) => -compareByGlickoLow(a.glicko, b.glicko));
 
     return filtered.map((rec, idx) => {
@@ -94,12 +93,7 @@ function RatingsTable({
         rank: idx + 1,
         player: userRecName(allUsers, rec.user),
         lastSeen,
-        variant: formatBatchRatingVariantLabel(
-          metaGame,
-          rec.game,
-          metaGameName,
-          t
-        ),
+        variant: formatBatchRatingVariantLabel(metaGame, rec.game, t),
         glicko: rec.glicko ?? null,
         rating: rec.rating,
         n,
@@ -108,7 +102,7 @@ function RatingsTable({
         winrate: n > 0 ? (wld[0] + wld[2] * 0.5) / n : 0,
       };
     });
-  }, [summary, metaGameName, metaGame, allUsers, t]);
+  }, [summary, metaGame, allUsers, t]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(

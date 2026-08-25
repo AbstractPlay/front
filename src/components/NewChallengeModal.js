@@ -13,6 +13,7 @@ import Modal from "./Modal";
 import GameVariants from "./GameVariants";
 import GamePickerTrigger from "./GamePickerTrigger";
 import { useStore } from "../stores";
+import { isPublicCatalogGame } from "../lib/gameOptions";
 import { AIAI_USER_ID, formatUserDisplayName } from "./Bots/botUtils";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
@@ -320,7 +321,10 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     playercounts = info.playercounts;
   }
 
-  if (metaGame !== null && !gameinfo.has(metaGame)) {
+  if (
+    metaGame !== null &&
+    (!gameinfo.has(metaGame) || !isPublicCatalogGame(gameinfo.get(metaGame)))
+  ) {
     return null;
   } else {
     return (

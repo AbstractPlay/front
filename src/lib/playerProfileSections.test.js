@@ -1,40 +1,48 @@
 import { describe, expect, it } from "vitest";
+import { gameinfo } from "@abstractplay/gameslib";
 import { getPlayerSiteGlicko, getTopRatings } from "./playerProfileSections";
 
 describe("getTopRatings", () => {
+  const hiveEntry = [...gameinfo.entries()].find(([uid]) => uid !== "go");
+
   const summary = {
     ratings: {
       highest: [
         {
           user: "u1",
-          game: "Chess (no variants)",
+          game: "go (no variants)",
           rating: 1280,
           glicko: { rating: 1250, rd: 80, ratingLow: 1090 },
         },
         {
           user: "u1",
-          game: "Go (9x9|handicap)",
+          game: "go (9x9|handicap)",
           rating: 1400,
           glicko: { rating: 1380, rd: 90, ratingLow: 1200 },
         },
-        {
-          user: "u1",
-          game: "Hive",
-          rating: 1500,
-          glicko: { rating: 1480, rd: 40, ratingLow: 1400 },
-        },
+        ...(hiveEntry
+          ? [
+              {
+                user: "u1",
+                game: hiveEntry[0],
+                rating: 1500,
+                glicko: { rating: 1480, rd: 40, ratingLow: 1400 },
+              },
+            ]
+          : []),
       ],
     },
   };
 
   it("returns top games by conservative Glicko, not Elo", () => {
     const top = getTopRatings(summary, "u1", 3);
-    expect(top.map((r) => r.game)).toEqual([
-      "Hive",
-      "Go (9x9|handicap)",
-      "Chess (no variants)",
-    ]);
-    expect(top[0]?.glickoLow).toBe(1400);
+    const expectedOrder = [
+      hiveEntry ? hiveEntry[0] : "go (9x9|handicap)",
+      hiveEntry ? "go (9x9|handicap)" : "go (no variants)",
+      hiveEntry ? "go (no variants)" : undefined,
+    ].filter(Boolean);
+    expect(top.map((r) => r.game)).toEqual(expectedOrder);
+    expect(top[0]?.glickoLow).toBe(hiveEntry ? 1400 : 1200);
   });
 
   it("respects limit", () => {

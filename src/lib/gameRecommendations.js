@@ -1,4 +1,5 @@
 import { gameinfo } from "@abstractplay/gameslib";
+import { isPublicCatalogGame } from "./gameOptions";
 import {
   gameRecommendationFeatures,
   topLevelGoalTag,
@@ -285,12 +286,14 @@ export function buildGameRecommendations({
 } = {}) {
   const candidates =
     catalog ??
-    [...gameinfo.entries()].map(([id, info]) => ({
-      id,
-      name: info.name,
-      categories: info.categories ?? [],
-      dateAdded: info.dateAdded,
-    }));
+    [...gameinfo.entries()]
+      .filter(([, info]) => isPublicCatalogGame(info))
+      .map(([id, info]) => ({
+        id,
+        name: info.name,
+        categories: info.categories ?? [],
+        dateAdded: info.dateAdded,
+      }));
 
   const popularityNorm = buildPopularityNormMap(popularityData);
   const playedMetaGames =

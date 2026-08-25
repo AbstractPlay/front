@@ -1,11 +1,14 @@
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { gameinfo } from "@abstractplay/gameslib";
 import { ProfileContext, SummaryContext, ResponsesContext } from "../Player";
 import NewChallengeModal from "../NewChallengeModal";
 import { useStore } from "../../stores";
 import { formatGlickoLowWithRd, formatGlickoSiteLowWithRd } from "../../lib/glickoDisplay";
+import {
+  formatSummaryGameKey,
+  metaUidFromSummaryGameKey,
+} from "../../lib/summaryGameKeys";
 import {
   getActivityHistogram,
   getMedianResponseHours,
@@ -150,17 +153,15 @@ function Hero({ handleChallenge }) {
                     </p>
                     <ul className="player-hero-ratings">
                       {topRatings.map(({ game, glicko }) => {
-                        const inforec = [...gameinfo.values()].find((r) =>
-                          game.startsWith(r.name)
-                        );
-                        const uid = inforec?.uid;
+                        const uid = metaUidFromSummaryGameKey(game);
+                        const label = formatSummaryGameKey(game, t);
                         return (
                           <li key={game}>
                             <span className="player-hero-game">
                               {uid ? (
-                                <Link to={`/games/${uid}`}>{game}</Link>
+                                <Link to={`/games/${uid}`}>{label}</Link>
                               ) : (
-                                game
+                                label
                               )}
                             </span>
                             <span className="player-hero-elo">

@@ -1,5 +1,31 @@
 import { gameinfo } from "@abstractplay/gameslib";
 import { isLabSupportedGame } from "./Lab/buildGame";
+import { isProductionMode } from "./realMode";
+
+/**
+ * @param {{ flags?: string[] } | null | undefined} info
+ */
+export function isExperimentalGame(info) {
+  return info?.flags?.includes("experimental") ?? false;
+}
+
+/**
+ * Production backstop when gameslib still ships experimental entries.
+ * @param {{ flags?: string[] } | null | undefined} info
+ */
+export function isPublicCatalogGame(info) {
+  if (!info) {
+    return false;
+  }
+  return !(isProductionMode() && isExperimentalGame(info));
+}
+
+/** Meta-game uids listed in public catalog UIs. */
+export function listPublicCatalogMetas() {
+  return [...gameinfo.keys()].filter((id) =>
+    isPublicCatalogGame(gameinfo.get(id))
+  );
+}
 
 export function tagSortFn(a, b) {
   const priority = (raw) => {
@@ -41,6 +67,9 @@ export function isBoardFilterCategory(cat) {
 export function buildGameOptions({ labOnly = false } = {}) {
   const options = [];
   for (const info of gameinfo.values()) {
+    if (!isPublicCatalogGame(info)) {
+      continue;
+    }
     if (labOnly && !isLabSupportedGame(info.uid)) {
       continue;
     }
