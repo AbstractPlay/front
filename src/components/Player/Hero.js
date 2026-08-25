@@ -100,7 +100,7 @@ function Hero({ handleChallenge }) {
                   {t("player.hero.topRatings")}
                 </p>
                 <ul className="player-hero-ratings">
-                  {topRatings.map(({ game, elo }) => {
+                  {topRatings.map(({ game, glickoLow }) => {
                     const inforec = [...gameinfo.values()].find((r) =>
                       game.startsWith(r.name)
                     );
@@ -108,7 +108,9 @@ function Hero({ handleChallenge }) {
                     return (
                       <li key={game}>
                         {uid ? <Link to={`/games/${uid}`}>{game}</Link> : game}
-                        <span className="player-hero-elo">{elo}</span>
+                        <span className="player-hero-elo">
+                          {glickoLow != null ? Math.round(glickoLow) : "---"}
+                        </span>
                       </li>
                     );
                   })}

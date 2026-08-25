@@ -1,3 +1,4 @@
+import { compareByGlickoLow, glickoRatingLow } from "./glickoDisplay";
 import { getPlayerTimeoutStats } from "./summaryFetch";
 
 export const PROFILE_TABS = [
@@ -84,8 +85,13 @@ export function getTopRatings(summary, userId, limit = 3) {
   if (!summary?.ratings?.highest || userId == null) return [];
   return summary.ratings.highest
     .filter((r) => r.user === userId)
-    .map(({ rating: elo, game }) => ({ elo, game }))
-    .sort((a, b) => b.elo - a.elo)
+    .map(({ rating: elo, game, glicko }) => ({
+      elo,
+      game,
+      glicko,
+      glickoLow: glickoRatingLow(glicko),
+    }))
+    .sort((a, b) => -compareByGlickoLow(a.glicko, b.glicko))
     .slice(0, limit);
 }
 

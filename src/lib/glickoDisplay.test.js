@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   buildGlickoByGameMap,
+  compareByGlickoLow,
+  formatGlickoConfidenceRange,
   formatGlickoLowWithRd,
   formatGlickoSiteLowWithRd,
   glickoRatingLow,
@@ -65,5 +67,27 @@ describe("formatGlickoSiteLowWithRd", () => {
         ratingLow: 955.4951659043276,
       })
     ).toBe("955 (245)");
+  });
+});
+
+describe("compareByGlickoLow", () => {
+  it("orders by conservative low bound", () => {
+    const a = { rating: 1320, rd: 60, ratingLow: 1200 };
+    const b = { rating: 1250, rd: 80, ratingLow: 1090 };
+    expect(compareByGlickoLow(a, b)).toBeGreaterThan(0);
+  });
+
+  it("breaks ties by lower RD", () => {
+    const a = { rating: 1300, rd: 50, ratingLow: 1200 };
+    const b = { rating: 1400, rd: 100, ratingLow: 1200 };
+    expect(compareByGlickoLow(a, b)).toBeLessThan(0);
+  });
+});
+
+describe("formatGlickoConfidenceRange", () => {
+  it("formats 95% range from rating and rd", () => {
+    expect(
+      formatGlickoConfidenceRange({ rating: 1600, rd: 50 })
+    ).toBe("1500–1700");
   });
 });

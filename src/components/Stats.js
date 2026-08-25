@@ -174,7 +174,6 @@ function Stats() {
                 summary !== null ? summary.numGames.toLocaleString() : "??",
             })}
           </p>
-          <p className="help">{t("stats.ratingsNote")}</p>
         </div>
 
         <div className="columns is-centered">

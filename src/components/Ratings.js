@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
-import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import {
@@ -19,37 +18,34 @@ import ActivityMarker from "./ActivityMarker";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import { useStore } from "../stores";
+import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
+import {
+  compareByGlickoLow,
+  formatGlickoLowWithRd,
+  glickoColumnSortingFn,
+} from "../lib/glickoDisplay";
+import Spinner from "./Spinner";
+import { SUMMARY_URLS } from "../lib/summaryFetch";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
-function Ratings() {
+function matchesMetaGame(rec, metaGameName) {
+  return (
+    rec.game === metaGameName || rec.game.startsWith(`${metaGameName} (`)
+  );
+}
+
+function RatingsTable({
+  metaGame,
+  metaGameName,
+  globalMe,
+  allUsers,
+  summary,
+}) {
   const { t } = useTranslation();
-  const [ratings, ratingsSetter] = useState([]);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
-  const { metaGame } = useParams();
-  const globalMe = useStore((state) => state.globalMe);
-  const allUsers = useStore((state) => state.users);
   const [showState, showStateSetter] = useStorageState("ratings-show", 20);
   const [sorting, setSorting] = useState([{ id: "rank", desc: false }]);
-
-  useEffect(() => {
-    async function fetchData() {
-      console.log(`Fetching ${metaGame} ratings`);
-      try {
-        var url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append("query", "ratings");
-        url.searchParams.append("metaGame", metaGame);
-        const res = await fetch(url);
-        const result = await res.json();
-        console.log(result);
-        result.sort((a, b) => b.rating.rating - a.rating.rating);
-        ratingsSetter(result);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, [metaGame]);
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -74,32 +70,38 @@ function Ratings() {
     [globalMe, closeChallengeModal]
   );
 
-  const metaGameName = gameinfo.get(metaGame).name;
+  const data = useMemo(() => {
+    if (!summary?.ratings?.highest) {
+      return [];
+    }
+    const filtered = summary.ratings.highest
+      .filter((rec) => matchesMetaGame(rec, metaGameName))
+      .sort((a, b) => -compareByGlickoLow(a.glicko, b.glicko));
 
-  const data = useMemo(
-    () =>
-      ratings.map((rec, idx) => {
-        let lastSeen = undefined;
-        if (allUsers !== null) {
-          const userRec = allUsers.find((u) => u.id === rec.id);
-          if (userRec !== undefined) {
-            lastSeen = userRec.lastSeen;
-          }
+    return filtered.map((rec, idx) => {
+      const wld = rec.wld ?? [0, 0, 0];
+      const n = wld.reduce((prev, curr) => prev + curr, 0);
+      let lastSeen;
+      if (allUsers !== null) {
+        const userRec = allUsers.find((u) => u.id === rec.user);
+        if (userRec !== undefined) {
+          lastSeen = userRec.lastSeen;
         }
-        return {
-          id: rec.id,
-          rank: idx + 1,
-          player: rec.name,
-          lastSeen,
-          rating: rec.rating.rating,
-          n: rec.rating.N,
-          wins: rec.rating.wins,
-          draws: rec.rating.draws,
-          winrate: (rec.rating.wins + rec.rating.draws * 0.5) / rec.rating.N,
-        };
-      }),
-    [ratings, allUsers]
-  );
+      }
+      return {
+        id: rec.user,
+        rank: idx + 1,
+        player: userRecName(allUsers, rec.user),
+        lastSeen,
+        glicko: rec.glicko ?? null,
+        rating: rec.rating,
+        n,
+        wins: wld[0],
+        draws: wld[2],
+        winrate: n > 0 ? (wld[0] + wld[2] * 0.5) / n : 0,
+      };
+    });
+  }, [summary, metaGameName, allUsers]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(
@@ -126,8 +128,13 @@ function Ratings() {
           </>
         ),
       }),
+      columnHelper.accessor("glicko", {
+        header: t("tables.glicko"),
+        cell: (props) => formatGlickoLowWithRd(props.getValue()),
+        sortingFn: glickoColumnSortingFn,
+      }),
       columnHelper.accessor("rating", {
-        header: t("tables.rating"),
+        header: t("tables.elo"),
         cell: (props) => Math.trunc(props.getValue()),
       }),
       columnHelper.accessor("n", {
@@ -199,7 +206,7 @@ function Ratings() {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     table.setPageSize(showState);
   }, [showState, table]);
 
@@ -255,20 +262,6 @@ function Ratings() {
                 {t("TotalPlayers")})
               </p>
             </div>
-            {/* <div className="level-item">
-                  <div className="field">
-                      <span>|&nbsp;Go to page:</span>
-                      <input
-                          type="number"
-                          defaultValue={table.getState().pagination.pageIndex + 1}
-                          onChange={e => {
-                              const page = e.target.value ? Number(e.target.value) - 1 : 0
-                              table.setPageIndex(page)
-                          }}
-                          className="input is-small"
-                      />
-                  </div>
-              </div> */}
             <div className="level-item">
               <div className="control">
                 <div className="select is-small">
@@ -372,6 +365,57 @@ function Ratings() {
         </div>
       </article>
     </>
+  );
+}
+
+function userRecName(allUsers, userId) {
+  if (allUsers === null) {
+    return userId;
+  }
+  const userRec = allUsers.find((u) => u.id === userId);
+  return userRec?.name ?? userId;
+}
+
+function Ratings() {
+  const { t } = useTranslation();
+  const { metaGame } = useParams();
+  const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
+  const summary = useStore((state) => state.summary);
+  const ratingsLoadState = useStore((state) => state.summaryRatingsLoadState);
+
+  useEnsureSummaryTier("ratings");
+
+  const metaGameName = gameinfo.get(metaGame).name;
+
+  if (ratingsLoadState === "pending" || ratingsLoadState === "idle") {
+    return (
+      <div className="has-text-centered summary-gate-loading">
+        <Spinner />
+        <p className="help">{t("stats.loadingSummary")}</p>
+      </div>
+    );
+  }
+
+  if (ratingsLoadState === "error") {
+    return (
+      <div className="content has-text-centered summary-gate-error">
+        <p>{t("stats.summaryLoadError")}</p>
+        <p>
+          <a href={SUMMARY_URLS.ratings}>{t("stats.downloadSummary")}</a>
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <RatingsTable
+      metaGame={metaGame}
+      metaGameName={metaGameName}
+      globalMe={globalMe}
+      allUsers={allUsers}
+      summary={summary}
+    />
   );
 }
 

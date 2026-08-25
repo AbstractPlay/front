@@ -7,6 +7,12 @@ import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import NewChallengeModal from "../NewChallengeModal";
 import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
+import {
+  compareByGlickoLow,
+  formatGlickoConfidenceRange,
+  glickoColumnSortingFn,
+  rankAmongGameByGlickoLow,
+} from "../../lib/glickoDisplay";
 
 function Ratings({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
@@ -26,17 +32,14 @@ function Ratings({ handleChallenge }) {
     if (summary == null || !summary.ratings?.highest) {
       return [];
     }
-    return summary.ratings.highest
+    const highest = summary.ratings.highest;
+    return highest
       .filter((r) => r.user === user.id)
       .map(({ rating: elo, game, wld, glicko, trueskill }) => {
         const inforec = [...gameinfo.values()].find((r) =>
           game.startsWith(r.name)
         );
-        const gameRatings = summary.ratings.highest
-          .filter((r) => r.game === game)
-          .map((r) => r.rating)
-          .sort((a, b) => b - a);
-        const rank = gameRatings.findIndex((n) => n === elo) + 1;
+        const rank = rankAmongGameByGlickoLow(highest, game, user.id);
         return {
           id: inforec.uid,
           name: game,
@@ -47,7 +50,7 @@ function Ratings({ handleChallenge }) {
           trueskill,
         };
       })
-      .sort((a, b) => b.elo - a.elo);
+      .sort((a, b) => -compareByGlickoLow(a.glicko, b.glicko));
   }, [summary, user]);
 
   const columnHelper = createColumnHelper();
@@ -94,7 +97,6 @@ function Ratings({ handleChallenge }) {
                 sumB) *
                 1000
             ) / 10;
-          // NaNs first
           if (isNaN(rateA) && isNaN(rateB)) {
             return 0;
           } else if (isNaN(rateA)) {
@@ -105,32 +107,16 @@ function Ratings({ handleChallenge }) {
           return rateA < rateB ? -1 : rateA > rateB ? 1 : 0;
         },
       }),
+      columnHelper.accessor("glicko", {
+        header: t("tables.glicko"),
+        cell: (props) => formatGlickoConfidenceRange(props.getValue()),
+        sortingFn: glickoColumnSortingFn,
+      }),
       columnHelper.accessor("elo", {
         header: t("tables.elo"),
       }),
       columnHelper.accessor("rank", {
-        header: t("tables.eloRank"),
-      }),
-      columnHelper.accessor("glicko", {
-        header: t("tables.glicko"),
-        cell: (props) => {
-          const rating = props.getValue().rating;
-          const rd = props.getValue().rd;
-          const min = Math.round(rating - rd * 2);
-          const max = Math.round(rating + rd * 2);
-          return `${min}–${max}`;
-        },
-        sortingFn: (rowA, rowB, columnID) => {
-          const ratingA = Math.round(rowA.getAllCells(columnID).rating);
-          const ratingB = Math.round(rowB.getAllCells(columnID).rating);
-          const rdA = Math.round(rowA.getAllCells(columnID).rd);
-          const rdB = Math.round(rowB.getAllCells(columnID).rd);
-          if (ratingA === ratingB) {
-            return rdA - rdB;
-          } else {
-            return ratingA - ratingB;
-          }
-        },
+        header: t("tables.rank"),
       }),
       columnHelper.accessor("trueskill", {
         header: t("tables.trueskill"),
@@ -187,7 +173,7 @@ function Ratings({ handleChallenge }) {
       {...PROFILE_TABLE_PROPS}
       data={data}
       columns={columns}
-      sort={[{ id: "elo", desc: true }]}
+      sort={[{ id: "glicko", desc: true }]}
       key="Player|Ratings"
     />
   );

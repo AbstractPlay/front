@@ -58,3 +58,53 @@ export function formatGlickoSiteLowWithRd(siteEntry) {
   }
   return `${Math.round(low)} (${Math.round(siteEntry.rd)})`;
 }
+
+/**
+ * Compare two Glicko objects by conservative low bound (ascending).
+ * @param {{ rating?: number, rd?: number, ratingLow?: number } | null | undefined} glickoA
+ * @param {{ rating?: number, rd?: number, ratingLow?: number } | null | undefined} glickoB
+ */
+export function compareByGlickoLow(glickoA, glickoB) {
+  const lowA = glickoRatingLow(glickoA) ?? -Infinity;
+  const lowB = glickoRatingLow(glickoB) ?? -Infinity;
+  if (lowA !== lowB) {
+    return lowA - lowB;
+  }
+  const rdA = glickoA?.rd ?? 0;
+  const rdB = glickoB?.rd ?? 0;
+  return rdA - rdB;
+}
+
+/**
+ * 95% confidence range for per-game Glicko display.
+ * @param {{ rating?: number, rd?: number } | null | undefined} glicko
+ */
+export function formatGlickoConfidenceRange(glicko) {
+  if (!glicko || glicko.rating == null || glicko.rd == null) {
+    return "---";
+  }
+  const min = Math.round(glicko.rating - glicko.rd * 2);
+  const max = Math.round(glicko.rating + glicko.rd * 2);
+  return `${min}–${max}`;
+}
+
+/**
+ * TanStack Table sortingFn for a Glicko object column.
+ */
+export function glickoColumnSortingFn(rowA, rowB, columnID) {
+  return compareByGlickoLow(rowA.getValue(columnID), rowB.getValue(columnID));
+}
+
+/**
+ * Rank within a game label by conservative Glicko (1-based).
+ * @param {{ user: string, game: string, glicko?: object }[]} highest
+ * @param {string} game
+ * @param {string} userId
+ */
+export function rankAmongGameByGlickoLow(highest, game, userId) {
+  const rows = highest
+    .filter((r) => r.game === game)
+    .sort((a, b) => -compareByGlickoLow(a.glicko, b.glicko));
+  const idx = rows.findIndex((r) => r.user === userId);
+  return idx >= 0 ? idx + 1 : 0;
+}
