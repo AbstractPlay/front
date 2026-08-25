@@ -3439,5 +3439,72 @@ All are actually functional and will accurately make moves, so you can see how w
       <guid isPermaLink="false">1538583289932152832</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>New feature on the way to let you export static PNGs of the displayed position or an animated GIF with customizable delay and start/end positions. Fonts appear to be respected. Buttons added below the boards. Let me know if something does not work as you expect.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 17 Aug 2026 17:03:22 GMT</pubDate>
+      <guid isPermaLink="false">1538956418659524738</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I used AI to flesh out our wiki. All production games now have a wiki page with some semblance of a rules summary (some are better than others). I warmly welcome human editors going in and touching up rules for games they care about. I will try to keep this up to date, but there will certainly be delays. For the record the wiki games page is here: https://abstractplay.com/wiki/doku.php?id=games. To contribute, just click the Log In link, then the Cognito icon to use your AP credentials. Every game has a rules link already that points here. Thank you to our wiki editors!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 17 Aug 2026 18:43:36 GMT</pubDate>
+      <guid isPermaLink="false">1538981643149385758</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;m about to finish a multiweek adjustment to how we manage and track dashboards. This is a cleanup phase. All the heavy lifting has already been done, but gaps may become apparent. Please let me know if you notice anything weird in your dashboards. I&amp;apos;ll be letting this sit for a few days before doing the final, final cleanup.
+
+I know there has been a lot of change lately. More is coming. I&amp;apos;m trying to make the best use of some downtime. Most of the changes are not user facing (it&amp;apos;s mostly about efficiency and robustness of the backend), but user-facing weirdness can still occur. Don&amp;apos;t be shy about reporting anything odd. I&amp;apos;d much rather deal with a #bug-reports that turns out to be nothing than not know at all that something is happening. Thank you for your continued patience and feedback.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 20 Aug 2026 19:00:32 GMT</pubDate>
+      <guid isPermaLink="false">1540073065965289543</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;m turning off the feedback collection of the game page previews (https://discord.com/channels/526483743180062720/1111447982345298121/1538583289932152832). The preview itself continues for now. I&amp;apos;ll post a summary of the feedback when I have it and will discuss future plans in the dedicated thread https://discord.com/channels/526483743180062720/1538580144468262932. Thank you for all the feedback!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 24 Aug 2026 16:40:29 GMT</pubDate>
+      <guid isPermaLink="false">1541487374469570701</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>A new &amp;quot;notifications&amp;quot; section has been added to the dashboard (only visible when you have notifications). You can dismiss them manually, or they will disappear after a week of being seen. The current notifications are game start/end, challenge issued/revoked/rejected (including any given notes), and organized event invitation. I&amp;apos;m considering adding rating changes later on after I finalize those changes. Let me know if something does not work as you expect. Feedback always welcome. Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 24 Aug 2026 23:33:33 GMT</pubDate>
+      <guid isPermaLink="false">1541591327412719686</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I have made some tweaks to the ratings system.
+- For some time there has been a disconnect between the real-time stats visible on some pages (which were never variant sensitive) and the batch-processed stats visible on the `/stats` page (which were variant sensitive). The real-time stats have now been discontinued. All ratings will now be consistent across the site.
+- We&amp;apos;re moving to [Glicko](https://en.wikipedia.org/wiki/Glicko_rating_system) as the default rating system, which is what will be used in tournaments for initial seeding (again, variant sensitive). Elo continues to be calculated and visible on the `/stats` page. Glicko ratings are more than a simple number; they also include a measure of uncertainty (the `RD` value; lower is more certain). The ratings you&amp;apos;ll see are the &amp;quot;95% confidence&amp;quot; rating value followed by the associated `RD` value in parentheses. I&amp;apos;ve also rebased the Glicko ratings to 1200 instead of 1500, to bring them more in line with the Elo values.
+
+The joy of batch processing is that I can retroactively correct things if issues arise. Let me know if things don&amp;apos;t work as you expect or if you have any suggestions for further improvements.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 25 Aug 2026 15:28:34 GMT</pubDate>
+      <guid isPermaLink="false">1541831664882417784</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Happy to announce six new games! Enjoy!
+- @El Poopo&amp;apos;s  two games [Circle of Life](https://play.abstractplay.com/games/circleOfLife) and [BITESIZE](https://play.abstractplay.com/games/bitesize) are games with similar themes of organisms vying for dominance, eating each other to do so.
+- @Mark Khan&amp;apos;s game [Scribe](https://play.abstractplay.com/games/scribe) is a unique area control game where your previous move constrains your next. Form glyphs to control the various zones.
+- Brian Train&amp;apos;s games [Guerrilla Checkers](https://play.abstractplay.com/games/guerrilla) is an asymmetric game where the more numerous but also less powerful insurgents attempt to surround the more mobile and lethal counter-insurgents.
+- James Ernest&amp;apos;s game [The Fractured Flat](https://play.abstractplay.com/games/fractured) is an area control game on a unique &amp;quot;fractured&amp;quot; board. Place and move your pieces to control cities in a race to gain points more quickly than your opponent.
+- @kanare4386&amp;apos;s game [Estate](https://play.abstractplay.com/games/estate) is a connection game where players have a fixed number of points with which to buy land. Spend it wisely to connect edges before your opponent can.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Tue, 25 Aug 2026 21:39:48 GMT</pubDate>
+      <guid isPermaLink="false">1541925085739491409</guid>
+    </item>
+    
   </channel>
 </rss>
