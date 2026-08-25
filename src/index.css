@@ -1450,6 +1450,71 @@ span.hardTime::after {
     margin-bottom: 1rem;
   }
 
+  #playerProfile .player-hero-stats {
+    font-size: 0.875rem;
+  }
+
+  #playerProfile .player-hero-stats .heading {
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.2rem;
+  }
+
+  #playerProfile .player-hero-stat-value {
+    margin-bottom: 0;
+    line-height: 1.2;
+  }
+
+  #playerProfile .player-hero-stats-row + .player-hero-stats-row {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--tag-background-color);
+  }
+
+  #playerProfile .player-hero-stats-row.columns {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  #playerProfile .player-hero-stats-row.columns > .column {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  #playerProfile .player-hero-stats-row.columns > .column:first-child {
+    padding-left: 0;
+  }
+
+  #playerProfile .player-hero-stats-row.columns > .column:last-child {
+    padding-right: 0;
+  }
+
+  #playerProfile .player-hero-stats-row-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: end;
+  }
+
+  @media screen and (max-width: 768px) {
+    #playerProfile .player-hero-stats-row-split {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  #playerProfile .player-hero-split-col {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  #playerProfile .player-hero-game {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   #playerProfile .player-hero-ratings {
     list-style: none;
     margin: 0;
@@ -1459,13 +1524,15 @@ span.hardTime::after {
   #playerProfile .player-hero-ratings li {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    padding: 0.15rem 0;
+    gap: 0.5rem;
+    padding: 0.1rem 0;
+    font-size: 0.9em;
   }
 
   #playerProfile .player-hero-elo {
     font-weight: 600;
     white-space: nowrap;
+    font-size: 0.95em;
   }
 
   #playerProfile .player-hero-ptile {
@@ -1486,11 +1553,14 @@ span.hardTime::after {
     align-items: flex-end;
     gap: 2px;
     height: 3rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   #playerProfile .player-hero-sparkline-bar {
-    flex: 1;
-    min-width: 4px;
+    flex: 1 1 0;
+    min-width: 0;
     background: var(--bulma-link);
     border-radius: 1px 1px 0 0;
     opacity: 0.85;

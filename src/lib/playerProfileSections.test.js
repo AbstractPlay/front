@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getTopRatings } from "./playerProfileSections";
+import { getPlayerSiteGlicko, getTopRatings } from "./playerProfileSections";
 
 describe("getTopRatings", () => {
   const summary = {
@@ -43,5 +43,32 @@ describe("getTopRatings", () => {
 
   it("returns empty for missing user", () => {
     expect(getTopRatings(summary, "nobody", 3)).toEqual([]);
+  });
+});
+
+describe("getPlayerSiteGlicko", () => {
+  it("returns site composite entry for user", () => {
+    const summary = {
+      ratings: {
+        glickoSite: [
+          { user: "u1", rating: 1500, rd: 200 },
+          { user: "u2", rating: 1400, rd: 180 },
+        ],
+      },
+    };
+    expect(getPlayerSiteGlicko(summary, "u1")).toEqual({
+      user: "u1",
+      rating: 1500,
+      rd: 200,
+    });
+  });
+
+  it("returns null when user has no site Glicko", () => {
+    const summary = {
+      ratings: {
+        glickoSite: [{ user: "u2", rating: 1400, rd: 180 }],
+      },
+    };
+    expect(getPlayerSiteGlicko(summary, "u1")).toBeNull();
   });
 });

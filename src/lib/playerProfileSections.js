@@ -95,6 +95,11 @@ export function getTopRatings(summary, userId, limit = 3) {
     .slice(0, limit);
 }
 
+export function getPlayerSiteGlicko(summary, userId) {
+  if (!summary?.ratings?.glickoSite || userId == null) return null;
+  return summary.ratings.glickoSite.find((r) => r.user === userId) ?? null;
+}
+
 /**
  * Weekly games-played histogram for a player (`histograms.players` in summary).
  *
