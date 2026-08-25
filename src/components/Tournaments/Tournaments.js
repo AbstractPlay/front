@@ -16,6 +16,7 @@ import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import NewTournamentModal from "./NewTournamentModal";
 import { gameinfo } from "@abstractplay/gameslib";
+import { isPublicCatalogGame } from "../../lib/gameOptions";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { useStore } from "../../stores";
@@ -1021,6 +1022,7 @@ function Tournaments(props) {
                 --Show all--
               </option>
               {[...gameinfo.values()]
+                .filter(isPublicCatalogGame)
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((rec) => (
                   <option value={rec.uid} key={"filterMeta" + rec.uid}>

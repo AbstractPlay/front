@@ -7,6 +7,7 @@ import {
   trackRecommendationShow,
 } from "../lib/recommendationTracking";
 import { isLabSupportedGame } from "../lib/Lab/buildGame";
+import { isPublicCatalogGame } from "../lib/gameOptions";
 import { useStore } from "../stores";
 import {
   fetchPlayerQuickPickData,
@@ -71,7 +72,7 @@ async function fetchCooccur() {
 
 function buildLabCatalog() {
   return [...gameinfo.values()]
-    .filter((info) => isLabSupportedGame(info.uid))
+    .filter((info) => isPublicCatalogGame(info) && isLabSupportedGame(info.uid))
     .map((info) => ({
       id: info.uid,
       name: info.name,

@@ -1,12 +1,37 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
   buildGameOptions,
   collectBoardFilterOptions,
   filterGameOptions,
+  isExperimentalGame,
+  isPublicCatalogGame,
   isBoardRootCategory,
   pickRandomGameOption,
 } from "./gameOptions";
+import { isProductionMode } from "./realMode";
+
+vi.mock("./realMode", () => ({
+  isProductionMode: vi.fn(() => false),
+}));
+
+beforeEach(() => {
+  vi.mocked(isProductionMode).mockReturnValue(false);
+});
+
+describe("isPublicCatalogGame", () => {
+  it("hides experimental games in production", () => {
+    vi.mocked(isProductionMode).mockReturnValue(true);
+    expect(isExperimentalGame({ flags: ["experimental"] })).toBe(true);
+    expect(isPublicCatalogGame({ flags: ["experimental"] })).toBe(false);
+    expect(isPublicCatalogGame({ flags: [] })).toBe(true);
+  });
+
+  it("shows experimental games outside production", () => {
+    vi.mocked(isProductionMode).mockReturnValue(false);
+    expect(isPublicCatalogGame({ flags: ["experimental"] })).toBe(true);
+  });
+});
 
 describe("buildGameOptions", () => {
   it("returns sorted games from gameinfo", () => {
@@ -23,6 +48,18 @@ describe("buildGameOptions", () => {
     for (const { id } of lab) {
       expect(gameinfo.get(id).flags.includes("simultaneous")).toBe(false);
     }
+  });
+
+  it("excludes experimental games in production", () => {
+    const experimental = [...gameinfo.values()].find((info) =>
+      info.flags.includes("experimental")
+    );
+    if (!experimental) {
+      return;
+    }
+    vi.mocked(isProductionMode).mockReturnValue(true);
+    const options = buildGameOptions();
+    expect(options.some(({ id }) => id === experimental.uid)).toBe(false);
   });
 });
 

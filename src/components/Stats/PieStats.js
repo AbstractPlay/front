@@ -3,6 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
+import { formatSummaryGameKey } from "../../lib/summaryGameKeys";
 
 function PieStats({ nav }) {
   const summary = useStore((state) => state.summary);
@@ -12,12 +13,12 @@ function PieStats({ nav }) {
     () =>
       (summary.pieRates ?? []).map(({ game, n, pied, rate }) => ({
         id: game,
-        game,
+        game: formatSummaryGameKey(game, t),
         n,
         pied,
         rate: Math.trunc(rate * 10000) / 100,
       })),
-    [summary]
+    [summary, t]
   );
 
   const columnHelper = createColumnHelper();

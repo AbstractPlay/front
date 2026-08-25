@@ -27,6 +27,7 @@ import Thumbnail from "../Thumbnail";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import { useGameRecommendations } from "../../hooks/useGameRecommendations";
+import { listPublicCatalogMetas } from "../../lib/gameOptions";
 import { useStore } from "../../stores";
 import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
 
@@ -285,7 +286,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
 
   const loadGames = useCallback(
     (forceNew) => {
-      let metas = [...gameinfo.keys()];
+      let metas = listPublicCatalogMetas();
       if (config.loadGames) {
         gamesSetter(config.loadGames(metas, forceNew));
       } else {

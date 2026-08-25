@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext, SummaryContext } from "../Player";
-import { gameinfo } from "@abstractplay/gameslib";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import NewChallengeModal from "../NewChallengeModal";
 import { useStore } from "../../stores";
@@ -13,6 +12,10 @@ import {
   glickoColumnSortingFn,
   rankAmongGameByGlickoLow,
 } from "../../lib/glickoDisplay";
+import {
+  formatSummaryGameKey,
+  metaUidFromSummaryGameKey,
+} from "../../lib/summaryGameKeys";
 
 function Ratings({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
@@ -36,13 +39,11 @@ function Ratings({ handleChallenge }) {
     return highest
       .filter((r) => r.user === user.id)
       .map(({ rating: elo, game, wld, glicko, trueskill }) => {
-        const inforec = [...gameinfo.values()].find((r) =>
-          game.startsWith(r.name)
-        );
+        const uid = metaUidFromSummaryGameKey(game);
         const rank = rankAmongGameByGlickoLow(highest, game, user.id);
         return {
-          id: inforec.uid,
-          name: game,
+          id: uid,
+          name: formatSummaryGameKey(game, t),
           elo,
           rank,
           wld,
@@ -51,7 +52,7 @@ function Ratings({ handleChallenge }) {
         };
       })
       .sort((a, b) => -compareByGlickoLow(a.glicko, b.glicko));
-  }, [summary, user]);
+  }, [summary, user, t]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(

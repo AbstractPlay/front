@@ -3,6 +3,10 @@ import { createColumnHelper } from "@tanstack/react-table";
 import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
+import {
+  formatSummaryGameKey,
+  matchesSummaryGameKey,
+} from "../../lib/summaryGameKeys";
 
 function GameStats({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
@@ -11,11 +15,11 @@ function GameStats({ metaFilter, nav }) {
   const data = useMemo(
     () =>
       [...Object.keys(summary.metaStats)]
-        .map((game) => {
-          const rec = summary.metaStats[game];
+        .map((gameKey) => {
+          const rec = summary.metaStats[gameKey];
           return {
-            id: game,
-            game,
+            id: gameKey,
+            game: formatSummaryGameKey(gameKey, t),
             n: rec.n,
             lenAvg: Math.trunc(rec.lenAvg * 100) / 100,
             lenMedian: Math.trunc(rec.lenMedian * 100) / 100,
@@ -25,12 +29,10 @@ function GameStats({ metaFilter, nav }) {
         })
         .filter(
           (rec) =>
-            metaFilter === undefined ||
-            rec.game === metaFilter ||
-            rec.game.startsWith(`${metaFilter} (`)
+            metaFilter === undefined || matchesSummaryGameKey(rec.id, metaFilter)
         )
         .sort((a, b) => a.game.localeCompare(b.game)),
-    [summary, metaFilter]
+    [summary, metaFilter, t]
   );
 
   const columnHelper = createColumnHelper();

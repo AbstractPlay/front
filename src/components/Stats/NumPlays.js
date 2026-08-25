@@ -1,11 +1,15 @@
 import React, { useMemo, useState } from "react";
-import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import HistogramSparkline from "./shared/HistogramSparkline";
 import PlayContextSummary from "./shared/PlayContextSummary";
 import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
+import {
+  formatSummaryGameKey,
+  matchesSummaryGameKey,
+  metaUidFromSummaryGameKey,
+} from "../../lib/summaryGameKeys";
 
 function NumPlays({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
@@ -21,11 +25,7 @@ function NumPlays({ metaFilter, nav }) {
 
     return summary.plays.total
       .map((obj) => {
-        let meta = null;
-        const found = [...gameinfo.values()].find((i) => i.name === obj.game);
-        if (found !== undefined) {
-          meta = found.uid;
-        }
+        const meta = metaUidFromSummaryGameKey(obj.game);
         let hindex = 0;
         const hrec = summary.hMeta.find(({ user }) => user === meta);
         if (hrec !== undefined) {
@@ -43,7 +43,7 @@ function NumPlays({ metaFilter, nav }) {
           id: obj.game,
           meta,
           hindex,
-          game: obj.game,
+          game: formatSummaryGameKey(obj.game, t),
           plays: obj.value,
           width: opps.value,
           histogram,
@@ -53,12 +53,10 @@ function NumPlays({ metaFilter, nav }) {
       })
       .filter(
         (rec) =>
-          metaFilter === undefined ||
-          rec.game === metaFilter ||
-          rec.game.startsWith(`${metaFilter} (`)
+          metaFilter === undefined || matchesSummaryGameKey(rec.id, metaFilter)
       )
       .sort((a, b) => b.plays - a.plays);
-  }, [summary, metaFilter]);
+  }, [summary, metaFilter, t]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(

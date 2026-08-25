@@ -5,6 +5,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { isPublicCatalogGame } from "../../lib/gameOptions";
 
 function Designed() {
   const [user] = useContext(ProfileContext);
@@ -18,7 +19,7 @@ function Designed() {
             entry.people !== undefined &&
             entry.people.filter(
               (p) => p.type === "designer" && p.apid === user.id
-            ).length > 0
+            ).length > 0 && isPublicCatalogGame(entry)
         )
         .map(([meta, info]) => {
           const ret = {

@@ -9,6 +9,7 @@ import { bergerTable } from "../../lib/berger";
 import PairingTable from "./PairingTable";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
+import { isPublicCatalogGame } from "../../lib/gameOptions";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 
@@ -57,7 +58,7 @@ function Pair({ event, setRefresh }) {
       }
       setDivisions(tmpDivisions);
     }
-    let allMeta = [...gameinfo.values()];
+    let allMeta = [...gameinfo.values()].filter(isPublicCatalogGame);
     allMeta.sort((a, b) => a.name.localeCompare(b.name));
     setValidMeta(allMeta.map((i) => [i.uid, i.name]));
   }, [event, allUsers]);

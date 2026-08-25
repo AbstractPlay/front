@@ -1,30 +1,42 @@
 import { gameinfo } from "@abstractplay/gameslib";
 import { getTopRatings } from "./playerProfileSections";
+import { parseRecordGameId } from "./recordGameId";
+import { metaUidFromSummaryGameKey } from "./summaryGameKeys";
+import { isPublicCatalogGame } from "./gameOptions";
 
-/** Resolve display name from records JSON to metaGame uid (Counts/Hero pattern). */
+/** Resolve a summarize ratings/summary game key to metaGame uid. */
 export function metaGameFromDisplayName(gameName) {
   if (!gameName) {
     return null;
   }
-  const info = [...gameinfo.values()].find((r) => gameName.startsWith(r.name));
-  return info?.uid ?? null;
+  const uid = metaUidFromSummaryGameKey(gameName);
+  return gameinfo.has(uid) ? uid : null;
 }
 
 /** Resolve a player record row to metaGame uid (History pattern). */
 export function metaGameFromPlayerRecord(rec) {
   const gameName = rec?.header?.game?.name;
-  let siteId = rec?.header?.site?.gameid;
-  let meta;
-  if (typeof siteId === "string" && siteId.includes("#")) {
-    [meta] = siteId.split("#");
+  const siteId = rec?.header?.site?.gameid;
+  if (typeof siteId === "string") {
+    const parsed = parseRecordGameId(siteId);
+    if (parsed !== undefined) {
+      return parsed.metaGame;
+    }
+    const hashIdx = siteId.indexOf("#");
+    if (hashIdx !== -1) {
+      const before = siteId.slice(0, hashIdx);
+      if (before && !/^[0-9a-f-]{36}$/i.test(before)) {
+        return before;
+      }
+    }
   }
-  if (!meta && gameName) {
+  if (gameName) {
     const exact = [...gameinfo.entries()].find(
       ([, info]) => info.name === gameName
     );
-    meta = exact?.[0] ?? metaGameFromDisplayName(gameName);
+    return exact?.[0] ?? metaGameFromDisplayName(gameName);
   }
-  return meta ?? null;
+  return null;
 }
 
 function toQuickPick(metaGame) {
@@ -32,6 +44,9 @@ function toQuickPick(metaGame) {
     return null;
   }
   const info = gameinfo.get(metaGame);
+  if (!isPublicCatalogGame(info)) {
+    return null;
+  }
   return { id: metaGame, name: info.name };
 }
 

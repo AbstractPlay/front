@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { matchesSummaryGameKey } from "../../lib/summaryGameKeys";
 
 function shuffle(array) {
   const arr = [...array];
@@ -272,8 +273,8 @@ export const viewConfigs = {
     extraFields: (metaGame, info, fetchedData) => {
       let gamesper = 0;
       if (fetchedData !== null) {
-        const found = fetchedData.histograms.meta.find(
-          (x) => x.game === info.name
+        const found = fetchedData.histograms.meta.find((x) =>
+          matchesSummaryGameKey(x.game, metaGame)
         );
         if (found !== undefined) {
           const subset = found.value.slice(-13);

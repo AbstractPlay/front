@@ -5,6 +5,7 @@ import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 import { useTranslation } from "react-i18next";
+import { formatSummaryGameKey } from "../../lib/summaryGameKeys";
 import {
   formatGlickoLowWithRd,
   glickoColumnSortingFn,
@@ -29,14 +30,14 @@ function TopPlayers({ nav }) {
             id: game,
             userid,
             name,
-            game,
+            game: formatSummaryGameKey(game, t),
             rating,
             glicko: glicko ?? null,
             wld,
           };
         })
-        .sort((a, b) => a.game.localeCompare(b.game)),
-    [summary, userNames]
+        .sort((a, b) => a.id.localeCompare(b.id)),
+    [summary, userNames, t]
   );
 
   const columnHelper = createColumnHelper();

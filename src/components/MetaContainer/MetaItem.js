@@ -440,13 +440,13 @@ const MetaItem = React.forwardRef(
                   <p>{t("meta.historicalIntro")}</p>
                   <hr width="50%" style={{ opacity: 0.1 }} />
                   <p>{t("meta.playCounts")}</p>
-                  <NumPlays metaFilter={game.name} nav="bottom" />
+                  <NumPlays metaFilter={game.uid} nav="bottom" />
                   <hr width="50%" style={{ opacity: 0.1 }} />
                   <p>{t("meta.gameStatistics")}</p>
-                  <GameStats metaFilter={game.name} nav="bottom" />
+                  <GameStats metaFilter={game.uid} nav="bottom" />
                   <hr width="50%" style={{ opacity: 0.1 }} />
                   <p>{t("meta.ratings")}</p>
-                  <HighestSingleRating metaFilter={game.name} nav="bottom" />{" "}
+                  <HighestSingleRating metaFilter={game.uid} nav="bottom" />{" "}
                 </>
               </SummaryGate>
             )}

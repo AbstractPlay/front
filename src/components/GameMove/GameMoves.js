@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, Fragment, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
+import { isPublicCatalogGame } from "../../lib/gameOptions";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import {
@@ -88,6 +89,7 @@ function GameMoves(props) {
     let lst = [];
     for (const info of gameinfo.values()) {
       if (
+        isPublicCatalogGame(info) &&
         info.playercounts.includes(2) &&
         !info.flags.includes("simultaneous")
       ) {

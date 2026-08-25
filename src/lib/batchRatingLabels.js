@@ -1,44 +1,34 @@
-import { gameinfo } from "@abstractplay/gameslib";
+import {
+  formatVariantUids,
+  metaUidFromSummaryGameKey,
+  parseSummaryGameKey,
+} from "./summaryGameKeys";
 
 /**
  * Inner label from a summarize `highest[].game` key (`batchRatingGameLabel` output).
  * @param {string} gameKey
- * @param {string} metaGameName
  */
-export function variantSuffixFromBatchGameKey(gameKey, metaGameName) {
-  if (gameKey === metaGameName) {
+export function variantSuffixFromBatchGameKey(gameKey) {
+  const { variantUids } = parseSummaryGameKey(gameKey);
+  if (!variantUids.length) {
     return "no variants";
   }
-  const prefix = `${metaGameName} (`;
-  if (!gameKey.startsWith(prefix) || !gameKey.endsWith(")")) {
-    return gameKey;
-  }
-  return gameKey.slice(prefix.length, -1);
+  return variantUids.join("|");
 }
 
 /**
  * Human-readable variant label for a batch-ratings game key.
  * @param {string} metaGameUid
  * @param {string} gameKey
- * @param {string} metaGameName
  * @param {(key: string) => string} t
  */
-export function formatBatchRatingVariantLabel(
-  metaGameUid,
-  gameKey,
-  metaGameName,
-  t
-) {
-  const suffix = variantSuffixFromBatchGameKey(gameKey, metaGameName);
-  if (suffix === "no variants") {
-    return t("standingChallenge.noVariants");
+export function formatBatchRatingVariantLabel(metaGameUid, gameKey, t) {
+  const { metaUid, variantUids } = parseSummaryGameKey(gameKey);
+  if (!variantUids.length) {
+    return "";
   }
-  const info = gameinfo.get(metaGameUid);
-  if (!info?.variants?.length) {
-    return suffix.split("|").join(", ");
-  }
-  return suffix
-    .split("|")
-    .map((uid) => info.variants.find((v) => v.uid === uid)?.name ?? uid)
-    .join(", ");
+  const uid = metaGameUid || metaUid;
+  return formatVariantUids(uid, variantUids, t);
 }
+
+export { metaUidFromSummaryGameKey };

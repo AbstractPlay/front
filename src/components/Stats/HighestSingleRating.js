@@ -12,6 +12,10 @@ import {
   formatGlickoLowWithRd,
   glickoColumnSortingFn,
 } from "../../lib/glickoDisplay";
+import {
+  formatSummaryGameKey,
+  matchesSummaryGameKey,
+} from "../../lib/summaryGameKeys";
 
 function HighestSingleRating({ metaFilter, nav }) {
   useEnsureSummaryTier("site");
@@ -41,7 +45,8 @@ function HighestSingleRating({ metaFilter, nav }) {
                 uuid: `${userid}|${game}`,
                 userid,
                 name,
-                game,
+                gameKey: game,
+                game: formatSummaryGameKey(game, t),
                 rating,
                 wld,
                 glicko:
@@ -52,11 +57,10 @@ function HighestSingleRating({ metaFilter, nav }) {
             .filter(
               (rec) =>
                 metaFilter === undefined ||
-                rec.game === metaFilter ||
-                rec.game.startsWith(`${metaFilter} (`)
+                matchesSummaryGameKey(rec.gameKey, metaFilter)
             )
             .sort((a, b) => -compareByGlickoLow(a.glicko, b.glicko)),
-    [summary, userNames, metaFilter, glickoByGameMap]
+    [summary, userNames, metaFilter, glickoByGameMap, t]
   );
 
   const columnHelper = createColumnHelper();
