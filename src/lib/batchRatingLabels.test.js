@@ -1,18 +1,14 @@
 import { describe, expect, it, beforeAll } from "vitest";
-import { addResource } from "@abstractplay/gameslib";
-import enApgames from "../locales/en/apgames.json";
 import {
   formatBatchRatingVariantLabel,
   variantSuffixFromBatchGameKey,
 } from "./batchRatingLabels";
+import { setupGameslibI18nForTests } from "./testGameslibI18n";
 
 const t = (key) =>
   key === "standingChallenge.noVariants" ? "no variants" : key;
 
-beforeAll(async () => {
-  addResource("en", undefined, { bundles: { apgames: enApgames } });
-  await import("../i18n.js");
-});
+beforeAll(() => setupGameslibI18nForTests());
 
 describe("variantSuffixFromBatchGameKey", () => {
   it("extracts no variants suffix", () => {

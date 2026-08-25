@@ -83,7 +83,7 @@
     "test:watch": "vitest",
     "test:ci": "vitest run && npm run test:engines",
     "test:engines": "node bin/test-exploration-contracts.mjs",
-    "lint": "eslint src bin --ext .js,.jsx,.mjs",
+    "lint": "node bin/check-ci-deps.mjs && eslint src bin --ext .js,.jsx,.mjs",
     "lint:fix": "eslint src bin --ext .js,.jsx,.mjs --fix",
     "sync-locales": "node bin/sync-locales.mjs",
     "docs:check": "node bin/docs-check.mjs",

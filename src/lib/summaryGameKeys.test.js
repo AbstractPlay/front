@@ -1,6 +1,5 @@
 import { describe, expect, it, beforeAll } from "vitest";
-import { addResource, gameinfo } from "@abstractplay/gameslib";
-import enApgames from "../locales/en/apgames.json";
+import { gameinfo } from "@abstractplay/gameslib";
 import { expandVariants } from "./expandVariants";
 import {
   formatSummaryGameKey,
@@ -9,11 +8,9 @@ import {
   metaUidFromSummaryGameKey,
   parseSummaryGameKey,
 } from "./summaryGameKeys";
+import { setupGameslibI18nForTests } from "./testGameslibI18n";
 
-beforeAll(async () => {
-  addResource("en", undefined, { bundles: { apgames: enApgames } });
-  await import("../i18n.js");
-});
+beforeAll(() => setupGameslibI18nForTests());
 
 function sampleMeta() {
   const entry = [...gameinfo.entries()][0];

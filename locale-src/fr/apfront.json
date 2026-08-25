@@ -2168,61 +2168,80 @@
     "out": "et"
   },
   "boardExport.delayLabel": {
-    "src": "Delay between frames (seconds)"
+    "src": "Delay between frames (seconds)",
+    "out": "Délai entre les images (secondes)"
   },
   "boardExport.endLabel": {
-    "src": "End position"
+    "src": "End position",
+    "out": "Position finale"
   },
   "boardExport.export": {
-    "src": "Export GIF"
+    "src": "Export GIF",
+    "out": "Exporter le GIF"
   },
   "boardExport.failed": {
-    "src": "Export failed: {{error}}"
+    "src": "Export failed: {{error}}",
+    "out": "Échec de l'exportation : {{error}}"
   },
   "boardExport.frameCap": {
-    "src": "Too many frames (maximum {{max}}). Choose a shorter range."
+    "src": "Too many frames (maximum {{max}}). Choose a shorter range.",
+    "out": "Trop d'images (maximum {{max}}). Choisissez une plage plus courte."
   },
   "boardExport.frameCount": {
-    "src": "{{count}} frame(s)"
+    "src": "{{count}} frame(s)",
+    "out": "{{count}} image(s)"
   },
   "boardExport.gifButton": {
-    "src": "Download animated board (GIF)"
+    "src": "Download animated board (GIF)",
+    "out": "Télécharger le plateau animé (GIF)"
   },
   "boardExport.gifHelp": {
-    "src": "Exports the board along the current line (main line and any variation you are viewing). Stacked column expansions are not included."
+    "src": "Exports the board along the current line (main line and any variation you are viewing). Stacked column expansions are not included.",
+    "out": "Exporte le plateau le long de la ligne actuelle (ligne principale et toute variante consultée). Les extensions de colonnes empilées ne sont pas incluses."
   },
   "boardExport.gifSuccess": {
-    "src": "Animated GIF downloaded."
+    "src": "Animated GIF downloaded.",
+    "out": "GIF animé téléchargé."
   },
   "boardExport.gifTitle": {
-    "src": "Export animated GIF"
+    "src": "Export animated GIF",
+    "out": "Exporter un GIF animé"
   },
   "boardExport.pathInitial": {
-    "src": "Initial position"
+    "src": "Initial position",
+    "out": "Position initiale"
   },
   "boardExport.pathMove": {
-    "src": "After move {{number}}: {{move}}"
+    "src": "After move {{number}}: {{move}}",
+    "out": "Après le coup {{number}} : {{move}}"
   },
   "boardExport.pathStep": {
-    "src": "Step {{number}}"
+    "src": "Step {{number}}",
+    "out": "Étape {{number}}"
   },
   "boardExport.pathVariation": {
-    "src": "Variation: {{move}}"
+    "src": "Variation: {{move}}",
+    "out": "Variante : {{move}}"
   },
   "boardExport.pathVariationUnknown": {
-    "src": "Variation"
+    "src": "Variation",
+    "out": "Variante"
   },
   "boardExport.pngButton": {
-    "src": "Download board image (PNG)"
+    "src": "Download board image (PNG)",
+    "out": "Télécharger l'image du plateau (PNG)"
   },
   "boardExport.pngSuccess": {
-    "src": "Board image downloaded."
+    "src": "Board image downloaded.",
+    "out": "Image du plateau téléchargée."
   },
   "boardExport.progress": {
-    "src": "Exporting frame {{current}} of {{total}}…"
+    "src": "Exporting frame {{current}} of {{total}}…",
+    "out": "Exportation de l'image {{current}} sur {{total}}…"
   },
   "boardExport.startLabel": {
-    "src": "Start position"
+    "src": "Start position",
+    "out": "Position de départ"
   },
   "bots.ackSecretStored": {
     "src": "I have copied and securely stored the client secret",
@@ -4144,6 +4163,14 @@
     "src": "Move {{n}}",
     "out": "Coup {{n}}"
   },
+  "gameMove.layout.moveTableDensityAuto": {
+    "src": "Compact move rows (click for one row per move)",
+    "out": "Lignes de coups compactes (cliquer pour une ligne par coup)"
+  },
+  "gameMove.layout.moveTableDensitySparse": {
+    "src": "One row per move (click for compact rows)",
+    "out": "Une ligne par coup (cliquer pour des lignes compactes)"
+  },
   "gameMove.layout.narrativeDescription": {
     "src": "Story column with board beside you",
     "out": "Colonne d'historique avec plateau adjacent"
@@ -4488,6 +4515,62 @@
     "src": "Download all your completed game reports",
     "out": "Télécharger tous vos rapports de parties terminées"
   },
+  "me.notifications.columns.message": {
+    "src": "Message",
+    "out": "Message"
+  },
+  "me.notifications.columns.note": {
+    "src": "Note",
+    "out": "Note"
+  },
+  "me.notifications.columns.time": {
+    "src": "Time",
+    "out": "Heure"
+  },
+  "me.notifications.dismiss": {
+    "src": "Dismiss",
+    "out": "Ignorer"
+  },
+  "me.notifications.message.challengeDeclined": {
+    "src": "{{declinerName}} declined your <gameLink>{{metaGame}}</gameLink> challenge",
+    "out": "{{declinerName}} a refusé votre défi à {{metaGame}}"
+  },
+  "me.notifications.message.challengeIssued": {
+    "src": "{{challengerName}} challenged you to <gameLink>{{metaGame}}</gameLink>",
+    "out": "{{challengerName}} vous a défié à {{metaGame}}"
+  },
+  "me.notifications.message.challengeRevoked": {
+    "src": "{{revokerName}} revoked the <gameLink>{{metaGame}}</gameLink> challenge",
+    "out": "{{revokerName}} a annulé le défi à {{metaGame}}"
+  },
+  "me.notifications.message.eventInvitation": {
+    "src": "{{organizerName}} has invited you to the event <eventLink>{{eventName}}</eventLink>.",
+    "out": "{{organizerName}} vous a invité à {{eventName}}"
+  },
+  "me.notifications.message.gameEnd_draw": {
+    "src": "Your game of {{metaGame}} ended in a draw",
+    "out": "Votre partie de {{metaGame}} s'est terminée par un nul"
+  },
+  "me.notifications.message.gameEnd_lose": {
+    "src": "You lost your game of {{metaGame}}",
+    "out": "Vous avez perdu votre partie de {{metaGame}}"
+  },
+  "me.notifications.message.gameEnd_win": {
+    "src": "You won your game of {{metaGame}}",
+    "out": "Vous avez gagné votre partie de {{metaGame}}"
+  },
+  "me.notifications.message.gameStart": {
+    "src": "{{opponentName}} started a game of <gameLink>{{metaGame}}</gameLink> with you",
+    "out": "{{opponentName}} a commencé une partie de {{metaGame}} avec vous"
+  },
+  "me.notifications.message.ratingChange": {
+    "src": "Your {{metaGame}} rating changed by {{delta}} (now {{newRating}})",
+    "out": "Votre classement de {{metaGame}} a changé de {{delta}} (actuellement {{newRating}})"
+  },
+  "me.notifications.title": {
+    "src": "Notifications",
+    "out": "Notifications"
+  },
   "meta.gameStatistics": {
     "src": "Game statistics",
     "out": "Statistiques de jeu"
@@ -4567,6 +4650,10 @@
   "player.hero.recentActivity": {
     "src": "Recent activity",
     "out": "Activité récente"
+  },
+  "player.hero.siteGlicko": {
+    "src": "Site Glicko",
+    "out": "Glicko du site"
   },
   "player.hero.topRatings": {
     "src": "Top ratings",

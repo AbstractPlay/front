@@ -1,0 +1,4 @@
+# Keep production dependency pins when merging develop into main.
+ci-deps.prod.json merge=ours
+package.json merge=ours
+package-lock.json merge=ours

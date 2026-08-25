@@ -4,7 +4,7 @@
  *
  * Resolution order:
  *   1. AP_GAMESLIB_VERSION / AP_RENDERER_VERSION env (from repository_dispatch)
- *   2. ci-deps.json
+ *   2. ci-deps.<stage>.json (ci-deps.dev.json or ci-deps.prod.json)
  *   3. fallback: @development (dev) or @latest (prod)
  *
  * Usage: node bin/install-ap-deps.mjs --stage dev|prod [--renderer-only] [--for-tests]
@@ -15,7 +15,7 @@ import { execSync } from "child_process";
 import { fileURLToPath } from "url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const CI_DEPS_PATH = path.join(ROOT, "ci-deps.json");
+const LEGACY_CI_DEPS_PATH = path.join(ROOT, "ci-deps.json");
 const PACKAGE_JSON_PATH = path.join(ROOT, "package.json");
 
 function parseArgs(argv) {
@@ -31,7 +31,18 @@ function parseArgs(argv) {
       forTests = true;
     }
   }
+  if (stage !== "dev" && stage !== "prod") {
+    throw new Error(`Invalid --stage "${stage}" (expected dev or prod)`);
+  }
   return { stage, rendererOnly, forTests };
+}
+
+function ciDepsPath(stage) {
+  return path.join(ROOT, `ci-deps.${stage}.json`);
+}
+
+function manifestLabel(stage) {
+  return `ci-deps.${stage}.json`;
 }
 
 function readJson(filePath) {
@@ -43,6 +54,21 @@ function readJson(filePath) {
 
 function writeJson(filePath, data) {
   fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`);
+}
+
+function readManifest(stage) {
+  const staged = readJson(ciDepsPath(stage));
+  if (staged) {
+    return staged;
+  }
+  const legacy = readJson(LEGACY_CI_DEPS_PATH);
+  if (legacy) {
+    console.warn(
+      `Warning: using legacy ci-deps.json; migrate to ${manifestLabel(stage)}`,
+    );
+    return legacy;
+  }
+  return null;
 }
 
 function getInstalledVersion(pkg) {
@@ -80,18 +106,19 @@ function detectRendererOnly(pkgJson, flag) {
 function resolveVersions({ stage, rendererOnly, forTests, pkgJson }) {
   const dispatchGameslib = process.env.AP_GAMESLIB_VERSION?.trim() || null;
   const dispatchRenderer = process.env.AP_RENDERER_VERSION?.trim() || null;
-  const manifest = readJson(CI_DEPS_PATH);
+  const manifest = readManifest(stage);
   const onlyRenderer = detectRendererOnly(pkgJson, rendererOnly);
+  const manifestName = manifestLabel(stage);
 
   let gameslib = dispatchGameslib || manifest?.gameslib || null;
   let renderer = dispatchRenderer || manifest?.renderer || null;
-  let source = "ci-deps.json";
+  let source = manifestName;
 
   if (forTests) {
     gameslib = process.env.AP_GAMESLIB_TEST_VERSION?.trim() || "development";
     source = "for-tests@development";
     console.log(
-      `Installing gameslib for tests: @${gameslib} (full registry, not synced to package.json)`
+      `Installing gameslib for tests: @${gameslib} (full registry, not synced to package.json)`,
     );
   } else if (dispatchGameslib || dispatchRenderer) {
     source = process.env.AP_SOURCE || "repository_dispatch";
@@ -108,12 +135,12 @@ function resolveVersions({ stage, rendererOnly, forTests, pkgJson }) {
   if (!onlyRenderer && !gameslib) {
     console.warn(`No gameslib version resolved; falling back to @${tag}`);
     gameslib = tag;
-    if (source === "ci-deps.json") {
+    if (source === manifestName) {
       source = `fallback@${tag}`;
     }
   }
 
-  return { gameslib, renderer, rendererOnly: onlyRenderer, source, forTests };
+  return { stage, gameslib, renderer, rendererOnly: onlyRenderer, source, forTests };
 }
 
 function syncPackageJson(pkgJson, versions) {
@@ -163,7 +190,7 @@ function versionMatches(installed, expected) {
   return installed === expected;
 }
 
-function verify(versions) {
+function verifyInstalledVersions(versions) {
   const installedRenderer = getInstalledVersion("@abstractplay/renderer");
   if (!versionMatches(installedRenderer, versions.renderer)) {
     throw new Error(
@@ -183,9 +210,66 @@ function verify(versions) {
   }
 }
 
+function verifyGameslibProductionBuild(versions) {
+  if (versions.stage !== "prod" || versions.rendererOnly || versions.forTests) {
+    return;
+  }
+
+  const gameslibRoot = path.join(ROOT, "node_modules", "@abstractplay", "gameslib");
+  const metaPath = path.join(
+    gameslibRoot,
+    "build",
+    "games",
+    "_registry-meta.generated.json",
+  );
+  const flagsPath = path.join(
+    gameslibRoot,
+    "build",
+    "games",
+    "_build-flags.generated.js",
+  );
+  const installed = getInstalledVersion("@abstractplay/gameslib");
+
+  if (fs.existsSync(metaPath)) {
+    const meta = JSON.parse(fs.readFileSync(metaPath, "utf8"));
+    if (meta.production !== true) {
+      throw new Error(
+        `Refusing prod install: @abstractplay/gameslib@${installed} ` +
+          `has production=false in registry meta (${meta.gameCount} games, ` +
+          `${(meta.experimentalUids ?? []).length} experimental). ` +
+          `Pin a Production Server CI build in ci-deps.prod.json.`,
+      );
+    }
+    console.log(
+      `gameslib production registry verified (${meta.gameCount} games; experimental omitted)`,
+    );
+    return;
+  }
+
+  if (!fs.existsSync(flagsPath)) {
+    throw new Error(
+      `Production deploy could not verify @abstractplay/gameslib@${installed}: ` +
+        `missing ${metaPath} and ${flagsPath}`,
+    );
+  }
+
+  const flagsSource = fs.readFileSync(flagsPath, "utf8");
+  if (!/APGAMES_PRODUCTION\s*=\s*true/.test(flagsSource)) {
+    throw new Error(
+      `Refusing prod install: @abstractplay/gameslib@${installed} ` +
+        `does not set APGAMES_PRODUCTION=true in ${flagsPath}. ` +
+        `Pin a Production Server CI build in ci-deps.prod.json.`,
+    );
+  }
+
+  console.log("gameslib production build verified (APGAMES_PRODUCTION=true)");
+}
+
 function writeCiDeps(versions) {
+  const outPath = ciDepsPath(versions.stage);
+
   if (versions.forTests) {
-    const existing = readJson(CI_DEPS_PATH);
+    const existing = readJson(outPath);
     if (!existing) {
       return;
     }
@@ -194,7 +278,7 @@ function writeCiDeps(versions) {
       data.renderer = versions.renderer;
       data.updatedAt = new Date().toISOString();
     }
-    writeJson(CI_DEPS_PATH, data);
+    writeJson(outPath, data);
     return;
   }
 
@@ -206,7 +290,7 @@ function writeCiDeps(versions) {
   if (!versions.rendererOnly && versions.gameslib) {
     data.gameslib = versions.gameslib;
   }
-  writeJson(CI_DEPS_PATH, data);
+  writeJson(outPath, data);
 }
 
 function writeGithubOutput(versions) {
@@ -231,7 +315,8 @@ console.log("Resolved AP dependency versions:", versions);
 
 syncPackageJson(pkgJson, versions);
 installPackages(versions);
-verify(versions);
+verifyInstalledVersions(versions);
+verifyGameslibProductionBuild(versions);
 writeCiDeps(versions);
 writeGithubOutput(versions);
 

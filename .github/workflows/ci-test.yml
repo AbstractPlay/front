@@ -44,6 +44,9 @@ jobs:
       - name: Install NPM dependencies
         run: npm ci
 
+      - name: Check ci-deps manifests
+        run: node bin/check-ci-deps.mjs
+
       - name: Install pinned AP dependencies
         env:
           AP_GAMESLIB_VERSION: ${{ inputs.ap_gameslib_version }}

@@ -16,7 +16,7 @@ import { pinchContracts } from "./pinch.js";
  * Run by [`bin/test-exploration-contracts.mjs`](../../../../bin/test-exploration-contracts.mjs)
  * (`npm run test:engines`). state: JSON string passed to GameFactory, or null for a fresh game.
  *
- * metaGame must be registered in the pinned gameslib build (see ci-deps.json).
+ * metaGame must be registered in the pinned gameslib build (see ci-deps.prod.json).
  * Use developmentOnly: true for experimental games not in production registry builds.
  */
 export const EXPLORATION_CONTRACTS = [

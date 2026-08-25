@@ -18,9 +18,9 @@ CI runs `npm run test:ci` via the reusable [`.github/workflows/ci-test.yml`](../
 | Step | gameslib | Purpose |
 |------|----------|---------|
 | Test job (`install-ap-deps --for-tests`) | `@development` (full registry) | `test:engines` — includes experimental games |
-| Deploy build (`install-ap-deps`) | Pinned production version from `ci-deps.json` | What ships to users |
+| Deploy build (`install-ap-deps`) | Pinned production version from `ci-deps.prod.json` | What ships to users |
 
-Renderer stays on the pinned `ci-deps.json` version in both cases.
+Renderer stays on the pinned `ci-deps.prod.json` / `ci-deps.dev.json` version in both cases (stage-specific manifest).
 
 ### Test layers
 
