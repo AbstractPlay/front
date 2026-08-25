@@ -267,7 +267,7 @@ function RatingsTable({
                 <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
                 {t("of")} <strong>{table.getPageCount()}</strong> (
                 {table.getPrePaginationRowModel().rows.length}{" "}
-                {t("TotalPlayers")})
+                {t("TotalRatings")})
               </p>
             </div>
             <div className="level-item">
