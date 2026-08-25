@@ -87,14 +87,21 @@ function NotificationMessage({ body }) {
         body.variants
       );
     case "ratingChange":
-      return withVariants(
-        t("me.notifications.message.ratingChange", {
-          metaGame,
-          delta: body.delta > 0 ? `+${body.delta}` : `${body.delta}`,
-          newRating: Math.round(body.newRating),
-        }),
-        body.metaGame,
-        body.variants
+      return (
+        <>
+          <Trans
+            i18nKey="me.notifications.message.ratingChange"
+            values={{
+              metaGame,
+              delta: body.delta > 0 ? `+${body.delta}` : `${body.delta}`,
+              newRating: Math.round(body.newRating),
+            }}
+            components={{
+              gameLink: <Link to={`/ratings/${body.metaGame}`} />,
+            }}
+          />
+          {variantsSuffix(body.metaGame, body.variants)}
+        </>
       );
     case "challengeIssued":
       return challengeNotificationMessage(
@@ -270,7 +277,7 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
             return dismissButton;
           }
 
-          if (body.type === "gameEnd" || body.type === "ratingChange") {
+          if (body.type === "gameEnd") {
             return (
               <>
                 <Link
@@ -283,6 +290,10 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
                 {dismissButton}
               </>
             );
+          }
+
+          if (body.type === "ratingChange") {
+            return dismissButton;
           }
 
           return dismissButton;
