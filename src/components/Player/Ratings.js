@@ -9,7 +9,7 @@ import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
 import {
   compareByGlickoLow,
-  formatGlickoConfidenceRange,
+  formatGlickoLowWithRd,
   glickoColumnSortingFn,
   rankAmongGameByGlickoLow,
 } from "../../lib/glickoDisplay";
@@ -109,7 +109,7 @@ function Ratings({ handleChallenge }) {
       }),
       columnHelper.accessor("glicko", {
         header: t("tables.glicko"),
-        cell: (props) => formatGlickoConfidenceRange(props.getValue()),
+        cell: (props) => formatGlickoLowWithRd(props.getValue()),
         sortingFn: glickoColumnSortingFn,
       }),
       columnHelper.accessor("elo", {

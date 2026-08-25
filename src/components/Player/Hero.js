@@ -5,10 +5,12 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { ProfileContext, SummaryContext, ResponsesContext } from "../Player";
 import NewChallengeModal from "../NewChallengeModal";
 import { useStore } from "../../stores";
+import { formatGlickoLowWithRd, formatGlickoSiteLowWithRd } from "../../lib/glickoDisplay";
 import {
   getActivityHistogram,
   getMedianResponseHours,
   getPlayerHIndex,
+  getPlayerSiteGlicko,
   getRecentActivitySparklineMax,
   getRecentActivitySparklineWeeks,
   getTopRatings,
@@ -53,6 +55,11 @@ function Hero({ handleChallenge }) {
     [summary, user?.id]
   );
 
+  const siteGlicko = useMemo(
+    () => getPlayerSiteGlicko(summary, user?.id),
+    [summary, user?.id]
+  );
+
   const hIndexRec = useMemo(
     () => getPlayerHIndex(summary, user?.id),
     [summary, user?.id]
@@ -79,11 +86,10 @@ function Hero({ handleChallenge }) {
   const canChallenge =
     globalMe !== null && globalMe.id !== undefined && globalMe.id !== user?.id;
 
-  const hasQuickStats =
-    topRatings.length > 0 ||
-    hIndexRec !== null ||
-    activityHist.length > 0 ||
-    medianResponseHours !== null;
+  const hasRow1Stats =
+    siteGlicko !== null || hIndexRec !== null || medianResponseHours !== null;
+  const hasRow2Stats = topRatings.length > 0 || activityHist.length > 0;
+  const hasQuickStats = hasRow1Stats || hasRow2Stats;
 
   if (!hasQuickStats && !canChallenge) {
     return null;
@@ -93,60 +99,87 @@ function Hero({ handleChallenge }) {
     <>
       <div className="player-hero box">
         {hasQuickStats ? (
-          <div className="columns is-vcentered is-multiline player-hero-stats">
-            {topRatings.length > 0 ? (
-              <div className="column is-12 is-6-tablet is-3-desktop">
-                <p className="heading has-text-weight-semibold">
-                  {t("player.hero.topRatings")}
-                </p>
-                <ul className="player-hero-ratings">
-                  {topRatings.map(({ game, glickoLow }) => {
-                    const inforec = [...gameinfo.values()].find((r) =>
-                      game.startsWith(r.name)
-                    );
-                    const uid = inforec?.uid;
-                    return (
-                      <li key={game}>
-                        {uid ? <Link to={`/games/${uid}`}>{game}</Link> : game}
-                        <span className="player-hero-elo">
-                          {glickoLow != null ? Math.round(glickoLow) : "---"}
+          <div className="player-hero-stats">
+            {hasRow1Stats ? (
+              <div className="columns is-mobile is-vcentered player-hero-stats-row">
+                {siteGlicko !== null ? (
+                  <div className="column is-4">
+                    <p className="heading has-text-weight-semibold">
+                      {t("player.hero.siteGlicko")}
+                    </p>
+                    <p className="title is-5 player-hero-stat-value">
+                      {formatGlickoSiteLowWithRd(siteGlicko)}
+                    </p>
+                  </div>
+                ) : null}
+                {hIndexRec !== null ? (
+                  <div className="column is-4">
+                    <p className="heading has-text-weight-semibold">
+                      {t("player.hero.hIndex")}
+                    </p>
+                    <p className="title is-5 player-hero-stat-value">
+                      {hIndexRec.value}
+                      {hIndexPtile !== null ? (
+                        <span className="player-hero-ptile">
+                          {" "}
+                          (p{hIndexPtile})
                         </span>
-                      </li>
-                    );
-                  })}
-                </ul>
+                      ) : null}
+                    </p>
+                  </div>
+                ) : null}
+                {medianResponseHours !== null ? (
+                  <div className="column is-4">
+                    <p className="heading has-text-weight-semibold">
+                      {t("player.hero.medianResponse")}
+                    </p>
+                    <p className="title is-5 player-hero-stat-value">
+                      {medianResponseHours.toFixed(2)}
+                      <span className="player-hero-ptile"> h</span>
+                    </p>
+                  </div>
+                ) : null}
               </div>
             ) : null}
-            {hIndexRec !== null ? (
-              <div className="column is-12 is-6-tablet is-3-desktop">
-                <p className="heading has-text-weight-semibold">
-                  {t("player.hero.hIndex")}
-                </p>
-                <p className="title is-4">
-                  {hIndexRec.value}
-                  {hIndexPtile !== null ? (
-                    <span className="player-hero-ptile"> (p{hIndexPtile})</span>
-                  ) : null}
-                </p>
-              </div>
-            ) : null}
-            {medianResponseHours !== null ? (
-              <div className="column is-12 is-6-tablet is-3-desktop">
-                <p className="heading has-text-weight-semibold">
-                  {t("player.hero.medianResponse")}
-                </p>
-                <p className="title is-4">
-                  {medianResponseHours.toFixed(2)}
-                  <span className="player-hero-ptile"> h</span>
-                </p>
-              </div>
-            ) : null}
-            {activityHist.length > 0 ? (
-              <div className="column is-12 is-6-tablet is-3-desktop">
-                <p className="heading has-text-weight-semibold">
-                  {t("player.hero.recentActivity")}
-                </p>
-                <ActivitySparkline values={activityHist} />
+            {hasRow2Stats ? (
+              <div className="player-hero-stats-row player-hero-stats-row-split">
+                {topRatings.length > 0 ? (
+                  <div className="player-hero-split-col player-hero-top-ratings">
+                    <p className="heading has-text-weight-semibold">
+                      {t("player.hero.topRatings")}
+                    </p>
+                    <ul className="player-hero-ratings">
+                      {topRatings.map(({ game, glicko }) => {
+                        const inforec = [...gameinfo.values()].find((r) =>
+                          game.startsWith(r.name)
+                        );
+                        const uid = inforec?.uid;
+                        return (
+                          <li key={game}>
+                            <span className="player-hero-game">
+                              {uid ? (
+                                <Link to={`/games/${uid}`}>{game}</Link>
+                              ) : (
+                                game
+                              )}
+                            </span>
+                            <span className="player-hero-elo">
+                              {formatGlickoLowWithRd(glicko)}
+                            </span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ) : null}
+                {activityHist.length > 0 ? (
+                  <div className="player-hero-split-col player-hero-activity">
+                    <p className="heading has-text-weight-semibold">
+                      {t("player.hero.recentActivity")}
+                    </p>
+                    <ActivitySparkline values={activityHist} />
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </div>
