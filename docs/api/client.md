@@ -52,7 +52,7 @@ Authenticated actions use [`callAuthApi`](../src/lib/api.js):
 ```javascript
 import { callAuthApi } from "../lib/api";
 
-const res = await callAuthApi("me", { size: "small" });
+const res = await callAuthApi("me_profile", {});
 if (!res) return; // redirected to login
 const result = await res.json();
 ```

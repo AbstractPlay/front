@@ -32,13 +32,7 @@ Redirect URLs come from `COGNITO_REDIRECT_LOGIN` and `COGNITO_REDIRECT_LOGOUT`. 
 
 ## User profile (`globalMe`)
 
-After login, [`LogInOutButton.js`](../src/components/LogInOutButton.js) calls:
-
-```javascript
-callAuthApi("me", { size: "small" })
-```
-
-The response populates Zustand `globalMe` (challenges, bots, settings, etc.). A full `me` fetch happens in [`Me.js`](../src/components/Me.js) on the dashboard.
+After login, [`useProfileBootstrap`](../src/hooks/useProfileBootstrap.js) calls [`fetchProfile()`](../src/lib/globalMeBootstrap.js) (`me_profile`), which populates Zustand `globalMe` (bots, settings, `activeGames`, etc.). [`Me.js`](../src/components/Me.js) calls `fetchDashboard()` (`me_dashboard`) on the `/me` page for games, challenges, and notifications.
 
 ## New user onboarding
 
