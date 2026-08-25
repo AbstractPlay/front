@@ -12,12 +12,10 @@ import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { gameinfo } from "@abstractplay/gameslib";
 import { Helmet } from "react-helmet-async";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
 import Spinner from "./Spinner";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
+import PlayerAboutSection, { aboutTextPlainSnippet } from "./PlayerAboutSection";
 import Stars from "./Player/Stars";
 import Ratings from "./Player/Ratings";
 import Counts from "./Player/Counts";
@@ -79,6 +77,7 @@ function Player() {
   const [allRecs, allRecsSetter] = useState([]);
   const [tourneys, tourneysSetter] = useState([]);
   const [responses, responsesSetter] = useState([]);
+  const [profileAbout, profileAboutSetter] = useState(null);
   const [isCoder, setIsCoder] = useState(false);
   const [isDesigner, setIsDesigner] = useState(false);
   const [storedTab, setStoredTab] = useStorageState(
@@ -207,6 +206,10 @@ function Player() {
   }, [user]);
 
   useEffect(() => {
+    profileAboutSetter(null);
+  }, [userid]);
+
+  useEffect(() => {
     if (allUsers !== null) {
       const rec = allUsers.find((u) => u.id === userid);
       if (rec !== undefined && rec !== null) {
@@ -252,6 +255,10 @@ function Player() {
   const tabMayHaveContent = modulesToRender.length > 0;
 
   if (user !== null) {
+    const ogDescription =
+      profileAbout !== null && !/^\s*$/.test(profileAbout)
+        ? aboutTextPlainSnippet(profileAbout)
+        : `Player profile for ${user.name}`;
     return (
       <>
         <Helmet>
@@ -260,10 +267,7 @@ function Player() {
             property="og:url"
             content={`https://play.abstractplay.com/player/${user.id}`}
           />
-          <meta
-            property="og:description"
-            content={`Player profile for ${user.name}`}
-          />
+          <meta property="og:description" content={ogDescription} />
         </Helmet>
         <article id="playerProfile">
           <h1 className="title has-text-centered">
@@ -291,15 +295,12 @@ function Player() {
               </span>
             )}
           </div>
-          {user.about === undefined || /^\s*$/.test(user.about) ? null : (
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeRaw]}
-              className="content has-text-centered"
-            >
-              {user.about}
-            </ReactMarkdown>
-          )}
+          <PlayerAboutSection
+            userId={user.id}
+            seedAbout={globalMe?.id === user.id ? globalMe.about : undefined}
+            globalMeId={globalMe?.id}
+            onAboutChange={profileAboutSetter}
+          />
           <ProfileContext.Provider value={[user, userSetter]}>
             <SummaryContext.Provider value={[summary, () => {}]}>
               <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>

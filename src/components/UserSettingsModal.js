@@ -13,9 +13,12 @@ import { Auth } from "aws-amplify";
 import { callAuthApi } from "../lib/api";
 import { fetchProfile } from "../lib/globalMeBootstrap";
 import { useAuthSession } from "../hooks/useAuthSession";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
+import ProfileAbout from "./ProfileAbout";
+import {
+  ABOUT_MAX_BYTES,
+  aboutTextByteLength,
+  validateAboutTextClient,
+} from "../lib/aboutTextClient";
 import Modal from "./Modal";
 import { useStorageState } from "react-use-storage-state";
 import { countryCodeList } from "../lib/countryCodeList";
@@ -67,7 +70,9 @@ async function parseNewSettingResponse(res) {
   let error = `Request failed (${res.status})`;
   try {
     const parsed = await res.json();
-    if (parsed?.body) {
+    if (parsed?.message) {
+      error = parsed.message;
+    } else if (parsed?.body) {
       try {
         const body = JSON.parse(parsed.body);
         if (body?.error) error = body.error;
@@ -97,6 +102,7 @@ function UserSettingsModal(props) {
   const [communicationLanguage, communicationLanguageSetter] = useState("en");
   const [bggid, bggidSetter] = useState("");
   const [aboutMe, aboutMeSetter] = useState("");
+  const [aboutError, aboutErrorSetter] = useState("");
   const users = useStore((state) => state.users);
   const { user } = useAuthSession();
   const [updated, updatedSetter] = useState(0);
@@ -271,14 +277,33 @@ function UserSettingsModal(props) {
     );
   };
 
-  const saveAbout = () => {
-    const { setGlobalMe, setUsers } = useStore.getState();
-    handleSettingChangeSubmit("about", aboutMe);
+  const saveAbout = async () => {
+    const validation = validateAboutTextClient(aboutMe);
+    if (!validation.ok) {
+      aboutErrorSetter(validation.message);
+      return;
+    }
+    const result = await handleSettingChangeSubmit("about", aboutMe);
+    if (!result.ok) {
+      const message =
+        result.error && /rate limit/i.test(result.error)
+          ? "You've reached the daily limit for bio edits. Try again tomorrow."
+          : result.error || "Unable to save about me.";
+      aboutErrorSetter(message);
+      toast.error(message);
+      return;
+    }
+    aboutErrorSetter("");
+    const { setGlobalMe } = useStore.getState();
     setGlobalMe((val) => ({ ...val, about: aboutMe }));
-    setUsers((prev) =>
-      prev.map((u) => (u.id === globalMe?.id ? { ...u, about: aboutMe } : u))
-    );
   };
+
+  const aboutByteCount = aboutTextByteLength(aboutMe);
+  const aboutValidation = validateAboutTextClient(aboutMe);
+  const aboutCanSave =
+    globalMe != null &&
+    globalMe.about !== aboutMe &&
+    aboutValidation.ok;
 
   const handleEMailChangeClick = () => {
     emailErrorSetter("");
@@ -746,20 +771,26 @@ function UserSettingsModal(props) {
               </label>
               <div className="control">
                 <textarea
-                  className="textarea"
-                  rows={5}
+                  className="textarea profile-about-editor"
+                  rows={12}
                   value={aboutMe}
-                  onChange={(e) => aboutMeSetter(e.target.value)}
+                  onChange={(e) => {
+                    aboutMeSetter(e.target.value);
+                    aboutErrorSetter("");
+                  }}
                 ></textarea>
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw]}
-                  className="content help"
-                >
-                  {aboutMe}
-                </ReactMarkdown>
+                <p className="help">
+                  {aboutByteCount.toLocaleString()} / {ABOUT_MAX_BYTES.toLocaleString()} bytes
+                  {aboutValidation.ok || aboutMe.length === 0
+                    ? ""
+                    : ` — ${aboutValidation.message}`}
+                </p>
+                <ProfileAbout text={aboutMe} className="content help" />
               </div>
-              {globalMe === undefined || globalMe.about === aboutMe ? null : (
+              {aboutError ? (
+                <p className="help is-danger">{aboutError}</p>
+              ) : null}
+              {aboutCanSave ? (
                 <div className="control">
                   <button
                     className="button is-small apButton"
@@ -768,7 +799,7 @@ function UserSettingsModal(props) {
                     Save about me
                   </button>
                 </div>
-              )}
+              ) : null}
             </div>
           )}
 
