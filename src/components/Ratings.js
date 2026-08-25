@@ -133,10 +133,6 @@ function RatingsTable({
         cell: (props) => formatGlickoLowWithRd(props.getValue()),
         sortingFn: glickoColumnSortingFn,
       }),
-      columnHelper.accessor("rating", {
-        header: t("tables.elo"),
-        cell: (props) => Math.trunc(props.getValue()),
-      }),
       columnHelper.accessor("n", {
         header: t("tables.gamesPlayed"),
       }),
