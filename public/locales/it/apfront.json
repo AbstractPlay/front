@@ -1057,7 +1057,7 @@
     "tournament": "Torneo",
     "trueskill": "TrueSkill",
     "variants": "Varianti",
-    "weightedAverage": "Media ponderata",
+    "weightedAverage": "Elo",
     "winLossDraw": "Vittoria/Sconfitta/Pareggio",
     "winRate": "Percentuale di vittorie",
     "winner": "Vincitore",
@@ -1078,7 +1078,8 @@
     "playerCount": "Giocatori",
     "allUsers": "Tutti gli utenti",
     "past30Days": "Ultimi 30 giorni",
-    "highConfidenceGlicko": "Glicko ad alta affidabilità"
+    "highConfidenceGlicko": "Glicko ad alta affidabilità",
+    "averageElo": "Elo"
   },
   "TimeRemaining": "Tempo rimanente",
   "ToggleFullSize": "Attiva/disattiva immagine del tabellone ad altezza intera",
@@ -1186,6 +1187,7 @@
   "Unblock": "Sblocca",
   "TotalPlayers": "giocatori totali",
   "TotalChallenges": "sfide totali",
+  "TotalRatings": "valutazioni totali",
   "TableView": "Tabella",
   "GridView": "Griglia",
   "Reshuffle": "Rimescola",
@@ -1323,9 +1325,9 @@
     "year_other": "{{count}} anni",
     "playersPlayedGames": "In questo periodo, {{numPlayers}} giocatori hanno giocato {{numGames}} partite.",
     "explanations": {
-      "highestSingle": "Elenco di ogni punteggio registrato. Il sistema ignora le partite esplicitamente contrassegnate come non classificate e le partite che terminano prima che siano state effettuate tre mosse. Il punteggio Elo parte da 1200 con un valore *K* statico di 30. Il punteggio Glicko utilizza l'algoritmo versione 2, i valori iniziali predefiniti (punteggio iniziale 1500) e un intervallo di valutazione di sessanta giorni (a partire dal primo giorno in cui una determinata partita è stata registrata). I punteggi Glicko sono presentati come un intervallo di confidenza del 95%. Più stretto è l'intervallo, maggiore è la confidenza del sistema nel punteggio. Infine, Trueskill è un sistema di punteggio utilizzato da Microsoft in vari giochi online. Ho utilizzato le impostazioni predefinite (intervallo di valutazione 0–50, a partire da 25).",
-      "avgRatings": "La valutazione media è semplicemente la media aritmetica di tutti i punteggi Elo registrati per quel giocatore. La media ponderata è ponderata in base al numero di partite giocate. Ad esempio, se hai una valutazione di 1300 in un gioco a cui hai giocato 10 volte e 1200 in un gioco a cui hai giocato solo due volte, la tua valutazione media sarà 1250, ma la tua media ponderata sarà 1283.",
-      "topPlayers": "Questa tabella elenca ogni combinazione di gioco e variante disponibile assieme al giocatore con il punteggio Elo più alto per quella combinazione.",
+      "highestSingle": "Elenco di ogni valutazione registrata. Il sistema ignora le partite contrassegnate esplicitamente come non classificate e ignora le partite che terminano prima che siano state fatte tre mosse. Le classifiche utilizzano il Glicko-2 conservativo (valutazione − 2×RD), mostrando sia il Glicko sia l'Elo storico. Glicko parte da 1200 con RD 350; Elo parte da 1200 con un *K* statico di 30. Le valutazioni Glicko sono presentate come un intervallo di confidenza al 95% — più l'intervallo è stretto, più il sistema è sicuro. TrueSkill utilizza le impostazioni predefinite di Microsoft (intervallo di valutazione 0–50, a partire da 25).",
+      "avgRatings": "Queste colonne sono medie ponderate delle tue valutazioni Glicko ed Elo su tutto il sito.",
+      "topPlayers": "Questa tabella elenca ciascuna combinazione di gioco e variante disponibile assieme al giocatore con la valutazione più alta per quella combinazione, classificato in base al Glicko-2 conservativo (valutazione − 2×RD). L'Elo viene mostrato come riferimento.",
       "numPlays": "Questa tabella elenca ogni gioco, quante volte è stato giocato, da quanti giocatori unici e l'`h-index` del gioco. L'h-index di un gioco è il numero di giocatori che hanno giocato a quel gioco almeno quel numero di volte (quindi un h-index di 5 significa che 5 giocatori diversi hanno giocato a quel gioco almeno 5 volte). Fornisce anche un istogramma delle partite completate per quel gioco. L'anteprima mostra le ultime 10 settimane, con la settimana più recente a destra. Cliccando sull'anteprima verrà mostrata la cronologia completa delle partite completate, suddivisa in \"intervalli\" di sette giorni, con la settimana più recente a destra.",
       "playerStats": "Questo mostra ogni giocatore registrato insieme al totale delle partite giocate, al conteggio dei giochi unici e al numero di avversari diversi affrontati. Fornisce anche un `h-index`, che rappresenta il numero di giochi a cui hai giocato almeno quel numero di volte (ad es., se hai giocato a tre giochi diversi solo una volta ciascuno, il tuo indice è 1. Non appena avrai giocato a quei tre giochi almeno tre volte *ciascuno*, l'indice salirà a 3). È presente anche un `h-index` per gli avversari che hai affrontato. Viene fornito anche un istogramma dell'attività, che mostra il numero di partite completate ogni settimana, con la settimana più recente a destra. L'anteprima mostra le dieci settimane più recenti. Cliccando su di essa verrà mostrata la cronologia completa.",
       "gameStats": "Questa tabella mostra ogni combinazione di gioco e variante insieme al numero di partite registrate, la lunghezza media della partita (numero di mosse), la lunghezza mediana, la percentuale di vittorie del primo giocatore e la percentuale di patte (solo per partite a due giocatori con più di due mosse). **Le statistiche sulle vittorie del primo giocatore e sulle patte vanno interpretate con cautela!** Il campione è ridotto e distorto. Ci sono molti fattori di confondimento che potrebbero spiegare una percentuale estrema. Nota che la percentuale di vittorie del primo giocatore ignora completamente se sia stata invocata la regola della torta. Le patte vengono calcolate come mezza vittoria per il primo giocatore nel calcolo della sua percentuale di vittorie.",
@@ -1498,7 +1500,7 @@
       "historicalData": "Dati storici"
     },
     "wikiLink": "Wiki di Abstract Play",
-    "historicalIntro": "Le statistiche sottostanti sono tratte dallo storico, che viene aggiornato solo settimanalmente. I punteggi storici potrebbero differire leggermente dai punteggi statici presenti altrove sul sito. Consulta la pagina Statistiche per maggiori dettagli.",
+    "historicalIntro": "Le statistiche sottostanti sono estratte dal riepilogo giornaliero e aggiornate alle 6:00 UTC.",
     "playCounts": "Conteggio partite",
     "gameStatistics": "Statistiche di gioco",
     "ratings": "Punteggi",
