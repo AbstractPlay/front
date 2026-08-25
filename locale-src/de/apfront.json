@@ -4564,8 +4564,8 @@
     "out": "{{opponentName}} hat eine Partie {{metaGame}} mit dir gestartet"
   },
   "me.notifications.message.ratingChange": {
-    "src": "Your {{metaGame}} rating changed by {{delta}} (now {{newRating}})",
-    "out": "Deine Wertung für {{metaGame}} hat sich um {{delta}} geändert (jetzt {{newRating}})"
+    "src": "Your <gameLink>{{metaGame}}</gameLink> Glicko rating changed by {{delta}} (now {{newRating}})",
+    "out": "Deine Glicko-Wertung für <gameLink>{{metaGame}}</gameLink> hat sich um {{delta}} geändert (jetzt {{newRating}})"
   },
   "me.notifications.title": {
     "src": "Notifications",
