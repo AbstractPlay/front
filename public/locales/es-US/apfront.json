@@ -1477,7 +1477,8 @@
       "topRatings": "Mejores calificaciones",
       "hIndex": "Índice H",
       "medianResponse": "Mediana del tiempo de respuesta",
-      "recentActivity": "Actividad reciente"
+      "recentActivity": "Actividad reciente",
+      "siteGlicko": "Glicko del sitio"
     },
     "pin": {
       "add": "Fijar esta sección en la parte superior",
