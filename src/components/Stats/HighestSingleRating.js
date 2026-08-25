@@ -8,8 +8,9 @@ import { useTranslation } from "react-i18next";
 import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
 import {
   buildGlickoByGameMap,
+  compareByGlickoLow,
   formatGlickoLowWithRd,
-  glickoRatingLow,
+  glickoColumnSortingFn,
 } from "../../lib/glickoDisplay";
 
 function HighestSingleRating({ metaFilter, nav }) {
@@ -30,7 +31,7 @@ function HighestSingleRating({ metaFilter, nav }) {
       !summary?.ratings?.highest
         ? []
         : summary.ratings.highest
-            .map(({ user: userid, game, rating, wld, trueskill }) => {
+            .map(({ user: userid, game, rating, wld, trueskill, glicko }) => {
               let name = "UNKNOWN";
               const user = userNames.find((u) => u.id === userid);
               if (user !== undefined) {
@@ -43,17 +44,18 @@ function HighestSingleRating({ metaFilter, nav }) {
                 game,
                 rating,
                 wld,
-                glicko: glickoByGameMap.get(`${userid}|${game}`) ?? null,
+                glicko:
+                  glicko ?? glickoByGameMap.get(`${userid}|${game}`) ?? null,
                 trueskill,
               };
             })
-        .filter(
-          (rec) =>
-            metaFilter === undefined ||
-            rec.game === metaFilter ||
-            rec.game.startsWith(`${metaFilter} (`)
-        )
-        .sort((a, b) => b.rating - a.rating),
+            .filter(
+              (rec) =>
+                metaFilter === undefined ||
+                rec.game === metaFilter ||
+                rec.game.startsWith(`${metaFilter} (`)
+            )
+            .sort((a, b) => -compareByGlickoLow(a.glicko, b.glicko)),
     [summary, userNames, metaFilter, glickoByGameMap]
   );
 
@@ -85,22 +87,13 @@ function HighestSingleRating({ metaFilter, nav }) {
       columnHelper.accessor("game", {
         header: t("tables.game"),
       }),
-      columnHelper.accessor("rating", {
-        header: t("tables.elo"),
-      }),
       columnHelper.accessor("glicko", {
         header: t("tables.glicko"),
         cell: (props) => formatGlickoLowWithRd(props.getValue()),
-        sortingFn: (rowA, rowB, columnID) => {
-          const lowA = glickoRatingLow(rowA.getValue(columnID)) ?? -Infinity;
-          const lowB = glickoRatingLow(rowB.getValue(columnID)) ?? -Infinity;
-          if (lowA === lowB) {
-            const rdA = rowA.getValue(columnID)?.rd ?? 0;
-            const rdB = rowB.getValue(columnID)?.rd ?? 0;
-            return rdA - rdB;
-          }
-          return lowA - lowB;
-        },
+        sortingFn: glickoColumnSortingFn,
+      }),
+      columnHelper.accessor("rating", {
+        header: t("tables.elo"),
       }),
       columnHelper.accessor("trueskill", {
         header: t("tables.trueskill"),
@@ -165,7 +158,7 @@ function HighestSingleRating({ metaFilter, nav }) {
       nav={nav}
       data={data}
       columns={columns}
-      sort={[{ id: "rating", desc: true }]}
+      sort={[{ id: "glicko", desc: true }]}
     />
   );
 }

@@ -1802,6 +1802,10 @@
     "src": "total players",
     "out": "joueurs au total"
   },
+  "TotalRatings": {
+    "src": "total ratings",
+    "out": "classements totaux"
+  },
   "TotalStars_one": {
     "src": "Total star",
     "out": "Total d'étoiles"
@@ -4489,8 +4493,8 @@
     "out": "Statistiques de jeu"
   },
   "meta.historicalIntro": {
-    "src": "The below stats are drawn from the historical record, which is only updated weekly. Historical ratings may be slightly different from the static ratings found elsewhere on the site. See the Statistics page for more details.",
-    "out": "Les statistiques ci-dessous sont issues des archives historiques, qui ne sont mises à jour qu'une fois par semaine. Les classements historiques peuvent être légèrement différents des classements statiques trouvés ailleurs sur le site. Consultez la page Statistiques pour plus de détails."
+    "src": "The stats below are drawn from the daily summary and updated at 6am UTC.",
+    "out": "Les statistiques ci-dessous sont tirées du résumé quotidien et sont mises à jour à 6 h UTC."
   },
   "meta.playCounts": {
     "src": "Play counts",
@@ -4757,16 +4761,16 @@
     "out": "Télécharger toutes les statistiques de synthèse"
   },
   "stats.explanations.avgRatings": {
-    "src": "The average rating is just that: a straight average of all the Elo ratings recorded for that player. The weighted average is weighted by number of games played. For example, if you had a rating of 1300 in a game you played 10 times and 1200 in a game you only played twice, your average rating would be 1250, but your weighted average would be 1283.",
-    "out": "Le classement moyen est simplement la moyenne brute de tous les classements Elo enregistrés pour ce joueur. La moyenne pondérée est pondérée par le nombre de parties jouées. Par exemple, si vous aviez un classement de 1300 dans un jeu joué 10 fois et de 1200 dans un jeu joué seulement 2 fois, votre classement moyen serait de 1250, mais votre moyenne pondérée serait de 1283."
+    "src": "These columns are weighted averages of your Glicko and Elo ratings across the site.",
+    "out": "Ces colonnes représentent les moyennes pondérées de vos classements Glicko et Elo sur l'ensemble du site."
   },
   "stats.explanations.gameStats": {
     "src": "This table shows each game and variant combination along with the number of recorded games, the average length of the game (number of moves), the median length, the rate of first-player wins, and the draw rate (two-player games with more than two moves only). **The first-player win and draw stats should be treated with care!** The sample size is small and biased. There are many confounding factors that could explain an extreme rate. Note that the first-player win rate completely ignores whether the pie rule was invoked. Draws are counted as half a win for the first player when computing first-player win rate.",
     "out": "Ce tableau présente chaque combinaison de jeu et de variante, ainsi que le nombre de parties enregistrées, la durée moyenne de la partie (nombre de coups), la durée médiane, le taux de victoires du premier joueur et le taux de parties nulles (parties à deux joueurs de plus de deux coups uniquement). **Les statistiques de victoires du premier joueur et de parties nulles doivent être interprétées avec précaution !** L'échantillon est réduit et biaisé. De nombreux facteurs de confusion pourraient expliquer un taux extrême. Notez que le taux de victoires du premier joueur ne tient aucun compte de l'application ou non de la règle du gâteau. Les parties nulles sont comptabilisées comme une demi-victoire pour le premier joueur lors du calcul de son taux de victoires."
   },
   "stats.explanations.highestSingle": {
-    "src": "List of every recorded rating. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made. The Elo rating starts at 1200 with a static *K* of 30. The Glicko rating uses the version 2 algorithm, the default starting values (initial rating 1500), and a rating period of sixty days (starting from the first day a particular game was recorded). Glicko ratings are presented as a 95% confidence range. The narrower that range, the more confident the system is in the rating. And finally, Trueskill is a rating system used by Microsoft in various online games. I used the default settings (rating range 0–50, starting at 25).",
-    "out": "Liste de tous les classements enregistrés. Le système ignore les parties explicitement marquées comme non classées, ainsi que celles qui se terminent avant la réalisation de trois coups. Le classement Elo commence à 1200 avec un facteur *K* fixe de 30. Le classement Glicko utilise l'algorithme version 2, les valeurs de départ par défaut (classement initial à 1500) et une période d'évaluation de soixante jours (à compter du premier jour où un jeu particulier a été enregistré). Les classements Glicko sont présentés sous la forme d'un intervalle de confiance à 95 %. Plus cet intervalle est étroit, plus le système est confiant dans l'évaluation. Enfin, TrueSkill est un système de classement utilisé par Microsoft dans divers jeux en ligne. Les paramètres par défaut ont été utilisés (plage de 0 à 50, départ à 25)."
+    "src": "List of every recorded rating. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made. Rankings use conservative Glicko-2 (rating − 2×RD), with both Glicko and legacy Elo shown. Glicko starts at 1200 with RD 350; Elo starts at 1200 with a static *K* of 30. Glicko ratings are presented as a 95% confidence range — the narrower the range, the more confident the system is. Trueskill uses Microsoft's default settings (rating range 0–50, starting at 25).",
+    "out": "Liste de tous les classements enregistrés. Le système ignore les parties explicitement marquées comme non classées, ainsi que les parties qui se terminent avant que trois coups n'aient été joués. Le classement utilise un Glicko-2 conservateur (classement − 2×RD), le Glicko et l'ancien Elo étant tous deux affichés. Glicko commence à 1200 avec un RD de 350 ; Elo commence à 1200 avec un *K* fixe de 30. Les classements Glicko sont présentés sous la forme d'un intervalle de confiance à 95 % — plus l'intervalle est étroit, plus le système est confiant. TrueSkill utilise les paramètres par défaut de Microsoft (plage de classement de 0 à 50, débutant à 25)."
   },
   "stats.explanations.numPlays": {
     "src": "This table lists each game, how many times it was played, by how many unique players, and the game's `h-index`. A game's h-index is the number of players who have played that game at least that many times (so an h-index of 5 means that 5 different players have played that game at least 5 times). It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day \"buckets,\" with the most recent week on the right.",
@@ -4785,8 +4789,8 @@
     "out": "Paires de deux joueurs ayant au moins cinquante parties ensemble, classées par nombre de parties jouées. Les paires restent anonymes jusqu'à ce que les joueurs acceptent de révéler leur nom."
   },
   "stats.explanations.topPlayers": {
-    "src": "This table lists each available game and variant combination along with the player with the highest Elo rating for that combination.",
-    "out": "Ce tableau liste chaque combinaison de jeu et de variante disponible, ainsi que le joueur ayant le classement Elo le plus élevé pour cette combinaison."
+    "src": "This table lists each available game and variant combination along with the top-rated player for that combination, ranked by conservative Glicko-2 (rating − 2×RD). Elo is shown for reference.",
+    "out": "Ce tableau liste chaque combinaison de jeu et de variante disponible, ainsi que le joueur le mieux classé pour cette combinaison, selon le Glicko-2 conservateur (classement − 2×RD). L'Elo est affiché à titre indicatif."
   },
   "stats.explanations.tourneyStats": {
     "src": "Shows each player who has participated in automated tournaments and their summary stats, including number of wins, number of top 50% finishes, and score. Your score is the sum of points received in each tournament. Points are awarded out of 100, based on your placement: first place gets 100 points, and last place gets none.",
@@ -5195,6 +5199,10 @@
   "tables.average": {
     "src": "Average",
     "out": "Moyenne"
+  },
+  "tables.averageElo": {
+    "src": "Elo",
+    "out": "Elo"
   },
   "tables.averageLength": {
     "src": "Average length",
@@ -5649,8 +5657,8 @@
     "out": "Variantes"
   },
   "tables.weightedAverage": {
-    "src": "Weighted average",
-    "out": "Moyenne pondérée"
+    "src": "Elo",
+    "out": "Elo"
   },
   "tables.winLossDraw": {
     "src": "Win/Loss/Draw",

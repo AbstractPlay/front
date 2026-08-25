@@ -1063,7 +1063,7 @@
     "tournament": "Torneo",
     "trueskill": "Trueskill",
     "variants": "Variantes",
-    "weightedAverage": "Promedio ponderado",
+    "weightedAverage": "Elo",
     "winLossDraw": "Victoria/Derrota/Empate",
     "winRate": "Tasa de victorias",
     "winner": "Ganador",
@@ -1084,7 +1084,8 @@
     "playerCount": "Jugadores",
     "allUsers": "Todos los usuarios",
     "past30Days": "Últimos 30 días",
-    "highConfidenceGlicko": "Glicko de alta confianza"
+    "highConfidenceGlicko": "Glicko de alta confianza",
+    "averageElo": "Elo"
   },
   "TimeRemaining": "Tiempo restante",
   "ToggleFullSize": "Alternar imagen del tablero de altura completa",
@@ -1193,6 +1194,7 @@
   "Unblock": "Desbloquear",
   "TotalPlayers": "total de jugadores",
   "TotalChallenges": "total de desafíos",
+  "TotalRatings": "evaluaciones totales",
   "TableView": "Tabla",
   "GridView": "Cuadrícula",
   "Reshuffle": "Rebarajar",
@@ -1333,9 +1335,9 @@
     "year_other": "{{count}} años",
     "playersPlayedGames": "En ese tiempo, {{numPlayers}} jugadores han jugado {{numGames}} partidas.",
     "explanations": {
-      "highestSingle": "Lista de todas las calificaciones registradas. El sistema ignora las partidas marcadas explícitamente como sin calificación y aquellas que terminan antes de realizarse tres movimientos. La calificación Elo comienza en 1200 con una *K* estática de 30. La calificación Glicko utiliza el algoritmo de la versión 2, los valores iniciales predeterminados (calificación inicial de 1500) y un período de calificación de sesenta días (a partir del primer día en que se registró un juego en particular). Las calificaciones Glicko se presentan como un rango de confianza del 95%. Cuanto más estrecho sea ese rango, más confianza tiene el sistema en la calificación. Y finalmente, Trueskill es un sistema de calificación utilizado por Microsoft en varios juegos en línea. Utilicé la configuración predeterminada (rango de calificación 0–50, comenzando en 25).",
-      "avgRatings": "La calificación promedio es solo eso: un promedio directo de todas las calificaciones Elo registradas para ese jugador. El promedio ponderado se pondera según la cantidad de partidas jugadas. Por ejemplo, si tuviste una calificación de 1300 en un juego que jugaste 10 veces y de 1200 en un juego que solo jugaste dos veces, tu calificación promedio sería 1250, pero tu promedio ponderado sería 1283.",
-      "topPlayers": "Esta tabla muestra cada combinación de juego y variante disponible junto con el jugador con la calificación Elo más alta para esa combinación.",
+      "highestSingle": "Lista de cada evaluación registrada. El sistema ignora las partidas marcadas explícitamente como no clasificadas y las partidas que terminan antes de haber realizado tres movimientos. Las clasificaciones usan Glicko-2 conservador (evaluación − 2×RD), mostrando tanto Glicko como el Elo heredado. Glicko comienza en 1200 con un RD de 350; Elo comienza en 1200 con una *K* estática de 30. Las evaluaciones de Glicko se presentan como un rango de confianza del 95% — cuanto más estrecho sea el rango, más seguro está el sistema. Trueskill usa la configuración predeterminada de Microsoft (rango de evaluación de 0 a 50, comenzando en 25).",
+      "avgRatings": "Estas columnas son promedios ponderados de tus evaluaciones de Glicko y Elo en todo el sitio.",
+      "topPlayers": "Esta tabla enumera cada combinación disponible de juego y variante junto con el jugador con la evaluación más alta para esa combinación, clasificado por Glicko-2 conservador (evaluación − 2×RD). El Elo se muestra como referencia.",
       "numPlays": "Esta tabla enumera cada juego, cuántas veces se jugó, por cuántos jugadores únicos y el `índice h` del juego. El índice h de un juego es el número de jugadores que han jugado a ese juego al menos ese número de veces (por lo que un índice h de 5 significa que 5 jugadores diferentes han jugado a ese juego al menos 5 veces). También proporciona un histograma de partidas completadas para ese juego. La vista previa muestra las últimas 10 semanas, con la semana más reciente a la derecha. Al hacer clic en la vista previa se mostrará el historial completo de partidas completadas, en \"bloques\" de siete días, con la semana más reciente a la derecha.",
       "playerStats": "Muestra cada jugador registrado junto con el total de sus partidas jugadas, un recuento de juegos únicos y la cantidad de oponentes diferentes contra los que jugó. También proporciona un `índice h`, que representa la cantidad de juegos a los que has jugado al menos esa cantidad de veces (por ejemplo, si has jugado tres juegos diferentes solo una vez cada uno, tu índice es 1. Tan pronto como hayas jugado a esos tres juegos al menos tres veces *cada uno*, el índice aumentará a 3). También hay un `índice h` para los oponentes a los que te has enfrentado. Se incluye un histograma de actividad que muestra el número de partidas completadas cada semana, con la semana más reciente a la derecha. La vista previa muestra las diez semanas más recientes. Al hacer clic en ella, se mostrará el historial completo.",
       "gameStats": "Esta tabla muestra cada combinación de juego y variante junto con la cantidad de partidas registradas, la duración promedio de la partida (número de movimientos), la mediana de la duración, la tasa de victorias del primer jugador y la tasa de empates (solo en partidas de dos jugadores con más de dos movimientos). **¡Las estadísticas de victorias del primer jugador y de empates deben tratarse con cuidado!** El tamaño de la muestra es pequeño y sesgado. Hay muchos factores de confusión que podrían explicar una tasa extrema. Ten en cuenta que la tasa de victorias del primer jugador ignora por completo si se invocó la regla del pastel. Los empates se cuentan como media victoria para el primer jugador al calcular la tasa de victorias del primer jugador.",
@@ -1508,7 +1510,7 @@
       "historicalData": "Datos históricos"
     },
     "wikiLink": "Wiki de Abstract Play",
-    "historicalIntro": "Las siguientes estadísticas provienen del registro histórico, que solo se actualiza semanalmente. Las calificaciones históricas pueden diferir ligeramente de las calificaciones estáticas que se encuentran en otros lugares del sitio. Consulta la página de Estadísticas para obtener más detalles.",
+    "historicalIntro": "Las estadísticas a continuación se obtienen del resumen diario y se actualizan a las 6 am UTC.",
     "playCounts": "Recuentos de partidas",
     "gameStatistics": "Estadísticas del juego",
     "ratings": "Calificaciones",

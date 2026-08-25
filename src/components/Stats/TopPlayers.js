@@ -5,6 +5,10 @@ import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 import { useTranslation } from "react-i18next";
+import {
+  formatGlickoLowWithRd,
+  glickoColumnSortingFn,
+} from "../../lib/glickoDisplay";
 
 function TopPlayers({ nav }) {
   const summary = useStore((state) => state.summary);
@@ -15,7 +19,7 @@ function TopPlayers({ nav }) {
   const data = useMemo(
     () =>
       summary.topPlayers
-        .map(({ user: userid, game, rating, wld }) => {
+        .map(({ user: userid, game, rating, wld, glicko }) => {
           let name = "UNKNOWN";
           const user = userNames.find((u) => u.id === userid);
           if (user !== undefined) {
@@ -27,6 +31,7 @@ function TopPlayers({ nav }) {
             name,
             game,
             rating,
+            glicko: glicko ?? null,
             wld,
           };
         })
@@ -62,8 +67,13 @@ function TopPlayers({ nav }) {
           );
         },
       }),
+      columnHelper.accessor("glicko", {
+        header: t("tables.glicko"),
+        cell: (props) => formatGlickoLowWithRd(props.getValue()),
+        sortingFn: glickoColumnSortingFn,
+      }),
       columnHelper.accessor("rating", {
-        header: t("tables.rating"),
+        header: t("tables.elo"),
       }),
       columnHelper.accessor("wld", {
         header: t("tables.winLossDraw"),
@@ -100,7 +110,6 @@ function TopPlayers({ nav }) {
                 sumB) *
                 1000
             ) / 10;
-          // NaNs first
           if (isNaN(rateA) && isNaN(rateB)) {
             return 0;
           } else if (isNaN(rateA)) {
@@ -121,7 +130,7 @@ function TopPlayers({ nav }) {
       nav={nav}
       data={data}
       columns={columns}
-      sort={[{ id: "game", desc: false }]}
+      sort={[{ id: "glicko", desc: true }]}
     />
   );
 }

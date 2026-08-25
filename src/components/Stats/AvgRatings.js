@@ -93,12 +93,6 @@ function AvgRatings({ nav }) {
           );
         },
       }),
-      columnHelper.accessor("avg", {
-        header: t("tables.average"),
-      }),
-      columnHelper.accessor("weighted", {
-        header: t("tables.weightedAverage"),
-      }),
       columnHelper.accessor("siteGlicko", {
         header: t("tables.glicko"),
         cell: (props) => formatGlickoSiteLowWithRd(props.getValue()),
@@ -113,6 +107,9 @@ function AvgRatings({ nav }) {
           return lowA - lowB;
         },
       }),
+      columnHelper.accessor("weighted", {
+        header: t("tables.weightedAverage"),
+      }),
     ],
     [columnHelper, globalMe, userNames, t]
   );
@@ -123,7 +120,7 @@ function AvgRatings({ nav }) {
       nav={nav}
       data={data}
       columns={columns}
-      sort={[{ id: "avg", desc: true }]}
+      sort={[{ id: "siteGlicko", desc: true }]}
     />
   );
 }

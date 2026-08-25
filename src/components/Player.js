@@ -310,12 +310,6 @@ function Player() {
                     <div className="columns is-centered">
                       <div className="column is-10">
                         <Hero handleChallenge={handleNewChallenge} />
-                        <div
-                          className="box is-size-7 has-text-centered player-dev-banner"
-                          role="note"
-                        >
-                          {t("player.underDevelopment")}
-                        </div>
                         <div className="tabs is-small is-toggle is-toggle-rounded player-profile-tabs">
                           <ul>
                             {PROFILE_TABS.map((tab) => (
