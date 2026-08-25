@@ -24,7 +24,7 @@ Backend flow: [WebSockets](/backend/subsystems/websockets/).
 
 `useGameWatch` builds the watch set from:
 
-- Active dashboard games (`globalMe.games` in "my turn" or "their turn" — not completed)
+- Active games from `globalMe.activeGames` (`me_profile`)
 - The current game page (`/move/:metaGame/:cbits/:gameID`)
 
 When the set changes, the client sends `watchGames` with the full desired list. The server only delivers `game` events to matching subscribers.
@@ -33,7 +33,7 @@ When the set changes, the client sends `watchGames` with the full desired list. 
 
 On `game` messages, `MyWebSocket` dispatches:
 
-- `refresh-me` — dashboard refetches `me()` for any watched-game update
+- `refresh-me` — dashboard refetches `me_dashboard` for any watched-game update
 - `refresh-data` — carries `{ meta, id }` from the WS payload; the open game page (`GameMove`) refetches only when those match the current route
 
 ## Reconnection

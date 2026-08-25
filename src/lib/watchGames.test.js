@@ -8,42 +8,29 @@ describe("collectWatchGames", () => {
 
   it("includes active games from activeGames", () => {
     const globalMe = {
-      activeGames: [{ metaGame: "go", id: "g1" }],
-    };
-    const games = collectWatchGames(globalMe, "/");
-    expect(games).toEqual([{ meta: "go", id: "g1" }]);
-  });
-
-  it("includes active dashboard games", () => {
-    const globalMe = {
-      games: [
-        { metaGame: "go", id: "g1", toMove: "player1" },
-        { metaGame: "chess", id: "c1", toMove: "" },
+      activeGames: [
+        { metaGame: "go", id: "g1" },
+        { metaGame: "chess", id: "c1" },
       ],
     };
     const games = collectWatchGames(globalMe, "/");
-    expect(games).toEqual([{ meta: "go", id: "g1" }]);
+    expect(games).toEqual([
+      { meta: "go", id: "g1" },
+      { meta: "chess", id: "c1" },
+    ]);
   });
 
-  it("deduplicates route and dashboard entries", () => {
+  it("deduplicates route and activeGames entries", () => {
     const globalMe = {
-      games: [{ metaGame: "chess", id: "abc123", toMove: "player1" }],
+      activeGames: [{ metaGame: "chess", id: "abc123" }],
     };
     const games = collectWatchGames(globalMe, "/move/chess/0/abc123");
     expect(games).toEqual([{ meta: "chess", id: "abc123" }]);
   });
 
-  it("treats multiplayer games with players as active", () => {
+  it("ignores globalMe without activeGames off-dashboard", () => {
     const globalMe = {
-      games: [{ metaGame: "multi", id: "m1", toMove: [], players: ["a", "b"] }],
-    };
-    const games = collectWatchGames(globalMe, "/");
-    expect(games).toEqual([{ meta: "multi", id: "m1" }]);
-  });
-
-  it("ignores multiplayer games with no players", () => {
-    const globalMe = {
-      games: [{ metaGame: "multi", id: "m1", toMove: [], players: [] }],
+      games: [{ metaGame: "go", id: "g1", toMove: "player1" }],
     };
     const games = collectWatchGames(globalMe, "/");
     expect(games).toEqual([]);
