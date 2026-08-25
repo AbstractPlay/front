@@ -44,8 +44,8 @@ CI steps:
 
 1. Install Serverless and run `npm ci` (with GitHub Packages auth).
 2. **Test job** (required before deploy): `bin/install-ap-deps.mjs --for-tests` installs `@abstractplay/gameslib` (full registry) plus pinned renderer, then runs `npm run test:ci` and lint.
-3. **Deploy job**: `bin/install-ap-deps.mjs` installs the pinned **production** gameslib and renderer from `ci-deps.json` (or dispatch payload).
-4. Auto-commit `ci-deps.json`, `package-lock.json`, and synced `package.json` AP version fields when they change (dispatch only).
+3. **Deploy job**: `bin/install-ap-deps.mjs` installs the pinned **production** gameslib and renderer from `ci-deps.prod.json` (or dispatch payload). Prod installs are rejected if gameslib was built with a dev registry (`production=false`).
+4. Auto-commit `ci-deps.dev.json` or `ci-deps.prod.json` (stage-specific), `package-lock.json`, and synced `package.json` AP version fields when they change (dispatch only).
 5. `npm run build-dev` or `build-prod`.
 6. `serverless client deploy`.
 7. Publish locale JSON files to S3 (`bin/publish-locales.mjs`).
@@ -85,15 +85,15 @@ Published `gameslib` and `renderer` packages use immutable `1.0.0-ci-{GITHUB_RUN
 
 1. **renderer** publishes and dispatches `renderer_version` to **gameslib** and **designer**.
 2. **gameslib** installs that renderer, tests, publishes, then dispatches `gameslib_version` + `renderer_version` to front and the backends.
-3. Each consumer runs `npm ci`, then `bin/install-ap-deps.mjs`, which installs the exact versions from the dispatch payload (or falls back to [`ci-deps.json`](../ci-deps.json) on consumer-only pushes).
+3. Each consumer runs `npm ci`, then `bin/install-ap-deps.mjs`, which installs the exact versions from the dispatch payload (or falls back to [`ci-deps.prod.json`](../ci-deps.prod.json) / [`ci-deps.dev.json`](../ci-deps.dev.json) on consumer-only pushes).
 
-You do not need to manually bump AP dependency versions in `package.json` after a gameslib or renderer publish — CI updates `ci-deps.json` and the lockfile automatically.
+You do not need to manually bump AP dependency versions in `package.json` after a gameslib or renderer publish — CI updates the stage-specific ci-deps file and the lockfile automatically.
+
+`ci-deps.prod.json` is protected on `main` via `.gitattributes` (`merge=ours`) so merges from `develop` do not overwrite production pins.
 
 ### Test vs deploy gameslib
 
-Engine contract tests (`test:engines`) need the full gameslib registry (including experimental games). The CI test job installs `@abstractplay/gameslib@development` via `install-ap-deps.mjs --for-tests` without changing the pinned production version in `ci-deps.json`. Deploy builds use the production gameslib artifact from `ci-deps.json`, which matches what production users receive.
-
-A future improvement: gameslib CI could publish a paired dev-registry version (same run ID) into `ci-deps.json` to avoid `@development` tag drift.
+Engine contract tests (`test:engines`) need the full gameslib registry (including experimental games). The CI test job installs `@abstractplay/gameslib@development` via `install-ap-deps.mjs --for-tests` without changing the pinned production version in `ci-deps.prod.json`. Deploy builds use the production gameslib artifact from `ci-deps.prod.json`, which matches what production users receive.
 
 ## Related
 
