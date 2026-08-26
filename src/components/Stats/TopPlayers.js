@@ -10,6 +10,8 @@ import {
   formatGlickoLowWithRd,
   glickoColumnSortingFn,
 } from "../../lib/glickoDisplay";
+import GlickoHint from "../shared/GlickoHint";
+import GlickoDisplayNote from "../shared/GlickoDisplayNote";
 
 function TopPlayers({ nav }) {
   const summary = useStore((state) => state.summary);
@@ -69,7 +71,7 @@ function TopPlayers({ nav }) {
         },
       }),
       columnHelper.accessor("glicko", {
-        header: t("tables.glicko"),
+        header: () => <GlickoHint />,
         cell: (props) => formatGlickoLowWithRd(props.getValue()),
         sortingFn: glickoColumnSortingFn,
       }),
@@ -132,6 +134,7 @@ function TopPlayers({ nav }) {
       data={data}
       columns={columns}
       sort={[{ id: "glicko", desc: true }]}
+      tableNote={<GlickoDisplayNote />}
     />
   );
 }

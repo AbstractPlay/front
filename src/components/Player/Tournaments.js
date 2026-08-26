@@ -29,7 +29,7 @@ function Tournaments() {
             participants,
             score,
           }) => {
-            const gameName = gameinfo.get(metaGame).name;
+            const gameName = gameinfo.get(metaGame)?.name ?? metaGame;
             return {
               id: tid,
               meta: metaGame,

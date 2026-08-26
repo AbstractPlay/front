@@ -28,6 +28,8 @@ import { formatBatchRatingVariantLabel } from "../lib/batchRatingLabels";
 import { matchesSummaryGameKey } from "../lib/summaryGameKeys";
 import Spinner from "./Spinner";
 import { SUMMARY_URLS } from "../lib/summaryFetch";
+import GlickoHint from "./shared/GlickoHint";
+import GlickoDisplayNote from "./shared/GlickoDisplayNote";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -133,7 +135,7 @@ function RatingsTable({
         header: t("tables.variants"),
       }),
       columnHelper.accessor("glicko", {
-        header: t("tables.glicko"),
+        header: () => <GlickoHint />,
         cell: (props) => formatGlickoLowWithRd(props.getValue()),
         sortingFn: glickoColumnSortingFn,
       }),
@@ -363,6 +365,7 @@ function RatingsTable({
               ))}
             </tbody>
           </table>
+          <GlickoDisplayNote />
           {tableNavigation}
         </div>
       </article>
@@ -388,8 +391,6 @@ function Ratings() {
 
   useEnsureSummaryTier("ratings");
 
-  const metaGameName = gameinfo.get(metaGame).name;
-
   if (ratingsLoadState === "pending" || ratingsLoadState === "idle") {
     return (
       <div className="has-text-centered summary-gate-loading">
@@ -409,6 +410,8 @@ function Ratings() {
       </div>
     );
   }
+
+  const metaGameName = gameinfo.get(metaGame)?.name ?? metaGame;
 
   return (
     <RatingsTable

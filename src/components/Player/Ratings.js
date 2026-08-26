@@ -16,6 +16,8 @@ import {
   formatSummaryGameKey,
   metaUidFromSummaryGameKey,
 } from "../../lib/summaryGameKeys";
+import GlickoHint from "../shared/GlickoHint";
+import GlickoDisplayNote from "../shared/GlickoDisplayNote";
 
 function Ratings({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
@@ -109,7 +111,7 @@ function Ratings({ handleChallenge }) {
         },
       }),
       columnHelper.accessor("glicko", {
-        header: t("tables.glicko"),
+        header: () => <GlickoHint />,
         cell: (props) => formatGlickoLowWithRd(props.getValue()),
         sortingFn: glickoColumnSortingFn,
       }),
@@ -175,6 +177,7 @@ function Ratings({ handleChallenge }) {
       data={data}
       columns={columns}
       sort={[{ id: "glicko", desc: true }]}
+      tableNote={<GlickoDisplayNote />}
       key="Player|Ratings"
     />
   );
