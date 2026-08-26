@@ -47,8 +47,11 @@ function Counts() {
         const inforec = [...gameinfo.values()].find((r) =>
           name.startsWith(r.name)
         );
-        const meta = inforec.uid;
-        lst.push({ meta, name, count: countMap.get(name) });
+        lst.push({
+          meta: inforec?.uid,
+          name,
+          count: countMap.get(name),
+        });
       }
       countsSetter(lst);
     } else {
@@ -75,9 +78,14 @@ function Counts() {
     () => [
       columnHelper.accessor("name", {
         header: t("tables.game"),
-        cell: (props) => (
-          <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
-        ),
+        cell: (props) =>
+          props.row.original.id ? (
+            <Link to={`/games/${props.row.original.id}`}>
+              {props.getValue()}
+            </Link>
+          ) : (
+            props.getValue()
+          ),
       }),
       columnHelper.accessor("count", {
         header: t("tables.playCount"),

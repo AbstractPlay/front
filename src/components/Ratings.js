@@ -388,8 +388,6 @@ function Ratings() {
 
   useEnsureSummaryTier("ratings");
 
-  const metaGameName = gameinfo.get(metaGame).name;
-
   if (ratingsLoadState === "pending" || ratingsLoadState === "idle") {
     return (
       <div className="has-text-centered summary-gate-loading">
@@ -409,6 +407,8 @@ function Ratings() {
       </div>
     );
   }
+
+  const metaGameName = gameinfo.get(metaGame)?.name ?? metaGame;
 
   return (
     <RatingsTable
