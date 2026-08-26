@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import {
   getCoreRowModel,
   useReactTable,
@@ -86,7 +86,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
       globalMe.realStanding?.map((entry) => {
         const ret = {
           ...entry,
-          gameName: "Unknown",
+          gameName: getGameDisplayName(entry.metaGame, "Unknown"),
           noExplore: entry.noExplore || false,
           variants: entry.variants || [],
           clockCombined: [
@@ -95,9 +95,6 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
             entry.clockMax,
           ].join("/"),
         };
-        if (gameinfo.get(entry.metaGame) !== undefined) {
-          ret.gameName = gameinfo.get(entry.metaGame).name;
-        }
         return ret;
       }),
     [globalMe]

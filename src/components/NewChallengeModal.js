@@ -13,7 +13,7 @@ import Modal from "./Modal";
 import GameVariants from "./GameVariants";
 import GamePickerTrigger from "./GamePickerTrigger";
 import { useStore } from "../stores";
-import { isPublicCatalogGame } from "../lib/gameOptions";
+import { isPublicCatalogGame, getGameDisplayName } from "../lib/gameOptions";
 import { AIAI_USER_ID, formatUserDisplayName } from "./Bots/botUtils";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
@@ -72,11 +72,13 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     let forced = false;
     if (metaGame !== null) {
       const info = gameinfo.get(metaGame);
-      for (const vname of selectedVariants) {
-        const variant = info.variants.find((v) => v.uid === vname);
-        if (variant.unrated === true) {
-          forced = true;
-          break;
+      if (info) {
+        for (const vname of selectedVariants) {
+          const variant = info.variants.find((v) => v.uid === vname);
+          if (variant.unrated === true) {
+            forced = true;
+            break;
+          }
         }
       }
     }
@@ -92,9 +94,9 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   useEffect(() => {
     if (allUsers !== null && metaGame !== null) {
       const info = gameinfo.get(metaGame);
-      if (!info.flags.includes("aiai")) {
+      if (info && !info.flags.includes("aiai")) {
         usersSetter([...allUsers].filter((u) => u.id !== AIAI_USER_ID));
-      } else {
+      } else if (info) {
         usersSetter([...allUsers]);
       }
     }
@@ -154,7 +156,8 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
           metaGameSetter(game);
           const info = gameinfo.get(game);
           if (info === undefined) {
-            throw new Error(`Could not find game metadata for "${game}"`);
+            errorSetter(t("Error"));
+            return;
           }
           const playercounts = info.playercounts;
           if (playercounts.length === 1) {
@@ -170,7 +173,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         errorSetter("");
       }
     },
-    [metaGame, setPlayerCount, props.opponent]
+    [metaGame, setPlayerCount, props.opponent, t]
   );
 
   useEffect(() => {
@@ -318,16 +321,18 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   let playercounts = [];
   if (metaGame !== null) {
     const info = gameinfo.get(metaGame);
-    playercounts = info.playercounts;
+    playercounts = info?.playercounts ?? [];
   }
 
   if (
-    metaGame !== null &&
-    (!gameinfo.has(metaGame) || !isPublicCatalogGame(gameinfo.get(metaGame)))
+    (fixedMetaGame && !gameinfo.has(fixedMetaGame)) ||
+    (metaGame !== null &&
+      (!gameinfo.has(metaGame) || !isPublicCatalogGame(gameinfo.get(metaGame))))
   ) {
     return null;
-  } else {
-    return (
+  }
+
+  return (
       <Modal
         show={show}
         title={t("NewChallenge")}
@@ -341,7 +346,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
           {fixedMetaGame ? (
             <p>
               <strong>{t("ChooseGame")}</strong>:{" "}
-              {gameinfo.get(fixedMetaGame).name}
+              {getGameDisplayName(fixedMetaGame)}
             </p>
           ) : (
             <div className="field">
@@ -793,7 +798,6 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         )}
       </Modal>
     );
-  }
 });
 
 export default NewChallengeModal;

@@ -16,7 +16,7 @@ import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import NewTournamentModal from "./NewTournamentModal";
 import { gameinfo } from "@abstractplay/gameslib";
-import { isPublicCatalogGame } from "../../lib/gameOptions";
+import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { useStore } from "../../stores";
@@ -254,7 +254,7 @@ function Tournaments(props) {
         const ret = {
           tournamentid: t.id,
           realMeta: t.metaGame,
-          metaGame: "Unknown",
+          metaGame: getGameDisplayName(t.metaGame, "Unknown"),
           variants: t.variants.join(", "),
           number: t.number,
           startDate: date1,
@@ -274,8 +274,6 @@ function Tournaments(props) {
             })
             .sort((a, b) => a.localeCompare(b)),
         };
-        if (gameinfo.get(t.metaGame) !== undefined)
-          ret.metaGame = gameinfo.get(t.metaGame).name;
         return ret;
       })
       .filter((rec) => filterMeta === null || rec.realMeta === filterMeta)
@@ -525,7 +523,7 @@ function Tournaments(props) {
         const ret = {
           tournamentid: t.id,
           realMeta: t.metaGame,
-          metaGame: "Unknown",
+          metaGame: getGameDisplayName(t.metaGame, "Unknown"),
           variants: t.variants.join(", "),
           number: t.number,
           dateStarted: t.dateStarted,
@@ -541,8 +539,6 @@ function Tournaments(props) {
             ),
           },
         };
-        if (gameinfo.get(t.metaGame) !== undefined)
-          ret.metaGame = gameinfo.get(t.metaGame).name;
         return ret;
       })
       .filter((rec) => filterMeta === null || rec.realMeta === filterMeta)
@@ -753,7 +749,7 @@ function Tournaments(props) {
       .map((t) => {
         const ret = {
           tournamentid: t.id,
-          metaGameName: "Unknown",
+          metaGameName: getGameDisplayName(t.metaGame, "Unknown"),
           metaGame: t.metaGame,
           variants: t.variants.join(", "),
           number: t.number,
@@ -764,8 +760,6 @@ function Tournaments(props) {
           numPlayers: t.players.length,
           players: t.players,
         };
-        if (gameinfo.get(t.metaGame) !== undefined)
-          ret.metaGameName = gameinfo.get(t.metaGame).name;
         return ret;
       })
       .filter((rec) => filterMeta === null || rec.metaGame === filterMeta)

@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -29,10 +30,8 @@ function Stars({ handleChallenge }) {
             .map((meta) => {
               const ret = {
                 id: meta,
-                name: "Unknown",
+                name: getGameDisplayName(meta, "Unknown"),
               };
-              if (gameinfo.get(meta) !== undefined)
-                ret.name = gameinfo.get(meta).name;
               return ret;
             })
             .sort((a, b) => a.name.localeCompare(b.name)),
@@ -51,7 +50,9 @@ function Stars({ handleChallenge }) {
       columnHelper.display({
         id: "challenge",
         cell: (props) =>
-          globalMe === null || globalMe.id === user.id ? null : (
+          globalMe === null ||
+          globalMe.id === user.id ||
+          !gameinfo.has(props.row.original.id) ? null : (
             <>
               <NewChallengeModal
                 show={

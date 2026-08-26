@@ -8,7 +8,7 @@ import React, {
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import ProfileModule from "./ProfileModule";
 import { API_ENDPOINT_OPEN } from "../../config";
@@ -37,13 +37,10 @@ function HighlightsTable({
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
-          gameName: "Unknown",
+          gameName: getGameDisplayName(g.metaGame, "Unknown"),
           opponents: (g.players ?? []).filter((p) => p.id !== user.id),
           gameEnded: g.gameEnded || 0,
         };
-        if (gameinfo.get(g.metaGame) !== undefined) {
-          ret.gameName = gameinfo.get(g.metaGame).name;
-        }
         return ret;
       }),
     [highlights, user.id]

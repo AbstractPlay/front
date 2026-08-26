@@ -7,6 +7,7 @@ import {
   useCallback,
 } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
+import { listPublicCatalogMetas, getGameDisplayName } from "../../lib/gameOptions";
 import { gameDescription } from "../../lib/gameDescription";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -27,7 +28,6 @@ import Thumbnail from "../Thumbnail";
 import Modal from "../Modal";
 import NewChallengeModal from "../NewChallengeModal";
 import { useGameRecommendations } from "../../hooks/useGameRecommendations";
-import { listPublicCatalogMetas } from "../../lib/gameOptions";
 import { useStore } from "../../stores";
 import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
 
@@ -291,8 +291,8 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         gamesSetter(config.loadGames(metas, forceNew));
       } else {
         metas.sort((a, b) => {
-          const na = gameinfo.get(a).name;
-          const nb = gameinfo.get(b).name;
+          const na = getGameDisplayName(a);
+          const nb = getGameDisplayName(b);
           if (na < nb) return -1;
           else if (na > nb) return 1;
           return 0;
@@ -858,7 +858,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         title={
           activeImgModal
             ? `Board image for ${
-                gameinfo.get(activeImgModal)?.name || activeImgModal
+                getGameDisplayName(activeImgModal)
               }`
             : ""
         }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../../lib/gameOptions";
 import GameStatus from "../GameStatus";
 import MoveEntry from "../MoveEntry";
 import MiscButtons from "../MiscButtons";
@@ -29,7 +29,7 @@ export function GameMoveBoardSection({ session, hideTitle = false }) {
         <h1 className="subtitle lined tourWelcome">
           <span>
             <Link to={`/games/${metaGame}`}>
-              {gameinfo.get(metaGame).name}
+              {getGameDisplayName(metaGame)}
             </Link>
             {parenthetical.length === 0 ? null : (
               <span style={{ fontSize: "smaller", padding: 0, margin: 0 }}>

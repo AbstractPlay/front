@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
 import GamePickerTrigger from "../GamePickerTrigger";
@@ -54,6 +55,10 @@ function NewTournamentModal(props) {
     handleClose();
   };
 
+  if (fixedMetaGame && !gameinfo.has(fixedMetaGame)) {
+    return null;
+  }
+
   return (
     <Modal
       show={show}
@@ -67,7 +72,7 @@ function NewTournamentModal(props) {
         {fixedMetaGame ? (
           <p>
             <strong>{t("ChooseGame")}</strong>:{" "}
-            {gameinfo.get(fixedMetaGame).name}
+            {getGameDisplayName(fixedMetaGame)}
           </p>
         ) : (
           <div className="field">

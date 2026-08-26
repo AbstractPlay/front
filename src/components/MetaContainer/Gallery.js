@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, createRef } from "react";
 import MetaItem from "./MetaItem";
 import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 
@@ -58,7 +59,7 @@ function Gallery(props) {
                 {games.map((game) => {
                   return (
                     <option key={gameinfo.get(game).uid} value={game}>
-                      {gameinfo.get(game).name}
+                      {getGameDisplayName(game)}
                     </option>
                   );
                 })}

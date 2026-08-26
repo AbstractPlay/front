@@ -1,6 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import {
   createColumnHelper,
   flexRender,
@@ -20,7 +21,7 @@ import { useStore } from "../../stores";
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function metaGameLabel(metaGame) {
-  return gameinfo.get(metaGame)?.name ?? metaGame;
+  return getGameDisplayName(metaGame);
 }
 
 function variantsLabel(metaGame, variants) {

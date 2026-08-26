@@ -20,6 +20,11 @@ export function isPublicCatalogGame(info) {
   return !(isProductionMode() && isExperimentalGame(info));
 }
 
+/** Display name for a meta uid; safe when the game is absent from gameslib. */
+export function getGameDisplayName(metaUid, fallback = metaUid) {
+  return (gameinfo.get(metaUid)?.name ?? fallback ?? metaUid) || "Unknown";
+}
+
 /** Meta-game uids listed in public catalog UIs. */
 export function listPublicCatalogMetas() {
   return [...gameinfo.keys()].filter((id) =>

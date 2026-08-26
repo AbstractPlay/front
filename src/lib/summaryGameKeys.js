@@ -1,4 +1,5 @@
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "./gameOptions";
 import { expandVariants } from "./expandVariants";
 
 const NO_VARIANTS_SUFFIX = "no variants";
@@ -63,7 +64,7 @@ export function matchesSummaryGameKey(gameKey, metaUidOrName) {
 
 export function formatSummaryGameName(gameKey) {
   const { metaUid } = parseSummaryGameKey(gameKey);
-  return gameinfo.get(metaUid)?.name ?? metaUid;
+  return getGameDisplayName(metaUid);
 }
 
 export function formatVariantUids(metaUid, variantUids, t) {
@@ -99,7 +100,7 @@ export function formatVariantUids(metaUid, variantUids, t) {
 /** Human-readable label for a summary or ratings game key. */
 export function formatSummaryGameKey(gameKey, t) {
   const { metaUid, variantUids } = parseSummaryGameKey(gameKey);
-  const name = gameinfo.get(metaUid)?.name ?? metaUid;
+  const name = getGameDisplayName(metaUid);
   if (!variantUids.length) {
     if (gameKey.includes(` (${NO_VARIANTS_SUFFIX})`)) {
       const noVariants = t
