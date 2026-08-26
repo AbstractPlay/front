@@ -1155,7 +1155,12 @@
         "Visit": "Visit tournament",
         "Winner": "Winner",
         "DivisionWinner": "Winner: {{winner}}",
-        "Withdraw": "Withdraw from next"
+        "Withdraw": "Withdraw from next",
+        "tabs": {
+            "open": "Open for registration",
+            "current": "Ongoing",
+            "completed": "Recently completed"
+        }
     },
     "TriggerRefresh": "Trigger a refresh",
     "TwoPlayersChallengeDescription": "You challenged {{other}} to a game of [{{game}}](/games/{{meta}})",

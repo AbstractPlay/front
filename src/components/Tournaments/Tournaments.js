@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { callAuthApi } from "../../lib/api";
 import {
   getCoreRowModel,
@@ -22,9 +22,23 @@ import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
+import {
+  TOURNAMENT_TABS,
+  DEFAULT_TOURNAMENT_TAB,
+  resolveTournamentRouteParams,
+  tournamentListPath,
+  isValidTournamentTab,
+} from "../../lib/tournamentSections";
 
 function Tournaments(props) {
   const { t } = useTranslation();
+  const { tab: tabParam, metaGame: metaGameParam } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [storedTab, setStoredTab] = useStorageState(
+    "tournaments-tab",
+    DEFAULT_TOURNAMENT_TAB
+  );
   const [update, updateSetter] = useState(0);
   const [showNewTournamentModal, showNewTournamentModalSetter] =
     useState(false);
@@ -54,8 +68,24 @@ function Tournaments(props) {
     "tournaments-starred-only",
     false
   );
-  const { metaGame } = useParams();
-  const [filterMeta, filterMetaSetter] = useState(null);
+  const route = resolveTournamentRouteParams(
+    tabParam,
+    metaGameParam,
+    storedTab
+  );
+  const activeTab = route.tab;
+  const filterMeta = route.metaGame;
+
+  useEffect(() => {
+    if (isValidTournamentTab(activeTab)) {
+      setStoredTab(activeTab);
+    }
+  }, [activeTab, setStoredTab]);
+
+  const showProposeButton =
+    globalMe !== null &&
+    globalMe !== undefined &&
+    (filterMeta === null || tournamentPlaySupported(filterMeta));
 
   const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -125,24 +155,6 @@ function Tournaments(props) {
     }
     fetchData();
   }, [update]);
-
-  useEffect(() => {
-    // was anything passed at all?
-    if (metaGame !== null && metaGame !== undefined && metaGame !== "") {
-      // is it a valid meta game?
-      if (gameinfo.has(metaGame)) {
-        filterMetaSetter(metaGame);
-      }
-      // if not, don't filter
-      else {
-        filterMetaSetter(null);
-      }
-    }
-    // if not, don't filter
-    else {
-      filterMetaSetter(null);
-    }
-  }, [metaGame]);
 
   useEffect(() => {
     async function archive() {
@@ -953,20 +965,28 @@ function Tournaments(props) {
     </>
   );
 
+  if (route.redirectTo !== null) {
+    return (
+      <Navigate
+        to={{ pathname: route.redirectTo, hash: location.hash }}
+        replace
+      />
+    );
+  }
+
+  const ogUrl = tournamentListPath(activeTab, filterMeta);
+
   return (
     <>
       <Helmet>
         <meta property="og:title" content={`Recurring Tournaments`} />
-        <meta
-          property="og:url"
-          content={`https://play.abstractplay.com/tournaments`}
-        />
+        <meta property="og:url" content={`https://play.abstractplay.com${ogUrl}`} />
         <meta
           property="og:description"
           content={`List of all the available recurring tournaments`}
         />
       </Helmet>
-      <article className="content">
+      <article id="tournamentsPage" className="content">
         <h1 className="title has-text-centered">
           {t("Tournament.Tournaments")}
         </h1>
@@ -1003,42 +1023,74 @@ function Tournaments(props) {
             )}
           </div>
         )}
-        <div className="control" style={{ paddingBottom: "1em" }}>
-          <div className="select is-small">
-            <select
-              value={filterMeta ?? ""}
-              onChange={(e) =>
-                e.target.value === ""
-                  ? filterMetaSetter(null)
-                  : filterMetaSetter(e.target.value)
-              }
-            >
-              <option value="" key="filterMetaBlank">
-                --Show all--
-              </option>
-              {[...gameinfo.values()]
-                .filter(isPublicCatalogGame)
-                .filter((rec) => tournamentPlaySupported(rec.uid))
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map((rec) => (
-                  <option value={rec.uid} key={"filterMeta" + rec.uid}>
-                    {rec.name}
-                  </option>
-                ))}
-            </select>
+        <div className="tournaments-page-toolbar">
+          <div className="control">
+            <div className="select is-small">
+              <select
+                value={filterMeta ?? ""}
+                onChange={(e) => {
+                  const nextMeta =
+                    e.target.value === "" ? null : e.target.value;
+                  navigate(tournamentListPath(activeTab, nextMeta));
+                }}
+              >
+                <option value="" key="filterMetaBlank">
+                  --Show all--
+                </option>
+                {[...gameinfo.values()]
+                  .filter(isPublicCatalogGame)
+                  .filter((rec) => tournamentPlaySupported(rec.uid))
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((rec) => (
+                    <option value={rec.uid} key={"filterMeta" + rec.uid}>
+                      {rec.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
           </div>
+          {showProposeButton ? (
+            <div className="control">
+              <button
+                type="button"
+                className="button is-small apButton"
+                onClick={() => handleNewTournamentClick()}
+              >
+                {t("Tournament.ProposeNew")}
+              </button>
+            </div>
+          ) : null}
         </div>
-        <div className="columns is-multiline">
-          <div className="column content is-10 is-offset-1">
-            <div className="card" key="completed_tournaments">
-              <header className="card-header">
-                <p className="card-header-title">
-                  {t("Tournament.RecentlyCompleted")}
-                </p>
-              </header>
-              <div className="card-content">
-                {completedTournamentsData.length === 0 ? (
-                  t("Tournament.NoneCompleted")
+
+        <div className="columns is-centered">
+          <div className="column is-12 is-10-desktop">
+            <div className="tabs is-small is-toggle is-toggle-rounded tournaments-page-tabs">
+              <ul>
+                {TOURNAMENT_TABS.map((tab) => (
+                  <li
+                    key={tab.id}
+                    className={activeTab === tab.id ? "is-active" : ""}
+                  >
+                    <a
+                      href={tournamentListPath(tab.id, filterMeta)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(tournamentListPath(tab.id, filterMeta));
+                      }}
+                    >
+                      {t(tab.nameKey)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="tournaments-tab-panel">
+              {activeTab === "completed" ? (
+                completedTournamentsData.length === 0 ? (
+                  <p className="has-text-centered">
+                    {t("Tournament.NoneCompleted")}
+                  </p>
                 ) : (
                   <>
                     <table
@@ -1108,178 +1160,148 @@ function Tournaments(props) {
                       ? completedTournamentsTableNavigation
                       : null}
                   </>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="column content is-10 is-offset-1">
-            <div className="card" key="open_tournaments">
-              <header className="card-header">
-                <p className="card-header-title">{t("Tournament.Open")}</p>
-              </header>
-              <div className="card-content">
-                {/* <RecentTournamentsTable tournaments={recentTournaments} /> */}
-                <table
-                  className="table apTable"
-                  style={{ marginLeft: "auto", marginRight: "auto" }}
-                >
-                  <thead>
-                    {openTournamentsTable
-                      .getHeaderGroups()
-                      .map((headerGroup) => (
-                        <tr key={headerGroup.id}>
-                          {headerGroup.headers.map((header) => (
-                            <th key={header.id}>
-                              {header.isPlaceholder ? null : (
-                                <div
-                                  {...{
-                                    className: header.column.getCanSort()
-                                      ? "sortable"
-                                      : "",
-                                    onClick:
-                                      header.column.getToggleSortingHandler(),
-                                  }}
-                                >
-                                  {flexRender(
-                                    header.column.columnDef.header,
-                                    header.getContext()
-                                  )}
-                                  {{
-                                    asc: (
-                                      <>
-                                        &nbsp;<i className="fa fa-angle-up"></i>
-                                      </>
-                                    ),
-                                    desc: (
-                                      <>
-                                        &nbsp;
-                                        <i className="fa fa-angle-down"></i>
-                                      </>
-                                    ),
-                                  }[header.column.getIsSorted()] ?? null}
-                                </div>
+                )
+              ) : null}
+
+              {activeTab === "open" ? (
+                <>
+                  <table
+                    className="table apTable"
+                    style={{ marginLeft: "auto", marginRight: "auto" }}
+                  >
+                    <thead>
+                      {openTournamentsTable
+                        .getHeaderGroups()
+                        .map((headerGroup) => (
+                          <tr key={headerGroup.id}>
+                            {headerGroup.headers.map((header) => (
+                              <th key={header.id}>
+                                {header.isPlaceholder ? null : (
+                                  <div
+                                    {...{
+                                      className: header.column.getCanSort()
+                                        ? "sortable"
+                                        : "",
+                                      onClick:
+                                        header.column.getToggleSortingHandler(),
+                                    }}
+                                  >
+                                    {flexRender(
+                                      header.column.columnDef.header,
+                                      header.getContext()
+                                    )}
+                                    {{
+                                      asc: (
+                                        <>
+                                          &nbsp;
+                                          <i className="fa fa-angle-up"></i>
+                                        </>
+                                      ),
+                                      desc: (
+                                        <>
+                                          &nbsp;
+                                          <i className="fa fa-angle-down"></i>
+                                        </>
+                                      ),
+                                    }[header.column.getIsSorted()] ?? null}
+                                  </div>
+                                )}
+                              </th>
+                            ))}
+                          </tr>
+                        ))}
+                    </thead>
+                    <tbody>
+                      {openTournamentsTable.getRowModel().rows.map((row) => (
+                        <tr key={row.id}>
+                          {row.getVisibleCells().map((cell) => (
+                            <td key={cell.id}>
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
                               )}
-                            </th>
+                            </td>
                           ))}
                         </tr>
                       ))}
-                  </thead>
-                  <tbody>
-                    {openTournamentsTable.getRowModel().rows.map((row) => (
-                      <tr key={row.id}>
-                        {row.getVisibleCells().map((cell) => (
-                          <td key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </td>
+                    </tbody>
+                  </table>
+                  {openTournamentsData.length > 10
+                    ? openTournamentsTableNavigation
+                    : null}
+                </>
+              ) : null}
+
+              {activeTab === "current" ? (
+                <>
+                  <table
+                    className="table apTable"
+                    style={{ marginLeft: "auto", marginRight: "auto" }}
+                  >
+                    <thead>
+                      {currentTournamentsTable
+                        .getHeaderGroups()
+                        .map((headerGroup) => (
+                          <tr key={headerGroup.id}>
+                            {headerGroup.headers.map((header) => (
+                              <th key={header.id}>
+                                {header.isPlaceholder ? null : (
+                                  <div
+                                    {...{
+                                      className: header.column.getCanSort()
+                                        ? "sortable"
+                                        : "",
+                                      onClick:
+                                        header.column.getToggleSortingHandler(),
+                                    }}
+                                  >
+                                    {flexRender(
+                                      header.column.columnDef.header,
+                                      header.getContext()
+                                    )}
+                                    {{
+                                      asc: (
+                                        <>
+                                          &nbsp;
+                                          <i className="fa fa-angle-up"></i>
+                                        </>
+                                      ),
+                                      desc: (
+                                        <>
+                                          &nbsp;
+                                          <i className="fa fa-angle-down"></i>
+                                        </>
+                                      ),
+                                    }[header.column.getIsSorted()] ?? null}
+                                  </div>
+                                )}
+                              </th>
+                            ))}
+                          </tr>
                         ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {openTournamentsData.length > 10
-                  ? openTournamentsTableNavigation
-                  : null}
-              </div>
-            </div>
-          </div>
-          <div className="column content is-10 is-offset-1">
-            <div className="card" key="current_tournaments">
-              <header className="card-header">
-                <p className="card-header-title">{t("Tournament.Current")}</p>
-              </header>
-              <div className="card-content">
-                <table
-                  className="table apTable"
-                  style={{ marginLeft: "auto", marginRight: "auto" }}
-                >
-                  <thead>
-                    {currentTournamentsTable
-                      .getHeaderGroups()
-                      .map((headerGroup) => (
-                        <tr key={headerGroup.id}>
-                          {headerGroup.headers.map((header) => (
-                            <th key={header.id}>
-                              {header.isPlaceholder ? null : (
-                                <div
-                                  {...{
-                                    className: header.column.getCanSort()
-                                      ? "sortable"
-                                      : "",
-                                    onClick:
-                                      header.column.getToggleSortingHandler(),
-                                  }}
-                                >
-                                  {flexRender(
-                                    header.column.columnDef.header,
-                                    header.getContext()
-                                  )}
-                                  {{
-                                    asc: (
-                                      <>
-                                        &nbsp;<i className="fa fa-angle-up"></i>
-                                      </>
-                                    ),
-                                    desc: (
-                                      <>
-                                        &nbsp;
-                                        <i className="fa fa-angle-down"></i>
-                                      </>
-                                    ),
-                                  }[header.column.getIsSorted()] ?? null}
-                                </div>
+                    </thead>
+                    <tbody>
+                      {currentTournamentsTable.getRowModel().rows.map((row) => (
+                        <tr key={row.id}>
+                          {row.getVisibleCells().map((cell) => (
+                            <td key={cell.id}>
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
                               )}
-                            </th>
+                            </td>
                           ))}
                         </tr>
                       ))}
-                  </thead>
-                  <tbody>
-                    {currentTournamentsTable.getRowModel().rows.map((row) => (
-                      <tr key={row.id}>
-                        {row.getVisibleCells().map((cell) => (
-                          <td key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {currentTournamentsData.length > 10
-                  ? currentTournamentsTableNavigation
-                  : null}
-              </div>
+                    </tbody>
+                  </table>
+                  {currentTournamentsData.length > 10
+                    ? currentTournamentsTableNavigation
+                    : null}
+                </>
+              ) : null}
             </div>
           </div>
-          {!globalMe ||
-          (filterMeta !== null &&
-            filterMeta !== undefined &&
-            filterMeta !== "" &&
-            !tournamentPlaySupported(filterMeta)) ? null : (
-            <div className="column content is-10 is-offset-1">
-              <div className="card" key="new_tournaments">
-                <header className="card-header">
-                  <p className="card-header-title">{t("Tournament.New2")}</p>
-                </header>
-                <div className="card-content">
-                  <p>
-                    <button
-                      className="button is-small apButton"
-                      onClick={() => handleNewTournamentClick()}
-                    >
-                      {t("Tournament.ProposeNew")}
-                    </button>
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </article>
       <NewTournamentModal

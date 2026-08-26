@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { tournamentListPath } from "../../lib/tournamentSections";
 import { matchesSummaryGameKey } from "../../lib/summaryGameKeys";
 
 function shuffle(array) {
@@ -107,7 +108,7 @@ export const viewConfigs = {
             >
               {t("IssueChallengeLabel")}
             </button>
-            <Link to={"/tournaments/" + props.row.original.id}>
+            <Link to={tournamentListPath("open", props.row.original.id)}>
               {t("TournamentsLink")}
             </Link>
           </>
