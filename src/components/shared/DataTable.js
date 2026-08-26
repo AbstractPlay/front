@@ -61,6 +61,7 @@ function DataTable({
   navClassName = "data-table-nav",
   globalFilterFn = "includesString",
   filterFieldId = "data-table-filter",
+  tableNote = null,
 }) {
   const [sorting, setSorting] = useState(sort);
   const [globalFilter, globalFilterSetter] = useState("");
@@ -294,6 +295,7 @@ function DataTable({
         ) : (
           tableElement
         )}
+        {tableNote}
         {nav === "top" ? null : tableNavigation}
       </div>
     </article>

@@ -1207,6 +1207,10 @@
     },
     "None": "None",
     "Draw": "Draw",
+    "glicko": {
+        "displayHint": "Glicko ratings are shown as the 95% confidence rating (rating − 2×RD), with full RD in parentheses.",
+        "displayNote": "Across the site, Glicko ratings are presented as the 95% confidence rating, with the full RD value in parentheses. <wikiLink>Learn more about the Glicko rating system</wikiLink>."
+    },
     "gameMarks": {
         "watch": "Watch this game",
         "unwatch": "Stop watching",
@@ -1355,7 +1359,7 @@
             }
         },
         "explanations": {
-            "highestSingle": "List of every recorded rating. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made. Rankings use conservative Glicko-2 (rating − 2×RD), with both Glicko and legacy Elo shown. Glicko starts at 1200 with RD 350; Elo starts at 1200 with a static *K* of 30. Glicko ratings are presented as a 95% confidence range — the narrower the range, the more confident the system is. Trueskill uses Microsoft's default settings (rating range 0–50, starting at 25).",
+            "highestSingle": "List of every recorded rating. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made. Rankings use conservative (95% confidence) Glicko-2 (rating − 2×RD), with both Glicko and legacy Elo shown. Glicko starts at 1200 with RD 350; Elo starts at 1200 with a static *K* of 30. Trueskill uses Microsoft's default settings (rating range 0–50, starting at 25).",
             "avgRatings": "These columns are weighted averages of your Glicko and Elo ratings across the site.",
             "topPlayers": "This table lists each available game and variant combination along with the top-rated player for that combination, ranked by conservative Glicko-2 (rating − 2×RD). Elo is shown for reference.",
             "numPlays": "This table lists each game, how many times it was played, by how many unique players, and the game's `h-index`. A game's h-index is the number of players who have played that game at least that many times (so an h-index of 5 means that 5 different players have played that game at least 5 times). It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day \"buckets,\" with the most recent week on the right.",

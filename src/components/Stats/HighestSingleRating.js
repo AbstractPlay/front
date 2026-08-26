@@ -16,6 +16,8 @@ import {
   formatSummaryGameKey,
   matchesSummaryGameKey,
 } from "../../lib/summaryGameKeys";
+import GlickoHint from "../shared/GlickoHint";
+import GlickoDisplayNote from "../shared/GlickoDisplayNote";
 
 function HighestSingleRating({ metaFilter, nav }) {
   useEnsureSummaryTier("site");
@@ -92,7 +94,7 @@ function HighestSingleRating({ metaFilter, nav }) {
         header: t("tables.game"),
       }),
       columnHelper.accessor("glicko", {
-        header: t("tables.glicko"),
+        header: () => <GlickoHint />,
         cell: (props) => formatGlickoLowWithRd(props.getValue()),
         sortingFn: glickoColumnSortingFn,
       }),
@@ -163,6 +165,7 @@ function HighestSingleRating({ metaFilter, nav }) {
       data={data}
       columns={columns}
       sort={[{ id: "glicko", desc: true }]}
+      tableNote={<GlickoDisplayNote />}
     />
   );
 }
