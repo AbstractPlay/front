@@ -11,10 +11,22 @@ describe("embedExportFonts", () => {
 
 describe("inlineSvgTextStyles", () => {
   it("copies computed typography onto export text nodes", () => {
-    const liveSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    const cloneSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    const liveText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    const cloneText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    const liveSvg = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg"
+    );
+    const cloneSvg = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg"
+    );
+    const liveText = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "text"
+    );
+    const cloneText = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "text"
+    );
     liveText.textContent = "A";
     cloneText.textContent = "A";
     liveSvg.appendChild(liveText);

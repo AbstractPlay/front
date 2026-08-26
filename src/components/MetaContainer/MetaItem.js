@@ -48,9 +48,7 @@ const MetaItem = React.forwardRef(
     const [localTab, localTabSetter] = useState(DEFAULT_META_TAB);
     const { t } = useTranslation();
 
-    const activeTab = syncTabToUrl
-      ? metaTabFromHash(location.hash)
-      : localTab;
+    const activeTab = syncTabToUrl ? metaTabFromHash(location.hash) : localTab;
 
     const handleTabChange = useCallback(
       (tabId) => {
@@ -225,10 +223,7 @@ const MetaItem = React.forwardRef(
                     {t(tab.nameKey)}
                   </a>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => handleTabChange(tab.id)}
-                  >
+                  <button type="button" onClick={() => handleTabChange(tab.id)}>
                     {t(tab.nameKey)}
                   </button>
                 )}
@@ -446,7 +441,10 @@ const MetaItem = React.forwardRef(
                   <GameStats metaFilter={game.uid} nav="bottom" />
                   <hr width="50%" style={{ opacity: 0.1 }} />
                   <p>{t("meta.ratings")}</p>
-                  <HighestSingleRating metaFilter={game.uid} nav="bottom" />{" "}
+                  <HighestSingleRating
+                    metaFilter={game.uid}
+                    nav="bottom"
+                  />{" "}
                 </>
               </SummaryGate>
             )}

@@ -11,9 +11,8 @@ describe("moveTreeKeyboard", () => {
     });
 
     it("skips known move-entry and comment inputs", () => {
-      expect(
-        shouldSkipMoveTreeKeyboard({ id: "enterAMove" }, [{ move: "e4" }])
-      ).to.be.true;
+      expect(shouldSkipMoveTreeKeyboard({ id: "enterAMove" }, [{ move: "e4" }]))
+        .to.be.true;
       expect(
         shouldSkipMoveTreeKeyboard({ id: "card-enterAMove" }, [{ move: "e4" }])
       ).to.be.true;

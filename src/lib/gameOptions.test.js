@@ -137,9 +137,9 @@ describe("filterGameOptions", () => {
         categories: ["goal.connect", "board>shape.hex"],
       },
     ];
-    expect(
-      filterGameOptions(tagged, { goalTag: "goal.territory" })
-    ).toEqual([tagged[0]]);
+    expect(filterGameOptions(tagged, { goalTag: "goal.territory" })).toEqual([
+      tagged[0],
+    ]);
   });
 
   it("filters by goal and board shape together", () => {

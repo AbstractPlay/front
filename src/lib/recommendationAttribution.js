@@ -50,7 +50,10 @@ export function saveRecommendationAttribution(attribution) {
   const storage = getSessionStorage();
   if (!storage || !attribution?.batchId || !attribution?.metaGame) return;
   try {
-    storage.setItem(RECOMMENDATION_ATTRIBUTION_KEY, JSON.stringify(attribution));
+    storage.setItem(
+      RECOMMENDATION_ATTRIBUTION_KEY,
+      JSON.stringify(attribution)
+    );
   } catch {
     // Private mode / quota — ignore.
   }

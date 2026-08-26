@@ -26,7 +26,10 @@ export default function LayoutSwitcher({ layoutId }) {
         {BETA_LAYOUTS.map((id) => (
           <Link
             key={id}
-            to={gameMovePath(metaGame, cbits, gameID, { beta: true, layout: id })}
+            to={gameMovePath(metaGame, cbits, gameID, {
+              beta: true,
+              layout: id,
+            })}
             className={`button is-small ${
               layoutId === id ? "apButton" : "apButtonNeutral"
             }`}

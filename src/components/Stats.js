@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams, useNavigate, Navigate, useLocation } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
@@ -54,10 +59,7 @@ function Stats() {
     "stats-tab",
     DEFAULT_STATS_TAB
   );
-  const [pinnedModule, pinnedModuleSetter] = useStorageState(
-    "stats-pin",
-    null
-  );
+  const [pinnedModule, pinnedModuleSetter] = useStorageState("stats-pin", null);
   const [recDays, recDaysSetter] = useState(0);
   const [recYears, recYearsSetter] = useState(0);
 

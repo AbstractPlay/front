@@ -113,7 +113,9 @@ describe("Board", () => {
   });
 
   it("applies colourContext background via board style", () => {
-    render(<Board {...makeProps({ colourContext: { background: "#abcdef" } })} />);
+    render(
+      <Board {...makeProps({ colourContext: { background: "#abcdef" } })} />
+    );
     const board = document.getElementById("svg");
     expect(board.style.backgroundColor).not.toBe("");
     expect(board.style.backgroundColor).toMatch(/^rgb\(/);
@@ -125,9 +127,7 @@ describe("Board", () => {
     const board = document.getElementById("svg");
     const mountedSvg = board.children[0];
 
-    rerender(
-      <Board {...props} colourContext={{ background: "#000000" }} />
-    );
+    rerender(<Board {...props} colourContext={{ background: "#000000" }} />);
 
     expect(board.children).toHaveLength(1);
     expect(board.children[0]).toBe(mountedSvg);
@@ -140,9 +140,7 @@ describe("Board", () => {
     const svg = board.children[0];
     expect(svg.style.height).toBe("");
 
-    fireEvent.click(
-      document.querySelector('button[title="ToggleFullSize"]')
-    );
+    fireEvent.click(document.querySelector('button[title="ToggleFullSize"]'));
 
     expect(svg.style.height).toBe("auto");
   });

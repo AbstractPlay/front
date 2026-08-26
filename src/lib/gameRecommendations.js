@@ -296,8 +296,7 @@ export function buildGameRecommendations({
       }));
 
   const popularityNorm = buildPopularityNormMap(popularityData);
-  const playedMetaGames =
-    profile?.playedMetaGames ?? new Set();
+  const playedMetaGames = profile?.playedMetaGames ?? new Set();
 
   if (profile?.tier === "cold") {
     return buildColdTierRecommendations({

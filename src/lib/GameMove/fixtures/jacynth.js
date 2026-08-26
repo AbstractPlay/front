@@ -24,7 +24,10 @@ export const JACYNTH_STATE = JSON.stringify({
       },
       claimed: { dataType: "Map", value: [] },
       influence: [4, 4],
-      hands: [["5ML", "2SY", "1L"], ["7VY", "7ML", "2VL"]],
+      hands: [
+        ["5ML", "2SY", "1L"],
+        ["7VY", "7ML", "2VL"],
+      ],
     },
   ],
 });

@@ -25,7 +25,9 @@ function SiteGeo({ nav }) {
         id: code,
         code,
         name:
-          allUsersByCode.get(code)?.name ?? activeByCode.get(code)?.name ?? code,
+          allUsersByCode.get(code)?.name ??
+          activeByCode.get(code)?.name ??
+          code,
         n: allUsersByCode.get(code)?.n ?? 0,
         activeN: activeByCode.get(code)?.n ?? 0,
       }))

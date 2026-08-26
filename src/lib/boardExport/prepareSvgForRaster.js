@@ -1,4 +1,7 @@
-import { buildEmbeddedExportFontCss, ensureFontsForSvg } from "./embedExportFonts";
+import {
+  buildEmbeddedExportFontCss,
+  ensureFontsForSvg,
+} from "./embedExportFonts";
 import {
   copySvgStyleBlocks,
   inlineTextStylesFromLive,

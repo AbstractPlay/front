@@ -7,7 +7,8 @@ export const SUMMARY_URLS = {
   site: `${RECORDS_BASE_URL}/_summary-site.json`,
   players: `${RECORDS_BASE_URL}/_summary-players.json`,
   ratings: `${RECORDS_BASE_URL}/_summary-ratings.json`,
-  playerSummary: (userId) => `${RECORDS_BASE_URL}/player/${userId}-summary.json`,
+  playerSummary: (userId) =>
+    `${RECORDS_BASE_URL}/player/${userId}-summary.json`,
 };
 
 /** @typedef {"site" | "players" | "ratings"} SummaryTier */
@@ -46,8 +47,7 @@ export function summaryFromPlayerSlice(slice) {
   return {
     ratings: {
       highest: ratings.highest ?? [],
-      avg:
-        ratings.avg != null ? [{ user: userId, rating: ratings.avg }] : [],
+      avg: ratings.avg != null ? [{ user: userId, rating: ratings.avg }] : [],
       weighted:
         ratings.weighted != null
           ? [{ user: userId, rating: ratings.weighted }]
@@ -181,19 +181,11 @@ export function ensureSummarySite() {
 }
 
 export function ensureSummaryPlayers() {
-  return loadSummaryTier(
-    "players",
-    SUMMARY_URLS.players,
-    mergePlayersSummary
-  );
+  return loadSummaryTier("players", SUMMARY_URLS.players, mergePlayersSummary);
 }
 
 export function ensureSummaryRatings() {
-  return loadSummaryTier(
-    "ratings",
-    SUMMARY_URLS.ratings,
-    mergeRatingsSummary
-  );
+  return loadSummaryTier("ratings", SUMMARY_URLS.ratings, mergeRatingsSummary);
 }
 
 /**

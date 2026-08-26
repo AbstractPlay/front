@@ -57,7 +57,10 @@ function LayoutFeedback({ layoutId }) {
           <span className="game-move-layout-feedback__toggle-label">
             {layoutTitle}
           </span>
-          <span className="icon game-move-layout-feedback__toggle-icon" aria-hidden="true">
+          <span
+            className="icon game-move-layout-feedback__toggle-icon"
+            aria-hidden="true"
+          >
             <i className={`fa fa-chevron-${expanded ? "down" : "up"}`} />
           </span>
           <span className="game-move-layout-feedback__toggle-hint">

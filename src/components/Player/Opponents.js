@@ -40,9 +40,7 @@ function Opponents({ handleChallenge }) {
       const rec = hOpp.find((r) => r.user === user.id);
       if (rec !== undefined) {
         hIndexSetter(rec.value);
-        const countBelow = hOpp.filter(
-          ({ value }) => value < rec.value
-        ).length;
+        const countBelow = hOpp.filter(({ value }) => value < rec.value).length;
         ptileSetter(Math.round((countBelow / hOpp.length) * 100));
       } else {
         hIndexSetter(null);

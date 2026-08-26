@@ -36,7 +36,10 @@ function RecentMovesStrip({ session, t }) {
       className="game-move-recent-moves"
       aria-labelledby="card-recent-moves"
     >
-      <h2 id="card-recent-moves" className="game-move-queue-card__section-heading">
+      <h2
+        id="card-recent-moves"
+        className="game-move-queue-card__section-heading"
+      >
         {t("gameMove.layout.recentMoves")}
       </h2>
       <div
@@ -54,8 +57,12 @@ function RecentMovesStrip({ session, t }) {
             }`}
             onClick={() => handleGameMoveClick(item)}
           >
-            <span className="game-move-recent-moves__num">{item.moveNumber}.</span>
-            <span className="game-move-recent-moves__notation">{item.move}</span>
+            <span className="game-move-recent-moves__num">
+              {item.moveNumber}.
+            </span>
+            <span className="game-move-recent-moves__notation">
+              {item.move}
+            </span>
           </button>
         ))}
       </div>

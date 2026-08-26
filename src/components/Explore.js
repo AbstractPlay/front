@@ -2,7 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import { getGameDisplayName } from "../lib/gameOptions";
 import { useTranslation } from "react-i18next";
-import { useParams, useLocation, useNavigate, Navigate } from "react-router-dom";
+import {
+  useParams,
+  useLocation,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
@@ -139,7 +144,9 @@ function Explore(props) {
             />
             <meta
               property="og:description"
-              content={`Information on the game ${getGameDisplayName(metaGame)}`}
+              content={`Information on the game ${getGameDisplayName(
+                metaGame
+              )}`}
             />
           </Helmet>
           <MetaItem
@@ -156,9 +163,7 @@ function Explore(props) {
   }
 
   if (modeFromPath !== undefined && !isValidExploreView(modeFromPath)) {
-    return (
-      <Navigate to={`/explore/${DEFAULT_EXPLORE_VIEW}`} replace />
-    );
+    return <Navigate to={`/explore/${DEFAULT_EXPLORE_VIEW}`} replace />;
   }
 
   if (modeFromPath === undefined) {

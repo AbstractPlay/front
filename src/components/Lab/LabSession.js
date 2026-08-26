@@ -599,8 +599,7 @@ function LabSession({
     const hasSubtree =
       focus.exPath.length > 0
         ? node.children.length > 0
-        : node.children.length > 0 ||
-          focus.moveNumber < nodes.length - 1;
+        : node.children.length > 0 || focus.moveNumber < nodes.length - 1;
     if (hasSubtree) {
       showDeleteSubtreeConfirmSetter(true);
     } else {
@@ -625,11 +624,7 @@ function LabSession({
 
     if (focus.moveNumber > 0) {
       const { focus: newFocus } = deleteSpineEntry(nodes, focus.moveNumber);
-      newFocus.canExplore = canExploreMove(
-        gameRef.current,
-        nodes,
-        newFocus
-      );
+      newFocus.canExplore = canExploreMove(gameRef.current, nodes, newFocus);
       recalculateLabOutcomes(nodes, gameRef.current, newFocus.moveNumber);
       const focusNode = getFocusNode(nodes, gameRef.current, newFocus);
       if (focusNode?.state) {
@@ -968,27 +963,19 @@ function LabSession({
         if (progressToast) {
           toast.dismiss(progressToast);
         }
-        const message =
-          err.message?.startsWith("FRAME_CAP:")
-            ? t("boardExport.frameCap", {
-                max: MAX_GIF_FRAMES,
-              })
-            : t("boardExport.failed", {
-                error: err.message || String(err),
-              });
+        const message = err.message?.startsWith("FRAME_CAP:")
+          ? t("boardExport.frameCap", {
+              max: MAX_GIF_FRAMES,
+            })
+          : t("boardExport.failed", {
+              error: err.message || String(err),
+            });
         toast(message, { type: "error" });
       } finally {
         boardExportBusySetter(false);
       }
     },
-    [
-      focus,
-      rendered.length,
-      metaGame,
-      settings,
-      effectiveColourContext,
-      t,
-    ]
+    [focus, rendered.length, metaGame, settings, effectiveColourContext, t]
   );
 
   if (error) {

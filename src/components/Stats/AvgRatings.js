@@ -99,8 +99,10 @@ function AvgRatings({ nav }) {
         header: () => <GlickoHint />,
         cell: (props) => formatGlickoSiteLowWithRd(props.getValue()),
         sortingFn: (rowA, rowB, columnID) => {
-          const lowA = glickoSiteRatingLow(rowA.getValue(columnID)) ?? -Infinity;
-          const lowB = glickoSiteRatingLow(rowB.getValue(columnID)) ?? -Infinity;
+          const lowA =
+            glickoSiteRatingLow(rowA.getValue(columnID)) ?? -Infinity;
+          const lowB =
+            glickoSiteRatingLow(rowB.getValue(columnID)) ?? -Infinity;
           if (lowA === lowB) {
             const rdA = rowA.getValue(columnID)?.rd ?? 0;
             const rdB = rowB.getValue(columnID)?.rd ?? 0;

@@ -84,11 +84,7 @@ function About(props) {
         <p style={{ fontSize: "smaller", textAlign: "right" }}>
           <span className="tag">{pkgInfo.version}</span>
         </p>
-        {highlights === null ? null : (
-          <p>
-            {aboutHighlightsLine(t)}
-          </p>
-        )}
+        {highlights === null ? null : <p>{aboutHighlightsLine(t)}</p>}
       </article>
       {highlights === null ? null : (
         <>

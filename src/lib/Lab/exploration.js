@@ -302,7 +302,12 @@ export function getMainLineTipState(nodes, game) {
   return getExplorationNode(nodes, game, tipMoveNumber).state;
 }
 
-export function shouldReplayAlongMainLine(exploration, focus, gameEngine, move) {
+export function shouldReplayAlongMainLine(
+  exploration,
+  focus,
+  gameEngine,
+  move
+) {
   const nextMain = exploration[focus.moveNumber + 1];
   return (
     focus.exPath.length === 0 &&
@@ -314,8 +319,7 @@ export function shouldReplayAlongMainLine(exploration, focus, gameEngine, move) 
 
 export function shouldExtendMainLine(exploration, focus) {
   return (
-    focus.exPath.length === 0 &&
-    focus.moveNumber === exploration.length - 1
+    focus.exPath.length === 0 && focus.moveNumber === exploration.length - 1
   );
 }
 

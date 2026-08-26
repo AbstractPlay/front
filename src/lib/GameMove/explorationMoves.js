@@ -80,22 +80,21 @@ export function requiresPartialExplorationApply(gameEngine, move, context) {
   if (ctx.simultaneous && v.complete !== 1) return true;
 
   try {
-    createProbeEngine(gameEngine, ctx.metaGame).move(wireMoveForEngine(move, ctx), {
-      trusted: true,
-      partial: false,
-      emulation: true,
-    });
+    createProbeEngine(gameEngine, ctx.metaGame).move(
+      wireMoveForEngine(move, ctx),
+      {
+        trusted: true,
+        partial: false,
+        emulation: true,
+      }
+    );
     return false;
   } catch {
     return true;
   }
 }
 
-export function isPartialExplorationMove(
-  gameEngine,
-  move,
-  options = {}
-) {
+export function isPartialExplorationMove(gameEngine, move, options = {}) {
   const ctx = normalizeMoveContext(options);
   const { userCompleted = false } = ctx;
   const v = validateMoveForExploration(gameEngine, move, ctx);
@@ -136,11 +135,7 @@ export function isPersistableExplorationMove(
   return valid && !partial;
 }
 
-export function applyExplorationMove(
-  gameEngine,
-  move,
-  options = {}
-) {
+export function applyExplorationMove(gameEngine, move, options = {}) {
   const ctx = normalizeMoveContext(options);
   const { valid, partial } = validateExplorationMove(gameEngine, move, ctx);
   if (!valid) {

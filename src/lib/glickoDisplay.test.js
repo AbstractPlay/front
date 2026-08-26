@@ -86,8 +86,8 @@ describe("compareByGlickoLow", () => {
 
 describe("formatGlickoConfidenceRange", () => {
   it("formats 95% range from rating and rd", () => {
-    expect(
-      formatGlickoConfidenceRange({ rating: 1600, rd: 50 })
-    ).toBe("1500–1700");
+    expect(formatGlickoConfidenceRange({ rating: 1600, rd: 50 })).toBe(
+      "1500–1700"
+    );
   });
 });

@@ -50,7 +50,10 @@ function CardMovePath(props) {
   const showChooser = uiState === 0 && focus.canExplore && showMoveControls;
 
   return (
-    <section className="game-move-card-move-path" aria-labelledby="card-make-move">
+    <section
+      className="game-move-card-move-path"
+      aria-labelledby="card-make-move"
+    >
       <h2 id="card-make-move" className="game-move-card-move-path__heading">
         {t("MakeMove")}
       </h2>
@@ -68,7 +71,9 @@ function CardMovePath(props) {
       ) : null}
 
       {moveToSubmit !== null ? (
-        <p className="game-move-card-move-path__pending">{t("PendingSubmit")}</p>
+        <p className="game-move-card-move-path__pending">
+          {t("PendingSubmit")}
+        </p>
       ) : null}
 
       {showChooser ? (
@@ -114,17 +119,19 @@ function CardMovePath(props) {
                 </div>
               )}
               {game.customButtons
-                ? safeGetButtons(engine).map(({ label, move: btnMove }, idx) => (
-                    <div className="control" key={`CardMoveButton|${idx}`}>
-                      <button
-                        type="button"
-                        className="button is-small apButton"
-                        onClick={() => handlers.handleMove(btnMove)}
-                      >
-                        {t(`buttons.${label}`)}
-                      </button>
-                    </div>
-                  ))
+                ? safeGetButtons(engine).map(
+                    ({ label, move: btnMove }, idx) => (
+                      <div className="control" key={`CardMoveButton|${idx}`}>
+                        <button
+                          type="button"
+                          className="button is-small apButton"
+                          onClick={() => handlers.handleMove(btnMove)}
+                        >
+                          {t(`buttons.${label}`)}
+                        </button>
+                      </div>
+                    )
+                  )
                 : null}
             </div>
           )}

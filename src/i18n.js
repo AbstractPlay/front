@@ -75,7 +75,12 @@ export function normalizeUiLanguage(language) {
 
 function convertDetectedLanguage(language) {
   const normalized = normalizeUiLanguage(language);
-  if (normalized !== "en" || String(language ?? "").toLowerCase().startsWith("en")) {
+  if (
+    normalized !== "en" ||
+    String(language ?? "")
+      .toLowerCase()
+      .startsWith("en")
+  ) {
     return normalized;
   }
   // Preserve regional tags (fr-CA, de-AT) for nonExplicitSupportedLngs matching.

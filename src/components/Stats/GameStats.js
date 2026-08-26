@@ -29,7 +29,8 @@ function GameStats({ metaFilter, nav }) {
         })
         .filter(
           (rec) =>
-            metaFilter === undefined || matchesSummaryGameKey(rec.id, metaFilter)
+            metaFilter === undefined ||
+            matchesSummaryGameKey(rec.id, metaFilter)
         )
         .sort((a, b) => a.game.localeCompare(b.game)),
     [summary, metaFilter, t]

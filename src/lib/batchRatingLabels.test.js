@@ -36,9 +36,9 @@ describe("variantSuffixFromBatchGameKey", () => {
 
 describe("formatBatchRatingVariantLabel", () => {
   it("formats no variants as empty", () => {
-    expect(formatBatchRatingVariantLabel("chess", "chess (no variants)", t)).toBe(
-      ""
-    );
+    expect(
+      formatBatchRatingVariantLabel("chess", "chess (no variants)", t)
+    ).toBe("");
     expect(formatBatchRatingVariantLabel("chess", "chess", t)).toBe("");
   });
 

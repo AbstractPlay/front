@@ -35,7 +35,9 @@ function RivalryStats({ nav }) {
     try {
       const res = await callAuthApi("set_public_rivalries", { state });
       if (!res?.ok) {
-        throw new Error(`set_public_rivalries failed with status ${res?.status}`);
+        throw new Error(
+          `set_public_rivalries failed with status ${res?.status}`
+        );
       }
       const { setGlobalMe } = useStore.getState();
       setGlobalMe((prev) => ({ ...prev, publicRivalries: state }));

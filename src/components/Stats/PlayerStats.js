@@ -22,43 +22,44 @@ function PlayerStats({ nav }) {
       !summary?.players?.allPlays
         ? []
         : summary.players.allPlays
-        .map((obj) => {
-          const eclectic = summary.players.eclectic?.find(
-            (u) => u.user === obj.user
-          );
-          const social = summary.players.social?.find(
-            (u) => u.user === obj.user
-          );
-          const histogram = summary.histograms?.players?.find(
-            (x) => x.user === obj.user
-          )?.value;
-          if (histogram === undefined) {
-            return null;
-          }
-          let histShort = histogram.slice(-10);
-          while (histShort.length < 10) {
-            histShort = [0, ...histShort];
-          }
-          const h =
-            summary.players.h?.find((u) => u.user === obj.user)?.value ?? 0;
-          const hOpp =
-            summary.players.hOpp?.find((u) => u.user === obj.user)?.value ?? 0;
-          const user = userNames.find((u) => u.id === obj.user);
-          const name = user !== undefined ? user.name : "UNKNOWN";
-          return {
-            id: obj.user,
-            name,
-            plays: obj.value,
-            eclectic: eclectic?.value ?? 0,
-            social: social?.value ?? 0,
-            histogram,
-            histShort,
-            h,
-            hOpp,
-          };
-        })
-        .filter((row) => row !== null)
-        .sort((a, b) => b.plays - a.plays),
+            .map((obj) => {
+              const eclectic = summary.players.eclectic?.find(
+                (u) => u.user === obj.user
+              );
+              const social = summary.players.social?.find(
+                (u) => u.user === obj.user
+              );
+              const histogram = summary.histograms?.players?.find(
+                (x) => x.user === obj.user
+              )?.value;
+              if (histogram === undefined) {
+                return null;
+              }
+              let histShort = histogram.slice(-10);
+              while (histShort.length < 10) {
+                histShort = [0, ...histShort];
+              }
+              const h =
+                summary.players.h?.find((u) => u.user === obj.user)?.value ?? 0;
+              const hOpp =
+                summary.players.hOpp?.find((u) => u.user === obj.user)?.value ??
+                0;
+              const user = userNames.find((u) => u.id === obj.user);
+              const name = user !== undefined ? user.name : "UNKNOWN";
+              return {
+                id: obj.user,
+                name,
+                plays: obj.value,
+                eclectic: eclectic?.value ?? 0,
+                social: social?.value ?? 0,
+                histogram,
+                histShort,
+                h,
+                hOpp,
+              };
+            })
+            .filter((row) => row !== null)
+            .sort((a, b) => b.plays - a.plays),
     [summary, userNames]
   );
 

@@ -76,9 +76,7 @@ describe("shouldReplayAlongMainLine", () => {
 describe("serializeSessionExploration", () => {
   it("returns one slot per spine node after extension", () => {
     const exploration = makeSpine(["homeworld", "build"]);
-    exploration[0].children.push(
-      new GameNode(exploration[0], "alt", "{}", 1)
-    );
+    exploration[0].children.push(new GameNode(exploration[0], "alt", "{}", 1));
     const serialized = serializeSessionExploration(exploration);
     expect(serialized).toHaveLength(3);
     expect(serialized[0]).toHaveLength(1);
@@ -169,7 +167,12 @@ describe("normalizeSessionExploration", () => {
       ],
     ];
     const normalized = normalizeSessionExploration(history, malformed);
-    restoreSessionExploration(history, "tictactoe", { state: "{}" }, normalized);
+    restoreSessionExploration(
+      history,
+      "tictactoe",
+      { state: "{}" },
+      normalized
+    );
     expect(history[1].children).toHaveLength(1);
     expect(history[1].children[0].move).toBe("alt");
     expect(history).toHaveLength(4);

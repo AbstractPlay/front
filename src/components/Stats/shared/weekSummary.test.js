@@ -37,8 +37,7 @@ describe("combinedTimeoutAbandonRates", () => {
 
   it("combines timeout and abandoned series", () => {
     expect(combinedTimeoutAbandonRates([0.1, 0.2], [0.01, 0.02])).toEqual([
-      0.22,
-      0.11,
+      0.22, 0.11,
     ]);
   });
 });

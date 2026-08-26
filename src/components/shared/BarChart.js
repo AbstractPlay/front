@@ -83,15 +83,20 @@ function BarChart({
   className = "",
 }) {
   const values = useMemo(
-    () => data.map((value) => (Number.isFinite(Number(value)) ? Number(value) : 0)),
+    () =>
+      data.map((value) => (Number.isFinite(Number(value)) ? Number(value) : 0)),
     [data]
   );
   const count = values.length;
   const computedYMin = yMin ?? 0;
   const dataMax = count > 0 ? Math.max(...values, computedYMin) : 1;
-  const computedYMax = yMax ?? (dataMax > computedYMin ? dataMax : computedYMin + 1);
+  const computedYMax =
+    yMax ?? (dataMax > computedYMin ? dataMax : computedYMin + 1);
   const xLabels = useMemo(
-    () => (labels?.length === count ? labels : values.map((_, index) => String(index))),
+    () =>
+      labels?.length === count
+        ? labels
+        : values.map((_, index) => String(index)),
     [labels, count, values]
   );
 
@@ -110,7 +115,9 @@ function BarChart({
       style={{ aspectRatio: `${VIEW_WIDTH} / ${height}` }}
       aria-label={title ?? undefined}
     >
-      {title ? <figcaption className="ap-chart-title">{title}</figcaption> : null}
+      {title ? (
+        <figcaption className="ap-chart-title">{title}</figcaption>
+      ) : null}
       <svg
         className="ap-chart-svg"
         aria-hidden="true"

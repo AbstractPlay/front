@@ -93,7 +93,9 @@ describe("gameRecommendationFeatures", () => {
   it("adds standard-board synthetic feature when a shape tag is present", () => {
     const withShape = gameRecommendationFeatures(["board>shape>square"]);
     const withoutShape = gameRecommendationFeatures(["board>dynamic"]);
-    expect(withShape.get(STANDARD_BOARD_FEATURE)).toBe(TAG_WEIGHTS.standardBoard);
+    expect(withShape.get(STANDARD_BOARD_FEATURE)).toBe(
+      TAG_WEIGHTS.standardBoard
+    );
     expect(withoutShape.has(STANDARD_BOARD_FEATURE)).toBe(false);
   });
 
@@ -122,9 +124,9 @@ describe("topLevelGoalBucket", () => {
 
 describe("topLevelGoalTags", () => {
   it("collects distinct top-level goal buckets", () => {
-    expect(
-      topLevelGoalTags(["goal>score>race", "mechanic>place"])
-    ).toEqual(["goal>score"]);
+    expect(topLevelGoalTags(["goal>score>race", "mechanic>place"])).toEqual([
+      "goal>score",
+    ]);
     expect(topLevelGoalTags(["goal>connect", "goal>area"])).toEqual([
       "goal>area",
       "goal>connect",
@@ -141,11 +143,7 @@ describe("topLevelGoalTag", () => {
 
   it("prefers the goal family with stronger feature weight when multiple exist", () => {
     expect(
-      topLevelGoalTag([
-        "goal>connect",
-        "goal>connect>hex",
-        "goal>area",
-      ])
+      topLevelGoalTag(["goal>connect", "goal>connect>hex", "goal>area"])
     ).toBe("goal>connect");
   });
 

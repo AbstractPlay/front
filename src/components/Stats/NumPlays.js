@@ -60,7 +60,8 @@ function NumPlays({ metaFilter, nav }) {
       .filter(
         (rec) =>
           rec !== null &&
-          (metaFilter === undefined || matchesSummaryGameKey(rec.id, metaFilter))
+          (metaFilter === undefined ||
+            matchesSummaryGameKey(rec.id, metaFilter))
       )
       .sort((a, b) => b.plays - a.plays);
   }, [summary, metaFilter, t]);

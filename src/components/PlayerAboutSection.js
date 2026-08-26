@@ -3,7 +3,12 @@ import { API_ENDPOINT_OPEN } from "../config";
 import ProfileAbout from "./ProfileAbout";
 import { aboutTextPlainSnippet } from "../lib/aboutTextClient";
 
-export default function PlayerAboutSection({ userId, seedAbout, globalMeId, onAboutChange }) {
+export default function PlayerAboutSection({
+  userId,
+  seedAbout,
+  globalMeId,
+  onAboutChange,
+}) {
   const [about, aboutSetter] = useState(
     seedAbout !== undefined && seedAbout !== null && !/^\s*$/.test(seedAbout)
       ? seedAbout
@@ -71,9 +76,7 @@ export default function PlayerAboutSection({ userId, seedAbout, globalMeId, onAb
 
   const bodyClassName = [
     "profile-about-body",
-    expanded
-      ? "profile-about-body--expanded"
-      : "profile-about-body--collapsed",
+    expanded ? "profile-about-body--expanded" : "profile-about-body--collapsed",
     !expanded && needsCollapse ? "profile-about-body--fade" : null,
   ]
     .filter(Boolean)

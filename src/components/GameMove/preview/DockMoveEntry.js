@@ -85,7 +85,9 @@ function DockMoveEntry(props) {
       {uiState !== 0 ? (
         <p
           className={
-            uiState === -1 ? "historyState" : "exploreState game-move-dock-entry__mode"
+            uiState === -1
+              ? "historyState"
+              : "exploreState game-move-dock-entry__mode"
           }
         >
           {uiState === -1 ? t("History") : t("Explore")}
@@ -150,14 +152,18 @@ function DockMoveEntry(props) {
             <button
               type="button"
               className="button is-small apButton tooltipped"
-              onClick={() => handlers.handleSubmit(drawoffer ? "drawoffer" : "")}
+              onClick={() =>
+                handlers.handleSubmit(drawoffer ? "drawoffer" : "")
+              }
             >
               {t("Submit")}
               <span className="tooltiptext">
                 {t("SubmitMove", { move: moveToSubmit })}
               </span>
             </button>
-          ) : moveToSubmit !== null && focus.exPath.length > 1 && !submitting ? (
+          ) : moveToSubmit !== null &&
+            focus.exPath.length > 1 &&
+            !submitting ? (
             <button
               type="button"
               className="button is-small apButton tooltipped"
@@ -253,7 +259,8 @@ function DockMoveEntry(props) {
                   </div>
                 )}
                 {game.customButtons
-                  ? safeGetButtons(engine).map(({ label, move: btnMove }, idx) => (
+                  ? safeGetButtons(engine).map(
+                      ({ label, move: btnMove }, idx) => (
                         <div className="control" key={`MoveButton|${idx}`}>
                           <button
                             type="button"
@@ -263,7 +270,8 @@ function DockMoveEntry(props) {
                             {t(`buttons.${label}`)}
                           </button>
                         </div>
-                      ))
+                      )
+                    )
                   : null}
               </div>
             </div>
@@ -281,7 +289,9 @@ function DockMoveEntry(props) {
             </div>
           ) : null}
 
-          {moveToSubmit !== null && focus.exPath.length === 1 && !drawOffered ? (
+          {moveToSubmit !== null &&
+          focus.exPath.length === 1 &&
+          !drawOffered ? (
             <div className="field game-move-dock-entry__draw-offer">
               <label className="checkbox">
                 <input
@@ -304,7 +314,9 @@ function DockMoveEntry(props) {
               <label className="checkbox">
                 <input
                   type="checkbox"
-                  onChange={(e) => handlers.handleDrawOfferChange(e.target.checked)}
+                  onChange={(e) =>
+                    handlers.handleDrawOfferChange(e.target.checked)
+                  }
                   checked={drawoffer}
                 />
                 {t("IncludeAcceptDrawOffer")}

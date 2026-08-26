@@ -153,10 +153,7 @@ export function alignHistogramToSiteWeeks(histogram, siteWeekCount) {
   if (histogram.length >= siteWeekCount) {
     return histogram.slice(0, siteWeekCount);
   }
-  return [
-    ...histogram,
-    ...Array(siteWeekCount - histogram.length).fill(0),
-  ];
+  return [...histogram, ...Array(siteWeekCount - histogram.length).fill(0)];
 }
 
 /**

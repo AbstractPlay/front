@@ -1,5 +1,8 @@
 import GameStatus from "../GameStatus";
-import { buildGameStatusProps, hasStatusContent } from "../../../lib/GameMove/gameMoveLayoutHelpers";
+import {
+  buildGameStatusProps,
+  hasStatusContent,
+} from "../../../lib/GameMove/gameMoveLayoutHelpers";
 
 function CardStatusSummary({ session }) {
   const { t } = session;
@@ -8,7 +11,10 @@ function CardStatusSummary({ session }) {
   }
 
   return (
-    <section className="game-move-queue-card__status" aria-labelledby="card-status">
+    <section
+      className="game-move-queue-card__status"
+      aria-labelledby="card-status"
+    >
       <h2 id="card-status" className="game-move-queue-card__section-heading">
         {t("Status")}
       </h2>

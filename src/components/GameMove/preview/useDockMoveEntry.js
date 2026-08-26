@@ -62,7 +62,10 @@ export function useDockMoveEntry(props) {
 
   const delayedHandleMove = useMemo(
     () =>
-      debounce((value) => handleMove(value), props.screenWidth < 770 ? 1000 : 500),
+      debounce(
+        (value) => handleMove(value),
+        props.screenWidth < 770 ? 1000 : 500
+      ),
     [handleMove, props.screenWidth]
   );
 
@@ -192,7 +195,9 @@ export function useDockMoveEntry(props) {
       canClaimTimeout =
         game.players.some(
           (p, i) =>
-            toMove[i] && i !== game.me && p.time - (Date.now() - game.lastMoveTime) < 0
+            toMove[i] &&
+            i !== game.me &&
+            p.time - (Date.now() - game.lastMoveTime) < 0
         ) && game.players.some((p) => p.id === globalMe?.id);
     } else {
       canClaimTimeout =

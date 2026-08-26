@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
-} from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render } from "@abstractplay/renderer";
@@ -851,14 +845,19 @@ export function useGameMoveSession(props) {
         parentheticalSetter((val) => [...val, t("gameMove.unrated")]);
       }
       if (game.noExplore !== undefined && game.noExplore === true) {
-        parentheticalSetter((val) => [...val, t("gameMove.explorationDisabled")]);
+        parentheticalSetter((val) => [
+          ...val,
+          t("gameMove.explorationDisabled"),
+        ]);
       }
       if (game.toMove !== "" && !game.players.some((p) => p.id === me?.id)) {
         if (game.clockHard) {
           if (Array.isArray(game.toMove)) {
             const elapsed = Date.now() - game.lastMoveTime;
             if (
-              game.toMove.some((p, i) => p && game.players[i].time - elapsed < 0)
+              game.toMove.some(
+                (p, i) => p && game.players[i].time - elapsed < 0
+              )
             ) {
               checkTime("timeloss");
             }
@@ -1277,7 +1276,10 @@ export function useGameMoveSession(props) {
           if (moveNumberParam && !initialMoveFromUrlAppliedRef.current) {
             initialMoveFromUrlAppliedRef.current = true;
             const moveNum = parseInt(moveNumberParam, 10);
-            handleGameMoveClickRef.current?.({ moveNumber: moveNum, exPath: [] });
+            handleGameMoveClickRef.current?.({
+              moveNumber: moveNum,
+              exPath: [],
+            });
           }
         }
       }
@@ -2429,8 +2431,7 @@ export function useGameMoveSession(props) {
           replaceNames,
           players: currentGame.players,
           users: useStore.getState().users,
-          getPerspective: (_engine, game) =>
-            game.me ? game.me + 1 : 1,
+          getPerspective: (_engine, game) => (game.me ? game.me + 1 : 1),
           altDisplay: displaySettings?.display,
           metaGame,
           gameId: gameID,
@@ -2460,14 +2461,13 @@ export function useGameMoveSession(props) {
         if (progressToast) {
           toast.dismiss(progressToast);
         }
-        const message =
-          err.message?.startsWith("FRAME_CAP:")
-            ? t("boardExport.frameCap", {
-                max: MAX_GIF_FRAMES,
-              })
-            : t("boardExport.failed", {
-                error: err.message || String(err),
-              });
+        const message = err.message?.startsWith("FRAME_CAP:")
+          ? t("boardExport.frameCap", {
+              max: MAX_GIF_FRAMES,
+            })
+          : t("boardExport.failed", {
+              error: err.message || String(err),
+            });
         toast(message, { type: "error" });
       } finally {
         boardExportBusySetter(false);
@@ -2812,4 +2812,3 @@ export function useGameMoveSession(props) {
     boardExportDisabled: rendered.length === 0,
   };
 }
-

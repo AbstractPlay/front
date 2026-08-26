@@ -152,11 +152,7 @@ function Bones(props) {
           const intentionalLogout =
             sessionStorage.getItem("intentionalLogout") === "1";
 
-          if (
-            wasLoggedIn &&
-            !intentionalLogout &&
-            !isAnonymousFriendlyPath()
-          ) {
+          if (wasLoggedIn && !intentionalLogout && !isAnonymousFriendlyPath()) {
             console.log("Session expired, auto-triggering login...");
             localStorage.removeItem("wasLoggedIn");
             Auth.federatedSignIn();
@@ -305,11 +301,7 @@ function Bones(props) {
               </Routes>
             </ErrorBoundary>
           </section>
-          {REAL_MODE === "production" ? (
-            <Footer />
-          ) : (
-            <FooterDev />
-          )}
+          {REAL_MODE === "production" ? <Footer /> : <FooterDev />}
         </Router>
       </HelmetProvider>
     );

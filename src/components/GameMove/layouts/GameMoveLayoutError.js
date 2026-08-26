@@ -1,14 +1,8 @@
 import { getFocusNode } from "../../../lib/GameMove/exploration";
 
 export default function GameMoveLayoutError({ session }) {
-  const {
-    errorMessageRef,
-    game,
-    focus,
-    explorationRef,
-    gameRef,
-    reportError,
-  } = session;
+  const { errorMessageRef, game, focus, explorationRef, gameRef, reportError } =
+    session;
 
   if (
     !(
