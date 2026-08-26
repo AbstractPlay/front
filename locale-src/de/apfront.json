@@ -4551,6 +4551,14 @@
     "src": "{{revokerName}} revoked the <gameLink>{{metaGame}}</gameLink> challenge",
     "out": "{{revokerName}} hat die Herausforderung zu {{metaGame}} zurückgezogen"
   },
+  "me.notifications.message.completedGameChat": {
+    "src": "{{commenterName}} has something to say in your completed <gameLink>{{metaGame}}</gameLink> game",
+    "out": "{{commenterName}} hat etwas in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie zu sagen"
+  },
+  "me.notifications.message.completedGameChat_backfill": {
+    "src": "You have unread chat in your completed <gameLink>{{metaGame}}</gameLink> game",
+    "out": "Du hast ungelesene Chatnachrichten in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie"
+  },
   "me.notifications.message.eventInvitation": {
     "src": "{{organizerName}} has invited you to the event <eventLink>{{eventName}}</eventLink>.",
     "out": "{{organizerName}} hat dich zu {{eventName}} eingeladen"

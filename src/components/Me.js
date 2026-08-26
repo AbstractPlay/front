@@ -17,7 +17,6 @@ import { callAuthApi } from "../lib/api";
 import { fetchDashboard } from "../lib/globalMeBootstrap";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { cloneDeep } from "lodash";
-import CompletedGamesTable from "./Me/CompletedGamesTable";
 import WatchedGamesTable from "./Me/WatchedGamesTable";
 import MyTurnTable from "./Me/MyTurnTable";
 import TheirTurnTable from "./Me/TheirTurnTable";
@@ -57,7 +56,6 @@ function Me(props) {
   const { t } = useTranslation();
   const [myMove, myMoveSetter] = useState([]);
   const [waiting, waitingSetter] = useState([]);
-  const [over, overSetter] = useState([]);
   const globalMe = useStore((state) => state.globalMe);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
   const location = useLocation();
@@ -420,7 +418,6 @@ function Me(props) {
       if (games === undefined) games = [];
       const localMyMove = [];
       const localWaiting = [];
-      const localOver = [];
       for (const game of games) {
         if (Array.isArray(game.toMove)) {
           let found = false;
@@ -434,12 +431,12 @@ function Me(props) {
           }
           if (!found) localWaiting.push(game);
         } else {
-          if (game.toMove === "" || game.toMove === null) {
-            localOver.push(game);
-          } else if (game.players[game.toMove].id === globalMe.id) {
-            localMyMove.push(game);
-          } else {
-            localWaiting.push(game);
+          if (game.toMove !== "" && game.toMove !== null) {
+            if (game.players[game.toMove].id === globalMe.id) {
+              localMyMove.push(game);
+            } else {
+              localWaiting.push(game);
+            }
           }
         }
       }
@@ -455,7 +452,6 @@ function Me(props) {
 
       myMoveSetter(localMyMove);
       waitingSetter(localWaiting);
-      overSetter(localOver);
       setMyTurn(localMyMove);
     }
   }, [globalMe]);
@@ -524,6 +520,15 @@ function Me(props) {
               <span>{t("YourGames")}</span>
             </p>
             <div className="indentedContainer">
+              <div className="control">
+                <a
+                  href={`https://records.abstractplay.com/player/${globalMe.id}.json`}
+                >
+                  <button className="button apButton is-small">
+                    {t("me.downloadCompletedReports")}
+                  </button>
+                </a>
+              </div>
               <div>
                 <p className="lined">
                   <span>{t("YourMove")}</span>
@@ -535,30 +540,6 @@ function Me(props) {
                   <span>{t("OpponentMove")}</span>
                 </p>
                 <TheirTurnTable games={waiting} />
-              </div>
-              <div className="topPad">
-                <p className="lined">
-                  <span>{t("CompletedGames")}</span>
-                </p>
-                {over.length === 0 ? (
-                  ""
-                ) : (
-                  <>
-                    <p className="help">
-                      <em>{t("CompletedGamesHelp")}</em>
-                    </p>
-                    <CompletedGamesTable games={over} />
-                  </>
-                )}
-                <div className="control">
-                  <a
-                    href={`https://records.abstractplay.com/player/${globalMe.id}.json`}
-                  >
-                    <button className="button apButton is-small">
-                      {t("me.downloadCompletedReports")}
-                    </button>
-                  </a>
-                </div>
               </div>
               <div className="topPad">
                 <p className="lined">
