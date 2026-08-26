@@ -36,7 +36,7 @@ function AvgRatings({ nav }) {
     }
     const lst = [];
     for (const obj of summary.ratings.avg) {
-      const weighted = summary.ratings.weighted.find(
+      const weighted = summary.ratings.weighted?.find(
         (u) => u.user === obj.user
       );
       lst.push({
@@ -99,8 +99,10 @@ function AvgRatings({ nav }) {
         header: () => <GlickoHint />,
         cell: (props) => formatGlickoSiteLowWithRd(props.getValue()),
         sortingFn: (rowA, rowB, columnID) => {
-          const lowA = glickoSiteRatingLow(rowA.getValue(columnID)) ?? -Infinity;
-          const lowB = glickoSiteRatingLow(rowB.getValue(columnID)) ?? -Infinity;
+          const lowA =
+            glickoSiteRatingLow(rowA.getValue(columnID)) ?? -Infinity;
+          const lowB =
+            glickoSiteRatingLow(rowB.getValue(columnID)) ?? -Infinity;
           if (lowA === lowB) {
             const rdA = rowA.getValue(columnID)?.rd ?? 0;
             const rdB = rowB.getValue(columnID)?.rd ?? 0;

@@ -21,7 +21,7 @@ function TopPlayers({ nav }) {
 
   const data = useMemo(
     () =>
-      summary.topPlayers
+      (summary?.topPlayers ?? [])
         .map(({ user: userid, game, rating, wld, glicko }) => {
           let name = "UNKNOWN";
           const user = userNames.find((u) => u.id === userid);

@@ -8,8 +8,7 @@ function WeekSummaryTable({ summary, captionKey }) {
     return null;
   }
 
-  const fmt = (n) =>
-    n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  const fmt = (n) => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
   return (
     <table>

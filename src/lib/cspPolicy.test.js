@@ -2,9 +2,7 @@ import { describe, expect, it } from "vitest";
 import { CONTENT_SECURITY_POLICY } from "../../csp-policy.mjs";
 
 function directive(name) {
-  const match = CONTENT_SECURITY_POLICY.match(
-    new RegExp(`${name}\\s+([^;]+)`)
-  );
+  const match = CONTENT_SECURITY_POLICY.match(new RegExp(`${name}\\s+([^;]+)`));
   return match?.[1] ?? "";
 }
 

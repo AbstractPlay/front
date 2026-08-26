@@ -14,7 +14,7 @@ function GameStats({ metaFilter, nav }) {
 
   const data = useMemo(
     () =>
-      [...Object.keys(summary.metaStats)]
+      [...Object.keys(summary?.metaStats ?? {})]
         .map((gameKey) => {
           const rec = summary.metaStats[gameKey];
           return {
@@ -29,7 +29,8 @@ function GameStats({ metaFilter, nav }) {
         })
         .filter(
           (rec) =>
-            metaFilter === undefined || matchesSummaryGameKey(rec.id, metaFilter)
+            metaFilter === undefined ||
+            matchesSummaryGameKey(rec.id, metaFilter)
         )
         .sort((a, b) => a.game.localeCompare(b.game)),
     [summary, metaFilter, t]

@@ -81,7 +81,12 @@ export function trackRecommendationClick({
  *   metaGame: string,
  * }} params
  */
-export function trackRecommendationChallenge({ batchId, surface, tier, metaGame }) {
+export function trackRecommendationChallenge({
+  batchId,
+  surface,
+  tier,
+  metaGame,
+}) {
   if (!batchId || !metaGame) return;
 
   void logRecommendationEvent({

@@ -301,9 +301,7 @@ function UserSettingsModal(props) {
   const aboutByteCount = aboutTextByteLength(aboutMe);
   const aboutValidation = validateAboutTextClient(aboutMe);
   const aboutCanSave =
-    globalMe != null &&
-    globalMe.about !== aboutMe &&
-    aboutValidation.ok;
+    globalMe != null && globalMe.about !== aboutMe && aboutValidation.ok;
 
   const handleEMailChangeClick = () => {
     emailErrorSetter("");
@@ -780,7 +778,8 @@ function UserSettingsModal(props) {
                   }}
                 ></textarea>
                 <p className="help">
-                  {aboutByteCount.toLocaleString()} / {ABOUT_MAX_BYTES.toLocaleString()} bytes
+                  {aboutByteCount.toLocaleString()} /{" "}
+                  {ABOUT_MAX_BYTES.toLocaleString()} bytes
                   {aboutValidation.ok || aboutMe.length === 0
                     ? ""
                     : ` — ${aboutValidation.message}`}

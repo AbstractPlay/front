@@ -18,7 +18,8 @@ vi.mock("@abstractplay/gameslib", () => ({
           throw new Error("VALIDATION_GENERAL");
         },
         validateMove(m) {
-          if (m === "5ml-e1") return { valid: true, complete: 0, canrender: true };
+          if (m === "5ml-e1")
+            return { valid: true, complete: 0, canrender: true };
           return { valid: false };
         },
       };
@@ -251,7 +252,10 @@ const jacynthFixtureState = {
       },
       claimed: { dataType: "Map", value: [] },
       influence: [4, 4],
-      hands: [["5ML", "2SY", "1L"], ["7VY", "7ML", "2VL"]],
+      hands: [
+        ["5ML", "2SY", "1L"],
+        ["7VY", "7ML", "2VL"],
+      ],
     },
   ],
 };
@@ -361,7 +365,9 @@ describe("isPartialExplorationMove", () => {
       })
     ).toBe(true);
     expect(
-      requiresPartialExplorationApply(engine, ">n,11", { metaGame: META_CARNAC })
+      requiresPartialExplorationApply(engine, ">n,11", {
+        metaGame: META_CARNAC,
+      })
     ).toBe(true);
   });
 
@@ -452,12 +458,12 @@ describe("filterPersistableExplorationTree", () => {
 describe("simultaneous exploration moves", () => {
   it("treats partial order source as partial with player-aware validation", () => {
     const engine = mockEntropySimEngine();
-    expect(
-      isPartialExplorationMove(engine, "d5", entropySimContext)
-    ).toBe(true);
-    expect(
-      isPartialExplorationMove(engine, "d5,", entropySimContext)
-    ).toBe(true);
+    expect(isPartialExplorationMove(engine, "d5", entropySimContext)).toBe(
+      true
+    );
+    expect(isPartialExplorationMove(engine, "d5,", entropySimContext)).toBe(
+      true
+    );
     expect(isPersistableExplorationMove(engine, "d5", entropySimContext)).toBe(
       false
     );
@@ -465,15 +471,15 @@ describe("simultaneous exploration moves", () => {
 
   it("treats complete order and chaos placements as persistable", () => {
     const engine = mockEntropySimEngine();
-    expect(
-      isPartialExplorationMove(engine, "d5-e4", entropySimContext)
-    ).toBe(false);
+    expect(isPartialExplorationMove(engine, "d5-e4", entropySimContext)).toBe(
+      false
+    );
     expect(
       isPersistableExplorationMove(engine, "d5-e4", entropySimContext)
     ).toBe(true);
-    expect(
-      isPersistableExplorationMove(engine, "d4", entropySimContext)
-    ).toBe(true);
+    expect(isPersistableExplorationMove(engine, "d4", entropySimContext)).toBe(
+      true
+    );
   });
 
   it("applies wrapped simultaneous moves to the engine", () => {

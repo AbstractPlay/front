@@ -40,7 +40,11 @@ function createPhysChunk(dpi) {
   writeUint32BE(view, 0, data.length);
   chunk.set(type, 4);
   chunk.set(data, 8);
-  writeUint32BE(view, 8 + data.length, crc32(chunk.subarray(4, 8 + data.length)));
+  writeUint32BE(
+    view,
+    8 + data.length,
+    crc32(chunk.subarray(4, 8 + data.length))
+  );
   return chunk;
 }
 

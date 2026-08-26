@@ -11,7 +11,7 @@ function SiteGeo({ nav }) {
 
   const data = useMemo(() => {
     const allUsersByCode = new Map(
-      summary.geoStats.map(({ code, name, n }) => [code, { name, n }])
+      (summary?.geoStats ?? []).map(({ code, name, n }) => [code, { name, n }])
     );
     const activeByCode = new Map(
       (summary.activeGeoStats ?? []).map(({ code, name, n }) => [
@@ -25,7 +25,9 @@ function SiteGeo({ nav }) {
         id: code,
         code,
         name:
-          allUsersByCode.get(code)?.name ?? activeByCode.get(code)?.name ?? code,
+          allUsersByCode.get(code)?.name ??
+          activeByCode.get(code)?.name ??
+          code,
         n: allUsersByCode.get(code)?.n ?? 0,
         activeN: activeByCode.get(code)?.n ?? 0,
       }))

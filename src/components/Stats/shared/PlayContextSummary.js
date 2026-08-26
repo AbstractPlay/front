@@ -5,7 +5,7 @@ import { useStore } from "../../../stores";
 function PlayContextSummary() {
   const summary = useStore((state) => state.summary);
   const { t } = useTranslation();
-  const playContext = summary.playContext;
+  const playContext = summary?.playContext;
 
   if (playContext === undefined) {
     return null;

@@ -68,9 +68,9 @@ describe("matchesSummaryGameKey", () => {
   it("matches legacy filters by display name", () => {
     const { uid, info } = sampleMeta();
     expect(matchesSummaryGameKey(`${info.name} (9x9)`, info.name)).toBe(true);
-    expect(
-      matchesSummaryGameKey(`${info.name} (no variants)`, info.name)
-    ).toBe(true);
+    expect(matchesSummaryGameKey(`${info.name} (no variants)`, info.name)).toBe(
+      true
+    );
     expect(matchesSummaryGameKey(`${uid} (no variants)`, uid)).toBe(true);
   });
 });

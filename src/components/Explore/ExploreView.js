@@ -7,7 +7,10 @@ import {
   useCallback,
 } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
-import { listPublicCatalogMetas, getGameDisplayName } from "../../lib/gameOptions";
+import {
+  listPublicCatalogMetas,
+  getGameDisplayName,
+} from "../../lib/gameOptions";
 import { gameDescription } from "../../lib/gameDescription";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -857,9 +860,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         show={activeImgModal !== ""}
         title={
           activeImgModal
-            ? `Board image for ${
-                getGameDisplayName(activeImgModal)
-              }`
+            ? `Board image for ${getGameDisplayName(activeImgModal)}`
             : ""
         }
       >

@@ -27,10 +27,7 @@ function sessionFromAutosave(last) {
 }
 
 function launchPayloadFromSave(save) {
-  const payload =
-    save.source != null
-      ? save
-      : localSaveToLaunchPayload(save);
+  const payload = save.source != null ? save : localSaveToLaunchPayload(save);
   const game = buildLabGame(payload.metaGame, payload.state, {
     variants: payload.variants ?? [],
     numPlayers: payload.playerCount,

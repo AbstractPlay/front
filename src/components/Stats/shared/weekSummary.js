@@ -1,5 +1,5 @@
 export function lstSummarize(lst) {
-  if (lst.length === 0) {
+  if (!Array.isArray(lst) || lst.length === 0) {
     return undefined;
   }
   // drop the most recent (usually partial) week
@@ -37,6 +37,9 @@ export function weekHistogramChart(values) {
 }
 
 export function firstTimersCumulative(firstTimers) {
+  if (!Array.isArray(firstTimers) || firstTimers.length === 0) {
+    return [];
+  }
   const reversed = [...firstTimers].reverse();
   const lst = [];
   for (let i = 0; i < reversed.length; i++) {
@@ -48,6 +51,9 @@ export function firstTimersCumulative(firstTimers) {
 }
 
 export function combinedTimeoutAbandonRates(timeouts, abandoned) {
+  if (!Array.isArray(timeouts)) {
+    return [];
+  }
   const timeoutSeries = [...timeouts].reverse();
   const abandonedSeries =
     abandoned !== undefined

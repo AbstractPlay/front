@@ -316,11 +316,12 @@ export async function resyncPushSubscription() {
     return resyncInflight;
   }
 
-  resyncInflight = subscribeUser({ requestPermission: false, silent: true }).finally(
-    () => {
-      resyncInflight = null;
-    }
-  );
+  resyncInflight = subscribeUser({
+    requestPermission: false,
+    silent: true,
+  }).finally(() => {
+    resyncInflight = null;
+  });
   return resyncInflight;
 }
 

@@ -241,12 +241,17 @@ function DataTable({
                     {{
                       asc: (
                         <Fragment>
-                          &nbsp;<i className="fa fa-angle-up" aria-hidden="true"></i>
+                          &nbsp;
+                          <i className="fa fa-angle-up" aria-hidden="true"></i>
                         </Fragment>
                       ),
                       desc: (
                         <Fragment>
-                          &nbsp;<i className="fa fa-angle-down" aria-hidden="true"></i>
+                          &nbsp;
+                          <i
+                            className="fa fa-angle-down"
+                            aria-hidden="true"
+                          ></i>
                         </Fragment>
                       ),
                     }[header.column.getIsSorted()] ?? null}

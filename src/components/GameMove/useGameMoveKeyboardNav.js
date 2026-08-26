@@ -16,20 +16,23 @@ export function useGameMoveKeyboardNav({
   const handleGameMoveClickLatestRef = useRef(handleGameMoveClickRef.current);
   handleGameMoveClickLatestRef.current = handleGameMoveClickRef.current;
 
-  const onKeyDown = useCallback((event) => {
-    const exploration = explorationRef.current?.nodes ?? null;
-    const game = gameRef.current;
-    const handleGameMoveClick = handleGameMoveClickLatestRef.current;
-    if (!handleGameMoveClick) {
-      return;
-    }
-    handleMoveTreeKeyDown(event, {
-      focus: focusRef.current,
-      exploration,
-      game,
-      handleGameMoveClick,
-    });
-  }, [explorationRef, gameRef]);
+  const onKeyDown = useCallback(
+    (event) => {
+      const exploration = explorationRef.current?.nodes ?? null;
+      const game = gameRef.current;
+      const handleGameMoveClick = handleGameMoveClickLatestRef.current;
+      if (!handleGameMoveClick) {
+        return;
+      }
+      handleMoveTreeKeyDown(event, {
+        focus: focusRef.current,
+        exploration,
+        game,
+        handleGameMoveClick,
+      });
+    },
+    [explorationRef, gameRef]
+  );
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);

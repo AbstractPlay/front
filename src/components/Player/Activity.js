@@ -2,7 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ProfileContext, SummaryContext } from "../Player";
 import PlayerWeeklyChart from "./PlayerWeeklyChart";
-import { getActivityHistogram, getSiteWeekCount } from "../../lib/playerProfileSections";
+import {
+  getActivityHistogram,
+  getSiteWeekCount,
+} from "../../lib/playerProfileSections";
 
 function Activity() {
   const { t } = useTranslation();

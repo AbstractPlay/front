@@ -57,7 +57,9 @@ export function GameMoveMoveSection({
         <span>{t("MakeMove")}</span>
       </h2>
       <MoveEntry {...buildMoveEntryProps(session, { forceUndoRight })} />
-      {showMiscButtons ? <MiscButtons {...buildMiscButtonsProps(session)} /> : null}
+      {showMiscButtons ? (
+        <MiscButtons {...buildMiscButtonsProps(session)} />
+      ) : null}
     </div>
   );
 }
@@ -165,7 +167,9 @@ export function GameMoveBetaDrawer({ session, defaultTab = "moves" }) {
       </div>
       {open ? (
         <div className="game-move-beta-drawer__panel" role="tabpanel">
-          {tab === "status" ? <GameMoveStatusSection session={session} /> : null}
+          {tab === "status" ? (
+            <GameMoveStatusSection session={session} />
+          ) : null}
           {tab === "moves" ? <GameMoveMovesSection session={session} /> : null}
           {tab === "chat" ? <GameMoveChatSection session={session} /> : null}
           {tab === "log" ? <GameMoveLogSection session={session} /> : null}

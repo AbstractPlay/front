@@ -72,9 +72,15 @@ async function loadSvgImage(svg) {
   }
 }
 
-async function rasterizeSvgToCanvas(svg, { liveSvg, background, metaGame } = {}) {
-  const { svg: prepared, width: srcWidth, height: srcHeight } =
-    await prepareSvgForRaster(svg, { liveSvg, metaGame });
+async function rasterizeSvgToCanvas(
+  svg,
+  { liveSvg, background, metaGame } = {}
+) {
+  const {
+    svg: prepared,
+    width: srcWidth,
+    height: srcHeight,
+  } = await prepareSvgForRaster(svg, { liveSvg, metaGame });
   const canvas = createCanvas(EXPORT_CANVAS_WIDTH, EXPORT_CANVAS_HEIGHT);
   const ctx = canvas.getContext("2d");
   if (!ctx) {
@@ -93,7 +99,10 @@ async function rasterizeSvgToCanvas(svg, { liveSvg, background, metaGame } = {})
   return { canvas, width: EXPORT_CANVAS_WIDTH, height: EXPORT_CANVAS_HEIGHT };
 }
 
-export async function svgToPngBlob(svg, { background, liveSvg, metaGame } = {}) {
+export async function svgToPngBlob(
+  svg,
+  { background, liveSvg, metaGame } = {}
+) {
   const { canvas } = await rasterizeSvgToCanvas(svg, {
     background,
     liveSvg,
@@ -103,7 +112,10 @@ export async function svgToPngBlob(svg, { background, liveSvg, metaGame } = {}) 
   return setPngDpi(blob, EXPORT_DPI);
 }
 
-export async function svgToImageData(svg, { background, liveSvg, metaGame } = {}) {
+export async function svgToImageData(
+  svg,
+  { background, liveSvg, metaGame } = {}
+) {
   const { canvas, width, height } = await rasterizeSvgToCanvas(svg, {
     background,
     liveSvg,

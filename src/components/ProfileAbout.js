@@ -13,7 +13,10 @@ const markdownComponents = {
   img: () => null,
 };
 
-export default function ProfileAbout({ text, className = "profile-about content" }) {
+export default function ProfileAbout({
+  text,
+  className = "profile-about content",
+}) {
   if (text === undefined || text === null || /^\s*$/.test(text)) {
     return null;
   }

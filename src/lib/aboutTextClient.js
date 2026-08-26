@@ -42,19 +42,31 @@ export function validateAboutTextClient(value) {
     return { ok: false, message: "About text must be a string." };
   }
   if (hasDisallowedControlChars(value)) {
-    return { ok: false, message: "About text contains disallowed control characters." };
+    return {
+      ok: false,
+      message: "About text contains disallowed control characters.",
+    };
   }
   if (HTML_TAG_RE.test(value)) {
-    return { ok: false, message: "HTML is not allowed in about text. Use Markdown instead." };
+    return {
+      ok: false,
+      message: "HTML is not allowed in about text. Use Markdown instead.",
+    };
   }
   if (IMAGE_MARKDOWN_RE.test(value)) {
     return { ok: false, message: "Images are not allowed in about text." };
   }
   if (aboutTextByteLength(value) > ABOUT_MAX_BYTES) {
-    return { ok: false, message: `About text exceeds the ${ABOUT_MAX_BYTES} byte limit.` };
+    return {
+      ok: false,
+      message: `About text exceeds the ${ABOUT_MAX_BYTES} byte limit.`,
+    };
   }
   if (countUrls(value) > ABOUT_MAX_URLS) {
-    return { ok: false, message: `About text may contain at most ${ABOUT_MAX_URLS} links.` };
+    return {
+      ok: false,
+      message: `About text may contain at most ${ABOUT_MAX_URLS} links.`,
+    };
   }
   return { ok: true, text: value };
 }

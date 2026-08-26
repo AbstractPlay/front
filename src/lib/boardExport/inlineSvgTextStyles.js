@@ -24,8 +24,16 @@ export function inlineTextStylesFromLive(liveRoot, cloneRoot) {
     setIfPresent(el, "font-weight", computed.fontWeight);
     setIfPresent(el, "font-style", computed.fontStyle);
     setIfPresent(el, "letter-spacing", computed.letterSpacing);
-    setIfPresent(el, "text-anchor", computed.textAnchor || el.getAttribute("text-anchor"));
-    setIfPresent(el, "dominant-baseline", computed.dominantBaseline || el.getAttribute("dominant-baseline"));
+    setIfPresent(
+      el,
+      "text-anchor",
+      computed.textAnchor || el.getAttribute("text-anchor")
+    );
+    setIfPresent(
+      el,
+      "dominant-baseline",
+      computed.dominantBaseline || el.getAttribute("dominant-baseline")
+    );
 
     if (computed.fill && computed.fill !== "none") {
       setIfPresent(el, "fill", computed.fill);

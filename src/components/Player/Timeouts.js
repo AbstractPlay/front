@@ -44,8 +44,7 @@ function Timeouts() {
   }, [summary, user, allRecs]);
 
   const hasData =
-    timeoutCount > 0 ||
-    (histogram.length > 0 && histogram.some((v) => v > 0));
+    timeoutCount > 0 || (histogram.length > 0 && histogram.some((v) => v > 0));
 
   const siteWeekCount = getSiteWeekCount(summary);
 

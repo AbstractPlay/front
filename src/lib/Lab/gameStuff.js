@@ -204,12 +204,7 @@ export function setupLabGame(
       normalized?.length > 0 &&
       typeof normalized[0]?.move === "string"
     ) {
-      restoreExplorationTree(
-        history,
-        game0.metaGame,
-        game0.state,
-        normalized
-      );
+      restoreExplorationTree(history, game0.metaGame, game0.state, normalized);
     } else if (normalized?.length > 0) {
       restoreExplorationTree(
         history,

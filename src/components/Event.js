@@ -875,7 +875,8 @@ function Event() {
                 {registrants.find((r) => r.id === globalMe.id) === undefined ? (
                   (eventData.event.maxPlayers > 0 &&
                     registrants.length >= eventData.event.maxPlayers) ||
-                  (savedInvited.length > 0 && !savedInvited.includes(globalMe.id)) ||
+                  (savedInvited.length > 0 &&
+                    !savedInvited.includes(globalMe.id)) ||
                   savedBlocked.includes(globalMe.id) ? null : (
                     <button
                       className="button is-small apButton"

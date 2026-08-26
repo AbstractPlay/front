@@ -73,10 +73,7 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false }) {
   );
 
   const hasBrowseFilters =
-    query.trim() !== "" ||
-    starredOnly ||
-    goalTag !== "" ||
-    boardTag !== "";
+    query.trim() !== "" || starredOnly || goalTag !== "" || boardTag !== "";
 
   const {
     recommendations,
@@ -225,7 +222,10 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false }) {
       </p>
 
       {showQuickPicks && sections.length > 0 ? (
-        <div className="game-picker-quick-picks" style={{ marginBottom: "1rem" }}>
+        <div
+          className="game-picker-quick-picks"
+          style={{ marginBottom: "1rem" }}
+        >
           {sections.map((section) => (
             <div key={section.key} className="field">
               <p className="label is-size-7 mb-1">
@@ -349,17 +349,15 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false }) {
                 ) : null}
                 {game.goalTags.length > 0 ? (
                   <span className="is-block mt-1">
-                    {[...game.goalTags]
-                      .sort(tagSortFn)
-                      .map((cat) => (
-                        <span
-                          key={cat}
-                          className="tag is-light mr-1 mb-1"
-                          title={t(`categories.${cat}.description`)}
-                        >
-                          {t(`categories.${cat}.full`)}
-                        </span>
-                      ))}
+                    {[...game.goalTags].sort(tagSortFn).map((cat) => (
+                      <span
+                        key={cat}
+                        className="tag is-light mr-1 mb-1"
+                        title={t(`categories.${cat}.description`)}
+                      >
+                        {t(`categories.${cat}.full`)}
+                      </span>
+                    ))}
                   </span>
                 ) : null}
               </span>

@@ -30,10 +30,7 @@ function StatsModule({
           <p className="card-header-title">
             {t(config?.nameKey ?? `stats_module_${code}`)}
           </p>
-          <CopyDeepLinkButton
-            hash={`#stats-${code}`}
-            pathname={statsPath}
-          />
+          <CopyDeepLinkButton hash={`#stats-${code}`} pathname={statsPath} />
           {showPin ? (
             <button
               type="button"

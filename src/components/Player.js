@@ -15,7 +15,9 @@ import { Helmet } from "react-helmet-async";
 import Spinner from "./Spinner";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
-import PlayerAboutSection, { aboutTextPlainSnippet } from "./PlayerAboutSection";
+import PlayerAboutSection, {
+  aboutTextPlainSnippet,
+} from "./PlayerAboutSection";
 import Stars from "./Player/Stars";
 import Ratings from "./Player/Ratings";
 import Counts from "./Player/Counts";
@@ -100,8 +102,8 @@ function Player() {
     hashTabOverride !== null
       ? hashTabOverride
       : isValidProfileTab(storedTab)
-        ? storedTab
-        : DEFAULT_PROFILE_TAB;
+      ? storedTab
+      : DEFAULT_PROFILE_TAB;
 
   useEffect(() => {
     if (hashTabOverride !== null) {

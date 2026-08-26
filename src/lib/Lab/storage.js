@@ -167,7 +167,10 @@ export function launchLabFromExport({
 }
 
 function localSaveFingerprint(saves) {
-  return saves.map((s) => s.id).sort().join(",");
+  return saves
+    .map((s) => s.id)
+    .sort()
+    .join(",");
 }
 
 export function shouldShowImportBanner(saves) {

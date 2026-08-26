@@ -173,7 +173,7 @@ describe("buildGameRecommendations", () => {
     const areaWithout = without.find((game) => game.id === "area-a");
     const areaWith = withCooccur.find((game) => game.id === "area-a");
     expect(areaWith).toBeDefined();
-    expect((areaWith?.score ?? 0)).toBeGreaterThan(areaWithout?.score ?? 0);
+    expect(areaWith?.score ?? 0).toBeGreaterThan(areaWithout?.score ?? 0);
     expect(areaWith?.reasonType).toBe("cooccur");
   });
 
