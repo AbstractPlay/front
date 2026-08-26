@@ -11,8 +11,8 @@ function SiteReliability() {
   const combinedRates = useMemo(
     () =>
       combinedTimeoutAbandonRates(
-        summary.histograms.timeouts,
-        summary.histograms.abandoned
+        summary?.histograms?.timeouts ?? [],
+        summary?.histograms?.abandoned
       ),
     [summary]
   );
@@ -20,15 +20,17 @@ function SiteReliability() {
   return (
     <>
       <div className="content">
-        <p>
-          {t("stats.siteStats.timeoutRate", {
-            rate: summary.timeoutRate.toLocaleString(undefined, {
-              style: "percent",
-              minimumFractionDigits: 2,
-            }),
-          })}
-        </p>
-        {summary.abandonedRate !== undefined ? (
+        {summary?.timeoutRate != null ? (
+          <p>
+            {t("stats.siteStats.timeoutRate", {
+              rate: summary.timeoutRate.toLocaleString(undefined, {
+                style: "percent",
+                minimumFractionDigits: 2,
+              }),
+            })}
+          </p>
+        ) : null}
+        {summary?.abandonedRate !== undefined ? (
           <p>
             {t("stats.siteStats.abandonedRate", {
               rate: summary.abandonedRate.toLocaleString(undefined, {

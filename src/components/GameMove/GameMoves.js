@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, Fragment, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  useRef,
+  Fragment,
+  useState,
+  useCallback,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { isPublicCatalogGame } from "../../lib/gameOptions";
@@ -14,7 +20,10 @@ import {
   MOVE_TREE_DENSITY_STORAGE_KEY,
   readMoveTableDensityPreference,
 } from "../../lib/GameMove/moveTableLayout";
-import { nextVarFocus, prevVarFocus } from "../../lib/GameMove/moveTreeKeyboard";
+import {
+  nextVarFocus,
+  prevVarFocus,
+} from "../../lib/GameMove/moveTreeKeyboard";
 
 function GameMoves(props) {
   const focusRowRef = useRef();
@@ -636,7 +645,9 @@ function GameMoves(props) {
               type="button"
               onClick={() => {
                 const next =
-                  readMoveTableDensityPreference() === "auto" ? "sparse" : "auto";
+                  readMoveTableDensityPreference() === "auto"
+                    ? "sparse"
+                    : "auto";
                 localStorage.setItem(MOVE_TREE_DENSITY_STORAGE_KEY, next);
                 setMoveTableDensityRev((n) => n + 1);
               }}

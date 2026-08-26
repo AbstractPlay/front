@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next";
 import { ProfileContext, SummaryContext, ResponsesContext } from "../Player";
 import NewChallengeModal from "../NewChallengeModal";
 import { useStore } from "../../stores";
-import { formatGlickoLowWithRd, formatGlickoSiteLowWithRd } from "../../lib/glickoDisplay";
+import {
+  formatGlickoLowWithRd,
+  formatGlickoSiteLowWithRd,
+} from "../../lib/glickoDisplay";
 import {
   formatSummaryGameKey,
   metaUidFromSummaryGameKey,

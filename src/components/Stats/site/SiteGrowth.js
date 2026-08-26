@@ -12,30 +12,31 @@ import {
 function SiteGrowth() {
   const summary = useStore((state) => state.summary);
   const { t } = useTranslation();
+  const histograms = summary?.histograms;
 
   const summaryGames = useMemo(
-    () => lstSummarize(summary.histograms.all),
-    [summary]
+    () => lstSummarize(histograms?.all ?? []),
+    [histograms]
   );
   const summaryPlayers = useMemo(
-    () => lstSummarize(summary.histograms.allPlayers),
-    [summary]
+    () => lstSummarize(histograms?.allPlayers ?? []),
+    [histograms]
   );
   const summaryActiveMovers = useMemo(
-    () => lstSummarize(summary.histograms.activeMovers ?? []),
-    [summary]
+    () => lstSummarize(histograms?.activeMovers ?? []),
+    [histograms]
   );
   const summaryReturningPlayers = useMemo(
-    () => lstSummarize(summary.histograms.returningPlayers ?? []),
-    [summary]
+    () => lstSummarize(histograms?.returningPlayers ?? []),
+    [histograms]
   );
   const cumulative = useMemo(
-    () => firstTimersCumulative(summary.histograms.firstTimers),
-    [summary]
+    () => firstTimersCumulative(histograms?.firstTimers ?? []),
+    [histograms]
   );
   const activeMoversChart = useMemo(
-    () => weekHistogramChart(summary.histograms.activeMovers ?? []),
-    [summary]
+    () => weekHistogramChart(histograms?.activeMovers ?? []),
+    [histograms]
   );
 
   return (
@@ -46,7 +47,7 @@ function SiteGrowth() {
       </div>
       <WeekBarChart
         title={t("stats.siteStats.gamesCompletedPerWeek")}
-        y={summary.histograms.all}
+        y={histograms?.all ?? []}
         xaxisTitle={t("stats.siteStats.weekNumber")}
         yaxisTitle={t("stats.siteStats.completedGames")}
       />
@@ -57,12 +58,12 @@ function SiteGrowth() {
       </div>
       <WeekBarChart
         title={t("stats.siteStats.playersCompletedPerWeek")}
-        y={summary.histograms.allPlayers}
+        y={histograms?.allPlayers ?? []}
         xaxisTitle={t("stats.siteStats.weekNumber")}
         yaxisTitle={t("stats.siteStats.numberOfPlayers")}
       />
       <hr />
-      {summary.histograms.activeMovers !== undefined ? (
+      {histograms?.activeMovers !== undefined ? (
         <>
           <div className="content">
             <p>{t("stats.siteStats.activeMoversIntro")}</p>
@@ -89,7 +90,7 @@ function SiteGrowth() {
         yaxisTitle={t("stats.siteStats.usersFirstGame")}
       />
       <hr />
-      {summary.histograms.returningPlayers !== undefined ? (
+      {histograms?.returningPlayers !== undefined ? (
         <>
           <div className="content">
             <p>{t("stats.siteStats.returningPlayersIntro")}</p>
@@ -97,7 +98,7 @@ function SiteGrowth() {
           </div>
           <WeekBarChart
             title={t("stats.siteStats.returningPlayersPerWeek")}
-            y={summary.histograms.returningPlayers}
+            y={histograms.returningPlayers}
             xaxisTitle={t("stats.siteStats.weekNumber")}
             yaxisTitle={t("stats.siteStats.returningPlayers")}
           />

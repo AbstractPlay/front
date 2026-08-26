@@ -183,11 +183,13 @@ describe("pathIndexForMoveCell", () => {
       gameRec: { header: { "turn-model": "skip-turn" } },
     });
     const engine = {
-      getRounds: () => [[{}, null, {}], [null, {}, null], [{}, {}, null]],
+      getRounds: () => [
+        [{}, null, {}],
+        [null, {}, null],
+        [{}, {}, null],
+      ],
     };
-    expect(
-      moveTableRowCount({ pathLength: 5, layout, engine })
-    ).toBe(3);
+    expect(moveTableRowCount({ pathLength: 5, layout, engine })).toBe(3);
   });
 
   it("maps sparse export rows when density is sparse (sequenced)", () => {
@@ -226,9 +228,7 @@ describe("pathIndexForMoveCell", () => {
         engine,
       })
     ).toBe(1);
-    expect(
-      moveTableRowCount({ pathLength: 5, layout, engine })
-    ).toBe(5);
+    expect(moveTableRowCount({ pathLength: 5, layout, engine })).toBe(5);
   });
 
   it("auto density merges unique-actor seat cycle into one row", () => {
@@ -406,7 +406,11 @@ describe("simultaneous round grid", () => {
   });
 
   it("formats move numbers and per-seat text", () => {
-    const path = [[{ move: "BNd4,BNd5" }], [{ move: "x,y" }], [{ move: "p,q" }]];
+    const path = [
+      [{ move: "BNd4,BNd5" }],
+      [{ move: "x,y" }],
+      [{ move: "p,q" }],
+    ];
     expect(moveNumberForCell({ layout, seatIdx: 0, movenum: 0 })).toBe("1");
     expect(moveNumberForCell({ layout, seatIdx: 1, movenum: 0 })).toBe("");
     expect(roundSlotToMoveText("BNd4")).toBe("BNd4");
@@ -456,16 +460,13 @@ describe("simultaneous round grid", () => {
       }
     }
 
-    expect(
-      moveTableRowCount({ pathLength, layout: devLayout, engine })
-    ).toBe(pathLength);
+    expect(moveTableRowCount({ pathLength, layout: devLayout, engine })).toBe(
+      pathLength
+    );
 
     for (let rowIdx = 0; rowIdx < pathLength; rowIdx++) {
       for (let seatIdx = 0; seatIdx < 2; seatIdx++) {
-        const expected =
-          rounds[rowIdx][seatIdx] == null
-            ? null
-            : rowIdx;
+        const expected = rounds[rowIdx][seatIdx] == null ? null : rowIdx;
         expect(
           pathIndexForMoveCell({
             rowIdx,

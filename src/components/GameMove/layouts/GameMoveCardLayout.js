@@ -44,9 +44,7 @@ export default function GameMoveCardLayout({ session }) {
   const miscProps = buildMiscButtonsProps(session);
 
   const boardFrameClass =
-    myColour != null
-      ? " game-move-queue-card__board--framed"
-      : "";
+    myColour != null ? " game-move-queue-card__board--framed" : "";
 
   return (
     <>

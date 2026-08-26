@@ -16,7 +16,12 @@ function pickRenderRep(renderrep, boardRenderIndex) {
   const reps = Array.isArray(renderrep) ? renderrep : [renderrep];
   if (reps.length === 0) return null;
   let index = boardRenderIndex;
-  if (index == null || Number.isNaN(index) || index < 0 || index >= reps.length) {
+  if (
+    index == null ||
+    Number.isNaN(index) ||
+    index < 0 ||
+    index >= reps.length
+  ) {
     index = reps.length - 1;
   }
   return reps[index];
@@ -25,11 +30,18 @@ function pickRenderRep(renderrep, boardRenderIndex) {
 function getLiveSvg(boardRenderIndex, rendered) {
   if (!rendered?.length) return null;
   let index = boardRenderIndex;
-  if (index == null || Number.isNaN(index) || index < 0 || index >= rendered.length) {
+  if (
+    index == null ||
+    Number.isNaN(index) ||
+    index < 0 ||
+    index >= rendered.length
+  ) {
     index = rendered.length - 1;
   }
   const node = rendered[index];
-  return node?.tagName?.toLowerCase() === "svg" ? node : node?.querySelector?.("svg");
+  return node?.tagName?.toLowerCase() === "svg"
+    ? node
+    : node?.querySelector?.("svg");
 }
 
 export async function exportCurrentBoardPng({

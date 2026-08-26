@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, Fragment, useCallback, useState } from "react";
+import React, {
+  useEffect,
+  useRef,
+  Fragment,
+  useCallback,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
@@ -856,7 +862,9 @@ function GameMoves(props) {
               type="button"
               onClick={() => {
                 const next =
-                  readMoveTableDensityPreference() === "auto" ? "sparse" : "auto";
+                  readMoveTableDensityPreference() === "auto"
+                    ? "sparse"
+                    : "auto";
                 localStorage.setItem(MOVE_TREE_DENSITY_STORAGE_KEY, next);
                 setMoveTableDensityRev((n) => n + 1);
               }}

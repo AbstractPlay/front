@@ -17,9 +17,7 @@ export function resolveMetaUid(metaUidOrDisplayName) {
     return lower;
   }
   const byName = [...gameinfo.values()].find(
-    (g) =>
-      g.name === metaUidOrDisplayName ||
-      g.name?.toLowerCase() === lower
+    (g) => g.name === metaUidOrDisplayName || g.name?.toLowerCase() === lower
   );
   return byName?.uid ?? metaUidOrDisplayName;
 }

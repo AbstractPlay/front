@@ -12,8 +12,7 @@ export async function maybeSyncInProgressCommentedFlag({
 
   if (game.toMove === "") return;
   if (
-    (game.commented ? 0 : game.commented) !==
-    (hasInterestingComments ? 1 : 0)
+    (game.commented ? 0 : game.commented) !== (hasInterestingComments ? 1 : 0)
   ) {
     await callAuthApi(
       "update_commented",

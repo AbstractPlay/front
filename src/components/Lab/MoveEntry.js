@@ -381,7 +381,8 @@ function MoveEntry(props) {
                 </div>
               ))
             : null}
-          {(focus.moveNumber > 0 || focus.exPath.length > 0) && game.canExplore ? (
+          {(focus.moveNumber > 0 || focus.exPath.length > 0) &&
+          game.canExplore ? (
             <div
               className="winningColorButton tooltipped"
               onClick={() => handleDeleteExploration()}

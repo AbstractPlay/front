@@ -62,9 +62,7 @@ function ExplorationToolbar({
           </div>
         </>
       ) : null}
-      {focus.exPath.length > 0 &&
-      game.canExplore &&
-      !gameOverNonLeafNode ? (
+      {focus.exPath.length > 0 && game.canExplore && !gameOverNonLeafNode ? (
         <div
           className="winningColorButton tooltipped"
           onClick={() => handleDeleteExploration()}

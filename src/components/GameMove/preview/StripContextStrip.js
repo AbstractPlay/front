@@ -65,8 +65,12 @@ function StripContextStrip({ session, layoutContext }) {
             }`}
             title={chip.label}
           >
-            <span className="game-move-strip-context__clock-name">{chip.label}</span>
-            <span className="game-move-strip-context__clock-time">{chip.time}</span>
+            <span className="game-move-strip-context__clock-name">
+              {chip.label}
+            </span>
+            <span className="game-move-strip-context__clock-time">
+              {chip.time}
+            </span>
           </span>
         ))}
       </div>

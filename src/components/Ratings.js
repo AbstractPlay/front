@@ -37,13 +37,7 @@ function matchesMetaGame(rec, metaUid) {
   return matchesSummaryGameKey(rec.game, metaUid);
 }
 
-function RatingsTable({
-  metaGame,
-  metaGameName,
-  globalMe,
-  allUsers,
-  summary,
-}) {
+function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
   const { t } = useTranslation();
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [showState, showStateSetter] = useStorageState("ratings-show", 20);
@@ -160,8 +154,7 @@ function RatingsTable({
             <>
               <NewChallengeModal
                 show={
-                  activeChallengeModal !== "" &&
-                  activeChallengeModal === userId
+                  activeChallengeModal !== "" && activeChallengeModal === userId
                 }
                 handleClose={closeChallengeModal}
                 handleChallenge={handleNewChallenge}

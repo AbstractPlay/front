@@ -9,12 +9,17 @@ function SitePace() {
   const { t } = useTranslation();
 
   const hoursPerSummary =
-    summary.hoursPer !== undefined && !Array.isArray(summary.hoursPer)
+    summary?.hoursPer !== undefined && !Array.isArray(summary.hoursPer)
       ? summary.hoursPer
       : null;
+  const hoursPerTableReady =
+    hoursPerSummary != null &&
+    hoursPerSummary.mean != null &&
+    hoursPerSummary.median != null &&
+    hoursPerSummary.n != null;
 
   const hoursPerTrend = useMemo(
-    () => hoursPerTrendSeries(summary.hoursPer?.byWeek),
+    () => hoursPerTrendSeries(summary?.hoursPer?.byWeek),
     [summary]
   );
 
@@ -22,7 +27,7 @@ function SitePace() {
     <>
       <div className="content">
         <p>{t("stats.siteStats.hoursPerMoveIntro")}</p>
-        {hoursPerSummary === null ? null : (
+        {hoursPerTableReady ? (
           <table>
             <caption>{t("stats.siteStats.hoursPerMove")}</caption>
             <thead>
@@ -48,7 +53,7 @@ function SitePace() {
               </tr>
             </tbody>
           </table>
-        )}
+        ) : null}
       </div>
       {hoursPerTrend.length > 0 ? (
         <WeekBarChart

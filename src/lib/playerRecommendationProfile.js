@@ -67,7 +67,10 @@ export function buildPlayerRecommendationProfile({
     }
   }
 
-  const totalPlays = [...playCounts.values()].reduce((sum, count) => sum + count, 0);
+  const totalPlays = [...playCounts.values()].reduce(
+    (sum, count) => sum + count,
+    0
+  );
   /** @type {Map<string, number>} */
   const playShare = new Map();
   for (const [meta, count] of playCounts) {
@@ -84,7 +87,10 @@ export function buildPlayerRecommendationProfile({
     }
   }
 
-  const recentlyPlayed = buildRecentlyPlayedQuickPicks(allRecs ?? [], RECENT_UNIQUE_LIMIT);
+  const recentlyPlayed = buildRecentlyPlayedQuickPicks(
+    allRecs ?? [],
+    RECENT_UNIQUE_LIMIT
+  );
   const recentSet = new Set(recentlyPlayed.map((game) => game.id));
 
   /** @type {Map<string, number>} */

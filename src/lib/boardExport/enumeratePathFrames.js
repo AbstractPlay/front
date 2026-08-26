@@ -61,7 +61,13 @@ export function labelPathFrame(frame, exploration, getFocusNode, game, t) {
   return t("boardExport.pathStep", { number: frame.moveNumber });
 }
 
-export function buildPathFrameOptions(frames, exploration, getFocusNode, game, t) {
+export function buildPathFrameOptions(
+  frames,
+  exploration,
+  getFocusNode,
+  game,
+  t
+) {
   const seen = new Set();
   return frames.map((frame, index) => {
     const key = focusKey(frame);

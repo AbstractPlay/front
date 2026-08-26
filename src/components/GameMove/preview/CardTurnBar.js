@@ -45,8 +45,12 @@ function CardTurnBar({ session, layoutContext }) {
               chip.active ? " is-active" : ""
             }`}
           >
-            <span className="game-move-queue-card__clock-name">{chip.label}</span>
-            <span className="game-move-queue-card__clock-time">{chip.time}</span>
+            <span className="game-move-queue-card__clock-name">
+              {chip.label}
+            </span>
+            <span className="game-move-queue-card__clock-time">
+              {chip.time}
+            </span>
           </span>
         ))}
       </div>

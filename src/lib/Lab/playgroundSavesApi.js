@@ -25,9 +25,7 @@ async function parseAuthResponse(res, query) {
     let message = `${query} failed (${statusCode})`;
     try {
       const errBody =
-        typeof result.body === "string"
-          ? JSON.parse(result.body)
-          : result.body;
+        typeof result.body === "string" ? JSON.parse(result.body) : result.body;
       message = errBody?.message || message;
     } catch {
       if (result.message) message = result.message;

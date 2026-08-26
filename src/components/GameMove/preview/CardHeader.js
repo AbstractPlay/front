@@ -3,12 +3,7 @@ import { formatParenthetical } from "../../../lib/GameMove/gameMoveLayoutHelpers
 import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
 
-function CardHeader({
-  t,
-  session,
-  layoutContext,
-  highlightNextGame = false,
-}) {
+function CardHeader({ t, session, layoutContext, highlightNextGame = false }) {
   const { metaGame, handleNextGame } = session;
   const {
     gameName,
@@ -27,8 +22,8 @@ function CardHeader({
           move: lastMoveNotation,
         })
       : lastMoveNotation
-        ? t("gameMove.layout.lastMove", { move: lastMoveNotation })
-        : null;
+      ? t("gameMove.layout.lastMove", { move: lastMoveNotation })
+      : null;
 
   return (
     <header className="game-move-queue-card__header">

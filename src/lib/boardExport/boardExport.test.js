@@ -92,10 +92,22 @@ describe("enumeratePathFrames", () => {
     }));
 
     expect(
-      labelPathFrame({ moveNumber: 0, exPath: [] }, exploration, getFocusNode, game, t)
+      labelPathFrame(
+        { moveNumber: 0, exPath: [] },
+        exploration,
+        getFocusNode,
+        game,
+        t
+      )
     ).toBe("Initial");
     expect(
-      labelPathFrame({ moveNumber: 1, exPath: [] }, exploration, getFocusNode, game, t)
+      labelPathFrame(
+        { moveNumber: 1, exPath: [] },
+        exploration,
+        getFocusNode,
+        game,
+        t
+      )
     ).toBe("Move 1: e4");
     expect(
       labelPathFrame(

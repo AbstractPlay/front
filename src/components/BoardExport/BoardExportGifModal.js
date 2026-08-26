@@ -2,14 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Modal from "../Modal";
 
-function BoardExportGifModal({
-  show,
-  onClose,
-  onExport,
-  pathFrames,
-  busy,
-  t,
-}) {
+function BoardExportGifModal({ show, onClose, onExport, pathFrames, busy, t }) {
   const [delaySec, setDelaySec] = useState(1);
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(0);

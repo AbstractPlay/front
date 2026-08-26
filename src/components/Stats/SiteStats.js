@@ -22,7 +22,7 @@ function SiteStats({ nav }) {
   const { t } = useTranslation();
   const summary = useStore((state) => state.summary);
   const showSubNav = nav === undefined;
-  const hasSeasonality = summary.seasonality?.movesByDow !== undefined;
+  const hasSeasonality = summary?.seasonality?.movesByDow !== undefined;
 
   return (
     <>

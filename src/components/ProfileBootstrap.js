@@ -1,4 +1,7 @@
-import { useProfileBootstrap, useRefreshDataListener } from "../hooks/useProfileBootstrap";
+import {
+  useProfileBootstrap,
+  useRefreshDataListener,
+} from "../hooks/useProfileBootstrap";
 
 export default function ProfileBootstrap() {
   useProfileBootstrap();

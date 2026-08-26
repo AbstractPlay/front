@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import GameVariants from "../GameVariants";
 import GamePickerTrigger from "../GamePickerTrigger";
-import { pickRandomGameOption, getGameDisplayName } from "../../lib/gameOptions";
-import { getAuthToken } from "../../lib/api";
 import {
-  buildLabGame,
-  getLabPlayerCounts,
-} from "../../lib/Lab/buildGame";
+  pickRandomGameOption,
+  getGameDisplayName,
+} from "../../lib/gameOptions";
+import { getAuthToken } from "../../lib/api";
+import { buildLabGame, getLabPlayerCounts } from "../../lib/Lab/buildGame";
 import { parsePlaygroundImport } from "../../lib/Lab/export";
 import {
   listSaves,
@@ -437,7 +437,9 @@ function LabLauncher({ onLaunch, onLoadSave }) {
             <>
               {showImportBanner ? (
                 <div className="notification is-info">
-                  <p>{t("lab.importLocalBanner", { count: localSaves.length })}</p>
+                  <p>
+                    {t("lab.importLocalBanner", { count: localSaves.length })}
+                  </p>
                   <div className="buttons">
                     <button
                       type="button"

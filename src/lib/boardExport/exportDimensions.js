@@ -6,12 +6,7 @@ export const EXPORT_DPI = 72;
 /**
  * Fit source rect inside destination while preserving aspect ratio (contain).
  */
-export function computeContainRect(
-  srcWidth,
-  srcHeight,
-  dstWidth,
-  dstHeight
-) {
+export function computeContainRect(srcWidth, srcHeight, dstWidth, dstHeight) {
   const safeSrcW = Math.max(1, srcWidth);
   const safeSrcH = Math.max(1, srcHeight);
   const scale = Math.min(dstWidth / safeSrcW, dstHeight / safeSrcH);

@@ -103,9 +103,14 @@ function HighestSingleRating({ metaFilter, nav }) {
       }),
       columnHelper.accessor("trueskill", {
         header: t("tables.trueskill"),
-        cell: (props) => Math.round(props.getValue().mu * 10) / 10,
+        cell: (props) => {
+          const mu = props.getValue()?.mu;
+          return mu != null ? Math.round(mu * 10) / 10 : "---";
+        },
         sortingFn: (rowA, rowB, columnID) => {
-          return rowA.getValue(columnID).mu - rowB.getValue(columnID).mu;
+          const muA = rowA.getValue(columnID)?.mu ?? -Infinity;
+          const muB = rowB.getValue(columnID)?.mu ?? -Infinity;
+          return muA - muB;
         },
       }),
       columnHelper.accessor("wld", {

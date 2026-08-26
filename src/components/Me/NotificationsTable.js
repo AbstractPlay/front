@@ -78,9 +78,7 @@ function NotificationMessage({ body }) {
             i18nKey="me.notifications.message.gameStart"
             values={{ opponentName: body.opponentName, metaGame }}
             components={{
-              gameLink: (
-                <Link to={`/move/${body.metaGame}/0/${body.gameId}`} />
-              ),
+              gameLink: <Link to={`/move/${body.metaGame}/0/${body.gameId}`} />,
             }}
           />
           {variantsSuffix(body.metaGame, body.variants)}
@@ -153,9 +151,7 @@ function NotificationMessage({ body }) {
             }
             values={{ commenterName: body.commenterName, metaGame }}
             components={{
-              gameLink: (
-                <Link to={`/move/${body.metaGame}/1/${body.gameId}`} />
-              ),
+              gameLink: <Link to={`/move/${body.metaGame}/1/${body.gameId}`} />,
             }}
           />
           {variantsSuffix(body.metaGame, body.variants)}
@@ -246,10 +242,7 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
         id: "createdAt",
         cell: (props) =>
           props.getValue() ? (
-            <LocalizedTimeAgo
-              date={props.getValue()}
-              timeStyle="twitter-now"
-            />
+            <LocalizedTimeAgo date={props.getValue()} timeStyle="twitter-now" />
           ) : (
             ""
           ),
@@ -476,8 +469,9 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
             </div>
             <div className="level-item">
               <p>
-                Page <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
-                of <strong>{table.getPageCount()}</strong> (
+                Page{" "}
+                <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
+                <strong>{table.getPageCount()}</strong> (
                 {table.getPrePaginationRowModel().rows.length} total rows)
               </p>
             </div>
