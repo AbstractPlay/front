@@ -294,37 +294,6 @@ function Me(props) {
     showDeleteGamesModalSetter(false);
   };
 
-  const handleStartTournamentsClick = async () => {
-    try {
-      if (genericInput.trim() === "") {
-        let url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append("query", "start_tournaments");
-        const res = await fetch(url);
-        const status = res.status;
-        if (status !== 200) {
-          const result = await res.json();
-          console.log("Error");
-          console.log(result);
-        } else {
-          const result = await res.json();
-          console.log(result);
-        }
-      } else {
-        console.log(`Posting start tournament ${genericInput}`);
-        const res = await callAuthApi("start_tournament", {
-          tournamentid: genericInput,
-        });
-        if (!res) return;
-        const result = await res.json();
-        console.log("start_tournament returned:");
-        console.log(JSON.parse(result.body));
-      }
-    } catch (error) {
-      console.log("Error");
-      console.log(error);
-    }
-  };
-
   const handleFixGamesClick = async () => {
     try {
       if (genericInput.trim() !== "") {
@@ -672,12 +641,6 @@ function Me(props) {
                   onClick={() => handleFixGamesClick()}
                 >
                   Fix user's games
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleStartTournamentsClick()}
-                >
-                  Start tournaments
                 </button>
                 <button
                   className="button is-small apButton"
