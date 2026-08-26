@@ -1525,7 +1525,7 @@
                 "gameEnd_win": "You won your game of {{metaGame}}",
                 "gameEnd_lose": "You lost your game of {{metaGame}}",
                 "gameEnd_draw": "Your game of {{metaGame}} ended in a draw",
-                "ratingChange": "Your <gameLink>{{metaGame}}</gameLink> Glicko rating changed by {{delta}} (now {{newRating}})",
+                "ratingChange": "Your rating for <gameLink>{{metaGame}}</gameLink>{{variantsInline}} changed {{delta}} points from {{oldRatingDisplay}} to {{newRatingDisplay}}.",
                 "challengeIssued": "{{challengerName}} challenged you to <gameLink>{{metaGame}}</gameLink>",
                 "challengeDeclined": "{{declinerName}} declined your <gameLink>{{metaGame}}</gameLink> challenge",
                 "challengeRevoked": "{{revokerName}} revoked the <gameLink>{{metaGame}}</gameLink> challenge",

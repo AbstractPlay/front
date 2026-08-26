@@ -4295,6 +4295,14 @@
     "src": "Starred games only",
     "out": "Jeux favoris uniquement"
   },
+  "glicko.displayHint": {
+    "src": "Glicko ratings are shown as the 95% confidence rating (rating − 2×RD), with full RD in parentheses.",
+    "out": "Les classements Glicko sont affichés sous la forme du classement de confiance à 95 % (classement − 2×RD), avec le RD complet entre parenthèses."
+  },
+  "glicko.displayNote": {
+    "src": "Across the site, Glicko ratings are presented as the 95% confidence rating, with the full RD value in parentheses. <wikiLink>Learn more about the Glicko rating system</wikiLink>.",
+    "out": "Sur tout le site, les classements Glicko sont présentés sous la forme du classement de confiance à 95 %, avec la valeur complète du RD entre parenthèses. <wikiLink>En savoir plus sur le système de classement Glicko</wikiLink>."
+  },
   "lab.annotations.clear": {
     "src": "Clear",
     "out": "Effacer"
@@ -4564,8 +4572,8 @@
     "out": "{{opponentName}} a commencé une partie de {{metaGame}} avec vous"
   },
   "me.notifications.message.ratingChange": {
-    "src": "Your <gameLink>{{metaGame}}</gameLink> Glicko rating changed by {{delta}} (now {{newRating}})",
-    "out": "Votre classement Glicko pour <gameLink>{{metaGame}}</gameLink> a évolué de {{delta}} (désormais {{newRating}})"
+    "src": "Your rating for <gameLink>{{metaGame}}</gameLink>{{variantsInline}} changed {{delta}} points from {{oldRatingDisplay}} to {{newRatingDisplay}}.",
+    "out": "Votre classement pour <gameLink>{{metaGame}}</gameLink>{{variantsInline}} a changé de {{delta}} points, passant de {{oldRatingDisplay}} à {{newRatingDisplay}}."
   },
   "me.notifications.title": {
     "src": "Notifications",
@@ -4856,8 +4864,8 @@
     "out": "Ce tableau présente chaque combinaison de jeu et de variante, ainsi que le nombre de parties enregistrées, la durée moyenne de la partie (nombre de coups), la durée médiane, le taux de victoires du premier joueur et le taux de parties nulles (parties à deux joueurs de plus de deux coups uniquement). **Les statistiques de victoires du premier joueur et de parties nulles doivent être interprétées avec précaution !** L'échantillon est réduit et biaisé. De nombreux facteurs de confusion pourraient expliquer un taux extrême. Notez que le taux de victoires du premier joueur ne tient aucun compte de l'application ou non de la règle du gâteau. Les parties nulles sont comptabilisées comme une demi-victoire pour le premier joueur lors du calcul de son taux de victoires."
   },
   "stats.explanations.highestSingle": {
-    "src": "List of every recorded rating. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made. Rankings use conservative Glicko-2 (rating − 2×RD), with both Glicko and legacy Elo shown. Glicko starts at 1200 with RD 350; Elo starts at 1200 with a static *K* of 30. Glicko ratings are presented as a 95% confidence range — the narrower the range, the more confident the system is. Trueskill uses Microsoft's default settings (rating range 0–50, starting at 25).",
-    "out": "Liste de tous les classements enregistrés. Le système ignore les parties explicitement marquées comme non classées, ainsi que les parties qui se terminent avant que trois coups n'aient été joués. Le classement utilise un Glicko-2 conservateur (classement − 2×RD), le Glicko et l'ancien Elo étant tous deux affichés. Glicko commence à 1200 avec un RD de 350 ; Elo commence à 1200 avec un *K* fixe de 30. Les classements Glicko sont présentés sous la forme d'un intervalle de confiance à 95 % — plus l'intervalle est étroit, plus le système est confiant. TrueSkill utilise les paramètres par défaut de Microsoft (plage de classement de 0 à 50, débutant à 25)."
+    "src": "List of every recorded rating. The system ignores games explicitly flagged as unrated, and it ignores games that end before three moves have been made. Rankings use conservative (95% confidence) Glicko-2 (rating − 2×RD), with both Glicko and legacy Elo shown. Glicko starts at 1200 with RD 350; Elo starts at 1200 with a static *K* of 30. Trueskill uses Microsoft's default settings (rating range 0–50, starting at 25).",
+    "out": "Liste de tous les classements enregistrés. Le système ignore les parties explicitement marquées comme non classées, ainsi que les parties qui se terminent avant que trois coups aient été joués. Les classements utilisent un Glicko-2 conservateur (confiance à 95 %) (classement − 2×RD), affichant à la fois Glicko et l'ancien Elo. Glicko commence à 1200 avec un RD de 350 ; Elo commence à 1200 avec un *K* fixe de 30. Trueskill utilise les paramètres par défaut de Microsoft (plage de classement de 0 à 50, commençant à 25)."
   },
   "stats.explanations.numPlays": {
     "src": "This table lists each game, how many times it was played, by how many unique players, and the game's `h-index`. A game's h-index is the number of players who have played that game at least that many times (so an h-index of 5 means that 5 different players have played that game at least 5 times). It also provides a histogram of games completed for that game. The preview shows the last 10 weeks, with the most recent week on the right. Clicking on the preview will show you the full history of games completed, in seven-day \"buckets,\" with the most recent week on the right.",

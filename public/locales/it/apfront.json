@@ -1217,7 +1217,7 @@
   "None": "Nessuno",
   "Draw": "Patta",
   "glicko": {
-    "displayHint": "I rating Glicko sono mostrati come rating di confidenza al 95% (rating − 2×RD), con il valore RD completo tra parentesi.",
+    "displayHint": "I rating Glicko sono mostrati come rating di confidenza al 95% (rating − 2×RD), con il RD completo tra parentesi.",
     "displayNote": "In tutto il sito, i rating Glicko sono presentati come rating di confidenza al 95%, con il valore RD completo tra parentesi. <wikiLink>Scopri di più sul sistema di rating Glicko</wikiLink>."
   },
   "gameMarks": {
@@ -1339,7 +1339,7 @@
     "year_other": "{{count}} anni",
     "playersPlayedGames": "In questo periodo, {{numPlayers}} giocatori hanno giocato {{numGames}} partite.",
     "explanations": {
-      "highestSingle": "Elenco di tutti i rating registrati. Il sistema ignora le partite esplicitamente contrassegnate come non classificate e ignora le partite che terminano prima che siano state effettuate tre mosse. Le classifiche utilizzano il Glicko-2 conservativo (confidenza al 95%) (rating − 2×RD), mostrando sia Glicko che l'Elo legacy. Glicko parte da 1200 con RD 350; Elo parte da 1200 con un *K* statico di 30. Trueskill utilizza le impostazioni predefinite di Microsoft (intervallo di rating 0–50, a partire da 25).",
+      "highestSingle": "Elenco di tutti i rating registrati. Il sistema ignora le partite esplicitamente contrassegnate come non classificate e ignora le partite che terminano prima che siano state fatte tre mosse. Le classifiche utilizzano il valore conservativo di Glicko-2 (confidenza al 95%) (rating − 2×RD), mostrando sia Glicko che lo storico Elo. Glicko parte da 1200 con RD 350; Elo parte da 1200 con un *K* statico di 30. Trueskill utilizza le impostazioni predefinite di Microsoft (intervallo di rating 0–50, con partenza da 25).",
       "avgRatings": "Queste colonne sono medie ponderate delle tue valutazioni Glicko ed Elo su tutto il sito.",
       "topPlayers": "Questa tabella elenca ciascuna combinazione di gioco e variante disponibile assieme al giocatore con la valutazione più alta per quella combinazione, classificato in base al Glicko-2 conservativo (valutazione − 2×RD). L'Elo viene mostrato come riferimento.",
       "numPlays": "Questa tabella elenca ogni gioco, quante volte è stato giocato, da quanti giocatori unici e l'`h-index` del gioco. L'h-index di un gioco è il numero di giocatori che hanno giocato a quel gioco almeno quel numero di volte (quindi un h-index di 5 significa che 5 giocatori diversi hanno giocato a quel gioco almeno 5 volte). Fornisce anche un istogramma delle partite completate per quel gioco. L'anteprima mostra le ultime 10 settimane, con la settimana più recente a destra. Cliccando sull'anteprima verrà mostrata la cronologia completa delle partite completate, suddivisa in \"intervalli\" di sette giorni, con la settimana più recente a destra.",
@@ -1538,7 +1538,7 @@
         "gameEnd_win": "Hai vinto la tua partita a {{metaGame}}",
         "gameEnd_lose": "Hai perso la tua partita a {{metaGame}}",
         "gameEnd_draw": "La tua partita a {{metaGame}} è terminata in pareggio",
-        "ratingChange": "Il tuo punteggio Glicko per <gameLink>{{metaGame}}</gameLink> è cambiato di {{delta}} (ora {{newRating}})",
+        "ratingChange": "Il tuo rating per <gameLink>{{metaGame}}</gameLink>{{variantsInline}} è cambiato di {{delta}} punti da {{oldRatingDisplay}} a {{newRatingDisplay}}.",
         "challengeIssued": "{{challengerName}} ti ha sfidato a {{metaGame}}",
         "challengeDeclined": "{{declinerName}} ha rifiutato la tua sfida a {{metaGame}}",
         "challengeRevoked": "{{revokerName}} ha revocato la sfida a {{metaGame}}",
