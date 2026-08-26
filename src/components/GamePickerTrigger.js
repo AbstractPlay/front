@@ -8,6 +8,7 @@ function GamePickerTrigger({
   value,
   onChange,
   labOnly = false,
+  tournamentOnly = false,
   id,
   size = "small",
 }) {
@@ -36,6 +37,7 @@ function GamePickerTrigger({
         onChange={handleChange}
         onClose={() => setOpen(false)}
         labOnly={labOnly}
+        tournamentOnly={tournamentOnly}
       />
     </>
   );
