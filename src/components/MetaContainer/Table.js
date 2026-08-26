@@ -8,6 +8,7 @@ import React, {
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { gameDescription } from "../../lib/gameDescription";
+import { tournamentListPath } from "../../lib/tournamentSections";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -519,7 +520,7 @@ function Table({
             >
               {t("IssueChallengeLabel")}
             </button>
-            <Link to={"/tournaments/" + props.row.original.id}>
+            <Link to={tournamentListPath("open", props.row.original.id)}>
               {t("TournamentsLink")}
             </Link>
           </>

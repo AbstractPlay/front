@@ -1765,6 +1765,23 @@ span.hardTime::after {
     opacity: 0.8;
   }
 
+  #tournamentsPage .tournaments-page-tabs {
+    margin-bottom: 1rem;
+  }
+
+  #tournamentsPage .tournaments-page-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 1em;
+  }
+
+  #tournamentsPage .tournaments-tab-panel {
+    margin-top: 0.5rem;
+  }
+
   #leaderboard .stats-page-tabs {
     margin-bottom: 1rem;
   }

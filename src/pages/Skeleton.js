@@ -293,7 +293,7 @@ function Bones(props) {
                   element={<Navigate to="/playground" replace />}
                 />
                 <Route
-                  path="/tournaments/:metaGame?"
+                  path="/tournaments/:tab?/:metaGame?"
                   element={<Tournaments />}
                 />
                 <Route path="/play" element={<Play />} />

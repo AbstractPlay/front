@@ -52,7 +52,7 @@ From a meta-game page (`/games/:metaGame`), users can navigate to ratings, stand
 |-------|-----------|
 | `/ratings/:metaGame` | `Ratings` |
 | `/challenges/:metaGame` | `StandingChallenges` |
-| `/tournaments/:metaGame?` | `Tournaments` |
+| `/tournaments/:tab?/:metaGame?` | `Tournaments` |
 | `/customize/:metaGame` | `Customize` |
 | `/listgames/:gameState/:metaGame` | `ListGames` |
 
