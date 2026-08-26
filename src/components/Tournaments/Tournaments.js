@@ -17,6 +17,7 @@ import { API_ENDPOINT_OPEN } from "../../config";
 import NewTournamentModal from "./NewTournamentModal";
 import { gameinfo } from "@abstractplay/gameslib";
 import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
+import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { useStore } from "../../stores";
@@ -1017,6 +1018,7 @@ function Tournaments(props) {
               </option>
               {[...gameinfo.values()]
                 .filter(isPublicCatalogGame)
+                .filter((rec) => tournamentPlaySupported(rec.uid))
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((rec) => (
                   <option value={rec.uid} key={"filterMeta" + rec.uid}>
@@ -1255,7 +1257,11 @@ function Tournaments(props) {
               </div>
             </div>
           </div>
-          {!globalMe ? null : (
+          {!globalMe ||
+          (filterMeta !== null &&
+            filterMeta !== undefined &&
+            filterMeta !== "" &&
+            !tournamentPlaySupported(filterMeta)) ? null : (
             <div className="column content is-10 is-offset-1">
               <div className="card" key="new_tournaments">
                 <header className="card-header">

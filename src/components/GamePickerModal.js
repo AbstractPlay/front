@@ -25,7 +25,7 @@ const SECTION_LABEL_KEYS = {
   recommended: "gamePicker.quickPicks.recommended",
 };
 
-function GamePickerModal({ show, value, onChange, onClose, labOnly = false }) {
+function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tournamentOnly = false }) {
   const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [starredOnly, setStarredOnly] = useState(false);
@@ -46,8 +46,8 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false }) {
   );
 
   const allGames = useMemo(
-    () => buildGameBrowseEntries({ labOnly }),
-    [labOnly]
+    () => buildGameBrowseEntries({ labOnly, tournamentOnly }),
+    [labOnly, tournamentOnly]
   );
 
   const goalOptions = useMemo(

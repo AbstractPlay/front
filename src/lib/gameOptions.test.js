@@ -67,6 +67,15 @@ describe("buildGameOptions", () => {
     }
   });
 
+  it("tournamentOnly excludes games without playercount 2", () => {
+    const all = buildGameOptions();
+    const tournament = buildGameOptions({ tournamentOnly: true });
+    expect(tournament.length).toBeLessThanOrEqual(all.length);
+    for (const { id } of tournament) {
+      expect(gameinfo.get(id).playercounts.includes(2)).toBe(true);
+    }
+  });
+
   it("excludes experimental games in production", () => {
     const experimental = [...gameinfo.values()].find((info) =>
       info.flags.includes("experimental")

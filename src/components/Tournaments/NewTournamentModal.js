@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { getGameDisplayName } from "../../lib/gameOptions";
+import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
 import GamePickerTrigger from "../GamePickerTrigger";
@@ -58,6 +59,9 @@ function NewTournamentModal(props) {
   if (fixedMetaGame && !gameinfo.has(fixedMetaGame)) {
     return null;
   }
+  if (fixedMetaGame && !tournamentPlaySupported(fixedMetaGame)) {
+    return null;
+  }
 
   return (
     <Modal
@@ -84,6 +88,7 @@ function NewTournamentModal(props) {
                 id="gameName"
                 value={metaGame ?? ""}
                 onChange={handleChangeGame}
+                tournamentOnly
               />
             </div>
           </div>

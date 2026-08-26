@@ -1,6 +1,7 @@
 import { gameinfo } from "@abstractplay/gameslib";
 import { isLabSupportedGame } from "./Lab/buildGame";
 import { isProductionMode } from "./realMode";
+import { tournamentPlaySupported } from "./tournamentGame";
 
 /**
  * @param {{ flags?: string[] } | null | undefined} info
@@ -66,16 +67,19 @@ export function isBoardFilterCategory(cat) {
 }
 
 /**
- * @param {{ labOnly?: boolean }} options
+ * @param {{ labOnly?: boolean, tournamentOnly?: boolean }} options
  * @returns {{ id: string, name: string }[]}
  */
-export function buildGameOptions({ labOnly = false } = {}) {
+export function buildGameOptions({ labOnly = false, tournamentOnly = false } = {}) {
   const options = [];
   for (const info of gameinfo.values()) {
     if (!isPublicCatalogGame(info)) {
       continue;
     }
     if (labOnly && !isLabSupportedGame(info.uid)) {
+      continue;
+    }
+    if (tournamentOnly && !tournamentPlaySupported(info.uid)) {
       continue;
     }
     options.push({ id: info.uid, name: info.name });
@@ -97,7 +101,7 @@ export function pickRandomGameOption({ labOnly = false } = {}) {
 }
 
 /**
- * @param {{ labOnly?: boolean }} options
+ * @param {{ labOnly?: boolean, tournamentOnly?: boolean }} options
  * @returns {Array<{
  *   id: string,
  *   name: string,
@@ -108,8 +112,8 @@ export function pickRandomGameOption({ labOnly = false } = {}) {
  *   boardShapeTags: string[],
  * }>}
  */
-export function buildGameBrowseEntries({ labOnly = false } = {}) {
-  return buildGameOptions({ labOnly }).map(({ id, name }) => {
+export function buildGameBrowseEntries({ labOnly = false, tournamentOnly = false } = {}) {
+  return buildGameOptions({ labOnly, tournamentOnly }).map(({ id, name }) => {
     const info = gameinfo.get(id);
     const designerList =
       info?.people?.filter((p) => p.type === "designer") ?? [];
