@@ -17,6 +17,9 @@ function NumPlays({ metaFilter, nav }) {
   const [activeChartModal, activeChartModalSetter] = useState("");
 
   const data = useMemo(() => {
+    if (!summary?.plays?.total || !summary?.histograms?.meta) {
+      return [];
+    }
     const sparklineValues = [];
     for (const entry of summary.histograms.meta) {
       sparklineValues.push(...[...entry.value].slice(-10));
@@ -27,14 +30,17 @@ function NumPlays({ metaFilter, nav }) {
       .map((obj) => {
         const meta = metaUidFromSummaryGameKey(obj.game);
         let hindex = 0;
-        const hrec = summary.hMeta.find(({ user }) => user === meta);
+        const hrec = summary.hMeta?.find(({ user }) => user === meta);
         if (hrec !== undefined) {
           hindex = hrec.value;
         }
-        const opps = summary.plays.width.find((g) => g.game === obj.game);
+        const opps = summary.plays.width?.find((g) => g.game === obj.game);
         const histogram = summary.histograms.meta.find(
           (x) => x.game === obj.game
-        ).value;
+        )?.value;
+        if (histogram === undefined) {
+          return null;
+        }
         let histShort = histogram.slice(-10);
         while (histShort.length < 10) {
           histShort = [0, ...histShort];
@@ -45,7 +51,7 @@ function NumPlays({ metaFilter, nav }) {
           hindex,
           game: formatSummaryGameKey(obj.game, t),
           plays: obj.value,
-          width: opps.value,
+          width: opps?.value ?? 0,
           histogram,
           histShort,
           histMax,
@@ -53,7 +59,8 @@ function NumPlays({ metaFilter, nav }) {
       })
       .filter(
         (rec) =>
-          metaFilter === undefined || matchesSummaryGameKey(rec.id, metaFilter)
+          rec !== null &&
+          (metaFilter === undefined || matchesSummaryGameKey(rec.id, metaFilter))
       )
       .sort((a, b) => b.plays - a.plays);
   }, [summary, metaFilter, t]);

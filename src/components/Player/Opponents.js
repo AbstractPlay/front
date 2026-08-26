@@ -35,16 +35,15 @@ function Opponents({ handleChallenge }) {
   }, []);
 
   useEffect(() => {
-    if (summary !== null && user !== null) {
-      const rec = summary.players.hOpp.find((r) => r.user === user.id);
+    const hOpp = summary?.players?.hOpp;
+    if (hOpp?.length && user !== null) {
+      const rec = hOpp.find((r) => r.user === user.id);
       if (rec !== undefined) {
         hIndexSetter(rec.value);
-        const countBelow = summary.players.hOpp.filter(
+        const countBelow = hOpp.filter(
           ({ value }) => value < rec.value
         ).length;
-        ptileSetter(
-          Math.round((countBelow / summary.players.hOpp.length) * 100)
-        );
+        ptileSetter(Math.round((countBelow / hOpp.length) * 100));
       } else {
         hIndexSetter(null);
         ptileSetter(null);

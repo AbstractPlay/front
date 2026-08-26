@@ -14,7 +14,7 @@ function GameStats({ metaFilter, nav }) {
 
   const data = useMemo(
     () =>
-      [...Object.keys(summary.metaStats)]
+      [...Object.keys(summary?.metaStats ?? {})]
         .map((gameKey) => {
           const rec = summary.metaStats[gameKey];
           return {

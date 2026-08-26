@@ -16,6 +16,7 @@ import {
   getStatsTab,
   sortStatsModules,
 } from "../lib/statsSections";
+import { formatSummaryCount } from "../lib/summaryDisplay";
 
 const daysBetween = (startDate, endDate) => {
   const oneDay = 1000 * 60 * 60 * 24;
@@ -61,7 +62,7 @@ function Stats() {
   const [recYears, recYearsSetter] = useState(0);
 
   useEffect(() => {
-    if (summary !== null) {
+    if (summary?.oldestRec != null && summary?.newestRec != null) {
       const oldest = new Date(summary.oldestRec);
       const newest = new Date(summary.newestRec);
       recDaysSetter(daysBetween(oldest, newest));
@@ -155,11 +156,11 @@ function Stats() {
             <br />
             {t("stats.recordsBetween", {
               oldest:
-                summary !== null
+                summary?.oldestRec != null
                   ? formatDate(new Date(summary.oldestRec))
                   : "??",
               newest:
-                summary !== null
+                summary?.newestRec != null
                   ? formatDate(new Date(summary.newestRec))
                   : "??",
               days: `${t("stats.day", { count: recDays })}, ${t("stats.year", {
@@ -168,10 +169,8 @@ function Stats() {
             })}
             <br />
             {t("stats.playersPlayedGames", {
-              numPlayers:
-                summary !== null ? summary.numPlayers.toLocaleString() : "??",
-              numGames:
-                summary !== null ? summary.numGames.toLocaleString() : "??",
+              numPlayers: formatSummaryCount(summary?.numPlayers),
+              numGames: formatSummaryCount(summary?.numGames),
             })}
           </p>
         </div>

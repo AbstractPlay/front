@@ -11,7 +11,7 @@ function SiteGeo({ nav }) {
 
   const data = useMemo(() => {
     const allUsersByCode = new Map(
-      summary.geoStats.map(({ code, name, n }) => [code, { name, n }])
+      (summary?.geoStats ?? []).map(({ code, name, n }) => [code, { name, n }])
     );
     const activeByCode = new Map(
       (summary.activeGeoStats ?? []).map(({ code, name, n }) => [

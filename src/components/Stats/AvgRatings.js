@@ -36,7 +36,7 @@ function AvgRatings({ nav }) {
     }
     const lst = [];
     for (const obj of summary.ratings.avg) {
-      const weighted = summary.ratings.weighted.find(
+      const weighted = summary.ratings.weighted?.find(
         (u) => u.user === obj.user
       );
       lst.push({

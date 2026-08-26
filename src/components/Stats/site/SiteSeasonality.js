@@ -10,7 +10,7 @@ function SiteSeasonality() {
   const summary = useStore((state) => state.summary);
   const { t } = useTranslation();
   const height = useChartHeight(400, 300);
-  const seasonality = summary.seasonality;
+  const seasonality = summary?.seasonality;
 
   const dowLabels = useMemo(
     () => [
