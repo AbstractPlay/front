@@ -142,6 +142,25 @@ function NotificationMessage({ body }) {
           }}
         />
       );
+    case "completedGameChat":
+      return (
+        <>
+          <Trans
+            i18nKey={
+              body.backfill
+                ? "me.notifications.message.completedGameChat_backfill"
+                : "me.notifications.message.completedGameChat"
+            }
+            values={{ commenterName: body.commenterName, metaGame }}
+            components={{
+              gameLink: (
+                <Link to={`/move/${body.metaGame}/1/${body.gameId}`} />
+              ),
+            }}
+          />
+          {variantsSuffix(body.metaGame, body.variants)}
+        </>
+      );
     default:
       return "";
   }
@@ -290,6 +309,21 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
               <>
                 <Link
                   to={`/move/${body.metaGame}/0/${body.gameId}`}
+                  className="button is-small apButton"
+                >
+                  {t("View")}
+                </Link>
+                &nbsp;
+                {dismissButton}
+              </>
+            );
+          }
+
+          if (body.type === "completedGameChat") {
+            return (
+              <>
+                <Link
+                  to={`/move/${body.metaGame}/1/${body.gameId}`}
                   className="button is-small apButton"
                 >
                   {t("View")}

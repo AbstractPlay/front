@@ -1529,7 +1529,9 @@
                 "challengeIssued": "{{challengerName}} challenged you to <gameLink>{{metaGame}}</gameLink>",
                 "challengeDeclined": "{{declinerName}} declined your <gameLink>{{metaGame}}</gameLink> challenge",
                 "challengeRevoked": "{{revokerName}} revoked the <gameLink>{{metaGame}}</gameLink> challenge",
-                "eventInvitation": "{{organizerName}} has invited you to the event <eventLink>{{eventName}}</eventLink>."
+                "eventInvitation": "{{organizerName}} has invited you to the event <eventLink>{{eventName}}</eventLink>.",
+                "completedGameChat": "{{commenterName}} has something to say in your completed <gameLink>{{metaGame}}</gameLink> game",
+                "completedGameChat_backfill": "You have unread chat in your completed <gameLink>{{metaGame}}</gameLink> game"
             }
         }
     },
