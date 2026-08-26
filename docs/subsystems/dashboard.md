@@ -25,7 +25,8 @@ The dashboard response drives:
 - Games awaiting opponent's move
 - Open challenges (issued, received, accepted)
 - Standing challenges
-- Completed and watched games
+- Completed games (post-game chat via in-app notifications; browse older games on per-metaGame list pages)
+- Watched games
 - Bot status (via [`botApi.js`](../src/components/Bots/botApi.js))
 
 Partial data may already be in Zustand `globalMe` from navbar login; `fetchDashboard` merges into `globalMe` with `{ ...prev, ...dashboard }`.
@@ -39,7 +40,6 @@ Backend: [Auth queries — Profile and dashboard](/backend/api/auth-queries/) (`
 | [`NotificationsTable.js`](../src/components/Me/NotificationsTable.js) | In-app notification feed (top of dashboard when non-empty) |
 | [`MyTurnTable.js`](../src/components/Me/MyTurnTable.js) | Games where it is the user's turn |
 | [`TheirTurnTable.js`](../src/components/Me/TheirTurnTable.js) | Games waiting on opponent |
-| [`CompletedGamesTable.js`](../src/components/Me/CompletedGamesTable.js) | Finished games |
 | [`WatchedGamesTable.js`](../src/components/Me/WatchedGamesTable.js) | Spectated games (persistent watch list) |
 | [`StandingChallengeTable.js`](../src/components/Me/StandingChallengeTable.js) | Active standing challenges |
 
@@ -51,7 +51,10 @@ Backend: [Auth queries — Profile and dashboard](/backend/api/auth-queries/) (`
 - **Challenge issued** — game name links to `/games/{metaGame}`; **View** opens [`ChallengeResponseModal.js`](../src/components/Me/ChallengeResponseModal.js) when the challenge is still in `challengesReceived`
 - **Game start** — game name links to `/move/{metaGame}/0/{gameId}`
 - **Game end / rating change** — **View** links to the move page
+- **Completed game chat** — **View** links to `/move/{metaGame}/1/{gameId}` (completed game)
 - **Event invitation** — `{organizer} has invited you to the event` with the event name linking to `/event/{eventId}`
+
+Under **Your games**, a link downloads all completed game reports from `records.abstractplay.com`.
 
 Creation rules and DynamoDB layout: [Notifications — In-app dashboard feed](/backend/subsystems/notifications/).
 
