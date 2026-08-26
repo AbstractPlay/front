@@ -4,6 +4,7 @@ import {
   buildGameOptions,
   collectBoardFilterOptions,
   filterGameOptions,
+  getGameDisplayName,
   isExperimentalGame,
   isPublicCatalogGame,
   isBoardRootCategory,
@@ -17,6 +18,22 @@ vi.mock("./realMode", () => ({
 
 beforeEach(() => {
   vi.mocked(isProductionMode).mockReturnValue(false);
+});
+
+describe("getGameDisplayName", () => {
+  it("returns the catalog name for a known uid", () => {
+    const uid = [...gameinfo.keys()][0];
+    expect(getGameDisplayName(uid)).toBe(gameinfo.get(uid).name);
+  });
+
+  it("returns fallback for unknown uid", () => {
+    expect(getGameDisplayName("not-a-real-game", "Unknown")).toBe("Unknown");
+    expect(getGameDisplayName("not-a-real-game")).toBe("not-a-real-game");
+  });
+
+  it("returns Unknown for empty uid without fallback", () => {
+    expect(getGameDisplayName("")).toBe("Unknown");
+  });
 });
 
 describe("isPublicCatalogGame", () => {

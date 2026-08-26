@@ -8,7 +8,7 @@ import { Helmet } from "react-helmet-async";
 // import Gallery from "./MetaContainer/Gallery";
 import Table from "./MetaContainer/Table";
 import MetaItem from "./MetaContainer/MetaItem";
-import { listPublicCatalogMetas } from "../lib/gameOptions";
+import { listPublicCatalogMetas, getGameDisplayName } from "../lib/gameOptions";
 import { useStore } from "../stores";
 
 function MetaContainer(props) {
@@ -33,8 +33,8 @@ function MetaContainer(props) {
   }, [updateCounter]);
 
   let games = listPublicCatalogMetas().sort((a, b) => {
-    const na = gameinfo.get(a).name;
-    const nb = gameinfo.get(b).name;
+    const na = getGameDisplayName(a);
+    const nb = getGameDisplayName(b);
     if (na < nb) return -1;
     else if (na > nb) return 1;
     return 0;
@@ -115,7 +115,7 @@ function MetaContainer(props) {
         <Helmet>
           <meta
             property="og:title"
-            content={`${gameinfo.get(metaGame).name}: Game Information`}
+            content={`${getGameDisplayName(metaGame)}: Game Information`}
           />
           <meta
             property="og:url"
@@ -123,7 +123,7 @@ function MetaContainer(props) {
           />
           <meta
             property="og:description"
-            content={`Information on the game ${gameinfo.get(metaGame).name}`}
+            content={`Information on the game ${getGameDisplayName(metaGame)}`}
           />
         </Helmet>
         <MetaItem

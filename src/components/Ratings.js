@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../lib/gameOptions";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import {
@@ -411,7 +411,7 @@ function Ratings() {
     );
   }
 
-  const metaGameName = gameinfo.get(metaGame)?.name ?? metaGame;
+  const metaGameName = getGameDisplayName(metaGame);
 
   return (
     <RatingsTable

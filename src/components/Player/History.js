@@ -305,6 +305,7 @@ function History({ handleChallenge }) {
               cell: (props) =>
                 globalMe === null ||
                 props.row.original.meta === undefined ||
+                !gameinfo.has(props.row.original.meta) ||
                 globalMe.id !== user.id ||
                 props.row.original.opponents.length !== 1 ? null : (
                   <>

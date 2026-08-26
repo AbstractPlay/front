@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext, SummaryContext } from "../Player";
+import { gameinfo } from "@abstractplay/gameslib";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import NewChallengeModal from "../NewChallengeModal";
 import { useStore } from "../../stores";
@@ -131,7 +132,9 @@ function Ratings({ handleChallenge }) {
       columnHelper.display({
         id: "challenge",
         cell: (props) =>
-          globalMe === null || globalMe.id === user.id ? null : (
+          globalMe === null ||
+          globalMe.id === user.id ||
+          !gameinfo.has(props.row.original.id) ? null : (
             <>
               <NewChallengeModal
                 show={

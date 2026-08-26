@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../Bots/botUtils";
 
@@ -11,9 +11,8 @@ function GameItem(props) {
 
   const game = props.item;
   const currentGameBit = props.gameOver ? "1" : "0";
-  const info = gameinfo.get(game.metaGame);
   var desc = t("GameAgainst", {
-    game: info.name,
+    game: getGameDisplayName(game.metaGame),
     opp: game.players
       .filter((item) => item.id !== globalMe.id)
       .map((item) => formatPlayerDisplayName(item, allUsers))

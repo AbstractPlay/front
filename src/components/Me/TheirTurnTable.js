@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import {
   getCoreRowModel,
   useReactTable,
@@ -73,7 +73,7 @@ function TheirTurnTable(props) {
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
-          gameName: "Unknown",
+          gameName: getGameDisplayName(g.metaGame, "Unknown"),
           gameStarted: g.gameStarted || 0,
           lastMove: g.lastMoveTime,
           opponents: g.players.filter((item) => item.id !== globalMe.id),
@@ -86,8 +86,6 @@ function TheirTurnTable(props) {
           lastSeen: g.seen || 0,
           lastChat: g.lastChat || 0,
         };
-        if (gameinfo.get(g.metaGame) !== undefined)
-          ret.gameName = gameinfo.get(g.metaGame).name;
         return ret;
       }),
     [props.games, globalMe.id]

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../lib/gameOptions";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
   getCoreRowModel,
@@ -62,7 +62,7 @@ function ListGames({ fixedState }) {
     fetchData();
   }, [gameState, metaGame, fixedState]);
 
-  const metaGameName = gameinfo.get(metaGame).name;
+  const metaGameName = getGameDisplayName(metaGame);
 
   const data = useMemo(
     () =>

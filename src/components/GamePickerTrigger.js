@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../lib/gameOptions";
 import GamePickerModal from "./GamePickerModal";
 
 function GamePickerTrigger({
@@ -13,7 +14,7 @@ function GamePickerTrigger({
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const selectedName =
-    value && gameinfo.has(value) ? gameinfo.get(value).name : null;
+    value && gameinfo.has(value) ? getGameDisplayName(value) : null;
 
   const handleChange = (metaGame) => {
     onChange(metaGame);
