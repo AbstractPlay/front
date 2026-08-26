@@ -13,7 +13,7 @@ All routes are defined in [`src/pages/Skeleton.js`](../src/pages/Skeleton.js) in
 | `/challenges/:metaGame` | `StandingChallenges` | |
 | `/listgames/:gameState/:metaGame` | `ListGames` | |
 | `/ratings/:metaGame` | `Ratings` | |
-| `/tournaments/:metaGame?` | `Tournaments` | |
+| `/tournaments/:tab?/:metaGame?` | `Tournaments` | Tabbed list (`open`, `current`, `completed`); optional game filter |
 | `/tournament/:metaGame/:tournamentid` | `Tournament` | |
 | `/tournament/:tournamentid` | `Tournament` | Legacy path variant |
 | `/tournamenthistory/:metaGame` | `TournamentsOld` | |

@@ -26,6 +26,7 @@ import {
   metaTabHash,
 } from "../../lib/metaItemTabs";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
+import { tournamentListPath } from "../../lib/tournamentSections";
 
 const MetaItem = React.forwardRef(
   (
@@ -428,7 +429,7 @@ const MetaItem = React.forwardRef(
                   )}
                   <div>
                     {tournamentPlaySupported(game.uid) ? (
-                      <Link to={"/tournaments/" + game.uid}>
+                      <Link to={tournamentListPath("open", game.uid)}>
                         {t("TournamentsLink")}
                       </Link>
                     ) : null}
