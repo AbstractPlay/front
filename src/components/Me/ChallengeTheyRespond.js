@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import {
   getCoreRowModel,
   useReactTable,
@@ -39,15 +39,13 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
           metaGame: g.metaGame,
           variants: expandVariants(g.metaGame, g.variants),
           numPlayers: g.numPlayers,
-          gameName: "Unknown",
+          gameName: getGameDisplayName(g.metaGame, "Unknown"),
           dateIssued: g.dateIssued,
           comment: g.comment,
           challengees: g.challengees,
           accepted: g.players.filter((p) => p.id !== globalMe.id),
           fullRec: g,
         };
-        if (gameinfo.get(g.metaGame) !== undefined)
-          ret.gameName = gameinfo.get(g.metaGame).name;
         return ret;
       }),
     [challenges, globalMe]

@@ -2,7 +2,7 @@ import { useCallback, useState, useMemo, Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { callAuthApi } from "../../lib/api";
 import { unwatchGame } from "../../lib/playerGameMarks";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import {
   getCoreRowModel,
   useReactTable,
@@ -80,7 +80,7 @@ function WatchedGamesTable(props) {
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
-          gameName: "Unknown",
+          gameName: getGameDisplayName(g.metaGame, "Unknown"),
           completed,
           opponents: g.players.filter((item) => item.id !== globalMe.id),
           lastActivity: Math.max(
@@ -91,8 +91,6 @@ function WatchedGamesTable(props) {
           lastSeen: g.seen || 0,
           lastChat: g.lastChat || 0,
         };
-        if (gameinfo.get(g.metaGame) !== undefined)
-          ret.gameName = gameinfo.get(g.metaGame).name;
         return ret;
       }),
     [globalMe.id, props.games]

@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { gameinfo } from "@abstractplay/gameslib";
 import GameVariants from "../GameVariants";
 import GamePickerTrigger from "../GamePickerTrigger";
-import { pickRandomGameOption } from "../../lib/gameOptions";
+import { pickRandomGameOption, getGameDisplayName } from "../../lib/gameOptions";
 import { getAuthToken } from "../../lib/api";
 import {
   buildLabGame,
@@ -44,7 +43,7 @@ function SavesTable({ saves, dateField, onLoad, onDelete, t }) {
         {saves.map((save) => (
           <tr key={save.id}>
             <td>{save.name}</td>
-            <td>{gameinfo.get(save.metaGame)?.name ?? save.metaGame}</td>
+            <td>{getGameDisplayName(save.metaGame)}</td>
             <td>{new Date(save[dateField]).toLocaleString()}</td>
             <td>
               <button
@@ -186,7 +185,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
         game,
         savedExploration: null,
         gameSettings: {},
-        sessionName: gameinfo.get(metaGame).name,
+        sessionName: getGameDisplayName(metaGame),
       });
     } catch (err) {
       setError(err.message || String(err));
@@ -207,7 +206,7 @@ function LabLauncher({ onLaunch, onLoadSave }) {
         savedMoveAnnotations: imported.moveAnnotations,
         initialFocus: imported.focus,
         gameSettings: {},
-        sessionName: `${gameinfo.get(imported.metaGame).name}${t(
+        sessionName: `${getGameDisplayName(imported.metaGame)}${t(
           "lab.importedSuffix"
         )}`,
       });

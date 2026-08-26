@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import Joyride from "react-joyride";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../../lib/gameOptions";
 
 export default function GameMoveHelmetTour({ session }) {
   const {
@@ -20,7 +20,7 @@ export default function GameMoveHelmetTour({ session }) {
       <Helmet>
         <meta
           property="og:title"
-          content={`${gameinfo.get(metaGame).name}: Game ${gameID}`}
+          content={`${getGameDisplayName(metaGame)}: Game ${gameID}`}
         />
         <meta
           property="og:url"
@@ -28,7 +28,7 @@ export default function GameMoveHelmetTour({ session }) {
         />
         <meta
           property="og:description"
-          content={`${gameinfo.get(metaGame).name} game ${gameID}`}
+          content={`${getGameDisplayName(metaGame)} game ${gameID}`}
         />
       </Helmet>
       <Joyride

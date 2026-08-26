@@ -3,7 +3,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { Link } from "react-router-dom";
 import { Trans } from "react-i18next";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import { Helmet } from "react-helmet-async";
 import GameMoves from "./GameMoves";
 import GameStatus from "./GameStatus";
@@ -191,7 +191,7 @@ export default function GameMoveClassicLayout({ session }) {
         <Helmet>
           <meta
             property="og:title"
-            content={`${gameinfo.get(metaGame).name}: Game ${gameID}`}
+            content={`${getGameDisplayName(metaGame)}: Game ${gameID}`}
           />
           <meta
             property="og:url"
@@ -199,7 +199,7 @@ export default function GameMoveClassicLayout({ session }) {
           />
           <meta
             property="og:description"
-            content={`${gameinfo.get(metaGame).name} game ${gameID}`}
+            content={`${getGameDisplayName(metaGame)} game ${gameID}`}
           />
         </Helmet>
         <article>
@@ -257,7 +257,7 @@ export default function GameMoveClassicLayout({ session }) {
                   tourClass = "tourMove";
                   break;
                 case "board":
-                  title = gameinfo.get(metaGame).name;
+                  title = getGameDisplayName(metaGame);
                   tourClass = "tourBoard";
                   break;
                 case "moves":
@@ -515,7 +515,7 @@ export default function GameMoveClassicLayout({ session }) {
                 <h1 className="subtitle lined tourWelcome">
                   <span>
                     <Link to={`/games/${metaGame}`}>
-                      {gameinfo.get(metaGame).name}
+                      {getGameDisplayName(metaGame)}
                     </Link>
                     {parenthetical.length === 0 ? null : (
                       <>

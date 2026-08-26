@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../lib/gameOptions";
 import { useTranslation } from "react-i18next";
 import { useParams, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { useStorageState } from "react-use-storage-state";
@@ -130,7 +131,7 @@ function Explore(props) {
           <Helmet>
             <meta
               property="og:title"
-              content={`${gameinfo.get(metaGame).name}: Game Information`}
+              content={`${getGameDisplayName(metaGame)}: Game Information`}
             />
             <meta
               property="og:url"
@@ -138,7 +139,7 @@ function Explore(props) {
             />
             <meta
               property="og:description"
-              content={`Information on the game ${gameinfo.get(metaGame).name}`}
+              content={`Information on the game ${getGameDisplayName(metaGame)}`}
             />
           </Helmet>
           <MetaItem

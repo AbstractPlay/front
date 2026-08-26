@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../lib/gameOptions";
 import { Auth } from "aws-amplify";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
@@ -237,7 +237,7 @@ function StandingChallenges(props) {
     revokeSetter(id);
   };
 
-  const metaGameName = gameinfo.get(metaGame).name;
+  const metaGameName = getGameDisplayName(metaGame);
   console.log(metaGame);
   const showRespond = loggedin && challenges;
 

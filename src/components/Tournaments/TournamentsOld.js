@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 
@@ -23,10 +23,7 @@ function TournamentsOld(props) {
     useStorageState("old-tournaments-show", 20);
   const { metaGame } = useParams();
 
-  const metaGameName =
-    gameinfo.get(metaGame) === undefined
-      ? "Unknown"
-      : gameinfo.get(metaGame).name;
+  const metaGameName = getGameDisplayName(metaGame, "Unknown");
   const allSize = Number.MAX_SAFE_INTEGER;
 
   useEffect(() => {
@@ -51,7 +48,7 @@ function TournamentsOld(props) {
     return tournaments.map((t) => {
       const ret = {
         tournamentid: t.id,
-        metaGameName: "Unknown",
+        metaGameName: getGameDisplayName(t.metaGame, "Unknown"),
         metaGame: t.metaGame,
         variants: t.variants.join(", "),
         number: t.number,
@@ -60,8 +57,6 @@ function TournamentsOld(props) {
         winner: t.divisions[1].winner,
         numPlayers: t.players.length,
       };
-      if (gameinfo.get(t.metaGame) !== undefined)
-        ret.metaGameName = gameinfo.get(t.metaGame).name;
       return ret;
     });
   }, [tournaments]);

@@ -1,4 +1,4 @@
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 
 /**
@@ -274,7 +274,7 @@ export function getLayoutContext(session, users, myMove, t) {
   } = session;
 
   const exploration = explorationRef.current?.nodes;
-  const gameName = gameinfo.get(metaGame).name;
+  const gameName = getGameDisplayName(metaGame);
   const queueCount = Array.isArray(myMove)
     ? myMove.filter((g) => g.id !== gameID).length
     : 0;

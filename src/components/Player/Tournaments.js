@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import { createColumnHelper } from "@tanstack/react-table";
 import { TournamentContext } from "../Player";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
@@ -29,7 +29,7 @@ function Tournaments() {
             participants,
             score,
           }) => {
-            const gameName = gameinfo.get(metaGame)?.name ?? metaGame;
+            const gameName = getGameDisplayName(metaGame);
             return {
               id: tid,
               meta: metaGame,
