@@ -1542,7 +1542,9 @@
         "challengeIssued": "{{challengerName}} te desafió a {{metaGame}}",
         "challengeDeclined": "{{declinerName}} rechazó tu desafío de {{metaGame}}",
         "challengeRevoked": "{{revokerName}} retiró el desafío de {{metaGame}}",
-        "eventInvitation": "{{organizerName}} te invitó a {{eventName}}"
+        "eventInvitation": "{{organizerName}} te invitó a {{eventName}}",
+        "completedGameChat": "{{commenterName}} tiene algo que decir en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>",
+        "completedGameChat_backfill": "Tienes mensajes sin leer en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>"
       }
     }
   },

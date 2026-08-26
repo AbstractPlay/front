@@ -1531,7 +1531,9 @@
         "challengeIssued": "{{challengerName}} hat dich zu {{metaGame}} herausgefordert",
         "challengeDeclined": "{{declinerName}} hat deine Herausforderung zu {{metaGame}} abgelehnt",
         "challengeRevoked": "{{revokerName}} hat die Herausforderung zu {{metaGame}} zurückgezogen",
-        "eventInvitation": "{{organizerName}} hat dich zu {{eventName}} eingeladen"
+        "eventInvitation": "{{organizerName}} hat dich zu {{eventName}} eingeladen",
+        "completedGameChat": "{{commenterName}} hat etwas in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie zu sagen",
+        "completedGameChat_backfill": "Du hast ungelesene Chatnachrichten in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie"
       }
     }
   },
