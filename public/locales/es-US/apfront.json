@@ -1164,7 +1164,12 @@
     "Visit": "Visitar torneo",
     "Winner": "Ganador",
     "DivisionWinner": "Ganador: {{winner}}",
-    "Withdraw": "Retirarse del siguiente"
+    "Withdraw": "Retirarse del siguiente",
+    "tabs": {
+      "open": "Inscripciones abiertas",
+      "current": "En curso",
+      "completed": "Completados recientemente"
+    }
   },
   "TriggerRefresh": "Forzar una actualización",
   "TwoPlayersChallengeDescription": "Desafiaste a {{other}} a una partida de [{{game}}](/games/{{meta}})",

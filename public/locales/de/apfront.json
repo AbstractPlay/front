@@ -1157,7 +1157,12 @@
     "Visit": "Turnier besuchen",
     "Winner": "Sieger",
     "DivisionWinner": "Sieger: {{winner}}",
-    "Withdraw": "Vom nächsten abmelden"
+    "Withdraw": "Vom nächsten abmelden",
+    "tabs": {
+      "open": "Offen für Anmeldungen",
+      "current": "Laufend",
+      "completed": "Kürzlich beendet"
+    }
   },
   "TriggerRefresh": "Aktualisierung auslösen",
   "TwoPlayersChallengeDescription": "Du hast {{other}} zu einer Partie [{{game}}](/games/{{meta}}) herausgefordert",

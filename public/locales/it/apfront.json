@@ -1164,7 +1164,12 @@
     "Visit": "Visita torneo",
     "Winner": "Vincitore",
     "DivisionWinner": "Vincitore: {{winner}}",
-    "Withdraw": "Ritirati dal prossimo"
+    "Withdraw": "Ritirati dal prossimo",
+    "tabs": {
+      "open": "Iscrizioni aperte",
+      "current": "In corso",
+      "completed": "Conclusi di recente"
+    }
   },
   "TriggerRefresh": "Forza un aggiornamento",
   "TwoPlayersChallengeDescription": "Hai sfidato {{other}} a una partita a [{{game}}](/games/{{meta}})",
