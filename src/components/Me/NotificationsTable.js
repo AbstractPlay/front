@@ -45,6 +45,14 @@ function variantsSuffix(metaGame, variants) {
   return label ? ` (${label})` : "";
 }
 
+function ratingWithRd(rating, rd) {
+  const rounded = Math.round(rating);
+  if (rd === undefined || rd === null || rd === "") {
+    return `${rounded}`;
+  }
+  return `${rounded} (${Math.round(rd)})`;
+}
+
 function challengeNotificationMessage(i18nKey, metaGame, values) {
   return (
     <Trans
@@ -88,20 +96,19 @@ function NotificationMessage({ body }) {
       );
     case "ratingChange":
       return (
-        <>
-          <Trans
-            i18nKey="me.notifications.message.ratingChange"
-            values={{
-              metaGame,
-              delta: body.delta > 0 ? `+${body.delta}` : `${body.delta}`,
-              newRating: Math.round(body.newRating),
-            }}
-            components={{
-              gameLink: <Link to={`/ratings/${body.metaGame}`} />,
-            }}
-          />
-          {variantsSuffix(body.metaGame, body.variants)}
-        </>
+        <Trans
+          i18nKey="me.notifications.message.ratingChange"
+          values={{
+            metaGame,
+            variantsInline: variantsSuffix(body.metaGame, body.variants),
+            delta: body.delta > 0 ? `+${body.delta}` : `${body.delta}`,
+            oldRatingDisplay: ratingWithRd(body.oldRating, body.oldRd),
+            newRatingDisplay: ratingWithRd(body.newRating, body.newRd),
+          }}
+          components={{
+            gameLink: <Link to={`/ratings/${body.metaGame}`} />,
+          }}
+        />
       );
     case "challengeIssued":
       return challengeNotificationMessage(
