@@ -718,6 +718,17 @@ button.fabtn:hover {
   visibility: hidden;
 }
 
+.glicko-display-note {
+  color: var(--secondary-font-color);
+  margin-top: 0.5rem;
+}
+
+abbr.glicko-hint {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.15em;
+}
+
 .input-icon {
   display: flex;
   align-items: center;

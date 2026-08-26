@@ -10,6 +10,8 @@ import {
   formatGlickoSiteLowWithRd,
   glickoSiteRatingLow,
 } from "../../lib/glickoDisplay";
+import GlickoHint from "../shared/GlickoHint";
+import GlickoDisplayNote from "../shared/GlickoDisplayNote";
 
 function AvgRatings({ nav }) {
   useEnsureSummaryTier("ratings");
@@ -94,7 +96,7 @@ function AvgRatings({ nav }) {
         },
       }),
       columnHelper.accessor("siteGlicko", {
-        header: t("tables.glicko"),
+        header: () => <GlickoHint />,
         cell: (props) => formatGlickoSiteLowWithRd(props.getValue()),
         sortingFn: (rowA, rowB, columnID) => {
           const lowA = glickoSiteRatingLow(rowA.getValue(columnID)) ?? -Infinity;
@@ -121,6 +123,7 @@ function AvgRatings({ nav }) {
       data={data}
       columns={columns}
       sort={[{ id: "siteGlicko", desc: true }]}
+      tableNote={<GlickoDisplayNote />}
     />
   );
 }

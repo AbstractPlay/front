@@ -18,6 +18,8 @@ import {
   getRecentActivitySparklineWeeks,
   getTopRatings,
 } from "../../lib/playerProfileSections";
+import GlickoHint from "../shared/GlickoHint";
+import GlickoDisplayNote from "../shared/GlickoDisplayNote";
 
 function ActivitySparkline({ values, count = 12 }) {
   const recent = getRecentActivitySparklineWeeks(values, count);
@@ -93,6 +95,7 @@ function Hero({ handleChallenge }) {
     siteGlicko !== null || hIndexRec !== null || medianResponseHours !== null;
   const hasRow2Stats = topRatings.length > 0 || activityHist.length > 0;
   const hasQuickStats = hasRow1Stats || hasRow2Stats;
+  const hasGlickoStats = siteGlicko !== null || topRatings.length > 0;
 
   if (!hasQuickStats && !canChallenge) {
     return null;
@@ -108,7 +111,7 @@ function Hero({ handleChallenge }) {
                 {siteGlicko !== null ? (
                   <div className="column is-4">
                     <p className="heading has-text-weight-semibold">
-                      {t("player.hero.siteGlicko")}
+                      <GlickoHint>{t("player.hero.siteGlicko")}</GlickoHint>
                     </p>
                     <p className="title is-5 player-hero-stat-value">
                       {formatGlickoSiteLowWithRd(siteGlicko)}
@@ -183,6 +186,7 @@ function Hero({ handleChallenge }) {
                 ) : null}
               </div>
             ) : null}
+            {hasGlickoStats ? <GlickoDisplayNote /> : null}
           </div>
         ) : null}
         {canChallenge ? (

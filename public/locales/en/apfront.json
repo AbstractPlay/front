@@ -1207,6 +1207,10 @@
     },
     "None": "None",
     "Draw": "Draw",
+    "glicko": {
+        "displayHint": "Glicko ratings are shown as the 95% confidence rating (rating − 2×RD), with full RD in parentheses.",
+        "displayNote": "Across the site, Glicko ratings are presented as the 95% confidence rating, with the full RD value in parentheses. <wikiLink>Learn more about the Glicko rating system</wikiLink>."
+    },
     "gameMarks": {
         "watch": "Watch this game",
         "unwatch": "Stop watching",
