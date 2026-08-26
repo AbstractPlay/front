@@ -25,6 +25,7 @@ import {
   metaTabFromHash,
   metaTabHash,
 } from "../../lib/metaItemTabs";
+import { tournamentPlaySupported } from "../../lib/tournamentGame";
 
 const MetaItem = React.forwardRef(
   (
@@ -200,6 +201,11 @@ const MetaItem = React.forwardRef(
       return;
     };
 
+    const visibleTabs = META_TABS.filter(
+      (tab) =>
+        tab.id !== "tournaments" || tournamentPlaySupported(game.uid)
+    );
+
     return (
       <div ref={ref}>
         <h1 className="subtitle lined">
@@ -207,7 +213,7 @@ const MetaItem = React.forwardRef(
         </h1>
         <div className="tabs is-small is-toggle is-toggle-rounded">
           <ul>
-            {META_TABS.map((tab) => (
+            {visibleTabs.map((tab) => (
               <li
                 key={tab.id}
                 className={activeTab === tab.id ? "is-active" : ""}
@@ -421,9 +427,11 @@ const MetaItem = React.forwardRef(
                     </div>
                   )}
                   <div>
-                    <Link to={"/tournaments/" + game.uid}>
-                      {t("TournamentsLink")}
-                    </Link>
+                    {tournamentPlaySupported(game.uid) ? (
+                      <Link to={"/tournaments/" + game.uid}>
+                        {t("TournamentsLink")}
+                      </Link>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -456,7 +464,9 @@ const MetaItem = React.forwardRef(
             {activeTab !== "completed" ? null : (
               <ListGames fixedState={"completed"} />
             )}
-            {activeTab !== "tournaments" ? null : <Tournaments />}
+            {activeTab !== "tournaments" || !tournamentPlaySupported(game.uid) ? null : (
+              <Tournaments />
+            )}
           </div>
           <div className="column">
             <div className="starContainer" onClick={() => toggleStar(game.uid)}>
