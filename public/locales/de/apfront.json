@@ -1209,6 +1209,10 @@
   },
   "None": "Keine",
   "Draw": "Unentschieden",
+  "glicko": {
+    "displayHint": "Glicko-Wertungen werden als 95%-Konfidenzwert (Wertung − 2×RD) mit der vollständigen RD in Klammern angezeigt.",
+    "displayNote": "Auf der gesamten Website werden Glicko-Wertungen als 95%-Konfidenzwert dargestellt, mit dem vollständigen RD-Wert in Klammern. <wikiLink>Mehr über das Glicko-Wertungssystem erfahren</wikiLink>."
+  },
   "gameMarks": {
     "watch": "Dieses Spiel beobachten",
     "unwatch": "Nicht mehr beobachten",
@@ -1325,7 +1329,7 @@
     "year_other": "{{count}} Jahre",
     "playersPlayedGames": "In dieser Zeit haben {{numPlayers}} Spieler {{numGames}} Spiele gespielt.",
     "explanations": {
-      "highestSingle": "Liste aller aufgezeichneten Wertungen. Das System ignoriert Spiele, die ausdrücklich als ungewertet markiert sind, sowie Spiele, die vor dem dritten Zug enden. Die Rangliste verwendet konservatives Glicko-2 (Wertung − 2×RD), wobei sowohl Glicko als auch das alte Elo angezeigt werden. Glicko beginnt bei 1200 mit einem RD von 350; Elo beginnt bei 1200 mit einem statischen *K* von 30. Glicko-Wertungen werden als 95%-Konfidenzintervall dargestellt — je schmaler der Bereich, desto sicherer ist das System. TrueSkill verwendet die Standardeinstellungen von Microsoft (Wertungsbereich 0–50, Startwert 25).",
+      "highestSingle": "Liste aller aufgezeichneten Wertungen. Das System ignoriert Spiele, die ausdrücklich als ungewertet gekennzeichnet sind, sowie Spiele, die enden, bevor drei Züge gemacht wurden. Ranglisten verwenden konservatives Glicko-2 (95%-Konfidenz) (Wertung − 2×RD), wobei sowohl Glicko als auch das alte Elo angezeigt werden. Glicko beginnt bei 1200 mit einer RD von 350; Elo beginnt bei 1200 mit einem statischen *K* von 30. TrueSkill verwendet Microsofts Standardeinstellungen (Wertungsbereich 0–50, Start bei 25).",
       "avgRatings": "Diese Spalten zeigen die gewichteten Durchschnitte deiner Glicko- und Elo-Wertungen über die gesamte Website.",
       "topPlayers": "Diese Tabelle listet jede verfügbare Kombination aus Spiel und Variante zusammen mit dem am höchsten gewerteten Spieler für diese Kombination auf, sortiert nach konservativem Glicko-2 (Wertung − 2×RD). Elo wird als Referenz angezeigt.",
       "numPlays": "Diese Tabelle listet jedes Spiel auf, wie oft es gespielt wurde, von wie vielen eindeutigen Spielern und den `h-index` des Spiels. Der h-Index eines Spiels ist die Anzahl der Spieler, die dieses Spiel mindestens so oft gespielt haben (ein h-Index von 5 bedeutet also, dass 5 verschiedene Spieler dieses Spiel mindestens 5-mal gespielt haben). Sie bietet auch ein Histogramm der beendeten Spiele für dieses Spiel. Die Vorschau zeigt die letzten 10 Wochen, wobei die aktuellste Woche rechts steht. Ein Klick auf die Vorschau zeigt den vollständigen Verlauf der beendeten Spiele in Sieben-Tage-\"Blöcken\", wobei die aktuellste Woche rechts steht.",

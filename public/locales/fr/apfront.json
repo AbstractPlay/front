@@ -1209,6 +1209,10 @@
   },
   "None": "Aucun",
   "Draw": "Égalité",
+  "glicko": {
+    "displayHint": "Les classements Glicko sont affichés avec un niveau de confiance de 95 % (classement − 2×RD), avec le RD complet entre parenthèses.",
+    "displayNote": "Sur l'ensemble du site, les classements Glicko sont présentés avec un niveau de confiance de 95 %, avec la valeur complète du RD entre parenthèses. <wikiLink>En savoir plus sur le système de classement Glicko</wikiLink>."
+  },
   "gameMarks": {
     "watch": "Observer cette partie",
     "unwatch": "Arrêter d'observer",
@@ -1325,7 +1329,7 @@
     "year_other": "{{count}} ans",
     "playersPlayedGames": "Pendant cette période, {{numPlayers}} joueurs ont joué {{numGames}} parties.",
     "explanations": {
-      "highestSingle": "Liste de tous les classements enregistrés. Le système ignore les parties explicitement marquées comme non classées, ainsi que les parties qui se terminent avant que trois coups n'aient été joués. Le classement utilise un Glicko-2 conservateur (classement − 2×RD), le Glicko et l'ancien Elo étant tous deux affichés. Glicko commence à 1200 avec un RD de 350 ; Elo commence à 1200 avec un *K* fixe de 30. Les classements Glicko sont présentés sous la forme d'un intervalle de confiance à 95 % — plus l'intervalle est étroit, plus le système est confiant. TrueSkill utilise les paramètres par défaut de Microsoft (plage de classement de 0 à 50, débutant à 25).",
+      "highestSingle": "Liste de tous les classements enregistrés. Le système ignore les parties explicitement marquées comme non classées, ainsi que les parties qui se terminent avant que trois coups aient été joués. Les classements utilisent un calcul conservateur (niveau de confiance de 95 %) Glicko-2 (classement − 2×RD), affichant à la fois Glicko et l'ancien Elo. Glicko commence à 1200 avec un RD de 350 ; Elo commence à 1200 avec un *K* fixe de 30. Trueskill utilise les paramètres par défaut de Microsoft (plage de classement de 0 à 50, commençant à 25).",
       "avgRatings": "Ces colonnes représentent les moyennes pondérées de vos classements Glicko et Elo sur l'ensemble du site.",
       "topPlayers": "Ce tableau liste chaque combinaison de jeu et de variante disponible, ainsi que le joueur le mieux classé pour cette combinaison, selon le Glicko-2 conservateur (classement − 2×RD). L'Elo est affiché à titre indicatif.",
       "numPlays": "Ce tableau indique pour chaque jeu le nombre de parties jouées, le nombre de joueurs uniques et l'`h-index` du jeu. L'h-index d'un jeu est le nombre de joueurs ayant joué à ce jeu au moins autant de fois (un h-index de 5 signifie donc que 5 joueurs différents ont joué à ce jeu au moins 5 fois). Un histogramme des parties terminées pour ce jeu est également proposé. L'aperçu affiche les 10 dernières semaines, la semaine la plus récente étant à droite. En cliquant sur l'aperçu, vous afficherez l'historique complet des parties terminées, par tranche de sept jours, avec la semaine la plus récente à droite.",
