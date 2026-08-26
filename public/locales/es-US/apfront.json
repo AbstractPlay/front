@@ -1216,6 +1216,10 @@
   },
   "None": "Ninguno",
   "Draw": "Tablas",
+  "glicko": {
+    "displayHint": "Las clasificaciones Glicko se muestran como la clasificación con un 95 % de confianza (clasificación − 2×RD), con el RD completo entre paréntesis.",
+    "displayNote": "En todo el sitio, las clasificaciones Glicko se presentan como la clasificación con un 95 % de confianza, con el valor completo de RD entre paréntesis. <wikiLink>Más información sobre el sistema de clasificación Glicko</wikiLink>."
+  },
   "gameMarks": {
     "watch": "Observar esta partida",
     "unwatch": "Dejar de observar",
@@ -1335,7 +1339,7 @@
     "year_other": "{{count}} años",
     "playersPlayedGames": "En ese tiempo, {{numPlayers}} jugadores han jugado {{numGames}} partidas.",
     "explanations": {
-      "highestSingle": "Lista de cada evaluación registrada. El sistema ignora las partidas marcadas explícitamente como no clasificadas y las partidas que terminan antes de haber realizado tres movimientos. Las clasificaciones usan Glicko-2 conservador (evaluación − 2×RD), mostrando tanto Glicko como el Elo heredado. Glicko comienza en 1200 con un RD de 350; Elo comienza en 1200 con una *K* estática de 30. Las evaluaciones de Glicko se presentan como un rango de confianza del 95% — cuanto más estrecho sea el rango, más seguro está el sistema. Trueskill usa la configuración predeterminada de Microsoft (rango de evaluación de 0 a 50, comenzando en 25).",
+      "highestSingle": "Lista de todas las clasificaciones registradas. El sistema ignora las partidas marcadas explícitamente como no clasificatorias e ignora las partidas que terminan antes de haber realizado tres movimientos. Las clasificaciones utilizan un Glicko-2 conservador (95 % de confianza) (clasificación − 2×RD), y muestran tanto Glicko como el Elo heredado. Glicko comienza en 1200 con un RD de 350; Elo comienza en 1200 con una *K* estática de 30. Trueskill usa la configuración predeterminada de Microsoft (rango de clasificación de 0 a 50, comenzando en 25).",
       "avgRatings": "Estas columnas son promedios ponderados de tus evaluaciones de Glicko y Elo en todo el sitio.",
       "topPlayers": "Esta tabla enumera cada combinación disponible de juego y variante junto con el jugador con la evaluación más alta para esa combinación, clasificado por Glicko-2 conservador (evaluación − 2×RD). El Elo se muestra como referencia.",
       "numPlays": "Esta tabla enumera cada juego, cuántas veces se jugó, por cuántos jugadores únicos y el `índice h` del juego. El índice h de un juego es el número de jugadores que han jugado a ese juego al menos ese número de veces (por lo que un índice h de 5 significa que 5 jugadores diferentes han jugado a ese juego al menos 5 veces). También proporciona un histograma de partidas completadas para ese juego. La vista previa muestra las últimas 10 semanas, con la semana más reciente a la derecha. Al hacer clic en la vista previa se mostrará el historial completo de partidas completadas, en \"bloques\" de siete días, con la semana más reciente a la derecha.",
