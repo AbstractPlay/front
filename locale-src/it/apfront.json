@@ -1169,6 +1169,30 @@
     "src": "Implementation Notes",
     "out": "Note di implementazione"
   },
+  "InAppNotifyLabel-challenges": {
+    "src": "Challenges",
+    "out": "Sfide"
+  },
+  "InAppNotifyLabel-completedGameChat": {
+    "src": "Completed game chat",
+    "out": "Chat delle partite concluse"
+  },
+  "InAppNotifyLabel-eventInvitation": {
+    "src": "Event invitations",
+    "out": "Inviti agli eventi"
+  },
+  "InAppNotifyLabel-gameEnd": {
+    "src": "Game ended",
+    "out": "Partita terminata"
+  },
+  "InAppNotifyLabel-gameStart": {
+    "src": "Game started",
+    "out": "Partita iniziata"
+  },
+  "InAppNotifyLabel-ratingChange": {
+    "src": "Rating changes",
+    "out": "Variazioni di rating"
+  },
   "InCheck": {
     "src": "{{player}} is in check!",
     "out": "{{player}} è sotto scacco!"
@@ -1362,8 +1386,28 @@
     "out": "Note per questa sfida (max 128 caratteri)."
   },
   "NotificationSettings": {
-    "src": "Notification settings (save instantly)",
-    "out": "Impostazioni notifiche (salvate all'istante)"
+    "src": "Notifications",
+    "out": "Notifiche"
+  },
+  "NotificationSettingsEmail": {
+    "src": "Email",
+    "out": "Email"
+  },
+  "NotificationSettingsEmailHelp": {
+    "src": "Requires a verified email address. Your-turn reminders are sent twice daily.",
+    "out": "Richiede un indirizzo email verificato. I promemoria per il tuo turno vengono inviati due volte al giorno."
+  },
+  "NotificationSettingsInApp": {
+    "src": "In-app",
+    "out": "In-app"
+  },
+  "NotificationSettingsInAppHelp": {
+    "src": "Dashboard notification feed on your home page.",
+    "out": "Feed delle notifiche nella dashboard sulla tua home page."
+  },
+  "NotificationSettingsSaveHelp": {
+    "src": "Changes save instantly.",
+    "out": "Le modifiche vengono salvate all'istante."
   },
   "NotifyLabel-challenges": {
     "src": "Challenges (every instance)",

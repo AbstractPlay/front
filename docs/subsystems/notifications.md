@@ -1,6 +1,6 @@
 # Notifications
 
-Browser push notifications alert users when it is their turn or when notable events occur.
+Browser push notifications alert users when it is their turn or when notable events occur. The dashboard also shows an in-app notification feed; users configure email, in-app, and push preferences in [`UserSettingsModal.js`](../src/components/UserSettingsModal.js) (`settings.all.notifications` for email/push categories, `settings.all.inAppNotifications` for the dashboard feed).
 
 ## Key files
 
