@@ -1517,6 +1517,48 @@
     "recommendedGames": "Juegos recomendados",
     "recommendedBy": "Recomendado por {{name}}"
   },
+  "solo": {
+    "badge": "Solo",
+    "badgeHelp": "Este juego permite jugar en solitario",
+    "playTitle": "Jugar en solitario",
+    "playAction": "Jugar en solitario",
+    "seedLabel": "Semilla del desafío",
+    "seedPlaceholder": "Deja en blanco para un rompecabezas aleatorio nuevo",
+    "seedHelp": "Usa la misma semilla para volver a jugar o competir en la misma configuración. El servidor asignará una si dejas esto en blanco.",
+    "rematch": "Jugar de nuevo (misma semilla)",
+    "copyShareLink": "Compartir enlace del rompecabezas",
+    "outcome": {
+      "passed": "Superado",
+      "failed": "Fallido",
+      "grade": "Calificación: {{grade}}",
+      "timed": "Tiempo: {{time}}",
+      "score": "{{score}} {{label}} ({{hint}})",
+      "scoreShort": "Puntuación: {{score}}",
+      "scoreFallback": "puntos",
+      "higherIsBetter": "mientras más alta, mejor",
+      "lowerIsBetter": "mientras más baja, mejor"
+    },
+    "stats": {
+      "title": "Estadísticas en solitario",
+      "empty": "Aún no se han registrado partidas en solitario.",
+      "attempts": "Intentos",
+      "uniquePlayers": "Jugadores",
+      "repeatRate": "Tasa de reintentos",
+      "medianBestScore": "Mediana de la mejor puntuación",
+      "commonGrade": "Mejor calificación"
+    },
+    "leaderboard": {
+      "title": "Tablas de clasificación por semilla",
+      "empty": "Aún no hay tablas de clasificación por semilla.",
+      "seedSelect": "Semilla del desafío",
+      "poolSummary": "{{players}} jugadores, {{attempts}} intentos",
+      "boardHelp": "Variante: {{variant}}. {{direction}}.",
+      "score": "Puntuación",
+      "grade": "Calificación",
+      "attempts": "Intentos",
+      "date": "Mejor partida"
+    }
+  },
   "me": {
     "challengedNotice": "¡Te han desafiado!",
     "downloadCompletedReports": "Descargar todos tus informes de partidas completadas",
