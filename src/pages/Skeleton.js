@@ -42,9 +42,9 @@ import Play from "../components/Play";
 import Customize from "../components/Customize";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import en from "javascript-time-ago/locale/en.json";
 import TimeAgo from "javascript-time-ago";
 import TimeAgoLocaleSync from "../components/TimeAgoLocaleSync";
+import { getTimeAgoLocaleData } from "../lib/timeAgoLocales";
 import { useStorageState } from "react-use-storage-state";
 import newsData from "../assets/news.json";
 import ThemeApplicator from "../components/ThemeApplicator";
@@ -62,7 +62,7 @@ const Player = lazy(() => import("../components/Player"));
 const Explore = lazy(() => import("../components/Explore"));
 
 // Register default English locale; TimeAgoLocaleSync updates on language change
-TimeAgo.addDefaultLocale(en);
+TimeAgo.addDefaultLocale(getTimeAgoLocaleData("en"));
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);

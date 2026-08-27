@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
@@ -10,9 +10,14 @@ import Table from "./MetaContainer/Table";
 import MetaItem from "./MetaContainer/MetaItem";
 import { listPublicCatalogMetas, getGameDisplayName } from "../lib/gameOptions";
 import { useStore } from "../stores";
+import {
+  soloPlayNavigatePath,
+  startSoloGameRequest,
+} from "../lib/soloPlay";
 
 function MetaContainer(props) {
   const globalMe = useStore((state) => state.globalMe);
+  const navigate = useNavigate();
   const [counts, countsSetter] = useState(null);
   const [updateCounter, updateCounterSetter] = useState(0);
   const { metaGame } = useParams();
@@ -84,6 +89,15 @@ function MetaContainer(props) {
     }
   };
 
+  const handleStartSolo = async (pars) => {
+    try {
+      const body = await startSoloGameRequest(pars);
+      navigate(soloPlayNavigatePath(body, pars.metaGame));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   //   console.log(games);
   if (metaGame === undefined || metaGame === null || !gameinfo.has(metaGame)) {
     return (
@@ -131,6 +145,7 @@ function MetaContainer(props) {
           counts={counts[metaGame]}
           toggleStar={toggleStar.bind(this)}
           handleChallenge={handleNewChallenge.bind(this)}
+          handleStartSolo={handleStartSolo.bind(this)}
         />
       </>
     );

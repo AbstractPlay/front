@@ -1,5 +1,14 @@
 import DownloadDataUri from "./DownloadDataUri";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../../stores";
+import ClipboardCopy from "../../lib/ClipboardCopy";
+import {
+  buildSoloShareUrl,
+  isSoloGame,
+  soloChallengeSeed,
+  soloPlayNavigatePath,
+  startSoloGameRequest,
+} from "../../lib/soloPlay";
 
 function MiscButtons({
   toMove,
@@ -16,6 +25,28 @@ function MiscButtons({
 }) {
   const globalMe = useStore((state) => state.globalMe);
   const myMove = useStore((state) => state.myMove);
+  const navigate = useNavigate();
+  const challengeSeed = gameRec ? soloChallengeSeed(gameRec) : undefined;
+  const shareUrl =
+    challengeSeed !== undefined
+      ? buildSoloShareUrl(metaGame, challengeSeed)
+      : undefined;
+
+  const handleSoloRematch = async () => {
+    if (!globalMe) {
+      return;
+    }
+    try {
+      const body = await startSoloGameRequest({
+        metaGame,
+        variants: game?.variants,
+        challengeSeed,
+      });
+      navigate(soloPlayNavigatePath(body, metaGame));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -32,6 +63,24 @@ function MiscButtons({
           }
         />
       )}
+      {toMove === "" && isSoloGame(game) && challengeSeed ? (
+        <div className="content is-small" style={{ marginTop: "0.75em" }}>
+          <p>
+            {t("solo.seedLabel")}: <code>{challengeSeed}</code>
+          </p>
+          {shareUrl ? <ClipboardCopy copyText={shareUrl} /> : null}
+          {globalMe ? (
+            <div className="control" style={{ paddingTop: "0.5em" }}>
+              <button
+                className="button is-small apButton"
+                onClick={handleSoloRematch}
+              >
+                {t("solo.rematch")}
+              </button>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
       <div className="buttons">
         {canPublish === "no" ? null : (
           <div className="control" style={{ paddingTop: "1em" }}>

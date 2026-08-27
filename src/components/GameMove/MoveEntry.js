@@ -13,6 +13,7 @@ import { useStore } from "../../stores";
 import { formatPlayerDisplayName, isClientBotTurn } from "../Bots/botUtils";
 import { getPendingSubmitMove } from "../../lib/GameMove/submitMove";
 import Modal from "../Modal";
+import { formatSoloOutcome, isSoloGame } from "../../lib/soloPlay";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -110,6 +111,7 @@ function MoveEntry(props) {
   const exploration = props.exploration;
   const focus = props.focus;
   const engine = props.engine;
+  const gameRec = props.gameRec;
   const forceUndoRight = props.forceUndoRight;
   const submitting = props.submitting;
   const handleMove = props.handlers[0];
@@ -284,25 +286,34 @@ function MoveEntry(props) {
       // game over
       const node = getFocusNode(exploration, game, focus);
       if (!node) return null;
-      const state = GameFactory(engine.metaGame, node.state);
-      if (state.winner && state.winner.length > 0) {
-        if (state.winner.length === 1) {
-          const winner = formatPlayerDisplayName(
-            game.players[state.winner[0] - 1],
-            allUsers
-          );
-          mover = t("GameIsOver1", { winner });
-        } else {
-          const winners = state.winner.map((w) =>
-            formatPlayerDisplayName(game.players[w - 1], allUsers)
-          );
-          const lastWinner = winners.pop();
-          const winnersStr = winners.join(", ");
-          mover = t("GameIsOver2", { winners: winnersStr, lastWinner });
-        }
+      if (isSoloGame(game)) {
+        mover = formatSoloOutcome({
+          gameRec,
+          engine,
+          metaGame: game.metaGame,
+          t,
+        });
       } else {
-        console.log(state);
-        mover = t("GameIsOver");
+        const state = GameFactory(engine.metaGame, node.state);
+        if (state.winner && state.winner.length > 0) {
+          if (state.winner.length === 1) {
+            const winner = formatPlayerDisplayName(
+              game.players[state.winner[0] - 1],
+              allUsers
+            );
+            mover = t("GameIsOver1", { winner });
+          } else {
+            const winners = state.winner.map((w) =>
+              formatPlayerDisplayName(game.players[w - 1], allUsers)
+            );
+            const lastWinner = winners.pop();
+            const winnersStr = winners.join(", ");
+            mover = t("GameIsOver2", { winners: winnersStr, lastWinner });
+          }
+        } else {
+          console.log(state);
+          mover = t("GameIsOver");
+        }
       }
     }
     let canClaimTimeout = false;

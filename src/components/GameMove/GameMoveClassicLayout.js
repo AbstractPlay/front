@@ -356,6 +356,7 @@ export default function GameMoveClassicLayout({ session }) {
                           exploration={explorationRef.current.nodes}
                           focus={focus}
                           submitting={submitting}
+                          gameRec={gameRec}
                           forceUndoRight={true}
                           screenWidth={screenWidth}
                           handlers={moveEntryHandlers}
@@ -484,6 +485,7 @@ export default function GameMoveClassicLayout({ session }) {
                   exploration={explorationRef.current.nodes}
                   focus={focus}
                   submitting={submitting}
+                  gameRec={gameRec}
                   forceUndoRight={false}
                   screenWidth={screenWidth}
                   handlers={moveEntryHandlers}

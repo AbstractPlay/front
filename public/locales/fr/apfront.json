@@ -1157,7 +1157,12 @@
     "Visit": "Voir le tournoi",
     "Winner": "Vainqueur",
     "DivisionWinner": "Vainqueur : {{winner}}",
-    "Withdraw": "Se retirer du prochain"
+    "Withdraw": "Se retirer du prochain",
+    "tabs": {
+      "open": "Inscriptions ouvertes",
+      "current": "En cours",
+      "completed": "Récemment terminés"
+    }
   },
   "TriggerRefresh": "Lancer un rafraîchissement",
   "TwoPlayersChallengeDescription": "Vous avez défié {{other}} à un jeu de [{{game}}](/games/{{meta}})",
@@ -1511,6 +1516,48 @@
     "ratings": "Classements",
     "recommendedGames": "Parties recommandées",
     "recommendedBy": "Recommandé par {{name}}"
+  },
+  "solo": {
+    "badge": "Solo",
+    "badgeHelp": "Ce jeu prend en charge le mode solo",
+    "playTitle": "Jouer en solo",
+    "playAction": "Jouer en solo",
+    "seedLabel": "Graine de défi",
+    "seedPlaceholder": "Laisser vide pour un nouveau casse-tête aléatoire",
+    "seedHelp": "Utilisez la même graine pour rejouer ou vous affronter sur la même configuration. Le serveur en attribuera une si vous laissez ce champ vide.",
+    "rematch": "Rejouer (même graine)",
+    "copyShareLink": "Partager le lien du casse-tête",
+    "outcome": {
+      "passed": "Réussi",
+      "failed": "Échoué",
+      "grade": "Rang : {{grade}}",
+      "timed": "Temps : {{time}}",
+      "score": "{{score}} {{label}} ({{hint}})",
+      "scoreShort": "Score : {{score}}",
+      "scoreFallback": "points",
+      "higherIsBetter": "plus élevé est mieux",
+      "lowerIsBetter": "plus bas est mieux"
+    },
+    "stats": {
+      "title": "Statistiques solo",
+      "empty": "Aucune partie solo enregistrée pour l'instant.",
+      "attempts": "Tentatives",
+      "uniquePlayers": "Joueurs",
+      "repeatRate": "Taux de rejeu",
+      "medianBestScore": "Meilleur score médian",
+      "commonGrade": "Meilleur rang"
+    },
+    "leaderboard": {
+      "title": "Classement par graine",
+      "empty": "Aucun classement solo par graine pour l'instant.",
+      "seedSelect": "Graine de défi",
+      "poolSummary": "{{players}} joueurs, {{attempts}} tentatives",
+      "boardHelp": "Variante : {{variant}}. {{direction}}.",
+      "score": "Score",
+      "grade": "Rang",
+      "attempts": "Essais",
+      "date": "Meilleure partie"
+    }
   },
   "me": {
     "challengedNotice": "On vous a lancé un défi !",
