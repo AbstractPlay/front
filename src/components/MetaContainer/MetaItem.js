@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useCallback } from "react";
+import React, { Fragment, useState, useCallback, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -27,6 +27,10 @@ import {
 } from "../../lib/metaItemTabs";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import { tournamentListPath } from "../../lib/tournamentSections";
+import SoloPlayModal from "../Solo/SoloPlayModal";
+import SoloMetaStatsPanel from "../Stats/SoloMetaStatsPanel";
+import SoloSeedLeaderboard from "../Stats/SoloSeedLeaderboard";
+import { soloPlaySupported } from "../../lib/soloPlay";
 
 const MetaItem = React.forwardRef(
   (
@@ -37,6 +41,7 @@ const MetaItem = React.forwardRef(
       hideDetails,
       highlight,
       handleChallenge,
+      handleStartSolo,
       syncTabToUrl = false,
     },
     ref
@@ -47,6 +52,8 @@ const MetaItem = React.forwardRef(
     const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [activeChallengeModal, activeChallengeModalSetter] = useState(false);
+    const [activeSoloModal, activeSoloModalSetter] = useState(false);
+    const [initialSoloSeed, initialSoloSeedSetter] = useState("");
     const [localTab, localTabSetter] = useState(DEFAULT_META_TAB);
     const { t } = useTranslation();
 
@@ -191,6 +198,14 @@ const MetaItem = React.forwardRef(
       activeChallengeModalSetter("");
     }, []);
 
+    useEffect(() => {
+      const params = new URLSearchParams(location.search);
+      const seed = params.get("seed");
+      if (typeof seed === "string" && seed.length > 0 && soloPlaySupported(game.uid)) {
+        initialSoloSeedSetter(seed);
+      }
+    }, [location.search, game.uid]);
+
     const openModal = () => {
       setModalIsOpen(true);
     };
@@ -329,6 +344,11 @@ const MetaItem = React.forwardRef(
                         ),
                       null
                     )}
+                  {soloPlaySupported(game.uid) ? (
+                    <span className="tag is-info" title={t("solo.badgeHelp")}>
+                      {t("solo.badge")}
+                    </span>
+                  ) : null}
                 </div>
                 <RepresentativeGames metaGame={game.uid} />
                 <div>
@@ -419,6 +439,26 @@ const MetaItem = React.forwardRef(
                         handleChallenge={handleChallenge}
                         fixedMetaGame={game.uid}
                       />
+                      {soloPlaySupported(game.uid) && handleStartSolo ? (
+                        <SoloPlayModal
+                          show={activeSoloModal}
+                          fixedMetaGame={game.uid}
+                          handleClose={() => activeSoloModalSetter(false)}
+                          initialChallengeSeed={initialSoloSeed}
+                          handleStart={async (pars) => {
+                            await handleStartSolo(pars);
+                            activeSoloModalSetter(false);
+                          }}
+                        />
+                      ) : null}
+                      {soloPlaySupported(game.uid) && handleStartSolo ? (
+                        <button
+                          className="button is-small apButton"
+                          onClick={() => activeSoloModalSetter(true)}
+                        >
+                          {t("solo.playAction")}
+                        </button>
+                      ) : null}{" "}
                       <button
                         className="button is-small apButton"
                         onClick={() => openChallengeModal(game.uid)}
@@ -445,15 +485,29 @@ const MetaItem = React.forwardRef(
                   <hr width="50%" style={{ opacity: 0.1 }} />
                   <p>{t("meta.playCounts")}</p>
                   <NumPlays metaFilter={game.uid} nav="bottom" />
-                  <hr width="50%" style={{ opacity: 0.1 }} />
-                  <p>{t("meta.gameStatistics")}</p>
-                  <GameStats metaFilter={game.uid} nav="bottom" />
-                  <hr width="50%" style={{ opacity: 0.1 }} />
-                  <p>{t("meta.ratings")}</p>
-                  <HighestSingleRating
-                    metaFilter={game.uid}
-                    nav="bottom"
-                  />{" "}
+                  {game.playercounts.includes(2) ? (
+                    <>
+                      <hr width="50%" style={{ opacity: 0.1 }} />
+                      <p>{t("meta.gameStatistics")}</p>
+                      <GameStats metaFilter={game.uid} nav="bottom" />
+                      <hr width="50%" style={{ opacity: 0.1 }} />
+                      <p>{t("meta.ratings")}</p>
+                      <HighestSingleRating
+                        metaFilter={game.uid}
+                        nav="bottom"
+                      />{" "}
+                    </>
+                  ) : null}
+                  {soloPlaySupported(game.uid) ? (
+                    <>
+                      <hr width="50%" style={{ opacity: 0.1 }} />
+                      <p>{t("solo.stats.title")}</p>
+                      <SoloMetaStatsPanel metaFilter={game.uid} nav="bottom" />
+                      <hr width="50%" style={{ opacity: 0.1 }} />
+                      <p>{t("solo.leaderboard.title")}</p>
+                      <SoloSeedLeaderboard metaFilter={game.uid} nav="bottom" />
+                    </>
+                  ) : null}
                 </>
               </SummaryGate>
             )}

@@ -1514,6 +1514,48 @@
         "recommendedGames": "Recommended games",
         "recommendedBy": "Recommended by {{name}}"
     },
+    "solo": {
+        "badge": "Solo",
+        "badgeHelp": "This game supports single-player play",
+        "playTitle": "Play solo",
+        "playAction": "Play solo",
+        "seedLabel": "Challenge seed",
+        "seedPlaceholder": "Leave blank for a new random puzzle",
+        "seedHelp": "Use the same seed to replay or compete on the same setup. The server assigns one if you leave this blank.",
+        "rematch": "Play again (same seed)",
+        "copyShareLink": "Share puzzle link",
+        "outcome": {
+            "passed": "Passed",
+            "failed": "Failed",
+            "grade": "Grade: {{grade}}",
+            "timed": "Time: {{time}}",
+            "score": "{{score}} {{label}} ({{hint}})",
+            "scoreShort": "Score: {{score}}",
+            "scoreFallback": "points",
+            "higherIsBetter": "higher is better",
+            "lowerIsBetter": "lower is better"
+        },
+        "stats": {
+            "title": "Solo statistics",
+            "empty": "No solo runs recorded yet.",
+            "attempts": "Attempts",
+            "uniquePlayers": "Players",
+            "repeatRate": "Retry rate",
+            "medianBestScore": "Median best score",
+            "commonGrade": "Top grade"
+        },
+        "leaderboard": {
+            "title": "Seed leaderboards",
+            "empty": "No seeded solo leaderboards yet.",
+            "seedSelect": "Challenge seed",
+            "poolSummary": "{{players}} players, {{attempts}} attempts",
+            "boardHelp": "Variant: {{variant}}. {{direction}}.",
+            "score": "Score",
+            "grade": "Grade",
+            "attempts": "Tries",
+            "date": "Best run"
+        }
+    },
     "me": {
         "challengedNotice": "You have been challenged!",
         "downloadCompletedReports": "Download all your completed game reports",

@@ -11,14 +11,9 @@ import {
 import enApfront from "./locales/en/apfront.json";
 import enApgames from "./locales/en/apgames.json";
 import enApresults from "./locales/en/apresults.json";
+import { SUPPORTED_LANGUAGES } from "./lib/uiLanguages";
 
-export const SUPPORTED_LANGUAGES = [
-  { code: "en", label: "English" },
-  { code: "fr", label: "Français" },
-  { code: "de", label: "Deutsch" },
-  { code: "it", label: "Italiano" },
-  { code: "es", label: "Español" },
-];
+export { SUPPORTED_LANGUAGES };
 
 /** Backend email/push locales (apback); may exceed UI footer languages. */
 export const COMMUNICATION_LANGUAGES = [

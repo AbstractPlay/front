@@ -1,9 +1,6 @@
 import ReactTimeAgo from "react-time-ago";
 import { useTranslation } from "react-i18next";
-
-function resolveTimeAgoLocale(language) {
-  return (language || "en").split("-")[0];
-}
+import { resolveTimeAgoLocale } from "../lib/timeAgoLocales";
 
 function LocalizedTimeAgo(props) {
   const { i18n } = useTranslation();
