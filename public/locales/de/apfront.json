@@ -1516,6 +1516,48 @@
     "recommendedGames": "Empfohlene Spiele",
     "recommendedBy": "Empfohlen von {{name}}"
   },
+  "solo": {
+    "badge": "Solo",
+    "badgeHelp": "Dieses Spiel unterstützt den Einzelspielermodus",
+    "playTitle": "Solo spielen",
+    "playAction": "Solo spielen",
+    "seedLabel": "Herausforderungs-Seed",
+    "seedPlaceholder": "Leer lassen für ein neues zufälliges Rätsel",
+    "seedHelp": "Verwende denselben Seed, um dieselbe Anordnung erneut zu spielen oder dich mit anderen zu messen. Der Server weist einen zu, wenn du dieses Feld leer lässt.",
+    "rematch": "Erneut spielen (gleicher Seed)",
+    "copyShareLink": "Rätsel-Link teilen",
+    "outcome": {
+      "passed": "Bestanden",
+      "failed": "Fehlgeschlagen",
+      "grade": "Wertung: {{grade}}",
+      "timed": "Zeit: {{time}}",
+      "score": "{{score}} {{label}} ({{hint}})",
+      "scoreShort": "Punktzahl: {{score}}",
+      "scoreFallback": "Punkte",
+      "higherIsBetter": "höher ist besser",
+      "lowerIsBetter": "niedriger ist besser"
+    },
+    "stats": {
+      "title": "Solo-Statistiken",
+      "empty": "Noch keine Solo-Spiele aufgezeichnet.",
+      "attempts": "Versuche",
+      "uniquePlayers": "Spieler",
+      "repeatRate": "Wiederholungsrate",
+      "medianBestScore": "Median-Bestpunktzahl",
+      "commonGrade": "Häufigste Wertung"
+    },
+    "leaderboard": {
+      "title": "Seed-Bestenlisten",
+      "empty": "Noch keine Bestenlisten für Solo-Seeds vorhanden.",
+      "seedSelect": "Herausforderungs-Seed",
+      "poolSummary": "{{players}} Spieler, {{attempts}} Versuche",
+      "boardHelp": "Variante: {{variant}}. {{direction}}.",
+      "score": "Punktzahl",
+      "grade": "Wertung",
+      "attempts": "Versuche",
+      "date": "Bester Versuch"
+    }
+  },
   "me": {
     "challengedNotice": "Du wurdest herausgefordert!",
     "downloadCompletedReports": "Alle Berichte deiner beendeten Spiele herunterladen",

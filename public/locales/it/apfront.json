@@ -1527,6 +1527,48 @@
     "recommendedGames": "Partite consigliate",
     "recommendedBy": "Consigliata da {{name}}"
   },
+  "solo": {
+    "badge": "Solitario",
+    "badgeHelp": "Questo gioco supporta la modalità giocatore singolo",
+    "playTitle": "Gioca in solitario",
+    "playAction": "Gioca in solitario",
+    "seedLabel": "Seed di sfida",
+    "seedPlaceholder": "Lascia vuoto per un nuovo puzzle casuale",
+    "seedHelp": "Usa lo stesso seed per rigiocare o competere sulla stessa configurazione. Il server ne assegnerà uno se lasci questo campo vuoto.",
+    "rematch": "Rigioca (stesso seed)",
+    "copyShareLink": "Condividi link del puzzle",
+    "outcome": {
+      "passed": "Superato",
+      "failed": "Fallito",
+      "grade": "Valutazione: {{grade}}",
+      "timed": "Tempo: {{time}}",
+      "score": "{{score}} {{label}} ({{hint}})",
+      "scoreShort": "Punteggio: {{score}}",
+      "scoreFallback": "punti",
+      "higherIsBetter": "più alto è meglio",
+      "lowerIsBetter": "più basso è meglio"
+    },
+    "stats": {
+      "title": "Statistiche solitario",
+      "empty": "Nessuna partita in solitario ancora registrata.",
+      "attempts": "Tentativi",
+      "uniquePlayers": "Giocatori",
+      "repeatRate": "Tasso di riprova",
+      "medianBestScore": "Miglior punteggio mediano",
+      "commonGrade": "Valutazione migliore"
+    },
+    "leaderboard": {
+      "title": "Classifiche per seed",
+      "empty": "Nessuna classifica per seed ancora disponibile.",
+      "seedSelect": "Seed di sfida",
+      "poolSummary": "{{players}} giocatori, {{attempts}} tentativi",
+      "boardHelp": "Variante: {{variant}}. {{direction}}.",
+      "score": "Punteggio",
+      "grade": "Valutazione",
+      "attempts": "Tentativi",
+      "date": "Miglior partita"
+    }
+  },
   "me": {
     "challengedNotice": "Sei stato sfidato!",
     "downloadCompletedReports": "Scarica tutti i report delle tue partite completate",
