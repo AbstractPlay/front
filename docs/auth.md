@@ -17,14 +17,21 @@ Redirect URLs come from `COGNITO_REDIRECT_LOGIN` and `COGNITO_REDIRECT_LOGOUT`. 
 1. User clicks login → `Auth.federatedSignIn()` (in [`LogInOutButton.js`](../src/components/LogInOutButton.js)).
 2. Browser redirects to Cognito hosted UI.
 3. On success, Cognito redirects back with an authorization code; Amplify exchanges it for tokens.
-4. `Skeleton` reads `usr.signInUserSession.idToken.jwtToken` and passes it to child routes as the `token` prop.
+4. On success, Cognito redirects back with an authorization code; Amplify exchanges it for tokens.
+5. [`resolveAuthSession()`](../src/lib/authSession.js) stores the user and JWT in Zustand `authSession`; UI components read it via [`useAuthSession()`](../src/hooks/useAuthSession.js).
 
 ## Session bootstrap
 
-`Skeleton` calls `Auth.currentAuthenticatedUser()` on load:
+`Skeleton` calls [`resolveAuthSession()`](../src/lib/authSession.js) on load:
 
-- Success → sets `token`, marks `localStorage.wasLoggedIn = "1"`.
-- Failure with prior `wasLoggedIn` and no intentional logout → session expired; auto-triggers `federatedSignIn()`.
+- Success → marks `localStorage.wasLoggedIn = "1"`.
+- Failure with prior `wasLoggedIn`, no intentional logout, and a non-anonymous route → session expired; auto-triggers `federatedSignIn()`.
+
+## Token refresh
+
+[`getAuthTokenFromSession()`](../src/lib/authSession.js) returns a cached JWT while it is still valid (with a 5-minute buffer before expiry). When the token is stale or missing, it silently calls `Auth.currentAuthenticatedUser()` again so Amplify can refresh the ID token without flashing the login UI.
+
+[`callAuthApi`](../src/lib/api.js) retries once with a forced session refresh on HTTP 401/403 before redirecting to Cognito.
 
 ## Sign-out
 

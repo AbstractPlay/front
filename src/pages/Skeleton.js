@@ -66,7 +66,6 @@ TimeAgo.addDefaultLocale(getTimeAgoLocaleData("en"));
 
 function Bones(props) {
   const [authed, authedSetter] = useState(false);
-  const [token, tokenSetter] = useState(null);
 
   const [update] = useState(0);
   const [colorMode] = useStorageState("color-mode", "light");
@@ -144,10 +143,8 @@ function Bones(props) {
       try {
         const session = await resolveAuthSession();
         if (session.status === "ready") {
-          tokenSetter(session.token);
           localStorage.setItem("wasLoggedIn", "1");
         } else {
-          tokenSetter(null);
           const wasLoggedIn = localStorage.getItem("wasLoggedIn") === "1";
           const intentionalLogout =
             sessionStorage.getItem("intentionalLogout") === "1";
@@ -163,7 +160,6 @@ function Bones(props) {
           sessionStorage.removeItem("intentionalLogout");
         }
       } catch (error) {
-        tokenSetter(null);
         localStorage.removeItem("wasLoggedIn");
         sessionStorage.removeItem("intentionalLogout");
       }
@@ -231,15 +227,9 @@ function Bones(props) {
             <ErrorBoundary inline>
               <Routes>
                 <Route path="*" element={<NotFound />} />
-                <Route path="/about" element={<About token={token} />} />
-                <Route
-                  path="/explore/:mode?"
-                  element={<Explore token={token} />}
-                />
-                <Route
-                  path="/games/:metaGame"
-                  element={<Explore token={token} />}
-                />
+                <Route path="/about" element={<About />} />
+                <Route path="/explore/:mode?" element={<Explore />} />
+                <Route path="/games/:metaGame" element={<Explore />} />
                 <Route
                   path="/games"
                   element={<Navigate to="/explore" replace />}
@@ -277,16 +267,10 @@ function Bones(props) {
                   path="/move-beta/:metaGame/:cbits/:gameID"
                   element={<GameMoveBetaWrapper update={update} />}
                 />
-                <Route
-                  path="/legal"
-                  element={<Legal token={token} update={update} />}
-                />
+                <Route path="/legal" element={<Legal update={update} />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/stats/:tab?" element={<Stats />} />
-                <Route
-                  path="/"
-                  element={<Welcome token={token} update={update} />}
-                />
+                <Route path="/" element={<Welcome update={update} />} />
                 <Route path="/playground" element={<Lab />} />
                 <Route
                   path="/lab"
