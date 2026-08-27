@@ -1974,6 +1974,18 @@
     "src": "Withdraw from next",
     "out": "Vom nächsten abmelden"
   },
+  "Tournament.tabs.completed": {
+    "src": "Recently completed",
+    "out": "Kürzlich beendet"
+  },
+  "Tournament.tabs.current": {
+    "src": "Ongoing",
+    "out": "Laufend"
+  },
+  "Tournament.tabs.open": {
+    "src": "Open for registration",
+    "out": "Offen für Anmeldungen"
+  },
   "TournamentsLink": {
     "src": "Tournaments",
     "out": "Turniere"
@@ -4814,6 +4826,142 @@
   "seatingRandom": {
     "src": "Seating will be random.",
     "out": "Die Sitzordnung ist zufällig."
+  },
+  "solo.badge": {
+    "src": "Solo",
+    "out": "Solo"
+  },
+  "solo.badgeHelp": {
+    "src": "This game supports single-player play",
+    "out": "Dieses Spiel unterstützt den Einzelspielermodus"
+  },
+  "solo.copyShareLink": {
+    "src": "Share puzzle link",
+    "out": "Rätsel-Link teilen"
+  },
+  "solo.leaderboard.attempts": {
+    "src": "Tries",
+    "out": "Versuche"
+  },
+  "solo.leaderboard.boardHelp": {
+    "src": "Variant: {{variant}}. {{direction}}.",
+    "out": "Variante: {{variant}}. {{direction}}."
+  },
+  "solo.leaderboard.date": {
+    "src": "Best run",
+    "out": "Bester Versuch"
+  },
+  "solo.leaderboard.empty": {
+    "src": "No seeded solo leaderboards yet.",
+    "out": "Noch keine Bestenlisten für Solo-Seeds vorhanden."
+  },
+  "solo.leaderboard.grade": {
+    "src": "Grade",
+    "out": "Wertung"
+  },
+  "solo.leaderboard.poolSummary": {
+    "src": "{{players}} players, {{attempts}} attempts",
+    "out": "{{players}} Spieler, {{attempts}} Versuche"
+  },
+  "solo.leaderboard.score": {
+    "src": "Score",
+    "out": "Punktzahl"
+  },
+  "solo.leaderboard.seedSelect": {
+    "src": "Challenge seed",
+    "out": "Herausforderungs-Seed"
+  },
+  "solo.leaderboard.title": {
+    "src": "Seed leaderboards",
+    "out": "Seed-Bestenlisten"
+  },
+  "solo.outcome.failed": {
+    "src": "Failed",
+    "out": "Fehlgeschlagen"
+  },
+  "solo.outcome.grade": {
+    "src": "Grade: {{grade}}",
+    "out": "Wertung: {{grade}}"
+  },
+  "solo.outcome.higherIsBetter": {
+    "src": "higher is better",
+    "out": "höher ist besser"
+  },
+  "solo.outcome.lowerIsBetter": {
+    "src": "lower is better",
+    "out": "niedriger ist besser"
+  },
+  "solo.outcome.passed": {
+    "src": "Passed",
+    "out": "Bestanden"
+  },
+  "solo.outcome.score": {
+    "src": "{{score}} {{label}} ({{hint}})",
+    "out": "{{score}} {{label}} ({{hint}})"
+  },
+  "solo.outcome.scoreFallback": {
+    "src": "points",
+    "out": "Punkte"
+  },
+  "solo.outcome.scoreShort": {
+    "src": "Score: {{score}}",
+    "out": "Punktzahl: {{score}}"
+  },
+  "solo.outcome.timed": {
+    "src": "Time: {{time}}",
+    "out": "Zeit: {{time}}"
+  },
+  "solo.playAction": {
+    "src": "Play solo",
+    "out": "Solo spielen"
+  },
+  "solo.playTitle": {
+    "src": "Play solo",
+    "out": "Solo spielen"
+  },
+  "solo.rematch": {
+    "src": "Play again (same seed)",
+    "out": "Erneut spielen (gleicher Seed)"
+  },
+  "solo.seedHelp": {
+    "src": "Use the same seed to replay or compete on the same setup. The server assigns one if you leave this blank.",
+    "out": "Verwende denselben Seed, um dieselbe Anordnung erneut zu spielen oder dich mit anderen zu messen. Der Server weist einen zu, wenn du dieses Feld leer lässt."
+  },
+  "solo.seedLabel": {
+    "src": "Challenge seed",
+    "out": "Herausforderungs-Seed"
+  },
+  "solo.seedPlaceholder": {
+    "src": "Leave blank for a new random puzzle",
+    "out": "Leer lassen für ein neues zufälliges Rätsel"
+  },
+  "solo.stats.attempts": {
+    "src": "Attempts",
+    "out": "Versuche"
+  },
+  "solo.stats.commonGrade": {
+    "src": "Top grade",
+    "out": "Häufigste Wertung"
+  },
+  "solo.stats.empty": {
+    "src": "No solo runs recorded yet.",
+    "out": "Noch keine Solo-Spiele aufgezeichnet."
+  },
+  "solo.stats.medianBestScore": {
+    "src": "Median best score",
+    "out": "Median-Bestpunktzahl"
+  },
+  "solo.stats.repeatRate": {
+    "src": "Retry rate",
+    "out": "Wiederholungsrate"
+  },
+  "solo.stats.title": {
+    "src": "Solo statistics",
+    "out": "Solo-Statistiken"
+  },
+  "solo.stats.uniquePlayers": {
+    "src": "Players",
+    "out": "Spieler"
   },
   "standingChallenge.deleteConfirm": {
     "src": "You are about to delete the following standing challenge: <1>{{description}}</1>. Are you sure?",

@@ -1974,6 +1974,18 @@
     "src": "Withdraw from next",
     "out": "Se retirer du prochain"
   },
+  "Tournament.tabs.completed": {
+    "src": "Recently completed",
+    "out": "Récemment terminés"
+  },
+  "Tournament.tabs.current": {
+    "src": "Ongoing",
+    "out": "En cours"
+  },
+  "Tournament.tabs.open": {
+    "src": "Open for registration",
+    "out": "Inscriptions ouvertes"
+  },
   "TournamentsLink": {
     "src": "Tournaments",
     "out": "Tournois"
@@ -4814,6 +4826,142 @@
   "seatingRandom": {
     "src": "Seating will be random.",
     "out": "L'ordre des joueurs sera aléatoire."
+  },
+  "solo.badge": {
+    "src": "Solo",
+    "out": "Solo"
+  },
+  "solo.badgeHelp": {
+    "src": "This game supports single-player play",
+    "out": "Ce jeu prend en charge le mode solo"
+  },
+  "solo.copyShareLink": {
+    "src": "Share puzzle link",
+    "out": "Partager le lien du casse-tête"
+  },
+  "solo.leaderboard.attempts": {
+    "src": "Tries",
+    "out": "Essais"
+  },
+  "solo.leaderboard.boardHelp": {
+    "src": "Variant: {{variant}}. {{direction}}.",
+    "out": "Variante : {{variant}}. {{direction}}."
+  },
+  "solo.leaderboard.date": {
+    "src": "Best run",
+    "out": "Meilleure partie"
+  },
+  "solo.leaderboard.empty": {
+    "src": "No seeded solo leaderboards yet.",
+    "out": "Aucun classement solo par graine pour l'instant."
+  },
+  "solo.leaderboard.grade": {
+    "src": "Grade",
+    "out": "Rang"
+  },
+  "solo.leaderboard.poolSummary": {
+    "src": "{{players}} players, {{attempts}} attempts",
+    "out": "{{players}} joueurs, {{attempts}} tentatives"
+  },
+  "solo.leaderboard.score": {
+    "src": "Score",
+    "out": "Score"
+  },
+  "solo.leaderboard.seedSelect": {
+    "src": "Challenge seed",
+    "out": "Graine de défi"
+  },
+  "solo.leaderboard.title": {
+    "src": "Seed leaderboards",
+    "out": "Classement par graine"
+  },
+  "solo.outcome.failed": {
+    "src": "Failed",
+    "out": "Échoué"
+  },
+  "solo.outcome.grade": {
+    "src": "Grade: {{grade}}",
+    "out": "Rang : {{grade}}"
+  },
+  "solo.outcome.higherIsBetter": {
+    "src": "higher is better",
+    "out": "plus élevé est mieux"
+  },
+  "solo.outcome.lowerIsBetter": {
+    "src": "lower is better",
+    "out": "plus bas est mieux"
+  },
+  "solo.outcome.passed": {
+    "src": "Passed",
+    "out": "Réussi"
+  },
+  "solo.outcome.score": {
+    "src": "{{score}} {{label}} ({{hint}})",
+    "out": "{{score}} {{label}} ({{hint}})"
+  },
+  "solo.outcome.scoreFallback": {
+    "src": "points",
+    "out": "points"
+  },
+  "solo.outcome.scoreShort": {
+    "src": "Score: {{score}}",
+    "out": "Score : {{score}}"
+  },
+  "solo.outcome.timed": {
+    "src": "Time: {{time}}",
+    "out": "Temps : {{time}}"
+  },
+  "solo.playAction": {
+    "src": "Play solo",
+    "out": "Jouer en solo"
+  },
+  "solo.playTitle": {
+    "src": "Play solo",
+    "out": "Jouer en solo"
+  },
+  "solo.rematch": {
+    "src": "Play again (same seed)",
+    "out": "Rejouer (même graine)"
+  },
+  "solo.seedHelp": {
+    "src": "Use the same seed to replay or compete on the same setup. The server assigns one if you leave this blank.",
+    "out": "Utilisez la même graine pour rejouer ou vous affronter sur la même configuration. Le serveur en attribuera une si vous laissez ce champ vide."
+  },
+  "solo.seedLabel": {
+    "src": "Challenge seed",
+    "out": "Graine de défi"
+  },
+  "solo.seedPlaceholder": {
+    "src": "Leave blank for a new random puzzle",
+    "out": "Laisser vide pour un nouveau casse-tête aléatoire"
+  },
+  "solo.stats.attempts": {
+    "src": "Attempts",
+    "out": "Tentatives"
+  },
+  "solo.stats.commonGrade": {
+    "src": "Top grade",
+    "out": "Meilleur rang"
+  },
+  "solo.stats.empty": {
+    "src": "No solo runs recorded yet.",
+    "out": "Aucune partie solo enregistrée pour l'instant."
+  },
+  "solo.stats.medianBestScore": {
+    "src": "Median best score",
+    "out": "Meilleur score médian"
+  },
+  "solo.stats.repeatRate": {
+    "src": "Retry rate",
+    "out": "Taux de rejeu"
+  },
+  "solo.stats.title": {
+    "src": "Solo statistics",
+    "out": "Statistiques solo"
+  },
+  "solo.stats.uniquePlayers": {
+    "src": "Players",
+    "out": "Joueurs"
   },
   "standingChallenge.deleteConfirm": {
     "src": "You are about to delete the following standing challenge: <1>{{description}}</1>. Are you sure?",

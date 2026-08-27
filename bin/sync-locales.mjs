@@ -2,10 +2,13 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { SUPPORTED_LANGUAGES } from "../src/lib/uiLanguages.js";
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
+
+const UI_LANGUAGES_PATH = path.join(ROOT, "src", "lib", "uiLanguages.json");
+const SUPPORTED_LANGUAGES = JSON.parse(
+  fs.readFileSync(UI_LANGUAGES_PATH, "utf8"),
+);
 
 const FRONT_LOCALES = path.join(ROOT, "public", "locales");
 const BUNDLE_LOCALES_EN = path.join(ROOT, "src", "locales", "en");
