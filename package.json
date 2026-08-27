@@ -12,6 +12,11 @@
     "url": "https://github.com/AbstractPlay/front/issues"
   },
   "private": true,
+  "engines": {
+    "node": ">=24",
+    "npm": "11.6.2"
+  },
+  "packageManager": "npm@11.6.2",
   "dependencies": {
     "@abstractplay/gameslib": "1.0.0-ci-32781458213.0",
     "@abstractplay/renderer": "1.0.0-ci-32779331365.0",

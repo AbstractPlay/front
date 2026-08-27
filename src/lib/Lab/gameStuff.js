@@ -22,6 +22,7 @@ import { LAB_ME } from "./buildGame";
 import { cloneDeep } from "lodash";
 import { toast } from "react-toastify";
 import { isPartialExplorationMove } from "../GameMove/explorationMoves";
+import { buildEngineMoveResults } from "../engineMoveResults";
 
 export const populateChecked = (gameRef, engineRef, t, setter) => {
   if (gameRef.current?.canCheck) {
@@ -131,18 +132,10 @@ export function setupLabGame(
     }
   }
 
-  if (typeof engine.chatLog === "function") {
-    game0.moveResults = engine
-      .chatLog(game0.players.map((p) => formatPlayerDisplayName(p, users)))
-      .map((e, idx) => ({
-        time: e[0],
-        log: e.slice(1).join(" "),
-        ply: idx + 1,
-      }))
-      .reverse();
-  } else {
-    game0.moveResults = engine.resultsHistory().reverse();
-  }
+  game0.moveResults = buildEngineMoveResults(
+    engine,
+    game0.players.map((p) => formatPlayerDisplayName(p, users)),
+  );
 
   if (gameRef.current !== null && gameRef.current.colors !== undefined) {
     game0.colors = gameRef.current.colors;
