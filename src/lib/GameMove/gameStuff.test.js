@@ -27,6 +27,10 @@ vi.mock("./misc", () => ({
   setStatus: vi.fn(),
 }));
 
+vi.mock("../engineMoveResults", () => ({
+  buildEngineMoveResults: vi.fn(() => []),
+}));
+
 vi.mock("@abstractplay/gameslib", () => ({
   GameFactory: () => ({
     validateMove(m, player) {

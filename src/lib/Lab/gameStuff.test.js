@@ -21,6 +21,10 @@ vi.mock("./misc", () => ({
   setStatus: vi.fn(),
 }));
 
+vi.mock("../engineMoveResults", () => ({
+  buildEngineMoveResults: vi.fn(() => []),
+}));
+
 const CMD_PARAMETERS = "The wrong number of parameters were provided.";
 const SACRIFICE_MOVE = "sacrifice g2 Eyuf";
 

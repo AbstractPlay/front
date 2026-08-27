@@ -13,6 +13,8 @@ npm run test:engines  # Real gameslib contract/integration tests only
 
 CI runs `npm run test:ci` via the reusable [`.github/workflows/ci-test.yml`](../../.github/workflows/ci-test.yml) workflow. That job is a **prerequisite** for both dev and prod deploys (`deploy-dev.js.yml` / `deploy-prod.js.yml` use `needs: test`). The same job also runs standalone on pull requests via [`.github/workflows/test.yml`](../../.github/workflows/test.yml); pushes to `develop` / `main` only run tests inside the deploy workflows (no duplicate run).
 
+The front repo cannot catch Lambda CommonJS init failures (Vite bundles ESM differently). Deploy safety for `@abstractplay/gameslib` is enforced in **node-backend** (`test/lambdaInit.test.js`) and **gameslib** (`npm run test:postbuild` after `tsc`).
+
 **Two gameslib installs in CI:**
 
 | Step | gameslib | Purpose |

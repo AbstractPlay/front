@@ -18,6 +18,7 @@ import { cloneDeep } from "lodash";
 import { toast } from "react-toastify";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
+import { buildEngineMoveResults } from "../engineMoveResults";
 
 export function setupGame(
   game0,
@@ -135,16 +136,17 @@ export function setupGame(
       }
     }
   }
-  if (typeof engine.chatLog === "function") {
-    game0.moveResults = engine
-      .chatLog(game0.players.map((p) => formatPlayerDisplayName(p, users)))
-      .map((e, idx) => {
-        return { time: e[0], log: e.slice(1).join(" "), ply: idx + 1 };
-      })
-      .reverse();
-  } else {
+  game0.moveResults = buildEngineMoveResults(
+    engine,
+    game0.players.map((p) => formatPlayerDisplayName(p, users)),
+  );
+  if (
+    game0.moveResults.length === 0 &&
+    typeof engine.chatLogEntries !== "function" &&
+    typeof engine.chatLog !== "function" &&
+    typeof engine.resultsHistory !== "function"
+  ) {
     console.log("No chatlog function");
-    game0.moveResults = engine.resultsHistory().reverse();
   }
   if (gameRef.current !== null && gameRef.current.colors !== undefined)
     game0.colors = gameRef.current.colors; // gets used when you submit a move.
