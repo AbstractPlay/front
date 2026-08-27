@@ -120,6 +120,7 @@ export function buildMoveEntryProps(session, { forceUndoRight = false } = {}) {
     explorationRef,
     focus,
     submitting,
+    gameRec,
     screenWidth,
     moveEntryHandlers,
   } = session;
@@ -133,6 +134,7 @@ export function buildMoveEntryProps(session, { forceUndoRight = false } = {}) {
     exploration: explorationRef.current.nodes,
     focus,
     submitting,
+    gameRec,
     forceUndoRight,
     screenWidth,
     handlers: moveEntryHandlers,

@@ -18,7 +18,7 @@ const STAGE_CONFIG = {
   },
 };
 
-const SUPPORTED_LANGUAGES = ["en", "fr", "de", "it", "es-US"];
+const SUPPORTED_LANGUAGES = ["en", "eo", "fr", "de", "it", "es-US"];
 const MANAGED_LANGUAGES = ["fr", "de", "it", "es-US"];
 const CACHE_CONTROL = "public, max-age=3600";
 
