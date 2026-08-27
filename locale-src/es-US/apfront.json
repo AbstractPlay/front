@@ -1167,6 +1167,30 @@
     "src": "Implementation Notes",
     "out": "Notas de implementación"
   },
+  "InAppNotifyLabel-challenges": {
+    "src": "Challenges",
+    "out": "Desafíos"
+  },
+  "InAppNotifyLabel-completedGameChat": {
+    "src": "Completed game chat",
+    "out": "Chat de partidas finalizadas"
+  },
+  "InAppNotifyLabel-eventInvitation": {
+    "src": "Event invitations",
+    "out": "Invitaciones a eventos"
+  },
+  "InAppNotifyLabel-gameEnd": {
+    "src": "Game ended",
+    "out": "Partida finalizada"
+  },
+  "InAppNotifyLabel-gameStart": {
+    "src": "Game started",
+    "out": "Partida iniciada"
+  },
+  "InAppNotifyLabel-ratingChange": {
+    "src": "Rating changes",
+    "out": "Cambios de clasificación"
+  },
   "InCheck": {
     "src": "{{player}} is in check!",
     "out": "¡{{player}} está en jaque!"
@@ -1360,8 +1384,28 @@
     "out": "Notas para este desafío (máx. 128 caracteres)."
   },
   "NotificationSettings": {
-    "src": "Notification settings (save instantly)",
-    "out": "Configuración de notificaciones (se guarda al instante)"
+    "src": "Notifications",
+    "out": "Notificaciones"
+  },
+  "NotificationSettingsEmail": {
+    "src": "Email",
+    "out": "Correo electrónico"
+  },
+  "NotificationSettingsEmailHelp": {
+    "src": "Requires a verified email address. Your-turn reminders are sent twice daily.",
+    "out": "Requiere una dirección de correo electrónico verificada. Los recordatorios de tu turno se envían dos veces al día."
+  },
+  "NotificationSettingsInApp": {
+    "src": "In-app",
+    "out": "En la aplicación"
+  },
+  "NotificationSettingsInAppHelp": {
+    "src": "Dashboard notification feed on your home page.",
+    "out": "Feed de notificaciones en el panel de tu página principal."
+  },
+  "NotificationSettingsSaveHelp": {
+    "src": "Changes save instantly.",
+    "out": "Los cambios se guardan al instante."
   },
   "NotifyLabel-challenges": {
     "src": "Challenges (every instance)",
