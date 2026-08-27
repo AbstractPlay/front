@@ -2203,6 +2203,14 @@
     "src": "{{count}} frame(s)",
     "out": "{{count}} Frame(s)"
   },
+  "boardExport.frameCount_one": {
+    "src": "{{count}} frame",
+    "out": "{{count}} Frame"
+  },
+  "boardExport.frameCount_other": {
+    "src": "{{count}} frames",
+    "out": "{{count}} Frames"
+  },
   "boardExport.gifButton": {
     "src": "Download animated board (GIF)",
     "out": "Animiertes Spielfeld herunterladen (GIF)"
@@ -4407,6 +4415,14 @@
     "src": "You have {{count}} Playground save(s) on this device. Copy them to your account?",
     "out": "Du hast {{count}} Playground-Spielstände auf diesem Gerät. In dein Konto kopieren?"
   },
+  "lab.importLocalBanner_one": {
+    "src": "You have one Playground save on this device. Copy it to your account?",
+    "out": "Du hast einen Playground-Spielstand auf diesem Gerät. In dein Konto kopieren?"
+  },
+  "lab.importLocalBanner_other": {
+    "src": "You have {{count}} Playground saves on this device. Copy them to your account?",
+    "out": "Du hast {{count}} Playground-Spielstände auf diesem Gerät. In dein Konto kopieren?"
+  },
   "lab.importLocalDismiss": {
     "src": "Not now",
     "out": "Nicht jetzt"
@@ -4418,6 +4434,14 @@
   "lab.importLocalSuccess": {
     "src": "Copied {{count}} save(s) to your account.",
     "out": "{{count}} Spielstände in dein Konto kopiert."
+  },
+  "lab.importLocalSuccess_one": {
+    "src": "Copied one save to your account.",
+    "out": "Ein Spielstand wurde in dein Konto kopiert."
+  },
+  "lab.importLocalSuccess_other": {
+    "src": "Copied {{count}} saves to your account.",
+    "out": "{{count}} Spielstände wurden in dein Konto kopiert."
   },
   "lab.importedSuffix": {
     "src": " (imported)",
