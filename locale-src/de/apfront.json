@@ -1169,6 +1169,30 @@
     "src": "Implementation Notes",
     "out": "Implementierungshinweise"
   },
+  "InAppNotifyLabel-challenges": {
+    "src": "Challenges",
+    "out": "Herausforderungen"
+  },
+  "InAppNotifyLabel-completedGameChat": {
+    "src": "Completed game chat",
+    "out": "Chat beendeter Spiele"
+  },
+  "InAppNotifyLabel-eventInvitation": {
+    "src": "Event invitations",
+    "out": "Event-Einladungen"
+  },
+  "InAppNotifyLabel-gameEnd": {
+    "src": "Game ended",
+    "out": "Spiel beendet"
+  },
+  "InAppNotifyLabel-gameStart": {
+    "src": "Game started",
+    "out": "Spiel gestartet"
+  },
+  "InAppNotifyLabel-ratingChange": {
+    "src": "Rating changes",
+    "out": "Wertungsänderungen"
+  },
   "InCheck": {
     "src": "{{player}} is in check!",
     "out": "{{player}} steht im Schach!"
@@ -1362,8 +1386,28 @@
     "out": "Notizen für diese Herausforderung (max. 128 Zeichen)."
   },
   "NotificationSettings": {
-    "src": "Notification settings (save instantly)",
-    "out": "Benachrichtigungseinstellungen (speichert sofort)"
+    "src": "Notifications",
+    "out": "Benachrichtigungen"
+  },
+  "NotificationSettingsEmail": {
+    "src": "Email",
+    "out": "E-Mail"
+  },
+  "NotificationSettingsEmailHelp": {
+    "src": "Requires a verified email address. Your-turn reminders are sent twice daily.",
+    "out": "Erfordert eine verifizierte E-Mail-Adresse. Erinnerungen, dass du am Zug bist, werden zweimal täglich gesendet."
+  },
+  "NotificationSettingsInApp": {
+    "src": "In-app",
+    "out": "In-App"
+  },
+  "NotificationSettingsInAppHelp": {
+    "src": "Dashboard notification feed on your home page.",
+    "out": "Benachrichtigungs-Feed auf deiner Startseite."
+  },
+  "NotificationSettingsSaveHelp": {
+    "src": "Changes save instantly.",
+    "out": "Änderungen werden sofort gespeichert."
   },
   "NotifyLabel-challenges": {
     "src": "Challenges (every instance)",

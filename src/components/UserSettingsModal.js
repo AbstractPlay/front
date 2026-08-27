@@ -34,6 +34,12 @@ import {
 import { toast } from "react-toastify";
 import LanguageSelect from "./LanguageSelect";
 import { COMMUNICATION_LANGUAGES } from "../i18n";
+import {
+  defaultEmailNotifications,
+  defaultInAppNotifications,
+  EMAIL_NOTIFICATION_KEYS,
+  IN_APP_NOTIFICATION_KEYS,
+} from "../lib/notificationPrefs";
 
 async function parseNewSettingResponse(res) {
   if (!res) {
@@ -107,6 +113,7 @@ function UserSettingsModal(props) {
   const { user } = useAuthSession();
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
+  const [inAppNotifications, inAppNotificationsSetter] = useState(null);
   const [exploration, explorationSetter] = useState(null);
   const [confirmMove, confirmMoveSetter] = useState(true);
   const globalMe = useStore((state) => state.globalMe);
@@ -130,35 +137,18 @@ function UserSettingsModal(props) {
       emailCodeSetter("");
       emailErrorSetter("");
       if (globalMe?.settings?.all?.notifications) {
-        const settings = { ...globalMe.settings.all.notifications };
-        if (!settings.hasOwnProperty("yourturn")) {
-          settings.yourturn = true;
-        }
-        if (!settings.hasOwnProperty("challenges")) {
-          settings.challenges = true;
-        }
-        if (!settings.hasOwnProperty("gameStart")) {
-          settings.gameStart = true;
-        }
-        if (!settings.hasOwnProperty("gameEnd")) {
-          settings.gameEnd = true;
-        }
-        if (!settings.hasOwnProperty("tournamentStart")) {
-          settings.tournamentStart = true;
-        }
-        if (!settings.hasOwnProperty("tournamentEnd")) {
-          settings.tournamentEnd = true;
-        }
-        notificationsSetter(settings);
+        notificationsSetter(
+          defaultEmailNotifications(globalMe.settings.all.notifications)
+        );
       } else {
-        notificationsSetter({
-          yourturn: true,
-          challenges: true,
-          gameStart: true,
-          gameEnd: true,
-          tournamentStart: true,
-          tournamentEnd: true,
-        });
+        notificationsSetter(defaultEmailNotifications());
+      }
+      if (globalMe?.settings?.all?.inAppNotifications) {
+        inAppNotificationsSetter(
+          defaultInAppNotifications(globalMe.settings.all.inAppNotifications)
+        );
+      } else {
+        inAppNotificationsSetter(defaultInAppNotifications());
       }
       if (globalMe?.settings?.all?.exploration === undefined) {
         explorationSetter(0);
@@ -191,7 +181,7 @@ function UserSettingsModal(props) {
         aboutMeSetter(globalMe.about);
       }
     }
-  }, [show, globalMe, notificationsSetter, explorationSetter]);
+  }, [show, globalMe, notificationsSetter, inAppNotificationsSetter, explorationSetter]);
 
   const handleNameChangeClick = () => {
     nameSetter(globalMe.name);
@@ -357,6 +347,15 @@ function UserSettingsModal(props) {
     if (newSettings.all === undefined) newSettings.all = {};
     newSettings.all.notifications = notifications;
     newSettings.all.notifications[key] = !newSettings.all.notifications[key];
+    handleSettingsChange(newSettings);
+  };
+
+  const handleInAppNotifyCheckChange = async (key) => {
+    const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
+    if (newSettings.all === undefined) newSettings.all = {};
+    newSettings.all.inAppNotifications = inAppNotifications;
+    newSettings.all.inAppNotifications[key] =
+      !newSettings.all.inAppNotifications[key];
     handleSettingsChange(newSettings);
   };
 
@@ -805,25 +804,44 @@ function UserSettingsModal(props) {
           {/********************* notifications *********************/}
           <div className="field" key="notifications">
             <label className="label">{t("NotificationSettings")}</label>
+            <p className="help">{t("NotificationSettingsSaveHelp")}</p>
+
+            <p className="label is-small mb-1 mt-3">
+              {t("NotificationSettingsEmail")}
+            </p>
+            <p className="help">{t("NotificationSettingsEmailHelp")}</p>
             {!notifications
               ? ""
-              : [
-                  "challenges",
-                  "gameStart",
-                  "gameEnd",
-                  "yourturn",
-                  "tournamentStart",
-                  "tournamentEnd",
-                ].map((key) => (
-                  <div className="control" key={key}>
+              : EMAIL_NOTIFICATION_KEYS.map((key) => (
+                  <div className="control" key={`email-${key}`}>
                     <label className="checkbox">
                       <input
                         type="checkbox"
-                        name={key}
+                        name={`email-${key}`}
                         checked={notifications[key]}
                         onChange={() => handleNotifyCheckChange(key)}
                       />
                       {t(`NotifyLabel-${key}`)}
+                    </label>
+                  </div>
+                ))}
+
+            <p className="label is-small mb-1 mt-3">
+              {t("NotificationSettingsInApp")}
+            </p>
+            <p className="help">{t("NotificationSettingsInAppHelp")}</p>
+            {!inAppNotifications
+              ? ""
+              : IN_APP_NOTIFICATION_KEYS.map((key) => (
+                  <div className="control" key={`inapp-${key}`}>
+                    <label className="checkbox">
+                      <input
+                        type="checkbox"
+                        name={`inapp-${key}`}
+                        checked={inAppNotifications[key]}
+                        onChange={() => handleInAppNotifyCheckChange(key)}
+                      />
+                      {t(`InAppNotifyLabel-${key}`)}
                     </label>
                   </div>
                 ))}

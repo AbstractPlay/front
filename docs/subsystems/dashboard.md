@@ -48,6 +48,7 @@ Backend: [Auth queries — Profile and dashboard](/backend/api/auth-queries/) (`
 [`NotificationsTable.js`](../src/components/Me/NotificationsTable.js) renders only when `globalMe.notifications.length > 0`. Columns: message, optional challenge note, time, dismiss.
 
 - **Dismiss** — `dismiss_notification` with optimistic removal from `globalMe`
+- **Preferences** — in-app categories are toggled in User Settings (`settings.all.inAppNotifications`), separate from email/push prefs
 - **Challenge issued** — game name links to `/games/{metaGame}`; **View** opens [`ChallengeResponseModal.js`](../src/components/Me/ChallengeResponseModal.js) when the challenge is still in `challengesReceived`
 - **Game start** — game name links to `/move/{metaGame}/0/{gameId}`
 - **Game end / rating change** — **View** links to the move page
