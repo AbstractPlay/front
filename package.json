@@ -86,7 +86,7 @@
     "full-prod": "npm run build-prod && npm run deploy-prod && npm run publish-locales:prod",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ci": "vitest run && npm run test:engines",
+    "test:ci": "npm run sync-locales && vitest run && npm run test:engines",
     "test:engines": "node bin/test-exploration-contracts.mjs",
     "lint": "node bin/check-ci-deps.mjs && eslint src bin --ext .js,.jsx,.mjs",
     "lint:fix": "eslint src bin --ext .js,.jsx,.mjs --fix",
