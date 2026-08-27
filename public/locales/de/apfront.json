@@ -31,7 +31,9 @@
     "gifSuccess": "Animiertes GIF heruntergeladen.",
     "progress": "Frame {{current}} von {{total}} wird exportiert…",
     "failed": "Export fehlgeschlagen: {{error}}",
-    "frameCap": "Zu viele Frames (maximal {{max}}). Wähle einen kürzeren Bereich."
+    "frameCap": "Zu viele Frames (maximal {{max}}). Wähle einen kürzeren Bereich.",
+    "frameCount_one": "{{count}} Frame",
+    "frameCount_other": "{{count}} Frames"
   },
   "CycleBoardDisplay": "Brettanzeige umschalten",
   "buttons": {
@@ -1871,7 +1873,11 @@
     "importLocalSuccess": "{{count}} Spielstände in dein Konto kopiert.",
     "importLocalPartial": "Einige Spielstände konnten nicht kopiert werden: {{names}}",
     "onThisDevice": "Auf diesem Gerät",
-    "feelingAdventurous": "Ich bin abenteuerlustig"
+    "feelingAdventurous": "Ich bin abenteuerlustig",
+    "importLocalBanner_one": "Du hast einen Playground-Spielstand auf diesem Gerät. In dein Konto kopieren?",
+    "importLocalBanner_other": "Du hast {{count}} Playground-Spielstände auf diesem Gerät. In dein Konto kopieren?",
+    "importLocalSuccess_one": "Ein Spielstand wurde in dein Konto kopiert.",
+    "importLocalSuccess_other": "{{count}} Spielstände wurden in dein Konto kopiert."
   },
   "Wikipedia": "Wikipedia"
 }

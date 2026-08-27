@@ -2203,6 +2203,14 @@
     "src": "{{count}} frame(s)",
     "out": "{{count}} frame"
   },
+  "boardExport.frameCount_one": {
+    "src": "{{count}} frame",
+    "out": "{{count}} frame"
+  },
+  "boardExport.frameCount_other": {
+    "src": "{{count}} frames",
+    "out": "{{count}} frame"
+  },
   "boardExport.gifButton": {
     "src": "Download animated board (GIF)",
     "out": "Scarica tavoliere animato (GIF)"
@@ -4407,6 +4415,14 @@
     "src": "You have {{count}} Playground save(s) on this device. Copy them to your account?",
     "out": "Hai {{count}} salvataggi del Playground su questo dispositivo. Vuoi copiarli nel tuo account?"
   },
+  "lab.importLocalBanner_one": {
+    "src": "You have one Playground save on this device. Copy it to your account?",
+    "out": "Hai un salvataggio di Playground su questo dispositivo. Vuoi copiarlo sul tuo account?"
+  },
+  "lab.importLocalBanner_other": {
+    "src": "You have {{count}} Playground saves on this device. Copy them to your account?",
+    "out": "Hai {{count}} salvataggi di Playground su questo dispositivo. Vuoi copiarli sul tuo account?"
+  },
   "lab.importLocalDismiss": {
     "src": "Not now",
     "out": "Non ora"
@@ -4418,6 +4434,14 @@
   "lab.importLocalSuccess": {
     "src": "Copied {{count}} save(s) to your account.",
     "out": "Copiati {{count}} salvataggi nel tuo account."
+  },
+  "lab.importLocalSuccess_one": {
+    "src": "Copied one save to your account.",
+    "out": "Copiato un salvataggio sul tuo account."
+  },
+  "lab.importLocalSuccess_other": {
+    "src": "Copied {{count}} saves to your account.",
+    "out": "Copiati {{count}} salvataggi sul tuo account."
   },
   "lab.importedSuffix": {
     "src": " (imported)",

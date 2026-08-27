@@ -31,7 +31,9 @@
     "gifSuccess": "GIF animata scaricata.",
     "progress": "Esportazione del frame {{current}} di {{total}}…",
     "failed": "Esportazione non riuscita: {{error}}",
-    "frameCap": "Troppi frame (massimo {{max}}). Scegli un intervallo più breve."
+    "frameCap": "Troppi frame (massimo {{max}}). Scegli un intervallo più breve.",
+    "frameCount_one": "{{count}} frame",
+    "frameCount_other": "{{count}} frame"
   },
   "CycleBoardDisplay": "Scorri modalità di visualizzazione del tabellone",
   "buttons": {
@@ -1882,7 +1884,11 @@
     "importLocalSuccess": "Copiati {{count}} salvataggi nel tuo account.",
     "importLocalPartial": "Impossibile copiare alcuni salvataggi: {{names}}",
     "onThisDevice": "Su questo dispositivo",
-    "feelingAdventurous": "Mi sento audace"
+    "feelingAdventurous": "Mi sento audace",
+    "importLocalBanner_one": "Hai un salvataggio di Playground su questo dispositivo. Vuoi copiarlo sul tuo account?",
+    "importLocalBanner_other": "Hai {{count}} salvataggi di Playground su questo dispositivo. Vuoi copiarli sul tuo account?",
+    "importLocalSuccess_one": "Copiato un salvataggio sul tuo account.",
+    "importLocalSuccess_other": "Copiati {{count}} salvataggi sul tuo account."
   },
   "Wikipedia": "Wikipedia"
 }

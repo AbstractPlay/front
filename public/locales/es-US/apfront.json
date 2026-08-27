@@ -31,7 +31,9 @@
     "gifSuccess": "GIF animado descargado.",
     "progress": "Exportando fotograma {{current}} de {{total}}…",
     "failed": "Error al exportar: {{error}}",
-    "frameCap": "Demasiados fotogramas (máximo {{max}}). Elige un rango más corto."
+    "frameCap": "Demasiados fotogramas (máximo {{max}}). Elige un rango más corto.",
+    "frameCount_one": "{{count}} fotograma",
+    "frameCount_other": "{{count}} fotogramas"
   },
   "CycleBoardDisplay": "Alternar vista del tablero",
   "buttons": {
@@ -1882,7 +1884,11 @@
       "commentPlaceholder": "Agrega un comentario en Markdown…",
       "nothingToPreview": "Aún no hay nada para previsualizar."
     },
-    "feelingAdventurous": "Me siento aventurero"
+    "feelingAdventurous": "Me siento aventurero",
+    "importLocalBanner_one": "Tienes una partida guardada de Playground en este dispositivo. ¿Copiarla a tu cuenta?",
+    "importLocalBanner_other": "Tienes {{count}} partidas guardadas de Playground en este dispositivo. ¿Copiarlas a tu cuenta?",
+    "importLocalSuccess_one": "Se copió una partida guardada a tu cuenta.",
+    "importLocalSuccess_other": "Se copiaron {{count}} partidas guardadas a tu cuenta."
   },
   "Wikipedia": "Wikipedia"
 }

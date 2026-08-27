@@ -31,7 +31,9 @@
     "gifSuccess": "GIF animé téléchargé.",
     "progress": "Exportation de l'image {{current}} sur {{total}}…",
     "failed": "Échec de l'exportation : {{error}}",
-    "frameCap": "Trop d'images (maximum {{max}}). Choisissez une plage plus courte."
+    "frameCap": "Trop d'images (maximum {{max}}). Choisissez une plage plus courte.",
+    "frameCount_one": "{{count}} image",
+    "frameCount_other": "{{count}} images"
   },
   "CycleBoardDisplay": "Changer le mode d'affichage du plateau",
   "buttons": {
@@ -1882,7 +1884,11 @@
     "importLocalSuccess": "{{count}} sauvegarde(s) copiée(s) sur votre compte.",
     "importLocalPartial": "Certaines sauvegardes n'ont pas pu être copiées : {{names}}",
     "onThisDevice": "Sur cet appareil",
-    "feelingAdventurous": "Je me sens d'humeur aventureuse"
+    "feelingAdventurous": "Je me sens d'humeur aventureuse",
+    "importLocalBanner_one": "Vous avez une sauvegarde de Playground sur cet appareil. Voulez-vous la copier sur votre compte ?",
+    "importLocalBanner_other": "Vous avez {{count}} sauvegardes de Playground sur cet appareil. Voulez-vous les copier sur votre compte ?",
+    "importLocalSuccess_one": "Une sauvegarde a été copiée sur votre compte.",
+    "importLocalSuccess_other": "{{count}} sauvegardes ont été copiées sur votre compte."
   },
   "Wikipedia": "Wikipédia"
 }
