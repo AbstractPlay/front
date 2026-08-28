@@ -3,14 +3,13 @@ import React, {
   useEffect,
   Fragment,
   useCallback,
-  useMemo,
 } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { nanoid } from "nanoid";
 import Spinner from "./Spinner";
 import Modal from "./Modal";
-import NewChallengeModal from "./NewChallengeModal";
+import ChallengeEntryModals from "./ChallengeEntryModals";
 import NewProfile from "./NewProfile";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
@@ -41,7 +40,6 @@ function Me(props) {
   // at some point. For now, sidestepping.
   const [refresh, setRefresh] = useState(0);
   const [fetching, fetchingSetter] = useState(true);
-  const [users, usersSetter] = useState(null);
   const [showNewChallengeModal, showNewChallengeModalSetter] = useState(false);
   const [showNewStandingModal, showNewStandingModalSetter] = useState(false);
   const [showDeleteGamesModal, showDeleteGamesModalSetter] = useState(false);
@@ -66,8 +64,6 @@ function Me(props) {
       updateSetter((update) => update + 1);
     }
   };
-
-  const usersMemo = useMemo(() => users, [users]);
 
   useEffect(() => {
     async function fetchData() {
@@ -98,21 +94,6 @@ function Me(props) {
     const handler = () => setRefresh((r) => r + 1);
     window.addEventListener("refresh-me", handler);
     return () => window.removeEventListener("refresh-me", handler);
-  }, []);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        var url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append("query", "user_names");
-        const res = await fetch(url);
-        const result = await res.json();
-        usersSetter(result);
-      } catch (error) {
-        errorSetter(error);
-      }
-    }
-    fetchData();
   }, []);
 
   const handleNewChallengeClick = (id) => {
@@ -682,11 +663,10 @@ function Me(props) {
             </div>
           )}
         </div>
-        <NewChallengeModal
+        <ChallengeEntryModals
           show={showNewChallengeModal}
           handleClose={handleNewChallengeClose}
           handleChallenge={handleNewChallenge2}
-          users={usersMemo}
         />
         <StandingChallengeModal
           show={showNewStandingModal}

@@ -13,7 +13,7 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import NewChallengeModal from "./NewChallengeModal";
+import ChallengeEntryModals from "./ChallengeEntryModals";
 import ActivityMarker from "./ActivityMarker";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
@@ -152,7 +152,7 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
           const userId = props.row.original.id.split("|")[0];
           return globalMe !== null && globalMe.id === userId ? null : (
             <>
-              <NewChallengeModal
+              <ChallengeEntryModals
                 show={
                   activeChallengeModal !== "" && activeChallengeModal === userId
                 }

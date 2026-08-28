@@ -1569,7 +1569,8 @@
       "grade": "Wertung",
       "attempts": "Versuche",
       "date": "Bester Versuch"
-    }
+    },
+    "rematchNewSeed": "Erneut spielen (anderer Seed)"
   },
   "me": {
     "challengedNotice": "Du wurdest herausgefordert!",

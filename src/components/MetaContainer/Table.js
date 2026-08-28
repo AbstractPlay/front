@@ -22,7 +22,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import Modal from "../Modal";
-import NewChallengeModal from "../NewChallengeModal";
+import ChallengeEntryModals from "../ChallengeEntryModals";
 import ExpandableDiv from "../ExpandableDiv";
 import { useStorageState } from "react-use-storage-state";
 import Thumbnail from "../Thumbnail";
@@ -505,7 +505,7 @@ function Table({
         id: "actions",
         cell: (props) => (
           <>
-            <NewChallengeModal
+            <ChallengeEntryModals
               show={
                 activeChallengeModal !== "" &&
                 activeChallengeModal === props.row.original.id

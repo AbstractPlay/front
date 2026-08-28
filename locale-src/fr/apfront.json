@@ -4991,6 +4991,10 @@
     "src": "Play again (same seed)",
     "out": "Rejouer (même graine)"
   },
+  "solo.rematchNewSeed": {
+    "src": "Play again (different seed)",
+    "out": "Rejouer (nouvelle graine)"
+  },
   "solo.seedHelp": {
     "src": "Use the same seed to replay or compete on the same setup. The server assigns one if you leave this blank.",
     "out": "Utilisez la même graine pour rejouer ou vous affronter sur la même configuration. Le serveur en attribuera une si vous laissez ce champ vide."

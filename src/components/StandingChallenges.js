@@ -17,7 +17,7 @@ import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import Spinner from "./Spinner";
 import ActivityMarker from "./ActivityMarker";
-import NewChallengeModal from "./NewChallengeModal";
+import ChallengeEntryModals from "./ChallengeEntryModals";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import { useExpandVariants } from "../hooks/useExpandVariants";
@@ -529,7 +529,7 @@ function StandingChallenges(props) {
         globalMe === null ||
         globalMe?.id === undefined ? null : (
           <>
-            <NewChallengeModal
+            <ChallengeEntryModals
               show={showModal}
               handleClose={() => showModalSetter(false)}
               handleChallenge={handleNewChallenge}

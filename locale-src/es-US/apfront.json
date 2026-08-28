@@ -4987,6 +4987,10 @@
     "src": "Play again (same seed)",
     "out": "Jugar de nuevo (misma semilla)"
   },
+  "solo.rematchNewSeed": {
+    "src": "Play again (different seed)",
+    "out": "Volver a jugar (semilla diferente)"
+  },
   "solo.seedHelp": {
     "src": "Use the same seed to replay or compete on the same setup. The server assigns one if you leave this blank.",
     "out": "Usa la misma semilla para volver a jugar o competir en la misma configuración. El servidor asignará una si dejas esto en blanco."
