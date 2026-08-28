@@ -5,9 +5,14 @@ export const LAB_ME = {
   settings: { all: { exploration: 1 } },
 };
 
+function isSoloOnlyCatalogGame(info) {
+  return info.playercounts.length === 1 && info.playercounts[0] === 1;
+}
+
 export function isLabSupportedGame(metaGame) {
   const info = gameinfo.get(metaGame);
   if (!info) return false;
+  if (isSoloOnlyCatalogGame(info)) return false;
   return !info.flags.includes("simultaneous");
 }
 

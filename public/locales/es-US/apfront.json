@@ -1570,7 +1570,8 @@
       "grade": "Calificación",
       "attempts": "Intentos",
       "date": "Mejor partida"
-    }
+    },
+    "rematchNewSeed": "Volver a jugar (semilla diferente)"
   },
   "me": {
     "challengedNotice": "¡Te han desafiado!",

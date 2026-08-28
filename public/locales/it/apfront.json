@@ -1570,7 +1570,8 @@
       "grade": "Valutazione",
       "attempts": "Tentativi",
       "date": "Miglior partita"
-    }
+    },
+    "rematchNewSeed": "Gioca ancora (seed diverso)"
   },
   "me": {
     "challengedNotice": "Sei stato sfidato!",

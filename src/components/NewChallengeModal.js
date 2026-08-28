@@ -15,10 +15,15 @@ import GamePickerTrigger from "./GamePickerTrigger";
 import { useStore } from "../stores";
 import { isPublicCatalogGame, getGameDisplayName } from "../lib/gameOptions";
 import { AIAI_USER_ID, formatUserDisplayName } from "./Bots/botUtils";
+import {
+  isSoloOnlyGame,
+  shouldHandoffToSolo,
+} from "../lib/soloPlay";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
   const handleNewChallenge = props.handleChallenge;
+  const onSoloHandoff = props.onSoloHandoff;
   const opponent = props.opponent;
   const fixedMetaGame = props.fixedMetaGame;
   const show = props.show;
@@ -147,13 +152,23 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     clockMaxSetter(max);
   };
 
+  const trySoloHandoff = useCallback(
+    (game, numPlayers) => {
+      if (onSoloHandoff && shouldHandoffToSolo(game, numPlayers)) {
+        onSoloHandoff(game);
+        return true;
+      }
+      return false;
+    },
+    [onSoloHandoff]
+  );
+
   const handleChangeGame = useCallback(
     (game) => {
       if (game !== metaGame) {
         if (game === "") {
           metaGameSetter(null);
         } else {
-          metaGameSetter(game);
           const info = gameinfo.get(game);
           if (info === undefined) {
             errorSetter(t("Error"));
@@ -162,41 +177,62 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
           const playercounts = info.playercounts;
           if (playercounts.length === 1) {
             setPlayerCount(playercounts[0]);
+            if (trySoloHandoff(game, playercounts[0])) {
+              return;
+            }
           } else if (props.opponent !== undefined) {
             setPlayerCount(2);
           } else {
             playerCountSetter(-1);
             opponentsSetter([]);
           }
+          metaGameSetter(game);
           seatingSetter("random");
         }
         errorSetter("");
       }
     },
-    [metaGame, setPlayerCount, props.opponent, t]
+    [metaGame, setPlayerCount, props.opponent, t, trySoloHandoff]
   );
 
   useEffect(() => {
+    if (!show) {
+      metaGameSetter(null);
+      playerCountSetter(-1);
+      opponentsSetter([]);
+      commentSetter("");
+      return;
+    }
     if (props.opponent !== undefined) {
       playerCountSetter(2);
       opponentsSetter([props.opponent]);
     }
     errorSetter("");
-    // clockStartSetter(72);
-    // clockIncSetter(24);
-    // clockMaxSetter(240);
-    // clockHardSetter(false);
     if (props.fixedMetaGame !== undefined) {
+      if (onSoloHandoff && isSoloOnlyGame(props.fixedMetaGame)) {
+        onSoloHandoff(props.fixedMetaGame);
+        return;
+      }
       metaGameSetter(props.fixedMetaGame);
       handleChangeGame(props.fixedMetaGame);
     }
     if (props.opponent !== undefined) {
       opponentsSetter([props.opponent]);
     }
-  }, [show, props.opponent, props.fixedMetaGame, handleChangeGame]);
+  }, [
+    show,
+    props.opponent,
+    props.fixedMetaGame,
+    handleChangeGame,
+    onSoloHandoff,
+  ]);
 
   const handleChangePlayerCount = (cnt) => {
-    setPlayerCount(parseInt(cnt));
+    const numPlayers = parseInt(cnt, 10);
+    if (metaGame !== null && trySoloHandoff(metaGame, numPlayers)) {
+      return;
+    }
+    setPlayerCount(numPlayers);
     errorSetter("");
   };
 
@@ -324,6 +360,11 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     playercounts = info?.playercounts ?? [];
   }
 
+  const soloHandoffPath =
+    metaGame !== null &&
+    playerCount !== -1 &&
+    shouldHandoffToSolo(metaGame, playerCount);
+
   if (
     (fixedMetaGame && !gameinfo.has(fixedMetaGame)) ||
     (metaGame !== null &&
@@ -362,7 +403,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             </div>
           </div>
         )}
-        {metaGame === null ? (
+        {metaGame === null || soloHandoffPath ? (
           ""
         ) : /* Number of players */
         playercounts.length === 1 || opponent ? (
@@ -393,7 +434,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             </div>
           </div>
         )}
-        {metaGame === null || playerCount === -1 ? (
+        {metaGame === null || playerCount === -1 || soloHandoffPath ? (
           ""
         ) : playerCount !== 2 ? (
           <p>
@@ -426,7 +467,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             </div>
           </div>
         )}
-        {metaGame === null || playerCount === -1 ? (
+        {metaGame === null || playerCount === -1 || soloHandoffPath ? (
           ""
         ) : /* Standing Challenge */
         opponent ? (
@@ -592,11 +633,13 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             </p>
           </div>
         )}
-        <GameVariants
-          metaGame={metaGame}
-          variantsSetter={setSelectedVariants}
-        />
-        {metaGame === null ? (
+        {soloHandoffPath ? null : (
+          <GameVariants
+            metaGame={metaGame}
+            variantsSetter={setSelectedVariants}
+          />
+        )}
+        {metaGame === null || soloHandoffPath ? (
           ""
         ) : (
           <Fragment>
@@ -747,7 +790,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             </div>
           </Fragment>
         )}
-        {metaGame === null || playerCount !== 2 ? null : (
+        {metaGame === null || playerCount !== 2 || soloHandoffPath ? null : (
           <div className="field">
             <div className="control">
               <label className="checkbox">
@@ -771,7 +814,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
           </div>
         )}
         {/* Comment to opponent */}
-        {metaGame === null || playerCount !== 2 ? null : (
+        {metaGame === null || playerCount !== 2 || soloHandoffPath ? null : (
           <div className="field">
             <label className="label" htmlFor="comment">
               {t("Note")}

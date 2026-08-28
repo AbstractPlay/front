@@ -1535,6 +1535,7 @@
         "seedPlaceholder": "Leave blank for a new random puzzle",
         "seedHelp": "Use the same seed to replay or compete on the same setup. The server assigns one if you leave this blank.",
         "rematch": "Play again (same seed)",
+        "rematchNewSeed": "Play again (different seed)",
         "copyShareLink": "Share puzzle link",
         "outcome": {
             "passed": "Passed",
@@ -1581,9 +1582,10 @@
             },
             "message": {
                 "gameStart": "{{opponentName}} started a game of <gameLink>{{metaGame}}</gameLink> with you",
-                "gameEnd_win": "You won your game of {{metaGame}}",
-                "gameEnd_lose": "You lost your game of {{metaGame}}",
-                "gameEnd_draw": "Your game of {{metaGame}} ended in a draw",
+                "gameEnd_win": "You won your game of <gameLink>{{metaGame}}</gameLink>",
+                "gameEnd_lose": "You lost your game of <gameLink>{{metaGame}}</gameLink>",
+                "gameEnd_draw": "Your game of <gameLink>{{metaGame}}</gameLink> ended in a draw",
+                "gameEnd_solo": "Your <gameLink>{{metaGame}}</gameLink> game has ended",
                 "ratingChange": "Your rating for <gameLink>{{metaGame}}</gameLink>{{variantsInline}} changed {{delta}} points from {{oldRatingDisplay}} to {{newRatingDisplay}}.",
                 "challengeIssued": "{{challengerName}} challenged you to <gameLink>{{metaGame}}</gameLink>",
                 "challengeDeclined": "{{declinerName}} declined your <gameLink>{{metaGame}}</gameLink> challenge",

@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ProfileContext, SummaryContext, ResponsesContext } from "../Player";
-import NewChallengeModal from "../NewChallengeModal";
+import ChallengeEntryModals from "../ChallengeEntryModals";
 import { useStore } from "../../stores";
 import {
   formatGlickoLowWithRd,
@@ -205,7 +205,7 @@ function Hero({ handleChallenge }) {
         ) : null}
       </div>
       {canChallenge ? (
-        <NewChallengeModal
+        <ChallengeEntryModals
           show={challengeOpen}
           handleClose={closeChallengeModal}
           handleChallenge={handleChallenge}

@@ -1570,7 +1570,8 @@
       "grade": "Rang",
       "attempts": "Essais",
       "date": "Meilleure partie"
-    }
+    },
+    "rematchNewSeed": "Rejouer (nouvelle graine)"
   },
   "me": {
     "challengedNotice": "On vous a lancé un défi !",

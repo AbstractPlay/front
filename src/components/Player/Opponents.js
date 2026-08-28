@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext, SummaryContext } from "../Player";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
-import NewChallengeModal from "../NewChallengeModal";
+import ChallengeEntryModals from "../ChallengeEntryModals";
 import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
@@ -160,7 +160,7 @@ function Opponents({ handleChallenge }) {
                 globalMe === null ||
                 props.row.original.id === undefined ? null : (
                   <>
-                    <NewChallengeModal
+                    <ChallengeEntryModals
                       show={
                         activeChallengeModal !== "" &&
                         activeChallengeModal === props.row.original.id

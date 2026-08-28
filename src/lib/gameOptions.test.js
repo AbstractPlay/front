@@ -9,6 +9,7 @@ import {
   isPublicCatalogGame,
   isBoardRootCategory,
   pickRandomGameOption,
+  resolveMetaGameUid,
 } from "./gameOptions";
 import { isProductionMode } from "./realMode";
 
@@ -33,6 +34,19 @@ describe("getGameDisplayName", () => {
 
   it("returns Unknown for empty uid without fallback", () => {
     expect(getGameDisplayName("")).toBe("Unknown");
+  });
+});
+
+describe("resolveMetaGameUid", () => {
+  it("returns canonical uid for case-insensitive match", () => {
+    const uid = [...gameinfo.keys()][0];
+    expect(resolveMetaGameUid(uid)).toBe(uid);
+    expect(resolveMetaGameUid(uid.toUpperCase())).toBe(uid);
+    expect(resolveMetaGameUid(uid.toLowerCase())).toBe(uid);
+  });
+
+  it("returns undefined for unknown uid", () => {
+    expect(resolveMetaGameUid("not-a-real-game")).toBeUndefined();
   });
 });
 
@@ -67,6 +81,16 @@ describe("buildGameOptions", () => {
     }
   });
 
+  it("labOnly excludes solo-only games", () => {
+    const lab = buildGameOptions({ labOnly: true });
+    for (const { id } of lab) {
+      const playercounts = gameinfo.get(id).playercounts;
+      expect(
+        playercounts.length === 1 && playercounts[0] === 1
+      ).toBe(false);
+    }
+  });
+
   it("tournamentOnly excludes games without playercount 2", () => {
     const all = buildGameOptions();
     const tournament = buildGameOptions({ tournamentOnly: true });
@@ -95,6 +119,8 @@ describe("pickRandomGameOption", () => {
     expect(picked).not.toBeNull();
     expect(gameinfo.has(picked.id)).toBe(true);
     expect(gameinfo.get(picked.id).flags.includes("simultaneous")).toBe(false);
+    const playercounts = gameinfo.get(picked.id).playercounts;
+    expect(playercounts.length === 1 && playercounts[0] === 1).toBe(false);
   });
 });
 

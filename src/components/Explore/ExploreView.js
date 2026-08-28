@@ -29,7 +29,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Thumbnail from "../Thumbnail";
 import Modal from "../Modal";
-import NewChallengeModal from "../NewChallengeModal";
+import ChallengeEntryModals from "../ChallengeEntryModals";
 import { useGameRecommendations } from "../../hooks/useGameRecommendations";
 import { useStore } from "../../stores";
 import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
@@ -869,7 +869,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         </div>
       </Modal>
       {handleChallenge && (
-        <NewChallengeModal
+        <ChallengeEntryModals
           show={activeChallengeModal !== ""}
           handleClose={closeChallengeModal}
           handleChallenge={handleChallenge}
