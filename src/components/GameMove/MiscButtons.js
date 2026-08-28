@@ -32,7 +32,7 @@ function MiscButtons({
       ? buildSoloShareUrl(metaGame, challengeSeed)
       : undefined;
 
-  const handleSoloRematch = async () => {
+  const handleSoloRematch = async (seed) => {
     if (!globalMe) {
       return;
     }
@@ -40,7 +40,7 @@ function MiscButtons({
       const body = await startSoloGameRequest({
         metaGame,
         variants: game?.variants,
-        challengeSeed,
+        challengeSeed: seed,
       });
       navigate(soloPlayNavigatePath(body, metaGame));
     } catch (error) {
@@ -73,9 +73,15 @@ function MiscButtons({
             <div className="control" style={{ paddingTop: "0.5em" }}>
               <button
                 className="button is-small apButton"
-                onClick={handleSoloRematch}
+                onClick={() => handleSoloRematch(challengeSeed)}
               >
                 {t("solo.rematch")}
+              </button>{" "}
+              <button
+                className="button is-small apButtonNeutral"
+                onClick={() => handleSoloRematch(undefined)}
+              >
+                {t("solo.rematchNewSeed")}
               </button>
             </div>
           ) : null}

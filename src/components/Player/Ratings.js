@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext, SummaryContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
-import NewChallengeModal from "../NewChallengeModal";
+import ChallengeEntryModals from "../ChallengeEntryModals";
 import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
 import {
@@ -136,7 +136,7 @@ function Ratings({ handleChallenge }) {
           globalMe.id === user.id ||
           !gameinfo.has(props.row.original.id) ? null : (
             <>
-              <NewChallengeModal
+              <ChallengeEntryModals
                 show={
                   activeChallengeModal !== "" &&
                   activeChallengeModal === props.row.original.id

@@ -1535,6 +1535,7 @@
         "seedPlaceholder": "Leave blank for a new random puzzle",
         "seedHelp": "Use the same seed to replay or compete on the same setup. The server assigns one if you leave this blank.",
         "rematch": "Play again (same seed)",
+        "rematchNewSeed": "Play again (different seed)",
         "copyShareLink": "Share puzzle link",
         "outcome": {
             "passed": "Passed",

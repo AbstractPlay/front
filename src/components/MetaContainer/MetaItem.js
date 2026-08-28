@@ -5,7 +5,7 @@ import rehypeRaw from "rehype-raw";
 import { useTranslation } from "react-i18next";
 import { GameFactory } from "@abstractplay/gameslib";
 import Modal from "../Modal";
-import NewChallengeModal from "../NewChallengeModal";
+import ChallengeEntryModals from "../ChallengeEntryModals";
 import HighestSingleRating from "../Stats/HighestSingleRating";
 import GameStats from "../Stats/GameStats";
 import NumPlays from "../Stats/NumPlays";
@@ -27,7 +27,6 @@ import {
 } from "../../lib/metaItemTabs";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import { tournamentListPath } from "../../lib/tournamentSections";
-import SoloPlayModal from "../Solo/SoloPlayModal";
 import SoloMetaStatsPanel from "../Stats/SoloMetaStatsPanel";
 import SoloSeedLeaderboard from "../Stats/SoloSeedLeaderboard";
 import { soloPlaySupported } from "../../lib/soloPlay";
@@ -41,7 +40,6 @@ const MetaItem = React.forwardRef(
       hideDetails,
       highlight,
       handleChallenge,
-      handleStartSolo,
       syncTabToUrl = false,
     },
     ref
@@ -430,7 +428,7 @@ const MetaItem = React.forwardRef(
                     ""
                   ) : (
                     <div>
-                      <NewChallengeModal
+                      <ChallengeEntryModals
                         show={
                           activeChallengeModal !== "" &&
                           activeChallengeModal === game.uid
@@ -438,20 +436,11 @@ const MetaItem = React.forwardRef(
                         handleClose={closeChallengeModal}
                         handleChallenge={handleChallenge}
                         fixedMetaGame={game.uid}
+                        showSolo={activeSoloModal}
+                        onSoloClose={() => activeSoloModalSetter(false)}
+                        initialSoloSeed={initialSoloSeed}
                       />
-                      {soloPlaySupported(game.uid) && handleStartSolo ? (
-                        <SoloPlayModal
-                          show={activeSoloModal}
-                          fixedMetaGame={game.uid}
-                          handleClose={() => activeSoloModalSetter(false)}
-                          initialChallengeSeed={initialSoloSeed}
-                          handleStart={async (pars) => {
-                            await handleStartSolo(pars);
-                            activeSoloModalSetter(false);
-                          }}
-                        />
-                      ) : null}
-                      {soloPlaySupported(game.uid) && handleStartSolo ? (
+                      {soloPlaySupported(game.uid) ? (
                         <button
                           className="button is-small apButton"
                           onClick={() => activeSoloModalSetter(true)}

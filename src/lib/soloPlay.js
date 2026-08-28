@@ -7,6 +7,21 @@ export function soloPlaySupported(metaGame) {
   return info !== undefined && info.playercounts.includes(1);
 }
 
+/** Whether the catalog title only supports single-player (`playercounts` is exactly `[1]`). */
+export function isSoloOnlyGame(metaGame) {
+  const info = gameinfo.get(metaGame);
+  return (
+    info !== undefined &&
+    info.playercounts.length === 1 &&
+    info.playercounts[0] === 1
+  );
+}
+
+/** Whether Issue Challenge should hand off to the solo play modal. */
+export function shouldHandoffToSolo(metaGame, numPlayers) {
+  return soloPlaySupported(metaGame) && numPlayers === 1;
+}
+
 export function isSoloGame(game) {
   return game?.numPlayers === 1;
 }
@@ -180,6 +195,13 @@ export async function startSoloGameRequest(pars) {
 export function soloPlayNavigatePath(body, fallbackMetaGame) {
   const metaGame = body.metaGameUid ?? fallbackMetaGame;
   return `/move/${metaGame}/0/${body.gameId}`;
+}
+
+/** Start a solo game and navigate to the move page. */
+export async function startSoloAndNavigate(pars, navigate) {
+  const body = await startSoloGameRequest(pars);
+  navigate(soloPlayNavigatePath(body, pars.metaGame));
+  return body;
 }
 
 export function buildSoloShareUrl(metaGame, challengeSeed) {

@@ -3,6 +3,8 @@ import { gameinfo } from "@abstractplay/gameslib";
 import {
   formatElapsedMs,
   formatSoloOutcome,
+  isSoloOnlyGame,
+  shouldHandoffToSolo,
   soloPlaySupported,
   soloVariantSummaryKey,
 } from "./soloPlay";
@@ -14,8 +16,21 @@ describe("soloPlay", () => {
     );
     if (soloOnly !== undefined) {
       expect(soloPlaySupported(soloOnly.uid)).toBe(true);
+      expect(isSoloOnlyGame(soloOnly.uid)).toBe(true);
     }
     expect(soloPlaySupported("not-a-real-game")).toBe(false);
+    expect(isSoloOnlyGame("not-a-real-game")).toBe(false);
+  });
+
+  it("detects when challenge flow should hand off to solo modal", () => {
+    const soloOnly = [...gameinfo.values()].find(
+      (info) => info.playercounts.length === 1 && info.playercounts[0] === 1
+    );
+    if (soloOnly !== undefined) {
+      expect(shouldHandoffToSolo(soloOnly.uid, 1)).toBe(true);
+      expect(shouldHandoffToSolo(soloOnly.uid, 2)).toBe(false);
+    }
+    expect(shouldHandoffToSolo("not-a-real-game", 1)).toBe(false);
   });
 
   it("formats elapsed time", () => {

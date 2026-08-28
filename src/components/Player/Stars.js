@@ -6,7 +6,7 @@ import { getGameDisplayName } from "../../lib/gameOptions";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import NewChallengeModal from "../NewChallengeModal";
+import ChallengeEntryModals from "../ChallengeEntryModals";
 import { useStore } from "../../stores";
 
 function Stars({ handleChallenge }) {
@@ -54,7 +54,7 @@ function Stars({ handleChallenge }) {
           globalMe.id === user.id ||
           !gameinfo.has(props.row.original.id) ? null : (
             <>
-              <NewChallengeModal
+              <ChallengeEntryModals
                 show={
                   activeChallengeModal !== "" &&
                   activeChallengeModal === props.row.original.id

@@ -4,7 +4,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext } from "../Player";
 import DataTable, { PROFILE_FILTER_TABLE_PROPS } from "../shared/DataTable";
-import NewChallengeModal from "../NewChallengeModal";
+import ChallengeEntryModals from "../ChallengeEntryModals";
 import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
@@ -309,7 +309,7 @@ function History({ handleChallenge }) {
                 globalMe.id !== user.id ||
                 props.row.original.opponents.length !== 1 ? null : (
                   <>
-                    <NewChallengeModal
+                    <ChallengeEntryModals
                       show={
                         activeChallengeModal !== "" &&
                         activeChallengeModal === props.row.original.id
