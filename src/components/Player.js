@@ -335,6 +335,23 @@ function Player() {
                             ))}
                           </ul>
                         </div>
+                        {activeTab === "record" && globalMe?.id === user.id ? (
+                          <div
+                            className="control"
+                            style={{ marginBottom: "1.5em" }}
+                          >
+                            <a
+                              href={`https://records.abstractplay.com/player/${user.id}.json`}
+                            >
+                              <button
+                                type="button"
+                                className="button apButton is-small"
+                              >
+                                {t("me.downloadCompletedReports")}
+                              </button>
+                            </a>
+                          </div>
+                        ) : null}
                         {tabMayHaveContent ? (
                           <SummaryGate>
                             <div className="columns is-multiline player-tab-modules">

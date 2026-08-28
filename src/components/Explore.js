@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
-import { getGameDisplayName } from "../lib/gameOptions";
+import { getGameDisplayName, resolveMetaGameUid } from "../lib/gameOptions";
 import { useTranslation } from "react-i18next";
 import {
   useParams,
@@ -124,11 +124,20 @@ function Explore(props) {
   );
 
   if (isGameDetail) {
-    if (!gameinfo.has(metaGame)) {
+    const resolvedMetaGame = resolveMetaGameUid(metaGame);
+    if (resolvedMetaGame === undefined) {
       if (isValidExploreView(metaGame)) {
         return <Navigate to={`/explore/${metaGame}`} replace />;
       }
       return <Navigate to="/explore" replace />;
+    }
+    if (resolvedMetaGame !== metaGame) {
+      return (
+        <Navigate
+          to={{ pathname: `/games/${resolvedMetaGame}`, hash: location.hash }}
+          replace
+        />
+      );
     }
     if (counts !== null) {
       return (
@@ -136,22 +145,22 @@ function Explore(props) {
           <Helmet>
             <meta
               property="og:title"
-              content={`${getGameDisplayName(metaGame)}: Game Information`}
+              content={`${getGameDisplayName(resolvedMetaGame)}: Game Information`}
             />
             <meta
               property="og:url"
-              content={`https://play.abstractplay.com/games/${metaGame}`}
+              content={`https://play.abstractplay.com/games/${resolvedMetaGame}`}
             />
             <meta
               property="og:description"
               content={`Information on the game ${getGameDisplayName(
-                metaGame
+                resolvedMetaGame
               )}`}
             />
           </Helmet>
           <MetaItem
-            game={gameinfo.get(metaGame)}
-            counts={counts[metaGame]}
+            game={gameinfo.get(resolvedMetaGame)}
+            counts={counts[resolvedMetaGame]}
             toggleStar={toggleStar}
             handleChallenge={handleNewChallenge}
             syncTabToUrl
