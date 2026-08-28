@@ -1596,16 +1596,17 @@
       },
       "message": {
         "gameStart": "{{opponentName}} inició una partida de {{metaGame}} contigo",
-        "gameEnd_win": "Ganaste tu partida de {{metaGame}}",
-        "gameEnd_lose": "Perdiste tu partida de {{metaGame}}",
-        "gameEnd_draw": "Tu partida de {{metaGame}} terminó en empate",
+        "gameEnd_win": "Ganaste tu partida de <gameLink>{{metaGame}}</gameLink>",
+        "gameEnd_lose": "Perdiste tu partida de <gameLink>{{metaGame}}</gameLink>",
+        "gameEnd_draw": "Tu partida de <gameLink>{{metaGame}}</gameLink> terminó en empate",
         "ratingChange": "Tu clasificación para <gameLink>{{metaGame}}</gameLink>{{variantsInline}} cambió {{delta}} puntos de {{oldRatingDisplay}} a {{newRatingDisplay}}.",
         "challengeIssued": "{{challengerName}} te desafió a {{metaGame}}",
         "challengeDeclined": "{{declinerName}} rechazó tu desafío de {{metaGame}}",
         "challengeRevoked": "{{revokerName}} retiró el desafío de {{metaGame}}",
         "eventInvitation": "{{organizerName}} te invitó a {{eventName}}",
         "completedGameChat": "{{commenterName}} tiene algo que decir en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>",
-        "completedGameChat_backfill": "Tienes mensajes sin leer en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>"
+        "completedGameChat_backfill": "Tienes mensajes sin leer en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>",
+        "gameEnd_solo": "Tu partida de <gameLink>{{metaGame}}</gameLink> ha terminado"
       }
     }
   },
