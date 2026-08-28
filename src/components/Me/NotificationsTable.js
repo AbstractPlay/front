@@ -17,6 +17,7 @@ import ChallengeResponseModal from "./ChallengeResponseModal";
 import { callAuthApi } from "../../lib/api";
 import { expandVariants } from "../../lib/expandVariants";
 import { useStore } from "../../stores";
+import { isSoloOnlyGame } from "../../lib/soloPlay";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -34,11 +35,6 @@ function variantsLabel(metaGame, variants) {
   } catch {
     return "";
   }
-}
-
-function withVariants(message, metaGame, variants) {
-  const label = variantsLabel(metaGame, variants);
-  return label ? `${message} (${label})` : message;
 }
 
 function variantsSuffix(metaGame, variants) {
@@ -66,6 +62,42 @@ function challengeNotificationMessage(i18nKey, metaGame, values) {
   );
 }
 
+function gameEndNotificationMessage(body) {
+  const metaGame = metaGameLabel(body.metaGame);
+  const soloEnded =
+    isSoloOnlyGame(body.metaGame) || body.numPlayers === 1;
+  const gameLinkTo = `/move/${body.metaGame}/1/${body.gameId}`;
+
+  if (soloEnded) {
+    return (
+      <>
+        <Trans
+          i18nKey="me.notifications.message.gameEnd_solo"
+          values={{ metaGame }}
+          components={{
+            gameLink: <Link to={gameLinkTo} />,
+          }}
+        />
+        {variantsSuffix(body.metaGame, body.variants)}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Trans
+        i18nKey="me.notifications.message.gameEnd"
+        context={body.result}
+        values={{ metaGame }}
+        components={{
+          gameLink: <Link to={gameLinkTo} />,
+        }}
+      />
+      {variantsSuffix(body.metaGame, body.variants)}
+    </>
+  );
+}
+
 function NotificationMessage({ body }) {
   const { t } = useTranslation();
   const metaGame = metaGameLabel(body.metaGame);
@@ -85,14 +117,7 @@ function NotificationMessage({ body }) {
         </>
       );
     case "gameEnd":
-      return withVariants(
-        t("me.notifications.message.gameEnd", {
-          context: body.result,
-          metaGame,
-        }),
-        body.metaGame,
-        body.variants
-      );
+      return gameEndNotificationMessage(body);
     case "ratingChange":
       return (
         <Trans
@@ -297,37 +322,13 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
             return dismissButton;
           }
 
-          if (body.type === "gameEnd") {
-            return (
-              <>
-                <Link
-                  to={`/move/${body.metaGame}/0/${body.gameId}`}
-                  className="button is-small apButton"
-                >
-                  {t("View")}
-                </Link>
-                &nbsp;
-                {dismissButton}
-              </>
-            );
-          }
-
-          if (body.type === "completedGameChat") {
-            return (
-              <>
-                <Link
-                  to={`/move/${body.metaGame}/1/${body.gameId}`}
-                  className="button is-small apButton"
-                >
-                  {t("View")}
-                </Link>
-                &nbsp;
-                {dismissButton}
-              </>
-            );
-          }
-
-          if (body.type === "ratingChange") {
+          if (
+            body.type === "gameEnd" ||
+            body.type === "completedGameChat" ||
+            body.type === "ratingChange" ||
+            body.type === "challengeDeclined" ||
+            body.type === "challengeRevoked"
+          ) {
             return dismissButton;
           }
 

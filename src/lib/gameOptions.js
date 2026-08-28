@@ -26,6 +26,26 @@ export function getGameDisplayName(metaUid, fallback = metaUid) {
   return (gameinfo.get(metaUid)?.name ?? fallback ?? metaUid) || "Unknown";
 }
 
+/**
+ * Resolve a URL path segment to the canonical meta-game uid (case-insensitive).
+ * Returns undefined when no catalog entry matches.
+ */
+export function resolveMetaGameUid(raw) {
+  if (raw === undefined || raw === null || raw === "") {
+    return undefined;
+  }
+  if (gameinfo.has(raw)) {
+    return raw;
+  }
+  const lower = String(raw).toLowerCase();
+  for (const id of gameinfo.keys()) {
+    if (id.toLowerCase() === lower) {
+      return id;
+    }
+  }
+  return undefined;
+}
+
 /** Meta-game uids listed in public catalog UIs. */
 export function listPublicCatalogMetas() {
   return [...gameinfo.keys()].filter((id) =>

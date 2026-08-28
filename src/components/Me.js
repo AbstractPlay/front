@@ -470,15 +470,6 @@ function Me(props) {
               <span>{t("YourGames")}</span>
             </p>
             <div className="indentedContainer">
-              <div className="control">
-                <a
-                  href={`https://records.abstractplay.com/player/${globalMe.id}.json`}
-                >
-                  <button className="button apButton is-small">
-                    {t("me.downloadCompletedReports")}
-                  </button>
-                </a>
-              </div>
               <div>
                 <p className="lined">
                   <span>{t("YourMove")}</span>
