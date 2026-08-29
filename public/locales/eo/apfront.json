@@ -481,7 +481,9 @@
     "gifSuccess": "La GIF-movbildo estas elŝutita.",
     "progress": "Eksportante filmeron {{current}} el {{total}}…",
     "failed": "Eksportado malsukcesis: {{error}}",
-    "frameCap": "Tro da filmeroj (maksimume {{max}}). Elektu pli mallongan intervalon."
+    "frameCap": "Tro da filmeroj (maksimume {{max}}). Elektu pli mallongan intervalon.",
+    "frameCount_one": "{{count}} filmero",
+    "frameCount_other": "{{count}} filmeroj"
   },
   "CycleBoardDisplay": "Cikli la tabulan bildigon",
   "buttons": {
@@ -853,7 +855,7 @@
   "Notes": "Notoj: ",
   "NotesHelp": "Notoj pri ĉi tiu defio (maksimume 128 signoj).",
   "NotHardTime": "Neniu deviga tempolimo",
-  "NotificationSettings": "Agordoj de sciigoj (tuj konservataj)",
+  "NotificationSettings": "Sciigoj",
   "CommunicationLanguage": "Lingvo de retpoŝtoj kaj sciigoj",
   "CommunicationLanguageHelp": "Elektu la lingvon de retpoŝtoj kaj puŝsciigoj de Abstract Play. Tio ne ŝanĝas la lingvon de la retejo — por tio uzu la lingvomenuon en la paĝopiedo.",
   "NotifyLabel-yourturn": "Via vico (dufoje tage)",
@@ -1865,5 +1867,9 @@
       "attempts": "Provoj",
       "date": "Plej bona provo"
     }
-  }
+  },
+  "NotificationSettingsSaveHelp": "Ŝanĝoj konserviĝas tuj.",
+  "NotificationSettingsEmail": "Retpoŝto",
+  "NotificationSettingsEmailHelp": "Postulas konfirmitan retpoŝtadreson. Rememorigiloj pri via vico estas sendataj dufoje tage.",
+  "NotificationSettingsInApp": "En la retejo"
 }
