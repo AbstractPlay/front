@@ -1593,7 +1593,7 @@
       "dismiss": "Ignorer",
       "columns": {
         "message": "Message",
-        "note": "Note",
+        "note": "Commentaire",
         "time": "Heure"
       },
       "message": {
