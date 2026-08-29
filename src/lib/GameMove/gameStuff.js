@@ -140,12 +140,7 @@ export function setupGame(
     engine,
     game0.players.map((p) => formatPlayerDisplayName(p, users)),
   );
-  if (
-    game0.moveResults.length === 0 &&
-    typeof engine.chatLogEntries !== "function" &&
-    typeof engine.chatLog !== "function" &&
-    typeof engine.resultsHistory !== "function"
-  ) {
+  if (game0.moveResults.length === 0) {
     console.log("No chatlog function");
   }
   if (gameRef.current !== null && gameRef.current.colors !== undefined)
