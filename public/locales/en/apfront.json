@@ -1579,7 +1579,7 @@
             "dismiss": "Dismiss",
             "columns": {
                 "message": "Message",
-                "note": "Note",
+                "note": "Comment",
                 "time": "Time"
             },
             "message": {
