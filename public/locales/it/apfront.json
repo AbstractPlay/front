@@ -873,6 +873,8 @@
   "InAppNotifyLabel-ratingChange": "Variazioni di rating",
   "InAppNotifyLabel-eventInvitation": "Inviti agli eventi",
   "InAppNotifyLabel-completedGameChat": "Chat delle partite concluse",
+  "InAppNotifyLabel-tournamentStart": "Torneo iniziato",
+  "InAppNotifyLabel-tournamentEnd": "Torneo terminato",
   "NoWaitingResponse": "Nessuna sfida in attesa della risposta dell'avversario",
   "NoYourMove": "Nessuna partita in attesa della tua mossa.",
   "NumChallenge": "Ci saranno {{num}} giocatori in questa partita. {{players}}. La disposizione dei posti sarà casuale.",
@@ -1588,7 +1590,7 @@
         "gameStart": "{{opponentName}} ha iniziato una partita a {{metaGame}} con te",
         "gameEnd_win": "Hai vinto la tua partita a <gameLink>{{metaGame}}</gameLink>",
         "gameEnd_lose": "Hai perso la tua partita a <gameLink>{{metaGame}}</gameLink>",
-        "gameEnd_draw": "La tua partita a <gameLink>{{metaGame}}</gameLink> è terminata in pareggio",
+        "gameEnd_draw": "La tua partita a <gameLink>{{metaGame}}</gameLink> è terminata in parità",
         "ratingChange": "Il tuo rating per <gameLink>{{metaGame}}</gameLink>{{variantsInline}} è cambiato di {{delta}} punti da {{oldRatingDisplay}} a {{newRatingDisplay}}.",
         "challengeIssued": "{{challengerName}} ti ha sfidato a {{metaGame}}",
         "challengeDeclined": "{{declinerName}} ha rifiutato la tua sfida a {{metaGame}}",
@@ -1596,7 +1598,10 @@
         "eventInvitation": "{{organizerName}} ti ha invitato a {{eventName}}",
         "completedGameChat": "{{commenterName}} ha qualcosa da dire nella tua partita terminata a <gameLink>{{metaGame}}</gameLink>",
         "completedGameChat_backfill": "Hai messaggi non letti nella chat della tua partita terminata a <gameLink>{{metaGame}}</gameLink>",
-        "gameEnd_solo": "La tua partita a <gameLink>{{metaGame}}</gameLink> è terminata"
+        "gameEnd_solo": "La tua partita a <gameLink>{{metaGame}}</gameLink> è terminata",
+        "tournamentStart": "Il torneo {{number}} di <tournamentLink>{{metaGame}}</tournamentLink> è iniziato.",
+        "tournamentEnd": "Il torneo {{number}} di <tournamentLink>{{metaGame}}</tournamentLink> è terminato.",
+        "tournamentEnd_withWinner": "Il torneo {{number}} di <tournamentLink>{{metaGame}}</tournamentLink> è terminato. Ha vinto {{winnerName}}."
       }
     }
   },
