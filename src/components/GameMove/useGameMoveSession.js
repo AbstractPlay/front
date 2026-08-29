@@ -30,7 +30,7 @@ import { useStore } from "../../stores";
 // import helpers
 import {
   isInterestingComment,
-  replaceNames,
+  resolveRenderLabels,
   setStatus,
 } from "../../lib/GameMove/misc";
 import {
@@ -1374,7 +1374,7 @@ export function useGameMoveSession(props) {
     engineRef.current = engine;
     const altDisplay = altDisplayOverride ?? displaySettings?.display;
     renderrepSetter(
-      replaceNames(
+      resolveRenderLabels(
         engine.render({
           perspective: currentGame.me ? currentGame.me + 1 : 1,
           altDisplay,
@@ -1789,7 +1789,7 @@ export function useGameMoveSession(props) {
       effectiveColourContext
     );
     if (newSettings?.display) {
-      const newRenderRep = replaceNames(
+      const newRenderRep = resolveRenderLabels(
         engineRef.current.render({
           perspective: gameRef.current.me + 1,
           altDisplay: newSettings.display,
@@ -2428,7 +2428,6 @@ export function useGameMoveSession(props) {
           game: currentGame,
           focus,
           getFocusNode,
-          replaceNames,
           players: currentGame.players,
           users: useStore.getState().users,
           getPerspective: (_engine, game) => (game.me ? game.me + 1 : 1),

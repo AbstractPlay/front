@@ -1,11 +1,11 @@
 import { GameFactory } from "@abstractplay/gameslib";
+import { resolveRenderLabels } from "../resolveRenderLabels";
 
 export function buildFrameRenderRep({
   exploration,
   game,
   focus,
   getFocusNode,
-  replaceNames,
   players,
   users,
   getPerspective,
@@ -18,8 +18,8 @@ export function buildFrameRenderRep({
   const engine = GameFactory(game.metaGame, node.state);
   const perspective = getPerspective(engine, game);
   const rep = engine.render({ perspective, altDisplay });
-  if (replaceNames && players?.length) {
-    return replaceNames(rep, players, users ?? {});
+  if (players?.length) {
+    return resolveRenderLabels(rep, players, users ?? {});
   }
   return rep;
 }

@@ -1,5 +1,7 @@
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 
+export { resolveRenderLabels } from "../resolveRenderLabels";
+
 export const replaceNames = (rep, players, users) => {
   let stringRep = JSON.stringify(rep);
   for (let i = 0; i < players.length; i++) {
