@@ -6,6 +6,10 @@ vi.mock("../api", () => ({
   callAuthApi: vi.fn(),
 }));
 
+vi.mock("./misc", () => ({
+  isInterestingComment: () => false,
+}));
+
 vi.mock("@abstractplay/gameslib", () => ({
   GameFactory: (_metaGame, state) => {
     const legal = [">e,12-d1", ">w,12-d1"];

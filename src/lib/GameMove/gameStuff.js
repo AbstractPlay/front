@@ -12,7 +12,7 @@ import {
   explorationMoveContext,
   isPartialExplorationMove,
 } from "./explorationMoves";
-import { replaceNames, setStatus } from "./misc";
+import { resolveRenderLabels, setStatus } from "./misc";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { cloneDeep } from "lodash";
 import { toast } from "react-toastify";
@@ -140,12 +140,7 @@ export function setupGame(
     engine,
     game0.players.map((p) => formatPlayerDisplayName(p, users)),
   );
-  if (
-    game0.moveResults.length === 0 &&
-    typeof engine.chatLogEntries !== "function" &&
-    typeof engine.chatLog !== "function" &&
-    typeof engine.resultsHistory !== "function"
-  ) {
+  if (game0.moveResults.length === 0) {
     console.log("No chatlog function");
   }
   if (gameRef.current !== null && gameRef.current.colors !== undefined)
@@ -153,7 +148,7 @@ export function setupGame(
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
   engineRef.current = engine.clone();
-  const render = replaceNames(
+  const render = resolveRenderLabels(
     engine.render({ perspective: game0.me + 1, altDisplay: display }),
     game0.players,
     users
@@ -403,7 +398,7 @@ function doView(
     `(doView) ABOUT TO RERENDER! Display setting: ${settings?.display}`
   );
   renderrepSetter(
-    replaceNames(
+    resolveRenderLabels(
       gameEngineTmp.render({
         perspective: game.me + 1,
         altDisplay: settings?.display,
@@ -480,7 +475,7 @@ export function processNewMove(
       `(processNewMove) ABOUT TO RERENDER! Display setting: ${settings?.display}`
     );
     renderrepSetter(
-      replaceNames(
+      resolveRenderLabels(
         gameEngineTmp.render({
           perspective: gameRef.current.me + 1,
           altDisplay: settings?.display,

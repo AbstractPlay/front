@@ -14,6 +14,8 @@ export const IN_APP_NOTIFICATION_KEYS = [
   "ratingChange",
   "eventInvitation",
   "completedGameChat",
+  "tournamentStart",
+  "tournamentEnd",
 ];
 
 function defaultNotificationMap(keys) {

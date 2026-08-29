@@ -23,7 +23,7 @@ vi.mock("./exploration", () => ({
 }));
 
 vi.mock("./misc", () => ({
-  replaceNames: (render) => render,
+  resolveRenderLabels: (render) => render,
   setStatus: vi.fn(),
 }));
 

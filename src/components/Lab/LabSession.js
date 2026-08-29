@@ -49,7 +49,7 @@ import {
   getMainLineTipState,
   deleteSpineEntry,
 } from "../../lib/Lab/exploration";
-import { setStatus, replaceNames } from "../../lib/Lab/misc";
+import { setStatus, resolveRenderLabels } from "../../lib/Lab/misc";
 import {
   getLabSetting,
   processNewSettings,
@@ -680,7 +680,7 @@ function LabSession({
       );
       const engine = GameFactory(gameRef.current.metaGame, node.state);
       engineRef.current = engine;
-      const newRenderRep = replaceNames(
+      const newRenderRep = resolveRenderLabels(
         engine.render({
           perspective: engine.currplayer,
           altDisplay: newSettings.display,
@@ -930,7 +930,6 @@ function LabSession({
           game: currentGame,
           focus,
           getFocusNode,
-          replaceNames,
           players: currentGame.players,
           users: useStore.getState().users,
           getPerspective: (engine) => engine.currplayer,

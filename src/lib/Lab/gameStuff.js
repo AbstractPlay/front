@@ -14,7 +14,7 @@ import {
   shouldExtendMainLine,
   createSpineNode,
 } from "./exploration";
-import { replaceNames, setStatus } from "./misc";
+import { resolveRenderLabels, setStatus } from "./misc";
 import { GameNode } from "../../components/Lab/GameTree";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { useStore } from "../../stores";
@@ -144,7 +144,7 @@ export function setupLabGame(
   partialMoveRenderRef.current = false;
   engineRef.current = engine.clone();
 
-  const render = replaceNames(
+  const render = resolveRenderLabels(
     engine.render({ perspective: engine.currplayer, altDisplay: display }),
     game0.players,
     users
@@ -354,7 +354,7 @@ function doView(
   partialMoveRenderRef.current = partialMove;
   engineRef.current = gameEngineTmp;
   renderrepSetter(
-    replaceNames(
+    resolveRenderLabels(
       gameEngineTmp.render({
         perspective: gameEngineTmp.currplayer,
         altDisplay: settings?.display,
@@ -419,7 +419,7 @@ export function processNewMove(
     }
     engineRef.current = gameEngineTmp;
     renderrepSetter(
-      replaceNames(
+      resolveRenderLabels(
         gameEngineTmp.render({
           perspective: gameEngineTmp.currplayer,
           altDisplay: settings?.display,
