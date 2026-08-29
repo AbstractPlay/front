@@ -3,7 +3,6 @@ import {
   resolveRenderLabel,
 } from "@abstractplay/gameslib";
 import { formatPlayerDisplayName } from "../components/Bots/botUtils";
-import { replaceNames } from "./GameMove/misc";
 import i18n from "../i18n";
 
 export const defaultRenderLabelT = (key, params) => i18n.t(key, params);
@@ -65,17 +64,8 @@ function walkBoard(board, playerNames, t) {
   walkMarkers(board.markers, playerNames, t);
 }
 
-/**
- * Resolve structured render labels to display strings, then apply the legacy
- * replaceNames shim for remaining plain-string "Player N" labels.
- */
-export function resolveRenderLabels(
-  rep,
-  players,
-  users,
-  t = defaultRenderLabelT,
-  { legacyReplaceNames = true } = {}
-) {
+/** Resolve structured render labels to display strings before drawing. */
+export function resolveRenderLabels(rep, players, users, t = defaultRenderLabelT) {
   if (!rep || typeof rep !== "object") {
     return rep;
   }
@@ -83,8 +73,5 @@ export function resolveRenderLabels(
   const out = structuredClone(rep);
   walkBoard(out.board, playerNames, t);
   walkAreas(out.areas, playerNames, t);
-  if (legacyReplaceNames) {
-    return replaceNames(out, players, users);
-  }
   return out;
 }

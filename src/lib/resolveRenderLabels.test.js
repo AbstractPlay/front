@@ -43,14 +43,12 @@ describe("resolveRenderLabels", () => {
         },
       ],
     };
-    const resolved = resolveRenderLabels(rep, players, users, t, {
-      legacyReplaceNames: false,
-    });
+    const resolved = resolveRenderLabels(rep, players, users, t);
     expect(resolved.legend["player 1 token"]).to.deep.equal({ name: "piece" });
     expect(resolved.areas[0].pieces[0]).to.equal("player 1 token");
   });
 
-  it("still applies legacy replaceNames to plain-string labels", () => {
+  it("leaves plain-string labels unchanged", () => {
     const rep = {
       areas: [
         {
@@ -61,7 +59,7 @@ describe("resolveRenderLabels", () => {
       ],
     };
     const resolved = resolveRenderLabels(rep, players, users, t);
-    expect(resolved.areas[0].label).to.equal("Alice hand");
+    expect(resolved.areas[0].label).to.equal("Player 1 hand");
   });
 
   it("resolves streetcar-style taken area labels", () => {
