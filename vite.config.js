@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv, transformWithEsbuild } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -24,6 +25,13 @@ function jsxInJsFiles() {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const realMode = env.VITE_REAL_MODE ?? "local";
+  const siblingGameslib = path.resolve(__dirname, "../gameslib/build/index.js");
+  const gameslibEntry = fs.existsSync(siblingGameslib)
+    ? siblingGameslib
+    : path.resolve(
+        __dirname,
+        "node_modules/@abstractplay/gameslib/build/index.js"
+      );
 
   return {
     plugins: [
@@ -35,10 +43,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         buffer: "buffer",
-        "@abstractplay/gameslib": path.resolve(
-          __dirname,
-          "node_modules/@abstractplay/gameslib/build/index.js"
-        ),
+        "@abstractplay/gameslib": gameslibEntry,
       },
     },
     define: {

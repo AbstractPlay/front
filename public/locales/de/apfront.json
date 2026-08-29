@@ -873,6 +873,8 @@
   "InAppNotifyLabel-ratingChange": "Wertungsänderungen",
   "InAppNotifyLabel-eventInvitation": "Event-Einladungen",
   "InAppNotifyLabel-completedGameChat": "Chat beendeter Spiele",
+  "InAppNotifyLabel-tournamentStart": "Turnier gestartet",
+  "InAppNotifyLabel-tournamentEnd": "Turnier beendet",
   "NoWaitingResponse": "Keine Herausforderungen, die auf eine Antwort des Gegners warten",
   "NoYourMove": "Keine Spiele warten auf deinen Zug.",
   "NumChallenge": "An diesem Spiel werden {{num}} Spieler teilnehmen. {{players}}. Die Sitzordnung ist zufällig.",
@@ -1596,7 +1598,10 @@
         "eventInvitation": "{{organizerName}} hat dich zu {{eventName}} eingeladen",
         "completedGameChat": "{{commenterName}} hat etwas in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie zu sagen",
         "completedGameChat_backfill": "Du hast ungelesene Chatnachrichten in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie",
-        "gameEnd_solo": "Deine Partie <gameLink>{{metaGame}}</gameLink> ist beendet"
+        "gameEnd_solo": "Deine Partie <gameLink>{{metaGame}}</gameLink> ist beendet",
+        "tournamentStart": "Turnier {{number}} von <tournamentLink>{{metaGame}}</tournamentLink> hat begonnen.",
+        "tournamentEnd": "Turnier {{number}} von <tournamentLink>{{metaGame}}</tournamentLink> ist beendet.",
+        "tournamentEnd_withWinner": "Turnier {{number}} von <tournamentLink>{{metaGame}}</tournamentLink> ist beendet. {{winnerName}} hat gewonnen."
       }
     }
   },

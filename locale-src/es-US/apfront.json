@@ -1191,6 +1191,14 @@
     "src": "Rating changes",
     "out": "Cambios de clasificación"
   },
+  "InAppNotifyLabel-tournamentEnd": {
+    "src": "Tournament ended",
+    "out": "Torneo finalizado"
+  },
+  "InAppNotifyLabel-tournamentStart": {
+    "src": "Tournament started",
+    "out": "Torneo iniciado"
+  },
   "InCheck": {
     "src": "{{player}} is in check!",
     "out": "¡{{player}} está en jaque!"
@@ -4640,16 +4648,16 @@
     "out": "{{organizerName}} te invitó a {{eventName}}"
   },
   "me.notifications.message.gameEnd_draw": {
-    "src": "Your game of {{metaGame}} ended in a draw",
-    "out": "Tu partida de {{metaGame}} terminó en empate"
+    "src": "Your game of <gameLink>{{metaGame}}</gameLink> ended in a draw",
+    "out": "Tu partida de <gameLink>{{metaGame}}</gameLink> terminó en empate"
   },
   "me.notifications.message.gameEnd_lose": {
-    "src": "You lost your game of {{metaGame}}",
-    "out": "Perdiste tu partida de {{metaGame}}"
+    "src": "You lost your game of <gameLink>{{metaGame}}</gameLink>",
+    "out": "Perdiste tu partida de <gameLink>{{metaGame}}</gameLink>"
   },
   "me.notifications.message.gameEnd_win": {
-    "src": "You won your game of {{metaGame}}",
-    "out": "Ganaste tu partida de {{metaGame}}"
+    "src": "You won your game of <gameLink>{{metaGame}}</gameLink>",
+    "out": "Ganaste tu partida de <gameLink>{{metaGame}}</gameLink>"
   },
   "me.notifications.message.gameStart": {
     "src": "{{opponentName}} started a game of <gameLink>{{metaGame}}</gameLink> with you",
@@ -4658,6 +4666,18 @@
   "me.notifications.message.ratingChange": {
     "src": "Your rating for <gameLink>{{metaGame}}</gameLink>{{variantsInline}} changed {{delta}} points from {{oldRatingDisplay}} to {{newRatingDisplay}}.",
     "out": "Tu clasificación para <gameLink>{{metaGame}}</gameLink>{{variantsInline}} cambió {{delta}} puntos de {{oldRatingDisplay}} a {{newRatingDisplay}}."
+  },
+  "me.notifications.message.tournamentEnd": {
+    "src": "Tournament {{number}} of <tournamentLink>{{metaGame}}</tournamentLink> has ended.",
+    "out": "El torneo {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> ha finalizado."
+  },
+  "me.notifications.message.tournamentEnd_withWinner": {
+    "src": "Tournament {{number}} of <tournamentLink>{{metaGame}}</tournamentLink> has ended. {{winnerName}} won.",
+    "out": "El torneo {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> ha finalizado. {{winnerName}} ganó."
+  },
+  "me.notifications.message.tournamentStart": {
+    "src": "Tournament {{number}} of <tournamentLink>{{metaGame}}</tournamentLink> has started.",
+    "out": "El torneo {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> ha comenzado."
   },
   "me.notifications.title": {
     "src": "Notifications",
