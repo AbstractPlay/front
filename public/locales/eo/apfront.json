@@ -453,7 +453,7 @@
   "Change": "Ŝanĝi",
   "ColorPatterns": "Nigra kaj blanka",
   "YourGames": "Viaj ludoj",
-  "YourMove": "Via movo",
+  "YourMove": "Via vico",
   "404": "404 Ne troviĝis",
   "AcceptDraw": "Akcepti proponon pri egalvenko",
   "Active": "Aktiva",
@@ -1263,7 +1263,7 @@
   },
   "footer": {
     "wiki": "Vikio",
-    "discord": "Discord",
+    "discord": "Diskordo",
     "boardGameGeek": "BoardGameGeek",
     "wishlist": "Dezirlisto",
     "github": "GitHub",
