@@ -1,22 +1,26 @@
-import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
+import { useStore } from "../../stores";
+import { resolveRenderLabels } from "../resolveRenderLabels";
+import {
+  resolveSidebarScores,
+  resolveSidebarStatuses,
+} from "../resolveSidebarStatus";
 
-export { resolveRenderLabels } from "../resolveRenderLabels";
-
-export const replaceNames = (rep, players, users) => {
-  let stringRep = JSON.stringify(rep);
-  for (let i = 0; i < players.length; i++) {
-    const re = new RegExp(`player ${i + 1}`, "gi");
-    stringRep = stringRep.replace(
-      re,
-      formatPlayerDisplayName(players[i], users)
-    );
-  }
-  return JSON.parse(stringRep);
-};
+export { resolveRenderLabels };
+export { resolveSidebarStatuses, resolveSidebarScores };
 
 export function setStatus(engine, game, isPartial, partialMove, status) {
-  status.statuses = engine.sidebarStatuses(isPartial, partialMove);
-  status.scores = engine.sidebarScores();
+  const users = useStore.getState().users;
+  const players = game.players ?? [];
+  status.statuses = resolveSidebarStatuses(
+    engine.sidebarStatuses(isPartial, partialMove),
+    players,
+    users
+  );
+  status.scores = resolveSidebarScores(
+    engine.sidebarScores(),
+    players,
+    users
+  );
   if (game.playerStashes) {
     status.stashes = [];
     for (let i = 1; i <= game.numPlayers; i++) {
