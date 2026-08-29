@@ -1529,7 +1529,16 @@
         "gameEnd_win": "Vi gajnis vian ludon de <gameLink>{{metaGame}}</gameLink>",
         "gameEnd_lose": "Vi malgajnis vian ludon de <gameLink>{{metaGame}}</gameLink>",
         "gameEnd_draw": "Vi kunremisis vian ludon de <gameLink>{{metaGame}}</gameLink>",
-        "gameEnd_solo": "Via ludo de <gameLink>{{metaGame}}</gameLink> finiĝis"
+        "gameEnd_solo": "Via ludo de <gameLink>{{metaGame}}</gameLink> finiĝis",
+        "ratingChange": "Via pritakso por <gameLink>{{metaGame}}</gameLink>{{variantsInline}} ŝanĝiĝis je {{delta}} poentoj, de {{oldRatingDisplay}} al {{newRatingDisplay}}.",
+        "challengeIssued": "{{challengerName}} defiis vin al ludo de <gameLink>{{metaGame}}</gameLink>",
+        "challengeDeclined": "{{declinerName}} malakceptis vian defion pri <gameLink>{{metaGame}}</gameLink>",
+        "challengeRevoked": "{{revokerName}} nuligis la defion pri <gameLink>{{metaGame}}</gameLink>",
+        "eventInvitation": "{{organizerName}} invitis vin al la evento <eventLink>{{eventName}}</eventLink>.",
+        "tournamentStart": "Turniro {{number}} de la serio <tournamentLink>{{metaGame}}</tournamentLink> komenciĝis.",
+        "tournamentEnd": "Turniro {{number}} de la serio <tournamentLink>{{metaGame}}</tournamentLink> finiĝis.",
+        "tournamentEnd_withWinner": "Turniro {{number}} de la serio <tournamentLink>{{metaGame}}</tournamentLink> finiĝis. {{winnerName}} venkis.",
+        "completedGameChat": "{{commenterName}} havas ion por diri en via finita ludo de <gameLink>{{metaGame}}</gameLink>"
       }
     }
   },
