@@ -165,6 +165,40 @@ function NotificationMessage({ body }) {
           }}
         />
       );
+    case "tournamentStart":
+      return (
+        <>
+          <Trans
+            i18nKey="me.notifications.message.tournamentStart"
+            values={{ number: body.number, metaGame }}
+            components={{
+              tournamentLink: <Link to={`/tournament/${body.tournamentId}`} />,
+            }}
+          />
+          {variantsSuffix(body.metaGame, body.variants)}
+        </>
+      );
+    case "tournamentEnd":
+      return (
+        <>
+          <Trans
+            i18nKey={
+              body.winnerName
+                ? "me.notifications.message.tournamentEnd_withWinner"
+                : "me.notifications.message.tournamentEnd"
+            }
+            values={{
+              number: body.number,
+              metaGame,
+              winnerName: body.winnerName,
+            }}
+            components={{
+              tournamentLink: <Link to={`/tournament/${body.tournamentId}`} />,
+            }}
+          />
+          {variantsSuffix(body.metaGame, body.variants)}
+        </>
+      );
     case "completedGameChat":
       return (
         <>
@@ -318,7 +352,12 @@ function NotificationsTable({ handleChallengeResponse, setError }) {
             );
           }
 
-          if (body.type === "eventInvitation" || body.type === "gameStart") {
+          if (
+            body.type === "eventInvitation" ||
+            body.type === "gameStart" ||
+            body.type === "tournamentStart" ||
+            body.type === "tournamentEnd"
+          ) {
             return dismissButton;
           }
 

@@ -872,6 +872,8 @@
     "InAppNotifyLabel-ratingChange": "Rating changes",
     "InAppNotifyLabel-eventInvitation": "Event invitations",
     "InAppNotifyLabel-completedGameChat": "Completed game chat",
+    "InAppNotifyLabel-tournamentStart": "Tournament started",
+    "InAppNotifyLabel-tournamentEnd": "Tournament ended",
     "NoWaitingResponse": "No challenges waiting on opponent response",
     "NoYourMove": "No games waiting for your move.",
     "NumChallenge": "There will be {{num}} players in this game. {{players}}. Seating will be random.",
@@ -1591,6 +1593,9 @@
                 "challengeDeclined": "{{declinerName}} declined your <gameLink>{{metaGame}}</gameLink> challenge",
                 "challengeRevoked": "{{revokerName}} revoked the <gameLink>{{metaGame}}</gameLink> challenge",
                 "eventInvitation": "{{organizerName}} has invited you to the event <eventLink>{{eventName}}</eventLink>.",
+                "tournamentStart": "Tournament {{number}} of <tournamentLink>{{metaGame}}</tournamentLink> has started.",
+                "tournamentEnd": "Tournament {{number}} of <tournamentLink>{{metaGame}}</tournamentLink> has ended.",
+                "tournamentEnd_withWinner": "Tournament {{number}} of <tournamentLink>{{metaGame}}</tournamentLink> has ended. {{winnerName}} won.",
                 "completedGameChat": "{{commenterName}} has something to say in your completed <gameLink>{{metaGame}}</gameLink> game",
                 "completedGameChat_backfill": "You have unread chat in your completed <gameLink>{{metaGame}}</gameLink> game"
             }
