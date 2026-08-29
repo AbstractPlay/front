@@ -1538,7 +1538,8 @@
         "tournamentStart": "Turniro {{number}} de la serio <tournamentLink>{{metaGame}}</tournamentLink> komenciĝis.",
         "tournamentEnd": "Turniro {{number}} de la serio <tournamentLink>{{metaGame}}</tournamentLink> finiĝis.",
         "tournamentEnd_withWinner": "Turniro {{number}} de la serio <tournamentLink>{{metaGame}}</tournamentLink> finiĝis. {{winnerName}} venkis.",
-        "completedGameChat": "{{commenterName}} havas ion por diri en via finita ludo de <gameLink>{{metaGame}}</gameLink>"
+        "completedGameChat": "{{commenterName}} havas ion por diri en via finita ludo de <gameLink>{{metaGame}}</gameLink>",
+        "completedGameChat_backfill": "Vi havas nelegitajn babilmesaĝojn en via finita ludo de <gameLink>{{metaGame}}</gameLink>"
       }
     }
   },
@@ -1829,7 +1830,11 @@
       "commentMarkdown": "Komento (Markdown)",
       "commentPlaceholder": "Aldonu komenton per Markdown…",
       "nothingToPreview": "Ankoraŭ nenio antaŭrigardebla."
-    }
+    },
+    "importLocalBanner_one": "Vi havas unu konservitan ludon de la Ludejo en ĉi tiu aparato. Ĉu kopii ĝin al via konto?",
+    "importLocalBanner_other": "Vi havas {{count}} konservitajn ludojn de la Ludejo en ĉi tiu aparato. Ĉu kopii ilin al via konto?",
+    "importLocalSuccess_one": "Unu konservita ludo estis kopiita al via konto.",
+    "importLocalSuccess_other": "{{count}} konservitaj ludoj estis kopiitaj al via konto."
   },
   "Wikipedia": "Vikipedio",
   "glicko": {
