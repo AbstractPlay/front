@@ -1526,9 +1526,10 @@
       },
       "message": {
         "gameStart": "{{opponentName}} komencis ludon de <gameLink>{{metaGame}}</gameLink> kun vi",
-        "gameEnd_win": "Vi gajnis vian ludon de {{metaGame}}",
-        "gameEnd_lose": "Vi malgajnis vian ludon de {{metaGame}}",
-        "gameEnd_draw": "Vi kunremisis vian ludon de {{metaGame}}"
+        "gameEnd_win": "Vi gajnis vian ludon de <gameLink>{{metaGame}}</gameLink>",
+        "gameEnd_lose": "Vi malgajnis vian ludon de <gameLink>{{metaGame}}</gameLink>",
+        "gameEnd_draw": "Vi kunremisis vian ludon de <gameLink>{{metaGame}}</gameLink>",
+        "gameEnd_solo": "Via ludo de <gameLink>{{metaGame}}</gameLink> finiĝis"
       }
     }
   },
@@ -1866,10 +1867,21 @@
       "grade": "Grado",
       "attempts": "Provoj",
       "date": "Plej bona provo"
-    }
+    },
+    "rematchNewSeed": "Reludi (malsama semo)"
   },
   "NotificationSettingsSaveHelp": "Ŝanĝoj konserviĝas tuj.",
   "NotificationSettingsEmail": "Retpoŝto",
   "NotificationSettingsEmailHelp": "Postulas konfirmitan retpoŝtadreson. Rememorigiloj pri via vico estas sendataj dufoje tage.",
-  "NotificationSettingsInApp": "En la retejo"
+  "NotificationSettingsInApp": "En la retejo",
+  "NotificationSettingsInAppHelp": "Fluo de sciigoj en la stirpanelo de via hejmpaĝo.",
+  "InAppNotifyLabel-challenges": "Defioj",
+  "InAppNotifyLabel-gameStart": "Ludo komenciĝis",
+  "InAppNotifyLabel-gameEnd": "Ludo finiĝis",
+  "InAppNotifyLabel-ratingChange": "Ŝanĝoj de pritaksoj",
+  "InAppNotifyLabel-eventInvitation": "Invitoj al eventoj",
+  "InAppNotifyLabel-completedGameChat": "Babilmesaĝoj en finitaj ludoj",
+  "InAppNotifyLabel-tournamentStart": "Turniro komenciĝis",
+  "InAppNotifyLabel-tournamentEnd": "Turniro finiĝis",
+  "TotalRatings": "pritaksoj entute"
 }
