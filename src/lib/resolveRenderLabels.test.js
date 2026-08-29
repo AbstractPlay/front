@@ -64,6 +64,29 @@ describe("resolveRenderLabels", () => {
     expect(resolved.areas[0].label).to.equal("Alice hand");
   });
 
+  it("resolves streetcar-style taken area labels", () => {
+    const rep = {
+      areas: [
+        {
+          type: "pieces",
+          label: {
+            textKey: "apgames:validation.streetcar.TAKEN_LABEL",
+            actor: { kind: "seat", seat: 1 },
+          },
+          pieces: ["E"],
+        },
+      ],
+    };
+    const streetcarT = (key, params) => {
+      if (key === "apgames:validation.streetcar.TAKEN_LABEL") {
+        return `${params?.player}'s housing limits`;
+      }
+      return key;
+    };
+    const resolved = resolveRenderLabels(rep, players, users, streetcarT);
+    expect(resolved.areas[0].label).to.equal("Alice's housing limits");
+  });
+
   it("resolves entropy board labels and board markers", () => {
     const rep = {
       board: {
