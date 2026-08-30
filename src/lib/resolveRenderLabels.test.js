@@ -1,3 +1,13 @@
+import { vi } from "vitest";
+
+vi.mock("../i18n.js", () => ({
+  default: {
+    t: (key) => key,
+    isInitialized: true,
+    language: "en",
+  },
+}));
+
 import { expect } from "chai";
 import { resolveRenderLabels } from "./resolveRenderLabels";
 

@@ -8,6 +8,8 @@
  *   3. fallback: @development (dev) or @latest (prod)
  *
  * Usage: node bin/install-ap-deps.mjs --stage dev|prod [--renderer-only] [--for-tests]
+ *
+ * --for-tests: install ci-deps pins without rewriting package.json or prod registry checks
  */
 import fs from "fs";
 import path from "path";
@@ -115,10 +117,16 @@ function resolveVersions({ stage, rendererOnly, forTests, pkgJson }) {
   let source = manifestName;
 
   if (forTests) {
-    gameslib = process.env.AP_GAMESLIB_TEST_VERSION?.trim() || "development";
-    source = "for-tests@development";
+    const testOverride = process.env.AP_GAMESLIB_TEST_VERSION?.trim();
+    if (testOverride) {
+      gameslib = testOverride;
+      source = "for-tests@AP_GAMESLIB_TEST_VERSION";
+    } else {
+      source = `${manifestName} (for-tests)`;
+    }
     console.log(
-      `Installing gameslib for tests: @${gameslib} (full registry, not synced to package.json)`,
+      `Test install: @abstractplay/gameslib@${gameslib ?? "(see ci-deps or fallback)"} ` +
+        `(${source}, not synced to package.json)`,
     );
   } else if (dispatchGameslib || dispatchRenderer) {
     source = process.env.AP_SOURCE || "repository_dispatch";
