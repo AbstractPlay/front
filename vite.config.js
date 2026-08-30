@@ -35,6 +35,8 @@ export default defineConfig(({ mode }) => {
         __dirname,
         "node_modules/@abstractplay/gameslib/build/index-browser.js"
       );
+  const useBrowserGameslib =
+    process.env.VITEST === "true" || process.env.VITEST === "1";
 
   return {
     plugins: [
@@ -48,6 +50,10 @@ export default defineConfig(({ mode }) => {
         buffer: "buffer",
         "@abstractplay/gameslib": gameslibEntry,
       },
+      // Vitest runs in Node and would pick gameslib's "node" export (i18n-node + fs).
+      conditions: useBrowserGameslib
+        ? ["browser", "import", "module", "default"]
+        : undefined,
       dedupe: ["i18next", "react-i18next"],
     },
     define: {
