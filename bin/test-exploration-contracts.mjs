@@ -7,8 +7,12 @@
  */
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { register } from "node:module";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+
+register("./gameslib-node-resolve.mjs", import.meta.url);
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const src = (rel) =>
   pathToFileURL(path.join(__dirname, "../src", rel)).href;
