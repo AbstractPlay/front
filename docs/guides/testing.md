@@ -17,12 +17,14 @@ The front repo cannot catch Lambda CommonJS init failures (Vite bundles ESM diff
 
 **Two gameslib installs in CI:**
 
-| Step | gameslib | Purpose |
-|------|----------|---------|
-| Test job (`install-ap-deps --for-tests`) | `@development` (full registry) | `test:engines` — includes experimental games |
-| Deploy build (`install-ap-deps`) | Pinned production version from `ci-deps.prod.json` | What ships to users |
+| Trigger | gameslib version | Purpose |
+|---------|------------------|---------|
+| Front push / PR (`AP_GAMESLIB_VERSION` unset) | `ci-deps.<stage>.json` pin | Reproducible tests against the committed pin |
+| gameslib `dep_update_*` dispatch | `client_payload.gameslib_version` (overrides ci-deps for that run) | Validate the freshly published build before deploy syncs manifests |
 
-Renderer stays on the pinned `ci-deps.prod.json` / `ci-deps.dev.json` version in both cases (stage-specific manifest).
+Both use `install-ap-deps.mjs --for-tests`, which installs the resolved pin **without** rewriting `package.json`. Deploy installs the stage manifest via `install-ap-deps` (no `--for-tests`).
+
+Renderer stays on the pinned `ci-deps.prod.json` / `ci-deps.dev.json` version unless a dispatch payload includes `renderer_version`.
 
 ### Test layers
 

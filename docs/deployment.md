@@ -93,7 +93,12 @@ You do not need to manually bump AP dependency versions in `package.json` after 
 
 ### Test vs deploy gameslib
 
-Engine contract tests (`test:engines`) need the full gameslib registry (including experimental games). The CI test job installs `@abstractplay/gameslib@development` via `install-ap-deps.mjs --for-tests` without changing the pinned production version in `ci-deps.prod.json`. Deploy builds use the production gameslib artifact from `ci-deps.prod.json`, which matches what production users receive.
+Engine contract tests (`test:engines`) need the full gameslib registry (including experimental games). CI resolves gameslib via `bin/install-ap-deps.mjs`:
+
+- **Consumer-only push/PR:** `ci-deps.dev.json` / `ci-deps.prod.json` pin (no dispatch payload).
+- **gameslib relay (`dep_update_dev` / `dep_update_prod`):** dispatch `gameslib_version` overrides the pin for that test run so the new publish is exercised before manifests are synced.
+
+The test job uses `--for-tests` (does not rewrite `package.json`). Deploy uses the stage manifest without `--for-tests` and may auto-commit updated `ci-deps.*.json` after a dispatch.
 
 ## Related
 
