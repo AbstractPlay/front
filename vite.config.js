@@ -48,6 +48,7 @@ export default defineConfig(({ mode }) => {
         buffer: "buffer",
         "@abstractplay/gameslib": gameslibEntry,
       },
+      dedupe: ["i18next", "react-i18next"],
     },
     define: {
       global: "globalThis",
