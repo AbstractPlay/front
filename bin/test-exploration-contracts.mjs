@@ -2,22 +2,22 @@
  * Real-engine exploration contract + integration tests.
  * Run via: npm run test:engines
  *
- * Jest cannot reliably load @abstractplay/gameslib/build (CRA resolves the
- * package's TypeScript sources instead). This script uses Node's resolver
- * until the Vite migration gives us a cleaner test runner setup.
- *
- * Requires Node 20+ (CI matches this) so Node can load CRA-style ESM in .js
- * files under src/ without "type": "module" in package.json.
+ * Loads @abstractplay/gameslib via ESM (browser/node entry) and front src modules
+ * via dynamic import (Vite-era CRA-style .js under src/).
  */
 import assert from "node:assert/strict";
-import { createRequire } from "node:module";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
 const src = (rel) =>
   pathToFileURL(path.join(__dirname, "../src", rel)).href;
+
+const gameslibPkgPath = path.join(
+  __dirname,
+  "../node_modules/@abstractplay/gameslib/package.json",
+);
+const gameslibVersion = JSON.parse(readFileSync(gameslibPkgPath, "utf8")).version;
 
 const [
   {
@@ -28,30 +28,28 @@ const [
   { getPendingSubmitMove },
   { EXPLORATION_CONTRACTS },
   { GameNode },
+  { GameFactory, gameinfo },
 ] = await Promise.all([
   import(src("lib/GameMove/explorationMoves.js")),
   import(src("lib/GameMove/submitMove.js")),
   import(src("lib/GameMove/fixtures/index.js")),
   import(src("components/GameMove/GameTree.js")),
+  import("@abstractplay/gameslib"),
 ]);
-// Use compiled build output (matches Jest moduleNameMapper and avoids TS/ESM resolution drift).
-const { GameFactory } = require("@abstractplay/gameslib/build/index.js");
-const { games: gamesRegistry } = require("@abstractplay/gameslib/build/games/index.js");
-const gameslibVersion = require("@abstractplay/gameslib/package.json").version;
 
 function partitionContracts(contracts) {
   console.log(`@abstractplay/gameslib@${gameslibVersion}`);
   assert.equal(
     typeof GameFactory,
     "function",
-    "GameFactory missing from @abstractplay/gameslib/build"
+    "GameFactory missing from @abstractplay/gameslib"
   );
 
   const active = [];
   const skipped = [];
 
   for (const contract of contracts) {
-    if (gamesRegistry.has(contract.metaGame)) {
+    if (gameinfo.has(contract.metaGame)) {
       active.push(contract);
     } else if (contract.developmentOnly) {
       skipped.push(contract);
