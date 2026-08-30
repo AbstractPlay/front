@@ -36,7 +36,9 @@ export default defineConfig(({ mode }) => {
         "node_modules/@abstractplay/gameslib/build/index-browser.js"
       );
   const useBrowserGameslib =
-    process.env.VITEST === "true" || process.env.VITEST === "1";
+    mode === "test" ||
+    process.env.VITEST === "true" ||
+    process.env.VITEST === "1";
 
   return {
     plugins: [
