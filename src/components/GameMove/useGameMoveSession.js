@@ -10,6 +10,10 @@ import {
   runCheckTimeQuery,
 } from "../../lib/GameMove/spectatorHousekeeping";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import {
+  effectiveFlags,
+  flagSetIncludes,
+} from "../../lib/effectiveGameFlags";
 import { Buffer } from "buffer";
 import { getDisplayedRenderRepJson } from "../../lib/displayRenderRepJson";
 import {
@@ -1679,12 +1683,7 @@ export function useGameMoveSession(props) {
       if (info === undefined) {
         return 0;
       }
-      if (
-        "flags" in info &&
-        info.flags !== undefined &&
-        Array.isArray(info.flags) &&
-        info.flags.includes("custom-rotation")
-      ) {
+      if (flagSetIncludes(effectiveFlags(engine, metaGame), "custom-rotation")) {
         const increment = engine.getCustomRotation();
         if (increment !== undefined) {
           return increment;

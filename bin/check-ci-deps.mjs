@@ -36,13 +36,35 @@ for (const stage of stages) {
 const pkgJsonPath = path.join(ROOT, "package.json");
 if (fs.existsSync(pkgJsonPath)) {
   const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf8"));
-  const usesGameslib = "@abstractplay/gameslib" in (pkgJson.dependencies ?? {});
+  const deps = pkgJson.dependencies ?? {};
+  const usesGameslib = "@abstractplay/gameslib" in deps;
   if (usesGameslib) {
     for (const stage of stages) {
       if (!manifests[stage].gameslib) {
         fail(`ci-deps.${stage}.json must include gameslib for this consumer`);
       }
     }
+  }
+
+  const dev = manifests.dev;
+  if (usesGameslib && dev.gameslib && deps["@abstractplay/gameslib"] !== dev.gameslib) {
+    fail(
+      `package.json gameslib is ${deps["@abstractplay/gameslib"]} but ci-deps.dev.json pins ${dev.gameslib}. ` +
+        "Run: node bin/install-ap-deps.mjs --stage dev",
+    );
+  }
+  if (dev.renderer && deps["@abstractplay/renderer"] !== dev.renderer) {
+    fail(
+      `package.json renderer is ${deps["@abstractplay/renderer"]} but ci-deps.dev.json pins ${dev.renderer}. ` +
+        "Run: node bin/install-ap-deps.mjs --stage dev",
+    );
+  }
+  const overrideRenderer = pkgJson.overrides?.["@abstractplay/renderer"];
+  if (dev.renderer && overrideRenderer && overrideRenderer !== dev.renderer) {
+    fail(
+      `package.json overrides renderer is ${overrideRenderer} but ci-deps.dev.json pins ${dev.renderer}. ` +
+        "Run: node bin/install-ap-deps.mjs --stage dev",
+    );
   }
 }
 
