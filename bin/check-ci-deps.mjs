@@ -1,6 +1,8 @@
 /* eslint-env node */
 /**
  * Validate split ci-deps manifests (ci-deps.dev.json / ci-deps.prod.json).
+ * Canonical AP pins live in ci-deps.*.json; run install-ap-deps to copy them
+ * into package.json after a merge or dispatch.
  */
 import fs from "fs";
 import path from "path";
@@ -11,6 +13,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 function fail(message) {
   console.error(`check-ci-deps: ${message}`);
   process.exit(1);
+}
+
+function warn(message) {
+  console.warn(`check-ci-deps: warning: ${message}`);
 }
 
 const legacyPath = path.join(ROOT, "ci-deps.json");
@@ -48,22 +54,22 @@ if (fs.existsSync(pkgJsonPath)) {
 
   const dev = manifests.dev;
   if (usesGameslib && dev.gameslib && deps["@abstractplay/gameslib"] !== dev.gameslib) {
-    fail(
-      `package.json gameslib is ${deps["@abstractplay/gameslib"]} but ci-deps.dev.json pins ${dev.gameslib}. ` +
-        "Run: node bin/install-ap-deps.mjs --stage dev",
+    warn(
+      `package.json gameslib (${deps["@abstractplay/gameslib"]}) differs from ` +
+        `ci-deps.dev.json (${dev.gameslib}); run: node bin/install-ap-deps.mjs --stage dev`,
     );
   }
   if (dev.renderer && deps["@abstractplay/renderer"] !== dev.renderer) {
-    fail(
-      `package.json renderer is ${deps["@abstractplay/renderer"]} but ci-deps.dev.json pins ${dev.renderer}. ` +
-        "Run: node bin/install-ap-deps.mjs --stage dev",
+    warn(
+      `package.json renderer (${deps["@abstractplay/renderer"]}) differs from ` +
+        `ci-deps.dev.json (${dev.renderer}); run: node bin/install-ap-deps.mjs --stage dev`,
     );
   }
   const overrideRenderer = pkgJson.overrides?.["@abstractplay/renderer"];
   if (dev.renderer && overrideRenderer && overrideRenderer !== dev.renderer) {
-    fail(
-      `package.json overrides renderer is ${overrideRenderer} but ci-deps.dev.json pins ${dev.renderer}. ` +
-        "Run: node bin/install-ap-deps.mjs --stage dev",
+    warn(
+      `package.json overrides renderer (${overrideRenderer}) differs from ` +
+        `ci-deps.dev.json (${dev.renderer}); run: node bin/install-ap-deps.mjs --stage dev`,
     );
   }
 }
@@ -73,9 +79,7 @@ if (
   manifests.dev.gameslib &&
   manifests.prod.gameslib === manifests.dev.gameslib
 ) {
-  console.warn(
-    "check-ci-deps: warning: prod and dev pin the same gameslib version",
-  );
+  warn("prod and dev pin the same gameslib version");
 }
 
 console.log("check-ci-deps OK");
