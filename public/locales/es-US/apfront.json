@@ -21,7 +21,8 @@
     "startLabel": "Posición inicial",
     "endLabel": "Posición final",
     "export": "Exportar GIF",
-    "frameCount": "{{count}} fotograma(s)",
+    "frameCount_one": "{{count}} fotograma",
+    "frameCount_other": "{{count}} fotogramas",
     "pathInitial": "Posición inicial",
     "pathMove": "Después del movimiento {{number}}: {{move}}",
     "pathVariation": "Variante: {{move}}",
@@ -31,9 +32,7 @@
     "gifSuccess": "GIF animado descargado.",
     "progress": "Exportando fotograma {{current}} de {{total}}…",
     "failed": "Error al exportar: {{error}}",
-    "frameCap": "Demasiados fotogramas (máximo {{max}}). Elige un rango más corto.",
-    "frameCount_one": "{{count}} fotograma",
-    "frameCount_other": "{{count}} fotogramas"
+    "frameCap": "Demasiados fotogramas (máximo {{max}}). Elige un rango más corto."
   },
   "CycleBoardDisplay": "Alternar vista del tablero",
   "buttons": {
@@ -44,6 +43,8 @@
     "draw": "Reclamar tablas",
     "playfirst": "Jugar primero",
     "swap": "Cambiar colores",
+    "roll1": "Lanzar un dado",
+    "roll2": "Lanzar dos dados",
     "numbers": {
       "one": "Uno (1)",
       "two": "Dos (2)",
@@ -83,9 +84,7 @@
       "gold99": "Configuración rápida",
       "silver99e7": "Configuración rápida, elefante en e7",
       "silver99d7": "Configuración rápida, elefante en d7"
-    },
-    "roll1": "Lanzar un dado",
-    "roll2": "Lanzar dos dados"
+    }
   },
   "Cancel": "Cancelar",
   "CanPie": "Este jugador tiene la opción de cambiar de lugar.",
@@ -978,7 +977,8 @@
     "accepted": "Aceptado",
     "activity": "Actividad",
     "added": "Añadido",
-    "average": "Promedio",
+    "allUsers": "Todos los usuarios",
+    "averageElo": "Elo",
     "averageLength": "Duración promedio",
     "avgScore": "Puntuación promedio",
     "challenged": "Desafiado",
@@ -1006,6 +1006,7 @@
     "endDate": "Fecha de fin",
     "ended": "Finalizado",
     "explorationDisabled": "¿Exploración desactivada?",
+    "drawRate": "Tasa de empates",
     "firstPlayerWins": "Gana el primer jugador",
     "game": "Juego",
     "gameEnded": "Juego finalizado",
@@ -1040,12 +1041,18 @@
     "numPlayersHeader": "Núm. Jugadores",
     "numPlays": "Núm. de partidas",
     "numRecords": "Núm. de registros",
+    "pieInvoked": "Regla del pastel invocada",
+    "rivalryPair": "Pareja",
+    "gamesTogether": "Partidas juntos",
+    "pieRate": "Tasa de regla del pastel",
+    "playerCount": "Jugadores",
     "oneMonth": "1 mes",
     "oneWeek": "1 semana",
     "oneYear": "1 año",
     "opponents": "Oponentes",
     "organizer": "Organizador",
     "participants": "Participantes",
+    "past30Days": "Últimos 30 días",
     "place": "Lugar",
     "playCount": "Conteo de partidas",
     "player": "Jugador",
@@ -1090,17 +1097,7 @@
     "status": "Estado",
     "unhighlight": "Desmarcar",
     "unwatch": "Dejar de seguir",
-    "rate": "Calificar",
-    "drawRate": "Tasa de empates",
-    "pieInvoked": "Regla del pastel invocada",
-    "rivalryPair": "Pareja",
-    "gamesTogether": "Partidas juntos",
-    "pieRate": "Tasa de regla del pastel",
-    "playerCount": "Jugadores",
-    "allUsers": "Todos los usuarios",
-    "past30Days": "Últimos 30 días",
-    "highConfidenceGlicko": "Glicko de alta confianza",
-    "averageElo": "Elo"
+    "rate": "Calificar"
   },
   "TimeRemaining": "Tiempo restante",
   "ToggleFullSize": "Alternar imagen del tablero de altura completa",
@@ -1301,6 +1298,7 @@
   },
   "explore": {
     "intro": "Esta página te permite explorar diferentes formas de ordenar la lista de juegos. Selecciona la vista que desees a continuación. Al hacer clic en el nombre de un juego, irás a la página principal de ese juego con información adicional.",
+    "filterRecommended": "Solo juegos recomendados",
     "views": {
       "all": {
         "title": "Todos los juegos"
@@ -1341,14 +1339,14 @@
         "title": "Orden aleatorio",
         "description": "Juegos en orden aleatorio. Haz clic en el botón para rebarajar."
       }
-    },
-    "filterRecommended": "Solo juegos recomendados"
+    }
   },
   "stats": {
     "selectStatistic": "Selecciona una estadística",
     "downloadSummary": "Descargar todas las estadísticas resumidas",
+    "loadingSummary": "Cargando estadísticas…",
+    "summaryLoadError": "No se pudieron cargar las estadísticas. Puedes intentarlo de nuevo más tarde o descargar los datos sin procesar.",
     "downloadReports": "Descargar todos los informes de juegos",
-    "ratingsNote": "Ten en cuenta que las calificaciones que se muestran aquí se generan dinámicamente y pueden diferir de la calificación estática visible en otros lugares. Estamos trabajando para armonizar todo con el tiempo.",
     "generatedDaily": "Las estadísticas se generan diariamente a las 6:00 a. m. UTC.",
     "recordsBetween": "Los registros analizados incluyen partidas completadas entre {{oldest}} y {{newest}} ({{days}}).",
     "day_one": "{{count}} día",
@@ -1358,80 +1356,11 @@
     "year_many": "",
     "year_other": "{{count}} años",
     "playersPlayedGames": "En ese tiempo, {{numPlayers}} jugadores han jugado {{numGames}} partidas.",
-    "explanations": {
-      "highestSingle": "Lista de todas las clasificaciones registradas. El sistema ignora las partidas marcadas explícitamente como no clasificadas y también aquellas que terminan antes de haber realizado tres movimientos. Las clasificaciones usan Glicko-2 conservador (95% de confianza) (clasificación − 2×RD), y se muestran tanto Glicko como el Elo heredado. Glicko comienza en 1200 con una RD de 350; Elo comienza en 1200 con una *K* estática de 30. Trueskill usa la configuración predeterminada de Microsoft (rango de clasificación de 0 a 50, comenzando en 25).",
-      "avgRatings": "Estas columnas son promedios ponderados de tus evaluaciones de Glicko y Elo en todo el sitio.",
-      "topPlayers": "Esta tabla enumera cada combinación disponible de juego y variante junto con el jugador con la evaluación más alta para esa combinación, clasificado por Glicko-2 conservador (evaluación − 2×RD). El Elo se muestra como referencia.",
-      "numPlays": "Esta tabla enumera cada juego, cuántas veces se jugó, por cuántos jugadores únicos y el `índice h` del juego. El índice h de un juego es el número de jugadores que han jugado a ese juego al menos ese número de veces (por lo que un índice h de 5 significa que 5 jugadores diferentes han jugado a ese juego al menos 5 veces). También proporciona un histograma de partidas completadas para ese juego. La vista previa muestra las últimas 10 semanas, con la semana más reciente a la derecha. Al hacer clic en la vista previa se mostrará el historial completo de partidas completadas, en \"bloques\" de siete días, con la semana más reciente a la derecha.",
-      "playerStats": "Muestra cada jugador registrado junto con el total de sus partidas jugadas, un recuento de juegos únicos y la cantidad de oponentes diferentes contra los que jugó. También proporciona un `índice h`, que representa la cantidad de juegos a los que has jugado al menos esa cantidad de veces (por ejemplo, si has jugado tres juegos diferentes solo una vez cada uno, tu índice es 1. Tan pronto como hayas jugado a esos tres juegos al menos tres veces *cada uno*, el índice aumentará a 3). También hay un `índice h` para los oponentes a los que te has enfrentado. Se incluye un histograma de actividad que muestra el número de partidas completadas cada semana, con la semana más reciente a la derecha. La vista previa muestra las diez semanas más recientes. Al hacer clic en ella, se mostrará el historial completo.",
-      "gameStats": "Esta tabla muestra cada combinación de juego y variante junto con la cantidad de partidas registradas, la duración promedio de la partida (número de movimientos), la mediana de la duración, la tasa de victorias del primer jugador y la tasa de empates (solo en partidas de dos jugadores con más de dos movimientos). **¡Las estadísticas de victorias del primer jugador y de empates deben tratarse con cuidado!** El tamaño de la muestra es pequeño y sesgado. Hay muchos factores de confusión que podrían explicar una tasa extrema. Ten en cuenta que la tasa de victorias del primer jugador ignora por completo si se invocó la regla del pastel. Los empates se cuentan como media victoria para el primer jugador al calcular la tasa de victorias del primer jugador.",
-      "tourneyStats": "Muestra a cada jugador que ha participado en torneos automatizados y sus estadísticas resumidas, incluyendo la cantidad de victorias, la cantidad de posiciones entre el 50% superior y la puntuación. Tu puntuación es la suma de los puntos recibidos en cada torneo. Los puntos se otorgan sobre 100, según tu posición: el primer lugar obtiene 100 puntos y el último no obtiene ninguno.",
-      "pieStats": "Partidas que admiten la regla del pastel, mostrando con qué frecuencia se invocó.",
-      "rivalryStats": "Emparejamientos de dos jugadores con al menos cincuenta partidas jugadas entre sí, ordenados por partidas jugadas. Las parejas se mantienen en el anonimato hasta que los jugadores elijan mostrar sus nombres."
-    },
-    "siteStats": {
-      "weekBuckets": "Las partidas se cuentan en bloques de siete días. La barra más a la izquierda es la primera semana en que se registraron partidas completadas. La barra más a la derecha es la semana más reciente (o parte de ella).",
-      "cumulativePastYear": "Acumulativo (año pasado)",
-      "average": "Promedio",
-      "median": "Mediana",
-      "middleHalf": "Mitad central",
-      "gamesCompletedPerWeek": "Partidas completadas por semana",
-      "weekNumber": "Semana n.º",
-      "completedGames": "Partidas completadas",
-      "playersCompletedPerWeek": "Número de jugadores que completan partidas por semana",
-      "numberOfPlayers": "Número de jugadores",
-      "firstTimersIntro": "Este gráfico rastrea el número de usuarios que completaron su primera partida esa semana. Los números son acumulativos, lo que significa que nunca disminuirán, y el punto más a la derecha siempre debería mostrar el recuento de usuarios registrados actualmente. Por supuesto, se espera que los números se estabilicen en algún momento, pero da una indicación del crecimiento.",
-      "firstTimersCumulative": "Primeras partidas completadas, acumulativo",
-      "usersFirstGame": "Usuarios que completaron su primera partida",
-      "countryIntro": "Esto muestra el desglose de los países desde los cuales los jugadores afirman estar jugando. Solo incluye códigos de país que el sistema pueda interpretar.",
-      "activeCountryIntro": "Jugadores con al menos una partida completada en el archivo de registros, agrupados por el país de su perfil.",
-      "playContext": "Partidas casuales: {{casual}} ({{casualRate}}). Partidas de torneo o evento oficial: {{event}} ({{eventRate}}).",
-      "pieRateIntro": "Partidas que admiten la regla del pastel (pie rule), mostrando qué tan seguido se invocó.",
-      "playerCountMixIntro": "Partidas que admiten más de dos jugadores, mostrando qué tan seguido se usó cada cantidad de jugadores.",
-      "returningPlayersIntro": "Jugadores que completaron al menos una partida esa semana y que ya habían completado su primera partida en una semana anterior.",
-      "returningPlayersPerWeek": "Jugadores recurrentes por semana",
-      "returningPlayers": "Jugadores recurrentes",
-      "timeoutRate": "La tasa acumulada total de tiempo agotado es {{rate}}.",
-      "timeoutRatePerWeek": "Tasa de tiempo agotado por semana",
-      "timeoutRateAxis": "Tasa de tiempo agotado",
-      "abandonedRate": "La tasa de partidas abandonadas (partidas caducadas con reloj flexible cerradas tras una inactividad prolongada) es {{rate}}.",
-      "abandonedRatePerWeek": "Tasa de abandono por semana",
-      "abandonedRateAxis": "Tasa de abandono",
-      "hoursPerMoveIntro": "Las horas por movimiento resumen el ritmo general del sitio según las partidas completadas. Se excluyen las partidas que terminan por tiempo agotado, abandono o con menos de dos turnos. Las tasas por partida se recortan en los percentiles 5 y 95 para que los valores atípicos extremos no dominen el resumen. La media se pondera por la cantidad de movimientos; la mediana trata por igual a cada partida que califica. El gráfico de tendencia muestra la mediana de horas por movimiento para las partidas completadas cada semana (se omite la semana actual parcial).",
-      "hoursPerMove": "Horas por jugada",
-      "hoursPerMoveMean": "Media ponderada por movimientos (horas)",
-      "hoursPerMoveMedian": "Mediana por partida (horas)",
-      "hoursPerMoveGames": "Partidas elegibles",
-      "hoursPerMovePerWeek": "Mediana de horas por movimiento por semana",
-      "rivalriesIntro": "Parejas de dos jugadores más frecuentes (al menos cinco partidas juntos). Las parejas son anónimas hasta que los jugadores elijan mostrar sus nombres.",
-      "seasonalityIntro": "Cuándo los jugadores hacen sus jugadas, por día de la semana y hora (UTC), en los últimos {{days}} días. Refleja mejor la actividad del sitio que la hora de finalización de las partidas asincrónicas.",
-      "movesByDow": "Jugadas por día de la semana (UTC)",
-      "playersByDow": "Jugadores activos por día de la semana (UTC)",
-      "movesByHour": "Jugadas por hora del día (UTC)",
-      "movesMade": "Jugadas",
-      "activePlayers": "Jugadores activos",
-      "dayOfWeekUtc": "Día de la semana (UTC)",
-      "hourOfDayUtc": "Hora (UTC)",
-      "dowMon": "Lun",
-      "dowTue": "Mar",
-      "dowWed": "Mié",
-      "dowThu": "Jue",
-      "dowFri": "Vie",
-      "dowSat": "Sáb",
-      "dowSun": "Dom",
-      "activeMoversIntro": "Jugadores distintos que realizaron al menos un movimiento cada semana. Usa los mismos períodos de siete días que los gráficos de arriba. Los datos de movimientos cubren aproximadamente el último año, por lo que las semanas anteriores pueden mostrar cero incluso si se completaron partidas.",
-      "activeMoversPerWeek": "Jugadores activos (≥1 movimiento) por semana",
-      "timeoutAbandonRatePerWeek": "Tasa de tiempo agotado y abandono por semana",
-      "timeoutAbandonRateAxis": "Tasa de tiempo agotado y abandono"
-    },
-    "gameStats": {
-      "pieRateIntro": "Partidas que admiten la regla del pastel, mostrando con qué frecuencia se aplicó."
-    },
-    "playerStats": {
-      "rivalriesIntro": "Emparejamientos de dos jugadores más frecuentes (al menos cinco partidas juntos). Las parejas son anónimas hasta que los jugadores elijan mostrar sus nombres.",
-      "publicRivalriesOptIn": "Mostrar mi nombre en la tabla pública de rivalidades (ambos jugadores deben optar por participar)"
-    },
     "histogramFor": "Histograma de {{name}}",
+    "link": {
+      "copy": "Copiar enlace a esta sección",
+      "copied": "¡Copiado!"
+    },
     "tabs": {
       "ratings": "Clasificaciones",
       "games": "Partidas",
@@ -1458,11 +1387,78 @@
         "pace": "Ritmo"
       }
     },
-    "loadingSummary": "Cargando estadísticas…",
-    "summaryLoadError": "No se pudieron cargar las estadísticas. Puedes intentarlo de nuevo más tarde o descargar los datos sin procesar.",
-    "link": {
-      "copy": "Copiar enlace a esta sección",
-      "copied": "¡Copiado!"
+    "explanations": {
+      "highestSingle": "Lista de todas las clasificaciones registradas. El sistema ignora las partidas marcadas explícitamente como no clasificadas y también aquellas que terminan antes de haber realizado tres movimientos. Las clasificaciones usan Glicko-2 conservador (95% de confianza) (clasificación − 2×RD), y se muestran tanto Glicko como el Elo heredado. Glicko comienza en 1200 con una RD de 350; Elo comienza en 1200 con una *K* estática de 30. Trueskill usa la configuración predeterminada de Microsoft (rango de clasificación de 0 a 50, comenzando en 25).",
+      "avgRatings": "Estas columnas son promedios ponderados de tus evaluaciones de Glicko y Elo en todo el sitio.",
+      "topPlayers": "Esta tabla enumera cada combinación disponible de juego y variante junto con el jugador con la evaluación más alta para esa combinación, clasificado por Glicko-2 conservador (evaluación − 2×RD). El Elo se muestra como referencia.",
+      "numPlays": "Esta tabla enumera cada juego, cuántas veces se jugó, por cuántos jugadores únicos y el `índice h` del juego. El índice h de un juego es el número de jugadores que han jugado a ese juego al menos ese número de veces (por lo que un índice h de 5 significa que 5 jugadores diferentes han jugado a ese juego al menos 5 veces). También proporciona un histograma de partidas completadas para ese juego. La vista previa muestra las últimas 10 semanas, con la semana más reciente a la derecha. Al hacer clic en la vista previa se mostrará el historial completo de partidas completadas, en \"bloques\" de siete días, con la semana más reciente a la derecha.",
+      "playerStats": "Muestra cada jugador registrado junto con el total de sus partidas jugadas, un recuento de juegos únicos y la cantidad de oponentes diferentes contra los que jugó. También proporciona un `índice h`, que representa la cantidad de juegos a los que has jugado al menos esa cantidad de veces (por ejemplo, si has jugado tres juegos diferentes solo una vez cada uno, tu índice es 1. Tan pronto como hayas jugado a esos tres juegos al menos tres veces *cada uno*, el índice aumentará a 3). También hay un `índice h` para los oponentes a los que te has enfrentado. Se incluye un histograma de actividad que muestra el número de partidas completadas cada semana, con la semana más reciente a la derecha. La vista previa muestra las diez semanas más recientes. Al hacer clic en ella, se mostrará el historial completo.",
+      "gameStats": "Esta tabla muestra cada combinación de juego y variante junto con la cantidad de partidas registradas, la duración promedio de la partida (número de movimientos), la mediana de la duración, la tasa de victorias del primer jugador y la tasa de empates (solo en partidas de dos jugadores con más de dos movimientos). **¡Las estadísticas de victorias del primer jugador y de empates deben tratarse con cuidado!** El tamaño de la muestra es pequeño y sesgado. Hay muchos factores de confusión que podrían explicar una tasa extrema. Ten en cuenta que la tasa de victorias del primer jugador ignora por completo si se invocó la regla del pastel. Los empates se cuentan como media victoria para el primer jugador al calcular la tasa de victorias del primer jugador.",
+      "pieStats": "Partidas que admiten la regla del pastel, mostrando con qué frecuencia se invocó.",
+      "rivalryStats": "Emparejamientos de dos jugadores con al menos cincuenta partidas jugadas entre sí, ordenados por partidas jugadas. Las parejas se mantienen en el anonimato hasta que los jugadores elijan mostrar sus nombres.",
+      "tourneyStats": "Muestra a cada jugador que ha participado en torneos automatizados y sus estadísticas resumidas, incluyendo la cantidad de victorias, la cantidad de posiciones entre el 50% superior y la puntuación. Tu puntuación es la suma de los puntos recibidos en cada torneo. Los puntos se otorgan sobre 100, según tu posición: el primer lugar obtiene 100 puntos y el último no obtiene ninguno."
+    },
+    "gameStats": {
+      "pieRateIntro": "Partidas que admiten la regla del pastel, mostrando con qué frecuencia se aplicó."
+    },
+    "playerStats": {
+      "rivalriesIntro": "Emparejamientos de dos jugadores más frecuentes (al menos cinco partidas juntos). Las parejas son anónimas hasta que los jugadores elijan mostrar sus nombres.",
+      "publicRivalriesOptIn": "Mostrar mi nombre en la tabla pública de rivalidades (ambos jugadores deben optar por participar)"
+    },
+    "siteStats": {
+      "weekBuckets": "Las partidas se cuentan en bloques de siete días. La barra más a la izquierda es la primera semana en que se registraron partidas completadas. La barra más a la derecha es la semana más reciente (o parte de ella).",
+      "cumulativePastYear": "Acumulativo (año pasado)",
+      "average": "Promedio",
+      "median": "Mediana",
+      "middleHalf": "Mitad central",
+      "gamesCompletedPerWeek": "Partidas completadas por semana",
+      "weekNumber": "Semana n.º",
+      "completedGames": "Partidas completadas",
+      "playersCompletedPerWeek": "Número de jugadores que completan partidas por semana",
+      "activeMoversIntro": "Jugadores distintos que realizaron al menos un movimiento cada semana. Usa los mismos períodos de siete días que los gráficos de arriba. Los datos de movimientos cubren aproximadamente el último año, por lo que las semanas anteriores pueden mostrar cero incluso si se completaron partidas.",
+      "activeMoversPerWeek": "Jugadores activos (≥1 movimiento) por semana",
+      "numberOfPlayers": "Número de jugadores",
+      "firstTimersIntro": "Este gráfico rastrea el número de usuarios que completaron su primera partida esa semana. Los números son acumulativos, lo que significa que nunca disminuirán, y el punto más a la derecha siempre debería mostrar el recuento de usuarios registrados actualmente. Por supuesto, se espera que los números se estabilicen en algún momento, pero da una indicación del crecimiento.",
+      "firstTimersCumulative": "Primeras partidas completadas, acumulativo",
+      "usersFirstGame": "Usuarios que completaron su primera partida",
+      "countryIntro": "Esto muestra el desglose de los países desde los cuales los jugadores afirman estar jugando. Solo incluye códigos de país que el sistema pueda interpretar.",
+      "activeCountryIntro": "Jugadores con al menos una partida completada en el archivo de registros, agrupados por el país de su perfil.",
+      "playContext": "Partidas casuales: {{casual}} ({{casualRate}}). Partidas de torneo o evento oficial: {{event}} ({{eventRate}}).",
+      "pieRateIntro": "Partidas que admiten la regla del pastel (pie rule), mostrando qué tan seguido se invocó.",
+      "playerCountMixIntro": "Partidas que admiten más de dos jugadores, mostrando qué tan seguido se usó cada cantidad de jugadores.",
+      "returningPlayersIntro": "Jugadores que completaron al menos una partida esa semana y que ya habían completado su primera partida en una semana anterior.",
+      "returningPlayersPerWeek": "Jugadores recurrentes por semana",
+      "returningPlayers": "Jugadores recurrentes",
+      "timeoutRate": "La tasa acumulada total de tiempo agotado es {{rate}}.",
+      "timeoutAbandonRatePerWeek": "Tasa de tiempo agotado y abandono por semana",
+      "timeoutAbandonRateAxis": "Tasa de tiempo agotado y abandono",
+      "timeoutRatePerWeek": "Tasa de tiempo agotado por semana",
+      "timeoutRateAxis": "Tasa de tiempo agotado",
+      "abandonedRate": "La tasa de partidas abandonadas (partidas caducadas con reloj flexible cerradas tras una inactividad prolongada) es {{rate}}.",
+      "abandonedRatePerWeek": "Tasa de abandono por semana",
+      "abandonedRateAxis": "Tasa de abandono",
+      "hoursPerMoveIntro": "Las horas por movimiento resumen el ritmo general del sitio según las partidas completadas. Se excluyen las partidas que terminan por tiempo agotado, abandono o con menos de dos turnos. Las tasas por partida se recortan en los percentiles 5 y 95 para que los valores atípicos extremos no dominen el resumen. La media se pondera por la cantidad de movimientos; la mediana trata por igual a cada partida que califica. El gráfico de tendencia muestra la mediana de horas por movimiento para las partidas completadas cada semana (se omite la semana actual parcial).",
+      "hoursPerMove": "Horas por jugada",
+      "hoursPerMoveMean": "Media ponderada por movimientos (horas)",
+      "hoursPerMoveMedian": "Mediana por partida (horas)",
+      "hoursPerMoveGames": "Partidas elegibles",
+      "hoursPerMovePerWeek": "Mediana de horas por movimiento por semana",
+      "rivalriesIntro": "Parejas de dos jugadores más frecuentes (al menos cinco partidas juntos). Las parejas son anónimas hasta que los jugadores elijan mostrar sus nombres.",
+      "seasonalityIntro": "Cuándo los jugadores hacen sus jugadas, por día de la semana y hora (UTC), en los últimos {{days}} días. Refleja mejor la actividad del sitio que la hora de finalización de las partidas asincrónicas.",
+      "movesByDow": "Jugadas por día de la semana (UTC)",
+      "playersByDow": "Jugadores activos por día de la semana (UTC)",
+      "movesByHour": "Jugadas por hora del día (UTC)",
+      "movesMade": "Jugadas",
+      "activePlayers": "Jugadores activos",
+      "dayOfWeekUtc": "Día de la semana (UTC)",
+      "hourOfDayUtc": "Hora (UTC)",
+      "dowMon": "Lun",
+      "dowTue": "Mar",
+      "dowWed": "Mié",
+      "dowThu": "Jue",
+      "dowFri": "Vie",
+      "dowSat": "Sáb",
+      "dowSun": "Dom"
     }
   },
   "players": {
@@ -1498,11 +1494,11 @@
       "empty": "No hay información disponible en esta sección."
     },
     "hero": {
+      "siteGlicko": "Glicko del sitio",
       "topRatings": "Mejores calificaciones",
       "hIndex": "Índice H",
       "medianResponse": "Mediana del tiempo de respuesta",
-      "recentActivity": "Actividad reciente",
-      "siteGlicko": "Glicko del sitio"
+      "recentActivity": "Actividad reciente"
     },
     "pin": {
       "add": "Fijar esta sección en la parte superior",
@@ -1551,6 +1547,7 @@
     "seedPlaceholder": "Deja en blanco para un rompecabezas aleatorio nuevo",
     "seedHelp": "Usa la misma semilla para volver a jugar o competir en la misma configuración. El servidor asignará una si dejas esto en blanco.",
     "rematch": "Jugar de nuevo (misma semilla)",
+    "rematchNewSeed": "Volver a jugar (semilla diferente)",
     "copyShareLink": "Compartir enlace del rompecabezas",
     "outcome": {
       "passed": "Superado",
@@ -1582,8 +1579,7 @@
       "grade": "Calificación",
       "attempts": "Intentos",
       "date": "Mejor partida"
-    },
-    "rematchNewSeed": "Volver a jugar (semilla diferente)"
+    }
   },
   "me": {
     "challengedNotice": "¡Te han desafiado!",
@@ -1601,17 +1597,17 @@
         "gameEnd_win": "Ganaste tu partida de <gameLink>{{metaGame}}</gameLink>",
         "gameEnd_lose": "Perdiste tu partida de <gameLink>{{metaGame}}</gameLink>",
         "gameEnd_draw": "Tu partida de <gameLink>{{metaGame}}</gameLink> terminó en empate",
+        "gameEnd_solo": "Tu partida de <gameLink>{{metaGame}}</gameLink> ha terminado",
         "ratingChange": "Tu clasificación para <gameLink>{{metaGame}}</gameLink>{{variantsInline}} cambió {{delta}} puntos de {{oldRatingDisplay}} a {{newRatingDisplay}}.",
         "challengeIssued": "{{challengerName}} te desafió a {{metaGame}}",
         "challengeDeclined": "{{declinerName}} rechazó tu desafío de {{metaGame}}",
         "challengeRevoked": "{{revokerName}} retiró el desafío de {{metaGame}}",
         "eventInvitation": "{{organizerName}} te invitó a {{eventName}}",
-        "completedGameChat": "{{commenterName}} tiene algo que decir en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>",
-        "completedGameChat_backfill": "Tienes mensajes sin leer en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>",
-        "gameEnd_solo": "Tu partida de <gameLink>{{metaGame}}</gameLink> ha terminado",
         "tournamentStart": "El torneo {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> ha comenzado.",
         "tournamentEnd": "El torneo {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> ha finalizado.",
-        "tournamentEnd_withWinner": "El torneo {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> ha finalizado. {{winnerName}} ganó."
+        "tournamentEnd_withWinner": "El torneo {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> ha finalizado. {{winnerName}} ganó.",
+        "completedGameChat": "{{commenterName}} tiene algo que decir en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>",
+        "completedGameChat_backfill": "Tienes mensajes sin leer en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>"
       }
     }
   },
@@ -1850,6 +1846,7 @@
     "introLoggedIn": "Experimenta con juegos en el laboratorio de pruebas (Playground). Las posiciones guardadas se sincronizan con tu cuenta; tu sesión actual también se conserva en este dispositivo para que puedas reanudarla después de actualizar la página.",
     "noSimultaneous": "El laboratorio de pruebas solo admite juegos secuenciales. Los juegos simultáneos no están disponibles.",
     "tabNew": "Nueva partida",
+    "feelingAdventurous": "Me siento aventurero",
     "tabPaste": "Pegar estado",
     "tabSaved": "Cargar guardado",
     "selectPlayerCount": "Selecciona el número de jugadores.",
@@ -1872,10 +1869,12 @@
     "saveAsNew": "Guardar como nuevo…",
     "copyOfName": "Copia de {{name}}",
     "savedToast": "Guardado.",
-    "importLocalBanner": "Tienes {{count}} partida(s) guardada(s) del laboratorio de pruebas en este dispositivo. ¿Deseas copiarlas a tu cuenta?",
+    "importLocalBanner_one": "Tienes una partida guardada de Playground en este dispositivo. ¿Copiarla a tu cuenta?",
+    "importLocalBanner_other": "Tienes {{count}} partidas guardadas de Playground en este dispositivo. ¿Copiarlas a tu cuenta?",
     "importLocal": "Copiar a la cuenta",
     "importLocalDismiss": "Ahora no",
-    "importLocalSuccess": "Se copiaron {{count}} partida(s) guardada(s) a tu cuenta.",
+    "importLocalSuccess_one": "Se copió una partida guardada a tu cuenta.",
+    "importLocalSuccess_other": "Se copiaron {{count}} partidas guardadas a tu cuenta.",
     "importLocalPartial": "No se pudieron copiar algunas partidas guardadas: {{names}}",
     "onThisDevice": "En este dispositivo",
     "exitToLauncher": "Salir al iniciador",
@@ -1901,12 +1900,7 @@
       "commentMarkdown": "Comentario (Markdown)",
       "commentPlaceholder": "Agrega un comentario en Markdown…",
       "nothingToPreview": "Aún no hay nada para previsualizar."
-    },
-    "feelingAdventurous": "Me siento aventurero",
-    "importLocalBanner_one": "Tienes una partida guardada de Playground en este dispositivo. ¿Copiarla a tu cuenta?",
-    "importLocalBanner_other": "Tienes {{count}} partidas guardadas de Playground en este dispositivo. ¿Copiarlas a tu cuenta?",
-    "importLocalSuccess_one": "Se copió una partida guardada a tu cuenta.",
-    "importLocalSuccess_other": "Se copiaron {{count}} partidas guardadas a tu cuenta."
+    }
   },
   "Wikipedia": "Wikipedia"
 }
