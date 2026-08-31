@@ -25,6 +25,10 @@ import {
   prevVarFocus,
 } from "../../lib/GameMove/moveTreeKeyboard";
 
+function childAtPath(node, index) {
+  return node?.children?.[index] ?? null;
+}
+
 function GameMoves(props) {
   const focusRowRef = useRef();
   const lastRowRef = useRef();
@@ -282,7 +286,10 @@ function GameMoves(props) {
             let className = "gameMove";
             if (j === focus.exPath.length - 1) className += " gameMoveFocus";
             curNumVariations = node.children.length;
-            node = node.children[focus.exPath[j]];
+            node = childAtPath(node, focus.exPath[j]);
+            if (!node) {
+              break;
+            }
             path.push([
               {
                 class: className,
@@ -306,7 +313,7 @@ function GameMoves(props) {
             ]);
           }
           let exPath = [...focus.exPath];
-          while (node.children.length > 0) {
+          while (node && node.children.length > 0) {
             let next = [];
             for (let k = 0; k < node.children.length; k++) {
               const c = node.children[k];
@@ -387,7 +394,10 @@ function GameMoves(props) {
             curNumVariations = node.children.length;
             if (j === 0) curNumVariations += 1;
           }
-          node = node.children[focus.exPath[j]];
+          node = childAtPath(node, focus.exPath[j]);
+          if (!node) {
+            break;
+          }
           path.push([
             {
               class: className,
@@ -407,7 +417,7 @@ function GameMoves(props) {
           ]);
         }
         let exPath = [...focus.exPath];
-        while (node.children.length > 0) {
+        while (node && node.children.length > 0) {
           let next = [];
           if (
             focus.moveNumber < exploration.length - 1 &&

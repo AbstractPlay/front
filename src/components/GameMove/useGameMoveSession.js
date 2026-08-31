@@ -1359,6 +1359,7 @@ export function useGameMoveSession(props) {
       nextFocus.moveNumber === explorationRef.current.nodes.length - 1
     ) {
       node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variation.
+      nextFocus.exPath = [];
     }
     let engine = GameFactory(currentGame.metaGame, node.state);
     partialMoveRenderRef.current = false;
