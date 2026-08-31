@@ -70,7 +70,7 @@ Content-Type: application/json
 `callAuthApi`:
 
 1. Obtains the JWT via [`getAuthTokenFromSession()`](../src/lib/authSession.js) (cached while valid; silently refreshed through Amplify when near expiry).
-2. If no token and `requireAuth` is true (default), calls `Auth.federatedSignIn()` and returns `undefined`.
+2. If no token and `requireAuth` is true (default), calls `signInWithRedirect()` and returns `undefined`.
 3. On HTTP 401/403 with `requireAuth` true, forces one session refresh and retries the request; redirects to login only if the retry also fails.
 4. On HTTP 401/403 with `requireAuth` false, returns the response without redirecting.
 

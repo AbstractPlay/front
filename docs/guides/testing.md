@@ -84,7 +84,7 @@ The engine runner in `bin/` picks up new contracts automatically.
 1. Colocate tests as `Component.test.js` next to the component, or under `src/pages/` for page shells.
 2. Import from `@testing-library/react` and `@testing-library/user-event`.
 3. Mock heavy dependencies:
-   - `aws-amplify` / `Auth` for auth flows
+   - `aws-amplify/auth` (`signInWithRedirect`, `fetchAuthSession`, etc.) for auth flows
    - `fetch` for API calls
    - `@abstractplay/gameslib` / `@abstractplay/renderer` for game components (when not using `test:engines`)
 

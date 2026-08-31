@@ -3,8 +3,10 @@ import { create } from "zustand";
 export const useStore = create((set, get) => ({
   authSession: {
     status: "unknown",
-    user: null,
     token: null,
+    userId: null,
+    username: null,
+    email: null,
   },
   setAuthSession: (session) =>
     set((state) => ({
@@ -12,7 +14,13 @@ export const useStore = create((set, get) => ({
     })),
   clearAuthSession: () =>
     set({
-      authSession: { status: "guest", user: null, token: null },
+      authSession: {
+        status: "guest",
+        token: null,
+        userId: null,
+        username: null,
+        email: null,
+      },
     }),
 
   globalMe: null,

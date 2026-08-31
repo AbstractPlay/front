@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Auth } from "aws-amplify";
+import { redirectToSignIn } from "../lib/amplifyAuth";
 import UserSettingsModal from "./UserSettingsModal";
 import NewProfile from "./NewProfile";
 import { useStore } from "../stores";
@@ -10,7 +10,7 @@ import { fetchProfile } from "../lib/globalMeBootstrap";
 
 function LogInOutButton({ closeBurger, variant = "default" }) {
   const { t } = useTranslation();
-  const { status, user } = useAuthSession();
+  const { status, userId, username } = useAuthSession();
   const [showUserSettingsModal, showUserSettingsModalSetter] = useState(false);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
   const globalMe = useStore((state) => state.globalMe);
@@ -37,11 +37,11 @@ function LogInOutButton({ closeBurger, variant = "default" }) {
     }
   };
 
-  if (status !== "ready" || user === null) {
+  if (status !== "ready" || !userId) {
     return (
       <button
         className="button is-small apButton"
-        onClick={() => Auth.federatedSignIn()}
+        onClick={() => redirectToSignIn()}
         id={variant === "compact" ? "login-button" : undefined}
       >
         {t("LogIn")}
@@ -49,8 +49,7 @@ function LogInOutButton({ closeBurger, variant = "default" }) {
     );
   }
 
-  const username = user.signInUserSession.idToken.payload["cognito:username"];
-  const playerPath = `/player/${user.signInUserSession.idToken.payload.sub}`;
+  const playerPath = `/player/${userId}`;
   const settingsModals = (
     <>
       <UserSettingsModal
