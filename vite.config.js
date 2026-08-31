@@ -25,13 +25,20 @@ function jsxInJsFiles() {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const realMode = env.VITE_REAL_MODE ?? "local";
-  const siblingGameslib = path.resolve(__dirname, "../gameslib/build/index.js");
+  const siblingGameslib = path.resolve(
+    __dirname,
+    "../gameslib/build/index-browser.js"
+  );
   const gameslibEntry = fs.existsSync(siblingGameslib)
     ? siblingGameslib
     : path.resolve(
         __dirname,
-        "node_modules/@abstractplay/gameslib/build/index.js"
+        "node_modules/@abstractplay/gameslib/build/index-browser.js"
       );
+  const useBrowserGameslib =
+    mode === "test" ||
+    process.env.VITEST === "true" ||
+    process.env.VITEST === "1";
 
   return {
     plugins: [
@@ -45,6 +52,11 @@ export default defineConfig(({ mode }) => {
         buffer: "buffer",
         "@abstractplay/gameslib": gameslibEntry,
       },
+      // Vitest runs in Node and would pick gameslib's "node" export (i18n-node + fs).
+      conditions: useBrowserGameslib
+        ? ["browser", "import", "module", "default"]
+        : undefined,
+      dedupe: ["i18next", "react-i18next"],
     },
     define: {
       global: "globalThis",
