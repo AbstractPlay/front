@@ -85,6 +85,7 @@
     "full-dev": "npm run build-dev && npm run deploy && npm run publish-locales",
     "full-prod": "npm run build-prod && npm run deploy-prod && npm run publish-locales:prod",
     "test": "vitest run",
+    "test:scripts": "node --test test/scripts/*.test.mjs",
     "test:watch": "vitest",
     "test:ci": "npm run sync-locales && vitest run && npm run test:engines",
     "test:engines": "node bin/test-exploration-contracts.mjs",
@@ -98,6 +99,8 @@
     "sync-csp:prod": "node bin/sync-cloudfront-csp.mjs --stage prod",
     "publish-locales": "node bin/publish-locales.mjs --stage dev",
     "publish-locales:prod": "node bin/publish-locales.mjs --stage prod",
+    "translate": "node bin/translate.mjs public/locales/en/apfront.json",
+    "prune-locales": "node bin/locale-prune.mjs public/locales/en/apfront.json",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "npm-login": "npm login --scope=@abstractplay --auth-type=legacy --registry=https://npm.pkg.github.com",
     "build-bulma": "sass --no-source-map --load-path=node_modules src/myBulma.scss src/myBulma.css"

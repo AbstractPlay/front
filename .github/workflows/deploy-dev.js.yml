@@ -91,6 +91,9 @@ jobs:
           package.json
 
 # --- MACHINE TRANSLATION PIPELINE START ---
+    - name: Prune stale managed locale keys
+      run: node bin/locale-prune.mjs public/locales/en/apfront.json
+
     - name: Run Machine Translation on Locales
       env:
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
