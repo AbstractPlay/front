@@ -44,10 +44,17 @@ jobs:
       - name: Add GitHub Packages auth
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT_READ_PACKAGES }}" >> .npmrc
 
+      - name: Reject merge conflict markers in dep files
+        run: |
+          if grep -r '^<<<<<<<' package.json package-lock.json ci-deps.dev.json ci-deps.prod.json 2>/dev/null; then
+            echo "Conflict markers found in dependency files"
+            exit 1
+          fi
+
       - name: Install NPM dependencies
         run: npm ci
 
-      - name: Check ci-deps manifests
+      - name: Validate ci-deps manifests
         run: node bin/check-ci-deps.mjs
 
       - name: Install pinned AP dependencies
@@ -55,7 +62,10 @@ jobs:
           AP_GAMESLIB_VERSION: ${{ inputs.ap_gameslib_version }}
           AP_RENDERER_VERSION: ${{ inputs.ap_renderer_version }}
           AP_SOURCE: ${{ inputs.ap_source }}
-        run: node bin/install-ap-deps.mjs --stage ${{ inputs.ap_deps_stage }} --for-tests
+        run: node bin/install-ap-deps.mjs --stage ${{ inputs.ap_deps_stage }}
+
+      - name: Verify package.json matches ci-deps
+        run: node bin/check-ci-deps.mjs --stage ${{ inputs.ap_deps_stage }} --strict
 
       - name: Run tests
         run: npm run test:ci

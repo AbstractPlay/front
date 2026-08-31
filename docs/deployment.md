@@ -42,10 +42,10 @@ GitHub Actions workflows:
 
 CI steps:
 
-1. Install Serverless and run `npm ci` (with GitHub Packages auth).
-2. **Test job** (required before deploy): `bin/install-ap-deps.mjs --for-tests` installs `@abstractplay/gameslib` (full registry) plus pinned renderer, then runs `npm run test:ci` and lint.
-3. **Deploy job**: `bin/install-ap-deps.mjs` installs the pinned **production** gameslib and renderer from `ci-deps.prod.json` (or dispatch payload). Prod installs are rejected if gameslib was built with a dev registry (`production=false`).
-4. Auto-commit `ci-deps.dev.json` or `ci-deps.prod.json` (stage-specific), `package-lock.json`, and synced `package.json` AP version fields when they change (dispatch only).
+1. Reject merge conflict markers in `package.json`, `package-lock.json`, and `ci-deps.*.json`.
+2. `npm ci` (with GitHub Packages auth).
+3. **Test job** (required before deploy): validate manifests → `bin/install-ap-deps.mjs --stage dev|prod` → strict sync check → `npm run test:ci` and lint.
+4. **Deploy job**: same dep order for the stage, then auto-commit `ci-deps.*.json`, `package-lock.json`, and synced `package.json` AP fields on `repository_dispatch` only.
 5. `npm run build-dev` or `build-prod`.
 6. `serverless client deploy`.
 7. Publish locale JSON files to S3 (`bin/publish-locales.mjs`).
@@ -85,20 +85,22 @@ Published `gameslib` and `renderer` packages use immutable `1.0.0-ci-{GITHUB_RUN
 
 1. **renderer** publishes and dispatches `renderer_version` to **gameslib** and **designer**.
 2. **gameslib** installs that renderer, tests, publishes, then dispatches `gameslib_version` + `renderer_version` to front and the backends.
-3. Each consumer runs `npm ci`, then `bin/install-ap-deps.mjs`, which installs the exact versions from the dispatch payload (or falls back to [`ci-deps.prod.json`](../ci-deps.prod.json) / [`ci-deps.dev.json`](../ci-deps.dev.json) on consumer-only pushes).
+3. Each consumer runs `npm ci`, validates manifests, then `bin/install-ap-deps.mjs --stage dev|prod`, which syncs `package.json` and installs exact versions from the dispatch payload or `ci-deps.<stage>.json`.
 
-You do not need to manually bump AP dependency versions in `package.json` after a gameslib or renderer publish — CI updates the stage-specific ci-deps file and the lockfile automatically.
+After a merge that touches dependency files, run `npm run sync-deps` on `develop` (or `npm run sync-deps:prod` on `main`) and commit `ci-deps.*.json`, `package.json`, and `package-lock.json` together. Do not hand-merge version strings in `package.json` — regenerate with `sync-deps`.
 
 `ci-deps.prod.json` is protected on `main` via `.gitattributes` (`merge=ours`) so merges from `develop` do not overwrite production pins.
 
-### Test vs deploy gameslib
+### Prod API lag
 
-Engine contract tests (`test:engines`) need the full gameslib registry (including experimental games). CI resolves gameslib via `bin/install-ap-deps.mjs`:
+It is normal for a **prod** deploy to fail at build when application code on `main` uses a gameslib API that is not yet in the pinned prod gameslib version. Wait for `dep_update_prod` (or bump `ci-deps.prod.json` deliberately when releasing).
 
-- **Consumer-only push/PR:** `ci-deps.dev.json` / `ci-deps.prod.json` pin (no dispatch payload).
-- **gameslib relay (`dep_update_dev` / `dep_update_prod`):** dispatch `gameslib_version` overrides the pin for that test run so the new publish is exercised before manifests are synced.
+### AP dependency sync
 
-The test job uses `--for-tests` (does not rewrite `package.json`). Deploy uses the stage manifest without `--for-tests` and may auto-commit updated `ci-deps.*.json` after a dispatch.
+- `npm run sync-deps` — apply `ci-deps.dev.json` to `package.json` and lockfile.
+- `npm run sync-deps:prod` — apply `ci-deps.prod.json` (prod registry checks apply on install).
+
+CI always runs `install-ap-deps` before tests, lint, and build. `check-ci-deps` is not part of `npm run lint`.
 
 ## Related
 
