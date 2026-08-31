@@ -21,7 +21,8 @@
     "startLabel": "Startposition",
     "endLabel": "Endposition",
     "export": "GIF exportieren",
-    "frameCount": "{{count}} Frame(s)",
+    "frameCount_one": "{{count}} Frame",
+    "frameCount_other": "{{count}} Frames",
     "pathInitial": "Ausgangsposition",
     "pathMove": "Nach Zug {{number}}: {{move}}",
     "pathVariation": "Variante: {{move}}",
@@ -31,9 +32,7 @@
     "gifSuccess": "Animiertes GIF heruntergeladen.",
     "progress": "Frame {{current}} von {{total}} wird exportiert…",
     "failed": "Export fehlgeschlagen: {{error}}",
-    "frameCap": "Zu viele Frames (maximal {{max}}). Wähle einen kürzeren Bereich.",
-    "frameCount_one": "{{count}} Frame",
-    "frameCount_other": "{{count}} Frames"
+    "frameCap": "Zu viele Frames (maximal {{max}}). Wähle einen kürzeren Bereich."
   },
   "CycleBoardDisplay": "Brettanzeige umschalten",
   "buttons": {
@@ -44,6 +43,8 @@
     "draw": "Unentschieden fordern",
     "playfirst": "Als erster spielen",
     "swap": "Farben wechseln",
+    "roll1": "Einen Würfel werfen",
+    "roll2": "Zwei Würfel werfen",
     "numbers": {
       "one": "Eins (1)",
       "two": "Zwei (2)",
@@ -75,17 +76,15 @@
       "dl": "Dunkel, links",
       "dr": "Dunkel, rechts"
     },
-    "arimaa": {
-      "gold99": "Schnelle Einrichtung",
-      "silver99e7": "Schnelle Einrichtung, Elefant E7",
-      "silver99d7": "Schnelle Einrichtung, Elefant D7"
-    },
     "evenatodds": {
       "evens": "Gerade",
       "odds": "Ungerade"
     },
-    "roll1": "Einen Würfel werfen",
-    "roll2": "Zwei Würfel werfen"
+    "arimaa": {
+      "gold99": "Schnelle Einrichtung",
+      "silver99e7": "Schnelle Einrichtung, Elefant E7",
+      "silver99d7": "Schnelle Einrichtung, Elefant D7"
+    }
   },
   "Cancel": "Abbrechen",
   "CanPie": "Dieser Spieler hat die Möglichkeit, die Sitzplätze zu tauschen.",
@@ -972,7 +971,8 @@
     "accepted": "Akzeptiert",
     "activity": "Aktivität",
     "added": "Hinzugefügt",
-    "average": "Durchschnitt",
+    "allUsers": "Alle Benutzer",
+    "averageElo": "Elo",
     "averageLength": "Durchschnittliche Länge",
     "avgScore": "Durchschn. Punktzahl",
     "challenged": "Herausgefordert",
@@ -1000,6 +1000,7 @@
     "endDate": "Enddatum",
     "ended": "Beendet",
     "explorationDisabled": "Erkundung deaktiviert?",
+    "drawRate": "Remisquote",
     "firstPlayerWins": "Erster Spieler gewinnt",
     "game": "Spiel",
     "gameEnded": "Spiel beendet",
@@ -1034,12 +1035,18 @@
     "numPlayersHeader": "Spieleranzahl",
     "numPlays": "Anzahl Partien",
     "numRecords": "Anzahl Datensätze",
+    "pieInvoked": "Pie-Regel angewendet",
+    "rivalryPair": "Paarung",
+    "gamesTogether": "Gemeinsame Spiele",
+    "pieRate": "Pie-Regel-Quote",
+    "playerCount": "Spieleranzahl",
     "oneMonth": "1 Monat",
     "oneWeek": "1 Woche",
     "oneYear": "1 Jahr",
     "opponents": "Gegner",
     "organizer": "Organisator",
     "participants": "Teilnehmer",
+    "past30Days": "Letzte 30 Tage",
     "place": "Platz",
     "playCount": "Partienanzahl",
     "player": "Spieler",
@@ -1078,23 +1085,13 @@
     "winner": "Sieger",
     "winners": "Sieger",
     "wins": "Siege",
-    "rate": "Rate",
     "clear": "Zurücksetzen",
     "inProgress": "Laufend",
     "lastActivity": "Letzte Aktivität",
     "status": "Status",
     "unhighlight": "Hervorhebung aufheben",
     "unwatch": "Nicht mehr beobachten",
-    "drawRate": "Remisquote",
-    "pieInvoked": "Pie-Regel angewendet",
-    "rivalryPair": "Paarung",
-    "gamesTogether": "Gemeinsame Spiele",
-    "pieRate": "Pie-Regel-Quote",
-    "playerCount": "Spieleranzahl",
-    "allUsers": "Alle Benutzer",
-    "past30Days": "Letzte 30 Tage",
-    "highConfidenceGlicko": "Hohe Glicko-Zuverlässigkeit",
-    "averageElo": "Elo"
+    "rate": "Rate"
   },
   "TimeRemaining": "Verbleibende Zeit",
   "ToggleFullSize": "Brettbild in voller Höhe umschalten",
@@ -1293,6 +1290,7 @@
   },
   "explore": {
     "intro": "Auf dieser Seite kannst du verschiedene Möglichkeiten erkunden, die Liste der Spiele zu sortieren. Wähle unten deine gewünschte Ansicht aus. Ein Klick auf den Namen eines Spiels führt dich zur Übersichtsseite dieses Spiels mit weiteren Informationen.",
+    "filterRecommended": "Nur empfohlene Spiele",
     "views": {
       "all": {
         "title": "Alle Spiele"
@@ -1333,14 +1331,14 @@
         "title": "Zufällige Reihenfolge",
         "description": "Spiele in zufälliger Reihenfolge. Klicke auf die Schaltfläche, um neu zu mischen."
       }
-    },
-    "filterRecommended": "Nur empfohlene Spiele"
+    }
   },
   "stats": {
     "selectStatistic": "Wähle eine Statistik",
     "downloadSummary": "Alle Zusammenfassungen herunterladen",
+    "loadingSummary": "Statistiken werden geladen…",
+    "summaryLoadError": "Die Statistiken konnten nicht geladen werden. Sie können es später erneut versuchen oder die Rohdaten herunterladen.",
     "downloadReports": "Alle Spielberichte herunterladen",
-    "ratingsNote": "Bitte beachte, dass die hier angegebenen Wertungen dynamisch generiert werden und von der statischen Wertung abweichen können, die an anderer Stelle sichtbar ist. Wir arbeiten daran, dies auf Dauer zu vereinheitlichen.",
     "generatedDaily": "Statistiken werden täglich um 06:00 Uhr UTC generiert.",
     "recordsBetween": "Die analysierten Datensätze umfassen Spiele, die zwischen {{oldest}} und {{newest}} ({{days}}) beendet wurden.",
     "day_one": "{{count}} Tag",
@@ -1348,80 +1346,11 @@
     "year_one": "{{count}} Jahr",
     "year_other": "{{count}} Jahre",
     "playersPlayedGames": "In dieser Zeit haben {{numPlayers}} Spieler {{numGames}} Spiele gespielt.",
-    "explanations": {
-      "highestSingle": "Liste aller aufgezeichneten Wertungen. Das System ignoriert Spiele, die ausdrücklich als ungewertet markiert sind, sowie Spiele, die enden, bevor drei Züge gespielt wurden. Ranglisten verwenden konservatives (95%-Konfidenz) Glicko-2 (Wertung − 2×RD), wobei sowohl Glicko als auch das alte Elo angezeigt werden. Glicko beginnt bei 1200 mit RD 350; Elo beginnt bei 1200 mit einem statischen *K* von 30. TrueSkill verwendet Microsofts Standardeinstellungen (Wertungsbereich 0–50, Start bei 25).",
-      "avgRatings": "Diese Spalten zeigen die gewichteten Durchschnitte deiner Glicko- und Elo-Wertungen über die gesamte Website.",
-      "topPlayers": "Diese Tabelle listet jede verfügbare Kombination aus Spiel und Variante zusammen mit dem am höchsten gewerteten Spieler für diese Kombination auf, sortiert nach konservativem Glicko-2 (Wertung − 2×RD). Elo wird als Referenz angezeigt.",
-      "numPlays": "Diese Tabelle listet jedes Spiel auf, wie oft es gespielt wurde, von wie vielen eindeutigen Spielern und den `h-index` des Spiels. Der h-Index eines Spiels ist die Anzahl der Spieler, die dieses Spiel mindestens so oft gespielt haben (ein h-Index von 5 bedeutet also, dass 5 verschiedene Spieler dieses Spiel mindestens 5-mal gespielt haben). Sie bietet auch ein Histogramm der beendeten Spiele für dieses Spiel. Die Vorschau zeigt die letzten 10 Wochen, wobei die aktuellste Woche rechts steht. Ein Klick auf die Vorschau zeigt den vollständigen Verlauf der beendeten Spiele in Sieben-Tage-\"Blöcken\", wobei die aktuellste Woche rechts steht.",
-      "playerStats": "Dies zeigt jeden erfassten Spieler zusammen mit seinen gespielten Spielen insgesamt, einer Anzahl eindeutiger Spiele und der Anzahl verschiedener Gegner, gegen die er gespielt hat. Es bietet auch einen `h-index`, der die Anzahl der Spiele darstellt, die du mindestens so oft gespielt hast (z. B. wenn du drei verschiedene Spiele jeweils nur einmal gespielt hast, beträgt dein Index 1. Sobald du diese drei Spiele jeweils mindestens drei *Mal* gespielt hast, steigt der Index auf 3). Es gibt auch einen `h-index` für Gegner, gegen die du angetreten bist. Ein Aktivitätshistogramm wird ebenfalls bereitgestellt, das die Anzahl der jede Woche beendeten Spiele zeigt, wobei die aktuellste Woche rechts steht. Die Vorschau zeigt die letzten zehn Wochen. Ein Klick darauf zeigt den vollständigen Verlauf.",
-      "gameStats": "Diese Tabelle zeigt jede Kombination aus Spiel und Variante zusammen mit der Anzahl der aufgezeichneten Spiele, der durchschnittlichen Spiellänge (Anzahl der Züge), der Median-Länge, der Siegquote des ersten Spielers und der Remisquote (nur bei Zwei-Spieler-Spielen mit mehr als zwei Zügen). **Die Statistiken zu Siegen des ersten Spielers und zu Remis sollten mit Vorsicht behandelt werden!** Die Stichprobengröße ist klein und verzerrt. Es gibt viele Störfaktoren, die eine extreme Quote erklären könnten. Beachten Sie, dass die Siegquote des ersten Spielers völlig ignoriert, ob die Pie-Regel angewendet wurde. Remis werden bei der Berechnung der Siegquote des ersten Spielers als halber Sieg gewertet.",
-      "tourneyStats": "Zeigt jeden Spieler, der an automatisierten Turnieren teilgenommen hat, und seine zusammenfassenden Statistiken, einschließlich der Anzahl der Siege, der Anzahl der Platzierungen in den oberen 50% und der Punktzahl. Deine Punktzahl ist die Summe der in jedem Turnier erhaltenen Punkte. Die Punkte werden aus 100 basierend auf deiner Platzierung vergeben: Der erste Platz erhält 100 Punkte, der letzte Platz keine.",
-      "pieStats": "Spiele, die die Kuchenregel unterstützen, und wie oft diese angewendet wurde.",
-      "rivalryStats": "Paarungen aus zwei Spielern mit mindestens fünfzig gemeinsamen Partien, sortiert nach gespielten Partien. Die Paare bleiben anonym, bis die Spieler der Nennung ihres Namens zustimmen."
-    },
-    "siteStats": {
-      "weekBuckets": "Spiele werden in Sieben-Tage-Abschnitten gezählt. Der Balken ganz links ist die erste Woche, in der beendete Spiele aufgezeichnet wurden. Der Balken ganz rechts ist die aktuellste Woche (oder ein Teil davon).",
-      "cumulativePastYear": "Kumuliert (vergangenes Jahr)",
-      "average": "Durchschnitt",
-      "median": "Median",
-      "middleHalf": "Mittlere Hälfte",
-      "gamesCompletedPerWeek": "Beendete Spiele pro Woche",
-      "weekNumber": "Woche #",
-      "completedGames": "Beendete Spiele",
-      "playersCompletedPerWeek": "Anzahl der Spieler, die pro Woche Spiele beenden",
-      "numberOfPlayers": "Anzahl der Spieler",
-      "firstTimersIntro": "Dieser Graph verfolgt die Anzahl der Benutzer, die in dieser Woche ihr erstes Spiel beendet haben. Die Zahlen sind kumulativ, d. h. sie werden nie sinken, und der Punkt ganz rechts sollte immer die aktuell erfasste Benutzerzahl anzeigen. Es wird natürlich erwartet, dass sich die Zahlen irgendwann einpendeln, aber es gibt einen Hinweis auf das Wachstum.",
-      "firstTimersCumulative": "Erstmalig beendete Spiele, kumuliert",
-      "usersFirstGame": "Benutzer, die ihr erstes Spiel beendet haben",
-      "countryIntro": "Dies zeigt die Aufschlüsselung der Länder, von denen Spieler angeben zu spielen. Enthält nur Ländercodes, die das System interpretieren kann.",
-      "activeCountryIntro": "Spieler mit mindestens einer abgeschlossenen Partie im Archiv, gruppiert nach dem Land in ihrem Profil.",
-      "playContext": "Gelegenheitsspiele: {{casual}} ({{casualRate}}). Turnier- oder Event-Partien: {{event}} ({{eventRate}}).",
-      "pieRateIntro": "Spiele, die die Pie-Rule unterstützen, und wie oft diese angewendet wurde.",
-      "playerCountMixIntro": "Spiele, die mehr als zwei Spieler unterstützen, und wie oft die jeweilige Spieleranzahl vorkam.",
-      "returningPlayersIntro": "Spieler, die in dieser Woche mindestens eine Partie abgeschlossen haben und ihre erste Partie bereits in einer früheren Woche beendet hatten.",
-      "returningPlayersPerWeek": "Wiederkehrende Spieler pro Woche",
-      "returningPlayers": "Wiederkehrende Spieler",
-      "timeoutRate": "Die gesamte Zeitüberschreitungsrate beträgt kumulativ {{rate}}.",
-      "timeoutRatePerWeek": "Zeitüberschreitungsrate pro Woche",
-      "timeoutRateAxis": "Zeitüberschreitungsrate",
-      "abandonedRate": "Die Quote abgebrochener Partien (inaktive Partien mit Soft-Clock, die nach längerer Inaktivität geschlossen wurden) beträgt {{rate}}.",
-      "abandonedRatePerWeek": "Abbruchquote pro Woche",
-      "abandonedRateAxis": "Abbruchquote",
-      "hoursPerMoveIntro": "Stunden pro Zug fasst das allgemeine Spieltempo der Website aus abgeschlossenen Partien zusammen. Partien, die durch Zeitüberschreitung, Abbruch oder mit weniger als zwei Zügen endeten, sind ausgeschlossen. Die Werte pro Partie werden beim 5. und 95. Perzentil winsorisiert, damit extreme Ausreißer die Zusammenfassung nicht dominieren. Der Mittelwert ist nach Anzahl der Züge gewichtet; der Median behandelt jede qualifizierte Partie gleich. Das Trenddiagramm zeigt den Median der Stunden pro Zug für Partien, die in jeder Woche abgeschlossen wurden (die unvollständige aktuelle Woche ist ausgenommen).",
-      "hoursPerMove": "Stunden pro Zug",
-      "hoursPerMoveMean": "Zuggewichteter Mittelwert (Stunden)",
-      "hoursPerMoveMedian": "Median pro Partie (Stunden)",
-      "hoursPerMoveGames": "Qualifizierte Partien",
-      "hoursPerMovePerWeek": "Median der Stunden pro Zug pro Woche",
-      "rivalriesIntro": "Häufigste Zwei-Spieler-Paarungen (mindestens fünf gemeinsame Partien). Paarungen werden anonymisiert, bis die Spieler der Namensnennung zustimmen.",
-      "seasonalityIntro": "Wann Spieler Züge ausführen, nach UTC-Wochentag und -Stunde, in den letzten {{days}} Tagen. Spiegelt die Website-Aktivität für asynchrone Spiele besser wider als die Spielabschlusszeiten.",
-      "movesByDow": "Züge nach Wochentag (UTC)",
-      "playersByDow": "Aktive Spieler nach Wochentag (UTC)",
-      "movesByHour": "Züge nach Uhrzeit (UTC)",
-      "movesMade": "Züge",
-      "activePlayers": "Aktive Spieler",
-      "dayOfWeekUtc": "Wochentag (UTC)",
-      "hourOfDayUtc": "Stunde (UTC)",
-      "dowMon": "Mo",
-      "dowTue": "Di",
-      "dowWed": "Mi",
-      "dowThu": "Do",
-      "dowFri": "Fr",
-      "dowSat": "Sa",
-      "dowSun": "So",
-      "activeMoversIntro": "Eindeutige Spieler, die pro Woche mindestens einen Zug gemacht haben. Verwendet dieselben Sieben-Tage-Zeiträume wie die obigen Diagramme. Die Zugdaten decken etwa das letzte Jahr ab, sodass frühere Wochen möglicherweise Null anzeigen, selbst wenn Spiele beendet wurden.",
-      "activeMoversPerWeek": "Aktive Spieler (≥1 Zug) pro Woche",
-      "timeoutAbandonRatePerWeek": "Timeout- und Abbruchrate pro Woche",
-      "timeoutAbandonRateAxis": "Timeout- und Abbruchrate"
-    },
-    "gameStats": {
-      "pieRateIntro": "Spiele, die die Pie-Regel unterstützen, und wie oft diese angewendet wurde."
-    },
-    "playerStats": {
-      "rivalriesIntro": "Häufigste Zwei-Spieler-Paarungen (mindestens fünf gemeinsame Spiele). Paarungen werden anonymisiert, bis die Spieler der Namensnennung zustimmen.",
-      "publicRivalriesOptIn": "Meinen Namen in der öffentlichen Rivalitäten-Tabelle anzeigen (beide Spieler müssen zustimmen)"
-    },
     "histogramFor": "Histogramm für {{name}}",
+    "link": {
+      "copy": "Link zu diesem Abschnitt kopieren",
+      "copied": "Kopiert!"
+    },
     "tabs": {
       "ratings": "Wertungen",
       "games": "Partien",
@@ -1448,11 +1377,78 @@
         "pace": "Tempo"
       }
     },
-    "loadingSummary": "Statistiken werden geladen…",
-    "summaryLoadError": "Die Statistiken konnten nicht geladen werden. Sie können es später erneut versuchen oder die Rohdaten herunterladen.",
-    "link": {
-      "copy": "Link zu diesem Abschnitt kopieren",
-      "copied": "Kopiert!"
+    "explanations": {
+      "highestSingle": "Liste aller aufgezeichneten Wertungen. Das System ignoriert Spiele, die ausdrücklich als ungewertet markiert sind, sowie Spiele, die enden, bevor drei Züge gespielt wurden. Ranglisten verwenden konservatives (95%-Konfidenz) Glicko-2 (Wertung − 2×RD), wobei sowohl Glicko als auch das alte Elo angezeigt werden. Glicko beginnt bei 1200 mit RD 350; Elo beginnt bei 1200 mit einem statischen *K* von 30. TrueSkill verwendet Microsofts Standardeinstellungen (Wertungsbereich 0–50, Start bei 25).",
+      "avgRatings": "Diese Spalten zeigen die gewichteten Durchschnitte deiner Glicko- und Elo-Wertungen über die gesamte Website.",
+      "topPlayers": "Diese Tabelle listet jede verfügbare Kombination aus Spiel und Variante zusammen mit dem am höchsten gewerteten Spieler für diese Kombination auf, sortiert nach konservativem Glicko-2 (Wertung − 2×RD). Elo wird als Referenz angezeigt.",
+      "numPlays": "Diese Tabelle listet jedes Spiel auf, wie oft es gespielt wurde, von wie vielen eindeutigen Spielern und den `h-index` des Spiels. Der h-Index eines Spiels ist die Anzahl der Spieler, die dieses Spiel mindestens so oft gespielt haben (ein h-Index von 5 bedeutet also, dass 5 verschiedene Spieler dieses Spiel mindestens 5-mal gespielt haben). Sie bietet auch ein Histogramm der beendeten Spiele für dieses Spiel. Die Vorschau zeigt die letzten 10 Wochen, wobei die aktuellste Woche rechts steht. Ein Klick auf die Vorschau zeigt den vollständigen Verlauf der beendeten Spiele in Sieben-Tage-\"Blöcken\", wobei die aktuellste Woche rechts steht.",
+      "playerStats": "Dies zeigt jeden erfassten Spieler zusammen mit seinen gespielten Spielen insgesamt, einer Anzahl eindeutiger Spiele und der Anzahl verschiedener Gegner, gegen die er gespielt hat. Es bietet auch einen `h-index`, der die Anzahl der Spiele darstellt, die du mindestens so oft gespielt hast (z. B. wenn du drei verschiedene Spiele jeweils nur einmal gespielt hast, beträgt dein Index 1. Sobald du diese drei Spiele jeweils mindestens drei *Mal* gespielt hast, steigt der Index auf 3). Es gibt auch einen `h-index` für Gegner, gegen die du angetreten bist. Ein Aktivitätshistogramm wird ebenfalls bereitgestellt, das die Anzahl der jede Woche beendeten Spiele zeigt, wobei die aktuellste Woche rechts steht. Die Vorschau zeigt die letzten zehn Wochen. Ein Klick darauf zeigt den vollständigen Verlauf.",
+      "gameStats": "Diese Tabelle zeigt jede Kombination aus Spiel und Variante zusammen mit der Anzahl der aufgezeichneten Spiele, der durchschnittlichen Spiellänge (Anzahl der Züge), der Median-Länge, der Siegquote des ersten Spielers und der Remisquote (nur bei Zwei-Spieler-Spielen mit mehr als zwei Zügen). **Die Statistiken zu Siegen des ersten Spielers und zu Remis sollten mit Vorsicht behandelt werden!** Die Stichprobengröße ist klein und verzerrt. Es gibt viele Störfaktoren, die eine extreme Quote erklären könnten. Beachten Sie, dass die Siegquote des ersten Spielers völlig ignoriert, ob die Pie-Regel angewendet wurde. Remis werden bei der Berechnung der Siegquote des ersten Spielers als halber Sieg gewertet.",
+      "pieStats": "Spiele, die die Kuchenregel unterstützen, und wie oft diese angewendet wurde.",
+      "rivalryStats": "Paarungen aus zwei Spielern mit mindestens fünfzig gemeinsamen Partien, sortiert nach gespielten Partien. Die Paare bleiben anonym, bis die Spieler der Nennung ihres Namens zustimmen.",
+      "tourneyStats": "Zeigt jeden Spieler, der an automatisierten Turnieren teilgenommen hat, und seine zusammenfassenden Statistiken, einschließlich der Anzahl der Siege, der Anzahl der Platzierungen in den oberen 50% und der Punktzahl. Deine Punktzahl ist die Summe der in jedem Turnier erhaltenen Punkte. Die Punkte werden aus 100 basierend auf deiner Platzierung vergeben: Der erste Platz erhält 100 Punkte, der letzte Platz keine."
+    },
+    "gameStats": {
+      "pieRateIntro": "Spiele, die die Pie-Regel unterstützen, und wie oft diese angewendet wurde."
+    },
+    "playerStats": {
+      "rivalriesIntro": "Häufigste Zwei-Spieler-Paarungen (mindestens fünf gemeinsame Spiele). Paarungen werden anonymisiert, bis die Spieler der Namensnennung zustimmen.",
+      "publicRivalriesOptIn": "Meinen Namen in der öffentlichen Rivalitäten-Tabelle anzeigen (beide Spieler müssen zustimmen)"
+    },
+    "siteStats": {
+      "weekBuckets": "Spiele werden in Sieben-Tage-Abschnitten gezählt. Der Balken ganz links ist die erste Woche, in der beendete Spiele aufgezeichnet wurden. Der Balken ganz rechts ist die aktuellste Woche (oder ein Teil davon).",
+      "cumulativePastYear": "Kumuliert (vergangenes Jahr)",
+      "average": "Durchschnitt",
+      "median": "Median",
+      "middleHalf": "Mittlere Hälfte",
+      "gamesCompletedPerWeek": "Beendete Spiele pro Woche",
+      "weekNumber": "Woche #",
+      "completedGames": "Beendete Spiele",
+      "playersCompletedPerWeek": "Anzahl der Spieler, die pro Woche Spiele beenden",
+      "activeMoversIntro": "Eindeutige Spieler, die pro Woche mindestens einen Zug gemacht haben. Verwendet dieselben Sieben-Tage-Zeiträume wie die obigen Diagramme. Die Zugdaten decken etwa das letzte Jahr ab, sodass frühere Wochen möglicherweise Null anzeigen, selbst wenn Spiele beendet wurden.",
+      "activeMoversPerWeek": "Aktive Spieler (≥1 Zug) pro Woche",
+      "numberOfPlayers": "Anzahl der Spieler",
+      "firstTimersIntro": "Dieser Graph verfolgt die Anzahl der Benutzer, die in dieser Woche ihr erstes Spiel beendet haben. Die Zahlen sind kumulativ, d. h. sie werden nie sinken, und der Punkt ganz rechts sollte immer die aktuell erfasste Benutzerzahl anzeigen. Es wird natürlich erwartet, dass sich die Zahlen irgendwann einpendeln, aber es gibt einen Hinweis auf das Wachstum.",
+      "firstTimersCumulative": "Erstmalig beendete Spiele, kumuliert",
+      "usersFirstGame": "Benutzer, die ihr erstes Spiel beendet haben",
+      "countryIntro": "Dies zeigt die Aufschlüsselung der Länder, von denen Spieler angeben zu spielen. Enthält nur Ländercodes, die das System interpretieren kann.",
+      "activeCountryIntro": "Spieler mit mindestens einer abgeschlossenen Partie im Archiv, gruppiert nach dem Land in ihrem Profil.",
+      "playContext": "Gelegenheitsspiele: {{casual}} ({{casualRate}}). Turnier- oder Event-Partien: {{event}} ({{eventRate}}).",
+      "pieRateIntro": "Spiele, die die Pie-Rule unterstützen, und wie oft diese angewendet wurde.",
+      "playerCountMixIntro": "Spiele, die mehr als zwei Spieler unterstützen, und wie oft die jeweilige Spieleranzahl vorkam.",
+      "returningPlayersIntro": "Spieler, die in dieser Woche mindestens eine Partie abgeschlossen haben und ihre erste Partie bereits in einer früheren Woche beendet hatten.",
+      "returningPlayersPerWeek": "Wiederkehrende Spieler pro Woche",
+      "returningPlayers": "Wiederkehrende Spieler",
+      "timeoutRate": "Die gesamte Zeitüberschreitungsrate beträgt kumulativ {{rate}}.",
+      "timeoutAbandonRatePerWeek": "Timeout- und Abbruchrate pro Woche",
+      "timeoutAbandonRateAxis": "Timeout- und Abbruchrate",
+      "timeoutRatePerWeek": "Zeitüberschreitungsrate pro Woche",
+      "timeoutRateAxis": "Zeitüberschreitungsrate",
+      "abandonedRate": "Die Quote abgebrochener Partien (inaktive Partien mit Soft-Clock, die nach längerer Inaktivität geschlossen wurden) beträgt {{rate}}.",
+      "abandonedRatePerWeek": "Abbruchquote pro Woche",
+      "abandonedRateAxis": "Abbruchquote",
+      "hoursPerMoveIntro": "Stunden pro Zug fasst das allgemeine Spieltempo der Website aus abgeschlossenen Partien zusammen. Partien, die durch Zeitüberschreitung, Abbruch oder mit weniger als zwei Zügen endeten, sind ausgeschlossen. Die Werte pro Partie werden beim 5. und 95. Perzentil winsorisiert, damit extreme Ausreißer die Zusammenfassung nicht dominieren. Der Mittelwert ist nach Anzahl der Züge gewichtet; der Median behandelt jede qualifizierte Partie gleich. Das Trenddiagramm zeigt den Median der Stunden pro Zug für Partien, die in jeder Woche abgeschlossen wurden (die unvollständige aktuelle Woche ist ausgenommen).",
+      "hoursPerMove": "Stunden pro Zug",
+      "hoursPerMoveMean": "Zuggewichteter Mittelwert (Stunden)",
+      "hoursPerMoveMedian": "Median pro Partie (Stunden)",
+      "hoursPerMoveGames": "Qualifizierte Partien",
+      "hoursPerMovePerWeek": "Median der Stunden pro Zug pro Woche",
+      "rivalriesIntro": "Häufigste Zwei-Spieler-Paarungen (mindestens fünf gemeinsame Partien). Paarungen werden anonymisiert, bis die Spieler der Namensnennung zustimmen.",
+      "seasonalityIntro": "Wann Spieler Züge ausführen, nach UTC-Wochentag und -Stunde, in den letzten {{days}} Tagen. Spiegelt die Website-Aktivität für asynchrone Spiele besser wider als die Spielabschlusszeiten.",
+      "movesByDow": "Züge nach Wochentag (UTC)",
+      "playersByDow": "Aktive Spieler nach Wochentag (UTC)",
+      "movesByHour": "Züge nach Uhrzeit (UTC)",
+      "movesMade": "Züge",
+      "activePlayers": "Aktive Spieler",
+      "dayOfWeekUtc": "Wochentag (UTC)",
+      "hourOfDayUtc": "Stunde (UTC)",
+      "dowMon": "Mo",
+      "dowTue": "Di",
+      "dowWed": "Mi",
+      "dowThu": "Do",
+      "dowFri": "Fr",
+      "dowSat": "Sa",
+      "dowSun": "So"
     }
   },
   "players": {
@@ -1480,6 +1476,24 @@
       "history": "Spielverlauf",
       "highlights": "Highlights"
     },
+    "tabs": {
+      "competition": "Wettbewerb",
+      "activity": "Aktivität",
+      "games": "Partien",
+      "record": "Bilanz",
+      "empty": "In diesem Bereich sind keine Informationen verfügbar."
+    },
+    "hero": {
+      "siteGlicko": "Site-Glicko",
+      "topRatings": "Beste Wertungen",
+      "hIndex": "H-Index",
+      "medianResponse": "Mediane Antwortzeit",
+      "recentActivity": "Letzte Aktivität"
+    },
+    "pin": {
+      "add": "Diesen Bereich oben anheften",
+      "remove": "Anheftung dieses Bereichs aufheben"
+    },
     "stats": {
       "response": {
         "average": "Durchschnittliche Antwortzeit: {{hours}} Stunden",
@@ -1494,24 +1508,6 @@
       "activity": {
         "axisY": "Abgeschlossene Spiele"
       }
-    },
-    "tabs": {
-      "competition": "Wettbewerb",
-      "activity": "Aktivität",
-      "games": "Partien",
-      "record": "Bilanz",
-      "empty": "In diesem Bereich sind keine Informationen verfügbar."
-    },
-    "hero": {
-      "topRatings": "Beste Wertungen",
-      "hIndex": "H-Index",
-      "medianResponse": "Mediane Antwortzeit",
-      "recentActivity": "Letzte Aktivität",
-      "siteGlicko": "Site-Glicko"
-    },
-    "pin": {
-      "add": "Diesen Bereich oben anheften",
-      "remove": "Anheftung dieses Bereichs aufheben"
     }
   },
   "meta": {
@@ -1541,6 +1537,7 @@
     "seedPlaceholder": "Leer lassen für ein neues zufälliges Rätsel",
     "seedHelp": "Verwende denselben Seed, um dieselbe Anordnung erneut zu spielen oder dich mit anderen zu messen. Der Server weist einen zu, wenn du dieses Feld leer lässt.",
     "rematch": "Erneut spielen (gleicher Seed)",
+    "rematchNewSeed": "Erneut spielen (anderer Seed)",
     "copyShareLink": "Rätsel-Link teilen",
     "outcome": {
       "passed": "Bestanden",
@@ -1572,8 +1569,7 @@
       "grade": "Wertung",
       "attempts": "Versuche",
       "date": "Bester Versuch"
-    },
-    "rematchNewSeed": "Erneut spielen (anderer Seed)"
+    }
   },
   "me": {
     "challengedNotice": "Du wurdest herausgefordert!",
@@ -1591,17 +1587,17 @@
         "gameEnd_win": "Du hast deine Partie <gameLink>{{metaGame}}</gameLink> gewonnen",
         "gameEnd_lose": "Du hast deine Partie <gameLink>{{metaGame}}</gameLink> verloren",
         "gameEnd_draw": "Deine Partie <gameLink>{{metaGame}}</gameLink> endete unentschieden",
+        "gameEnd_solo": "Deine Partie <gameLink>{{metaGame}}</gameLink> ist beendet",
         "ratingChange": "Deine Wertung für <gameLink>{{metaGame}}</gameLink>{{variantsInline}} hat sich um {{delta}} Punkte von {{oldRatingDisplay}} auf {{newRatingDisplay}} geändert.",
         "challengeIssued": "{{challengerName}} hat dich zu {{metaGame}} herausgefordert",
         "challengeDeclined": "{{declinerName}} hat deine Herausforderung zu {{metaGame}} abgelehnt",
         "challengeRevoked": "{{revokerName}} hat die Herausforderung zu {{metaGame}} zurückgezogen",
         "eventInvitation": "{{organizerName}} hat dich zu {{eventName}} eingeladen",
-        "completedGameChat": "{{commenterName}} hat etwas in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie zu sagen",
-        "completedGameChat_backfill": "Du hast ungelesene Chatnachrichten in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie",
-        "gameEnd_solo": "Deine Partie <gameLink>{{metaGame}}</gameLink> ist beendet",
         "tournamentStart": "Turnier {{number}} von <tournamentLink>{{metaGame}}</tournamentLink> hat begonnen.",
         "tournamentEnd": "Turnier {{number}} von <tournamentLink>{{metaGame}}</tournamentLink> ist beendet.",
-        "tournamentEnd_withWinner": "Turnier {{number}} von <tournamentLink>{{metaGame}}</tournamentLink> ist beendet. {{winnerName}} hat gewonnen."
+        "tournamentEnd_withWinner": "Turnier {{number}} von <tournamentLink>{{metaGame}}</tournamentLink> ist beendet. {{winnerName}} hat gewonnen.",
+        "completedGameChat": "{{commenterName}} hat etwas in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie zu sagen",
+        "completedGameChat_backfill": "Du hast ungelesene Chatnachrichten in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie"
       }
     }
   },
@@ -1837,8 +1833,10 @@
   },
   "lab": {
     "intro": "Ein lokaler Spielbereich zum Experimentieren mit Spielen. Nichts hier gelangt auf den Server – Stellungen und gespeicherte Spiele verbleiben ausschließlich in deinem Browser.",
+    "introLoggedIn": "Experimentiere mit Spielen im Playground. Gespeicherte Stellungen werden mit deinem Konto synchronisiert; deine aktuelle Sitzung wird ebenfalls auf diesem Gerät gespeichert, sodass du sie nach einem Neuladen fortsetzen kannst.",
     "noSimultaneous": "Playground unterstützt nur sequenzielle Spiele. Simultanspiele sind nicht verfügbar.",
     "tabNew": "Neues Spiel",
+    "feelingAdventurous": "Ich bin abenteuerlustig",
     "tabPaste": "Spielstand einfügen",
     "tabSaved": "Gespeicherte laden",
     "selectPlayerCount": "Wähle die Anzahl der Spieler.",
@@ -1850,10 +1848,25 @@
     "noSavedGames": "Noch keine gespeicherten Playground-Spiele vorhanden.",
     "savedAt": "Gespeichert",
     "load": "Laden",
+    "loading": "Wird geladen",
     "importedSuffix": " (importiert)",
     "playgroundSuffix": " (Playground)",
     "backToLauncher": "Zurück zum Launcher",
     "saveToPlayground": "In Playground speichern",
+    "save": "Speichern",
+    "saveNameLabel": "Name",
+    "updateSave": "\"{{name}}\" aktualisieren",
+    "saveAsNew": "Als neu speichern…",
+    "copyOfName": "Kopie von {{name}}",
+    "savedToast": "Gespeichert.",
+    "importLocalBanner_one": "Du hast einen Playground-Spielstand auf diesem Gerät. In dein Konto kopieren?",
+    "importLocalBanner_other": "Du hast {{count}} Playground-Spielstände auf diesem Gerät. In dein Konto kopieren?",
+    "importLocal": "In Konto kopieren",
+    "importLocalDismiss": "Nicht jetzt",
+    "importLocalSuccess_one": "Ein Spielstand wurde in dein Konto kopiert.",
+    "importLocalSuccess_other": "{{count}} Spielstände wurden in dein Konto kopiert.",
+    "importLocalPartial": "Einige Spielstände konnten nicht kopiert werden: {{names}}",
+    "onThisDevice": "Auf diesem Gerät",
     "exitToLauncher": "Beenden zum Launcher",
     "savePrompt": "Name für diese gespeicherte Stellung:",
     "savedAlert": "In Playground gespeichert.",
@@ -1877,26 +1890,7 @@
       "commentMarkdown": "Kommentar (Markdown)",
       "commentPlaceholder": "Füge einen Kommentar in Markdown hinzu…",
       "nothingToPreview": "Noch nichts für die Vorschau vorhanden."
-    },
-    "introLoggedIn": "Experimentiere mit Spielen im Playground. Gespeicherte Stellungen werden mit deinem Konto synchronisiert; deine aktuelle Sitzung wird ebenfalls auf diesem Gerät gespeichert, sodass du sie nach einem Neuladen fortsetzen kannst.",
-    "loading": "Wird geladen",
-    "save": "Speichern",
-    "saveNameLabel": "Name",
-    "updateSave": "\"{{name}}\" aktualisieren",
-    "saveAsNew": "Als neu speichern…",
-    "copyOfName": "Kopie von {{name}}",
-    "savedToast": "Gespeichert.",
-    "importLocalBanner": "Du hast {{count}} Playground-Spielstände auf diesem Gerät. In dein Konto kopieren?",
-    "importLocal": "In Konto kopieren",
-    "importLocalDismiss": "Nicht jetzt",
-    "importLocalSuccess": "{{count}} Spielstände in dein Konto kopiert.",
-    "importLocalPartial": "Einige Spielstände konnten nicht kopiert werden: {{names}}",
-    "onThisDevice": "Auf diesem Gerät",
-    "feelingAdventurous": "Ich bin abenteuerlustig",
-    "importLocalBanner_one": "Du hast einen Playground-Spielstand auf diesem Gerät. In dein Konto kopieren?",
-    "importLocalBanner_other": "Du hast {{count}} Playground-Spielstände auf diesem Gerät. In dein Konto kopieren?",
-    "importLocalSuccess_one": "Ein Spielstand wurde in dein Konto kopiert.",
-    "importLocalSuccess_other": "{{count}} Spielstände wurden in dein Konto kopiert."
+    }
   },
   "Wikipedia": "Wikipedia"
 }
