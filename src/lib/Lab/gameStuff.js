@@ -1,5 +1,9 @@
 import { GameFactory, gameinfo } from "@abstractplay/gameslib";
 import {
+  applyEffectiveFlags,
+  blocksExplorationAutomoveForPieEven,
+} from "../effectiveGameFlags";
+import {
   canExploreMove,
   getFocusNode,
   fixMoveOutcomes,
@@ -75,34 +79,7 @@ export function setupLabGame(
   const users = useStore.getState().users;
   const info = gameinfo.get(game0.metaGame);
   game0.name = info.name;
-  game0.simultaneous =
-    info.flags !== undefined && info.flags.includes("simultaneous");
-  game0.pie =
-    info.flags !== undefined &&
-    (info.flags.includes("pie") || info.flags.includes("pie-even")) &&
-    (typeof engine.shouldOfferPie !== "function" || engine.shouldOfferPie());
-  game0.pieEven = info.flags !== undefined && info.flags.includes("pie-even");
-  game0.canCheck = info.flags !== undefined && info.flags.includes("check");
-  game0.sharedPieces =
-    info.flags !== undefined && info.flags.includes("shared-pieces");
-  game0.customColours =
-    info.flags !== undefined && info.flags.includes("custom-colours");
-  game0.customButtons =
-    info.flags !== undefined && info.flags.includes("custom-buttons");
-  game0.customRandom =
-    info.flags !== undefined && info.flags.includes("custom-randomization");
-  game0.rotate90 = info.flags !== undefined && info.flags.includes("rotate90");
-  game0.playerStashes =
-    info.flags !== undefined && info.flags.includes("player-stashes");
-  game0.sharedStash =
-    info.flags !== undefined && info.flags.includes("shared-stash");
-  game0.noMoves = info.flags !== undefined && info.flags.includes("no-moves");
-  game0.automove = info.flags !== undefined && info.flags.includes("automove");
-  game0.autopass = info.flags !== undefined && info.flags.includes("autopass");
-  game0.noExploreFlag =
-    info.flags !== undefined && info.flags.includes("no-explore");
-  game0.stackExpanding =
-    info.flags !== undefined && info.flags.includes("stacking-expanding");
+  applyEffectiveFlags(game0, engine, game0.metaGame);
 
   moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
 
@@ -289,13 +266,7 @@ function doView(
       while (
         moves.length === 1 &&
         (game.automove || moves[0] === "pass") &&
-        !(
-          game.pieEven &&
-          ((typeof gameEngineTmp.shouldOfferPie === "function" &&
-            gameEngineTmp.shouldOfferPie()) ||
-            (typeof gameEngineTmp.shouldOfferPie !== "function" &&
-              gameEngineTmp.state().stack.length === 2))
-        ) &&
+        !blocksExplorationAutomoveForPieEven(game, gameEngineTmp) &&
         !gameEngineTmp.__noAutomove
       ) {
         automoved = true;

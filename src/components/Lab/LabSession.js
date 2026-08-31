@@ -12,6 +12,10 @@ import rehypeRaw from "rehype-raw";
 import { render } from "@abstractplay/renderer";
 import { cloneDeep, debounce } from "lodash";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import {
+  effectiveFlags,
+  flagSetIncludes,
+} from "../../lib/effectiveGameFlags";
 import { Helmet } from "react-helmet-async";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
@@ -96,7 +100,7 @@ function getRotationIncrement(metaGame, rep, engine) {
   }
   const info = gameinfo.get(metaGame);
   if (!info) return 0;
-  if (info.flags?.includes("custom-rotation")) {
+  if (flagSetIncludes(effectiveFlags(engine, metaGame), "custom-rotation")) {
     const increment = engine.getCustomRotation();
     if (increment !== undefined) return increment;
   }
@@ -421,8 +425,9 @@ function LabSession({
     );
     setStatusFromEngine(engine, game, false);
     moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
-    const metaInfo = gameinfo.get(game.metaGame);
-    if (metaInfo.flags.includes("custom-colours")) {
+    if (
+      flagSetIncludes(effectiveFlags(engine, game.metaGame), "custom-colours")
+    ) {
       publishGameColors(node);
     }
   };
@@ -464,8 +469,12 @@ function LabSession({
       tRef.current
     );
     populateChecked(gameRef, engineRef, tRef.current, inCheckSetter);
-    const metaInfo = gameinfo.get(gameRef.current.metaGame);
-    if (metaInfo.flags.includes("custom-colours")) {
+    if (
+      flagSetIncludes(
+        effectiveFlags(engineRef.current, gameRef.current.metaGame),
+        "custom-colours"
+      )
+    ) {
       publishGameColorsRef.current({ state: engineRef.current.state() });
     }
   };
@@ -539,8 +548,12 @@ function LabSession({
       t
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
-    const metaInfo = gameinfo.get(gameRef.current.metaGame);
-    if (metaInfo.flags.includes("custom-colours")) {
+    if (
+      flagSetIncludes(
+        effectiveFlags(engineRef.current, gameRef.current.metaGame),
+        "custom-colours"
+      )
+    ) {
       publishGameColors({ state: engineRef.current.state() });
     }
   };
@@ -691,8 +704,12 @@ function LabSession({
       renderrepSetter(newRenderRep);
       gameRef.current.stackExpanding =
         newRenderRep.renderer === "stacking-expanding";
-      const metaInfo = gameinfo.get(gameRef.current.metaGame);
-      if (metaInfo.flags.includes("custom-colours")) {
+      if (
+        flagSetIncludes(
+          effectiveFlags(engine, gameRef.current.metaGame),
+          "custom-colours"
+        )
+      ) {
         publishGameColors(node);
       }
     }
