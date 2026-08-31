@@ -1,10 +1,10 @@
 # Authentication
 
-The browser client authenticates users through **AWS Cognito** via **aws-amplify** v5. Sign-in uses the Cognito hosted UI (OAuth authorization code flow with federated identity providers).
+The browser client authenticates users through **AWS Cognito** via **aws-amplify** v6. Sign-in uses the Cognito hosted UI (OAuth authorization code flow with federated identity providers).
 
 ## Configuration
 
-Amplify is configured on mount in [`Skeleton.js`](../src/pages/Skeleton.js):
+Amplify is configured once at app startup in [`amplifyAuth.js`](../src/lib/amplifyAuth.js), called from [`index.js`](../src/index.js):
 
 - User pool ID and app client ID from config
 - Cookie storage (7-day expiry, secure, domain from `COGNITO_COOKIE_DOMAIN`)
@@ -12,30 +12,31 @@ Amplify is configured on mount in [`Skeleton.js`](../src/pages/Skeleton.js):
 
 Redirect URLs come from `COGNITO_REDIRECT_LOGIN` and `COGNITO_REDIRECT_LOGOUT`. See [Configuration](/front/configuration/).
 
+[`polyfills.js`](../src/polyfills.js) imports `aws-amplify/auth/enable-oauth-listener` so OAuth callbacks complete in production Vite builds (the listener must live in the root bundle, not a lazy chunk).
+
 ## Sign-in flow
 
-1. User clicks login → `Auth.federatedSignIn()` (in [`LogInOutButton.js`](../src/components/LogInOutButton.js)).
+1. User clicks login → `signInWithRedirect()` via [`redirectToSignIn()`](../src/lib/amplifyAuth.js) (in [`LogInOutButton.js`](../src/components/LogInOutButton.js)).
 2. Browser redirects to Cognito hosted UI.
 3. On success, Cognito redirects back with an authorization code; Amplify exchanges it for tokens.
-4. On success, Cognito redirects back with an authorization code; Amplify exchanges it for tokens.
-5. [`resolveAuthSession()`](../src/lib/authSession.js) stores the user and JWT in Zustand `authSession`; UI components read it via [`useAuthSession()`](../src/hooks/useAuthSession.js).
+4. [`resolveAuthSession()`](../src/lib/authSession.js) stores the JWT and normalized identity fields (`userId`, `username`, `email`) in Zustand `authSession`; UI components read them via [`useAuthSession()`](../src/hooks/useAuthSession.js).
 
 ## Session bootstrap
 
 `Skeleton` calls [`resolveAuthSession()`](../src/lib/authSession.js) on load:
 
 - Success → marks `localStorage.wasLoggedIn = "1"`.
-- Failure with prior `wasLoggedIn`, no intentional logout, and a non-anonymous route → session expired; auto-triggers `federatedSignIn()`.
+- Failure with prior `wasLoggedIn`, no intentional logout, and a non-anonymous route → session expired; auto-triggers `signInWithRedirect()`.
 
 ## Token refresh
 
-[`getAuthTokenFromSession()`](../src/lib/authSession.js) returns a cached JWT while it is still valid (with a 5-minute buffer before expiry). When the token is stale or missing, it silently calls `Auth.currentAuthenticatedUser()` again so Amplify can refresh the ID token without flashing the login UI.
+[`getAuthTokenFromSession()`](../src/lib/authSession.js) returns a cached JWT while it is still valid (with a 5-minute buffer before expiry). When the token is stale or missing, it silently calls `fetchAuthSession()` again so Amplify can refresh the ID token without flashing the login UI.
 
 [`callAuthApi`](../src/lib/api.js) retries once with a forced session refresh on HTTP 401/403 before redirecting to Cognito.
 
 ## Sign-out
 
-[`UserSettingsModal.js`](../src/components/UserSettingsModal.js) sets `sessionStorage.intentionalLogout = "1"` before `Auth.signOut()` so the expiry handler does not immediately re-login.
+[`UserSettingsModal.js`](../src/components/UserSettingsModal.js) sets `sessionStorage.intentionalLogout = "1"` before `signOut()` so the expiry handler does not immediately re-login.
 
 ## User profile (`globalMe`)
 
@@ -53,7 +54,7 @@ If the backend returns an incomplete profile, [`NewProfile.js`](../src/component
 
 ## Profile updates
 
-Email and password changes go through Amplify APIs in `UserSettingsModal`, not the node-backend `authQuery` layer.
+Email changes go through Amplify v6 attribute APIs (`updateUserAttribute`, `confirmUserAttribute`) in `UserSettingsModal`, not the node-backend `authQuery` layer.
 
 ## Cognito setup (ops)
 

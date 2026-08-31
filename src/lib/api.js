@@ -1,4 +1,4 @@
-import { Auth } from "aws-amplify";
+import { signInWithRedirect } from "aws-amplify/auth";
 import { API_ENDPOINT_AUTH } from "../config";
 import {
   getAuthTokenFromSession,
@@ -28,7 +28,7 @@ export const callAuthApi = async (query, pars, requireAuth = true) => {
   const token = await getAuthToken();
   if (token === null) {
     if (requireAuth) {
-      await Auth.federatedSignIn();
+      await signInWithRedirect();
     }
     return;
   }
@@ -52,7 +52,7 @@ export const callAuthApi = async (query, pars, requireAuth = true) => {
     console.log(
       `callAuthApi: token rejected by server for query "${query}", redirecting to login`
     );
-    await Auth.federatedSignIn();
+    await signInWithRedirect();
     return;
   }
 

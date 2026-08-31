@@ -92,7 +92,6 @@ export default defineConfig(({ mode }) => {
         "lodash/merge",
         "buffer",
         "aws-amplify",
-        "amazon-cognito-identity-js",
       ],
     },
     test: {

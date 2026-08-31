@@ -1,4 +1,5 @@
 import "./polyfills";
+import { configureAmplifyAuth } from "./lib/amplifyAuth";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { toast } from "react-toastify";
@@ -8,6 +9,8 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import I18nGate from "./components/I18nGate";
 import "./myBulma.css";
 import "./index.css";
+
+configureAmplifyAuth();
 
 const container = document.getElementById("root");
 const root = createRoot(container);

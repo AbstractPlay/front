@@ -8,15 +8,9 @@ import {
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import {
   API_ENDPOINT_OPEN,
-  COGNITO_USER_POOL_ID,
-  COGNITO_APPID,
-  COGNITO_DOMAIN,
-  COGNITO_COOKIE_DOMAIN,
-  COGNITO_REDIRECT_LOGIN,
-  COGNITO_REDIRECT_LOGOUT,
 } from "../config";
 import { REAL_MODE } from "../lib/realMode";
-import { Amplify, Auth } from "aws-amplify";
+import { redirectToSignIn } from "../lib/amplifyAuth";
 import Spinner from "../components/Spinner";
 import Welcome from "./Welcome";
 import GameMoveWrapper from "../components/GameMoveWrapper";
@@ -106,39 +100,6 @@ function Bones(props) {
   }, []);
 
   useEffect(() => {
-    const awsconfig = {
-      Auth: {
-        region: "us-east-1",
-        userPoolId: COGNITO_USER_POOL_ID,
-        userPoolWebClientId: COGNITO_APPID,
-        mandatorySignIn: false,
-        cookieStorage: {
-          domain: COGNITO_COOKIE_DOMAIN,
-          path: "/",
-          expires: 7,
-          secure: true,
-        },
-        redirectSignIn: COGNITO_REDIRECT_LOGIN,
-        redirectSignOut: COGNITO_REDIRECT_LOGOUT,
-      },
-      API: {
-        endpoints: [
-          {
-            name: "demo",
-            endpoint: COGNITO_REDIRECT_LOGIN,
-          },
-        ],
-      },
-    };
-    Amplify.configure(awsconfig);
-    const awsauth = {
-      domain: COGNITO_DOMAIN,
-      scope: ["openid", "email", "aws.cognito.signin.user.admin"],
-      redirectSignIn: COGNITO_REDIRECT_LOGIN,
-      redirectSignOut: COGNITO_REDIRECT_LOGOUT,
-      responseType: "code",
-    };
-    Auth.configure({ oauth: awsauth });
     async function getToken() {
       try {
         const session = await resolveAuthSession();
@@ -152,7 +113,7 @@ function Bones(props) {
           if (wasLoggedIn && !intentionalLogout && !isAnonymousFriendlyPath()) {
             console.log("Session expired, auto-triggering login...");
             localStorage.removeItem("wasLoggedIn");
-            Auth.federatedSignIn();
+            redirectToSignIn();
             return;
           }
 

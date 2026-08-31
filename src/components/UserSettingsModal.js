@@ -9,7 +9,11 @@ import React, {
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
 import { cloneDeep, debounce } from "lodash";
-import { Auth } from "aws-amplify";
+import {
+  confirmUserAttribute,
+  signOut,
+  updateUserAttribute,
+} from "aws-amplify/auth";
 import { callAuthApi } from "../lib/api";
 import { fetchProfile } from "../lib/globalMeBootstrap";
 import { useAuthSession } from "../hooks/useAuthSession";
@@ -110,7 +114,7 @@ function UserSettingsModal(props) {
   const [aboutMe, aboutMeSetter] = useState("");
   const [aboutError, aboutErrorSetter] = useState("");
   const users = useStore((state) => state.users);
-  const { user } = useAuthSession();
+  const { email: sessionEmail } = useAuthSession();
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
   const [inAppNotifications, inAppNotificationsSetter] = useState(null);
@@ -251,7 +255,7 @@ function UserSettingsModal(props) {
     localStorage.removeItem("wasLoggedIn");
     sessionStorage.setItem("intentionalLogout", "1");
     const { setGlobalMe, clearAuthSession } = useStore.getState();
-    await Auth.signOut();
+    await signOut();
     clearAuthSession();
     setGlobalMe(null);
     updatedSetter((updated) => updated + 1);
@@ -295,18 +299,23 @@ function UserSettingsModal(props) {
 
   const handleEMailChangeClick = () => {
     emailErrorSetter("");
-    emailSetter(user?.signInUserSession.idToken.payload.email ?? "");
+    emailSetter(sessionEmail ?? "");
     changingEMailSetter(true);
   };
 
   const handleEMailChangeSubmitClick = async () => {
     emailErrorSetter("");
     try {
-      const usr = await Auth.currentAuthenticatedUser();
-      await Auth.updateUserAttributes(usr, { email });
+      await updateUserAttribute({
+        userAttribute: {
+          attributeKey: "email",
+          value: email,
+        },
+      });
       changingCodeSentSetter(true);
     } catch (error) {
-      if (error?.code === "AliasExistsException") {
+      const errorCode = error?.name ?? error?.code;
+      if (errorCode === "AliasExistsException") {
         emailErrorSetter(t("EMailInUse"));
       } else {
         emailErrorSetter(error?.message || t("EMailUpdateFailed"));
@@ -325,15 +334,19 @@ function UserSettingsModal(props) {
   const handleEMailChangeCodeSubmitClick = async () => {
     emailErrorSetter("");
     try {
-      await Auth.verifyCurrentUserAttributeSubmit("email", emailCode);
+      await confirmUserAttribute({
+        userAttributeKey: "email",
+        confirmationCode: emailCode,
+      });
       changingEMailSetter(false);
       changingCodeSentSetter(false);
       emailCodeSetter("");
       updatedSetter((updated) => updated + 1);
     } catch (error) {
+      const errorCode = error?.name ?? error?.code;
       if (
-        error?.code === "CodeMismatchException" ||
-        error?.code === "ExpiredCodeException"
+        errorCode === "CodeMismatchException" ||
+        errorCode === "ExpiredCodeException"
       ) {
         emailErrorSetter(t("EMailCodeInvalid"));
       } else {
@@ -593,7 +606,7 @@ function UserSettingsModal(props) {
                   }}
                 />
               ) : (
-                user?.signInUserSession.idToken.payload.email
+                sessionEmail
               )}
             </div>
             {emailError !== "" ? (

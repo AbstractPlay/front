@@ -1,9 +1,15 @@
-import { Auth } from "aws-amplify";
+import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 import { useStore } from "../stores";
 
 let inflight = null;
 
 const DEFAULT_EXPIRY_BUFFER_SEC = 300;
+
+const EMPTY_IDENTITY = {
+  userId: null,
+  username: null,
+  email: null,
+};
 
 export function getJwtExpiryMs(token) {
   if (!token || typeof token !== "string") {
@@ -34,6 +40,42 @@ export function isJwtExpired(
   return Date.now() >= expiryMs - bufferSec * 1000;
 }
 
+function guestSession() {
+  return {
+    status: "guest",
+    token: null,
+    ...EMPTY_IDENTITY,
+  };
+}
+
+function loadingSession() {
+  return {
+    status: "loading",
+    token: null,
+    ...EMPTY_IDENTITY,
+  };
+}
+
+async function readAmplifySession() {
+  const [authSession, currentUser] = await Promise.all([
+    fetchAuthSession(),
+    getCurrentUser(),
+  ]);
+  const token = authSession.tokens?.idToken?.toString();
+  if (!token) {
+    return guestSession();
+  }
+
+  const payload = authSession.tokens.idToken.payload ?? {};
+  return {
+    status: "ready",
+    token,
+    userId: currentUser.userId,
+    username: payload["cognito:username"] ?? currentUser.username ?? null,
+    email: typeof payload.email === "string" ? payload.email : null,
+  };
+}
+
 function startAmplifyFetch({ silent = false } = {}) {
   if (inflight) {
     return inflight;
@@ -41,21 +83,16 @@ function startAmplifyFetch({ silent = false } = {}) {
 
   const { setAuthSession } = useStore.getState();
   if (!silent) {
-    setAuthSession({ status: "loading", user: null, token: null });
+    setAuthSession(loadingSession());
   }
 
-  inflight = Auth.currentAuthenticatedUser()
-    .then((user) => {
-      const session = {
-        status: "ready",
-        user,
-        token: user.signInUserSession.idToken.jwtToken,
-      };
+  inflight = readAmplifySession()
+    .then((session) => {
       useStore.getState().setAuthSession(session);
       return session;
     })
     .catch(() => {
-      const session = { status: "guest", user: null, token: null };
+      const session = guestSession();
       useStore.getState().setAuthSession(session);
       return session;
     })

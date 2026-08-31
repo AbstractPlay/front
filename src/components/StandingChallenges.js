@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
-import { Auth } from "aws-amplify";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
   getCoreRowModel,
@@ -21,6 +20,7 @@ import ChallengeEntryModals from "./ChallengeEntryModals";
 import { useStorageState } from "react-use-storage-state";
 import { Helmet } from "react-helmet-async";
 import { useExpandVariants } from "../hooks/useExpandVariants";
+import { useAuthSession } from "../hooks/useAuthSession";
 import { useStore } from "../stores";
 import BotAwareName from "./Bots/BotAwareName";
 import { formatPlayerDisplayName } from "./Bots/botUtils";
@@ -29,7 +29,7 @@ const allSize = Number.MAX_SAFE_INTEGER;
 
 function StandingChallenges(props) {
   const { t } = useTranslation();
-  const [loggedin, loggedinSetter] = useState(false);
+  const { status: authStatus } = useAuthSession();
   const [challenges, challengesSetter] = useState([]);
   const [accepted, acceptedSetter] = useState(null);
   const [revoke, revokeSetter] = useState(null);
@@ -43,6 +43,7 @@ function StandingChallenges(props) {
   const [showAccepted, showAcceptedSetter] = useState(false);
   const [showModal, showModalSetter] = useState(false);
   const { expandVariants } = useExpandVariants(metaGame);
+  const loggedin = authStatus === "ready";
 
   async function reportError(error) {
     try {
@@ -88,24 +89,7 @@ function StandingChallenges(props) {
   );
 
   useEffect(() => {
-    async function fetchAuth() {
-      try {
-        const usr = await Auth.currentAuthenticatedUser();
-        const token = usr.signInUserSession.idToken.jwtToken;
-        console.log("idToken", usr.signInUserSession.idToken);
-        if (token !== null) {
-          loggedinSetter(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchAuth();
-  }, []);
-
-  useEffect(() => {
     async function fetchData() {
-      console.log(`Fetching ${metaGame} standing challenges`);
       try {
         var url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append("query", "standing_challenges");

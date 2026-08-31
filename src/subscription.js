@@ -195,7 +195,10 @@ async function getPushSyncCacheKey(subscription) {
   if (session.status !== "ready") {
     return null;
   }
-  const userId = session.user.signInUserSession.idToken.payload.sub;
+  const userId = session.userId;
+  if (!userId) {
+    return null;
+  }
   return `${userId}:${subscription.endpoint}`;
 }
 
