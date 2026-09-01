@@ -6,6 +6,8 @@ import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
 import GamePickerTrigger from "../GamePickerTrigger";
+import { validateChallengeVariantSelection } from "../../lib/variantChallengeValidation";
+import { useVariantSelectionValidity } from "../../hooks/useVariantSelectionValidity";
 
 function NewTournamentModal(props) {
   const handleClose = props.handleClose;
@@ -14,8 +16,20 @@ function NewTournamentModal(props) {
   const fixedMetaGame = props.fixedMetaGame;
   const [metaGame, metaGameSetter] = useState(null);
   const [selectedVariants, setSelectedVariants] = useState([]);
+  const { variantsValid, onValidityChange, resetVariantValidity } =
+    useVariantSelectionValidity();
   const [error, errorSetter] = useState("");
   const { t } = useTranslation();
+
+  const handleVariantValidityChange = useCallback(
+    (valid) => {
+      onValidityChange(valid);
+      if (valid) {
+        errorSetter("");
+      }
+    },
+    [onValidityChange]
+  );
 
   const handleChangeGame = useCallback(
     (game) => {
@@ -25,8 +39,9 @@ function NewTournamentModal(props) {
         metaGameSetter(game);
       }
       errorSetter("");
+      resetVariantValidity();
     },
-    [metaGameSetter]
+    [resetVariantValidity]
   );
 
   useEffect(() => {
@@ -42,6 +57,10 @@ function NewTournamentModal(props) {
   const handleNew = async () => {
     if (metaGame === null) {
       errorSetter(t("SelectAGame"));
+      return;
+    }
+    if (!validateChallengeVariantSelection(metaGame, selectedVariants).ok) {
+      errorSetter(t("InvalidVariantCombination"));
       return;
     }
     if (
@@ -68,7 +87,11 @@ function NewTournamentModal(props) {
       show={show}
       title={t("Tournament.New1")}
       buttons={[
-        { label: t("Submit"), action: handleNew },
+        {
+          label: t("Submit"),
+          action: handleNew,
+          disabled: metaGame !== null && !variantsValid,
+        },
         { label: t("Close"), action: handleClose },
       ]}
     >
@@ -96,6 +119,7 @@ function NewTournamentModal(props) {
         <GameVariants
           metaGame={metaGame}
           variantsSetter={setSelectedVariants}
+          onValidityChange={handleVariantValidityChange}
         />
       </div>
       <div className="is-danger error">{error}</div>

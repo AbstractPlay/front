@@ -891,6 +891,7 @@
   "PickAnyVariant_disabled": "Puedes seleccionar cualquiera de",
   "PickOneVariant_normal": "Selecciona uno de",
   "PickOneVariant_disabled": "Puedes seleccionar uno de",
+  "InvalidVariantCombination": "Esa combinación de variantes no está permitida para este juego.",
   "PickVariant_normal": "Seleccionar variantes",
   "PickVariant_disabled": "Variantes disponibles",
   "PlayerList": "Jugadores",

@@ -12,6 +12,8 @@ import Modal from "./Modal";
 import GameVariants from "./GameVariants";
 import GamePickerTrigger from "./GamePickerTrigger";
 import { useStore } from "../stores";
+import { validateChallengeVariantSelection } from "../lib/variantChallengeValidation";
+import { useVariantSelectionValidity } from "../hooks/useVariantSelectionValidity";
 
 const stringArraysEqual = (lst1, lst2) => {
   if (lst1.length !== lst2.length) {
@@ -66,6 +68,8 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
     false
   );
   const [selectedVariants, setSelectedVariants] = useState([]);
+  const { variantsValid, onValidityChange, resetVariantValidity } =
+    useVariantSelectionValidity();
   const globalMe = useStore((state) => state.globalMe);
   const errorRef = useRef(null);
 
@@ -91,6 +95,16 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
     clockMaxSetter(max);
   };
 
+  const handleVariantValidityChange = useCallback(
+    (valid) => {
+      onValidityChange(valid);
+      if (valid) {
+        errorSetter(null);
+      }
+    },
+    [onValidityChange]
+  );
+
   const handleChangeGame = useCallback(
     (game) => {
       if (game !== metaGame) {
@@ -107,9 +121,10 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
           }
         }
         errorSetter("");
+        resetVariantValidity();
       }
     },
-    [metaGame, setPlayerCount]
+    [metaGame, setPlayerCount, resetVariantValidity]
   );
 
   useEffect(() => {
@@ -223,6 +238,11 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
       }
     }
 
+    if (!validateChallengeVariantSelection(metaGame, selectedVariants).ok) {
+      errorSetter(t("InvalidVariantCombination"));
+      return;
+    }
+
     handleNewChallenge({
       metaGame: metaGame,
       numPlayers: playerCount,
@@ -254,7 +274,11 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
       show={show}
       title={t("NewRealStanding")}
       buttons={[
-        { label: t("Challenge"), action: handleChallenge },
+        {
+          label: t("Challenge"),
+          action: handleChallenge,
+          disabled: metaGame !== null && !variantsValid,
+        },
         { label: t("Close"), action: handleModalClose },
       ]}
     >
@@ -314,6 +338,7 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
         <GameVariants
           metaGame={metaGame}
           variantsSetter={setSelectedVariants}
+          onValidityChange={handleVariantValidityChange}
         />
         {metaGame === null ? (
           ""

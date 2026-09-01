@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
-import { gameinfo } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import GameVariants from "./GameVariants";
@@ -19,6 +19,8 @@ import {
   isSoloOnlyGame,
   shouldHandoffToSolo,
 } from "../lib/soloPlay";
+import { validateChallengeVariantSelection } from "../lib/variantChallengeValidation";
+import { useVariantSelectionValidity } from "../hooks/useVariantSelectionValidity";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
@@ -66,6 +68,8 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const [standingCount, standingCountSetter] = useState(0);
   const [opponents, opponentsSetter] = useState([]);
   const [selectedVariants, setSelectedVariants] = useState([]);
+  const { variantsValid, onValidityChange, resetVariantValidity } =
+    useVariantSelectionValidity();
   const [comment, commentSetter] = useState("");
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
@@ -78,9 +82,17 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     if (metaGame !== null) {
       const info = gameinfo.get(metaGame);
       if (info) {
+        const gameEngine =
+          info.playercounts.length > 1
+            ? GameFactory(info.uid, 2)
+            : GameFactory(info.uid);
+        const variantDefs =
+          typeof gameEngine.challengeVariants === "function"
+            ? gameEngine.challengeVariants()
+            : gameEngine.allvariants();
         for (const vname of selectedVariants) {
-          const variant = info.variants.find((v) => v.uid === vname);
-          if (variant.unrated === true) {
+          const variant = variantDefs?.find((v) => v.uid === vname);
+          if (variant?.unrated === true) {
             forced = true;
             break;
           }
@@ -163,6 +175,16 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     [onSoloHandoff]
   );
 
+  const handleVariantValidityChange = useCallback(
+    (valid) => {
+      onValidityChange(valid);
+      if (valid) {
+        errorSetter(null);
+      }
+    },
+    [onValidityChange]
+  );
+
   const handleChangeGame = useCallback(
     (game) => {
       if (game !== metaGame) {
@@ -190,9 +212,10 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
           seatingSetter("random");
         }
         errorSetter("");
+        resetVariantValidity();
       }
     },
-    [metaGame, setPlayerCount, props.opponent, t, trySoloHandoff]
+    [metaGame, setPlayerCount, props.opponent, resetVariantValidity, t, trySoloHandoff]
   );
 
   useEffect(() => {
@@ -330,6 +353,14 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       });
       if (!ok) return;
     }
+    if (
+      metaGame !== null &&
+      !soloHandoffPath &&
+      !validateChallengeVariantSelection(metaGame, selectedVariants).ok
+    ) {
+      errorSetter(t("InvalidVariantCombination"));
+      return;
+    }
     handleNewChallenge({
       metaGame: metaGame,
       numPlayers: playerCount,
@@ -365,6 +396,9 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     playerCount !== -1 &&
     shouldHandoffToSolo(metaGame, playerCount);
 
+  const challengeDisabled =
+    metaGame !== null && !soloHandoffPath && !variantsValid;
+
   if (
     (fixedMetaGame && !gameinfo.has(fixedMetaGame)) ||
     (metaGame !== null &&
@@ -378,7 +412,11 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       show={show}
       title={t("NewChallenge")}
       buttons={[
-        { label: t("Challenge"), action: handleChallenge },
+        {
+          label: t("Challenge"),
+          action: handleChallenge,
+          disabled: challengeDisabled,
+        },
         { label: t("ResetDefault"), action: resetToDefault },
         { label: t("Close"), action: handleNewChallengeClose },
       ]}
@@ -637,6 +675,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
           <GameVariants
             metaGame={metaGame}
             variantsSetter={setSelectedVariants}
+            onValidityChange={handleVariantValidityChange}
           />
         )}
         {metaGame === null || soloHandoffPath ? (

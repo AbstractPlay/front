@@ -5,6 +5,8 @@ import { useStorageState } from "react-use-storage-state";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
 import { soloPlaySupported } from "../../lib/soloPlay";
+import { validateChallengeVariantSelection } from "../../lib/variantChallengeValidation";
+import { useVariantSelectionValidity } from "../../hooks/useVariantSelectionValidity";
 
 function SoloPlayModal({
   show,
@@ -16,6 +18,8 @@ function SoloPlayModal({
   const { t } = useTranslation();
   const [error, errorSetter] = useState("");
   const [selectedVariants, setSelectedVariants] = useState([]);
+  const { variantsValid, onValidityChange, resetVariantValidity } =
+    useVariantSelectionValidity();
   const [challengeSeed, setChallengeSeed] = useState(initialChallengeSeed);
   const [clockStart] = useStorageState("new-challenge-clock-start", 48);
   const [clockInc] = useStorageState("new-challenge-clock-inc", 24);
@@ -27,8 +31,16 @@ function SoloPlayModal({
     if (show) {
       setChallengeSeed(initialChallengeSeed ?? "");
       errorSetter("");
+      resetVariantValidity();
     }
-  }, [show, initialChallengeSeed]);
+  }, [show, initialChallengeSeed, resetVariantValidity]);
+
+  const handleVariantValidityChange = (valid) => {
+    onValidityChange(valid);
+    if (valid) {
+      errorSetter("");
+    }
+  };
 
   if (!fixedMetaGame || !gameinfo.has(fixedMetaGame) || !soloPlaySupported(fixedMetaGame)) {
     return null;
@@ -36,6 +48,10 @@ function SoloPlayModal({
 
   const onStart = () => {
     errorSetter("");
+    if (!validateChallengeVariantSelection(fixedMetaGame, selectedVariants).ok) {
+      errorSetter(t("InvalidVariantCombination"));
+      return;
+    }
     const trimmedSeed = challengeSeed.trim();
     handleStart({
       metaGame: fixedMetaGame,
@@ -54,7 +70,11 @@ function SoloPlayModal({
       show={show}
       title={t("solo.playTitle")}
       buttons={[
-        { label: t("solo.playAction"), action: onStart },
+        {
+          label: t("solo.playAction"),
+          action: onStart,
+          disabled: !variantsValid,
+        },
         { label: t("Cancel"), action: handleClose },
       ]}
     >
@@ -62,6 +82,7 @@ function SoloPlayModal({
       <GameVariants
         metaGame={fixedMetaGame}
         variantsSetter={setSelectedVariants}
+        onValidityChange={handleVariantValidityChange}
       />
       <div className="field">
         <label className="label" htmlFor="solo-challenge-seed">
