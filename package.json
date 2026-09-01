@@ -103,6 +103,8 @@
     "publish-locales:prod": "node bin/publish-locales.mjs --stage prod",
     "translate": "node bin/translate.mjs public/locales/en/apfront.json",
     "prune-locales": "node bin/locale-prune.mjs public/locales/en/apfront.json",
+    "check-weblate-branch": "node bin/check-weblate-branch.mjs",
+    "merge-weblate-branch": "node bin/merge-weblate-branch.mjs",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "npm-login": "npm login --scope=@abstractplay --auth-type=legacy --registry=https://npm.pkg.github.com",
     "build-bulma": "sass --no-source-map --load-path=node_modules src/myBulma.scss src/myBulma.css"
