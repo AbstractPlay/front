@@ -1215,6 +1215,10 @@
     "src": "increment {{inc}} hours",
     "out": "incremento de {{inc}} horas"
   },
+  "InvalidVariantCombination": {
+    "src": "That combination of variants is not allowed for this game.",
+    "out": "Esa combinación de variantes no está permitida para este juego."
+  },
   "InvokePie": {
     "src": "Swap player seats",
     "out": "Cambiar asientos de los jugadores"
@@ -2246,10 +2250,6 @@
   "boardExport.frameCap": {
     "src": "Too many frames (maximum {{max}}). Choose a shorter range.",
     "out": "Demasiados fotogramas (máximo {{max}}). Elige un rango más corto."
-  },
-  "boardExport.frameCount": {
-    "src": "{{count}} frame(s)",
-    "out": "{{count}} fotograma(s)"
   },
   "boardExport.frameCount_one": {
     "src": "{{count}} frame",
@@ -4459,10 +4459,6 @@
     "src": "Copy to account",
     "out": "Copiar a la cuenta"
   },
-  "lab.importLocalBanner": {
-    "src": "You have {{count}} Playground save(s) on this device. Copy them to your account?",
-    "out": "Tienes {{count}} partida(s) guardada(s) del laboratorio de pruebas en este dispositivo. ¿Deseas copiarlas a tu cuenta?"
-  },
   "lab.importLocalBanner_one": {
     "src": "You have one Playground save on this device. Copy it to your account?",
     "out": "Tienes una partida guardada de Playground en este dispositivo. ¿Copiarla a tu cuenta?"
@@ -4478,10 +4474,6 @@
   "lab.importLocalPartial": {
     "src": "Some saves could not be copied: {{names}}",
     "out": "No se pudieron copiar algunas partidas guardadas: {{names}}"
-  },
-  "lab.importLocalSuccess": {
-    "src": "Copied {{count}} save(s) to your account.",
-    "out": "Se copiaron {{count}} partida(s) guardada(s) a tu cuenta."
   },
   "lab.importLocalSuccess_one": {
     "src": "Copied one save to your account.",
@@ -4612,8 +4604,8 @@
     "out": "Mensaje"
   },
   "me.notifications.columns.note": {
-    "src": "Note",
-    "out": "Nota"
+    "src": "Comment",
+    "out": "Comentario"
   },
   "me.notifications.columns.time": {
     "src": "Time",
@@ -4654,6 +4646,10 @@
   "me.notifications.message.gameEnd_lose": {
     "src": "You lost your game of <gameLink>{{metaGame}}</gameLink>",
     "out": "Perdiste tu partida de <gameLink>{{metaGame}}</gameLink>"
+  },
+  "me.notifications.message.gameEnd_solo": {
+    "src": "Your <gameLink>{{metaGame}}</gameLink> game has ended",
+    "out": "Tu partida de <gameLink>{{metaGame}}</gameLink> ha terminado"
   },
   "me.notifications.message.gameEnd_win": {
     "src": "You won your game of <gameLink>{{metaGame}}</gameLink>",
@@ -5171,10 +5167,6 @@
     "src": "In that time, {{numPlayers}} players have played {{numGames}} games.",
     "out": "En ese tiempo, {{numPlayers}} jugadores han jugado {{numGames}} partidas."
   },
-  "stats.ratingsNote": {
-    "src": "Please note that the ratings given here are dynamically generated and may differ from the static rating visible elsewhere. We're working on harmonizing things eventually.",
-    "out": "Ten en cuenta que las calificaciones que se muestran aquí se generan dinámicamente y pueden diferir de la calificación estática visible en otros lugares. Estamos trabajando para armonizar todo con el tiempo."
-  },
   "stats.recordsBetween": {
     "src": "Records analyzed include games completed between {{oldest}} and {{newest}} ({{days}}).",
     "out": "Los registros analizados incluyen partidas completadas entre {{oldest}} y {{newest}} ({{days}})."
@@ -5534,10 +5526,6 @@
   "tables.allUsers": {
     "src": "All users",
     "out": "Todos los usuarios"
-  },
-  "tables.average": {
-    "src": "Average",
-    "out": "Promedio"
   },
   "tables.averageElo": {
     "src": "Elo",

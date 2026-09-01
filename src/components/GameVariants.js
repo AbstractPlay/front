@@ -1,201 +1,313 @@
-import React, { useEffect, useState } from "react";
-import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  evaluateAvailability,
+  gameinfo,
+  GameFactory,
+  sanitizeVariantSelection,
+  validateVariantSelection,
+} from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { cloneDeep } from "lodash";
+
+// Variant constraints: /gameslib/variants/
+
+function collectActiveVariantUids(groupVariants, nonGroupVariants) {
+  const uids = [];
+  Object.values(groupVariants).forEach((uid) => {
+    if (uid && !uid.startsWith("#")) {
+      uids.push(uid);
+    }
+  });
+  Object.keys(nonGroupVariants).forEach((uid) => {
+    if (nonGroupVariants[uid]) {
+      uids.push(uid);
+    }
+  });
+  return uids;
+}
+
+function variantUidsEqual(left, right) {
+  return (
+    left.length === right.length && left.every((uid, index) => uid === right[index])
+  );
+}
+
+function applySanitizedVariantSelection(
+  sanitized,
+  groupVariants,
+  nonGroupVariants,
+  allVariants,
+) {
+  const nextGroup = { ...groupVariants };
+  const nextNonGroup = { ...nonGroupVariants };
+  const groups = [
+    ...new Set(
+      allVariants.filter((v) => v.group !== undefined).map((v) => v.group),
+    ),
+  ];
+  for (const group of groups) {
+    const member = sanitized.find((uid) => {
+      const def = allVariants.find((v) => v.uid === uid);
+      return def?.group === group;
+    });
+    nextGroup[group] = member ?? `#${group}`;
+  }
+  for (const uid of Object.keys(nextNonGroup)) {
+    nextNonGroup[uid] = sanitized.includes(uid);
+  }
+  return { groupVariants: nextGroup, nonGroupVariants: nextNonGroup };
+}
+
+function buildGroupData(rootAllVariants) {
+  const groups = [
+    ...new Set(
+      rootAllVariants
+        .filter((v) => v.group !== undefined)
+        .map((v) => v.group),
+    ),
+  ];
+  return groups.map((group) => {
+    const variants = rootAllVariants.filter(
+      (v) => v.group === group || v.uid === `#${group}`,
+    );
+    const cloned = cloneDeep(variants);
+    const sentinelIdx = cloned.findIndex((v) => v.uid.startsWith("#"));
+    if (sentinelIdx >= 0) {
+      if (cloned[sentinelIdx].group === undefined) {
+        cloned[sentinelIdx].group = group;
+      }
+      if (cloned[sentinelIdx].name === undefined) {
+        cloned[sentinelIdx].name = `Default ${group}`;
+      }
+    } else {
+      cloned.unshift({
+        uid: `#${group}`,
+        name: `Default ${group}`,
+        description: undefined,
+        group,
+      });
+    }
+    const explicitDefault = cloned.find((v) => v.default === true);
+    if (explicitDefault === undefined) {
+      const idx = cloned.findIndex((v) => v.uid.startsWith("#"));
+      if (idx >= 0) {
+        cloned[idx].default = true;
+      }
+    }
+    return { group, variants: cloned };
+  });
+}
+
+function initialGroupVariants(groupData) {
+  const initial = {};
+  for (const entry of groupData) {
+    const explicitDefault = entry.variants.find((v) => v.default === true);
+    initial[entry.group] = explicitDefault
+      ? explicitDefault.uid
+      : `#${entry.group}`;
+  }
+  return initial;
+}
+
+function variantOptionDisabled(disableFields, availability, uid) {
+  if (disableFields) {
+    return true;
+  }
+  const entry = availability.get(uid);
+  return entry !== undefined && !entry.selectable;
+}
+
 /**
- * This component parses a metaGame's variant definition and returns the form for selecting them.
- * Give it the metaGame and a function for setting the string[] of selected variants.
+ * Parses a metaGame's variant definition and returns the form for selecting them.
  */
-function GameVariants({ metaGame, variantsSetter, disableFields }) {
-  //   const groupVariantsRef = useRef({});
+function GameVariants({
+  metaGame,
+  variantsSetter,
+  disableFields,
+  onValidityChange,
+}) {
   const [groupVariants, groupVariantsSetter] = useState({});
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
   const [groupData, groupDataSetter] = useState([]);
   const [nonGroupData, nonGroupDataSetter] = useState([]);
+  const [allVariants, allVariantsSetter] = useState([]);
   const { t } = useTranslation();
 
-  // This does the initial parse of the data
   useEffect(() => {
-    if (metaGame !== undefined && metaGame !== null && metaGame !== "") {
-      // load game info
-      // need an engine if we want to translate the strings
-      const info = gameinfo.get(metaGame);
-      if (info !== undefined) {
-        let gameEngine;
-        if (info.playercounts.length > 1) {
-          gameEngine = GameFactory(info.uid, 2);
-        } else {
-          gameEngine = GameFactory(info.uid);
-        }
-
-        const rootAllVariants =
-          typeof gameEngine.challengeVariants === "function"
-            ? gameEngine.challengeVariants()
-            : gameEngine.allvariants();
-
-        // get all non-group variants
-        // but ignore variant UIDs that start with `#` as reserved
-        let ngVariants = {};
-        if (rootAllVariants)
-          rootAllVariants
-            .filter((v) => v.group === undefined || v.uid.startsWith("#"))
-            .forEach((v) => (ngVariants[v.uid] = false));
-        nonGroupVariantsSetter(ngVariants);
-        groupVariantsSetter({});
-
-        // get all grouped variants, including those that start with "#"
-        if (rootAllVariants && rootAllVariants !== undefined) {
-          const groups = [
-            ...new Set(
-              rootAllVariants
-                .filter((v) => v.group !== undefined)
-                .map((v) => v.group)
-            ),
-          ];
-          const selected = [];
-          groupDataSetter(
-            groups
-              .map((g) => {
-                return {
-                  group: g,
-                  variants: rootAllVariants.filter(
-                    (v) => v.group === g || v.uid === `#${g}`
-                  ),
-                };
-              })
-              // now process each group and either add a `#` entry with defaults
-              // or make sure the existing one is properly populated
-              .map((entry) => {
-                const cloned = cloneDeep(entry.variants);
-                const idx = cloned.findIndex((v) => v.uid.startsWith("#"));
-                // one exists
-                if (idx >= 0) {
-                  if (cloned[idx].group === undefined) {
-                    cloned[idx].group = entry.group;
-                  }
-                  if (cloned[idx].name === undefined) {
-                    cloned[idx].name = `Default ${entry.group}`;
-                  }
-                }
-                // one does not
-                else {
-                  cloned.unshift({
-                    uid: `#${entry.group}`,
-                    name: `Default ${entry.group}`,
-                    description: undefined,
-                    group: entry.group,
-                  });
-                }
-
-                // make sure at least one thing is marked as default
-                const found = cloned.find(
-                  (v) => v.default !== undefined && v.default
-                );
-                // if there isn't one, mark the `#` variant as default
-                if (found === undefined) {
-                  const idx = cloned.findIndex((v) => v.uid.startsWith("#"));
-                  if (idx >= 0) {
-                    cloned[idx].default = true;
-                  }
-                }
-                // otherwise, push the manually marked variant to the selected array
-                else {
-                  selected.push([found.group, found.uid]);
-                }
-                return { group: entry.group, variants: cloned };
-              })
-          );
-          selected.forEach(([g, v]) => handleGroupChange(g, v));
-
-          nonGroupDataSetter(
-            rootAllVariants.filter(
-              (v) => v.group === undefined && !v.uid.startsWith("#")
-            )
-          );
-        } else {
-          groupDataSetter([]);
-          nonGroupDataSetter([]);
-        }
-      } else {
-        groupDataSetter([]);
-        nonGroupDataSetter([]);
-      }
-    } else {
+    if (metaGame === undefined || metaGame === null || metaGame === "") {
       groupDataSetter([]);
       nonGroupDataSetter([]);
+      allVariantsSetter([]);
+      groupVariantsSetter({});
+      nonGroupVariantsSetter({});
+      return;
     }
-    // Only re-run when metaGame changes; handleGroupChange is recreated each render.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    const info = gameinfo.get(metaGame);
+    if (info === undefined) {
+      groupDataSetter([]);
+      nonGroupDataSetter([]);
+      allVariantsSetter([]);
+      groupVariantsSetter({});
+      nonGroupVariantsSetter({});
+      return;
+    }
+
+    const gameEngine =
+      info.playercounts.length > 1
+        ? GameFactory(info.uid, 2)
+        : GameFactory(info.uid);
+
+    const rootAllVariants =
+      typeof gameEngine.challengeVariants === "function"
+        ? gameEngine.challengeVariants()
+        : gameEngine.allvariants();
+
+    if (!rootAllVariants) {
+      groupDataSetter([]);
+      nonGroupDataSetter([]);
+      allVariantsSetter([]);
+      groupVariantsSetter({});
+      nonGroupVariantsSetter({});
+      return;
+    }
+
+    allVariantsSetter(rootAllVariants);
+
+    const builtGroupData = buildGroupData(rootAllVariants);
+    const builtNonGroupData = rootAllVariants.filter(
+      (v) => v.group === undefined && !v.uid.startsWith("#"),
+    );
+
+    groupDataSetter(builtGroupData);
+    nonGroupDataSetter(builtNonGroupData);
+    groupVariantsSetter(initialGroupVariants(builtGroupData));
+
+    const ngVariants = {};
+    builtNonGroupData.forEach((v) => {
+      ngVariants[v.uid] = false;
+    });
+    nonGroupVariantsSetter(ngVariants);
   }, [metaGame]);
 
-  const handleGroupChange = (group, variant) => {
-    // // Ref gets updated, so no rerender. The radio buttons aren't "controlled"
-    // groupVariantsRef.current[group] = variant;
-    const cloned = cloneDeep(groupVariants);
-    cloned[group] = variant;
-    groupVariantsSetter(cloned);
-  };
+  const handleGroupChange = useCallback((group, variant) => {
+    groupVariantsSetter((current) => ({
+      ...current,
+      [group]: variant,
+    }));
+  }, []);
 
-  const handleNonGroupChange = (event) => {
-    // State get updated, so rerender. The checkboxes are controlled.
-    let ngVariants = cloneDeep(nonGroupVariants);
-    ngVariants[event.target.id] = !ngVariants[event.target.id];
-    nonGroupVariantsSetter(ngVariants);
-  };
+  const handleNonGroupChange = useCallback((uid, checked) => {
+    nonGroupVariantsSetter((current) => ({
+      ...current,
+      [uid]: checked,
+    }));
+  }, []);
 
-  // update the string[] of variants whenever selections change
+  const activeVariantUids = useMemo(
+    () => collectActiveVariantUids(groupVariants, nonGroupVariants),
+    [groupVariants, nonGroupVariants],
+  );
+
+  const availability = useMemo(() => {
+    if (disableFields || allVariants.length === 0) {
+      return new Map();
+    }
+    return evaluateAvailability(allVariants, activeVariantUids);
+  }, [allVariants, activeVariantUids, disableFields]);
+
   useEffect(() => {
-    let variants = [];
-    for (var group of Object.keys(groupVariants)) {
-      if (groupVariants[group] !== null && groupVariants[group] !== "") {
-        variants.push(groupVariants[group]);
-      }
+    if (allVariants.length === 0) {
+      variantsSetter([]);
+      onValidityChange?.(true, []);
+      return;
     }
-    for (var variant of Object.keys(nonGroupVariants)) {
-      if (nonGroupVariants[variant]) {
-        variants.push(variant);
+
+    let active = activeVariantUids;
+    if (!disableFields) {
+      const sanitized = sanitizeVariantSelection(allVariants, active);
+      if (!variantUidsEqual(active, sanitized)) {
+        const next = applySanitizedVariantSelection(
+          sanitized,
+          groupVariants,
+          nonGroupVariants,
+          allVariants,
+        );
+        groupVariantsSetter(next.groupVariants);
+        nonGroupVariantsSetter(next.nonGroupVariants);
+        return;
       }
+      active = sanitized;
     }
-    // console.log("About to send the following variants:", variants);
-    variantsSetter(variants.filter((v) => !v.startsWith("#")));
-  }, [groupVariants, nonGroupVariants, variantsSetter]);
+
+    variantsSetter(active.filter((uid) => !uid.startsWith("#")));
+
+    if (onValidityChange) {
+      const validation = validateVariantSelection(allVariants, active);
+      onValidityChange(
+        validation.ok,
+        validation.ok ? [] : validation.errors,
+      );
+    }
+  }, [
+    activeVariantUids,
+    allVariants,
+    disableFields,
+    groupVariants,
+    nonGroupVariants,
+    onValidityChange,
+    variantsSetter,
+  ]);
 
   if (groupData.length === 0 && nonGroupData.length === 0) {
     return null;
-  } else {
-    return (
-      <>
-        <div className="field">
-          <label className="label">
-            {t("PickVariant", {
-              context: disableFields ? "disabled" : "normal",
-            })}
-          </label>
-        </div>
-        <div className="indentedContainer">
-          {groupData.length === 0
-            ? ""
-            : groupData.map((g) => (
-                <div
-                  className="field"
-                  key={"group:" + g.group}
-                  onChange={(e) => handleGroupChange(g.group, e.target.value)}
-                >
-                  <label className="label">
-                    {t("PickOneVariant", {
-                      context: disableFields ? "disabled" : "normal",
-                    })}
-                  </label>
-                  {g.variants.map((v) => (
+  }
+
+  return (
+    <>
+      <div className="field">
+        <label className="label">
+          {t("PickVariant", {
+            context: disableFields ? "disabled" : "normal",
+          })}
+        </label>
+      </div>
+      <div className="indentedContainer">
+        {groupData.length === 0
+          ? ""
+          : groupData.map((g) => (
+              <div className="field" key={"group:" + g.group}>
+                <label className="label">
+                  {t("PickOneVariant", {
+                    context: disableFields ? "disabled" : "normal",
+                  })}
+                </label>
+                {g.variants.map((v) => {
+                  const isOptionDisabled = variantOptionDisabled(
+                    disableFields,
+                    availability,
+                    v.uid,
+                  );
+                  return (
                     <div className="control" key={v.uid}>
-                      <label className="radio">
+                      <label
+                        className={
+                          isOptionDisabled ? "radio has-text-grey" : "radio"
+                        }
+                        style={
+                          isOptionDisabled
+                            ? { opacity: 0.55, cursor: "not-allowed" }
+                            : undefined
+                        }
+                      >
                         <input
                           type="radio"
                           id={v.uid}
                           value={v.uid}
                           name={g.group}
-                          defaultChecked={v.default}
-                          disabled={disableFields}
+                          checked={groupVariants[g.group] === v.uid}
+                          onChange={() => handleGroupChange(g.group, v.uid)}
+                          disabled={isOptionDisabled}
                         />
                         {v.name}
                       </label>
@@ -204,39 +316,60 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
                         ""
                       ) : (
                         <p
-                          className="help"
+                          className={
+                            isOptionDisabled ? "help has-text-grey" : "help"
+                          }
                           style={{
                             marginTop: "-0.5%",
+                            ...(isOptionDisabled ? { opacity: 0.55 } : {}),
                           }}
                         >
                           {v.description}
                         </p>
                       )}
                     </div>
-                  ))}
-                </div>
-              ))}
-          {nonGroupData.length === 0 ? (
-            ""
-          ) : (
-            <>
-              <div className="field">
-                <label className="label">
-                  {t("PickAnyVariant", {
-                    context: disableFields ? "disabled" : "normal",
-                  })}
-                </label>
+                  );
+                })}
               </div>
-              <div className="field">
-                {nonGroupData.map((v) => (
+            ))}
+        {nonGroupData.length === 0 ? (
+          ""
+        ) : (
+          <>
+            <div className="field">
+              <label className="label">
+                {t("PickAnyVariant", {
+                  context: disableFields ? "disabled" : "normal",
+                })}
+              </label>
+            </div>
+            <div className="field">
+              {nonGroupData.map((v) => {
+                const isOptionDisabled = variantOptionDisabled(
+                  disableFields,
+                  availability,
+                  v.uid,
+                );
+                return (
                   <div className="control" key={v.uid}>
-                    <label className="checkbox">
+                    <label
+                      className={
+                        isOptionDisabled ? "checkbox has-text-grey" : "checkbox"
+                      }
+                      style={
+                        isOptionDisabled
+                          ? { opacity: 0.55, cursor: "not-allowed" }
+                          : undefined
+                      }
+                    >
                       <input
                         type="checkbox"
                         id={v.uid}
-                        checked={nonGroupVariants[v.uid]}
-                        onChange={handleNonGroupChange}
-                        disabled={disableFields}
+                        checked={Boolean(nonGroupVariants[v.uid])}
+                        onChange={(event) =>
+                          handleNonGroupChange(v.uid, event.target.checked)
+                        }
+                        disabled={isOptionDisabled}
                       />
                       {v.name}
                     </label>
@@ -245,23 +378,26 @@ function GameVariants({ metaGame, variantsSetter, disableFields }) {
                       ""
                     ) : (
                       <p
-                        className="help"
+                        className={
+                          isOptionDisabled ? "help has-text-grey" : "help"
+                        }
                         style={{
                           marginTop: "-0.5%",
+                          ...(isOptionDisabled ? { opacity: 0.55 } : {}),
                         }}
                       >
                         {v.description}
                       </p>
                     )}
                   </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </>
-    );
-  }
+                );
+              })}
+            </div>
+          </>
+        )}
+      </div>
+    </>
+  );
 }
 
 export default GameVariants;

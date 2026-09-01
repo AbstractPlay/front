@@ -399,8 +399,6 @@
     "src": "Date",
     "out": "Datum"
   },
-  "DateEnded": "Date ended",
-  "DateStarted": "Date started",
   "DebugModal": {
     "src": "Debugging information",
     "out": "Debugging-Informationen"
@@ -1217,6 +1215,10 @@
     "src": "increment {{inc}} hours",
     "out": "Zeitgutschrift {{inc}} Stunden"
   },
+  "InvalidVariantCombination": {
+    "src": "That combination of variants is not allowed for this game.",
+    "out": "Diese Variantenkombination ist für dieses Spiel nicht erlaubt."
+  },
   "InvokePie": {
     "src": "Swap player seats",
     "out": "Sitzplätze tauschen"
@@ -1449,7 +1451,6 @@
     "src": "There will be 2 players in this game.",
     "out": "An diesem Spiel werden 2 Spieler teilnehmen."
   },
-  "NumMoves": "# moves",
   "NumPlayers": {
     "src": "Number of players",
     "out": "Anzahl der Spieler"
@@ -2118,7 +2119,6 @@
     "src": "Games you are watching as a spectator. Unwatch to remove from this list. New chat or moves will update these entries.",
     "out": "Spiele, die du als Zuschauer verfolgst. Nicht mehr beobachten, um sie aus dieser Liste zu entfernen. Neue Chatnachrichten oder Züge aktualisieren diese Einträge."
   },
-  "Welcome": "Welcome",
   "WelcomePlayer": {
     "src": "Dashboard for",
     "out": "Übersicht für"
@@ -2250,10 +2250,6 @@
   "boardExport.frameCap": {
     "src": "Too many frames (maximum {{max}}). Choose a shorter range.",
     "out": "Zu viele Frames (maximal {{max}}). Wähle einen kürzeren Bereich."
-  },
-  "boardExport.frameCount": {
-    "src": "{{count}} frame(s)",
-    "out": "{{count}} Frame(s)"
   },
   "boardExport.frameCount_one": {
     "src": "{{count}} frame",
@@ -4463,10 +4459,6 @@
     "src": "Copy to account",
     "out": "In Konto kopieren"
   },
-  "lab.importLocalBanner": {
-    "src": "You have {{count}} Playground save(s) on this device. Copy them to your account?",
-    "out": "Du hast {{count}} Playground-Spielstände auf diesem Gerät. In dein Konto kopieren?"
-  },
   "lab.importLocalBanner_one": {
     "src": "You have one Playground save on this device. Copy it to your account?",
     "out": "Du hast einen Playground-Spielstand auf diesem Gerät. In dein Konto kopieren?"
@@ -4482,10 +4474,6 @@
   "lab.importLocalPartial": {
     "src": "Some saves could not be copied: {{names}}",
     "out": "Einige Spielstände konnten nicht kopiert werden: {{names}}"
-  },
-  "lab.importLocalSuccess": {
-    "src": "Copied {{count}} save(s) to your account.",
-    "out": "{{count}} Spielstände in dein Konto kopiert."
   },
   "lab.importLocalSuccess_one": {
     "src": "Copied one save to your account.",
@@ -4616,8 +4604,8 @@
     "out": "Nachricht"
   },
   "me.notifications.columns.note": {
-    "src": "Note",
-    "out": "Notiz"
+    "src": "Comment",
+    "out": "Kommentar"
   },
   "me.notifications.columns.time": {
     "src": "Time",
@@ -4658,6 +4646,10 @@
   "me.notifications.message.gameEnd_lose": {
     "src": "You lost your game of <gameLink>{{metaGame}}</gameLink>",
     "out": "Du hast deine Partie <gameLink>{{metaGame}}</gameLink> verloren"
+  },
+  "me.notifications.message.gameEnd_solo": {
+    "src": "Your <gameLink>{{metaGame}}</gameLink> game has ended",
+    "out": "Deine Partie <gameLink>{{metaGame}}</gameLink> ist beendet"
   },
   "me.notifications.message.gameEnd_win": {
     "src": "You won your game of <gameLink>{{metaGame}}</gameLink>",
@@ -5175,10 +5167,6 @@
     "src": "In that time, {{numPlayers}} players have played {{numGames}} games.",
     "out": "In dieser Zeit haben {{numPlayers}} Spieler {{numGames}} Spiele gespielt."
   },
-  "stats.ratingsNote": {
-    "src": "Please note that the ratings given here are dynamically generated and may differ from the static rating visible elsewhere. We're working on harmonizing things eventually.",
-    "out": "Bitte beachte, dass die hier angegebenen Wertungen dynamisch generiert werden und von der statischen Wertung abweichen können, die an anderer Stelle sichtbar ist. Wir arbeiten daran, dies auf Dauer zu vereinheitlichen."
-  },
   "stats.recordsBetween": {
     "src": "Records analyzed include games completed between {{oldest}} and {{newest}} ({{days}}).",
     "out": "Die analysierten Datensätze umfassen Spiele, die zwischen {{oldest}} und {{newest}} ({{days}}) beendet wurden."
@@ -5538,10 +5526,6 @@
   "tables.allUsers": {
     "src": "All users",
     "out": "Alle Benutzer"
-  },
-  "tables.average": {
-    "src": "Average",
-    "out": "Durchschnitt"
   },
   "tables.averageElo": {
     "src": "Elo",
@@ -6023,28 +6007,6 @@
     "src": "Wins",
     "out": "Siege"
   },
-  "tblHeaderAccepted": "Accepted",
-  "tblHeaderChallenger": "Challenger",
-  "tblHeaderClockIncrement": "Clock increment",
-  "tblHeaderClockMax": "Clock max",
-  "tblHeaderClockStart": "Clock start",
-  "tblHeaderFinished": "Game ended",
-  "tblHeaderGameNumber": "Game number",
-  "tblHeaderGamesDrawn": "Games drawn",
-  "tblHeaderGamesPlayed": "Games played",
-  "tblHeaderGamesWon": "Games won",
-  "tblHeaderHardClock": "Hard clock?",
-  "tblHeaderMoves": "Moves",
-  "tblHeaderPlayer": "Player {{num}}",
-  "tblHeaderPlayers": "Players",
-  "tblHeaderRated": "Rated?",
-  "tblHeaderRatedPlayer": "Player",
-  "tblHeaderRating": "Rating",
-  "tblHeaderRatingRank": "Rank",
-  "tblHeaderRespond": "Respond",
-  "tblHeaderSeating": "Seating",
-  "tblHeaderStarted": "Game started",
-  "tblHeaderVariants": "Variants",
   "theme.alertButton": {
     "src": "Alert Button",
     "out": "Warn-Schaltfläche"
