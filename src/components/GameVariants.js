@@ -8,6 +8,7 @@ import {
 } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { cloneDeep } from "lodash";
+import { initialNonGroupVariants } from "../lib/variantSelectionInit";
 
 // Variant constraints: /gameslib/variants/
 
@@ -182,12 +183,7 @@ function GameVariants({
     groupDataSetter(builtGroupData);
     nonGroupDataSetter(builtNonGroupData);
     groupVariantsSetter(initialGroupVariants(builtGroupData));
-
-    const ngVariants = {};
-    builtNonGroupData.forEach((v) => {
-      ngVariants[v.uid] = false;
-    });
-    nonGroupVariantsSetter(ngVariants);
+    nonGroupVariantsSetter(initialNonGroupVariants(builtNonGroupData));
   }, [metaGame]);
 
   const handleGroupChange = useCallback((group, variant) => {
