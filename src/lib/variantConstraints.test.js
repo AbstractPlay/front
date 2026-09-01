@@ -34,6 +34,13 @@ describe("variantConstraints (gameslib)", () => {
     expect(map.get("scrambled")?.selectable).toBe(false);
   });
 
+  it("evaluateAvailability disables hex boards under scrambled (back-pressure)", () => {
+    const map = evaluateAvailability(loaVariants, ["classic", "scrambled"]);
+    expect(map.get("hex5")?.selectable).toBe(false);
+    expect(map.get("hex6")?.selectable).toBe(false);
+    expect(map.get("classic")?.selectable).toBe(true);
+  });
+
   it("validateVariantSelection rejects hex5 + scrambled", () => {
     const result = validateVariantSelection(loaVariants, ["hex5", "scrambled"]);
     expect(result.ok).toBe(false);
