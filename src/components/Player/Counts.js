@@ -2,9 +2,10 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AllRecsContext, ProfileContext, SummaryContext } from "../Player";
-import { gameinfo } from "@abstractplay/gameslib";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { useTranslation } from "react-i18next";
+import { getGameDisplayName } from "../../lib/gameOptions";
+import { metaGameFromPlayerRecord } from "../../lib/playerGameQuickPicks";
 import { getPlayerHIndex } from "../../lib/playerProfileSections";
 
 function Counts() {
@@ -34,23 +35,18 @@ function Counts() {
     if (allRecs !== null) {
       const countMap = new Map();
       for (const rec of allRecs) {
-        const name = rec.header.game.name;
-        if (countMap.has(name)) {
-          const num = countMap.get(name);
-          countMap.set(name, num + 1);
-        } else {
-          countMap.set(name, 1);
+        const meta = metaGameFromPlayerRecord(rec);
+        if (!meta) {
+          continue;
         }
+        countMap.set(meta, (countMap.get(meta) ?? 0) + 1);
       }
       const lst = [];
-      for (const name of countMap.keys()) {
-        const inforec = [...gameinfo.values()].find((r) =>
-          name.startsWith(r.name)
-        );
+      for (const meta of countMap.keys()) {
         lst.push({
-          meta: inforec?.uid,
-          name,
-          count: countMap.get(name),
+          meta,
+          name: getGameDisplayName(meta),
+          count: countMap.get(meta),
         });
       }
       countsSetter(lst);
