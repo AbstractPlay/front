@@ -12,10 +12,12 @@ function firstGames(count) {
   return [...gameinfo.values()].slice(0, count);
 }
 
-const sampleRec = (meta, gameName, dateEnd) => ({
+const LEGACY_INSTANCE_ID = "f47ac10b-58cc-4372-a567-0e02b2c3d479";
+
+const sampleRec = (meta, gameName, dateEnd, gameid = `${meta}#abc123`) => ({
   header: {
     game: { name: gameName },
-    site: { gameid: `${meta}#abc123` },
+    site: { gameid },
     "date-end": dateEnd,
   },
 });
@@ -33,10 +35,20 @@ describe("metaGameFromDisplayName", () => {
 });
 
 describe("metaGameFromPlayerRecord", () => {
-  it("reads meta from site gameid hash", () => {
+  it("reads meta from legacy site gameid hash", () => {
     const info = gameinfo.values().next().value;
     expect(
       metaGameFromPlayerRecord(sampleRec(info.uid, info.name, "2024-01-01"))
+    ).toBe(info.uid);
+  });
+
+  it("reads meta from encoded site gameid", () => {
+    const info = gameinfo.values().next().value;
+    const gameid = `${LEGACY_INSTANCE_ID}#${info.uid}:variant-a`;
+    expect(
+      metaGameFromPlayerRecord(
+        sampleRec(info.uid, info.name, "2024-01-01", gameid)
+      )
     ).toBe(info.uid);
   });
 });
