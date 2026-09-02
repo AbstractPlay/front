@@ -8,6 +8,7 @@ import {
   metaUidFromSummaryGameKey,
   parseSummaryGameKey,
 } from "./summaryGameKeys";
+import { getGameDisplayName } from "./gameOptions";
 import { setupGameslibI18nForTests } from "./testGameslibI18n";
 
 beforeAll(() => setupGameslibI18nForTests());
@@ -77,10 +78,10 @@ describe("matchesSummaryGameKey", () => {
 
 describe("formatSummaryGameKey", () => {
   it("formats uid keys to display names", () => {
-    const { uid, info } = sampleMeta();
-    expect(formatSummaryGameKey(uid)).toBe(info.name);
+    const { uid } = sampleMeta();
+    expect(formatSummaryGameKey(uid)).toBe(getGameDisplayName(uid));
     expect(formatSummaryGameKey(`${uid} (no variants)`, (k) => k)).toContain(
-      info.name
+      getGameDisplayName(uid)
     );
   });
 });

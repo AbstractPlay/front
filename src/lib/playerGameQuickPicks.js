@@ -2,7 +2,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { getTopRatings } from "./playerProfileSections";
 import { parseRecordGameId } from "./recordGameId";
 import { metaUidFromSummaryGameKey } from "./summaryGameKeys";
-import { isPublicCatalogGame } from "./gameOptions";
+import { isPublicCatalogGame, getGameDisplayName } from "./gameOptions";
 
 /** Resolve a summarize ratings/summary game key to metaGame uid. */
 export function metaGameFromDisplayName(gameName) {
@@ -47,7 +47,7 @@ function toQuickPick(metaGame) {
   if (!isPublicCatalogGame(info)) {
     return null;
   }
-  return { id: metaGame, name: info.name };
+  return { id: metaGame, name: getGameDisplayName(metaGame) };
 }
 
 /**

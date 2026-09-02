@@ -5,11 +5,11 @@ import { gameinfo } from "@abstractplay/gameslib";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { isPublicCatalogGame } from "../../lib/gameOptions";
+import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
 
 function Coded() {
   const [user] = useContext(ProfileContext);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -21,15 +21,12 @@ function Coded() {
               .length > 0 &&
             isPublicCatalogGame(entry)
         )
-        .map(([meta, info]) => {
-          const ret = {
-            id: meta,
-            name: info.name,
-          };
-          return ret;
-        })
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    [user]
+        .map(([meta]) => ({
+          id: meta,
+          name: getGameDisplayName(meta),
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name, i18n.language)),
+    [user, i18n.language]
   );
 
   const columnHelper = createColumnHelper();

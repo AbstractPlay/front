@@ -1,6 +1,7 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useMemo } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
@@ -12,6 +13,7 @@ import { listPublicCatalogMetas, getGameDisplayName } from "../lib/gameOptions";
 import { useStore } from "../stores";
 
 function MetaContainer(props) {
+  const { i18n } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
   const [counts, countsSetter] = useState(null);
   const [updateCounter, updateCounterSetter] = useState(0);
@@ -32,13 +34,13 @@ function MetaContainer(props) {
     fetchData();
   }, [updateCounter]);
 
-  let games = listPublicCatalogMetas().sort((a, b) => {
-    const na = getGameDisplayName(a);
-    const nb = getGameDisplayName(b);
-    if (na < nb) return -1;
-    else if (na > nb) return 1;
-    return 0;
-  });
+  const games = useMemo(
+    () =>
+      listPublicCatalogMetas().sort((a, b) =>
+        getGameDisplayName(a).localeCompare(getGameDisplayName(b), i18n.language)
+      ),
+    [i18n.language]
+  );
   const toggleStar = async (game) => {
     try {
       const { setGlobalMe } = useStore.getState();

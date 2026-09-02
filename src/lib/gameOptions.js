@@ -1,4 +1,4 @@
-import { gameinfo } from "@abstractplay/gameslib";
+import { gameinfo, resolveGameName } from "@abstractplay/gameslib";
 import { isLabSupportedGame } from "./Lab/buildGame";
 import { isProductionMode } from "./realMode";
 import { tournamentPlaySupported } from "./tournamentGame";
@@ -23,7 +23,11 @@ export function isPublicCatalogGame(info) {
 
 /** Display name for a meta uid; safe when the game is absent from gameslib. */
 export function getGameDisplayName(metaUid, fallback = metaUid) {
-  return (gameinfo.get(metaUid)?.name ?? fallback ?? metaUid) || "Unknown";
+  if (!metaUid) {
+    return "Unknown";
+  }
+  const info = gameinfo.get(metaUid);
+  return resolveGameName(metaUid, info?.name ?? fallback) || "Unknown";
 }
 
 /**
@@ -87,10 +91,14 @@ export function isBoardFilterCategory(cat) {
 }
 
 /**
- * @param {{ labOnly?: boolean, tournamentOnly?: boolean }} options
+ * @param {{ labOnly?: boolean, tournamentOnly?: boolean, locale?: string }} options
  * @returns {{ id: string, name: string }[]}
  */
-export function buildGameOptions({ labOnly = false, tournamentOnly = false } = {}) {
+export function buildGameOptions({
+  labOnly = false,
+  tournamentOnly = false,
+  locale,
+} = {}) {
   const options = [];
   for (const info of gameinfo.values()) {
     if (!isPublicCatalogGame(info)) {
@@ -102,9 +110,9 @@ export function buildGameOptions({ labOnly = false, tournamentOnly = false } = {
     if (tournamentOnly && !tournamentPlaySupported(info.uid)) {
       continue;
     }
-    options.push({ id: info.uid, name: info.name });
+    options.push({ id: info.uid, name: getGameDisplayName(info.uid) });
   }
-  options.sort((a, b) => a.name.localeCompare(b.name));
+  options.sort((a, b) => a.name.localeCompare(b.name, locale));
   return options;
 }
 
@@ -121,7 +129,7 @@ export function pickRandomGameOption({ labOnly = false } = {}) {
 }
 
 /**
- * @param {{ labOnly?: boolean, tournamentOnly?: boolean }} options
+ * @param {{ labOnly?: boolean, tournamentOnly?: boolean, locale?: string }} options
  * @returns {Array<{
  *   id: string,
  *   name: string,
@@ -132,8 +140,12 @@ export function pickRandomGameOption({ labOnly = false } = {}) {
  *   boardShapeTags: string[],
  * }>}
  */
-export function buildGameBrowseEntries({ labOnly = false, tournamentOnly = false } = {}) {
-  return buildGameOptions({ labOnly, tournamentOnly }).map(({ id, name }) => {
+export function buildGameBrowseEntries({
+  labOnly = false,
+  tournamentOnly = false,
+  locale,
+} = {}) {
+  return buildGameOptions({ labOnly, tournamentOnly, locale }).map(({ id, name }) => {
     const info = gameinfo.get(id);
     const designerList =
       info?.people?.filter((p) => p.type === "designer") ?? [];

@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
-import { isPublicCatalogGame } from "../../lib/gameOptions";
+import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import {
@@ -34,7 +34,7 @@ function GameMoves(props) {
   const lastRowRef = useRef();
   const tableRef = useRef();
   const headerRef = useRef();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [moveTableDensityRev, setMoveTableDensityRev] = useState(0);
   void moveTableDensityRev;
   let focus = props.focus;
@@ -106,12 +106,12 @@ function GameMoves(props) {
         info.playercounts.includes(2) &&
         !info.flags.includes("simultaneous")
       ) {
-        lst.push([info.uid, info.name]);
+        lst.push([info.uid, getGameDisplayName(info.uid)]);
       }
     }
-    lst.sort((a, b) => a[1].localeCompare(b[1]));
+    lst.sort((a, b) => a[1].localeCompare(b[1], i18n.language));
     validGamesSetter(lst);
-  }, []);
+  }, [i18n.language]);
 
   function AMove(game, m) {
     return (
