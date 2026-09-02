@@ -7,7 +7,7 @@ import {
   trackRecommendationShow,
 } from "../lib/recommendationTracking";
 import { isLabSupportedGame } from "../lib/Lab/buildGame";
-import { isPublicCatalogGame } from "../lib/gameOptions";
+import { isPublicCatalogGame, getGameDisplayName } from "../lib/gameOptions";
 import { useStore } from "../stores";
 import {
   fetchPlayerQuickPickData,
@@ -75,7 +75,7 @@ function buildLabCatalog() {
     .filter((info) => isPublicCatalogGame(info) && isLabSupportedGame(info.uid))
     .map((info) => ({
       id: info.uid,
-      name: info.name,
+      name: getGameDisplayName(info.uid),
       categories: info.categories ?? [],
       dateAdded: info.dateAdded,
     }));

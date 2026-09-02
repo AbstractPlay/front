@@ -26,7 +26,7 @@ const SECTION_LABEL_KEYS = {
 };
 
 function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tournamentOnly = false }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [query, setQuery] = useState("");
   const [starredOnly, setStarredOnly] = useState(false);
   const [goalTag, setGoalTag] = useState("");
@@ -46,8 +46,8 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
   );
 
   const allGames = useMemo(
-    () => buildGameBrowseEntries({ labOnly, tournamentOnly }),
-    [labOnly, tournamentOnly]
+    () => buildGameBrowseEntries({ labOnly, tournamentOnly, locale: i18n.language }),
+    [labOnly, tournamentOnly, i18n.language]
   );
 
   const goalOptions = useMemo(

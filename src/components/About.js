@@ -4,6 +4,7 @@ import pkgInfo from "../../package.json";
 import { Link } from "react-router-dom";
 import { shuffle } from "../lib/shuffle";
 import { gameinfo } from "@abstractplay/gameslib";
+import { getGameDisplayName } from "../lib/gameOptions";
 import { gameDescription } from "../lib/gameDescription";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -28,7 +29,7 @@ function aboutHighlightsLine(t) {
 function About(props) {
   const [mvTimes, mvTimesSetter] = useState(null);
   const [highlightMetas, setHighlightMetas] = useState(null);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     async function fetchData() {
@@ -66,7 +67,7 @@ function About(props) {
         if (!info) return null;
         return {
           metaGame,
-          name: info.name,
+          name: getGameDisplayName(metaGame),
           designers:
             info.people !== undefined && info.people.length > 0
               ? info.people.filter((p) => p.type === "designer")
@@ -74,7 +75,9 @@ function About(props) {
         };
       })
       .filter(Boolean);
-  }, [highlightMetas]);
+  // getGameDisplayName reads gameslib i18n synced from host language
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh labels on locale change
+  }, [highlightMetas, i18n.language]);
 
   return (
     <Fragment>

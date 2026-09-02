@@ -191,7 +191,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     }
     return "";
   });
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     sessionStorage.setItem(`explore-page-${viewKey}`, String(pageIndex));
@@ -293,17 +293,13 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       if (config.loadGames) {
         gamesSetter(config.loadGames(metas, forceNew));
       } else {
-        metas.sort((a, b) => {
-          const na = getGameDisplayName(a);
-          const nb = getGameDisplayName(b);
-          if (na < nb) return -1;
-          else if (na > nb) return 1;
-          return 0;
-        });
+        metas.sort((a, b) =>
+          getGameDisplayName(a).localeCompare(getGameDisplayName(b), i18n.language)
+        );
         gamesSetter([...metas]);
       }
     },
-    [config]
+    [config, i18n.language]
   );
 
   useEffect(() => {
@@ -348,7 +344,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
             : tagsRaw.filter((cat) => cat.raw.startsWith("goal"));
           return {
             id: metaGame,
-            gameName: info.name,
+            gameName: getGameDisplayName(metaGame),
             image: undefined,
             links: info.urls,
             designers:
@@ -370,8 +366,11 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         })
         .filter((obj) => !filterStars || obj.starred)
         .filter((obj) => !filterRecommended || recommendedIds.has(obj.id)),
+    // getGameDisplayName reads gameslib i18n synced from host language
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh labels on locale change
     [
       t,
+      i18n.language,
       games,
       globalMe,
       fetchedData,

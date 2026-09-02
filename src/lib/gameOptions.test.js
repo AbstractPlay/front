@@ -1,5 +1,7 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
-import { gameinfo } from "@abstractplay/gameslib";
+import { describe, expect, it, vi, beforeEach, beforeAll } from "vitest";
+import i18n from "i18next";
+import { addResource, gameinfo } from "@abstractplay/gameslib";
+import enApgames from "../../node_modules/@abstractplay/gameslib/locales/en/apgames.json";
 import {
   buildGameOptions,
   collectBoardFilterOptions,
@@ -21,10 +23,35 @@ beforeEach(() => {
   vi.mocked(isProductionMode).mockReturnValue(false);
 });
 
+beforeAll(async () => {
+  await i18n.init({
+    lng: "en",
+    ns: ["apgames"],
+    resources: { en: { apgames: enApgames } },
+  });
+  addResource("en", i18n);
+});
+
 describe("getGameDisplayName", () => {
   it("returns the catalog name for a known uid", () => {
     const uid = [...gameinfo.keys()][0];
     expect(getGameDisplayName(uid)).toBe(gameinfo.get(uid).name);
+  });
+
+  it("returns localized name when apgames bundle has a translation", async () => {
+    const deBundle = {
+      ...enApgames,
+      names: {
+        ...enApgames.names,
+        hex: "Hex (DE)",
+      },
+    };
+    await i18n.changeLanguage("de");
+    i18n.addResourceBundle("de", "apgames", deBundle, true, true);
+    addResource("de", i18n);
+    expect(getGameDisplayName("hex")).toBe("Hex (DE)");
+    await i18n.changeLanguage("en");
+    addResource("en", i18n);
   });
 
   it("returns fallback for unknown uid", () => {
