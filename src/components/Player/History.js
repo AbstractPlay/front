@@ -2,6 +2,9 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
+import { getGameDisplayName } from "../../lib/gameOptions";
+import { metaGameFromPlayerRecord } from "../../lib/playerGameQuickPicks";
+import { parseRecordGameId } from "../../lib/recordGameId";
 import { AllRecsContext, ProfileContext } from "../Player";
 import DataTable, { PROFILE_FILTER_TABLE_PROPS } from "../shared/DataTable";
 import ChallengeEntryModals from "../ChallengeEntryModals";
@@ -66,17 +69,12 @@ function History({ handleChallenge }) {
     () =>
       allRecs
         .map((rec) => {
-          const gameName = rec.header.game.name;
-          let id = rec.header.site.gameid;
-          let meta = undefined;
-          if (id.includes("#")) {
-            [meta, id] = id.split("#");
-          }
-          if (meta === undefined) {
-            meta = [...gameinfo.entries()].find(
-              ([, info]) => info.name === gameName
-            )[0];
-          }
+          const meta = metaGameFromPlayerRecord(rec);
+          const parsed = parseRecordGameId(rec.header?.site?.gameid);
+          const id = parsed?.instanceId ?? rec.header?.site?.gameid ?? "";
+          const gameName = meta
+            ? getGameDisplayName(meta)
+            : (rec.header?.game?.name ?? "Unknown");
           let winner = undefined;
           const sortedResults = rec.header.players.sort(
             (a, b) => b.result - a.result
