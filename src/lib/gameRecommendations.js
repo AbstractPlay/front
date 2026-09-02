@@ -1,5 +1,5 @@
 import { gameinfo } from "@abstractplay/gameslib";
-import { isPublicCatalogGame } from "./gameOptions";
+import { isPublicCatalogGame, getGameDisplayName } from "./gameOptions";
 import {
   gameRecommendationFeatures,
   topLevelGoalTag,
@@ -153,7 +153,7 @@ export function findTopSeedOverlaps(candidateId, categories, seedMetaGames) {
       gameRecommendationFeatures(info.categories ?? [])
     );
     if (overlap > 0) {
-      overlaps.push({ meta: seed, name: info.name, overlap });
+      overlaps.push({ meta: seed, name: getGameDisplayName(seed), overlap });
     }
   }
   overlaps.sort((a, b) => b.overlap - a.overlap);
@@ -194,7 +194,7 @@ export function buildRecommendationReason({
     return { reasonType: "new", reason: "New on Abstract Play" };
   }
   if (reasonType === "cooccur" && cooccurBestSeed) {
-    const seedName = gameinfo.get(cooccurBestSeed)?.name ?? cooccurBestSeed;
+    const seedName = getGameDisplayName(cooccurBestSeed, cooccurBestSeed);
     return {
       reasonType: "cooccur",
       reason: `Popular with players who play ${seedName}`,
@@ -290,7 +290,7 @@ export function buildGameRecommendations({
       .filter(([, info]) => isPublicCatalogGame(info))
       .map(([id, info]) => ({
         id,
-        name: info.name,
+        name: getGameDisplayName(id),
         categories: info.categories ?? [],
         dateAdded: info.dateAdded,
       }));

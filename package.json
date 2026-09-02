@@ -18,8 +18,8 @@
   },
   "packageManager": "npm@11.6.2",
   "dependencies": {
-    "@abstractplay/gameslib": "1.0.0-ci-33426323775.0",
-    "@abstractplay/renderer": "1.0.0-ci-33337357418.0",
+    "@abstractplay/gameslib": "1.0.0-ci-33652219693.0",
+    "@abstractplay/renderer": "1.0.0-ci-33584630705.0",
     "@atlaskit/pragmatic-drag-and-drop": "^1.3.0",
     "@tanstack/react-table": "^8.11.2",
     "array-move": "^3.0.1",
@@ -113,6 +113,6 @@
     "defaults"
   ],
   "overrides": {
-    "@abstractplay/renderer": "1.0.0-ci-33337357418.0"
+    "@abstractplay/renderer": "1.0.0-ci-33584630705.0"
   }
 }

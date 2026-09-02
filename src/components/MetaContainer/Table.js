@@ -8,6 +8,7 @@ import React, {
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { gameDescription } from "../../lib/gameDescription";
+import { getGameDisplayName } from "../../lib/gameOptions";
 import { tournamentListPath } from "../../lib/tournamentSections";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
@@ -46,7 +47,7 @@ function Table({
   const [activeImgModal, activeImgModalSetter] = useState("");
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [expandedPara, expandedParaSetter] = useState([]);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
   const [filterStars, filterStarsSetter] = useStorageState(
     "allgames-filter-stars",
@@ -214,7 +215,7 @@ function Table({
             });
           return {
             id: metaGame,
-            gameName: info.name,
+            gameName: getGameDisplayName(metaGame),
             image: undefined,
             links: info.urls,
             dateAdded: info.dateAdded,
@@ -256,7 +257,9 @@ function Table({
           };
         })
         .filter((obj) => !filterStars || obj.starred),
-    [globalMe, props.games, props.counts, filterStars, t]
+    // getGameDisplayName reads gameslib i18n synced from host language
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh labels on locale change
+    [globalMe, props.games, props.counts, filterStars, t, i18n.language]
   );
 
   const allTags = useMemo(() => {
