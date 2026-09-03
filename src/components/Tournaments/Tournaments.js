@@ -29,6 +29,7 @@ import {
   tournamentListPath,
   isValidTournamentTab,
 } from "../../lib/tournamentSections";
+import PageLoading from "../shared/PageLoading";
 
 function Tournaments(props) {
   const { t } = useTranslation();
@@ -42,7 +43,7 @@ function Tournaments(props) {
   const [update, updateSetter] = useState(0);
   const [showNewTournamentModal, showNewTournamentModalSetter] =
     useState(false);
-  const [tournaments, tournamentsSetter] = useState([]);
+  const [tournaments, tournamentsSetter] = useState(null);
   const [tournamentsToArchive, tournamentsToArchiveSetter] = useState(false);
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
@@ -93,11 +94,13 @@ function Tournaments(props) {
     async function fetchData() {
       let url = new URL(API_ENDPOINT_OPEN);
       url.searchParams.append("query", "get_tournaments");
+      try {
       const res = await fetch(url);
       const status = res.status;
       if (status !== 200) {
         const result = await res.json();
         console.log(JSON.parse(result.body));
+        tournamentsSetter([]);
       } else {
         const data = await res.json();
         let newtournaments = data.tournaments.map((t) => {
@@ -152,6 +155,10 @@ function Tournaments(props) {
         tournamentsSetter(newtournaments);
         if (toArchive) tournamentsToArchiveSetter(true);
       }
+      } catch (error) {
+        console.log(error);
+        tournamentsSetter([]);
+      }
     }
     fetchData();
   }, [update]);
@@ -187,7 +194,7 @@ function Tournaments(props) {
   const handleNewTournament = async (tournament) => {
     const variantsKey = tournament.variants.sort().join("|");
     if (
-      tournaments.find(
+      (tournaments ?? []).find(
         (t) =>
           t.metaGame === tournament.metaGame &&
           t.variants.sort().join("|") === variantsKey &&
@@ -255,7 +262,7 @@ function Tournaments(props) {
   const openTournamentsData = useMemo(() => {
     const oneWeek = 1000 * 60 * 60 * 24 * 7;
     const twoWeeks = oneWeek * 2;
-    return tournaments
+    return (tournaments ?? [])
       .filter((t) => !t.started)
       .map((t) => {
         let date1 = -1;
@@ -530,7 +537,7 @@ function Tournaments(props) {
   );
 
   const currentTournamentsData = useMemo(() => {
-    return tournaments
+    return (tournaments ?? [])
       .filter((t) => t.started && !t.dateEnded)
       .map((t, idx) => {
         const ret = {
@@ -757,7 +764,7 @@ function Tournaments(props) {
   );
 
   const completedTournamentsData = useMemo(() => {
-    return tournaments
+    return (tournaments ?? [])
       .filter((t) => t.dateEnded)
       .map((t) => {
         const ret = {
@@ -975,6 +982,10 @@ function Tournaments(props) {
   }
 
   const ogUrl = tournamentListPath(activeTab, filterMeta);
+
+  if (tournaments === null) {
+    return <PageLoading message={t("Tournament.loading")} />;
+  }
 
   return (
     <>

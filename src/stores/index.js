@@ -46,9 +46,17 @@ export const useStore = create((set, get) => ({
     })),
 
   users: [],
+  usersLoaded: false,
   setUsers: (users) =>
     set((state) => ({
       users: typeof users === "function" ? users(state.users) : users,
+    })),
+  setUsersLoaded: (usersLoaded) =>
+    set((state) => ({
+      usersLoaded:
+        typeof usersLoaded === "function"
+          ? usersLoaded(state.usersLoaded)
+          : usersLoaded,
     })),
 
   news: [],

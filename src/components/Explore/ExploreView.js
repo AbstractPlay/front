@@ -88,6 +88,8 @@ function tagSortFn(a, b) {
   return va === vb ? a.tag.localeCompare(b.tag) : va - vb;
 }
 
+const COUNT_VIEWS = new Set(["all", "stars", "completed", "random"]);
+
 function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
   const allSize = Number.MAX_SAFE_INTEGER;
   const globalMe = useStore((state) => state.globalMe);
@@ -688,6 +690,9 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         </ReactMarkdown>
       ) : null}
       {config.renderExtra ? config.renderExtra(handleReload, t) : null}
+      {counts === null && COUNT_VIEWS.has(viewKey) ? (
+        <p className="help has-text-centered">{t("explore.loadingCounts")}</p>
+      ) : null}
       {config.enableRecommendedFilter ? (
         <div className="container content" style={{ paddingBottom: "0.75em" }}>
           <label className="checkbox">

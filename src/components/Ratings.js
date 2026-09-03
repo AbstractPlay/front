@@ -26,7 +26,7 @@ import {
 } from "../lib/glickoDisplay";
 import { formatBatchRatingVariantLabel } from "../lib/batchRatingLabels";
 import { matchesSummaryGameKey } from "../lib/summaryGameKeys";
-import Spinner from "./Spinner";
+import PageLoading from "./shared/PageLoading";
 import { SUMMARY_URLS } from "../lib/summaryFetch";
 import GlickoHint from "./shared/GlickoHint";
 import GlickoDisplayNote from "./shared/GlickoDisplayNote";
@@ -385,12 +385,7 @@ function Ratings() {
   useEnsureSummaryTier("ratings");
 
   if (ratingsLoadState === "pending" || ratingsLoadState === "idle") {
-    return (
-      <div className="has-text-centered summary-gate-loading">
-        <Spinner />
-        <p className="help">{t("stats.loadingSummary")}</p>
-      </div>
-    );
+    return <PageLoading message={t("stats.loadingSummary")} />;
   }
 
   if (ratingsLoadState === "error") {

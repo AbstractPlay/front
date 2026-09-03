@@ -548,6 +548,9 @@
   "ChallengeTypeOpenDescription": "Chiunque può accettare questa sfida.",
   "ChallengeTypeTargeted": "Chiusa",
   "ChallengeTypeTargetedDescription": "Stai sfidando giocatori specifici.",
+  "challenges": {
+    "loading": "Caricamento sfide…"
+  },
   "Change": "Modifica",
   "ChangeRenderOptions": "Modifica opzioni di visualizzazione del tabellone",
   "ChooseDisplay": "Scegli come visualizzare il tabellone",
@@ -567,6 +570,9 @@
   "ClearMove": "Cancella inserimento mossa",
   "ClickExpand": "Clicca per espandere",
   "Close": "Chiudi",
+  "common": {
+    "loading": "Caricamento…"
+  },
   "ColorBlind": "Daltonici",
   "ColorPatterns": "Bianco e nero",
   "Comment": "Commento",
@@ -643,6 +649,7 @@
   "EnterMove": "Inserisci/Clicca una mossa",
   "Error": "Errore!",
   "Events": {
+    "loading": "Caricamento eventi…",
     "Description": "Gli eventi organizzati sono gestiti da singoli individui. Il sistema consente agli organizzatori di creare eventi, ai giocatori di registrarsi e agli organizzatori di avviare le partite tra i giocatori registrati. Il tracciamento dei risultati, l'applicazione di restrizioni temporali dettagliate e l'annuncio dei vincitori spettano all'organizzatore.",
     "Name": "Eventi organizzati",
     "newEvent": "Nuovo evento",
@@ -822,6 +829,9 @@
   "LevelGame": "Solo per questa partita",
   "LevelMetaGame": "Per tutte le partite a {{game}}",
   "ListOf": "Elenco di",
+  "listGames": {
+    "loading": "Caricamento partite…"
+  },
   "LogIn": "Accedi",
   "LogOut": "Disconnettiti",
   "MakeMove": "Fai una mossa",
@@ -899,6 +909,9 @@
   "PleaseConsent": "È necessario il tuo consenso!",
   "PlayersAccepted": "Per ora i seguenti giocatori desiderano partecipare alla partita: {{others}}.",
   "Playground": "Area di prova",
+  "play": {
+    "loadingNext": "Ricerca della tua prossima partita…"
+  },
   "Lab": "Area di prova",
   "Ply": "Semimossa",
   "ProfileAnon": "Vuoi rimanere anonimo?",
@@ -1131,6 +1144,7 @@
     }
   },
   "Tournament": {
+    "loading": "Caricamento tornei…",
     "Number": "Numero del torneo",
     "Tournaments": "Tornei automatizzati",
     "Completion": "Completamento",
@@ -1291,6 +1305,7 @@
   },
   "explore": {
     "intro": "Questa pagina ti permette di esplorare diversi modi per ordinare l'elenco dei giochi. Seleziona la vista desiderata qui sotto. Cliccando sul nome di un gioco verrai indirizzato alla sua pagina principale con ulteriori informazioni.",
+    "loadingCounts": "Caricamento conteggio partite…",
     "filterRecommended": "Solo giochi consigliati",
     "views": {
       "all": {
@@ -1453,6 +1468,7 @@
     }
   },
   "players": {
+    "loading": "Caricamento giocatori…",
     "filters": {
       "hideRed": "Nascondi rossi",
       "hideYellowRed": "Nascondi gialli e rossi",
@@ -1657,6 +1673,7 @@
     }
   },
   "gameMove": {
+    "loading": "Caricamento partita…",
     "dev": {
       "copyHomeworldsDiagram": "Copia diagramma Homeworlds",
       "injectState": "Inietta stato",

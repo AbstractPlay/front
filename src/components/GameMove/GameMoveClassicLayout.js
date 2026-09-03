@@ -17,10 +17,12 @@ import ClipboardCopy from "../../lib/ClipboardCopy";
 import BoardExportGifModal from "../BoardExport/BoardExportGifModal";
 import UserChats from "./UserChats";
 import Joyride from "react-joyride";
+import PageLoading from "../shared/PageLoading";
 
 export default function GameMoveClassicLayout({ session }) {
   const {
     error,
+    isGameLoading,
     errorMessageRef,
     game,
     toMove,
@@ -153,6 +155,10 @@ export default function GameMoveClassicLayout({ session }) {
     onOpenExportGif: () => showBoardExportGifSetter(true),
     boardExportDisabled,
   };
+
+  if (isGameLoading) {
+    return <PageLoading message={t("gameMove.loading")} />;
+  }
 
   if (error) {
     if (

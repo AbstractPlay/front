@@ -4,13 +4,14 @@ import { useTranslation } from "react-i18next";
 import { addResource } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
 import { useStore } from "../stores";
+import PageLoading from "./shared/PageLoading";
 
 /*
  * This component loads the "next game" data and immediately redirects you.
  */
 function Play(props) {
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   addResource(i18n.language, i18n);
 
   useEffect(() => {
@@ -53,7 +54,7 @@ function Play(props) {
     });
   }, [navigate]);
 
-  return;
+  return <PageLoading message={t("play.loadingNext")} />;
 }
 
 export default Play;

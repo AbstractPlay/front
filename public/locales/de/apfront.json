@@ -548,6 +548,9 @@
   "ChallengeTypeOpenDescription": "Jeder kann diese Herausforderung annehmen.",
   "ChallengeTypeTargeted": "Geschlossen",
   "ChallengeTypeTargetedDescription": "Du forderst bestimmte Spieler heraus.",
+  "challenges": {
+    "loading": "Herausforderungen werden geladen…"
+  },
   "Change": "Ändern",
   "ChangeRenderOptions": "Anzeigeoptionen des Spielbretts ändern",
   "ChooseDisplay": "Wähle, wie das Brett angezeigt werden soll",
@@ -567,6 +570,9 @@
   "ClearMove": "Zugeingabe löschen",
   "ClickExpand": "Zum Aufklappen klicken",
   "Close": "Schließen",
+  "common": {
+    "loading": "Wird geladen…"
+  },
   "ColorBlind": "Farbenblind",
   "ColorPatterns": "Schwarz und Weiß",
   "Comment": "Kommentar",
@@ -643,6 +649,7 @@
   "EnterMove": "Zug eingeben/klicken",
   "Error": "Fehler!",
   "Events": {
+    "loading": "Events werden geladen…",
     "Description": "Organisierte Events werden von Einzelpersonen verwaltet. Das System ermöglicht es Organisatoren, Events zu erstellen, Spielern, sich zu registrieren, und Organisatoren anschließend, Spiele zwischen registrierten Spielern zu starten. Die Verfolgung von Ergebnissen, die Durchsetzung detaillierter Zeitbeschränkungen und die Ankündigung von Gewinnern obliegt dem Organisator.",
     "Name": "Organisierte Events",
     "newEvent": "Neues Event",
@@ -822,6 +829,9 @@
   "LevelGame": "Nur für dieses Spiel",
   "LevelMetaGame": "Für alle {{game}}-Spiele",
   "ListOf": "Liste von",
+  "listGames": {
+    "loading": "Spiele werden geladen…"
+  },
   "LogIn": "Anmelden",
   "LogOut": "Abmelden",
   "MakeMove": "Einen Zug machen",
@@ -899,6 +909,9 @@
   "PleaseConsent": "Deine Zustimmung wird benötigt!",
   "PlayersAccepted": "Bisher sind folgende Spieler bereit, am Spiel teilzunehmen: {{others}}.",
   "Playground": "Spielplatz",
+  "play": {
+    "loadingNext": "Dein nächstes Spiel wird gesucht…"
+  },
   "Lab": "Spielplatz",
   "Ply": "Halbzug",
   "ProfileAnon": "Möchtest du anonym bleiben?",
@@ -1131,6 +1144,7 @@
     }
   },
   "Tournament": {
+    "loading": "Turniere werden geladen…",
     "Number": "Turniernummer",
     "Tournaments": "Automatisierte Turniere",
     "Completion": "Abschluss",
@@ -1291,6 +1305,7 @@
   },
   "explore": {
     "intro": "Auf dieser Seite kannst du verschiedene Möglichkeiten erkunden, die Liste der Spiele zu sortieren. Wähle unten deine gewünschte Ansicht aus. Ein Klick auf den Namen eines Spiels führt dich zur Übersichtsseite dieses Spiels mit weiteren Informationen.",
+    "loadingCounts": "Anzahl der Spiele wird geladen…",
     "filterRecommended": "Nur empfohlene Spiele",
     "views": {
       "all": {
@@ -1453,6 +1468,7 @@
     }
   },
   "players": {
+    "loading": "Spieler werden geladen…",
     "filters": {
       "hideRed": "Rot ausblenden",
       "hideYellowRed": "Gelb und Rot ausblenden",
@@ -1657,6 +1673,7 @@
     }
   },
   "gameMove": {
+    "loading": "Partie wird geladen…",
     "dev": {
       "copyHomeworldsDiagram": "Homeworlds-Diagramm kopieren",
       "injectState": "Status injizieren",

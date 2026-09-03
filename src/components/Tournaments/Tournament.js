@@ -5,6 +5,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { Helmet } from "react-helmet-async";
+import PageLoading from "../shared/PageLoading";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 
@@ -162,6 +163,7 @@ function Tournament(props) {
   const { t } = useTranslation();
   const allUsers = useStore((state) => state.users);
   const [tournament, tournamentSetter] = useState(null);
+  const [tournamentLoaded, tournamentLoadedSetter] = useState(false);
   const [divisions, divisionsSetter] = useState([]);
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
   const { tournamentid } = useParams();
@@ -205,6 +207,7 @@ function Tournament(props) {
         divisionsSetter(divisions);
         tournamentSetter(data.tournament[0]);
       }
+      tournamentLoadedSetter(true);
     }
     fetchData();
   }, [tournamentid, metaGame, gameId, gameMetaGame]);
@@ -218,6 +221,11 @@ function Tournament(props) {
     ? gameinfo.get(tournament.metaGame)?.name
     : "";
   const variants = tournament ? tournament.variants.join(", ") : "";
+
+  if (!tournamentLoaded) {
+    return <PageLoading message={t("Tournament.loading")} />;
+  }
+
   return (
     <>
       <Helmet>

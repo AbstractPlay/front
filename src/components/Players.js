@@ -18,6 +18,7 @@ import ActivityMarker from "./ActivityMarker";
 import { useStore } from "../stores";
 import { callAuthApi } from "../lib/api";
 import { formatUserDisplayName } from "./Bots/botUtils";
+import PageLoading from "./shared/PageLoading";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -52,6 +53,7 @@ function parseBlockedBody(body) {
 function Players() {
   const { t } = useTranslation();
   const allUsers = useStore((state) => state.users);
+  const usersLoaded = useStore((state) => state.usersLoaded);
   const globalMe = useStore((state) => state.globalMe);
   const connections = useStore((state) => state.connections);
   const [showState, showStateSetter] = useStorageState("players-show", 20);
@@ -389,6 +391,10 @@ function Players() {
       </div>
     </>
   );
+
+  if (!usersLoaded) {
+    return <PageLoading message={t("players.loading")} />;
+  }
 
   return (
     <>

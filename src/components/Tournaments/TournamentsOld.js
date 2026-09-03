@@ -14,10 +14,11 @@ import { API_ENDPOINT_OPEN } from "../../config";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
+import PageLoading from "../shared/PageLoading";
 
 function TournamentsOld(props) {
   const { t } = useTranslation();
-  const [tournaments, tournamentsSetter] = useState([]);
+  const [tournaments, tournamentsSetter] = useState(null);
   const [sorting, sortingSetter] = useState([{ id: "dateEnded", desc: true }]);
   const [oldTournamentsShowState, oldTournamentsShowStateSetter] =
     useStorageState("old-tournaments-show", 20);
@@ -36,16 +37,18 @@ function TournamentsOld(props) {
       if (status !== 200) {
         const result = await res.json();
         console.log(JSON.parse(result.body));
+        tournamentsSetter([]);
       } else {
         const data = await res.json();
         tournamentsSetter(data.tournaments);
       }
     }
     if (metaGame) fetchData();
+    else tournamentsSetter([]);
   }, [metaGame]);
 
   const oldTournamentsData = useMemo(() => {
-    return tournaments.map((t) => {
+    return (tournaments ?? []).map((t) => {
       const ret = {
         tournamentid: t.id,
         metaGameName: getGameDisplayName(t.metaGame, "Unknown"),
@@ -205,6 +208,10 @@ function TournamentsOld(props) {
       </div>
     </>
   );
+
+  if (tournaments === null) {
+    return <PageLoading message={t("Tournament.loading")} />;
+  }
 
   return (
     <>

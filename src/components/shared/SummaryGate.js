@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import Spinner from "../Spinner";
+import PageLoading from "./PageLoading";
 import { useSiteSummary } from "../../hooks/useSiteSummary";
 import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
 import { SUMMARY_URLS } from "../../lib/summaryFetch";
@@ -11,12 +11,7 @@ function SummaryGate({ children }) {
   const { isPending, isReady, isError } = useSiteSummary();
 
   if (isPending) {
-    return (
-      <div className="has-text-centered summary-gate-loading">
-        <Spinner />
-        <p className="help">{t("stats.loadingSummary")}</p>
-      </div>
-    );
+    return <PageLoading message={t("stats.loadingSummary")} />;
   }
 
   if (isError) {

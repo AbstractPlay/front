@@ -548,6 +548,9 @@
   "ChallengeTypeOpenDescription": "N'importe qui peut accepter ce défi.",
   "ChallengeTypeTargeted": "Fermé",
   "ChallengeTypeTargetedDescription": "Vous défiez des joueurs spécifiques.",
+  "challenges": {
+    "loading": "Chargement des défis…"
+  },
   "Change": "Modifier",
   "ChangeRenderOptions": "Modifier les options d'affichage du plateau",
   "ChooseDisplay": "Choisir comment le plateau doit être affiché",
@@ -567,6 +570,9 @@
   "ClearMove": "Effacer la saisie du coup",
   "ClickExpand": "Cliquer pour agrandir",
   "Close": "Fermer",
+  "common": {
+    "loading": "Chargement…"
+  },
   "ColorBlind": "Daltongène",
   "ColorPatterns": "Noir et blanc",
   "Comment": "Commentaire",
@@ -643,6 +649,7 @@
   "EnterMove": "Entrez/Cliquez sur le bouton",
   "Error": "Erreur !",
   "Events": {
+    "loading": "Chargement des événements…",
     "Description": "Les événements organisés sont gérés par des particuliers. Le système permet aux organisateurs de créer des événements, aux joueurs de s'inscrire, puis aux organisateurs de lancer des parties entre les joueurs inscrits. Le suivi des résultats, l'application des limites de temps détaillées et l'annonce des gagnants incombent à l'organisateur.",
     "Name": "Événements organisés",
     "newEvent": "Nouvel événement",
@@ -822,6 +829,9 @@
   "LevelGame": "Uniquement pour cette partie",
   "LevelMetaGame": "Pour toutes les parties de {{game}}",
   "ListOf": "Liste de",
+  "listGames": {
+    "loading": "Chargement des parties…"
+  },
   "LogIn": "Connexion",
   "LogOut": "Déconnexion",
   "MakeMove": "Jouer un coup",
@@ -899,6 +909,9 @@
   "PleaseConsent": "Votre consentement est requis !",
   "PlayersAccepted": "Pour l'instant, les joueurs suivants acceptent de participer à la partie : {{others}}.",
   "Playground": "Laboratoire",
+  "play": {
+    "loadingNext": "Recherche de votre prochaine partie…"
+  },
   "Lab": "Laboratoire",
   "Ply": "Demi-coup",
   "ProfileAnon": "Souhaitez-vous être anonyme ?",
@@ -1131,6 +1144,7 @@
     }
   },
   "Tournament": {
+    "loading": "Chargement des tournois…",
     "Number": "Numéro du tournoi",
     "Tournaments": "Tournois automatisés",
     "Completion": "Avancement",
@@ -1291,6 +1305,7 @@
   },
   "explore": {
     "intro": "Cette page vous permet d'explorer différentes manières de trier la liste des jeux. Sélectionnez la vue souhaitée ci-dessous. En cliquant sur le nom d'un jeu, vous accéderez à sa page de présentation contenant des informations supplémentaires.",
+    "loadingCounts": "Chargement du nombre de parties…",
     "filterRecommended": "Jeux recommandés uniquement",
     "views": {
       "all": {
@@ -1453,6 +1468,7 @@
     }
   },
   "players": {
+    "loading": "Chargement des joueurs…",
     "filters": {
       "hideRed": "Masquer les rouges",
       "hideYellowRed": "Masquer les jaunes et les rouges",
@@ -1657,6 +1673,7 @@
     }
   },
   "gameMove": {
+    "loading": "Chargement de la partie…",
     "dev": {
       "copyHomeworldsDiagram": "Copier le diagramme Homeworlds",
       "injectState": "Injecter l'état",
