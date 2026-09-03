@@ -64,14 +64,21 @@ function walkBoard(board, playerNames, t) {
   walkMarkers(board.markers, playerNames, t);
 }
 
-/** Resolve structured render labels to display strings before drawing. */
-export function resolveRenderLabels(rep, players, users, t = defaultRenderLabelT) {
-  if (!rep || typeof rep !== "object") {
-    return rep;
-  }
-  const playerNames = players.map((p) => formatPlayerDisplayName(p, users));
+function resolveOneRenderRep(rep, playerNames, t) {
   const out = structuredClone(rep);
   walkBoard(out.board, playerNames, t);
   walkAreas(out.areas, playerNames, t);
   return out;
+}
+
+/** Resolve structured render labels to display strings before drawing. */
+export function resolveRenderLabels(rep, players, users, t = defaultRenderLabelT) {
+  if (rep == null || typeof rep !== "object") {
+    return rep;
+  }
+  const playerNames = players.map((p) => formatPlayerDisplayName(p, users));
+  if (Array.isArray(rep)) {
+    return rep.map((r) => resolveOneRenderRep(r, playerNames, t));
+  }
+  return resolveOneRenderRep(rep, playerNames, t);
 }
