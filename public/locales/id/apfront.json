@@ -10,5 +10,17 @@
     "Accepted": "Diterima!",
     "and": "dan",
     "ChallengeResponseComment": "Berkomentar",
-    "YourMove": "Giliranmu"
+    "YourMove": "Giliranmu",
+    "a11y": {
+        "hideShow": "Sembunyikan/Tampilkan",
+        "activePlayers": "Nomor setiap pemain yang aktif",
+        "language": "Bahasa",
+        "menu": "menu",
+        "toggleDarkMode": "Tombol mode gelap",
+        "toggleLightMode": "Tombol mode terang"
+    },
+    "about": {
+        "highlightsLink": "Daftar semua game"
+    },
+    "Add": "Tambahkan"
 }
