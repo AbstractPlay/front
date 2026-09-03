@@ -548,6 +548,9 @@
     "ChallengeTypeOpenDescription": "Anybody can accept this challenge.",
     "ChallengeTypeTargeted": "Closed",
     "ChallengeTypeTargetedDescription": "You are challenging specific players.",
+    "challenges": {
+        "loading": "Loading challenges…"
+    },
     "Change": "Change",
     "ChangeRenderOptions": "Change board display options",
     "ChooseDisplay": "Choose how the board should be displayed",
@@ -567,6 +570,9 @@
     "ClearMove": "Clear move input",
     "ClickExpand": "Click to expand",
     "Close": "Close",
+    "common": {
+        "loading": "Loading…"
+    },
     "ColorBlind": "Colour blind",
     "ColorPatterns": "Black and white",
     "Comment": "Comment",
@@ -643,6 +649,7 @@
     "EnterMove": "Enter/Click a move",
     "Error": "Error!",
     "Events": {
+        "loading": "Loading events…",
         "Description": "Organized events are managed by individuals. The system allows organizers to create events, for players to register, and then for organizers to launch games between registered players. Tracking results, enforcing detailed time restrictions, and announcing winners is up to the organizer.",
         "Name": "Organized Events",
         "newEvent": "New event",
@@ -822,6 +829,9 @@
     "LevelGame": "Only for this game",
     "LevelMetaGame": "For all {{game}} games",
     "ListOf": "List of",
+    "listGames": {
+        "loading": "Loading games…"
+    },
     "LogIn": "Log In",
     "LogOut": "Log Out",
     "MakeMove": "Make a move",
@@ -899,6 +909,9 @@
     "PleaseConsent": "Your consent is needed!",
     "PlayersAccepted": "So far the following players are willing to participate in the game: {{others}}.",
     "Playground": "Playground",
+    "play": {
+        "loadingNext": "Finding your next game…"
+    },
     "Lab": "Playground",
     "Ply": "Ply",
     "ProfileAnon": "Would you like to be anonymous?",
@@ -1131,6 +1144,7 @@
         }
     },
     "Tournament": {
+        "loading": "Loading tournaments…",
         "Number": "Tournament Number",
         "Tournaments": "Automated Tournaments",
         "Completion": "Completion",
@@ -1291,6 +1305,7 @@
     },
     "explore": {
         "intro": "This page lets you explore different ways of sorting the list of games. Select your desired view below. Clicking on a game's name will take you to that game's landing page with additional information.",
+        "loadingCounts": "Loading game counts…",
         "filterRecommended": "Recommended games only",
         "views": {
             "all": {
@@ -1453,6 +1468,7 @@
         }
     },
     "players": {
+        "loading": "Loading players…",
         "filters": {
             "hideRed": "Hide red",
             "hideYellowRed": "Hide yellow and red",
@@ -1657,6 +1673,7 @@
         }
     },
     "gameMove": {
+        "loading": "Loading game…",
         "dev": {
             "copyHomeworldsDiagram": "Copy Homeworlds diagram",
             "injectState": "Inject state",

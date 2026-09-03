@@ -82,6 +82,7 @@ function Explore(props) {
           newMe.stars = JSON.parse(result.body);
           setGlobalMe(newMe);
           // update counts locally
+          if (counts === null) return;
           const newcounts = JSON.parse(JSON.stringify(counts));
           if (
             newMe !== null &&
@@ -139,36 +140,34 @@ function Explore(props) {
         />
       );
     }
-    if (counts !== null) {
-      return (
-        <>
-          <Helmet>
-            <meta
-              property="og:title"
-              content={`${getGameDisplayName(resolvedMetaGame)}: Game Information`}
-            />
-            <meta
-              property="og:url"
-              content={`https://play.abstractplay.com/games/${resolvedMetaGame}`}
-            />
-            <meta
-              property="og:description"
-              content={`Information on the game ${getGameDisplayName(
-                resolvedMetaGame
-              )}`}
-            />
-          </Helmet>
-          <MetaItem
-            game={gameinfo.get(resolvedMetaGame)}
-            counts={counts[resolvedMetaGame]}
-            toggleStar={toggleStar}
-            handleChallenge={handleNewChallenge}
-            syncTabToUrl
+    return (
+      <>
+        <Helmet>
+          <meta
+            property="og:title"
+            content={`${getGameDisplayName(resolvedMetaGame)}: Game Information`}
           />
-        </>
-      );
-    }
-    return null;
+          <meta
+            property="og:url"
+            content={`https://play.abstractplay.com/games/${resolvedMetaGame}`}
+          />
+          <meta
+            property="og:description"
+            content={`Information on the game ${getGameDisplayName(
+              resolvedMetaGame
+            )}`}
+          />
+        </Helmet>
+        <MetaItem
+          game={gameinfo.get(resolvedMetaGame)}
+          counts={counts?.[resolvedMetaGame]}
+          countsLoading={counts === null}
+          toggleStar={toggleStar}
+          handleChallenge={handleNewChallenge}
+          syncTabToUrl
+        />
+      </>
+    );
   }
 
   if (modeFromPath !== undefined && !isValidExploreView(modeFromPath)) {

@@ -11,6 +11,8 @@ import {
   MOVE_BETA_BASE,
   resolveBetaLayout,
 } from "../lib/GameMove/layoutPreference";
+import PageLoading from "./shared/PageLoading";
+import { useTranslation } from "react-i18next";
 
 function BetaLayout({ session, layoutId }) {
   switch (layoutId) {
@@ -26,11 +28,16 @@ function BetaLayout({ session, layoutId }) {
 
 function GameMoveBetaShell() {
   const location = useLocation();
+  const { t } = useTranslation();
   const layoutId = resolveBetaLayout(location.search);
   const session = useGameMoveSession({
     routerState: location.state,
     moveBasePath: MOVE_BETA_BASE,
   });
+
+  if (session.isGameLoading) {
+    return <PageLoading message={t("gameMove.loading")} />;
+  }
 
   return (
     <div className="game-move-beta-shell">

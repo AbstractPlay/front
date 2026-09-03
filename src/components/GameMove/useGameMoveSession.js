@@ -2683,6 +2683,7 @@ export function useGameMoveSession(props) {
   return {
     moveBasePath,
     error,
+    isGameLoading: dbgame === null && !error,
     errorMessageRef,
     game,
     toMove,

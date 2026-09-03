@@ -18,12 +18,13 @@ import { useExpandVariants } from "../hooks/useExpandVariants";
 import { useStore } from "../stores";
 import BotAwareName from "./Bots/BotAwareName";
 import { formatPlayerDisplayName } from "./Bots/botUtils";
+import PageLoading from "./shared/PageLoading";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function ListGames({ fixedState }) {
   const { t } = useTranslation();
-  const [games, gamesSetter] = useState([]);
+  const [games, gamesSetter] = useState(null);
   const { gameState, metaGame } = useParams();
   const [, maxPlayersSetter] = useState(2);
   const [showState, showStateSetter] = useStorageState("listgames-show", 20);
@@ -66,7 +67,7 @@ function ListGames({ fixedState }) {
 
   const data = useMemo(
     () =>
-      games.map((rec) => {
+      (games ?? []).map((rec) => {
         console.log(
           `Processing game record: ${rec.id} with commented = ${rec.commented}, sk = ${rec.sk}`
         );
@@ -348,6 +349,10 @@ function ListGames({ fixedState }) {
       </div>
     </>
   );
+
+  if (games === null) {
+    return <PageLoading message={t("listGames.loading")} />;
+  }
 
   return (
     <>

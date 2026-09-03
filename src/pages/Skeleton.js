@@ -131,7 +131,7 @@ function Bones(props) {
   }, []);
 
   useEffect(() => {
-    const { setUsers } = useStore.getState();
+    const { setUsers, setUsersLoaded } = useStore.getState();
     async function fetchData() {
       try {
         var url = new URL(API_ENDPOINT_OPEN);
@@ -141,6 +141,8 @@ function Bones(props) {
         setUsers(result);
       } catch (error) {
         setUsers([]);
+      } finally {
+        setUsersLoaded(true);
       }
     }
     fetchData();

@@ -11,6 +11,7 @@ import TableRegistration from "./Events/TableRegistration";
 import TableActive from "./Events/TableActive";
 import TableComplete from "./Events/TableComplete";
 import { useStore } from "../stores";
+import PageLoading from "./shared/PageLoading";
 
 function Events() {
   const { t } = useTranslation();
@@ -38,7 +39,7 @@ function Events() {
       if (status !== 200) {
         const result = await res.json();
         console.log(result);
-        allDataSetter(null);
+        allDataSetter({ events: [], players: [], games: [] });
       } else {
         const data = await res.json();
         console.log(data);
@@ -251,6 +252,10 @@ function Events() {
       });
     }
   };
+
+  if (allData === null) {
+    return <PageLoading message={t("Events.loading")} />;
+  }
 
   return (
     <>
