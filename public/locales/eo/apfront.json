@@ -762,7 +762,8 @@
             "arbitrateNote": "Bonvolu noti, ke arbitraciitaj rezultoj ne aperos en la aŭtomate kreitaj ludraportoj. Ili validas nur kadre de ĉi tiu evento.",
             "selectWinner": "Elektu la arbitraciitan venkinton de <1>la ludo {{gameName}}</1>:",
             "gameSuffix": "ludo"
-        }
+        },
+        "loading": "Ŝargas eventojn…"
     },
     "EventsNav": "Eventoj",
     "ExplorationSetting": "Agordo de esplorado",
@@ -1165,7 +1166,8 @@
             "open": "Malfermitaj por aliĝo",
             "current": "Daŭrantaj",
             "completed": "Lastatempe finitaj"
-        }
+        },
+        "loading": "Ŝargas turnirojn…"
     },
     "TriggerRefresh": "Ekigi aktualigon",
     "TwoPlayersChallengeDescription": "Vi defiis {{other}} al ludo de [{{game}}](/games/{{meta}})",
@@ -1315,7 +1317,8 @@
                 "title": "Hazarda ordo",
                 "description": "Ludoj en hazarda ordo. Premu la butonon por remiksi."
             }
-        }
+        },
+        "loadingCounts": "Ŝargas ludnombrojn…"
     },
     "stats": {
         "selectStatistic": "Elektu statistikon",
@@ -1443,7 +1446,8 @@
             "hideOffline": "Kaŝi eksterretajn ludantojn",
             "hideBlocked": "Kaŝi blokitajn",
             "showOnlyBlocked": "Montri nur blokitajn"
-        }
+        },
+        "loading": "Ŝargas ludantojn…"
     },
     "player": {
         "underDevelopment": "La ludantoprofila paĝo estas tre \"konstruata\". Ĝi dependas de statistikoj tabeligitaj ĉiutage.",
@@ -1669,7 +1673,8 @@
             "feedbackCommentTooLong": "La komento devas havi maksimume {{max}} signojn.",
             "moveTableDensityAuto": "Kompaktaj movvicoj (klaku por po unu vico por ĉiu movo)",
             "moveTableDensitySparse": "Po unu vico por ĉiu movo (klaku por kompaktaj vicoj)"
-        }
+        },
+        "loading": "Ŝargas ludon…"
     },
     "Back": "Reiri",
     "theme": {
@@ -1898,5 +1903,17 @@
             "attempts": "Provoj",
             "date": "Plej bona provo"
         }
+    },
+    "challenges": {
+        "loading": "Ŝargas defiojn…"
+    },
+    "common": {
+        "loading": "Ŝargas…"
+    },
+    "listGames": {
+        "loading": "Ŝargas ludojn…"
+    },
+    "play": {
+        "loadingNext": "Serĉas por via sekva ludo…"
     }
 }
