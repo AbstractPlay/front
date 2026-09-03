@@ -2,6 +2,21 @@ import { Link } from "react-router-dom";
 import { tournamentListPath } from "../../lib/tournamentSections";
 import { matchesSummaryGameKey } from "../../lib/summaryGameKeys";
 
+function metaCount(counts, metaGame, key) {
+  if (counts === null) return null;
+  return counts[metaGame]?.[key] ?? 0;
+}
+
+function countLinkCell(toBuilder, loadingLabel) {
+  return (props) => {
+    const value = props.getValue();
+    if (value === null) {
+      return <span className="help">{loadingLabel}</span>;
+    }
+    return <Link to={toBuilder(props.row.original.id)}>{value}</Link>;
+  };
+}
+
 function shuffle(array) {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
@@ -60,43 +75,35 @@ export const viewConfigs = {
     defaultSort: [{ id: "gameName", desc: false }],
     fetchUrl: null,
     extraFields: (metaGame, info, fetchedData, counts) => ({
-      current: counts?.[metaGame]?.currentgames || 0,
-      completed: counts?.[metaGame]?.completedgames || 0,
-      challenges: counts?.[metaGame]?.standingchallenges || 0,
-      ratings: counts?.[metaGame]?.ratings || 0,
+      current: metaCount(counts, metaGame, "currentgames"),
+      completed: metaCount(counts, metaGame, "completedgames"),
+      challenges: metaCount(counts, metaGame, "standingchallenges"),
+      ratings: metaCount(counts, metaGame, "ratings"),
     }),
-    extraColumns: (columnHelper, { openChallengeModal }, t) => [
+    extraColumns: (columnHelper, { openChallengeModal }, t) => {
+      const loadingLabel = t("explore.loadingCounts");
+      return [
       columnHelper.accessor("current", {
         header: t("tables.current"),
-        cell: (props) => (
-          <Link to={`/listgames/current/${props.row.original.id}`}>
-            {props.getValue()}
-          </Link>
+        cell: countLinkCell(
+          (id) => `/listgames/current/${id}`,
+          loadingLabel
         ),
       }),
       columnHelper.accessor("completed", {
         header: t("tables.completed"),
-        cell: (props) => (
-          <Link to={`/listgames/completed/${props.row.original.id}`}>
-            {props.getValue()}
-          </Link>
+        cell: countLinkCell(
+          (id) => `/listgames/completed/${id}`,
+          loadingLabel
         ),
       }),
       columnHelper.accessor("challenges", {
         header: t("tables.challenges"),
-        cell: (props) => (
-          <Link to={`/challenges/${props.row.original.id}`}>
-            {props.getValue()}
-          </Link>
-        ),
+        cell: countLinkCell((id) => `/challenges/${id}`, loadingLabel),
       }),
       columnHelper.accessor("ratings", {
         header: t("tables.ratings"),
-        cell: (props) => (
-          <Link to={`/ratings/${props.row.original.id}`}>
-            {props.getValue()}
-          </Link>
-        ),
+        cell: countLinkCell((id) => `/ratings/${id}`, loadingLabel),
       }),
       columnHelper.display({
         id: "actions",
@@ -114,7 +121,8 @@ export const viewConfigs = {
           </>
         ),
       }),
-    ],
+    ];
+    },
     loadGames: null,
     renderExtra: null,
     showAllTags: true,
@@ -226,11 +234,17 @@ export const viewConfigs = {
     defaultSort: [{ id: "stars", desc: true }],
     fetchUrl: null,
     extraFields: (metaGame, info, fetchedData, counts) => ({
-      stars: counts !== null ? counts[metaGame]?.stars || 0 : 0,
+      stars: counts === null ? null : counts[metaGame]?.stars ?? 0,
     }),
     extraColumns: (columnHelper, _context, t) => [
       columnHelper.accessor("stars", {
         header: t("tables.stars"),
+        cell: (props) =>
+          props.getValue() === null ? (
+            <span className="help">{t("explore.loadingCounts")}</span>
+          ) : (
+            props.getValue()
+          ),
       }),
     ],
     loadGames: null,
@@ -243,23 +257,28 @@ export const viewConfigs = {
     defaultSort: [{ id: "games", desc: true }],
     fetchUrl: null,
     extraFields: (metaGame, info, fetchedData, counts) => {
+      if (counts === null) {
+        return { games: null };
+      }
       const now = Date.now();
       const added = new Date(info.dateAdded).getTime();
       const week = 7 * 24 * 60 * 60 * 1000;
       const weeksLive = Math.ceil(Math.abs(now - added) / week);
-      let gamesper = 0;
-      if (counts !== null) {
-        gamesper =
-          Math.round(
-            ((counts[metaGame]?.completedgames || 0) / weeksLive) * 100
-          ) / 100;
-      }
+      const gamesper =
+        Math.round(
+          ((counts[metaGame]?.completedgames || 0) / weeksLive) * 100
+        ) / 100;
       return { games: gamesper };
     },
     extraColumns: (columnHelper, _context, t) => [
       columnHelper.accessor("games", {
         header: t("tables.gamesPerWeek"),
-        cell: (props) => props.getValue().toFixed(2),
+        cell: (props) =>
+          props.getValue() === null ? (
+            <span className="help">{t("explore.loadingCounts")}</span>
+          ) : (
+            props.getValue().toFixed(2)
+          ),
       }),
     ],
     loadGames: null,
@@ -301,53 +320,38 @@ export const viewConfigs = {
     defaultSort: [],
     fetchUrl: null,
     extraFields: (metaGame, info, fetchedData, counts) => ({
-      current:
-        counts !== null && counts[metaGame] ? counts[metaGame].currentgames : 0,
-      completed:
-        counts !== null && counts[metaGame]
-          ? counts[metaGame].completedgames
-          : 0,
-      challenges:
-        counts !== null && counts[metaGame]
-          ? counts[metaGame].standingchallenges
-          : 0,
-      ratings:
-        counts !== null && counts[metaGame] ? counts[metaGame].ratings : 0,
+      current: metaCount(counts, metaGame, "currentgames"),
+      completed: metaCount(counts, metaGame, "completedgames"),
+      challenges: metaCount(counts, metaGame, "standingchallenges"),
+      ratings: metaCount(counts, metaGame, "ratings"),
     }),
-    extraColumns: (columnHelper, _context, t) => [
+    extraColumns: (columnHelper, _context, t) => {
+      const loadingLabel = t("explore.loadingCounts");
+      return [
       columnHelper.accessor("current", {
         header: t("tables.current"),
-        cell: (props) => (
-          <Link to={`/listgames/current/${props.row.original.id}`}>
-            {props.getValue()}
-          </Link>
+        cell: countLinkCell(
+          (id) => `/listgames/current/${id}`,
+          loadingLabel
         ),
       }),
       columnHelper.accessor("completed", {
         header: t("tables.completed"),
-        cell: (props) => (
-          <Link to={`/listgames/completed/${props.row.original.id}`}>
-            {props.getValue()}
-          </Link>
+        cell: countLinkCell(
+          (id) => `/listgames/completed/${id}`,
+          loadingLabel
         ),
       }),
       columnHelper.accessor("challenges", {
         header: t("tables.challenges"),
-        cell: (props) => (
-          <Link to={`/challenges/${props.row.original.id}`}>
-            {props.getValue()}
-          </Link>
-        ),
+        cell: countLinkCell((id) => `/challenges/${id}`, loadingLabel),
       }),
       columnHelper.accessor("ratings", {
         header: t("tables.ratings"),
-        cell: (props) => (
-          <Link to={`/ratings/${props.row.original.id}`}>
-            {props.getValue()}
-          </Link>
-        ),
+        cell: countLinkCell((id) => `/ratings/${id}`, loadingLabel),
       }),
-    ],
+    ];
+    },
     loadGames: (metas, forceNew) => {
       if (!forceNew) {
         try {

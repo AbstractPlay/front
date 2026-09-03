@@ -835,6 +835,10 @@
     "src": "Select the arbitrated winner of <1>{{gameName}} game</1>:",
     "out": "Wähle den Sieger per Schiedsentscheid von <1>{{gameName}}-Spiel</1>:"
   },
+  "Events.loading": {
+    "src": "Loading events…",
+    "out": "Events werden geladen…"
+  },
   "Events.maxPlayersHelp": {
     "src": "A value of 0 means no limit.",
     "out": "Ein Wert von 0 bedeutet kein Limit."
@@ -2026,6 +2030,10 @@
   "Tournament.Withdraw": {
     "src": "Withdraw from next",
     "out": "Vom nächsten abmelden"
+  },
+  "Tournament.loading": {
+    "src": "Loading tournaments…",
+    "out": "Turniere werden geladen…"
   },
   "Tournament.tabs.completed": {
     "src": "Recently completed",
@@ -3675,6 +3683,14 @@
     "src": "O: Traditional",
     "out": "S: Traditionell"
   },
+  "challenges.loading": {
+    "src": "Loading challenges…",
+    "out": "Herausforderungen werden geladen…"
+  },
+  "common.loading": {
+    "src": "Loading…",
+    "out": "Wird geladen…"
+  },
   "customize.addColour": {
     "src": "Add Colour",
     "out": "Farbe hinzufügen"
@@ -3854,6 +3870,10 @@
   "explore.intro": {
     "src": "This page lets you explore different ways of sorting the list of games. Select your desired view below. Clicking on a game's name will take you to that game's landing page with additional information.",
     "out": "Auf dieser Seite kannst du verschiedene Möglichkeiten erkunden, die Liste der Spiele zu sortieren. Wähle unten deine gewünschte Ansicht aus. Ein Klick auf den Namen eines Spiels führt dich zur Übersichtsseite dieses Spiels mit weiteren Informationen."
+  },
+  "explore.loadingCounts": {
+    "src": "Loading game counts…",
+    "out": "Anzahl der Spiele wird geladen…"
   },
   "explore.views.all.title": {
     "src": "All games",
@@ -4283,6 +4303,10 @@
     "src": "You are player {{colour}}",
     "out": "Du spielst {{colour}}"
   },
+  "gameMove.loading": {
+    "src": "Loading game…",
+    "out": "Partie wird geladen…"
+  },
   "gameMove.tournamentLink": {
     "src": "tournament",
     "out": "Turnier"
@@ -4591,6 +4615,10 @@
     "src": "Update \"{{name}}\"",
     "out": "\"{{name}}\" aktualisieren"
   },
+  "listGames.loading": {
+    "src": "Loading games…",
+    "out": "Spiele werden geladen…"
+  },
   "me.challengedNotice": {
     "src": "You have been challenged!",
     "out": "Du wurdest herausgefordert!"
@@ -4747,6 +4775,10 @@
     "src": "of",
     "out": "von"
   },
+  "play.loadingNext": {
+    "src": "Finding your next game…",
+    "out": "Dein nächstes Spiel wird gesucht…"
+  },
   "player.hero.hIndex": {
     "src": "H-index",
     "out": "H-Index"
@@ -4894,6 +4926,10 @@
   "players.filters.showOnlyBlocked": {
     "src": "Show only blocked",
     "out": "Nur Blockierte anzeigen"
+  },
+  "players.loading": {
+    "src": "Loading players…",
+    "out": "Spieler werden geladen…"
   },
   "seatingMeFirst": {
     "src": "You will play first.",

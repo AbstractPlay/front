@@ -835,6 +835,10 @@
     "src": "Select the arbitrated winner of <1>{{gameName}} game</1>:",
     "out": "Seleziona il vincitore d'ufficio della <1>partita {{gameName}}</1>:"
   },
+  "Events.loading": {
+    "src": "Loading events…",
+    "out": "Caricamento eventi…"
+  },
   "Events.maxPlayersHelp": {
     "src": "A value of 0 means no limit.",
     "out": "Un valore pari a 0 indica nessun limite."
@@ -2026,6 +2030,10 @@
   "Tournament.Withdraw": {
     "src": "Withdraw from next",
     "out": "Ritirati dal prossimo"
+  },
+  "Tournament.loading": {
+    "src": "Loading tournaments…",
+    "out": "Caricamento tornei…"
   },
   "Tournament.tabs.completed": {
     "src": "Recently completed",
@@ -3675,6 +3683,14 @@
     "src": "O: Traditional",
     "out": "A: Tradizionale"
   },
+  "challenges.loading": {
+    "src": "Loading challenges…",
+    "out": "Caricamento sfide…"
+  },
+  "common.loading": {
+    "src": "Loading…",
+    "out": "Caricamento…"
+  },
   "customize.addColour": {
     "src": "Add Colour",
     "out": "Aggiungi colore"
@@ -3854,6 +3870,10 @@
   "explore.intro": {
     "src": "This page lets you explore different ways of sorting the list of games. Select your desired view below. Clicking on a game's name will take you to that game's landing page with additional information.",
     "out": "Questa pagina ti permette di esplorare diversi modi per ordinare l'elenco dei giochi. Seleziona la vista desiderata qui sotto. Cliccando sul nome di un gioco verrai indirizzato alla sua pagina principale con ulteriori informazioni."
+  },
+  "explore.loadingCounts": {
+    "src": "Loading game counts…",
+    "out": "Caricamento conteggio partite…"
   },
   "explore.views.all.title": {
     "src": "All games",
@@ -4283,6 +4303,10 @@
     "src": "You are player {{colour}}",
     "out": "Sei il giocatore {{colour}}"
   },
+  "gameMove.loading": {
+    "src": "Loading game…",
+    "out": "Caricamento partita…"
+  },
   "gameMove.tournamentLink": {
     "src": "tournament",
     "out": "torneo"
@@ -4591,6 +4615,10 @@
     "src": "Update \"{{name}}\"",
     "out": "Aggiorna \"{{name}}\""
   },
+  "listGames.loading": {
+    "src": "Loading games…",
+    "out": "Caricamento partite…"
+  },
   "me.challengedNotice": {
     "src": "You have been challenged!",
     "out": "Sei stato sfidato!"
@@ -4747,6 +4775,10 @@
     "src": "of",
     "out": "di"
   },
+  "play.loadingNext": {
+    "src": "Finding your next game…",
+    "out": "Ricerca della tua prossima partita…"
+  },
   "player.hero.hIndex": {
     "src": "H-index",
     "out": "Indice H"
@@ -4894,6 +4926,10 @@
   "players.filters.showOnlyBlocked": {
     "src": "Show only blocked",
     "out": "Mostra solo bloccati"
+  },
+  "players.loading": {
+    "src": "Loading players…",
+    "out": "Caricamento giocatori…"
   },
   "seatingMeFirst": {
     "src": "You will play first.",

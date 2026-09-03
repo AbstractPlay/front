@@ -15,6 +15,7 @@ import {
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import Spinner from "./Spinner";
+import PageLoading from "./shared/PageLoading";
 import ActivityMarker from "./ActivityMarker";
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import { useStorageState } from "react-use-storage-state";
@@ -30,7 +31,7 @@ const allSize = Number.MAX_SAFE_INTEGER;
 function StandingChallenges(props) {
   const { t } = useTranslation();
   const { status: authStatus } = useAuthSession();
-  const [challenges, challengesSetter] = useState([]);
+  const [challenges, challengesSetter] = useState(null);
   const [accepted, acceptedSetter] = useState(null);
   const [revoke, revokeSetter] = useState(null);
   const [reject, rejectSetter] = useState(null);
@@ -118,6 +119,7 @@ function StandingChallenges(props) {
         revokeSetter(null);
         acceptedSetter(null);
       } catch (error) {
+        challengesSetter([]);
         console.log(error);
       }
     }
@@ -223,11 +225,11 @@ function StandingChallenges(props) {
 
   const metaGameName = getGameDisplayName(metaGame);
   console.log(metaGame);
-  const showRespond = loggedin && challenges;
+  const showRespond = loggedin && challenges !== null;
 
   const data = useMemo(
     () =>
-      challenges.map((rec) => {
+      (challenges ?? []).map((rec) => {
         let lastSeen = undefined;
         if (allUsers !== null) {
           const userRec = allUsers.find((u) => u.id === rec.challenger?.id);
@@ -488,6 +490,10 @@ function StandingChallenges(props) {
       </div>
     </>
   );
+
+  if (challenges === null) {
+    return <PageLoading message={t("challenges.loading")} />;
+  }
 
   return (
     <>

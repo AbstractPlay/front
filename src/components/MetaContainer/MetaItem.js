@@ -37,6 +37,7 @@ const MetaItem = React.forwardRef(
       toggleStar,
       game,
       counts,
+      countsLoading = false,
       hideDetails,
       highlight,
       handleChallenge,
@@ -350,7 +351,9 @@ const MetaItem = React.forwardRef(
                 </div>
                 <RepresentativeGames metaGame={game.uid} />
                 <div>
-                  {counts === undefined ? (
+                  {countsLoading ? (
+                    <p className="help">{t("explore.loadingCounts")}</p>
+                  ) : counts === undefined ? (
                     ""
                   ) : (
                     <ul

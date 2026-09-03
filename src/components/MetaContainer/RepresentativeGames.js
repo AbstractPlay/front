@@ -65,7 +65,11 @@ function RepresentativeGames({ metaGame }) {
     });
   }, [entries, metaGame]);
 
-  if (entries === null || rows.length === 0) return null;
+  if (entries === null) {
+    return <p className="help">{t("common.loading")}</p>;
+  }
+
+  if (rows.length === 0) return null;
 
   return (
     <div style={{ marginTop: "1em", marginBottom: "1em" }}>

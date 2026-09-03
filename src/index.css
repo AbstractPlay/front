@@ -2887,3 +2887,13 @@ span.hardTime::after {
   }
 }
 
+.page-loading {
+  padding: 2rem 1rem;
+  color: var(--main-font-color);
+}
+
+.page-loading .help {
+  color: var(--secondary-font-color);
+  margin-top: 0.75rem;
+}
+
