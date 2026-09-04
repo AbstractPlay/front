@@ -1893,6 +1893,7 @@
     "coderOne": "Programmatore: ",
     "codersMany": "Programmatori: ",
     "titleSuffix": " — Laboratorio",
+    "launcherPageTitle": "Area di prova",
     "debug": {
       "copyPosition": "Copia posizione",
       "copyPositionHelp": "Stato grezzo del motore di gioco al punto corrente (per il debug).",

@@ -1893,6 +1893,7 @@
     "coderOne": "Programador: ",
     "codersMany": "Programadores: ",
     "titleSuffix": " — Zona de pruebas",
+    "launcherPageTitle": "Zona de pruebas",
     "debug": {
       "copyPosition": "Copiar posición",
       "copyPositionHelp": "Estado sin procesar del motor en el enfoque actual (para depuración).",
