@@ -1893,6 +1893,7 @@
         "coderOne": "Coder: ",
         "codersMany": "Coders: ",
         "titleSuffix": " — Playground",
+        "launcherPageTitle": "Playground",
         "debug": {
             "copyPosition": "Copy position",
             "copyPositionHelp": "Raw engine state at the current focus (for debugging).",

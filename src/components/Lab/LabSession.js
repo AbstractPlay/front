@@ -16,7 +16,6 @@ import {
   effectiveFlags,
   flagSetIncludes,
 } from "../../lib/effectiveGameFlags";
-import { Helmet } from "react-helmet-async";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
 import GameMoves from "./GameMoves";
@@ -134,6 +133,7 @@ function LabSession({
   sessionName,
   loadedSave: initialLoadedSave,
   onLoadedSaveChange,
+  onSessionNameChange,
   onExit,
 }) {
   const metaGame = initialGame.metaGame;
@@ -200,7 +200,6 @@ function LabSession({
   const gameRef = useRef(null);
   const explorationRef = useRef(null);
   const engineRef = useRef(null);
-  const sessionNameRef = useRef(sessionName);
   const loadedSaveRef = useRef(initialLoadedSave ?? null);
   const pendingFocusRestore = useRef(initialFocus);
 
@@ -236,7 +235,7 @@ function LabSession({
     const nodes = explorationRef.current.nodes;
     const safeFocus = sanitizeFocus(nodes, focus);
     const payload = {
-      name: sessionNameRef.current,
+      name: sessionName,
       metaGame: gameRef.current.metaGame,
       state: getMainLineTipState(nodes, gameRef.current),
       variants: gameRef.current.selectedVariants ?? [],
@@ -253,7 +252,7 @@ function LabSession({
       loadedSave: loadedSaveRef.current,
     };
     saveLastSession(payload);
-  }, [gameSettings, focus]);
+  }, [gameSettings, focus, sessionName]);
 
   const debouncedPersist = useMemo(
     () => debounce(persistSession, 500),
@@ -747,7 +746,7 @@ function LabSession({
     saveBusySetter(true);
     try {
       debouncedPersist.flush();
-      sessionNameRef.current = name;
+      onSessionNameChange?.(name);
       const token = await getAuthToken();
       const nextLoadedSave = await persistNamedPlaygroundSave({
         action,
@@ -1115,12 +1114,6 @@ function LabSession({
 
   return (
     <>
-      <Helmet>
-        <title>
-          {sessionNameRef.current}
-          {t("lab.titleSuffix")}
-        </title>
-      </Helmet>
       <article>
         {screenWidth < 770 || verticalLayout ? (
           <>
@@ -1150,7 +1143,7 @@ function LabSession({
           show={showSaveModal}
           mode={loadedSave ? "update" : "create"}
           loadedSaveName={loadedSave?.name}
-          initialName={sessionNameRef.current}
+          initialName={sessionName}
           onCancel={() => showSaveModalSetter(false)}
           onCreate={handleSaveCreate}
           onUpdate={handleSaveUpdate}

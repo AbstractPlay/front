@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 
 const md = `### Terms of Service
 
@@ -70,11 +70,7 @@ function About(props) {
 
   return (
     <Fragment>
-      <Helmet>
-        <meta
-          property="og:title"
-          content={`Terms of Service & Privacy Policy`}
-        />
+      <PageHelmet title="Terms of Service & Privacy Policy">
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/legal`}
@@ -83,7 +79,7 @@ function About(props) {
           property="og:description"
           content={`Terms of Service & Privacy Policy`}
         />
-      </Helmet>
+      </PageHelmet>
       <article className="content">
         <h1 className="has-text-centered title">{t("Legal")}</h1>
         <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">

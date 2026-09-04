@@ -4,7 +4,7 @@ import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 // import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation, Trans } from "react-i18next";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 import Modal from "./Modal";
 import TableDrafts from "./Events/TableDrafts";
 import TableRegistration from "./Events/TableRegistration";
@@ -259,8 +259,7 @@ function Events() {
 
   return (
     <>
-      <Helmet>
-        <meta property="og:title" content={`Organized Events`} />
+      <PageHelmet title="Organized Events">
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/events`}
@@ -269,7 +268,7 @@ function Events() {
           property="og:description"
           content={`List of available and completed organized events`}
         />
-      </Helmet>
+      </PageHelmet>
       <article className="content">
         <h1 className="title has-text-centered">{t("Events.Name")}</h1>
         <p>{t("Events.Description")}</p>

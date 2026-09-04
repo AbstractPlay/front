@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "../../PageHelmet";
 import Joyride from "react-joyride";
 import { getGameDisplayName } from "../../../lib/gameOptions";
 
@@ -15,13 +15,11 @@ export default function GameMoveHelmetTour({ session }) {
     t,
   } = session;
 
+  const pageTitle = `${getGameDisplayName(metaGame)}: Game ${gameID}`;
+
   return (
     <>
-      <Helmet>
-        <meta
-          property="og:title"
-          content={`${getGameDisplayName(metaGame)}: Game ${gameID}`}
-        />
+      <PageHelmet title={pageTitle}>
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/move/${metaGame}/0/${gameID}`}
@@ -30,7 +28,7 @@ export default function GameMoveHelmetTour({ session }) {
           property="og:description"
           content={`${getGameDisplayName(metaGame)} game ${gameID}`}
         />
-      </Helmet>
+      </PageHelmet>
       <Joyride
         steps={tourState}
         run={startTour}

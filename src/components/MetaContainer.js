@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 // import Gallery from "./MetaContainer/Gallery";
 import Table from "./MetaContainer/Table";
 import MetaItem from "./MetaContainer/MetaItem";
@@ -90,8 +90,7 @@ function MetaContainer(props) {
   if (metaGame === undefined || metaGame === null || !gameinfo.has(metaGame)) {
     return (
       <Fragment>
-        <Helmet>
-          <meta property="og:title" content="List of available games" />
+        <PageHelmet title="List of available games">
           <meta
             property="og:url"
             content="https://play.abstractplay.com/games"
@@ -100,7 +99,7 @@ function MetaContainer(props) {
             property="og:description"
             content="A sortable table of all the games currently available on Abstract Play."
           />
-        </Helmet>
+        </PageHelmet>
         <Table
           metaGame={metaGame}
           counts={counts}
@@ -114,11 +113,9 @@ function MetaContainer(props) {
   } else if (counts !== null) {
     return (
       <>
-        <Helmet>
-          <meta
-            property="og:title"
-            content={`${getGameDisplayName(metaGame)}: Game Information`}
-          />
+        <PageHelmet
+          title={`${getGameDisplayName(metaGame)}: Game Information`}
+        >
           <meta
             property="og:url"
             content="https://play.abstractplay.com/games"
@@ -127,7 +124,7 @@ function MetaContainer(props) {
             property="og:description"
             content={`Information on the game ${getGameDisplayName(metaGame)}`}
           />
-        </Helmet>
+        </PageHelmet>
         <MetaItem
           game={gameinfo.get(metaGame)}
           counts={counts[metaGame]}

@@ -11,7 +11,7 @@ import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { gameinfo } from "@abstractplay/gameslib";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 import Spinner from "./Spinner";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
@@ -263,14 +263,13 @@ function Player() {
         : `Player profile for ${user.name}`;
     return (
       <>
-        <Helmet>
-          <meta property="og:title" content={`${user.name}: Player Profile`} />
+        <PageHelmet title={`${user.name}: Player Profile`}>
           <meta
             property="og:url"
             content={`https://play.abstractplay.com/player/${user.id}`}
           />
           <meta property="og:description" content={ogDescription} />
-        </Helmet>
+        </PageHelmet>
         <article id="playerProfile">
           <h1 className="title has-text-centered">
             {t("ProfileFor", {
