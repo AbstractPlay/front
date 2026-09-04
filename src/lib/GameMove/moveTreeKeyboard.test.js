@@ -16,6 +16,17 @@ describe("moveTreeKeyboard", () => {
       expect(
         shouldSkipMoveTreeKeyboard({ id: "card-enterAMove" }, [{ move: "e4" }])
       ).to.be.true;
+      expect(
+        shouldSkipMoveTreeKeyboard({ id: "playgroundMoveComment" }, [
+          { move: "e4" },
+        ])
+      ).to.be.true;
+      expect(
+        shouldSkipMoveTreeKeyboard({ id: "labSaveName" }, [{ move: "e4" }])
+      ).to.be.true;
+      expect(
+        shouldSkipMoveTreeKeyboard({ id: "labSaveNameUpdate" }, [{ move: "e4" }])
+      ).to.be.true;
     });
 
     it("does not skip when focus is elsewhere", () => {
