@@ -6,7 +6,7 @@ import LocalizedTimeAgo from "./LocalizedTimeAgo";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useStorageState } from "react-use-storage-state";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 import { useStore } from "../stores";
 
 function News(props) {
@@ -29,8 +29,7 @@ function News(props) {
   } else {
     return (
       <>
-        <Helmet>
-          <meta property="og:title" content={`News`} />
+        <PageHelmet title="News">
           <meta
             property="og:url"
             content={`https://play.abstractplay.com/news`}
@@ -39,7 +38,7 @@ function News(props) {
             property="og:description"
             content={`Copy of the #announcements channel from our Discord (https://discord.abstractplay.com)`}
           />
-        </Helmet>
+        </PageHelmet>
         <article>
           <div className="content">
             <h1 className="has-text-centered title">{t("News")}</h1>

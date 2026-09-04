@@ -19,7 +19,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import { useTranslation } from "react-i18next";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "../PageHelmet";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 import {
@@ -989,14 +989,13 @@ function Tournaments(props) {
 
   return (
     <>
-      <Helmet>
-        <meta property="og:title" content={`Recurring Tournaments`} />
+      <PageHelmet title="Recurring Tournaments">
         <meta property="og:url" content={`https://play.abstractplay.com${ogUrl}`} />
         <meta
           property="og:description"
           content={`List of all the available recurring tournaments`}
         />
-      </Helmet>
+      </PageHelmet>
       <article id="tournamentsPage" className="content">
         <h1 className="title has-text-centered">
           {t("Tournament.Tournaments")}

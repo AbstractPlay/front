@@ -16,7 +16,7 @@ import {
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import ActivityMarker from "./ActivityMarker";
 import { useStorageState } from "react-use-storage-state";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 import { useStore } from "../stores";
 import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
 import {
@@ -285,8 +285,7 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
 
   return (
     <>
-      <Helmet>
-        <meta property="og:title" content={`${metaGameName}: Ratings`} />
+      <PageHelmet title={`${metaGameName}: Ratings`}>
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/ratings/${metaGame}`}
@@ -295,7 +294,7 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
           property="og:description"
           content={`Ratings for ${metaGameName}`}
         />
-      </Helmet>
+      </PageHelmet>
       <article>
         <h1 className="has-text-centered title">
           {t("RatingsList", { name: metaGameName })}

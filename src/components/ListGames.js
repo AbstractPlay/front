@@ -13,7 +13,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 import { useExpandVariants } from "../hooks/useExpandVariants";
 import { useStore } from "../stores";
 import BotAwareName from "./Bots/BotAwareName";
@@ -356,15 +356,13 @@ function ListGames({ fixedState }) {
 
   return (
     <>
-      <Helmet>
-        <meta
-          property="og:title"
-          content={`${metaGameName}: ${
-            fixedState === "current" || gameState === "current"
-              ? t("Active")
-              : t("Completed")
-          } ${t("Games")}`}
-        />
+      <PageHelmet
+        title={`${metaGameName}: ${
+          fixedState === "current" || gameState === "current"
+            ? t("Active")
+            : t("Completed")
+        } ${t("Games")}`}
+      >
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/${gameState}/${metaGame}`}
@@ -377,7 +375,7 @@ function ListGames({ fixedState }) {
               : t("Completed").toLowerCase()
           } ${t("GamesOf")} ${metaGameName}`}
         />
-      </Helmet>
+      </PageHelmet>
       <article>
         <h1 className="has-text-centered title">
           {fixedState === "current" || gameState === "current"

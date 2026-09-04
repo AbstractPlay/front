@@ -12,7 +12,7 @@ import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { API_ENDPOINT_OPEN } from "../config";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 import MetaItem from "./MetaContainer/MetaItem";
 import ExploreView from "./Explore/ExploreView";
 import {
@@ -142,11 +142,9 @@ function Explore(props) {
     }
     return (
       <>
-        <Helmet>
-          <meta
-            property="og:title"
-            content={`${getGameDisplayName(resolvedMetaGame)}: Game Information`}
-          />
+        <PageHelmet
+          title={`${getGameDisplayName(resolvedMetaGame)}: Game Information`}
+        >
           <meta
             property="og:url"
             content={`https://play.abstractplay.com/games/${resolvedMetaGame}`}
@@ -157,7 +155,7 @@ function Explore(props) {
               resolvedMetaGame
             )}`}
           />
-        </Helmet>
+        </PageHelmet>
         <MetaItem
           game={gameinfo.get(resolvedMetaGame)}
           counts={counts?.[resolvedMetaGame]}
@@ -185,8 +183,7 @@ function Explore(props) {
 
   return (
     <>
-      <Helmet>
-        <meta property="og:title" content="Explore available games" />
+      <PageHelmet title="Explore available games">
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/explore/${activeMode}`}
@@ -195,7 +192,7 @@ function Explore(props) {
           property="og:description"
           content="Different ways of exploring what's popular on Abstract Play."
         />
-      </Helmet>
+      </PageHelmet>
       <article>
         <div
           className="container has-text-centered"

@@ -19,7 +19,7 @@ import PageLoading from "./shared/PageLoading";
 import ActivityMarker from "./ActivityMarker";
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import { useStorageState } from "react-use-storage-state";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 import { useExpandVariants } from "../hooks/useExpandVariants";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { useStore } from "../stores";
@@ -497,11 +497,7 @@ function StandingChallenges(props) {
 
   return (
     <>
-      <Helmet>
-        <meta
-          property="og:title"
-          content={`${metaGameName}: Open Challenges`}
-        />
+      <PageHelmet title={`${metaGameName}: Open Challenges`}>
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/challenges/${metaGame}`}
@@ -510,7 +506,7 @@ function StandingChallenges(props) {
           property="og:description"
           content={`Open challenges for ${metaGameName}`}
         />
-      </Helmet>
+      </PageHelmet>
       <article>
         <h1 className="has-text-centered title">
           {t("StandingChallenges", { name: metaGameName })}

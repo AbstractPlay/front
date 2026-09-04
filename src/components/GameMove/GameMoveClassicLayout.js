@@ -4,7 +4,7 @@ import rehypeRaw from "rehype-raw";
 import { Link } from "react-router-dom";
 import { Trans } from "react-i18next";
 import { getGameDisplayName } from "../../lib/gameOptions";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "../PageHelmet";
 import GameMoves from "./GameMoves";
 import GameStatus from "./GameStatus";
 import MoveEntry from "./MoveEntry";
@@ -194,11 +194,7 @@ export default function GameMoveClassicLayout({ session }) {
 
   return (
     <>
-      <Helmet>
-        <meta
-          property="og:title"
-          content={`${getGameDisplayName(metaGame)}: Game ${gameID}`}
-        />
+      <PageHelmet title={`${getGameDisplayName(metaGame)}: Game ${gameID}`}>
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/move/${metaGame}/0/${gameID}`}
@@ -207,7 +203,7 @@ export default function GameMoveClassicLayout({ session }) {
           property="og:description"
           content={`${getGameDisplayName(metaGame)} game ${gameID}`}
         />
-      </Helmet>
+      </PageHelmet>
       <article>
         <Joyride
           steps={tourState}

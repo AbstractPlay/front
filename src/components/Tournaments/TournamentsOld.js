@@ -13,7 +13,7 @@ import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { useTranslation } from "react-i18next";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "../PageHelmet";
 import PageLoading from "../shared/PageLoading";
 
 function TournamentsOld(props) {
@@ -215,11 +215,7 @@ function TournamentsOld(props) {
 
   return (
     <>
-      <Helmet>
-        <meta
-          property="og:title"
-          content={`${metaGameName}: Tournament History`}
-        />
+      <PageHelmet title={`${metaGameName}: Tournament History`}>
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/tournamenthistory/${metaGame}`}
@@ -228,7 +224,7 @@ function TournamentsOld(props) {
           property="og:description"
           content={`Historical ${metaGameName} tournaments`}
         />
-      </Helmet>
+      </PageHelmet>
       <article className="content">
         <h1 className="title has-text-centered">{t("Tournament.OldTitle")}</h1>
         <div className="columns is-multiline">

@@ -11,7 +11,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 import { isoToCountryCode } from "../lib/isoToCountryCode";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
@@ -398,8 +398,7 @@ function Players() {
 
   return (
     <>
-      <Helmet>
-        <meta property="og:title" content="List of players" />
+      <PageHelmet title="List of players">
         <meta
           property="og:url"
           content="https://play.abstractplay.com/players"
@@ -408,7 +407,7 @@ function Players() {
           property="og:description"
           content="List of players registered on Abstract Play"
         />
-      </Helmet>
+      </PageHelmet>
       <article>
         <h1 className="has-text-centered title">{t("PlayerList")}</h1>
         <div className="field has-text-centered">
