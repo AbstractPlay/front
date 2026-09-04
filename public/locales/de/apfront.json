@@ -1893,6 +1893,7 @@
     "coderOne": "Entwickler: ",
     "codersMany": "Entwickler: ",
     "titleSuffix": " — Playground",
+    "launcherPageTitle": "Spielwiese",
     "debug": {
       "copyPosition": "Stellung kopieren",
       "copyPositionHelp": "Roher Engine-Zustand des aktuellen Fokus (für Debugging).",
