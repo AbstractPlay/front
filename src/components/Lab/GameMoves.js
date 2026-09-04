@@ -18,6 +18,7 @@ import {
   MOVE_TREE_DENSITY_STORAGE_KEY,
   readMoveTableDensityPreference,
 } from "../../lib/GameMove/moveTableLayout";
+import { shouldSkipMoveTreeKeyboard } from "../../lib/GameMove/moveTreeKeyboard";
 
 function moveCommentedState(node) {
   if (node.textComment) return "filled";
@@ -289,15 +290,7 @@ function GameMoves(props) {
 
   function keyDownHandler(e) {
     const key = e.key;
-    if (
-      document.activeElement.id === "enterAMove" ||
-      document.activeElement.id === "enterAComment" ||
-      document.activeElement.id === "playgroundMoveComment" ||
-      document.activeElement.id === "enterANote" ||
-      document.activeElement.id === "myCustomCSS" ||
-      exploration === null
-    )
-      return;
+    if (shouldSkipMoveTreeKeyboard(document.activeElement, exploration)) return;
     let path = [];
     let curNumVariations;
 

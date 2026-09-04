@@ -481,7 +481,9 @@
         "gifSuccess": "La GIF-movbildo estas elŝutita.",
         "progress": "Eksportante filmeron {{current}} el {{total}}…",
         "failed": "Eksportado malsukcesis: {{error}}",
-        "frameCap": "Tro da filmeroj (maksimume {{max}}). Elektu pli mallongan intervalon."
+        "frameCap": "Tro da filmeroj (maksimume {{max}}). Elektu pli mallongan intervalon.",
+        "frameCount_one": "{{count}} filmero",
+        "frameCount_other": "{{count}} filmeroj"
     },
     "CycleBoardDisplay": "Cikli la tabulan bildigon",
     "buttons": {
@@ -760,7 +762,8 @@
             "arbitrateNote": "Bonvolu noti, ke arbitraciitaj rezultoj ne aperos en la aŭtomate kreitaj ludraportoj. Ili validas nur kadre de ĉi tiu evento.",
             "selectWinner": "Elektu la arbitraciitan venkinton de <1>la ludo {{gameName}}</1>:",
             "gameSuffix": "ludo"
-        }
+        },
+        "loading": "Ŝargas eventojn…"
     },
     "EventsNav": "Eventoj",
     "ExplorationSetting": "Agordo de esplorado",
@@ -1079,7 +1082,8 @@
         "status": "Stato",
         "unhighlight": "Malmarki",
         "unwatch": "Ĉesi observi",
-        "rate": "Proporcio"
+        "rate": "Proporcio",
+        "averageElo": "Elo"
     },
     "TimeRemaining": "Restanta tempo",
     "ToggleFullSize": "Baskuligi plenaltan tabulbildon",
@@ -1157,7 +1161,13 @@
         "Visit": "Viziti turniron",
         "Winner": "Venkinto",
         "DivisionWinner": "Venkinto: {{winner}}",
-        "Withdraw": "Retiriĝi de la sekva"
+        "Withdraw": "Retiriĝi de la sekva",
+        "tabs": {
+            "open": "Malfermitaj por aliĝo",
+            "current": "Daŭrantaj",
+            "completed": "Lastatempe finitaj"
+        },
+        "loading": "Ŝargas turnirojn…"
     },
     "TriggerRefresh": "Ekigi aktualigon",
     "TwoPlayersChallengeDescription": "Vi defiis {{other}} al ludo de [{{game}}](/games/{{meta}})",
@@ -1307,7 +1317,8 @@
                 "title": "Hazarda ordo",
                 "description": "Ludoj en hazarda ordo. Premu la butonon por remiksi."
             }
-        }
+        },
+        "loadingCounts": "Ŝargas ludnombrojn…"
     },
     "stats": {
         "selectStatistic": "Elektu statistikon",
@@ -1435,7 +1446,8 @@
             "hideOffline": "Kaŝi eksterretajn ludantojn",
             "hideBlocked": "Kaŝi blokitajn",
             "showOnlyBlocked": "Montri nur blokitajn"
-        }
+        },
+        "loading": "Ŝargas ludantojn…"
     },
     "player": {
         "underDevelopment": "La ludantoprofila paĝo estas tre \"konstruata\". Ĝi dependas de statistikoj tabeligitaj ĉiutage.",
@@ -1464,7 +1476,8 @@
             "topRatings": "Plej altaj pritaksoj",
             "hIndex": "h-indekso",
             "medianResponse": "Mediana respondtempo",
-            "recentActivity": "Lastatempa aktiveco"
+            "recentActivity": "Lastatempa aktiveco",
+            "siteGlicko": "Reteja Glicko"
         },
         "pin": {
             "add": "Alpingli ĉi tiun sekcion supre",
@@ -1506,7 +1519,33 @@
     },
     "me": {
         "challengedNotice": "Oni defiis vin!",
-        "downloadCompletedReports": "Elŝuti raportojn pri ĉiuj viaj finitaj ludoj"
+        "downloadCompletedReports": "Elŝuti raportojn pri ĉiuj viaj finitaj ludoj",
+        "notifications": {
+            "title": "Sciigoj",
+            "dismiss": "Forigi",
+            "columns": {
+                "message": "Mesaĝo",
+                "note": "Komento",
+                "time": "Tempo"
+            },
+            "message": {
+                "gameStart": "{{opponentName}} komencis ludon de <gameLink>{{metaGame}}</gameLink> kun vi",
+                "gameEnd_win": "Vi gajnis vian ludon de <gameLink>{{metaGame}}</gameLink>",
+                "gameEnd_lose": "Vi malgajnis vian ludon de <gameLink>{{metaGame}}</gameLink>",
+                "gameEnd_draw": "Vi kunremisis vian ludon de <gameLink>{{metaGame}}</gameLink>",
+                "gameEnd_solo": "Via ludo de <gameLink>{{metaGame}}</gameLink> finiĝis",
+                "ratingChange": "Via pritakso por <gameLink>{{metaGame}}</gameLink>{{variantsInline}} ŝanĝiĝis je {{delta}} poentoj de {{oldRatingDisplay}} al {{newRatingDisplay}}.",
+                "challengeIssued": "{{challengerName}} defiis vin al ludo de <gameLink>{{metaGame}}</gameLink>",
+                "challengeDeclined": "{{declinerName}} malakceptis vian defion por ludo de <gameLink>{{metaGame}}</gameLink>",
+                "challengeRevoked": "{{revokerName}} nuligis la defion por ludo de <gameLink>{{metaGame}}</gameLink>",
+                "eventInvitation": "{{organizerName}} invitis vin al la evento <eventLink>{{eventName}}</eventLink>.",
+                "tournamentStart": "Turniro {{number}} de la serio <tournamentLink>{{metaGame}}</tournamentLink> komenciĝis.",
+                "tournamentEnd": "Turniro {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> finiĝis.",
+                "tournamentEnd_withWinner": "Turniro {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> finiĝis. {{winnerName}} venkis.",
+                "completedGameChat": "{{commenterName}} havas ion por diri en via finita ludo de <gameLink>{{metaGame}}</gameLink>",
+                "completedGameChat_backfill": "Vi havas nelegitajn babilmesaĝojn en via finita ludo de <gameLink>{{metaGame}}</gameLink>"
+            }
+        }
     },
     "Edit": "Redakti",
     "Done": "Fini",
@@ -1634,7 +1673,8 @@
             "feedbackCommentTooLong": "La komento devas havi maksimume {{max}} signojn.",
             "moveTableDensityAuto": "Kompaktaj movvicoj (klaku por po unu vico por ĉiu movo)",
             "moveTableDensitySparse": "Po unu vico por ĉiu movo (klaku por kompaktaj vicoj)"
-        }
+        },
+        "loading": "Ŝargas ludon…"
     },
     "Back": "Reiri",
     "theme": {
@@ -1795,7 +1835,85 @@
             "commentMarkdown": "Komento (Markdown)",
             "commentPlaceholder": "Aldonu komenton per Markdown…",
             "nothingToPreview": "Ankoraŭ nenio antaŭrigardebla."
+        },
+        "importLocalBanner_one": "Vi havas unu konservitan ludon de la Ludejo en ĉi tiu aparato. Ĉu kopii ĝin al via konto?",
+        "importLocalBanner_other": "Vi havas {{count}} konservitajn ludojn de la Ludejo en ĉi tiu aparato. Ĉu kopii ilin al via konto?",
+        "importLocalSuccess_one": "Unu konservita ludo estis kopiita al via konto.",
+        "importLocalSuccess_other": "{{count}} konservitaj ludoj estis kopiitaj al via konto."
+    },
+    "Wikipedia": "Vikipedio",
+    "NotificationSettingsSaveHelp": "Ŝanĝoj tuj konserviĝas.",
+    "NotificationSettingsEmail": "Retpoŝto",
+    "NotificationSettingsEmailHelp": "Necesas konfirmita retpoŝta adreso. Memorigoj pri via vico estas sendataj dufoje tage.",
+    "NotificationSettingsInApp": "En la aplikaĵo",
+    "NotificationSettingsInAppHelp": "Fluo de sciigoj en la stirpanelo sur via hejmpaĝo.",
+    "InAppNotifyLabel-challenges": "Defioj",
+    "InAppNotifyLabel-gameStart": "Ludo komenciĝis",
+    "InAppNotifyLabel-gameEnd": "Ludo finiĝis",
+    "InAppNotifyLabel-ratingChange": "Pritakso ŝanĝas",
+    "InAppNotifyLabel-eventInvitation": "Invitoj al eventoj",
+    "InAppNotifyLabel-completedGameChat": "Babilado en finitaj ludoj",
+    "InAppNotifyLabel-tournamentStart": "Turniro komenciĝis",
+    "InAppNotifyLabel-tournamentEnd": "Turniro finiĝis",
+    "InvalidVariantCombination": "Tiu kombino de variaĵoj ne estas permesita por ĉi tiu ludo.",
+    "TotalRatings": "pritaksoj entute",
+    "glicko": {
+        "displayHint": "Glicko-pritaksoj montriĝas laŭ la malsupra limo de la 95%-a konfidintervalo (pritakso − 2×RD), kun la plena RD en krampoj.",
+        "displayNote": "Tra la tuta retejo, Glicko-pritaksoj montriĝas laŭ la malsupra limo de la 95%-a konfidintervalo (pritakso − 2×RD), kun la plena RD en krampoj. <wikiLink>Ekscii pli pri la Glicko-pritaksa sistemo</wikiLink>."
+    },
+    "solo": {
+        "badge": "Solludo",
+        "badgeHelp": "Ĉi tiu ludo ebligas solludadon",
+        "playTitle": "Ludu sole",
+        "playAction": "Ludi sole",
+        "seedLabel": "Semo de defio",
+        "seedPlaceholder": "Lasu malplena por ricevi novan hazardan enigmon",
+        "seedHelp": "Uzu la saman semon por reludi aŭ konkuri laŭ la sama komenca aranĝo. Se vi lasas ĉi tiun kampon malplena, la servilo asignas semon.",
+        "rematch": "Ludi denove (sama semo)",
+        "rematchNewSeed": "Ludi denove (malsama semo)",
+        "copyShareLink": "Kunhavigi ligilon al la enigmo",
+        "outcome": {
+            "passed": "Sukcesis",
+            "failed": "Malsukcesis",
+            "grade": "Grado: {{grade}}",
+            "timed": "Tempo: {{time}}",
+            "score": "{{score}} {{label}} ({{hint}})",
+            "scoreShort": "Poentaro: {{score}}",
+            "scoreFallback": "poentoj",
+            "higherIsBetter": "pli alta estas pli bona",
+            "lowerIsBetter": "pli malalta estas pli bona"
+        },
+        "stats": {
+            "title": "Solludaj statistikoj",
+            "empty": "Ankoraŭ neniu solluda provo estas registrita.",
+            "attempts": "Provoj",
+            "uniquePlayers": "Ludantoj",
+            "repeatRate": "Reprova proporcio",
+            "medianBestScore": "Mediano de la plej bonaj poentaroj",
+            "commonGrade": "Plej bona grado"
+        },
+        "leaderboard": {
+            "title": "Ranglistoj laŭ semo",
+            "empty": "Ankoraŭ ne estas solludaj ranglistoj laŭ semo.",
+            "seedSelect": "Defia semo",
+            "poolSummary": "{{players}} ludantoj, {{attempts}} provoj",
+            "boardHelp": "Variaĵo: {{variant}}. {{direction}}.",
+            "score": "Poentaro",
+            "grade": "Grado",
+            "attempts": "Provoj",
+            "date": "Plej bona provo"
         }
     },
-    "Wikipedia": "Vikipedio"
+    "challenges": {
+        "loading": "Ŝargas defiojn…"
+    },
+    "common": {
+        "loading": "Ŝargas…"
+    },
+    "listGames": {
+        "loading": "Ŝargas ludojn…"
+    },
+    "play": {
+        "loadingNext": "Serĉas por via sekva ludo…"
+    }
 }

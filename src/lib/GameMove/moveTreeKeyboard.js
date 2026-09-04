@@ -5,6 +5,9 @@ export const MOVE_TREE_KEYBOARD_INPUT_IDS = new Set([
   "enterAComment",
   "enterANote",
   "myCustomCSS",
+  "playgroundMoveComment",
+  "labSaveName",
+  "labSaveNameUpdate",
 ]);
 
 export function shouldSkipMoveTreeKeyboard(activeElement, exploration) {

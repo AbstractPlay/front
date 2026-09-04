@@ -1,4 +1,26 @@
 {
     "404": "404 Tidak ditemukan",
-    "All": "Semua"
+    "All": "Semua",
+    "boardExport": {
+        "pathVariationUnknown": "Variasi"
+    },
+    "About": "Tentang",
+    "Accept": "Terima",
+    "Active": "Aktif",
+    "Accepted": "Diterima!",
+    "and": "dan",
+    "ChallengeResponseComment": "Berkomentar",
+    "YourMove": "Giliranmu",
+    "a11y": {
+        "hideShow": "Sembunyikan/Tampilkan",
+        "activePlayers": "Nomor setiap pemain yang aktif",
+        "language": "Bahasa",
+        "menu": "menu",
+        "toggleDarkMode": "Tombol mode gelap",
+        "toggleLightMode": "Tombol mode terang"
+    },
+    "about": {
+        "highlightsLink": "Daftar semua game"
+    },
+    "Add": "Tambahkan"
 }
