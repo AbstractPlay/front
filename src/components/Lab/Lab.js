@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import PageHelmet from "../PageHelmet";
 import { buildLabGame } from "../../lib/Lab/buildGame";
 import {
   clearLastSession,
@@ -50,6 +52,7 @@ function launchPayloadFromSave(save) {
 }
 
 function Lab() {
+  const { t } = useTranslation();
   const [session, setSession] = useState(null);
   const [ready, setReady] = useState(false);
 
@@ -66,63 +69,81 @@ function Lab() {
     setReady(true);
   }, []);
 
-  const handleLaunch = ({
-    game,
-    savedExploration,
-    savedMoveAnnotations,
-    initialFocus,
-    gameSettings,
-    sessionName,
-  }) => {
-    setSession({
+  const documentTitle = useMemo(() => {
+    if (!session) {
+      return t("lab.launcherPageTitle");
+    }
+    return `${session.sessionName}${t("lab.titleSuffix")}`;
+  }, [session, t]);
+
+  const handleLaunch = useCallback(
+    ({
       game,
       savedExploration,
-      savedMoveAnnotations: savedMoveAnnotations ?? null,
-      initialFocus: initialFocus ?? null,
+      savedMoveAnnotations,
+      initialFocus,
       gameSettings,
       sessionName,
-      loadedSave: null,
-    });
-  };
+    }) => {
+      setSession({
+        game,
+        savedExploration,
+        savedMoveAnnotations: savedMoveAnnotations ?? null,
+        initialFocus: initialFocus ?? null,
+        gameSettings,
+        sessionName,
+        loadedSave: null,
+      });
+    },
+    []
+  );
 
-  const handleLoadSave = (save) => {
+  const handleLoadSave = useCallback((save) => {
     try {
       setSession(launchPayloadFromSave(save));
     } catch (err) {
       window.alert(err.message || String(err));
     }
-  };
+  }, []);
 
-  const handleLoadedSaveChange = (loadedSave) => {
+  const handleLoadedSaveChange = useCallback((loadedSave) => {
     setSession((prev) => (prev ? { ...prev, loadedSave } : prev));
-  };
+  }, []);
 
-  const handleExit = () => {
+  const handleSessionNameChange = useCallback((sessionName) => {
+    setSession((prev) => (prev ? { ...prev, sessionName } : prev));
+  }, []);
+
+  const handleExit = useCallback(() => {
     clearLastSession();
     setSession(null);
-  };
+  }, []);
 
   if (!ready) {
     return null;
   }
 
-  if (session) {
-    return (
-      <LabSession
-        initialGame={session.game}
-        savedExploration={session.savedExploration}
-        savedMoveAnnotations={session.savedMoveAnnotations}
-        initialFocus={session.initialFocus}
-        initialGameSettings={session.gameSettings}
-        sessionName={session.sessionName}
-        loadedSave={session.loadedSave}
-        onLoadedSaveChange={handleLoadedSaveChange}
-        onExit={handleExit}
-      />
-    );
-  }
-
-  return <LabLauncher onLaunch={handleLaunch} onLoadSave={handleLoadSave} />;
+  return (
+    <>
+      <PageHelmet title={documentTitle} />
+      {session ? (
+        <LabSession
+          initialGame={session.game}
+          savedExploration={session.savedExploration}
+          savedMoveAnnotations={session.savedMoveAnnotations}
+          initialFocus={session.initialFocus}
+          initialGameSettings={session.gameSettings}
+          sessionName={session.sessionName}
+          loadedSave={session.loadedSave}
+          onLoadedSaveChange={handleLoadedSaveChange}
+          onSessionNameChange={handleSessionNameChange}
+          onExit={handleExit}
+        />
+      ) : (
+        <LabLauncher onLaunch={handleLaunch} onLoadSave={handleLoadSave} />
+      )}
+    </>
+  );
 }
 
 export default Lab;

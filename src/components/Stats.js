@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 import StatsModule from "./Stats/StatsModule";
 import SummaryGate from "./shared/SummaryGate";
 import { useStore } from "../stores";
@@ -139,8 +139,7 @@ function Stats() {
 
   return (
     <>
-      <Helmet>
-        <meta property="og:title" content={`Site Statistics`} />
+      <PageHelmet title="Site Statistics">
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/stats/${tabFromPath}`}
@@ -149,7 +148,7 @@ function Stats() {
           property="og:description"
           content={`Site statistics, updated weekly`}
         />
-      </Helmet>
+      </PageHelmet>
       <article id="leaderboard">
         <h1 className="title has-text-centered">{t("Statistics")}</h1>
         <div className="content has-text-centered">

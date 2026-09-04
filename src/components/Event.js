@@ -9,7 +9,7 @@ import { API_ENDPOINT_OPEN } from "../config";
 import { cloneDeep } from "lodash";
 // import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation, Trans } from "react-i18next";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "./PageHelmet";
 import Modal from "./Modal";
 import Spinner from "./Spinner";
 import NotFound from "./NotFound";
@@ -556,11 +556,7 @@ function Event() {
     const savedBlocked = eventData.event.blocked || [];
     return (
       <>
-        <Helmet>
-          <meta
-            property="og:title"
-            content={`Organized Event: ${eventData.event.name}`}
-          />
+        <PageHelmet title={`Organized Event: ${eventData.event.name}`}>
           <meta
             property="og:url"
             content={`https://play.abstractplay.com/event/${eventid}`}
@@ -569,7 +565,7 @@ function Event() {
             property="og:description"
             content={eventData.event.description}
           />
-        </Helmet>
+        </PageHelmet>
         <article className="content">
           <h1 className="title lined">
             <span>{eventData.event.name}</span>

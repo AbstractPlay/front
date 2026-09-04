@@ -4,7 +4,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 
 import { useTranslation } from "react-i18next";
 import { API_ENDPOINT_OPEN } from "../../config";
-import { Helmet } from "react-helmet-async";
+import PageHelmet from "../PageHelmet";
 import PageLoading from "../shared/PageLoading";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
@@ -228,11 +228,7 @@ function Tournament(props) {
 
   return (
     <>
-      <Helmet>
-        <meta
-          property="og:title"
-          content={`${metaGameName}: Tournament ${tournamentid}`}
-        />
+      <PageHelmet title={`${metaGameName}: Tournament ${tournamentid}`}>
         <meta
           property="og:url"
           content={`https://play.abstractplay.com/tournament/${tournamentid}`}
@@ -241,7 +237,7 @@ function Tournament(props) {
           property="og:description"
           content={`Details of ${metaGameName} tournament ${tournamentid}`}
         />
-      </Helmet>
+      </PageHelmet>
       <article className="content">
         <h1 className="title has-text-centered">
           <a

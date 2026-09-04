@@ -49,6 +49,8 @@ import { resolveAuthSession } from "../lib/authSession";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { useStore } from "../stores";
 import { isAnonymousFriendlyPath } from "../lib/publicPaths";
+import DefaultDocumentTitle from "../components/DefaultDocumentTitle";
+import { SITE_OG_TITLE } from "../lib/siteDocumentTitle";
 
 const Stats = lazy(() => import("../components/Stats"));
 // const MetaContainer = lazy(() => import("../components/MetaContainer"));
@@ -162,16 +164,7 @@ function Bones(props) {
     return (
       <HelmetProvider>
         <Helmet>
-          <title>
-            {REAL_MODE === "production"
-              ? "Abstract Play"
-              : "Abstract Play (Dev)"}
-          </title>
-
-          <meta
-            property="og:title"
-            content="Abstract Play: Make Time for Games"
-          />
+          <meta property="og:title" content={SITE_OG_TITLE} />
           <meta property="og:url" content="https://play.abstractplay.com" />
           <meta
             property="og:description"
@@ -180,6 +173,7 @@ function Bones(props) {
         </Helmet>
         <ToastContainer />
         <Router>
+          <DefaultDocumentTitle />
           <TimeAgoLocaleSync />
           <ThemeApplicator />
           <MyWebSocket />
