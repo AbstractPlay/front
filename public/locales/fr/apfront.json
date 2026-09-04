@@ -1893,6 +1893,7 @@
     "coderOne": "Développeur : ",
     "codersMany": "Développeurs : ",
     "titleSuffix": " — Bac à sable",
+    "launcherPageTitle": "Espace d'essai",
     "debug": {
       "copyPosition": "Copier la position",
       "copyPositionHelp": "État brut du moteur sur le coup actuel (pour le débogage).",
