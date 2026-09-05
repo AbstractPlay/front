@@ -1783,6 +1783,7 @@
     "clearColours": "Borrar colores",
     "developerHints": "Pistas para desarrolladores:",
     "paletteHint": "Paleta #{{num}}",
+    "paletteHintPlayer": "(Jugador {{player}})",
     "defaultValue": "(Predeterminado: {{value}})",
     "boardColours": "Colores del tablero",
     "selectProperty": "Seleccionar propiedad",
