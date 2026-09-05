@@ -43,9 +43,9 @@ GitHub Actions workflows:
 CI steps:
 
 1. Reject merge conflict markers in `package.json`, `package-lock.json`, and `ci-deps.*.json`.
-2. `npm ci` (with GitHub Packages auth).
-3. **Test job** (required before deploy): validate manifests → `bin/install-ap-deps.mjs --stage dev|prod` → strict sync check → `npm run test:ci` and lint.
-4. **Deploy job**: same dep order for the stage, then auto-commit `ci-deps.*.json`, `package-lock.json`, and synced `package.json` AP fields on `repository_dispatch` only.
+2. `ap-install-deps --bootstrap` (with GitHub Packages auth): runs `npm ci`, overlays pinned AP versions, restores `0.0.0-managed` placeholders in `package.json`.
+3. **Test job** (required before deploy): validate manifests → strict lockfile check → `npm run test:ci` and lint.
+4. **Deploy job**: same dep install for the stage, then auto-commit `ci-deps.*.json` and `package-lock.json` on `repository_dispatch` only (`package.json` placeholders stay unchanged).
 5. `npm run build-dev` or `build-prod`.
 6. `serverless client deploy`.
 7. Publish locale JSON files to S3 (`bin/publish-locales.mjs`).
@@ -85,11 +85,11 @@ Published `gameslib` and `renderer` packages use immutable `1.0.0-ci-{GITHUB_RUN
 
 1. **renderer** publishes and dispatches `renderer_version` to **gameslib** and **designer**.
 2. **gameslib** installs that renderer, tests, publishes, then dispatches `gameslib_version` + `renderer_version` to front and the backends.
-3. Each consumer runs `npm ci`, validates manifests, then `bin/install-ap-deps.mjs --stage dev|prod`, which syncs `package.json` and installs exact versions from the dispatch payload or `ci-deps.<stage>.json`.
+3. Each consumer runs `npm ci`, validates manifests, then `ap-install-deps --stage dev|prod`, which updates the lockfile from the dispatch payload or `ci-deps.<stage>.json`. AP versions in `package.json` use the placeholder `0.0.0-managed`; see `ci-deps.*.json` and `package-lock.json` for exact pins.
 
-After a merge that touches dependency files, run `npm run sync-deps` on `develop` (or `npm run sync-deps:prod` on `main`) and commit `ci-deps.*.json`, `package.json`, and `package-lock.json` together. Do not hand-merge version strings in `package.json` — regenerate with `sync-deps`.
+After a merge that touches dependency files, run `npm run sync-deps` on `develop` (or `npm run sync-deps:prod` on `main`) and commit `ci-deps.*.json`, `package-lock.json`, and `package.json` together. Do not hand-merge version strings — regenerate with `sync-deps`.
 
-`ci-deps.prod.json` is protected on `main` via `.gitattributes` (`merge=ours`) so merges from `develop` do not overwrite production pins.
+`ci-deps.prod.json` is protected on `main` via `.gitattributes` (`merge=ours`) so merges from `develop` do not overwrite production pins. `package-lock.json` uses `merge=ours` on the target branch; run `sync-deps` if the strict check fails after a merge.
 
 ### Prod API lag
 
@@ -97,10 +97,10 @@ It is normal for a **prod** deploy to fail at build when application code on `ma
 
 ### AP dependency sync
 
-- `npm run sync-deps` — apply `ci-deps.dev.json` to `package.json` and lockfile.
+- `npm run sync-deps` — apply `ci-deps.dev.json` to the lockfile.
 - `npm run sync-deps:prod` — apply `ci-deps.prod.json` (prod registry checks apply on install).
 
-CI always runs `install-ap-deps` before tests, lint, and build. `check-ci-deps` is not part of `npm run lint`.
+CI always runs `ap-install-deps` before tests, lint, and build. `ap-check-ci-deps` is not part of `npm run lint`.
 
 ## Related
 
