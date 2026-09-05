@@ -1783,6 +1783,7 @@
     "clearColours": "Farben löschen",
     "developerHints": "Entwicklerhinweise:",
     "paletteHint": "Palette #{{num}}",
+    "paletteHintPlayer": "(Spieler {{player}})",
     "defaultValue": "(Standard: {{value}})",
     "boardColours": "Brettfarben",
     "selectProperty": "Eigenschaft auswählen",

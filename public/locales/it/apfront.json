@@ -1783,6 +1783,7 @@
     "clearColours": "Cancella colori",
     "developerHints": "Suggerimenti per sviluppatori:",
     "paletteHint": "Tavolozza #{{num}}",
+    "paletteHintPlayer": "(Giocatore {{player}})",
     "defaultValue": "(Predefinito: {{value}})",
     "boardColours": "Colori del tabellone",
     "selectProperty": "Seleziona proprietà",
