@@ -13,9 +13,10 @@
 ```bash
 git clone https://github.com/AbstractPlay/front.git
 cd front
-npm ci
-node bin/install-ap-deps.mjs
+npm run sync-deps
 ```
+
+`sync-deps` runs `ap-install-deps`, which bootstraps with `npm ci` on a fresh clone (AP versions in `package.json` are placeholders; see `ci-deps.dev.json` and `package-lock.json` for pins).
 
 ## GitHub Packages
 
