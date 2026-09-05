@@ -838,7 +838,6 @@
   "MarkPremove": "Marquer comme coup anticipé",
   "MaxTime": "temps max. {{max}} heures",
   "Moves": "Coups",
-  "MyColor": "Utiliser ma couleur de joueur préférée quel que soit l'ordre du tour",
   "MyDashboard": "Tableau de bord",
   "NameBlank": "Veuillez saisir un nom",
   "NameNotAvailable": "Le nom {{name}} n'est pas disponible.",
@@ -1769,6 +1768,10 @@
   "customize": {
     "title": "Personnaliser les paramètres pour {{gameName}}",
     "globalDefaults": "Valeurs par défaut globales",
+    "preferredColour": "Ma couleur préférée",
+    "preferredColourHelpGlobal": "Lorsque vous jouez une partie, vos pièces utilisent cette couleur lorsque c'est possible. Les autres joueurs conservent des couleurs distinctes.",
+    "preferredColourHelpGame": "Remplace votre couleur préférée globale pour cette partie uniquement. Définissez votre choix par défaut sur la",
+    "clearPreferredColour": "Effacer la couleur préférée",
     "playerColours": "Couleurs des joueurs",
     "addColour": "Ajouter une couleur",
     "addColourHelp": "Sélectionnez une couleur et cliquez sur le bouton \"Ajouter une couleur\". Les couleurs par défaut peuvent être sélectionnées en cliquant sur l'échantillon. Si la palette est vide, la palette par défaut sera utilisée.",

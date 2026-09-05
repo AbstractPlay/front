@@ -838,6 +838,8 @@ function LabSession({
           settings,
           context: effectiveColourContext,
           globalMe: globalMeRef.current,
+          engine: engineRef.current,
+          numPlayers: gameRef.current?.players?.length,
         });
         setGlyphMapOpt({
           options: opts,

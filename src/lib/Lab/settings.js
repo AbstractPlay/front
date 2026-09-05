@@ -72,6 +72,14 @@ export function processNewSettings(
 
 export function setupColors(settings, game, globalMe, colourContext, node) {
   var options = {};
+  let engine;
+  if (game.customColours) {
+    if (node === undefined) {
+      engine = GameFactory(game.metaGame, game.state);
+    } else {
+      engine = GameFactory(game.metaGame, node.state);
+    }
+  }
   setRendererColourOpts({
     options,
     metaGame: game.metaGame,
@@ -79,6 +87,8 @@ export function setupColors(settings, game, globalMe, colourContext, node) {
     settings,
     context: colourContext,
     globalMe,
+    engine,
+    numPlayers: game.players?.length,
   });
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {
@@ -88,12 +98,6 @@ export function setupColors(settings, game, globalMe, colourContext, node) {
       options.colourContext = colourContext;
       let color = i + 1;
       if (game.customColours) {
-        let engine;
-        if (node === undefined) {
-          engine = GameFactory(game.metaGame, game.state);
-        } else {
-          engine = GameFactory(game.metaGame, node.state);
-        }
         color = engine.getPlayerColour(i + 1);
       }
       return {

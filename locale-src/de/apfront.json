@@ -1291,10 +1291,6 @@
     "src": "Moves",
     "out": "Züge"
   },
-  "MyColor": {
-    "src": "Use my preferred player colour regardless of turn order",
-    "out": "Eigene bevorzugte Spielerfarbe unabhängig von der Zugreihenfolge verwenden"
-  },
   "MyDashboard": {
     "src": "Dashboard",
     "out": "Übersicht"
@@ -3719,6 +3715,10 @@
     "src": "Clear colours",
     "out": "Farben löschen"
   },
+  "customize.clearPreferredColour": {
+    "src": "Clear preferred colour",
+    "out": "Bevorzugte Farbe zurücksetzen"
+  },
   "customize.context.annotations.help": {
     "src": "The colour of move annotations.",
     "out": "Die Farbe von Zuganmerkungen."
@@ -3814,6 +3814,18 @@
   "customize.playerColours": {
     "src": "Player Colours",
     "out": "Spielerfarben"
+  },
+  "customize.preferredColour": {
+    "src": "My preferred colour",
+    "out": "Meine bevorzugte Farbe"
+  },
+  "customize.preferredColourHelpGame": {
+    "src": "Overrides your global preferred colour for this game only. Set your default on the",
+    "out": "Überschreibt deine globale bevorzugte Farbe nur für dieses Spiel. Stelle deinen Standard ein auf der"
+  },
+  "customize.preferredColourHelpGlobal": {
+    "src": "When you play a game, your pieces use this colour when possible. Other players keep distinct colours.",
+    "out": "Wenn du ein Spiel spielst, verwenden deine Spielsteine nach Möglichkeit diese Farbe. Andere Spieler behalten eindeutige Farben."
   },
   "customize.resetToDefaults": {
     "src": "Reset to Defaults",

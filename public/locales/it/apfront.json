@@ -838,7 +838,6 @@
   "MarkPremove": "Contrassegna come premossa",
   "MaxTime": "tempo max {{max}} ore",
   "Moves": "Mosse",
-  "MyColor": "Usa il mio colore preferito indipendentemente dall'ordine dei turni",
   "MyDashboard": "Bacheca",
   "NameBlank": "Inserisci un nome",
   "NameNotAvailable": "Il nome {{name}} non è disponibile.",
@@ -1769,6 +1768,10 @@
   "customize": {
     "title": "Personalizza impostazioni per {{gameName}}",
     "globalDefaults": "Impostazioni predefinite globali",
+    "preferredColour": "Il mio colore preferito",
+    "preferredColourHelpGlobal": "Quando giochi una partita, i tuoi pezzi usano questo colore quando possibile. Gli altri giocatori mantengono colori distinti.",
+    "preferredColourHelpGame": "Sostituisce il tuo colore preferito globale solo per questa partita. Imposta quello predefinito nella",
+    "clearPreferredColour": "Rimuovi colore preferito",
     "playerColours": "Colori dei giocatori",
     "addColour": "Aggiungi colore",
     "addColourHelp": "Seleziona un colore e fai clic sul pulsante \"Aggiungi colore\". I colori predefiniti possono essere selezionati facendo clic sul campione. Se la tavolozza è vuota, verrà usata quella predefinita.",

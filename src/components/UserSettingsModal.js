@@ -127,7 +127,6 @@ function UserSettingsModal(props) {
   );
   const [hideTour, hideTourSetter] = useState(!showPlayTour);
   const [hideSpoilers, hideSpoilersSetter] = useState(false);
-  const [myColor, myColorSetter] = useState(false);
   const [showBots, showBotsSetter] = useState(false);
   const [pushOnThisDevice, pushOnThisDeviceSetter] = useState(false);
 
@@ -168,11 +167,6 @@ function UserSettingsModal(props) {
         hideSpoilersSetter(globalMe.settings.all.hideSpoilers);
       } else {
         hideSpoilersSetter(false);
-      }
-      if (globalMe?.settings?.all?.myColor) {
-        myColorSetter(globalMe.settings.all.myColor);
-      } else {
-        myColorSetter(false);
       }
       if (globalMe?.country !== undefined) {
         countrySetter(globalMe.country);
@@ -403,14 +397,6 @@ function UserSettingsModal(props) {
     if (newSettings.all === undefined) newSettings.all = {};
     newSettings.all.hideSpoilers = !hideSpoilers;
     hideSpoilersSetter(!hideSpoilers);
-    handleSettingsChange(newSettings);
-  };
-
-  const handleMyColorChange = async () => {
-    const newSettings = cloneDeep(globalMe.settings);
-    if (newSettings.all === undefined) newSettings.all = {};
-    newSettings.all.myColor = !myColor;
-    myColorSetter(!myColor);
     handleSettingsChange(newSettings);
   };
 
@@ -996,23 +982,6 @@ function UserSettingsModal(props) {
                 {t("HideSpoilers")}
               </label>
             </div>
-          </div>
-
-          {/********************* use my player color *********************/}
-          <div className="field" key="myColor">
-            <div className="control">
-              <label className="checkbox is-small">
-                <input
-                  type="checkbox"
-                  checked={myColor}
-                  onChange={handleMyColorChange}
-                />
-                {t("MyColor")}
-              </label>
-            </div>
-            <p className="help">
-              Also requires setting up and applying a custom palette.
-            </p>
           </div>
 
           <div className="field is-grouped">
