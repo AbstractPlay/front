@@ -51,15 +51,18 @@ jobs:
             exit 1
           fi
 
-      - name: Install NPM dependencies and pinned AP packages
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Validate ci-deps manifests
+        run: npx ap-check-ci-deps
+
+      - name: Install pinned AP dependencies
         env:
           AP_GAMESLIB_VERSION: ${{ inputs.ap_gameslib_version }}
           AP_RENDERER_VERSION: ${{ inputs.ap_renderer_version }}
           AP_SOURCE: ${{ inputs.ap_source }}
-        run: npx -p @abstractplay/ap-deps-tools@^1.0.3 ap-install-deps --stage ${{ inputs.ap_deps_stage }} --bootstrap
-
-      - name: Validate ci-deps manifests
-        run: npx ap-check-ci-deps
+        run: npx ap-install-deps --stage ${{ inputs.ap_deps_stage }}
 
       - name: Verify lockfile matches ci-deps
         run: npx ap-check-ci-deps --stage ${{ inputs.ap_deps_stage }} --strict
