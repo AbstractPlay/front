@@ -2,7 +2,13 @@
     "404": "404 Tidak ditemukan",
     "All": "Semua",
     "boardExport": {
-        "pathVariationUnknown": "Variasi"
+        "pathVariationUnknown": "Variasi",
+        "pngButton": "Unduh gambar papan (PNG)",
+        "gifButton": "Unduh animasi papan (GIF)",
+        "gifTitle": "Ekspor GIF animasi",
+        "delayLabel": "Jeda antar bingkai (detik)",
+        "startLabel": "Posisi mulai",
+        "endLabel": "Posisi selesai"
     },
     "About": "Tentang",
     "Accept": "Terima",
@@ -22,5 +28,10 @@
     "about": {
         "highlightsLink": "Daftar semua game"
     },
-    "Add": "Tambahkan"
+    "Add": "Tambahkan",
+    "AcceptDraw": "Terima tawaran remis",
+    "AlternativeDisplays": "Opsi display alternatif",
+    "Annotate": "Tampilkan indikator pergerakan terakhir",
+    "AvailableGames": "Game yang tersedia",
+    "BoardSettings": "Ubah pengaturan permainan papan"
 }
