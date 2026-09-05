@@ -1,3 +1,4 @@
+import { GameFactory } from "@abstractplay/gameslib";
 import React, { useMemo } from "react";
 import { renderglyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
@@ -15,6 +16,10 @@ function renderGlyph(
   game
 ) {
   var options = {};
+  let engine;
+  if (game.customColours && game.state) {
+    engine = GameFactory(game.metaGame, game.state);
+  }
   setRendererColourOpts({
     options,
     metaGame: game.metaGame,
@@ -22,6 +27,8 @@ function renderGlyph(
     settings,
     context: colourContext,
     globalMe,
+    engine,
+    numPlayers: game.players?.length,
   });
   options.svgid = id;
   return renderglyph(glyph, player, options);

@@ -1,3 +1,7 @@
+import { gameinfo } from "@abstractplay/gameslib";
+import { resolveCustomizationScope } from "./resolveEffectiveCustomization.js";
+import { resolveEffectivePalette } from "./resolveEffectivePalette.js";
+
 export const setRendererColourOpts = ({
   options,
   metaGame,
@@ -5,6 +9,9 @@ export const setRendererColourOpts = ({
   settings,
   context,
   globalMe,
+  engine,
+  numPlayers,
+  customizationHints = gameinfo.get(metaGame)?.customizations,
 }) => {
   options.colourContext = context;
   let optioncolours = [];
@@ -23,47 +30,34 @@ export const setRendererColourOpts = ({
     }
     options.coloursGlobal = false;
   }
+
+  const scope = resolveCustomizationScope(globalMe, metaGame);
   if (globalMe?.customizations?.[metaGame]) {
-    const custom = globalMe.customizations[metaGame];
-    if (
-      custom.palette &&
-      Array.isArray(custom.palette) &&
-      custom.palette.length > 0
-    ) {
-      optioncolours = [...custom.palette];
-      options.coloursGlobal = false;
-    }
     options.contextGlobal = false;
   } else if (globalMe?.customizations?._default) {
-    const custom = globalMe.customizations._default;
-    if (
-      custom.palette &&
-      Array.isArray(custom.palette) &&
-      custom.palette.length > 0
-    ) {
-      optioncolours = [...custom.palette];
-      options.coloursGlobal = true;
-    }
     options.contextGlobal = true;
   }
-  // extend all palettes to 12 colours
+
+  if (scope.palette) {
+    const effective = resolveEffectivePalette({
+      globalMe,
+      metaGame,
+      isParticipant,
+      engine,
+      numPlayers,
+      customizationHints,
+    });
+    if (effective) {
+      optioncolours = effective;
+      options.coloursGlobal = scope.coloursGlobal;
+    }
+  }
+
   if (optioncolours.length > 0 && optioncolours.length < 12) {
     while (optioncolours.length < 12) {
       optioncolours.push(null);
     }
   }
-  // handle "Always use my colour" preference
-  if (
-    optioncolours !== undefined &&
-    Array.isArray(optioncolours) &&
-    optioncolours.length > 0 &&
-    globalMe?.settings?.all?.myColor &&
-    isParticipant > 0
-  ) {
-    const mycolor = optioncolours.shift();
-    optioncolours.splice(isParticipant, 0, mycolor);
-  }
-  // set option
   if (optioncolours.length > 0) {
     options.colours = [...optioncolours];
   }

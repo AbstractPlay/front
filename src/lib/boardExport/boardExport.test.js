@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { buildBoardRenderOptions } from "./buildBoardRenderOptions";
 import {
   getPathToFocus,
   slicePathFrames,
@@ -140,5 +141,62 @@ describe("enumeratePathFrames", () => {
 
   it("exposes a generous frame cap constant", () => {
     expect(MAX_GIF_FRAMES).toBeGreaterThanOrEqual(100);
+  });
+});
+
+describe("buildBoardRenderOptions", () => {
+  const RED = "#e31a1c";
+  const WHITE = "#ffffff";
+  const BLACK = "#000000";
+
+  it("applies preferred colour swap without engine when hints tag player slots", () => {
+    const pawn1 = "#aaaaaa";
+    const bloqueoHints = [
+      { num: 1, default: pawn1 },
+      { num: 2, default: pawn1 },
+      { num: 3, default: pawn1 },
+      { num: 4, player: 1, default: WHITE },
+      { num: 5, player: 2, default: BLACK },
+    ];
+    const globalMe = {
+      customizations: {
+        bloqueo: {
+          palette: [pawn1, pawn1, pawn1, WHITE, BLACK],
+          preferredColour: WHITE,
+        },
+      },
+    };
+    const options = buildBoardRenderOptions({
+      metaGame: "bloqueo",
+      settings: { color: "standard" },
+      colourContext: {},
+      globalMe,
+      isParticipant: 1,
+      viewerSeat: 1,
+      numPlayers: 2,
+      customizationHints: bloqueoHints,
+    });
+    expect(options.colours[0]).toBe(pawn1);
+    expect(options.colours[3]).toBe(BLACK);
+    expect(options.colours[4]).toBe(WHITE);
+  });
+
+  it("does not swap preferred colour for spectators", () => {
+    const palette = [RED, "#1f78b4", "#33a02c"];
+    const globalMe = {
+      customizations: {
+        _default: { palette, preferredColour: RED },
+      },
+    };
+    const options = buildBoardRenderOptions({
+      metaGame: "bide",
+      settings: { color: "standard" },
+      colourContext: {},
+      globalMe,
+      isParticipant: -1,
+      numPlayers: 3,
+      customizationHints: [],
+    });
+    expect(options.colours.slice(0, 3)).toEqual(palette);
   });
 });

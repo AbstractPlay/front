@@ -838,7 +838,6 @@
   "MarkPremove": "Marcar como premovimiento",
   "MaxTime": "tiempo máx. {{max}} horas",
   "Moves": "Movimientos",
-  "MyColor": "Usar mi color de jugador preferido independientemente del orden de turno",
   "MyDashboard": "Panel principal",
   "NameBlank": "Por favor ingresa un nombre",
   "NameNotAvailable": "El nombre {{name}} no está disponible.",
@@ -1769,6 +1768,10 @@
   "customize": {
     "title": "Personalizar configuración para {{gameName}}",
     "globalDefaults": "Valores predeterminados globales",
+    "preferredColour": "Mi color preferido",
+    "preferredColourHelpGlobal": "Cuando juegas una partida, tus piezas usan este color siempre que sea posible. Los demás jugadores conservan colores distintos.",
+    "preferredColourHelpGame": "Anula tu color preferido global solo para esta partida. Establece tu opción predeterminada en la",
+    "clearPreferredColour": "Borrar color preferido",
     "playerColours": "Colores de los jugadores",
     "addColour": "Agregar color",
     "addColourHelp": "Selecciona un color y haz clic en el botón \"Agregar color\". Los colores predeterminados se pueden seleccionar haciendo clic en la muestra de color. Si la paleta está vacía, se usará la paleta predeterminada.",

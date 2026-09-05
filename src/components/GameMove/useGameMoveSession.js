@@ -1566,6 +1566,8 @@ export function useGameMoveSession(props) {
         settings: displaySettings,
         context: effectiveColourContext,
         globalMe: globalMeRef.current,
+        engine: engineRef.current,
+        numPlayers: currentGame?.players?.length,
       });
       setGlyphMapOpt({
         options,
@@ -2395,6 +2397,7 @@ export function useGameMoveSession(props) {
         colourContext: effectiveColourContext,
         globalMe: globalMeRef.current,
         isParticipant: currentGame.me,
+        numPlayers: currentGame.players?.length,
       });
       toast(t("boardExport.pngSuccess"));
     } catch (err) {

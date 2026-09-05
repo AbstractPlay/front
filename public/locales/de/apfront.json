@@ -838,7 +838,6 @@
   "MarkPremove": "Als Zugvorauswahl markieren",
   "MaxTime": "Max. Bedenkzeit {{max}} Stunden",
   "Moves": "Züge",
-  "MyColor": "Eigene bevorzugte Spielerfarbe unabhängig von der Zugreihenfolge verwenden",
   "MyDashboard": "Übersicht",
   "NameBlank": "Bitte gib einen Namen ein",
   "NameNotAvailable": "Der Name {{name}} ist nicht verfügbar.",
@@ -1769,6 +1768,10 @@
   "customize": {
     "title": "Einstellungen für {{gameName}} anpassen",
     "globalDefaults": "Globale Standardwerte",
+    "preferredColour": "Meine bevorzugte Farbe",
+    "preferredColourHelpGlobal": "Wenn du ein Spiel spielst, verwenden deine Spielsteine nach Möglichkeit diese Farbe. Andere Spieler behalten eindeutige Farben.",
+    "preferredColourHelpGame": "Überschreibt deine globale bevorzugte Farbe nur für dieses Spiel. Stelle deinen Standard ein auf der",
+    "clearPreferredColour": "Bevorzugte Farbe zurücksetzen",
     "playerColours": "Spielerfarben",
     "addColour": "Farbe hinzufügen",
     "addColourHelp": "Wähle eine Farbe aus und klicke auf die Schaltfläche \"Farbe hinzufügen\". Die Standardfarben können durch Klicken auf das Farbfeld ausgewählt werden. Wenn die Palette leer ist, wird die Standardpalette verwendet.",
