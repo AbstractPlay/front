@@ -1,3 +1,4 @@
+import { gameinfo } from "@abstractplay/gameslib";
 import { buildBoardRenderOptions } from "./buildBoardRenderOptions";
 import { renderBoardSvg } from "./renderBoardSvg";
 import { svgToPngBlob, svgToImageData } from "./svgToPngBlob";
@@ -54,11 +55,14 @@ export async function exportCurrentBoardPng({
   colourContext,
   globalMe,
   isParticipant,
+  numPlayers,
 }) {
   const rep = pickRenderRep(renderrep, boardRenderIndex);
   if (!rep) {
     throw new Error("No board to export");
   }
+
+  const customizationHints = gameinfo.get(metaGame)?.customizations;
 
   const options = buildBoardRenderOptions({
     metaGame,
@@ -66,6 +70,9 @@ export async function exportCurrentBoardPng({
     colourContext,
     globalMe,
     isParticipant,
+    viewerSeat: isParticipant,
+    numPlayers,
+    customizationHints,
   });
 
   const liveSvg = getLiveSvg(boardRenderIndex, rendered);
@@ -113,12 +120,17 @@ export async function exportBoardGif({
     throw new Error(`FRAME_CAP:${MAX_GIF_FRAMES}`);
   }
 
+  const customizationHints = gameinfo.get(metaGame)?.customizations;
+
   const options = buildBoardRenderOptions({
     metaGame,
     settings,
     colourContext,
     globalMe,
     isParticipant,
+    viewerSeat: isParticipant,
+    numPlayers: game?.players?.length,
+    customizationHints,
   });
 
   const rasterFrames = [];

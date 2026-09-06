@@ -1,69 +1,49 @@
+import { gameinfo } from "@abstractplay/gameslib";
+import { resolveCustomizationScope, resolvePreferredColour } from "./resolveEffectiveCustomization.js";
+import { resolveEffectivePalette } from "./resolveEffectivePalette.js";
+
 export const setRendererColourOpts = ({
   options,
   metaGame,
   isParticipant,
-  settings,
   context,
   globalMe,
+  engine,
+  numPlayers,
+  customizationHints = gameinfo.get(metaGame)?.customizations,
 }) => {
   options.colourContext = context;
   let optioncolours = [];
-  // deprecated in favour of explicit customizations
-  // option will be removed at some point
-  if (settings.color === "blind") {
-    options.colourBlind = true;
-  }
-  // deprecated in favour of explicit customizations
-  // named palettes will be removed at some point
-  if (settings.color !== "standard" && settings.color !== "blind") {
-    console.log(`Looking for a palette named ${settings.color}`);
-    const palette = globalMe.palettes?.find((p) => p.name === settings.color);
-    if (palette !== undefined) {
-      optioncolours = [...palette.colours];
-    }
-    options.coloursGlobal = false;
-  }
-  if (globalMe?.customizations?.[metaGame]) {
-    const custom = globalMe.customizations[metaGame];
-    if (
-      custom.palette &&
-      Array.isArray(custom.palette) &&
-      custom.palette.length > 0
-    ) {
-      optioncolours = [...custom.palette];
-      options.coloursGlobal = false;
-    }
+
+  const scope = resolveCustomizationScope(globalMe, metaGame);
+  const hasPerGameCustomization = Boolean(globalMe?.customizations?.[metaGame]);
+  if (hasPerGameCustomization) {
     options.contextGlobal = false;
+    options.coloursGlobal = false;
   } else if (globalMe?.customizations?._default) {
-    const custom = globalMe.customizations._default;
-    if (
-      custom.palette &&
-      Array.isArray(custom.palette) &&
-      custom.palette.length > 0
-    ) {
-      optioncolours = [...custom.palette];
-      options.coloursGlobal = true;
-    }
     options.contextGlobal = true;
+    options.coloursGlobal = true;
   }
-  // extend all palettes to 12 colours
+
+  if (scope.palette || resolvePreferredColour(globalMe, metaGame)) {
+    const effective = resolveEffectivePalette({
+      globalMe,
+      metaGame,
+      isParticipant,
+      engine,
+      numPlayers,
+      customizationHints,
+    });
+    if (effective) {
+      optioncolours = effective;
+    }
+  }
+
   if (optioncolours.length > 0 && optioncolours.length < 12) {
     while (optioncolours.length < 12) {
       optioncolours.push(null);
     }
   }
-  // handle "Always use my colour" preference
-  if (
-    optioncolours !== undefined &&
-    Array.isArray(optioncolours) &&
-    optioncolours.length > 0 &&
-    globalMe?.settings?.all?.myColor &&
-    isParticipant > 0
-  ) {
-    const mycolor = optioncolours.shift();
-    optioncolours.splice(isParticipant, 0, mycolor);
-  }
-  // set option
   if (optioncolours.length > 0) {
     options.colours = [...optioncolours];
   }

@@ -187,10 +187,6 @@
     "src": "Clock start (hours)",
     "out": "Temps initial (heures)"
   },
-  "ChooseColors": {
-    "src": "Choose color scheme",
-    "out": "Choisir le thème de couleurs"
-  },
   "ChooseDisplay": {
     "src": "Choose how the board should be displayed",
     "out": "Choisir comment le plateau doit être affiché"
@@ -242,14 +238,6 @@
   "Close": {
     "src": "Close",
     "out": "Fermer"
-  },
-  "ColorBlind": {
-    "src": "Colour blind",
-    "out": "Daltongène"
-  },
-  "ColorPatterns": {
-    "src": "Black and white",
-    "out": "Noir et blanc"
   },
   "Comment": {
     "src": "Comment",
@@ -1247,10 +1235,6 @@
     "src": "Legal",
     "out": "Légal"
   },
-  "Level": {
-    "src": "Where would you like these colors applied?",
-    "out": "Où souhaitez-vous appliquer ces couleurs ?"
-  },
   "LevelAll": {
     "src": "For all games",
     "out": "Pour toutes les parties"
@@ -1290,10 +1274,6 @@
   "Moves": {
     "src": "Moves",
     "out": "Coups"
-  },
-  "MyColor": {
-    "src": "Use my preferred player colour regardless of turn order",
-    "out": "Utiliser ma couleur de joueur préférée quel que soit l'ordre du tour"
   },
   "MyDashboard": {
     "src": "Dashboard",
@@ -3719,6 +3699,10 @@
     "src": "Clear colours",
     "out": "Effacer les couleurs"
   },
+  "customize.clearPreferredColour": {
+    "src": "Clear preferred colour",
+    "out": "Effacer la couleur préférée"
+  },
   "customize.context.annotations.help": {
     "src": "The colour of move annotations.",
     "out": "La couleur des annotations de coup."
@@ -3807,6 +3791,10 @@
     "src": "Palette #{{num}}",
     "out": "Palette n° {{num}}"
   },
+  "customize.paletteHintPlayer": {
+    "src": "(Player {{player}})",
+    "out": "(Joueur {{player}})"
+  },
   "customize.pasteSettingsHelp": {
     "src": "Paste settings JSON here to apply.",
     "out": "Collez le JSON des paramètres ici pour l'appliquer."
@@ -3814,6 +3802,18 @@
   "customize.playerColours": {
     "src": "Player Colours",
     "out": "Couleurs des joueurs"
+  },
+  "customize.preferredColour": {
+    "src": "My preferred colour",
+    "out": "Ma couleur préférée"
+  },
+  "customize.preferredColourHelpGame": {
+    "src": "Overrides your global preferred colour for this game only. Set your default on the",
+    "out": "Remplace votre couleur préférée globale pour cette partie uniquement. Définissez votre choix par défaut sur la"
+  },
+  "customize.preferredColourHelpGlobal": {
+    "src": "When you play a game, your pieces use this colour when possible. Other players keep distinct colours.",
+    "out": "Lorsque vous jouez une partie, vos pièces utilisent cette couleur lorsque c'est possible. Les autres joueurs conservent des couleurs distinctes."
   },
   "customize.resetToDefaults": {
     "src": "Reset to Defaults",
@@ -4522,6 +4522,10 @@
   "lab.launch": {
     "src": "Launch",
     "out": "Lancer"
+  },
+  "lab.launcherPageTitle": {
+    "src": "Playground",
+    "out": "Espace d'essai"
   },
   "lab.load": {
     "src": "Load",

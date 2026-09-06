@@ -4,6 +4,7 @@ import { HexColorPicker, HexColorInput } from "react-colorful";
 import { render, renderglyph, sheets } from "@abstractplay/renderer";
 import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
+import { coloursEqual, resolveCustomizePreviewPalette } from "../lib/resolveEffectivePalette.js";
 import { useStore } from "../stores";
 import { isEqual, cloneDeep, debounce } from "lodash";
 import { useTranslation } from "react-i18next";
@@ -30,12 +31,23 @@ const swatchButtonStyle = {
   lineHeight: 0,
 };
 
-function ColourSwatchButton({ color, onClick, title }) {
+function ColourSwatchButton({ color, onClick, title, selected = false }) {
   return (
     <button
+      type="button"
       className="button is-small"
       title={title}
-      style={{ ...swatchButtonStyle, backgroundColor: color }}
+      aria-pressed={selected}
+      style={{
+        ...swatchButtonStyle,
+        backgroundColor: color,
+        ...(selected
+          ? {
+              boxShadow:
+                "0 0 0 2px var(--main-bg-color), 0 0 0 4px var(--secondary-color-3)",
+            }
+          : {}),
+      }}
       onClick={onClick}
     >
       &nbsp;
@@ -179,6 +191,8 @@ function Customize(props) {
   // Palette state
   const [palette, setPalette] = useState([]);
   const [selectedColor, setSelectedColor] = useState("#ffffff");
+  const [preferredColour, setPreferredColour] = useState(null);
+  const [preferredColourOpen, setPreferredColourOpen] = useState(false);
 
   // Glyph mapping state
   const [glyphMap, setGlyphMap] = useState([]);
@@ -273,24 +287,35 @@ function Customize(props) {
     return customizationHints.filter((h) => "num" in h);
   }, [customizationHints]);
 
-  const settingsJson = useMemo(() => {
-    return JSON.stringify(
-      {
-        colourContext: {
-          background,
-          board,
-          strokes,
-          borders,
-          labels,
-          annotations,
-          fill,
-        },
+  const previewColours = useMemo(
+    () =>
+      resolveCustomizePreviewPalette({
         palette,
-        glyphmap: glyphMap,
+        preferredColour,
+        metaGame,
+        customizationHints,
+      }),
+    [palette, preferredColour, metaGame, customizationHints]
+  );
+
+  const settingsJson = useMemo(() => {
+    const settings = {
+      colourContext: {
+        background,
+        board,
+        strokes,
+        borders,
+        labels,
+        annotations,
+        fill,
       },
-      null,
-      2
-    );
+      palette,
+      glyphmap: glyphMap,
+    };
+    if (preferredColour) {
+      settings.preferredColour = preferredColour;
+    }
+    return JSON.stringify(settings, null, 2);
   }, [
     background,
     board,
@@ -301,6 +326,7 @@ function Customize(props) {
     fill,
     palette,
     glyphMap,
+    preferredColour,
   ]);
 
   const [settingsInput, setSettingsInput] = useState(settingsJson);
@@ -330,6 +356,7 @@ function Customize(props) {
       }
       setPalette(settings.palette || []);
       setGlyphMap(settings.glyphmap || []);
+      setPreferredColour(settings.preferredColour || null);
     } else if (globalMe?.customizations?._default) {
       const settings = globalMe.customizations._default;
       const sys_ctx = globalColourContext || {};
@@ -345,6 +372,7 @@ function Customize(props) {
       setFill(ctx.fill || sys_ctx.fill);
       setPalette(settings.palette || []);
       setGlyphMap(settings.glyphmap || []);
+      setPreferredColour(settings.preferredColour || null);
     } else if (globalColourContext) {
       if (globalColourContext.background)
         setBackground(globalColourContext.background);
@@ -359,6 +387,7 @@ function Customize(props) {
       if (globalColourContext.fill) setFill(globalColourContext.fill);
       setPalette([]);
       setGlyphMap([]);
+      setPreferredColour(null);
     }
   }, [globalMe, metaGame, globalColourContext]);
 
@@ -418,6 +447,11 @@ function Customize(props) {
       }
       if (parsed.glyphmap && Array.isArray(parsed.glyphmap)) {
         setGlyphMap(parsed.glyphmap);
+      }
+      if (parsed.preferredColour != null && parsed.preferredColour !== "") {
+        setPreferredColour(parsed.preferredColour);
+      } else {
+        setPreferredColour(null);
       }
       setSettingsError(null);
       debouncedSetError.cancel();
@@ -590,6 +624,7 @@ function Customize(props) {
       setFill(ctx.fill || sys_ctx.fill);
       setPalette(settings.palette || []);
       setGlyphMap(settings.glyphmap || []);
+      setPreferredColour(settings.preferredColour || null);
     } else if (globalColourContext) {
       // Reset to system defaults
       const sys_ctx = globalColourContext;
@@ -602,6 +637,7 @@ function Customize(props) {
       setFill(sys_ctx.fill);
       setPalette([]);
       setGlyphMap([]);
+      setPreferredColour(null);
     }
   };
 
@@ -629,8 +665,8 @@ function Customize(props) {
           fill,
         },
         contextGlobal: false,
-        coloursGlobal: false,
-        colours: palette.length > 0 ? palette : undefined,
+        coloursGlobal: metaGame === "_default",
+        colours: previewColours ?? undefined,
         glyphmap: glyphMap.length > 0 ? glyphMap : undefined,
       };
       render(json, options);
@@ -648,8 +684,9 @@ function Customize(props) {
     labels,
     annotations,
     fill,
-    palette,
+    previewColours,
     glyphMap,
+    metaGame,
   ]);
 
   //   useEffect(() => {console.log(rendererJson)}, [rendererJson]);
@@ -905,6 +942,10 @@ function Customize(props) {
                   <li key={i}>
                     <strong>
                       {t("customize.paletteHint", { num: h.num })}
+                      {h.player != null &&
+                        ` ${t("customize.paletteHintPlayer", {
+                          player: h.player,
+                        })}`}
                     </strong>
                     : {h.explanation}{" "}
                     {h.default !== undefined && (
@@ -917,6 +958,142 @@ function Customize(props) {
               </ul>
             </div>
           )}
+          <div
+            style={{
+              marginTop: "1em",
+              marginBottom: "1em",
+              border: "1px solid var(--tag-background-color)",
+              borderRadius: "4px",
+              background: "var(--main-bg-color)",
+            }}
+          >
+            <button
+              type="button"
+              className="button is-small apButtonNeutral is-fullwidth"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                border: "none",
+                borderRadius: "4px",
+              }}
+              aria-expanded={preferredColourOpen}
+              onClick={() => setPreferredColourOpen((open) => !open)}
+            >
+              <span
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5em",
+                  minWidth: 0,
+                }}
+              >
+                <span>{t("customize.preferredColour")}</span>
+                {preferredColour && (
+                  <>
+                    <span
+                      aria-hidden="true"
+                      style={{
+                        width: "14px",
+                        height: "14px",
+                        borderRadius: "2px",
+                        backgroundColor: preferredColour,
+                        border: "1px solid var(--tag-background-color)",
+                        flexShrink: 0,
+                      }}
+                    />
+                    <span
+                      className="is-size-7"
+                      style={{ color: "var(--secondary-font-color)" }}
+                    >
+                      {preferredColour}
+                    </span>
+                  </>
+                )}
+              </span>
+              <span className="icon is-small" aria-hidden="true">
+                <i
+                  className={`fa fa-chevron-${
+                    preferredColourOpen ? "down" : "right"
+                  }`}
+                />
+              </span>
+            </button>
+            {preferredColourOpen && (
+              <div className="field" style={{ padding: "0.75em" }}>
+                <div className="help">
+                  {scope === "game" &&
+                  providedMetaGame &&
+                  providedMetaGame !== "_default" ? (
+                    <>
+                      {t("customize.preferredColourHelpGame")}{" "}
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                      <a onClick={() => setScope("global")}>
+                        {t("customize.globalDefaults")}
+                      </a>
+                      .
+                    </>
+                  ) : (
+                    t("customize.preferredColourHelpGlobal")
+                  )}
+                </div>
+                <div className="control">
+                  <HexColorPicker
+                    color={preferredColour || "#e31a1c"}
+                    onChange={setPreferredColour}
+                    style={{ width: "100%", height: "120px" }}
+                  />
+                  <HexColorInput
+                    className="input is-small"
+                    color={preferredColour || "#e31a1c"}
+                    onChange={setPreferredColour}
+                    style={{ marginTop: "0.5em", marginBottom: "0.5em" }}
+                    prefixed
+                  />
+                  <div className="buttons">
+                    {presetColors.map((c) => (
+                      <ColourSwatchButton
+                        key={`preferred-${c}`}
+                        color={c}
+                        selected={coloursEqual(c, preferredColour)}
+                        onClick={() => setPreferredColour(c)}
+                      />
+                    ))}
+                  </div>
+                  <div className="buttons">
+                    {colorBlindColors.map((c) => (
+                      <ColourSwatchButton
+                        key={`preferred-cb-${c}`}
+                        color={c}
+                        selected={coloursEqual(c, preferredColour)}
+                        onClick={() => setPreferredColour(c)}
+                      />
+                    ))}
+                  </div>
+                  {preferredColour && (
+                    <div className="tags" style={{ marginTop: "0.5em" }}>
+                      <span
+                        className="tag is-medium"
+                        style={{
+                          color: "#000",
+                          border: "1px solid var(--tag-background-color)",
+                          backgroundColor: preferredColour,
+                        }}
+                      >
+                        {preferredColour}
+                        <button
+                          type="button"
+                          className="delete is-small"
+                          aria-label={t("customize.clearPreferredColour")}
+                          onClick={() => setPreferredColour(null)}
+                        />
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
           <hr />
           <h2 className="subtitle">{t("customize.boardColours")}</h2>
           <div className="field">
