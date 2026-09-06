@@ -5,6 +5,22 @@ import {
 
 const PALETTE_SIZE = 12;
 
+/** Matches @abstractplay/renderer paletteDefault (used when palette is empty). */
+export const DEFAULT_RENDERER_PALETTE = [
+  "#e31a1c",
+  "#1f78b4",
+  "#33a02c",
+  "#ffff99",
+  "#6a3d9a",
+  "#ff7f00",
+  "#b15928",
+  "#fb9a99",
+  "#a6cee3",
+  "#b2df8a",
+  "#fdbf6f",
+  "#cab2d6",
+];
+
 export function padPalette(palette) {
   const padded = [...palette];
   while (padded.length < PALETTE_SIZE) {
@@ -134,14 +150,19 @@ export function resolveEffectivePalette({
   customizationHints = [],
 }) {
   const scope = resolveCustomizationScope(globalMe, metaGame);
-  if (!scope.palette || scope.palette.length === 0) {
-    return null;
+  const preferredColour = resolvePreferredColour(globalMe, metaGame);
+
+  let basePalette = scope.palette;
+  if (!basePalette || basePalette.length === 0) {
+    if (!preferredColour) {
+      return null;
+    }
+    basePalette = [...DEFAULT_RENDERER_PALETTE];
   }
 
-  let effective = padPalette(scope.palette);
+  let effective = padPalette(basePalette);
   effective = mergeGameinfoDefaults(effective, customizationHints);
 
-  const preferredColour = resolvePreferredColour(globalMe, metaGame);
   if (!preferredColour || isParticipant < 0) {
     return effective;
   }
@@ -166,5 +187,48 @@ export function resolveEffectivePalette({
     mySlot,
     playerSlots,
     preferred: preferredColour,
+  });
+}
+
+/**
+ * Palette for Customize live preview (local editor state, viewer as P1).
+ */
+export function resolveCustomizePreviewPalette({
+  palette,
+  preferredColour,
+  metaGame,
+  customizationHints = [],
+}) {
+  const hasPalette = palette && palette.length > 0;
+  const hasPreferred =
+    preferredColour != null && preferredColour !== "";
+  if (!hasPalette && !hasPreferred) {
+    return null;
+  }
+
+  let numPlayers = 0;
+  for (const hint of customizationHints) {
+    if (hint.player != null && hint.player > numPlayers) {
+      numPlayers = hint.player;
+    }
+  }
+  if (numPlayers === 0) {
+    numPlayers = 2;
+  }
+
+  const customization = {};
+  if (hasPalette) {
+    customization.palette = palette;
+  }
+  if (hasPreferred) {
+    customization.preferredColour = preferredColour;
+  }
+
+  return resolveEffectivePalette({
+    globalMe: { customizations: { [metaGame]: customization } },
+    metaGame,
+    isParticipant: 0,
+    numPlayers,
+    customizationHints,
   });
 }

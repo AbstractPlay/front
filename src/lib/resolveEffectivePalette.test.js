@@ -8,6 +8,7 @@ import {
   mergeGameinfoDefaults,
   padPalette,
   resolveEffectivePalette,
+  resolveCustomizePreviewPalette,
 } from "./resolveEffectivePalette.js";
 import {
   resolveCustomizationScope,
@@ -275,6 +276,20 @@ describe("resolveEffectivePalette", () => {
     expect(result.slice(0, 3)).toEqual([BLUE, GREEN, RED]);
   });
 
+  it("8b: preferredColour alone uses default renderer palette", () => {
+    const BROWN = "#b15928";
+    const result = resolveEffectivePalette({
+      globalMe: globalMeWith({
+        _default: { preferredColour: BROWN },
+      }),
+      metaGame: "bide",
+      isParticipant: 0,
+      numPlayers: 2,
+    });
+    expect(result[0]).toBe(BROWN);
+    expect(result[1]).toBe("#1f78b4");
+  });
+
   it("9: mergeGameinfoDefaults fills null slots via full pipeline", () => {
     const hints = [
       { num: 1, default: RED },
@@ -339,5 +354,37 @@ describe("resolveEffectivePalette", () => {
     expect(result.slice(0, 3)).toEqual([pawn1, pawn2, pawn3]);
     expect(result[3]).toBe(BLACK);
     expect(result[4]).toBe(WHITE);
+  });
+});
+
+describe("resolveCustomizePreviewPalette", () => {
+  it("applies preferred colour swap for local editor state as P1", () => {
+    const result = resolveCustomizePreviewPalette({
+      palette: [RED, BLUE, GREEN],
+      preferredColour: BLUE,
+      metaGame: "bide",
+      customizationHints: [],
+    });
+    expect(result?.slice(0, 3)).toEqual([BLUE, RED, GREEN]);
+  });
+
+  it("returns null when palette and preferredColour are both unset", () => {
+    expect(
+      resolveCustomizePreviewPalette({
+        palette: [],
+        metaGame: "_default",
+      })
+    ).toBeNull();
+  });
+
+  it("applies preferredColour on default palette when palette is empty", () => {
+    const BROWN = "#b15928";
+    const result = resolveCustomizePreviewPalette({
+      palette: [],
+      preferredColour: BROWN,
+      metaGame: "_default",
+    });
+    expect(result?.[0]).toBe(BROWN);
+    expect(result?.[1]).toBe("#1f78b4");
   });
 });

@@ -38,4 +38,22 @@ describe("setRendererColourOpts", () => {
     expect(options.colours?.slice(0, 3)).toEqual(palette);
     expect(options.coloursGlobal).toBe(true);
   });
+
+  it("applies preferred colour swap when only preferredColour is customized", () => {
+    const BROWN = "#b15928";
+    const options = {};
+    setRendererColourOpts({
+      options,
+      metaGame: "bide",
+      isParticipant: 0,
+      context: {},
+      globalMe: {
+        customizations: {
+          _default: { preferredColour: BROWN },
+        },
+      },
+      numPlayers: 2,
+    });
+    expect(options.colours?.[0]).toBe(BROWN);
+  });
 });
