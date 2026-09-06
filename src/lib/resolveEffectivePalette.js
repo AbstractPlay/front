@@ -29,6 +29,16 @@ export function padPalette(palette) {
   return padded;
 }
 
+/**
+ * Hint defaults may be hex strings or 1-based palette indices (standard renderer colours).
+ */
+export function normalizeHintDefault(hintDefault) {
+  if (typeof hintDefault === "number" && hintDefault >= 1 && hintDefault <= PALETTE_SIZE) {
+    return DEFAULT_RENDERER_PALETTE[hintDefault - 1];
+  }
+  return hintDefault;
+}
+
 export function mergeGameinfoDefaults(effective, customizationHints = []) {
   const result = [...effective];
   for (const hint of customizationHints) {
@@ -39,7 +49,18 @@ export function mergeGameinfoDefaults(effective, customizationHints = []) {
       result[idx] == null &&
       hint.default != null
     ) {
-      result[idx] = hint.default;
+      result[idx] = normalizeHintDefault(hint.default);
+    }
+  }
+  return result;
+}
+
+/** Fill remaining null slots from the standard renderer palette. */
+export function backfillDefaultPalette(effective) {
+  const result = [...effective];
+  for (let i = 0; i < PALETTE_SIZE; i++) {
+    if (result[i] == null) {
+      result[i] = DEFAULT_RENDERER_PALETTE[i];
     }
   }
   return result;
@@ -157,11 +178,12 @@ export function resolveEffectivePalette({
     if (!preferredColour) {
       return null;
     }
-    basePalette = [...DEFAULT_RENDERER_PALETTE];
+    basePalette = [];
   }
 
   let effective = padPalette(basePalette);
   effective = mergeGameinfoDefaults(effective, customizationHints);
+  effective = backfillDefaultPalette(effective);
 
   if (!preferredColour || isParticipant < 0) {
     return effective;

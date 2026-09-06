@@ -42,6 +42,18 @@ describe("resolveEffectiveCustomization", () => {
     expect(scope.contextGlobal).toBe(false);
   });
 
+  it("per-game customization with empty palette still uses coloursGlobal false", () => {
+    const scope = resolveCustomizationScope(
+      globalMeWith({
+        acity: { palette: [], preferredColour: "#ffff99" },
+      }),
+      "acity"
+    );
+    expect(scope.palette).toBeNull();
+    expect(scope.coloursGlobal).toBe(false);
+    expect(scope.contextGlobal).toBe(false);
+  });
+
   it("falls back to _default when no per-game customization", () => {
     const scope = resolveCustomizationScope(
       globalMeWith({
@@ -94,6 +106,18 @@ describe("resolveEffectivePalette helpers", () => {
     expect(merged[0]).toBe(RED);
     expect(merged[1]).toBe(BLUE);
     expect(merged[2]).toBe(GREEN);
+  });
+
+  it("mergeGameinfoDefaults resolves numeric palette-index defaults", () => {
+    const hints = [
+      { num: 1, default: 1 },
+      { num: 2, default: 2 },
+      { num: 4, default: "#000" },
+    ];
+    const merged = mergeGameinfoDefaults([null, null, null, null], hints);
+    expect(merged[0]).toBe(RED);
+    expect(merged[1]).toBe(BLUE);
+    expect(merged[3]).toBe("#000");
   });
 
   it("extractSlot normalizes getPlayerColour return shapes", () => {
@@ -355,6 +379,38 @@ describe("resolveEffectivePalette", () => {
     expect(result[3]).toBe(BLACK);
     expect(result[4]).toBe(WHITE);
   });
+
+  it("12: Alien City preferred yellow keeps Moon black and swaps P1 slot", () => {
+    const YELLOW = "#ffff99";
+    const acityHints = [
+      { num: 1, default: 1 },
+      { num: 2, default: 2 },
+      { num: 3, default: 3 },
+      { num: 4, default: "#000" },
+      { num: 5, default: "#fff", player: 1 },
+      { num: 6, default: "#000", player: 2 },
+    ];
+    const engine = {
+      getPlayerColour: (p) =>
+        p === 1 ? { palette: 5, default: "#fff" } : { palette: 6, default: "#000" },
+    };
+    const result = resolveEffectivePalette({
+      globalMe: globalMeWith({
+        acity: { palette: [], preferredColour: YELLOW },
+      }),
+      metaGame: "acity",
+      isParticipant: 0,
+      engine,
+      numPlayers: 2,
+      customizationHints: acityHints,
+    });
+    expect(result[0]).toBe(RED);
+    expect(result[1]).toBe(BLUE);
+    expect(result[2]).toBe(GREEN);
+    expect(result[3]).toBe("#000");
+    expect(result[4]).toBe(YELLOW);
+    expect(result[5]).toBe("#000");
+  });
 });
 
 describe("resolveCustomizePreviewPalette", () => {
@@ -382,9 +438,30 @@ describe("resolveCustomizePreviewPalette", () => {
     const result = resolveCustomizePreviewPalette({
       palette: [],
       preferredColour: BROWN,
-      metaGame: "_default",
+      metaGame: "bide",
     });
     expect(result?.[0]).toBe(BROWN);
     expect(result?.[1]).toBe("#1f78b4");
+  });
+
+  it("Alien City preview keeps Moon black when preferred colour is yellow", () => {
+    const YELLOW = "#ffff99";
+    const acityHints = [
+      { num: 1, default: 1 },
+      { num: 2, default: 2 },
+      { num: 3, default: 3 },
+      { num: 4, default: "#000" },
+      { num: 5, default: "#fff", player: 1 },
+      { num: 6, default: "#000", player: 2 },
+    ];
+    const result = resolveCustomizePreviewPalette({
+      palette: [],
+      preferredColour: YELLOW,
+      metaGame: "acity",
+      customizationHints: acityHints,
+    });
+    expect(result?.[3]).toBe("#000");
+    expect(result?.[4]).toBe(YELLOW);
+    expect(result?.[5]).toBe("#000");
   });
 });
