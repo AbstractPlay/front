@@ -6,7 +6,6 @@ export const setRendererColourOpts = ({
   options,
   metaGame,
   isParticipant,
-  settings,
   context,
   globalMe,
   engine,
@@ -15,21 +14,6 @@ export const setRendererColourOpts = ({
 }) => {
   options.colourContext = context;
   let optioncolours = [];
-  // deprecated in favour of explicit customizations
-  // option will be removed at some point
-  if (settings.color === "blind") {
-    options.colourBlind = true;
-  }
-  // deprecated in favour of explicit customizations
-  // named palettes will be removed at some point
-  if (settings.color !== "standard" && settings.color !== "blind") {
-    console.log(`Looking for a palette named ${settings.color}`);
-    const palette = globalMe.palettes?.find((p) => p.name === settings.color);
-    if (palette !== undefined) {
-      optioncolours = [...palette.colours];
-    }
-    options.coloursGlobal = false;
-  }
 
   const scope = resolveCustomizationScope(globalMe, metaGame);
   if (globalMe?.customizations?.[metaGame]) {

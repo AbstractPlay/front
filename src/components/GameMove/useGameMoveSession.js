@@ -1563,7 +1563,6 @@ export function useGameMoveSession(props) {
         options,
         metaGame,
         isParticipant: currentGame?.me,
-        settings: displaySettings,
         context: effectiveColourContext,
         globalMe: globalMeRef.current,
         engine: engineRef.current,
