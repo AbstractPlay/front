@@ -52,7 +52,6 @@ export function processNewSettings(
       newUserSettings,
       game.metaGame
     );
-    newSettings.color = "standard";
     newSettings.annotate = getLabSetting(
       "annotate",
       true,
@@ -84,7 +83,6 @@ export function setupColors(settings, game, globalMe, colourContext, node) {
     options,
     metaGame: game.metaGame,
     isParticipant: game.me,
-    settings,
     context: colourContext,
     globalMe,
     engine,

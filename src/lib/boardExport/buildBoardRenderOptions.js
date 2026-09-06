@@ -26,7 +26,6 @@ export function buildBoardRenderOptions({
     options,
     metaGame,
     isParticipant: seat,
-    settings,
     context: colourContext,
     globalMe,
     numPlayers,

@@ -7,7 +7,6 @@ import { formatPlayerDisplayName } from "../Bots/botUtils";
 import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
 
 function renderGlyph(
-  settings,
   glyph,
   id,
   player,
@@ -24,7 +23,6 @@ function renderGlyph(
     options,
     metaGame: game.metaGame,
     isParticipant: game.me,
-    settings,
     context: colourContext,
     globalMe,
     engine,
@@ -113,7 +111,6 @@ function GameStatus({
                             className="playerImage"
                             src={`data:image/svg+xml;utf8,${encodeURIComponent(
                               renderGlyph(
-                                settings,
                                 v.glyph,
                                 "genericStatus-" + ind + "-" + i,
                                 v.colour,
@@ -216,7 +213,6 @@ function GameStatus({
                           className="playerImage"
                           src={`data:image/svg+xml;utf8,${encodeURIComponent(
                             renderGlyph(
-                              settings,
                               s.glyph.name,
                               "stack-" + index + "-" + j,
                               s.glyph.colour,
@@ -255,7 +251,6 @@ function GameStatus({
                     className="playerImage"
                     src={`data:image/svg+xml;utf8,${encodeURIComponent(
                       renderGlyph(
-                        settings,
                         s.glyph.name,
                         "stack-" + j,
                         s.glyph.colour,

@@ -558,7 +558,6 @@
   "ChooseClockIncrement": "Incremento del reloj (horas)",
   "ChooseClockMax": "Máximo del reloj (horas)",
   "ChooseClockStart": "Inicio del reloj (horas)",
-  "ChooseColors": "Elegir esquema de colores",
   "ChooseGame": "Elegir un juego",
   "ChooseLimit": "Número máximo de partidas activas",
   "ChooseMove": "Elegir movimiento",
@@ -573,8 +572,6 @@
   "common": {
     "loading": "Cargando…"
   },
-  "ColorBlind": "Modo daltónico",
-  "ColorPatterns": "Blanco y negro",
   "Comment": "Comentario",
   "Comments": "Comentarios",
   "CommentTooLong": "Los comentarios pueden tener como máximo 4K caracteres",
@@ -824,7 +821,6 @@
   "IssueChallenge": "Emitir un nuevo desafío",
   "IssueStanding": "Emitir un nuevo desafío abierto",
   "Legal": "Legal",
-  "Level": "¿Dónde te gustaría que se apliquen estos colores?",
   "LevelAll": "Para todos los juegos",
   "LevelGame": "Solo para este juego",
   "LevelMetaGame": "Para todos los juegos de {{game}}",

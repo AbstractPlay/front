@@ -168,7 +168,7 @@ describe("buildBoardRenderOptions", () => {
     };
     const options = buildBoardRenderOptions({
       metaGame: "bloqueo",
-      settings: { color: "standard" },
+      settings: { rotate: 0, annotate: true },
       colourContext: {},
       globalMe,
       isParticipant: 1,
@@ -190,7 +190,7 @@ describe("buildBoardRenderOptions", () => {
     };
     const options = buildBoardRenderOptions({
       metaGame: "bide",
-      settings: { color: "standard" },
+      settings: { annotate: true },
       colourContext: {},
       globalMe,
       isParticipant: -1,

@@ -187,10 +187,6 @@
     "src": "Clock start (hours)",
     "out": "Temps initial (heures)"
   },
-  "ChooseColors": {
-    "src": "Choose color scheme",
-    "out": "Choisir le thème de couleurs"
-  },
   "ChooseDisplay": {
     "src": "Choose how the board should be displayed",
     "out": "Choisir comment le plateau doit être affiché"
@@ -242,14 +238,6 @@
   "Close": {
     "src": "Close",
     "out": "Fermer"
-  },
-  "ColorBlind": {
-    "src": "Colour blind",
-    "out": "Daltongène"
-  },
-  "ColorPatterns": {
-    "src": "Black and white",
-    "out": "Noir et blanc"
   },
   "Comment": {
     "src": "Comment",
@@ -1246,10 +1234,6 @@
   "Legal": {
     "src": "Legal",
     "out": "Légal"
-  },
-  "Level": {
-    "src": "Where would you like these colors applied?",
-    "out": "Où souhaitez-vous appliquer ces couleurs ?"
   },
   "LevelAll": {
     "src": "For all games",
@@ -3807,6 +3791,10 @@
     "src": "Palette #{{num}}",
     "out": "Palette n° {{num}}"
   },
+  "customize.paletteHintPlayer": {
+    "src": "(Player {{player}})",
+    "out": "(Joueur {{player}})"
+  },
   "customize.pasteSettingsHelp": {
     "src": "Paste settings JSON here to apply.",
     "out": "Collez le JSON des paramètres ici pour l'appliquer."
@@ -4534,6 +4522,10 @@
   "lab.launch": {
     "src": "Launch",
     "out": "Lancer"
+  },
+  "lab.launcherPageTitle": {
+    "src": "Playground",
+    "out": "Espace d'essai"
   },
   "lab.load": {
     "src": "Load",

@@ -558,7 +558,6 @@
   "ChooseClockIncrement": "Zeitzuschlag (Stunden)",
   "ChooseClockMax": "Maximale Bedenkzeit (Stunden)",
   "ChooseClockStart": "Startzeit der Uhr (Stunden)",
-  "ChooseColors": "Farbschema wählen",
   "ChooseGame": "Spiel auswählen",
   "ChooseLimit": "Maximale Anzahl aktiver Spiele",
   "ChooseMove": "Zug auswählen",
@@ -573,8 +572,6 @@
   "common": {
     "loading": "Wird geladen…"
   },
-  "ColorBlind": "Farbenblind",
-  "ColorPatterns": "Schwarz und Weiß",
   "Comment": "Kommentar",
   "Comments": "Kommentare",
   "CommentTooLong": "Kommentare dürfen höchstens 4000 Zeichen lang sein",
@@ -824,7 +821,6 @@
   "IssueChallenge": "Neue Herausforderung aussprechen",
   "IssueStanding": "Neue offene Herausforderung erstellen",
   "Legal": "Rechtliches",
-  "Level": "Wo sollen diese Farben angewendet werden?",
   "LevelAll": "Für alle Spiele",
   "LevelGame": "Nur für dieses Spiel",
   "LevelMetaGame": "Für alle {{game}}-Spiele",
