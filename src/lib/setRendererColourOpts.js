@@ -16,10 +16,13 @@ export const setRendererColourOpts = ({
   let optioncolours = [];
 
   const scope = resolveCustomizationScope(globalMe, metaGame);
-  if (globalMe?.customizations?.[metaGame]) {
+  const hasPerGameCustomization = Boolean(globalMe?.customizations?.[metaGame]);
+  if (hasPerGameCustomization) {
     options.contextGlobal = false;
+    options.coloursGlobal = false;
   } else if (globalMe?.customizations?._default) {
     options.contextGlobal = true;
+    options.coloursGlobal = true;
   }
 
   if (scope.palette || resolvePreferredColour(globalMe, metaGame)) {
@@ -33,7 +36,6 @@ export const setRendererColourOpts = ({
     });
     if (effective) {
       optioncolours = effective;
-      options.coloursGlobal = scope.coloursGlobal;
     }
   }
 

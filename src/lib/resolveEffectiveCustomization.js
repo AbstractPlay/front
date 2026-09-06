@@ -19,7 +19,6 @@ export function resolveCustomizationScope(globalMe, metaGame) {
       perGame.palette.length > 0
     ) {
       result.palette = [...perGame.palette];
-      result.coloursGlobal = false;
     }
     if (perGame.colourContext) {
       result.colourContext = perGame.colourContext;
@@ -31,6 +30,7 @@ export function resolveCustomizationScope(globalMe, metaGame) {
     ) {
       result.glyphmap = [...perGame.glyphmap];
     }
+    result.coloursGlobal = false;
     result.contextGlobal = false;
     return result;
   }
@@ -43,7 +43,6 @@ export function resolveCustomizationScope(globalMe, metaGame) {
       global.palette.length > 0
     ) {
       result.palette = [...global.palette];
-      result.coloursGlobal = true;
     }
     if (global.colourContext) {
       result.colourContext = global.colourContext;
