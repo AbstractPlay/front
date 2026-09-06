@@ -4,7 +4,7 @@ import { HexColorPicker, HexColorInput } from "react-colorful";
 import { render, renderglyph, sheets } from "@abstractplay/renderer";
 import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
-import { coloursEqual } from "../lib/resolveEffectivePalette.js";
+import { coloursEqual, resolveCustomizePreviewPalette } from "../lib/resolveEffectivePalette.js";
 import { useStore } from "../stores";
 import { isEqual, cloneDeep, debounce } from "lodash";
 import { useTranslation } from "react-i18next";
@@ -286,6 +286,17 @@ function Customize(props) {
   const paletteHints = useMemo(() => {
     return customizationHints.filter((h) => "num" in h);
   }, [customizationHints]);
+
+  const previewColours = useMemo(
+    () =>
+      resolveCustomizePreviewPalette({
+        palette,
+        preferredColour,
+        metaGame,
+        customizationHints,
+      }),
+    [palette, preferredColour, metaGame, customizationHints]
+  );
 
   const settingsJson = useMemo(() => {
     const settings = {
@@ -654,8 +665,8 @@ function Customize(props) {
           fill,
         },
         contextGlobal: false,
-        coloursGlobal: false,
-        colours: palette.length > 0 ? palette : undefined,
+        coloursGlobal: metaGame === "_default",
+        colours: previewColours ?? undefined,
         glyphmap: glyphMap.length > 0 ? glyphMap : undefined,
       };
       render(json, options);
@@ -673,8 +684,9 @@ function Customize(props) {
     labels,
     annotations,
     fill,
-    palette,
+    previewColours,
     glyphMap,
+    metaGame,
   ]);
 
   //   useEffect(() => {console.log(rendererJson)}, [rendererJson]);

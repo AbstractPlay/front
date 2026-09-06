@@ -1,5 +1,5 @@
 import { gameinfo } from "@abstractplay/gameslib";
-import { resolveCustomizationScope } from "./resolveEffectiveCustomization.js";
+import { resolveCustomizationScope, resolvePreferredColour } from "./resolveEffectiveCustomization.js";
 import { resolveEffectivePalette } from "./resolveEffectivePalette.js";
 
 export const setRendererColourOpts = ({
@@ -22,7 +22,7 @@ export const setRendererColourOpts = ({
     options.contextGlobal = true;
   }
 
-  if (scope.palette) {
+  if (scope.palette || resolvePreferredColour(globalMe, metaGame)) {
     const effective = resolveEffectivePalette({
       globalMe,
       metaGame,
