@@ -13,6 +13,7 @@ import ChallengeEntryModals from "./ChallengeEntryModals";
 import NewProfile from "./NewProfile";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
+import { useChallengeResponse } from "../hooks/useChallengeResponse";
 import { fetchDashboard } from "../lib/globalMeBootstrap";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { cloneDeep } from "lodash";
@@ -23,7 +24,6 @@ import StandingChallengeTable from "./Me/StandingChallengeTable";
 import StandingChallengeModal from "./StandingChallengeModal";
 import { toast } from "react-toastify";
 import ChallengeMeRespond from "./Me/ChallengeMeRespond";
-import NotificationsTable from "./Me/NotificationsTable";
 import ChallengeTheyRespond from "./Me/ChallengeTheyRespond";
 import ChallengeOpen from "./Me/ChallengeOpen";
 import { useStore } from "../stores";
@@ -135,29 +135,10 @@ function Me(props) {
     }
   };
 
-  const handleChallengeResponse = async (challenge, resp, comment) => {
-    try {
-      console.log("calling authQuery query = challenge_response");
-      const res = await callAuthApi("challenge_response", {
-        id: challenge.id,
-        standing: challenge.standing === true,
-        metaGame: challenge.metaGame,
-        response: resp,
-        comment: comment,
-      });
-      if (!res) return;
-      const result = await res.json();
-      if (result.statusCode !== 200) {
-        console.log("handleChallengeResponse", result.statusCode);
-        errorSetter(JSON.parse(result.body));
-      } else {
-        varsSetter(challenge.id);
-      }
-    } catch (error) {
-      console.log("handleChallengeResponse catch", error);
-      errorSetter(error);
-    }
-  };
+  const handleChallengeResponse = useChallengeResponse({
+    onError: errorSetter,
+    onSuccess: (challenge) => varsSetter(challenge.id),
+  });
 
   const handleNewChallenge2 = useCallback(
     async (challenge) => {
@@ -455,14 +436,6 @@ function Me(props) {
             </button>
           </div>
         </h1>
-        <div className="columns">
-          <div className="column content is-half is-offset-one-quarter">
-            <NotificationsTable
-              handleChallengeResponse={handleChallengeResponse.bind(this)}
-              setError={errorSetter}
-            />
-          </div>
-        </div>
         {/* Your Games */}
         <div className="columns">
           <div className="column content is-half is-offset-one-quarter">

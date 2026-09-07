@@ -841,6 +841,25 @@
   "NewProfile": "Crear perfil",
   "NewRealStanding": "Nuevo desafío abierto",
   "News": "Noticias",
+  "news": {
+    "whatsNew": "Novedades",
+    "earlier": "Anteriores"
+  },
+  "nav": {
+    "myProfile": "Mi perfil",
+    "customizeTheme": "Personalizar tema",
+    "visibilityVisible": "Visible para otros",
+    "activePlayers_one": "Jugador activo: {{count}}",
+    "activePlayers_other": "Jugadores activos: {{count}}"
+  },
+  "notifications": {
+    "newsUpdated": "Se actualizaron las noticias",
+    "empty": "No hay notificaciones",
+    "markRead": "Marcar como leída",
+    "markAllRead": "Marcar todas como leídas",
+    "dismissAll": "Descartar todas",
+    "dismissAllConfirm": "Haz clic de nuevo para descartar todas"
+  },
   "NewsPreamble": "La fuente oficial y más actualizada de noticias de Abstract Play está en nuestro servidor de Discord (https://discord.abstractplay.com). ¡Acompáñanos!",
   "NextGame": "Siguiente juego",
   "NextGameLast": "Viendo el último juego",
@@ -1231,6 +1250,7 @@
     "customizeTheme": "Personalizar tema",
     "toggleDarkMode": "Alternar modo oscuro",
     "toggleLightMode": "Alternar modo claro",
+    "notifications": "Notificaciones",
     "moveUp": "mover hacia arriba",
     "moveDown": "mover hacia abajo"
   },
