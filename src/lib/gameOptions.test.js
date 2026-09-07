@@ -13,6 +13,7 @@ import {
   isBoardRootCategory,
   pickRandomGameOption,
   resolveMetaGameUid,
+  sortCategoryKeys,
 } from "./gameOptions";
 import { isProductionMode } from "./realMode";
 
@@ -163,6 +164,32 @@ describe("collectBoardFilterOptions", () => {
     expect(options.some((c) => c.startsWith("board>shape"))).toBe(true);
     expect(options.some((c) => isBoardRootCategory(c))).toBe(true);
     expect(options.some((c) => c.startsWith("board>connect"))).toBe(false);
+  });
+});
+
+describe("sortCategoryKeys", () => {
+  it("calls labelFor once per key, not from inside the comparator", () => {
+    const keys = ["goal>connect", "goal>area", "mechanic>capture"];
+    let calls = 0;
+    const labels = {
+      "goal>connect": "Connect",
+      "goal>area": "Area",
+      "mechanic>capture": "Capture",
+    };
+    sortCategoryKeys(keys, "eo", (key) => {
+      calls += 1;
+      return labels[key];
+    });
+    expect(calls).toBe(keys.length);
+  });
+
+  it("sorts by translated labels in the requested locale", () => {
+    const sorted = sortCategoryKeys(
+      ["goal>area", "goal>connect"],
+      "eo",
+      (key) => (key === "goal>area" ? "ĉapelo" : "abako")
+    );
+    expect(sorted).toEqual(["goal>connect", "goal>area"]);
   });
 });
 

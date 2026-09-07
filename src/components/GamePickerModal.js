@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { getUiLocaleBundleKey } from "../i18n";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
 import Thumbnail from "./Thumbnail";
@@ -27,6 +28,7 @@ const SECTION_LABEL_KEYS = {
 
 function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tournamentOnly = false }) {
   const { t, i18n } = useTranslation();
+  const localeBundleKey = getUiLocaleBundleKey(i18n);
   const [query, setQuery] = useState("");
   const [starredOnly, setStarredOnly] = useState(false);
   const [goalTag, setGoalTag] = useState("");
@@ -47,7 +49,7 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
 
   const allGames = useMemo(
     () => buildGameBrowseEntries({ labOnly, tournamentOnly, locale: i18n.language }),
-    [labOnly, tournamentOnly, i18n.language]
+    [labOnly, tournamentOnly, localeBundleKey, i18n.language]
   );
 
   const goalOptions = useMemo(
@@ -56,7 +58,8 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
         locale: i18n.language,
         labelFor: (cat) => t(`categories.${cat}.full`),
       }),
-    [allGames, i18n.language, t]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
+    [allGames, localeBundleKey, i18n.language]
   );
 
   const boardOptions = useMemo(
@@ -65,7 +68,8 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
         locale: i18n.language,
         labelFor: (cat) => t(`categories.${cat}.full`),
       }),
-    [allGames, i18n.language, t]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
+    [allGames, localeBundleKey, i18n.language]
   );
 
   const filteredGames = useMemo(
