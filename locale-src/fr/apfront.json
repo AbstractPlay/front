@@ -2191,6 +2191,10 @@
     "src": "move up",
     "out": "déplacer vers le haut"
   },
+  "a11y.notifications": {
+    "src": "Notifications",
+    "out": "Notifications"
+  },
   "a11y.toggleDarkMode": {
     "src": "Toggle dark mode",
     "out": "Basculer le mode sombre"
@@ -4887,6 +4891,34 @@
     "src": "Abstract Play Wiki",
     "out": "Wiki Abstract Play"
   },
+  "nav.activePlayers_one": {
+    "src": "Active players: {{count}}",
+    "out": "Joueur actif : {{count}}"
+  },
+  "nav.activePlayers_other": {
+    "src": "Active players: {{count}}",
+    "out": "Joueurs actifs : {{count}}"
+  },
+  "nav.customizeTheme": {
+    "src": "Customize theme",
+    "out": "Personnaliser le thème"
+  },
+  "nav.myProfile": {
+    "src": "My profile",
+    "out": "Mon profil"
+  },
+  "nav.visibilityVisible": {
+    "src": "Visible to others",
+    "out": "Visible par les autres"
+  },
+  "news.earlier": {
+    "src": "Earlier",
+    "out": "Plus anciens"
+  },
+  "news.whatsNew": {
+    "src": "What's new",
+    "out": "Nouveautés"
+  },
   "notFound.body": {
     "src": "No page could be found at <1>{{path}}</1>. Please use the navigation bar to try again. If the problem persists, please <2>post a bug report on our Discord server</2>.",
     "out": "Aucune page n'a été trouvée à l'adresse <1>{{path}}</1>. Veuillez utiliser la barre de navigation pour réessayer. Si le problème persiste, veuillez <2>publier un rapport de bogue sur notre serveur Discord</2>."
@@ -4894,6 +4926,30 @@
   "notFound.reportLink": {
     "src": "post a bug report on our Discord server",
     "out": "publier un rapport de bogue sur notre serveur Discord"
+  },
+  "notifications.dismissAll": {
+    "src": "Dismiss all",
+    "out": "Tout effacer"
+  },
+  "notifications.dismissAllConfirm": {
+    "src": "Click again to dismiss all",
+    "out": "Cliquer à nouveau pour tout effacer"
+  },
+  "notifications.empty": {
+    "src": "No notifications",
+    "out": "Aucune notification"
+  },
+  "notifications.markAllRead": {
+    "src": "Mark all read",
+    "out": "Tout marquer comme lu"
+  },
+  "notifications.markRead": {
+    "src": "Mark read",
+    "out": "Marquer comme lu"
+  },
+  "notifications.newsUpdated": {
+    "src": "News has been updated",
+    "out": "Les actualités ont été mises à jour"
   },
   "of": {
     "src": "of",
