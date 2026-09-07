@@ -16,6 +16,7 @@ import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../../lib/compareStrings";
 import { toast } from "react-toastify";
 
 const allSize = Number.MAX_SAFE_INTEGER;
@@ -36,7 +37,7 @@ function WatchedGamesTable(props) {
     "dashboard-tables-watched-show",
     10
   );
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleUnwatchClick = useCallback(
     async (metaGame, gameId) => {
@@ -147,7 +148,7 @@ function WatchedGamesTable(props) {
           const valB = rowB.getValue(columnID);
           const nameA = valA[0]?.name ?? "";
           const nameB = valB[0]?.name ?? "";
-          return nameA.localeCompare(nameB);
+          return compareStrings(nameA, nameB, i18n.language);
         },
       }),
       columnHelper.accessor("completed", {
@@ -197,7 +198,7 @@ function WatchedGamesTable(props) {
         ),
       }),
     ],
-    [columnHelper, handleClearClick, handleUnwatchClick, allUsers, t]
+    [columnHelper, handleClearClick, handleUnwatchClick, allUsers, t, i18n.language]
   );
 
   const table = useReactTable({

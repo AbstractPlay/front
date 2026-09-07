@@ -13,6 +13,7 @@ import {
 import { useStorageState } from "react-use-storage-state";
 import PageHelmet from "./PageHelmet";
 import { isoToCountryCode } from "../lib/isoToCountryCode";
+import { compareStrings } from "../lib/compareStrings";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
 import { useStore } from "../stores";
@@ -51,7 +52,7 @@ function parseBlockedBody(body) {
 }
 
 function Players() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const allUsers = useStore((state) => state.users);
   const usersLoaded = useStore((state) => state.usersLoaded);
   const globalMe = useStore((state) => state.globalMe);
@@ -89,10 +90,10 @@ function Players() {
           used.push([code, name]);
         }
       }
-      used.sort((a, b) => a[1].localeCompare(b[1]));
+      used.sort((a, b) => compareStrings(a[1], b[1], i18n.language));
       usedCountriesSetter(used);
     }
-  }, [allUsers]);
+  }, [allUsers, i18n.language]);
 
   useEffect(() => {
     if (hideFilter === "offline" && globalMe === null) {
@@ -211,8 +212,8 @@ function Players() {
               }
               return true;
             })
-            .sort((a, b) => a.name.localeCompare(b.name)),
-    [allUsers, hideFilter, blockedFilter, countryFilter, connections, globalMe]
+            .sort((a, b) => compareStrings(a.name, b.name, i18n.language)),
+    [allUsers, hideFilter, blockedFilter, countryFilter, connections, globalMe, i18n.language]
   );
 
   const columnHelper = createColumnHelper();

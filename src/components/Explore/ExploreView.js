@@ -8,9 +8,11 @@ import {
 } from "react";
 import { gameinfo } from "@abstractplay/gameslib";
 import {
+  compareCategoryTagEntries,
   listPublicCatalogMetas,
   getGameDisplayName,
 } from "../../lib/gameOptions";
+import { compareStrings } from "../../lib/compareStrings";
 import { gameDescription } from "../../lib/gameDescription";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -72,20 +74,6 @@ function initialGridView(viewKey) {
     return fromLegacy;
   }
   return false;
-}
-
-function tagSortFn(a, b) {
-  const priority = (raw) => {
-    if (raw.startsWith("goal")) return 1;
-    if (raw.startsWith("mech")) return 2;
-    if (raw.startsWith("board>shape")) return 3.1;
-    if (raw.startsWith("board>connect")) return 3.2;
-    if (raw.startsWith("board")) return 3;
-    return 4;
-  };
-  const va = priority(a.raw),
-    vb = priority(b.raw);
-  return va === vb ? a.tag.localeCompare(b.tag) : va - vb;
 }
 
 const COUNT_VIEWS = new Set(["all", "stars", "completed", "random"]);
@@ -296,7 +284,11 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         gamesSetter(config.loadGames(metas, forceNew));
       } else {
         metas.sort((a, b) =>
-          getGameDisplayName(a).localeCompare(getGameDisplayName(b), i18n.language)
+          compareStrings(
+            getGameDisplayName(a),
+            getGameDisplayName(b),
+            i18n.language
+          )
         );
         gamesSetter([...metas]);
       }
@@ -327,8 +319,8 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         desc: t(`categories.${cat}.description`),
         full: t(`categories.${cat}.full`),
       }))
-      .sort(tagSortFn);
-  }, [config.enableTagFilter, games, t]);
+      .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language));
+  }, [config.enableTagFilter, games, t, i18n.language]);
 
   const data = useMemo(
     () =>
@@ -342,7 +334,9 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
             full: t(`categories.${cat}.full`),
           }));
           const tags = config.showAllTags
-            ? [...tagsRaw].sort(tagSortFn)
+            ? [...tagsRaw].sort((a, b) =>
+                compareCategoryTagEntries(a, b, i18n.language)
+              )
             : tagsRaw.filter((cat) => cat.raw.startsWith("goal"));
           return {
             id: metaGame,

@@ -5,11 +5,12 @@ import DataTable, { EVENTS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../../lib/compareStrings";
 
 function TableRegistration({ events, handleRegister }) {
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   console.log(events);
 
@@ -35,7 +36,9 @@ function TableRegistration({ events, handleRegister }) {
                 const registrants = allUsers.filter((u) =>
                   playerids.includes(u.id)
                 );
-                registrants.sort((a, b) => a.name.localeCompare(b.name));
+                registrants.sort((a, b) =>
+                  compareStrings(a.name, b.name, i18n.language)
+                );
                 console.log(registrants);
                 let canRegister = false;
                 if (globalMe !== null && !playerids.includes(globalMe.id)) {
@@ -54,7 +57,7 @@ function TableRegistration({ events, handleRegister }) {
               }
             )
             .sort((a, b) => a.dateStart - b.dateStart),
-    [events, allUsers, globalMe]
+    [events, allUsers, globalMe, i18n.language]
   );
 
   const columnHelper = createColumnHelper();

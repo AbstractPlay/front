@@ -9,7 +9,7 @@ import {
   collectBoardFilterOptions,
   collectCategoryFilterOptions,
   filterGameOptions,
-  tagSortFn,
+  sortCategoryKeys,
 } from "../lib/gameOptions";
 import { mergeCustomizationSections } from "../lib/mergeCustomizationSections";
 import { useStore } from "../stores";
@@ -54,13 +54,21 @@ function ApplyCustomizationModal({
   );
 
   const goalOptions = useMemo(
-    () => collectCategoryFilterOptions(allGames, "goal"),
-    [allGames]
+    () =>
+      collectCategoryFilterOptions(allGames, "goal", {
+        locale: i18n.language,
+        labelFor: (cat) => t(`categories.${cat}.full`),
+      }),
+    [allGames, i18n.language, t]
   );
 
   const boardOptions = useMemo(
-    () => collectBoardFilterOptions(allGames),
-    [allGames]
+    () =>
+      collectBoardFilterOptions(allGames, {
+        locale: i18n.language,
+        labelFor: (cat) => t(`categories.${cat}.full`),
+      }),
+    [allGames, i18n.language, t]
   );
 
   const filteredGames = useMemo(
@@ -371,7 +379,11 @@ function ApplyCustomizationModal({
                     ) : null}
                     {game.goalTags?.length > 0 ? (
                       <span className="is-block mt-1">
-                        {[...game.goalTags].sort(tagSortFn).map((cat) => (
+                        {sortCategoryKeys(
+                          game.goalTags,
+                          i18n.language,
+                          (cat) => t(`categories.${cat}.full`)
+                        ).map((cat) => (
                           <span key={cat} className="tag is-light mr-1 mb-1">
                             {t(`categories.${cat}.full`)}
                           </span>

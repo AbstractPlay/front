@@ -3,6 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../../lib/compareStrings";
 import {
   formatSummaryGameKey,
   matchesSummaryGameKey,
@@ -10,7 +11,7 @@ import {
 
 function GameStats({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -32,8 +33,8 @@ function GameStats({ metaFilter, nav }) {
             metaFilter === undefined ||
             matchesSummaryGameKey(rec.id, metaFilter)
         )
-        .sort((a, b) => a.game.localeCompare(b.game)),
-    [summary, metaFilter, t]
+        .sort((a, b) => compareStrings(a.game, b.game, i18n.language)),
+    [summary, metaFilter, t, i18n.language]
   );
 
   const columnHelper = createColumnHelper();

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { compareStrings } from "../../lib/compareStrings";
 import { callAuthApi } from "../../lib/api";
 import { cloneDeep } from "lodash";
 import invariant from "tiny-invariant";
@@ -12,7 +13,7 @@ import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 
 function Division({ event, setRefresh }) {
-  //   const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const allUsers = useStore((state) => state.users);
   const [unassigned, setUnassigned] = useState([]);
   const [divisions, setDivisions] = useState([]);
@@ -25,10 +26,10 @@ function Division({ event, setRefresh }) {
       const playerids = event.players.map((p) => p.playerid);
       const players = allUsers
         ?.filter((u) => playerids.includes(u.id))
-        .sort((a, b) => a.name.localeCompare(b.name));
+        .sort((a, b) => compareStrings(a.name, b.name, i18n.language));
       setUnassigned(players);
     }
-  }, [event, allUsers]);
+  }, [event, allUsers, i18n.language]);
 
   const addDivision = () => {
     setDivisions((val) => [...val, []]);

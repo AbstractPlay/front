@@ -3,6 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { ProfileContext } from "../Player";
 import { gameinfo } from "@abstractplay/gameslib";
 import { getGameDisplayName } from "../../lib/gameOptions";
+import { compareStrings } from "../../lib/compareStrings";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -13,7 +14,7 @@ function Stars({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const globalMe = useStore((state) => state.globalMe);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -34,8 +35,8 @@ function Stars({ handleChallenge }) {
               };
               return ret;
             })
-            .sort((a, b) => a.name.localeCompare(b.name)),
-    [user]
+            .sort((a, b) => compareStrings(a.name, b.name, i18n.language)),
+    [user, i18n.language]
   );
 
   const columnHelper = createColumnHelper();

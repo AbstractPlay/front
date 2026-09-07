@@ -9,7 +9,8 @@ import { bergerTable } from "../../lib/berger";
 import PairingTable from "./PairingTable";
 import Modal from "../Modal";
 import GameVariants from "../GameVariants";
-import { isPublicCatalogGame } from "../../lib/gameOptions";
+import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
+import { compareStrings } from "../../lib/compareStrings";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 
@@ -20,7 +21,7 @@ const errorDescKey = {
 };
 
 function Pair({ event, setRefresh }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const allUsers = useStore((state) => state.users);
   const [round, setRound] = useState(0);
   const [validMeta, setValidMeta] = useState(null);
@@ -59,9 +60,11 @@ function Pair({ event, setRefresh }) {
       setDivisions(tmpDivisions);
     }
     let allMeta = [...gameinfo.values()].filter(isPublicCatalogGame);
-    allMeta.sort((a, b) => a.name.localeCompare(b.name));
+    allMeta.sort((a, b) =>
+      compareStrings(getGameDisplayName(a.uid), getGameDisplayName(b.uid), i18n.language)
+    );
     setValidMeta(allMeta.map((i) => [i.uid, i.name]));
-  }, [event, allUsers]);
+  }, [event, allUsers, i18n.language]);
 
   const handleMetaChange = (val) => {
     if (val === "") {

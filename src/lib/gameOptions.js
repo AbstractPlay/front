@@ -1,4 +1,5 @@
 import { gameinfo, resolveGameName } from "@abstractplay/gameslib";
+import { compareStrings } from "./compareStrings";
 import { isLabSupportedGame } from "./Lab/buildGame";
 import { isProductionMode } from "./realMode";
 import { tournamentPlaySupported } from "./tournamentGame";
@@ -57,19 +58,45 @@ export function listPublicCatalogMetas() {
   );
 }
 
-export function tagSortFn(a, b) {
-  const priority = (raw) => {
-    if (raw.startsWith("goal")) return 1;
-    if (raw.startsWith("mech")) return 2;
-    if (raw.startsWith("board>shape")) return 3.1;
-    if (raw.startsWith("board>connect")) return 3.2;
-    if (/^board>[^>]+$/.test(raw)) return 3.05;
-    if (raw.startsWith("board")) return 3;
-    return 4;
-  };
-  const va = priority(a);
-  const vb = priority(b);
-  return va === vb ? a.localeCompare(b) : va - vb;
+export function categoryTagPriority(raw) {
+  if (raw.startsWith("goal")) return 1;
+  if (raw.startsWith("mech")) return 2;
+  if (raw.startsWith("board>shape")) return 3.1;
+  if (raw.startsWith("board>connect")) return 3.2;
+  if (/^board>[^>]+$/.test(raw)) return 3.05;
+  if (raw.startsWith("board")) return 3;
+  return 4;
+}
+
+export function tagSortFn(a, b, locale = "en") {
+  const va = categoryTagPriority(a);
+  const vb = categoryTagPriority(b);
+  return va === vb ? compareStrings(a, b, locale) : va - vb;
+}
+
+/** Sort { raw, tag } category entries by group priority then translated tag label. */
+export function compareCategoryTagEntries(a, b, locale = "en") {
+  const va = categoryTagPriority(a.raw);
+  const vb = categoryTagPriority(b.raw);
+  return va === vb
+    ? compareStrings(a.tag, b.tag, locale)
+    : va - vb;
+}
+
+/**
+ * Sort raw category keys by group priority, then by a locale-aware display label.
+ * @param {string[]} keys
+ * @param {string} locale
+ * @param {(key: string) => string} labelFor
+ */
+export function sortCategoryKeys(keys, locale, labelFor) {
+  return [...keys].sort((a, b) => {
+    const va = categoryTagPriority(a);
+    const vb = categoryTagPriority(b);
+    return va === vb
+      ? compareStrings(labelFor(a), labelFor(b), locale)
+      : va - vb;
+  });
 }
 
 /** Direct board tags (e.g. board>dynamic, board>none), not shape/connect subtrees. */
@@ -97,7 +124,7 @@ export function isBoardFilterCategory(cat) {
 export function buildGameOptions({
   labOnly = false,
   tournamentOnly = false,
-  locale,
+  locale = "en",
 } = {}) {
   const options = [];
   for (const info of gameinfo.values()) {
@@ -112,7 +139,7 @@ export function buildGameOptions({
     }
     options.push({ id: info.uid, name: getGameDisplayName(info.uid) });
   }
-  options.sort((a, b) => a.name.localeCompare(b.name, locale));
+  options.sort((a, b) => compareStrings(a.name, b.name, locale));
   return options;
 }
 
@@ -166,7 +193,11 @@ export function buildGameBrowseEntries({
  * @param {Array<{ categories?: string[] }>} games
  * @param {string} prefix
  */
-export function collectCategoryFilterOptions(games, prefix) {
+export function collectCategoryFilterOptions(
+  games,
+  prefix,
+  { locale = "en", labelFor } = {}
+) {
   const tagSet = new Set();
   for (const game of games) {
     for (const cat of game.categories ?? []) {
@@ -175,14 +206,18 @@ export function collectCategoryFilterOptions(games, prefix) {
       }
     }
   }
-  return [...tagSet].sort(tagSortFn);
+  const keys = [...tagSet];
+  if (labelFor) {
+    return sortCategoryKeys(keys, locale, labelFor);
+  }
+  return keys.sort((a, b) => tagSortFn(a, b, locale));
 }
 
 /**
  * Board shape tags plus root board tags (dynamic, none, etc.).
  * @param {Array<{ categories?: string[] }>} games
  */
-export function collectBoardFilterOptions(games) {
+export function collectBoardFilterOptions(games, { locale = "en", labelFor } = {}) {
   const tagSet = new Set();
   for (const game of games) {
     for (const cat of game.categories ?? []) {
@@ -191,7 +226,11 @@ export function collectBoardFilterOptions(games) {
       }
     }
   }
-  return [...tagSet].sort(tagSortFn);
+  const keys = [...tagSet];
+  if (labelFor) {
+    return sortCategoryKeys(keys, locale, labelFor);
+  }
+  return keys.sort((a, b) => tagSortFn(a, b, locale));
 }
 
 /**
