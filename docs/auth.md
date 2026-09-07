@@ -16,7 +16,7 @@ Redirect URLs come from `COGNITO_REDIRECT_LOGIN` and `COGNITO_REDIRECT_LOGOUT`. 
 
 ## Sign-in flow
 
-1. User clicks login → `signInWithRedirect()` via [`redirectToSignIn()`](../src/lib/amplifyAuth.js) (in [`LogInOutButton.js`](../src/components/LogInOutButton.js)).
+1. User clicks login → `signInWithRedirect()` via [`redirectToSignIn()`](../src/lib/amplifyAuth.js) (navbar [`ProfileMenu.js`](../src/components/ProfileMenu.js) when logged out).
 2. Browser redirects to Cognito hosted UI.
 3. On success, Cognito redirects back with an authorization code; Amplify exchanges it for tokens.
 4. [`resolveAuthSession()`](../src/lib/authSession.js) stores the JWT and normalized identity fields (`userId`, `username`, `email`) in Zustand `authSession`; UI components read them via [`useAuthSession()`](../src/hooks/useAuthSession.js).
@@ -36,11 +36,11 @@ Redirect URLs come from `COGNITO_REDIRECT_LOGIN` and `COGNITO_REDIRECT_LOGOUT`. 
 
 ## Sign-out
 
-[`UserSettingsModal.js`](../src/components/UserSettingsModal.js) sets `sessionStorage.intentionalLogout = "1"` before `signOut()` so the expiry handler does not immediately re-login.
+[`ProfileMenu.js`](../src/components/ProfileMenu.js) and [`UserSettingsModal.js`](../src/components/UserSettingsModal.js) set `sessionStorage.intentionalLogout = "1"` before `signOut()` so the expiry handler does not immediately re-login.
 
 ## User profile (`globalMe`)
 
-After login, [`useProfileBootstrap`](../src/hooks/useProfileBootstrap.js) calls [`fetchProfile()`](../src/lib/globalMeBootstrap.js) (`me_profile`), which populates Zustand `globalMe` (bots, settings, `activeGames`, etc.). [`Me.js`](../src/components/Me.js) calls `fetchDashboard()` (`me_dashboard`) on the `/me` page for games, challenges, and notifications.
+After login, [`useProfileBootstrap`](../src/hooks/useProfileBootstrap.js) calls [`fetchProfile()`](../src/lib/globalMeBootstrap.js) (`me_profile`), which populates Zustand `globalMe` (bots, settings, `activeGames`, etc.). [`NotificationBell.js`](../src/components/NotificationBell.js) calls [`fetchNotifications()`](../src/lib/globalMeBootstrap.js) (`list_notifications`) for the navbar feed. [`Me.js`](../src/components/Me.js) calls `fetchDashboard()` (`me_dashboard`) on the `/me` page for games and challenges (notifications are also included in the dashboard payload but the bell is the primary UI).
 
 ## New user onboarding
 
