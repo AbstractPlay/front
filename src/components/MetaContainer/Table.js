@@ -14,6 +14,7 @@ import {
 } from "../../lib/gameOptions";
 import { tournamentListPath } from "../../lib/tournamentSections";
 import { useTranslation } from "react-i18next";
+import { getUiLocaleBundleKey } from "../../i18n";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import {
@@ -51,6 +52,7 @@ function Table({
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [expandedPara, expandedParaSetter] = useState([]);
   const { t, i18n } = useTranslation();
+  const localeBundleKey = getUiLocaleBundleKey(i18n);
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
   const [filterStars, filterStarsSetter] = useStorageState(
     "allgames-filter-stars",
@@ -226,7 +228,7 @@ function Table({
         .filter((obj) => !filterStars || obj.starred),
     // getGameDisplayName reads gameslib i18n synced from host language
     // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh labels on locale change
-    [globalMe, props.games, props.counts, filterStars, i18n.language]
+    [globalMe, props.games, props.counts, filterStars, localeBundleKey]
   );
 
   const allTags = useMemo(() => {
@@ -245,8 +247,8 @@ function Table({
         };
       })
       .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language));
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow i18n.language
-  }, [props.games, i18n.language]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
+  }, [props.games, localeBundleKey]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(

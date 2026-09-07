@@ -15,6 +15,7 @@ import {
 import { compareStrings } from "../../lib/compareStrings";
 import { gameDescription } from "../../lib/gameDescription";
 import { useTranslation } from "react-i18next";
+import { getUiLocaleBundleKey } from "../../i18n";
 import { Link } from "react-router-dom";
 import { useStorageState } from "react-use-storage-state";
 import {
@@ -182,6 +183,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     return "";
   });
   const { t, i18n } = useTranslation();
+  const localeBundleKey = getUiLocaleBundleKey(i18n);
 
   useEffect(() => {
     sessionStorage.setItem(`explore-page-${viewKey}`, String(pageIndex));
@@ -293,7 +295,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         gamesSetter([...metas]);
       }
     },
-    [config, i18n.language]
+    [config, localeBundleKey]
   );
 
   useEffect(() => {
@@ -320,8 +322,8 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         full: t(`categories.${cat}.full`),
       }))
       .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language));
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow i18n.language
-  }, [config.enableTagFilter, games, i18n.language]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
+  }, [config.enableTagFilter, games, localeBundleKey]);
 
   const data = useMemo(
     () =>
@@ -366,7 +368,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     // getGameDisplayName reads gameslib i18n synced from host language
     // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh labels on locale change
     [
-      i18n.language,
+      localeBundleKey,
       games,
       globalMe,
       fetchedData,

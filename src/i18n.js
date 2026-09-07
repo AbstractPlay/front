@@ -89,13 +89,36 @@ export function getPickerLanguage(i18nInstance) {
   );
 }
 
+/** Stable key for React deps: changes when UI locale bundles finish loading (not on every `t` identity). */
+export function getUiLocaleBundleKey(i18nInstance) {
+  const lang = normalizeUiLanguage(
+    i18nInstance.resolvedLanguage ?? i18nInstance.language ?? "en"
+  );
+  const loaded = HTTP_NAMESPACES.map((ns) =>
+    i18nInstance.hasResourceBundle(lang, ns) ? "1" : "0"
+  ).join("");
+  return `${lang}:${loaded}`;
+}
+
+/** Host UI language → gameslib locale (es → es-US; eo and other UI langs keep their code). */
+export function gamesLibLocale(hostLang) {
+  const normalized = normalizeUiLanguage(hostLang);
+  if (normalized === "es") {
+    return resolveLocale(normalized);
+  }
+  if (SUPPORTED_LANGUAGE_CODES.has(normalized)) {
+    return normalized;
+  }
+  return resolveLocale(normalized);
+}
+
 /** Copy host bundles into gameslib (host "es" → gameslib "es-US"). */
 const syncGamesLibBundles = () => {
   if (!gamesLibI18n?.isInitialized || !i18n.isInitialized) {
     return;
   }
   const hostLang = normalizeUiLanguage(i18n.language);
-  const gamesLibLang = resolveLocale(hostLang);
+  const gamesLibLang = gamesLibLocale(hostLang);
   for (const ns of GAMESLIB_NAMESPACES) {
     const bundle = i18n.getResourceBundle(hostLang, ns);
     if (bundle) {
@@ -117,8 +140,25 @@ const ensureGamesLibResources = () => {
   syncGamesLibBundles();
 };
 
-const onHostGamesNamespaceUpdated = (_lng, ns) => {
-  if (GAMESLIB_NAMESPACES.includes(ns)) {
+const onHostGamesNamespaceUpdated = (arg1, arg2) => {
+  // i18next v21+ loaded: single arg { [lng]: { [ns]: data } }; added: (lng, ns, …)
+  if (
+    arg2 === undefined &&
+    arg1 &&
+    typeof arg1 === "object" &&
+    !Array.isArray(arg1)
+  ) {
+    for (const lng of Object.keys(arg1)) {
+      for (const ns of Object.keys(arg1[lng] ?? {})) {
+        if (GAMESLIB_NAMESPACES.includes(ns)) {
+          ensureGamesLibResources();
+          return;
+        }
+      }
+    }
+    return;
+  }
+  if (GAMESLIB_NAMESPACES.includes(arg2)) {
     ensureGamesLibResources();
   }
 };

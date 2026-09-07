@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useTranslation } from "react-i18next";
+import { getUiLocaleBundleKey } from "../../i18n";
 import { GameFactory } from "@abstractplay/gameslib";
 import Modal from "../Modal";
 import ChallengeEntryModals from "../ChallengeEntryModals";
@@ -57,6 +58,7 @@ const MetaItem = React.forwardRef(
     const [initialSoloSeed, initialSoloSeedSetter] = useState("");
     const [localTab, localTabSetter] = useState(DEFAULT_META_TAB);
     const { t, i18n } = useTranslation();
+    const localeBundleKey = getUiLocaleBundleKey(i18n);
 
     const activeTab = syncTabToUrl ? metaTabFromHash(location.hash) : localTab;
 
@@ -153,8 +155,8 @@ const MetaItem = React.forwardRef(
           .filter(
             (obj) => !obj.raw.endsWith(">rect") && !obj.raw.endsWith(">simple")
           ),
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow i18n.language
-      [game.categories, i18n.language]
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
+      [game.categories, localeBundleKey]
     );
 
     const openChallengeModal = (name) => {
