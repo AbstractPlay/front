@@ -320,7 +320,8 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         full: t(`categories.${cat}.full`),
       }))
       .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language));
-  }, [config.enableTagFilter, games, t, i18n.language]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow i18n.language
+  }, [config.enableTagFilter, games, i18n.language]);
 
   const data = useMemo(
     () =>
@@ -365,7 +366,6 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     // getGameDisplayName reads gameslib i18n synced from host language
     // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh labels on locale change
     [
-      t,
       i18n.language,
       games,
       globalMe,

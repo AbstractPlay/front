@@ -85,16 +85,22 @@ export function compareCategoryTagEntries(a, b, locale = "en") {
 
 /**
  * Sort raw category keys by group priority, then by a locale-aware display label.
+ * Labels are resolved once up front so labelFor (often i18n `t`) is not called from
+ * inside the sort comparator, which can recurse badly while locale bundles load.
  * @param {string[]} keys
  * @param {string} locale
  * @param {(key: string) => string} labelFor
  */
 export function sortCategoryKeys(keys, locale, labelFor) {
+  const labels = new Map();
+  for (const key of keys) {
+    labels.set(key, labelFor(key));
+  }
   return [...keys].sort((a, b) => {
     const va = categoryTagPriority(a);
     const vb = categoryTagPriority(b);
     return va === vb
-      ? compareStrings(labelFor(a), labelFor(b), locale)
+      ? compareStrings(labels.get(a), labels.get(b), locale)
       : va - vb;
   });
 }

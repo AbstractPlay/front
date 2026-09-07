@@ -226,7 +226,7 @@ function Table({
         .filter((obj) => !filterStars || obj.starred),
     // getGameDisplayName reads gameslib i18n synced from host language
     // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh labels on locale change
-    [globalMe, props.games, props.counts, filterStars, t, i18n.language]
+    [globalMe, props.games, props.counts, filterStars, i18n.language]
   );
 
   const allTags = useMemo(() => {
@@ -245,7 +245,8 @@ function Table({
         };
       })
       .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language));
-  }, [props.games, t, i18n.language]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow i18n.language
+  }, [props.games, i18n.language]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(

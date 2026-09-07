@@ -56,7 +56,8 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
         locale: i18n.language,
         labelFor: (cat) => t(`categories.${cat}.full`),
       }),
-    [allGames, i18n.language, t]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow i18n.language
+    [allGames, i18n.language]
   );
 
   const boardOptions = useMemo(
@@ -65,7 +66,8 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
         locale: i18n.language,
         labelFor: (cat) => t(`categories.${cat}.full`),
       }),
-    [allGames, i18n.language, t]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow i18n.language
+    [allGames, i18n.language]
   );
 
   const filteredGames = useMemo(

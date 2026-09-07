@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useCallback, useEffect } from "react";
+import React, { Fragment, useState, useCallback, useEffect, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -140,19 +140,22 @@ const MetaItem = React.forwardRef(
       coderString += coders.join(", ");
     }
 
-    const tags = game.categories
-      .map((cat) => {
-        return {
-          raw: cat,
-          tag: t(`categories.${cat}.tag`),
-          desc: t(`categories.${cat}.description`),
-          full: t(`categories.${cat}.full`),
-        };
-      })
-      .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language))
-      .filter(
-        (obj) => !obj.raw.endsWith(">rect") && !obj.raw.endsWith(">simple")
-      );
+    const tags = useMemo(
+      () =>
+        game.categories
+          .map((cat) => ({
+            raw: cat,
+            tag: t(`categories.${cat}.tag`),
+            desc: t(`categories.${cat}.description`),
+            full: t(`categories.${cat}.full`),
+          }))
+          .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language))
+          .filter(
+            (obj) => !obj.raw.endsWith(">rect") && !obj.raw.endsWith(">simple")
+          ),
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow i18n.language
+      [game.categories, i18n.language]
+    );
 
     const openChallengeModal = (name) => {
       activeChallengeModalSetter(name);
