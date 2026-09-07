@@ -2191,6 +2191,10 @@
     "src": "move up",
     "out": "sposta su"
   },
+  "a11y.notifications": {
+    "src": "Notifications",
+    "out": "Notifiche"
+  },
   "a11y.toggleDarkMode": {
     "src": "Toggle dark mode",
     "out": "Attiva/disattiva modalità scura"
@@ -4887,6 +4891,34 @@
     "src": "Abstract Play Wiki",
     "out": "Wiki di Abstract Play"
   },
+  "nav.activePlayers_one": {
+    "src": "Active players: {{count}}",
+    "out": "Giocatore attivo: {{count}}"
+  },
+  "nav.activePlayers_other": {
+    "src": "Active players: {{count}}",
+    "out": "Giocatori attivi: {{count}}"
+  },
+  "nav.customizeTheme": {
+    "src": "Customize theme",
+    "out": "Personalizza tema"
+  },
+  "nav.myProfile": {
+    "src": "My profile",
+    "out": "Il mio profilo"
+  },
+  "nav.visibilityVisible": {
+    "src": "Visible to others",
+    "out": "Visibile agli altri"
+  },
+  "news.earlier": {
+    "src": "Earlier",
+    "out": "Precedenti"
+  },
+  "news.whatsNew": {
+    "src": "What's new",
+    "out": "Novità"
+  },
   "notFound.body": {
     "src": "No page could be found at <1>{{path}}</1>. Please use the navigation bar to try again. If the problem persists, please <2>post a bug report on our Discord server</2>.",
     "out": "Impossibile trovare una pagina su <1>{{path}}</1>. Usa la barra di navigazione per riprovare. Se il problema persiste, <2>invia una segnalazione di bug sul nostro server Discord</2>."
@@ -4894,6 +4926,30 @@
   "notFound.reportLink": {
     "src": "post a bug report on our Discord server",
     "out": "invia una segnalazione di bug sul nostro server Discord"
+  },
+  "notifications.dismissAll": {
+    "src": "Dismiss all",
+    "out": "Rimuovi tutte"
+  },
+  "notifications.dismissAllConfirm": {
+    "src": "Click again to dismiss all",
+    "out": "Clicca di nuovo per rimuovere tutte"
+  },
+  "notifications.empty": {
+    "src": "No notifications",
+    "out": "Nessuna notifica"
+  },
+  "notifications.markAllRead": {
+    "src": "Mark all read",
+    "out": "Segna tutte come lette"
+  },
+  "notifications.markRead": {
+    "src": "Mark read",
+    "out": "Segna come letta"
+  },
+  "notifications.newsUpdated": {
+    "src": "News has been updated",
+    "out": "Novità aggiornate"
   },
   "of": {
     "src": "of",
