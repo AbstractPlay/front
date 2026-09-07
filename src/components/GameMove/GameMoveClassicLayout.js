@@ -140,6 +140,7 @@ export default function GameMoveClassicLayout({ session }) {
     newCSSSetter,
     cssActive,
     cssActiveSetter,
+    customCssAccountActive,
     reportError,
     handleExportBoardPng,
     handleExportBoardGif,
@@ -981,6 +982,11 @@ export default function GameMoveClassicLayout({ session }) {
                 components={[<code key="code" />]}
               />
             </p>
+            {customCssAccountActive ? (
+              <p className="notification is-info is-light">
+                {t("gameMove.dev.accountCssOverridesLocal")}
+              </p>
+            ) : null}
           </div>
           <div className="control">
             <textarea

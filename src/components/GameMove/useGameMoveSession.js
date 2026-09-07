@@ -27,6 +27,7 @@ import {
 } from "../../lib/boardExport/enumeratePathFrames";
 import { STATUS } from "react-joyride";
 import { useStorageState } from "react-use-storage-state";
+import { useGameCustomCss } from "../../hooks/useGameCustomCss";
 import { toast } from "react-toastify";
 import { nanoid } from "nanoid";
 import { useStore } from "../../stores";
@@ -232,6 +233,7 @@ export function useGameMoveSession(props) {
   const state = props.routerState;
 
   const { metaGame, cbits, gameID } = useParams();
+  const effectiveCustomCss = useGameCustomCss(metaGame, globalMe, customCSS);
   const cbit = parseInt(cbits, 10);
 
   const altDisplays = useMemo(
@@ -474,23 +476,6 @@ export function useGameMoveSession(props) {
     } else {
       newCSSSetter("");
       cssActiveSetter(true);
-    }
-  }, [customCSS, metaGame]);
-
-  // apply (or not) any custom CSS
-  useEffect(() => {
-    if (
-      customCSS !== undefined &&
-      metaGame in customCSS &&
-      customCSS[metaGame] !== undefined &&
-      customCSS[metaGame].css !== "" &&
-      customCSS[metaGame].active
-    ) {
-      const sheet = new CSSStyleSheet();
-      sheet.replaceSync(customCSS[metaGame].css);
-      document.adoptedStyleSheets = [sheet];
-    } else {
-      document.adoptedStyleSheets = [];
     }
   }, [customCSS, metaGame]);
 
@@ -2804,6 +2789,7 @@ export function useGameMoveSession(props) {
     newCSSSetter,
     cssActive,
     cssActiveSetter,
+    customCssAccountActive: effectiveCustomCss?.source === "account",
     reportError,
     handleExportBoardPng,
     handleExportBoardGif,
