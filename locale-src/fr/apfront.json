@@ -4789,7 +4789,11 @@
   },
   "me.notifications.message.gameEnd_lose_vsOpponent": {
     "src": "You lost your game of <gameLink>{{metaGame}}</gameLink> to <opponentLink>{{opponentName}}</opponentLink>",
-    "out": "Vous avez perdu votre partie de <gameLink>{{metaGame}}</gameLink> contre <opponentLink>{{opponentName}}</opponentLink>"
+    "out": "Vous avez perdu votre partie de <gameLink>{{metaGame}}</gameLink> face à <opponentLink>{{opponentName}}</opponentLink>"
+  },
+  "me.notifications.message.gameEnd_scores": {
+    "src": "Final scores were as follows: {{scores}}.",
+    "out": "Les scores finaux sont les suivants : {{scores}}."
   },
   "me.notifications.message.gameEnd_solo": {
     "src": "Your <gameLink>{{metaGame}}</gameLink> game has ended",

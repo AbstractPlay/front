@@ -4791,6 +4791,10 @@
     "src": "You lost your game of <gameLink>{{metaGame}}</gameLink> to <opponentLink>{{opponentName}}</opponentLink>",
     "out": "Perdiste tu partida de <gameLink>{{metaGame}}</gameLink> contra <opponentLink>{{opponentName}}</opponentLink>"
   },
+  "me.notifications.message.gameEnd_scores": {
+    "src": "Final scores were as follows: {{scores}}.",
+    "out": "Los puntajes finales fueron los siguientes: {{scores}}."
+  },
   "me.notifications.message.gameEnd_solo": {
     "src": "Your <gameLink>{{metaGame}}</gameLink> game has ended",
     "out": "Tu partida de <gameLink>{{metaGame}}</gameLink> ha terminado"
