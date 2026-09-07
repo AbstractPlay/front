@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
-import LogInOutButton from "./LogInOutButton";
+import ProfileMenu from "./ProfileMenu";
+import NotificationBell from "./NotificationBell";
 import ErrorBoundary from "./ErrorBoundary";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../stores";
@@ -18,15 +19,11 @@ import {
 
 const ThemeCustomizer = lazy(() => import("./ThemeCustomizer"));
 
-function Navbar(props) {
+function Navbar() {
   const { status } = useAuthSession();
   const loggedin = status === "ready";
-  const [burgerExpanded, updateBurgerExpanded] = useState(false);
-  const news = useStore((state) => state.news);
   const globalMe = useStore((state) => state.globalMe);
-  const connections = useStore((state) => state.connections);
-  const [newsLastSeen] = useStorageState("news-last-seen", 0);
-  const [maxNews, maxNewsSetter] = useState(Infinity);
+  const [burgerExpanded, updateBurgerExpanded] = useState(false);
   const [colorMode, colorModeSetter] = useStorageState("color-mode", "light");
   const [storedContextLight] = useStorageState(
     "stored-context-light",
@@ -36,30 +33,35 @@ function Navbar(props) {
     "stored-context-dark",
     DEFAULT_COLOUR_CONTEXT_DARK
   );
-  const [storedInvis, setStoredInvis] = useStorageState("invisible", false);
   const { t } = useTranslation();
   const [showThemeModal, setShowThemeModal] = useState(false);
+  const [storedInvis, setStoredInvis] = useStorageState("invisible", false);
+
+  useEffect(() => {
+    useStore.getState().setInvisible(storedInvis);
+  }, [storedInvis]);
 
   const closeBurger = () => {
     updateBurgerExpanded(false);
   };
 
-  useEffect(() => {
-    const { setInvisible } = useStore.getState();
-    setInvisible(storedInvis);
-  }, [storedInvis]);
-
-  const toggleStoredInvis = () => {
-    setStoredInvis((val) => !val);
+  const toggleColorMode = () => {
+    const next = colorMode === "light" ? "dark" : "light";
+    colorModeSetter(next);
+    document.documentElement.setAttribute("color-mode", next);
+    useStore
+      .getState()
+      .setColourContext(next === "dark" ? storedContextDark : storedContextLight);
   };
 
-  useEffect(() => {
-    if (news !== undefined && news.length > 0) {
-      maxNewsSetter(Math.max(...news.map((n) => n.time)));
-    } else {
-      maxNewsSetter(Infinity);
-    }
-  }, [news]);
+  const profileMenuProps = {
+    closeBurger,
+    onCustomizeTheme: () => setShowThemeModal(true),
+    colorMode,
+    onToggleColorMode: toggleColorMode,
+    visibleToOthers: !storedInvis,
+    onVisibilityChange: (visible) => setStoredInvis(!visible),
+  };
 
   return (
     <nav className="navbar">
@@ -80,8 +82,15 @@ function Navbar(props) {
             )}
           </Link>
         </div>
-        <div className="navbar-item navbar-login-mobile-only">
-          <LogInOutButton variant="compact" closeBurger={closeBurger} />
+        <div className="navbar-brand-actions navbar-icon-cluster-mobile">
+          {loggedin && globalMe !== null ? (
+            <NotificationBell closeBurger={closeBurger} />
+          ) : null}
+          <ProfileMenu
+            {...profileMenuProps}
+            showColorModeInMenu={true}
+            loginButtonId="login-button"
+          />
         </div>
         <a
           role="button"
@@ -183,12 +192,6 @@ function Navbar(props) {
                   onClick={() => updateBurgerExpanded(false)}
                 >
                   {t("News")}
-                  {newsLastSeen >= maxNews ? null : (
-                    <span className="icon highlight">
-                      &nbsp;
-                      <i className="fa fa-eercast" aria-hidden="true"></i>
-                    </span>
-                  )}
                 </Link>
               </div>
               <div className="navbar-item">
@@ -250,81 +253,43 @@ function Navbar(props) {
           </div>
         </div>
         <div className="navbar-end">
-          {globalMe === null ? null : (
+          {loggedin ? (
             <>
-              <div className="navbar-item" title={t("a11y.activePlayers")}>
-                <span className="icon">
-                  <i className="fa fa-wifi" aria-hidden="true"></i>
-                </span>
-                &nbsp;
-                {connections.totalCount}
-              </div>
-              <div className="navbar-item" title={t("a11y.toggleVisibility")}>
-                <button onClick={toggleStoredInvis}>
-                  {storedInvis ? (
-                    <span className="icon">
-                      <i className="fa fa-eye-slash" aria-hidden="true"></i>
-                    </span>
-                  ) : (
-                    <span className="icon">
-                      <i className="fa fa-eye" aria-hidden="true"></i>
-                    </span>
-                  )}
+              <div className="navbar-item navbar-dark-mode-desktop">
+                <button
+                  type="button"
+                  aria-label={
+                    colorMode === "light"
+                      ? t("a11y.toggleDarkMode")
+                      : t("a11y.toggleLightMode")
+                  }
+                  onClick={toggleColorMode}
+                  title={
+                    colorMode === "light"
+                      ? t("a11y.toggleDarkMode")
+                      : t("a11y.toggleLightMode")
+                  }
+                >
+                  <span
+                    className="icon"
+                    style={{ fontSize: "1.4rem", fontWeight: "bold" }}
+                  >
+                    {colorMode === "light" ? "\u263E" : "\u263C"}
+                  </span>
                 </button>
               </div>
+              <div className="navbar-item navbar-icon-cluster-desktop">
+                {globalMe !== null ? (
+                  <NotificationBell closeBurger={closeBurger} />
+                ) : null}
+                <ProfileMenu {...profileMenuProps} showColorModeInMenu={false} />
+              </div>
             </>
+          ) : (
+            <div className="navbar-item navbar-login-desktop">
+              <ProfileMenu {...profileMenuProps} showColorModeInMenu={false} />
+            </div>
           )}
-          <div className="navbar-item">
-            <button
-              aria-label={
-                colorMode === "light"
-                  ? t("a11y.toggleDarkMode")
-                  : t("a11y.toggleLightMode")
-              }
-              onClick={() => {
-                const next = colorMode === "light" ? "dark" : "light";
-                colorModeSetter(next);
-                document.documentElement.setAttribute("color-mode", next);
-                useStore
-                  .getState()
-                  .setColourContext(
-                    next === "dark" ? storedContextDark : storedContextLight
-                  );
-              }}
-              title={
-                colorMode === "light"
-                  ? t("a11y.toggleDarkMode")
-                  : t("a11y.toggleLightMode")
-              }
-            >
-              <span
-                className="icon"
-                style={{ fontSize: "1.4rem", fontWeight: "bold" }}
-              >
-                {colorMode === "light" ? "\u263E" : "\u263C"}
-              </span>
-            </button>
-          </div>
-          <div className="navbar-item">
-            <button
-              className="ml-2"
-              aria-label={t("a11y.customizeTheme")}
-              onClick={() => setShowThemeModal(true)}
-              title={t("a11y.customizeTheme")}
-            >
-              <span className="icon">
-                <i className="fa fa-paint-brush"></i>
-              </span>
-            </button>
-          </div>
-          <div
-            className={
-              "navbar-item tourSettings" +
-              (loggedin ? "" : " navbar-login-hide-mobile")
-            }
-          >
-            <LogInOutButton closeBurger={closeBurger} />
-          </div>
         </div>
       </div>
       <ErrorBoundary inline>
