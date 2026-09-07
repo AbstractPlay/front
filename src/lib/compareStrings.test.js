@@ -18,4 +18,13 @@ describe("compareStrings", () => {
     expect(compareStrings(null, "a", "en")).toBeLessThan(0);
     expect(compareStrings("a", undefined, "en")).toBeGreaterThan(0);
   });
+
+  it("coerces non-string operands", () => {
+    expect(compareStrings(10, 2, "en")).toBeLessThan(0);
+    expect(compareStrings("a", /** @type {*} */ (["x"]), "en")).toBeLessThan(0);
+  });
+
+  it("falls back to en for non-string locale tags", () => {
+    expect(() => compareStrings("a", "b", /** @type {*} */ ({}))).not.toThrow();
+  });
 });
