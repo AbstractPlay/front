@@ -5,10 +5,11 @@ import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import { formatGradeLabel, filterSoloMetaStats } from "../../lib/soloPlay";
 import { formatSummaryGameKey } from "../../lib/summaryGameKeys";
+import { compareStrings } from "../../lib/compareStrings";
 
 function SoloMetaStatsPanel({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -24,8 +25,8 @@ function SoloMetaStatsPanel({ metaFilter, nav }) {
             ? Object.entries(rec.gradeHistogramBestPerUser).sort((a, b) => b[1] - a[1])[0]?.[0]
             : undefined,
         }))
-        .sort((a, b) => a.game.localeCompare(b.game)),
-    [summary, metaFilter, t]
+        .sort((a, b) => compareStrings(a.game, b.game, i18n.language)),
+    [summary, metaFilter, t, i18n.language]
   );
 
   const columnHelper = createColumnHelper();

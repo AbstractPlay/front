@@ -12,6 +12,7 @@ import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../../lib/compareStrings";
 import { isHighlighted, toggleHighlight } from "../../lib/playerGameMarks";
 import { toast } from "react-toastify";
 
@@ -150,8 +151,10 @@ function History({ handleChallenge }) {
                 </>
               ),
               sortingFn: (rowA, rowB, columnID) => {
-                return rowA.original.gameName.localeCompare(
-                  rowB.original.gameName
+                return compareStrings(
+                  rowA.original.gameName,
+                  rowB.original.gameName,
+                  i18n.language
                 );
               },
               filterFn: (row, colId, val) => {
@@ -162,10 +165,11 @@ function History({ handleChallenge }) {
               header: t("tables.variants"),
               cell: (props) => props.getValue().join(", "),
               sortingFn: (rowA, rowB, columnID) => {
-                return rowA
-                  .getValue(columnID)
-                  .join(", ")
-                  .localeCompare(rowB.getValue(columnID).join(", "));
+                return compareStrings(
+                  rowA.getValue(columnID).join(", "),
+                  rowB.getValue(columnID).join(", "),
+                  i18n.language
+                );
               },
               filterFn: (row, colId, val) => {
                 return row.getValue(colId).join(",").includes(val);
@@ -205,9 +209,11 @@ function History({ handleChallenge }) {
                     null
                   ),
               sortingFn: (rowA, rowB, columnID) => {
-                return rowA
-                  .getValue(columnID)[0]
-                  .name.localeCompare(rowB.getValue(columnID)[0].name);
+                return compareStrings(
+                  rowA.getValue(columnID)[0].name,
+                  rowB.getValue(columnID)[0].name,
+                  i18n.language
+                );
               },
               filterFn: (row, colId, val) => {
                 return row
@@ -260,7 +266,7 @@ function History({ handleChallenge }) {
                     nameB = valB.name;
                   }
                 }
-                return nameA.localeCompare(nameB);
+                return compareStrings(nameA, nameB, i18n.language);
               },
               filterFn: (row, colId, val) => {
                 return row.getValue(colId).name.includes(val);
@@ -342,6 +348,7 @@ function History({ handleChallenge }) {
       formatter,
       isOwnProfile,
       handleHighlightToggle,
+      i18n.language,
     ]
   );
 

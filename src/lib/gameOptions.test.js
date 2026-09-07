@@ -2,6 +2,7 @@ import { describe, expect, it, vi, beforeEach, beforeAll } from "vitest";
 import i18n from "i18next";
 import { addResource, gameinfo } from "@abstractplay/gameslib";
 import enApgames from "../../node_modules/@abstractplay/gameslib/locales/en/apgames.json";
+import { compareStrings } from "./compareStrings";
 import {
   buildGameOptions,
   collectBoardFilterOptions,
@@ -96,7 +97,9 @@ describe("buildGameOptions", () => {
     const options = buildGameOptions();
     expect(options.length).toBeGreaterThan(0);
     const names = options.map((o) => o.name);
-    expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+    expect(names).toEqual(
+      [...names].sort((a, b) => compareStrings(a, b, "en"))
+    );
   });
 
   it("labOnly excludes simultaneous games", () => {

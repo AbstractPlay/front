@@ -13,6 +13,7 @@ import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../../lib/compareStrings";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 
@@ -56,7 +57,7 @@ function MyTurnTable({ games, fetching }) {
     "dashboard-tables-mine-show",
     10
   );
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -136,7 +137,7 @@ function MyTurnTable({ games, fetching }) {
         sortingFn: (rowA, rowB, columnID) => {
           const nameA = rowA.getValue(columnID)[0].name;
           const nameB = rowB.getValue(columnID)[0].name;
-          return nameA.localeCompare(nameB);
+          return compareStrings(nameA, nameB, i18n.language);
         },
       }),
       columnHelper.accessor("gameStarted", {
@@ -164,7 +165,7 @@ function MyTurnTable({ games, fetching }) {
         ),
       }),
     ],
-    [columnHelper, connections, allUsers, t]
+    [columnHelper, connections, allUsers, t, i18n.language]
   );
 
   const table = useReactTable({

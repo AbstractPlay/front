@@ -8,7 +8,10 @@ import React, {
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { gameDescription } from "../../lib/gameDescription";
-import { getGameDisplayName } from "../../lib/gameOptions";
+import {
+  compareCategoryTagEntries,
+  getGameDisplayName,
+} from "../../lib/gameOptions";
 import { tournamentListPath } from "../../lib/tournamentSections";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
@@ -174,45 +177,9 @@ function Table({
                 full: t(`categories.${cat}.full`),
               };
             })
-            .sort((a, b) => {
-              // goals > mechanics > board > board:shape > board:connect > components
-              let valA, valB;
-              if (a.raw.startsWith("goal")) {
-                valA = 1;
-              } else if (a.raw.startsWith("mech")) {
-                valA = 2;
-              } else if (a.raw.startsWith("board")) {
-                if (a.raw.startsWith("board>shape")) {
-                  valA = 3.1;
-                } else if (a.raw.startsWith("board>connect")) {
-                  valA = 3.2;
-                } else {
-                  valA = 3;
-                }
-              } else {
-                valA = 4;
-              }
-              if (b.raw.startsWith("goal")) {
-                valB = 1;
-              } else if (b.raw.startsWith("mech")) {
-                valB = 2;
-              } else if (b.raw.startsWith("board")) {
-                if (b.raw.startsWith("board>shape")) {
-                  valB = 3.1;
-                } else if (b.raw.startsWith("board>connect")) {
-                  valB = 3.2;
-                } else {
-                  valB = 3;
-                }
-              } else {
-                valB = 4;
-              }
-              if (valA === valB) {
-                return a.tag.localeCompare(b.tag);
-              } else {
-                return valA - valB;
-              }
-            });
+            .sort((a, b) =>
+              compareCategoryTagEntries(a, b, i18n.language)
+            );
           return {
             id: metaGame,
             gameName: getGameDisplayName(metaGame),
@@ -277,46 +244,8 @@ function Table({
           full: t(`categories.${cat}.full`),
         };
       })
-      .sort((a, b) => {
-        // goals > mechanics > board > board:shape > board:connect > components
-        let valA, valB;
-        if (a.raw.startsWith("goal")) {
-          valA = 1;
-        } else if (a.raw.startsWith("mech")) {
-          valA = 2;
-        } else if (a.raw.startsWith("board")) {
-          if (a.raw.startsWith("board>shape")) {
-            valA = 3.1;
-          } else if (a.raw.startsWith("board>connect")) {
-            valA = 3.2;
-          } else {
-            valA = 3;
-          }
-        } else {
-          valA = 4;
-        }
-        if (b.raw.startsWith("goal")) {
-          valB = 1;
-        } else if (b.raw.startsWith("mech")) {
-          valB = 2;
-        } else if (b.raw.startsWith("board")) {
-          if (b.raw.startsWith("board>shape")) {
-            valB = 3.1;
-          } else if (b.raw.startsWith("board>connect")) {
-            valB = 3.2;
-          } else {
-            valB = 3;
-          }
-        } else {
-          valB = 4;
-        }
-        if (valA === valB) {
-          return a.tag.localeCompare(b.tag);
-        } else {
-          return valA - valB;
-        }
-      });
-  }, [props.games, t]);
+      .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language));
+  }, [props.games, t, i18n.language]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(

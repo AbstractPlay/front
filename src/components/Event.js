@@ -9,6 +9,7 @@ import { API_ENDPOINT_OPEN } from "../config";
 import { cloneDeep } from "lodash";
 // import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation, Trans } from "react-i18next";
+import { compareStrings } from "../lib/compareStrings";
 import PageHelmet from "./PageHelmet";
 import Modal from "./Modal";
 import Spinner from "./Spinner";
@@ -23,7 +24,7 @@ import { formatUserDisplayName } from "./Bots/botUtils";
 
 function Event() {
   const { eventid } = useParams();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
   const [eventData, eventDataSetter] = useState(null);
@@ -128,7 +129,7 @@ function Event() {
       // registrants
       const playerids = eventData.players.map((p) => p.playerid);
       const regs = allUsers.filter((u) => playerids.includes(u.id));
-      regs.sort((a, b) => a.name.localeCompare(b.name));
+      regs.sort((a, b) => compareStrings(a.name, b.name, i18n.language));
       registrantsSetter(regs);
 
       // canPublish
@@ -162,7 +163,7 @@ function Event() {
       invitedSetter(eventData.event.invited || []);
       blockedSetter(eventData.event.blocked || []);
     }
-  }, [eventData, globalMe, allUsers]);
+  }, [eventData, globalMe, allUsers, i18n.language]);
 
   const handleChangeDate = () => {
     async function putNewDate(date) {
@@ -693,7 +694,9 @@ function Event() {
                     const u = allUsers?.find((u) => u.id === id);
                     return { id, name: u ? u.name : id };
                   })
-                  .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+                  .sort((a, b) =>
+                    compareStrings(a.name ?? "", b.name ?? "", i18n.language)
+                  )
                   .map((u) => (
                     <BotAwareName
                       key={u.id}
@@ -724,7 +727,9 @@ function Event() {
                     const u = allUsers?.find((u) => u.id === id);
                     return { id, name: u ? u.name : id };
                   })
-                  .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+                  .sort((a, b) =>
+                    compareStrings(a.name ?? "", b.name ?? "", i18n.language)
+                  )
                   .map((u) => (
                     <BotAwareName
                       key={u.id}
@@ -1193,7 +1198,7 @@ function Event() {
                     {(allUsers || [])
                       .filter((u) => !u.bot)
                       .sort((a, b) =>
-                        (a.name ?? "").localeCompare(b.name ?? "")
+                        compareStrings(a.name ?? "", b.name ?? "", i18n.language)
                       )
                       .map((u) => (
                         <option key={u.id} value={u.id}>
@@ -1234,7 +1239,7 @@ function Event() {
                     <option value="">{t("Events.admin.selectPlayer")}</option>
                     {(allUsers || [])
                       .sort((a, b) =>
-                        (a.name ?? "").localeCompare(b.name ?? "")
+                        compareStrings(a.name ?? "", b.name ?? "", i18n.language)
                       )
                       .map((u) => (
                         <option key={u.id} value={u.id}>

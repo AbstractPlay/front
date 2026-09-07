@@ -7,6 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../lib/compareStrings";
 import Spinner from "./Spinner";
 import { cloneDeep, debounce } from "lodash";
 import {
@@ -99,7 +100,7 @@ async function parseNewSettingResponse(res) {
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
   const show = props.show;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [changingName, changingNameSetter] = useState(false);
   const [changingEMail, changingEMailSetter] = useState(false);
   const [changingCodeSent, changingCodeSentSetter] = useState(false);
@@ -699,7 +700,9 @@ function UserSettingsModal(props) {
                     --Prefer not to say--
                   </option>
                   {countryCodeList
-                    .sort((a, b) => a.countryName.localeCompare(b.countryName))
+                    .sort((a, b) =>
+                      compareStrings(a.countryName, b.countryName, i18n.language)
+                    )
                     .map((entry) => {
                       return (
                         <option
