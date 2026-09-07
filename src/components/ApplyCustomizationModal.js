@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { getUiLocaleBundleKey } from "../i18n";
 import { cloneDeep } from "lodash";
 import Modal from "./Modal";
 import Thumbnail from "./Thumbnail";
@@ -29,6 +30,7 @@ function ApplyCustomizationModal({
   sourceSettings,
 }) {
   const { t, i18n } = useTranslation();
+  const localeBundleKey = getUiLocaleBundleKey(i18n);
   const globalMe = useStore((state) => state.globalMe);
   const setGlobalMe = useStore((state) => state.setGlobalMe);
 
@@ -50,7 +52,7 @@ function ApplyCustomizationModal({
 
   const allGames = useMemo(
     () => buildGameBrowseEntries({ locale: i18n.language }),
-    [i18n.language]
+    [localeBundleKey, i18n.language]
   );
 
   const goalOptions = useMemo(
@@ -59,8 +61,8 @@ function ApplyCustomizationModal({
         locale: i18n.language,
         labelFor: (cat) => t(`categories.${cat}.full`),
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow i18n.language
-    [allGames, i18n.language]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
+    [allGames, localeBundleKey, i18n.language]
   );
 
   const boardOptions = useMemo(
@@ -69,8 +71,8 @@ function ApplyCustomizationModal({
         locale: i18n.language,
         labelFor: (cat) => t(`categories.${cat}.full`),
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow i18n.language
-    [allGames, i18n.language]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
+    [allGames, localeBundleKey, i18n.language]
   );
 
   const filteredGames = useMemo(
