@@ -64,9 +64,11 @@ function challengeNotificationMessage(i18nKey, metaGame, values) {
 
 function gameEndNotificationMessage(body) {
   const metaGame = metaGameLabel(body.metaGame);
-  const soloEnded =
-    isSoloOnlyGame(body.metaGame) || body.numPlayers === 1;
   const gameLinkTo = `/move/${body.metaGame}/1/${body.gameId}`;
+  const hasOpponent = body.opponentId && body.opponentName;
+  const soloEnded =
+    !hasOpponent &&
+    (isSoloOnlyGame(body.metaGame) || body.numPlayers === 1);
 
   if (soloEnded) {
     return (
@@ -83,15 +85,26 @@ function gameEndNotificationMessage(body) {
     );
   }
 
+  const i18nKey = hasOpponent
+    ? `me.notifications.message.gameEnd_${body.result}_vsOpponent`
+    : "me.notifications.message.gameEnd";
+  const transComponents = {
+    gameLink: <Link to={gameLinkTo} />,
+    ...(hasOpponent
+      ? { opponentLink: <Link to={`/player/${body.opponentId}`} /> }
+      : {}),
+  };
+
   return (
     <>
       <Trans
-        i18nKey="me.notifications.message.gameEnd"
-        context={body.result}
-        values={{ metaGame }}
-        components={{
-          gameLink: <Link to={gameLinkTo} />,
+        i18nKey={i18nKey}
+        context={hasOpponent ? undefined : body.result}
+        values={{
+          metaGame,
+          ...(hasOpponent ? { opponentName: body.opponentName } : {}),
         }}
+        components={transComponents}
       />
       {variantsSuffix(body.metaGame, body.variants)}
     </>
