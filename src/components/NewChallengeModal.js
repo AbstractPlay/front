@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../lib/compareStrings";
 import Spinner from "./Spinner";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useStorageState } from "react-use-storage-state";
@@ -29,7 +30,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const opponent = props.opponent;
   const fixedMetaGame = props.fixedMetaGame;
   const show = props.show;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [error, errorSetter] = useState(null);
   const [metaGame, metaGameSetter] = useState(null);
   const [playerCount, playerCountSetter] = useState(-1);
@@ -625,7 +626,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                                   user.lastSeen >= minSeen)
                             )
                             .sort((a, b) =>
-                              (a.name ?? "").localeCompare(b.name ?? "")
+                              compareStrings(a.name ?? "", b.name ?? "", i18n.language)
                             )
                             .map((item) => {
                               return (

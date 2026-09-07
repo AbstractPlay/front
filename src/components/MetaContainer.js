@@ -10,6 +10,7 @@ import PageHelmet from "./PageHelmet";
 import Table from "./MetaContainer/Table";
 import MetaItem from "./MetaContainer/MetaItem";
 import { listPublicCatalogMetas, getGameDisplayName } from "../lib/gameOptions";
+import { compareStrings } from "../lib/compareStrings";
 import { useStore } from "../stores";
 
 function MetaContainer(props) {
@@ -37,7 +38,7 @@ function MetaContainer(props) {
   const games = useMemo(
     () =>
       listPublicCatalogMetas().sort((a, b) =>
-        getGameDisplayName(a).localeCompare(getGameDisplayName(b), i18n.language)
+        compareStrings(getGameDisplayName(a), getGameDisplayName(b), i18n.language)
       ),
     [i18n.language]
   );

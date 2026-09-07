@@ -6,6 +6,7 @@ import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
+import { compareStrings } from "../../lib/compareStrings";
 
 function Coded() {
   const [user] = useContext(ProfileContext);
@@ -25,7 +26,7 @@ function Coded() {
           id: meta,
           name: getGameDisplayName(meta),
         }))
-        .sort((a, b) => a.name.localeCompare(b.name, i18n.language)),
+        .sort((a, b) => compareStrings(a.name, b.name, i18n.language)),
     [user, i18n.language]
   );
 

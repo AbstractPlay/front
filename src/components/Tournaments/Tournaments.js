@@ -19,6 +19,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../lib/compareStrings";
 import PageHelmet from "../PageHelmet";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
@@ -32,7 +33,7 @@ import {
 import PageLoading from "../shared/PageLoading";
 
 function Tournaments(props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { tab: tabParam, metaGame: metaGameParam } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -292,7 +293,7 @@ function Tournaments(props) {
                 return rec.name;
               }
             })
-            .sort((a, b) => a.localeCompare(b)),
+            .sort((a, b) => compareStrings(a, b, i18n.language)),
         };
         return ret;
       })
@@ -312,6 +313,7 @@ function Tournaments(props) {
     globalMe,
     filterMeta,
     allUsers,
+    i18n.language,
   ]);
 
   const openTournamentsColumnHelper = createColumnHelper();
@@ -375,7 +377,7 @@ function Tournaments(props) {
                   }
                   return { raw: rec.name, display };
                 })
-                .sort((a, b) => a.raw.localeCompare(b.raw))
+                .sort((a, b) => compareStrings(a.raw, b.raw, i18n.language))
                 .map((x) => x.display)
                 .join(", ")}
             </span>
@@ -430,6 +432,7 @@ function Tournaments(props) {
       handleWithdrawTournament,
       t,
       allUsers,
+      i18n.language,
     ]
   );
 
@@ -1050,7 +1053,13 @@ function Tournaments(props) {
                 {[...gameinfo.values()]
                   .filter(isPublicCatalogGame)
                   .filter((rec) => tournamentPlaySupported(rec.uid))
-                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .sort((a, b) =>
+                    compareStrings(
+                      getGameDisplayName(a.uid),
+                      getGameDisplayName(b.uid),
+                      i18n.language
+                    )
+                  )
                   .map((rec) => (
                     <option value={rec.uid} key={"filterMeta" + rec.uid}>
                       {rec.name}

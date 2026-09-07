@@ -8,6 +8,7 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
+import { compareStrings } from "../../lib/compareStrings";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import {
@@ -109,7 +110,7 @@ function GameMoves(props) {
         lst.push([info.uid, getGameDisplayName(info.uid)]);
       }
     }
-    lst.sort((a, b) => a[1].localeCompare(b[1], i18n.language));
+    lst.sort((a, b) => compareStrings(a[1], b[1], i18n.language));
     validGamesSetter(lst);
   }, [i18n.language]);
 

@@ -30,6 +30,8 @@ import { tournamentListPath } from "../../lib/tournamentSections";
 import SoloMetaStatsPanel from "../Stats/SoloMetaStatsPanel";
 import SoloSeedLeaderboard from "../Stats/SoloSeedLeaderboard";
 import { soloPlaySupported } from "../../lib/soloPlay";
+import { compareStrings } from "../../lib/compareStrings";
+import { compareCategoryTagEntries } from "../../lib/gameOptions";
 
 const MetaItem = React.forwardRef(
   (
@@ -54,7 +56,7 @@ const MetaItem = React.forwardRef(
     const [activeSoloModal, activeSoloModalSetter] = useState(false);
     const [initialSoloSeed, initialSoloSeedSetter] = useState("");
     const [localTab, localTabSetter] = useState(DEFAULT_META_TAB);
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const activeTab = syncTabToUrl ? metaTabFromHash(location.hash) : localTab;
 
@@ -147,45 +149,7 @@ const MetaItem = React.forwardRef(
           full: t(`categories.${cat}.full`),
         };
       })
-      .sort((a, b) => {
-        // goals > mechanics > board > board:shape > board:connect > components
-        let valA, valB;
-        if (a.raw.startsWith("goal")) {
-          valA = 1;
-        } else if (a.raw.startsWith("mech")) {
-          valA = 2;
-        } else if (a.raw.startsWith("board")) {
-          if (a.raw.startsWith("board>shape")) {
-            valA = 3.1;
-          } else if (a.raw.startsWith("board>connect")) {
-            valA = 3.2;
-          } else {
-            valA = 3;
-          }
-        } else {
-          valA = 4;
-        }
-        if (b.raw.startsWith("goal")) {
-          valB = 1;
-        } else if (b.raw.startsWith("mech")) {
-          valB = 2;
-        } else if (b.raw.startsWith("board")) {
-          if (b.raw.startsWith("board>shape")) {
-            valB = 3.1;
-          } else if (b.raw.startsWith("board>connect")) {
-            valB = 3.2;
-          } else {
-            valB = 3;
-          }
-        } else {
-          valB = 4;
-        }
-        if (valA === valB) {
-          return a.tag.localeCompare(b.tag);
-        } else {
-          return valA - valB;
-        }
-      })
+      .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language))
       .filter(
         (obj) => !obj.raw.endsWith(">rect") && !obj.raw.endsWith(">simple")
       );
@@ -406,7 +370,9 @@ const MetaItem = React.forwardRef(
                             <span style={{ fontSize: "smaller" }}>
                               {allUsers
                                 .filter((u) => u.stars?.includes(game.uid))
-                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .sort((a, b) =>
+                                  compareStrings(a.name, b.name, i18n.language)
+                                )
                                 .map((u) => (
                                   <Link to={`/player/${u.id}`}>{u.name}</Link>
                                 ))

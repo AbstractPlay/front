@@ -5,6 +5,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { TournamentContext } from "../Player";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../../lib/compareStrings";
 
 function Tournaments() {
   const [tourneys] = useContext(TournamentContext);
@@ -69,7 +70,11 @@ function Tournaments() {
           </>
         ),
         sortingFn: (rowA, rowB, columnID) => {
-          return rowA.original.gameName.localeCompare(rowB.original.gameName);
+          return compareStrings(
+            rowA.original.gameName,
+            rowB.original.gameName,
+            i18n.language
+          );
         },
       }),
       columnHelper.accessor("place", {
@@ -88,7 +93,7 @@ function Tournaments() {
         cell: (props) => formatter.format(props.getValue()),
       }),
     ],
-    [columnHelper, t, formatter]
+    [columnHelper, t, formatter, i18n.language]
   );
 
   return (

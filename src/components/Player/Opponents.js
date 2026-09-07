@@ -14,6 +14,7 @@ import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../../lib/compareStrings";
 
 function Opponents({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
@@ -25,7 +26,7 @@ function Opponents({ handleChallenge }) {
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [hIndex, hIndexSetter] = useState(null);
   const [ptile, ptileSetter] = useState(null);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -143,7 +144,7 @@ function Opponents({ handleChallenge }) {
                 const nameB = allUsers?.find(
                   (u) => u.id === rowB.getValue(columnID)
                 ).name;
-                return nameA.localeCompare(nameB);
+                return compareStrings(nameA, nameB, i18n.language);
               },
             }),
             columnHelper.accessor("count", {
@@ -192,6 +193,7 @@ function Opponents({ handleChallenge }) {
       allUsers,
       closeChallengeModal,
       t,
+      i18n.language,
     ]
   );
 

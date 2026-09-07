@@ -14,6 +14,7 @@ import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../../lib/compareStrings";
 
 function showMilliseconds(ms) {
   let positive = true;
@@ -55,7 +56,7 @@ function TheirTurnTable(props) {
     "dashboard-tables-theirs-show",
     10
   );
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -147,7 +148,7 @@ function TheirTurnTable(props) {
         sortingFn: (rowA, rowB, columnID) => {
           const nameA = rowA.getValue(columnID)[0].name;
           const nameB = rowB.getValue(columnID)[0].name;
-          return nameA.localeCompare(nameB);
+          return compareStrings(nameA, nameB, i18n.language);
         },
       }),
       columnHelper.accessor("gameStarted", {
@@ -180,7 +181,7 @@ function TheirTurnTable(props) {
             : showMilliseconds(props.getValue()),
       }),
     ],
-    [columnHelper, connections, allUsers, t]
+    [columnHelper, connections, allUsers, t, i18n.language]
   );
 
   const table = useReactTable({

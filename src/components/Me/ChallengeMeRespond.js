@@ -14,6 +14,7 @@ import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
 import ChallengeResponseModal from "./ChallengeResponseModal";
 import { useTranslation } from "react-i18next";
+import { compareStrings } from "../../lib/compareStrings";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 
@@ -28,7 +29,7 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
     "dashboard-tables-challenges-show",
     10
   );
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -97,8 +98,10 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
         ),
         invertSorting: true,
         sortingFn: (rowA, rowB, columnID) => {
-          return rowA.original.challenger.name.localeCompare(
-            rowB.original.challenger.name
+          return compareStrings(
+            rowA.original.challenger.name,
+            rowB.original.challenger.name,
+            i18n.language
           );
         },
       }),
@@ -146,7 +149,7 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
         ),
       }),
     ],
-    [columnHelper, activeChallengeModal, handleChallengeResponse, allUsers, t]
+    [columnHelper, activeChallengeModal, handleChallengeResponse, allUsers, t, i18n.language]
   );
 
   const table = useReactTable({
