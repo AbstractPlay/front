@@ -4781,7 +4781,7 @@
   },
   "me.notifications.message.gameEnd_draw_vsOpponent": {
     "src": "Your game of <gameLink>{{metaGame}}</gameLink> against <opponentLink>{{opponentName}}</opponentLink> ended in a draw",
-    "out": "Deine Partie <gameLink>{{metaGame}}</gameLink> gegen <opponentLink>{{opponentName}}</opponentLink> endete unentschieden"
+    "out": "Deine Partie <gameLink>{{metaGame}}</gameLink> gegen <opponentLink>{{opponentName}}</opponentLink> endete unentschieden."
   },
   "me.notifications.message.gameEnd_lose": {
     "src": "You lost your game of <gameLink>{{metaGame}}</gameLink>",
@@ -4789,7 +4789,11 @@
   },
   "me.notifications.message.gameEnd_lose_vsOpponent": {
     "src": "You lost your game of <gameLink>{{metaGame}}</gameLink> to <opponentLink>{{opponentName}}</opponentLink>",
-    "out": "Du hast deine Partie <gameLink>{{metaGame}}</gameLink> gegen <opponentLink>{{opponentName}}</opponentLink> verloren"
+    "out": "Du hast deine Partie <gameLink>{{metaGame}}</gameLink> gegen <opponentLink>{{opponentName}}</opponentLink> verloren."
+  },
+  "me.notifications.message.gameEnd_scores": {
+    "src": "Final scores were as follows: {{scores}}.",
+    "out": "Das Endergebnis war wie folgt: {{scores}}."
   },
   "me.notifications.message.gameEnd_solo": {
     "src": "Your <gameLink>{{metaGame}}</gameLink> game has ended",
@@ -4801,7 +4805,7 @@
   },
   "me.notifications.message.gameEnd_win_vsOpponent": {
     "src": "You won your game of <gameLink>{{metaGame}}</gameLink> against <opponentLink>{{opponentName}}</opponentLink>",
-    "out": "Du hast deine Partie <gameLink>{{metaGame}}</gameLink> gegen <opponentLink>{{opponentName}}</opponentLink> gewonnen"
+    "out": "Du hast deine Partie <gameLink>{{metaGame}}</gameLink> gegen <opponentLink>{{opponentName}}</opponentLink> gewonnen."
   },
   "me.notifications.message.gameStart": {
     "src": "{{opponentName}} started a game of <gameLink>{{metaGame}}</gameLink> with you",

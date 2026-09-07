@@ -62,6 +62,21 @@ function challengeNotificationMessage(i18nKey, metaGame, values) {
   );
 }
 
+function gameEndScoresSuffix(body) {
+  if (!Array.isArray(body.scores) || body.scores.length === 0) {
+    return null;
+  }
+  return (
+    <>
+      {" "}
+      <Trans
+        i18nKey="me.notifications.message.gameEnd_scores"
+        values={{ scores: body.scores.map(String).join(", ") }}
+      />
+    </>
+  );
+}
+
 function gameEndNotificationMessage(body) {
   const metaGame = metaGameLabel(body.metaGame);
   const gameLinkTo = `/move/${body.metaGame}/1/${body.gameId}`;
@@ -81,6 +96,7 @@ function gameEndNotificationMessage(body) {
           }}
         />
         {variantsSuffix(body.metaGame, body.variants)}
+        {gameEndScoresSuffix(body)}
       </>
     );
   }
@@ -107,6 +123,7 @@ function gameEndNotificationMessage(body) {
         components={transComponents}
       />
       {variantsSuffix(body.metaGame, body.variants)}
+      {gameEndScoresSuffix(body)}
     </>
   );
 }
