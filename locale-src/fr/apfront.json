@@ -3687,6 +3687,82 @@
     "src": "Add Replacement",
     "out": "Ajouter un remplacement"
   },
+  "customize.applyClearSelection": {
+    "src": "Clear selection",
+    "out": "Effacer la sélection"
+  },
+  "customize.applyConfirmAction": {
+    "src": "Apply",
+    "out": "Appliquer"
+  },
+  "customize.applyDone": {
+    "src": "Applied to {{success}} of {{total}} game(s).",
+    "out": "Appliqué à {{success}} sur {{total}} jeu(x)."
+  },
+  "customize.applyFailures": {
+    "src": "Failed for: {{games}}",
+    "out": "Échec pour : {{games}}"
+  },
+  "customize.applyHasCustomization": {
+    "src": "Customized",
+    "out": "Personnalisé"
+  },
+  "customize.applyIntro": {
+    "src": "Copy selected sections from the current saved customization to other games.",
+    "out": "Copiez les sections sélectionnées de la personnalisation actuellement enregistrée vers d'autres jeux."
+  },
+  "customize.applyOverwriteWarning": {
+    "src": "This will overwrite selected sections on {{count}} game(s) that already have customizations.",
+    "out": "Cela écrasera les sections sélectionnées sur {{count}} jeu(x) qui ont déjà des personnalisations."
+  },
+  "customize.applyProgress": {
+    "src": "Saving… {{done}} / {{total}}",
+    "out": "Enregistrement… {{done}} / {{total}}"
+  },
+  "customize.applySaveFirst": {
+    "src": "Save your changes before applying to other games.",
+    "out": "Enregistrez vos modifications avant de les appliquer à d'autres jeux."
+  },
+  "customize.applySections.colourContext": {
+    "src": "Board colours",
+    "out": "Couleurs du plateau"
+  },
+  "customize.applySections.customCss": {
+    "src": "Custom CSS",
+    "out": "CSS personnalisé"
+  },
+  "customize.applySections.glyphmap": {
+    "src": "Glyph replacements",
+    "out": "Remplacements de glyphes"
+  },
+  "customize.applySections.palette": {
+    "src": "Player colours (palette)",
+    "out": "Couleurs des joueurs (palette)"
+  },
+  "customize.applySections.preferredColour": {
+    "src": "Preferred colour",
+    "out": "Couleur préférée"
+  },
+  "customize.applySectionsLabel": {
+    "src": "Sections to copy",
+    "out": "Sections à copier"
+  },
+  "customize.applySelectCustomized": {
+    "src": "Select games I customized",
+    "out": "Sélectionner les jeux que j'ai personnalisés"
+  },
+  "customize.applySelectFiltered": {
+    "src": "Select filtered",
+    "out": "Sélectionner les éléments filtrés"
+  },
+  "customize.applySelectedCount": {
+    "src": "{{count}} game(s) selected",
+    "out": "{{count}} jeu(x) sélectionné(s)"
+  },
+  "customize.applyToOtherGames": {
+    "src": "Apply to other games…",
+    "out": "Appliquer à d'autres jeux…"
+  },
   "customize.atScale": {
     "src": "at scale",
     "out": "à l'échelle"
@@ -3759,6 +3835,26 @@
     "src": "Strokes",
     "out": "Tracés"
   },
+  "customize.customCss": {
+    "src": "Custom CSS",
+    "out": "CSS personnalisé"
+  },
+  "customize.customCssConfiguredActive": {
+    "src": "Active",
+    "out": "Actif"
+  },
+  "customize.customCssConfiguredInactive": {
+    "src": "Inactive",
+    "out": "Inactif"
+  },
+  "customize.customCssHelp": {
+    "src": "Stored in your account when you save. Targets board elements via div._meta_<game> selectors. Legacy device-only CSS from the board toolbar is imported here automatically when present.",
+    "out": "Stocké sur votre compte lorsque vous enregistrez. Cible les éléments du plateau via les sélecteurs div._meta_<game>. L'ancien CSS propre à l'appareil provenant de la barre d'outils du plateau est importé ici automatiquement lorsqu'il est présent."
+  },
+  "customize.customCssImportedTag": {
+    "src": "Imported",
+    "out": "Importé"
+  },
   "customize.defaultSwatch": {
     "src": "Default",
     "out": "Par défaut"
@@ -3782,6 +3878,10 @@
   "customize.glyphReplacements": {
     "src": "Glyph Replacements",
     "out": "Remplacement de glyphes"
+  },
+  "customize.importedLegacyCss": {
+    "src": "Imported CSS from this device. Save to store in your account.",
+    "out": "CSS importé depuis cet appareil. Enregistrez pour le stocker sur votre compte."
   },
   "customize.output": {
     "src": "Output",
@@ -4059,6 +4159,10 @@
     "src": ", post-game",
     "out": ", d'après-partie"
   },
+  "gameMove.dev.accountCssOverridesLocal": {
+    "src": "Custom CSS from your account (Customize screen) is active for this game. Changes here are saved on this device only and will not apply until account CSS is removed.",
+    "out": "Le CSS personnalisé de votre compte (écran Personnaliser) est actif pour ce jeu. Les modifications apportées ici ne sont enregistrées que sur cet appareil et ne s'appliqueront pas tant que le CSS du compte n'aura pas été supprimé."
+  },
   "gameMove.dev.activateCustomCss": {
     "src": "Activate custom CSS?",
     "out": "Activer le CSS personnalisé ?"
@@ -4080,8 +4184,8 @@
     "out": "Il est possible de personnaliser le CSS de toutes les instances de cette partie en particulier. <1>Ce n'est pas une action à prendre à la légère !</1> N'injectez pas de code que vous ne comprenez pas ou qui n'a pas été vérifié par une personne de confiance. Abstract Play et ses développeurs ne sont pas responsables des incidents pouvant survenir lors de l'utilisation de cette fonctionnalité."
   },
   "gameMove.dev.customCssWarning2": {
-    "src": "If you are certain you wish to continue, paste the CSS code below and click Save. If everything blows up, open the developer console and clear the local storage key <1>custom-css</1>, and that should reset everything. See the wiki for documentation, and join us on Discord to discuss.",
-    "out": "Si vous êtes certain(e) de vouloir continuer, collez le code CSS ci-dessous et cliquez sur Enregistrer. Si tout plante, ouvrez la console développeur et effacez la clé de stockage local <1>custom-css</1>, ce qui devrait tout réinitialiser. Consultez le wiki pour la documentation, et rejoignez-nous sur Discord pour en discuter."
+    "src": "If you are certain you wish to continue, paste the CSS code below and click Save. CSS saved in Customize (paintbrush) is stored in your account and overrides this device-only editor. To reset legacy device CSS, clear the local storage key <1>custom-css</1>. See the wiki for documentation, and join us on Discord to discuss.",
+    "out": "Si vous êtes certain de vouloir continuer, collez le code CSS ci-dessous et cliquez sur Enregistrer. Le CSS enregistré dans Personnaliser (pinceau) est stocké sur votre compte et remplace cet éditeur propre à cet appareil. Pour réinitialiser l'ancien CSS de l'appareil, effacez la clé de stockage local <1>custom-css</1>. Consultez le wiki pour la documentation et rejoignez-nous sur Discord pour en discuter."
   },
   "gameMove.dev.debugIntro": {
     "src": "If there's a problem with your game, a developer may ask you to come to this page and send them the current game state. You can either click the \"Copy\" link below to copy the text to your clipboard and then paste it somewhere, or you can click the \"Download\" button to save a text file to your computer, which you can then send to the developers. Thank you!",

@@ -5,9 +5,12 @@ import { render, renderglyph, sheets } from "@abstractplay/renderer";
 import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
 import { coloursEqual, resolveCustomizePreviewPalette } from "../lib/resolveEffectivePalette.js";
+import { shouldImportLegacyCustomCss } from "../lib/resolveEffectiveCustomCss.js";
 import { useStore } from "../stores";
 import { isEqual, cloneDeep, debounce } from "lodash";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
+import { useStorageState } from "react-use-storage-state";
+import ApplyCustomizationModal from "./ApplyCustomizationModal";
 const patternNames = [
   "microbial",
   "chevrons",
@@ -201,6 +204,16 @@ function Customize(props) {
   const [selectedReplacementGlyph, setSelectedReplacementGlyph] = useState("");
   const [selectedScale, setSelectedScale] = useState("1");
 
+  const [customCssText, setCustomCssText] = useState("");
+  const [customCssActive, setCustomCssActive] = useState(true);
+  const [customCssOpen, setCustomCssOpen] = useState(false);
+  const [importedLegacyCss, setImportedLegacyCss] = useState(false);
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [legacyCustomCSS, legacyCustomCSSSetter] = useStorageState(
+    "custom-css",
+    {}
+  );
+
   const presetColors = [
     "#e31a1c",
     "#1f78b4",
@@ -315,6 +328,9 @@ function Customize(props) {
     if (preferredColour) {
       settings.preferredColour = preferredColour;
     }
+    if (customCssText.trim()) {
+      settings.customCss = { css: customCssText, active: customCssActive };
+    }
     return JSON.stringify(settings, null, 2);
   }, [
     background,
@@ -327,6 +343,8 @@ function Customize(props) {
     palette,
     glyphMap,
     preferredColour,
+    customCssText,
+    customCssActive,
   ]);
 
   const [settingsInput, setSettingsInput] = useState(settingsJson);
@@ -357,6 +375,13 @@ function Customize(props) {
       setPalette(settings.palette || []);
       setGlyphMap(settings.glyphmap || []);
       setPreferredColour(settings.preferredColour || null);
+      if (settings.customCss) {
+        setCustomCssText(settings.customCss.css ?? "");
+        setCustomCssActive(settings.customCss.active !== false);
+      } else {
+        setCustomCssText("");
+        setCustomCssActive(true);
+      }
     } else if (globalMe?.customizations?._default) {
       const settings = globalMe.customizations._default;
       const sys_ctx = globalColourContext || {};
@@ -373,6 +398,13 @@ function Customize(props) {
       setPalette(settings.palette || []);
       setGlyphMap(settings.glyphmap || []);
       setPreferredColour(settings.preferredColour || null);
+      if (settings.customCss) {
+        setCustomCssText(settings.customCss.css ?? "");
+        setCustomCssActive(settings.customCss.active !== false);
+      } else {
+        setCustomCssText("");
+        setCustomCssActive(true);
+      }
     } else if (globalColourContext) {
       if (globalColourContext.background)
         setBackground(globalColourContext.background);
@@ -388,8 +420,38 @@ function Customize(props) {
       setPalette([]);
       setGlyphMap([]);
       setPreferredColour(null);
+      setCustomCssText("");
+      setCustomCssActive(true);
     }
+    setImportedLegacyCss(false);
   }, [globalMe, metaGame, globalColourContext]);
+
+  useEffect(() => {
+    if (
+      scope !== "game" ||
+      !providedMetaGame ||
+      providedMetaGame === "_default" ||
+      !legacyCustomCSS
+    ) {
+      return;
+    }
+    const localEntry = legacyCustomCSS[providedMetaGame];
+    if (
+      shouldImportLegacyCustomCss(globalMe, providedMetaGame, localEntry)
+    ) {
+      setCustomCssText(localEntry.css ?? "");
+      setCustomCssActive(localEntry.active !== false);
+      setImportedLegacyCss(true);
+      setIsDirty(true);
+      setCustomCssOpen(true);
+    }
+  }, [
+    scope,
+    providedMetaGame,
+    legacyCustomCSS,
+    globalMe,
+    metaGame,
+  ]);
 
   useEffect(() => {
     if (firstUpdate.current) {
@@ -452,6 +514,13 @@ function Customize(props) {
         setPreferredColour(parsed.preferredColour);
       } else {
         setPreferredColour(null);
+      }
+      if (parsed.customCss && typeof parsed.customCss === "object") {
+        setCustomCssText(parsed.customCss.css ?? "");
+        setCustomCssActive(parsed.customCss.active !== false);
+      } else {
+        setCustomCssText("");
+        setCustomCssActive(true);
       }
       setSettingsError(null);
       debouncedSetError.cancel();
@@ -575,6 +644,12 @@ function Customize(props) {
       });
       if (res && res.status === 200) {
         setIsDirty(false);
+        setImportedLegacyCss(false);
+        if (legacyCustomCSS?.[metaGame]) {
+          const newobj = { ...legacyCustomCSS };
+          delete newobj[metaGame];
+          legacyCustomCSSSetter(newobj);
+        }
         if (globalMe) {
           const newMe = cloneDeep(globalMe);
           if (!newMe.customizations) {
@@ -625,6 +700,13 @@ function Customize(props) {
       setPalette(settings.palette || []);
       setGlyphMap(settings.glyphmap || []);
       setPreferredColour(settings.preferredColour || null);
+      if (settings.customCss) {
+        setCustomCssText(settings.customCss.css ?? "");
+        setCustomCssActive(settings.customCss.active !== false);
+      } else {
+        setCustomCssText("");
+        setCustomCssActive(true);
+      }
     } else if (globalColourContext) {
       // Reset to system defaults
       const sys_ctx = globalColourContext;
@@ -638,8 +720,31 @@ function Customize(props) {
       setPalette([]);
       setGlyphMap([]);
       setPreferredColour(null);
+      setCustomCssText("");
+      setCustomCssActive(true);
     }
   };
+
+  useEffect(() => {
+    const styleId = "customize-preview-css";
+    let styleEl = document.getElementById(styleId);
+    if (customCssActive && customCssText.trim()) {
+      if (!styleEl) {
+        styleEl = document.createElement("style");
+        styleEl.id = styleId;
+        document.head.appendChild(styleEl);
+      }
+      styleEl.textContent = customCssText;
+    } else if (styleEl) {
+      styleEl.remove();
+    }
+    return () => {
+      const el = document.getElementById(styleId);
+      if (el) {
+        el.remove();
+      }
+    };
+  }, [customCssText, customCssActive]);
 
   useEffect(() => {
     const divId = "renderer-demo-output";
@@ -1251,13 +1356,114 @@ function Customize(props) {
           <label className="label">{t("customize.output")}</label>
           <div
             id="renderer-demo-output"
+            className={
+              metaGame && metaGame !== "_default"
+                ? `board _meta_${metaGame}`
+                : undefined
+            }
             style={{
-              border: "1px solid #ccc",
+              border: "1px solid var(--tag-background-color)",
               minHeight: "200px",
               backgroundColor: background,
               padding: "10px",
             }}
           ></div>
+        </div>
+      </div>
+      <div className="columns">
+        <div className="column is-full">
+          <div
+            style={{
+              marginBottom: "1em",
+              border: "1px solid var(--tag-background-color)",
+              borderRadius: "4px",
+              background: "var(--main-bg-color)",
+            }}
+          >
+            <button
+              type="button"
+              className="button is-small apButtonNeutral is-fullwidth"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                border: "none",
+                borderRadius: "4px",
+              }}
+              aria-expanded={customCssOpen}
+              onClick={() => setCustomCssOpen((open) => !open)}
+            >
+              <span
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5em",
+                  minWidth: 0,
+                }}
+              >
+                <span>{t("customize.customCss")}</span>
+                {customCssText.trim() ? (
+                  <span
+                    className="tag is-light is-size-7"
+                    style={{ color: "var(--secondary-font-color)" }}
+                  >
+                    {customCssActive
+                      ? t("customize.customCssConfiguredActive")
+                      : t("customize.customCssConfiguredInactive")}
+                  </span>
+                ) : null}
+                {importedLegacyCss ? (
+                  <span className="tag is-warning is-size-7">
+                    {t("customize.customCssImportedTag")}
+                  </span>
+                ) : null}
+              </span>
+              <span className="icon is-small" aria-hidden="true">
+                <i
+                  className={`fa fa-chevron-${
+                    customCssOpen ? "down" : "right"
+                  }`}
+                />
+              </span>
+            </button>
+            {customCssOpen && (
+              <div style={{ padding: "0.75em" }}>
+                <div className="content is-size-7">
+                  <p>
+                    <Trans
+                      i18nKey="gameMove.dev.customCssWarning1"
+                      components={[<strong key="strong" />]}
+                    />
+                  </p>
+                  <p>{t("customize.customCssHelp")}</p>
+                </div>
+                {importedLegacyCss ? (
+                  <p className="help mb-2">{t("customize.importedLegacyCss")}</p>
+                ) : null}
+                <div className="field">
+                  <div className="control">
+                    <textarea
+                      className="textarea is-small"
+                      rows="8"
+                      value={customCssText}
+                      placeholder={t("gameMove.dev.pasteCssPlaceholder")}
+                      onChange={(e) => setCustomCssText(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="field">
+                  <label className="checkbox">
+                    <input
+                      type="checkbox"
+                      checked={customCssActive}
+                      onChange={(e) => setCustomCssActive(e.target.checked)}
+                    />{" "}
+                    {t("gameMove.dev.activateCustomCss")}
+                  </label>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <div className="columns">
@@ -1295,6 +1501,20 @@ function Customize(props) {
               {t("customize.resetToDefaults")}
             </button>
           </div>
+          {providedMetaGame && providedMetaGame !== "_default" ? (
+            <div className="control">
+              <button
+                className="button is-small apButtonNeutral"
+                onClick={() => setShowApplyModal(true)}
+                disabled={isDirty}
+                title={
+                  isDirty ? t("customize.applySaveFirst") : undefined
+                }
+              >
+                {t("customize.applyToOtherGames")}
+              </button>
+            </div>
+          ) : null}
           <div className="control">
             <button
               className="button is-small apButtonAlert"
@@ -1306,6 +1526,16 @@ function Customize(props) {
           </div>
         </div>
       </div>
+      <ApplyCustomizationModal
+        show={showApplyModal}
+        onClose={() => setShowApplyModal(false)}
+        sourceMetaGame={providedMetaGame}
+        sourceSettings={
+          showApplyModal && !isDirty
+            ? JSON.parse(settingsJson)
+            : null
+        }
+      />
     </div>
   );
 }
