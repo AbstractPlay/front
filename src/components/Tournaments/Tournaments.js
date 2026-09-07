@@ -19,7 +19,7 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import { useTranslation } from "react-i18next";
-import { compareStrings } from "../lib/compareStrings";
+import { compareStrings } from "../../lib/compareStrings";
 import PageHelmet from "../PageHelmet";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
