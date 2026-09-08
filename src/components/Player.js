@@ -15,6 +15,7 @@ import PageHelmet from "./PageHelmet";
 import Spinner from "./Spinner";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
+import UserIdenticon from "./UserIdenticon";
 import PlayerAboutSection, {
   aboutTextPlainSnippet,
 } from "./PlayerAboutSection";
@@ -276,16 +277,18 @@ function Player() {
               player: formatUserDisplayName(user, allUsers),
             })}
           </h1>
-          <div className="subtitle has-text-centered">
+          <div className="player-profile-meta">
+            <UserIdenticon
+              userId={user.id}
+              size={36}
+              className="player-profile-identicon"
+            />
             {user.country === undefined ? null : (
-              <>
-                <Flag code={user.country} size="l" />
-                &emsp;
-              </>
+              <Flag code={user.country} size="m" />
             )}
-            <ActivityMarker lastSeen={user.lastSeen} />
+            <ActivityMarker lastSeen={user.lastSeen} size="m" />
             {user.bggid === undefined || /^\s*$/.test(user.bggid) ? null : (
-              <span style={{ fontSize: "smaller", marginLeft: "1em" }}>
+              <span className="player-profile-bgg">
                 <a
                   href={`https://boardgamegeek.com/user/${user.bggid}`}
                   target="_blank"

@@ -1,30 +1,30 @@
 import { identiconGrid, identiconHue } from "../lib/userIdenticon";
 
-const VIEW_SIZE = 40;
-const CELL_SIZE = VIEW_SIZE / 5;
+const DEFAULT_SIZE = 40;
 
-function UserIdenticon({ userId, className = "" }) {
+function UserIdenticon({ userId, className = "", size = DEFAULT_SIZE }) {
   if (!userId) {
     return null;
   }
 
   const hue = identiconHue(userId);
   const grid = identiconGrid(userId);
+  const cellSize = size / 5;
   const classNames = ["nav-avatar-identicon", className].filter(Boolean).join(" ");
 
   return (
     <svg
       className={classNames}
       style={{ "--identicon-hue": hue }}
-      width={VIEW_SIZE}
-      height={VIEW_SIZE}
-      viewBox={`0 0 ${VIEW_SIZE} ${VIEW_SIZE}`}
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
       aria-hidden="true"
     >
       <rect
         className="nav-avatar-identicon-bg"
-        width={VIEW_SIZE}
-        height={VIEW_SIZE}
+        width={size}
+        height={size}
       />
       {grid.flatMap((row, rowIndex) =>
         row.map((filled, colIndex) =>
@@ -32,10 +32,10 @@ function UserIdenticon({ userId, className = "" }) {
             <rect
               key={`${rowIndex}-${colIndex}`}
               className="nav-avatar-identicon-cell"
-              x={colIndex * CELL_SIZE}
-              y={rowIndex * CELL_SIZE}
-              width={CELL_SIZE}
-              height={CELL_SIZE}
+              x={colIndex * cellSize}
+              y={rowIndex * cellSize}
+              width={cellSize}
+              height={cellSize}
             />
           ) : null
         )
