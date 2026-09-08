@@ -1870,6 +1870,40 @@ span.hardTime::after {
     color: var(--main-font-color);
   }
 
+  #playerProfile .player-profile-meta {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin: 0 auto 0.5rem;
+    width: 100%;
+  }
+
+  #playerProfile .player-profile-identicon {
+    border: 1px solid var(--tag-background-color);
+    border-radius: 50%;
+    display: block;
+    flex-shrink: 0;
+    height: 36px;
+    overflow: hidden;
+    width: 36px;
+  }
+
+  #playerProfile .player-profile-meta .flag.size-m {
+    height: 30px;
+    width: 40px;
+  }
+
+  #playerProfile .player-profile-meta .orb.size-m {
+    height: 36px;
+    width: 36px;
+  }
+
+  #playerProfile .player-profile-bgg {
+    font-size: smaller;
+  }
+
   #playerProfile .player-profile-tabs {
     margin-bottom: 1rem;
   }
