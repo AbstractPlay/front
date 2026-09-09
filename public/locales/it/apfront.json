@@ -1954,5 +1954,38 @@
       "nothingToPreview": "Niente da mostrare in anteprima per ora."
     }
   },
-  "Wikipedia": "Wikipedia"
+  "Wikipedia": "Wikipedia",
+  "profile": {
+    "avatar": {
+      "title": "Avatar",
+      "current": "Attuale",
+      "preview": "Anteprima",
+      "styleLabel": "Stile",
+      "seedLabel": "Seed",
+      "seedHelp": "Per impostazione predefinita viene utilizzato il tuo ID utente. Modifica il seed per ottenere un'immagine diversa nello stesso stile.",
+      "randomize": "Genera seed casuale",
+      "resetDefault": "Ripristina predefinito",
+      "save": "Salva avatar",
+      "saveSuccess": "Avatar salvato.",
+      "saveFailed": "Impossibile salvare l'avatar.",
+      "licenseNote": "Gli avatar sono generati da DiceBear. Alcuni stili richiedono l'attribuzione — vedi",
+      "style": {
+        "blobs": "Blobs",
+        "glass": "Vetro",
+        "rings": "Anelli",
+        "identicon": "Identicon",
+        "initial-face": "Faccia iniziale",
+        "patchwork": "Patchwork",
+        "shape-grid": "Griglia di forme",
+        "shapes": "Forme",
+        "waves": "Onde",
+        "cameo": "Cammeo",
+        "clay": "Argilla",
+        "cutouts": "Ritagli",
+        "constellation": "Costellazione",
+        "landscape": "Paesaggio",
+        "planets": "Pianeti"
+      }
+    }
+  }
 }

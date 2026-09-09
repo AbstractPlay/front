@@ -38,6 +38,7 @@ import {
 } from "../subscription";
 import { toast } from "react-toastify";
 import LanguageSelect from "./LanguageSelect";
+import AvatarPicker from "./AvatarPicker";
 import { COMMUNICATION_LANGUAGES } from "../i18n";
 import {
   defaultEmailNotifications,
@@ -572,6 +573,14 @@ function UserSettingsModal(props) {
               </Fragment>
             )}
           </div>
+          {/********************* avatar *********************/}
+          {globalMe === null ? null : (
+            <AvatarPicker
+              userId={globalMe.id}
+              globalMe={globalMe}
+              onSaved={() => updatedSetter((updated) => updated + 1)}
+            />
+          )}
           {/********************* e-mail *********************/}
           <div className="field" key="email">
             <label className="label" htmlFor="user_settings_email">
