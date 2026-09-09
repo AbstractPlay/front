@@ -56,6 +56,8 @@ If the backend returns an incomplete profile, [`NewProfile.js`](../src/component
 
 Email changes go through Amplify v6 attribute APIs (`updateUserAttribute`, `confirmUserAttribute`) in `UserSettingsModal`, not the node-backend `authQuery` layer.
 
+Avatar customization (DiceBear style + seed) is saved via `update_user_settings` as `settings.all.profile.avatar` and mirrored on the public user list for player profiles. See User Settings → Avatar in [`UserSettingsModal.js`](../src/components/UserSettingsModal.js) and [`UserAvatar.js`](../src/components/UserAvatar.js).
+
 ## Cognito setup (ops)
 
 Pool configuration, callback URLs, and identity providers are documented in [Backend deployment](/backend/deployment/). Dev and prod use separate pools; tokens are not interchangeable across stages.
