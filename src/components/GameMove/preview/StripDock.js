@@ -23,7 +23,7 @@ function StripDock({ session }) {
 
   return (
     <div
-      className={`game-move-beta--strip__dock game-move-strip-dock${
+      className={`game-move-layout--strip__dock game-move-strip-dock${
         expanded ? " is-expanded" : ""
       }`}
     >
