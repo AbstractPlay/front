@@ -5,11 +5,16 @@ import { getPlayerClockChips } from "./moveEntryUtils";
 import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
 import LastMoveChip from "./LastMoveChip";
+import LayoutPickerTrigger from "../LayoutPickerTrigger";
+
+const MOBILE_PANEL_MAX_WIDTH = 768;
 
 function StripContextStrip({ session, layoutContext }) {
   const { t, handleNextGame, game, toMove, metaGame } = session;
   const users = useStore((state) => state.users);
   const [now, setNow] = useState(Date.now());
+  const compact =
+    (session.screenWidth ?? MOBILE_PANEL_MAX_WIDTH) <= MOBILE_PANEL_MAX_WIDTH;
 
   const {
     gameName,
@@ -90,6 +95,7 @@ function StripContextStrip({ session, layoutContext }) {
             onNextGame={handleNextGame}
           />
         ) : null}
+        <LayoutPickerTrigger compact={compact} />
       </div>
     </header>
   );

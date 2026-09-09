@@ -129,7 +129,7 @@ function resolveDrawerTab(session, preferredTab = "status") {
   return preferredTab;
 }
 
-export function GameMoveBetaDrawer({
+export function GameMoveDrawer({
   session,
   defaultTab = "status",
   defaultOpen = false,
@@ -171,8 +171,8 @@ export function GameMoveBetaDrawer({
   };
 
   return (
-    <div className={`game-move-beta-drawer${open ? " is-open" : ""}`}>
-      <div className="game-move-beta-drawer__tabs" role="tablist">
+    <div className={`game-move-drawer${open ? " is-open" : ""}`}>
+      <div className="game-move-drawer__tabs" role="tablist">
         {DRAWER_TABS.map((id) => {
           if (id === "status" && !hasStatusContent(session)) return null;
           return (
@@ -181,7 +181,7 @@ export function GameMoveBetaDrawer({
               type="button"
               role="tab"
               aria-selected={open && tab === id}
-              className={`button is-small game-move-beta-drawer__tab${
+              className={`button is-small game-move-drawer__tab${
                 open && tab === id ? " apButton" : " apButtonNeutral"
               }`}
               onClick={() => {
@@ -196,7 +196,7 @@ export function GameMoveBetaDrawer({
               {tabLabel(id)}
               {id === "chat" && hasChatUnread ? (
                 <span
-                  className="game-move-beta-drawer__tab-badge"
+                  className="game-move-drawer__tab-badge"
                   aria-label={t("gameMove.layout.chatUnread")}
                 />
               ) : null}
@@ -205,7 +205,7 @@ export function GameMoveBetaDrawer({
         })}
       </div>
       {open ? (
-        <div className="game-move-beta-drawer__panel" role="tabpanel">
+        <div className="game-move-drawer__panel" role="tabpanel">
           {tab === "status" ? (
             <GameMoveStatusSection session={session} />
           ) : null}

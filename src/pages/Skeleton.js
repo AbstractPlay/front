@@ -13,8 +13,9 @@ import { REAL_MODE } from "../lib/realMode";
 import { redirectToSignIn } from "../lib/amplifyAuth";
 import Spinner from "../components/Spinner";
 import Welcome from "./Welcome";
-import GameMoveWrapper from "../components/GameMoveWrapper";
-import GameMoveBetaWrapper from "../components/GameMoveBetaWrapper";
+import GameMoveWrapper, {
+  GameMoveLegacyRedirect,
+} from "../components/GameMoveWrapper";
 import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
 import ListGames from "../components/ListGames";
@@ -222,7 +223,7 @@ function Bones(props) {
                 />
                 <Route
                   path="/move-beta/:metaGame/:cbits/:gameID"
-                  element={<GameMoveBetaWrapper update={update} />}
+                  element={<GameMoveLegacyRedirect />}
                 />
                 <Route path="/legal" element={<Legal update={update} />} />
                 <Route path="/news" element={<News />} />

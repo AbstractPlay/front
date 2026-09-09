@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Permanent play-page layouts: classic, strip (default), queue card, and narrative on unified `/move/` routes; layout picker in the header; first-visit hint on strip; `/move-beta/` redirects to `/move/`.
+* Layout usage analytics (`session_start`, `layout_switch`) with localStorage layout prefs and on-demand backend export.
+
 * Added "info" button below the game board so players can quickly reference game information, including links to rules.
 * Added "debug" button below the game board so players can easily get the developers the current game state for debugging purposes.
 * Added "zoom" button that hides the game tree and maximizes SVG size. This change involved removing a `max-height` SVG rule. There may be unintended consequences. Will have to monitor.

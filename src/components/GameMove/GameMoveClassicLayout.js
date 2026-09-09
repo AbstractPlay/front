@@ -18,6 +18,7 @@ import BoardExportGifModal from "../BoardExport/BoardExportGifModal";
 import UserChats from "./UserChats";
 import Joyride from "react-joyride";
 import PageLoading from "../shared/PageLoading";
+import LayoutPickerTrigger from "./LayoutPickerTrigger";
 
 export default function GameMoveClassicLayout({ session }) {
   const {
@@ -511,28 +512,31 @@ export default function GameMoveClassicLayout({ session }) {
             {/* column */}
             {/***************** Board *****************/}
             <div className="column">
-              <h1 className="subtitle lined tourWelcome">
-                <span>
-                  <Link to={`/games/${metaGame}`}>
-                    {getGameDisplayName(metaGame)}
-                  </Link>
-                  {parenthetical.length === 0 ? null : (
-                    <>
-                      <span
-                        style={{ fontSize: "smaller", padding: 0, margin: 0 }}
-                      >
-                        &nbsp;(
-                        {parenthetical.reduce((prev, curr) => [
-                          prev,
-                          ", ",
-                          curr,
-                        ])}
-                        )
-                      </span>
-                    </>
-                  )}
-                </span>
-              </h1>
+              <div className="game-move-classic-header__title-row">
+                <h1 className="subtitle lined tourWelcome">
+                  <span>
+                    <Link to={`/games/${metaGame}`}>
+                      {getGameDisplayName(metaGame)}
+                    </Link>
+                    {parenthetical.length === 0 ? null : (
+                      <>
+                        <span
+                          style={{ fontSize: "smaller", padding: 0, margin: 0 }}
+                        >
+                          &nbsp;(
+                          {parenthetical.reduce((prev, curr) => [
+                            prev,
+                            ", ",
+                            curr,
+                          ])}
+                          )
+                        </span>
+                      </>
+                    )}
+                  </span>
+                </h1>
+                <LayoutPickerTrigger compact={screenWidth < 768} />
+              </div>
               <Board
                 metaGame={metaGame}
                 gameID={gameID}
