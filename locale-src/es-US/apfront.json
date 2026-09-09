@@ -4267,6 +4267,10 @@
     "src": "Queue card",
     "out": "Tarjeta de la cola"
   },
+  "gameMove.layout.chatUnread": {
+    "src": "New chat messages",
+    "out": "Nuevos mensajes de chat"
+  },
   "gameMove.layout.classicName": {
     "src": "Classic",
     "out": "Clásico"
@@ -4350,6 +4354,14 @@
   "gameMove.layout.lastMoveBy": {
     "src": "{{player}} played {{move}}",
     "out": "{{player}} jugó {{move}}"
+  },
+  "gameMove.layout.lastMoveByPrefix": {
+    "src": "{{player}} played",
+    "out": "{{player}} jugó"
+  },
+  "gameMove.layout.lastMoveLabel": {
+    "src": "Last move:",
+    "out": "Último movimiento:"
   },
   "gameMove.layout.moreActions": {
     "src": "More",

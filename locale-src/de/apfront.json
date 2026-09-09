@@ -4267,6 +4267,10 @@
     "src": "Queue card",
     "out": "Warteschlangen-Karte"
   },
+  "gameMove.layout.chatUnread": {
+    "src": "New chat messages",
+    "out": "Neue Chatnachrichten"
+  },
   "gameMove.layout.classicName": {
     "src": "Classic",
     "out": "Klassisch"
@@ -4350,6 +4354,14 @@
   "gameMove.layout.lastMoveBy": {
     "src": "{{player}} played {{move}}",
     "out": "{{player}} spielte {{move}}"
+  },
+  "gameMove.layout.lastMoveByPrefix": {
+    "src": "{{player}} played",
+    "out": "{{player}} spielte"
+  },
+  "gameMove.layout.lastMoveLabel": {
+    "src": "Last move:",
+    "out": "Letzter Zug:"
   },
   "gameMove.layout.moreActions": {
     "src": "More",
