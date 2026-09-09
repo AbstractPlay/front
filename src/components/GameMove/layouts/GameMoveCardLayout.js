@@ -16,6 +16,7 @@ import CardMovePath from "../preview/CardMovePath";
 import CardStatusSummary from "../preview/CardStatusSummary";
 import RecentMovesStrip from "../preview/RecentMovesStrip";
 import CardOverlayPanel from "../preview/CardOverlayPanel";
+import { GameMoveChatSection } from "./GameMoveBetaSections";
 
 export default function GameMoveCardLayout({ session }) {
   const users = useStore((state) => state.users);
@@ -51,18 +52,23 @@ export default function GameMoveCardLayout({ session }) {
       <GameMoveHelmetTour session={session} />
       <article className="game-move-beta game-move-beta--card">
         <div className="game-move-queue-card">
-          <CardHeader
-            t={session.t}
-            session={session}
-            layoutContext={layoutContext}
-            highlightNextGame={highlightNextGame}
-          />
+          <div className="game-move-queue-card__intro">
+            <CardHeader
+              t={session.t}
+              session={session}
+              layoutContext={layoutContext}
+              highlightNextGame={highlightNextGame}
+            />
+            <CardTurnBar session={session} layoutContext={layoutContext} />
+          </div>
           <div className={`game-move-queue-card__board${boardFrameClass}`}>
             <Board {...buildBoardProps(session)} />
           </div>
-          <CardTurnBar session={session} layoutContext={layoutContext} />
           <CardMovePath {...moveEntryProps} miscProps={miscProps} />
           <CardStatusSummary session={session} />
+          <div className="game-move-queue-card__inline-chat">
+            <GameMoveChatSection session={session} />
+          </div>
           <RecentMovesStrip session={session} t={session.t} />
           <CardOverlayPanel session={session} />
         </div>

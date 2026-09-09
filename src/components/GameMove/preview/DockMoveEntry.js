@@ -3,12 +3,12 @@ import { useDockMoveEntry } from "./useDockMoveEntry";
 import ExplorationToolbar from "./ExplorationToolbar";
 import { NoMoves, safeGetButtons, sortLenAlpha } from "./moveEntryUtils";
 
-function TurnIndicator({ img, mover, isMyTurn }) {
+function TurnIndicator({ img, mover, isMyTurn, className = "" }) {
   return (
     <p
       className={`game-move-dock-entry__turn${
         isMyTurn ? " game-move-dock-entry__turn--active" : ""
-      }`}
+      }${className ? ` ${className}` : ""}`}
     >
       {img == null ? null : img.isImage ? (
         <img
@@ -60,6 +60,7 @@ function DockMoveEntry(props) {
   } = state;
 
   const isMyTurn = game.canSubmit && uiState === 0;
+  const showInlineTurn = uiState === 0 && mover;
   const showPrimaryRow = uiState === 0 && toMove !== "" && focus.canExplore;
   const showExplorationToolbar =
     (focus.exPath.length > 0 && game.canExplore) || uiState !== 0;
@@ -94,7 +95,7 @@ function DockMoveEntry(props) {
         </p>
       ) : null}
 
-      {mover ? (
+      {!showInlineTurn && mover ? (
         <TurnIndicator img={img} mover={mover} isMyTurn={isMyTurn} />
       ) : null}
 
@@ -103,6 +104,14 @@ function DockMoveEntry(props) {
       ) : null}
 
       <div className="game-move-dock-entry__primary">
+        {showInlineTurn ? (
+          <TurnIndicator
+            img={img}
+            mover={mover}
+            isMyTurn={isMyTurn}
+            className="game-move-dock-entry__turn--inline"
+          />
+        ) : null}
         {showPrimaryRow ? (
           <div className="game-move-dock-entry__input-row">
             {moves === null ? (

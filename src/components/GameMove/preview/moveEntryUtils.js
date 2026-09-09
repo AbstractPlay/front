@@ -105,7 +105,7 @@ export function NoMoves({ engine, game, handleMove, t }) {
   }
 
   if (elements.length === 0) {
-    return <div />;
+    return null;
   }
 
   return <div className="game-move-dock-entry__no-moves">{elements}</div>;

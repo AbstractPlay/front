@@ -10,6 +10,8 @@ import UserChats from "../UserChats";
 import MoveResults from "../MoveResults";
 import PlayerColourChip from "../preview/PlayerColourChip";
 import QueueNavButtons from "../preview/QueueNavButtons";
+import LastMoveChip from "../preview/LastMoveChip";
+import { useDrawerChatUnread } from "../preview/useDrawerChatUnread";
 import {
   buildBoardProps,
   buildGameMovesProps,
@@ -117,10 +119,17 @@ export function GameMoveLogSection({ session }) {
 
 const DRAWER_TABS = ["status", "moves", "chat", "log"];
 
-export function GameMoveBetaDrawer({ session, defaultTab = "moves" }) {
+export function GameMoveBetaDrawer({
+  session,
+  defaultTab,
+  defaultOpen = false,
+}) {
   const { t } = session;
-  const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState(defaultTab);
+  const initialTab =
+    defaultTab ?? (hasStatusContent(session) ? "status" : "moves");
+  const [open, setOpen] = useState(defaultOpen);
+  const [tab, setTab] = useState(initialTab);
+  const hasChatUnread = useDrawerChatUnread(session, { tab, open });
 
   const tabLabel = (id) => {
     switch (id) {
@@ -148,8 +157,8 @@ export function GameMoveBetaDrawer({ session, defaultTab = "moves" }) {
               type="button"
               role="tab"
               aria-selected={open && tab === id}
-              className={`button is-small ${
-                open && tab === id ? "apButton" : "apButtonNeutral"
+              className={`button is-small game-move-beta-drawer__tab${
+                open && tab === id ? " apButton" : " apButtonNeutral"
               }`}
               onClick={() => {
                 if (open && tab === id) {
@@ -161,6 +170,12 @@ export function GameMoveBetaDrawer({ session, defaultTab = "moves" }) {
               }}
             >
               {tabLabel(id)}
+              {id === "chat" && hasChatUnread ? (
+                <span
+                  className="game-move-beta-drawer__tab-badge"
+                  aria-label={t("gameMove.layout.chatUnread")}
+                />
+              ) : null}
             </button>
           );
         })}
@@ -218,14 +233,11 @@ export function GameMoveContextStrip({ session, layoutContext }) {
       </div>
       <div className="game-move-context-strip__secondary">
         {lastMoveNotation ? (
-          <span className="game-move-context-strip__last-move">
-            {lastMovePlayerName
-              ? t("gameMove.layout.lastMoveBy", {
-                  player: lastMovePlayerName,
-                  move: lastMoveNotation,
-                })
-              : t("gameMove.layout.lastMove", { move: lastMoveNotation })}
-          </span>
+          <LastMoveChip
+            t={t}
+            lastMoveNotation={lastMoveNotation}
+            lastMovePlayerName={lastMovePlayerName}
+          />
         ) : null}
         {game ? (
           <QueueNavButtons
@@ -244,14 +256,12 @@ export function GameMoveLastMoveBlock({ layoutContext, t }) {
   if (!lastMoveNotation) return null;
   return (
     <div className="game-move-last-move-block">
-      <p>
-        {lastMovePlayerName
-          ? t("gameMove.layout.lastMoveBy", {
-              player: lastMovePlayerName,
-              move: lastMoveNotation,
-            })
-          : t("gameMove.layout.lastMove", { move: lastMoveNotation })}
-      </p>
+      <LastMoveChip
+        t={t}
+        lastMoveNotation={lastMoveNotation}
+        lastMovePlayerName={lastMovePlayerName}
+        className="game-move-last-move-chip--block"
+      />
     </div>
   );
 }

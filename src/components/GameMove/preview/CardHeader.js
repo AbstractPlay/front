@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { formatParenthetical } from "../../../lib/GameMove/gameMoveLayoutHelpers";
 import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
+import LastMoveChip from "./LastMoveChip";
 
 function CardHeader({ t, session, layoutContext, highlightNextGame = false }) {
   const { metaGame, handleNextGame } = session;
@@ -15,16 +16,6 @@ function CardHeader({ t, session, layoutContext, highlightNextGame = false }) {
     myColour,
   } = layoutContext;
 
-  const lastMoveLine =
-    lastMoveNotation && lastMovePlayerName
-      ? t("gameMove.layout.lastMoveBy", {
-          player: lastMovePlayerName,
-          move: lastMoveNotation,
-        })
-      : lastMoveNotation
-      ? t("gameMove.layout.lastMove", { move: lastMoveNotation })
-      : null;
-
   return (
     <header className="game-move-queue-card__header">
       <div className="game-move-queue-card__header-top">
@@ -37,8 +28,14 @@ function CardHeader({ t, session, layoutContext, highlightNextGame = false }) {
               {formatParenthetical(parenthetical)}
             </p>
           ) : null}
-          {lastMoveLine ? (
-            <p className="game-move-queue-card__last-move">{lastMoveLine}</p>
+          {lastMoveNotation ? (
+            <p className="game-move-queue-card__last-move">
+              <LastMoveChip
+                t={t}
+                lastMoveNotation={lastMoveNotation}
+                lastMovePlayerName={lastMovePlayerName}
+              />
+            </p>
           ) : null}
         </div>
         <div

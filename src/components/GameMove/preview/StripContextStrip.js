@@ -4,6 +4,7 @@ import { useStore } from "../../../stores";
 import { getPlayerClockChips } from "./moveEntryUtils";
 import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
+import LastMoveChip from "./LastMoveChip";
 
 function StripContextStrip({ session, layoutContext }) {
   const { t, handleNextGame, game, toMove, metaGame } = session;
@@ -76,14 +77,11 @@ function StripContextStrip({ session, layoutContext }) {
       </div>
       <div className="game-move-context-strip__secondary">
         {lastMoveNotation ? (
-          <span className="game-move-context-strip__last-move">
-            {lastMovePlayerName
-              ? t("gameMove.layout.lastMoveBy", {
-                  player: lastMovePlayerName,
-                  move: lastMoveNotation,
-                })
-              : t("gameMove.layout.lastMove", { move: lastMoveNotation })}
-          </span>
+          <LastMoveChip
+            t={t}
+            lastMoveNotation={lastMoveNotation}
+            lastMovePlayerName={lastMovePlayerName}
+          />
         ) : null}
         {game ? (
           <QueueNavButtons

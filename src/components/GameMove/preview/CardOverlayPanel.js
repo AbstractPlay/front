@@ -46,7 +46,7 @@ function CardOverlayPanel({ session }) {
         </button>
         <button
           type="button"
-          className="button is-small apButtonNeutral"
+          className="button is-small apButtonNeutral game-move-queue-card__more-button--chat"
           onClick={() => setOpenPanel(PANELS.chat)}
         >
           {t("GameSummary")}

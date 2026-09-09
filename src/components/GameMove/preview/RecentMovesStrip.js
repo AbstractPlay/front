@@ -1,3 +1,5 @@
+import { useLayoutEffect, useRef } from "react";
+
 function getRecentMainlineMoves(exploration, limit = 12) {
   if (!Array.isArray(exploration)) return [];
   const items = [];
@@ -22,10 +24,35 @@ function isSameFocus(focus, item) {
   );
 }
 
+function scrollRecentMovesIntoView(strip) {
+  const active = strip.querySelector(".game-move-recent-moves__chip.is-active");
+  const target =
+    active instanceof HTMLElement
+      ? active
+      : strip.lastElementChild instanceof HTMLElement
+        ? strip.lastElementChild
+        : null;
+  if (target) {
+    target.scrollIntoView({ inline: "end", block: "nearest" });
+  }
+}
+
 function RecentMovesStrip({ session, t }) {
   const { focus, explorationRef, handleGameMoveClick } = session;
   const exploration = explorationRef.current?.nodes;
   const recent = getRecentMainlineMoves(exploration);
+  const stripRef = useRef(null);
+  const focusKey = focus
+    ? `${focus.moveNumber}:${(focus.exPath ?? []).join(".")}`
+    : "";
+
+  useLayoutEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) {
+      return;
+    }
+    scrollRecentMovesIntoView(strip);
+  }, [focusKey, recent.length]);
 
   if (recent.length === 0 || !focus) {
     return null;
@@ -43,6 +70,7 @@ function RecentMovesStrip({ session, t }) {
         {t("gameMove.layout.recentMoves")}
       </h2>
       <div
+        ref={stripRef}
         className="game-move-recent-moves__strip"
         role="list"
         aria-label={t("gameMove.layout.recentMoves")}
