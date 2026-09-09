@@ -6,9 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import {
-  API_ENDPOINT_OPEN,
-} from "../config";
+import { fetchUserNames } from "../lib/fetchUserNames";
 import { REAL_MODE } from "../lib/realMode";
 import { redirectToSignIn } from "../lib/amplifyAuth";
 import Spinner from "../components/Spinner";
@@ -134,21 +132,19 @@ function Bones(props) {
   }, []);
 
   useEffect(() => {
-    const { setUsers, setUsersLoaded } = useStore.getState();
-    async function fetchData() {
-      try {
-        var url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append("query", "user_names");
-        const res = await fetch(url);
-        const result = await res.json();
-        setUsers(result);
-      } catch (error) {
-        setUsers([]);
-      } finally {
-        setUsersLoaded(true);
+    fetchUserNames({ force: true });
+  }, []);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchUserNames();
       }
-    }
-    fetchData();
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   // apply stored color mode

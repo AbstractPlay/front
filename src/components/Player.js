@@ -15,7 +15,7 @@ import PageHelmet from "./PageHelmet";
 import Spinner from "./Spinner";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
-import UserIdenticon from "./UserIdenticon";
+import UserAvatar from "./UserAvatar";
 import PlayerAboutSection, {
   aboutTextPlainSnippet,
 } from "./PlayerAboutSection";
@@ -37,6 +37,7 @@ import SummaryGate from "./shared/SummaryGate";
 import { useStore } from "../stores";
 import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
 import { formatUserDisplayName } from "./Bots/botUtils";
+import { fetchUserNames } from "../lib/fetchUserNames";
 import {
   PROFILE_TABS,
   MODULE_NAME_KEYS,
@@ -213,6 +214,10 @@ function Player() {
   }, [userid]);
 
   useEffect(() => {
+    fetchUserNames();
+  }, [userid]);
+
+  useEffect(() => {
     if (allUsers !== null) {
       const rec = allUsers.find((u) => u.id === userid);
       if (rec !== undefined && rec !== null) {
@@ -278,10 +283,10 @@ function Player() {
             })}
           </h1>
           <div className="player-profile-meta">
-            <UserIdenticon
-              userId={user.id}
+            <UserAvatar
+              user={user}
               size={36}
-              className="player-profile-identicon"
+              className="player-profile-avatar"
             />
             {user.country === undefined ? null : (
               <Flag code={user.country} size="m" />

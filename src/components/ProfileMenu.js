@@ -6,7 +6,7 @@ import { redirectToSignIn } from "../lib/amplifyAuth";
 import UserSettingsModal from "./UserSettingsModal";
 import NewProfile from "./NewProfile";
 import NavDropdownPanel from "./NavDropdownPanel";
-import UserIdenticon from "./UserIdenticon";
+import UserAvatar from "./UserAvatar";
 import { useStore } from "../stores";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { fetchProfile } from "../lib/globalMeBootstrap";
@@ -124,7 +124,7 @@ function ProfileMenu({
           aria-haspopup="menu"
           onClick={() => setMenuOpen((open) => !open)}
         >
-          <UserIdenticon userId={userId} />
+          <UserAvatar user={{ id: userId, settings: globalMe?.settings }} />
         </button>
         {menuOpen ? (
           <div className="nav-dropdown-panel nav-profile-menu" role="menu">

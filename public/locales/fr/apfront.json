@@ -1954,5 +1954,38 @@
       "nothingToPreview": "Rien à prévisualiser pour l'instant."
     }
   },
-  "Wikipedia": "Wikipédia"
+  "Wikipedia": "Wikipédia",
+  "profile": {
+    "avatar": {
+      "title": "Avatar",
+      "current": "Actuel",
+      "preview": "Aperçu",
+      "styleLabel": "Style",
+      "seedLabel": "Graine",
+      "seedHelp": "Votre identifiant utilisateur est utilisé par défaut. Modifiez la graine pour obtenir une image différente dans le même style.",
+      "randomize": "Graine aléatoire",
+      "resetDefault": "Réinitialiser par défaut",
+      "save": "Enregistrer l'avatar",
+      "saveSuccess": "Avatar enregistré.",
+      "saveFailed": "Impossible d'enregistrer l'avatar.",
+      "licenseNote": "Les avatars sont générés par DiceBear. Certains styles nécessitent une attribution — voir",
+      "style": {
+        "blobs": "Blobs",
+        "glass": "Verre",
+        "rings": "Anneaux",
+        "identicon": "Identicon",
+        "initial-face": "Visage initial",
+        "patchwork": "Patchwork",
+        "shape-grid": "Grille de formes",
+        "shapes": "Formes",
+        "waves": "Vagues",
+        "cameo": "Camée",
+        "clay": "Argile",
+        "cutouts": "Découpes",
+        "constellation": "Constellation",
+        "landscape": "Paysage",
+        "planets": "Planètes"
+      }
+    }
+  }
 }
