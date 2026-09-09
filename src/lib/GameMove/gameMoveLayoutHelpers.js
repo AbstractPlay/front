@@ -11,8 +11,8 @@ export function hasStatusContent(session) {
     !game ||
     game.colors === undefined ||
     ((!game.variants || game.variants.length === 0) &&
-      status.statuses.length === 0 &&
-      status.scores.length === 0 &&
+      (status.statuses?.length ?? 0) === 0 &&
+      (status.scores?.length ?? 0) === 0 &&
       !game.playerStashes &&
       !game.sharedStash)
   ) {
