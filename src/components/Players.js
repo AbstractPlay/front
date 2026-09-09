@@ -20,6 +20,7 @@ import { useStore } from "../stores";
 import { callAuthApi } from "../lib/api";
 import { formatUserDisplayName } from "./Bots/botUtils";
 import PageLoading from "./shared/PageLoading";
+import UserAvatar from "./UserAvatar";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -168,13 +169,15 @@ function Players() {
       allUsers === undefined || allUsers === null
         ? []
         : allUsers
-            .map(({ id, name, country, lastSeen, bot }) => {
+            .map(({ id, name, country, lastSeen, bot, avatarStyle, avatarSeed }) => {
               return {
                 id,
                 name: name ?? "",
                 bot,
                 country: isoToCountryCode(country, "numeric"),
                 lastSeen,
+                avatarStyle,
+                avatarSeed,
               };
             })
             .filter(({ country }) => {
@@ -222,6 +225,25 @@ function Players() {
       return [];
     }
     const cols = [
+      columnHelper.display({
+        id: "avatar",
+        header: "",
+        enableSorting: false,
+        cell: (props) => (
+          <Link
+            to={`/player/${props.row.original.id}`}
+            className="players-table-avatar-link"
+            aria-hidden="true"
+            tabIndex={-1}
+          >
+            <UserAvatar
+              user={props.row.original}
+              size={32}
+              className="players-table-avatar"
+            />
+          </Link>
+        ),
+      }),
       columnHelper.accessor("name", {
         header: t("tables.name"),
         cell: (props) => (

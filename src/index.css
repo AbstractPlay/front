@@ -455,6 +455,18 @@ a.navbar-item,
   margin-top: 0.75rem;
 }
 
+.players-table-avatar-link {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.apTable .players-table-avatar-cell,
+.apTable td:has(.players-table-avatar-link) {
+  padding-right: 0.35rem;
+  vertical-align: middle;
+  width: 2.5rem;
+}
+
 .nav-profile-menu {
   min-width: 14rem;
   padding: 0.35rem 0;
