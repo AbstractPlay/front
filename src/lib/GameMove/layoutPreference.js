@@ -1,4 +1,9 @@
-export const MOVE_CLASSIC_BASE = "/move";
+export const MOVE_BASE = "/move";
+
+/** @deprecated use MOVE_BASE */
+export const MOVE_CLASSIC_BASE = MOVE_BASE;
+
+/** @deprecated preview route; redirect only */
 export const MOVE_BETA_BASE = "/move-beta";
 
 export const LAYOUT_CLASSIC = "classic";
@@ -9,10 +14,25 @@ export const LAYOUT_NARRATIVE = "narrative";
 /** @deprecated use LAYOUT_CARD */
 export const LAYOUT_QUEUE = LAYOUT_CARD;
 
-export const BETA_LAYOUTS = [LAYOUT_STRIP, LAYOUT_CARD, LAYOUT_NARRATIVE];
-export const DEFAULT_BETA_LAYOUT = LAYOUT_STRIP;
+export const ALL_LAYOUTS = [
+  LAYOUT_CLASSIC,
+  LAYOUT_STRIP,
+  LAYOUT_CARD,
+  LAYOUT_NARRATIVE,
+];
 
-export const STORAGE_BANNER_DISMISSED = "gameMoveBetaBannerDismissed";
+/** @deprecated use ALL_LAYOUTS without classic */
+export const BETA_LAYOUTS = [LAYOUT_STRIP, LAYOUT_CARD, LAYOUT_NARRATIVE];
+
+export const DEFAULT_LAYOUT = LAYOUT_STRIP;
+
+/** @deprecated use DEFAULT_LAYOUT */
+export const DEFAULT_BETA_LAYOUT = DEFAULT_LAYOUT;
+
+export const STORAGE_LAYOUT = "gameMoveLayout";
+export const STORAGE_LAYOUT_HINT_DISMISSED = "gameMoveLayoutHintDismissed";
+
+/** @deprecated migrated to STORAGE_LAYOUT */
 export const STORAGE_BETA_LAYOUT = "gameMoveBetaLayout";
 
 function readStorage(key) {
@@ -31,79 +51,119 @@ function writeStorage(key, value) {
   }
 }
 
-function normalizeBetaLayout(layout) {
+function normalizeLayout(layout) {
   if (layout === "queue") {
     return LAYOUT_CARD;
   }
   return layout;
 }
 
-export function gameMovePath(
-  metaGame,
-  cbits,
-  gameID,
-  { beta = false, layout } = {}
-) {
-  const base = beta ? MOVE_BETA_BASE : MOVE_CLASSIC_BASE;
-  const path = `${base}/${metaGame}/${cbits}/${gameID}`;
-  if (!beta || !layout || layout === LAYOUT_CLASSIC) {
+export function gameMovePath(metaGame, cbits, gameID, { layout, beta } = {}) {
+  if (beta) {
+    const legacyPath = `${MOVE_BETA_BASE}/${metaGame}/${cbits}/${gameID}`;
+    if (!layout || layout === LAYOUT_CLASSIC) {
+      return legacyPath;
+    }
+    const normalized = normalizeLayout(layout);
+    if (!ALL_LAYOUTS.includes(normalized)) {
+      return legacyPath;
+    }
+    return `${legacyPath}?layout=${encodeURIComponent(normalized)}`;
+  }
+
+  const path = `${MOVE_BASE}/${metaGame}/${cbits}/${gameID}`;
+  if (!layout) {
     return path;
   }
-  const normalized = normalizeBetaLayout(layout);
-  if (!BETA_LAYOUTS.includes(normalized)) {
+  const normalized = normalizeLayout(layout);
+  if (!ALL_LAYOUTS.includes(normalized)) {
     return path;
   }
   return `${path}?layout=${encodeURIComponent(normalized)}`;
 }
 
+/** @deprecated unified /move/ route */
 export function isBetaGameMovePath(pathname = "") {
   return pathname.startsWith(`${MOVE_BETA_BASE}/`);
 }
 
-export function readBetaLayoutPreference() {
-  const stored = normalizeBetaLayout(readStorage(STORAGE_BETA_LAYOUT));
-  if (BETA_LAYOUTS.includes(stored)) {
-    return stored;
+export function readLayoutPreference() {
+  const fromNew = normalizeLayout(readStorage(STORAGE_LAYOUT));
+  if (ALL_LAYOUTS.includes(fromNew)) {
+    return fromNew;
   }
-  return DEFAULT_BETA_LAYOUT;
+
+  const fromLegacy = normalizeLayout(readStorage(STORAGE_BETA_LAYOUT));
+  if (ALL_LAYOUTS.includes(fromLegacy)) {
+    writeStorage(STORAGE_LAYOUT, fromLegacy);
+    return fromLegacy;
+  }
+
+  return null;
 }
 
-export function writeBetaLayoutPreference(layout) {
-  const normalized = normalizeBetaLayout(layout);
-  if (!BETA_LAYOUTS.includes(normalized)) {
+/** @deprecated use readLayoutPreference */
+export function readBetaLayoutPreference() {
+  return readLayoutPreference() ?? DEFAULT_LAYOUT;
+}
+
+export function writeLayoutPreference(layout) {
+  const normalized = normalizeLayout(layout);
+  if (!ALL_LAYOUTS.includes(normalized)) {
     return;
   }
-  writeStorage(STORAGE_BETA_LAYOUT, normalized);
+  writeStorage(STORAGE_LAYOUT, normalized);
 }
 
-export function resolveBetaLayout(search = "") {
+/** @deprecated use writeLayoutPreference */
+export function writeBetaLayoutPreference(layout) {
+  writeLayoutPreference(layout);
+}
+
+export function resolveGameMoveLayout(search = "") {
   const params = new URLSearchParams(search);
-  const fromUrl = normalizeBetaLayout(params.get("layout"));
-  if (BETA_LAYOUTS.includes(fromUrl)) {
-    writeBetaLayoutPreference(fromUrl);
-    return fromUrl;
+  const fromUrl = normalizeLayout(params.get("layout"));
+  if (ALL_LAYOUTS.includes(fromUrl)) {
+    writeLayoutPreference(fromUrl);
+    return { layoutId: fromUrl, resolvedFrom: "url" };
   }
-  return readBetaLayoutPreference();
-}
 
-export function isExperimentBannerDismissed() {
-  return readStorage(STORAGE_BANNER_DISMISSED) === "1";
-}
-
-export function dismissExperimentBanner() {
-  writeStorage(STORAGE_BANNER_DISMISSED, "1");
-}
-
-export function resetExperimentBannerDismissal() {
-  try {
-    localStorage.removeItem(STORAGE_BANNER_DISMISSED);
-  } catch {
-    // ignore
+  const stored = readLayoutPreference();
+  if (stored) {
+    return { layoutId: stored, resolvedFrom: "localStorage" };
   }
+
+  return { layoutId: DEFAULT_LAYOUT, resolvedFrom: "default" };
+}
+
+/** @deprecated use resolveGameMoveLayout */
+export function resolveBetaLayout(search = "") {
+  return resolveGameMoveLayout(search).layoutId;
+}
+
+export function isLayoutHintDismissed() {
+  return readStorage(STORAGE_LAYOUT_HINT_DISMISSED) === "1";
+}
+
+export function dismissLayoutHint() {
+  writeStorage(STORAGE_LAYOUT_HINT_DISMISSED, "1");
+}
+
+export function shouldShowLayoutHint(resolvedFrom) {
+  if (resolvedFrom !== "default") {
+    return false;
+  }
+  if (isLayoutHintDismissed()) {
+    return false;
+  }
+  if (readLayoutPreference()) {
+    return false;
+  }
+  return true;
 }
 
 export function layoutLabelKey(layoutId) {
-  switch (normalizeBetaLayout(layoutId)) {
+  switch (normalizeLayout(layoutId)) {
     case LAYOUT_STRIP:
       return "gameMove.layout.stripName";
     case LAYOUT_CARD:
@@ -116,7 +176,7 @@ export function layoutLabelKey(layoutId) {
 }
 
 export function layoutDescriptionKey(layoutId) {
-  switch (normalizeBetaLayout(layoutId)) {
+  switch (normalizeLayout(layoutId)) {
     case LAYOUT_STRIP:
       return "gameMove.layout.stripDescription";
     case LAYOUT_CARD:

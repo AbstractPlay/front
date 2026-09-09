@@ -16,7 +16,7 @@ import CardMovePath from "../preview/CardMovePath";
 import CardStatusSummary from "../preview/CardStatusSummary";
 import RecentMovesStrip from "../preview/RecentMovesStrip";
 import CardOverlayPanel from "../preview/CardOverlayPanel";
-import { GameMoveChatSection } from "./GameMoveBetaSections";
+import { GameMoveChatSection } from "./GameMoveSections";
 
 export default function GameMoveCardLayout({ session }) {
   const users = useStore((state) => state.users);
@@ -50,7 +50,7 @@ export default function GameMoveCardLayout({ session }) {
   return (
     <>
       <GameMoveHelmetTour session={session} />
-      <article className="game-move-beta game-move-beta--card">
+      <article className="game-move-layout game-move-layout--card">
         <div className="game-move-queue-card">
           <div className="game-move-queue-card__intro">
             <CardHeader

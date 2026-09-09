@@ -1,28 +1,25 @@
-import { useParams, useLocation } from "react-router-dom";
-import GameMove from "./GameMove";
-import LayoutExperimentBanner from "./GameMove/LayoutExperimentBanner";
-import { useGameMoveLayout } from "../hooks/useGameMoveLayout";
-import { MOVE_CLASSIC_BASE } from "../lib/GameMove/layoutPreference";
+import { useParams, useLocation, Navigate } from "react-router-dom";
+import GameMoveShell from "./GameMoveShell";
 
-function GameMoveWrapper() {
-  const params = useParams();
+function GameMoveLegacyRedirect() {
+  const { metaGame, cbits, gameID } = useParams();
   const location = useLocation();
-  const { moveBasePath, showExperimentBanner, dismissBanner } =
-    useGameMoveLayout();
-
   return (
-    <>
-      {showExperimentBanner ? (
-        <LayoutExperimentBanner onDismiss={dismissBanner} />
-      ) : null}
-      <GameMove
-        key={`${params.metaGame}-${params.gameID}`}
-        routerState={location.state}
-        moveBasePath={moveBasePath ?? MOVE_CLASSIC_BASE}
-        showExperimentBanner={false}
-      />
-    </>
+    <Navigate
+      to={`/move/${metaGame}/${cbits}/${gameID}${location.search}`}
+      replace
+      state={location.state}
+    />
   );
 }
 
+function GameMoveWrapper() {
+  const params = useParams();
+
+  return (
+    <GameMoveShell key={`${params.metaGame}-${params.gameID}`} />
+  );
+}
+
+export { GameMoveLegacyRedirect };
 export default GameMoveWrapper;

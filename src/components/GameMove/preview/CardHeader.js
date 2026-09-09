@@ -3,6 +3,7 @@ import { formatParenthetical } from "../../../lib/GameMove/gameMoveLayoutHelpers
 import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
 import LastMoveChip from "./LastMoveChip";
+import LayoutPickerTrigger from "../LayoutPickerTrigger";
 
 function CardHeader({ t, session, layoutContext, highlightNextGame = false }) {
   const { metaGame, handleNextGame } = session;
@@ -43,6 +44,9 @@ function CardHeader({ t, session, layoutContext, highlightNextGame = false }) {
             highlightNextGame ? " is-highlighted" : ""
           }`}
         >
+          <LayoutPickerTrigger
+            compact={(session.screenWidth ?? 1024) <= 768}
+          />
           <QueueNavButtons
             t={t}
             waitingCount={queueCount}

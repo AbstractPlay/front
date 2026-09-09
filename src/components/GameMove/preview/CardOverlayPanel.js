@@ -4,7 +4,7 @@ import {
   GameMoveChatSection,
   GameMoveLogSection,
   GameMoveMovesSection,
-} from "../layouts/GameMoveBetaSections";
+} from "../layouts/GameMoveSections";
 
 const PANELS = {
   moves: "moves",

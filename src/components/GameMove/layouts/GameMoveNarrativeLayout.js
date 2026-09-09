@@ -18,7 +18,8 @@ import {
   GameMoveMoveSection,
   GameMoveMovesSection,
   GameMoveStatusSection,
-} from "./GameMoveBetaSections";
+} from "./GameMoveSections";
+import LayoutPickerTrigger from "../LayoutPickerTrigger";
 import PlayerColourChip from "../preview/PlayerColourChip";
 import QueueNavButtons from "../preview/QueueNavButtons";
 import DockMiscButtons from "../preview/DockMiscButtons";
@@ -42,12 +43,17 @@ export default function GameMoveNarrativeLayout({ session }) {
   return (
     <>
       <GameMoveHelmetTour session={session} />
-      <article className="game-move-beta game-move-beta--narrative">
-        <div className="game-move-beta--narrative__story">
+      <article className="game-move-layout game-move-layout--narrative">
+        <div className="game-move-layout--narrative__story">
           <header className="game-move-narrative-header">
-            <h1 className="title is-5">
-              <Link to={`/games/${metaGame}`}>{gameName}</Link>
-            </h1>
+            <div className="game-move-narrative-header__title-row">
+              <h1 className="title is-5">
+                <Link to={`/games/${metaGame}`}>{gameName}</Link>
+              </h1>
+              <LayoutPickerTrigger
+                compact={(session.screenWidth ?? 1024) <= 768}
+              />
+            </div>
             {parenthetical.length > 0 ? (
               <p className="game-move-narrative-header__meta">
                 {formatParenthetical(parenthetical)}
@@ -107,7 +113,7 @@ export default function GameMoveNarrativeLayout({ session }) {
             {showLog ? <GameMoveLogSection session={session} /> : null}
           </div>
         </div>
-        <div className="game-move-beta--narrative__board">
+        <div className="game-move-layout--narrative__board">
           <GameMoveBoardSection session={session} hideTitle />
         </div>
       </article>
