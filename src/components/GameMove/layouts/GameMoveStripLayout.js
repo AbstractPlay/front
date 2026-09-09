@@ -1,17 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../../stores";
-import {
-  getLayoutContext,
-  hasStatusContent,
-} from "../../../lib/GameMove/gameMoveLayoutHelpers";
+import { getLayoutContext } from "../../../lib/GameMove/gameMoveLayoutHelpers";
 
 const STRIP_WIDE_BREAKPOINT = 900;
 
 function stripDrawerDefaults(session) {
-  const isWide = (session.screenWidth ?? STRIP_WIDE_BREAKPOINT) >= STRIP_WIDE_BREAKPOINT;
-  const defaultTab = hasStatusContent(session) ? "status" : "moves";
+  const isWide =
+    (session.screenWidth ?? STRIP_WIDE_BREAKPOINT) >= STRIP_WIDE_BREAKPOINT;
   return {
-    defaultTab,
+    defaultTab: "status",
     defaultOpen: isWide,
   };
 }
@@ -47,7 +44,11 @@ export default function GameMoveStripLayout({ session }) {
         </div>
         <div className="game-move-beta--strip__sidebar">
           <StripDock session={session} />
-          <GameMoveBetaDrawer session={session} {...drawerDefaults} />
+          <GameMoveBetaDrawer
+            key={session.game?.id ?? session.gameID}
+            session={session}
+            {...drawerDefaults}
+          />
         </div>
       </article>
       <GameMoveLayoutModals session={session} />

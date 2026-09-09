@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getGameDisplayName } from "../../../lib/gameOptions";
 import GameStatus from "../GameStatus";
@@ -119,17 +119,41 @@ export function GameMoveLogSection({ session }) {
 
 const DRAWER_TABS = ["status", "moves", "chat", "log"];
 
+function resolveDrawerTab(session, preferredTab = "status") {
+  if (preferredTab === "status" && hasStatusContent(session)) {
+    return "status";
+  }
+  if (preferredTab === "status" && !hasStatusContent(session)) {
+    return "moves";
+  }
+  return preferredTab;
+}
+
 export function GameMoveBetaDrawer({
   session,
-  defaultTab,
+  defaultTab = "status",
   defaultOpen = false,
 }) {
   const { t } = session;
-  const initialTab =
-    defaultTab ?? (hasStatusContent(session) ? "status" : "moves");
+  const statusAvailable = hasStatusContent(session);
   const [open, setOpen] = useState(defaultOpen);
-  const [tab, setTab] = useState(initialTab);
+  const [tab, setTab] = useState(() => resolveDrawerTab(session, defaultTab));
   const hasChatUnread = useDrawerChatUnread(session, { tab, open });
+
+  useEffect(() => {
+    setTab((current) => {
+      if (defaultTab !== "status") {
+        return current;
+      }
+      if (statusAvailable && current === "moves") {
+        return "status";
+      }
+      if (!statusAvailable && current === "status") {
+        return "moves";
+      }
+      return current;
+    });
+  }, [defaultTab, statusAvailable, session.game?.id]);
 
   const tabLabel = (id) => {
     switch (id) {
