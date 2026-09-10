@@ -132,14 +132,43 @@ function Navbar() {
               {t("Playground")}
             </Link>
           </div>
-          <div className="navbar-item">
+          <div className="navbar-item has-dropdown is-hoverable">
             <Link
               to="/explore"
-              className="navbar-item"
+              className="navbar-link"
               onClick={() => updateBurgerExpanded(false)}
             >
               {t("Games")}
             </Link>
+            <div className="navbar-dropdown">
+              <div className="navbar-item">
+                <Link
+                  to="/explore"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
+                  {t("nav.explore")}
+                </Link>
+              </div>
+              <div className="navbar-item">
+                <Link
+                  to="/challenges"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
+                  {t("nav.openChallenges")}
+                </Link>
+              </div>
+              <div className="navbar-item">
+                <Link
+                  to="/recent-games"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
+                  {t("nav.recentGames")}
+                </Link>
+              </div>
+            </div>
           </div>
           <div className="navbar-item">
             <Link
