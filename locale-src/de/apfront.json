@@ -3675,6 +3675,18 @@
     "src": "O: Traditional",
     "out": "S: Traditionell"
   },
+  "challenges.filters.hardTimeOnly": {
+    "src": "Hard time only",
+    "out": "Nur harte Bedenkzeit"
+  },
+  "challenges.filters.ratedOnly": {
+    "src": "Rated only",
+    "out": "Nur gewertete Spiele"
+  },
+  "challenges.filters.starredOnly": {
+    "src": "Only starred games",
+    "out": "Nur Spiele mit Stern"
+  },
   "challenges.loading": {
     "src": "Loading challenges…",
     "out": "Herausforderungen werden geladen…"

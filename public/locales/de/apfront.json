@@ -549,7 +549,12 @@
   "ChallengeTypeTargeted": "Geschlossen",
   "ChallengeTypeTargetedDescription": "Du forderst bestimmte Spieler heraus.",
   "challenges": {
-    "loading": "Herausforderungen werden geladen…"
+    "loading": "Herausforderungen werden geladen…",
+    "filters": {
+      "starredOnly": "Nur Spiele mit Stern",
+      "hardTimeOnly": "Nur harte Bedenkzeit",
+      "ratedOnly": "Nur gewertete Spiele"
+    }
   },
   "recentGames": {
     "loading": "Kürzliche Spiele werden geladen…",
