@@ -553,7 +553,9 @@
     "filters": {
       "starredOnly": "Solo partidas destacadas",
       "hardTimeOnly": "Solo tiempo estricto",
-      "ratedOnly": "Solo partidas evaluadas"
+      "softTimeOnly": "Solo tiempo flexible",
+      "ratedOnly": "Solo partidas evaluadas",
+      "unratedOnly": "Solo sin clasificación"
     }
   },
   "recentGames": {
