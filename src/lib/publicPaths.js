@@ -12,6 +12,15 @@ export function isAnonymousFriendlyPath(pathname = window.location.pathname) {
   if (pathname === "/explore" || pathname.startsWith("/explore/")) {
     return true;
   }
+  if (pathname === "/challenges" || pathname.startsWith("/challenges/")) {
+    return true;
+  }
+  if (pathname === "/recent-games" || pathname.startsWith("/recent-games/")) {
+    return true;
+  }
+  if (pathname === "/listgames" || pathname.startsWith("/listgames/")) {
+    return true;
+  }
   if (pathname.startsWith("/move/") || pathname.startsWith("/move-beta/")) {
     return true;
   }

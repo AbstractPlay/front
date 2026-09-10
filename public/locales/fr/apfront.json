@@ -551,6 +551,11 @@
   "challenges": {
     "loading": "Chargement des défis…"
   },
+  "recentGames": {
+    "loading": "Chargement des parties récentes…",
+    "daysLabel": "Période",
+    "daysOption": "Les {{count}} derniers jours"
+  },
   "Change": "Modifier",
   "ChangeRenderOptions": "Modifier les options d'affichage du plateau",
   "ChooseDisplay": "Choisir comment le plateau doit être affiché",
@@ -846,6 +851,9 @@
     "earlier": "Plus anciens"
   },
   "nav": {
+    "explore": "Explorer",
+    "openChallenges": "Défis ouverts",
+    "recentGames": "Parties récentes",
     "myProfile": "Mon profil",
     "customizeTheme": "Personnaliser le thème",
     "visibilityVisible": "Visible par les autres",
@@ -979,6 +987,8 @@
   "StandingChallengeDescription": "Défi ouvert pour une partie de {{game}}",
   "StandingChallenges": "Défis ouverts pour {{name}}",
   "StandingChallenges2": "Défis ouverts",
+  "RecentCompletedGames": "Dernières parties terminées",
+  "RecentCompletedGamesFor": "Dernières parties de {{name}} terminées",
   "StandingChallengesCount_one": "défi ouvert",
   "StandingChallengesCount_other": "défis ouverts",
   "Statistics": "Statistiques",

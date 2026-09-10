@@ -16,6 +16,7 @@ import GameMoveWrapper, {
 } from "../components/GameMoveWrapper";
 import About from "../components/About";
 import StandingChallenges from "../components/StandingChallenges";
+import RecentCompletedGames from "../components/RecentCompletedGames";
 import ListGames from "../components/ListGames";
 import Ratings from "../components/Ratings";
 import Tournament from "../components/Tournaments/Tournament";
@@ -191,8 +192,12 @@ function Bones(props) {
                 <Route path="/players" element={<Players />} />
                 <Route path="/player/:userid" element={<Player />} />
                 <Route
-                  path="/challenges/:metaGame"
+                  path="/challenges/:metaGame?"
                   element={<StandingChallenges />}
+                />
+                <Route
+                  path="/recent-games/:metaGame?"
+                  element={<RecentCompletedGames />}
                 />
                 <Route
                   path="/listgames/:gameState/:metaGame"

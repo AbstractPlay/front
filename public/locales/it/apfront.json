@@ -551,6 +551,11 @@
   "challenges": {
     "loading": "Caricamento sfide…"
   },
+  "recentGames": {
+    "loading": "Caricamento partite recenti…",
+    "daysLabel": "Intervallo di tempo",
+    "daysOption": "Ultimi {{count}} giorni"
+  },
   "Change": "Modifica",
   "ChangeRenderOptions": "Modifica opzioni di visualizzazione del tabellone",
   "ChooseDisplay": "Scegli come visualizzare il tabellone",
@@ -846,6 +851,9 @@
     "earlier": "Precedenti"
   },
   "nav": {
+    "explore": "Esplora",
+    "openChallenges": "Sfide aperte",
+    "recentGames": "Partite recenti",
     "myProfile": "Il mio profilo",
     "customizeTheme": "Personalizza tema",
     "visibilityVisible": "Visibile agli altri",
@@ -979,6 +987,8 @@
   "StandingChallengeDescription": "Sfida aperta per una partita a {{game}}",
   "StandingChallenges": "Sfide aperte per {{name}}",
   "StandingChallenges2": "Sfide aperte",
+  "RecentCompletedGames": "Partite recenti concluse",
+  "RecentCompletedGamesFor": "Partite recenti concluse di {{name}}",
   "StandingChallengesCount_one": "sfida aperta",
   "StandingChallengesCount_other": "sfide aperte",
   "Statistics": "Statistiche",

@@ -1615,6 +1615,14 @@
     "src": "{{name}} Ratings",
     "out": "Classifiche di {{name}}"
   },
+  "RecentCompletedGames": {
+    "src": "Recent completed games",
+    "out": "Partite recenti concluse"
+  },
+  "RecentCompletedGamesFor": {
+    "src": "Recent completed {{name}} games",
+    "out": "Partite recenti concluse di {{name}}"
+  },
   "Refresh": {
     "src": "Refresh",
     "out": "Aggiorna"
@@ -4839,9 +4847,21 @@
     "src": "Customize theme",
     "out": "Personalizza tema"
   },
+  "nav.explore": {
+    "src": "Explore",
+    "out": "Esplora"
+  },
   "nav.myProfile": {
     "src": "My profile",
     "out": "Il mio profilo"
+  },
+  "nav.openChallenges": {
+    "src": "Open challenges",
+    "out": "Sfide aperte"
+  },
+  "nav.recentGames": {
+    "src": "Recent games",
+    "out": "Partite recenti"
   },
   "nav.visibilityVisible": {
     "src": "Visible to others",
@@ -5154,6 +5174,18 @@
   "profile.avatar.title": {
     "src": "Avatar",
     "out": "Avatar"
+  },
+  "recentGames.daysLabel": {
+    "src": "Time range",
+    "out": "Intervallo di tempo"
+  },
+  "recentGames.daysOption": {
+    "src": "Last {{count}} days",
+    "out": "Ultimi {{count}} giorni"
+  },
+  "recentGames.loading": {
+    "src": "Loading recent games…",
+    "out": "Caricamento partite recenti…"
   },
   "seatingMeFirst": {
     "src": "You will play first.",
