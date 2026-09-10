@@ -553,7 +553,9 @@
         "filters": {
             "starredOnly": "Only starred games",
             "hardTimeOnly": "Hard time only",
-            "ratedOnly": "Rated only"
+            "softTimeOnly": "Soft time only",
+            "ratedOnly": "Rated only",
+            "unratedOnly": "Unrated only"
         }
     },
     "recentGames": {

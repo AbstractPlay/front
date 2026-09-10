@@ -77,8 +77,16 @@ function StandingChallenges(props) {
     "challenges-filter-hard-time",
     false
   );
+  const [filterSoftTime, filterSoftTimeSetter] = useStorageState(
+    "challenges-filter-soft-time",
+    false
+  );
   const [filterRated, filterRatedSetter] = useStorageState(
     "challenges-filter-rated",
+    false
+  );
+  const [filterUnrated, filterUnratedSetter] = useStorageState(
+    "challenges-filter-unrated",
     false
   );
   const loggedin = authStatus === "ready";
@@ -335,7 +343,13 @@ function StandingChallenges(props) {
       if (filterHardTime && !row.clockHard) {
         return false;
       }
+      if (filterSoftTime && row.clockHard) {
+        return false;
+      }
       if (filterRated && !row.rated) {
+        return false;
+      }
+      if (filterUnrated && row.rated) {
         return false;
       }
       return true;
@@ -347,7 +361,9 @@ function StandingChallenges(props) {
     siteWide,
     filterStarred,
     filterHardTime,
+    filterSoftTime,
     filterRated,
+    filterUnrated,
     starredGameIds,
   ]);
 
@@ -521,7 +537,7 @@ function StandingChallenges(props) {
     if (siteWide) {
       table.setPageIndex(0);
     }
-  }, [siteWide, filterStarred, filterHardTime, filterRated, table]);
+  }, [siteWide, filterStarred, filterHardTime, filterSoftTime, filterRated, filterUnrated, table]);
 
   const challengeFilters = siteWide ? (
     <div
@@ -556,11 +572,33 @@ function StandingChallenges(props) {
         <label className="checkbox">
           <input
             type="checkbox"
+            checked={filterSoftTime}
+            onChange={(e) => filterSoftTimeSetter(e.target.checked)}
+          />
+          {" "}
+          {t("challenges.filters.softTimeOnly")}
+        </label>
+      </div>
+      <div className="control">
+        <label className="checkbox">
+          <input
+            type="checkbox"
             checked={filterRated}
             onChange={(e) => filterRatedSetter(e.target.checked)}
           />
           {" "}
           {t("challenges.filters.ratedOnly")}
+        </label>
+      </div>
+      <div className="control">
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={filterUnrated}
+            onChange={(e) => filterUnratedSetter(e.target.checked)}
+          />
+          {" "}
+          {t("challenges.filters.unratedOnly")}
         </label>
       </div>
     </div>
