@@ -553,7 +553,9 @@
     "filters": {
       "starredOnly": "Solo partite preferite",
       "hardTimeOnly": "Solo tempo rigido",
-      "ratedOnly": "Solo classificate"
+      "softTimeOnly": "Solo tempo flessibile",
+      "ratedOnly": "Solo classificate",
+      "unratedOnly": "Solo non classificate"
     }
   },
   "recentGames": {

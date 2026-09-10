@@ -553,7 +553,9 @@
     "filters": {
       "starredOnly": "Parties étoilées uniquement",
       "hardTimeOnly": "Temps strict uniquement",
-      "ratedOnly": "Parties classées uniquement"
+      "softTimeOnly": "Temps flexible uniquement",
+      "ratedOnly": "Parties classées uniquement",
+      "unratedOnly": "Non classé uniquement"
     }
   },
   "recentGames": {

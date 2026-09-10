@@ -553,7 +553,9 @@
     "filters": {
       "starredOnly": "Nur Spiele mit Stern",
       "hardTimeOnly": "Nur harte Bedenkzeit",
-      "ratedOnly": "Nur gewertete Spiele"
+      "softTimeOnly": "Nur weiche Bedenkzeit",
+      "ratedOnly": "Nur gewertete Spiele",
+      "unratedOnly": "Nur ungewertet"
     }
   },
   "recentGames": {
