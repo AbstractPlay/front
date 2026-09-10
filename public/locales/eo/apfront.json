@@ -1543,7 +1543,7 @@
         "tournamentStart": "Turniro {{number}} de la serio <tournamentLink>{{metaGame}}</tournamentLink> komenciĝis.",
         "tournamentEnd": "Turniro {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> finiĝis.",
         "tournamentEnd_withWinner": "Turniro {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> finiĝis. {{winnerName}} venkis.",
-        "completedGameChat": "{{commenterName}} havas ion por diri en via finita ludo de <gameLink>{{metaGame}}</gameLink>",
+        "completedGameChat": "{{commenterName}} parolis en via finita ludo de <gameLink>{{metaGame}}</gameLink>",
         "completedGameChat_backfill": "Vi havas nelegitajn babilmesaĝojn en via finita ludo de <gameLink>{{metaGame}}</gameLink>",
         "gameEnd_draw_vsOpponent": "Vi kunremisis vian ludon de <gameLink>{{metaGame}}</gameLink> kontraŭ <opponentLink>{{opponentName}}</opponentLink>",
         "gameEnd_lose_vsOpponent": "Vi malgajnis vian ludon de <gameLink>{{metaGame}}</gameLink> kontraŭ <opponentLink>{{opponentName}}</opponentLink>",
