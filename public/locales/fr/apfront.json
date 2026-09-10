@@ -549,7 +549,12 @@
   "ChallengeTypeTargeted": "Fermé",
   "ChallengeTypeTargetedDescription": "Vous défiez des joueurs spécifiques.",
   "challenges": {
-    "loading": "Chargement des défis…"
+    "loading": "Chargement des défis…",
+    "filters": {
+      "starredOnly": "Parties étoilées uniquement",
+      "hardTimeOnly": "Temps strict uniquement",
+      "ratedOnly": "Parties classées uniquement"
+    }
   },
   "recentGames": {
     "loading": "Chargement des parties récentes…",

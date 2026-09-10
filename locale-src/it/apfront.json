@@ -3675,6 +3675,18 @@
     "src": "O: Traditional",
     "out": "A: Tradizionale"
   },
+  "challenges.filters.hardTimeOnly": {
+    "src": "Hard time only",
+    "out": "Solo tempo rigido"
+  },
+  "challenges.filters.ratedOnly": {
+    "src": "Rated only",
+    "out": "Solo classificate"
+  },
+  "challenges.filters.starredOnly": {
+    "src": "Only starred games",
+    "out": "Solo partite preferite"
+  },
   "challenges.loading": {
     "src": "Loading challenges…",
     "out": "Caricamento sfide…"
