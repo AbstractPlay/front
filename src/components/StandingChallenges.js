@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
+import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
   getCoreRowModel,
@@ -20,13 +21,37 @@ import ActivityMarker from "./ActivityMarker";
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import { useStorageState } from "react-use-storage-state";
 import PageHelmet from "./PageHelmet";
-import { useExpandVariants } from "../hooks/useExpandVariants";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { useStore } from "../stores";
 import BotAwareName from "./Bots/BotAwareName";
 import { formatPlayerDisplayName } from "./Bots/botUtils";
 
 const allSize = Number.MAX_SAFE_INTEGER;
+
+async function parseAuthQueryArray(res) {
+  if (!res || res.status !== 200) {
+    return null;
+  }
+  const result = await res.json();
+  if (result.statusCode !== 200) {
+    return null;
+  }
+  return JSON.parse(result.body);
+}
+
+function partitionStandingChallenges(raw) {
+  return raw.reduce(
+    (acc, c) => {
+      if (c.id) {
+        acc[0].push(c);
+      } else {
+        acc[1].push(c);
+      }
+      return acc;
+    },
+    [[], []]
+  );
+}
 
 function StandingChallenges(props) {
   const { t } = useTranslation();
@@ -36,6 +61,7 @@ function StandingChallenges(props) {
   const [revoke, revokeSetter] = useState(null);
   const [reject, rejectSetter] = useState(null);
   const { metaGame } = useParams();
+  const siteWide = !metaGame;
   const [update, updateSetter] = useState(0);
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
@@ -43,7 +69,6 @@ function StandingChallenges(props) {
   const [sorting, setSorting] = useState([]);
   const [showAccepted, showAcceptedSetter] = useState(false);
   const [showModal, showModalSetter] = useState(false);
-  const { expandVariants } = useExpandVariants(metaGame);
   const loggedin = authStatus === "ready";
 
   async function reportError(error) {
@@ -92,29 +117,37 @@ function StandingChallenges(props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        var url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append("query", "standing_challenges");
-        url.searchParams.append("metaGame", metaGame);
-        if (globalMe?.id) {
-          url.searchParams.append("userId", globalMe.id);
+        let raw;
+        if (siteWide && loggedin) {
+          const res = await callAuthApi("all_standing_challenges", {}, false);
+          raw = await parseAuthQueryArray(res);
+          if (raw === null) {
+            const url = new URL(API_ENDPOINT_OPEN);
+            url.searchParams.append("query", "all_standing_challenges");
+            const publicRes = await fetch(url);
+            raw = await publicRes.json();
+          }
+        } else if (siteWide) {
+          const url = new URL(API_ENDPOINT_OPEN);
+          url.searchParams.append("query", "all_standing_challenges");
+          const res = await fetch(url);
+          raw = await res.json();
+        } else {
+          const url = new URL(API_ENDPOINT_OPEN);
+          url.searchParams.append("query", "standing_challenges");
+          url.searchParams.append("metaGame", metaGame);
+          if (globalMe?.id) {
+            url.searchParams.append("userId", globalMe.id);
+          }
+          const res = await fetch(url);
+          raw = await res.json();
         }
-        const res = await fetch(url);
-        var result = await res.json();
-        console.log(result);
-        var bad;
-        [result, bad] = result.reduce(
-          (acc, c) => {
-            if (c.id) {
-              acc[0].push(c);
-            } else {
-              acc[1].push(c);
-            }
-            return acc;
-          },
-          [[], []]
-        );
-        if (bad.length > 0)
+        let bad;
+        let result;
+        [result, bad] = partitionStandingChallenges(raw);
+        if (bad.length > 0) {
           reportError(`Bad standing challenges: ${JSON.stringify(bad)}`);
+        }
         challengesSetter(result);
         revokeSetter(null);
         acceptedSetter(null);
@@ -124,7 +157,7 @@ function StandingChallenges(props) {
       }
     }
     fetchData();
-  }, [metaGame, update, globalMe?.id]);
+  }, [metaGame, siteWide, loggedin, update, globalMe?.id]);
 
   useEffect(() => {
     showAcceptedSetter(
@@ -135,11 +168,18 @@ function StandingChallenges(props) {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(`Submitting acceptance of ${metaGame} challenge ${accepted}`);
+      const challenge = challenges?.find((c) => c.id === accepted);
+      const challengeMetaGame = siteWide ? challenge?.metaGame : metaGame;
+      if (!challengeMetaGame) {
+        return;
+      }
+      console.log(
+        `Submitting acceptance of ${challengeMetaGame} challenge ${accepted}`
+      );
       try {
         const res = await callAuthApi("challenge_response", {
           id: accepted,
-          metaGame: metaGame,
+          metaGame: challengeMetaGame,
           standing: true,
           response: true,
         });
@@ -149,7 +189,6 @@ function StandingChallenges(props) {
           console.log("handleAccept", result.statusCode);
           console.log(JSON.parse(result.body));
         } else {
-          const challenge = challenges.find((c) => c.id === accepted);
           if (challenge.numPlayers > 2) updateSetter((update) => update + 1);
         }
       } catch (error) {
@@ -158,14 +197,19 @@ function StandingChallenges(props) {
       }
     }
     if (accepted) fetchData();
-  }, [accepted, challenges, metaGame, updateSetter]);
+  }, [accepted, challenges, metaGame, siteWide, updateSetter]);
 
   useEffect(() => {
     async function fetchData() {
+      const challenge = challenges?.find((c) => c.id === revoke);
+      const challengeMetaGame = siteWide ? challenge?.metaGame : metaGame;
+      if (!challengeMetaGame) {
+        return;
+      }
       try {
         const res = await callAuthApi("challenge_revoke", {
           id: revoke,
-          metaGame: metaGame,
+          metaGame: challengeMetaGame,
           standing: true,
         });
         if (!res) return;
@@ -181,15 +225,21 @@ function StandingChallenges(props) {
     if (revoke) {
       fetchData();
     }
-  }, [revoke, metaGame, updateSetter]);
+  }, [revoke, metaGame, siteWide, challenges, updateSetter]);
 
   useEffect(() => {
     async function fetchData() {
-      console.log(`Submitting reject of ${metaGame} challenge ${reject}`);
+      const challengeMetaGame = siteWide
+        ? challenges?.find((c) => c.id === reject)?.metaGame
+        : metaGame;
+      if (!challengeMetaGame) {
+        return;
+      }
+      console.log(`Submitting reject of ${challengeMetaGame} challenge ${reject}`);
       try {
         const res = await callAuthApi("challenge_response", {
           id: reject,
-          metaGame: metaGame,
+          metaGame: challengeMetaGame,
           standing: true,
           response: false,
         });
@@ -209,7 +259,7 @@ function StandingChallenges(props) {
       fetchData();
       rejectSetter(null);
     }
-  }, [reject, metaGame]);
+  }, [reject, metaGame, siteWide, challenges, updateSetter]);
 
   const handleAccept = async (id) => {
     acceptedSetter(id);
@@ -223,8 +273,7 @@ function StandingChallenges(props) {
     revokeSetter(id);
   };
 
-  const metaGameName = getGameDisplayName(metaGame);
-  console.log(metaGame);
+  const metaGameName = metaGame ? getGameDisplayName(metaGame) : null;
   const showRespond = loggedin && challenges !== null;
 
   const data = useMemo(
@@ -237,8 +286,11 @@ function StandingChallenges(props) {
             lastSeen = userRec.lastSeen;
           }
         }
+        const rowMetaGame = rec.metaGame ?? metaGame;
         return {
           id: rec.id,
+          metaGame: rowMetaGame,
+          metaGameName: getGameDisplayName(rowMetaGame),
           challenger: rec.challenger.name,
           challengerId: rec.challenger.id,
           lastSeen,
@@ -251,16 +303,29 @@ function StandingChallenges(props) {
           players: rec.players.filter((p) => p.id !== rec.challenger?.id),
           rated: rec.rated,
           seating: rec.seating,
-          variants: expandVariants(rec.variants),
+          variants: expandVariantsForGame(rowMetaGame, rec.variants),
           comment: rec.comment,
         };
       }),
-    [challenges, allUsers, expandVariants]
+    [challenges, allUsers, metaGame]
   );
 
   const columnHelper = createColumnHelper();
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => {
+    const cols = [];
+    if (siteWide) {
+      cols.push(
+        columnHelper.accessor("metaGameName", {
+          header: t("tables.game"),
+          cell: (props) => (
+            <Link to={`/challenges/${props.row.original.metaGame}`}>
+              {props.getValue()}
+            </Link>
+          ),
+        })
+      );
+    }
+    cols.push(
       columnHelper.accessor("challenger", {
         header: t("tables.challenger"),
         cell: (props) => (
@@ -374,10 +439,20 @@ function StandingChallenges(props) {
               )}
             </>
           ),
-      }),
-    ],
-    [columnHelper, globalMe, t, accepted, revoke, reject, showRespond, allUsers]
-  );
+      })
+    );
+    return cols;
+  }, [
+    columnHelper,
+    globalMe,
+    t,
+    accepted,
+    revoke,
+    reject,
+    showRespond,
+    allUsers,
+    siteWide,
+  ]);
 
   const table = useReactTable({
     data,
@@ -497,19 +572,35 @@ function StandingChallenges(props) {
 
   return (
     <>
-      <PageHelmet title={`${metaGameName}: Open Challenges`}>
+      <PageHelmet
+        title={
+          siteWide
+            ? t("StandingChallenges2")
+            : `${metaGameName}: Open Challenges`
+        }
+      >
         <meta
           property="og:url"
-          content={`https://play.abstractplay.com/challenges/${metaGame}`}
+          content={
+            siteWide
+              ? "https://play.abstractplay.com/challenges"
+              : `https://play.abstractplay.com/challenges/${metaGame}`
+          }
         />
         <meta
           property="og:description"
-          content={`Open challenges for ${metaGameName}`}
+          content={
+            siteWide
+              ? t("StandingChallenges2")
+              : `Open challenges for ${metaGameName}`
+          }
         />
       </PageHelmet>
       <article>
         <h1 className="has-text-centered title">
-          {t("StandingChallenges", { name: metaGameName })}
+          {siteWide
+            ? t("StandingChallenges2")
+            : t("StandingChallenges", { name: metaGameName })}
         </h1>
         {globalMe === undefined ||
         globalMe === null ||
@@ -519,7 +610,7 @@ function StandingChallenges(props) {
               show={showModal}
               handleClose={() => showModalSetter(false)}
               handleChallenge={handleNewChallenge}
-              fixedMetaGame={metaGame}
+              fixedMetaGame={siteWide ? undefined : metaGame}
             />
             <div className="has-text-centered" style={{ marginBottom: "1em" }}>
               <button

@@ -551,6 +551,11 @@
     "challenges": {
         "loading": "Loading challenges…"
     },
+    "recentGames": {
+        "loading": "Loading recent games…",
+        "daysLabel": "Time range",
+        "daysOption": "Last {{count}} days"
+    },
     "Change": "Change",
     "ChangeRenderOptions": "Change board display options",
     "ChooseDisplay": "Choose how the board should be displayed",
@@ -846,6 +851,9 @@
         "earlier": "Earlier"
     },
     "nav": {
+        "explore": "Explore",
+        "openChallenges": "Open challenges",
+        "recentGames": "Recent games",
         "myProfile": "My profile",
         "customizeTheme": "Customize theme",
         "visibilityVisible": "Visible to others",
@@ -979,6 +987,8 @@
     "StandingChallengeDescription": "Open challenge for a game of {{game}}",
     "StandingChallenges": "Open Challenges for {{name}}",
     "StandingChallenges2": "Open Challenges",
+    "RecentCompletedGames": "Recent completed games",
+    "RecentCompletedGamesFor": "Recent completed {{name}} games",
     "StandingChallengesCount_one": "open challenge",
     "StandingChallengesCount_other": "open challenges",
     "Statistics": "Statistics",
