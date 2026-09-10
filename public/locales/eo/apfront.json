@@ -1212,7 +1212,8 @@
     "toggleDarkMode": "Baskuligi malhelan reĝimon",
     "toggleLightMode": "Baskuligi helan reĝimon",
     "moveUp": "movi supren",
-    "moveDown": "movi malsupren"
+    "moveDown": "movi malsupren",
+    "notifications": "Sciigoj"
   },
   "None": "Neniu",
   "Draw": "Remizo",
@@ -1543,7 +1544,11 @@
         "tournamentEnd": "Turniro {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> finiĝis.",
         "tournamentEnd_withWinner": "Turniro {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> finiĝis. {{winnerName}} venkis.",
         "completedGameChat": "{{commenterName}} havas ion por diri en via finita ludo de <gameLink>{{metaGame}}</gameLink>",
-        "completedGameChat_backfill": "Vi havas nelegitajn babilmesaĝojn en via finita ludo de <gameLink>{{metaGame}}</gameLink>"
+        "completedGameChat_backfill": "Vi havas nelegitajn babilmesaĝojn en via finita ludo de <gameLink>{{metaGame}}</gameLink>",
+        "gameEnd_draw_vsOpponent": "Vi kunremisis vian ludon de <gameLink>{{metaGame}}</gameLink> kontraŭ <opponentLink>{{opponentName}}</opponentLink>",
+        "gameEnd_lose_vsOpponent": "Vi malgajnis vian ludon de <gameLink>{{metaGame}}</gameLink> kontraŭ <opponentLink>{{opponentName}}</opponentLink>",
+        "gameEnd_scores": "La finaj poentaroj estis jenaj: {{scores}}.",
+        "gameEnd_win_vsOpponent": "Vi gajnis vian ludon de <gameLink>{{metaGame}}</gameLink> kontraŭ <opponentLink>{{opponentName}}</opponentLink>"
       }
     }
   },
@@ -1616,7 +1621,8 @@
       "customCssWarning1": "Eblas adapti la CSS-on de ĉiuj okazoj de ĉi tiu specifa ludo. <1>Oni ne faru tion senpripense!</1> Ne enmetu kodon, kiun vi ne komprenas aŭ kiun ne kontrolis fidata homo. Abstract Play kaj ĝiaj programistoj ne respondecas pri problemoj, kiuj povas okazi dum la uzado de ĉi tiu funkcio.",
       "customCssWarning2": "Se vi certe volas daŭrigi, algluu la CSS-kodon sube kaj premu „Konservi“. Se ĉio paneos, malfermu la programistan konzolon kaj vakigu la lokan memorŝlosilon <1>custom-css</1>; tio devus restarigi ĉion. Vidu la vikion por dokumentado, kaj aliĝu al ni en Discord por diskuti.",
       "pasteCssPlaceholder": "Algluu CSS-kodon ĉi tie",
-      "activateCustomCss": "Aktivigi propran CSS-on?"
+      "activateCustomCss": "Aktivigi propran CSS-on?",
+      "accountCssOverridesLocal": "Propra CSS el via konto (la paĝo por adapti agordojn) estas aktiva por ĉi tiu ludo. Ŝanĝoj ĉi tie konserviĝas nur en ĉi tiu aparato kaj ne aplikiĝos ĝis la CSS de via konto estos forigita."
     },
     "unrated": "nerangigita",
     "explorationDisabled": "esplorado malŝaltita",
@@ -1672,7 +1678,17 @@
       "feedbackNotePosted": "Dankon—via noto estis sendita.",
       "feedbackCommentTooLong": "La komento devas havi maksimume {{max}} signojn.",
       "moveTableDensityAuto": "Kompaktaj movvicoj (klaku por po unu vico por ĉiu movo)",
-      "moveTableDensitySparse": "Po unu vico por ĉiu movo (klaku por kompaktaj vicoj)"
+      "moveTableDensitySparse": "Po unu vico por ĉiu movo (klaku por kompaktaj vicoj)",
+      "chatUnread": "Novaj babilmesaĝoj",
+      "classicDescription": "La originala trikolumna enpaĝigo",
+      "hintBody": "Vi uzas la enpaĝigon \"Bendo kaj doko\".",
+      "hintChange": "Ŝanĝi enpaĝigon",
+      "hintDismiss": "Forigi",
+      "lastMoveByPrefix": "{{player}} ludis",
+      "lastMoveLabel": "Lasta movo:",
+      "pickerIntro": "Elektu, kiel la ludpaĝo estu aranĝita en ĉi tiu aparato. Via elekto estos memorata en ĉi tiu retumilo.",
+      "pickerOpen": "Ŝanĝi enpaĝigon (nun {{layout}})",
+      "pickerTitle": "Elektu la enpaĝigon de la ludpaĝo"
     },
     "loading": "Ŝargas ludon…"
   },
@@ -1754,7 +1770,39 @@
     "pasteSettingsHelp": "Algluu ĉi tie la agordan JSON-on por apliki ĝin.",
     "saveSettings": "Konservi agordojn",
     "resetToDefaults": "Restarigi la defaŭltojn",
-    "deleteCustomization": "Forigi la propran agordon"
+    "deleteCustomization": "Forigi la propran agordon",
+    "applyClearSelection": "Nuligi la elekton",
+    "applyConfirmAction": "Apliki",
+    "applyDone": "Aplikita al {{success}} el {{total}} ludo(j).",
+    "applyFailures": "Malsukcesis por: {{games}}",
+    "applyHasCustomization": "Kun propra agordo",
+    "applyIntro": "Kopiu elektitajn sekciojn el la nuna konservita propra agordo al aliaj ludoj.",
+    "applyOverwriteWarning": "Ĉi tio anstataŭigos la elektitajn sekciojn en {{count}} ludo(j), kiu(j) jam havas proprajn agordojn.",
+    "applyProgress": "Konservas… {{done}} / {{total}}",
+    "applySaveFirst": "Konservu viajn ŝanĝojn antaŭ ol apliki ilin al aliaj ludoj.",
+    "applySections": {
+      "colourContext": "Koloroj de la tabulo",
+      "customCss": "Propra CSS",
+      "glyphmap": "Anstataŭigoj de glifoj",
+      "palette": "Koloroj de ludantoj (paletro)",
+      "preferredColour": "Preferata koloro"
+    },
+    "applySectionsLabel": "Kopiotaj sekcioj",
+    "applySelectCustomized": "Elekti ludojn kun miaj propraj agordoj",
+    "applySelectFiltered": "Elekti la filtritajn ludojn",
+    "applySelectedCount": "{{count}} ludo(j) elektita(j)",
+    "applyToOtherGames": "Apliki al aliaj ludoj…",
+    "clearPreferredColour": "Forigi la preferatan koloron",
+    "customCss": "Propra CSS",
+    "customCssConfiguredActive": "Aktiva",
+    "customCssConfiguredInactive": "Neaktiva",
+    "customCssHelp": "Konserviĝas en via konto, kiam vi konservas. Celas tabulelementojn per elektiloj div._meta_<game>. Malnova CSS konservita nur en la aparato per la tabula ilobreto aŭtomate importiĝas ĉi tien, se tia ekzistas.",
+    "customCssImportedTag": "Importita",
+    "importedLegacyCss": "CSS importita el ĉi tiu aparato. Konservu por registri ĝin en via konto.",
+    "paletteHintPlayer": "(Ludanto {{player}})",
+    "preferredColour": "Mia preferata koloro",
+    "preferredColourHelpGame": "Anstataŭas vian tutlokan preferatan koloron nur por ĉi tiu ludo. Agordu vian defaŭlton en la sekcio",
+    "preferredColourHelpGlobal": "Kiam vi ludas, viaj pecoj uzas ĉi tiun koloron laŭeble. La aliaj ludantoj konservas apartajn kolorojn."
   },
   "gamePicker": {
     "choose": "Elektu ludon…",
@@ -1839,7 +1887,8 @@
     "importLocalBanner_one": "Vi havas unu konservitan ludon de la Ludejo en ĉi tiu aparato. Ĉu kopii ĝin al via konto?",
     "importLocalBanner_other": "Vi havas {{count}} konservitajn ludojn de la Ludejo en ĉi tiu aparato. Ĉu kopii ilin al via konto?",
     "importLocalSuccess_one": "Unu konservita ludo estis kopiita al via konto.",
-    "importLocalSuccess_other": "{{count}} konservitaj ludoj estis kopiitaj al via konto."
+    "importLocalSuccess_other": "{{count}} konservitaj ludoj estis kopiitaj al via konto.",
+    "launcherPageTitle": "Ludejo"
   },
   "Wikipedia": "Vikipedio",
   "NotificationSettingsSaveHelp": "Ŝanĝoj tuj konserviĝas.",
@@ -1915,5 +1964,67 @@
   },
   "play": {
     "loadingNext": "Serĉas por via sekva ludo…"
+  },
+  "RecentCompletedGames": "Lastatempe finitaj ludoj",
+  "RecentCompletedGamesFor": "Lastatempe finitaj ludoj de {{name}}",
+  "nav": {
+    "activePlayers_one": "Aktivaj ludantoj: {{count}}",
+    "activePlayers_other": "Aktivaj ludantoj: {{count}}",
+    "customizeTheme": "Agordi la retejan etoson",
+    "explore": "Esplori",
+    "myProfile": "Mia profilo",
+    "openChallenges": "Malfermitaj defioj",
+    "recentGames": "Lastatempaj ludoj",
+    "visibilityVisible": "Videbla al aliaj"
+  },
+  "news": {
+    "earlier": "Pli frue",
+    "whatsNew": "Novaĵoj"
+  },
+  "notifications": {
+    "dismissAll": "Forigi ĉiujn",
+    "dismissAllConfirm": "Alklaku denove por forigi ĉiujn",
+    "empty": "Neniuj sciigoj",
+    "markAllRead": "Marki ĉiujn kiel legitajn",
+    "markRead": "Marki kiel legitan",
+    "newsUpdated": "La novaĵoj estis aktualigitaj"
+  },
+  "profile": {
+    "avatar": {
+      "current": "Nuna",
+      "licenseNote": "La avataroj estas generataj de DiceBear. Iuj stiloj postulas mencion de la aŭtoro — vidu",
+      "preview": "Antaŭrigardo",
+      "randomize": "Hazardigi la semon",
+      "resetDefault": "Restarigi la defaŭlton",
+      "save": "Konservi avataron",
+      "saveFailed": "Ne eblis konservi la avataron.",
+      "saveSuccess": "Avataro konservita.",
+      "seedHelp": "Via uzantidentigilo estas uzata defaŭlte. Ŝanĝu la semon por ricevi alian bildon en la sama stilo.",
+      "seedLabel": "Semo",
+      "style": {
+        "blobs": "Makuloj",
+        "cameo": "Kameo",
+        "clay": "Argilo",
+        "constellation": "Konstelacio",
+        "cutouts": "Eltondaĵoj",
+        "glass": "Vitro",
+        "identicon": "Identicon",
+        "initial-face": "Vizaĝo kun inicialo",
+        "landscape": "Pejzaĝo",
+        "patchwork": "Ĉifonaĵo",
+        "planets": "Planedoj",
+        "rings": "Ringoj",
+        "shape-grid": "Krado de formoj",
+        "shapes": "Formoj",
+        "waves": "Ondoj"
+      },
+      "styleLabel": "Stilo",
+      "title": "Avataro"
+    }
+  },
+  "recentGames": {
+    "daysLabel": "Tempintervalo",
+    "daysOption": "La lastaj {{count}} tagoj",
+    "loading": "Ŝargas lastatempajn ludojn…"
   }
 }
