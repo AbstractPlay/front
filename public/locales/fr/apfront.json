@@ -924,6 +924,7 @@
   "InAppNotifyLabel-feedbackReply": "Réponses aux retours",
   "InAppNotifyLabel-feedbackStatus": "Mises à jour du statut des retours",
   "InAppNotifyLabel-feedbackDeleted": "Entrées supprimées de la liste de souhaits",
+  "InAppNotifyLabel-feedbackReviewRequested": "Demandes de révision de retours",
   "NoWaitingResponse": "Aucun challenge attend sur la réponse de votre adversaire",
   "NoYourMove": "Aucune partie en attente de votre coup.",
   "NumChallenge": "Il y aura {{num}} joueurs dans cette partie. {{players}}. La répartition des sièges sera aléatoire.",
@@ -1663,7 +1664,8 @@
         "completedGameChat_backfill": "Vous avez des messages non lus dans votre partie terminée de <gameLink>{{metaGame}}</gameLink>",
         "feedbackReply": "Nouvelle réponse sur <feedbackLink>{{title}}</feedbackLink>{{preview}}",
         "feedbackStatus": "Mise à jour du statut de <feedbackLink>{{title}}</feedbackLink> : {{status}}",
-        "feedbackDeleted": "Entrée de la liste de souhaits supprimée : <wishlistLink>{{title}}</wishlistLink>. Raison : {{reason}}"
+        "feedbackDeleted": "Entrée de la liste de souhaits supprimée : <wishlistLink>{{title}}</wishlistLink>. Raison : {{reason}}",
+        "feedbackReviewRequested": "Vous avez été ajouté comme réviseur sur <feedbackLink>{{title}}</feedbackLink>"
       }
     }
   },
@@ -1834,6 +1836,7 @@
       "adminEffort": "Effort",
       "adminPriority": "Priorité",
       "adminTags": "Étiquettes admin (séparées par des virgules)",
+      "adminReviewers": "Réviseurs",
       "adminWishlistCategory": "Catégorie",
       "adminWishlistNote": "Note de catégorie (optionnel)",
       "saveAdminFields": "Enregistrer les champs admin",
@@ -1861,6 +1864,16 @@
       "urgent": "Urgente",
       "normal": "Normale",
       "low": "Basse"
+    },
+    "reviewers": {
+      "badge": "Réviseurs : {{names}}",
+      "badgeCompact_one": "1 réviseur",
+      "badgeCompact_other": "{{count}} réviseurs",
+      "add": "Ajouter un réviseur",
+      "remove": "Retirer {{name}}",
+      "empty": "Aucun réviseur assigné.",
+      "hint": "Jusqu'à {{max}} réviseurs. Les utilisateurs ajoutés reçoivent une notification unique ; utilisez Suivre pour recevoir les mises à jour régulières.",
+      "divider": "────────────"
     },
     "meta": {
       "comments_one": "{{count}} commentaire",

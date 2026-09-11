@@ -924,6 +924,7 @@
   "InAppNotifyLabel-feedbackReply": "Respuestas a comentarios",
   "InAppNotifyLabel-feedbackStatus": "Actualizaciones de estado de comentarios",
   "InAppNotifyLabel-feedbackDeleted": "Entradas eliminadas de la lista de deseos",
+  "InAppNotifyLabel-feedbackReviewRequested": "Solicitudes de revisión de comentarios",
   "NoWaitingResponse": "No hay desafíos esperando la respuesta del oponente",
   "NoYourMove": "No hay juegos esperando tu movimiento.",
   "NumChallenge": "Habrá {{num}} jugadores en este juego. {{players}}. La asignación de asientos será aleatoria.",
@@ -1663,7 +1664,8 @@
         "completedGameChat_backfill": "Tienes mensajes sin leer en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>",
         "feedbackReply": "Nueva respuesta en <feedbackLink>{{title}}</feedbackLink>{{preview}}",
         "feedbackStatus": "Actualización de estado en <feedbackLink>{{title}}</feedbackLink>: {{status}}",
-        "feedbackDeleted": "Entrada de la lista de deseos eliminada: <wishlistLink>{{title}}</wishlistLink>. Motivo: {{reason}}"
+        "feedbackDeleted": "Entrada de la lista de deseos eliminada: <wishlistLink>{{title}}</wishlistLink>. Motivo: {{reason}}",
+        "feedbackReviewRequested": "Se te agregó como revisor en <feedbackLink>{{title}}</feedbackLink>"
       }
     }
   },
@@ -1834,6 +1836,7 @@
       "adminEffort": "Esfuerzo",
       "adminPriority": "Prioridad",
       "adminTags": "Etiquetas de administración (separadas por comas)",
+      "adminReviewers": "Revisores",
       "adminWishlistCategory": "Categoría",
       "adminWishlistNote": "Nota de categoría (opcional)",
       "saveAdminFields": "Guardar campos de administración",
@@ -1861,6 +1864,16 @@
       "urgent": "Urgente",
       "normal": "Normal",
       "low": "Baja"
+    },
+    "reviewers": {
+      "badge": "Revisores: {{names}}",
+      "badgeCompact_one": "1 revisor",
+      "badgeCompact_other": "{{count}} revisores",
+      "add": "Agregar revisor",
+      "remove": "Eliminar a {{name}}",
+      "empty": "No hay revisores asignados.",
+      "hint": "Hasta {{max}} revisores. Los usuarios agregados reciben una notificación por única vez; usa Seguir para actualizaciones continuas.",
+      "divider": "────────────"
     },
     "meta": {
       "comments_one": "{{count}} comentario",
