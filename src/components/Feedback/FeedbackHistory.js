@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Spinner from "../Spinner";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import FeedbackTimestamp from "./FeedbackTimestamp";
-import { listFeedbackHistory } from "../../lib/feedback/feedbackApi";
+import { listFeedbackHistoryAll } from "../../lib/feedback/feedbackApi";
 import {
   FEEDBACK_HISTORY_TABS,
   feedbackDetailPath,
@@ -35,7 +35,7 @@ function FeedbackHistory() {
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const result = await listFeedbackHistory({ kind, limit: 100 });
+      const result = await listFeedbackHistoryAll({ kind, limit: 100 });
       if (cancelled) {
         return;
       }

@@ -1669,6 +1669,8 @@
     },
     "feedback": {
         "board": {
+            "filterLabel": "Filter list",
+            "filterAll": "All ({{count}})",
             "sortBy": "Sort by",
             "sortVotes": "Votes (most first)",
             "sortRecent": "Date posted (newest first)"

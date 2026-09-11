@@ -6,7 +6,7 @@ import Spinner from "../Spinner";
 import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
 import FeedbackTimestamp from "./FeedbackTimestamp";
-import { listMyFeedback } from "../../lib/feedback/feedbackApi";
+import { listMyFeedbackAll } from "../../lib/feedback/feedbackApi";
 import { feedbackDetailPath } from "../../lib/feedback/feedbackConstants";
 import { isFeedbackUnread } from "../../lib/feedback/feedbackLastSeen";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
@@ -35,8 +35,8 @@ function FeedbackMine() {
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const result = await listMyFeedback(
-        activeTab.kind ? { kind: activeTab.kind, limit: 50 } : { limit: 50 },
+      const result = await listMyFeedbackAll(
+        activeTab.kind ? { kind: activeTab.kind, limit: 100 } : { limit: 100 },
       );
       if (cancelled) {
         return;

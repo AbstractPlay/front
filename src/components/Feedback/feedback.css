@@ -342,38 +342,26 @@
   margin: 0 0 1.25rem;
 }
 
-.feedback-board-sort .label {
+.feedback-board-sort .label,
+.feedback-board-chips + .feedback-board-sort .label {
   margin-bottom: 0.35rem;
 }
 
-.feedback-wishlist-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.75rem 1rem;
-  margin-bottom: 1rem;
+.feedback-board-chips .button.is-selected {
+  background: var(--secondary-color-3);
+  color: var(--high-contrast-font-color);
 }
 
-.feedback-wishlist-chips {
+.feedback-board-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   flex: 1 1 12rem;
 }
 
-.feedback-wishlist-sort {
+.feedback-board-sort {
   flex: 0 1 auto;
   margin-bottom: 0;
-}
-
-.feedback-wishlist-sort .label {
-  margin-bottom: 0.25rem;
-}
-
-.feedback-wishlist-chips .button.is-selected {
-  background: var(--secondary-color-3);
-  color: var(--high-contrast-font-color, var(--main-bg-color));
 }
 
 .feedback-wishlist-callout {

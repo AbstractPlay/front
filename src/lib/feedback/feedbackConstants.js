@@ -4,6 +4,12 @@ export const FEEDBACK_KINDS = {
   wishlist: "wishlist",
 };
 
+export const TERMINAL_STATUSES = {
+  bug: ["resolved", "closed"],
+  feature: ["shipped", "declined"],
+  wishlist: ["available"],
+};
+
 export const BUG_STATUSES = [
   "open",
   "triaged",
@@ -47,10 +53,6 @@ export const WISHLIST_ADMIN_CATEGORIES = [
 export const WISHLIST_CATEGORY_FILTER_CHIPS = [
   "permissions_required",
   "declined",
-];
-
-export const WISHLIST_STATUS_FILTER_CHIPS = [
-  "in_development",
 ];
 
 export const PRIORITY_LEVELS = ["urgent", "normal", "low"];
@@ -109,6 +111,19 @@ export function statusesForKind(kind) {
     return WISHLIST_STATUSES;
   }
   return [];
+}
+
+export function boardStatusFilterChipsForKind(kind) {
+  const terminal = TERMINAL_STATUSES[kind] ?? [];
+  return statusesForKind(kind).filter((status) => !terminal.includes(status));
+}
+
+export function countItemsByStatus(items, statusChips) {
+  const counts = { all: items.length };
+  for (const chip of statusChips) {
+    counts[chip] = items.filter((item) => item.status === chip).length;
+  }
+  return counts;
 }
 
 export function boardKeyForKind(kind) {

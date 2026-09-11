@@ -106,20 +106,45 @@ async function enrichWishlistCoverUrls(items) {
   });
 }
 
-/** Fetch every page until the API stops returning nextCursor. */
-export async function listFeedbackAll({ kind, sort = "recent", limit = 100 }) {
+async function listAllPages(fetchPage) {
   const items = [];
   let cursor;
   do {
-    const result = await listFeedback({ kind, sort, limit, cursor });
+    const result = await fetchPage(cursor);
     if (!result.ok) {
       return result;
     }
     items.push(...(result.data?.items ?? []));
     cursor = result.data?.nextCursor;
   } while (cursor);
-  const enriched = kind === "wishlist" ? await enrichWishlistCoverUrls(items) : items;
+  return { ok: true, data: { items } };
+}
+
+/** Fetch every page until the API stops returning nextCursor. */
+export async function listFeedbackAll({ kind, sort = "recent", limit = 100 }) {
+  const result = await listAllPages((cursor) => listFeedback({ kind, sort, limit, cursor }));
+  if (!result.ok) {
+    return result;
+  }
+  const enriched = kind === "wishlist"
+    ? await enrichWishlistCoverUrls(result.data.items)
+    : result.data.items;
   return { ok: true, data: { items: enriched } };
+}
+
+export async function listFeedbackAdminAll(pars) {
+  const { limit = 100, ...rest } = pars;
+  return listAllPages((cursor) => listFeedbackAdmin({ ...rest, limit, cursor }));
+}
+
+export async function listMyFeedbackAll(pars = {}) {
+  const { limit = 100, ...rest } = pars;
+  return listAllPages((cursor) => listMyFeedback({ ...rest, limit, cursor }));
+}
+
+export async function listFeedbackHistoryAll(pars) {
+  const { limit = 100, ...rest } = pars;
+  return listAllPages((cursor) => listFeedbackHistory({ ...rest, limit, cursor }));
 }
 
 export async function getFeedbackOpen(id) {
