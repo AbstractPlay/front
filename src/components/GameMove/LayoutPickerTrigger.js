@@ -19,7 +19,7 @@ function LayoutPickerTrigger({ className = "", compact = false }) {
       aria-label={label}
     >
       <span className="icon" aria-hidden="true">
-        <i className="fa fa-table-columns" />
+        <i className="fa fa-columns" />
       </span>
       {compact ? null : (
         <span className="game-move-layout-picker-trigger__label">

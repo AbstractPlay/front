@@ -4084,12 +4084,132 @@
     "out": "le signaler sur notre serveur Discord"
   },
   "fatalError.genericMessage": {
-    "src": "Please refresh the page. If the problem persists, please <1>report it on our Discord server</1>.",
-    "out": "Veuillez rafraîchir la page. Si le problème persiste, veuillez <1>le signaler sur notre serveur Discord</1>."
+    "src": "Please refresh the page. If the problem persists, please <1>report it on our Discord server</1> or use the Report a bug button below.",
+    "out": "Veuillez rafraîchir la page. Si le problème persiste, veuillez le <1>signaler sur notre serveur Discord</1> ou utiliser le bouton Signaler un bug ci-dessous."
   },
   "fatalError.title": {
     "src": "Something went wrong",
     "out": "Une erreur est survenue"
+  },
+  "feedback.auth.signInRequired": {
+    "src": "You must be logged in to participate in feedback.",
+    "out": "Vous devez être connecté pour participer aux retours."
+  },
+  "feedback.auth.signInToCreate": {
+    "src": "You must be logged in to report a bug, suggest a feature, or add a game to the wishlist.",
+    "out": "Vous devez être connecté pour signaler un bug, suggérer une fonctionnalité ou ajouter un jeu à la liste de souhaits."
+  },
+  "feedback.auth.signInToCreateShort": {
+    "src": "Log in to submit feedback.",
+    "out": "Connectez-vous pour envoyer un retour."
+  },
+  "feedback.auth.signInToInteract": {
+    "src": "Log in to vote, watch, or comment on this item.",
+    "out": "Connectez-vous pour voter, suivre ou commenter cet élément."
+  },
+  "feedback.auth.signInToViewMine": {
+    "src": "Log in to see your submitted feedback.",
+    "out": "Connectez-vous pour voir les retours que vous avez envoyés."
+  },
+  "feedback.detail.archivedBanner": {
+    "src": "This item has been archived. Discussion is read-only until live data is removed.",
+    "out": "Cet élément a été archivé. La discussion est en lecture seule jusqu'à la suppression des données en direct."
+  },
+  "feedback.detail.archivedPurgedBanner": {
+    "src": "This item has been archived. The full thread is no longer available on the live board.",
+    "out": "Cet élément a été archivé. Le fil de discussion complet n'est plus disponible sur le tableau en direct."
+  },
+  "feedback.detail.holdRetention": {
+    "src": "Hold retention",
+    "out": "Maintenir la conservation"
+  },
+  "feedback.detail.releaseRetention": {
+    "src": "Release retention",
+    "out": "Lever la conservation"
+  },
+  "feedback.detail.retentionHoldOff": {
+    "src": "Retention hold is off — this item will be archived after the retention period.",
+    "out": "La conservation des données est désactivée — cet élément sera archivé après la période de conservation."
+  },
+  "feedback.detail.retentionHoldOn": {
+    "src": "Retention hold is on — this item will not be archived automatically.",
+    "out": "La conservation des données est activée — cet élément ne sera pas archivé automatiquement."
+  },
+  "feedback.history.closed": {
+    "src": "Closed {{date}}",
+    "out": "Fermé le {{date}}"
+  },
+  "feedback.history.empty.bugs": {
+    "src": "No archived bug reports yet.",
+    "out": "Aucun rapport de bug archivé pour le moment."
+  },
+  "feedback.history.empty.games": {
+    "src": "No archived wishlist games yet.",
+    "out": "Aucun jeu de la liste de souhaits archivé pour le moment."
+  },
+  "feedback.history.empty.ideas": {
+    "src": "No archived feature ideas yet.",
+    "out": "Aucune idée de fonctionnalité archivée pour le moment."
+  },
+  "feedback.history.implementedAs": {
+    "src": "Now on Abstract Play: {{name}}",
+    "out": "Désormais sur Abstract Play : {{name}}"
+  },
+  "feedback.history.intro": {
+    "src": "Closed bug reports, shipped feature ideas, and games that became available on Abstract Play.",
+    "out": "Rapports de bugs fermés, idées de fonctionnalités intégrées et jeux devenus disponibles sur Abstract Play."
+  },
+  "feedback.history.tabLabel": {
+    "src": "History category",
+    "out": "Catégorie d'historique"
+  },
+  "feedback.history.tabs.bugs": {
+    "src": "Bugs",
+    "out": "Bugs"
+  },
+  "feedback.history.tabs.games": {
+    "src": "Games",
+    "out": "Jeux"
+  },
+  "feedback.history.tabs.ideas": {
+    "src": "Features",
+    "out": "Fonctionnalités"
+  },
+  "feedback.history.title": {
+    "src": "Feedback history",
+    "out": "Historique des retours"
+  },
+  "feedback.history.viewHistory": {
+    "src": "View feedback history",
+    "out": "Voir l'historique des retours"
+  },
+  "feedback.new.coverImage": {
+    "src": "Cover image",
+    "out": "Image de couverture"
+  },
+  "feedback.new.coverImageHint": {
+    "src": "Optional. Paste or upload one box-art image. If you paste multiple images, only the last one is kept.",
+    "out": "Optionnel. Collez ou téléchargez une illustration de boîte. Si vous collez plusieurs images, seule la dernière sera conservée."
+  },
+  "feedback.upload.addCover": {
+    "src": "Add cover image",
+    "out": "Ajouter une image de couverture"
+  },
+  "feedback.upload.coverCount_one": {
+    "src": "{{count}} cover image attached",
+    "out": "{{count}} image de couverture jointe"
+  },
+  "feedback.upload.coverCount_other": {
+    "src": "{{count}} cover images attached",
+    "out": "{{count}} images de couverture jointes"
+  },
+  "feedback.upload.pasteCover": {
+    "src": "Paste cover image",
+    "out": "Coller une image de couverture"
+  },
+  "feedback.upload.pasteCoverHint": {
+    "src": "Click here and press Ctrl+V (or Cmd+V on Mac). If your clipboard has multiple images, only the last one is kept.",
+    "out": "Cliquez ici et appuyez sur Ctrl+V (ou Cmd+V sur Mac). Si votre presse-papiers contient plusieurs images, seule la dernière sera conservée."
   },
   "footer.betaBanner": {
     "src": "The site is currently in BETA testing!",
@@ -4102,14 +4222,6 @@
   "footer.discord": {
     "src": "Discord",
     "out": "Discord"
-  },
-  "footer.feedback": {
-    "src": "We're very happy with the core functionality, but we'd love some concrete feedback from users on how to make things better.",
-    "out": "Nous sommes très satisfaits des fonctionnalités principales, mais nous aimerions avoir des retours concrets des utilisateurs pour améliorer le site."
-  },
-  "footer.feedbackJoin": {
-    "src": "Please come join us on <1>Discord</1> and let us know if you run into any trouble or have any ideas.",
-    "out": "N'hésitez pas à nous rejoindre sur <1>Discord</1> et à nous faire savoir si vous rencontrez des difficultés ou si vous avez des idées."
   },
   "footer.github": {
     "src": "GitHub",
@@ -4863,6 +4975,10 @@
     "src": "Explore",
     "out": "Explorer"
   },
+  "nav.feedbackHistory": {
+    "src": "Feedback history",
+    "out": "Historique des retours"
+  },
   "nav.myProfile": {
     "src": "My profile",
     "out": "Mon profil"
@@ -4888,8 +5004,8 @@
     "out": "Nouveautés"
   },
   "notFound.body": {
-    "src": "No page could be found at <1>{{path}}</1>. Please use the navigation bar to try again. If the problem persists, please <2>post a bug report on our Discord server</2>.",
-    "out": "Aucune page n'a été trouvée à l'adresse <1>{{path}}</1>. Veuillez utiliser la barre de navigation pour réessayer. Si le problème persiste, veuillez <2>publier un rapport de bogue sur notre serveur Discord</2>."
+    "src": "No page could be found at <1>{{path}}</1>. Please use the navigation bar to try again. You can also <2>report a bug in-app</2> or <3>post on our Discord server</3>.",
+    "out": "Aucune page n'a été trouvée à l'adresse <1>{{path}}</1>. Veuillez utiliser la barre de navigation pour réessayer. Vous pouvez également <2>signaler un bug dans l'application</2> ou <3>publier sur notre serveur Discord</3>."
   },
   "notFound.reportLink": {
     "src": "post a bug report on our Discord server",

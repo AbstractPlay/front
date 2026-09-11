@@ -3,6 +3,7 @@ import { SitemapStream, streamToPromise } from "sitemap";
 import { Readable } from "stream";
 import { writeFileSync } from "fs";
 
+// Do not add /feedback/* or /wishlist routes — feedback boards are noindex.
 // An array with your links
 const links = [
     { url: "/about",  changefreq: "weekly", priority: 0.5  },
