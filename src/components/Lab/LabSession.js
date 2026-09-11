@@ -871,7 +871,7 @@ function LabSession({
 
   useEffect(() => {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
-  }, [t, focus?.moveNumber, focusExPathKey]);
+  }, [t, focus?.moveNumber, focusExPathKey, globalMe?.settings?.all?.hideSpoilers]);
 
   const game = gameRef.current;
 
