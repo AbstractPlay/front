@@ -863,6 +863,7 @@
     "bugBoard": "Rapports de bugs",
     "featureIdeas": "Idées de fonctionnalités",
     "gameWishlist": "Liste de souhaits de jeux",
+    "feedbackHistory": "Historique des retours",
     "myFeedback": "Mes retours",
     "explore": "Explorer",
     "openChallenges": "Défis ouverts",
@@ -1311,7 +1312,7 @@
   "fatalError": {
     "title": "Une erreur est survenue",
     "chunkMessage": "Une nouvelle version du site est peut-être disponible. Veuillez rafraîchir la page.",
-    "genericMessage": "Veuillez rafraîchir la page. Si le problème persiste, veuillez <1>le signaler sur notre serveur Discord</1> ou utiliser le bouton Signaler un bug ci-dessous.",
+    "genericMessage": "Veuillez rafraîchir la page. Si le problème persiste, veuillez le <1>signaler sur notre serveur Discord</1> ou utiliser le bouton Signaler un bug ci-dessous.",
     "discordLink": "le signaler sur notre serveur Discord"
   },
   "standingChallenge": {
@@ -1717,6 +1718,31 @@
       "ideas": "Fonctionnalités",
       "updated": "Mis à jour"
     },
+    "auth": {
+      "signInRequired": "Vous devez être connecté pour participer aux retours.",
+      "signInToCreate": "Vous devez être connecté pour signaler un bug, suggérer une fonctionnalité ou ajouter un jeu à la liste de souhaits.",
+      "signInToCreateShort": "Connectez-vous pour envoyer un retour.",
+      "signInToInteract": "Connectez-vous pour voter, suivre ou commenter cet élément.",
+      "signInToViewMine": "Connectez-vous pour voir les retours que vous avez envoyés."
+    },
+    "history": {
+      "title": "Historique des retours",
+      "intro": "Rapports de bugs fermés, idées de fonctionnalités intégrées et jeux devenus disponibles sur Abstract Play.",
+      "tabLabel": "Catégorie d'historique",
+      "closed": "Fermé le {{date}}",
+      "implementedAs": "Désormais sur Abstract Play : {{name}}",
+      "viewHistory": "Voir l'historique des retours",
+      "tabs": {
+        "bugs": "Bugs",
+        "ideas": "Fonctionnalités",
+        "games": "Jeux"
+      },
+      "empty": {
+        "bugs": "Aucun rapport de bug archivé pour le moment.",
+        "ideas": "Aucune idée de fonctionnalité archivée pour le moment.",
+        "games": "Aucun jeu de la liste de souhaits archivé pour le moment."
+      }
+    },
     "admin": {
       "title": "Administration des retours",
       "intro": "Trier et gérer les retours soumis.",
@@ -1800,7 +1826,13 @@
       "deleteWishlistReason": "Raison de la suppression",
       "deleteWishlistConfirm": "Supprimer l'entrée",
       "deleteWishlistCancel": "Annuler",
-      "deleting": "Suppression…"
+      "deleting": "Suppression…",
+      "archivedBanner": "Cet élément a été archivé. La discussion est en lecture seule jusqu'à la suppression des données en direct.",
+      "archivedPurgedBanner": "Cet élément a été archivé. Le fil de discussion complet n'est plus disponible sur le tableau en direct.",
+      "retentionHoldOn": "La conservation des données est activée — cet élément ne sera pas archivé automatiquement.",
+      "retentionHoldOff": "La conservation des données est désactivée — cet élément sera archivé après la période de conservation.",
+      "holdRetention": "Maintenir la conservation",
+      "releaseRetention": "Lever la conservation"
     },
     "effort": {
       "low": "Faible effort",

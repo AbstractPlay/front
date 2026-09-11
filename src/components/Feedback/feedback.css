@@ -6,6 +6,52 @@
   padding: 1rem;
 }
 
+.feedback-archived-banner {
+  background: var(--secondary-color-3-bg);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.feedback-history-note {
+  margin: 0.35rem 0 0;
+  color: var(--secondary-font-color);
+}
+
+.feedback-retention-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.feedback-sign-in-required {
+  background: var(--secondary-color-3-bg);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.feedback-sign-in-required--compact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+}
+
+.feedback-sign-in-required--compact p {
+  margin: 0;
+}
+
 .feedback-board-list {
   list-style: none;
   margin: 0;

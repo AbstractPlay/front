@@ -3,7 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
+import { useAuthSession } from "../../hooks/useAuthSession";
 import Spinner from "../Spinner";
+import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import FeedbackListFilters from "./FeedbackListFilters";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
 import { listFeedback, listFeedbackAdmin, listFeedbackAll } from "../../lib/feedback/feedbackApi";
@@ -21,6 +23,8 @@ import "./feedback.css";
 
 function FeedbackBoard({ kind = "bug" }) {
   const { t } = useTranslation();
+  const { status } = useAuthSession();
+  const loggedIn = status === "ready";
   const globalMe = useStore((state) => state.globalMe);
   const boardKey = boardKeyForKind(kind);
   const defaultSort = kind === "feature" || kind === "wishlist" ? "votes" : "recent";
@@ -104,9 +108,13 @@ function FeedbackBoard({ kind = "bug" }) {
         <p className="feedback-muted">{t("feedback.wishlist.legend")}</p>
       ) : null}
       <p>
-        <Link className="button apButton" to={`${FEEDBACK_NEW_PATH}?kind=${kind}`}>
-          {t(`feedback.${boardKey}.report`)}
-        </Link>
+        {loggedIn ? (
+          <Link className="button apButton" to={`${FEEDBACK_NEW_PATH}?kind=${kind}`}>
+            {t(`feedback.${boardKey}.report`)}
+          </Link>
+        ) : (
+          <FeedbackSignInRequired messageKey="feedback.auth.signInToCreateShort" compact />
+        )}
       </p>
       {kind === "wishlist" ? (
         <div className="feedback-wishlist-toolbar">

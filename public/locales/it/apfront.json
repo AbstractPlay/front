@@ -863,6 +863,7 @@
     "bugBoard": "Segnalazioni di bug",
     "featureIdeas": "Idee per funzionalità",
     "gameWishlist": "Lista desideri giochi",
+    "feedbackHistory": "Cronologia feedback",
     "myFeedback": "I miei feedback",
     "explore": "Esplora",
     "openChallenges": "Sfide aperte",
@@ -1311,7 +1312,7 @@
   "fatalError": {
     "title": "Qualcosa è andato storto",
     "chunkMessage": "Potrebbe essere disponibile una nuova versione del sito. Ricarica la pagina.",
-    "genericMessage": "Ricarica la pagina. Se il problema persiste, <1>segnalalo sul nostro server Discord</1> oppure usa il pulsante Segnala un bug qui sotto.",
+    "genericMessage": "Ricarica la pagina. Se il problema persiste, <1>segnalalo sul nostro server Discord</1> o usa il pulsante Segnala un bug qui sotto.",
     "discordLink": "segnalalo sul nostro server Discord"
   },
   "standingChallenge": {
@@ -1330,7 +1331,7 @@
     "highlightsLink": "elenco completo dei giochi"
   },
   "notFound": {
-    "body": "Nessuna pagina trovata all'indirizzo <1>{{path}}</1>. Usa la barra di navigazione per riprovare. Puoi anche <2>segnalare un bug nell'app</2> o <3>scrivere sul nostro server Discord</3>.",
+    "body": "Nessuna pagina trovata a <1>{{path}}</1>. Usa la barra di navigazione per riprovare. Puoi anche <2>segnalare un bug nell'app</2> o <3>scrivere sul nostro server Discord</3>.",
     "reportLink": "invia una segnalazione di bug sul nostro server Discord"
   },
   "footer": {
@@ -1717,6 +1718,31 @@
       "ideas": "Funzionalità",
       "updated": "Aggiornato"
     },
+    "auth": {
+      "signInRequired": "Devi aver effettuato l'accesso per partecipare ai feedback.",
+      "signInToCreate": "Devi aver effettuato l'accesso per segnalare un bug, suggerire una funzionalità o aggiungere un gioco alla lista dei desideri.",
+      "signInToCreateShort": "Accedi per inviare un feedback.",
+      "signInToInteract": "Accedi per votare, seguire o commentare questo elemento.",
+      "signInToViewMine": "Accedi per vedere i feedback che hai inviato."
+    },
+    "history": {
+      "title": "Cronologia feedback",
+      "intro": "Segnalazioni di bug chiuse, idee di funzionalità implementate e giochi arrivati su Abstract Play.",
+      "tabLabel": "Categoria cronologia",
+      "closed": "Chiuso il {{date}}",
+      "implementedAs": "Ora su Abstract Play: {{name}}",
+      "viewHistory": "Visualizza cronologia feedback",
+      "tabs": {
+        "bugs": "Bug",
+        "ideas": "Funzionalità",
+        "games": "Giochi"
+      },
+      "empty": {
+        "bugs": "Nessuna segnalazione di bug archiviata.",
+        "ideas": "Nessuna idea di funzionalità archiviata.",
+        "games": "Nessun gioco in lista desideri archiviato."
+      }
+    },
     "admin": {
       "title": "Amministrazione feedback",
       "intro": "Esamina e gestisci le segnalazioni di feedback.",
@@ -1800,7 +1826,13 @@
       "deleteWishlistReason": "Motivo dell'eliminazione",
       "deleteWishlistConfirm": "Elimina voce",
       "deleteWishlistCancel": "Annulla",
-      "deleting": "Eliminazione in corso…"
+      "deleting": "Eliminazione in corso…",
+      "archivedBanner": "Questo elemento è stato archiviato. La discussione è in sola lettura fino alla rimozione dei dati attivi.",
+      "archivedPurgedBanner": "Questo elemento è stato archiviato. La discussione completa non è più disponibile sulla bacheca attiva.",
+      "retentionHoldOn": "Blocco conservazione attivo — questo elemento non verrà archiviato automaticamente.",
+      "retentionHoldOff": "Blocco conservazione disattivato — questo elemento verrà archiviato dopo il periodo di conservazione.",
+      "holdRetention": "Blocca conservazione",
+      "releaseRetention": "Sblocca conservazione"
     },
     "effort": {
       "low": "Basso impegno",

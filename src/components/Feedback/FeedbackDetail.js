@@ -2,7 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
+import { useAuthSession } from "../../hooks/useAuthSession";
 import Spinner from "../Spinner";
+import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import Modal from "../Modal";
 import FeedbackMarkdown from "./FeedbackMarkdown";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
@@ -14,6 +16,7 @@ import {
   deleteFeedback,
   getFeedbackAuth,
   getFeedbackOpen,
+  holdFeedbackRetention,
   setFeedbackAdminFields,
   setFeedbackStatus,
   subscribeFeedback,
@@ -26,6 +29,8 @@ import {
   WISHLIST_ADMIN_CATEGORIES,
   boardKeyForKind,
   boardPathForKind,
+  feedbackHistoryPath,
+  historyTabForKind,
   statusesForKind,
 } from "../../lib/feedback/feedbackConstants";
 import "./feedback.css";
@@ -34,6 +39,8 @@ function FeedbackDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { status } = useAuthSession();
+  const loggedIn = status === "ready";
   const globalMe = useStore((state) => state.globalMe);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -54,7 +61,7 @@ function FeedbackDetail() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const authResult = globalMe?.id
+    const authResult = loggedIn
       ? await getFeedbackAuth(id)
       : await getFeedbackOpen(id);
     if (!authResult.ok) {
@@ -64,17 +71,19 @@ function FeedbackDetail() {
       setData(authResult.data);
       setError("");
       const post = authResult.data.post;
-      setEditTitle(post.title);
-      setEditBody(post.body ?? "");
-      setAdminEffort(post.effort ?? "");
-      setAdminPriority(post.priority ?? "");
-      setAdminTags(Array.isArray(post.adminTags) ? post.adminTags.join(", ") : "");
-      setAdminWishlistCategory(post.wishlistCategory ?? "none");
-      setAdminWishlistNote(post.wishlistCategoryNote ?? "");
-      markFeedbackSeen(post.id, post.updatedAt);
+      if (post) {
+        setEditTitle(post.title);
+        setEditBody(post.body ?? "");
+        setAdminEffort(post.effort ?? "");
+        setAdminPriority(post.priority ?? "");
+        setAdminTags(Array.isArray(post.adminTags) ? post.adminTags.join(", ") : "");
+        setAdminWishlistCategory(post.wishlistCategory ?? "none");
+        setAdminWishlistNote(post.wishlistCategoryNote ?? "");
+        markFeedbackSeen(post.id, post.updatedAt);
+      }
     }
     setLoading(false);
-  }, [globalMe?.id, id]);
+  }, [loggedIn, id]);
 
   useEffect(() => {
     load();
@@ -152,6 +161,17 @@ function FeedbackDetail() {
     navigate(boardPathForKind("wishlist"));
   }
 
+  async function handleRetentionHold(hold) {
+    setSubmitting(true);
+    const result = await holdFeedbackRetention(id, hold);
+    setSubmitting(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    await load();
+  }
+
   async function handleSaveAdminFields(e) {
     e.preventDefault();
     setSubmitting(true);
@@ -182,7 +202,7 @@ function FeedbackDetail() {
   if (loading) {
     return <Spinner />;
   }
-  if (!data?.post) {
+  if (!data?.post && !data?.summary) {
     return (
       <article className="content">
         <p className="has-text-danger">{error || t("feedback.detail.notFound")}</p>
@@ -191,7 +211,57 @@ function FeedbackDetail() {
     );
   }
 
+  if (data.purged && data.summary) {
+    const summary = data.summary;
+    const boardKey = boardKeyForKind(summary.kind);
+    const historyTab = historyTabForKind(summary.kind);
+    return (
+      <>
+        <FeedbackPageHelmet title={summary.title} />
+        <article className="content feedback-panel">
+          <p>
+            <Link to={feedbackHistoryPath(historyTab)}>{t("feedback.history.viewHistory")}</Link>
+          </p>
+          <div className="feedback-archived-banner" role="status">
+            {t("feedback.detail.archivedPurgedBanner")}
+          </div>
+          <h1 className="title lined">
+            <span>
+              {summary.kind === "wishlist" && summary.gameUrl ? (
+                <a href={summary.gameUrl} target="_blank" rel="noopener noreferrer">{summary.title}</a>
+              ) : (
+                summary.title
+              )}
+            </span>
+          </h1>
+          <div className="feedback-muted">
+            {summary.authorName}
+            {" · "}
+            {t(`feedback.status.${summary.terminalStatus}`, { defaultValue: summary.terminalStatus })}
+            {" · "}
+            {t("feedback.meta.votes", { count: summary.effectiveVotes })}
+            {" · "}
+            {t("feedback.history.closed", { date: new Date(summary.closedAt).toLocaleDateString() })}
+          </div>
+          {summary.implementedGameMeta?.name ? (
+            <p className="feedback-muted">
+              {t("feedback.history.implementedAs", { name: summary.implementedGameMeta.name })}
+            </p>
+          ) : null}
+          {summary.resolutionNote ? (
+            <p>{summary.resolutionNote}</p>
+          ) : null}
+          <p>
+            <Link to={boardPathForKind(summary.kind)}>{t(`feedback.${boardKey}.backToBoard`)}</Link>
+          </p>
+        </article>
+      </>
+    );
+  }
+
   const { post, comments, attachmentUrls, subscribed, userVoted } = data;
+  const isArchived = Boolean(data.archived || post.archivedAt);
+  const readOnly = isArchived;
   const boardPath = boardPathForKind(post.kind);
   const boardKey = boardKeyForKind(post.kind);
   const canEdit = globalMe?.id && (globalMe.admin || globalMe.id === post.authorId);
@@ -203,7 +273,17 @@ function FeedbackDetail() {
       <article className="content feedback-panel">
       <p>
         <Link to={boardPath}>{t(`feedback.${boardKey}.backToBoard`)}</Link>
+        {" · "}
+        <Link to={feedbackHistoryPath(historyTabForKind(post.kind))}>{t("feedback.history.viewHistory")}</Link>
       </p>
+      {isArchived ? (
+        <div className="feedback-archived-banner" role="status">
+          {t("feedback.detail.archivedBanner")}
+        </div>
+      ) : null}
+      {globalMe?.admin && post.retentionHold ? (
+        <p className="feedback-muted">{t("feedback.detail.retentionHoldOn")}</p>
+      ) : null}
       <h1 className="title lined">
         <span>
           {post.kind === "wishlist" && post.gameUrl ? (
@@ -229,7 +309,7 @@ function FeedbackDetail() {
         <span className="feedback-muted">
           {post.authorName} · {t("feedback.meta.votes", { count: post.effectiveVotes })}
         </span>
-        {globalMe?.id && (
+        {loggedIn && !readOnly && (
           <>
             <button type="button" className="button apButtonNeutral is-small" onClick={handleVote}>
               {userVoted ? t("feedback.detail.unvote") : t("feedback.detail.vote")}
@@ -239,7 +319,7 @@ function FeedbackDetail() {
             </button>
           </>
         )}
-        {canEdit && !editing && (
+        {canEdit && !editing && !readOnly && (
           <button
             type="button"
             className="button apButtonNeutral is-small"
@@ -249,7 +329,7 @@ function FeedbackDetail() {
           </button>
         )}
       </div>
-      {globalMe?.admin && statusOptions.length > 0 && (
+      {globalMe?.admin && !readOnly && statusOptions.length > 0 && (
         <div className="field">
           <label className="label" htmlFor="feedback-status">{t("feedback.detail.adminStatus")}</label>
           <select id="feedback-status" className="select" value={post.status} onChange={handleStatusChange}>
@@ -261,7 +341,7 @@ function FeedbackDetail() {
           </select>
         </div>
       )}
-      {globalMe?.admin && (
+      {globalMe?.admin && !readOnly && (
         <form className="feedback-admin-fields" onSubmit={handleSaveAdminFields}>
           {post.kind === "wishlist" ? (
             <>
@@ -369,7 +449,7 @@ function FeedbackDetail() {
           ) : null}
         </form>
       )}
-      {globalMe?.admin && post.kind === "wishlist" ? (
+      {globalMe?.admin && !readOnly && post.kind === "wishlist" ? (
         <Modal
           show={showDeleteModal}
           title={t("feedback.detail.deleteWishlistTitle")}
@@ -478,7 +558,27 @@ function FeedbackDetail() {
           </div>
         ))
       )}
-      {globalMe?.id && (
+      {globalMe?.admin && (
+        <div className="feedback-retention-actions">
+          <button
+            type="button"
+            className="button apButtonNeutral is-small"
+            disabled={submitting}
+            onClick={() => handleRetentionHold(!post.retentionHold)}
+          >
+            {post.retentionHold
+              ? t("feedback.detail.releaseRetention")
+              : t("feedback.detail.holdRetention")}
+          </button>
+          {!post.retentionHold ? (
+            <span className="feedback-muted">{t("feedback.detail.retentionHoldOff")}</span>
+          ) : null}
+        </div>
+      )}
+      {!loggedIn && !readOnly ? (
+        <FeedbackSignInRequired messageKey="feedback.auth.signInToInteract" />
+      ) : null}
+      {loggedIn && !readOnly && (
         <form onSubmit={handleComment}>
           <div className="field">
             <label className="label" htmlFor="feedback-comment">{t("feedback.detail.addComment")}</label>

@@ -272,6 +272,15 @@ function Navbar() {
               </div>
               <div className="navbar-item">
                 <Link
+                  to="/feedback/history"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
+                  {t("nav.feedbackHistory")}
+                </Link>
+              </div>
+              <div className="navbar-item">
+                <Link
                   to="/about"
                   className="navbar-item"
                   onClick={() => updateBurgerExpanded(false)}

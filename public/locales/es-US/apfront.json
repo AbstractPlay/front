@@ -863,6 +863,7 @@
     "bugBoard": "Reportes de errores",
     "featureIdeas": "Ideas de funciones",
     "gameWishlist": "Lista de deseos de juegos",
+    "feedbackHistory": "Historial de comentarios",
     "myFeedback": "Mis comentarios",
     "explore": "Explorar",
     "openChallenges": "Desafíos abiertos",
@@ -1311,7 +1312,7 @@
   "fatalError": {
     "title": "Algo salió mal",
     "chunkMessage": "Es posible que haya una nueva versión del sitio disponible. Por favor, actualiza la página.",
-    "genericMessage": "Por favor, actualiza la página. Si el problema persiste, por favor <1>reportalo en nuestro servidor de Discord</1> o usa el botón Reportar un error a continuación.",
+    "genericMessage": "Por favor, actualiza la página. Si el problema persiste, <1>infórmalo en nuestro servidor de Discord</1> o usa el botón Reportar un error a continuación.",
     "discordLink": "infórmalo en nuestro servidor de Discord"
   },
   "standingChallenge": {
@@ -1717,6 +1718,31 @@
       "ideas": "Funciones",
       "updated": "Actualizado"
     },
+    "auth": {
+      "signInRequired": "Debes iniciar sesión para participar en los comentarios.",
+      "signInToCreate": "Debes iniciar sesión para reportar un error, sugerir una función o agregar un juego a la lista de deseos.",
+      "signInToCreateShort": "Inicia sesión para enviar comentarios.",
+      "signInToInteract": "Inicia sesión para votar, seguir o comentar en este elemento.",
+      "signInToViewMine": "Inicia sesión para ver tus comentarios enviados."
+    },
+    "history": {
+      "title": "Historial de comentarios",
+      "intro": "Reportes de errores cerrados, ideas de funciones implementadas y juegos que pasaron a estar disponibles en Abstract Play.",
+      "tabLabel": "Categoría del historial",
+      "closed": "Cerrado el {{date}}",
+      "implementedAs": "Ahora en Abstract Play: {{name}}",
+      "viewHistory": "Ver historial de comentarios",
+      "tabs": {
+        "bugs": "Errores",
+        "ideas": "Funciones",
+        "games": "Juegos"
+      },
+      "empty": {
+        "bugs": "Aún no hay reportes de errores archivados.",
+        "ideas": "Aún no hay ideas de funciones archivadas.",
+        "games": "Aún no hay juegos archivados en la lista de deseos."
+      }
+    },
     "admin": {
       "title": "Administración de comentarios",
       "intro": "Clasifica y gestiona las publicaciones de comentarios.",
@@ -1800,7 +1826,13 @@
       "deleteWishlistReason": "Motivo de eliminación",
       "deleteWishlistConfirm": "Eliminar entrada",
       "deleteWishlistCancel": "Cancelar",
-      "deleting": "Eliminando…"
+      "deleting": "Eliminando…",
+      "archivedBanner": "Este elemento ha sido archivado. La discusión es solo de lectura hasta que se eliminen los datos en vivo.",
+      "archivedPurgedBanner": "Este elemento ha sido archivado. El hilo completo ya no está disponible en el tablero activo.",
+      "retentionHoldOn": "La retención está activada: este elemento no se archivará automáticamente.",
+      "retentionHoldOff": "La retención está desactivada: este elemento se archivará después del período de retención.",
+      "holdRetention": "Activar retención",
+      "releaseRetention": "Liberar retención"
     },
     "effort": {
       "low": "Poco esfuerzo",
