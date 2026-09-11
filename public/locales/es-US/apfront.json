@@ -1735,7 +1735,7 @@
       "title": "Historial de comentarios",
       "intro": "Reportes de errores cerrados, ideas de funciones implementadas y juegos que pasaron a estar disponibles en Abstract Play.",
       "tabLabel": "Categoría del historial",
-      "closed": "Cerrado el {{date}}",
+      "closed": "Cerrado",
       "implementedAs": "Ahora en Abstract Play: {{name}}",
       "viewHistory": "Ver historial de comentarios",
       "tabs": {
@@ -1863,7 +1863,9 @@
       "comments_one": "{{count}} comentario",
       "comments_other": "{{count}} comentarios",
       "votes_one": "{{count}} voto",
-      "votes_other": "{{count}} votos"
+      "votes_other": "{{count}} votos",
+      "posted": "Publicado",
+      "updated": "Actualizado"
     },
     "status": {
       "open": "Abierto",

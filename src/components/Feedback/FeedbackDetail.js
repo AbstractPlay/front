@@ -11,6 +11,7 @@ import FeedbackStatusBadge from "./FeedbackStatusBadge";
 import WishlistCategoryCallout from "./WishlistCategoryCallout";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import ScreenshotUpload from "./ScreenshotUpload";
+import FeedbackTimestamp from "./FeedbackTimestamp";
 import { markFeedbackSeen } from "../../lib/feedback/feedbackLastSeen";
 import {
   commentFeedback,
@@ -245,7 +246,7 @@ function FeedbackDetail() {
             {" · "}
             {t("feedback.meta.votes", { count: summary.effectiveVotes })}
             {" · "}
-            {t("feedback.history.closed", { date: new Date(summary.closedAt).toLocaleDateString() })}
+            {t("feedback.history.closed")} <FeedbackTimestamp date={summary.closedAt} />
           </div>
           {summary.implementedGameMeta?.name ? (
             <p className="feedback-muted">
@@ -322,7 +323,17 @@ function FeedbackDetail() {
           wishlistCategory={post.wishlistCategory}
         />
         <span className="feedback-muted">
-          {post.authorName} · {t("feedback.meta.votes", { count: post.effectiveVotes })}
+          {post.authorName}
+          {" · "}
+          {t("feedback.meta.posted")} <FeedbackTimestamp date={post.createdAt} />
+          {post.updatedAt > post.createdAt + 60_000 ? (
+            <>
+              {" · "}
+              {t("feedback.meta.updated")} <FeedbackTimestamp date={post.updatedAt} />
+            </>
+          ) : null}
+          {" · "}
+          {t("feedback.meta.votes", { count: post.effectiveVotes })}
         </span>
         {loggedIn && !readOnly && (
           <>
@@ -610,6 +621,8 @@ function FeedbackDetail() {
             <div className="feedback-muted">
               {comment.authorName}
               {comment.isStaff ? ` · ${t("feedback.detail.staff")}` : ""}
+              {" · "}
+              <FeedbackTimestamp date={comment.createdAt} />
             </div>
             <FeedbackMarkdown>{comment.body}</FeedbackMarkdown>
           </div>

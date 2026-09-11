@@ -1735,7 +1735,7 @@
             "title": "Feedback history",
             "intro": "Closed bug reports, shipped feature ideas, and games that became available on Abstract Play.",
             "tabLabel": "History category",
-            "closed": "Closed {{date}}",
+            "closed": "Closed",
             "implementedAs": "Now on Abstract Play: {{name}}",
             "viewHistory": "View feedback history",
             "tabs": {
@@ -1863,7 +1863,9 @@
             "comments_one": "{{count}} comment",
             "comments_other": "{{count}} comments",
             "votes_one": "{{count}} vote",
-            "votes_other": "{{count}} votes"
+            "votes_other": "{{count}} votes",
+            "posted": "Posted",
+            "updated": "Updated"
         },
         "status": {
             "open": "Open",

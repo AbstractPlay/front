@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Spinner from "../Spinner";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
+import FeedbackTimestamp from "./FeedbackTimestamp";
 import { listFeedbackHistory } from "../../lib/feedback/feedbackApi";
 import {
   FEEDBACK_HISTORY_TABS,
@@ -109,7 +110,7 @@ function FeedbackHistory() {
                   {" · "}
                   {t("feedback.meta.votes", { count: item.effectiveVotes })}
                   {" · "}
-                  {t("feedback.history.closed", { date: new Date(item.closedAt).toLocaleDateString() })}
+                  {t("feedback.history.closed")} <FeedbackTimestamp date={item.closedAt} />
                 </div>
                 {item.implementedGameMeta?.name ? (
                   <div className="feedback-muted">

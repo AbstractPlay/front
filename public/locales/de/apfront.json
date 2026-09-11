@@ -1735,7 +1735,7 @@
       "title": "Feedback-Verlauf",
       "intro": "Geschlossene Fehlerberichte, umgesetzte Funktionsideen und Spiele, die auf Abstract Play verfügbar wurden.",
       "tabLabel": "Verlaufskategorie",
-      "closed": "Geschlossen am {{date}}",
+      "closed": "Geschlossen",
       "implementedAs": "Jetzt auf Abstract Play: {{name}}",
       "viewHistory": "Feedback-Verlauf anzeigen",
       "tabs": {
@@ -1863,7 +1863,9 @@
       "comments_one": "{{count}} Kommentar",
       "comments_other": "{{count}} Kommentare",
       "votes_one": "{{count}} Stimme",
-      "votes_other": "{{count}} Stimmen"
+      "votes_other": "{{count}} Stimmen",
+      "posted": "Veröffentlicht",
+      "updated": "Aktualisiert"
     },
     "status": {
       "open": "Offen",
