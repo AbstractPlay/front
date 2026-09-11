@@ -37,6 +37,7 @@
     "CycleBoardDisplay": "Cycle board display",
     "buttons": {
         "pass": "Pass",
+        "declare": "Declare",
         "takebutton": "Take button",
         "acceptpie": "Play second",
         "playsecond": "Play second",

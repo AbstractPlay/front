@@ -488,6 +488,7 @@
   "CycleBoardDisplay": "Cikli la tabulan bildigon",
   "buttons": {
     "pass": "Pasi",
+    "declare": "Deklari",
     "takebutton": "Preni la butonon",
     "acceptpie": "Ludi due",
     "playsecond": "Ludi due",
