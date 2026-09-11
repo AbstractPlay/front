@@ -173,6 +173,24 @@
 
 .feedback-markdown {
   margin-bottom: 0.75rem;
+  color: var(--main-font-color);
+}
+
+.feedback-markdown blockquote {
+  background: var(--secondary-color-3-bg);
+  color: var(--main-font-color);
+  border-inline-start: 4px solid var(--secondary-color-3);
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+}
+
+.feedback-markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.feedback-markdown code {
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
 }
 
 .feedback-admin-delete {
@@ -183,6 +201,15 @@
 
 .feedback-markdown pre {
   overflow-x: auto;
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  padding: 0.75rem 1rem;
+}
+
+.feedback-markdown pre code {
+  background: transparent;
+  color: inherit;
 }
 
 .feedback-screenshot-grid {
