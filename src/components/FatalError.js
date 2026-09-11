@@ -1,5 +1,8 @@
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
+import { stashPendingError } from "../lib/feedback/feedbackContext";
+import { feedbackNewPath } from "../lib/feedback/feedbackConstants";
 
 function isChunkLoadError(error) {
   if (!error) {
@@ -27,9 +30,20 @@ const FatalError = ({ error, inline = false }) => {
             i18nKey="fatalError.genericMessage"
             components={[
               // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans injects anchor text from i18n
-              <a key="link" href="https://discord.abstractplay.com" />,
+              <a key="discord" href="https://discord.abstractplay.com" />,
             ]}
           />
+        </p>
+      )}
+      {!chunkError && error && (
+        <p className="has-text-centered">
+          <Link
+            className="button apButtonNeutral"
+            to={feedbackNewPath("bug")}
+            onClick={() => stashPendingError(error)}
+          >
+            {t("feedback.bugs.report")}
+          </Link>
         </p>
       )}
       <p className="has-text-centered">

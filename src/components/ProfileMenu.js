@@ -141,6 +141,24 @@ function ProfileMenu({
             >
               {t("nav.myProfile")}
             </Link>
+            <Link
+              to="/feedback/mine"
+              className="nav-profile-menu-item"
+              role="menuitem"
+              onClick={handleNavigate}
+            >
+              {t("nav.myFeedback")}
+            </Link>
+            {globalMe?.admin ? (
+              <Link
+                to="/feedback/admin"
+                className="nav-profile-menu-item"
+                role="menuitem"
+                onClick={handleNavigate}
+              >
+                {t("feedback.admin.title")}
+              </Link>
+            ) : null}
             <button
               type="button"
               className="nav-profile-menu-item"

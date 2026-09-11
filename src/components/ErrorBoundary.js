@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import FatalError from "./FatalError";
+import { pushCapturedError } from "../lib/feedback/consoleCapture";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error("ErrorBoundary caught an error:", error, errorInfo);
+    pushCapturedError(error, { componentStack: errorInfo?.componentStack });
   }
 
   render() {
