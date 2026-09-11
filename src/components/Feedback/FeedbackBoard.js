@@ -7,6 +7,7 @@ import { useAuthSession } from "../../hooks/useAuthSession";
 import Spinner from "../Spinner";
 import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
+import FeedbackReviewersBadge from "./FeedbackReviewersBadge";
 import FeedbackTimestamp from "./FeedbackTimestamp";
 import { listFeedbackAll } from "../../lib/feedback/feedbackApi";
 import {
@@ -235,6 +236,9 @@ function FeedbackBoard({ kind = "bug" }) {
                 priority={item.priority}
                 wishlistCategory={item.wishlistCategory}
               />
+              {(kind === "bug" || kind === "feature") ? (
+                <FeedbackReviewersBadge reviewers={item.reviewers} compact />
+              ) : null}
               {kind === "wishlist" && item.gameUrl ? (
                 <>
                   <a
