@@ -34,6 +34,10 @@ Terminal posts are archived to S3 after a configurable delay (`FEEDBACK_ARCHIVE_
 
 Admins can set `retentionHold` on a post to skip automatic archiving. The history board at `/feedback/history` lists archived summaries; detail pages show an archived banner and, after TTL purge, a summary-only view.
 
+Screenshot objects under `{postId}/` in the attachments bucket are deleted after live rows expire (`attachmentsPurgeAfter` on `HISTORY#` rows). JSON archive snapshots at `archive/{postId}.json` are kept. Abandoned presign uploads under `staging/` are swept after 24 hours. Wishlist admin delete and merge remove duplicate attachment objects immediately.
+
+Nightly cleanup: `feedback-attachment-cleanup` Lambda (`npm run feedback-attachment-cleanup` locally), scheduled 30 minutes after the archive job.
+
 See [node-backend API docs](/backend/api/auth-queries/) and [public queries](/backend/api/public-queries/).
 
 ## Notifications

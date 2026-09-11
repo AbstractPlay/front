@@ -1691,6 +1691,7 @@
             "filterLabel": "Filter wishlist",
             "sortBy": "Sort by",
             "sortVotes": "Votes (most first)",
+            "sortRecent": "Date added (newest first)",
             "sortName": "Name (A–Z)",
             "filterAll": "All ({{count}})",
             "discuss": "Discuss",
