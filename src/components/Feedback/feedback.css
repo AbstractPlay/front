@@ -295,6 +295,49 @@
   color: var(--high-contrast-font-color, var(--main-bg-color));
 }
 
+.feedback-reviewer-badge {
+  background: var(--secondary-color-3-bg, var(--tag-background-color));
+}
+
+.feedback-reviewer-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feedback-reviewer-selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.feedback-reviewer-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
+}
+
+.feedback-reviewer-remove {
+  border: none;
+  background: transparent;
+  color: var(--main-font-color);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.feedback-reviewer-remove:hover,
+.feedback-reviewer-remove:focus-visible {
+  color: var(--secondary-color-1);
+}
+
 .feedback-priority-fieldset {
   border: none;
   margin: 0;

@@ -263,6 +263,16 @@ export function NotificationMessage({ body }) {
           }}
         />
       );
+    case "feedbackReviewRequested":
+      return (
+        <Trans
+          i18nKey="me.notifications.message.feedbackReviewRequested"
+          values={{ title: body.title }}
+          components={{
+            feedbackLink: <Link to={`/feedback/${body.postId}`} />,
+          }}
+        />
+      );
     default:
       return "";
   }

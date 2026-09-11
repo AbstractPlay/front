@@ -28,6 +28,8 @@ export const FEATURE_STATUSES = [
 
 export const EFFORT_LEVELS = ["low", "medium", "high", "unknown"];
 
+export const FEEDBACK_REVIEWER_MAX_COUNT = 8;
+
 export const WISHLIST_STATUSES = [
   "requested",
   "evaluating",
