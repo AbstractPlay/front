@@ -4148,8 +4148,8 @@
     "out": "La retención está activada: este elemento no se archivará automáticamente."
   },
   "feedback.history.closed": {
-    "src": "Closed {{date}}",
-    "out": "Cerrado el {{date}}"
+    "src": "Closed",
+    "out": "Cerrado"
   },
   "feedback.history.empty.bugs": {
     "src": "No archived bug reports yet.",
@@ -4194,6 +4194,14 @@
   "feedback.history.viewHistory": {
     "src": "View feedback history",
     "out": "Ver historial de comentarios"
+  },
+  "feedback.meta.posted": {
+    "src": "Posted",
+    "out": "Publicado"
+  },
+  "feedback.meta.updated": {
+    "src": "Updated",
+    "out": "Actualizado"
   },
   "feedback.new.coverImage": {
     "src": "Cover image",

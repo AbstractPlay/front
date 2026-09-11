@@ -5,6 +5,7 @@ import { useAuthSession } from "../../hooks/useAuthSession";
 import Spinner from "../Spinner";
 import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
+import FeedbackTimestamp from "./FeedbackTimestamp";
 import { listMyFeedback } from "../../lib/feedback/feedbackApi";
 import { feedbackDetailPath } from "../../lib/feedback/feedbackConstants";
 import { isFeedbackUnread } from "../../lib/feedback/feedbackLastSeen";
@@ -109,6 +110,8 @@ function FeedbackMine() {
                 <span className="feedback-unread-badge">{t("feedback.mine.updated")}</span>
               ) : null}
               <div className="feedback-muted">
+                {t("feedback.meta.posted")} <FeedbackTimestamp date={item.createdAt} />
+                {" · "}
                 {t(`feedback.status.${item.status}`, { defaultValue: item.status })}
                 {" · "}
                 {t("feedback.meta.votes", { count: item.effectiveVotes })}

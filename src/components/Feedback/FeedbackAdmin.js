@@ -5,6 +5,7 @@ import { useStore } from "../../stores";
 import Spinner from "../Spinner";
 import FeedbackListFilters from "./FeedbackListFilters";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
+import FeedbackTimestamp from "./FeedbackTimestamp";
 import { listFeedbackAdmin } from "../../lib/feedback/feedbackApi";
 import {
   compareFeedbackItems,
@@ -146,6 +147,8 @@ function FeedbackAdmin() {
               </Link>
               <div className="feedback-muted">
                 {item.authorName}
+                {" · "}
+                {t("feedback.meta.posted")} <FeedbackTimestamp date={item.createdAt} />
                 {" · "}
                 {t("feedback.meta.votes", { count: item.effectiveVotes })}
               </div>

@@ -1735,7 +1735,7 @@
       "title": "Historique des retours",
       "intro": "Rapports de bugs fermés, idées de fonctionnalités intégrées et jeux devenus disponibles sur Abstract Play.",
       "tabLabel": "Catégorie d'historique",
-      "closed": "Fermé le {{date}}",
+      "closed": "Fermé",
       "implementedAs": "Désormais sur Abstract Play : {{name}}",
       "viewHistory": "Voir l'historique des retours",
       "tabs": {
@@ -1863,7 +1863,9 @@
       "comments_one": "{{count}} commentaire",
       "comments_other": "{{count}} commentaires",
       "votes_one": "{{count}} vote",
-      "votes_other": "{{count}} votes"
+      "votes_other": "{{count}} votes",
+      "posted": "Publié",
+      "updated": "Mis à jour"
     },
     "status": {
       "open": "Ouvert",

@@ -4148,8 +4148,8 @@
     "out": "La conservation des données est activée — cet élément ne sera pas archivé automatiquement."
   },
   "feedback.history.closed": {
-    "src": "Closed {{date}}",
-    "out": "Fermé le {{date}}"
+    "src": "Closed",
+    "out": "Fermé"
   },
   "feedback.history.empty.bugs": {
     "src": "No archived bug reports yet.",
@@ -4194,6 +4194,14 @@
   "feedback.history.viewHistory": {
     "src": "View feedback history",
     "out": "Voir l'historique des retours"
+  },
+  "feedback.meta.posted": {
+    "src": "Posted",
+    "out": "Publié"
+  },
+  "feedback.meta.updated": {
+    "src": "Updated",
+    "out": "Mis à jour"
   },
   "feedback.new.coverImage": {
     "src": "Cover image",

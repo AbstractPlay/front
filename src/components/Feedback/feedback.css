@@ -98,6 +98,10 @@
   margin: 0 0 1.5rem;
 }
 
+.feedback-timestamp {
+  white-space: nowrap;
+}
+
 .feedback-wishlist-cover-image {
   display: block;
   max-width: min(100%, 18rem);
