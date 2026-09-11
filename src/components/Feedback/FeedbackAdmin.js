@@ -6,7 +6,7 @@ import Spinner from "../Spinner";
 import FeedbackListFilters from "./FeedbackListFilters";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
 import FeedbackTimestamp from "./FeedbackTimestamp";
-import { listFeedbackAdmin } from "../../lib/feedback/feedbackApi";
+import { listFeedbackAdminAll } from "../../lib/feedback/feedbackApi";
 import {
   compareFeedbackItems,
   EFFORT_LEVELS,
@@ -35,13 +35,13 @@ function FeedbackAdmin() {
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const result = await listFeedbackAdmin({
+      const result = await listFeedbackAdminAll({
         kind,
         status: status || undefined,
         priority: priority || undefined,
         effort: effort || undefined,
         needsResponse: needsResponse || undefined,
-        limit: 50,
+        limit: 100,
       });
       if (cancelled) {
         return;
