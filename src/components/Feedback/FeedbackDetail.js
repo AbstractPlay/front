@@ -8,6 +8,9 @@ import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import Modal from "../Modal";
 import FeedbackMarkdown from "./FeedbackMarkdown";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
+import FeedbackReviewersBadge from "./FeedbackReviewersBadge";
+import FeedbackReviewerPicker from "./FeedbackReviewerPicker";
+import { fetchUserNames } from "../../lib/fetchUserNames";
 import WishlistCategoryCallout from "./WishlistCategoryCallout";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import ScreenshotUpload from "./ScreenshotUpload";
@@ -44,6 +47,7 @@ function FeedbackDetail() {
   const { status } = useAuthSession();
   const loggedIn = status === "ready";
   const globalMe = useStore((state) => state.globalMe);
+  const users = useStore((state) => state.users);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -57,6 +61,7 @@ function FeedbackDetail() {
   const [adminEffort, setAdminEffort] = useState("");
   const [adminPriority, setAdminPriority] = useState("");
   const [adminTags, setAdminTags] = useState("");
+  const [adminReviewerIds, setAdminReviewerIds] = useState([]);
   const [adminWishlistCategory, setAdminWishlistCategory] = useState("none");
   const [adminWishlistNote, setAdminWishlistNote] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -80,6 +85,9 @@ function FeedbackDetail() {
         setAdminEffort(post.effort ?? "");
         setAdminPriority(post.priority ?? "");
         setAdminTags(Array.isArray(post.adminTags) ? post.adminTags.join(", ") : "");
+        setAdminReviewerIds(
+          Array.isArray(post.reviewers) ? post.reviewers.map((reviewer) => reviewer.id) : [],
+        );
         setAdminWishlistCategory(post.wishlistCategory ?? "none");
         setAdminWishlistNote(post.wishlistCategoryNote ?? "");
         markFeedbackSeen(post.id, post.updatedAt);
@@ -91,6 +99,12 @@ function FeedbackDetail() {
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    if (globalMe?.admin) {
+      fetchUserNames();
+    }
+  }, [globalMe?.admin]);
 
   async function handleVote() {
     const voted = Boolean(data?.userVoted);
@@ -193,6 +207,7 @@ function FeedbackDetail() {
       adminPars.adminTags = tags.length > 0 ? tags : undefined;
       if (post.kind === "bug" || post.kind === "feature") {
         adminPars.priority = adminPriority || "";
+        adminPars.reviewerIds = adminReviewerIds;
       }
     }
     const result = await setFeedbackAdminFields(adminPars);
@@ -322,6 +337,9 @@ function FeedbackDetail() {
           priority={post.priority}
           wishlistCategory={post.wishlistCategory}
         />
+        {(post.kind === "bug" || post.kind === "feature") ? (
+          <FeedbackReviewersBadge reviewers={post.reviewers} />
+        ) : null}
         <span className="feedback-muted">
           {post.authorName}
           {" · "}
@@ -537,6 +555,17 @@ function FeedbackDetail() {
                   onChange={(e) => setAdminTags(e.target.value)}
                 />
               </div>
+              {(post.kind === "bug" || post.kind === "feature") ? (
+                <div className="field">
+                  <label className="label">{t("feedback.detail.adminReviewers")}</label>
+                  <FeedbackReviewerPicker
+                    users={users}
+                    selectedIds={adminReviewerIds}
+                    onChange={setAdminReviewerIds}
+                    disabled={submitting}
+                  />
+                </div>
+              ) : null}
             </>
           )}
           <button type="submit" className="button apButtonNeutral is-small" disabled={submitting}>

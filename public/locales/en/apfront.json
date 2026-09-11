@@ -924,6 +924,7 @@
     "InAppNotifyLabel-feedbackReply": "Feedback replies",
     "InAppNotifyLabel-feedbackStatus": "Feedback status updates",
     "InAppNotifyLabel-feedbackDeleted": "Removed wishlist entries",
+    "InAppNotifyLabel-feedbackReviewRequested": "Feedback review requests",
     "NoWaitingResponse": "No challenges waiting on opponent response",
     "NoYourMove": "No games waiting for your move.",
     "NumChallenge": "There will be {{num}} players in this game. {{players}}. Seating will be random.",
@@ -1663,7 +1664,8 @@
                 "completedGameChat_backfill": "You have unread chat in your completed <gameLink>{{metaGame}}</gameLink> game",
                 "feedbackReply": "New reply on <feedbackLink>{{title}}</feedbackLink>{{preview}}",
                 "feedbackStatus": "Status update on <feedbackLink>{{title}}</feedbackLink>: {{status}}",
-                "feedbackDeleted": "Wishlist entry removed: <wishlistLink>{{title}}</wishlistLink>. Reason: {{reason}}"
+                "feedbackDeleted": "Wishlist entry removed: <wishlistLink>{{title}}</wishlistLink>. Reason: {{reason}}",
+                "feedbackReviewRequested": "You were added as a reviewer on <feedbackLink>{{title}}</feedbackLink>"
             }
         }
     },
@@ -1834,6 +1836,7 @@
             "adminEffort": "Effort",
             "adminPriority": "Priority",
             "adminTags": "Admin tags (comma-separated)",
+            "adminReviewers": "Reviewers",
             "adminWishlistCategory": "Category",
             "adminWishlistNote": "Category note (optional)",
             "saveAdminFields": "Save admin fields",
@@ -1861,6 +1864,16 @@
             "urgent": "Urgent",
             "normal": "Normal",
             "low": "Low"
+        },
+        "reviewers": {
+            "badge": "Reviewers: {{names}}",
+            "badgeCompact_one": "1 reviewer",
+            "badgeCompact_other": "{{count}} reviewers",
+            "add": "Add reviewer",
+            "remove": "Remove {{name}}",
+            "empty": "No reviewers assigned.",
+            "hint": "Up to {{max}} reviewers. Added users get a one-time notification; use Watch for ongoing updates.",
+            "divider": "────────────"
         },
         "meta": {
             "comments_one": "{{count}} comment",
