@@ -1,5 +1,6 @@
 import "./polyfills";
 import { configureAmplifyAuth } from "./lib/amplifyAuth";
+import { installConsoleCapture } from "./lib/feedback/consoleCapture";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { toast } from "react-toastify";
@@ -11,6 +12,7 @@ import "./myBulma.css";
 import "./index.css";
 
 configureAmplifyAuth();
+installConsoleCapture();
 
 const container = document.getElementById("root");
 const root = createRoot(container);

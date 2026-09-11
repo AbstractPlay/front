@@ -1,5 +1,7 @@
 import React, { useEffect, Fragment, useState } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
+import { feedbackNewPath } from "../lib/feedback/feedbackConstants";
 
 function NotFound(props) {
   const { t } = useTranslation();
@@ -28,9 +30,10 @@ function NotFound(props) {
             values={{ path }}
             components={[
               <code key="code" />,
+              <Link key="bug" to={feedbackNewPath("bug", { pageUrl: path })} />,
               // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans injects anchor text from i18n
               <a
-                key="link"
+                key="discord"
                 href="https://discord.abstractplay.com"
                 target="_blank"
                 rel="noreferrer"

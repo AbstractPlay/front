@@ -1,6 +1,10 @@
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { getFocusNode } from "../../../lib/GameMove/exploration";
+import { feedbackNewPath } from "../../../lib/feedback/feedbackConstants";
 
 export default function GameMoveLayoutError({ session }) {
+  const { t } = useTranslation();
   const { errorMessageRef, game, focus, explorationRef, gameRef, reportError } =
     session;
 
@@ -30,5 +34,20 @@ export default function GameMoveLayoutError({ session }) {
       }`
     );
   }
-  return <h4>{errorMessageRef.current}</h4>;
+  const bugLink = feedbackNewPath("bug", {
+    gameId: game?.id,
+    metaGame: game?.metaGame,
+    pageUrl: window.location.href,
+  });
+
+  return (
+    <div>
+      <h4>{errorMessageRef.current}</h4>
+      <p>
+        <Link className="button apButtonNeutral is-small" to={bugLink}>
+          {t("feedback.bugs.report")}
+        </Link>
+      </p>
+    </div>
+  );
 }

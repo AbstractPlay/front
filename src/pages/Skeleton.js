@@ -56,6 +56,12 @@ const Stats = lazy(() => import("../components/Stats"));
 // const MetaContainer = lazy(() => import("../components/MetaContainer"));
 const Player = lazy(() => import("../components/Player"));
 const Explore = lazy(() => import("../components/Explore"));
+const FeedbackBoard = lazy(() => import("../components/Feedback/FeedbackBoard"));
+const FeedbackNew = lazy(() => import("../components/Feedback/FeedbackNew"));
+const FeedbackDetail = lazy(() => import("../components/Feedback/FeedbackDetail"));
+const FeedbackMine = lazy(() => import("../components/Feedback/FeedbackMine"));
+const FeedbackAdmin = lazy(() => import("../components/Feedback/FeedbackAdmin"));
+const FeedbackHistory = lazy(() => import("../components/Feedback/FeedbackHistory"));
 
 // Register default English locale; TimeAgoLocaleSync updates on language change
 TimeAgo.addDefaultLocale(getTimeAgoLocaleData("en"));
@@ -241,6 +247,15 @@ function Bones(props) {
                 />
                 <Route path="/play" element={<Play />} />
                 <Route path="/customize/:metaGame" element={<Customize />} />
+                <Route path="/feedback/bugs" element={<FeedbackBoard kind="bug" />} />
+                <Route path="/feedback/ideas" element={<FeedbackBoard kind="feature" />} />
+                <Route path="/wishlist" element={<FeedbackBoard kind="wishlist" />} />
+                <Route path="/feedback/mine" element={<FeedbackMine />} />
+                <Route path="/feedback/admin" element={<FeedbackAdmin />} />
+                <Route path="/feedback/history" element={<FeedbackHistory />} />
+                <Route path="/feedback/history/:tab" element={<FeedbackHistory />} />
+                <Route path="/feedback/new" element={<FeedbackNew />} />
+                <Route path="/feedback/:id" element={<FeedbackDetail />} />
               </Routes>
             </ErrorBoundary>
           </section>

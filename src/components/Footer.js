@@ -34,13 +34,9 @@ function Footer(props) {
             {t("footer.boardGameGeek")}
           </a>
           &nbsp;|&nbsp;
-          <a
-            href="https://wishlist.abstractplay.com"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <Link to="/wishlist">
             {t("footer.wishlist")}
-          </a>
+          </Link>
           &nbsp;|&nbsp;
           <a
             href="https://github.com/AbstractPlay"
@@ -58,11 +54,12 @@ function Footer(props) {
           {t("footer.betaBanner")}
         </p>
         <p>
-          {t("footer.feedback")}
-          <br />
           <Trans
-            i18nKey="footer.feedbackJoin"
+            i18nKey="footer.feedbackCta"
             components={[
+              <Link key="bugs" to="/feedback/bugs" />,
+              <Link key="ideas" to="/feedback/ideas" />,
+              <Link key="report" to="/feedback/new?kind=bug" />,
               // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans injects anchor text from i18n
               <a
                 key="discord"

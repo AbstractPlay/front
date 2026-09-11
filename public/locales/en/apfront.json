@@ -858,6 +858,13 @@
         "earlier": "Earlier"
     },
     "nav": {
+        "community": "Community",
+        "reportBug": "Report a bug",
+        "bugBoard": "Bug reports",
+        "featureIdeas": "Feature ideas",
+        "gameWishlist": "Game wishlist",
+        "feedbackHistory": "Feedback history",
+        "myFeedback": "My feedback",
         "explore": "Explore",
         "openChallenges": "Open challenges",
         "recentGames": "Recent games",
@@ -913,6 +920,9 @@
     "InAppNotifyLabel-completedGameChat": "Completed game chat",
     "InAppNotifyLabel-tournamentStart": "Tournament started",
     "InAppNotifyLabel-tournamentEnd": "Tournament ended",
+    "InAppNotifyLabel-feedbackReply": "Feedback replies",
+    "InAppNotifyLabel-feedbackStatus": "Feedback status updates",
+    "InAppNotifyLabel-feedbackDeleted": "Removed wishlist entries",
     "NoWaitingResponse": "No challenges waiting on opponent response",
     "NoYourMove": "No games waiting for your move.",
     "NumChallenge": "There will be {{num}} players in this game. {{players}}. Seating will be random.",
@@ -1302,7 +1312,7 @@
     "fatalError": {
         "title": "Something went wrong",
         "chunkMessage": "A new version of the site may be available. Please refresh the page.",
-        "genericMessage": "Please refresh the page. If the problem persists, please <1>report it on our Discord server</1>.",
+        "genericMessage": "Please refresh the page. If the problem persists, please <1>report it on our Discord server</1> or use the Report a bug button below.",
         "discordLink": "report it on our Discord server"
     },
     "standingChallenge": {
@@ -1321,7 +1331,7 @@
         "highlightsLink": "full games list"
     },
     "notFound": {
-        "body": "No page could be found at <1>{{path}}</1>. Please use the navigation bar to try again. If the problem persists, please <2>post a bug report on our Discord server</2>.",
+        "body": "No page could be found at <1>{{path}}</1>. Please use the navigation bar to try again. You can also <2>report a bug in-app</2> or <3>post on our Discord server</3>.",
         "reportLink": "post a bug report on our Discord server"
     },
     "footer": {
@@ -1332,8 +1342,7 @@
         "github": "GitHub",
         "legalLink": "Terms of Service & Privacy Policy",
         "betaBanner": "The site is currently in BETA testing!",
-        "feedback": "We're very happy with the core functionality, but we'd love some concrete feedback from users on how to make things better.",
-        "feedbackJoin": "Please come join us on <1>Discord</1> and let us know if you run into any trouble or have any ideas."
+        "feedbackCta": "Browse <1>bug reports</1> and <2>feature ideas</2>, <3>report a bug</3>, or chat with us on <4>Discord</4>."
     },
     "explore": {
         "intro": "This page lets you explore different ways of sorting the list of games. Select your desired view below. Clicking on a game's name will take you to that game's landing page with additional information.",
@@ -1650,8 +1659,216 @@
                 "tournamentEnd": "Tournament {{number}} of <tournamentLink>{{metaGame}}</tournamentLink> has ended.",
                 "tournamentEnd_withWinner": "Tournament {{number}} of <tournamentLink>{{metaGame}}</tournamentLink> has ended. {{winnerName}} won.",
                 "completedGameChat": "{{commenterName}} has something to say in your completed <gameLink>{{metaGame}}</gameLink> game",
-                "completedGameChat_backfill": "You have unread chat in your completed <gameLink>{{metaGame}}</gameLink> game"
+                "completedGameChat_backfill": "You have unread chat in your completed <gameLink>{{metaGame}}</gameLink> game",
+                "feedbackReply": "New reply on <feedbackLink>{{title}}</feedbackLink>{{preview}}",
+                "feedbackStatus": "Status update on <feedbackLink>{{title}}</feedbackLink>: {{status}}",
+                "feedbackDeleted": "Wishlist entry removed: <wishlistLink>{{title}}</wishlistLink>. Reason: {{reason}}"
             }
+        }
+    },
+    "feedback": {
+        "bugs": {
+            "title": "Bug reports",
+            "intro": "Report issues you find on Abstract Play. Please attach a screenshot when you can — it helps us reproduce the issue.",
+            "report": "Report a bug",
+            "backToBoard": "Back to bug reports",
+            "empty": "No open bug reports yet."
+        },
+        "ideas": {
+            "title": "Feature ideas",
+            "intro": "Suggest improvements and new features for Abstract Play. Vote on ideas you want to see.",
+            "report": "Suggest a feature",
+            "backToBoard": "Back to feature ideas",
+            "empty": "No feature ideas yet."
+        },
+        "wishlist": {
+            "title": "Game wishlist",
+            "intro": "Vote for games you would like to see on Abstract Play. Suggest a game with a link to its rules or BoardGameGeek page.",
+            "report": "Suggest a game",
+            "backToBoard": "Back to game wishlist",
+            "empty": "No wishlist entries yet.",
+            "legend": "Some games are on hold while we seek publishing rights, or marked as declined so we do not receive repeat requests. They remain listed so you can see the community interest.",
+            "filterLabel": "Filter wishlist",
+            "sortBy": "Sort by",
+            "sortVotes": "Votes (most first)",
+            "sortRecent": "Date added (newest first)",
+            "sortName": "Name (A–Z)",
+            "filterAll": "All ({{count}})",
+            "discuss": "Discuss",
+            "legacyVotesNote": "includes former BGG list votes",
+            "viewExisting": "View existing wishlist entry",
+            "category": {
+                "none": "Uncategorized",
+                "permissions_required": "Permissions required",
+                "declined": "Declined",
+                "feasible": "Feasible",
+                "low_priority": "Low priority",
+                "not_feasible": "Not feasible"
+            },
+            "categoryHint": {
+                "permissions_required": "This game is commercially available. Abstract Play cannot implement it without permission from the rights holder. You may still vote to show interest.",
+                "declined": "We are not planning to add this game. It stays on the list so others do not submit duplicate requests."
+            }
+        },
+        "mine": {
+            "title": "My feedback",
+            "intro": "Bugs and feature ideas you have submitted.",
+            "empty": "You have not submitted any feedback yet.",
+            "all": "All",
+            "bugs": "Bugs",
+            "ideas": "Features",
+            "updated": "Updated"
+        },
+        "auth": {
+            "signInRequired": "You must be logged in to participate in feedback.",
+            "signInToCreate": "You must be logged in to report a bug, suggest a feature, or add a game to the wishlist.",
+            "signInToCreateShort": "Log in to submit feedback.",
+            "signInToInteract": "Log in to vote, watch, or comment on this item.",
+            "signInToViewMine": "Log in to see your submitted feedback."
+        },
+        "history": {
+            "title": "Feedback history",
+            "intro": "Closed bug reports, shipped feature ideas, and games that became available on Abstract Play.",
+            "tabLabel": "History category",
+            "closed": "Closed {{date}}",
+            "implementedAs": "Now on Abstract Play: {{name}}",
+            "viewHistory": "View feedback history",
+            "tabs": {
+                "bugs": "Bugs",
+                "ideas": "Features",
+                "games": "Games"
+            },
+            "empty": {
+                "bugs": "No archived bug reports yet.",
+                "ideas": "No archived feature ideas yet.",
+                "games": "No archived wishlist games yet."
+            }
+        },
+        "admin": {
+            "title": "Feedback admin",
+            "intro": "Triage and manage feedback submissions.",
+            "empty": "No items match these filters.",
+            "needsResponse": "Needs response",
+            "effort": "Effort",
+            "priority": "Priority",
+            "status": "Status",
+            "kind": "Type",
+            "allStatuses": "All statuses",
+            "allPriorities": "All priorities",
+            "allEfforts": "All efforts",
+            "noPriority": "Not set",
+            "sortBy": "Sort by",
+            "sortDefault": "Default",
+            "sortPriority": "Priority",
+            "sortStatus": "Status",
+            "saveFields": "Save admin fields",
+            "saving": "Saving…"
+        },
+        "new": {
+            "title": "Report a bug",
+            "titleFeature": "Suggest a feature",
+            "titleWishlist": "Suggest a game",
+            "titleLabel": "Title",
+            "gameTitleLabel": "Game name",
+            "gameUrlLabel": "Game URL",
+            "notesLabel": "Notes",
+            "submitWishlist": "Add to wishlist",
+            "bodyLabel": "Description",
+            "bodyMarkdownHint": "Markdown supported (headings, lists, links, code blocks).",
+            "attachments": "Attachments",
+            "screenshots": "Screenshots",
+            "screenshotEncouraged": "A screenshot makes bugs much easier to fix. Please attach one if you can.",
+            "techDetails": "Technical details (preview)",
+            "submit": "Submit bug report",
+            "submitFeature": "Submit feature idea",
+            "submitWithoutScreenshot": "Submit bug report without a screen capture",
+            "submitting": "Submitting…"
+        },
+        "upload": {
+            "add": "Add screenshot",
+            "paste": "Paste screenshot",
+            "pasteHint": "Click here and press Ctrl+V (or Cmd+V on Mac). You can also paste anywhere on this page except the title and description fields.",
+            "pasteEmpty": "No image found on the clipboard.",
+            "uploading": "Uploading…",
+            "tooMany": "You can attach at most {{max}} screenshots.",
+            "invalidType": "Only PNG, JPEG, and WebP images are allowed.",
+            "tooLarge": "Each image must be 5 MB or smaller.",
+            "failed": "Upload failed. Please try again.",
+            "count_one": "{{count}} screenshot attached",
+            "count_other": "{{count}} screenshots attached"
+        },
+        "detail": {
+            "notFound": "This feedback item could not be found.",
+            "comments": "Discussion",
+            "noComments": "No comments yet.",
+            "staff": "Staff",
+            "vote": "Vote",
+            "unvote": "Unvote",
+            "watch": "Watch",
+            "unwatch": "Unwatch",
+            "adminStatus": "Status",
+            "addComment": "Your comment",
+            "notifyMe": "Notify me of updates on this item",
+            "postComment": "Post comment",
+            "posting": "Posting…",
+            "edit": "Edit",
+            "saveEdit": "Save changes",
+            "cancelEdit": "Cancel",
+            "savingEdit": "Saving…",
+            "adminEffort": "Effort",
+            "adminPriority": "Priority",
+            "adminTags": "Admin tags (comma-separated)",
+            "adminWishlistCategory": "Category",
+            "adminWishlistNote": "Category note (optional)",
+            "saveAdminFields": "Save admin fields",
+            "deleteWishlist": "Delete entry",
+            "deleteWishlistTitle": "Delete wishlist entry",
+            "deleteWishlistIntro": "This permanently removes the entry from the wishlist. Watchers will be notified with your reason.",
+            "deleteWishlistReason": "Reason for deletion",
+            "deleteWishlistConfirm": "Delete entry",
+            "deleteWishlistCancel": "Cancel",
+            "deleting": "Deleting…",
+            "archivedBanner": "This item has been archived. Discussion is read-only until live data is removed.",
+            "archivedPurgedBanner": "This item has been archived. The full thread is no longer available on the live board.",
+            "retentionHoldOn": "Retention hold is on — this item will not be archived automatically.",
+            "retentionHoldOff": "Retention hold is off — this item will be archived after the retention period.",
+            "holdRetention": "Hold retention",
+            "releaseRetention": "Release retention"
+        },
+        "effort": {
+            "low": "Low effort",
+            "medium": "Medium effort",
+            "high": "High effort",
+            "unknown": "Unknown effort"
+        },
+        "priority": {
+            "urgent": "Urgent",
+            "normal": "Normal",
+            "low": "Low"
+        },
+        "meta": {
+            "comments_one": "{{count}} comment",
+            "comments_other": "{{count}} comments",
+            "votes_one": "{{count}} vote",
+            "votes_other": "{{count}} votes"
+        },
+        "status": {
+            "open": "Open",
+            "triaged_urgent": "Triaged (legacy)",
+            "triaged_normal": "Triaged (legacy)",
+            "triaged_low": "Triaged (legacy)",
+            "resolved": "Resolved",
+            "closed": "Closed",
+            "triaged": "Triaged",
+            "in_progress": "In progress",
+            "under_review": "Under review",
+            "planned": "Planned",
+            "shipped": "Shipped",
+            "declined": "Declined",
+            "requested": "Requested",
+            "evaluating": "Evaluating",
+            "in_development": "In development",
+            "available": "Available"
         }
     },
     "Edit": "Edit",

@@ -16,6 +16,9 @@ export const IN_APP_NOTIFICATION_KEYS = [
   "completedGameChat",
   "tournamentStart",
   "tournamentEnd",
+  "feedbackReply",
+  "feedbackStatus",
+  "feedbackDeleted",
 ];
 
 function defaultNotificationMap(keys) {
