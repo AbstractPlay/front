@@ -142,13 +142,20 @@ export function priorityLabelKey(priority) {
   return `feedback.priority.${priority}`;
 }
 
-export const WISHLIST_SORT_OPTIONS = ["votes", "name"];
+export const WISHLIST_SORT_OPTIONS = ["votes", "recent", "name"];
 
 export function compareWishlistItems(a, b, sortBy) {
   if (sortBy === "name") {
     const titleCmp = String(a.title).localeCompare(String(b.title), undefined, { sensitivity: "base" });
     if (titleCmp !== 0) {
       return titleCmp;
+    }
+    return (b.effectiveVotes ?? 0) - (a.effectiveVotes ?? 0);
+  }
+  if (sortBy === "recent") {
+    const dateDiff = (b.createdAt ?? 0) - (a.createdAt ?? 0);
+    if (dateDiff !== 0) {
+      return dateDiff;
     }
     return (b.effectiveVotes ?? 0) - (a.effectiveVotes ?? 0);
   }
