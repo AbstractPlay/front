@@ -1691,6 +1691,7 @@
       "filterLabel": "Wunschliste filtern",
       "sortBy": "Sortieren nach",
       "sortVotes": "Stimmen (meiste zuerst)",
+      "sortRecent": "Hinzufügedatum (neueste zuerst)",
       "sortName": "Name (A–Z)",
       "filterAll": "Alle ({{count}})",
       "discuss": "Diskutieren",

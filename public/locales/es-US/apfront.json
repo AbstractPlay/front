@@ -1691,6 +1691,7 @@
       "filterLabel": "Filtrar lista de deseos",
       "sortBy": "Ordenar por",
       "sortVotes": "Votos (más primero)",
+      "sortRecent": "Fecha en que se agregó (más recientes primero)",
       "sortName": "Nombre (A–Z)",
       "filterAll": "Todos ({{count}})",
       "discuss": "Discutir",
