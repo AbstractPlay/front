@@ -330,6 +330,18 @@
   background: var(--secondary-color-3-bg, var(--main-bg-color));
 }
 
+.feedback-board-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.feedback-board-sort .label {
+  margin-bottom: 0.35rem;
+}
+
 .feedback-wishlist-toolbar {
   display: flex;
   flex-wrap: wrap;

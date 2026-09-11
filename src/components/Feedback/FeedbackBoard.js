@@ -13,7 +13,10 @@ import {
   boardKeyForKind,
   compareFeedbackItems,
   compareWishlistItems,
+  defaultBoardSortForKind,
+  FEEDBACK_BOARD_SORT_OPTIONS,
   FEEDBACK_NEW_PATH,
+  feedbackBoardSortLabelKey,
   feedbackDetailPath,
   WISHLIST_CATEGORY_FILTER_CHIPS,
   WISHLIST_SORT_OPTIONS,
@@ -28,7 +31,7 @@ function FeedbackBoard({ kind = "bug" }) {
   const loggedIn = status === "ready";
   const globalMe = useStore((state) => state.globalMe);
   const boardKey = boardKeyForKind(kind);
-  const defaultSort = kind === "feature" || kind === "wishlist" ? "votes" : "recent";
+  const defaultSort = defaultBoardSortForKind(kind);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -36,10 +39,14 @@ function FeedbackBoard({ kind = "bug" }) {
   const [priorityFilter, setPriorityFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [wishlistStatusFilter, setWishlistStatusFilter] = useState("");
-  const [sortBy, setSortBy] = useState(kind === "wishlist" ? "votes" : "default");
+  const [sortBy, setSortBy] = useState(() => defaultBoardSortForKind(kind));
 
   const isAdmin = Boolean(globalMe?.admin);
   const useAdminList = isAdmin && kind !== "wishlist" && (statusFilter || priorityFilter);
+  const listSort = (kind === "bug" || kind === "feature")
+    && FEEDBACK_BOARD_SORT_OPTIONS.includes(sortBy)
+    ? sortBy
+    : defaultSort;
 
   useEffect(() => {
     let cancelled = false;
@@ -54,7 +61,7 @@ function FeedbackBoard({ kind = "bug" }) {
         })
         : kind === "wishlist"
           ? await listFeedbackAll({ kind, sort: defaultSort, limit: 100 })
-          : await listFeedback({ kind, sort: defaultSort, limit: 100 });
+          : await listFeedback({ kind, sort: listSort, limit: 100 });
       if (cancelled) {
         return;
       }
@@ -70,7 +77,7 @@ function FeedbackBoard({ kind = "bug" }) {
     return () => {
       cancelled = true;
     };
-  }, [kind, defaultSort, useAdminList, statusFilter, priorityFilter]);
+  }, [kind, defaultSort, listSort, useAdminList, statusFilter, priorityFilter]);
 
   const categoryCounts = useMemo(() => {
     const counts = { all: items.length };
@@ -94,8 +101,10 @@ function FeedbackBoard({ kind = "bug" }) {
     if (kind === "wishlist") {
       return [...filtered].sort((a, b) => compareWishlistItems(a, b, sortBy));
     }
-    if (isAdmin && sortBy !== "default") {
-      return [...filtered].sort((a, b) => compareFeedbackItems(a, b, sortBy));
+    if (kind === "bug" || kind === "feature") {
+      if (FEEDBACK_BOARD_SORT_OPTIONS.includes(sortBy) || (isAdmin && sortBy !== "default")) {
+        return [...filtered].sort((a, b) => compareFeedbackItems(a, b, sortBy));
+      }
     }
     return filtered;
   }, [categoryFilter, isAdmin, items, kind, sortBy, wishlistStatusFilter]);
@@ -124,6 +133,32 @@ function FeedbackBoard({ kind = "bug" }) {
           <FeedbackSignInRequired messageKey="feedback.auth.signInToCreateShort" compact />
         )}
       </p>
+      {kind === "bug" || kind === "feature" ? (
+        <div className="feedback-board-toolbar">
+          <div className="field feedback-board-sort">
+            <label className="label" htmlFor="feedback-board-sort">{t("feedback.board.sortBy")}</label>
+            <select
+              id="feedback-board-sort"
+              className="select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              {FEEDBACK_BOARD_SORT_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {t(feedbackBoardSortLabelKey(option))}
+                </option>
+              ))}
+              {isAdmin ? (
+                <>
+                  <option value="default">{t("feedback.admin.sortDefault")}</option>
+                  <option value="priority">{t("feedback.admin.sortPriority")}</option>
+                  <option value="status">{t("feedback.admin.sortStatus")}</option>
+                </>
+              ) : null}
+            </select>
+          </div>
+        </div>
+      ) : null}
       {kind === "wishlist" ? (
         <div className="feedback-wishlist-toolbar">
           <div className="feedback-wishlist-chips" role="toolbar" aria-label={t("feedback.wishlist.filterLabel")}>
@@ -191,9 +226,6 @@ function FeedbackBoard({ kind = "bug" }) {
             onStatusChange={setStatusFilter}
             priority={priorityFilter}
             onPriorityChange={setPriorityFilter}
-            sortBy={sortBy}
-            onSortByChange={setSortBy}
-            showSort
           />
         </div>
       ) : null}

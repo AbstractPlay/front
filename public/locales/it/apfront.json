@@ -1667,6 +1667,11 @@
     }
   },
   "feedback": {
+    "board": {
+      "sortBy": "Ordina per",
+      "sortVotes": "Voti (dal più votato)",
+      "sortRecent": "Data di pubblicazione (dal più recente)"
+    },
     "bugs": {
       "title": "Segnalazioni di bug",
       "intro": "Segnala i problemi riscontrati su Abstract Play. Se possibile, allega uno screenshot: ci aiuta a riprodurre il problema.",
