@@ -1822,6 +1822,7 @@
       "saveEdit": "Änderungen speichern",
       "cancelEdit": "Abbrechen",
       "savingEdit": "Speichern…",
+      "coverReplaceHint": "Lade ein neues Bild hoch oder füge eines ein, um das aktuelle Cover zu ersetzen.",
       "adminEffort": "Aufwand",
       "adminPriority": "Priorität",
       "adminTags": "Admin-Tags (kommagetrennt)",
