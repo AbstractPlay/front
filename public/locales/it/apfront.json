@@ -37,6 +37,7 @@
   "CycleBoardDisplay": "Scorri modalità di visualizzazione del tabellone",
   "buttons": {
     "pass": "Passa",
+    "declare": "Dichiara",
     "takebutton": "Prendi bottone",
     "acceptpie": "Gioca per secondo",
     "playsecond": "Gioca per secondo",
@@ -1668,6 +1669,8 @@
   },
   "feedback": {
     "board": {
+      "filterLabel": "Filtra elenco",
+      "filterAll": "Tutti ({{count}})",
       "sortBy": "Ordina per",
       "sortVotes": "Voti (dal più votato)",
       "sortRecent": "Data di pubblicazione (dal più recente)"

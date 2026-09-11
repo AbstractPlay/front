@@ -37,6 +37,7 @@
   "CycleBoardDisplay": "Alternar vista del tablero",
   "buttons": {
     "pass": "Pasar",
+    "declare": "Declarar",
     "takebutton": "Tomar botón",
     "acceptpie": "Jugar segundo",
     "playsecond": "Jugar segundo",
@@ -1668,6 +1669,8 @@
   },
   "feedback": {
     "board": {
+      "filterLabel": "Filtrar lista",
+      "filterAll": "Todos ({{count}})",
       "sortBy": "Ordenar por",
       "sortVotes": "Votos (más votados primero)",
       "sortRecent": "Fecha de publicación (más recientes primero)"

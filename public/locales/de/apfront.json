@@ -37,6 +37,7 @@
   "CycleBoardDisplay": "Brettanzeige umschalten",
   "buttons": {
     "pass": "Verzögern",
+    "declare": "Ansagen",
     "takebutton": "Aufnehmen-Taste",
     "acceptpie": "Als zweiter spielen",
     "playsecond": "Als zweiter spielen",
@@ -1668,6 +1669,8 @@
   },
   "feedback": {
     "board": {
+      "filterLabel": "Liste filtern",
+      "filterAll": "Alle ({{count}})",
       "sortBy": "Sortieren nach",
       "sortVotes": "Stimmen (meiste zuerst)",
       "sortRecent": "Erstellungsdatum (neueste zuerst)"

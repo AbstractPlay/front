@@ -37,6 +37,7 @@
     "CycleBoardDisplay": "Cycle board display",
     "buttons": {
         "pass": "Pass",
+        "declare": "Declare",
         "takebutton": "Take button",
         "acceptpie": "Play second",
         "playsecond": "Play second",
@@ -1668,6 +1669,8 @@
     },
     "feedback": {
         "board": {
+            "filterLabel": "Filter list",
+            "filterAll": "All ({{count}})",
             "sortBy": "Sort by",
             "sortVotes": "Votes (most first)",
             "sortRecent": "Date posted (newest first)"
