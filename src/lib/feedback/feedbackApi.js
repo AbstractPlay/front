@@ -55,6 +55,7 @@ async function fetchOpen(query, pars) {
   const res = await fetch(API_ENDPOINT_OPEN, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    cache: "no-store",
     body: JSON.stringify({ query, pars }),
   });
   if (!res.ok) {
