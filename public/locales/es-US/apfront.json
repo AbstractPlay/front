@@ -1822,6 +1822,7 @@
       "saveEdit": "Guardar cambios",
       "cancelEdit": "Cancelar",
       "savingEdit": "Guardando…",
+      "coverReplaceHint": "Sube o pega una nueva imagen para reemplazar la portada actual.",
       "adminEffort": "Esfuerzo",
       "adminPriority": "Prioridad",
       "adminTags": "Etiquetas de administración (separadas por comas)",

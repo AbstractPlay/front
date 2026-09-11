@@ -1822,6 +1822,7 @@
       "saveEdit": "Salva modifiche",
       "cancelEdit": "Annulla",
       "savingEdit": "Salvataggio in corso…",
+      "coverReplaceHint": "Carica o incolla una nuova immagine per sostituire la copertina attuale.",
       "adminEffort": "Impegno",
       "adminPriority": "Priorità",
       "adminTags": "Tag admin (separati da virgola)",
