@@ -77,24 +77,27 @@ function History({ handleChallenge }) {
             ? getGameDisplayName(meta)
             : (rec.header?.game?.name ?? "Unknown");
           let winner = undefined;
-          const sortedResults = rec.header.players.sort(
-            (a, b) => b.result - a.result
-          );
-          if (sortedResults[0].result !== sortedResults[1].result) {
-            let name = "UNKNOWN";
-            const found = allUsers?.find(
-              (u) => u.id === sortedResults[0].userid
+          const players = rec.header?.players ?? [];
+          if (players.length >= 2) {
+            const sortedResults = [...players].sort(
+              (a, b) => b.result - a.result
             );
-            if (found !== undefined) {
-              name = found.name;
+            if (sortedResults[0].result !== sortedResults[1].result) {
+              let name = "UNKNOWN";
+              const found = allUsers?.find(
+                (u) => u.id === sortedResults[0].userid
+              );
+              if (found !== undefined) {
+                name = found.name;
+              }
+              winner = {
+                id: sortedResults[0].userid,
+                name,
+                lastSeen: found.lastSeen || 0,
+              };
             }
-            winner = {
-              id: sortedResults[0].userid,
-              name,
-              lastSeen: found.lastSeen || 0,
-            };
           }
-          const opponents = rec.header.players
+          const opponents = players
             .map((r) => {
               return {
                 id: r.userid,
