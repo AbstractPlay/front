@@ -1669,6 +1669,8 @@
   },
   "feedback": {
     "board": {
+      "filterLabel": "Filtrer la liste",
+      "filterAll": "Tous ({{count}})",
       "sortBy": "Trier par",
       "sortVotes": "Votes (les plus nombreux en premier)",
       "sortRecent": "Date de publication (les plus récentes en premier)"
