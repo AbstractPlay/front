@@ -347,6 +347,87 @@ function FeedbackDetail() {
           </button>
         )}
       </div>
+      {editing ? (
+        <form className="feedback-edit-form" onSubmit={handleSaveEdit}>
+          <div className="field">
+            <label className="label" htmlFor="feedback-edit-title">
+              {post.kind === "wishlist" ? t("feedback.new.gameTitleLabel") : t("feedback.new.titleLabel")}
+            </label>
+            <input
+              id="feedback-edit-title"
+              className="input"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              required
+              maxLength={200}
+            />
+          </div>
+          <div className="field">
+            <label className="label" htmlFor="feedback-edit-body">
+              {post.kind === "wishlist" ? t("feedback.new.notesLabel") : t("feedback.new.bodyLabel")}
+            </label>
+            {post.kind !== "wishlist" ? (
+              <p className="feedback-muted feedback-field-hint">{t("feedback.new.bodyMarkdownHint")}</p>
+            ) : null}
+            <textarea
+              id="feedback-edit-body"
+              className="textarea"
+              rows={5}
+              value={editBody}
+              onChange={(e) => setEditBody(e.target.value)}
+              required={post.kind === "feature"}
+            />
+          </div>
+          {post.kind === "wishlist" ? (
+            <div className="field">
+              <label className="label">{t("feedback.new.coverImage")}</label>
+              <p className="feedback-muted feedback-field-hint">{t("feedback.new.coverImageHint")}</p>
+              {attachmentUrls?.[0] && editAttachmentKeys.length === 0 ? (
+                <div className="feedback-wishlist-cover-edit-preview">
+                  <img
+                    src={attachmentUrls[0].url}
+                    alt=""
+                    className="feedback-wishlist-cover-image"
+                  />
+                  <p className="feedback-muted">{t("feedback.detail.coverReplaceHint")}</p>
+                </div>
+              ) : null}
+              <ScreenshotUpload
+                attachmentKeys={editAttachmentKeys}
+                onChange={setEditAttachmentKeys}
+                maxFiles={1}
+                replaceOnUpload
+                addLabel={t("feedback.upload.addCover")}
+                pasteLabel={t("feedback.upload.pasteCover")}
+                pasteHint={t("feedback.upload.pasteCoverHint")}
+                countLabelKey="feedback.upload.coverCount"
+              />
+            </div>
+          ) : null}
+          <div className="feedback-comment-actions">
+            <button type="submit" className="button apButton" disabled={submitting}>
+              {submitting ? t("feedback.detail.savingEdit") : t("feedback.detail.saveEdit")}
+            </button>
+            <button
+              type="button"
+              className="button apButtonNeutral"
+              onClick={() => {
+                setEditAttachmentKeys([]);
+                setEditing(false);
+              }}
+              disabled={submitting}
+            >
+              {t("feedback.detail.cancelEdit")}
+            </button>
+          </div>
+        </form>
+      ) : (
+        post.body ? (
+          <FeedbackMarkdown convertBggBbcode={post.kind === "wishlist"}>
+            {post.body}
+          </FeedbackMarkdown>
+        ) : null
+      )}
       {globalMe?.admin && !readOnly && statusOptions.length > 0 && (
         <div className="field">
           <label className="label" htmlFor="feedback-status">{t("feedback.detail.adminStatus")}</label>
@@ -508,81 +589,6 @@ function FeedbackDetail() {
           {error ? <p className="has-text-danger">{error}</p> : null}
         </Modal>
       ) : null}
-      {editing ? (
-        <form onSubmit={handleSaveEdit}>
-          <div className="field">
-            <label className="label" htmlFor="feedback-edit-title">{t("feedback.new.titleLabel")}</label>
-            <input
-              id="feedback-edit-title"
-              className="input"
-              value={editTitle}
-              onChange={(e) => setEditTitle(e.target.value)}
-              required
-              maxLength={200}
-            />
-          </div>
-          <div className="field">
-            <label className="label" htmlFor="feedback-edit-body">{t("feedback.new.bodyLabel")}</label>
-            <p className="feedback-muted feedback-field-hint">{t("feedback.new.bodyMarkdownHint")}</p>
-            <textarea
-              id="feedback-edit-body"
-              className="textarea"
-              rows={5}
-              value={editBody}
-              onChange={(e) => setEditBody(e.target.value)}
-              required={post.kind === "feature"}
-            />
-          </div>
-          {post.kind === "wishlist" ? (
-            <div className="field">
-              <label className="label">{t("feedback.new.coverImage")}</label>
-              <p className="feedback-muted feedback-field-hint">{t("feedback.new.coverImageHint")}</p>
-              {attachmentUrls?.[0] && editAttachmentKeys.length === 0 ? (
-                <div className="feedback-wishlist-cover-edit-preview">
-                  <img
-                    src={attachmentUrls[0].url}
-                    alt=""
-                    className="feedback-wishlist-cover-image"
-                  />
-                  <p className="feedback-muted">{t("feedback.detail.coverReplaceHint")}</p>
-                </div>
-              ) : null}
-              <ScreenshotUpload
-                attachmentKeys={editAttachmentKeys}
-                onChange={setEditAttachmentKeys}
-                maxFiles={1}
-                replaceOnUpload
-                addLabel={t("feedback.upload.addCover")}
-                pasteLabel={t("feedback.upload.pasteCover")}
-                pasteHint={t("feedback.upload.pasteCoverHint")}
-                countLabelKey="feedback.upload.coverCount"
-              />
-            </div>
-          ) : null}
-          <div className="feedback-comment-actions">
-            <button type="submit" className="button apButton" disabled={submitting}>
-              {submitting ? t("feedback.detail.savingEdit") : t("feedback.detail.saveEdit")}
-            </button>
-            <button
-              type="button"
-              className="button apButtonNeutral"
-              onClick={() => {
-                setEditAttachmentKeys([]);
-                setEditing(false);
-              }}
-              disabled={submitting}
-            >
-              {t("feedback.detail.cancelEdit")}
-            </button>
-          </div>
-        </form>
-      ) : (
-        post.body && (
-          <FeedbackMarkdown convertBggBbcode={post.kind === "wishlist"}>
-            {post.body}
-          </FeedbackMarkdown>
-        )
-      )}
       {attachmentUrls?.length > 0 && post.kind !== "wishlist" && (
         <div className="feedback-screenshot-grid">
           {attachmentUrls.map(({ key, url }) => (

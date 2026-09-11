@@ -49,6 +49,10 @@ export const WISHLIST_CATEGORY_FILTER_CHIPS = [
   "declined",
 ];
 
+export const WISHLIST_STATUS_FILTER_CHIPS = [
+  "in_development",
+];
+
 export const PRIORITY_LEVELS = ["urgent", "normal", "low"];
 
 export const PRIORITY_SORT_RANK = {

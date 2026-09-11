@@ -94,6 +94,10 @@
   margin: 0 0 1rem;
 }
 
+.feedback-edit-form {
+  margin: 0 0 1.5rem;
+}
+
 .feedback-wishlist-cover-image {
   display: block;
   max-width: min(100%, 18rem);

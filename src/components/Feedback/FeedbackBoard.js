@@ -17,6 +17,7 @@ import {
   feedbackDetailPath,
   WISHLIST_CATEGORY_FILTER_CHIPS,
   WISHLIST_SORT_OPTIONS,
+  WISHLIST_STATUS_FILTER_CHIPS,
 } from "../../lib/feedback/feedbackConstants";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import "./feedback.css";
@@ -34,6 +35,7 @@ function FeedbackBoard({ kind = "bug" }) {
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [wishlistStatusFilter, setWishlistStatusFilter] = useState("");
   const [sortBy, setSortBy] = useState(kind === "wishlist" ? "votes" : "default");
 
   const isAdmin = Boolean(globalMe?.admin);
@@ -75,6 +77,9 @@ function FeedbackBoard({ kind = "bug" }) {
     for (const chip of WISHLIST_CATEGORY_FILTER_CHIPS) {
       counts[chip] = items.filter((item) => item.wishlistCategory === chip).length;
     }
+    for (const chip of WISHLIST_STATUS_FILTER_CHIPS) {
+      counts[`status:${chip}`] = items.filter((item) => item.status === chip).length;
+    }
     return counts;
   }, [items]);
 
@@ -83,6 +88,9 @@ function FeedbackBoard({ kind = "bug" }) {
     if (kind === "wishlist" && categoryFilter) {
       filtered = filtered.filter((item) => item.wishlistCategory === categoryFilter);
     }
+    if (kind === "wishlist" && wishlistStatusFilter) {
+      filtered = filtered.filter((item) => item.status === wishlistStatusFilter);
+    }
     if (kind === "wishlist") {
       return [...filtered].sort((a, b) => compareWishlistItems(a, b, sortBy));
     }
@@ -90,7 +98,7 @@ function FeedbackBoard({ kind = "bug" }) {
       return [...filtered].sort((a, b) => compareFeedbackItems(a, b, sortBy));
     }
     return filtered;
-  }, [categoryFilter, isAdmin, items, kind, sortBy]);
+  }, [categoryFilter, isAdmin, items, kind, sortBy, wishlistStatusFilter]);
 
   if (loading) {
     return <Spinner />;
@@ -121,17 +129,37 @@ function FeedbackBoard({ kind = "bug" }) {
           <div className="feedback-wishlist-chips" role="toolbar" aria-label={t("feedback.wishlist.filterLabel")}>
             <button
               type="button"
-              className={`button is-small apButtonNeutral${categoryFilter === "" ? " is-selected" : ""}`}
-              onClick={() => setCategoryFilter("")}
+              className={`button is-small apButtonNeutral${!categoryFilter && !wishlistStatusFilter ? " is-selected" : ""}`}
+              onClick={() => {
+                setCategoryFilter("");
+                setWishlistStatusFilter("");
+              }}
             >
               {t("feedback.wishlist.filterAll", { count: categoryCounts.all })}
             </button>
+            {WISHLIST_STATUS_FILTER_CHIPS.map((chip) => (
+              <button
+                key={`status-${chip}`}
+                type="button"
+                className={`button is-small apButtonNeutral${wishlistStatusFilter === chip ? " is-selected" : ""}`}
+                onClick={() => {
+                  setCategoryFilter("");
+                  setWishlistStatusFilter(chip);
+                }}
+              >
+                {t(`feedback.status.${chip}`)}
+                {categoryCounts[`status:${chip}`] > 0 ? ` (${categoryCounts[`status:${chip}`]})` : ""}
+              </button>
+            ))}
             {WISHLIST_CATEGORY_FILTER_CHIPS.map((chip) => (
               <button
                 key={chip}
                 type="button"
                 className={`button is-small apButtonNeutral${categoryFilter === chip ? " is-selected" : ""}`}
-                onClick={() => setCategoryFilter(chip)}
+                onClick={() => {
+                  setWishlistStatusFilter("");
+                  setCategoryFilter(chip);
+                }}
               >
                 {t(`feedback.wishlist.category.${chip}`)}
                 {categoryCounts[chip] > 0 ? ` (${categoryCounts[chip]})` : ""}
