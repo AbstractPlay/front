@@ -4111,6 +4111,18 @@
     "src": "Log in to see your submitted feedback.",
     "out": "Inicia sesión para ver tus comentarios enviados."
   },
+  "feedback.board.sortBy": {
+    "src": "Sort by",
+    "out": "Ordenar por"
+  },
+  "feedback.board.sortRecent": {
+    "src": "Date posted (newest first)",
+    "out": "Fecha de publicación (más recientes primero)"
+  },
+  "feedback.board.sortVotes": {
+    "src": "Votes (most first)",
+    "out": "Votos (más votados primero)"
+  },
   "feedback.detail.archivedBanner": {
     "src": "This item has been archived. Discussion is read-only until live data is removed.",
     "out": "Este elemento ha sido archivado. La discusión es solo de lectura hasta que se eliminen los datos en vivo."

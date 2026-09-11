@@ -148,6 +148,22 @@ export function priorityLabelKey(priority) {
 
 export const WISHLIST_SORT_OPTIONS = ["votes", "recent", "name"];
 
+export const FEEDBACK_BOARD_SORT_OPTIONS = ["votes", "recent"];
+
+export function defaultBoardSortForKind(kind) {
+  if (kind === "bug") {
+    return "recent";
+  }
+  if (kind === "feature" || kind === "wishlist") {
+    return "votes";
+  }
+  return "recent";
+}
+
+export function feedbackBoardSortLabelKey(option) {
+  return `feedback.board.sort${option.charAt(0).toUpperCase()}${option.slice(1)}`;
+}
+
 export function compareWishlistItems(a, b, sortBy) {
   if (sortBy === "name") {
     const titleCmp = String(a.title).localeCompare(String(b.title), undefined, { sensitivity: "base" });
@@ -171,6 +187,20 @@ export function compareWishlistItems(a, b, sortBy) {
 }
 
 export function compareFeedbackItems(a, b, sortBy) {
+  if (sortBy === "recent") {
+    const dateDiff = (b.createdAt ?? 0) - (a.createdAt ?? 0);
+    if (dateDiff !== 0) {
+      return dateDiff;
+    }
+    return (b.effectiveVotes ?? 0) - (a.effectiveVotes ?? 0);
+  }
+  if (sortBy === "votes") {
+    const voteDiff = (b.effectiveVotes ?? 0) - (a.effectiveVotes ?? 0);
+    if (voteDiff !== 0) {
+      return voteDiff;
+    }
+    return (b.createdAt ?? 0) - (a.createdAt ?? 0);
+  }
   if (sortBy === "priority") {
     const rankA = PRIORITY_SORT_RANK[a.priority] ?? 99;
     const rankB = PRIORITY_SORT_RANK[b.priority] ?? 99;
