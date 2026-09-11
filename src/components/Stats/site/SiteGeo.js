@@ -4,10 +4,11 @@ import { useTranslation } from "react-i18next";
 import Flag from "../../Flag";
 import DataTable, { STATS_TABLE_PROPS } from "../../shared/DataTable";
 import { useStore } from "../../../stores";
+import { compareStrings } from "../../../lib/compareStrings";
 
 function SiteGeo({ nav }) {
   const summary = useStore((state) => state.summary);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const data = useMemo(() => {
     const allUsersByCode = new Map(
@@ -31,12 +32,26 @@ function SiteGeo({ nav }) {
         n: allUsersByCode.get(code)?.n ?? 0,
         activeN: activeByCode.get(code)?.n ?? 0,
       }))
-      .sort((a, b) => b.n - a.n);
-  }, [summary]);
+      .sort((a, b) => {
+        const byN = b.n - a.n;
+        if (byN !== 0) return byN;
+        return compareStrings(a.name, b.name, i18n.language);
+      });
+  }, [summary, i18n.language]);
 
   const columnHelper = createColumnHelper();
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => {
+    const countThenNameSortingFn = (rowA, rowB, columnId) => {
+      const diff = rowA.getValue(columnId) - rowB.getValue(columnId);
+      if (diff !== 0) return diff;
+      return compareStrings(
+        rowA.original.name,
+        rowB.original.name,
+        i18n.language
+      );
+    };
+
+    return [
       columnHelper.accessor("name", {
         header: t("tables.country"),
       }),
@@ -46,13 +61,14 @@ function SiteGeo({ nav }) {
       }),
       columnHelper.accessor("n", {
         header: t("tables.allUsers"),
+        sortingFn: countThenNameSortingFn,
       }),
       columnHelper.accessor("activeN", {
         header: t("tables.past30Days"),
+        sortingFn: countThenNameSortingFn,
       }),
-    ],
-    [columnHelper, t]
-  );
+    ];
+  }, [columnHelper, t, i18n.language]);
 
   return (
     <>
