@@ -1776,6 +1776,8 @@
             "bodyLabel": "Description",
             "bodyMarkdownHint": "Markdown supported (headings, lists, links, code blocks).",
             "attachments": "Attachments",
+            "coverImage": "Cover image",
+            "coverImageHint": "Optional. Paste or upload one box-art image. If you paste multiple images, only the last one is kept.",
             "screenshots": "Screenshots",
             "screenshotEncouraged": "A screenshot makes bugs much easier to fix. Please attach one if you can.",
             "techDetails": "Technical details (preview)",
@@ -1786,8 +1788,11 @@
         },
         "upload": {
             "add": "Add screenshot",
+            "addCover": "Add cover image",
             "paste": "Paste screenshot",
+            "pasteCover": "Paste cover image",
             "pasteHint": "Click here and press Ctrl+V (or Cmd+V on Mac). You can also paste anywhere on this page except the title and description fields.",
+            "pasteCoverHint": "Click here and press Ctrl+V (or Cmd+V on Mac). If your clipboard has multiple images, only the last one is kept.",
             "pasteEmpty": "No image found on the clipboard.",
             "uploading": "Uploading…",
             "tooMany": "You can attach at most {{max}} screenshots.",
@@ -1795,7 +1800,9 @@
             "tooLarge": "Each image must be 5 MB or smaller.",
             "failed": "Upload failed. Please try again.",
             "count_one": "{{count}} screenshot attached",
-            "count_other": "{{count}} screenshots attached"
+            "count_other": "{{count}} screenshots attached",
+            "coverCount_one": "{{count}} cover image attached",
+            "coverCount_other": "{{count}} cover images attached"
         },
         "detail": {
             "notFound": "This feedback item could not be found.",

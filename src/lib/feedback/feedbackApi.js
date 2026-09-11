@@ -78,6 +78,34 @@ export async function listFeedback({ kind, sort = "recent", limit = 50, cursor }
   return fetchOpen("feedback_list", { kind, sort, limit, cursor });
 }
 
+const WISHLIST_COVER_URL_BATCH = 20;
+
+/**
+ * feedback_list returns attachmentKeys; coverImageUrl is added server-side when deployed.
+ * Until then, presign the first attachment per item via feedback_get (batched).
+ */
+async function enrichWishlistCoverUrls(items) {
+  const pending = items.filter((item) => item.attachmentKeys?.[0] && !item.coverImageUrl);
+  if (pending.length === 0) {
+    return items;
+  }
+  const coverById = new Map();
+  for (let i = 0; i < pending.length; i += WISHLIST_COVER_URL_BATCH) {
+    const batch = pending.slice(i, i + WISHLIST_COVER_URL_BATCH);
+    const results = await Promise.all(batch.map((item) => getFeedbackOpen(item.id)));
+    results.forEach((result, idx) => {
+      const url = result.ok ? result.data?.attachmentUrls?.[0]?.url : undefined;
+      if (url) {
+        coverById.set(batch[idx].id, url);
+      }
+    });
+  }
+  return items.map((item) => {
+    const coverImageUrl = item.coverImageUrl ?? coverById.get(item.id);
+    return coverImageUrl ? { ...item, coverImageUrl } : item;
+  });
+}
+
 /** Fetch every page until the API stops returning nextCursor. */
 export async function listFeedbackAll({ kind, sort = "recent", limit = 100 }) {
   const items = [];
@@ -90,7 +118,8 @@ export async function listFeedbackAll({ kind, sort = "recent", limit = 100 }) {
     items.push(...(result.data?.items ?? []));
     cursor = result.data?.nextCursor;
   } while (cursor);
-  return { ok: true, data: { items } };
+  const enriched = kind === "wishlist" ? await enrichWishlistCoverUrls(items) : items;
+  return { ok: true, data: { items: enriched } };
 }
 
 export async function getFeedbackOpen(id) {

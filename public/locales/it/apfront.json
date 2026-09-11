@@ -1776,6 +1776,8 @@
       "bodyLabel": "Descrizione",
       "bodyMarkdownHint": "Markdown supportato (intestazioni, elenchi, link, blocchi di codice).",
       "attachments": "Allegati",
+      "coverImage": "Immagine di copertina",
+      "coverImageHint": "Opzionale. Incolla o carica un'immagine della scatola del gioco. Se incolli più immagini, verrà conservata solo l'ultima.",
       "screenshots": "Screenshot",
       "screenshotEncouraged": "Uno screenshot rende molto più facile risolvere i bug. Se puoi, allegane uno.",
       "techDetails": "Dettagli tecnici (anteprima)",
@@ -1786,8 +1788,11 @@
     },
     "upload": {
       "add": "Aggiungi screenshot",
+      "addCover": "Aggiungi immagine di copertina",
       "paste": "Incolla screenshot",
+      "pasteCover": "Incolla immagine di copertina",
       "pasteHint": "Fai clic qui e premi Ctrl+V (o Cmd+V su Mac). Puoi anche incollare in qualsiasi punto di questa pagina tranne nei campi titolo e descrizione.",
+      "pasteCoverHint": "Fai clic qui e premi Ctrl+V (o Cmd+V su Mac). Se negli appunti sono presenti più immagini, verrà conservata solo l'ultima.",
       "pasteEmpty": "Nessuna immagine trovata negli appunti.",
       "uploading": "Caricamento in corso…",
       "tooMany": "Puoi allegare al massimo {{max}} screenshot.",
@@ -1795,7 +1800,9 @@
       "tooLarge": "Ogni immagine deve essere di 5 MB o inferiore.",
       "failed": "Caricamento fallito. Riprova.",
       "count_one": "{{count}} screenshot allegato",
-      "count_other": "{{count}} screenshot allegati"
+      "count_other": "{{count}} screenshot allegati",
+      "coverCount_one": "{{count}} immagine di copertina allegata",
+      "coverCount_other": "{{count}} immagini di copertina allegate"
     },
     "detail": {
       "notFound": "Impossibile trovare questo elemento di feedback.",

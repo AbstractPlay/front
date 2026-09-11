@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { bggBbcodeToMarkdown } from "../../lib/feedback/bggBbcodeToMarkdown";
 
 function FeedbackMarkdownLink({ href, children, ...props }) {
   const external = href && /^https?:\/\//i.test(href);
@@ -15,10 +16,11 @@ function FeedbackMarkdownLink({ href, children, ...props }) {
   );
 }
 
-function FeedbackMarkdown({ children }) {
+function FeedbackMarkdown({ children, convertBggBbcode = false }) {
   if (!children) {
     return null;
   }
+  const markdown = convertBggBbcode ? bggBbcodeToMarkdown(children) : children;
   return (
     <ReactMarkdown
       className="content feedback-markdown"
@@ -27,13 +29,14 @@ function FeedbackMarkdown({ children }) {
       unwrapDisallowed
       components={{ a: FeedbackMarkdownLink }}
     >
-      {children}
+      {markdown}
     </ReactMarkdown>
   );
 }
 
 FeedbackMarkdown.propTypes = {
   children: PropTypes.string,
+  convertBggBbcode: PropTypes.bool,
 };
 
 export default FeedbackMarkdown;

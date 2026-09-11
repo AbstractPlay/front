@@ -4183,6 +4183,34 @@
     "src": "View feedback history",
     "out": "Ver historial de comentarios"
   },
+  "feedback.new.coverImage": {
+    "src": "Cover image",
+    "out": "Imagen de portada"
+  },
+  "feedback.new.coverImageHint": {
+    "src": "Optional. Paste or upload one box-art image. If you paste multiple images, only the last one is kept.",
+    "out": "Opcional. Pega o sube una imagen de la portada de la caja. Si pegas varias imágenes, solo se conservará la última."
+  },
+  "feedback.upload.addCover": {
+    "src": "Add cover image",
+    "out": "Agregar imagen de portada"
+  },
+  "feedback.upload.coverCount_one": {
+    "src": "{{count}} cover image attached",
+    "out": "{{count}} imagen de portada adjunta"
+  },
+  "feedback.upload.coverCount_other": {
+    "src": "{{count}} cover images attached",
+    "out": "{{count}} imágenes de portada adjuntas"
+  },
+  "feedback.upload.pasteCover": {
+    "src": "Paste cover image",
+    "out": "Pegar imagen de portada"
+  },
+  "feedback.upload.pasteCoverHint": {
+    "src": "Click here and press Ctrl+V (or Cmd+V on Mac). If your clipboard has multiple images, only the last one is kept.",
+    "out": "Haz clic aquí y presiona Ctrl+V (o Cmd+V en Mac). Si tu portapapeles tiene varias imágenes, solo se conservará la última."
+  },
   "footer.betaBanner": {
     "src": "The site is currently in BETA testing!",
     "out": "¡El sitio se encuentra actualmente en pruebas BETA!"

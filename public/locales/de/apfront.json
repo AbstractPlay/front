@@ -1776,6 +1776,8 @@
       "bodyLabel": "Beschreibung",
       "bodyMarkdownHint": "Markdown wird unterstützt (Überschriften, Listen, Links, Code-Blöcke).",
       "attachments": "Anhänge",
+      "coverImage": "Titelbild",
+      "coverImageHint": "Optional. Füge ein Schachtelcover-Bild ein oder lade eines hoch. Wenn du mehrere Bilder einfügst, wird nur das letzte behalten.",
       "screenshots": "Screenshots",
       "screenshotEncouraged": "Ein Screenshot macht die Fehlerbehebung viel einfacher. Bitte füge nach Möglichkeit einen bei.",
       "techDetails": "Technische Details (Vorschau)",
@@ -1786,8 +1788,11 @@
     },
     "upload": {
       "add": "Screenshot hinzufügen",
+      "addCover": "Titelbild hinzufügen",
       "paste": "Screenshot einfügen",
+      "pasteCover": "Titelbild einfügen",
       "pasteHint": "Klicke hier und drücke Strg+V (oder Cmd+V auf dem Mac). Du kannst ihn auch überall auf dieser Seite einfügen, außer in den Titel- und Beschreibungsfeldern.",
+      "pasteCoverHint": "Klicke hier und drücke Strg+V (oder Cmd+V auf dem Mac). Wenn deine Zwischenablage mehrere Bilder enthält, wird nur das letzte behalten.",
       "pasteEmpty": "Kein Bild in der Zwischenablage gefunden.",
       "uploading": "Wird hochgeladen…",
       "tooMany": "Du kannst maximal {{max}} Screenshots anhängen.",
@@ -1795,7 +1800,9 @@
       "tooLarge": "Jedes Bild darf höchstens 5 MB groß sein.",
       "failed": "Upload fehlgeschlagen. Bitte versuche es erneut.",
       "count_one": "{{count}} Screenshot angehängt",
-      "count_other": "{{count}} Screenshots angehängt"
+      "count_other": "{{count}} Screenshots angehängt",
+      "coverCount_one": "{{count}} Titelbild angehängt",
+      "coverCount_other": "{{count}} Titelbilder angehängt"
     },
     "detail": {
       "notFound": "Dieser Feedback-Eintrag konnte nicht gefunden werden.",
