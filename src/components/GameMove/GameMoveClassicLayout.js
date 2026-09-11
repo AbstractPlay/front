@@ -316,6 +316,9 @@ export default function GameMoveClassicLayout({ session }) {
                         </>
                       )}
                     </p>
+                    {key === "board" ? (
+                      <LayoutPickerTrigger compact={screenWidth < 768} />
+                    ) : null}
                     <button
                       className="card-header-icon"
                       aria-label={t("a11y.moveUp")}
