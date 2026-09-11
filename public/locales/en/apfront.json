@@ -1822,6 +1822,7 @@
             "saveEdit": "Save changes",
             "cancelEdit": "Cancel",
             "savingEdit": "Saving…",
+            "coverReplaceHint": "Upload or paste a new image to replace the current cover.",
             "adminEffort": "Effort",
             "adminPriority": "Priority",
             "adminTags": "Admin tags (comma-separated)",

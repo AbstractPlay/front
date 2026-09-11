@@ -89,7 +89,8 @@
   background: var(--secondary-color-3-bg);
 }
 
-.feedback-wishlist-cover {
+.feedback-wishlist-cover,
+.feedback-wishlist-cover-edit-preview {
   margin: 0 0 1rem;
 }
 
