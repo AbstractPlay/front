@@ -17,6 +17,7 @@
   { "slug": "subsystems/bots" },
   { "slug": "subsystems/websockets" },
   { "slug": "subsystems/notifications" },
+  { "slug": "subsystems/feedback", "title": "Feedback" },
   { "slug": "subsystems/customize", "title": "Customize & themes" },
   { "slug": "subsystems/i18n", "title": "Internationalization" },
   { "slug": "guides/project-structure", "title": "Project structure" },

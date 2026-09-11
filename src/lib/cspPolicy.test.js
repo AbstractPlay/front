@@ -21,6 +21,13 @@ describe("csp-policy board export", () => {
     expect(connect).toContain("blob:");
   });
 
+  it("allows feedback attachment bucket for presigned upload and preview", () => {
+    const connect = directive("connect-src");
+    const img = directive("img-src");
+    expect(connect).toContain("https://ap-feedback-attachments-dev.s3.us-east-1.amazonaws.com");
+    expect(img).toContain("https://ap-feedback-attachments-dev.s3.us-east-1.amazonaws.com");
+  });
+
   it("allows embedded export fonts to load in rasterized SVG", () => {
     const fontSrc = directive("font-src");
     expect(fontSrc).toContain("https://fonts.gstatic.com");

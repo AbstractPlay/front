@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { Trans } from "react-i18next";
+import i18n from "i18next";
 import { getGameDisplayName } from "./gameOptions";
 import { expandVariants } from "./expandVariants";
 import { isSoloOnlyGame } from "./soloPlay";
@@ -228,6 +229,39 @@ export function NotificationMessage({ body }) {
           />
           {variantsSuffix(body.metaGame, body.variants)}
         </>
+      );
+    case "feedbackReply":
+      return (
+        <Trans
+          i18nKey="me.notifications.message.feedbackReply"
+          values={{ title: body.title, preview: body.commentPreview ?? "" }}
+          components={{
+            feedbackLink: <Link to={`/feedback/${body.postId}`} />,
+          }}
+        />
+      );
+    case "feedbackStatus":
+      return (
+        <Trans
+          i18nKey="me.notifications.message.feedbackStatus"
+          values={{
+            title: body.title,
+            status: i18n.t(`feedback.status.${body.status}`, { defaultValue: body.status }),
+          }}
+          components={{
+            feedbackLink: <Link to={`/feedback/${body.postId}`} />,
+          }}
+        />
+      );
+    case "feedbackDeleted":
+      return (
+        <Trans
+          i18nKey="me.notifications.message.feedbackDeleted"
+          values={{ title: body.title, reason: body.reason ?? "" }}
+          components={{
+            wishlistLink: <Link to="/wishlist" />,
+          }}
+        />
       );
     default:
       return "";
