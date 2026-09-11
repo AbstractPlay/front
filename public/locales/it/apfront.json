@@ -924,6 +924,7 @@
   "InAppNotifyLabel-feedbackReply": "Risposte ai feedback",
   "InAppNotifyLabel-feedbackStatus": "Aggiornamenti di stato del feedback",
   "InAppNotifyLabel-feedbackDeleted": "Voci della lista desideri rimosse",
+  "InAppNotifyLabel-feedbackReviewRequested": "Richieste di revisione feedback",
   "NoWaitingResponse": "Nessuna sfida in attesa della risposta dell'avversario",
   "NoYourMove": "Nessuna partita in attesa della tua mossa.",
   "NumChallenge": "Ci saranno {{num}} giocatori in questa partita. {{players}}. La disposizione dei posti sarà casuale.",
@@ -1663,7 +1664,8 @@
         "completedGameChat_backfill": "Hai messaggi non letti nella chat della tua partita terminata a <gameLink>{{metaGame}}</gameLink>",
         "feedbackReply": "Nuova risposta su <feedbackLink>{{title}}</feedbackLink>{{preview}}",
         "feedbackStatus": "Aggiornamento di stato su <feedbackLink>{{title}}</feedbackLink>: {{status}}",
-        "feedbackDeleted": "Voce rimossa dalla lista desideri: <wishlistLink>{{title}}</wishlistLink>. Motivo: {{reason}}"
+        "feedbackDeleted": "Voce rimossa dalla lista desideri: <wishlistLink>{{title}}</wishlistLink>. Motivo: {{reason}}",
+        "feedbackReviewRequested": "Sei stato aggiunto come revisore su <feedbackLink>{{title}}</feedbackLink>"
       }
     }
   },
@@ -1834,6 +1836,7 @@
       "adminEffort": "Impegno",
       "adminPriority": "Priorità",
       "adminTags": "Tag admin (separati da virgola)",
+      "adminReviewers": "Revisori",
       "adminWishlistCategory": "Categoria",
       "adminWishlistNote": "Nota sulla categoria (opzionale)",
       "saveAdminFields": "Salva campi admin",
@@ -1861,6 +1864,16 @@
       "urgent": "Urgente",
       "normal": "Normale",
       "low": "Bassa"
+    },
+    "reviewers": {
+      "badge": "Revisori: {{names}}",
+      "badgeCompact_one": "1 revisore",
+      "badgeCompact_other": "{{count}} revisori",
+      "add": "Aggiungi revisore",
+      "remove": "Rimuovi {{name}}",
+      "empty": "Nessun revisore assegnato.",
+      "hint": "Fino a {{max}} revisori. Gli utenti aggiunti ricevono una notifica singola; usa Segui per gli aggiornamenti continui.",
+      "divider": "────────────"
     },
     "meta": {
       "comments_one": "{{count}} commento",

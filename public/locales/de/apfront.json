@@ -924,6 +924,7 @@
   "InAppNotifyLabel-feedbackReply": "Feedback-Antworten",
   "InAppNotifyLabel-feedbackStatus": "Feedback-Statusaktualisierungen",
   "InAppNotifyLabel-feedbackDeleted": "Entfernte Wunschlisten-Einträge",
+  "InAppNotifyLabel-feedbackReviewRequested": "Feedback-Review-Anfragen",
   "NoWaitingResponse": "Keine Herausforderungen, die auf eine Antwort des Gegners warten",
   "NoYourMove": "Keine Spiele warten auf deinen Zug.",
   "NumChallenge": "An diesem Spiel werden {{num}} Spieler teilnehmen. {{players}}. Die Sitzordnung ist zufällig.",
@@ -1663,7 +1664,8 @@
         "completedGameChat_backfill": "Du hast ungelesene Chatnachrichten in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie",
         "feedbackReply": "Neue Antwort auf <feedbackLink>{{title}}</feedbackLink>{{preview}}",
         "feedbackStatus": "Statusaktualisierung für <feedbackLink>{{title}}</feedbackLink>: {{status}}",
-        "feedbackDeleted": "Wunschlisten-Eintrag entfernt: <wishlistLink>{{title}}</wishlistLink>. Grund: {{reason}}"
+        "feedbackDeleted": "Wunschlisten-Eintrag entfernt: <wishlistLink>{{title}}</wishlistLink>. Grund: {{reason}}",
+        "feedbackReviewRequested": "Du wurdest als Reviewer zu <feedbackLink>{{title}}</feedbackLink> hinzugefügt"
       }
     }
   },
@@ -1834,6 +1836,7 @@
       "adminEffort": "Aufwand",
       "adminPriority": "Priorität",
       "adminTags": "Admin-Tags (kommagetrennt)",
+      "adminReviewers": "Reviewer",
       "adminWishlistCategory": "Kategorie",
       "adminWishlistNote": "Kategorie-Notiz (optional)",
       "saveAdminFields": "Admin-Felder speichern",
@@ -1861,6 +1864,16 @@
       "urgent": "Dringend",
       "normal": "Normal",
       "low": "Niedrig"
+    },
+    "reviewers": {
+      "badge": "Reviewer: {{names}}",
+      "badgeCompact_one": "1 Reviewer",
+      "badgeCompact_other": "{{count}} Reviewer",
+      "add": "Reviewer hinzufügen",
+      "remove": "{{name}} entfernen",
+      "empty": "Keine Reviewer zugewiesen.",
+      "hint": "Bis zu {{max}} Reviewer. Hinzugefügte Benutzer erhalten eine einmalige Benachrichtigung; verwende \"Beobachten\" für fortlaufende Updates.",
+      "divider": "────────────"
     },
     "meta": {
       "comments_one": "{{count}} Kommentar",
