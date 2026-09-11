@@ -1619,7 +1619,7 @@ export function useGameMoveSession(props) {
 
   useEffect(() => {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
-  }, [t, focus?.moveNumber, focusExPathKey]);
+  }, [t, focus?.moveNumber, focusExPathKey, globalMe?.settings?.all?.hideSpoilers]);
 
   useEffect(() => {
     if (!gameRef.current?.customColours) return;
