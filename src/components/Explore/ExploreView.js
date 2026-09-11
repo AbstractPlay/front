@@ -142,6 +142,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     config.starFilterStorageKey || "explore-filter-stars",
     false
   );
+  const starFilterActive = filterStars && globalMe !== null;
   const [filterRecommended, filterRecommendedSetter] = useStorageState(
     config.recommendedFilterStorageKey || "explore-filter-recommended",
     false
@@ -363,7 +364,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
             ...config.extraFields(metaGame, info, fetchedData, counts),
           };
         })
-        .filter((obj) => !filterStars || obj.starred)
+        .filter((obj) => !starFilterActive || obj.starred)
         .filter((obj) => !filterRecommended || recommendedIds.has(obj.id)),
     // getGameDisplayName reads gameslib i18n synced from host language
     // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh labels on locale change
@@ -374,7 +375,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       fetchedData,
       counts,
       config,
-      filterStars,
+      starFilterActive,
       filterRecommended,
       recommendedIds,
     ]
