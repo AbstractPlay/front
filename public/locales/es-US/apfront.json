@@ -549,7 +549,14 @@
   "ChallengeTypeTargeted": "Cerrado",
   "ChallengeTypeTargetedDescription": "Estás desafiando a jugadores específicos.",
   "challenges": {
-    "loading": "Cargando desafíos…"
+    "loading": "Cargando desafíos…",
+    "filters": {
+      "starredOnly": "Solo partidas destacadas",
+      "hardTimeOnly": "Solo tiempo estricto",
+      "softTimeOnly": "Solo tiempo flexible",
+      "ratedOnly": "Solo partidas evaluadas",
+      "unratedOnly": "Solo sin clasificación"
+    }
   },
   "recentGames": {
     "loading": "Cargando partidas recientes…",

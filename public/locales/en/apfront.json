@@ -549,7 +549,14 @@
     "ChallengeTypeTargeted": "Closed",
     "ChallengeTypeTargetedDescription": "You are challenging specific players.",
     "challenges": {
-        "loading": "Loading challenges…"
+        "loading": "Loading challenges…",
+        "filters": {
+            "starredOnly": "Only starred games",
+            "hardTimeOnly": "Hard time only",
+            "softTimeOnly": "Soft time only",
+            "ratedOnly": "Rated only",
+            "unratedOnly": "Unrated only"
+        }
     },
     "recentGames": {
         "loading": "Loading recent games…",

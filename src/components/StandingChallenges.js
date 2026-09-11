@@ -69,7 +69,34 @@ function StandingChallenges(props) {
   const [sorting, setSorting] = useState([]);
   const [showAccepted, showAcceptedSetter] = useState(false);
   const [showModal, showModalSetter] = useState(false);
+  const [filterStarred, filterStarredSetter] = useStorageState(
+    "challenges-filter-stars",
+    false
+  );
+  const [filterHardTime, filterHardTimeSetter] = useStorageState(
+    "challenges-filter-hard-time",
+    false
+  );
+  const [filterSoftTime, filterSoftTimeSetter] = useStorageState(
+    "challenges-filter-soft-time",
+    false
+  );
+  const [filterRated, filterRatedSetter] = useStorageState(
+    "challenges-filter-rated",
+    false
+  );
+  const [filterUnrated, filterUnratedSetter] = useStorageState(
+    "challenges-filter-unrated",
+    false
+  );
   const loggedin = authStatus === "ready";
+  const starredGameIds = useMemo(
+    () =>
+      Array.isArray(globalMe?.stars) ? globalMe.stars.filter(Boolean) : [],
+    [globalMe?.stars]
+  );
+  const showStarredFilter =
+    siteWide && loggedin && globalMe !== null && starredGameIds.length > 0;
 
   async function reportError(error) {
     try {
@@ -276,9 +303,8 @@ function StandingChallenges(props) {
   const metaGameName = metaGame ? getGameDisplayName(metaGame) : null;
   const showRespond = loggedin && challenges !== null;
 
-  const data = useMemo(
-    () =>
-      (challenges ?? []).map((rec) => {
+  const data = useMemo(() => {
+    const rows = (challenges ?? []).map((rec) => {
         let lastSeen = undefined;
         if (allUsers !== null) {
           const userRec = allUsers.find((u) => u.id === rec.challenger?.id);
@@ -306,9 +332,40 @@ function StandingChallenges(props) {
           variants: expandVariantsForGame(rowMetaGame, rec.variants),
           comment: rec.comment,
         };
-      }),
-    [challenges, allUsers, metaGame]
-  );
+      });
+    if (!siteWide) {
+      return rows;
+    }
+    return rows.filter((row) => {
+      if (filterStarred && !starredGameIds.includes(row.metaGame)) {
+        return false;
+      }
+      if (filterHardTime && !row.clockHard) {
+        return false;
+      }
+      if (filterSoftTime && row.clockHard) {
+        return false;
+      }
+      if (filterRated && !row.rated) {
+        return false;
+      }
+      if (filterUnrated && row.rated) {
+        return false;
+      }
+      return true;
+    });
+  }, [
+    challenges,
+    allUsers,
+    metaGame,
+    siteWide,
+    filterStarred,
+    filterHardTime,
+    filterSoftTime,
+    filterRated,
+    filterUnrated,
+    starredGameIds,
+  ]);
 
   const columnHelper = createColumnHelper();
   const columns = useMemo(() => {
@@ -476,6 +533,77 @@ function StandingChallenges(props) {
     table.setPageSize(showState);
   }, [showState, table]);
 
+  useEffect(() => {
+    if (siteWide) {
+      table.setPageIndex(0);
+    }
+  }, [siteWide, filterStarred, filterHardTime, filterSoftTime, filterRated, filterUnrated, table]);
+
+  const challengeFilters = siteWide ? (
+    <div
+      className="field is-grouped is-grouped-centered is-grouped-multiline has-text-centered"
+      style={{ marginBottom: "1em", justifyContent: "center" }}
+    >
+      {showStarredFilter ? (
+        <div className="control">
+          <label className="checkbox">
+            <input
+              type="checkbox"
+              checked={filterStarred}
+              onChange={(e) => filterStarredSetter(e.target.checked)}
+            />
+            {" "}
+            {t("challenges.filters.starredOnly")}
+          </label>
+        </div>
+      ) : null}
+      <div className="control">
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={filterHardTime}
+            onChange={(e) => filterHardTimeSetter(e.target.checked)}
+          />
+          {" "}
+          {t("challenges.filters.hardTimeOnly")}
+        </label>
+      </div>
+      <div className="control">
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={filterSoftTime}
+            onChange={(e) => filterSoftTimeSetter(e.target.checked)}
+          />
+          {" "}
+          {t("challenges.filters.softTimeOnly")}
+        </label>
+      </div>
+      <div className="control">
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={filterRated}
+            onChange={(e) => filterRatedSetter(e.target.checked)}
+          />
+          {" "}
+          {t("challenges.filters.ratedOnly")}
+        </label>
+      </div>
+      <div className="control">
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={filterUnrated}
+            onChange={(e) => filterUnratedSetter(e.target.checked)}
+          />
+          {" "}
+          {t("challenges.filters.unratedOnly")}
+        </label>
+      </div>
+    </div>
+  ) : null;
+
   const tableNavigation = (
     <>
       <div className="columns tableNav">
@@ -622,6 +750,7 @@ function StandingChallenges(props) {
             </div>
           </>
         )}
+        {challengeFilters}
         <div className="container">
           {tableNavigation}
           <table

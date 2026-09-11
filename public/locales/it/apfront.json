@@ -549,7 +549,14 @@
   "ChallengeTypeTargeted": "Chiusa",
   "ChallengeTypeTargetedDescription": "Stai sfidando giocatori specifici.",
   "challenges": {
-    "loading": "Caricamento sfide…"
+    "loading": "Caricamento sfide…",
+    "filters": {
+      "starredOnly": "Solo partite preferite",
+      "hardTimeOnly": "Solo tempo rigido",
+      "softTimeOnly": "Solo tempo flessibile",
+      "ratedOnly": "Solo classificate",
+      "unratedOnly": "Solo non classificate"
+    }
   },
   "recentGames": {
     "loading": "Caricamento partite recenti…",

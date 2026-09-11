@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import NavDropdownPanel from "./NavDropdownPanel";
 import LocalizedTimeAgo from "./LocalizedTimeAgo";
 import ChallengeResponseModal from "./Me/ChallengeResponseModal";
@@ -27,9 +28,14 @@ function NotificationBell({ closeBurger }) {
   const markNotificationsSeen = useMarkNotificationsSeen();
 
   const handleChallengeResponse = useChallengeResponse({
+    onError: (err) => {
+      toast.error(err?.message || err?.error || t("Error"));
+    },
     onSuccess: async () => {
       await fetchDashboard();
       setActiveChallengeModal("");
+      setDismissAllConfirming(false);
+      setMenuOpen(false);
     },
   });
 
@@ -61,6 +67,10 @@ function NotificationBell({ closeBurger }) {
     return map;
   }, [globalMe?.challengesReceived]);
 
+  const activeChallenge = activeChallengeModal
+    ? challengeById.get(activeChallengeModal)
+    : null;
+
   if (globalMe === null) {
     return null;
   }
@@ -78,6 +88,27 @@ function NotificationBell({ closeBurger }) {
   const closeMenu = () => {
     setDismissAllConfirming(false);
     setMenuOpen(false);
+    setActiveChallengeModal("");
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen((open) => {
+      if (open) {
+        setDismissAllConfirming(false);
+        setActiveChallengeModal("");
+      }
+      return !open;
+    });
+  };
+
+  const openChallengeModal = async (challengeId) => {
+    const dashboard = await fetchDashboard();
+    const received = dashboard?.challengesReceived ?? [];
+    if (received.some((c) => c.id === challengeId)) {
+      setActiveChallengeModal(challengeId);
+    } else {
+      toast.error(t("Error"));
+    }
   };
 
   const handleDismissAllClick = async () => {
@@ -97,14 +128,17 @@ function NotificationBell({ closeBurger }) {
   };
 
   return (
-    <NavDropdownPanel open={menuOpen} onClose={closeMenu}>
+    <NavDropdownPanel
+      open={menuOpen && !activeChallengeModal}
+      onClose={closeMenu}
+    >
       <button
         type="button"
         className="nav-icon-btn notification-bell-btn"
         aria-label={t("a11y.notifications")}
         aria-expanded={menuOpen}
         aria-haspopup="menu"
-        onClick={() => setMenuOpen((open) => !open)}
+        onClick={toggleMenu}
       >
         <span className="icon">
           <i className="fa fa-bell" aria-hidden="true"></i>
@@ -189,21 +223,10 @@ function NotificationBell({ closeBurger }) {
                     <>
                       {challenge ? (
                         <>
-                          <ChallengeResponseModal
-                            challenge={challenge}
-                            show={
-                              activeChallengeModal !== "" &&
-                              activeChallengeModal === body.challengeId
-                            }
-                            close={() => setActiveChallengeModal("")}
-                            respond={handleChallengeResponse}
-                          />
                           <button
                             type="button"
                             className="button is-small apButton"
-                            onClick={() =>
-                              setActiveChallengeModal(body.challengeId)
-                            }
+                            onClick={() => openChallengeModal(body.challengeId)}
                           >
                             {t("View")}
                           </button>
@@ -259,6 +282,14 @@ function NotificationBell({ closeBurger }) {
             </>
           ) : null}
         </div>
+      ) : null}
+      {activeChallenge ? (
+        <ChallengeResponseModal
+          challenge={activeChallenge}
+          show={activeChallengeModal !== ""}
+          close={() => setActiveChallengeModal("")}
+          respond={handleChallengeResponse}
+        />
       ) : null}
     </NavDropdownPanel>
   );

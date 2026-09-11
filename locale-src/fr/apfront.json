@@ -3675,6 +3675,18 @@
     "src": "O: Traditional",
     "out": "A : Traditionnel"
   },
+  "challenges.filters.hardTimeOnly": {
+    "src": "Hard time only",
+    "out": "Temps strict uniquement"
+  },
+  "challenges.filters.ratedOnly": {
+    "src": "Rated only",
+    "out": "Parties classées uniquement"
+  },
+  "challenges.filters.starredOnly": {
+    "src": "Only starred games",
+    "out": "Parties étoilées uniquement"
+  },
   "challenges.loading": {
     "src": "Loading challenges…",
     "out": "Chargement des défis…"
