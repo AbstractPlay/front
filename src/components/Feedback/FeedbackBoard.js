@@ -175,7 +175,23 @@ function FeedbackBoard({ kind = "bug" }) {
       ) : (
         <ul className="feedback-board-list">
           {displayItems.map((item) => (
-            <li key={item.id} className="feedback-board-item">
+            <li key={item.id} className={`feedback-board-item${kind === "wishlist" ? " feedback-board-item-wishlist" : ""}`}>
+              {kind === "wishlist" && item.coverImageUrl ? (
+                <a
+                  href={item.coverImageUrl}
+                  className="feedback-wishlist-cover-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={item.coverImageUrl}
+                    alt=""
+                    className="feedback-wishlist-cover-thumb"
+                    loading="lazy"
+                  />
+                </a>
+              ) : null}
+              <div className="feedback-board-item-main">
               <FeedbackStatusBadge
                 status={item.status}
                 effort={item.effort}
@@ -212,6 +228,7 @@ function FeedbackBoard({ kind = "bug" }) {
                     {t("feedback.wishlist.legacyVotesNote")}
                   </>
                 ) : null}
+              </div>
               </div>
             </li>
           ))}

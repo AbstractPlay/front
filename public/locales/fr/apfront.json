@@ -1776,6 +1776,8 @@
       "bodyLabel": "Description",
       "bodyMarkdownHint": "Markdown pris en charge (titres, listes, liens, blocs de code).",
       "attachments": "Pièces jointes",
+      "coverImage": "Image de couverture",
+      "coverImageHint": "Optionnel. Collez ou téléchargez une illustration de boîte. Si vous collez plusieurs images, seule la dernière sera conservée.",
       "screenshots": "Captures d'écran",
       "screenshotEncouraged": "Une capture d'écran facilite grandement la résolution des bugs. Veuillez en joindre une si possible.",
       "techDetails": "Détails techniques (aperçu)",
@@ -1786,8 +1788,11 @@
     },
     "upload": {
       "add": "Ajouter une capture d'écran",
+      "addCover": "Ajouter une image de couverture",
       "paste": "Coller une capture d'écran",
+      "pasteCover": "Coller une image de couverture",
       "pasteHint": "Cliquez ici et appuyez sur Ctrl+V (ou Cmd+V sur Mac). Vous pouvez aussi coller n'importe où sur cette page sauf dans les champs titre et description.",
+      "pasteCoverHint": "Cliquez ici et appuyez sur Ctrl+V (ou Cmd+V sur Mac). Si votre presse-papiers contient plusieurs images, seule la dernière sera conservée.",
       "pasteEmpty": "Aucune image trouvée dans le presse-papiers.",
       "uploading": "Téléversement…",
       "tooMany": "Vous ne pouvez joindre au maximum que {{max}} captures d'écran.",
@@ -1795,7 +1800,9 @@
       "tooLarge": "Chaque image doit faire 5 Mo ou moins.",
       "failed": "Échec du téléversement. Veuillez réessayer.",
       "count_one": "{{count}} capture d'écran jointe",
-      "count_other": "{{count}} captures d'écran jointes"
+      "count_other": "{{count}} captures d'écran jointes",
+      "coverCount_one": "{{count}} image de couverture jointe",
+      "coverCount_other": "{{count}} images de couverture jointes"
     },
     "detail": {
       "notFound": "Cet élément de retour est introuvable.",

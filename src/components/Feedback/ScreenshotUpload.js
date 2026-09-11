@@ -5,7 +5,7 @@ import { presignFeedbackUpload } from "../../lib/feedback/feedbackApi";
 
 const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MAX_BYTES = 5_242_880;
-const MAX_FILES = 3;
+const DEFAULT_MAX_FILES = 3;
 
 function isTextInput(target) {
   if (!target || !(target instanceof HTMLElement)) {
@@ -54,23 +54,35 @@ function filesFromClipboard(clipboardData) {
   return files;
 }
 
-function ScreenshotUpload({ attachmentKeys, onChange }) {
+function ScreenshotUpload({
+  attachmentKeys,
+  onChange,
+  maxFiles = DEFAULT_MAX_FILES,
+  replaceOnUpload = false,
+  addLabel,
+  pasteLabel,
+  pasteHint,
+  countLabelKey = "feedback.upload.count",
+}) {
   const { t } = useTranslation();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
   const handleFiles = useCallback(async (fileList) => {
-    const files = [...fileList];
+    let files = [...fileList];
     if (files.length === 0) {
       return;
     }
-    if (attachmentKeys.length + files.length > MAX_FILES) {
-      setError(t("feedback.upload.tooMany", { max: MAX_FILES }));
+    if (replaceOnUpload) {
+      files = files.slice(-1);
+    }
+    if (!replaceOnUpload && attachmentKeys.length + files.length > maxFiles) {
+      setError(t("feedback.upload.tooMany", { max: maxFiles }));
       return;
     }
     setError("");
     setUploading(true);
-    const nextKeys = [...attachmentKeys];
+    const nextKeys = replaceOnUpload ? [] : [...attachmentKeys];
     try {
       for (const file of files) {
         if (!ALLOWED_TYPES.includes(file.type)) {
@@ -103,10 +115,10 @@ function ScreenshotUpload({ attachmentKeys, onChange }) {
     } finally {
       setUploading(false);
     }
-  }, [attachmentKeys, onChange, t]);
+  }, [attachmentKeys, maxFiles, onChange, replaceOnUpload, t]);
 
   const handlePaste = useCallback((e) => {
-    if (uploading || attachmentKeys.length >= MAX_FILES) {
+    if (uploading || (!replaceOnUpload && attachmentKeys.length >= maxFiles)) {
       return;
     }
     const files = filesFromClipboard(e.clipboardData);
@@ -116,11 +128,11 @@ function ScreenshotUpload({ attachmentKeys, onChange }) {
     }
     e.preventDefault();
     handleFiles(files);
-  }, [attachmentKeys.length, handleFiles, t, uploading]);
+  }, [attachmentKeys.length, handleFiles, maxFiles, replaceOnUpload, t, uploading]);
 
   useEffect(() => {
     function onWindowPaste(e) {
-      if (uploading || attachmentKeys.length >= MAX_FILES) {
+      if (uploading || (!replaceOnUpload && attachmentKeys.length >= maxFiles)) {
         return;
       }
       if (isTextInput(e.target)) {
@@ -135,19 +147,19 @@ function ScreenshotUpload({ attachmentKeys, onChange }) {
     }
     window.addEventListener("paste", onWindowPaste);
     return () => window.removeEventListener("paste", onWindowPaste);
-  }, [attachmentKeys.length, handleFiles, uploading]);
+  }, [attachmentKeys.length, handleFiles, maxFiles, replaceOnUpload, uploading]);
 
-  const atMax = attachmentKeys.length >= MAX_FILES;
+  const atMax = !replaceOnUpload && attachmentKeys.length >= maxFiles;
 
   return (
     <div className="feedback-screenshot-upload">
       <div className="feedback-screenshot-upload-actions">
         <label className="button apButtonNeutral">
-          {uploading ? t("feedback.upload.uploading") : t("feedback.upload.add")}
+          {uploading ? t("feedback.upload.uploading") : (addLabel ?? t("feedback.upload.add"))}
           <input
             type="file"
             accept={ALLOWED_TYPES.join(",")}
-            multiple
+            multiple={maxFiles > 1 && !replaceOnUpload}
             hidden
             disabled={uploading || atMax}
             onChange={(e) => {
@@ -164,14 +176,14 @@ function ScreenshotUpload({ attachmentKeys, onChange }) {
           onPaste={handlePaste}
         >
           <span className="feedback-screenshot-paste-label">
-            {t("feedback.upload.paste")}
+            {pasteLabel ?? t("feedback.upload.paste")}
           </span>
-          <span className="feedback-muted">{t("feedback.upload.pasteHint")}</span>
+          <span className="feedback-muted">{pasteHint ?? t("feedback.upload.pasteHint")}</span>
         </div>
       </div>
       {attachmentKeys.length > 0 && (
         <p className="feedback-muted">
-          {t("feedback.upload.count", { count: attachmentKeys.length })}
+          {t(countLabelKey, { count: attachmentKeys.length })}
         </p>
       )}
       {error && <p className="has-text-danger">{error}</p>}
@@ -182,6 +194,12 @@ function ScreenshotUpload({ attachmentKeys, onChange }) {
 ScreenshotUpload.propTypes = {
   attachmentKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
   onChange: PropTypes.func.isRequired,
+  maxFiles: PropTypes.number,
+  replaceOnUpload: PropTypes.bool,
+  addLabel: PropTypes.string,
+  pasteLabel: PropTypes.string,
+  pasteHint: PropTypes.string,
+  countLabelKey: PropTypes.string,
 };
 
 export default ScreenshotUpload;

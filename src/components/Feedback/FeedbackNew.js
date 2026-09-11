@@ -66,7 +66,7 @@ function FeedbackNew() {
       title: title.trim(),
       body: body.trim() || undefined,
       gameUrl: kind === "wishlist" ? gameUrl.trim() : undefined,
-      attachmentKeys: kind !== "wishlist" && attachmentKeys.length > 0 ? attachmentKeys : undefined,
+      attachmentKeys: attachmentKeys.length > 0 ? attachmentKeys : undefined,
       context: kind === "bug" ? context : undefined,
     });
     setSubmitting(false);
@@ -169,17 +169,28 @@ function FeedbackNew() {
             required={kind === "feature"}
           />
         </div>
-        {kind !== "wishlist" ? (
-          <div className="field">
-            <label className="label">
-              {kind === "feature" ? t("feedback.new.attachments") : t("feedback.new.screenshots")}
-            </label>
-            <ScreenshotUpload
-              attachmentKeys={attachmentKeys}
-              onChange={handleAttachmentChange}
-            />
-          </div>
-        ) : null}
+        <div className="field">
+          <label className="label">
+            {kind === "wishlist"
+              ? t("feedback.new.coverImage")
+              : kind === "feature"
+                ? t("feedback.new.attachments")
+                : t("feedback.new.screenshots")}
+          </label>
+          {kind === "wishlist" ? (
+            <p className="feedback-muted feedback-field-hint">{t("feedback.new.coverImageHint")}</p>
+          ) : null}
+          <ScreenshotUpload
+            attachmentKeys={attachmentKeys}
+            onChange={handleAttachmentChange}
+            maxFiles={kind === "wishlist" ? 1 : 3}
+            replaceOnUpload={kind === "wishlist"}
+            addLabel={kind === "wishlist" ? t("feedback.upload.addCover") : undefined}
+            pasteLabel={kind === "wishlist" ? t("feedback.upload.pasteCover") : undefined}
+            pasteHint={kind === "wishlist" ? t("feedback.upload.pasteCoverHint") : undefined}
+            countLabelKey={kind === "wishlist" ? "feedback.upload.coverCount" : "feedback.upload.count"}
+          />
+        </div>
         {kind === "bug" && (
           <div className="field">
             <button

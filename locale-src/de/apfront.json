@@ -4183,6 +4183,34 @@
     "src": "View feedback history",
     "out": "Feedback-Verlauf anzeigen"
   },
+  "feedback.new.coverImage": {
+    "src": "Cover image",
+    "out": "Titelbild"
+  },
+  "feedback.new.coverImageHint": {
+    "src": "Optional. Paste or upload one box-art image. If you paste multiple images, only the last one is kept.",
+    "out": "Optional. Füge ein Schachtelcover-Bild ein oder lade eines hoch. Wenn du mehrere Bilder einfügst, wird nur das letzte behalten."
+  },
+  "feedback.upload.addCover": {
+    "src": "Add cover image",
+    "out": "Titelbild hinzufügen"
+  },
+  "feedback.upload.coverCount_one": {
+    "src": "{{count}} cover image attached",
+    "out": "{{count}} Titelbild angehängt"
+  },
+  "feedback.upload.coverCount_other": {
+    "src": "{{count}} cover images attached",
+    "out": "{{count}} Titelbilder angehängt"
+  },
+  "feedback.upload.pasteCover": {
+    "src": "Paste cover image",
+    "out": "Titelbild einfügen"
+  },
+  "feedback.upload.pasteCoverHint": {
+    "src": "Click here and press Ctrl+V (or Cmd+V on Mac). If your clipboard has multiple images, only the last one is kept.",
+    "out": "Klicke hier und drücke Strg+V (oder Cmd+V auf dem Mac). Wenn deine Zwischenablage mehrere Bilder enthält, wird nur das letzte behalten."
+  },
   "footer.betaBanner": {
     "src": "The site is currently in BETA testing!",
     "out": "Die Seite befindet sich derzeit im BETA-Test!"
