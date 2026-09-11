@@ -858,6 +858,12 @@
     "earlier": "Plus anciens"
   },
   "nav": {
+    "community": "Communauté",
+    "reportBug": "Signaler un bug",
+    "bugBoard": "Rapports de bugs",
+    "featureIdeas": "Idées de fonctionnalités",
+    "gameWishlist": "Liste de souhaits de jeux",
+    "myFeedback": "Mes retours",
     "explore": "Explorer",
     "openChallenges": "Défis ouverts",
     "recentGames": "Parties récentes",
@@ -913,6 +919,9 @@
   "InAppNotifyLabel-completedGameChat": "Chat de partie terminée",
   "InAppNotifyLabel-tournamentStart": "Tournoi commencé",
   "InAppNotifyLabel-tournamentEnd": "Tournoi terminé",
+  "InAppNotifyLabel-feedbackReply": "Réponses aux retours",
+  "InAppNotifyLabel-feedbackStatus": "Mises à jour du statut des retours",
+  "InAppNotifyLabel-feedbackDeleted": "Entrées supprimées de la liste de souhaits",
   "NoWaitingResponse": "Aucun challenge attend sur la réponse de votre adversaire",
   "NoYourMove": "Aucune partie en attente de votre coup.",
   "NumChallenge": "Il y aura {{num}} joueurs dans cette partie. {{players}}. La répartition des sièges sera aléatoire.",
@@ -1302,7 +1311,7 @@
   "fatalError": {
     "title": "Une erreur est survenue",
     "chunkMessage": "Une nouvelle version du site est peut-être disponible. Veuillez rafraîchir la page.",
-    "genericMessage": "Veuillez rafraîchir la page. Si le problème persiste, veuillez <1>le signaler sur notre serveur Discord</1>.",
+    "genericMessage": "Veuillez rafraîchir la page. Si le problème persiste, veuillez <1>le signaler sur notre serveur Discord</1> ou utiliser le bouton Signaler un bug ci-dessous.",
     "discordLink": "le signaler sur notre serveur Discord"
   },
   "standingChallenge": {
@@ -1321,7 +1330,7 @@
     "highlightsLink": "liste complète des jeux"
   },
   "notFound": {
-    "body": "Aucune page n'a été trouvée à l'adresse <1>{{path}}</1>. Veuillez utiliser la barre de navigation pour réessayer. Si le problème persiste, veuillez <2>publier un rapport de bogue sur notre serveur Discord</2>.",
+    "body": "Aucune page n'a été trouvée à l'adresse <1>{{path}}</1>. Veuillez utiliser la barre de navigation pour réessayer. Vous pouvez également <2>signaler un bug dans l'application</2> ou <3>publier sur notre serveur Discord</3>.",
     "reportLink": "publier un rapport de bogue sur notre serveur Discord"
   },
   "footer": {
@@ -1332,8 +1341,7 @@
     "github": "GitHub",
     "legalLink": "Conditions d'utilisation et Politique de confidentialité",
     "betaBanner": "Le site est actuellement en version BETA !",
-    "feedback": "Nous sommes très satisfaits des fonctionnalités principales, mais nous aimerions avoir des retours concrets des utilisateurs pour améliorer le site.",
-    "feedbackJoin": "N'hésitez pas à nous rejoindre sur <1>Discord</1> et à nous faire savoir si vous rencontrez des difficultés ou si vous avez des idées."
+    "feedbackCta": "Parcourir les <1>rapports de bugs</1> et les <2>idées de fonctionnalités</2>, <3>signaler un bug</3>, ou discuter avec nous sur <4>Discord</4>."
   },
   "explore": {
     "intro": "Cette page vous permet d'explorer différentes manières de trier la liste des jeux. Sélectionnez la vue souhaitée ci-dessous. En cliquant sur le nom d'un jeu, vous accéderez à sa page de présentation contenant des informations supplémentaires.",
@@ -1650,8 +1658,184 @@
         "tournamentEnd": "Le tournoi {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> est terminé.",
         "tournamentEnd_withWinner": "Le tournoi {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> est terminé. {{winnerName}} a gagné.",
         "completedGameChat": "{{commenterName}} a quelque chose à dire dans votre partie terminée de <gameLink>{{metaGame}}</gameLink>",
-        "completedGameChat_backfill": "Vous avez des messages non lus dans votre partie terminée de <gameLink>{{metaGame}}</gameLink>"
+        "completedGameChat_backfill": "Vous avez des messages non lus dans votre partie terminée de <gameLink>{{metaGame}}</gameLink>",
+        "feedbackReply": "Nouvelle réponse sur <feedbackLink>{{title}}</feedbackLink>{{preview}}",
+        "feedbackStatus": "Mise à jour du statut de <feedbackLink>{{title}}</feedbackLink> : {{status}}",
+        "feedbackDeleted": "Entrée de la liste de souhaits supprimée : <wishlistLink>{{title}}</wishlistLink>. Raison : {{reason}}"
       }
+    }
+  },
+  "feedback": {
+    "bugs": {
+      "title": "Rapports de bugs",
+      "intro": "Signalez les problèmes que vous rencontrez sur Abstract Play. Veuillez joindre une capture d'écran si possible — cela nous aide à reproduire le problème.",
+      "report": "Signaler un bug",
+      "backToBoard": "Retour aux rapports de bugs",
+      "empty": "Aucun rapport de bug ouvert pour le moment."
+    },
+    "ideas": {
+      "title": "Idées de fonctionnalités",
+      "intro": "Proposez des améliorations et de nouvelles fonctionnalités pour Abstract Play. Votez pour les idées que vous souhaitez voir réalisées.",
+      "report": "Proposer une fonctionnalité",
+      "backToBoard": "Retour aux idées de fonctionnalités",
+      "empty": "Aucune idée de fonctionnalité pour le moment."
+    },
+    "wishlist": {
+      "title": "Liste de souhaits de jeux",
+      "intro": "Votez pour les jeux que vous aimeriez voir sur Abstract Play. Proposez un jeu avec un lien vers ses règles ou sa page BoardGameGeek.",
+      "report": "Proposer un jeu",
+      "backToBoard": "Retour à la liste de souhaits de jeux",
+      "empty": "Aucune entrée dans la liste de souhaits pour le moment.",
+      "legend": "Certains jeux sont en attente pendant que nous cherchons à obtenir les droits de publication, ou marqués comme refusés afin d'éviter les demandes répétées. Ils restent listés pour que vous puissiez voir l'intérêt de la communauté.",
+      "filterLabel": "Filtrer la liste de souhaits",
+      "sortBy": "Trier par",
+      "sortVotes": "Votes (plus élevés en premier)",
+      "sortName": "Nom (A–Z)",
+      "filterAll": "Tous ({{count}})",
+      "discuss": "Discuter",
+      "legacyVotesNote": "inclut les anciens votes de la liste BGG",
+      "viewExisting": "Voir l'entrée existante de la liste de souhaits",
+      "category": {
+        "none": "Non catégorisé",
+        "permissions_required": "Autorisations requises",
+        "declined": "Refusé",
+        "feasible": "Faisable",
+        "low_priority": "Basse priorité",
+        "not_feasible": "Non faisable"
+      },
+      "categoryHint": {
+        "permissions_required": "Ce jeu est disponible dans le commerce. Abstract Play ne peut pas l'implémenter sans l'autorisation du titulaire des droits. Vous pouvez tout de même voter pour manifester votre intérêt.",
+        "declined": "Nous ne prévoyons pas d'ajouter ce jeu. Il reste dans la liste afin que d'autres ne soumettent pas de demandes en double."
+      }
+    },
+    "mine": {
+      "title": "Mes retours",
+      "intro": "Bugs et idées de fonctionnalités que vous avez soumis.",
+      "empty": "Vous n'avez soumis aucun retour pour le moment.",
+      "all": "Tous",
+      "bugs": "Bugs",
+      "ideas": "Fonctionnalités",
+      "updated": "Mis à jour"
+    },
+    "admin": {
+      "title": "Administration des retours",
+      "intro": "Trier et gérer les retours soumis.",
+      "empty": "Aucun élément ne correspond à ces filtres.",
+      "needsResponse": "Nécessite une réponse",
+      "effort": "Effort",
+      "priority": "Priorité",
+      "status": "Statut",
+      "kind": "Type",
+      "allStatuses": "Tous les statuts",
+      "allPriorities": "Toutes les priorités",
+      "allEfforts": "Tous les efforts",
+      "noPriority": "Non défini",
+      "sortBy": "Trier par",
+      "sortDefault": "Par défaut",
+      "sortPriority": "Priorité",
+      "sortStatus": "Statut",
+      "saveFields": "Enregistrer les champs admin",
+      "saving": "Enregistrement…"
+    },
+    "new": {
+      "title": "Signaler un bug",
+      "titleFeature": "Proposer une fonctionnalité",
+      "titleWishlist": "Proposer un jeu",
+      "titleLabel": "Titre",
+      "gameTitleLabel": "Nom du jeu",
+      "gameUrlLabel": "URL du jeu",
+      "notesLabel": "Notes",
+      "submitWishlist": "Ajouter à la liste de souhaits",
+      "bodyLabel": "Description",
+      "bodyMarkdownHint": "Markdown pris en charge (titres, listes, liens, blocs de code).",
+      "attachments": "Pièces jointes",
+      "screenshots": "Captures d'écran",
+      "screenshotEncouraged": "Une capture d'écran facilite grandement la résolution des bugs. Veuillez en joindre une si possible.",
+      "techDetails": "Détails techniques (aperçu)",
+      "submit": "Soumettre le rapport de bug",
+      "submitFeature": "Soumettre l'idée de fonctionnalité",
+      "submitWithoutScreenshot": "Soumettre le rapport de bug sans capture d'écran",
+      "submitting": "Soumission…"
+    },
+    "upload": {
+      "add": "Ajouter une capture d'écran",
+      "paste": "Coller une capture d'écran",
+      "pasteHint": "Cliquez ici et appuyez sur Ctrl+V (ou Cmd+V sur Mac). Vous pouvez aussi coller n'importe où sur cette page sauf dans les champs titre et description.",
+      "pasteEmpty": "Aucune image trouvée dans le presse-papiers.",
+      "uploading": "Téléversement…",
+      "tooMany": "Vous ne pouvez joindre au maximum que {{max}} captures d'écran.",
+      "invalidType": "Seules les images PNG, JPEG et WebP sont autorisées.",
+      "tooLarge": "Chaque image doit faire 5 Mo ou moins.",
+      "failed": "Échec du téléversement. Veuillez réessayer.",
+      "count_one": "{{count}} capture d'écran jointe",
+      "count_other": "{{count}} captures d'écran jointes"
+    },
+    "detail": {
+      "notFound": "Cet élément de retour est introuvable.",
+      "comments": "Discussion",
+      "noComments": "Aucun commentaire pour le moment.",
+      "staff": "Équipe",
+      "vote": "Voter",
+      "unvote": "Retirer le vote",
+      "watch": "Suivre",
+      "unwatch": "Ne plus suivre",
+      "adminStatus": "Statut",
+      "addComment": "Votre commentaire",
+      "notifyMe": "Me notifier des mises à jour sur cet élément",
+      "postComment": "Publier le commentaire",
+      "posting": "Publication…",
+      "edit": "Modifier",
+      "saveEdit": "Enregistrer les modifications",
+      "cancelEdit": "Annuler",
+      "savingEdit": "Enregistrement…",
+      "adminEffort": "Effort",
+      "adminPriority": "Priorité",
+      "adminTags": "Étiquettes admin (séparées par des virgules)",
+      "adminWishlistCategory": "Catégorie",
+      "adminWishlistNote": "Note de catégorie (optionnel)",
+      "saveAdminFields": "Enregistrer les champs admin",
+      "deleteWishlist": "Supprimer l'entrée",
+      "deleteWishlistTitle": "Supprimer l'entrée de la liste de souhaits",
+      "deleteWishlistIntro": "Ceci supprime définitivement l'entrée de la liste de souhaits. Les personnes qui la suivent seront notifiées avec votre raison.",
+      "deleteWishlistReason": "Raison de la suppression",
+      "deleteWishlistConfirm": "Supprimer l'entrée",
+      "deleteWishlistCancel": "Annuler",
+      "deleting": "Suppression…"
+    },
+    "effort": {
+      "low": "Faible effort",
+      "medium": "Moyen effort",
+      "high": "Grand effort",
+      "unknown": "Effort inconnu"
+    },
+    "priority": {
+      "urgent": "Urgente",
+      "normal": "Normale",
+      "low": "Basse"
+    },
+    "meta": {
+      "comments_one": "{{count}} commentaire",
+      "comments_other": "{{count}} commentaires",
+      "votes_one": "{{count}} vote",
+      "votes_other": "{{count}} votes"
+    },
+    "status": {
+      "open": "Ouvert",
+      "triaged_urgent": "Trié (ancien)",
+      "triaged_normal": "Trié (ancien)",
+      "triaged_low": "Trié (ancien)",
+      "resolved": "Résolu",
+      "closed": "Fermé",
+      "triaged": "Trié",
+      "in_progress": "En cours",
+      "under_review": "En cours d'examen",
+      "planned": "Planifié",
+      "shipped": "Déployé",
+      "declined": "Refusé",
+      "requested": "Demandé",
+      "evaluating": "En cours d'évaluation",
+      "in_development": "En développement",
+      "available": "Disponible"
     }
   },
   "Edit": "Modifier",
