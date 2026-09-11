@@ -37,6 +37,7 @@
   "CycleBoardDisplay": "Brettanzeige umschalten",
   "buttons": {
     "pass": "Verzögern",
+    "declare": "Ansagen",
     "takebutton": "Aufnehmen-Taste",
     "acceptpie": "Als zweiter spielen",
     "playsecond": "Als zweiter spielen",

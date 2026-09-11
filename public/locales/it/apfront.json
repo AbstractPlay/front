@@ -37,6 +37,7 @@
   "CycleBoardDisplay": "Scorri modalità di visualizzazione del tabellone",
   "buttons": {
     "pass": "Passa",
+    "declare": "Dichiara",
     "takebutton": "Prendi bottone",
     "acceptpie": "Gioca per secondo",
     "playsecond": "Gioca per secondo",
