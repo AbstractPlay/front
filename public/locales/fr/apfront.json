@@ -1822,6 +1822,7 @@
       "saveEdit": "Enregistrer les modifications",
       "cancelEdit": "Annuler",
       "savingEdit": "Enregistrement…",
+      "coverReplaceHint": "Téléversez ou collez une nouvelle image pour remplacer l'image de couverture actuelle.",
       "adminEffort": "Effort",
       "adminPriority": "Priorité",
       "adminTags": "Étiquettes admin (séparées par des virgules)",
