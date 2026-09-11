@@ -284,6 +284,17 @@ function FeedbackDetail() {
       {globalMe?.admin && post.retentionHold ? (
         <p className="feedback-muted">{t("feedback.detail.retentionHoldOn")}</p>
       ) : null}
+      {post.kind === "wishlist" && attachmentUrls?.length > 0 ? (
+        <div className="feedback-wishlist-cover">
+          <a href={attachmentUrls[0].url} target="_blank" rel="noreferrer">
+            <img
+              src={attachmentUrls[0].url}
+              alt=""
+              className="feedback-wishlist-cover-image"
+            />
+          </a>
+        </div>
+      ) : null}
       <h1 className="title lined">
         <span>
           {post.kind === "wishlist" && post.gameUrl ? (
@@ -530,9 +541,13 @@ function FeedbackDetail() {
           </div>
         </form>
       ) : (
-        post.body && <FeedbackMarkdown>{post.body}</FeedbackMarkdown>
+        post.body && (
+          <FeedbackMarkdown convertBggBbcode={post.kind === "wishlist"}>
+            {post.body}
+          </FeedbackMarkdown>
+        )
       )}
-      {attachmentUrls?.length > 0 && (
+      {attachmentUrls?.length > 0 && post.kind !== "wishlist" && (
         <div className="feedback-screenshot-grid">
           {attachmentUrls.map(({ key, url }) => (
             <a key={key} href={url} target="_blank" rel="noreferrer">
@@ -554,7 +569,7 @@ function FeedbackDetail() {
               {comment.authorName}
               {comment.isStaff ? ` · ${t("feedback.detail.staff")}` : ""}
             </div>
-            <p>{comment.body}</p>
+            <FeedbackMarkdown>{comment.body}</FeedbackMarkdown>
           </div>
         ))
       )}

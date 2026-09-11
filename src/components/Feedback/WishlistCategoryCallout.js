@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import FeedbackMarkdown from "./FeedbackMarkdown";
 
 function WishlistCategoryCallout({ category, note }) {
   const { t } = useTranslation();
@@ -18,9 +19,11 @@ function WishlistCategoryCallout({ category, note }) {
   return (
     <div className={className} role="note">
       <strong>{t(`feedback.wishlist.category.${category}`)}</strong>
-      <p>
-        {note || t(`feedback.wishlist.categoryHint.${category}`)}
-      </p>
+      {note ? (
+        <FeedbackMarkdown>{note}</FeedbackMarkdown>
+      ) : (
+        <p>{t(`feedback.wishlist.categoryHint.${category}`)}</p>
+      )}
     </div>
   );
 }

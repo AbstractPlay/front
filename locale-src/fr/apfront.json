@@ -4183,6 +4183,34 @@
     "src": "View feedback history",
     "out": "Voir l'historique des retours"
   },
+  "feedback.new.coverImage": {
+    "src": "Cover image",
+    "out": "Image de couverture"
+  },
+  "feedback.new.coverImageHint": {
+    "src": "Optional. Paste or upload one box-art image. If you paste multiple images, only the last one is kept.",
+    "out": "Optionnel. Collez ou téléchargez une illustration de boîte. Si vous collez plusieurs images, seule la dernière sera conservée."
+  },
+  "feedback.upload.addCover": {
+    "src": "Add cover image",
+    "out": "Ajouter une image de couverture"
+  },
+  "feedback.upload.coverCount_one": {
+    "src": "{{count}} cover image attached",
+    "out": "{{count}} image de couverture jointe"
+  },
+  "feedback.upload.coverCount_other": {
+    "src": "{{count}} cover images attached",
+    "out": "{{count}} images de couverture jointes"
+  },
+  "feedback.upload.pasteCover": {
+    "src": "Paste cover image",
+    "out": "Coller une image de couverture"
+  },
+  "feedback.upload.pasteCoverHint": {
+    "src": "Click here and press Ctrl+V (or Cmd+V on Mac). If your clipboard has multiple images, only the last one is kept.",
+    "out": "Cliquez ici et appuyez sur Ctrl+V (ou Cmd+V sur Mac). Si votre presse-papiers contient plusieurs images, seule la dernière sera conservée."
+  },
   "footer.betaBanner": {
     "src": "The site is currently in BETA testing!",
     "out": "Le site est actuellement en version BETA !"

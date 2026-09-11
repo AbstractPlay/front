@@ -1776,6 +1776,8 @@
       "bodyLabel": "Descripción",
       "bodyMarkdownHint": "Compatible con Markdown (encabezados, listas, enlaces, bloques de código).",
       "attachments": "Archivos adjuntos",
+      "coverImage": "Imagen de portada",
+      "coverImageHint": "Opcional. Pega o sube una imagen de la portada de la caja. Si pegas varias imágenes, solo se conservará la última.",
       "screenshots": "Capturas de pantalla",
       "screenshotEncouraged": "Una captura de pantalla facilita mucho la solución de errores. Por favor, adjunta una si puedes.",
       "techDetails": "Detalles técnicos (vista previa)",
@@ -1786,8 +1788,11 @@
     },
     "upload": {
       "add": "Agregar captura de pantalla",
+      "addCover": "Agregar imagen de portada",
       "paste": "Pegar captura de pantalla",
+      "pasteCover": "Pegar imagen de portada",
       "pasteHint": "Haz clic aquí y presiona Ctrl+V (o Cmd+V en Mac). También puedes pegar en cualquier lugar de esta página, excepto en los campos de título y descripción.",
+      "pasteCoverHint": "Haz clic aquí y presiona Ctrl+V (o Cmd+V en Mac). Si tu portapapeles tiene varias imágenes, solo se conservará la última.",
       "pasteEmpty": "No se encontró ninguna imagen en el portapapeles.",
       "uploading": "Subiendo…",
       "tooMany": "Puedes adjuntar como máximo {{max}} capturas de pantalla.",
@@ -1795,7 +1800,9 @@
       "tooLarge": "Cada imagen debe ser de 5 MB o más pequeña.",
       "failed": "Error al subir. Por favor, inténtalo de nuevo.",
       "count_one": "{{count}} captura de pantalla adjunta",
-      "count_other": "{{count}} capturas de pantalla adjuntas"
+      "count_other": "{{count}} capturas de pantalla adjuntas",
+      "coverCount_one": "{{count}} imagen de portada adjunta",
+      "coverCount_other": "{{count}} imágenes de portada adjuntas"
     },
     "detail": {
       "notFound": "No se pudo encontrar este elemento de comentarios.",

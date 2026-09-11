@@ -4183,6 +4183,34 @@
     "src": "View feedback history",
     "out": "Visualizza cronologia feedback"
   },
+  "feedback.new.coverImage": {
+    "src": "Cover image",
+    "out": "Immagine di copertina"
+  },
+  "feedback.new.coverImageHint": {
+    "src": "Optional. Paste or upload one box-art image. If you paste multiple images, only the last one is kept.",
+    "out": "Opzionale. Incolla o carica un'immagine della scatola del gioco. Se incolli più immagini, verrà conservata solo l'ultima."
+  },
+  "feedback.upload.addCover": {
+    "src": "Add cover image",
+    "out": "Aggiungi immagine di copertina"
+  },
+  "feedback.upload.coverCount_one": {
+    "src": "{{count}} cover image attached",
+    "out": "{{count}} immagine di copertina allegata"
+  },
+  "feedback.upload.coverCount_other": {
+    "src": "{{count}} cover images attached",
+    "out": "{{count}} immagini di copertina allegate"
+  },
+  "feedback.upload.pasteCover": {
+    "src": "Paste cover image",
+    "out": "Incolla immagine di copertina"
+  },
+  "feedback.upload.pasteCoverHint": {
+    "src": "Click here and press Ctrl+V (or Cmd+V on Mac). If your clipboard has multiple images, only the last one is kept.",
+    "out": "Fai clic qui e premi Ctrl+V (o Cmd+V su Mac). Se negli appunti sono presenti più immagini, verrà conservata solo l'ultima."
+  },
   "footer.betaBanner": {
     "src": "The site is currently in BETA testing!",
     "out": "Il sito è attualmente in fase di BETA testing!"

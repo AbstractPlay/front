@@ -63,6 +63,48 @@
   padding: 0.75rem 0;
 }
 
+.feedback-board-item-wishlist {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.feedback-board-item-main {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.feedback-wishlist-cover-link {
+  flex: 0 0 auto;
+  display: block;
+  line-height: 0;
+}
+
+.feedback-wishlist-cover-thumb {
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--tag-background-color);
+  background: var(--secondary-color-3-bg);
+}
+
+.feedback-wishlist-cover {
+  margin: 0 0 1rem;
+}
+
+.feedback-wishlist-cover-image {
+  display: block;
+  max-width: min(100%, 18rem);
+  max-height: 18rem;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid var(--tag-background-color);
+  background: var(--secondary-color-3-bg);
+}
+
 .feedback-board-item:last-child {
   border-bottom: none;
 }
@@ -158,6 +200,14 @@
 
 .feedback-comment-staff {
   border-left-color: var(--secondary-color-3);
+}
+
+.feedback-comment .feedback-markdown {
+  margin-bottom: 0;
+}
+
+.feedback-comment .feedback-markdown p:last-child {
+  margin-bottom: 0;
 }
 
 .feedback-tech-preview {
