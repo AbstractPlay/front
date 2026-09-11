@@ -37,6 +37,7 @@
   "CycleBoardDisplay": "Alternar vista del tablero",
   "buttons": {
     "pass": "Pasar",
+    "declare": "Declarar",
     "takebutton": "Tomar botón",
     "acceptpie": "Jugar segundo",
     "playsecond": "Jugar segundo",

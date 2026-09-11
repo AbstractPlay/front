@@ -37,6 +37,7 @@
   "CycleBoardDisplay": "Changer le mode d'affichage du plateau",
   "buttons": {
     "pass": "Passer",
+    "declare": "Déclarer",
     "takebutton": "Bouton de prise",
     "acceptpie": "Jouer en second",
     "playsecond": "Jouer en second",
