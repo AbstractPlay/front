@@ -4148,8 +4148,8 @@
     "out": "Aufbewahrungssperre ist aktiv — dieser Eintrag wird nicht automatisch archiviert."
   },
   "feedback.history.closed": {
-    "src": "Closed {{date}}",
-    "out": "Geschlossen am {{date}}"
+    "src": "Closed",
+    "out": "Geschlossen"
   },
   "feedback.history.empty.bugs": {
     "src": "No archived bug reports yet.",
@@ -4194,6 +4194,14 @@
   "feedback.history.viewHistory": {
     "src": "View feedback history",
     "out": "Feedback-Verlauf anzeigen"
+  },
+  "feedback.meta.posted": {
+    "src": "Posted",
+    "out": "Veröffentlicht"
+  },
+  "feedback.meta.updated": {
+    "src": "Updated",
+    "out": "Aktualisiert"
   },
   "feedback.new.coverImage": {
     "src": "Cover image",

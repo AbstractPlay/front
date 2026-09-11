@@ -8,6 +8,7 @@ import Spinner from "../Spinner";
 import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import FeedbackListFilters from "./FeedbackListFilters";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
+import FeedbackTimestamp from "./FeedbackTimestamp";
 import { listFeedback, listFeedbackAdmin, listFeedbackAll } from "../../lib/feedback/feedbackApi";
 import {
   boardKeyForKind,
@@ -279,7 +280,11 @@ function FeedbackBoard({ kind = "bug" }) {
                 </Link>
               )}
               <div className="feedback-muted">
-                {item.authorName} · {t("feedback.meta.votes", { count: item.effectiveVotes })}
+                {item.authorName}
+                {" · "}
+                {t("feedback.meta.posted")} <FeedbackTimestamp date={item.createdAt} />
+                {" · "}
+                {t("feedback.meta.votes", { count: item.effectiveVotes })}
                 {" · "}
                 {t("feedback.meta.comments", { count: item.commentCount ?? 0 })}
                 {item.legacyVoteCount > 0 ? (

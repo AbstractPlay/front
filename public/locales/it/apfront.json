@@ -1735,7 +1735,7 @@
       "title": "Cronologia feedback",
       "intro": "Segnalazioni di bug chiuse, idee di funzionalità implementate e giochi arrivati su Abstract Play.",
       "tabLabel": "Categoria cronologia",
-      "closed": "Chiuso il {{date}}",
+      "closed": "Chiuso",
       "implementedAs": "Ora su Abstract Play: {{name}}",
       "viewHistory": "Visualizza cronologia feedback",
       "tabs": {
@@ -1863,7 +1863,9 @@
       "comments_one": "{{count}} commento",
       "comments_other": "{{count}} commenti",
       "votes_one": "{{count}} voto",
-      "votes_other": "{{count}} voti"
+      "votes_other": "{{count}} voti",
+      "posted": "Pubblicato",
+      "updated": "Aggiornato"
     },
     "status": {
       "open": "Aperto",
