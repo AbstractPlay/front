@@ -1,10 +1,13 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Spinner from "../Spinner";
 import ScreenshotUpload from "./ScreenshotUpload";
+import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import { createFeedback } from "../../lib/feedback/feedbackApi";
 import { captureBugContext } from "../../lib/feedback/feedbackContext";
 import { boardKeyForKind, boardPathForKind, feedbackDetailPath } from "../../lib/feedback/feedbackConstants";
+import { useAuthSession } from "../../hooks/useAuthSession";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import "./feedback.css";
 
@@ -20,6 +23,7 @@ function resolveKind(kindParam) {
 
 function FeedbackNew() {
   const { t } = useTranslation();
+  const { status } = useAuthSession();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const kind = resolveKind(searchParams.get("kind"));
@@ -91,6 +95,27 @@ function FeedbackNew() {
     : kind === "wishlist"
       ? t("feedback.new.titleWishlist")
       : t("feedback.new.title");
+
+  if (status === "unknown" || status === "loading") {
+    return <Spinner />;
+  }
+
+  if (status !== "ready") {
+    return (
+      <>
+        <FeedbackPageHelmet title={pageTitle} />
+        <article className="content feedback-panel">
+          <h1 className="title lined">
+            <span>{pageTitle}</span>
+          </h1>
+          <p>
+            <Link to={boardPathForKind(kind)}>{t(`feedback.${boardKey}.backToBoard`)}</Link>
+          </p>
+          <FeedbackSignInRequired messageKey="feedback.auth.signInToCreate" />
+        </article>
+      </>
+    );
+  }
 
   return (
     <>

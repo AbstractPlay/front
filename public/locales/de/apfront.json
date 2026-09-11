@@ -863,6 +863,7 @@
     "bugBoard": "Fehlerberichte",
     "featureIdeas": "Feature-Ideen",
     "gameWishlist": "Spiele-Wunschliste",
+    "feedbackHistory": "Feedback-Verlauf",
     "myFeedback": "Mein Feedback",
     "explore": "Entdecken",
     "openChallenges": "Offene Herausforderungen",
@@ -1717,6 +1718,31 @@
       "ideas": "Features",
       "updated": "Aktualisiert"
     },
+    "auth": {
+      "signInRequired": "Du musst angemeldet sein, um am Feedback teilzunehmen.",
+      "signInToCreate": "Du musst angemeldet sein, um einen Fehler zu melden, eine Funktion vorzuschlagen oder ein Spiel zur Wunschliste hinzuzufügen.",
+      "signInToCreateShort": "Melde dich an, um Feedback einzureichen.",
+      "signInToInteract": "Melde dich an, um für diesen Eintrag abzustimmen, ihn zu beobachten oder zu kommentieren.",
+      "signInToViewMine": "Melde dich an, um dein eingereichtes Feedback zu sehen."
+    },
+    "history": {
+      "title": "Feedback-Verlauf",
+      "intro": "Geschlossene Fehlerberichte, umgesetzte Funktionsideen und Spiele, die auf Abstract Play verfügbar wurden.",
+      "tabLabel": "Verlaufskategorie",
+      "closed": "Geschlossen am {{date}}",
+      "implementedAs": "Jetzt auf Abstract Play: {{name}}",
+      "viewHistory": "Feedback-Verlauf anzeigen",
+      "tabs": {
+        "bugs": "Fehler",
+        "ideas": "Funktionen",
+        "games": "Spiele"
+      },
+      "empty": {
+        "bugs": "Noch keine archivierten Fehlerberichte.",
+        "ideas": "Noch keine archivierten Funktionsideen.",
+        "games": "Noch keine archivierten Wunschlisten-Spiele."
+      }
+    },
     "admin": {
       "title": "Feedback-Verwaltung",
       "intro": "Feedback-Eingänge sichten und verwalten.",
@@ -1800,7 +1826,13 @@
       "deleteWishlistReason": "Grund für die Löschung",
       "deleteWishlistConfirm": "Eintrag löschen",
       "deleteWishlistCancel": "Abbrechen",
-      "deleting": "Wird gelöscht…"
+      "deleting": "Wird gelöscht…",
+      "archivedBanner": "Dieser Eintrag wurde archiviert. Die Diskussion ist schreibgeschützt, bis die Live-Daten entfernt werden.",
+      "archivedPurgedBanner": "Dieser Eintrag wurde archiviert. Der vollständige Verlauf ist auf dem Live-Board nicht mehr verfügbar.",
+      "retentionHoldOn": "Aufbewahrungssperre ist aktiv — dieser Eintrag wird nicht automatisch archiviert.",
+      "retentionHoldOff": "Aufbewahrungssperre ist inaktiv — dieser Eintrag wird nach Ablauf der Aufbewahrungsfrist archiviert.",
+      "holdRetention": "Aufbewahrungssperre aktivieren",
+      "releaseRetention": "Aufbewahrungssperre aufheben"
     },
     "effort": {
       "low": "Geringer Aufwand",

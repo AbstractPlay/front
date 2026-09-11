@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuthSession } from "../../hooks/useAuthSession";
 import Spinner from "../Spinner";
+import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
 import { listMyFeedback } from "../../lib/feedback/feedbackApi";
 import { feedbackDetailPath } from "../../lib/feedback/feedbackConstants";
@@ -17,6 +19,7 @@ const TABS = [
 
 function FeedbackMine() {
   const { t } = useTranslation();
+  const { status } = useAuthSession();
   const [tab, setTab] = useState("all");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +28,9 @@ function FeedbackMine() {
   const activeTab = TABS.find((entry) => entry.id === tab) ?? TABS[0];
 
   useEffect(() => {
+    if (status !== "ready") {
+      return;
+    }
     let cancelled = false;
     (async () => {
       setLoading(true);
@@ -46,7 +52,25 @@ function FeedbackMine() {
     return () => {
       cancelled = true;
     };
-  }, [activeTab.kind]);
+  }, [activeTab.kind, status]);
+
+  if (status === "unknown" || status === "loading") {
+    return <Spinner />;
+  }
+
+  if (status !== "ready") {
+    return (
+      <>
+        <FeedbackPageHelmet title={t("feedback.mine.title")} />
+        <article className="content feedback-panel">
+          <h1 className="title lined">
+            <span>{t("feedback.mine.title")}</span>
+          </h1>
+          <FeedbackSignInRequired messageKey="feedback.auth.signInToViewMine" />
+        </article>
+      </>
+    );
+  }
 
   return (
     <>

@@ -62,6 +62,27 @@ export const IDEAS_BOARD_PATH = "/feedback/ideas";
 export const FEEDBACK_MINE_PATH = "/feedback/mine";
 export const FEEDBACK_ADMIN_PATH = "/feedback/admin";
 export const FEEDBACK_NEW_PATH = "/feedback/new";
+export const FEEDBACK_HISTORY_PATH = "/feedback/history";
+
+export const FEEDBACK_HISTORY_TABS = [
+  { id: "bugs", kind: "bug" },
+  { id: "ideas", kind: "feature" },
+  { id: "games", kind: "wishlist" },
+];
+
+export function historyKindForTab(tab) {
+  const entry = FEEDBACK_HISTORY_TABS.find((item) => item.id === tab);
+  return entry?.kind ?? "bug";
+}
+
+export function historyTabForKind(kind) {
+  const entry = FEEDBACK_HISTORY_TABS.find((item) => item.kind === kind);
+  return entry?.id ?? "bugs";
+}
+
+export function feedbackHistoryPath(tab = "bugs") {
+  return tab === "bugs" ? FEEDBACK_HISTORY_PATH : `${FEEDBACK_HISTORY_PATH}/${tab}`;
+}
 
 export function boardPathForKind(kind) {
   if (kind === "feature") {

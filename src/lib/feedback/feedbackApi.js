@@ -159,3 +159,12 @@ export async function deleteFeedback(id, reason) {
   const res = await callAuthApi("feedback_delete", { id, reason });
   return parseAuthResponse(res);
 }
+
+export async function listFeedbackHistory({ kind, limit = 50, cursor }) {
+  return fetchOpen("feedback_history_list", { kind, limit, cursor });
+}
+
+export async function holdFeedbackRetention(id, hold) {
+  const res = await callAuthApi("feedback_hold_retention", { id, hold });
+  return parseAuthResponse(res);
+}

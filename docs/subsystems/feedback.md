@@ -9,10 +9,12 @@ In-app feedback replaces Discord forum workflows for bug reports, feature ideas,
 | `/feedback/bugs` | Bug board | Open |
 | `/feedback/ideas` | Feature ideas board | Open |
 | `/wishlist` | Game wishlist board | Open |
-| `/feedback/new?kind=bug\|feature\|wishlist` | Submit form | Signed in |
-| `/feedback/:id` | Detail + comments | Open (auth adds vote/watch state) |
+| `/feedback/new?kind=bug\|feature\|wishlist` | Submit form | Signed in (guests see sign-in prompt) |
+| `/feedback/:id` | Detail thread | Open read-only; vote, watch, and comment require sign-in |
 | `/feedback/mine` | User's submissions | Signed in |
 | `/feedback/admin` | Admin triage | Admin |
+| `/feedback/history` | Archived bugs, features, and wishlist games | Open |
+| `/feedback/history/:tab` | History tab (`bugs`, `ideas`, `games`) | Open |
 
 ## Kinds
 
@@ -22,9 +24,15 @@ In-app feedback replaces Discord forum workflows for bug reports, feature ideas,
 
 ## API
 
-Open queries: `feedback_list`, `feedback_get`, `wishlist_search`.
+Open queries: `feedback_list`, `feedback_get`, `feedback_history_list`, `wishlist_search`.
 
-Auth queries: `feedback_create`, `feedback_vote`, `feedback_comment`, `feedback_subscribe`, `feedback_update`, `feedback_set_status`, `feedback_set_admin_fields`, `feedback_mine`, `feedback_admin_list`, `feedback_delete` (wishlist admin), `feedback_merge` (wishlist admin).
+Auth queries: `feedback_create`, `feedback_vote`, `feedback_comment`, `feedback_subscribe`, `feedback_update`, `feedback_set_status`, `feedback_set_admin_fields`, `feedback_mine`, `feedback_admin_list`, `feedback_delete` (wishlist admin), `feedback_merge` (wishlist admin), `feedback_hold_retention` (admin).
+
+## Retention and history
+
+Terminal posts are archived to S3 after a configurable delay (`FEEDBACK_ARCHIVE_AFTER_TERMINAL_DAYS`, default 90). The nightly `feedback-archive` job (node-backend Lambda, `npm run feedback-archive`) writes a `HISTORY#` summary row, stamps `archivedAt` and `expiresAt` on live rows, and stores a full JSON snapshot in S3. Live DynamoDB rows are removed when `expiresAt` TTL fires (`FEEDBACK_LIVE_RETENTION_AFTER_ARCHIVE_DAYS`, default 90).
+
+Admins can set `retentionHold` on a post to skip automatic archiving. The history board at `/feedback/history` lists archived summaries; detail pages show an archived banner and, after TTL purge, a summary-only view.
 
 See [node-backend API docs](/backend/api/auth-queries/) and [public queries](/backend/api/public-queries/).
 
