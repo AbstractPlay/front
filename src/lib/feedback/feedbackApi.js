@@ -186,6 +186,11 @@ export async function setFeedbackStatus(id, status) {
   return parseAuthResponse(res);
 }
 
+export async function reclassifyFeedback(id) {
+  const res = await callAuthApi("feedback_reclassify", { id });
+  return parseAuthResponse(res);
+}
+
 export async function updateFeedback(pars) {
   const res = await callAuthApi("feedback_update", pars);
   return parseAuthResponse(res);

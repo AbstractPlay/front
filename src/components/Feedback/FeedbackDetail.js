@@ -22,6 +22,7 @@ import {
   getFeedbackAuth,
   getFeedbackOpen,
   holdFeedbackRetention,
+  reclassifyFeedback,
   setFeedbackAdminFields,
   setFeedbackStatus,
   subscribeFeedback,
@@ -37,6 +38,7 @@ import {
   feedbackHistoryPath,
   historyTabForKind,
   statusesForKind,
+  TERMINAL_STATUSES,
 } from "../../lib/feedback/feedbackConstants";
 import "./feedback.css";
 
@@ -65,6 +67,7 @@ function FeedbackDetail() {
   const [adminWishlistCategory, setAdminWishlistCategory] = useState("none");
   const [adminWishlistNote, setAdminWishlistNote] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showReclassifyModal, setShowReclassifyModal] = useState(false);
   const [deleteReason, setDeleteReason] = useState("");
 
   const load = useCallback(async () => {
@@ -178,6 +181,18 @@ function FeedbackDetail() {
     }
     setShowDeleteModal(false);
     navigate(boardPathForKind("wishlist"));
+  }
+
+  async function handleReclassify() {
+    setSubmitting(true);
+    const result = await reclassifyFeedback(id);
+    setSubmitting(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setShowReclassifyModal(false);
+    await load();
   }
 
   async function handleRetentionHold(hold) {
@@ -298,6 +313,10 @@ function FeedbackDetail() {
   const boardKey = boardKeyForKind(post.kind);
   const canEdit = globalMe?.id && (globalMe.admin || globalMe.id === post.authorId);
   const statusOptions = statusesForKind(post.kind);
+  const canReclassify = globalMe?.admin
+    && post.kind === "bug"
+    && !readOnly
+    && !TERMINAL_STATUSES.bug.includes(post.status);
 
   return (
     <>
@@ -481,6 +500,18 @@ function FeedbackDetail() {
           </select>
         </div>
       )}
+      {canReclassify ? (
+        <div className="feedback-reclassify-action">
+          <button
+            type="button"
+            className="button apButtonNeutral is-small"
+            onClick={() => setShowReclassifyModal(true)}
+            disabled={submitting}
+          >
+            {t("feedback.detail.reclassifyToFeature")}
+          </button>
+        </div>
+      ) : null}
       {globalMe?.admin && !readOnly && (
         <form className="feedback-admin-fields" onSubmit={handleSaveAdminFields}>
           {post.kind === "wishlist" ? (
@@ -600,6 +631,32 @@ function FeedbackDetail() {
           ) : null}
         </form>
       )}
+      {canReclassify ? (
+        <Modal
+          show={showReclassifyModal}
+          title={t("feedback.detail.reclassifyToFeatureTitle")}
+          disableBackdropClose={submitting}
+          buttons={[
+            {
+              label: submitting ? t("feedback.detail.reclassifying") : t("feedback.detail.reclassifyToFeatureConfirm"),
+              action: handleReclassify,
+              disabled: submitting,
+            },
+            {
+              label: t("feedback.detail.reclassifyToFeatureCancel"),
+              action: () => {
+                if (!submitting) {
+                  setShowReclassifyModal(false);
+                }
+              },
+              disabled: submitting,
+            },
+          ]}
+        >
+          <p>{t("feedback.detail.reclassifyToFeatureIntro")}</p>
+          {error ? <p className="has-text-danger">{error}</p> : null}
+        </Modal>
+      ) : null}
       {globalMe?.admin && !readOnly && post.kind === "wishlist" ? (
         <Modal
           show={showDeleteModal}
