@@ -88,6 +88,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
           ...entry,
           gameName: getGameDisplayName(entry.metaGame, "Unknown"),
           noExplore: entry.noExplore || false,
+          suspended: entry.suspended === true,
           variants: entry.variants || [],
           clockCombined: [
             entry.clockStart,
