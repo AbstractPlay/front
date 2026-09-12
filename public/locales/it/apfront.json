@@ -1825,6 +1825,8 @@
       "unwatch": "Non seguire più",
       "adminStatus": "Stato",
       "addComment": "Il tuo commento",
+      "commentBodyHint": "Markdown supportato. Il testo è facoltativo se alleghi degli screenshot.",
+      "commentScreenshots": "Screenshot",
       "notifyMe": "Notificami gli aggiornamenti su questo elemento",
       "postComment": "Pubblica commento",
       "posting": "Pubblicazione in corso…",
