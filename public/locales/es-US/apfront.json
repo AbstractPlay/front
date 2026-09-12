@@ -1901,6 +1901,7 @@
       "resolved": "Resuelto",
       "closed": "Cerrado",
       "triaged": "Clasificado",
+      "monitoring": "Monitoreando",
       "in_progress": "En progreso",
       "under_review": "En revisión",
       "planned": "Planeado",
