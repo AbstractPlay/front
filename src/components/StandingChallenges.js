@@ -753,62 +753,64 @@ function StandingChallenges(props) {
         {challengeFilters}
         <div className="container">
           {tableNavigation}
-          <table
-            className="table apTable"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-          >
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <div
-                          {...{
-                            className: header.column.getCanSort()
-                              ? "sortable"
-                              : "",
-                            onClick: header.column.getToggleSortingHandler(),
-                          }}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {{
-                            asc: (
-                              <>
-                                &nbsp;<i className="fa fa-angle-up"></i>
-                              </>
-                            ),
-                            desc: (
-                              <>
-                                &nbsp;<i className="fa fa-angle-down"></i>
-                              </>
-                            ),
-                          }[header.column.getIsSorted()] ?? null}
-                        </div>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="table-container">
+            <table
+              className="table apTable"
+              style={{ marginLeft: "auto", marginRight: "auto" }}
+            >
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <th key={header.id}>
+                        {header.isPlaceholder ? null : (
+                          <div
+                            {...{
+                              className: header.column.getCanSort()
+                                ? "sortable"
+                                : "",
+                              onClick: header.column.getToggleSortingHandler(),
+                            }}
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            {{
+                              asc: (
+                                <>
+                                  &nbsp;<i className="fa fa-angle-up"></i>
+                                </>
+                              ),
+                              desc: (
+                                <>
+                                  &nbsp;<i className="fa fa-angle-down"></i>
+                                </>
+                              ),
+                            }[header.column.getIsSorted()] ?? null}
+                          </div>
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {tableNavigation}
         </div>
       </article>
