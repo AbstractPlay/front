@@ -1851,6 +1851,8 @@
       "deleting": "Wird gelöscht…",
       "archivedBanner": "Dieser Eintrag wurde archiviert. Die Diskussion ist schreibgeschützt, bis die Live-Daten entfernt werden.",
       "archivedPurgedBanner": "Dieser Eintrag wurde archiviert. Der vollständige Verlauf ist auf dem Live-Board nicht mehr verfügbar.",
+      "closedBanner": "Dieser Eintrag ist geschlossen, aber noch nicht archiviert. Du kannst hier weiterhin kommentieren.",
+      "reopenHint": "Ändere den Status auf einen nicht geschlossenen Wert, um diesen Eintrag wieder auf dem Board zu öffnen.",
       "retentionHoldOn": "Aufbewahrungssperre ist aktiv — dieser Eintrag wird nicht automatisch archiviert.",
       "retentionHoldOff": "Aufbewahrungssperre ist inaktiv — dieser Eintrag wird nach Ablauf der Aufbewahrungsfrist archiviert.",
       "holdRetention": "Aufbewahrungssperre aktivieren",
