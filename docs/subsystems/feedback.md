@@ -26,7 +26,7 @@ In-app feedback replaces Discord forum workflows for bug reports, feature ideas,
 
 Open queries: `feedback_list`, `feedback_get`, `feedback_history_list`, `wishlist_search`.
 
-Auth queries: `feedback_create`, `feedback_vote`, `feedback_comment`, `feedback_subscribe`, `feedback_update`, `feedback_set_status`, `feedback_set_admin_fields`, `feedback_mine`, `feedback_admin_list`, `feedback_delete` (wishlist admin), `feedback_merge` (wishlist admin), `feedback_hold_retention` (admin).
+Auth queries: `feedback_create`, `feedback_vote`, `feedback_comment`, `feedback_subscribe`, `feedback_update`, `feedback_set_status`, `feedback_reclassify` (admin: bug → feature, non-terminal only), `feedback_set_admin_fields`, `feedback_mine`, `feedback_admin_list`, `feedback_delete` (wishlist admin), `feedback_merge` (wishlist admin), `feedback_hold_retention` (admin).
 
 ## Retention and history
 
