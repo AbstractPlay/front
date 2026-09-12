@@ -30,6 +30,8 @@ export const EFFORT_LEVELS = ["low", "medium", "high", "unknown"];
 
 export const FEEDBACK_REVIEWER_MAX_COUNT = 8;
 
+export const FEEDBACK_COMMENT_ATTACHMENT_MAX_COUNT = 3;
+
 export const WISHLIST_STATUSES = [
   "requested",
   "evaluating",

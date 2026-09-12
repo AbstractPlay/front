@@ -171,8 +171,12 @@ export async function voteFeedback(id, vote) {
   return parseAuthResponse(res);
 }
 
-export async function commentFeedback(id, body, subscribe = true) {
-  const res = await callAuthApi("feedback_comment", { id, body, subscribe });
+export async function commentFeedback(id, body, subscribe = true, attachmentKeys) {
+  const pars = { id, body, subscribe };
+  if (Array.isArray(attachmentKeys) && attachmentKeys.length > 0) {
+    pars.attachmentKeys = attachmentKeys;
+  }
+  const res = await callAuthApi("feedback_comment", pars);
   return parseAuthResponse(res);
 }
 
