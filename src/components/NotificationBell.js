@@ -120,11 +120,25 @@ function NotificationBell({ closeBurger }) {
     await dismissAllNotifications();
   };
 
-  const handleNewsClick = () => {
+  const closePanelAndBurger = () => {
     closeMenu();
     if (closeBurger) {
       closeBurger();
     }
+  };
+
+  const handleNewsClick = () => {
+    closePanelAndBurger();
+  };
+
+  const handleNotificationLinkClick = (event, notification) => {
+    if (!event.target.closest("a")) {
+      return;
+    }
+    if (isNotificationNew(notification)) {
+      markNotificationsSeen({ sks: [notification.sk] });
+    }
+    closePanelAndBurger();
   };
 
   return (
@@ -244,7 +258,11 @@ function NotificationBell({ closeBurger }) {
                   : "notification-panel-item";
 
                 return (
-                  <li key={n.sk} className={itemClassName}>
+                  <li
+                    key={n.sk}
+                    className={itemClassName}
+                    onClick={(event) => handleNotificationLinkClick(event, n)}
+                  >
                     <div className="notification-panel-message">
                       <NotificationMessage body={body} />
                     </div>
