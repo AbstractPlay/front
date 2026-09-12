@@ -234,7 +234,10 @@ export function NotificationMessage({ body }) {
       return (
         <Trans
           i18nKey="me.notifications.message.feedbackReply"
-          values={{ title: body.title, preview: body.commentPreview ?? "" }}
+          values={{
+            title: body.title,
+            preview: body.commentPreview ? ` ${body.commentPreview}` : "",
+          }}
           components={{
             feedbackLink: <Link to={`/feedback/${body.postId}`} />,
           }}
