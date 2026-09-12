@@ -1851,6 +1851,8 @@
       "deleting": "Eliminando…",
       "archivedBanner": "Este elemento ha sido archivado. La discusión es solo de lectura hasta que se eliminen los datos en vivo.",
       "archivedPurgedBanner": "Este elemento ha sido archivado. El hilo completo ya no está disponible en el tablero activo.",
+      "closedBanner": "Este elemento está cerrado pero aún no se ha archivado. Todavía puedes comentar aquí.",
+      "reopenHint": "Cambia el estado a un valor que no esté cerrado para volver a abrir este elemento en el tablero.",
       "retentionHoldOn": "La retención está activada: este elemento no se archivará automáticamente.",
       "retentionHoldOff": "La retención está desactivada: este elemento se archivará después del período de retención.",
       "holdRetention": "Activar retención",

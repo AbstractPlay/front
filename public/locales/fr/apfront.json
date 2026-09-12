@@ -1851,6 +1851,8 @@
       "deleting": "Suppression…",
       "archivedBanner": "Cet élément a été archivé. La discussion est en lecture seule jusqu'à la suppression des données en direct.",
       "archivedPurgedBanner": "Cet élément a été archivé. Le fil de discussion complet n'est plus disponible sur le tableau en direct.",
+      "closedBanner": "Cet élément est fermé mais pas encore archivé. Vous pouvez toujours commenter ici.",
+      "reopenHint": "Changez le statut pour une valeur non fermée afin de rouvrir cet élément sur le tableau.",
       "retentionHoldOn": "La conservation des données est activée — cet élément ne sera pas archivé automatiquement.",
       "retentionHoldOff": "La conservation des données est désactivée — cet élément sera archivé après la période de conservation.",
       "holdRetention": "Maintenir la conservation",
