@@ -186,6 +186,13 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     [onValidityChange]
   );
 
+  const hasFixedOpponent = opponent !== undefined;
+  const handleChangeGameRef = useRef(null);
+  const prevShowRef = useRef(false);
+  const prevOpponentIdRef = useRef(undefined);
+  const prevOpponentNameRef = useRef(undefined);
+  const prevFixedMetaGameRef = useRef(undefined);
+
   const handleChangeGame = useCallback(
     (game) => {
       if (game !== metaGame) {
@@ -203,7 +210,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             if (trySoloHandoff(game, playercounts[0])) {
               return;
             }
-          } else if (props.opponent !== undefined) {
+          } else if (hasFixedOpponent) {
             setPlayerCount(2);
           } else {
             playerCountSetter(-1);
@@ -216,39 +223,68 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         resetVariantValidity();
       }
     },
-    [metaGame, setPlayerCount, props.opponent, resetVariantValidity, t, trySoloHandoff]
+    [metaGame, setPlayerCount, hasFixedOpponent, resetVariantValidity, t, trySoloHandoff]
   );
+
+  handleChangeGameRef.current = handleChangeGame;
+
+  const initializeForOpen = useCallback(() => {
+    if (opponent !== undefined) {
+      playerCountSetter(2);
+      opponentsSetter([{ id: opponent.id, name: opponent.name }]);
+    }
+    errorSetter("");
+    if (fixedMetaGame !== undefined) {
+      if (onSoloHandoff && isSoloOnlyGame(fixedMetaGame)) {
+        onSoloHandoff(fixedMetaGame);
+        return;
+      }
+      metaGameSetter(fixedMetaGame);
+      handleChangeGameRef.current(fixedMetaGame);
+    }
+    if (opponent !== undefined) {
+      opponentsSetter([{ id: opponent.id, name: opponent.name }]);
+    }
+  }, [opponent, fixedMetaGame, onSoloHandoff]);
 
   useEffect(() => {
     if (!show) {
-      metaGameSetter(null);
-      playerCountSetter(-1);
-      opponentsSetter([]);
-      commentSetter("");
+      if (prevShowRef.current) {
+        metaGameSetter(null);
+        playerCountSetter(-1);
+        opponentsSetter([]);
+        commentSetter("");
+      }
+      prevShowRef.current = false;
+      prevOpponentIdRef.current = undefined;
+      prevOpponentNameRef.current = undefined;
+      prevFixedMetaGameRef.current = undefined;
       return;
     }
-    if (props.opponent !== undefined) {
-      playerCountSetter(2);
-      opponentsSetter([props.opponent]);
-    }
-    errorSetter("");
-    if (props.fixedMetaGame !== undefined) {
-      if (onSoloHandoff && isSoloOnlyGame(props.fixedMetaGame)) {
-        onSoloHandoff(props.fixedMetaGame);
-        return;
-      }
-      metaGameSetter(props.fixedMetaGame);
-      handleChangeGame(props.fixedMetaGame);
-    }
-    if (props.opponent !== undefined) {
-      opponentsSetter([props.opponent]);
+
+    const opponentId = opponent?.id;
+    const opponentName = opponent?.name;
+    const justOpened = !prevShowRef.current;
+    const targetChangedWhileOpen =
+      prevShowRef.current &&
+      (opponentId !== prevOpponentIdRef.current ||
+        opponentName !== prevOpponentNameRef.current ||
+        fixedMetaGame !== prevFixedMetaGameRef.current);
+
+    prevShowRef.current = true;
+    prevOpponentIdRef.current = opponentId;
+    prevOpponentNameRef.current = opponentName;
+    prevFixedMetaGameRef.current = fixedMetaGame;
+
+    if (justOpened || targetChangedWhileOpen) {
+      initializeForOpen();
     }
   }, [
     show,
-    props.opponent,
-    props.fixedMetaGame,
-    handleChangeGame,
-    onSoloHandoff,
+    opponent?.id,
+    opponent?.name,
+    fixedMetaGame,
+    initializeForOpen,
   ]);
 
   const handleChangePlayerCount = (cnt) => {

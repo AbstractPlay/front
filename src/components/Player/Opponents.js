@@ -16,6 +16,8 @@ import { formatUserDisplayName } from "../Bots/botUtils";
 import { useTranslation } from "react-i18next";
 import { compareStrings } from "../../lib/compareStrings";
 
+const columnHelper = createColumnHelper();
+
 function Opponents({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const [allRecs] = useContext(AllRecsContext);
@@ -112,7 +114,17 @@ function Opponents({ handleChallenge }) {
     [counts]
   );
 
-  const columnHelper = createColumnHelper();
+  const activeOpponent = useMemo(() => {
+    if (!activeChallengeModal || allUsers === null) {
+      return undefined;
+    }
+    const userRec = allUsers.find((u) => u.id === activeChallengeModal);
+    return {
+      id: activeChallengeModal,
+      name: userRec?.name ?? activeChallengeModal,
+    };
+  }, [activeChallengeModal, allUsers]);
+
   const columns = useMemo(
     () =>
       allUsers === null
@@ -160,41 +172,16 @@ function Opponents({ handleChallenge }) {
               cell: (props) =>
                 globalMe === null ||
                 props.row.original.id === undefined ? null : (
-                  <>
-                    <ChallengeEntryModals
-                      show={
-                        activeChallengeModal !== "" &&
-                        activeChallengeModal === props.row.original.id
-                      }
-                      handleClose={closeChallengeModal}
-                      handleChallenge={handleChallenge}
-                      opponent={{
-                        id: props.row.original.id,
-                        name: allUsers?.find(
-                          (u) => u.id === props.row.original.id
-                        ).name,
-                      }}
-                    />
-                    <button
-                      className="button is-small apButton"
-                      onClick={() => openChallengeModal(props.row.original.id)}
-                    >
-                      {t("IssueChallengeLabel")}
-                    </button>
-                  </>
+                  <button
+                    className="button is-small apButton"
+                    onClick={() => openChallengeModal(props.row.original.id)}
+                  >
+                    {t("IssueChallengeLabel")}
+                  </button>
                 ),
             }),
           ],
-    [
-      columnHelper,
-      globalMe,
-      activeChallengeModal,
-      handleChallenge,
-      allUsers,
-      closeChallengeModal,
-      t,
-      i18n.language,
-    ]
+    [globalMe, allUsers, t, i18n.language]
   );
 
   if (data.length === 0 && hIndex === null) {
@@ -217,6 +204,14 @@ function Opponents({ handleChallenge }) {
           columns={columns}
           sort={[{ id: "count", desc: true }]}
           key="Player|Opponent"
+        />
+      )}
+      {globalMe !== null && (
+        <ChallengeEntryModals
+          show={activeChallengeModal !== ""}
+          handleClose={closeChallengeModal}
+          handleChallenge={handleChallenge}
+          opponent={activeOpponent}
         />
       )}
     </>

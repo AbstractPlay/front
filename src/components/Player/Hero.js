@@ -58,6 +58,11 @@ function Hero({ handleChallenge }) {
     setChallengeOpen(false);
   }, []);
 
+  const challengeOpponent = useMemo(
+    () => ({ id: user.id, name: user.name }),
+    [user.id, user.name]
+  );
+
   const topRatings = useMemo(
     () => getTopRatings(summary, user?.id, 3),
     [summary, user?.id]
@@ -209,10 +214,7 @@ function Hero({ handleChallenge }) {
           show={challengeOpen}
           handleClose={closeChallengeModal}
           handleChallenge={handleChallenge}
-          opponent={{
-            id: user.id,
-            name: user.name,
-          }}
+          opponent={challengeOpponent}
         />
       ) : null}
     </>

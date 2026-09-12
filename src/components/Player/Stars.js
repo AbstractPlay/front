@@ -10,6 +10,8 @@ import { useTranslation } from "react-i18next";
 import ChallengeEntryModals from "../ChallengeEntryModals";
 import { useStore } from "../../stores";
 
+const columnHelper = createColumnHelper();
+
 function Stars({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const globalMe = useStore((state) => state.globalMe);
@@ -39,7 +41,13 @@ function Stars({ handleChallenge }) {
     [user, i18n.language]
   );
 
-  const columnHelper = createColumnHelper();
+  const activeOpponent = useMemo(() => {
+    if (!activeChallengeModal) {
+      return undefined;
+    }
+    return { id: user.id, name: user.name };
+  }, [activeChallengeModal, user.id, user.name]);
+
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
@@ -54,39 +62,16 @@ function Stars({ handleChallenge }) {
           globalMe === null ||
           globalMe.id === user.id ||
           !gameinfo.has(props.row.original.id) ? null : (
-            <>
-              <ChallengeEntryModals
-                show={
-                  activeChallengeModal !== "" &&
-                  activeChallengeModal === props.row.original.id
-                }
-                handleClose={closeChallengeModal}
-                handleChallenge={handleChallenge}
-                fixedMetaGame={props.row.original.id}
-                opponent={{
-                  id: user.id,
-                  name: user.name,
-                }}
-              />
-              <button
-                className="button is-small apButton"
-                onClick={() => openChallengeModal(props.row.original.id)}
-              >
-                {t("IssueChallengeLabel")}
-              </button>
-            </>
+            <button
+              className="button is-small apButton"
+              onClick={() => openChallengeModal(props.row.original.id)}
+            >
+              {t("IssueChallengeLabel")}
+            </button>
           ),
       }),
     ],
-    [
-      columnHelper,
-      globalMe,
-      user,
-      activeChallengeModal,
-      handleChallenge,
-      closeChallengeModal,
-      t,
-    ]
+    [globalMe, user, t]
   );
 
   if (data.length === 0) {
@@ -94,13 +79,24 @@ function Stars({ handleChallenge }) {
   }
 
   return (
-    <DataTable
-      {...PROFILE_TABLE_PROPS}
-      data={data}
-      columns={columns}
-      sort={[{ id: "name", desc: false }]}
-      key="Player|Stars"
-    />
+    <>
+      <DataTable
+        {...PROFILE_TABLE_PROPS}
+        data={data}
+        columns={columns}
+        sort={[{ id: "name", desc: false }]}
+        key="Player|Stars"
+      />
+      {globalMe !== null && globalMe.id !== user.id && (
+        <ChallengeEntryModals
+          show={activeChallengeModal !== ""}
+          handleClose={closeChallengeModal}
+          handleChallenge={handleChallenge}
+          fixedMetaGame={activeChallengeModal || undefined}
+          opponent={activeOpponent}
+        />
+      )}
+    </>
   );
 }
 
