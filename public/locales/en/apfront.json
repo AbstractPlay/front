@@ -1859,7 +1859,7 @@
             "releaseRetention": "Release retention",
             "reclassifyToFeature": "Move to feature ideas",
             "reclassifyToFeatureTitle": "Move to feature ideas",
-            "reclassifyToFeatureIntro": "This moves the thread from bug reports to feature ideas. Votes, comments, and watchers stay on the same page. Open bugs become Open; triaged bugs become Under review.",
+            "reclassifyToFeatureIntro": "This moves the thread from bug reports to feature ideas. Votes, comments, and watchers stay on the same page. Open bugs become Open; triaged bugs become Under review; monitoring bugs become Planned.",
             "reclassifyToFeatureConfirm": "Move to feature ideas",
             "reclassifyToFeatureCancel": "Cancel",
             "reclassifying": "Moving…"
@@ -1901,6 +1901,7 @@
             "resolved": "Resolved",
             "closed": "Closed",
             "triaged": "Triaged",
+            "monitoring": "Monitoring",
             "in_progress": "In progress",
             "under_review": "Under review",
             "planned": "Planned",

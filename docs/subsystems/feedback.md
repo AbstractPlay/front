@@ -18,7 +18,7 @@ In-app feedback replaces Discord forum workflows for bug reports, feature ideas,
 
 ## Kinds
 
-- **bug** — screenshots optional on create; up to 3 images per follow-up comment; bug context captured from error pages
+- **bug** — status flow: open → triaged → monitoring → resolved | closed; screenshots optional on create; up to 3 images per follow-up comment; bug context captured from error pages
 - **feature** — markdown body; attachments on create and comments (up to 3 images per comment)
 - **wishlist** — game title, HTTPS URL, optional cover image (one PNG/JPEG/WebP), notes; dedup by BGG id or normalized URL
 
