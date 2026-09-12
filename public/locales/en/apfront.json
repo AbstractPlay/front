@@ -1851,6 +1851,8 @@
             "deleting": "Deleting…",
             "archivedBanner": "This item has been archived. Discussion is read-only until live data is removed.",
             "archivedPurgedBanner": "This item has been archived. The full thread is no longer available on the live board.",
+            "closedBanner": "This item is closed but not yet archived. You can still comment here.",
+            "reopenHint": "Change the status to a non-closed value to reopen this item on the board.",
             "retentionHoldOn": "Retention hold is on — this item will not be archived automatically.",
             "retentionHoldOff": "Retention hold is off — this item will be archived after the retention period.",
             "holdRetention": "Hold retention",
