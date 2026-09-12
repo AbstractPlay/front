@@ -1877,6 +1877,7 @@
     },
     "reviewers": {
       "badge": "Reviewer: {{names}}",
+      "badgePrefix": "Rezensenten:",
       "badgeCompact_one": "1 Reviewer",
       "badgeCompact_other": "{{count}} Reviewer",
       "add": "Reviewer hinzufügen",
