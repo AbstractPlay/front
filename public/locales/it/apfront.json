@@ -1851,6 +1851,8 @@
       "deleting": "Eliminazione in corso…",
       "archivedBanner": "Questo elemento è stato archiviato. La discussione è in sola lettura fino alla rimozione dei dati attivi.",
       "archivedPurgedBanner": "Questo elemento è stato archiviato. La discussione completa non è più disponibile sulla bacheca attiva.",
+      "closedBanner": "Questo elemento è chiuso ma non ancora archiviato. Puoi comunque commentare qui.",
+      "reopenHint": "Cambia lo stato in un valore diverso da chiuso per riaprire questo elemento sulla bacheca.",
       "retentionHoldOn": "Blocco conservazione attivo — questo elemento non verrà archiviato automaticamente.",
       "retentionHoldOff": "Blocco conservazione disattivato — questo elemento verrà archiviato dopo il periodo di conservazione.",
       "holdRetention": "Blocca conservazione",

@@ -320,6 +320,7 @@ function FeedbackDetail() {
 
   const { post, comments, attachmentUrls, subscribed, userVoted } = data;
   const isArchived = Boolean(data.archived || post.archivedAt);
+  const isTerminal = Boolean(post.terminalAt);
   const readOnly = isArchived;
   const boardPath = boardPathForKind(post.kind);
   const boardKey = boardKeyForKind(post.kind);
@@ -342,6 +343,11 @@ function FeedbackDetail() {
       {isArchived ? (
         <div className="feedback-archived-banner" role="status">
           {t("feedback.detail.archivedBanner")}
+        </div>
+      ) : null}
+      {isTerminal && !isArchived ? (
+        <div className="feedback-closed-banner" role="status">
+          {t("feedback.detail.closedBanner")}
         </div>
       ) : null}
       {globalMe?.admin && post.retentionHold ? (
@@ -503,6 +509,9 @@ function FeedbackDetail() {
       {globalMe?.admin && !readOnly && statusOptions.length > 0 && (
         <div className="field">
           <label className="label" htmlFor="feedback-status">{t("feedback.detail.adminStatus")}</label>
+          {isTerminal ? (
+            <p className="feedback-muted feedback-field-hint">{t("feedback.detail.reopenHint")}</p>
+          ) : null}
           <select id="feedback-status" className="select" value={post.status} onChange={handleStatusChange}>
             {statusOptions.map((status) => (
               <option key={status} value={status}>

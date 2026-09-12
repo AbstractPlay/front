@@ -13,6 +13,7 @@ export const TERMINAL_STATUSES = {
 export const BUG_STATUSES = [
   "open",
   "triaged",
+  "monitoring",
   "resolved",
   "closed",
 ];

@@ -18,7 +18,7 @@ In-app feedback replaces Discord forum workflows for bug reports, feature ideas,
 
 ## Kinds
 
-- **bug** — screenshots optional on create; up to 3 images per follow-up comment; bug context captured from error pages
+- **bug** — status flow: open → triaged → monitoring → resolved | closed; screenshots optional on create; up to 3 images per follow-up comment; bug context captured from error pages
 - **feature** — markdown body; attachments on create and comments (up to 3 images per comment)
 - **wishlist** — game title, HTTPS URL, optional cover image (one PNG/JPEG/WebP), notes; dedup by BGG id or normalized URL
 
@@ -30,7 +30,7 @@ Auth queries: `feedback_create`, `feedback_vote`, `feedback_comment`, `feedback_
 
 ## Retention and history
 
-Terminal posts are archived to S3 after a configurable delay (`FEEDBACK_ARCHIVE_AFTER_TERMINAL_DAYS`, default 90). The nightly `feedback-archive` job (node-backend Lambda, `npm run feedback-archive`) writes a `HISTORY#` summary row, stamps `archivedAt` and `expiresAt` on live rows, and stores a full JSON snapshot in S3. Live DynamoDB rows are removed when `expiresAt` TTL fires (`FEEDBACK_LIVE_RETENTION_AFTER_ARCHIVE_DAYS`, default 90).
+Terminal (closed) posts remain commentable until the archive job stamps `archivedAt`; admins can reopen by setting a non-terminal status (removes `terminalAt` and returns the item to live boards). Terminal posts are archived to S3 after a configurable delay (`FEEDBACK_ARCHIVE_AFTER_TERMINAL_DAYS`, default 90). The nightly `feedback-archive` job (node-backend Lambda, `npm run feedback-archive`) writes a `HISTORY#` summary row, stamps `archivedAt` and `expiresAt` on live rows, and stores a full JSON snapshot in S3. Live DynamoDB rows are removed when `expiresAt` TTL fires (`FEEDBACK_LIVE_RETENTION_AFTER_ARCHIVE_DAYS`, default 90).
 
 Admins can set `retentionHold` on a post to skip automatic archiving. The history board at `/feedback/history` lists archived summaries; detail pages show an archived banner and, after TTL purge, a summary-only view.
 
