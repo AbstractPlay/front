@@ -6,6 +6,7 @@ import Spinner from "../Spinner";
 import FeedbackListFilters from "./FeedbackListFilters";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
 import FeedbackTimestamp from "./FeedbackTimestamp";
+import FeedbackPlayerLink from "./FeedbackPlayerLink";
 import { listFeedbackAdminAll } from "../../lib/feedback/feedbackApi";
 import {
   compareFeedbackItems,
@@ -146,7 +147,7 @@ function FeedbackAdmin() {
                 {item.title}
               </Link>
               <div className="feedback-muted">
-                {item.authorName}
+                <FeedbackPlayerLink userId={item.authorId} name={item.authorName} />
                 {" · "}
                 {t("feedback.meta.posted")} <FeedbackTimestamp date={item.createdAt} />
                 {" · "}

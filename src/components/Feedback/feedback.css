@@ -301,6 +301,21 @@
   color: var(--high-contrast-font-color, var(--main-bg-color));
 }
 
+.feedback-muted a,
+.feedback-reviewer-badge a,
+.feedback-markdown a {
+  color: var(--secondary-color-3);
+}
+
+.feedback-muted a:hover,
+.feedback-muted a:focus-visible,
+.feedback-reviewer-badge a:hover,
+.feedback-reviewer-badge a:focus-visible,
+.feedback-markdown a:hover,
+.feedback-markdown a:focus-visible {
+  color: var(--secondary-color-3-lighter);
+}
+
 .feedback-reviewer-badge {
   background: var(--secondary-color-3-bg, var(--tag-background-color));
 }
