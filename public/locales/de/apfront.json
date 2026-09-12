@@ -1852,7 +1852,13 @@
       "retentionHoldOn": "Aufbewahrungssperre ist aktiv — dieser Eintrag wird nicht automatisch archiviert.",
       "retentionHoldOff": "Aufbewahrungssperre ist inaktiv — dieser Eintrag wird nach Ablauf der Aufbewahrungsfrist archiviert.",
       "holdRetention": "Aufbewahrungssperre aktivieren",
-      "releaseRetention": "Aufbewahrungssperre aufheben"
+      "releaseRetention": "Aufbewahrungssperre aufheben",
+      "reclassifyToFeature": "Zu Funktionsideen verschieben",
+      "reclassifyToFeatureTitle": "Zu Funktionsideen verschieben",
+      "reclassifyToFeatureIntro": "Dies verschiebt den Thread von Fehlerberichten zu Funktionsideen. Stimmen, Kommentare und Beobachter bleiben auf derselben Seite. Offene Fehler werden zu \"Offen\"; triagierte Fehler werden zu \"In Prüfung\".",
+      "reclassifyToFeatureConfirm": "Zu Funktionsideen verschieben",
+      "reclassifyToFeatureCancel": "Abbrechen",
+      "reclassifying": "Wird verschoben…"
     },
     "effort": {
       "low": "Geringer Aufwand",

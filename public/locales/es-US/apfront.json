@@ -1852,7 +1852,13 @@
       "retentionHoldOn": "La retención está activada: este elemento no se archivará automáticamente.",
       "retentionHoldOff": "La retención está desactivada: este elemento se archivará después del período de retención.",
       "holdRetention": "Activar retención",
-      "releaseRetention": "Liberar retención"
+      "releaseRetention": "Liberar retención",
+      "reclassifyToFeature": "Mover a ideas de funciones",
+      "reclassifyToFeatureTitle": "Mover a ideas de funciones",
+      "reclassifyToFeatureIntro": "Esto mueve el hilo de reportes de errores a ideas de funciones. Los votos, comentarios y seguidores permanecen en la misma página. Los errores abiertos pasan a estar Abiertos; los errores clasificados pasan a estar En revisión.",
+      "reclassifyToFeatureConfirm": "Mover a ideas de funciones",
+      "reclassifyToFeatureCancel": "Cancelar",
+      "reclassifying": "Moviendo…"
     },
     "effort": {
       "low": "Poco esfuerzo",

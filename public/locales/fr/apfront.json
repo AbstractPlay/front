@@ -1852,7 +1852,13 @@
       "retentionHoldOn": "La conservation des données est activée — cet élément ne sera pas archivé automatiquement.",
       "retentionHoldOff": "La conservation des données est désactivée — cet élément sera archivé après la période de conservation.",
       "holdRetention": "Maintenir la conservation",
-      "releaseRetention": "Lever la conservation"
+      "releaseRetention": "Lever la conservation",
+      "reclassifyToFeature": "Déplacer vers les idées de fonctionnalités",
+      "reclassifyToFeatureTitle": "Déplacer vers les idées de fonctionnalités",
+      "reclassifyToFeatureIntro": "Cela déplace le fil des rapports de bugs vers les idées de fonctionnalités. Les votes, commentaires et abonnés restent sur la même page. Les bugs ouverts deviennent \"Ouvert\" ; les bugs triés deviennent \"En cours d'examen\".",
+      "reclassifyToFeatureConfirm": "Déplacer vers les idées de fonctionnalités",
+      "reclassifyToFeatureCancel": "Annuler",
+      "reclassifying": "Déplacement…"
     },
     "effort": {
       "low": "Faible effort",

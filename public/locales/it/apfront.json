@@ -1852,7 +1852,13 @@
       "retentionHoldOn": "Blocco conservazione attivo — questo elemento non verrà archiviato automaticamente.",
       "retentionHoldOff": "Blocco conservazione disattivato — questo elemento verrà archiviato dopo il periodo di conservazione.",
       "holdRetention": "Blocca conservazione",
-      "releaseRetention": "Sblocca conservazione"
+      "releaseRetention": "Sblocca conservazione",
+      "reclassifyToFeature": "Sposta in Idee per funzionalità",
+      "reclassifyToFeatureTitle": "Sposta in Idee per funzionalità",
+      "reclassifyToFeatureIntro": "Questo sposta la discussione dalle segnalazioni di bug alle idee per funzionalità. Voti, commenti e osservatori rimangono sulla stessa pagina. I bug aperti diventano Aperti; i bug analizzati diventano In esame.",
+      "reclassifyToFeatureConfirm": "Sposta in Idee per funzionalità",
+      "reclassifyToFeatureCancel": "Annulla",
+      "reclassifying": "Spostamento in corso…"
     },
     "effort": {
       "low": "Basso impegno",
