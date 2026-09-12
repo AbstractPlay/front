@@ -9,6 +9,7 @@ import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
 import FeedbackReviewersBadge from "./FeedbackReviewersBadge";
 import FeedbackTimestamp from "./FeedbackTimestamp";
+import FeedbackPlayerLink from "./FeedbackPlayerLink";
 import { listFeedbackAll } from "../../lib/feedback/feedbackApi";
 import {
   boardKeyForKind,
@@ -260,7 +261,7 @@ function FeedbackBoard({ kind = "bug" }) {
                 </Link>
               )}
               <div className="feedback-muted">
-                {item.authorName}
+                <FeedbackPlayerLink userId={item.authorId} name={item.authorName} />
                 {" · "}
                 {t("feedback.meta.posted")} <FeedbackTimestamp date={item.createdAt} />
                 {" · "}
