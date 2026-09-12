@@ -180,6 +180,29 @@ function Navbar() {
             </Link>
           </div>
           <div className="navbar-item has-dropdown is-hoverable">
+            <a className="navbar-link">{t("EventsNav")}</a>
+            <div className="navbar-dropdown">
+              <div className="navbar-item">
+                <Link
+                  to="/tournaments"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
+                  {t("Tournament.Tournaments")}
+                </Link>
+              </div>
+              <div className="navbar-item">
+                <Link
+                  to="/events"
+                  className="navbar-item"
+                  onClick={() => updateBurgerExpanded(false)}
+                >
+                  {t("Events.Name")}
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="navbar-item has-dropdown is-hoverable">
             <Link
               to="/feedback/bugs"
               className="navbar-link"
@@ -222,29 +245,6 @@ function Navbar() {
                   onClick={() => updateBurgerExpanded(false)}
                 >
                   {t("nav.gameWishlist")}
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="navbar-item has-dropdown is-hoverable">
-            <a className="navbar-link">{t("EventsNav")}</a>
-            <div className="navbar-dropdown">
-              <div className="navbar-item">
-                <Link
-                  to="/tournaments"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("Tournament.Tournaments")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/events"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("Events.Name")}
                 </Link>
               </div>
             </div>
