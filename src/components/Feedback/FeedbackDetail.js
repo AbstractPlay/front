@@ -15,6 +15,7 @@ import WishlistCategoryCallout from "./WishlistCategoryCallout";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import ScreenshotUpload from "./ScreenshotUpload";
 import FeedbackTimestamp from "./FeedbackTimestamp";
+import FeedbackPlayerLink from "./FeedbackPlayerLink";
 import { markFeedbackSeen } from "../../lib/feedback/feedbackLastSeen";
 import {
   commentFeedback,
@@ -294,7 +295,7 @@ function FeedbackDetail() {
             </span>
           </h1>
           <div className="feedback-muted">
-            {summary.authorName}
+            <FeedbackPlayerLink userId={summary.authorId} name={summary.authorName} />
             {" · "}
             {t(`feedback.status.${summary.terminalStatus}`, { defaultValue: summary.terminalStatus })}
             {" · "}
@@ -390,7 +391,7 @@ function FeedbackDetail() {
           <FeedbackReviewersBadge reviewers={post.reviewers} />
         ) : null}
         <span className="feedback-muted">
-          {post.authorName}
+          <FeedbackPlayerLink userId={post.authorId} name={post.authorName} />
           {" · "}
           {t("feedback.meta.posted")} <FeedbackTimestamp date={post.createdAt} />
           {post.updatedAt > post.createdAt + 60_000 ? (
@@ -738,7 +739,7 @@ function FeedbackDetail() {
             className={`feedback-comment${comment.isStaff ? " feedback-comment-staff" : ""}`}
           >
             <div className="feedback-muted">
-              {comment.authorName}
+              <FeedbackPlayerLink userId={comment.authorId} name={comment.authorName} />
               {comment.isStaff ? ` · ${t("feedback.detail.staff")}` : ""}
               {" · "}
               <FeedbackTimestamp date={comment.createdAt} />
