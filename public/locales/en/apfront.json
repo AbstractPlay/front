@@ -1825,6 +1825,8 @@
             "unwatch": "Unwatch",
             "adminStatus": "Status",
             "addComment": "Your comment",
+            "commentBodyHint": "Markdown supported. Text is optional if you attach screenshots.",
+            "commentScreenshots": "Screenshots",
             "notifyMe": "Notify me of updates on this item",
             "postComment": "Post comment",
             "posting": "Posting…",
