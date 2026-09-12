@@ -84,3 +84,38 @@ export function resolveTournamentRouteParams(tabParam, metaGameParam, storedTab)
     redirectTo: tournamentListPath(DEFAULT_TOURNAMENT_TAB, null),
   };
 }
+
+/** True when tournaments are embedded in `/games/:metaGame#tournaments`. */
+export function isEmbeddedTournamentsPath(pathname) {
+  return pathname.startsWith("/games/") && pathname !== "/games";
+}
+
+/**
+ * Resolve tournament tab/filter from either the standalone list route or the
+ * game detail tab (`/games/:metaGame#tournaments`).
+ */
+export function resolveTournamentRouteContext({
+  pathname,
+  tabParam,
+  metaGameParam,
+  storedTab,
+}) {
+  if (isEmbeddedTournamentsPath(pathname)) {
+    const preferredTab = isValidTournamentTab(storedTab)
+      ? storedTab
+      : DEFAULT_TOURNAMENT_TAB;
+    return {
+      tab: preferredTab,
+      metaGame: isValidTournamentMetaGame(metaGameParam) ? metaGameParam : null,
+      redirectTo: null,
+      embedded: true,
+    };
+  }
+
+  const resolved = resolveTournamentRouteParams(
+    tabParam,
+    metaGameParam,
+    storedTab
+  );
+  return { ...resolved, embedded: false };
+}
