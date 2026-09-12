@@ -1877,6 +1877,7 @@
     },
     "reviewers": {
       "badge": "Réviseurs : {{names}}",
+      "badgePrefix": "Relecteurs :",
       "badgeCompact_one": "1 réviseur",
       "badgeCompact_other": "{{count}} réviseurs",
       "add": "Ajouter un réviseur",

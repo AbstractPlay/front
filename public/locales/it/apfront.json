@@ -1877,6 +1877,7 @@
     },
     "reviewers": {
       "badge": "Revisori: {{names}}",
+      "badgePrefix": "Revisori:",
       "badgeCompact_one": "1 revisore",
       "badgeCompact_other": "{{count}} revisori",
       "add": "Aggiungi revisore",
