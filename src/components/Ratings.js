@@ -32,6 +32,7 @@ import GlickoHint from "./shared/GlickoHint";
 import GlickoDisplayNote from "./shared/GlickoDisplayNote";
 
 const allSize = Number.MAX_SAFE_INTEGER;
+const columnHelper = createColumnHelper();
 
 function matchesMetaGame(rec, metaUid) {
   return matchesSummaryGameKey(rec.game, metaUid);
@@ -100,7 +101,19 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
     });
   }, [summary, metaGame, allUsers, t]);
 
-  const columnHelper = createColumnHelper();
+  const activeOpponent = useMemo(() => {
+    if (!activeChallengeModal) {
+      return undefined;
+    }
+    const row = data.find(
+      (rec) => rec.id.split("|")[0] === activeChallengeModal
+    );
+    return {
+      id: activeChallengeModal,
+      name: row?.player ?? activeChallengeModal,
+    };
+  }, [activeChallengeModal, data]);
+
   const columns = useMemo(
     () => [
       columnHelper.accessor("rank", {
@@ -151,39 +164,17 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
         cell: (props) => {
           const userId = props.row.original.id.split("|")[0];
           return globalMe !== null && globalMe.id === userId ? null : (
-            <>
-              <ChallengeEntryModals
-                show={
-                  activeChallengeModal !== "" && activeChallengeModal === userId
-                }
-                handleClose={closeChallengeModal}
-                handleChallenge={handleNewChallenge}
-                fixedMetaGame={metaGame}
-                opponent={{
-                  id: userId,
-                  name: props.row.original.player,
-                }}
-              />
-              <button
-                className="button is-small apButton"
-                onClick={() => openChallengeModal(userId)}
-              >
-                {t("IssueChallengeLabel")}
-              </button>
-            </>
+            <button
+              className="button is-small apButton"
+              onClick={() => openChallengeModal(userId)}
+            >
+              {t("IssueChallengeLabel")}
+            </button>
           );
         },
       }),
     ],
-    [
-      activeChallengeModal,
-      columnHelper,
-      globalMe,
-      handleNewChallenge,
-      metaGame,
-      closeChallengeModal,
-      t,
-    ]
+    [globalMe, t]
   );
 
   const table = useReactTable({
@@ -361,6 +352,15 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
           {tableNavigation}
         </div>
       </article>
+      {globalMe !== null && (
+        <ChallengeEntryModals
+          show={activeChallengeModal !== ""}
+          handleClose={closeChallengeModal}
+          handleChallenge={handleNewChallenge}
+          fixedMetaGame={metaGame}
+          opponent={activeOpponent}
+        />
+      )}
     </>
   );
 }
