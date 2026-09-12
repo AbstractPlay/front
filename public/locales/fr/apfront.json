@@ -1825,6 +1825,8 @@
       "unwatch": "Ne plus suivre",
       "adminStatus": "Statut",
       "addComment": "Votre commentaire",
+      "commentBodyHint": "Markdown pris en charge. Le texte est facultatif si vous joignez des captures d'écran.",
+      "commentScreenshots": "Captures d'écran",
       "notifyMe": "Me notifier des mises à jour sur cet élément",
       "postComment": "Publier le commentaire",
       "posting": "Publication…",

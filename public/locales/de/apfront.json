@@ -1825,6 +1825,8 @@
       "unwatch": "Nicht mehr beobachten",
       "adminStatus": "Status",
       "addComment": "Dein Kommentar",
+      "commentBodyHint": "Markdown wird unterstützt. Text ist optional, wenn Screenshots angehängt werden.",
+      "commentScreenshots": "Screenshots",
       "notifyMe": "Mich bei Aktualisierungen zu diesem Eintrag benachrichtigen",
       "postComment": "Kommentar veröffentlichen",
       "posting": "Wird veröffentlicht…",
