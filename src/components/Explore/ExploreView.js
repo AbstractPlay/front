@@ -571,6 +571,13 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     enableSortingRemoval: false,
   });
 
+  useEffect(() => {
+    const pageCount = table.getPageCount();
+    pageIndexSetter((current) =>
+      pageCount > 0 && current >= pageCount ? pageCount - 1 : current
+    );
+  }, [data, columnFilters, showState, table]);
+
   const tableNavigation = (
     <>
       <div className="level smallerText tableNav">
