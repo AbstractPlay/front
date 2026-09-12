@@ -6,7 +6,8 @@
   padding: 1rem;
 }
 
-.feedback-archived-banner {
+.feedback-archived-banner,
+.feedback-closed-banner {
   background: var(--secondary-color-3-bg);
   color: var(--main-font-color);
   border: 1px solid var(--tag-background-color);
