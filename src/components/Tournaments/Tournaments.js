@@ -26,7 +26,7 @@ import { formatUserDisplayName } from "../Bots/botUtils";
 import {
   TOURNAMENT_TABS,
   DEFAULT_TOURNAMENT_TAB,
-  resolveTournamentRouteParams,
+  resolveTournamentRouteContext,
   tournamentListPath,
   isValidTournamentTab,
 } from "../../lib/tournamentSections";
@@ -70,13 +70,26 @@ function Tournaments(props) {
     "tournaments-starred-only",
     false
   );
-  const route = resolveTournamentRouteParams(
+  const route = resolveTournamentRouteContext({
+    pathname: location.pathname,
     tabParam,
     metaGameParam,
-    storedTab
-  );
+    storedTab,
+  });
   const activeTab = route.tab;
   const filterMeta = route.metaGame;
+  const isEmbedded = route.embedded;
+
+  const goToTournamentList = useCallback(
+    (tabId, metaGame = filterMeta) => {
+      if (isEmbedded) {
+        setStoredTab(tabId);
+        return;
+      }
+      navigate(tournamentListPath(tabId, metaGame));
+    },
+    [filterMeta, isEmbedded, navigate, setStoredTab]
+  );
 
   useEffect(() => {
     if (isValidTournamentTab(activeTab)) {
@@ -1037,37 +1050,39 @@ function Tournaments(props) {
           </div>
         )}
         <div className="tournaments-page-toolbar">
-          <div className="control">
-            <div className="select is-small">
-              <select
-                value={filterMeta ?? ""}
-                onChange={(e) => {
-                  const nextMeta =
-                    e.target.value === "" ? null : e.target.value;
-                  navigate(tournamentListPath(activeTab, nextMeta));
-                }}
-              >
-                <option value="" key="filterMetaBlank">
-                  --Show all--
-                </option>
-                {[...gameinfo.values()]
-                  .filter(isPublicCatalogGame)
-                  .filter((rec) => tournamentPlaySupported(rec.uid))
-                  .sort((a, b) =>
-                    compareStrings(
-                      getGameDisplayName(a.uid),
-                      getGameDisplayName(b.uid),
-                      i18n.language
+          {isEmbedded ? null : (
+            <div className="control">
+              <div className="select is-small">
+                <select
+                  value={filterMeta ?? ""}
+                  onChange={(e) => {
+                    const nextMeta =
+                      e.target.value === "" ? null : e.target.value;
+                    goToTournamentList(activeTab, nextMeta);
+                  }}
+                >
+                  <option value="" key="filterMetaBlank">
+                    --Show all--
+                  </option>
+                  {[...gameinfo.values()]
+                    .filter(isPublicCatalogGame)
+                    .filter((rec) => tournamentPlaySupported(rec.uid))
+                    .sort((a, b) =>
+                      compareStrings(
+                        getGameDisplayName(a.uid),
+                        getGameDisplayName(b.uid),
+                        i18n.language
+                      )
                     )
-                  )
-                  .map((rec) => (
-                    <option value={rec.uid} key={"filterMeta" + rec.uid}>
-                      {rec.name}
-                    </option>
-                  ))}
-              </select>
+                    .map((rec) => (
+                      <option value={rec.uid} key={"filterMeta" + rec.uid}>
+                        {rec.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
             </div>
-          </div>
+          )}
           {showProposeButton ? (
             <div className="control">
               <button
@@ -1090,15 +1105,24 @@ function Tournaments(props) {
                     key={tab.id}
                     className={activeTab === tab.id ? "is-active" : ""}
                   >
-                    <a
-                      href={tournamentListPath(tab.id, filterMeta)}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate(tournamentListPath(tab.id, filterMeta));
-                      }}
-                    >
-                      {t(tab.nameKey)}
-                    </a>
+                    {isEmbedded ? (
+                      <button
+                        type="button"
+                        onClick={() => goToTournamentList(tab.id)}
+                      >
+                        {t(tab.nameKey)}
+                      </button>
+                    ) : (
+                      <a
+                        href={tournamentListPath(tab.id, filterMeta)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          goToTournamentList(tab.id);
+                        }}
+                      >
+                        {t(tab.nameKey)}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
