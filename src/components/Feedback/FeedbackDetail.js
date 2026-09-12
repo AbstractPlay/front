@@ -31,6 +31,7 @@ import {
 } from "../../lib/feedback/feedbackApi";
 import {
   EFFORT_LEVELS,
+  FEEDBACK_COMMENT_ATTACHMENT_MAX_COUNT,
   PRIORITY_LEVELS,
   WISHLIST_ADMIN_CATEGORIES,
   boardKeyForKind,
@@ -54,6 +55,7 @@ function FeedbackDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [commentBody, setCommentBody] = useState("");
+  const [commentAttachmentKeys, setCommentAttachmentKeys] = useState([]);
   const [notifyMe, setNotifyMe] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -127,14 +129,24 @@ function FeedbackDetail() {
 
   async function handleComment(e) {
     e.preventDefault();
+    const body = commentBody.trim();
+    if (!body && commentAttachmentKeys.length === 0) {
+      return;
+    }
     setSubmitting(true);
-    const result = await commentFeedback(id, commentBody.trim(), notifyMe);
+    const result = await commentFeedback(
+      id,
+      body,
+      notifyMe,
+      commentAttachmentKeys.length > 0 ? commentAttachmentKeys : undefined,
+    );
     setSubmitting(false);
     if (!result.ok) {
       setError(result.error);
       return;
     }
     setCommentBody("");
+    setCommentAttachmentKeys([]);
     await load();
   }
 
@@ -722,7 +734,16 @@ function FeedbackDetail() {
               {" · "}
               <FeedbackTimestamp date={comment.createdAt} />
             </div>
-            <FeedbackMarkdown>{comment.body}</FeedbackMarkdown>
+            {comment.body ? <FeedbackMarkdown>{comment.body}</FeedbackMarkdown> : null}
+            {comment.attachmentUrls?.length > 0 ? (
+              <div className="feedback-screenshot-grid feedback-comment-screenshots">
+                {comment.attachmentUrls.map(({ key, url }) => (
+                  <a key={key} href={url} target="_blank" rel="noreferrer">
+                    <img src={url} alt="" className="feedback-screenshot-thumb" />
+                  </a>
+                ))}
+              </div>
+            ) : null}
           </div>
         ))
       )}
@@ -750,16 +771,28 @@ function FeedbackDetail() {
         <form onSubmit={handleComment}>
           <div className="field">
             <label className="label" htmlFor="feedback-comment">{t("feedback.detail.addComment")}</label>
+            {post.kind === "bug" || post.kind === "feature" ? (
+              <p className="feedback-muted feedback-field-hint">{t("feedback.detail.commentBodyHint")}</p>
+            ) : null}
             <textarea
               id="feedback-comment"
               className="textarea"
               rows={3}
               value={commentBody}
               onChange={(e) => setCommentBody(e.target.value)}
-              required
               maxLength={2000}
             />
           </div>
+          {post.kind === "bug" || post.kind === "feature" ? (
+            <div className="field">
+              <label className="label">{t("feedback.detail.commentScreenshots")}</label>
+              <ScreenshotUpload
+                attachmentKeys={commentAttachmentKeys}
+                onChange={setCommentAttachmentKeys}
+                maxFiles={FEEDBACK_COMMENT_ATTACHMENT_MAX_COUNT}
+              />
+            </div>
+          ) : null}
           <label className="checkbox">
             <input
               type="checkbox"
@@ -770,7 +803,14 @@ function FeedbackDetail() {
           </label>
           <div className="feedback-comment-actions">
             {error && <p className="has-text-danger">{error}</p>}
-            <button type="submit" className="button apButton" disabled={submitting}>
+            <button
+              type="submit"
+              className="button apButton"
+              disabled={
+                submitting
+                || (!commentBody.trim() && commentAttachmentKeys.length === 0)
+              }
+            >
               {submitting ? t("feedback.detail.posting") : t("feedback.detail.postComment")}
             </button>
           </div>

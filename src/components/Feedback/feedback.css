@@ -246,6 +246,11 @@
   margin-bottom: 0;
 }
 
+.feedback-comment-screenshots {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
 .feedback-tech-preview {
   font-family: monospace;
   font-size: 0.8rem;
