@@ -1,37 +1,57 @@
 {
-    "404": "404 Tidak ditemukan",
-    "All": "Semua",
-    "boardExport": {
-        "pathVariationUnknown": "Variasi",
-        "pngButton": "Unduh gambar papan (PNG)",
-        "gifButton": "Unduh animasi papan (GIF)",
-        "gifTitle": "Ekspor GIF animasi",
-        "delayLabel": "Jeda antar bingkai (detik)",
-        "startLabel": "Posisi mulai",
-        "endLabel": "Posisi selesai"
-    },
-    "About": "Tentang",
-    "Accept": "Terima",
-    "Active": "Aktif",
-    "Accepted": "Diterima!",
-    "and": "dan",
-    "ChallengeResponseComment": "Berkomentar",
-    "YourMove": "Giliranmu",
-    "a11y": {
-        "hideShow": "Sembunyikan/Tampilkan",
-        "activePlayers": "Nomor setiap pemain yang aktif",
-        "language": "Bahasa",
-        "menu": "menu",
-        "toggleDarkMode": "Tombol mode gelap",
-        "toggleLightMode": "Tombol mode terang"
-    },
-    "about": {
-        "highlightsLink": "Daftar semua game"
-    },
-    "Add": "Tambahkan",
-    "AcceptDraw": "Terima tawaran remis",
-    "AlternativeDisplays": "Opsi display alternatif",
-    "Annotate": "Tampilkan indikator pergerakan terakhir",
-    "AvailableGames": "Game yang tersedia",
-    "BoardSettings": "Ubah pengaturan permainan papan"
+  "404": "404 Tidak ditemukan",
+  "All": "Semua",
+  "boardExport": {
+    "pathVariationUnknown": "Variasi",
+    "pngButton": "Unduh gambar papan (PNG)",
+    "gifButton": "Unduh animasi papan (GIF)",
+    "gifTitle": "Ekspor GIF animasi",
+    "delayLabel": "Jeda antar bingkai (detik)",
+    "startLabel": "Posisi mulai",
+    "endLabel": "Posisi selesai",
+    "export": "Expor GIF",
+    "frameCount_one": "{{count}} bingkai",
+    "frameCount_other": "{{count}} bingkai",
+    "pathInitial": "Posisi awal",
+    "pathMove": "Setelah pergerakan {{number}}: {{move}}",
+    "pathVariation": "Variasi: {{move}}",
+    "pathStep": "Langkah {{number}}",
+    "pngSuccess": "Gambar papan terunduh.",
+    "gifSuccess": "GIF animasi terunduh.",
+    "failed": "Ekspor gagal: {{error}}"
+  },
+  "About": "Tentang",
+  "Accept": "Terima",
+  "Active": "Aktif",
+  "Accepted": "Diterima!",
+  "and": "dan",
+  "ChallengeResponseComment": "Berkomentar",
+  "YourMove": "Giliranmu",
+  "a11y": {
+    "hideShow": "Sembunyikan/Tampilkan",
+    "activePlayers": "Nomor setiap pemain yang aktif",
+    "language": "Bahasa",
+    "menu": "menu",
+    "toggleDarkMode": "Tombol mode gelap",
+    "toggleLightMode": "Tombol mode terang"
+  },
+  "about": {
+    "highlightsLink": "Daftar semua game"
+  },
+  "Add": "Tambahkan",
+  "AcceptDraw": "Terima tawaran remis",
+  "AlternativeDisplays": "Opsi display alternatif",
+  "Annotate": "Tampilkan indikator pergerakan terakhir",
+  "AvailableGames": "Game yang tersedia",
+  "BoardSettings": "Ubah pengaturan permainan papan",
+  "buttons": {
+    "pass": "Lewati",
+    "declare": "Menyatakan",
+    "takebutton": "Tombol ambil",
+    "acceptpie": "Bermain di urutan kedua",
+    "playsecond": "Bermain di urutan kedua",
+    "draw": "Terima tawaran seri",
+    "playfirst": "Bermain di urutan pertama",
+    "swap": "Tukar warna"
+  }
 }
