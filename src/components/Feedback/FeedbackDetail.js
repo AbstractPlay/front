@@ -193,21 +193,33 @@ function FeedbackDetail() {
 
   async function handleSaveAdminFields(e) {
     e.preventDefault();
+    const currentPost = data?.post;
+    if (!currentPost) {
+      return;
+    }
     setSubmitting(true);
     const tags = adminTags
       .split(",")
       .map((tag) => tag.trim())
       .filter(Boolean);
     const adminPars = { id };
-    if (post.kind === "wishlist") {
+    if (currentPost.kind === "wishlist") {
       adminPars.wishlistCategory = adminWishlistCategory;
       adminPars.wishlistCategoryNote = adminWishlistNote.trim() || undefined;
     } else {
       adminPars.effort = adminEffort || undefined;
       adminPars.adminTags = tags.length > 0 ? tags : undefined;
-      if (post.kind === "bug" || post.kind === "feature") {
+      if (currentPost.kind === "bug" || currentPost.kind === "feature") {
         adminPars.priority = adminPriority || "";
-        adminPars.reviewerIds = adminReviewerIds;
+        const loadedReviewerIds = Array.isArray(currentPost.reviewers)
+          ? currentPost.reviewers.map((reviewer) => reviewer.id).sort()
+          : [];
+        const nextReviewerIds = [...adminReviewerIds].sort();
+        const reviewersChanged = loadedReviewerIds.length !== nextReviewerIds.length
+          || loadedReviewerIds.some((reviewerId, index) => reviewerId !== nextReviewerIds[index]);
+        if (reviewersChanged) {
+          adminPars.reviewerIds = adminReviewerIds;
+        }
       }
     }
     const result = await setFeedbackAdminFields(adminPars);
