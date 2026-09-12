@@ -857,7 +857,7 @@
   "Notes": "Notoj: ",
   "NotesHelp": "Notoj pri ĉi tiu defio (maksimume 128 signoj).",
   "NotHardTime": "Neniu deviga tempolimo",
-  "NotificationSettings": "Agordoj de sciigoj (tuj konservataj)",
+  "NotificationSettings": "Sciigoj",
   "CommunicationLanguage": "Lingvo de retpoŝtoj kaj sciigoj",
   "CommunicationLanguageHelp": "Elektu la lingvon de retpoŝtoj kaj puŝsciigoj de Abstract Play. Tio ne ŝanĝas la lingvon de la retejo — por tio uzu la lingvomenuon en la paĝopiedo.",
   "NotifyLabel-yourturn": "Via vico (dufoje tage)",
@@ -1071,7 +1071,7 @@
     "tournament": "Turniro",
     "trueskill": "TrueSkill",
     "variants": "Variaĵoj",
-    "weightedAverage": "Pezita mezumo",
+    "weightedAverage": "Elo",
     "winLossDraw": "Venko/malvenko/remizo",
     "winRate": "Proporcio de venkoj",
     "winner": "Venkinto",
@@ -1243,7 +1243,7 @@
   "fatalError": {
     "title": "Io misfunkciis",
     "chunkMessage": "Nova versio de la retejo eble disponeblas. Bonvolu reŝargi la paĝon.",
-    "genericMessage": "Bonvolu reŝargi la paĝon. Se la problemo daŭras, bonvolu <1>raporti ĝin en nia Discord-servilo</1>.",
+    "genericMessage": "Bonvolu reŝargi la paĝon. Se la problemo daŭras, bonvolu <1>raporti ĝin en nia Discord-servilo</1> aŭ uzi la suban butonon \"Raporti cimon\".",
     "discordLink": "raporti ĝin en nia Discord-servilo"
   },
   "standingChallenge": {
@@ -1262,7 +1262,7 @@
     "highlightsLink": "plena listo de ludoj"
   },
   "notFound": {
-    "body": "Neniu paĝo troviĝis ĉe <1>{{path}}</1>. Bonvolu uzi la navigbreton por reprovi. Se la problemo daŭras, bonvolu <2>afiŝi cimraporton en nia Discord-servilo</2>.",
+    "body": "Neniu paĝo troviĝis ĉe <1>{{path}}</1>. Bonvolu uzi la navigbreton por reprovi. Vi ankaŭ povas <2>raporti cimon en la programo</2> aŭ <3>afiŝi en nia Discord-servilo</3>.",
     "reportLink": "afiŝi cimraporton en nia Discord-servilo"
   },
   "footer": {
@@ -1274,7 +1274,8 @@
     "legalLink": "Uzkondiĉoj kaj privateca politiko",
     "betaBanner": "La retejo estas nun beta-testata!",
     "feedback": "Ni tre ĝojas pri la kernaj funkcioj, sed ni ŝatus konkretajn rimarkojn de uzantoj pri kiel plibonigi ilin.",
-    "feedbackJoin": "Bonvolu aliĝi al ni en <1>Discord</1> kaj sciigi nin, se vi renkontas problemon aŭ havas ideon."
+    "feedbackJoin": "Bonvolu aliĝi al ni en <1>Discord</1> kaj sciigi nin, se vi renkontas problemon aŭ havas ideon.",
+    "feedbackCta": "Foliumu <1>cimraportojn</1> kaj <2>ideojn pri funkcioj</2>, <3>raportu cimon</3>, aŭ babilu kun ni en <4>Discord</4>."
   },
   "explore": {
     "intro": "Ĉi tiu paĝo ebligas esplori diversajn manierojn ordigi la liston de ludoj. Elektu la deziratan vidon malsupre. Klako sur la nomo de ludo kondukos vin al ĝia ĉefpaĝo kun pliaj informoj.",
@@ -1368,9 +1369,9 @@
       }
     },
     "explanations": {
-      "highestSingle": "Listo de ĉiuj registritaj pritaksoj. La sistemo ignoras ludojn eksplicite markitajn kiel nepritaksitajn, kaj ludojn, kiuj finiĝas antaŭ ol tri movoj estas faritaj. La Elo-pritakso komenciĝas je 1200 kun konstanta *K* de 30. La Glicko-pritakso uzas la algoritmon de versio 2, la defaŭltajn komencajn valorojn (komenca pritakso 1500), kaj pritaksan periodon de sesdek tagoj (ekde la unua tago, kiam specifa ludo estis registrita). Glicko-pritaksoj estas prezentataj kiel 95%-a fidintervalo. Ju pli mallarĝa estas la intervalo, des pli certa estas la sistemo pri la pritakso. Fine, TrueSkill estas pritaksa sistemo uzata de Microsoft en diversaj retaj ludoj. Mi uzis la defaŭltajn agordojn (pritaksa intervalo 0–50, komenca valoro 25).",
-      "avgRatings": "La meza pritakso estas simple la aritmetika mezumo de ĉiuj Elo-pritaksoj registritaj por tiu ludanto. La pezita mezumo estas pezita laŭ la nombro de luditaj ludoj. Ekzemple, se vi havus pritakson 1300 en ludo, kiun vi ludis 10 fojojn, kaj 1200 en ludo, kiun vi ludis nur dufoje, via meza pritakso estus 1250, sed via pezita mezumo estus 1283.",
-      "topPlayers": "Ĉi tiu tabelo listigas ĉiun disponeblan kombinon de ludo kaj variaĵoj, kune kun la ludanto, kiu havas la plej altan Elo-pritakson por tiu kombino.",
+      "highestSingle": "Listo de ĉiuj registritaj pritaksoj. La sistemo ignoras ludojn eksplicite markitajn kiel nepritaksitajn, kaj ĝi ignoras ludojn, kiuj finiĝas antaŭ ol tri movoj estas faritaj. Rangigoj uzas konservativan (95%-fidan) Glicko-2-pritakson (pritakso − 2×RD), kaj montras kaj Glicko kaj la malnovan Elo-pritakson. Glicko komenciĝas je 1200 kun RD 350; Elo komenciĝas je 1200 kun konstanta *K* de 30. TrueSkill uzas la defaŭltajn agordojn de Microsoft (pritaksa intervalo 0–50, komenca valoro 25).",
+      "avgRatings": "Ĉi tiuj kolumnoj estas pezitaj mezumoj de viaj Glicko- kaj Elo-pritaksoj en la tuta retejo.",
+      "topPlayers": "Ĉi tiu tabelo listigas ĉiun disponeblan kombinon de ludo kaj variaĵoj, kune kun la plej alte pritaksita ludanto por tiu kombino, rangigita laŭ la konservativa Glicko-2-pritakso (pritakso − 2×RD). Elo montriĝas por referenco.",
       "numPlays": "Ĉi tiu tabelo listigas ĉiun ludon, kiom da fojoj kaj de kiom da malsamaj ludantoj ĝi estis ludita, kaj la `h-index` de la ludo. La h-indekso de ludo estas la nombro de ludantoj, kiuj ludis ĝin almenaŭ tiom da fojoj (do h-indekso 5 signifas, ke 5 malsamaj ludantoj ludis ĝin almenaŭ 5 fojojn). Ĝi ankaŭ donas histogramon de la finitaj ludoj. La antaŭrigardo montras la lastajn 10 semajnojn, kun la plej nova semajno dekstre. Klaku la antaŭrigardon por vidi la tutan historion de finitaj ludoj en sep-tagaj intervaloj, kun la plej nova semajno dekstre.",
       "playerStats": "Ĉi tio montras ĉiun registritan ludanton kune kun la tuta nombro de luditaj ludoj, la nombro de malsamaj ludoj kaj la nombro de malsamaj kontraŭuloj. Ĝi ankaŭ donas `h-index`, kiu estas la nombro de ludoj, kiujn vi ludis almenaŭ tiom da fojoj (ekzemple, se vi ludis tri malsamajn ludojn nur po unu fojon, via indekso estas 1; kiam vi ludos ĉiun el tiuj tri ludoj almenaŭ tri fojojn, la indekso kreskos ĝis 3). Estas ankaŭ `h-index` por la kontraŭuloj, kiujn vi renkontis. Aktiveca histogramo montras la nombron de ludoj finitaj ĉiusemajne, kun la plej nova semajno dekstre. La antaŭrigardo montras la dek plej novajn semajnojn. Klaku ĝin por vidi la tutan historion.",
       "gameStats": "Ĉi tiu tabelo montras ĉiun kombinon de ludo kaj variaĵoj kune kun la nombro de registritaj ludoj, la meza longo de la ludo (nombro de movoj), la mediana longo, la proporcio de venkoj de la unua ludanto kaj la proporcio de remizoj (nur duludantaj ludoj kun pli ol du movoj). **La statistikoj pri venkoj de la unua ludanto kaj remizoj devas esti traktataj singarde!** La provaĵo estas malgranda kaj biasita. Multaj konfuzaj faktoroj povus klarigi ekstreman proporcion. Notu, ke la proporcio de venkoj de la unua ludanto tute ignoras ĉu la interŝanĝa regulo estis uzita. Kalkulante tiun proporcion, remizo valoras kiel duona venko de la unua ludanto.",
@@ -1512,7 +1513,7 @@
       "historicalData": "Historiaj datumoj"
     },
     "wikiLink": "Vikio de Abstract Play",
-    "historicalIntro": "La malsupraj statistikoj venas el la historia registro, kiu estas aktualigata nur ĉiusemajne. Historiaj pritaksoj povas iom diferenci de la statikaj pritaksoj troveblaj aliloke en la retejo. Vidu la paĝon Statistikoj por pliaj detaloj.",
+    "historicalIntro": "La malsupraj statistikoj estas prenitaj el la ĉiutaga resumo kaj aktualigataj je 06:00 UTC.",
     "playCounts": "Nombroj de ludoj",
     "gameStatistics": "Ludstatistikoj",
     "ratings": "Pritaksoj",
@@ -1549,7 +1550,11 @@
         "gameEnd_draw_vsOpponent": "Vi kunremisis vian ludon de <gameLink>{{metaGame}}</gameLink> kontraŭ <opponentLink>{{opponentName}}</opponentLink>",
         "gameEnd_lose_vsOpponent": "Vi malgajnis vian ludon de <gameLink>{{metaGame}}</gameLink> kontraŭ <opponentLink>{{opponentName}}</opponentLink>",
         "gameEnd_scores": "La finaj poentaroj estis jenaj: {{scores}}.",
-        "gameEnd_win_vsOpponent": "Vi gajnis vian ludon de <gameLink>{{metaGame}}</gameLink> kontraŭ <opponentLink>{{opponentName}}</opponentLink>"
+        "gameEnd_win_vsOpponent": "Vi gajnis vian ludon de <gameLink>{{metaGame}}</gameLink> kontraŭ <opponentLink>{{opponentName}}</opponentLink>",
+        "feedbackDeleted": "Ero forigita el la dezirlisto: <wishlistLink>{{title}}</wishlistLink>. Kialo: {{reason}}",
+        "feedbackReply": "Nova respondo pri <feedbackLink>{{title}}</feedbackLink>{{preview}}",
+        "feedbackReviewRequested": "Vi estis aldonita kiel kontrolanto de <feedbackLink>{{title}}</feedbackLink>",
+        "feedbackStatus": "Ŝanĝo de stato pri <feedbackLink>{{title}}</feedbackLink>: {{status}}"
       }
     }
   },
@@ -1955,7 +1960,14 @@
     }
   },
   "challenges": {
-    "loading": "Ŝargas defiojn…"
+    "loading": "Ŝargas defiojn…",
+    "filters": {
+      "hardTimeOnly": "Nur ludoj kun deviga tempolimo",
+      "ratedOnly": "Nur pritaksitaj ludoj",
+      "softTimeOnly": "Nur ludoj sen deviga tempolimo",
+      "starredOnly": "Nur stelumitaj ludoj",
+      "unratedOnly": "Nur nepritaksitaj ludoj"
+    }
   },
   "common": {
     "loading": "Ŝargas…"
@@ -1976,7 +1988,14 @@
     "myProfile": "Mia profilo",
     "openChallenges": "Malfermitaj defioj",
     "recentGames": "Lastatempaj ludoj",
-    "visibilityVisible": "Videbla al aliaj"
+    "visibilityVisible": "Videbla al aliaj",
+    "bugBoard": "Cimraportoj",
+    "community": "Komunumo",
+    "featureIdeas": "Ideoj pri funkcioj",
+    "feedbackHistory": "Historio de retrosciigoj",
+    "gameWishlist": "Dezirlisto de ludoj",
+    "myFeedback": "Miaj retrosciigoj",
+    "reportBug": "Raporti cimon"
   },
   "news": {
     "earlier": "Pli frue",
@@ -2027,5 +2046,254 @@
     "daysLabel": "Tempintervalo",
     "daysOption": "La lastaj {{count}} tagoj",
     "loading": "Ŝargas lastatempajn ludojn…"
+  },
+  "InAppNotifyLabel-feedbackDeleted": "Forigitaj eroj de la dezirlisto",
+  "InAppNotifyLabel-feedbackReply": "Respondoj al retrosciigoj",
+  "InAppNotifyLabel-feedbackReviewRequested": "Petoj pri kontrolado de retrosciigoj",
+  "InAppNotifyLabel-feedbackStatus": "Ŝanĝoj de retrosciiga stato",
+  "feedback": {
+    "admin": {
+      "allEfforts": "Ĉiuj laborkvantoj",
+      "allPriorities": "Ĉiuj prioritatoj",
+      "allStatuses": "Ĉiuj statoj",
+      "effort": "Laborkvanto",
+      "empty": "Neniuj eroj kongruas kun ĉi tiuj filtriloj.",
+      "intro": "Klasifiku kaj mastrumu senditajn retrosciigojn.",
+      "kind": "Tipo",
+      "needsResponse": "Bezonas respondon",
+      "noPriority": "Ne agordita",
+      "priority": "Prioritato",
+      "saveFields": "Konservi administrajn kampojn",
+      "saving": "Konservante…",
+      "sortBy": "Ordigi laŭ",
+      "sortDefault": "Defaŭlta",
+      "sortPriority": "Prioritato",
+      "sortStatus": "Stato",
+      "status": "Stato",
+      "title": "Administrado de retrosciigoj"
+    },
+    "auth": {
+      "signInRequired": "Vi devas esti ensalutinta por partopreni en la retrosciiga sistemo.",
+      "signInToCreate": "Vi devas esti ensalutinta por raporti cimon, sugesti funkcion aŭ aldoni ludon al la dezirlisto.",
+      "signInToCreateShort": "Ensalutu por sendi retrosciigon.",
+      "signInToInteract": "Ensalutu por voĉdoni, observi aŭ komenti pri ĉi tiu ero.",
+      "signInToViewMine": "Ensalutu por vidi viajn senditajn retrosciigojn."
+    },
+    "board": {
+      "filterAll": "Ĉiuj ({{count}})",
+      "filterLabel": "Filtri la liston",
+      "sortBy": "Ordigi laŭ",
+      "sortRecent": "Dato de afiŝo (plej novaj unue)",
+      "sortVotes": "Voĉoj (plej multaj unue)"
+    },
+    "bugs": {
+      "backToBoard": "Reiri al cimraportoj",
+      "empty": "Ankoraŭ neniuj malfermitaj cimraportoj.",
+      "intro": "Raportu problemojn, kiujn vi trovas en Abstract Play. Bonvolu aldoni ekrankopion kiam vi povas — ĝi helpas nin reprodukti la problemon.",
+      "report": "Raporti cimon",
+      "title": "Cimraportoj"
+    },
+    "detail": {
+      "addComment": "Via komento",
+      "adminEffort": "Laborkvanto",
+      "adminPriority": "Prioritato",
+      "adminReviewers": "Kontrolantoj",
+      "adminStatus": "Stato",
+      "adminTags": "Administraj etikedoj (apartigitaj per komoj)",
+      "adminWishlistCategory": "Kategorio",
+      "adminWishlistNote": "Noto pri kategorio (nedeviga)",
+      "archivedBanner": "Ĉi tiu ero estas arkivita. La diskutfadeno estas nurlegebla ĝis la aktualaj datumoj estos forigitaj.",
+      "archivedPurgedBanner": "Ĉi tiu ero estas arkivita. La plena diskutfadeno ne plu haveblas en la aktuala retrosciiga sistemo.",
+      "cancelEdit": "Nuligi",
+      "closedBanner": "Ĉi tiu ero estas fermita sed ankoraŭ ne arkivita. Vi ankoraŭ povas komenti ĉi tie.",
+      "commentBodyHint": "Markdown estas subtenata. Teksto estas nedeviga, se vi aldonas ekrankopiojn.",
+      "commentScreenshots": "Ekrankopioj",
+      "comments": "Diskuto",
+      "coverReplaceHint": "Alŝutu aŭ algluu novan bildon por anstataŭigi la nunan kovrilbildon.",
+      "deleteWishlist": "Forigi eron",
+      "deleteWishlistCancel": "Nuligi",
+      "deleteWishlistConfirm": "Forigi eron",
+      "deleteWishlistIntro": "Ĉi tio definitive forigas la eron el la dezirlisto. Observantoj estos sciigitaj pri via kialo.",
+      "deleteWishlistReason": "Kialo de forigo",
+      "deleteWishlistTitle": "Forigi eron de la dezirlisto",
+      "deleting": "Forigante…",
+      "edit": "Redakti",
+      "holdRetention": "Bloki aŭtomatan arkivadon",
+      "noComments": "Ankoraŭ neniuj komentoj.",
+      "notFound": "Ĉi tiu retrosciiga ero ne troviĝis.",
+      "notifyMe": "Sciigi min pri ĝisdatigoj de ĉi tiu ero",
+      "postComment": "Afiŝi komenton",
+      "posting": "Afiŝante…",
+      "reclassifyToFeature": "Movi al ideoj pri funkcioj",
+      "reclassifyToFeatureCancel": "Nuligi",
+      "reclassifyToFeatureConfirm": "Movi al ideoj pri funkcioj",
+      "reclassifyToFeatureIntro": "Ĉi tio movas la diskuton de cimraportoj al ideoj pri funkcioj. Voĉoj, komentoj kaj observantoj restas sur la sama paĝo. Malfermitaj cimoj fariĝas \"Malfermita\"; klasifikitaj cimoj fariĝas \"Kontrolata\"; observataj cimoj fariĝas \"Planita\".",
+      "reclassifyToFeatureTitle": "Movi al ideoj pri funkcioj",
+      "reclassifying": "Movante…",
+      "releaseRetention": "Malbloki aŭtomatan arkivadon",
+      "reopenHint": "Ŝanĝu la staton al iu alia ol \"Fermita\" por remalfermi ĉi tiun eron en la listo.",
+      "retentionHoldOff": "Aŭtomata arkivado ne estas blokita — ĉi tiu ero estos arkivita post la konservoperiodo.",
+      "retentionHoldOn": "Aŭtomata arkivado estas blokita — ĉi tiu ero ne estos aŭtomate arkivita.",
+      "saveAdminFields": "Konservi administrajn kampojn",
+      "saveEdit": "Konservi ŝanĝojn",
+      "savingEdit": "Konservante…",
+      "staff": "Personaro",
+      "unvote": "Retiri voĉon",
+      "unwatch": "Ĉesi observi",
+      "vote": "Voĉdoni",
+      "watch": "Observi"
+    },
+    "effort": {
+      "high": "Granda laborkvanto",
+      "low": "Malgranda laborkvanto",
+      "medium": "Meza laborkvanto",
+      "unknown": "Nekonata laborkvanto"
+    },
+    "history": {
+      "closed": "Fermita",
+      "empty": {
+        "bugs": "Ankoraŭ neniuj arkivitaj cimraportoj.",
+        "games": "Ankoraŭ neniuj arkivitaj ludoj el la dezirlisto.",
+        "ideas": "Ankoraŭ neniuj arkivitaj ideoj pri funkcioj."
+      },
+      "implementedAs": "Nun en Abstract Play: {{name}}",
+      "intro": "Fermitaj cimraportoj, realigitaj ideoj pri funkcioj kaj ludoj, kiuj fariĝis disponeblaj en Abstract Play.",
+      "tabLabel": "Kategorio de historio",
+      "tabs": {
+        "bugs": "Cimoj",
+        "games": "Ludoj",
+        "ideas": "Funkcioj"
+      },
+      "title": "Historio de retrosciigoj",
+      "viewHistory": "Vidi la historion de retrosciigoj"
+    },
+    "ideas": {
+      "backToBoard": "Reiri al ideoj pri funkcioj",
+      "empty": "Ankoraŭ neniuj ideoj pri funkcioj.",
+      "intro": "Sugestu plibonigojn kaj novajn funkciojn por Abstract Play. Voĉdonu por la ideoj, kiujn vi volas vidi.",
+      "report": "Sugesti funkcion",
+      "title": "Ideoj pri funkcioj"
+    },
+    "meta": {
+      "comments_one": "{{count}} komento",
+      "comments_other": "{{count}} komentoj",
+      "posted": "Afiŝita",
+      "updated": "Aktualigita",
+      "votes_one": "{{count}} voĉo",
+      "votes_other": "{{count}} voĉoj"
+    },
+    "mine": {
+      "all": "Ĉiuj",
+      "bugs": "Cimoj",
+      "empty": "Vi ankoraŭ sendis neniun retrosciigon.",
+      "ideas": "Funkcioj",
+      "intro": "Cimraportoj kaj ideoj pri funkcioj, kiujn vi sendis.",
+      "title": "Miaj retrosciigoj",
+      "updated": "Aktualigita"
+    },
+    "new": {
+      "attachments": "Aldonaĵoj",
+      "bodyLabel": "Priskribo",
+      "bodyMarkdownHint": "Markdown estas subtenata (rubrikoj, listoj, ligiloj, kodblokoj).",
+      "coverImage": "Kovrilbildo",
+      "coverImageHint": "Nedeviga. Algluu aŭ alŝutu unu bildon de la ludskatolo. Se vi algluas plurajn bildojn, nur la lasta estos konservita.",
+      "gameTitleLabel": "Nomo de ludo",
+      "gameUrlLabel": "URL de la ludo",
+      "notesLabel": "Notoj",
+      "screenshotEncouraged": "Ekrankopio multe faciligas ripari cimojn. Bonvolu aldoni unu, se vi povas.",
+      "screenshots": "Ekrankopioj",
+      "submit": "Sendi cimraporton",
+      "submitFeature": "Sendi ideon pri funkcio",
+      "submitWishlist": "Aldoni al la dezirlisto",
+      "submitWithoutScreenshot": "Sendi cimraporton sen ekrankopio",
+      "submitting": "Sendante…",
+      "techDetails": "Teknikaj detaloj (antaŭrigardo)",
+      "title": "Raporti cimon",
+      "titleFeature": "Sugesti funkcion",
+      "titleLabel": "Titolo",
+      "titleWishlist": "Sugesti ludon"
+    },
+    "priority": {
+      "low": "Malalta",
+      "normal": "Normala",
+      "urgent": "Urĝa"
+    },
+    "reviewers": {
+      "add": "Aldoni kontrolanton",
+      "badge": "Kontrolantoj: {{names}}",
+      "badgeCompact_one": "1 kontrolanto",
+      "badgeCompact_other": "{{count}} kontrolantoj",
+      "badgePrefix": "Kontrolantoj:",
+      "divider": "────────────",
+      "empty": "Neniu kontrolanto asignita.",
+      "hint": "Ĝis {{max}} kontrolantoj. Aldonitaj uzantoj ricevas unufojan sciigon; uzu \"Observi\" por ricevi daŭrajn ĝisdatigojn.",
+      "remove": "Forigi {{name}}"
+    },
+    "status": {
+      "available": "Disponebla",
+      "closed": "Fermita",
+      "declined": "Rifuzita",
+      "evaluating": "Taksata",
+      "in_development": "Disvolvata",
+      "in_progress": "Prilaborata",
+      "monitoring": "Observata",
+      "open": "Malfermita",
+      "planned": "Planita",
+      "requested": "Petita",
+      "resolved": "Solvita",
+      "shipped": "Realigita",
+      "triaged": "Klasifikita",
+      "triaged_low": "Klasifikita (malnova)",
+      "triaged_normal": "Klasifikita (malnova)",
+      "triaged_urgent": "Klasifikita (malnova)",
+      "under_review": "Kontrolata"
+    },
+    "upload": {
+      "add": "Aldoni ekrankopion",
+      "addCover": "Aldoni kovrilbildon",
+      "count_one": "{{count}} ekrankopio aldonita",
+      "count_other": "{{count}} ekrankopioj aldonitaj",
+      "coverCount_one": "{{count}} kovrilbildo aldonita",
+      "coverCount_other": "{{count}} kovrilbildoj aldonitaj",
+      "failed": "Alŝuto malsukcesis. Bonvolu reprovi.",
+      "invalidType": "Nur PNG-, JPEG- kaj WebP-bildoj estas permesitaj.",
+      "paste": "Alglui ekrankopion",
+      "pasteCover": "Alglui kovrilbildon",
+      "pasteCoverHint": "Klaku ĉi tie kaj premu Ctrl+V (aŭ Cmd+V en Mac). Se via tondujo enhavas plurajn bildojn, nur la lasta estos konservita.",
+      "pasteEmpty": "Neniu bildo troviĝis en la tondujo.",
+      "pasteHint": "Klaku ĉi tie kaj premu Ctrl+V (aŭ Cmd+V en Mac). Vi ankaŭ povas alglui ie ajn sur ĉi tiu paĝo krom en la kampoj pri titolo kaj priskribo.",
+      "tooLarge": "Ĉiu bildo devas esti ne pli granda ol 5 MB.",
+      "tooMany": "Vi povas aldoni maksimume {{max}} ekrankopiojn.",
+      "uploading": "Alŝutante…"
+    },
+    "wishlist": {
+      "backToBoard": "Reiri al la dezirlisto de ludoj",
+      "category": {
+        "declined": "Rifuzita",
+        "feasible": "Realigebla",
+        "low_priority": "Malalta prioritato",
+        "none": "Nekategoriigita",
+        "not_feasible": "Nerealigebla",
+        "permissions_required": "Permeso necesas"
+      },
+      "categoryHint": {
+        "declined": "Ni ne planas aldoni ĉi tiun ludon. Ĝi restas en la listo, por ke aliaj ne sendu duoblajn petojn.",
+        "permissions_required": "Ĉi tiu ludo estas komerce havebla. Abstract Play ne povas aldoni ĝin sen permeso de la posedanto de la rajtoj. Vi tamen povas voĉdoni por montri intereson."
+      },
+      "discuss": "Diskuti",
+      "empty": "Ankoraŭ neniuj eroj en la dezirlisto.",
+      "filterAll": "Ĉiuj ({{count}})",
+      "filterLabel": "Filtri la dezirliston",
+      "intro": "Voĉdonu por ludoj, kiujn vi volus vidi en Abstract Play. Sugestu ludon kun ligilo al ĝiaj reguloj aŭ paĝo ĉe BoardGameGeek.",
+      "legacyVotesNote": "inkluzivas voĉojn de la antaŭa BGG-listo",
+      "legend": "Iuj ludoj estas provizore flankenmetitaj dum ni serĉas eldonrajtojn, aŭ markitaj kiel rifuzitaj por ke ni ne ricevu ripetajn petojn. Ili restas en la listo, por ke vi povu vidi la intereson de la komunumo.",
+      "report": "Sugesti ludon",
+      "sortBy": "Ordigi laŭ",
+      "sortName": "Nomo (A–Z)",
+      "sortRecent": "Dato de aldono (plej novaj unue)",
+      "sortVotes": "Voĉoj (plej multaj unue)",
+      "title": "Dezirlisto de ludoj",
+      "viewExisting": "Vidi la ekzistantan eron de la dezirlisto"
+    }
   }
 }

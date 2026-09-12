@@ -4992,8 +4992,8 @@
     "out": "Personalizza tema"
   },
   "nav.explore": {
-    "src": "Explore",
-    "out": "Esplora"
+    "src": "Lists",
+    "out": "Liste"
   },
   "nav.feedbackHistory": {
     "src": "Feedback history",
