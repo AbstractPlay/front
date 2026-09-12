@@ -1852,7 +1852,13 @@
             "retentionHoldOn": "Retention hold is on — this item will not be archived automatically.",
             "retentionHoldOff": "Retention hold is off — this item will be archived after the retention period.",
             "holdRetention": "Hold retention",
-            "releaseRetention": "Release retention"
+            "releaseRetention": "Release retention",
+            "reclassifyToFeature": "Move to feature ideas",
+            "reclassifyToFeatureTitle": "Move to feature ideas",
+            "reclassifyToFeatureIntro": "This moves the thread from bug reports to feature ideas. Votes, comments, and watchers stay on the same page. Open bugs become Open; triaged bugs become Under review.",
+            "reclassifyToFeatureConfirm": "Move to feature ideas",
+            "reclassifyToFeatureCancel": "Cancel",
+            "reclassifying": "Moving…"
         },
         "effort": {
             "low": "Low effort",

@@ -338,6 +338,10 @@
   color: var(--secondary-color-1);
 }
 
+.feedback-reclassify-action {
+  margin: 0.5rem 0 1rem;
+}
+
 .feedback-priority-fieldset {
   border: none;
   margin: 0;
