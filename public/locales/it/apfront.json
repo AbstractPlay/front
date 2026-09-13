@@ -556,7 +556,13 @@
       "hardTimeOnly": "Solo tempo rigido",
       "softTimeOnly": "Solo tempo flessibile",
       "ratedOnly": "Solo classificate",
-      "unratedOnly": "Solo non classificate"
+      "unratedOnly": "Solo non classificate",
+      "matchLegend": "Competitività della partita",
+      "matchLabel": "Partita:",
+      "matchAll": "Tutte le partite",
+      "matchGood": "Partita equilibrata (35–65%)",
+      "matchIdeal": "Partita ideale (45–55%)",
+      "matchHint": "Per le sfide classificate, probabilità di vittoria attesa contro lo sfidante secondo Glicko-2 (per gioco e pool di varianti). I giocatori nuovi in quel pool usano il punteggio predefinito (1200, RD 350)."
     }
   },
   "recentGames": {
@@ -576,6 +582,13 @@
   "ChooseMove": "Scegli la mossa",
   "ChooseNoExplore": "Disabilitare l'esplorazione?",
   "ChooseOpponent": "Scegli un avversario",
+  "newChallenge": {
+    "opponentActivityHelp": "Limita l'elenco degli avversari in base all'attività recente sul sito.",
+    "opponentActivityAll": "Tutti gli avversari",
+    "opponentActivity7Days": "Attivi negli ultimi 7 giorni",
+    "opponentActivity30Days": "Attivi negli ultimi 30 giorni",
+    "matchFilterHelp": "Limita gli avversari in base alla probabilità di vittoria prevista per questo gioco e per le sue varianti (Glicko-2), indipendentemente dal fatto che la sfida sia classificata o meno."
+  },
   "ChooseRated": "Con punteggio?",
   "Claim": "Reclama",
   "ClaimTimeOut": "Reclama vittoria per tempo scaduto",
@@ -1072,6 +1085,7 @@
     "goal": "Obiettivo",
     "hard": "Difficile?",
     "hardClock": "Tempo rigido?",
+    "matchPercent": "% Partita",
     "histogram": "Istogramma",
     "hIndex": "Indice h",
     "hIndexOpponents": "Indice h (avv.)",

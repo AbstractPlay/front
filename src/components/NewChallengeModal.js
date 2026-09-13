@@ -4,6 +4,7 @@ import React, {
   Fragment,
   useCallback,
   useRef,
+  useMemo,
 } from "react";
 import { useTranslation } from "react-i18next";
 import { compareStrings } from "../lib/compareStrings";
@@ -22,6 +23,12 @@ import {
 } from "../lib/soloPlay";
 import { validateChallengeVariantSelection } from "../lib/variantChallengeValidation";
 import { useVariantSelectionValidity } from "../hooks/useVariantSelectionValidity";
+import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
+import {
+  buildHighestGlickoMap,
+  matchWinRateForChallenge,
+  passesMatchCompetitivenessFilter,
+} from "../lib/glickoMatchOdds";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
@@ -56,7 +63,11 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     false
   );
   const [onlySee, onlySeeSetter] = useStorageState(
-    "new-challenge-onlySee",
+    "challenges-filter-opponent-activity",
+    "all"
+  );
+  const [matchFilter, matchFilterSetter] = useStorageState(
+    "challenges-filter-match",
     "all"
   );
   const [minSeen, minSeenSetter] = useState(0);
@@ -74,6 +85,10 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const [comment, commentSetter] = useState("");
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
+  const summary = useStore((state) => state.summary);
+  const summaryRatingsLoadState = useStore(
+    (state) => state.summaryRatingsLoadState
+  );
   const [users, usersSetter] = useState([]);
   const [forceUnrated, setForceUnrated] = useState(false);
   const errorRef = useRef(null);
@@ -102,6 +117,56 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     }
     setForceUnrated(forced);
   }, [metaGame, selectedVariants]);
+
+  const directChallengeOpponentPick =
+    show &&
+    globalMe?.id &&
+    !standing &&
+    opponent === undefined &&
+    playerCount !== -1;
+  useEnsureSummaryTier(directChallengeOpponentPick ? "ratings" : null);
+  const ratingsReady = summaryRatingsLoadState === "ready";
+  const highestGlickoMap = useMemo(
+    () => buildHighestGlickoMap(summary?.ratings?.highest),
+    [summary?.ratings?.highest]
+  );
+  const matchFiltersDisabled = summaryRatingsLoadState === "pending";
+
+  const opponentMatchesCompetitiveness = useCallback(
+    (userId) => {
+      if (matchFilter === "all") {
+        return true;
+      }
+      if (metaGame === null || !globalMe?.id) {
+        return true;
+      }
+      if (!ratingsReady) {
+        return true;
+      }
+      const p = matchWinRateForChallenge({
+        highestMap: highestGlickoMap,
+        userId: globalMe.id,
+        challengerId: userId,
+        metaUid: metaGame,
+        variantUids: selectedVariants,
+        numPlayers: playerCount > 0 ? playerCount : 2,
+        rated: true,
+      });
+      if (p == null) {
+        return false;
+      }
+      return passesMatchCompetitivenessFilter(p, matchFilter);
+    },
+    [
+      matchFilter,
+      metaGame,
+      globalMe?.id,
+      ratingsReady,
+      highestGlickoMap,
+      selectedVariants,
+      playerCount,
+    ]
+  );
 
   useEffect(() => {
     if (error && errorRef.current) {
@@ -511,6 +576,15 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         )}
         {metaGame === null || playerCount === -1 || soloHandoffPath ? (
           ""
+        ) : (
+          <GameVariants
+            metaGame={metaGame}
+            variantsSetter={setSelectedVariants}
+            onValidityChange={handleVariantValidityChange}
+          />
+        )}
+        {metaGame === null || playerCount === -1 || soloHandoffPath ? (
+          ""
         ) : playerCount !== 2 ? (
           <p>
             <strong>{t("Seating")}</strong>: {t("SeatingRandom")}
@@ -584,9 +658,9 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         {playerCount === -1 || standing || props.opponent !== undefined ? (
           ""
         ) : (
-          /* Opponents filtering */
+          <>
           <div className="control">
-            <p className="help">Use this to filter out inactive opponents</p>
+            <p className="help">{t("newChallenge.opponentActivityHelp")}</p>
             <label className="radio">
               <input
                 type="radio"
@@ -595,7 +669,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                 value="all"
                 onChange={() => onlySeeSetter("all")}
               />
-              All opponents
+              {t("newChallenge.opponentActivityAll")}
             </label>
             <label className="radio">
               <input
@@ -605,7 +679,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                 value="week"
                 onChange={() => onlySeeSetter("week")}
               />
-              Past 7 days
+              {t("newChallenge.opponentActivity7Days")}
             </label>
             <label className="radio">
               <input
@@ -615,9 +689,42 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                 value="month"
                 onChange={() => onlySeeSetter("month")}
               />
-              Past 30 days
+              {t("newChallenge.opponentActivity30Days")}
             </label>
           </div>
+          <fieldset
+            className="control"
+            disabled={matchFiltersDisabled}
+            style={{ border: "none", margin: 0, padding: 0, marginTop: "0.75em" }}
+          >
+            <p className="help">{t("newChallenge.matchFilterHelp")}</p>
+            <span className="is-size-7" style={{ marginRight: "0.5em" }}>
+              {t("challenges.filters.matchLabel")}
+            </span>
+            {(
+              [
+                ["all", "challenges.filters.matchAll"],
+                ["good", "challenges.filters.matchGood"],
+                ["ideal", "challenges.filters.matchIdeal"],
+              ]
+            ).map(([value, labelKey]) => (
+              <label
+                key={value}
+                className="radio"
+                style={{ marginRight: "0.75em" }}
+              >
+                <input
+                  type="radio"
+                  name="new-challenge-match-filter"
+                  checked={matchFilter === value}
+                  onChange={() => matchFilterSetter(value)}
+                />
+                {" "}
+                {t(labelKey)}
+              </label>
+            ))}
+          </fieldset>
+          </>
         )}
         {playerCount === -1 || standing
           ? ""
@@ -659,7 +766,8 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                                 user.id === opponents[i].id ||
                                 (user.id !== globalMe.id &&
                                   !opponents.some((o) => user.id === o.id) &&
-                                  user.lastSeen >= minSeen)
+                                  user.lastSeen >= minSeen &&
+                                  opponentMatchesCompetitiveness(user.id))
                             )
                             .sort((a, b) =>
                               compareStrings(a.name ?? "", b.name ?? "", i18n.language)
@@ -707,13 +815,6 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                 : t("DurationHelp", { count: standingCount })}
             </p>
           </div>
-        )}
-        {soloHandoffPath ? null : (
-          <GameVariants
-            metaGame={metaGame}
-            variantsSetter={setSelectedVariants}
-            onValidityChange={handleVariantValidityChange}
-          />
         )}
         {metaGame === null || soloHandoffPath ? (
           ""

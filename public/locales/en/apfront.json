@@ -556,7 +556,13 @@
             "hardTimeOnly": "Hard time only",
             "softTimeOnly": "Soft time only",
             "ratedOnly": "Rated only",
-            "unratedOnly": "Unrated only"
+            "unratedOnly": "Unrated only",
+            "matchLegend": "Match competitiveness",
+            "matchLabel": "Match:",
+            "matchAll": "All matches",
+            "matchGood": "Good match (35–65%)",
+            "matchIdeal": "Ideal match (45–55%)",
+            "matchHint": "For rated challenges, expected win chance vs the challenger from Glicko-2 (per game and variant pool). Players new to that pool use the default rating (1200, RD 350)."
         }
     },
     "recentGames": {
@@ -576,6 +582,13 @@
     "ChooseMove": "Choose move",
     "ChooseNoExplore": "Disable exploration?",
     "ChooseOpponent": "Choose an opponent",
+    "newChallenge": {
+        "opponentActivityHelp": "Limit the opponent list by recent site activity.",
+        "opponentActivityAll": "All opponents",
+        "opponentActivity7Days": "Active in the past 7 days",
+        "opponentActivity30Days": "Active in the past 30 days",
+        "matchFilterHelp": "Limit opponents by expected win chance for this game and variants (Glicko-2), whether or not the challenge is marked rated."
+    },
     "ChooseRated": "Rated?",
     "Claim": "Claim",
     "ClaimTimeOut": "Claim win on time",
@@ -1072,6 +1085,7 @@
         "goal": "Goal",
         "hard": "Hard?",
         "hardClock": "Hard clock?",
+        "matchPercent": "Match %",
         "histogram": "Histogram",
         "hIndex": "h-index",
         "hIndexOpponents": "h-index (opps)",

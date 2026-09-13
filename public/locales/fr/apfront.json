@@ -556,7 +556,13 @@
       "hardTimeOnly": "Temps strict uniquement",
       "softTimeOnly": "Temps flexible uniquement",
       "ratedOnly": "Parties classées uniquement",
-      "unratedOnly": "Non classé uniquement"
+      "unratedOnly": "Non classé uniquement",
+      "matchLegend": "Équilibre du match",
+      "matchLabel": "Match :",
+      "matchAll": "Tous les matchs",
+      "matchGood": "Bon match (35–65 %)",
+      "matchIdeal": "Match idéal (45–55 %)",
+      "matchHint": "Pour les défis classés, chances de victoire estimées contre le challenger selon Glicko-2 (par jeu et bassin de variantes). Les nouveaux joueurs dans ce bassin utilisent le classement par défaut (1200, RD 350)."
     }
   },
   "recentGames": {
@@ -576,6 +582,13 @@
   "ChooseMove": "Choississez un mouvement",
   "ChooseNoExplore": "Désactiver l'exploration ?",
   "ChooseOpponent": "Choississez un adversaire :",
+  "newChallenge": {
+    "opponentActivityHelp": "Limiter la liste des adversaires selon leur activité récente sur le site.",
+    "opponentActivityAll": "Tous les adversaires",
+    "opponentActivity7Days": "Actifs ces 7 derniers jours",
+    "opponentActivity30Days": "Actifs ces 30 derniers jours",
+    "matchFilterHelp": "Limiter les adversaires selon les chances de victoire estimées pour ce jeu et ses variantes (Glicko-2), que le défi soit classé ou non."
+  },
   "ChooseRated": "Classée ?",
   "Claim": "Réclamer",
   "ClaimTimeOut": "Réclamer la victoire au temps",
@@ -1072,6 +1085,7 @@
     "goal": "Objectif",
     "hard": "Difficile ?",
     "hardClock": "Horloge stricte ?",
+    "matchPercent": "% du match",
     "histogram": "Histogramme",
     "hIndex": "Indice h",
     "hIndexOpponents": "h-index (adv.)",

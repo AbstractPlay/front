@@ -556,7 +556,13 @@
       "hardTimeOnly": "Nur harte Bedenkzeit",
       "softTimeOnly": "Nur weiche Bedenkzeit",
       "ratedOnly": "Nur gewertete Spiele",
-      "unratedOnly": "Nur ungewertet"
+      "unratedOnly": "Nur ungewertet",
+      "matchLegend": "Match-Ausgeglichenheit",
+      "matchLabel": "Match:",
+      "matchAll": "Alle Matches",
+      "matchGood": "Gutes Match (35–65 %)",
+      "matchIdeal": "Ideales Match (45–55 %)",
+      "matchHint": "Für gewertete Herausforderungen die erwartete Gewinnchance gegen den Herausforderer laut Glicko-2 (pro Spiel- und Varianten-Pool). Spieler, die neu in diesem Pool sind, verwenden die Standardwertung (1200, RD 350)."
     }
   },
   "recentGames": {
@@ -576,6 +582,13 @@
   "ChooseMove": "Zug auswählen",
   "ChooseNoExplore": "Analysefunktion deaktivieren?",
   "ChooseOpponent": "Gegner auswählen",
+  "newChallenge": {
+    "opponentActivityHelp": "Gegnerliste nach der letzten Aktivität auf der Website einschränken.",
+    "opponentActivityAll": "Alle Gegner",
+    "opponentActivity7Days": "Aktiv in den letzten 7 Tagen",
+    "opponentActivity30Days": "Aktiv in den letzten 30 Tagen",
+    "matchFilterHelp": "Gegner nach erwarteter Gewinnchance für dieses Spiel und Varianten (Glicko-2) einschränken, unabhängig davon, ob die Herausforderung als gewertet markiert ist."
+  },
   "ChooseRated": "Gewertet?",
   "Claim": "Beanspruchen",
   "ClaimTimeOut": "Sieg nach Zeit beanspruchen",
@@ -1072,6 +1085,7 @@
     "goal": "Ziel",
     "hard": "Schwer?",
     "hardClock": "Harte Bedenkzeit?",
+    "matchPercent": "Match %",
     "histogram": "Histogramm",
     "hIndex": "h-Index",
     "hIndexOpponents": "h-Index (Gegner)",
