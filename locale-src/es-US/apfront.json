@@ -3683,6 +3683,30 @@
     "src": "Hard time only",
     "out": "Solo tiempo estricto"
   },
+  "challenges.filters.matchAll": {
+    "src": "All matches",
+    "out": "Todos los emparejamientos"
+  },
+  "challenges.filters.matchGood": {
+    "src": "Good match (35–65%)",
+    "out": "Buen emparejamiento (35–65%)"
+  },
+  "challenges.filters.matchHint": {
+    "src": "For rated challenges, expected win chance vs the challenger from Glicko-2 (per game and variant pool). Players new to that pool use the default rating (1200, RD 350).",
+    "out": "Para desafíos por clasificación, la probabilidad de victoria esperada contra el desafiante según Glicko-2 (por juego y grupo de variantes). Los jugadores nuevos en ese grupo usan la clasificación predeterminada (1200, RD 350)."
+  },
+  "challenges.filters.matchIdeal": {
+    "src": "Ideal match (45–55%)",
+    "out": "Emparejamiento ideal (45–55%)"
+  },
+  "challenges.filters.matchLabel": {
+    "src": "Match:",
+    "out": "Emparejamiento:"
+  },
+  "challenges.filters.matchLegend": {
+    "src": "Match competitiveness",
+    "out": "Competitividad del emparejamiento"
+  },
   "challenges.filters.ratedOnly": {
     "src": "Rated only",
     "out": "Solo partidas evaluadas"
@@ -5035,6 +5059,26 @@
     "src": "Visible to others",
     "out": "Visible para otros"
   },
+  "newChallenge.matchFilterHelp": {
+    "src": "Limit opponents by expected win chance for this game and variants (Glicko-2), whether or not the challenge is marked rated.",
+    "out": "Limita los oponentes según la probabilidad de victoria esperada para este juego y sus variantes (Glicko-2), ya sea que el desafío esté marcado como evaluado o no."
+  },
+  "newChallenge.opponentActivity30Days": {
+    "src": "Active in the past 30 days",
+    "out": "Activos en los últimos 30 días"
+  },
+  "newChallenge.opponentActivity7Days": {
+    "src": "Active in the past 7 days",
+    "out": "Activos en los últimos 7 días"
+  },
+  "newChallenge.opponentActivityAll": {
+    "src": "All opponents",
+    "out": "Todos los oponentes"
+  },
+  "newChallenge.opponentActivityHelp": {
+    "src": "Limit the opponent list by recent site activity.",
+    "out": "Limita la lista de oponentes según la actividad reciente en el sitio."
+  },
   "news.earlier": {
     "src": "Earlier",
     "out": "Anteriores"
@@ -6206,6 +6250,10 @@
   "tables.limit": {
     "src": "Limit",
     "out": "Límite"
+  },
+  "tables.matchPercent": {
+    "src": "Match %",
+    "out": "% de emparejamiento"
   },
   "tables.medianLength": {
     "src": "Median length",

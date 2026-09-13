@@ -556,7 +556,13 @@
       "hardTimeOnly": "Solo tiempo estricto",
       "softTimeOnly": "Solo tiempo flexible",
       "ratedOnly": "Solo partidas evaluadas",
-      "unratedOnly": "Solo sin clasificación"
+      "unratedOnly": "Solo sin clasificación",
+      "matchLegend": "Competitividad del emparejamiento",
+      "matchLabel": "Emparejamiento:",
+      "matchAll": "Todos los emparejamientos",
+      "matchGood": "Buen emparejamiento (35–65%)",
+      "matchIdeal": "Emparejamiento ideal (45–55%)",
+      "matchHint": "Para desafíos por clasificación, la probabilidad de victoria esperada contra el desafiante según Glicko-2 (por juego y grupo de variantes). Los jugadores nuevos en ese grupo usan la clasificación predeterminada (1200, RD 350)."
     }
   },
   "recentGames": {
@@ -576,6 +582,13 @@
   "ChooseMove": "Elegir movimiento",
   "ChooseNoExplore": "¿Deshabilitar exploración?",
   "ChooseOpponent": "Elegir un oponente",
+  "newChallenge": {
+    "opponentActivityHelp": "Limita la lista de oponentes según la actividad reciente en el sitio.",
+    "opponentActivityAll": "Todos los oponentes",
+    "opponentActivity7Days": "Activos en los últimos 7 días",
+    "opponentActivity30Days": "Activos en los últimos 30 días",
+    "matchFilterHelp": "Limita los oponentes según la probabilidad de victoria esperada para este juego y sus variantes (Glicko-2), ya sea que el desafío esté marcado como evaluado o no."
+  },
   "ChooseRated": "¿Con clasificación?",
   "Claim": "Reclamar",
   "ClaimTimeOut": "Reclamar victoria por tiempo",
@@ -1072,6 +1085,7 @@
     "goal": "Objetivo",
     "hard": "¿Estricto?",
     "hardClock": "¿Reloj estricto?",
+    "matchPercent": "% de emparejamiento",
     "histogram": "Histograma",
     "hIndex": "Índice h",
     "hIndexOpponents": "Índice h (ops)",
