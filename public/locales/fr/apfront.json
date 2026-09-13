@@ -925,6 +925,7 @@
   "InAppNotifyLabel-feedbackStatus": "Mises à jour du statut des retours",
   "InAppNotifyLabel-feedbackDeleted": "Entrées supprimées de la liste de souhaits",
   "InAppNotifyLabel-feedbackReviewRequested": "Demandes de révision de retours",
+  "InAppNotifyLabel-feedbackNew": "Nouveaux retours",
   "NoWaitingResponse": "Aucun challenge attend sur la réponse de votre adversaire",
   "NoYourMove": "Aucune partie en attente de votre coup.",
   "NumChallenge": "Il y aura {{num}} joueurs dans cette partie. {{players}}. La répartition des sièges sera aléatoire.",
@@ -1665,7 +1666,11 @@
         "feedbackReply": "Nouvelle réponse sur <feedbackLink>{{title}}</feedbackLink>{{preview}}",
         "feedbackStatus": "Mise à jour du statut de <feedbackLink>{{title}}</feedbackLink> : {{status}}",
         "feedbackDeleted": "Entrée de la liste de souhaits supprimée : <wishlistLink>{{title}}</wishlistLink>. Raison : {{reason}}",
-        "feedbackReviewRequested": "Vous avez été ajouté comme réviseur sur <feedbackLink>{{title}}</feedbackLink>"
+        "feedbackReviewRequested": "Vous avez été ajouté comme réviseur sur <feedbackLink>{{title}}</feedbackLink>",
+        "feedbackNew": "Nouveau {{kindLabel}} : <feedbackLink>{{title}}</feedbackLink>",
+        "feedbackNewKind_bug": "rapport de bug",
+        "feedbackNewKind_feature": "idée de fonctionnalité",
+        "feedbackNewKind_wishlist": "jeu souhaité"
       }
     }
   },

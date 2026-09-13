@@ -1171,6 +1171,10 @@
     "src": "Event invitations",
     "out": "Event-Einladungen"
   },
+  "InAppNotifyLabel-feedbackNew": {
+    "src": "New feedback submissions",
+    "out": "Neue Feedback-Einsendungen"
+  },
   "InAppNotifyLabel-gameEnd": {
     "src": "Game ended",
     "out": "Spiel beendet"
@@ -4866,6 +4870,22 @@
   "me.notifications.message.eventInvitation": {
     "src": "{{organizerName}} has invited you to the event <eventLink>{{eventName}}</eventLink>.",
     "out": "{{organizerName}} hat dich zu {{eventName}} eingeladen"
+  },
+  "me.notifications.message.feedbackNew": {
+    "src": "New {{kindLabel}}: <feedbackLink>{{title}}</feedbackLink>",
+    "out": "Neues {{kindLabel}}: <feedbackLink>{{title}}</feedbackLink>"
+  },
+  "me.notifications.message.feedbackNewKind_bug": {
+    "src": "bug report",
+    "out": "Fehlerbericht"
+  },
+  "me.notifications.message.feedbackNewKind_feature": {
+    "src": "feature idea",
+    "out": "Feature-Idee"
+  },
+  "me.notifications.message.feedbackNewKind_wishlist": {
+    "src": "wishlist game",
+    "out": "Wunschspiel"
   },
   "me.notifications.message.gameEnd_draw": {
     "src": "Your game of <gameLink>{{metaGame}}</gameLink> ended in a draw",

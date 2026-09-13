@@ -925,6 +925,7 @@
   "InAppNotifyLabel-feedbackStatus": "Actualizaciones de estado de comentarios",
   "InAppNotifyLabel-feedbackDeleted": "Entradas eliminadas de la lista de deseos",
   "InAppNotifyLabel-feedbackReviewRequested": "Solicitudes de revisión de comentarios",
+  "InAppNotifyLabel-feedbackNew": "Nuevos comentarios recibidos",
   "NoWaitingResponse": "No hay desafíos esperando la respuesta del oponente",
   "NoYourMove": "No hay juegos esperando tu movimiento.",
   "NumChallenge": "Habrá {{num}} jugadores en este juego. {{players}}. La asignación de asientos será aleatoria.",
@@ -1665,7 +1666,11 @@
         "feedbackReply": "Nueva respuesta en <feedbackLink>{{title}}</feedbackLink>{{preview}}",
         "feedbackStatus": "Actualización de estado en <feedbackLink>{{title}}</feedbackLink>: {{status}}",
         "feedbackDeleted": "Entrada de la lista de deseos eliminada: <wishlistLink>{{title}}</wishlistLink>. Motivo: {{reason}}",
-        "feedbackReviewRequested": "Se te agregó como revisor en <feedbackLink>{{title}}</feedbackLink>"
+        "feedbackReviewRequested": "Se te agregó como revisor en <feedbackLink>{{title}}</feedbackLink>",
+        "feedbackNew": "Nuevo {{kindLabel}}: <feedbackLink>{{title}}</feedbackLink>",
+        "feedbackNewKind_bug": "reporte de error",
+        "feedbackNewKind_feature": "idea de función",
+        "feedbackNewKind_wishlist": "juego para la lista de deseos"
       }
     }
   },
