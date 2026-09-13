@@ -13,6 +13,10 @@ import {
   EFFORT_LEVELS,
   feedbackDetailPath,
 } from "../../lib/feedback/feedbackConstants";
+import {
+  getStoredFeedbackAdminSort,
+  setStoredFeedbackAdminSort,
+} from "../../lib/feedback/feedbackListSort";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import "./feedback.css";
 
@@ -23,11 +27,20 @@ function FeedbackAdmin() {
   const [status, setStatus] = useState("");
   const [priority, setPriority] = useState("");
   const [effort, setEffort] = useState("");
-  const [sortBy, setSortBy] = useState("default");
+  const [sortBy, setSortBy] = useState(() => getStoredFeedbackAdminSort(kind));
   const [needsResponse, setNeedsResponse] = useState(false);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setSortBy(getStoredFeedbackAdminSort(kind));
+  }, [kind]);
+
+  const handleSortByChange = (nextSort) => {
+    setSortBy(nextSort);
+    setStoredFeedbackAdminSort(kind, nextSort);
+  };
 
   useEffect(() => {
     if (!globalMe?.admin) {
@@ -98,7 +111,7 @@ function FeedbackAdmin() {
           priority={priority}
           onPriorityChange={setPriority}
           sortBy={sortBy}
-          onSortByChange={setSortBy}
+          onSortByChange={handleSortByChange}
           showSort
         />
         <div className="field feedback-filter-field">
