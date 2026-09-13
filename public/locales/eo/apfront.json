@@ -1984,7 +1984,7 @@
     "activePlayers_one": "Aktivaj ludantoj: {{count}}",
     "activePlayers_other": "Aktivaj ludantoj: {{count}}",
     "customizeTheme": "Agordi la retejan etoson",
-    "explore": "Esplori",
+    "explore": "Listoj",
     "myProfile": "Mia profilo",
     "openChallenges": "Malfermitaj defioj",
     "recentGames": "Lastatempaj ludoj",
@@ -2211,7 +2211,13 @@
       "title": "Raporti cimon",
       "titleFeature": "Sugesti funkcion",
       "titleLabel": "Titolo",
-      "titleWishlist": "Sugesti ludon"
+      "titleWishlist": "Sugesti ludon",
+      "relevantPageCustomPlaceholder": "https://play.abstractplay.com/…",
+      "relevantPageLabel": "Kie vi observis la problemon?",
+      "relevantPageHint": "Elektu paĝon ĵus vizititan de vi, aŭ algluu hiperligon al la ludo aŭ ekrano, kie okazis la cimo.",
+      "relevantPageNone": "Mi ne certas / ne ekzistas specifa paĝo",
+      "relevantPageCustom": "Alia hiperligo al Abstract Play",
+      "relevantPageInvalid": "Bonvolu tajpi validan hiperligon al Abstract Play (ĉe la sama retejo kiel ĉi tiu paĝo)."
     },
     "priority": {
       "low": "Malalta",
