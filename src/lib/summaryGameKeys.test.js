@@ -7,6 +7,7 @@ import {
   matchesSummaryGameKey,
   metaUidFromSummaryGameKey,
   parseSummaryGameKey,
+  sortVariantUidsLexicographic,
 } from "./summaryGameKeys";
 import { getGameDisplayName } from "./gameOptions";
 import { setupGameslibI18nForTests } from "./testGameslibI18n";
@@ -29,6 +30,21 @@ describe("formatVariantUids", () => {
     expect(formatVariantUids("abande", ["hex"])).toBe("Board: Hexagonal");
     expect(formatVariantUids("abande", ["snub"])).toBe("Board: Snub Square");
     expect(formatVariantUids("abande", ["libre"])).toBe("Abande Libre");
+  });
+
+  it("orders labels by lexicographic variant uid regardless of input order", () => {
+    const forward = formatVariantUids("go", ["9x9", "handicap"]);
+    const reversed = formatVariantUids("go", ["handicap", "9x9"]);
+    expect(forward).toBe(reversed);
+    expect(forward.length).toBeGreaterThan(0);
+  });
+});
+
+describe("sortVariantUidsLexicographic", () => {
+  it("sorts uids without mutating the input", () => {
+    const input = ["handicap", "9x9"];
+    expect(sortVariantUidsLexicographic(input)).toEqual(["9x9", "handicap"]);
+    expect(input).toEqual(["handicap", "9x9"]);
   });
 });
 
