@@ -6,6 +6,12 @@ import ScreenshotUpload from "./ScreenshotUpload";
 import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import { createFeedback } from "../../lib/feedback/feedbackApi";
 import { captureBugContext } from "../../lib/feedback/feedbackContext";
+import {
+  formatApUrlLabel,
+  getRecentApUrlsForBugReport,
+  normalizeReportedPageUrl,
+  resolveReportedPageUrlForSubmit,
+} from "../../lib/feedback/recentApUrls";
 import { boardKeyForKind, boardPathForKind, feedbackDetailPath } from "../../lib/feedback/feedbackConstants";
 import { useAuthSession } from "../../hooks/useAuthSession";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
@@ -37,10 +43,28 @@ function FeedbackNew() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [duplicateId, setDuplicateId] = useState("");
+  const recentPageUrls = useMemo(
+    () => (kind === "bug" ? getRecentApUrlsForBugReport() : []),
+    [kind],
+  );
+  const [pageChoice, setPageChoice] = useState(() => (
+    recentPageUrls[0] ?? "none"
+  ));
+  const [customPageUrl, setCustomPageUrl] = useState("");
+  const [pageUrlError, setPageUrlError] = useState("");
+
+  const reportedPageUrl = useMemo(() => {
+    if (kind !== "bug") {
+      return "";
+    }
+    return resolveReportedPageUrlForSubmit(pageChoice, customPageUrl);
+  }, [kind, pageChoice, customPageUrl]);
 
   const context = useMemo(
-    () => (kind === "bug" ? captureBugContext(searchParams) : undefined),
-    [kind, searchParams],
+    () => (kind === "bug"
+      ? captureBugContext(searchParams, { reportedPageUrl })
+      : undefined),
+    [kind, searchParams, reportedPageUrl],
   );
 
   const missingScreenshot = kind === "bug" && attachmentKeys.length < 1;
@@ -56,6 +80,13 @@ function FeedbackNew() {
     e.preventDefault();
     setError("");
     setDuplicateId("");
+    setPageUrlError("");
+    if (kind === "bug" && pageChoice === "custom" && customPageUrl.trim()) {
+      if (!normalizeReportedPageUrl(customPageUrl.trim())) {
+        setPageUrlError(t("feedback.new.relevantPageInvalid"));
+        return;
+      }
+    }
     if (missingScreenshot && !confirmNoScreenshot) {
       setConfirmNoScreenshot(true);
       return;
@@ -127,6 +158,9 @@ function FeedbackNew() {
       <p>
         <Link to={boardPathForKind(kind)}>{t(`feedback.${boardKey}.backToBoard`)}</Link>
       </p>
+      {kind === "bug" ? (
+        <p className="feedback-bug-intro">{t("feedback.new.bugIntro")}</p>
+      ) : null}
       <form onSubmit={handleSubmit}>
         <div className="field">
           <label className="label" htmlFor="feedback-title">
@@ -153,6 +187,59 @@ function FeedbackNew() {
               required
               placeholder="https://"
             />
+          </div>
+        ) : null}
+        {kind === "bug" ? (
+          <div className="field">
+            <label className="label">{t("feedback.new.relevantPageLabel")}</label>
+            <p className="feedback-muted feedback-field-hint">{t("feedback.new.relevantPageHint")}</p>
+            <div className="feedback-recent-url-list">
+              {recentPageUrls.map((url) => (
+                <label key={url} className="feedback-recent-url-option">
+                  <input
+                    type="radio"
+                    name="feedback-relevant-page"
+                    value={url}
+                    checked={pageChoice === url}
+                    onChange={() => setPageChoice(url)}
+                  />
+                  <span className="feedback-recent-url-label" title={url}>
+                    {formatApUrlLabel(url)}
+                  </span>
+                </label>
+              ))}
+              <label className="feedback-recent-url-option">
+                <input
+                  type="radio"
+                  name="feedback-relevant-page"
+                  value="custom"
+                  checked={pageChoice === "custom"}
+                  onChange={() => setPageChoice("custom")}
+                />
+                {t("feedback.new.relevantPageCustom")}
+              </label>
+              {pageChoice === "custom" ? (
+                <input
+                  className="input feedback-recent-url-custom"
+                  type="url"
+                  value={customPageUrl}
+                  onChange={(e) => setCustomPageUrl(e.target.value)}
+                  placeholder={t("feedback.new.relevantPageCustomPlaceholder")}
+                  aria-invalid={pageUrlError ? true : undefined}
+                />
+              ) : null}
+              <label className="feedback-recent-url-option">
+                <input
+                  type="radio"
+                  name="feedback-relevant-page"
+                  value="none"
+                  checked={pageChoice === "none"}
+                  onChange={() => setPageChoice("none")}
+                />
+                {t("feedback.new.relevantPageNone")}
+              </label>
+            </div>
+            {pageUrlError ? <p className="has-text-danger">{pageUrlError}</p> : null}
           </div>
         ) : null}
         <div className="field">
