@@ -20,6 +20,7 @@ export const IN_APP_NOTIFICATION_KEYS = [
   "feedbackStatus",
   "feedbackDeleted",
   "feedbackReviewRequested",
+  "feedbackNew",
 ];
 
 function defaultNotificationMap(keys) {

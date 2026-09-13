@@ -925,6 +925,7 @@
     "InAppNotifyLabel-feedbackStatus": "Feedback status updates",
     "InAppNotifyLabel-feedbackDeleted": "Removed wishlist entries",
     "InAppNotifyLabel-feedbackReviewRequested": "Feedback review requests",
+    "InAppNotifyLabel-feedbackNew": "New feedback submissions",
     "NoWaitingResponse": "No challenges waiting on opponent response",
     "NoYourMove": "No games waiting for your move.",
     "NumChallenge": "There will be {{num}} players in this game. {{players}}. Seating will be random.",
@@ -1665,7 +1666,11 @@
                 "feedbackReply": "New reply on <feedbackLink>{{title}}</feedbackLink>{{preview}}",
                 "feedbackStatus": "Status update on <feedbackLink>{{title}}</feedbackLink>: {{status}}",
                 "feedbackDeleted": "Wishlist entry removed: <wishlistLink>{{title}}</wishlistLink>. Reason: {{reason}}",
-                "feedbackReviewRequested": "You were added as a reviewer on <feedbackLink>{{title}}</feedbackLink>"
+                "feedbackReviewRequested": "You were added as a reviewer on <feedbackLink>{{title}}</feedbackLink>",
+                "feedbackNew": "New {{kindLabel}}: <feedbackLink>{{title}}</feedbackLink>",
+                "feedbackNewKind_bug": "bug report",
+                "feedbackNewKind_feature": "feature idea",
+                "feedbackNewKind_wishlist": "wishlist game"
             }
         }
     },

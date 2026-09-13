@@ -276,6 +276,21 @@ export function NotificationMessage({ body }) {
           }}
         />
       );
+    case "feedbackNew":
+      return (
+        <Trans
+          i18nKey="me.notifications.message.feedbackNew"
+          values={{
+            title: body.title,
+            kindLabel: i18n.t(`me.notifications.message.feedbackNewKind_${body.kind}`, {
+              defaultValue: body.kind,
+            }),
+          }}
+          components={{
+            feedbackLink: <Link to={`/feedback/${body.postId}`} />,
+          }}
+        />
+      );
     default:
       return "";
   }
