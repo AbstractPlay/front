@@ -22,9 +22,16 @@ import ChallengeEntryModals from "./ChallengeEntryModals";
 import { useStorageState } from "react-use-storage-state";
 import PageHelmet from "./PageHelmet";
 import { useAuthSession } from "../hooks/useAuthSession";
+import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
 import { useStore } from "../stores";
 import BotAwareName from "./Bots/BotAwareName";
 import { formatPlayerDisplayName } from "./Bots/botUtils";
+import {
+  buildHighestGlickoMap,
+  formatMatchWinRatePercent,
+  matchWinRateForChallenge,
+  passesMatchCompetitivenessFilter,
+} from "../lib/glickoMatchOdds";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -89,7 +96,21 @@ function StandingChallenges(props) {
     "challenges-filter-unrated",
     false
   );
+  const [filterMatch, filterMatchSetter] = useStorageState(
+    "challenges-filter-match",
+    "all"
+  );
   const loggedin = authStatus === "ready";
+  const summary = useStore((state) => state.summary);
+  const summaryRatingsLoadState = useStore(
+    (state) => state.summaryRatingsLoadState
+  );
+  useEnsureSummaryTier(loggedin ? "ratings" : null);
+  const ratingsReady = summaryRatingsLoadState === "ready";
+  const highestGlickoMap = useMemo(
+    () => buildHighestGlickoMap(summary?.ratings?.highest),
+    [summary?.ratings?.highest]
+  );
   const starredGameIds = useMemo(
     () =>
       Array.isArray(globalMe?.stars) ? globalMe.stars.filter(Boolean) : [],
@@ -313,6 +334,26 @@ function StandingChallenges(props) {
           }
         }
         const rowMetaGame = rec.metaGame ?? metaGame;
+        const variantUids = rec.variants ?? [];
+        let matchWinRate = null;
+        if (
+          loggedin &&
+          globalMe?.id &&
+          rec.rated &&
+          ratingsReady
+        ) {
+          matchWinRate = matchWinRateForChallenge({
+            highestMap: highestGlickoMap,
+            userId: globalMe.id,
+            challengerId: rec.challenger?.id,
+            metaUid: rowMetaGame,
+            variantUids,
+            numPlayers: rec.numPlayers ?? 2,
+            rated: true,
+          });
+        } else if (loggedin && globalMe?.id && rec.rated && !ratingsReady) {
+          matchWinRate = undefined;
+        }
         return {
           id: rec.id,
           metaGame: rowMetaGame,
@@ -329,31 +370,53 @@ function StandingChallenges(props) {
           players: rec.players.filter((p) => p.id !== rec.challenger?.id),
           rated: rec.rated,
           seating: rec.seating,
-          variants: expandVariantsForGame(rowMetaGame, rec.variants),
+          variants: expandVariantsForGame(rowMetaGame, variantUids),
+          variantUids,
           comment: rec.comment,
+          matchWinRate,
         };
       });
-    if (!siteWide) {
-      return rows;
+    let filtered = rows;
+    if (siteWide) {
+      filtered = filtered.filter((row) => {
+        if (filterStarred && !starredGameIds.includes(row.metaGame)) {
+          return false;
+        }
+        if (filterHardTime && !row.clockHard) {
+          return false;
+        }
+        if (filterSoftTime && row.clockHard) {
+          return false;
+        }
+        if (filterRated && !row.rated) {
+          return false;
+        }
+        if (filterUnrated && row.rated) {
+          return false;
+        }
+        return true;
+      });
     }
-    return rows.filter((row) => {
-      if (filterStarred && !starredGameIds.includes(row.metaGame)) {
-        return false;
-      }
-      if (filterHardTime && !row.clockHard) {
-        return false;
-      }
-      if (filterSoftTime && row.clockHard) {
-        return false;
-      }
-      if (filterRated && !row.rated) {
-        return false;
-      }
-      if (filterUnrated && row.rated) {
-        return false;
-      }
-      return true;
-    });
+    if (
+      loggedin &&
+      globalMe?.id &&
+      filterMatch !== "all" &&
+      ratingsReady
+    ) {
+      filtered = filtered.filter((row) => {
+        if (!row.rated) {
+          return false;
+        }
+        if (row.challengerId === globalMe.id) {
+          return false;
+        }
+        if (row.matchWinRate == null) {
+          return false;
+        }
+        return passesMatchCompetitivenessFilter(row.matchWinRate, filterMatch);
+      });
+    }
+    return filtered;
   }, [
     challenges,
     allUsers,
@@ -365,6 +428,11 @@ function StandingChallenges(props) {
     filterRated,
     filterUnrated,
     starredGameIds,
+    loggedin,
+    globalMe?.id,
+    filterMatch,
+    ratingsReady,
+    highestGlickoMap,
   ]);
 
   const columnHelper = createColumnHelper();
@@ -404,6 +472,33 @@ function StandingChallenges(props) {
             )}
           </>
         ),
+      }),
+      columnHelper.accessor("matchWinRate", {
+        header: () => t("tables.matchPercent"),
+        cell: (props) => {
+          if (!props.row.original.rated) {
+            return "—";
+          }
+          const rate = props.getValue();
+          if (rate === undefined) {
+            return "…";
+          }
+          return formatMatchWinRatePercent(rate);
+        },
+        sortingFn: (rowA, rowB, columnId) => {
+          const a = rowA.getValue(columnId);
+          const b = rowB.getValue(columnId);
+          if (a == null && b == null) {
+            return 0;
+          }
+          if (a == null) {
+            return 1;
+          }
+          if (b == null) {
+            return -1;
+          }
+          return a - b;
+        },
       }),
       columnHelper.accessor("numPlayers", {
         header: t("tables.players"),
@@ -518,6 +613,7 @@ function StandingChallenges(props) {
       sorting,
       columnVisibility: {
         actions: globalMe !== null,
+        matchWinRate: globalMe !== null,
         players: showAccepted,
       },
     },
@@ -534,17 +630,28 @@ function StandingChallenges(props) {
   }, [showState, table]);
 
   useEffect(() => {
-    if (siteWide) {
-      table.setPageIndex(0);
-    }
-  }, [siteWide, filterStarred, filterHardTime, filterSoftTime, filterRated, filterUnrated, table]);
+    table.setPageIndex(0);
+  }, [
+    siteWide,
+    filterStarred,
+    filterHardTime,
+    filterSoftTime,
+    filterRated,
+    filterUnrated,
+    filterMatch,
+    table,
+  ]);
 
-  const challengeFilters = siteWide ? (
+  const showMatchFilters = loggedin && globalMe !== null;
+  const matchFiltersDisabled = summaryRatingsLoadState === "pending";
+
+  const challengeFilters =
+    siteWide || showMatchFilters ? (
     <div
-      className="field is-grouped is-grouped-centered is-grouped-multiline has-text-centered"
+      className="field is-grouped is-grouped-centered is-grouped-multiline has-text-centered challenges-filters"
       style={{ marginBottom: "1em", justifyContent: "center" }}
     >
-      {showStarredFilter ? (
+      {siteWide && showStarredFilter ? (
         <div className="control">
           <label className="checkbox">
             <input
@@ -557,6 +664,8 @@ function StandingChallenges(props) {
           </label>
         </div>
       ) : null}
+      {siteWide ? (
+        <>
       <div className="control">
         <label className="checkbox">
           <input
@@ -601,6 +710,45 @@ function StandingChallenges(props) {
           {t("challenges.filters.unratedOnly")}
         </label>
       </div>
+        </>
+      ) : null}
+      {showMatchFilters ? (
+        <fieldset
+          className="control challenges-match-filters"
+          disabled={matchFiltersDisabled}
+          style={{ border: "none", margin: 0, padding: 0 }}
+        >
+          <legend className="is-sr-only">{t("challenges.filters.matchLegend")}</legend>
+          <span className="is-size-7" style={{ marginRight: "0.5em" }}>
+            {t("challenges.filters.matchLabel")}
+          </span>
+          {(
+            [
+              ["all", "challenges.filters.matchAll"],
+              ["good", "challenges.filters.matchGood"],
+              ["ideal", "challenges.filters.matchIdeal"],
+            ]
+          ).map(([value, labelKey]) => (
+            <label
+              key={value}
+              className="radio"
+              style={{ marginRight: "0.75em" }}
+            >
+              <input
+                type="radio"
+                name="challenges-filter-match"
+                checked={filterMatch === value}
+                onChange={() => filterMatchSetter(value)}
+              />
+              {" "}
+              {t(labelKey)}
+            </label>
+          ))}
+          <p className="is-size-7 challenges-match-hint" style={{ marginTop: "0.35em" }}>
+            {t("challenges.filters.matchHint")}
+          </p>
+        </fieldset>
+      ) : null}
     </div>
   ) : null;
 
