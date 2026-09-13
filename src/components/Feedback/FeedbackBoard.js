@@ -25,6 +25,10 @@ import {
   WISHLIST_CATEGORY_FILTER_CHIPS,
   WISHLIST_SORT_OPTIONS,
 } from "../../lib/feedback/feedbackConstants";
+import {
+  getStoredFeedbackBoardSort,
+  setStoredFeedbackBoardSort,
+} from "../../lib/feedback/feedbackListSort";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import "./feedback.css";
 
@@ -41,9 +45,17 @@ function FeedbackBoard({ kind = "bug" }) {
   const [error, setError] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
-  const [sortBy, setSortBy] = useState(() => defaultBoardSortForKind(kind));
-
   const isAdmin = Boolean(globalMe?.admin);
+  const [sortBy, setSortBy] = useState(() => getStoredFeedbackBoardSort(kind, { isAdmin }));
+
+  useEffect(() => {
+    setSortBy(getStoredFeedbackBoardSort(kind, { isAdmin }));
+  }, [isAdmin, kind]);
+
+  const handleSortByChange = (nextSort) => {
+    setSortBy(nextSort);
+    setStoredFeedbackBoardSort(kind, nextSort);
+  };
   const listSort = (kind === "bug" || kind === "feature")
     && FEEDBACK_BOARD_SORT_OPTIONS.includes(sortBy)
     ? sortBy
@@ -191,7 +203,7 @@ function FeedbackBoard({ kind = "bug" }) {
             id="feedback-board-sort"
             className="select"
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
+            onChange={(e) => handleSortByChange(e.target.value)}
           >
             {sortOptions.map((option) => (
               <option key={option} value={option}>
