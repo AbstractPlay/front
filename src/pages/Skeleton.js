@@ -47,6 +47,7 @@ import GameWatch from "../components/GameWatch";
 import ProfileBootstrap from "../components/ProfileBootstrap";
 import { resolveAuthSession } from "../lib/authSession";
 import ErrorBoundary from "../components/ErrorBoundary";
+import RecentApUrlRecorder from "../components/Feedback/RecentApUrlRecorder";
 import { useStore } from "../stores";
 import { isAnonymousFriendlyPath } from "../lib/publicPaths";
 import DefaultDocumentTitle from "../components/DefaultDocumentTitle";
@@ -177,6 +178,7 @@ function Bones(props) {
         </Helmet>
         <ToastContainer />
         <Router>
+          <RecentApUrlRecorder />
           <DefaultDocumentTitle />
           <TimeAgoLocaleSync />
           <ThemeApplicator />
