@@ -577,9 +577,9 @@
   "CompletedGamesCount_one": "finita ludo",
   "CompletedGamesCount_other": "finitaj ludoj",
   "CompletedGamesList": "Finitaj ludoj de {{name}}",
-  "CompletedGamesHelp": "Por ke la stirpanelo restu facile mastrumebla, ludoj malaperas de ĉi tiu listo 7 tagojn post la dato \"laste vidita\". Premu la butonon Forviŝi por tuj forigi ludon. Nova babilmesaĝo ree aperigos pli malnovan ludon kaj rekomencos la 7-tagan periodon. Vizitu la paĝon Ludoj por aliri pli malnovajn finitajn ludojn.",
+  "CompletedGamesHelp": "Por ne troŝarĝi la stirpanelon, ludoj malaperas de ĉi tiu listo 7 tagojn post la dato \"laste vidita\". Premu la butonon Forviŝi por tuj forigi ludon. Nova babilmesaĝo reaperigos pli malnovan ludon kaj rekomencos la 7-tagan periodon. Vizitu la paĝon Ludoj por aliri pli malnovajn finitajn ludojn.",
   "WatchedGames": "Observataj ludoj",
-  "WatchedGamesHelp": "Ludoj, kiujn vi observas kiel spektanto. Ĉesu observi ludon por forigi ĝin de ĉi tiu listo. Novaj babilmesaĝoj aŭ movoj aktualigos ĉi tiujn erojn.",
+  "WatchedGamesHelp": "Ludoj, kiujn vi observas kiel spektanto. Ĉesu observi ludon por forigi ĝin el ĉi tiu listo. Novaj babilmesaĝoj aŭ movoj aktualigos tiujn erojn.",
   "CompleteMove": "Fini la movon",
   "Confirm": "Konfirmi",
   "ConfirmDeleteSubtree": "Forigi esploran subarbon",
@@ -661,7 +661,7 @@
     "maxPlayersHelp": "Valoro 0 signifas, ke ne estas limo.",
     "eventDateLabel": "Dato de evento",
     "eventTimeLabel": "Horo de evento",
-    "dateTimeRequired": "Dato kaj horo estas bezonataj kaj devas esti estontaj.",
+    "dateTimeRequired": "Necesas dato kaj horo en la estonteco.",
     "admin": {
       "statusLabel": "Stato:",
       "statusDraft": "Malneto. Nur la organizanto kaj administrantoj povas vidi ĉi tiun eventon.",
@@ -711,7 +711,7 @@
       "deleteEventBody": "Vi estas tute forigonta ĉi tiun eventon. <1>Ĉi tio ne estas malfarebla!</1> Tio eblas nur antaŭ ol ludoj estas kreitaj por la evento.",
       "closeEventTitle": "Fermi eventon",
       "closeEventSelectWinners": "Elektu la venkinton (aŭ venkintojn) kaj premu \"Aktualigi venkintojn\".",
-      "closeEventBody": "Vi estas markonta ĉi tiun eventon kiel finitan. <1>Ĉi tio ne estas malfarebla!</1> Bonvolu elekti la venkinton (aŭ venkintojn) kaj premu \"Fermi eventon\". La venkinto povas esti aktualigita iam ajn post la fino de la evento.",
+      "closeEventBody": "Vi tuj markos ĉi tiun eventon kiel finitan. <1>Tion ne eblas malfari!</1> Elektu la venkinton (aŭ venkintojn) kaj premu \"Fermi eventon\". Post la evento vi povos iam ajn ŝanĝi la venkinton.",
       "selectWinnersLabel": "Elektu unu aŭ plurajn venkintojn de la evento:",
       "updateWinners": "Aktualigi venkintojn",
       "inviteBlockTitle": "Inviti aŭ bloki ludantojn",
@@ -785,12 +785,12 @@
   "GameSummary": "Babilprotokolo",
   "GameComments": "Komentoj pri movoj",
   "GamesOf": "ludoj de",
-  "GoBegin": "Montru la komencon de la ludo. Klavoj: hejma klavo aŭ 'h'.",
-  "GoCurrent": "Montru la nunan pozicion. Klavoj: fina klavo aŭ 'l'.",
-  "GoNext": "Montru la sekvan movon (kaj la unuan variaĵon, se ekzistas). Klavoj: dekstra sagoklavo aŭ 'k'.",
-  "GoNextVar": "Montru la sekvan variaĵon de la movo. Klavoj: malsupra sagoklavo aŭ 'm'.",
-  "GoPrev": "Montru la antaŭan movon. Klavoj: maldekstra sagoklavo aŭ 'j'.",
-  "GoPrevVar": "Montru la antaŭan variaĵon. Klavoj: supra sagoklavo aŭ 'i'.",
+  "GoBegin": "Montru la komencon de la ludo. Klavoj: Home aŭ 'h'.",
+  "GoCurrent": "Montru la nunan pozicion. Klavoj: End aŭ 'l'.",
+  "GoNext": "Montru la sekvan movon (kaj la unuan variaĵon, se ekzistas). Klavoj: sago dekstren aŭ 'k'.",
+  "GoNextVar": "Montru la sekvan variaĵon de la movo. Klavoj: sago malsupren aŭ 'm'.",
+  "GoPrev": "Montru la antaŭan movon. Klavoj: sago maldekstren aŭ 'j'.",
+  "GoPrevVar": "Montru la antaŭan variaĵon. Klavoj: sago supren aŭ 'i'.",
   "HardTime": "Deviga tempolimo: la sistemo devigos la tempolimojn.",
   "HardTimeSet": "Deviga tempolimo",
   "HasAnnotations": "Havas postludajn komentojn",
@@ -881,13 +881,13 @@
   "PickVariant_disabled": "Disponeblaj variaĵoj",
   "PlayerList": "Ludantoj",
   "Players": "Ludantoj",
-  "PleaseConsent": "Via konsento estas bezonata!",
+  "PleaseConsent": "Necesas via konsento!",
   "PlayersAccepted": "Ĝis nun jen la ludantoj, kiuj volas partopreni en la ludo: {{others}}.",
   "Playground": "Ludejo",
   "Lab": "Ludejo",
   "Ply": "Duonmovo",
   "ProfileAnon": "Ĉu vi volas esti anonima?",
-  "ProfileAnonHelp": "Esti anonima signifas, ke neniu scios kontraŭ kiu ĝi ludas, kaj viaj finitaj ludoj ne estos atribuitaj al vi. Sekve ili ne estos pritaksitaj. Eĉ se vi poste ŝanĝos ĉi tiun agordon, pasintaj ludoj ne povos esti reatribuitaj al vi.",
+  "ProfileAnonHelp": "Anonimeco signifas, ke neniu scios la identecon de sia kontraŭulo, kaj viaj finitaj ludoj ne estos atribuitaj al vi nek pritaksitaj. Eĉ se vi poste ŝanĝos ĉi tiun agordon, pasintaj ludoj ne povos esti reatribuitaj al vi.",
   "ProfileConsent": "Ĉu vi konsentas pri la uzkondiĉoj kaj privateca politiko de Abstract Play?",
   "ProfileCountry": "Landokodo",
   "ProfileCountryHelp": "Diru al homoj, de kie vi estas! Vi povas enigi ion ajn ĉi tie, sed se vi enigos validan du- aŭ tri-signan ISO-landokodon, la konvena flago aperos en via profilo.",
@@ -1277,7 +1277,7 @@
       },
       "newest": {
         "title": "Plej novaj",
-        "description": "La dato kiam la ludo estis aldonita al la retejo."
+        "description": "Kiam la ludo estis aldonita al la retejo."
       },
       "hotRaw": {
         "title": "Plej aktivaj (movoj/tago)",
@@ -1359,9 +1359,9 @@
       }
     },
     "explanations": {
-      "highestSingle": "Listo de ĉiuj registritaj pritaksoj. La sistemo ignoras ludojn eksplicite markitajn kiel nepritaksitajn, kaj ĝi ignoras ludojn, kiuj finiĝas antaŭ ol tri movoj estas faritaj. Rangigoj uzas konservativan (95%-fidan) Glicko-2-pritakson (pritakso − 2×RD), kaj montras kaj Glicko kaj la malnovan Elo-pritakson. Glicko komenciĝas je 1200 kun RD 350; Elo komenciĝas je 1200 kun konstanta *K* de 30. TrueSkill uzas la defaŭltajn agordojn de Microsoft (pritaksa intervalo 0–50, komenca valoro 25).",
-      "avgRatings": "Ĉi tiuj kolumnoj estas pezitaj mezumoj de viaj Glicko- kaj Elo-pritaksoj en la tuta retejo.",
-      "topPlayers": "Ĉi tiu tabelo listigas ĉiun disponeblan kombinon de ludo kaj variaĵoj, kune kun la plej alte pritaksita ludanto por tiu kombino, rangigita laŭ la konservativa Glicko-2-pritakso (pritakso − 2×RD). Elo montriĝas por referenco.",
+      "highestSingle": "Listo de ĉiuj registritaj pritaksoj. La sistemo ignoras ludojn eksplicite markitajn kiel nepritaksitajn kaj ludojn finiĝintajn antaŭ tri movoj. Rangigoj uzas konservativan (95%-fidan) Glicko-2-poentaron (poentaro − 2×RD); montriĝas kaj Glicko kaj la malnova Elo-poentaro. Glicko komenciĝas je 1200 kun RD 350; Elo je 1200 kun konstanta *K* de 30. TrueSkill uzas la defaŭltajn agordojn de Microsoft (poentara intervalo 0–50, komenca valoro 25).",
+      "avgRatings": "Ĉi tiuj kolumnoj estas pezitaj mezumoj de viaj Glicko- kaj Elo-poentaroj en la tuta retejo.",
+      "topPlayers": "Ĉi tiu tabelo listigas ĉiun disponeblan kombinon de ludo kaj variaĵoj kun ĝia plej alte pritaksita ludanto, rangigita laŭ konservativa Glicko-2-poentaro (poentaro − 2×RD). Elo montriĝas por komparo.",
       "numPlays": "Ĉi tiu tabelo listigas ĉiun ludon, kiom da fojoj kaj de kiom da malsamaj ludantoj ĝi estis ludita, kaj la `h-index` de la ludo. La h-indekso de ludo estas la nombro de ludantoj, kiuj ludis ĝin almenaŭ tiom da fojoj (do h-indekso 5 signifas, ke 5 malsamaj ludantoj ludis ĝin almenaŭ 5 fojojn). Ĝi ankaŭ donas histogramon de la finitaj ludoj. La antaŭrigardo montras la lastajn 10 semajnojn, kun la plej nova semajno dekstre. Klaku la antaŭrigardon por vidi la tutan historion de finitaj ludoj en sep-tagaj intervaloj, kun la plej nova semajno dekstre.",
       "playerStats": "Ĉi tio montras ĉiun registritan ludanton kune kun la tuta nombro de luditaj ludoj, la nombro de malsamaj ludoj kaj la nombro de malsamaj kontraŭuloj. Ĝi ankaŭ donas `h-index`, kiu estas la nombro de ludoj, kiujn vi ludis almenaŭ tiom da fojoj (ekzemple, se vi ludis tri malsamajn ludojn nur po unu fojon, via indekso estas 1; kiam vi ludos ĉiun el tiuj tri ludoj almenaŭ tri fojojn, la indekso kreskos ĝis 3). Estas ankaŭ `h-index` por la kontraŭuloj, kiujn vi renkontis. Aktiveca histogramo montras la nombron de ludoj finitaj ĉiusemajne, kun la plej nova semajno dekstre. La antaŭrigardo montras la dek plej novajn semajnojn. Klaku ĝin por vidi la tutan historion.",
       "gameStats": "Ĉi tiu tabelo montras ĉiun kombinon de ludo kaj variaĵoj kune kun la nombro de registritaj ludoj, la meza longo de la ludo (nombro de movoj), la mediana longo, la proporcio de venkoj de la unua ludanto kaj la proporcio de remizoj (nur duludantaj ludoj kun pli ol du movoj). **La statistikoj pri venkoj de la unua ludanto kaj remizoj devas esti traktataj singarde!** La provaĵo estas malgranda kaj biasita. Multaj konfuzaj faktoroj povus klarigi ekstreman proporcion. Notu, ke la proporcio de venkoj de la unua ludanto tute ignoras ĉu la interŝanĝa regulo estis uzita. Kalkulante tiun proporcion, remizo valoras kiel duona venko de la unua ludanto.",
@@ -1592,7 +1592,7 @@
       "httpsRequired": "La finpunkto devas esti valida HTTPS-adreso.",
       "createFailed": "Ne eblis krei la roboton.",
       "missingCredentials": "En la servila respondo mankis la aŭtentigiloj de la roboto.",
-      "refreshFailed": "La roboto estis kreita, sed ne eblis aktualigi la robotliston. Reŝargu la agordojn por vidi ĝin.",
+      "refreshFailed": "Roboto kreita, sed la robotlisto ne aktualiĝis. Reŝargu la agordojn por vidi ĝin.",
       "updateFailed": "Ne eblis aktualigi la roboton.",
       "deleteFailed": "Ne eblis forigi la roboton.",
       "rotationBeginFailed": "Ne eblis komenci ŝanĝi la sekreton.",
@@ -1874,16 +1874,16 @@
   "InAppNotifyLabel-challenges": "Defioj",
   "InAppNotifyLabel-gameStart": "Ludo komenciĝis",
   "InAppNotifyLabel-gameEnd": "Ludo finiĝis",
-  "InAppNotifyLabel-ratingChange": "Pritakso ŝanĝas",
+  "InAppNotifyLabel-ratingChange": "Ŝanĝoj de pritakso",
   "InAppNotifyLabel-eventInvitation": "Invitoj al eventoj",
   "InAppNotifyLabel-completedGameChat": "Babilado en finitaj ludoj",
   "InAppNotifyLabel-tournamentStart": "Turniro komenciĝis",
   "InAppNotifyLabel-tournamentEnd": "Turniro finiĝis",
-  "InvalidVariantCombination": "Tiu kombino de variaĵoj ne estas permesita por ĉi tiu ludo.",
+  "InvalidVariantCombination": "Tiu kombino de variaĵoj ne validas por ĉi tiu ludo.",
   "TotalRatings": "pritaksoj entute",
   "glicko": {
-    "displayHint": "Glicko-pritaksoj montriĝas laŭ la malsupra limo de la 95%-a konfidintervalo (pritakso − 2×RD), kun la plena RD en krampoj.",
-    "displayNote": "Tra la tuta retejo, Glicko-pritaksoj montriĝas laŭ la malsupra limo de la 95%-a konfidintervalo (pritakso − 2×RD), kun la plena RD en krampoj. <wikiLink>Ekscii pli pri la Glicko-pritaksa sistemo</wikiLink>."
+    "displayHint": "Glicko-poentaro montriĝas kiel 95%-fida poentaro (poentaro − 2×RD), kun la plena RD en krampoj.",
+    "displayNote": "En la tuta retejo Glicko-poentaro montriĝas kiel 95%-fida poentaro, kun la plena RD en krampoj. <wikiLink>Ekscii pli pri la Glicko-poentara sistemo</wikiLink>."
   },
   "solo": {
     "badge": "Solludo",
@@ -1909,7 +1909,7 @@
     },
     "stats": {
       "title": "Solludaj statistikoj",
-      "empty": "Ankoraŭ neniu solluda provo estas registrita.",
+      "empty": "Ankoraŭ neniu solluda provo registrita.",
       "attempts": "Provoj",
       "uniquePlayers": "Ludantoj",
       "repeatRate": "Reprova proporcio",
@@ -1918,7 +1918,7 @@
     },
     "leaderboard": {
       "title": "Ranglistoj laŭ semo",
-      "empty": "Ankoraŭ ne estas solludaj ranglistoj laŭ semo.",
+      "empty": "Ankoraŭ neniuj solludaj ranglistoj laŭ semo.",
       "seedSelect": "Defia semo",
       "poolSummary": "{{players}} ludantoj, {{attempts}} provoj",
       "boardHelp": "Variaĵo: {{variant}}. {{direction}}.",
@@ -2042,7 +2042,7 @@
       "title": "Administrado de retrosciigoj"
     },
     "auth": {
-      "signInRequired": "Vi devas esti ensalutinta por partopreni en la retrosciiga sistemo.",
+      "signInRequired": "Vi devas ensaluti por partopreni en la retrosciigo.",
       "signInToCreate": "Vi devas esti ensalutinta por raporti cimon, sugesti funkcion aŭ aldoni ludon al la dezirlisto.",
       "signInToCreateShort": "Ensalutu por sendi retrosciigon.",
       "signInToInteract": "Ensalutu por voĉdoni, observi aŭ komenti pri ĉi tiu ero.",
@@ -2122,7 +2122,7 @@
       "closed": "Fermita",
       "empty": {
         "bugs": "Ankoraŭ neniuj arkivitaj cimraportoj.",
-        "games": "Ankoraŭ neniuj arkivitaj ludoj el la dezirlisto.",
+        "games": "Ankoraŭ neniuj arkivitaj dezirlistaj ludoj.",
         "ideas": "Ankoraŭ neniuj arkivitaj ideoj pri funkcioj."
       },
       "implementedAs": "Nun en Abstract Play: {{name}}",
@@ -2195,7 +2195,7 @@
       "badgePrefix": "Kontrolantoj:",
       "divider": "────────────",
       "empty": "Neniu kontrolanto asignita.",
-      "hint": "Ĝis {{max}} kontrolantoj. Aldonitaj uzantoj ricevas unufojan sciigon; uzu \"Observi\" por ricevi daŭrajn ĝisdatigojn.",
+      "hint": "Ĝis {{max}} kontrolantoj. Aldonitaj uzantoj ricevas unufojan sciigon; uzu \"Observi\" por daŭraj ĝisdatigoj.",
       "remove": "Forigi {{name}}"
     },
     "status": {
