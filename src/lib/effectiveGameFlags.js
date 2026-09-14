@@ -42,8 +42,8 @@ export function applyEffectiveFlags(game0, engine, metaGame) {
   game0.sharedStash = flagSetIncludes(flags, "shared-stash");
   game0.noMoves = flagSetIncludes(flags, "no-moves");
   game0.noExploreFlag = flagSetIncludes(flags, "no-explore");
-  game0.automove = flagSetIncludes(flags, "automove") && !game0.noExploreFlag;
-  game0.autopass = flagSetIncludes(flags, "autopass") && !game0.noExploreFlag;
+  game0.automove = flagSetIncludes(flags, "automove") && !(game0.noExploreFlag || game0.noExplore);
+  game0.autopass = flagSetIncludes(flags, "autopass") && !(game0.noExploreFlag || game0.noExplore);
   game0.stackExpanding = flagSetIncludes(flags, "stacking-expanding");
 }
 
