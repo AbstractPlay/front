@@ -984,7 +984,7 @@
     "RatedGame": "This will be a rated game.",
     "RatedPlayersCount_one": "rated player",
     "RatedPlayersCount_other": "rated players",
-    "RatingsList": "{{name}} Ratings",
+    "RatingsList": "<gameLink>{{name}}</gameLink> Ratings",
     "Reject": "Reject",
     "RelatedSites": "Related sites",
     "ResetDefault": "Reset to defaults",

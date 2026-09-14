@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
 import { callAuthApi } from "../lib/api";
@@ -292,7 +292,18 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
       </PageHelmet>
       <article>
         <h1 className="has-text-centered title">
-          {t("RatingsList", { name: metaGameName })}
+          <Trans
+            i18nKey="RatingsList"
+            values={{ name: metaGameName }}
+            components={{
+              gameLink: (
+                <Link
+                  to={`/games/${metaGame}`}
+                  style={{ textDecoration: "underline" }}
+                />
+              ),
+            }}
+          />
         </h1>
         <div className="container">
           {tableNavigation}
