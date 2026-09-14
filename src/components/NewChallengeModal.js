@@ -7,8 +7,7 @@ import React, {
   useMemo,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { compareStrings } from "../lib/compareStrings";
-import Spinner from "./Spinner";
+import PlayerPickerTrigger from "./PlayerPickerTrigger";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
@@ -24,11 +23,8 @@ import {
 import { validateChallengeVariantSelection } from "../lib/variantChallengeValidation";
 import { useVariantSelectionValidity } from "../hooks/useVariantSelectionValidity";
 import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
-import {
-  buildHighestGlickoMap,
-  matchWinRateForChallenge,
-  passesMatchCompetitivenessFilter,
-} from "../lib/glickoMatchOdds";
+import { buildHighestGlickoMap } from "../lib/glickoMatchOdds";
+import { useChallengeOpponentFilters } from "../hooks/useChallengeOpponentFilters";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
@@ -37,7 +33,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const opponent = props.opponent;
   const fixedMetaGame = props.fixedMetaGame;
   const show = props.show;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [error, errorSetter] = useState(null);
   const [metaGame, metaGameSetter] = useState(null);
   const [playerCount, playerCountSetter] = useState(-1);
@@ -62,15 +58,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     "new-challenge-clock-hard",
     false
   );
-  const [onlySee, onlySeeSetter] = useStorageState(
-    "challenges-filter-opponent-activity",
-    "all"
-  );
-  const [matchFilter, matchFilterSetter] = useStorageState(
-    "challenges-filter-match",
-    "all"
-  );
-  const [minSeen, minSeenSetter] = useState(0);
+  const { setOnlySee } = useChallengeOpponentFilters();
   const [rated, ratedSetter] = useStorageState("new-challenge-rated", true); // rated or not
   const [noExplore, noExploreSetter] = useStorageState(
     "new-challenge-noExplore",
@@ -130,44 +118,6 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     () => buildHighestGlickoMap(summary?.ratings?.highest),
     [summary?.ratings?.highest]
   );
-  const matchFiltersDisabled = summaryRatingsLoadState === "pending";
-
-  const opponentMatchesCompetitiveness = useCallback(
-    (userId) => {
-      if (matchFilter === "all") {
-        return true;
-      }
-      if (metaGame === null || !globalMe?.id) {
-        return true;
-      }
-      if (!ratingsReady) {
-        return true;
-      }
-      const p = matchWinRateForChallenge({
-        highestMap: highestGlickoMap,
-        userId: globalMe.id,
-        challengerId: userId,
-        metaUid: metaGame,
-        variantUids: selectedVariants,
-        numPlayers: playerCount > 0 ? playerCount : 2,
-        rated: true,
-      });
-      if (p == null) {
-        return false;
-      }
-      return passesMatchCompetitivenessFilter(p, matchFilter);
-    },
-    [
-      matchFilter,
-      metaGame,
-      globalMe?.id,
-      ratingsReady,
-      highestGlickoMap,
-      selectedVariants,
-      playerCount,
-    ]
-  );
-
   useEffect(() => {
     if (error && errorRef.current) {
       errorRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -185,24 +135,13 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     }
   }, [allUsers, metaGame]);
 
-  useEffect(() => {
-    const now = new Date().getTime();
-    let min = 0;
-    if (onlySee === "week") {
-      min = now - 7 * 24 * 60 * 60 * 1000;
-    } else if (onlySee === "month") {
-      min = now - 30 * 24 * 60 * 60 * 1000;
-    }
-    minSeenSetter(min);
-  }, [onlySee]);
-
   const resetToDefault = () => {
     clockSpeedSetter("medium");
     clockStartSetter(48);
     clockIncSetter(24);
     clockMaxSetter(96);
     clockHardSetter(false);
-    onlySeeSetter("all");
+    setOnlySee("all");
     ratedSetter(true);
     noExploreSetter(false);
   };
@@ -655,77 +594,6 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             </p>
           </div>
         )}
-        {playerCount === -1 || standing || props.opponent !== undefined ? (
-          ""
-        ) : (
-          <>
-          <div className="control">
-            <p className="help">{t("newChallenge.opponentActivityHelp")}</p>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "all"}
-                value="all"
-                onChange={() => onlySeeSetter("all")}
-              />
-              {t("newChallenge.opponentActivityAll")}
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "week"}
-                value="week"
-                onChange={() => onlySeeSetter("week")}
-              />
-              {t("newChallenge.opponentActivity7Days")}
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "month"}
-                value="month"
-                onChange={() => onlySeeSetter("month")}
-              />
-              {t("newChallenge.opponentActivity30Days")}
-            </label>
-          </div>
-          <fieldset
-            className="control"
-            disabled={matchFiltersDisabled}
-            style={{ border: "none", margin: 0, padding: 0, marginTop: "0.75em" }}
-          >
-            <p className="help">{t("newChallenge.matchFilterHelp")}</p>
-            <span className="is-size-7" style={{ marginRight: "0.5em" }}>
-              {t("challenges.filters.matchLabel")}
-            </span>
-            {(
-              [
-                ["all", "challenges.filters.matchAll"],
-                ["good", "challenges.filters.matchGood"],
-                ["ideal", "challenges.filters.matchIdeal"],
-              ]
-            ).map(([value, labelKey]) => (
-              <label
-                key={value}
-                className="radio"
-                style={{ marginRight: "0.75em" }}
-              >
-                <input
-                  type="radio"
-                  name="new-challenge-match-filter"
-                  checked={matchFilter === value}
-                  onChange={() => matchFilterSetter(value)}
-                />
-                {" "}
-                {t(labelKey)}
-              </label>
-            ))}
-          </fieldset>
-          </>
-        )}
         {playerCount === -1 || standing
           ? ""
           : /* Opponents */
@@ -738,49 +606,23 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                       : t("ChooseOpponent", i)}
                   </label>
                   <div className="control">
-                    {users === null && !opponent ? (
-                      <Spinner />
-                    ) : opponent ? (
+                    {opponent ? (
                       formatUserDisplayName(opponent, allUsers)
                     ) : (
-                      <div className="select is-small">
-                        <select
-                          value={o.id || ""}
-                          name="users"
-                          id={"user_for_challenge" + i}
-                          onChange={(e) => {
-                            const selected = users.find(
-                              (user) => user.id === e.target.value
-                            );
-                            handleChangeOpponent({
-                              id: e.target.value,
-                              name: selected?.name ?? "",
-                              player: i,
-                            });
-                          }}
-                        >
-                          <option value="">--{t("Select")}--</option>
-                          {users
-                            .filter(
-                              (user) =>
-                                user.id === opponents[i].id ||
-                                (user.id !== globalMe.id &&
-                                  !opponents.some((o) => user.id === o.id) &&
-                                  user.lastSeen >= minSeen &&
-                                  opponentMatchesCompetitiveness(user.id))
-                            )
-                            .sort((a, b) =>
-                              compareStrings(a.name ?? "", b.name ?? "", i18n.language)
-                            )
-                            .map((item) => {
-                              return (
-                                <option key={item.id} value={item.id}>
-                                  {formatUserDisplayName(item, users)}
-                                </option>
-                              );
-                            })}
-                        </select>
-                      </div>
+                      <PlayerPickerTrigger
+                        id={"user_for_challenge" + i}
+                        value={o?.id || ""}
+                        users={users}
+                        allUsers={allUsers}
+                        slotIndex={i}
+                        selectedOpponentIds={opponents}
+                        metaGame={metaGame}
+                        selectedVariants={selectedVariants}
+                        playerCount={playerCount}
+                        highestMap={highestGlickoMap}
+                        ratingsReady={ratingsReady}
+                        onChange={handleChangeOpponent}
+                      />
                     )}
                   </div>
                 </div>

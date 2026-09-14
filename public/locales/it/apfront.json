@@ -2173,6 +2173,20 @@
     "applyDone": "Applicato a {{success}} di {{total}} gioco/i.",
     "applyFailures": "Operazione non riuscita per: {{games}}"
   },
+  "playerPicker": {
+    "choose": "Scegli un giocatore…",
+    "searchLabel": "Cerca",
+    "searchPlaceholder": "Digita per filtrare i giocatori…",
+    "noResults": "Nessun giocatore corrisponde alla tua ricerca.",
+    "noEligible": "Nessun giocatore corrisponde ai tuoi filtri. Prova ad allentare le impostazioni di attività o di partita.",
+    "loadingQuickPicks": "Caricamento dei tuoi avversari…",
+    "matchCount": "{{count}} di {{total}} giocatori",
+    "expectedWinRate": "La tua percentuale di vittoria prevista: {{percent}}",
+    "quickPicks": {
+      "mostPlayed": "Più affrontati",
+      "recent": "Avversari recenti"
+    }
+  },
   "gamePicker": {
     "choose": "Scegli un gioco…",
     "searchLabel": "Cerca",

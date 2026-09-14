@@ -3506,5 +3506,140 @@ The joy of batch processing is that I can retroactively correct things if issues
       <guid isPermaLink="false">1541925085739491409</guid>
     </item>
     
+    <item>
+      <title>Announcement</title>
+      <description>The new notifications system (https://discord.com/channels/526483743180062720/1111447982345298121/1541591327412719686) is replacing the old &amp;quot;Completed Games&amp;quot; section of the dashboard. This is just generally cleaner and easier to maintain. I&amp;apos;m backfilling the &amp;quot;new chat&amp;quot; notifications into the new panel and hiding the section on the dashboard. I&amp;apos;ll monitor for a few days before tearing everything down on the backend. Let me know if something unexpected happens.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 26 Aug 2026 20:24:27 GMT</pubDate>
+      <guid isPermaLink="false">1542268513388077066</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve done some restructuring of how player names are handled across the various components of our engine. The new code is propagating now. All my tests are showing things working, but don&amp;apos;t hesitate to let me know if something does not look right to you.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sat, 29 Aug 2026 20:03:00 GMT</pubDate>
+      <guid isPermaLink="false">1543350278940532779</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve just pushed some wide-ranging changes that are not user facing. It&amp;apos;s more about the infrastructure. Things appear to be working, but as always, do not hesitate to call out anything that looks odd. Thank you!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 31 Aug 2026 00:37:45 GMT</pubDate>
+      <guid isPermaLink="false">1543781810713137285</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I had to update our underlying AWS authentication libraries. Things appear to be working fine, but, as always, let me know if things start acting funny.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 31 Aug 2026 17:52:53 GMT</pubDate>
+      <guid isPermaLink="false">1544042307597377546</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>There was an issue with Amazons not persisting variants correctly. Fixing this will result in what *might* be a relatively dramatic shift in ratings when the rater runs again this evening (it will recalculate the ratings in a variant-sensitive way) . Heads up 🙂</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 04 Sep 2026 17:14:28 GMT</pubDate>
+      <guid isPermaLink="false">1545482194305286274</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Three changes to the customization screen:
+1) You can now save your game-specific custom CSS here and it will apply account wide. I know this is a niche feature, but this unifies everything into the one screen. The old device-specific custom CSS feature (a button below the board) remains available for now.
+2) There is now a &amp;quot;preferred colour&amp;quot; setting you can set globally or game specifically. What this does is adjust the colour palettes so that whatever seat you are in, it will try to use that given colour. Another niche feature, but there it is.
+3) Finally, the old palette system is fully closed now. To make it easier to copy specific customizations to a number of games at once, at the bottom of the screen, down with the Save and Delete buttons, there is an &amp;quot;Apply to other games...&amp;quot; button. From here you can copy all or part of your current customization to an arbitrary number of other games.
+
+Please let me know if something doesn&amp;apos;t work as you expect, or if you have further suggestions for improvements. Please reach out in #customization if you have questions about how to achieve a certain goal.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 07 Sep 2026 01:59:09 GMT</pubDate>
+      <guid isPermaLink="false">1546339011235414038</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>New navigation bar rolling out now. I simplified the icons. All the profile-related stuff is in a new avatar menu on the far right. To the left of that is the notifications menu. You can mark items read or dismiss them entirely. This is also where you&amp;apos;ll be told if the news file has been updated. To the left of that is the dark/light mode toggle, then the rest of the menu bar. On mobile, you see the logo (which takes you to your dashboard), the three icons, and the hamburger icon with the rest of the menu options. I tested things on desktop and mobile and I think this is far superior to our previous layout. 
+
+Currently, read notifications auto-dismiss after 30 days. Unread notifications auto-purge after six months (gotta keep the database clean).
+
+Let me know if something does not work as you expect or if you have suggestions for further improvements.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Mon, 07 Sep 2026 23:26:55 GMT</pubDate>
+      <guid isPermaLink="false">1546663085308379227</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Two new games are now live:
+- In Marc Rebillet&amp;apos;s game [Bridges](https://play.abstractplay.com/games/bridges), players compete to build the longest bridges. Thanks to @ManaT for coding this for us!
+- I&amp;apos;m pleased to announce our first single-player game, James Ernest&amp;apos;s [El Oso](https://play.abstractplay.com/games/eloso). You can launch a game from the game&amp;apos;s landing page or from the normal &amp;quot;Issue a new challenge&amp;quot; dialog. Solo games use deterministic randomization based on text seeds, so you can try the same series of dice rolls numerous times or compete against others using the same seed. It may take a few days of play before I land on the best ways of presenting game stats, but the engine itself appears to be working fine.
+
+Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 09 Sep 2026 17:42:50 GMT</pubDate>
+      <guid isPermaLink="false">1547301272460202024</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Thank you again, all, for participating in the beta preview! Because opinions are diverse, I&amp;apos;m keeping all options on the table for the foreseeable future. All four layouts are now available as first-class options. &amp;quot;Classic&amp;quot; remains available for all who prefer it! The default is now &amp;quot;Strip &amp;amp; Dock,&amp;quot; but in the bar in all views is a button that shows the name of your current view. Click it to select one of the others. Your choice is persisted per device (so your tablet can have a different default than your desktop). I&amp;apos;ll be collecting some information on which layouts are preferred and revisiting everything after a few months of usage. I continue to encourage feedback and suggestions on how to improve all the various layouts. Let me know if there&amp;apos;s something I can do to make a particular layout even better! Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 09 Sep 2026 20:45:40 GMT</pubDate>
+      <guid isPermaLink="false">1547347281999560796</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Avatar customization is now available. Click the icon and edit your user settings. You&amp;apos;ll now see a selection of 15 different styles, all deterministic, and a field to select a seed. The badge is visible from a player&amp;apos;s profile page. Go nuts! Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Wed, 09 Sep 2026 21:35:11 GMT</pubDate>
+      <guid isPermaLink="false">1547359745239818271</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>And rolling out two new pages under the &amp;quot;Games&amp;quot; heading in the nav: (1) A list of all open challenges across all games and (2) a list of recently completed games. I didn&amp;apos;t do a backfill on the completed games, so it will populate as games get completed moving forward. Let me know if things don&amp;apos;t work as expected.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Thu, 10 Sep 2026 00:06:45 GMT</pubDate>
+      <guid isPermaLink="false">1547397885740716093</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;ve decided to bring bug reports, feature requests, and the wishlist all into the app. We have too many people not on Discord, and I want everybody to be able to participate. The UI is a little unrefined, but I will chip away at it. Everything is available through the new Community menu.
+
+The BGG wishlist has been imported along with the thumb counts. BGG doesn&amp;apos;t make it possible for me to import comments. I encourage people to check often (you can sort by date added) and vote for the games you&amp;apos;re most interested in. I&amp;apos;ve closed the GeekList to new entries, but I&amp;apos;ll leave the list there for now.
+
+All unfinished and unresolved feature requests and bug reports have been imported from Discord, including comments, mapping them to AP users where it could be determined. It is going to take me some time to make my way through the backlog and categorize, prioritize, and close old entries. You may start to see some notifications related to entries tied to your account. You can vote for issues and bugs and &amp;quot;watch&amp;quot; them if you want notifications when they change. Filers are automatically subscribed (but you can unsubscribe). While folks are always welcome to post suggestions and bug reports to Discord if that&amp;apos;s easiest for you, I encourage folks to use the in-app system where possible.
+
+As always, I appreciate your patience as things keep changing, and I warmly welcome continued feedback and suggestions for improvement.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Fri, 11 Sep 2026 03:57:04 GMT</pubDate>
+      <guid isPermaLink="false">1547818236060377098</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>Storisende players: I&amp;apos;ve done a major overhaul of the way Storisende game states are saved, which should greatly improve performance. The new format is only applied to *new* games. Older games continue to be processed as usual. I&amp;apos;ve done extensive regression testing to ensure everything works as expected, but do not hesitate to let me know if something unexpected happens.</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 13 Sep 2026 20:37:55 GMT</pubDate>
+      <guid isPermaLink="false">1548794884847313088</guid>
+    </item>
+    
+    <item>
+      <title>Announcement</title>
+      <description>I&amp;apos;m rolling out some new competitiveness filters. 
+- On all pages where you see lists of open challenges, there&amp;apos;s a new &amp;quot;Match %&amp;quot; column (which I will likely remove eventually) that is the odds that you would win the game against the challenger based on Glicko ratings and RD. There are new radio button filters for finding &amp;quot;ideal&amp;quot; matches (45-55% win chance), &amp;quot;good&amp;quot; matches (35-65% win chance), or just the unfiltered list. By selecting one of these radio buttons, unrated challenges are hidden.
+- On the new challenge dialog, you can now filter the list of available opponents by the same criteria, based on the selected metagame and variants.
+
+I&amp;apos;m pretty sure the math is right here, but I&amp;apos;m open to suggestions otherwise, or for other ways of presenting this information. Gotta start somewhere 🙂 Enjoy!</description>
+      <link>https://play.abstractplay.com/news</link>
+      <pubDate>Sun, 13 Sep 2026 22:48:54 GMT</pubDate>
+      <guid isPermaLink="false">1548827846527688765</guid>
+    </item>
+    
   </channel>
 </rss>

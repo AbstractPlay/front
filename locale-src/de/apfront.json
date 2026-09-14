@@ -5255,6 +5255,46 @@
     "src": "The player profile page is very much \"under development.\" It relies on statistics tabulated daily.",
     "out": "Die Spielerprofilseite befindet sich noch stark \"in Entwicklung\". Sie basiert auf täglich tabellierten Statistiken."
   },
+  "playerPicker.choose": {
+    "src": "Choose a player…",
+    "out": "Spieler auswählen…"
+  },
+  "playerPicker.expectedWinRate": {
+    "src": "Your expected win rate: {{percent}}",
+    "out": "Deine erwartete Siegquote: {{percent}}"
+  },
+  "playerPicker.loadingQuickPicks": {
+    "src": "Loading your opponents…",
+    "out": "Gegner werden geladen…"
+  },
+  "playerPicker.matchCount": {
+    "src": "{{count}} of {{total}} players",
+    "out": "{{count}} von {{total}} Spielern"
+  },
+  "playerPicker.noEligible": {
+    "src": "No players match your filters. Try relaxing activity or match settings.",
+    "out": "Keine Spieler entsprechen deinen Filtern. Versuche, die Aktivitäts- oder Match-Einstellungen zu lockern."
+  },
+  "playerPicker.noResults": {
+    "src": "No players match your search.",
+    "out": "Keine Spieler entsprechen deiner Suche."
+  },
+  "playerPicker.quickPicks.mostPlayed": {
+    "src": "Most played against",
+    "out": "Häufigste Gegner"
+  },
+  "playerPicker.quickPicks.recent": {
+    "src": "Recent opponents",
+    "out": "Letzte Gegner"
+  },
+  "playerPicker.searchLabel": {
+    "src": "Search",
+    "out": "Suchen"
+  },
+  "playerPicker.searchPlaceholder": {
+    "src": "Type to filter players…",
+    "out": "Tippen, um Spieler zu filtern…"
+  },
   "players.filters.hideBlocked": {
     "src": "Hide blocked",
     "out": "Blockierte ausblenden"

@@ -2201,6 +2201,21 @@ span.hardTime::after {
     opacity: 0.8;
   }
 
+  .player-picker-filters .radio {
+    display: inline-block;
+    margin-right: 0.75em;
+  }
+
+  .player-picker-row-avatar {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .player-picker-browse-list .player-picker-row {
+    text-align: left;
+  }
+
   #tournamentsPage .tournaments-page-tabs {
     margin-bottom: 1rem;
   }
