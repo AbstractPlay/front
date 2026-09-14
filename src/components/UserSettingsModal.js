@@ -28,6 +28,7 @@ import Modal from "./Modal";
 import { useStorageState } from "react-use-storage-state";
 import { countryCodeList } from "../lib/countryCodeList";
 import { useStore } from "../stores";
+import { fetchUserNames } from "../lib/fetchUserNames";
 import BotsModal from "./Bots/BotsModal";
 import { validateDisplayName } from "./Bots/botUtils";
 import {
@@ -207,6 +208,13 @@ function UserSettingsModal(props) {
       nameErrorSetter(result.error || t("DisplayNameError", { name }));
       return;
     }
+    const trimmed = name.trim();
+    const { setGlobalMe, setUsers } = useStore.getState();
+    setGlobalMe((val) => (val ? { ...val, name: trimmed } : val));
+    setUsers((prev) =>
+      prev.map((u) => (u.id === globalMe?.id ? { ...u, name: trimmed } : u))
+    );
+    fetchUserNames({ force: true });
     changingNameSetter(false);
     updatedSetter((updated) => updated + 1);
   };
