@@ -984,7 +984,7 @@
   "RatedGame": "Este será un juego evaluado.",
   "RatedPlayersCount_one": "jugador evaluado",
   "RatedPlayersCount_other": "jugadores evaluados",
-  "RatingsList": "Clasificación de <gameLink>{{name}}</gameLink>",
+  "RatingsList": "Calificaciones de <gameLink>{{name}}</gameLink>",
   "Reject": "Rechazar",
   "RelatedSites": "Sitios relacionados",
   "ResetDefault": "Restablecer a valores predeterminados",
@@ -1693,6 +1693,8 @@
     "board": {
       "filterLabel": "Filtrar lista",
       "filterAll": "Todos ({{count}})",
+      "showClosed": "Cerrados (no archivados)",
+      "emptyClosed": "No hay elementos cerrados listados aquí. Después de archivarlos, se mueven al historial de comentarios.",
       "sortBy": "Ordenar por",
       "sortVotes": "Votos (más votados primero)",
       "sortRecent": "Fecha de publicación (más recientes primero)"

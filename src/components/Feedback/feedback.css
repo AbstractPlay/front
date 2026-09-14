@@ -488,6 +488,17 @@
   color: var(--high-contrast-font-color);
 }
 
+.feedback-board-chips .button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.feedback-board-chips .button:disabled:hover,
+.feedback-board-chips .button:disabled:focus-visible {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+}
+
 .feedback-board-chips {
   display: flex;
   flex-wrap: wrap;

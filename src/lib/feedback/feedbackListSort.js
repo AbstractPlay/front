@@ -5,6 +5,7 @@ import {
 } from "./feedbackConstants";
 
 const BOARD_SORT_PREFIX = "feedback-board-sort:";
+const BOARD_CLOSED_PREFIX = "feedback-board-closed:";
 const ADMIN_SORT_PREFIX = "feedback-admin-sort:";
 
 export const FEEDBACK_ADMIN_SORT_OPTIONS = ["default", "priority", "status"];
@@ -60,6 +61,22 @@ export function setStoredFeedbackBoardSort(kind, sortBy) {
     return;
   }
   writeStorage(`${BOARD_SORT_PREFIX}${kind}`, sortBy);
+}
+
+export function getStoredFeedbackBoardClosedOnly(kind) {
+  return readStorage(`${BOARD_CLOSED_PREFIX}${kind}`) === "1";
+}
+
+export function setStoredFeedbackBoardClosedOnly(kind, closedOnly) {
+  if (closedOnly) {
+    writeStorage(`${BOARD_CLOSED_PREFIX}${kind}`, "1");
+  } else {
+    try {
+      localStorage.removeItem(`${BOARD_CLOSED_PREFIX}${kind}`);
+    } catch {
+      // ignore
+    }
+  }
 }
 
 export function getStoredFeedbackAdminSort(kind) {

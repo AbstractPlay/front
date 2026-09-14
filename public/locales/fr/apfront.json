@@ -984,7 +984,7 @@
   "RatedGame": "Ce sera une partie classée.",
   "RatedPlayersCount_one": "joueur classé",
   "RatedPlayersCount_other": "joueurs classés",
-  "RatingsList": "Classement de <gameLink>{{name}}</gameLink>",
+  "RatingsList": "Classements de <gameLink>{{name}}</gameLink>",
   "Reject": "Refuser",
   "RelatedSites": "Sites associés",
   "ResetDefault": "Réinitialiser aux valeurs par défaut",
@@ -1693,6 +1693,8 @@
     "board": {
       "filterLabel": "Filtrer la liste",
       "filterAll": "Tous ({{count}})",
+      "showClosed": "Fermés (non archivés)",
+      "emptyClosed": "Aucun élément fermé n'est affiché ici. Après archivage, ils sont déplacés dans l'historique des retours.",
       "sortBy": "Trier par",
       "sortVotes": "Votes (les plus nombreux en premier)",
       "sortRecent": "Date de publication (les plus récentes en premier)"

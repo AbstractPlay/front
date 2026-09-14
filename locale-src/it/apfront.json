@@ -1616,8 +1616,8 @@
     "out": "giocatori con punteggio"
   },
   "RatingsList": {
-    "src": "{{name}} Ratings",
-    "out": "Classifiche di {{name}}"
+    "src": "<gameLink>{{name}}</gameLink> Ratings",
+    "out": "Valutazioni <gameLink>{{name}}</gameLink>"
   },
   "RecentCompletedGames": {
     "src": "Recent completed games",
@@ -4138,6 +4138,14 @@
   "feedback.auth.signInToViewMine": {
     "src": "Log in to see your submitted feedback.",
     "out": "Accedi per vedere i feedback che hai inviato."
+  },
+  "feedback.board.emptyClosed": {
+    "src": "No closed items are listed here. After archive, they move to feedback history.",
+    "out": "Qui non è elencato alcun elemento chiuso. Dopo l'archiviazione, verranno spostati nello storico dei feedback."
+  },
+  "feedback.board.showClosed": {
+    "src": "Closed (not archived)",
+    "out": "Chiusi (non archiviati)"
   },
   "feedback.board.sortBy": {
     "src": "Sort by",
