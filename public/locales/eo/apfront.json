@@ -1077,7 +1077,8 @@
     "unhighlight": "Malmarki",
     "unwatch": "Ĉesi observi",
     "rate": "Proporcio",
-    "averageElo": "Elo"
+    "averageElo": "Elo",
+    "matchPercent": "Venkŝanco"
   },
   "TimeRemaining": "Restanta tempo",
   "ToggleFullSize": "Baskuligi plenaltan tabulbildon",
@@ -1544,7 +1545,11 @@
         "feedbackDeleted": "Ero forigita el la dezirlisto: <wishlistLink>{{title}}</wishlistLink>. Kialo: {{reason}}",
         "feedbackReply": "Nova respondo pri <feedbackLink>{{title}}</feedbackLink>{{preview}}",
         "feedbackReviewRequested": "Vi estis aldonita kiel kontrolanto de <feedbackLink>{{title}}</feedbackLink>",
-        "feedbackStatus": "Ŝanĝo de stato pri <feedbackLink>{{title}}</feedbackLink>: {{status}}"
+        "feedbackStatus": "Ŝanĝo de stato pri <feedbackLink>{{title}}</feedbackLink>: {{status}}",
+        "feedbackNew": "Nova {{kindLabel}}: <feedbackLink>{{title}}</feedbackLink>",
+        "feedbackNewKind_bug": "cimraporto",
+        "feedbackNewKind_feature": "ideo pri funkcio",
+        "feedbackNewKind_wishlist": "ludo por la dezirlisto"
       }
     }
   },
@@ -1935,7 +1940,13 @@
       "ratedOnly": "Nur pritaksitaj ludoj",
       "softTimeOnly": "Nur ludoj sen deviga tempolimo",
       "starredOnly": "Nur stelumitaj ludoj",
-      "unratedOnly": "Nur nepritaksitaj ludoj"
+      "unratedOnly": "Nur nepritaksitaj ludoj",
+      "matchLegend": "Ekvilibro de matĉo",
+      "matchLabel": "Matĉo:",
+      "matchAll": "Ĉiuj matĉoj",
+      "matchGood": "Bona matĉo (35–65%)",
+      "matchIdeal": "Ideala matĉo (45–55%)",
+      "matchHint": "Por taksataj defioj: la atendata venkoŝanco kontraŭ la defianto laŭ Glicko-2 (por ĉiu grupo de ludo kaj variaĵoj). Ludantoj novaj en tiu grupo ricevas la defaŭltan takson (1200, RD 350)."
     }
   },
   "common": {
@@ -2180,7 +2191,14 @@
       "title": "Raporti cimon",
       "titleFeature": "Sugesti funkcion",
       "titleLabel": "Titolo",
-      "titleWishlist": "Sugesti ludon"
+      "titleWishlist": "Sugesti ludon",
+      "bugIntro": "Bonvolu doni kiel eble plej multajn detalojn. Se la problemo rilatas al specifa ludo, aldonu ligilon al ĝi. Ekrankopioj ĉiam helpas. Ju pli da informoj vi donas, des pli verŝajne ni povos rapide ripari ĝin. Dankon!",
+      "relevantPageLabel": "Kie vi vidis la problemon?",
+      "relevantPageHint": "Elektu paĝon, kiun vi lastatempe vizitis, aŭ algluu ligilon al la ludo aŭ ekrano, kie okazis la cimo.",
+      "relevantPageNone": "Mi ne certas / neniu specifa paĝo",
+      "relevantPageCustom": "Alia ligilo al Abstract Play",
+      "relevantPageCustomPlaceholder": "https://play.abstractplay.com/…",
+      "relevantPageInvalid": "Bonvolu enigi validan ligilon al Abstract Play (en la sama retejo kiel ĉi tiu paĝo)."
     },
     "priority": {
       "low": "Malalta",
@@ -2264,5 +2282,13 @@
       "title": "Dezirlisto de ludoj",
       "viewExisting": "Vidi la ekzistantan eron de la dezirlisto"
     }
-  }
+  },
+  "newChallenge": {
+    "opponentActivityHelp": "Limigu la liston de kontraŭuloj laŭ lastatempa aktiveco en la retejo.",
+    "opponentActivityAll": "Ĉiuj kontraŭuloj",
+    "opponentActivity7Days": "Aktivaj en la lastaj 7 tagoj",
+    "opponentActivity30Days": "Aktivaj en la lastaj 30 tagoj",
+    "matchFilterHelp": "Limigu kontraŭulojn laŭ la atendata venkoŝanco por ĉi tiu ludo kaj variaĵoj (Glicko-2), sendepende de tio, ĉu la defio estas markita kiel taksata."
+  },
+  "InAppNotifyLabel-feedbackNew": "Novaj retrosciigoj"
 }
