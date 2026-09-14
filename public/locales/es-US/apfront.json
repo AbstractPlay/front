@@ -984,7 +984,7 @@
   "RatedGame": "Este será un juego evaluado.",
   "RatedPlayersCount_one": "jugador evaluado",
   "RatedPlayersCount_other": "jugadores evaluados",
-  "RatingsList": "Clasificaciones de {{name}}",
+  "RatingsList": "Clasificación de <gameLink>{{name}}</gameLink>",
   "Reject": "Rechazar",
   "RelatedSites": "Sitios relacionados",
   "ResetDefault": "Restablecer a valores predeterminados",

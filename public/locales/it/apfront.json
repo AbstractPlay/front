@@ -984,7 +984,7 @@
   "RatedGame": "Questa sarà una partita con punteggio.",
   "RatedPlayersCount_one": "giocatore con punteggio",
   "RatedPlayersCount_other": "giocatori con punteggio",
-  "RatingsList": "Classifiche di {{name}}",
+  "RatingsList": "Valutazioni di <gameLink>{{name}}</gameLink>",
   "Reject": "Rifiuta",
   "RelatedSites": "Siti correlati",
   "ResetDefault": "Ripristina predefiniti",

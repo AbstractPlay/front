@@ -984,7 +984,7 @@
   "RatedGame": "Ce sera une partie classée.",
   "RatedPlayersCount_one": "joueur classé",
   "RatedPlayersCount_other": "joueurs classés",
-  "RatingsList": "Classements de {{name}}",
+  "RatingsList": "Classement de <gameLink>{{name}}</gameLink>",
   "Reject": "Refuser",
   "RelatedSites": "Sites associés",
   "ResetDefault": "Réinitialiser aux valeurs par défaut",

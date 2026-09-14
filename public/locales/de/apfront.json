@@ -984,7 +984,7 @@
   "RatedGame": "Dies wird ein gewertetes Spiel sein.",
   "RatedPlayersCount_one": "gewerteter Spieler",
   "RatedPlayersCount_other": "gewertete Spieler",
-  "RatingsList": "{{name}}-Wertungen",
+  "RatingsList": "<gameLink>{{name}}</gameLink>-Bewertungen",
   "Reject": "Ablehnen",
   "RelatedSites": "Verwandte Seiten",
   "ResetDefault": "Auf Standard zurücksetzen",
