@@ -74,8 +74,12 @@ async function fetchOpen(query, pars) {
   return { ok: true, data };
 }
 
-export async function listFeedback({ kind, sort = "recent", limit = 50, cursor }) {
-  return fetchOpen("feedback_list", { kind, sort, limit, cursor });
+export async function listFeedback({ kind, sort = "recent", limit = 50, cursor, closedOnly }) {
+  const pars = { kind, sort, limit, cursor };
+  if (closedOnly) {
+    pars.closedOnly = true;
+  }
+  return fetchOpen("feedback_list", pars);
 }
 
 const WISHLIST_COVER_URL_BATCH = 20;
@@ -121,8 +125,10 @@ async function listAllPages(fetchPage) {
 }
 
 /** Fetch every page until the API stops returning nextCursor. */
-export async function listFeedbackAll({ kind, sort = "recent", limit = 100 }) {
-  const result = await listAllPages((cursor) => listFeedback({ kind, sort, limit, cursor }));
+export async function listFeedbackAll({ kind, sort = "recent", limit = 100, closedOnly }) {
+  const result = await listAllPages((cursor) => listFeedback({
+    kind, sort, limit, cursor, closedOnly,
+  }));
   if (!result.ok) {
     return result;
   }

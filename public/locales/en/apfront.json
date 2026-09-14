@@ -1693,6 +1693,8 @@
         "board": {
             "filterLabel": "Filter list",
             "filterAll": "All ({{count}})",
+            "showClosed": "Closed (not archived)",
+            "emptyClosed": "No closed items are listed here. After archive, they move to feedback history.",
             "sortBy": "Sort by",
             "sortVotes": "Votes (most first)",
             "sortRecent": "Date posted (newest first)"

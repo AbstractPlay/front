@@ -26,7 +26,9 @@ import {
   WISHLIST_SORT_OPTIONS,
 } from "../../lib/feedback/feedbackConstants";
 import {
+  getStoredFeedbackBoardClosedOnly,
   getStoredFeedbackBoardSort,
+  setStoredFeedbackBoardClosedOnly,
   setStoredFeedbackBoardSort,
 } from "../../lib/feedback/feedbackListSort";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
@@ -45,12 +47,28 @@ function FeedbackBoard({ kind = "bug" }) {
   const [error, setError] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [showClosedOnly, setShowClosedOnly] = useState(() => getStoredFeedbackBoardClosedOnly(kind));
   const isAdmin = Boolean(globalMe?.admin);
   const [sortBy, setSortBy] = useState(() => getStoredFeedbackBoardSort(kind, { isAdmin }));
 
   useEffect(() => {
     setSortBy(getStoredFeedbackBoardSort(kind, { isAdmin }));
+    setShowClosedOnly(getStoredFeedbackBoardClosedOnly(kind));
+    setStatusFilter("");
+    setCategoryFilter("");
   }, [isAdmin, kind]);
+
+  const handleClosedOnlyToggle = () => {
+    setShowClosedOnly((prev) => {
+      const next = !prev;
+      setStoredFeedbackBoardClosedOnly(kind, next);
+      if (next) {
+        setStatusFilter("");
+        setCategoryFilter("");
+      }
+      return next;
+    });
+  };
 
   const handleSortByChange = (nextSort) => {
     setSortBy(nextSort);
@@ -69,6 +87,7 @@ function FeedbackBoard({ kind = "bug" }) {
         kind,
         sort: kind === "wishlist" ? defaultSort : listSort,
         limit: 100,
+        closedOnly: showClosedOnly,
       });
       if (cancelled) {
         return;
@@ -85,7 +104,7 @@ function FeedbackBoard({ kind = "bug" }) {
     return () => {
       cancelled = true;
     };
-  }, [kind, defaultSort, listSort]);
+  }, [kind, defaultSort, listSort, showClosedOnly]);
 
   const statusCounts = useMemo(
     () => countItemsByStatus(items, statusChips),
@@ -105,10 +124,10 @@ function FeedbackBoard({ kind = "bug" }) {
 
   const displayItems = useMemo(() => {
     let filtered = items;
-    if (statusFilter) {
+    if (!showClosedOnly && statusFilter) {
       filtered = filtered.filter((item) => item.status === statusFilter);
     }
-    if (kind === "wishlist" && categoryFilter) {
+    if (!showClosedOnly && kind === "wishlist" && categoryFilter) {
       filtered = filtered.filter((item) => item.wishlistCategory === categoryFilter);
     }
     if (kind === "wishlist") {
@@ -120,7 +139,7 @@ function FeedbackBoard({ kind = "bug" }) {
       }
     }
     return filtered;
-  }, [categoryFilter, isAdmin, items, kind, sortBy, statusFilter]);
+  }, [categoryFilter, isAdmin, items, kind, showClosedOnly, sortBy, statusFilter]);
 
   const sortOptions = kind === "wishlist"
     ? WISHLIST_SORT_OPTIONS
@@ -160,7 +179,8 @@ function FeedbackBoard({ kind = "bug" }) {
         <div className="feedback-board-chips" role="toolbar" aria-label={t("feedback.board.filterLabel")}>
           <button
             type="button"
-            className={`button is-small apButtonNeutral${!statusFilter && !categoryFilter ? " is-selected" : ""}`}
+            className={`button is-small apButtonNeutral${!showClosedOnly && !statusFilter && !categoryFilter ? " is-selected" : ""}`}
+            disabled={showClosedOnly}
             onClick={() => {
               setStatusFilter("");
               setCategoryFilter("");
@@ -173,6 +193,7 @@ function FeedbackBoard({ kind = "bug" }) {
               key={chip}
               type="button"
               className={`button is-small apButtonNeutral${statusFilter === chip ? " is-selected" : ""}`}
+              disabled={showClosedOnly}
               onClick={() => {
                 setCategoryFilter("");
                 setStatusFilter(chip);
@@ -187,6 +208,7 @@ function FeedbackBoard({ kind = "bug" }) {
               key={chip}
               type="button"
               className={`button is-small apButtonNeutral${categoryFilter === chip ? " is-selected" : ""}`}
+              disabled={showClosedOnly}
               onClick={() => {
                 setStatusFilter("");
                 setCategoryFilter(chip);
@@ -196,6 +218,14 @@ function FeedbackBoard({ kind = "bug" }) {
               {categoryCounts[chip] > 0 ? ` (${categoryCounts[chip]})` : ""}
             </button>
           )) : null}
+          <button
+            type="button"
+            className={`button is-small apButtonNeutral feedback-board-closed-toggle${showClosedOnly ? " is-selected" : ""}`}
+            aria-pressed={showClosedOnly}
+            onClick={handleClosedOnlyToggle}
+          >
+            {t("feedback.board.showClosed")}
+          </button>
         </div>
         <div className="field feedback-board-sort">
           <label className="label" htmlFor="feedback-board-sort">{t("feedback.board.sortBy")}</label>
@@ -222,7 +252,9 @@ function FeedbackBoard({ kind = "bug" }) {
       </div>
       {error && <p className="has-text-danger">{error}</p>}
       {displayItems.length === 0 ? (
-        <p className="feedback-muted">{t(`feedback.${boardKey}.empty`)}</p>
+        <p className="feedback-muted">
+          {showClosedOnly ? t("feedback.board.emptyClosed") : t(`feedback.${boardKey}.empty`)}
+        </p>
       ) : (
         <ul className="feedback-board-list">
           {displayItems.map((item) => (

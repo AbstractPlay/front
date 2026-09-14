@@ -1,9 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest";
 import {
   getStoredFeedbackAdminSort,
+  getStoredFeedbackBoardClosedOnly,
   getStoredFeedbackBoardSort,
   isValidFeedbackBoardSort,
   setStoredFeedbackAdminSort,
+  setStoredFeedbackBoardClosedOnly,
   setStoredFeedbackBoardSort,
 } from "./feedbackListSort";
 
@@ -44,5 +46,15 @@ describe("feedbackListSort", () => {
     setStoredFeedbackAdminSort("feature", "priority");
     expect(getStoredFeedbackAdminSort("bug")).toBe("status");
     expect(getStoredFeedbackAdminSort("feature")).toBe("priority");
+  });
+
+  it("persists closed-only board filter per kind", () => {
+    expect(getStoredFeedbackBoardClosedOnly("bug")).toBe(false);
+    setStoredFeedbackBoardClosedOnly("bug", true);
+    setStoredFeedbackBoardClosedOnly("feature", false);
+    expect(getStoredFeedbackBoardClosedOnly("bug")).toBe(true);
+    expect(getStoredFeedbackBoardClosedOnly("feature")).toBe(false);
+    setStoredFeedbackBoardClosedOnly("bug", false);
+    expect(getStoredFeedbackBoardClosedOnly("bug")).toBe(false);
   });
 });

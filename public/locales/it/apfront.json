@@ -984,7 +984,7 @@
   "RatedGame": "Questa sarà una partita con punteggio.",
   "RatedPlayersCount_one": "giocatore con punteggio",
   "RatedPlayersCount_other": "giocatori con punteggio",
-  "RatingsList": "Classifiche di {{name}}",
+  "RatingsList": "Valutazioni <gameLink>{{name}}</gameLink>",
   "Reject": "Rifiuta",
   "RelatedSites": "Siti correlati",
   "ResetDefault": "Ripristina predefiniti",
@@ -1693,6 +1693,8 @@
     "board": {
       "filterLabel": "Filtra elenco",
       "filterAll": "Tutti ({{count}})",
+      "showClosed": "Chiusi (non archiviati)",
+      "emptyClosed": "Qui non è elencato alcun elemento chiuso. Dopo l'archiviazione, verranno spostati nello storico dei feedback.",
       "sortBy": "Ordina per",
       "sortVotes": "Voti (dal più votato)",
       "sortRecent": "Data di pubblicazione (dal più recente)"

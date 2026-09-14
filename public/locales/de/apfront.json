@@ -984,7 +984,7 @@
   "RatedGame": "Dies wird ein gewertetes Spiel sein.",
   "RatedPlayersCount_one": "gewerteter Spieler",
   "RatedPlayersCount_other": "gewertete Spieler",
-  "RatingsList": "{{name}}-Wertungen",
+  "RatingsList": "<gameLink>{{name}}</gameLink> Wertungen",
   "Reject": "Ablehnen",
   "RelatedSites": "Verwandte Seiten",
   "ResetDefault": "Auf Standard zurücksetzen",
@@ -1693,6 +1693,8 @@
     "board": {
       "filterLabel": "Liste filtern",
       "filterAll": "Alle ({{count}})",
+      "showClosed": "Geschlossen (nicht archiviert)",
+      "emptyClosed": "Hier sind keine geschlossenen Einträge aufgeführt. Nach dem Archivieren werden sie in den Feedback-Verlauf verschoben.",
       "sortBy": "Sortieren nach",
       "sortVotes": "Stimmen (meiste zuerst)",
       "sortRecent": "Erstellungsdatum (neueste zuerst)"
