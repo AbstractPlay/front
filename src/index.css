@@ -2031,6 +2031,13 @@ span.hardTime::after {
     font-size: smaller;
   }
 
+  #playerProfile .player-profile-past-names {
+    color: var(--secondary-font-color);
+    margin: 0 auto 0.75rem;
+    max-width: 40rem;
+    text-align: center;
+  }
+
   #playerProfile .player-profile-tabs {
     margin-bottom: 1rem;
   }

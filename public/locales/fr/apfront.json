@@ -976,7 +976,7 @@
   "ProfileCountryHelp": "Dites aux gens d'où vous venez ! Vous pouvez saisir ce que vous voulez ici, mais si vous entrez un code pays ISO valide à deux ou trois caractères, le drapeau approprié sera affiché sur votre profil.",
   "ProfileFor": "Profil de joueur pour {{player}}",
   "ProfileName": "Nom d'affichage",
-  "ProfileNameHelp": "C'est le nom que les autres utilisateurs du site verront. Il pourra être modifié ultérieurement. Il doit être unique parmi les noms actuellement utilisés et récemment utilisés.",
+  "ProfileNameHelp": "C'est le nom que les autres verront sur le site. Il peut être modifié ultérieurement. Il doit être unique parmi les noms d'affichage actuellement utilisés (sans tenir compte de la casse et des espaces supplémentaires).",
   "ProfileTagline": "Une description libre (255 caractères max)",
   "Publish": "Publier l'exploration",
   "PublishHelp": "Publiez l'exploration que vous avez effectuée pendant la partie afin que tout le monde puisse la voir.",
@@ -1551,6 +1551,7 @@
       "history": "Historique des parties",
       "highlights": "Mises en surbrillance"
     },
+    "pastDisplayNames": "Anciennement connu sous le nom de : {{names}}",
     "tabs": {
       "competition": "Compétition",
       "activity": "Activité",

@@ -28,6 +28,7 @@ import ChallengeTheyRespond from "./Me/ChallengeTheyRespond";
 import ChallengeOpen from "./Me/ChallengeOpen";
 import { useStore } from "../stores";
 import { testBotStatus } from "./Bots/botApi";
+import { rawDirectoryDisplayName } from "./Bots/botUtils";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -55,6 +56,7 @@ function Me(props) {
   const [myMove, myMoveSetter] = useState([]);
   const [waiting, waitingSetter] = useState([]);
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
   const location = useLocation();
 
@@ -146,7 +148,10 @@ function Me(props) {
         console.log("calling new_challenge");
         const res = await callAuthApi("new_challenge", {
           ...challenge,
-          challenger: { id: globalMe.id, name: globalMe.name },
+          challenger: {
+            id: globalMe.id,
+            name: rawDirectoryDisplayName(globalMe, allUsers),
+          },
         });
         if (!res) return;
         maybeTrackRecommendationChallenge(challenge.metaGame);
@@ -156,7 +161,7 @@ function Me(props) {
         errorSetter(error);
       }
     },
-    [globalMe, myid]
+    [globalMe, allUsers, myid]
   );
 
   const submitStanding = useCallback(

@@ -55,14 +55,68 @@ export function formatDisplayName(name, isBot) {
   return cleaned;
 }
 
+/**
+ * Current display name from the user_names directory, if loaded.
+ * @param {Array<{ id: string, name?: string }> | null | undefined} users
+ * @param {string | undefined} userId
+ * @returns {string | undefined}
+ */
+export function lookupDirectoryName(users, userId) {
+  if (!userId || !users?.length) {
+    return undefined;
+  }
+  const row = users.find((u) => u.id === userId);
+  const name = row?.name;
+  if (typeof name !== "string" || name.trim() === "") {
+    return undefined;
+  }
+  return name;
+}
+
+/**
+ * Prefer directory name by id; fall back to embedded snapshot name.
+ * @param {{ id?: string, name?: string, bot?: boolean } | null | undefined} entity
+ * @param {Array<{ id: string, name?: string, bot?: boolean }> | null | undefined} users
+ * @returns {string}
+ */
+/** Plain name for API payloads (no bot emoji); prefers directory. */
+export function rawDirectoryDisplayName(entity, users) {
+  if (!entity) {
+    return "";
+  }
+  const id = entity.id;
+  const directoryName = id ? lookupDirectoryName(users, id) : undefined;
+  if (directoryName !== undefined) {
+    return directoryName;
+  }
+  return typeof entity.name === "string" ? entity.name : "";
+}
+
+export function resolveDisplayName(entity, users) {
+  if (!entity) {
+    return "";
+  }
+  const id = entity.id;
+  const directoryName = id ? lookupDirectoryName(users, id) : undefined;
+  const raw =
+    directoryName ??
+    (typeof entity.name === "string" ? entity.name : "");
+  const botEntity = {
+    id,
+    name: raw,
+    bot: entity.bot,
+  };
+  return formatDisplayName(raw, isAnyBot(botEntity, users));
+}
+
 export function formatUserDisplayName(user, users) {
   if (!user) return "";
-  return formatDisplayName(user.name, isAnyBot(user, users));
+  return resolveDisplayName(user, users);
 }
 
 export function formatPlayerDisplayName(player, users) {
   if (!player) return "";
-  return formatDisplayName(player.name, isAnyBot(player, users));
+  return resolveDisplayName(player, users);
 }
 
 export function validateDisplayName(name, t) {

@@ -25,7 +25,10 @@ import { useAuthSession } from "../hooks/useAuthSession";
 import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
 import { useStore } from "../stores";
 import BotAwareName from "./Bots/BotAwareName";
-import { formatPlayerDisplayName } from "./Bots/botUtils";
+import {
+  formatPlayerDisplayName,
+  rawDirectoryDisplayName,
+} from "./Bots/botUtils";
 import {
   buildHighestGlickoMap,
   formatMatchWinRatePercent,
@@ -150,7 +153,10 @@ function StandingChallenges(props) {
       try {
         const res = await callAuthApi("new_challenge", {
           ...challenge,
-          challenger: { id: globalMe.id, name: globalMe.name },
+          challenger: {
+            id: globalMe.id,
+            name: rawDirectoryDisplayName(globalMe, allUsers),
+          },
         });
         if (!res) return;
         maybeTrackRecommendationChallenge(challenge.metaGame);
@@ -159,7 +165,7 @@ function StandingChallenges(props) {
         console.log(error);
       }
     },
-    [globalMe]
+    [globalMe, allUsers]
   );
 
   useEffect(() => {
@@ -358,7 +364,7 @@ function StandingChallenges(props) {
           id: rec.id,
           metaGame: rowMetaGame,
           metaGameName: getGameDisplayName(rowMetaGame),
-          challenger: rec.challenger.name,
+          challenger: rawDirectoryDisplayName(rec.challenger, allUsers),
           challengerId: rec.challenger.id,
           lastSeen,
           clockHard: rec.clockHard,

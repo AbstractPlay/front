@@ -976,7 +976,7 @@
   "ProfileCountryHelp": "Lass andere wissen, woher du kommst! Du kannst hier eingeben, was du möchtest. Wenn du jedoch einen gültigen zwei- oder dreistelligen ISO-Ländercode eingibst, wird die entsprechende Flagge in deinem Profil angezeigt.",
   "ProfileFor": "Spielerprofil für {{player}}",
   "ProfileName": "Anzeigename",
-  "ProfileNameHelp": "Dies ist der Name, den andere auf der Website sehen. Er kann später geändert werden. Er muss unter den aktuell und kürzlich verwendeten Namen einzigartig sein.",
+  "ProfileNameHelp": "Dies ist der Name, den andere auf der Website sehen werden. Er kann später geändert werden. Er muss unter den aktuell verwendeten Anzeigenamen einzigartig sein (Groß-/Kleinschreibung und zusätzliche Leerzeichen werden ignoriert).",
   "ProfileTagline": "Freier Slogan (max. 255 Zeichen)",
   "Publish": "Analyse veröffentlichen",
   "PublishHelp": "Veröffentliche die Analyse, die du während des Spiels gemacht hast, damit sie jeder sehen kann.",
@@ -1551,6 +1551,7 @@
       "history": "Spielverlauf",
       "highlights": "Highlights"
     },
+    "pastDisplayNames": "Früher bekannt als: {{names}}",
     "tabs": {
       "competition": "Wettbewerb",
       "activity": "Aktivität",

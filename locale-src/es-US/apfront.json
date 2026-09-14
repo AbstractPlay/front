@@ -1556,8 +1556,8 @@
     "out": "Nombre de pantalla"
   },
   "ProfileNameHelp": {
-    "src": "This is the name others on the site will see. It can be changed later. It must be unique across names currently in use and those recently used.",
-    "out": "Este es el nombre que otros en el sitio verán. Se puede cambiar más tarde. Debe ser único entre los nombres en uso actualmente y los usados recientemente."
+    "src": "This is the name others on the site will see. It can be changed later. It must be unique among display names currently in use (ignoring capitalization and extra spaces).",
+    "out": "Este es el nombre que los demás verán en el sitio. Puedes cambiarlo más adelante. Debe ser único entre los nombres visibles actualmente en uso (ignorando mayúsculas y espacios adicionales)."
   },
   "ProfileTagline": {
     "src": "A free-form tagline (255 characters max)",
@@ -5194,6 +5194,10 @@
   "player.modules.tournaments": {
     "src": "Tournament History",
     "out": "Historial de torneos"
+  },
+  "player.pastDisplayNames": {
+    "src": "Previously known as: {{names}}",
+    "out": "Anteriormente conocido como: {{names}}"
   },
   "player.pin.add": {
     "src": "Pin this section to the top",

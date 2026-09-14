@@ -30,6 +30,7 @@ import PageLoading from "./shared/PageLoading";
 import { SUMMARY_URLS } from "../lib/summaryFetch";
 import GlickoHint from "./shared/GlickoHint";
 import GlickoDisplayNote from "./shared/GlickoDisplayNote";
+import { rawDirectoryDisplayName } from "./Bots/botUtils";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 const columnHelper = createColumnHelper();
@@ -56,7 +57,10 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
       try {
         await callAuthApi("new_challenge", {
           ...challenge,
-          challenger: { id: globalMe.id, name: globalMe.name },
+          challenger: {
+            id: globalMe.id,
+            name: rawDirectoryDisplayName(globalMe, allUsers),
+          },
         });
         maybeTrackRecommendationChallenge(challenge.metaGame);
         closeChallengeModal();
@@ -64,7 +68,7 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
         console.log(error);
       }
     },
-    [globalMe, closeChallengeModal]
+    [globalMe, allUsers, closeChallengeModal]
   );
 
   const data = useMemo(() => {

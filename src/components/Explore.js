@@ -22,9 +22,11 @@ import {
   isValidExploreView,
 } from "../lib/exploreSections";
 import { useStore } from "../stores";
+import { rawDirectoryDisplayName } from "./Bots/botUtils";
 
 function Explore(props) {
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const location = useLocation();
   const navigate = useNavigate();
   const { mode: modeParam, metaGame } = useParams();
@@ -108,7 +110,10 @@ function Explore(props) {
     try {
       await callAuthApi("new_challenge", {
         ...challenge,
-        challenger: { id: globalMe.id, name: globalMe.name },
+        challenger: {
+          id: globalMe.id,
+          name: rawDirectoryDisplayName(globalMe, allUsers),
+        },
       });
       maybeTrackRecommendationChallenge(challenge.metaGame);
     } catch (error) {
