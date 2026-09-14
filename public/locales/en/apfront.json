@@ -2173,6 +2173,20 @@
         "applyDone": "Applied to {{success}} of {{total}} game(s).",
         "applyFailures": "Failed for: {{games}}"
     },
+    "playerPicker": {
+        "choose": "Choose a player…",
+        "searchLabel": "Search",
+        "searchPlaceholder": "Type to filter players…",
+        "noResults": "No players match your search.",
+        "noEligible": "No players match your filters. Try relaxing activity or match settings.",
+        "loadingQuickPicks": "Loading your opponents…",
+        "matchCount": "{{count}} of {{total}} players",
+        "expectedWinRate": "Your expected win rate: {{percent}}",
+        "quickPicks": {
+            "mostPlayed": "Most played against",
+            "recent": "Recent opponents"
+        }
+    },
     "gamePicker": {
         "choose": "Choose a game…",
         "searchLabel": "Search",
