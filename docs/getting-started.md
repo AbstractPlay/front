@@ -78,15 +78,9 @@ If you change `src/myBulma.scss`, recompile:
 npm run build-bulma
 ```
 
-## i18n string extraction
+## i18n
 
-After adding translatable strings:
-
-```bash
-npm run extract
-```
-
-See [Internationalization](/front/subsystems/i18n/).
+After adding translatable strings, edit `public/locales/en/apfront.json`. See [Internationalization](/front/subsystems/i18n/).
 
 ## Project layout
 
