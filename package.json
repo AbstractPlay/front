@@ -69,6 +69,7 @@
     "jsdom": "^29.1.1",
     "prettier": "2.8.8",
     "sass": "^1.77.5",
+    "serverless": "4.42.0",
     "serverless-finch": "4.0.4",
     "serverless-single-page-app-plugin": "1.0.4",
     "shx": "^0.3.4",

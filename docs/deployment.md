@@ -30,8 +30,8 @@ Defined in [`serverless.yml`](../serverless.yml).
 
 1. Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 2. Configure profiles `AbstractPlayDev` and `AbstractPlayProd` in `~/.aws/credentials`.
-3. Install Serverless globally: `npm install -g serverless`.
-4. First-time stack setup: `serverless deploy` (dev) and `serverless --stage prod deploy` (prod) to create S3 buckets and CloudFront distributions.
+3. Install Serverless locally via `npm ci` in each repo (`serverless@4.42.0` in `devDependencies`). Dashboard auth: `npx serverless login` once (org **abstractplay**), or use org access key in CI.
+4. First-time stack setup: `npx serverless deploy` (dev) and `npx serverless --stage prod deploy` (prod) to create S3 buckets and CloudFront distributions.
 
 ## CI/CD
 
@@ -47,7 +47,7 @@ CI steps:
 3. **Test job** (required before deploy): validate manifests → `ap-install-deps --stage dev|prod` → strict lockfile check → `npm run test:ci` and lint.
 4. **Deploy job**: same dep order for the stage, then auto-commit `ci-deps.*.json`, `package-lock.json`, and `package.json` on `repository_dispatch` only.
 5. `npm run build-dev` or `build-prod`.
-6. `serverless client deploy`.
+6. **`npx serverless client deploy`** (Serverless **v4** from `devDependencies`; org secret `SERVERLESS_ACCESS_KEY` + `SERVERLESS_ORG=abstractplay` — no global CLI install).
 7. Publish locale JSON files to S3 (`bin/publish-locales.mjs`).
 
 Deployments do **not** use CloudFront invalidations. Cache freshness is handled by upload headers (see below) and content-hashed JS/CSS bundle filenames under `build/static/` (Vite `rollupOptions.output`, matching the former CRA layout).

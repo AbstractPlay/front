@@ -38,6 +38,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+      SERVERLESS_ORG: abstractplay
 
     steps:
     - uses: actions/checkout@v4
@@ -50,18 +53,6 @@ jobs:
 
     - name: Pin npm
       run: npm install -g npm@11.6.2
-
-    - name: Install Serverless Framework
-      run: npm install -g serverless@3.38.0
-
-    - name: Serverless AWS authentication
-      run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
-
-    # - name: Create env file
-    #   run: | # cp sample.env.yml env.yml
-    #     cat > env.yml << EOF
-    #     ${{ secrets.ENV }}
-    #     EOF
 
     - name: Create .npmrc
       run: echo "@abstractplay:registry=https://npm.pkg.github.com/" > .npmrc
@@ -140,7 +131,7 @@ jobs:
     #     aws-region: us-east-1
 
     - name: Deploy
-      run: serverless client deploy --no-confirm
+      run: npx serverless client deploy --no-confirm
 
     - name: Sync CloudFront CSP
       run: node bin/sync-cloudfront-csp.mjs --stage dev
