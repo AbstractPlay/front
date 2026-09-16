@@ -84,7 +84,7 @@
     "analyze": "npm run sync-locales && cross-env VITE_REAL_MODE=development npx vite build --mode development && npm run analyze:only",
     "analyze:only": "source-map-explorer \"build/static/js/*.js\"",
     "build-dev": "npm run sync-locales && cross-env VITE_REAL_MODE=development npx vite build --mode development && shx cp src/robots/robots.txt.dev build/robots.txt && shx rm -rf build/locales",
-    "build-prod": "node bin/gensitemap.mjs && npm run sync-locales && cross-env VITE_REAL_MODE=production npx vite build --mode production && shx cp src/robots/robots.txt.prod build/robots.txt && shx rm -rf build/locales",
+    "build-prod": "cross-env VITE_REAL_MODE=production node bin/gensitemap.mjs && npm run sync-locales && cross-env VITE_REAL_MODE=production npx vite build --mode production && shx cp src/robots/robots.txt.prod build/robots.txt && shx rm -rf build/locales",
     "full-dev": "npm run build-dev && npm run deploy && npm run publish-locales",
     "full-prod": "npm run build-prod && npm run deploy-prod && npm run publish-locales:prod",
     "test": "vitest run",

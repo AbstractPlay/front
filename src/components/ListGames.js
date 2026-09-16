@@ -365,7 +365,7 @@ function ListGames({ fixedState }) {
       >
         <meta
           property="og:url"
-          content={`https://play.abstractplay.com/${gameState}/${metaGame}`}
+          content={`https://play.abstractplay.com/listgames/${gameState}/${metaGame}`}
         />
         <meta
           property="og:description"
