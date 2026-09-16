@@ -2049,6 +2049,25 @@ span.hardTime::after {
     margin-bottom: 1rem;
   }
 
+  .user-settings-tabs {
+    margin-bottom: 1rem;
+  }
+
+  .user-settings-tabs ul {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .user-settings-tab-panel {
+    margin-top: 0.25rem;
+  }
+
+  .user-settings-logout {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+
   #playerProfile .player-tab-modules {
     margin-top: 0.5rem;
   }
