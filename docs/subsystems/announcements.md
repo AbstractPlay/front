@@ -10,7 +10,8 @@ Public news is loaded from the backend (`announcements_list` / `announcement_get
 | [`announcementApi.js`](../src/lib/announcements/announcementApi.js) | Open API client |
 | [`AnnouncementArticle.js`](../src/components/Announcements/AnnouncementArticle.js) | Single post on `/news` |
 | [`News.js`](../src/components/News.js) | News page |
-| [`useUnreadNews.js`](../src/hooks/useUnreadNews.js) | Bell badge (interim `news-last-seen` until Phase 4 server cursor) |
+| [`useAnnouncementUnread.js`](../src/hooks/useAnnouncementUnread.js) | Server cursor `announcementsLastReadAt` + bell synthetic rows |
+| [`AnnouncementReactions.js`](../src/components/Announcements/AnnouncementReactions.js) | Reaction chips on `/news` |
 
 Backend: [Announcements](/backend/subsystems/announcements/).
 

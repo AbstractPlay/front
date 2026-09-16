@@ -1,11 +1,20 @@
 import PropTypes from "prop-types";
 import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import AnnouncementMarkdown from "./AnnouncementMarkdown";
+import AnnouncementReactions from "./AnnouncementReactions";
 
-function AnnouncementArticle({ item, className }) {
+function AnnouncementArticle({
+  item,
+  className,
+  showReactions,
+  myReactions,
+  onReactionToggle,
+  reactionsDisabled,
+}) {
   const articleClass = className ? `media ${className}` : "media";
+  const anchorId = item.id ? `announcement-${item.id}` : undefined;
   return (
-    <article className={articleClass}>
+    <article className={articleClass} id={anchorId}>
       <div className="media-content">
         <div className="content">
           <p>
@@ -24,6 +33,15 @@ function AnnouncementArticle({ item, className }) {
           body={item.body ?? item.text}
           attachmentUrlByKey={item.attachmentUrlByKey}
         />
+        {showReactions && item.id ? (
+          <AnnouncementReactions
+            announcementId={item.id}
+            reactionCounts={item.reactionCounts}
+            myReactions={myReactions}
+            onToggle={onReactionToggle}
+            disabled={reactionsDisabled}
+          />
+        ) : null}
       </div>
     </article>
   );
@@ -38,8 +56,13 @@ AnnouncementArticle.propTypes = {
     time: PropTypes.number,
     publishedAt: PropTypes.number,
     attachmentUrlByKey: PropTypes.object,
+    reactionCounts: PropTypes.object,
   }).isRequired,
   className: PropTypes.string,
+  showReactions: PropTypes.bool,
+  myReactions: PropTypes.arrayOf(PropTypes.string),
+  onReactionToggle: PropTypes.func,
+  reactionsDisabled: PropTypes.bool,
 };
 
 export default AnnouncementArticle;

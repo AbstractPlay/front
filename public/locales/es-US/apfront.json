@@ -875,6 +875,12 @@
     "intro": "Esta página es la fuente oficial de las noticias del sitio. También reflejamos los anuncios en <discordLink>nuestro servidor de Discord</discordLink>. Reacciona a las publicaciones aquí; suscríbete mediante <rssLink>RSS</rssLink> si quieres."
   },
   "announcements": {
+    "reactions": {
+      "label": "Reacciones",
+      "toggle": "Alternar reacción",
+      "signIn": "Inicia sesión para reaccionar",
+      "signInToReact": "Inicia sesión para agregar una reacción"
+    },
     "preview": {
       "noTitle": "(Sin título)"
     },
@@ -941,6 +947,10 @@
     "activePlayers_other": "Jugadores activos: {{count}}"
   },
   "notifications": {
+    "announcementsMore_one": "{{count}} anuncio más en Noticias",
+    "announcementsMore_other": "{{count}} anuncios más en Noticias",
+    "newAnnouncement": "Nuevo anuncio:",
+    "markAnnouncementsRead": "Marcar anuncios como leídos",
     "newsUpdated": "Se actualizaron las noticias",
     "empty": "No hay notificaciones",
     "markRead": "Marcar como leída",
@@ -993,6 +1003,8 @@
   "InAppNotifyLabel-feedbackDeleted": "Entradas eliminadas de la lista de deseos",
   "InAppNotifyLabel-feedbackReviewRequested": "Solicitudes de revisión de comentarios",
   "InAppNotifyLabel-feedbackNew": "Nuevos comentarios recibidos",
+  "InAppNotifyLabel-announcements": "Anuncios del sitio",
+  "NotifyLabel-announcements": "Anuncios del sitio",
   "NoWaitingResponse": "No hay desafíos esperando la respuesta del oponente",
   "NoYourMove": "No hay juegos esperando tu movimiento.",
   "NumChallenge": "Habrá {{num}} jugadores en este juego. {{players}}. La asignación de asientos será aleatoria.",

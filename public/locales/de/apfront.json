@@ -875,6 +875,12 @@
     "intro": "Diese Seite ist die offizielle Quelle für Neuigkeiten auf der Website. Wir spiegeln Ankündigungen auch auf <discordLink>unserem Discord-Server</discordLink>. Reagiere hier auf Beiträge; abonniere sie bei Interesse per <rssLink>RSS</rssLink>."
   },
   "announcements": {
+    "reactions": {
+      "label": "Reaktionen",
+      "toggle": "Reaktion umschalten",
+      "signIn": "Anmelden, um zu reagieren",
+      "signInToReact": "Anmelden, um eine Reaktion hinzuzufügen"
+    },
     "preview": {
       "noTitle": "(Kein Titel)"
     },
@@ -941,6 +947,10 @@
     "activePlayers_other": "Aktive Spieler: {{count}}"
   },
   "notifications": {
+    "announcementsMore_one": "{{count}} weitere Ankündigung unter News",
+    "announcementsMore_other": "{{count}} weitere Ankündigungen unter News",
+    "newAnnouncement": "Neue Ankündigung:",
+    "markAnnouncementsRead": "Ankündigungen als gelesen markieren",
     "newsUpdated": "Neuigkeiten wurden aktualisiert",
     "empty": "Keine Benachrichtigungen",
     "markRead": "Als gelesen markieren",
@@ -993,6 +1003,8 @@
   "InAppNotifyLabel-feedbackDeleted": "Entfernte Wunschlisten-Einträge",
   "InAppNotifyLabel-feedbackReviewRequested": "Feedback-Review-Anfragen",
   "InAppNotifyLabel-feedbackNew": "Neue Feedback-Einsendungen",
+  "InAppNotifyLabel-announcements": "Website-Ankündigungen",
+  "NotifyLabel-announcements": "Website-Ankündigungen",
   "NoWaitingResponse": "Keine Herausforderungen, die auf eine Antwort des Gegners warten",
   "NoYourMove": "Keine Spiele warten auf deinen Zug.",
   "NumChallenge": "An diesem Spiel werden {{num}} Spieler teilnehmen. {{players}}. Die Sitzordnung ist zufällig.",

@@ -1167,6 +1167,10 @@
     "src": "Implementation Notes",
     "out": "Notas de implementación"
   },
+  "InAppNotifyLabel-announcements": {
+    "src": "Site announcements",
+    "out": "Anuncios del sitio"
+  },
   "InAppNotifyLabel-challenges": {
     "src": "Challenges",
     "out": "Desafíos"
@@ -1414,6 +1418,10 @@
   "NotificationSettingsSaveHelp": {
     "src": "Changes save instantly.",
     "out": "Los cambios se guardan al instante."
+  },
+  "NotifyLabel-announcements": {
+    "src": "Site announcements",
+    "out": "Anuncios del sitio"
   },
   "NotifyLabel-challenges": {
     "src": "Challenges (every instance)",
@@ -2398,6 +2406,22 @@
   "announcements.preview.noTitle": {
     "src": "(No title)",
     "out": "(Sin título)"
+  },
+  "announcements.reactions.label": {
+    "src": "Reactions",
+    "out": "Reacciones"
+  },
+  "announcements.reactions.signIn": {
+    "src": "Sign in to react",
+    "out": "Inicia sesión para reaccionar"
+  },
+  "announcements.reactions.signInToReact": {
+    "src": "Sign in to add a reaction",
+    "out": "Inicia sesión para agregar una reacción"
+  },
+  "announcements.reactions.toggle": {
+    "src": "Toggle reaction",
+    "out": "Alternar reacción"
   },
   "boardExport.delayLabel": {
     "src": "Delay between frames (seconds)",
@@ -5371,6 +5395,14 @@
     "src": "post a bug report on our Discord server",
     "out": "publica un informe de error en nuestro servidor de Discord"
   },
+  "notifications.announcementsMore_one": {
+    "src": "{{count}} more announcement on News",
+    "out": "{{count}} anuncio más en Noticias"
+  },
+  "notifications.announcementsMore_other": {
+    "src": "{{count}} more announcements on News",
+    "out": "{{count}} anuncios más en Noticias"
+  },
   "notifications.dismissAll": {
     "src": "Dismiss all",
     "out": "Descartar todas"
@@ -5387,9 +5419,17 @@
     "src": "Mark all read",
     "out": "Marcar todas como leídas"
   },
+  "notifications.markAnnouncementsRead": {
+    "src": "Mark announcements read",
+    "out": "Marcar anuncios como leídos"
+  },
   "notifications.markRead": {
     "src": "Mark read",
     "out": "Marcar como leída"
+  },
+  "notifications.newAnnouncement": {
+    "src": "New announcement:",
+    "out": "Nuevo anuncio:"
   },
   "notifications.newsUpdated": {
     "src": "News has been updated",

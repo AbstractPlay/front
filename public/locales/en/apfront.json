@@ -875,6 +875,12 @@
         "intro": "This page is the canonical source for site news. We also mirror announcements to <discordLink>our Discord server</discordLink>. React on posts here; subscribe via <rssLink>RSS</rssLink> if you like."
     },
     "announcements": {
+        "reactions": {
+            "label": "Reactions",
+            "toggle": "Toggle reaction",
+            "signIn": "Sign in to react",
+            "signInToReact": "Sign in to add a reaction"
+        },
         "preview": {
             "noTitle": "(No title)"
         },
@@ -941,6 +947,10 @@
         "activePlayers_other": "Active players: {{count}}"
     },
     "notifications": {
+        "announcementsMore_one": "{{count}} more announcement on News",
+        "announcementsMore_other": "{{count}} more announcements on News",
+        "newAnnouncement": "New announcement:",
+        "markAnnouncementsRead": "Mark announcements read",
         "newsUpdated": "News has been updated",
         "empty": "No notifications",
         "markRead": "Mark read",
@@ -993,6 +1003,8 @@
     "InAppNotifyLabel-feedbackDeleted": "Removed wishlist entries",
     "InAppNotifyLabel-feedbackReviewRequested": "Feedback review requests",
     "InAppNotifyLabel-feedbackNew": "New feedback submissions",
+    "InAppNotifyLabel-announcements": "Site announcements",
+    "NotifyLabel-announcements": "Site announcements",
     "NoWaitingResponse": "No challenges waiting on opponent response",
     "NoYourMove": "No games waiting for your move.",
     "NumChallenge": "There will be {{num}} players in this game. {{players}}. Seating will be random.",

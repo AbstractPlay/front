@@ -875,6 +875,12 @@
     "intro": "Cette page est la source officielle des actualités du site. Nous publions également les annonces sur <discordLink>notre serveur Discord</discordLink>. Réagissez aux publications ici ; abonnez-vous via <rssLink>RSS</rssLink> si vous le souhaitez."
   },
   "announcements": {
+    "reactions": {
+      "label": "Réactions",
+      "toggle": "Basculer la réaction",
+      "signIn": "Connectez-vous pour réagir",
+      "signInToReact": "Connectez-vous pour ajouter une réaction"
+    },
     "preview": {
       "noTitle": "(Sans titre)"
     },
@@ -941,6 +947,10 @@
     "activePlayers_other": "Joueurs actifs : {{count}}"
   },
   "notifications": {
+    "announcementsMore_one": "{{count}} autre annonce dans les Actualités",
+    "announcementsMore_other": "{{count}} autres annonces dans les Actualités",
+    "newAnnouncement": "Nouvelle annonce :",
+    "markAnnouncementsRead": "Marquer les annonces comme lues",
     "newsUpdated": "Les actualités ont été mises à jour",
     "empty": "Aucune notification",
     "markRead": "Marquer comme lu",
@@ -993,6 +1003,8 @@
   "InAppNotifyLabel-feedbackDeleted": "Entrées supprimées de la liste de souhaits",
   "InAppNotifyLabel-feedbackReviewRequested": "Demandes de révision de retours",
   "InAppNotifyLabel-feedbackNew": "Nouveaux retours",
+  "InAppNotifyLabel-announcements": "Annonces du site",
+  "NotifyLabel-announcements": "Annonces du site",
   "NoWaitingResponse": "Aucun challenge attend sur la réponse de votre adversaire",
   "NoYourMove": "Aucune partie en attente de votre coup.",
   "NumChallenge": "Il y aura {{num}} joueurs dans cette partie. {{players}}. La répartition des sièges sera aléatoire.",

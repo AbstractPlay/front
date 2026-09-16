@@ -1167,6 +1167,10 @@
     "src": "Implementation Notes",
     "out": "Notes d'implémentation"
   },
+  "InAppNotifyLabel-announcements": {
+    "src": "Site announcements",
+    "out": "Annonces du site"
+  },
   "InAppNotifyLabel-challenges": {
     "src": "Challenges",
     "out": "Défis"
@@ -1414,6 +1418,10 @@
   "NotificationSettingsSaveHelp": {
     "src": "Changes save instantly.",
     "out": "Les modifications sont enregistrées instantanément."
+  },
+  "NotifyLabel-announcements": {
+    "src": "Site announcements",
+    "out": "Annonces du site"
   },
   "NotifyLabel-challenges": {
     "src": "Challenges (every instance)",
@@ -2398,6 +2406,22 @@
   "announcements.preview.noTitle": {
     "src": "(No title)",
     "out": "(Sans titre)"
+  },
+  "announcements.reactions.label": {
+    "src": "Reactions",
+    "out": "Réactions"
+  },
+  "announcements.reactions.signIn": {
+    "src": "Sign in to react",
+    "out": "Connectez-vous pour réagir"
+  },
+  "announcements.reactions.signInToReact": {
+    "src": "Sign in to add a reaction",
+    "out": "Connectez-vous pour ajouter une réaction"
+  },
+  "announcements.reactions.toggle": {
+    "src": "Toggle reaction",
+    "out": "Basculer la réaction"
   },
   "boardExport.delayLabel": {
     "src": "Delay between frames (seconds)",
@@ -5371,6 +5395,14 @@
     "src": "post a bug report on our Discord server",
     "out": "publier un rapport de bogue sur notre serveur Discord"
   },
+  "notifications.announcementsMore_one": {
+    "src": "{{count}} more announcement on News",
+    "out": "{{count}} autre annonce dans les Actualités"
+  },
+  "notifications.announcementsMore_other": {
+    "src": "{{count}} more announcements on News",
+    "out": "{{count}} autres annonces dans les Actualités"
+  },
   "notifications.dismissAll": {
     "src": "Dismiss all",
     "out": "Tout effacer"
@@ -5387,9 +5419,17 @@
     "src": "Mark all read",
     "out": "Tout marquer comme lu"
   },
+  "notifications.markAnnouncementsRead": {
+    "src": "Mark announcements read",
+    "out": "Marquer les annonces comme lues"
+  },
   "notifications.markRead": {
     "src": "Mark read",
     "out": "Marquer comme lu"
+  },
+  "notifications.newAnnouncement": {
+    "src": "New announcement:",
+    "out": "Nouvelle annonce :"
   },
   "notifications.newsUpdated": {
     "src": "News has been updated",

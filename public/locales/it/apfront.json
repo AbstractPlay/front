@@ -875,6 +875,12 @@
     "intro": "Questa pagina è la fonte ufficiale per le notizie del sito. Riportiamo gli annunci anche sul <discordLink>nostro server Discord</discordLink>. Reagisci ai post qui; iscriviti tramite <rssLink>RSS</rssLink> se preferisci."
   },
   "announcements": {
+    "reactions": {
+      "label": "Reazioni",
+      "toggle": "Attiva/disattiva reazione",
+      "signIn": "Accedi per reagire",
+      "signInToReact": "Accedi per aggiungere una reazione"
+    },
     "preview": {
       "noTitle": "(Senza titolo)"
     },
@@ -941,6 +947,10 @@
     "activePlayers_other": "Giocatori attivi: {{count}}"
   },
   "notifications": {
+    "announcementsMore_one": "{{count}} altro annuncio nelle Notizie",
+    "announcementsMore_other": "{{count}} altri annunci nelle Notizie",
+    "newAnnouncement": "Nuovo annuncio:",
+    "markAnnouncementsRead": "Segna gli annunci come letti",
     "newsUpdated": "Novità aggiornate",
     "empty": "Nessuna notifica",
     "markRead": "Segna come letta",
@@ -993,6 +1003,8 @@
   "InAppNotifyLabel-feedbackDeleted": "Voci della lista desideri rimosse",
   "InAppNotifyLabel-feedbackReviewRequested": "Richieste di revisione feedback",
   "InAppNotifyLabel-feedbackNew": "Nuovi feedback",
+  "InAppNotifyLabel-announcements": "Annunci del sito",
+  "NotifyLabel-announcements": "Annunci del sito",
   "NoWaitingResponse": "Nessuna sfida in attesa della risposta dell'avversario",
   "NoYourMove": "Nessuna partita in attesa della tua mossa.",
   "NumChallenge": "Ci saranno {{num}} giocatori in questa partita. {{players}}. La disposizione dei posti sarà casuale.",

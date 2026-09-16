@@ -246,6 +246,7 @@ function Bones(props) {
                 />
                 <Route path="/legal" element={<Legal update={update} />} />
                 <Route path="/news" element={<News />} />
+                <Route path="/news/:announcementId" element={<News />} />
                 <Route path="/stats/:tab?" element={<Stats />} />
                 <Route path="/" element={<Welcome update={update} />} />
                 <Route path="/playground" element={<Lab />} />

@@ -107,3 +107,52 @@
 .announcement-editor-actions {
   margin-bottom: 1rem;
 }
+
+.announcement-reactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.announcement-reaction-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--tag-background-color);
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+.announcement-reaction-chip:hover,
+.announcement-reaction-chip:focus-visible {
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
+}
+
+.announcement-reaction-chip.is-selected {
+  border-color: var(--secondary-color-3);
+  background: var(--secondary-color-3-bg);
+}
+
+.announcement-reaction-chip:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.announcement-reaction-count {
+  font-size: 0.75rem;
+  color: var(--secondary-font-color);
+}
+
+.announcement-reactions-guest-hint {
+  font-size: 0.8rem;
+  color: var(--secondary-font-color);
+}
+

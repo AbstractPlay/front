@@ -5,6 +5,7 @@ export const EMAIL_NOTIFICATION_KEYS = [
   "yourturn",
   "tournamentStart",
   "tournamentEnd",
+  "announcements",
 ];
 
 export const IN_APP_NOTIFICATION_KEYS = [
@@ -20,6 +21,7 @@ export const IN_APP_NOTIFICATION_KEYS = [
   "feedbackStatus",
   "feedbackDeleted",
   "feedbackReviewRequested",
+  "announcements",
 ];
 
 export const FEEDBACK_NEW_KIND_KEYS = ["bug", "feature", "wishlist"];
@@ -50,8 +52,11 @@ export function defaultEmailNotifications(existing) {
   };
   for (const key of EMAIL_NOTIFICATION_KEYS) {
     if (!Object.prototype.hasOwnProperty.call(settings, key)) {
-      settings[key] = true;
+      settings[key] = key === "announcements" ? false : true;
     }
+  }
+  if (!Object.prototype.hasOwnProperty.call(settings, "announcements")) {
+    settings.announcements = false;
   }
   return settings;
 }
