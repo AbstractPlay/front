@@ -1742,14 +1742,39 @@
                 "declined": "We are not planning to add this game. It stays on the list so others do not submit duplicate requests."
             }
         },
+        "search": {
+            "label": "Search",
+            "placeholder": "Filter by title, author, or text…",
+            "noMatches": "No items match your search."
+        },
         "mine": {
             "title": "My feedback",
             "intro": "Bugs and feature ideas you have submitted.",
+            "intro_submitted": "Feedback you have submitted.",
+            "intro_voted": "Items you have voted for.",
+            "intro_watched": "Items you are watching for updates.",
             "empty": "You have not submitted any feedback yet.",
+            "empty_submitted": "You have not submitted any feedback yet.",
+            "empty_voted": "You have not voted on any feedback yet.",
+            "empty_watched": "You are not watching any feedback yet.",
             "all": "All",
             "bugs": "Bugs",
             "ideas": "Features",
-            "updated": "Updated"
+            "wishlist": "Wishlist",
+            "updated": "Updated",
+            "scopeLabel": "Activity",
+            "scope_submitted": "Submitted",
+            "scope_voted": "Voted",
+            "scope_watched": "Watched",
+            "unvote": "Unvote",
+            "unwatch": "Unwatch",
+            "notifyTitle": "New feedback alerts",
+            "notifyIntro": "Get a one-time in-app notification when someone submits new feedback in a category you choose. This does not vote for or watch those items.",
+            "notifyHint": "Reply and status updates still require watching a specific thread.",
+            "notifyKind_bug": "New bug reports",
+            "notifyKind_feature": "New feature ideas",
+            "notifyKind_wishlist": "New wishlist games",
+            "notifySaveError": "Could not save notification preferences."
         },
         "auth": {
             "signInRequired": "You must be logged in to participate in feedback.",

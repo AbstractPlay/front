@@ -1742,14 +1742,39 @@
         "declined": "No tenemos planeado agregar este juego. Permanece en la lista para que otros no envíen solicitudes duplicadas."
       }
     },
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Filtrar por título, autor o texto…",
+      "noMatches": "Ningún elemento coincide con tu búsqueda."
+    },
     "mine": {
       "title": "Mis comentarios",
       "intro": "Errores e ideas de funciones que has enviado.",
+      "intro_submitted": "Comentarios que has enviado.",
+      "intro_voted": "Elementos por los que has votado.",
+      "intro_watched": "Elementos que estás siguiendo para ver actualizaciones.",
       "empty": "Aún no has enviado ningún comentario.",
+      "empty_submitted": "Aún no has enviado ningún comentario.",
+      "empty_voted": "Aún no has votado en ningún comentario.",
+      "empty_watched": "Aún no estás siguiendo ningún comentario.",
       "all": "Todos",
       "bugs": "Errores",
       "ideas": "Funciones",
-      "updated": "Actualizado"
+      "wishlist": "Lista de deseos",
+      "updated": "Actualizado",
+      "scopeLabel": "Actividad",
+      "scope_submitted": "Enviados",
+      "scope_voted": "Votados",
+      "scope_watched": "Siguiendo",
+      "unvote": "Quitar voto",
+      "unwatch": "Dejar de seguir",
+      "notifyTitle": "Alertas de nuevos comentarios",
+      "notifyIntro": "Recibe una notificación única en la aplicación cuando alguien envíe un nuevo comentario en una categoría que elijas. Esto no vota por esos elementos ni los sigue.",
+      "notifyHint": "Las respuestas y actualizaciones de estado aún requieren seguir un hilo específico.",
+      "notifyKind_bug": "Nuevos reportes de errores",
+      "notifyKind_feature": "Nuevas ideas de funciones",
+      "notifyKind_wishlist": "Nuevos juegos de la lista de deseos",
+      "notifySaveError": "No se pudieron guardar las preferencias de notificación."
     },
     "auth": {
       "signInRequired": "Debes iniciar sesión para participar en los comentarios.",

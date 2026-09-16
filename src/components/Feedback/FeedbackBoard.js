@@ -32,6 +32,8 @@ import {
   setStoredFeedbackBoardSort,
 } from "../../lib/feedback/feedbackListSort";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
+import FeedbackQuickSearch from "./FeedbackQuickSearch";
+import { filterFeedbackItemsByQuery } from "../../lib/feedback/filterFeedbackItemsByQuery";
 import "./feedback.css";
 
 function FeedbackBoard({ kind = "bug" }) {
@@ -47,6 +49,7 @@ function FeedbackBoard({ kind = "bug" }) {
   const [error, setError] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [showClosedOnly, setShowClosedOnly] = useState(() => getStoredFeedbackBoardClosedOnly(kind));
   const isAdmin = Boolean(globalMe?.admin);
   const [sortBy, setSortBy] = useState(() => getStoredFeedbackBoardSort(kind, { isAdmin }));
@@ -141,6 +144,11 @@ function FeedbackBoard({ kind = "bug" }) {
     return filtered;
   }, [categoryFilter, isAdmin, items, kind, showClosedOnly, sortBy, statusFilter]);
 
+  const visibleItems = useMemo(
+    () => filterFeedbackItemsByQuery(displayItems, searchQuery),
+    [displayItems, searchQuery],
+  );
+
   const sortOptions = kind === "wishlist"
     ? WISHLIST_SORT_OPTIONS
     : FEEDBACK_BOARD_SORT_OPTIONS;
@@ -175,6 +183,7 @@ function FeedbackBoard({ kind = "bug" }) {
           <FeedbackSignInRequired messageKey="feedback.auth.signInToCreateShort" compact />
         )}
       </p>
+      <FeedbackQuickSearch value={searchQuery} onChange={setSearchQuery} />
       <div className="feedback-board-toolbar">
         <div className="feedback-board-chips" role="toolbar" aria-label={t("feedback.board.filterLabel")}>
           <button
@@ -251,13 +260,15 @@ function FeedbackBoard({ kind = "bug" }) {
         </div>
       </div>
       {error && <p className="has-text-danger">{error}</p>}
-      {displayItems.length === 0 ? (
+      {visibleItems.length === 0 ? (
         <p className="feedback-muted">
-          {showClosedOnly ? t("feedback.board.emptyClosed") : t(`feedback.${boardKey}.empty`)}
+          {searchQuery.trim()
+            ? t("feedback.search.noMatches")
+            : (showClosedOnly ? t("feedback.board.emptyClosed") : t(`feedback.${boardKey}.empty`))}
         </p>
       ) : (
         <ul className="feedback-board-list">
-          {displayItems.map((item) => (
+          {visibleItems.map((item) => (
             <li key={item.id} className={`feedback-board-item${kind === "wishlist" ? " feedback-board-item-wishlist" : ""}`}>
               {kind === "wishlist" && item.coverImageUrl ? (
                 <a

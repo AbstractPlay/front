@@ -4239,6 +4239,86 @@
     "src": "Updated",
     "out": "Mis à jour"
   },
+  "feedback.mine.empty_submitted": {
+    "src": "You have not submitted any feedback yet.",
+    "out": "Vous n'avez pas encore soumis de retour."
+  },
+  "feedback.mine.empty_voted": {
+    "src": "You have not voted on any feedback yet.",
+    "out": "Vous n'avez encore voté pour aucun retour."
+  },
+  "feedback.mine.empty_watched": {
+    "src": "You are not watching any feedback yet.",
+    "out": "Vous ne suivez encore aucun retour."
+  },
+  "feedback.mine.intro_submitted": {
+    "src": "Feedback you have submitted.",
+    "out": "Retours que vous avez soumis."
+  },
+  "feedback.mine.intro_voted": {
+    "src": "Items you have voted for.",
+    "out": "Éléments pour lesquels vous avez voté."
+  },
+  "feedback.mine.intro_watched": {
+    "src": "Items you are watching for updates.",
+    "out": "Éléments que vous suivez."
+  },
+  "feedback.mine.notifyHint": {
+    "src": "Reply and status updates still require watching a specific thread.",
+    "out": "Les réponses et les mises à jour de statut nécessitent toujours de suivre la discussion spécifique."
+  },
+  "feedback.mine.notifyIntro": {
+    "src": "Get a one-time in-app notification when someone submits new feedback in a category you choose. This does not vote for or watch those items.",
+    "out": "Recevez une notification unique dans l'application lorsque quelqu'un soumet un nouveau retour dans une catégorie de votre choix. Cela n'ajoute pas de vote et ne suit pas ces éléments."
+  },
+  "feedback.mine.notifyKind_bug": {
+    "src": "New bug reports",
+    "out": "Nouveaux rapports de bugs"
+  },
+  "feedback.mine.notifyKind_feature": {
+    "src": "New feature ideas",
+    "out": "Nouvelles idées de fonctionnalités"
+  },
+  "feedback.mine.notifyKind_wishlist": {
+    "src": "New wishlist games",
+    "out": "Nouveaux jeux pour la liste de souhaits"
+  },
+  "feedback.mine.notifySaveError": {
+    "src": "Could not save notification preferences.",
+    "out": "Impossible d'enregistrer les préférences de notification."
+  },
+  "feedback.mine.notifyTitle": {
+    "src": "New feedback alerts",
+    "out": "Alertes de nouveaux retours"
+  },
+  "feedback.mine.scopeLabel": {
+    "src": "Activity",
+    "out": "Activité"
+  },
+  "feedback.mine.scope_submitted": {
+    "src": "Submitted",
+    "out": "Soumis"
+  },
+  "feedback.mine.scope_voted": {
+    "src": "Voted",
+    "out": "Voté"
+  },
+  "feedback.mine.scope_watched": {
+    "src": "Watched",
+    "out": "Suivi"
+  },
+  "feedback.mine.unvote": {
+    "src": "Unvote",
+    "out": "Annuler le vote"
+  },
+  "feedback.mine.unwatch": {
+    "src": "Unwatch",
+    "out": "Ne plus suivre"
+  },
+  "feedback.mine.wishlist": {
+    "src": "Wishlist",
+    "out": "Liste de souhaits"
+  },
   "feedback.new.coverImage": {
     "src": "Cover image",
     "out": "Image de couverture"
@@ -4246,6 +4326,18 @@
   "feedback.new.coverImageHint": {
     "src": "Optional. Paste or upload one box-art image. If you paste multiple images, only the last one is kept.",
     "out": "Optionnel. Collez ou téléchargez une illustration de boîte. Si vous collez plusieurs images, seule la dernière sera conservée."
+  },
+  "feedback.search.label": {
+    "src": "Search",
+    "out": "Rechercher"
+  },
+  "feedback.search.noMatches": {
+    "src": "No items match your search.",
+    "out": "Aucun élément ne correspond à votre recherche."
+  },
+  "feedback.search.placeholder": {
+    "src": "Filter by title, author, or text…",
+    "out": "Filtrer par titre, auteur ou texte…"
   },
   "feedback.upload.addCover": {
     "src": "Add cover image",

@@ -4239,6 +4239,86 @@
     "src": "Updated",
     "out": "Aktualisiert"
   },
+  "feedback.mine.empty_submitted": {
+    "src": "You have not submitted any feedback yet.",
+    "out": "Du hast noch kein Feedback eingereicht."
+  },
+  "feedback.mine.empty_voted": {
+    "src": "You have not voted on any feedback yet.",
+    "out": "Du hast noch für kein Feedback abgestimmt."
+  },
+  "feedback.mine.empty_watched": {
+    "src": "You are not watching any feedback yet.",
+    "out": "Du beobachtest noch kein Feedback."
+  },
+  "feedback.mine.intro_submitted": {
+    "src": "Feedback you have submitted.",
+    "out": "Feedback, das du eingereicht hast."
+  },
+  "feedback.mine.intro_voted": {
+    "src": "Items you have voted for.",
+    "out": "Einträge, für die du abgestimmt hast."
+  },
+  "feedback.mine.intro_watched": {
+    "src": "Items you are watching for updates.",
+    "out": "Einträge, die du auf Aktualisierungen beobachtest."
+  },
+  "feedback.mine.notifyHint": {
+    "src": "Reply and status updates still require watching a specific thread.",
+    "out": "Antworten und Statusaktualisierungen erfordern weiterhin das Beobachten des jeweiligen Threads."
+  },
+  "feedback.mine.notifyIntro": {
+    "src": "Get a one-time in-app notification when someone submits new feedback in a category you choose. This does not vote for or watch those items.",
+    "out": "Erhalte eine einmalige In-App-Benachrichtigung, wenn jemand neues Feedback in einer von dir gewählten Kategorie einreicht. Dadurch wird für diese Einträge weder abgestimmt noch werden sie beobachtet."
+  },
+  "feedback.mine.notifyKind_bug": {
+    "src": "New bug reports",
+    "out": "Neue Fehlerberichte"
+  },
+  "feedback.mine.notifyKind_feature": {
+    "src": "New feature ideas",
+    "out": "Neue Feature-Ideen"
+  },
+  "feedback.mine.notifyKind_wishlist": {
+    "src": "New wishlist games",
+    "out": "Neue Wunschlisten-Spiele"
+  },
+  "feedback.mine.notifySaveError": {
+    "src": "Could not save notification preferences.",
+    "out": "Benachrichtigungseinstellungen konnten nicht gespeichert werden."
+  },
+  "feedback.mine.notifyTitle": {
+    "src": "New feedback alerts",
+    "out": "Benachrichtigungen für neues Feedback"
+  },
+  "feedback.mine.scopeLabel": {
+    "src": "Activity",
+    "out": "Aktivität"
+  },
+  "feedback.mine.scope_submitted": {
+    "src": "Submitted",
+    "out": "Eingereicht"
+  },
+  "feedback.mine.scope_voted": {
+    "src": "Voted",
+    "out": "Abgestimmt"
+  },
+  "feedback.mine.scope_watched": {
+    "src": "Watched",
+    "out": "Beobachtet"
+  },
+  "feedback.mine.unvote": {
+    "src": "Unvote",
+    "out": "Stimme zurückziehen"
+  },
+  "feedback.mine.unwatch": {
+    "src": "Unwatch",
+    "out": "Nicht mehr beobachten"
+  },
+  "feedback.mine.wishlist": {
+    "src": "Wishlist",
+    "out": "Wunschliste"
+  },
   "feedback.new.coverImage": {
     "src": "Cover image",
     "out": "Titelbild"
@@ -4246,6 +4326,18 @@
   "feedback.new.coverImageHint": {
     "src": "Optional. Paste or upload one box-art image. If you paste multiple images, only the last one is kept.",
     "out": "Optional. Füge ein Schachtelcover-Bild ein oder lade eines hoch. Wenn du mehrere Bilder einfügst, wird nur das letzte behalten."
+  },
+  "feedback.search.label": {
+    "src": "Search",
+    "out": "Suche"
+  },
+  "feedback.search.noMatches": {
+    "src": "No items match your search.",
+    "out": "Keine Einträge entsprechen deiner Suche."
+  },
+  "feedback.search.placeholder": {
+    "src": "Filter by title, author, or text…",
+    "out": "Nach Titel, Autor oder Text filtern…"
   },
   "feedback.upload.addCover": {
     "src": "Add cover image",

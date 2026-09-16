@@ -11,7 +11,7 @@ In-app feedback replaces Discord forum workflows for bug reports, feature ideas,
 | `/wishlist` | Game wishlist board | Open |
 | `/feedback/new?kind=bug\|feature\|wishlist` | Submit form | Signed in (guests see sign-in prompt) |
 | `/feedback/:id` | Detail thread | Open read-only; vote, watch, and comment require sign-in |
-| `/feedback/mine` | User's submissions | Signed in |
+| `/feedback/mine` | Submitted, voted, and watched items; new-post alert opt-in | Signed in |
 | `/feedback/admin` | Admin triage | Admin |
 | `/feedback/history` | Archived bugs, features, and wishlist games | Open |
 | `/feedback/history/:tab` | History tab (`bugs`, `ideas`, `games`) | Open |
@@ -43,6 +43,12 @@ See [node-backend API docs](/backend/api/auth-queries/) and [public queries](/ba
 ## Notifications
 
 Watchers receive in-app notifications for replies (`feedbackReply`), status changes (`feedbackStatus`), and wishlist deletions (`feedbackDeleted`). Authors are auto-subscribed on create.
+
+**New posts:** Admins on the backend allowlist receive a one-time `feedbackNew` in-app alert per submission. Other users can opt in per kind (`bug`, `feature`, `wishlist`) via **My feedback** or user settings (`settings.all.feedbackNewKinds`; default off). Opt-in sends only that one-time alert — it does not vote or watch the thread.
+
+**My feedback:** Scope filters `submitted` (default), `voted`, and `watched` use `feedback_mine` with optional `kind`. List pages include a client-side quick search over loaded rows (title, author, body where available).
+
+**Ops:** After deploy, run `npm run backfill-feedback-user-engagement` in node-backend once per environment to populate voted/watched user index rows from existing votes and subscriptions.
 
 ## SEO
 

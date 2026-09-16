@@ -43,8 +43,10 @@ import AvatarPicker from "./AvatarPicker";
 import { COMMUNICATION_LANGUAGES } from "../i18n";
 import {
   defaultEmailNotifications,
+  defaultFeedbackNewKinds,
   defaultInAppNotifications,
   EMAIL_NOTIFICATION_KEYS,
+  FEEDBACK_NEW_KIND_KEYS,
   IN_APP_NOTIFICATION_KEYS,
 } from "../lib/notificationPrefs";
 
@@ -121,6 +123,7 @@ function UserSettingsModal(props) {
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
   const [inAppNotifications, inAppNotificationsSetter] = useState(null);
+  const [feedbackNewKinds, feedbackNewKindsSetter] = useState(() => defaultFeedbackNewKinds());
   const [exploration, explorationSetter] = useState(null);
   const [confirmMove, confirmMoveSetter] = useState(true);
   const globalMe = useStore((state) => state.globalMe);
@@ -156,6 +159,9 @@ function UserSettingsModal(props) {
       } else {
         inAppNotificationsSetter(defaultInAppNotifications());
       }
+      feedbackNewKindsSetter(
+        defaultFeedbackNewKinds(globalMe?.settings?.all?.feedbackNewKinds),
+      );
       if (globalMe?.settings?.all?.exploration === undefined) {
         explorationSetter(0);
       } else {
@@ -373,6 +379,15 @@ function UserSettingsModal(props) {
     newSettings.all.inAppNotifications = inAppNotifications;
     newSettings.all.inAppNotifications[key] =
       !newSettings.all.inAppNotifications[key];
+    handleSettingsChange(newSettings);
+  };
+
+  const handleFeedbackNewKindChange = async (kind) => {
+    const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
+    if (newSettings.all === undefined) newSettings.all = {};
+    const kinds = { ...feedbackNewKinds, [kind]: !feedbackNewKinds[kind] };
+    newSettings.all.feedbackNewKinds = kinds;
+    feedbackNewKindsSetter(kinds);
     handleSettingsChange(newSettings);
   };
 
@@ -864,6 +879,24 @@ function UserSettingsModal(props) {
                     </label>
                   </div>
                 ))}
+            <p className="label is-small mb-1 mt-3">
+              {t("feedback.mine.notifyTitle")}
+            </p>
+            <p className="help">{t("feedback.mine.notifyIntro")}</p>
+            <p className="help">{t("feedback.mine.notifyHint")}</p>
+            {FEEDBACK_NEW_KIND_KEYS.map((kind) => (
+              <div className="control" key={`feedback-new-${kind}`}>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    name={`feedback-new-${kind}`}
+                    checked={Boolean(feedbackNewKinds[kind])}
+                    onChange={() => handleFeedbackNewKindChange(kind)}
+                  />
+                  {t(`feedback.mine.notifyKind_${kind}`)}
+                </label>
+              </div>
+            ))}
           </div>
           {/********************* communication language *********************/}
           <div className="field" key="communicationLanguage">

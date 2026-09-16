@@ -1742,14 +1742,39 @@
         "declined": "Nous ne prévoyons pas d'ajouter ce jeu. Il reste dans la liste afin que d'autres ne soumettent pas de demandes en double."
       }
     },
+    "search": {
+      "label": "Rechercher",
+      "placeholder": "Filtrer par titre, auteur ou texte…",
+      "noMatches": "Aucun élément ne correspond à votre recherche."
+    },
     "mine": {
       "title": "Mes retours",
       "intro": "Bugs et idées de fonctionnalités que vous avez soumis.",
+      "intro_submitted": "Retours que vous avez soumis.",
+      "intro_voted": "Éléments pour lesquels vous avez voté.",
+      "intro_watched": "Éléments que vous suivez.",
       "empty": "Vous n'avez soumis aucun retour pour le moment.",
+      "empty_submitted": "Vous n'avez pas encore soumis de retour.",
+      "empty_voted": "Vous n'avez encore voté pour aucun retour.",
+      "empty_watched": "Vous ne suivez encore aucun retour.",
       "all": "Tous",
       "bugs": "Bugs",
       "ideas": "Fonctionnalités",
-      "updated": "Mis à jour"
+      "wishlist": "Liste de souhaits",
+      "updated": "Mis à jour",
+      "scopeLabel": "Activité",
+      "scope_submitted": "Soumis",
+      "scope_voted": "Voté",
+      "scope_watched": "Suivi",
+      "unvote": "Annuler le vote",
+      "unwatch": "Ne plus suivre",
+      "notifyTitle": "Alertes de nouveaux retours",
+      "notifyIntro": "Recevez une notification unique dans l'application lorsque quelqu'un soumet un nouveau retour dans une catégorie de votre choix. Cela n'ajoute pas de vote et ne suit pas ces éléments.",
+      "notifyHint": "Les réponses et les mises à jour de statut nécessitent toujours de suivre la discussion spécifique.",
+      "notifyKind_bug": "Nouveaux rapports de bugs",
+      "notifyKind_feature": "Nouvelles idées de fonctionnalités",
+      "notifyKind_wishlist": "Nouveaux jeux pour la liste de souhaits",
+      "notifySaveError": "Impossible d'enregistrer les préférences de notification."
     },
     "auth": {
       "signInRequired": "Vous devez être connecté pour participer aux retours.",

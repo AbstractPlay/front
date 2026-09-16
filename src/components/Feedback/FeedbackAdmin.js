@@ -18,6 +18,8 @@ import {
   setStoredFeedbackAdminSort,
 } from "../../lib/feedback/feedbackListSort";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
+import FeedbackQuickSearch from "./FeedbackQuickSearch";
+import { filterFeedbackItemsByQuery } from "../../lib/feedback/filterFeedbackItemsByQuery";
 import "./feedback.css";
 
 function FeedbackAdmin() {
@@ -32,6 +34,7 @@ function FeedbackAdmin() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     setSortBy(getStoredFeedbackAdminSort(kind));
@@ -79,6 +82,11 @@ function FeedbackAdmin() {
     [items, sortBy],
   );
 
+  const visibleItems = useMemo(
+    () => filterFeedbackItemsByQuery(displayItems, searchQuery),
+    [displayItems, searchQuery],
+  );
+
   if (!globalMe?.admin) {
     return <Navigate to="/feedback/ideas" replace />;
   }
@@ -91,6 +99,7 @@ function FeedbackAdmin() {
         <span>{t("feedback.admin.title")}</span>
       </h1>
       <p>{t("feedback.admin.intro")}</p>
+      <FeedbackQuickSearch value={searchQuery} onChange={setSearchQuery} />
       <div className="feedback-admin-filters">
         <div className="field feedback-filter-field">
           <label className="label" htmlFor="feedback-admin-kind">{t("feedback.admin.kind")}</label>
@@ -141,12 +150,14 @@ function FeedbackAdmin() {
       </div>
       {loading ? <Spinner /> : null}
       {error && <p className="has-text-danger">{error}</p>}
-      {!loading && displayItems.length === 0 ? (
-        <p className="feedback-muted">{t("feedback.admin.empty")}</p>
+      {!loading && visibleItems.length === 0 ? (
+        <p className="feedback-muted">
+          {searchQuery.trim() ? t("feedback.search.noMatches") : t("feedback.admin.empty")}
+        </p>
       ) : null}
-      {!loading && displayItems.length > 0 ? (
+      {!loading && visibleItems.length > 0 ? (
         <ul className="feedback-board-list">
-          {displayItems.map((item) => (
+          {visibleItems.map((item) => (
             <li key={item.id} className="feedback-board-item">
               <FeedbackStatusBadge
                 status={item.status}
