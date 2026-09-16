@@ -902,6 +902,8 @@
   "NextGameNone": "Retour au tableau de bord",
   "No": "Non",
   "NoChallengeResponse": "Aucun challenge n'ont besoin de votre réponse",
+  "DeclineDirectChallenges": "Ne pas accepter les défis directs",
+  "DeclineDirectChallengesHelp": "Les défis nominatifs qui vous sont envoyés seront automatiquement refusés. Les défis ouverts sur les pages de jeu ne sont pas affectés.",
   "NoExploreTrue": "La fonctionnalité d'exploration intégrée sera désactivée pour cette partie.",
   "NoGames": "Aucune partie ne requiert votre attention pour le moment.",
   "NoOpponentMove": "Aucune partie en attente du coup de l'adversaire.",

@@ -391,6 +391,14 @@
     "src": "Debugging information",
     "out": "Información de depuración"
   },
+  "DeclineDirectChallenges": {
+    "src": "Do not accept direct challenges",
+    "out": "No aceptar desafíos directos"
+  },
+  "DeclineDirectChallengesHelp": {
+    "src": "Named challenges sent to you will be declined automatically. Open challenges on game pages are not affected.",
+    "out": "Los desafíos dirigidos a tu nombre se rechazarán automáticamente. Los desafíos abiertos en las páginas de los juegos no se verán afectados."
+  },
   "DefaultDisplay": {
     "src": "Default display",
     "out": "Vista predeterminada"

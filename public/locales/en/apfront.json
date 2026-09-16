@@ -902,6 +902,8 @@
     "NextGameNone": "Back to dashboard",
     "No": "No",
     "NoChallengeResponse": "No challenges needing your response",
+    "DeclineDirectChallenges": "Do not accept direct challenges",
+    "DeclineDirectChallengesHelp": "Named challenges sent to you will be declined automatically. Open challenges on game pages are not affected.",
     "NoExploreTrue": "The built-in exploration feature will be forcibly disabled for this game.",
     "NoGames": "No games currently need your attention.",
     "NoOpponentMove": "No games waiting on opponent's move.",

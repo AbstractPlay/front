@@ -902,6 +902,8 @@
   "NextGameNone": "Zurück zur Übersicht",
   "No": "Nein",
   "NoChallengeResponse": "Keine Herausforderungen, die deine Antwort erfordern",
+  "DeclineDirectChallenges": "Direkte Herausforderungen nicht annehmen",
+  "DeclineDirectChallengesHelp": "Namentlich an dich gerichtete Herausforderungen werden automatisch abgelehnt. Offene Herausforderungen auf Spielseiten sind davon nicht betroffen.",
   "NoExploreTrue": "Die integrierte Analysefunktion wird für dieses Spiel zwingend deaktiviert.",
   "NoGames": "Derzeit erfordern keine Spiele deine Aufmerksamkeit.",
   "NoOpponentMove": "Keine Spiele, die auf den Zug des Gegners warten.",
