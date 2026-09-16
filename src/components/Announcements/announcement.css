@@ -1,0 +1,16 @@
+.announcement-inline-image {
+  max-width: 100%;
+  height: auto;
+  margin: 0.75rem 0;
+  border-radius: 4px;
+  border: 1px solid var(--tag-background-color);
+}
+
+.announcement-article-title {
+  color: var(--main-heading-color);
+  margin-bottom: 0.5rem;
+}
+
+.announcement-markdown img {
+  max-width: 100%;
+}

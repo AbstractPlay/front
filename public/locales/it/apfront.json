@@ -869,7 +869,10 @@
   "News": "Notizie",
   "news": {
     "whatsNew": "Novità",
-    "earlier": "Precedenti"
+    "earlier": "Precedenti",
+    "empty": "Nessun annuncio al momento.",
+    "ogDescription": "Notizie e annunci di Abstract Play",
+    "intro": "Questa pagina è la fonte ufficiale per le notizie del sito. Riportiamo gli annunci anche sul <discordLink>nostro server Discord</discordLink>. Reagisci ai post qui; iscriviti tramite <rssLink>RSS</rssLink> se preferisci."
   },
   "nav": {
     "community": "Community",

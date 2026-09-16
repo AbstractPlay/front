@@ -1,41 +1,22 @@
 import React, { useEffect, useMemo, useRef } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import Spinner from "./Spinner";
-import LocalizedTimeAgo from "./LocalizedTimeAgo";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import rehypeRaw from "rehype-raw";
 import { useStorageState } from "react-use-storage-state";
 import PageHelmet from "./PageHelmet";
 import { useStore } from "../stores";
-
-function NewsArticle({ item, className }) {
-  return (
-    <article className={className ? `media ${className}` : "media"}>
-      <div className="media-content">
-        <div className="content">
-          <p>
-            <small>
-              <LocalizedTimeAgo date={item.time} timeStyle="twitter-now" />
-            </small>
-          </p>
-        </div>
-        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-          {item.text}
-        </ReactMarkdown>
-      </div>
-    </article>
-  );
-}
+import AnnouncementArticle from "./Announcements/AnnouncementArticle";
+import "./Announcements/announcement.css";
 
 function News() {
   const { t } = useTranslation();
   const news = useStore((state) => state.news);
+  const newsLoadState = useStore((state) => state.newsLoadState);
   const [newsLastSeen, setNewsLastSeen] = useStorageState("news-last-seen", 0);
   const seenAtMountRef = useRef(newsLastSeen);
 
   useEffect(() => {
     if (news !== null && news.length > 0) {
-      setNewsLastSeen(Math.max(...news.map((n) => n.time)));
+      setNewsLastSeen(Math.max(...news.map((n) => n.time ?? n.publishedAt)));
     }
   }, [setNewsLastSeen, news]);
 
@@ -47,7 +28,8 @@ function News() {
     const fresh = [];
     const older = [];
     for (const item of news) {
-      if (item.time > cutoff) {
+      const ts = item.time ?? item.publishedAt;
+      if (ts > cutoff) {
         fresh.push(item);
       } else {
         older.push(item);
@@ -56,10 +38,19 @@ function News() {
     return { newItems: fresh, olderItems: older };
   }, [news]);
 
-  if (!news || news.length === 0) {
+  if (newsLoadState === "loading" || news === null) {
     return (
       <article>
         <Spinner />
+      </article>
+    );
+  }
+
+  if (news.length === 0) {
+    return (
+      <article className="content">
+        <h1 className="has-text-centered title">{t("News")}</h1>
+        <p className="has-text-centered">{t("news.empty")}</p>
       </article>
     );
   }
@@ -68,27 +59,28 @@ function News() {
     <>
       <PageHelmet title="News">
         <meta property="og:url" content={`https://play.abstractplay.com/news`} />
-        <meta
-          property="og:description"
-          content={`Copy of the #announcements channel from our Discord (https://discord.abstractplay.com)`}
-        />
+        <meta property="og:description" content={t("news.ogDescription")} />
       </PageHelmet>
       <article>
         <div className="content">
           <h1 className="has-text-centered title">{t("News")}</h1>
           <p>
-            The authoritative and most up-to-date source of Abstract Play news
-            is{" "}
-            <a
-              href="https://discord.abstractplay.com"
-              target="blank"
-              rel="noreferer"
-            >
-              our Discord server
-            </a>
-            . Please come join us! This list is maintained separately, doesn't
-            include images and reactions, and may be slightly delayed. Also
-            available as an <a href="/news.rss">RSS feed</a>!
+            <Trans
+              i18nKey="news.intro"
+              components={{
+                // Trans injects visible link text from news.intro
+                discordLink: (
+                  // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans children
+                  <a
+                    href="https://discord.abstractplay.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                ),
+                // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans children
+                rssLink: <a href="/news.rss" />,
+              }}
+            />
           </p>
         </div>
         <div className="columns">
@@ -98,9 +90,9 @@ function News() {
                 <h2 className="subtitle lined">
                   <span>{t("news.whatsNew")}</span>
                 </h2>
-                {newItems.map((item, idx) => (
-                  <NewsArticle
-                    key={`news-new-${item.time}-${idx}`}
+                {newItems.map((item) => (
+                  <AnnouncementArticle
+                    key={`news-new-${item.id}`}
                     item={item}
                     className="news-item-new"
                   />
@@ -114,9 +106,9 @@ function News() {
                     <span>{t("news.earlier")}</span>
                   </h2>
                 ) : null}
-                {olderItems.map((item, idx) => (
-                  <NewsArticle
-                    key={`news-older-${item.time}-${idx}`}
+                {olderItems.map((item) => (
+                  <AnnouncementArticle
+                    key={`news-older-${item.id}`}
                     item={item}
                   />
                 ))}

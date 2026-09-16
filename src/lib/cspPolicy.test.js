@@ -28,6 +28,12 @@ describe("csp-policy board export", () => {
     expect(img).toContain("https://ap-feedback-attachments-dev.s3.us-east-1.amazonaws.com");
   });
 
+  it("allows announcement attachment buckets for presigned images", () => {
+    const img = directive("img-src");
+    expect(img).toContain("https://ap-announcements-attachments-dev.s3.us-east-1.amazonaws.com");
+    expect(img).toContain("https://ap-announcements-attachments-prod.s3.us-east-1.amazonaws.com");
+  });
+
   it("allows embedded export fonts to load in rasterized SVG", () => {
     const fontSrc = directive("font-src");
     expect(fontSrc).toContain("https://fonts.gstatic.com");

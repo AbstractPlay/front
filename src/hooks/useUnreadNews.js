@@ -8,7 +8,7 @@ export function useUnreadNews() {
 
   const maxNews = useMemo(() => {
     if (news !== undefined && news !== null && news.length > 0) {
-      return Math.max(...news.map((n) => n.time));
+      return Math.max(...news.map((n) => n.time ?? n.publishedAt));
     }
     return Infinity;
   }, [news]);

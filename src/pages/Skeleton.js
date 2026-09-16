@@ -40,7 +40,7 @@ import TimeAgo from "javascript-time-ago";
 import TimeAgoLocaleSync from "../components/TimeAgoLocaleSync";
 import { getTimeAgoLocaleData } from "../lib/timeAgoLocales";
 import { useStorageState } from "react-use-storage-state";
-import newsData from "../assets/news.json";
+import { loadAnnouncementsForStore } from "../lib/announcements/loadNews";
 import ThemeApplicator from "../components/ThemeApplicator";
 import MyWebSocket from "../components/MyWebSocket";
 import GameWatch from "../components/GameWatch";
@@ -100,12 +100,20 @@ function Bones(props) {
   }, [colorMode, storedContextLight, storedContextDark]);
 
   useEffect(() => {
-    const { setNews } = useStore.getState();
-    if (newsData !== null && newsData !== undefined) {
-      setNews(newsData.sort((a, b) => b.time - a.time));
-    } else {
-      setNews([]);
-    }
+    let cancelled = false;
+    const { setNews, setNewsLoadState } = useStore.getState();
+    setNewsLoadState("loading");
+    (async () => {
+      const items = await loadAnnouncementsForStore();
+      if (cancelled) {
+        return;
+      }
+      setNews(items);
+      setNewsLoadState("ready");
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {

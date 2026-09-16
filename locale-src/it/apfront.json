@@ -5191,6 +5191,18 @@
     "src": "Earlier",
     "out": "Precedenti"
   },
+  "news.empty": {
+    "src": "No announcements yet.",
+    "out": "Nessun annuncio al momento."
+  },
+  "news.intro": {
+    "src": "This page is the canonical source for site news. We also mirror announcements to <discordLink>our Discord server</discordLink>. React on posts here; subscribe via <rssLink>RSS</rssLink> if you like.",
+    "out": "Questa pagina è la fonte ufficiale per le notizie del sito. Riportiamo gli annunci anche sul <discordLink>nostro server Discord</discordLink>. Reagisci ai post qui; iscriviti tramite <rssLink>RSS</rssLink> se preferisci."
+  },
+  "news.ogDescription": {
+    "src": "Abstract Play news and announcements",
+    "out": "Notizie e annunci di Abstract Play"
+  },
   "news.whatsNew": {
     "src": "What's new",
     "out": "Novità"
