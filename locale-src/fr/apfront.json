@@ -5379,6 +5379,18 @@
     "src": "This page is the canonical source for site news. We also mirror announcements to <discordLink>our Discord server</discordLink>. React on posts here; subscribe via <rssLink>RSS</rssLink> if you like.",
     "out": "Cette page est la source officielle des actualités du site. Nous publions également les annonces sur <discordLink>notre serveur Discord</discordLink>. Réagissez aux publications ici ; abonnez-vous via <rssLink>RSS</rssLink> si vous le souhaitez."
   },
+  "news.loadError": {
+    "src": "Could not load announcements. Try again later.",
+    "out": "Impossible de charger les annonces. Réessayez plus tard."
+  },
+  "news.loadOlder": {
+    "src": "Load older announcements",
+    "out": "Charger les annonces plus anciennes"
+  },
+  "news.loadingMore": {
+    "src": "Loading…",
+    "out": "Chargement…"
+  },
   "news.ogDescription": {
     "src": "Abstract Play news and announcements",
     "out": "Actualités et annonces d'Abstract Play"

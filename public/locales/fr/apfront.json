@@ -872,7 +872,10 @@
     "earlier": "Plus anciens",
     "empty": "Aucune annonce pour le moment.",
     "ogDescription": "Actualités et annonces d'Abstract Play",
-    "intro": "Cette page est la source officielle des actualités du site. Nous publions également les annonces sur <discordLink>notre serveur Discord</discordLink>. Réagissez aux publications ici ; abonnez-vous via <rssLink>RSS</rssLink> si vous le souhaitez."
+    "intro": "Cette page est la source officielle des actualités du site. Nous publions également les annonces sur <discordLink>notre serveur Discord</discordLink>. Réagissez aux publications ici ; abonnez-vous via <rssLink>RSS</rssLink> si vous le souhaitez.",
+    "loadOlder": "Charger les annonces plus anciennes",
+    "loadingMore": "Chargement…",
+    "loadError": "Impossible de charger les annonces. Réessayez plus tard."
   },
   "announcements": {
     "reactions": {

@@ -11,6 +11,22 @@
   margin-bottom: 0.5rem;
 }
 
+.news-feed-more {
+  margin: 2rem 0 1rem;
+}
+
+.news-feed-sentinel {
+  height: 1px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.news-feed-loading,
+.news-feed-error {
+  color: var(--secondary-font-color);
+  margin-top: 0.75rem;
+}
+
 .announcement-markdown img {
   max-width: 100%;
 }

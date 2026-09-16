@@ -872,7 +872,10 @@
         "earlier": "Earlier",
         "empty": "No announcements yet.",
         "ogDescription": "Abstract Play news and announcements",
-        "intro": "This page is the canonical source for site news. We also mirror announcements to <discordLink>our Discord server</discordLink>. React on posts here; subscribe via <rssLink>RSS</rssLink> if you like."
+        "intro": "This page is the canonical source for site news. We also mirror announcements to <discordLink>our Discord server</discordLink>. React on posts here; subscribe via <rssLink>RSS</rssLink> if you like.",
+        "loadOlder": "Load older announcements",
+        "loadingMore": "Loading…",
+        "loadError": "Could not load announcements. Try again later."
     },
     "announcements": {
         "reactions": {

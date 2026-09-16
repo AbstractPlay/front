@@ -10,11 +10,17 @@ function AnnouncementArticle({
   myReactions,
   onReactionToggle,
   reactionsDisabled,
+  articleRef,
 }) {
   const articleClass = className ? `media ${className}` : "media";
   const anchorId = item.id ? `announcement-${item.id}` : undefined;
   return (
-    <article className={articleClass} id={anchorId}>
+    <article
+      className={articleClass}
+      id={anchorId}
+      ref={articleRef}
+      data-announcement-id={item.id || undefined}
+    >
       <div className="media-content">
         <div className="content">
           <p>
@@ -63,6 +69,7 @@ AnnouncementArticle.propTypes = {
   myReactions: PropTypes.arrayOf(PropTypes.string),
   onReactionToggle: PropTypes.func,
   reactionsDisabled: PropTypes.bool,
+  articleRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.any })]),
 };
 
 export default AnnouncementArticle;

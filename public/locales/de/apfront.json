@@ -872,7 +872,10 @@
     "earlier": "Früher",
     "empty": "Noch keine Ankündigungen.",
     "ogDescription": "Neuigkeiten und Ankündigungen von Abstract Play",
-    "intro": "Diese Seite ist die offizielle Quelle für Neuigkeiten auf der Website. Wir spiegeln Ankündigungen auch auf <discordLink>unserem Discord-Server</discordLink>. Reagiere hier auf Beiträge; abonniere sie bei Interesse per <rssLink>RSS</rssLink>."
+    "intro": "Diese Seite ist die offizielle Quelle für Neuigkeiten auf der Website. Wir spiegeln Ankündigungen auch auf <discordLink>unserem Discord-Server</discordLink>. Reagiere hier auf Beiträge; abonniere sie bei Interesse per <rssLink>RSS</rssLink>.",
+    "loadOlder": "Ältere Ankündigungen laden",
+    "loadingMore": "Wird geladen…",
+    "loadError": "Ankündigungen konnten nicht geladen werden. Versuche es später erneut."
   },
   "announcements": {
     "reactions": {

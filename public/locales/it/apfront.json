@@ -872,7 +872,10 @@
     "earlier": "Precedenti",
     "empty": "Nessun annuncio al momento.",
     "ogDescription": "Notizie e annunci di Abstract Play",
-    "intro": "Questa pagina è la fonte ufficiale per le notizie del sito. Riportiamo gli annunci anche sul <discordLink>nostro server Discord</discordLink>. Reagisci ai post qui; iscriviti tramite <rssLink>RSS</rssLink> se preferisci."
+    "intro": "Questa pagina è la fonte ufficiale per le notizie del sito. Riportiamo gli annunci anche sul <discordLink>nostro server Discord</discordLink>. Reagisci ai post qui; iscriviti tramite <rssLink>RSS</rssLink> se preferisci.",
+    "loadOlder": "Carica annunci precedenti",
+    "loadingMore": "Caricamento…",
+    "loadError": "Impossibile caricare gli annunci. Riprova più tardi."
   },
   "announcements": {
     "reactions": {

@@ -40,7 +40,7 @@ import TimeAgo from "javascript-time-ago";
 import TimeAgoLocaleSync from "../components/TimeAgoLocaleSync";
 import { getTimeAgoLocaleData } from "../lib/timeAgoLocales";
 import { useStorageState } from "react-use-storage-state";
-import { loadAnnouncementsForStore } from "../lib/announcements/loadNews";
+import { loadAnnouncementsBellBootstrap } from "../lib/announcements/loadNews";
 import ThemeApplicator from "../components/ThemeApplicator";
 import MyWebSocket from "../components/MyWebSocket";
 import GameWatch from "../components/GameWatch";
@@ -101,12 +101,14 @@ function Bones(props) {
     }
   }, [colorMode, storedContextLight, storedContextDark]);
 
+  const globalMe = useStore((state) => state.globalMe);
+
   useEffect(() => {
     let cancelled = false;
     const { setNews, setNewsLoadState } = useStore.getState();
     setNewsLoadState("loading");
     (async () => {
-      const items = await loadAnnouncementsForStore();
+      const items = await loadAnnouncementsBellBootstrap(globalMe);
       if (cancelled) {
         return;
       }
@@ -116,7 +118,8 @@ function Bones(props) {
     return () => {
       cancelled = true;
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reload bell window on login/logout only
+  }, [globalMe?.id]);
 
   useEffect(() => {
     async function getToken() {
