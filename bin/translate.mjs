@@ -2,6 +2,7 @@
 import { GoogleGenAI } from "@google/genai";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { pruneManagedLocale, pruneToSourceShape } from "./locale-prune.mjs";
 
 const ES_US_DIALECT = [
@@ -187,7 +188,7 @@ function unflatten(flat) {
   return result;
 }
 
-function deepMerge(target, source) {
+export function deepMerge(target, source) {
   for (const [key, value] of Object.entries(source)) {
     if (
       value &&
@@ -734,4 +735,7 @@ async function run() {
   }
 }
 
-run();
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  run();
+}

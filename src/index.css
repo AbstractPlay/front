@@ -455,13 +455,56 @@ a.navbar-item,
   margin-top: 0.75rem;
 }
 
-.players-table-avatar-link {
+.avatar-enlarge-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
   display: inline-flex;
   line-height: 0;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.avatar-enlarge-btn:hover .user-avatar,
+.avatar-enlarge-btn:focus-visible .user-avatar {
+  box-shadow: 0 0 0 2px var(--secondary-color-3);
+}
+
+.avatar-enlarge-btn:focus-visible {
+  outline: none;
+}
+
+.avatar-lightbox-content {
+  align-items: center;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: none;
+  overflow: visible;
+  position: relative;
+  width: auto;
+}
+
+.avatar-lightbox-close {
+  position: absolute;
+  right: -0.25rem;
+  top: -0.25rem;
+  z-index: 1;
+}
+
+.avatar-lightbox-avatar {
+  border: 3px solid var(--tag-background-color);
+  box-shadow: 0 8px 32px var(--dropshadow-target-start);
+  height: 320px;
+  max-height: min(320px, 80vw);
+  max-width: min(320px, 80vw);
+  width: 320px;
 }
 
 .apTable .players-table-avatar-cell,
-.apTable td:has(.players-table-avatar-link) {
+.apTable td:has(.avatar-enlarge-btn) {
   padding-right: 0.35rem;
   vertical-align: middle;
   width: 2.5rem;
