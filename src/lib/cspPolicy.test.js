@@ -15,23 +15,17 @@ describe("csp-policy board export", () => {
 
   it("allows font and board asset fetches used during export", () => {
     const connect = directive("connect-src");
-    expect(connect).toContain("https://fonts.googleapis.com");
+    expect(connect).toContain("https://*.googleapis.com");
     expect(connect).toContain("https://fonts.gstatic.com");
     expect(connect).toContain("https://thumbnails.abstractplay.com");
     expect(connect).toContain("blob:");
   });
 
-  it("allows feedback attachment bucket for presigned upload and preview", () => {
+  it("allows S3 us-east-1 for feedback and announcement presigned attachments", () => {
     const connect = directive("connect-src");
     const img = directive("img-src");
-    expect(connect).toContain("https://ap-feedback-attachments-dev.s3.us-east-1.amazonaws.com");
-    expect(img).toContain("https://ap-feedback-attachments-dev.s3.us-east-1.amazonaws.com");
-  });
-
-  it("allows announcement attachment buckets for presigned images", () => {
-    const img = directive("img-src");
-    expect(img).toContain("https://ap-announcements-attachments-dev.s3.us-east-1.amazonaws.com");
-    expect(img).toContain("https://ap-announcements-attachments-prod.s3.us-east-1.amazonaws.com");
+    expect(connect).toContain("https://*.s3.us-east-1.amazonaws.com");
+    expect(img).toContain("https://*.s3.us-east-1.amazonaws.com");
   });
 
   it("allows embedded export fonts to load in rasterized SVG", () => {
