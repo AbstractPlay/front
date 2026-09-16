@@ -922,7 +922,7 @@
       "previewHeading": "Aperçu",
       "emojiHint": "Astuce : vous pouvez également utiliser le sélecteur d'émojis de votre système (Windows : Win+., macOS : Ctrl+Cmd+Espace).",
       "publishConfirmTitle": "Publier l'annonce ?",
-      "publishConfirmBody": "Cela publiera sur /news, actualisera le flux RSS, retransmettra sur Discord (si configuré) et enverra un e-mail ou une notification push aux utilisateurs ayant accepté de recevoir les annonces du site.",
+      "publishConfirmBody": "Cela publiera sur /news, actualisera le flux RSS, retransmettra sur Discord (si configuré) et enverra un e-mail ou une notification push aux utilisateurs inscrits aux annonces du site.",
       "publishConfirm": "Publier maintenant",
       "retract": "Retirer",
       "retracting": "Retrait…",

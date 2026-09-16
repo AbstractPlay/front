@@ -1183,9 +1183,25 @@
     "src": "Event invitations",
     "out": "Inviti agli eventi"
   },
+  "InAppNotifyLabel-feedbackDeleted": {
+    "src": "Removed wishlist entries",
+    "out": "Voci della lista desideri rimosse"
+  },
   "InAppNotifyLabel-feedbackNew": {
     "src": "New feedback submissions",
     "out": "Nuovi feedback"
+  },
+  "InAppNotifyLabel-feedbackReply": {
+    "src": "Feedback replies",
+    "out": "Risposte ai feedback"
+  },
+  "InAppNotifyLabel-feedbackReviewRequested": {
+    "src": "Feedback review requests",
+    "out": "Richieste di revisione feedback"
+  },
+  "InAppNotifyLabel-feedbackStatus": {
+    "src": "Feedback status updates",
+    "out": "Aggiornamenti di stato del feedback"
   },
   "InAppNotifyLabel-gameEnd": {
     "src": "Game ended",
@@ -2103,6 +2119,18 @@
     "src": "User Settings",
     "out": "Impostazioni utente"
   },
+  "UserSettingsTabGameplay": {
+    "src": "Gameplay",
+    "out": "Gameplay"
+  },
+  "UserSettingsTabNotifications": {
+    "src": "Notifications",
+    "out": "Notifiche"
+  },
+  "UserSettingsTabProfile": {
+    "src": "Profile",
+    "out": "Profilo"
+  },
   "Variant": {
     "src": "Variant",
     "out": "Variante"
@@ -2332,8 +2360,8 @@
     "out": "Pubblica ora"
   },
   "announcements.admin.publishConfirmBody": {
-    "src": "This will make the post public on /news. Discord, RSS, and notifications fan-out ship in a later release; on production today it publishes to the site only.",
-    "out": "Questo renderà il post pubblico su /news. La distribuzione (fan-out) su Discord, RSS e notifiche sarà disponibile in una versione successiva; oggi in produzione viene pubblicato solo sul sito."
+    "src": "This will publish on /news, refresh RSS, mirror to Discord (when configured), and email or push users who opted in to site announcements.",
+    "out": "Questo pubblicherà su /news, aggiornerà il feed RSS, eseguirà il mirror su Discord (se configurato) e invierà un'e-mail o una notifica push agli utenti che hanno scelto di ricevere gli annunci del sito."
   },
   "announcements.admin.publishConfirmTitle": {
     "src": "Publish announcement?",
@@ -2350,6 +2378,26 @@
   "announcements.admin.publishing": {
     "src": "Publishing…",
     "out": "Pubblicazione in corso…"
+  },
+  "announcements.admin.retract": {
+    "src": "Retract",
+    "out": "Ritira"
+  },
+  "announcements.admin.retractConfirm": {
+    "src": "Retract now",
+    "out": "Ritira ora"
+  },
+  "announcements.admin.retractConfirmBody": {
+    "src": "This removes the post from /news and RSS. It does not delete the Discord mirror; update Discord manually if needed.",
+    "out": "Questo rimuove il post da /news e dall'RSS. Non elimina il mirror su Discord; aggiorna Discord manualmente se necessario."
+  },
+  "announcements.admin.retractConfirmTitle": {
+    "src": "Retract announcement?",
+    "out": "Ritirare l'annuncio?"
+  },
+  "announcements.admin.retracting": {
+    "src": "Retracting…",
+    "out": "Ritiro in corso…"
   },
   "announcements.admin.saveDraft": {
     "src": "Save",
@@ -2738,6 +2786,10 @@
   "buttons.cifra.lt": {
     "src": "Light, Top",
     "out": "Chiaro, Alto"
+  },
+  "buttons.declare": {
+    "src": "Declare",
+    "out": "Dichiara"
   },
   "buttons.draw": {
     "src": "Claim draw",
@@ -3899,9 +3951,17 @@
     "src": "Rated only",
     "out": "Solo classificate"
   },
+  "challenges.filters.softTimeOnly": {
+    "src": "Soft time only",
+    "out": "Solo tempo flessibile"
+  },
   "challenges.filters.starredOnly": {
     "src": "Only starred games",
     "out": "Solo partite preferite"
+  },
+  "challenges.filters.unratedOnly": {
+    "src": "Unrated only",
+    "out": "Solo non classificate"
   },
   "challenges.loading": {
     "src": "Loading challenges…",
@@ -4307,6 +4367,78 @@
     "src": "Something went wrong",
     "out": "Qualcosa è andato storto"
   },
+  "feedback.admin.allEfforts": {
+    "src": "All efforts",
+    "out": "Tutti i livelli di impegno"
+  },
+  "feedback.admin.allPriorities": {
+    "src": "All priorities",
+    "out": "Tutte le priorità"
+  },
+  "feedback.admin.allStatuses": {
+    "src": "All statuses",
+    "out": "Tutti gli stati"
+  },
+  "feedback.admin.effort": {
+    "src": "Effort",
+    "out": "Impegno"
+  },
+  "feedback.admin.empty": {
+    "src": "No items match these filters.",
+    "out": "Nessun elemento corrisponde a questi filtri."
+  },
+  "feedback.admin.intro": {
+    "src": "Triage and manage feedback submissions.",
+    "out": "Esamina e gestisci le segnalazioni di feedback."
+  },
+  "feedback.admin.kind": {
+    "src": "Type",
+    "out": "Tipo"
+  },
+  "feedback.admin.needsResponse": {
+    "src": "Needs response",
+    "out": "Richiede risposta"
+  },
+  "feedback.admin.noPriority": {
+    "src": "Not set",
+    "out": "Non impostata"
+  },
+  "feedback.admin.priority": {
+    "src": "Priority",
+    "out": "Priorità"
+  },
+  "feedback.admin.saveFields": {
+    "src": "Save admin fields",
+    "out": "Salva campi admin"
+  },
+  "feedback.admin.saving": {
+    "src": "Saving…",
+    "out": "Salvataggio in corso…"
+  },
+  "feedback.admin.sortBy": {
+    "src": "Sort by",
+    "out": "Ordina per"
+  },
+  "feedback.admin.sortDefault": {
+    "src": "Default",
+    "out": "Predefinito"
+  },
+  "feedback.admin.sortPriority": {
+    "src": "Priority",
+    "out": "Priorità"
+  },
+  "feedback.admin.sortStatus": {
+    "src": "Status",
+    "out": "Stato"
+  },
+  "feedback.admin.status": {
+    "src": "Status",
+    "out": "Stato"
+  },
+  "feedback.admin.title": {
+    "src": "Feedback admin",
+    "out": "Amministrazione feedback"
+  },
   "feedback.auth.signInRequired": {
     "src": "You must be logged in to participate in feedback.",
     "out": "Devi aver effettuato l'accesso per partecipare ai feedback."
@@ -4331,6 +4463,14 @@
     "src": "No closed items are listed here. After archive, they move to feedback history.",
     "out": "Qui non è elencato alcun elemento chiuso. Dopo l'archiviazione, verranno spostati nello storico dei feedback."
   },
+  "feedback.board.filterAll": {
+    "src": "All ({{count}})",
+    "out": "Tutti ({{count}})"
+  },
+  "feedback.board.filterLabel": {
+    "src": "Filter list",
+    "out": "Filtra elenco"
+  },
   "feedback.board.showClosed": {
     "src": "Closed (not archived)",
     "out": "Chiusi (non archiviati)"
@@ -4347,6 +4487,58 @@
     "src": "Votes (most first)",
     "out": "Voti (dal più votato)"
   },
+  "feedback.bugs.backToBoard": {
+    "src": "Back to bug reports",
+    "out": "Torna alle segnalazioni di bug"
+  },
+  "feedback.bugs.empty": {
+    "src": "No open bug reports yet.",
+    "out": "Nessuna segnalazione di bug aperta al momento."
+  },
+  "feedback.bugs.intro": {
+    "src": "Report issues you find on Abstract Play. Please attach a screenshot when you can — it helps us reproduce the issue.",
+    "out": "Segnala i problemi riscontrati su Abstract Play. Se possibile, allega uno screenshot: ci aiuta a riprodurre il problema."
+  },
+  "feedback.bugs.report": {
+    "src": "Report a bug",
+    "out": "Segnala un bug"
+  },
+  "feedback.bugs.title": {
+    "src": "Bug reports",
+    "out": "Segnalazioni di bug"
+  },
+  "feedback.detail.addComment": {
+    "src": "Your comment",
+    "out": "Il tuo commento"
+  },
+  "feedback.detail.adminEffort": {
+    "src": "Effort",
+    "out": "Impegno"
+  },
+  "feedback.detail.adminPriority": {
+    "src": "Priority",
+    "out": "Priorità"
+  },
+  "feedback.detail.adminReviewers": {
+    "src": "Reviewers",
+    "out": "Revisori"
+  },
+  "feedback.detail.adminStatus": {
+    "src": "Status",
+    "out": "Stato"
+  },
+  "feedback.detail.adminTags": {
+    "src": "Admin tags (comma-separated)",
+    "out": "Tag admin (separati da virgola)"
+  },
+  "feedback.detail.adminWishlistCategory": {
+    "src": "Category",
+    "out": "Categoria"
+  },
+  "feedback.detail.adminWishlistNote": {
+    "src": "Category note (optional)",
+    "out": "Nota sulla categoria (opzionale)"
+  },
   "feedback.detail.archivedBanner": {
     "src": "This item has been archived. Discussion is read-only until live data is removed.",
     "out": "Questo elemento è stato archiviato. La discussione è in sola lettura fino alla rimozione dei dati attivi."
@@ -4355,13 +4547,117 @@
     "src": "This item has been archived. The full thread is no longer available on the live board.",
     "out": "Questo elemento è stato archiviato. La discussione completa non è più disponibile sulla bacheca attiva."
   },
+  "feedback.detail.cancelEdit": {
+    "src": "Cancel",
+    "out": "Annulla"
+  },
+  "feedback.detail.closedBanner": {
+    "src": "This item is closed but not yet archived. You can still comment here.",
+    "out": "Questo elemento è chiuso ma non ancora archiviato. Puoi comunque commentare qui."
+  },
+  "feedback.detail.commentBodyHint": {
+    "src": "Markdown supported. Text is optional if you attach screenshots.",
+    "out": "Markdown supportato. Il testo è facoltativo se alleghi degli screenshot."
+  },
+  "feedback.detail.commentScreenshots": {
+    "src": "Screenshots",
+    "out": "Screenshot"
+  },
+  "feedback.detail.comments": {
+    "src": "Discussion",
+    "out": "Discussione"
+  },
+  "feedback.detail.coverReplaceHint": {
+    "src": "Upload or paste a new image to replace the current cover.",
+    "out": "Carica o incolla una nuova immagine per sostituire la copertina attuale."
+  },
+  "feedback.detail.deleteWishlist": {
+    "src": "Delete entry",
+    "out": "Elimina voce"
+  },
+  "feedback.detail.deleteWishlistCancel": {
+    "src": "Cancel",
+    "out": "Annulla"
+  },
+  "feedback.detail.deleteWishlistConfirm": {
+    "src": "Delete entry",
+    "out": "Elimina voce"
+  },
+  "feedback.detail.deleteWishlistIntro": {
+    "src": "This permanently removes the entry from the wishlist. Watchers will be notified with your reason.",
+    "out": "Questo rimuoverà permanentemente la voce dalla lista desideri. Chi segue l'elemento riceverà una notifica con il motivo."
+  },
+  "feedback.detail.deleteWishlistReason": {
+    "src": "Reason for deletion",
+    "out": "Motivo dell'eliminazione"
+  },
+  "feedback.detail.deleteWishlistTitle": {
+    "src": "Delete wishlist entry",
+    "out": "Elimina voce dalla lista desideri"
+  },
+  "feedback.detail.deleting": {
+    "src": "Deleting…",
+    "out": "Eliminazione in corso…"
+  },
+  "feedback.detail.edit": {
+    "src": "Edit",
+    "out": "Modifica"
+  },
   "feedback.detail.holdRetention": {
     "src": "Hold retention",
     "out": "Blocca conservazione"
   },
+  "feedback.detail.noComments": {
+    "src": "No comments yet.",
+    "out": "Nessun commento al momento."
+  },
+  "feedback.detail.notFound": {
+    "src": "This feedback item could not be found.",
+    "out": "Impossibile trovare questo elemento di feedback."
+  },
+  "feedback.detail.notifyMe": {
+    "src": "Notify me of updates on this item",
+    "out": "Notificami gli aggiornamenti su questo elemento"
+  },
+  "feedback.detail.postComment": {
+    "src": "Post comment",
+    "out": "Pubblica commento"
+  },
+  "feedback.detail.posting": {
+    "src": "Posting…",
+    "out": "Pubblicazione in corso…"
+  },
+  "feedback.detail.reclassifyToFeature": {
+    "src": "Move to feature ideas",
+    "out": "Sposta in Idee per funzionalità"
+  },
+  "feedback.detail.reclassifyToFeatureCancel": {
+    "src": "Cancel",
+    "out": "Annulla"
+  },
+  "feedback.detail.reclassifyToFeatureConfirm": {
+    "src": "Move to feature ideas",
+    "out": "Sposta in Idee per funzionalità"
+  },
+  "feedback.detail.reclassifyToFeatureIntro": {
+    "src": "This moves the thread from bug reports to feature ideas. Votes, comments, and watchers stay on the same page. Open bugs become Open; triaged bugs become Under review; monitoring bugs become Planned.",
+    "out": "Questo sposta la discussione dalle segnalazioni di bug alle idee per funzionalità. Voti, commenti e osservatori rimangono sulla stessa pagina. I bug aperti diventano Aperti; i bug analizzati diventano In esame."
+  },
+  "feedback.detail.reclassifyToFeatureTitle": {
+    "src": "Move to feature ideas",
+    "out": "Sposta in Idee per funzionalità"
+  },
+  "feedback.detail.reclassifying": {
+    "src": "Moving…",
+    "out": "Spostamento in corso…"
+  },
   "feedback.detail.releaseRetention": {
     "src": "Release retention",
     "out": "Sblocca conservazione"
+  },
+  "feedback.detail.reopenHint": {
+    "src": "Change the status to a non-closed value to reopen this item on the board.",
+    "out": "Cambia lo stato in un valore diverso da chiuso per riaprire questo elemento sulla bacheca."
   },
   "feedback.detail.retentionHoldOff": {
     "src": "Retention hold is off — this item will be archived after the retention period.",
@@ -4370,6 +4666,54 @@
   "feedback.detail.retentionHoldOn": {
     "src": "Retention hold is on — this item will not be archived automatically.",
     "out": "Blocco conservazione attivo — questo elemento non verrà archiviato automaticamente."
+  },
+  "feedback.detail.saveAdminFields": {
+    "src": "Save admin fields",
+    "out": "Salva campi admin"
+  },
+  "feedback.detail.saveEdit": {
+    "src": "Save changes",
+    "out": "Salva modifiche"
+  },
+  "feedback.detail.savingEdit": {
+    "src": "Saving…",
+    "out": "Salvataggio in corso…"
+  },
+  "feedback.detail.staff": {
+    "src": "Staff",
+    "out": "Staff"
+  },
+  "feedback.detail.unvote": {
+    "src": "Unvote",
+    "out": "Rimuovi voto"
+  },
+  "feedback.detail.unwatch": {
+    "src": "Unwatch",
+    "out": "Non seguire più"
+  },
+  "feedback.detail.vote": {
+    "src": "Vote",
+    "out": "Vota"
+  },
+  "feedback.detail.watch": {
+    "src": "Watch",
+    "out": "Segui"
+  },
+  "feedback.effort.high": {
+    "src": "High effort",
+    "out": "Alto impegno"
+  },
+  "feedback.effort.low": {
+    "src": "Low effort",
+    "out": "Basso impegno"
+  },
+  "feedback.effort.medium": {
+    "src": "Medium effort",
+    "out": "Medio impegno"
+  },
+  "feedback.effort.unknown": {
+    "src": "Unknown effort",
+    "out": "Impegno sconosciuto"
   },
   "feedback.history.closed": {
     "src": "Closed",
@@ -4419,6 +4763,34 @@
     "src": "View feedback history",
     "out": "Visualizza cronologia feedback"
   },
+  "feedback.ideas.backToBoard": {
+    "src": "Back to feature ideas",
+    "out": "Torna alle idee per funzionalità"
+  },
+  "feedback.ideas.empty": {
+    "src": "No feature ideas yet.",
+    "out": "Nessuna idea per funzionalità al momento."
+  },
+  "feedback.ideas.intro": {
+    "src": "Suggest improvements and new features for Abstract Play. Vote on ideas you want to see.",
+    "out": "Suggerisci miglioramenti e nuove funzionalità per Abstract Play. Vota le idee che vorresti veder realizzate."
+  },
+  "feedback.ideas.report": {
+    "src": "Suggest a feature",
+    "out": "Suggerisci una funzionalità"
+  },
+  "feedback.ideas.title": {
+    "src": "Feature ideas",
+    "out": "Idee per funzionalità"
+  },
+  "feedback.meta.comments_one": {
+    "src": "{{count}} comment",
+    "out": "{{count}} commento"
+  },
+  "feedback.meta.comments_other": {
+    "src": "{{count}} comments",
+    "out": "{{count}} commenti"
+  },
   "feedback.meta.posted": {
     "src": "Posted",
     "out": "Pubblicato"
@@ -4426,6 +4798,26 @@
   "feedback.meta.updated": {
     "src": "Updated",
     "out": "Aggiornato"
+  },
+  "feedback.meta.votes_one": {
+    "src": "{{count}} vote",
+    "out": "{{count}} voto"
+  },
+  "feedback.meta.votes_other": {
+    "src": "{{count}} votes",
+    "out": "{{count}} voti"
+  },
+  "feedback.mine.all": {
+    "src": "All",
+    "out": "Tutti"
+  },
+  "feedback.mine.bugs": {
+    "src": "Bugs",
+    "out": "Bug"
+  },
+  "feedback.mine.empty": {
+    "src": "You have not submitted any feedback yet.",
+    "out": "Non hai ancora inviato alcun feedback."
   },
   "feedback.mine.empty_submitted": {
     "src": "You have not submitted any feedback yet.",
@@ -4438,6 +4830,14 @@
   "feedback.mine.empty_watched": {
     "src": "You are not watching any feedback yet.",
     "out": "Non stai ancora seguendo alcun feedback."
+  },
+  "feedback.mine.ideas": {
+    "src": "Features",
+    "out": "Funzionalità"
+  },
+  "feedback.mine.intro": {
+    "src": "Bugs and feature ideas you have submitted.",
+    "out": "Bug e idee per funzionalità che hai inviato."
   },
   "feedback.mine.intro_submitted": {
     "src": "Feedback you have submitted.",
@@ -4495,6 +4895,10 @@
     "src": "Watched",
     "out": "Seguiti"
   },
+  "feedback.mine.title": {
+    "src": "My feedback",
+    "out": "I miei feedback"
+  },
   "feedback.mine.unvote": {
     "src": "Unvote",
     "out": "Rimuovi voto"
@@ -4503,9 +4907,29 @@
     "src": "Unwatch",
     "out": "Smetti di seguire"
   },
+  "feedback.mine.updated": {
+    "src": "Updated",
+    "out": "Aggiornato"
+  },
   "feedback.mine.wishlist": {
     "src": "Wishlist",
     "out": "Lista dei desideri"
+  },
+  "feedback.new.attachments": {
+    "src": "Attachments",
+    "out": "Allegati"
+  },
+  "feedback.new.bodyLabel": {
+    "src": "Description",
+    "out": "Descrizione"
+  },
+  "feedback.new.bodyMarkdownHint": {
+    "src": "Markdown supported (headings, lists, links, code blocks).",
+    "out": "Markdown supportato (intestazioni, elenchi, link, blocchi di codice)."
+  },
+  "feedback.new.bugIntro": {
+    "src": "Please provide as many details as possible. If it relates to a specific game, please provide a link to the game. Screen captures are always helpful. The more information you provide, the better chance we have of fixing it quickly. Thank you!",
+    "out": "Ti preghiamo di fornire quanti più dettagli possibile. Se il problema riguarda una partita specifica, fornisci un link alla partita. Gli screenshot sono sempre utili. Più informazioni fornisci, maggiori saranno le possibilità di risolverlo rapidamente. Grazie!"
   },
   "feedback.new.coverImage": {
     "src": "Cover image",
@@ -4514,6 +4938,138 @@
   "feedback.new.coverImageHint": {
     "src": "Optional. Paste or upload one box-art image. If you paste multiple images, only the last one is kept.",
     "out": "Opzionale. Incolla o carica un'immagine della scatola del gioco. Se incolli più immagini, verrà conservata solo l'ultima."
+  },
+  "feedback.new.gameTitleLabel": {
+    "src": "Game name",
+    "out": "Nome del gioco"
+  },
+  "feedback.new.gameUrlLabel": {
+    "src": "Game URL",
+    "out": "URL del gioco"
+  },
+  "feedback.new.notesLabel": {
+    "src": "Notes",
+    "out": "Note"
+  },
+  "feedback.new.relevantPageCustom": {
+    "src": "Other Abstract Play link",
+    "out": "Altro link di Abstract Play"
+  },
+  "feedback.new.relevantPageCustomPlaceholder": {
+    "src": "https://play.abstractplay.com/…",
+    "out": "https://play.abstractplay.com/…"
+  },
+  "feedback.new.relevantPageHint": {
+    "src": "Choose a page you visited recently, or paste a link to the game or screen where the bug happened.",
+    "out": "Scegli una pagina che hai visitato di recente, oppure incolla un link alla partita o alla schermata in cui si è verificato il bug."
+  },
+  "feedback.new.relevantPageInvalid": {
+    "src": "Please enter a valid Abstract Play link (same site as this page).",
+    "out": "Inserisci un link di Abstract Play valido (dello stesso sito di questa pagina)."
+  },
+  "feedback.new.relevantPageLabel": {
+    "src": "Where did you see the problem?",
+    "out": "Dove hai riscontrato il problema?"
+  },
+  "feedback.new.relevantPageNone": {
+    "src": "Not sure / no specific page",
+    "out": "Non saprei / nessuna pagina specifica"
+  },
+  "feedback.new.screenshotEncouraged": {
+    "src": "A screenshot makes bugs much easier to fix. Please attach one if you can.",
+    "out": "Uno screenshot rende molto più facile risolvere i bug. Se puoi, allegane uno."
+  },
+  "feedback.new.screenshots": {
+    "src": "Screenshots",
+    "out": "Screenshot"
+  },
+  "feedback.new.submit": {
+    "src": "Submit bug report",
+    "out": "Invia segnalazione di bug"
+  },
+  "feedback.new.submitFeature": {
+    "src": "Submit feature idea",
+    "out": "Invia idea per funzionalità"
+  },
+  "feedback.new.submitWishlist": {
+    "src": "Add to wishlist",
+    "out": "Aggiungi alla lista desideri"
+  },
+  "feedback.new.submitWithoutScreenshot": {
+    "src": "Submit bug report without a screen capture",
+    "out": "Invia segnalazione di bug senza screenshot"
+  },
+  "feedback.new.submitting": {
+    "src": "Submitting…",
+    "out": "Invio in corso…"
+  },
+  "feedback.new.techDetails": {
+    "src": "Technical details (preview)",
+    "out": "Dettagli tecnici (anteprima)"
+  },
+  "feedback.new.title": {
+    "src": "Report a bug",
+    "out": "Segnala un bug"
+  },
+  "feedback.new.titleFeature": {
+    "src": "Suggest a feature",
+    "out": "Suggerisci una funzionalità"
+  },
+  "feedback.new.titleLabel": {
+    "src": "Title",
+    "out": "Titolo"
+  },
+  "feedback.new.titleWishlist": {
+    "src": "Suggest a game",
+    "out": "Suggerisci un gioco"
+  },
+  "feedback.priority.low": {
+    "src": "Low",
+    "out": "Bassa"
+  },
+  "feedback.priority.normal": {
+    "src": "Normal",
+    "out": "Normale"
+  },
+  "feedback.priority.urgent": {
+    "src": "Urgent",
+    "out": "Urgente"
+  },
+  "feedback.reviewers.add": {
+    "src": "Add reviewer",
+    "out": "Aggiungi revisore"
+  },
+  "feedback.reviewers.badge": {
+    "src": "Reviewers: {{names}}",
+    "out": "Revisori: {{names}}"
+  },
+  "feedback.reviewers.badgeCompact_one": {
+    "src": "1 reviewer",
+    "out": "1 revisore"
+  },
+  "feedback.reviewers.badgeCompact_other": {
+    "src": "{{count}} reviewers",
+    "out": "{{count}} revisori"
+  },
+  "feedback.reviewers.badgePrefix": {
+    "src": "Reviewers:",
+    "out": "Revisori:"
+  },
+  "feedback.reviewers.divider": {
+    "src": "────────────",
+    "out": "────────────"
+  },
+  "feedback.reviewers.empty": {
+    "src": "No reviewers assigned.",
+    "out": "Nessun revisore assegnato."
+  },
+  "feedback.reviewers.hint": {
+    "src": "Up to {{max}} reviewers. Added users get a one-time notification; use Watch for ongoing updates.",
+    "out": "Fino a {{max}} revisori. Gli utenti aggiunti ricevono una notifica singola; usa Segui per gli aggiornamenti continui."
+  },
+  "feedback.reviewers.remove": {
+    "src": "Remove {{name}}",
+    "out": "Rimuovi {{name}}"
   },
   "feedback.search.label": {
     "src": "Search",
@@ -4527,9 +5083,89 @@
     "src": "Filter by title, author, or text…",
     "out": "Filtra per titolo, autore o testo…"
   },
+  "feedback.status.available": {
+    "src": "Available",
+    "out": "Disponibile"
+  },
+  "feedback.status.closed": {
+    "src": "Closed",
+    "out": "Chiuso"
+  },
+  "feedback.status.declined": {
+    "src": "Declined",
+    "out": "Rifiutato"
+  },
+  "feedback.status.evaluating": {
+    "src": "Evaluating",
+    "out": "In valutazione"
+  },
+  "feedback.status.in_development": {
+    "src": "In development",
+    "out": "In sviluppo"
+  },
+  "feedback.status.in_progress": {
+    "src": "In progress",
+    "out": "In corso"
+  },
+  "feedback.status.monitoring": {
+    "src": "Monitoring",
+    "out": "Monitoraggio"
+  },
+  "feedback.status.open": {
+    "src": "Open",
+    "out": "Aperto"
+  },
+  "feedback.status.planned": {
+    "src": "Planned",
+    "out": "Pianificato"
+  },
+  "feedback.status.requested": {
+    "src": "Requested",
+    "out": "Richiesto"
+  },
+  "feedback.status.resolved": {
+    "src": "Resolved",
+    "out": "Risolto"
+  },
+  "feedback.status.shipped": {
+    "src": "Shipped",
+    "out": "Rilasciato"
+  },
+  "feedback.status.triaged": {
+    "src": "Triaged",
+    "out": "Esaminato"
+  },
+  "feedback.status.triaged_low": {
+    "src": "Triaged (legacy)",
+    "out": "Esaminato (legacy)"
+  },
+  "feedback.status.triaged_normal": {
+    "src": "Triaged (legacy)",
+    "out": "Esaminato (legacy)"
+  },
+  "feedback.status.triaged_urgent": {
+    "src": "Triaged (legacy)",
+    "out": "Esaminato (legacy)"
+  },
+  "feedback.status.under_review": {
+    "src": "Under review",
+    "out": "In fase di revisione"
+  },
+  "feedback.upload.add": {
+    "src": "Add screenshot",
+    "out": "Aggiungi screenshot"
+  },
   "feedback.upload.addCover": {
     "src": "Add cover image",
     "out": "Aggiungi immagine di copertina"
+  },
+  "feedback.upload.count_one": {
+    "src": "{{count}} screenshot attached",
+    "out": "{{count}} screenshot allegato"
+  },
+  "feedback.upload.count_other": {
+    "src": "{{count}} screenshots attached",
+    "out": "{{count}} screenshot allegati"
   },
   "feedback.upload.coverCount_one": {
     "src": "{{count}} cover image attached",
@@ -4539,6 +5175,18 @@
     "src": "{{count}} cover images attached",
     "out": "{{count}} immagini di copertina allegate"
   },
+  "feedback.upload.failed": {
+    "src": "Upload failed. Please try again.",
+    "out": "Caricamento fallito. Riprova."
+  },
+  "feedback.upload.invalidType": {
+    "src": "Only PNG, JPEG, and WebP images are allowed.",
+    "out": "Sono consentite solo immagini PNG, JPEG e WebP."
+  },
+  "feedback.upload.paste": {
+    "src": "Paste screenshot",
+    "out": "Incolla screenshot"
+  },
   "feedback.upload.pasteCover": {
     "src": "Paste cover image",
     "out": "Incolla immagine di copertina"
@@ -4546,6 +5194,118 @@
   "feedback.upload.pasteCoverHint": {
     "src": "Click here and press Ctrl+V (or Cmd+V on Mac). If your clipboard has multiple images, only the last one is kept.",
     "out": "Fai clic qui e premi Ctrl+V (o Cmd+V su Mac). Se negli appunti sono presenti più immagini, verrà conservata solo l'ultima."
+  },
+  "feedback.upload.pasteEmpty": {
+    "src": "No image found on the clipboard.",
+    "out": "Nessuna immagine trovata negli appunti."
+  },
+  "feedback.upload.pasteHint": {
+    "src": "Click here and press Ctrl+V (or Cmd+V on Mac). You can also paste anywhere on this page except the title and description fields.",
+    "out": "Fai clic qui e premi Ctrl+V (o Cmd+V su Mac). Puoi anche incollare in qualsiasi punto di questa pagina tranne nei campi titolo e descrizione."
+  },
+  "feedback.upload.tooLarge": {
+    "src": "Each image must be 5 MB or smaller.",
+    "out": "Ogni immagine deve essere di 5 MB o inferiore."
+  },
+  "feedback.upload.tooMany": {
+    "src": "You can attach at most {{max}} screenshots.",
+    "out": "Puoi allegare al massimo {{max}} screenshot."
+  },
+  "feedback.upload.uploading": {
+    "src": "Uploading…",
+    "out": "Caricamento in corso…"
+  },
+  "feedback.wishlist.backToBoard": {
+    "src": "Back to game wishlist",
+    "out": "Torna alla lista desideri giochi"
+  },
+  "feedback.wishlist.category.declined": {
+    "src": "Declined",
+    "out": "Rifiutato"
+  },
+  "feedback.wishlist.category.feasible": {
+    "src": "Feasible",
+    "out": "Fattibile"
+  },
+  "feedback.wishlist.category.low_priority": {
+    "src": "Low priority",
+    "out": "Bassa priorità"
+  },
+  "feedback.wishlist.category.none": {
+    "src": "Uncategorized",
+    "out": "Senza categoria"
+  },
+  "feedback.wishlist.category.not_feasible": {
+    "src": "Not feasible",
+    "out": "Non fattibile"
+  },
+  "feedback.wishlist.category.permissions_required": {
+    "src": "Permissions required",
+    "out": "Permessi richiesti"
+  },
+  "feedback.wishlist.categoryHint.declined": {
+    "src": "We are not planning to add this game. It stays on the list so others do not submit duplicate requests.",
+    "out": "Non abbiamo in programma di aggiungere questo gioco. Rimane in elenco per evitare che altri inviino richieste duplicate."
+  },
+  "feedback.wishlist.categoryHint.permissions_required": {
+    "src": "This game is commercially available. Abstract Play cannot implement it without permission from the rights holder. You may still vote to show interest.",
+    "out": "Questo gioco è disponibile in commercio. Abstract Play non può implementarlo senza il consenso del titolare dei diritti. Puoi comunque votare per mostrare il tuo interesse."
+  },
+  "feedback.wishlist.discuss": {
+    "src": "Discuss",
+    "out": "Discussione"
+  },
+  "feedback.wishlist.empty": {
+    "src": "No wishlist entries yet.",
+    "out": "Nessuna voce nella lista desideri al momento."
+  },
+  "feedback.wishlist.filterAll": {
+    "src": "All ({{count}})",
+    "out": "Tutti ({{count}})"
+  },
+  "feedback.wishlist.filterLabel": {
+    "src": "Filter wishlist",
+    "out": "Filtra lista desideri"
+  },
+  "feedback.wishlist.intro": {
+    "src": "Vote for games you would like to see on Abstract Play. Suggest a game with a link to its rules or BoardGameGeek page.",
+    "out": "Vota i giochi che vorresti vedere su Abstract Play. Suggerisci un gioco inserendo un link al suo regolamento o alla sua pagina su BoardGameGeek."
+  },
+  "feedback.wishlist.legacyVotesNote": {
+    "src": "includes former BGG list votes",
+    "out": "include i precedenti voti della lista BGG"
+  },
+  "feedback.wishlist.legend": {
+    "src": "Some games are on hold while we seek publishing rights, or marked as declined so we do not receive repeat requests. They remain listed so you can see the community interest.",
+    "out": "Alcuni giochi sono in attesa dell'acquisizione dei diritti di pubblicazione, o contrassegnati come rifiutati per evitare richieste duplicate. Rimangono in elenco per mostrare l'interesse della community."
+  },
+  "feedback.wishlist.report": {
+    "src": "Suggest a game",
+    "out": "Suggerisci un gioco"
+  },
+  "feedback.wishlist.sortBy": {
+    "src": "Sort by",
+    "out": "Ordina per"
+  },
+  "feedback.wishlist.sortName": {
+    "src": "Name (A–Z)",
+    "out": "Nome (A–Z)"
+  },
+  "feedback.wishlist.sortRecent": {
+    "src": "Date added (newest first)",
+    "out": "Data di aggiunta (dal più recente)"
+  },
+  "feedback.wishlist.sortVotes": {
+    "src": "Votes (most first)",
+    "out": "Voti (dal più alto)"
+  },
+  "feedback.wishlist.title": {
+    "src": "Game wishlist",
+    "out": "Lista desideri giochi"
+  },
+  "feedback.wishlist.viewExisting": {
+    "src": "View existing wishlist entry",
+    "out": "Visualizza la voce esistente nella lista desideri"
   },
   "footer.betaBanner": {
     "src": "The site is currently in BETA testing!",
@@ -4558,6 +5318,10 @@
   "footer.discord": {
     "src": "Discord",
     "out": "Discord"
+  },
+  "footer.feedbackCta": {
+    "src": "Browse <1>bug reports</1> and <2>feature ideas</2>, <3>report a bug</3>, or chat with us on <4>Discord</4>.",
+    "out": "Esplora le <1>segnalazioni di bug</1> e le <2>idee per funzionalità</2>, <3>segnala un bug</3> o chatta con noi su <4>Discord</4>."
   },
   "footer.github": {
     "src": "GitHub",
@@ -4711,6 +5475,10 @@
     "src": "New chat messages",
     "out": "Nuovi messaggi in chat"
   },
+  "gameMove.layout.classicDescription": {
+    "src": "The original three-column layout",
+    "out": "Il layout originale a tre colonne"
+  },
   "gameMove.layout.classicName": {
     "src": "Classic",
     "out": "Classico"
@@ -4738,6 +5506,18 @@
   "gameMove.layout.hideMoves": {
     "src": "Hide move list",
     "out": "Nascondi elenco mosse"
+  },
+  "gameMove.layout.hintBody": {
+    "src": "You're using Strip and dock.",
+    "out": "Stai usando Strip e dock."
+  },
+  "gameMove.layout.hintChange": {
+    "src": "Change layout",
+    "out": "Cambia layout"
+  },
+  "gameMove.layout.hintDismiss": {
+    "src": "Dismiss",
+    "out": "Ignora"
   },
   "gameMove.layout.lastMove": {
     "src": "Last move: {{move}}",
@@ -4778,6 +5558,18 @@
   "gameMove.layout.narrativeName": {
     "src": "Narrative",
     "out": "Narrativo"
+  },
+  "gameMove.layout.pickerIntro": {
+    "src": "Pick how the game page is arranged on this device. Your choice is remembered in this browser.",
+    "out": "Scegli come disporre la pagina di gioco su questo dispositivo. La tua scelta verrà memorizzata in questo browser."
+  },
+  "gameMove.layout.pickerOpen": {
+    "src": "Change layout (currently {{layout}})",
+    "out": "Cambia layout (attualmente {{layout}})"
+  },
+  "gameMove.layout.pickerTitle": {
+    "src": "Choose play page layout",
+    "out": "Scegli il layout della pagina di gioco"
   },
   "gameMove.layout.queueWaiting": {
     "src": "{{count}} more in queue",
@@ -5183,6 +5975,10 @@
     "src": "{{organizerName}} has invited you to the event <eventLink>{{eventName}}</eventLink>.",
     "out": "{{organizerName}} ti ha invitato a {{eventName}}"
   },
+  "me.notifications.message.feedbackDeleted": {
+    "src": "Wishlist entry removed: <wishlistLink>{{title}}</wishlistLink>. Reason: {{reason}}",
+    "out": "Voce rimossa dalla lista desideri: <wishlistLink>{{title}}</wishlistLink>. Motivo: {{reason}}"
+  },
   "me.notifications.message.feedbackNew": {
     "src": "New {{kindLabel}}: <feedbackLink>{{title}}</feedbackLink>",
     "out": "Nuovo {{kindLabel}}: <feedbackLink>{{title}}</feedbackLink>"
@@ -5198,6 +5994,18 @@
   "me.notifications.message.feedbackNewKind_wishlist": {
     "src": "wishlist game",
     "out": "gioco in lista desideri"
+  },
+  "me.notifications.message.feedbackReply": {
+    "src": "New reply on <feedbackLink>{{title}}</feedbackLink>{{preview}}",
+    "out": "Nuova risposta su <feedbackLink>{{title}}</feedbackLink>{{preview}}"
+  },
+  "me.notifications.message.feedbackReviewRequested": {
+    "src": "You were added as a reviewer on <feedbackLink>{{title}}</feedbackLink>",
+    "out": "Sei stato aggiunto come revisore su <feedbackLink>{{title}}</feedbackLink>"
+  },
+  "me.notifications.message.feedbackStatus": {
+    "src": "Status update on <feedbackLink>{{title}}</feedbackLink>: {{status}}",
+    "out": "Aggiornamento di stato su <feedbackLink>{{title}}</feedbackLink>: {{status}}"
   },
   "me.notifications.message.gameEnd_draw": {
     "src": "Your game of <gameLink>{{metaGame}}</gameLink> ended in a draw",
@@ -5319,6 +6127,14 @@
     "src": "Active players: {{count}}",
     "out": "Giocatori attivi: {{count}}"
   },
+  "nav.bugBoard": {
+    "src": "Bug reports",
+    "out": "Segnalazioni di bug"
+  },
+  "nav.community": {
+    "src": "Community",
+    "out": "Community"
+  },
   "nav.customizeTheme": {
     "src": "Customize theme",
     "out": "Personalizza tema"
@@ -5327,9 +6143,21 @@
     "src": "Lists",
     "out": "Liste"
   },
+  "nav.featureIdeas": {
+    "src": "Feature ideas",
+    "out": "Idee per funzionalità"
+  },
   "nav.feedbackHistory": {
     "src": "Feedback history",
     "out": "Cronologia feedback"
+  },
+  "nav.gameWishlist": {
+    "src": "Game wishlist",
+    "out": "Lista desideri giochi"
+  },
+  "nav.myFeedback": {
+    "src": "My feedback",
+    "out": "I miei feedback"
   },
   "nav.myProfile": {
     "src": "My profile",
@@ -5342,6 +6170,10 @@
   "nav.recentGames": {
     "src": "Recent games",
     "out": "Partite recenti"
+  },
+  "nav.reportBug": {
+    "src": "Report a bug",
+    "out": "Segnala un bug"
   },
   "nav.visibilityVisible": {
     "src": "Visible to others",
