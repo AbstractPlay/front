@@ -869,7 +869,73 @@
   "News": "Noticias",
   "news": {
     "whatsNew": "Novedades",
-    "earlier": "Anteriores"
+    "earlier": "Anteriores",
+    "empty": "Aún no hay anuncios.",
+    "ogDescription": "Noticias y anuncios de Abstract Play",
+    "intro": "Esta página es la fuente oficial de las noticias del sitio. También reflejamos los anuncios en <discordLink>nuestro servidor de Discord</discordLink>. Reacciona a las publicaciones aquí; suscríbete mediante <rssLink>RSS</rssLink> si quieres.",
+    "loadOlder": "Cargar anuncios anteriores",
+    "loadingMore": "Cargando…",
+    "loadError": "No se pudieron cargar los anuncios. Inténtalo de nuevo más tarde."
+  },
+  "announcements": {
+    "reactions": {
+      "label": "Reacciones",
+      "toggle": "Alternar reacción",
+      "signIn": "Inicia sesión para reaccionar",
+      "signInToReact": "Inicia sesión para agregar una reacción"
+    },
+    "preview": {
+      "noTitle": "(Sin título)"
+    },
+    "admin": {
+      "listTitle": "Administración de anuncios",
+      "listIntro": "Redacta borradores aquí y luego publícalos en producción cuando estén listos. Las versiones de desarrollo y locales pueden guardar borradores y subir imágenes; la publicación es solo para producción.",
+      "newDraft": "Nuevo borrador",
+      "editDraft": "Editar anuncio",
+      "editorTitle": "Editor de anuncios",
+      "empty": "Ningún anuncio coincide con este filtro.",
+      "filterStatus": "Estado",
+      "allStatuses": "Todos los estados",
+      "colTitle": "Título",
+      "colStatus": "Estado",
+      "colUpdated": "Actualizado",
+      "status": {
+        "draft": "Borrador",
+        "published": "Publicado",
+        "scheduled": "Programado",
+        "retracted": "Retirado"
+      },
+      "saveDraft": "Guardar",
+      "saving": "Guardando…",
+      "saved": "Guardado.",
+      "publish": "Publicar",
+      "publishing": "Publicando…",
+      "publishDisabledDev": "La opción de publicar solo está disponible en play.abstractplay.com (producción). Guarda borradores aquí y publícalos en producción.",
+      "publishedHint": "Esta publicación está activa. Guardar solo actualiza el sitio; Discord y RSS no se actualizarán hasta una futura modificación de distribución.",
+      "backToList": "Volver a la lista",
+      "tabWrite": "Escribir",
+      "tabPreview": "Vista previa",
+      "fieldTitle": "Título",
+      "fieldBody": "Cuerpo (Markdown)",
+      "fieldAdminNote": "Nota interna",
+      "adminNoteHint": "Solo visible para administradores; nunca se muestra en /news.",
+      "previewHeading": "Vista previa",
+      "emojiHint": "Consejo: también puedes usar el selector de emojis de tu sistema (Windows: Tecla Windows+., macOS: Ctrl+Cmd+Espacio).",
+      "publishConfirmTitle": "¿Publicar anuncio?",
+      "publishConfirmBody": "Esto se publicará en /news, actualizará el RSS, se reflejará en Discord (cuando esté configurado) y enviará un correo electrónico o notificación push a los usuarios que hayan optado por recibir anuncios del sitio.",
+      "publishConfirm": "Publicar ahora",
+      "retract": "Retirar",
+      "retracting": "Retirando…",
+      "retractConfirmTitle": "¿Retirar anuncio?",
+      "retractConfirmBody": "Esto eliminará la publicación de /news y RSS. No elimina la copia en Discord; actualiza Discord manualmente si es necesario.",
+      "retractConfirm": "Retirar ahora",
+      "upload": {
+        "addImage": "Agregar imagen",
+        "pasteHint": "Pega una captura de pantalla en cualquier lugar de esta página (excepto mientras escribes en un campo) o usa Agregar imagen.",
+        "saveFirst": "Guarda el borrador una vez para que los archivos subidos puedan vincularse a este anuncio.",
+        "tooMany": "Puedes adjuntar como máximo {{max}} imágenes."
+      }
+    }
   },
   "nav": {
     "community": "Comunidad",
@@ -889,6 +955,10 @@
     "activePlayers_other": "Jugadores activos: {{count}}"
   },
   "notifications": {
+    "announcementsMore_one": "{{count}} anuncio más en Noticias",
+    "announcementsMore_other": "{{count}} anuncios más en Noticias",
+    "newAnnouncement": "Nuevo anuncio:",
+    "markAnnouncementsRead": "Marcar anuncios como leídos",
     "newsUpdated": "Se actualizaron las noticias",
     "empty": "No hay notificaciones",
     "markRead": "Marcar como leída",
@@ -941,6 +1011,8 @@
   "InAppNotifyLabel-feedbackDeleted": "Entradas eliminadas de la lista de deseos",
   "InAppNotifyLabel-feedbackReviewRequested": "Solicitudes de revisión de comentarios",
   "InAppNotifyLabel-feedbackNew": "Nuevos comentarios recibidos",
+  "InAppNotifyLabel-announcements": "Anuncios del sitio",
+  "NotifyLabel-announcements": "Anuncios del sitio",
   "NoWaitingResponse": "No hay desafíos esperando la respuesta del oponente",
   "NoYourMove": "No hay juegos esperando tu movimiento.",
   "NumChallenge": "Habrá {{num}} jugadores en este juego. {{players}}. La asignación de asientos será aleatoria.",
@@ -1256,6 +1328,9 @@
   "UnratedGame": "Esta será una partida sin calificación.",
   "UpdateNote": "Actualizar nota del juego",
   "UserSettings": "Configuración de usuario",
+  "UserSettingsTabProfile": "Perfil",
+  "UserSettingsTabNotifications": "Notificaciones",
+  "UserSettingsTabGameplay": "Jugabilidad",
   "Variants": "Variantes",
   "Variant": "Variante",
   "View": "Ver",

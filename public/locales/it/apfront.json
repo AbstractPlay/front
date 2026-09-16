@@ -869,7 +869,73 @@
   "News": "Notizie",
   "news": {
     "whatsNew": "Novità",
-    "earlier": "Precedenti"
+    "earlier": "Precedenti",
+    "empty": "Nessun annuncio al momento.",
+    "ogDescription": "Notizie e annunci di Abstract Play",
+    "intro": "Questa pagina è la fonte ufficiale per le notizie del sito. Riportiamo gli annunci anche sul <discordLink>nostro server Discord</discordLink>. Reagisci ai post qui; iscriviti tramite <rssLink>RSS</rssLink> se preferisci.",
+    "loadOlder": "Carica annunci precedenti",
+    "loadingMore": "Caricamento…",
+    "loadError": "Impossibile caricare gli annunci. Riprova più tardi."
+  },
+  "announcements": {
+    "reactions": {
+      "label": "Reazioni",
+      "toggle": "Attiva/disattiva reazione",
+      "signIn": "Accedi per reagire",
+      "signInToReact": "Accedi per aggiungere una reazione"
+    },
+    "preview": {
+      "noTitle": "(Senza titolo)"
+    },
+    "admin": {
+      "listTitle": "Gestione annunci",
+      "listIntro": "Scrivi qui le bozze dei post, poi pubblicale in produzione quando sei pronto. Le build locali e di sviluppo possono salvare bozze e caricare immagini; la pubblicazione è disponibile solo in produzione.",
+      "newDraft": "Nuova bozza",
+      "editDraft": "Modifica annuncio",
+      "editorTitle": "Editor annunci",
+      "empty": "Nessun annuncio corrisponde a questo filtro.",
+      "filterStatus": "Stato",
+      "allStatuses": "Tutti gli stati",
+      "colTitle": "Titolo",
+      "colStatus": "Stato",
+      "colUpdated": "Aggiornato",
+      "status": {
+        "draft": "Bozza",
+        "published": "Pubblicato",
+        "scheduled": "Programmato",
+        "retracted": "Ritirato"
+      },
+      "saveDraft": "Salva",
+      "saving": "Salvataggio in corso…",
+      "saved": "Salvato.",
+      "publish": "Pubblica",
+      "publishing": "Pubblicazione in corso…",
+      "publishDisabledDev": "La pubblicazione è disponibile solo su play.abstractplay.com (produzione). Salva le bozze qui e pubblicale in produzione.",
+      "publishedHint": "Questo post è visibile. Il salvataggio aggiorna solo il sito; Discord e RSS non verranno aggiornati fino a un futuro aggiornamento della funzionalità di distribuzione (fan-out).",
+      "backToList": "Torna all'elenco",
+      "tabWrite": "Scrivi",
+      "tabPreview": "Anteprima",
+      "fieldTitle": "Titolo",
+      "fieldBody": "Corpo (Markdown)",
+      "fieldAdminNote": "Nota interna",
+      "adminNoteHint": "Visibile solo agli amministratori; non viene mai mostrata su /news.",
+      "previewHeading": "Anteprima",
+      "emojiHint": "Suggerimento: puoi anche usare il selettore emoji del tuo sistema (Windows: Win+., macOS: Ctrl+Cmd+Spazio).",
+      "publishConfirmTitle": "Pubblicare l'annuncio?",
+      "publishConfirmBody": "Questo pubblicherà su /news, aggiornerà il feed RSS, duplicherà su Discord (se configurato) e invierà un'email o una notifica push agli utenti che hanno acconsentito a ricevere gli annunci del sito.",
+      "publishConfirm": "Pubblica ora",
+      "retract": "Ritira",
+      "retracting": "Ritiro in corso…",
+      "retractConfirmTitle": "Ritirare l'annuncio?",
+      "retractConfirmBody": "Questo rimuove il post da /news e dall'RSS. Non elimina il mirror su Discord; aggiorna Discord manualmente se necessario.",
+      "retractConfirm": "Ritira ora",
+      "upload": {
+        "addImage": "Aggiungi immagine",
+        "pasteHint": "Incolla uno screenshot in qualsiasi punto di questa pagina (tranne mentre digiti in un campo), oppure usa Aggiungi immagine.",
+        "saveFirst": "Salva la bozza una volta affinché i file caricati possano essere collegati a questo annuncio.",
+        "tooMany": "Puoi allegare al massimo {{max}} immagini."
+      }
+    }
   },
   "nav": {
     "community": "Community",
@@ -889,6 +955,10 @@
     "activePlayers_other": "Giocatori attivi: {{count}}"
   },
   "notifications": {
+    "announcementsMore_one": "{{count}} altro annuncio nelle Notizie",
+    "announcementsMore_other": "{{count}} altri annunci nelle Notizie",
+    "newAnnouncement": "Nuovo annuncio:",
+    "markAnnouncementsRead": "Segna gli annunci come letti",
     "newsUpdated": "Novità aggiornate",
     "empty": "Nessuna notifica",
     "markRead": "Segna come letta",
@@ -941,6 +1011,8 @@
   "InAppNotifyLabel-feedbackDeleted": "Voci della lista desideri rimosse",
   "InAppNotifyLabel-feedbackReviewRequested": "Richieste di revisione feedback",
   "InAppNotifyLabel-feedbackNew": "Nuovi feedback",
+  "InAppNotifyLabel-announcements": "Annunci del sito",
+  "NotifyLabel-announcements": "Annunci del sito",
   "NoWaitingResponse": "Nessuna sfida in attesa della risposta dell'avversario",
   "NoYourMove": "Nessuna partita in attesa della tua mossa.",
   "NumChallenge": "Ci saranno {{num}} giocatori in questa partita. {{players}}. La disposizione dei posti sarà casuale.",
@@ -1256,6 +1328,9 @@
   "UnratedGame": "Questa sarà una partita senza punteggio.",
   "UpdateNote": "Aggiorna nota della partita",
   "UserSettings": "Impostazioni utente",
+  "UserSettingsTabProfile": "Profilo",
+  "UserSettingsTabNotifications": "Notifiche",
+  "UserSettingsTabGameplay": "Gameplay",
   "Variants": "Varianti",
   "Variant": "Variante",
   "View": "Visualizza",

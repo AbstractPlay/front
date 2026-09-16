@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import NavDropdownPanel from "./NavDropdownPanel";
@@ -12,13 +11,26 @@ import { useDismissNotification } from "../hooks/useDismissNotification";
 import { useDismissAllNotifications } from "../hooks/useDismissAllNotifications";
 import { useMarkNotificationsSeen } from "../hooks/useMarkNotificationsSeen";
 import { useChallengeResponse } from "../hooks/useChallengeResponse";
+import { useMarkAnnouncementsRead } from "../hooks/useMarkAnnouncementsRead";
 import { fetchDashboard, fetchNotifications } from "../lib/globalMeBootstrap";
 import { useStore } from "../stores";
+import { useAnnouncementCursorBootstrap } from "../hooks/useAnnouncementCursorBootstrap";
+import AnnouncementNotificationItem from "./Announcements/AnnouncementNotificationItem";
+import { maxPublishedAt } from "../hooks/useAnnouncementUnread";
 
 function NotificationBell({ closeBurger }) {
   const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
-  const { hasUnreadNews } = useUnreadNews();
+  const news = useStore((state) => state.news);
+  useAnnouncementCursorBootstrap();
+  const {
+    unreadAnnouncementItems,
+    unreadAnnouncementCount,
+    unreadAnnouncementOverflow,
+    setNewsLastSeen,
+    maxNews,
+  } = useUnreadNews();
+  const markAnnouncementsRead = useMarkAnnouncementsRead();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeChallengeModal, setActiveChallengeModal] = useState("");
   const [dismissAllConfirming, setDismissAllConfirming] = useState(false);
@@ -50,8 +62,39 @@ function NotificationBell({ closeBurger }) {
 
   const newCount = useMemo(
     () => notifications.filter(isNotificationNew).length,
-    [notifications]
+    [notifications],
   );
+
+  const panelRows = useMemo(() => {
+    const rows = [];
+    for (const item of unreadAnnouncementItems) {
+      rows.push({
+        kind: "announcement",
+        key: `ann-${item.id}`,
+        sortTime: item.publishedAt ?? item.time ?? 0,
+        item,
+      });
+    }
+    if (unreadAnnouncementOverflow > 0) {
+      rows.push({
+        kind: "announcement-more",
+        key: "ann-more",
+        sortTime: unreadAnnouncementItems[0]
+          ? (unreadAnnouncementItems[0].publishedAt ?? unreadAnnouncementItems[0].time ?? 0)
+          : 0,
+        overflow: unreadAnnouncementOverflow,
+      });
+    }
+    for (const n of notifications) {
+      rows.push({
+        kind: "dashboard",
+        key: n.sk,
+        sortTime: n.createdAt ? new Date(n.createdAt).getTime() : 0,
+        notification: n,
+      });
+    }
+    return rows.sort((a, b) => b.sortTime - a.sortTime);
+  }, [notifications, unreadAnnouncementItems, unreadAnnouncementOverflow]);
 
   useEffect(() => {
     if (globalMe?.id && globalMe.notifications === undefined) {
@@ -75,15 +118,14 @@ function NotificationBell({ closeBurger }) {
     return null;
   }
 
-  const showBadge = newCount > 0 || hasUnreadNews;
-  const badgeLabel =
-    newCount > 0
-      ? newCount > 9
-        ? "9+"
-        : String(newCount)
-      : hasUnreadNews
-        ? "1"
-        : "";
+  const totalUnread = newCount + (unreadAnnouncementCount ?? 0);
+  const showBadge = totalUnread > 0;
+  const badgeLabel = (() => {
+    if (totalUnread <= 0) {
+      return "";
+    }
+    return totalUnread > 9 ? "9+" : String(totalUnread);
+  })();
 
   const closeMenu = () => {
     setDismissAllConfirming(false);
@@ -127,8 +169,23 @@ function NotificationBell({ closeBurger }) {
     }
   };
 
-  const handleNewsClick = () => {
-    closePanelAndBurger();
+  const handleAnnouncementMarkRead = (ts) => {
+    if (globalMe?.id) {
+      markAnnouncementsRead(ts);
+      return;
+    }
+    setNewsLastSeen((prev) => Math.max(prev, ts ?? 0));
+  };
+
+  const handleMarkAllAnnouncementsRead = () => {
+    const readAt = maxPublishedAt(news) ?? maxNews;
+    if (globalMe?.id) {
+      markAnnouncementsRead(Number.isFinite(readAt) ? readAt : Date.now());
+      return;
+    }
+    if (Number.isFinite(readAt)) {
+      setNewsLastSeen(readAt);
+    }
   };
 
   const handleNotificationLinkClick = (event, notification) => {
@@ -139,6 +196,92 @@ function NotificationBell({ closeBurger }) {
       markNotificationsSeen({ sks: [notification.sk] });
     }
     closePanelAndBurger();
+  };
+
+  const renderDashboardNotification = (n) => {
+    const note =
+      n.body.note && String(n.body.note).trim() !== ""
+        ? n.body.note
+        : "";
+    const body = n.body;
+    const isNew = isNotificationNew(n);
+    const markReadButton = isNew ? (
+      <>
+        <button
+          type="button"
+          className="button is-small is-rounded apButtonNeutral"
+          onClick={() => markNotificationsSeen({ sks: [n.sk] })}
+        >
+          {t("notifications.markRead")}
+        </button>
+        &nbsp;
+      </>
+    ) : null;
+    const dismissButton = (
+      <button
+        type="button"
+        className="button is-small is-rounded apButtonNeutral"
+        onClick={() => handleDismiss(n.sk)}
+      >
+        {t("me.notifications.dismiss")}
+      </button>
+    );
+
+    let actions = (
+      <>
+        {markReadButton}
+        {dismissButton}
+      </>
+    );
+    if (body.type === "challengeIssued") {
+      const challenge = challengeById.get(body.challengeId);
+      actions = (
+        <>
+          {challenge ? (
+            <>
+              <button
+                type="button"
+                className="button is-small apButton"
+                onClick={() => openChallengeModal(body.challengeId)}
+              >
+                {t("View")}
+              </button>
+              &nbsp;
+            </>
+          ) : null}
+          {markReadButton}
+          {dismissButton}
+        </>
+      );
+    }
+
+    const itemClassName = isNew
+      ? "notification-panel-item notification-panel-item-new"
+      : "notification-panel-item";
+
+    return (
+      <li
+        key={n.sk}
+        className={itemClassName}
+        onClick={(event) => handleNotificationLinkClick(event, n)}
+      >
+        <div className="notification-panel-message">
+          <NotificationMessage body={body} />
+        </div>
+        {note ? (
+          <span className="notificationNote">{note}</span>
+        ) : null}
+        {n.createdAt ? (
+          <p className="notification-panel-time">
+            <LocalizedTimeAgo
+              date={n.createdAt}
+              timeStyle="twitter-now"
+            />
+          </p>
+        ) : null}
+        <div className="notification-panel-actions">{actions}</div>
+      </li>
+    );
   };
 
   return (
@@ -169,136 +312,77 @@ function NotificationBell({ closeBurger }) {
           role="menu"
           aria-label={t("a11y.notifications")}
         >
-          {hasUnreadNews ? (
-            <Link
-              to="/news"
-              className="notification-panel-news-callout"
-              role="menuitem"
-              onClick={handleNewsClick}
-            >
-              {t("notifications.newsUpdated")}
-            </Link>
-          ) : null}
-          {newCount > 0 ? (
+          {newCount > 0 || unreadAnnouncementCount > 0 ? (
             <div className="notification-panel-toolbar notification-panel-toolbar-top">
-              <button
-                type="button"
-                className="button is-small is-rounded apButtonNeutral notification-panel-bulk-btn"
-                onClick={() => markNotificationsSeen()}
-              >
-                {t("notifications.markAllRead")}
-              </button>
+              {unreadAnnouncementCount > 0 ? (
+                <button
+                  type="button"
+                  className="button is-small is-rounded apButtonNeutral notification-panel-bulk-btn"
+                  onClick={handleMarkAllAnnouncementsRead}
+                >
+                  {t("notifications.markAnnouncementsRead")}
+                </button>
+              ) : null}
+              {newCount > 0 ? (
+                <button
+                  type="button"
+                  className="button is-small is-rounded apButtonNeutral notification-panel-bulk-btn"
+                  onClick={() => markNotificationsSeen()}
+                >
+                  {t("notifications.markAllRead")}
+                </button>
+              ) : null}
             </div>
           ) : null}
-          {notifications.length === 0 && !hasUnreadNews ? (
+          {panelRows.length === 0 ? (
             <p className="notification-panel-empty">{t("notifications.empty")}</p>
-          ) : null}
-          {notifications.length > 0 ? (
+          ) : (
             <>
-            <ul className="notification-panel-list">
-              {notifications.map((n) => {
-                const note =
-                  n.body.note && String(n.body.note).trim() !== ""
-                    ? n.body.note
-                    : "";
-                const body = n.body;
-                const isNew = isNotificationNew(n);
-                const markReadButton = isNew ? (
-                  <>
-                    <button
-                      type="button"
-                      className="button is-small is-rounded apButtonNeutral"
-                      onClick={() => markNotificationsSeen({ sks: [n.sk] })}
-                    >
-                      {t("notifications.markRead")}
-                    </button>
-                    &nbsp;
-                  </>
-                ) : null;
-                const dismissButton = (
+              <ul className="notification-panel-list">
+                {panelRows.map((row) => {
+                  if (row.kind === "announcement") {
+                    return (
+                      <AnnouncementNotificationItem
+                        key={row.key}
+                        item={row.item}
+                        onMarkRead={handleAnnouncementMarkRead}
+                        onNavigate={closePanelAndBurger}
+                      />
+                    );
+                  }
+                  if (row.kind === "announcement-more") {
+                    return (
+                      <AnnouncementNotificationItem
+                        key={row.key}
+                        variant="more"
+                        overflowCount={row.overflow}
+                        onMarkRead={handleAnnouncementMarkRead}
+                        onNavigate={closePanelAndBurger}
+                      />
+                    );
+                  }
+                  return renderDashboardNotification(row.notification);
+                })}
+              </ul>
+              {notifications.length > 0 ? (
+                <div className="notification-panel-toolbar notification-panel-toolbar-bottom">
                   <button
                     type="button"
-                    className="button is-small is-rounded apButtonNeutral"
-                    onClick={() => handleDismiss(n.sk)}
+                    className={`button is-small is-rounded notification-panel-bulk-btn${
+                      dismissAllConfirming
+                        ? " apButtonAlert notification-panel-bulk-btn-confirm"
+                        : " apButtonNeutral"
+                    }`}
+                    onClick={handleDismissAllClick}
                   >
-                    {t("me.notifications.dismiss")}
+                    {dismissAllConfirming
+                      ? t("notifications.dismissAllConfirm")
+                      : t("notifications.dismissAll")}
                   </button>
-                );
-
-                let actions = (
-                  <>
-                    {markReadButton}
-                    {dismissButton}
-                  </>
-                );
-                if (body.type === "challengeIssued") {
-                  const challenge = challengeById.get(body.challengeId);
-                  actions = (
-                    <>
-                      {challenge ? (
-                        <>
-                          <button
-                            type="button"
-                            className="button is-small apButton"
-                            onClick={() => openChallengeModal(body.challengeId)}
-                          >
-                            {t("View")}
-                          </button>
-                          &nbsp;
-                        </>
-                      ) : null}
-                      {markReadButton}
-                      {dismissButton}
-                    </>
-                  );
-                }
-
-                const itemClassName = isNew
-                  ? "notification-panel-item notification-panel-item-new"
-                  : "notification-panel-item";
-
-                return (
-                  <li
-                    key={n.sk}
-                    className={itemClassName}
-                    onClick={(event) => handleNotificationLinkClick(event, n)}
-                  >
-                    <div className="notification-panel-message">
-                      <NotificationMessage body={body} />
-                    </div>
-                    {note ? (
-                      <span className="notificationNote">{note}</span>
-                    ) : null}
-                    {n.createdAt ? (
-                      <p className="notification-panel-time">
-                        <LocalizedTimeAgo
-                          date={n.createdAt}
-                          timeStyle="twitter-now"
-                        />
-                      </p>
-                    ) : null}
-                    <div className="notification-panel-actions">{actions}</div>
-                  </li>
-                );
-              })}
-            </ul>
-            <div className="notification-panel-toolbar notification-panel-toolbar-bottom">
-              <button
-                type="button"
-                className={`button is-small is-rounded notification-panel-bulk-btn${
-                  dismissAllConfirming
-                    ? " apButtonAlert notification-panel-bulk-btn-confirm"
-                    : " apButtonNeutral"
-                }`}
-                onClick={handleDismissAllClick}
-              >
-                {dismissAllConfirming
-                  ? t("notifications.dismissAllConfirm")
-                  : t("notifications.dismissAll")}
-              </button>
-            </div>
+                </div>
+              ) : null}
             </>
-          ) : null}
+          )}
         </div>
       ) : null}
       {activeChallenge ? (

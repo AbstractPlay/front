@@ -50,6 +50,12 @@ import {
   IN_APP_NOTIFICATION_KEYS,
 } from "../lib/notificationPrefs";
 
+const USER_SETTINGS_TABS = [
+  { id: "profile", nameKey: "UserSettingsTabProfile" },
+  { id: "notifications", nameKey: "UserSettingsTabNotifications" },
+  { id: "gameplay", nameKey: "UserSettingsTabGameplay" },
+];
+
 async function parseNewSettingResponse(res) {
   if (!res) {
     return { ok: false, error: "Not authenticated" };
@@ -135,9 +141,11 @@ function UserSettingsModal(props) {
   const [hideSpoilers, hideSpoilersSetter] = useState(false);
   const [showBots, showBotsSetter] = useState(false);
   const [pushOnThisDevice, pushOnThisDeviceSetter] = useState(false);
+  const [settingsTab, settingsTabSetter] = useState("profile");
 
   useEffect(() => {
     if (show) {
+      settingsTabSetter("profile");
       changingNameSetter(false);
       changingEMailSetter(false);
       changingCodeSentSetter(false);
@@ -529,7 +537,39 @@ function UserSettingsModal(props) {
           },
         ]}
       >
-        <div className="container">
+        <div className="container user-settings-modal">
+          <div
+            className="tabs is-small is-toggle is-toggle-rounded user-settings-tabs"
+            role="tablist"
+          >
+            <ul>
+              {USER_SETTINGS_TABS.map((tab) => (
+                <li
+                  key={tab.id}
+                  className={settingsTab === tab.id ? "is-active" : ""}
+                >
+                  <a
+                    href={`#user-settings-${tab.id}`}
+                    role="tab"
+                    aria-selected={settingsTab === tab.id}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      settingsTabSetter(tab.id);
+                    }}
+                  >
+                    {t(tab.nameKey)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {settingsTab === "profile" ? (
+            <div
+              className="user-settings-tab-panel"
+              id="user-settings-profile"
+              role="tabpanel"
+            >
           {/********************* Display Name *********************/}
           <div className="field" key="DisplayName">
             <label className="label" htmlFor="user_settings_name">
@@ -835,9 +875,50 @@ function UserSettingsModal(props) {
             </div>
           )}
 
+          {/********************* Log out *********************/}
+          <div className="control user-settings-logout">
+            <button
+              className="button is-small apButtonAlert"
+              onClick={logout}
+              id="logout-button"
+            >
+              {t("LogOut")}
+            </button>
+          </div>
+            </div>
+          ) : null}
+
+          {settingsTab === "notifications" ? (
+            <div
+              className="user-settings-tab-panel"
+              id="user-settings-notifications"
+              role="tabpanel"
+            >
+          {/********************* communication language *********************/}
+          <div className="field" key="communicationLanguage">
+            <label
+              className="label"
+              htmlFor="user_settings_communication_language"
+            >
+              {t("CommunicationLanguage")}
+            </label>
+            <div className="control">
+              <div className="select is-small">
+                <LanguageSelect
+                  id="user_settings_communication_language"
+                  languages={COMMUNICATION_LANGUAGES}
+                  value={communicationLanguage}
+                  onChange={(e) =>
+                    handleCommunicationLanguageChange(e.target.value)
+                  }
+                />
+              </div>
+            </div>
+            <p className="help">{t("CommunicationLanguageHelp")}</p>
+          </div>
+
           {/********************* notifications *********************/}
           <div className="field" key="notifications">
-            <label className="label">{t("NotificationSettings")}</label>
             <p className="help">{t("NotificationSettingsSaveHelp")}</p>
 
             <p className="label is-small mb-1 mt-3">
@@ -898,28 +979,6 @@ function UserSettingsModal(props) {
               </div>
             ))}
           </div>
-          {/********************* communication language *********************/}
-          <div className="field" key="communicationLanguage">
-            <label
-              className="label"
-              htmlFor="user_settings_communication_language"
-            >
-              {t("CommunicationLanguage")}
-            </label>
-            <div className="control">
-              <div className="select is-small">
-                <LanguageSelect
-                  id="user_settings_communication_language"
-                  languages={COMMUNICATION_LANGUAGES}
-                  value={communicationLanguage}
-                  onChange={(e) =>
-                    handleCommunicationLanguageChange(e.target.value)
-                  }
-                />
-              </div>
-            </div>
-            <p className="help">{t("CommunicationLanguageHelp")}</p>
-          </div>
           {/********************* push notifications *********************/}
           <div className="field" key="pushNotifications">
             <div className="control">
@@ -944,7 +1003,15 @@ function UserSettingsModal(props) {
               </button>
             </div>
           </div>
+            </div>
+          ) : null}
 
+          {settingsTab === "gameplay" ? (
+            <div
+              className="user-settings-tab-panel"
+              id="user-settings-gameplay"
+              role="tabpanel"
+            >
           {/********************* exploration *********************/}
           {exploration === null ? (
             ""
@@ -1047,17 +1114,8 @@ function UserSettingsModal(props) {
               </button>
             </div>
           </div>
-
-          {/********************* Log out *********************/}
-          <div className="control" style={{ float: "right" }}>
-            <button
-              className="button is-small apButtonAlert"
-              onClick={logout}
-              id="logout-button"
-            >
-              {t("LogOut")}
-            </button>
-          </div>
+            </div>
+          ) : null}
         </div>
       </Modal>
       <BotsModal show={showBots} onClose={() => showBotsSetter(false)} />

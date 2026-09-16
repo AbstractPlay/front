@@ -40,7 +40,7 @@ import TimeAgo from "javascript-time-ago";
 import TimeAgoLocaleSync from "../components/TimeAgoLocaleSync";
 import { getTimeAgoLocaleData } from "../lib/timeAgoLocales";
 import { useStorageState } from "react-use-storage-state";
-import newsData from "../assets/news.json";
+import { loadAnnouncementsBellBootstrap } from "../lib/announcements/loadNews";
 import ThemeApplicator from "../components/ThemeApplicator";
 import MyWebSocket from "../components/MyWebSocket";
 import GameWatch from "../components/GameWatch";
@@ -62,6 +62,8 @@ const FeedbackNew = lazy(() => import("../components/Feedback/FeedbackNew"));
 const FeedbackDetail = lazy(() => import("../components/Feedback/FeedbackDetail"));
 const FeedbackMine = lazy(() => import("../components/Feedback/FeedbackMine"));
 const FeedbackAdmin = lazy(() => import("../components/Feedback/FeedbackAdmin"));
+const AnnouncementAdminList = lazy(() => import("../components/Announcements/AnnouncementAdminList"));
+const AnnouncementEditor = lazy(() => import("../components/Announcements/AnnouncementEditor"));
 const FeedbackHistory = lazy(() => import("../components/Feedback/FeedbackHistory"));
 
 // Register default English locale; TimeAgoLocaleSync updates on language change
@@ -99,14 +101,25 @@ function Bones(props) {
     }
   }, [colorMode, storedContextLight, storedContextDark]);
 
+  const globalMe = useStore((state) => state.globalMe);
+
   useEffect(() => {
-    const { setNews } = useStore.getState();
-    if (newsData !== null && newsData !== undefined) {
-      setNews(newsData.sort((a, b) => b.time - a.time));
-    } else {
-      setNews([]);
-    }
-  }, []);
+    let cancelled = false;
+    const { setNews, setNewsLoadState } = useStore.getState();
+    setNewsLoadState("loading");
+    (async () => {
+      const items = await loadAnnouncementsBellBootstrap(globalMe);
+      if (cancelled) {
+        return;
+      }
+      setNews(items);
+      setNewsLoadState("ready");
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reload bell window on login/logout only
+  }, [globalMe?.id]);
 
   useEffect(() => {
     async function getToken() {
@@ -236,6 +249,7 @@ function Bones(props) {
                 />
                 <Route path="/legal" element={<Legal update={update} />} />
                 <Route path="/news" element={<News />} />
+                <Route path="/news/:announcementId" element={<News />} />
                 <Route path="/stats/:tab?" element={<Stats />} />
                 <Route path="/" element={<Welcome update={update} />} />
                 <Route path="/playground" element={<Lab />} />
@@ -254,6 +268,9 @@ function Bones(props) {
                 <Route path="/wishlist" element={<FeedbackBoard kind="wishlist" />} />
                 <Route path="/feedback/mine" element={<FeedbackMine />} />
                 <Route path="/feedback/admin" element={<FeedbackAdmin />} />
+                <Route path="/announcements/admin" element={<AnnouncementAdminList />} />
+                <Route path="/announcements/admin/new" element={<AnnouncementEditor />} />
+                <Route path="/announcements/admin/:id" element={<AnnouncementEditor />} />
                 <Route path="/feedback/history" element={<FeedbackHistory />} />
                 <Route path="/feedback/history/:tab" element={<FeedbackHistory />} />
                 <Route path="/feedback/new" element={<FeedbackNew />} />

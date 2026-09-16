@@ -869,7 +869,73 @@
     "News": "News",
     "news": {
         "whatsNew": "What's new",
-        "earlier": "Earlier"
+        "earlier": "Earlier",
+        "empty": "No announcements yet.",
+        "ogDescription": "Abstract Play news and announcements",
+        "intro": "This page is the canonical source for site news. We also mirror announcements to <discordLink>our Discord server</discordLink>. React on posts here; subscribe via <rssLink>RSS</rssLink> if you like.",
+        "loadOlder": "Load older announcements",
+        "loadingMore": "Loading…",
+        "loadError": "Could not load announcements. Try again later."
+    },
+    "announcements": {
+        "reactions": {
+            "label": "Reactions",
+            "toggle": "Toggle reaction",
+            "signIn": "Sign in to react",
+            "signInToReact": "Sign in to add a reaction"
+        },
+        "preview": {
+            "noTitle": "(No title)"
+        },
+        "admin": {
+            "listTitle": "Announcements admin",
+            "listIntro": "Draft posts here, then publish on production when ready. Dev and local builds can save drafts and upload images; publish is production-only.",
+            "newDraft": "New draft",
+            "editDraft": "Edit announcement",
+            "editorTitle": "Announcement editor",
+            "empty": "No announcements match this filter.",
+            "filterStatus": "Status",
+            "allStatuses": "All statuses",
+            "colTitle": "Title",
+            "colStatus": "Status",
+            "colUpdated": "Updated",
+            "status": {
+                "draft": "Draft",
+                "published": "Published",
+                "scheduled": "Scheduled",
+                "retracted": "Retracted"
+            },
+            "saveDraft": "Save",
+            "saving": "Saving…",
+            "saved": "Saved.",
+            "publish": "Publish",
+            "publishing": "Publishing…",
+            "publishDisabledDev": "Publish is only available on play.abstractplay.com (production). Save drafts here and publish in prod.",
+            "publishedHint": "This post is live. Saving updates the site only; Discord and RSS are not updated until a future fan-out change.",
+            "backToList": "Back to list",
+            "tabWrite": "Write",
+            "tabPreview": "Preview",
+            "fieldTitle": "Title",
+            "fieldBody": "Body (Markdown)",
+            "fieldAdminNote": "Internal note",
+            "adminNoteHint": "Visible only to admins; never shown on /news.",
+            "previewHeading": "Preview",
+            "emojiHint": "Tip: you can also use your system emoji picker (Windows: Win+., macOS: Ctrl+Cmd+Space).",
+            "publishConfirmTitle": "Publish announcement?",
+            "publishConfirmBody": "This will publish on /news, refresh RSS, mirror to Discord (when configured), and email or push users who opted in to site announcements.",
+            "publishConfirm": "Publish now",
+            "retract": "Retract",
+            "retracting": "Retracting…",
+            "retractConfirmTitle": "Retract announcement?",
+            "retractConfirmBody": "This removes the post from /news and RSS. It does not delete the Discord mirror; update Discord manually if needed.",
+            "retractConfirm": "Retract now",
+            "upload": {
+                "addImage": "Add image",
+                "pasteHint": "Paste a screenshot anywhere on this page (except while typing in a field), or use Add image.",
+                "saveFirst": "Save the draft once so uploads can be linked to this announcement.",
+                "tooMany": "You can attach at most {{max}} images."
+            }
+        }
     },
     "nav": {
         "community": "Community",
@@ -889,6 +955,10 @@
         "activePlayers_other": "Active players: {{count}}"
     },
     "notifications": {
+        "announcementsMore_one": "{{count}} more announcement on News",
+        "announcementsMore_other": "{{count}} more announcements on News",
+        "newAnnouncement": "New announcement:",
+        "markAnnouncementsRead": "Mark announcements read",
         "newsUpdated": "News has been updated",
         "empty": "No notifications",
         "markRead": "Mark read",
@@ -941,6 +1011,8 @@
     "InAppNotifyLabel-feedbackDeleted": "Removed wishlist entries",
     "InAppNotifyLabel-feedbackReviewRequested": "Feedback review requests",
     "InAppNotifyLabel-feedbackNew": "New feedback submissions",
+    "InAppNotifyLabel-announcements": "Site announcements",
+    "NotifyLabel-announcements": "Site announcements",
     "NoWaitingResponse": "No challenges waiting on opponent response",
     "NoYourMove": "No games waiting for your move.",
     "NumChallenge": "There will be {{num}} players in this game. {{players}}. Seating will be random.",
@@ -1256,6 +1328,9 @@
     "UnratedGame": "This will be an unrated game.",
     "UpdateNote": "Update game note",
     "UserSettings": "User Settings",
+    "UserSettingsTabProfile": "Profile",
+    "UserSettingsTabNotifications": "Notifications",
+    "UserSettingsTabGameplay": "Gameplay",
     "Variants": "Variants",
     "Variant": "Variant",
     "View": "View",

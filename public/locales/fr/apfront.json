@@ -869,7 +869,73 @@
   "News": "Actualités",
   "news": {
     "whatsNew": "Nouveautés",
-    "earlier": "Plus anciens"
+    "earlier": "Plus anciens",
+    "empty": "Aucune annonce pour le moment.",
+    "ogDescription": "Actualités et annonces d'Abstract Play",
+    "intro": "Cette page est la source officielle des actualités du site. Nous publions également les annonces sur <discordLink>notre serveur Discord</discordLink>. Réagissez aux publications ici ; abonnez-vous via <rssLink>RSS</rssLink> si vous le souhaitez.",
+    "loadOlder": "Charger les annonces plus anciennes",
+    "loadingMore": "Chargement…",
+    "loadError": "Impossible de charger les annonces. Réessayez plus tard."
+  },
+  "announcements": {
+    "reactions": {
+      "label": "Réactions",
+      "toggle": "Basculer la réaction",
+      "signIn": "Connectez-vous pour réagir",
+      "signInToReact": "Connectez-vous pour ajouter une réaction"
+    },
+    "preview": {
+      "noTitle": "(Sans titre)"
+    },
+    "admin": {
+      "listTitle": "Administration des annonces",
+      "listIntro": "Rédigez des brouillons ici, puis publiez-les en production lorsque vous êtes prêt. Les versions dev et locales peuvent enregistrer des brouillons et téléverser des images ; la publication est réservée à la production.",
+      "newDraft": "Nouveau brouillon",
+      "editDraft": "Modifier l'annonce",
+      "editorTitle": "Éditeur d'annonces",
+      "empty": "Aucune annonce ne correspond à ce filtre.",
+      "filterStatus": "Statut",
+      "allStatuses": "Tous les statuts",
+      "colTitle": "Titre",
+      "colStatus": "Statut",
+      "colUpdated": "Mis à jour",
+      "status": {
+        "draft": "Brouillon",
+        "published": "Publié",
+        "scheduled": "Programmé",
+        "retracted": "Retiré"
+      },
+      "saveDraft": "Enregistrer",
+      "saving": "Enregistrement…",
+      "saved": "Enregistré.",
+      "publish": "Publier",
+      "publishing": "Publication…",
+      "publishDisabledDev": "La publication est uniquement disponible sur play.abstractplay.com (production). Enregistrez les brouillons ici et publiez en prod.",
+      "publishedHint": "Cet article est en ligne. L'enregistrement met à jour le site uniquement ; Discord et le flux RSS ne seront pas mis à jour avant une future modification de la diffusion.",
+      "backToList": "Retour à la liste",
+      "tabWrite": "Rédiger",
+      "tabPreview": "Aperçu",
+      "fieldTitle": "Titre",
+      "fieldBody": "Corps (Markdown)",
+      "fieldAdminNote": "Note interne",
+      "adminNoteHint": "Visible uniquement par les administrateurs ; jamais affiché sur /news.",
+      "previewHeading": "Aperçu",
+      "emojiHint": "Astuce : vous pouvez également utiliser le sélecteur d'émojis de votre système (Windows : Win+., macOS : Ctrl+Cmd+Espace).",
+      "publishConfirmTitle": "Publier l'annonce ?",
+      "publishConfirmBody": "Cela publiera sur /news, actualisera le flux RSS, retransmettra sur Discord (si configuré) et enverra un e-mail ou une notification push aux utilisateurs ayant accepté de recevoir les annonces du site.",
+      "publishConfirm": "Publier maintenant",
+      "retract": "Retirer",
+      "retracting": "Retrait…",
+      "retractConfirmTitle": "Retirer l'annonce ?",
+      "retractConfirmBody": "Ceci retire la publication de /news et du flux RSS. Cela ne supprime pas la publication sur Discord ; mettez à jour Discord manuellement si nécessaire.",
+      "retractConfirm": "Retirer maintenant",
+      "upload": {
+        "addImage": "Ajouter une image",
+        "pasteHint": "Collez une capture d'écran n'importe où sur cette page (sauf lorsque vous tapez dans un champ), ou utilisez Ajouter une image.",
+        "saveFirst": "Enregistrez le brouillon une fois afin que les fichiers téléversés puissent être liés à cette annonce.",
+        "tooMany": "Vous pouvez joindre au maximum {{max}} images."
+      }
+    }
   },
   "nav": {
     "community": "Communauté",
@@ -889,6 +955,10 @@
     "activePlayers_other": "Joueurs actifs : {{count}}"
   },
   "notifications": {
+    "announcementsMore_one": "{{count}} autre annonce dans les Actualités",
+    "announcementsMore_other": "{{count}} autres annonces dans les Actualités",
+    "newAnnouncement": "Nouvelle annonce :",
+    "markAnnouncementsRead": "Marquer les annonces comme lues",
     "newsUpdated": "Les actualités ont été mises à jour",
     "empty": "Aucune notification",
     "markRead": "Marquer comme lu",
@@ -941,6 +1011,8 @@
   "InAppNotifyLabel-feedbackDeleted": "Entrées supprimées de la liste de souhaits",
   "InAppNotifyLabel-feedbackReviewRequested": "Demandes de révision de retours",
   "InAppNotifyLabel-feedbackNew": "Nouveaux retours",
+  "InAppNotifyLabel-announcements": "Annonces du site",
+  "NotifyLabel-announcements": "Annonces du site",
   "NoWaitingResponse": "Aucun challenge attend sur la réponse de votre adversaire",
   "NoYourMove": "Aucune partie en attente de votre coup.",
   "NumChallenge": "Il y aura {{num}} joueurs dans cette partie. {{players}}. La répartition des sièges sera aléatoire.",
@@ -1256,6 +1328,9 @@
   "UnratedGame": "Ce sera une partie non classée.",
   "UpdateNote": "Mettre à jour la note sur la partie",
   "UserSettings": "Paramètres d'utilisateur",
+  "UserSettingsTabProfile": "Profil",
+  "UserSettingsTabNotifications": "Notifications",
+  "UserSettingsTabGameplay": "Jouabilité",
   "Variants": "Variantes",
   "Variant": "Variante",
   "View": "Voir",

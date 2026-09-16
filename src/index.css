@@ -628,6 +628,10 @@ a.navbar-item,
   margin: 0.25rem 0 0.5rem;
 }
 
+.notification-panel-announcement-lead {
+  color: var(--secondary-font-color);
+}
+
 .notification-panel-actions {
   margin-top: 0.35rem;
 }
@@ -653,6 +657,9 @@ a.navbar-item,
 .notification-panel-toolbar-top {
   border-bottom: 1px solid var(--tag-background-color);
   border-top: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .notification-panel-bulk-btn {
@@ -2040,6 +2047,25 @@ span.hardTime::after {
 
   #playerProfile .player-profile-tabs {
     margin-bottom: 1rem;
+  }
+
+  .user-settings-tabs {
+    margin-bottom: 1rem;
+  }
+
+  .user-settings-tabs ul {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .user-settings-tab-panel {
+    margin-top: 0.25rem;
+  }
+
+  .user-settings-logout {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
   }
 
   #playerProfile .player-tab-modules {

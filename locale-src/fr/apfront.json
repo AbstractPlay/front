@@ -1167,6 +1167,10 @@
     "src": "Implementation Notes",
     "out": "Notes d'implémentation"
   },
+  "InAppNotifyLabel-announcements": {
+    "src": "Site announcements",
+    "out": "Annonces du site"
+  },
   "InAppNotifyLabel-challenges": {
     "src": "Challenges",
     "out": "Défis"
@@ -1414,6 +1418,10 @@
   "NotificationSettingsSaveHelp": {
     "src": "Changes save instantly.",
     "out": "Les modifications sont enregistrées instantanément."
+  },
+  "NotifyLabel-announcements": {
+    "src": "Site announcements",
+    "out": "Annonces du site"
   },
   "NotifyLabel-challenges": {
     "src": "Challenges (every instance)",
@@ -2242,6 +2250,178 @@
   "and": {
     "src": "and",
     "out": "et"
+  },
+  "announcements.admin.adminNoteHint": {
+    "src": "Visible only to admins; never shown on /news.",
+    "out": "Visible uniquement par les administrateurs ; jamais affiché sur /news."
+  },
+  "announcements.admin.allStatuses": {
+    "src": "All statuses",
+    "out": "Tous les statuts"
+  },
+  "announcements.admin.backToList": {
+    "src": "Back to list",
+    "out": "Retour à la liste"
+  },
+  "announcements.admin.colStatus": {
+    "src": "Status",
+    "out": "Statut"
+  },
+  "announcements.admin.colTitle": {
+    "src": "Title",
+    "out": "Titre"
+  },
+  "announcements.admin.colUpdated": {
+    "src": "Updated",
+    "out": "Mis à jour"
+  },
+  "announcements.admin.editDraft": {
+    "src": "Edit announcement",
+    "out": "Modifier l'annonce"
+  },
+  "announcements.admin.editorTitle": {
+    "src": "Announcement editor",
+    "out": "Éditeur d'annonces"
+  },
+  "announcements.admin.emojiHint": {
+    "src": "Tip: you can also use your system emoji picker (Windows: Win+., macOS: Ctrl+Cmd+Space).",
+    "out": "Astuce : vous pouvez également utiliser le sélecteur d'émojis de votre système (Windows : Win+., macOS : Ctrl+Cmd+Espace)."
+  },
+  "announcements.admin.empty": {
+    "src": "No announcements match this filter.",
+    "out": "Aucune annonce ne correspond à ce filtre."
+  },
+  "announcements.admin.fieldAdminNote": {
+    "src": "Internal note",
+    "out": "Note interne"
+  },
+  "announcements.admin.fieldBody": {
+    "src": "Body (Markdown)",
+    "out": "Corps (Markdown)"
+  },
+  "announcements.admin.fieldTitle": {
+    "src": "Title",
+    "out": "Titre"
+  },
+  "announcements.admin.filterStatus": {
+    "src": "Status",
+    "out": "Statut"
+  },
+  "announcements.admin.listIntro": {
+    "src": "Draft posts here, then publish on production when ready. Dev and local builds can save drafts and upload images; publish is production-only.",
+    "out": "Rédigez des brouillons ici, puis publiez-les en production lorsque vous êtes prêt. Les versions dev et locales peuvent enregistrer des brouillons et téléverser des images ; la publication est réservée à la production."
+  },
+  "announcements.admin.listTitle": {
+    "src": "Announcements admin",
+    "out": "Administration des annonces"
+  },
+  "announcements.admin.newDraft": {
+    "src": "New draft",
+    "out": "Nouveau brouillon"
+  },
+  "announcements.admin.previewHeading": {
+    "src": "Preview",
+    "out": "Aperçu"
+  },
+  "announcements.admin.publish": {
+    "src": "Publish",
+    "out": "Publier"
+  },
+  "announcements.admin.publishConfirm": {
+    "src": "Publish now",
+    "out": "Publier maintenant"
+  },
+  "announcements.admin.publishConfirmBody": {
+    "src": "This will make the post public on /news. Discord, RSS, and notifications fan-out ship in a later release; on production today it publishes to the site only.",
+    "out": "Cela rendra l'article public sur /news. La diffusion sur Discord, RSS et les notifications sera déployée dans une version ultérieure ; aujourd'hui en production, la publication se fait uniquement sur le site."
+  },
+  "announcements.admin.publishConfirmTitle": {
+    "src": "Publish announcement?",
+    "out": "Publier l'annonce ?"
+  },
+  "announcements.admin.publishDisabledDev": {
+    "src": "Publish is only available on play.abstractplay.com (production). Save drafts here and publish in prod.",
+    "out": "La publication est uniquement disponible sur play.abstractplay.com (production). Enregistrez les brouillons ici et publiez en prod."
+  },
+  "announcements.admin.publishedHint": {
+    "src": "This post is live. Saving updates the site only; Discord and RSS are not updated until a future fan-out change.",
+    "out": "Cet article est en ligne. L'enregistrement met à jour le site uniquement ; Discord et le flux RSS ne seront pas mis à jour avant une future modification de la diffusion."
+  },
+  "announcements.admin.publishing": {
+    "src": "Publishing…",
+    "out": "Publication…"
+  },
+  "announcements.admin.saveDraft": {
+    "src": "Save",
+    "out": "Enregistrer"
+  },
+  "announcements.admin.saved": {
+    "src": "Saved.",
+    "out": "Enregistré."
+  },
+  "announcements.admin.saving": {
+    "src": "Saving…",
+    "out": "Enregistrement…"
+  },
+  "announcements.admin.status.draft": {
+    "src": "Draft",
+    "out": "Brouillon"
+  },
+  "announcements.admin.status.published": {
+    "src": "Published",
+    "out": "Publié"
+  },
+  "announcements.admin.status.retracted": {
+    "src": "Retracted",
+    "out": "Retiré"
+  },
+  "announcements.admin.status.scheduled": {
+    "src": "Scheduled",
+    "out": "Programmé"
+  },
+  "announcements.admin.tabPreview": {
+    "src": "Preview",
+    "out": "Aperçu"
+  },
+  "announcements.admin.tabWrite": {
+    "src": "Write",
+    "out": "Rédiger"
+  },
+  "announcements.admin.upload.addImage": {
+    "src": "Add image",
+    "out": "Ajouter une image"
+  },
+  "announcements.admin.upload.pasteHint": {
+    "src": "Paste a screenshot anywhere on this page (except while typing in a field), or use Add image.",
+    "out": "Collez une capture d'écran n'importe où sur cette page (sauf lorsque vous tapez dans un champ), ou utilisez Ajouter une image."
+  },
+  "announcements.admin.upload.saveFirst": {
+    "src": "Save the draft once so uploads can be linked to this announcement.",
+    "out": "Enregistrez le brouillon une fois afin que les fichiers téléversés puissent être liés à cette annonce."
+  },
+  "announcements.admin.upload.tooMany": {
+    "src": "You can attach at most {{max}} images.",
+    "out": "Vous pouvez joindre au maximum {{max}} images."
+  },
+  "announcements.preview.noTitle": {
+    "src": "(No title)",
+    "out": "(Sans titre)"
+  },
+  "announcements.reactions.label": {
+    "src": "Reactions",
+    "out": "Réactions"
+  },
+  "announcements.reactions.signIn": {
+    "src": "Sign in to react",
+    "out": "Connectez-vous pour réagir"
+  },
+  "announcements.reactions.signInToReact": {
+    "src": "Sign in to add a reaction",
+    "out": "Connectez-vous pour ajouter une réaction"
+  },
+  "announcements.reactions.toggle": {
+    "src": "Toggle reaction",
+    "out": "Basculer la réaction"
   },
   "boardExport.delayLabel": {
     "src": "Delay between frames (seconds)",
@@ -5191,6 +5371,30 @@
     "src": "Earlier",
     "out": "Plus anciens"
   },
+  "news.empty": {
+    "src": "No announcements yet.",
+    "out": "Aucune annonce pour le moment."
+  },
+  "news.intro": {
+    "src": "This page is the canonical source for site news. We also mirror announcements to <discordLink>our Discord server</discordLink>. React on posts here; subscribe via <rssLink>RSS</rssLink> if you like.",
+    "out": "Cette page est la source officielle des actualités du site. Nous publions également les annonces sur <discordLink>notre serveur Discord</discordLink>. Réagissez aux publications ici ; abonnez-vous via <rssLink>RSS</rssLink> si vous le souhaitez."
+  },
+  "news.loadError": {
+    "src": "Could not load announcements. Try again later.",
+    "out": "Impossible de charger les annonces. Réessayez plus tard."
+  },
+  "news.loadOlder": {
+    "src": "Load older announcements",
+    "out": "Charger les annonces plus anciennes"
+  },
+  "news.loadingMore": {
+    "src": "Loading…",
+    "out": "Chargement…"
+  },
+  "news.ogDescription": {
+    "src": "Abstract Play news and announcements",
+    "out": "Actualités et annonces d'Abstract Play"
+  },
   "news.whatsNew": {
     "src": "What's new",
     "out": "Nouveautés"
@@ -5202,6 +5406,14 @@
   "notFound.reportLink": {
     "src": "post a bug report on our Discord server",
     "out": "publier un rapport de bogue sur notre serveur Discord"
+  },
+  "notifications.announcementsMore_one": {
+    "src": "{{count}} more announcement on News",
+    "out": "{{count}} autre annonce dans les Actualités"
+  },
+  "notifications.announcementsMore_other": {
+    "src": "{{count}} more announcements on News",
+    "out": "{{count}} autres annonces dans les Actualités"
   },
   "notifications.dismissAll": {
     "src": "Dismiss all",
@@ -5219,9 +5431,17 @@
     "src": "Mark all read",
     "out": "Tout marquer comme lu"
   },
+  "notifications.markAnnouncementsRead": {
+    "src": "Mark announcements read",
+    "out": "Marquer les annonces comme lues"
+  },
   "notifications.markRead": {
     "src": "Mark read",
     "out": "Marquer comme lu"
+  },
+  "notifications.newAnnouncement": {
+    "src": "New announcement:",
+    "out": "Nouvelle annonce :"
   },
   "notifications.newsUpdated": {
     "src": "News has been updated",
