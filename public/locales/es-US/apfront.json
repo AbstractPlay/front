@@ -922,7 +922,7 @@
       "previewHeading": "Vista previa",
       "emojiHint": "Consejo: también puedes usar el selector de emojis de tu sistema (Windows: Tecla Windows+., macOS: Ctrl+Cmd+Espacio).",
       "publishConfirmTitle": "¿Publicar anuncio?",
-      "publishConfirmBody": "Esto se publicará en /news, actualizará el RSS, se reflejará en Discord (cuando esté configurado) y enviará un correo electrónico o notificación push a los usuarios que hayan optado por recibir anuncios del sitio.",
+      "publishConfirmBody": "Esto se publicará en /news, actualizará el RSS, se reflejará en Discord (cuando esté configurado) y enviará un correo electrónico o notificación push a los usuarios que optaron por recibir anuncios del sitio.",
       "publishConfirm": "Publicar ahora",
       "retract": "Retirar",
       "retracting": "Retirando…",

@@ -922,7 +922,7 @@
       "previewHeading": "Vorschau",
       "emojiHint": "Tipp: Du kannst auch die Emoji-Auswahl deines Systems verwenden (Windows: Win+., macOS: Strg+Cmd+Space).",
       "publishConfirmTitle": "Ankündigung veröffentlichen?",
-      "publishConfirmBody": "Dies wird auf /news veröffentlicht, den RSS-Feed aktualisieren, auf Discord spiegeln (falls konfiguriert) und eine E-Mail oder Push-Benachrichtigung an Benutzer senden, die Website-Ankündigungen aktiviert haben.",
+      "publishConfirmBody": "Dies wird auf /news veröffentlicht, den RSS-Feed aktualisieren, auf Discord spiegeln (falls konfiguriert) und eine E-Mail oder Push-Benachrichtigung an Benutzer senden, die sich für Website-Ankündigungen angemeldet haben.",
       "publishConfirm": "Jetzt veröffentlichen",
       "retract": "Zurückziehen",
       "retracting": "Wird zurückgezogen…",
