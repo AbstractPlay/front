@@ -6591,6 +6591,10 @@
     "src": "Avatar",
     "out": "Avatar"
   },
+  "profile.avatar.viewLarge": {
+    "src": "View larger avatar",
+    "out": "Voir l'avatar en grand"
+  },
   "recentGames.daysLabel": {
     "src": "Time range",
     "out": "Période"

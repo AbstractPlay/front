@@ -2380,6 +2380,7 @@
   "profile": {
     "avatar": {
       "title": "Avatar",
+      "viewLarge": "Visualizza avatar più grande",
       "current": "Attuale",
       "preview": "Anteprima",
       "styleLabel": "Stile",

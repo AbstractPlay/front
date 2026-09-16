@@ -15,7 +15,7 @@ import PageHelmet from "./PageHelmet";
 import Spinner from "./Spinner";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
-import UserAvatar from "./UserAvatar";
+import { EnlargeableUserAvatar } from "./AvatarLightbox";
 import PlayerAboutSection, {
   aboutTextPlainSnippet,
 } from "./PlayerAboutSection";
@@ -310,7 +310,7 @@ function Player() {
             })}
           </h1>
           <div className="player-profile-meta">
-            <UserAvatar
+            <EnlargeableUserAvatar
               user={user}
               size={36}
               className="player-profile-avatar"
