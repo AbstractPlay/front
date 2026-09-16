@@ -391,6 +391,14 @@
     "src": "Debugging information",
     "out": "Informazioni di debug"
   },
+  "DeclineDirectChallenges": {
+    "src": "Do not accept direct challenges",
+    "out": "Non accettare sfide dirette"
+  },
+  "DeclineDirectChallengesHelp": {
+    "src": "Named challenges sent to you will be declined automatically. Open challenges on game pages are not affected.",
+    "out": "Le sfide nominative inviate a te verranno rifiutate automaticamente. Le sfide aperte sulle pagine di gioco non saranno influenzate."
+  },
   "DefaultDisplay": {
     "src": "Default display",
     "out": "Visualizzazione predefinita"

@@ -902,6 +902,8 @@
   "NextGameNone": "Torna alla bacheca",
   "No": "No",
   "NoChallengeResponse": "Nessuna sfida richiede la tua risposta",
+  "DeclineDirectChallenges": "Non accettare sfide dirette",
+  "DeclineDirectChallengesHelp": "Le sfide nominative inviate a te verranno rifiutate automaticamente. Le sfide aperte sulle pagine di gioco non saranno influenzate.",
   "NoExploreTrue": "La funzione di esplorazione integrata sarà disabilitata forzatamente per questa partita.",
   "NoGames": "Nessuna partita richiede attualmente la tua attenzione.",
   "NoOpponentMove": "Nessuna partita in attesa della mossa dell'avversario.",

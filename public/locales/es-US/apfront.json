@@ -902,6 +902,8 @@
   "NextGameNone": "Volver al panel principal",
   "No": "No",
   "NoChallengeResponse": "No hay desafíos que requieran tu respuesta",
+  "DeclineDirectChallenges": "No aceptar desafíos directos",
+  "DeclineDirectChallengesHelp": "Los desafíos dirigidos a tu nombre se rechazarán automáticamente. Los desafíos abiertos en las páginas de los juegos no se verán afectados.",
   "NoExploreTrue": "La función de exploración integrada se desactivará obligatoriamente para este juego.",
   "NoGames": "Actualmente ningún juego requiere tu atención.",
   "NoOpponentMove": "No hay juegos esperando el movimiento del oponente.",

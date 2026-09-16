@@ -14,7 +14,7 @@ import NewProfile from "./NewProfile";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { useChallengeResponse } from "../hooks/useChallengeResponse";
-import { fetchDashboard } from "../lib/globalMeBootstrap";
+import { fetchDashboard, fetchProfile } from "../lib/globalMeBootstrap";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { cloneDeep } from "lodash";
 import WatchedGamesTable from "./Me/WatchedGamesTable";
@@ -52,6 +52,8 @@ function Me(props) {
   const [testBotStatusResult, testBotStatusResultSetter] = useState("");
   const [testBotStatusLoading, testBotStatusLoadingSetter] = useState(false);
   const [deletes, deletesSetter] = useState("");
+  const [noDirectChallengesSaving, noDirectChallengesSavingSetter] =
+    useState(false);
   const { t } = useTranslation();
   const [myMove, myMoveSetter] = useState([]);
   const [waiting, waitingSetter] = useState([]);
@@ -194,6 +196,38 @@ function Me(props) {
     await callAuthApi("update_standing", { entries: updatedStanding });
     maybeTrackRecommendationChallenge(challenge.metaGame);
   }, []);
+
+  const handleNoDirectChallengesChange = async (e) => {
+    if (globalMe === null || noDirectChallengesSaving) {
+      return;
+    }
+    const enabled = e.target.checked;
+    noDirectChallengesSavingSetter(true);
+    try {
+      const newSettings = cloneDeep(globalMe.settings ?? {});
+      if (newSettings.all === undefined) {
+        newSettings.all = {};
+      }
+      newSettings.all.noDirectChallenges = enabled;
+      const res = await callAuthApi("update_user_settings", {
+        settings: newSettings,
+      });
+      if (!res || res.status !== 200) {
+        throw new Error("Failed to save direct challenge preference");
+      }
+      const { setGlobalMe } = useStore.getState();
+      setGlobalMe((prev) => ({
+        ...prev,
+        settings: newSettings,
+      }));
+      await fetchProfile();
+    } catch (err) {
+      console.error("Failed to save direct challenge preference", err);
+      errorSetter(err);
+    } finally {
+      noDirectChallengesSavingSetter(false);
+    }
+  };
 
   const handleStandingSuspend = async (id) => {
     console.log(`suspending ${id}`);
@@ -504,6 +538,21 @@ function Me(props) {
                     handleChallengeResponse={handleChallengeResponse.bind(this)}
                   />
                 )}
+                <div className="field topPad">
+                  <label className="checkbox">
+                    <input
+                      type="checkbox"
+                      checked={globalMe.settings?.all?.noDirectChallenges === true}
+                      disabled={noDirectChallengesSaving}
+                      onChange={handleNoDirectChallengesChange}
+                    />
+                    {" "}
+                    {t("DeclineDirectChallenges")}
+                  </label>
+                  <p className="help">
+                    <em>{t("DeclineDirectChallengesHelp")}</em>
+                  </p>
+                </div>
               </div>
               <p className="lined">
                 <span>{t("WaitingResponse")}</span>
