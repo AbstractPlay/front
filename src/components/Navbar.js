@@ -247,6 +247,17 @@ function Navbar() {
                   {t("nav.gameWishlist")}
                 </Link>
               </div>
+              {loggedin ? (
+                <div className="navbar-item">
+                  <Link
+                    to="/feedback/mine"
+                    className="navbar-item"
+                    onClick={() => updateBurgerExpanded(false)}
+                  >
+                    {t("nav.myFeedback")}
+                  </Link>
+                </div>
+              ) : null}
             </div>
           </div>
           <div className="navbar-item has-dropdown is-hoverable">

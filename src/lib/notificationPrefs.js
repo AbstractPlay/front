@@ -20,8 +20,24 @@ export const IN_APP_NOTIFICATION_KEYS = [
   "feedbackStatus",
   "feedbackDeleted",
   "feedbackReviewRequested",
-  "feedbackNew",
 ];
+
+export const FEEDBACK_NEW_KIND_KEYS = ["bug", "feature", "wishlist"];
+
+export function defaultFeedbackNewKinds(existing) {
+  const settings = {
+    bug: false,
+    feature: false,
+    wishlist: false,
+    ...(existing ?? {}),
+  };
+  for (const key of FEEDBACK_NEW_KIND_KEYS) {
+    if (!Object.prototype.hasOwnProperty.call(settings, key)) {
+      settings[key] = false;
+    }
+  }
+  return settings;
+}
 
 function defaultNotificationMap(keys) {
   return Object.fromEntries(keys.map((key) => [key, true]));

@@ -6,6 +6,38 @@
   padding: 1rem;
 }
 
+.feedback-quick-search .input {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border-color: var(--tag-background-color);
+}
+
+.feedback-quick-search .input:focus {
+  border-color: var(--secondary-color-3);
+}
+
+.feedback-notify-opt-in {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--tag-background-color);
+  border-radius: 4px;
+  background: var(--secondary-color-3-bg);
+}
+
+.feedback-mine-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.feedback-mine-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
 .feedback-archived-banner,
 .feedback-closed-banner {
   background: var(--secondary-color-3-bg);

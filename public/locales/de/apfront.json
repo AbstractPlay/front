@@ -1742,14 +1742,39 @@
         "declined": "Wir planen derzeit nicht, dieses Spiel hinzuzufügen. Es bleibt auf der Liste, damit andere keine doppelten Anfragen einreichen."
       }
     },
+    "search": {
+      "label": "Suche",
+      "placeholder": "Nach Titel, Autor oder Text filtern…",
+      "noMatches": "Keine Einträge entsprechen deiner Suche."
+    },
     "mine": {
       "title": "Mein Feedback",
       "intro": "Fehler und Feature-Ideen, die du eingereicht hast.",
+      "intro_submitted": "Feedback, das du eingereicht hast.",
+      "intro_voted": "Einträge, für die du abgestimmt hast.",
+      "intro_watched": "Einträge, die du auf Aktualisierungen beobachtest.",
       "empty": "Du hast noch kein Feedback eingereicht.",
+      "empty_submitted": "Du hast noch kein Feedback eingereicht.",
+      "empty_voted": "Du hast noch für kein Feedback abgestimmt.",
+      "empty_watched": "Du beobachtest noch kein Feedback.",
       "all": "Alle",
       "bugs": "Fehler",
       "ideas": "Features",
-      "updated": "Aktualisiert"
+      "wishlist": "Wunschliste",
+      "updated": "Aktualisiert",
+      "scopeLabel": "Aktivität",
+      "scope_submitted": "Eingereicht",
+      "scope_voted": "Abgestimmt",
+      "scope_watched": "Beobachtet",
+      "unvote": "Stimme zurückziehen",
+      "unwatch": "Nicht mehr beobachten",
+      "notifyTitle": "Benachrichtigungen für neues Feedback",
+      "notifyIntro": "Erhalte eine einmalige In-App-Benachrichtigung, wenn jemand neues Feedback in einer von dir gewählten Kategorie einreicht. Dadurch wird für diese Einträge weder abgestimmt noch werden sie beobachtet.",
+      "notifyHint": "Antworten und Statusaktualisierungen erfordern weiterhin das Beobachten des jeweiligen Threads.",
+      "notifyKind_bug": "Neue Fehlerberichte",
+      "notifyKind_feature": "Neue Feature-Ideen",
+      "notifyKind_wishlist": "Neue Wunschlisten-Spiele",
+      "notifySaveError": "Benachrichtigungseinstellungen konnten nicht gespeichert werden."
     },
     "auth": {
       "signInRequired": "Du musst angemeldet sein, um am Feedback teilzunehmen.",

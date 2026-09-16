@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Spinner from "../Spinner";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
+import FeedbackQuickSearch from "./FeedbackQuickSearch";
+import { filterFeedbackItemsByQuery } from "../../lib/feedback/filterFeedbackItemsByQuery";
 import FeedbackTimestamp from "./FeedbackTimestamp";
 import { listFeedbackHistoryAll } from "../../lib/feedback/feedbackApi";
 import {
@@ -24,6 +26,7 @@ function FeedbackHistory() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (tabParam && tabParam !== tab) {
@@ -57,6 +60,11 @@ function FeedbackHistory() {
     navigate(feedbackHistoryPath(nextTab));
   }
 
+  const visibleItems = useMemo(
+    () => filterFeedbackItemsByQuery(items, searchQuery),
+    [items, searchQuery],
+  );
+
   return (
     <>
       <FeedbackPageHelmet title={t("feedback.history.title")} />
@@ -65,6 +73,7 @@ function FeedbackHistory() {
           <span>{t("feedback.history.title")}</span>
         </h1>
         <p>{t("feedback.history.intro")}</p>
+        <FeedbackQuickSearch value={searchQuery} onChange={setSearchQuery} />
         <div className="feedback-actions" role="tablist" aria-label={t("feedback.history.tabLabel")}>
           {FEEDBACK_HISTORY_TABS.map((entry) => (
             <button
@@ -81,12 +90,16 @@ function FeedbackHistory() {
         </div>
         {loading ? <Spinner /> : null}
         {error ? <p className="has-text-danger">{error}</p> : null}
-        {!loading && items.length === 0 ? (
-          <p className="feedback-muted">{t(`feedback.history.empty.${tab}`)}</p>
+        {!loading && visibleItems.length === 0 ? (
+          <p className="feedback-muted">
+            {searchQuery.trim()
+              ? t("feedback.search.noMatches")
+              : t(`feedback.history.empty.${tab}`)}
+          </p>
         ) : null}
-        {!loading && items.length > 0 ? (
+        {!loading && visibleItems.length > 0 ? (
           <ul className="feedback-board-list">
-            {items.map((item) => (
+            {visibleItems.map((item) => (
               <li key={item.id} className="feedback-board-item">
                 <span className="feedback-status-badge">
                   {t(`feedback.status.${item.terminalStatus}`, { defaultValue: item.terminalStatus })}

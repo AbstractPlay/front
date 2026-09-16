@@ -1742,14 +1742,39 @@
         "declined": "Non abbiamo in programma di aggiungere questo gioco. Rimane in elenco per evitare che altri inviino richieste duplicate."
       }
     },
+    "search": {
+      "label": "Cerca",
+      "placeholder": "Filtra per titolo, autore o testo…",
+      "noMatches": "Nessun elemento corrisponde alla ricerca."
+    },
     "mine": {
       "title": "I miei feedback",
       "intro": "Bug e idee per funzionalità che hai inviato.",
+      "intro_submitted": "Feedback che hai inviato.",
+      "intro_voted": "Elementi per cui hai votato.",
+      "intro_watched": "Elementi che stai seguendo per aggiornamenti.",
       "empty": "Non hai ancora inviato alcun feedback.",
+      "empty_submitted": "Non hai ancora inviato alcun feedback.",
+      "empty_voted": "Non hai ancora votato per alcun feedback.",
+      "empty_watched": "Non stai ancora seguendo alcun feedback.",
       "all": "Tutti",
       "bugs": "Bug",
       "ideas": "Funzionalità",
-      "updated": "Aggiornato"
+      "wishlist": "Lista dei desideri",
+      "updated": "Aggiornato",
+      "scopeLabel": "Attività",
+      "scope_submitted": "Inviati",
+      "scope_voted": "Votati",
+      "scope_watched": "Seguiti",
+      "unvote": "Rimuovi voto",
+      "unwatch": "Smetti di seguire",
+      "notifyTitle": "Avvisi per nuovi feedback",
+      "notifyIntro": "Ricevi una notifica singola nell'app quando qualcuno invia un nuovo feedback in una categoria a tua scelta. Questo non aggiunge un voto né ti fa seguire tali elementi.",
+      "notifyHint": "Le risposte e gli aggiornamenti di stato richiedono comunque di seguire una discussione specifica.",
+      "notifyKind_bug": "Nuove segnalazioni di bug",
+      "notifyKind_feature": "Nuove idee per funzionalità",
+      "notifyKind_wishlist": "Nuovi giochi nella lista dei desideri",
+      "notifySaveError": "Impossibile salvare le preferenze di notifica."
     },
     "auth": {
       "signInRequired": "Devi aver effettuato l'accesso per partecipare ai feedback.",
