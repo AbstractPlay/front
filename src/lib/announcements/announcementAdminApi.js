@@ -93,6 +93,11 @@ export async function publishAnnouncement(id) {
   return parseAuthResponse(res);
 }
 
+export async function retractAnnouncement(id) {
+  const res = await callAuthApi("announcement_retract", { id });
+  return parseAuthResponse(res);
+}
+
 export function attachmentUrlMapFromGet(data) {
   const map = {};
   for (const entry of data?.attachmentUrls ?? []) {

@@ -6,7 +6,7 @@ Public news is loaded from the backend (`announcements_list` / `announcement_get
 
 | File | Role |
 |------|------|
-| [`loadNews.js`](../src/lib/announcements/loadNews.js) | Bootstrap fetch; falls back to bundled `news.json` if API fails |
+| [`loadNews.js`](../src/lib/announcements/loadNews.js) | Bell bootstrap: windowed `announcements_list` (no attachment presign) |
 | [`announcementApi.js`](../src/lib/announcements/announcementApi.js) | Open API client |
 | [`AnnouncementArticle.js`](../src/components/Announcements/AnnouncementArticle.js) | Single post on `/news` |
 | [`News.js`](../src/components/News.js) | News page |

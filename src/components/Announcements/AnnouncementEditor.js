@@ -11,6 +11,7 @@ import {
   attachmentUrlMapFromGet,
   getAnnouncementAuth,
   publishAnnouncement,
+  retractAnnouncement,
   saveAnnouncement,
 } from "../../lib/announcements/announcementAdminApi";
 import { insertAtSelection } from "../../lib/announcements/markdownInsert";
@@ -44,7 +45,9 @@ function AnnouncementEditor() {
   const [saveMessage, setSaveMessage] = useState("");
   const [editorTab, setEditorTab] = useState("write");
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const [showRetractModal, setShowRetractModal] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [retracting, setRetracting] = useState(false);
   const [lastSavedSnapshot, setLastSavedSnapshot] = useState("");
   const bodyRef = useRef(null);
 
@@ -205,6 +208,20 @@ function AnnouncementEditor() {
     navigate("/announcements/admin");
   };
 
+  const handleRetract = async () => {
+    setRetracting(true);
+    setError("");
+    const result = await retractAnnouncement(draftId);
+    setRetracting(false);
+    if (!result.ok) {
+      setError(result.error);
+      setShowRetractModal(false);
+      return;
+    }
+    setShowRetractModal(false);
+    navigate("/announcements/admin");
+  };
+
   if (!globalMe?.admin) {
     return <Navigate to="/news" replace />;
   }
@@ -242,6 +259,17 @@ function AnnouncementEditor() {
               onClick={() => setShowPublishModal(true)}
             >
               {t("announcements.admin.publish")}
+            </button>
+          ) : null}
+          {status === "published" ? (
+            <button
+              type="button"
+              className="button apButtonNeutral"
+              disabled={publishDisabled || saving || retracting}
+              title={publishDisabled ? t("announcements.admin.publishDisabledDev") : undefined}
+              onClick={() => setShowRetractModal(true)}
+            >
+              {t("announcements.admin.retract")}
             </button>
           ) : null}
           <Link to="/announcements/admin" className="button apButtonNeutral">
@@ -361,6 +389,24 @@ function AnnouncementEditor() {
       >
         <p>{t("announcements.admin.publishConfirmBody")}</p>
         <AnnouncementArticle item={previewItem} className="announcement-preview-article" />
+      </Modal>
+
+      <Modal
+        show={showRetractModal}
+        title={t("announcements.admin.retractConfirmTitle")}
+        disableBackdropClose={retracting}
+        buttons={[
+          {
+            label: retracting ? t("announcements.admin.retracting") : t("announcements.admin.retractConfirm"),
+            action: handleRetract,
+          },
+          {
+            label: t("Cancel"),
+            action: () => setShowRetractModal(false),
+          },
+        ]}
+      >
+        <p>{t("announcements.admin.retractConfirmBody")}</p>
       </Modal>
     </>
   );

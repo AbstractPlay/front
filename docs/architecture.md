@@ -33,7 +33,7 @@ On mount, `Skeleton` also fetches:
 
 - `user_names` (open query) → Zustand `users`
 - `https://records.abstractplay.com/_summary.json` → Zustand `summary`
-- Embedded `news.json` → Zustand `news`
+- API `announcements_list` (bell window) → Zustand `news`
 
 ## Routing
 
