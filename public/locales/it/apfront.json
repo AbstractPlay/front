@@ -874,6 +874,55 @@
     "ogDescription": "Notizie e annunci di Abstract Play",
     "intro": "Questa pagina è la fonte ufficiale per le notizie del sito. Riportiamo gli annunci anche sul <discordLink>nostro server Discord</discordLink>. Reagisci ai post qui; iscriviti tramite <rssLink>RSS</rssLink> se preferisci."
   },
+  "announcements": {
+    "preview": {
+      "noTitle": "(Senza titolo)"
+    },
+    "admin": {
+      "listTitle": "Gestione annunci",
+      "listIntro": "Scrivi qui le bozze dei post, poi pubblicale in produzione quando sei pronto. Le build locali e di sviluppo possono salvare bozze e caricare immagini; la pubblicazione è disponibile solo in produzione.",
+      "newDraft": "Nuova bozza",
+      "editDraft": "Modifica annuncio",
+      "editorTitle": "Editor annunci",
+      "empty": "Nessun annuncio corrisponde a questo filtro.",
+      "filterStatus": "Stato",
+      "allStatuses": "Tutti gli stati",
+      "colTitle": "Titolo",
+      "colStatus": "Stato",
+      "colUpdated": "Aggiornato",
+      "status": {
+        "draft": "Bozza",
+        "published": "Pubblicato",
+        "scheduled": "Programmato",
+        "retracted": "Ritirato"
+      },
+      "saveDraft": "Salva",
+      "saving": "Salvataggio in corso…",
+      "saved": "Salvato.",
+      "publish": "Pubblica",
+      "publishing": "Pubblicazione in corso…",
+      "publishDisabledDev": "La pubblicazione è disponibile solo su play.abstractplay.com (produzione). Salva le bozze qui e pubblicale in produzione.",
+      "publishedHint": "Questo post è visibile. Il salvataggio aggiorna solo il sito; Discord e RSS non verranno aggiornati fino a un futuro aggiornamento della funzionalità di distribuzione (fan-out).",
+      "backToList": "Torna all'elenco",
+      "tabWrite": "Scrivi",
+      "tabPreview": "Anteprima",
+      "fieldTitle": "Titolo",
+      "fieldBody": "Corpo (Markdown)",
+      "fieldAdminNote": "Nota interna",
+      "adminNoteHint": "Visibile solo agli amministratori; non viene mai mostrata su /news.",
+      "previewHeading": "Anteprima",
+      "emojiHint": "Suggerimento: puoi anche usare il selettore emoji del tuo sistema (Windows: Win+., macOS: Ctrl+Cmd+Spazio).",
+      "publishConfirmTitle": "Pubblicare l'annuncio?",
+      "publishConfirmBody": "Questo renderà il post pubblico su /news. La distribuzione (fan-out) su Discord, RSS e notifiche sarà disponibile in una versione successiva; oggi in produzione viene pubblicato solo sul sito.",
+      "publishConfirm": "Pubblica ora",
+      "upload": {
+        "addImage": "Aggiungi immagine",
+        "pasteHint": "Incolla uno screenshot in qualsiasi punto di questa pagina (tranne mentre digiti in un campo), oppure usa Aggiungi immagine.",
+        "saveFirst": "Salva la bozza una volta affinché i file caricati possano essere collegati a questo annuncio.",
+        "tooMany": "Puoi allegare al massimo {{max}} immagini."
+      }
+    }
+  },
   "nav": {
     "community": "Community",
     "reportBug": "Segnala un bug",

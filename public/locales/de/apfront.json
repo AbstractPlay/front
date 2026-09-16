@@ -874,6 +874,55 @@
     "ogDescription": "Neuigkeiten und Ankündigungen von Abstract Play",
     "intro": "Diese Seite ist die offizielle Quelle für Neuigkeiten auf der Website. Wir spiegeln Ankündigungen auch auf <discordLink>unserem Discord-Server</discordLink>. Reagiere hier auf Beiträge; abonniere sie bei Interesse per <rssLink>RSS</rssLink>."
   },
+  "announcements": {
+    "preview": {
+      "noTitle": "(Kein Titel)"
+    },
+    "admin": {
+      "listTitle": "Ankündigungs-Verwaltung",
+      "listIntro": "Entwerfe hier Beiträge und veröffentliche sie auf Production, wenn sie fertig sind. Entwicklungs- und lokale Builds können Entwürfe speichern und Bilder hochladen; Veröffentlichen ist nur auf Production möglich.",
+      "newDraft": "Neuer Entwurf",
+      "editDraft": "Ankündigung bearbeiten",
+      "editorTitle": "Ankündigungs-Editor",
+      "empty": "Keine Ankündigungen entsprechen diesem Filter.",
+      "filterStatus": "Status",
+      "allStatuses": "Alle Status",
+      "colTitle": "Titel",
+      "colStatus": "Status",
+      "colUpdated": "Aktualisiert",
+      "status": {
+        "draft": "Entwurf",
+        "published": "Veröffentlicht",
+        "scheduled": "Geplant",
+        "retracted": "Zurückgezogen"
+      },
+      "saveDraft": "Speichern",
+      "saving": "Speichern…",
+      "saved": "Gespeichert.",
+      "publish": "Veröffentlichen",
+      "publishing": "Veröffentlichen…",
+      "publishDisabledDev": "Veröffentlichen ist nur auf play.abstractplay.com (Production) verfügbar. Speichere Entwürfe hier und veröffentliche sie in Prod.",
+      "publishedHint": "Dieser Beitrag ist live. Das Speichern aktualisiert nur die Website; Discord und RSS werden erst mit einer zukünftigen Fan-out-Änderung aktualisiert.",
+      "backToList": "Zurück zur Liste",
+      "tabWrite": "Schreiben",
+      "tabPreview": "Vorschau",
+      "fieldTitle": "Titel",
+      "fieldBody": "Text (Markdown)",
+      "fieldAdminNote": "Interne Notiz",
+      "adminNoteHint": "Nur für Admins sichtbar; wird nie auf /news angezeigt.",
+      "previewHeading": "Vorschau",
+      "emojiHint": "Tipp: Du kannst auch die Emoji-Auswahl deines Systems verwenden (Windows: Win+., macOS: Strg+Cmd+Space).",
+      "publishConfirmTitle": "Ankündigung veröffentlichen?",
+      "publishConfirmBody": "Dadurch wird der Beitrag auf /news öffentlich gemacht. Discord, RSS und Benachrichtigungs-Fan-out folgen in einem späteren Release; auf Production wird heute nur auf der Website veröffentlicht.",
+      "publishConfirm": "Jetzt veröffentlichen",
+      "upload": {
+        "addImage": "Bild hinzufügen",
+        "pasteHint": "Füge einen Screenshot irgendwo auf dieser Seite ein (außer während der Eingabe in einem Feld) oder verwende \"Bild hinzufügen\".",
+        "saveFirst": "Speichere den Entwurf einmal, damit Uploads mit dieser Ankündigung verknüpft werden können.",
+        "tooMany": "Du kannst maximal {{max}} Bilder anhängen."
+      }
+    }
+  },
   "nav": {
     "community": "Community",
     "reportBug": "Fehler melden",

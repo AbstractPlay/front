@@ -14,3 +14,96 @@
 .announcement-markdown img {
   max-width: 100%;
 }
+
+.announcement-muted {
+  color: var(--secondary-font-color);
+}
+
+.announcement-admin-panel {
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.announcement-admin-table a {
+  color: var(--secondary-color-3);
+}
+
+.announcement-editor-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media screen and (max-width: 768px) {
+  .announcement-editor-split {
+    grid-template-columns: 1fr;
+  }
+
+  .announcement-editor-pane.is-hidden-mobile {
+    display: none;
+  }
+}
+
+.announcement-editor-preview {
+  position: sticky;
+  top: 1rem;
+  padding: 1rem;
+  background: var(--secondary-color-3-bg);
+  border: 1px solid var(--tag-background-color);
+  border-radius: 6px;
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+}
+
+.announcement-editor-tabs {
+  display: none;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 768px) {
+  .announcement-editor-tabs {
+    display: flex;
+  }
+}
+
+.announcement-body-input {
+  font-family: ui-monospace, monospace;
+  font-size: 0.9rem;
+}
+
+.announcement-toolbar {
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.announcement-emoji-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.announcement-emoji-btn {
+  min-width: 2.25rem;
+}
+
+.announcement-image-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.announcement-image-thumb {
+  max-width: 120px;
+}
+
+.announcement-image-thumb img {
+  margin: 0;
+}
+
+.announcement-editor-actions {
+  margin-bottom: 1rem;
+}

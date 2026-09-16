@@ -62,6 +62,8 @@ const FeedbackNew = lazy(() => import("../components/Feedback/FeedbackNew"));
 const FeedbackDetail = lazy(() => import("../components/Feedback/FeedbackDetail"));
 const FeedbackMine = lazy(() => import("../components/Feedback/FeedbackMine"));
 const FeedbackAdmin = lazy(() => import("../components/Feedback/FeedbackAdmin"));
+const AnnouncementAdminList = lazy(() => import("../components/Announcements/AnnouncementAdminList"));
+const AnnouncementEditor = lazy(() => import("../components/Announcements/AnnouncementEditor"));
 const FeedbackHistory = lazy(() => import("../components/Feedback/FeedbackHistory"));
 
 // Register default English locale; TimeAgoLocaleSync updates on language change
@@ -262,6 +264,9 @@ function Bones(props) {
                 <Route path="/wishlist" element={<FeedbackBoard kind="wishlist" />} />
                 <Route path="/feedback/mine" element={<FeedbackMine />} />
                 <Route path="/feedback/admin" element={<FeedbackAdmin />} />
+                <Route path="/announcements/admin" element={<AnnouncementAdminList />} />
+                <Route path="/announcements/admin/new" element={<AnnouncementEditor />} />
+                <Route path="/announcements/admin/:id" element={<AnnouncementEditor />} />
                 <Route path="/feedback/history" element={<FeedbackHistory />} />
                 <Route path="/feedback/history/:tab" element={<FeedbackHistory />} />
                 <Route path="/feedback/new" element={<FeedbackNew />} />

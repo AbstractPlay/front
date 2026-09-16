@@ -14,6 +14,16 @@ Public news is loaded from the backend (`announcements_list` / `announcement_get
 
 Backend: [Announcements](/backend/subsystems/announcements/).
 
+## Admin composer
+
+| Route | Purpose |
+|-------|---------|
+| `/announcements/admin` | Draft/published list (admin only) |
+| `/announcements/admin/new` | New draft editor |
+| `/announcements/admin/:id` | Edit draft or published post |
+
+Publish is disabled unless `VITE_REAL_MODE=production` (matches backend dev publish guard).
+
 ## Images
 
 Markdown may use `ap-att:{s3Key}`; the client resolves keys to presigned URLs via `announcement_get` during bootstrap enrichment.

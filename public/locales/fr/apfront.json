@@ -874,6 +874,55 @@
     "ogDescription": "Actualités et annonces d'Abstract Play",
     "intro": "Cette page est la source officielle des actualités du site. Nous publions également les annonces sur <discordLink>notre serveur Discord</discordLink>. Réagissez aux publications ici ; abonnez-vous via <rssLink>RSS</rssLink> si vous le souhaitez."
   },
+  "announcements": {
+    "preview": {
+      "noTitle": "(Sans titre)"
+    },
+    "admin": {
+      "listTitle": "Administration des annonces",
+      "listIntro": "Rédigez des brouillons ici, puis publiez-les en production lorsque vous êtes prêt. Les versions dev et locales peuvent enregistrer des brouillons et téléverser des images ; la publication est réservée à la production.",
+      "newDraft": "Nouveau brouillon",
+      "editDraft": "Modifier l'annonce",
+      "editorTitle": "Éditeur d'annonces",
+      "empty": "Aucune annonce ne correspond à ce filtre.",
+      "filterStatus": "Statut",
+      "allStatuses": "Tous les statuts",
+      "colTitle": "Titre",
+      "colStatus": "Statut",
+      "colUpdated": "Mis à jour",
+      "status": {
+        "draft": "Brouillon",
+        "published": "Publié",
+        "scheduled": "Programmé",
+        "retracted": "Retiré"
+      },
+      "saveDraft": "Enregistrer",
+      "saving": "Enregistrement…",
+      "saved": "Enregistré.",
+      "publish": "Publier",
+      "publishing": "Publication…",
+      "publishDisabledDev": "La publication est uniquement disponible sur play.abstractplay.com (production). Enregistrez les brouillons ici et publiez en prod.",
+      "publishedHint": "Cet article est en ligne. L'enregistrement met à jour le site uniquement ; Discord et le flux RSS ne seront pas mis à jour avant une future modification de la diffusion.",
+      "backToList": "Retour à la liste",
+      "tabWrite": "Rédiger",
+      "tabPreview": "Aperçu",
+      "fieldTitle": "Titre",
+      "fieldBody": "Corps (Markdown)",
+      "fieldAdminNote": "Note interne",
+      "adminNoteHint": "Visible uniquement par les administrateurs ; jamais affiché sur /news.",
+      "previewHeading": "Aperçu",
+      "emojiHint": "Astuce : vous pouvez également utiliser le sélecteur d'émojis de votre système (Windows : Win+., macOS : Ctrl+Cmd+Espace).",
+      "publishConfirmTitle": "Publier l'annonce ?",
+      "publishConfirmBody": "Cela rendra l'article public sur /news. La diffusion sur Discord, RSS et les notifications sera déployée dans une version ultérieure ; aujourd'hui en production, la publication se fait uniquement sur le site.",
+      "publishConfirm": "Publier maintenant",
+      "upload": {
+        "addImage": "Ajouter une image",
+        "pasteHint": "Collez une capture d'écran n'importe où sur cette page (sauf lorsque vous tapez dans un champ), ou utilisez Ajouter une image.",
+        "saveFirst": "Enregistrez le brouillon une fois afin que les fichiers téléversés puissent être liés à cette annonce.",
+        "tooMany": "Vous pouvez joindre au maximum {{max}} images."
+      }
+    }
+  },
   "nav": {
     "community": "Communauté",
     "reportBug": "Signaler un bug",

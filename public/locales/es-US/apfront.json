@@ -874,6 +874,55 @@
     "ogDescription": "Noticias y anuncios de Abstract Play",
     "intro": "Esta página es la fuente oficial de las noticias del sitio. También reflejamos los anuncios en <discordLink>nuestro servidor de Discord</discordLink>. Reacciona a las publicaciones aquí; suscríbete mediante <rssLink>RSS</rssLink> si quieres."
   },
+  "announcements": {
+    "preview": {
+      "noTitle": "(Sin título)"
+    },
+    "admin": {
+      "listTitle": "Administración de anuncios",
+      "listIntro": "Redacta borradores aquí y luego publícalos en producción cuando estén listos. Las versiones de desarrollo y locales pueden guardar borradores y subir imágenes; la publicación es solo para producción.",
+      "newDraft": "Nuevo borrador",
+      "editDraft": "Editar anuncio",
+      "editorTitle": "Editor de anuncios",
+      "empty": "Ningún anuncio coincide con este filtro.",
+      "filterStatus": "Estado",
+      "allStatuses": "Todos los estados",
+      "colTitle": "Título",
+      "colStatus": "Estado",
+      "colUpdated": "Actualizado",
+      "status": {
+        "draft": "Borrador",
+        "published": "Publicado",
+        "scheduled": "Programado",
+        "retracted": "Retirado"
+      },
+      "saveDraft": "Guardar",
+      "saving": "Guardando…",
+      "saved": "Guardado.",
+      "publish": "Publicar",
+      "publishing": "Publicando…",
+      "publishDisabledDev": "La opción de publicar solo está disponible en play.abstractplay.com (producción). Guarda borradores aquí y publícalos en producción.",
+      "publishedHint": "Esta publicación está activa. Guardar solo actualiza el sitio; Discord y RSS no se actualizarán hasta una futura modificación de distribución.",
+      "backToList": "Volver a la lista",
+      "tabWrite": "Escribir",
+      "tabPreview": "Vista previa",
+      "fieldTitle": "Título",
+      "fieldBody": "Cuerpo (Markdown)",
+      "fieldAdminNote": "Nota interna",
+      "adminNoteHint": "Solo visible para administradores; nunca se muestra en /news.",
+      "previewHeading": "Vista previa",
+      "emojiHint": "Consejo: también puedes usar el selector de emojis de tu sistema (Windows: Tecla Windows+., macOS: Ctrl+Cmd+Espacio).",
+      "publishConfirmTitle": "¿Publicar anuncio?",
+      "publishConfirmBody": "Esto hará que la publicación sea pública en /news. La distribución en Discord, RSS y notificaciones se lanzará en una versión posterior; hoy en producción solo se publica en el sitio.",
+      "publishConfirm": "Publicar ahora",
+      "upload": {
+        "addImage": "Agregar imagen",
+        "pasteHint": "Pega una captura de pantalla en cualquier lugar de esta página (excepto mientras escribes en un campo) o usa Agregar imagen.",
+        "saveFirst": "Guarda el borrador una vez para que los archivos subidos puedan vincularse a este anuncio.",
+        "tooMany": "Puedes adjuntar como máximo {{max}} imágenes."
+      }
+    }
+  },
   "nav": {
     "community": "Comunidad",
     "reportBug": "Reportar un error",
