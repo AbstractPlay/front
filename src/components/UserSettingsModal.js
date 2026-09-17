@@ -143,60 +143,65 @@ function UserSettingsModal(props) {
   const [pushOnThisDevice, pushOnThisDeviceSetter] = useState(false);
   const [settingsTab, settingsTabSetter] = useState("profile");
 
+  // Reset tab and transient edit UI only when the modal opens — not when globalMe
+  // refreshes after saving a setting (which would jump back to Profile and scroll top).
   useEffect(() => {
-    if (show) {
-      settingsTabSetter("profile");
-      changingNameSetter(false);
-      changingEMailSetter(false);
-      changingCodeSentSetter(false);
-      nameSetter("");
-      emailSetter("");
-      emailCodeSetter("");
-      emailErrorSetter("");
-      if (globalMe?.settings?.all?.notifications) {
-        notificationsSetter(
-          defaultEmailNotifications(globalMe.settings.all.notifications)
-        );
-      } else {
-        notificationsSetter(defaultEmailNotifications());
-      }
-      if (globalMe?.settings?.all?.inAppNotifications) {
-        inAppNotificationsSetter(
-          defaultInAppNotifications(globalMe.settings.all.inAppNotifications)
-        );
-      } else {
-        inAppNotificationsSetter(defaultInAppNotifications());
-      }
-      feedbackNewKindsSetter(
-        defaultFeedbackNewKinds(globalMe?.settings?.all?.feedbackNewKinds),
+    if (!show) return;
+    settingsTabSetter("profile");
+    changingNameSetter(false);
+    changingEMailSetter(false);
+    changingCodeSentSetter(false);
+    nameSetter("");
+    emailSetter("");
+    emailCodeSetter("");
+    emailErrorSetter("");
+  }, [show]);
+
+  useEffect(() => {
+    if (!show) return;
+    if (globalMe?.settings?.all?.notifications) {
+      notificationsSetter(
+        defaultEmailNotifications(globalMe.settings.all.notifications)
       );
-      if (globalMe?.settings?.all?.exploration === undefined) {
-        explorationSetter(0);
-      } else {
-        explorationSetter(globalMe.settings.all.exploration);
-      }
-      if (globalMe?.settings?.all?.moveConfirmOff) {
-        confirmMoveSetter(!globalMe.settings.all.moveConfirmOff);
-      } else {
-        confirmMoveSetter(true);
-      }
-      if (globalMe?.settings?.all?.hideSpoilers) {
-        hideSpoilersSetter(globalMe.settings.all.hideSpoilers);
-      } else {
-        hideSpoilersSetter(false);
-      }
-      if (globalMe?.country !== undefined) {
-        countrySetter(globalMe.country);
-      }
-      communicationLanguageSetter(globalMe?.language ?? "en");
-      if (globalMe?.bggid !== undefined && globalMe?.bggid !== null) {
-        bggidSetter(globalMe.bggid);
-      }
-      if (globalMe?.about !== undefined && globalMe?.about !== null) {
-        aboutMeSetter(globalMe.about);
-      }
+    } else {
+      notificationsSetter(defaultEmailNotifications());
     }
-  }, [show, globalMe, notificationsSetter, inAppNotificationsSetter, explorationSetter]);
+    if (globalMe?.settings?.all?.inAppNotifications) {
+      inAppNotificationsSetter(
+        defaultInAppNotifications(globalMe.settings.all.inAppNotifications)
+      );
+    } else {
+      inAppNotificationsSetter(defaultInAppNotifications());
+    }
+    feedbackNewKindsSetter(
+      defaultFeedbackNewKinds(globalMe?.settings?.all?.feedbackNewKinds),
+    );
+    if (globalMe?.settings?.all?.exploration === undefined) {
+      explorationSetter(0);
+    } else {
+      explorationSetter(globalMe.settings.all.exploration);
+    }
+    if (globalMe?.settings?.all?.moveConfirmOff) {
+      confirmMoveSetter(!globalMe.settings.all.moveConfirmOff);
+    } else {
+      confirmMoveSetter(true);
+    }
+    if (globalMe?.settings?.all?.hideSpoilers) {
+      hideSpoilersSetter(globalMe.settings.all.hideSpoilers);
+    } else {
+      hideSpoilersSetter(false);
+    }
+    if (globalMe?.country !== undefined) {
+      countrySetter(globalMe.country);
+    }
+    communicationLanguageSetter(globalMe?.language ?? "en");
+    if (globalMe?.bggid !== undefined && globalMe?.bggid !== null) {
+      bggidSetter(globalMe.bggid);
+    }
+    if (globalMe?.about !== undefined && globalMe?.about !== null) {
+      aboutMeSetter(globalMe.about);
+    }
+  }, [show, globalMe]);
 
   const handleNameChangeClick = () => {
     nameSetter(globalMe.name);
@@ -374,19 +379,20 @@ function UserSettingsModal(props) {
   };
 
   const handleNotifyCheckChange = async (key) => {
+    const next = !notifications[key];
+    notificationsSetter((prev) => ({ ...prev, [key]: next }));
     const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
     if (newSettings.all === undefined) newSettings.all = {};
-    newSettings.all.notifications = notifications;
-    newSettings.all.notifications[key] = !newSettings.all.notifications[key];
+    newSettings.all.notifications = { ...notifications, [key]: next };
     handleSettingsChange(newSettings);
   };
 
   const handleInAppNotifyCheckChange = async (key) => {
+    const next = !inAppNotifications[key];
+    inAppNotificationsSetter((prev) => ({ ...prev, [key]: next }));
     const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
     if (newSettings.all === undefined) newSettings.all = {};
-    newSettings.all.inAppNotifications = inAppNotifications;
-    newSettings.all.inAppNotifications[key] =
-      !newSettings.all.inAppNotifications[key];
+    newSettings.all.inAppNotifications = { ...inAppNotifications, [key]: next };
     handleSettingsChange(newSettings);
   };
 
