@@ -563,7 +563,7 @@
     "DeclineMultiPlayerInvitationHelp": "Your seat may open to others; the challenge continues for remaining players.",
     "ChallengeOpenSeats_one": "{{count}} seat open to anyone.",
     "ChallengeOpenSeats_other": "{{count}} seats open to anyone.",
-    "StandingChallengeOpenSeats": "{{total}} players ({{open}} open)",
+    "StandingChallengeOpenSeats": "{{total}} ({{open}} open)",
     "challenges": {
         "loading": "Loading challenges…",
         "filters": {

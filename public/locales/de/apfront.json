@@ -554,6 +554,7 @@
   "OpponentSlotAnyone": "Jeder kann diesen Platz einnehmen",
   "OpponentSlotAnyoneHelp": "Dieser Platz wird in der Liste der offenen Herausforderungen angezeigt und kann von jedem angenommen werden.",
   "SelectFirstOpponent": "Wähle den ersten Gegner für diese Herausforderung.",
+  "DuplicateOpponentInChallenge": "Jeder Spieler darf in einer Herausforderung nur einmal genannt werden.",
   "SelectOpponentOrAnyone": "Wähle Gegner {{slot}} oder gib den Platz für alle frei.",
   "UseOpenChallengeForAllOpenSeats": "Um nur offene Plätze einzuladen, verwende eine offene Herausforderung anstelle einer geschlossenen.",
   "LeaveMultiPlayerChallenge": "Herausforderung verlassen",
@@ -562,7 +563,7 @@
   "DeclineMultiPlayerInvitationHelp": "Dein Platz wird möglicherweise für andere freigegeben; die Herausforderung wird für die verbleibenden Spieler fortgesetzt.",
   "ChallengeOpenSeats_one": "{{count}} Platz offen für alle.",
   "ChallengeOpenSeats_other": "{{count}} Plätze offen für alle.",
-  "StandingChallengeOpenSeats": "{{total}} Spieler ({{open}} offen)",
+  "StandingChallengeOpenSeats": "{{total}} ({{open}} frei)",
   "challenges": {
     "loading": "Herausforderungen werden geladen…",
     "filters": {

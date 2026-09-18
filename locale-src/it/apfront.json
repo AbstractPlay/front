@@ -479,6 +479,10 @@
     "src": "Draw",
     "out": "Patta"
   },
+  "DuplicateOpponentInChallenge": {
+    "src": "Each player may only be named once in a challenge.",
+    "out": "Ogni giocatore può essere nominato una sola volta in una sfida."
+  },
   "Duration": {
     "src": "Duration",
     "out": "Durata"
@@ -1844,8 +1848,8 @@
     "out": "Sfida aperta per una partita a {{game}}"
   },
   "StandingChallengeOpenSeats": {
-    "src": "{{total}} players ({{open}} open)",
-    "out": "{{total}} giocatori ({{open}} aperti)"
+    "src": "{{total}} ({{open}} open)",
+    "out": "{{total}} ({{open}} liberi)"
   },
   "StandingChallenges": {
     "src": "Open Challenges for {{name}}",

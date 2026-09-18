@@ -479,6 +479,10 @@
     "src": "Draw",
     "out": "Égalité"
   },
+  "DuplicateOpponentInChallenge": {
+    "src": "Each player may only be named once in a challenge.",
+    "out": "Chaque joueur ne peut être nommé qu'une seule fois dans un défi."
+  },
   "Duration": {
     "src": "Duration",
     "out": "Durée"
@@ -1844,8 +1848,8 @@
     "out": "Défi ouvert pour une partie de {{game}}"
   },
   "StandingChallengeOpenSeats": {
-    "src": "{{total}} players ({{open}} open)",
-    "out": "{{total}} joueurs ({{open}} libres)"
+    "src": "{{total}} ({{open}} open)",
+    "out": "{{total}} ({{open}} libres)"
   },
   "StandingChallenges": {
     "src": "Open Challenges for {{name}}",
