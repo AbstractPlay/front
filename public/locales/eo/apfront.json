@@ -1551,7 +1551,7 @@
         "feedbackNewKind_bug": "cimraporto",
         "feedbackNewKind_feature": "ideo pri funkcio",
         "feedbackNewKind_wishlist": "ludo por la dezirlisto",
-        "challengeSlotOpened": "{{participantName}} forlasis vian defion pri <gameLink>{{metaGame}}</gameLink>; la nombro de sidlokoj nun malfermitaj al iu ajn estas {{count}}",
+        "challengeSlotOpened": "{{participantName}} forlasis vian defion pri <gameLink>{{metaGame}}</gameLink>; {{count}} sidloko(j) estas malfermita(j) al iu ajn",
         "challengeParticipantLeft": "{{participantName}} forlasis la defion pri <gameLink>{{metaGame}}</gameLink>; ĝi ankoraŭ estas malfermita al aliaj ludantoj"
       }
     }
@@ -1988,7 +1988,11 @@
     "intro": "Ĉi tiu paĝo estas la oficiala fonto de novaĵoj pri la retejo. Ni ankaŭ spegulas anoncojn al <discordLink>nia Discord-servilo</discordLink>. Reagu al afiŝoj ĉi tie; abonu per <rssLink>RSS</rssLink>, se vi volas.",
     "loadOlder": "Ŝargi pli malnovajn anoncojn",
     "loadingMore": "Ŝargas…",
-    "loadError": "Ne eblis ŝargi anoncojn. Reprovu poste."
+    "loadError": "Ne eblis ŝargi anoncojn. Reprovu poste.",
+    "link": {
+      "copy": "Kopii ligilon al ĉi tiu anonco",
+      "copied": "Kopiita!"
+    }
   },
   "notifications": {
     "dismissAll": "Forigi ĉiujn",
@@ -2095,6 +2099,8 @@
       "adminPriority": "Prioritato",
       "adminReviewers": "Kontrolantoj",
       "adminStatus": "Stato",
+      "reply": "Respondi",
+      "quoteNoText": "_(sen teksto)_",
       "adminTags": "Administraj etikedoj (apartigitaj per komoj)",
       "adminWishlistCategory": "Kategorio",
       "adminWishlistNote": "Noto pri kategorio (nedeviga)",
@@ -2190,8 +2196,8 @@
       "intro_voted": "Eroj, por kiuj vi voĉdonis.",
       "intro_watched": "Eroj, kiujn vi observas por ricevi ĝisdatigojn.",
       "empty_submitted": "Vi ankoraŭ sendis neniun retrosciigon.",
-      "empty_voted": "Vi ankoraŭ ne voĉdonis por iu retrosciigo.",
-      "empty_watched": "Vi ankoraŭ ne observas iun retrosciigon.",
+      "empty_voted": "Vi ankoraŭ voĉdonis por neniu retrosciigo.",
+      "empty_watched": "Vi ankoraŭ observas neniun retrosciigon.",
       "wishlist": "Dezirlisto",
       "scopeLabel": "Aktiveco",
       "scope_submitted": "Senditaj",
@@ -2346,7 +2352,7 @@
   "DeclineMultiPlayerInvitationHelp": "Via sidloko eble malfermiĝos al aliaj; la defio daŭras por la ceteraj ludantoj.",
   "ChallengeOpenSeats_one": "{{count}} sidloko estas malfermita al iu ajn.",
   "ChallengeOpenSeats_other": "{{count}} sidlokoj estas malfermitaj al iu ajn.",
-  "StandingChallengeOpenSeats": "{{total}} ludantoj ({{open}} malfermitaj sidlokoj)",
+  "StandingChallengeOpenSeats": "{{total}} ({{open}} malfermitaj)",
   "announcements": {
     "reactions": {
       "label": "Reagoj",
@@ -2359,7 +2365,7 @@
     },
     "admin": {
       "listTitle": "Administrado de anoncoj",
-      "listIntro": "Verku malnetajn afiŝojn ĉi tie, poste publikigu ilin en la produkta retejo, kiam ili pretas. Disvolva kaj lokaj versioj povas konservi malnetojn kaj alŝuti bildojn; publikigo eblas nur en la produkta retejo.",
+      "listIntro": "Verku malnetajn afiŝojn ĉi tie, poste publikigu ilin en la produkta retejo, kiam ili pretas. Disvolvaj kaj lokaj versioj povas konservi malnetojn kaj alŝuti bildojn; publikigo eblas nur en la produkta retejo.",
       "newDraft": "Nova malneto",
       "editDraft": "Redakti anoncon",
       "editorTitle": "Redaktilo de anoncoj",
@@ -2394,6 +2400,10 @@
       "publishConfirmTitle": "Ĉu publikigi la anoncon?",
       "publishConfirmBody": "Ĉi tio publikigos ĝin ĉe /news, aktualigos RSS, spegulos ĝin al Discord (se agordite), kaj retpoŝte aŭ per puŝsciigo sciigos uzantojn, kiuj elektis ricevi retejajn anoncojn.",
       "publishConfirm": "Publikigi nun",
+      "publishSaveFirst": "Konservu la malneton antaŭ ol publikigi.",
+      "publishSaveChanges": "Konservu viajn ŝanĝojn antaŭ ol publikigi.",
+      "publishFailed": "Publikigo malsukcesis. Reprovu aŭ kontrolu la eraron en la paĝo de la redaktilo.",
+      "publishFailedNoId": "Ĉi tiu malneto ankoraŭ ne havas identigilon. Unue konservu ĝin, poste publikigu.",
       "retract": "Retiri",
       "retracting": "Retirante…",
       "retractConfirmTitle": "Ĉu retiri la anoncon?",
