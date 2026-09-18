@@ -890,7 +890,11 @@
     "intro": "Cette page est la source officielle des actualités du site. Nous publions également les annonces sur <discordLink>notre serveur Discord</discordLink>. Réagissez aux publications ici ; abonnez-vous via <rssLink>RSS</rssLink> si vous le souhaitez.",
     "loadOlder": "Charger les annonces plus anciennes",
     "loadingMore": "Chargement…",
-    "loadError": "Impossible de charger les annonces. Réessayez plus tard."
+    "loadError": "Impossible de charger les annonces. Réessayez plus tard.",
+    "link": {
+      "copy": "Copier le lien vers cette annonce",
+      "copied": "Copié !"
+    }
   },
   "announcements": {
     "reactions": {
@@ -939,6 +943,10 @@
       "publishConfirmTitle": "Publier l'annonce ?",
       "publishConfirmBody": "Cela publiera sur /news, actualisera le flux RSS, retransmettra sur Discord (si configuré) et enverra un e-mail ou une notification push aux utilisateurs inscrits aux annonces du site.",
       "publishConfirm": "Publier maintenant",
+      "publishSaveFirst": "Enregistrez le brouillon avant de publier.",
+      "publishSaveChanges": "Enregistrez vos modifications avant de publier.",
+      "publishFailed": "Échec de la publication. Réessayez ou vérifiez l'erreur sur la page d'édition.",
+      "publishFailedNoId": "Ce brouillon n'a pas encore d'ID. Enregistrez-le d'abord, puis publiez-le.",
       "retract": "Retirer",
       "retracting": "Retrait…",
       "retractConfirmTitle": "Retirer l'annonce ?",

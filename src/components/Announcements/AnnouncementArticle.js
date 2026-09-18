@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import LocalizedTimeAgo from "../LocalizedTimeAgo";
+import CopyDeepLinkButton from "../Stats/CopyDeepLinkButton";
 import AnnouncementMarkdown from "./AnnouncementMarkdown";
 import AnnouncementReactions from "./AnnouncementReactions";
 
@@ -11,6 +12,7 @@ function AnnouncementArticle({
   onReactionToggle,
   reactionsDisabled,
   articleRef,
+  showCopyLink,
 }) {
   const articleClass = className ? `media ${className}` : "media";
   const anchorId = item.id ? `announcement-${item.id}` : undefined;
@@ -23,13 +25,21 @@ function AnnouncementArticle({
     >
       <div className="media-content">
         <div className="content">
-          <p>
+          <p className="announcement-article-meta">
             <small>
               <LocalizedTimeAgo
                 date={item.publishedAt ?? item.time}
                 timeStyle="twitter-now"
               />
             </small>
+            {showCopyLink && item.id ? (
+              <CopyDeepLinkButton
+                pathname={`/news/${item.id}`}
+                baseClassName="announcement-copy-link"
+                copyLabelKey="news.link.copy"
+                copiedLabelKey="news.link.copied"
+              />
+            ) : null}
           </p>
           {item.title && item.title !== "Announcement" ? (
             <h2 className="title is-5 announcement-article-title">{item.title}</h2>
@@ -70,6 +80,7 @@ AnnouncementArticle.propTypes = {
   onReactionToggle: PropTypes.func,
   reactionsDisabled: PropTypes.bool,
   articleRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.any })]),
+  showCopyLink: PropTypes.bool,
 };
 
 export default AnnouncementArticle;

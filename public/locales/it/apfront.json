@@ -890,7 +890,11 @@
     "intro": "Questa pagina è la fonte ufficiale per le notizie del sito. Riportiamo gli annunci anche sul <discordLink>nostro server Discord</discordLink>. Reagisci ai post qui; iscriviti tramite <rssLink>RSS</rssLink> se preferisci.",
     "loadOlder": "Carica annunci precedenti",
     "loadingMore": "Caricamento…",
-    "loadError": "Impossibile caricare gli annunci. Riprova più tardi."
+    "loadError": "Impossibile caricare gli annunci. Riprova più tardi.",
+    "link": {
+      "copy": "Copia link a questo annuncio",
+      "copied": "Copiato!"
+    }
   },
   "announcements": {
     "reactions": {
@@ -939,6 +943,10 @@
       "publishConfirmTitle": "Pubblicare l'annuncio?",
       "publishConfirmBody": "Questo pubblicherà su /news, aggiornerà il feed RSS, eseguirà il mirror su Discord (se configurato) e invierà un'e-mail o una notifica push agli utenti che hanno scelto di ricevere gli annunci del sito.",
       "publishConfirm": "Pubblica ora",
+      "publishSaveFirst": "Salva la bozza prima di pubblicare.",
+      "publishSaveChanges": "Salva le modifiche prima di pubblicare.",
+      "publishFailed": "Pubblicazione non riuscita. Riprova o controlla l'errore nella pagina dell'editor.",
+      "publishFailedNoId": "Questa bozza non ha ancora un ID. Salvala prima, poi pubblicala.",
       "retract": "Ritira",
       "retracting": "Ritiro in corso…",
       "retractConfirmTitle": "Ritirare l'annuncio?",
