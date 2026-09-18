@@ -1360,9 +1360,9 @@
       }
     },
     "explanations": {
-      "highestSingle": "Listo de ĉiuj registritaj pritaksoj. La sistemo ignoras ludojn eksplicite markitajn kiel nepritaksitajn kaj ludojn finiĝintajn antaŭ tri movoj. Rangigoj uzas konservativan (95%-fidan) Glicko-2-poentaron (poentaro − 2×RD); montriĝas kaj Glicko kaj la malnova Elo-poentaro. Glicko komenciĝas je 1200 kun RD 350; Elo je 1200 kun konstanta *K* de 30. TrueSkill uzas la defaŭltajn agordojn de Microsoft (poentara intervalo 0–50, komenca valoro 25).",
-      "avgRatings": "Ĉi tiuj kolumnoj estas pezitaj mezumoj de viaj Glicko- kaj Elo-poentaroj en la tuta retejo.",
-      "topPlayers": "Ĉi tiu tabelo listigas ĉiun disponeblan kombinon de ludo kaj variaĵoj kun ĝia plej alte pritaksita ludanto, rangigita laŭ konservativa Glicko-2-poentaro (poentaro − 2×RD). Elo montriĝas por komparo.",
+      "highestSingle": "Listo de ĉiuj registritaj pritaksoj. La sistemo ignoras ludojn eksplicite markitajn kiel nepritaksitajn kaj ludojn finiĝintajn antaŭ tri movoj. Rangigoj uzas konservativan (95%-fidan) Glicko-2-pritakson (pritakso − 2×RD); montriĝas kaj Glicko kaj la malnova Elo-pritakso. Glicko komenciĝas je 1200 kun RD 350; Elo je 1200 kun konstanta *K* de 30. TrueSkill uzas la defaŭltajn agordojn de Microsoft (pritaksa intervalo 0–50, komenca valoro 25).",
+      "avgRatings": "Ĉi tiuj kolumnoj estas pezitaj mezumoj de viaj Glicko- kaj Elo-pritaksoj en la tuta retejo.",
+      "topPlayers": "Ĉi tiu tabelo listigas ĉiun disponeblan kombinon de ludo kaj variaĵoj kun ĝia plej alte pritaksita ludanto, rangigita laŭ konservativa Glicko-2-pritakso (pritakso − 2×RD). Elo montriĝas por komparo.",
       "numPlays": "Ĉi tiu tabelo listigas ĉiun ludon, kiom da fojoj kaj de kiom da malsamaj ludantoj ĝi estis ludita, kaj la `h-index` de la ludo. La h-indekso de ludo estas la nombro de ludantoj, kiuj ludis ĝin almenaŭ tiom da fojoj (do h-indekso 5 signifas, ke 5 malsamaj ludantoj ludis ĝin almenaŭ 5 fojojn). Ĝi ankaŭ donas histogramon de la finitaj ludoj. La antaŭrigardo montras la lastajn 10 semajnojn, kun la plej nova semajno dekstre. Klaku la antaŭrigardon por vidi la tutan historion de finitaj ludoj en sep-tagaj intervaloj, kun la plej nova semajno dekstre.",
       "playerStats": "Ĉi tio montras ĉiun registritan ludanton kune kun la tuta nombro de luditaj ludoj, la nombro de malsamaj ludoj kaj la nombro de malsamaj kontraŭuloj. Ĝi ankaŭ donas `h-index`, kiu estas la nombro de ludoj, kiujn vi ludis almenaŭ tiom da fojoj (ekzemple, se vi ludis tri malsamajn ludojn nur po unu fojon, via indekso estas 1; kiam vi ludos ĉiun el tiuj tri ludoj almenaŭ tri fojojn, la indekso kreskos ĝis 3). Estas ankaŭ `h-index` por la kontraŭuloj, kiujn vi renkontis. Aktiveca histogramo montras la nombron de ludoj finitaj ĉiusemajne, kun la plej nova semajno dekstre. La antaŭrigardo montras la dek plej novajn semajnojn. Klaku ĝin por vidi la tutan historion.",
       "gameStats": "Ĉi tiu tabelo montras ĉiun kombinon de ludo kaj variaĵoj kune kun la nombro de registritaj ludoj, la meza longo de la ludo (nombro de movoj), la mediana longo, la proporcio de venkoj de la unua ludanto kaj la proporcio de remizoj (nur duludantaj ludoj kun pli ol du movoj). **La statistikoj pri venkoj de la unua ludanto kaj remizoj devas esti traktataj singarde!** La provaĵo estas malgranda kaj biasita. Multaj konfuzaj faktoroj povus klarigi ekstreman proporcion. Notu, ke la proporcio de venkoj de la unua ludanto tute ignoras ĉu la interŝanĝa regulo estis uzita. Kalkulante tiun proporcion, remizo valoras kiel duona venko de la unua ludanto.",
@@ -1628,7 +1628,7 @@
       "activateCustomCss": "Aktivigi propran CSS-on?",
       "accountCssOverridesLocal": "Propra CSS el via konto (la paĝo por adapti agordojn) estas aktiva por ĉi tiu ludo. Ŝanĝoj ĉi tie konserviĝas nur en ĉi tiu aparato kaj ne aplikiĝos ĝis la CSS de via konto estos forigita."
     },
-    "unrated": "nerangigita",
+    "unrated": "nepritaksita",
     "explorationDisabled": "esplorado malŝaltita",
     "tournamentLink": "turniro",
     "eventLink": "evento",
@@ -1890,8 +1890,8 @@
   "InvalidVariantCombination": "Tiu kombino de variaĵoj ne validas por ĉi tiu ludo.",
   "TotalRatings": "pritaksoj entute",
   "glicko": {
-    "displayHint": "Glicko-poentaro montriĝas kiel 95%-fida poentaro (poentaro − 2×RD), kun la plena RD en krampoj.",
-    "displayNote": "En la tuta retejo Glicko-poentaro montriĝas kiel 95%-fida poentaro, kun la plena RD en krampoj. <wikiLink>Ekscii pli pri la Glicko-poentara sistemo</wikiLink>."
+    "displayHint": "Glicko-pritakso montriĝas kiel 95%-fida pritakso (pritakso − 2×RD), kun la plena RD en krampoj.",
+    "displayNote": "En la tuta retejo Glicko-pritakso montriĝas kiel 95%-fida pritakso, kun la plena RD en krampoj. <wikiLink>Ekscii pli pri la Glicko-pritaksa sistemo</wikiLink>."
   },
   "solo": {
     "badge": "Solludo",
@@ -1949,7 +1949,7 @@
       "matchAll": "Ĉiuj matĉoj",
       "matchGood": "Bona matĉo (35–65%)",
       "matchIdeal": "Ideala matĉo (45–55%)",
-      "matchHint": "Por taksataj defioj: la atendata venkoŝanco kontraŭ la defianto laŭ Glicko-2 (por ĉiu grupo de ludo kaj variaĵoj). Ludantoj novaj en tiu grupo ricevas la defaŭltan takson (1200, RD 350)."
+      "matchHint": "Por pritaksitaj defioj: la atendata venkoŝanco kontraŭ la defianto laŭ Glicko-2 (por ĉiu grupo de ludo kaj variaĵoj). Ludantoj novaj en tiu grupo ricevas la defaŭltan pritakson (1200, RD 350)."
     }
   },
   "common": {
@@ -2335,7 +2335,7 @@
     "opponentActivityAll": "Ĉiuj kontraŭuloj",
     "opponentActivity7Days": "Aktivaj en la lastaj 7 tagoj",
     "opponentActivity30Days": "Aktivaj en la lastaj 30 tagoj",
-    "matchFilterHelp": "Limigu kontraŭulojn laŭ la atendata venkoŝanco por ĉi tiu ludo kaj variaĵoj (Glicko-2), sendepende de tio, ĉu la defio estas markita kiel taksata."
+    "matchFilterHelp": "Limigu kontraŭulojn laŭ la atendata venkoŝanco por ĉi tiu ludo kaj variaĵoj (Glicko-2), sendepende de tio, ĉu la defio estas markita kiel pritaksita."
   },
   "InAppNotifyLabel-feedbackNew": "Novaj retrosciigoj",
   "ChooseFirstOpponent": "Unua kontraŭulo (deviga)",
