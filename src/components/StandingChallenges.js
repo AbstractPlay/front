@@ -373,6 +373,10 @@ function StandingChallenges(props) {
           clockMax: rec.clockMax,
           noExplore: rec.noExplore || false,
           numPlayers: rec.numPlayers,
+          openSlots:
+            rec.openSlots ??
+            Math.max(0, (rec.numPlayers ?? 2) - (rec.players?.length ?? 1)),
+          fillableDirect: rec.fillableDirect === true,
           players: rec.players.filter((p) => p.id !== rec.challenger?.id),
           rated: rec.rated,
           seating: rec.seating,
@@ -508,6 +512,16 @@ function StandingChallenges(props) {
       }),
       columnHelper.accessor("numPlayers", {
         header: t("tables.players"),
+        cell: (props) => {
+          const open = props.row.original.openSlots ?? 0;
+          if (open > 0) {
+            return t("StandingChallengeOpenSeats", {
+              total: props.getValue(),
+              open,
+            });
+          }
+          return props.getValue();
+        },
       }),
       columnHelper.accessor("players", {
         header: t("tables.accepted"),

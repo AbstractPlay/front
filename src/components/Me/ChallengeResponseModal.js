@@ -107,7 +107,10 @@ const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
           action: handleChallengeAccept,
         },
         {
-          label: t("Reject"),
+          label:
+            challenge.numPlayers > 2
+              ? t("DeclineMultiPlayerInvitation")
+              : t("Reject"),
           action: handleChallengeReject,
         },
         {
@@ -161,7 +164,11 @@ const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
               onChange={handleCommentChange}
             ></textarea>
           </div>
-          <p className="help">{t("ChallengeResponseCommentHelp")}</p>
+          <p className="help">
+            {challenge.numPlayers > 2
+              ? t("DeclineMultiPlayerInvitationHelp")
+              : t("ChallengeResponseCommentHelp")}
+          </p>
         </div>
       </div>
     </Modal>,

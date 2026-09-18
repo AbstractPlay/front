@@ -1,14 +1,19 @@
 import { useCallback } from "react";
 import { callAuthApi } from "../lib/api";
+import { validateChallengeResponseArgs } from "../lib/challengeResponseArgs";
 
 export function useChallengeResponse({ onError, onSuccess } = {}) {
   return useCallback(
     async (challenge, resp, comment) => {
       try {
+        const { id, metaGame, standing } = validateChallengeResponseArgs(
+          challenge,
+          resp
+        );
         const res = await callAuthApi("challenge_response", {
-          id: challenge.id,
-          standing: challenge.standing === true,
-          metaGame: challenge.metaGame,
+          id,
+          standing,
+          metaGame,
           response: resp,
           comment: comment,
         });

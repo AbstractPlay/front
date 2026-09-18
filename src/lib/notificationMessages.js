@@ -166,6 +166,21 @@ export function NotificationMessage({ body }) {
         body.metaGame,
         { revokerName: body.revokerName }
       );
+    case "challengeSlotOpened":
+      return challengeNotificationMessage(
+        "me.notifications.message.challengeSlotOpened",
+        body.metaGame,
+        {
+          participantName: body.participantName,
+          count: body.openSlots,
+        }
+      );
+    case "challengeParticipantLeft":
+      return challengeNotificationMessage(
+        "me.notifications.message.challengeParticipantLeft",
+        body.metaGame,
+        { participantName: body.participantName }
+      );
     case "eventInvitation":
       return (
         <Trans
