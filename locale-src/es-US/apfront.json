@@ -95,6 +95,14 @@
     "src": "{{game}} challenge from {{challenger}}",
     "out": "Desafío de {{game}} de {{challenger}}"
   },
+  "ChallengeOpenSeats_one": {
+    "src": "{{count}} seat open to anyone.",
+    "out": "{{count}} lugar abierto para cualquiera."
+  },
+  "ChallengeOpenSeats_other": {
+    "src": "{{count}} seats open to anyone.",
+    "out": "{{count}} lugares abiertos para cualquiera."
+  },
   "ChallengeResponse": {
     "src": "Challenges awaiting your response",
     "out": "Desafíos esperando tu respuesta"
@@ -136,8 +144,8 @@
     "out": "Cerrado"
   },
   "ChallengeTypeTargetedDescription": {
-    "src": "You are challenging specific players.",
-    "out": "Estás desafiando a jugadores específicos."
+    "src": "The first seat must be a named player. Additional seats may be open to anyone.",
+    "out": "El primer lugar debe ser para un jugador específico. Los lugares adicionales pueden estar abiertos para cualquiera."
   },
   "ChallengedNoOthers": {
     "src": "{{game}}, no other players yet.",
@@ -191,6 +199,10 @@
     "src": "Choose how the board should be displayed",
     "out": "Elige cómo debe mostrarse el tablero"
   },
+  "ChooseFirstOpponent": {
+    "src": "First opponent (required)",
+    "out": "Primer oponente (obligatorio)"
+  },
   "ChooseGame": {
     "src": "Choose a game",
     "out": "Elegir un juego"
@@ -210,6 +222,10 @@
   "ChooseOpponent": {
     "src": "Choose an opponent",
     "out": "Elegir un oponente"
+  },
+  "ChooseOpponentSlot": {
+    "src": "Opponent {{slot}}",
+    "out": "Oponente {{slot}}"
   },
   "ChooseRated": {
     "src": "Rated?",
@@ -399,6 +415,14 @@
     "src": "Named challenges sent to you will be declined automatically. Open challenges on game pages are not affected.",
     "out": "Los desafíos dirigidos a tu nombre se rechazarán automáticamente. Los desafíos abiertos en las páginas de los juegos no se verán afectados."
   },
+  "DeclineMultiPlayerInvitation": {
+    "src": "Decline invitation",
+    "out": "Rechazar invitación"
+  },
+  "DeclineMultiPlayerInvitationHelp": {
+    "src": "Your seat may open to others; the challenge continues for remaining players.",
+    "out": "Tu lugar podría abrirse para otros; el desafío continúa para los jugadores restantes."
+  },
   "DefaultDisplay": {
     "src": "Default display",
     "out": "Vista predeterminada"
@@ -454,6 +478,10 @@
   "Draw": {
     "src": "Draw",
     "out": "Tablas"
+  },
+  "DuplicateOpponentInChallenge": {
+    "src": "Each player may only be named once in a challenge.",
+    "out": "Cada jugador solo puede ser nombrado una vez en un desafío."
   },
   "Duration": {
     "src": "Duration",
@@ -1263,6 +1291,14 @@
     "src": "Playground",
     "out": "Laboratorio"
   },
+  "LeaveMultiPlayerChallenge": {
+    "src": "Leave challenge",
+    "out": "Abandonar el desafío"
+  },
+  "LeaveMultiPlayerChallengeHelp": {
+    "src": "Other players can still join; the challenge continues without you.",
+    "out": "Otros jugadores aún pueden unirse; el desafío continúa sin ti."
+  },
   "Legal": {
     "src": "Legal",
     "out": "Legal"
@@ -1482,6 +1518,14 @@
   "OpponentMove": {
     "src": "Opponent's move",
     "out": "Movimiento del oponente"
+  },
+  "OpponentSlotAnyone": {
+    "src": "Anyone may join this seat",
+    "out": "Cualquiera puede unirse a este lugar"
+  },
+  "OpponentSlotAnyoneHelp": {
+    "src": "This seat will appear on the open-challenges list for anyone to accept.",
+    "out": "Este lugar aparecerá en la lista de desafíos abiertos para que cualquiera lo acepte."
   },
   "Or": {
     "src": "or",
@@ -1751,9 +1795,17 @@
     "src": "Please select a game",
     "out": "Por favor selecciona un juego"
   },
+  "SelectFirstOpponent": {
+    "src": "Choose the first opponent for this challenge.",
+    "out": "Elige al primer oponente para este desafío."
+  },
   "SelectGameDropdown": {
     "src": "select a game",
     "out": "seleccionar un juego"
+  },
+  "SelectOpponentOrAnyone": {
+    "src": "Choose opponent {{slot}} or mark the seat as open to anyone.",
+    "out": "Elige al oponente {{slot}} o marca el lugar como abierto para cualquiera."
   },
   "SelectOpponents_one": {
     "src": "Select an opponent.",
@@ -1794,6 +1846,10 @@
   "StandingChallengeDescription": {
     "src": "Open challenge for a game of {{game}}",
     "out": "Desafío abierto para un juego de {{game}}"
+  },
+  "StandingChallengeOpenSeats": {
+    "src": "{{total}} ({{open}} open)",
+    "out": "{{total}} ({{open}} disponibles)"
   },
   "StandingChallenges": {
     "src": "Open Challenges for {{name}}",
@@ -2114,6 +2170,10 @@
   "UpdateNote": {
     "src": "Update game note",
     "out": "Actualizar nota del juego"
+  },
+  "UseOpenChallengeForAllOpenSeats": {
+    "src": "To invite only open seats, use an open challenge instead of a closed one.",
+    "out": "Para invitar solo a lugares abiertos, usa un desafío abierto en lugar de uno cerrado."
   },
   "UserSettings": {
     "src": "User Settings",
@@ -5959,9 +6019,17 @@
     "src": "{{challengerName}} challenged you to <gameLink>{{metaGame}}</gameLink>",
     "out": "{{challengerName}} te desafió a {{metaGame}}"
   },
+  "me.notifications.message.challengeParticipantLeft": {
+    "src": "{{participantName}} left the <gameLink>{{metaGame}}</gameLink> challenge; it is still open for other players",
+    "out": "{{participantName}} abandonó el desafío de <gameLink>{{metaGame}}</gameLink>; sigue abierto para otros jugadores"
+  },
   "me.notifications.message.challengeRevoked": {
     "src": "{{revokerName}} revoked the <gameLink>{{metaGame}}</gameLink> challenge",
     "out": "{{revokerName}} retiró el desafío de {{metaGame}}"
+  },
+  "me.notifications.message.challengeSlotOpened": {
+    "src": "{{participantName}} left your <gameLink>{{metaGame}}</gameLink> challenge; {{count}} seat(s) are open to anyone",
+    "out": "{{participantName}} abandonó tu desafío de <gameLink>{{metaGame}}</gameLink>; {{count}} lugar(es) está(n) abierto(s) para cualquiera"
   },
   "me.notifications.message.completedGameChat": {
     "src": "{{commenterName}} has something to say in your completed <gameLink>{{metaGame}}</gameLink> game",

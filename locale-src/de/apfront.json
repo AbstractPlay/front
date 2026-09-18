@@ -95,6 +95,14 @@
     "src": "{{game}} challenge from {{challenger}}",
     "out": "{{game}}-Herausforderung von {{challenger}}"
   },
+  "ChallengeOpenSeats_one": {
+    "src": "{{count}} seat open to anyone.",
+    "out": "{{count}} Platz offen für alle."
+  },
+  "ChallengeOpenSeats_other": {
+    "src": "{{count}} seats open to anyone.",
+    "out": "{{count}} Plätze offen für alle."
+  },
   "ChallengeResponse": {
     "src": "Challenges awaiting your response",
     "out": "Herausforderungen, die auf deine Antwort warten"
@@ -136,8 +144,8 @@
     "out": "Geschlossen"
   },
   "ChallengeTypeTargetedDescription": {
-    "src": "You are challenging specific players.",
-    "out": "Du forderst bestimmte Spieler heraus."
+    "src": "The first seat must be a named player. Additional seats may be open to anyone.",
+    "out": "Der erste Platz muss an einen bestimmten Spieler vergeben werden. Weitere Plätze können für alle offen sein."
   },
   "ChallengedNoOthers": {
     "src": "{{game}}, no other players yet.",
@@ -191,6 +199,10 @@
     "src": "Choose how the board should be displayed",
     "out": "Wähle, wie das Brett angezeigt werden soll"
   },
+  "ChooseFirstOpponent": {
+    "src": "First opponent (required)",
+    "out": "Erster Gegner (erforderlich)"
+  },
   "ChooseGame": {
     "src": "Choose a game",
     "out": "Spiel auswählen"
@@ -210,6 +222,10 @@
   "ChooseOpponent": {
     "src": "Choose an opponent",
     "out": "Gegner auswählen"
+  },
+  "ChooseOpponentSlot": {
+    "src": "Opponent {{slot}}",
+    "out": "Gegner {{slot}}"
   },
   "ChooseRated": {
     "src": "Rated?",
@@ -399,6 +415,14 @@
     "src": "Named challenges sent to you will be declined automatically. Open challenges on game pages are not affected.",
     "out": "Namentlich an dich gerichtete Herausforderungen werden automatisch abgelehnt. Offene Herausforderungen auf Spielseiten sind davon nicht betroffen."
   },
+  "DeclineMultiPlayerInvitation": {
+    "src": "Decline invitation",
+    "out": "Einladung ablehnen"
+  },
+  "DeclineMultiPlayerInvitationHelp": {
+    "src": "Your seat may open to others; the challenge continues for remaining players.",
+    "out": "Dein Platz wird möglicherweise für andere freigegeben; die Herausforderung wird für die verbleibenden Spieler fortgesetzt."
+  },
   "DefaultDisplay": {
     "src": "Default display",
     "out": "Standardanzeige"
@@ -454,6 +478,10 @@
   "Draw": {
     "src": "Draw",
     "out": "Unentschieden"
+  },
+  "DuplicateOpponentInChallenge": {
+    "src": "Each player may only be named once in a challenge.",
+    "out": "Jeder Spieler darf in einer Herausforderung nur einmal genannt werden."
   },
   "Duration": {
     "src": "Duration",
@@ -1263,6 +1291,14 @@
     "src": "Playground",
     "out": "Spielplatz"
   },
+  "LeaveMultiPlayerChallenge": {
+    "src": "Leave challenge",
+    "out": "Herausforderung verlassen"
+  },
+  "LeaveMultiPlayerChallengeHelp": {
+    "src": "Other players can still join; the challenge continues without you.",
+    "out": "Andere Spieler können weiterhin beitreten; die Herausforderung wird ohne dich fortgesetzt."
+  },
   "Legal": {
     "src": "Legal",
     "out": "Rechtliches"
@@ -1482,6 +1518,14 @@
   "OpponentMove": {
     "src": "Opponent's move",
     "out": "Zug des Gegners"
+  },
+  "OpponentSlotAnyone": {
+    "src": "Anyone may join this seat",
+    "out": "Jeder kann diesen Platz einnehmen"
+  },
+  "OpponentSlotAnyoneHelp": {
+    "src": "This seat will appear on the open-challenges list for anyone to accept.",
+    "out": "Dieser Platz wird in der Liste der offenen Herausforderungen angezeigt und kann von jedem angenommen werden."
   },
   "Or": {
     "src": "or",
@@ -1751,9 +1795,17 @@
     "src": "Please select a game",
     "out": "Bitte wähle ein Spiel aus"
   },
+  "SelectFirstOpponent": {
+    "src": "Choose the first opponent for this challenge.",
+    "out": "Wähle den ersten Gegner für diese Herausforderung."
+  },
   "SelectGameDropdown": {
     "src": "select a game",
     "out": "Spiel auswählen"
+  },
+  "SelectOpponentOrAnyone": {
+    "src": "Choose opponent {{slot}} or mark the seat as open to anyone.",
+    "out": "Wähle Gegner {{slot}} oder gib den Platz für alle frei."
   },
   "SelectOpponents_one": {
     "src": "Select an opponent.",
@@ -1794,6 +1846,10 @@
   "StandingChallengeDescription": {
     "src": "Open challenge for a game of {{game}}",
     "out": "Offene Herausforderung für eine Partie {{game}}"
+  },
+  "StandingChallengeOpenSeats": {
+    "src": "{{total}} ({{open}} open)",
+    "out": "{{total}} ({{open}} frei)"
   },
   "StandingChallenges": {
     "src": "Open Challenges for {{name}}",
@@ -2114,6 +2170,10 @@
   "UpdateNote": {
     "src": "Update game note",
     "out": "Spielnotiz aktualisieren"
+  },
+  "UseOpenChallengeForAllOpenSeats": {
+    "src": "To invite only open seats, use an open challenge instead of a closed one.",
+    "out": "Um nur offene Plätze einzuladen, verwende eine offene Herausforderung anstelle einer geschlossenen."
   },
   "UserSettings": {
     "src": "User Settings",
@@ -5959,9 +6019,17 @@
     "src": "{{challengerName}} challenged you to <gameLink>{{metaGame}}</gameLink>",
     "out": "{{challengerName}} hat dich zu {{metaGame}} herausgefordert"
   },
+  "me.notifications.message.challengeParticipantLeft": {
+    "src": "{{participantName}} left the <gameLink>{{metaGame}}</gameLink> challenge; it is still open for other players",
+    "out": "{{participantName}} hat die <gameLink>{{metaGame}}</gameLink>-Herausforderung verlassen; sie ist weiterhin für andere Spieler offen"
+  },
   "me.notifications.message.challengeRevoked": {
     "src": "{{revokerName}} revoked the <gameLink>{{metaGame}}</gameLink> challenge",
     "out": "{{revokerName}} hat die Herausforderung zu {{metaGame}} zurückgezogen"
+  },
+  "me.notifications.message.challengeSlotOpened": {
+    "src": "{{participantName}} left your <gameLink>{{metaGame}}</gameLink> challenge; {{count}} seat(s) are open to anyone",
+    "out": "{{participantName}} hat deine <gameLink>{{metaGame}}</gameLink>-Herausforderung verlassen; {{count}} Platz/Plätze sind für alle offen"
   },
   "me.notifications.message.completedGameChat": {
     "src": "{{commenterName}} has something to say in your completed <gameLink>{{metaGame}}</gameLink> game",

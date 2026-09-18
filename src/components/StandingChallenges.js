@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
+import { formatChallengeTablePlayerCount } from "../lib/challengeTablePlayerCount";
 import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
@@ -373,6 +374,10 @@ function StandingChallenges(props) {
           clockMax: rec.clockMax,
           noExplore: rec.noExplore || false,
           numPlayers: rec.numPlayers,
+          openSlots:
+            rec.openSlots ??
+            Math.max(0, (rec.numPlayers ?? 2) - (rec.players?.length ?? 1)),
+          fillableDirect: rec.fillableDirect === true,
           players: rec.players.filter((p) => p.id !== rec.challenger?.id),
           rated: rec.rated,
           seating: rec.seating,
@@ -508,6 +513,12 @@ function StandingChallenges(props) {
       }),
       columnHelper.accessor("numPlayers", {
         header: t("tables.players"),
+        cell: (props) =>
+          formatChallengeTablePlayerCount(
+            props.getValue(),
+            props.row.original.openSlots,
+            t
+          ),
       }),
       columnHelper.accessor("players", {
         header: t("tables.accepted"),

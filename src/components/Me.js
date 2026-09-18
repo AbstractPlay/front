@@ -118,9 +118,23 @@ function Me(props) {
     showNewStandingModalSetter(false);
   }, []);
 
+  const handleChallengeResponse = useChallengeResponse({
+    onError: errorSetter,
+    onSuccess: (challenge) => varsSetter(challenge.id),
+  });
+
   const handleChallengeRevoke = async (challenge, comment) => {
-    if (globalMe.id !== challenge.challenger.id)
-      return handleChallengeResponse(false);
+    if (challenge == null || typeof challenge !== "object") {
+      errorSetter(
+        new Error(
+          "Leave challenge needs a challenge object. Check revoke(challenge, comment) wiring."
+        )
+      );
+      return;
+    }
+    if (globalMe.id !== challenge.challenger.id) {
+      return handleChallengeResponse(challenge, false, comment);
+    }
     try {
       const res = await callAuthApi("challenge_revoke", {
         id: challenge.id,
@@ -138,11 +152,6 @@ function Me(props) {
       errorSetter(error);
     }
   };
-
-  const handleChallengeResponse = useChallengeResponse({
-    onError: errorSetter,
-    onSuccess: (challenge) => varsSetter(challenge.id),
-  });
 
   const handleNewChallenge2 = useCallback(
     async (challenge) => {

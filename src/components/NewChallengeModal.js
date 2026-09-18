@@ -67,6 +67,8 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const [standing, standingSetter] = useState(false); // Standing challenge or not.
   const [standingCount, standingCountSetter] = useState(0);
   const [opponents, opponentsSetter] = useState([]);
+  /** Per slot: slot 0 must be named; slots 1+ may be open to anyone */
+  const [opponentAnyone, opponentAnyoneSetter] = useState([]);
   const [selectedVariants, setSelectedVariants] = useState([]);
   const { variantsValid, onValidityChange, resetVariantValidity } =
     useVariantSelectionValidity();
@@ -157,7 +159,9 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         ratedSetter(false);
       }
       if (cnt !== -1 && cnt - 1 !== opponents.length) {
-        opponentsSetter(Array(cnt - 1).fill(""));
+        const n = cnt - 1;
+        opponentsSetter(Array(n).fill(""));
+        opponentAnyoneSetter(Array(n).fill(false));
       }
     },
     [ratedSetter, opponents.length]
@@ -236,6 +240,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     if (opponent !== undefined) {
       playerCountSetter(2);
       opponentsSetter([{ id: opponent.id, name: opponent.name }]);
+      opponentAnyoneSetter([false]);
     }
     errorSetter("");
     if (fixedMetaGame !== undefined) {
@@ -248,6 +253,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     }
     if (opponent !== undefined) {
       opponentsSetter([{ id: opponent.id, name: opponent.name }]);
+      opponentAnyoneSetter([false]);
     }
   }, [opponent, fixedMetaGame, onSoloHandoff]);
 
@@ -257,6 +263,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         metaGameSetter(null);
         playerCountSetter(-1);
         opponentsSetter([]);
+        opponentAnyoneSetter([]);
         commentSetter("");
       }
       prevShowRef.current = false;
@@ -309,6 +316,23 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     let opps = [...opponents];
     opps[data.player] = { id: data.id, name: data.name };
     opponentsSetter(opps);
+    if (data.player > 0) {
+      const flags = [...opponentAnyone];
+      flags[data.player] = false;
+      opponentAnyoneSetter(flags);
+    }
+    errorSetter("");
+  };
+
+  const handleToggleOpponentAnyone = (slotIndex) => {
+    const flags = [...opponentAnyone];
+    flags[slotIndex] = !flags[slotIndex];
+    opponentAnyoneSetter(flags);
+    if (flags[slotIndex]) {
+      const opps = [...opponents];
+      opps[slotIndex] = "";
+      opponentsSetter(opps);
+    }
     errorSetter("");
   };
 
@@ -384,15 +408,22 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       return;
     }
     if (!standing) {
-      let ok = true;
-      opponents.forEach((o) => {
-        if (o === "") {
-          errorSetter(t("SelectOpponents", { count: opponents.length }));
-          ok = false;
+      const first = opponents[0];
+      if (!first || first === "" || !first.id) {
+        errorSetter(t("SelectFirstOpponent"));
+        return;
+      }
+      for (let i = 1; i < opponents.length; i++) {
+        if (!opponentAnyone[i] && (!opponents[i] || opponents[i] === "" || !opponents[i].id)) {
+          errorSetter(t("SelectOpponentOrAnyone", { slot: i + 1 }));
           return;
         }
-      });
-      if (!ok) return;
+      }
+      const anyoneCount = opponentAnyone.filter(Boolean).length;
+      if (playerCount > 2 && anyoneCount === playerCount - 1) {
+        errorSetter(t("UseOpenChallengeForAllOpenSeats"));
+        return;
+      }
     }
     if (
       metaGame !== null &&
@@ -402,6 +433,17 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       errorSetter(t("InvalidVariantCombination"));
       return;
     }
+    const namedOpponents = standing
+      ? opponents
+      : opponents.filter((o, i) => !opponentAnyone[i] && o && o.id);
+    const namedIds = namedOpponents.map((o) => o.id).filter(Boolean);
+    if (new Set(namedIds).size !== namedIds.length) {
+      errorSetter(t("DuplicateOpponentInChallenge"));
+      return;
+    }
+    const openSlots = standing
+      ? 0
+      : opponentAnyone.filter(Boolean).length;
     handleNewChallenge({
       metaGame: metaGame,
       numPlayers: playerCount,
@@ -409,7 +451,8 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       duration: standingCount,
       seating: seating,
       variants: selectedVariants,
-      challengees: opponents,
+      challengees: namedOpponents,
+      openSlots: openSlots,
       clockStart: clockStart,
       clockInc: clockInc,
       clockMax: clockMax,
@@ -422,6 +465,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     // So that if you click on challenge again, it doesn't look like the challenge wasn't submitted:
     playerCountSetter(-1);
     opponentsSetter([]);
+    opponentAnyoneSetter([]);
     metaGameSetter(null);
     commentSetter("");
   };
@@ -598,16 +642,33 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
           ? ""
           : /* Opponents */
             opponents.map((o, i) => {
+              const anyoneSlot = i > 0 && opponentAnyone[i];
               return (
                 <div className="field" key={i}>
                   <label className="label" htmlFor={"user_for_challenge" + i}>
                     {playerCount === 2
                       ? t("ChooseOpponent")
-                      : t("ChooseOpponent", i)}
+                      : i === 0
+                      ? t("ChooseFirstOpponent")
+                      : t("ChooseOpponentSlot", { slot: i + 1 })}
                   </label>
+                  {i > 0 && !opponent ? (
+                    <div className="control mb-2">
+                      <label className="checkbox">
+                        <input
+                          type="checkbox"
+                          checked={anyoneSlot}
+                          onChange={() => handleToggleOpponentAnyone(i)}
+                        />
+                        {t("OpponentSlotAnyone")}
+                      </label>
+                    </div>
+                  ) : null}
                   <div className="control">
                     {opponent ? (
                       formatUserDisplayName(opponent, allUsers)
+                    ) : anyoneSlot ? (
+                      <p className="help">{t("OpponentSlotAnyoneHelp")}</p>
                     ) : (
                       <PlayerPickerTrigger
                         id={"user_for_challenge" + i}
