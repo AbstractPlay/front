@@ -4703,6 +4703,10 @@
     "src": "Posting…",
     "out": "Pubblicazione in corso…"
   },
+  "feedback.detail.quoteNoText": {
+    "src": "_(no text)_",
+    "out": "_(nessun testo)_"
+  },
   "feedback.detail.reclassifyToFeature": {
     "src": "Move to feature ideas",
     "out": "Sposta in Idee per funzionalità"
@@ -4734,6 +4738,10 @@
   "feedback.detail.reopenHint": {
     "src": "Change the status to a non-closed value to reopen this item on the board.",
     "out": "Cambia lo stato in un valore diverso da chiuso per riaprire questo elemento sulla bacheca."
+  },
+  "feedback.detail.reply": {
+    "src": "Reply",
+    "out": "Rispondi"
   },
   "feedback.detail.retentionHoldOff": {
     "src": "Retention hold is off — this item will be archived after the retention period.",

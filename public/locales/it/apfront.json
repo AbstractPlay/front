@@ -1981,6 +1981,8 @@
       "unwatch": "Non seguire più",
       "adminStatus": "Stato",
       "addComment": "Il tuo commento",
+      "reply": "Rispondi",
+      "quoteNoText": "_(nessun testo)_",
       "commentBodyHint": "Markdown supportato. Il testo è facoltativo se alleghi degli screenshot.",
       "commentScreenshots": "Screenshot",
       "notifyMe": "Notificami gli aggiornamenti su questo elemento",

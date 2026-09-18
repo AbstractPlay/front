@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../../../stores";
-import { getPlayerClockChips } from "./moveEntryUtils";
+import { getLivePlayerClockChips } from "./moveEntryUtils";
 import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
 import LastMoveChip from "./LastMoveChip";
@@ -10,7 +10,8 @@ import LayoutPickerTrigger from "../LayoutPickerTrigger";
 const MOBILE_PANEL_MAX_WIDTH = 768;
 
 function StripContextStrip({ session, layoutContext }) {
-  const { t, handleNextGame, game, toMove, metaGame } = session;
+  const { t, handleNextGame, game, metaGame } = session;
+  const liveToMove = game?.toMove ?? "";
   const users = useStore((state) => state.users);
   const [now, setNow] = useState(Date.now());
   const compact =
@@ -28,15 +29,15 @@ function StripContextStrip({ session, layoutContext }) {
   } = layoutContext;
 
   const clockChips =
-    uiStateActive(game, toMove) && game
-      ? getPlayerClockChips(game, toMove, users, now)
+    uiStateActive(game, liveToMove) && game
+      ? getLivePlayerClockChips(game, users, now)
       : [];
 
   useEffect(() => {
-    if (!game || toMove === "") return undefined;
+    if (!game || liveToMove === "") return undefined;
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
-  }, [game, toMove]);
+  }, [game, liveToMove]);
 
   return (
     <header className="game-move-context-strip game-move-strip-context">
