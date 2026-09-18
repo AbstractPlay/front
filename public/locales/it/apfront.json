@@ -554,6 +554,7 @@
   "OpponentSlotAnyone": "Chiunque può occupare questo posto",
   "OpponentSlotAnyoneHelp": "Questo posto apparirà nell'elenco delle sfide aperte affinché chiunque possa accettarlo.",
   "SelectFirstOpponent": "Scegli il primo avversario per questa sfida.",
+  "DuplicateOpponentInChallenge": "Ogni giocatore può essere nominato una sola volta in una sfida.",
   "SelectOpponentOrAnyone": "Scegli l'avversario {{slot}} o contrassegna il posto come aperto a chiunque.",
   "UseOpenChallengeForAllOpenSeats": "Per avere solo posti aperti, usa una sfida aperta invece di una sfida chiusa.",
   "LeaveMultiPlayerChallenge": "Abbandona la sfida",
