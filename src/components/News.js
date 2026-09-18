@@ -161,6 +161,7 @@ function News() {
       onReactionToggle={handleReactionToggle}
       reactionsDisabled={reactionBusy}
       articleRef={articleRef}
+      showCopyLink
     />
   );
 

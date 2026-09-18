@@ -2431,6 +2431,22 @@
     "src": "Publish is only available on play.abstractplay.com (production). Save drafts here and publish in prod.",
     "out": "Veröffentlichen ist nur auf play.abstractplay.com (Production) verfügbar. Speichere Entwürfe hier und veröffentliche sie in Prod."
   },
+  "announcements.admin.publishFailed": {
+    "src": "Publish failed. Try again or check the error on the editor page.",
+    "out": "Veröffentlichung fehlgeschlagen. Versuche es erneut oder überprüfe den Fehler auf der Editor-Seite."
+  },
+  "announcements.admin.publishFailedNoId": {
+    "src": "This draft has no id yet. Save it first, then publish.",
+    "out": "Dieser Entwurf hat noch keine ID. Speichere ihn zuerst und veröffentliche ihn dann."
+  },
+  "announcements.admin.publishSaveChanges": {
+    "src": "Save your changes before publishing.",
+    "out": "Speichere deine Änderungen vor dem Veröffentlichen."
+  },
+  "announcements.admin.publishSaveFirst": {
+    "src": "Save the draft before publishing.",
+    "out": "Speichere den Entwurf vor dem Veröffentlichen."
+  },
   "announcements.admin.publishedHint": {
     "src": "This post is live. Saving updates the site only; Discord and RSS are not updated until a future fan-out change.",
     "out": "Dieser Beitrag ist live. Das Speichern aktualisiert nur die Website; Discord und RSS werden erst mit einer zukünftigen Fan-out-Änderung aktualisiert."
@@ -6278,6 +6294,14 @@
   "news.intro": {
     "src": "This page is the canonical source for site news. We also mirror announcements to <discordLink>our Discord server</discordLink>. React on posts here; subscribe via <rssLink>RSS</rssLink> if you like.",
     "out": "Diese Seite ist die offizielle Quelle für Neuigkeiten auf der Website. Wir spiegeln Ankündigungen auch auf <discordLink>unserem Discord-Server</discordLink>. Reagiere hier auf Beiträge; abonniere sie bei Interesse per <rssLink>RSS</rssLink>."
+  },
+  "news.link.copied": {
+    "src": "Copied!",
+    "out": "Kopiert!"
+  },
+  "news.link.copy": {
+    "src": "Copy link to this announcement",
+    "out": "Link zu dieser Ankündigung kopieren"
   },
   "news.loadError": {
     "src": "Could not load announcements. Try again later.",
