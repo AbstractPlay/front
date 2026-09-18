@@ -39,6 +39,7 @@ function News() {
     loadingMore,
     ensureAnnouncementLoaded,
     updateItem,
+    feedEpoch,
   } = useNewsFeed();
   const {
     reactionsById,
@@ -51,9 +52,14 @@ function News() {
   const deepLinkScrolledIdRef = useRef(null);
 
   useEffect(() => {
-    setDeepLinkScrollReady(!routeAnnouncementId);
+    if (!routeAnnouncementId) {
+      setDeepLinkScrollReady(true);
+      deepLinkScrolledIdRef.current = null;
+      return;
+    }
     deepLinkScrolledIdRef.current = null;
-  }, [routeAnnouncementId]);
+    setDeepLinkScrollReady(false);
+  }, [routeAnnouncementId, feedEpoch]);
 
   useEffect(() => {
     if (!routeAnnouncementId) {
@@ -88,13 +94,22 @@ function News() {
     if (!el) {
       return;
     }
-    const frame = requestAnimationFrame(() => {
-      el.scrollIntoView({ behavior: "auto", block: "start" });
-      deepLinkScrolledIdRef.current = routeAnnouncementId;
-      setDeepLinkScrollReady(true);
+    let outerFrame;
+    let innerFrame;
+    outerFrame = requestAnimationFrame(() => {
+      innerFrame = requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: "auto", block: "start" });
+        deepLinkScrolledIdRef.current = routeAnnouncementId;
+        setDeepLinkScrollReady(true);
+      });
     });
-    return () => cancelAnimationFrame(frame);
-  }, [routeAnnouncementId, feedItems]);
+    return () => {
+      cancelAnimationFrame(outerFrame);
+      if (innerFrame !== undefined) {
+        cancelAnimationFrame(innerFrame);
+      }
+    };
+  }, [routeAnnouncementId, feedItems, feedEpoch]);
 
   useEffect(() => {
     const node = loadMoreSentinelRef.current;

@@ -40,3 +40,20 @@ export function computeInitialPublishedAfter(globalMe) {
 export function computeBellPublishedAfter(globalMe) {
   return computeInitialPublishedAfter(globalMe);
 }
+
+/**
+ * When null, the /news feed should wait (auth or profile still loading).
+ * @returns {string | null}
+ */
+export function resolveNewsFeedBootstrapKey(authStatus, globalMe) {
+  if (authStatus === "unknown" || authStatus === "loading") {
+    return null;
+  }
+  if (authStatus === "guest") {
+    return "guest";
+  }
+  if (!globalMe?.id) {
+    return null;
+  }
+  return globalMe.id;
+}
