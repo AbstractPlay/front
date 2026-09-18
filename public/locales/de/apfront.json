@@ -563,7 +563,7 @@
   "DeclineMultiPlayerInvitationHelp": "Dein Platz wird möglicherweise für andere freigegeben; die Herausforderung wird für die verbleibenden Spieler fortgesetzt.",
   "ChallengeOpenSeats_one": "{{count}} Platz offen für alle.",
   "ChallengeOpenSeats_other": "{{count}} Plätze offen für alle.",
-  "StandingChallengeOpenSeats": "{{total}} Spieler ({{open}} offen)",
+  "StandingChallengeOpenSeats": "{{total}} ({{open}} frei)",
   "challenges": {
     "loading": "Herausforderungen werden geladen…",
     "filters": {
@@ -890,7 +890,11 @@
     "intro": "Diese Seite ist die offizielle Quelle für Neuigkeiten auf der Website. Wir spiegeln Ankündigungen auch auf <discordLink>unserem Discord-Server</discordLink>. Reagiere hier auf Beiträge; abonniere sie bei Interesse per <rssLink>RSS</rssLink>.",
     "loadOlder": "Ältere Ankündigungen laden",
     "loadingMore": "Wird geladen…",
-    "loadError": "Ankündigungen konnten nicht geladen werden. Versuche es später erneut."
+    "loadError": "Ankündigungen konnten nicht geladen werden. Versuche es später erneut.",
+    "link": {
+      "copy": "Link zu dieser Ankündigung kopieren",
+      "copied": "Kopiert!"
+    }
   },
   "announcements": {
     "reactions": {
@@ -939,6 +943,10 @@
       "publishConfirmTitle": "Ankündigung veröffentlichen?",
       "publishConfirmBody": "Dies wird auf /news veröffentlicht, RSS aktualisiert, auf Discord gespiegelt (falls konfiguriert) und per E-Mail oder Push-Benachrichtigung an Nutzer gesendet, die sich für Website-Ankündigungen angemeldet haben.",
       "publishConfirm": "Jetzt veröffentlichen",
+      "publishSaveFirst": "Speichere den Entwurf vor dem Veröffentlichen.",
+      "publishSaveChanges": "Speichere deine Änderungen vor dem Veröffentlichen.",
+      "publishFailed": "Veröffentlichung fehlgeschlagen. Versuche es erneut oder überprüfe den Fehler auf der Editor-Seite.",
+      "publishFailedNoId": "Dieser Entwurf hat noch keine ID. Speichere ihn zuerst und veröffentliche ihn dann.",
       "retract": "Zurückziehen",
       "retracting": "Wird zurückgezogen…",
       "retractConfirmTitle": "Ankündigung zurückziehen?",
@@ -1973,6 +1981,8 @@
       "unwatch": "Nicht mehr beobachten",
       "adminStatus": "Status",
       "addComment": "Dein Kommentar",
+      "reply": "Antworten",
+      "quoteNoText": "_(kein Text)_",
       "commentBodyHint": "Markdown wird unterstützt. Text ist optional, wenn Screenshots angehängt werden.",
       "commentScreenshots": "Screenshots",
       "notifyMe": "Mich bei Aktualisierungen zu diesem Eintrag benachrichtigen",

@@ -563,7 +563,7 @@
   "DeclineMultiPlayerInvitationHelp": "Tu lugar podría abrirse para otros; el desafío continúa para los jugadores restantes.",
   "ChallengeOpenSeats_one": "{{count}} lugar abierto para cualquiera.",
   "ChallengeOpenSeats_other": "{{count}} lugares abiertos para cualquiera.",
-  "StandingChallengeOpenSeats": "{{total}} jugadores ({{open}} abiertos)",
+  "StandingChallengeOpenSeats": "{{total}} ({{open}} disponibles)",
   "challenges": {
     "loading": "Cargando desafíos…",
     "filters": {
@@ -890,7 +890,11 @@
     "intro": "Esta página es la fuente oficial de las noticias del sitio. También reflejamos los anuncios en <discordLink>nuestro servidor de Discord</discordLink>. Reacciona a las publicaciones aquí; suscríbete mediante <rssLink>RSS</rssLink> si quieres.",
     "loadOlder": "Cargar anuncios anteriores",
     "loadingMore": "Cargando…",
-    "loadError": "No se pudieron cargar los anuncios. Inténtalo de nuevo más tarde."
+    "loadError": "No se pudieron cargar los anuncios. Inténtalo de nuevo más tarde.",
+    "link": {
+      "copy": "Copiar enlace a este anuncio",
+      "copied": "¡Copiado!"
+    }
   },
   "announcements": {
     "reactions": {
@@ -939,6 +943,10 @@
       "publishConfirmTitle": "¿Publicar anuncio?",
       "publishConfirmBody": "Esto se publicará en /news, actualizará el RSS, se reflejará en Discord (cuando esté configurado) y enviará un correo electrónico o una notificación push a los usuarios que hayan optado por recibir anuncios del sitio.",
       "publishConfirm": "Publicar ahora",
+      "publishSaveFirst": "Guarda el borrador antes de publicar.",
+      "publishSaveChanges": "Guarda tus cambios antes de publicar.",
+      "publishFailed": "Error al publicar. Inténtalo de nuevo o revisa el error en la página del editor.",
+      "publishFailedNoId": "Este borrador aún no tiene id. Guárdalo primero y luego publícalo.",
       "retract": "Retirar",
       "retracting": "Retirando…",
       "retractConfirmTitle": "¿Retirar anuncio?",
@@ -1973,6 +1981,8 @@
       "unwatch": "Dejar de seguir",
       "adminStatus": "Estado",
       "addComment": "Tu comentario",
+      "reply": "Responder",
+      "quoteNoText": "_(sin texto)_",
       "commentBodyHint": "Compatible con Markdown. El texto es opcional si adjuntas capturas de pantalla.",
       "commentScreenshots": "Capturas de pantalla",
       "notifyMe": "Notificarme sobre actualizaciones de este elemento",

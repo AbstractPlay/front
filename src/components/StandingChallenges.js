@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
+import { formatChallengeTablePlayerCount } from "../lib/challengeTablePlayerCount";
 import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
@@ -35,6 +36,7 @@ import {
   matchWinRateForChallenge,
   passesMatchCompetitivenessFilter,
 } from "../lib/glickoMatchOdds";
+import { triggerDownload } from "../lib/boardExport/downloadBlob";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -512,16 +514,12 @@ function StandingChallenges(props) {
       }),
       columnHelper.accessor("numPlayers", {
         header: t("tables.players"),
-        cell: (props) => {
-          const open = props.row.original.openSlots ?? 0;
-          if (open > 0) {
-            return t("StandingChallengeOpenSeats", {
-              total: props.getValue(),
-              open,
-            });
-          }
-          return props.getValue();
-        },
+        cell: (props) =>
+          formatChallengeTablePlayerCount(
+            props.getValue(),
+            props.row.original.openSlots,
+            t
+          ),
       }),
       columnHelper.accessor("players", {
         header: t("tables.accepted"),
@@ -648,6 +646,34 @@ function StandingChallenges(props) {
   useEffect(() => {
     table.setPageSize(showState);
   }, [showState, table]);
+
+  const handleDownloadFiltered = useCallback(() => {
+    const exportRows = table.getPrePaginationRowModel().rows.map((row) => {
+      const raw = challenges?.find((c) => c.id === row.original.id);
+      const payload = raw ? { ...raw } : { ...row.original };
+      if (row.original.matchWinRate != null) {
+        payload.matchWinRate = row.original.matchWinRate;
+      }
+      return payload;
+    });
+    const body = JSON.stringify(
+      {
+        exportedAt: new Date().toISOString(),
+        metaGame: siteWide ? null : metaGame,
+        count: exportRows.length,
+        challenges: exportRows,
+      },
+      null,
+      2
+    );
+    const filename = siteWide
+      ? "abstractplay-open-challenges.json"
+      : `abstractplay-open-challenges-${metaGame}.json`;
+    triggerDownload(
+      new Blob([body], { type: "application/json" }),
+      filename
+    );
+  }, [table, challenges, siteWide, metaGame]);
 
   useEffect(() => {
     table.setPageIndex(0);
@@ -908,12 +934,23 @@ function StandingChallenges(props) {
               handleChallenge={handleNewChallenge}
               fixedMetaGame={siteWide ? undefined : metaGame}
             />
-            <div className="has-text-centered" style={{ marginBottom: "1em" }}>
+            <div
+              className="has-text-centered buttons is-centered"
+              style={{ marginBottom: "1em" }}
+            >
               <button
                 className="button is-small apButton"
                 onClick={() => showModalSetter(true)}
               >
                 {t("IssueChallengeLabel")}
+              </button>
+              <button
+                type="button"
+                className="button is-small apButtonNeutral"
+                onClick={handleDownloadFiltered}
+                disabled={data.length === 0}
+              >
+                {t("Download")}
               </button>
             </div>
           </>

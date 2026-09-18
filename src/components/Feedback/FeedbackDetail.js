@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
@@ -30,6 +30,7 @@ import {
   updateFeedback,
   voteFeedback,
 } from "../../lib/feedback/feedbackApi";
+import { buildFeedbackReplyDraft } from "../../lib/feedback/feedbackQuoteMarkdown";
 import {
   EFFORT_LEVELS,
   FEEDBACK_COMMENT_ATTACHMENT_MAX_COUNT,
@@ -72,6 +73,23 @@ function FeedbackDetail() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showReclassifyModal, setShowReclassifyModal] = useState(false);
   const [deleteReason, setDeleteReason] = useState("");
+  const commentTextareaRef = useRef(null);
+
+  const beginReplyTo = useCallback(({ authorName, body }) => {
+    setCommentBody(buildFeedbackReplyDraft({
+      authorName,
+      body,
+      emptyText: t("feedback.detail.quoteNoText"),
+    }));
+    window.requestAnimationFrame(() => {
+      const el = commentTextareaRef.current;
+      if (!el) {
+        return;
+      }
+      el.focus();
+      el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  }, [t]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -411,6 +429,13 @@ function FeedbackDetail() {
             <button type="button" className="button apButtonNeutral is-small" onClick={handleSubscribe}>
               {subscribed ? t("feedback.detail.unwatch") : t("feedback.detail.watch")}
             </button>
+            <button
+              type="button"
+              className="button apButtonNeutral is-small"
+              onClick={() => beginReplyTo({ authorName: post.authorName, body: post.body })}
+            >
+              {t("feedback.detail.reply")}
+            </button>
           </>
         )}
         {canEdit && !editing && !readOnly && (
@@ -738,11 +763,25 @@ function FeedbackDetail() {
             key={comment.commentId}
             className={`feedback-comment${comment.isStaff ? " feedback-comment-staff" : ""}`}
           >
-            <div className="feedback-muted">
-              <FeedbackPlayerLink userId={comment.authorId} name={comment.authorName} />
-              {comment.isStaff ? ` · ${t("feedback.detail.staff")}` : ""}
-              {" · "}
-              <FeedbackTimestamp date={comment.createdAt} />
+            <div className="feedback-comment-header">
+              <div className="feedback-muted">
+                <FeedbackPlayerLink userId={comment.authorId} name={comment.authorName} />
+                {comment.isStaff ? ` · ${t("feedback.detail.staff")}` : ""}
+                {" · "}
+                <FeedbackTimestamp date={comment.createdAt} />
+              </div>
+              {loggedIn && !readOnly ? (
+                <button
+                  type="button"
+                  className="button apButtonNeutral is-small feedback-reply-button"
+                  onClick={() => beginReplyTo({
+                    authorName: comment.authorName,
+                    body: comment.body,
+                  })}
+                >
+                  {t("feedback.detail.reply")}
+                </button>
+              ) : null}
             </div>
             {comment.body ? <FeedbackMarkdown>{comment.body}</FeedbackMarkdown> : null}
             {comment.attachmentUrls?.length > 0 ? (
@@ -785,9 +824,10 @@ function FeedbackDetail() {
               <p className="feedback-muted feedback-field-hint">{t("feedback.detail.commentBodyHint")}</p>
             ) : null}
             <textarea
+              ref={commentTextareaRef}
               id="feedback-comment"
               className="textarea"
-              rows={3}
+              rows={6}
               value={commentBody}
               onChange={(e) => setCommentBody(e.target.value)}
               maxLength={2000}

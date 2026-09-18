@@ -8,13 +8,20 @@ async function copyTextToClipboard(text) {
   return document.execCommand("copy", true, text);
 }
 
-function CopyDeepLinkButton({ hash, pathname, className = "" }) {
+function CopyDeepLinkButton({
+  hash = "",
+  pathname,
+  className = "",
+  baseClassName = "card-header-icon",
+  copyLabelKey = "stats.link.copy",
+  copiedLabelKey = "stats.link.copied",
+}) {
   const { t } = useTranslation();
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyClick = useCallback(() => {
     const path = pathname ?? window.location.pathname;
-    const url = `${window.location.origin}${path}${hash}`;
+    const url = `${window.location.origin}${path}${hash ?? ""}`;
     copyTextToClipboard(url)
       .then(() => {
         setIsCopied(true);
@@ -27,12 +34,14 @@ function CopyDeepLinkButton({ hash, pathname, className = "" }) {
       });
   }, [hash, pathname]);
 
-  const label = isCopied ? t("stats.link.copied") : t("stats.link.copy");
+  const label = isCopied ? t(copiedLabelKey) : t(copyLabelKey);
+
+  const buttonClass = [baseClassName, className].filter(Boolean).join(" ");
 
   return (
     <button
       type="button"
-      className={`card-header-icon${className ? ` ${className}` : ""}`}
+      className={buttonClass || undefined}
       aria-label={label}
       title={label}
       onClick={handleCopyClick}

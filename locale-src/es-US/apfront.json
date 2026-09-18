@@ -479,6 +479,10 @@
     "src": "Draw",
     "out": "Tablas"
   },
+  "DuplicateOpponentInChallenge": {
+    "src": "Each player may only be named once in a challenge.",
+    "out": "Cada jugador solo puede ser nombrado una vez en un desafío."
+  },
   "Duration": {
     "src": "Duration",
     "out": "Duración"
@@ -1844,8 +1848,8 @@
     "out": "Desafío abierto para un juego de {{game}}"
   },
   "StandingChallengeOpenSeats": {
-    "src": "{{total}} players ({{open}} open)",
-    "out": "{{total}} jugadores ({{open}} abiertos)"
+    "src": "{{total}} ({{open}} open)",
+    "out": "{{total}} ({{open}} disponibles)"
   },
   "StandingChallenges": {
     "src": "Open Challenges for {{name}}",
@@ -2426,6 +2430,22 @@
   "announcements.admin.publishDisabledDev": {
     "src": "Publish is only available on play.abstractplay.com (production). Save drafts here and publish in prod.",
     "out": "La opción de publicar solo está disponible en play.abstractplay.com (producción). Guarda borradores aquí y publícalos en producción."
+  },
+  "announcements.admin.publishFailed": {
+    "src": "Publish failed. Try again or check the error on the editor page.",
+    "out": "Error al publicar. Inténtalo de nuevo o revisa el error en la página del editor."
+  },
+  "announcements.admin.publishFailedNoId": {
+    "src": "This draft has no id yet. Save it first, then publish.",
+    "out": "Este borrador aún no tiene id. Guárdalo primero y luego publícalo."
+  },
+  "announcements.admin.publishSaveChanges": {
+    "src": "Save your changes before publishing.",
+    "out": "Guarda tus cambios antes de publicar."
+  },
+  "announcements.admin.publishSaveFirst": {
+    "src": "Save the draft before publishing.",
+    "out": "Guarda el borrador antes de publicar."
   },
   "announcements.admin.publishedHint": {
     "src": "This post is live. Saving updates the site only; Discord and RSS are not updated until a future fan-out change.",
@@ -4683,6 +4703,10 @@
     "src": "Posting…",
     "out": "Publicando…"
   },
+  "feedback.detail.quoteNoText": {
+    "src": "_(no text)_",
+    "out": "_(sin texto)_"
+  },
   "feedback.detail.reclassifyToFeature": {
     "src": "Move to feature ideas",
     "out": "Mover a ideas de funciones"
@@ -4714,6 +4738,10 @@
   "feedback.detail.reopenHint": {
     "src": "Change the status to a non-closed value to reopen this item on the board.",
     "out": "Cambia el estado a un valor que no esté cerrado para volver a abrir este elemento en el tablero."
+  },
+  "feedback.detail.reply": {
+    "src": "Reply",
+    "out": "Responder"
   },
   "feedback.detail.retentionHoldOff": {
     "src": "Retention hold is off — this item will be archived after the retention period.",
@@ -6274,6 +6302,14 @@
   "news.intro": {
     "src": "This page is the canonical source for site news. We also mirror announcements to <discordLink>our Discord server</discordLink>. React on posts here; subscribe via <rssLink>RSS</rssLink> if you like.",
     "out": "Esta página es la fuente oficial de las noticias del sitio. También reflejamos los anuncios en <discordLink>nuestro servidor de Discord</discordLink>. Reacciona a las publicaciones aquí; suscríbete mediante <rssLink>RSS</rssLink> si quieres."
+  },
+  "news.link.copied": {
+    "src": "Copied!",
+    "out": "¡Copiado!"
+  },
+  "news.link.copy": {
+    "src": "Copy link to this announcement",
+    "out": "Copiar enlace a este anuncio"
   },
   "news.loadError": {
     "src": "Could not load announcements. Try again later.",

@@ -395,7 +395,9 @@ function MoveEntry(props) {
               </caption>
               <tbody>
                 {game.players.map((p, ind) =>
-                  (Array.isArray(toMove) ? toMove[ind] : ind === toMove) ? (
+                  (Array.isArray(game.toMove)
+                    ? game.toMove[ind]
+                    : ind === game.toMove) ? (
                     <tr key={"player" + ind} style={{ fontWeight: "bolder" }}>
                       <td key={"player" + ind}>
                         {formatPlayerDisplayName(p, allUsers)}

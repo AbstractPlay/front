@@ -9,6 +9,7 @@ import {
 import {
   ANNOUNCEMENT_FEED_PAGE_SIZE,
   computeInitialPublishedAfter,
+  resolveNewsFeedBootstrapKey,
 } from "../lib/announcements/announcementFeedConfig";
 
 function mergeById(existing, incoming) {
@@ -32,9 +33,12 @@ function oldestPublishedAt(items) {
  * Paginated /news feed: initial window from cursor buffer, then cursor pages, then older archive.
  */
 export function useNewsFeed() {
+  const authStatus = useStore((state) => state.authSession.status);
   const globalMe = useStore((state) => state.globalMe);
+  const feedBootstrapKey = resolveNewsFeedBootstrapKey(authStatus, globalMe);
   const [items, setItems] = useState([]);
   const [status, setStatus] = useState("idle");
+  const [feedEpoch, setFeedEpoch] = useState(0);
   const [error, setError] = useState(null);
   const [nextCursor, setNextCursor] = useState(undefined);
   const [phase, setPhase] = useState("window");
@@ -67,6 +71,10 @@ export function useNewsFeed() {
   }, []);
 
   useEffect(() => {
+    if (feedBootstrapKey === null) {
+      setStatus("loading");
+      return undefined;
+    }
     let cancelled = false;
     const publishedAfter = computeInitialPublishedAfter(globalMe);
     initialAfterRef.current = publishedAfter;
@@ -76,6 +84,7 @@ export function useNewsFeed() {
     setItems([]);
     setError(null);
     setStatus("loading");
+    setFeedEpoch((epoch) => epoch + 1);
     (async () => {
       const result = await loadPage({ publishedAfter, append: false });
       if (cancelled) {
@@ -91,8 +100,8 @@ export function useNewsFeed() {
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- reset feed on login/logout only (not on mark-read)
-  }, [globalMe?.id, loadPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- reset only on auth/login identity, not mark-read
+  }, [feedBootstrapKey, loadPage]);
 
   const loadMore = useCallback(async () => {
     if (loadingMore || status === "loading" || archiveExhausted) {
@@ -178,5 +187,6 @@ export function useNewsFeed() {
     loadingMore,
     ensureAnnouncementLoaded,
     updateItem,
+    feedEpoch,
   };
 }

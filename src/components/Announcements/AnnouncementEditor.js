@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useMatch, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 import Spinner from "../Spinner";
@@ -27,19 +27,22 @@ function snapshotFromFields(fields) {
 
 function AnnouncementEditor() {
   const { t } = useTranslation();
+  const isNewRoute = useMatch("/announcements/admin/new") != null;
   const { id: routeId } = useParams();
   const navigate = useNavigate();
   const globalMe = useStore((state) => state.globalMe);
-  const isNew = routeId === "new";
 
-  const [draftId, setDraftId] = useState(() => (isNew ? crypto.randomUUID() : routeId));
+  const [draftId, setDraftId] = useState(() => (
+    isNewRoute ? crypto.randomUUID() : routeId
+  ));
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [adminNote, setAdminNote] = useState("");
   const [status, setStatus] = useState("draft");
   const [attachmentKeys, setAttachmentKeys] = useState([]);
   const [urlByKey, setUrlByKey] = useState({});
-  const [loading, setLoading] = useState(!isNew);
+  const [loading, setLoading] = useState(!isNewRoute);
+  const [publishError, setPublishError] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
@@ -61,6 +64,8 @@ function AnnouncementEditor() {
   }), [title, body, adminNote, attachmentKeys]);
 
   const isDirty = lastSavedSnapshot !== "" && snapshotFromFields(fields) !== lastSavedSnapshot;
+  const publishNeedsSave = isNewRoute || isDirty;
+  const publishBlocked = publishDisabled || publishNeedsSave || saving || !draftId;
 
   useEffect(() => {
     if (!isDirty) {
@@ -75,7 +80,7 @@ function AnnouncementEditor() {
   }, [isDirty]);
 
   useEffect(() => {
-    if (!globalMe?.admin || isNew) {
+    if (!globalMe?.admin || isNewRoute) {
       return;
     }
     let cancelled = false;
@@ -110,10 +115,10 @@ function AnnouncementEditor() {
     return () => {
       cancelled = true;
     };
-  }, [globalMe?.admin, isNew, routeId]);
+  }, [globalMe?.admin, isNewRoute, routeId]);
 
   useEffect(() => {
-    if (isNew && lastSavedSnapshot === "") {
+    if (isNewRoute && lastSavedSnapshot === "") {
       setLastSavedSnapshot(snapshotFromFields({
         title: "",
         body: "",
@@ -121,7 +126,7 @@ function AnnouncementEditor() {
         attachmentKeys: [],
       }));
     }
-  }, [isNew, lastSavedSnapshot]);
+  }, [isNewRoute, lastSavedSnapshot]);
 
   const previewItem = useMemo(() => {
     const mergedUrls = { ...urlByKey };
@@ -160,14 +165,15 @@ function AnnouncementEditor() {
       attachmentKeys: mergedKeys,
     }));
     setSaveMessage(t("announcements.admin.saved"));
-    if (isNew) {
+    setDraftId(result.data.id);
+    if (isNewRoute) {
       navigate(`/announcements/admin/${result.data.id}`, { replace: true });
     }
     const refreshed = await getAnnouncementAuth(result.data.id);
     if (refreshed.ok) {
       setUrlByKey(attachmentUrlMapFromGet(refreshed.data));
     }
-  }, [adminNote, attachmentKeys, body, draftId, isNew, navigate, t, title]);
+  }, [adminNote, attachmentKeys, body, draftId, isNewRoute, navigate, t, title]);
 
   const handleImageInserted = useCallback((key, markdown) => {
     setAttachmentKeys((prev) => (prev.includes(key) ? prev : [...prev, key]));
@@ -195,16 +201,29 @@ function AnnouncementEditor() {
 
   const handlePublish = async () => {
     setPublishing(true);
+    setPublishError("");
     setError("");
-    const result = await publishAnnouncement(draftId);
+    const id = draftId?.trim();
+    if (!id) {
+      const msg = t("announcements.admin.publishFailedNoId");
+      setPublishing(false);
+      setError(msg);
+      setPublishError(msg);
+      window.alert(msg);
+      return;
+    }
+    const result = await publishAnnouncement(id);
     setPublishing(false);
     if (!result.ok) {
-      setError(result.error);
-      setShowPublishModal(false);
+      const msg = result.error || t("announcements.admin.publishFailed");
+      setError(msg);
+      setPublishError(msg);
+      window.alert(msg);
       return;
     }
     setStatus("published");
     setShowPublishModal(false);
+    setPublishError("");
     navigate("/announcements/admin");
   };
 
@@ -239,7 +258,7 @@ function AnnouncementEditor() {
       <AnnouncementPageHelmet title={t("announcements.admin.editorTitle")} />
       <article className="content announcement-editor">
         <h1 className="title lined">
-          <span>{isNew ? t("announcements.admin.newDraft") : t("announcements.admin.editDraft")}</span>
+          <span>{isNewRoute ? t("announcements.admin.newDraft") : t("announcements.admin.editDraft")}</span>
         </h1>
         <div className="buttons are-small announcement-editor-actions">
           <button
@@ -254,9 +273,20 @@ function AnnouncementEditor() {
             <button
               type="button"
               className="button apButtonNeutral"
-              disabled={publishDisabled || saving}
-              title={publishDisabled ? t("announcements.admin.publishDisabledDev") : undefined}
-              onClick={() => setShowPublishModal(true)}
+              disabled={publishBlocked}
+              title={
+                publishDisabled
+                  ? t("announcements.admin.publishDisabledDev")
+                  : publishNeedsSave
+                    ? (isNewRoute
+                      ? t("announcements.admin.publishSaveFirst")
+                      : t("announcements.admin.publishSaveChanges"))
+                    : undefined
+              }
+              onClick={() => {
+                setPublishError("");
+                setShowPublishModal(true);
+              }}
             >
               {t("announcements.admin.publish")}
             </button>
@@ -388,6 +418,7 @@ function AnnouncementEditor() {
         ]}
       >
         <p>{t("announcements.admin.publishConfirmBody")}</p>
+        {publishError ? <p className="has-text-danger">{publishError}</p> : null}
         <AnnouncementArticle item={previewItem} className="announcement-preview-article" />
       </Modal>
 

@@ -563,7 +563,7 @@
     "DeclineMultiPlayerInvitationHelp": "Your seat may open to others; the challenge continues for remaining players.",
     "ChallengeOpenSeats_one": "{{count}} seat open to anyone.",
     "ChallengeOpenSeats_other": "{{count}} seats open to anyone.",
-    "StandingChallengeOpenSeats": "{{total}} players ({{open}} open)",
+    "StandingChallengeOpenSeats": "{{total}} ({{open}} open)",
     "challenges": {
         "loading": "Loading challenges…",
         "filters": {
@@ -890,7 +890,11 @@
         "intro": "This page is the canonical source for site news. We also mirror announcements to <discordLink>our Discord server</discordLink>. React on posts here; subscribe via <rssLink>RSS</rssLink> if you like.",
         "loadOlder": "Load older announcements",
         "loadingMore": "Loading…",
-        "loadError": "Could not load announcements. Try again later."
+        "loadError": "Could not load announcements. Try again later.",
+        "link": {
+            "copy": "Copy link to this announcement",
+            "copied": "Copied!"
+        }
     },
     "announcements": {
         "reactions": {
@@ -939,6 +943,10 @@
             "publishConfirmTitle": "Publish announcement?",
             "publishConfirmBody": "This will publish on /news, refresh RSS, mirror to Discord (when configured), and email or push users who opted in to site announcements.",
             "publishConfirm": "Publish now",
+            "publishSaveFirst": "Save the draft before publishing.",
+            "publishSaveChanges": "Save your changes before publishing.",
+            "publishFailed": "Publish failed. Try again or check the error on the editor page.",
+            "publishFailedNoId": "This draft has no id yet. Save it first, then publish.",
             "retract": "Retract",
             "retracting": "Retracting…",
             "retractConfirmTitle": "Retract announcement?",
@@ -1973,6 +1981,8 @@
             "unwatch": "Unwatch",
             "adminStatus": "Status",
             "addComment": "Your comment",
+            "reply": "Reply",
+            "quoteNoText": "_(no text)_",
             "commentBodyHint": "Markdown supported. Text is optional if you attach screenshots.",
             "commentScreenshots": "Screenshots",
             "notifyMe": "Notify me of updates on this item",
