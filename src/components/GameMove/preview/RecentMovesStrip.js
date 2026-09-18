@@ -24,6 +24,19 @@ function isSameFocus(focus, item) {
   );
 }
 
+/** Keep the chip visible inside the strip without scrolling the page. */
+function scrollChipIntoHorizontalStrip(strip, chip) {
+  const chipLeft = chip.offsetLeft;
+  const chipRight = chipLeft + chip.offsetWidth;
+  const viewLeft = strip.scrollLeft;
+  const viewRight = viewLeft + strip.clientWidth;
+  if (chipLeft < viewLeft) {
+    strip.scrollLeft = chipLeft;
+  } else if (chipRight > viewRight) {
+    strip.scrollLeft = chipRight - strip.clientWidth;
+  }
+}
+
 function scrollRecentMovesIntoView(strip) {
   const active = strip.querySelector(".game-move-recent-moves__chip.is-active");
   const target =
@@ -33,7 +46,7 @@ function scrollRecentMovesIntoView(strip) {
         ? strip.lastElementChild
         : null;
   if (target) {
-    target.scrollIntoView({ inline: "end", block: "nearest" });
+    scrollChipIntoHorizontalStrip(strip, target);
   }
 }
 

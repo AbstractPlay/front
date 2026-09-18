@@ -267,6 +267,19 @@
   background: var(--secondary-color-3-bg, var(--main-bg-color));
 }
 
+.feedback-comment-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.feedback-reply-button {
+  flex-shrink: 0;
+}
+
 .feedback-comment-staff {
   border-left-color: var(--secondary-color-3);
 }
