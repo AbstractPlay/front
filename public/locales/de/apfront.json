@@ -2292,11 +2292,9 @@
     "boardStyles": {
       "vertex": "Schnittpunkt-Gitter",
       "vertex-cross": "Schnittpunkt-Gitter (Kreuz)",
-      "vertex-fanorona": "Schnittpunkt-Gitter (Fanorona)",
       "squares": "Quadrate",
       "squares-checkered": "Schachbrettmuster",
       "squares-beveled": "Abgeschrägte Quadrate",
-      "pegboard": "Steckbrett",
       "squares-stacked": "Gestapelte Quadrate"
     },
     "glyphReplacements": "Glyphenersetzungen",

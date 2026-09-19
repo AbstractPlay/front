@@ -2292,11 +2292,9 @@
     "boardStyles": {
       "vertex": "Griglia ad intersezioni",
       "vertex-cross": "Griglia ad intersezioni (croce)",
-      "vertex-fanorona": "Griglia ad intersezioni (Fanorona)",
       "squares": "Caselle",
       "squares-checkered": "Caselle a scacchi",
       "squares-beveled": "Caselle smussate",
-      "pegboard": "Tavoliere a pioli",
       "squares-stacked": "Caselle impilate"
     },
     "glyphReplacements": "Sostituzioni glifi",

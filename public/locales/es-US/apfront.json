@@ -2292,11 +2292,9 @@
     "boardStyles": {
       "vertex": "Cuadrícula de vértices",
       "vertex-cross": "Cuadrícula de vértices (cruz)",
-      "vertex-fanorona": "Cuadrícula de vértices (Fanorona)",
       "squares": "Casillas",
       "squares-checkered": "Casillas ajedrezadas",
       "squares-beveled": "Casillas biseladas",
-      "pegboard": "Tablero de clavijas",
       "squares-stacked": "Casillas apiladas"
     },
     "glyphReplacements": "Reemplazos de glifos",

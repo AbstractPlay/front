@@ -2292,11 +2292,9 @@
         "boardStyles": {
             "vertex": "Vertex grid",
             "vertex-cross": "Vertex grid (cross)",
-            "vertex-fanorona": "Vertex grid (Fanorona)",
             "squares": "Squares",
             "squares-checkered": "Checkered squares",
             "squares-beveled": "Beveled squares",
-            "pegboard": "Pegboard",
             "squares-stacked": "Stacked squares"
         },
         "glyphReplacements": "Glyph replacements",

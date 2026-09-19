@@ -4115,6 +4115,10 @@
     "src": "Preferred colour",
     "out": "Colore preferito"
   },
+  "customize.applySections.render": {
+    "src": "Renderer (board, glyphs, options)",
+    "out": "Rendering (tavoliere, simboli, opzioni)"
+  },
   "customize.applySectionsLabel": {
     "src": "Sections to copy",
     "out": "Sezioni da copiare"
@@ -4139,9 +4143,49 @@
     "src": "at scale",
     "out": "in scala"
   },
+  "customize.boardChromeNotEligible": {
+    "src": "This preview game does not support board layout customization (only standard row/column string grids). Glyph replacements still apply.",
+    "out": "Questa anteprima di gioco non supporta la personalizzazione del layout del tavoliere (solo griglie di stringhe riga/colonna standard). Le sostituzioni dei simboli si applicano comunque."
+  },
   "customize.boardColours": {
     "src": "Board Colours",
     "out": "Colori del tabellone"
+  },
+  "customize.boardStyle": {
+    "src": "Board style",
+    "out": "Stile del tavoliere"
+  },
+  "customize.boardStyleGameDefault": {
+    "src": "Game default",
+    "out": "Predefinito del gioco"
+  },
+  "customize.boardStyleGlobalDisabled": {
+    "src": "Board style cannot be set in global defaults because each game uses a different board type.",
+    "out": "Lo stile del tavoliere non può essere impostato nelle impostazioni predefinite globali perché ogni gioco utilizza un tipo di tavoliere diverso."
+  },
+  "customize.boardStyles.squares": {
+    "src": "Squares",
+    "out": "Caselle"
+  },
+  "customize.boardStyles.squares-beveled": {
+    "src": "Beveled squares",
+    "out": "Caselle smussate"
+  },
+  "customize.boardStyles.squares-checkered": {
+    "src": "Checkered squares",
+    "out": "Caselle a scacchi"
+  },
+  "customize.boardStyles.squares-stacked": {
+    "src": "Stacked squares",
+    "out": "Caselle impilate"
+  },
+  "customize.boardStyles.vertex": {
+    "src": "Vertex grid",
+    "out": "Griglia ad intersezioni"
+  },
+  "customize.boardStyles.vertex-cross": {
+    "src": "Vertex grid (cross)",
+    "out": "Griglia ad intersezioni (croce)"
   },
   "customize.clearColours": {
     "src": "Clear colours",
@@ -4247,6 +4291,10 @@
     "src": "Global Defaults",
     "out": "Impostazioni predefinite globali"
   },
+  "customize.globalDefaultsSectionNotice": {
+    "src": "You are editing global defaults. These apply to every game without its own customization. Changes here are rarely universal across all boards—prefer per-game settings when layout or CSS targets one game.",
+    "out": "Stai modificando le impostazioni predefinite globali. Si applicano a ogni partita priva di personalizzazioni proprie. Le modifiche apportate qui sono raramente universali per tutti i tavolieri: preferisci le impostazioni per singolo gioco quando il layout o il CSS si riferiscono a un gioco specifico."
+  },
   "customize.glyphReplacements": {
     "src": "Glyph replacements",
     "out": "Sostituzioni glifi"
@@ -4254,6 +4302,14 @@
   "customize.importedLegacyCss": {
     "src": "Imported CSS from this device. Save to store in your account.",
     "out": "CSS importato da questo dispositivo. Salva per memorizzarlo nel tuo account."
+  },
+  "customize.labelScale": {
+    "src": "Coordinate label size",
+    "out": "Dimensione etichette coordinate"
+  },
+  "customize.labelScaleHelp": {
+    "src": "Scales row and column letters and numbers on the board (1 is the game default). The slider spans {{min}}–{{max}}; use the number field or settings JSON for other positive values.",
+    "out": "Ridimensiona le lettere e i numeri di riga e colonna sul tavoliere (1 è il valore predefinito del gioco). Il cursore varia da {{min}}–{{max}}; usa il campo numerico o il JSON delle impostazioni per altri valori positivi."
   },
   "customize.output": {
     "src": "Output",
@@ -4286,6 +4342,62 @@
   "customize.preferredColourHelpGlobal": {
     "src": "When you play a game, your pieces use this colour when possible. Other players keep distinct colours.",
     "out": "Quando giochi una partita, i tuoi pezzi usano questo colore quando possibile. Gli altri giocatori mantengono colori distinti."
+  },
+  "customize.renderOptions.hide-labels": {
+    "src": "Hide coordinate labels",
+    "out": "Nascondi etichette coordinate"
+  },
+  "customize.renderOptions.hide-labels-half": {
+    "src": "Hide half of coordinate labels",
+    "out": "Nascondi metà delle etichette coordinate"
+  },
+  "customize.renderOptions.hide-star-points": {
+    "src": "Hide star points",
+    "out": "Nascondi punti stella"
+  },
+  "customize.renderOptions.no-border": {
+    "src": "No board borders",
+    "out": "Nessun bordo dei pezzi"
+  },
+  "customize.renderOptionsHelp": {
+    "src": "Replaces the preview game’s options when saved. Checked items match the preview JSON when you have not saved options yet.",
+    "out": "Sostituisce le opzioni dell'anteprima di gioco una volta salvato. Gli elementi selezionati corrispondono al JSON dell'anteprima se non hai ancora salvato le opzioni."
+  },
+  "customize.renderOptionsLabel": {
+    "src": "Render options",
+    "out": "Opzioni di rendering"
+  },
+  "customize.renderPreflightErrors": {
+    "src": "Fix these before saving:",
+    "out": "Correggi questi errori prima di salvare:"
+  },
+  "customize.renderPreflightWarnings": {
+    "src": "Warnings (some marker overrides may be removed when you play):",
+    "out": "Avvertenze (alcune personalizzazioni dei marcatori potrebbero essere rimosse durante il gioco):"
+  },
+  "customize.renderSection": {
+    "src": "Board and pieces",
+    "out": "Tavoliere e pezzi"
+  },
+  "customize.renderSectionConfigured": {
+    "src": "Configured",
+    "out": "Configurato"
+  },
+  "customize.renderSectionHelp": {
+    "src": "Board layout overrides apply to compatible square and vertex grids. Piece glyph replacements use the same saved render settings as live play.",
+    "out": "Le personalizzazioni del layout del tavoliere si applicano alle griglie compatibili a caselle e ad intersezioni. Le sostituzioni dei simboli dei pezzi utilizzano le stesse impostazioni di rendering salvate per le partite dal vivo."
+  },
+  "customize.renderSectionNeedsAttention": {
+    "src": "Fix errors to save",
+    "out": "Correggi gli errori per salvare"
+  },
+  "customize.renderTooLarge": {
+    "src": "The render section is too large to save (8 KiB limit). Remove glyph map entries or board overrides.",
+    "out": "La sezione di rendering è troppo grande per essere salvata (limite di 8 KiB). Rimuovi voci dalla mappa dei simboli o personalizzazioni del tavoliere."
+  },
+  "customize.resetBoardRender": {
+    "src": "Reset board layout overrides",
+    "out": "Ripristina personalizzazioni layout tavoliere"
   },
   "customize.resetToDefaults": {
     "src": "Reset to Defaults",
@@ -4326,6 +4438,14 @@
   "customize.settingsJson": {
     "src": "Settings JSON",
     "out": "JSON impostazioni"
+  },
+  "customize.strokeWeight": {
+    "src": "Line weight",
+    "out": "Spessore delle linee"
+  },
+  "customize.strokeWeightDefault": {
+    "src": "Default",
+    "out": "Predefinito"
   },
   "customize.title": {
     "src": "Customize Settings for {{gameName}}",

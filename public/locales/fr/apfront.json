@@ -2292,11 +2292,9 @@
     "boardStyles": {
       "vertex": "Grille d'intersections",
       "vertex-cross": "Grille d'intersections (croix)",
-      "vertex-fanorona": "Grille d'intersections (Fanorona)",
       "squares": "Cases",
       "squares-checkered": "Damier",
       "squares-beveled": "Cases biseautées",
-      "pegboard": "Plateau à trous",
       "squares-stacked": "Cases empilées"
     },
     "glyphReplacements": "Remplacements de glyphes",

@@ -4115,6 +4115,10 @@
     "src": "Preferred colour",
     "out": "Bevorzugte Farbe"
   },
+  "customize.applySections.render": {
+    "src": "Renderer (board, glyphs, options)",
+    "out": "Renderer (Brett, Glyphen, Optionen)"
+  },
   "customize.applySectionsLabel": {
     "src": "Sections to copy",
     "out": "Zu kopierende Abschnitte"
@@ -4139,9 +4143,49 @@
     "src": "at scale",
     "out": "im Maßstab"
   },
+  "customize.boardChromeNotEligible": {
+    "src": "This preview game does not support board layout customization (only standard row/column string grids). Glyph replacements still apply.",
+    "out": "Dieses Vorschauspiel unterstützt keine Anpassung des Brett-Layouts (nur Standard-Zeilen/Spalten-Gitter). Glyphen-Ersetzungen gelten weiterhin."
+  },
   "customize.boardColours": {
     "src": "Board Colours",
     "out": "Brettfarben"
+  },
+  "customize.boardStyle": {
+    "src": "Board style",
+    "out": "Brettstil"
+  },
+  "customize.boardStyleGameDefault": {
+    "src": "Game default",
+    "out": "Spiel-Standard"
+  },
+  "customize.boardStyleGlobalDisabled": {
+    "src": "Board style cannot be set in global defaults because each game uses a different board type.",
+    "out": "Der Brettstil kann nicht in den globalen Standardeinstellungen festgelegt werden, da jedes Spiel einen anderen Brett-Typ verwendet."
+  },
+  "customize.boardStyles.squares": {
+    "src": "Squares",
+    "out": "Quadrate"
+  },
+  "customize.boardStyles.squares-beveled": {
+    "src": "Beveled squares",
+    "out": "Abgeschrägte Quadrate"
+  },
+  "customize.boardStyles.squares-checkered": {
+    "src": "Checkered squares",
+    "out": "Schachbrettmuster"
+  },
+  "customize.boardStyles.squares-stacked": {
+    "src": "Stacked squares",
+    "out": "Gestapelte Quadrate"
+  },
+  "customize.boardStyles.vertex": {
+    "src": "Vertex grid",
+    "out": "Schnittpunkt-Gitter"
+  },
+  "customize.boardStyles.vertex-cross": {
+    "src": "Vertex grid (cross)",
+    "out": "Schnittpunkt-Gitter (Kreuz)"
   },
   "customize.clearColours": {
     "src": "Clear colours",
@@ -4247,6 +4291,10 @@
     "src": "Global Defaults",
     "out": "Globale Standardwerte"
   },
+  "customize.globalDefaultsSectionNotice": {
+    "src": "You are editing global defaults. These apply to every game without its own customization. Changes here are rarely universal across all boards—prefer per-game settings when layout or CSS targets one game.",
+    "out": "Sie bearbeiten die globalen Standardeinstellungen. Diese gelten für jedes Spiel ohne eigene Anpassung. Änderungen hier sind selten universell für alle Spielbretter – bevorzugen Sie spielspezifische Einstellungen, wenn das Layout oder CSS auf ein bestimmtes Spiel abzielt."
+  },
   "customize.glyphReplacements": {
     "src": "Glyph replacements",
     "out": "Glyphenersetzungen"
@@ -4254,6 +4302,14 @@
   "customize.importedLegacyCss": {
     "src": "Imported CSS from this device. Save to store in your account.",
     "out": "Importiertes CSS von diesem Gerät. Speichere, um es in deinem Konto zu hinterlegen."
+  },
+  "customize.labelScale": {
+    "src": "Coordinate label size",
+    "out": "Größe der Koordinatenbeschriftung"
+  },
+  "customize.labelScaleHelp": {
+    "src": "Scales row and column letters and numbers on the board (1 is the game default). The slider spans {{min}}–{{max}}; use the number field or settings JSON for other positive values.",
+    "out": "Skaliert Zeilen- und Spaltenbuchstaben sowie Zahlen auf dem Spielbrett (1 ist der Spiel-Standard). Der Schieberegler reicht von {{min}}–{{max}}; verwenden Sie das Zahlenfeld oder das Einstellungen-JSON für andere positive Werte."
   },
   "customize.output": {
     "src": "Output",
@@ -4286,6 +4342,62 @@
   "customize.preferredColourHelpGlobal": {
     "src": "When you play a game, your pieces use this colour when possible. Other players keep distinct colours.",
     "out": "Wenn du ein Spiel spielst, verwenden deine Spielsteine nach Möglichkeit diese Farbe. Andere Spieler behalten eindeutige Farben."
+  },
+  "customize.renderOptions.hide-labels": {
+    "src": "Hide coordinate labels",
+    "out": "Koordinatenbeschriftungen ausblenden"
+  },
+  "customize.renderOptions.hide-labels-half": {
+    "src": "Hide half of coordinate labels",
+    "out": "Hälfte der Koordinatenbeschriftungen ausblenden"
+  },
+  "customize.renderOptions.hide-star-points": {
+    "src": "Hide star points",
+    "out": "Sternpunkte ausblenden"
+  },
+  "customize.renderOptions.no-border": {
+    "src": "No board borders",
+    "out": "Keine Steinränder"
+  },
+  "customize.renderOptionsHelp": {
+    "src": "Replaces the preview game’s options when saved. Checked items match the preview JSON when you have not saved options yet.",
+    "out": "Ersetzt die Optionen des Vorschauspiels beim Speichern. Ausgewählte Elemente entsprechen dem Vorschau-JSON, wenn Sie noch keine Optionen gespeichert haben."
+  },
+  "customize.renderOptionsLabel": {
+    "src": "Render options",
+    "out": "Darstellungsoptionen"
+  },
+  "customize.renderPreflightErrors": {
+    "src": "Fix these before saving:",
+    "out": "Beheben Sie diese vor dem Speichern:"
+  },
+  "customize.renderPreflightWarnings": {
+    "src": "Warnings (some marker overrides may be removed when you play):",
+    "out": "Warnungen (einige Marker-Überschreibungen werden beim Spielen möglicherweise entfernt):"
+  },
+  "customize.renderSection": {
+    "src": "Board and pieces",
+    "out": "Brett und Spielsteine"
+  },
+  "customize.renderSectionConfigured": {
+    "src": "Configured",
+    "out": "Konfiguriert"
+  },
+  "customize.renderSectionHelp": {
+    "src": "Board layout overrides apply to compatible square and vertex grids. Piece glyph replacements use the same saved render settings as live play.",
+    "out": "Überschreibungen des Brett-Layouts gelten für kompatible Quadrat- und Schnittpunkt-Gitter. Der Austausch von Spielstein-Glyphen verwendet dieselben gespeicherten Darstellungs-Einstellungen wie im Live-Spiel."
+  },
+  "customize.renderSectionNeedsAttention": {
+    "src": "Fix errors to save",
+    "out": "Beheben Sie Fehler zum Speichern"
+  },
+  "customize.renderTooLarge": {
+    "src": "The render section is too large to save (8 KiB limit). Remove glyph map entries or board overrides.",
+    "out": "Der Darstellungsbereich ist zu groß zum Speichern (Limit: 8 KiB). Entfernen Sie Glyphen-Zuordnungseinträge oder Brett-Überschreibungen."
+  },
+  "customize.resetBoardRender": {
+    "src": "Reset board layout overrides",
+    "out": "Brett-Layout-Überschreibungen zurücksetzen"
   },
   "customize.resetToDefaults": {
     "src": "Reset to Defaults",
@@ -4326,6 +4438,14 @@
   "customize.settingsJson": {
     "src": "Settings JSON",
     "out": "Einstellungen-JSON"
+  },
+  "customize.strokeWeight": {
+    "src": "Line weight",
+    "out": "Linienstärke"
+  },
+  "customize.strokeWeightDefault": {
+    "src": "Default",
+    "out": "Standard"
   },
   "customize.title": {
     "src": "Customize Settings for {{gameName}}",

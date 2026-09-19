@@ -4115,6 +4115,10 @@
     "src": "Preferred colour",
     "out": "Couleur préférée"
   },
+  "customize.applySections.render": {
+    "src": "Renderer (board, glyphs, options)",
+    "out": "Moteur de rendu (plateau, symboles, options)"
+  },
   "customize.applySectionsLabel": {
     "src": "Sections to copy",
     "out": "Sections à copier"
@@ -4139,9 +4143,49 @@
     "src": "at scale",
     "out": "à l'échelle"
   },
+  "customize.boardChromeNotEligible": {
+    "src": "This preview game does not support board layout customization (only standard row/column string grids). Glyph replacements still apply.",
+    "out": "Ce jeu en aperçu ne prend pas en charge la personnalisation de la disposition du plateau (seules les grilles standard de lignes/colonnes sont compatibles). Les remplacements de symboles s'appliquent toujours."
+  },
   "customize.boardColours": {
     "src": "Board Colours",
     "out": "Couleurs du plateau"
+  },
+  "customize.boardStyle": {
+    "src": "Board style",
+    "out": "Style de plateau"
+  },
+  "customize.boardStyleGameDefault": {
+    "src": "Game default",
+    "out": "Par défaut pour le jeu"
+  },
+  "customize.boardStyleGlobalDisabled": {
+    "src": "Board style cannot be set in global defaults because each game uses a different board type.",
+    "out": "Le style de plateau ne peut pas être défini dans les paramètres par défaut globaux car chaque jeu utilise un type de plateau différent."
+  },
+  "customize.boardStyles.squares": {
+    "src": "Squares",
+    "out": "Cases"
+  },
+  "customize.boardStyles.squares-beveled": {
+    "src": "Beveled squares",
+    "out": "Cases biseautées"
+  },
+  "customize.boardStyles.squares-checkered": {
+    "src": "Checkered squares",
+    "out": "Damier"
+  },
+  "customize.boardStyles.squares-stacked": {
+    "src": "Stacked squares",
+    "out": "Cases empilées"
+  },
+  "customize.boardStyles.vertex": {
+    "src": "Vertex grid",
+    "out": "Grille d'intersections"
+  },
+  "customize.boardStyles.vertex-cross": {
+    "src": "Vertex grid (cross)",
+    "out": "Grille d'intersections (croix)"
   },
   "customize.clearColours": {
     "src": "Clear colours",
@@ -4247,6 +4291,10 @@
     "src": "Global Defaults",
     "out": "Valeurs par défaut globales"
   },
+  "customize.globalDefaultsSectionNotice": {
+    "src": "You are editing global defaults. These apply to every game without its own customization. Changes here are rarely universal across all boards—prefer per-game settings when layout or CSS targets one game.",
+    "out": "Vous modifiez les paramètres par défaut globaux. Ils s'appliquent à tous les jeux n'ayant pas leur propre personnalisation. Les modifications apportées ici sont rarement universelles à tous les plateaux — préférez les paramètres par jeu lorsque la disposition ou le CSS visent un jeu particulier."
+  },
   "customize.glyphReplacements": {
     "src": "Glyph replacements",
     "out": "Remplacements de glyphes"
@@ -4254,6 +4302,14 @@
   "customize.importedLegacyCss": {
     "src": "Imported CSS from this device. Save to store in your account.",
     "out": "CSS importé depuis cet appareil. Enregistrez pour le stocker sur votre compte."
+  },
+  "customize.labelScale": {
+    "src": "Coordinate label size",
+    "out": "Taille des étiquettes de coordonnées"
+  },
+  "customize.labelScaleHelp": {
+    "src": "Scales row and column letters and numbers on the board (1 is the game default). The slider spans {{min}}–{{max}}; use the number field or settings JSON for other positive values.",
+    "out": "Ajuste la taille des lettres et des chiffres de rangées et colonnes sur le plateau (1 est la valeur par défaut du jeu). Le curseur va de {{min}} à {{max}} ; utilisez le champ numérique ou le JSON de paramètres pour d'autres valeurs positives."
   },
   "customize.output": {
     "src": "Output",
@@ -4286,6 +4342,62 @@
   "customize.preferredColourHelpGlobal": {
     "src": "When you play a game, your pieces use this colour when possible. Other players keep distinct colours.",
     "out": "Lorsque vous jouez une partie, vos pièces utilisent cette couleur lorsque c'est possible. Les autres joueurs conservent des couleurs distinctes."
+  },
+  "customize.renderOptions.hide-labels": {
+    "src": "Hide coordinate labels",
+    "out": "Masquer les étiquettes de coordonnées"
+  },
+  "customize.renderOptions.hide-labels-half": {
+    "src": "Hide half of coordinate labels",
+    "out": "Masquer la moitié des étiquettes de coordonnées"
+  },
+  "customize.renderOptions.hide-star-points": {
+    "src": "Hide star points",
+    "out": "Masquer les points d'étoile"
+  },
+  "customize.renderOptions.no-border": {
+    "src": "No board borders",
+    "out": "Pas de bordure de pièce"
+  },
+  "customize.renderOptionsHelp": {
+    "src": "Replaces the preview game’s options when saved. Checked items match the preview JSON when you have not saved options yet.",
+    "out": "Remplace les options du jeu en aperçu une fois enregistré. Les éléments cochés correspondent au JSON d'aperçu lorsque vous n'avez pas encore enregistré d'options."
+  },
+  "customize.renderOptionsLabel": {
+    "src": "Render options",
+    "out": "Options de rendu"
+  },
+  "customize.renderPreflightErrors": {
+    "src": "Fix these before saving:",
+    "out": "Corrigez ces erreurs avant d'enregistrer :"
+  },
+  "customize.renderPreflightWarnings": {
+    "src": "Warnings (some marker overrides may be removed when you play):",
+    "out": "Avertissements (certaines surcharges de marqueurs peuvent être supprimées lorsque vous jouez) :"
+  },
+  "customize.renderSection": {
+    "src": "Board and pieces",
+    "out": "Plateau et pièces"
+  },
+  "customize.renderSectionConfigured": {
+    "src": "Configured",
+    "out": "Configuré"
+  },
+  "customize.renderSectionHelp": {
+    "src": "Board layout overrides apply to compatible square and vertex grids. Piece glyph replacements use the same saved render settings as live play.",
+    "out": "Les surcharges de disposition du plateau s'appliquent aux grilles carrées et aux grilles d'intersections compatibles. Les remplacements de symboles de pièces utilisent les mêmes paramètres de rendu enregistrés que le jeu en direct."
+  },
+  "customize.renderSectionNeedsAttention": {
+    "src": "Fix errors to save",
+    "out": "Corrigez les erreurs pour enregistrer"
+  },
+  "customize.renderTooLarge": {
+    "src": "The render section is too large to save (8 KiB limit). Remove glyph map entries or board overrides.",
+    "out": "La section de rendu est trop volumineuse pour être enregistrée (limite de 8 Kio). Supprimez des entrées de la carte des symboles ou des surcharges de plateau."
+  },
+  "customize.resetBoardRender": {
+    "src": "Reset board layout overrides",
+    "out": "Réinitialiser les surcharges de disposition du plateau"
   },
   "customize.resetToDefaults": {
     "src": "Reset to Defaults",
@@ -4326,6 +4438,14 @@
   "customize.settingsJson": {
     "src": "Settings JSON",
     "out": "JSON des paramètres"
+  },
+  "customize.strokeWeight": {
+    "src": "Line weight",
+    "out": "Épaisseur du trait"
+  },
+  "customize.strokeWeightDefault": {
+    "src": "Default",
+    "out": "Par défaut"
   },
   "customize.title": {
     "src": "Customize Settings for {{gameName}}",
