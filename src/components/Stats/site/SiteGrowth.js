@@ -85,7 +85,6 @@ function SiteGrowth() {
       <WeekBarChart
         title={t("stats.siteStats.firstTimersCumulative")}
         y={cumulative}
-        chartType="line"
         xaxisTitle={t("stats.siteStats.weekNumber")}
         yaxisTitle={t("stats.siteStats.usersFirstGame")}
       />

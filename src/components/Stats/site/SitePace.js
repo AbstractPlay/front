@@ -1,8 +1,7 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../../stores";
 import WeekBarChart from "../shared/WeekBarChart";
-import { hoursPerTrendSeries } from "../shared/weekSummary";
 
 function SitePace() {
   const summary = useStore((state) => state.summary);
@@ -18,10 +17,7 @@ function SitePace() {
     hoursPerSummary.median != null &&
     hoursPerSummary.n != null;
 
-  const hoursPerTrend = useMemo(
-    () => hoursPerTrendSeries(summary?.hoursPer?.byWeek),
-    [summary]
-  );
+  const hoursPerByWeek = summary?.hoursPer?.byWeek;
 
   return (
     <>
@@ -55,11 +51,11 @@ function SitePace() {
           </table>
         ) : null}
       </div>
-      {hoursPerTrend.length > 0 ? (
+      {Array.isArray(hoursPerByWeek) && hoursPerByWeek.length > 1 ? (
         <WeekBarChart
           title={t("stats.siteStats.hoursPerMovePerWeek")}
-          y={hoursPerTrend}
-          chartType="line"
+          y={hoursPerByWeek}
+          maxWeeks={52}
           xaxisTitle={t("stats.siteStats.weekNumber")}
           yaxisTitle={t("stats.siteStats.hoursPerMove")}
         />
