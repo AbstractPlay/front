@@ -1,5 +1,6 @@
 import { gameinfo } from "@abstractplay/gameslib";
 import { buildBoardRenderOptions } from "./buildBoardRenderOptions";
+import { resolveDisplayRenderRep } from "../getDisplayRenderRep.js";
 import { renderBoardSvg } from "./renderBoardSvg";
 import { svgToPngBlob, svgToImageData } from "./svgToPngBlob";
 import { encodeAnimatedGif } from "./encodeAnimatedGif";
@@ -64,6 +65,8 @@ export async function exportCurrentBoardPng({
 
   const customizationHints = gameinfo.get(metaGame)?.customizations;
 
+  const displayRep = resolveDisplayRenderRep(rep, globalMe, metaGame);
+
   const options = buildBoardRenderOptions({
     metaGame,
     settings,
@@ -72,13 +75,14 @@ export async function exportCurrentBoardPng({
     isParticipant,
     viewerSeat: isParticipant,
     numPlayers,
+    renderRep: rep,
     customizationHints,
   });
 
   const liveSvg = getLiveSvg(boardRenderIndex, rendered);
   const svg =
     liveSvg?.cloneNode(true) ??
-    renderBoardSvg(rep, options, { layerIndex: 0, metaGame });
+    renderBoardSvg(displayRep, options, { layerIndex: 0, metaGame });
   if (!svg) {
     throw new Error("Board render failed");
   }
@@ -122,17 +126,6 @@ export async function exportBoardGif({
 
   const customizationHints = gameinfo.get(metaGame)?.customizations;
 
-  const options = buildBoardRenderOptions({
-    metaGame,
-    settings,
-    colourContext,
-    globalMe,
-    isParticipant,
-    viewerSeat: isParticipant,
-    numPlayers: game?.players?.length,
-    customizationHints,
-  });
-
   const rasterFrames = [];
   for (let i = 0; i < frames.length; i++) {
     onProgress?.(i + 1, frames.length);
@@ -146,7 +139,22 @@ export async function exportBoardGif({
       getPerspective,
       altDisplay,
     });
-    const svg = renderBoardSvg(rep, options, { layerIndex: 0, metaGame });
+    const frameOptions = buildBoardRenderOptions({
+      metaGame,
+      settings,
+      colourContext,
+      globalMe,
+      isParticipant,
+      viewerSeat: isParticipant,
+      numPlayers: game?.players?.length,
+      renderRep: rep,
+      customizationHints,
+    });
+    const displayRep = resolveDisplayRenderRep(rep, globalMe, metaGame);
+    const svg = renderBoardSvg(displayRep, frameOptions, {
+      layerIndex: 0,
+      metaGame,
+    });
     if (!svg) {
       throw new Error(`Failed to render frame ${i + 1}`);
     }

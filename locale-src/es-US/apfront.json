@@ -4107,10 +4107,6 @@
     "src": "Custom CSS",
     "out": "CSS personalizado"
   },
-  "customize.applySections.glyphmap": {
-    "src": "Glyph replacements",
-    "out": "Reemplazos de glifos"
-  },
   "customize.applySections.palette": {
     "src": "Player colours (palette)",
     "out": "Colores de los jugadores (paleta)"
@@ -4118,6 +4114,10 @@
   "customize.applySections.preferredColour": {
     "src": "Preferred colour",
     "out": "Color preferido"
+  },
+  "customize.applySections.render": {
+    "src": "Renderer (board, glyphs, options)",
+    "out": "Renderizador (tablero, símbolos, opciones)"
   },
   "customize.applySectionsLabel": {
     "src": "Sections to copy",
@@ -4143,9 +4143,49 @@
     "src": "at scale",
     "out": "a escala"
   },
+  "customize.boardChromeNotEligible": {
+    "src": "This preview game does not support board layout customization (only standard row/column string grids). Glyph replacements still apply.",
+    "out": "Esta vista previa del juego no admite la personalización del diseño del tablero (solo cuadrículas estándar de texto para filas y columnas). Los reemplazos de símbolos aún se aplican."
+  },
   "customize.boardColours": {
     "src": "Board Colours",
     "out": "Colores del tablero"
+  },
+  "customize.boardStyle": {
+    "src": "Board style",
+    "out": "Estilo del tablero"
+  },
+  "customize.boardStyleGameDefault": {
+    "src": "Game default",
+    "out": "Predeterminado del juego"
+  },
+  "customize.boardStyleGlobalDisabled": {
+    "src": "Board style cannot be set in global defaults because each game uses a different board type.",
+    "out": "El estilo del tablero no se puede establecer en la configuración predeterminada global porque cada juego usa un tipo de tablero diferente."
+  },
+  "customize.boardStyles.squares": {
+    "src": "Squares",
+    "out": "Casillas"
+  },
+  "customize.boardStyles.squares-beveled": {
+    "src": "Beveled squares",
+    "out": "Casillas biseladas"
+  },
+  "customize.boardStyles.squares-checkered": {
+    "src": "Checkered squares",
+    "out": "Casillas ajedrezadas"
+  },
+  "customize.boardStyles.squares-stacked": {
+    "src": "Stacked squares",
+    "out": "Casillas apiladas"
+  },
+  "customize.boardStyles.vertex": {
+    "src": "Vertex grid",
+    "out": "Cuadrícula de vértices"
+  },
+  "customize.boardStyles.vertex-cross": {
+    "src": "Vertex grid (cross)",
+    "out": "Cuadrícula de vértices (cruz)"
   },
   "customize.clearColours": {
     "src": "Clear colours",
@@ -4251,13 +4291,25 @@
     "src": "Global Defaults",
     "out": "Valores predeterminados globales"
   },
+  "customize.globalDefaultsSectionNotice": {
+    "src": "You are editing global defaults. These apply to every game without its own customization. Changes here are rarely universal across all boards—prefer per-game settings when layout or CSS targets one game.",
+    "out": "Estás editando la configuración predeterminada global. Esto se aplica a todos los juegos que no tengan su propia personalización. Los cambios aquí rara vez son universales para todos los tableros; es preferible usar la configuración por juego cuando el diseño o el CSS están dirigidos a un solo juego."
+  },
   "customize.glyphReplacements": {
-    "src": "Glyph Replacements",
+    "src": "Glyph replacements",
     "out": "Reemplazos de glifos"
   },
   "customize.importedLegacyCss": {
     "src": "Imported CSS from this device. Save to store in your account.",
     "out": "CSS importado de este dispositivo. Guarda para almacenarlo en tu cuenta."
+  },
+  "customize.labelScale": {
+    "src": "Coordinate label size",
+    "out": "Tamaño de etiquetas de coordenadas"
+  },
+  "customize.labelScaleHelp": {
+    "src": "Scales row and column letters and numbers on the board (1 is the game default). The slider spans {{min}}–{{max}}; use the number field or settings JSON for other positive values.",
+    "out": "Ajusta la escala de las letras y números de filas y columnas en el tablero (1 es el valor predeterminado del juego). El deslizador abarca desde {{min}} hasta {{max}}; usa el campo numérico o el JSON de configuración para otros valores positivos."
   },
   "customize.output": {
     "src": "Output",
@@ -4272,8 +4324,8 @@
     "out": "(Jugador {{player}})"
   },
   "customize.pasteSettingsHelp": {
-    "src": "Paste settings JSON here to apply.",
-    "out": "Pega el JSON de configuración aquí para aplicarlo."
+    "src": "Paste full settings JSON here. Board and glyph overrides live under render (render.board, render.glyphmap, render.options).",
+    "out": "Pega aquí el JSON completo de configuración. Las redefiniciones de tablero y glifos están bajo render (render.board, render.glyphmap, render.options)."
   },
   "customize.playerColours": {
     "src": "Player Colours",
@@ -4290,6 +4342,62 @@
   "customize.preferredColourHelpGlobal": {
     "src": "When you play a game, your pieces use this colour when possible. Other players keep distinct colours.",
     "out": "Cuando juegas una partida, tus piezas usan este color siempre que sea posible. Los demás jugadores conservan colores distintos."
+  },
+  "customize.renderOptions.hide-labels": {
+    "src": "Hide coordinate labels",
+    "out": "Ocultar etiquetas de coordenadas"
+  },
+  "customize.renderOptions.hide-labels-half": {
+    "src": "Hide half of coordinate labels",
+    "out": "Ocultar la mitad de las etiquetas de coordenadas"
+  },
+  "customize.renderOptions.hide-star-points": {
+    "src": "Hide star points",
+    "out": "Ocultar puntos estelares"
+  },
+  "customize.renderOptions.no-border": {
+    "src": "No board borders",
+    "out": "Sin bordes en las piezas"
+  },
+  "customize.renderOptionsHelp": {
+    "src": "Replaces the preview game’s options when saved. Checked items match the preview JSON when you have not saved options yet.",
+    "out": "Reemplaza las opciones de la vista previa del juego al guardar. Los elementos seleccionados coinciden con el JSON de la vista previa si aún no has guardado las opciones."
+  },
+  "customize.renderOptionsLabel": {
+    "src": "Render options",
+    "out": "Opciones de renderizado"
+  },
+  "customize.renderPreflightErrors": {
+    "src": "Fix these before saving:",
+    "out": "Corrige esto antes de guardar:"
+  },
+  "customize.renderPreflightWarnings": {
+    "src": "Warnings (some marker overrides may be removed when you play):",
+    "out": "Advertencias (algunas modificaciones de marcadores podrían eliminarse cuando juegues):"
+  },
+  "customize.renderSection": {
+    "src": "Board and pieces",
+    "out": "Tablero y piezas"
+  },
+  "customize.renderSectionConfigured": {
+    "src": "Configured",
+    "out": "Configurado"
+  },
+  "customize.renderSectionHelp": {
+    "src": "Board layout overrides apply to compatible square and vertex grids. Piece glyph replacements use the same saved render settings as live play.",
+    "out": "Las modificaciones del diseño del tablero se aplican a las cuadrículas de casillas y vértices compatibles. El reemplazo de símbolos de piezas usa la misma configuración de renderizado guardada que las partidas en vivo."
+  },
+  "customize.renderSectionNeedsAttention": {
+    "src": "Fix errors to save",
+    "out": "Corrige los errores para guardar"
+  },
+  "customize.renderTooLarge": {
+    "src": "The render section is too large to save (8 KiB limit). Remove glyph map entries or board overrides.",
+    "out": "La sección de renderizado es demasiado grande para guardar (límite de 8 KiB). Elimina entradas del mapa de símbolos o modificaciones del tablero."
+  },
+  "customize.resetBoardRender": {
+    "src": "Reset board layout overrides",
+    "out": "Restablecer modificaciones de diseño del tablero"
   },
   "customize.resetToDefaults": {
     "src": "Reset to Defaults",
@@ -4330,6 +4438,14 @@
   "customize.settingsJson": {
     "src": "Settings JSON",
     "out": "JSON de configuración"
+  },
+  "customize.strokeWeight": {
+    "src": "Line weight",
+    "out": "Grosor de línea"
+  },
+  "customize.strokeWeightDefault": {
+    "src": "Default",
+    "out": "Predeterminado"
   },
   "customize.title": {
     "src": "Customize Settings for {{gameName}}",

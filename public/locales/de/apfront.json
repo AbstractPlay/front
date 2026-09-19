@@ -2215,6 +2215,8 @@
   "customize": {
     "title": "Einstellungen für {{gameName}} anpassen",
     "globalDefaults": "Globale Standardwerte",
+    "globalDefaultsSectionNotice": "Sie bearbeiten die globalen Standardeinstellungen. Diese gelten für jedes Spiel ohne eigene Anpassung. Änderungen hier sind selten universell für alle Spielbretter – bevorzugen Sie spielspezifische Einstellungen, wenn das Layout oder CSS auf ein bestimmtes Spiel abzielt.",
+    "boardStyleGlobalDisabled": "Der Brettstil kann nicht in den globalen Standardeinstellungen festgelegt werden, da jedes Spiel einen anderen Brett-Typ verwendet.",
     "preferredColour": "Meine bevorzugte Farbe",
     "preferredColourHelpGlobal": "Wenn du ein Spiel spielst, verwenden deine Spielsteine nach Möglichkeit diese Farbe. Andere Spieler behalten eindeutige Farben.",
     "preferredColourHelpGame": "Überschreibt deine globale bevorzugte Farbe nur für dieses Spiel. Stelle deinen Standard ein auf der",
@@ -2264,7 +2266,38 @@
         "help": "Die Farbe zum Ausfüllen bestimmter Brettelemente. Im Grunde das \"Gegenteil\" des Hintergrunds."
       }
     },
-    "glyphReplacements": "Glyphen-Ersetzungen",
+    "renderSection": "Brett und Spielsteine",
+    "renderSectionHelp": "Überschreibungen des Brett-Layouts gelten für kompatible Quadrat- und Schnittpunkt-Gitter. Der Austausch von Spielstein-Glyphen verwendet dieselben gespeicherten Darstellungs-Einstellungen wie im Live-Spiel.",
+    "renderSectionConfigured": "Konfiguriert",
+    "renderSectionNeedsAttention": "Beheben Sie Fehler zum Speichern",
+    "boardStyle": "Brettstil",
+    "boardStyleGameDefault": "Spiel-Standard",
+    "strokeWeight": "Linienstärke",
+    "strokeWeightDefault": "Standard",
+    "labelScale": "Größe der Koordinatenbeschriftung",
+    "labelScaleHelp": "Skaliert Zeilen- und Spaltenbuchstaben sowie Zahlen auf dem Spielbrett (1 ist der Spiel-Standard). Der Schieberegler reicht von {{min}}–{{max}}; verwenden Sie das Zahlenfeld oder das Einstellungen-JSON für andere positive Werte.",
+    "renderOptionsLabel": "Darstellungsoptionen",
+    "renderOptionsHelp": "Ersetzt die Optionen des Vorschauspiels beim Speichern. Ausgewählte Elemente entsprechen dem Vorschau-JSON, wenn Sie noch keine Optionen gespeichert haben.",
+    "renderOptions": {
+      "hide-labels": "Koordinatenbeschriftungen ausblenden",
+      "hide-labels-half": "Hälfte der Koordinatenbeschriftungen ausblenden",
+      "no-border": "Keine Steinränder",
+      "hide-star-points": "Sternpunkte ausblenden"
+    },
+    "resetBoardRender": "Brett-Layout-Überschreibungen zurücksetzen",
+    "boardChromeNotEligible": "Dieses Vorschauspiel unterstützt keine Anpassung des Brett-Layouts (nur Standard-Zeilen/Spalten-Gitter). Glyphen-Ersetzungen gelten weiterhin.",
+    "renderTooLarge": "Der Darstellungsbereich ist zu groß zum Speichern (Limit: 8 KiB). Entfernen Sie Glyphen-Zuordnungseinträge oder Brett-Überschreibungen.",
+    "renderPreflightErrors": "Beheben Sie diese vor dem Speichern:",
+    "renderPreflightWarnings": "Warnungen (einige Marker-Überschreibungen werden beim Spielen möglicherweise entfernt):",
+    "boardStyles": {
+      "vertex": "Schnittpunkt-Gitter",
+      "vertex-cross": "Schnittpunkt-Gitter (Kreuz)",
+      "squares": "Quadrate",
+      "squares-checkered": "Schachbrettmuster",
+      "squares-beveled": "Abgeschrägte Quadrate",
+      "squares-stacked": "Gestapelte Quadrate"
+    },
+    "glyphReplacements": "Glyphenersetzungen",
     "addReplacement": "Ersetzung hinzufügen",
     "selectOriginal": "-- Original auswählen --",
     "with": "durch",
@@ -2273,7 +2306,7 @@
     "scaleSuffix": "(@ {{scale}}x)",
     "output": "Ausgabe",
     "settingsJson": "Einstellungen-JSON",
-    "pasteSettingsHelp": "Füge das Einstellungen-JSON hier ein, um es anzuwenden.",
+    "pasteSettingsHelp": "Füge hier das vollständige Einstellungs-JSON ein. Brett- und Glyphen-Überschreibungen befinden sich unter render (render.board, render.glyphmap, render.options).",
     "saveSettings": "Einstellungen speichern",
     "resetToDefaults": "Auf Standardwerte zurücksetzen",
     "deleteCustomization": "Anpassung löschen",
@@ -2290,7 +2323,7 @@
     "applySections": {
       "palette": "Spielerfarben (Palette)",
       "colourContext": "Spielbrettfarben",
-      "glyphmap": "Symbol-Ersetzungen",
+      "render": "Renderer (Brett, Glyphen, Optionen)",
       "preferredColour": "Bevorzugte Farbe",
       "customCss": "Benutzerdefiniertes CSS"
     },

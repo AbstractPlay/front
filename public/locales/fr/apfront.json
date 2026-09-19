@@ -2215,6 +2215,8 @@
   "customize": {
     "title": "Personnaliser les paramètres pour {{gameName}}",
     "globalDefaults": "Valeurs par défaut globales",
+    "globalDefaultsSectionNotice": "Vous modifiez les paramètres par défaut globaux. Ils s'appliquent à tous les jeux n'ayant pas leur propre personnalisation. Les modifications apportées ici sont rarement universelles à tous les plateaux — préférez les paramètres par jeu lorsque la disposition ou le CSS visent un jeu particulier.",
+    "boardStyleGlobalDisabled": "Le style de plateau ne peut pas être défini dans les paramètres par défaut globaux car chaque jeu utilise un type de plateau différent.",
     "preferredColour": "Ma couleur préférée",
     "preferredColourHelpGlobal": "Lorsque vous jouez une partie, vos pièces utilisent cette couleur lorsque c'est possible. Les autres joueurs conservent des couleurs distinctes.",
     "preferredColourHelpGame": "Remplace votre couleur préférée globale pour cette partie uniquement. Définissez votre choix par défaut sur la",
@@ -2264,7 +2266,38 @@
         "help": "La couleur utilisée pour remplir certains éléments du plateau. En gros, l'\"opposé\" de l'arrière-plan."
       }
     },
-    "glyphReplacements": "Remplacement de glyphes",
+    "renderSection": "Plateau et pièces",
+    "renderSectionHelp": "Les surcharges de disposition du plateau s'appliquent aux grilles carrées et aux grilles d'intersections compatibles. Les remplacements de symboles de pièces utilisent les mêmes paramètres de rendu enregistrés que le jeu en direct.",
+    "renderSectionConfigured": "Configuré",
+    "renderSectionNeedsAttention": "Corrigez les erreurs pour enregistrer",
+    "boardStyle": "Style de plateau",
+    "boardStyleGameDefault": "Par défaut pour le jeu",
+    "strokeWeight": "Épaisseur du trait",
+    "strokeWeightDefault": "Par défaut",
+    "labelScale": "Taille des étiquettes de coordonnées",
+    "labelScaleHelp": "Ajuste la taille des lettres et des chiffres de rangées et colonnes sur le plateau (1 est la valeur par défaut du jeu). Le curseur va de {{min}} à {{max}} ; utilisez le champ numérique ou le JSON de paramètres pour d'autres valeurs positives.",
+    "renderOptionsLabel": "Options de rendu",
+    "renderOptionsHelp": "Remplace les options du jeu en aperçu une fois enregistré. Les éléments cochés correspondent au JSON d'aperçu lorsque vous n'avez pas encore enregistré d'options.",
+    "renderOptions": {
+      "hide-labels": "Masquer les étiquettes de coordonnées",
+      "hide-labels-half": "Masquer la moitié des étiquettes de coordonnées",
+      "no-border": "Pas de bordure de pièce",
+      "hide-star-points": "Masquer les points d'étoile"
+    },
+    "resetBoardRender": "Réinitialiser les surcharges de disposition du plateau",
+    "boardChromeNotEligible": "Ce jeu en aperçu ne prend pas en charge la personnalisation de la disposition du plateau (seules les grilles standard de lignes/colonnes sont compatibles). Les remplacements de symboles s'appliquent toujours.",
+    "renderTooLarge": "La section de rendu est trop volumineuse pour être enregistrée (limite de 8 Kio). Supprimez des entrées de la carte des symboles ou des surcharges de plateau.",
+    "renderPreflightErrors": "Corrigez ces erreurs avant d'enregistrer :",
+    "renderPreflightWarnings": "Avertissements (certaines surcharges de marqueurs peuvent être supprimées lorsque vous jouez) :",
+    "boardStyles": {
+      "vertex": "Grille d'intersections",
+      "vertex-cross": "Grille d'intersections (croix)",
+      "squares": "Cases",
+      "squares-checkered": "Damier",
+      "squares-beveled": "Cases biseautées",
+      "squares-stacked": "Cases empilées"
+    },
+    "glyphReplacements": "Remplacements de glyphes",
     "addReplacement": "Ajouter un remplacement",
     "selectOriginal": "-- Sélectionner l'original --",
     "with": "par",
@@ -2273,7 +2306,7 @@
     "scaleSuffix": "(@ {{scale}}x)",
     "output": "Sortie",
     "settingsJson": "JSON des paramètres",
-    "pasteSettingsHelp": "Collez le JSON des paramètres ici pour l'appliquer.",
+    "pasteSettingsHelp": "Collez le JSON complet des paramètres ici. Les surcharges de plateau et de glyphes se trouvent sous render (render.board, render.glyphmap, render.options).",
     "saveSettings": "Enregistrer les paramètres",
     "resetToDefaults": "Réinitialiser aux valeurs par défaut",
     "deleteCustomization": "Supprimer la personnalisation",
@@ -2290,7 +2323,7 @@
     "applySections": {
       "palette": "Couleurs des joueurs (palette)",
       "colourContext": "Couleurs du plateau",
-      "glyphmap": "Remplacements de glyphes",
+      "render": "Moteur de rendu (plateau, symboles, options)",
       "preferredColour": "Couleur préférée",
       "customCss": "CSS personnalisé"
     },
