@@ -555,7 +555,7 @@
   "ChallengerSecond": "La defianto ludas due",
   "ChallengeType": "Tipo de defio",
   "ChallengeTypeOpenDescription": "Iu ajn povas akcepti ĉi tiun defion.",
-  "ChallengeTypeTargetedDescription": "Vi defias specifajn ludantojn.",
+  "ChallengeTypeTargetedDescription": "La unua sidloko devas esti asignita al nomita ludanto. Pliaj sidlokoj povas esti malfermitaj al iu ajn.",
   "ChangeRenderOptions": "Ŝanĝi agordojn de la tabula bildigo",
   "ChooseDisplay": "Elektu kiel la tabulo estu bildigita",
   "ChooseClockHard": "Ĉu deviga tempolimo?",
@@ -893,7 +893,7 @@
   "ProfileCountryHelp": "Diru al homoj, de kie vi estas! Vi povas enigi ion ajn ĉi tie, sed se vi enigos validan du- aŭ tri-signan ISO-landokodon, la konvena flago aperos en via profilo.",
   "ProfileFor": "Ludantoprofilo de {{player}}",
   "ProfileName": "Montrita nomo",
-  "ProfileNameHelp": "Jen la nomo, kiun aliaj homoj en la retejo vidos. Ĝi povas esti ŝanĝita poste. Ĝi devas diferenci de ĉiuj nomoj nun uzataj aŭ lastatempe uzitaj.",
+  "ProfileNameHelp": "Jen la nomo, kiun aliaj homoj en la retejo vidos. Ĝi povas esti ŝanĝita poste. Ĝi devas esti unika inter la montrataj nomoj nun uzataj, sen konsideri usklecon kaj kromajn spacetojn.",
   "ProfileTagline": "Libera frapfrazo (maksimume 255 signoj)",
   "Publish": "Publikigi la esploradon",
   "PublishHelp": "Publikigu la esploradon, kiun vi faris dum la ludo, por ke iu ajn povu vidi ĝin.",
@@ -901,7 +901,7 @@
   "RatedGame": "Ĉi tio estos pritaksita ludo.",
   "RatedPlayersCount_one": "pritaksita ludanto",
   "RatedPlayersCount_other": "pritaksitaj ludantoj",
-  "RatingsList": "Pritaksoj de {{name}}",
+  "RatingsList": "Pritaksoj de <gameLink>{{name}}</gameLink>",
   "Reject": "Malakcepti",
   "RelatedSites": "Rilataj retejoj",
   "ResetDefault": "Restarigi defaŭltojn",
@@ -1360,9 +1360,9 @@
       }
     },
     "explanations": {
-      "highestSingle": "Listo de ĉiuj registritaj pritaksoj. La sistemo ignoras ludojn eksplicite markitajn kiel nepritaksitajn kaj ludojn finiĝintajn antaŭ tri movoj. Rangigoj uzas konservativan (95%-fidan) Glicko-2-poentaron (poentaro − 2×RD); montriĝas kaj Glicko kaj la malnova Elo-poentaro. Glicko komenciĝas je 1200 kun RD 350; Elo je 1200 kun konstanta *K* de 30. TrueSkill uzas la defaŭltajn agordojn de Microsoft (poentara intervalo 0–50, komenca valoro 25).",
-      "avgRatings": "Ĉi tiuj kolumnoj estas pezitaj mezumoj de viaj Glicko- kaj Elo-poentaroj en la tuta retejo.",
-      "topPlayers": "Ĉi tiu tabelo listigas ĉiun disponeblan kombinon de ludo kaj variaĵoj kun ĝia plej alte pritaksita ludanto, rangigita laŭ konservativa Glicko-2-poentaro (poentaro − 2×RD). Elo montriĝas por komparo.",
+      "highestSingle": "Listo de ĉiuj registritaj pritaksoj. La sistemo ignoras ludojn eksplicite markitajn kiel nepritaksitajn kaj ludojn finiĝintajn antaŭ tri movoj. Rangigoj uzas konservativan (95%-fidan) Glicko-2-pritakson (pritakso − 2×RD); montriĝas kaj Glicko kaj la malnova Elo-pritakso. Glicko komenciĝas je 1200 kun RD 350; Elo je 1200 kun konstanta *K* de 30. TrueSkill uzas la defaŭltajn agordojn de Microsoft (pritaksa intervalo 0–50, komenca valoro 25).",
+      "avgRatings": "Ĉi tiuj kolumnoj estas pezitaj mezumoj de viaj Glicko- kaj Elo-pritaksoj en la tuta retejo.",
+      "topPlayers": "Ĉi tiu tabelo listigas ĉiun disponeblan kombinon de ludo kaj variaĵoj kun ĝia plej alte pritaksita ludanto, rangigita laŭ konservativa Glicko-2-pritakso (pritakso − 2×RD). Elo montriĝas por komparo.",
       "numPlays": "Ĉi tiu tabelo listigas ĉiun ludon, kiom da fojoj kaj de kiom da malsamaj ludantoj ĝi estis ludita, kaj la `h-index` de la ludo. La h-indekso de ludo estas la nombro de ludantoj, kiuj ludis ĝin almenaŭ tiom da fojoj (do h-indekso 5 signifas, ke 5 malsamaj ludantoj ludis ĝin almenaŭ 5 fojojn). Ĝi ankaŭ donas histogramon de la finitaj ludoj. La antaŭrigardo montras la lastajn 10 semajnojn, kun la plej nova semajno dekstre. Klaku la antaŭrigardon por vidi la tutan historion de finitaj ludoj en sep-tagaj intervaloj, kun la plej nova semajno dekstre.",
       "playerStats": "Ĉi tio montras ĉiun registritan ludanton kune kun la tuta nombro de luditaj ludoj, la nombro de malsamaj ludoj kaj la nombro de malsamaj kontraŭuloj. Ĝi ankaŭ donas `h-index`, kiu estas la nombro de ludoj, kiujn vi ludis almenaŭ tiom da fojoj (ekzemple, se vi ludis tri malsamajn ludojn nur po unu fojon, via indekso estas 1; kiam vi ludos ĉiun el tiuj tri ludoj almenaŭ tri fojojn, la indekso kreskos ĝis 3). Estas ankaŭ `h-index` por la kontraŭuloj, kiujn vi renkontis. Aktiveca histogramo montras la nombron de ludoj finitaj ĉiusemajne, kun la plej nova semajno dekstre. La antaŭrigardo montras la dek plej novajn semajnojn. Klaku ĝin por vidi la tutan historion.",
       "gameStats": "Ĉi tiu tabelo montras ĉiun kombinon de ludo kaj variaĵoj kune kun la nombro de registritaj ludoj, la meza longo de la ludo (nombro de movoj), la mediana longo, la proporcio de venkoj de la unua ludanto kaj la proporcio de remizoj (nur duludantaj ludoj kun pli ol du movoj). **La statistikoj pri venkoj de la unua ludanto kaj remizoj devas esti traktataj singarde!** La provaĵo estas malgranda kaj biasita. Multaj konfuzaj faktoroj povus klarigi ekstreman proporcion. Notu, ke la proporcio de venkoj de la unua ludanto tute ignoras ĉu la interŝanĝa regulo estis uzita. Kalkulante tiun proporcion, remizo valoras kiel duona venko de la unua ludanto.",
@@ -1491,7 +1491,8 @@
       "activity": {
         "axisY": "Finitaj ludoj"
       }
-    }
+    },
+    "pastDisplayNames": "Antaŭe konata kiel: {{names}}"
   },
   "meta": {
     "tabs": {
@@ -1549,7 +1550,9 @@
         "feedbackNew": "Nova {{kindLabel}}: <feedbackLink>{{title}}</feedbackLink>",
         "feedbackNewKind_bug": "cimraporto",
         "feedbackNewKind_feature": "ideo pri funkcio",
-        "feedbackNewKind_wishlist": "ludo por la dezirlisto"
+        "feedbackNewKind_wishlist": "ludo por la dezirlisto",
+        "challengeSlotOpened": "{{participantName}} forlasis vian defion pri <gameLink>{{metaGame}}</gameLink>; {{count}} sidloko(j) estas malfermita(j) al iu ajn",
+        "challengeParticipantLeft": "{{participantName}} forlasis la defion pri <gameLink>{{metaGame}}</gameLink>; ĝi ankoraŭ estas malfermita al aliaj ludantoj"
       }
     }
   },
@@ -1625,7 +1628,7 @@
       "activateCustomCss": "Aktivigi propran CSS-on?",
       "accountCssOverridesLocal": "Propra CSS el via konto (la paĝo por adapti agordojn) estas aktiva por ĉi tiu ludo. Ŝanĝoj ĉi tie konserviĝas nur en ĉi tiu aparato kaj ne aplikiĝos ĝis la CSS de via konto estos forigita."
     },
-    "unrated": "nerangigita",
+    "unrated": "nepritaksita",
     "explorationDisabled": "esplorado malŝaltita",
     "tournamentLink": "turniro",
     "eventLink": "evento",
@@ -1887,8 +1890,8 @@
   "InvalidVariantCombination": "Tiu kombino de variaĵoj ne validas por ĉi tiu ludo.",
   "TotalRatings": "pritaksoj entute",
   "glicko": {
-    "displayHint": "Glicko-poentaro montriĝas kiel 95%-fida poentaro (poentaro − 2×RD), kun la plena RD en krampoj.",
-    "displayNote": "En la tuta retejo Glicko-poentaro montriĝas kiel 95%-fida poentaro, kun la plena RD en krampoj. <wikiLink>Ekscii pli pri la Glicko-poentara sistemo</wikiLink>."
+    "displayHint": "Glicko-pritakso montriĝas kiel 95%-fida pritakso (pritakso − 2×RD), kun la plena RD en krampoj.",
+    "displayNote": "En la tuta retejo Glicko-pritakso montriĝas kiel 95%-fida pritakso, kun la plena RD en krampoj. <wikiLink>Ekscii pli pri la Glicko-pritaksa sistemo</wikiLink>."
   },
   "solo": {
     "badge": "Solludo",
@@ -1946,7 +1949,7 @@
       "matchAll": "Ĉiuj matĉoj",
       "matchGood": "Bona matĉo (35–65%)",
       "matchIdeal": "Ideala matĉo (45–55%)",
-      "matchHint": "Por taksataj defioj: la atendata venkoŝanco kontraŭ la defianto laŭ Glicko-2 (por ĉiu grupo de ludo kaj variaĵoj). Ludantoj novaj en tiu grupo ricevas la defaŭltan takson (1200, RD 350)."
+      "matchHint": "Por pritaksitaj defioj: la atendata venkoŝanco kontraŭ la defianto laŭ Glicko-2 (por ĉiu grupo de ludo kaj variaĵoj). Ludantoj novaj en tiu grupo ricevas la defaŭltan pritakson (1200, RD 350)."
     }
   },
   "common": {
@@ -1979,7 +1982,17 @@
   },
   "news": {
     "earlier": "Pli frue",
-    "whatsNew": "Novaĵoj"
+    "whatsNew": "Novaĵoj",
+    "empty": "Ankoraŭ neniuj anoncoj.",
+    "ogDescription": "Novaĵoj kaj anoncoj de Abstract Play",
+    "intro": "Ĉi tiu paĝo estas la oficiala fonto de novaĵoj pri la retejo. Ni ankaŭ spegulas anoncojn al <discordLink>nia Discord-servilo</discordLink>. Reagu al afiŝoj ĉi tie; abonu per <rssLink>RSS</rssLink>, se vi volas.",
+    "loadOlder": "Ŝargi pli malnovajn anoncojn",
+    "loadingMore": "Ŝargas…",
+    "loadError": "Ne eblis ŝargi anoncojn. Reprovu poste.",
+    "link": {
+      "copy": "Kopii ligilon al ĉi tiu anonco",
+      "copied": "Kopiita!"
+    }
   },
   "notifications": {
     "dismissAll": "Forigi ĉiujn",
@@ -1987,7 +2000,11 @@
     "empty": "Neniuj sciigoj",
     "markAllRead": "Marki ĉiujn kiel legitajn",
     "markRead": "Marki kiel legitan",
-    "newsUpdated": "La novaĵoj estis aktualigitaj"
+    "newsUpdated": "La novaĵoj estis aktualigitaj",
+    "announcementsMore_one": "{{count}} plia anonco en Novaĵoj",
+    "announcementsMore_other": "{{count}} pliaj anoncoj en Novaĵoj",
+    "newAnnouncement": "Nova anonco:",
+    "markAnnouncementsRead": "Marki anoncojn kiel legitajn"
   },
   "profile": {
     "avatar": {
@@ -2019,7 +2036,8 @@
         "waves": "Ondoj"
       },
       "styleLabel": "Stilo",
-      "title": "Avataro"
+      "title": "Avataro",
+      "viewLarge": "Vidi pli grandan avataron"
     }
   },
   "recentGames": {
@@ -2064,7 +2082,9 @@
       "filterLabel": "Filtri la liston",
       "sortBy": "Ordigi laŭ",
       "sortRecent": "Dato de afiŝo (plej novaj unue)",
-      "sortVotes": "Voĉoj (plej multaj unue)"
+      "sortVotes": "Voĉoj (plej multaj unue)",
+      "showClosed": "Fermitaj (ne arkivitaj)",
+      "emptyClosed": "Neniuj fermitaj eroj estas listigitaj ĉi tie. Post arkivado ili moviĝas al la historio de retrosciigoj."
     },
     "bugs": {
       "backToBoard": "Reiri al cimraportoj",
@@ -2079,6 +2099,8 @@
       "adminPriority": "Prioritato",
       "adminReviewers": "Kontrolantoj",
       "adminStatus": "Stato",
+      "reply": "Respondi",
+      "quoteNoText": "_(sen teksto)_",
       "adminTags": "Administraj etikedoj (apartigitaj per komoj)",
       "adminWishlistCategory": "Kategorio",
       "adminWishlistNote": "Noto pri kategorio (nedeviga)",
@@ -2169,7 +2191,27 @@
       "ideas": "Funkcioj",
       "intro": "Cimraportoj kaj ideoj pri funkcioj, kiujn vi sendis.",
       "title": "Miaj retrosciigoj",
-      "updated": "Aktualigita"
+      "updated": "Aktualigita",
+      "intro_submitted": "Retrosciigoj, kiujn vi sendis.",
+      "intro_voted": "Eroj, por kiuj vi voĉdonis.",
+      "intro_watched": "Eroj, kiujn vi observas por ricevi ĝisdatigojn.",
+      "empty_submitted": "Vi ankoraŭ sendis neniun retrosciigon.",
+      "empty_voted": "Vi ankoraŭ voĉdonis por neniu retrosciigo.",
+      "empty_watched": "Vi ankoraŭ observas neniun retrosciigon.",
+      "wishlist": "Dezirlisto",
+      "scopeLabel": "Aktiveco",
+      "scope_submitted": "Senditaj",
+      "scope_voted": "Voĉdonitaj",
+      "scope_watched": "Observataj",
+      "unvote": "Retiri voĉon",
+      "unwatch": "Ĉesi observi",
+      "notifyTitle": "Sciigoj pri novaj retrosciigoj",
+      "notifyIntro": "Ricevu unufojan sciigon en la aplikaĵo, kiam iu sendas novan retrosciigon en kategorio, kiun vi elektas. Tio ne voĉdonas por tiuj eroj nek observas ilin.",
+      "notifyHint": "Por ricevi ĝisdatigojn pri respondoj kaj statoj, vi tamen devas observi specifan diskuton.",
+      "notifyKind_bug": "Novaj cimraportoj",
+      "notifyKind_feature": "Novaj ideoj pri funkcioj",
+      "notifyKind_wishlist": "Novaj ludoj en la dezirlisto",
+      "notifySaveError": "Ne eblis konservi la sciigajn preferojn."
     },
     "new": {
       "attachments": "Aldonaĵoj",
@@ -2281,6 +2323,11 @@
       "sortVotes": "Voĉoj (plej multaj unue)",
       "title": "Dezirlisto de ludoj",
       "viewExisting": "Vidi la ekzistantan eron de la dezirlisto"
+    },
+    "search": {
+      "label": "Serĉi",
+      "placeholder": "Filtri laŭ titolo, aŭtoro aŭ teksto…",
+      "noMatches": "Neniu ero kongruas kun via serĉo."
     }
   },
   "newChallenge": {
@@ -2288,7 +2335,107 @@
     "opponentActivityAll": "Ĉiuj kontraŭuloj",
     "opponentActivity7Days": "Aktivaj en la lastaj 7 tagoj",
     "opponentActivity30Days": "Aktivaj en la lastaj 30 tagoj",
-    "matchFilterHelp": "Limigu kontraŭulojn laŭ la atendata venkoŝanco por ĉi tiu ludo kaj variaĵoj (Glicko-2), sendepende de tio, ĉu la defio estas markita kiel taksata."
+    "matchFilterHelp": "Limigu kontraŭulojn laŭ la atendata venkoŝanco por ĉi tiu ludo kaj variaĵoj (Glicko-2), sendepende de tio, ĉu la defio estas markita kiel pritaksita."
   },
-  "InAppNotifyLabel-feedbackNew": "Novaj retrosciigoj"
+  "InAppNotifyLabel-feedbackNew": "Novaj retrosciigoj",
+  "ChooseFirstOpponent": "Unua kontraŭulo (deviga)",
+  "ChooseOpponentSlot": "Kontraŭulo {{slot}}",
+  "OpponentSlotAnyone": "Iu ajn povas okupi ĉi tiun sidlokon",
+  "OpponentSlotAnyoneHelp": "Ĉi tiu sidloko aperos en la listo de malfermitaj defioj, por ke iu ajn povu akcepti ĝin.",
+  "SelectFirstOpponent": "Elektu la unuan kontraŭulon por ĉi tiu defio.",
+  "DuplicateOpponentInChallenge": "Ĉiu ludanto povas esti nomita nur unufoje en defio.",
+  "SelectOpponentOrAnyone": "Elektu la kontraŭulon {{slot}} aŭ marku la sidlokon kiel malfermitan al iu ajn.",
+  "UseOpenChallengeForAllOpenSeats": "Se vi volas, ke ĉiuj sidlokoj estu malfermitaj, uzu malfermitan defion anstataŭ fermitan.",
+  "LeaveMultiPlayerChallenge": "Forlasi defion",
+  "LeaveMultiPlayerChallengeHelp": "Aliaj ludantoj ankoraŭ povas aliĝi; la defio daŭras sen vi.",
+  "DeclineMultiPlayerInvitation": "Malakcepti inviton",
+  "DeclineMultiPlayerInvitationHelp": "Via sidloko eble malfermiĝos al aliaj; la defio daŭras por la ceteraj ludantoj.",
+  "ChallengeOpenSeats_one": "{{count}} sidloko estas malfermita al iu ajn.",
+  "ChallengeOpenSeats_other": "{{count}} sidlokoj estas malfermitaj al iu ajn.",
+  "StandingChallengeOpenSeats": "{{total}} ({{open}} malfermitaj)",
+  "announcements": {
+    "reactions": {
+      "label": "Reagoj",
+      "toggle": "Aldoni aŭ forigi reagon",
+      "signIn": "Ensaluti por reagi",
+      "signInToReact": "Ensalutu por aldoni reagon"
+    },
+    "preview": {
+      "noTitle": "(Sen titolo)"
+    },
+    "admin": {
+      "listTitle": "Administrado de anoncoj",
+      "listIntro": "Verku malnetajn afiŝojn ĉi tie, poste publikigu ilin en la produkta retejo, kiam ili pretas. Disvolvaj kaj lokaj versioj povas konservi malnetojn kaj alŝuti bildojn; publikigo eblas nur en la produkta retejo.",
+      "newDraft": "Nova malneto",
+      "editDraft": "Redakti anoncon",
+      "editorTitle": "Redaktilo de anoncoj",
+      "empty": "Neniu anonco kongruas kun ĉi tiu filtrilo.",
+      "filterStatus": "Stato",
+      "allStatuses": "Ĉiuj statoj",
+      "colTitle": "Titolo",
+      "colStatus": "Stato",
+      "colUpdated": "Aktualigita",
+      "status": {
+        "draft": "Malneto",
+        "published": "Publikigita",
+        "scheduled": "Planita",
+        "retracted": "Retirita"
+      },
+      "saveDraft": "Konservi",
+      "saving": "Konservante…",
+      "saved": "Konservita.",
+      "publish": "Publikigi",
+      "publishing": "Publikigante…",
+      "publishDisabledDev": "Publikigo eblas nur ĉe play.abstractplay.com (la produkta retejo). Konservu malnetojn ĉi tie kaj publikigu ilin en la produkta retejo.",
+      "publishedHint": "Ĉi tiu afiŝo estas publikigita. Konservado ĝisdatigas nur la retejon; Discord kaj RSS ne estos ĝisdatigitaj antaŭ estonta ŝanĝo de la dissendado.",
+      "backToList": "Reiri al la listo",
+      "tabWrite": "Verki",
+      "tabPreview": "Antaŭrigardi",
+      "fieldTitle": "Titolo",
+      "fieldBody": "Enhavo (Markdown)",
+      "fieldAdminNote": "Interna noto",
+      "adminNoteHint": "Videbla nur al administrantoj; neniam montrata ĉe /news.",
+      "previewHeading": "Antaŭrigardo",
+      "emojiHint": "Konsileto: vi ankaŭ povas uzi la emoji-elektilon de via sistemo (Windows: Win+., macOS: Ctrl+Cmd+Space).",
+      "publishConfirmTitle": "Ĉu publikigi la anoncon?",
+      "publishConfirmBody": "Ĉi tio publikigos ĝin ĉe /news, aktualigos RSS, spegulos ĝin al Discord (se agordite), kaj retpoŝte aŭ per puŝsciigo sciigos uzantojn, kiuj elektis ricevi retejajn anoncojn.",
+      "publishConfirm": "Publikigi nun",
+      "publishSaveFirst": "Konservu la malneton antaŭ ol publikigi.",
+      "publishSaveChanges": "Konservu viajn ŝanĝojn antaŭ ol publikigi.",
+      "publishFailed": "Publikigo malsukcesis. Reprovu aŭ kontrolu la eraron en la paĝo de la redaktilo.",
+      "publishFailedNoId": "Ĉi tiu malneto ankoraŭ ne havas identigilon. Unue konservu ĝin, poste publikigu.",
+      "retract": "Retiri",
+      "retracting": "Retirante…",
+      "retractConfirmTitle": "Ĉu retiri la anoncon?",
+      "retractConfirmBody": "Ĉi tio forigos la afiŝon de /news kaj RSS. Ĝi ne forigas la spegulon en Discord; ĝisdatigu Discord permane, se necese.",
+      "retractConfirm": "Retiri nun",
+      "upload": {
+        "addImage": "Aldoni bildon",
+        "pasteHint": "Algluu ekrankopion ie ajn sur ĉi tiu paĝo (krom dum vi tajpas en kampo), aŭ uzu \"Aldoni bildon\".",
+        "saveFirst": "Konservu la malneton unufoje, por ke alŝutaĵoj povu esti ligitaj al ĉi tiu anonco.",
+        "tooMany": "Vi povas alkroĉi maksimume {{max}} bildojn."
+      }
+    }
+  },
+  "DeclineDirectChallenges": "Ne akcepti rektajn defiojn",
+  "DeclineDirectChallengesHelp": "Nomitaj defioj senditaj al vi estos aŭtomate malakceptitaj. Malfermitaj defioj sur ludpaĝoj ne estos tuŝitaj.",
+  "InAppNotifyLabel-announcements": "Retejaj anoncoj",
+  "NotifyLabel-announcements": "Retejaj anoncoj",
+  "UserSettingsTabProfile": "Profilo",
+  "UserSettingsTabNotifications": "Sciigoj",
+  "UserSettingsTabGameplay": "Ludado",
+  "playerPicker": {
+    "choose": "Elekti ludanton…",
+    "searchLabel": "Serĉi",
+    "searchPlaceholder": "Tajpu por filtri ludantojn…",
+    "noResults": "Neniu ludanto kongruas kun via serĉo.",
+    "noEligible": "Neniu ludanto kongruas kun viaj filtriloj. Provu malpliigi la limigojn pri aktiveco aŭ matĉo.",
+    "loadingQuickPicks": "Ŝargas viajn kontraŭulojn…",
+    "matchCount": "{{count}} el {{total}} ludantoj",
+    "expectedWinRate": "Via atendata venkoŝanco: {{percent}}",
+    "quickPicks": {
+      "mostPlayed": "Plej oftaj kontraŭuloj",
+      "recent": "Lastatempaj kontraŭuloj"
+    }
+  }
 }

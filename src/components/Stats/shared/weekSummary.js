@@ -1,9 +1,25 @@
+/** Drop the trailing (current, usually incomplete) week bucket. */
+export function withoutIncompleteWeek(series) {
+  if (!Array.isArray(series) || series.length === 0) {
+    return [];
+  }
+  return series.slice(0, -1);
+}
+
+/** Complete weeks only, optionally capped to the most recent N weeks. */
+export function trimWeekSeriesForChart(series, maxWeeks) {
+  let values = withoutIncompleteWeek(series);
+  if (maxWeeks != null && values.length > maxWeeks) {
+    values = values.slice(-maxWeeks);
+  }
+  return values;
+}
+
 export function lstSummarize(lst) {
   if (!Array.isArray(lst) || lst.length === 0) {
     return undefined;
   }
-  // drop the most recent (usually partial) week
-  let newLst = lst.slice(0, -1);
+  let newLst = withoutIncompleteWeek(lst);
   // now just keep the most recent 52 weeks
   if (newLst.length > 52) {
     newLst = newLst.slice(-52);
@@ -54,21 +70,11 @@ export function combinedTimeoutAbandonRates(timeouts, abandoned) {
   if (!Array.isArray(timeouts)) {
     return [];
   }
-  const timeoutSeries = [...timeouts].reverse();
   const abandonedSeries =
-    abandoned !== undefined
-      ? [...abandoned].reverse()
-      : timeoutSeries.map(() => 0);
-  return timeoutSeries.map((rate, i) => rate + (abandonedSeries[i] ?? 0));
+    abandoned !== undefined ? abandoned : timeouts.map(() => 0);
+  return timeouts.map((rate, i) => rate + (abandonedSeries[i] ?? 0));
 }
 
 export function hoursPerTrendSeries(byWeek) {
-  if (!Array.isArray(byWeek) || byWeek.length === 0) {
-    return [];
-  }
-  let trend = byWeek.slice(0, -1);
-  if (trend.length > 52) {
-    trend = trend.slice(-52);
-  }
-  return trend;
+  return trimWeekSeriesForChart(byWeek, 52);
 }

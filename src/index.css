@@ -1510,12 +1510,18 @@ tr.stickyHeader {
     text-align: center;
     font-weight: bold;
     margin-bottom: 0.5rem;
+    color: var(--main-font-color);
 }
 
 .ap-chart-grid {
     stroke: var(--secondary-color-3-bg);
     stroke-width: 1;
     pointer-events: none;
+}
+
+:root[color-mode="dark"] .ap-chart-grid {
+    stroke: var(--secondary-font-color);
+    stroke-opacity: 0.35;
 }
 
 .ap-chart-grid-layer {
@@ -1539,13 +1545,13 @@ tr.stickyHeader {
 }
 
 .ap-chart-tick {
-    fill: var(--main-text-color);
+    fill: var(--main-font-color);
     font-size: 11px;
     pointer-events: none;
 }
 
 .ap-chart-axis-title {
-    fill: var(--main-text-color);
+    fill: var(--main-font-color);
     font-size: 12px;
     pointer-events: none;
 }
