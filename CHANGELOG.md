@@ -38,7 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Esperanto sorting: Table columns holding game and player names now sort with the locale-aware collator instead of TanStack Table's built-in comparator, which compared by UTF-16 code unit and so listed the hat letters (Ĉ, Ĝ, Ĥ, Ĵ, Ŝ, Ŭ) after Z rather than after their base letters.
+* Esperanto sorting: Table columns holding game, player, and designer names now sort with the locale-aware collator instead of TanStack Table's built-in comparator, which compared by UTF-16 code unit and so listed the hat letters (Ĉ, Ĝ, Ĥ, Ĵ, Ŝ, Ŭ) after Z rather than after their base letters.
+* Game list: The alphabetized meta-game list is now rebuilt when the translation bundles finish loading, not only when the language tag changes, so it no longer stays in English name order after a locale loads over HTTP.
 * Challenges: Fixed bug where new challenges didn't *really* start with "Random" seating selected.
 * Homeworlds: Fixed bug that stopped the click handler from working properly.
 * Pikemen: Fixed bug that caused unnecessary reorientation to throw an error instead of being ignored.

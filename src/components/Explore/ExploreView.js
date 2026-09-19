@@ -450,6 +450,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         {
           header: t("tables.designers"),
           id: "designers",
+          sortingFn: stringColumnSortingFn(i18n.language),
           cell: (props) =>
             props.row.original.designers.length === 0
               ? ""
