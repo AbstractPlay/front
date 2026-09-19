@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
+import { compareStrings, stringColumnSortingFn } from "../lib/compareStrings";
 import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
@@ -54,7 +55,7 @@ function partitionStandingChallenges(raw) {
 }
 
 function StandingChallenges(props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { status: authStatus } = useAuthSession();
   const [challenges, challengesSetter] = useState(null);
   const [accepted, acceptedSetter] = useState(null);
@@ -374,6 +375,7 @@ function StandingChallenges(props) {
       cols.push(
         columnHelper.accessor("metaGameName", {
           header: t("tables.game"),
+          sortingFn: stringColumnSortingFn(i18n.language),
           cell: (props) => (
             <Link to={`/challenges/${props.row.original.metaGame}`}>
               {props.getValue()}
@@ -385,6 +387,7 @@ function StandingChallenges(props) {
     cols.push(
       columnHelper.accessor("challenger", {
         header: t("tables.challenger"),
+        sortingFn: stringColumnSortingFn(i18n.language),
         cell: (props) => (
           <>
             <BotAwareName
@@ -415,6 +418,14 @@ function StandingChallenges(props) {
             .getValue()
             .map((p) => formatPlayerDisplayName(p, allUsers))
             .join(","),
+        sortingFn: (rowA, rowB, columnID) => {
+          const names = (row) =>
+            row
+              .getValue(columnID)
+              .map((p) => formatPlayerDisplayName(p, allUsers))
+              .join(",");
+          return compareStrings(names(rowA), names(rowB), i18n.language);
+        },
       }),
       columnHelper.accessor("seating", {
         header: t("tables.seating"),
@@ -509,6 +520,7 @@ function StandingChallenges(props) {
     showRespond,
     allUsers,
     siteWide,
+    i18n.language,
   ]);
 
   const table = useReactTable({

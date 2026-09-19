@@ -20,3 +20,14 @@ export function getStringCollator(locale = "en") {
 export function compareStrings(a, b, locale = "en") {
   return getStringCollator(locale).compare(String(a ?? ""), String(b ?? ""));
 }
+
+/**
+ * TanStack Table sortingFn for a plain string column.
+ * The built-in `text` / `alphanumeric` comparators compare with `>` / `<`, i.e. by
+ * UTF-16 code unit, which strands Esperanto hat letters (ĉ, ĝ, ŝ …) after z.
+ * @param {string} locale
+ */
+export function stringColumnSortingFn(locale) {
+  return (rowA, rowB, columnID) =>
+    compareStrings(rowA.getValue(columnID), rowB.getValue(columnID), locale);
+}

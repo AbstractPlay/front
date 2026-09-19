@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
+import { stringColumnSortingFn } from "../lib/compareStrings";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import {
@@ -38,7 +39,7 @@ function matchesMetaGame(rec, metaUid) {
 }
 
 function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [showState, showStateSetter] = useStorageState("ratings-show", 20);
   const [sorting, setSorting] = useState([{ id: "rank", desc: false }]);
@@ -108,6 +109,7 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
       }),
       columnHelper.accessor("player", {
         header: t("tables.player"),
+        sortingFn: stringColumnSortingFn(i18n.language),
         cell: (props) => (
           <>
             <Link to={`/player/${props.row.original.id.split("|")[0]}`}>
@@ -183,6 +185,7 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
       metaGame,
       closeChallengeModal,
       t,
+      i18n.language,
     ]
   );
 
