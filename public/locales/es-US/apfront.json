@@ -2215,6 +2215,8 @@
   "customize": {
     "title": "Personalizar configuración para {{gameName}}",
     "globalDefaults": "Valores predeterminados globales",
+    "globalDefaultsSectionNotice": "Estás editando la configuración predeterminada global. Esto se aplica a todos los juegos que no tengan su propia personalización. Los cambios aquí rara vez son universales para todos los tableros; es preferible usar la configuración por juego cuando el diseño o el CSS están dirigidos a un solo juego.",
+    "boardStyleGlobalDisabled": "El estilo del tablero no se puede establecer en la configuración predeterminada global porque cada juego usa un tipo de tablero diferente.",
     "preferredColour": "Mi color preferido",
     "preferredColourHelpGlobal": "Cuando juegas una partida, tus piezas usan este color siempre que sea posible. Los demás jugadores conservan colores distintos.",
     "preferredColourHelpGame": "Anula tu color preferido global solo para esta partida. Establece tu opción predeterminada en la",
@@ -2264,7 +2266,40 @@
         "help": "El color usado para rellenar ciertos elementos del tablero. Básicamente, lo \"opuesto\" al fondo."
       }
     },
-    "glyphReplacements": "Reemplazos de glifos",
+    "renderSection": "Tablero y piezas",
+    "renderSectionHelp": "Las modificaciones del diseño del tablero se aplican a las cuadrículas de casillas y vértices compatibles. El reemplazo de símbolos de piezas usa la misma configuración de renderizado guardada que las partidas en vivo.",
+    "renderSectionConfigured": "Configurado",
+    "renderSectionNeedsAttention": "Corrige los errores para guardar",
+    "boardStyle": "Estilo del tablero",
+    "boardStyleGameDefault": "Predeterminado del juego",
+    "strokeWeight": "Grosor de línea",
+    "strokeWeightDefault": "Predeterminado",
+    "labelScale": "Tamaño de etiquetas de coordenadas",
+    "labelScaleHelp": "Ajusta la escala de las letras y números de filas y columnas en el tablero (1 es el valor predeterminado del juego). El deslizador abarca desde {{min}} hasta {{max}}; usa el campo numérico o el JSON de configuración para otros valores positivos.",
+    "renderOptionsLabel": "Opciones de renderizado",
+    "renderOptionsHelp": "Reemplaza las opciones de la vista previa del juego al guardar. Los elementos seleccionados coinciden con el JSON de la vista previa si aún no has guardado las opciones.",
+    "renderOptions": {
+      "hide-labels": "Ocultar etiquetas de coordenadas",
+      "hide-labels-half": "Ocultar la mitad de las etiquetas de coordenadas",
+      "no-border": "Sin bordes en las piezas",
+      "hide-star-points": "Ocultar puntos estelares"
+    },
+    "resetBoardRender": "Restablecer modificaciones de diseño del tablero",
+    "boardChromeNotEligible": "Esta vista previa del juego no admite la personalización del diseño del tablero (solo cuadrículas estándar de texto para filas y columnas). Los reemplazos de símbolos aún se aplican.",
+    "renderTooLarge": "La sección de renderizado es demasiado grande para guardar (límite de 8 KiB). Elimina entradas del mapa de símbolos o modificaciones del tablero.",
+    "renderPreflightErrors": "Corrige esto antes de guardar:",
+    "renderPreflightWarnings": "Advertencias (algunas modificaciones de marcadores podrían eliminarse cuando juegues):",
+    "boardStyles": {
+      "vertex": "Cuadrícula de vértices",
+      "vertex-cross": "Cuadrícula de vértices (cruz)",
+      "vertex-fanorona": "Cuadrícula de vértices (Fanorona)",
+      "squares": "Casillas",
+      "squares-checkered": "Casillas ajedrezadas",
+      "squares-beveled": "Casillas biseladas",
+      "pegboard": "Tablero de clavijas",
+      "squares-stacked": "Casillas apiladas"
+    },
+    "glyphReplacements": "Reemplazos de símbolos",
     "addReplacement": "Agregar reemplazo",
     "selectOriginal": "-- Seleccionar original --",
     "with": "con",
@@ -2273,7 +2308,7 @@
     "scaleSuffix": "(@ {{scale}}x)",
     "output": "Salida",
     "settingsJson": "JSON de configuración",
-    "pasteSettingsHelp": "Pega el JSON de configuración aquí para aplicarlo.",
+    "pasteSettingsHelp": "Pega aquí el JSON completo de configuración. Las modificaciones de tablero y símbolos se encuentran dentro de render (render.board, render.glyphmap, render.options).",
     "saveSettings": "Guardar configuración",
     "resetToDefaults": "Restablecer a valores predeterminados",
     "deleteCustomization": "Eliminar personalización",
@@ -2290,7 +2325,7 @@
     "applySections": {
       "palette": "Colores de los jugadores (paleta)",
       "colourContext": "Colores del tablero",
-      "glyphmap": "Reemplazos de glifos",
+      "render": "Renderizador (tablero, símbolos, opciones)",
       "preferredColour": "Color preferido",
       "customCss": "CSS personalizado"
     },

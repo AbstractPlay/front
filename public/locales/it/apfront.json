@@ -2215,6 +2215,8 @@
   "customize": {
     "title": "Personalizza impostazioni per {{gameName}}",
     "globalDefaults": "Impostazioni predefinite globali",
+    "globalDefaultsSectionNotice": "Stai modificando le impostazioni predefinite globali. Si applicano a ogni partita priva di personalizzazioni proprie. Le modifiche apportate qui sono raramente universali per tutti i tavolieri: preferisci le impostazioni per singolo gioco quando il layout o il CSS si riferiscono a un gioco specifico.",
+    "boardStyleGlobalDisabled": "Lo stile del tavoliere non può essere impostato nelle impostazioni predefinite globali perché ogni gioco utilizza un tipo di tavoliere diverso.",
     "preferredColour": "Il mio colore preferito",
     "preferredColourHelpGlobal": "Quando giochi una partita, i tuoi pezzi usano questo colore quando possibile. Gli altri giocatori mantengono colori distinti.",
     "preferredColourHelpGame": "Sostituisce il tuo colore preferito globale solo per questa partita. Imposta quello predefinito nella",
@@ -2264,7 +2266,40 @@
         "help": "Il colore usato per riempire alcuni elementi del tabellone. In pratica, l'\"opposto\" dello sfondo."
       }
     },
-    "glyphReplacements": "Sostituzioni di simboli",
+    "renderSection": "Tavoliere e pezzi",
+    "renderSectionHelp": "Le personalizzazioni del layout del tavoliere si applicano alle griglie compatibili a caselle e ad intersezioni. Le sostituzioni dei simboli dei pezzi utilizzano le stesse impostazioni di rendering salvate per le partite dal vivo.",
+    "renderSectionConfigured": "Configurato",
+    "renderSectionNeedsAttention": "Correggi gli errori per salvare",
+    "boardStyle": "Stile del tavoliere",
+    "boardStyleGameDefault": "Predefinito del gioco",
+    "strokeWeight": "Spessore delle linee",
+    "strokeWeightDefault": "Predefinito",
+    "labelScale": "Dimensione etichette coordinate",
+    "labelScaleHelp": "Ridimensiona le lettere e i numeri di riga e colonna sul tavoliere (1 è il valore predefinito del gioco). Il cursore varia da {{min}}–{{max}}; usa il campo numerico o il JSON delle impostazioni per altri valori positivi.",
+    "renderOptionsLabel": "Opzioni di rendering",
+    "renderOptionsHelp": "Sostituisce le opzioni dell'anteprima di gioco una volta salvato. Gli elementi selezionati corrispondono al JSON dell'anteprima se non hai ancora salvato le opzioni.",
+    "renderOptions": {
+      "hide-labels": "Nascondi etichette coordinate",
+      "hide-labels-half": "Nascondi metà delle etichette coordinate",
+      "no-border": "Nessun bordo dei pezzi",
+      "hide-star-points": "Nascondi punti stella"
+    },
+    "resetBoardRender": "Ripristina personalizzazioni layout tavoliere",
+    "boardChromeNotEligible": "Questa anteprima di gioco non supporta la personalizzazione del layout del tavoliere (solo griglie di stringhe riga/colonna standard). Le sostituzioni dei simboli si applicano comunque.",
+    "renderTooLarge": "La sezione di rendering è troppo grande per essere salvata (limite di 8 KiB). Rimuovi voci dalla mappa dei simboli o personalizzazioni del tavoliere.",
+    "renderPreflightErrors": "Correggi questi errori prima di salvare:",
+    "renderPreflightWarnings": "Avvertenze (alcune personalizzazioni dei marcatori potrebbero essere rimosse durante il gioco):",
+    "boardStyles": {
+      "vertex": "Griglia ad intersezioni",
+      "vertex-cross": "Griglia ad intersezioni (croce)",
+      "vertex-fanorona": "Griglia ad intersezioni (Fanorona)",
+      "squares": "Caselle",
+      "squares-checkered": "Caselle a scacchi",
+      "squares-beveled": "Caselle smussate",
+      "pegboard": "Tavoliere a pioli",
+      "squares-stacked": "Caselle impilate"
+    },
+    "glyphReplacements": "Sostituzioni dei simboli",
     "addReplacement": "Aggiungi sostituzione",
     "selectOriginal": "-- Seleziona originale --",
     "with": "con",
@@ -2273,7 +2308,7 @@
     "scaleSuffix": "(@ {{scale}}x)",
     "output": "Output",
     "settingsJson": "JSON impostazioni",
-    "pasteSettingsHelp": "Incolla qui il JSON delle impostazioni per applicarle.",
+    "pasteSettingsHelp": "Incolla qui il JSON completo delle impostazioni. Le personalizzazioni del tavoliere e dei simboli si trovano sotto render (render.board, render.glyphmap, render.options).",
     "saveSettings": "Salva impostazioni",
     "resetToDefaults": "Ripristina predefiniti",
     "deleteCustomization": "Elimina personalizzazione",
@@ -2290,7 +2325,7 @@
     "applySections": {
       "palette": "Colori dei giocatori (palette)",
       "colourContext": "Colori del tabellone",
-      "glyphmap": "Sostituzioni di glifi",
+      "render": "Rendering (tavoliere, simboli, opzioni)",
       "preferredColour": "Colore preferito",
       "customCss": "CSS personalizzato"
     },
