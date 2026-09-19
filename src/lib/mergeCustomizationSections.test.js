@@ -8,7 +8,11 @@ describe("mergeCustomizationSections", () => {
   const target = {
     palette: ["#111111"],
     colourContext: { background: "#aaaaaa" },
-    glyphmap: [["a", "b"]],
+    render: {
+      board: { strokeWeight: 1 },
+      glyphmap: [["a", "b"]],
+    },
+    glyphmap: [["legacy", "row"]],
     preferredColour: "#ff0000",
     customCss: { css: "old", active: true },
   };
@@ -16,7 +20,11 @@ describe("mergeCustomizationSections", () => {
   const source = {
     palette: ["#e31a1c", "#1f78b4"],
     colourContext: { background: "#ffffff", board: "#eeeeee" },
-    glyphmap: [["x", "y", 2]],
+    render: {
+      board: { style: "squares-checkered", labelScale: 1.5 },
+      glyphmap: [["x", "y", 2]],
+      options: ["hide-star-points"],
+    },
     preferredColour: "#33a02c",
     customCss: { css: "div._meta_foo {}", active: false },
   };
@@ -25,13 +33,36 @@ describe("mergeCustomizationSections", () => {
     const merged = mergeCustomizationSections(target, source, {
       palette: true,
       colourContext: false,
-      glyphmap: false,
+      render: false,
       preferredColour: false,
       customCss: false,
     });
     expect(merged.palette).toEqual(["#e31a1c", "#1f78b4"]);
-    expect(merged.glyphmap).toEqual([["a", "b"]]);
+    expect(merged.render).toEqual(target.render);
     expect(merged.customCss).toEqual({ css: "old", active: true });
+  });
+
+  it("copies render and drops legacy glyphmap on target", () => {
+    const merged = mergeCustomizationSections(target, source, {
+      render: true,
+    });
+    expect(merged.render).toEqual(source.render);
+    expect(merged).not.toHaveProperty("glyphmap");
+    expect(merged.palette).toEqual(["#111111"]);
+  });
+
+  it("builds render from legacy source glyphmap and boardChrome", () => {
+    const legacySource = {
+      glyphmap: [["p", "meeple", 1]],
+      boardChrome: { strokeWeight: 2 },
+    };
+    const merged = mergeCustomizationSections({}, legacySource, {
+      render: true,
+    });
+    expect(merged.render).toEqual({
+      board: { strokeWeight: 2 },
+      glyphmap: [["p", "meeple", 1]],
+    });
   });
 
   it("merges customCss when selected", () => {
@@ -46,7 +77,7 @@ describe("mergeCustomizationSections", () => {
     const merged = mergeCustomizationSections(
       target,
       { ...source, preferredColour: null },
-      { preferredColour: true }
+      { preferredColour: true },
     );
     expect(merged).not.toHaveProperty("preferredColour");
   });
@@ -55,7 +86,7 @@ describe("mergeCustomizationSections", () => {
     const merged = mergeCustomizationSections(
       target,
       { ...source, customCss: undefined },
-      { customCss: true }
+      { customCss: true },
     );
     expect(merged).not.toHaveProperty("customCss");
   });
@@ -63,6 +94,7 @@ describe("mergeCustomizationSections", () => {
   it("starts from empty target", () => {
     const merged = mergeCustomizationSections({}, source, ALL_CUSTOMIZATION_SECTIONS);
     expect(merged.palette).toEqual(source.palette);
+    expect(merged.render).toEqual(source.render);
     expect(merged.customCss).toEqual(source.customCss);
   });
 });

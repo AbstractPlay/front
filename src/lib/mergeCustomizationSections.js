@@ -3,11 +3,13 @@
  * Used by bulk-apply; only overwrites sections the user selected.
  */
 
+import { cloneRenderCustomization } from "./normalizeCustomizationSettings.js";
+
 /**
  * @typedef {object} CustomizationSections
  * @property {boolean} [palette]
  * @property {boolean} [colourContext]
- * @property {boolean} [glyphmap]
+ * @property {boolean} [render]
  * @property {boolean} [preferredColour]
  * @property {boolean} [customCss]
  */
@@ -30,8 +32,15 @@ export function mergeCustomizationSections(target, source, sections) {
         ? { ...source.colourContext }
         : {};
   }
-  if (sections.glyphmap) {
-    out.glyphmap = Array.isArray(source.glyphmap) ? [...source.glyphmap] : [];
+  if (sections.render) {
+    const render = cloneRenderCustomization(source);
+    if (render) {
+      out.render = render;
+    } else {
+      delete out.render;
+    }
+    delete out.glyphmap;
+    delete out.boardChrome;
   }
   if (sections.preferredColour) {
     if (source.preferredColour != null && source.preferredColour !== "") {
@@ -55,7 +64,7 @@ export function mergeCustomizationSections(target, source, sections) {
 export const ALL_CUSTOMIZATION_SECTIONS = {
   palette: true,
   colourContext: true,
-  glyphmap: true,
+  render: true,
   preferredColour: true,
   customCss: true,
 };

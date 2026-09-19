@@ -2215,6 +2215,8 @@
     "customize": {
         "title": "Customize Settings for {{gameName}}",
         "globalDefaults": "Global Defaults",
+        "globalDefaultsSectionNotice": "You are editing global defaults. These apply to every game without its own customization. Changes here are rarely universal across all boards—prefer per-game settings when layout or CSS targets one game.",
+        "boardStyleGlobalDisabled": "Board style cannot be set in global defaults because each game uses a different board type.",
         "preferredColour": "My preferred colour",
         "preferredColourHelpGlobal": "When you play a game, your pieces use this colour when possible. Other players keep distinct colours.",
         "preferredColourHelpGame": "Overrides your global preferred colour for this game only. Set your default on the",
@@ -2264,7 +2266,40 @@
                 "help": "The colour used to fill certain board elements. Basically, the \"opposite\" of the background."
             }
         },
-        "glyphReplacements": "Glyph Replacements",
+        "renderSection": "Board and pieces",
+        "renderSectionHelp": "Board layout overrides apply to compatible square and vertex grids. Piece glyph replacements use the same saved render settings as live play.",
+        "renderSectionConfigured": "Configured",
+        "renderSectionNeedsAttention": "Fix errors to save",
+        "boardStyle": "Board style",
+        "boardStyleGameDefault": "Game default",
+        "strokeWeight": "Line weight",
+        "strokeWeightDefault": "Default",
+        "labelScale": "Coordinate label size",
+        "labelScaleHelp": "Scales row and column letters and numbers on the board (1 is the game default). The slider spans {{min}}–{{max}}; use the number field or settings JSON for other positive values.",
+        "renderOptionsLabel": "Render options",
+        "renderOptionsHelp": "Replaces the preview game’s options when saved. Checked items match the preview JSON when you have not saved options yet.",
+        "renderOptions": {
+            "hide-labels": "Hide coordinate labels",
+            "hide-labels-half": "Hide half of coordinate labels",
+            "no-border": "No piece borders",
+            "hide-star-points": "Hide star points"
+        },
+        "resetBoardRender": "Reset board layout overrides",
+        "boardChromeNotEligible": "This preview game does not support board layout customization (only standard row/column string grids). Glyph replacements still apply.",
+        "renderTooLarge": "The render section is too large to save (8 KiB limit). Remove glyph map entries or board overrides.",
+        "renderPreflightErrors": "Fix these before saving:",
+        "renderPreflightWarnings": "Warnings (some marker overrides may be removed when you play):",
+        "boardStyles": {
+            "vertex": "Vertex grid",
+            "vertex-cross": "Vertex grid (cross)",
+            "vertex-fanorona": "Vertex grid (Fanorona)",
+            "squares": "Squares",
+            "squares-checkered": "Checkered squares",
+            "squares-beveled": "Beveled squares",
+            "pegboard": "Pegboard",
+            "squares-stacked": "Stacked squares"
+        },
+        "glyphReplacements": "Glyph replacements",
         "addReplacement": "Add Replacement",
         "selectOriginal": "-- Select Original --",
         "with": "with",
@@ -2273,7 +2308,7 @@
         "scaleSuffix": "(@ {{scale}}x)",
         "output": "Output",
         "settingsJson": "Settings JSON",
-        "pasteSettingsHelp": "Paste settings JSON here to apply.",
+        "pasteSettingsHelp": "Paste full settings JSON here. Board and glyph overrides live under render (render.board, render.glyphmap, render.options).",
         "saveSettings": "Save Settings",
         "resetToDefaults": "Reset to Defaults",
         "deleteCustomization": "Delete Customization",
@@ -2290,7 +2325,7 @@
         "applySections": {
             "palette": "Player colours (palette)",
             "colourContext": "Board colours",
-            "glyphmap": "Glyph replacements",
+            "render": "Renderer (board, glyphs, options)",
             "preferredColour": "Preferred colour",
             "customCss": "Custom CSS"
         },

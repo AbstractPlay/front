@@ -1,6 +1,10 @@
 import { gameinfo } from "@abstractplay/gameslib";
 import { setRendererColourOpts } from "../setRendererColourOpts";
 import { setGlyphMapOpt } from "../setGlyphMapOpt";
+import {
+  applyRenderSettingsToOptions,
+  prepareBoardRender,
+} from "../prepareBoardRender";
 
 /**
  * Build renderer options for export (mirrors session render recipes, no interactivity).
@@ -14,6 +18,7 @@ export function buildBoardRenderOptions({
   isParticipant,
   viewerSeat,
   numPlayers,
+  renderRep = null,
   customizationHints = gameinfo.get(metaGame)?.customizations,
 }) {
   const seat = viewerSeat ?? isParticipant;
@@ -31,10 +36,21 @@ export function buildBoardRenderOptions({
     numPlayers,
     customizationHints,
   });
-  setGlyphMapOpt({
-    options,
-    metaGame,
-    globalMe,
-  });
+  if (renderRep) {
+    const { renderSettings } = prepareBoardRender(renderRep, globalMe, metaGame);
+    setGlyphMapOpt({
+      options,
+      metaGame,
+      globalMe,
+      renderRep,
+    });
+    applyRenderSettingsToOptions(options, renderSettings);
+  } else {
+    setGlyphMapOpt({
+      options,
+      metaGame,
+      globalMe,
+    });
+  }
   return options;
 }

@@ -18,7 +18,7 @@ import { useStore } from "../stores";
 const SECTION_KEYS = [
   "palette",
   "colourContext",
-  "glyphmap",
+  "render",
   "preferredColour",
   "customCss",
 ];
@@ -41,7 +41,7 @@ function ApplyCustomizationModal({
   const [sections, setSections] = useState(() => ({
     palette: true,
     colourContext: true,
-    glyphmap: true,
+    render: true,
     preferredColour: true,
     customCss: true,
   }));
@@ -108,7 +108,7 @@ function ApplyCustomizationModal({
     setSections({
       palette: true,
       colourContext: true,
-      glyphmap: true,
+      render: true,
       preferredColour: true,
       customCss: true,
     });

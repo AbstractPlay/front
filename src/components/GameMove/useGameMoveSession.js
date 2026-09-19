@@ -77,6 +77,11 @@ import {
 } from "../../lib/GameMove/sessionDisplay";
 import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
 import { setGlyphMapOpt } from "../../lib/setGlyphMapOpt";
+import {
+  applyRenderSettingsToOptions,
+  prepareBoardRender,
+} from "../../lib/prepareBoardRender";
+import { resolveDisplayRenderRep } from "../../lib/getDisplayRenderRep";
 import { isLabSupportedGame } from "../../lib/Lab/buildGame";
 import { launchLabFromExport } from "../../lib/Lab/storage";
 import { serializeSessionExploration } from "../../lib/Lab/exploration";
@@ -1553,11 +1558,6 @@ export function useGameMoveSession(props) {
         engine: engineRef.current,
         numPlayers: currentGame?.players?.length,
       });
-      setGlyphMapOpt({
-        options,
-        metaGame,
-        globalMe: globalMeRef.current,
-      });
       const canExplore = focusRef.current?.canExplore;
       if (canExplore) {
         options.boardClick = boardClick;
@@ -1579,12 +1579,25 @@ export function useGameMoveSession(props) {
       }
       for (let i = 0; i < renders.length; i++) {
         const r = renders[i];
+        const { displayRep, renderSettings } = prepareBoardRender(
+          r,
+          globalMeRef.current,
+          metaGame,
+        );
+        const layerOptions = { ...options };
+        setGlyphMapOpt({
+          options: layerOptions,
+          metaGame,
+          globalMe: globalMeRef.current,
+          renderRep: r,
+        });
+        applyRenderSettingsToOptions(layerOptions, renderSettings);
         const container = document.createElement("div");
         container.style.position = "absolute";
         container.style.left = "-9999px"; // hide off-screen
         document.body.appendChild(container); // ✅ attach to DOM
-        render(r, {
-          ...options,
+        render(displayRep, {
+          ...layerOptions,
           divelem: container,
           boardClick:
             i === renders.length - 1
@@ -1615,6 +1628,7 @@ export function useGameMoveSession(props) {
     metaGame,
     colorMode,
     focus?.canExplore,
+    globalMe,
   ]);
 
   useEffect(() => {
@@ -1706,13 +1720,21 @@ export function useGameMoveSession(props) {
       return 0;
     };
     if (renderrep !== null && engineRef.current !== null) {
+      const displayRep = resolveDisplayRenderRep(
+        renderrep,
+        globalMeRef.current,
+        metaGame,
+      );
+      const repForRotation = Array.isArray(displayRep)
+        ? displayRep[displayRep.length - 1]
+        : displayRep;
       rotIncrementSetter(
-        getRotationIncrement(metaGame, renderrep, engineRef.current)
+        getRotationIncrement(metaGame, repForRotation, engineRef.current)
       );
     } else {
       rotIncrementSetter(0);
     }
-  }, [renderrep, metaGame]);
+  }, [renderrep, metaGame, globalMe]);
 
   const handleRotate = async (dir) => {
     let newGameSettings = cloneDeep(gameSettings);
