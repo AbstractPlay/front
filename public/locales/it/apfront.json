@@ -2299,7 +2299,7 @@
       "pegboard": "Tavoliere a pioli",
       "squares-stacked": "Caselle impilate"
     },
-    "glyphReplacements": "Sostituzioni dei simboli",
+    "glyphReplacements": "Sostituzioni glifi",
     "addReplacement": "Aggiungi sostituzione",
     "selectOriginal": "-- Seleziona originale --",
     "with": "con",
@@ -2308,7 +2308,7 @@
     "scaleSuffix": "(@ {{scale}}x)",
     "output": "Output",
     "settingsJson": "JSON impostazioni",
-    "pasteSettingsHelp": "Incolla qui il JSON completo delle impostazioni. Le personalizzazioni del tavoliere e dei simboli si trovano sotto render (render.board, render.glyphmap, render.options).",
+    "pasteSettingsHelp": "Incolla qui il JSON completo delle impostazioni. Le ridefinizioni di tavoliere e glifi si trovano sotto render (render.board, render.glyphmap, render.options).",
     "saveSettings": "Salva impostazioni",
     "resetToDefaults": "Ripristina predefiniti",
     "deleteCustomization": "Elimina personalizzazione",

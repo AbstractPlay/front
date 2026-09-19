@@ -2299,7 +2299,7 @@
       "pegboard": "Tablero de clavijas",
       "squares-stacked": "Casillas apiladas"
     },
-    "glyphReplacements": "Reemplazos de símbolos",
+    "glyphReplacements": "Reemplazos de glifos",
     "addReplacement": "Agregar reemplazo",
     "selectOriginal": "-- Seleccionar original --",
     "with": "con",
@@ -2308,7 +2308,7 @@
     "scaleSuffix": "(@ {{scale}}x)",
     "output": "Salida",
     "settingsJson": "JSON de configuración",
-    "pasteSettingsHelp": "Pega aquí el JSON completo de configuración. Las modificaciones de tablero y símbolos se encuentran dentro de render (render.board, render.glyphmap, render.options).",
+    "pasteSettingsHelp": "Pega aquí el JSON completo de configuración. Las redefiniciones de tablero y glifos están bajo render (render.board, render.glyphmap, render.options).",
     "saveSettings": "Guardar configuración",
     "resetToDefaults": "Restablecer a valores predeterminados",
     "deleteCustomization": "Eliminar personalización",

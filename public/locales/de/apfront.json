@@ -2299,7 +2299,7 @@
       "pegboard": "Steckbrett",
       "squares-stacked": "Gestapelte Quadrate"
     },
-    "glyphReplacements": "Glyphen-Ersetzungen",
+    "glyphReplacements": "Glyphenersetzungen",
     "addReplacement": "Ersetzung hinzufügen",
     "selectOriginal": "-- Original auswählen --",
     "with": "durch",
@@ -2308,7 +2308,7 @@
     "scaleSuffix": "(@ {{scale}}x)",
     "output": "Ausgabe",
     "settingsJson": "Einstellungen-JSON",
-    "pasteSettingsHelp": "Fügen Sie hier das vollständige Einstellungen-JSON ein. Brett- und Glyphen-Überschreibungen befinden sich unter render (render.board, render.glyphmap, render.options).",
+    "pasteSettingsHelp": "Füge hier das vollständige Einstellungs-JSON ein. Brett- und Glyphen-Überschreibungen befinden sich unter render (render.board, render.glyphmap, render.options).",
     "saveSettings": "Einstellungen speichern",
     "resetToDefaults": "Auf Standardwerte zurücksetzen",
     "deleteCustomization": "Anpassung löschen",

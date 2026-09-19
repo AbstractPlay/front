@@ -4107,10 +4107,6 @@
     "src": "Custom CSS",
     "out": "CSS personnalisé"
   },
-  "customize.applySections.glyphmap": {
-    "src": "Glyph replacements",
-    "out": "Remplacements de glyphes"
-  },
   "customize.applySections.palette": {
     "src": "Player colours (palette)",
     "out": "Couleurs des joueurs (palette)"
@@ -4252,8 +4248,8 @@
     "out": "Valeurs par défaut globales"
   },
   "customize.glyphReplacements": {
-    "src": "Glyph Replacements",
-    "out": "Remplacement de glyphes"
+    "src": "Glyph replacements",
+    "out": "Remplacements de glyphes"
   },
   "customize.importedLegacyCss": {
     "src": "Imported CSS from this device. Save to store in your account.",
@@ -4272,8 +4268,8 @@
     "out": "(Joueur {{player}})"
   },
   "customize.pasteSettingsHelp": {
-    "src": "Paste settings JSON here to apply.",
-    "out": "Collez le JSON des paramètres ici pour l'appliquer."
+    "src": "Paste full settings JSON here. Board and glyph overrides live under render (render.board, render.glyphmap, render.options).",
+    "out": "Collez le JSON complet des paramètres ici. Les surcharges de plateau et de glyphes se trouvent sous render (render.board, render.glyphmap, render.options)."
   },
   "customize.playerColours": {
     "src": "Player Colours",

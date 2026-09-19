@@ -2299,7 +2299,7 @@
       "pegboard": "Plateau à trous",
       "squares-stacked": "Cases empilées"
     },
-    "glyphReplacements": "Remplacements de symboles",
+    "glyphReplacements": "Remplacements de glyphes",
     "addReplacement": "Ajouter un remplacement",
     "selectOriginal": "-- Sélectionner l'original --",
     "with": "par",
@@ -2308,7 +2308,7 @@
     "scaleSuffix": "(@ {{scale}}x)",
     "output": "Sortie",
     "settingsJson": "JSON des paramètres",
-    "pasteSettingsHelp": "Collez le JSON complet des paramètres ici. Les surcharges de plateau et de symboles se trouvent sous render (`render.board`, `render.glyphmap`, `render.options`).",
+    "pasteSettingsHelp": "Collez le JSON complet des paramètres ici. Les surcharges de plateau et de glyphes se trouvent sous render (render.board, render.glyphmap, render.options).",
     "saveSettings": "Enregistrer les paramètres",
     "resetToDefaults": "Réinitialiser aux valeurs par défaut",
     "deleteCustomization": "Supprimer la personnalisation",

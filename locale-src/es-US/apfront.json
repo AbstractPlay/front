@@ -4107,10 +4107,6 @@
     "src": "Custom CSS",
     "out": "CSS personalizado"
   },
-  "customize.applySections.glyphmap": {
-    "src": "Glyph replacements",
-    "out": "Reemplazos de glifos"
-  },
   "customize.applySections.palette": {
     "src": "Player colours (palette)",
     "out": "Colores de los jugadores (paleta)"
@@ -4252,7 +4248,7 @@
     "out": "Valores predeterminados globales"
   },
   "customize.glyphReplacements": {
-    "src": "Glyph Replacements",
+    "src": "Glyph replacements",
     "out": "Reemplazos de glifos"
   },
   "customize.importedLegacyCss": {
@@ -4272,8 +4268,8 @@
     "out": "(Jugador {{player}})"
   },
   "customize.pasteSettingsHelp": {
-    "src": "Paste settings JSON here to apply.",
-    "out": "Pega el JSON de configuración aquí para aplicarlo."
+    "src": "Paste full settings JSON here. Board and glyph overrides live under render (render.board, render.glyphmap, render.options).",
+    "out": "Pega aquí el JSON completo de configuración. Las redefiniciones de tablero y glifos están bajo render (render.board, render.glyphmap, render.options)."
   },
   "customize.playerColours": {
     "src": "Player Colours",

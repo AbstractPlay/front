@@ -2281,7 +2281,7 @@
         "renderOptions": {
             "hide-labels": "Hide coordinate labels",
             "hide-labels-half": "Hide half of coordinate labels",
-            "no-border": "No piece borders",
+            "no-border": "No board borders",
             "hide-star-points": "Hide star points"
         },
         "resetBoardRender": "Reset board layout overrides",
