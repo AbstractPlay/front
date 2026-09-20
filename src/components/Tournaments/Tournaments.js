@@ -25,6 +25,10 @@ import {
   canonicalVariantKey,
   formatVariantsJoined,
 } from "../../lib/expandVariants";
+import {
+  isTwoLegTournament,
+  tournamentSeriesKey,
+} from "../../lib/tournamentFormat";
 import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import PageHelmet from "../PageHelmet";
 import { useStore } from "../../stores";
@@ -164,10 +168,11 @@ function Tournaments(props) {
         let latestCompleted = new Map();
         for (const tournament of newtournaments) {
           if (tournament.dateEnded !== undefined) {
-            const key =
-              tournament.metaGame +
-              "#" +
-              canonicalVariantKey(tournament.metaGame, tournament.variants);
+            const key = tournamentSeriesKey(
+              tournament.metaGame,
+              tournament.variants,
+              tournament.matchLegs
+            );
             let latest = latestCompleted.get(key);
             if (latest === undefined || tournament.dateEnded > latest) {
               latestCompleted.set(key, tournament.dateEnded);
@@ -176,10 +181,11 @@ function Tournaments(props) {
         }
         newtournaments = newtournaments.filter((tournament) => {
           if (tournament.dateEnded !== undefined) {
-            const key =
-              tournament.metaGame +
-              "#" +
-              canonicalVariantKey(tournament.metaGame, tournament.variants);
+            const key = tournamentSeriesKey(
+              tournament.metaGame,
+              tournament.variants,
+              tournament.matchLegs
+            );
             if (tournament.dateEnded < latestCompleted.get(key)) {
               toArchive = true;
               return false;
@@ -231,11 +237,13 @@ function Tournaments(props) {
       tournament.metaGame,
       tournament.variants
     );
+    const wantTwoLeg = isTwoLegTournament(tournament);
     if (
       (tournaments ?? []).find(
         (t) =>
           t.metaGame === tournament.metaGame &&
           canonicalVariantKey(t.metaGame, t.variants) === variantsKey &&
+          isTwoLegTournament(t) === wantTwoLeg &&
           t.dateEnded === undefined
       )
     )
