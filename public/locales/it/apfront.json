@@ -940,6 +940,8 @@
       "adminNoteHint": "Visibile solo agli amministratori; non viene mai mostrata su /news.",
       "previewHeading": "Anteprima",
       "emojiHint": "Suggerimento: puoi anche usare il selettore emoji del tuo sistema (Windows: Win+., macOS: Ctrl+Cmd+Spazio).",
+      "discordExcerptHint": "Opzionale: inserisci {{marker}} su una riga separata nel punto in cui deve terminare il mirror di Discord. Il testo dopo il marcatore rimane solo su /news; il marcatore viene nascosto una volta pubblicato.",
+      "insertDiscordExcerptMarker": "Inserisci marcatore estratto",
       "publishConfirmTitle": "Pubblicare l'annuncio?",
       "publishConfirmBody": "Questo pubblicherà su /news, aggiornerà il feed RSS, eseguirà il mirror su Discord (se configurato) e invierà un'e-mail o una notifica push agli utenti che hanno scelto di ricevere gli annunci del sito.",
       "publishConfirm": "Pubblica ora",

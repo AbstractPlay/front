@@ -940,6 +940,8 @@
       "adminNoteHint": "Nur für Admins sichtbar; wird nie auf /news angezeigt.",
       "previewHeading": "Vorschau",
       "emojiHint": "Tipp: Du kannst auch die Emoji-Auswahl deines Systems verwenden (Windows: Win+., macOS: Strg+Cmd+Space).",
+      "discordExcerptHint": "Optional: Platziere {{marker}} in einer eigenen Zeile dort, wo die Discord-Spiegelung enden soll. Text nach der Markierung verbleibt nur auf /news; die Markierung wird beim Veröffentlichen ausgeblendet.",
+      "insertDiscordExcerptMarker": "Auszugsmarkierung einfügen",
       "publishConfirmTitle": "Ankündigung veröffentlichen?",
       "publishConfirmBody": "Dies wird auf /news veröffentlicht, RSS aktualisiert, auf Discord gespiegelt (falls konfiguriert) und per E-Mail oder Push-Benachrichtigung an Nutzer gesendet, die sich für Website-Ankündigungen angemeldet haben.",
       "publishConfirm": "Jetzt veröffentlichen",
