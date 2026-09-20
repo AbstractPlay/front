@@ -60,6 +60,27 @@ describe("spectatorHousekeeping", () => {
 
       expect(callAuthApi).not.toHaveBeenCalled();
     });
+
+    it("clears commented when only system lines exist", async () => {
+      getAuthToken.mockResolvedValue("jwt-token");
+
+      await maybeSyncInProgressCommentedFlag({
+        ...baseArgs,
+        game: { toMove: "0", commented: 1 },
+        hasInterestingComments: false,
+      });
+
+      expect(callAuthApi).toHaveBeenCalledWith(
+        "update_commented",
+        {
+          id: "game-1",
+          metaGame: "carnac",
+          cbit: 0,
+          commented: 0,
+        },
+        false
+      );
+    });
   });
 
   describe("runCheckTimeQuery", () => {

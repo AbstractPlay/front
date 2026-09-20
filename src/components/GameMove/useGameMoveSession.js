@@ -9,6 +9,7 @@ import {
   maybeSyncInProgressCommentedFlag,
   runCheckTimeQuery,
 } from "../../lib/GameMove/spectatorHousekeeping";
+import { isUserChatComment } from "../../lib/GameMove/userChatComments";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import {
   effectiveFlags,
@@ -690,8 +691,9 @@ export function useGameMoveSession(props) {
             ) {
               commentsTooLongSetter(true);
             }
-            const hasInterestingComments = data.comments.some((c) =>
-              isInterestingComment(c.comment)
+            const hasInterestingComments = data.comments.some(
+              (c) =>
+                isUserChatComment(c) && isInterestingComment(c.comment)
             );
             // Check if commented flag needs to be updated (only for in-progress games). This is mostly to "fix" old games that already had chats but no commented flag.
             await maybeSyncInProgressCommentedFlag({

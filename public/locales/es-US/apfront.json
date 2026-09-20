@@ -940,6 +940,8 @@
       "adminNoteHint": "Solo visible para administradores; nunca se muestra en /news.",
       "previewHeading": "Vista previa",
       "emojiHint": "Consejo: también puedes usar el selector de emojis de tu sistema (Windows: Tecla Windows+., macOS: Ctrl+Cmd+Espacio).",
+      "discordExcerptHint": "Opcional: coloca {{marker}} en su propia línea donde deba terminar la réplica de Discord. El texto después del marcador permanecerá solo en /news; el marcador se oculta al publicar.",
+      "insertDiscordExcerptMarker": "Insertar marcador de extracto",
       "publishConfirmTitle": "¿Publicar anuncio?",
       "publishConfirmBody": "Esto se publicará en /news, actualizará el RSS, se reflejará en Discord (cuando esté configurado) y enviará un correo electrónico o una notificación push a los usuarios que hayan optado por recibir anuncios del sitio.",
       "publishConfirm": "Publicar ahora",

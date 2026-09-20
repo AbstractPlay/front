@@ -940,6 +940,8 @@
       "adminNoteHint": "Visible uniquement par les administrateurs ; jamais affiché sur /news.",
       "previewHeading": "Aperçu",
       "emojiHint": "Astuce : vous pouvez également utiliser le sélecteur d'émojis de votre système (Windows : Win+., macOS : Ctrl+Cmd+Espace).",
+      "discordExcerptHint": "Facultatif : placez {{marker}} sur sa propre ligne à l'endroit où le miroir Discord doit s'arrêter. Le texte après le marqueur reste uniquement sur /news ; le marqueur est masqué lors de la publication.",
+      "insertDiscordExcerptMarker": "Insérer le marqueur d'extrait",
       "publishConfirmTitle": "Publier l'annonce ?",
       "publishConfirmBody": "Cela publiera sur /news, actualisera le flux RSS, retransmettra sur Discord (si configuré) et enverra un e-mail ou une notification push aux utilisateurs inscrits aux annonces du site.",
       "publishConfirm": "Publier maintenant",
