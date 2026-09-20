@@ -27,6 +27,22 @@ describe("compareStrings", () => {
   it("falls back to en for non-string locale tags", () => {
     expect(() => compareStrings("a", "b", /** @type {*} */ ({}))).not.toThrow();
   });
+
+  it("compares digit runs by value, not character by character", () => {
+    const names = ["Connect 10", "Connect 2", "Connect 6"];
+    expect([...names].sort((a, b) => compareStrings(a, b, "en"))).toEqual([
+      "Connect 2",
+      "Connect 6",
+      "Connect 10",
+    ]);
+    // Board-size variant labels are the common case in this app.
+    const boards = ["tabulo (13×13)", "tabulo (8×8)", "tabulo (9×9)"];
+    expect([...boards].sort((a, b) => compareStrings(a, b, "eo"))).toEqual([
+      "tabulo (8×8)",
+      "tabulo (9×9)",
+      "tabulo (13×13)",
+    ]);
+  });
 });
 
 describe("stringColumnSortingFn", () => {

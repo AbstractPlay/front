@@ -10,7 +10,13 @@ export function getStringCollator(locale = "en") {
   const key = resolveSortLocale(locale);
   let collator = collatorCache.get(key);
   if (!collator) {
-    collator = new Intl.Collator(key, { sensitivity: "accent" });
+    // numeric: digit runs compare by value, so "Connect 10" follows "Connect 6"
+    // rather than "Connect 1". Matches the natural sort TanStack's built-in
+    // `alphanumeric` comparator gave these columns before.
+    collator = new Intl.Collator(key, {
+      sensitivity: "accent",
+      numeric: true,
+    });
     collatorCache.set(key, collator);
   }
   return collator;
