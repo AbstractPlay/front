@@ -1348,6 +1348,10 @@
     "Winner": "Vainqueur",
     "DivisionWinner": "Vainqueur : {{winner}}",
     "Withdraw": "Se retirer du prochain",
+    "Format": "Format",
+    "TwoLegBadge": "Deux parties par adversaire",
+    "TwoLegHelp": "Chaque confrontation se joue en deux parties en alternant les positions (la seconde partie débute lorsque la première s'achève).",
+    "TwoLegOption": "Deux parties par adversaire (alternance des positions)",
     "tabs": {
       "open": "Inscriptions ouvertes",
       "current": "En cours",

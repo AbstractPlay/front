@@ -17,6 +17,8 @@ Tournament list and detail pages. Routes: `/tournaments/:tab?/:metaGame?` (tabs:
 
 Tournament detail fetches bracket/standings data and links to individual game move pages for active games.
 
+**Two-leg format** (`matchLegs: 2` on the tournament record): shown via `TournamentFormatBadge` on list and detail pages. Organizers can enable it when requesting a new tournament (`NewTournamentModal`). Standings matrix cells link to each leg separately when both exist.
+
 Backend semantics: [Tournaments](/backend/subsystems/tournaments/).
 
 ## Related

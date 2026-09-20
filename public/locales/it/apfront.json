@@ -1348,6 +1348,10 @@
     "Winner": "Vincitore",
     "DivisionWinner": "Vincitore: {{winner}}",
     "Withdraw": "Ritirati dal prossimo",
+    "Format": "Formato",
+    "TwoLegBadge": "Due partite per avversario",
+    "TwoLegHelp": "Ogni sfida viene giocata due volte a posti alternati (la seconda partita inizia quando termina la prima).",
+    "TwoLegOption": "Due partite per avversario (posti alternati)",
     "tabs": {
       "open": "Iscrizioni aperte",
       "current": "In corso",

@@ -1983,6 +1983,10 @@
     "src": "Date ended",
     "out": "Fecha de finalización"
   },
+  "Tournament.Format": {
+    "src": "Format",
+    "out": "Formato"
+  },
   "Tournament.History": {
     "src": "History",
     "out": "Historial"
@@ -2094,6 +2098,18 @@
   "Tournament.Tournaments": {
     "src": "Automated Tournaments",
     "out": "Torneos automatizados"
+  },
+  "Tournament.TwoLegBadge": {
+    "src": "Two games per opponent",
+    "out": "Dos partidas por oponente"
+  },
+  "Tournament.TwoLegHelp": {
+    "src": "Each pairing is played twice with alternating seats (second game opens when the first ends).",
+    "out": "Cada emparejamiento se juega dos veces alternando asientos (la segunda partida se abre cuando termina la primera)."
+  },
+  "Tournament.TwoLegOption": {
+    "src": "Two games per opponent (alternating seats)",
+    "out": "Dos partidas por oponente (alternando asientos)"
   },
   "Tournament.VariantsName": {
     "src": "{{metaGame}} Tournament ({{variants}})",

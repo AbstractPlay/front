@@ -15,6 +15,7 @@ import rehypeRaw from "rehype-raw";
 import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import NewTournamentModal from "./NewTournamentModal";
+import TournamentFormatBadge from "./TournamentFormatBadge";
 import { gameinfo } from "@abstractplay/gameslib";
 import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
@@ -315,6 +316,7 @@ function Tournaments(props) {
           variantUids: [...(t.variants ?? [])],
           variants: formatVariantsJoined(t.metaGame, t.variants),
           number: t.number,
+          matchLegs: t.matchLegs,
           startDate: date1,
           players: t.players,
           once: t.once,
@@ -368,6 +370,13 @@ function Tournaments(props) {
         header: t("tables.variants"),
         cell: (props) => props.getValue(),
         sortingFn: tournamentVariantSortingFn,
+      }),
+      openTournamentsColumnHelper.accessor("matchLegs", {
+        header: t("Tournament.Format"),
+        cell: (props) => (
+          <TournamentFormatBadge matchLegs={props.getValue()} />
+        ),
+        enableSorting: false,
       }),
       openTournamentsColumnHelper.accessor("number", {
         header: t("Tournament.Number"),
@@ -589,6 +598,7 @@ function Tournaments(props) {
           variantUids: [...(t.variants ?? [])],
           variants: formatVariantsJoined(t.metaGame, t.variants),
           number: t.number,
+          matchLegs: t.matchLegs,
           dateStarted: t.dateStarted,
           players: t.players,
           completion: {
@@ -630,6 +640,13 @@ function Tournaments(props) {
         header: t("tables.variants"),
         cell: (props) => props.getValue(),
         sortingFn: tournamentVariantSortingFn,
+      }),
+      currentTournamentsColumnHelper.accessor("matchLegs", {
+        header: t("Tournament.Format"),
+        cell: (props) => (
+          <TournamentFormatBadge matchLegs={props.getValue()} />
+        ),
+        enableSorting: false,
       }),
       currentTournamentsColumnHelper.accessor("number", {
         header: t("Tournament.Number"),
@@ -818,6 +835,7 @@ function Tournaments(props) {
           variantUids: [...(t.variants ?? [])],
           variants: formatVariantsJoined(t.metaGame, t.variants),
           number: t.number,
+          matchLegs: t.matchLegs,
           dateStarted: t.dateStarted,
           dateEnded: t.dateEnded,
           winner: t.divisions[1].winner,
@@ -853,6 +871,13 @@ function Tournaments(props) {
         header: t("tables.variants"),
         cell: (props) => props.getValue(),
         sortingFn: tournamentVariantSortingFn,
+      }),
+      completedTournamentsColumnHelper.accessor("matchLegs", {
+        header: t("Tournament.Format"),
+        cell: (props) => (
+          <TournamentFormatBadge matchLegs={props.getValue()} />
+        ),
+        enableSorting: false,
       }),
       completedTournamentsColumnHelper.accessor("number", {
         header: t("Tournament.Number"),
