@@ -1056,6 +1056,12 @@
   "InvalidVariantCombination": "Questa combinazione di varianti non è consentita per questo gioco.",
   "PickVariant_normal": "Seleziona varianti",
   "PickVariant_disabled": "Varianti disponibili",
+  "gameVariants": {
+    "communityBadge": "Community",
+    "communityTitle": "Aggiunta dalla community di Abstract Play; non fa parte delle regole pubblicate dall'autore.",
+    "unratedBadge": "Non classificata",
+    "unratedTitle": "Le partite con questa variante non possono essere classificate."
+  },
   "PlayerList": "Giocatori",
   "Players": "Giocatori",
   "PleaseConsent": "È necessario il tuo consenso!",
@@ -2285,7 +2291,8 @@
       "hide-star-points": "Nascondi punti stella"
     },
     "resetBoardRender": "Ripristina personalizzazioni layout tavoliere",
-    "boardChromeNotEligible": "Questa anteprima di gioco non supporta la personalizzazione del layout del tavoliere (solo griglie di stringhe riga/colonna standard). Le sostituzioni dei simboli si applicano comunque.",
+    "boardStyleNotAvailable": "Lo stile della scacchiera di questo gioco non può essere modificato. Puoi comunque regolare lo spessore delle linee, la dimensione delle etichette delle coordinate, le opzioni di rendering e i glifi qui sotto.",
+    "boardFieldsNotAvailable": "Questa anteprima non dispone di una definizione della scacchiera che supporti lo spessore delle linee o la dimensione delle etichette. Le opzioni di rendering e le sostituzioni dei glifi rimangono comunque applicabili.",
     "renderTooLarge": "La sezione di rendering è troppo grande per essere salvata (limite di 8 KiB). Rimuovi voci dalla mappa dei simboli o personalizzazioni del tavoliere.",
     "renderPreflightErrors": "Correggi questi errori prima di salvare:",
     "renderPreflightWarnings": "Avvertenze (alcune personalizzazioni dei marcatori potrebbero essere rimosse durante il gioco):",
