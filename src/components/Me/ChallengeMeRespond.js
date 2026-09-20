@@ -14,7 +14,10 @@ import { useStorageState } from "react-use-storage-state";
 import Spinner from "../Spinner";
 import ChallengeResponseModal from "./ChallengeResponseModal";
 import { useTranslation } from "react-i18next";
-import { compareStrings } from "../../lib/compareStrings";
+import {
+  compareStrings,
+  stringColumnSortingFn,
+} from "../../lib/compareStrings";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { formatUserDisplayName } from "../Bots/botUtils";
@@ -57,6 +60,7 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
     () => [
       columnHelper.accessor("gameName", {
         header: t("tables.game"),
+        sortingFn: stringColumnSortingFn(i18n.language),
         cell: (props) => {
           if (props.getValue() === "Unknown") {
             return <>Unknown</>;

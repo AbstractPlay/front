@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getGameDisplayName } from "../lib/gameOptions";
+import { stringColumnSortingFn } from "../lib/compareStrings";
 import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
@@ -24,7 +25,7 @@ import {
 } from "../lib/recentGamesSections";
 
 function RecentCompletedGames() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { metaGame: metaGameParam } = useParams();
   const metaGame = isValidRecentGamesMetaGame(metaGameParam)
     ? metaGameParam
@@ -135,6 +136,7 @@ function RecentCompletedGames() {
               {props.getValue()}
             </Link>
           ),
+          sortingFn: stringColumnSortingFn(i18n.language),
         })
       );
     }
@@ -269,7 +271,7 @@ function RecentCompletedGames() {
       })
     );
     return cols;
-  }, [columnHelper, metaGame, t, allUsers]);
+  }, [columnHelper, metaGame, t, allUsers, i18n.language]);
 
   const table = useReactTable({
     data,

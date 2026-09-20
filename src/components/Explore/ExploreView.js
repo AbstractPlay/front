@@ -12,7 +12,10 @@ import {
   listPublicCatalogMetas,
   getGameDisplayName,
 } from "../../lib/gameOptions";
-import { compareStrings } from "../../lib/compareStrings";
+import {
+  compareStrings,
+  stringColumnSortingFn,
+} from "../../lib/compareStrings";
 import { gameDescription } from "../../lib/gameDescription";
 import { useTranslation } from "react-i18next";
 import { getUiLocaleBundleKey } from "../../i18n";
@@ -478,6 +481,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
         filterFn: "includesString",
+        sortingFn: stringColumnSortingFn(i18n.language),
       }),
       columnHelper.accessor(
         (row) =>
@@ -487,6 +491,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         {
           header: t("tables.designers"),
           id: "designers",
+          sortingFn: stringColumnSortingFn(i18n.language),
           cell: (props) =>
             props.row.original.designers.length === 0
               ? ""
@@ -580,6 +585,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       addTag,
       multiTagSelect,
       t,
+      i18n.language,
     ]
   );
 
