@@ -1130,8 +1130,8 @@ function Customize(props) {
           </ul>
         </div>
       )}
-      <div className="columns">
-        <div className="column is-half">
+      <div className="customize-page-layout">
+        <div className="customize-page-main">
           <h2 className="subtitle">{t("customize.playerColours")}</h2>
           <div className="field">
             <label className="label is-small">{t("customize.addColour")}</label>
@@ -1813,26 +1813,7 @@ function Customize(props) {
           </div>
           </CustomizeCollapsibleSection>
         </div>
-        <div className="column is-half">
-          <label className="label">{t("customize.output")}</label>
-          <div
-            id="renderer-demo-output"
-            className={
-              metaGame && metaGame !== "_default"
-                ? `board _meta_${metaGame}`
-                : undefined
-            }
-            style={{
-              border: "1px solid var(--tag-background-color)",
-              minHeight: "200px",
-              backgroundColor: background,
-              padding: "10px",
-            }}
-          ></div>
-        </div>
-      </div>
-      <div className="columns">
-        <div className="column is-full">
+        <div className="customize-page-custom-css">
           <CustomizeCollapsibleSection
             id="customize-custom-css"
             title={t("customize.customCss")}
@@ -1901,9 +1882,24 @@ function Customize(props) {
                 </div>
           </CustomizeCollapsibleSection>
         </div>
-      </div>
-      <div className="columns">
-        <div className="column is-full">
+        <div className="customize-page-preview">
+          <label className="label">{t("customize.output")}</label>
+          <div
+            id="renderer-demo-output"
+            className={
+              metaGame && metaGame !== "_default"
+                ? `board _meta_${metaGame}`
+                : undefined
+            }
+            style={{
+              border: "1px solid var(--tag-background-color)",
+              minHeight: "200px",
+              backgroundColor: background,
+              padding: "10px",
+            }}
+          ></div>
+        </div>
+        <div className="customize-page-settings">
           <h2 className="subtitle">{t("customize.settingsJson")}</h2>
           <div className="field">
             <div className="control">
