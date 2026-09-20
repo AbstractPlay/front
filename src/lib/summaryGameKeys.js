@@ -1,6 +1,6 @@
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { getGameDisplayName } from "./gameOptions";
-import { expandVariants } from "./expandVariants";
+import { expandVariants, orderVariantUidsForDisplay } from "./expandVariants";
 
 const NO_VARIANTS_SUFFIX = "no variants";
 
@@ -65,8 +65,11 @@ export function formatSummaryGameName(gameKey) {
   return getGameDisplayName(metaUid);
 }
 
-/** Stable display order for variant UIDs (matches tournaments / record game ids). */
-export function sortVariantUidsLexicographic(variantUids) {
+/** Stable variant UID order for a meta game (group name, then uid). */
+export function sortVariantUidsLexicographic(variantUids, metaUid, numPlayers = 2) {
+  if (metaUid) {
+    return orderVariantUidsForDisplay(metaUid, variantUids, numPlayers);
+  }
   return [...variantUids].sort((a, b) => a.localeCompare(b));
 }
 
@@ -74,7 +77,7 @@ export function formatVariantUids(metaUid, variantUids, t) {
   if (!variantUids.length) {
     return t ? t("standingChallenge.noVariants") : NO_VARIANTS_SUFFIX;
   }
-  const orderedUids = sortVariantUidsLexicographic(variantUids);
+  const orderedUids = sortVariantUidsLexicographic(variantUids, metaUid);
   try {
     const labels = expandVariants(metaUid, orderedUids);
     if (labels.length > 0) {

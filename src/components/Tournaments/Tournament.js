@@ -8,6 +8,7 @@ import PageHelmet from "../PageHelmet";
 import PageLoading from "../shared/PageLoading";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { formatVariantsJoined } from "../../lib/expandVariants";
 
 async function reportError(error) {
   try {
@@ -220,7 +221,9 @@ function Tournament(props) {
   const metaGameName = tournament
     ? gameinfo.get(tournament.metaGame)?.name
     : "";
-  const variants = tournament ? tournament.variants.join(", ") : "";
+  const variants = tournament
+    ? formatVariantsJoined(tournament.metaGame, tournament.variants)
+    : "";
 
   if (!tournamentLoaded) {
     return <PageLoading message={t("Tournament.loading")} />;

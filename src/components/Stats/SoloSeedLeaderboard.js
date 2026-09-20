@@ -10,6 +10,7 @@ import {
   formatGradeLabel,
 } from "../../lib/soloPlay";
 import { formatVariantUids } from "../../lib/summaryGameKeys";
+import { canonicalVariantKey } from "../../lib/expandVariants";
 
 function SoloSeedLeaderboard({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
@@ -97,7 +98,9 @@ function SoloSeedLeaderboard({ metaFilter, nav }) {
               {boards.map((entry, index) => (
                 <option key={`${entry.challengeSeed}-${index}`} value={index}>
                   {entry.challengeSeed}
-                  {entry.variants?.length ? ` (${entry.variants.join("|")})` : ""}
+                  {entry.variants?.length
+                    ? ` (${canonicalVariantKey(entry.metaUid, entry.variants)})`
+                    : ""}
                   {" — "}
                   {t("solo.leaderboard.poolSummary", {
                     players: entry.uniquePlayers,

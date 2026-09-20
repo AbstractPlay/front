@@ -20,6 +20,10 @@ import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import { useTranslation } from "react-i18next";
 import { compareStrings } from "../../lib/compareStrings";
+import {
+  canonicalVariantKey,
+  formatVariantsJoined,
+} from "../../lib/expandVariants";
 import PageHelmet from "../PageHelmet";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
@@ -148,7 +152,9 @@ function Tournaments(props) {
         for (const tournament of newtournaments) {
           if (tournament.dateEnded !== undefined) {
             const key =
-              tournament.metaGame + "#" + tournament.variants.sort().join("|");
+              tournament.metaGame +
+              "#" +
+              canonicalVariantKey(tournament.metaGame, tournament.variants);
             let latest = latestCompleted.get(key);
             if (latest === undefined || tournament.dateEnded > latest) {
               latestCompleted.set(key, tournament.dateEnded);
@@ -158,7 +164,9 @@ function Tournaments(props) {
         newtournaments = newtournaments.filter((tournament) => {
           if (tournament.dateEnded !== undefined) {
             const key =
-              tournament.metaGame + "#" + tournament.variants.sort().join("|");
+              tournament.metaGame +
+              "#" +
+              canonicalVariantKey(tournament.metaGame, tournament.variants);
             if (tournament.dateEnded < latestCompleted.get(key)) {
               toArchive = true;
               return false;
@@ -206,12 +214,15 @@ function Tournaments(props) {
   };
 
   const handleNewTournament = async (tournament) => {
-    const variantsKey = tournament.variants.sort().join("|");
+    const variantsKey = canonicalVariantKey(
+      tournament.metaGame,
+      tournament.variants
+    );
     if (
       (tournaments ?? []).find(
         (t) =>
           t.metaGame === tournament.metaGame &&
-          t.variants.sort().join("|") === variantsKey &&
+          canonicalVariantKey(t.metaGame, t.variants) === variantsKey &&
           t.dateEnded === undefined
       )
     )
@@ -289,7 +300,7 @@ function Tournaments(props) {
           tournamentid: t.id,
           realMeta: t.metaGame,
           metaGame: getGameDisplayName(t.metaGame, "Unknown"),
-          variants: t.variants.join(", "),
+          variants: formatVariantsJoined(t.metaGame, t.variants),
           number: t.number,
           startDate: date1,
           players: t.players,
@@ -560,7 +571,7 @@ function Tournaments(props) {
           tournamentid: t.id,
           realMeta: t.metaGame,
           metaGame: getGameDisplayName(t.metaGame, "Unknown"),
-          variants: t.variants.join(", "),
+          variants: formatVariantsJoined(t.metaGame, t.variants),
           number: t.number,
           dateStarted: t.dateStarted,
           players: t.players,
@@ -787,7 +798,7 @@ function Tournaments(props) {
           tournamentid: t.id,
           metaGameName: getGameDisplayName(t.metaGame, "Unknown"),
           metaGame: t.metaGame,
-          variants: t.variants.join(", "),
+          variants: formatVariantsJoined(t.metaGame, t.variants),
           number: t.number,
           dateStarted: t.dateStarted,
           dateEnded: t.dateEnded,

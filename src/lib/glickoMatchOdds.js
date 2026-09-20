@@ -1,4 +1,4 @@
-import { gameinfo, variantUidsForBatchRating } from "@abstractplay/gameslib";
+import { canonicalVariantUids } from "./expandVariants";
 import { resolveMetaUid } from "./summaryGameKeys";
 
 export const GLICKO_RATING_START = 1200;
@@ -53,11 +53,7 @@ export function batchRatingGameLabel(metaUid, variants) {
  * @param {number} numPlayers
  */
 export function canonicalVariantUidsForPool(metaUid, rawVariantUids, numPlayers) {
-  const defs = gameinfo.get(metaUid)?.variants;
-  if (defs !== undefined && defs.length > 0) {
-    return variantUidsForBatchRating(metaUid, numPlayers, rawVariantUids);
-  }
-  return [...rawVariantUids].sort((a, b) => a.localeCompare(b));
+  return canonicalVariantUids(metaUid, rawVariantUids, numPlayers);
 }
 
 /**
