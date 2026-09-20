@@ -92,7 +92,7 @@ if (result.statusCode !== 200) { /* handle error */ }
 const data = JSON.parse(result.body);
 ```
 
-[`botApi.js`](../src/components/Bots/botApi.js) centralizes this parsing in `parseAuthResponse()` for bot management calls.
+The canonical helper is [`parseAuthResponse.js`](../src/lib/parseAuthResponse.js) (used by Game Move, feedback, announcements, and similar). [`botApi.js`](../src/components/Bots/botApi.js) also defines a local `parseAuthResponse()` for bot management calls.
 
 ## Direct fetch for auth queries
 

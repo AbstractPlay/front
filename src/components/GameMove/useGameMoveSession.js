@@ -5,6 +5,7 @@ import { render } from "@abstractplay/renderer";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { callAuthApi } from "../../lib/api";
+import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import {
   maybeSyncInProgressCommentedFlag,
   runCheckTimeQuery,
@@ -627,17 +628,15 @@ export function useGameMoveSession(props) {
           );
           if (res) {
             status = res.status;
-            if (status !== 200) {
-              const result = await res.json();
+            const parsed = await parseAuthResponse(res);
+            if (!parsed.ok) {
               const error = new Error(
-                `auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}, status = ${status}, message: ${result.message}, body: ${result.body}`
+                `auth get_game failed, id = ${gameID}, metaGame = ${metaGame}, cbit = ${cbit}: ${parsed.error}`
               );
               error.status = status;
               throw error;
-            } else {
-              const result = await res.json();
-              data = JSON.parse(result.body);
             }
+            data = parsed.data;
           } else {
             // res == null means no auth token available, probably non-logged in user, try unauthenticated fetch
             var url = new URL(API_ENDPOINT_OPEN);
@@ -1110,9 +1109,10 @@ export function useGameMoveSession(props) {
             note: newNote,
           });
           if (!res) return;
-          const result = await res.json();
-          if (result && result.statusCode && result.statusCode !== 200)
-            setError(`update_note failed with: ${result.body}`);
+          const parsed = await parseAuthResponse(res);
+          if (!parsed.ok) {
+            setError(`update_note failed with: ${parsed.error}`);
+          }
         } catch (err) {
           console.log(err);
           //setError(err.message);
@@ -1130,7 +1130,6 @@ export function useGameMoveSession(props) {
       explorationFetchedSetter(true);
       try {
         let data;
-        let status;
         const res = await callAuthApi(
           "get_exploration",
           {
@@ -1140,15 +1139,12 @@ export function useGameMoveSession(props) {
           false
         );
         if (res) {
-          status = res.status;
-          if (status !== 200) {
-            const result = await res.json();
-            errorMessageRef.current = `auth get_exploration failed, game = ${gameID}, move = ${explorationRef.current.nodes.length}, status = ${status}, message: ${result.message}, body: ${result.body}`;
+          const parsed = await parseAuthResponse(res);
+          if (!parsed.ok) {
+            errorMessageRef.current = `auth get_exploration failed, game = ${gameID}, move = ${explorationRef.current.nodes.length}: ${parsed.error}`;
             errorSetter(true);
-          } else {
-            const result = await res.json();
-            data = JSON.parse(result.body);
-            data = data.map((d) => {
+          } else if (Array.isArray(parsed.data)) {
+            data = parsed.data.map((d) => {
               if (d && typeof d.tree === "string") {
                 d.tree = JSON.parse(d.tree);
               }
@@ -1440,10 +1436,9 @@ export function useGameMoveSession(props) {
         cbit: cbit,
       });
       if (!res) return;
-      const result = await res.json();
-      if (result.statusCode !== 200) {
-        // setError(JSON.parse(result.body));
-        throw JSON.parse(result.body);
+      const parsed = await parseAuthResponse(res);
+      if (!parsed.ok) {
+        throw new Error(parsed.error);
       }
       pieInvokedSetter(true);
       gameRef.current.pieInvoked = true;
@@ -1871,6 +1866,11 @@ export function useGameMoveSession(props) {
 
   const submitMove = async (m, draw) => {
     try {
+      if (gameRef.current.gameOver || !gameRef.current.canSubmit) {
+        submittingSetter(false);
+        setError("It is not your turn or this game is over.");
+        return;
+      }
       // Find opponent ID for premove checking (only for 2-player non-simultaneous games)
       const opponent = gameRef.current.players.find(
         (p) => p.id !== globalMe.id
@@ -1890,14 +1890,13 @@ export function useGameMoveSession(props) {
         ),
       });
       if (!res) return;
-      const result = await res.json();
+      const parsed = await parseAuthResponse(res);
       submittingSetter(false);
-      if (result.statusCode !== 200) {
-        // setError(JSON.parse(result.body));
-        throw JSON.parse(result.body);
+      if (!parsed.ok) {
+        throw new Error(parsed.error);
       }
       setMyMove((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
-      let game0 = JSON.parse(result.body);
+      let game0 = parsed.data;
       const moveNum = explorationRef.current.nodes.length - 1;
       const cur_exploration = explorationRef.current.nodes[moveNum];
       const perGameSettings =
@@ -1981,12 +1980,10 @@ export function useGameMoveSession(props) {
           moveNumber: explorationRef.current.nodes.length - 1,
         });
         if (!res) return;
-        const result = await res.json();
-        if (result && result.statusCode && result.statusCode !== 200)
-          setError(
-            `submit_comment failed, status: ${result.statusCode}, body: ${result.body}`
-          );
-        else if (
+        const parsed = await parseAuthResponse(res);
+        if (!parsed.ok) {
+          setError(`submit_comment failed: ${parsed.error}`);
+        } else if (
           (!gameRef.current.commented || gameRef.current.commented < 1) &&
           isInterestingComment(comment)
         ) {
@@ -2199,21 +2196,18 @@ export function useGameMoveSession(props) {
       const injectedState2 = tmpEngine.serialize(); // NOT cheapSerialize!
 
       try {
-        let status;
         const res = await callAuthApi("set_game_state", {
           id: gameID,
           metaGame: metaGame,
           newState: injectedState2,
         });
         if (res) {
-          status = res.status;
-          if (status !== 200) {
-            const result = await res.json();
-            errorMessageRef.current = `set_game_state failed, game = ${gameID}, metaGame = ${metaGame}, status = ${status}, message: ${result.message}, body: ${result.body}`;
+          const parsed = await parseAuthResponse(res);
+          if (!parsed.ok) {
+            errorMessageRef.current = `set_game_state failed, game = ${gameID}, metaGame = ${metaGame}: ${parsed.error}`;
             errorSetter(true);
           } else {
-            const result = await res.json();
-            let game0 = JSON.parse(result.body);
+            let game0 = parsed.data;
             const perGameSettings =
               game0.me > -1 && globalMe
                 ? game0.players.find((p) => p.id === globalMe.id)?.settings
@@ -2542,7 +2536,6 @@ export function useGameMoveSession(props) {
         false
       );
       // fetch private exploration data
-      let status;
       const res = await callAuthApi(
         "get_private_exploration",
         {
@@ -2551,15 +2544,12 @@ export function useGameMoveSession(props) {
         false
       );
       if (res) {
-        status = res.status;
-        if (status !== 200) {
-          const result = await res.json();
-          errorMessageRef.current = `get_private_exploration failed, game = ${gameID}, status = ${status}, message: ${result.message}, body: ${result.body}`;
+        const parsed = await parseAuthResponse(res);
+        if (!parsed.ok) {
+          errorMessageRef.current = `get_private_exploration failed, game = ${gameID}: ${parsed.error}`;
           errorSetter(true);
-        } else {
-          const result = await res.json();
-          if (result && result.body) {
-            let data = JSON.parse(result.body);
+        } else if (parsed.data) {
+            let data = parsed.data;
             data = data.map((d) => {
               if (d && typeof d.tree === "string") {
                 d.tree = JSON.parse(d.tree);
@@ -2575,7 +2565,6 @@ export function useGameMoveSession(props) {
               errorMessageRef
             );
             canPublishSetter("no");
-          }
         }
       }
     } catch (error) {
@@ -2588,19 +2577,15 @@ export function useGameMoveSession(props) {
   const refreshNextGame = () => {
     async function fetchData() {
       try {
-        let status;
         const res = await callAuthApi("next_game", {}, false);
         if (res) {
-          status = res.status;
-          if (status !== 200) {
-            const result = await res.json();
-            errorMessageRef.current = `next_game failed, status = ${status}, message: ${result.message}, body: ${result.body}`;
+          const parsed = await parseAuthResponse(res);
+          if (!parsed.ok) {
+            errorMessageRef.current = `next_game failed: ${parsed.error}`;
             errorSetter(true);
             return [];
-          } else {
-            const result = await res.json();
-            return JSON.parse(result.body);
           }
+          return parsed.data;
         } else {
           return [];
         }
