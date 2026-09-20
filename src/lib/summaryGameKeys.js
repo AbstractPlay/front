@@ -1,4 +1,4 @@
-import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory, resolveRetractedMetaUidByName } from "@abstractplay/gameslib";
 import { getGameDisplayName } from "./gameOptions";
 import { expandVariants, orderVariantUidsForDisplay } from "./expandVariants";
 
@@ -19,7 +19,11 @@ export function resolveMetaUid(metaUidOrDisplayName) {
   const byName = [...gameinfo.values()].find(
     (g) => g.name === metaUidOrDisplayName || g.name?.toLowerCase() === lower
   );
-  return byName?.uid ?? metaUidOrDisplayName;
+  if (byName !== undefined) {
+    return byName.uid;
+  }
+  const retracted = resolveRetractedMetaUidByName(metaUidOrDisplayName);
+  return retracted ?? metaUidOrDisplayName;
 }
 
 /**

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { getGameDisplayName } from "../lib/gameOptions";
+import { getGameDisplayName, isSummaryStatsVisible } from "../lib/gameOptions";
 import { stringColumnSortingFn } from "../lib/compareStrings";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
@@ -78,6 +78,7 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
       return [];
     }
     const filtered = summary.ratings.highest
+      .filter((rec) => isSummaryStatsVisible(parseSummaryGameKey(rec.game).metaUid))
       .filter((rec) => matchesMetaGame(rec, metaGame))
       .sort((a, b) => -compareByGlickoLow(a.glicko, b.glicko));
 

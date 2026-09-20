@@ -1,4 +1,10 @@
-import { gameinfo, resolveGameName } from "@abstractplay/gameslib";
+import {
+  gameinfo,
+  resolveGameName,
+  isCatalogVisible,
+  shouldPublishStats,
+  archiveMetadataFor,
+} from "@abstractplay/gameslib";
 import { compareStrings } from "./compareStrings";
 import { isLabSupportedGame } from "./Lab/buildGame";
 import { isProductionMode } from "./realMode";
@@ -19,7 +25,15 @@ export function isPublicCatalogGame(info) {
   if (!info) {
     return false;
   }
+  if (!isCatalogVisible(info.uid, isProductionMode())) {
+    return false;
+  }
   return !(isProductionMode() && isExperimentalGame(info));
+}
+
+/** Whether stats / ratings tables should list this meta UID (defense in depth vs summarize). */
+export function isSummaryStatsVisible(metaUid) {
+  return shouldPublishStats(metaUid);
 }
 
 /** Display name for a meta uid; safe when the game is absent from gameslib. */
@@ -28,7 +42,10 @@ export function getGameDisplayName(metaUid, fallback = metaUid) {
     return "Unknown";
   }
   const info = gameinfo.get(metaUid);
-  return resolveGameName(metaUid, info?.name ?? fallback) || "Unknown";
+  const archive = archiveMetadataFor(metaUid);
+  return (
+    resolveGameName(metaUid, info?.name ?? archive?.name ?? fallback) || "Unknown"
+  );
 }
 
 /**

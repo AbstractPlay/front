@@ -11,6 +11,7 @@ import {
   metaUidFromSummaryGameKey,
 } from "../../lib/summaryGameKeys";
 import { summaryGameKeySortingFn } from "../../lib/variantTableSort";
+import { isSummaryStatsVisible } from "../../lib/gameOptions";
 
 function NumPlays({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
@@ -28,6 +29,7 @@ function NumPlays({ metaFilter, nav }) {
     const histMax = Math.max(...sparklineValues, 1);
 
     return summary.plays.total
+      .filter((obj) => isSummaryStatsVisible(metaUidFromSummaryGameKey(obj.game)))
       .map((obj) => {
         const meta = metaUidFromSummaryGameKey(obj.game);
         let hindex = 0;

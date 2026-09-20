@@ -7,7 +7,9 @@ import { compareStrings } from "../../lib/compareStrings";
 import {
   formatSummaryGameKey,
   matchesSummaryGameKey,
+  metaUidFromSummaryGameKey,
 } from "../../lib/summaryGameKeys";
+import { isSummaryStatsVisible } from "../../lib/gameOptions";
 import { summaryGameKeySortingFn } from "../../lib/variantTableSort";
 
 function GameStats({ metaFilter, nav }) {
@@ -30,6 +32,7 @@ function GameStats({ metaFilter, nav }) {
             drawRate: Math.trunc((rec.drawRate ?? 0) * 10000) / 100,
           };
         })
+        .filter((rec) => isSummaryStatsVisible(metaUidFromSummaryGameKey(rec.gameKey)))
         .filter(
           (rec) =>
             metaFilter === undefined ||
