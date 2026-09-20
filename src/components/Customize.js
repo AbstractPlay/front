@@ -8,6 +8,10 @@ import {
   isBoardChromeEligible,
   getCompatibleStyles,
 } from "@abstractplay/renderer";
+import {
+  isBoardBasicBoard,
+  isBoardStyleSwappable,
+} from "../lib/boardRepShape.js";
 import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
 import { coloursEqual, resolveCustomizePreviewPalette } from "../lib/resolveEffectivePalette.js";
@@ -455,8 +459,11 @@ function Customize(props) {
     }
   }, [rendererJson]);
 
-  const boardChromeEligible = Boolean(
-    previewRep && isBoardChromeEligible(previewRep),
+  const boardStyleCustomizationEligible = Boolean(
+    previewRep && isBoardStyleSwappable(previewRep) && isBoardChromeEligible(previewRep),
+  );
+  const boardFieldChromeEligible = Boolean(
+    previewRep && isBoardBasicBoard(previewRep.board),
   );
 
   const compatibleBoardStyles = useMemo(() => {
@@ -1552,19 +1559,15 @@ function Customize(props) {
                     <p>{t("customize.globalDefaultsSectionNotice")}</p>
                   </div>
                 ) : null}
-          {boardChromeEligible ? (
-            <>
+          {boardStyleCustomizationEligible && !isGlobalCustomization ? (
               <div className="field">
                 <label className="label is-small">
                   {t("customize.boardStyle")}
                 </label>
                 <div className="control">
-                  <div
-                    className={`select is-small${isGlobalCustomization ? " is-disabled" : ""}`}
-                  >
+                  <div className="select is-small">
                     <select
                       value={boardStyle}
-                      disabled={isGlobalCustomization}
                       onChange={(e) => setBoardStyle(e.target.value)}
                     >
                       <option value="">
@@ -1580,10 +1583,22 @@ function Customize(props) {
                     </select>
                   </div>
                 </div>
-                {isGlobalCustomization ? (
-                  <p className="help">{t("customize.boardStyleGlobalDisabled")}</p>
-                ) : null}
               </div>
+          ) : null}
+          {!boardStyleCustomizationEligible &&
+          boardFieldChromeEligible &&
+          !isGlobalCustomization ? (
+            <p className="help" style={{ marginBottom: "1em" }}>
+              {t("customize.boardStyleNotAvailable")}
+            </p>
+          ) : null}
+          {isGlobalCustomization ? (
+            <p className="help" style={{ marginBottom: "1em" }}>
+              {t("customize.boardStyleGlobalDisabled")}
+            </p>
+          ) : null}
+          {boardFieldChromeEligible ? (
+            <>
               <div className="field">
                 <label className="label is-small">
                   {t("customize.strokeWeight")}
@@ -1672,7 +1687,7 @@ function Customize(props) {
             </>
           ) : (
             <p className="notification is-light" style={{ fontSize: "0.9rem" }}>
-              {t("customize.boardChromeNotEligible")}
+              {t("customize.boardFieldsNotAvailable")}
             </p>
           )}
           <div className="field">

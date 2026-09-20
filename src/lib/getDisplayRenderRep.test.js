@@ -25,4 +25,19 @@ describe("getDisplayRenderRep", () => {
     expect(display.board.style).to.equal("vertex");
     expect(display.options).to.deep.equal(["hide-star-points"]);
   });
+
+  it("applies labelScale on pegboard without style swap", () => {
+    const pegRep = {
+      board: { style: "pegboard", width: 4, height: 4 },
+      legend: { P: { name: "piece", colour: 1 } },
+      pieces: "----\n----\n----\n----",
+    };
+    const display = getDisplayRenderRep(pegRep, {
+      board: { labelScale: 2, style: "vertex" },
+      options: ["hide-labels"],
+    });
+    expect(display.board.style).to.equal("pegboard");
+    expect(display.board.labelScale).to.equal(2);
+    expect(display.options).to.deep.equal(["hide-labels"]);
+  });
 });
