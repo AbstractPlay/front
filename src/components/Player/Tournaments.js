@@ -6,6 +6,7 @@ import { TournamentContext } from "../Player";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { useTranslation } from "react-i18next";
 import { compareStrings } from "../../lib/compareStrings";
+import { formatVariantUids } from "../../lib/summaryGameKeys";
 
 function Tournaments() {
   const [tourneys] = useContext(TournamentContext);
@@ -39,7 +40,7 @@ function Tournaments() {
               tourneyName: `${gameName} (${
                 variants.length === 0
                   ? t("standingChallenge.noVariants")
-                  : variants.join("|")
+                  : formatVariantUids(metaGame, variants, t)
               })`,
               dateEnded,
               archived,

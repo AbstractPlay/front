@@ -1,3 +1,5 @@
+import { orderVariantUidsForDisplay } from "./expandVariants";
+
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -27,7 +29,7 @@ export function parseRecordGameId(gameid) {
     return {
       instanceId,
       metaGame,
-      variantUids: [...variantUids].sort(),
+      variantUids: orderVariantUidsForDisplay(metaGame, variantUids),
       legacy: false,
     };
   }

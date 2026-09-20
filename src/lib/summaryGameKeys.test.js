@@ -41,10 +41,20 @@ describe("formatVariantUids", () => {
 });
 
 describe("sortVariantUidsLexicographic", () => {
-  it("sorts uids without mutating the input", () => {
+  it("sorts uids without mutating the input when meta is omitted", () => {
     const input = ["handicap", "9x9"];
     expect(sortVariantUidsLexicographic(input)).toEqual(["9x9", "handicap"]);
     expect(input).toEqual(["handicap", "9x9"]);
+  });
+
+  it("orders by variant group for a meta game (asli)", () => {
+    const input = ["woven", "board-9", "area", "setkomi"];
+    expect(sortVariantUidsLexicographic(input, "asli")).toEqual([
+      "board-9",
+      "setkomi",
+      "woven",
+      "area",
+    ]);
   });
 });
 

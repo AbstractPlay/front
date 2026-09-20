@@ -14,6 +14,7 @@ import Spinner from "../Spinner";
 import { useTranslation, Trans } from "react-i18next";
 import Modal from "../Modal";
 import { useStore } from "../../stores";
+import { expandVariants } from "../../lib/expandVariants";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -90,7 +91,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
           gameName: getGameDisplayName(entry.metaGame, "Unknown"),
           noExplore: entry.noExplore || false,
           suspended: entry.suspended === true,
-          variants: entry.variants || [],
+          variants: expandVariants(entry.metaGame, entry.variants || []),
           clockCombined: [
             entry.clockStart,
             entry.clockInc,

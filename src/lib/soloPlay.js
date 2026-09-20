@@ -1,5 +1,6 @@
 import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "./api";
+import { canonicalVariantUids } from "./expandVariants";
 
 /** Whether the catalog title supports `playercounts` including 1. */
 export function soloPlaySupported(metaGame) {
@@ -143,7 +144,7 @@ export function formatSoloOutcome({ gameRec, engine, metaGame, t }) {
 }
 
 export function soloVariantSummaryKey(metaUid, variantUids = []) {
-  const sorted = [...variantUids].sort();
+  const sorted = canonicalVariantUids(metaUid, variantUids);
   if (sorted.length === 0) {
     return `${metaUid} (no variants)`;
   }

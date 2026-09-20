@@ -5,6 +5,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { metaGameFromPlayerRecord } from "../../lib/playerGameQuickPicks";
 import { parseRecordGameId } from "../../lib/recordGameId";
+import { orderVariantUidsForDisplay } from "../../lib/expandVariants";
 import { AllRecsContext, ProfileContext } from "../Player";
 import DataTable, { PROFILE_FILTER_TABLE_PROPS } from "../shared/DataTable";
 import ChallengeEntryModals from "../ChallengeEntryModals";
@@ -126,7 +127,7 @@ function History({ handleChallenge }) {
             id,
             meta,
             gameName,
-            variants: variants.sort((a, b) => a.localeCompare(b)),
+            variants: orderVariantUidsForDisplay(meta, variants),
             opponents,
             winner,
             dateEnd: new Date(rec.header["date-end"]).getTime(),

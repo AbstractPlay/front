@@ -12,6 +12,7 @@ import {
 import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { getGameDisplayName } from "../../lib/gameOptions";
+import { formatVariantsJoined } from "../../lib/expandVariants";
 import { useTranslation } from "react-i18next";
 import PageHelmet from "../PageHelmet";
 import PageLoading from "../shared/PageLoading";
@@ -53,7 +54,7 @@ function TournamentsOld(props) {
         tournamentid: t.id,
         metaGameName: getGameDisplayName(t.metaGame, "Unknown"),
         metaGame: t.metaGame,
-        variants: t.variants.join(", "),
+        variants: formatVariantsJoined(t.metaGame, t.variants),
         number: t.number,
         dateStarted: t.dateStarted,
         dateEnded: t.dateEnded,
