@@ -2005,6 +2005,8 @@
       "adminPriority": "Priorità",
       "adminTags": "Tag admin (separati da virgola)",
       "adminReviewers": "Revisori",
+      "adminBugContext": "Contesto tecnico",
+      "adminBugContextNone": "Nessun contesto tecnico è stato memorizzato per questa segnalazione.",
       "adminWishlistCategory": "Categoria",
       "adminWishlistNote": "Nota sulla categoria (opzionale)",
       "saveAdminFields": "Salva campi admin",

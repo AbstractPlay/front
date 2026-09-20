@@ -2005,6 +2005,8 @@
       "adminPriority": "Prioridad",
       "adminTags": "Etiquetas de administración (separadas por comas)",
       "adminReviewers": "Revisores",
+      "adminBugContext": "Contexto técnico",
+      "adminBugContextNone": "No se guardó contexto técnico para este reporte.",
       "adminWishlistCategory": "Categoría",
       "adminWishlistNote": "Nota de categoría (opcional)",
       "saveAdminFields": "Guardar campos de administración",
