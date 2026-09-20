@@ -337,7 +337,7 @@ function FeedbackDetail() {
     );
   }
 
-  const { post, comments, attachmentUrls, subscribed, userVoted } = data;
+  const { post, comments, attachmentUrls, subscribed, userVoted, bugContext } = data;
   const isArchived = Boolean(data.archived || post.archivedAt);
   const isTerminal = Boolean(post.terminalAt);
   const readOnly = isArchived;
@@ -557,6 +557,27 @@ function FeedbackDetail() {
           >
             {t("feedback.detail.reclassifyToFeature")}
           </button>
+        </div>
+      ) : null}
+      {globalMe?.admin && post.kind === "bug" ? (
+        <div className="feedback-admin-bug-context">
+          <p className="label">{t("feedback.detail.adminBugContext")}</p>
+          {bugContext ? (
+            <>
+              {typeof bugContext.pageUrl === "string" && bugContext.pageUrl ? (
+                <p className="feedback-admin-bug-context-page">
+                  <a href={bugContext.pageUrl} target="_blank" rel="noopener noreferrer">
+                    {bugContext.pageUrl}
+                  </a>
+                </p>
+              ) : null}
+              <pre className="feedback-tech-preview feedback-admin-bug-context-json">
+                {JSON.stringify(bugContext, null, 2)}
+              </pre>
+            </>
+          ) : (
+            <p className="feedback-muted">{t("feedback.detail.adminBugContextNone")}</p>
+          )}
         </div>
       ) : null}
       {globalMe?.admin && !readOnly && (

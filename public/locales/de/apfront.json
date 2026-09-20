@@ -2005,6 +2005,8 @@
       "adminPriority": "Priorität",
       "adminTags": "Admin-Tags (kommagetrennt)",
       "adminReviewers": "Reviewer",
+      "adminBugContext": "Technischer Kontext",
+      "adminBugContextNone": "Für diesen Bericht wurde kein technischer Kontext gespeichert.",
       "adminWishlistCategory": "Kategorie",
       "adminWishlistNote": "Kategorie-Notiz (optional)",
       "saveAdminFields": "Admin-Felder speichern",

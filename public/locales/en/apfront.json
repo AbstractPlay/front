@@ -2005,6 +2005,8 @@
             "adminPriority": "Priority",
             "adminTags": "Admin tags (comma-separated)",
             "adminReviewers": "Reviewers",
+            "adminBugContext": "Technical context",
+            "adminBugContextNone": "No technical context was stored for this report.",
             "adminWishlistCategory": "Category",
             "adminWishlistNote": "Category note (optional)",
             "saveAdminFields": "Save admin fields",

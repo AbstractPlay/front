@@ -4707,6 +4707,14 @@
     "src": "Your comment",
     "out": "Il tuo commento"
   },
+  "feedback.detail.adminBugContext": {
+    "src": "Technical context",
+    "out": "Contesto tecnico"
+  },
+  "feedback.detail.adminBugContextNone": {
+    "src": "No technical context was stored for this report.",
+    "out": "Nessun contesto tecnico è stato memorizzato per questa segnalazione."
+  },
   "feedback.detail.adminEffort": {
     "src": "Effort",
     "out": "Impegno"
