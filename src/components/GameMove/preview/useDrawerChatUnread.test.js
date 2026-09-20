@@ -14,7 +14,7 @@ describe("useDrawerChatUnread", () => {
   it("does not flag historical messages on first visit", () => {
     const session = {
       gameID: "game-1",
-      chatComments: [{ timeStamp: 1000, comment: "gg" }],
+      chatComments: [{ userId: "u1", timeStamp: 1000, comment: "gg" }],
     };
 
     const { result } = renderHook(() =>
@@ -29,7 +29,7 @@ describe("useDrawerChatUnread", () => {
 
     const session = {
       gameID: "game-1",
-      chatComments: [{ timeStamp: 2000, comment: "hello" }],
+      chatComments: [{ userId: "u1", timeStamp: 2000, comment: "hello" }],
     };
 
     const { result } = renderHook(() =>
@@ -44,7 +44,7 @@ describe("useDrawerChatUnread", () => {
 
     const session = {
       gameID: "game-1",
-      chatComments: [{ timeStamp: 2000, comment: "hello" }],
+      chatComments: [{ userId: "u1", timeStamp: 2000, comment: "hello" }],
     };
 
     const { result, rerender } = renderHook(
@@ -60,5 +60,26 @@ describe("useDrawerChatUnread", () => {
 
     expect(result.current).toBe(false);
     expect(localStorage.getItem("gameMoveChatSeen:game-1")).toBe("2000");
+  });
+
+  it("does not flag pie-style system comments", () => {
+    localStorage.setItem("gameMoveChatSeen:game-1", "0");
+
+    const session = {
+      gameID: "game-1",
+      chatComments: [
+        {
+          userId: "",
+          timeStamp: 5000,
+          comment: "elected to switch seats",
+        },
+      ],
+    };
+
+    const { result } = renderHook(() =>
+      useDrawerChatUnread(session, { tab: "status", open: true })
+    );
+
+    expect(result.current).toBe(false);
   });
 });
