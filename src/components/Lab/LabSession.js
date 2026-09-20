@@ -17,6 +17,7 @@ import {
   flagSetIncludes,
 } from "../../lib/effectiveGameFlags";
 import { useStorageState } from "react-use-storage-state";
+import { useGameCustomCss } from "../../hooks/useGameCustomCss";
 import { useStore } from "../../stores";
 import GameMoves from "./GameMoves";
 import GameStatus from "./GameStatus";
@@ -185,6 +186,8 @@ function LabSession({
   const [loadedSave, loadedSaveSetter] = useState(initialLoadedSave ?? null);
   const globalMe = useStore((state) => state.globalMe);
   const colourContext = useStore((state) => state.colourContext);
+  const [customCSS] = useStorageState("custom-css", {});
+  useGameCustomCss(metaGame, globalMe, customCSS);
   const [colorMode] = useStorageState("color-mode", "light");
   const errorMessageRef = useRef("");
   const movesRef = useRef(null);
