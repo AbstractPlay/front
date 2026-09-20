@@ -17,6 +17,7 @@ import {
   formatSummaryGameKey,
   metaUidFromSummaryGameKey,
 } from "../../lib/summaryGameKeys";
+import { summaryGameKeySortingFn } from "../../lib/variantTableSort";
 import GlickoHint from "../shared/GlickoHint";
 import GlickoDisplayNote from "../shared/GlickoDisplayNote";
 
@@ -27,7 +28,7 @@ function Ratings({ handleChallenge }) {
   const [summary] = useContext(SummaryContext);
   const globalMe = useStore((state) => state.globalMe);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -48,6 +49,7 @@ function Ratings({ handleChallenge }) {
         const rank = rankAmongGameByGlickoLow(highest, game, user.id);
         return {
           id: uid,
+          gameKey: game,
           name: formatSummaryGameKey(game, t),
           elo,
           rank,
@@ -72,6 +74,10 @@ function Ratings({ handleChallenge }) {
         header: t("tables.game"),
         cell: (props) => (
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
+        ),
+        sortingFn: summaryGameKeySortingFn(
+          i18n.language,
+          (row) => row.original.gameKey ?? ""
         ),
       }),
       columnHelper.accessor("wld", {
@@ -152,7 +158,7 @@ function Ratings({ handleChallenge }) {
           ),
       }),
     ],
-    [globalMe, user, t]
+    [globalMe, user, t, i18n.language]
   );
 
   if (data.length === 0) {

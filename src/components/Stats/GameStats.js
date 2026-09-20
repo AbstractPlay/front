@@ -8,6 +8,7 @@ import {
   formatSummaryGameKey,
   matchesSummaryGameKey,
 } from "../../lib/summaryGameKeys";
+import { summaryGameKeySortingFn } from "../../lib/variantTableSort";
 
 function GameStats({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
@@ -20,6 +21,7 @@ function GameStats({ metaFilter, nav }) {
           const rec = summary.metaStats[gameKey];
           return {
             id: gameKey,
+            gameKey,
             game: formatSummaryGameKey(gameKey, t),
             n: rec.n,
             lenAvg: Math.trunc(rec.lenAvg * 100) / 100,
@@ -42,6 +44,7 @@ function GameStats({ metaFilter, nav }) {
     () => [
       columnHelper.accessor("game", {
         header: t("tables.game"),
+        sortingFn: summaryGameKeySortingFn(i18n.language),
       }),
       columnHelper.accessor("n", {
         header: t("tables.numRecords"),
@@ -61,7 +64,7 @@ function GameStats({ metaFilter, nav }) {
         cell: (props) => props.getValue() + "%",
       }),
     ],
-    [columnHelper, t]
+    [columnHelper, t, i18n.language]
   );
 
   return (

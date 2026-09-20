@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { getGameDisplayName } from "../lib/gameOptions";
 import { stringColumnSortingFn } from "../lib/compareStrings";
 import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
+import { variantSelectionSortingFn } from "../lib/variantTableSort";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
   getCoreRowModel,
@@ -116,6 +117,8 @@ function RecentCompletedGames() {
           "winner" in rec && rec.winner !== null
             ? rec.winner.map((w) => rec.players[w - 1])
             : null,
+        variantUids:
+          "variants" in rec && rec.variants !== null ? [...rec.variants] : [],
         variants:
           "variants" in rec && rec.variants !== null
             ? expandVariantsForGame(rec.metaGame, rec.variants)
@@ -254,6 +257,12 @@ function RecentCompletedGames() {
         header: t("tables.variants"),
         cell: (props) =>
           props.getValue() === null ? "" : props.getValue().join("; "),
+        sortingFn: variantSelectionSortingFn({
+          getMeta: (row) => row.original.metaGame,
+          getUids: (row) => row.original.variantUids ?? [],
+          locale: i18n.language,
+          compareMetaFirst: true,
+        }),
       }),
       columnHelper.display({
         id: "actions",

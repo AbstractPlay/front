@@ -6,6 +6,7 @@ import { getGameDisplayName } from "../../lib/gameOptions";
 import { metaGameFromPlayerRecord } from "../../lib/playerGameQuickPicks";
 import { parseRecordGameId } from "../../lib/recordGameId";
 import { orderVariantUidsForDisplay } from "../../lib/expandVariants";
+import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import { AllRecsContext, ProfileContext } from "../Player";
 import DataTable, { PROFILE_FILTER_TABLE_PROPS } from "../shared/DataTable";
 import ChallengeEntryModals from "../ChallengeEntryModals";
@@ -127,6 +128,7 @@ function History({ handleChallenge }) {
             id,
             meta,
             gameName,
+            variantUids: orderVariantUidsForDisplay(meta, variants),
             variants: orderVariantUidsForDisplay(meta, variants),
             opponents,
             winner,
@@ -186,13 +188,11 @@ function History({ handleChallenge }) {
             columnHelper.accessor("variants", {
               header: t("tables.variants"),
               cell: (props) => props.getValue().join(", "),
-              sortingFn: (rowA, rowB, columnID) => {
-                return compareStrings(
-                  rowA.getValue(columnID).join(", "),
-                  rowB.getValue(columnID).join(", "),
-                  i18n.language
-                );
-              },
+              sortingFn: variantSelectionSortingFn({
+                getMeta: (row) => row.original.meta,
+                getUids: (row) => row.original.variantUids ?? [],
+                locale: i18n.language,
+              }),
               filterFn: (row, colId, val) => {
                 return row.getValue(colId).join(",").includes(val);
               },

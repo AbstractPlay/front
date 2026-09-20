@@ -9,9 +9,11 @@ import Modal from "../Modal";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { formatPlayerDisplayName } from "../Bots/botUtils";
+import { expandVariants } from "../../lib/expandVariants";
+import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 
 function GamesTable({ games, setRefresh, editor, eventid }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const allUsers = useStore((state) => state.users);
   const [showModalArbitrate, showModalArbitrateSetter] = useState(false);
   const [arbRec, setArbRec] = useState(null);
@@ -55,7 +57,8 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
                 round,
                 metagame: metaGame,
                 gameName: gameinfo.get(metaGame)?.name,
-                variants,
+                variantUids: [...(variants ?? [])],
+                variants: expandVariants(metaGame, variants ?? []),
                 p1,
                 p2,
                 gameover:
@@ -98,6 +101,11 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
       columnHelper.accessor("variants", {
         header: t("tables.variants"),
         cell: (props) => props.getValue()?.join(", ") || null,
+        sortingFn: variantSelectionSortingFn({
+          getMeta: (row) => row.original.metagame,
+          getUids: (row) => row.original.variantUids ?? [],
+          locale: i18n.language,
+        }),
       }),
       columnHelper.accessor("round", {
         header: t("tables.round"),
@@ -162,7 +170,7 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
           ),
       }),
     ],
-    [columnHelper, editor, allUsers, t]
+    [columnHelper, editor, allUsers, t, i18n.language]
   );
 
   const changeResult = () => {

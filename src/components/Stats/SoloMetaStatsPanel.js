@@ -6,6 +6,7 @@ import { useStore } from "../../stores";
 import { formatGradeLabel, filterSoloMetaStats } from "../../lib/soloPlay";
 import { formatSummaryGameKey } from "../../lib/summaryGameKeys";
 import { compareStrings } from "../../lib/compareStrings";
+import { summaryGameKeySortingFn } from "../../lib/variantTableSort";
 
 function SoloMetaStatsPanel({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
@@ -16,6 +17,7 @@ function SoloMetaStatsPanel({ metaFilter, nav }) {
       filterSoloMetaStats(summary, metaFilter)
         .map(([key, rec]) => ({
           id: key,
+          gameKey: key,
           game: formatSummaryGameKey(key, t),
           attempts: rec.attempts,
           uniquePlayers: rec.uniquePlayers,
@@ -32,7 +34,10 @@ function SoloMetaStatsPanel({ metaFilter, nav }) {
   const columnHelper = createColumnHelper();
   const columns = useMemo(
     () => [
-      columnHelper.accessor("game", { header: t("tables.game") }),
+      columnHelper.accessor("game", {
+        header: t("tables.game"),
+        sortingFn: summaryGameKeySortingFn(i18n.language),
+      }),
       columnHelper.accessor("attempts", { header: t("solo.stats.attempts") }),
       columnHelper.accessor("uniquePlayers", {
         header: t("solo.stats.uniquePlayers"),
@@ -51,7 +56,7 @@ function SoloMetaStatsPanel({ metaFilter, nav }) {
         cell: (props) => formatGradeLabel(props.getValue(), t),
       }),
     ],
-    [columnHelper, t]
+    [columnHelper, t, i18n.language]
   );
 
   if (data.length === 0) {

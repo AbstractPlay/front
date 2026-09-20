@@ -19,11 +19,12 @@ import { useStore } from "../stores";
 import BotAwareName from "./Bots/BotAwareName";
 import { formatPlayerDisplayName } from "./Bots/botUtils";
 import PageLoading from "./shared/PageLoading";
+import { variantSelectionSortingFn } from "../lib/variantTableSort";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function ListGames({ fixedState }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [games, gamesSetter] = useState(null);
   const { gameState, metaGame } = useParams();
   const [, maxPlayersSetter] = useState(2);
@@ -89,6 +90,8 @@ function ListGames({ fixedState }) {
             "winner" in rec && rec.winner !== null
               ? rec.winner.map((w) => rec.players[w - 1])
               : null,
+          variantUids:
+            "variants" in rec && rec.variants !== null ? [...rec.variants] : [],
           variants:
             "variants" in rec && rec.variants !== null
               ? expandVariants(rec.variants)
@@ -219,6 +222,11 @@ function ListGames({ fixedState }) {
         header: t("tables.variants"),
         cell: (props) =>
           props.getValue() === null ? "" : props.getValue().join("; "),
+        sortingFn: variantSelectionSortingFn({
+          getMeta: () => metaGame,
+          getUids: (row) => row.original.variantUids ?? [],
+          locale: i18n.language,
+        }),
       }),
       columnHelper.display({
         id: "actions",
@@ -235,7 +243,7 @@ function ListGames({ fixedState }) {
         ),
       }),
     ],
-    [columnHelper, metaGame, t, allUsers]
+    [columnHelper, metaGame, t, allUsers, i18n.language]
   );
 
   const table = useReactTable({

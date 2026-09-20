@@ -16,6 +16,7 @@ import {
   formatSummaryGameKey,
   matchesSummaryGameKey,
 } from "../../lib/summaryGameKeys";
+import { summaryGameKeySortingFn } from "../../lib/variantTableSort";
 import GlickoHint from "../shared/GlickoHint";
 import GlickoDisplayNote from "../shared/GlickoDisplayNote";
 
@@ -25,7 +26,7 @@ function HighestSingleRating({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
   const globalMe = useStore((state) => state.globalMe);
   const userNames = useStore((state) => state.users);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const glickoByGameMap = useMemo(
     () => buildGlickoByGameMap(summary?.ratings?.glickoByGame),
@@ -92,6 +93,7 @@ function HighestSingleRating({ metaFilter, nav }) {
       }),
       columnHelper.accessor("game", {
         header: t("tables.game"),
+        sortingFn: summaryGameKeySortingFn(i18n.language),
       }),
       columnHelper.accessor("glicko", {
         header: () => <GlickoHint />,
@@ -160,7 +162,7 @@ function HighestSingleRating({ metaFilter, nav }) {
         },
       }),
     ],
-    [columnHelper, globalMe, userNames, t]
+    [columnHelper, globalMe, userNames, t, i18n.language]
   );
 
   return (

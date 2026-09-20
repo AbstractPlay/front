@@ -4,15 +4,17 @@ import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import { useTranslation } from "react-i18next";
 import { formatSummaryGameKey } from "../../lib/summaryGameKeys";
+import { summaryGameKeySortingFn } from "../../lib/variantTableSort";
 
 function PieStats({ nav }) {
   const summary = useStore((state) => state.summary);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const pieRateData = useMemo(
     () =>
       (summary.pieRates ?? []).map(({ game, n, pied, rate }) => ({
         id: game,
+        gameKey: game,
         game: formatSummaryGameKey(game, t),
         n,
         pied,
@@ -26,6 +28,7 @@ function PieStats({ nav }) {
     () => [
       columnHelper.accessor("game", {
         header: t("tables.game"),
+        sortingFn: summaryGameKeySortingFn(i18n.language),
       }),
       columnHelper.accessor("n", {
         header: t("tables.numRecords"),
@@ -38,7 +41,7 @@ function PieStats({ nav }) {
         cell: (props) => props.getValue() + "%",
       }),
     ],
-    [columnHelper, t]
+    [columnHelper, t, i18n.language]
   );
 
   if (pieRateData.length === 0) {

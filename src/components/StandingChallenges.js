@@ -4,6 +4,10 @@ import { Link, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
 import { formatChallengeTablePlayerCount } from "../lib/challengeTablePlayerCount";
 import { compareStrings, stringColumnSortingFn } from "../lib/compareStrings";
+import {
+  clockTupleSortingFn,
+  variantSelectionSortingFn,
+} from "../lib/variantTableSort";
 import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
@@ -552,6 +556,12 @@ function StandingChallenges(props) {
       columnHelper.accessor("variants", {
         header: t("tables.variants"),
         cell: (props) => props.getValue().join("; "),
+        sortingFn: variantSelectionSortingFn({
+          getMeta: (row) => row.original.metaGame,
+          getUids: (row) => row.original.variantUids ?? [],
+          locale: i18n.language,
+          compareMetaFirst: true,
+        }),
       }),
       columnHelper.accessor("comment", {
         header: t("tables.notes"),
@@ -565,12 +575,30 @@ function StandingChallenges(props) {
       }),
       columnHelper.accessor("clockStart", {
         header: t("tables.clockStart"),
+        sortingFn: clockTupleSortingFn({
+          getStart: (row) => row.original.clockStart,
+          getInc: (row) => row.original.clockInc,
+          getMax: (row) => row.original.clockMax,
+          primary: "start",
+        }),
       }),
       columnHelper.accessor("clockInc", {
         header: t("tables.clockIncrement"),
+        sortingFn: clockTupleSortingFn({
+          getStart: (row) => row.original.clockStart,
+          getInc: (row) => row.original.clockInc,
+          getMax: (row) => row.original.clockMax,
+          primary: "inc",
+        }),
       }),
       columnHelper.accessor("clockMax", {
         header: t("tables.clockMax"),
+        sortingFn: clockTupleSortingFn({
+          getStart: (row) => row.original.clockStart,
+          getInc: (row) => row.original.clockInc,
+          getMax: (row) => row.original.clockMax,
+          primary: "max",
+        }),
       }),
       columnHelper.accessor("rated", {
         header: t("tables.rated"),

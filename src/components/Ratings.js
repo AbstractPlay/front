@@ -26,7 +26,8 @@ import {
   glickoColumnSortingFn,
 } from "../lib/glickoDisplay";
 import { formatBatchRatingVariantLabel } from "../lib/batchRatingLabels";
-import { matchesSummaryGameKey } from "../lib/summaryGameKeys";
+import { matchesSummaryGameKey, parseSummaryGameKey } from "../lib/summaryGameKeys";
+import { compareVariantSelections } from "../lib/variantTableSort";
 import PageLoading from "./shared/PageLoading";
 import { SUMMARY_URLS } from "../lib/summaryFetch";
 import GlickoHint from "./shared/GlickoHint";
@@ -95,6 +96,7 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
         rank: idx + 1,
         player: userRecName(allUsers, rec.user),
         lastSeen,
+        gameKey: rec.game,
         variant: formatBatchRatingVariantLabel(metaGame, rec.game, t),
         glicko: rec.glicko ?? null,
         rating: rec.rating,
@@ -146,6 +148,16 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
       }),
       columnHelper.accessor("variant", {
         header: t("tables.variants"),
+        sortingFn: (rowA, rowB) => {
+          const a = parseSummaryGameKey(rowA.original.gameKey);
+          const b = parseSummaryGameKey(rowB.original.gameKey);
+          return compareVariantSelections(
+            metaGame,
+            a.variantUids,
+            b.variantUids,
+            i18n.language
+          );
+        },
       }),
       columnHelper.accessor("glicko", {
         header: () => <GlickoHint />,
@@ -180,7 +192,7 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
         },
       }),
     ],
-    [globalMe, t, i18n.language]
+    [globalMe, t, i18n.language, metaGame]
   );
 
   const table = useReactTable({

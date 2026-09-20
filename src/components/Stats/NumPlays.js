@@ -10,10 +10,11 @@ import {
   matchesSummaryGameKey,
   metaUidFromSummaryGameKey,
 } from "../../lib/summaryGameKeys";
+import { summaryGameKeySortingFn } from "../../lib/variantTableSort";
 
 function NumPlays({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [activeChartModal, activeChartModalSetter] = useState("");
 
   const data = useMemo(() => {
@@ -47,6 +48,7 @@ function NumPlays({ metaFilter, nav }) {
         }
         return {
           id: obj.game,
+          gameKey: obj.game,
           meta,
           hindex,
           game: formatSummaryGameKey(obj.game, t),
@@ -71,6 +73,7 @@ function NumPlays({ metaFilter, nav }) {
     () => [
       columnHelper.accessor("game", {
         header: t("tables.game"),
+        sortingFn: summaryGameKeySortingFn(i18n.language),
       }),
       columnHelper.accessor("plays", {
         header: t("tables.numPlays"),
@@ -106,7 +109,7 @@ function NumPlays({ metaFilter, nav }) {
         enableSorting: false,
       }),
     ],
-    [columnHelper, activeChartModal, t]
+    [columnHelper, activeChartModal, t, i18n.language]
   );
 
   return (

@@ -5,7 +5,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { TournamentContext } from "../Player";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { useTranslation } from "react-i18next";
-import { compareStrings } from "../../lib/compareStrings";
+import { compareTournamentRow } from "../../lib/variantTableSort";
 import { formatVariantUids } from "../../lib/summaryGameKeys";
 
 function Tournaments() {
@@ -70,13 +70,16 @@ function Tournaments() {
             </Link>
           </>
         ),
-        sortingFn: (rowA, rowB, columnID) => {
-          return compareStrings(
+        sortingFn: (rowA, rowB) =>
+          compareTournamentRow(
             rowA.original.gameName,
+            rowA.original.meta,
+            rowA.original.variants ?? [],
             rowB.original.gameName,
+            rowB.original.meta,
+            rowB.original.variants ?? [],
             i18n.language
-          );
-        },
+          ),
       }),
       columnHelper.accessor("place", {
         header: t("tables.place"),

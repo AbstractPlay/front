@@ -5,10 +5,15 @@ import DataTable, { EVENTS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
+import { expandVariants } from "../../lib/expandVariants";
+import {
+  clockTupleSortingFn,
+  variantSelectionSortingFn,
+} from "../../lib/variantTableSort";
 
 function PairingTable({ pairs, delPairing, swapPairing }) {
   const allUsers = useStore((state) => state.users);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const data = useMemo(
     () =>
       pairs.map(
@@ -19,8 +24,13 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
           return {
             id: idx,
             round,
+            metaUid: metagame,
             metagame: gameinfo.get(metagame)?.name,
-            variants,
+            variantUids: [...(variants ?? [])],
+            variants: expandVariants(metagame, variants ?? []),
+            clockStart,
+            clockInc,
+            clockMax,
             clock: [clockStart, clockInc, clockMax].join("/"),
             p1,
             p2,
@@ -79,9 +89,19 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
       columnHelper.accessor("variants", {
         header: t("tables.variants"),
         cell: (props) => props.getValue().join(", "),
+        sortingFn: variantSelectionSortingFn({
+          getMeta: (row) => row.original.metaUid,
+          getUids: (row) => row.original.variantUids ?? [],
+          locale: i18n.language,
+        }),
       }),
       columnHelper.accessor("clock", {
         header: t("tables.clock"),
+        sortingFn: clockTupleSortingFn({
+          getStart: (row) => row.original.clockStart,
+          getInc: (row) => row.original.clockInc,
+          getMax: (row) => row.original.clockMax,
+        }),
       }),
       columnHelper.display({
         id: "actions",
@@ -97,7 +117,7 @@ function PairingTable({ pairs, delPairing, swapPairing }) {
         ),
       }),
     ],
-    [columnHelper, delPairing, swapPairing, allUsers, t]
+    [columnHelper, delPairing, swapPairing, allUsers, t, i18n.language]
   );
 
   return (

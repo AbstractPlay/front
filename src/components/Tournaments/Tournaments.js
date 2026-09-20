@@ -24,6 +24,7 @@ import {
   canonicalVariantKey,
   formatVariantsJoined,
 } from "../../lib/expandVariants";
+import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import PageHelmet from "../PageHelmet";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
@@ -107,6 +108,17 @@ function Tournaments(props) {
     (filterMeta === null || tournamentPlaySupported(filterMeta));
 
   const allSize = Number.MAX_SAFE_INTEGER;
+
+  const tournamentVariantSortingFn = useMemo(
+    () =>
+      variantSelectionSortingFn({
+        getMeta: (row) => row.original.realMeta ?? row.original.metaGame,
+        getUids: (row) => row.original.variantUids ?? [],
+        locale: i18n.language,
+        compareMetaFirst: true,
+      }),
+    [i18n.language]
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -300,6 +312,7 @@ function Tournaments(props) {
           tournamentid: t.id,
           realMeta: t.metaGame,
           metaGame: getGameDisplayName(t.metaGame, "Unknown"),
+          variantUids: [...(t.variants ?? [])],
           variants: formatVariantsJoined(t.metaGame, t.variants),
           number: t.number,
           startDate: date1,
@@ -354,6 +367,7 @@ function Tournaments(props) {
       openTournamentsColumnHelper.accessor("variants", {
         header: t("tables.variants"),
         cell: (props) => props.getValue(),
+        sortingFn: tournamentVariantSortingFn,
       }),
       openTournamentsColumnHelper.accessor("number", {
         header: t("Tournament.Number"),
@@ -457,6 +471,7 @@ function Tournaments(props) {
       t,
       allUsers,
       i18n.language,
+      tournamentVariantSortingFn,
     ]
   );
 
@@ -571,6 +586,7 @@ function Tournaments(props) {
           tournamentid: t.id,
           realMeta: t.metaGame,
           metaGame: getGameDisplayName(t.metaGame, "Unknown"),
+          variantUids: [...(t.variants ?? [])],
           variants: formatVariantsJoined(t.metaGame, t.variants),
           number: t.number,
           dateStarted: t.dateStarted,
@@ -613,6 +629,7 @@ function Tournaments(props) {
       currentTournamentsColumnHelper.accessor("variants", {
         header: t("tables.variants"),
         cell: (props) => props.getValue(),
+        sortingFn: tournamentVariantSortingFn,
       }),
       currentTournamentsColumnHelper.accessor("number", {
         header: t("Tournament.Number"),
@@ -668,7 +685,7 @@ function Tournaments(props) {
         ),
       }),
     ],
-    [currentTournamentsColumnHelper, t]
+    [currentTournamentsColumnHelper, t, tournamentVariantSortingFn]
   );
 
   const currentTournamentsTable = useReactTable({
@@ -798,6 +815,7 @@ function Tournaments(props) {
           tournamentid: t.id,
           metaGameName: getGameDisplayName(t.metaGame, "Unknown"),
           metaGame: t.metaGame,
+          variantUids: [...(t.variants ?? [])],
           variants: formatVariantsJoined(t.metaGame, t.variants),
           number: t.number,
           dateStarted: t.dateStarted,
@@ -834,6 +852,7 @@ function Tournaments(props) {
       completedTournamentsColumnHelper.accessor("variants", {
         header: t("tables.variants"),
         cell: (props) => props.getValue(),
+        sortingFn: tournamentVariantSortingFn,
       }),
       completedTournamentsColumnHelper.accessor("number", {
         header: t("Tournament.Number"),
@@ -885,7 +904,7 @@ function Tournaments(props) {
           ) : null,
       }),
     ],
-    [completedTournamentsColumnHelper, t, allUsers]
+    [completedTournamentsColumnHelper, t, allUsers, tournamentVariantSortingFn]
   );
 
   const completedTournamentsTable = useReactTable({
