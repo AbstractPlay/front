@@ -15,6 +15,10 @@ import { useTranslation, Trans } from "react-i18next";
 import Modal from "../Modal";
 import { useStore } from "../../stores";
 import { expandVariants } from "../../lib/expandVariants";
+import {
+  clockTupleSortingFn,
+  variantSelectionSortingFn,
+} from "../../lib/variantTableSort";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -91,6 +95,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
           gameName: getGameDisplayName(entry.metaGame, "Unknown"),
           noExplore: entry.noExplore || false,
           suspended: entry.suspended === true,
+          variantUids: [...(entry.variants || [])],
           variants: expandVariants(entry.metaGame, entry.variants || []),
           clockCombined: [
             entry.clockStart,
@@ -114,6 +119,11 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
         header: t("tables.variants"),
         cell: (props) =>
           props.getValue() !== undefined ? props.getValue().join(", ") : "none",
+        sortingFn: variantSelectionSortingFn({
+          getMeta: (row) => row.original.metaGame,
+          getUids: (row) => row.original.variantUids ?? [],
+          locale: i18n.language,
+        }),
       }),
       columnHelper.accessor("limit", {
         header: t("tables.limit"),
@@ -126,6 +136,11 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
       }),
       columnHelper.accessor("clockCombined", {
         header: t("tables.clock"),
+        sortingFn: clockTupleSortingFn({
+          getStart: (row) => row.original.clockStart,
+          getInc: (row) => row.original.clockInc,
+          getMax: (row) => row.original.clockMax,
+        }),
       }),
       columnHelper.accessor("clockHard", {
         header: t("tables.hard"),

@@ -13,12 +13,13 @@ import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { formatVariantsJoined } from "../../lib/expandVariants";
+import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import { useTranslation } from "react-i18next";
 import PageHelmet from "../PageHelmet";
 import PageLoading from "../shared/PageLoading";
 
 function TournamentsOld(props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [tournaments, tournamentsSetter] = useState(null);
   const [sorting, sortingSetter] = useState([{ id: "dateEnded", desc: true }]);
   const [oldTournamentsShowState, oldTournamentsShowStateSetter] =
@@ -54,6 +55,7 @@ function TournamentsOld(props) {
         tournamentid: t.id,
         metaGameName: getGameDisplayName(t.metaGame, "Unknown"),
         metaGame: t.metaGame,
+        variantUids: [...(t.variants ?? [])],
         variants: formatVariantsJoined(t.metaGame, t.variants),
         number: t.number,
         dateStarted: t.dateStarted,
@@ -75,6 +77,11 @@ function TournamentsOld(props) {
       oldTournamentsColumnHelper.accessor("variants", {
         header: t("tables.variants"),
         cell: (props) => props.getValue(),
+        sortingFn: variantSelectionSortingFn({
+          getMeta: (row) => row.original.metaGame,
+          getUids: (row) => row.original.variantUids ?? [],
+          locale: i18n.language,
+        }),
       }),
       oldTournamentsColumnHelper.accessor("number", {
         header: t("Tournament.Number"),
@@ -107,7 +114,7 @@ function TournamentsOld(props) {
         ),
       }),
     ],
-    [oldTournamentsColumnHelper, t]
+    [oldTournamentsColumnHelper, t, i18n.language]
   );
 
   const oldTournamentsTable = useReactTable({

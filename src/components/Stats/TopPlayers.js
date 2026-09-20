@@ -6,6 +6,7 @@ import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 import { useTranslation } from "react-i18next";
 import { formatSummaryGameKey } from "../../lib/summaryGameKeys";
+import { summaryGameKeySortingFn } from "../../lib/variantTableSort";
 import {
   formatGlickoLowWithRd,
   glickoColumnSortingFn,
@@ -17,7 +18,7 @@ function TopPlayers({ nav }) {
   const summary = useStore((state) => state.summary);
   const globalMe = useStore((state) => state.globalMe);
   const userNames = useStore((state) => state.users);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -30,6 +31,7 @@ function TopPlayers({ nav }) {
           }
           return {
             id: game,
+            gameKey: game,
             userid,
             name,
             game: formatSummaryGameKey(game, t),
@@ -47,6 +49,7 @@ function TopPlayers({ nav }) {
     () => [
       columnHelper.accessor("game", {
         header: t("tables.game"),
+        sortingFn: summaryGameKeySortingFn(i18n.language),
       }),
       columnHelper.accessor("name", {
         header: t("tables.player"),
@@ -124,7 +127,7 @@ function TopPlayers({ nav }) {
         },
       }),
     ],
-    [columnHelper, globalMe, userNames, t]
+    [columnHelper, globalMe, userNames, t, i18n.language]
   );
 
   return (

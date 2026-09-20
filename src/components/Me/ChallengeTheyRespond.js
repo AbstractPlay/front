@@ -18,6 +18,7 @@ import {
   compareStrings,
   stringColumnSortingFn,
 } from "../../lib/compareStrings";
+import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { expandVariants } from "../../lib/expandVariants";
@@ -41,6 +42,7 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
+          variantUids: [...(g.variants ?? [])],
           variants: expandVariants(g.metaGame, g.variants),
           numPlayers: g.numPlayers,
           gameName: getGameDisplayName(g.metaGame, "Unknown"),
@@ -75,6 +77,15 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
       }),
       columnHelper.accessor("variants", {
         header: t("tables.variants"),
+        cell: (props) =>
+          Array.isArray(props.getValue())
+            ? props.getValue().join(", ")
+            : props.getValue(),
+        sortingFn: variantSelectionSortingFn({
+          getMeta: (row) => row.original.metaGame,
+          getUids: (row) => row.original.variantUids ?? [],
+          locale: i18n.language,
+        }),
       }),
       columnHelper.accessor("numPlayers", {
         header: t("tables.numPlayers"),

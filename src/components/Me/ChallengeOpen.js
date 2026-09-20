@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { stringColumnSortingFn } from "../../lib/compareStrings";
+import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import {
   getCoreRowModel,
   useReactTable,
@@ -36,6 +37,7 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
+          variantUids: [...(g.variants ?? [])],
           variants: expandVariants(g.metaGame, g.variants),
           numPlayers: g.numPlayers,
           gameName: getGameDisplayName(g.metaGame, "Unknown"),
@@ -70,6 +72,15 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
       }),
       columnHelper.accessor("variants", {
         header: t("tables.variants"),
+        cell: (props) =>
+          Array.isArray(props.getValue())
+            ? props.getValue().join(", ")
+            : props.getValue(),
+        sortingFn: variantSelectionSortingFn({
+          getMeta: (row) => row.original.metaGame,
+          getUids: (row) => row.original.variantUids ?? [],
+          locale: i18n.language,
+        }),
       }),
       columnHelper.accessor("numPlayers", {
         header: t("tables.numPlayers"),
