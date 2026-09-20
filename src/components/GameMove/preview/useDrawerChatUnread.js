@@ -1,16 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { getLatestUserChatTimestamp } from "../../../lib/GameMove/userChatComments";
 
 const STORAGE_PREFIX = "gameMoveChatSeen:";
-
-function getLatestChatTimestamp(comments) {
-  if (!Array.isArray(comments) || comments.length === 0) {
-    return 0;
-  }
-  return comments.reduce(
-    (max, comment) => Math.max(max, comment?.timeStamp ?? 0),
-    0
-  );
-}
 
 function readLastSeen(gameID) {
   try {
@@ -38,7 +29,7 @@ function writeLastSeen(gameID, timestamp) {
  */
 export function useDrawerChatUnread(session, { tab, open }) {
   const { gameID, chatComments } = session;
-  const latest = getLatestChatTimestamp(chatComments);
+  const latest = getLatestUserChatTimestamp(chatComments);
   const [lastSeen, setLastSeen] = useState(() => readLastSeen(gameID) ?? 0);
   const seededRef = useRef(readLastSeen(gameID) !== null);
   const chatVisible = open && tab === "chat";

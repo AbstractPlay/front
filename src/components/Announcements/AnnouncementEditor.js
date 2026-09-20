@@ -14,6 +14,7 @@ import {
   retractAnnouncement,
   saveAnnouncement,
 } from "../../lib/announcements/announcementAdminApi";
+import { DISCORD_EXCERPT_END_MARKER } from "../../lib/announcements/discordExcerpt";
 import { insertAtSelection } from "../../lib/announcements/markdownInsert";
 import { resolveAnnouncementImages, apAttKeysInBody } from "../../lib/announcements/resolveAnnouncementImages";
 import { isProductionMode } from "../../lib/realMode";
@@ -191,12 +192,20 @@ function AnnouncementEditor() {
     });
   }, []);
 
+  const preventToolbarBlur = (event) => {
+    event.preventDefault();
+  };
+
   const wrapSelection = (before, after = "", placeholder = "") => {
     const el = bodyRef.current;
     const next = insertAtSelection(el, before, after, placeholder);
     if (next !== null) {
       setBody(next);
     }
+  };
+
+  const insertDiscordExcerptMarkerAtCursor = () => {
+    wrapSelection(`\n${DISCORD_EXCERPT_END_MARKER}\n`, "");
   };
 
   const handlePublish = async () => {
@@ -355,7 +364,10 @@ function AnnouncementEditor() {
               />
               <p className="help">{t("announcements.admin.adminNoteHint")}</p>
             </div>
-            <div className="announcement-toolbar buttons are-small">
+            <div
+              className="announcement-toolbar buttons are-small"
+              onMouseDown={preventToolbarBlur}
+            >
               <button type="button" className="button apButtonNeutral is-small" onClick={() => wrapSelection("**", "**", "text")}>B</button>
               <button type="button" className="button apButtonNeutral is-small" onClick={() => wrapSelection("_", "_", "text")}>i</button>
               <button type="button" className="button apButtonNeutral is-small" onClick={() => wrapSelection("[", "](https://)", "link")}>Link</button>
@@ -377,7 +389,21 @@ function AnnouncementEditor() {
             </div>
             <p className="help">{t("announcements.admin.emojiHint")}</p>
             <div className="field">
-              <label className="label" htmlFor="announcement-body">{t("announcements.admin.fieldBody")}</label>
+              <div className="announcement-body-field-header">
+                <label className="label" htmlFor="announcement-body">{t("announcements.admin.fieldBody")}</label>
+                <button
+                  type="button"
+                  className="button apButtonNeutral is-small"
+                  onMouseDown={preventToolbarBlur}
+                  title={t("announcements.admin.discordExcerptHint", { marker: DISCORD_EXCERPT_END_MARKER })}
+                  onClick={insertDiscordExcerptMarkerAtCursor}
+                >
+                  {t("announcements.admin.insertDiscordExcerptMarker")}
+                </button>
+              </div>
+              <p className="help announcement-body-marker-hint">
+                {t("announcements.admin.discordExcerptHint", { marker: DISCORD_EXCERPT_END_MARKER })}
+              </p>
               <textarea
                 id="announcement-body"
                 ref={bodyRef}

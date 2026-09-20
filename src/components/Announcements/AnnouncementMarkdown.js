@@ -3,12 +3,16 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { resolveAnnouncementImages } from "../../lib/announcements/resolveAnnouncementImages";
+import { removeDiscordExcerptMarker } from "../../lib/announcements/discordExcerpt";
 
 function AnnouncementMarkdown({ body, attachmentUrlByKey, className }) {
   if (!body) {
     return null;
   }
-  const markdown = resolveAnnouncementImages(body, attachmentUrlByKey);
+  const markdown = resolveAnnouncementImages(
+    removeDiscordExcerptMarker(body),
+    attachmentUrlByKey,
+  );
   return (
     <ReactMarkdown
       className={className ?? "content announcement-markdown"}

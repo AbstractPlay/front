@@ -114,6 +114,24 @@
   }
 }
 
+.announcement-body-field-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.announcement-body-field-header .label {
+  margin-bottom: 0;
+}
+
+.announcement-body-marker-hint {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
 .announcement-body-input {
   font-family: ui-monospace, monospace;
   font-size: 0.9rem;

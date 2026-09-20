@@ -940,6 +940,8 @@
             "adminNoteHint": "Visible only to admins; never shown on /news.",
             "previewHeading": "Preview",
             "emojiHint": "Tip: you can also use your system emoji picker (Windows: Win+., macOS: Ctrl+Cmd+Space).",
+            "discordExcerptHint": "Optional: place {{marker}} on its own line where the Discord mirror should end. Text after the marker stays on /news only; the marker is hidden when published.",
+            "insertDiscordExcerptMarker": "Insert excerpt marker",
             "publishConfirmTitle": "Publish announcement?",
             "publishConfirmBody": "This will publish on /news, refresh RSS, mirror to Discord (when configured), and email or push users who opted in to site announcements.",
             "publishConfirm": "Publish now",
