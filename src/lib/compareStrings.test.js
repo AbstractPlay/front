@@ -19,8 +19,8 @@ describe("compareStrings", () => {
     expect(compareStrings("a", undefined, "en")).toBeGreaterThan(0);
   });
 
-  it("coerces non-string operands", () => {
-    expect(compareStrings(10, 2, "en")).toBeLessThan(0);
+  it("coerces non-string operands to strings", () => {
+    expect(compareStrings(10, 2, "en")).toBeGreaterThan(0);
     expect(compareStrings("a", /** @type {*} */ (["x"]), "en")).toBeLessThan(0);
   });
 
