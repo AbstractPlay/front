@@ -6,19 +6,34 @@ import { useStore } from "../../stores";
 import { useAuthSession } from "../../hooks/useAuthSession";
 import Spinner from "../Spinner";
 import FeedbackSignInRequired from "./FeedbackSignInRequired";
-import FeedbackListFilters from "./FeedbackListFilters";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
-import { listFeedback, listFeedbackAdmin, listFeedbackAll } from "../../lib/feedback/feedbackApi";
+import FeedbackReviewersBadge from "./FeedbackReviewersBadge";
+import FeedbackTimestamp from "./FeedbackTimestamp";
+import FeedbackPlayerLink from "./FeedbackPlayerLink";
+import { listFeedbackAll } from "../../lib/feedback/feedbackApi";
 import {
   boardKeyForKind,
+  boardStatusFilterChipsForKind,
   compareFeedbackItems,
   compareWishlistItems,
+  countItemsByStatus,
+  defaultBoardSortForKind,
+  FEEDBACK_BOARD_SORT_OPTIONS,
   FEEDBACK_NEW_PATH,
+  feedbackBoardSortLabelKey,
   feedbackDetailPath,
   WISHLIST_CATEGORY_FILTER_CHIPS,
   WISHLIST_SORT_OPTIONS,
 } from "../../lib/feedback/feedbackConstants";
+import {
+  getStoredFeedbackBoardClosedOnly,
+  getStoredFeedbackBoardSort,
+  setStoredFeedbackBoardClosedOnly,
+  setStoredFeedbackBoardSort,
+} from "../../lib/feedback/feedbackListSort";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
+import FeedbackQuickSearch from "./FeedbackQuickSearch";
+import { filterFeedbackItemsByQuery } from "../../lib/feedback/filterFeedbackItemsByQuery";
 import "./feedback.css";
 
 function FeedbackBoard({ kind = "bug" }) {
@@ -27,32 +42,56 @@ function FeedbackBoard({ kind = "bug" }) {
   const loggedIn = status === "ready";
   const globalMe = useStore((state) => state.globalMe);
   const boardKey = boardKeyForKind(kind);
-  const defaultSort = kind === "feature" || kind === "wishlist" ? "votes" : "recent";
+  const defaultSort = defaultBoardSortForKind(kind);
+  const statusChips = boardStatusFilterChipsForKind(kind);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [priorityFilter, setPriorityFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
-  const [sortBy, setSortBy] = useState(kind === "wishlist" ? "votes" : "default");
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showClosedOnly, setShowClosedOnly] = useState(() => getStoredFeedbackBoardClosedOnly(kind));
   const isAdmin = Boolean(globalMe?.admin);
-  const useAdminList = isAdmin && kind !== "wishlist" && (statusFilter || priorityFilter);
+  const [sortBy, setSortBy] = useState(() => getStoredFeedbackBoardSort(kind, { isAdmin }));
+
+  useEffect(() => {
+    setSortBy(getStoredFeedbackBoardSort(kind, { isAdmin }));
+    setShowClosedOnly(getStoredFeedbackBoardClosedOnly(kind));
+    setStatusFilter("");
+    setCategoryFilter("");
+  }, [isAdmin, kind]);
+
+  const handleClosedOnlyToggle = () => {
+    setShowClosedOnly((prev) => {
+      const next = !prev;
+      setStoredFeedbackBoardClosedOnly(kind, next);
+      if (next) {
+        setStatusFilter("");
+        setCategoryFilter("");
+      }
+      return next;
+    });
+  };
+
+  const handleSortByChange = (nextSort) => {
+    setSortBy(nextSort);
+    setStoredFeedbackBoardSort(kind, nextSort);
+  };
+  const listSort = (kind === "bug" || kind === "feature")
+    && FEEDBACK_BOARD_SORT_OPTIONS.includes(sortBy)
+    ? sortBy
+    : defaultSort;
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const result = useAdminList
-        ? await listFeedbackAdmin({
-          kind,
-          status: statusFilter || undefined,
-          priority: priorityFilter || undefined,
-          limit: 100,
-        })
-        : kind === "wishlist"
-          ? await listFeedbackAll({ kind, sort: defaultSort, limit: 100 })
-          : await listFeedback({ kind, sort: defaultSort, limit: 100 });
+      const result = await listFeedbackAll({
+        kind,
+        sort: kind === "wishlist" ? defaultSort : listSort,
+        limit: 100,
+        closedOnly: showClosedOnly,
+      });
       if (cancelled) {
         return;
       }
@@ -68,29 +107,57 @@ function FeedbackBoard({ kind = "bug" }) {
     return () => {
       cancelled = true;
     };
-  }, [kind, defaultSort, useAdminList, statusFilter, priorityFilter]);
+  }, [kind, defaultSort, listSort, showClosedOnly]);
+
+  const statusCounts = useMemo(
+    () => countItemsByStatus(items, statusChips),
+    [items, statusChips],
+  );
 
   const categoryCounts = useMemo(() => {
-    const counts = { all: items.length };
+    if (kind !== "wishlist") {
+      return {};
+    }
+    const counts = {};
     for (const chip of WISHLIST_CATEGORY_FILTER_CHIPS) {
       counts[chip] = items.filter((item) => item.wishlistCategory === chip).length;
     }
     return counts;
-  }, [items]);
+  }, [items, kind]);
 
   const displayItems = useMemo(() => {
     let filtered = items;
-    if (kind === "wishlist" && categoryFilter) {
+    if (!showClosedOnly && statusFilter) {
+      filtered = filtered.filter((item) => item.status === statusFilter);
+    }
+    if (!showClosedOnly && kind === "wishlist" && categoryFilter) {
       filtered = filtered.filter((item) => item.wishlistCategory === categoryFilter);
     }
     if (kind === "wishlist") {
       return [...filtered].sort((a, b) => compareWishlistItems(a, b, sortBy));
     }
-    if (isAdmin && sortBy !== "default") {
-      return [...filtered].sort((a, b) => compareFeedbackItems(a, b, sortBy));
+    if (kind === "bug" || kind === "feature") {
+      if (FEEDBACK_BOARD_SORT_OPTIONS.includes(sortBy) || (isAdmin && sortBy !== "default")) {
+        return [...filtered].sort((a, b) => compareFeedbackItems(a, b, sortBy));
+      }
     }
     return filtered;
-  }, [categoryFilter, isAdmin, items, kind, sortBy]);
+  }, [categoryFilter, isAdmin, items, kind, showClosedOnly, sortBy, statusFilter]);
+
+  const visibleItems = useMemo(
+    () => filterFeedbackItemsByQuery(displayItems, searchQuery),
+    [displayItems, searchQuery],
+  );
+
+  const sortOptions = kind === "wishlist"
+    ? WISHLIST_SORT_OPTIONS
+    : FEEDBACK_BOARD_SORT_OPTIONS;
+
+  const sortLabelKey = (option) => (
+    kind === "wishlist"
+      ? `feedback.wishlist.sort${option.charAt(0).toUpperCase()}${option.slice(1)}`
+      : feedbackBoardSortLabelKey(option)
+  );
 
   if (loading) {
     return <Spinner />;
@@ -116,65 +183,92 @@ function FeedbackBoard({ kind = "bug" }) {
           <FeedbackSignInRequired messageKey="feedback.auth.signInToCreateShort" compact />
         )}
       </p>
-      {kind === "wishlist" ? (
-        <div className="feedback-wishlist-toolbar">
-          <div className="feedback-wishlist-chips" role="toolbar" aria-label={t("feedback.wishlist.filterLabel")}>
+      <FeedbackQuickSearch value={searchQuery} onChange={setSearchQuery} />
+      <div className="feedback-board-toolbar">
+        <div className="feedback-board-chips" role="toolbar" aria-label={t("feedback.board.filterLabel")}>
+          <button
+            type="button"
+            className={`button is-small apButtonNeutral${!showClosedOnly && !statusFilter && !categoryFilter ? " is-selected" : ""}`}
+            disabled={showClosedOnly}
+            onClick={() => {
+              setStatusFilter("");
+              setCategoryFilter("");
+            }}
+          >
+            {t("feedback.board.filterAll", { count: statusCounts.all })}
+          </button>
+          {statusChips.map((chip) => (
             <button
+              key={chip}
               type="button"
-              className={`button is-small apButtonNeutral${categoryFilter === "" ? " is-selected" : ""}`}
-              onClick={() => setCategoryFilter("")}
+              className={`button is-small apButtonNeutral${statusFilter === chip ? " is-selected" : ""}`}
+              disabled={showClosedOnly}
+              onClick={() => {
+                setCategoryFilter("");
+                setStatusFilter(chip);
+              }}
             >
-              {t("feedback.wishlist.filterAll", { count: categoryCounts.all })}
+              {t(`feedback.status.${chip}`)}
+              {statusCounts[chip] > 0 ? ` (${statusCounts[chip]})` : ""}
             </button>
-            {WISHLIST_CATEGORY_FILTER_CHIPS.map((chip) => (
-              <button
-                key={chip}
-                type="button"
-                className={`button is-small apButtonNeutral${categoryFilter === chip ? " is-selected" : ""}`}
-                onClick={() => setCategoryFilter(chip)}
-              >
-                {t(`feedback.wishlist.category.${chip}`)}
-                {categoryCounts[chip] > 0 ? ` (${categoryCounts[chip]})` : ""}
-              </button>
-            ))}
-          </div>
-          <div className="field feedback-wishlist-sort">
-            <label className="label" htmlFor="feedback-wishlist-sort">{t("feedback.wishlist.sortBy")}</label>
-            <select
-              id="feedback-wishlist-sort"
-              className="select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
+          ))}
+          {kind === "wishlist" ? WISHLIST_CATEGORY_FILTER_CHIPS.map((chip) => (
+            <button
+              key={chip}
+              type="button"
+              className={`button is-small apButtonNeutral${categoryFilter === chip ? " is-selected" : ""}`}
+              disabled={showClosedOnly}
+              onClick={() => {
+                setStatusFilter("");
+                setCategoryFilter(chip);
+              }}
             >
-              {WISHLIST_SORT_OPTIONS.map((option) => (
-                <option key={option} value={option}>
-                  {t(`feedback.wishlist.sort${option.charAt(0).toUpperCase()}${option.slice(1)}`)}
-                </option>
-              ))}
-            </select>
-          </div>
+              {t(`feedback.wishlist.category.${chip}`)}
+              {categoryCounts[chip] > 0 ? ` (${categoryCounts[chip]})` : ""}
+            </button>
+          )) : null}
+          <button
+            type="button"
+            className={`button is-small apButtonNeutral feedback-board-closed-toggle${showClosedOnly ? " is-selected" : ""}`}
+            aria-pressed={showClosedOnly}
+            onClick={handleClosedOnlyToggle}
+          >
+            {t("feedback.board.showClosed")}
+          </button>
         </div>
-      ) : null}
-      {isAdmin && kind !== "wishlist" ? (
-        <div className="feedback-admin-filters">
-          <FeedbackListFilters
-            kind={kind}
-            status={statusFilter}
-            onStatusChange={setStatusFilter}
-            priority={priorityFilter}
-            onPriorityChange={setPriorityFilter}
-            sortBy={sortBy}
-            onSortByChange={setSortBy}
-            showSort
-          />
+        <div className="field feedback-board-sort">
+          <label className="label" htmlFor="feedback-board-sort">{t("feedback.board.sortBy")}</label>
+          <select
+            id="feedback-board-sort"
+            className="select"
+            value={sortBy}
+            onChange={(e) => handleSortByChange(e.target.value)}
+          >
+            {sortOptions.map((option) => (
+              <option key={option} value={option}>
+                {t(sortLabelKey(option))}
+              </option>
+            ))}
+            {isAdmin && kind !== "wishlist" ? (
+              <>
+                <option value="default">{t("feedback.admin.sortDefault")}</option>
+                <option value="priority">{t("feedback.admin.sortPriority")}</option>
+                <option value="status">{t("feedback.admin.sortStatus")}</option>
+              </>
+            ) : null}
+          </select>
         </div>
-      ) : null}
+      </div>
       {error && <p className="has-text-danger">{error}</p>}
-      {displayItems.length === 0 ? (
-        <p className="feedback-muted">{t(`feedback.${boardKey}.empty`)}</p>
+      {visibleItems.length === 0 ? (
+        <p className="feedback-muted">
+          {searchQuery.trim()
+            ? t("feedback.search.noMatches")
+            : (showClosedOnly ? t("feedback.board.emptyClosed") : t(`feedback.${boardKey}.empty`))}
+        </p>
       ) : (
         <ul className="feedback-board-list">
-          {displayItems.map((item) => (
+          {visibleItems.map((item) => (
             <li key={item.id} className={`feedback-board-item${kind === "wishlist" ? " feedback-board-item-wishlist" : ""}`}>
               {kind === "wishlist" && item.coverImageUrl ? (
                 <a
@@ -198,6 +292,9 @@ function FeedbackBoard({ kind = "bug" }) {
                 priority={item.priority}
                 wishlistCategory={item.wishlistCategory}
               />
+              {(kind === "bug" || kind === "feature") ? (
+                <FeedbackReviewersBadge reviewers={item.reviewers} compact />
+              ) : null}
               {kind === "wishlist" && item.gameUrl ? (
                 <>
                   <a
@@ -219,7 +316,11 @@ function FeedbackBoard({ kind = "bug" }) {
                 </Link>
               )}
               <div className="feedback-muted">
-                {item.authorName} · {t("feedback.meta.votes", { count: item.effectiveVotes })}
+                <FeedbackPlayerLink userId={item.authorId} name={item.authorName} />
+                {" · "}
+                {t("feedback.meta.posted")} <FeedbackTimestamp date={item.createdAt} />
+                {" · "}
+                {t("feedback.meta.votes", { count: item.effectiveVotes })}
                 {" · "}
                 {t("feedback.meta.comments", { count: item.commentCount ?? 0 })}
                 {item.legacyVoteCount > 0 ? (

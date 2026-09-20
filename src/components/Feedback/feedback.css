@@ -6,7 +6,40 @@
   padding: 1rem;
 }
 
-.feedback-archived-banner {
+.feedback-quick-search .input {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border-color: var(--tag-background-color);
+}
+
+.feedback-quick-search .input:focus {
+  border-color: var(--secondary-color-3);
+}
+
+.feedback-notify-opt-in {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--tag-background-color);
+  border-radius: 4px;
+  background: var(--secondary-color-3-bg);
+}
+
+.feedback-mine-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.feedback-mine-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.feedback-archived-banner,
+.feedback-closed-banner {
   background: var(--secondary-color-3-bg);
   color: var(--main-font-color);
   border: 1px solid var(--tag-background-color);
@@ -94,6 +127,14 @@
   margin: 0 0 1rem;
 }
 
+.feedback-edit-form {
+  margin: 0 0 1.5rem;
+}
+
+.feedback-timestamp {
+  white-space: nowrap;
+}
+
 .feedback-wishlist-cover-image {
   display: block;
   max-width: min(100%, 18rem);
@@ -165,6 +206,24 @@
 
 .feedback-markdown {
   margin-bottom: 0.75rem;
+  color: var(--main-font-color);
+}
+
+.feedback-markdown blockquote {
+  background: var(--secondary-color-3-bg);
+  color: var(--main-font-color);
+  border-inline-start: 4px solid var(--secondary-color-3);
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+}
+
+.feedback-markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.feedback-markdown code {
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
 }
 
 .feedback-admin-delete {
@@ -175,6 +234,15 @@
 
 .feedback-markdown pre {
   overflow-x: auto;
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  padding: 0.75rem 1rem;
+}
+
+.feedback-markdown pre code {
+  background: transparent;
+  color: inherit;
 }
 
 .feedback-screenshot-grid {
@@ -199,6 +267,19 @@
   background: var(--secondary-color-3-bg, var(--main-bg-color));
 }
 
+.feedback-comment-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.feedback-reply-button {
+  flex-shrink: 0;
+}
+
 .feedback-comment-staff {
   border-left-color: var(--secondary-color-3);
 }
@@ -208,6 +289,11 @@
 }
 
 .feedback-comment .feedback-markdown p:last-child {
+  margin-bottom: 0;
+}
+
+.feedback-comment-screenshots {
+  margin-top: 0.5rem;
   margin-bottom: 0;
 }
 
@@ -244,6 +330,47 @@
   margin-top: 0.75rem;
 }
 
+.feedback-bug-intro {
+  margin-bottom: 1.25rem;
+  color: var(--main-font-color);
+}
+
+.feedback-recent-url-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-inline-start: 0;
+  padding-inline-start: 0;
+}
+
+.feedback-recent-url-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  margin: 0;
+  margin-inline-start: 0;
+  color: var(--main-font-color);
+  cursor: pointer;
+}
+
+.feedback-recent-url-option input[type="radio"] {
+  flex-shrink: 0;
+  margin-top: 0.2em;
+}
+
+.feedback-recent-url-label {
+  word-break: break-all;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.feedback-recent-url-custom {
+  margin-inline-start: 1.5rem;
+  max-width: 36rem;
+}
+
 .feedback-status-badge-group {
   display: inline-flex;
   flex-wrap: wrap;
@@ -258,6 +385,68 @@
 .feedback-priority-badge {
   background: var(--secondary-color-1);
   color: var(--high-contrast-font-color, var(--main-bg-color));
+}
+
+.feedback-muted a,
+.feedback-reviewer-badge a,
+.feedback-markdown a {
+  color: var(--secondary-color-3);
+}
+
+.feedback-muted a:hover,
+.feedback-muted a:focus-visible,
+.feedback-reviewer-badge a:hover,
+.feedback-reviewer-badge a:focus-visible,
+.feedback-markdown a:hover,
+.feedback-markdown a:focus-visible {
+  color: var(--secondary-color-3-lighter);
+}
+
+.feedback-reviewer-badge {
+  background: var(--secondary-color-3-bg, var(--tag-background-color));
+}
+
+.feedback-reviewer-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feedback-reviewer-selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.feedback-reviewer-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
+}
+
+.feedback-reviewer-remove {
+  border: none;
+  background: transparent;
+  color: var(--main-font-color);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.feedback-reviewer-remove:hover,
+.feedback-reviewer-remove:focus-visible {
+  color: var(--secondary-color-1);
+}
+
+.feedback-reclassify-action {
+  margin: 0.5rem 0 1rem;
 }
 
 .feedback-priority-fieldset {
@@ -326,34 +515,45 @@
   background: var(--secondary-color-3-bg, var(--main-bg-color));
 }
 
-.feedback-wishlist-toolbar {
+.feedback-board-toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.75rem 1rem;
-  margin-bottom: 1rem;
+  gap: 1rem;
+  margin: 0 0 1.25rem;
 }
 
-.feedback-wishlist-chips {
+.feedback-board-sort .label,
+.feedback-board-chips + .feedback-board-sort .label {
+  margin-bottom: 0.35rem;
+}
+
+.feedback-board-chips .button.is-selected {
+  background: var(--secondary-color-3);
+  color: var(--high-contrast-font-color);
+}
+
+.feedback-board-chips .button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.feedback-board-chips .button:disabled:hover,
+.feedback-board-chips .button:disabled:focus-visible {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+}
+
+.feedback-board-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   flex: 1 1 12rem;
 }
 
-.feedback-wishlist-sort {
+.feedback-board-sort {
   flex: 0 1 auto;
   margin-bottom: 0;
-}
-
-.feedback-wishlist-sort .label {
-  margin-bottom: 0.25rem;
-}
-
-.feedback-wishlist-chips .button.is-selected {
-  background: var(--secondary-color-3);
-  color: var(--high-contrast-font-color, var(--main-bg-color));
 }
 
 .feedback-wishlist-callout {

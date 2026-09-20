@@ -15,7 +15,7 @@ import PageHelmet from "./PageHelmet";
 import Spinner from "./Spinner";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
-import UserAvatar from "./UserAvatar";
+import { EnlargeableUserAvatar } from "./AvatarLightbox";
 import PlayerAboutSection, {
   aboutTextPlainSnippet,
 } from "./PlayerAboutSection";
@@ -36,8 +36,12 @@ import ProfileModule from "./Player/ProfileModule";
 import SummaryGate from "./shared/SummaryGate";
 import { useStore } from "../stores";
 import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
-import { formatUserDisplayName } from "./Bots/botUtils";
+import {
+  formatUserDisplayName,
+  rawDirectoryDisplayName,
+} from "./Bots/botUtils";
 import { fetchUserNames } from "../lib/fetchUserNames";
+import { fetchPlayerSummarySlice } from "../lib/summaryFetch";
 import {
   PROFILE_TABS,
   MODULE_NAME_KEYS,
@@ -82,6 +86,7 @@ function Player() {
   const [tourneys, tourneysSetter] = useState([]);
   const [responses, responsesSetter] = useState([]);
   const [profileAbout, profileAboutSetter] = useState(null);
+  const [pastDisplayNames, pastDisplayNamesSetter] = useState(null);
   const [isCoder, setIsCoder] = useState(false);
   const [isDesigner, setIsDesigner] = useState(false);
   const [storedTab, setStoredTab] = useStorageState(
@@ -211,6 +216,25 @@ function Player() {
 
   useEffect(() => {
     profileAboutSetter(null);
+    pastDisplayNamesSetter(null);
+  }, [userid]);
+
+  useEffect(() => {
+    if (!userid) {
+      return;
+    }
+    let cancelled = false;
+    fetchPlayerSummarySlice(userid).then((slice) => {
+      if (!cancelled) {
+        const names = slice?.pastDisplayNames;
+        pastDisplayNamesSetter(
+          Array.isArray(names) && names.length > 0 ? names : null
+        );
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [userid]);
 
   useEffect(() => {
@@ -234,7 +258,10 @@ function Player() {
     try {
       await callAuthApi("new_challenge", {
         ...challenge,
-        challenger: { id: globalMe.id, name: globalMe.name },
+        challenger: {
+          id: globalMe.id,
+          name: rawDirectoryDisplayName(globalMe, allUsers),
+        },
       });
       maybeTrackRecommendationChallenge(challenge.metaGame);
     } catch (error) {
@@ -283,7 +310,7 @@ function Player() {
             })}
           </h1>
           <div className="player-profile-meta">
-            <UserAvatar
+            <EnlargeableUserAvatar
               user={user}
               size={36}
               className="player-profile-avatar"
@@ -304,6 +331,13 @@ function Player() {
               </span>
             )}
           </div>
+          {pastDisplayNames ? (
+            <p className="player-profile-past-names help">
+              {t("player.pastDisplayNames", {
+                names: pastDisplayNames.join(", "),
+              })}
+            </p>
+          ) : null}
           <PlayerAboutSection
             userId={user.id}
             seedAbout={globalMe?.id === user.id ? globalMe.about : undefined}

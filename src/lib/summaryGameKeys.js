@@ -65,34 +65,40 @@ export function formatSummaryGameName(gameKey) {
   return getGameDisplayName(metaUid);
 }
 
+/** Stable display order for variant UIDs (matches tournaments / record game ids). */
+export function sortVariantUidsLexicographic(variantUids) {
+  return [...variantUids].sort((a, b) => a.localeCompare(b));
+}
+
 export function formatVariantUids(metaUid, variantUids, t) {
   if (!variantUids.length) {
     return t ? t("standingChallenge.noVariants") : NO_VARIANTS_SUFFIX;
+  }
+  const orderedUids = sortVariantUidsLexicographic(variantUids);
+  try {
+    const labels = expandVariants(metaUid, orderedUids);
+    if (labels.length > 0) {
+      return labels.join(", ");
+    }
+  } catch {
+    // fall through
   }
   try {
     const info = gameinfo.get(metaUid);
     if (info) {
       const engine =
         info.playercounts.length > 1
-          ? GameFactory(metaUid, 2, [...variantUids])
-          : GameFactory(metaUid, undefined, [...variantUids]);
+          ? GameFactory(metaUid, 2, [...orderedUids])
+          : GameFactory(metaUid, undefined, [...orderedUids]);
       const labels = engine?.getVariants?.() ?? [];
       if (labels.length > 0) {
         return labels.join(", ");
       }
     }
   } catch {
-    // fall through
-  }
-  try {
-    const labels = expandVariants(metaUid, [...variantUids]);
-    if (labels.length > 0) {
-      return labels.join(", ");
-    }
-  } catch {
     // fall through to raw UIDs
   }
-  return variantUids.join(", ");
+  return orderedUids.join(", ");
 }
 
 /** Human-readable label for a summary or ratings game key. */

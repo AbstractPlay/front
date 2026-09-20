@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
+import { formatChallengeTablePlayerCount } from "../lib/challengeTablePlayerCount";
 import { compareStrings, stringColumnSortingFn } from "../lib/compareStrings";
 import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
 import { API_ENDPOINT_OPEN } from "../config";
@@ -23,9 +24,20 @@ import ChallengeEntryModals from "./ChallengeEntryModals";
 import { useStorageState } from "react-use-storage-state";
 import PageHelmet from "./PageHelmet";
 import { useAuthSession } from "../hooks/useAuthSession";
+import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
 import { useStore } from "../stores";
 import BotAwareName from "./Bots/BotAwareName";
-import { formatPlayerDisplayName } from "./Bots/botUtils";
+import {
+  formatPlayerDisplayName,
+  rawDirectoryDisplayName,
+} from "./Bots/botUtils";
+import {
+  buildHighestGlickoMap,
+  formatMatchWinRatePercent,
+  matchWinRateForChallenge,
+  passesMatchCompetitivenessFilter,
+} from "../lib/glickoMatchOdds";
+import { triggerDownload } from "../lib/boardExport/downloadBlob";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -90,7 +102,21 @@ function StandingChallenges(props) {
     "challenges-filter-unrated",
     false
   );
+  const [filterMatch, filterMatchSetter] = useStorageState(
+    "challenges-filter-match",
+    "all"
+  );
   const loggedin = authStatus === "ready";
+  const summary = useStore((state) => state.summary);
+  const summaryRatingsLoadState = useStore(
+    (state) => state.summaryRatingsLoadState
+  );
+  useEnsureSummaryTier(loggedin ? "ratings" : null);
+  const ratingsReady = summaryRatingsLoadState === "ready";
+  const highestGlickoMap = useMemo(
+    () => buildHighestGlickoMap(summary?.ratings?.highest),
+    [summary?.ratings?.highest]
+  );
   const starredGameIds = useMemo(
     () =>
       Array.isArray(globalMe?.stars) ? globalMe.stars.filter(Boolean) : [],
@@ -130,7 +156,10 @@ function StandingChallenges(props) {
       try {
         const res = await callAuthApi("new_challenge", {
           ...challenge,
-          challenger: { id: globalMe.id, name: globalMe.name },
+          challenger: {
+            id: globalMe.id,
+            name: rawDirectoryDisplayName(globalMe, allUsers),
+          },
         });
         if (!res) return;
         maybeTrackRecommendationChallenge(challenge.metaGame);
@@ -139,7 +168,7 @@ function StandingChallenges(props) {
         console.log(error);
       }
     },
-    [globalMe]
+    [globalMe, allUsers]
   );
 
   useEffect(() => {
@@ -314,11 +343,31 @@ function StandingChallenges(props) {
           }
         }
         const rowMetaGame = rec.metaGame ?? metaGame;
+        const variantUids = rec.variants ?? [];
+        let matchWinRate = null;
+        if (
+          loggedin &&
+          globalMe?.id &&
+          rec.rated &&
+          ratingsReady
+        ) {
+          matchWinRate = matchWinRateForChallenge({
+            highestMap: highestGlickoMap,
+            userId: globalMe.id,
+            challengerId: rec.challenger?.id,
+            metaUid: rowMetaGame,
+            variantUids,
+            numPlayers: rec.numPlayers ?? 2,
+            rated: true,
+          });
+        } else if (loggedin && globalMe?.id && rec.rated && !ratingsReady) {
+          matchWinRate = undefined;
+        }
         return {
           id: rec.id,
           metaGame: rowMetaGame,
           metaGameName: getGameDisplayName(rowMetaGame),
-          challenger: rec.challenger.name,
+          challenger: rawDirectoryDisplayName(rec.challenger, allUsers),
           challengerId: rec.challenger.id,
           lastSeen,
           clockHard: rec.clockHard,
@@ -327,34 +376,60 @@ function StandingChallenges(props) {
           clockMax: rec.clockMax,
           noExplore: rec.noExplore || false,
           numPlayers: rec.numPlayers,
+          openSlots:
+            rec.openSlots ??
+            Math.max(0, (rec.numPlayers ?? 2) - (rec.players?.length ?? 1)),
+          fillableDirect: rec.fillableDirect === true,
           players: rec.players.filter((p) => p.id !== rec.challenger?.id),
           rated: rec.rated,
           seating: rec.seating,
-          variants: expandVariantsForGame(rowMetaGame, rec.variants),
+          variants: expandVariantsForGame(rowMetaGame, variantUids),
+          variantUids,
           comment: rec.comment,
+          matchWinRate,
         };
       });
-    if (!siteWide) {
-      return rows;
+    let filtered = rows;
+    if (siteWide) {
+      filtered = filtered.filter((row) => {
+        if (filterStarred && !starredGameIds.includes(row.metaGame)) {
+          return false;
+        }
+        if (filterHardTime && !row.clockHard) {
+          return false;
+        }
+        if (filterSoftTime && row.clockHard) {
+          return false;
+        }
+        if (filterRated && !row.rated) {
+          return false;
+        }
+        if (filterUnrated && row.rated) {
+          return false;
+        }
+        return true;
+      });
     }
-    return rows.filter((row) => {
-      if (filterStarred && !starredGameIds.includes(row.metaGame)) {
-        return false;
-      }
-      if (filterHardTime && !row.clockHard) {
-        return false;
-      }
-      if (filterSoftTime && row.clockHard) {
-        return false;
-      }
-      if (filterRated && !row.rated) {
-        return false;
-      }
-      if (filterUnrated && row.rated) {
-        return false;
-      }
-      return true;
-    });
+    if (
+      loggedin &&
+      globalMe?.id &&
+      filterMatch !== "all" &&
+      ratingsReady
+    ) {
+      filtered = filtered.filter((row) => {
+        if (!row.rated) {
+          return false;
+        }
+        if (row.challengerId === globalMe.id) {
+          return false;
+        }
+        if (row.matchWinRate == null) {
+          return false;
+        }
+        return passesMatchCompetitivenessFilter(row.matchWinRate, filterMatch);
+      });
+    }
+    return filtered;
   }, [
     challenges,
     allUsers,
@@ -366,6 +441,11 @@ function StandingChallenges(props) {
     filterRated,
     filterUnrated,
     starredGameIds,
+    loggedin,
+    globalMe?.id,
+    filterMatch,
+    ratingsReady,
+    highestGlickoMap,
   ]);
 
   const columnHelper = createColumnHelper();
@@ -408,8 +488,41 @@ function StandingChallenges(props) {
           </>
         ),
       }),
+      columnHelper.accessor("matchWinRate", {
+        header: () => t("tables.matchPercent"),
+        cell: (props) => {
+          if (!props.row.original.rated) {
+            return "—";
+          }
+          const rate = props.getValue();
+          if (rate === undefined) {
+            return "…";
+          }
+          return formatMatchWinRatePercent(rate);
+        },
+        sortingFn: (rowA, rowB, columnId) => {
+          const a = rowA.getValue(columnId);
+          const b = rowB.getValue(columnId);
+          if (a == null && b == null) {
+            return 0;
+          }
+          if (a == null) {
+            return 1;
+          }
+          if (b == null) {
+            return -1;
+          }
+          return a - b;
+        },
+      }),
       columnHelper.accessor("numPlayers", {
         header: t("tables.players"),
+        cell: (props) =>
+          formatChallengeTablePlayerCount(
+            props.getValue(),
+            props.row.original.openSlots,
+            t
+          ),
       }),
       columnHelper.accessor("players", {
         header: t("tables.accepted"),
@@ -530,6 +643,7 @@ function StandingChallenges(props) {
       sorting,
       columnVisibility: {
         actions: globalMe !== null,
+        matchWinRate: globalMe !== null,
         players: showAccepted,
       },
     },
@@ -545,18 +659,57 @@ function StandingChallenges(props) {
     table.setPageSize(showState);
   }, [showState, table]);
 
-  useEffect(() => {
-    if (siteWide) {
-      table.setPageIndex(0);
-    }
-  }, [siteWide, filterStarred, filterHardTime, filterSoftTime, filterRated, filterUnrated, table]);
+  const handleDownloadFiltered = useCallback(() => {
+    const exportRows = table.getPrePaginationRowModel().rows.map((row) => {
+      const raw = challenges?.find((c) => c.id === row.original.id);
+      const payload = raw ? { ...raw } : { ...row.original };
+      if (row.original.matchWinRate != null) {
+        payload.matchWinRate = row.original.matchWinRate;
+      }
+      return payload;
+    });
+    const body = JSON.stringify(
+      {
+        exportedAt: new Date().toISOString(),
+        metaGame: siteWide ? null : metaGame,
+        count: exportRows.length,
+        challenges: exportRows,
+      },
+      null,
+      2
+    );
+    const filename = siteWide
+      ? "abstractplay-open-challenges.json"
+      : `abstractplay-open-challenges-${metaGame}.json`;
+    triggerDownload(
+      new Blob([body], { type: "application/json" }),
+      filename
+    );
+  }, [table, challenges, siteWide, metaGame]);
 
-  const challengeFilters = siteWide ? (
+  useEffect(() => {
+    table.setPageIndex(0);
+  }, [
+    siteWide,
+    filterStarred,
+    filterHardTime,
+    filterSoftTime,
+    filterRated,
+    filterUnrated,
+    filterMatch,
+    table,
+  ]);
+
+  const showMatchFilters = loggedin && globalMe !== null;
+  const matchFiltersDisabled = summaryRatingsLoadState === "pending";
+
+  const challengeFilters =
+    siteWide || showMatchFilters ? (
     <div
-      className="field is-grouped is-grouped-centered is-grouped-multiline has-text-centered"
+      className="field is-grouped is-grouped-centered is-grouped-multiline has-text-centered challenges-filters"
       style={{ marginBottom: "1em", justifyContent: "center" }}
     >
-      {showStarredFilter ? (
+      {siteWide && showStarredFilter ? (
         <div className="control">
           <label className="checkbox">
             <input
@@ -569,6 +722,8 @@ function StandingChallenges(props) {
           </label>
         </div>
       ) : null}
+      {siteWide ? (
+        <>
       <div className="control">
         <label className="checkbox">
           <input
@@ -613,6 +768,45 @@ function StandingChallenges(props) {
           {t("challenges.filters.unratedOnly")}
         </label>
       </div>
+        </>
+      ) : null}
+      {showMatchFilters ? (
+        <fieldset
+          className="control challenges-match-filters"
+          disabled={matchFiltersDisabled}
+          style={{ border: "none", margin: 0, padding: 0 }}
+        >
+          <legend className="is-sr-only">{t("challenges.filters.matchLegend")}</legend>
+          <span className="is-size-7" style={{ marginRight: "0.5em" }}>
+            {t("challenges.filters.matchLabel")}
+          </span>
+          {(
+            [
+              ["all", "challenges.filters.matchAll"],
+              ["good", "challenges.filters.matchGood"],
+              ["ideal", "challenges.filters.matchIdeal"],
+            ]
+          ).map(([value, labelKey]) => (
+            <label
+              key={value}
+              className="radio"
+              style={{ marginRight: "0.75em" }}
+            >
+              <input
+                type="radio"
+                name="challenges-filter-match"
+                checked={filterMatch === value}
+                onChange={() => filterMatchSetter(value)}
+              />
+              {" "}
+              {t(labelKey)}
+            </label>
+          ))}
+          <p className="is-size-7 challenges-match-hint" style={{ marginTop: "0.35em" }}>
+            {t("challenges.filters.matchHint")}
+          </p>
+        </fieldset>
+      ) : null}
     </div>
   ) : null;
 
@@ -752,12 +946,23 @@ function StandingChallenges(props) {
               handleChallenge={handleNewChallenge}
               fixedMetaGame={siteWide ? undefined : metaGame}
             />
-            <div className="has-text-centered" style={{ marginBottom: "1em" }}>
+            <div
+              className="has-text-centered buttons is-centered"
+              style={{ marginBottom: "1em" }}
+            >
               <button
                 className="button is-small apButton"
                 onClick={() => showModalSetter(true)}
               >
                 {t("IssueChallengeLabel")}
+              </button>
+              <button
+                type="button"
+                className="button is-small apButtonNeutral"
+                onClick={handleDownloadFiltered}
+                disabled={data.length === 0}
+              >
+                {t("Download")}
               </button>
             </div>
           </>
@@ -765,62 +970,64 @@ function StandingChallenges(props) {
         {challengeFilters}
         <div className="container">
           {tableNavigation}
-          <table
-            className="table apTable"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-          >
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <div
-                          {...{
-                            className: header.column.getCanSort()
-                              ? "sortable"
-                              : "",
-                            onClick: header.column.getToggleSortingHandler(),
-                          }}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {{
-                            asc: (
-                              <>
-                                &nbsp;<i className="fa fa-angle-up"></i>
-                              </>
-                            ),
-                            desc: (
-                              <>
-                                &nbsp;<i className="fa fa-angle-down"></i>
-                              </>
-                            ),
-                          }[header.column.getIsSorted()] ?? null}
-                        </div>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="table-container">
+            <table
+              className="table apTable"
+              style={{ marginLeft: "auto", marginRight: "auto" }}
+            >
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <th key={header.id}>
+                        {header.isPlaceholder ? null : (
+                          <div
+                            {...{
+                              className: header.column.getCanSort()
+                                ? "sortable"
+                                : "",
+                              onClick: header.column.getToggleSortingHandler(),
+                            }}
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            {{
+                              asc: (
+                                <>
+                                  &nbsp;<i className="fa fa-angle-up"></i>
+                                </>
+                              ),
+                              desc: (
+                                <>
+                                  &nbsp;<i className="fa fa-angle-down"></i>
+                                </>
+                              ),
+                            }[header.column.getIsSorted()] ?? null}
+                          </div>
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {tableNavigation}
         </div>
       </article>

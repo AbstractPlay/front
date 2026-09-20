@@ -1,3 +1,7 @@
+/**
+ * Legacy Discord-export RSS generator (local path to announcements.json).
+ * Prefer: node-backend `npm run generate-announcements-rss` against the API/Dynamo.
+ */
 import { writeFileSync, readFileSync } from "fs";
 
 function escapeXml(unsafe) {

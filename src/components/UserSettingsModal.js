@@ -28,6 +28,7 @@ import Modal from "./Modal";
 import { useStorageState } from "react-use-storage-state";
 import { countryCodeList } from "../lib/countryCodeList";
 import { useStore } from "../stores";
+import { fetchUserNames } from "../lib/fetchUserNames";
 import BotsModal from "./Bots/BotsModal";
 import { validateDisplayName } from "./Bots/botUtils";
 import {
@@ -42,10 +43,18 @@ import AvatarPicker from "./AvatarPicker";
 import { COMMUNICATION_LANGUAGES } from "../i18n";
 import {
   defaultEmailNotifications,
+  defaultFeedbackNewKinds,
   defaultInAppNotifications,
   EMAIL_NOTIFICATION_KEYS,
+  FEEDBACK_NEW_KIND_KEYS,
   IN_APP_NOTIFICATION_KEYS,
 } from "../lib/notificationPrefs";
+
+const USER_SETTINGS_TABS = [
+  { id: "profile", nameKey: "UserSettingsTabProfile" },
+  { id: "notifications", nameKey: "UserSettingsTabNotifications" },
+  { id: "gameplay", nameKey: "UserSettingsTabGameplay" },
+];
 
 async function parseNewSettingResponse(res) {
   if (!res) {
@@ -120,6 +129,7 @@ function UserSettingsModal(props) {
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
   const [inAppNotifications, inAppNotificationsSetter] = useState(null);
+  const [feedbackNewKinds, feedbackNewKindsSetter] = useState(() => defaultFeedbackNewKinds());
   const [exploration, explorationSetter] = useState(null);
   const [confirmMove, confirmMoveSetter] = useState(true);
   const globalMe = useStore((state) => state.globalMe);
@@ -131,57 +141,67 @@ function UserSettingsModal(props) {
   const [hideSpoilers, hideSpoilersSetter] = useState(false);
   const [showBots, showBotsSetter] = useState(false);
   const [pushOnThisDevice, pushOnThisDeviceSetter] = useState(false);
+  const [settingsTab, settingsTabSetter] = useState("profile");
+
+  // Reset tab and transient edit UI only when the modal opens — not when globalMe
+  // refreshes after saving a setting (which would jump back to Profile and scroll top).
+  useEffect(() => {
+    if (!show) return;
+    settingsTabSetter("profile");
+    changingNameSetter(false);
+    changingEMailSetter(false);
+    changingCodeSentSetter(false);
+    nameSetter("");
+    emailSetter("");
+    emailCodeSetter("");
+    emailErrorSetter("");
+  }, [show]);
 
   useEffect(() => {
-    if (show) {
-      changingNameSetter(false);
-      changingEMailSetter(false);
-      changingCodeSentSetter(false);
-      nameSetter("");
-      emailSetter("");
-      emailCodeSetter("");
-      emailErrorSetter("");
-      if (globalMe?.settings?.all?.notifications) {
-        notificationsSetter(
-          defaultEmailNotifications(globalMe.settings.all.notifications)
-        );
-      } else {
-        notificationsSetter(defaultEmailNotifications());
-      }
-      if (globalMe?.settings?.all?.inAppNotifications) {
-        inAppNotificationsSetter(
-          defaultInAppNotifications(globalMe.settings.all.inAppNotifications)
-        );
-      } else {
-        inAppNotificationsSetter(defaultInAppNotifications());
-      }
-      if (globalMe?.settings?.all?.exploration === undefined) {
-        explorationSetter(0);
-      } else {
-        explorationSetter(globalMe.settings.all.exploration);
-      }
-      if (globalMe?.settings?.all?.moveConfirmOff) {
-        confirmMoveSetter(!globalMe.settings.all.moveConfirmOff);
-      } else {
-        confirmMoveSetter(true);
-      }
-      if (globalMe?.settings?.all?.hideSpoilers) {
-        hideSpoilersSetter(globalMe.settings.all.hideSpoilers);
-      } else {
-        hideSpoilersSetter(false);
-      }
-      if (globalMe?.country !== undefined) {
-        countrySetter(globalMe.country);
-      }
-      communicationLanguageSetter(globalMe?.language ?? "en");
-      if (globalMe?.bggid !== undefined && globalMe?.bggid !== null) {
-        bggidSetter(globalMe.bggid);
-      }
-      if (globalMe?.about !== undefined && globalMe?.about !== null) {
-        aboutMeSetter(globalMe.about);
-      }
+    if (!show) return;
+    if (globalMe?.settings?.all?.notifications) {
+      notificationsSetter(
+        defaultEmailNotifications(globalMe.settings.all.notifications)
+      );
+    } else {
+      notificationsSetter(defaultEmailNotifications());
     }
-  }, [show, globalMe, notificationsSetter, inAppNotificationsSetter, explorationSetter]);
+    if (globalMe?.settings?.all?.inAppNotifications) {
+      inAppNotificationsSetter(
+        defaultInAppNotifications(globalMe.settings.all.inAppNotifications)
+      );
+    } else {
+      inAppNotificationsSetter(defaultInAppNotifications());
+    }
+    feedbackNewKindsSetter(
+      defaultFeedbackNewKinds(globalMe?.settings?.all?.feedbackNewKinds),
+    );
+    if (globalMe?.settings?.all?.exploration === undefined) {
+      explorationSetter(0);
+    } else {
+      explorationSetter(globalMe.settings.all.exploration);
+    }
+    if (globalMe?.settings?.all?.moveConfirmOff) {
+      confirmMoveSetter(!globalMe.settings.all.moveConfirmOff);
+    } else {
+      confirmMoveSetter(true);
+    }
+    if (globalMe?.settings?.all?.hideSpoilers) {
+      hideSpoilersSetter(globalMe.settings.all.hideSpoilers);
+    } else {
+      hideSpoilersSetter(false);
+    }
+    if (globalMe?.country !== undefined) {
+      countrySetter(globalMe.country);
+    }
+    communicationLanguageSetter(globalMe?.language ?? "en");
+    if (globalMe?.bggid !== undefined && globalMe?.bggid !== null) {
+      bggidSetter(globalMe.bggid);
+    }
+    if (globalMe?.about !== undefined && globalMe?.about !== null) {
+      aboutMeSetter(globalMe.about);
+    }
+  }, [show, globalMe]);
 
   const handleNameChangeClick = () => {
     nameSetter(globalMe.name);
@@ -207,6 +227,13 @@ function UserSettingsModal(props) {
       nameErrorSetter(result.error || t("DisplayNameError", { name }));
       return;
     }
+    const trimmed = name.trim();
+    const { setGlobalMe, setUsers } = useStore.getState();
+    setGlobalMe((val) => (val ? { ...val, name: trimmed } : val));
+    setUsers((prev) =>
+      prev.map((u) => (u.id === globalMe?.id ? { ...u, name: trimmed } : u))
+    );
+    fetchUserNames({ force: true });
     changingNameSetter(false);
     updatedSetter((updated) => updated + 1);
   };
@@ -352,19 +379,29 @@ function UserSettingsModal(props) {
   };
 
   const handleNotifyCheckChange = async (key) => {
+    const next = !notifications[key];
+    notificationsSetter((prev) => ({ ...prev, [key]: next }));
     const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
     if (newSettings.all === undefined) newSettings.all = {};
-    newSettings.all.notifications = notifications;
-    newSettings.all.notifications[key] = !newSettings.all.notifications[key];
+    newSettings.all.notifications = { ...notifications, [key]: next };
     handleSettingsChange(newSettings);
   };
 
   const handleInAppNotifyCheckChange = async (key) => {
+    const next = !inAppNotifications[key];
+    inAppNotificationsSetter((prev) => ({ ...prev, [key]: next }));
     const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
     if (newSettings.all === undefined) newSettings.all = {};
-    newSettings.all.inAppNotifications = inAppNotifications;
-    newSettings.all.inAppNotifications[key] =
-      !newSettings.all.inAppNotifications[key];
+    newSettings.all.inAppNotifications = { ...inAppNotifications, [key]: next };
+    handleSettingsChange(newSettings);
+  };
+
+  const handleFeedbackNewKindChange = async (kind) => {
+    const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
+    if (newSettings.all === undefined) newSettings.all = {};
+    const kinds = { ...feedbackNewKinds, [kind]: !feedbackNewKinds[kind] };
+    newSettings.all.feedbackNewKinds = kinds;
+    feedbackNewKindsSetter(kinds);
     handleSettingsChange(newSettings);
   };
 
@@ -506,7 +543,39 @@ function UserSettingsModal(props) {
           },
         ]}
       >
-        <div className="container">
+        <div className="container user-settings-modal">
+          <div
+            className="tabs is-small is-toggle is-toggle-rounded user-settings-tabs"
+            role="tablist"
+          >
+            <ul>
+              {USER_SETTINGS_TABS.map((tab) => (
+                <li
+                  key={tab.id}
+                  className={settingsTab === tab.id ? "is-active" : ""}
+                >
+                  <a
+                    href={`#user-settings-${tab.id}`}
+                    role="tab"
+                    aria-selected={settingsTab === tab.id}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      settingsTabSetter(tab.id);
+                    }}
+                  >
+                    {t(tab.nameKey)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {settingsTab === "profile" ? (
+            <div
+              className="user-settings-tab-panel"
+              id="user-settings-profile"
+              role="tabpanel"
+            >
           {/********************* Display Name *********************/}
           <div className="field" key="DisplayName">
             <label className="label" htmlFor="user_settings_name">
@@ -812,9 +881,50 @@ function UserSettingsModal(props) {
             </div>
           )}
 
+          {/********************* Log out *********************/}
+          <div className="control user-settings-logout">
+            <button
+              className="button is-small apButtonAlert"
+              onClick={logout}
+              id="logout-button"
+            >
+              {t("LogOut")}
+            </button>
+          </div>
+            </div>
+          ) : null}
+
+          {settingsTab === "notifications" ? (
+            <div
+              className="user-settings-tab-panel"
+              id="user-settings-notifications"
+              role="tabpanel"
+            >
+          {/********************* communication language *********************/}
+          <div className="field" key="communicationLanguage">
+            <label
+              className="label"
+              htmlFor="user_settings_communication_language"
+            >
+              {t("CommunicationLanguage")}
+            </label>
+            <div className="control">
+              <div className="select is-small">
+                <LanguageSelect
+                  id="user_settings_communication_language"
+                  languages={COMMUNICATION_LANGUAGES}
+                  value={communicationLanguage}
+                  onChange={(e) =>
+                    handleCommunicationLanguageChange(e.target.value)
+                  }
+                />
+              </div>
+            </div>
+            <p className="help">{t("CommunicationLanguageHelp")}</p>
+          </div>
+
           {/********************* notifications *********************/}
           <div className="field" key="notifications">
-            <label className="label">{t("NotificationSettings")}</label>
             <p className="help">{t("NotificationSettingsSaveHelp")}</p>
 
             <p className="label is-small mb-1 mt-3">
@@ -856,28 +966,24 @@ function UserSettingsModal(props) {
                     </label>
                   </div>
                 ))}
-          </div>
-          {/********************* communication language *********************/}
-          <div className="field" key="communicationLanguage">
-            <label
-              className="label"
-              htmlFor="user_settings_communication_language"
-            >
-              {t("CommunicationLanguage")}
-            </label>
-            <div className="control">
-              <div className="select is-small">
-                <LanguageSelect
-                  id="user_settings_communication_language"
-                  languages={COMMUNICATION_LANGUAGES}
-                  value={communicationLanguage}
-                  onChange={(e) =>
-                    handleCommunicationLanguageChange(e.target.value)
-                  }
-                />
+            <p className="label is-small mb-1 mt-3">
+              {t("feedback.mine.notifyTitle")}
+            </p>
+            <p className="help">{t("feedback.mine.notifyIntro")}</p>
+            <p className="help">{t("feedback.mine.notifyHint")}</p>
+            {FEEDBACK_NEW_KIND_KEYS.map((kind) => (
+              <div className="control" key={`feedback-new-${kind}`}>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    name={`feedback-new-${kind}`}
+                    checked={Boolean(feedbackNewKinds[kind])}
+                    onChange={() => handleFeedbackNewKindChange(kind)}
+                  />
+                  {t(`feedback.mine.notifyKind_${kind}`)}
+                </label>
               </div>
-            </div>
-            <p className="help">{t("CommunicationLanguageHelp")}</p>
+            ))}
           </div>
           {/********************* push notifications *********************/}
           <div className="field" key="pushNotifications">
@@ -903,7 +1009,15 @@ function UserSettingsModal(props) {
               </button>
             </div>
           </div>
+            </div>
+          ) : null}
 
+          {settingsTab === "gameplay" ? (
+            <div
+              className="user-settings-tab-panel"
+              id="user-settings-gameplay"
+              role="tabpanel"
+            >
           {/********************* exploration *********************/}
           {exploration === null ? (
             ""
@@ -1006,17 +1120,8 @@ function UserSettingsModal(props) {
               </button>
             </div>
           </div>
-
-          {/********************* Log out *********************/}
-          <div className="control" style={{ float: "right" }}>
-            <button
-              className="button is-small apButtonAlert"
-              onClick={logout}
-              id="logout-button"
-            >
-              {t("LogOut")}
-            </button>
-          </div>
+            </div>
+          ) : null}
         </div>
       </Modal>
       <BotsModal show={showBots} onClose={() => showBotsSetter(false)} />

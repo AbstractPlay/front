@@ -4,10 +4,10 @@ import React, {
   Fragment,
   useCallback,
   useRef,
+  useMemo,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { compareStrings } from "../lib/compareStrings";
-import Spinner from "./Spinner";
+import PlayerPickerTrigger from "./PlayerPickerTrigger";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useStorageState } from "react-use-storage-state";
 import Modal from "./Modal";
@@ -22,6 +22,9 @@ import {
 } from "../lib/soloPlay";
 import { validateChallengeVariantSelection } from "../lib/variantChallengeValidation";
 import { useVariantSelectionValidity } from "../hooks/useVariantSelectionValidity";
+import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
+import { buildHighestGlickoMap } from "../lib/glickoMatchOdds";
+import { useChallengeOpponentFilters } from "../hooks/useChallengeOpponentFilters";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
@@ -30,7 +33,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const opponent = props.opponent;
   const fixedMetaGame = props.fixedMetaGame;
   const show = props.show;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [error, errorSetter] = useState(null);
   const [metaGame, metaGameSetter] = useState(null);
   const [playerCount, playerCountSetter] = useState(-1);
@@ -55,11 +58,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     "new-challenge-clock-hard",
     false
   );
-  const [onlySee, onlySeeSetter] = useStorageState(
-    "new-challenge-onlySee",
-    "all"
-  );
-  const [minSeen, minSeenSetter] = useState(0);
+  const { setOnlySee } = useChallengeOpponentFilters();
   const [rated, ratedSetter] = useStorageState("new-challenge-rated", true); // rated or not
   const [noExplore, noExploreSetter] = useStorageState(
     "new-challenge-noExplore",
@@ -68,12 +67,18 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const [standing, standingSetter] = useState(false); // Standing challenge or not.
   const [standingCount, standingCountSetter] = useState(0);
   const [opponents, opponentsSetter] = useState([]);
+  /** Per slot: slot 0 must be named; slots 1+ may be open to anyone */
+  const [opponentAnyone, opponentAnyoneSetter] = useState([]);
   const [selectedVariants, setSelectedVariants] = useState([]);
   const { variantsValid, onValidityChange, resetVariantValidity } =
     useVariantSelectionValidity();
   const [comment, commentSetter] = useState("");
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
+  const summary = useStore((state) => state.summary);
+  const summaryRatingsLoadState = useStore(
+    (state) => state.summaryRatingsLoadState
+  );
   const [users, usersSetter] = useState([]);
   const [forceUnrated, setForceUnrated] = useState(false);
   const errorRef = useRef(null);
@@ -103,6 +108,18 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     setForceUnrated(forced);
   }, [metaGame, selectedVariants]);
 
+  const directChallengeOpponentPick =
+    show &&
+    globalMe?.id &&
+    !standing &&
+    opponent === undefined &&
+    playerCount !== -1;
+  useEnsureSummaryTier(directChallengeOpponentPick ? "ratings" : null);
+  const ratingsReady = summaryRatingsLoadState === "ready";
+  const highestGlickoMap = useMemo(
+    () => buildHighestGlickoMap(summary?.ratings?.highest),
+    [summary?.ratings?.highest]
+  );
   useEffect(() => {
     if (error && errorRef.current) {
       errorRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -120,24 +137,13 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     }
   }, [allUsers, metaGame]);
 
-  useEffect(() => {
-    const now = new Date().getTime();
-    let min = 0;
-    if (onlySee === "week") {
-      min = now - 7 * 24 * 60 * 60 * 1000;
-    } else if (onlySee === "month") {
-      min = now - 30 * 24 * 60 * 60 * 1000;
-    }
-    minSeenSetter(min);
-  }, [onlySee]);
-
   const resetToDefault = () => {
     clockSpeedSetter("medium");
     clockStartSetter(48);
     clockIncSetter(24);
     clockMaxSetter(96);
     clockHardSetter(false);
-    onlySeeSetter("all");
+    setOnlySee("all");
     ratedSetter(true);
     noExploreSetter(false);
   };
@@ -153,7 +159,9 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         ratedSetter(false);
       }
       if (cnt !== -1 && cnt - 1 !== opponents.length) {
-        opponentsSetter(Array(cnt - 1).fill(""));
+        const n = cnt - 1;
+        opponentsSetter(Array(n).fill(""));
+        opponentAnyoneSetter(Array(n).fill(false));
       }
     },
     [ratedSetter, opponents.length]
@@ -186,6 +194,13 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     [onValidityChange]
   );
 
+  const hasFixedOpponent = opponent !== undefined;
+  const handleChangeGameRef = useRef(null);
+  const prevShowRef = useRef(false);
+  const prevOpponentIdRef = useRef(undefined);
+  const prevOpponentNameRef = useRef(undefined);
+  const prevFixedMetaGameRef = useRef(undefined);
+
   const handleChangeGame = useCallback(
     (game) => {
       if (game !== metaGame) {
@@ -203,7 +218,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             if (trySoloHandoff(game, playercounts[0])) {
               return;
             }
-          } else if (props.opponent !== undefined) {
+          } else if (hasFixedOpponent) {
             setPlayerCount(2);
           } else {
             playerCountSetter(-1);
@@ -216,39 +231,71 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         resetVariantValidity();
       }
     },
-    [metaGame, setPlayerCount, props.opponent, resetVariantValidity, t, trySoloHandoff]
+    [metaGame, setPlayerCount, hasFixedOpponent, resetVariantValidity, t, trySoloHandoff]
   );
+
+  handleChangeGameRef.current = handleChangeGame;
+
+  const initializeForOpen = useCallback(() => {
+    if (opponent !== undefined) {
+      playerCountSetter(2);
+      opponentsSetter([{ id: opponent.id, name: opponent.name }]);
+      opponentAnyoneSetter([false]);
+    }
+    errorSetter("");
+    if (fixedMetaGame !== undefined) {
+      if (onSoloHandoff && isSoloOnlyGame(fixedMetaGame)) {
+        onSoloHandoff(fixedMetaGame);
+        return;
+      }
+      metaGameSetter(fixedMetaGame);
+      handleChangeGameRef.current(fixedMetaGame);
+    }
+    if (opponent !== undefined) {
+      opponentsSetter([{ id: opponent.id, name: opponent.name }]);
+      opponentAnyoneSetter([false]);
+    }
+  }, [opponent, fixedMetaGame, onSoloHandoff]);
 
   useEffect(() => {
     if (!show) {
-      metaGameSetter(null);
-      playerCountSetter(-1);
-      opponentsSetter([]);
-      commentSetter("");
+      if (prevShowRef.current) {
+        metaGameSetter(null);
+        playerCountSetter(-1);
+        opponentsSetter([]);
+        opponentAnyoneSetter([]);
+        commentSetter("");
+      }
+      prevShowRef.current = false;
+      prevOpponentIdRef.current = undefined;
+      prevOpponentNameRef.current = undefined;
+      prevFixedMetaGameRef.current = undefined;
       return;
     }
-    if (props.opponent !== undefined) {
-      playerCountSetter(2);
-      opponentsSetter([props.opponent]);
-    }
-    errorSetter("");
-    if (props.fixedMetaGame !== undefined) {
-      if (onSoloHandoff && isSoloOnlyGame(props.fixedMetaGame)) {
-        onSoloHandoff(props.fixedMetaGame);
-        return;
-      }
-      metaGameSetter(props.fixedMetaGame);
-      handleChangeGame(props.fixedMetaGame);
-    }
-    if (props.opponent !== undefined) {
-      opponentsSetter([props.opponent]);
+
+    const opponentId = opponent?.id;
+    const opponentName = opponent?.name;
+    const justOpened = !prevShowRef.current;
+    const targetChangedWhileOpen =
+      prevShowRef.current &&
+      (opponentId !== prevOpponentIdRef.current ||
+        opponentName !== prevOpponentNameRef.current ||
+        fixedMetaGame !== prevFixedMetaGameRef.current);
+
+    prevShowRef.current = true;
+    prevOpponentIdRef.current = opponentId;
+    prevOpponentNameRef.current = opponentName;
+    prevFixedMetaGameRef.current = fixedMetaGame;
+
+    if (justOpened || targetChangedWhileOpen) {
+      initializeForOpen();
     }
   }, [
     show,
-    props.opponent,
-    props.fixedMetaGame,
-    handleChangeGame,
-    onSoloHandoff,
+    opponent?.id,
+    opponent?.name,
+    fixedMetaGame,
+    initializeForOpen,
   ]);
 
   const handleChangePlayerCount = (cnt) => {
@@ -269,6 +316,23 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     let opps = [...opponents];
     opps[data.player] = { id: data.id, name: data.name };
     opponentsSetter(opps);
+    if (data.player > 0) {
+      const flags = [...opponentAnyone];
+      flags[data.player] = false;
+      opponentAnyoneSetter(flags);
+    }
+    errorSetter("");
+  };
+
+  const handleToggleOpponentAnyone = (slotIndex) => {
+    const flags = [...opponentAnyone];
+    flags[slotIndex] = !flags[slotIndex];
+    opponentAnyoneSetter(flags);
+    if (flags[slotIndex]) {
+      const opps = [...opponents];
+      opps[slotIndex] = "";
+      opponentsSetter(opps);
+    }
     errorSetter("");
   };
 
@@ -344,15 +408,22 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       return;
     }
     if (!standing) {
-      let ok = true;
-      opponents.forEach((o) => {
-        if (o === "") {
-          errorSetter(t("SelectOpponents", { count: opponents.length }));
-          ok = false;
+      const first = opponents[0];
+      if (!first || first === "" || !first.id) {
+        errorSetter(t("SelectFirstOpponent"));
+        return;
+      }
+      for (let i = 1; i < opponents.length; i++) {
+        if (!opponentAnyone[i] && (!opponents[i] || opponents[i] === "" || !opponents[i].id)) {
+          errorSetter(t("SelectOpponentOrAnyone", { slot: i + 1 }));
           return;
         }
-      });
-      if (!ok) return;
+      }
+      const anyoneCount = opponentAnyone.filter(Boolean).length;
+      if (playerCount > 2 && anyoneCount === playerCount - 1) {
+        errorSetter(t("UseOpenChallengeForAllOpenSeats"));
+        return;
+      }
     }
     if (
       metaGame !== null &&
@@ -362,6 +433,17 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       errorSetter(t("InvalidVariantCombination"));
       return;
     }
+    const namedOpponents = standing
+      ? opponents
+      : opponents.filter((o, i) => !opponentAnyone[i] && o && o.id);
+    const namedIds = namedOpponents.map((o) => o.id).filter(Boolean);
+    if (new Set(namedIds).size !== namedIds.length) {
+      errorSetter(t("DuplicateOpponentInChallenge"));
+      return;
+    }
+    const openSlots = standing
+      ? 0
+      : opponentAnyone.filter(Boolean).length;
     handleNewChallenge({
       metaGame: metaGame,
       numPlayers: playerCount,
@@ -369,7 +451,8 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       duration: standingCount,
       seating: seating,
       variants: selectedVariants,
-      challengees: opponents,
+      challengees: namedOpponents,
+      openSlots: openSlots,
       clockStart: clockStart,
       clockInc: clockInc,
       clockMax: clockMax,
@@ -382,6 +465,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     // So that if you click on challenge again, it doesn't look like the challenge wasn't submitted:
     playerCountSetter(-1);
     opponentsSetter([]);
+    opponentAnyoneSetter([]);
     metaGameSetter(null);
     commentSetter("");
   };
@@ -475,6 +559,15 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         )}
         {metaGame === null || playerCount === -1 || soloHandoffPath ? (
           ""
+        ) : (
+          <GameVariants
+            metaGame={metaGame}
+            variantsSetter={setSelectedVariants}
+            onValidityChange={handleVariantValidityChange}
+          />
+        )}
+        {metaGame === null || playerCount === -1 || soloHandoffPath ? (
+          ""
         ) : playerCount !== 2 ? (
           <p>
             <strong>{t("Seating")}</strong>: {t("SeatingRandom")}
@@ -545,98 +638,52 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             </p>
           </div>
         )}
-        {playerCount === -1 || standing || props.opponent !== undefined ? (
-          ""
-        ) : (
-          /* Opponents filtering */
-          <div className="control">
-            <p className="help">Use this to filter out inactive opponents</p>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "all"}
-                value="all"
-                onChange={() => onlySeeSetter("all")}
-              />
-              All opponents
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "week"}
-                value="week"
-                onChange={() => onlySeeSetter("week")}
-              />
-              Past 7 days
-            </label>
-            <label className="radio">
-              <input
-                type="radio"
-                name="oppFilter"
-                checked={onlySee === "month"}
-                value="month"
-                onChange={() => onlySeeSetter("month")}
-              />
-              Past 30 days
-            </label>
-          </div>
-        )}
         {playerCount === -1 || standing
           ? ""
           : /* Opponents */
             opponents.map((o, i) => {
+              const anyoneSlot = i > 0 && opponentAnyone[i];
               return (
                 <div className="field" key={i}>
                   <label className="label" htmlFor={"user_for_challenge" + i}>
                     {playerCount === 2
                       ? t("ChooseOpponent")
-                      : t("ChooseOpponent", i)}
+                      : i === 0
+                      ? t("ChooseFirstOpponent")
+                      : t("ChooseOpponentSlot", { slot: i + 1 })}
                   </label>
+                  {i > 0 && !opponent ? (
+                    <div className="control mb-2">
+                      <label className="checkbox">
+                        <input
+                          type="checkbox"
+                          checked={anyoneSlot}
+                          onChange={() => handleToggleOpponentAnyone(i)}
+                        />
+                        {t("OpponentSlotAnyone")}
+                      </label>
+                    </div>
+                  ) : null}
                   <div className="control">
-                    {users === null && !opponent ? (
-                      <Spinner />
-                    ) : opponent ? (
+                    {opponent ? (
                       formatUserDisplayName(opponent, allUsers)
+                    ) : anyoneSlot ? (
+                      <p className="help">{t("OpponentSlotAnyoneHelp")}</p>
                     ) : (
-                      <div className="select is-small">
-                        <select
-                          value={o.id || ""}
-                          name="users"
-                          id={"user_for_challenge" + i}
-                          onChange={(e) => {
-                            const selected = users.find(
-                              (user) => user.id === e.target.value
-                            );
-                            handleChangeOpponent({
-                              id: e.target.value,
-                              name: selected?.name ?? "",
-                              player: i,
-                            });
-                          }}
-                        >
-                          <option value="">--{t("Select")}--</option>
-                          {users
-                            .filter(
-                              (user) =>
-                                user.id === opponents[i].id ||
-                                (user.id !== globalMe.id &&
-                                  !opponents.some((o) => user.id === o.id) &&
-                                  user.lastSeen >= minSeen)
-                            )
-                            .sort((a, b) =>
-                              compareStrings(a.name ?? "", b.name ?? "", i18n.language)
-                            )
-                            .map((item) => {
-                              return (
-                                <option key={item.id} value={item.id}>
-                                  {formatUserDisplayName(item, users)}
-                                </option>
-                              );
-                            })}
-                        </select>
-                      </div>
+                      <PlayerPickerTrigger
+                        id={"user_for_challenge" + i}
+                        value={o?.id || ""}
+                        users={users}
+                        allUsers={allUsers}
+                        slotIndex={i}
+                        selectedOpponentIds={opponents}
+                        metaGame={metaGame}
+                        selectedVariants={selectedVariants}
+                        playerCount={playerCount}
+                        highestMap={highestGlickoMap}
+                        ratingsReady={ratingsReady}
+                        onChange={handleChangeOpponent}
+                      />
                     )}
                   </div>
                 </div>
@@ -671,13 +718,6 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                 : t("DurationHelp", { count: standingCount })}
             </p>
           </div>
-        )}
-        {soloHandoffPath ? null : (
-          <GameVariants
-            metaGame={metaGame}
-            variantsSetter={setSelectedVariants}
-            onValidityChange={handleVariantValidityChange}
-          />
         )}
         {metaGame === null || soloHandoffPath ? (
           ""

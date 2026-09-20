@@ -154,6 +154,8 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
             {
               label: amChallenger
                 ? t("RevokeChallenge")
+                : challenge.numPlayers > 2
+                ? t("LeaveMultiPlayerChallenge")
                 : t("RevokeAcceptance"),
               action: handleChallengeRevoke,
             },
@@ -191,6 +193,21 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
               <strong>{challenge.noExplore ? t("NoExploreTrue") : ""}</strong>
             </p>
             <p>{players}</p>
+            {challenge.numPlayers > 2 &&
+            (challenge.openSlots > 0 ||
+              challenge.standing ||
+              challenge.fillableDirect) ? (
+              <p>
+                {t("ChallengeOpenSeats", {
+                  count:
+                    challenge.openSlots ??
+                    Math.max(
+                      0,
+                      challenge.numPlayers - challenge.players.length
+                    ),
+                })}
+              </p>
+            ) : null}
             <p>{notes}</p>
             {challenge.standing ? null : (
               <div className="field">
@@ -211,6 +228,8 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
                 <p className="help">
                   {amChallenger
                     ? t("ChallengeRevokeCommentHelp")
+                    : challenge.numPlayers > 2
+                    ? t("LeaveMultiPlayerChallengeHelp")
                     : t("ChallengeRevokeCommentHelp2")}
                 </p>
               </div>

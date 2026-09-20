@@ -1,4 +1,5 @@
 import { getConsoleCaptureSnapshot } from "./consoleCapture";
+import { parseGameHintsFromApUrl } from "./recentApUrls";
 
 const PENDING_ERROR_KEY = "feedback-pending-error";
 
@@ -36,9 +37,14 @@ export function consumePendingError() {
   }
 }
 
-export function captureBugContext(searchParams = new URLSearchParams()) {
+export function captureBugContext(searchParams = new URLSearchParams(), options = {}) {
+  const reportedPageUrl = typeof options.reportedPageUrl === "string"
+    ? options.reportedPageUrl.trim()
+    : "";
+  const pageUrl = reportedPageUrl || window.location.href;
+
   const context = {
-    pageUrl: window.location.href,
+    pageUrl,
     userAgent: navigator.userAgent,
     viewport: {
       width: window.innerWidth,
@@ -61,6 +67,17 @@ export function captureBugContext(searchParams = new URLSearchParams()) {
   }
   if (layoutId) {
     context.layoutId = layoutId;
+  }
+
+  const fromPage = parseGameHintsFromApUrl(pageUrl);
+  if (fromPage.gameId && !context.gameId) {
+    context.gameId = fromPage.gameId;
+  }
+  if (fromPage.moveNumber !== undefined && context.moveNumber === undefined) {
+    context.moveNumber = fromPage.moveNumber;
+  }
+  if (fromPage.layoutId && !context.layoutId) {
+    context.layoutId = fromPage.layoutId;
   }
 
   const pending = consumePendingError();

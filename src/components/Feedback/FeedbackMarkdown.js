@@ -1,9 +1,19 @@
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { bggBbcodeToMarkdown } from "../../lib/feedback/bggBbcodeToMarkdown";
+import { playerIdFromProfileHref } from "../../lib/feedback/feedbackPlayerLink";
 
 function FeedbackMarkdownLink({ href, children, ...props }) {
+  const playerId = playerIdFromProfileHref(href);
+  if (playerId) {
+    return (
+      <Link to={`/player/${playerId}`} {...props}>
+        {children}
+      </Link>
+    );
+  }
   const external = href && /^https?:\/\//i.test(href);
   return (
     <a

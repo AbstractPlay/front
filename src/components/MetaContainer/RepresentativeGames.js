@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import { API_ENDPOINT_OPEN } from "../../config";
 import BotAwareName from "../Bots/BotAwareName";
+import { formatUserDisplayName } from "../Bots/botUtils";
 import { useStore } from "../../stores";
 
 function dedupeByGameId(entries) {
@@ -107,9 +108,17 @@ function RepresentativeGames({ metaGame }) {
                 )
               </span>
             ) : null}
-            {row.userName ? (
+            {row.userId ? (
               <span style={{ fontSize: "smaller", display: "block" }}>
-                {t("meta.recommendedBy", { name: row.userName })}
+                {t("meta.recommendedBy", {
+                  name: formatUserDisplayName(
+                    allUsers?.find((u) => u.id === row.userId) ?? {
+                      id: row.userId,
+                      name: row.userName,
+                    },
+                    allUsers
+                  ),
+                })}
               </span>
             ) : null}
           </li>

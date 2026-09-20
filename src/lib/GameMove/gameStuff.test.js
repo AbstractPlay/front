@@ -1,6 +1,11 @@
-import { vi } from "vitest";
+import { beforeEach, vi } from "vitest";
 import { GameNode } from "../../components/GameMove/GameTree";
-import { processNewMove } from "./gameStuff";
+import { populateChecked, processNewMove } from "./gameStuff";
+
+const mockStoreState = vi.hoisted(() => ({
+  users: {},
+  globalMe: undefined,
+}));
 
 vi.mock("react-toastify", () => ({
   toast: vi.fn(),
@@ -8,7 +13,7 @@ vi.mock("react-toastify", () => ({
 
 vi.mock("../../stores", () => ({
   useStore: {
-    getState: () => ({ users: {} }),
+    getState: () => mockStoreState,
   },
 }));
 
@@ -255,5 +260,39 @@ describe("processNewMove", () => {
 
     expect(simFocus.exPath).toEqual([0]);
     expect(partialMoveRenderRef.current).toBe(false);
+  });
+});
+
+describe("populateChecked", () => {
+  const t = (key, { player }) => `${key}:${player}`;
+  const gameRef = { current: { canCheck: true, gameOver: false, players: [{ name: "Alice" }] } };
+  const engineRef = { current: { inCheck: () => [1] } };
+
+  beforeEach(() => {
+    mockStoreState.users = {};
+    mockStoreState.globalMe = undefined;
+  });
+
+  it("shows in-check when hideSpoilers is off", () => {
+    const setter = vi.fn();
+    populateChecked(gameRef, engineRef, t, setter);
+    expect(setter).toHaveBeenCalledWith("<p>InCheck:Alice</p>");
+  });
+
+  it("suppresses in-check when hideSpoilers is on and game is not over", () => {
+    mockStoreState.globalMe = { settings: { all: { hideSpoilers: true } } };
+    const setter = vi.fn();
+    populateChecked(gameRef, engineRef, t, setter);
+    expect(setter).toHaveBeenCalledWith("");
+  });
+
+  it("shows in-check when hideSpoilers is on but game is over", () => {
+    mockStoreState.globalMe = { settings: { all: { hideSpoilers: true } } };
+    const overGameRef = {
+      current: { canCheck: true, gameOver: true, players: [{ name: "Alice" }] },
+    };
+    const setter = vi.fn();
+    populateChecked(overGameRef, engineRef, t, setter);
+    expect(setter).toHaveBeenCalledWith("<p>InCheck:Alice</p>");
   });
 });

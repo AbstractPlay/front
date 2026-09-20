@@ -63,6 +63,11 @@ import {
 import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
 import { setGlyphMapOpt } from "../../lib/setGlyphMapOpt";
 import {
+  applyRenderSettingsToOptions,
+  prepareBoardRender,
+} from "../../lib/prepareBoardRender";
+import { resolveDisplayRenderRep } from "../../lib/getDisplayRenderRep";
+import {
   setupLabGame,
   processNewMove,
   populateChecked,
@@ -366,13 +371,21 @@ function LabSession({
 
   useEffect(() => {
     if (renderrep !== null && engineRef.current !== null) {
+      const displayRep = resolveDisplayRenderRep(
+        renderrep,
+        globalMeRef.current,
+        metaGame,
+      );
+      const repForRotation = Array.isArray(displayRep)
+        ? displayRep[displayRep.length - 1]
+        : displayRep;
       rotIncrementSetter(
-        getRotationIncrement(metaGame, renderrep, engineRef.current)
+        getRotationIncrement(metaGame, repForRotation, engineRef.current)
       );
     } else {
       rotIncrementSetter(0);
     }
-  }, [renderrep, metaGame]);
+  }, [renderrep, metaGame, globalMe]);
 
   useEffect(() => {
     if (!gameRef.current?.customColours) return;
@@ -840,15 +853,22 @@ function LabSession({
           engine: engineRef.current,
           numPlayers: gameRef.current?.players?.length,
         });
+        const { displayRep, renderSettings } = prepareBoardRender(
+          r,
+          globalMeRef.current,
+          metaGame,
+        );
         setGlyphMapOpt({
           options: opts,
           metaGame,
           globalMe: globalMeRef.current,
+          renderRep: r,
         });
+        applyRenderSettingsToOptions(opts, renderSettings);
         if (gameRef.current?.stackExpanding) {
           opts.boardHover = (row, col, piece) => expand(col, row);
         }
-        render(r, opts);
+        render(displayRep, opts);
         tmpRendered.push(container.firstChild);
         document.body.removeChild(container);
       }
@@ -861,6 +881,7 @@ function LabSession({
     metaGame,
     focusCanExplore,
     colorMode,
+    globalMe,
   ]);
 
   useEffect(() => {
@@ -871,7 +892,7 @@ function LabSession({
 
   useEffect(() => {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
-  }, [t, focus?.moveNumber, focusExPathKey]);
+  }, [t, focus?.moveNumber, focusExPathKey, globalMe?.settings?.all?.hideSpoilers]);
 
   const game = gameRef.current;
 

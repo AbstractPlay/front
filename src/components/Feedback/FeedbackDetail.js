@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
@@ -8,9 +8,14 @@ import FeedbackSignInRequired from "./FeedbackSignInRequired";
 import Modal from "../Modal";
 import FeedbackMarkdown from "./FeedbackMarkdown";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
+import FeedbackReviewersBadge from "./FeedbackReviewersBadge";
+import FeedbackReviewerPicker from "./FeedbackReviewerPicker";
+import { fetchUserNames } from "../../lib/fetchUserNames";
 import WishlistCategoryCallout from "./WishlistCategoryCallout";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import ScreenshotUpload from "./ScreenshotUpload";
+import FeedbackTimestamp from "./FeedbackTimestamp";
+import FeedbackPlayerLink from "./FeedbackPlayerLink";
 import { markFeedbackSeen } from "../../lib/feedback/feedbackLastSeen";
 import {
   commentFeedback,
@@ -18,14 +23,17 @@ import {
   getFeedbackAuth,
   getFeedbackOpen,
   holdFeedbackRetention,
+  reclassifyFeedback,
   setFeedbackAdminFields,
   setFeedbackStatus,
   subscribeFeedback,
   updateFeedback,
   voteFeedback,
 } from "../../lib/feedback/feedbackApi";
+import { buildFeedbackReplyDraft } from "../../lib/feedback/feedbackQuoteMarkdown";
 import {
   EFFORT_LEVELS,
+  FEEDBACK_COMMENT_ATTACHMENT_MAX_COUNT,
   PRIORITY_LEVELS,
   WISHLIST_ADMIN_CATEGORIES,
   boardKeyForKind,
@@ -33,6 +41,7 @@ import {
   feedbackHistoryPath,
   historyTabForKind,
   statusesForKind,
+  TERMINAL_STATUSES,
 } from "../../lib/feedback/feedbackConstants";
 import "./feedback.css";
 
@@ -43,10 +52,12 @@ function FeedbackDetail() {
   const { status } = useAuthSession();
   const loggedIn = status === "ready";
   const globalMe = useStore((state) => state.globalMe);
+  const users = useStore((state) => state.users);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [commentBody, setCommentBody] = useState("");
+  const [commentAttachmentKeys, setCommentAttachmentKeys] = useState([]);
   const [notifyMe, setNotifyMe] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -56,10 +67,29 @@ function FeedbackDetail() {
   const [adminEffort, setAdminEffort] = useState("");
   const [adminPriority, setAdminPriority] = useState("");
   const [adminTags, setAdminTags] = useState("");
+  const [adminReviewerIds, setAdminReviewerIds] = useState([]);
   const [adminWishlistCategory, setAdminWishlistCategory] = useState("none");
   const [adminWishlistNote, setAdminWishlistNote] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showReclassifyModal, setShowReclassifyModal] = useState(false);
   const [deleteReason, setDeleteReason] = useState("");
+  const commentTextareaRef = useRef(null);
+
+  const beginReplyTo = useCallback(({ authorName, body }) => {
+    setCommentBody(buildFeedbackReplyDraft({
+      authorName,
+      body,
+      emptyText: t("feedback.detail.quoteNoText"),
+    }));
+    window.requestAnimationFrame(() => {
+      const el = commentTextareaRef.current;
+      if (!el) {
+        return;
+      }
+      el.focus();
+      el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  }, [t]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -79,6 +109,9 @@ function FeedbackDetail() {
         setAdminEffort(post.effort ?? "");
         setAdminPriority(post.priority ?? "");
         setAdminTags(Array.isArray(post.adminTags) ? post.adminTags.join(", ") : "");
+        setAdminReviewerIds(
+          Array.isArray(post.reviewers) ? post.reviewers.map((reviewer) => reviewer.id) : [],
+        );
         setAdminWishlistCategory(post.wishlistCategory ?? "none");
         setAdminWishlistNote(post.wishlistCategoryNote ?? "");
         markFeedbackSeen(post.id, post.updatedAt);
@@ -90,6 +123,12 @@ function FeedbackDetail() {
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    if (globalMe?.admin) {
+      fetchUserNames();
+    }
+  }, [globalMe?.admin]);
 
   async function handleVote() {
     const voted = Boolean(data?.userVoted);
@@ -109,14 +148,24 @@ function FeedbackDetail() {
 
   async function handleComment(e) {
     e.preventDefault();
+    const body = commentBody.trim();
+    if (!body && commentAttachmentKeys.length === 0) {
+      return;
+    }
     setSubmitting(true);
-    const result = await commentFeedback(id, commentBody.trim(), notifyMe);
+    const result = await commentFeedback(
+      id,
+      body,
+      notifyMe,
+      commentAttachmentKeys.length > 0 ? commentAttachmentKeys : undefined,
+    );
     setSubmitting(false);
     if (!result.ok) {
       setError(result.error);
       return;
     }
     setCommentBody("");
+    setCommentAttachmentKeys([]);
     await load();
   }
 
@@ -165,6 +214,18 @@ function FeedbackDetail() {
     navigate(boardPathForKind("wishlist"));
   }
 
+  async function handleReclassify() {
+    setSubmitting(true);
+    const result = await reclassifyFeedback(id);
+    setSubmitting(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setShowReclassifyModal(false);
+    await load();
+  }
+
   async function handleRetentionHold(hold) {
     setSubmitting(true);
     const result = await holdFeedbackRetention(id, hold);
@@ -178,20 +239,33 @@ function FeedbackDetail() {
 
   async function handleSaveAdminFields(e) {
     e.preventDefault();
+    const currentPost = data?.post;
+    if (!currentPost) {
+      return;
+    }
     setSubmitting(true);
     const tags = adminTags
       .split(",")
       .map((tag) => tag.trim())
       .filter(Boolean);
     const adminPars = { id };
-    if (post.kind === "wishlist") {
+    if (currentPost.kind === "wishlist") {
       adminPars.wishlistCategory = adminWishlistCategory;
       adminPars.wishlistCategoryNote = adminWishlistNote.trim() || undefined;
     } else {
       adminPars.effort = adminEffort || undefined;
       adminPars.adminTags = tags.length > 0 ? tags : undefined;
-      if (post.kind === "bug" || post.kind === "feature") {
+      if (currentPost.kind === "bug" || currentPost.kind === "feature") {
         adminPars.priority = adminPriority || "";
+        const loadedReviewerIds = Array.isArray(currentPost.reviewers)
+          ? currentPost.reviewers.map((reviewer) => reviewer.id).sort()
+          : [];
+        const nextReviewerIds = [...adminReviewerIds].sort();
+        const reviewersChanged = loadedReviewerIds.length !== nextReviewerIds.length
+          || loadedReviewerIds.some((reviewerId, index) => reviewerId !== nextReviewerIds[index]);
+        if (reviewersChanged) {
+          adminPars.reviewerIds = adminReviewerIds;
+        }
       }
     }
     const result = await setFeedbackAdminFields(adminPars);
@@ -239,13 +313,13 @@ function FeedbackDetail() {
             </span>
           </h1>
           <div className="feedback-muted">
-            {summary.authorName}
+            <FeedbackPlayerLink userId={summary.authorId} name={summary.authorName} />
             {" · "}
             {t(`feedback.status.${summary.terminalStatus}`, { defaultValue: summary.terminalStatus })}
             {" · "}
             {t("feedback.meta.votes", { count: summary.effectiveVotes })}
             {" · "}
-            {t("feedback.history.closed", { date: new Date(summary.closedAt).toLocaleDateString() })}
+            {t("feedback.history.closed")} <FeedbackTimestamp date={summary.closedAt} />
           </div>
           {summary.implementedGameMeta?.name ? (
             <p className="feedback-muted">
@@ -265,11 +339,16 @@ function FeedbackDetail() {
 
   const { post, comments, attachmentUrls, subscribed, userVoted } = data;
   const isArchived = Boolean(data.archived || post.archivedAt);
+  const isTerminal = Boolean(post.terminalAt);
   const readOnly = isArchived;
   const boardPath = boardPathForKind(post.kind);
   const boardKey = boardKeyForKind(post.kind);
   const canEdit = globalMe?.id && (globalMe.admin || globalMe.id === post.authorId);
   const statusOptions = statusesForKind(post.kind);
+  const canReclassify = globalMe?.admin
+    && post.kind === "bug"
+    && !readOnly
+    && !TERMINAL_STATUSES.bug.includes(post.status);
 
   return (
     <>
@@ -283,6 +362,11 @@ function FeedbackDetail() {
       {isArchived ? (
         <div className="feedback-archived-banner" role="status">
           {t("feedback.detail.archivedBanner")}
+        </div>
+      ) : null}
+      {isTerminal && !isArchived ? (
+        <div className="feedback-closed-banner" role="status">
+          {t("feedback.detail.closedBanner")}
         </div>
       ) : null}
       {globalMe?.admin && post.retentionHold ? (
@@ -321,8 +405,21 @@ function FeedbackDetail() {
           priority={post.priority}
           wishlistCategory={post.wishlistCategory}
         />
+        {(post.kind === "bug" || post.kind === "feature") ? (
+          <FeedbackReviewersBadge reviewers={post.reviewers} />
+        ) : null}
         <span className="feedback-muted">
-          {post.authorName} · {t("feedback.meta.votes", { count: post.effectiveVotes })}
+          <FeedbackPlayerLink userId={post.authorId} name={post.authorName} />
+          {" · "}
+          {t("feedback.meta.posted")} <FeedbackTimestamp date={post.createdAt} />
+          {post.updatedAt > post.createdAt + 60_000 ? (
+            <>
+              {" · "}
+              {t("feedback.meta.updated")} <FeedbackTimestamp date={post.updatedAt} />
+            </>
+          ) : null}
+          {" · "}
+          {t("feedback.meta.votes", { count: post.effectiveVotes })}
         </span>
         {loggedIn && !readOnly && (
           <>
@@ -331,6 +428,13 @@ function FeedbackDetail() {
             </button>
             <button type="button" className="button apButtonNeutral is-small" onClick={handleSubscribe}>
               {subscribed ? t("feedback.detail.unwatch") : t("feedback.detail.watch")}
+            </button>
+            <button
+              type="button"
+              className="button apButtonNeutral is-small"
+              onClick={() => beginReplyTo({ authorName: post.authorName, body: post.body })}
+            >
+              {t("feedback.detail.reply")}
             </button>
           </>
         )}
@@ -347,9 +451,93 @@ function FeedbackDetail() {
           </button>
         )}
       </div>
+      {editing ? (
+        <form className="feedback-edit-form" onSubmit={handleSaveEdit}>
+          <div className="field">
+            <label className="label" htmlFor="feedback-edit-title">
+              {post.kind === "wishlist" ? t("feedback.new.gameTitleLabel") : t("feedback.new.titleLabel")}
+            </label>
+            <input
+              id="feedback-edit-title"
+              className="input"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              required
+              maxLength={200}
+            />
+          </div>
+          <div className="field">
+            <label className="label" htmlFor="feedback-edit-body">
+              {post.kind === "wishlist" ? t("feedback.new.notesLabel") : t("feedback.new.bodyLabel")}
+            </label>
+            {post.kind !== "wishlist" ? (
+              <p className="feedback-muted feedback-field-hint">{t("feedback.new.bodyMarkdownHint")}</p>
+            ) : null}
+            <textarea
+              id="feedback-edit-body"
+              className="textarea"
+              rows={5}
+              value={editBody}
+              onChange={(e) => setEditBody(e.target.value)}
+              required={post.kind === "feature"}
+            />
+          </div>
+          {post.kind === "wishlist" ? (
+            <div className="field">
+              <label className="label">{t("feedback.new.coverImage")}</label>
+              <p className="feedback-muted feedback-field-hint">{t("feedback.new.coverImageHint")}</p>
+              {attachmentUrls?.[0] && editAttachmentKeys.length === 0 ? (
+                <div className="feedback-wishlist-cover-edit-preview">
+                  <img
+                    src={attachmentUrls[0].url}
+                    alt=""
+                    className="feedback-wishlist-cover-image"
+                  />
+                  <p className="feedback-muted">{t("feedback.detail.coverReplaceHint")}</p>
+                </div>
+              ) : null}
+              <ScreenshotUpload
+                attachmentKeys={editAttachmentKeys}
+                onChange={setEditAttachmentKeys}
+                maxFiles={1}
+                replaceOnUpload
+                addLabel={t("feedback.upload.addCover")}
+                pasteLabel={t("feedback.upload.pasteCover")}
+                pasteHint={t("feedback.upload.pasteCoverHint")}
+                countLabelKey="feedback.upload.coverCount"
+              />
+            </div>
+          ) : null}
+          <div className="feedback-comment-actions">
+            <button type="submit" className="button apButton" disabled={submitting}>
+              {submitting ? t("feedback.detail.savingEdit") : t("feedback.detail.saveEdit")}
+            </button>
+            <button
+              type="button"
+              className="button apButtonNeutral"
+              onClick={() => {
+                setEditAttachmentKeys([]);
+                setEditing(false);
+              }}
+              disabled={submitting}
+            >
+              {t("feedback.detail.cancelEdit")}
+            </button>
+          </div>
+        </form>
+      ) : (
+        post.body ? (
+          <FeedbackMarkdown convertBggBbcode={post.kind === "wishlist"}>
+            {post.body}
+          </FeedbackMarkdown>
+        ) : null
+      )}
       {globalMe?.admin && !readOnly && statusOptions.length > 0 && (
         <div className="field">
           <label className="label" htmlFor="feedback-status">{t("feedback.detail.adminStatus")}</label>
+          {isTerminal ? (
+            <p className="feedback-muted feedback-field-hint">{t("feedback.detail.reopenHint")}</p>
+          ) : null}
           <select id="feedback-status" className="select" value={post.status} onChange={handleStatusChange}>
             {statusOptions.map((status) => (
               <option key={status} value={status}>
@@ -359,6 +547,18 @@ function FeedbackDetail() {
           </select>
         </div>
       )}
+      {canReclassify ? (
+        <div className="feedback-reclassify-action">
+          <button
+            type="button"
+            className="button apButtonNeutral is-small"
+            onClick={() => setShowReclassifyModal(true)}
+            disabled={submitting}
+          >
+            {t("feedback.detail.reclassifyToFeature")}
+          </button>
+        </div>
+      ) : null}
       {globalMe?.admin && !readOnly && (
         <form className="feedback-admin-fields" onSubmit={handleSaveAdminFields}>
           {post.kind === "wishlist" ? (
@@ -445,6 +645,17 @@ function FeedbackDetail() {
                   onChange={(e) => setAdminTags(e.target.value)}
                 />
               </div>
+              {(post.kind === "bug" || post.kind === "feature") ? (
+                <div className="field">
+                  <label className="label">{t("feedback.detail.adminReviewers")}</label>
+                  <FeedbackReviewerPicker
+                    users={users}
+                    selectedIds={adminReviewerIds}
+                    onChange={setAdminReviewerIds}
+                    disabled={submitting}
+                  />
+                </div>
+              ) : null}
             </>
           )}
           <button type="submit" className="button apButtonNeutral is-small" disabled={submitting}>
@@ -467,6 +678,32 @@ function FeedbackDetail() {
           ) : null}
         </form>
       )}
+      {canReclassify ? (
+        <Modal
+          show={showReclassifyModal}
+          title={t("feedback.detail.reclassifyToFeatureTitle")}
+          disableBackdropClose={submitting}
+          buttons={[
+            {
+              label: submitting ? t("feedback.detail.reclassifying") : t("feedback.detail.reclassifyToFeatureConfirm"),
+              action: handleReclassify,
+              disabled: submitting,
+            },
+            {
+              label: t("feedback.detail.reclassifyToFeatureCancel"),
+              action: () => {
+                if (!submitting) {
+                  setShowReclassifyModal(false);
+                }
+              },
+              disabled: submitting,
+            },
+          ]}
+        >
+          <p>{t("feedback.detail.reclassifyToFeatureIntro")}</p>
+          {error ? <p className="has-text-danger">{error}</p> : null}
+        </Modal>
+      ) : null}
       {globalMe?.admin && !readOnly && post.kind === "wishlist" ? (
         <Modal
           show={showDeleteModal}
@@ -508,81 +745,6 @@ function FeedbackDetail() {
           {error ? <p className="has-text-danger">{error}</p> : null}
         </Modal>
       ) : null}
-      {editing ? (
-        <form onSubmit={handleSaveEdit}>
-          <div className="field">
-            <label className="label" htmlFor="feedback-edit-title">{t("feedback.new.titleLabel")}</label>
-            <input
-              id="feedback-edit-title"
-              className="input"
-              value={editTitle}
-              onChange={(e) => setEditTitle(e.target.value)}
-              required
-              maxLength={200}
-            />
-          </div>
-          <div className="field">
-            <label className="label" htmlFor="feedback-edit-body">{t("feedback.new.bodyLabel")}</label>
-            <p className="feedback-muted feedback-field-hint">{t("feedback.new.bodyMarkdownHint")}</p>
-            <textarea
-              id="feedback-edit-body"
-              className="textarea"
-              rows={5}
-              value={editBody}
-              onChange={(e) => setEditBody(e.target.value)}
-              required={post.kind === "feature"}
-            />
-          </div>
-          {post.kind === "wishlist" ? (
-            <div className="field">
-              <label className="label">{t("feedback.new.coverImage")}</label>
-              <p className="feedback-muted feedback-field-hint">{t("feedback.new.coverImageHint")}</p>
-              {attachmentUrls?.[0] && editAttachmentKeys.length === 0 ? (
-                <div className="feedback-wishlist-cover-edit-preview">
-                  <img
-                    src={attachmentUrls[0].url}
-                    alt=""
-                    className="feedback-wishlist-cover-image"
-                  />
-                  <p className="feedback-muted">{t("feedback.detail.coverReplaceHint")}</p>
-                </div>
-              ) : null}
-              <ScreenshotUpload
-                attachmentKeys={editAttachmentKeys}
-                onChange={setEditAttachmentKeys}
-                maxFiles={1}
-                replaceOnUpload
-                addLabel={t("feedback.upload.addCover")}
-                pasteLabel={t("feedback.upload.pasteCover")}
-                pasteHint={t("feedback.upload.pasteCoverHint")}
-                countLabelKey="feedback.upload.coverCount"
-              />
-            </div>
-          ) : null}
-          <div className="feedback-comment-actions">
-            <button type="submit" className="button apButton" disabled={submitting}>
-              {submitting ? t("feedback.detail.savingEdit") : t("feedback.detail.saveEdit")}
-            </button>
-            <button
-              type="button"
-              className="button apButtonNeutral"
-              onClick={() => {
-                setEditAttachmentKeys([]);
-                setEditing(false);
-              }}
-              disabled={submitting}
-            >
-              {t("feedback.detail.cancelEdit")}
-            </button>
-          </div>
-        </form>
-      ) : (
-        post.body && (
-          <FeedbackMarkdown convertBggBbcode={post.kind === "wishlist"}>
-            {post.body}
-          </FeedbackMarkdown>
-        )
-      )}
       {attachmentUrls?.length > 0 && post.kind !== "wishlist" && (
         <div className="feedback-screenshot-grid">
           {attachmentUrls.map(({ key, url }) => (
@@ -601,11 +763,36 @@ function FeedbackDetail() {
             key={comment.commentId}
             className={`feedback-comment${comment.isStaff ? " feedback-comment-staff" : ""}`}
           >
-            <div className="feedback-muted">
-              {comment.authorName}
-              {comment.isStaff ? ` · ${t("feedback.detail.staff")}` : ""}
+            <div className="feedback-comment-header">
+              <div className="feedback-muted">
+                <FeedbackPlayerLink userId={comment.authorId} name={comment.authorName} />
+                {comment.isStaff ? ` · ${t("feedback.detail.staff")}` : ""}
+                {" · "}
+                <FeedbackTimestamp date={comment.createdAt} />
+              </div>
+              {loggedIn && !readOnly ? (
+                <button
+                  type="button"
+                  className="button apButtonNeutral is-small feedback-reply-button"
+                  onClick={() => beginReplyTo({
+                    authorName: comment.authorName,
+                    body: comment.body,
+                  })}
+                >
+                  {t("feedback.detail.reply")}
+                </button>
+              ) : null}
             </div>
-            <FeedbackMarkdown>{comment.body}</FeedbackMarkdown>
+            {comment.body ? <FeedbackMarkdown>{comment.body}</FeedbackMarkdown> : null}
+            {comment.attachmentUrls?.length > 0 ? (
+              <div className="feedback-screenshot-grid feedback-comment-screenshots">
+                {comment.attachmentUrls.map(({ key, url }) => (
+                  <a key={key} href={url} target="_blank" rel="noreferrer">
+                    <img src={url} alt="" className="feedback-screenshot-thumb" />
+                  </a>
+                ))}
+              </div>
+            ) : null}
           </div>
         ))
       )}
@@ -633,16 +820,29 @@ function FeedbackDetail() {
         <form onSubmit={handleComment}>
           <div className="field">
             <label className="label" htmlFor="feedback-comment">{t("feedback.detail.addComment")}</label>
+            {post.kind === "bug" || post.kind === "feature" ? (
+              <p className="feedback-muted feedback-field-hint">{t("feedback.detail.commentBodyHint")}</p>
+            ) : null}
             <textarea
+              ref={commentTextareaRef}
               id="feedback-comment"
               className="textarea"
-              rows={3}
+              rows={6}
               value={commentBody}
               onChange={(e) => setCommentBody(e.target.value)}
-              required
               maxLength={2000}
             />
           </div>
+          {post.kind === "bug" || post.kind === "feature" ? (
+            <div className="field">
+              <label className="label">{t("feedback.detail.commentScreenshots")}</label>
+              <ScreenshotUpload
+                attachmentKeys={commentAttachmentKeys}
+                onChange={setCommentAttachmentKeys}
+                maxFiles={FEEDBACK_COMMENT_ATTACHMENT_MAX_COUNT}
+              />
+            </div>
+          ) : null}
           <label className="checkbox">
             <input
               type="checkbox"
@@ -653,7 +853,14 @@ function FeedbackDetail() {
           </label>
           <div className="feedback-comment-actions">
             {error && <p className="has-text-danger">{error}</p>}
-            <button type="submit" className="button apButton" disabled={submitting}>
+            <button
+              type="submit"
+              className="button apButton"
+              disabled={
+                submitting
+                || (!commentBody.trim() && commentAttachmentKeys.length === 0)
+              }
+            >
               {submitting ? t("feedback.detail.posting") : t("feedback.detail.postComment")}
             </button>
           </div>

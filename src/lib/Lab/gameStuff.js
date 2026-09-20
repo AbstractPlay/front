@@ -29,6 +29,12 @@ import { isPartialExplorationMove } from "../GameMove/explorationMoves";
 import { buildEngineMoveResults } from "../engineMoveResults";
 
 export const populateChecked = (gameRef, engineRef, t, setter) => {
+  const hideSpoilers =
+    useStore.getState().globalMe?.settings?.all?.hideSpoilers;
+  if (hideSpoilers && !gameRef.current?.gameOver) {
+    setter("");
+    return;
+  }
   if (gameRef.current?.canCheck) {
     const inCheckArr = engineRef.current.inCheck();
     if (inCheckArr.length > 0) {

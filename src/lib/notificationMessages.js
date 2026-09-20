@@ -166,6 +166,21 @@ export function NotificationMessage({ body }) {
         body.metaGame,
         { revokerName: body.revokerName }
       );
+    case "challengeSlotOpened":
+      return challengeNotificationMessage(
+        "me.notifications.message.challengeSlotOpened",
+        body.metaGame,
+        {
+          participantName: body.participantName,
+          count: body.openSlots,
+        }
+      );
+    case "challengeParticipantLeft":
+      return challengeNotificationMessage(
+        "me.notifications.message.challengeParticipantLeft",
+        body.metaGame,
+        { participantName: body.participantName }
+      );
     case "eventInvitation":
       return (
         <Trans
@@ -234,7 +249,10 @@ export function NotificationMessage({ body }) {
       return (
         <Trans
           i18nKey="me.notifications.message.feedbackReply"
-          values={{ title: body.title, preview: body.commentPreview ?? "" }}
+          values={{
+            title: body.title,
+            preview: body.commentPreview ? ` ${body.commentPreview}` : "",
+          }}
           components={{
             feedbackLink: <Link to={`/feedback/${body.postId}`} />,
           }}
@@ -260,6 +278,31 @@ export function NotificationMessage({ body }) {
           values={{ title: body.title, reason: body.reason ?? "" }}
           components={{
             wishlistLink: <Link to="/wishlist" />,
+          }}
+        />
+      );
+    case "feedbackReviewRequested":
+      return (
+        <Trans
+          i18nKey="me.notifications.message.feedbackReviewRequested"
+          values={{ title: body.title }}
+          components={{
+            feedbackLink: <Link to={`/feedback/${body.postId}`} />,
+          }}
+        />
+      );
+    case "feedbackNew":
+      return (
+        <Trans
+          i18nKey="me.notifications.message.feedbackNew"
+          values={{
+            title: body.title,
+            kindLabel: i18n.t(`me.notifications.message.feedbackNewKind_${body.kind}`, {
+              defaultValue: body.kind,
+            }),
+          }}
+          components={{
+            feedbackLink: <Link to={`/feedback/${body.postId}`} />,
           }}
         />
       );

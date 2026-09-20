@@ -36,7 +36,11 @@ import rehypeRaw from "rehype-raw";
 import Thumbnail from "../Thumbnail";
 import Modal from "../Modal";
 import ChallengeEntryModals from "../ChallengeEntryModals";
-import { useGameRecommendations } from "../../hooks/useGameRecommendations";
+import {
+  fetchMvtimes,
+  MVTIMES_URL,
+  useGameRecommendations,
+} from "../../hooks/useGameRecommendations";
 import { useStore } from "../../stores";
 import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
 
@@ -88,9 +92,39 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
   const summarySite = useStore((state) => state.summary);
   const summarySiteLoadState = useStore((state) => state.summarySiteLoadState);
   const [games, gamesSetter] = useState([]);
+  const [urlFetchedData, urlFetchedDataSetter] = useState(null);
   useEnsureSummaryTier(config.summaryTier ?? null);
 
+  useEffect(() => {
+    if (!config.fetchUrl) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const result =
+          config.fetchUrl === MVTIMES_URL
+            ? await fetchMvtimes()
+            : await fetch(config.fetchUrl).then((res) =>
+                res.ok ? res.json() : null
+              );
+        if (!cancelled) {
+          urlFetchedDataSetter(result);
+        }
+      } catch (error) {
+        console.log(error);
+        if (!cancelled) {
+          urlFetchedDataSetter(null);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [config.fetchUrl]);
+
   const fetchedData = useMemo(() => {
+    if (config.fetchUrl) {
+      return urlFetchedData;
+    }
     if (!config.summaryTier) {
       return null;
     }
@@ -98,7 +132,13 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       return summarySite;
     }
     return null;
-  }, [config.summaryTier, summarySite, summarySiteLoadState]);
+  }, [
+    config.fetchUrl,
+    config.summaryTier,
+    urlFetchedData,
+    summarySite,
+    summarySiteLoadState,
+  ]);
   const [showState, showStateSetter] = useStorageState(
     `explore-show-${viewKey}`,
     initialPageSize(viewKey)
@@ -145,6 +185,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     config.starFilterStorageKey || "explore-filter-stars",
     false
   );
+  const starFilterActive = filterStars && globalMe !== null;
   const [filterRecommended, filterRecommendedSetter] = useStorageState(
     config.recommendedFilterStorageKey || "explore-filter-recommended",
     false
@@ -366,7 +407,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
             ...config.extraFields(metaGame, info, fetchedData, counts),
           };
         })
-        .filter((obj) => !filterStars || obj.starred)
+        .filter((obj) => !starFilterActive || obj.starred)
         .filter((obj) => !filterRecommended || recommendedIds.has(obj.id)),
     // getGameDisplayName reads gameslib i18n synced from host language
     // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh labels on locale change
@@ -377,7 +418,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       fetchedData,
       counts,
       config,
-      filterStars,
+      starFilterActive,
       filterRecommended,
       recommendedIds,
     ]
@@ -575,6 +616,13 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     getFilteredRowModel: getFilteredRowModel(),
     enableSortingRemoval: false,
   });
+
+  useEffect(() => {
+    const pageCount = table.getPageCount();
+    pageIndexSetter((current) =>
+      pageCount > 0 && current >= pageCount ? pageCount - 1 : current
+    );
+  }, [data, columnFilters, showState, table]);
 
   const tableNavigation = (
     <>

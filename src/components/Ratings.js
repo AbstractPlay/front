@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
 import { stringColumnSortingFn } from "../lib/compareStrings";
@@ -31,8 +31,10 @@ import PageLoading from "./shared/PageLoading";
 import { SUMMARY_URLS } from "../lib/summaryFetch";
 import GlickoHint from "./shared/GlickoHint";
 import GlickoDisplayNote from "./shared/GlickoDisplayNote";
+import { rawDirectoryDisplayName } from "./Bots/botUtils";
 
 const allSize = Number.MAX_SAFE_INTEGER;
+const columnHelper = createColumnHelper();
 
 function matchesMetaGame(rec, metaUid) {
   return matchesSummaryGameKey(rec.game, metaUid);
@@ -56,7 +58,10 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
       try {
         await callAuthApi("new_challenge", {
           ...challenge,
-          challenger: { id: globalMe.id, name: globalMe.name },
+          challenger: {
+            id: globalMe.id,
+            name: rawDirectoryDisplayName(globalMe, allUsers),
+          },
         });
         maybeTrackRecommendationChallenge(challenge.metaGame);
         closeChallengeModal();
@@ -64,7 +69,7 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
         console.log(error);
       }
     },
-    [globalMe, closeChallengeModal]
+    [globalMe, allUsers, closeChallengeModal]
   );
 
   const data = useMemo(() => {
@@ -101,7 +106,19 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
     });
   }, [summary, metaGame, allUsers, t]);
 
-  const columnHelper = createColumnHelper();
+  const activeOpponent = useMemo(() => {
+    if (!activeChallengeModal) {
+      return undefined;
+    }
+    const row = data.find(
+      (rec) => rec.id.split("|")[0] === activeChallengeModal
+    );
+    return {
+      id: activeChallengeModal,
+      name: row?.player ?? activeChallengeModal,
+    };
+  }, [activeChallengeModal, data]);
+
   const columns = useMemo(
     () => [
       columnHelper.accessor("rank", {
@@ -153,40 +170,17 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
         cell: (props) => {
           const userId = props.row.original.id.split("|")[0];
           return globalMe !== null && globalMe.id === userId ? null : (
-            <>
-              <ChallengeEntryModals
-                show={
-                  activeChallengeModal !== "" && activeChallengeModal === userId
-                }
-                handleClose={closeChallengeModal}
-                handleChallenge={handleNewChallenge}
-                fixedMetaGame={metaGame}
-                opponent={{
-                  id: userId,
-                  name: props.row.original.player,
-                }}
-              />
-              <button
-                className="button is-small apButton"
-                onClick={() => openChallengeModal(userId)}
-              >
-                {t("IssueChallengeLabel")}
-              </button>
-            </>
+            <button
+              className="button is-small apButton"
+              onClick={() => openChallengeModal(userId)}
+            >
+              {t("IssueChallengeLabel")}
+            </button>
           );
         },
       }),
     ],
-    [
-      activeChallengeModal,
-      columnHelper,
-      globalMe,
-      handleNewChallenge,
-      metaGame,
-      closeChallengeModal,
-      t,
-      i18n.language,
-    ]
+    [globalMe, t, i18n.language]
   );
 
   const table = useReactTable({
@@ -300,7 +294,18 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
       </PageHelmet>
       <article>
         <h1 className="has-text-centered title">
-          {t("RatingsList", { name: metaGameName })}
+          <Trans
+            i18nKey="RatingsList"
+            values={{ name: metaGameName }}
+            components={{
+              gameLink: (
+                <Link
+                  to={`/games/${metaGame}`}
+                  style={{ textDecoration: "underline" }}
+                />
+              ),
+            }}
+          />
         </h1>
         <div className="container">
           {tableNavigation}
@@ -364,6 +369,15 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
           {tableNavigation}
         </div>
       </article>
+      {globalMe !== null && (
+        <ChallengeEntryModals
+          show={activeChallengeModal !== ""}
+          handleClose={closeChallengeModal}
+          handleChallenge={handleNewChallenge}
+          fixedMetaGame={metaGame}
+          opponent={activeOpponent}
+        />
+      )}
     </>
   );
 }

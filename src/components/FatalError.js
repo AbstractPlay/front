@@ -3,17 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
 import { stashPendingError } from "../lib/feedback/feedbackContext";
 import { feedbackNewPath } from "../lib/feedback/feedbackConstants";
-
-function isChunkLoadError(error) {
-  if (!error) {
-    return false;
-  }
-  return (
-    error.name === "ChunkLoadError" ||
-    (typeof error.message === "string" &&
-      error.message.includes("Loading chunk"))
-  );
-}
+import { isChunkLoadError } from "../lib/chunkLoadError";
 
 const FatalError = ({ error, inline = false }) => {
   const { t } = useTranslation();
@@ -74,5 +64,5 @@ FatalError.propTypes = {
   inline: PropTypes.bool,
 };
 
-export { isChunkLoadError };
+export { isChunkLoadError } from "../lib/chunkLoadError";
 export default FatalError;

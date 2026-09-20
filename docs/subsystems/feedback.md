@@ -11,26 +11,26 @@ In-app feedback replaces Discord forum workflows for bug reports, feature ideas,
 | `/wishlist` | Game wishlist board | Open |
 | `/feedback/new?kind=bug\|feature\|wishlist` | Submit form | Signed in (guests see sign-in prompt) |
 | `/feedback/:id` | Detail thread | Open read-only; vote, watch, and comment require sign-in |
-| `/feedback/mine` | User's submissions | Signed in |
+| `/feedback/mine` | Submitted, voted, and watched items; new-post alert opt-in | Signed in |
 | `/feedback/admin` | Admin triage | Admin |
 | `/feedback/history` | Archived bugs, features, and wishlist games | Open |
 | `/feedback/history/:tab` | History tab (`bugs`, `ideas`, `games`) | Open |
 
 ## Kinds
 
-- **bug** — screenshots optional; bug context captured from error pages
-- **feature** — markdown body; attachments supported
+- **bug** — status flow: open → triaged → monitoring → resolved | closed; screenshots optional on create; up to 3 images per follow-up comment; bug context captured from error pages
+- **feature** — markdown body; attachments on create and comments (up to 3 images per comment)
 - **wishlist** — game title, HTTPS URL, optional cover image (one PNG/JPEG/WebP), notes; dedup by BGG id or normalized URL
 
 ## API
 
 Open queries: `feedback_list`, `feedback_get`, `feedback_history_list`, `wishlist_search`.
 
-Auth queries: `feedback_create`, `feedback_vote`, `feedback_comment`, `feedback_subscribe`, `feedback_update`, `feedback_set_status`, `feedback_set_admin_fields`, `feedback_mine`, `feedback_admin_list`, `feedback_delete` (wishlist admin), `feedback_merge` (wishlist admin), `feedback_hold_retention` (admin).
+Auth queries: `feedback_create`, `feedback_vote`, `feedback_comment`, `feedback_subscribe`, `feedback_update`, `feedback_set_status`, `feedback_reclassify` (admin: bug → feature, non-terminal only), `feedback_set_admin_fields`, `feedback_mine`, `feedback_admin_list`, `feedback_delete` (wishlist admin), `feedback_merge` (wishlist admin), `feedback_hold_retention` (admin).
 
 ## Retention and history
 
-Terminal posts are archived to S3 after a configurable delay (`FEEDBACK_ARCHIVE_AFTER_TERMINAL_DAYS`, default 90). The nightly `feedback-archive` job (node-backend Lambda, `npm run feedback-archive`) writes a `HISTORY#` summary row, stamps `archivedAt` and `expiresAt` on live rows, and stores a full JSON snapshot in S3. Live DynamoDB rows are removed when `expiresAt` TTL fires (`FEEDBACK_LIVE_RETENTION_AFTER_ARCHIVE_DAYS`, default 90).
+Terminal (closed) posts remain commentable until the archive job stamps `archivedAt`; admins can reopen by setting a non-terminal status (removes `terminalAt` and returns the item to live boards). Terminal posts are archived to S3 after a configurable delay (`FEEDBACK_ARCHIVE_AFTER_TERMINAL_DAYS`, default 90). The nightly `feedback-archive` job (node-backend Lambda, `npm run feedback-archive`) writes a `HISTORY#` summary row, stamps `archivedAt` and `expiresAt` on live rows, and stores a full JSON snapshot in S3. Live DynamoDB rows are removed when `expiresAt` TTL fires (`FEEDBACK_LIVE_RETENTION_AFTER_ARCHIVE_DAYS`, default 90).
 
 Admins can set `retentionHold` on a post to skip automatic archiving. The history board at `/feedback/history` lists archived summaries; detail pages show an archived banner and, after TTL purge, a summary-only view.
 
@@ -43,6 +43,12 @@ See [node-backend API docs](/backend/api/auth-queries/) and [public queries](/ba
 ## Notifications
 
 Watchers receive in-app notifications for replies (`feedbackReply`), status changes (`feedbackStatus`), and wishlist deletions (`feedbackDeleted`). Authors are auto-subscribed on create.
+
+**New posts:** Admins on the backend allowlist receive a one-time `feedbackNew` in-app alert per submission. Other users can opt in per kind (`bug`, `feature`, `wishlist`) via **My feedback** or user settings (`settings.all.feedbackNewKinds`; default off). Opt-in sends only that one-time alert — it does not vote or watch the thread.
+
+**My feedback:** Scope filters `submitted` (default), `voted`, and `watched` use `feedback_mine` with optional `kind`. List pages include a client-side quick search over loaded rows (title, author, body where available).
+
+**Ops:** After deploy, run `npm run backfill-feedback-user-engagement` in node-backend once per environment to populate voted/watched user index rows from existing votes and subscriptions.
 
 ## SEO
 

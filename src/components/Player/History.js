@@ -16,6 +16,8 @@ import { compareStrings } from "../../lib/compareStrings";
 import { isHighlighted, toggleHighlight } from "../../lib/playerGameMarks";
 import { toast } from "react-toastify";
 
+const columnHelper = createColumnHelper();
+
 function History({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const [allRecs] = useContext(AllRecsContext);
@@ -134,7 +136,23 @@ function History({ handleChallenge }) {
     [allRecs, globalMe, allUsers, user]
   );
 
-  const columnHelper = createColumnHelper();
+  const activeChallengeTarget = useMemo(() => {
+    if (!activeChallengeModal) {
+      return undefined;
+    }
+    const row = data.find((rec) => rec.id === activeChallengeModal);
+    if (!row || row.opponents.length !== 1) {
+      return undefined;
+    }
+    return {
+      fixedMetaGame: row.meta,
+      opponent: {
+        id: row.opponents[0].id,
+        name: row.opponents[0].name,
+      },
+    };
+  }, [activeChallengeModal, data]);
+
   const columns = useMemo(
     () =>
       allUsers === null
@@ -315,38 +333,19 @@ function History({ handleChallenge }) {
                 !gameinfo.has(props.row.original.meta) ||
                 globalMe.id !== user.id ||
                 props.row.original.opponents.length !== 1 ? null : (
-                  <>
-                    <ChallengeEntryModals
-                      show={
-                        activeChallengeModal !== "" &&
-                        activeChallengeModal === props.row.original.id
-                      }
-                      handleClose={closeChallengeModal}
-                      handleChallenge={handleChallenge}
-                      fixedMetaGame={props.row.original.meta}
-                      opponent={{
-                        id: props.row.original.opponents[0].id,
-                        name: props.row.original.opponents[0].name,
-                      }}
-                    />
-                    <button
-                      className="button is-small apButton"
-                      onClick={() => openChallengeModal(props.row.original.id)}
-                    >
-                      Rematch
-                    </button>
-                  </>
+                  <button
+                    className="button is-small apButton"
+                    onClick={() => openChallengeModal(props.row.original.id)}
+                  >
+                    Rematch
+                  </button>
                 ),
             }),
           ],
     [
-      columnHelper,
       globalMe,
-      activeChallengeModal,
-      handleChallenge,
       allUsers,
       user,
-      closeChallengeModal,
       t,
       formatter,
       isOwnProfile,
@@ -410,6 +409,17 @@ function History({ handleChallenge }) {
         sort={[{ id: "dateEnd", desc: true }]}
         key="Player|History"
       />
+      {globalMe !== null && globalMe.id === user.id && (
+        <ChallengeEntryModals
+          show={
+            activeChallengeModal !== "" && activeChallengeTarget !== undefined
+          }
+          handleClose={closeChallengeModal}
+          handleChallenge={handleChallenge}
+          fixedMetaGame={activeChallengeTarget?.fixedMetaGame}
+          opponent={activeChallengeTarget?.opponent}
+        />
+      )}
     </>
   );
 }

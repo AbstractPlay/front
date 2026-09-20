@@ -341,4 +341,4 @@ export function clearGameRecommendationsCache() {
 }
 
 /** @visibleForTesting */
-export { fetchCooccur, fetchMvtimes };
+export { fetchCooccur, fetchMvtimes, MVTIMES_URL };

@@ -20,7 +20,7 @@ import { useStore } from "../stores";
 import { callAuthApi } from "../lib/api";
 import { formatUserDisplayName } from "./Bots/botUtils";
 import PageLoading from "./shared/PageLoading";
-import UserAvatar from "./UserAvatar";
+import { EnlargeableUserAvatar } from "./AvatarLightbox";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -230,18 +230,11 @@ function Players() {
         header: "",
         enableSorting: false,
         cell: (props) => (
-          <Link
-            to={`/player/${props.row.original.id}`}
-            className="players-table-avatar-link"
-            aria-hidden="true"
-            tabIndex={-1}
-          >
-            <UserAvatar
-              user={props.row.original}
-              size={32}
-              className="players-table-avatar"
-            />
-          </Link>
+          <EnlargeableUserAvatar
+            user={props.row.original}
+            size={32}
+            className="players-table-avatar"
+          />
         ),
       }),
       columnHelper.accessor("name", {

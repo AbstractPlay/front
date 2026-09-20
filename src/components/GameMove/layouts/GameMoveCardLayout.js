@@ -59,7 +59,7 @@ export default function GameMoveCardLayout({ session }) {
               layoutContext={layoutContext}
               highlightNextGame={highlightNextGame}
             />
-            <CardTurnBar session={session} layoutContext={layoutContext} />
+            <CardTurnBar session={session} />
           </div>
           <div className={`game-move-queue-card__board${boardFrameClass}`}>
             <Board {...buildBoardProps(session)} />

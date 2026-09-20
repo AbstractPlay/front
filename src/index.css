@@ -455,13 +455,56 @@ a.navbar-item,
   margin-top: 0.75rem;
 }
 
-.players-table-avatar-link {
+.avatar-enlarge-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
   display: inline-flex;
   line-height: 0;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.avatar-enlarge-btn:hover .user-avatar,
+.avatar-enlarge-btn:focus-visible .user-avatar {
+  box-shadow: 0 0 0 2px var(--secondary-color-3);
+}
+
+.avatar-enlarge-btn:focus-visible {
+  outline: none;
+}
+
+.avatar-lightbox-content {
+  align-items: center;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: none;
+  overflow: visible;
+  position: relative;
+  width: auto;
+}
+
+.avatar-lightbox-close {
+  position: absolute;
+  right: -0.25rem;
+  top: -0.25rem;
+  z-index: 1;
+}
+
+.avatar-lightbox-avatar {
+  border: 3px solid var(--tag-background-color);
+  box-shadow: 0 8px 32px var(--dropshadow-target-start);
+  height: 320px;
+  max-height: min(320px, 80vw);
+  max-width: min(320px, 80vw);
+  width: 320px;
 }
 
 .apTable .players-table-avatar-cell,
-.apTable td:has(.players-table-avatar-link) {
+.apTable td:has(.avatar-enlarge-btn) {
   padding-right: 0.35rem;
   vertical-align: middle;
   width: 2.5rem;
@@ -628,6 +671,10 @@ a.navbar-item,
   margin: 0.25rem 0 0.5rem;
 }
 
+.notification-panel-announcement-lead {
+  color: var(--secondary-font-color);
+}
+
 .notification-panel-actions {
   margin-top: 0.35rem;
 }
@@ -653,6 +700,9 @@ a.navbar-item,
 .notification-panel-toolbar-top {
   border-bottom: 1px solid var(--tag-background-color);
   border-top: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .notification-panel-bulk-btn {
@@ -1460,12 +1510,18 @@ tr.stickyHeader {
     text-align: center;
     font-weight: bold;
     margin-bottom: 0.5rem;
+    color: var(--main-font-color);
 }
 
 .ap-chart-grid {
     stroke: var(--secondary-color-3-bg);
     stroke-width: 1;
     pointer-events: none;
+}
+
+:root[color-mode="dark"] .ap-chart-grid {
+    stroke: var(--secondary-font-color);
+    stroke-opacity: 0.35;
 }
 
 .ap-chart-grid-layer {
@@ -1489,13 +1545,13 @@ tr.stickyHeader {
 }
 
 .ap-chart-tick {
-    fill: var(--main-text-color);
+    fill: var(--main-font-color);
     font-size: 11px;
     pointer-events: none;
 }
 
 .ap-chart-axis-title {
-    fill: var(--main-text-color);
+    fill: var(--main-font-color);
     font-size: 12px;
     pointer-events: none;
 }
@@ -2031,8 +2087,34 @@ span.hardTime::after {
     font-size: smaller;
   }
 
+  #playerProfile .player-profile-past-names {
+    color: var(--secondary-font-color);
+    margin: 0 auto 0.75rem;
+    max-width: 40rem;
+    text-align: center;
+  }
+
   #playerProfile .player-profile-tabs {
     margin-bottom: 1rem;
+  }
+
+  .user-settings-tabs {
+    margin-bottom: 1rem;
+  }
+
+  .user-settings-tabs ul {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .user-settings-tab-panel {
+    margin-top: 0.25rem;
+  }
+
+  .user-settings-logout {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
   }
 
   #playerProfile .player-tab-modules {
@@ -2199,6 +2281,21 @@ span.hardTime::after {
     font-size: 0.7rem;
     line-height: 1.2;
     opacity: 0.8;
+  }
+
+  .player-picker-filters .radio {
+    display: inline-block;
+    margin-right: 0.75em;
+  }
+
+  .player-picker-row-avatar {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .player-picker-browse-list .player-picker-row {
+    text-align: left;
   }
 
   #tournamentsPage .tournaments-page-tabs {

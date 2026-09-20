@@ -1,11 +1,39 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { HexColorPicker, HexColorInput } from "react-colorful";
-import { render, renderglyph, sheets } from "@abstractplay/renderer";
+import {
+  render,
+  renderglyph,
+  sheets,
+  isBoardChromeEligible,
+  getCompatibleStyles,
+} from "@abstractplay/renderer";
+import {
+  isBoardBasicBoard,
+  isBoardStyleSwappable,
+} from "../lib/boardRepShape.js";
 import { gameinfo } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
 import { coloursEqual, resolveCustomizePreviewPalette } from "../lib/resolveEffectivePalette.js";
 import { shouldImportLegacyCustomCss } from "../lib/resolveEffectiveCustomCss.js";
+import {
+  applyRenderSettingsToOptions,
+  prepareBoardRender,
+} from "../lib/prepareBoardRender.js";
+import {
+  buildRenderCustomization,
+  clearBoardRenderUi,
+  coerceLabelScale,
+  LABEL_SCALE_SLIDER_MAX,
+  LABEL_SCALE_SLIDER_MIN,
+  LABEL_SCALE_SLIDER_STEP,
+  isRenderSettingsWithinSizeLimit,
+  preflightRenderCustomization,
+  RENDER_OPTION_WHITELIST,
+  renderUiStateFromSettings,
+  stripBoardStyleForGlobalRender,
+} from "../lib/customizeRenderSettings.js";
+import { normalizeCustomizationSettings } from "../lib/normalizeCustomizationSettings.js";
 import { useStore } from "../stores";
 import { isEqual, cloneDeep, debounce } from "lodash";
 import { useTranslation, Trans } from "react-i18next";
@@ -33,6 +61,70 @@ const swatchButtonStyle = {
   padding: 0,
   lineHeight: 0,
 };
+
+function CustomizeCollapsibleSection({
+  id,
+  title,
+  open,
+  onToggle,
+  tags = null,
+  children,
+}) {
+  return (
+    <section style={{ marginTop: "1.25em", marginBottom: "1.25em" }}>
+      <button
+        type="button"
+        id={`${id}-heading`}
+        className="customize-collapsible-heading"
+        aria-expanded={open}
+        aria-controls={`${id}-panel`}
+        onClick={onToggle}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+          width: "100%",
+          padding: 0,
+          border: "none",
+          background: "transparent",
+          cursor: "pointer",
+          textAlign: "left",
+          color: "inherit",
+        }}
+      >
+        <span className="icon is-small" style={{ opacity: 0.65 }} aria-hidden="true">
+          <i className={`fa fa-chevron-${open ? "down" : "right"}`} />
+        </span>
+        <h2 className="subtitle" style={{ margin: 0, flex: "1 1 auto" }}>
+          {title}
+        </h2>
+        {tags ? (
+          <span
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0.35em",
+              alignItems: "center",
+              flexShrink: 0,
+            }}
+          >
+            {tags}
+          </span>
+        ) : null}
+      </button>
+      {open ? (
+        <div
+          id={`${id}-panel`}
+          role="region"
+          aria-labelledby={`${id}-heading`}
+          style={{ marginTop: "0.75em" }}
+        >
+          {children}
+        </div>
+      ) : null}
+    </section>
+  );
+}
 
 function ColourSwatchButton({ color, onClick, title, selected = false }) {
   return (
@@ -118,6 +210,7 @@ function Customize(props) {
   const [scope, setScope] = useState("game");
   const metaGame =
     scope === "global" || !providedMetaGame ? "_default" : providedMetaGame;
+  const isGlobalCustomization = metaGame === "_default";
   const inJSON = props.inJSON || location.state?.inJSON;
   const defaultRendererJson = useMemo(
     () =>
@@ -199,6 +292,10 @@ function Customize(props) {
 
   // Glyph mapping state
   const [glyphMap, setGlyphMap] = useState([]);
+  const [boardStyle, setBoardStyle] = useState("");
+  const [strokeWeight, setStrokeWeight] = useState("");
+  const [labelScale, setLabelScale] = useState(1);
+  const [renderOptions, setRenderOptions] = useState([]);
   const [selectedOriginalGlyph, setSelectedOriginalGlyph] = useState("");
   const [selectedSheet, setSelectedSheet] = useState("core");
   const [selectedReplacementGlyph, setSelectedReplacementGlyph] = useState("");
@@ -207,6 +304,7 @@ function Customize(props) {
   const [customCssText, setCustomCssText] = useState("");
   const [customCssActive, setCustomCssActive] = useState(true);
   const [customCssOpen, setCustomCssOpen] = useState(false);
+  const [renderSectionOpen, setRenderSectionOpen] = useState(false);
   const [importedLegacyCss, setImportedLegacyCss] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [legacyCustomCSS, legacyCustomCSSSetter] = useStorageState(
@@ -311,6 +409,78 @@ function Customize(props) {
     [palette, preferredColour, metaGame, customizationHints]
   );
 
+  const applySettingsToRenderUi = (settings, previewRepForSeed = null) => {
+    const ui = renderUiStateFromSettings(settings, previewRepForSeed);
+    setGlyphMap(ui.glyphMap);
+    setBoardStyle(isGlobalCustomization ? "" : ui.boardStyle);
+    setStrokeWeight(ui.strokeWeight);
+    setLabelScale(ui.labelScale);
+    setRenderOptions(ui.renderOptions);
+  };
+
+  const toggleRenderOption = (optionKey) => {
+    setRenderOptions((prev) =>
+      prev.includes(optionKey)
+        ? prev.filter((k) => k !== optionKey)
+        : [...prev, optionKey].sort(
+            (a, b) =>
+              RENDER_OPTION_WHITELIST.indexOf(a) -
+              RENDER_OPTION_WHITELIST.indexOf(b),
+          ),
+    );
+    setIsDirty(true);
+  };
+
+  const renderCustomization = useMemo(() => {
+    const built = buildRenderCustomization({
+      boardStyle,
+      strokeWeight,
+      labelScale,
+      renderOptions,
+      glyphMap,
+    });
+    return isGlobalCustomization
+      ? stripBoardStyleForGlobalRender(built)
+      : built;
+  }, [
+    boardStyle,
+    strokeWeight,
+    labelScale,
+    renderOptions,
+    glyphMap,
+    isGlobalCustomization,
+  ]);
+
+  const previewRep = useMemo(() => {
+    try {
+      return JSON.parse(rendererJson);
+    } catch {
+      return null;
+    }
+  }, [rendererJson]);
+
+  const boardStyleCustomizationEligible = Boolean(
+    previewRep && isBoardStyleSwappable(previewRep) && isBoardChromeEligible(previewRep),
+  );
+  const boardFieldChromeEligible = Boolean(
+    previewRep && isBoardBasicBoard(previewRep.board),
+  );
+
+  const compatibleBoardStyles = useMemo(() => {
+    const base = previewRep?.board?.style;
+    if (!base) {
+      return [];
+    }
+    return getCompatibleStyles(String(base));
+  }, [previewRep]);
+
+  const renderPreflight = useMemo(() => {
+    if (!previewRep) {
+      return { ok: true, errors: [], warnings: [] };
+    }
+    return preflightRenderCustomization(previewRep, renderCustomization);
+  }, [previewRep, renderCustomization]);
+
   const settingsJson = useMemo(() => {
     const settings = {
       colourContext: {
@@ -323,13 +493,15 @@ function Customize(props) {
         fill,
       },
       palette,
-      glyphmap: glyphMap,
     };
     if (preferredColour) {
       settings.preferredColour = preferredColour;
     }
     if (customCssText.trim()) {
       settings.customCss = { css: customCssText, active: customCssActive };
+    }
+    if (renderCustomization) {
+      settings.render = renderCustomization;
     }
     return JSON.stringify(settings, null, 2);
   }, [
@@ -341,10 +513,10 @@ function Customize(props) {
     annotations,
     fill,
     palette,
-    glyphMap,
     preferredColour,
     customCssText,
     customCssActive,
+    renderCustomization,
   ]);
 
   const [settingsInput, setSettingsInput] = useState(settingsJson);
@@ -373,7 +545,7 @@ function Customize(props) {
         if (settings.colourContext.fill) setFill(settings.colourContext.fill);
       }
       setPalette(settings.palette || []);
-      setGlyphMap(settings.glyphmap || []);
+      applySettingsToRenderUi(settings, previewRep);
       setPreferredColour(settings.preferredColour || null);
       if (settings.customCss) {
         setCustomCssText(settings.customCss.css ?? "");
@@ -396,7 +568,7 @@ function Customize(props) {
       setAnnotations(ctx.annotations || sys_ctx.annotations);
       setFill(ctx.fill || sys_ctx.fill);
       setPalette(settings.palette || []);
-      setGlyphMap(settings.glyphmap || []);
+      applySettingsToRenderUi(settings, previewRep);
       setPreferredColour(settings.preferredColour || null);
       if (settings.customCss) {
         setCustomCssText(settings.customCss.css ?? "");
@@ -418,13 +590,27 @@ function Customize(props) {
         setAnnotations(globalColourContext.annotations);
       if (globalColourContext.fill) setFill(globalColourContext.fill);
       setPalette([]);
-      setGlyphMap([]);
+      applySettingsToRenderUi({}, previewRep);
       setPreferredColour(null);
       setCustomCssText("");
       setCustomCssActive(true);
     }
     setImportedLegacyCss(false);
-  }, [globalMe, metaGame, globalColourContext]);
+  }, [globalMe, metaGame, globalColourContext, previewRep]);
+
+  useEffect(() => {
+    if (!previewRep) {
+      return;
+    }
+    const settings = globalMe?.customizations?.[metaGame];
+    const norm = normalizeCustomizationSettings(settings);
+    const hasSavedOptions =
+      Array.isArray(norm.options) && norm.options.length > 0;
+    if (!hasSavedOptions) {
+      const ui = renderUiStateFromSettings(settings ?? {}, previewRep);
+      setRenderOptions(ui.renderOptions);
+    }
+  }, [previewRep, metaGame, globalMe?.customizations]);
 
   useEffect(() => {
     if (
@@ -507,9 +693,7 @@ function Customize(props) {
       if (parsed.palette && Array.isArray(parsed.palette)) {
         setPalette(parsed.palette);
       }
-      if (parsed.glyphmap && Array.isArray(parsed.glyphmap)) {
-        setGlyphMap(parsed.glyphmap);
-      }
+      applySettingsToRenderUi(parsed, previewRep);
       if (parsed.preferredColour != null && parsed.preferredColour !== "") {
         setPreferredColour(parsed.preferredColour);
       } else {
@@ -636,11 +820,68 @@ function Customize(props) {
     setGlyphMap(newMap);
   };
 
+  const handleResetBoardRender = () => {
+    const cleared = clearBoardRenderUi(
+      {
+        boardStyle,
+        strokeWeight,
+        labelScale,
+        renderOptions,
+        glyphMap,
+      },
+      previewRep,
+    );
+    setBoardStyle(cleared.boardStyle);
+    setStrokeWeight(cleared.strokeWeight);
+    setLabelScale(cleared.labelScale);
+    setRenderOptions(cleared.renderOptions);
+    setIsDirty(true);
+  };
+
   const handleSave = async () => {
     try {
+      if (!renderPreflight.ok) {
+        setSettingsError(renderPreflight.errors.join(" "));
+        return;
+      }
+      let settingsToSave;
+      try {
+        settingsToSave = JSON.parse(settingsInput);
+      } catch {
+        settingsToSave = JSON.parse(settingsJson);
+      }
+      if (previewRep && settingsToSave.render) {
+        const savePf = preflightRenderCustomization(
+          previewRep,
+          settingsToSave.render,
+        );
+        if (!savePf.ok) {
+          setSettingsError(savePf.errors.join(" "));
+          return;
+        }
+      }
+      if (isGlobalCustomization && settingsToSave.render) {
+        const stripped = stripBoardStyleForGlobalRender(settingsToSave.render);
+        if (stripped) {
+          settingsToSave.render = stripped;
+        } else {
+          delete settingsToSave.render;
+        }
+      }
+      if (
+        settingsToSave.render &&
+        !isRenderSettingsWithinSizeLimit(settingsToSave.render)
+      ) {
+        setSettingsError(t("customize.renderTooLarge"));
+        return;
+      }
+      if (settingsToSave.render) {
+        delete settingsToSave.glyphmap;
+        delete settingsToSave.boardChrome;
+      }
       const res = await callAuthApi("save_customization", {
         metaGame,
-        settings: JSON.parse(settingsJson),
+        settings: settingsToSave,
       });
       if (res && res.status === 200) {
         setIsDirty(false);
@@ -655,7 +896,7 @@ function Customize(props) {
           if (!newMe.customizations) {
             newMe.customizations = {};
           }
-          newMe.customizations[metaGame] = JSON.parse(settingsJson);
+          newMe.customizations[metaGame] = settingsToSave;
           setGlobalMe(newMe);
         }
       }
@@ -698,7 +939,7 @@ function Customize(props) {
       setAnnotations(ctx.annotations || sys_ctx.annotations);
       setFill(ctx.fill || sys_ctx.fill);
       setPalette(settings.palette || []);
-      setGlyphMap(settings.glyphmap || []);
+      applySettingsToRenderUi(settings, previewRep);
       setPreferredColour(settings.preferredColour || null);
       if (settings.customCss) {
         setCustomCssText(settings.customCss.css ?? "");
@@ -718,7 +959,7 @@ function Customize(props) {
       setAnnotations(sys_ctx.annotations);
       setFill(sys_ctx.fill);
       setPalette([]);
-      setGlyphMap([]);
+      applySettingsToRenderUi({}, previewRep);
       setPreferredColour(null);
       setCustomCssText("");
       setCustomCssActive(true);
@@ -756,7 +997,6 @@ function Customize(props) {
 
     try {
       const json = JSON.parse(rendererJson);
-      console.log("Preview JSON:", json);
       const options = {
         divid: divId,
         svgid: svgId,
@@ -772,9 +1012,21 @@ function Customize(props) {
         contextGlobal: false,
         coloursGlobal: metaGame === "_default",
         colours: previewColours ?? undefined,
-        glyphmap: glyphMap.length > 0 ? glyphMap : undefined,
       };
-      render(json, options);
+      const mockMe = {
+        customizations: {
+          [metaGame]: {
+            render: renderCustomization,
+          },
+        },
+      };
+      const { displayRep, renderSettings: resolvedRender } = prepareBoardRender(
+        json,
+        mockMe,
+        metaGame,
+      );
+      applyRenderSettingsToOptions(options, resolvedRender);
+      render(displayRep, options);
     } catch (e) {
       if (div) {
         div.innerHTML = `<div class="notification is-danger">${e.message}</div>`;
@@ -791,6 +1043,8 @@ function Customize(props) {
     fill,
     previewColours,
     glyphMap,
+    renderOptions,
+    renderCustomization,
     metaGame,
   ]);
 
@@ -1271,8 +1525,214 @@ function Customize(props) {
               </ul>
             </div>
           )}
-          <hr />
-          <h2 className="subtitle">{t("customize.glyphReplacements")}</h2>
+          <CustomizeCollapsibleSection
+            id="customize-render"
+            title={t("customize.renderSection")}
+            open={renderSectionOpen}
+            onToggle={() => setRenderSectionOpen((open) => !open)}
+            tags={
+              <>
+                {renderCustomization ? (
+                  <span
+                    className="tag is-light is-size-7"
+                    style={{ color: "var(--secondary-font-color)" }}
+                  >
+                    {t("customize.renderSectionConfigured")}
+                  </span>
+                ) : null}
+                {!renderPreflight.ok && renderPreflight.errors.length > 0 ? (
+                  <span className="tag is-danger is-size-7">
+                    {t("customize.renderSectionNeedsAttention")}
+                  </span>
+                ) : null}
+              </>
+            }
+          >
+                <p className="help" style={{ marginBottom: "1em" }}>
+                  {t("customize.renderSectionHelp")}
+                </p>
+                {isGlobalCustomization ? (
+                  <div
+                    className="notification is-warning is-light"
+                    style={{ fontSize: "0.85rem", padding: "1em" }}
+                  >
+                    <p>{t("customize.globalDefaultsSectionNotice")}</p>
+                  </div>
+                ) : null}
+          {boardStyleCustomizationEligible && !isGlobalCustomization ? (
+              <div className="field">
+                <label className="label is-small">
+                  {t("customize.boardStyle")}
+                </label>
+                <div className="control">
+                  <div className="select is-small">
+                    <select
+                      value={boardStyle}
+                      onChange={(e) => setBoardStyle(e.target.value)}
+                    >
+                      <option value="">
+                        {t("customize.boardStyleGameDefault")}
+                      </option>
+                      {compatibleBoardStyles.map((style) => (
+                        <option key={style} value={style}>
+                          {t(`customize.boardStyles.${style}`, {
+                            defaultValue: style,
+                          })}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+          ) : null}
+          {!boardStyleCustomizationEligible &&
+          boardFieldChromeEligible &&
+          !isGlobalCustomization ? (
+            <p className="help" style={{ marginBottom: "1em" }}>
+              {t("customize.boardStyleNotAvailable")}
+            </p>
+          ) : null}
+          {isGlobalCustomization ? (
+            <p className="help" style={{ marginBottom: "1em" }}>
+              {t("customize.boardStyleGlobalDisabled")}
+            </p>
+          ) : null}
+          {boardFieldChromeEligible ? (
+            <>
+              <div className="field">
+                <label className="label is-small">
+                  {t("customize.strokeWeight")}
+                </label>
+                <div className="control">
+                  <input
+                    className="input is-small"
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    placeholder={t("customize.strokeWeightDefault")}
+                    value={strokeWeight}
+                    onChange={(e) => setStrokeWeight(e.target.value)}
+                    style={{ maxWidth: "8em" }}
+                  />
+                </div>
+              </div>
+              <div className="field">
+                <label className="label is-small">
+                  {t("customize.labelScale")}
+                </label>
+                <div
+                  className="control"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.75em",
+                    flexWrap: "wrap",
+                    maxWidth: "24em",
+                  }}
+                >
+                  <input
+                    type="range"
+                    min={LABEL_SCALE_SLIDER_MIN}
+                    max={LABEL_SCALE_SLIDER_MAX}
+                    step={LABEL_SCALE_SLIDER_STEP}
+                    value={Math.min(
+                      LABEL_SCALE_SLIDER_MAX,
+                      Math.max(
+                        LABEL_SCALE_SLIDER_MIN,
+                        coerceLabelScale(labelScale),
+                      ),
+                    )}
+                    onChange={(e) =>
+                      setLabelScale(Number.parseFloat(e.target.value))
+                    }
+                    style={{ flex: "1 1 12em" }}
+                  />
+                  <input
+                    className="input is-small"
+                    type="number"
+                    min={LABEL_SCALE_SLIDER_STEP}
+                    step={LABEL_SCALE_SLIDER_STEP}
+                    value={labelScale}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      if (raw === "") {
+                        setLabelScale(1);
+                        return;
+                      }
+                      const n = Number.parseFloat(raw);
+                      if (!Number.isNaN(n)) {
+                        setLabelScale(n);
+                      }
+                    }}
+                    style={{ width: "5.5em" }}
+                    aria-label={t("customize.labelScale")}
+                  />
+                </div>
+                <p className="help">
+                  {t("customize.labelScaleHelp", {
+                    min: LABEL_SCALE_SLIDER_MIN,
+                    max: LABEL_SCALE_SLIDER_MAX,
+                  })}
+                </p>
+              </div>
+              <div className="control" style={{ marginBottom: "1em" }}>
+                <button
+                  type="button"
+                  className="button is-small apButtonNeutral"
+                  onClick={handleResetBoardRender}
+                >
+                  {t("customize.resetBoardRender")}
+                </button>
+              </div>
+            </>
+          ) : (
+            <p className="notification is-light" style={{ fontSize: "0.9rem" }}>
+              {t("customize.boardFieldsNotAvailable")}
+            </p>
+          )}
+          <div className="field">
+            <label className="label is-small">
+              {t("customize.renderOptionsLabel")}
+            </label>
+            {RENDER_OPTION_WHITELIST.map((optionKey) => (
+              <label key={optionKey} className="checkbox is-small mr-4">
+                <input
+                  type="checkbox"
+                  checked={renderOptions.includes(optionKey)}
+                  onChange={() => toggleRenderOption(optionKey)}
+                />{" "}
+                {t(`customize.renderOptions.${optionKey}`, {
+                  defaultValue: optionKey,
+                })}
+              </label>
+            ))}
+            <p className="help">{t("customize.renderOptionsHelp")}</p>
+          </div>
+          {!renderPreflight.ok && renderPreflight.errors.length > 0 ? (
+            <div className="notification is-danger is-light">
+              <p>
+                <strong>{t("customize.renderPreflightErrors")}</strong>
+              </p>
+              <ul style={{ marginLeft: "1.25em", listStyle: "disc" }}>
+                {renderPreflight.errors.map((msg, i) => (
+                  <li key={i}>{msg}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {renderPreflight.warnings?.length > 0 ? (
+            <div className="notification is-warning is-light">
+              <p>
+                <strong>{t("customize.renderPreflightWarnings")}</strong>
+              </p>
+              <ul style={{ marginLeft: "1.25em", listStyle: "disc" }}>
+                {renderPreflight.warnings.map((msg, i) => (
+                  <li key={i}>{msg}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          <h3 className="subtitle is-5">{t("customize.glyphReplacements")}</h3>
           <div className="field">
             <label className="label is-small">
               {t("customize.addReplacement")}
@@ -1351,6 +1811,7 @@ function Customize(props) {
               </span>
             ))}
           </div>
+          </CustomizeCollapsibleSection>
         </div>
         <div className="column is-half">
           <label className="label">{t("customize.output")}</label>
@@ -1372,36 +1833,13 @@ function Customize(props) {
       </div>
       <div className="columns">
         <div className="column is-full">
-          <div
-            style={{
-              marginBottom: "1em",
-              border: "1px solid var(--tag-background-color)",
-              borderRadius: "4px",
-              background: "var(--main-bg-color)",
-            }}
-          >
-            <button
-              type="button"
-              className="button is-small apButtonNeutral is-fullwidth"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                border: "none",
-                borderRadius: "4px",
-              }}
-              aria-expanded={customCssOpen}
-              onClick={() => setCustomCssOpen((open) => !open)}
-            >
-              <span
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5em",
-                  minWidth: 0,
-                }}
-              >
-                <span>{t("customize.customCss")}</span>
+          <CustomizeCollapsibleSection
+            id="customize-custom-css"
+            title={t("customize.customCss")}
+            open={customCssOpen}
+            onToggle={() => setCustomCssOpen((open) => !open)}
+            tags={
+              <>
                 {customCssText.trim() ? (
                   <span
                     className="tag is-light is-size-7"
@@ -1417,17 +1855,17 @@ function Customize(props) {
                     {t("customize.customCssImportedTag")}
                   </span>
                 ) : null}
-              </span>
-              <span className="icon is-small" aria-hidden="true">
-                <i
-                  className={`fa fa-chevron-${
-                    customCssOpen ? "down" : "right"
-                  }`}
-                />
-              </span>
-            </button>
-            {customCssOpen && (
-              <div style={{ padding: "0.75em" }}>
+              </>
+            }
+          >
+                {isGlobalCustomization ? (
+                  <div
+                    className="notification is-warning is-light mb-3"
+                    style={{ fontSize: "0.85rem", padding: "1em" }}
+                  >
+                    <p>{t("customize.globalDefaultsSectionNotice")}</p>
+                  </div>
+                ) : null}
                 <div className="content is-size-7">
                   <p>
                     <Trans
@@ -1461,9 +1899,7 @@ function Customize(props) {
                     {t("gameMove.dev.activateCustomCss")}
                   </label>
                 </div>
-              </div>
-            )}
-          </div>
+          </CustomizeCollapsibleSection>
         </div>
       </div>
       <div className="columns">
@@ -1488,7 +1924,7 @@ function Customize(props) {
             <button
               className="button is-small apButton"
               onClick={handleSave}
-              disabled={!isDirty}
+              disabled={!isDirty || !renderPreflight.ok}
             >
               {t("customize.saveSettings")}
             </button>

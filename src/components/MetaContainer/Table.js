@@ -35,6 +35,7 @@ import Thumbnail from "../Thumbnail";
 import { useStore } from "../../stores";
 
 const allSize = Number.MAX_SAFE_INTEGER;
+const columnHelper = createColumnHelper();
 // props:
 //   - metaGame
 //   - counts
@@ -249,9 +250,8 @@ function Table({
       })
       .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
-  }, [props.games, localeBundleKey]);
+  },     [props.games, localeBundleKey]);
 
-  const columnHelper = createColumnHelper();
   const columns = useMemo(
     () => [
       columnHelper.display({
@@ -443,15 +443,6 @@ function Table({
         id: "actions",
         cell: (props) => (
           <>
-            <ChallengeEntryModals
-              show={
-                activeChallengeModal !== "" &&
-                activeChallengeModal === props.row.original.id
-              }
-              handleClose={closeChallengeModal}
-              handleChallenge={handleChallenge}
-              fixedMetaGame={props.row.original.id}
-            />
             <button
               className="button is-small apButton"
               onClick={() => openChallengeModal(props.row.original.id)}
@@ -466,17 +457,14 @@ function Table({
       }),
     ],
     [
-      columnHelper,
       activeImgModal,
       toggleStar,
       filterStars,
       filterStarsSetter,
-      activeChallengeModal,
-      handleChallenge,
       expandedPara,
       togglePara,
       addTag,
-      closeChallengeModal,
+      closeImgModal,
       t,
       i18n.language,
     ]
@@ -743,6 +731,14 @@ function Table({
         </table>
         {tableNavigation}
       </div>
+      {globalMe !== null && handleChallenge && (
+        <ChallengeEntryModals
+          show={activeChallengeModal !== ""}
+          handleClose={closeChallengeModal}
+          handleChallenge={handleChallenge}
+          fixedMetaGame={activeChallengeModal || undefined}
+        />
+      )}
     </article>
   );
 }

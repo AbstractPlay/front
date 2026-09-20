@@ -20,6 +20,7 @@ import {
 } from "../../lib/compareStrings";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { formatUserDisplayName } from "../Bots/botUtils";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -101,12 +102,16 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
           />
         ),
         invertSorting: true,
-        sortingFn: (rowA, rowB, columnID) => {
-          return compareStrings(
-            rowA.original.challenger.name,
-            rowB.original.challenger.name,
-            i18n.language
+        sortingFn: (rowA, rowB) => {
+          const nameA = formatUserDisplayName(
+            rowA.original.challenger,
+            allUsers
           );
+          const nameB = formatUserDisplayName(
+            rowB.original.challenger,
+            allUsers
+          );
+          return compareStrings(nameA, nameB, i18n.language);
         },
       }),
       columnHelper.accessor("accepted", {

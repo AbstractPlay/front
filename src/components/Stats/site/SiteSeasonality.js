@@ -65,6 +65,7 @@ function SiteSeasonality() {
         xTitle={t("stats.siteStats.dayOfWeekUtc")}
         yTitle={t("stats.siteStats.movesMade")}
         height={height}
+        chartType="line"
       />
       <BarChart
         data={playersByDow}
@@ -73,6 +74,7 @@ function SiteSeasonality() {
         xTitle={t("stats.siteStats.dayOfWeekUtc")}
         yTitle={t("stats.siteStats.activePlayers")}
         height={height}
+        chartType="line"
       />
       <BarChart
         data={movesByHour}
@@ -82,6 +84,7 @@ function SiteSeasonality() {
         yTitle={t("stats.siteStats.movesMade")}
         height={height}
         xTickStep={3}
+        chartType="line"
       />
     </>
   );

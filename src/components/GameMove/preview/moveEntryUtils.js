@@ -72,6 +72,12 @@ export function getPlayerClockChips(game, toMove, users, now = Date.now()) {
   });
 }
 
+/** Live clock display; ignores exploration / history focus. */
+export function getLivePlayerClockChips(game, users, now = Date.now()) {
+  if (!game) return [];
+  return getPlayerClockChips(game, game.toMove, users, now);
+}
+
 export function NoMoves({ engine, game, handleMove, t }) {
   const elements = [];
   if (game.customRandom) {

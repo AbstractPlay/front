@@ -27,7 +27,6 @@ import {
   metaTabHash,
 } from "../../lib/metaItemTabs";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
-import { tournamentListPath } from "../../lib/tournamentSections";
 import SoloMetaStatsPanel from "../Stats/SoloMetaStatsPanel";
 import SoloSeedLeaderboard from "../Stats/SoloSeedLeaderboard";
 import { soloPlaySupported } from "../../lib/soloPlay";
@@ -430,13 +429,6 @@ const MetaItem = React.forwardRef(
                       </button>
                     </div>
                   )}
-                  <div>
-                    {tournamentPlaySupported(game.uid) ? (
-                      <Link to={tournamentListPath("open", game.uid)}>
-                        {t("TournamentsLink")}
-                      </Link>
-                    ) : null}
-                  </div>
                 </div>
               </div>
             )}

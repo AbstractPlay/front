@@ -5,13 +5,21 @@ import { useStore } from "../../stores";
 import Spinner from "../Spinner";
 import FeedbackListFilters from "./FeedbackListFilters";
 import FeedbackStatusBadge from "./FeedbackStatusBadge";
-import { listFeedbackAdmin } from "../../lib/feedback/feedbackApi";
+import FeedbackTimestamp from "./FeedbackTimestamp";
+import FeedbackPlayerLink from "./FeedbackPlayerLink";
+import { listFeedbackAdminAll } from "../../lib/feedback/feedbackApi";
 import {
   compareFeedbackItems,
   EFFORT_LEVELS,
   feedbackDetailPath,
 } from "../../lib/feedback/feedbackConstants";
+import {
+  getStoredFeedbackAdminSort,
+  setStoredFeedbackAdminSort,
+} from "../../lib/feedback/feedbackListSort";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
+import FeedbackQuickSearch from "./FeedbackQuickSearch";
+import { filterFeedbackItemsByQuery } from "../../lib/feedback/filterFeedbackItemsByQuery";
 import "./feedback.css";
 
 function FeedbackAdmin() {
@@ -21,11 +29,21 @@ function FeedbackAdmin() {
   const [status, setStatus] = useState("");
   const [priority, setPriority] = useState("");
   const [effort, setEffort] = useState("");
-  const [sortBy, setSortBy] = useState("default");
+  const [sortBy, setSortBy] = useState(() => getStoredFeedbackAdminSort(kind));
   const [needsResponse, setNeedsResponse] = useState(false);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    setSortBy(getStoredFeedbackAdminSort(kind));
+  }, [kind]);
+
+  const handleSortByChange = (nextSort) => {
+    setSortBy(nextSort);
+    setStoredFeedbackAdminSort(kind, nextSort);
+  };
 
   useEffect(() => {
     if (!globalMe?.admin) {
@@ -34,13 +52,13 @@ function FeedbackAdmin() {
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const result = await listFeedbackAdmin({
+      const result = await listFeedbackAdminAll({
         kind,
         status: status || undefined,
         priority: priority || undefined,
         effort: effort || undefined,
         needsResponse: needsResponse || undefined,
-        limit: 50,
+        limit: 100,
       });
       if (cancelled) {
         return;
@@ -64,6 +82,11 @@ function FeedbackAdmin() {
     [items, sortBy],
   );
 
+  const visibleItems = useMemo(
+    () => filterFeedbackItemsByQuery(displayItems, searchQuery),
+    [displayItems, searchQuery],
+  );
+
   if (!globalMe?.admin) {
     return <Navigate to="/feedback/ideas" replace />;
   }
@@ -76,6 +99,7 @@ function FeedbackAdmin() {
         <span>{t("feedback.admin.title")}</span>
       </h1>
       <p>{t("feedback.admin.intro")}</p>
+      <FeedbackQuickSearch value={searchQuery} onChange={setSearchQuery} />
       <div className="feedback-admin-filters">
         <div className="field feedback-filter-field">
           <label className="label" htmlFor="feedback-admin-kind">{t("feedback.admin.kind")}</label>
@@ -96,7 +120,7 @@ function FeedbackAdmin() {
           priority={priority}
           onPriorityChange={setPriority}
           sortBy={sortBy}
-          onSortByChange={setSortBy}
+          onSortByChange={handleSortByChange}
           showSort
         />
         <div className="field feedback-filter-field">
@@ -126,12 +150,14 @@ function FeedbackAdmin() {
       </div>
       {loading ? <Spinner /> : null}
       {error && <p className="has-text-danger">{error}</p>}
-      {!loading && displayItems.length === 0 ? (
-        <p className="feedback-muted">{t("feedback.admin.empty")}</p>
+      {!loading && visibleItems.length === 0 ? (
+        <p className="feedback-muted">
+          {searchQuery.trim() ? t("feedback.search.noMatches") : t("feedback.admin.empty")}
+        </p>
       ) : null}
-      {!loading && displayItems.length > 0 ? (
+      {!loading && visibleItems.length > 0 ? (
         <ul className="feedback-board-list">
-          {displayItems.map((item) => (
+          {visibleItems.map((item) => (
             <li key={item.id} className="feedback-board-item">
               <FeedbackStatusBadge
                 status={item.status}
@@ -145,7 +171,9 @@ function FeedbackAdmin() {
                 {item.title}
               </Link>
               <div className="feedback-muted">
-                {item.authorName}
+                <FeedbackPlayerLink userId={item.authorId} name={item.authorName} />
+                {" · "}
+                {t("feedback.meta.posted")} <FeedbackTimestamp date={item.createdAt} />
                 {" · "}
                 {t("feedback.meta.votes", { count: item.effectiveVotes })}
               </div>

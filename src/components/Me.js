@@ -14,7 +14,7 @@ import NewProfile from "./NewProfile";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { useChallengeResponse } from "../hooks/useChallengeResponse";
-import { fetchDashboard } from "../lib/globalMeBootstrap";
+import { fetchDashboard, fetchProfile } from "../lib/globalMeBootstrap";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { cloneDeep } from "lodash";
 import WatchedGamesTable from "./Me/WatchedGamesTable";
@@ -28,6 +28,7 @@ import ChallengeTheyRespond from "./Me/ChallengeTheyRespond";
 import ChallengeOpen from "./Me/ChallengeOpen";
 import { useStore } from "../stores";
 import { testBotStatus } from "./Bots/botApi";
+import { rawDirectoryDisplayName } from "./Bots/botUtils";
 
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -51,10 +52,13 @@ function Me(props) {
   const [testBotStatusResult, testBotStatusResultSetter] = useState("");
   const [testBotStatusLoading, testBotStatusLoadingSetter] = useState(false);
   const [deletes, deletesSetter] = useState("");
+  const [noDirectChallengesSaving, noDirectChallengesSavingSetter] =
+    useState(false);
   const { t } = useTranslation();
   const [myMove, myMoveSetter] = useState([]);
   const [waiting, waitingSetter] = useState([]);
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
   const location = useLocation();
 
@@ -114,9 +118,23 @@ function Me(props) {
     showNewStandingModalSetter(false);
   }, []);
 
+  const handleChallengeResponse = useChallengeResponse({
+    onError: errorSetter,
+    onSuccess: (challenge) => varsSetter(challenge.id),
+  });
+
   const handleChallengeRevoke = async (challenge, comment) => {
-    if (globalMe.id !== challenge.challenger.id)
-      return handleChallengeResponse(false);
+    if (challenge == null || typeof challenge !== "object") {
+      errorSetter(
+        new Error(
+          "Leave challenge needs a challenge object. Check revoke(challenge, comment) wiring."
+        )
+      );
+      return;
+    }
+    if (globalMe.id !== challenge.challenger.id) {
+      return handleChallengeResponse(challenge, false, comment);
+    }
     try {
       const res = await callAuthApi("challenge_revoke", {
         id: challenge.id,
@@ -135,18 +153,16 @@ function Me(props) {
     }
   };
 
-  const handleChallengeResponse = useChallengeResponse({
-    onError: errorSetter,
-    onSuccess: (challenge) => varsSetter(challenge.id),
-  });
-
   const handleNewChallenge2 = useCallback(
     async (challenge) => {
       try {
         console.log("calling new_challenge");
         const res = await callAuthApi("new_challenge", {
           ...challenge,
-          challenger: { id: globalMe.id, name: globalMe.name },
+          challenger: {
+            id: globalMe.id,
+            name: rawDirectoryDisplayName(globalMe, allUsers),
+          },
         });
         if (!res) return;
         maybeTrackRecommendationChallenge(challenge.metaGame);
@@ -156,7 +172,7 @@ function Me(props) {
         errorSetter(error);
       }
     },
-    [globalMe, myid]
+    [globalMe, allUsers, myid]
   );
 
   const submitStanding = useCallback(
@@ -189,6 +205,38 @@ function Me(props) {
     await callAuthApi("update_standing", { entries: updatedStanding });
     maybeTrackRecommendationChallenge(challenge.metaGame);
   }, []);
+
+  const handleNoDirectChallengesChange = async (e) => {
+    if (globalMe === null || noDirectChallengesSaving) {
+      return;
+    }
+    const enabled = e.target.checked;
+    noDirectChallengesSavingSetter(true);
+    try {
+      const newSettings = cloneDeep(globalMe.settings ?? {});
+      if (newSettings.all === undefined) {
+        newSettings.all = {};
+      }
+      newSettings.all.noDirectChallenges = enabled;
+      const res = await callAuthApi("update_user_settings", {
+        settings: newSettings,
+      });
+      if (!res || res.status !== 200) {
+        throw new Error("Failed to save direct challenge preference");
+      }
+      const { setGlobalMe } = useStore.getState();
+      setGlobalMe((prev) => ({
+        ...prev,
+        settings: newSettings,
+      }));
+      await fetchProfile();
+    } catch (err) {
+      console.error("Failed to save direct challenge preference", err);
+      errorSetter(err);
+    } finally {
+      noDirectChallengesSavingSetter(false);
+    }
+  };
 
   const handleStandingSuspend = async (id) => {
     console.log(`suspending ${id}`);
@@ -499,6 +547,21 @@ function Me(props) {
                     handleChallengeResponse={handleChallengeResponse.bind(this)}
                   />
                 )}
+                <div className="field topPad">
+                  <label className="checkbox">
+                    <input
+                      type="checkbox"
+                      checked={globalMe.settings?.all?.noDirectChallenges === true}
+                      disabled={noDirectChallengesSaving}
+                      onChange={handleNoDirectChallengesChange}
+                    />
+                    {" "}
+                    {t("DeclineDirectChallenges")}
+                  </label>
+                  <p className="help">
+                    <em>{t("DeclineDirectChallengesHelp")}</em>
+                  </p>
+                </div>
               </div>
               <p className="lined">
                 <span>{t("WaitingResponse")}</span>

@@ -13,11 +13,13 @@ import { listPublicCatalogMetas, getGameDisplayName } from "../lib/gameOptions";
 import { compareStrings } from "../lib/compareStrings";
 import { getUiLocaleBundleKey } from "../i18n";
 import { useStore } from "../stores";
+import { rawDirectoryDisplayName } from "./Bots/botUtils";
 
 function MetaContainer(props) {
   const { i18n } = useTranslation();
   const localeBundleKey = getUiLocaleBundleKey(i18n);
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [counts, countsSetter] = useState(null);
   const [updateCounter, updateCounterSetter] = useState(0);
   const { metaGame } = useParams();
@@ -81,7 +83,10 @@ function MetaContainer(props) {
     try {
       await callAuthApi("new_challenge", {
         ...challenge,
-        challenger: { id: globalMe.id, name: globalMe.name },
+        challenger: {
+          id: globalMe.id,
+          name: rawDirectoryDisplayName(globalMe, allUsers),
+        },
       });
       maybeTrackRecommendationChallenge(challenge.metaGame);
     } catch (error) {

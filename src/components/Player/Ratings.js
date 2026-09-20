@@ -20,6 +20,8 @@ import {
 import GlickoHint from "../shared/GlickoHint";
 import GlickoDisplayNote from "../shared/GlickoDisplayNote";
 
+const columnHelper = createColumnHelper();
+
 function Ratings({ handleChallenge }) {
   const [user] = useContext(ProfileContext);
   const [summary] = useContext(SummaryContext);
@@ -57,7 +59,13 @@ function Ratings({ handleChallenge }) {
       .sort((a, b) => -compareByGlickoLow(a.glicko, b.glicko));
   }, [summary, user, t]);
 
-  const columnHelper = createColumnHelper();
+  const activeOpponent = useMemo(() => {
+    if (!activeChallengeModal) {
+      return undefined;
+    }
+    return { id: user.id, name: user.name };
+  }, [activeChallengeModal, user.id, user.name]);
+
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
@@ -135,39 +143,16 @@ function Ratings({ handleChallenge }) {
           globalMe === null ||
           globalMe.id === user.id ||
           !gameinfo.has(props.row.original.id) ? null : (
-            <>
-              <ChallengeEntryModals
-                show={
-                  activeChallengeModal !== "" &&
-                  activeChallengeModal === props.row.original.id
-                }
-                handleClose={closeChallengeModal}
-                handleChallenge={handleChallenge}
-                fixedMetaGame={props.row.original.id}
-                opponent={{
-                  id: user.id,
-                  name: user.name,
-                }}
-              />
-              <button
-                className="button is-small apButton"
-                onClick={() => openChallengeModal(props.row.original.id)}
-              >
-                {t("IssueChallengeLabel")}
-              </button>
-            </>
+            <button
+              className="button is-small apButton"
+              onClick={() => openChallengeModal(props.row.original.id)}
+            >
+              {t("IssueChallengeLabel")}
+            </button>
           ),
       }),
     ],
-    [
-      columnHelper,
-      globalMe,
-      user,
-      activeChallengeModal,
-      handleChallenge,
-      closeChallengeModal,
-      t,
-    ]
+    [globalMe, user, t]
   );
 
   if (data.length === 0) {
@@ -175,14 +160,25 @@ function Ratings({ handleChallenge }) {
   }
 
   return (
-    <DataTable
-      {...PROFILE_TABLE_PROPS}
-      data={data}
-      columns={columns}
-      sort={[{ id: "glicko", desc: true }]}
-      tableNote={<GlickoDisplayNote />}
-      key="Player|Ratings"
-    />
+    <>
+      <DataTable
+        {...PROFILE_TABLE_PROPS}
+        data={data}
+        columns={columns}
+        sort={[{ id: "glicko", desc: true }]}
+        tableNote={<GlickoDisplayNote />}
+        key="Player|Ratings"
+      />
+      {globalMe !== null && globalMe.id !== user.id && (
+        <ChallengeEntryModals
+          show={activeChallengeModal !== ""}
+          handleClose={closeChallengeModal}
+          handleChallenge={handleChallenge}
+          fixedMetaGame={activeChallengeModal || undefined}
+          opponent={activeOpponent}
+        />
+      )}
+    </>
   );
 }
 

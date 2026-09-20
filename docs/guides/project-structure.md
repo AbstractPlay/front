@@ -26,7 +26,7 @@ front/
 | `stores/` | Zustand global store (`index.js`). |
 | `hooks/` | Custom React hooks. |
 | `config/` | Environment-specific endpoints (runtime Cognito/API settings). |
-| `assets/` | Static JSON bundled at build time (e.g. `news.json`). |
+| `assets/` | Static JSON bundled at build time (game data, etc.). Site news is loaded from the API, not bundled here. |
 
 ## Component organization
 

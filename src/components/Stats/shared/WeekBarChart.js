@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import BarChart from "../../shared/BarChart";
 import { useChartHeight } from "../../shared/useChartHeight";
+import { trimWeekSeriesForChart } from "./weekSummary";
 
 function WeekBarChart({
   title,
@@ -8,17 +9,29 @@ function WeekBarChart({
   x,
   xaxisTitle,
   yaxisTitle,
-  chartType = "bar",
+  chartType = "line",
   yaxis,
+  maxWeeks,
   heightDesktop = 500,
   heightMobile = 350,
 }) {
   const height = useChartHeight(heightDesktop, heightMobile);
-  const labels = x !== undefined ? x.map(String) : undefined;
+  const { chartY, chartX } = useMemo(() => {
+    const sourceY = y ?? [];
+    const trimmedY = trimWeekSeriesForChart(sourceY, maxWeeks);
+    if (x === undefined) {
+      return { chartY: trimmedY, chartX: undefined };
+    }
+    const dropCount = sourceY.length - trimmedY.length;
+    const trimmedX =
+      x.length === sourceY.length ? x.slice(dropCount) : x.slice(0, trimmedY.length);
+    return { chartY: trimmedY, chartX: trimmedX };
+  }, [maxWeeks, x, y]);
+  const labels = chartX !== undefined ? chartX.map(String) : undefined;
 
   return (
     <BarChart
-      data={[...y]}
+      data={[...chartY]}
       labels={labels}
       title={title}
       xTitle={xaxisTitle}

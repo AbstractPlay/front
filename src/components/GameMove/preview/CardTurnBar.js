@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
 import { useStore } from "../../../stores";
-import { getPlayerClockChips } from "./moveEntryUtils";
+import { getLivePlayerClockChips } from "./moveEntryUtils";
 
-function CardTurnBar({ session, layoutContext }) {
-  const { toMove, game } = session;
+function CardTurnBar({ session }) {
+  const { game } = session;
   const users = useStore((state) => state.users);
   const [now, setNow] = useState(Date.now());
+  const liveToMove = game?.toMove ?? "";
 
   useEffect(() => {
-    if (!game || toMove === "") return undefined;
+    if (!game || liveToMove === "") return undefined;
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
-  }, [game, toMove]);
+  }, [game, liveToMove]);
 
-  if (!game || toMove === "") {
+  if (!game || liveToMove === "") {
     return null;
   }
 
-  const chips = getPlayerClockChips(game, toMove, users, now);
+  const chips = getLivePlayerClockChips(game, users, now);
   if (chips.length === 0) {
     return null;
   }
@@ -30,7 +31,9 @@ function CardTurnBar({ session, layoutContext }) {
       {activeChip ? (
         <p
           className={`game-move-queue-card__turn${
-            layoutContext.isMyTurn ? " game-move-queue-card__turn--mine" : ""
+            game.canSubmit && game.me === liveToMove
+              ? " game-move-queue-card__turn--mine"
+              : ""
           }`}
         >
           {t("ToMove", { player: activeChip.label })}

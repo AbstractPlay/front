@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   DEFAULT_TOURNAMENT_TAB,
+  isEmbeddedTournamentsPath,
   isValidTournamentTab,
+  resolveTournamentRouteContext,
   resolveTournamentRouteParams,
   tournamentListPath,
 } from "./tournamentSections";
@@ -53,5 +55,43 @@ describe("resolveTournamentRouteParams", () => {
     expect(isValidTournamentTab("open")).toBe(true);
     expect(isValidTournamentTab("propose")).toBe(false);
     expect(isValidTournamentTab("go")).toBe(false);
+  });
+});
+
+describe("resolveTournamentRouteContext", () => {
+  it("keeps game detail tournaments embedded without redirecting", () => {
+    const resolved = resolveTournamentRouteContext({
+      pathname: "/games/go",
+      tabParam: undefined,
+      metaGameParam: "go",
+      storedTab: "current",
+    });
+    expect(resolved).toEqual({
+      tab: "current",
+      metaGame: "go",
+      redirectTo: null,
+      embedded: true,
+    });
+  });
+
+  it("delegates standalone tournament routes to route param resolution", () => {
+    const resolved = resolveTournamentRouteContext({
+      pathname: "/tournaments/open/go",
+      tabParam: "open",
+      metaGameParam: "go",
+      storedTab: "current",
+    });
+    expect(resolved.tab).toBe("open");
+    expect(resolved.metaGame).toBe("go");
+    expect(resolved.redirectTo).toBeNull();
+    expect(resolved.embedded).toBe(false);
+  });
+});
+
+describe("isEmbeddedTournamentsPath", () => {
+  it("detects game detail paths only", () => {
+    expect(isEmbeddedTournamentsPath("/games/go")).toBe(true);
+    expect(isEmbeddedTournamentsPath("/games")).toBe(false);
+    expect(isEmbeddedTournamentsPath("/tournaments/open/go")).toBe(false);
   });
 });

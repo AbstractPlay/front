@@ -64,13 +64,13 @@ function UserChats(props) {
     comments.forEach((c) => {
       if (c.userId !== null && c.userId !== undefined && c.userId.length > 0) {
         let personName = t("Unknown");
-        let player = players?.find((p) => p.id === c.userId);
-        if (player !== undefined) {
-          personName = formatPlayerDisplayName(player, users);
-        } else if (users !== null) {
-          player = users.find((p) => p.id === c.userId);
+        const directoryUser = users?.find((p) => p.id === c.userId);
+        if (directoryUser !== undefined) {
+          personName = formatUserDisplayName(directoryUser, users);
+        } else {
+          const player = players?.find((p) => p.id === c.userId);
           if (player !== undefined) {
-            personName = formatUserDisplayName(player, users);
+            personName = formatPlayerDisplayName(player, users);
           }
         }
         results.push({

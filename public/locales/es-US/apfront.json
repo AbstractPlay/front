@@ -37,6 +37,7 @@
   "CycleBoardDisplay": "Alternar vista del tablero",
   "buttons": {
     "pass": "Pasar",
+    "declare": "Declarar",
     "takebutton": "Tomar botón",
     "acceptpie": "Jugar segundo",
     "playsecond": "Jugar segundo",
@@ -547,7 +548,22 @@
   "ChallengeTypeOpen": "Abierto",
   "ChallengeTypeOpenDescription": "Cualquiera puede aceptar este desafío.",
   "ChallengeTypeTargeted": "Cerrado",
-  "ChallengeTypeTargetedDescription": "Estás desafiando a jugadores específicos.",
+  "ChallengeTypeTargetedDescription": "El primer lugar debe ser para un jugador específico. Los lugares adicionales pueden estar abiertos para cualquiera.",
+  "ChooseFirstOpponent": "Primer oponente (obligatorio)",
+  "ChooseOpponentSlot": "Oponente {{slot}}",
+  "OpponentSlotAnyone": "Cualquiera puede unirse a este lugar",
+  "OpponentSlotAnyoneHelp": "Este lugar aparecerá en la lista de desafíos abiertos para que cualquiera lo acepte.",
+  "SelectFirstOpponent": "Elige al primer oponente para este desafío.",
+  "DuplicateOpponentInChallenge": "Cada jugador solo puede ser nombrado una vez en un desafío.",
+  "SelectOpponentOrAnyone": "Elige al oponente {{slot}} o marca el lugar como abierto para cualquiera.",
+  "UseOpenChallengeForAllOpenSeats": "Para invitar solo a lugares abiertos, usa un desafío abierto en lugar de uno cerrado.",
+  "LeaveMultiPlayerChallenge": "Abandonar el desafío",
+  "LeaveMultiPlayerChallengeHelp": "Otros jugadores aún pueden unirse; el desafío continúa sin ti.",
+  "DeclineMultiPlayerInvitation": "Rechazar invitación",
+  "DeclineMultiPlayerInvitationHelp": "Tu lugar podría abrirse para otros; el desafío continúa para los jugadores restantes.",
+  "ChallengeOpenSeats_one": "{{count}} lugar abierto para cualquiera.",
+  "ChallengeOpenSeats_other": "{{count}} lugares abiertos para cualquiera.",
+  "StandingChallengeOpenSeats": "{{total}} ({{open}} disponibles)",
   "challenges": {
     "loading": "Cargando desafíos…",
     "filters": {
@@ -555,7 +571,13 @@
       "hardTimeOnly": "Solo tiempo estricto",
       "softTimeOnly": "Solo tiempo flexible",
       "ratedOnly": "Solo partidas evaluadas",
-      "unratedOnly": "Solo sin clasificación"
+      "unratedOnly": "Solo sin clasificación",
+      "matchLegend": "Competitividad del emparejamiento",
+      "matchLabel": "Emparejamiento:",
+      "matchAll": "Todos los emparejamientos",
+      "matchGood": "Buen emparejamiento (35–65%)",
+      "matchIdeal": "Emparejamiento ideal (45–55%)",
+      "matchHint": "Para desafíos por clasificación, la probabilidad de victoria esperada contra el desafiante según Glicko-2 (por juego y grupo de variantes). Los jugadores nuevos en ese grupo usan la clasificación predeterminada (1200, RD 350)."
     }
   },
   "recentGames": {
@@ -575,6 +597,13 @@
   "ChooseMove": "Elegir movimiento",
   "ChooseNoExplore": "¿Deshabilitar exploración?",
   "ChooseOpponent": "Elegir un oponente",
+  "newChallenge": {
+    "opponentActivityHelp": "Limita la lista de oponentes según la actividad reciente en el sitio.",
+    "opponentActivityAll": "Todos los oponentes",
+    "opponentActivity7Days": "Activos en los últimos 7 días",
+    "opponentActivity30Days": "Activos en los últimos 30 días",
+    "matchFilterHelp": "Limita los oponentes según la probabilidad de victoria esperada para este juego y sus variantes (Glicko-2), ya sea que el desafío esté marcado como evaluado o no."
+  },
   "ChooseRated": "¿Con clasificación?",
   "Claim": "Reclamar",
   "ClaimTimeOut": "Reclamar victoria por tiempo",
@@ -855,7 +884,81 @@
   "News": "Noticias",
   "news": {
     "whatsNew": "Novedades",
-    "earlier": "Anteriores"
+    "earlier": "Anteriores",
+    "empty": "Aún no hay anuncios.",
+    "ogDescription": "Noticias y anuncios de Abstract Play",
+    "intro": "Esta página es la fuente oficial de las noticias del sitio. También reflejamos los anuncios en <discordLink>nuestro servidor de Discord</discordLink>. Reacciona a las publicaciones aquí; suscríbete mediante <rssLink>RSS</rssLink> si quieres.",
+    "loadOlder": "Cargar anuncios anteriores",
+    "loadingMore": "Cargando…",
+    "loadError": "No se pudieron cargar los anuncios. Inténtalo de nuevo más tarde.",
+    "link": {
+      "copy": "Copiar enlace a este anuncio",
+      "copied": "¡Copiado!"
+    }
+  },
+  "announcements": {
+    "reactions": {
+      "label": "Reacciones",
+      "toggle": "Alternar reacción",
+      "signIn": "Inicia sesión para reaccionar",
+      "signInToReact": "Inicia sesión para agregar una reacción"
+    },
+    "preview": {
+      "noTitle": "(Sin título)"
+    },
+    "admin": {
+      "listTitle": "Administración de anuncios",
+      "listIntro": "Redacta borradores aquí y luego publícalos en producción cuando estén listos. Las versiones de desarrollo y locales pueden guardar borradores y subir imágenes; la publicación es solo para producción.",
+      "newDraft": "Nuevo borrador",
+      "editDraft": "Editar anuncio",
+      "editorTitle": "Editor de anuncios",
+      "empty": "Ningún anuncio coincide con este filtro.",
+      "filterStatus": "Estado",
+      "allStatuses": "Todos los estados",
+      "colTitle": "Título",
+      "colStatus": "Estado",
+      "colUpdated": "Actualizado",
+      "status": {
+        "draft": "Borrador",
+        "published": "Publicado",
+        "scheduled": "Programado",
+        "retracted": "Retirado"
+      },
+      "saveDraft": "Guardar",
+      "saving": "Guardando…",
+      "saved": "Guardado.",
+      "publish": "Publicar",
+      "publishing": "Publicando…",
+      "publishDisabledDev": "La opción de publicar solo está disponible en play.abstractplay.com (producción). Guarda borradores aquí y publícalos en producción.",
+      "publishedHint": "Esta publicación está activa. Guardar solo actualiza el sitio; Discord y RSS no se actualizarán hasta una futura modificación de distribución.",
+      "backToList": "Volver a la lista",
+      "tabWrite": "Escribir",
+      "tabPreview": "Vista previa",
+      "fieldTitle": "Título",
+      "fieldBody": "Cuerpo (Markdown)",
+      "fieldAdminNote": "Nota interna",
+      "adminNoteHint": "Solo visible para administradores; nunca se muestra en /news.",
+      "previewHeading": "Vista previa",
+      "emojiHint": "Consejo: también puedes usar el selector de emojis de tu sistema (Windows: Tecla Windows+., macOS: Ctrl+Cmd+Espacio).",
+      "publishConfirmTitle": "¿Publicar anuncio?",
+      "publishConfirmBody": "Esto se publicará en /news, actualizará el RSS, se reflejará en Discord (cuando esté configurado) y enviará un correo electrónico o una notificación push a los usuarios que hayan optado por recibir anuncios del sitio.",
+      "publishConfirm": "Publicar ahora",
+      "publishSaveFirst": "Guarda el borrador antes de publicar.",
+      "publishSaveChanges": "Guarda tus cambios antes de publicar.",
+      "publishFailed": "Error al publicar. Inténtalo de nuevo o revisa el error en la página del editor.",
+      "publishFailedNoId": "Este borrador aún no tiene id. Guárdalo primero y luego publícalo.",
+      "retract": "Retirar",
+      "retracting": "Retirando…",
+      "retractConfirmTitle": "¿Retirar anuncio?",
+      "retractConfirmBody": "Esto eliminará la publicación de /news y RSS. No elimina la copia en Discord; actualiza Discord manualmente si es necesario.",
+      "retractConfirm": "Retirar ahora",
+      "upload": {
+        "addImage": "Agregar imagen",
+        "pasteHint": "Pega una captura de pantalla en cualquier lugar de esta página (excepto mientras escribes en un campo) o usa Agregar imagen.",
+        "saveFirst": "Guarda el borrador una vez para que los archivos subidos puedan vincularse a este anuncio.",
+        "tooMany": "Puedes adjuntar como máximo {{max}} imágenes."
+      }
+    }
   },
   "nav": {
     "community": "Comunidad",
@@ -865,7 +968,7 @@
     "gameWishlist": "Lista de deseos de juegos",
     "feedbackHistory": "Historial de comentarios",
     "myFeedback": "Mis comentarios",
-    "explore": "Explorar",
+    "explore": "Listas",
     "openChallenges": "Desafíos abiertos",
     "recentGames": "Partidas recientes",
     "myProfile": "Mi perfil",
@@ -875,6 +978,10 @@
     "activePlayers_other": "Jugadores activos: {{count}}"
   },
   "notifications": {
+    "announcementsMore_one": "{{count}} anuncio más en Noticias",
+    "announcementsMore_other": "{{count}} anuncios más en Noticias",
+    "newAnnouncement": "Nuevo anuncio:",
+    "markAnnouncementsRead": "Marcar anuncios como leídos",
     "newsUpdated": "Se actualizaron las noticias",
     "empty": "No hay notificaciones",
     "markRead": "Marcar como leída",
@@ -888,6 +995,8 @@
   "NextGameNone": "Volver al panel principal",
   "No": "No",
   "NoChallengeResponse": "No hay desafíos que requieran tu respuesta",
+  "DeclineDirectChallenges": "No aceptar desafíos directos",
+  "DeclineDirectChallengesHelp": "Los desafíos dirigidos a tu nombre se rechazarán automáticamente. Los desafíos abiertos en las páginas de los juegos no se verán afectados.",
   "NoExploreTrue": "La función de exploración integrada se desactivará obligatoriamente para este juego.",
   "NoGames": "Actualmente ningún juego requiere tu atención.",
   "NoOpponentMove": "No hay juegos esperando el movimiento del oponente.",
@@ -923,6 +1032,10 @@
   "InAppNotifyLabel-feedbackReply": "Respuestas a comentarios",
   "InAppNotifyLabel-feedbackStatus": "Actualizaciones de estado de comentarios",
   "InAppNotifyLabel-feedbackDeleted": "Entradas eliminadas de la lista de deseos",
+  "InAppNotifyLabel-feedbackReviewRequested": "Solicitudes de revisión de comentarios",
+  "InAppNotifyLabel-feedbackNew": "Nuevos comentarios recibidos",
+  "InAppNotifyLabel-announcements": "Anuncios del sitio",
+  "NotifyLabel-announcements": "Anuncios del sitio",
   "NoWaitingResponse": "No hay desafíos esperando la respuesta del oponente",
   "NoYourMove": "No hay juegos esperando tu movimiento.",
   "NumChallenge": "Habrá {{num}} jugadores en este juego. {{players}}. La asignación de asientos será aleatoria.",
@@ -960,7 +1073,7 @@
   "ProfileCountryHelp": "¡Diles a todos de dónde eres! Puedes ingresar lo que quieras aquí, pero si ingresas un código de país ISO válido de dos o tres caracteres, se mostrará la bandera correspondiente en tu perfil.",
   "ProfileFor": "Perfil de jugador para {{player}}",
   "ProfileName": "Nombre de pantalla",
-  "ProfileNameHelp": "Este es el nombre que otros en el sitio verán. Se puede cambiar más tarde. Debe ser único entre los nombres en uso actualmente y los usados recientemente.",
+  "ProfileNameHelp": "Este es el nombre que los demás verán en el sitio. Puedes cambiarlo más adelante. Debe ser único entre los nombres visibles actualmente en uso (ignorando mayúsculas y espacios adicionales).",
   "ProfileTagline": "Un lema de texto libre (máx. 255 caracteres)",
   "Publish": "Publicar exploración",
   "PublishHelp": "Publica la exploración que hiciste durante el juego para que cualquiera pueda verla.",
@@ -968,7 +1081,7 @@
   "RatedGame": "Este será un juego evaluado.",
   "RatedPlayersCount_one": "jugador evaluado",
   "RatedPlayersCount_other": "jugadores evaluados",
-  "RatingsList": "Clasificaciones de {{name}}",
+  "RatingsList": "Calificaciones de <gameLink>{{name}}</gameLink>",
   "Reject": "Rechazar",
   "RelatedSites": "Sitios relacionados",
   "ResetDefault": "Restablecer a valores predeterminados",
@@ -1069,6 +1182,7 @@
     "goal": "Objetivo",
     "hard": "¿Estricto?",
     "hardClock": "¿Reloj estricto?",
+    "matchPercent": "% de emparejamiento",
     "histogram": "Histograma",
     "hIndex": "Índice h",
     "hIndexOpponents": "Índice h (ops)",
@@ -1237,6 +1351,9 @@
   "UnratedGame": "Esta será una partida sin calificación.",
   "UpdateNote": "Actualizar nota del juego",
   "UserSettings": "Configuración de usuario",
+  "UserSettingsTabProfile": "Perfil",
+  "UserSettingsTabNotifications": "Notificaciones",
+  "UserSettingsTabGameplay": "Jugabilidad",
   "Variants": "Variantes",
   "Variant": "Variante",
   "View": "Ver",
@@ -1534,6 +1651,7 @@
       "history": "Historial de partidas",
       "highlights": "Destacados"
     },
+    "pastDisplayNames": "Anteriormente conocido como: {{names}}",
     "tabs": {
       "competition": "Competición",
       "activity": "Actividad",
@@ -1653,6 +1771,8 @@
         "ratingChange": "Tu clasificación para <gameLink>{{metaGame}}</gameLink>{{variantsInline}} cambió {{delta}} puntos de {{oldRatingDisplay}} a {{newRatingDisplay}}.",
         "challengeIssued": "{{challengerName}} te desafió a {{metaGame}}",
         "challengeDeclined": "{{declinerName}} rechazó tu desafío de {{metaGame}}",
+        "challengeSlotOpened": "{{participantName}} abandonó tu desafío de <gameLink>{{metaGame}}</gameLink>; {{count}} lugar(es) está(n) abierto(s) para cualquiera",
+        "challengeParticipantLeft": "{{participantName}} abandonó el desafío de <gameLink>{{metaGame}}</gameLink>; sigue abierto para otros jugadores",
         "challengeRevoked": "{{revokerName}} retiró el desafío de {{metaGame}}",
         "eventInvitation": "{{organizerName}} te invitó a {{eventName}}",
         "tournamentStart": "El torneo {{number}} de <tournamentLink>{{metaGame}}</tournamentLink> ha comenzado.",
@@ -1662,11 +1782,25 @@
         "completedGameChat_backfill": "Tienes mensajes sin leer en tu partida finalizada de <gameLink>{{metaGame}}</gameLink>",
         "feedbackReply": "Nueva respuesta en <feedbackLink>{{title}}</feedbackLink>{{preview}}",
         "feedbackStatus": "Actualización de estado en <feedbackLink>{{title}}</feedbackLink>: {{status}}",
-        "feedbackDeleted": "Entrada de la lista de deseos eliminada: <wishlistLink>{{title}}</wishlistLink>. Motivo: {{reason}}"
+        "feedbackDeleted": "Entrada de la lista de deseos eliminada: <wishlistLink>{{title}}</wishlistLink>. Motivo: {{reason}}",
+        "feedbackReviewRequested": "Se te agregó como revisor en <feedbackLink>{{title}}</feedbackLink>",
+        "feedbackNew": "Nuevo {{kindLabel}}: <feedbackLink>{{title}}</feedbackLink>",
+        "feedbackNewKind_bug": "reporte de error",
+        "feedbackNewKind_feature": "idea de función",
+        "feedbackNewKind_wishlist": "juego para la lista de deseos"
       }
     }
   },
   "feedback": {
+    "board": {
+      "filterLabel": "Filtrar lista",
+      "filterAll": "Todos ({{count}})",
+      "showClosed": "Cerrados (no archivados)",
+      "emptyClosed": "No hay elementos cerrados listados aquí. Después de archivarlos, se mueven al historial de comentarios.",
+      "sortBy": "Ordenar por",
+      "sortVotes": "Votos (más votados primero)",
+      "sortRecent": "Fecha de publicación (más recientes primero)"
+    },
     "bugs": {
       "title": "Reportes de errores",
       "intro": "Reporta problemas que encuentres en Abstract Play. Por favor, adjunta una captura de pantalla cuando puedas; nos ayuda a reproducir el problema.",
@@ -1710,14 +1844,39 @@
         "declined": "No tenemos planeado agregar este juego. Permanece en la lista para que otros no envíen solicitudes duplicadas."
       }
     },
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Filtrar por título, autor o texto…",
+      "noMatches": "Ningún elemento coincide con tu búsqueda."
+    },
     "mine": {
       "title": "Mis comentarios",
       "intro": "Errores e ideas de funciones que has enviado.",
+      "intro_submitted": "Comentarios que has enviado.",
+      "intro_voted": "Elementos por los que has votado.",
+      "intro_watched": "Elementos que estás siguiendo para ver actualizaciones.",
       "empty": "Aún no has enviado ningún comentario.",
+      "empty_submitted": "Aún no has enviado ningún comentario.",
+      "empty_voted": "Aún no has votado en ningún comentario.",
+      "empty_watched": "Aún no estás siguiendo ningún comentario.",
       "all": "Todos",
       "bugs": "Errores",
       "ideas": "Funciones",
-      "updated": "Actualizado"
+      "wishlist": "Lista de deseos",
+      "updated": "Actualizado",
+      "scopeLabel": "Actividad",
+      "scope_submitted": "Enviados",
+      "scope_voted": "Votados",
+      "scope_watched": "Siguiendo",
+      "unvote": "Quitar voto",
+      "unwatch": "Dejar de seguir",
+      "notifyTitle": "Alertas de nuevos comentarios",
+      "notifyIntro": "Recibe una notificación única en la aplicación cuando alguien envíe un nuevo comentario en una categoría que elijas. Esto no vota por esos elementos ni los sigue.",
+      "notifyHint": "Las respuestas y actualizaciones de estado aún requieren seguir un hilo específico.",
+      "notifyKind_bug": "Nuevos reportes de errores",
+      "notifyKind_feature": "Nuevas ideas de funciones",
+      "notifyKind_wishlist": "Nuevos juegos de la lista de deseos",
+      "notifySaveError": "No se pudieron guardar las preferencias de notificación."
     },
     "auth": {
       "signInRequired": "Debes iniciar sesión para participar en los comentarios.",
@@ -1730,7 +1889,7 @@
       "title": "Historial de comentarios",
       "intro": "Reportes de errores cerrados, ideas de funciones implementadas y juegos que pasaron a estar disponibles en Abstract Play.",
       "tabLabel": "Categoría del historial",
-      "closed": "Cerrado el {{date}}",
+      "closed": "Cerrado",
       "implementedAs": "Ahora en Abstract Play: {{name}}",
       "viewHistory": "Ver historial de comentarios",
       "tabs": {
@@ -1780,6 +1939,13 @@
       "coverImageHint": "Opcional. Pega o sube una imagen de la portada de la caja. Si pegas varias imágenes, solo se conservará la última.",
       "screenshots": "Capturas de pantalla",
       "screenshotEncouraged": "Una captura de pantalla facilita mucho la solución de errores. Por favor, adjunta una si puedes.",
+      "bugIntro": "Por favor, proporciona todos los detalles posibles. Si se relaciona con una partida específica, incluye un enlace a la partida. Las capturas de pantalla siempre son de ayuda. Cuanta más información proporciones, más probabilidades tendremos de solucionarlo rápidamente. ¡Gracias!",
+      "relevantPageLabel": "¿Dónde viste el problema?",
+      "relevantPageHint": "Elige una página que hayas visitado recientemente o pega un enlace a la partida o pantalla donde ocurrió el error.",
+      "relevantPageNone": "No estoy seguro / ninguna página específica",
+      "relevantPageCustom": "Otro enlace de Abstract Play",
+      "relevantPageCustomPlaceholder": "https://play.abstractplay.com/…",
+      "relevantPageInvalid": "Por favor, ingresa un enlace válido de Abstract Play (del mismo sitio que esta página).",
       "techDetails": "Detalles técnicos (vista previa)",
       "submit": "Enviar reporte de error",
       "submitFeature": "Enviar idea de función",
@@ -1815,6 +1981,10 @@
       "unwatch": "Dejar de seguir",
       "adminStatus": "Estado",
       "addComment": "Tu comentario",
+      "reply": "Responder",
+      "quoteNoText": "_(sin texto)_",
+      "commentBodyHint": "Compatible con Markdown. El texto es opcional si adjuntas capturas de pantalla.",
+      "commentScreenshots": "Capturas de pantalla",
       "notifyMe": "Notificarme sobre actualizaciones de este elemento",
       "postComment": "Publicar comentario",
       "posting": "Publicando…",
@@ -1822,9 +1992,11 @@
       "saveEdit": "Guardar cambios",
       "cancelEdit": "Cancelar",
       "savingEdit": "Guardando…",
+      "coverReplaceHint": "Sube o pega una nueva imagen para reemplazar la portada actual.",
       "adminEffort": "Esfuerzo",
       "adminPriority": "Prioridad",
       "adminTags": "Etiquetas de administración (separadas por comas)",
+      "adminReviewers": "Revisores",
       "adminWishlistCategory": "Categoría",
       "adminWishlistNote": "Nota de categoría (opcional)",
       "saveAdminFields": "Guardar campos de administración",
@@ -1837,10 +2009,18 @@
       "deleting": "Eliminando…",
       "archivedBanner": "Este elemento ha sido archivado. La discusión es solo de lectura hasta que se eliminen los datos en vivo.",
       "archivedPurgedBanner": "Este elemento ha sido archivado. El hilo completo ya no está disponible en el tablero activo.",
+      "closedBanner": "Este elemento está cerrado pero aún no se ha archivado. Todavía puedes comentar aquí.",
+      "reopenHint": "Cambia el estado a un valor que no esté cerrado para volver a abrir este elemento en el tablero.",
       "retentionHoldOn": "La retención está activada: este elemento no se archivará automáticamente.",
       "retentionHoldOff": "La retención está desactivada: este elemento se archivará después del período de retención.",
       "holdRetention": "Activar retención",
-      "releaseRetention": "Liberar retención"
+      "releaseRetention": "Liberar retención",
+      "reclassifyToFeature": "Mover a ideas de funciones",
+      "reclassifyToFeatureTitle": "Mover a ideas de funciones",
+      "reclassifyToFeatureIntro": "Esto mueve el hilo de reportes de errores a ideas de funciones. Los votos, comentarios y seguidores permanecen en la misma página. Los errores abiertos pasan a estar Abiertos; los errores clasificados pasan a estar En revisión.",
+      "reclassifyToFeatureConfirm": "Mover a ideas de funciones",
+      "reclassifyToFeatureCancel": "Cancelar",
+      "reclassifying": "Moviendo…"
     },
     "effort": {
       "low": "Poco esfuerzo",
@@ -1853,11 +2033,24 @@
       "normal": "Normal",
       "low": "Baja"
     },
+    "reviewers": {
+      "badge": "Revisores: {{names}}",
+      "badgePrefix": "Revisores:",
+      "badgeCompact_one": "1 revisor",
+      "badgeCompact_other": "{{count}} revisores",
+      "add": "Agregar revisor",
+      "remove": "Eliminar a {{name}}",
+      "empty": "No hay revisores asignados.",
+      "hint": "Hasta {{max}} revisores. Los usuarios agregados reciben una notificación por única vez; usa Seguir para actualizaciones continuas.",
+      "divider": "────────────"
+    },
     "meta": {
       "comments_one": "{{count}} comentario",
       "comments_other": "{{count}} comentarios",
       "votes_one": "{{count}} voto",
-      "votes_other": "{{count}} votos"
+      "votes_other": "{{count}} votos",
+      "posted": "Publicado",
+      "updated": "Actualizado"
     },
     "status": {
       "open": "Abierto",
@@ -1867,6 +2060,7 @@
       "resolved": "Resuelto",
       "closed": "Cerrado",
       "triaged": "Clasificado",
+      "monitoring": "Monitoreando",
       "in_progress": "En progreso",
       "under_review": "En revisión",
       "planned": "Planeado",
@@ -2021,6 +2215,8 @@
   "customize": {
     "title": "Personalizar configuración para {{gameName}}",
     "globalDefaults": "Valores predeterminados globales",
+    "globalDefaultsSectionNotice": "Estás editando la configuración predeterminada global. Esto se aplica a todos los juegos que no tengan su propia personalización. Los cambios aquí rara vez son universales para todos los tableros; es preferible usar la configuración por juego cuando el diseño o el CSS están dirigidos a un solo juego.",
+    "boardStyleGlobalDisabled": "El estilo del tablero no se puede establecer en la configuración predeterminada global porque cada juego usa un tipo de tablero diferente.",
     "preferredColour": "Mi color preferido",
     "preferredColourHelpGlobal": "Cuando juegas una partida, tus piezas usan este color siempre que sea posible. Los demás jugadores conservan colores distintos.",
     "preferredColourHelpGame": "Anula tu color preferido global solo para esta partida. Establece tu opción predeterminada en la",
@@ -2070,6 +2266,38 @@
         "help": "El color usado para rellenar ciertos elementos del tablero. Básicamente, lo \"opuesto\" al fondo."
       }
     },
+    "renderSection": "Tablero y piezas",
+    "renderSectionHelp": "Las modificaciones del diseño del tablero se aplican a las cuadrículas de casillas y vértices compatibles. El reemplazo de símbolos de piezas usa la misma configuración de renderizado guardada que las partidas en vivo.",
+    "renderSectionConfigured": "Configurado",
+    "renderSectionNeedsAttention": "Corrige los errores para guardar",
+    "boardStyle": "Estilo del tablero",
+    "boardStyleGameDefault": "Predeterminado del juego",
+    "strokeWeight": "Grosor de línea",
+    "strokeWeightDefault": "Predeterminado",
+    "labelScale": "Tamaño de etiquetas de coordenadas",
+    "labelScaleHelp": "Ajusta la escala de las letras y números de filas y columnas en el tablero (1 es el valor predeterminado del juego). El deslizador abarca desde {{min}} hasta {{max}}; usa el campo numérico o el JSON de configuración para otros valores positivos.",
+    "renderOptionsLabel": "Opciones de renderizado",
+    "renderOptionsHelp": "Reemplaza las opciones de la vista previa del juego al guardar. Los elementos seleccionados coinciden con el JSON de la vista previa si aún no has guardado las opciones.",
+    "renderOptions": {
+      "hide-labels": "Ocultar etiquetas de coordenadas",
+      "hide-labels-half": "Ocultar la mitad de las etiquetas de coordenadas",
+      "no-border": "Sin bordes en las piezas",
+      "hide-star-points": "Ocultar puntos estelares"
+    },
+    "resetBoardRender": "Restablecer modificaciones de diseño del tablero",
+    "boardStyleNotAvailable": "El estilo de tablero de este juego no se puede cambiar. Aún puedes ajustar el grosor de las líneas, el tamaño de las etiquetas de coordenadas, las opciones de renderizado y los glifos a continuación.",
+    "boardFieldsNotAvailable": "Esta vista previa no cuenta con una definición de tablero que admita grosor de línea o tamaño de etiqueta. Las opciones de renderizado y los reemplazos de glifos se siguen aplicando.",
+    "renderTooLarge": "La sección de renderizado es demasiado grande para guardar (límite de 8 KiB). Elimina entradas del mapa de símbolos o modificaciones del tablero.",
+    "renderPreflightErrors": "Corrige esto antes de guardar:",
+    "renderPreflightWarnings": "Advertencias (algunas modificaciones de marcadores podrían eliminarse cuando juegues):",
+    "boardStyles": {
+      "vertex": "Cuadrícula de vértices",
+      "vertex-cross": "Cuadrícula de vértices (cruz)",
+      "squares": "Casillas",
+      "squares-checkered": "Casillas ajedrezadas",
+      "squares-beveled": "Casillas biseladas",
+      "squares-stacked": "Casillas apiladas"
+    },
     "glyphReplacements": "Reemplazos de glifos",
     "addReplacement": "Agregar reemplazo",
     "selectOriginal": "-- Seleccionar original --",
@@ -2079,7 +2307,7 @@
     "scaleSuffix": "(@ {{scale}}x)",
     "output": "Salida",
     "settingsJson": "JSON de configuración",
-    "pasteSettingsHelp": "Pega el JSON de configuración aquí para aplicarlo.",
+    "pasteSettingsHelp": "Pega aquí el JSON completo de configuración. Las redefiniciones de tablero y glifos están bajo render (render.board, render.glyphmap, render.options).",
     "saveSettings": "Guardar configuración",
     "resetToDefaults": "Restablecer a valores predeterminados",
     "deleteCustomization": "Eliminar personalización",
@@ -2096,7 +2324,7 @@
     "applySections": {
       "palette": "Colores de los jugadores (paleta)",
       "colourContext": "Colores del tablero",
-      "glyphmap": "Reemplazos de glifos",
+      "render": "Renderizador (tablero, símbolos, opciones)",
       "preferredColour": "Color preferido",
       "customCss": "CSS personalizado"
     },
@@ -2110,6 +2338,20 @@
     "applyProgress": "Guardando… {{done}} / {{total}}",
     "applyDone": "Aplicado a {{success}} de {{total}} juego(s).",
     "applyFailures": "Falló para: {{games}}"
+  },
+  "playerPicker": {
+    "choose": "Elige un jugador…",
+    "searchLabel": "Buscar",
+    "searchPlaceholder": "Escribe para filtrar jugadores…",
+    "noResults": "Ningún jugador coincide con tu búsqueda.",
+    "noEligible": "Ningún jugador coincide con tus filtros. Intenta ajustar la configuración de actividad o de partida.",
+    "loadingQuickPicks": "Cargando tus oponentes…",
+    "matchCount": "{{count}} de {{total}} jugadores",
+    "expectedWinRate": "Tu porcentaje de victorias esperado: {{percent}}",
+    "quickPicks": {
+      "mostPlayed": "Oponentes más frecuentes",
+      "recent": "Oponentes recientes"
+    }
   },
   "gamePicker": {
     "choose": "Elige un juego…",
@@ -2199,6 +2441,7 @@
   "profile": {
     "avatar": {
       "title": "Avatar",
+      "viewLarge": "Ver avatar más grande",
       "current": "Actual",
       "preview": "Vista previa",
       "styleLabel": "Estilo",
