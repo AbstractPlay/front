@@ -2285,7 +2285,8 @@
             "hide-star-points": "Hide star points"
         },
         "resetBoardRender": "Reset board layout overrides",
-        "boardChromeNotEligible": "This preview game does not support board layout customization (only standard row/column string grids). Glyph replacements still apply.",
+        "boardStyleNotAvailable": "This game’s board style cannot be changed. You can still adjust line weight, coordinate label size, render options, and glyphs below.",
+        "boardFieldsNotAvailable": "This preview does not have a board definition that supports line weight or label size. Render options and glyph replacements still apply.",
         "renderTooLarge": "The render section is too large to save (8 KiB limit). Remove glyph map entries or board overrides.",
         "renderPreflightErrors": "Fix these before saving:",
         "renderPreflightWarnings": "Warnings (some marker overrides may be removed when you play):",

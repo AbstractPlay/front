@@ -1,9 +1,44 @@
 import {
   applyBoardChrome,
   sanitizeRenderRep,
+  getCompatibleStyles,
   isBoardChromeEligible,
 } from "@abstractplay/renderer";
+import {
+  isBoardBasicBoard,
+  isBoardStyleSwappable,
+} from "./boardRepShape.js";
 import { resolveEffectiveRenderSettings } from "./resolveEffectiveRenderSettings.js";
+
+/**
+ * @param {Record<string, unknown>} board
+ * @param {import('@abstractplay/gameslib').APRenderRep} rawRep
+ */
+function boardChromePatchForRep(board, rawRep) {
+  const patch = { ...board };
+  if (patch.style === undefined) {
+    return patch;
+  }
+  const baseStyle =
+    rawRep.board && "style" in rawRep.board
+      ? String(rawRep.board.style)
+      : null;
+  if (!baseStyle) {
+    delete patch.style;
+    return patch;
+  }
+  const target = String(patch.style);
+  const styleAllowed =
+    isBoardStyleSwappable(rawRep) &&
+    isBoardChromeEligible(rawRep) &&
+    target !== baseStyle &&
+    getCompatibleStyles(baseStyle).includes(target);
+  const styleNoOp = target === baseStyle;
+  if (!styleNoOp && !styleAllowed) {
+    delete patch.style;
+  }
+  return patch;
+}
 
 /**
  * @param {import('@abstractplay/gameslib').APRenderRep | import('@abstractplay/gameslib').APRenderRep[] | null | undefined} rawRep
@@ -26,13 +61,17 @@ export function getDisplayRenderRep(rawRep, renderSettings) {
     return rawRep;
   }
 
-  if (hasBoard && isBoardChromeEligible(rawRep)) {
-    const chrome = { ...board };
+  if (hasBoard && isBoardBasicBoard(rawRep.board)) {
+    const patch = boardChromePatchForRep(board, rawRep);
+    const chrome = { ...patch };
     if (hasOptions) {
       chrome.options = options;
     }
-    const merged = applyBoardChrome(rawRep, chrome);
-    return sanitizeRenderRep(merged);
+    const boardKeys = Object.keys(chrome).filter((k) => k !== "options");
+    if (boardKeys.length > 0 || hasOptions) {
+      const merged = applyBoardChrome(rawRep, chrome);
+      return sanitizeRenderRep(merged);
+    }
   }
 
   if (hasOptions) {

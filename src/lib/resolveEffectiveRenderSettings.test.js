@@ -59,4 +59,41 @@ describe("resolveEffectiveRenderSettings", () => {
     expect(rs.board).to.equal(null);
     expect(rs.glyphmap).to.have.length(1);
   });
+
+  it("keeps render options when board style is invalid for the game", () => {
+    const globalMe = {
+      customizations: {
+        go: {
+          render: {
+            board: { style: "squares-stacked" },
+            options: ["hide-labels"],
+            glyphmap: [["p", "q", 1]],
+          },
+        },
+      },
+    };
+    const rs = resolveEffectiveRenderSettings(globalMe, "go", goRep);
+    expect(rs.board).to.equal(null);
+    expect(rs.options).to.deep.equal(["hide-labels"]);
+  });
+
+  it("keeps labelScale on pegboard and drops style override", () => {
+    const pegRep = {
+      board: { style: "pegboard", width: 4, height: 4 },
+      legend: { P: { name: "piece", colour: 1 } },
+      pieces: "----\n----\n----\n----",
+    };
+    const globalMe = {
+      customizations: {
+        fanorona: {
+          render: {
+            board: { style: "vertex", labelScale: 1.25 },
+          },
+        },
+      },
+    };
+    const rs = resolveEffectiveRenderSettings(globalMe, "fanorona", pegRep);
+    expect(rs.board?.style).to.equal(undefined);
+    expect(rs.board?.labelScale).to.equal(1.25);
+  });
 });
