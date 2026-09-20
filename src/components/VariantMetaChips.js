@@ -1,16 +1,26 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
+export function variantShowsMetaChips(variant) {
+  if (variant === undefined || variant === null) {
+    return false;
+  }
+  return variant.fans === true || variant.unrated === true;
+}
+
 /**
  * Subtle badges for variant metadata from gameslib (fans, unrated).
  */
-export default function VariantMetaChips({ variant }) {
+export default function VariantMetaChips({ variant, compact = false }) {
   const { t } = useTranslation();
   if (variant === undefined || variant === null) {
     return null;
   }
 
   const chips = [];
+  const chipClassBase = compact
+    ? "tag is-light is-size-7 ml-1 ap-variant-meta-chip"
+    : "tag is-light is-size-7 ml-1";
 
   if (variant.fans === true) {
     const badge = t("gameVariants.communityBadge");
@@ -18,7 +28,7 @@ export default function VariantMetaChips({ variant }) {
     chips.push(
       <span
         key="fans"
-        className="tag is-light is-size-7 ml-1"
+        className={chipClassBase}
         title={title}
         aria-label={`${badge}. ${title}`}
       >
@@ -33,7 +43,7 @@ export default function VariantMetaChips({ variant }) {
     chips.push(
       <span
         key="unrated"
-        className="tag is-warning is-light is-size-7 ml-1"
+        className={`${chipClassBase} is-warning`}
         title={title}
         aria-label={`${badge}. ${title}`}
       >

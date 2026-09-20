@@ -173,6 +173,19 @@ a.navbar-item,
     background-color: var(--tag-background-color);
 }
 
+/* Variant picker: compact chips + a little clearance only when chips are shown. */
+.tag.ap-variant-meta-chip {
+    height: auto;
+    min-height: 0;
+    padding: 0.1em 0.4em;
+    line-height: 1.25;
+    vertical-align: text-top;
+}
+
+.ap-variant-option-help--with-chips {
+    margin-top: 0.2rem;
+}
+
 :root[color-mode="dark"] a.navbar-burger {
     color: var(--main-font-color);
 }

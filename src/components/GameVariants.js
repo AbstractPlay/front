@@ -9,9 +9,33 @@ import {
 import { useTranslation } from "react-i18next";
 import { cloneDeep } from "lodash";
 import { initialNonGroupVariants } from "../lib/variantSelectionInit";
-import VariantMetaChips from "./VariantMetaChips";
+import VariantMetaChips, {
+  variantShowsMetaChips,
+} from "./VariantMetaChips";
 
 // Variant constraints: /gameslib/variants/
+
+function variantOptionHelpClassName(isOptionDisabled, variant) {
+  const parts = ["help"];
+  if (variantShowsMetaChips(variant)) {
+    parts.push("ap-variant-option-help--with-chips");
+  }
+  if (isOptionDisabled) {
+    parts.push("has-text-grey");
+  }
+  return parts.join(" ");
+}
+
+function variantOptionHelpStyle(isOptionDisabled, variant) {
+  const style = {};
+  if (!variantShowsMetaChips(variant)) {
+    style.marginTop = "-0.5%";
+  }
+  if (isOptionDisabled) {
+    style.opacity = 0.55;
+  }
+  return Object.keys(style).length > 0 ? style : undefined;
+}
 
 function collectActiveVariantUids(groupVariants, nonGroupVariants) {
   const uids = [];
@@ -307,20 +331,18 @@ function GameVariants({
                           disabled={isOptionDisabled}
                         />
                         {v.name}
-                        <VariantMetaChips variant={v} />
+                        <VariantMetaChips variant={v} compact />
                       </label>
                       {v.description === undefined ||
                       v.description.length === 0 ? (
                         ""
                       ) : (
                         <p
-                          className={
-                            isOptionDisabled ? "help has-text-grey" : "help"
-                          }
-                          style={{
-                            marginTop: "-0.5%",
-                            ...(isOptionDisabled ? { opacity: 0.55 } : {}),
-                          }}
+                          className={variantOptionHelpClassName(
+                            isOptionDisabled,
+                            v,
+                          )}
+                          style={variantOptionHelpStyle(isOptionDisabled, v)}
                         >
                           {v.description}
                         </p>
@@ -370,20 +392,18 @@ function GameVariants({
                         disabled={isOptionDisabled}
                       />
                       {v.name}
-                      <VariantMetaChips variant={v} />
+                      <VariantMetaChips variant={v} compact />
                     </label>
                     {v.description === undefined ||
                     v.description.length === 0 ? (
                       ""
                     ) : (
                       <p
-                        className={
-                          isOptionDisabled ? "help has-text-grey" : "help"
-                        }
-                        style={{
-                          marginTop: "-0.5%",
-                          ...(isOptionDisabled ? { opacity: 0.55 } : {}),
-                        }}
+                        className={variantOptionHelpClassName(
+                          isOptionDisabled,
+                          v,
+                        )}
+                        style={variantOptionHelpStyle(isOptionDisabled, v)}
                       >
                         {v.description}
                       </p>

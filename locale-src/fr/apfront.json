@@ -4147,6 +4147,10 @@
     "src": "Board Colours",
     "out": "Couleurs du plateau"
   },
+  "customize.boardFieldsNotAvailable": {
+    "src": "This preview does not have a board definition that supports line weight or label size. Render options and glyph replacements still apply.",
+    "out": "Cet aperçu ne possède pas de définition de plateau prenant en charge l'épaisseur des lignes ou la taille des étiquettes. Les options de rendu et les remplacements de glyphes s'appliquent toujours."
+  },
   "customize.boardStyle": {
     "src": "Board style",
     "out": "Style de plateau"
@@ -4158,6 +4162,10 @@
   "customize.boardStyleGlobalDisabled": {
     "src": "Board style cannot be set in global defaults because each game uses a different board type.",
     "out": "Le style de plateau ne peut pas être défini dans les paramètres par défaut globaux car chaque jeu utilise un type de plateau différent."
+  },
+  "customize.boardStyleNotAvailable": {
+    "src": "This game’s board style cannot be changed. You can still adjust line weight, coordinate label size, render options, and glyphs below.",
+    "out": "Le style de plateau de ce jeu ne peut pas être modifié. Vous pouvez toujours ajuster l'épaisseur des lignes, la taille des étiquettes de coordonnées, les options de rendu et les glyphes ci-dessous."
   },
   "customize.boardStyles.squares": {
     "src": "Squares",

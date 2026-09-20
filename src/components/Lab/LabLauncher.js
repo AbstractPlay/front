@@ -68,10 +68,10 @@ function SavesTable({ saves, dateField, onLoad, onDelete, t }) {
   );
 }
 
-function LabLauncher({ onLaunch, onLoadSave }) {
+function LabLauncher({ initialMetaGame = "", onLaunch, onLoadSave }) {
   const { t } = useTranslation();
   const [mode, setMode] = useState("new");
-  const [metaGame, setMetaGame] = useState("");
+  const [metaGame, setMetaGame] = useState(initialMetaGame);
   const [playerCount, setPlayerCount] = useState("");
   const [selectedVariants, setSelectedVariants] = useState([]);
   const [pastedState, setPastedState] = useState("");
@@ -137,6 +137,13 @@ function LabLauncher({ onLaunch, onLoadSave }) {
       });
     }
   }, [mode, refreshAuth, refreshCloudSaves, refreshLocalSaves]);
+
+  useEffect(() => {
+    if (initialMetaGame) {
+      setMetaGame(initialMetaGame);
+      setMode("new");
+    }
+  }, [initialMetaGame]);
 
   const playercounts = useMemo(
     () => (metaGame ? getLabPlayerCounts(metaGame) : []),

@@ -4,8 +4,10 @@ import PageHelmet from "../PageHelmet";
 import { buildLabGame } from "../../lib/Lab/buildGame";
 import {
   clearLastSession,
+  getLastLauncherMetaGame,
   getLastSession,
   localSaveToLaunchPayload,
+  saveLastLauncherMetaGame,
 } from "../../lib/Lab/storage";
 import LabLauncher from "./LabLauncher";
 import LabSession from "./LabSession";
@@ -54,6 +56,9 @@ function launchPayloadFromSave(save) {
 function Lab() {
   const { t } = useTranslation();
   const [session, setSession] = useState(null);
+  const [launcherMetaGame, setLauncherMetaGame] = useState(() =>
+    getLastLauncherMetaGame(),
+  );
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -76,6 +81,14 @@ function Lab() {
     return `${session.sessionName}${t("lab.titleSuffix")}`;
   }, [session, t]);
 
+  const rememberLauncherMetaGame = useCallback((metaGame) => {
+    if (!metaGame) {
+      return;
+    }
+    saveLastLauncherMetaGame(metaGame);
+    setLauncherMetaGame(metaGame);
+  }, []);
+
   const handleLaunch = useCallback(
     ({
       game,
@@ -85,6 +98,7 @@ function Lab() {
       gameSettings,
       sessionName,
     }) => {
+      rememberLauncherMetaGame(game?.metaGame);
       setSession({
         game,
         savedExploration,
@@ -95,16 +109,21 @@ function Lab() {
         loadedSave: null,
       });
     },
-    []
+    [rememberLauncherMetaGame],
   );
 
-  const handleLoadSave = useCallback((save) => {
-    try {
-      setSession(launchPayloadFromSave(save));
-    } catch (err) {
-      window.alert(err.message || String(err));
-    }
-  }, []);
+  const handleLoadSave = useCallback(
+    (save) => {
+      try {
+        const payload = launchPayloadFromSave(save);
+        rememberLauncherMetaGame(payload.game?.metaGame);
+        setSession(payload);
+      } catch (err) {
+        window.alert(err.message || String(err));
+      }
+    },
+    [rememberLauncherMetaGame],
+  );
 
   const handleLoadedSaveChange = useCallback((loadedSave) => {
     setSession((prev) => (prev ? { ...prev, loadedSave } : prev));
@@ -115,9 +134,10 @@ function Lab() {
   }, []);
 
   const handleExit = useCallback(() => {
+    rememberLauncherMetaGame(session?.game?.metaGame);
     clearLastSession();
     setSession(null);
-  }, []);
+  }, [rememberLauncherMetaGame, session]);
 
   if (!ready) {
     return null;
@@ -140,7 +160,11 @@ function Lab() {
           onExit={handleExit}
         />
       ) : (
-        <LabLauncher onLaunch={handleLaunch} onLoadSave={handleLoadSave} />
+        <LabLauncher
+          initialMetaGame={launcherMetaGame}
+          onLaunch={handleLaunch}
+          onLoadSave={handleLoadSave}
+        />
       )}
     </>
   );
