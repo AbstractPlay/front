@@ -4147,6 +4147,10 @@
     "src": "Board Colours",
     "out": "Colori del tabellone"
   },
+  "customize.boardFieldsNotAvailable": {
+    "src": "This preview does not have a board definition that supports line weight or label size. Render options and glyph replacements still apply.",
+    "out": "Questa anteprima non dispone di una definizione della scacchiera che supporti lo spessore delle linee o la dimensione delle etichette. Le opzioni di rendering e le sostituzioni dei glifi rimangono comunque applicabili."
+  },
   "customize.boardStyle": {
     "src": "Board style",
     "out": "Stile del tavoliere"
@@ -4158,6 +4162,10 @@
   "customize.boardStyleGlobalDisabled": {
     "src": "Board style cannot be set in global defaults because each game uses a different board type.",
     "out": "Lo stile del tavoliere non può essere impostato nelle impostazioni predefinite globali perché ogni gioco utilizza un tipo di tavoliere diverso."
+  },
+  "customize.boardStyleNotAvailable": {
+    "src": "This game’s board style cannot be changed. You can still adjust line weight, coordinate label size, render options, and glyphs below.",
+    "out": "Lo stile della scacchiera di questo gioco non può essere modificato. Puoi comunque regolare lo spessore delle linee, la dimensione delle etichette delle coordinate, le opzioni di rendering e i glifi qui sotto."
   },
   "customize.boardStyles.squares": {
     "src": "Squares",

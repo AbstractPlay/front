@@ -16,7 +16,10 @@ import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
-import { compareStrings } from "../../lib/compareStrings";
+import {
+  compareStrings,
+  stringColumnSortingFn,
+} from "../../lib/compareStrings";
 import { toast } from "react-toastify";
 
 const allSize = Number.MAX_SAFE_INTEGER;
@@ -102,6 +105,7 @@ function WatchedGamesTable(props) {
     () => [
       columnHelper.accessor("gameName", {
         header: t("tables.game"),
+        sortingFn: stringColumnSortingFn(i18n.language),
         cell: (props) => {
           const cbit = props.row.original.completed ? 1 : 0;
           if (props.getValue() === "Unknown") {

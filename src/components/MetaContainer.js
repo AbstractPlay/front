@@ -11,11 +11,13 @@ import Table from "./MetaContainer/Table";
 import MetaItem from "./MetaContainer/MetaItem";
 import { listPublicCatalogMetas, getGameDisplayName } from "../lib/gameOptions";
 import { compareStrings } from "../lib/compareStrings";
+import { getUiLocaleBundleKey } from "../i18n";
 import { useStore } from "../stores";
 import { rawDirectoryDisplayName } from "./Bots/botUtils";
 
 function MetaContainer(props) {
   const { i18n } = useTranslation();
+  const localeBundleKey = getUiLocaleBundleKey(i18n);
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
   const [counts, countsSetter] = useState(null);
@@ -42,7 +44,7 @@ function MetaContainer(props) {
       listPublicCatalogMetas().sort((a, b) =>
         compareStrings(getGameDisplayName(a), getGameDisplayName(b), i18n.language)
       ),
-    [i18n.language]
+    [localeBundleKey, i18n.language]
   );
   const toggleStar = async (game) => {
     try {

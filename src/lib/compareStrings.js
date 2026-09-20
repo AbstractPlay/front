@@ -10,7 +10,13 @@ export function getStringCollator(locale = "en") {
   const key = resolveSortLocale(locale);
   let collator = collatorCache.get(key);
   if (!collator) {
-    collator = new Intl.Collator(key, { sensitivity: "accent" });
+    // numeric: digit runs compare by value, so "Connect 10" follows "Connect 6"
+    // rather than "Connect 1". Matches the natural sort TanStack's built-in
+    // `alphanumeric` comparator gave these columns before.
+    collator = new Intl.Collator(key, {
+      sensitivity: "accent",
+      numeric: true,
+    });
     collatorCache.set(key, collator);
   }
   return collator;
@@ -19,4 +25,15 @@ export function getStringCollator(locale = "en") {
 /** Locale-aware string comparison for sort order (negative / zero / positive). */
 export function compareStrings(a, b, locale = "en") {
   return getStringCollator(locale).compare(String(a ?? ""), String(b ?? ""));
+}
+
+/**
+ * TanStack Table sortingFn for a plain string column.
+ * The built-in `text` / `alphanumeric` comparators compare with `>` / `<`, i.e. by
+ * UTF-16 code unit, which strands Esperanto hat letters (ĉ, ĝ, ŝ …) after z.
+ * @param {string} locale
+ */
+export function stringColumnSortingFn(locale) {
+  return (rowA, rowB, columnID) =>
+    compareStrings(rowA.getValue(columnID), rowB.getValue(columnID), locale);
 }

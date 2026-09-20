@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { getGameDisplayName } from "../../lib/gameOptions";
+import { stringColumnSortingFn } from "../../lib/compareStrings";
 import {
   getCoreRowModel,
   useReactTable,
@@ -26,7 +27,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
   const [nextDate, nextDateSetter] = useState(new Date());
   const [showDeleteModal, showDeleteModalSetter] = useState(false);
   const [standingEntry, standingEntrySetter] = useState(null);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const resetModal = () => {
     showDeleteModalSetter(false);
@@ -106,6 +107,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
     () => [
       columnHelper.accessor("gameName", {
         header: t("tables.game"),
+        sortingFn: stringColumnSortingFn(i18n.language),
       }),
       columnHelper.accessor("variants", {
         header: t("tables.variants"),
@@ -215,7 +217,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
         ),
       }),
     ],
-    [columnHelper, handleSuspend, t]
+    [columnHelper, handleSuspend, t, i18n.language]
   );
 
   const table = useReactTable({

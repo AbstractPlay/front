@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { getGameDisplayName } from "../../lib/gameOptions";
+import { stringColumnSortingFn } from "../../lib/compareStrings";
 import {
   getCoreRowModel,
   useReactTable,
@@ -27,7 +28,7 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
     "dashboard-tables-challenges-show",
     10
   );
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const data = useMemo(
     () =>
@@ -54,6 +55,7 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
     () => [
       columnHelper.accessor("gameName", {
         header: t("tables.game"),
+        sortingFn: stringColumnSortingFn(i18n.language),
         cell: (props) => {
           if (props.getValue() === "Unknown") {
             return <>Unknown</>;
@@ -122,7 +124,13 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
         ),
       }),
     ],
-    [columnHelper, activeChallengeModal, handleChallengeRevoke, t]
+    [
+      columnHelper,
+      activeChallengeModal,
+      handleChallengeRevoke,
+      t,
+      i18n.language,
+    ]
   );
 
   const table = useReactTable({

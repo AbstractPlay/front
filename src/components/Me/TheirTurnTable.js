@@ -14,7 +14,10 @@ import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
-import { compareStrings } from "../../lib/compareStrings";
+import {
+  compareStrings,
+  stringColumnSortingFn,
+} from "../../lib/compareStrings";
 
 function showMilliseconds(ms) {
   let positive = true;
@@ -97,6 +100,7 @@ function TheirTurnTable(props) {
     () => [
       columnHelper.accessor("gameName", {
         header: t("tables.game"),
+        sortingFn: stringColumnSortingFn(i18n.language),
         cell: (props) => {
           if (props.getValue() === "Unknown") {
             return <>Unknown</>;

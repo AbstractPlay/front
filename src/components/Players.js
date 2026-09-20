@@ -13,7 +13,7 @@ import {
 import { useStorageState } from "react-use-storage-state";
 import PageHelmet from "./PageHelmet";
 import { isoToCountryCode } from "../lib/isoToCountryCode";
-import { compareStrings } from "../lib/compareStrings";
+import { compareStrings, stringColumnSortingFn } from "../lib/compareStrings";
 import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
 import { useStore } from "../stores";
@@ -244,6 +244,7 @@ function Players() {
             {formatUserDisplayName(props.row.original, allUsers)}
           </Link>
         ),
+        sortingFn: stringColumnSortingFn(i18n.language),
       }),
       columnHelper.accessor("lastSeen", {
         header: t("tables.activity"),
@@ -282,7 +283,7 @@ function Players() {
       );
     }
     return cols;
-  }, [allUsers, columnHelper, globalMe, toggleBlock, t]);
+  }, [allUsers, columnHelper, globalMe, toggleBlock, t, i18n.language]);
 
   const table = useReactTable({
     data,

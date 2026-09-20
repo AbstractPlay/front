@@ -12,6 +12,7 @@ import {
   compareCategoryTagEntries,
   getGameDisplayName,
 } from "../../lib/gameOptions";
+import { stringColumnSortingFn } from "../../lib/compareStrings";
 import { tournamentListPath } from "../../lib/tournamentSections";
 import { useTranslation } from "react-i18next";
 import { getUiLocaleBundleKey } from "../../i18n";
@@ -287,6 +288,7 @@ function Table({
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
         filterFn: "includesString",
+        sortingFn: stringColumnSortingFn(i18n.language),
       }),
       columnHelper.accessor(
         (row) =>
@@ -296,6 +298,7 @@ function Table({
         {
           header: t("tables.designers"),
           id: "designers",
+          sortingFn: stringColumnSortingFn(i18n.language),
           cell: (props) =>
             props.row.original.designers.length === 0
               ? ""
@@ -463,6 +466,7 @@ function Table({
       addTag,
       closeImgModal,
       t,
+      i18n.language,
     ]
   );
 

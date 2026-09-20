@@ -111,6 +111,9 @@ export function localSaveToLaunchPayload(record) {
 export function saveLastSession(session) {
   const data = loadStorage();
   data.lastSession = { ...session, savedAt: Date.now() };
+  if (session.metaGame) {
+    data.lastLauncherMetaGame = session.metaGame;
+  }
   writeStorage(data);
 }
 
@@ -121,6 +124,20 @@ export function getLastSession() {
 export function clearLastSession() {
   const data = loadStorage();
   data.lastSession = null;
+  writeStorage(data);
+}
+
+export function getLastLauncherMetaGame() {
+  const metaGame = loadStorage().lastLauncherMetaGame;
+  return typeof metaGame === "string" && metaGame.length > 0 ? metaGame : "";
+}
+
+export function saveLastLauncherMetaGame(metaGame) {
+  if (!metaGame) {
+    return;
+  }
+  const data = loadStorage();
+  data.lastLauncherMetaGame = metaGame;
   writeStorage(data);
 }
 
