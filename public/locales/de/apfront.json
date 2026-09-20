@@ -2285,7 +2285,8 @@
       "hide-star-points": "Sternpunkte ausblenden"
     },
     "resetBoardRender": "Brett-Layout-Überschreibungen zurücksetzen",
-    "boardChromeNotEligible": "Dieses Vorschauspiel unterstützt keine Anpassung des Brett-Layouts (nur Standard-Zeilen/Spalten-Gitter). Glyphen-Ersetzungen gelten weiterhin.",
+    "boardStyleNotAvailable": "Der Brettstil dieses Spiels kann nicht geändert werden. Du kannst unten weiterhin Linienstärke, Größe der Koordinatenbeschriftung, Render-Optionen und Glyphen anpassen.",
+    "boardFieldsNotAvailable": "Diese Vorschau verfügt über keine Brettdefinition, die Linienstärke oder Beschriftungsgröße unterstützt. Render-Optionen und Glyphen-Ersetzungen gelten weiterhin.",
     "renderTooLarge": "Der Darstellungsbereich ist zu groß zum Speichern (Limit: 8 KiB). Entfernen Sie Glyphen-Zuordnungseinträge oder Brett-Überschreibungen.",
     "renderPreflightErrors": "Beheben Sie diese vor dem Speichern:",
     "renderPreflightWarnings": "Warnungen (einige Marker-Überschreibungen werden beim Spielen möglicherweise entfernt):",

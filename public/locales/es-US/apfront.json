@@ -2285,7 +2285,8 @@
       "hide-star-points": "Ocultar puntos estelares"
     },
     "resetBoardRender": "Restablecer modificaciones de diseño del tablero",
-    "boardChromeNotEligible": "Esta vista previa del juego no admite la personalización del diseño del tablero (solo cuadrículas estándar de texto para filas y columnas). Los reemplazos de símbolos aún se aplican.",
+    "boardStyleNotAvailable": "El estilo de tablero de este juego no se puede cambiar. Aún puedes ajustar el grosor de las líneas, el tamaño de las etiquetas de coordenadas, las opciones de renderizado y los glifos a continuación.",
+    "boardFieldsNotAvailable": "Esta vista previa no cuenta con una definición de tablero que admita grosor de línea o tamaño de etiqueta. Las opciones de renderizado y los reemplazos de glifos se siguen aplicando.",
     "renderTooLarge": "La sección de renderizado es demasiado grande para guardar (límite de 8 KiB). Elimina entradas del mapa de símbolos o modificaciones del tablero.",
     "renderPreflightErrors": "Corrige esto antes de guardar:",
     "renderPreflightWarnings": "Advertencias (algunas modificaciones de marcadores podrían eliminarse cuando juegues):",

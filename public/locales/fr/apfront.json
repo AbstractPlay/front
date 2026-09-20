@@ -2285,7 +2285,8 @@
       "hide-star-points": "Masquer les points d'étoile"
     },
     "resetBoardRender": "Réinitialiser les surcharges de disposition du plateau",
-    "boardChromeNotEligible": "Ce jeu en aperçu ne prend pas en charge la personnalisation de la disposition du plateau (seules les grilles standard de lignes/colonnes sont compatibles). Les remplacements de symboles s'appliquent toujours.",
+    "boardStyleNotAvailable": "Le style de plateau de ce jeu ne peut pas être modifié. Vous pouvez toujours ajuster l'épaisseur des lignes, la taille des étiquettes de coordonnées, les options de rendu et les glyphes ci-dessous.",
+    "boardFieldsNotAvailable": "Cet aperçu ne possède pas de définition de plateau prenant en charge l'épaisseur des lignes ou la taille des étiquettes. Les options de rendu et les remplacements de glyphes s'appliquent toujours.",
     "renderTooLarge": "La section de rendu est trop volumineuse pour être enregistrée (limite de 8 Kio). Supprimez des entrées de la carte des symboles ou des surcharges de plateau.",
     "renderPreflightErrors": "Corrigez ces erreurs avant d'enregistrer :",
     "renderPreflightWarnings": "Avertissements (certaines surcharges de marqueurs peuvent être supprimées lorsque vous jouez) :",
