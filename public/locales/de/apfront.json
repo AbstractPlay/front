@@ -1056,6 +1056,12 @@
   "InvalidVariantCombination": "Diese Variantenkombination ist für dieses Spiel nicht erlaubt.",
   "PickVariant_normal": "Varianten auswählen",
   "PickVariant_disabled": "Verfügbare Varianten",
+  "gameVariants": {
+    "communityBadge": "Community",
+    "communityTitle": "Von der Abstract Play-Community hinzugefügt; nicht Teil der veröffentlichten Regeln des Autors.",
+    "unratedBadge": "Ungewertet",
+    "unratedTitle": "Spiele mit dieser Variante können nicht gewertet werden."
+  },
   "PlayerList": "Spieler",
   "Players": "Spieler",
   "PleaseConsent": "Deine Zustimmung wird benötigt!",

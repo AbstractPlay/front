@@ -9,6 +9,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { cloneDeep } from "lodash";
 import { initialNonGroupVariants } from "../lib/variantSelectionInit";
+import VariantMetaChips from "./VariantMetaChips";
 
 // Variant constraints: /gameslib/variants/
 
@@ -306,6 +307,7 @@ function GameVariants({
                           disabled={isOptionDisabled}
                         />
                         {v.name}
+                        <VariantMetaChips variant={v} />
                       </label>
                       {v.description === undefined ||
                       v.description.length === 0 ? (
@@ -368,6 +370,7 @@ function GameVariants({
                         disabled={isOptionDisabled}
                       />
                       {v.name}
+                      <VariantMetaChips variant={v} />
                     </label>
                     {v.description === undefined ||
                     v.description.length === 0 ? (

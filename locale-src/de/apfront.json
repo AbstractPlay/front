@@ -4143,10 +4143,6 @@
     "src": "at scale",
     "out": "im Maßstab"
   },
-  "customize.boardChromeNotEligible": {
-    "src": "This preview game does not support board layout customization (only standard row/column string grids). Glyph replacements still apply.",
-    "out": "Dieses Vorschauspiel unterstützt keine Anpassung des Brett-Layouts (nur Standard-Zeilen/Spalten-Gitter). Glyphen-Ersetzungen gelten weiterhin."
-  },
   "customize.boardColours": {
     "src": "Board Colours",
     "out": "Brettfarben"
@@ -5890,6 +5886,22 @@
   "gamePicker.starredOnly": {
     "src": "Starred games only",
     "out": "Nur Favoriten"
+  },
+  "gameVariants.communityBadge": {
+    "src": "Community",
+    "out": "Community"
+  },
+  "gameVariants.communityTitle": {
+    "src": "Added by the Abstract Play community; not part of the designer's published rules.",
+    "out": "Von der Abstract Play-Community hinzugefügt; nicht Teil der veröffentlichten Regeln des Autors."
+  },
+  "gameVariants.unratedBadge": {
+    "src": "Unrated",
+    "out": "Ungewertet"
+  },
+  "gameVariants.unratedTitle": {
+    "src": "Games with this variant cannot be rated.",
+    "out": "Spiele mit dieser Variante können nicht gewertet werden."
   },
   "glicko.displayHint": {
     "src": "Glicko ratings are shown as the 95% confidence rating (rating − 2×RD), with full RD in parentheses.",
