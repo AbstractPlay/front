@@ -571,6 +571,65 @@
   color: var(--main-font-color);
 }
 
+.feedback-tag-badges {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-left: 0.35rem;
+}
+
+.feedback-tag-badges-compact {
+  margin-left: 0;
+  margin-top: 0.25rem;
+}
+
+.feedback-tag-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: var(--secondary-color-3-bg);
+  border: 1px solid var(--tag-background-color);
+  color: var(--main-font-color);
+}
+
+.feedback-tag-picker-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.feedback-post-tags {
+  margin: 0.75rem 0 1rem;
+}
+
+.feedback-admin-tags-panel,
+.feedback-vocab-admin {
+  margin: 1.25rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--tag-background-color);
+}
+
+.feedback-vocab-list {
+  list-style: none;
+  margin: 0.75rem 0;
+  padding: 0;
+}
+
+.feedback-vocab-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.feedback-vocab-row .input {
+  flex: 1 1 12rem;
+  max-width: 16rem;
+}
+
 .feedback-board-chips {
   display: flex;
   flex-wrap: wrap;

@@ -13,6 +13,8 @@ import FeedbackReviewerPicker from "./FeedbackReviewerPicker";
 import { fetchUserNames } from "../../lib/fetchUserNames";
 import WishlistCategoryCallout from "./WishlistCategoryCallout";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
+import FeedbackTagBadges from "./FeedbackTagBadges";
+import FeedbackTagPicker from "./FeedbackTagPicker";
 import ScreenshotUpload from "./ScreenshotUpload";
 import FeedbackTimestamp from "./FeedbackTimestamp";
 import FeedbackPlayerLink from "./FeedbackPlayerLink";
@@ -65,9 +67,11 @@ function FeedbackDetail() {
   const [editTitle, setEditTitle] = useState("");
   const [editBody, setEditBody] = useState("");
   const [editAttachmentKeys, setEditAttachmentKeys] = useState([]);
+  const [editTags, setEditTags] = useState([]);
+  const [editSuggestedTags, setEditSuggestedTags] = useState([]);
+  const [adminTagSelection, setAdminTagSelection] = useState([]);
   const [adminEffort, setAdminEffort] = useState("");
   const [adminPriority, setAdminPriority] = useState("");
-  const [adminTags, setAdminTags] = useState("");
   const [adminReviewerIds, setAdminReviewerIds] = useState([]);
   const [adminWishlistCategory, setAdminWishlistCategory] = useState("none");
   const [adminWishlistNote, setAdminWishlistNote] = useState("");
@@ -107,9 +111,11 @@ function FeedbackDetail() {
       if (post) {
         setEditTitle(post.title);
         setEditBody(post.body ?? "");
+        setEditTags(Array.isArray(post.tags) ? post.tags : []);
+        setEditSuggestedTags(Array.isArray(authResult.data.suggestedTags) ? authResult.data.suggestedTags : []);
+        setAdminTagSelection(Array.isArray(post.tags) ? post.tags : []);
         setAdminEffort(post.effort ?? "");
         setAdminPriority(post.priority ?? "");
-        setAdminTags(Array.isArray(post.adminTags) ? post.adminTags.join(", ") : "");
         setAdminReviewerIds(
           Array.isArray(post.reviewers) ? post.reviewers.map((reviewer) => reviewer.id) : [],
         );
@@ -182,12 +188,19 @@ function FeedbackDetail() {
 
   async function handleSaveEdit(e) {
     e.preventDefault();
+    const postKind = data?.post?.kind;
     setSubmitting(true);
     const result = await updateFeedback({
       id,
       title: editTitle.trim(),
       body: editBody.trim(),
       attachmentKeys: editAttachmentKeys.length > 0 ? editAttachmentKeys : undefined,
+      ...(postKind === "bug" || postKind === "feature"
+        ? {
+          tags: editTags,
+          suggestedTags: editSuggestedTags.length > 0 ? editSuggestedTags : [],
+        }
+        : {}),
     });
     setSubmitting(false);
     if (!result.ok) {
@@ -245,17 +258,12 @@ function FeedbackDetail() {
       return;
     }
     setSubmitting(true);
-    const tags = adminTags
-      .split(",")
-      .map((tag) => tag.trim())
-      .filter(Boolean);
     const adminPars = { id };
     if (currentPost.kind === "wishlist") {
       adminPars.wishlistCategory = adminWishlistCategory;
       adminPars.wishlistCategoryNote = adminWishlistNote.trim() || undefined;
     } else {
       adminPars.effort = adminEffort || undefined;
-      adminPars.adminTags = tags.length > 0 ? tags : undefined;
       if (currentPost.kind === "bug" || currentPost.kind === "feature") {
         adminPars.priority = adminPriority || "";
         const loadedReviewerIds = Array.isArray(currentPost.reviewers)
@@ -270,6 +278,34 @@ function FeedbackDetail() {
       }
     }
     const result = await setFeedbackAdminFields(adminPars);
+    setSubmitting(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    await load();
+  }
+
+  async function handleSaveAdminTags() {
+    setSubmitting(true);
+    const result = await setFeedbackAdminFields({
+      id,
+      tags: adminTagSelection,
+    });
+    setSubmitting(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    await load();
+  }
+
+  async function handleClearTagSuggestions() {
+    setSubmitting(true);
+    const result = await setFeedbackAdminFields({
+      id,
+      clearSuggestedTags: true,
+    });
     setSubmitting(false);
     if (!result.ok) {
       setError(result.error);
@@ -439,12 +475,14 @@ function FeedbackDetail() {
             </button>
           </>
         )}
-        {canEdit && !editing && !readOnly && (
+        {canEdit && !editing && !readOnly && !isTerminal && (
           <button
             type="button"
             className="button apButtonNeutral is-small"
             onClick={() => {
               setEditAttachmentKeys([]);
+              setEditTags(Array.isArray(post.tags) ? post.tags : []);
+              setEditSuggestedTags(Array.isArray(data.suggestedTags) ? data.suggestedTags : []);
               setEditing(true);
             }}
           >
@@ -452,6 +490,14 @@ function FeedbackDetail() {
           </button>
         )}
       </div>
+      {(post.kind === "bug" || post.kind === "feature") && !editing ? (
+        <div className="feedback-post-tags">
+          <FeedbackTagBadges tags={post.tags} />
+          {(!post.tags || post.tags.length === 0) && canEdit && !isTerminal ? (
+            <p className="feedback-muted">{t("feedback.tags.emptyAuthorHint")}</p>
+          ) : null}
+        </div>
+      ) : null}
       {editing ? (
         <form className="feedback-edit-form" onSubmit={handleSaveEdit}>
           <div className="field">
@@ -483,6 +529,16 @@ function FeedbackDetail() {
               required={post.kind === "feature"}
             />
           </div>
+          {(post.kind === "bug" || post.kind === "feature") ? (
+            <FeedbackTagPicker
+              kind={post.kind}
+              selectedTags={editTags}
+              suggestedTags={editSuggestedTags}
+              onSelectedChange={setEditTags}
+              onSuggestedChange={setEditSuggestedTags}
+              disabled={submitting}
+            />
+          ) : null}
           {post.kind === "wishlist" ? (
             <div className="field">
               <label className="label">{t("feedback.new.coverImage")}</label>
@@ -660,15 +716,6 @@ function FeedbackDetail() {
                   ))}
                 </div>
               </fieldset>
-              <div className="field">
-                <label className="label" htmlFor="feedback-admin-tags">{t("feedback.detail.adminTags")}</label>
-                <input
-                  id="feedback-admin-tags"
-                  className="input"
-                  value={adminTags}
-                  onChange={(e) => setAdminTags(e.target.value)}
-                />
-              </div>
               {(post.kind === "bug" || post.kind === "feature") ? (
                 <div className="field">
                   <label className="label">{t("feedback.detail.adminReviewers")}</label>
@@ -702,6 +749,43 @@ function FeedbackDetail() {
           ) : null}
         </form>
       )}
+      {globalMe?.admin && !readOnly && (post.kind === "bug" || post.kind === "feature") ? (
+        <div className="feedback-admin-tags-panel">
+          <h2 className="title is-5">{t("feedback.tags.adminSection")}</h2>
+          <FeedbackTagPicker
+            kind={post.kind}
+            selectedTags={adminTagSelection}
+            onSelectedChange={setAdminTagSelection}
+            showSuggestField={false}
+            disabled={submitting}
+          />
+          <div className="feedback-comment-actions">
+            <button
+              type="button"
+              className="button apButtonNeutral is-small"
+              disabled={submitting}
+              onClick={handleSaveAdminTags}
+            >
+              {submitting ? t("feedback.admin.saving") : t("feedback.tags.saveTags")}
+            </button>
+          </div>
+          {Array.isArray(data.suggestedTags) && data.suggestedTags.length > 0 ? (
+            <div className="feedback-tag-suggestions-admin">
+              <p className="feedback-muted">
+                {t("feedback.tags.pendingSuggestions", { tags: data.suggestedTags.join(", ") })}
+              </p>
+              <button
+                type="button"
+                className="button apButtonNeutral is-small"
+                disabled={submitting}
+                onClick={handleClearTagSuggestions}
+              >
+                {t("feedback.tags.clearSuggestions")}
+              </button>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
       {canReclassify ? (
         <Modal
           show={showReclassifyModal}

@@ -4747,10 +4747,6 @@
     "src": "Status",
     "out": "Stato"
   },
-  "feedback.detail.adminTags": {
-    "src": "Admin tags (comma-separated)",
-    "out": "Tag admin (separati da virgola)"
-  },
   "feedback.detail.adminWishlistCategory": {
     "src": "Category",
     "out": "Categoria"
@@ -5378,6 +5374,138 @@
   "feedback.status.under_review": {
     "src": "Under review",
     "out": "In fase di revisione"
+  },
+  "feedback.tag.accessibility": {
+    "src": "Accessibility & UX",
+    "out": "Accessibilità e UX"
+  },
+  "feedback.tag.account": {
+    "src": "Account & settings",
+    "out": "Account e impostazioni"
+  },
+  "feedback.tag.challenges": {
+    "src": "Challenges",
+    "out": "Sfide"
+  },
+  "feedback.tag.chat": {
+    "src": "Chat",
+    "out": "Chat"
+  },
+  "feedback.tag.dashboard": {
+    "src": "Dashboard",
+    "out": "Dashboard"
+  },
+  "feedback.tag.designer": {
+    "src": "Designer & playground",
+    "out": "Designer e playground"
+  },
+  "feedback.tag.game_client": {
+    "src": "Game client & variants",
+    "out": "Client di gioco e varianti"
+  },
+  "feedback.tag.games": {
+    "src": "Games & catalog",
+    "out": "Giochi e catalogo"
+  },
+  "feedback.tag.i18n": {
+    "src": "Translations",
+    "out": "Traduzioni"
+  },
+  "feedback.tag.players": {
+    "src": "Players & profiles",
+    "out": "Giocatori e profili"
+  },
+  "feedback.tag.rules_engine": {
+    "src": "Rules & engine",
+    "out": "Regole e motore"
+  },
+  "feedback.tag.stats": {
+    "src": "Stats & history",
+    "out": "Statistiche e cronologia"
+  },
+  "feedback.tag.tables": {
+    "src": "Tables & layout",
+    "out": "Tavoli e layout"
+  },
+  "feedback.tag.themes": {
+    "src": "Themes & customization",
+    "out": "Temi e personalizzazione"
+  },
+  "feedback.tag.tournaments": {
+    "src": "Tournaments",
+    "out": "Tornei"
+  },
+  "feedback.tags.adminSection": {
+    "src": "Tags",
+    "out": "Tag"
+  },
+  "feedback.tags.adminSuggestions": {
+    "src": "Pending tag suggestions from posts: {{tags}}",
+    "out": "Suggerimenti di tag in attesa dai post: {{tags}}"
+  },
+  "feedback.tags.clearSuggestions": {
+    "src": "Clear suggestions",
+    "out": "Cancella suggerimenti"
+  },
+  "feedback.tags.emptyAuthorHint": {
+    "src": "Add tags when you edit this post to help others find it.",
+    "out": "Aggiungi tag quando modifichi questo post per aiutare gli altri a trovarlo."
+  },
+  "feedback.tags.pendingSuggestions": {
+    "src": "Suggested new tags: {{tags}}",
+    "out": "Nuovi tag suggeriti: {{tags}}"
+  },
+  "feedback.tags.pickerHint": {
+    "src": "Choose up to {{max}} tags that best describe this item.",
+    "out": "Scegli fino a {{max}} tag che descrivono meglio questo elemento."
+  },
+  "feedback.tags.pickerLabel": {
+    "src": "Topics",
+    "out": "Argomenti"
+  },
+  "feedback.tags.saveTags": {
+    "src": "Save tags",
+    "out": "Salva tag"
+  },
+  "feedback.tags.suggestHint": {
+    "src": "Optional. We review suggestions before adding them to the list.",
+    "out": "Opzionale. Revisioniamo i suggerimenti prima di aggiungerli all'elenco."
+  },
+  "feedback.tags.suggestLabel": {
+    "src": "Suggest a new tag",
+    "out": "Suggerisci un nuovo tag"
+  },
+  "feedback.tags.suggestPlaceholder": {
+    "src": "e.g. mobile app",
+    "out": "ad es. app mobile"
+  },
+  "feedback.tags.vocabAdd": {
+    "src": "Add tag",
+    "out": "Aggiungi tag"
+  },
+  "feedback.tags.vocabIdPlaceholder": {
+    "src": "tag_slug",
+    "out": "tag_slug"
+  },
+  "feedback.tags.vocabIntro": {
+    "src": "Tags shown on bug and feature boards. Use lowercase slugs (letters, numbers, underscores).",
+    "out": "Tag mostrati nelle bacheche di bug e funzionalità. Usa slug in minuscolo (lettere, numeri, trattini bassi)."
+  },
+  "feedback.tags.vocabRemove": {
+    "src": "Remove",
+    "out": "Rimuovi"
+  },
+  "feedback.tags.vocabSave": {
+    "src": "Save vocabulary",
+    "out": "Salva vocabolario"
+  },
+  "feedback.tags.vocabSaved": {
+    "src": "Tag vocabulary saved.",
+    "out": "Vocabolario dei tag salvato."
+  },
+  "feedback.tags.vocabTitle": {
+    "src": "Tag vocabulary",
+    "out": "Vocabolario dei tag"
   },
   "feedback.upload.add": {
     "src": "Add screenshot",

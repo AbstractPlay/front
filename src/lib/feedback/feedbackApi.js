@@ -189,3 +189,13 @@ export async function holdFeedbackRetention(id, hold) {
   const res = await callAuthApi("feedback_hold_retention", { id, hold });
   return parseAuthResponse(res);
 }
+
+export async function fetchFeedbackTagVocabAuth() {
+  const res = await callAuthApi("feedback_tag_vocab", {});
+  return parseAuthResponse(res);
+}
+
+export async function setFeedbackTagVocab(tags) {
+  const res = await callAuthApi("feedback_set_tag_vocab", { tags });
+  return parseAuthResponse(res);
+}

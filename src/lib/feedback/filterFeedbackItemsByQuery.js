@@ -22,8 +22,8 @@ function searchableStringsFromItem(item) {
   if (item.implementedGameMeta?.name) {
     parts.push(String(item.implementedGameMeta.name));
   }
-  if (Array.isArray(item.adminTags)) {
-    parts.push(item.adminTags.join(" "));
+  if (Array.isArray(item.tags)) {
+    parts.push(item.tags.join(" "));
   }
   return parts;
 }

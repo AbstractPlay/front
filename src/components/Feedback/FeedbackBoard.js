@@ -33,7 +33,9 @@ import {
 } from "../../lib/feedback/feedbackListSort";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import FeedbackQuickSearch from "./FeedbackQuickSearch";
+import FeedbackTagBadges from "./FeedbackTagBadges";
 import { filterFeedbackItemsByQuery } from "../../lib/feedback/filterFeedbackItemsByQuery";
+import { loadFeedbackTagVocab, tagOptionsForKind } from "../../lib/feedback/feedbackTagVocab";
 import "./feedback.css";
 
 function FeedbackBoard({ kind = "bug" }) {
@@ -49,6 +51,8 @@ function FeedbackBoard({ kind = "bug" }) {
   const [error, setError] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [tagFilter, setTagFilter] = useState("");
+  const [tagVocab, setTagVocab] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showClosedOnly, setShowClosedOnly] = useState(() => getStoredFeedbackBoardClosedOnly(kind));
   const isAdmin = Boolean(globalMe?.admin);
@@ -59,7 +63,25 @@ function FeedbackBoard({ kind = "bug" }) {
     setShowClosedOnly(getStoredFeedbackBoardClosedOnly(kind));
     setStatusFilter("");
     setCategoryFilter("");
+    setTagFilter("");
   }, [isAdmin, kind]);
+
+  useEffect(() => {
+    if (kind !== "bug" && kind !== "feature") {
+      setTagVocab(null);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const result = await loadFeedbackTagVocab();
+      if (!cancelled && result.ok) {
+        setTagVocab(result.data);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [kind]);
 
   const handleClosedOnlyToggle = () => {
     setShowClosedOnly((prev) => {
@@ -68,6 +90,7 @@ function FeedbackBoard({ kind = "bug" }) {
       if (next) {
         setStatusFilter("");
         setCategoryFilter("");
+        setTagFilter("");
       }
       return next;
     });
@@ -125,6 +148,22 @@ function FeedbackBoard({ kind = "bug" }) {
     return counts;
   }, [items, kind]);
 
+  const tagOptions = useMemo(
+    () => tagOptionsForKind(tagVocab, kind),
+    [kind, tagVocab],
+  );
+
+  const tagCounts = useMemo(() => {
+    if (kind !== "bug" && kind !== "feature") {
+      return {};
+    }
+    const counts = {};
+    for (const entry of tagOptions) {
+      counts[entry.id] = items.filter((item) => Array.isArray(item.tags) && item.tags.includes(entry.id)).length;
+    }
+    return counts;
+  }, [items, kind, tagOptions]);
+
   const displayItems = useMemo(() => {
     let filtered = items;
     if (!showClosedOnly && statusFilter) {
@@ -132,6 +171,9 @@ function FeedbackBoard({ kind = "bug" }) {
     }
     if (!showClosedOnly && kind === "wishlist" && categoryFilter) {
       filtered = filtered.filter((item) => item.wishlistCategory === categoryFilter);
+    }
+    if (!showClosedOnly && tagFilter && (kind === "bug" || kind === "feature")) {
+      filtered = filtered.filter((item) => Array.isArray(item.tags) && item.tags.includes(tagFilter));
     }
     if (kind === "wishlist") {
       return [...filtered].sort((a, b) => compareWishlistItems(a, b, sortBy));
@@ -142,7 +184,7 @@ function FeedbackBoard({ kind = "bug" }) {
       }
     }
     return filtered;
-  }, [categoryFilter, isAdmin, items, kind, showClosedOnly, sortBy, statusFilter]);
+  }, [categoryFilter, isAdmin, items, kind, showClosedOnly, sortBy, statusFilter, tagFilter]);
 
   const visibleItems = useMemo(
     () => filterFeedbackItemsByQuery(displayItems, searchQuery),
@@ -188,11 +230,12 @@ function FeedbackBoard({ kind = "bug" }) {
         <div className="feedback-board-chips" role="toolbar" aria-label={t("feedback.board.filterLabel")}>
           <button
             type="button"
-            className={`button is-small apButtonNeutral${!showClosedOnly && !statusFilter && !categoryFilter ? " is-selected" : ""}`}
+            className={`button is-small apButtonNeutral${!showClosedOnly && !statusFilter && !categoryFilter && !tagFilter ? " is-selected" : ""}`}
             disabled={showClosedOnly}
             onClick={() => {
               setStatusFilter("");
               setCategoryFilter("");
+              setTagFilter("");
             }}
           >
             {t("feedback.board.filterAll", { count: statusCounts.all })}
@@ -225,6 +268,22 @@ function FeedbackBoard({ kind = "bug" }) {
             >
               {t(`feedback.wishlist.category.${chip}`)}
               {categoryCounts[chip] > 0 ? ` (${categoryCounts[chip]})` : ""}
+            </button>
+          )) : null}
+          {(kind === "bug" || kind === "feature") ? tagOptions.map((entry) => (
+            <button
+              key={entry.id}
+              type="button"
+              className={`button is-small apButtonNeutral${tagFilter === entry.id ? " is-selected" : ""}`}
+              disabled={showClosedOnly || tagCounts[entry.id] === 0}
+              onClick={() => {
+                setStatusFilter("");
+                setCategoryFilter("");
+                setTagFilter((prev) => (prev === entry.id ? "" : entry.id));
+              }}
+            >
+              {t(`feedback.tag.${entry.id}`, { defaultValue: entry.id })}
+              {tagCounts[entry.id] > 0 ? ` (${tagCounts[entry.id]})` : ""}
             </button>
           )) : null}
           <button
@@ -294,6 +353,9 @@ function FeedbackBoard({ kind = "bug" }) {
               />
               {(kind === "bug" || kind === "feature") ? (
                 <FeedbackReviewersBadge reviewers={item.reviewers} compact />
+              ) : null}
+              {(kind === "bug" || kind === "feature") ? (
+                <FeedbackTagBadges tags={item.tags} compact />
               ) : null}
               {kind === "wishlist" && item.gameUrl ? (
                 <>

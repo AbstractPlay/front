@@ -16,6 +16,7 @@ import {
 import { boardKeyForKind, boardPathForKind, feedbackDetailPath } from "../../lib/feedback/feedbackConstants";
 import { useAuthSession } from "../../hooks/useAuthSession";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
+import FeedbackTagPicker from "./FeedbackTagPicker";
 import "./feedback.css";
 
 function resolveKind(kindParam) {
@@ -44,6 +45,8 @@ function FeedbackNew() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [duplicateId, setDuplicateId] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [suggestedTags, setSuggestedTags] = useState([]);
   const recentPageUrls = useMemo(
     () => (kind === "bug" ? getRecentApUrlsForBugReport() : []),
     [kind],
@@ -105,6 +108,12 @@ function FeedbackNew() {
       gameUrl: kind === "wishlist" ? gameUrl.trim() : undefined,
       attachmentKeys: attachmentKeys.length > 0 ? attachmentKeys : undefined,
       context: kind === "bug" ? context : undefined,
+      ...(kind === "bug" || kind === "feature"
+        ? {
+          tags: selectedTags.length > 0 ? selectedTags : undefined,
+          suggestedTags: suggestedTags.length > 0 ? suggestedTags : undefined,
+        }
+        : {}),
     });
     setSubmitting(false);
     if (!result.ok) {
@@ -247,6 +256,15 @@ function FeedbackNew() {
             </div>
             {pageUrlError ? <p className="has-text-danger">{pageUrlError}</p> : null}
           </div>
+        ) : null}
+        {(kind === "bug" || kind === "feature") ? (
+          <FeedbackTagPicker
+            kind={kind}
+            selectedTags={selectedTags}
+            suggestedTags={suggestedTags}
+            onSelectedChange={setSelectedTags}
+            onSuggestedChange={setSuggestedTags}
+          />
         ) : null}
         <div className="field">
           <label className="label" htmlFor="feedback-body">

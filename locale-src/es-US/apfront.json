@@ -4747,10 +4747,6 @@
     "src": "Status",
     "out": "Estado"
   },
-  "feedback.detail.adminTags": {
-    "src": "Admin tags (comma-separated)",
-    "out": "Etiquetas de administración (separadas por comas)"
-  },
   "feedback.detail.adminWishlistCategory": {
     "src": "Category",
     "out": "Categoría"
@@ -5378,6 +5374,138 @@
   "feedback.status.under_review": {
     "src": "Under review",
     "out": "En revisión"
+  },
+  "feedback.tag.accessibility": {
+    "src": "Accessibility & UX",
+    "out": "Accesibilidad y UX"
+  },
+  "feedback.tag.account": {
+    "src": "Account & settings",
+    "out": "Cuenta y configuración"
+  },
+  "feedback.tag.challenges": {
+    "src": "Challenges",
+    "out": "Desafíos"
+  },
+  "feedback.tag.chat": {
+    "src": "Chat",
+    "out": "Chat"
+  },
+  "feedback.tag.dashboard": {
+    "src": "Dashboard",
+    "out": "Panel de control"
+  },
+  "feedback.tag.designer": {
+    "src": "Designer & playground",
+    "out": "Diseñador y área de pruebas"
+  },
+  "feedback.tag.game_client": {
+    "src": "Game client & variants",
+    "out": "Cliente de juego y variantes"
+  },
+  "feedback.tag.games": {
+    "src": "Games & catalog",
+    "out": "Juegos y catálogo"
+  },
+  "feedback.tag.i18n": {
+    "src": "Translations",
+    "out": "Traducciones"
+  },
+  "feedback.tag.players": {
+    "src": "Players & profiles",
+    "out": "Jugadores y perfiles"
+  },
+  "feedback.tag.rules_engine": {
+    "src": "Rules & engine",
+    "out": "Reglas y motor"
+  },
+  "feedback.tag.stats": {
+    "src": "Stats & history",
+    "out": "Estadísticas e historial"
+  },
+  "feedback.tag.tables": {
+    "src": "Tables & layout",
+    "out": "Mesas y diseño"
+  },
+  "feedback.tag.themes": {
+    "src": "Themes & customization",
+    "out": "Temas y personalización"
+  },
+  "feedback.tag.tournaments": {
+    "src": "Tournaments",
+    "out": "Torneos"
+  },
+  "feedback.tags.adminSection": {
+    "src": "Tags",
+    "out": "Etiquetas"
+  },
+  "feedback.tags.adminSuggestions": {
+    "src": "Pending tag suggestions from posts: {{tags}}",
+    "out": "Sugerencias de etiquetas pendientes de publicaciones: {{tags}}"
+  },
+  "feedback.tags.clearSuggestions": {
+    "src": "Clear suggestions",
+    "out": "Borrar sugerencias"
+  },
+  "feedback.tags.emptyAuthorHint": {
+    "src": "Add tags when you edit this post to help others find it.",
+    "out": "Agrega etiquetas cuando edites esta publicación para ayudar a que otros la encuentren."
+  },
+  "feedback.tags.pendingSuggestions": {
+    "src": "Suggested new tags: {{tags}}",
+    "out": "Nuevas etiquetas sugeridas: {{tags}}"
+  },
+  "feedback.tags.pickerHint": {
+    "src": "Choose up to {{max}} tags that best describe this item.",
+    "out": "Elige hasta {{max}} etiquetas que describan mejor este elemento."
+  },
+  "feedback.tags.pickerLabel": {
+    "src": "Topics",
+    "out": "Temas"
+  },
+  "feedback.tags.saveTags": {
+    "src": "Save tags",
+    "out": "Guardar etiquetas"
+  },
+  "feedback.tags.suggestHint": {
+    "src": "Optional. We review suggestions before adding them to the list.",
+    "out": "Opcional. Revisamos las sugerencias antes de agregarlas a la lista."
+  },
+  "feedback.tags.suggestLabel": {
+    "src": "Suggest a new tag",
+    "out": "Sugerir una nueva etiqueta"
+  },
+  "feedback.tags.suggestPlaceholder": {
+    "src": "e.g. mobile app",
+    "out": "ej. aplicación móvil"
+  },
+  "feedback.tags.vocabAdd": {
+    "src": "Add tag",
+    "out": "Agregar etiqueta"
+  },
+  "feedback.tags.vocabIdPlaceholder": {
+    "src": "tag_slug",
+    "out": "slug_etiqueta"
+  },
+  "feedback.tags.vocabIntro": {
+    "src": "Tags shown on bug and feature boards. Use lowercase slugs (letters, numbers, underscores).",
+    "out": "Etiquetas que se muestran en los tableros de errores y funciones. Usa slugs en minúsculas (letras, números y guiones bajos)."
+  },
+  "feedback.tags.vocabRemove": {
+    "src": "Remove",
+    "out": "Eliminar"
+  },
+  "feedback.tags.vocabSave": {
+    "src": "Save vocabulary",
+    "out": "Guardar vocabulario"
+  },
+  "feedback.tags.vocabSaved": {
+    "src": "Tag vocabulary saved.",
+    "out": "Vocabulario de etiquetas guardado."
+  },
+  "feedback.tags.vocabTitle": {
+    "src": "Tag vocabulary",
+    "out": "Vocabulario de etiquetas"
   },
   "feedback.upload.add": {
     "src": "Add screenshot",
