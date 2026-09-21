@@ -1,5 +1,9 @@
 import { getConsoleCaptureSnapshot } from "./consoleCapture";
-import { parseGameHintsFromApUrl } from "./recentApUrls";
+import {
+  isFeedbackNewFormUrl,
+  normalizeReportedPageUrl,
+  parseGameHintsFromApUrl,
+} from "./recentApUrls";
 
 const PENDING_ERROR_KEY = "feedback-pending-error";
 
@@ -41,10 +45,15 @@ export function captureBugContext(searchParams = new URLSearchParams(), options 
   const reportedPageUrl = typeof options.reportedPageUrl === "string"
     ? options.reportedPageUrl.trim()
     : "";
-  const pageUrl = reportedPageUrl || window.location.href;
+  const storedPageUrl = normalizeReportedPageUrl(reportedPageUrl) ?? "";
+  const hintPageUrl = storedPageUrl
+    || normalizeReportedPageUrl(searchParams.get("pageUrl") ?? "")
+    || (typeof window !== "undefined"
+      && !isFeedbackNewFormUrl(window.location.href)
+      ? window.location.href
+      : "");
 
   const context = {
-    pageUrl,
     userAgent: navigator.userAgent,
     viewport: {
       width: window.innerWidth,
@@ -52,6 +61,9 @@ export function captureBugContext(searchParams = new URLSearchParams(), options 
     },
     consoleErrors: getConsoleCaptureSnapshot(),
   };
+  if (storedPageUrl) {
+    context.pageUrl = storedPageUrl;
+  }
 
   const gameId = searchParams.get("gameId");
   const moveNumber = searchParams.get("moveNumber");
@@ -69,7 +81,7 @@ export function captureBugContext(searchParams = new URLSearchParams(), options 
     context.layoutId = layoutId;
   }
 
-  const fromPage = parseGameHintsFromApUrl(pageUrl);
+  const fromPage = parseGameHintsFromApUrl(hintPageUrl);
   if (fromPage.gameId && !context.gameId) {
     context.gameId = fromPage.gameId;
   }

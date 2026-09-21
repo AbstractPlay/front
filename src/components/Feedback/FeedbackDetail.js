@@ -17,6 +17,7 @@ import ScreenshotUpload from "./ScreenshotUpload";
 import FeedbackTimestamp from "./FeedbackTimestamp";
 import FeedbackPlayerLink from "./FeedbackPlayerLink";
 import { markFeedbackSeen } from "../../lib/feedback/feedbackLastSeen";
+import { isFeedbackNewFormUrl } from "../../lib/feedback/recentApUrls";
 import {
   commentFeedback,
   deleteFeedback,
@@ -564,13 +565,15 @@ function FeedbackDetail() {
           <p className="label">{t("feedback.detail.adminBugContext")}</p>
           {bugContext ? (
             <>
-              {typeof bugContext.pageUrl === "string" && bugContext.pageUrl ? (
-                <p className="feedback-admin-bug-context-page">
-                  <a href={bugContext.pageUrl} target="_blank" rel="noopener noreferrer">
-                    {bugContext.pageUrl}
-                  </a>
-                </p>
-              ) : null}
+              {typeof bugContext.pageUrl === "string"
+                && bugContext.pageUrl
+                && !isFeedbackNewFormUrl(bugContext.pageUrl) ? (
+                  <p className="feedback-admin-bug-context-page">
+                    <a href={bugContext.pageUrl} target="_blank" rel="noopener noreferrer">
+                      {bugContext.pageUrl}
+                    </a>
+                  </p>
+                ) : null}
               <pre className="feedback-tech-preview feedback-admin-bug-context-json">
                 {JSON.stringify(bugContext, null, 2)}
               </pre>

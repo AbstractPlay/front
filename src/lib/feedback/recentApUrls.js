@@ -23,13 +23,25 @@ export function normalizeReportedPageUrl(url) {
   }
 }
 
-function isBugFormUrl(url) {
+export function isFeedbackNewFormUrl(url) {
   try {
     const parsed = new URL(url);
     return parsed.pathname === FEEDBACK_NEW_PATH;
   } catch {
     return false;
   }
+}
+
+/** @param {URLSearchParams} searchParams */
+export function resolveInitialRelevantPageSelection(searchParams, recentUrls) {
+  const fromLink = normalizeReportedPageUrl(searchParams.get("pageUrl") ?? "");
+  if (fromLink) {
+    if (recentUrls.includes(fromLink)) {
+      return { pageChoice: fromLink, customPageUrl: "" };
+    }
+    return { pageChoice: "custom", customPageUrl: fromLink };
+  }
+  return { pageChoice: recentUrls[0] ?? "none", customPageUrl: "" };
 }
 
 /**
@@ -83,7 +95,7 @@ export function getRecentApUrlsForBugReport() {
   if (!Array.isArray(list)) {
     return [];
   }
-  return list.filter((url) => typeof url === "string" && !isBugFormUrl(url));
+  return list.filter((url) => typeof url === "string" && !isFeedbackNewFormUrl(url));
 }
 
 /**

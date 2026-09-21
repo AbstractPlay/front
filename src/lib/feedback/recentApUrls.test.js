@@ -2,8 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   formatApUrlLabel,
   getRecentApUrlsForBugReport,
+  isFeedbackNewFormUrl,
   parseGameHintsFromApUrl,
   recordApUrl,
+  resolveInitialRelevantPageSelection,
 } from "./recentApUrls";
 
 describe("recentApUrls", () => {
@@ -50,5 +52,25 @@ describe("recentApUrls", () => {
     expect(parseGameHintsFromApUrl(
       "https://play.abstractplay.com/move/hive/1/444727048",
     )).toEqual({ gameId: "444727048" });
+  });
+
+  it("isFeedbackNewFormUrl matches bug report form paths", () => {
+    expect(isFeedbackNewFormUrl("https://play.abstractplay.com/feedback/new?kind=bug"))
+      .toBe(true);
+    expect(isFeedbackNewFormUrl("https://play.abstractplay.com/move/druid/0/x"))
+      .toBe(false);
+  });
+
+  it("resolveInitialRelevantPageSelection prefers pageUrl query param", () => {
+    const move = "https://play.abstractplay.com/move/druid/0/game-1";
+    const params = new URLSearchParams({ pageUrl: move });
+    expect(resolveInitialRelevantPageSelection(params, [])).toEqual({
+      pageChoice: "custom",
+      customPageUrl: move,
+    });
+    expect(resolveInitialRelevantPageSelection(params, [move])).toEqual({
+      pageChoice: move,
+      customPageUrl: "",
+    });
   });
 });

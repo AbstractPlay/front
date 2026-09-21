@@ -10,6 +10,7 @@ import {
   formatApUrlLabel,
   getRecentApUrlsForBugReport,
   normalizeReportedPageUrl,
+  resolveInitialRelevantPageSelection,
   resolveReportedPageUrlForSubmit,
 } from "../../lib/feedback/recentApUrls";
 import { boardKeyForKind, boardPathForKind, feedbackDetailPath } from "../../lib/feedback/feedbackConstants";
@@ -47,10 +48,15 @@ function FeedbackNew() {
     () => (kind === "bug" ? getRecentApUrlsForBugReport() : []),
     [kind],
   );
-  const [pageChoice, setPageChoice] = useState(() => (
-    recentPageUrls[0] ?? "none"
-  ));
-  const [customPageUrl, setCustomPageUrl] = useState("");
+  const initialRelevantPage = useMemo(
+    () => (kind === "bug"
+      ? resolveInitialRelevantPageSelection(searchParams, getRecentApUrlsForBugReport())
+      : { pageChoice: "none", customPageUrl: "" }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only defaults from URL + session
+    [],
+  );
+  const [pageChoice, setPageChoice] = useState(initialRelevantPage.pageChoice);
+  const [customPageUrl, setCustomPageUrl] = useState(initialRelevantPage.customPageUrl);
   const [pageUrlError, setPageUrlError] = useState("");
 
   const reportedPageUrl = useMemo(() => {
