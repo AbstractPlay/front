@@ -4699,6 +4699,10 @@
     "src": "Votes (most first)",
     "out": "Stimmen (meiste zuerst)"
   },
+  "feedback.board.tagFilterLabel": {
+    "src": "Filter by topic",
+    "out": "Nach Thema filtern"
+  },
   "feedback.bugs.backToBoard": {
     "src": "Back to bug reports",
     "out": "Zurück zu Fehlerberichten"

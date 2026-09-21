@@ -227,73 +227,84 @@ function FeedbackBoard({ kind = "bug" }) {
       </p>
       <FeedbackQuickSearch value={searchQuery} onChange={setSearchQuery} />
       <div className="feedback-board-toolbar">
-        <div className="feedback-board-chips" role="toolbar" aria-label={t("feedback.board.filterLabel")}>
-          <button
-            type="button"
-            className={`button is-small apButtonNeutral${!showClosedOnly && !statusFilter && !categoryFilter && !tagFilter ? " is-selected" : ""}`}
-            disabled={showClosedOnly}
-            onClick={() => {
-              setStatusFilter("");
-              setCategoryFilter("");
-              setTagFilter("");
-            }}
-          >
-            {t("feedback.board.filterAll", { count: statusCounts.all })}
-          </button>
-          {statusChips.map((chip) => (
+        <div className="feedback-board-filters">
+          <div className="feedback-board-chips" role="toolbar" aria-label={t("feedback.board.filterLabel")}>
             <button
-              key={chip}
               type="button"
-              className={`button is-small apButtonNeutral${statusFilter === chip ? " is-selected" : ""}`}
-              disabled={showClosedOnly}
-              onClick={() => {
-                setCategoryFilter("");
-                setStatusFilter(chip);
-              }}
-            >
-              {t(`feedback.status.${chip}`)}
-              {statusCounts[chip] > 0 ? ` (${statusCounts[chip]})` : ""}
-            </button>
-          ))}
-          {kind === "wishlist" ? WISHLIST_CATEGORY_FILTER_CHIPS.map((chip) => (
-            <button
-              key={chip}
-              type="button"
-              className={`button is-small apButtonNeutral${categoryFilter === chip ? " is-selected" : ""}`}
+              className={`button is-small apButtonNeutral${!showClosedOnly && !statusFilter && !categoryFilter && !tagFilter ? " is-selected" : ""}`}
               disabled={showClosedOnly}
               onClick={() => {
                 setStatusFilter("");
-                setCategoryFilter(chip);
-              }}
-            >
-              {t(`feedback.wishlist.category.${chip}`)}
-              {categoryCounts[chip] > 0 ? ` (${categoryCounts[chip]})` : ""}
-            </button>
-          )) : null}
-          {(kind === "bug" || kind === "feature") ? tagOptions.map((entry) => (
-            <button
-              key={entry.id}
-              type="button"
-              className={`button is-small apButtonNeutral${tagFilter === entry.id ? " is-selected" : ""}`}
-              disabled={showClosedOnly || tagCounts[entry.id] === 0}
-              onClick={() => {
-                setStatusFilter("");
                 setCategoryFilter("");
-                setTagFilter((prev) => (prev === entry.id ? "" : entry.id));
+                setTagFilter("");
               }}
             >
-              {t(`feedback.tag.${entry.id}`, { defaultValue: entry.id })}
-              {tagCounts[entry.id] > 0 ? ` (${tagCounts[entry.id]})` : ""}
+              {t("feedback.board.filterAll", { count: statusCounts.all })}
             </button>
-          )) : null}
-          <button
-            type="button"
-            className={`button is-small apButtonNeutral feedback-board-closed-toggle${showClosedOnly ? " is-selected" : ""}`}
-            aria-pressed={showClosedOnly}
-            onClick={handleClosedOnlyToggle}
-          >
-            {t("feedback.board.showClosed")}
-          </button>
+            {statusChips.map((chip) => (
+              <button
+                key={chip}
+                type="button"
+                className={`button is-small apButtonNeutral${statusFilter === chip ? " is-selected" : ""}`}
+                disabled={showClosedOnly}
+                onClick={() => {
+                  setCategoryFilter("");
+                  setStatusFilter(chip);
+                }}
+              >
+                {t(`feedback.status.${chip}`)}
+                {statusCounts[chip] > 0 ? ` (${statusCounts[chip]})` : ""}
+              </button>
+            ))}
+            {kind === "wishlist" ? WISHLIST_CATEGORY_FILTER_CHIPS.map((chip) => (
+              <button
+                key={chip}
+                type="button"
+                className={`button is-small apButtonNeutral${categoryFilter === chip ? " is-selected" : ""}`}
+                disabled={showClosedOnly}
+                onClick={() => {
+                  setStatusFilter("");
+                  setCategoryFilter(chip);
+                }}
+              >
+                {t(`feedback.wishlist.category.${chip}`)}
+                {categoryCounts[chip] > 0 ? ` (${categoryCounts[chip]})` : ""}
+              </button>
+            )) : null}
+            <button
+              type="button"
+              className={`button is-small apButtonNeutral feedback-board-closed-toggle${showClosedOnly ? " is-selected" : ""}`}
+              aria-pressed={showClosedOnly}
+              onClick={handleClosedOnlyToggle}
+            >
+              {t("feedback.board.showClosed")}
+            </button>
+          </div>
+          {(kind === "bug" || kind === "feature") && tagOptions.length > 0 ? (
+            <div
+              className="feedback-board-chips feedback-board-tag-chips"
+              role="toolbar"
+              aria-label={t("feedback.board.tagFilterLabel")}
+            >
+              {tagOptions.map((entry) => (
+                <button
+                  key={entry.id}
+                  type="button"
+                  className={`button is-small feedback-tag-filter-chip${tagFilter === entry.id ? " feedback-tag-filter-chip--selected" : ""}`}
+                  disabled={showClosedOnly || tagCounts[entry.id] === 0}
+                  aria-pressed={tagFilter === entry.id}
+                  onClick={() => {
+                    setStatusFilter("");
+                    setCategoryFilter("");
+                    setTagFilter((prev) => (prev === entry.id ? "" : entry.id));
+                  }}
+                >
+                  {t(`feedback.tag.${entry.id}`, { defaultValue: entry.id })}
+                  {tagCounts[entry.id] > 0 ? ` (${tagCounts[entry.id]})` : ""}
+                </button>
+              ))}
+            </div>
+          ) : null}
         </div>
         <div className="field feedback-board-sort">
           <label className="label" htmlFor="feedback-board-sort">{t("feedback.board.sortBy")}</label>

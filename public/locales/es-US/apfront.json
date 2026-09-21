@@ -1806,6 +1806,7 @@
   "feedback": {
     "board": {
       "filterLabel": "Filtrar lista",
+      "tagFilterLabel": "Filtrar por tema",
       "filterAll": "Todos ({{count}})",
       "showClosed": "Cerrados (no archivados)",
       "emptyClosed": "No hay elementos cerrados listados aquí. Después de archivarlos, se mueven al historial de comentarios.",

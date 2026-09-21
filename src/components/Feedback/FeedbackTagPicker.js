@@ -96,7 +96,7 @@ function FeedbackTagPicker({
             <button
               key={entry.id}
               type="button"
-              className={`button is-small apButtonNeutral${selected ? " is-selected" : ""}`}
+              className={`button is-small feedback-tag-picker-option${selected ? " feedback-tag-picker-option--selected" : ""}`}
               disabled={disabled || (!selected && selectedTags.length >= FEEDBACK_TAG_MAX_COUNT)}
               aria-pressed={selected}
               onClick={() => toggleTag(entry.id)}

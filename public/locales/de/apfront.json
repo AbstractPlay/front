@@ -1806,6 +1806,7 @@
   "feedback": {
     "board": {
       "filterLabel": "Liste filtern",
+      "tagFilterLabel": "Nach Thema filtern",
       "filterAll": "Alle ({{count}})",
       "showClosed": "Geschlossen (nicht archiviert)",
       "emptyClosed": "Hier sind keine geschlossenen Einträge aufgeführt. Nach dem Archivieren werden sie in den Feedback-Verlauf verschoben.",

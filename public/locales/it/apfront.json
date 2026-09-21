@@ -1806,6 +1806,7 @@
   "feedback": {
     "board": {
       "filterLabel": "Filtra elenco",
+      "tagFilterLabel": "Filtra per argomento",
       "filterAll": "Tutti ({{count}})",
       "showClosed": "Chiusi (non archiviati)",
       "emptyClosed": "Qui non è elencato alcun elemento chiuso. Dopo l'archiviazione, verranno spostati nello storico dei feedback.",

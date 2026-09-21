@@ -1806,6 +1806,7 @@
     "feedback": {
         "board": {
             "filterLabel": "Filter list",
+            "tagFilterLabel": "Filter by topic",
             "filterAll": "All ({{count}})",
             "showClosed": "Closed (not archived)",
             "emptyClosed": "No closed items are listed here. After archive, they move to feedback history.",
