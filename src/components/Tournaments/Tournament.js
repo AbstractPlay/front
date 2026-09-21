@@ -9,6 +9,7 @@ import PageLoading from "../shared/PageLoading";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { formatVariantsJoined } from "../../lib/expandVariants";
+import TournamentFormatBadge from "./TournamentFormatBadge";
 
 async function reportError(error) {
   try {
@@ -34,6 +35,25 @@ async function reportError(error) {
   } catch (e) {
     console.log(`Error reporting error: ${e}`);
   }
+}
+
+function outcomeForPlayerGame(playerid, game) {
+  let outcome = "";
+  let outcome2 = "";
+  if (game.winner === undefined) {
+    outcome = "_";
+    outcome2 = "_";
+  } else if (game.winner.length === 2) {
+    outcome = "Draw";
+    outcome2 = "½";
+  } else if (game.winner[0] === playerid) {
+    outcome = "Win";
+    outcome2 = "1";
+  } else {
+    outcome = "Loss";
+    outcome2 = "0";
+  }
+  return [outcome, outcome2, game.id];
 }
 
 function processData(tournament, players, games) {
@@ -133,25 +153,21 @@ function processData(tournament, players, games) {
         if (o.playerid === p.playerid) {
           p.outcomes.push(["-"]);
         } else {
-          let game = p.games.find(
-            (g) => g.player1 === o.playerid || g.player2 === o.playerid
-          );
-          let outcome = "";
-          let outcome2 = "";
-          if (game.winner === undefined) {
-            outcome = "_";
-            outcome2 = "_";
-          } else if (game.winner.length === 2) {
-            outcome = "Draw";
-            outcome2 = "½";
-          } else if (game.winner[0] === p.playerid) {
-            outcome = "Win";
-            outcome2 = "1";
+          const gamesVsO = p.games
+            .filter(
+              (g) => g.player1 === o.playerid || g.player2 === o.playerid
+            )
+            .sort((a, b) => (a.matchLeg ?? 1) - (b.matchLeg ?? 1));
+          if (gamesVsO.length === 0) {
+            p.outcomes.push(["_", "_", null]);
+          } else if (gamesVsO.length === 1) {
+            p.outcomes.push(outcomeForPlayerGame(p.playerid, gamesVsO[0]));
           } else {
-            outcome = "Loss";
-            outcome2 = "0";
+            p.outcomes.push([
+              "multi",
+              gamesVsO.map((g) => outcomeForPlayerGame(p.playerid, g)),
+            ]);
           }
-          p.outcomes.push([outcome, outcome2, game.id]);
         }
       }
     }
@@ -258,6 +274,9 @@ function Tournament(props) {
                 })}
           </a>
         </h1>
+        <div className="has-text-centered mb-4">
+          <TournamentFormatBadge tournament={tournament} />
+        </div>
         <div className="control has-text-centered">
           <a
             href={`https://records.abstractplay.com/event/${tournamentid}.json`}
@@ -344,6 +363,25 @@ function Tournament(props) {
                               <td key={"player-" + i + "-" + j}>
                                 {o[0] === "-" ? (
                                   "-"
+                                ) : o[0] === "multi" ? (
+                                  <span>
+                                    {o[1].map((leg, k) => (
+                                      <React.Fragment key={k}>
+                                        {k > 0 ? " · " : null}
+                                        {leg[2] === null ? (
+                                          leg[screenWidth >= 770 ? 0 : 1]
+                                        ) : (
+                                          <Link
+                                            to={`/move/${tournament.metaGame}/${
+                                              leg[0] === "_" ? "0" : "1"
+                                            }/${leg[2]}`}
+                                          >
+                                            {leg[screenWidth >= 770 ? 0 : 1]}
+                                          </Link>
+                                        )}
+                                      </React.Fragment>
+                                    ))}
+                                  </span>
                                 ) : (
                                   <Link
                                     to={`/move/${tournament.metaGame}/${

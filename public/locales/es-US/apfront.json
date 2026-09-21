@@ -1348,6 +1348,10 @@
     "Winner": "Ganador",
     "DivisionWinner": "Ganador: {{winner}}",
     "Withdraw": "Retirarse del siguiente",
+    "Format": "Formato",
+    "TwoLegBadge": "Dos partidas por oponente",
+    "TwoLegHelp": "Cada emparejamiento se juega dos veces alternando asientos (la segunda partida se abre cuando termina la primera).",
+    "TwoLegOption": "Dos partidas por oponente (alternando asientos)",
     "tabs": {
       "open": "Inscripciones abiertas",
       "current": "En curso",

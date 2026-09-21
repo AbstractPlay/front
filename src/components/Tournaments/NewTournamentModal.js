@@ -19,6 +19,7 @@ function NewTournamentModal(props) {
   const { variantsValid, onValidityChange, resetVariantValidity } =
     useVariantSelectionValidity();
   const [error, errorSetter] = useState("");
+  const [twoLeg, setTwoLeg] = useState(false);
   const { t } = useTranslation();
 
   const handleVariantValidityChange = useCallback(
@@ -52,6 +53,7 @@ function NewTournamentModal(props) {
       metaGameSetter(null);
     }
     errorSetter("");
+    setTwoLeg(false);
   }, [show, props, handleChangeGame]);
 
   const handleNew = async () => {
@@ -67,6 +69,7 @@ function NewTournamentModal(props) {
       !(await handleNewTournament({
         metaGame: metaGame,
         variants: selectedVariants,
+        ...(twoLeg ? { matchLegs: 2 } : {}),
       }))
     ) {
       errorSetter(t("Tournament.Duplicate"));
@@ -121,6 +124,18 @@ function NewTournamentModal(props) {
           variantsSetter={setSelectedVariants}
           onValidityChange={handleVariantValidityChange}
         />
+        <div className="field mt-4">
+          <label className="checkbox">
+            <input
+              type="checkbox"
+              checked={twoLeg}
+              onChange={(e) => setTwoLeg(e.target.checked)}
+            />
+            {" "}
+            {t("Tournament.TwoLegOption")}
+          </label>
+          <p className="help">{t("Tournament.TwoLegHelp")}</p>
+        </div>
       </div>
       <div className="is-danger error">{error}</div>
     </Modal>

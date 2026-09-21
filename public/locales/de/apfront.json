@@ -1348,6 +1348,10 @@
     "Winner": "Sieger",
     "DivisionWinner": "Sieger: {{winner}}",
     "Withdraw": "Vom nächsten abmelden",
+    "Format": "Format",
+    "TwoLegBadge": "Zwei Partien pro Gegner",
+    "TwoLegHelp": "Jede Paarung wird zweimal mit wechselnden Seiten gespielt (die zweite Partie beginnt, sobald die erste beendet ist).",
+    "TwoLegOption": "Zwei Partien pro Gegner (wechselnde Seiten)",
     "tabs": {
       "open": "Offen für Anmeldungen",
       "current": "Laufend",

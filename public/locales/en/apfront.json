@@ -1348,6 +1348,10 @@
         "Winner": "Winner",
         "DivisionWinner": "Winner: {{winner}}",
         "Withdraw": "Withdraw from next",
+        "Format": "Format",
+        "TwoLegBadge": "Two games per opponent",
+        "TwoLegHelp": "Each pairing is played twice with alternating seats (second game opens when the first ends).",
+        "TwoLegOption": "Two games per opponent (alternating seats)",
         "tabs": {
             "open": "Open for registration",
             "current": "Ongoing",
