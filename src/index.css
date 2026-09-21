@@ -2686,6 +2686,34 @@ span.hardTime::after {
   border: 1px solid var(--tag-background-color);
 }
 
+.game-move-player-online {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  color: inherit;
+}
+
+.game-move-player-online .fa-wifi {
+  color: var(--secondary-font-color);
+}
+
+.game-move-player-online--chip {
+  margin-left: 0.2rem;
+  font-size: 0.85em;
+}
+
+.game-move-context-strip__chip--clock .game-move-strip-context__clock-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.game-move-queue-card__clock-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
 .game-move-last-move-chip {
   display: inline-flex;
   flex-wrap: wrap;

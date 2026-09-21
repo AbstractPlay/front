@@ -14,6 +14,7 @@ import { formatPlayerDisplayName, isClientBotTurn } from "../Bots/botUtils";
 import { getPendingSubmitMove } from "../../lib/GameMove/submitMove";
 import Modal from "../Modal";
 import { formatSoloOutcome, isSoloGame } from "../../lib/soloPlay";
+import PlayerOnlineIcon from "./preview/PlayerOnlineIcon";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -131,7 +132,6 @@ function MoveEntry(props) {
   const [inputValue, inputValueSetter] = useState(move.move);
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
-  const connections = useStore((state) => state.connections);
 
   function getFocusNode(exp, game, foc) {
     let curNode = exp[foc.moveNumber];
@@ -406,12 +406,7 @@ function MoveEntry(props) {
                         {showMilliseconds(
                           p.time - (Date.now() - game.lastMoveTime)
                         )}
-                        {globalMe === null ||
-                        !connections?.visibleUserIds.includes(p.id) ? null : (
-                          <span className="icon" title={t("PlayerOnline")}>
-                            <i className="fa fa-wifi" aria-hidden="true"></i>
-                          </span>
-                        )}
+                        <PlayerOnlineIcon playerId={p.id} />
                       </td>
                     </tr>
                   ) : (
@@ -421,12 +416,7 @@ function MoveEntry(props) {
                       </td>
                       <td>
                         {showMilliseconds(p.time)}
-                        {globalMe === null ||
-                        !connections?.visibleUserIds.includes(p.id) ? null : (
-                          <span className="icon" title={t("PlayerOnline")}>
-                            <i className="fa fa-wifi" aria-hidden="true"></i>
-                          </span>
-                        )}
+                        <PlayerOnlineIcon playerId={p.id} />
                       </td>
                     </tr>
                   )

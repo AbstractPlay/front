@@ -23,5 +23,7 @@ describe("moveEntryUtils clocks", () => {
     expect(live[1].active).to.be.false;
     expect(historicalOpponentTurn[1].active).to.be.true;
     expect(live[0].time).to.not.equal(live[1].time);
+    expect(live[0].playerId).to.equal("a");
+    expect(live[1].playerId).to.equal("b");
   });
 });

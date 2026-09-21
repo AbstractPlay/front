@@ -65,6 +65,7 @@ export function getPlayerClockChips(game, toMove, users, now = Date.now()) {
     const ms = active ? p.time - (now - game.lastMoveTime) : p.time;
     return {
       key: ind,
+      playerId: p.id,
       label: formatPlayerDisplayName(p, users),
       time: showMilliseconds(ms),
       active,

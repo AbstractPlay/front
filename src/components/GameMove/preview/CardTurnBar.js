@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useStore } from "../../../stores";
 import { getLivePlayerClockChips } from "./moveEntryUtils";
+import PlayerOnlineIcon from "./PlayerOnlineIcon";
 
 function CardTurnBar({ session }) {
   const { game } = session;
@@ -50,6 +51,10 @@ function CardTurnBar({ session }) {
           >
             <span className="game-move-queue-card__clock-name">
               {chip.label}
+              <PlayerOnlineIcon
+                playerId={chip.playerId}
+                className="game-move-player-online--chip"
+              />
             </span>
             <span className="game-move-queue-card__clock-time">
               {chip.time}

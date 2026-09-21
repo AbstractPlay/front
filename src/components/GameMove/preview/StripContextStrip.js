@@ -6,6 +6,7 @@ import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
 import LastMoveChip from "./LastMoveChip";
 import LayoutPickerTrigger from "../LayoutPickerTrigger";
+import PlayerOnlineIcon from "./PlayerOnlineIcon";
 
 const MOBILE_PANEL_MAX_WIDTH = 768;
 
@@ -74,6 +75,10 @@ function StripContextStrip({ session, layoutContext }) {
           >
             <span className="game-move-strip-context__clock-name">
               {chip.label}
+              <PlayerOnlineIcon
+                playerId={chip.playerId}
+                className="game-move-player-online--chip"
+              />
             </span>
             <span className="game-move-strip-context__clock-time">
               {chip.time}
