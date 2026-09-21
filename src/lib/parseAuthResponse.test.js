@@ -51,6 +51,16 @@ describe("parseAuthResponse", () => {
     expect(result.data).toBe(null);
   });
 
+  it("handles empty envelope body string without throwing", async () => {
+    const result = await parseAuthResponse(
+      mockResponse({
+        body: JSON.stringify({ statusCode: 200, body: "" }),
+      })
+    );
+    expect(result.ok).toBe(true);
+    expect(result.data).toBe(null);
+  });
+
   it("reports HTTP errors with status", async () => {
     const result = await parseAuthResponse(
       mockResponse({ status: 502, body: "Bad Gateway" })

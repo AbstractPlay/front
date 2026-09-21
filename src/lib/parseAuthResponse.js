@@ -19,6 +19,9 @@ function parseEnvelopeBody(body) {
     return null;
   }
   if (typeof body === "string") {
+    if (!body.trim()) {
+      return null;
+    }
     return JSON.parse(body);
   }
   return body;
