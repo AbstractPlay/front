@@ -227,7 +227,7 @@ function FeedbackBoard({ kind = "bug" }) {
       </p>
       <FeedbackQuickSearch value={searchQuery} onChange={setSearchQuery} />
       <div className="feedback-board-toolbar">
-        <div className="feedback-board-filters">
+        <div className="feedback-board-toolbar-row">
           <div className="feedback-board-chips" role="toolbar" aria-label={t("feedback.board.filterLabel")}>
             <button
               type="button"
@@ -280,54 +280,57 @@ function FeedbackBoard({ kind = "bug" }) {
               {t("feedback.board.showClosed")}
             </button>
           </div>
-          {(kind === "bug" || kind === "feature") && tagOptions.length > 0 ? (
-            <div
-              className="feedback-board-chips feedback-board-tag-chips"
-              role="toolbar"
-              aria-label={t("feedback.board.tagFilterLabel")}
-            >
-              {tagOptions.map((entry) => (
-                <button
-                  key={entry.id}
-                  type="button"
-                  className={`button is-small feedback-tag-filter-chip${tagFilter === entry.id ? " feedback-tag-filter-chip--selected" : ""}`}
-                  disabled={showClosedOnly || tagCounts[entry.id] === 0}
-                  aria-pressed={tagFilter === entry.id}
-                  onClick={() => {
-                    setStatusFilter("");
-                    setCategoryFilter("");
-                    setTagFilter((prev) => (prev === entry.id ? "" : entry.id));
-                  }}
+          <div className="field feedback-board-sort">
+            <label className="label" htmlFor="feedback-board-sort">{t("feedback.board.sortBy")}</label>
+            <div className="control">
+              <div className="select is-small">
+                <select
+                  id="feedback-board-sort"
+                  value={sortBy}
+                  onChange={(e) => handleSortByChange(e.target.value)}
                 >
-                  {t(`feedback.tag.${entry.id}`, { defaultValue: entry.id })}
-                  {tagCounts[entry.id] > 0 ? ` (${tagCounts[entry.id]})` : ""}
-                </button>
-              ))}
+                  {sortOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {t(sortLabelKey(option))}
+                    </option>
+                  ))}
+                  {isAdmin && kind !== "wishlist" ? (
+                    <>
+                      <option value="default">{t("feedback.admin.sortDefault")}</option>
+                      <option value="priority">{t("feedback.admin.sortPriority")}</option>
+                      <option value="status">{t("feedback.admin.sortStatus")}</option>
+                    </>
+                  ) : null}
+                </select>
+              </div>
             </div>
-          ) : null}
+          </div>
         </div>
-        <div className="field feedback-board-sort">
-          <label className="label" htmlFor="feedback-board-sort">{t("feedback.board.sortBy")}</label>
-          <select
-            id="feedback-board-sort"
-            className="select"
-            value={sortBy}
-            onChange={(e) => handleSortByChange(e.target.value)}
+        {(kind === "bug" || kind === "feature") && tagOptions.length > 0 ? (
+          <div
+            className="feedback-board-chips feedback-board-tag-chips"
+            role="toolbar"
+            aria-label={t("feedback.board.tagFilterLabel")}
           >
-            {sortOptions.map((option) => (
-              <option key={option} value={option}>
-                {t(sortLabelKey(option))}
-              </option>
+            {tagOptions.map((entry) => (
+              <button
+                key={entry.id}
+                type="button"
+                className={`button is-small apButtonNeutral feedback-tag-filter-chip${tagFilter === entry.id ? " feedback-tag-filter-chip--selected" : ""}`}
+                disabled={showClosedOnly || tagCounts[entry.id] === 0}
+                aria-pressed={tagFilter === entry.id}
+                onClick={() => {
+                  setStatusFilter("");
+                  setCategoryFilter("");
+                  setTagFilter((prev) => (prev === entry.id ? "" : entry.id));
+                }}
+              >
+                {t(`feedback.tag.${entry.id}`, { defaultValue: entry.id })}
+                {tagCounts[entry.id] > 0 ? ` (${tagCounts[entry.id]})` : ""}
+              </button>
             ))}
-            {isAdmin && kind !== "wishlist" ? (
-              <>
-                <option value="default">{t("feedback.admin.sortDefault")}</option>
-                <option value="priority">{t("feedback.admin.sortPriority")}</option>
-                <option value="status">{t("feedback.admin.sortStatus")}</option>
-              </>
-            ) : null}
-          </select>
-        </div>
+          </div>
+        ) : null}
       </div>
       {error && <p className="has-text-danger">{error}</p>}
       {visibleItems.length === 0 ? (

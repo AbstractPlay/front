@@ -6,6 +6,14 @@
   padding: 1rem;
 }
 
+.feedback-quick-search {
+  margin-bottom: 0.5rem;
+}
+
+.feedback-quick-search .label {
+  margin-bottom: 0.25rem;
+}
+
 .feedback-quick-search .input {
   background: var(--main-bg-color);
   color: var(--main-font-color);
@@ -544,46 +552,61 @@
 
 .feedback-board-toolbar {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 1rem;
-  margin: 0 0 1.25rem;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0 0 0.5rem;
 }
 
-.feedback-board-filters {
+.feedback-board-toolbar-row {
   display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  flex: 1 1 12rem;
-  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 0.5rem;
 }
 
 .feedback-board-tag-chips {
-  padding-top: 0.65rem;
+  padding-top: 0.25rem;
+  margin-top: 0.15rem;
   border-top: 1px solid var(--tag-background-color);
 }
 
-.feedback-tag-filter-chip,
-.feedback-tag-picker-option {
-  background: var(--main-bg-color);
-  color: var(--secondary-font-color);
+.feedback-board-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.feedback-board-chips .button.is-small {
+  height: auto;
+  min-height: var(--bulma-control-size, 1.75rem);
+  padding-top: calc(var(--bulma-control-padding-vertical, 0.25rem) - 1px);
+  padding-bottom: calc(var(--bulma-control-padding-vertical, 0.25rem) - 1px);
+}
+
+.feedback-board-tag-chips .feedback-tag-filter-chip:not(.feedback-tag-filter-chip--selected) {
   border: 1px dashed var(--tag-background-color);
-  font-weight: 400;
+  color: var(--secondary-font-color);
 }
 
-.feedback-tag-filter-chip:hover:not(:disabled),
-.feedback-tag-picker-option:hover:not(:disabled) {
-  border-style: solid;
-  color: var(--main-font-color);
+.feedback-board-tag-chips .feedback-tag-filter-chip--selected {
+  background: var(--secondary-color-3);
+  color: var(--high-contrast-font-color);
+  border: 1px solid var(--secondary-color-3);
 }
 
-.feedback-tag-filter-chip--selected,
+.feedback-tag-picker-option:not(.feedback-tag-picker-option--selected) {
+  border: 1px dashed var(--tag-background-color);
+  color: var(--secondary-font-color);
+}
+
 .feedback-tag-picker-option--selected {
   background: var(--secondary-color-3);
   color: var(--high-contrast-font-color);
-  border: 2px solid var(--secondary-color-3);
-  font-weight: 600;
-  box-shadow: 0 0 0 1px var(--main-bg-color);
+  border: 1px solid var(--secondary-color-3);
 }
 
 .feedback-tag-filter-chip:disabled,
@@ -593,8 +616,23 @@
 }
 
 .feedback-board-sort .label,
-.feedback-board-filters + .feedback-board-sort .label {
-  margin-bottom: 0.35rem;
+.feedback-board-toolbar-row .feedback-board-sort .label {
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.feedback-board-sort.field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  margin-bottom: 0;
+  flex: 0 1 auto;
+}
+
+.feedback-board-sort .control {
+  flex: 0 1 auto;
+  min-width: min(100%, 11rem);
 }
 
 .feedback-board-chips .button.is-selected {
@@ -639,7 +677,16 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
-  margin: 0.5rem 0 0.75rem;
+  margin: 0.35rem 0 0.5rem;
+}
+
+.feedback-tag-picker .label {
+  margin-bottom: 0.25rem;
+}
+
+.feedback-tag-picker .feedback-field-hint {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
 }
 
 .feedback-post-tags {
@@ -672,16 +719,12 @@
   max-width: 16rem;
 }
 
-.feedback-board-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  flex: 1 1 12rem;
+.feedback-board-sort {
+  margin-bottom: 0;
 }
 
-.feedback-board-sort {
-  flex: 0 1 auto;
-  margin-bottom: 0;
+.feedback-board-sort .select {
+  width: 100%;
 }
 
 .feedback-wishlist-callout {
