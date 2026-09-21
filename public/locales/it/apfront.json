@@ -2082,7 +2082,8 @@
       "i18n": "Traduzioni",
       "accessibility": "Accessibilità e UX",
       "rules_engine": "Regole e motore",
-      "tables": "Tavoli e layout"
+      "tables": "Tavoli e layout",
+      "feedback": "Sistema di feedback"
     },
     "reviewers": {
       "badge": "Revisori: {{names}}",

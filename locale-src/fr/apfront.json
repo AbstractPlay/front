@@ -5403,6 +5403,10 @@
     "src": "Designer & playground",
     "out": "Concepteur et bac à sable"
   },
+  "feedback.tag.feedback": {
+    "src": "Feedback system",
+    "out": "Système de retours"
+  },
   "feedback.tag.game_client": {
     "src": "Game client & variants",
     "out": "Client de jeu et variantes"

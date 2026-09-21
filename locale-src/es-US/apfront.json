@@ -5403,6 +5403,10 @@
     "src": "Designer & playground",
     "out": "Diseñador y área de pruebas"
   },
+  "feedback.tag.feedback": {
+    "src": "Feedback system",
+    "out": "Sistema de comentarios"
+  },
   "feedback.tag.game_client": {
     "src": "Game client & variants",
     "out": "Cliente de juego y variantes"
