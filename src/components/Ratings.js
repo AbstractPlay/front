@@ -5,18 +5,9 @@ import { getGameDisplayName, isSummaryStatsVisible } from "../lib/gameOptions";
 import { stringColumnSortingFn } from "../lib/compareStrings";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
-import {
-  getCoreRowModel,
-  useReactTable,
-  flexRender,
-  createColumnHelper,
-  getSortedRowModel,
-  getPaginationRowModel,
-  getFilteredRowModel,
-} from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import ActivityMarker from "./ActivityMarker";
-import { useStorageState } from "react-use-storage-state";
 import PageHelmet from "./PageHelmet";
 import { useStore } from "../stores";
 import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
@@ -33,8 +24,8 @@ import { SUMMARY_URLS } from "../lib/summaryFetch";
 import GlickoHint from "./shared/GlickoHint";
 import GlickoDisplayNote from "./shared/GlickoDisplayNote";
 import { rawDirectoryDisplayName } from "./Bots/botUtils";
+import DataTable, { LIST_TABLE_PROPS } from "./shared/DataTable";
 
-const allSize = Number.MAX_SAFE_INTEGER;
 const columnHelper = createColumnHelper();
 
 function matchesMetaGame(rec, metaUid) {
@@ -44,8 +35,6 @@ function matchesMetaGame(rec, metaUid) {
 function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
   const { t, i18n } = useTranslation();
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
-  const [showState, showStateSetter] = useStorageState("ratings-show", 20);
-  const [sorting, setSorting] = useState([{ id: "rank", desc: false }]);
 
   const openChallengeModal = (name) => {
     activeChallengeModalSetter(name);
@@ -196,103 +185,6 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
     [globalMe, t, i18n.language, metaGame]
   );
 
-  const table = useReactTable({
-    data,
-    columns,
-    state: {
-      sorting,
-      columnVisibility: {
-        actions: globalMe !== null,
-      },
-    },
-    autoResetPageIndex: false,
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-  });
-
-  React.useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
-
-  const tableNavigation = (
-    <>
-      <div className="columns tableNav">
-        <div className="column is-half is-offset-one-quarter">
-          <div className="level smallerText has-text-centered">
-            <div className="level-item">
-              <button
-                className="button is-small"
-                onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <span className="icon is-small">
-                  <i className="fa fa-angle-double-left"></i>
-                </span>
-              </button>
-              <button
-                className="button is-small"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <span className="icon is-small">
-                  <i className="fa fa-angle-left"></i>
-                </span>
-              </button>
-              <button
-                className="button is-small"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                <span className="icon is-small">
-                  <i className="fa fa-angle-right"></i>
-                </span>
-              </button>
-              <button
-                className="button is-small"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}
-              >
-                <span className="icon is-small">
-                  <i className="fa fa-angle-double-right"></i>
-                </span>
-              </button>
-            </div>
-            <div className="level-item">
-              <p>
-                {t("Page")}{" "}
-                <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
-                {t("of")} <strong>{table.getPageCount()}</strong> (
-                {table.getPrePaginationRowModel().rows.length}{" "}
-                {t("TotalRatings")})
-              </p>
-            </div>
-            <div className="level-item">
-              <div className="control">
-                <div className="select is-small">
-                  <select
-                    value={table.getState().pagination.pageSize}
-                    onChange={(e) => {
-                      showStateSetter(Number(e.target.value));
-                    }}
-                  >
-                    {[10, 20, 30, 40, 50, allSize].map((pageSize) => (
-                      <option key={pageSize} value={pageSize}>
-                        {t("Show")} {pageSize === allSize ? t("All") : pageSize}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-
   return (
     <>
       <PageHelmet title={`${metaGameName}: Ratings`}>
@@ -320,67 +212,17 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
             }}
           />
         </h1>
-        <div className="container">
-          {tableNavigation}
-          <table
-            className="table apTable"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-          >
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <div
-                          {...{
-                            className: header.column.getCanSort()
-                              ? "sortable"
-                              : "",
-                            onClick: header.column.getToggleSortingHandler(),
-                          }}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {{
-                            asc: (
-                              <>
-                                &nbsp;<i className="fa fa-angle-up"></i>
-                              </>
-                            ),
-                            desc: (
-                              <>
-                                &nbsp;<i className="fa fa-angle-down"></i>
-                              </>
-                            ),
-                          }[header.column.getIsSorted()] ?? null}
-                        </div>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <GlickoDisplayNote />
-          {tableNavigation}
-        </div>
+        <DataTable
+          {...LIST_TABLE_PROPS}
+          embedded
+          pageSizeKey="ratings-show"
+          sort={[{ id: "rank", desc: false }]}
+          data={data}
+          columns={columns}
+          columnVisibility={{ actions: globalMe !== null }}
+          tableStyle={{ marginLeft: "auto", marginRight: "auto" }}
+          tableNote={<GlickoDisplayNote />}
+        />
       </article>
       {globalMe !== null && (
         <ChallengeEntryModals

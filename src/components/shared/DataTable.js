@@ -27,7 +27,16 @@ export const PROFILE_TABLE_PROPS = {
   nav: "bottom",
   wrapTable: false,
   stickyHeader: false,
-  showSearch: false,
+  showSearch: true,
+  searchPlacement: "nav",
+};
+
+export const LIST_TABLE_PROPS = {
+  nav: "both",
+  wrapTable: false,
+  stickyHeader: false,
+  showSearch: true,
+  searchPlacement: "nav",
 };
 
 export const PROFILE_FILTER_TABLE_PROPS = {
@@ -42,10 +51,35 @@ export const EVENTS_TABLE_PROPS = {
   nav: "bottom",
   wrapTable: false,
   stickyHeader: false,
-  showSearch: false,
+  showSearch: true,
+  searchPlacement: "nav",
 };
 
 const HEADER_HINT_COLUMNS = new Set(["description"]);
+
+/** @param {{ value: string, onChange: (value: string) => void, placeholderKey?: string }} props */
+export function TableNavSearch({
+  value,
+  onChange,
+  placeholderKey = "Search",
+}) {
+  const { t } = useTranslation();
+  return (
+    <div className="level-item data-table-nav-search">
+      <div className="field">
+        <div className="control">
+          <input
+            className="input is-small"
+            type="search"
+            placeholder={t(placeholderKey)}
+            onChange={(e) => onChange(e.target.value)}
+            value={value}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function DataTable({
   data,
@@ -55,6 +89,7 @@ function DataTable({
   nav = "top",
   showSearch = false,
   searchPlacement = "nav",
+  searchPlaceholderKey = "Search",
   wrapTable = false,
   stickyHeader = false,
   articleClassName = "",
@@ -62,6 +97,10 @@ function DataTable({
   globalFilterFn = "includesString",
   filterFieldId = "data-table-filter",
   tableNote = null,
+  columnVisibility = {},
+  embedded = false,
+  tableClassName = "table apTable",
+  tableStyle = undefined,
 }) {
   const [sorting, setSorting] = useState(sort);
   const [globalFilter, globalFilterSetter] = useState("");
@@ -73,7 +112,7 @@ function DataTable({
     columns,
     state: {
       sorting,
-      columnVisibility: {},
+      columnVisibility,
       globalFilter,
     },
     autoResetPageIndex: false,
@@ -96,19 +135,11 @@ function DataTable({
 
   const searchControl =
     showSearch && searchPlacement === "nav" ? (
-      <div className="level-item data-table-nav-search">
-        <div className="field">
-          <div className="control">
-            <input
-              className="input is-small"
-              type="search"
-              placeholder={t("Search")}
-              onChange={(e) => globalFilterSetter(e.target.value)}
-              value={globalFilter}
-            />
-          </div>
-        </div>
-      </div>
+      <TableNavSearch
+        value={globalFilter}
+        onChange={globalFilterSetter}
+        placeholderKey={searchPlaceholderKey}
+      />
     ) : null;
 
   const pagerControl = (
@@ -220,7 +251,7 @@ function DataTable({
     ) : null;
 
   const tableElement = (
-    <table className="table apTable">
+    <table className={tableClassName} style={tableStyle}>
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr
@@ -290,20 +321,26 @@ function DataTable({
     </table>
   );
 
+  const inner = (
+    <div className="container">
+      {nav === "bottom" ? null : tableNavigation}
+      {aboveTableFilter}
+      {wrapTable ? (
+        <div className="table-container">{tableElement}</div>
+      ) : (
+        tableElement
+      )}
+      {tableNote}
+      {nav === "top" ? null : tableNavigation}
+    </div>
+  );
+
+  if (embedded) {
+    return inner;
+  }
+
   return (
-    <article className={articleClassName || undefined}>
-      <div className="container">
-        {nav === "bottom" ? null : tableNavigation}
-        {aboveTableFilter}
-        {wrapTable ? (
-          <div className="table-container">{tableElement}</div>
-        ) : (
-          tableElement
-        )}
-        {tableNote}
-        {nav === "top" ? null : tableNavigation}
-      </div>
-    </article>
+    <article className={articleClassName || undefined}>{inner}</article>
   );
 }
 

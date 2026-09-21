@@ -41,6 +41,7 @@ import {
   isValidTournamentTab,
 } from "../../lib/tournamentSections";
 import PageLoading from "../shared/PageLoading";
+import { TableNavSearch } from "../shared/DataTable";
 
 function Tournaments(props) {
   const { t, i18n } = useTranslation();
@@ -66,6 +67,12 @@ function Tournaments(props) {
   ]);
   const [completedTournamentSorting, completedTournamentSortingSetter] =
     useState([{ id: "dateEnded", desc: true }]);
+  const [openTournamentsGlobalFilter, setOpenTournamentsGlobalFilter] =
+    useState("");
+  const [currentTournamentsGlobalFilter, setCurrentTournamentsGlobalFilter] =
+    useState("");
+  const [completedTournamentsGlobalFilter, setCompletedTournamentsGlobalFilter] =
+    useState("");
   const [openTournamentsShowState, openTournamentsShowStateSetter] =
     useStorageState("open-tournaments-show", 20);
   const [currentTournamentsShowState, currentTournamentsShowStateSetter] =
@@ -497,17 +504,24 @@ function Tournaments(props) {
     columns: openTournamentsColumns,
     state: {
       sorting: openTournamentSorting,
-    },
-    columnVisibility: {
-      actions: globalMe !== null,
+      globalFilter: openTournamentsGlobalFilter,
+      columnVisibility: {
+        actions: globalMe !== null,
+      },
     },
     autoResetPageIndex: false,
     onSortingChange: openTournamentSortingSetter,
+    onGlobalFilterChange: setOpenTournamentsGlobalFilter,
+    globalFilterFn: "includesString",
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
+
+  useEffect(() => {
+    openTournamentsTable.setPageIndex(0);
+  }, [openTournamentsGlobalFilter, openTournamentsTable]);
 
   useEffect(() => {
     openTournamentsTable.setPageSize(openTournamentsShowState);
@@ -518,6 +532,10 @@ function Tournaments(props) {
       <div className="columns tableNav">
         <div className="column is-half is-offset-one-quarter">
           <div className="level smallerText has-text-centered">
+            <TableNavSearch
+              value={openTournamentsGlobalFilter}
+              onChange={setOpenTournamentsGlobalFilter}
+            />
             <div className="level-item">
               <button
                 className="button is-small"
@@ -718,17 +736,24 @@ function Tournaments(props) {
     columns: currentTournamentsColumns,
     state: {
       sorting: currentTournamentSorting,
-    },
-    columnVisibility: {
-      actions: globalMe !== null,
+      globalFilter: currentTournamentsGlobalFilter,
+      columnVisibility: {
+        actions: globalMe !== null,
+      },
     },
     autoResetPageIndex: false,
     onSortingChange: currentTournamentSortingSetter,
+    onGlobalFilterChange: setCurrentTournamentsGlobalFilter,
+    globalFilterFn: "includesString",
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
+
+  useEffect(() => {
+    currentTournamentsTable.setPageIndex(0);
+  }, [currentTournamentsGlobalFilter, currentTournamentsTable]);
 
   useEffect(() => {
     currentTournamentsTable.setPageSize(currentTournamentsShowState);
@@ -739,6 +764,10 @@ function Tournaments(props) {
       <div className="columns">
         <div className="column is-half is-offset-one-quarter">
           <div className="level smallerText has-text-centered">
+            <TableNavSearch
+              value={currentTournamentsGlobalFilter}
+              onChange={setCurrentTournamentsGlobalFilter}
+            />
             <div className="level-item">
               <button
                 className="button is-small"
@@ -945,17 +974,24 @@ function Tournaments(props) {
     columns: completedTournamentsColumns,
     state: {
       sorting: completedTournamentSorting,
-    },
-    columnVisibility: {
-      actions: globalMe !== null,
+      globalFilter: completedTournamentsGlobalFilter,
+      columnVisibility: {
+        actions: globalMe !== null,
+      },
     },
     autoResetPageIndex: false,
     onSortingChange: completedTournamentSortingSetter,
+    onGlobalFilterChange: setCompletedTournamentsGlobalFilter,
+    globalFilterFn: "includesString",
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
+
+  useEffect(() => {
+    completedTournamentsTable.setPageIndex(0);
+  }, [completedTournamentsGlobalFilter, completedTournamentsTable]);
 
   useEffect(() => {
     completedTournamentsTable.setPageSize(completedTournamentsShowState);
@@ -966,6 +1002,10 @@ function Tournaments(props) {
       <div className="columns">
         <div className="column is-half is-offset-one-quarter">
           <div className="level smallerText has-text-centered">
+            <TableNavSearch
+              value={completedTournamentsGlobalFilter}
+              onChange={setCompletedTournamentsGlobalFilter}
+            />
             <div className="level-item">
               <button
                 className="button is-small"

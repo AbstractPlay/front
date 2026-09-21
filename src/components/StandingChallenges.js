@@ -23,6 +23,7 @@ import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import Spinner from "./Spinner";
 import PageLoading from "./shared/PageLoading";
+import { TableNavSearch } from "./shared/DataTable";
 import ActivityMarker from "./ActivityMarker";
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import { useStorageState } from "react-use-storage-state";
@@ -84,6 +85,7 @@ function StandingChallenges(props) {
   const allUsers = useStore((state) => state.users);
   const [showState, showStateSetter] = useStorageState("challenges-show", 20);
   const [sorting, setSorting] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState("");
   const [showAccepted, showAcceptedSetter] = useState(false);
   const [showModal, showModalSetter] = useState(false);
   const [filterStarred, filterStarredSetter] = useStorageState(
@@ -669,6 +671,7 @@ function StandingChallenges(props) {
     columns,
     state: {
       sorting,
+      globalFilter,
       columnVisibility: {
         actions: globalMe !== null,
         matchWinRate: globalMe !== null,
@@ -677,11 +680,17 @@ function StandingChallenges(props) {
     },
     autoResetPageIndex: false,
     onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: "includesString",
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
+
+  useEffect(() => {
+    table.setPageIndex(0);
+  }, [globalFilter, table]);
 
   useEffect(() => {
     table.setPageSize(showState);
@@ -843,6 +852,7 @@ function StandingChallenges(props) {
       <div className="columns tableNav">
         <div className="column is-half is-offset-one-quarter">
           <div className="level smallerText has-text-centered">
+            <TableNavSearch value={globalFilter} onChange={setGlobalFilter} />
             <div className="level-item">
               <button
                 className="button is-small"
