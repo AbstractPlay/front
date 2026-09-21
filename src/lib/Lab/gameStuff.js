@@ -211,6 +211,14 @@ export function setupLabGame(
   renderrepSetter(render);
 }
 
+/** Wire move recorded on the exploration spine after a full engine apply. */
+function labSpineMoveLabel(gameEngine, wire, partial) {
+  if (partial) {
+    return wire;
+  }
+  return gameEngine.lastmove ?? wire;
+}
+
 function routeLabMove(exploration, game, focus, node, gameEngineTmp, move) {
   const newfocus = cloneDeep(focus);
   let currentNode = node;
@@ -282,7 +290,7 @@ function doView(
           newfocus,
           node,
           gameEngineTmp,
-          m
+          labSpineMoveLabel(gameEngineTmp, m, partialMove)
         );
         newfocus.moveNumber = routed.newfocus.moveNumber;
         newfocus.exPath = routed.newfocus.exPath;
@@ -304,7 +312,8 @@ function doView(
     errorSetter(true);
     return;
   }
-  move.rendered = m;
+  const spineMove = labSpineMoveLabel(gameEngineTmp, m, partialMove);
+  move.rendered = spineMove;
   setStatus(gameEngineTmp, game, partialMove, m, statusRef.current);
   if (!partialMove) {
     game.state = gameEngineTmp.serialize();
@@ -314,7 +323,7 @@ function doView(
       newfocus,
       node,
       gameEngineTmp,
-      m
+      spineMove
     );
     newfocus.moveNumber = routed.newfocus.moveNumber;
     newfocus.exPath = routed.newfocus.exPath;

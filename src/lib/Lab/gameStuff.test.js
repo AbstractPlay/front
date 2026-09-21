@@ -12,9 +12,14 @@ vi.mock("../../stores", () => ({
   },
 }));
 
-vi.mock("./exploration", () => ({
-  getFocusNode: (exploration, _game, focus) => exploration[focus.moveNumber],
-}));
+vi.mock("./exploration", async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getFocusNode: (exploration, _game, focus) => exploration[focus.moveNumber],
+    saveLabExploration: vi.fn(),
+  };
+});
 
 vi.mock("./misc", () => ({
   resolveRenderLabels: (render) => render,
@@ -27,6 +32,8 @@ vi.mock("../engineMoveResults", () => ({
 
 const CMD_PARAMETERS = "The wrong number of parameters were provided.";
 const SACRIFICE_MOVE = "sacrifice g2 Eyuf";
+const WIRE_MOVE = "a6-b5";
+const CANONICAL_MOVE = "a6-b5(xc4)";
 
 vi.mock("@abstractplay/gameslib", () => {
   function createEngine() {
@@ -34,6 +41,12 @@ vi.mock("@abstractplay/gameslib", () => {
       validateMove(m) {
         if (m === SACRIFICE_MOVE) {
           return { valid: true, complete: -1, canrender: true };
+        }
+        if (m === WIRE_MOVE) {
+          return { valid: true, complete: 1 };
+        }
+        if (m === "") {
+          return { valid: true, complete: -1 };
         }
         return { valid: false };
       },
@@ -46,6 +59,9 @@ vi.mock("@abstractplay/gameslib", () => {
         }
         this.last = m;
         this.lastPartial = partial;
+        if (!partial && m === WIRE_MOVE) {
+          this.lastmove = CANONICAL_MOVE;
+        }
       },
       render: () => ({}),
       serialize: () => "{}",
@@ -84,7 +100,7 @@ describe("processNewMove", () => {
   const exploration = [new GameNode(null, "", "{}", 0)];
   const focus = { moveNumber: 0, exPath: [], canExplore: true };
 
-  function runProcessNewMove(newmove, partialMoveRenderRef) {
+  function runProcessNewMove(newmove, partialMoveRenderRef, explorationNodes = exploration) {
     const gameRef = { current: game };
     const movesRef = { current: [] };
     const statusRef = { current: {} };
@@ -98,7 +114,7 @@ describe("processNewMove", () => {
       gameRef,
       movesRef,
       statusRef,
-      exploration,
+      explorationNodes,
       errorMessageRef,
       partialMoveRenderRef,
       vi.fn(),
@@ -133,5 +149,25 @@ describe("processNewMove", () => {
     expect(partialMoveRenderRef.current).toBe(true);
     expect(engineRef.current.last).toBe(SACRIFICE_MOVE);
     expect(engineRef.current.lastPartial).toBe(true);
+  });
+
+  it("records engine lastmove on the spine after a full apply", () => {
+    const partialMoveRenderRef = { current: false };
+    const nodes = [new GameNode(null, "", "{}", 0)];
+
+    runProcessNewMove(
+      {
+        valid: true,
+        complete: 1,
+        move: WIRE_MOVE,
+        rendered: "",
+      },
+      partialMoveRenderRef,
+      nodes
+    );
+
+    expect(nodes).toHaveLength(2);
+    expect(nodes[1].move).toBe(CANONICAL_MOVE);
+    expect(partialMoveRenderRef.current).toBe(false);
   });
 });
