@@ -101,6 +101,7 @@ function DataTable({
   embedded = false,
   tableClassName = "table apTable",
   tableStyle = undefined,
+  navEnd = undefined,
 }) {
   const [sorting, setSorting] = useState(sort);
   const [globalFilter, globalFilterSetter] = useState("");
@@ -227,6 +228,7 @@ function DataTable({
         {pagerControl}
         {statusControl}
         {pageSizeControl}
+        {navEnd ? navEnd(table) : null}
       </div>
     </div>
   );

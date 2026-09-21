@@ -4,6 +4,7 @@ import {
   includesStringOnFields,
   normalizeFilterQuery,
   pairingGlobalFilterFn,
+  recentGamesGlobalFilterFn,
 } from "./tableGlobalFilter";
 
 function row(original) {
@@ -77,6 +78,26 @@ describe("gameListGlobalFilterFn", () => {
         }),
         "global",
         "zorro"
+      )
+    ).toBe(true);
+  });
+});
+
+describe("recentGamesGlobalFilterFn", () => {
+  it("finds rows by meta game display name", () => {
+    expect(
+      recentGamesGlobalFilterFn(
+        row({
+          id: "g1",
+          metaGame: "loa",
+          metaGameName: "Lines of Action",
+          players: [],
+          variants: [],
+          winners: null,
+          numMoves: 10,
+        }),
+        "global",
+        "lines of"
       )
     ).toBe(true);
   });

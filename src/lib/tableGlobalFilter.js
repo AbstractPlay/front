@@ -75,6 +75,24 @@ export function gameListGlobalFilterFn(row, _columnId, filterValue) {
 }
 
 /** @type {import("@tanstack/react-table").FilterFn<any>} */
+export function recentGamesGlobalFilterFn(row, _columnId, filterValue) {
+  const o = row.original;
+  return includesStringOnFields(
+    o,
+    [
+      () => o.id,
+      () => o.metaGame,
+      () => o.metaGameName,
+      () => o.players,
+      () => o.variants,
+      () => o.winners,
+      () => o.numMoves,
+    ],
+    filterValue
+  );
+}
+
+/** @type {import("@tanstack/react-table").FilterFn<any>} */
 export function pairingGlobalFilterFn(row, _columnId, filterValue) {
   const o = row.original;
   return includesStringOnFields(

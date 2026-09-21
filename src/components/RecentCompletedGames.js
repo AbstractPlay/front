@@ -6,23 +6,21 @@ import { stringColumnSortingFn } from "../lib/compareStrings";
 import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
 import { variantSelectionSortingFn } from "../lib/variantTableSort";
 import { API_ENDPOINT_OPEN } from "../config";
-import {
-  getCoreRowModel,
-  useReactTable,
-  flexRender,
-  createColumnHelper,
-  getSortedRowModel,
-  getFilteredRowModel,
-} from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
 import PageHelmet from "./PageHelmet";
 import { useStore } from "../stores";
 import BotAwareName from "./Bots/BotAwareName";
 import { formatPlayerDisplayName } from "./Bots/botUtils";
 import PageLoading from "./shared/PageLoading";
+import DataTable, { LIST_TABLE_PROPS } from "./shared/DataTable";
+import { recentGamesGlobalFilterFn } from "../lib/tableGlobalFilter";
+import { triggerDownload } from "../lib/boardExport/downloadBlob";
 import {
   RECENT_GAMES_DAY_OPTIONS,
+  RECENT_GAMES_DEFAULT_DAYS,
   isValidRecentGamesMetaGame,
+  normalizeRecentGamesDays,
 } from "../lib/recentGamesSections";
 
 function RecentCompletedGames() {
@@ -31,71 +29,47 @@ function RecentCompletedGames() {
   const metaGame = isValidRecentGamesMetaGame(metaGameParam)
     ? metaGameParam
     : null;
-  const [items, itemsSetter] = useState(null);
-  const [pageIndex, pageIndexSetter] = useState(0);
-  const [pageKeys, pageKeysSetter] = useState([undefined]);
-  const [nextPageKey, nextPageKeySetter] = useState(undefined);
-  const [days, daysSetter] = useStorageState("recent-games-days", 30);
-  const [pageSize, pageSizeSetter] = useStorageState("recent-games-show", 20);
-  const [sorting, setSorting] = useState([{ id: "ended", desc: true }]);
+  const [rawGames, rawGamesSetter] = useState(null);
+  const [daysStored, daysSetter] = useStorageState(
+    "recent-games-days",
+    RECENT_GAMES_DEFAULT_DAYS
+  );
+  const days = normalizeRecentGamesDays(daysStored);
   const allUsers = useStore((state) => state.users);
 
-  const resetPagination = useCallback(() => {
-    pageIndexSetter(0);
-    pageKeysSetter([undefined]);
-    nextPageKeySetter(undefined);
-  }, []);
-
   useEffect(() => {
-    resetPagination();
-  }, [days, metaGame, pageSize, resetPagination]);
+    if (days !== daysStored) {
+      daysSetter(days);
+    }
+  }, [days, daysStored, daysSetter]);
 
   useEffect(() => {
     async function fetchData() {
-      itemsSetter(null);
+      rawGamesSetter(null);
       try {
         const url = new URL(API_ENDPOINT_OPEN);
         url.searchParams.append("query", "recent_completed_games");
         url.searchParams.append("days", String(days));
-        url.searchParams.append("limit", String(pageSize));
-        const startKey = pageKeys[pageIndex];
-        if (startKey) {
-          url.searchParams.append("exclusiveStartKey", startKey);
-        }
         const res = await fetch(url);
         const result = await res.json();
-        let pageItems = result.items ?? [];
+        let items = result.items ?? [];
         if (metaGame) {
-          pageItems = pageItems.filter((rec) => rec.metaGame === metaGame);
+          items = items.filter((rec) => rec.metaGame === metaGame);
         }
-        itemsSetter(pageItems);
-        nextPageKeySetter(result.lastEvaluatedKey);
+        rawGamesSetter(items);
       } catch (error) {
-        itemsSetter([]);
-        nextPageKeySetter(undefined);
+        rawGamesSetter([]);
         console.log(error);
       }
     }
     fetchData();
-  }, [days, metaGame, pageSize, pageIndex, pageKeys]);
-
-  const goToNextPage = useCallback(() => {
-    if (pageIndex + 1 < pageKeys.length) {
-      pageIndexSetter((idx) => idx + 1);
-      return;
-    }
-    if (!nextPageKey) {
-      return;
-    }
-    pageKeysSetter((prev) => [...prev, nextPageKey]);
-    pageIndexSetter((idx) => idx + 1);
-  }, [pageIndex, pageKeys.length, nextPageKey]);
+  }, [days, metaGame]);
 
   const metaGameName = metaGame ? getGameDisplayName(metaGame) : null;
 
   const data = useMemo(
     () =>
-      (items ?? []).map((rec) => ({
+      (rawGames ?? []).map((rec) => ({
         id: rec.id,
         metaGame: rec.metaGame,
         metaGameName: getGameDisplayName(rec.metaGame),
@@ -107,8 +81,8 @@ function RecentCompletedGames() {
           "gameEnded" in rec && rec.gameEnded !== null
             ? new Date(rec.gameEnded)
             : rec.lastMoveTime
-            ? new Date(rec.lastMoveTime)
-            : null,
+              ? new Date(rec.lastMoveTime)
+              : null,
         numMoves: rec.numMoves,
         commented: rec.commented || 0,
         sk: rec.sk,
@@ -124,7 +98,7 @@ function RecentCompletedGames() {
             ? expandVariantsForGame(rec.metaGame, rec.variants)
             : null,
       })),
-    [items]
+    [rawGames]
   );
 
   const columnHelper = createColumnHelper();
@@ -282,84 +256,52 @@ function RecentCompletedGames() {
     return cols;
   }, [columnHelper, metaGame, t, allUsers, i18n.language]);
 
-  const table = useReactTable({
-    data,
-    columns,
-    state: { sorting },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-  });
+  const tableSort = useMemo(() => [{ id: "ended", desc: true }], []);
 
-  const canPreviousPage = pageIndex > 0;
-  const canNextPage =
-    pageIndex + 1 < pageKeys.length || nextPageKey !== undefined;
-  const totalOnPage = items?.length ?? 0;
-
-  const tableNavigation = (
-    <div className="columns tableNav">
-      <div className="column is-half is-offset-one-quarter">
-        <div className="level smallerText has-text-centered">
-          <div className="level-item">
-            <button
-              className="button is-small"
-              onClick={() => pageIndexSetter(0)}
-              disabled={!canPreviousPage}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-double-left"></i>
-              </span>
-            </button>
-            <button
-              className="button is-small"
-              onClick={() => pageIndexSetter((idx) => Math.max(0, idx - 1))}
-              disabled={!canPreviousPage}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-left"></i>
-              </span>
-            </button>
-            <button
-              className="button is-small"
-              onClick={goToNextPage}
-              disabled={!canNextPage}
-            >
-              <span className="icon is-small">
-                <i className="fa fa-angle-right"></i>
-              </span>
-            </button>
-          </div>
-          <div className="level-item">
-            <p>
-              {t("Page")} <strong>{pageIndex + 1}</strong> ({totalOnPage}{" "}
-              {t("TotalGames")})
-            </p>
-          </div>
-          <div className="level-item">
-            <div className="control">
-              <div className="select is-small">
-                <select
-                  value={pageSize}
-                  onChange={(e) => {
-                    pageSizeSetter(Number(e.target.value));
-                  }}
-                >
-                  {[10, 20, 30, 40, 50, 100].map((size) => (
-                    <option key={size} value={size}>
-                      {t("Show")} {size}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  const handleDownloadFiltered = useCallback(
+    (table) => {
+      const exportRows = table.getPrePaginationRowModel().rows.map((row) => {
+        const raw = rawGames?.find((g) => g.id === row.original.id);
+        return raw ? { ...raw } : { ...row.original };
+      });
+      const body = JSON.stringify(
+        {
+          exportedAt: new Date().toISOString(),
+          days,
+          metaGame,
+          count: exportRows.length,
+          games: exportRows,
+        },
+        null,
+        2
+      );
+      const filename = metaGame
+        ? `abstractplay-recent-games-${metaGame}-${days}d.json`
+        : `abstractplay-recent-games-${days}d.json`;
+      triggerDownload(
+        new Blob([body], { type: "application/json" }),
+        filename
+      );
+    },
+    [rawGames, days, metaGame]
   );
 
-  if (items === null) {
+  const navEnd = useCallback(
+    (table) => (
+      <div className="level-item">
+        <button
+          type="button"
+          className="button is-small"
+          onClick={() => handleDownloadFiltered(table)}
+        >
+          {t("Download")}
+        </button>
+      </div>
+    ),
+    [handleDownloadFiltered, t]
+  );
+
+  if (rawGames === null) {
     return <PageLoading message={t("recentGames.loading")} />;
   }
 
@@ -405,7 +347,9 @@ function RecentCompletedGames() {
                 <select
                   id="recent-games-days"
                   value={days}
-                  onChange={(e) => daysSetter(Number(e.target.value))}
+                  onChange={(e) =>
+                    daysSetter(normalizeRecentGamesDays(e.target.value))
+                  }
                 >
                   {RECENT_GAMES_DAY_OPTIONS.map((option) => (
                     <option key={option} value={option}>
@@ -417,66 +361,18 @@ function RecentCompletedGames() {
             </div>
           </div>
         </div>
-        <div className="container">
-          {tableNavigation}
-          <table
-            className="table apTable"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-          >
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <div
-                          {...{
-                            className: header.column.getCanSort()
-                              ? "sortable"
-                              : "",
-                            onClick: header.column.getToggleSortingHandler(),
-                          }}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {{
-                            asc: (
-                              <>
-                                &nbsp;<i className="fa fa-angle-up"></i>
-                              </>
-                            ),
-                            desc: (
-                              <>
-                                &nbsp;<i className="fa fa-angle-down"></i>
-                              </>
-                            ),
-                          }[header.column.getIsSorted()] ?? null}
-                        </div>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {tableNavigation}
-        </div>
+        <DataTable
+          key={`recent-games-${metaGame ?? "all"}-${days}`}
+          {...LIST_TABLE_PROPS}
+          embedded
+          pageSizeKey="recent-games-show"
+          sort={tableSort}
+          data={data}
+          columns={columns}
+          globalFilterFn={recentGamesGlobalFilterFn}
+          navEnd={navEnd}
+          tableStyle={{ marginLeft: "auto", marginRight: "auto" }}
+        />
       </article>
     </>
   );
