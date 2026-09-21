@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FEEDBACK_TAG_MAX_COUNT,
@@ -17,6 +17,8 @@ function FeedbackTagPicker({
   disabled = false,
 }) {
   const { t } = useTranslation();
+  const suggestInputId = useId();
+  const suggestFocusedRef = useRef(false);
   const [vocab, setVocab] = useState(null);
   const [loadError, setLoadError] = useState("");
   const [suggestDraft, setSuggestDraft] = useState(
@@ -43,6 +45,9 @@ function FeedbackTagPicker({
   }, []);
 
   useEffect(() => {
+    if (suggestFocusedRef.current) {
+      return;
+    }
     setSuggestDraft(Array.isArray(suggestedTags) ? suggestedTags.join(", ") : "");
   }, [suggestedTags]);
 
@@ -69,6 +74,7 @@ function FeedbackTagPicker({
   };
 
   const handleSuggestBlur = () => {
+    suggestFocusedRef.current = false;
     if (!onSuggestedChange) {
       return;
     }
@@ -108,14 +114,17 @@ function FeedbackTagPicker({
       </div>
       {showSuggestField && onSuggestedChange ? (
         <div className="field feedback-tag-suggest">
-          <label className="label" htmlFor="feedback-tag-suggest">{t("feedback.tags.suggestLabel")}</label>
+          <label className="label" htmlFor={suggestInputId}>{t("feedback.tags.suggestLabel")}</label>
           <input
-            id="feedback-tag-suggest"
+            id={suggestInputId}
             className="input"
             value={suggestDraft}
             disabled={disabled}
             placeholder={t("feedback.tags.suggestPlaceholder")}
             onChange={(e) => setSuggestDraft(e.target.value)}
+            onFocus={() => {
+              suggestFocusedRef.current = true;
+            }}
             onBlur={handleSuggestBlur}
           />
           <p className="feedback-muted feedback-field-hint">{t("feedback.tags.suggestHint")}</p>

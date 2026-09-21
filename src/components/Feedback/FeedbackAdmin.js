@@ -23,6 +23,26 @@ import FeedbackQuickSearch from "./FeedbackQuickSearch";
 import { filterFeedbackItemsByQuery } from "../../lib/feedback/filterFeedbackItemsByQuery";
 import "./feedback.css";
 
+function newVocabRowKey() {
+  return `vocab-row-${crypto.randomUUID()}`;
+}
+
+function vocabEntriesFromApi(tags) {
+  return (Array.isArray(tags) ? tags : []).map((entry) => ({
+    ...entry,
+    rowKey: newVocabRowKey(),
+  }));
+}
+
+function vocabEntriesForSave(entries) {
+  return entries.map(({ rowKey: _rowKey, ...entry }) => ({
+    ...entry,
+    id: typeof entry.id === "string"
+      ? entry.id.trim().toLowerCase().replace(/\s+/g, "_")
+      : entry.id,
+  }));
+}
+
 function FeedbackAdmin() {
   const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
@@ -54,7 +74,7 @@ function FeedbackAdmin() {
         return;
       }
       if (result.ok) {
-        setVocabEntries(result.data?.tags ?? []);
+        setVocabEntries(vocabEntriesFromApi(result.data?.tags));
         setVocabError("");
       } else {
         setVocabError(result.error);
@@ -131,14 +151,18 @@ function FeedbackAdmin() {
     setVocabSaving(true);
     setVocabMessage("");
     setVocabError("");
-    const result = await setFeedbackTagVocab(vocabEntries);
+    const result = await setFeedbackTagVocab(vocabEntriesForSave(vocabEntries));
     setVocabSaving(false);
     if (!result.ok) {
       setVocabError(result.error);
       return;
     }
     invalidateFeedbackTagVocabCache();
-    setVocabEntries(result.data?.tags ?? vocabEntries);
+    const saved = vocabEntriesForSave(result.data?.tags ?? vocabEntries);
+    setVocabEntries((prev) => saved.map((entry, index) => ({
+      ...entry,
+      rowKey: prev[index]?.rowKey ?? newVocabRowKey(),
+    })));
     setVocabMessage(t("feedback.tags.vocabSaved"));
   }
 
@@ -151,7 +175,7 @@ function FeedbackAdmin() {
   }
 
   function addVocabEntry() {
-    setVocabEntries((prev) => [...prev, { id: "", kinds: ["bug", "feature"] }]);
+    setVocabEntries((prev) => [...prev, { id: "", kinds: ["bug", "feature"], rowKey: newVocabRowKey() }]);
   }
 
   if (!globalMe?.admin) {
@@ -176,11 +200,11 @@ function FeedbackAdmin() {
           <>
             <ul className="feedback-vocab-list">
               {vocabEntries.map((entry, index) => (
-                <li key={`${entry.id}-${index}`} className="feedback-vocab-row">
+                <li key={entry.rowKey} className="feedback-vocab-row">
                   <input
                     className="input"
                     value={entry.id}
-                    onChange={(e) => updateVocabEntry(index, { id: e.target.value.trim().toLowerCase().replace(/\s+/g, "_") })}
+                    onChange={(e) => updateVocabEntry(index, { id: e.target.value })}
                     placeholder={t("feedback.tags.vocabIdPlaceholder")}
                   />
                   <label className="checkbox">
