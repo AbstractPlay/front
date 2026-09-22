@@ -3,8 +3,9 @@ import { useTranslation } from "react-i18next";
 import { callAuthApi } from "../lib/api";
 import { cloneDeep } from "lodash";
 import Modal from "./Modal";
-import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../stores";
+import DisplayOptionsPicker from "./DisplayOptionsPicker.js";
+import { normalizeDisplaySetting } from "../lib/displaySettings.js";
 
 function getSettingAndLevel(
   setting,
@@ -80,13 +81,17 @@ function RenderOptionsModal(props) {
   const settings = props.settings;
   const gameSettings = props.gameSettings;
   const show = props.show;
-  const [display, displaySetter] = useState(null);
+  const [displayUids, displayUidsSetter] = useState([]);
+  const [displayPickerKey, displayPickerKeySetter] = useState(0);
   const [annotate, annotateSetter] = useState(null);
   const [annotateLevel, annotateLevelSetter] = useState(null);
   const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
 
   useEffect(() => {
+    if (!show) {
+      return;
+    }
     const displaySetting = getSettingAndLevel(
       "display",
       "default",
@@ -94,7 +99,8 @@ function RenderOptionsModal(props) {
       settings,
       metaGame
     );
-    displaySetter(displaySetting[0]);
+    displayUidsSetter(normalizeDisplaySetting(displaySetting[0]));
+    displayPickerKeySetter((key) => key + 1);
     const annotateSetting = getSettingAndLevel(
       "annotate",
       true,
@@ -105,15 +111,6 @@ function RenderOptionsModal(props) {
     annotateSetter(annotateSetting[0]);
     annotateLevelSetter(annotateSetting[1]);
   }, [show, gameSettings, metaGame, settings]);
-
-  const handleDisplayChange = (display, checked) => {
-    console.log("handleDisplayChange", display, checked);
-    if (checked) {
-      displaySetter(display);
-    } else {
-      displaySetter(null);
-    }
-  };
 
   const handleAnnotationChange = (checked) => {
     annotateSetter(checked);
@@ -134,7 +131,7 @@ function RenderOptionsModal(props) {
     [newUserSettings, newGameSettings] = updateSettings(
       "display",
       "meta",
-      display,
+      displayUids,
       newGameSettings,
       newUserSettings,
       metaGame
@@ -175,17 +172,6 @@ function RenderOptionsModal(props) {
     }
   };
 
-  let displays;
-  if (show === true && gameId !== undefined) {
-    const info = gameinfo.get(metaGame);
-    let gameEngine;
-    if (info.playercounts.length > 1) {
-      gameEngine = GameFactory(info.uid, 2);
-    } else {
-      gameEngine = GameFactory(info.uid);
-    }
-    displays = gameEngine.alternativeDisplays();
-  }
   return !gameId ? (
     ""
   ) : (
@@ -198,40 +184,13 @@ function RenderOptionsModal(props) {
       ]}
     >
       <Fragment>
-        {displays && displays.length > 0 ? (
-          <div className="field">
-            <label className="label">{t("ChooseDisplay")}</label>
-            <div className="control">
-              <label className="radio">
-                <input
-                  type="radio"
-                  name="display"
-                  value="default"
-                  checked={display === "default"}
-                  onChange={(e) =>
-                    handleDisplayChange(e.target.value, e.target.checked)
-                  }
-                />
-                {t("DefaultDisplay")}
-              </label>
-            </div>
-            {displays.map((disp) => (
-              <div className="control" key={disp.uid}>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="display"
-                    value={disp.uid}
-                    checked={display === disp.uid}
-                    onChange={(e) =>
-                      handleDisplayChange(e.target.value, e.target.checked)
-                    }
-                  />
-                  {disp.description}
-                </label>
-              </div>
-            ))}
-          </div>
+        {show ? (
+          <DisplayOptionsPicker
+            key={displayPickerKey}
+            metaGame={metaGame}
+            initialUids={displayUids}
+            onChange={displayUidsSetter}
+          />
         ) : (
           ""
         )}

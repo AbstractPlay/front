@@ -104,6 +104,7 @@ export async function exportBoardGif({
   users,
   getPerspective,
   altDisplay,
+  display,
   metaGame,
   gameId,
   settings,
@@ -137,7 +138,7 @@ export async function exportBoardGif({
       players,
       users,
       getPerspective,
-      altDisplay,
+      display: display ?? altDisplay,
     });
     const frameOptions = buildBoardRenderOptions({
       metaGame,

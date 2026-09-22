@@ -1,5 +1,6 @@
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
+import { canCycleBoardDisplay } from "../displaySettings.js";
 
 /**
  * Build props objects and context strings shared by beta layout shells.
@@ -48,7 +49,6 @@ export function buildBoardProps(session) {
     handleRotate,
     handleUpdateRenderOptions,
     handleCycleAltDisplay,
-    altDisplays,
     showGameDetailsSetter,
     showGameNoteSetter,
     showGameDumpSetter,
@@ -88,7 +88,7 @@ export function buildBoardProps(session) {
     handleRotate,
     handleUpdateRenderOptions,
     handleCycleAltDisplay,
-    hasAltDisplays: altDisplays.length > 0,
+    hasAltDisplays: canCycleBoardDisplay(metaGame),
     showGameDetailsSetter,
     showGameNoteSetter,
     showGameDumpSetter,

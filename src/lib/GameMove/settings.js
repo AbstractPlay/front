@@ -1,6 +1,7 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import { renderglyph } from "@abstractplay/renderer";
 import { setRendererColourOpts } from "../setRendererColourOpts";
+import { normalizeDisplaySetting } from "../displaySettings.js";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -30,8 +31,12 @@ export function resolveDisplay(
   metaGame,
   sessionOverride
 ) {
-  if (sessionOverride != null) return sessionOverride;
-  return getSetting("display", undefined, gameSettings, userSettings, metaGame);
+  if (sessionOverride != null) {
+    return normalizeDisplaySetting(sessionOverride);
+  }
+  return normalizeDisplaySetting(
+    getSetting("display", undefined, gameSettings, userSettings, metaGame)
+  );
 }
 
 export function processNewSettings(
@@ -49,12 +54,14 @@ export function processNewSettings(
   if (gameRef.current !== null) {
     var newSettings = {};
     const game = gameRef.current;
-    newSettings.display = getSetting(
-      "display",
-      undefined,
-      newGameSettings,
-      newUserSettings,
-      game.metaGame
+    newSettings.display = normalizeDisplaySetting(
+      getSetting(
+        "display",
+        undefined,
+        newGameSettings,
+        newUserSettings,
+        game.metaGame
+      )
     );
     newSettings.annotate = getSetting(
       "annotate",

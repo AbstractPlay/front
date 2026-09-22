@@ -59,7 +59,6 @@ import {
   getLabSetting,
   processNewSettings,
   setupColors,
-  getAltDisplaysForMetaGame,
   nextDisplayOption,
 } from "../../lib/Lab/settings";
 import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
@@ -69,6 +68,10 @@ import {
   prepareBoardRender,
 } from "../../lib/prepareBoardRender";
 import { resolveDisplayRenderRep } from "../../lib/getDisplayRenderRep";
+import {
+  buildRenderDisplayOpts,
+  canCycleBoardDisplay,
+} from "../../lib/displaySettings.js";
 import {
   setupLabGame,
   processNewMove,
@@ -223,8 +226,8 @@ function LabSession({
 
   const { t } = useTranslation();
 
-  const altDisplays = useMemo(
-    () => getAltDisplaysForMetaGame(metaGame),
+  const hasAltDisplays = useMemo(
+    () => canCycleBoardDisplay(metaGame),
     [metaGame]
   );
 
@@ -434,10 +437,15 @@ function LabSession({
     focusSetter(foc);
     engineRef.current = engine;
     renderrepSetter(
-      engine.render({
-        perspective: engine.currplayer,
-        altDisplay: settings?.display,
-      })
+      resolveRenderLabels(
+        engine.render(
+          buildRenderDisplayOpts(game.metaGame, settings?.display, {
+            perspective: engine.currplayer,
+          })
+        ),
+        game.players,
+        useStore.getState().users
+      )
     );
     setStatusFromEngine(engine, game, false);
     moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
@@ -715,10 +723,13 @@ function LabSession({
       const engine = GameFactory(gameRef.current.metaGame, node.state);
       engineRef.current = engine;
       const newRenderRep = resolveRenderLabels(
-        engine.render({
-          perspective: engine.currplayer,
-          altDisplay: newSettings.display,
-        }),
+        engine.render(
+          buildRenderDisplayOpts(
+            gameRef.current.metaGame,
+            newSettings.display,
+            { perspective: engine.currplayer }
+          )
+        ),
         gameRef.current.players,
         useStore.getState().users
       );
@@ -746,7 +757,7 @@ function LabSession({
   };
 
   const handleCycleAltDisplay = () => {
-    const next = nextDisplayOption(settings?.display, altDisplays);
+    const next = nextDisplayOption(metaGame, settings?.display);
     const newLabBoardSettings = cloneDeep(labBoardSettings) ?? { all: {} };
     if (!newLabBoardSettings[metaGame]) {
       newLabBoardSettings[metaGame] = {};
@@ -980,7 +991,7 @@ function LabSession({
           players: currentGame.players,
           users: useStore.getState().users,
           getPerspective: (engine) => engine.currplayer,
-          altDisplay: settings?.display,
+          display: settings?.display,
           metaGame,
           gameId: currentGame.id,
           settings,
@@ -1104,7 +1115,7 @@ function LabSession({
         handleRotate={handleRotate}
         handleUpdateRenderOptions={handleUpdateRenderOptions}
         handleCycleAltDisplay={handleCycleAltDisplay}
-        hasAltDisplays={altDisplays.length > 0}
+        hasAltDisplays={hasAltDisplays}
         showGameDetailsSetter={showGameDetailsSetter}
         showGameDumpSetter={showGameDumpSetter}
         verticalLayout={verticalLayout}

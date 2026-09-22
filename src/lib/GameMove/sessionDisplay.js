@@ -1,3 +1,8 @@
+import {
+  parseSessionDisplayOverride,
+  serializeSessionDisplayOverride,
+} from "../displaySettings.js";
+
 const STORAGE_PREFIX = "gameMoveDisplayOverride:";
 const RELOAD_FLAG = "gameMovePageReload";
 
@@ -10,18 +15,20 @@ export function readSessionDisplayOverride(gameId) {
   if (sessionStorage.getItem(RELOAD_FLAG) !== "1") return null;
   sessionStorage.removeItem(RELOAD_FLAG);
   try {
-    return sessionStorage.getItem(storageKey(gameId));
+    return parseSessionDisplayOverride(sessionStorage.getItem(storageKey(gameId)));
   } catch {
     return null;
   }
 }
 
+/** @param {string[]|string|null|undefined} display Active display uids or legacy string. */
 export function writeSessionDisplayOverride(gameId, display) {
   try {
-    if (display == null) {
+    const serialized = serializeSessionDisplayOverride(display);
+    if (serialized == null) {
       sessionStorage.removeItem(storageKey(gameId));
     } else {
-      sessionStorage.setItem(storageKey(gameId), display);
+      sessionStorage.setItem(storageKey(gameId), serialized);
     }
   } catch {
     // ignore quota / private-mode errors

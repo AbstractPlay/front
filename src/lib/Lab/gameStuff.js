@@ -28,6 +28,7 @@ import { cloneDeep } from "lodash";
 import { toast } from "react-toastify";
 import { isPartialExplorationMove } from "../GameMove/explorationMoves";
 import { buildEngineMoveResults } from "../engineMoveResults";
+import { buildRenderDisplayOpts } from "../displaySettings.js";
 
 export const populateChecked = (gameRef, engineRef, t, setter) => {
   const hideSpoilers =
@@ -234,10 +235,11 @@ export function syncLabEngineToFocus(
     movesRef.current = engine.moves();
   }
   const render = resolveRenderLabels(
-    engine.render({
-      perspective: engine.currplayer,
-      altDisplay: display,
-    }),
+    engine.render(
+      buildRenderDisplayOpts(game.metaGame, display, {
+        perspective: engine.currplayer,
+      })
+    ),
     game.players,
     users
   );
@@ -382,11 +384,12 @@ function doView(
   engineRef.current = gameEngineTmp;
   renderrepSetter(
     resolveRenderLabels(
-      gameEngineTmp.render({
-        perspective: gameEngineTmp.currplayer,
-        altDisplay: settings?.display,
-        ...move.opts,
-      }),
+      gameEngineTmp.render(
+        buildRenderDisplayOpts(game.metaGame, settings?.display, {
+          perspective: gameEngineTmp.currplayer,
+          ...move.opts,
+        })
+      ),
       game.players,
       useStore.getState().users
     )
@@ -447,10 +450,11 @@ export function processNewMove(
     engineRef.current = gameEngineTmp;
     renderrepSetter(
       resolveRenderLabels(
-        gameEngineTmp.render({
-          perspective: gameEngineTmp.currplayer,
-          altDisplay: settings?.display,
-        }),
+        gameEngineTmp.render(
+          buildRenderDisplayOpts(gameRef.current.metaGame, settings?.display, {
+            perspective: gameEngineTmp.currplayer,
+          })
+        ),
         gameRef.current.players,
         useStore.getState().users
       )

@@ -1,5 +1,6 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import { resolveRenderLabels } from "../resolveRenderLabels";
+import { buildRenderDisplayOpts } from "../displaySettings.js";
 
 export function buildFrameRenderRep({
   exploration,
@@ -9,6 +10,8 @@ export function buildFrameRenderRep({
   players,
   users,
   getPerspective,
+  display,
+  /** @deprecated use display */
   altDisplay,
 }) {
   const node = getFocusNode(exploration, game, focus);
@@ -17,7 +20,10 @@ export function buildFrameRenderRep({
   }
   const engine = GameFactory(game.metaGame, node.state);
   const perspective = getPerspective(engine, game);
-  const rep = engine.render({ perspective, altDisplay });
+  const displayUids = display ?? altDisplay;
+  const rep = engine.render(
+    buildRenderDisplayOpts(game.metaGame, displayUids, { perspective })
+  );
   if (players?.length) {
     return resolveRenderLabels(rep, players, users ?? {});
   }
