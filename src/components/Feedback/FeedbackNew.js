@@ -284,9 +284,7 @@ function FeedbackNew() {
           <label className="label">
             {kind === "wishlist"
               ? t("feedback.new.coverImage")
-              : kind === "feature"
-                ? t("feedback.new.attachments")
-                : t("feedback.new.screenshots")}
+              : t("feedback.new.attachments")}
           </label>
           {kind === "wishlist" ? (
             <p className="feedback-muted feedback-field-hint">{t("feedback.new.coverImageHint")}</p>

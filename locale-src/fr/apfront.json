@@ -4776,12 +4776,12 @@
     "out": "Cet élément est fermé mais pas encore archivé. Vous pouvez toujours commenter ici."
   },
   "feedback.detail.commentBodyHint": {
-    "src": "Markdown supported. Text is optional if you attach screenshots.",
-    "out": "Markdown pris en charge. Le texte est facultatif si vous joignez des captures d'écran."
+    "src": "Markdown supported. Text is optional if you attach files.",
+    "out": "Markdown pris en charge. Le texte est facultatif si vous joignez des fichiers."
   },
   "feedback.detail.commentScreenshots": {
-    "src": "Screenshots",
-    "out": "Captures d'écran"
+    "src": "Attachments",
+    "out": "Pièces jointes"
   },
   "feedback.detail.comments": {
     "src": "Discussion",
@@ -5516,20 +5516,20 @@
     "out": "Vocabulaire des tags"
   },
   "feedback.upload.add": {
-    "src": "Add screenshot",
-    "out": "Ajouter une capture d'écran"
+    "src": "Add file",
+    "out": "Ajouter un fichier"
   },
   "feedback.upload.addCover": {
     "src": "Add cover image",
     "out": "Ajouter une image de couverture"
   },
   "feedback.upload.count_one": {
-    "src": "{{count}} screenshot attached",
-    "out": "{{count}} capture d'écran jointe"
+    "src": "{{count}} file attached",
+    "out": "{{count}} fichier joint"
   },
   "feedback.upload.count_other": {
-    "src": "{{count}} screenshots attached",
-    "out": "{{count}} captures d'écran jointes"
+    "src": "{{count}} files attached",
+    "out": "{{count}} fichiers joints"
   },
   "feedback.upload.coverCount_one": {
     "src": "{{count}} cover image attached",
@@ -5544,8 +5544,8 @@
     "out": "Échec du téléversement. Veuillez réessayer."
   },
   "feedback.upload.invalidType": {
-    "src": "Only PNG, JPEG, and WebP images are allowed.",
-    "out": "Seules les images PNG, JPEG et WebP sont autorisées."
+    "src": "Allowed files: PNG, JPEG, and WebP images; plain text (.txt); and JSON (.json).",
+    "out": "Fichiers autorisés : images PNG, JPEG et WebP ; texte brut (.txt) ; et JSON (.json)."
   },
   "feedback.upload.paste": {
     "src": "Paste screenshot",
@@ -5564,16 +5564,16 @@
     "out": "Aucune image trouvée dans le presse-papiers."
   },
   "feedback.upload.pasteHint": {
-    "src": "Click here and press Ctrl+V (or Cmd+V on Mac). You can also paste anywhere on this page except the title and description fields.",
-    "out": "Cliquez ici et appuyez sur Ctrl+V (ou Cmd+V sur Mac). Vous pouvez aussi coller n'importe où sur cette page sauf dans les champs titre et description."
+    "src": "Paste a screenshot (Ctrl+V or Cmd+V), or use Add file for images, plain text (.txt), or JSON (.json). You can also paste a screenshot anywhere on this page except the title and description fields.",
+    "out": "Collez une capture d'écran (Ctrl+V ou Cmd+V), ou utilisez Ajouter un fichier pour les images, le texte brut (.txt) ou JSON (.json). Vous pouvez également coller une capture d'écran n'importe où sur cette page, sauf dans les champs titre et description."
   },
   "feedback.upload.tooLarge": {
-    "src": "Each image must be 5 MB or smaller.",
-    "out": "Chaque image doit faire 5 Mo ou moins."
+    "src": "Each file must be 5 MB or smaller.",
+    "out": "Chaque fichier doit faire 5 Mo ou moins."
   },
   "feedback.upload.tooMany": {
-    "src": "You can attach at most {{max}} screenshots.",
-    "out": "Vous ne pouvez joindre au maximum que {{max}} captures d'écran."
+    "src": "You can attach at most {{max}} files.",
+    "out": "Vous pouvez joindre au maximum {{max}} fichiers."
   },
   "feedback.upload.uploading": {
     "src": "Uploading…",

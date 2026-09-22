@@ -4776,12 +4776,12 @@
     "out": "Questo elemento è chiuso ma non ancora archiviato. Puoi comunque commentare qui."
   },
   "feedback.detail.commentBodyHint": {
-    "src": "Markdown supported. Text is optional if you attach screenshots.",
-    "out": "Markdown supportato. Il testo è facoltativo se alleghi degli screenshot."
+    "src": "Markdown supported. Text is optional if you attach files.",
+    "out": "Markdown supportato. Il testo è opzionale se alleghi dei file."
   },
   "feedback.detail.commentScreenshots": {
-    "src": "Screenshots",
-    "out": "Screenshot"
+    "src": "Attachments",
+    "out": "Allegati"
   },
   "feedback.detail.comments": {
     "src": "Discussion",
@@ -5516,20 +5516,20 @@
     "out": "Vocabolario dei tag"
   },
   "feedback.upload.add": {
-    "src": "Add screenshot",
-    "out": "Aggiungi screenshot"
+    "src": "Add file",
+    "out": "Aggiungi file"
   },
   "feedback.upload.addCover": {
     "src": "Add cover image",
     "out": "Aggiungi immagine di copertina"
   },
   "feedback.upload.count_one": {
-    "src": "{{count}} screenshot attached",
-    "out": "{{count}} screenshot allegato"
+    "src": "{{count}} file attached",
+    "out": "{{count}} file allegato"
   },
   "feedback.upload.count_other": {
-    "src": "{{count}} screenshots attached",
-    "out": "{{count}} screenshot allegati"
+    "src": "{{count}} files attached",
+    "out": "{{count}} file allegati"
   },
   "feedback.upload.coverCount_one": {
     "src": "{{count}} cover image attached",
@@ -5544,8 +5544,8 @@
     "out": "Caricamento fallito. Riprova."
   },
   "feedback.upload.invalidType": {
-    "src": "Only PNG, JPEG, and WebP images are allowed.",
-    "out": "Sono consentite solo immagini PNG, JPEG e WebP."
+    "src": "Allowed files: PNG, JPEG, and WebP images; plain text (.txt); and JSON (.json).",
+    "out": "File consentiti: immagini PNG, JPEG e WebP; testo semplice (.txt); e JSON (.json)."
   },
   "feedback.upload.paste": {
     "src": "Paste screenshot",
@@ -5564,16 +5564,16 @@
     "out": "Nessuna immagine trovata negli appunti."
   },
   "feedback.upload.pasteHint": {
-    "src": "Click here and press Ctrl+V (or Cmd+V on Mac). You can also paste anywhere on this page except the title and description fields.",
-    "out": "Fai clic qui e premi Ctrl+V (o Cmd+V su Mac). Puoi anche incollare in qualsiasi punto di questa pagina tranne nei campi titolo e descrizione."
+    "src": "Paste a screenshot (Ctrl+V or Cmd+V), or use Add file for images, plain text (.txt), or JSON (.json). You can also paste a screenshot anywhere on this page except the title and description fields.",
+    "out": "Incolla uno screenshot (Ctrl+V o Cmd+V), oppure usa Aggiungi file per immagini, testo semplice (.txt) o JSON (.json). Puoi anche incollare uno screenshot in qualsiasi punto di questa pagina tranne nei campi titolo e descrizione."
   },
   "feedback.upload.tooLarge": {
-    "src": "Each image must be 5 MB or smaller.",
-    "out": "Ogni immagine deve essere di 5 MB o inferiore."
+    "src": "Each file must be 5 MB or smaller.",
+    "out": "Ciascun file deve essere di 5 MB o inferiore."
   },
   "feedback.upload.tooMany": {
-    "src": "You can attach at most {{max}} screenshots.",
-    "out": "Puoi allegare al massimo {{max}} screenshot."
+    "src": "You can attach at most {{max}} files.",
+    "out": "Puoi allegare al massimo {{max}} file."
   },
   "feedback.upload.uploading": {
     "src": "Uploading…",

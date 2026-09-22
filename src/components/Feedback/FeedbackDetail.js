@@ -15,6 +15,7 @@ import WishlistCategoryCallout from "./WishlistCategoryCallout";
 import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import FeedbackTagBadges from "./FeedbackTagBadges";
 import FeedbackTagPicker from "./FeedbackTagPicker";
+import FeedbackAttachmentList from "./FeedbackAttachmentList";
 import ScreenshotUpload from "./ScreenshotUpload";
 import FeedbackTimestamp from "./FeedbackTimestamp";
 import FeedbackPlayerLink from "./FeedbackPlayerLink";
@@ -854,13 +855,7 @@ function FeedbackDetail() {
         </Modal>
       ) : null}
       {attachmentUrls?.length > 0 && post.kind !== "wishlist" && (
-        <div className="feedback-screenshot-grid">
-          {attachmentUrls.map(({ key, url }) => (
-            <a key={key} href={url} target="_blank" rel="noreferrer">
-              <img src={url} alt="" className="feedback-screenshot-thumb" />
-            </a>
-          ))}
-        </div>
+        <FeedbackAttachmentList attachmentUrls={attachmentUrls} />
       )}
       <h2 className="subtitle">{t("feedback.detail.comments")}</h2>
       {comments.length === 0 ? (
@@ -893,13 +888,10 @@ function FeedbackDetail() {
             </div>
             {comment.body ? <FeedbackMarkdown>{comment.body}</FeedbackMarkdown> : null}
             {comment.attachmentUrls?.length > 0 ? (
-              <div className="feedback-screenshot-grid feedback-comment-screenshots">
-                {comment.attachmentUrls.map(({ key, url }) => (
-                  <a key={key} href={url} target="_blank" rel="noreferrer">
-                    <img src={url} alt="" className="feedback-screenshot-thumb" />
-                  </a>
-                ))}
-              </div>
+              <FeedbackAttachmentList
+                attachmentUrls={comment.attachmentUrls}
+                className="feedback-screenshot-grid feedback-comment-screenshots"
+              />
             ) : null}
           </div>
         ))
