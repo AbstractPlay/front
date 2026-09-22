@@ -89,7 +89,7 @@ export function serializeSessionDisplayOverride(displayUids) {
   return JSON.stringify(normalized);
 }
 
-/** True when the board FAB may cycle default vs one projection group. */
+/** True when the board FAB may cycle default vs one projection group or a single toggle. */
 export function canCycleBoardDisplay(metaGame) {
   const info = gameinfo.get(metaGame);
   return isSimpleDisplayCycleGame(info?.displays);
