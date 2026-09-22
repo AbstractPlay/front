@@ -17,6 +17,7 @@ import {
   shouldReplayAlongMainLine,
   shouldExtendMainLine,
   createSpineNode,
+  materializeMainLineSpineStates,
 } from "./exploration";
 import { resolveRenderLabels, setStatus } from "./misc";
 import { GameNode } from "../../components/Lab/GameTree";
@@ -125,20 +126,6 @@ export function setupLabGame(
   }
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
-  engineRef.current = engine.clone();
-
-  const render = resolveRenderLabels(
-    engine.render({ perspective: engine.currplayer, altDisplay: display }),
-    game0.players,
-    users
-  );
-  game0.stackExpanding =
-    game0.stackExpanding && render.renderer === "stacking-expanding";
-  setStatus(engine, game0, false, "", statusRef.current);
-
-  if (!game0.noMoves) {
-    movesRef.current = engine.moves();
-  }
 
   const tmpEngine = GameFactory(game0.metaGame, game0.state);
   game0.gameOver = tmpEngine.gameover;
@@ -193,6 +180,8 @@ export function setupLabGame(
 
   restoreMainLineAnnotations(history, savedMoveAnnotations);
 
+  materializeMainLineSpineStates(history, game0.metaGame, game0.state);
+
   explorationRef.current = { gameID: game0.id, nodes: history };
   const sanitized = sanitizeFocus(
     history,
@@ -208,7 +197,56 @@ export function setupLabGame(
     focus0
   );
   focusSetter(focus0);
+  syncLabEngineToFocus(game0, history, focus0, {
+    partialMoveRenderRef,
+    engineRef,
+    renderrepSetter,
+    movesRef,
+    moveSetter,
+    statusRef,
+    display,
+  });
+}
+
+export function syncLabEngineToFocus(
+  game,
+  nodes,
+  focus,
+  {
+    partialMoveRenderRef,
+    engineRef,
+    renderrepSetter,
+    movesRef,
+    moveSetter,
+    statusRef,
+    display,
+  }
+) {
+  const node = getFocusNode(nodes, game, focus);
+  if (!node?.state) {
+    return false;
+  }
+  const users = useStore.getState().users;
+  const engine = GameFactory(game.metaGame, node.state);
+  partialMoveRenderRef.current = false;
+  engineRef.current = engine;
+  if (!game.noMoves) {
+    movesRef.current = engine.moves();
+  }
+  const render = resolveRenderLabels(
+    engine.render({
+      perspective: engine.currplayer,
+      altDisplay: display,
+    }),
+    game.players,
+    users
+  );
+  game.stackExpanding =
+    game.stackExpanding && render.renderer === "stacking-expanding";
   renderrepSetter(render);
+  setStatus(engine, game, false, "", statusRef.current);
+  moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
+  return true;
 }
 
 /** Wire move recorded on the exploration spine after a full engine apply. */
@@ -329,6 +367,9 @@ function doView(
     newfocus.exPath = routed.newfocus.exPath;
     newfocus.canExplore = canExploreMove(game, exploration, newfocus);
     focusSetter(newfocus);
+    if (newfocus.exPath.length === 0) {
+      materializeMainLineSpineStates(exploration, game.metaGame, game.state);
+    }
     saveLabExploration();
     moveSetter({ ...gameEngineTmp.validateMove(""), rendered: "", move: "" });
     if (!partialMove && !game.noMoves) {

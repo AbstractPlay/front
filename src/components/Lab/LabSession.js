@@ -52,6 +52,7 @@ import {
   serializeMainLineAnnotations,
   getMainLineTipState,
   deleteSpineEntry,
+  materializeMainLineSpineStates,
 } from "../../lib/Lab/exploration";
 import { setStatus, resolveRenderLabels } from "../../lib/Lab/misc";
 import {
@@ -658,6 +659,11 @@ function LabSession({
       if (focusNode?.state) {
         gameRef.current.state = focusNode.state;
       }
+      materializeMainLineSpineStates(
+        nodes,
+        gameRef.current.metaGame,
+        gameRef.current.state
+      );
       saveLabExploration();
       bumpExplorationVersion();
       handleGameMoveClick(newFocus);

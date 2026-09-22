@@ -155,11 +155,47 @@ export function restoreSessionExploration(nodes, metaGame, game, branches) {
   }
 }
 
+function mainLineReferenceState(exploration, game) {
+  const tip = exploration[exploration.length - 1];
+  if (tip?.state != null) {
+    return tip.state;
+  }
+  return game.state;
+}
+
+/** Fill null main-line spine snapshots from a full main-line game state (stack prefix per ply). */
+export function materializeMainLineSpineStates(exploration, metaGame, gameState) {
+  if (!exploration?.length || gameState == null) {
+    return;
+  }
+  const probe = GameFactory(metaGame, gameState);
+  const stackLen = probe.stack?.length ?? 0;
+  if (stackLen === 0) {
+    return;
+  }
+  for (let i = 0; i < exploration.length; i++) {
+    const node = exploration[i];
+    if (node.state !== null) {
+      continue;
+    }
+    let tmpEngine = GameFactory(metaGame, gameState);
+    if (i + 1 < stackLen) {
+      tmpEngine.gameover = false;
+      tmpEngine.winner = [];
+    }
+    tmpEngine.stack = tmpEngine.stack.slice(0, i + 1);
+    tmpEngine.load();
+    node.state = tmpEngine.cheapSerialize();
+  }
+}
+
 function getExplorationNode(exploration, game, moveNumber) {
   let node = exploration[moveNumber];
   if (node.state === null) {
-    let tmpEngine = GameFactory(game.metaGame, game.state);
-    if (moveNumber + 1 < tmpEngine.stack.length) {
+    const referenceState = mainLineReferenceState(exploration, game);
+    let tmpEngine = GameFactory(game.metaGame, referenceState);
+    const stackLen = tmpEngine.stack?.length ?? 0;
+    if (moveNumber + 1 < stackLen) {
       tmpEngine.gameover = false;
       tmpEngine.winner = [];
     }
