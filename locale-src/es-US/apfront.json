@@ -2379,6 +2379,10 @@
     "src": "Updated",
     "out": "Actualizado"
   },
+  "announcements.admin.discordExcerptHint": {
+    "src": "Optional: place {{marker}} on its own line where the Discord mirror should end. Text after the marker stays on /news only; the marker is hidden when published.",
+    "out": "Opcional: coloca {{marker}} en su propia línea donde deba terminar la réplica de Discord. El texto después del marcador permanecerá solo en /news; el marcador se oculta al publicar."
+  },
   "announcements.admin.editDraft": {
     "src": "Edit announcement",
     "out": "Editar anuncio"
@@ -2410,6 +2414,10 @@
   "announcements.admin.filterStatus": {
     "src": "Status",
     "out": "Estado"
+  },
+  "announcements.admin.insertDiscordExcerptMarker": {
+    "src": "Insert excerpt marker",
+    "out": "Insertar marcador de extracto"
   },
   "announcements.admin.listIntro": {
     "src": "Draft posts here, then publish on production when ready. Dev and local builds can save drafts and upload images; publish is production-only.",
