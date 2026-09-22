@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { cloneDeep } from "lodash";
 import Modal from "../Modal";
-import {
-  getLabSetting,
-  getAltDisplaysForMetaGame,
-} from "../../lib/Lab/settings";
+import { getLabSetting } from "../../lib/Lab/settings";
+import DisplayOptionsPicker from "../DisplayOptionsPicker.js";
+import { normalizeDisplaySetting } from "../../lib/displaySettings.js";
 
 function LabRenderOptionsModal({
   show,
@@ -19,19 +18,26 @@ function LabRenderOptionsModal({
   const metaGame = game?.metaGame;
   const gameId = game?.id;
   const { t } = useTranslation();
-  const [display, displaySetter] = useState(null);
+  const [displayUids, displayUidsSetter] = useState([]);
+  const [displayPickerKey, displayPickerKeySetter] = useState(0);
   const [annotate, annotateSetter] = useState(true);
 
   useEffect(() => {
-    displaySetter(
-      getLabSetting(
-        "display",
-        "default",
-        gameSettings,
-        labBoardSettings,
-        metaGame
+    if (!show) {
+      return;
+    }
+    displayUidsSetter(
+      normalizeDisplaySetting(
+        getLabSetting(
+          "display",
+          "default",
+          gameSettings,
+          labBoardSettings,
+          metaGame
+        )
       )
     );
+    displayPickerKeySetter((key) => key + 1);
     annotateSetter(
       getLabSetting("annotate", true, gameSettings, labBoardSettings, metaGame)
     );
@@ -43,15 +49,10 @@ function LabRenderOptionsModal({
     if (!newLabBoardSettings[metaGame]) {
       newLabBoardSettings[metaGame] = {};
     }
-    newLabBoardSettings[metaGame].display = display;
+    newLabBoardSettings[metaGame].display = displayUids;
     newLabBoardSettings[metaGame].annotate = annotate;
     processNewSettings(gameSettings, newLabBoardSettings);
   };
-
-  let displays;
-  if (show === true && gameId !== undefined) {
-    displays = getAltDisplaysForMetaGame(metaGame);
-  }
 
   if (!gameId) {
     return "";
@@ -66,36 +67,13 @@ function LabRenderOptionsModal({
         { label: t("Close"), action: handleClose },
       ]}
     >
-      {displays && displays.length > 0 ? (
-        <div className="field">
-          <label className="label">{t("ChooseDisplay")}</label>
-          <div className="control">
-            <label className="radio">
-              <input
-                type="radio"
-                name="display"
-                value="default"
-                checked={display === "default"}
-                onChange={(e) => displaySetter(e.target.value)}
-              />
-              {t("DefaultDisplay")}
-            </label>
-          </div>
-          {displays.map((disp) => (
-            <div className="control" key={disp.uid}>
-              <label className="radio">
-                <input
-                  type="radio"
-                  name="display"
-                  value={disp.uid}
-                  checked={display === disp.uid}
-                  onChange={(e) => displaySetter(e.target.value)}
-                />
-                {disp.description}
-              </label>
-            </div>
-          ))}
-        </div>
+      {show ? (
+        <DisplayOptionsPicker
+          key={displayPickerKey}
+          metaGame={metaGame}
+          initialUids={displayUids}
+          onChange={displayUidsSetter}
+        />
       ) : null}
       <div className="field">
         <div className="control">

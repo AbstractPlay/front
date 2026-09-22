@@ -1,6 +1,10 @@
 import { GameFactory, gameinfo } from "@abstractplay/gameslib";
 import { renderglyph } from "@abstractplay/renderer";
 import { setRendererColourOpts } from "../setRendererColourOpts";
+import {
+  nextBoardDisplayCycle,
+  normalizeDisplaySetting,
+} from "../displaySettings.js";
 
 export function getLabSetting(
   setting,
@@ -45,12 +49,14 @@ export function processNewSettings(
   if (gameRef.current !== null) {
     var newSettings = {};
     const game = gameRef.current;
-    newSettings.display = getLabSetting(
-      "display",
-      undefined,
-      newGameSettings,
-      newUserSettings,
-      game.metaGame
+    newSettings.display = normalizeDisplaySetting(
+      getLabSetting(
+        "display",
+        undefined,
+        newGameSettings,
+        newUserSettings,
+        game.metaGame
+      )
     );
     newSettings.annotate = getLabSetting(
       "annotate",
@@ -118,11 +124,6 @@ export function getAltDisplaysForMetaGame(metaGame) {
   return gameEngine.alternativeDisplays() ?? [];
 }
 
-export function nextDisplayOption(current, altDisplays) {
-  const options = ["default", ...altDisplays.map((d) => d.uid)];
-  const normalized =
-    current === undefined || current === null ? "default" : current;
-  let idx = options.indexOf(normalized);
-  if (idx < 0) idx = 0;
-  return options[(idx + 1) % options.length];
+export function nextDisplayOption(metaGame, current) {
+  return nextBoardDisplayCycle(metaGame, current);
 }

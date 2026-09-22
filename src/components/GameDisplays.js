@@ -27,10 +27,12 @@ function GameDisplays({ metaGame }) {
 
         // Don't need to filter out `experimental` displays unless that gets implemented.
         let displays = gameEngine.alternativeDisplays();
-
-        // Don't need to deal with grouping.
-        if (displays && displays !== undefined) {
-          displaysSetter(displays);
+        if (displays?.length) {
+          displaysSetter(
+            displays.filter(
+              (d) => !d.uid.startsWith("#") && d.uid !== "hide-both",
+            ),
+          );
         } else {
           displaysSetter([]);
         }

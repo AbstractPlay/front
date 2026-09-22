@@ -84,6 +84,12 @@ import {
   prepareBoardRender,
 } from "../../lib/prepareBoardRender";
 import { resolveDisplayRenderRep } from "../../lib/getDisplayRenderRep";
+import {
+  buildRenderDisplayOpts,
+  canCycleBoardDisplay,
+  displaySettingEqual,
+  normalizeDisplaySetting,
+} from "../../lib/displaySettings.js";
 import { isLabSupportedGame } from "../../lib/Lab/buildGame";
 import { launchLabFromExport } from "../../lib/Lab/storage";
 import { serializeSessionExploration } from "../../lib/Lab/exploration";
@@ -248,10 +254,21 @@ export function useGameMoveSession(props) {
     [metaGame]
   );
 
+  const hasAltDisplays = useMemo(
+    () => canCycleBoardDisplay(metaGame),
+    [metaGame]
+  );
+
   const displaySettings = useMemo(() => {
     if (!settings) return settings;
-    const display = sessionDisplayOverride ?? settings.display;
-    if (display === settings.display) return settings;
+    const rawDisplay = sessionDisplayOverride ?? settings.display;
+    const display = normalizeDisplaySetting(rawDisplay);
+    if (
+      sessionDisplayOverride == null &&
+      displaySettingEqual(display, settings.display)
+    ) {
+      return settings;
+    }
     return { ...settings, display };
   }, [settings, sessionDisplayOverride]);
 
@@ -1365,13 +1382,15 @@ export function useGameMoveSession(props) {
     }
     focusSetter(nextFocus);
     engineRef.current = engine;
-    const altDisplay = altDisplayOverride ?? displaySettings?.display;
+    const displayUids =
+      altDisplayOverride ?? displaySettings?.display ?? [];
     renderrepSetter(
       resolveRenderLabels(
-        engine.render({
-          perspective: currentGame.me ? currentGame.me + 1 : 1,
-          altDisplay,
-        }),
+        engine.render(
+          buildRenderDisplayOpts(currentGame.metaGame, displayUids, {
+            perspective: currentGame.me ? currentGame.me + 1 : 1,
+          })
+        ),
         currentGame.players,
         useStore.getState().users
       )
@@ -1793,12 +1812,15 @@ export function useGameMoveSession(props) {
       globalMe,
       effectiveColourContext
     );
-    if (newSettings?.display) {
+    if (newSettings) {
       const newRenderRep = resolveRenderLabels(
-        engineRef.current.render({
-          perspective: gameRef.current.me + 1,
-          altDisplay: newSettings.display,
-        }),
+        engineRef.current.render(
+          buildRenderDisplayOpts(
+            gameRef.current.metaGame,
+            newSettings.display,
+            { perspective: gameRef.current.me + 1 }
+          )
+        ),
         gameRef.current.players,
         useStore.getState().users
       );
@@ -1817,7 +1839,7 @@ export function useGameMoveSession(props) {
   };
 
   const handleCycleAltDisplay = () => {
-    const next = nextDisplayOption(displaySettings?.display, altDisplays);
+    const next = nextDisplayOption(metaGame, displaySettings?.display);
     sessionDisplayOverrideSetter(next);
     writeSessionDisplayOverride(gameID, next);
   };
@@ -2436,7 +2458,7 @@ export function useGameMoveSession(props) {
           players: currentGame.players,
           users: useStore.getState().users,
           getPerspective: (_engine, game) => (game.me ? game.me + 1 : 1),
-          altDisplay: displaySettings?.display,
+          display: displaySettings?.display,
           metaGame,
           gameId: gameID,
           settings: displaySettings,
@@ -2730,6 +2752,7 @@ export function useGameMoveSession(props) {
     handleUpdateRenderOptions,
     handleCycleAltDisplay,
     altDisplays,
+    hasAltDisplays,
     showGameDetailsSetter,
     showGameNoteSetter,
     showGameDumpSetter,

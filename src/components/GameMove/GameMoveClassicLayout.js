@@ -73,7 +73,7 @@ export default function GameMoveClassicLayout({ session }) {
     handleRotate,
     handleUpdateRenderOptions,
     handleCycleAltDisplay,
-    altDisplays,
+    hasAltDisplays,
     showGameDetailsSetter,
     showGameNoteSetter,
     showGameDumpSetter,
@@ -404,7 +404,7 @@ export default function GameMoveClassicLayout({ session }) {
                         handleRotate={handleRotate}
                         handleUpdateRenderOptions={handleUpdateRenderOptions}
                         handleCycleAltDisplay={handleCycleAltDisplay}
-                        hasAltDisplays={altDisplays.length > 0}
+                        hasAltDisplays={hasAltDisplays}
                         showGameDetailsSetter={showGameDetailsSetter}
                         showGameNoteSetter={showGameNoteSetter}
                         showGameDumpSetter={showGameDumpSetter}
@@ -559,7 +559,7 @@ export default function GameMoveClassicLayout({ session }) {
                 handleRotate={handleRotate}
                 handleUpdateRenderOptions={handleUpdateRenderOptions}
                 handleCycleAltDisplay={handleCycleAltDisplay}
-                hasAltDisplays={altDisplays.length > 0}
+                hasAltDisplays={hasAltDisplays}
                 showGameDetailsSetter={showGameDetailsSetter}
                 showGameNoteSetter={showGameNoteSetter}
                 showGameDumpSetter={showGameDumpSetter}

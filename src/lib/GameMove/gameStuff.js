@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { buildEngineMoveResults } from "../engineMoveResults";
+import { buildRenderDisplayOpts } from "../displaySettings.js";
 
 export function setupGame(
   game0,
@@ -128,7 +129,11 @@ export function setupGame(
   partialMoveRenderRef.current = false;
   engineRef.current = engine.clone();
   const render = resolveRenderLabels(
-    engine.render({ perspective: game0.me + 1, altDisplay: display }),
+    engine.render(
+      buildRenderDisplayOpts(game0.metaGame, display, {
+        perspective: game0.me + 1,
+      })
+    ),
     game0.players,
     users
   );
@@ -372,11 +377,12 @@ function doView(
   );
   renderrepSetter(
     resolveRenderLabels(
-      gameEngineTmp.render({
-        perspective: game.me + 1,
-        altDisplay: settings?.display,
-        ...move.opts,
-      }),
+      gameEngineTmp.render(
+        buildRenderDisplayOpts(game.metaGame, settings?.display, {
+          perspective: game.me + 1,
+          ...move.opts,
+        })
+      ),
       game.players,
       useStore.getState().users
     )
@@ -449,10 +455,13 @@ export function processNewMove(
     );
     renderrepSetter(
       resolveRenderLabels(
-        gameEngineTmp.render({
-          perspective: gameRef.current.me + 1,
-          altDisplay: settings?.display,
-        }),
+        gameEngineTmp.render(
+          buildRenderDisplayOpts(
+            gameRef.current.metaGame,
+            settings?.display,
+            { perspective: gameRef.current.me + 1 }
+          )
+        ),
         gameRef.current.players,
         useStore.getState().users
       )
