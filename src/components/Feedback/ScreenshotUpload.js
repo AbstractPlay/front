@@ -3,7 +3,26 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { presignFeedbackUpload } from "../../lib/feedback/feedbackApi";
 
-const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp"];
+const ALLOWED_TYPES = [
+  "image/png",
+  "image/jpeg",
+  "image/webp",
+  "text/plain",
+  "application/json",
+];
+const EXTENSION_TO_TYPE = {
+  png: "image/png",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  webp: "image/webp",
+  txt: "text/plain",
+  json: "application/json",
+};
+const FILE_INPUT_ACCEPT = [
+  ...ALLOWED_TYPES,
+  ".txt",
+  ".json",
+].join(",");
 const MAX_BYTES = 5_242_880;
 const DEFAULT_MAX_FILES = 3;
 
@@ -28,7 +47,28 @@ function extensionForType(type) {
   if (type === "image/webp") {
     return "webp";
   }
+  if (type === "text/plain") {
+    return "txt";
+  }
+  if (type === "application/json") {
+    return "json";
+  }
   return "png";
+}
+
+function resolveContentType(file) {
+  if (ALLOWED_TYPES.includes(file.type)) {
+    return file.type;
+  }
+  const name = file.name?.toLowerCase() ?? "";
+  const dot = name.lastIndexOf(".");
+  if (dot >= 0) {
+    const mapped = EXTENSION_TO_TYPE[name.slice(dot + 1)];
+    if (mapped) {
+      return mapped;
+    }
+  }
+  return file.type;
 }
 
 function filesFromClipboard(clipboardData) {
@@ -85,7 +125,8 @@ function ScreenshotUpload({
     const nextKeys = replaceOnUpload ? [] : [...attachmentKeys];
     try {
       for (const file of files) {
-        if (!ALLOWED_TYPES.includes(file.type)) {
+        const contentType = resolveContentType(file);
+        if (!ALLOWED_TYPES.includes(contentType)) {
           throw new Error(t("feedback.upload.invalidType"));
         }
         if (file.size > MAX_BYTES) {
@@ -93,7 +134,7 @@ function ScreenshotUpload({
         }
         const presign = await presignFeedbackUpload({
           filename: file.name,
-          contentType: file.type,
+          contentType,
           contentLength: file.size,
         });
         if (!presign.ok) {
@@ -158,7 +199,7 @@ function ScreenshotUpload({
           {uploading ? t("feedback.upload.uploading") : (addLabel ?? t("feedback.upload.add"))}
           <input
             type="file"
-            accept={ALLOWED_TYPES.join(",")}
+            accept={FILE_INPUT_ACCEPT}
             multiple={maxFiles > 1 && !replaceOnUpload}
             hidden
             disabled={uploading || atMax}
