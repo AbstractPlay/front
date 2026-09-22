@@ -24,11 +24,31 @@ describe("useDrawerChatUnread", () => {
     expect(result.current).toBe(false);
   });
 
-  it("flags messages newer than the last seen timestamp", () => {
+  it("does not flag the viewer's own newer messages", () => {
     localStorage.setItem("gameMoveChatSeen:game-1", "1000");
 
     const session = {
       gameID: "game-1",
+      globalMe: { id: "me" },
+      chatComments: [
+        { userId: "u1", timeStamp: 1000, comment: "hi" },
+        { userId: "me", timeStamp: 5000, comment: "my reply" },
+      ],
+    };
+
+    const { result } = renderHook(() =>
+      useDrawerChatUnread(session, { tab: "status", open: true })
+    );
+
+    expect(result.current).toBe(false);
+  });
+
+  it("flags opponent messages newer than the last seen timestamp", () => {
+    localStorage.setItem("gameMoveChatSeen:game-1", "1000");
+
+    const session = {
+      gameID: "game-1",
+      globalMe: { id: "me" },
       chatComments: [{ userId: "u1", timeStamp: 2000, comment: "hello" }],
     };
 
@@ -44,6 +64,7 @@ describe("useDrawerChatUnread", () => {
 
     const session = {
       gameID: "game-1",
+      globalMe: { id: "me" },
       chatComments: [{ userId: "u1", timeStamp: 2000, comment: "hello" }],
     };
 

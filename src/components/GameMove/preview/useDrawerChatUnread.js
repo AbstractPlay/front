@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getLatestUserChatTimestamp } from "../../../lib/GameMove/userChatComments";
+import { getLatestOpponentChatTimestamp } from "../../../lib/GameMove/userChatComments";
 
 const STORAGE_PREFIX = "gameMoveChatSeen:";
 
@@ -25,11 +25,14 @@ function writeLastSeen(gameID, timestamp) {
 }
 
 /**
- * True when chat has messages newer than the last time the user viewed the tab.
+ * True when an opponent's chat is newer than the last time the user viewed the tab.
  */
 export function useDrawerChatUnread(session, { tab, open }) {
-  const { gameID, chatComments } = session;
-  const latest = getLatestUserChatTimestamp(chatComments);
+  const { gameID, chatComments, globalMe } = session;
+  const latest = getLatestOpponentChatTimestamp(
+    chatComments,
+    globalMe?.id,
+  );
   const [lastSeen, setLastSeen] = useState(() => readLastSeen(gameID) ?? 0);
   const seededRef = useRef(readLastSeen(gameID) !== null);
   const chatVisible = open && tab === "chat";
