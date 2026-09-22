@@ -10,27 +10,50 @@ import {
   deleteSpineEntry,
   recalculateLabOutcomes,
   restoreSessionExploration,
+  materializeMainLineSpineStates,
+  getFocusNode,
 } from "./exploration";
 
-vi.mock("@abstractplay/gameslib", () => ({
-  GameFactory: (_metaGame, state) => {
+vi.mock("@abstractplay/gameslib", () => {
+  function parseState(state) {
+    if (typeof state === "string") {
+      try {
+        return JSON.parse(state);
+      } catch {
+        return { stack: [{}] };
+      }
+    }
+    return state ?? { stack: [{}] };
+  }
+
+  function createEngine(state) {
+    const parsed = parseState(state);
     const isTerminal =
       typeof state === "string" && state.includes('"terminal":true');
+    const stack = [...(parsed.stack ?? [{}])];
     return {
       sameMove: (a, b) => a === b,
       move: () => {},
       validateMove: () => ({ valid: true, complete: 1 }),
       moves: () => [],
-      serialize: () => "{}",
-      cheapSerialize: () => "{}",
-      stack: { pop: () => {}, length: 1, slice: () => [] },
+      stack,
       load: () => {},
       gameover: isTerminal,
       winner: isTerminal ? [1] : [],
       currplayer: 1,
+      serialize() {
+        return JSON.stringify({ stack: this.stack });
+      },
+      cheapSerialize() {
+        return JSON.stringify({ stack: this.stack });
+      },
     };
-  },
-}));
+  }
+
+  return {
+    GameFactory: (_metaGame, state) => createEngine(state),
+  };
+});
 
 function makeSpine(moves) {
   const nodes = [new GameNode(null, "", null, 0)];
@@ -94,6 +117,55 @@ describe("getMainLineTipState", () => {
     };
     nodes[1].state = JSON.stringify({ stack: [{}, {}] });
     expect(getMainLineTipState(nodes, game)).toBe(nodes[1].state);
+  });
+});
+
+describe("materializeMainLineSpineStates", () => {
+  it("fills lazy spine nodes from main-line stack depth", () => {
+    const nodes = makeSpine(["m1", "m2"]);
+    nodes.forEach((n) => {
+      n.state = null;
+    });
+    const gameState = JSON.stringify({
+      stack: [{ id: 0 }, { id: 1, lastmove: "m1" }, { id: 2, lastmove: "m2" }],
+    });
+    materializeMainLineSpineStates(nodes, "tictactoe", gameState);
+    expect(nodes[0].state).toContain('"id":0');
+    expect(nodes[1].state).toContain('"id":1');
+    expect(nodes[2].state).toContain('"id":2');
+  });
+});
+
+describe("getFocusNode main-line snapshots", () => {
+  it("derives lazy ply state from materialized tip, not a divergent game.state", () => {
+    const nodes = makeSpine(["m1", "m2", "m3"]);
+    nodes.forEach((n) => {
+      n.state = null;
+    });
+    const mainLineState = JSON.stringify({
+      stack: [
+        { tag: "main", depth: 0 },
+        { tag: "main", depth: 1, lastmove: "m1" },
+        { tag: "main", depth: 2, lastmove: "m2" },
+        { tag: "main", depth: 3, lastmove: "m3" },
+      ],
+    });
+    materializeMainLineSpineStates(nodes, "tictactoe", mainLineState);
+    const variationState = JSON.stringify({
+      stack: [
+        { tag: "var", depth: 0 },
+        { tag: "var", depth: 1 },
+        { tag: "var", depth: 2 },
+        { tag: "var", depth: 3 },
+        { tag: "var", depth: 4 },
+      ],
+    });
+    const game = { metaGame: "tictactoe", state: variationState };
+    nodes[1].state = null;
+    const atPly1 = getFocusNode(nodes, game, { moveNumber: 1, exPath: [] });
+    expect(atPly1.state).toContain('"depth":1');
+    expect(atPly1.state).toContain('"tag":"main"');
+    expect(atPly1.state).not.toContain('"tag":"var"');
   });
 });
 
