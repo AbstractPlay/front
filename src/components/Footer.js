@@ -56,18 +56,19 @@ function Footer(props) {
         <p>
           <Trans
             i18nKey="footer.feedbackCta"
-            components={[
-              <Link key="bugs" to="/feedback/bugs" />,
-              <Link key="ideas" to="/feedback/ideas" />,
-              <Link key="report" to="/feedback/new?kind=bug" />,
-              // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans injects anchor text from i18n
-              <a
-                key="discord"
-                href="https://discord.gg/7dmx7BwRzg"
-                target="_blank"
-                rel="noreferrer"
-              />,
-            ]}
+            components={{
+              bugsLink: <Link to="/feedback/bugs" />,
+              ideasLink: <Link to="/feedback/ideas" />,
+              reportLink: <Link to="/feedback/new?kind=bug" />,
+              discordLink: (
+                // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans injects anchor text from i18n
+                <a
+                  href="https://discord.gg/7dmx7BwRzg"
+                  target="_blank"
+                  rel="noreferrer"
+                />
+              ),
+            }}
           />
         </p>
       </div>
