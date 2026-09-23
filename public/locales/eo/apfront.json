@@ -534,6 +534,11 @@
       "gold99": "Rapide aranĝi",
       "silver99e7": "Rapide aranĝi, elefanto ĉe e7",
       "silver99d7": "Rapide aranĝi, elefanto ĉe d7"
+    },
+    "killallgo": {
+      "attacker": "Ludi kiel la atakanto",
+      "defender": "Ludi kiel la defendanto",
+      "youplace": "Lasi la kontraŭulon meti la unuan aron"
     }
   },
   "CanPie": "Ĉi tiu ludanto rajtas interŝanĝi sidlokojn.",

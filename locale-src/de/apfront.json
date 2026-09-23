@@ -2903,6 +2903,18 @@
     "src": "Odds",
     "out": "Ungerade"
   },
+  "buttons.killallgo.attacker": {
+    "src": "Play as the Attacker",
+    "out": "Als Angreifer spielen"
+  },
+  "buttons.killallgo.defender": {
+    "src": "Play as the Defender",
+    "out": "Als Verteidiger spielen"
+  },
+  "buttons.killallgo.youplace": {
+    "src": "Let the opponent place the first batch",
+    "out": "Den Gegner die erste Gruppe setzen lassen"
+  },
   "buttons.numbers.one": {
     "src": "One (1)",
     "out": "Eins (1)"

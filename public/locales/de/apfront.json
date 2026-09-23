@@ -85,6 +85,11 @@
       "gold99": "Schnelle Einrichtung",
       "silver99e7": "Schnelle Einrichtung, Elefant E7",
       "silver99d7": "Schnelle Einrichtung, Elefant D7"
+    },
+    "killallgo": {
+      "attacker": "Als Angreifer spielen",
+      "defender": "Als Verteidiger spielen",
+      "youplace": "Den Gegner die erste Gruppe setzen lassen"
     }
   },
   "Cancel": "Abbrechen",

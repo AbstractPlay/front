@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useStore } from "../../../stores";
-import { getLivePlayerClockChips } from "./moveEntryUtils";
+import {
+  getLivePlayerClockChips,
+  isPlayerIndexOnMove,
+} from "./moveEntryUtils";
 import PlayerOnlineIcon from "./PlayerOnlineIcon";
 
 function CardTurnBar({ session }) {
@@ -32,7 +35,7 @@ function CardTurnBar({ session }) {
       {activeChip ? (
         <p
           className={`game-move-queue-card__turn${
-            game.canSubmit && game.me === liveToMove
+            game.canSubmit && isPlayerIndexOnMove(game.me, liveToMove)
               ? " game-move-queue-card__turn--mine"
               : ""
           }`}

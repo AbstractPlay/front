@@ -15,6 +15,7 @@ import { getPendingSubmitMove } from "../../lib/GameMove/submitMove";
 import Modal from "../Modal";
 import { formatSoloOutcome, isSoloGame } from "../../lib/soloPlay";
 import PlayerOnlineIcon from "./preview/PlayerOnlineIcon";
+import { isPlayerIndexOnMove } from "./preview/moveEntryUtils";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -395,9 +396,7 @@ function MoveEntry(props) {
               </caption>
               <tbody>
                 {game.players.map((p, ind) =>
-                  (Array.isArray(game.toMove)
-                    ? game.toMove[ind]
-                    : ind === game.toMove) ? (
+                  isPlayerIndexOnMove(ind, game.toMove) ? (
                     <tr key={"player" + ind} style={{ fontWeight: "bolder" }}>
                       <td key={"player" + ind}>
                         {formatPlayerDisplayName(p, allUsers)}

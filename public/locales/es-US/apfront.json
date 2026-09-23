@@ -85,6 +85,11 @@
       "gold99": "Configuración rápida",
       "silver99e7": "Configuración rápida, elefante en e7",
       "silver99d7": "Configuración rápida, elefante en d7"
+    },
+    "killallgo": {
+      "attacker": "Jugar como el atacante",
+      "defender": "Jugar como el defensor",
+      "youplace": "Dejar que el oponente coloque el primer lote"
     }
   },
   "Cancel": "Cancelar",
