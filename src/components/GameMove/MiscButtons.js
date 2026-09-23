@@ -9,6 +9,7 @@ import {
   soloPlayNavigatePath,
   startSoloGameRequest,
 } from "../../lib/soloPlay";
+import { sessionExplorationAllowed } from "../../lib/effectiveGameFlags";
 
 function MiscButtons({
   toMove,
@@ -103,10 +104,7 @@ function MiscButtons({
         {globalMe?.settings?.all?.exploration === -1 ||
         globalMe?.settings?.all?.exploration === 1 ||
         explorer ||
-        !game ||
-        game.simultaneous ||
-        game.noExplore ||
-        game.numPlayers !== 2 ? null : (
+        !sessionExplorationAllowed(game) ? null : (
           <div
             className="control"
             style={{ paddingTop: "1em", paddingRight: "1em" }}

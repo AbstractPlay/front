@@ -2,9 +2,11 @@ import { describe, expect, it, vi } from "vitest";
 import {
   applyEffectiveFlags,
   blocksExplorationAutomoveForPieEven,
+  challengeNoExploreActive,
   effectiveFlags,
   effectiveFlagsForChallenge,
   flagSetIncludes,
+  sessionExplorationAllowed,
 } from "./effectiveGameFlags";
 
 vi.mock("@abstractplay/gameslib", () => ({
@@ -90,6 +92,50 @@ describe("effectiveGameFlags", () => {
     const game0 = {};
     applyEffectiveFlags(game0, { getFlags: () => [] }, "entropy");
     expect(game0.simultaneous).toBe(true);
+  });
+
+  it("challengeNoExploreActive is in-game only", () => {
+    expect(
+      challengeNoExploreActive({ noExplore: true, gameOver: false })
+    ).toBe(true);
+    expect(
+      challengeNoExploreActive({ noExplore: true, gameOver: true })
+    ).toBe(false);
+    expect(challengeNoExploreActive({ noExplore: false, gameOver: false })).toBe(
+      false
+    );
+  });
+
+  it("sessionExplorationAllowed respects agreement, flag, and shape", () => {
+    const twoPlayer = { numPlayers: 2, simultaneous: false };
+    expect(
+      sessionExplorationAllowed({
+        ...twoPlayer,
+        noExplore: true,
+        gameOver: false,
+      })
+    ).toBe(false);
+    expect(
+      sessionExplorationAllowed({
+        ...twoPlayer,
+        noExplore: true,
+        gameOver: true,
+      })
+    ).toBe(true);
+    expect(
+      sessionExplorationAllowed({
+        ...twoPlayer,
+        noExploreFlag: true,
+        gameOver: true,
+      })
+    ).toBe(false);
+    expect(
+      sessionExplorationAllowed({ numPlayers: 3, simultaneous: false })
+    ).toBe(false);
+    expect(
+      sessionExplorationAllowed({ numPlayers: 2, simultaneous: true })
+    ).toBe(false);
+    expect(sessionExplorationAllowed(null)).toBe(false);
   });
 
   it("blocksExplorationAutomoveForPieEven at stack depth 2", () => {

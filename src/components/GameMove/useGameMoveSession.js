@@ -15,6 +15,7 @@ import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import {
   effectiveFlags,
   flagSetIncludes,
+  sessionExplorationAllowed,
 } from "../../lib/effectiveGameFlags";
 import { Buffer } from "buffer";
 import { getDisplayedRenderRepJson } from "../../lib/displayRenderRepJson";
@@ -2527,7 +2528,7 @@ export function useGameMoveSession(props) {
 
   const handleExplorer = () => {
     let game = gameRef.current;
-    game.canExplore = !game.simultaneous && game.numPlayers === 2;
+    game.canExplore = sessionExplorationAllowed(game);
     let focus0 = cloneDeep(focus);
     focus0.canExplore = canExploreMove(
       gameRef.current,

@@ -23,6 +23,25 @@ export function flagSetIncludes(flags, name) {
   return Array.isArray(flags) && flags.includes(name);
 }
 
+/** Challenge-agreed no explore: blocks only while the game is in progress. */
+export function challengeNoExploreActive(game) {
+  return game?.noExplore === true && !game?.gameOver;
+}
+
+/** Whether this game session supports exploration (2p, non-simultaneous, flags/agreement). */
+export function sessionExplorationAllowed(game) {
+  if (!game || game.simultaneous || game.numPlayers !== 2) {
+    return false;
+  }
+  if (game.noExploreFlag === true) {
+    return false;
+  }
+  if (challengeNoExploreActive(game)) {
+    return false;
+  }
+  return true;
+}
+
 /** Copy session flags from the engine onto the front game record. */
 export function applyEffectiveFlags(game0, engine, metaGame) {
   const info = gameinfo.get(metaGame);

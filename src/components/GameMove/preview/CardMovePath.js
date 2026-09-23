@@ -4,6 +4,7 @@ import { useStore } from "../../../stores";
 import { useDockMoveEntry } from "./useDockMoveEntry";
 import ExplorationToolbar from "./ExplorationToolbar";
 import { NoMoves, safeGetButtons, sortLenAlpha } from "./moveEntryUtils";
+import { sessionExplorationAllowed } from "../../../lib/effectiveGameFlags";
 
 function CardMovePath(props) {
   const state = useDockMoveEntry(props);
@@ -42,10 +43,7 @@ function CardMovePath(props) {
     globalMe?.settings?.all?.exploration !== -1 &&
     globalMe?.settings?.all?.exploration !== 1 &&
     !misc?.explorer &&
-    game &&
-    !game.simultaneous &&
-    !game.noExplore &&
-    game.numPlayers === 2;
+    sessionExplorationAllowed(game);
 
   const showChooser = uiState === 0 && focus.canExplore && showMoveControls;
 
