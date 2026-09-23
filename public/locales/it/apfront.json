@@ -85,6 +85,11 @@
       "gold99": "Configurazione rapida",
       "silver99e7": "Configurazione rapida, elefante in e7",
       "silver99d7": "Configurazione rapida, elefante in d7"
+    },
+    "killallgo": {
+      "attacker": "Gioca come Attaccante",
+      "defender": "Gioca come Difensore",
+      "youplace": "Lascia che l'avversario piazzi il primo gruppo"
     }
   },
   "Cancel": "Annulla",
