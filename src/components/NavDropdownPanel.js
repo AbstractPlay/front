@@ -12,24 +12,7 @@ function NavDropdownPanel({ open, onClose, className = "", children }) {
       return;
     }
     const handlePointerDown = (event) => {
-      const target = event.target;
-      if (!(target instanceof Element)) {
-        return;
-      }
-      const root = rootRef.current;
-      if (!root) {
-        return;
-      }
-      if (!root.contains(target)) {
-        onClose();
-        return;
-      }
-      const panel = root.querySelector(".nav-dropdown-panel");
-      if (!panel?.contains(target)) {
-        return;
-      }
-      const dismissTarget = target.closest('a[href], [role="menuitem"]');
-      if (dismissTarget && panel.contains(dismissTarget)) {
+      if (rootRef.current && !rootRef.current.contains(event.target)) {
         onClose();
       }
     };
