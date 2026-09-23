@@ -87,4 +87,15 @@ describe("filterOpponentOptionsByQuery", () => {
       "abc",
     ]);
   });
+
+  it("trims query and requires all tokens", () => {
+    const list = [
+      { id: "xyz", name: "Zara Alpha" },
+      { id: "abc", name: "Beta" },
+    ];
+    expect(filterOpponentOptionsByQuery(list, " zara ").map((u) => u.id)).toEqual([
+      "xyz",
+    ]);
+    expect(filterOpponentOptionsByQuery(list, "zara beta")).toHaveLength(0);
+  });
 });

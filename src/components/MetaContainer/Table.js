@@ -8,6 +8,7 @@ import React, {
 import { Link } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { gameDescription } from "../../lib/gameDescription";
+import { trimmedIncludesStringColumnFilterFn } from "../../lib/tableGlobalFilter";
 import {
   compareCategoryTagEntries,
   getGameDisplayName,
@@ -127,7 +128,7 @@ function Table({
   const updateNameFilter = useCallback(
     (txt) => {
       const filters = [...columnFilters].filter((cf) => cf.id !== "gameName");
-      if (txt !== "") {
+      if (txt.trim() !== "") {
         filters.push({ id: "gameName", value: txt });
       }
       setColumnFilters([...filters]);
@@ -138,7 +139,7 @@ function Table({
   const updateDesignerFilter = useCallback(
     (txt) => {
       const filters = [...columnFilters].filter((cf) => cf.id !== "designers");
-      if (txt !== "") {
+      if (txt.trim() !== "") {
         filters.push({ id: "designers", value: txt });
       }
       setColumnFilters([...filters]);
@@ -287,7 +288,7 @@ function Table({
         cell: (props) => (
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
-        filterFn: "includesString",
+        filterFn: trimmedIncludesStringColumnFilterFn,
         sortingFn: stringColumnSortingFn(i18n.language),
       }),
       columnHelper.accessor(
@@ -298,6 +299,7 @@ function Table({
         {
           header: t("tables.designers"),
           id: "designers",
+          filterFn: trimmedIncludesStringColumnFilterFn,
           sortingFn: stringColumnSortingFn(i18n.language),
           cell: (props) =>
             props.row.original.designers.length === 0

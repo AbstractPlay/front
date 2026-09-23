@@ -21,6 +21,7 @@ import { callAuthApi } from "../lib/api";
 import { formatUserDisplayName } from "./Bots/botUtils";
 import PageLoading from "./shared/PageLoading";
 import { EnlargeableUserAvatar } from "./AvatarLightbox";
+import { trimmedGlobalIncludesStringFilterFn } from "../lib/tableGlobalFilter";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -295,7 +296,7 @@ function Players() {
     autoResetPageIndex: false,
     onSortingChange: setSorting,
     onGlobalFilterChange: globalFilterSetter,
-    globalFilterFn: "includesString",
+    globalFilterFn: trimmedGlobalIncludesStringFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

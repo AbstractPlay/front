@@ -16,6 +16,7 @@ import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
 import { compareStrings } from "../../lib/compareStrings";
 import { isHighlighted, toggleHighlight } from "../../lib/playerGameMarks";
+import { queryMatchesHaystack } from "../../lib/searchQuery";
 import { toast } from "react-toastify";
 
 const columnHelper = createColumnHelper();
@@ -181,9 +182,8 @@ function History({ handleChallenge }) {
                   i18n.language
                 );
               },
-              filterFn: (row, colId, val) => {
-                return row.original.gameName.includes(val);
-              },
+              filterFn: (row, colId, val) =>
+                queryMatchesHaystack(val, row.original.gameName.toLowerCase()),
             }),
             columnHelper.accessor("variants", {
               header: t("tables.variants"),
@@ -193,9 +193,11 @@ function History({ handleChallenge }) {
                 getUids: (row) => row.original.variantUids ?? [],
                 locale: i18n.language,
               }),
-              filterFn: (row, colId, val) => {
-                return row.getValue(colId).join(",").includes(val);
-              },
+              filterFn: (row, colId, val) =>
+                queryMatchesHaystack(
+                  val,
+                  row.getValue(colId).join(",").toLowerCase()
+                ),
             }),
             columnHelper.accessor("dateEnd", {
               header: t("tables.endDate"),
@@ -237,13 +239,15 @@ function History({ handleChallenge }) {
                   i18n.language
                 );
               },
-              filterFn: (row, colId, val) => {
-                return row
-                  .getValue(colId)
-                  .map((u) => u.name)
-                  .join(",")
-                  .includes(val);
-              },
+              filterFn: (row, colId, val) =>
+                queryMatchesHaystack(
+                  val,
+                  row
+                    .getValue(colId)
+                    .map((u) => u.name)
+                    .join(",")
+                    .toLowerCase()
+                ),
             }),
             columnHelper.accessor("winner", {
               header: t("tables.winner"),
@@ -291,7 +295,12 @@ function History({ handleChallenge }) {
                 return compareStrings(nameA, nameB, i18n.language);
               },
               filterFn: (row, colId, val) => {
-                return row.getValue(colId).name.includes(val);
+                const winnerVal = row.getValue(colId);
+                const winnerText =
+                  winnerVal === undefined
+                    ? "draw"
+                    : winnerVal.name.toLowerCase();
+                return queryMatchesHaystack(val, winnerText);
               },
             }),
             columnHelper.display({
@@ -356,43 +365,27 @@ function History({ handleChallenge }) {
   );
 
   const globalFilterFn = (row, colId, val) => {
-    const realVal = val.toLowerCase();
     let winner = row.original.winner;
     if (winner === undefined) {
       winner = "draw";
-    } else {
-      if (
-        globalMe === null ||
-        globalMe === undefined ||
-        winner.id !== globalMe.id
-      ) {
-        winner = winner.name.toLowerCase();
-      } else {
-        winner = winner.name.toLowerCase() + ",you";
-      }
-    }
-    // game name
-    if (row.original.gameName.toLowerCase().includes(realVal)) {
-      return true;
-    }
-    // variants
-    else if (row.original.variants.join(",").toLowerCase().includes(realVal)) {
-      return true;
-    }
-    // opponents
-    else if (
-      row.original.opponents
-        .map((u) => u.name.toLowerCase())
-        .join(",")
-        .includes(realVal)
+    } else if (
+      globalMe === null ||
+      globalMe === undefined ||
+      winner.id !== globalMe.id
     ) {
-      return true;
+      winner = winner.name;
+    } else {
+      winner = `${winner.name},you`;
     }
-    // winner
-    else if (winner.includes(realVal)) {
-      return true;
-    }
-    return false;
+    const haystack = [
+      row.original.gameName,
+      row.original.variants.join(","),
+      row.original.opponents.map((u) => u.name).join(","),
+      typeof winner === "string" ? winner : winner.name,
+    ]
+      .join(" ")
+      .toLowerCase();
+    return queryMatchesHaystack(val, haystack);
   };
 
   if (!Array.isArray(allRecs) || allRecs.length === 0) {

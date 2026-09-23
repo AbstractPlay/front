@@ -1,6 +1,7 @@
-function normalizeQuery(query) {
-  return String(query ?? "").trim().toLowerCase().replace(/\s+/g, " ");
-}
+import {
+  normalizeSearchQuery,
+  queryMatchesHaystack,
+} from "../searchQuery";
 
 function searchableStringsFromItem(item) {
   const parts = [];
@@ -32,13 +33,12 @@ function searchableStringsFromItem(item) {
  * Client-side filter for feedback list rows (boards, mine, admin, history).
  */
 export function filterFeedbackItemsByQuery(items, query) {
-  const normalized = normalizeQuery(query);
+  const normalized = normalizeSearchQuery(query);
   if (!normalized) {
     return items;
   }
-  const tokens = normalized.split(" ").filter(Boolean);
   return items.filter((item) => {
     const haystack = searchableStringsFromItem(item).join(" ").toLowerCase();
-    return tokens.every((token) => haystack.includes(token));
+    return queryMatchesHaystack(query, haystack);
   });
 }

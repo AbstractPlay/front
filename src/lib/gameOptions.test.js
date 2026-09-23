@@ -214,6 +214,18 @@ describe("filterGameOptions", () => {
 
   it("returns all games when query empty", () => {
     expect(filterGameOptions(games, { query: "" })).toEqual(games);
+    expect(filterGameOptions(games, { query: "   " })).toEqual(games);
+  });
+
+  it("trims query and matches all tokens in name id or designers", () => {
+    const tagged = [
+      { id: "arimaa", name: "Arimaa", designers: "Z. J. Bombard" },
+      { id: "go", name: "Go", designers: "Ancient" },
+    ];
+    expect(filterGameOptions(tagged, { query: " arimaa " })).toEqual([tagged[0]]);
+    expect(filterGameOptions(tagged, { query: "ARIMAA" })).toEqual([tagged[0]]);
+    expect(filterGameOptions(tagged, { query: "arimaa bomb" })).toEqual([tagged[0]]);
+    expect(filterGameOptions(tagged, { query: "arimaa ancient" })).toHaveLength(0);
   });
 
   it("filters by goal tag", () => {

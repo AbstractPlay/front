@@ -42,6 +42,7 @@ import {
 } from "../../lib/tournamentSections";
 import PageLoading from "../shared/PageLoading";
 import { TableNavSearch } from "../shared/DataTable";
+import { trimmedGlobalIncludesStringFilterFn } from "../../lib/tableGlobalFilter";
 
 function Tournaments(props) {
   const { t, i18n } = useTranslation();
@@ -512,7 +513,7 @@ function Tournaments(props) {
     autoResetPageIndex: false,
     onSortingChange: openTournamentSortingSetter,
     onGlobalFilterChange: setOpenTournamentsGlobalFilter,
-    globalFilterFn: "includesString",
+    globalFilterFn: trimmedGlobalIncludesStringFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -744,7 +745,7 @@ function Tournaments(props) {
     autoResetPageIndex: false,
     onSortingChange: currentTournamentSortingSetter,
     onGlobalFilterChange: setCurrentTournamentsGlobalFilter,
-    globalFilterFn: "includesString",
+    globalFilterFn: trimmedGlobalIncludesStringFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -982,7 +983,7 @@ function Tournaments(props) {
     autoResetPageIndex: false,
     onSortingChange: completedTournamentSortingSetter,
     onGlobalFilterChange: setCompletedTournamentsGlobalFilter,
-    globalFilterFn: "includesString",
+    globalFilterFn: trimmedGlobalIncludesStringFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

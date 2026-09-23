@@ -35,4 +35,15 @@ describe("filterFeedbackItemsByQuery", () => {
     expect(filterFeedbackItemsByQuery(items, "dark alice")).toHaveLength(1);
     expect(filterFeedbackItemsByQuery(items, "dark bob")).toHaveLength(0);
   });
+
+  it("treats leading and trailing space like an untrimmed query", () => {
+    expect(filterFeedbackItemsByQuery(items, "dark")).toHaveLength(1);
+    expect(filterFeedbackItemsByQuery(items, "  dark  ")).toHaveLength(1);
+  });
+
+  it("matches case-insensitively", () => {
+    expect(filterFeedbackItemsByQuery(items, "DARK")).toHaveLength(1);
+    expect(filterFeedbackItemsByQuery(items, "ALICE")).toHaveLength(1);
+    expect(filterFeedbackItemsByQuery(items, "dark ALICE")).toHaveLength(1);
+  });
 });
