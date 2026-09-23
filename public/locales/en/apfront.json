@@ -703,7 +703,7 @@
         "createEvent": "Create event",
         "createEventModalTitle": "Create new event",
         "createEventHelp": "These values can be changed later. Dates and times must be given in UTC.",
-        "createEventContact": "To create an event, please reach out to one of the developers through <1>Discord</1>.",
+        "createEventContact": "To create an event, please reach out to one of the developers through <0>Discord</0>.",
         "noOpenRegistration": "No events are currently open for registration.",
         "eventNameLabel": "Event name",
         "eventNameRequired": "The event must have a name.",
@@ -730,7 +730,7 @@
             "gamesTitle": "Games",
             "gamesAsteriskNote": "An asterisk next to a result means the organizer has manually adjusted it.",
             "resultsTitle": "Results",
-            "resultsDisclaimer": "These results are <1>unofficial</1>. See the description for the official results as tabulated by the organizer. This table is not aware of things like byes. It simply summarizes the results of the paired games, including arbitrations.",
+            "resultsDisclaimer": "These results are <0>unofficial</0>. See the description for the official results as tabulated by the organizer. This table is not aware of things like byes. It simply summarizes the results of the paired games, including arbitrations.",
             "editorHelp1": "Draft events can be published as long as it's at least 24 hours from the start date and the description is not empty.",
             "editorHelp2": "Events can be fully deleted if they are draft, open for registration, or active before any games have been created.",
             "editorHelp3": "The start date can be changed up until games have been created.",
@@ -757,11 +757,11 @@
             "descriptionMarkdown": "Markdown enabled",
             "descriptionNotEmpty": "The description may not be empty.",
             "publishEventTitle": "Publish event",
-            "publishEventBody": "You are about to open this event up for registration. It will be immediately visible to all players. <1>This cannot be undone!</1>",
-            "deleteEventBody": "You are about to delete this event entirely. <1>This cannot be undone!</1> This is only possible up until games have been created for this event.",
+            "publishEventBody": "You are about to open this event up for registration. It will be immediately visible to all players. <0>This cannot be undone!</0>",
+            "deleteEventBody": "You are about to delete this event entirely. <0>This cannot be undone!</0> This is only possible up until games have been created for this event.",
             "closeEventTitle": "Close event",
             "closeEventSelectWinners": "Select the winner (or winners) and click \"Update winners.\"",
-            "closeEventBody": "You are about to mark this event as complete. <1>This cannot be undone!</1> Please select the winner (or winners) and click \"Close Event.\" The winner can be updated at any time after the event is over.",
+            "closeEventBody": "You are about to mark this event as complete. <0>This cannot be undone!</0> Please select the winner (or winners) and click \"Close Event.\" The winner can be updated at any time after the event is over.",
             "selectWinnersLabel": "Select one or more event winners:",
             "updateWinners": "Update winners",
             "inviteBlockTitle": "Invite/Block Players",
@@ -794,7 +794,7 @@
             "proceedAnyway": "Proceed anyway",
             "errorsModalBody": "Your pairings contain potential errors. Please review the table and resolve any duplications. You should only proceed if you are certain your pairings are correct.",
             "confirmGameCreation": "Confirm game creation",
-            "confirmCreateBody": "You are about to create games, which will start immediately. <1>This cannot be undone!</1> Please review your pairings and be very certain they are correct before proceeding.",
+            "confirmCreateBody": "You are about to create games, which will start immediately. <0>This cannot be undone!</0> Please review your pairings and be very certain they are correct before proceeding.",
             "deletePairing": "Delete pairing",
             "errors": {
                 "dupeExact": "This combination of p1, p2, and game is an exact duplicate of an earlier entry. This is almost never desirable.",
@@ -807,7 +807,7 @@
             "arbitrateTitle": "Arbitrate result",
             "saveResult": "Save result",
             "arbitrateNote": "Please note that arbitrated results will not be visible in the auto-generated game reports. They only apply within the context of this event.",
-            "selectWinner": "Select the arbitrated winner of <1>{{gameName}} game</1>:",
+            "selectWinner": "Select the arbitrated winner of <0>{{gameName}} game</0>:",
             "gameSuffix": "game"
         }
     },
@@ -1446,7 +1446,7 @@
     "fatalError": {
         "title": "Something went wrong",
         "chunkMessage": "A new version of the site may be available. Please refresh the page.",
-        "genericMessage": "Please refresh the page. If the problem persists, please <1>report it on our Discord server</1> or use the Report a bug button below.",
+        "genericMessage": "Please refresh the page. If the problem persists, please <0>report it on our Discord server</0> or use the Report a bug button below.",
         "discordLink": "report it on our Discord server"
     },
     "standingChallenge": {
@@ -1456,7 +1456,7 @@
         "yesDelete": "Yes, delete it",
         "noCancel": "No, cancel",
         "missingEntry": "No standing challenge entry was provided. This should never happen.",
-        "deleteConfirm": "You are about to delete the following standing challenge: <1>{{description}}</1>. Are you sure?",
+        "deleteConfirm": "You are about to delete the following standing challenge: <0>{{description}}</0>. Are you sure?",
         "noVariants": "no variants"
     },
     "about": {
@@ -1465,7 +1465,7 @@
         "highlightsLink": "full games list"
     },
     "notFound": {
-        "body": "No page could be found at <1>{{path}}</1>. Please use the navigation bar to try again. You can also <2>report a bug in-app</2> or <3>post on our Discord server</3>.",
+        "body": "No page could be found at <pathCode>{{path}}</pathCode>. Please use the navigation bar to try again. You can also <bugLink>report a bug in-app</bugLink> or <discordLink>post on our Discord server</discordLink>.",
         "reportLink": "post a bug report on our Discord server"
     },
     "footer": {
@@ -1476,7 +1476,7 @@
         "github": "GitHub",
         "legalLink": "Terms of Service & Privacy Policy",
         "betaBanner": "The site is currently in BETA testing!",
-        "feedbackCta": "Browse <1>bug reports</1> and <2>feature ideas</2>, <3>report a bug</3>, or chat with us on <4>Discord</4>."
+        "feedbackCta": "Browse <bugsLink>bug reports</bugsLink> and <ideasLink>feature ideas</ideasLink>, <reportLink>report a bug</reportLink>, or chat with us on <discordLink>Discord</discordLink>."
     },
     "explore": {
         "intro": "This page lets you explore different ways of sorting the list of games. Select your desired view below. Clicking on a game's name will take you to that game's landing page with additional information.",
@@ -2162,7 +2162,7 @@
         "deleting": "Deleting…",
         "yesDelete": "Yes, delete it",
         "noCancel": "No, cancel",
-        "deleteConfirm": "You are about to delete the bot <1>{{name}}</1>. This will unlink all past game records from this bot. If you just lost your client secret, you can generate a new one using the \"Rotate secret\" button. Deleting a bot cannot be undone! Are you sure you want to delete this bot?",
+        "deleteConfirm": "You are about to delete the bot <0>{{name}}</0>. This will unlink all past game records from this bot. If you just lost your client secret, you can generate a new one using the \"Rotate secret\" button. Deleting a bot cannot be undone! Are you sure you want to delete this bot?",
         "saving": "Saving…",
         "credentialsWarningBoth": "These credentials are shown only once. Copy the client ID and client secret and store them securely before closing this dialog.",
         "credentialsWarningSecretOnly": "Your client ID is unchanged. This new client secret is shown only once — copy and store it securely before closing this dialog.",
@@ -2196,8 +2196,8 @@
             "jsonToInject": "JSON to inject",
             "pasteJsonPlaceholder": "Paste JSON here",
             "injectJson": "Inject JSON!",
-            "customCssWarning1": "It is possible to customize the CSS of all instances of this particular game. <1>This is not something to do lightly!</1> Do not inject code you either do not understand or have not had vetted by someone you trust. Abstract Play and its developers are not responsible for any mishaps that may occur while using this feature.",
-            "customCssWarning2": "If you are certain you wish to continue, paste the CSS code below and click Save. CSS saved in Customize (paintbrush) is stored in your account and overrides this device-only editor. To reset legacy device CSS, clear the local storage key <1>custom-css</1>. See the wiki for documentation, and join us on Discord to discuss.",
+            "customCssWarning1": "It is possible to customize the CSS of all instances of this particular game. <0>This is not something to do lightly!</0> Do not inject code you either do not understand or have not had vetted by someone you trust. Abstract Play and its developers are not responsible for any mishaps that may occur while using this feature.",
+            "customCssWarning2": "If you are certain you wish to continue, paste the CSS code below and click Save. CSS saved in Customize (paintbrush) is stored in your account and overrides this device-only editor. To reset legacy device CSS, clear the local storage key <0>custom-css</0>. See the wiki for documentation, and join us on Discord to discuss.",
             "accountCssOverridesLocal": "Custom CSS from your account (Customize screen) is active for this game. Changes here are saved on this device only and will not apply until account CSS is removed.",
             "pasteCssPlaceholder": "Paste CSS code here",
             "activateCustomCss": "Activate custom CSS?"

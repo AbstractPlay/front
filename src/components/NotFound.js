@@ -28,17 +28,20 @@ function NotFound(props) {
           <Trans
             i18nKey="notFound.body"
             values={{ path }}
-            components={[
-              <code key="code" />,
-              <Link key="bug" to={feedbackNewPath("bug", { pageUrl: path })} />,
-              // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans injects anchor text from i18n
-              <a
-                key="discord"
-                href="https://discord.abstractplay.com"
-                target="_blank"
-                rel="noreferrer"
-              />,
-            ]}
+            components={{
+              pathCode: <code />,
+              bugLink: (
+                <Link to={feedbackNewPath("bug", { pageUrl: path })} />
+              ),
+              discordLink: (
+                // eslint-disable-next-line jsx-a11y/anchor-has-content -- Trans injects anchor text from i18n
+                <a
+                  href="https://discord.abstractplay.com"
+                  target="_blank"
+                  rel="noreferrer"
+                />
+              ),
+            }}
           />
         </p>
       </article>
