@@ -16,6 +16,10 @@ import {
   DEFAULT_COLOUR_CONTEXT_DARK,
   DEFAULT_COLOUR_CONTEXT_LIGHT,
 } from "../lib/colourContextDefaults";
+import NavbarHoverDropdown, {
+  NavbarHoverDropdownAnchor,
+  NavbarHoverDropdownLink,
+} from "./NavbarHoverDropdown";
 
 const ThemeCustomizer = lazy(() => import("./ThemeCustomizer"));
 
@@ -132,44 +136,21 @@ function Navbar() {
               {t("Playground")}
             </Link>
           </div>
-          <div className="navbar-item has-dropdown is-hoverable">
-            <Link
-              to="/explore"
-              className="navbar-link"
-              onClick={() => updateBurgerExpanded(false)}
-            >
-              {t("Games")}
-            </Link>
-            <div className="navbar-dropdown">
-              <div className="navbar-item">
-                <Link
-                  to="/explore"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("nav.explore")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/challenges"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("nav.openChallenges")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/recent-games"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("nav.recentGames")}
-                </Link>
-              </div>
-            </div>
-          </div>
+          <NavbarHoverDropdown
+            label={t("Games")}
+            labelTo="/explore"
+            closeBurger={closeBurger}
+          >
+            <NavbarHoverDropdownLink to="/explore">
+              {t("nav.explore")}
+            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownLink to="/challenges">
+              {t("nav.openChallenges")}
+            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownLink to="/recent-games">
+              {t("nav.recentGames")}
+            </NavbarHoverDropdownLink>
+          </NavbarHoverDropdown>
           <div className="navbar-item">
             <Link
               to="/players"
@@ -179,174 +160,81 @@ function Navbar() {
               {t("Players")}
             </Link>
           </div>
-          <div className="navbar-item has-dropdown is-hoverable">
-            <a className="navbar-link">{t("EventsNav")}</a>
-            <div className="navbar-dropdown">
-              <div className="navbar-item">
-                <Link
-                  to="/tournaments"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("Tournament.Tournaments")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/events"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("Events.Name")}
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="navbar-item has-dropdown is-hoverable">
-            <Link
-              to="/feedback/bugs"
-              className="navbar-link"
-              onClick={() => updateBurgerExpanded(false)}
+          <NavbarHoverDropdown label={t("EventsNav")} closeBurger={closeBurger}>
+            <NavbarHoverDropdownLink to="/tournaments">
+              {t("Tournament.Tournaments")}
+            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownLink to="/events">
+              {t("Events.Name")}
+            </NavbarHoverDropdownLink>
+          </NavbarHoverDropdown>
+          <NavbarHoverDropdown
+            label={t("nav.community")}
+            labelTo="/feedback/bugs"
+            closeBurger={closeBurger}
+          >
+            <NavbarHoverDropdownLink to="/feedback/new?kind=bug">
+              {t("nav.reportBug")}
+            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownLink to="/feedback/bugs">
+              {t("nav.bugBoard")}
+            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownLink to="/feedback/ideas">
+              {t("nav.featureIdeas")}
+            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownLink to="/wishlist">
+              {t("nav.gameWishlist")}
+            </NavbarHoverDropdownLink>
+            {loggedin ? (
+              <NavbarHoverDropdownLink to="/feedback/mine">
+                {t("nav.myFeedback")}
+              </NavbarHoverDropdownLink>
+            ) : null}
+          </NavbarHoverDropdown>
+          <NavbarHoverDropdown label={t("About")} closeBurger={closeBurger}>
+            <NavbarHoverDropdownLink to="/stats">
+              {t("Statistics")}
+            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownLink to="/news">
+              {t("News")}
+            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownLink to="/feedback/history">
+              {t("nav.feedbackHistory")}
+            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownLink to="/about">
+              {t("About")}
+            </NavbarHoverDropdownLink>
+            <hr className="navbar-divider" />
+            <div className="navbar-item">{t("RelatedSites")}</div>
+            <NavbarHoverDropdownAnchor
+              href="https://records.abstractplay.com"
+              target="_blank"
+              rel="noreferrer"
             >
-              {t("nav.community")}
-            </Link>
-            <div className="navbar-dropdown">
-              <div className="navbar-item">
-                <Link
-                  to="/feedback/new?kind=bug"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("nav.reportBug")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/feedback/bugs"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("nav.bugBoard")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/feedback/ideas"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("nav.featureIdeas")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/wishlist"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("nav.gameWishlist")}
-                </Link>
-              </div>
-              {loggedin ? (
-                <div className="navbar-item">
-                  <Link
-                    to="/feedback/mine"
-                    className="navbar-item"
-                    onClick={() => updateBurgerExpanded(false)}
-                  >
-                    {t("nav.myFeedback")}
-                  </Link>
-                </div>
-              ) : null}
-            </div>
-          </div>
-          <div className="navbar-item has-dropdown is-hoverable">
-            <a className="navbar-link">{t("About")}</a>
-            <div className="navbar-dropdown">
-              <div className="navbar-item">
-                <Link
-                  to="/stats"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("Statistics")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/news"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("News")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/feedback/history"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("nav.feedbackHistory")}
-                </Link>
-              </div>
-              <div className="navbar-item">
-                <Link
-                  to="/about"
-                  className="navbar-item"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  {t("About")}
-                </Link>
-              </div>
-              <hr className="navbar-divider" />
-              <div className="navbar-item">{t("RelatedSites")}</div>
-              <div className="navbar-item">
-                <a
-                  className="navbar-item"
-                  href="https://records.abstractplay.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  Historical records
-                </a>
-              </div>
-              <div className="navbar-item">
-                <a
-                  className="navbar-item"
-                  href="https://designer.abstractplay.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  Game designer
-                </a>
-              </div>
-              <div className="navbar-item">
-                <a
-                  className="navbar-item"
-                  href="https://hwdiagrams.abstractplay.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  Homeworlds diagram generator
-                </a>
-              </div>
-              <div className="navbar-item">
-                <a
-                  className="navbar-item"
-                  href="https://perlkonig.com/zendo"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => updateBurgerExpanded(false)}
-                >
-                  Zendo client (synchronous)
-                </a>
-              </div>
-            </div>
-          </div>
+              Historical records
+            </NavbarHoverDropdownAnchor>
+            <NavbarHoverDropdownAnchor
+              href="https://designer.abstractplay.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Game designer
+            </NavbarHoverDropdownAnchor>
+            <NavbarHoverDropdownAnchor
+              href="https://hwdiagrams.abstractplay.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Homeworlds diagram generator
+            </NavbarHoverDropdownAnchor>
+            <NavbarHoverDropdownAnchor
+              href="https://perlkonig.com/zendo"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Zendo client (synchronous)
+            </NavbarHoverDropdownAnchor>
+          </NavbarHoverDropdown>
         </div>
         <div className="navbar-end">
           {loggedin ? (
