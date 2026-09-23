@@ -61,6 +61,19 @@ describe("parseAuthResponse", () => {
     expect(result.data).toBe(null);
   });
 
+  it("returns plain-string envelope bodies (timeloss sentinels)", async () => {
+    const result = await parseAuthResponse(
+      mockResponse({
+        body: JSON.stringify({
+          statusCode: 200,
+          body: "not_a_timeloss",
+        }),
+      })
+    );
+    expect(result.ok).toBe(true);
+    expect(result.data).toBe("not_a_timeloss");
+  });
+
   it("reports HTTP errors with status", async () => {
     const result = await parseAuthResponse(
       mockResponse({ status: 502, body: "Bad Gateway" })
