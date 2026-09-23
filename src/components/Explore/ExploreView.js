@@ -31,6 +31,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import ExpandableDiv from "../ExpandableDiv";
+import { trimmedIncludesStringColumnFilterFn } from "../../lib/tableGlobalFilter";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Thumbnail from "../Thumbnail";
@@ -303,7 +304,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     (txt) => {
       nameSearchSetter(txt);
       const filters = [...columnFilters].filter((cf) => cf.id !== "gameName");
-      if (txt !== "") {
+      if (txt.trim() !== "") {
         filters.push({ id: "gameName", value: txt });
       }
       setColumnFilters([...filters]);
@@ -315,7 +316,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     (txt) => {
       designerSearchSetter(txt);
       const filters = [...columnFilters].filter((cf) => cf.id !== "designers");
-      if (txt !== "") {
+      if (txt.trim() !== "") {
         filters.push({ id: "designers", value: txt });
       }
       setColumnFilters([...filters]);
@@ -480,7 +481,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         cell: (props) => (
           <Link to={`/games/${props.row.original.id}`}>{props.getValue()}</Link>
         ),
-        filterFn: "includesString",
+        filterFn: trimmedIncludesStringColumnFilterFn,
         sortingFn: stringColumnSortingFn(i18n.language),
       }),
       columnHelper.accessor(
@@ -491,6 +492,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         {
           header: t("tables.designers"),
           id: "designers",
+          filterFn: trimmedIncludesStringColumnFilterFn,
           sortingFn: stringColumnSortingFn(i18n.language),
           cell: (props) =>
             props.row.original.designers.length === 0

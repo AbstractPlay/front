@@ -9,6 +9,7 @@ import { compareStrings } from "./compareStrings";
 import { isLabSupportedGame } from "./Lab/buildGame";
 import { isProductionMode } from "./realMode";
 import { tournamentPlaySupported } from "./tournamentGame";
+import { queryMatchesHaystack } from "./searchQuery";
 
 /**
  * @param {{ flags?: string[] } | null | undefined} info
@@ -276,7 +277,6 @@ export function filterGameOptions(
     boardTag = "",
   } = {}
 ) {
-  const q = query.trim().toLowerCase();
   const starredSet = new Set(starredIds);
   return games.filter((game) => {
     if (starredOnly && !starredSet.has(game.id)) {
@@ -288,12 +288,13 @@ export function filterGameOptions(
     if (boardTag && !(game.categories ?? []).includes(boardTag)) {
       return false;
     }
-    if (!q) {
-      return true;
+    if (!queryMatchesHaystack(query, [
+      game.name,
+      game.id,
+      game.designers ?? "",
+    ].join(" ").toLowerCase())) {
+      return false;
     }
-    const nameMatch = game.name.toLowerCase().includes(q);
-    const idMatch = game.id.toLowerCase().includes(q);
-    const designerMatch = (game.designers ?? "").toLowerCase().includes(q);
-    return nameMatch || idMatch || designerMatch;
+    return true;
   });
 }

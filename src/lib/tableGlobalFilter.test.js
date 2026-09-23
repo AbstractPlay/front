@@ -31,6 +31,9 @@ describe("includesStringOnFields", () => {
     expect(
       includesStringOnFields({ name: "Alice Smith" }, [({ name }) => name], "smith")
     ).toBe(true);
+    expect(
+      includesStringOnFields({ name: "Alice Smith" }, [({ name }) => name], "SMITH")
+    ).toBe(true);
   });
 
   it("matches player arrays by name", () => {
@@ -46,6 +49,29 @@ describe("includesStringOnFields", () => {
         "botalpha"
       )
     ).toBe(true);
+  });
+
+  it("trims leading and trailing space on the query", () => {
+    expect(
+      includesStringOnFields({ name: "Arimaa" }, [({ name }) => name], " arimaa ")
+    ).toBe(true);
+  });
+
+  it("requires all tokens to match the combined haystack", () => {
+    expect(
+      includesStringOnFields(
+        { game: "Lines of Action", id: "loa" },
+        [({ game }) => game, ({ id }) => id],
+        "lines action"
+      )
+    ).toBe(true);
+    expect(
+      includesStringOnFields(
+        { game: "Lines of Action", id: "loa" },
+        [({ game }) => game, ({ id }) => id],
+        "lines chess"
+      )
+    ).toBe(false);
   });
 });
 
@@ -97,7 +123,7 @@ describe("recentGamesGlobalFilterFn", () => {
           numMoves: 10,
         }),
         "global",
-        "lines of"
+        "  lines   action  "
       )
     ).toBe(true);
   });

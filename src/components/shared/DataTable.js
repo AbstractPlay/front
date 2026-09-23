@@ -9,6 +9,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
+import { trimmedGlobalIncludesStringFilterFn } from "../../lib/tableGlobalFilter";
 
 const ALL_SIZE = Number.MAX_SAFE_INTEGER;
 
@@ -94,7 +95,7 @@ function DataTable({
   stickyHeader = false,
   articleClassName = "",
   navClassName = "data-table-nav",
-  globalFilterFn = "includesString",
+  globalFilterFn = trimmedGlobalIncludesStringFilterFn,
   filterFieldId = "data-table-filter",
   tableNote = null,
   columnVisibility = {},

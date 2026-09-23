@@ -24,6 +24,7 @@ import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribut
 import Spinner from "./Spinner";
 import PageLoading from "./shared/PageLoading";
 import { TableNavSearch } from "./shared/DataTable";
+import { trimmedGlobalIncludesStringFilterFn } from "../lib/tableGlobalFilter";
 import ActivityMarker from "./ActivityMarker";
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import { useStorageState } from "react-use-storage-state";
@@ -681,7 +682,7 @@ function StandingChallenges(props) {
     autoResetPageIndex: false,
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: "includesString",
+    globalFilterFn: trimmedGlobalIncludesStringFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
