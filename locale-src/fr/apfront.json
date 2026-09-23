@@ -2903,6 +2903,18 @@
     "src": "Odds",
     "out": "Impair"
   },
+  "buttons.killallgo.attacker": {
+    "src": "Play as the Attacker",
+    "out": "Jouer l'attaquant"
+  },
+  "buttons.killallgo.defender": {
+    "src": "Play as the Defender",
+    "out": "Jouer le défenseur"
+  },
+  "buttons.killallgo.youplace": {
+    "src": "Let the opponent place the first batch",
+    "out": "Laisser l'adversaire poser le premier lot"
+  },
   "buttons.numbers.one": {
     "src": "One (1)",
     "out": "Un (1)"

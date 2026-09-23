@@ -2903,6 +2903,18 @@
     "src": "Odds",
     "out": "Dispari"
   },
+  "buttons.killallgo.attacker": {
+    "src": "Play as the Attacker",
+    "out": "Gioca come Attaccante"
+  },
+  "buttons.killallgo.defender": {
+    "src": "Play as the Defender",
+    "out": "Gioca come Difensore"
+  },
+  "buttons.killallgo.youplace": {
+    "src": "Let the opponent place the first batch",
+    "out": "Lascia che l'avversario piazzi il primo gruppo"
+  },
   "buttons.numbers.one": {
     "src": "One (1)",
     "out": "Uno (1)"

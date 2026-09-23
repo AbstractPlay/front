@@ -58,10 +58,22 @@ export function sortLenAlpha(a, b) {
   return a.length - b.length;
 }
 
+/** API `toMove` is often string "0"/"1"; exploration nodes use numbers. */
+export function isPlayerIndexOnMove(playerIndex, toMove) {
+  if (toMove === "" || toMove === undefined || toMove === null) {
+    return false;
+  }
+  if (Array.isArray(toMove)) {
+    return Boolean(toMove[playerIndex]);
+  }
+  const onMove = parseInt(String(toMove), 10);
+  return !Number.isNaN(onMove) && playerIndex === onMove;
+}
+
 export function getPlayerClockChips(game, toMove, users, now = Date.now()) {
   if (!game?.players || toMove === "") return [];
   return game.players.map((p, ind) => {
-    const active = Array.isArray(toMove) ? toMove[ind] : ind === toMove;
+    const active = isPlayerIndexOnMove(ind, toMove);
     const ms = active ? p.time - (now - game.lastMoveTime) : p.time;
     return {
       key: ind,

@@ -2131,7 +2131,11 @@ export function useGameMoveSession(props) {
   const handleTimeoutConfirmed = async () => {
     showTimeoutConfirmSetter(false);
     submittingSetter(true);
-    submitMove("timeout", false);
+    try {
+      await checkTime("timeloss");
+    } finally {
+      submittingSetter(false);
+    }
   };
 
   // Handler for marking/unmarking a premove
