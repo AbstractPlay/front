@@ -780,7 +780,14 @@ export function useGameMoveSession(props) {
         metaGame: gameRef.current.metaGame,
       });
       if (!res) return;
-      let game0 = JSON.parse(res.body);
+      const parsed = await parseAuthResponse(res);
+      if (!parsed.ok) {
+        setError(
+          `checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} failed: ${parsed.error}`
+        );
+        return;
+      }
+      const game0 = parsed.data;
       if (game0 !== "not_a_timeloss" && game0 !== "not_abandoned") {
         dbgameSetter(game0);
       }

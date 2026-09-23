@@ -22,7 +22,12 @@ function parseEnvelopeBody(body) {
     if (!body.trim()) {
       return null;
     }
-    return JSON.parse(body);
+    try {
+      return JSON.parse(body);
+    } catch {
+      // e.g. timeloss / abandoned return plain "not_a_timeloss" in the envelope body
+      return body;
+    }
   }
   return body;
 }
