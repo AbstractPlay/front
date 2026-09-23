@@ -1,5 +1,6 @@
 import DownloadDataUri from "../DownloadDataUri";
 import { useStore } from "../../../stores";
+import { sessionExplorationAllowed } from "../../../lib/effectiveGameFlags";
 
 /**
  * Dock actions: explore/publish/download only.
@@ -23,10 +24,7 @@ function DockMiscButtons({
     globalMe?.settings?.all?.exploration !== -1 &&
     globalMe?.settings?.all?.exploration !== 1 &&
     !explorer &&
-    game &&
-    !game.simultaneous &&
-    !game.noExplore &&
-    game.numPlayers === 2;
+    sessionExplorationAllowed(game);
 
   return (
     <div className="game-move-dock-misc">
