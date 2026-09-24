@@ -21,6 +21,13 @@ function resolveStatusField(label, playerNames, t) {
   return resolveRenderLabel(label, playerNames, t);
 }
 
+function resolveStatusValue(entry, playerNames, t) {
+  if (isGlyph(entry)) {
+    return entry;
+  }
+  return resolveStatusField(entry, playerNames, t);
+}
+
 export function resolveSidebarStatuses(
   statuses,
   players,
@@ -34,12 +41,7 @@ export function resolveSidebarStatuses(
   return statuses.map((row) => ({
     ...row,
     key: resolveStatusField(row.key, playerNames, t),
-    value: row.value.map((entry) => {
-      if (isGlyph(entry)) {
-        return entry;
-      }
-      return resolveStatusField(entry, playerNames, t);
-    }),
+    value: row.value.map((entry) => resolveStatusValue(entry, playerNames, t)),
   }));
 }
 
@@ -56,8 +58,11 @@ export function resolveSidebarScores(
   return scores.map((block) => ({
     ...block,
     name: resolveStatusField(block.name, playerNames, t),
+    // A player's score may be a row of status values (text or glyphs)
     scores: block.scores.map((entry) =>
-      resolveStatusField(entry, playerNames, t)
+      Array.isArray(entry)
+        ? entry.map((value) => resolveStatusValue(value, playerNames, t))
+        : resolveStatusField(entry, playerNames, t)
     ),
   }));
 }
