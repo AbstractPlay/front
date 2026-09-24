@@ -1,4 +1,4 @@
-import { gameinfo } from "@abstractplay/gameslib";
+import { resolveMetaGameUid } from "./gameOptions";
 
 export const RECENT_GAMES_DAY_OPTIONS = [7, 30];
 export const RECENT_GAMES_DEFAULT_DAYS = 7;
@@ -16,18 +16,14 @@ export function normalizeRecentGamesDays(value) {
 }
 
 export function isValidRecentGamesMetaGame(metaGame) {
-  return (
-    metaGame !== null &&
-    metaGame !== undefined &&
-    metaGame !== "" &&
-    gameinfo.has(metaGame)
-  );
+  return resolveMetaGameUid(metaGame) !== undefined;
 }
 
 /** Build list URL: `/recent-games` or `/recent-games/:metaGame`. */
 export function recentGamesListPath(metaGame = null) {
-  if (isValidRecentGamesMetaGame(metaGame)) {
-    return `/recent-games/${metaGame}`;
+  const resolved = resolveMetaGameUid(metaGame);
+  if (resolved !== undefined) {
+    return `/recent-games/${resolved}`;
   }
   return "/recent-games";
 }

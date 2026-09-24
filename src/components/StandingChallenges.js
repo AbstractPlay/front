@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
+import { resolveRequiredMetaGameParam } from "../lib/metaGameRoute";
+import NotFound from "./NotFound";
 import { formatChallengeTablePlayerCount } from "../lib/challengeTablePlayerCount";
 import { compareStrings, stringColumnSortingFn } from "../lib/compareStrings";
 import {
@@ -29,6 +31,7 @@ import ActivityMarker from "./ActivityMarker";
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import { useStorageState } from "react-use-storage-state";
 import PageHelmet from "./PageHelmet";
+import HubListEmptyNotice from "./shared/HubListEmptyNotice";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
 import { useStore } from "../stores";
@@ -79,8 +82,17 @@ function StandingChallenges(props) {
   const [accepted, acceptedSetter] = useState(null);
   const [revoke, revokeSetter] = useState(null);
   const [reject, rejectSetter] = useState(null);
-  const { metaGame } = useParams();
-  const siteWide = !metaGame;
+  const { metaGame: metaGameParam } = useParams();
+  const siteWide = !metaGameParam;
+  const metaResolution = siteWide
+    ? null
+    : resolveRequiredMetaGameParam(metaGameParam);
+  const metaGame =
+    siteWide || metaResolution === null
+      ? undefined
+      : metaResolution.kind === "ok" || metaResolution.kind === "redirect"
+        ? metaResolution.resolved
+        : metaGameParam;
   const [update, updateSetter] = useState(0);
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
@@ -180,6 +192,9 @@ function StandingChallenges(props) {
 
   useEffect(() => {
     async function fetchData() {
+      if (!siteWide && metaResolution?.kind !== "ok") {
+        return;
+      }
       try {
         let raw;
         if (siteWide && loggedin) {
@@ -221,7 +236,7 @@ function StandingChallenges(props) {
       }
     }
     fetchData();
-  }, [metaGame, siteWide, loggedin, update, globalMe?.id]);
+  }, [metaGame, siteWide, loggedin, update, globalMe?.id, metaResolution]);
 
   useEffect(() => {
     showAcceptedSetter(
@@ -939,6 +954,15 @@ function StandingChallenges(props) {
     </>
   );
 
+  if (!siteWide && metaResolution?.kind === "invalid") {
+    return <NotFound />;
+  }
+  if (!siteWide && metaResolution?.kind === "redirect") {
+    return (
+      <Navigate to={`/challenges/${metaResolution.resolved}`} replace />
+    );
+  }
+
   if (challenges === null) {
     return <PageLoading message={t("challenges.loading")} />;
   }
@@ -951,15 +975,10 @@ function StandingChallenges(props) {
             ? t("StandingChallenges2")
             : `${metaGameName}: Open Challenges`
         }
+        canonicalPath={
+          siteWide ? "/challenges" : `/challenges/${metaGame}`
+        }
       >
-        <meta
-          property="og:url"
-          content={
-            siteWide
-              ? "https://play.abstractplay.com/challenges"
-              : `https://play.abstractplay.com/challenges/${metaGame}`
-          }
-        />
         <meta
           property="og:description"
           content={
@@ -975,6 +994,15 @@ function StandingChallenges(props) {
             ? t("StandingChallenges2")
             : t("StandingChallenges", { name: metaGameName })}
         </h1>
+        {data.length === 0 ? (
+          <HubListEmptyNotice>
+            {siteWide
+              ? t("seoHubEmpty.openChallengesSite")
+              : t("seoHubEmpty.openChallengesForGame", {
+                  gameName: metaGameName,
+                })}
+          </HubListEmptyNotice>
+        ) : null}
         {globalMe === undefined ||
         globalMe === null ||
         globalMe?.id === undefined ? null : (

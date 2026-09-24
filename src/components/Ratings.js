@@ -1,7 +1,9 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { getGameDisplayName, isSummaryStatsVisible } from "../lib/gameOptions";
+import { resolveRequiredMetaGameParam } from "../lib/metaGameRoute";
+import NotFound from "./NotFound";
 import { stringColumnSortingFn } from "../lib/compareStrings";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
@@ -20,11 +22,12 @@ import { formatBatchRatingVariantLabel } from "../lib/batchRatingLabels";
 import { matchesSummaryGameKey, parseSummaryGameKey } from "../lib/summaryGameKeys";
 import { compareVariantSelections } from "../lib/variantTableSort";
 import PageLoading from "./shared/PageLoading";
-import { SUMMARY_URLS } from "../lib/summaryFetch";
+import { SUMMARY_URLS, RECORDS_DOWNLOAD_LINK_REL } from "../lib/summaryFetch";
 import GlickoHint from "./shared/GlickoHint";
 import GlickoDisplayNote from "./shared/GlickoDisplayNote";
 import { rawDirectoryDisplayName } from "./Bots/botUtils";
 import DataTable, { LIST_TABLE_PROPS } from "./shared/DataTable";
+import HubListEmptyNotice from "./shared/HubListEmptyNotice";
 
 const columnHelper = createColumnHelper();
 
@@ -187,11 +190,10 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
 
   return (
     <>
-      <PageHelmet title={`${metaGameName}: Ratings`}>
-        <meta
-          property="og:url"
-          content={`https://play.abstractplay.com/ratings/${metaGame}`}
-        />
+      <PageHelmet
+        title={`${metaGameName}: Ratings`}
+        canonicalPath={`/ratings/${metaGame}`}
+      >
         <meta
           property="og:description"
           content={`Ratings for ${metaGameName}`}
@@ -212,6 +214,11 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
             }}
           />
         </h1>
+        {data.length === 0 ? (
+          <HubListEmptyNotice>
+            {t("seoHubEmpty.ratingsForGame", { gameName: metaGameName })}
+          </HubListEmptyNotice>
+        ) : null}
         <DataTable
           {...LIST_TABLE_PROPS}
           embedded
@@ -246,8 +253,23 @@ function userRecName(allUsers, userId) {
 }
 
 function Ratings() {
+  const { metaGame: metaGameParam } = useParams();
+  const metaResolution = resolveRequiredMetaGameParam(metaGameParam);
+
+  if (metaResolution.kind === "invalid") {
+    return <NotFound />;
+  }
+  if (metaResolution.kind === "redirect") {
+    return (
+      <Navigate to={`/ratings/${metaResolution.resolved}`} replace />
+    );
+  }
+
+  return <RatingsForMeta metaGame={metaResolution.resolved} />;
+}
+
+function RatingsForMeta({ metaGame }) {
   const { t } = useTranslation();
-  const { metaGame } = useParams();
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
   const summary = useStore((state) => state.summary);
@@ -264,7 +286,9 @@ function Ratings() {
       <div className="content has-text-centered summary-gate-error">
         <p>{t("stats.summaryLoadError")}</p>
         <p>
-          <a href={SUMMARY_URLS.ratings}>{t("stats.downloadSummary")}</a>
+          <a href={SUMMARY_URLS.ratings} rel={RECORDS_DOWNLOAD_LINK_REL}>
+            {t("stats.downloadSummary")}
+          </a>
         </p>
       </div>
     );

@@ -208,8 +208,7 @@ function News() {
 
   return (
     <>
-      <PageHelmet title="News">
-        <meta property="og:url" content={`https://play.abstractplay.com/news`} />
+      <PageHelmet title="News" canonicalPath="/news">
         <meta property="og:description" content={t("news.ogDescription")} />
       </PageHelmet>
       <article>

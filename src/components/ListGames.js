@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getGameDisplayName } from "../lib/gameOptions";
+import { resolveRequiredMetaGameParam } from "../lib/metaGameRoute";
+import NotFound from "./NotFound";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
   createColumnHelper,
@@ -15,11 +17,18 @@ import PageLoading from "./shared/PageLoading";
 import { variantSelectionSortingFn } from "../lib/variantTableSort";
 import DataTable, { LIST_TABLE_PROPS } from "./shared/DataTable";
 import { gameListGlobalFilterFn } from "../lib/tableGlobalFilter";
+import HubListEmptyNotice from "./shared/HubListEmptyNotice";
+import {
+  RECORDS_DOWNLOAD_LINK_REL,
+  RECORDS_DOWNLOAD_URLS,
+} from "../lib/summaryFetch";
 
-function ListGames({ fixedState }) {
+function ListGamesForMeta({ fixedState, metaGame, gameState }) {
   const { t, i18n } = useTranslation();
   const [games, gamesSetter] = useState(null);
-  const { gameState, metaGame } = useParams();
+  const listState = fixedState || gameState;
+  const isCompleted =
+    fixedState === "completed" || gameState === "completed";
   const [, maxPlayersSetter] = useState(2);
   const { expandVariants } = useExpandVariants(metaGame);
   const allUsers = useStore((state) => state.users);
@@ -229,8 +238,6 @@ function ListGames({ fixedState }) {
     [columnHelper, metaGame, t, allUsers, i18n.language]
   );
 
-  const isCompleted =
-    fixedState === "completed" || gameState === "completed";
   const columnVisibility = useMemo(
     () => ({
       ended: isCompleted,
@@ -258,11 +265,8 @@ function ListGames({ fixedState }) {
             ? t("Active")
             : t("Completed")
         } ${t("Games")}`}
+        canonicalPath={`/listgames/${listState}/${metaGame}`}
       >
-        <meta
-          property="og:url"
-          content={`https://play.abstractplay.com/listgames/${gameState}/${metaGame}`}
-        />
         <meta
           property="og:description"
           content={`${t("ListOf")} ${
@@ -278,12 +282,26 @@ function ListGames({ fixedState }) {
             ? t("CurrentGamesList", { name: metaGameName })
             : t("CompletedGamesList", { name: metaGameName })}
         </h1>
+        {data.length === 0 ? (
+          <HubListEmptyNotice>
+            {isCompleted
+              ? t("seoHubEmpty.completedGamesForGame", {
+                  gameName: metaGameName,
+                })
+              : t("seoHubEmpty.activeGamesForGame", {
+                  gameName: metaGameName,
+                })}
+          </HubListEmptyNotice>
+        ) : null}
         {fixedState !== "completed" && gameState !== "completed" ? null : (
           <div
             className="control has-text-centered"
             style={{ paddingBottom: "1em" }}
           >
-            <a href={`https://records.abstractplay.com/meta/${metaGame}.json`}>
+            <a
+              href={RECORDS_DOWNLOAD_URLS.meta(metaGame)}
+              rel={RECORDS_DOWNLOAD_LINK_REL}
+            >
               <button className="button apButton is-small">
                 {t("DownloadCompletedGames")}
               </button>
@@ -304,6 +322,32 @@ function ListGames({ fixedState }) {
         />
       </article>
     </>
+  );
+}
+
+function ListGames({ fixedState }) {
+  const { gameState, metaGame: metaGameParam } = useParams();
+  const metaResolution = resolveRequiredMetaGameParam(metaGameParam);
+  const listState = fixedState || gameState;
+
+  if (metaResolution.kind === "invalid") {
+    return <NotFound />;
+  }
+  if (metaResolution.kind === "redirect") {
+    return (
+      <Navigate
+        to={`/listgames/${listState}/${metaResolution.resolved}`}
+        replace
+      />
+    );
+  }
+
+  return (
+    <ListGamesForMeta
+      fixedState={fixedState}
+      metaGame={metaResolution.resolved}
+      gameState={gameState}
+    />
   );
 }
 

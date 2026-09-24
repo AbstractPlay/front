@@ -590,6 +590,15 @@
         "daysLabel": "Time range",
         "daysOption": "Last {{count}} days"
     },
+    "seoHubEmpty": {
+        "openChallengesForGame": "There are no open challenges for {{gameName}} right now.",
+        "openChallengesSite": "There are no open challenges right now.",
+        "activeGamesForGame": "There are no active games for {{gameName}} right now.",
+        "completedGamesForGame": "There are no completed games listed for {{gameName}} right now.",
+        "ratingsForGame": "There are no rated players listed for {{gameName}} right now.",
+        "recentGamesForGame": "There are no recently completed games for {{gameName}} in this time range.",
+        "recentGamesSite": "There are no recently completed games in this time range."
+    },
     "Change": "Change",
     "ChangeRenderOptions": "Change board display options",
     "ChooseDisplay": "Choose how the board should be displayed",

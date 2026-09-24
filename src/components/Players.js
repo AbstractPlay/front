@@ -416,11 +416,7 @@ function Players() {
 
   return (
     <>
-      <PageHelmet title="List of players">
-        <meta
-          property="og:url"
-          content="https://play.abstractplay.com/players"
-        />
+      <PageHelmet title="List of players" canonicalPath="/players">
         <meta
           property="og:description"
           content="List of players registered on Abstract Play"

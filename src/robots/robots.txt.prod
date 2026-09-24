@@ -2,4 +2,7 @@
 User-agent: *
 Disallow: /feedback
 Disallow: /wishlist
+Disallow: /move
+Disallow: /player
+Disallow: /tournament
 Sitemap: https://play.abstractplay.com/sitemap.xml

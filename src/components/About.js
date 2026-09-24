@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import pkgInfo from "../../package.json";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { shuffle } from "../lib/shuffle";
 import { gameinfo } from "@abstractplay/gameslib";
 import { getGameDisplayName } from "../lib/gameOptions";
@@ -9,6 +9,7 @@ import { gameDescription } from "../lib/gameDescription";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Thumbnail from "./Thumbnail";
+import PageHelmet from "./PageHelmet";
 
 function aboutHighlightsLine(t) {
   const text = t("about.highlights");
@@ -30,6 +31,8 @@ function About(props) {
   const [mvTimes, mvTimesSetter] = useState(null);
   const [highlightMetas, setHighlightMetas] = useState(null);
   const { t, i18n } = useTranslation();
+  const { pathname } = useLocation();
+  const isAboutRoute = pathname === "/about";
 
   useEffect(() => {
     async function fetchData() {
@@ -81,6 +84,9 @@ function About(props) {
 
   return (
     <Fragment>
+      {isAboutRoute ? (
+        <PageHelmet title={t("About")} canonicalPath="/about" />
+      ) : null}
       <article className="content">
         <h1 className="has-text-centered title">{t("About")}</h1>
         <p>{t("about.intro")}</p>
