@@ -99,6 +99,10 @@ export function setupGame(
   } else {
     game0.canSubmit =
       game0.toMove !== "" && me && game0.players[game0.toMove].id === me.id;
+  }
+  // Must match engine before sessionExplorationAllowed (challenge noExplore is in-game only).
+  game0.gameOver = engine.gameover;
+  if (!game0.simultaneous) {
     game0.canExplore =
       sessionExplorationAllowed(game0) && isExplorer(explorer, me);
   }
