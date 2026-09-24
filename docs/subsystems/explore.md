@@ -32,6 +32,8 @@ Open queries:
 
 Optional `token` prop enables authenticated-only actions (e.g. starting a game while logged in).
 
+Tag ids on each game (`gameinfo.categories`) drive filters in the UI. Semantics and **generated lists of games per tag** are documented in [Categories & tags](/gameslib/categories/) on gameslib.
+
 ## Per-view preferences
 
 Each catalog view persists its own **Show** (page size) and **table/grid** layout in localStorage (`explore-show-{view}`, `explore-grid-{view}`). The last-selected view is stored under `selected-module`.

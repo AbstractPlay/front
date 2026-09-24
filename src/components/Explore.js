@@ -149,11 +149,8 @@ function Explore(props) {
       <>
         <PageHelmet
           title={`${getGameDisplayName(resolvedMetaGame)}: Game Information`}
+          canonicalPath={`/games/${resolvedMetaGame}`}
         >
-          <meta
-            property="og:url"
-            content={`https://play.abstractplay.com/games/${resolvedMetaGame}`}
-          />
           <meta
             property="og:description"
             content={`Information on the game ${getGameDisplayName(
@@ -188,11 +185,10 @@ function Explore(props) {
 
   return (
     <>
-      <PageHelmet title="Explore available games">
-        <meta
-          property="og:url"
-          content={`https://play.abstractplay.com/explore/${activeMode}`}
-        />
+      <PageHelmet
+        title="Explore available games"
+        canonicalPath={`/explore/${activeMode}`}
+      >
         <meta
           property="og:description"
           content="Different ways of exploring what's popular on Abstract Play."

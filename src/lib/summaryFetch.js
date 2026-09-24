@@ -2,6 +2,16 @@ import { useStore } from "../stores";
 
 export const RECORDS_BASE_URL = "https://records.abstractplay.com";
 
+/** Play UI links to records JSON — not for search follow (see records host robots). */
+export const RECORDS_DOWNLOAD_LINK_REL = "nofollow";
+
+export const RECORDS_DOWNLOAD_URLS = {
+  allReports: `${RECORDS_BASE_URL}/ALL.json`,
+  meta: (metaGame) => `${RECORDS_BASE_URL}/meta/${metaGame}.json`,
+  event: (eventId) => `${RECORDS_BASE_URL}/event/${eventId}.json`,
+  player: (userId) => `${RECORDS_BASE_URL}/player/${userId}.json`,
+};
+
 export const SUMMARY_URLS = {
   monolith: `${RECORDS_BASE_URL}/_summary.json`,
   site: `${RECORDS_BASE_URL}/_summary-site.json`,

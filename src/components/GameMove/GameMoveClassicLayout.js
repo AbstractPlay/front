@@ -196,11 +196,10 @@ export default function GameMoveClassicLayout({ session }) {
 
   return (
     <>
-      <PageHelmet title={`${getGameDisplayName(metaGame)}: Game ${gameID}`}>
-        <meta
-          property="og:url"
-          content={`https://play.abstractplay.com/move/${metaGame}/0/${gameID}`}
-        />
+      <PageHelmet
+        title={`${getGameDisplayName(metaGame)}: Game ${gameID}`}
+        noIndex
+      >
         <meta
           property="og:description"
           content={`${getGameDisplayName(metaGame)} game ${gameID}`}

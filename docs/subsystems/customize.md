@@ -111,6 +111,18 @@ On game pages, [`useGameCustomCss`](../src/hooks/useGameCustomCss.js) applies CS
 
 Boards use `div.board._meta_${metaGame}` for CSS selectors.
 
+## SVG board DOM (custom CSS authors)
+
+Player-facing customization how-to lives on the [community wiki](https://abstractplay.com/wiki/doku.php?id=customizing). This section is for developers and advanced users writing **custom CSS** on the Customize screen.
+
+- Boards render as SVG inside `svg#theBoardSVG` (some stacking games also use `svg#theStackSVG`).
+- Common groups: `g#labels`, `g#gridlines`, `g#tiles`, `g#pieces` (usually `use` elements), `defs` / `symbol` for glyphs (`aprender-glyph-…` ids).
+- Elements that follow **player colours** often have `data-playerfill=true` and/or `data-playerstroke=true`.
+- Prefer **Customize → coordinate label size** over CSS for label scaling; prefer **palette / board colours** before overriding glyph fills in CSS.
+- CSS variables on the board container (names may change): `--svg-label-color`, `--svg-gridline-color`, `--svg-default-fill`, `--svg-volcano-caps`.
+
+The board DOM is **not a stable public API** — verify selectors against a live game after renderer upgrades.
+
 ## Thumbnails
 
 `Customize` loads preset thumbnails from:

@@ -41,7 +41,11 @@ import {
   rawDirectoryDisplayName,
 } from "./Bots/botUtils";
 import { fetchUserNames } from "../lib/fetchUserNames";
-import { fetchPlayerSummarySlice } from "../lib/summaryFetch";
+import {
+  fetchPlayerSummarySlice,
+  RECORDS_DOWNLOAD_LINK_REL,
+  RECORDS_DOWNLOAD_URLS,
+} from "../lib/summaryFetch";
 import {
   PROFILE_TABS,
   MODULE_NAME_KEYS,
@@ -296,11 +300,7 @@ function Player() {
         : `Player profile for ${user.name}`;
     return (
       <>
-        <PageHelmet title={`${user.name}: Player Profile`}>
-          <meta
-            property="og:url"
-            content={`https://play.abstractplay.com/player/${user.id}`}
-          />
+        <PageHelmet title={`${user.name}: Player Profile`} noIndex>
           <meta property="og:description" content={ogDescription} />
         </PageHelmet>
         <article id="playerProfile">
@@ -382,7 +382,8 @@ function Player() {
                             style={{ marginBottom: "1.5em" }}
                           >
                             <a
-                              href={`https://records.abstractplay.com/player/${user.id}.json`}
+                              href={RECORDS_DOWNLOAD_URLS.player(user.id)}
+                              rel={RECORDS_DOWNLOAD_LINK_REL}
                             >
                               <button
                                 type="button"

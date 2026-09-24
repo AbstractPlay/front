@@ -70,11 +70,10 @@ function About(props) {
 
   return (
     <Fragment>
-      <PageHelmet title="Terms of Service & Privacy Policy">
-        <meta
-          property="og:url"
-          content={`https://play.abstractplay.com/legal`}
-        />
+      <PageHelmet
+        title="Terms of Service & Privacy Policy"
+        canonicalPath="/legal"
+      >
         <meta
           property="og:description"
           content={`Terms of Service & Privacy Policy`}

@@ -5,6 +5,10 @@ import DataTable, { EVENTS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
+import {
+  RECORDS_DOWNLOAD_LINK_REL,
+  RECORDS_DOWNLOAD_URLS,
+} from "../../lib/summaryFetch";
 
 function TableComplete({ events }) {
   const allUsers = useStore((state) => state.users);
@@ -73,7 +77,8 @@ function TableComplete({ events }) {
         cell: (props) => (
           <>
             <a
-              href={`https://records.abstractplay.com/event/${props.row.original.id}.json`}
+              href={RECORDS_DOWNLOAD_URLS.event(props.row.original.id)}
+              rel={RECORDS_DOWNLOAD_LINK_REL}
             >
               <button className="button apButton is-small">
                 Download game records

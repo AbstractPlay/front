@@ -259,11 +259,7 @@ function Events() {
 
   return (
     <>
-      <PageHelmet title="Organized Events">
-        <meta
-          property="og:url"
-          content={`https://play.abstractplay.com/events`}
-        />
+      <PageHelmet title="Organized Events" canonicalPath="/events">
         <meta
           property="og:description"
           content={`List of available and completed organized events`}

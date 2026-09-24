@@ -19,11 +19,7 @@ export default function GameMoveHelmetTour({ session }) {
 
   return (
     <>
-      <PageHelmet title={pageTitle}>
-        <meta
-          property="og:url"
-          content={`https://play.abstractplay.com/move/${metaGame}/0/${gameID}`}
-        />
+      <PageHelmet title={pageTitle} noIndex>
         <meta
           property="og:description"
           content={`${getGameDisplayName(metaGame)} game ${gameID}`}

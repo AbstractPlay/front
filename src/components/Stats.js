@@ -12,7 +12,11 @@ import StatsModule from "./Stats/StatsModule";
 import SummaryGate from "./shared/SummaryGate";
 import { useStore } from "../stores";
 import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
-import { SUMMARY_URLS } from "../lib/summaryFetch";
+import {
+  SUMMARY_URLS,
+  RECORDS_DOWNLOAD_LINK_REL,
+  RECORDS_DOWNLOAD_URLS,
+} from "../lib/summaryFetch";
 import {
   STATS_TABS,
   STATS_MODULES,
@@ -139,11 +143,10 @@ function Stats() {
 
   return (
     <>
-      <PageHelmet title="Site Statistics">
-        <meta
-          property="og:url"
-          content={`https://play.abstractplay.com/stats/${tabFromPath}`}
-        />
+      <PageHelmet
+        title="Site Statistics"
+        canonicalPath={`/stats/${tabFromPath}`}
+      >
         <meta
           property="og:description"
           content={`Site statistics, updated weekly`}
@@ -225,14 +228,17 @@ function Stats() {
 
             <div className="field is-grouped stats-downloads topPad">
               <div className="control">
-                <a href={SUMMARY_URLS.monolith}>
+                <a href={SUMMARY_URLS.monolith} rel={RECORDS_DOWNLOAD_LINK_REL}>
                   <button type="button" className="button is-small apButton">
                     {t("stats.downloadSummary")}
                   </button>
                 </a>
               </div>
               <div className="control">
-                <a href="https://records.abstractplay.com/ALL.json">
+                <a
+                  href={RECORDS_DOWNLOAD_URLS.allReports}
+                  rel={RECORDS_DOWNLOAD_LINK_REL}
+                >
                   <button type="button" className="button is-small apButton">
                     {t("stats.downloadReports")}
                   </button>

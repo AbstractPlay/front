@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,14 @@ import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { formatVariantsJoined } from "../../lib/expandVariants";
 import TournamentFormatBadge from "./TournamentFormatBadge";
+import {
+  shouldNormalizeTournamentDetailUrl,
+  tournamentDetailPath,
+} from "../../lib/seoCanonical";
+import {
+  RECORDS_DOWNLOAD_LINK_REL,
+  RECORDS_DOWNLOAD_URLS,
+} from "../../lib/summaryFetch";
 
 async function reportError(error) {
   try {
@@ -186,6 +194,8 @@ function Tournament(props) {
   const { tournamentid } = useParams();
   const { metaGame } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
+  const canonicalPath = tournamentDetailPath(tournamentid);
 
   // Get query parameters for game fixing
   const searchParams = new URLSearchParams(location.search);
@@ -229,6 +239,29 @@ function Tournament(props) {
     fetchData();
   }, [tournamentid, metaGame, gameId, gameMetaGame]);
 
+  useEffect(() => {
+    if (!tournamentLoaded) {
+      return;
+    }
+    if (
+      !shouldNormalizeTournamentDetailUrl(
+        location.pathname,
+        location.search,
+        tournamentid
+      )
+    ) {
+      return;
+    }
+    navigate(canonicalPath, { replace: true });
+  }, [
+    tournamentLoaded,
+    tournamentid,
+    location.pathname,
+    location.search,
+    navigate,
+    canonicalPath,
+  ]);
+
   const handleResize = () => {
     screenWidthSetter(window.innerWidth);
   };
@@ -241,22 +274,33 @@ function Tournament(props) {
     ? formatVariantsJoined(tournament.metaGame, tournament.variants)
     : "";
 
-  if (!tournamentLoaded) {
-    return <PageLoading message={t("Tournament.loading")} />;
-  }
+  const pageTitle = tournament
+    ? `${metaGameName}: Tournament ${tournamentid}`
+    : t("Tournament.loading");
 
-  return (
-    <>
-      <PageHelmet title={`${metaGameName}: Tournament ${tournamentid}`}>
-        <meta
-          property="og:url"
-          content={`https://play.abstractplay.com/tournament/${tournamentid}`}
-        />
+  const helmet = (
+    <PageHelmet title={pageTitle} canonicalPath={canonicalPath} noIndex>
+      {tournament ? (
         <meta
           property="og:description"
           content={`Details of ${metaGameName} tournament ${tournamentid}`}
         />
-      </PageHelmet>
+      ) : null}
+    </PageHelmet>
+  );
+
+  if (!tournamentLoaded) {
+    return (
+      <>
+        {helmet}
+        <PageLoading message={t("Tournament.loading")} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      {helmet}
       <article className="content">
         <h1 className="title has-text-centered">
           <a
@@ -279,7 +323,8 @@ function Tournament(props) {
         </div>
         <div className="control has-text-centered">
           <a
-            href={`https://records.abstractplay.com/event/${tournamentid}.json`}
+            href={RECORDS_DOWNLOAD_URLS.event(tournamentid)}
+            rel={RECORDS_DOWNLOAD_LINK_REL}
           >
             <button className="button apButton is-small">
               Download all game records for this tournament

@@ -209,7 +209,7 @@ function Navbar() {
             <NavbarHoverDropdownAnchor
               href="https://records.abstractplay.com"
               target="_blank"
-              rel="noreferrer"
+              rel="nofollow noreferrer"
             >
               Historical records
             </NavbarHoverDropdownAnchor>

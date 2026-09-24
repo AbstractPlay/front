@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getGameDisplayName } from "../lib/gameOptions";
+import { resolveRequiredMetaGameParam } from "../lib/metaGameRoute";
+import NotFound from "./NotFound";
 import { stringColumnSortingFn } from "../lib/compareStrings";
 import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
 import { variantSelectionSortingFn } from "../lib/variantTableSort";
@@ -14,21 +16,17 @@ import BotAwareName from "./Bots/BotAwareName";
 import { formatPlayerDisplayName } from "./Bots/botUtils";
 import PageLoading from "./shared/PageLoading";
 import DataTable, { LIST_TABLE_PROPS } from "./shared/DataTable";
+import HubListEmptyNotice from "./shared/HubListEmptyNotice";
 import { recentGamesGlobalFilterFn } from "../lib/tableGlobalFilter";
 import { triggerDownload } from "../lib/boardExport/downloadBlob";
 import {
   RECENT_GAMES_DAY_OPTIONS,
   RECENT_GAMES_DEFAULT_DAYS,
-  isValidRecentGamesMetaGame,
   normalizeRecentGamesDays,
 } from "../lib/recentGamesSections";
 
-function RecentCompletedGames() {
+function RecentCompletedGamesList({ metaGame }) {
   const { t, i18n } = useTranslation();
-  const { metaGame: metaGameParam } = useParams();
-  const metaGame = isValidRecentGamesMetaGame(metaGameParam)
-    ? metaGameParam
-    : null;
   const [rawGames, rawGamesSetter] = useState(null);
   const [daysStored, daysSetter] = useStorageState(
     "recent-games-days",
@@ -313,15 +311,10 @@ function RecentCompletedGames() {
             ? t("RecentCompletedGamesFor", { name: metaGameName })
             : t("RecentCompletedGames")
         }
+        canonicalPath={
+          metaGame ? `/recent-games/${metaGame}` : "/recent-games"
+        }
       >
-        <meta
-          property="og:url"
-          content={
-            metaGame
-              ? `https://play.abstractplay.com/recent-games/${metaGame}`
-              : "https://play.abstractplay.com/recent-games"
-          }
-        />
         <meta
           property="og:description"
           content={
@@ -361,6 +354,15 @@ function RecentCompletedGames() {
             </div>
           </div>
         </div>
+        {data.length === 0 ? (
+          <HubListEmptyNotice>
+            {metaGame
+              ? t("seoHubEmpty.recentGamesForGame", {
+                  gameName: metaGameName,
+                })
+              : t("seoHubEmpty.recentGamesSite")}
+          </HubListEmptyNotice>
+        ) : null}
         <DataTable
           key={`recent-games-${metaGame ?? "all"}-${days}`}
           {...LIST_TABLE_PROPS}
@@ -376,6 +378,29 @@ function RecentCompletedGames() {
       </article>
     </>
   );
+}
+
+function RecentCompletedGames() {
+  const { metaGame: metaGameParam } = useParams();
+
+  if (!metaGameParam) {
+    return <RecentCompletedGamesList metaGame={null} />;
+  }
+
+  const metaResolution = resolveRequiredMetaGameParam(metaGameParam);
+  if (metaResolution.kind === "invalid") {
+    return <NotFound />;
+  }
+  if (metaResolution.kind === "redirect") {
+    return (
+      <Navigate
+        to={`/recent-games/${metaResolution.resolved}`}
+        replace
+      />
+    );
+  }
+
+  return <RecentCompletedGamesList metaGame={metaResolution.resolved} />;
 }
 
 export default RecentCompletedGames;

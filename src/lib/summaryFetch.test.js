@@ -5,10 +5,27 @@ import {
   mergePlayersSummary,
   mergeRatingsSummary,
   mergeSiteSummary,
+  RECORDS_DOWNLOAD_LINK_REL,
+  RECORDS_DOWNLOAD_URLS,
   summaryFromPlayerSlice,
   unwrapTierPayload,
 } from "./summaryFetch";
 import { useStore } from "../stores";
+
+describe("records download link helpers", () => {
+  it("uses nofollow for play UI anchors", () => {
+    expect(RECORDS_DOWNLOAD_LINK_REL).toBe("nofollow");
+  });
+
+  it("builds records JSON download URLs", () => {
+    expect(RECORDS_DOWNLOAD_URLS.event("abc")).toBe(
+      "https://records.abstractplay.com/event/abc.json",
+    );
+    expect(RECORDS_DOWNLOAD_URLS.meta("go")).toBe(
+      "https://records.abstractplay.com/meta/go.json",
+    );
+  });
+});
 
 describe("unwrapTierPayload", () => {
   it("strips tier wrapper fields", () => {

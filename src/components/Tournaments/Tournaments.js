@@ -1109,8 +1109,7 @@ function Tournaments(props) {
 
   return (
     <>
-      <PageHelmet title="Recurring Tournaments">
-        <meta property="og:url" content={`https://play.abstractplay.com${ogUrl}`} />
+      <PageHelmet title="Recurring Tournaments" canonicalPath={ogUrl}>
         <meta
           property="og:description"
           content={`List of all the available recurring tournaments`}
