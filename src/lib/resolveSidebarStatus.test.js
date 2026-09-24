@@ -88,4 +88,29 @@ describe("resolveSidebarStatus", () => {
     expect(resolved[0].name).to.equal("Scores");
     expect(resolved[0].scores).to.deep.equal([10, 20]);
   });
+
+  it("resolves list score cells entry by entry, leaving glyphs unchanged", () => {
+    const glyph = { glyph: "piece", colour: 3 };
+    const scores = [
+      {
+        name: "Colours",
+        scores: [
+          [
+            glyph,
+            {
+              textKey: "apgames:status._player",
+              actor: { kind: "seat", seat: 2 },
+            },
+          ],
+          [],
+        ],
+        spoiler: true,
+      },
+    ];
+    const resolved = resolveSidebarScores(scores, players, users, t);
+    expect(resolved[0].scores[0][0]).to.equal(glyph);
+    expect(resolved[0].scores[0][1]).to.equal("Bob");
+    expect(resolved[0].scores[1]).to.deep.equal([]);
+    expect(resolved[0].spoiler).to.equal(true);
+  });
 });

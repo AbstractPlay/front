@@ -32,6 +32,29 @@ function renderGlyph(
   return renderglyph(glyph, player, options);
 }
 
+// A status value is plain text or a glyph (`{ glyph, colour }`)
+function renderStatusValue(value, id, globalMe, colourContext, game) {
+  if (typeof value === "string") {
+    return value;
+  }
+  return (
+    <img
+      className="playerImage"
+      src={`data:image/svg+xml;utf8,${encodeURIComponent(
+        renderGlyph(
+          value.glyph,
+          id,
+          value.colour,
+          globalMe,
+          colourContext,
+          game
+        )
+      )}`}
+      alt={"color " + value.colour}
+    />
+  );
+}
+
 function GameStatus({
   status,
   settings,
@@ -104,23 +127,12 @@ function GameStatus({
                   <td>
                     {status.value.map((v, i) => (
                       <span key={i}>
-                        {typeof v === "string" ? (
-                          v
-                        ) : (
-                          <img
-                            className="playerImage"
-                            src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                              renderGlyph(
-                                v.glyph,
-                                "genericStatus-" + ind + "-" + i,
-                                v.colour,
-                                globalMe,
-                                colourContext,
-                                game
-                              )
-                            )}`}
-                            alt={"color " + v.colour}
-                          />
+                        {renderStatusValue(
+                          v,
+                          "genericStatus-" + ind + "-" + i,
+                          globalMe,
+                          colourContext,
+                          game
                         )}
                       </span>
                     ))}
@@ -161,7 +173,21 @@ function GameStatus({
                             allUsers
                           )}
                         </td>
-                        <td>{score}</td>
+                        <td>
+                          {Array.isArray(score)
+                            ? score.map((v, j) => (
+                                <span key={j}>
+                                  {renderStatusValue(
+                                    v,
+                                    "score-" + i + "-" + index + "-" + j,
+                                    globalMe,
+                                    colourContext,
+                                    game
+                                  )}
+                                </span>
+                              ))
+                            : score}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
