@@ -1,4 +1,4 @@
-import { useState, useMemo, Fragment } from "react";
+import { useMemo, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import {
@@ -13,6 +13,7 @@ import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
+import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
 import {
@@ -53,9 +54,10 @@ function TheirTurnTable(props) {
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
   const connections = useStore((state) => state.connections);
-  const [sorting, setSorting] = useState([
-    { id: "timeRemaining", desc: false },
-  ]);
+  const [sorting, setSorting] = usePersistedTableSorting(
+    "dashboard-tables-theirs-sort",
+    [{ id: "timeRemaining", desc: false }]
+  );
   const [showState, showStateSetter] = useStorageState(
     "dashboard-tables-theirs-show",
     10
