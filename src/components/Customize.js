@@ -34,6 +34,7 @@ import {
   stripBoardStyleForGlobalRender,
 } from "../lib/customizeRenderSettings.js";
 import { normalizeCustomizationSettings } from "../lib/normalizeCustomizationSettings.js";
+import { omitRedundantBoardFromColourContext } from "../lib/omitRedundantBoardFromColourContext.js";
 import { useStore } from "../stores";
 import { isEqual, cloneDeep, debounce } from "lodash";
 import { useTranslation, Trans } from "react-i18next";
@@ -482,16 +483,19 @@ function Customize(props) {
   }, [previewRep, renderCustomization]);
 
   const settingsJson = useMemo(() => {
+    const colourContext = {
+      background,
+      strokes,
+      borders,
+      labels,
+      annotations,
+      fill,
+    };
+    if (!coloursEqual(board, background)) {
+      colourContext.board = board;
+    }
     const settings = {
-      colourContext: {
-        background,
-        board,
-        strokes,
-        borders,
-        labels,
-        annotations,
-        fill,
-      },
+      colourContext,
       palette,
     };
     if (preferredColour) {
@@ -878,6 +882,11 @@ function Customize(props) {
       if (settingsToSave.render) {
         delete settingsToSave.glyphmap;
         delete settingsToSave.boardChrome;
+      }
+      if (settingsToSave.colourContext) {
+        settingsToSave.colourContext = omitRedundantBoardFromColourContext(
+          settingsToSave.colourContext,
+        );
       }
       const res = await callAuthApi("save_customization", {
         metaGame,
