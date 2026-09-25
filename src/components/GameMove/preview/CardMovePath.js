@@ -45,7 +45,7 @@ function CardMovePath(props) {
     !misc?.explorer &&
     sessionExplorationAllowed(game);
 
-  const showChooser = uiState === 0 && focus.canExplore && showMoveControls;
+  const showChooser = showMoveControls;
 
   return (
     <section

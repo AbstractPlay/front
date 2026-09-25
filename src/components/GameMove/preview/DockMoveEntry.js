@@ -35,7 +35,6 @@ function DockMoveEntry(props) {
   const {
     t,
     move,
-    toMove,
     game,
     moves,
     exploration,
@@ -61,7 +60,7 @@ function DockMoveEntry(props) {
 
   const isMyTurn = game.canSubmit && uiState === 0;
   const showInlineTurn = uiState === 0 && mover;
-  const showPrimaryRow = uiState === 0 && toMove !== "" && focus.canExplore;
+  const showPrimaryRow = focus.canExplore;
   const showExplorationToolbar =
     (focus.exPath.length > 0 && game.canExplore) || uiState !== 0;
 
