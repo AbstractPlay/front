@@ -2801,6 +2801,8 @@ span.hardTime::after {
   position: sticky;
   bottom: 0;
   z-index: 20;
+  display: flex;
+  flex-direction: column;
   padding: 0.75rem 1rem;
   margin: 0 -0.5rem 0.5rem;
   background: var(--main-bg-color);
@@ -2809,12 +2811,16 @@ span.hardTime::after {
   box-shadow: 0 -4px 16px var(--dropshadow-target-start);
   flex: 0 0 auto;
   max-height: min(42vh, 20rem);
-  overflow-y: auto;
+  overflow: hidden;
+}
+
+.game-move-strip-dock.is-expanded {
+  overflow: hidden;
 }
 
 .game-move-strip-dock:not(.is-expanded) {
   max-height: none;
-  overflow-y: visible;
+  overflow: visible;
 }
 
 .game-move-layout--strip__dock .lined span {
@@ -2824,6 +2830,7 @@ span.hardTime::after {
 .game-move-strip-dock__bar {
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   gap: 0.5rem;
 }
 
@@ -2832,14 +2839,22 @@ span.hardTime::after {
 }
 
 .game-move-strip-dock__details {
+  flex: 1 1 auto;
+  min-height: 0;
   margin-top: 0.5rem;
   padding-top: 0.5rem;
   border-top: 1px solid var(--tag-background-color);
+  overflow-y: auto;
+}
+
+.game-move-dock-entry {
+  flex-shrink: 0;
 }
 
 .game-move-dock-entry__primary {
   display: flex;
   flex-wrap: wrap;
+  flex-shrink: 0;
   gap: 0.5rem;
   align-items: center;
 }
@@ -3020,35 +3035,43 @@ span.hardTime::after {
     align-self: start;
     max-height: calc(100dvh - 10rem);
     min-height: 0;
+    overflow: hidden;
     margin-bottom: 5rem;
   }
 
   .game-move-layout--strip__sidebar .game-move-strip-dock {
     position: static;
     bottom: auto;
-    flex: 0 1 auto;
-    max-height: min(42vh, 20rem);
+    flex: 0 0 auto;
+    max-height: none;
     margin: 0;
     padding: 0.5rem 0.75rem;
     box-shadow: 0 4px 16px var(--dropshadow-target-start);
     border: 1px solid var(--tag-background-color);
     border-radius: 0.5rem;
+    overflow: visible;
+  }
+
+  .game-move-layout--strip__sidebar .game-move-strip-dock__details {
+    max-height: min(28vh, 14rem);
   }
 
   .game-move-layout--strip__sidebar .game-move-drawer {
     display: flex;
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     flex-direction: column;
     min-height: 0;
     margin-bottom: 0;
   }
 
   .game-move-layout--strip__sidebar .game-move-drawer.is-open {
-    flex: 1 1 auto;
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .game-move-layout--strip__sidebar .game-move-drawer__panel {
-    flex: 1 1 auto;
+    flex: 1 1 0;
     min-height: 0;
     max-height: none;
     overflow: auto;
