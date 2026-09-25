@@ -13,6 +13,7 @@ import {
   sortCategoryKeys,
 } from "../lib/gameOptions";
 import { mergeCustomizationSections } from "../lib/mergeCustomizationSections";
+import { omitRedundantBoardFromColourContext } from "../lib/omitRedundantBoardFromColourContext";
 import { useStore } from "../stores";
 
 const SECTION_KEYS = [
@@ -168,6 +169,11 @@ function ApplyCustomizationModal({
       const targetId = targets[i];
       const existing = newMe.customizations[targetId] ?? {};
       const merged = mergeCustomizationSections(existing, sourceSettings, sections);
+      if (merged.colourContext) {
+        merged.colourContext = omitRedundantBoardFromColourContext(
+          merged.colourContext,
+        );
+      }
 
       try {
         const res = await callAuthApi("save_customization", {

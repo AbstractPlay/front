@@ -1,7 +1,11 @@
 import PropTypes from "prop-types";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { presignFeedbackUpload } from "../../lib/feedback/feedbackApi";
+import {
+  feedbackAttachmentFilename,
+  isFeedbackImageAttachmentKey,
+} from "../../lib/feedback/feedbackAttachmentDisplay";
 
 const ALLOWED_TYPES = [
   "image/png",
@@ -107,6 +111,16 @@ function ScreenshotUpload({
   const { t } = useTranslation();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [dragOver, setDragOver] = useState(false);
+  const [previewUrlByKey, setPreviewUrlByKey] = useState({});
+  const previewUrlByKeyRef = useRef(previewUrlByKey);
+  previewUrlByKeyRef.current = previewUrlByKey;
+
+  const revokePreviewUrl = useCallback((url) => {
+    if (url) {
+      URL.revokeObjectURL(url);
+    }
+  }, []);
 
   const handleFiles = useCallback(async (fileList) => {
     let files = [...fileList];
@@ -123,6 +137,7 @@ function ScreenshotUpload({
     setError("");
     setUploading(true);
     const nextKeys = replaceOnUpload ? [] : [...attachmentKeys];
+    const newPreviewUrls = new Map();
     try {
       for (const file of files) {
         const contentType = resolveContentType(file);
@@ -149,14 +164,43 @@ function ScreenshotUpload({
           throw new Error(t("feedback.upload.failed"));
         }
         nextKeys.push(presign.data.key);
+        if (contentType.startsWith("image/")) {
+          newPreviewUrls.set(presign.data.key, URL.createObjectURL(file));
+        }
       }
       onChange(nextKeys);
+      setPreviewUrlByKey((prev) => {
+        const next = replaceOnUpload ? {} : { ...prev };
+        if (replaceOnUpload) {
+          Object.values(prev).forEach(revokePreviewUrl);
+        }
+        for (const [key, url] of newPreviewUrls) {
+          next[key] = url;
+        }
+        return next;
+      });
     } catch (err) {
+      for (const url of newPreviewUrls.values()) {
+        revokePreviewUrl(url);
+      }
       setError(err.message || t("feedback.upload.failed"));
     } finally {
       setUploading(false);
     }
-  }, [attachmentKeys, maxFiles, onChange, replaceOnUpload, t]);
+  }, [attachmentKeys, maxFiles, onChange, replaceOnUpload, revokePreviewUrl, t]);
+
+  const removeAttachment = useCallback((key) => {
+    onChange(attachmentKeys.filter((k) => k !== key));
+    setPreviewUrlByKey((prev) => {
+      if (!prev[key]) {
+        return prev;
+      }
+      revokePreviewUrl(prev[key]);
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  }, [attachmentKeys, onChange, revokePreviewUrl]);
 
   const handlePaste = useCallback((e) => {
     if (uploading || (!replaceOnUpload && attachmentKeys.length >= maxFiles)) {
@@ -190,7 +234,65 @@ function ScreenshotUpload({
     return () => window.removeEventListener("paste", onWindowPaste);
   }, [attachmentKeys.length, handleFiles, maxFiles, replaceOnUpload, uploading]);
 
+  useEffect(() => {
+    setPreviewUrlByKey((prev) => {
+      let changed = false;
+      const next = { ...prev };
+      for (const key of Object.keys(prev)) {
+        if (!attachmentKeys.includes(key)) {
+          revokePreviewUrl(prev[key]);
+          delete next[key];
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [attachmentKeys, revokePreviewUrl]);
+
+  useEffect(() => () => {
+    Object.values(previewUrlByKeyRef.current).forEach(revokePreviewUrl);
+  }, [revokePreviewUrl]);
+
+  const handleDropZoneDragEnter = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!uploading && (replaceOnUpload || attachmentKeys.length < maxFiles)) {
+      setDragOver(true);
+    }
+  }, [attachmentKeys.length, maxFiles, replaceOnUpload, uploading]);
+
+  const handleDropZoneDragOver = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDropZoneDragLeave = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOver(false);
+    }
+  }, []);
+
+  const handleDropZoneDrop = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(false);
+    if (uploading || (!replaceOnUpload && attachmentKeys.length >= maxFiles)) {
+      return;
+    }
+    const files = [...e.dataTransfer.files];
+    if (files.length === 0) {
+      return;
+    }
+    handleFiles(files);
+  }, [attachmentKeys.length, handleFiles, maxFiles, replaceOnUpload, uploading]);
+
   const atMax = !replaceOnUpload && attachmentKeys.length >= maxFiles;
+  const dropZoneClassName = [
+    "feedback-screenshot-paste-zone",
+    dragOver ? "feedback-screenshot-paste-zone--drag-over" : "",
+  ].filter(Boolean).join(" ");
 
   return (
     <div className="feedback-screenshot-upload">
@@ -210,11 +312,16 @@ function ScreenshotUpload({
           />
         </label>
         <div
-          className="feedback-screenshot-paste-zone"
+          className={dropZoneClassName}
           tabIndex={uploading || atMax ? -1 : 0}
           role="button"
           aria-disabled={uploading || atMax}
+          aria-label={t("feedback.upload.dropZoneAria")}
           onPaste={handlePaste}
+          onDragEnter={handleDropZoneDragEnter}
+          onDragOver={handleDropZoneDragOver}
+          onDragLeave={handleDropZoneDragLeave}
+          onDrop={handleDropZoneDrop}
         >
           <span className="feedback-screenshot-paste-label">
             {pasteLabel ?? t("feedback.upload.paste")}
@@ -223,9 +330,41 @@ function ScreenshotUpload({
         </div>
       </div>
       {attachmentKeys.length > 0 && (
-        <p className="feedback-muted">
-          {t(countLabelKey, { count: attachmentKeys.length })}
-        </p>
+        <div className="feedback-screenshot-upload-previews">
+          <p className="feedback-muted feedback-screenshot-upload-count">
+            {t(countLabelKey, { count: attachmentKeys.length })}
+          </p>
+          <div className="feedback-screenshot-grid feedback-screenshot-upload-grid">
+            {attachmentKeys.map((key) => {
+              const previewUrl = previewUrlByKey[key];
+              const isImage = isFeedbackImageAttachmentKey(key);
+              return (
+                <div key={key} className="feedback-screenshot-upload-item">
+                  {isImage && previewUrl ? (
+                    <img
+                      src={previewUrl}
+                      alt=""
+                      className="feedback-screenshot-thumb"
+                    />
+                  ) : (
+                    <span className="feedback-file-attachment">
+                      {feedbackAttachmentFilename(key)}
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    className="feedback-screenshot-remove apButtonNeutral"
+                    disabled={uploading}
+                    aria-label={t("feedback.upload.remove")}
+                    onClick={() => removeAttachment(key)}
+                  >
+                    {t("feedback.upload.remove")}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       )}
       {error && <p className="has-text-danger">{error}</p>}
     </div>
