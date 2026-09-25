@@ -1,6 +1,23 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
+/** Match `.game-comment-short__input { max-height: 8rem }` in index.css */
+const COMMENT_TEXTAREA_MIN_HEIGHT_PX = 30;
+const COMMENT_TEXTAREA_MAX_HEIGHT_PX = 128;
+
+function scrollParentsOf(el) {
+  const saved = [];
+  let node = el?.parentElement;
+  while (node) {
+    const { overflowY } = window.getComputedStyle(node);
+    if (overflowY === "auto" || overflowY === "scroll") {
+      saved.push({ node, scrollTop: node.scrollTop });
+    }
+    node = node.parentElement;
+  }
+  return saved;
+}
+
 function GameCommentShort(props) {
   const [comment, commentSetter] = useState("");
   const [toolong, toolongSetter] = useState(false);
@@ -23,15 +40,25 @@ function GameCommentShort(props) {
   };
 
   React.useLayoutEffect(() => {
-    if (textareaRef.current !== undefined && textareaRef.current !== null) {
-      // Reset height - important to shrink on delete
-      textareaRef.current.style.height = "inherit";
-      // Set height
-      textareaRef.current.style.height = `${Math.max(
-        textareaRef.current.scrollHeight,
-        30
-      )}px`;
+    const el = textareaRef.current;
+    if (el === undefined || el === null) {
+      return;
     }
+    const scrollSnapshot = scrollParentsOf(el);
+    const windowScrollY = window.scrollY;
+
+    // Reset height - important to shrink on delete
+    el.style.height = "inherit";
+    const nextHeight = Math.min(
+      Math.max(el.scrollHeight, COMMENT_TEXTAREA_MIN_HEIGHT_PX),
+      COMMENT_TEXTAREA_MAX_HEIGHT_PX
+    );
+    el.style.height = `${nextHeight}px`;
+
+    for (const { node, scrollTop } of scrollSnapshot) {
+      node.scrollTop = scrollTop;
+    }
+    window.scrollTo(0, windowScrollY);
   }, [comment]);
 
   return (
@@ -48,7 +75,7 @@ function GameCommentShort(props) {
                 rows={1}
                 id="enterAComment"
                 name="enterAComment"
-                className="input is-small"
+                className="input is-small game-comment-short__input"
                 value={comment}
                 placeholder={t("Comment")}
                 onChange={(e) => handleChange(e.target.value)}

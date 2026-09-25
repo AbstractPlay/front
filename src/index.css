@@ -1214,6 +1214,7 @@ abbr.glicko-hint {
 .chatTable {
     max-height: 200px;
     overflow-y: auto;
+    overflow-anchor: none;
     font-size: smaller;
 }
 
@@ -1245,6 +1246,14 @@ abbr.glicko-hint {
 /* Add space between help text and chat messages */
 .tourChat .help {
     margin-bottom: 0.75rem;
+}
+
+/* Cap in-game chat composer growth (scroll inside field, not the drawer) */
+.game-comment-short__input {
+    max-height: 8rem;
+    overflow-y: auto;
+    resize: none;
+    box-sizing: border-box;
 }
 
 /* Highlight comments for the currently focused move */
@@ -3451,6 +3460,7 @@ span.hardTime::after {
 .game-move-drawer__panel {
   max-height: 40vh;
   overflow: auto;
+  overflow-anchor: none;
   padding: 1rem;
   border: 1px solid var(--tag-background-color);
   border-radius: 0.5rem;
