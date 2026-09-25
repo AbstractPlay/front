@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { stringColumnSortingFn } from "../../lib/compareStrings";
@@ -17,6 +17,7 @@ import Spinner from "../Spinner";
 import ChallengeViewModal from "./ChallengeViewModal";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
+import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import { expandVariants } from "../../lib/expandVariants";
 
 const allSize = Number.MAX_SAFE_INTEGER;
@@ -157,9 +158,7 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
     onSortingChange: setSorting,
   });
 
-  useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
+  useSyncTablePageSize(table, showState);
 
   if (data === null || data === undefined || data.length === 0) {
     return (

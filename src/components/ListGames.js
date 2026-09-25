@@ -2,8 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getGameDisplayName } from "../lib/gameOptions";
-import { resolveRequiredMetaGameParam } from "../lib/metaGameRoute";
 import NotFound from "./NotFound";
+import { useRequiredMetaGameParam } from "../hooks/useRequiredMetaGameParam";
 import { API_ENDPOINT_OPEN } from "../config";
 import {
   createColumnHelper,
@@ -327,7 +327,7 @@ function ListGamesForMeta({ fixedState, metaGame, gameState }) {
 
 function ListGames({ fixedState }) {
   const { gameState, metaGame: metaGameParam } = useParams();
-  const metaResolution = resolveRequiredMetaGameParam(metaGameParam);
+  const metaResolution = useRequiredMetaGameParam(metaGameParam);
   const listState = fixedState || gameState;
 
   if (metaResolution.kind === "invalid") {

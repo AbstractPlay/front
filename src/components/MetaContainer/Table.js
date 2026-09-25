@@ -1,6 +1,5 @@
 import React, {
   useState,
-  useEffect,
   useMemo,
   Fragment,
   useCallback,
@@ -34,6 +33,7 @@ import ExpandableDiv from "../ExpandableDiv";
 import { useStorageState } from "react-use-storage-state";
 import Thumbnail from "../Thumbnail";
 import { useStore } from "../../stores";
+import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 const columnHelper = createColumnHelper();
@@ -499,9 +499,7 @@ function Table({
     enableSortingRemoval: false,
   });
 
-  useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
+  useSyncTablePageSize(table, showState);
 
   const tableNavigation = (
     <>

@@ -2,8 +2,8 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getGameDisplayName } from "../lib/gameOptions";
-import { resolveRequiredMetaGameParam } from "../lib/metaGameRoute";
 import NotFound from "./NotFound";
+import { useRequiredMetaGameParam } from "../hooks/useRequiredMetaGameParam";
 import { stringColumnSortingFn } from "../lib/compareStrings";
 import { expandVariants as expandVariantsForGame } from "../lib/expandVariants";
 import { variantSelectionSortingFn } from "../lib/variantTableSort";
@@ -382,12 +382,15 @@ function RecentCompletedGamesList({ metaGame }) {
 
 function RecentCompletedGames() {
   const { metaGame: metaGameParam } = useParams();
+  const siteWide = !metaGameParam;
+  const metaResolution = useRequiredMetaGameParam(metaGameParam, {
+    skip: siteWide,
+  });
 
-  if (!metaGameParam) {
+  if (siteWide) {
     return <RecentCompletedGamesList metaGame={null} />;
   }
 
-  const metaResolution = resolveRequiredMetaGameParam(metaGameParam);
   if (metaResolution.kind === "invalid") {
     return <NotFound />;
   }

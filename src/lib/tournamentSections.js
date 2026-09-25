@@ -93,6 +93,8 @@ export function isEmbeddedTournamentsPath(pathname) {
 /**
  * Resolve tournament tab/filter from either the standalone list route or the
  * game detail tab (`/games/:metaGame#tournaments`).
+ *
+ * Returns a new object every call — use primitive fields in effect deps, not `route`.
  */
 export function resolveTournamentRouteContext({
   pathname,
