@@ -2,8 +2,8 @@ import React, { useState, useMemo, useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { getGameDisplayName, isSummaryStatsVisible } from "../lib/gameOptions";
-import { resolveRequiredMetaGameParam } from "../lib/metaGameRoute";
 import NotFound from "./NotFound";
+import { useRequiredMetaGameParam } from "../hooks/useRequiredMetaGameParam";
 import { stringColumnSortingFn } from "../lib/compareStrings";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
@@ -254,7 +254,7 @@ function userRecName(allUsers, userId) {
 
 function Ratings() {
   const { metaGame: metaGameParam } = useParams();
-  const metaResolution = resolveRequiredMetaGameParam(metaGameParam);
+  const metaResolution = useRequiredMetaGameParam(metaGameParam);
 
   if (metaResolution.kind === "invalid") {
     return <NotFound />;

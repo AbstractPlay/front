@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, Fragment } from "react";
+import { useState, useMemo, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import {
@@ -12,6 +12,7 @@ import {
 import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
+import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
 import {
@@ -201,9 +202,7 @@ function TheirTurnTable(props) {
     onSortingChange: setSorting,
   });
 
-  useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
+  useSyncTablePageSize(table, showState);
 
   return (
     <Fragment>

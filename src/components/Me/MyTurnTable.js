@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import {
@@ -18,6 +18,7 @@ import {
   stringColumnSortingFn,
 } from "../../lib/compareStrings";
 import { useStore } from "../../stores";
+import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import BotAwareName from "../Bots/BotAwareName";
 
 const allSize = Number.MAX_SAFE_INTEGER;
@@ -185,9 +186,7 @@ function MyTurnTable({ games, fetching }) {
     onSortingChange: setSorting,
   });
 
-  useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
+  useSyncTablePageSize(table, showState);
 
   if (data === null || data === undefined || data.length === 0) {
     return (

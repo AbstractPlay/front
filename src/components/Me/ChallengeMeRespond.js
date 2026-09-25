@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import {
@@ -21,6 +21,7 @@ import {
 import { expandVariants } from "../../lib/expandVariants";
 import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import { useStore } from "../../stores";
+import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import BotAwareName from "../Bots/BotAwareName";
 import { formatUserDisplayName } from "../Bots/botUtils";
 
@@ -180,9 +181,7 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
     onSortingChange: setSorting,
   });
 
-  useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
+  useSyncTablePageSize(table, showState);
 
   if (data === null || data === undefined || data.length === 0) {
     return (

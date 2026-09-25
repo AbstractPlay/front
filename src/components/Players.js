@@ -22,6 +22,7 @@ import { formatUserDisplayName } from "./Bots/botUtils";
 import PageLoading from "./shared/PageLoading";
 import { EnlargeableUserAvatar } from "./AvatarLightbox";
 import { trimmedGlobalIncludesStringFilterFn } from "../lib/tableGlobalFilter";
+import { useSyncTablePageSize } from "../hooks/useTanstackTableEffects";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -303,9 +304,7 @@ function Players() {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
+  useSyncTablePageSize(table, showState);
 
   const tableNavigation = (
     <>

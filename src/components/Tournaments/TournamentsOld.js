@@ -17,6 +17,7 @@ import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import { useTranslation } from "react-i18next";
 import PageHelmet from "../PageHelmet";
 import PageLoading from "../shared/PageLoading";
+import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 
 function TournamentsOld(props) {
   const { t, i18n } = useTranslation();
@@ -131,9 +132,7 @@ function TournamentsOld(props) {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  useEffect(() => {
-    oldTournamentsTable.setPageSize(oldTournamentsShowState);
-  }, [oldTournamentsShowState, oldTournamentsTable]);
+  useSyncTablePageSize(oldTournamentsTable, oldTournamentsShowState);
 
   const oldTournamentsTableNavigation = (
     <>

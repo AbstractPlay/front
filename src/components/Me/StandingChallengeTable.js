@@ -19,6 +19,7 @@ import {
   clockTupleSortingFn,
   variantSelectionSortingFn,
 } from "../../lib/variantTableSort";
+import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -249,9 +250,7 @@ function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
     onSortingChange: setSorting,
   });
 
-  useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
+  useSyncTablePageSize(table, showState);
 
   if (data === null || data === undefined || data.length === 0) {
     return (

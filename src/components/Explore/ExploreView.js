@@ -624,7 +624,9 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     pageIndexSetter((current) =>
       pageCount > 0 && current >= pageCount ? pageCount - 1 : current
     );
-  }, [data, columnFilters, showState, table]);
+    // Omit `table` — its identity changes when pagination updates (infinite loop).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, columnFilters, showState]);
 
   const tableNavigation = (
     <>

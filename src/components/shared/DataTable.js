@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import {
   getCoreRowModel,
@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-table";
 import { useStorageState } from "react-use-storage-state";
 import { trimmedGlobalIncludesStringFilterFn } from "../../lib/tableGlobalFilter";
+import { useSyncTablePageSize, useResetTablePageIndex } from "../../hooks/useTanstackTableEffects";
 
 const ALL_SIZE = Number.MAX_SAFE_INTEGER;
 
@@ -127,9 +128,8 @@ function DataTable({
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
+  useSyncTablePageSize(table, showState);
+  useResetTablePageIndex(table, globalFilter);
 
   const pageIndex = table.getState().pagination.pageIndex + 1;
   const pageCount = table.getPageCount();

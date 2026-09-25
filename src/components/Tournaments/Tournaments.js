@@ -43,6 +43,10 @@ import {
 import PageLoading from "../shared/PageLoading";
 import { TableNavSearch } from "../shared/DataTable";
 import { trimmedGlobalIncludesStringFilterFn } from "../../lib/tableGlobalFilter";
+import {
+  useResetTablePageIndex,
+  useSyncTablePageSize,
+} from "../../hooks/useTanstackTableEffects";
 
 function Tournaments(props) {
   const { t, i18n } = useTranslation();
@@ -520,13 +524,9 @@ function Tournaments(props) {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  useEffect(() => {
-    openTournamentsTable.setPageIndex(0);
-  }, [openTournamentsGlobalFilter, openTournamentsTable]);
+  useResetTablePageIndex(openTournamentsTable, openTournamentsGlobalFilter);
 
-  useEffect(() => {
-    openTournamentsTable.setPageSize(openTournamentsShowState);
-  }, [openTournamentsShowState, openTournamentsTable]);
+  useSyncTablePageSize(openTournamentsTable, openTournamentsShowState);
 
   const openTournamentsTableNavigation = (
     <>
@@ -752,13 +752,15 @@ function Tournaments(props) {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  useEffect(() => {
-    currentTournamentsTable.setPageIndex(0);
-  }, [currentTournamentsGlobalFilter, currentTournamentsTable]);
+  useResetTablePageIndex(
+    currentTournamentsTable,
+    currentTournamentsGlobalFilter
+  );
 
-  useEffect(() => {
-    currentTournamentsTable.setPageSize(currentTournamentsShowState);
-  }, [currentTournamentsShowState, currentTournamentsTable]);
+  useSyncTablePageSize(
+    currentTournamentsTable,
+    currentTournamentsShowState
+  );
 
   const currentTournamentsTableNavigation = (
     <>
@@ -990,13 +992,15 @@ function Tournaments(props) {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  useEffect(() => {
-    completedTournamentsTable.setPageIndex(0);
-  }, [completedTournamentsGlobalFilter, completedTournamentsTable]);
+  useResetTablePageIndex(
+    completedTournamentsTable,
+    completedTournamentsGlobalFilter
+  );
 
-  useEffect(() => {
-    completedTournamentsTable.setPageSize(completedTournamentsShowState);
-  }, [completedTournamentsShowState, completedTournamentsTable]);
+  useSyncTablePageSize(
+    completedTournamentsTable,
+    completedTournamentsShowState
+  );
 
   const completedTournamentsTableNavigation = (
     <>

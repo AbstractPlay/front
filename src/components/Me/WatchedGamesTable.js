@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo, Fragment, useEffect } from "react";
+import { useCallback, useState, useMemo, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { callAuthApi } from "../../lib/api";
 import { unwatchGame } from "../../lib/playerGameMarks";
@@ -14,6 +14,7 @@ import {
 import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
+import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
 import {
@@ -216,9 +217,7 @@ function WatchedGamesTable(props) {
     onSortingChange: setSorting,
   });
 
-  useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
+  useSyncTablePageSize(table, showState);
 
   return (
     <Fragment>

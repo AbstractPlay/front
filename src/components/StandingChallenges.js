@@ -2,8 +2,8 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { getGameDisplayName } from "../lib/gameOptions";
-import { resolveRequiredMetaGameParam } from "../lib/metaGameRoute";
 import NotFound from "./NotFound";
+import { useRequiredMetaGameParam } from "../hooks/useRequiredMetaGameParam";
 import { formatChallengeTablePlayerCount } from "../lib/challengeTablePlayerCount";
 import { compareStrings, stringColumnSortingFn } from "../lib/compareStrings";
 import {
@@ -47,8 +47,13 @@ import {
   passesMatchCompetitivenessFilter,
 } from "../lib/glickoMatchOdds";
 import { triggerDownload } from "../lib/boardExport/downloadBlob";
+import {
+  useResetTablePageIndex,
+  useSyncTablePageSize,
+} from "../hooks/useTanstackTableEffects";
 
 const allSize = Number.MAX_SAFE_INTEGER;
+const columnHelper = createColumnHelper();
 
 async function parseAuthQueryArray(res) {
   if (!res || res.status !== 200) {
@@ -84,9 +89,7 @@ function StandingChallenges(props) {
   const [reject, rejectSetter] = useState(null);
   const { metaGame: metaGameParam } = useParams();
   const siteWide = !metaGameParam;
-  const metaResolution = siteWide
-    ? null
-    : resolveRequiredMetaGameParam(metaGameParam);
+  const metaResolution = useRequiredMetaGameParam(metaGameParam, { skip: siteWide });
   const metaGame =
     siteWide || metaResolution === null
       ? undefined
@@ -236,7 +239,15 @@ function StandingChallenges(props) {
       }
     }
     fetchData();
-  }, [metaGame, siteWide, loggedin, update, globalMe?.id, metaResolution]);
+  }, [
+    metaGame,
+    siteWide,
+    loggedin,
+    update,
+    globalMe?.id,
+    metaResolution?.kind,
+    metaResolution?.resolved,
+  ]);
 
   useEffect(() => {
     showAcceptedSetter(
@@ -470,7 +481,6 @@ function StandingChallenges(props) {
     highestGlickoMap,
   ]);
 
-  const columnHelper = createColumnHelper();
   const columns = useMemo(() => {
     const cols = [];
     if (siteWide) {
@@ -670,7 +680,6 @@ function StandingChallenges(props) {
     );
     return cols;
   }, [
-    columnHelper,
     globalMe,
     t,
     accepted,
@@ -704,13 +713,19 @@ function StandingChallenges(props) {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  useEffect(() => {
-    table.setPageIndex(0);
-  }, [globalFilter, table]);
+  useResetTablePageIndex(
+    table,
+    globalFilter,
+    siteWide,
+    filterStarred,
+    filterHardTime,
+    filterSoftTime,
+    filterRated,
+    filterUnrated,
+    filterMatch
+  );
 
-  useEffect(() => {
-    table.setPageSize(showState);
-  }, [showState, table]);
+  useSyncTablePageSize(table, showState);
 
   const handleDownloadFiltered = useCallback(() => {
     const exportRows = table.getPrePaginationRowModel().rows.map((row) => {
@@ -739,19 +754,6 @@ function StandingChallenges(props) {
       filename
     );
   }, [table, challenges, siteWide, metaGame]);
-
-  useEffect(() => {
-    table.setPageIndex(0);
-  }, [
-    siteWide,
-    filterStarred,
-    filterHardTime,
-    filterSoftTime,
-    filterRated,
-    filterUnrated,
-    filterMatch,
-    table,
-  ]);
 
   const showMatchFilters = loggedin && globalMe !== null;
   const matchFiltersDisabled = summaryRatingsLoadState === "pending";
