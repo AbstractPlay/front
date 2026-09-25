@@ -203,6 +203,54 @@
   pointer-events: none;
 }
 
+.feedback-screenshot-paste-zone--drag-over {
+  border-color: var(--secondary-color-3);
+  background: var(--tag-background-color);
+  box-shadow: inset 0 0 0 1px var(--secondary-color-3);
+}
+
+.feedback-screenshot-upload-previews {
+  margin-top: 0.5rem;
+}
+
+.feedback-screenshot-upload-count {
+  margin-bottom: 0.35rem;
+}
+
+.feedback-screenshot-upload-grid {
+  margin-top: 0;
+}
+
+.feedback-screenshot-upload-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  max-width: 160px;
+}
+
+.feedback-screenshot-remove {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--tag-background-color);
+  border-radius: 4px;
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  cursor: pointer;
+}
+
+.feedback-screenshot-remove:hover,
+.feedback-screenshot-remove:focus-visible {
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
+  outline: none;
+}
+
+.feedback-screenshot-remove:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .feedback-screenshot-paste-label {
   font-weight: 600;
 }
