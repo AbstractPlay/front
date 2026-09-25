@@ -14,7 +14,7 @@ import NewProfile from "./NewProfile";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { useChallengeResponse } from "../hooks/useChallengeResponse";
-import { fetchDashboard, fetchProfile } from "../lib/globalMeBootstrap";
+import { fetchDashboard } from "../lib/globalMeBootstrap";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { cloneDeep } from "lodash";
 import WatchedGamesTable from "./Me/WatchedGamesTable";
@@ -52,8 +52,6 @@ function Me(props) {
   const [testBotStatusResult, testBotStatusResultSetter] = useState("");
   const [testBotStatusLoading, testBotStatusLoadingSetter] = useState(false);
   const [deletes, deletesSetter] = useState("");
-  const [noDirectChallengesSaving, noDirectChallengesSavingSetter] =
-    useState(false);
   const { t } = useTranslation();
   const [myMove, myMoveSetter] = useState([]);
   const [waiting, waitingSetter] = useState([]);
@@ -205,38 +203,6 @@ function Me(props) {
     await callAuthApi("update_standing", { entries: updatedStanding });
     maybeTrackRecommendationChallenge(challenge.metaGame);
   }, []);
-
-  const handleNoDirectChallengesChange = async (e) => {
-    if (globalMe === null || noDirectChallengesSaving) {
-      return;
-    }
-    const enabled = e.target.checked;
-    noDirectChallengesSavingSetter(true);
-    try {
-      const newSettings = cloneDeep(globalMe.settings ?? {});
-      if (newSettings.all === undefined) {
-        newSettings.all = {};
-      }
-      newSettings.all.noDirectChallenges = enabled;
-      const res = await callAuthApi("update_user_settings", {
-        settings: newSettings,
-      });
-      if (!res || res.status !== 200) {
-        throw new Error("Failed to save direct challenge preference");
-      }
-      const { setGlobalMe } = useStore.getState();
-      setGlobalMe((prev) => ({
-        ...prev,
-        settings: newSettings,
-      }));
-      await fetchProfile();
-    } catch (err) {
-      console.error("Failed to save direct challenge preference", err);
-      errorSetter(err);
-    } finally {
-      noDirectChallengesSavingSetter(false);
-    }
-  };
 
   const handleStandingSuspend = async (id) => {
     console.log(`suspending ${id}`);
@@ -465,6 +431,15 @@ function Me(props) {
       ...(globalMe.challengesIssued ?? []),
       ...(globalMe.challengesAccepted ?? []),
     ].filter((c) => c !== undefined && c !== null);
+    const hasWatchedGames =
+      Array.isArray(globalMe.watchedGames) && globalMe.watchedGames.length > 0;
+    const hasChallengesReceived =
+      Array.isArray(globalMe.challengesReceived) &&
+      globalMe.challengesReceived.length > 0;
+    const hasChallengesAwaitingResponse = challengesResponded.length > 0;
+    const hasOpenChallenges =
+      Array.isArray(globalMe.standingChallenges) &&
+      globalMe.standingChallenges.length > 0;
     return (
       <article id="dashboard">
         <h1 className="title has-text-centered">
@@ -503,27 +478,20 @@ function Me(props) {
                 </p>
                 <TheirTurnTable games={waiting} />
               </div>
-              <div className="topPad">
-                <p className="lined">
-                  <span>{t("WatchedGames")}</span>
-                </p>
-                {!globalMe.watchedGames ||
-                globalMe.watchedGames.length === 0 ? (
+              {hasWatchedGames ? (
+                <div className="topPad">
+                  <p className="lined">
+                    <span>{t("WatchedGames")}</span>
+                  </p>
                   <p className="help">
                     <em>{t("WatchedGamesHelp")}</em>
                   </p>
-                ) : (
-                  <>
-                    <p className="help">
-                      <em>{t("WatchedGamesHelp")}</em>
-                    </p>
-                    <WatchedGamesTable
-                      games={globalMe.watchedGames}
-                      setError={errorSetter}
-                    />
-                  </>
-                )}
-              </div>
+                  <WatchedGamesTable
+                    games={globalMe.watchedGames}
+                    setError={errorSetter}
+                  />
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -534,63 +502,48 @@ function Me(props) {
               <span>{t("YourChallenges")}</span>
             </p>
             <div id="challenged" className="indentedContainer">
-              <p className="lined">
-                <span>{t("ChallengeResponse")}</span>
-              </p>
-              <div className="indentedContainer">
-                {!globalMe.challengesReceived ||
-                globalMe.challengesReceived.length === 0 ? (
-                  <p>{t("NoChallengeResponse")}</p>
-                ) : (
-                  <ChallengeMeRespond
-                    fetching={fetching}
-                    handleChallengeResponse={handleChallengeResponse.bind(this)}
-                  />
-                )}
-                <div className="field topPad">
-                  <label className="checkbox">
-                    <input
-                      type="checkbox"
-                      checked={globalMe.settings?.all?.noDirectChallenges === true}
-                      disabled={noDirectChallengesSaving}
-                      onChange={handleNoDirectChallengesChange}
-                    />
-                    {" "}
-                    {t("DeclineDirectChallenges")}
-                  </label>
-                  <p className="help">
-                    <em>{t("DeclineDirectChallengesHelp")}</em>
+              {hasChallengesReceived ? (
+                <>
+                  <p className="lined">
+                    <span>{t("ChallengeResponse")}</span>
                   </p>
-                </div>
-              </div>
-              <p className="lined">
-                <span>{t("WaitingResponse")}</span>
-              </p>
-              <div className="indentedContainer">
-                {challengesResponded.length === 0 ? (
-                  <p>{t("NoWaitingResponse")}</p>
-                ) : (
-                  <ChallengeTheyRespond
-                    challenges={challengesResponded}
-                    handleChallengeRevoke={handleChallengeRevoke.bind(this)}
-                    fetching={fetching}
-                  />
-                )}
-              </div>
-              <p className="lined">
-                <span>{t("StandingChallenges2")}</span>
-              </p>
-              <div className="indentedContainer">
-                {!globalMe.standingChallenges ||
-                globalMe.standingChallenges.length === 0 ? (
-                  <p>{t("NoStandingChallenges")}</p>
-                ) : (
-                  <ChallengeOpen
-                    handleChallengeRevoke={handleChallengeRevoke.bind(this)}
-                    fetching={fetching}
-                  />
-                )}
-              </div>
+                  <div className="indentedContainer">
+                    <ChallengeMeRespond
+                      fetching={fetching}
+                      handleChallengeResponse={handleChallengeResponse.bind(
+                        this
+                      )}
+                    />
+                  </div>
+                </>
+              ) : null}
+              {hasChallengesAwaitingResponse ? (
+                <>
+                  <p className="lined">
+                    <span>{t("WaitingResponse")}</span>
+                  </p>
+                  <div className="indentedContainer">
+                    <ChallengeTheyRespond
+                      challenges={challengesResponded}
+                      handleChallengeRevoke={handleChallengeRevoke.bind(this)}
+                      fetching={fetching}
+                    />
+                  </div>
+                </>
+              ) : null}
+              {hasOpenChallenges ? (
+                <>
+                  <p className="lined">
+                    <span>{t("StandingChallenges2")}</span>
+                  </p>
+                  <div className="indentedContainer">
+                    <ChallengeOpen
+                      handleChallengeRevoke={handleChallengeRevoke.bind(this)}
+                      fetching={fetching}
+                    />
+                  </div>
+                </>
+              ) : null}
               <div>
                 <p className="lined">
                   <span>{t("NewRealStanding")}</span>

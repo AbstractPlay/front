@@ -139,6 +139,7 @@ function UserSettingsModal(props) {
   );
   const [hideTour, hideTourSetter] = useState(!showPlayTour);
   const [hideSpoilers, hideSpoilersSetter] = useState(false);
+  const [noDirectChallenges, noDirectChallengesSetter] = useState(false);
   const [showBots, showBotsSetter] = useState(false);
   const [pushOnThisDevice, pushOnThisDeviceSetter] = useState(false);
   const [settingsTab, settingsTabSetter] = useState("profile");
@@ -191,6 +192,9 @@ function UserSettingsModal(props) {
     } else {
       hideSpoilersSetter(false);
     }
+    noDirectChallengesSetter(
+      globalMe?.settings?.all?.noDirectChallenges === true
+    );
     if (globalMe?.country !== undefined) {
       countrySetter(globalMe.country);
     }
@@ -436,6 +440,14 @@ function UserSettingsModal(props) {
     if (newSettings.all === undefined) newSettings.all = {};
     newSettings.all.hideSpoilers = !hideSpoilers;
     hideSpoilersSetter(!hideSpoilers);
+    handleSettingsChange(newSettings);
+  };
+
+  const handleNoDirectChallengesChange = async () => {
+    const newSettings = cloneDeep(globalMe.settings);
+    if (newSettings.all === undefined) newSettings.all = {};
+    newSettings.all.noDirectChallenges = !noDirectChallenges;
+    noDirectChallengesSetter(!noDirectChallenges);
     handleSettingsChange(newSettings);
   };
 
@@ -1093,6 +1105,23 @@ function UserSettingsModal(props) {
             </div>
             <p className="help">
               May not work for all games. Let us know if we missed something.
+            </p>
+          </div>
+
+          {/********************* direct challenges *********************/}
+          <div className="field" key="noDirectChallenges">
+            <div className="control">
+              <label className="checkbox is-small">
+                <input
+                  type="checkbox"
+                  checked={noDirectChallenges}
+                  onChange={handleNoDirectChallengesChange}
+                />
+                {t("DeclineDirectChallenges")}
+              </label>
+            </div>
+            <p className="help">
+              <em>{t("DeclineDirectChallengesHelp")}</em>
             </p>
           </div>
 
