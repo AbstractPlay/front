@@ -21,6 +21,7 @@ import {
 import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import { useStore } from "../../stores";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
+import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
 import { expandVariants } from "../../lib/expandVariants";
 
@@ -30,7 +31,10 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
-  const [sorting, setSorting] = useState([{ id: "dateIssued", desc: true }]);
+  const [sorting, setSorting] = usePersistedTableSorting(
+    "dashboard-tables-challenges-accepted-sort",
+    [{ id: "dateIssued", desc: true }]
+  );
   const [showState, showStateSetter] = useStorageState(
     "dashboard-tables-challenges-show",
     10

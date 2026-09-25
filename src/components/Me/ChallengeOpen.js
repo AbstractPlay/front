@@ -18,6 +18,7 @@ import ChallengeViewModal from "./ChallengeViewModal";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
+import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import { expandVariants } from "../../lib/expandVariants";
 
 const allSize = Number.MAX_SAFE_INTEGER;
@@ -25,7 +26,10 @@ const allSize = Number.MAX_SAFE_INTEGER;
 function ChallengeOpen({ fetching, handleChallengeRevoke }) {
   const globalMe = useStore((state) => state.globalMe);
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
-  const [sorting, setSorting] = useState([{ id: "dateIssued", desc: true }]);
+  const [sorting, setSorting] = usePersistedTableSorting(
+    "dashboard-tables-challenges-open-sort",
+    [{ id: "dateIssued", desc: true }]
+  );
   const [showState, showStateSetter] = useStorageState(
     "dashboard-tables-challenges-show",
     10

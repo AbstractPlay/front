@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import {
@@ -19,6 +19,7 @@ import {
 } from "../../lib/compareStrings";
 import { useStore } from "../../stores";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
+import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
 
 const allSize = Number.MAX_SAFE_INTEGER;
@@ -54,9 +55,10 @@ function MyTurnTable({ games, fetching }) {
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
   const connections = useStore((state) => state.connections);
-  const [sorting, setSorting] = useState([
-    { id: "timeRemaining", desc: false },
-  ]);
+  const [sorting, setSorting] = usePersistedTableSorting(
+    "dashboard-tables-mine-sort",
+    [{ id: "timeRemaining", desc: false }]
+  );
   const [showState, showStateSetter] = useStorageState(
     "dashboard-tables-mine-show",
     10

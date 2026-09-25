@@ -20,12 +20,16 @@ import {
   variantSelectionSortingFn,
 } from "../../lib/variantTableSort";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
+import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
 function StandingChallengeTable({ fetching, handleSuspend, handleDelete }) {
   const globalMe = useStore((state) => state.globalMe);
-  const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
+  const [sorting, setSorting] = usePersistedTableSorting(
+    "dashboard-tables-standing-sort",
+    [{ id: "gameName", desc: false }]
+  );
   const [showState, showStateSetter] = useStorageState(
     "dashboard-tables-mine-show",
     10

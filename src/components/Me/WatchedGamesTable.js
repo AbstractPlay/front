@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo, Fragment } from "react";
+import { useCallback, useMemo, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { callAuthApi } from "../../lib/api";
 import { unwatchGame } from "../../lib/playerGameMarks";
@@ -15,6 +15,7 @@ import LocalizedTimeAgo from "../LocalizedTimeAgo";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../../stores";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
+import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
 import {
@@ -36,7 +37,10 @@ function isGameCompleted(game) {
 function WatchedGamesTable(props) {
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
-  const [sorting, setSorting] = useState([{ id: "lastActivity", desc: true }]);
+  const [sorting, setSorting] = usePersistedTableSorting(
+    "dashboard-tables-watched-sort",
+    [{ id: "lastActivity", desc: true }]
+  );
   const [showState, showStateSetter] = useStorageState(
     "dashboard-tables-watched-show",
     10
