@@ -2847,6 +2847,11 @@ span.hardTime::after {
   overflow-y: auto;
 }
 
+.game-move-strip-dock.is-expanded .game-move-strip-dock__details {
+  /* Keep misc actions reachable when the dock hits max-height. */
+  min-height: 3rem;
+}
+
 .game-move-dock-entry {
   flex-shrink: 0;
 }
@@ -3057,6 +3062,7 @@ span.hardTime::after {
 
   .game-move-layout--strip__sidebar .game-move-strip-dock__details {
     max-height: min(28vh, 14rem);
+    min-height: 2.5rem;
   }
 
   .game-move-layout--strip__sidebar .game-move-drawer {
@@ -3068,8 +3074,9 @@ span.hardTime::after {
   }
 
   .game-move-layout--strip__sidebar .game-move-drawer.is-open {
-    flex: 1 1 0;
-    min-height: 0;
+    /* flex-basis auto + min-height: tab row stays visible even if flex math mis-fires. */
+    flex: 1 1 auto;
+    min-height: 2.75rem;
     overflow: hidden;
   }
 
@@ -3078,8 +3085,8 @@ span.hardTime::after {
   }
 
   .game-move-layout--strip__sidebar .game-move-drawer__panel {
-    flex: 1 1 0;
-    min-height: 0;
+    flex: 1 1 auto;
+    min-height: 8rem;
     max-height: none;
     overflow: auto;
   }
