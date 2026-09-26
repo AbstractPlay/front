@@ -454,7 +454,7 @@
     "Change": "Ŝanĝi",
     "YourGames": "Viaj ludoj",
     "YourMove": "Via movo",
-    "AcceptDraw": "Akcepti proponon pri remizo",
+    "AcceptDraw": "Akcepti proponon pri egalvenko",
     "Active": "Aktiva",
     "All": "Ĉiuj",
     "AlternativeDisplays": "Alternativaj bildigaj agordoj",
@@ -560,7 +560,7 @@
     "ChallengerSecond": "La defianto ludas due",
     "ChallengeType": "Tipo de defio",
     "ChallengeTypeOpenDescription": "Iu ajn povas akcepti ĉi tiun defion.",
-    "ChallengeTypeTargetedDescription": "La unua sidloko devas esti asignita al nomita ludanto. Pliaj sidlokoj povas esti malfermitaj al iu ajn.",
+    "ChallengeTypeTargetedDescription": "Vi defias specifajn ludantojn.",
     "ChangeRenderOptions": "Ŝanĝi agordojn de la tabula bildigo",
     "ChooseDisplay": "Elektu kiel la tabulo estu bildigita",
     "ChooseClockHard": "Ĉu deviga tempolimo?",
@@ -582,9 +582,9 @@
     "CompletedGamesCount_one": "finita ludo",
     "CompletedGamesCount_other": "finitaj ludoj",
     "CompletedGamesList": "Finitaj ludoj de {{name}}",
-    "CompletedGamesHelp": "Por ne troŝarĝi la stirpanelon, ludoj malaperas de ĉi tiu listo 7 tagojn post la dato \"laste vidita\". Premu la butonon Forviŝi por tuj forigi ludon. Nova babilmesaĝo reaperigos pli malnovan ludon kaj rekomencos la 7-tagan periodon. Vizitu la paĝon Ludoj por aliri pli malnovajn finitajn ludojn.",
+    "CompletedGamesHelp": "Por ke la stirpanelo restu facile mastrumebla, ludoj malaperas de ĉi tiu listo 7 tagojn post la dato \"laste vidita\". Premu la butonon Forviŝi por tuj forigi ludon. Nova babilmesaĝo ree aperigos pli malnovan ludon kaj rekomencos la 7-tagan periodon. Vizitu la paĝon Ludoj por aliri pli malnovajn finitajn ludojn.",
     "WatchedGames": "Observataj ludoj",
-    "WatchedGamesHelp": "Ludoj, kiujn vi observas kiel spektanto. Ĉesu observi ludon por forigi ĝin el ĉi tiu listo. Novaj babilmesaĝoj aŭ movoj aktualigos tiujn erojn.",
+    "WatchedGamesHelp": "Ludoj, kiujn vi observas kiel spektanto. Ĉesu observi ludon por forigi ĝin de ĉi tiu listo. Novaj babilmesaĝoj aŭ movoj aktualigos ĉi tiujn erojn.",
     "CompleteMove": "Fini la movon",
     "Confirm": "Konfirmi",
     "ConfirmDeleteSubtree": "Forigi esploran subarbon",
@@ -658,7 +658,7 @@
         "createEvent": "Krei eventon",
         "createEventModalTitle": "Krei novan eventon",
         "createEventHelp": "Ĉi tiuj valoroj povas esti ŝanĝitaj poste. Datoj kaj horoj devas esti donitaj laŭ UTC.",
-        "createEventContact": "Por krei eventon, bonvolu kontakti unu el la programistoj per <0>Discord</0>.",
+        "createEventContact": "Por krei eventon, bonvolu kontakti unu el la programistoj per <1>Discord</1>.",
         "noOpenRegistration": "Neniu evento nun estas malfermita por aliĝoj.",
         "eventNameLabel": "Nomo de evento",
         "eventNameRequired": "La evento devas havi nomon.",
@@ -666,7 +666,7 @@
         "maxPlayersHelp": "Valoro 0 signifas, ke ne estas limo.",
         "eventDateLabel": "Dato de evento",
         "eventTimeLabel": "Horo de evento",
-        "dateTimeRequired": "Necesas dato kaj horo en la estonteco.",
+        "dateTimeRequired": "Dato kaj horo estas bezonataj kaj devas esti estontaj.",
         "admin": {
             "statusLabel": "Stato:",
             "statusDraft": "Malneto. Nur la organizanto kaj administrantoj povas vidi ĉi tiun eventon.",
@@ -685,7 +685,7 @@
             "gamesTitle": "Ludoj",
             "gamesAsteriskNote": "Asterisko apud rezulto signifas, ke la organizanto mane ĝustigis ĝin.",
             "resultsTitle": "Rezultoj",
-            "resultsDisclaimer": "Ĉi tiuj rezultoj estas <0>neoficialaj</0>. Vidu la priskribon por la oficialaj rezultoj tabeligitaj de la organizanto. Ĉi tiu tabelo ne konsideras aferojn kiel liberajn vicojn. Ĝi simple resumas la rezultojn de la parigitaj ludoj, inkluzive de arbitraciaj decidoj.",
+            "resultsDisclaimer": "Ĉi tiuj rezultoj estas <1>neoficialaj</1>. Vidu la priskribon por la oficialaj rezultoj tabeligitaj de la organizanto. Ĉi tiu tabelo ne konsideras aferojn kiel liberajn vicojn. Ĝi simple resumas la rezultojn de la parigitaj ludoj, inkluzive de arbitraciaj decidoj.",
             "editorHelp1": "Malneta evento povas esti publikigita, se ĝia komenca dato estas post almenaŭ 24 horoj kaj ĝia priskribo ne estas malplena.",
             "editorHelp2": "Evento povas esti tute forigita se ĝi estas malneta, malfermita por aliĝoj, aŭ aktiva sed ankoraŭ ne havas kreitajn ludojn.",
             "editorHelp3": "La komenca dato povas esti ŝanĝita ĝis ludoj estas kreitaj.",
@@ -712,11 +712,11 @@
             "descriptionMarkdown": "Markdown estas ŝaltita",
             "descriptionNotEmpty": "La priskribo ne rajtas esti malplena.",
             "publishEventTitle": "Publikigi eventon",
-            "publishEventBody": "Vi estas malfermonta ĉi tiun eventon por aliĝoj. Ĝi tuj estos videbla al ĉiuj ludantoj. <0>Ĉi tio ne estas malfarebla!</0>",
-            "deleteEventBody": "Vi estas tute forigonta ĉi tiun eventon. <0>Ĉi tio ne estas malfarebla!</0> Tio eblas nur antaŭ ol ludoj estas kreitaj por la evento.",
+            "publishEventBody": "Vi estas malfermonta ĉi tiun eventon por aliĝoj. Ĝi tuj estos videbla al ĉiuj ludantoj. <1>Ĉi tio ne estas malfarebla!</1>",
+            "deleteEventBody": "Vi estas tute forigonta ĉi tiun eventon. <1>Ĉi tio ne estas malfarebla!</1> Tio eblas nur antaŭ ol ludoj estas kreitaj por la evento.",
             "closeEventTitle": "Fermi eventon",
             "closeEventSelectWinners": "Elektu la venkinton (aŭ venkintojn) kaj premu \"Aktualigi venkintojn\".",
-            "closeEventBody": "Vi tuj markos ĉi tiun eventon kiel finitan. <0>Tion ne eblas malfari!</0> Elektu la venkinton (aŭ venkintojn) kaj premu \"Fermi eventon\". Post la evento vi povos iam ajn ŝanĝi la venkinton.",
+            "closeEventBody": "Vi estas markonta ĉi tiun eventon kiel finitan. <1>Ĉi tio ne estas malfarebla!</1> Bonvolu elekti la venkinton (aŭ venkintojn) kaj premu \"Fermi eventon\". La venkinto povas esti aktualigita iam ajn post la fino de la evento.",
             "selectWinnersLabel": "Elektu unu aŭ plurajn venkintojn de la evento:",
             "updateWinners": "Aktualigi venkintojn",
             "inviteBlockTitle": "Inviti aŭ bloki ludantojn",
@@ -749,7 +749,7 @@
             "proceedAnyway": "Daŭrigi malgraŭ tio",
             "errorsModalBody": "Viaj parigoj enhavas eblajn erarojn. Bonvolu kontroli la tabelon kaj solvi ĉiujn duoblaĵojn. Daŭrigu nur se vi certas, ke viaj parigoj estas ĝustaj.",
             "confirmGameCreation": "Konfirmi kreadon de ludoj",
-            "confirmCreateBody": "Vi estas kreonta ludojn, kiuj tuj komenciĝos. <0>Ĉi tio ne estas malfarebla!</0> Bonvolu kontroli viajn parigojn kaj tre certiĝu, ke ili estas ĝustaj, antaŭ ol daŭrigi.",
+            "confirmCreateBody": "Vi estas kreonta ludojn, kiuj tuj komenciĝos. <1>Ĉi tio ne estas malfarebla!</1> Bonvolu kontroli viajn parigojn kaj tre certiĝu, ke ili estas ĝustaj, antaŭ ol daŭrigi.",
             "deletePairing": "Forigi parigon",
             "errors": {
                 "dupeExact": "Ĉi tiu kombino de p1, p2 kaj ludo estas preciza duoblaĵo de pli frua ero. Tio preskaŭ neniam estas dezirata.",
@@ -762,7 +762,7 @@
             "arbitrateTitle": "Arbitracii rezulton",
             "saveResult": "Konservi rezulton",
             "arbitrateNote": "Bonvolu noti, ke arbitraciitaj rezultoj ne aperos en la aŭtomate kreitaj ludraportoj. Ili validas nur kadre de ĉi tiu evento.",
-            "selectWinner": "Elektu la arbitraciitan venkinton de <0>la ludo {{gameName}}</0>:",
+            "selectWinner": "Elektu la arbitraciitan venkinton de <1>la ludo {{gameName}}</1>:",
             "gameSuffix": "ludo"
         },
         "loading": "Ŝargas eventojn…"
@@ -790,12 +790,12 @@
     "GameSummary": "Babilprotokolo",
     "GameComments": "Komentoj pri movoj",
     "GamesOf": "ludoj de",
-    "GoBegin": "Montru la komencon de la ludo. Klavoj: Home aŭ 'h'.",
-    "GoCurrent": "Montru la nunan pozicion. Klavoj: End aŭ 'l'.",
-    "GoNext": "Montru la sekvan movon (kaj la unuan variaĵon, se ekzistas). Klavoj: sago dekstren aŭ 'k'.",
-    "GoNextVar": "Montru la sekvan variaĵon de la movo. Klavoj: sago malsupren aŭ 'm'.",
-    "GoPrev": "Montru la antaŭan movon. Klavoj: sago maldekstren aŭ 'j'.",
-    "GoPrevVar": "Montru la antaŭan variaĵon. Klavoj: sago supren aŭ 'i'.",
+    "GoBegin": "Montru la komencon de la ludo. Klavoj: hejma klavo aŭ 'h'.",
+    "GoCurrent": "Montru la nunan pozicion. Klavoj: fina klavo aŭ 'l'.",
+    "GoNext": "Montru la sekvan movon (kaj la unuan variaĵon, se ekzistas). Klavoj: dekstra sagoklavo aŭ 'k'.",
+    "GoNextVar": "Montru la sekvan variaĵon de la movo. Klavoj: malsupra sagoklavo aŭ 'm'.",
+    "GoPrev": "Montru la antaŭan movon. Klavoj: maldekstra sagoklavo aŭ 'j'.",
+    "GoPrevVar": "Montru la antaŭan variaĵon. Klavoj: supra sagoklavo aŭ 'i'.",
     "HardTime": "Deviga tempolimo: la sistemo devigos la tempolimojn.",
     "HardTimeSet": "Deviga tempolimo",
     "HasAnnotations": "Havas postludajn komentojn",
@@ -886,19 +886,19 @@
     "PickVariant_disabled": "Disponeblaj variaĵoj",
     "PlayerList": "Ludantoj",
     "Players": "Ludantoj",
-    "PleaseConsent": "Necesas via konsento!",
+    "PleaseConsent": "Via konsento estas bezonata!",
     "PlayersAccepted": "Ĝis nun jen la ludantoj, kiuj volas partopreni en la ludo: {{others}}.",
     "Playground": "Ludejo",
     "Lab": "Ludejo",
     "Ply": "Duonmovo",
     "ProfileAnon": "Ĉu vi volas esti anonima?",
-    "ProfileAnonHelp": "Anonimeco signifas, ke neniu scios la identecon de sia kontraŭulo, kaj viaj finitaj ludoj ne estos atribuitaj al vi nek pritaksitaj. Eĉ se vi poste ŝanĝos ĉi tiun agordon, pasintaj ludoj ne povos esti reatribuitaj al vi.",
+    "ProfileAnonHelp": "Esti anonima signifas, ke neniu scios kontraŭ kiu ĝi ludas, kaj viaj finitaj ludoj ne estos atribuitaj al vi. Sekve ili ne estos pritaksitaj. Eĉ se vi poste ŝanĝos ĉi tiun agordon, pasintaj ludoj ne povos esti reatribuitaj al vi.",
     "ProfileConsent": "Ĉu vi konsentas pri la uzkondiĉoj kaj privateca politiko de Abstract Play?",
     "ProfileCountry": "Landokodo",
     "ProfileCountryHelp": "Diru al homoj, de kie vi estas! Vi povas enigi ion ajn ĉi tie, sed se vi enigos validan du- aŭ tri-signan ISO-landokodon, la konvena flago aperos en via profilo.",
     "ProfileFor": "Ludantoprofilo de {{player}}",
     "ProfileName": "Montrita nomo",
-    "ProfileNameHelp": "Jen la nomo, kiun aliaj homoj en la retejo vidos. Ĝi povas esti ŝanĝita poste. Ĝi devas esti unika inter la montrataj nomoj nun uzataj, sen konsideri usklecon kaj kromajn spacetojn.",
+    "ProfileNameHelp": "Jen la nomo, kiun aliaj homoj en la retejo vidos. Ĝi povas esti ŝanĝita poste. Ĝi devas diferenci de ĉiuj nomoj nun uzataj aŭ lastatempe uzitaj.",
     "ProfileTagline": "Libera frapfrazo (maksimume 255 signoj)",
     "Publish": "Publikigi la esploradon",
     "PublishHelp": "Publikigu la esploradon, kiun vi faris dum la ludo, por ke iu ajn povu vidi ĝin.",
@@ -906,7 +906,7 @@
     "RatedGame": "Ĉi tio estos pritaksita ludo.",
     "RatedPlayersCount_one": "pritaksita ludanto",
     "RatedPlayersCount_other": "pritaksitaj ludantoj",
-    "RatingsList": "Pritaksoj de <gameLink>{{name}}</gameLink>",
+    "RatingsList": "Pritaksoj de {{name}}",
     "Reject": "Malakcepti",
     "RelatedSites": "Rilataj retejoj",
     "ResetDefault": "Restarigi defaŭltojn",
@@ -1242,7 +1242,7 @@
     "fatalError": {
         "title": "Io misfunkciis",
         "chunkMessage": "Nova versio de la retejo eble disponeblas. Bonvolu reŝargi la paĝon.",
-        "genericMessage": "Bonvolu reŝargi la paĝon. Se la problemo daŭras, bonvolu <0>raporti ĝin en nia Discord-servilo</0> aŭ uzi la suban butonon \"Raporti cimon\".",
+        "genericMessage": "Bonvolu reŝargi la paĝon. Se la problemo daŭras, bonvolu <1>raporti ĝin en nia Discord-servilo</1> aŭ uzi la suban butonon \"Raporti cimon\".",
         "discordLink": "raporti ĝin en nia Discord-servilo"
     },
     "standingChallenge": {
@@ -1252,7 +1252,7 @@
         "yesDelete": "Jes, forigi ĝin",
         "noCancel": "Ne, nuligi",
         "missingEntry": "Neniu ero de daŭra defio estis donita. Tio neniam devus okazi.",
-        "deleteConfirm": "Vi estas forigonta la jenan daŭran defion: <0>{{description}}</0>. Ĉu vi certas?",
+        "deleteConfirm": "Vi estas forigonta la jenan daŭran defion: <1>{{description}}</1>. Ĉu vi certas?",
         "noVariants": "neniu variaĵo"
     },
     "about": {
@@ -1261,7 +1261,7 @@
         "highlightsLink": "plena listo de ludoj"
     },
     "notFound": {
-        "body": "Neniu paĝo troviĝis ĉe <pathCode>{{path}}</pathCode>. Bonvolu uzi la navigbreton por reprovi. Vi ankaŭ povas <bugLink>raporti cimon en la programo</bugLink> aŭ <discordLink>afiŝi en nia Discord-servilo</discordLink>.",
+        "body": "Neniu paĝo troviĝis ĉe <1>{{path}}</1>. Bonvolu uzi la navigbreton por reprovi. Vi ankaŭ povas <2>raporti cimon en la programo</2> aŭ <3>afiŝi en nia Discord-servilo</3>.",
         "reportLink": "afiŝi cimraporton en nia Discord-servilo"
     },
     "footer": {
@@ -1272,7 +1272,7 @@
         "github": "GitHub",
         "legalLink": "Uzkondiĉoj kaj privateca politiko",
         "betaBanner": "La retejo estas nun beta-testata!",
-        "feedbackCta": "Foliumu <bugsLink>cimraportojn</bugsLink> kaj <ideasLink>ideojn pri funkcioj</ideasLink>, <reportLink>raportu cimon</reportLink>, aŭ babilu kun ni en <discordLink>Discord</discordLink>."
+        "feedbackCta": "Foliumu <1>cimraportojn</1> kaj <2>ideojn pri funkcioj</2>, <3>raportu cimon</3>, aŭ babilu kun ni en <4>Discord</4>."
     },
     "explore": {
         "intro": "Ĉi tiu paĝo ebligas esplori diversajn manierojn ordigi la liston de ludoj. Elektu la deziratan vidon malsupre. Klako sur la nomo de ludo kondukos vin al ĝia ĉefpaĝo kun pliaj informoj.",
@@ -1283,7 +1283,7 @@
             },
             "newest": {
                 "title": "Plej novaj",
-                "description": "Kiam la ludo estis aldonita al la retejo."
+                "description": "La dato kiam la ludo estis aldonita al la retejo."
             },
             "hotRaw": {
                 "title": "Plej aktivaj (movoj/tago)",
@@ -1365,9 +1365,9 @@
             }
         },
         "explanations": {
-            "highestSingle": "Listo de ĉiuj registritaj pritaksoj. La sistemo ignoras ludojn eksplicite markitajn kiel nepritaksitajn kaj ludojn finiĝintajn antaŭ tri movoj. Rangigoj uzas konservativan (95%-fidan) Glicko-2-pritakson (pritakso − 2×RD); montriĝas kaj Glicko kaj la malnova Elo-pritakso. Glicko komenciĝas je 1200 kun RD 350; Elo je 1200 kun konstanta *K* de 30. TrueSkill uzas la defaŭltajn agordojn de Microsoft (pritaksa intervalo 0–50, komenca valoro 25).",
+            "highestSingle": "Listo de ĉiuj registritaj pritaksoj. La sistemo ignoras ludojn eksplicite markitajn kiel nepritaksitajn, kaj ĝi ignoras ludojn, kiuj finiĝas antaŭ ol tri movoj estas faritaj. Rangigoj uzas konservativan (95%-fidan) Glicko-2-pritakson (pritakso − 2×RD), kaj montras kaj Glicko kaj la malnovan Elo-pritakson. Glicko komenciĝas je 1200 kun RD 350; Elo komenciĝas je 1200 kun konstanta *K* de 30. TrueSkill uzas la defaŭltajn agordojn de Microsoft (pritaksa intervalo 0–50, komenca valoro 25).",
             "avgRatings": "Ĉi tiuj kolumnoj estas pezitaj mezumoj de viaj Glicko- kaj Elo-pritaksoj en la tuta retejo.",
-            "topPlayers": "Ĉi tiu tabelo listigas ĉiun disponeblan kombinon de ludo kaj variaĵoj kun ĝia plej alte pritaksita ludanto, rangigita laŭ konservativa Glicko-2-pritakso (pritakso − 2×RD). Elo montriĝas por komparo.",
+            "topPlayers": "Ĉi tiu tabelo listigas ĉiun disponeblan kombinon de ludo kaj variaĵoj, kune kun la plej alte pritaksita ludanto por tiu kombino, rangigita laŭ la konservativa Glicko-2-pritakso (pritakso − 2×RD). Elo montriĝas por referenco.",
             "numPlays": "Ĉi tiu tabelo listigas ĉiun ludon, kiom da fojoj kaj de kiom da malsamaj ludantoj ĝi estis ludita, kaj la `h-index` de la ludo. La h-indekso de ludo estas la nombro de ludantoj, kiuj ludis ĝin almenaŭ tiom da fojoj (do h-indekso 5 signifas, ke 5 malsamaj ludantoj ludis ĝin almenaŭ 5 fojojn). Ĝi ankaŭ donas histogramon de la finitaj ludoj. La antaŭrigardo montras la lastajn 10 semajnojn, kun la plej nova semajno dekstre. Klaku la antaŭrigardon por vidi la tutan historion de finitaj ludoj en sep-tagaj intervaloj, kun la plej nova semajno dekstre.",
             "playerStats": "Ĉi tio montras ĉiun registritan ludanton kune kun la tuta nombro de luditaj ludoj, la nombro de malsamaj ludoj kaj la nombro de malsamaj kontraŭuloj. Ĝi ankaŭ donas `h-index`, kiu estas la nombro de ludoj, kiujn vi ludis almenaŭ tiom da fojoj (ekzemple, se vi ludis tri malsamajn ludojn nur po unu fojon, via indekso estas 1; kiam vi ludos ĉiun el tiuj tri ludoj almenaŭ tri fojojn, la indekso kreskos ĝis 3). Estas ankaŭ `h-index` por la kontraŭuloj, kiujn vi renkontis. Aktiveca histogramo montras la nombron de ludoj finitaj ĉiusemajne, kun la plej nova semajno dekstre. La antaŭrigardo montras la dek plej novajn semajnojn. Klaku ĝin por vidi la tutan historion.",
             "gameStats": "Ĉi tiu tabelo montras ĉiun kombinon de ludo kaj variaĵoj kune kun la nombro de registritaj ludoj, la meza longo de la ludo (nombro de movoj), la mediana longo, la proporcio de venkoj de la unua ludanto kaj la proporcio de remizoj (nur duludantaj ludoj kun pli ol du movoj). **La statistikoj pri venkoj de la unua ludanto kaj remizoj devas esti traktataj singarde!** La provaĵo estas malgranda kaj biasita. Multaj konfuzaj faktoroj povus klarigi ekstreman proporcion. Notu, ke la proporcio de venkoj de la unua ludanto tute ignoras ĉu la interŝanĝa regulo estis uzita. Kalkulante tiun proporcion, remizo valoras kiel duona venko de la unua ludanto.",
@@ -1594,7 +1594,7 @@
         "deleting": "Forigante…",
         "yesDelete": "Jes, forigi ĝin",
         "noCancel": "Ne, nuligi",
-        "deleteConfirm": "Vi estas forigonta la roboton <0>{{name}}</0>. Ĉi tio malligos ĉiujn pasintajn ludregistrojn de ĉi tiu roboto. Se vi nur perdis vian klientan sekreton, vi povas generi novan per la butono \"Ŝanĝi sekreton\". Forigo de roboto estas nerefarebla! Ĉu vi certe volas forigi ĉi tiun roboton?",
+        "deleteConfirm": "Vi estas forigonta la roboton <1>{{name}}</1>. Ĉi tio malligos ĉiujn pasintajn ludregistrojn de ĉi tiu roboto. Se vi nur perdis vian klientan sekreton, vi povas generi novan per la butono „Ŝanĝi sekreton“. Forigo de roboto estas nerefarebla! Ĉu vi certe volas forigi ĉi tiun roboton?",
         "saving": "Konservante…",
         "credentialsWarningBoth": "Ĉi tiuj aŭtentigiloj montriĝas nur unufoje. Kopiu la klientan identigilon kaj la klientan sekreton, kaj sekure konservu ilin antaŭ ol fermi ĉi tiun dialogon.",
         "credentialsWarningSecretOnly": "Via klienta identigilo ne ŝanĝiĝis. Ĉi tiu nova klienta sekreto montriĝas nur unufoje—kopiu kaj sekure konservu ĝin antaŭ ol fermi ĉi tiun dialogon.",
@@ -1605,7 +1605,7 @@
             "httpsRequired": "La finpunkto devas esti valida HTTPS-adreso.",
             "createFailed": "Ne eblis krei la roboton.",
             "missingCredentials": "En la servila respondo mankis la aŭtentigiloj de la roboto.",
-            "refreshFailed": "Roboto kreita, sed la robotlisto ne aktualiĝis. Reŝargu la agordojn por vidi ĝin.",
+            "refreshFailed": "La roboto estis kreita, sed ne eblis aktualigi la robotliston. Reŝargu la agordojn por vidi ĝin.",
             "updateFailed": "Ne eblis aktualigi la roboton.",
             "deleteFailed": "Ne eblis forigi la roboton.",
             "rotationBeginFailed": "Ne eblis komenci ŝanĝi la sekreton.",
@@ -1619,7 +1619,7 @@
         "dev": {
             "copyHomeworldsDiagram": "Kopii Homeworlds-diagramon",
             "injectState": "Enmeti staton",
-            "debugIntro": "Se estas problemo pri via ludo, programisto eble petos vin veni al ĉi tiu paĝo kaj sendi la nunan ludstaton. Klaku la suban ligilon \"Kopii\" por kopii la tekston en la tondujon kaj poste alglui ĝin ie, aŭ premu la butonon \"Elŝuti\" por konservi tekstdosieron en via komputilo, kiun vi poste povos sendi al la programistoj. Dankon!",
+            "debugIntro": "Se estas problemo pri via ludo, programisto eble petos vin veni al ĉi tiu paĝo kaj sendi la nunan ludstaton. Klaku la suban ligilon „Kopii“ por kopii la tekston en la tondujon kaj poste alglui ĝin ie, aŭ premu la butonon „Elŝuti“ por konservi tekstdosieron en via komputilo, kiun vi poste povos sendi al la programistoj. Dankon!",
             "copyRendererJson": "Kopii la JSON-datumojn de la bildigilo",
             "copyRendererJsonHelp": "Enigaĵo de la bildigilo por la nun montrata tabula vido (por propra agordo aŭ sencimigo).",
             "injectNonDevWarning": "Se vi vidas ĉi tion kaj ne estas programisto, bonvolu tuj sciigi administranton.",
@@ -1627,13 +1627,13 @@
             "jsonToInject": "Enmetota JSON",
             "pasteJsonPlaceholder": "Algluu JSON-on ĉi tie",
             "injectJson": "Enmeti JSON-on!",
-            "customCssWarning1": "Eblas adapti la CSS-on de ĉiuj okazoj de ĉi tiu specifa ludo. <0>Oni ne faru tion senpripense!</0> Ne enmetu kodon, kiun vi ne komprenas aŭ kiun ne kontrolis fidata homo. Abstract Play kaj ĝiaj programistoj ne respondecas pri problemoj, kiuj povas okazi dum la uzado de ĉi tiu funkcio.",
-            "customCssWarning2": "Se vi certe volas daŭrigi, algluu la CSS-kodon sube kaj premu \"Konservi\". Se ĉio paneos, malfermu la programistan konzolon kaj vakigu la lokan memorŝlosilon <0>custom-css</0>; tio devus restarigi ĉion. Vidu la vikion por dokumentado, kaj aliĝu al ni en Discord por diskuti.",
+            "customCssWarning1": "Eblas adapti la CSS-on de ĉiuj okazoj de ĉi tiu specifa ludo. <1>Oni ne faru tion senpripense!</1> Ne enmetu kodon, kiun vi ne komprenas aŭ kiun ne kontrolis fidata homo. Abstract Play kaj ĝiaj programistoj ne respondecas pri problemoj, kiuj povas okazi dum la uzado de ĉi tiu funkcio.",
+            "customCssWarning2": "Se vi certe volas daŭrigi, algluu la CSS-kodon sube kaj premu „Konservi“. Se ĉio paneos, malfermu la programistan konzolon kaj vakigu la lokan memorŝlosilon <1>custom-css</1>; tio devus restarigi ĉion. Vidu la vikion por dokumentado, kaj aliĝu al ni en Discord por diskuti.",
             "pasteCssPlaceholder": "Algluu CSS-kodon ĉi tie",
             "activateCustomCss": "Aktivigi propran CSS-on?",
             "accountCssOverridesLocal": "Propra CSS el via konto (la paĝo por adapti agordojn) estas aktiva por ĉi tiu ludo. Ŝanĝoj ĉi tie konserviĝas nur en ĉi tiu aparato kaj ne aplikiĝos ĝis la CSS de via konto estos forigita."
         },
-        "unrated": "nepritaksita",
+        "unrated": "nerangigita",
         "explorationDisabled": "esplorado malŝaltita",
         "tournamentLink": "turniro",
         "eventLink": "evento",
@@ -1706,7 +1706,7 @@
         "globalDefaults": "Tutlokaj defaŭltoj",
         "playerColours": "Koloroj de ludantoj",
         "addColour": "Aldoni koloron",
-        "addColourHelp": "Elektu koloron kaj premu la butonon \"Aldoni koloron\". La defaŭltajn kolorojn vi povas elekti klakante iliajn kolorprovaĵojn. Se la paletro estas malplena, la defaŭlta paletro estos uzata.",
+        "addColourHelp": "Elektu koloron kaj premu la butonon „Aldoni koloron“. La defaŭltajn kolorojn vi povas elekti klakante iliajn kolorprovaĵojn. Se la paletro estas malplena, la defaŭlta paletro estos uzata.",
         "defaultSwatch": "Defaŭlta",
         "addColourBtn": "Aldoni koloron",
         "selectDefaultColours": "Elekti defaŭltajn kolorojn",
@@ -1745,7 +1745,7 @@
             },
             "fill": {
                 "label": "Plenigaĵo",
-                "help": "La koloro uzata por plenigi certajn tabulelementojn; esence la \"malo\" de la fono."
+                "help": "La koloro uzata por plenigi certajn tabulelementojn; esence la „malo“ de la fono."
             }
         },
         "glyphReplacements": "Anstataŭigoj de glifoj",
@@ -1840,7 +1840,7 @@
         "saveToPlayground": "Konservi en la Ludejo",
         "save": "Konservi",
         "saveNameLabel": "Nomo",
-        "updateSave": "Aktualigi \"{{name}}\"",
+        "updateSave": "Aktualigi „{{name}}“",
         "saveAsNew": "Konservi kiel novan…",
         "copyOfName": "Kopio de {{name}}",
         "savedToast": "Konservite.",
@@ -1887,16 +1887,16 @@
     "InAppNotifyLabel-challenges": "Defioj",
     "InAppNotifyLabel-gameStart": "Ludo komenciĝis",
     "InAppNotifyLabel-gameEnd": "Ludo finiĝis",
-    "InAppNotifyLabel-ratingChange": "Ŝanĝoj de pritakso",
+    "InAppNotifyLabel-ratingChange": "Pritakso ŝanĝas",
     "InAppNotifyLabel-eventInvitation": "Invitoj al eventoj",
     "InAppNotifyLabel-completedGameChat": "Babilado en finitaj ludoj",
     "InAppNotifyLabel-tournamentStart": "Turniro komenciĝis",
     "InAppNotifyLabel-tournamentEnd": "Turniro finiĝis",
-    "InvalidVariantCombination": "Tiu kombino de variaĵoj ne validas por ĉi tiu ludo.",
+    "InvalidVariantCombination": "Tiu kombino de variaĵoj ne estas permesita por ĉi tiu ludo.",
     "TotalRatings": "pritaksoj entute",
     "glicko": {
-        "displayHint": "Glicko-pritakso montriĝas kiel 95%-fida pritakso (pritakso − 2×RD), kun la plena RD en krampoj.",
-        "displayNote": "En la tuta retejo Glicko-pritakso montriĝas kiel 95%-fida pritakso, kun la plena RD en krampoj. <wikiLink>Ekscii pli pri la Glicko-pritaksa sistemo</wikiLink>."
+        "displayHint": "Glicko-pritaksoj montriĝas laŭ la malsupra limo de la 95%-a konfidintervalo (pritakso − 2×RD), kun la plena RD en krampoj.",
+        "displayNote": "Tra la tuta retejo, Glicko-pritaksoj montriĝas laŭ la malsupra limo de la 95%-a konfidintervalo (pritakso − 2×RD), kun la plena RD en krampoj. <wikiLink>Ekscii pli pri la Glicko-pritaksa sistemo</wikiLink>."
     },
     "solo": {
         "badge": "Solludo",
@@ -1922,7 +1922,7 @@
         },
         "stats": {
             "title": "Solludaj statistikoj",
-            "empty": "Ankoraŭ neniu solluda provo registrita.",
+            "empty": "Ankoraŭ neniu solluda provo estas registrita.",
             "attempts": "Provoj",
             "uniquePlayers": "Ludantoj",
             "repeatRate": "Reprova proporcio",
@@ -1931,7 +1931,7 @@
         },
         "leaderboard": {
             "title": "Ranglistoj laŭ semo",
-            "empty": "Ankoraŭ neniuj solludaj ranglistoj laŭ semo.",
+            "empty": "Ankoraŭ ne estas solludaj ranglistoj laŭ semo.",
             "seedSelect": "Defia semo",
             "poolSummary": "{{players}} ludantoj, {{attempts}} provoj",
             "boardHelp": "Variaĵo: {{variant}}. {{direction}}.",
@@ -1972,7 +1972,7 @@
         "activePlayers_one": "Aktivaj ludantoj: {{count}}",
         "activePlayers_other": "Aktivaj ludantoj: {{count}}",
         "customizeTheme": "Agordi la retejan etoson",
-        "explore": "Esplori",
+        "explore": "Listoj",
         "myProfile": "Mia profilo",
         "openChallenges": "Malfermitaj defioj",
         "recentGames": "Lastatempaj ludoj",
@@ -2076,7 +2076,7 @@
             "title": "Administrado de retrosciigoj"
         },
         "auth": {
-            "signInRequired": "Vi devas ensaluti por partopreni en la retrosciigo.",
+            "signInRequired": "Vi devas esti ensalutinta por partopreni en la retrosciiga sistemo.",
             "signInToCreate": "Vi devas esti ensalutinta por raporti cimon, sugesti funkcion aŭ aldoni ludon al la dezirlisto.",
             "signInToCreateShort": "Ensalutu por sendi retrosciigon.",
             "signInToInteract": "Ensalutu por voĉdoni, observi aŭ komenti pri ĉi tiu ero.",
@@ -2160,7 +2160,7 @@
             "closed": "Fermita",
             "empty": {
                 "bugs": "Ankoraŭ neniuj arkivitaj cimraportoj.",
-                "games": "Ankoraŭ neniuj arkivitaj dezirlistaj ludoj.",
+                "games": "Ankoraŭ neniuj arkivitaj ludoj el la dezirlisto.",
                 "ideas": "Ankoraŭ neniuj arkivitaj ideoj pri funkcioj."
             },
             "implementedAs": "Nun en Abstract Play: {{name}}",
@@ -2240,12 +2240,12 @@
             "titleLabel": "Titolo",
             "titleWishlist": "Sugesti ludon",
             "bugIntro": "Bonvolu doni kiel eble plej multajn detalojn. Se la problemo rilatas al specifa ludo, aldonu ligilon al ĝi. Ekrankopioj ĉiam helpas. Ju pli da informoj vi donas, des pli verŝajne ni povos rapide ripari ĝin. Dankon!",
-            "relevantPageLabel": "Kie vi vidis la problemon?",
-            "relevantPageHint": "Elektu paĝon, kiun vi lastatempe vizitis, aŭ algluu ligilon al la ludo aŭ ekrano, kie okazis la cimo.",
-            "relevantPageNone": "Mi ne certas / neniu specifa paĝo",
-            "relevantPageCustom": "Alia ligilo al Abstract Play",
+            "relevantPageLabel": "Kie vi observis la problemon?",
+            "relevantPageHint": "Elektu paĝon ĵus vizititan de vi, aŭ algluu hiperligon al la ludo aŭ ekrano, kie okazis la cimo.",
+            "relevantPageNone": "Mi ne certas / ne ekzistas specifa paĝo",
+            "relevantPageCustom": "Alia hiperligo al Abstract Play",
             "relevantPageCustomPlaceholder": "https://play.abstractplay.com/…",
-            "relevantPageInvalid": "Bonvolu enigi validan ligilon al Abstract Play (en la sama retejo kiel ĉi tiu paĝo)."
+            "relevantPageInvalid": "Bonvolu tajpi validan hiperligon al Abstract Play (ĉe la sama retejo kiel ĉi tiu paĝo)."
         },
         "priority": {
             "low": "Malalta",
@@ -2260,7 +2260,7 @@
             "badgePrefix": "Kontrolantoj:",
             "divider": "────────────",
             "empty": "Neniu kontrolanto asignita.",
-            "hint": "Ĝis {{max}} kontrolantoj. Aldonitaj uzantoj ricevas unufojan sciigon; uzu \"Observi\" por daŭraj ĝisdatigoj.",
+            "hint": "Ĝis {{max}} kontrolantoj. Aldonitaj uzantoj ricevas unufojan sciigon; uzu \"Observi\" por ricevi daŭrajn ĝisdatigojn.",
             "remove": "Forigi {{name}}"
         },
         "status": {

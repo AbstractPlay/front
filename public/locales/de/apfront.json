@@ -316,7 +316,7 @@
       "tag": "G: Durchbruch"
     },
     "goal>connect": {
-      "description": "Verbinde bestimmte Kanten des Spielbretts oder von Flächen",
+      "description": "Verbinde die bestimmten Kanten des Spielbretts oder von Flächen",
       "full": "Ziel > Verbindung",
       "tag": "G: Verbindung"
     },
@@ -1592,7 +1592,7 @@
       "pieRateIntro": "Spiele, die die Pie-Regel unterstützen, und wie oft diese angewendet wurde."
     },
     "playerStats": {
-      "rivalriesIntro": "Häufigste Zwei-Spieler-Paarungen (mindestens fünf gemeinsame Spiele). Paarungen werden anonymisiert, bis die Spieler der Namensnennung zustimmen.",
+      "rivalriesIntro": "2 Spieler Paare mit mindestens fünzig Spielen gesammt,sortiert von der anzahl an Spielen gespielt.Spielerpaare sind anonymisiert bis Spieler sich dafür entschieden ihren namen zu zeigen.",
       "publicRivalriesOptIn": "Meinen Namen in der öffentlichen Rivalitäten-Tabelle anzeigen (beide Spieler müssen zustimmen)"
     },
     "siteStats": {
@@ -1611,7 +1611,7 @@
       "firstTimersIntro": "Dieser Graph verfolgt die Anzahl der Benutzer, die in dieser Woche ihr erstes Spiel beendet haben. Die Zahlen sind kumulativ, d. h. sie werden nie sinken, und der Punkt ganz rechts sollte immer die aktuell erfasste Benutzerzahl anzeigen. Es wird natürlich erwartet, dass sich die Zahlen irgendwann einpendeln, aber es gibt einen Hinweis auf das Wachstum.",
       "firstTimersCumulative": "Erstmalig beendete Spiele, kumuliert",
       "usersFirstGame": "Benutzer, die ihr erstes Spiel beendet haben",
-      "countryIntro": "Dies zeigt die Aufschlüsselung der Länder, von denen Spieler angeben zu spielen. Enthält nur Ländercodes, die das System interpretieren kann.",
+      "countryIntro": "Regestrierte nutzer durch Länder(von Profileinstellungen).Enthällt nur Spieler welche sich dazu entschieden haben ihr Land bekanntzugeben,und nur Ländercodes beihaltet welche das System erkennen kann.Die 2 Anzeige zeigt spieler welche mindestens ein Speil in den letzten 30 Tagen abgeschlossen haben.",
       "activeCountryIntro": "Spieler mit mindestens einer abgeschlossenen Partie im Archiv, gruppiert nach dem Land in ihrem Profil.",
       "playContext": "Gelegenheitsspiele: {{casual}} ({{casualRate}}). Turnier- oder Event-Partien: {{event}} ({{eventRate}}).",
       "pieRateIntro": "Spiele, die die Pie-Rule unterstützen, und wie oft diese angewendet wurde.",
@@ -1619,7 +1619,7 @@
       "returningPlayersIntro": "Spieler, die in dieser Woche mindestens eine Partie abgeschlossen haben und ihre erste Partie bereits in einer früheren Woche beendet hatten.",
       "returningPlayersPerWeek": "Wiederkehrende Spieler pro Woche",
       "returningPlayers": "Wiederkehrende Spieler",
-      "timeoutRate": "Die gesamte Zeitüberschreitungsrate beträgt kumulativ {{rate}}.",
+      "timeoutRate": "Die Gesammtrate an spielen welche durch Zeitüberschreitung oder verlassen des spiels enden ist {{rate}}.",
       "timeoutAbandonRatePerWeek": "Timeout- und Abbruchrate pro Woche",
       "timeoutAbandonRateAxis": "Timeout- und Abbruchrate",
       "timeoutRatePerWeek": "Zeitüberschreitungsrate pro Woche",
