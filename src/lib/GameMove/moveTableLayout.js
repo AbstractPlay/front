@@ -124,6 +124,48 @@ export function buildDisplayRounds(engine) {
 }
 
 /**
+ * Map sequenced round-grid cell to exploration path when plies carry stackIndex
+ * (e.g. Thricewise wire lastmove expanded to one ply per seat).
+ * @param {{ getPlies?: () => { actor: number, move: string, stackIndex?: number }[] }} engine
+ * @param {number} rowIdx
+ * @param {number} seatIdx
+ * @param {number} pathLength
+ * @returns {number | null}
+ */
+function pathIndexFromStackIndexForSequencedCell(
+  engine,
+  rowIdx,
+  seatIdx,
+  pathLength
+) {
+  if (typeof engine?.getPlies !== "function") {
+    return null;
+  }
+  try {
+    const displayRounds = buildDisplayRounds(engine);
+    if (rowIdx >= displayRounds.length) {
+      return null;
+    }
+    const row = displayRounds[rowIdx];
+    if (!Array.isArray(row) || row[seatIdx] == null) {
+      return null;
+    }
+    const moveText = roundSlotToMoveText(row[seatIdx]);
+    const plies = engine.getPlies();
+    const ply = plies.find(
+      (p) => p.actor === seatIdx + 1 && String(p.move) === moveText
+    );
+    if (ply?.stackIndex == null) {
+      return null;
+    }
+    const pathIdx = ply.stackIndex - 1;
+    return pathIdx < pathLength ? pathIdx : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * @param {{ getRounds?: () => unknown[][], getPlies?: () => unknown[] }} engine
  * @param {MoveTableLayout} layout
  */
@@ -274,6 +316,16 @@ export function pathIndexForMoveCell({
 
   if (layout.model === "simultaneous") {
     return rowIdx < pathLength ? rowIdx : null;
+  }
+
+  const stackPathIdx = pathIndexFromStackIndexForSequencedCell(
+    engine,
+    rowIdx,
+    seatIdx,
+    pathLength
+  );
+  if (stackPathIdx !== null) {
+    return stackPathIdx;
   }
 
   let plyIndex = 0;
