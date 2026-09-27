@@ -7043,6 +7043,34 @@
     "src": "Seating will be random.",
     "out": "La asignación de asientos será aleatoria."
   },
+  "seoHubEmpty.activeGamesForGame": {
+    "src": "There are no active games for {{gameName}} right now.",
+    "out": "No hay partidas activas para {{gameName}} en este momento."
+  },
+  "seoHubEmpty.completedGamesForGame": {
+    "src": "There are no completed games listed for {{gameName}} right now.",
+    "out": "No hay partidas finalizadas registradas para {{gameName}} en este momento."
+  },
+  "seoHubEmpty.openChallengesForGame": {
+    "src": "There are no open challenges for {{gameName}} right now.",
+    "out": "No hay desafíos abiertos para {{gameName}} en este momento."
+  },
+  "seoHubEmpty.openChallengesSite": {
+    "src": "There are no open challenges right now.",
+    "out": "No hay desafíos abiertos en este momento."
+  },
+  "seoHubEmpty.ratingsForGame": {
+    "src": "There are no rated players listed for {{gameName}} right now.",
+    "out": "No hay jugadores con clasificación registrados para {{gameName}} en este momento."
+  },
+  "seoHubEmpty.recentGamesForGame": {
+    "src": "There are no recently completed games for {{gameName}} in this time range.",
+    "out": "No hay partidas finalizadas recientemente para {{gameName}} en este rango de tiempo."
+  },
+  "seoHubEmpty.recentGamesSite": {
+    "src": "There are no recently completed games in this time range.",
+    "out": "No hay partidas finalizadas recientemente en este rango de tiempo."
+  },
   "solo.badge": {
     "src": "Solo",
     "out": "Solo"

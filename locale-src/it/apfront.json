@@ -7043,6 +7043,34 @@
     "src": "Seating will be random.",
     "out": "La disposizione dei posti sarà casuale."
   },
+  "seoHubEmpty.activeGamesForGame": {
+    "src": "There are no active games for {{gameName}} right now.",
+    "out": "Al momento non ci sono partite attive per {{gameName}}."
+  },
+  "seoHubEmpty.completedGamesForGame": {
+    "src": "There are no completed games listed for {{gameName}} right now.",
+    "out": "Al momento non ci sono partite concluse nell'elenco per {{gameName}}."
+  },
+  "seoHubEmpty.openChallengesForGame": {
+    "src": "There are no open challenges for {{gameName}} right now.",
+    "out": "Al momento non ci sono sfide aperte per {{gameName}}."
+  },
+  "seoHubEmpty.openChallengesSite": {
+    "src": "There are no open challenges right now.",
+    "out": "Al momento non ci sono sfide aperte."
+  },
+  "seoHubEmpty.ratingsForGame": {
+    "src": "There are no rated players listed for {{gameName}} right now.",
+    "out": "Al momento non ci sono giocatori con punteggio nell'elenco per {{gameName}}."
+  },
+  "seoHubEmpty.recentGamesForGame": {
+    "src": "There are no recently completed games for {{gameName}} in this time range.",
+    "out": "Non ci sono partite concluse di recente per {{gameName}} in questo intervallo di tempo."
+  },
+  "seoHubEmpty.recentGamesSite": {
+    "src": "There are no recently completed games in this time range.",
+    "out": "Non ci sono partite concluse di recente in questo intervallo di tempo."
+  },
   "solo.badge": {
     "src": "Solo",
     "out": "Solitario"

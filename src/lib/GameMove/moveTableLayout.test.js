@@ -3,11 +3,14 @@ import { GameFactory } from "@abstractplay/gameslib";
 import { ENTROPY_DEV_MOVE_TABLE_STATE } from "./fixtures/entropy.js";
 import { effectiveTurnModel } from "./effectiveTurnModel";
 import {
+  buildStackRowsFromPathWire,
   buildDisplayRounds,
+  getRoundsForLayout,
   moveNumberForCell,
   moveTableRowCount,
   moveTextForCell,
   pathIndexForMoveCell,
+  resolveMoveTableExportEngine,
   resolveMoveTableLayout,
   roundSlotToMoveText,
 } from "./moveTableLayout";
@@ -282,6 +285,176 @@ describe("pathIndexForMoveCell", () => {
         engine,
       })
     ).toBe(4);
+  });
+
+  it("sequenced round grid uses per-seat slots, not path wire string", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 2, simultaneous: true },
+      engine: { turnModel: () => "sequenced" },
+    });
+    const roundsFromEngine = [
+      ["7ML", "NL"],
+      ["7ML@2.-1", null],
+      [null, "NL@-1.0"],
+    ];
+    const engine = {
+      numplayers: 2,
+      turnModel: () => "sequenced",
+      getPlies: () => [
+        { actor: 1, move: "7ML", round: 0, playOrder: 1, stackIndex: 1 },
+        { actor: 2, move: "NL", round: 0, playOrder: 2, stackIndex: 1 },
+        { actor: 1, move: "7ML@2.-1", round: 1, playOrder: 1, stackIndex: 2 },
+        { actor: 2, move: "NL@-1.0", round: 2, playOrder: 1, stackIndex: 3 },
+      ],
+      getRounds: () => roundsFromEngine,
+      stack: [{}, {}, {}, {}],
+    };
+    const path = [
+      [{ move: "7ML,NL" }],
+      [{ move: "7ML@2.-1,\u0091" }],
+      [{ move: "\u0091,NL@-1.0" }],
+    ];
+    const rounds = getRoundsForLayout(engine, layout, path.length);
+    expect(rounds).toBe(roundsFromEngine);
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 0,
+        seatIdx: 1,
+        pathLength: 3,
+        layout,
+        engine,
+      })
+    ).toBe(0);
+    expect(
+      moveTextForCell({
+        layout,
+        rounds,
+        rowIdx: 0,
+        seatIdx: 0,
+        path,
+        movenum: 0,
+      })
+    ).toBe("7ML");
+    expect(
+      moveTextForCell({
+        layout,
+        rounds,
+        rowIdx: 0,
+        seatIdx: 1,
+        path,
+        movenum: 0,
+      })
+    ).toBe("NL");
+    expect(
+      moveTextForCell({
+        layout,
+        rounds,
+        rowIdx: 1,
+        seatIdx: 0,
+        path,
+        movenum: 1,
+      })
+    ).toBe("7ML@2.-1");
+    expect(
+      moveTextForCell({
+        layout,
+        rounds,
+        rowIdx: 2,
+        seatIdx: 1,
+        path,
+        movenum: 2,
+      })
+    ).toBe("NL@-1.0");
+  });
+
+  it("resolveMoveTableExportEngine uses live state when focus stack is shallow", () => {
+    const focusEngine = { stack: [{}, {}] };
+    const deepEngine = { stack: [{}, {}, {}, {}] };
+    const createEngine = () => deepEngine;
+    expect(
+      resolveMoveTableExportEngine(
+        focusEngine,
+        3,
+        { game: "thricewise" },
+        createEngine,
+        "thricewise"
+      )
+    ).toBe(deepEngine);
+    expect(
+      resolveMoveTableExportEngine(
+        deepEngine,
+        3,
+        { game: "thricewise" },
+        createEngine,
+        "thricewise"
+      )
+    ).toBe(deepEngine);
+  });
+
+  it("round grid splits comma wire in engine slot text per seat", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 2 },
+      engine: { turnModel: () => "sequenced" },
+      gameRec: { header: { "turn-model": "sequenced" } },
+    });
+    const rounds = [[{ move: "7ML,NL" }, null]];
+    const path = [[{ move: "7ML,NL" }]];
+    expect(
+      moveTextForCell({
+        layout,
+        rounds,
+        rowIdx: 0,
+        seatIdx: 0,
+        path,
+        movenum: 0,
+      })
+    ).toBe("7ML");
+    expect(
+      moveTextForCell({
+        layout,
+        rounds,
+        rowIdx: 0,
+        seatIdx: 1,
+        path,
+        movenum: 0,
+      })
+    ).toBe("NL");
+  });
+
+  it("buildStackRowsFromPathWire splits exploration path like stack export", () => {
+    const path = [
+      [{ move: "7ML,NL" }],
+      [{ move: "7ML@2.-1,\u0091" }],
+      [{ move: "\u0091,NL@-1.0" }],
+    ];
+    const rows = buildStackRowsFromPathWire(path, 2, 3);
+    expect(rows[0]).toEqual(["7ML", "NL"]);
+    expect(rows[1]).toEqual(["7ML@2.-1", null]);
+    expect(rows[2]).toEqual([null, "NL@-1.0"]);
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 2 },
+      engine: { turnModel: () => "sequenced", numplayers: 2 },
+      gameRec: { header: { "turn-model": "sequenced" } },
+    });
+    const engine = {
+      numplayers: 2,
+      turnModel: () => "sequenced",
+      getRounds: () => [[{ move: "7ML,NL" }, null]],
+      getPlies: () => [],
+      stack: [{}, {}, {}, {}],
+    };
+    const rounds = getRoundsForLayout(engine, layout, 3, path);
+    expect(rounds).toEqual(rows);
+    expect(
+      pathIndexForMoveCell({
+        rowIdx: 0,
+        seatIdx: 1,
+        pathLength: 3,
+        layout,
+        engine,
+        path,
+      })
+    ).toBe(0);
   });
 
   it("auto density keeps duplicate-actor round sparse", () => {
