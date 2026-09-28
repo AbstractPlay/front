@@ -35,63 +35,6 @@
     "frameCap": "Troppi frame (massimo {{max}}). Scegli un intervallo più breve."
   },
   "CycleBoardDisplay": "Scorri modalità di visualizzazione del tabellone",
-  "buttons": {
-    "pass": "Passa",
-    "declare": "Dichiara",
-    "takebutton": "Prendi bottone",
-    "acceptpie": "Gioca per secondo",
-    "playsecond": "Gioca per secondo",
-    "draw": "Chiedi patta",
-    "playfirst": "Gioca per primo",
-    "swap": "Scambia colori",
-    "roll1": "Lancia un dado",
-    "roll2": "Lancia due dadi",
-    "numbers": {
-      "one": "Uno (1)",
-      "two": "Due (2)",
-      "three": "Tre (3)"
-    },
-    "pigs": {
-      "back": "Muovi all'indietro",
-      "forward": "Muovi in avanti",
-      "left": "Muovi avanti a sinistra",
-      "right": "Muovi avanti a destra",
-      "cw": "Ruota in senso orario",
-      "ccw": "Ruota in senso antiorario",
-      "fire": "Spara laser",
-      "hit": "Colpisci con il grugno"
-    },
-    "carnac": {
-      "tip_n": "Inclina verso nord",
-      "tip_e": "Inclina verso est",
-      "tip_s": "Inclina verso sud",
-      "tip_w": "Inclina verso ovest"
-    },
-    "cifra": {
-      "lt": "Chiaro, Alto",
-      "lb": "Chiaro, Basso",
-      "dt": "Scuro, Alto",
-      "db": "Scuro, Basso",
-      "ll": "Chiaro, Sinistra",
-      "lr": "Chiaro, Destra",
-      "dl": "Scuro, Sinistra",
-      "dr": "Scuro, Destra"
-    },
-    "evenatodds": {
-      "evens": "Pari",
-      "odds": "Dispari"
-    },
-    "arimaa": {
-      "gold99": "Configurazione rapida",
-      "silver99e7": "Configurazione rapida, elefante in e7",
-      "silver99d7": "Configurazione rapida, elefante in d7"
-    },
-    "killallgo": {
-      "attacker": "Gioca come Attaccante",
-      "defender": "Gioca come Difensore",
-      "youplace": "Lascia che l'avversario piazzi il primo gruppo"
-    }
-  },
   "Cancel": "Annulla",
   "CanPie": "Questo giocatore ha l'opzione di scambiare i posti.",
   "categories": {

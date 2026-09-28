@@ -35,63 +35,6 @@
     "frameCap": "Demasiados fotogramas (máximo {{max}}). Elige un rango más corto."
   },
   "CycleBoardDisplay": "Alternar vista del tablero",
-  "buttons": {
-    "pass": "Pasar",
-    "declare": "Declarar",
-    "takebutton": "Tomar botón",
-    "acceptpie": "Jugar segundo",
-    "playsecond": "Jugar segundo",
-    "draw": "Reclamar tablas",
-    "playfirst": "Jugar primero",
-    "swap": "Cambiar colores",
-    "roll1": "Lanzar un dado",
-    "roll2": "Lanzar dos dados",
-    "numbers": {
-      "one": "Uno (1)",
-      "two": "Dos (2)",
-      "three": "Tres (3)"
-    },
-    "pigs": {
-      "back": "Mover hacia atrás",
-      "forward": "Mover hacia adelante",
-      "left": "Mover hacia adelante a la izquierda",
-      "right": "Mover hacia adelante a la derecha",
-      "cw": "Girar en sentido horario",
-      "ccw": "Girar en sentido antihorario",
-      "fire": "Disparar láser",
-      "hit": "Mover hocico"
-    },
-    "carnac": {
-      "tip_n": "Inclinar al norte",
-      "tip_e": "Inclinar al este",
-      "tip_s": "Inclinar al sur",
-      "tip_w": "Inclinar al oeste"
-    },
-    "cifra": {
-      "lt": "Claro, superior",
-      "lb": "Claro, inferior",
-      "dt": "Oscuro, superior",
-      "db": "Oscuro, inferior",
-      "ll": "Claro, izquierda",
-      "lr": "Claro, derecha",
-      "dl": "Oscuro, izquierda",
-      "dr": "Oscuro, derecha"
-    },
-    "evenatodds": {
-      "evens": "Pares",
-      "odds": "Impares"
-    },
-    "arimaa": {
-      "gold99": "Configuración rápida",
-      "silver99e7": "Configuración rápida, elefante en e7",
-      "silver99d7": "Configuración rápida, elefante en d7"
-    },
-    "killallgo": {
-      "attacker": "Jugar como el atacante",
-      "defender": "Jugar como el defensor",
-      "youplace": "Dejar que el oponente coloque el primer lote"
-    }
-  },
   "Cancel": "Cancelar",
   "CanPie": "Este jugador tiene la opción de cambiar de lugar.",
   "categories": {
