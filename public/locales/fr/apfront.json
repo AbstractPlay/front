@@ -35,63 +35,6 @@
     "frameCap": "Trop d'images (maximum {{max}}). Choisissez une plage plus courte."
   },
   "CycleBoardDisplay": "Changer le mode d'affichage du plateau",
-  "buttons": {
-    "pass": "Passer",
-    "declare": "Déclarer",
-    "takebutton": "Bouton de prise",
-    "acceptpie": "Jouer en second",
-    "playsecond": "Jouer en second",
-    "draw": "Réclamer un nul",
-    "playfirst": "Jouer en premier",
-    "swap": "Échanger les couleurs",
-    "roll1": "Lancer un dé",
-    "roll2": "Lancer deux dés",
-    "numbers": {
-      "one": "Un (1)",
-      "two": "Deux (2)",
-      "three": "Trois (3)"
-    },
-    "pigs": {
-      "back": "Reculer",
-      "forward": "Avancer",
-      "left": "Avancer à gauche",
-      "right": "Avancer à droite",
-      "cw": "Rotation dans le sens horaire",
-      "ccw": "Rotation dans le sens anti-horaire",
-      "fire": "Tirer au laser",
-      "hit": "Bouger le museau"
-    },
-    "carnac": {
-      "tip_n": "Faire basculer au nord",
-      "tip_e": "Faire basculer à l'est",
-      "tip_s": "Faire basculer au sud",
-      "tip_w": "Faire basculer à l'ouest"
-    },
-    "cifra": {
-      "lt": "Clair, Haut",
-      "lb": "Clair, Bas",
-      "dt": "Foncé, Haut",
-      "db": "Foncé, Bas",
-      "ll": "Clair, Gauche",
-      "lr": "Clair, Droite",
-      "dl": "Foncé, Gauche",
-      "dr": "Foncé, Droite"
-    },
-    "evenatodds": {
-      "evens": "Pair",
-      "odds": "Impair"
-    },
-    "arimaa": {
-      "gold99": "Configuration rapide",
-      "silver99e7": "Configuration rapide, éléphant e7",
-      "silver99d7": "Configuration rapide, éléphant d7"
-    },
-    "killallgo": {
-      "attacker": "Jouer l'attaquant",
-      "defender": "Jouer le défenseur",
-      "youplace": "Laisser l'adversaire poser le premier lot"
-    }
-  },
   "Cancel": "Annuler",
   "CanPie": "Ce joueur à l'option d'échanger les places.",
   "categories": {

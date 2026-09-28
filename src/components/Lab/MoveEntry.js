@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
+import { resolveCustomButtonLabel } from "../../lib/customButtonLabel";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -35,7 +36,7 @@ function NoMoves({ engine, game, handleMove, t }) {
           className="button is-small apButton"
           onClick={() => handleMove(move)}
         >
-          {t(`buttons.${label}`)}
+          {resolveCustomButtonLabel(label, t)}
         </button>
       </div>
     ));
@@ -265,7 +266,7 @@ function MoveEntry(props) {
                             className="button is-small apButton"
                             onClick={() => handleMove(move)}
                           >
-                            {t(`buttons.${label}`)}
+                            {resolveCustomButtonLabel(label, t)}
                           </button>
                         </div>
                       ))}

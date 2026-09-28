@@ -5,6 +5,7 @@ import { useDockMoveEntry } from "./useDockMoveEntry";
 import ExplorationToolbar from "./ExplorationToolbar";
 import { NoMoves, safeGetButtons, sortLenAlpha } from "./moveEntryUtils";
 import { sessionExplorationAllowed } from "../../../lib/effectiveGameFlags";
+import { resolveCustomButtonLabel } from "../../../lib/customButtonLabel";
 
 function CardMovePath(props) {
   const state = useDockMoveEntry(props);
@@ -125,7 +126,7 @@ function CardMovePath(props) {
                           className="button is-small apButton"
                           onClick={() => handlers.handleMove(btnMove)}
                         >
-                          {t(`buttons.${label}`)}
+                          {resolveCustomButtonLabel(label, t)}
                         </button>
                       </div>
                     )

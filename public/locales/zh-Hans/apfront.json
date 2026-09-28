@@ -2,17 +2,6 @@
     "404": "啊哦，网页出现了一点小问题（测试）",
     "AnnotationLevel": "你希望将这个选择应用在哪里？",
     "BoardSettings": "更改游戏面板设置",
-    "buttons": {
-        "takebutton": "按下按钮",
-        "pigs": {
-            "forward": "前进",
-            "left": "向左移动",
-            "right": "向右移动",
-            "back": "后退"
-        },
-        "pass": "跳过",
-        "acceptpie": "再次播放"
-    },
     "categories": {
         "board>connect>hex": {
             "description": "以六边形连接的棋盘",

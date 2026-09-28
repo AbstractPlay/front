@@ -1,5 +1,6 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import { formatPlayerDisplayName } from "../../Bots/botUtils";
+import { resolveCustomButtonLabel } from "../../../lib/customButtonLabel";
 
 export function safeGetButtons(engine) {
   try {
@@ -116,7 +117,7 @@ export function NoMoves({ engine, game, handleMove, t }) {
             className="button is-small apButton"
             onClick={() => handleMove(move)}
           >
-            {t(`buttons.${label}`)}
+            {resolveCustomButtonLabel(label, t)}
           </button>
         </div>
       );

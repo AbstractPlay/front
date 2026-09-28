@@ -16,6 +16,7 @@ import Modal from "../Modal";
 import { formatSoloOutcome, isSoloGame } from "../../lib/soloPlay";
 import PlayerOnlineIcon from "./preview/PlayerOnlineIcon";
 import { isPlayerIndexOnMove } from "./preview/moveEntryUtils";
+import { resolveCustomButtonLabel } from "../../lib/customButtonLabel";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -49,7 +50,7 @@ function NoMoves({ engine, game, handleMove, t }) {
           className="button is-small apButton"
           onClick={() => handleMove(move)}
         >
-          {t(`buttons.${label}`)}
+          {resolveCustomButtonLabel(label, t)}
         </button>
       </div>
     ));
@@ -501,7 +502,7 @@ function MoveEntry(props) {
                             className="button is-small apButton"
                             onClick={() => handleMove(move)}
                           >
-                            {t(`buttons.${label}`)}
+                            {resolveCustomButtonLabel(label, t)}
                           </button>
                         </div>
                       ))}
