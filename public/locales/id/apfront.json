@@ -68,7 +68,23 @@
     "board": {
       "full": "Papan",
       "tag": "Papan"
+    },
+    "mechanic": {
+      "full": "Mekanik"
     }
   },
-  "Cancel": "Batal"
+  "Cancel": "Batal",
+  "announcements": {
+    "admin": {
+      "saveDraft": "Simpan"
+    }
+  },
+  "UserSettingsTabProfile": "Profil",
+  "Or": "atau",
+  "feedback": {
+    "tag": {
+      "chat": "Pesan"
+    }
+  },
+  "Games": "Game"
 }
