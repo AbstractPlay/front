@@ -30,19 +30,6 @@ function safeGetButtons(engine) {
 function NoMoves({ engine, game, handleMove, t }) {
   // console.log("In NoMoves");
   const elements = [];
-  if (game.customRandom) {
-    elements.push(
-      <div className="control">
-        <button
-          className="button is-small apButtonNeutral"
-          onClick={() => handleMove(engine.randomMove())}
-        >
-          Random move
-        </button>
-      </div>
-    );
-  }
-
   if (game.customButtons) {
     const buttons = safeGetButtons(engine).map(({ label, move }, idx) => (
       <div className="control" key={`MoveButton|${idx}`}>

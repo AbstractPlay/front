@@ -94,20 +94,6 @@ export function getLivePlayerClockChips(game, users, now = Date.now()) {
 
 export function NoMoves({ engine, game, handleMove, t }) {
   const elements = [];
-  if (game.customRandom) {
-    elements.push(
-      <div className="control" key="random">
-        <button
-          type="button"
-          className="button is-small apButtonNeutral"
-          onClick={() => handleMove(engine.randomMove())}
-        >
-          Random move
-        </button>
-      </div>
-    );
-  }
-
   if (game.customButtons) {
     safeGetButtons(engine).forEach(({ label, move }, idx) => {
       elements.push(
