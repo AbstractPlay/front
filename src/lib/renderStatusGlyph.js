@@ -113,19 +113,28 @@ export function statusGlyphAlt(value) {
   return "";
 }
 
-/** Stash entries expose a `glyph` field that may be shorthand or a full legend entry. */
+/**
+ * Maps `IStashEntry.glyph` to the same shapes `renderStatusGlyphSvg` accepts.
+ */
 export function stashEntryToStatusGlyph(stashItem) {
   const g = stashItem.glyph;
-  if (isStatusGlyphLike(g)) {
+  if (g === null || typeof g !== "object") {
     return g;
   }
-  if (
-    typeof g === "object" &&
-    g !== null &&
-    typeof g.name === "string" &&
-    g.colour !== undefined
-  ) {
-    return { glyph: g.name, colour: g.colour };
+  if (g.kind === "sheet" || g.kind === "legend") {
+    return g;
+  }
+  if (Array.isArray(g) || "piece" in g) {
+    return g;
+  }
+  if ("glyph" in g && typeof g.glyph === "string" && "colour" in g) {
+    return g;
+  }
+  if (typeof g.name === "string" && g.colour !== undefined) {
+    return { kind: "sheet", name: g.name, colour: g.colour };
+  }
+  if (isStatusGlyphLike(g)) {
+    return g;
   }
   return g;
 }
