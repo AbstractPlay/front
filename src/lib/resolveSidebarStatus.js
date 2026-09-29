@@ -14,11 +14,18 @@ function isGlyph(value) {
   );
 }
 
+function isNamespacedI18nKey(label) {
+  return typeof label === "string" && /^[a-zA-Z][\w]*:/.test(label);
+}
+
 function resolveStatusField(label, playerNames, t) {
-  if (!isStructuredRenderLabel(label)) {
-    return label;
+  if (isStructuredRenderLabel(label)) {
+    return resolveRenderLabel(label, playerNames, t);
   }
-  return resolveRenderLabel(label, playerNames, t);
+  if (isNamespacedI18nKey(label)) {
+    return t(label);
+  }
+  return label;
 }
 
 function resolveStatusValue(entry, playerNames, t) {

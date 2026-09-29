@@ -26,6 +26,80 @@ import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { buildEngineMoveResults } from "../engineMoveResults";
 import { buildRenderDisplayOpts } from "../displaySettings.js";
 
+/** me / canSubmit / canExplore from API game + logged-in user (no engine). */
+export function applyPlayerSessionFields(game0, me, explorer) {
+  game0.me = game0.players.findIndex((p) => me && p.id === me.id);
+  if (game0.simultaneous) {
+    game0.canSubmit =
+      game0.toMove === "" || game0.me < 0 ? false : game0.toMove[game0.me];
+    game0.canExplore = false;
+  } else {
+    game0.canSubmit =
+      game0.toMove !== "" && me && game0.players[game0.toMove].id === me.id;
+    game0.canExplore =
+      sessionExplorationAllowed(game0) && isExplorer(explorer, me);
+  }
+}
+
+export function populateMovesRefIfNeeded(game, movesRef, engineRef) {
+  if (
+    game.noMoves ||
+    !(game.canSubmit || (!game.simultaneous && game.numPlayers === 2))
+  ) {
+    return;
+  }
+  const engine = engineRef.current;
+  if (!engine) return;
+  if (game.simultaneous) movesRef.current = engine.moves(game.me + 1);
+  else movesRef.current = engine.moves();
+}
+
+/**
+ * After a clock/metadata dbgame refresh, re-merge session fields without
+ * rebuilding the exploration tree (fixes move UI when globalMe arrives late).
+ */
+export function syncGameSessionFromApi({
+  game,
+  priorGame,
+  me,
+  explorer,
+  explorationRef,
+  focusRef,
+  focusSetter,
+  movesRef,
+  engineRef,
+  gameRef,
+}) {
+  const merged = { ...game };
+  if (priorGame?.colors !== undefined) merged.colors = priorGame.colors;
+  if (priorGame) {
+    merged.canPie = priorGame.canPie;
+    merged.stackExpanding = priorGame.stackExpanding;
+    merged.seatNames = priorGame.seatNames;
+    merged.moveResults = priorGame.moveResults;
+    merged.variants = priorGame.variants;
+    merged.name = priorGame.name;
+    merged.hasNewChat = priorGame.hasNewChat;
+  }
+  applyPlayerSessionFields(merged, me, explorer);
+  gameRef.current = merged;
+
+  const focus = focusRef.current;
+  const nodes = explorationRef.current?.nodes;
+  if (!focus || !nodes) return;
+
+  const nextCanExplore = canExploreMove(merged, nodes, focus);
+  const identityChanged =
+    merged.me !== priorGame?.me || merged.canSubmit !== priorGame?.canSubmit;
+
+  if (identityChanged || nextCanExplore !== focus.canExplore) {
+    const nextFocus = cloneDeep(focus);
+    nextFocus.canExplore = nextCanExplore;
+    focusSetter(nextFocus);
+    populateMovesRefIfNeeded(merged, movesRef, engineRef);
+  }
+}
+
 export function setupGame(
   game0,
   gameRef,
@@ -81,12 +155,9 @@ export function setupGame(
       (typeof engine.isPieTurn !== "function" && engine.stack.length === 2)) &&
     // eslint-disable-next-line no-prototype-builtins
     (!game0.hasOwnProperty("pieInvoked") || game0.pieInvoked === false);
-  game0.me = game0.players.findIndex((p) => me && p.id === me.id);
   game0.variants = engine.getVariants();
 
   if (game0.simultaneous) {
-    game0.canSubmit =
-      game0.toMove === "" || game0.me < 0 ? false : game0.toMove[game0.me];
     if (game0.toMove !== "") {
       if (
         game0.partialMove !== undefined &&
@@ -95,17 +166,10 @@ export function setupGame(
         // the empty move is numPlayers - 1 commas
         engine.move(game0.partialMove, { partial: true, trusted: true });
     }
-    game0.canExplore = false;
-  } else {
-    game0.canSubmit =
-      game0.toMove !== "" && me && game0.players[game0.toMove].id === me.id;
   }
   // Must match engine before sessionExplorationAllowed (challenge noExplore is in-game only).
   game0.gameOver = engine.gameover;
-  if (!game0.simultaneous) {
-    game0.canExplore =
-      sessionExplorationAllowed(game0) && isExplorer(explorer, me);
-  }
+  applyPlayerSessionFields(game0, me, explorer);
   if (game0.sharedPieces) {
     game0.seatNames = [];
     if (typeof engine.player2seat === "function") {
