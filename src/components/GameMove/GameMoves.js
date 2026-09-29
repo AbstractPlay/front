@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { gameinfo } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
 import { compareStrings } from "../../lib/compareStrings";
 import { useStore } from "../../stores";
@@ -17,6 +17,7 @@ import {
   moveTableRowCount,
   moveTextForCell,
   pathIndexForMoveCell,
+  resolveMoveTableExportEngine,
   resolveMoveTableLayout,
   MOVE_TREE_DENSITY_STORAGE_KEY,
   readMoveTableDensityPreference,
@@ -468,12 +469,29 @@ function GameMoves(props) {
           node = node.children[0];
         }
       }
+      const exportState =
+        exploration?.length > 0
+          ? exploration[exploration.length - 1]?.state ?? game?.state
+          : game?.state;
+      const moveTableEngine = resolveMoveTableExportEngine(
+        props.engine,
+        path.length,
+        exportState,
+        GameFactory,
+        game.metaGame
+      );
       numRows = moveTableRowCount({
         pathLength: path.length,
         layout,
-        engine: props.engine,
+        engine: moveTableEngine,
+        path,
       });
-      const rounds = getRoundsForLayout(props.engine, layout);
+      const rounds = getRoundsForLayout(
+        moveTableEngine,
+        layout,
+        path.length,
+        path
+      );
       for (let i = 0; i < numRows; i++) {
         let row = [];
         for (let j = 0; j < numcolumns; j++) {
@@ -482,7 +500,8 @@ function GameMoves(props) {
             seatIdx: j,
             pathLength: path.length,
             layout,
-            engine: props.engine,
+            engine: moveTableEngine,
+            path,
           });
           row.push(
             <td

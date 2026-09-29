@@ -16,6 +16,7 @@ import Modal from "../Modal";
 import { formatSoloOutcome, isSoloGame } from "../../lib/soloPlay";
 import PlayerOnlineIcon from "./preview/PlayerOnlineIcon";
 import { isPlayerIndexOnMove } from "./preview/moveEntryUtils";
+import { resolveCustomButtonLabel } from "../../lib/customButtonLabel";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -29,19 +30,6 @@ function safeGetButtons(engine) {
 function NoMoves({ engine, game, handleMove, t }) {
   // console.log("In NoMoves");
   const elements = [];
-  if (game.customRandom) {
-    elements.push(
-      <div className="control">
-        <button
-          className="button is-small apButtonNeutral"
-          onClick={() => handleMove(engine.randomMove())}
-        >
-          Random move
-        </button>
-      </div>
-    );
-  }
-
   if (game.customButtons) {
     const buttons = safeGetButtons(engine).map(({ label, move }, idx) => (
       <div className="control" key={`MoveButton|${idx}`}>
@@ -49,7 +37,7 @@ function NoMoves({ engine, game, handleMove, t }) {
           className="button is-small apButton"
           onClick={() => handleMove(move)}
         >
-          {t(`buttons.${label}`)}
+          {resolveCustomButtonLabel(label, t)}
         </button>
       </div>
     ));
@@ -501,7 +489,7 @@ function MoveEntry(props) {
                             className="button is-small apButton"
                             onClick={() => handleMove(move)}
                           >
-                            {t(`buttons.${label}`)}
+                            {resolveCustomButtonLabel(label, t)}
                           </button>
                         </div>
                       ))}

@@ -4,6 +4,7 @@ import {
 } from "@abstractplay/gameslib";
 import { formatPlayerDisplayName } from "../components/Bots/botUtils";
 import { defaultRenderLabelT } from "./resolveRenderLabels";
+import { isStatusGlyphLike } from "./renderStatusGlyph.js";
 
 function isGlyph(value) {
   return (
@@ -14,19 +15,28 @@ function isGlyph(value) {
   );
 }
 
+function isNamespacedI18nKey(label) {
+  return typeof label === "string" && /^[a-zA-Z][\w]*:/.test(label);
+}
+
 function resolveStatusField(label, playerNames, t) {
-  if (!isStructuredRenderLabel(label)) {
-    return label;
+  if (isStructuredRenderLabel(label)) {
+    return resolveRenderLabel(label, playerNames, t);
   }
-  return resolveRenderLabel(label, playerNames, t);
+  if (isNamespacedI18nKey(label)) {
+    return t(label);
+  }
+  return label;
 }
 
 function resolveStatusValue(entry, playerNames, t) {
-  if (isGlyph(entry)) {
+  if (isStatusGlyphLike(entry) || isGlyph(entry)) {
     return entry;
   }
   return resolveStatusField(entry, playerNames, t);
 }
+
+export { isStatusGlyphLike };
 
 export function resolveSidebarStatuses(
   statuses,

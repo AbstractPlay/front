@@ -35,63 +35,6 @@
         "frameCap": "Too many frames (maximum {{max}}). Choose a shorter range."
     },
     "CycleBoardDisplay": "Cycle board display",
-    "buttons": {
-        "pass": "Pass",
-        "declare": "Declare",
-        "takebutton": "Take button",
-        "acceptpie": "Play second",
-        "playsecond": "Play second",
-        "draw": "Claim draw",
-        "playfirst": "Play first",
-        "swap": "Swap colours",
-        "roll1": "Roll one die",
-        "roll2": "Roll two dice",
-        "numbers": {
-            "one": "One (1)",
-            "two": "Two (2)",
-            "three": "Three (3)"
-        },
-        "pigs": {
-            "back": "Move backward",
-            "forward": "Move forward",
-            "left": "Move forward left",
-            "right": "Move forward right",
-            "cw": "Rotate clockwise",
-            "ccw": "Rotate counterclockwise",
-            "fire": "Fire laser",
-            "hit": "Swing snout"
-        },
-        "carnac": {
-            "tip_n": "Tip north",
-            "tip_e": "Tip east",
-            "tip_s": "Tip south",
-            "tip_w": "Tip west"
-        },
-        "cifra": {
-            "lt": "Light, Top",
-            "lb": "Light, Bottom",
-            "dt": "Dark, Top",
-            "db": "Dark, Bottom",
-            "ll": "Light, Left",
-            "lr": "Light, Right",
-            "dl": "Dark, Left",
-            "dr": "Dark, Right"
-        },
-        "evenatodds": {
-            "evens": "Evens",
-            "odds": "Odds"
-        },
-        "arimaa": {
-            "gold99": "Quick setup",
-            "silver99e7": "Quick setup, elephant e7",
-            "silver99d7": "Quick setup, elephant d7"
-        },
-        "killallgo": {
-            "attacker": "Play as the Attacker",
-            "defender": "Play as the Defender",
-            "youplace": "Let the opponent place the first batch"
-        }
-    },
     "Cancel": "Cancel",
     "CanPie": "This player has the option to switch seats.",
     "categories": {

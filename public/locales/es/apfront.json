@@ -11,45 +11,6 @@
     "AnnotationLevel": "¿Dónde le gustaría ser aplicada esta elección?",
     "AvailableGames": "Juegos disponibles",
     "BoardSettings": "Cambia los ajuste del tablero de juego",
-    "buttons": {
-        "pass": "Aprobar",
-        "takebutton": "Botón de tomar",
-        "acceptpie": "Jugar segundo",
-        "draw": "Reclamar sorteo",
-        "playfirst": "Juega primero",
-        "numbers": {
-            "one": "Uno (1)",
-            "two": "Dos (2)",
-            "three": "Tres (3)"
-        },
-        "pigs": {
-            "back": "Retrocede",
-            "forward": "Avanzar",
-            "left": "Avanza a la izquierda",
-            "right": "Avanza a la derecha",
-            "cw": "Rotar según las agujas del reloj",
-            "ccw": "Rotar en sentido contrario a las agujas del reloj",
-            "fire": "Fuego láser",
-            "hit": "Hocico oscilante"
-        },
-        "cifra": {
-            "lt": "Claro, Cima",
-            "lb": "Claro, Suelo",
-            "dt": "Oscuro, Cima",
-            "db": "Oscuro, Botón",
-            "ll": "Claro, Izquierdo",
-            "lr": "Claro, Derecho",
-            "dl": "Oscuro, Izquierdo",
-            "dr": "Oscuro, Derecho"
-        },
-        "playsecond": "Reproducir segundo",
-        "arimaa": {
-            "gold99": "Configuración rápida",
-            "silver99e7": "Configuración rápida, elefante e7",
-            "silver99d7": "Configuración rápida, elefante d7"
-        },
-        "swap": "Intercambiar colores"
-    },
     "AcceptDraw": "Aceptar oferta",
     "Cancel": "Cancelar",
     "CanPie": "Este reproductor tiene la opción para intercambiar asientos.",

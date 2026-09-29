@@ -44,31 +44,27 @@
     "Annotate": "Tampilkan indikator pergerakan terakhir",
     "AvailableGames": "Game yang tersedia",
     "BoardSettings": "Ubah pengaturan permainan papan",
-    "buttons": {
-        "pass": "Lewati",
-        "declare": "Menyatakan",
-        "takebutton": "Tombol ambil",
-        "acceptpie": "Bermain di urutan kedua",
-        "playsecond": "Bermain di urutan kedua",
-        "draw": "Terima tawaran seri",
-        "playfirst": "Bermain di urutan pertama",
-        "swap": "Tukar warna",
-        "cifra": {
-            "lt": "Terang, Atas",
-            "lb": "Terang, Bawah",
-            "dt": "Gelap, Atas",
-            "db": "Gelap, Bawah",
-            "ll": "Terang, Kiri",
-            "lr": "Terang, Kanan",
-            "dl": "Gelap, Kiri",
-            "dr": "Gelap, Kanan"
-        }
-    },
     "categories": {
         "board": {
             "full": "Papan",
             "tag": "Papan"
+        },
+        "mechanic": {
+            "full": "Mekanik"
         }
     },
-    "Cancel": "Batal"
+    "Cancel": "Batal",
+    "announcements": {
+        "admin": {
+            "saveDraft": "Simpan"
+        }
+    },
+    "UserSettingsTabProfile": "Profil",
+    "Or": "atau",
+    "feedback": {
+        "tag": {
+            "chat": "Pesan"
+        }
+    },
+    "Games": "Game"
 }

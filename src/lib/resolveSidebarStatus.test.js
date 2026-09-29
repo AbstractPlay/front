@@ -61,6 +61,20 @@ describe("resolveSidebarStatus", () => {
     expect(resolved[1].value[0]).to.equal("7");
   });
 
+  it("resolves plain namespaced status keys (e.g. agofmars bag count)", () => {
+    const statuses = [
+      {
+        key: "apgames:status.agofmars.bagCount",
+        value: ["63"],
+      },
+    ];
+    const bagT = (key) =>
+      key === "apgames:status.agofmars.bagCount" ? "Tiles in bag" : key;
+    const resolved = resolveSidebarStatuses(statuses, players, users, bagT);
+    expect(resolved[0].key).to.equal("Tiles in bag");
+    expect(resolved[0].value[0]).to.equal("63");
+  });
+
   it("leaves glyph status values unchanged", () => {
     const glyph = { name: "piece", colour: 2 };
     const statuses = [
@@ -71,6 +85,24 @@ describe("resolveSidebarStatus", () => {
     ];
     const resolved = resolveSidebarStatuses(statuses, players, users, t);
     expect(resolved[0].value[0]).to.equal(glyph);
+  });
+
+  it("leaves composite legend and tagged legend status values unchanged", () => {
+    const composite = [
+      { name: "piece-square-borderless", colour: 1 },
+      { name: "piece-circle-borderless", colour: 2 },
+    ];
+    const legendTagged = { kind: "legend", entry: composite };
+    const polymatrix = [[1, 0], [0, 1]];
+    const statuses = [
+      { key: "Hand", value: [composite] },
+      { key: "Tagged", value: [legendTagged] },
+      { key: "Matrix", value: [polymatrix] },
+    ];
+    const resolved = resolveSidebarStatuses(statuses, players, users, t);
+    expect(resolved[0].value[0]).to.equal(composite);
+    expect(resolved[1].value[0]).to.equal(legendTagged);
+    expect(resolved[2].value[0]).to.equal(polymatrix);
   });
 
   it("resolves structured score block names and cells", () => {

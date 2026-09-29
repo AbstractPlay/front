@@ -2,6 +2,7 @@ import Modal from "../../Modal";
 import { useDockMoveEntry } from "./useDockMoveEntry";
 import ExplorationToolbar from "./ExplorationToolbar";
 import { NoMoves, safeGetButtons, sortLenAlpha } from "./moveEntryUtils";
+import { resolveCustomButtonLabel } from "../../../lib/customButtonLabel";
 
 function TurnIndicator({ img, mover, isMyTurn, className = "" }) {
   return (
@@ -275,7 +276,7 @@ function DockMoveEntry(props) {
                             className="button is-small apButton"
                             onClick={() => handlers.handleMove(btnMove)}
                           >
-                            {t(`buttons.${label}`)}
+                            {resolveCustomButtonLabel(label, t)}
                           </button>
                         </div>
                       )
