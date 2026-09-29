@@ -1008,6 +1008,14 @@ th .player {
   min-width: 0.8rem;
 }
 
+/* Sidebar status/score legend glyphs (composites, polymatrix, iso); not seat swatches */
+.statusGlyphImage {
+  max-height: 0.8rem;
+  width: auto;
+  min-width: 0.8rem;
+  vertical-align: middle;
+}
+
 .toMoveImage {
   height: 1.15rem;
   width: 1.15rem;
