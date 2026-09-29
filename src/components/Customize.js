@@ -3,7 +3,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import {
   render,
-  renderglyph,
+  renderSheetGlyph,
   sheets,
   isBoardChromeEligible,
   getCompatibleStyles,
@@ -152,7 +152,7 @@ function ColourSwatchButton({ color, onClick, title, selected = false }) {
 }
 
 function renderPatternGlyph(patternName, idPrefix) {
-  return renderglyph("piece", patternName, {
+  return renderSheetGlyph("piece", patternName, {
     prefix: `${idPrefix}-${patternName}-`,
   });
 }

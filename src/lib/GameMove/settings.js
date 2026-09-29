@@ -1,5 +1,5 @@
 import { GameFactory } from "@abstractplay/gameslib";
-import { renderglyph } from "@abstractplay/renderer";
+import { renderSheetGlyph } from "@abstractplay/renderer";
 import { setRendererColourOpts } from "../setRendererColourOpts";
 import { normalizeDisplaySetting } from "../displaySettings.js";
 
@@ -111,7 +111,7 @@ export function setupColors(settings, game, globalMe, colourContext, node) {
       }
       return {
         isImage: true,
-        value: renderglyph("piece", color, options),
+        value: renderSheetGlyph("piece", color, options),
       };
     }
   });
