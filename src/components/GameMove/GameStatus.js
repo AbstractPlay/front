@@ -1,6 +1,6 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import React, { useMemo } from "react";
-import { renderglyph } from "@abstractplay/renderer";
+import { renderSheetGlyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../Bots/botUtils";
@@ -29,7 +29,7 @@ function renderGlyph(
     numPlayers: game.players?.length,
   });
   options.svgid = id;
-  return renderglyph(glyph, player, options);
+  return renderSheetGlyph(glyph, player, options);
 }
 
 // A status value is plain text or a glyph (`{ glyph, colour }`)
