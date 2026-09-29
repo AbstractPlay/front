@@ -43,6 +43,7 @@ import {
 } from "../../lib/GameMove/misc";
 import {
   setupGame,
+  syncGameSessionFromApi,
   populateChecked,
   processNewMove,
 } from "../../lib/GameMove/gameStuff";
@@ -896,7 +897,18 @@ export function useGameMoveSession(props) {
 
     // Clock / metadata refresh only — keep exploration tree and move-tree focus.
     if (!gamePlayfieldChanged(priorGame, game) && priorGame) {
-      gameRef.current = { ...game, colors: priorGame.colors };
+      syncGameSessionFromApi({
+        game,
+        priorGame,
+        me,
+        explorer: preserveExplorer ? explorer : false,
+        explorationRef,
+        focusRef,
+        focusSetter,
+        movesRef,
+        engineRef,
+        gameRef,
+      });
       runGameMetaTail();
       return;
     }

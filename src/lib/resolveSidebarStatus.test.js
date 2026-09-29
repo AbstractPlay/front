@@ -61,6 +61,20 @@ describe("resolveSidebarStatus", () => {
     expect(resolved[1].value[0]).to.equal("7");
   });
 
+  it("resolves plain namespaced status keys (e.g. agofmars bag count)", () => {
+    const statuses = [
+      {
+        key: "apgames:status.agofmars.bagCount",
+        value: ["63"],
+      },
+    ];
+    const bagT = (key) =>
+      key === "apgames:status.agofmars.bagCount" ? "Tiles in bag" : key;
+    const resolved = resolveSidebarStatuses(statuses, players, users, bagT);
+    expect(resolved[0].key).to.equal("Tiles in bag");
+    expect(resolved[0].value[0]).to.equal("63");
+  });
+
   it("leaves glyph status values unchanged", () => {
     const glyph = { name: "piece", colour: 2 };
     const statuses = [
