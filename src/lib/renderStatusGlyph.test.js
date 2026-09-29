@@ -64,12 +64,42 @@ describe("renderStatusGlyph", () => {
     expect(renderLegendGlyph.mock.calls[1]).to.deep.equal([entry, opts]);
   });
 
-  it("stashEntryToStatusGlyph preserves legend-shaped glyphs", () => {
+  it("stashEntryToStatusGlyph maps stash glyphs for renderStatusGlyphSvg", () => {
     const composite = [{ name: "piece", colour: 1 }];
     expect(stashEntryToStatusGlyph({ glyph: composite })).to.equal(composite);
     expect(stashEntryToStatusGlyph({ glyph: { name: "piece", colour: 2 } })).to.deep.equal({
+      kind: "sheet",
       name: "piece",
       colour: 2,
     });
+    const taggedLegend = {
+      kind: "legend",
+      entry: composite,
+    };
+    expect(stashEntryToStatusGlyph({ glyph: taggedLegend })).to.equal(taggedLegend);
+  });
+
+  it("renderStatusGlyphSvg renders stash entries via stashEntryToStatusGlyph", () => {
+    const opts = { svgid: "stash" };
+    const composite = [{ name: "piece-square-borderless", colour: 1 }];
+    renderStatusGlyphSvg(
+      stashEntryToStatusGlyph({
+        count: 1,
+        glyph: { kind: "legend", entry: composite },
+        movePart: "",
+      }),
+      opts,
+    );
+    expect(renderLegendGlyph.mock.calls[0]).to.deep.equal([composite, opts]);
+
+    renderStatusGlyphSvg(
+      stashEntryToStatusGlyph({
+        count: 2,
+        glyph: { name: "hline", colour: 3 },
+        movePart: "",
+      }),
+      opts,
+    );
+    expect(renderSheetGlyph.mock.calls[0]).to.deep.equal(["hline", 3, opts]);
   });
 });
