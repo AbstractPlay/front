@@ -1,56 +1,46 @@
-import { GameFactory } from "@abstractplay/gameslib";
 import React, { useMemo } from "react";
-import { renderSheetGlyph } from "@abstractplay/renderer";
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../Bots/botUtils";
-import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
+import {
+  buildStatusGlyphRenderOptions,
+  isStatusGlyphLike,
+  renderStatusGlyphSvg,
+  stashEntryToStatusGlyph,
+} from "../../lib/renderStatusGlyph.js";
+import { StatusGlyphImage } from "../../lib/statusGlyphImage.js";
 
-function renderGlyph(
-  glyph,
-  id,
-  player,
-  globalMe,
-  colourContext,
-  game
-) {
-  var options = {};
-  let engine;
-  if (game.customColours && game.state) {
-    engine = GameFactory(game.metaGame, game.state);
-  }
-  setRendererColourOpts({
-    options,
-    metaGame: game.metaGame,
-    isParticipant: game.me,
-    context: colourContext,
-    globalMe,
-    engine,
-    numPlayers: game.players?.length,
-  });
-  options.svgid = id;
-  return renderSheetGlyph(glyph, player, options);
-}
-
-// A status value is plain text or a glyph (`{ glyph, colour }`)
 function renderStatusValue(value, id, globalMe, colourContext, game) {
   if (typeof value === "string") {
     return value;
   }
+  if (!isStatusGlyphLike(value)) {
+    return value;
+  }
+  return (
+    <StatusGlyphImage
+      value={value}
+      id={id}
+      globalMe={globalMe}
+      colourContext={colourContext}
+      game={game}
+    />
+  );
+}
+
+function renderStashGlyph(s, id, globalMe, colourContext, game) {
+  const options = buildStatusGlyphRenderOptions({
+    id,
+    game,
+    globalMe,
+    colourContext,
+  });
+  const svg = renderStatusGlyphSvg(stashEntryToStatusGlyph(s), options);
   return (
     <img
-      className="playerImage"
-      src={`data:image/svg+xml;utf8,${encodeURIComponent(
-        renderGlyph(
-          value.glyph,
-          id,
-          value.colour,
-          globalMe,
-          colourContext,
-          game
-        )
-      )}`}
-      alt={"color " + value.colour}
+      className="statusGlyphImage"
+      src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}`}
+      alt=""
     />
   );
 }
@@ -235,20 +225,13 @@ function GameStatus({
                         }
                       >
                         {s.count}&#215;
-                        <img
-                          className="playerImage"
-                          src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                            renderGlyph(
-                              s.glyph.name,
-                              "stack-" + index + "-" + j,
-                              s.glyph.colour,
-                              globalMe,
-                              colourContext,
-                              game
-                            )
-                          )}`}
-                          alt=""
-                        />
+                        {renderStashGlyph(
+                          s,
+                          "stack-" + index + "-" + j,
+                          globalMe,
+                          colourContext,
+                          game
+                        )}
                       </td>
                     ))}
                   </tr>
@@ -273,20 +256,13 @@ function GameStatus({
                   }
                 >
                   {j > 0 ? ", " : ""} {s.count}&#215;
-                  <img
-                    className="playerImage"
-                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                      renderGlyph(
-                        s.glyph.name,
-                        "stack-" + j,
-                        s.glyph.colour,
-                        globalMe,
-                        colourContext,
-                        game
-                      )
-                    )}`}
-                    alt=""
-                  />
+                  {renderStashGlyph(
+                    s,
+                    "stack-" + j,
+                    globalMe,
+                    colourContext,
+                    game
+                  )}
                 </span>
               ))}
             </div>

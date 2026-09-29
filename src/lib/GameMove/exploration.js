@@ -1,5 +1,6 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import { callAuthApi } from "../api";
+import { parseAuthResponse } from "../parseAuthResponse";
 import { isInterestingComment } from "./misc";
 import {
   applyExplorationMove,
@@ -337,6 +338,40 @@ function mergeMoveRecursive2(
   return movesUpdated;
 }
 
+/** @returns {{ move: number, tree: object } | null} */
+export function parseSaveExplorationConflictPayload(data) {
+  if (!data || typeof data !== "object" || data.success) {
+    return null;
+  }
+  let move;
+  if (typeof data.move === "number") {
+    move = data.move;
+  } else if (typeof data.sk === "string") {
+    const skMove = data.sk.includes("#")
+      ? data.sk.split("#").pop()
+      : data.sk;
+    move = Number(skMove);
+  }
+  if (!Number.isFinite(move)) {
+    return null;
+  }
+  let tree = data.tree;
+  if (tree == null) {
+    return null;
+  }
+  if (typeof tree === "string") {
+    try {
+      tree = JSON.parse(tree);
+    } catch {
+      return null;
+    }
+  }
+  if (typeof tree !== "object") {
+    return null;
+  }
+  return { move, tree };
+}
+
 export async function saveExploration(
   exploration,
   moveNumber,
@@ -395,44 +430,50 @@ export async function saveExploration(
     }
   }
   const res = await callAuthApi("save_exploration", pars);
-  if (!res) return;
-  if (res.status !== 200) {
-    const result = await res.json();
-    errorMessageRef.current = `save_exploration failed, status = ${res.status}, message: ${result.message}`;
+  const parsed = await parseAuthResponse(res);
+  if (!parsed.ok) {
+    errorMessageRef.current = `save_exploration failed: ${parsed.error}`;
     errorSetter(true);
-  } else {
-    const result = await res.json();
-    if (result && result.body) {
-      // We only get here when failing to save public exploration (because the move was updated by someone else)
-      const data = JSON.parse(result.body);
-      const version = data.version;
-      const move = data.sk;
-      const tree = JSON.parse(data.tree);
-      let node = getExplorationNode(exploration, game, move - 1);
-      node.version = version;
-      if (tree.comment !== undefined)
-        for (const comment of tree.comment) node.AddComment(comment);
-      let gameEngine = GameFactory(game.metaGame, node.state);
-      mergeMoveRecursive(gameEngine, node, tree.children, true, game.metaGame);
-      if (focus !== undefined) setURL(exploration, focus, game, navigate);
-      // Try to save again
-      saveExploration(
-        exploration,
-        move,
-        game,
-        me,
-        explorer,
-        errorSetter,
-        errorMessageRef,
-        focus,
-        navigate
-      );
-    } else if (game.gameOver) {
-      exploration[moveNumber - 1].version =
-        (exploration[moveNumber - 1].version
-          ? exploration[moveNumber - 1].version
-          : 0) + 1;
-    }
+    return;
+  }
+
+  const conflict = parseSaveExplorationConflictPayload(parsed.data);
+  if (conflict) {
+    // Public exploration version conflict — merge server tree and retry save.
+    const { move, tree } = conflict;
+    const version = parsed.data.version;
+    let node = getExplorationNode(exploration, game, move - 1);
+    node.version = version;
+    if (tree.comment !== undefined)
+      for (const comment of tree.comment) node.AddComment(comment);
+    let gameEngine = GameFactory(game.metaGame, node.state);
+    mergeMoveRecursive(
+      gameEngine,
+      node,
+      tree.children || [],
+      true,
+      game.metaGame
+    );
+    if (focus !== undefined) setURL(exploration, focus, game, navigate);
+    saveExploration(
+      exploration,
+      move,
+      game,
+      me,
+      explorer,
+      errorSetter,
+      errorMessageRef,
+      focus,
+      navigate
+    );
+    return;
+  }
+
+  if (game.gameOver) {
+    exploration[moveNumber - 1].version =
+      (exploration[moveNumber - 1].version
+        ? exploration[moveNumber - 1].version
+        : 0) + 1;
   }
 }
 

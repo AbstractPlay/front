@@ -1,6 +1,11 @@
 import { vi } from "vitest";
 import { GameNode } from "../../components/GameMove/GameTree";
-import { mergeExploration } from "./exploration";
+import { callAuthApi } from "../api";
+import {
+  mergeExploration,
+  parseSaveExplorationConflictPayload,
+  saveExploration,
+} from "./exploration";
 
 vi.mock("../api", () => ({
   callAuthApi: vi.fn(),
@@ -42,6 +47,78 @@ vi.mock("@abstractplay/gameslib", () => ({
     return createEngine();
   },
 }));
+
+describe("parseSaveExplorationConflictPayload", () => {
+  it("returns null for success and error-shaped payloads without a tree", () => {
+    expect(parseSaveExplorationConflictPayload({ success: true })).toBe(null);
+    expect(
+      parseSaveExplorationConflictPayload({
+        message: "Handler returned no response",
+      })
+    ).toBe(null);
+  });
+
+  it("parses public exploration conflict records", () => {
+    const payload = parseSaveExplorationConflictPayload({
+      version: 2,
+      sk: "3",
+      tree: JSON.stringify({ children: [{ move: "a1", children: [] }] }),
+    });
+    expect(payload?.move).toBe(3);
+    expect(payload?.tree.children).toHaveLength(1);
+  });
+
+  it("parses private exploration sk user#move", () => {
+    const payload = parseSaveExplorationConflictPayload({
+      sk: "user-1#4",
+      tree: { children: [] },
+    });
+    expect(payload?.move).toBe(4);
+  });
+});
+
+describe("saveExploration", () => {
+  const game = {
+    id: "g1",
+    metaGame: "carnac",
+    state: JSON.stringify({ stack: [{}, {}] }),
+    gameOver: false,
+    numMoves: 2,
+    numPlayers: 2,
+    players: [],
+  };
+
+  const exploration = [
+    new GameNode(null, "", JSON.stringify({ stack: [{}] }), 0),
+    new GameNode(null, "12-a1", JSON.stringify({ stack: [{}, {}] }), 1),
+  ];
+
+  it("does not throw when the API returns an envelope error body", async () => {
+    callAuthApi.mockResolvedValueOnce({
+      status: 200,
+      text: async () =>
+        JSON.stringify({
+          statusCode: 500,
+          body: JSON.stringify({ message: "Handler returned no response" }),
+        }),
+    });
+    const errorSetter = vi.fn();
+    const errorMessageRef = { current: "" };
+    await expect(
+      saveExploration(
+        exploration,
+        2,
+        game,
+        { id: "u1", settings: { all: { exploration: 1 } } },
+        true,
+        errorSetter,
+        errorMessageRef
+      )
+    ).resolves.toBeUndefined();
+    expect(errorSetter).toHaveBeenCalledWith(true);
+    expect(errorMessageRef.current).toContain("Handler returned no response");
+  });
+});
 
 describe("mergeExploration", () => {
   const game = {

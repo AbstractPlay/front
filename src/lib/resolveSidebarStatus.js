@@ -4,6 +4,7 @@ import {
 } from "@abstractplay/gameslib";
 import { formatPlayerDisplayName } from "../components/Bots/botUtils";
 import { defaultRenderLabelT } from "./resolveRenderLabels";
+import { isStatusGlyphLike } from "./renderStatusGlyph.js";
 
 function isGlyph(value) {
   return (
@@ -29,11 +30,13 @@ function resolveStatusField(label, playerNames, t) {
 }
 
 function resolveStatusValue(entry, playerNames, t) {
-  if (isGlyph(entry)) {
+  if (isStatusGlyphLike(entry) || isGlyph(entry)) {
     return entry;
   }
   return resolveStatusField(entry, playerNames, t);
 }
+
+export { isStatusGlyphLike };
 
 export function resolveSidebarStatuses(
   statuses,

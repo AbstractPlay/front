@@ -87,6 +87,24 @@ describe("resolveSidebarStatus", () => {
     expect(resolved[0].value[0]).to.equal(glyph);
   });
 
+  it("leaves composite legend and tagged legend status values unchanged", () => {
+    const composite = [
+      { name: "piece-square-borderless", colour: 1 },
+      { name: "piece-circle-borderless", colour: 2 },
+    ];
+    const legendTagged = { kind: "legend", entry: composite };
+    const polymatrix = [[1, 0], [0, 1]];
+    const statuses = [
+      { key: "Hand", value: [composite] },
+      { key: "Tagged", value: [legendTagged] },
+      { key: "Matrix", value: [polymatrix] },
+    ];
+    const resolved = resolveSidebarStatuses(statuses, players, users, t);
+    expect(resolved[0].value[0]).to.equal(composite);
+    expect(resolved[1].value[0]).to.equal(legendTagged);
+    expect(resolved[2].value[0]).to.equal(polymatrix);
+  });
+
   it("resolves structured score block names and cells", () => {
     const scores = [
       {
