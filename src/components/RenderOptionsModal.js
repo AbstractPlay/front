@@ -83,8 +83,8 @@ function RenderOptionsModal(props) {
   const show = props.show;
   const [displayUids, displayUidsSetter] = useState([]);
   const [displayPickerKey, displayPickerKeySetter] = useState(0);
-  const [annotate, annotateSetter] = useState(null);
-  const [annotateLevel, annotateLevelSetter] = useState(null);
+  const [annotate, annotateSetter] = useState(true);
+  const [annotateLevel, annotateLevelSetter] = useState("game");
   const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
 
@@ -108,8 +108,8 @@ function RenderOptionsModal(props) {
       settings,
       metaGame
     );
-    annotateSetter(annotateSetting[0]);
-    annotateLevelSetter(annotateSetting[1]);
+    annotateSetter(annotateSetting[0] === true);
+    annotateLevelSetter(annotateSetting[1] ?? "game");
   }, [show, gameSettings, metaGame, settings]);
 
   const handleAnnotationChange = (checked) => {
@@ -200,7 +200,7 @@ function RenderOptionsModal(props) {
               <input
                 type="checkbox"
                 onChange={(e) => handleAnnotationChange(e.target.checked)}
-                checked={annotate}
+                checked={annotate === true}
               />
               {t("Annotate")}
             </label>
