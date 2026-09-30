@@ -28,6 +28,7 @@ const SECTION_LABEL_KEYS = {
 
 function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tournamentOnly = false }) {
   const { t, i18n } = useTranslation();
+  const { t: tCat } = useTranslation("apgames");
   const localeBundleKey = getUiLocaleBundleKey(i18n);
   const [query, setQuery] = useState("");
   const [starredOnly, setStarredOnly] = useState(false);
@@ -56,7 +57,7 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
     () =>
       collectCategoryFilterOptions(allGames, "goal", {
         locale: i18n.language,
-        labelFor: (cat) => t(`categories.${cat}.full`),
+        labelFor: (cat) => tCat(`categories.${cat}.full`),
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
     [allGames, localeBundleKey, i18n.language]
@@ -66,7 +67,7 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
     () =>
       collectBoardFilterOptions(allGames, {
         locale: i18n.language,
-        labelFor: (cat) => t(`categories.${cat}.full`),
+        labelFor: (cat) => tCat(`categories.${cat}.full`),
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
     [allGames, localeBundleKey, i18n.language]
@@ -180,7 +181,7 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
                   <option value="">{t("gamePicker.filterAny")}</option>
                   {goalOptions.map((cat) => (
                     <option key={cat} value={cat}>
-                      {t(`categories.${cat}.full`)}
+                      {tCat(`categories.${cat}.full`)}
                     </option>
                   ))}
                 </select>
@@ -203,7 +204,7 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
                   <option value="">{t("gamePicker.filterAny")}</option>
                   {boardOptions.map((cat) => (
                     <option key={cat} value={cat}>
-                      {t(`categories.${cat}.full`)}
+                      {tCat(`categories.${cat}.full`)}
                     </option>
                   ))}
                 </select>
@@ -364,14 +365,14 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
                     {sortCategoryKeys(
                       game.goalTags,
                       i18n.language,
-                      (cat) => t(`categories.${cat}.full`)
+                      (cat) => tCat(`categories.${cat}.full`)
                     ).map((cat) => (
                       <span
                         key={cat}
                         className="tag is-light mr-1 mb-1"
-                        title={t(`categories.${cat}.description`)}
+                        title={tCat(`categories.${cat}.description`)}
                       >
-                        {t(`categories.${cat}.full`)}
+                        {tCat(`categories.${cat}.full`)}
                       </span>
                     ))}
                   </span>

@@ -44,15 +44,6 @@
     "Annotate": "Tampilkan indikator pergerakan terakhir",
     "AvailableGames": "Game yang tersedia",
     "BoardSettings": "Ubah pengaturan permainan papan",
-    "categories": {
-        "board": {
-            "full": "Papan",
-            "tag": "Papan"
-        },
-        "mechanic": {
-            "full": "Mekanik"
-        }
-    },
     "Cancel": "Batal",
     "announcements": {
         "admin": {
