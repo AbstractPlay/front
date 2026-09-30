@@ -55,6 +55,7 @@ function Table({
   const [activeChallengeModal, activeChallengeModalSetter] = useState("");
   const [expandedPara, expandedParaSetter] = useState([]);
   const { t, i18n } = useTranslation();
+  const { t: tCat } = useTranslation("apgames");
   const localeBundleKey = getUiLocaleBundleKey(i18n);
   const [sorting, setSorting] = useState([{ id: "gameName", desc: false }]);
   const [filterStars, filterStarsSetter] = useStorageState(
@@ -177,9 +178,9 @@ function Table({
             .map((cat) => {
               return {
                 raw: cat,
-                tag: t(`categories.${cat}.tag`),
-                desc: t(`categories.${cat}.description`),
-                full: t(`categories.${cat}.full`),
+                tag: tCat(`categories.${cat}.tag`),
+                desc: tCat(`categories.${cat}.description`),
+                full: tCat(`categories.${cat}.full`),
               };
             })
             .sort((a, b) =>
@@ -244,9 +245,9 @@ function Table({
       .map((cat) => {
         return {
           raw: cat,
-          tag: t(`categories.${cat}.tag`),
-          desc: t(`categories.${cat}.description`),
-          full: t(`categories.${cat}.full`),
+          tag: tCat(`categories.${cat}.tag`),
+          desc: tCat(`categories.${cat}.description`),
+          full: tCat(`categories.${cat}.full`),
         };
       })
       .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language));
@@ -690,10 +691,10 @@ function Table({
                                   <span
                                     key={`tag_${ind}`}
                                     className="tag"
-                                    title={t(`categories.${tag}.description`)}
+                                    title={tCat(`categories.${tag}.description`)}
                                     onClick={() => delTag(tag)}
                                   >
-                                    {t(`categories.${tag}.tag`)}
+                                    {tCat(`categories.${tag}.tag`)}
                                   </span>
                                 )
                               )
