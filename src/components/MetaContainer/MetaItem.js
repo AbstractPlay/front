@@ -57,6 +57,7 @@ const MetaItem = React.forwardRef(
     const [initialSoloSeed, initialSoloSeedSetter] = useState("");
     const [localTab, localTabSetter] = useState(DEFAULT_META_TAB);
     const { t, i18n } = useTranslation();
+    const { t: tCat } = useTranslation("apgames");
     const localeBundleKey = getUiLocaleBundleKey(i18n);
 
     const activeTab = syncTabToUrl ? metaTabFromHash(location.hash) : localTab;
@@ -146,9 +147,9 @@ const MetaItem = React.forwardRef(
         game.categories
           .map((cat) => ({
             raw: cat,
-            tag: t(`categories.${cat}.tag`),
-            desc: t(`categories.${cat}.description`),
-            full: t(`categories.${cat}.full`),
+            tag: tCat(`categories.${cat}.tag`),
+            desc: tCat(`categories.${cat}.description`),
+            full: tCat(`categories.${cat}.full`),
           }))
           .sort((a, b) => compareCategoryTagEntries(a, b, i18n.language))
           .filter(

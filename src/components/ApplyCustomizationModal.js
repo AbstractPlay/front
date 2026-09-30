@@ -31,6 +31,7 @@ function ApplyCustomizationModal({
   sourceSettings,
 }) {
   const { t, i18n } = useTranslation();
+  const { t: tCat } = useTranslation("apgames");
   const localeBundleKey = getUiLocaleBundleKey(i18n);
   const globalMe = useStore((state) => state.globalMe);
   const setGlobalMe = useStore((state) => state.setGlobalMe);
@@ -60,7 +61,7 @@ function ApplyCustomizationModal({
     () =>
       collectCategoryFilterOptions(allGames, "goal", {
         locale: i18n.language,
-        labelFor: (cat) => t(`categories.${cat}.full`),
+        labelFor: (cat) => tCat(`categories.${cat}.full`),
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
     [allGames, localeBundleKey, i18n.language]
@@ -70,7 +71,7 @@ function ApplyCustomizationModal({
     () =>
       collectBoardFilterOptions(allGames, {
         locale: i18n.language,
-        labelFor: (cat) => t(`categories.${cat}.full`),
+        labelFor: (cat) => tCat(`categories.${cat}.full`),
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- labels follow localeBundleKey
     [allGames, localeBundleKey, i18n.language]
@@ -293,7 +294,7 @@ function ApplyCustomizationModal({
                       <option value="">{t("gamePicker.filterAny")}</option>
                       {goalOptions.map((cat) => (
                         <option key={cat} value={cat}>
-                          {t(`categories.${cat}.full`)}
+                          {tCat(`categories.${cat}.full`)}
                         </option>
                       ))}
                     </select>
@@ -316,7 +317,7 @@ function ApplyCustomizationModal({
                       <option value="">{t("gamePicker.filterAny")}</option>
                       {boardOptions.map((cat) => (
                         <option key={cat} value={cat}>
-                          {t(`categories.${cat}.full`)}
+                          {tCat(`categories.${cat}.full`)}
                         </option>
                       ))}
                     </select>
@@ -392,10 +393,10 @@ function ApplyCustomizationModal({
                         {sortCategoryKeys(
                           game.goalTags,
                           i18n.language,
-                          (cat) => t(`categories.${cat}.full`)
+                          (cat) => tCat(`categories.${cat}.full`)
                         ).map((cat) => (
                           <span key={cat} className="tag is-light mr-1 mb-1">
-                            {t(`categories.${cat}.full`)}
+                            {tCat(`categories.${cat}.full`)}
                           </span>
                         ))}
                       </span>

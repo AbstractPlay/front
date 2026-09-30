@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Render options modal: annotate checkbox initializes as a controlled input so opening display/render settings no longer triggers a React controlled/uncontrolled warning.
+
 ### Added
 
 * Permanent play-page layouts: classic, strip (default), queue card, and narrative on unified `/move/` routes; layout picker in the header; first-visit hint on strip; `/move-beta/` redirects to `/move/`.
