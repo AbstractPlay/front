@@ -1870,7 +1870,9 @@
             "squares": "Squares",
             "squares-checkered": "Checkered squares",
             "squares-beveled": "Beveled squares",
-            "squares-stacked": "Stacked squares"
+            "squares-stacked": "Stacked squares",
+            "hex-of-hex": "Hex cells",
+            "hex-of-tri": "Triangle vertices"
         },
         "glyphReplacements": "Glyph replacements",
         "addReplacement": "Add Replacement",

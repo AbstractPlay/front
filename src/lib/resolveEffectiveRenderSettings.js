@@ -62,6 +62,23 @@ function resolveBoardChromeForRep(board, rep) {
     result = validateRenderCustomization(rep, candidate);
   }
 
+  if (
+    !result.ok &&
+    candidate.style === undefined &&
+    !isBoardStyleSwappable(rep) &&
+    Object.keys(candidate).length > 0
+  ) {
+    const onlyBaseStyleRejection = (result.errors ?? []).every(
+      (e) =>
+        e.includes("does not support customization") ||
+        e ===
+          "Board style cannot be customized for this render representation.",
+    );
+    if (onlyBaseStyleRejection) {
+      return candidate;
+    }
+  }
+
   return result.ok ? candidate : null;
 }
 
