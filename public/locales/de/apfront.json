@@ -352,9 +352,9 @@
   "GoBegin": "Spielbeginn anzeigen. Tasten: Pos1 oder 'h'.",
   "GoCurrent": "Aktuelle Position anzeigen. Tasten: Ende oder 'l'.",
   "GoNext": "Nächsten Zug (und erste Variante, falls vorhanden) anzeigen. Tasten: Pfeil rechts oder 'k'.",
-  "GoNextVar": "Nächste Zugvariante anzeigen. Tasten: Pfeil nach unten oder 'm'.",
+  "GoNextVar": "Nächste Zugvariante anzeigen. Tasten: Pfeiltaste nach unten oder 'i'.",
   "GoPrev": "Vorherigen Zug anzeigen. Tasten: Pfeil links oder 'j'.",
-  "GoPrevVar": "Vorherige Variante anzeigen. Tasten: Pfeil nach oben oder 'i'.",
+  "GoPrevVar": "Vorherige Zugvariante anzeigen. Tasten: Pfeiltaste nach oben oder 'm'.",
   "HardTime": "Harte Bedenkzeit: Das System setzt Zeitlimits durch.",
   "HardTimeSet": "Harte Bedenkzeit",
   "HasAnnotations": "Hat Kommentare nach dem Spiel",
@@ -1765,6 +1765,10 @@
       "dockCollapse": "Weniger Optionen",
       "moveTableDensityAuto": "Kompakte Zugzeilen (Klick für eine Zeile pro Zug)",
       "moveTableDensitySparse": "Eine Zeile pro Zug (Klick für kompakte Zeilen)"
+    },
+    "moveTree": {
+      "legendMainline": "Gespielte Züge",
+      "legendExploration": "Erkundung"
     }
   },
   "Back": "Zurück",
