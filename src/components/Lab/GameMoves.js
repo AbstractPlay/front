@@ -21,6 +21,51 @@ import {
   readMoveTableDensityPreference,
 } from "../../lib/GameMove/moveTableLayout";
 import { shouldSkipMoveTreeKeyboard } from "../../lib/GameMove/moveTreeKeyboard";
+import {
+  collectVariationChoices,
+  explorationPathEquals,
+  focusedMovePathIndex,
+  moveCellsFromVariationChoices,
+  nodeForExplorationPath,
+  rowHasFocus,
+} from "../../lib/GameMove/moveTreeVariations";
+
+function syncRowFocusClasses(cells, focus) {
+  return cells.map((cell) => {
+    const isFocus = explorationPathEquals(cell.path, focus);
+    const withoutFocus = (cell.class || "gameMove")
+      .replace(/\s*gameMoveFocus/g, "")
+      .trim();
+    return {
+      ...cell,
+      class: isFocus ? `${withoutFocus} gameMoveFocus` : withoutFocus,
+    };
+  });
+}
+
+function labMoveCellClass({ isFocus }) {
+  return isFocus ? "gameMove gameMoveFocus" : "gameMove";
+}
+
+function labVariationGameContext(focus, exploration, game) {
+  return {
+    gameOver: shouldUseCompletedPath(focus, exploration, game.gameOver),
+  };
+}
+
+function enrichLabMoveCell(exploration, cell) {
+  const node = nodeForExplorationPath(exploration, cell.path);
+  if (!node) {
+    return cell;
+  }
+  return {
+    ...cell,
+    nag: node.nag,
+    commented: moveCommentedState(node),
+    premove:
+      node.premove || node?.children?.some((n) => n.premove) || false,
+  };
+}
 
 function moveCommentedState(node) {
   if (node.textComment) return "filled";
@@ -483,6 +528,7 @@ function GameMoves(props) {
     let moveRows = [];
     let path = [];
     let curNumVariations = 0;
+    const focusedBranchPathIndex = focusedMovePathIndex(focus);
 
     let focusRow = 0;
     let numRows = 0;
@@ -675,6 +721,13 @@ function GameMoves(props) {
           node = node.children[0];
         }
       }
+      const keyboardPathScratch = [];
+      curNumVariations = getPath(
+        focus,
+        exploration,
+        keyboardPathScratch,
+        game.gameOver
+      );
       const exportState =
         exploration?.length > 0
           ? exploration[exploration.length - 1]?.state ?? game?.state
@@ -709,31 +762,49 @@ function GameMoves(props) {
             engine: moveTableEngine,
             path,
           });
+          const rowHasCurrentFocus =
+            movenum !== null &&
+            path[movenum] !== undefined &&
+            rowHasFocus(path[movenum], focus);
           row.push(
             <td
               key={"td0-" + i + "-" + j}
               className="gameMoveNums"
-              id={
-                movenum !== null &&
-                path !== null &&
-                path !== undefined &&
-                path[movenum] !== undefined &&
-                path[movenum][0].class.includes("gameMoveFocus")
-                  ? "focusedMoveNum"
-                  : ""
-              }
+              id={rowHasCurrentFocus ? "focusedMoveNum" : ""}
             >
               {moveNumberForCell({ layout, seatIdx: j, movenum })}
             </td>
           );
           if (movenum !== null && movenum < path.length) {
-            if (path[movenum][0].class.includes("gameMoveFocus")) focusRow = i;
+            if (rowHasCurrentFocus) focusRow = i;
+            const variationGame = labVariationGameContext(
+              focus,
+              exploration,
+              game
+            );
+            const { count: branchChoiceCount, choices: branchChoices } =
+              collectVariationChoices(focus, exploration, variationGame);
+            let cells = path[movenum];
+            if (
+              movenum === focusedBranchPathIndex &&
+              branchChoiceCount > 1 &&
+              cells.length === 1
+            ) {
+              cells = moveCellsFromVariationChoices(
+                exploration,
+                branchChoices,
+                focus,
+                labMoveCellClass
+              ).map((cell) => enrichLabMoveCell(exploration, cell));
+            } else if (cells.length > 1) {
+              cells = syncRowFocusClasses(cells, focus);
+            }
             row.push(
               <td key={"td1-" + i + "-" + j}>
                 <div className="move">
-                  {path[movenum].length === 1 ? (
+                  {cells.length === 1 ? (
                     AMove(game, {
-                      ...path[movenum][0],
+                      ...cells[0],
                       move: moveTextForCell({
                         layout,
                         rounds,
@@ -745,12 +816,24 @@ function GameMoves(props) {
                     })
                   ) : (
                     <div className="variation-list">
-                      {path[movenum].map((m, k) => (
+                      {cells.map((m, k) => (
                         <Fragment key={"move" + i + "-" + j + "-" + k}>
-                          <div className="variation-item-numbering">
+                          <div
+                            className={
+                              explorationPathEquals(m.path, focus)
+                                ? "variation-item-numbering variation-item-numbering--active"
+                                : "variation-item-numbering"
+                            }
+                          >
                             {(k + 10).toString(36)}
                           </div>
-                          <div className="variation-item-content">
+                          <div
+                            className={
+                              explorationPathEquals(m.path, focus)
+                                ? "variation-item-content variation-item-content--active"
+                                : "variation-item-content"
+                            }
+                          >
                             {AMove(game, m)}
                           </div>
                         </Fragment>
@@ -807,12 +890,12 @@ function GameMoves(props) {
               disabled={curNumVariations > 1 ? false : true}
               onClick={
                 curNumVariations > 1
-                  ? () => handleGameMoveClick(nextVarFocus(curNumVariations))
+                  ? () => handleGameMoveClick(prevVarFocus(curNumVariations))
                   : undefined
               }
             >
               <i className="fa fa-angle-up"></i>
-              <span className="tooltiptext">{t("GoNextVar")}</span>
+              <span className="tooltiptext">{t("GoPrevVar")}</span>
             </button>
           )}
           {neverExplore ? null : (
@@ -821,12 +904,12 @@ function GameMoves(props) {
               disabled={curNumVariations > 1 ? false : true}
               onClick={
                 curNumVariations > 1
-                  ? () => handleGameMoveClick(prevVarFocus(curNumVariations))
+                  ? () => handleGameMoveClick(nextVarFocus(curNumVariations))
                   : undefined
               }
             >
               <i className="fa fa-angle-down"></i>
-              <span className="tooltiptext">{t("GoPrevVar")}</span>
+              <span className="tooltiptext">{t("GoNextVar")}</span>
             </button>
           )}
           <button
