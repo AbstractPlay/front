@@ -352,9 +352,9 @@
   "GoBegin": "Mostra l'inizio della partita. Tasti: Home o 'h'.",
   "GoCurrent": "Mostra la posizione corrente. Tasti: End o 'l'.",
   "GoNext": "Mostra la mossa successiva (e la prima variante se presente). Tasti: freccia destra o 'k'.",
-  "GoNextVar": "Mostra la variante della mossa successiva. Tasti: freccia giù o 'm'.",
+  "GoNextVar": "Mostra la variante successiva. Tasti: freccia giù o 'i'.",
   "GoPrev": "Mostra la mossa precedente. Tasti: freccia sinistra o 'j'.",
-  "GoPrevVar": "Mostra la variante precedente. Tasti: freccia su o 'i'.",
+  "GoPrevVar": "Mostra la variante precedente. Tasti: freccia su o 'm'.",
   "HardTime": "Tempo severo: il sistema applicherà tassativamente i limiti di tempo.",
   "HardTimeSet": "Tempo severo",
   "HasAnnotations": "Contiene commenti post-partita",
@@ -1765,6 +1765,10 @@
       "dockCollapse": "Meno opzioni",
       "moveTableDensityAuto": "Righe delle mosse compatte (clicca per una riga per mossa)",
       "moveTableDensitySparse": "Una riga per mossa (clicca per righe compatte)"
+    },
+    "moveTree": {
+      "legendMainline": "Mosse giocate",
+      "legendExploration": "Esplorazione"
     }
   },
   "Back": "Indietro",
