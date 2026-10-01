@@ -1056,6 +1056,54 @@ th .player {
   font-weight: bold;
 }
 
+.mainlineMove {
+  color: var(--main-font-color);
+}
+
+.explorationMove {
+  color: var(--secondary-font-color);
+  font-style: italic;
+}
+
+.variation-item-content .explorationMove {
+  border-left: 2px solid var(--tag-background-color);
+  padding-left: 0.35rem;
+}
+
+.gameMoveFocus.explorationMove {
+  color: var(--main-font-color);
+  font-style: italic;
+}
+
+.gameMoveFocus.explorationMove:hover,
+.gameMoveFocus.explorationMove:focus-visible {
+  color: var(--main-font-color);
+}
+
+.branchPoint::after {
+  content: " \2042";
+  font-size: 0.85em;
+  color: var(--secondary-font-color);
+  font-style: normal;
+  font-weight: normal;
+}
+
+.move-tree-legend {
+  font-size: x-small;
+  color: var(--secondary-font-color);
+  margin: 0.25rem 0 0.35rem;
+}
+
+.move-tree-legend__mainline {
+  font-weight: bold;
+  color: var(--main-font-color);
+  font-style: normal;
+}
+
+.move-tree-legend__exploration {
+  font-style: italic;
+}
+
 .gameMoveNums {
   font-size: x-small;
   vertical-align: bottom !important;
@@ -1077,8 +1125,31 @@ th .player {
   align-self: end;
 }
 
+.variation-item-numbering--active {
+  font-weight: bold;
+  color: var(--main-font-color);
+}
+
 .variation-item-content {
   justify-self: start;
+}
+
+.variation-item-content--active {
+  border-radius: 2px;
+}
+
+.variation-item-content--active .gameMove {
+  background-color: var(--tag-background-color);
+}
+
+#MoveTreeBtnBar .button:disabled .fa-angle-up,
+#MoveTreeBtnBar .button:disabled .fa-angle-down {
+  opacity: 0.35;
+}
+
+#MoveTreeBtnBar .button:not(:disabled) .fa-angle-up,
+#MoveTreeBtnBar .button:not(:disabled) .fa-angle-down {
+  color: var(--secondary-color-3);
 }
 
 /* Winning/losing indicators */
