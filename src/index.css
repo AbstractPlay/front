@@ -1142,6 +1142,11 @@ th .player {
   background-color: var(--tag-background-color);
 }
 
+/* Lab (and mainline variants): focus token is a bg colour; keep text readable */
+.variation-item-content .gameMoveFocus {
+  color: var(--main-font-color);
+}
+
 #MoveTreeBtnBar .button:disabled .fa-angle-up,
 #MoveTreeBtnBar .button:disabled .fa-angle-down {
   opacity: 0.35;

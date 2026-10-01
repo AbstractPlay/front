@@ -11,8 +11,8 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Changed
 
-- **Live play move tree:** mainline moves and exploration branches are styled differently (with a short legend when branches are present); Lab is unchanged.
-- **Move tree branches:** at a multi-branch ply, list all lines (a, b, …) with the active one highlighted; ↑/↓ toolbar buttons and tooltips match keyboard (up = previous variant, down = next).
+- **Live play move tree:** mainline moves and exploration branches are styled differently (with a short legend when branches are present).
+- **Move tree branches (live play and Lab):** at a multi-branch ply, list all lines (a, b, …) with the active one highlighted; ↑/↓ toolbar buttons and tooltips match keyboard (up = previous variant, down = next).
 
 ### Fixed
 
