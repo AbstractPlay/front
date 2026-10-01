@@ -23,9 +23,34 @@ import {
   readMoveTableDensityPreference,
 } from "../../lib/GameMove/moveTableLayout";
 import {
+  getPath,
   nextVarFocus,
   prevVarFocus,
 } from "../../lib/GameMove/moveTreeKeyboard";
+import {
+  buildMoveCellClass,
+  pathHasExplorationMoves,
+} from "../../lib/GameMove/moveTreeCellClasses";
+import {
+  collectVariationChoices,
+  focusedMovePathIndex,
+  explorationPathEquals,
+  moveCellsFromVariationChoices,
+  rowHasFocus,
+} from "../../lib/GameMove/moveTreeVariations";
+
+function syncRowFocusClasses(cells, focus) {
+  return cells.map((cell) => {
+    const isFocus = explorationPathEquals(cell.path, focus);
+    const withoutFocus = (cell.class || "gameMove")
+      .replace(/\s*gameMoveFocus/g, "")
+      .trim();
+    return {
+      ...cell,
+      class: isFocus ? `${withoutFocus} gameMoveFocus` : withoutFocus,
+    };
+  });
+}
 
 function childAtPath(node, index) {
   return node?.children?.[index] ?? null;
@@ -248,24 +273,25 @@ function GameMoves(props) {
     let moveRows = [];
     let path = [];
     let curNumVariations = 0;
+    const focusedBranchPathIndex = focusedMovePathIndex(focus);
 
     let focusRow = 0;
     let numRows = 0;
+    let showMoveTreeLegend = false;
     if (exploration !== null) {
       if (!game.gameOver) {
         for (let i = 1; i < exploration.length; i++) {
-          let className = "gameMove";
-          if (
-            i === focus.moveNumber &&
-            (i < exploration.length - 1 ||
-              (i === exploration.length - 1 && focus.exPath.length === 0))
-          )
-            className += " gameMoveFocus";
-          if (
-            i === exploration.length - 1 &&
-            exploration[focus.moveNumber].children.length > 0
-          )
-            className += " lastMove";
+          const movePath = { moveNumber: i, exPath: [] };
+          const className = buildMoveCellClass({
+            movePath,
+            isFocus:
+              i === focus.moveNumber &&
+              (i < exploration.length - 1 ||
+                (i === exploration.length - 1 && focus.exPath.length === 0)),
+            isBranchPoint:
+              i === exploration.length - 1 &&
+              exploration[focus.moveNumber].children.length > 0,
+          });
 
           path.push([
             {
@@ -278,15 +304,21 @@ function GameMoves(props) {
                   ? "outline"
                   : false,
               move: exploration[i].move,
-              path: { moveNumber: i, exPath: [] },
+              path: movePath,
             },
           ]);
         }
         if (focus.moveNumber === exploration.length - 1) {
           let node = exploration[focus.moveNumber];
           for (let j = 0; j < focus.exPath.length; j++) {
-            let className = "gameMove";
-            if (j === focus.exPath.length - 1) className += " gameMoveFocus";
+            const movePath = {
+              moveNumber: focus.moveNumber,
+              exPath: focus.exPath.slice(0, j + 1),
+            };
+            const className = buildMoveCellClass({
+              movePath,
+              isFocus: j === focus.exPath.length - 1,
+            });
             curNumVariations = node.children.length;
             node = childAtPath(node, focus.exPath[j]);
             if (!node) {
@@ -307,10 +339,7 @@ function GameMoves(props) {
                     ? "outline"
                     : false,
                 move: node.move,
-                path: {
-                  moveNumber: focus.moveNumber,
-                  exPath: focus.exPath.slice(0, j + 1),
-                },
+                path: movePath,
               },
             ]);
           }
@@ -319,9 +348,12 @@ function GameMoves(props) {
             let next = [];
             for (let k = 0; k < node.children.length; k++) {
               const c = node.children[k];
-              let className = "gameMove";
+              const movePath = {
+                moveNumber: focus.moveNumber,
+                exPath: exPath.concat(k),
+              };
               next.push({
-                class: className,
+                class: buildMoveCellClass({ movePath }),
                 outcome: c.outcome,
                 premove:
                   c.premove || c?.children?.some((n) => n.premove) || false,
@@ -332,10 +364,7 @@ function GameMoves(props) {
                     ? "outline"
                     : false,
                 move: c.move,
-                path: {
-                  moveNumber: focus.moveNumber,
-                  exPath: exPath.concat(k),
-                },
+                path: movePath,
               });
             }
             exPath = exPath.concat(0);
@@ -355,19 +384,23 @@ function GameMoves(props) {
           i++
         ) {
           // moves up to focus, or if focus has no exploration, all actual game moves
-          let className = "gameMove";
+          const movePath = { moveNumber: i, exPath: [] };
+          let isFocusOnMainline = false;
           if (i === focus.moveNumber) {
             if (focus.exPath.length === 0) {
-              className += " gameMoveFocus";
+              isFocusOnMainline = true;
               curNumVariations =
                 1 +
                 (focus.moveNumber === 0
                   ? 0
                   : exploration[focus.moveNumber - 1].children.length);
-            } else {
-              className += " lastMove";
             }
           }
+          const className = buildMoveCellClass({
+            movePath,
+            isFocus: isFocusOnMainline,
+            isBranchPoint: i === focus.moveNumber && focus.exPath.length !== 0,
+          });
           path.push([
             {
               class: className,
@@ -383,19 +416,26 @@ function GameMoves(props) {
                 (exploration[i].children.length > 0 && focus.moveNumber !== i
                   ? "..."
                   : ""),
-              path: { moveNumber: i, exPath: [] },
+              path: movePath,
             },
           ]);
         }
         let node = exploration[focus.moveNumber];
         for (let j = 0; j < focus.exPath.length; j++) {
           // now moves from the actual move along the focus path
-          let className = "gameMove";
-          if (j === focus.exPath.length - 1) {
-            className += " gameMoveFocus";
+          const movePath = {
+            moveNumber: focus.moveNumber,
+            exPath: focus.exPath.slice(0, j + 1),
+          };
+          const isFocus = j === focus.exPath.length - 1;
+          if (isFocus) {
             curNumVariations = node.children.length;
             if (j === 0) curNumVariations += 1;
           }
+          const className = buildMoveCellClass({
+            movePath,
+            isFocus,
+          });
           node = childAtPath(node, focus.exPath[j]);
           if (!node) {
             break;
@@ -411,10 +451,7 @@ function GameMoves(props) {
                   ? "outline"
                   : false,
               move: node.move,
-              path: {
-                moveNumber: focus.moveNumber,
-                exPath: focus.exPath.slice(0, j + 1),
-              },
+              path: movePath,
             },
           ]);
         }
@@ -426,9 +463,15 @@ function GameMoves(props) {
             focus.exPath.length === 0
           ) {
             // actual game move isn't in the previous move's node's children, so needs special handling
-            const className = "gameMove actualMove";
+            const actualPath = {
+              moveNumber: focus.moveNumber + 1,
+              exPath: [],
+            };
             next.push({
-              class: className,
+              class: buildMoveCellClass({
+                movePath: actualPath,
+                isActual: true,
+              }),
               outcome: exploration[focus.moveNumber + 1].outcome,
               commented:
                 exploration[focus.moveNumber + 1].comment &&
@@ -438,17 +481,17 @@ function GameMoves(props) {
                   ? "outline"
                   : false,
               move: exploration[focus.moveNumber + 1].move,
-              path: {
-                moveNumber: focus.moveNumber + 1,
-                exPath: [],
-              },
+              path: actualPath,
             });
           }
           for (let k = 0; k < node.children.length; k++) {
             const c = node.children[k];
-            let className = "gameMove";
+            const movePath = {
+              moveNumber: focus.moveNumber,
+              exPath: exPath.concat(k),
+            };
             next.push({
-              class: className,
+              class: buildMoveCellClass({ movePath }),
               outcome: c.outcome,
               commented:
                 c.comment && c.comment.length > 0
@@ -457,10 +500,7 @@ function GameMoves(props) {
                   ? "outline"
                   : false,
               move: c.move,
-              path: {
-                moveNumber: focus.moveNumber,
-                exPath: exPath.concat(k),
-              },
+              path: movePath,
             });
           }
           exPath = exPath.concat(0);
@@ -469,6 +509,17 @@ function GameMoves(props) {
           node = node.children[0];
         }
       }
+      showMoveTreeLegend =
+        !neverExplore &&
+        game.canExplore &&
+        pathHasExplorationMoves(path);
+      const keyboardPathScratch = [];
+      curNumVariations = getPath(
+        focus,
+        exploration,
+        keyboardPathScratch,
+        game.gameOver
+      );
       const exportState =
         exploration?.length > 0
           ? exploration[exploration.length - 1]?.state ?? game?.state
@@ -503,31 +554,44 @@ function GameMoves(props) {
             engine: moveTableEngine,
             path,
           });
+          const rowHasCurrentFocus =
+            movenum !== null &&
+            path[movenum] !== undefined &&
+            rowHasFocus(path[movenum], focus);
           row.push(
             <td
               key={"td0-" + i + "-" + j}
               className="gameMoveNums"
-              id={
-                movenum !== null &&
-                path !== null &&
-                path !== undefined &&
-                path[movenum] !== undefined &&
-                path[movenum][0].class.includes("gameMoveFocus")
-                  ? "focusedMoveNum"
-                  : ""
-              }
+              id={rowHasCurrentFocus ? "focusedMoveNum" : ""}
             >
               {moveNumberForCell({ layout, seatIdx: j, movenum })}
             </td>
           );
           if (movenum !== null && movenum < path.length) {
-            if (path[movenum][0].class.includes("gameMoveFocus")) focusRow = i;
+            if (rowHasCurrentFocus) focusRow = i;
+            const { count: branchChoiceCount, choices: branchChoices } =
+              collectVariationChoices(focus, exploration, game);
+            let cells = path[movenum];
+            if (
+              movenum === focusedBranchPathIndex &&
+              branchChoiceCount > 1 &&
+              cells.length === 1
+            ) {
+              cells = moveCellsFromVariationChoices(
+                exploration,
+                branchChoices,
+                focus,
+                (opts) => buildMoveCellClass(opts)
+              );
+            } else if (cells.length > 1) {
+              cells = syncRowFocusClasses(cells, focus);
+            }
             row.push(
               <td key={"td1-" + i + "-" + j}>
                 <div className="move">
-                  {path[movenum].length === 1 ? (
+                  {cells.length === 1 ? (
                     AMove(game, {
-                      ...path[movenum][0],
+                      ...cells[0],
                       move: moveTextForCell({
                         layout,
                         rounds,
@@ -539,12 +603,24 @@ function GameMoves(props) {
                     })
                   ) : (
                     <div className="variation-list">
-                      {path[movenum].map((m, k) => (
+                      {cells.map((m, k) => (
                         <Fragment key={"move" + i + "-" + j + "-" + k}>
-                          <div className="variation-item-numbering">
+                          <div
+                            className={
+                              explorationPathEquals(m.path, focus)
+                                ? "variation-item-numbering variation-item-numbering--active"
+                                : "variation-item-numbering"
+                            }
+                          >
                             {(k + 10).toString(36)}
                           </div>
-                          <div className="variation-item-content">
+                          <div
+                            className={
+                              explorationPathEquals(m.path, focus)
+                                ? "variation-item-content variation-item-content--active"
+                                : "variation-item-content"
+                            }
+                          >
                             {AMove(game, m)}
                           </div>
                         </Fragment>
@@ -603,13 +679,13 @@ function GameMoves(props) {
                 curNumVariations > 1
                   ? () =>
                       handleGameMoveClick(
-                        nextVarFocus(focus, game, curNumVariations)
+                        prevVarFocus(focus, game, curNumVariations)
                       )
                   : undefined
               }
             >
               <i className="fa fa-angle-up"></i>
-              <span className="tooltiptext">{t("GoNextVar")}</span>
+              <span className="tooltiptext">{t("GoPrevVar")}</span>
             </button>
           )}
           {neverExplore ? null : (
@@ -620,13 +696,13 @@ function GameMoves(props) {
                 curNumVariations > 1
                   ? () =>
                       handleGameMoveClick(
-                        prevVarFocus(focus, game, curNumVariations)
+                        nextVarFocus(focus, game, curNumVariations)
                       )
                   : undefined
               }
             >
               <i className="fa fa-angle-down"></i>
-              <span className="tooltiptext">{t("GoPrevVar")}</span>
+              <span className="tooltiptext">{t("GoNextVar")}</span>
             </button>
           )}
           <button
@@ -691,6 +767,17 @@ function GameMoves(props) {
             </button>
           ) : null}
         </div>
+        {showMoveTreeLegend ? (
+          <p className="move-tree-legend" aria-hidden="true">
+            <span className="move-tree-legend__mainline">
+              {t("gameMove.moveTree.legendMainline")}
+            </span>
+            <span className="move-tree-legend__sep"> · </span>
+            <span className="move-tree-legend__exploration">
+              {t("gameMove.moveTree.legendExploration")}
+            </span>
+          </p>
+        ) : null}
         <div className="movesTable" ref={tableRef}>
           <table className="table apTable is-narrow">
             <tbody>
