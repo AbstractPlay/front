@@ -352,9 +352,9 @@
     "GoBegin": "Show beginning of game. Keys: Home or 'h'.",
     "GoCurrent": "Show current position. Keys: End or 'l'.",
     "GoNext": "Show next move (and first variant if any). Keys: right arrow or 'k'.",
-    "GoNextVar": "Show next move variant. Keys: down arrow or 'm'.",
+    "GoNextVar": "Show next move variant. Keys: down arrow or 'i'.",
     "GoPrev": "Show previous move. Keys: left arrow or 'j'.",
-    "GoPrevVar": "Show previous variant. Keys: up arrow or 'i'.",
+    "GoPrevVar": "Show previous variant. Keys: up arrow or 'm'.",
     "HardTime": "Hard time: the system will enforce time limits.",
     "HardTimeSet": "Hard time",
     "HasAnnotations": "Has post-game comments",
@@ -1765,6 +1765,10 @@
             "dockCollapse": "Fewer options",
             "moveTableDensityAuto": "Compact move rows (click for one row per move)",
             "moveTableDensitySparse": "One row per move (click for compact rows)"
+        },
+        "moveTree": {
+            "legendMainline": "Played moves",
+            "legendExploration": "Exploration"
         }
     },
     "Back": "Back",
