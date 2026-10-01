@@ -84,7 +84,7 @@ function StandingChallenges(props) {
   const { t, i18n } = useTranslation();
   const { status: authStatus } = useAuthSession();
   const [challenges, challengesSetter] = useState(null);
-  const [accepted, acceptedSetter] = useState(null);
+  const [accepting, acceptingSetter] = useState(null);
   const [revoke, revokeSetter] = useState(null);
   const [reject, rejectSetter] = useState(null);
   const { metaGame: metaGameParam } = useParams();
@@ -232,7 +232,7 @@ function StandingChallenges(props) {
         }
         challengesSetter(result);
         revokeSetter(null);
-        acceptedSetter(null);
+        acceptingSetter(null);
       } catch (error) {
         challengesSetter([]);
         console.log(error);
@@ -258,36 +258,43 @@ function StandingChallenges(props) {
 
   useEffect(() => {
     async function fetchData() {
-      const challenge = challenges?.find((c) => c.id === accepted);
+      const challenge = challenges?.find((c) => c.id === accepting);
       const challengeMetaGame = siteWide ? challenge?.metaGame : metaGame;
       if (!challengeMetaGame) {
+        acceptingSetter(null);
         return;
       }
       console.log(
-        `Submitting acceptance of ${challengeMetaGame} challenge ${accepted}`
+        `Submitting acceptance of ${challengeMetaGame} challenge ${accepting}`
       );
       try {
         const res = await callAuthApi("challenge_response", {
-          id: accepted,
+          id: accepting,
           metaGame: challengeMetaGame,
           standing: true,
           response: true,
         });
-        if (!res) return;
+        if (!res) {
+          acceptingSetter(null);
+          return;
+        }
         const result = await res.json();
         if (result.statusCode !== 200) {
           console.log("handleAccept", result.statusCode);
           console.log(JSON.parse(result.body));
+          acceptingSetter(null);
         } else {
-          if (challenge.numPlayers > 2) updateSetter((update) => update + 1);
+          updateSetter((update) => update + 1);
+          acceptingSetter(null);
         }
       } catch (error) {
         console.log("handleChallengeResponse catch", error);
         console.log(error);
+        acceptingSetter(null);
       }
     }
-    if (accepted) fetchData();
-  }, [accepted, challenges, metaGame, siteWide, updateSetter]);
+    if (accepting) fetchData();
+  }, [accepting, challenges, metaGame, siteWide, updateSetter]);
 
   useEffect(() => {
     async function fetchData() {
@@ -351,8 +358,8 @@ function StandingChallenges(props) {
     }
   }, [reject, metaGame, siteWide, challenges, updateSetter]);
 
-  const handleAccept = async (id) => {
-    acceptedSetter(id);
+  const handleAccept = (id) => {
+    acceptingSetter(id);
   };
 
   const handleReject = async (id) => {
@@ -643,9 +650,8 @@ function StandingChallenges(props) {
             <>
               {!showRespond ? null : (
                 <>
-                  {props.row.original.id === accepted ? (
-                    t("Accepted")
-                  ) : props.row.original.id === reject ||
+                  {props.row.original.id === accepting ||
+                  props.row.original.id === reject ||
                     props.row.original.id === revoke ? (
                     <Spinner></Spinner>
                   ) : props.row.original.challengerId === globalMe?.id ? (
@@ -682,7 +688,7 @@ function StandingChallenges(props) {
   }, [
     globalMe,
     t,
-    accepted,
+    accepting,
     revoke,
     reject,
     showRespond,
