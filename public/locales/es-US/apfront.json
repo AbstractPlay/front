@@ -352,9 +352,9 @@
   "GoBegin": "Mostrar el inicio del juego. Teclas: Inicio o 'h'.",
   "GoCurrent": "Mostrar la posición actual. Teclas: Fin o 'l'.",
   "GoNext": "Mostrar el siguiente movimiento (y la primera variante si la hay). Teclas: flecha derecha o 'k'.",
-  "GoNextVar": "Mostrar la siguiente variante de jugada. Teclas: flecha abajo o 'i'.",
+  "GoNextVar": "Mostrar la siguiente variante de movimiento. Teclas: flecha abajo o 'i'.",
   "GoPrev": "Mostrar el movimiento anterior. Teclas: flecha izquierda o 'j'.",
-  "GoPrevVar": "Mostrar la variante de jugada anterior. Teclas: flecha arriba o 'm'.",
+  "GoPrevVar": "Mostrar la variante anterior. Teclas: flecha arriba o 'm'.",
   "HardTime": "Tiempo estricto: el sistema aplicará límites de tiempo.",
   "HardTimeSet": "Tiempo estricto",
   "HasAnnotations": "Tiene comentarios posjuego",
@@ -1959,6 +1959,10 @@
     "intro": "Un área de juego local para experimentar con juegos. Nada de lo que hagas aquí llega al servidor; las posiciones y partidas guardadas permanecen únicamente en tu navegador.",
     "introLoggedIn": "Experimenta con juegos en el laboratorio de pruebas (Playground). Las posiciones guardadas se sincronizan con tu cuenta; tu sesión actual también se conserva en este dispositivo para que puedas reanudarla después de actualizar la página.",
     "noSimultaneous": "El laboratorio de pruebas solo admite juegos secuenciales. Los juegos simultáneos no están disponibles.",
+    "seatPicker": {
+      "legend": "Asiento activo",
+      "seat": "{{player}}"
+    },
     "tabNew": "Nueva partida",
     "feelingAdventurous": "Me siento aventurero",
     "tabPaste": "Pegar estado",
@@ -1967,7 +1971,7 @@
     "launch": "Iniciar",
     "gameState": "Estado de la partida",
     "pastePlaceholder": "Pega el estado serializado de la partida aquí",
-    "pasteHelp": "Pega un estado serializado proveniente de un volcado de depuración de una partida en vivo, una exportación del laboratorio de pruebas u otro lugar. El tipo de juego se detectará automáticamente a partir del estado. No se admiten juegos simultáneos.",
+    "pasteHelp": "Pega un estado serializado desde un volcado de depuración de una partida en vivo, una exportación de Playground o cualquier otro lugar. El tipo de juego se lee automáticamente desde el estado. Para juegos simultáneos, elige un asiento después de cargar e ingresa el movimiento de un jugador por cada envío.",
     "loadState": "Cargar estado",
     "noSavedGames": "Aún no hay partidas guardadas en el laboratorio de pruebas.",
     "savedAt": "Guardado",
@@ -2000,6 +2004,14 @@
     "codersMany": "Programadores: ",
     "titleSuffix": " — Zona de pruebas",
     "launcherPageTitle": "Zona de pruebas",
+    "hiddenView": {
+      "legend": "Información oculta (vista)",
+      "god": "Modo dios",
+      "live": "Modo en vivo",
+      "hintGod": "Estado completo (sin omitir nada).",
+      "hintLive": "Mostrando la vista del jugador {{player}} (jugador actual).",
+      "hintGameOver": "Fin del juego — se muestra el estado completo."
+    },
     "debug": {
       "copyPosition": "Copiar posición",
       "copyPositionHelp": "Estado sin procesar del motor en el enfoque actual (para depuración).",
