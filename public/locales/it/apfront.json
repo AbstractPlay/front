@@ -1959,6 +1959,10 @@
     "intro": "Un'area di gioco locale per sperimentare con i giochi. Nulla qui interagisce con il server: le posizioni e le partite salvate risiedono solo nel tuo browser.",
     "introLoggedIn": "Sperimenta con le partite nel Playground. Le posizioni salvate si sincronizzano con il tuo account; la tua sessione corrente viene conservata anche su questo dispositivo, così da poter riprendere dopo un aggiornamento.",
     "noSimultaneous": "Il laboratorio supporta solo giochi a turni sequenziali. I giochi simultanei non sono disponibili.",
+    "seatPicker": {
+      "legend": "Posto attivo",
+      "seat": "{{player}}"
+    },
     "tabNew": "Nuova partita",
     "feelingAdventurous": "Mi sento audace",
     "tabPaste": "Incolla stato",
@@ -1967,7 +1971,7 @@
     "launch": "Avvia",
     "gameState": "Stato della partita",
     "pastePlaceholder": "Incolla qui lo stato serializzato della partita",
-    "pasteHelp": "Incolla uno stato serializzato da un dump di debug di una partita dal vivo, da un'esportazione del laboratorio o da un'altra fonte. Il tipo di gioco viene letto automaticamente dallo stato. I giochi simultanei non sono supportati.",
+    "pasteHelp": "Incolla uno stato serializzato da un dump di debug di una partita dal vivo, da un'esportazione del Playground o da altrove. Il tipo di gioco viene letto automaticamente dallo stato. Per i giochi simultanei, seleziona un posto dopo il caricamento e inserisci la mossa di un singolo giocatore per ciascun invio.",
     "loadState": "Carica stato",
     "noSavedGames": "Nessuna partita salvata nel laboratorio.",
     "savedAt": "Salvato il",
@@ -2000,6 +2004,14 @@
     "codersMany": "Programmatori: ",
     "titleSuffix": " — Laboratorio",
     "launcherPageTitle": "Area di prova",
+    "hiddenView": {
+      "legend": "Informazioni nascoste (vista)",
+      "god": "Modalità Dio",
+      "live": "Modalità dal vivo",
+      "hintGod": "Stato completo (nessun elemento rimosso).",
+      "hintLive": "Mostra la vista del giocatore {{player}} (giocatore corrente).",
+      "hintGameOver": "Partita terminata — mostra lo stato completo."
+    },
     "debug": {
       "copyPosition": "Copia posizione",
       "copyPositionHelp": "Stato grezzo del motore di gioco al punto corrente (per il debug).",

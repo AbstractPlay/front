@@ -352,7 +352,7 @@
   "GoBegin": "Afficher le début de la partie. Touches : Début ou 'h'.",
   "GoCurrent": "Afficher la position actuelle. Touches : Fin ou 'l'.",
   "GoNext": "Afficher le coup suivant (et la première variante le cas échéant). Touches : Flèche droite ou 'k'.",
-  "GoNextVar": "Afficher la variante suivante. Touches : flèche bas ou 'i'.",
+  "GoNextVar": "Afficher la variante de coup suivante. Touches : flèche bas ou 'i'.",
   "GoPrev": "Afficher le coup précédent. Touches : Flèche gauche ou 'j'.",
   "GoPrevVar": "Afficher la variante précédente. Touches : flèche haut ou 'm'.",
   "HardTime": "Temps strict : le système appliquera strictement les limites de temps.",
@@ -1959,6 +1959,10 @@
     "intro": "Un espace de jeu local pour expérimenter avec les jeux. Rien ici ne touche le serveur — les positions et les parties sauvegardées résident uniquement dans votre navigateur.",
     "introLoggedIn": "Expérimentez des parties dans le Playground. Les positions sauvegardées sont synchronisées avec votre compte ; votre session actuelle est également conservée sur cet appareil pour vous permettre de reprendre après avoir rafraîchi la page.",
     "noSimultaneous": "Le Playground ne prend en charge que les jeux au tour par tour (séquentiels). Les jeux simultanés ne sont pas disponibles.",
+    "seatPicker": {
+      "legend": "Siège actif",
+      "seat": "{{player}}"
+    },
     "tabNew": "Nouvelle partie",
     "feelingAdventurous": "Je me sens d'humeur aventureuse",
     "tabPaste": "Coller l'état",
@@ -1967,7 +1971,7 @@
     "launch": "Lancer",
     "gameState": "État de la partie",
     "pastePlaceholder": "Collez l'état sérialisé de la partie ici",
-    "pasteHelp": "Collez un état sérialisé issu d'un dump de débogage d'une partie en direct, d'un export de partie du Playground ou d'ailleurs. Le type de jeu est extrait automatiquement de l'état. Les jeux simultanés ne sont pas pris en charge.",
+    "pasteHelp": "Collez un état sérialisé provenant d'un dump de débogage d'une partie en direct, d'un export de partie du Playground ou d'ailleurs. Le type de jeu est lu automatiquement à partir de l'état. Pour les jeux simultanés, choisissez un siège après le chargement et entrez le coup d'un joueur par validation.",
     "loadState": "Charger l'état",
     "noSavedGames": "Aucune partie sauvegardée dans le Playground pour l'instant.",
     "savedAt": "Sauvegardé",
@@ -2000,6 +2004,14 @@
     "codersMany": "Développeurs : ",
     "titleSuffix": " — Bac à sable",
     "launcherPageTitle": "Espace d'essai",
+    "hiddenView": {
+      "legend": "Informations cachées (vue)",
+      "god": "Mode Dieu",
+      "live": "Mode en direct",
+      "hintGod": "État complet (aucun élément masqué).",
+      "hintLive": "Affichage de la vue du joueur {{player}} (joueur actuel).",
+      "hintGameOver": "Fin de partie — état complet affiché."
+    },
     "debug": {
       "copyPosition": "Copier la position",
       "copyPositionHelp": "État brut du moteur sur le coup actuel (pour le débogage).",
