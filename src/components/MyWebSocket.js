@@ -7,6 +7,7 @@ import {
   cancelWatchGamesSync,
   scheduleWatchGamesSync,
 } from "../lib/wsWatchSync";
+import { scheduleNotificationsRefresh } from "../lib/scheduleNotificationsRefresh";
 
 const WS_CLOSE_CODES = {
   1000: "Normal closure",
@@ -238,6 +239,8 @@ export default function MyWebSocket() {
           } else if (payload !== undefined && typeof payload === "object") {
             setConnections(payload);
           }
+        } else if (msg.verb === "notification") {
+          scheduleNotificationsRefresh();
         } else if (msg.verb === "test") {
           toast(`Test message: ${msg.payload}`);
         }

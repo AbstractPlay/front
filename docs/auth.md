@@ -40,7 +40,7 @@ Redirect URLs come from `COGNITO_REDIRECT_LOGIN` and `COGNITO_REDIRECT_LOGOUT`. 
 
 ## User profile (`globalMe`)
 
-After login, [`useProfileBootstrap`](../src/hooks/useProfileBootstrap.js) calls [`fetchProfile()`](../src/lib/globalMeBootstrap.js) (`me_profile`), which populates Zustand `globalMe` (bots, settings, `activeGames`, etc.). [`NotificationBell.js`](../src/components/NotificationBell.js) calls [`fetchNotifications()`](../src/lib/globalMeBootstrap.js) (`list_notifications`) for the navbar feed. [`Me.js`](../src/components/Me.js) calls `fetchDashboard()` (`me_dashboard`) on the `/me` page for games and challenges (notifications are also included in the dashboard payload but the bell is the primary UI).
+After login, [`useProfileBootstrap`](../src/hooks/useProfileBootstrap.js) calls [`fetchProfile()`](../src/lib/globalMeBootstrap.js) (`me_profile`), which populates Zustand `globalMe` (bots, settings, `activeGames`, etc.). [`NotificationBell.js`](../src/components/NotificationBell.js) calls [`fetchNotifications()`](../src/lib/globalMeBootstrap.js) (`list_notifications`) once for the navbar feed. [`Me.js`](../src/components/Me.js) on `/` calls `fetchDashboard()` (`me_dashboard`) for games and challenges and `fetchNotifications()` in parallel as a gap filler; WebSocket `notification` messages trigger a debounced `fetchNotifications()` while connected (see [WebSockets](/front/subsystems/websockets/)).
 
 ## New user onboarding
 
