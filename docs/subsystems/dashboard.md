@@ -28,7 +28,7 @@ The dashboard response drives:
 - Watched games
 - Bot status (via [`botApi.js`](../src/components/Bots/botApi.js))
 
-Partial data may already be in Zustand `globalMe` from navbar login; `fetchDashboard` merges into `globalMe` with `{ ...prev, ...dashboard }`.
+Partial data may already be in Zustand `globalMe` from navbar login; `fetchDashboard` merges into `globalMe` with `{ ...prev, ...dashboard }`. In-app notifications are **not** part of the dashboard payload — [`Me.js`](../src/components/Me.js) calls [`fetchNotifications()`](../src/lib/globalMeBootstrap.js) in parallel when loading the dashboard.
 
 Backend: [Auth queries — Profile and dashboard](/backend/api/auth-queries/) (`me_dashboard`, `dismiss_notification`).
 

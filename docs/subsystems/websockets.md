@@ -36,6 +36,8 @@ On `game` messages, `MyWebSocket` dispatches:
 - `refresh-me` — dashboard refetches `me_dashboard` for any watched-game update
 - `refresh-data` — carries `{ meta, id }` from the WS payload; the open game page (`GameMove`) refetches only when those match the current route
 
+On `notification` messages, [`scheduleNotificationsRefresh()`](../src/lib/scheduleNotificationsRefresh.js) debounces a `list_notifications` refetch so the navbar bell stays current without embedding notifications in `me_dashboard`.
+
 ## Reconnection
 
 Exponential backoff on disconnect:
