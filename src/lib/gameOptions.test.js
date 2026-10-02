@@ -16,6 +16,7 @@ import {
   sortCategoryKeys,
 } from "./gameOptions";
 import { isProductionMode } from "./realMode";
+import { isLabSupportedGame } from "./Lab/buildGame";
 
 vi.mock("./realMode", () => ({
   isProductionMode: vi.fn(() => false),
@@ -103,12 +104,17 @@ describe("buildGameOptions", () => {
     );
   });
 
-  it("labOnly excludes simultaneous games", () => {
+  it("labOnly includes simultaneous games when otherwise supported", () => {
     const all = buildGameOptions();
     const lab = buildGameOptions({ labOnly: true });
     expect(lab.length).toBeLessThanOrEqual(all.length);
-    for (const { id } of lab) {
-      expect(gameinfo.get(id).flags.includes("simultaneous")).toBe(false);
+    const simInAll = all.some(({ id }) =>
+      gameinfo.get(id).flags.includes("simultaneous")
+    );
+    if (simInAll) {
+      expect(
+        lab.some(({ id }) => gameinfo.get(id).flags.includes("simultaneous"))
+      ).toBe(true);
     }
   });
 
@@ -149,7 +155,7 @@ describe("pickRandomGameOption", () => {
     const picked = pickRandomGameOption({ labOnly: true });
     expect(picked).not.toBeNull();
     expect(gameinfo.has(picked.id)).toBe(true);
-    expect(gameinfo.get(picked.id).flags.includes("simultaneous")).toBe(false);
+    expect(isLabSupportedGame(picked.id)).toBe(true);
     const playercounts = gameinfo.get(picked.id).playercounts;
     expect(playercounts.length === 1 && playercounts[0] === 1).toBe(false);
   });

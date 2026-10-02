@@ -32,9 +32,12 @@ export function engineSupportsPlayerStrip(engine) {
 
 /**
  * @param {import("@abstractplay/gameslib").GameBase} engine
- * @param {number} [_activeSeat] reserved for simultaneous seat perspective
+ * @param {number} [activeSeat] 1-based Lab seat when simultaneous
  */
-export function liveStripPlayer(engine, _activeSeat) {
+export function liveStripPlayer(engine, activeSeat) {
+  if (typeof activeSeat === "number" && activeSeat >= 1) {
+    return activeSeat;
+  }
   return engine.currplayer;
 }
 
@@ -70,11 +73,16 @@ export function serializeForLiveView(engine, player) {
  * @param {import("@abstractplay/gameslib").GameBase} fullEngine
  * @param {LabHiddenViewMode} viewMode
  */
-export function createLabViewEngine(metaGame, fullEngine, viewMode) {
+export function createLabViewEngine(
+  metaGame,
+  fullEngine,
+  viewMode,
+  activeSeat
+) {
   if (!shouldStripForLiveView(fullEngine, viewMode)) {
     return fullEngine;
   }
-  const player = liveStripPlayer(fullEngine);
+  const player = liveStripPlayer(fullEngine, activeSeat);
   return GameFactory(metaGame, serializeForLiveView(fullEngine, player));
 }
 
@@ -83,8 +91,18 @@ export function createLabViewEngine(metaGame, fullEngine, viewMode) {
  * @param {import("@abstractplay/gameslib").GameBase} fullEngine
  * @param {LabHiddenViewMode} viewMode
  */
-export function resolveLabDisplayEngines(metaGame, fullEngine, viewMode) {
-  const viewEngine = createLabViewEngine(metaGame, fullEngine, viewMode);
+export function resolveLabDisplayEngines(
+  metaGame,
+  fullEngine,
+  viewMode,
+  activeSeat
+) {
+  const viewEngine = createLabViewEngine(
+    metaGame,
+    fullEngine,
+    viewMode,
+    activeSeat
+  );
   return { fullEngine, viewEngine };
 }
 
@@ -96,8 +114,12 @@ export function resolveLabDisplayEngines(metaGame, fullEngine, viewMode) {
  * @param {LabHiddenViewMode} hiddenViewMode
  * @returns {Record<string, unknown>}
  */
-export function labRenderExtras(viewEngine, hiddenViewMode) {
-  const extras = { perspective: viewEngine.currplayer };
+export function labRenderExtras(viewEngine, hiddenViewMode, activeSeat) {
+  const perspective =
+    typeof activeSeat === "number" && activeSeat >= 1
+      ? activeSeat
+      : viewEngine.currplayer;
+  const extras = { perspective };
   if (normalizeLabHiddenViewMode(hiddenViewMode) === LAB_HIDDEN_VIEW_GOD) {
     extras.omniscient = true;
   }

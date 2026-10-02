@@ -54,6 +54,10 @@ describe("hiddenView", () => {
     expect(liveStripPlayer(mockEngine({ currplayer: 2 }))).to.equal(2);
   });
 
+  it("liveStripPlayer prefers explicit active seat", () => {
+    expect(liveStripPlayer(mockEngine({ currplayer: 1 }), 3)).to.equal(3);
+  });
+
   it("shouldStripForLiveView is false when game over or god mode", () => {
     const engine = mockEngine();
     expect(shouldStripForLiveView(engine, LAB_HIDDEN_VIEW_GOD)).to.be.false;
@@ -73,10 +77,14 @@ describe("hiddenView", () => {
     );
   });
 
-  it("labRenderExtras sets omniscient in god mode only", () => {
+  it("labRenderExtras sets omniscient and perspective in god mode", () => {
     const engine = { currplayer: 2 };
     expect(labRenderExtras(engine, LAB_HIDDEN_VIEW_GOD)).to.deep.equal({
       perspective: 2,
+      omniscient: true,
+    });
+    expect(labRenderExtras(engine, LAB_HIDDEN_VIEW_GOD, 3)).to.deep.equal({
+      perspective: 3,
       omniscient: true,
     });
     expect(labRenderExtras(engine, LAB_HIDDEN_VIEW_LIVE)).to.deep.equal({

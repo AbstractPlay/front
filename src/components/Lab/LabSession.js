@@ -73,7 +73,17 @@ import {
   processNewMove,
   populateChecked,
   updateLabDisplay,
+  resetLabSimRoundOnFocus,
 } from "../../lib/Lab/gameStuff";
+import {
+  isSeatSubmitBlocked,
+  partialMoveSeat,
+  seatEliminated,
+} from "../../lib/Lab/simultaneousRound";
+import {
+  mergeSimRoundIntoBoardSettings,
+  persistLabSimRound,
+} from "../../lib/Lab/labSimBoardSettings";
 import {
   engineSupportsPlayerStrip,
   LAB_HIDDEN_VIEW_GOD,
@@ -269,7 +279,16 @@ function LabSession({
       exploration: serializeSessionExploration(nodes, gameRef.current.gameOver),
       explorationFormat: 2,
       moveAnnotations: serializeMainLineAnnotations(nodes),
-      gameSettings: gameSettings ?? {},
+      gameSettings: (() => {
+        const base = { ...(gameSettings ?? {}) };
+        const g = gameRef.current;
+        if (g?.simultaneous) {
+          base.simActiveSeat = g.labActiveSeat ?? g.me + 1;
+          base.simPartialMove = g.partialMove;
+          base.simToMove = g.toMove;
+        }
+        return base;
+      })(),
       id: gameRef.current.id,
       loadedSave: loadedSaveRef.current,
     };
@@ -367,7 +386,8 @@ function LabSession({
         savedExploration,
         savedMoveAnnotations,
         initialFocus,
-        initialHiddenView
+        initialHiddenView,
+        boardSettings
       );
       bumpStatusRevision((v) => v + 1);
       processNewSettings(
@@ -445,9 +465,12 @@ function LabSession({
     const node = getFocusNode(explorationRef.current.nodes, game, foc);
     const engine = GameFactory(game.metaGame, node.state);
     partialMoveRenderRef.current = false;
+    resetLabSimRoundOnFocus(game, engine);
     foc.canExplore = canExploreMove(game, explorationRef.current.nodes, foc);
     if (!game.noMoves) {
-      movesRef.current = engine.moves();
+      movesRef.current = game.simultaneous
+        ? engine.moves(game.me + 1)
+        : engine.moves();
     }
     focusSetter(foc);
     engineRef.current = engine;
@@ -460,7 +483,15 @@ function LabSession({
       statusRef,
     });
     bumpStatusRevision((v) => v + 1);
-    moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
+    if (game.simultaneous) {
+      moveSetter({
+        ...engine.validateMove("", game.me + 1),
+        move: "",
+        rendered: "",
+      });
+    } else {
+      moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
+    }
     if (
       flagSetIncludes(effectiveFlags(engine, game.metaGame), "custom-colours")
     ) {
@@ -479,13 +510,32 @@ function LabSession({
       gameRef.current,
       focusRef.current
     );
-    const gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-    const result = gameEngineTmp.handleClick(
-      moveRef.current.move,
-      row,
-      col,
-      piece
-    );
+    const game = gameRef.current;
+    const gameEngineTmp = GameFactory(game.metaGame, node.state);
+    let result;
+    if (game.simultaneous) {
+      if (isSeatSubmitBlocked(gameEngineTmp, game.me, game.toMove)) {
+        return;
+      }
+      const seat = partialMoveSeat(
+        gameEngineTmp,
+        game.labActiveSeat ?? game.me + 1
+      );
+      result = gameEngineTmp.handleClickSimultaneous(
+        moveRef.current.move,
+        row,
+        col,
+        seat,
+        piece
+      );
+    } else {
+      result = gameEngineTmp.handleClick(
+        moveRef.current.move,
+        row,
+        col,
+        piece
+      );
+    }
     result.rendered = moveRef.current.rendered;
     processNewMove(
       result,
@@ -560,8 +610,14 @@ function LabSession({
       gameRef.current,
       focus
     );
-    const gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
-    const result = gameEngineTmp.validateMove(value);
+    const game = gameRef.current;
+    const gameEngineTmp = GameFactory(game.metaGame, node.state);
+    const result = game.simultaneous
+      ? gameEngineTmp.validateMove(
+          value,
+          partialMoveSeat(gameEngineTmp, game.labActiveSeat ?? game.me + 1)
+        )
+      : gameEngineTmp.validateMove(value);
     result.move = value;
     result.rendered = move.rendered;
     processNewMove(
@@ -765,6 +821,53 @@ function LabSession({
 
   const handleSettingsClose = () => {
     showSettingsSetter(false);
+  };
+
+  const handleActiveSeatChange = (seat) => {
+    const currentGame = gameRef.current;
+    if (!currentGame?.simultaneous || !focus) {
+      return;
+    }
+    const nextSeat = Math.min(Math.max(seat, 1), currentGame.numPlayers);
+    currentGame.me = nextSeat - 1;
+    currentGame.labActiveSeat = nextSeat;
+    currentGame.canSubmit = currentGame.toMove?.[currentGame.me] === true;
+    gameRef.current = currentGame;
+    persistLabSimRound(currentGame);
+    labBoardSettingsSetter((prev) => {
+      const next = mergeSimRoundIntoBoardSettings(prev ?? { all: {} }, currentGame);
+      saveLabBoardSettings(next);
+      return next;
+    });
+    const node = getFocusNode(
+      explorationRef.current.nodes,
+      currentGame,
+      focus
+    );
+    const baseEngine = GameFactory(currentGame.metaGame, node.state);
+    const validateSeat = partialMoveSeat(baseEngine, nextSeat);
+    moveSetter({
+      ...baseEngine.validateMove("", validateSeat),
+      move: "",
+      rendered: "",
+    });
+    if (!currentGame.noMoves) {
+      movesRef.current = baseEngine.moves(validateSeat);
+    }
+    if (engineRef.current && settings) {
+      updateLabDisplay({
+        game: currentGame,
+        fullEngine: engineRef.current,
+        hiddenViewMode: hiddenViewModeRef.current,
+        display: settings.display,
+        renderrepSetter,
+        statusRef,
+        partial: partialMoveRenderRef.current,
+        partialMove: moveRef.current?.move ?? "",
+        moveOpts: moveRef.current?.opts,
+      });
+      bumpStatusRevision((v) => v + 1);
+    }
   };
 
   const handleHiddenViewModeChange = (mode) => {
@@ -1105,7 +1208,10 @@ function LabSession({
     if (hiddenViewMode === LAB_HIDDEN_VIEW_LIVE && engineRef.current.gameover) {
       hiddenViewHint = t("lab.hiddenView.hintGameOver");
     } else if (hiddenViewMode === LAB_HIDDEN_VIEW_LIVE) {
-      const player = liveStripPlayer(engineRef.current);
+      const activeSeat = game.simultaneous
+        ? (game.labActiveSeat ?? game.me + 1)
+        : undefined;
+      const player = liveStripPlayer(engineRef.current, activeSeat);
       hiddenViewHint = t("lab.hiddenView.hintLive", { player });
     } else {
       hiddenViewHint = t("lab.hiddenView.hintGod");
@@ -1147,6 +1253,44 @@ function LabSession({
           {hiddenViewHint ? (
             <p className="lab-hidden-view-controls__hint">{hiddenViewHint}</p>
           ) : null}
+        </fieldset>
+      ) : null}
+      {game.simultaneous ? (
+        <fieldset className="lab-seat-picker">
+          <legend>{t("lab.seatPicker.legend")}</legend>
+          {game.players.map((player, i) => {
+            const seat = i + 1;
+            const eliminated =
+              engineRef.current != null &&
+              seatEliminated(engineRef.current, seat);
+            const submitted =
+              Array.isArray(game.toMove) && game.toMove[i] === false;
+            const active =
+              (game.labActiveSeat ?? game.me + 1) === seat;
+            return (
+              <label
+                key={player.id ?? seat}
+                className={[
+                  "lab-seat-picker__option",
+                  eliminated ? "lab-seat-picker__option--eliminated" : "",
+                  submitted && !eliminated
+                    ? "lab-seat-picker__option--submitted"
+                    : "",
+                  active ? "lab-seat-picker__option--active" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+              >
+                <input
+                  type="radio"
+                  name="labActiveSeat"
+                  checked={active}
+                  onChange={() => handleActiveSeatChange(seat)}
+                />
+                {t("lab.seatPicker.seat", { player: player.name })}
+              </label>
+            );
+          })}
         </fieldset>
       ) : null}
       <GameStatus

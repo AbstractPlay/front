@@ -9,8 +9,10 @@ import {
 } from "../../lib/gameOptions";
 import { getAuthToken } from "../../lib/api";
 import { buildLabGame, getLabPlayerCounts } from "../../lib/Lab/buildGame";
+import { readSimRoundFromBoardSettings } from "../../lib/Lab/labSimBoardSettings";
 import { parsePlaygroundImport } from "../../lib/Lab/export";
 import {
+  getLabBoardSettings,
   listSaves,
   deleteSave,
   localSaveToLaunchPayload,
@@ -184,9 +186,11 @@ function LabLauncher({ initialMetaGame = "", onLaunch, onLoadSave }) {
       return;
     }
     try {
+      const sim = readSimRoundFromBoardSettings(getLabBoardSettings());
       const game = buildLabGame(metaGame, null, {
         variants: selectedVariants,
         numPlayers: count,
+        activeSeat: sim.activeSeat,
       });
       onLaunch({
         game,
@@ -290,7 +294,6 @@ function LabLauncher({ initialMetaGame = "", onLaunch, onLoadSave }) {
       <div className="content">
         <h1 className="title">{t("Playground")}</h1>
         <p>{t(introKey)}</p>
-        <p>{t("lab.noSimultaneous")}</p>
       </div>
 
       <div className="tabs is-small is-toggle is-toggle-rounded">

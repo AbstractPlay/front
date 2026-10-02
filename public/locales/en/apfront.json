@@ -1959,6 +1959,10 @@
         "intro": "A local play area for experimenting with games. Nothing here touches the server — positions and saved games live in your browser only.",
         "introLoggedIn": "Experiment with games in the Playground. Saved positions sync to your account; your current session is also kept on this device so you can resume after a refresh.",
         "noSimultaneous": "Playground supports sequential games only. Simultaneous games are not available.",
+        "seatPicker": {
+            "legend": "Active seat",
+            "seat": "{{player}}"
+        },
         "tabNew": "New game",
         "feelingAdventurous": "I'm feeling adventurous",
         "tabPaste": "Paste state",
@@ -1967,7 +1971,7 @@
         "launch": "Launch",
         "gameState": "Game state",
         "pastePlaceholder": "Paste serialized game state here",
-        "pasteHelp": "Paste a serialized state from a live game debug dump, a Playground game export, or elsewhere. The game type is read from the state automatically. Simultaneous games are not supported.",
+        "pasteHelp": "Paste a serialized state from a live game debug dump, a Playground game export, or elsewhere. The game type is read from the state automatically. For simultaneous games, pick a seat after load and enter one player’s move per submit.",
         "loadState": "Load state",
         "noSavedGames": "No saved Playground games yet.",
         "savedAt": "Saved",

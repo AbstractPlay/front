@@ -34,6 +34,18 @@ import {
   labRenderExtras,
   resolveLabDisplayEngines,
 } from "./hiddenView.js";
+import {
+  applySimultaneousGameFields,
+  createFreshRoundBuffer,
+  joinPartialRow,
+  partialMoveSeat,
+  splitPartialRow,
+  submitSeatRound,
+} from "./simultaneousRound.js";
+import {
+  persistLabSimRound,
+  readSimRoundFromBoardSettings,
+} from "./labSimBoardSettings.js";
 
 export const populateChecked = (gameRef, engineRef, t, setter) => {
   const hideSpoilers =
@@ -66,6 +78,29 @@ export const populateChecked = (gameRef, engineRef, t, setter) => {
   }
 };
 
+function labActiveSeat(game) {
+  return game.labActiveSeat ?? (game.me != null ? game.me + 1 : 1);
+}
+
+function labSimExplorationContext(game) {
+  return {
+    simultaneous: true,
+    playerIndex: game.me,
+    numPlayers: game.numPlayers,
+    metaGame: game.metaGame,
+  };
+}
+
+/** Discard in-progress simultaneous round when exploration focus changes. */
+export function resetLabSimRoundOnFocus(game, engine) {
+  if (!game.simultaneous || engine.gameover) {
+    return;
+  }
+  const fresh = createFreshRoundBuffer(engine);
+  applySimultaneousGameFields(game, engine, fresh);
+  persistLabSimRound(game);
+}
+
 export function setupLabGame(
   game0,
   gameRef,
@@ -81,7 +116,8 @@ export function setupLabGame(
   savedExploration = null,
   savedMoveAnnotations = null,
   initialFocus = null,
-  hiddenViewMode = LAB_HIDDEN_VIEW_GOD
+  hiddenViewMode = LAB_HIDDEN_VIEW_GOD,
+  boardSettings = null
 ) {
   const explorer = true;
   void explorer;
@@ -104,9 +140,31 @@ export function setupLabGame(
     (!Object.prototype.hasOwnProperty.call(game0, "pieInvoked") ||
       game0.pieInvoked === false);
 
-  game0.me = 0;
+  if (!game0.simultaneous) {
+    game0.me = 0;
+  } else {
+    const savedSim = readSimRoundFromBoardSettings(boardSettings);
+    const seat = Math.min(
+      Math.max(savedSim.activeSeat ?? game0.labActiveSeat ?? 1, 1),
+      engine.numplayers
+    );
+    game0.me = seat - 1;
+    game0.labActiveSeat = seat;
+    const buffer =
+      savedSim.simPartialMove !== undefined && savedSim.simToMove
+        ? {
+            partialMove: savedSim.simPartialMove,
+            toMove: savedSim.simToMove,
+          }
+        : game0.partialMove
+          ? { partialMove: game0.partialMove, toMove: game0.toMove }
+          : createFreshRoundBuffer(engine);
+    applySimultaneousGameFields(game0, engine, buffer);
+  }
   game0.variants = engine.getVariants();
-  game0.canSubmit = true;
+  if (!game0.simultaneous) {
+    game0.canSubmit = true;
+  }
   // Local sandbox: always allow move entry and exploration (ignore no-explore flag).
   game0.canExplore = true;
 
@@ -221,12 +279,14 @@ export function renderRepForLab(
   viewEngine,
   display,
   moveOpts = {},
-  hiddenViewMode = LAB_HIDDEN_VIEW_GOD
+  hiddenViewMode = LAB_HIDDEN_VIEW_GOD,
+  activeSeat
 ) {
   const users = useStore.getState().users;
+  const seat = game.simultaneous ? (activeSeat ?? labActiveSeat(game)) : undefined;
   const renderExtras = {
     ...moveOpts,
-    ...labRenderExtras(viewEngine, hiddenViewMode),
+    ...labRenderExtras(viewEngine, hiddenViewMode, seat),
   };
   return resolveRenderLabels(
     viewEngine.render(
@@ -247,18 +307,24 @@ export function updateLabDisplay({
   partial = false,
   partialMove = "",
   moveOpts = {},
+  activeSeat,
 }) {
+  const seat = game.simultaneous
+    ? (activeSeat ?? labActiveSeat(game))
+    : undefined;
   const { viewEngine } = resolveLabDisplayEngines(
     game.metaGame,
     fullEngine,
-    hiddenViewMode
+    hiddenViewMode,
+    seat
   );
   const render = renderRepForLab(
     game,
     viewEngine,
     display,
     moveOpts,
-    hiddenViewMode
+    hiddenViewMode,
+    seat
   );
   game.stackExpanding =
     game.stackExpanding && render.renderer === "stacking-expanding";
@@ -287,9 +353,12 @@ export function syncLabEngineToFocus(
   }
   const engine = GameFactory(game.metaGame, node.state);
   partialMoveRenderRef.current = false;
+  resetLabSimRoundOnFocus(game, engine);
   engineRef.current = engine;
   if (!game.noMoves) {
-    movesRef.current = engine.moves();
+    movesRef.current = game.simultaneous
+      ? engine.moves(game.me + 1)
+      : engine.moves();
   }
   updateLabDisplay({
     game,
@@ -299,7 +368,15 @@ export function syncLabEngineToFocus(
     renderrepSetter,
     statusRef,
   });
-  moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
+  if (game.simultaneous) {
+    moveSetter({
+      ...engine.validateMove("", game.me + 1),
+      move: "",
+      rendered: "",
+    });
+  } else {
+    moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
+  }
   return true;
 }
 
@@ -334,6 +411,179 @@ function routeLabMove(exploration, game, focus, node, gameEngineTmp, move) {
   return { newfocus, node: currentNode };
 }
 
+function doViewSimultaneous(
+  game,
+  move,
+  exploration,
+  focus,
+  errorMessageRef,
+  errorSetter,
+  focusSetter,
+  moveSetter,
+  partialMoveRenderRef,
+  renderrepSetter,
+  engineRef,
+  movesRef,
+  statusRef,
+  settings,
+  t,
+  hiddenViewMode = LAB_HIDDEN_VIEW_GOD
+) {
+  const node = getFocusNode(exploration, game, focus);
+  let gameEngineTmp = GameFactory(game.metaGame, node.state);
+  const fragment = move.move || "";
+  const seatIndex = game.me;
+  const validateSeat = partialMoveSeat(gameEngineTmp, labActiveSeat(game));
+
+  if (move.complete !== 1) {
+    const simCtx = labSimExplorationContext(game);
+    const exploringPartial = isPartialExplorationMove(
+      gameEngineTmp,
+      fragment,
+      {
+        userCompleted: false,
+        ...simCtx,
+      }
+    );
+    const shouldPreview =
+      exploringPartial ||
+      (move.canrender === true &&
+        (fragment !== "" || move.opts !== undefined));
+    if (shouldPreview) {
+      const moves = splitPartialRow(game.partialMove, game.numPlayers);
+      moves[seatIndex] = fragment;
+      const combined = joinPartialRow(moves);
+      try {
+        gameEngineTmp.move(combined, { partial: true });
+        partialMoveRenderRef.current = true;
+        engineRef.current = gameEngineTmp;
+        moveSetter(move);
+        updateLabDisplay({
+          game,
+          fullEngine: gameEngineTmp,
+          hiddenViewMode,
+          display: settings?.display,
+          renderrepSetter,
+          statusRef,
+          partial: true,
+          partialMove: fragment,
+          moveOpts: move.opts,
+        });
+      } catch (err) {
+        if (err.name === "UserFacingError") {
+          errorMessageRef.current = err.client;
+        } else {
+          errorMessageRef.current = err.message;
+        }
+        errorSetter(true);
+      }
+    } else {
+      moveSetter(move);
+    }
+    return;
+  }
+
+  const newfocus = cloneDeep(focus);
+  let currentNode = node;
+  let moves;
+  try {
+    const result = submitSeatRound({
+      engine: gameEngineTmp,
+      numPlayers: game.numPlayers,
+      seatIndex,
+      fragment: fragment.trim(),
+      partialMove: game.partialMove,
+      toMove: game.toMove,
+    });
+    applySimultaneousGameFields(game, gameEngineTmp, result);
+    persistLabSimRound(game);
+
+    if (!result.committed) {
+      partialMoveRenderRef.current = true;
+      engineRef.current = gameEngineTmp;
+      moveSetter({
+        ...gameEngineTmp.validateMove("", validateSeat),
+        rendered: "",
+        move: "",
+      });
+      if (!game.noMoves) {
+        movesRef.current = gameEngineTmp.moves(validateSeat);
+      }
+      updateLabDisplay({
+        game,
+        fullEngine: gameEngineTmp,
+        hiddenViewMode,
+        display: settings?.display,
+        renderrepSetter,
+        statusRef,
+        partial: true,
+        partialMove: fragment,
+        moveOpts: move.opts,
+      });
+      return;
+    }
+
+    game.state = result.serialized ?? gameEngineTmp.serialize();
+    const fresh = createFreshRoundBuffer(gameEngineTmp);
+    applySimultaneousGameFields(game, gameEngineTmp, fresh);
+    persistLabSimRound(game);
+
+    if (!game.noMoves) {
+      moves = gameEngineTmp.moves(game.me + 1);
+    }
+  } catch (err) {
+    if (err.name === "UserFacingError") {
+      errorMessageRef.current = err.client;
+    } else {
+      errorMessageRef.current = err.message;
+    }
+    errorSetter(true);
+    return;
+  }
+
+  const spineMove = labSpineMoveLabel(
+    gameEngineTmp,
+    gameEngineTmp.lastmove ?? fragment,
+    false
+  );
+  move.rendered = spineMove;
+  const routed = routeLabMove(
+    exploration,
+    game,
+    newfocus,
+    currentNode,
+    gameEngineTmp,
+    spineMove
+  );
+  newfocus.moveNumber = routed.newfocus.moveNumber;
+  newfocus.exPath = routed.newfocus.exPath;
+  newfocus.canExplore = canExploreMove(game, exploration, newfocus);
+  focusSetter(newfocus);
+  if (newfocus.exPath.length === 0) {
+    materializeMainLineSpineStates(exploration, game.metaGame, game.state);
+  }
+  saveLabExploration();
+  moveSetter({
+    ...gameEngineTmp.validateMove("", game.me + 1),
+    rendered: "",
+    move: "",
+  });
+  if (!game.noMoves) {
+    movesRef.current = moves;
+  }
+  partialMoveRenderRef.current = false;
+  engineRef.current = gameEngineTmp;
+  updateLabDisplay({
+    game,
+    fullEngine: gameEngineTmp,
+    hiddenViewMode,
+    display: settings?.display,
+    renderrepSetter,
+    statusRef,
+    moveOpts: move.opts,
+  });
+}
+
 function doView(
   game,
   move,
@@ -352,6 +602,26 @@ function doView(
   t,
   hiddenViewMode = LAB_HIDDEN_VIEW_GOD
 ) {
+  if (game.simultaneous) {
+    return doViewSimultaneous(
+      game,
+      move,
+      exploration,
+      focus,
+      errorMessageRef,
+      errorSetter,
+      focusSetter,
+      moveSetter,
+      partialMoveRenderRef,
+      renderrepSetter,
+      engineRef,
+      movesRef,
+      statusRef,
+      settings,
+      t,
+      hiddenViewMode
+    );
+  }
   const me = LAB_ME;
   void me;
   let node = getFocusNode(exploration, game, focus);
@@ -465,11 +735,15 @@ export function processNewMove(
   t,
   hiddenViewMode = LAB_HIDDEN_VIEW_GOD
 ) {
-  if (
-    (newmove.valid && newmove.complete > 0 && newmove.move !== "") ||
-    (newmove.canrender === true &&
-      (newmove.move !== "" || newmove.opts !== undefined))
-  ) {
+  const game = gameRef.current;
+  const shouldDoView = game?.simultaneous
+    ? (newmove.valid && newmove.complete === 1 && newmove.move !== "") ||
+      (newmove.canrender === true &&
+        (newmove.move !== "" || newmove.opts !== undefined))
+    : (newmove.valid && newmove.complete > 0 && newmove.move !== "") ||
+      (newmove.canrender === true &&
+        (newmove.move !== "" || newmove.opts !== undefined));
+  if (shouldDoView) {
     doView(
       gameRef.current,
       newmove,
