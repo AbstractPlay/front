@@ -352,7 +352,7 @@
   "GoBegin": "Afficher le début de la partie. Touches : Début ou 'h'.",
   "GoCurrent": "Afficher la position actuelle. Touches : Fin ou 'l'.",
   "GoNext": "Afficher le coup suivant (et la première variante le cas échéant). Touches : Flèche droite ou 'k'.",
-  "GoNextVar": "Afficher la variante du coup suivant. Touches : flèche bas ou 'i'.",
+  "GoNextVar": "Afficher la variante suivante. Touches : flèche bas ou 'i'.",
   "GoPrev": "Afficher le coup précédent. Touches : Flèche gauche ou 'j'.",
   "GoPrevVar": "Afficher la variante précédente. Touches : flèche haut ou 'm'.",
   "HardTime": "Temps strict : le système appliquera strictement les limites de temps.",
