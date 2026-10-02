@@ -1971,7 +1971,7 @@
     "launch": "Starten",
     "gameState": "Spielzustand",
     "pastePlaceholder": "Serialisierten Spielzustand hier einfügen",
-    "pasteHelp": "Fügen Sie einen serialisierten Zustand aus einem Live-Spiel-Debug-Dump, einem Playground-Spielexport oder von anderswo ein. Der Spieltyp wird automatisch aus dem Zustand gelesen. Wählen Sie bei simultanen Spielen nach dem Laden einen Platz aus und geben Sie pro Absenden den Zug eines Spielers ein.",
+    "pasteHelp": "Füge einen serialisierten Zustand aus einem Live-Spiel-Debug-Dump, einem Playground-Spielexport oder von anderswo ein. Der Spieltyp wird automatisch aus dem Zustand gelesen. Wähle bei simultanen Spielen nach dem Laden einen Platz aus und gib pro Absenden den Zug eines Spielers ein.",
     "loadState": "Zustand laden",
     "noSavedGames": "Noch keine gespeicherten Playground-Spiele vorhanden.",
     "savedAt": "Gespeichert",

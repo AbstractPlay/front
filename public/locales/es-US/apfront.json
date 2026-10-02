@@ -1971,7 +1971,7 @@
     "launch": "Iniciar",
     "gameState": "Estado de la partida",
     "pastePlaceholder": "Pega el estado serializado de la partida aquí",
-    "pasteHelp": "Pega un estado serializado desde un volcado de depuración de una partida en vivo, una exportación de Playground o cualquier otro lugar. El tipo de juego se lee automáticamente desde el estado. Para juegos simultáneos, elige un asiento después de cargar e ingresa el movimiento de un jugador por cada envío.",
+    "pasteHelp": "Pega un estado serializado desde un volcado de depuración de una partida en vivo, una exportación de partida de Playground o cualquier otro lugar. El tipo de juego se lee automáticamente del estado. Para juegos simultáneos, elige un asiento después de cargar e ingresa el movimiento de un jugador por envío.",
     "loadState": "Cargar estado",
     "noSavedGames": "Aún no hay partidas guardadas en el laboratorio de pruebas.",
     "savedAt": "Guardado",
