@@ -352,7 +352,7 @@
   "GoBegin": "Mostra l'inizio della partita. Tasti: Home o 'h'.",
   "GoCurrent": "Mostra la posizione corrente. Tasti: End o 'l'.",
   "GoNext": "Mostra la mossa successiva (e la prima variante se presente). Tasti: freccia destra o 'k'.",
-  "GoNextVar": "Mostra la variante di mossa successiva. Tasti: freccia giù o 'i'.",
+  "GoNextVar": "Mostra la variante della mossa successiva. Tasti: freccia giù o 'i'.",
   "GoPrev": "Mostra la mossa precedente. Tasti: freccia sinistra o 'j'.",
   "GoPrevVar": "Mostra la variante precedente. Tasti: freccia su o 'm'.",
   "HardTime": "Tempo severo: il sistema applicherà tassativamente i limiti di tempo.",
