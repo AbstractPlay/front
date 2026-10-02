@@ -288,7 +288,7 @@ function isVerifiedSame(trackingEntry, sourceValue, translated) {
   return src === sourceValue && out === translated;
 }
 
-function backfillSrcTracking(sourceData, targetData, srcTracking) {
+export function backfillSrcTracking(sourceData, targetData, srcTracking) {
   const sourceLeaves = collectLeaves(sourceData);
   let backfilled = false;
   for (const [leafPath, sourceValue] of Object.entries(sourceLeaves)) {
@@ -697,9 +697,45 @@ async function translateFile(ai, sourcePath) {
     }
 
     if (!langFailed) {
+      if (backfillSrcTracking(sourceData, targetData, srcTracking)) {
+        writeSrcTracking(repoRoot, lang.code, fileName, srcTracking);
+        console.log(`[${lang.code}] ${fileName}: Backfilled locale-src stamps after translation.`);
+      }
       console.log(`[${lang.code}] ${fileName}: Updated successfully.`);
     }
   }
+}
+
+/** @param {string} sourcePath */
+export function backfillManagedLocaleStamps(sourcePath) {
+  if (!fs.existsSync(sourcePath)) {
+    throw new Error(`File not found: ${sourcePath}`);
+  }
+
+  const sourceData = JSON.parse(fs.readFileSync(sourcePath, "utf-8"));
+  const { localesDir, repoRoot } = localeRoots(sourcePath);
+  const fileName = path.basename(sourcePath);
+  let anyBackfilled = false;
+
+  for (const lang of TARGET_LANGUAGES) {
+    const targetPath = path.join(localesDir, lang.code, fileName);
+    if (!fs.existsSync(targetPath)) {
+      console.log(`[${lang.code}] ${fileName}: No target file, skipping.`);
+      continue;
+    }
+
+    const targetData = JSON.parse(fs.readFileSync(targetPath, "utf-8"));
+    const srcTracking = loadSrcTracking(repoRoot, lang.code, fileName, targetData);
+    if (backfillSrcTracking(sourceData, targetData, srcTracking)) {
+      writeSrcTracking(repoRoot, lang.code, fileName, srcTracking);
+      anyBackfilled = true;
+      console.log(`[${lang.code}] ${fileName}: Backfilled locale-src stamps.`);
+    } else {
+      console.log(`[${lang.code}] ${fileName}: locale-src already in sync.`);
+    }
+  }
+
+  return anyBackfilled;
 }
 
 async function run() {
