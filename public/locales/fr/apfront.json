@@ -1769,6 +1769,12 @@
     "moveTree": {
       "legendMainline": "Coups joués",
       "legendExploration": "Exploration"
+    },
+    "boardNav": {
+      "jumpToFirst": "Aller à la première image",
+      "jumpToLast": "Aller à la dernière image",
+      "previousFrame": "Image précédente",
+      "nextFrame": "Image suivante"
     }
   },
   "Back": "Retour",
