@@ -4575,6 +4575,22 @@
     "src": "Watching",
     "out": "Beobachtet"
   },
+  "gameMove.boardNav.jumpToFirst": {
+    "src": "Jump to first frame",
+    "out": "Zum ersten Bild springen"
+  },
+  "gameMove.boardNav.jumpToLast": {
+    "src": "Jump to last frame",
+    "out": "Zum letzten Bild springen"
+  },
+  "gameMove.boardNav.nextFrame": {
+    "src": "Next frame",
+    "out": "Nächstes Bild"
+  },
+  "gameMove.boardNav.previousFrame": {
+    "src": "Previous frame",
+    "out": "Vorheriges Bild"
+  },
   "gameMove.chats.inGame": {
     "src": ", in-game",
     "out": ", im Spiel"

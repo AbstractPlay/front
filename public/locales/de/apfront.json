@@ -1769,6 +1769,12 @@
     "moveTree": {
       "legendMainline": "Gespielte Züge",
       "legendExploration": "Erkundung"
+    },
+    "boardNav": {
+      "jumpToFirst": "Zum ersten Bild springen",
+      "jumpToLast": "Zum letzten Bild springen",
+      "previousFrame": "Vorheriges Bild",
+      "nextFrame": "Nächstes Bild"
     }
   },
   "Back": "Zurück",

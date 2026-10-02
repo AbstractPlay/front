@@ -1769,6 +1769,12 @@
     "moveTree": {
       "legendMainline": "Mosse giocate",
       "legendExploration": "Esplorazione"
+    },
+    "boardNav": {
+      "jumpToFirst": "Vai al primo frame",
+      "jumpToLast": "Vai all'ultimo frame",
+      "previousFrame": "Frame precedente",
+      "nextFrame": "Frame successivo"
     }
   },
   "Back": "Indietro",

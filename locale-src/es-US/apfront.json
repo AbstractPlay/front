@@ -4575,6 +4575,22 @@
     "src": "Watching",
     "out": "Observando"
   },
+  "gameMove.boardNav.jumpToFirst": {
+    "src": "Jump to first frame",
+    "out": "Saltar al primer fotograma"
+  },
+  "gameMove.boardNav.jumpToLast": {
+    "src": "Jump to last frame",
+    "out": "Saltar al último fotograma"
+  },
+  "gameMove.boardNav.nextFrame": {
+    "src": "Next frame",
+    "out": "Siguiente fotograma"
+  },
+  "gameMove.boardNav.previousFrame": {
+    "src": "Previous frame",
+    "out": "Fotograma anterior"
+  },
   "gameMove.chats.inGame": {
     "src": ", in-game",
     "out": ", en la partida"
