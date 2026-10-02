@@ -1971,7 +1971,7 @@
     "launch": "Avvia",
     "gameState": "Stato della partita",
     "pastePlaceholder": "Incolla qui lo stato serializzato della partita",
-    "pasteHelp": "Incolla uno stato serializzato da un dump di debug di una partita dal vivo, da un'esportazione del Playground o da altrove. Il tipo di gioco viene letto automaticamente dallo stato. Per i giochi simultanei, seleziona un posto dopo il caricamento e inserisci la mossa di un singolo giocatore per ciascun invio.",
+    "pasteHelp": "Incolla uno stato serializzato da un dump di debug di una partita dal vivo, un'esportazione di una partita Playground o da altrove. Il tipo di gioco viene letto automaticamente dallo stato. Per le partite simultanee, scegli un posto dopo il caricamento e inserisci la mossa di un giocatore per ogni invio.",
     "loadState": "Carica stato",
     "noSavedGames": "Nessuna partita salvata nel laboratorio.",
     "savedAt": "Salvato il",
