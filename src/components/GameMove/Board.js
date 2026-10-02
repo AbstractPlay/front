@@ -113,6 +113,9 @@ function Board({
     setBoardRenderIndex(
       (i) => (i - 1 + visibleRendered.length) % visibleRendered.length
     );
+  const first = () => setBoardRenderIndex(0);
+  const last = () =>
+    setBoardRenderIndex(Math.max(0, visibleRendered.length - 1));
 
   return (
     <>
@@ -177,8 +180,11 @@ function Board({
         <BoardNav
           currentIndex={safeBoardIndex}
           total={visibleRendered.length}
+          onFirst={first}
           onPrev={prev}
           onNext={next}
+          onLast={last}
+          t={t}
         />
       )}
 

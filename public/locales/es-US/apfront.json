@@ -1769,6 +1769,12 @@
     "moveTree": {
       "legendMainline": "Jugadas realizadas",
       "legendExploration": "Exploración"
+    },
+    "boardNav": {
+      "jumpToFirst": "Saltar al primer fotograma",
+      "jumpToLast": "Saltar al último fotograma",
+      "previousFrame": "Fotograma anterior",
+      "nextFrame": "Siguiente fotograma"
     }
   },
   "Back": "Volver",
