@@ -18,7 +18,7 @@ Browser push notifications alert users when it is their turn or when notable eve
 
 ## In-app bell panel
 
-[`NotificationBell.js`](../src/components/NotificationBell.js) loads notifications via [`fetchNotifications()`](../src/lib/globalMeBootstrap.js) (`list_notifications`) when `globalMe.notifications` is unset. Badge count includes only **new** items (`status: 'new'`) plus unread news.
+[`NotificationBell.js`](../src/components/NotificationBell.js) loads notifications via [`fetchNotifications()`](../src/lib/globalMeBootstrap.js) (`list_notifications`) when `globalMe.notifications` is unset. [`Me.js`](../src/components/Me.js) refetches the same query alongside `me_dashboard` on home / `refresh-me` (gap filler). New items also trigger a debounced refetch via WebSocket `notification` ([`scheduleNotificationsRefresh.js`](../src/lib/scheduleNotificationsRefresh.js)). Badge count includes only **new** items (`status: 'new'`) plus unread news.
 
 Panel layout (top to bottom):
 

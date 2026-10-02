@@ -14,7 +14,7 @@ import NewProfile from "./NewProfile";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { useChallengeResponse } from "../hooks/useChallengeResponse";
-import { fetchDashboard } from "../lib/globalMeBootstrap";
+import { fetchDashboard, fetchNotifications } from "../lib/globalMeBootstrap";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { cloneDeep } from "lodash";
 import WatchedGamesTable from "./Me/WatchedGamesTable";
@@ -72,10 +72,13 @@ function Me(props) {
       try {
         console.log("calling authQuery me_dashboard");
         fetchingSetter(true);
-        const dashboard = await fetchDashboard({
-          vars: JSON.stringify(vars),
-          update: update,
-        });
+        const [dashboard] = await Promise.all([
+          fetchDashboard({
+            vars: JSON.stringify(vars),
+            update: update,
+          }),
+          fetchNotifications(),
+        ]);
         fetchingSetter(false);
         if (dashboard === null) {
           return;
