@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PageHelmet from "../PageHelmet";
 import { buildLabGame } from "../../lib/Lab/buildGame";
+import { readSimRoundFromGameSettings } from "../../lib/Lab/labSimBoardSettings";
 import {
   clearLastSession,
   getLastLauncherMetaGame,
@@ -12,10 +13,21 @@ import {
 import LabLauncher from "./LabLauncher";
 import LabSession from "./LabSession";
 
+function simOptionsFromSettings(gameSettings) {
+  const sim = readSimRoundFromGameSettings(gameSettings);
+  return {
+    activeSeat: sim.activeSeat,
+    simPartialMove: sim.simPartialMove,
+    simToMove: sim.simToMove,
+  };
+}
+
 function sessionFromAutosave(last) {
+  const gameSettings = last.gameSettings ?? {};
   const game = buildLabGame(last.metaGame, last.state, {
     variants: last.variants ?? [],
     numPlayers: last.playerCount,
+    ...simOptionsFromSettings(gameSettings),
   });
   game.id = last.id;
   game.selectedVariants = last.variants ?? [];
@@ -24,7 +36,7 @@ function sessionFromAutosave(last) {
     savedExploration: last.exploration ?? null,
     savedMoveAnnotations: last.moveAnnotations ?? null,
     initialFocus: last.focus ?? null,
-    gameSettings: last.gameSettings ?? {},
+    gameSettings,
     sessionName: last.name,
     loadedSave: last.loadedSave ?? null,
   };
@@ -32,9 +44,11 @@ function sessionFromAutosave(last) {
 
 function launchPayloadFromSave(save) {
   const payload = save.source != null ? save : localSaveToLaunchPayload(save);
+  const gameSettings = payload.gameSettings ?? {};
   const game = buildLabGame(payload.metaGame, payload.state, {
     variants: payload.variants ?? [],
     numPlayers: payload.playerCount,
+    ...simOptionsFromSettings(gameSettings),
   });
   game.id = payload.id;
   game.selectedVariants = payload.variants ?? [];
@@ -43,7 +57,7 @@ function launchPayloadFromSave(save) {
     savedExploration: payload.exploration,
     savedMoveAnnotations: payload.moveAnnotations ?? null,
     initialFocus: payload.focus ?? null,
-    gameSettings: payload.gameSettings ?? {},
+    gameSettings,
     sessionName: payload.name,
     loadedSave: {
       id: payload.id,

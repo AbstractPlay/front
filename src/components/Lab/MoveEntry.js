@@ -160,7 +160,20 @@ function MoveEntry(props) {
     }
     let mover = "";
     let img = null;
-    if (toMove !== "") {
+    if (game.simultaneous && !game.gameOver) {
+      if (uiState === 0) {
+        if (game.canSubmit) {
+          mover = t("ToMove", {
+            player: game.players[game.me]?.name ?? `Player ${game.me + 1}`,
+          });
+          if (game.colors !== undefined) {
+            img = game.colors[game.me];
+          }
+        } else {
+          mover = t("Waiting");
+        }
+      }
+    } else if (toMove !== "") {
       mover = t("ToMove", { player: `Player ${toMove + 1}` });
       if (game.colors !== undefined) img = game.colors[toMove];
     } else {

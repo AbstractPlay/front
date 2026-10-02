@@ -6,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import {
@@ -15,7 +14,6 @@ import {
   moveTableRowCount,
   moveTextForCell,
   pathIndexForMoveCell,
-  resolveMoveTableExportEngine,
   resolveMoveTableLayout,
   MOVE_TREE_DENSITY_STORAGE_KEY,
   readMoveTableDensityPreference,
@@ -29,6 +27,10 @@ import {
   nodeForExplorationPath,
   rowHasFocus,
 } from "../../lib/GameMove/moveTreeVariations";
+import {
+  labDisplayMoveLabel,
+  resolveLabMoveTableEngine,
+} from "../../lib/Lab/hiddenView";
 
 function syncRowFocusClasses(cells, focus) {
   return cells.map((cell) => {
@@ -529,6 +531,17 @@ function GameMoves(props) {
     let path = [];
     let curNumVariations = 0;
     const focusedBranchPathIndex = focusedMovePathIndex(focus);
+    const tipState = props.getFocusNode
+      ? props.getFocusNode(exploration, game, focus)?.state
+      : undefined;
+    const fmtMove = (moveNumber, move, suffix = "") =>
+      labDisplayMoveLabel(
+        game.metaGame,
+        tipState,
+        moveNumber,
+        move ?? "",
+        props.labHiddenViewMode
+      ) + suffix;
 
     let focusRow = 0;
     let numRows = 0;
@@ -560,7 +573,7 @@ function GameMoves(props) {
               outcome: -1,
               commented: moveCommentedState(exploration[i]),
               nag: exploration[i].nag,
-              move: exploration[i].move,
+              move: fmtMove(i, exploration[i].move),
               path: { moveNumber: i, exPath: [] },
             },
           ]);
@@ -582,7 +595,7 @@ function GameMoves(props) {
                   false,
                 commented: moveCommentedState(node),
                 nag: node.nag,
-                move: node.move,
+                move: fmtMove(focus.moveNumber, node.move),
                 path: {
                   moveNumber: focus.moveNumber,
                   exPath: focus.exPath.slice(0, j + 1),
@@ -603,7 +616,7 @@ function GameMoves(props) {
                   c.premove || c?.children?.some((n) => n.premove) || false,
                 commented: moveCommentedState(c),
                 nag: c.nag,
-                move: c.move,
+                move: fmtMove(focus.moveNumber, c.move),
                 path: {
                   moveNumber: focus.moveNumber,
                   exPath: exPath.concat(k),
@@ -646,11 +659,13 @@ function GameMoves(props) {
               outcome: exploration[i].outcome,
               commented: moveCommentedState(exploration[i]),
               nag: exploration[i].nag,
-              move:
-                exploration[i].move +
-                (exploration[i].children.length > 0 && focus.moveNumber !== i
+              move: fmtMove(
+                i,
+                exploration[i].move,
+                exploration[i].children.length > 0 && focus.moveNumber !== i
                   ? "..."
-                  : ""),
+                  : ""
+              ),
               path: { moveNumber: i, exPath: [] },
             },
           ]);
@@ -671,7 +686,7 @@ function GameMoves(props) {
               outcome: node.outcome,
               commented: moveCommentedState(node),
               nag: node.nag,
-              move: node.move,
+              move: fmtMove(focus.moveNumber, node.move),
               path: {
                 moveNumber: focus.moveNumber,
                 exPath: focus.exPath.slice(0, j + 1),
@@ -693,7 +708,10 @@ function GameMoves(props) {
               outcome: exploration[focus.moveNumber + 1].outcome,
               commented: moveCommentedState(exploration[focus.moveNumber + 1]),
               nag: exploration[focus.moveNumber + 1].nag,
-              move: exploration[focus.moveNumber + 1].move,
+              move: fmtMove(
+                focus.moveNumber + 1,
+                exploration[focus.moveNumber + 1].move
+              ),
               path: {
                 moveNumber: focus.moveNumber + 1,
                 exPath: [],
@@ -708,7 +726,7 @@ function GameMoves(props) {
               outcome: c.outcome,
               commented: moveCommentedState(c),
               nag: c.nag,
-              move: c.move,
+              move: fmtMove(focus.moveNumber, c.move),
               path: {
                 moveNumber: focus.moveNumber,
                 exPath: exPath.concat(k),
@@ -732,12 +750,12 @@ function GameMoves(props) {
         exploration?.length > 0
           ? exploration[exploration.length - 1]?.state ?? game?.state
           : game?.state;
-      const moveTableEngine = resolveMoveTableExportEngine(
+      const moveTableEngine = resolveLabMoveTableEngine(
+        game.metaGame,
         props.engine,
         path.length,
-        exportState,
-        GameFactory,
-        game.metaGame
+        tipState ?? exportState,
+        props.labHiddenViewMode
       );
       numRows = moveTableRowCount({
         pathLength: path.length,
