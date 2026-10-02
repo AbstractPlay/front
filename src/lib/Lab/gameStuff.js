@@ -29,6 +29,11 @@ import { toast } from "react-toastify";
 import { isPartialExplorationMove } from "../GameMove/explorationMoves";
 import { buildEngineMoveResults } from "../engineMoveResults";
 import { buildRenderDisplayOpts } from "../displaySettings.js";
+import {
+  LAB_HIDDEN_VIEW_GOD,
+  labRenderExtras,
+  resolveLabDisplayEngines,
+} from "./hiddenView.js";
 
 export const populateChecked = (gameRef, engineRef, t, setter) => {
   const hideSpoilers =
@@ -75,7 +80,8 @@ export function setupLabGame(
   display,
   savedExploration = null,
   savedMoveAnnotations = null,
-  initialFocus = null
+  initialFocus = null,
+  hiddenViewMode = LAB_HIDDEN_VIEW_GOD
 ) {
   const explorer = true;
   void explorer;
@@ -206,7 +212,58 @@ export function setupLabGame(
     moveSetter,
     statusRef,
     display,
+    hiddenViewMode,
   });
+}
+
+export function renderRepForLab(
+  game,
+  viewEngine,
+  display,
+  moveOpts = {},
+  hiddenViewMode = LAB_HIDDEN_VIEW_GOD
+) {
+  const users = useStore.getState().users;
+  const renderExtras = {
+    ...moveOpts,
+    ...labRenderExtras(viewEngine, hiddenViewMode),
+  };
+  return resolveRenderLabels(
+    viewEngine.render(
+      buildRenderDisplayOpts(game.metaGame, display, renderExtras)
+    ),
+    game.players,
+    users
+  );
+}
+
+export function updateLabDisplay({
+  game,
+  fullEngine,
+  hiddenViewMode,
+  display,
+  renderrepSetter,
+  statusRef,
+  partial = false,
+  partialMove = "",
+  moveOpts = {},
+}) {
+  const { viewEngine } = resolveLabDisplayEngines(
+    game.metaGame,
+    fullEngine,
+    hiddenViewMode
+  );
+  const render = renderRepForLab(
+    game,
+    viewEngine,
+    display,
+    moveOpts,
+    hiddenViewMode
+  );
+  game.stackExpanding =
+    game.stackExpanding && render.renderer === "stacking-expanding";
+  renderrepSetter(render);
+  setStatus(viewEngine, game, partial, partialMove, statusRef.current);
 }
 
 export function syncLabEngineToFocus(
@@ -221,32 +278,27 @@ export function syncLabEngineToFocus(
     moveSetter,
     statusRef,
     display,
+    hiddenViewMode = LAB_HIDDEN_VIEW_GOD,
   }
 ) {
   const node = getFocusNode(nodes, game, focus);
   if (!node?.state) {
     return false;
   }
-  const users = useStore.getState().users;
   const engine = GameFactory(game.metaGame, node.state);
   partialMoveRenderRef.current = false;
   engineRef.current = engine;
   if (!game.noMoves) {
     movesRef.current = engine.moves();
   }
-  const render = resolveRenderLabels(
-    engine.render(
-      buildRenderDisplayOpts(game.metaGame, display, {
-        perspective: engine.currplayer,
-      })
-    ),
-    game.players,
-    users
-  );
-  game.stackExpanding =
-    game.stackExpanding && render.renderer === "stacking-expanding";
-  renderrepSetter(render);
-  setStatus(engine, game, false, "", statusRef.current);
+  updateLabDisplay({
+    game,
+    fullEngine: engine,
+    hiddenViewMode,
+    display,
+    renderrepSetter,
+    statusRef,
+  });
   moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
   return true;
 }
@@ -297,7 +349,8 @@ function doView(
   movesRef,
   statusRef,
   settings,
-  t
+  t,
+  hiddenViewMode = LAB_HIDDEN_VIEW_GOD
 ) {
   const me = LAB_ME;
   void me;
@@ -354,7 +407,6 @@ function doView(
   }
   const spineMove = labSpineMoveLabel(gameEngineTmp, m, partialMove);
   move.rendered = spineMove;
-  setStatus(gameEngineTmp, game, partialMove, m, statusRef.current);
   if (!partialMove) {
     game.state = gameEngineTmp.serialize();
     const routed = routeLabMove(
@@ -382,18 +434,17 @@ function doView(
   }
   partialMoveRenderRef.current = partialMove;
   engineRef.current = gameEngineTmp;
-  renderrepSetter(
-    resolveRenderLabels(
-      gameEngineTmp.render(
-        buildRenderDisplayOpts(game.metaGame, settings?.display, {
-          perspective: gameEngineTmp.currplayer,
-          ...move.opts,
-        })
-      ),
-      game.players,
-      useStore.getState().users
-    )
-  );
+  updateLabDisplay({
+    game,
+    fullEngine: gameEngineTmp,
+    hiddenViewMode,
+    display: settings?.display,
+    renderrepSetter,
+    statusRef,
+    partial: partialMove,
+    partialMove: m,
+    moveOpts: move.opts,
+  });
 }
 
 export function processNewMove(
@@ -411,7 +462,8 @@ export function processNewMove(
   focusSetter,
   moveSetter,
   settings,
-  t
+  t,
+  hiddenViewMode = LAB_HIDDEN_VIEW_GOD
 ) {
   if (
     (newmove.valid && newmove.complete > 0 && newmove.move !== "") ||
@@ -433,7 +485,8 @@ export function processNewMove(
       movesRef,
       statusRef,
       settings,
-      t
+      t,
+      hiddenViewMode
     );
   } else if (
     partialMoveRenderRef.current &&
@@ -443,22 +496,18 @@ export function processNewMove(
     const node = getFocusNode(exploration, gameRef.current, focus);
     const gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     partialMoveRenderRef.current = false;
-    setStatus(gameEngineTmp, gameRef.current, false, "", statusRef.current);
     if (!gameRef.current.noMoves) {
       movesRef.current = gameEngineTmp.moves();
     }
     engineRef.current = gameEngineTmp;
-    renderrepSetter(
-      resolveRenderLabels(
-        gameEngineTmp.render(
-          buildRenderDisplayOpts(gameRef.current.metaGame, settings?.display, {
-            perspective: gameEngineTmp.currplayer,
-          })
-        ),
-        gameRef.current.players,
-        useStore.getState().users
-      )
-    );
+    updateLabDisplay({
+      game: gameRef.current,
+      fullEngine: gameEngineTmp,
+      hiddenViewMode,
+      display: settings?.display,
+      renderrepSetter,
+      statusRef,
+    });
     newmove.rendered = "";
     moveSetter(newmove);
   } else {

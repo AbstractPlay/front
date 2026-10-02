@@ -54,7 +54,6 @@ import {
   deleteSpineEntry,
   materializeMainLineSpineStates,
 } from "../../lib/Lab/exploration";
-import { setStatus, resolveRenderLabels } from "../../lib/Lab/misc";
 import {
   getLabSetting,
   processNewSettings,
@@ -68,15 +67,20 @@ import {
   prepareBoardRender,
 } from "../../lib/prepareBoardRender";
 import { resolveDisplayRenderRep } from "../../lib/getDisplayRenderRep";
-import {
-  buildRenderDisplayOpts,
-  canCycleBoardDisplay,
-} from "../../lib/displaySettings.js";
+import { canCycleBoardDisplay } from "../../lib/displaySettings.js";
 import {
   setupLabGame,
   processNewMove,
   populateChecked,
+  updateLabDisplay,
 } from "../../lib/Lab/gameStuff";
+import {
+  engineSupportsPlayerStrip,
+  LAB_HIDDEN_VIEW_GOD,
+  LAB_HIDDEN_VIEW_LIVE,
+  liveStripPlayer,
+  normalizeLabHiddenViewMode,
+} from "../../lib/Lab/hiddenView";
 import {
   saveLastSession,
   clearLastSession,
@@ -185,6 +189,7 @@ function LabSession({
   const [explorationVersion, bumpExplorationVersion] = useState(0);
   const bumpExploration = () => bumpExplorationVersion((v) => v + 1);
   const [inCheck, inCheckSetter] = useState("");
+  const [statusRevision, bumpStatusRevision] = useState(0);
   const [showSaveModal, showSaveModalSetter] = useState(false);
   const [saveBusy, saveBusySetter] = useState(false);
   const [loadedSave, loadedSaveSetter] = useState(initialLoadedSave ?? null);
@@ -212,6 +217,11 @@ function LabSession({
   const gameRef = useRef(null);
   const explorationRef = useRef(null);
   const engineRef = useRef(null);
+  const hiddenViewMode = normalizeLabHiddenViewMode(
+    labBoardSettings?.all?.hiddenViewMode
+  );
+  const hiddenViewModeRef = useRef(hiddenViewMode);
+  hiddenViewModeRef.current = hiddenViewMode;
   const loadedSaveRef = useRef(initialLoadedSave ?? null);
   const pendingFocusRestore = useRef(initialFocus);
 
@@ -339,6 +349,9 @@ function LabSession({
         metaGame
       );
       const game0 = cloneDeep(initialGame);
+      const initialHiddenView = normalizeLabHiddenViewMode(
+        boardSettings?.all?.hiddenViewMode
+      );
       setupLabGame(
         game0,
         gameRef,
@@ -353,8 +366,10 @@ function LabSession({
         initialDisplay,
         savedExploration,
         savedMoveAnnotations,
-        initialFocus
+        initialFocus,
+        initialHiddenView
       );
+      bumpStatusRevision((v) => v + 1);
       processNewSettings(
         sessionGameSettings,
         boardSettings,
@@ -436,18 +451,15 @@ function LabSession({
     }
     focusSetter(foc);
     engineRef.current = engine;
-    renderrepSetter(
-      resolveRenderLabels(
-        engine.render(
-          buildRenderDisplayOpts(game.metaGame, settings?.display, {
-            perspective: engine.currplayer,
-          })
-        ),
-        game.players,
-        useStore.getState().users
-      )
-    );
-    setStatusFromEngine(engine, game, false);
+    updateLabDisplay({
+      game,
+      fullEngine: engine,
+      hiddenViewMode: hiddenViewModeRef.current,
+      display: settings?.display,
+      renderrepSetter,
+      statusRef,
+    });
+    bumpStatusRevision((v) => v + 1);
     moveSetter({ ...engine.validateMove(""), move: "", rendered: "" });
     if (
       flagSetIncludes(effectiveFlags(engine, game.metaGame), "custom-colours")
@@ -490,9 +502,11 @@ function LabSession({
       focusSetter,
       moveSetter,
       settingsRef.current,
-      tRef.current
+      tRef.current,
+      hiddenViewModeRef.current
     );
     populateChecked(gameRef, engineRef, tRef.current, inCheckSetter);
+    bumpStatusRevision((v) => v + 1);
     if (
       flagSetIncludes(
         effectiveFlags(engineRef.current, gameRef.current.metaGame),
@@ -540,10 +554,6 @@ function LabSession({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus]);
 
-  const setStatusFromEngine = (engine, game, partial, partialMove = "") => {
-    setStatus(engine, game, partial, partialMove, statusRef.current);
-  };
-
   const handleMove = (value) => {
     const node = getFocusNode(
       explorationRef.current.nodes,
@@ -569,9 +579,11 @@ function LabSession({
       focusSetter,
       moveSetter,
       settings,
-      t
+      t,
+      hiddenViewModeRef.current
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
+    bumpStatusRevision((v) => v + 1);
     if (
       flagSetIncludes(
         effectiveFlags(engineRef.current, gameRef.current.metaGame),
@@ -600,9 +612,11 @@ function LabSession({
       focusSetter,
       moveSetter,
       settings,
-      t
+      t,
+      hiddenViewModeRef.current
     );
     populateChecked(gameRef, engineRef, t, inCheckSetter);
+    bumpStatusRevision((v) => v + 1);
   };
 
   const handleReset = () => {
@@ -722,20 +736,17 @@ function LabSession({
       );
       const engine = GameFactory(gameRef.current.metaGame, node.state);
       engineRef.current = engine;
-      const newRenderRep = resolveRenderLabels(
-        engine.render(
-          buildRenderDisplayOpts(
-            gameRef.current.metaGame,
-            newSettings.display,
-            { perspective: engine.currplayer }
-          )
+      updateLabDisplay({
+        game: gameRef.current,
+        fullEngine: engine,
+        hiddenViewMode: normalizeLabHiddenViewMode(
+          newLabBoardSettings?.all?.hiddenViewMode
         ),
-        gameRef.current.players,
-        useStore.getState().users
-      );
-      renderrepSetter(newRenderRep);
-      gameRef.current.stackExpanding =
-        newRenderRep.renderer === "stacking-expanding";
+        display: newSettings.display,
+        renderrepSetter,
+        statusRef,
+      });
+      bumpStatusRevision((v) => v + 1);
       if (
         flagSetIncludes(
           effectiveFlags(engine, gameRef.current.metaGame),
@@ -754,6 +765,31 @@ function LabSession({
 
   const handleSettingsClose = () => {
     showSettingsSetter(false);
+  };
+
+  const handleHiddenViewModeChange = (mode) => {
+    const newLabBoardSettings = cloneDeep(labBoardSettings) ?? { all: {} };
+    if (!newLabBoardSettings.all) {
+      newLabBoardSettings.all = {};
+    }
+    newLabBoardSettings.all.hiddenViewMode = mode;
+    labBoardSettingsSetter(newLabBoardSettings);
+    saveLabBoardSettings(newLabBoardSettings);
+    hiddenViewModeRef.current = normalizeLabHiddenViewMode(mode);
+    if (engineRef.current && gameRef.current && settings) {
+      updateLabDisplay({
+        game: gameRef.current,
+        fullEngine: engineRef.current,
+        hiddenViewMode: hiddenViewModeRef.current,
+        display: settings.display,
+        renderrepSetter,
+        statusRef,
+        partial: partialMoveRenderRef.current,
+        partialMove: moveRef.current?.move ?? "",
+        moveOpts: moveRef.current?.opts,
+      });
+      bumpStatusRevision((v) => v + 1);
+    }
   };
 
   const handleCycleAltDisplay = () => {
@@ -1060,12 +1096,61 @@ function LabSession({
     focusNode?.move &&
     (focus.moveNumber > 0 || (focus.exPath?.length ?? 0) > 0);
 
+  const showHiddenViewControls =
+    engineRef.current != null &&
+    engineSupportsPlayerStrip(engineRef.current);
+
+  let hiddenViewHint = "";
+  if (showHiddenViewControls && engineRef.current) {
+    if (hiddenViewMode === LAB_HIDDEN_VIEW_LIVE && engineRef.current.gameover) {
+      hiddenViewHint = t("lab.hiddenView.hintGameOver");
+    } else if (hiddenViewMode === LAB_HIDDEN_VIEW_LIVE) {
+      const player = liveStripPlayer(engineRef.current);
+      hiddenViewHint = t("lab.hiddenView.hintLive", { player });
+    } else {
+      hiddenViewHint = t("lab.hiddenView.hintGod");
+    }
+  }
+
   const statusSection = (
     <>
       <h1 className="subtitle lined">
         <span>{t("Status")}</span>
       </h1>
+      {showHiddenViewControls ? (
+        <fieldset className="lab-hidden-view-controls">
+          <legend>{t("lab.hiddenView.legend")}</legend>
+          <label className="lab-hidden-view-controls__option">
+            <input
+              type="radio"
+              name="labHiddenViewMode"
+              value={LAB_HIDDEN_VIEW_GOD}
+              checked={hiddenViewMode === LAB_HIDDEN_VIEW_GOD}
+              onChange={() =>
+                handleHiddenViewModeChange(LAB_HIDDEN_VIEW_GOD)
+              }
+            />
+            {t("lab.hiddenView.god")}
+          </label>
+          <label className="lab-hidden-view-controls__option">
+            <input
+              type="radio"
+              name="labHiddenViewMode"
+              value={LAB_HIDDEN_VIEW_LIVE}
+              checked={hiddenViewMode === LAB_HIDDEN_VIEW_LIVE}
+              onChange={() =>
+                handleHiddenViewModeChange(LAB_HIDDEN_VIEW_LIVE)
+              }
+            />
+            {t("lab.hiddenView.live")}
+          </label>
+          {hiddenViewHint ? (
+            <p className="lab-hidden-view-controls__hint">{hiddenViewHint}</p>
+          ) : null}
+        </fieldset>
+      ) : null}
       <GameStatus
+        key={statusRevision}
         status={statusRef.current}
         settings={settings}
         game={game}
@@ -1104,7 +1189,6 @@ function LabSession({
         t={t}
         locked={false}
         setLocked={noop}
-        setRefresh={noop}
         gameEngine={gameEngine}
         inCheck={inCheck}
         stackExpanding={game.stackExpanding || false}
@@ -1147,6 +1231,7 @@ function LabSession({
         getFocusNode={getFocusNode}
         explorationVersion={explorationVersion}
         engine={engineRef.current}
+        labHiddenViewMode={hiddenViewMode}
       />
       {showMoveAnnotations ? (
         <MoveAnnotations focusNode={focusNode} onChange={bumpExploration} />

@@ -2000,6 +2000,14 @@
         "codersMany": "Coders: ",
         "titleSuffix": " — Playground",
         "launcherPageTitle": "Playground",
+        "hiddenView": {
+            "legend": "Hidden information (view)",
+            "god": "God mode",
+            "live": "Live mode",
+            "hintGod": "Full state (nothing stripped).",
+            "hintLive": "Showing player {{player}} view (current player).",
+            "hintGameOver": "Game over — full state shown."
+        },
         "debug": {
             "copyPosition": "Copy position",
             "copyPositionHelp": "Raw engine state at the current focus (for debugging).",
