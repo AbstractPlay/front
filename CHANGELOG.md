@@ -9,6 +9,11 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ## [1.0.0-ci] - 2026-10-01
 
+### Added
+
+- **Playground (Lab):** God vs Live view for games with hidden information — board and status use the current player’s stripped view in Live mode; exploration and saves keep full state.
+- **Playground (Lab):** simultaneous games in seat mode — per-seat move entry, round buffer until all active seats submit, eliminated-seat handling, and active-seat picker for board perspective.
+
 ### Changed
 
 - **Live play move tree:** mainline moves and exploration branches are styled differently (with a short legend when branches are present).
