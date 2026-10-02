@@ -22,6 +22,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 ### Fixed
 
 - **Open challenges:** show a spinner while accept is in flight instead of optimistic “Accepted!” before the server responds.
+- **i18n CI:** `locale-src/` sidecars are committed again on develop deploy (auto-commit `file_pattern` was multiline, so only `public/locales` were ever staged); backfilled sidecars to stop repeated Gemini rewrites of the same strings.
 
 ## [1.0.0-ci] - 2026-09-30
 

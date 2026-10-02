@@ -92,10 +92,7 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: "deps: sync AP versions [skip ci]"
-        file_pattern: |
-          ci-deps.prod.json
-          package-lock.json
-          package.json
+        file_pattern: "ci-deps.prod.json package-lock.json package.json"
 
     - name: Set CI version
       run: npm version prerelease --preid=ci-$GITHUB_RUN_ID --no-git-tag-version
