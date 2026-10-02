@@ -1959,6 +1959,10 @@
     "intro": "Ein lokaler Spielbereich zum Experimentieren mit Spielen. Nichts hier gelangt auf den Server – Stellungen und gespeicherte Spiele verbleiben ausschließlich in deinem Browser.",
     "introLoggedIn": "Experimentiere mit Spielen im Playground. Gespeicherte Stellungen werden mit deinem Konto synchronisiert; deine aktuelle Sitzung wird ebenfalls auf diesem Gerät gespeichert, sodass du sie nach einem Neuladen fortsetzen kannst.",
     "noSimultaneous": "Playground unterstützt nur sequenzielle Spiele. Simultanspiele sind nicht verfügbar.",
+    "seatPicker": {
+      "legend": "Aktiver Platz",
+      "seat": "{{player}}"
+    },
     "tabNew": "Neues Spiel",
     "feelingAdventurous": "Ich bin abenteuerlustig",
     "tabPaste": "Spielstand einfügen",
@@ -1967,7 +1971,7 @@
     "launch": "Starten",
     "gameState": "Spielzustand",
     "pastePlaceholder": "Serialisierten Spielzustand hier einfügen",
-    "pasteHelp": "Füge einen serialisierten Zustand aus dem Debug-Dump eines Live-Spiels, einem Playground-Spielexport oder von woanders ein. Der Spieltyp wird automatisch aus dem Zustand gelesen. Simultanspiele werden nicht unterstützt.",
+    "pasteHelp": "Fügen Sie einen serialisierten Zustand aus einem Live-Spiel-Debug-Dump, einem Playground-Spielexport oder von anderswo ein. Der Spieltyp wird automatisch aus dem Zustand gelesen. Wählen Sie bei simultanen Spielen nach dem Laden einen Platz aus und geben Sie pro Absenden den Zug eines Spielers ein.",
     "loadState": "Zustand laden",
     "noSavedGames": "Noch keine gespeicherten Playground-Spiele vorhanden.",
     "savedAt": "Gespeichert",
@@ -2000,6 +2004,14 @@
     "codersMany": "Entwickler: ",
     "titleSuffix": " — Playground",
     "launcherPageTitle": "Spielwiese",
+    "hiddenView": {
+      "legend": "Verborgene Informationen (Ansicht)",
+      "god": "Gott-Modus",
+      "live": "Live-Modus",
+      "hintGod": "Vollständiger Zustand (nichts entfernt).",
+      "hintLive": "Zeige Ansicht von Spieler {{player}} (aktueller Spieler).",
+      "hintGameOver": "Spiel vorbei — vollständiger Zustand wird angezeigt."
+    },
     "debug": {
       "copyPosition": "Stellung kopieren",
       "copyPositionHelp": "Roher Engine-Zustand des aktuellen Fokus (für Debugging).",
