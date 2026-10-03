@@ -40,14 +40,15 @@ import { useStore } from "../../stores";
 import {
   isInterestingComment,
   resolveRenderLabels,
-  setStatus,
 } from "../../lib/GameMove/misc";
 import {
   setupGame,
   syncGameSessionFromApi,
+  syncPlayRenderToFocus,
   populateChecked,
   processNewMove,
 } from "../../lib/GameMove/gameStuff";
+import { shouldCommitBoardRender } from "../../lib/GameMove/boardRenderCommit";
 import {
   mergeExistingExploration,
   mergeExploration,
@@ -1376,48 +1377,38 @@ export function useGameMoveSession(props) {
       node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variation.
       nextFocus.exPath = [];
     }
-    let engine = GameFactory(currentGame.metaGame, node.state);
-    partialMoveRenderRef.current = false;
     nextFocus.canExplore = canExploreMove(
       currentGame,
       explorationRef.current.nodes,
       nextFocus
     );
-    if (nextFocus.canExplore && !currentGame.noMoves) {
-      movesRef.current = engine.moves();
-    }
     focusSetter(nextFocus);
-    engineRef.current = engine;
     const displayUids =
       altDisplayOverride ?? displaySettings?.display ?? [];
-    renderrepSetter(
-      resolveRenderLabels(
-        engine.render(
-          buildRenderDisplayOpts(currentGame.metaGame, displayUids, {
-            perspective: currentGame.me ? currentGame.me + 1 : 1,
-          })
-        ),
-        currentGame.players,
-        useStore.getState().users
-      )
-    );
-    setURL(explorationRef.current.nodes, nextFocus, currentGame, navigate);
     const isPartialSimMove =
       currentGame.simultaneous &&
       (nextFocus.exPath.length === 1 ||
         (nextFocus.exPath.length === 0 &&
           nextFocus.moveNumber === explorationRef.current.nodes.length - 1 &&
           !currentGame.canSubmit));
-    setStatus(engine, currentGame, isPartialSimMove, "", statusRef.current);
-    if (currentGame.simultaneous) {
-      moveSetter({
-        ...engine.validateMove("", currentGame.me + 1),
-        rendered: "",
-        move: "",
-      });
-    } else {
-      moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
-    }
+    syncPlayRenderToFocus(
+      currentGame,
+      explorationRef.current.nodes,
+      nextFocus,
+      {
+        partialMoveRenderRef,
+        engineRef,
+        renderrepSetter,
+        movesRef,
+        statusRef,
+        display: displayUids,
+        moveSetter,
+        isPartialSimMove,
+        loadMoves: nextFocus.canExplore && !currentGame.noMoves,
+        updateMoveEntry: true,
+      }
+    );
+    setURL(explorationRef.current.nodes, nextFocus, currentGame, navigate);
     populateChecked(gameRef, engineRef, t, inCheckSetter);
     publishGameColors(node);
   };
@@ -1632,10 +1623,14 @@ export function useGameMoveSession(props) {
         tmpRendered.push(svgNode);
         document.body.removeChild(container); // ✅ clean up
       }
-      if (generation !== boardRenderGenerationRef.current) {
-        return;
-      }
-      if (renderrepRef.current !== renderrep) {
+      if (
+        !shouldCommitBoardRender({
+          generationAtStart: generation,
+          generationNow: boardRenderGenerationRef.current,
+          renderrepAtStart: renderrep,
+          renderrepLatest: renderrepRef.current,
+        })
+      ) {
         return;
       }
       const nextIndex = Math.max(0, tmpRendered.length - 1);
@@ -1650,6 +1645,8 @@ export function useGameMoveSession(props) {
     metaGame,
     colorMode,
     focus?.canExplore,
+    focus?.moveNumber,
+    focusExPathKey,
     globalMe,
   ]);
 
