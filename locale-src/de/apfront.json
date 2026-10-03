@@ -251,6 +251,10 @@
     "src": "Click to expand",
     "out": "Zum Aufklappen klicken"
   },
+  "ClockPaused": {
+    "src": "clock paused",
+    "out": "Uhr pausiert"
+  },
   "Close": {
     "src": "Close",
     "out": "Schließen"
@@ -1515,9 +1519,17 @@
     "src": "There will be {{num}} players in this game. Seating will be random.",
     "out": "An diesem Spiel werden {{num}} Spieler teilnehmen. Die Sitzordnung ist zufällig."
   },
+  "OnVacation": {
+    "src": "On vacation",
+    "out": "Im Urlaub"
+  },
   "OpponentMove": {
     "src": "Opponent's move",
     "out": "Zug des Gegners"
+  },
+  "OpponentOnVacation": {
+    "src": "An opponent is on vacation.",
+    "out": "Ein Gegner ist im Urlaub."
   },
   "OpponentSlotAnyone": {
     "src": "Anyone may join this seat",
@@ -1570,6 +1582,10 @@
   "PickVariant_normal": {
     "src": "Select variants",
     "out": "Varianten auswählen"
+  },
+  "PlayerIsOnVacation": {
+    "src": "{{player}} is on vacation.",
+    "out": "{{player}} ist im Urlaub."
   },
   "PlayerList": {
     "src": "Players",
@@ -2206,6 +2222,10 @@
   "UserSettingsTabProfile": {
     "src": "Profile",
     "out": "Profil"
+  },
+  "UserSettingsTabVacation": {
+    "src": "Vacation",
+    "out": "Urlaub"
   },
   "Variant": {
     "src": "Variant",
@@ -7162,5 +7182,133 @@
   "tour.play.welcome": {
     "src": "This is where the action happens! The play screen for every game is structured the same way. The name of the game will always appear here, front and centre, along with any descriptors like whether the game is part of a tournament.",
     "out": "Hier findet die Action statt! Der Spielbildschirm ist für jedes Spiel gleich aufgebaut. Der Name des Spiels erscheint immer hier, laut und deutlich in der Mitte, zusammen mit etwaigen Beschreibungen, zum Beispiel ob das Spiel Teil eines Turniers ist."
+  },
+  "vacation.cancelScheduled": {
+    "src": "Cancel scheduled vacation",
+    "out": "Geplanten Urlaub stornieren"
+  },
+  "vacation.editActiveEnd": {
+    "src": "Change end time",
+    "out": "Endzeit ändern"
+  },
+  "vacation.editScheduled": {
+    "src": "Adjust scheduled vacation",
+    "out": "Geplanten Urlaub anpassen"
+  },
+  "vacation.endsAt": {
+    "src": "Ends {{when}}",
+    "out": "Endet {{when}}"
+  },
+  "vacation.errors.generic": {
+    "src": "Could not update vacation. Try again.",
+    "out": "Urlaub konnte nicht aktualisiert werden. Versuche es erneut."
+  },
+  "vacation.errors.vacation_end_passed": {
+    "src": "That end time has already passed.",
+    "out": "Diese Endzeit ist bereits verstrichen."
+  },
+  "vacation.errors.vacation_ends_in_past": {
+    "src": "The end time must be in the future.",
+    "out": "Die Endzeit muss in der Zukunft liegen."
+  },
+  "vacation.errors.vacation_invalid_range": {
+    "src": "Those dates are not valid for vacation.",
+    "out": "Diese Daten sind für einen Urlaub ungültig."
+  },
+  "vacation.errors.vacation_no_quota": {
+    "src": "Not enough vacation time left for that period.",
+    "out": "Nicht genügend Urlaubszeit für diesen Zeitraum übrig."
+  },
+  "vacation.errors.vacation_not_scheduled": {
+    "src": "No vacation is scheduled to change.",
+    "out": "Es ist kein Urlaub geplant, der geändert werden könnte."
+  },
+  "vacation.errors.vacation_nothing_to_stop": {
+    "src": "There is no vacation to stop.",
+    "out": "Es gibt keinen Urlaub, der beendet werden könnte."
+  },
+  "vacation.errors.vacation_stint_active": {
+    "src": "You already have a vacation scheduled or in progress.",
+    "out": "Du hast bereits einen Urlaub geplant oder aktiv."
+  },
+  "vacation.fixedEnd": {
+    "src": "End date and time",
+    "out": "Enddatum und -zeit"
+  },
+  "vacation.intro": {
+    "src": "Pause your turn clock on all active correspondence games. Vacation applies to every game type (casual, tournament, event, solo; hard and soft clocks).",
+    "out": "Pausiere deine Bedenkzeit in allen aktiven Fernpartien. Der Urlaub gilt für jeden Spieltyp (Gelegenheitsspiel, Turnier, Event, Solo; harte und weiche Bedenkzeiten)."
+  },
+  "vacation.noQuotaLeft": {
+    "src": "You have no vacation time left for this quota year.",
+    "out": "Du hast für dieses Kontingentjahr keine Urlaubszeit mehr übrig."
+  },
+  "vacation.openEndedLabel": {
+    "src": "Open-ended until you stop or your allowance runs out.",
+    "out": "Open-End, bis du ihn beendest oder dein Kontingent abläuft."
+  },
+  "vacation.openEndedUntilStop": {
+    "src": "Open-ended until I stop",
+    "out": "Open-End, bis ich ihn beende"
+  },
+  "vacation.profileTooltipOpenEnded": {
+    "src": "Open-ended vacation — about {{remaining}} ({{blocks}} full-day blocks) left in this quota year.",
+    "out": "Unbefristeter Urlaub – noch etwa {{remaining}} ({{blocks}} ganztägige Blöcke) in diesem Kontingentjahr verbleibend."
+  },
+  "vacation.profileTooltipScheduled": {
+    "src": "Vacation starts {{when}}.",
+    "out": "Urlaub beginnt {{when}}."
+  },
+  "vacation.profileTooltipUntil": {
+    "src": "On vacation until {{when}} (turn clocks paused).",
+    "out": "Im Urlaub bis {{when}} (Zuguhren pausiert)."
+  },
+  "vacation.quotaSummary": {
+    "src": "{{remaining}} remaining this UTC quota year ({{year}}) — {{blocks}} of {{maxBlocks}} full-day blocks (14×24h per year).",
+    "out": "{{remaining}} verbleibend in diesem UTC-Kontingentjahr ({{year}}) – {{blocks}} von {{maxBlocks}} Ganztagesblöcken (14×24h pro Jahr)."
+  },
+  "vacation.saveChanges": {
+    "src": "Save changes",
+    "out": "Änderungen speichern"
+  },
+  "vacation.saved": {
+    "src": "Vacation settings updated.",
+    "out": "Urlaubseinstellungen aktualisiert."
+  },
+  "vacation.scheduleHeading": {
+    "src": "Schedule vacation",
+    "out": "Urlaub planen"
+  },
+  "vacation.scheduleSubmit": {
+    "src": "Start vacation",
+    "out": "Urlaub starten"
+  },
+  "vacation.startLater": {
+    "src": "Start at a specific time",
+    "out": "Zu einer bestimmten Zeit starten"
+  },
+  "vacation.startNow": {
+    "src": "Start now",
+    "out": "Jetzt starten"
+  },
+  "vacation.startedAt": {
+    "src": "Started {{when}}",
+    "out": "Begonnen {{when}}"
+  },
+  "vacation.startsAt": {
+    "src": "Starts {{when}}",
+    "out": "Beginnt {{when}}"
+  },
+  "vacation.statusActive": {
+    "src": "You are on vacation",
+    "out": "Du bist im Urlaub"
+  },
+  "vacation.statusScheduled": {
+    "src": "Vacation scheduled",
+    "out": "Urlaub geplant"
+  },
+  "vacation.stopVacation": {
+    "src": "Stop vacation",
+    "out": "Urlaub beenden"
   }
 }

@@ -16,6 +16,7 @@ import GamePickerTrigger from "./GamePickerTrigger";
 import { useStore } from "../stores";
 import { isPublicCatalogGame, getGameDisplayName } from "../lib/gameOptions";
 import { AIAI_USER_ID, formatUserDisplayName } from "./Bots/botUtils";
+import OnVacationBadge from "./OnVacationBadge";
 import {
   isSoloOnlyGame,
   shouldHandoffToSolo,
@@ -666,7 +667,10 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                   ) : null}
                   <div className="control">
                     {opponent ? (
-                      formatUserDisplayName(opponent, allUsers)
+                      <>
+                        {formatUserDisplayName(opponent, allUsers)}
+                        <OnVacationBadge user={opponent} />
+                      </>
                     ) : anyoneSlot ? (
                       <p className="help">{t("OpponentSlotAnyoneHelp")}</p>
                     ) : (

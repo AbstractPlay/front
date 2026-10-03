@@ -15,8 +15,13 @@ import { getPendingSubmitMove } from "../../lib/GameMove/submitMove";
 import Modal from "../Modal";
 import { formatSoloOutcome, isSoloGame } from "../../lib/soloPlay";
 import PlayerOnlineIcon from "./preview/PlayerOnlineIcon";
+import PlayerVacationPauseIcon from "./preview/PlayerVacationPauseIcon";
 import { isPlayerIndexOnMove } from "./preview/moveEntryUtils";
 import { resolveCustomButtonLabel } from "../../lib/customButtonLabel";
+import {
+  isPlayerTimedOut,
+  tickActivePlayerRemainingMs,
+} from "../../lib/gameClockDisplay";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -307,21 +312,30 @@ function MoveEntry(props) {
     }
     let canClaimTimeout = false;
     if (uiState === 0 && !submitting) {
+      const now = Date.now();
       if (game.simultaneous)
         canClaimTimeout =
           game.players.some(
             (p, i) =>
-              toMove[i] &&
-              i !== game.me &&
-              p.time - (Date.now() - game.lastMoveTime) < 0
+              isPlayerTimedOut(p, game, toMove, i, now) &&
+              i !== game.me
           ) && game.players.some((p) => p.id === globalMe?.id);
-      else
+      else {
+        const toMoveIdx = parseInt(String(game.toMove), 10);
         canClaimTimeout =
           !game.canSubmit &&
           game.toMove !== "" &&
           game.me !== game.toMove &&
           game.players.some((p) => p.id === globalMe?.id) &&
-          game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
+          !Number.isNaN(toMoveIdx) &&
+          isPlayerTimedOut(
+            game.players[toMoveIdx],
+            game,
+            game.toMove,
+            toMoveIdx,
+            now
+          );
+      }
     }
     const drawOffered = game.players.some((p) => p.draw);
     // Am I the last player that needs to agree to a draw?
@@ -372,7 +386,7 @@ function MoveEntry(props) {
         )}
         {uiState === 0 && toMove !== "" ? (
           <>
-            <table className="table">
+            <table className="table game-move-classic-clock">
               <caption className="tooltipped">
                 {t("TimeRemaining")}
                 <br />
@@ -383,31 +397,44 @@ function MoveEntry(props) {
                 </span>
               </caption>
               <tbody>
-                {game.players.map((p, ind) =>
-                  isPlayerIndexOnMove(ind, game.toMove) ? (
-                    <tr key={"player" + ind} style={{ fontWeight: "bolder" }}>
-                      <td key={"player" + ind}>
-                        {formatPlayerDisplayName(p, allUsers)}
-                      </td>
-                      <td>
-                        {showMilliseconds(
-                          p.time - (Date.now() - game.lastMoveTime)
-                        )}
-                        <PlayerOnlineIcon playerId={p.id} />
-                      </td>
-                    </tr>
-                  ) : (
-                    <tr key={"player" + ind}>
-                      <td key={"player" + ind}>
-                        {formatPlayerDisplayName(p, allUsers)}
-                      </td>
-                      <td>
-                        {showMilliseconds(p.time)}
-                        <PlayerOnlineIcon playerId={p.id} />
-                      </td>
-                    </tr>
-                  )
-                )}
+                {game.players.map((p, ind) => {
+                  const onClock = isPlayerIndexOnMove(ind, game.toMove);
+                  const remainingMs = onClock
+                    ? tickActivePlayerRemainingMs(
+                        p,
+                        game,
+                        game.toMove,
+                        ind,
+                        Date.now()
+                      )
+                    : p.time ?? 0;
+                  const showPause = p.clockPaused === true || p.onVacation === true;
+                  return (
+                    <Fragment key={`player${ind}`}>
+                      <tr style={onClock ? { fontWeight: "bolder" } : undefined}>
+                        <td>{formatPlayerDisplayName(p, allUsers)}</td>
+                        <td>
+                          {showMilliseconds(remainingMs)}
+                          <PlayerOnlineIcon playerId={p.id} />
+                          {showPause ? (
+                            <PlayerVacationPauseIcon className="game-move-player-vacation-pause--chip" />
+                          ) : null}
+                        </td>
+                      </tr>
+                      {p.onVacation === true ? (
+                        <tr className="game-move-classic-clock__vacation-row">
+                          <td colSpan={2}>
+                            <span className="tag is-light is-small">
+                              {t("PlayerIsOnVacation", {
+                                player: formatPlayerDisplayName(p, allUsers),
+                              })}
+                            </span>
+                          </td>
+                        </tr>
+                      ) : null}
+                    </Fragment>
+                  );
+                })}
               </tbody>
             </table>
             {!isClientBotTurn(game, toMove, allUsers) ||

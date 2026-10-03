@@ -5,6 +5,7 @@ import { render } from "@abstractplay/renderer";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { callAuthApi } from "../../lib/api";
+import { anyOnClockPlayerTimedOut } from "../../lib/gameClockDisplay";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import {
   maybeSyncInProgressCommentedFlag,
@@ -873,23 +874,8 @@ export function useGameMoveSession(props) {
       }
       if (game.toMove !== "" && !game.players.some((p) => p.id === me?.id)) {
         if (game.clockHard) {
-          if (Array.isArray(game.toMove)) {
-            const elapsed = Date.now() - game.lastMoveTime;
-            if (
-              game.toMove.some(
-                (p, i) => p && game.players[i].time - elapsed < 0
-              )
-            ) {
-              checkTime("timeloss");
-            }
-          } else {
-            const toMove = parseInt(game.toMove);
-            if (
-              game.players[toMove].time - (Date.now() - game.lastMoveTime) <
-              0
-            ) {
-              checkTime("timeloss");
-            }
+          if (anyOnClockPlayerTimedOut(game)) {
+            checkTime("timeloss");
           }
         }
       }

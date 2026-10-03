@@ -60,8 +60,11 @@ function CardTurnBar({ session }) {
               />
             </span>
             <span className="game-move-queue-card__clock-time">
-              {chip.time}
+              {chip.clockPaused ? `${chip.time} · ${t("ClockPaused")}` : chip.time}
             </span>
+            {chip.onVacation ? (
+              <span className="game-move-queue-card__vacation">{t("OnVacation")}</span>
+            ) : null}
           </span>
         ))}
       </div>

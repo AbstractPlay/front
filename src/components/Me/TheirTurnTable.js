@@ -15,6 +15,7 @@ import { useStore } from "../../stores";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
+import { tickActivePlayerRemainingMs } from "../../lib/gameClockDisplay";
 import { useTranslation } from "react-i18next";
 import {
   compareStrings,
@@ -89,7 +90,16 @@ function TheirTurnTable(props) {
           timeRemaining:
             them === undefined
               ? undefined
-              : them.time - (Date.now() - g.lastMoveTime),
+              : tickActivePlayerRemainingMs(
+                  them,
+                  g,
+                  g.toMove,
+                  g.players.indexOf(them),
+                  Date.now()
+                ),
+          opponentOnVacation: g.players.some(
+            (p) => p.id !== globalMe.id && p.onVacation === true
+          ),
           lastSeen: g.seen || 0,
           lastChat: g.lastChat || 0,
         };
@@ -128,30 +138,36 @@ function TheirTurnTable(props) {
       }),
       columnHelper.accessor("opponents", {
         header: t("tables.opponents"),
-        cell: (props) =>
-          props
-            .getValue()
-            .map((u) => (
-              <>
-                <BotAwareName id={u.id} name={u.name} users={allUsers} link />
-                {!connections?.visibleUserIds.includes(u.id) ? null : (
-                  <span className="icon" title="Player is online">
-                    <i className="fa fa-wifi" aria-hidden="true"></i>
-                  </span>
-                )}
-              </>
-            ))
-            .reduce(
-              (acc, x) =>
-                acc === null ? (
-                  x
-                ) : (
-                  <>
-                    {acc}, {x}
-                  </>
-                ),
-              null
-            ),
+        cell: (props) => (
+          <>
+            {props
+              .getValue()
+              .map((u) => (
+                <>
+                  <BotAwareName id={u.id} name={u.name} users={allUsers} link />
+                  {!connections?.visibleUserIds.includes(u.id) ? null : (
+                    <span className="icon" title="Player is online">
+                      <i className="fa fa-wifi" aria-hidden="true"></i>
+                    </span>
+                  )}
+                </>
+              ))
+              .reduce(
+                (acc, x) =>
+                  acc === null ? (
+                    x
+                  ) : (
+                    <>
+                      {acc}, {x}
+                    </>
+                  ),
+                null
+              )}
+            {props.row.original.opponentOnVacation ? (
+              <span className="tag is-light ml-1">{t("OnVacation")}</span>
+            ) : null}
+          </>
+        ),
         sortingFn: (rowA, rowB, columnID) => {
           const nameA = rowA.getValue(columnID)[0].name;
           const nameB = rowB.getValue(columnID)[0].name;

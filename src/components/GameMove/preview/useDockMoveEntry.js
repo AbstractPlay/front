@@ -8,6 +8,7 @@ import { getPendingSubmitMove } from "../../../lib/GameMove/submitMove";
 import { formatPlayerDisplayName, isClientBotTurn } from "../../Bots/botUtils";
 import { getFocusNode } from "./moveEntryUtils";
 import { formatSoloOutcome, isSoloGame } from "../../../lib/soloPlay";
+import { isPlayerTimedOut } from "../../../lib/gameClockDisplay";
 
 export function useDockMoveEntry(props) {
   const [drawoffer, drawofferSetter] = useState(false);
@@ -202,21 +203,30 @@ export function useDockMoveEntry(props) {
 
   let canClaimTimeout = false;
   if (uiState === 0 && !submitting) {
+    const now = Date.now();
     if (game.simultaneous) {
       canClaimTimeout =
         game.players.some(
           (p, i) =>
             toMove[i] &&
             i !== game.me &&
-            p.time - (Date.now() - game.lastMoveTime) < 0
+            isPlayerTimedOut(p, game, toMove, i, now)
         ) && game.players.some((p) => p.id === globalMe?.id);
     } else {
+      const toMoveIdx = parseInt(String(game.toMove), 10);
       canClaimTimeout =
         !game.canSubmit &&
         game.toMove !== "" &&
         game.me !== game.toMove &&
         game.players.some((p) => p.id === globalMe?.id) &&
-        game.players[game.toMove].time - (Date.now() - game.lastMoveTime) < 0;
+        !Number.isNaN(toMoveIdx) &&
+        isPlayerTimedOut(
+          game.players[toMoveIdx],
+          game,
+          game.toMove,
+          toMoveIdx,
+          now
+        );
     }
   }
 

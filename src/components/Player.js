@@ -11,6 +11,7 @@ import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { gameinfo } from "@abstractplay/gameslib";
+import OnVacationBadge from "./OnVacationBadge";
 import PageHelmet from "./PageHelmet";
 import Spinner from "./Spinner";
 import Flag from "./Flag";
@@ -319,6 +320,7 @@ function Player() {
               <Flag code={user.country} size="m" />
             )}
             <ActivityMarker lastSeen={user.lastSeen} size="m" />
+            <OnVacationBadge user={user} />
             {user.bggid === undefined || /^\s*$/.test(user.bggid) ? null : (
               <span className="player-profile-bgg">
                 <a
