@@ -393,8 +393,24 @@ function Me(props) {
       localMyMove.sort((a, b) => {
         const recA = a.players.find((x) => x.id === globalMe.id);
         const recB = b.players.find((x) => x.id === globalMe.id);
-        const timeA = (recA?.time || 0) + a.lastMoveTime;
-        const timeB = (recB?.time || 0) + b.lastMoveTime;
+        const now = Date.now();
+        const tickMyRemaining = (rec, gameRow) => {
+          if (
+            rec?.effectiveRemainingMs === undefined
+            || gameRow.clockDisplayServerTime === undefined
+          ) {
+            return (rec?.time || 0) + gameRow.lastMoveTime;
+          }
+          if (rec.clockPaused) {
+            return rec.effectiveRemainingMs;
+          }
+          return (
+            rec.effectiveRemainingMs
+            - (now - gameRow.clockDisplayServerTime)
+          );
+        };
+        const timeA = tickMyRemaining(recA, a);
+        const timeB = tickMyRemaining(recB, b);
         return timeA - timeB;
       });
 

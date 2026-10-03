@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { API_ENDPOINT_OPEN } from "../config";
 import ProfileAbout from "./ProfileAbout";
+import PlayerVacationDetail from "./PlayerVacationDetail";
 import { aboutTextPlainSnippet } from "../lib/aboutTextClient";
 
 export default function PlayerAboutSection({
@@ -14,6 +15,7 @@ export default function PlayerAboutSection({
       ? seedAbout
       : null
   );
+  const [vacation, vacationSetter] = useState(null);
   const [expanded, expandedSetter] = useState(false);
   const [needsCollapse, needsCollapseSetter] = useState(false);
   const contentRef = useRef(null);
@@ -31,6 +33,11 @@ export default function PlayerAboutSection({
         const res = await fetch(url);
         const result = await res.json();
         if (cancelled) return;
+        if (result?.vacation) {
+          vacationSetter(result.vacation);
+        } else {
+          vacationSetter(null);
+        }
         const text = result?.about;
         if (typeof text === "string" && !/^\s*$/.test(text)) {
           aboutSetter(text);
@@ -70,8 +77,15 @@ export default function PlayerAboutSection({
     return () => cancelAnimationFrame(raf);
   }, [about, expanded]);
 
-  if (about === null || /^\s*$/.test(about)) {
+  if (
+    (about === null || /^\s*$/.test(about))
+    && vacation === null
+  ) {
     return null;
+  }
+
+  if (about === null || /^\s*$/.test(about)) {
+    return <PlayerVacationDetail vacation={vacation} />;
   }
 
   const bodyClassName = [
@@ -83,7 +97,9 @@ export default function PlayerAboutSection({
     .join(" ");
 
   return (
-    <div className="box profile-about-box">
+    <>
+      <PlayerVacationDetail vacation={vacation} />
+      <div className="box profile-about-box">
       <div ref={contentRef} className={bodyClassName}>
         <ProfileAbout text={about} />
       </div>
@@ -98,7 +114,8 @@ export default function PlayerAboutSection({
           </button>
         </p>
       ) : null}
-    </div>
+      </div>
+    </>
   );
 }
 

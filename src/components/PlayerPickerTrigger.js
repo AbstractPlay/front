@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import PlayerPickerModal from "./PlayerPickerModal";
 import { formatUserDisplayName } from "./Bots/botUtils";
+import OnVacationBadge from "./OnVacationBadge";
 
 function PlayerPickerTrigger({
   id,
@@ -43,6 +44,7 @@ function PlayerPickerTrigger({
         onClick={() => setOpen(true)}
       >
         {selectedLabel ?? t("playerPicker.choose")}
+        {selectedUser ? <OnVacationBadge user={selectedUser} /> : null}
       </button>
       <PlayerPickerModal
         show={open}

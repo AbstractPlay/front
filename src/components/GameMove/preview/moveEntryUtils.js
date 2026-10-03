@@ -1,6 +1,10 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import { formatPlayerDisplayName } from "../../Bots/botUtils";
 import { resolveCustomButtonLabel } from "../../../lib/customButtonLabel";
+import {
+  isPlayerIndexOnMove,
+  tickActivePlayerRemainingMs,
+} from "../../../lib/gameClockDisplay";
 
 export function safeGetButtons(engine) {
   try {
@@ -60,28 +64,21 @@ export function sortLenAlpha(a, b) {
 }
 
 /** API `toMove` is often string "0"/"1"; exploration nodes use numbers. */
-export function isPlayerIndexOnMove(playerIndex, toMove) {
-  if (toMove === "" || toMove === undefined || toMove === null) {
-    return false;
-  }
-  if (Array.isArray(toMove)) {
-    return Boolean(toMove[playerIndex]);
-  }
-  const onMove = parseInt(String(toMove), 10);
-  return !Number.isNaN(onMove) && playerIndex === onMove;
-}
+export { isPlayerIndexOnMove } from "../../../lib/gameClockDisplay";
 
 export function getPlayerClockChips(game, toMove, users, now = Date.now()) {
   if (!game?.players || toMove === "") return [];
   return game.players.map((p, ind) => {
     const active = isPlayerIndexOnMove(ind, toMove);
-    const ms = active ? p.time - (now - game.lastMoveTime) : p.time;
+    const ms = tickActivePlayerRemainingMs(p, game, toMove, ind, now);
     return {
       key: ind,
       playerId: p.id,
       label: formatPlayerDisplayName(p, users),
       time: showMilliseconds(ms),
       active,
+      clockPaused: active && p.clockPaused === true,
+      onVacation: p.onVacation === true,
     };
   });
 }
