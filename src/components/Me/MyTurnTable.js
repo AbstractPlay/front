@@ -21,6 +21,9 @@ import { useStore } from "../../stores";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
+import {
+  tickActivePlayerRemainingMs,
+} from "../../lib/gameClockDisplay";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 function showMilliseconds(ms) {
@@ -78,7 +81,13 @@ function MyTurnTable({ games, fetching }) {
           opponents: g.players.filter((item) => item.id !== globalMe.id),
           numMoves: g.numMoves || 0,
           myTime: me.time,
-          timeRemaining: me.time - (Date.now() - g.lastMoveTime),
+          timeRemaining: tickActivePlayerRemainingMs(
+            me,
+            g,
+            g.toMove,
+            g.players.findIndex((item) => item.id === globalMe.id),
+            Date.now()
+          ),
           lastSeen: g.seen || 0,
           lastChat: g.lastChat || 0,
         };

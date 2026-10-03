@@ -40,6 +40,7 @@ import {
 import { toast } from "react-toastify";
 import LanguageSelect from "./LanguageSelect";
 import AvatarPicker from "./AvatarPicker";
+import VacationSettingsPanel from "./VacationSettingsPanel";
 import { COMMUNICATION_LANGUAGES } from "../i18n";
 import {
   defaultEmailNotifications,
@@ -54,6 +55,7 @@ const USER_SETTINGS_TABS = [
   { id: "profile", nameKey: "UserSettingsTabProfile" },
   { id: "notifications", nameKey: "UserSettingsTabNotifications" },
   { id: "gameplay", nameKey: "UserSettingsTabGameplay" },
+  { id: "vacation", nameKey: "UserSettingsTabVacation" },
 ];
 
 async function parseNewSettingResponse(res) {
@@ -1149,6 +1151,16 @@ function UserSettingsModal(props) {
               </button>
             </div>
           </div>
+            </div>
+          ) : null}
+
+          {settingsTab === "vacation" ? (
+            <div
+              className="user-settings-tab-panel"
+              id="user-settings-vacation"
+              role="tabpanel"
+            >
+              <VacationSettingsPanel vacation={globalMe?.vacation} />
             </div>
           ) : null}
         </div>

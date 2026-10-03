@@ -19,6 +19,7 @@ import ActivityMarker from "./ActivityMarker";
 import { useStore } from "../stores";
 import { callAuthApi } from "../lib/api";
 import { formatUserDisplayName } from "./Bots/botUtils";
+import OnVacationBadge from "./OnVacationBadge";
 import PageLoading from "./shared/PageLoading";
 import { EnlargeableUserAvatar } from "./AvatarLightbox";
 import { trimmedGlobalIncludesStringFilterFn } from "../lib/tableGlobalFilter";
@@ -171,7 +172,7 @@ function Players() {
       allUsers === undefined || allUsers === null
         ? []
         : allUsers
-            .map(({ id, name, country, lastSeen, bot, avatarStyle, avatarSeed }) => {
+            .map(({ id, name, country, lastSeen, bot, avatarStyle, avatarSeed, onVacation }) => {
               return {
                 id,
                 name: name ?? "",
@@ -180,6 +181,7 @@ function Players() {
                 lastSeen,
                 avatarStyle,
                 avatarSeed,
+                onVacation: onVacation === true,
               };
             })
             .filter(({ country }) => {
@@ -242,9 +244,12 @@ function Players() {
       columnHelper.accessor("name", {
         header: t("tables.name"),
         cell: (props) => (
-          <Link to={`/player/${props.row.original.id}`}>
-            {formatUserDisplayName(props.row.original, allUsers)}
-          </Link>
+          <>
+            <Link to={`/player/${props.row.original.id}`}>
+              {formatUserDisplayName(props.row.original, allUsers)}
+            </Link>
+            <OnVacationBadge user={props.row.original} />
+          </>
         ),
         sortingFn: stringColumnSortingFn(i18n.language),
       }),

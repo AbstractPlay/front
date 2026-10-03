@@ -7,6 +7,7 @@ import { useChallengeOpponentFilters } from "../hooks/useChallengeOpponentFilter
 import { useOpponentQuickPicks } from "../hooks/useOpponentQuickPicks";
 import { useStore } from "../stores";
 import { formatUserDisplayName } from "./Bots/botUtils";
+import OnVacationBadge from "./OnVacationBadge";
 import {
   filterChallengeOpponents,
   filterOpponentOptionsByQuery,
@@ -208,6 +209,7 @@ function PlayerPickerModal({
                       onClick={() => handleSelect(user)}
                     >
                       {formatUserDisplayName(user, allUsers)}
+                      <OnVacationBadge user={user} />
                     </button>
                   ))}
                 </div>
@@ -247,6 +249,7 @@ function PlayerPickerModal({
                 <span className="has-text-left">
                   <span className="is-block has-text-weight-semibold">
                     {entry.name}
+                    <OnVacationBadge user={entry.user} />
                   </span>
                   {ratingsReady && metaGame && winRate != null ? (
                     <span className="is-block is-size-7 has-text-grey">

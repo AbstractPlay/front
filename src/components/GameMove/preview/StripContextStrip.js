@@ -7,6 +7,7 @@ import QueueNavButtons from "./QueueNavButtons";
 import LastMoveChip from "./LastMoveChip";
 import LayoutPickerTrigger from "../LayoutPickerTrigger";
 import PlayerOnlineIcon from "./PlayerOnlineIcon";
+import PlayerVacationPauseIcon from "./PlayerVacationPauseIcon";
 
 const MOBILE_PANEL_MAX_WIDTH = 768;
 
@@ -81,7 +82,12 @@ function StripContextStrip({ session, layoutContext }) {
               />
             </span>
             <span className="game-move-strip-context__clock-time">
-              {chip.time}
+              {chip.clockPaused && chip.active
+                ? `${chip.time} · ${t("ClockPaused")}`
+                : chip.time}
+              {chip.onVacation ? (
+                <PlayerVacationPauseIcon className="game-move-player-vacation-pause--chip" />
+              ) : null}
             </span>
           </span>
         ))}
