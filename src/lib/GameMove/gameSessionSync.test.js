@@ -88,4 +88,52 @@ describe("game session sync", () => {
     expect(focusSetter.mock.calls[0][0].canExplore).to.be.true;
     expect(movesRef.current).to.deep.equal(["swap", "noswap"]);
   });
+
+  it("syncGameSessionFromApi clears spine caches when game state changes", () => {
+    const game = {
+      id: "g1",
+      simultaneous: false,
+      toMove: 0,
+      players,
+      gameOver: false,
+      noExplore: false,
+      numPlayers: 2,
+      noMoves: false,
+      metaGame: "pinch",
+      state: '{"v":2}',
+      me: 0,
+      canSubmit: true,
+      canExplore: false,
+    };
+    const priorGame = {
+      ...game,
+      state: '{"v":1}',
+      colors: { 0: { value: "P1", isImage: false } },
+    };
+    const nodes = [
+      new GameNode(null, "", "cached-0", 0),
+      new GameNode(null, "m1", "cached-1", 0),
+    ];
+    const focus = { moveNumber: 1, exPath: [], canExplore: false };
+    const gameRef = { current: priorGame };
+    const explorationRef = { current: { gameID: "g1", nodes } };
+    const focusRef = { current: focus };
+    const me = { id: "user-a", settings: { all: { exploration: 0 } } };
+
+    syncGameSessionFromApi({
+      game,
+      priorGame,
+      me,
+      explorer: false,
+      explorationRef,
+      focusRef,
+      focusSetter: vi.fn(),
+      movesRef: { current: null },
+      engineRef: { current: null },
+      gameRef,
+    });
+
+    expect(nodes[0].state).to.be.null;
+    expect(nodes[1].state).to.be.null;
+  });
 });
