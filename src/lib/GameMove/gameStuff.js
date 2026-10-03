@@ -10,6 +10,8 @@ import {
   setCanPublish,
   setURL,
   getFocusNode,
+  createEngineAtFocus,
+  invalidateExplorationSpineStates,
   fixMoveOutcomes,
   saveExploration,
 } from "./exploration";
@@ -92,12 +94,81 @@ export function syncGameSessionFromApi({
   const identityChanged =
     merged.me !== priorGame?.me || merged.canSubmit !== priorGame?.canSubmit;
 
+  if (priorGame?.state !== game.state && nodes) {
+    invalidateExplorationSpineStates(nodes);
+  }
+
   if (identityChanged || nextCanExplore !== focus.canExplore) {
     const nextFocus = cloneDeep(focus);
     nextFocus.canExplore = nextCanExplore;
     focusSetter(nextFocus);
     populateMovesRefIfNeeded(merged, movesRef, engineRef);
   }
+}
+
+/**
+ * Match Lab: render from the engine at move-tree focus (not the pre-setup session engine).
+ */
+export function syncPlayRenderToFocus(
+  game,
+  exploration,
+  focus,
+  {
+    partialMoveRenderRef,
+    engineRef,
+    renderrepSetter,
+    movesRef,
+    statusRef,
+    display,
+    moveSetter,
+    isPartialSimMove = false,
+    loadMoves = true,
+    updateMoveEntry = false,
+  }
+) {
+  const users = useStore.getState().users;
+  const engine = createEngineAtFocus(game, exploration, focus);
+  partialMoveRenderRef.current = false;
+  engineRef.current = engine;
+
+  const render = resolveRenderLabels(
+    engine.render(
+      buildRenderDisplayOpts(game.metaGame, display, {
+        perspective: game.me > -1 ? game.me + 1 : 1,
+      })
+    ),
+    game.players,
+    users
+  );
+  renderrepSetter(render);
+
+  const rep = Array.isArray(render) ? render[render.length - 1] : render;
+  game.stackExpanding =
+    !!game.stackExpanding && rep?.renderer === "stacking-expanding";
+
+  if (loadMoves && focus.canExplore && !game.noMoves) {
+    if (game.simultaneous) {
+      movesRef.current = engine.moves(game.me + 1);
+    } else {
+      movesRef.current = engine.moves();
+    }
+  }
+
+  setStatus(engine, game, isPartialSimMove, "", statusRef.current);
+
+  if (updateMoveEntry && moveSetter) {
+    if (game.simultaneous) {
+      moveSetter({
+        ...engine.validateMove("", game.me + 1),
+        rendered: "",
+        move: "",
+      });
+    } else {
+      moveSetter({ ...engine.validateMove(""), rendered: "", move: "" });
+    }
+  }
+
+  return render;
 }
 
 export function setupGame(
@@ -193,32 +264,6 @@ export function setupGame(
     game0.colors = gameRef.current.colors; // gets used when you submit a move.
   gameRef.current = game0;
   partialMoveRenderRef.current = false;
-  engineRef.current = engine.clone();
-  const render = resolveRenderLabels(
-    engine.render(
-      buildRenderDisplayOpts(game0.metaGame, display, {
-        perspective: game0.me + 1,
-      })
-    ),
-    game0.players,
-    users
-  );
-  game0.stackExpanding =
-    game0.stackExpanding && render.renderer === "stacking-expanding";
-  setStatus(
-    engine,
-    game0,
-    game0.simultaneous && !game0.canSubmit,
-    "",
-    statusRef.current
-  );
-  if (
-    !game0.noMoves &&
-    (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2))
-  ) {
-    if (game0.simultaneous) movesRef.current = engine.moves(game0.me + 1);
-    else movesRef.current = engine.moves();
-  }
 
   // If the game is over, generate the game record
   // TODO: Add "event" and "round" should those ever be implemented.
@@ -288,7 +333,18 @@ export function setupGame(
   setCanPublish(game0, explorer, me, publishSetter);
   focusSetter(focus0);
   console.log(`(setupGame) ABOUT TO RERENDER! Display setting: ${display}`);
-  renderrepSetter(render);
+  syncPlayRenderToFocus(game0, explorationRef.current.nodes, focus0, {
+    partialMoveRenderRef,
+    engineRef,
+    renderrepSetter,
+    movesRef,
+    statusRef,
+    display,
+    isPartialSimMove: game0.simultaneous && !game0.canSubmit,
+    loadMoves:
+      !game0.noMoves &&
+      (game0.canSubmit || (!game0.simultaneous && game0.numPlayers === 2)),
+  });
   setURL(explorationRef.current.nodes, focus0, game0, navigate);
 }
 

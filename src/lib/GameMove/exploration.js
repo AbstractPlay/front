@@ -99,6 +99,32 @@ function getExplorationNode(exploration, game, moveNumber) {
   return node;
 }
 
+/** Engine at the current focus — main line always from live `game.state` (not cached node.state). */
+export function createEngineAtFocus(game, exploration, focus) {
+  if (focus.exPath?.length) {
+    const node = getFocusNode(exploration, game, focus);
+    return GameFactory(game.metaGame, node.state);
+  }
+  let engine = GameFactory(game.metaGame, game.state);
+  const moveNumber = focus.moveNumber;
+  if (moveNumber + 1 < engine.stack.length) {
+    engine.gameover = false;
+    engine.winner = [];
+  }
+  engine.stack = engine.stack.slice(0, moveNumber + 1);
+  engine.load();
+  return engine;
+}
+
+export function invalidateExplorationSpineStates(exploration) {
+  if (!exploration?.length) {
+    return;
+  }
+  for (const node of exploration) {
+    node.state = null;
+  }
+}
+
 export function mergeExploration(
   game,
   exploration,
