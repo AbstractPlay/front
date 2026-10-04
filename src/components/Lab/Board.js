@@ -159,14 +159,18 @@ function Board({
               onClick={() => handleRotate("CW")}
               title={t("RotateBoardCW")}
             >
-              <i className="fa fa-repeat"></i>
+              <span className="boardRotateIcon" aria-hidden="true">
+                {"\u27F3"}
+              </span>
             </button>
             <button
               className="fabtn align-right"
               onClick={() => handleRotate("CCW")}
               title={t("RotateBoardCCW")}
             >
-              <i className="fa fa-undo"></i>
+              <span className="boardRotateIcon" aria-hidden="true">
+                {"\u27F2"}
+              </span>
             </button>
           </>
         )}

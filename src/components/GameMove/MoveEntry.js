@@ -744,11 +744,14 @@ function MoveEntry(props) {
           )}
           {focus.exPath.length > 0 ? (
             <div
-              style={forceUndoRight ? { float: "right" } : {}}
-              className="winningColorButton tooltipped"
+              className={`winningColorButton tooltipped${
+                forceUndoRight ? " game-move-explore-mark-tools__push-end" : ""
+              }`}
               onClick={() => handleReset()}
             >
-              <i className="fa fa-undo resetIcon"></i>
+              <span className="resetIcon" aria-hidden="true">
+                {"\u21A9"}
+              </span>
               <span className="tooltiptext">{t("ResetExploration")}</span>
             </div>
           ) : (

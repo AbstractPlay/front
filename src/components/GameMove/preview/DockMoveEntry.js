@@ -75,8 +75,8 @@ function DockMoveEntry(props) {
       handlers={handlers}
       className={
         pinExplorationToolbar
-          ? "game-move-dock-entry__explore-tools game-move-dock-entry__explore-tools--pinned"
-          : "game-move-dock-entry__explore-tools"
+          ? "game-move-dock-entry__explore-tools game-move-dock-entry__explore-tools--pinned game-move-explore-mark-tools submitOrMark"
+          : "game-move-dock-entry__explore-tools game-move-explore-mark-tools submitOrMark"
       }
     />
   ) : null;
