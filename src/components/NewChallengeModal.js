@@ -33,6 +33,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const onSoloHandoff = props.onSoloHandoff;
   const opponent = props.opponent;
   const fixedMetaGame = props.fixedMetaGame;
+  const initialVariantUids = props.initialVariantUids;
   const show = props.show;
   const { t } = useTranslation();
   const [error, errorSetter] = useState(null);
@@ -201,6 +202,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const prevOpponentIdRef = useRef(undefined);
   const prevOpponentNameRef = useRef(undefined);
   const prevFixedMetaGameRef = useRef(undefined);
+  const prevInitialVariantUidsKeyRef = useRef("");
 
   const handleChangeGame = useCallback(
     (game) => {
@@ -271,22 +273,27 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       prevOpponentIdRef.current = undefined;
       prevOpponentNameRef.current = undefined;
       prevFixedMetaGameRef.current = undefined;
+      prevInitialVariantUidsKeyRef.current = "";
       return;
     }
 
     const opponentId = opponent?.id;
     const opponentName = opponent?.name;
+    const initialVariantUidsKey =
+      initialVariantUids?.length > 0 ? initialVariantUids.join("|") : "";
     const justOpened = !prevShowRef.current;
     const targetChangedWhileOpen =
       prevShowRef.current &&
       (opponentId !== prevOpponentIdRef.current ||
         opponentName !== prevOpponentNameRef.current ||
-        fixedMetaGame !== prevFixedMetaGameRef.current);
+        fixedMetaGame !== prevFixedMetaGameRef.current ||
+        initialVariantUidsKey !== prevInitialVariantUidsKeyRef.current);
 
     prevShowRef.current = true;
     prevOpponentIdRef.current = opponentId;
     prevOpponentNameRef.current = opponentName;
     prevFixedMetaGameRef.current = fixedMetaGame;
+    prevInitialVariantUidsKeyRef.current = initialVariantUidsKey;
 
     if (justOpened || targetChangedWhileOpen) {
       initializeForOpen();
@@ -296,6 +303,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     opponent?.id,
     opponent?.name,
     fixedMetaGame,
+    initialVariantUids,
     initializeForOpen,
   ]);
 
@@ -562,9 +570,11 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
           ""
         ) : (
           <GameVariants
+            key={`${metaGame}:${(initialVariantUids ?? []).join("|")}`}
             metaGame={metaGame}
             variantsSetter={setSelectedVariants}
             onValidityChange={handleVariantValidityChange}
+            initialVariantUids={initialVariantUids}
           />
         )}
         {metaGame === null || playerCount === -1 || soloHandoffPath ? (

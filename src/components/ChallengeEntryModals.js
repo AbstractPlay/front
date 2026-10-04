@@ -14,6 +14,7 @@ function ChallengeEntryModals({
   handleChallenge,
   fixedMetaGame,
   opponent,
+  initialVariantUids,
   initialSoloSeed = "",
   showSolo = false,
   onSoloClose,
@@ -72,6 +73,7 @@ function ChallengeEntryModals({
         handleChallenge={handleChallenge}
         fixedMetaGame={fixedMetaGame}
         opponent={opponent}
+        initialVariantUids={initialVariantUids}
         onSoloHandoff={handleSoloHandoff}
       />
       <SoloPlayModal
