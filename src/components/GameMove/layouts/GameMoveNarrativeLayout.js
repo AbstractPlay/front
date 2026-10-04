@@ -78,11 +78,7 @@ export default function GameMoveNarrativeLayout({ session }) {
             ) : null}
           </header>
           <GameMoveLastMoveBlock layoutContext={layoutContext} t={t} />
-          <GameMoveMoveSection
-            session={session}
-            forceUndoRight
-            showMiscButtons={false}
-          />
+          <GameMoveMoveSection session={session} showMiscButtons={false} />
           <DockMiscButtons {...buildMiscButtonsProps(session)} />
           <GameMoveStatusSection session={session} />
           <div className="game-move-narrative-collapsible">

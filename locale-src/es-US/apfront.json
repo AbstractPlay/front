@@ -4396,8 +4396,8 @@
     "out": "Error al subir. Por favor, inténtalo de nuevo."
   },
   "feedback.upload.invalidType": {
-    "src": "Allowed files: PNG, JPEG, and WebP images; plain text (.txt); and JSON (.json).",
-    "out": "Archivos permitidos: imágenes PNG, JPEG y WebP; texto plano (.txt); y JSON (.json)."
+    "src": "Allowed files: PNG, JPEG, WebP, and SVG images; plain text (.txt); Markdown (.md); and JSON (.json).",
+    "out": "Archivos permitidos: imágenes PNG, JPEG, WebP y SVG; texto plano (.txt); Markdown (.md); y JSON (.json)."
   },
   "feedback.upload.paste": {
     "src": "Paste screenshot",
@@ -4416,8 +4416,8 @@
     "out": "No se encontró ninguna imagen en el portapapeles."
   },
   "feedback.upload.pasteHint": {
-    "src": "Paste (Ctrl+V or Cmd+V), drag and drop files here, or use Add file for images, plain text (.txt), or JSON (.json). You can also paste a screenshot anywhere on this page except the title and description fields.",
-    "out": "Pega (Ctrl+V o Cmd+V), arrastra y suelta archivos aquí, o usa Agregar archivo para imágenes, texto plano (.txt) o JSON (.json). También puedes pegar una captura de pantalla en cualquier lugar de esta página, excepto en los campos de título y descripción."
+    "src": "Paste (Ctrl+V or Cmd+V), drag and drop files here, or use Add file for images (including SVG), plain text (.txt), Markdown (.md), or JSON (.json). You can also paste a screenshot anywhere on this page except the title and description fields.",
+    "out": "Pega (Ctrl+V o Cmd+V), arrastra y suelta archivos aquí, o usa Agregar archivo para imágenes (incluyendo SVG), texto plano (.txt), Markdown (.md) o JSON (.json). También puedes pegar una captura de pantalla en cualquier lugar de esta página, excepto en los campos de título y descripción."
   },
   "feedback.upload.remove": {
     "src": "Remove",

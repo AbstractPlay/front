@@ -4396,8 +4396,8 @@
     "out": "Caricamento fallito. Riprova."
   },
   "feedback.upload.invalidType": {
-    "src": "Allowed files: PNG, JPEG, and WebP images; plain text (.txt); and JSON (.json).",
-    "out": "File consentiti: immagini PNG, JPEG e WebP; testo semplice (.txt); e JSON (.json)."
+    "src": "Allowed files: PNG, JPEG, WebP, and SVG images; plain text (.txt); Markdown (.md); and JSON (.json).",
+    "out": "File consentiti: immagini PNG, JPEG, WebP e SVG; testo semplice (.txt); Markdown (.md); e JSON (.json)."
   },
   "feedback.upload.paste": {
     "src": "Paste screenshot",
@@ -4416,8 +4416,8 @@
     "out": "Nessuna immagine trovata negli appunti."
   },
   "feedback.upload.pasteHint": {
-    "src": "Paste (Ctrl+V or Cmd+V), drag and drop files here, or use Add file for images, plain text (.txt), or JSON (.json). You can also paste a screenshot anywhere on this page except the title and description fields.",
-    "out": "Incolla (Ctrl+V o Cmd+V), trascina e rilascia i file qui, oppure usa Aggiungi file per immagini, testo semplice (.txt) o JSON (.json). Puoi anche incollare uno screenshot in qualsiasi punto di questa pagina tranne nei campi titolo e descrizione."
+    "src": "Paste (Ctrl+V or Cmd+V), drag and drop files here, or use Add file for images (including SVG), plain text (.txt), Markdown (.md), or JSON (.json). You can also paste a screenshot anywhere on this page except the title and description fields.",
+    "out": "Incolla (Ctrl+V o Cmd+V), trascina e rilascia i file qui, oppure usa Aggiungi file per immagini (incluso SVG), testo semplice (.txt), Markdown (.md) o JSON (.json). Puoi anche incollare uno screenshot in qualsiasi punto di questa pagina tranne che nei campi titolo e descrizione."
   },
   "feedback.upload.remove": {
     "src": "Remove",

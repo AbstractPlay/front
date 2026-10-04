@@ -403,7 +403,9 @@ function MoveEntry(props) {
               className="winningColorButton tooltipped"
               onClick={() => handleReset()}
             >
-              <i className="fa fa-undo resetIcon"></i>
+              <span className="resetIcon" aria-hidden="true">
+                {"\u21A9"}
+              </span>
               <span className="tooltiptext">{t("ResetExploration")}</span>
             </div>
           ) : (
