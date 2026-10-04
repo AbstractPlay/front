@@ -1050,6 +1050,8 @@ th .player {
 
 .gameMove {
   display: inline;
+  cursor: pointer;
+  user-select: text;
 }
 
 .actualMove {

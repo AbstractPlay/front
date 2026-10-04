@@ -24,6 +24,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Move tree (round grid):** compact/sparse rows and path indexing delegate to gameslib `getMoveTableRounds` / `pathIndexForMoveTableCell` (exploration wire split stays in a thin front adapter).
 - **Live play move tree:** mainline moves and exploration branches are styled differently (with a short legend when branches are present).
 - **Move tree branches (live play and Lab):** at a multi-branch ply, list all lines (a, b, …) with the active one highlighted; ↑/↓ toolbar buttons and tooltips match keyboard (up = previous variant, down = next).
+- **Move list:** hover cursor on move notation is a pointer (clickable moves) while text selection still works.
 
 ### Fixed
 
