@@ -8,7 +8,9 @@ describe("feedbackAttachmentDisplay", () => {
   it("detects image keys by extension", () => {
     expect(isFeedbackImageAttachmentKey("staging/user/uuid.png")).toBe(true);
     expect(isFeedbackImageAttachmentKey("post/comments/c1/uuid.webp")).toBe(true);
+    expect(isFeedbackImageAttachmentKey("post/comments/c1/uuid.svg")).toBe(true);
     expect(isFeedbackImageAttachmentKey("staging/user/uuid.txt")).toBe(false);
+    expect(isFeedbackImageAttachmentKey("staging/user/uuid.md")).toBe(false);
     expect(isFeedbackImageAttachmentKey("staging/user/uuid.json")).toBe(false);
   });
 
