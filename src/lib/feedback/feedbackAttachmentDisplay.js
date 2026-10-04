@@ -1,4 +1,4 @@
-const IMAGE_EXTENSIONS = new Set(["png", "jpg", "jpeg", "webp"]);
+const IMAGE_EXTENSIONS = new Set(["png", "jpg", "jpeg", "webp", "svg"]);
 
 function extensionFromKey(key) {
   if (!key || typeof key !== "string") {
