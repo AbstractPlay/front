@@ -11,7 +11,9 @@ const ALLOWED_TYPES = [
   "image/png",
   "image/jpeg",
   "image/webp",
+  "image/svg+xml",
   "text/plain",
+  "text/markdown",
   "application/json",
 ];
 const EXTENSION_TO_TYPE = {
@@ -19,12 +21,18 @@ const EXTENSION_TO_TYPE = {
   jpg: "image/jpeg",
   jpeg: "image/jpeg",
   webp: "image/webp",
+  svg: "image/svg+xml",
   txt: "text/plain",
+  md: "text/markdown",
+  markdown: "text/markdown",
   json: "application/json",
 };
 const FILE_INPUT_ACCEPT = [
   ...ALLOWED_TYPES,
+  ".svg",
   ".txt",
+  ".md",
+  ".markdown",
   ".json",
 ].join(",");
 const MAX_BYTES = 5_242_880;
@@ -51,8 +59,14 @@ function extensionForType(type) {
   if (type === "image/webp") {
     return "webp";
   }
+  if (type === "image/svg+xml") {
+    return "svg";
+  }
   if (type === "text/plain") {
     return "txt";
+  }
+  if (type === "text/markdown") {
+    return "md";
   }
   if (type === "application/json") {
     return "json";
