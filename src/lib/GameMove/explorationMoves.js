@@ -135,6 +135,18 @@ export function isPersistableExplorationMove(
   return valid && !partial;
 }
 
+/**
+ * Options for `engine.move` while exploring.
+ * A finished ply must be written onto the stack (`emulation: false`). Games such
+ * as Waldmeister mutate the live board under emulation and return before
+ * `saveState()`, so a later `GameFactory(node.state)` would still be the
+ * previous position.
+ * @param {boolean} partial
+ */
+export function explorationEngineMoveOpts(partial) {
+  return { partial: !!partial, emulation: !!partial };
+}
+
 export function applyExplorationMove(gameEngine, move, options = {}) {
   const ctx = normalizeMoveContext(options);
   const { valid, partial } = validateExplorationMove(gameEngine, move, ctx);
@@ -142,7 +154,10 @@ export function applyExplorationMove(gameEngine, move, options = {}) {
     throw new Error(`Invalid exploration move: ${move}`);
   }
   const wireMove = wireMoveForEngine(move, ctx);
-  gameEngine.move(wireMove, { trusted: true, partial, emulation: true });
+  gameEngine.move(wireMove, {
+    trusted: true,
+    ...explorationEngineMoveOpts(partial),
+  });
 }
 
 export function filterPersistableExplorationTree(

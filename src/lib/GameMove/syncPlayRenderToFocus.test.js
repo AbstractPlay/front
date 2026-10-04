@@ -117,6 +117,7 @@ describe("syncPlayRenderToFocus", () => {
       renderResult: { renderer: "plain" },
     });
     game.state = stateSingle;
+    exploration[0].state = null;
 
     syncPlayRenderToFocus(game, exploration, focus, {
       partialMoveRenderRef: { current: false },

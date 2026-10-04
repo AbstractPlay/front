@@ -436,6 +436,24 @@ describe("pathIndexForMoveCell", () => {
     ).toBe(deepEngine);
   });
 
+  it("keeps a sequential comma move in one cell", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 2, simultaneous: false },
+      engine: { turnModel: () => "sequential" },
+    });
+    const path = [[{ move: "G3@h6-h8,Y1" }]];
+    expect(
+      moveTextForCell({
+        layout,
+        rounds: null,
+        rowIdx: 0,
+        seatIdx: 0,
+        path,
+        movenum: 0,
+      })
+    ).toBe("G3@h6-h8,Y1");
+  });
+
   it("round grid splits comma wire in engine slot text per seat", () => {
     const layout = resolveMoveTableLayout({
       game: { numPlayers: 2 },

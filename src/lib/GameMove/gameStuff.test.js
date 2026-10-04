@@ -23,6 +23,39 @@ vi.mock("./exploration", () => ({
   setCanPublish: vi.fn(),
   setURL: vi.fn(),
   getFocusNode: (exploration, _game, focus) => exploration[focus.moveNumber],
+  createEngineAtFocus: () => ({
+    validateMove(m, player) {
+      if (player === 1) {
+        if (m === "d5") {
+          return { valid: true, complete: -1, canrender: true };
+        }
+        if (m === "d5-e4") {
+          return { valid: true, complete: 1 };
+        }
+      }
+      if (m === "") {
+        return { valid: true, complete: -1, canrender: true };
+      }
+      if (m === "f7") {
+        return { valid: true, complete: -1, canrender: true };
+      }
+      return { valid: false };
+    },
+    move(m, opts = {}) {
+      if (m === "" && !opts.partial && !opts.emulation) {
+        throw new Error("The algebraic notation is invalid: ");
+      }
+    },
+    render: () => ({}),
+    cheapSerialize: () => ({}),
+    serialize: () => ({}),
+    currplayer: 1,
+    gameover: false,
+    winner: [],
+    sameMove: (a, b) => a === b,
+    moves: () => [],
+    state: () => ({}),
+  }),
   fixMoveOutcomes: vi.fn(),
   saveExploration: vi.fn(),
 }));
