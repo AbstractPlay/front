@@ -1,10 +1,14 @@
 import {
+  getMoveTableRoundsForEngine,
   isStackAlignedRounds,
   moveTableRoundsFromExplorationPath,
   moveTableRowCountForEngine,
   moveTextForMoveTableSlot,
   moveTableStackMoveCount,
+  wireMoveTokenForSeat,
   normalizeMoveTableDensity,
+  packPliesForMoveTable,
+  pathIndexForMoveTableCell as pathIndexForMoveTableCellFromGameslib,
   resolveMoveTableRounds,
   roundSlotToMoveText,
 } from "@abstractplay/gameslib";
@@ -34,6 +38,124 @@ function engineSupportsMoveTableApi(engine) {
     typeof engine?.getMoveTableRounds === "function" &&
     typeof engine?.pathIndexForMoveTableCell === "function"
   );
+}
+
+/**
+ * @param {{ actor: number, move: string, playOrder?: number, results?: unknown[] }} ply
+ */
+function plyToRoundSlot(ply) {
+  const results = ply.results ?? [];
+  if (ply.playOrder !== undefined && ply.playOrder !== ply.actor) {
+    if (results.length > 0) {
+      return { move: ply.move, sequence: ply.playOrder, result: [...results] };
+    }
+    return { move: ply.move, sequence: ply.playOrder };
+  }
+  if (results.length > 0) {
+    return { move: ply.move, result: [...results] };
+  }
+  return ply.move;
+}
+
+/**
+ * @param {{ actor: number, move: string, playOrder?: number, results?: unknown[] }[]} group
+ * @param {number} numPlayers
+ */
+function buildRoundRowFromPlies(group, numPlayers) {
+  const row = new Array(numPlayers).fill(null);
+  for (const ply of group) {
+    row[ply.actor - 1] = plyToRoundSlot(ply);
+  }
+  return row;
+}
+
+/**
+ * Plain-object engines (tests) and pre-API gameslib: synthesize move-table methods.
+ * @param {object} engine
+ */
+function pathIndexFromRoundGridOnly(engine, opts) {
+  const rounds = engine.getRounds?.();
+  if (!Array.isArray(rounds) || opts.rowIdx >= rounds.length) {
+    return null;
+  }
+  const row = rounds[opts.rowIdx];
+  if (!Array.isArray(row) || opts.seatIdx >= row.length || row[opts.seatIdx] == null) {
+    return null;
+  }
+  if (opts.model === "simultaneous") {
+    return opts.rowIdx < opts.pathLength ? opts.rowIdx : null;
+  }
+  if (opts.model === "sequenced" && isStackAlignedRounds(rounds, opts.pathLength)) {
+    return opts.rowIdx < opts.pathLength ? opts.rowIdx : null;
+  }
+  let plyIndex = 0;
+  for (let r = 0; r < opts.rowIdx; r++) {
+    for (let s = 0; s < rounds[r].length; s++) {
+      if (rounds[r][s] !== null) {
+        plyIndex++;
+      }
+    }
+  }
+  for (let s = 0; s < opts.seatIdx; s++) {
+    if (row[s] !== null) {
+      plyIndex++;
+    }
+  }
+  return plyIndex < opts.pathLength ? plyIndex : null;
+}
+
+function ensureMoveTableApi(engine) {
+  if (!engine || engineSupportsMoveTableApi(engine)) {
+    return engine;
+  }
+  if (
+    typeof engine.getRounds === "function" &&
+    typeof engine.getPlies !== "function"
+  ) {
+    const host = {
+      ...engine,
+      numplayers: engine.numplayers ?? engine.numPlayers ?? 0,
+      getPlies: () => [],
+      getMoveTableRounds: () => engine.getRounds(),
+      pathIndexForMoveTableCell(opts) {
+        return pathIndexFromRoundGridOnly(engine, opts);
+      },
+    };
+    return host;
+  }
+  if (typeof engine.getPlies !== "function") {
+    return engine;
+  }
+  const numplayers = engine.numplayers ?? engine.numPlayers ?? 0;
+  const host = {
+    ...engine,
+    numplayers,
+    turnModel:
+      typeof engine.turnModel === "function"
+        ? engine.turnModel.bind(engine)
+        : () => "sequenced",
+    getRounds:
+      typeof engine.getRounds === "function"
+        ? engine.getRounds.bind(engine)
+        : () => [],
+    getMoveTableRounds(opts = {}) {
+      if (typeof engine.getMoveTableRounds === "function") {
+        return engine.getMoveTableRounds(opts);
+      }
+      return getMoveTableRoundsForEngine(
+        host,
+        opts,
+        (group) => buildRoundRowFromPlies(group, numplayers)
+      );
+    },
+    pathIndexForMoveTableCell(opts) {
+      if (typeof engine.pathIndexForMoveTableCell === "function") {
+        return engine.pathIndexForMoveTableCell(opts);
+      }
+      return pathIndexForMoveTableCellFromGameslib(host, opts);
+    },
+  };
+  return host;
 }
 
 /**
@@ -102,10 +224,18 @@ export function buildStackRowsFromPathWire(path, numPlayers, pathLength) {
  * @param {{ getMoveTableRounds?: (opts: { density: string }) => unknown[], getPlies?: () => unknown[], numplayers?: number, numPlayers?: number }} engine
  */
 export function buildDisplayRounds(engine) {
-  if (typeof engine?.getMoveTableRounds === "function") {
-    return engine.getMoveTableRounds({ density: "compact" });
+  const api = ensureMoveTableApi(engine);
+  if (typeof api?.getMoveTableRounds === "function") {
+    return api.getMoveTableRounds({ density: "compact" });
   }
-  throw new Error("buildDisplayRounds requires engine.getMoveTableRounds");
+  const plies = engine.getPlies();
+  const numPlayers = engine.numplayers ?? engine.numPlayers;
+  if (!numPlayers || numPlayers < 1) {
+    throw new Error("buildDisplayRounds requires engine.numplayers");
+  }
+  return packPliesForMoveTable(plies, numPlayers, (group) =>
+    buildRoundRowFromPlies(group, numPlayers)
+  );
 }
 
 /**
@@ -118,10 +248,11 @@ export function getRoundsForLayout(engine, layout, pathLength = 0, path = null) 
   if (!layout.useRoundGrid) {
     return undefined;
   }
-  if (!engineSupportsMoveTableApi(engine)) {
+  const api = ensureMoveTableApi(engine);
+  if (!engineSupportsMoveTableApi(api)) {
     return engine?.getRounds?.();
   }
-  return resolveMoveTableRounds(engine, {
+  return resolveMoveTableRounds(api, {
     density: toGameslibDensity(layout.density),
     model: layout.model,
     pathLength,
@@ -241,8 +372,8 @@ export function moveTextForCell({
   }
 
   if (move != null && layout.numcolumns > 1) {
-    const wire = moveTextForMoveTableSlot(move, seatIdx, layout.numcolumns);
-    if (wire !== "" || (typeof move === "string" && move.includes(","))) {
+    const wire = wireMoveTokenForSeat(move, seatIdx, layout.numcolumns);
+    if (wire !== null) {
       return wire;
     }
   }
@@ -269,8 +400,9 @@ export function pathIndexForMoveCell({
     return movenum < pathLength ? movenum : null;
   }
 
-  if (engineSupportsMoveTableApi(engine)) {
-    return engine.pathIndexForMoveTableCell({
+  const api = ensureMoveTableApi(engine);
+  if (engineSupportsMoveTableApi(api)) {
+    return api.pathIndexForMoveTableCell({
       density: toGameslibDensity(layout.density),
       model: layout.model,
       useRoundGrid,
@@ -295,8 +427,9 @@ export function moveTableRowCount({ pathLength, layout, engine, path = null }) {
   if (!useRoundGrid) {
     return Math.ceil(pathLength / numcolumns);
   }
-  if (engineSupportsMoveTableApi(engine)) {
-    return moveTableRowCountForEngine(engine, {
+  const api = ensureMoveTableApi(engine);
+  if (engineSupportsMoveTableApi(api)) {
+    return moveTableRowCountForEngine(api, {
       density: toGameslibDensity(layout.density),
       model: layout.model,
       pathLength,
