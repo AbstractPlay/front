@@ -23,6 +23,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Playground (Lab):** God vs Live hidden-information controls stay available for card games (e.g. Jacynth, Biscuit) — strip capability is probed on disposable engines so gameslib strip export cannot corrupt the live session engine.
 - **Live play multi-frame boards:** render from live main-line `game.state` at move-tree focus (not stale exploration spine snapshots); clear spine caches on API state refresh.
 - **Open challenges:** show a spinner while accept is in flight instead of optimistic “Accepted!” before the server responds.
 - **i18n CI:** `locale-src/` sidecars are committed again on develop deploy (auto-commit `file_pattern` was multiline, so only `public/locales` were ever staged); backfilled sidecars to stop repeated Gemini rewrites of the same strings.
