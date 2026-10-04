@@ -936,6 +936,8 @@
   "WelcomePlayer": "Panel de control de",
   "Winners": "Ganadores",
   "Winning": "Marcar esta jugada como ganadora para este jugador",
+  "MarkDraw": "Marcar esta línea como empate",
+  "MarkUndecided": "Borrar el resultado (marcar como no decidido)",
   "WithVariants_zero": ".",
   "WithVariants_one": " con la variante {{variants}}.",
   "WithVariants_other": " con las variantes {{variants}}.",

@@ -1,6 +1,7 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import { GameNode } from "../../components/Lab/GameTree";
 import { applyExplorationMove } from "../GameMove/explorationMoves";
+import { deriveParentExplorationOutcome } from "../GameMove/explorationOutcome.js";
 
 export function serializeExploration(nodes, gameOver = false) {
   if (!nodes || nodes.length === 0) return null;
@@ -242,18 +243,9 @@ export function fixMoveOutcomes(exploration, moveNumber) {
   let child = exploration[moveNumber];
   for (let moveNum = moveNumber; moveNum > 0; moveNum--) {
     const parent = exploration[moveNum - 1];
-    const mover = 1 - parent.toMove;
-    let a_child_wins = false;
-    let all_children_lose = true;
-    if (child.outcome === 1 - mover) a_child_wins = true;
-    if (child.outcome !== mover) all_children_lose = false;
-    parent.children.forEach((c) => {
-      if (c.outcome === 1 - mover) a_child_wins = true;
-      if (c.outcome !== mover) all_children_lose = false;
-    });
-    if (a_child_wins) parent.outcome = 1 - mover;
-    else if (all_children_lose) parent.outcome = mover;
-    else parent.outcome = -1;
+    const outcomes = parent.children.map((c) => c.outcome);
+    outcomes.push(child.outcome);
+    parent.outcome = deriveParentExplorationOutcome(outcomes, parent.toMove);
     child = parent;
   }
 }

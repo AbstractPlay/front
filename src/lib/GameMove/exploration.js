@@ -7,6 +7,7 @@ import {
   explorationMoveContext,
   filterPersistableExplorationTree,
 } from "./explorationMoves";
+import { deriveParentExplorationOutcome } from "./explorationOutcome.js";
 
 export {
   assertValidMoveHasComplete,
@@ -201,20 +202,9 @@ export function fixMoveOutcomes(exploration, moveNumber) {
   let child = exploration[moveNumber];
   for (let moveNum = moveNumber; moveNum > 0; moveNum--) {
     const parent = exploration[moveNum - 1];
-    const mover = 1 - parent.toMove;
-    // if player x moved, and the other player (1-x) has a winning reply (outcome = 1-x), then player x loses
-    // if player x moved, and the other player (1-x) has only losing replies (outcome = x) (no winning moves, no unknown outcome moves) then player x wins
-    let a_child_wins = false;
-    let all_children_lose = true;
-    if (child.outcome === 1 - mover) a_child_wins = true;
-    if (child.outcome !== mover) all_children_lose = false;
-    parent.children.forEach((c) => {
-      if (c.outcome === 1 - mover) a_child_wins = true;
-      if (c.outcome !== mover) all_children_lose = false;
-    });
-    if (a_child_wins) parent.outcome = 1 - mover;
-    else if (all_children_lose) parent.outcome = mover;
-    else parent.outcome = -1;
+    const outcomes = parent.children.map((c) => c.outcome);
+    outcomes.push(child.outcome);
+    parent.outcome = deriveParentExplorationOutcome(outcomes, parent.toMove);
     child = parent;
   }
 }
