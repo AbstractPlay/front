@@ -3,6 +3,15 @@ import { useTranslation } from "react-i18next";
 import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
 import { resolveCustomButtonLabel } from "../../lib/customButtonLabel";
+import {
+  EXPLORATION_OUTCOME_DRAW,
+  EXPLORATION_OUTCOME_UNDECIDED,
+} from "../../lib/GameMove/explorationOutcome.js";
+import {
+  ExplorationDrawMarkButton,
+  ExplorationPlayerWinMarkButton,
+  ExplorationUndecidedMarkButton,
+} from "../GameMove/ExplorationOutcomeIndicator.js";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -351,50 +360,32 @@ function MoveEntry(props) {
             ""
           )}
         </div>
-        <div className="submitOrMark">
+        <div className="submitOrMark game-move-explore-mark-tools">
           {(focus.moveNumber > 0 || focus.exPath.length > 0) &&
           game.canExplore &&
           game.colors
-            ? game.colors.map((color, i) => (
-                <div
+            ? game.colors.map((_color, i) => (
+                <ExplorationPlayerWinMarkButton
                   key={`winner|${i}`}
-                  className="winningColorButton tooltipped"
+                  game={game}
+                  playerIndex={i}
+                  t={t}
                   onClick={() => handleMark(i)}
-                >
-                  {color.isImage ? (
-                    <img
-                      className="winnerButtonImage"
-                      src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                        color.value
-                      )}`}
-                      alt=""
-                    />
-                  ) : (
-                    <svg className="winnerButtonImage" viewBox="0 0 44 44">
-                      <circle
-                        cx="22"
-                        cy="22"
-                        r="18"
-                        stroke="black"
-                        strokeWidth="4"
-                        fill="white"
-                      />
-                      <text
-                        x="12"
-                        y="32"
-                        fill="black"
-                        fontFamily="monospace"
-                        fontSize="35"
-                        fontWeight="bold"
-                      >
-                        {i + 1}
-                      </text>
-                    </svg>
-                  )}
-                  <span className="tooltiptext">{t("Winning")}</span>
-                </div>
+                />
               ))
             : null}
+          {(focus.moveNumber > 0 || focus.exPath.length > 0) && game.canExplore ? (
+            <ExplorationDrawMarkButton
+              t={t}
+              onClick={() => handleMark(EXPLORATION_OUTCOME_DRAW)}
+            />
+          ) : null}
+          {(focus.moveNumber > 0 || focus.exPath.length > 0) && game.canExplore ? (
+            <ExplorationUndecidedMarkButton
+              t={t}
+              onClick={() => handleMark(EXPLORATION_OUTCOME_UNDECIDED)}
+            />
+          ) : null}
           {(focus.moveNumber > 0 || focus.exPath.length > 0) &&
           game.canExplore ? (
             <div

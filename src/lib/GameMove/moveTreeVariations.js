@@ -196,3 +196,45 @@ export function rowHasFocus(row, focus) {
   }
   return row.some((cell) => explorationPathEquals(cell.path, focus));
 }
+
+/**
+ * In-progress game with focus on the main-line tip and no explored branches from
+ * that node — uses a compact move-tree path. Any exploration (exPath or earlier
+ * branch) uses the full path builder instead.
+ *
+ * @param {{ moveNumber: number; exPath?: number[] } | null | undefined} focus
+ * @param {unknown[]} exploration
+ * @param {boolean} gameOver
+ * @returns {boolean}
+ */
+export function isIdleMainlineExplorationTip(focus, exploration, gameOver) {
+  if (gameOver || !exploration?.length || !focus) {
+    return false;
+  }
+  const exPath = focus.exPath ?? [];
+  const tipIndex = exploration.length - 1;
+  return (
+    focus.moveNumber === tipIndex &&
+    exPath.length === 0 &&
+    (exploration[tipIndex]?.children?.length ?? 0) === 0
+  );
+}
+
+/**
+ * @param {unknown[]} exploration
+ * @param {{ path?: { moveNumber: number; exPath?: number[] }; outcome?: number } | null | undefined} cell
+ * @returns {typeof cell}
+ */
+export function enrichExplorationMoveCell(exploration, cell) {
+  if (!cell?.path) {
+    return cell;
+  }
+  const node = nodeForExplorationPath(exploration, cell.path);
+  if (!node) {
+    return cell;
+  }
+  return {
+    ...cell,
+    outcome: node.outcome ?? -1,
+  };
+}

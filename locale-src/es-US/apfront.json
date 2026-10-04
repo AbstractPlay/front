@@ -1335,9 +1335,17 @@
     "src": "Make a move",
     "out": "Hacer un movimiento"
   },
+  "MarkDraw": {
+    "src": "Mark this line as a draw",
+    "out": "Marcar esta línea como empate"
+  },
   "MarkPremove": {
     "src": "Mark as pre-move",
     "out": "Marcar como premovimiento"
+  },
+  "MarkUndecided": {
+    "src": "Clear the outcome (mark as undecided)",
+    "out": "Borrar el resultado (marcar como no decidido)"
   },
   "MaxTime": {
     "src": "max time {{max}} hours",

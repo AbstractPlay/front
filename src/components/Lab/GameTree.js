@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import { deriveParentExplorationOutcome } from "../../lib/GameMove/explorationOutcome.js";
 
 export const VALID_NAGS = ["!", "?", "!!", "??", "!?", "?!"];
 
@@ -97,18 +98,10 @@ export class GameNode {
   }
 
   UpdateOutcome() {
-    const mover = 1 - this.toMove;
-    // if player x moved, and the other player (1-x) has a winning reply (outcome = 1-x), then player x loses
-    // if player x moved, and the other player (1-x) has only losing replies (outcome = x) (no winning moves, no unknown outcome moves) then player x wins
-    let a_child_wins = false;
-    let all_children_lose = true;
-    this.children.forEach((child) => {
-      if (child.outcome === 1 - mover) a_child_wins = true;
-      if (child.outcome !== mover) all_children_lose = false;
-    });
-    if (a_child_wins) this.outcome = 1 - mover;
-    else if (all_children_lose) this.outcome = mover;
-    else this.outcome = -1;
+    this.outcome = deriveParentExplorationOutcome(
+      this.children.map((child) => child.outcome),
+      this.toMove
+    );
     if (this.parent != null) this.parent.UpdateOutcome();
   }
 

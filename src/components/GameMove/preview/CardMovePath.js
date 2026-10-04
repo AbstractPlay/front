@@ -324,7 +324,7 @@ function CardMovePath(props) {
           exploration={exploration}
           gameOverNonLeafNode={gameOverNonLeafNode}
           handlers={handlers}
-          className="game-move-card-move-path__explore-tools"
+          className="game-move-card-move-path__explore-tools game-move-explore-mark-tools"
         />
       ) : null}
 

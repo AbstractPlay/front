@@ -936,6 +936,8 @@
   "WelcomePlayer": "Tableau de bord de",
   "Winners": "Gagnants",
   "Winning": "Marquer ce coup comme gagnant pour ce joueur",
+  "MarkDraw": "Marquer cette ligne comme nulle",
+  "MarkUndecided": "Effacer le résultat (marquer comme indéterminé)",
   "WithVariants_zero": ".",
   "WithVariants_one": " avec la variante {{variants}}.",
   "WithVariants_other": " avec les variantes {{variants}}.",

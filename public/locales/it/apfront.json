@@ -936,6 +936,8 @@
   "WelcomePlayer": "Bacheca di",
   "Winners": "Vincitori",
   "Winning": "Contrassegna questa mossa come vincente per questo giocatore",
+  "MarkDraw": "Contrassegna questa linea come patta",
+  "MarkUndecided": "Cancella il risultato (contrassegna come non deciso)",
   "WithVariants_zero": ".",
   "WithVariants_one": " con la variante {{variants}}.",
   "WithVariants_other": " con le varianti {{variants}}.",

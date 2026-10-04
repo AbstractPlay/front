@@ -936,6 +936,8 @@
     "WelcomePlayer": "Dashboard for",
     "Winners": "Winners",
     "Winning": "Mark this move as winning for this player",
+    "MarkDraw": "Mark this line as a draw",
+    "MarkUndecided": "Clear the outcome (mark as undecided)",
     "WithVariants_zero": ".",
     "WithVariants_one": " with variant {{variants}}.",
     "WithVariants_other": " with variants {{variants}}.",

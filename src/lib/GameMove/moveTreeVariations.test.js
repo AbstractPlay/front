@@ -3,6 +3,7 @@ import {
   collectVariationChoices,
   explorationPathEquals,
   focusedMovePathIndex,
+  isIdleMainlineExplorationTip,
 } from "./moveTreeVariations";
 
 describe("moveTreeVariations", () => {
@@ -18,6 +19,37 @@ describe("moveTreeVariations", () => {
         explorationPathEquals(
           { moveNumber: 2, exPath: [0] },
           { moveNumber: 2, exPath: [1] }
+        )
+      ).to.be.false;
+    });
+  });
+
+  describe("isIdleMainlineExplorationTip", () => {
+    it("is only true on the main-line tip with no local branches", () => {
+      const exploration = [
+        { move: "" },
+        { move: "a" },
+        { move: "b", children: [] },
+      ];
+      expect(
+        isIdleMainlineExplorationTip(
+          { moveNumber: 2, exPath: [] },
+          exploration,
+          false
+        )
+      ).to.be.true;
+      expect(
+        isIdleMainlineExplorationTip(
+          { moveNumber: 2, exPath: [0] },
+          exploration,
+          false
+        )
+      ).to.be.false;
+      expect(
+        isIdleMainlineExplorationTip(
+          { moveNumber: 1, exPath: [] },
+          exploration,
+          false
         )
       ).to.be.false;
     });
