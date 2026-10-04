@@ -95,7 +95,9 @@ function ExplorationToolbar({
           className="winningColorButton tooltipped"
           onClick={() => handleReset()}
         >
-          <i className="fa fa-undo resetIcon" aria-hidden="true" />
+          <span className="resetIcon" aria-hidden="true">
+            {"\u21A9"}
+          </span>
           <span className="tooltiptext">{t("ResetExploration")}</span>
         </div>
       ) : null}
