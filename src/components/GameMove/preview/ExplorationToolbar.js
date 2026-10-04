@@ -1,3 +1,13 @@
+import {
+  EXPLORATION_OUTCOME_DRAW,
+  EXPLORATION_OUTCOME_UNDECIDED,
+} from "../../../lib/GameMove/explorationOutcome.js";
+import {
+  ExplorationDrawMarkButton,
+  ExplorationPlayerWinMarkButton,
+  ExplorationUndecidedMarkButton,
+} from "../ExplorationOutcomeIndicator.js";
+
 /** Exploration mark/delete/premove/reset tools (strip dock + queue card). */
 function ExplorationToolbar({
   t,
@@ -6,7 +16,7 @@ function ExplorationToolbar({
   exploration,
   gameOverNonLeafNode,
   handlers,
-  className = "game-move-dock-entry__explore-tools submitOrMark",
+  className = "game-move-dock-entry__explore-tools game-move-explore-mark-tools submitOrMark",
 }) {
   const {
     handleMark,
@@ -26,40 +36,26 @@ function ExplorationToolbar({
       game.canExplore &&
       game.colors?.length >= 2 ? (
         <>
-          <div
-            className="winningColorButton tooltipped"
+          <ExplorationPlayerWinMarkButton
+            game={game}
+            playerIndex={0}
+            t={t}
             onClick={() => handleMark(0)}
-          >
-            {game.colors[0].isImage ? (
-              <img
-                className="winnerButtonImage"
-                src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                  game.colors[0].value
-                )}`}
-                alt=""
-              />
-            ) : (
-              <span className="game-move-dock-entry__mark">1</span>
-            )}
-            <span className="tooltiptext">{t("Winning")}</span>
-          </div>
-          <div
-            className="winningColorButton tooltipped"
+          />
+          <ExplorationPlayerWinMarkButton
+            game={game}
+            playerIndex={1}
+            t={t}
             onClick={() => handleMark(1)}
-          >
-            {game.colors[1].isImage ? (
-              <img
-                className="winnerButtonImage"
-                src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                  game.colors[1].value
-                )}`}
-                alt=""
-              />
-            ) : (
-              <span className="game-move-dock-entry__mark">2</span>
-            )}
-            <span className="tooltiptext">{t("Winning")}</span>
-          </div>
+          />
+          <ExplorationDrawMarkButton
+            t={t}
+            onClick={() => handleMark(EXPLORATION_OUTCOME_DRAW)}
+          />
+          <ExplorationUndecidedMarkButton
+            t={t}
+            onClick={() => handleMark(EXPLORATION_OUTCOME_UNDECIDED)}
+          />
         </>
       ) : null}
       {focus.exPath.length > 0 && game.canExplore && !gameOverNonLeafNode ? (

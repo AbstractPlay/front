@@ -936,6 +936,8 @@
   "WelcomePlayer": "Übersicht für",
   "Winners": "Sieger",
   "Winning": "Diesen Zug als Gewinnzug für diesen Spieler markieren",
+  "MarkDraw": "Diese Variante als Unentschieden markieren",
+  "MarkUndecided": "Ergebnis zurücksetzen (als offen markieren)",
   "WithVariants_zero": ".",
   "WithVariants_one": " mit Variante {{variants}}.",
   "WithVariants_other": " mit Varianten {{variants}}.",

@@ -1335,9 +1335,17 @@
     "src": "Make a move",
     "out": "Fai una mossa"
   },
+  "MarkDraw": {
+    "src": "Mark this line as a draw",
+    "out": "Contrassegna questa linea come patta"
+  },
   "MarkPremove": {
     "src": "Mark as pre-move",
     "out": "Contrassegna come premossa"
+  },
+  "MarkUndecided": {
+    "src": "Clear the outcome (mark as undecided)",
+    "out": "Cancella il risultato (contrassegna come non deciso)"
   },
   "MaxTime": {
     "src": "max time {{max}} hours",

@@ -8,6 +8,7 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { ExplorationOutcomeIndicator } from "../GameMove/ExplorationOutcomeIndicator.js";
 import {
   getRoundsForLayout,
   moveNumberForCell,
@@ -21,8 +22,10 @@ import {
 import { shouldSkipMoveTreeKeyboard } from "../../lib/GameMove/moveTreeKeyboard";
 import {
   collectVariationChoices,
+  enrichExplorationMoveCell,
   explorationPathEquals,
   focusedMovePathIndex,
+  isIdleMainlineExplorationTip,
   moveCellsFromVariationChoices,
   nodeForExplorationPath,
   rowHasFocus,
@@ -60,13 +63,13 @@ function enrichLabMoveCell(exploration, cell) {
   if (!node) {
     return cell;
   }
-  return {
+  return enrichExplorationMoveCell(exploration, {
     ...cell,
     nag: node.nag,
     commented: moveCommentedState(node),
     premove:
       node.premove || node?.children?.some((n) => n.premove) || false,
-  };
+  });
 }
 
 function moveCommentedState(node) {
@@ -102,11 +105,7 @@ function useEventListener(eventName, handler, element = window) {
 
 function shouldUseCompletedPath(focus, exploration, gameOver) {
   if (gameOver) return true;
-  return !(
-    focus.moveNumber === exploration.length - 1 &&
-    focus.exPath.length === 0 &&
-    exploration[focus.moveNumber].children.length === 0
-  );
+  return !isIdleMainlineExplorationTip(focus, exploration, gameOver);
 }
 
 function getPath(focus, exploration, path, gameOver) {
@@ -408,36 +407,7 @@ function GameMoves(props) {
           {m.move.endsWith("...") && (
             <span style={{ fontSize: "1.3em", fontWeight: "bold" }}>...</span>
           )}
-          {m.outcome === -1 ? null : game.colors[m.outcome].isImage ? (
-            <img
-              className="winnerImage"
-              src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                game.colors[m.outcome].value
-              )}`}
-              alt=""
-            />
-          ) : (
-            <svg className="winnerImage2" viewBox="0 0 44 44">
-              <circle
-                cx="22"
-                cy="22"
-                r="18"
-                stroke="black"
-                strokeWidth="4"
-                fill="white"
-              />
-              <text
-                x="12"
-                y="32"
-                fill="black"
-                fontFamily="monospace"
-                fontSize="35"
-                fontWeight="bold"
-              >
-                {m.outcome + 1}
-              </text>
-            </svg>
-          )}
+          <ExplorationOutcomeIndicator game={game} outcome={m.outcome} />
           {m.premove ? (
             <i className="fa fa-clock-o premoveIndicator"></i>
           ) : null}
@@ -546,13 +516,7 @@ function GameMoves(props) {
     let focusRow = 0;
     let numRows = 0;
     if (exploration !== null) {
-      const atTipWithNoBranches =
-        !game.gameOver &&
-        focus.moveNumber === exploration.length - 1 &&
-        focus.exPath.length === 0 &&
-        exploration[focus.moveNumber].children.length === 0;
-
-      if (atTipWithNoBranches) {
+      if (isIdleMainlineExplorationTip(focus, exploration, game.gameOver)) {
         for (let i = 1; i < exploration.length; i++) {
           let className = "gameMove";
           if (
@@ -570,7 +534,7 @@ function GameMoves(props) {
           path.push([
             {
               class: className,
-              outcome: -1,
+              outcome: exploration[i].outcome ?? -1,
               commented: moveCommentedState(exploration[i]),
               nag: exploration[i].nag,
               move: fmtMove(i, exploration[i].move),
@@ -817,6 +781,7 @@ function GameMoves(props) {
             } else if (cells.length > 1) {
               cells = syncRowFocusClasses(cells, focus);
             }
+            cells = cells.map((cell) => enrichLabMoveCell(exploration, cell));
             row.push(
               <td key={"td1-" + i + "-" + j}>
                 <div className="move">

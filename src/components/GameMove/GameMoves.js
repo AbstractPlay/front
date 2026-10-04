@@ -11,6 +11,7 @@ import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
 import { compareStrings } from "../../lib/compareStrings";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { ExplorationOutcomeIndicator } from "./ExplorationOutcomeIndicator.js";
 import {
   getRoundsForLayout,
   moveNumberForCell,
@@ -33,8 +34,10 @@ import {
 } from "../../lib/GameMove/moveTreeCellClasses";
 import {
   collectVariationChoices,
+  enrichExplorationMoveCell,
   focusedMovePathIndex,
   explorationPathEquals,
+  isIdleMainlineExplorationTip,
   moveCellsFromVariationChoices,
   rowHasFocus,
 } from "../../lib/GameMove/moveTreeVariations";
@@ -151,36 +154,7 @@ function GameMoves(props) {
           {m.move.endsWith("...") && (
             <span style={{ fontSize: "1.3em", fontWeight: "bold" }}>...</span>
           )}
-          {m.outcome === -1 ? null : game.colors[m.outcome].isImage ? (
-            <img
-              className="winnerImage"
-              src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                game.colors[m.outcome].value
-              )}`}
-              alt=""
-            />
-          ) : (
-            <svg className="winnerImage2" viewBox="0 0 44 44">
-              <circle
-                cx="22"
-                cy="22"
-                r="18"
-                stroke="black"
-                strokeWidth="4"
-                fill="white"
-              />
-              <text
-                x="12"
-                y="32"
-                fill="black"
-                fontFamily="monospace"
-                fontSize="35"
-                fontWeight="bold"
-              >
-                {m.outcome + 1}
-              </text>
-            </svg>
-          )}
+          <ExplorationOutcomeIndicator game={game} outcome={m.outcome} />
           {m.premove ? (
             <i className="fa fa-clock-o premoveIndicator"></i>
           ) : null}
@@ -279,7 +253,7 @@ function GameMoves(props) {
     let numRows = 0;
     let showMoveTreeLegend = false;
     if (exploration !== null) {
-      if (!game.gameOver) {
+      if (isIdleMainlineExplorationTip(focus, exploration, game.gameOver)) {
         for (let i = 1; i < exploration.length; i++) {
           const movePath = { moveNumber: i, exPath: [] };
           const className = buildMoveCellClass({
@@ -296,7 +270,7 @@ function GameMoves(props) {
           path.push([
             {
               class: className,
-              outcome: -1,
+              outcome: exploration[i].outcome ?? -1,
               commented:
                 exploration[i].comment && exploration[i].comment.length > 0
                   ? "filled"
@@ -586,6 +560,9 @@ function GameMoves(props) {
             } else if (cells.length > 1) {
               cells = syncRowFocusClasses(cells, focus);
             }
+            cells = cells.map((cell) =>
+              enrichExplorationMoveCell(exploration, cell)
+            );
             row.push(
               <td key={"td1-" + i + "-" + j}>
                 <div className="move">
