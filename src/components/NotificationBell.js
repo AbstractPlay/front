@@ -234,21 +234,16 @@ function NotificationBell({ closeBurger }) {
       </>
     );
     if (body.type === "challengeIssued") {
-      const challenge = challengeById.get(body.challengeId);
       actions = (
         <>
-          {challenge ? (
-            <>
-              <button
-                type="button"
-                className="button is-small apButton"
-                onClick={() => openChallengeModal(body.challengeId)}
-              >
-                {t("View")}
-              </button>
-              &nbsp;
-            </>
-          ) : null}
+          <button
+            type="button"
+            className="button is-small apButton"
+            onClick={() => openChallengeModal(body.challengeId)}
+          >
+            {t("View")}
+          </button>
+          &nbsp;
           {markReadButton}
           {dismissButton}
         </>
