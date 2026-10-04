@@ -235,10 +235,13 @@ describe("pathIndexForMoveCell", () => {
   });
 
   it("auto density merges unique-actor seat cycle into one row", () => {
-    const layout = resolveMoveTableLayout({
-      game: { numPlayers: 4, simultaneous: false },
-      engine: { turnModel: () => "sequenced" },
-    });
+    const layout = {
+      ...resolveMoveTableLayout({
+        game: { numPlayers: 4, simultaneous: false },
+        engine: { turnModel: () => "sequenced" },
+      }),
+      density: "auto",
+    };
     const engine = {
       numplayers: 4,
       turnModel: () => "sequenced",
@@ -500,10 +503,13 @@ describe("pathIndexForMoveCell", () => {
   });
 
   it("auto density keeps duplicate-actor round sparse", () => {
-    const layout = resolveMoveTableLayout({
-      game: { numPlayers: 2, simultaneous: false },
-      engine: { turnModel: () => "sequenced" },
-    });
+    const layout = {
+      ...resolveMoveTableLayout({
+        game: { numPlayers: 2, simultaneous: false },
+        engine: { turnModel: () => "sequenced" },
+      }),
+      density: "auto",
+    };
     const engine = {
       numplayers: 2,
       getPlies: () => [
@@ -527,10 +533,13 @@ describe("pathIndexForMoveCell", () => {
   });
 
   it("path indices increase left-to-right across dense rows", () => {
-    const layout = resolveMoveTableLayout({
-      game: { numPlayers: 4, simultaneous: false },
-      engine: { turnModel: () => "sequenced" },
-    });
+    const layout = {
+      ...resolveMoveTableLayout({
+        game: { numPlayers: 4, simultaneous: false },
+        engine: { turnModel: () => "sequenced" },
+      }),
+      density: "auto",
+    };
     const engine = {
       numplayers: 4,
       getPlies: () => [
