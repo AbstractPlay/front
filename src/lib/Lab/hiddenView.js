@@ -11,20 +11,42 @@ export function normalizeLabHiddenViewMode(viewMode) {
   return viewMode === LAB_HIDDEN_VIEW_LIVE ? LAB_HIDDEN_VIEW_LIVE : LAB_HIDDEN_VIEW_GOD;
 }
 
-/** True when `serialize({ strip, player })` can differ by viewer. */
-export function engineSupportsPlayerStrip(engine) {
-  if (!engine || typeof engine.serialize !== "function") {
+/**
+ * Probe strip capability on a throwaway engine built from full state (never mutates
+ * the caller's live instance when gameslib strip export touches stack frames).
+ *
+ * @param {string} metaGame
+ * @param {string} fullState
+ */
+export function stateSupportsPlayerStrip(metaGame, fullState) {
+  if (!metaGame || !fullState) {
     return false;
   }
   try {
-    if (engine.numplayers >= 2) {
-      const s1 = engine.serialize({ strip: true, player: 1 });
-      const s2 = engine.serialize({ strip: true, player: 2 });
+    const probe = GameFactory(metaGame, fullState);
+    if (typeof probe.serialize !== "function") {
+      return false;
+    }
+    if (probe.numplayers >= 2) {
+      const s1 = probe.serialize({ strip: true, player: 1 });
+      const s2 = probe.serialize({ strip: true, player: 2 });
       return s1 !== s2;
     }
-    const full = engine.serialize();
-    const stripped = engine.serialize({ strip: true, player: 1 });
+    const full = probe.serialize();
+    const stripped = probe.serialize({ strip: true, player: 1 });
     return full !== stripped;
+  } catch {
+    return false;
+  }
+}
+
+/** True when `serialize({ strip, player })` can differ by viewer. */
+export function engineSupportsPlayerStrip(engine) {
+  if (!engine || typeof engine.serialize !== "function" || !engine.metaGame) {
+    return false;
+  }
+  try {
+    return stateSupportsPlayerStrip(engine.metaGame, engine.serialize());
   } catch {
     return false;
   }
@@ -58,14 +80,16 @@ export function shouldStripForLiveView(engine, viewMode) {
  * @param {number} player 1-based
  */
 export function serializeForLiveView(engine, player) {
-  if (typeof engine.serialize === "function") {
-    try {
-      return engine.serialize({ strip: true, player });
-    } catch {
-      return engine.serialize();
-    }
+  if (typeof engine.serialize !== "function" || !engine.metaGame) {
+    return engine.serialize();
   }
-  return engine.serialize();
+  try {
+    const fullState = engine.serialize();
+    const probe = GameFactory(engine.metaGame, fullState);
+    return probe.serialize({ strip: true, player });
+  } catch {
+    return engine.serialize();
+  }
 }
 
 /**

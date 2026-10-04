@@ -1,4 +1,6 @@
 import { expect } from "chai";
+import { GameFactory } from "@abstractplay/gameslib";
+import { JACYNTH_STATE } from "../GameMove/fixtures/jacynth.js";
 import {
   createLabViewEngine,
   engineSupportsPlayerStrip,
@@ -8,7 +10,9 @@ import {
   labRenderExtras,
   liveStripPlayer,
   normalizeLabHiddenViewMode,
+  serializeForLiveView,
   shouldStripForLiveView,
+  stateSupportsPlayerStrip,
 } from "./hiddenView.js";
 
 function mockEngine({
@@ -42,12 +46,41 @@ describe("hiddenView", () => {
   });
 
   it("engineSupportsPlayerStrip detects differing strip serializations", () => {
-    expect(engineSupportsPlayerStrip(mockEngine())).to.be.true;
+    const engine = GameFactory("jacynth", JACYNTH_STATE);
+    expect(engineSupportsPlayerStrip(engine)).to.be.true;
+    const emptyHands = JSON.parse(JACYNTH_STATE);
+    emptyHands.stack[0].hands = [[], []];
     expect(
-      engineSupportsPlayerStrip(
-        mockEngine({ full: "same", stripByPlayer: { 1: "same", 2: "same" } })
-      )
+      stateSupportsPlayerStrip("jacynth", JSON.stringify(emptyHands))
     ).to.be.false;
+  });
+
+  it("stateSupportsPlayerStrip is stable for jacynth across repeated probes", () => {
+    expect(stateSupportsPlayerStrip("jacynth", JACYNTH_STATE)).to.be.true;
+    expect(stateSupportsPlayerStrip("jacynth", JACYNTH_STATE)).to.be.true;
+    const live = GameFactory("jacynth", JACYNTH_STATE);
+    const handsBefore = JSON.stringify(live.stack[0].hands);
+    engineSupportsPlayerStrip(live);
+    engineSupportsPlayerStrip(live);
+    expect(JSON.stringify(live.stack[0].hands)).to.equal(handsBefore);
+  });
+
+  it("serializeForLiveView does not mutate jacynth stack hands on live engine", () => {
+    const live = GameFactory("jacynth", JACYNTH_STATE);
+    const handsBefore = JSON.stringify(live.stack[0].hands);
+    serializeForLiveView(live, 1);
+    serializeForLiveView(live, 2);
+    expect(JSON.stringify(live.stack[0].hands)).to.equal(handsBefore);
+  });
+
+  it("stateSupportsPlayerStrip is stable for biscuit across repeated probes", () => {
+    const full = GameFactory("biscuit", 2).serialize();
+    expect(stateSupportsPlayerStrip("biscuit", full)).to.be.true;
+    expect(stateSupportsPlayerStrip("biscuit", full)).to.be.true;
+    const live = GameFactory("biscuit", full);
+    const handsBefore = JSON.stringify(live.stack[0].hands);
+    engineSupportsPlayerStrip(live);
+    expect(JSON.stringify(live.stack[0].hands)).to.equal(handsBefore);
   });
 
   it("liveStripPlayer uses currplayer", () => {
@@ -59,12 +92,14 @@ describe("hiddenView", () => {
   });
 
   it("shouldStripForLiveView is false when game over or god mode", () => {
-    const engine = mockEngine();
+    const engine = GameFactory("jacynth", JACYNTH_STATE);
     expect(shouldStripForLiveView(engine, LAB_HIDDEN_VIEW_GOD)).to.be.false;
     expect(shouldStripForLiveView(engine, LAB_HIDDEN_VIEW_LIVE)).to.be.true;
+    const over = JSON.parse(JACYNTH_STATE);
+    over.gameover = true;
     expect(
       shouldStripForLiveView(
-        mockEngine({ gameover: true }),
+        GameFactory("jacynth", JSON.stringify(over)),
         LAB_HIDDEN_VIEW_LIVE
       )
     ).to.be.false;

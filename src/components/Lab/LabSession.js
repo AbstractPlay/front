@@ -85,11 +85,11 @@ import {
   persistLabSimRound,
 } from "../../lib/Lab/labSimBoardSettings";
 import {
-  engineSupportsPlayerStrip,
   LAB_HIDDEN_VIEW_GOD,
   LAB_HIDDEN_VIEW_LIVE,
   liveStripPlayer,
   normalizeLabHiddenViewMode,
+  stateSupportsPlayerStrip,
 } from "../../lib/Lab/hiddenView";
 import {
   saveLastSession,
@@ -1064,6 +1064,13 @@ function LabSession({
   const focusStateText =
     getFocusNode(explorationRef.current?.nodes, game, focus)?.state ?? "";
 
+  const showHiddenViewControls = useMemo(() => {
+    if (!game?.metaGame || !focusStateText) {
+      return false;
+    }
+    return stateSupportsPlayerStrip(game.metaGame, focusStateText);
+  }, [game?.metaGame, focusStateText]);
+
   const displayRenderRepJson = useMemo(
     () => getDisplayedRenderRepJson(renderrep, boardRenderIndex),
     [renderrep, boardRenderIndex]
@@ -1198,10 +1205,6 @@ function LabSession({
   const showMoveAnnotations =
     focusNode?.move &&
     (focus.moveNumber > 0 || (focus.exPath?.length ?? 0) > 0);
-
-  const showHiddenViewControls =
-    engineRef.current != null &&
-    engineSupportsPlayerStrip(engineRef.current);
 
   let hiddenViewHint = "";
   if (showHiddenViewControls && engineRef.current) {
