@@ -17,6 +17,7 @@ import {
 } from "./exploration";
 import {
   explorationMoveContext,
+  explorationEngineMoveOpts,
   isPartialExplorationMove,
 } from "./explorationMoves";
 import { resolveRenderLabels, setStatus } from "./misc";
@@ -368,8 +369,8 @@ function doView(
   navigate,
   t
 ) {
+  let gameEngineTmp = createEngineAtFocus(game, exploration, focus);
   let node = getFocusNode(exploration, game, focus);
-  let gameEngineTmp = GameFactory(game.metaGame, node.state);
   let simMove = false;
   let m = move.move || "";
   if (game.simultaneous) {
@@ -385,10 +386,7 @@ function doView(
   let newfocus = cloneDeep(focus);
   let moves;
   try {
-    gameEngineTmp.move(m, {
-      partial: exploringPartial || simMove,
-      emulation: true,
-    });
+    gameEngineTmp.move(m, explorationEngineMoveOpts(exploringPartial || simMove));
     if (!exploringPartial && focus.canExplore && !game.noMoves) {
       moves = gameEngineTmp.moves();
     }
@@ -421,10 +419,10 @@ function doView(
           node = getFocusNode(exploration, game, newfocus);
         }
         m = moves[0];
-        gameEngineTmp.move(m, {
-          partial: exploringPartial || simMove,
-          emulation: true,
-        });
+        gameEngineTmp.move(
+          m,
+          explorationEngineMoveOpts(exploringPartial || simMove)
+        );
         moves = gameEngineTmp.moves();
       }
       if (automoved) {
@@ -565,8 +563,11 @@ export function processNewMove(
     newmove.move !== undefined &&
     !newmove.move.startsWith(newmove.rendered)
   ) {
-    let node = getFocusNode(exploration, gameRef.current, focus);
-    let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
+    let gameEngineTmp = createEngineAtFocus(
+      gameRef.current,
+      exploration,
+      focus
+    );
     partialMoveRenderRef.current = false;
     setStatus(gameEngineTmp, gameRef.current, false, "", statusRef.current);
     if (focus.canExplore && !gameRef.current.noMoves)

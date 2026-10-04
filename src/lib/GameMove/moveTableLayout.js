@@ -371,7 +371,13 @@ export function moveTextForCell({
     return seatIdx === 0 ? String(move) : "";
   }
 
-  if (move != null && layout.numcolumns > 1) {
+  // Comma-separated seat wires (simultaneous / sequenced). Sequential games
+  // such as Waldmeister use a comma inside one ply (`slide,placement`).
+  if (
+    move != null &&
+    layout.numcolumns > 1 &&
+    (layout.model === "simultaneous" || layout.model === "sequenced")
+  ) {
     const wire = wireMoveTokenForSeat(move, seatIdx, layout.numcolumns);
     if (wire !== null) {
       return wire;

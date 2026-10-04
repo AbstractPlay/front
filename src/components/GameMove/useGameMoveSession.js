@@ -56,6 +56,7 @@ import {
   fixMoveOutcomes,
   analyzeExplorationForCommentedFlag,
   getFocusNode,
+  createEngineAtFocus,
   isExplorer,
   canExploreMove,
   setURL,
@@ -383,12 +384,11 @@ export function useGameMoveSession(props) {
   publishGameColorsRef.current = publishGameColors;
 
   boardClickHandlerRef.current = (row, col, piece) => {
-    let node = getFocusNode(
-      explorationRef.current.nodes,
+    let gameEngineTmp = createEngineAtFocus(
       gameRef.current,
+      explorationRef.current.nodes,
       focusRef.current
     );
-    let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     let result = gameRef.current.simultaneous
       ? gameEngineTmp.handleClickSimultaneous(
           moveRef.current.move,
@@ -1465,12 +1465,11 @@ export function useGameMoveSession(props) {
 
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
-    let node = getFocusNode(
-      explorationRef.current.nodes,
+    let gameEngineTmp = createEngineAtFocus(
       gameRef.current,
+      explorationRef.current.nodes,
       focus
     );
-    let gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
     let result;
     if (gameRef.current.simultaneous)
       result = gameEngineTmp.validateMove(value, gameRef.current.me + 1);
@@ -2536,8 +2535,11 @@ export function useGameMoveSession(props) {
       !game.noMoves &&
       (game.canSubmit || (!game.simultaneous && game.numPlayers === 2))
     ) {
-      let node = getFocusNode(explorationRef.current.nodes, game, focus);
-      const engine = GameFactory(game.metaGame, node.state);
+      const engine = createEngineAtFocus(
+        game,
+        explorationRef.current.nodes,
+        focus
+      );
       if (game.simultaneous) movesRef.current = engine.moves(game.me + 1);
       else movesRef.current = engine.moves();
     }
