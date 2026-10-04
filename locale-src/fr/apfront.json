@@ -4396,8 +4396,8 @@
     "out": "Échec du téléversement. Veuillez réessayer."
   },
   "feedback.upload.invalidType": {
-    "src": "Allowed files: PNG, JPEG, and WebP images; plain text (.txt); and JSON (.json).",
-    "out": "Fichiers autorisés : images PNG, JPEG et WebP ; texte brut (.txt) ; et JSON (.json)."
+    "src": "Allowed files: PNG, JPEG, WebP, and SVG images; plain text (.txt); Markdown (.md); and JSON (.json).",
+    "out": "Fichiers autorisés : images PNG, JPEG, WebP et SVG ; texte brut (.txt) ; Markdown (.md) ; et JSON (.json)."
   },
   "feedback.upload.paste": {
     "src": "Paste screenshot",
@@ -4416,8 +4416,8 @@
     "out": "Aucune image trouvée dans le presse-papiers."
   },
   "feedback.upload.pasteHint": {
-    "src": "Paste (Ctrl+V or Cmd+V), drag and drop files here, or use Add file for images, plain text (.txt), or JSON (.json). You can also paste a screenshot anywhere on this page except the title and description fields.",
-    "out": "Collez (Ctrl+V ou Cmd+V), glissez-déposez des fichiers ici, ou utilisez Ajouter un fichier pour des images, du texte brut (.txt) ou du JSON (.json). Vous pouvez aussi coller une capture d'écran n'importe où sur cette page, sauf dans les champs titre et description."
+    "src": "Paste (Ctrl+V or Cmd+V), drag and drop files here, or use Add file for images (including SVG), plain text (.txt), Markdown (.md), or JSON (.json). You can also paste a screenshot anywhere on this page except the title and description fields.",
+    "out": "Collez (Ctrl+V ou Cmd+V), glissez-déposez des fichiers ici ou utilisez Ajouter un fichier pour les images (y compris SVG), le texte brut (.txt), Markdown (.md) ou JSON (.json). Vous pouvez également coller une capture d'écran n'importe où sur cette page, à l'exception des champs de titre et de description."
   },
   "feedback.upload.remove": {
     "src": "Remove",
