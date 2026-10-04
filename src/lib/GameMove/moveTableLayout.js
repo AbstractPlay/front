@@ -410,6 +410,14 @@ function pathIndexFromStackIndexForSequencedCell(
 }
 
 /**
+ * Round-grid rows for the move table. Priority (first match wins):
+ * 1. Trim over-long stack-indexed `getRounds()` to path/stack depth.
+ * 2. Engine `getRounds()` when a stack frame maps to multiple plies (Thricewise wire).
+ * 3. Engine `getRounds()` when sparse density and stack-aligned (path index = row).
+ * 4. Exploration path wire split when sequenced lastmoves use comma wire.
+ * 5. Ply `round` grouping when sequenced + compact density.
+ * 6. Engine `getRounds()` fallback.
+ *
  * @param {{ getRounds?: () => unknown[][], getPlies?: () => unknown[], stack?: unknown[] }} engine
  * @param {MoveTableLayout} layout
  * @param {number} [pathLength]
@@ -423,22 +431,23 @@ export function getRoundsForLayout(engine, layout, pathLength = 0, path = null) 
   const stackCount = stackMoveCount(engine);
   const alignLen = pathLength > 0 ? pathLength : stackCount;
   const numPlayers = engine?.numplayers ?? engine?.numPlayers ?? 0;
-  if (
-    Array.isArray(fromRounds) &&
-    fromRounds.length > alignLen &&
-    alignLen > 0 &&
-    roundsLookStackIndexed(fromRounds, numPlayers)
-  ) {
+  const fromRoundsStackIndexed =
+    Array.isArray(fromRounds) && roundsLookStackIndexed(fromRounds, numPlayers);
+
+  if (fromRoundsStackIndexed && fromRounds.length > alignLen && alignLen > 0) {
     return fromRounds.slice(0, alignLen);
   }
   if (
-    Array.isArray(fromRounds) &&
+    fromRoundsStackIndexed &&
     fromRounds.length > 0 &&
     preferStackIndexedRounds(engine, fromRounds, alignLen)
   ) {
     return fromRounds;
   }
-  if (stackRoundsLookComplete(fromRounds, alignLen, numPlayers, engine)) {
+  const useStackSparseGrid =
+    layout.density !== "auto" &&
+    stackRoundsLookComplete(fromRounds, alignLen, numPlayers, engine);
+  if (useStackSparseGrid) {
     return fromRounds;
   }
   if (

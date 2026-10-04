@@ -287,6 +287,48 @@ describe("pathIndexForMoveCell", () => {
     ).toBe(4);
   });
 
+  it("auto density compacts when engine has full stack-aligned getRounds", () => {
+    const pathLength = 6;
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 3, simultaneous: false },
+      engine: { turnModel: () => "sequenced" },
+      gameRec: { header: { "turn-model": "sequenced" } },
+    });
+    const getPlies = () => [
+      { actor: 1, move: "1M@0,0", round: 0, playOrder: 1, stackIndex: 1 },
+      { actor: 2, move: "WM@0,1", round: 0, playOrder: 2, stackIndex: 2 },
+      { actor: 3, move: "3M@1,1", round: 0, playOrder: 3, stackIndex: 3 },
+      { actor: 1, move: "1L@-1,1", round: 1, playOrder: 1, stackIndex: 4 },
+      { actor: 2, move: "pass", round: 1, playOrder: 2, stackIndex: 5 },
+      { actor: 3, move: "pass", round: 1, playOrder: 3, stackIndex: 6 },
+    ];
+    const getRounds = () => [
+      ["1M@0,0", null, null],
+      [null, "WM@0,1", null],
+      [null, null, "3M@1,1"],
+      ["1L@-1,1", null, null],
+      [null, "pass", null],
+      [null, null, "pass"],
+    ];
+    const stack = new Array(pathLength + 1).fill({});
+    const engine = {
+      numplayers: 3,
+      turnModel: () => "sequenced",
+      getPlies,
+      getRounds,
+      stack,
+    };
+    expect(buildDisplayRounds(engine)).toHaveLength(2);
+    expect(
+      getRoundsForLayout(engine, layout, pathLength, null)
+    ).toHaveLength(2);
+    expect(moveTableRowCount({ pathLength, layout, engine })).toBe(2);
+    const sparseLayout = { ...layout, density: "sparse" };
+    expect(moveTableRowCount({ pathLength, layout: sparseLayout, engine })).toBe(
+      pathLength
+    );
+  });
+
   it("sequenced round grid uses per-seat slots, not path wire string", () => {
     const layout = resolveMoveTableLayout({
       game: { numPlayers: 2, simultaneous: true },
