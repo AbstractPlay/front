@@ -4,8 +4,12 @@ import { gameinfo } from "@abstractplay/gameslib";
 import { createColumnHelper } from "@tanstack/react-table";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { metaGameFromPlayerRecord } from "../../lib/playerGameQuickPicks";
-import { parseRecordGameId } from "../../lib/recordGameId";
+import {
+  parseRecordGameId,
+  variantUidsFromPlayerRecord,
+} from "../../lib/recordGameId";
 import { orderVariantUidsForDisplay } from "../../lib/expandVariants";
+import { formatVariantUids } from "../../lib/summaryGameKeys";
 import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import { AllRecsContext, ProfileContext } from "../Player";
 import DataTable, { PROFILE_FILTER_TABLE_PROPS } from "../shared/DataTable";
@@ -117,27 +121,25 @@ function History({ handleChallenge }) {
                 user === null ||
                 (user.id === globalMe.id ? r.id !== globalMe.id : true)
             );
-          let variants = [];
-          if (
-            rec.header.game.variants !== undefined &&
-            rec.header.game.variants !== null &&
-            rec.header.game.variants.length > 0
-          ) {
-            variants = [...rec.header.game.variants];
-          }
+          const variantUids = variantUidsFromPlayerRecord(rec, meta);
+          const headerVariantLabels = rec?.header?.game?.variants;
+          const variantsDisplay =
+            Array.isArray(headerVariantLabels) && headerVariantLabels.length > 0
+              ? headerVariantLabels.join(", ")
+              : formatVariantUids(meta, variantUids, t);
           return {
             id,
             meta,
             gameName,
-            variantUids: orderVariantUidsForDisplay(meta, variants),
-            variants: orderVariantUidsForDisplay(meta, variants),
+            variantUids: orderVariantUidsForDisplay(meta, variantUids),
+            variants: variantsDisplay,
             opponents,
             winner,
             dateEnd: new Date(rec.header["date-end"]).getTime(),
           };
         })
         .sort((a, b) => b.dateEnd - a.dateEnd),
-    [allRecs, globalMe, allUsers, user]
+    [allRecs, globalMe, allUsers, user, t]
   );
 
   const activeChallengeTarget = useMemo(() => {
@@ -150,6 +152,7 @@ function History({ handleChallenge }) {
     }
     return {
       fixedMetaGame: row.meta,
+      initialVariantUids: row.variantUids ?? [],
       opponent: {
         id: row.opponents[0].id,
         name: row.opponents[0].name,
@@ -187,7 +190,7 @@ function History({ handleChallenge }) {
             }),
             columnHelper.accessor("variants", {
               header: t("tables.variants"),
-              cell: (props) => props.getValue().join(", "),
+              cell: (props) => props.getValue(),
               sortingFn: variantSelectionSortingFn({
                 getMeta: (row) => row.original.meta,
                 getUids: (row) => row.original.variantUids ?? [],
@@ -196,7 +199,7 @@ function History({ handleChallenge }) {
               filterFn: (row, colId, val) =>
                 queryMatchesHaystack(
                   val,
-                  row.getValue(colId).join(",").toLowerCase()
+                  String(row.getValue(colId) ?? "").toLowerCase()
                 ),
             }),
             columnHelper.accessor("dateEnd", {
@@ -379,7 +382,7 @@ function History({ handleChallenge }) {
     }
     const haystack = [
       row.original.gameName,
-      row.original.variants.join(","),
+      row.original.variants,
       row.original.opponents.map((u) => u.name).join(","),
       typeof winner === "string" ? winner : winner.name,
     ]
@@ -411,6 +414,7 @@ function History({ handleChallenge }) {
           handleClose={closeChallengeModal}
           handleChallenge={handleChallenge}
           fixedMetaGame={activeChallengeTarget?.fixedMetaGame}
+          initialVariantUids={activeChallengeTarget?.initialVariantUids}
           opponent={activeChallengeTarget?.opponent}
         />
       )}

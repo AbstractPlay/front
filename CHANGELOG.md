@@ -28,6 +28,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Player profile:** Game History Rematch pre-fills variant rules from the original game using variant UIDs encoded in `site.gameid` (not display names in `header.game.variants`).
 - **Live play exploration:** clicks, typed moves, and board render all use one engine built from the hydrated focus node (partials stay in the move string); multi-frame SVG remounts when the focused render changes; exploration premove clock is no longer clipped.
 - **Live play multi-frame boards:** render from live main-line `game.state` at move-tree focus (not stale exploration spine snapshots); clear spine caches on API state refresh.
 - **Move tree (sequenced games):** compact row density merges seat cycles again when the engine exposes a full stack-aligned `getRounds()` grid (playground and live play); sparse density still uses one row per stack move for path indexing.

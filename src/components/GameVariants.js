@@ -7,8 +7,13 @@ import {
   validateVariantSelection,
 } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
-import { cloneDeep } from "lodash";
-import { initialNonGroupVariants } from "../lib/variantSelectionInit";
+import {
+  applySanitizedVariantSelection,
+  buildGroupData,
+  buildVariantFormStateFromUids,
+  initialGroupVariants,
+  initialNonGroupVariants,
+} from "../lib/variantSelectionInit";
 import VariantMetaChips, {
   variantShowsMetaChips,
 } from "./VariantMetaChips";
@@ -58,83 +63,6 @@ function variantUidsEqual(left, right) {
   );
 }
 
-function applySanitizedVariantSelection(
-  sanitized,
-  groupVariants,
-  nonGroupVariants,
-  allVariants,
-) {
-  const nextGroup = { ...groupVariants };
-  const nextNonGroup = { ...nonGroupVariants };
-  const groups = [
-    ...new Set(
-      allVariants.filter((v) => v.group !== undefined).map((v) => v.group),
-    ),
-  ];
-  for (const group of groups) {
-    const member = sanitized.find((uid) => {
-      const def = allVariants.find((v) => v.uid === uid);
-      return def?.group === group;
-    });
-    nextGroup[group] = member ?? `#${group}`;
-  }
-  for (const uid of Object.keys(nextNonGroup)) {
-    nextNonGroup[uid] = sanitized.includes(uid);
-  }
-  return { groupVariants: nextGroup, nonGroupVariants: nextNonGroup };
-}
-
-function buildGroupData(rootAllVariants) {
-  const groups = [
-    ...new Set(
-      rootAllVariants
-        .filter((v) => v.group !== undefined)
-        .map((v) => v.group),
-    ),
-  ];
-  return groups.map((group) => {
-    const variants = rootAllVariants.filter(
-      (v) => v.group === group || v.uid === `#${group}`,
-    );
-    const cloned = cloneDeep(variants);
-    const sentinelIdx = cloned.findIndex((v) => v.uid.startsWith("#"));
-    if (sentinelIdx >= 0) {
-      if (cloned[sentinelIdx].group === undefined) {
-        cloned[sentinelIdx].group = group;
-      }
-      if (cloned[sentinelIdx].name === undefined) {
-        cloned[sentinelIdx].name = `Default ${group}`;
-      }
-    } else {
-      cloned.unshift({
-        uid: `#${group}`,
-        name: `Default ${group}`,
-        description: undefined,
-        group,
-      });
-    }
-    const explicitDefault = cloned.find((v) => v.default === true);
-    if (explicitDefault === undefined) {
-      const idx = cloned.findIndex((v) => v.uid.startsWith("#"));
-      if (idx >= 0) {
-        cloned[idx].default = true;
-      }
-    }
-    return { group, variants: cloned };
-  });
-}
-
-function initialGroupVariants(groupData) {
-  const initial = {};
-  for (const entry of groupData) {
-    const explicitDefault = entry.variants.find((v) => v.default === true);
-    initial[entry.group] = explicitDefault
-      ? explicitDefault.uid
-      : `#${entry.group}`;
-  }
-  return initial;
-}
-
 function variantOptionDisabled(disableFields, availability, uid) {
   if (disableFields) {
     return true;
@@ -146,11 +74,19 @@ function variantOptionDisabled(disableFields, availability, uid) {
 /**
  * Parses a metaGame's variant definition and returns the form for selecting them.
  */
+function variantUidsKey(variantUids) {
+  if (!variantUids?.length) {
+    return "";
+  }
+  return variantUids.join("|");
+}
+
 function GameVariants({
   metaGame,
   variantsSetter,
   disableFields,
   onValidityChange,
+  initialVariantUids,
 }) {
   const [groupVariants, groupVariantsSetter] = useState({});
   const [nonGroupVariants, nonGroupVariantsSetter] = useState({});
@@ -158,6 +94,10 @@ function GameVariants({
   const [nonGroupData, nonGroupDataSetter] = useState([]);
   const [allVariants, allVariantsSetter] = useState([]);
   const { t } = useTranslation();
+  const initialVariantUidsPresetKey = useMemo(
+    () => variantUidsKey(initialVariantUids),
+    [initialVariantUids],
+  );
 
   useEffect(() => {
     if (metaGame === undefined || metaGame === null || metaGame === "") {
@@ -207,9 +147,20 @@ function GameVariants({
 
     groupDataSetter(builtGroupData);
     nonGroupDataSetter(builtNonGroupData);
-    groupVariantsSetter(initialGroupVariants(builtGroupData));
-    nonGroupVariantsSetter(initialNonGroupVariants(builtNonGroupData));
-  }, [metaGame]);
+    const presetUids =
+      initialVariantUids?.length > 0 ? initialVariantUids : [];
+    if (presetUids.length > 0) {
+      const { groupVariants, nonGroupVariants } = buildVariantFormStateFromUids(
+        rootAllVariants,
+        presetUids,
+      );
+      groupVariantsSetter(groupVariants);
+      nonGroupVariantsSetter(nonGroupVariants);
+    } else {
+      groupVariantsSetter(initialGroupVariants(builtGroupData));
+      nonGroupVariantsSetter(initialNonGroupVariants(builtNonGroupData));
+    }
+  }, [metaGame, initialVariantUids, initialVariantUidsPresetKey]);
 
   const handleGroupChange = useCallback((group, variant) => {
     groupVariantsSetter((current) => ({
