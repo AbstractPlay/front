@@ -100,21 +100,28 @@ function getExplorationNode(exploration, game, moveNumber) {
   return node;
 }
 
-/** Engine at the current focus — main line always from live `game.state` (not cached node.state). */
+function ensureFocusNodeState(game, exploration, focus) {
+  let curNode = getExplorationNode(exploration, game, focus.moveNumber);
+  for (const p of focus.exPath ?? []) {
+    const child = curNode.children[p];
+    if (!child) {
+      throw new Error("Invalid exploration path");
+    }
+    if (child.state == null) {
+      const ctx = explorationMoveContext(game);
+      const engine = GameFactory(game.metaGame, curNode.state);
+      applyExplorationMove(engine, child.move, ctx);
+      child.state = engine.cheapSerialize();
+    }
+    curNode = child;
+  }
+}
+
+/** Engine at tree focus — always `GameFactory` from hydrated focus `node.state`. */
 export function createEngineAtFocus(game, exploration, focus) {
-  if (focus.exPath?.length) {
-    const node = getFocusNode(exploration, game, focus);
-    return GameFactory(game.metaGame, node.state);
-  }
-  let engine = GameFactory(game.metaGame, game.state);
-  const moveNumber = focus.moveNumber;
-  if (moveNumber + 1 < engine.stack.length) {
-    engine.gameover = false;
-    engine.winner = [];
-  }
-  engine.stack = engine.stack.slice(0, moveNumber + 1);
-  engine.load();
-  return engine;
+  ensureFocusNodeState(game, exploration, focus);
+  const node = getFocusNode(exploration, game, focus);
+  return GameFactory(game.metaGame, node.state);
 }
 
 export function invalidateExplorationSpineStates(exploration) {

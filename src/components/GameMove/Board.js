@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useCallback } from "react";
+import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import useStorageState from "react-use-storage-state";
 import BoardNav from "./BoardNav";
@@ -92,6 +92,10 @@ function Board({
     },
     [boardImage, mountBoardSvg, safeBoardIndex, visibleRendered]
   );
+
+  useEffect(() => {
+    mountBoardSvg(boardContainerRef.current, visibleRendered, safeBoardIndex);
+  }, [mountBoardSvg, visibleRendered, safeBoardIndex]);
 
   const boardStyle = useMemo(() => {
     const style = { backgroundColor: colourContext.background };
