@@ -28,6 +28,7 @@ import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { buildEngineMoveResults } from "../engineMoveResults";
 import { buildRenderDisplayOpts } from "../displaySettings.js";
+import { buildGameMoveRenderExtras } from "./renderExtras.js";
 
 /** me / canSubmit / canExplore from API game + logged-in user (no engine). */
 export function applyPlayerSessionFields(game0, me, explorer) {
@@ -83,6 +84,9 @@ export function syncGameSessionFromApi({
     merged.variants = priorGame.variants;
     merged.name = priorGame.name;
     merged.hasNewChat = priorGame.hasNewChat;
+    if (priorGame.gameOver !== undefined) {
+      merged.gameOver = priorGame.gameOver;
+    }
   }
   applyPlayerSessionFields(merged, me, explorer);
   gameRef.current = merged;
@@ -134,9 +138,11 @@ export function syncPlayRenderToFocus(
 
   const render = resolveRenderLabels(
     engine.render(
-      buildRenderDisplayOpts(game.metaGame, display, {
-        perspective: game.me > -1 ? game.me + 1 : 1,
-      })
+      buildRenderDisplayOpts(
+        game.metaGame,
+        display,
+        buildGameMoveRenderExtras(game)
+      )
     ),
     game.players,
     users
@@ -290,7 +296,7 @@ export function setupGame(
   let history = [];
   // The following is no longer destructive.
   const tmpEngine = GameFactory(game0.metaGame, game0.state);
-  game0.gameOver = tmpEngine.gameover;
+  game0.gameOver = tmpEngine.gameover || Boolean(game0.gameEnded);
   const winner = tmpEngine.winner;
 
   // If the game is over and gameEnded is not set, calculate it from the last move's timestamp
@@ -499,7 +505,7 @@ function doView(
     resolveRenderLabels(
       gameEngineTmp.render(
         buildRenderDisplayOpts(game.metaGame, settings?.display, {
-          perspective: game.me + 1,
+          ...buildGameMoveRenderExtras(game),
           ...move.opts,
         })
       ),
@@ -582,7 +588,7 @@ export function processNewMove(
           buildRenderDisplayOpts(
             gameRef.current.metaGame,
             settings?.display,
-            { perspective: gameRef.current.me + 1 }
+            buildGameMoveRenderExtras(gameRef.current)
           )
         ),
         gameRef.current.players,

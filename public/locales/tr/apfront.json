@@ -1,15 +1,15 @@
 {
-    "404": "404 Bulunamadı",
-    "Accept": "Kabul et",
-    "About": "Hakkında",
-    "Active": "Aktif",
-    "AcceptDraw": "Beraberlik teklifini kabul et",
-    "Accepted": "Kabul Edildi!",
-    "All": "Hepsi",
-    "AlternativeDisplays": "Alternatif görüntüleme seçenekleri",
-    "and": "ve",
-    "Annotate": "Son hamle göstergelerini göster",
-    "AnnotationLevel": "Bu seçeneğin nerede uygulanmasını istersiniz?",
-    "AvailableGames": "Mevcut Oyunlar",
-    "BoardSettings": "Oyun tahtası ayarlarını değiştir"
+  "404": "404 Bulunamadı",
+  "Accept": "Kabul et",
+  "About": "Hakkında",
+  "Active": "Aktif",
+  "AcceptDraw": "Beraberlik teklifini kabul et",
+  "Accepted": "Kabul Edildi!",
+  "All": "Hepsi",
+  "AlternativeDisplays": "Alternatif görüntüleme seçenekleri",
+  "and": "ve",
+  "Annotate": "Son hamle göstergelerini göster",
+  "AnnotationLevel": "Bu seçeneğin nerede uygulanmasını istersiniz?",
+  "AvailableGames": "Mevcut Oyunlar",
+  "BoardSettings": "Oyun tahtası ayarlarını değiştir"
 }

@@ -1134,7 +1134,6 @@ function LabSession({
           getFocusNode,
           players: currentGame.players,
           users: useStore.getState().users,
-          getPerspective: (engine) => engine.currplayer,
           display: settings?.display,
           metaGame,
           gameId: currentGame.id,
