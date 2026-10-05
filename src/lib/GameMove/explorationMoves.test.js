@@ -1,6 +1,7 @@
 import { vi } from "vitest";
 import {
   applyExplorationMove,
+  explorationEngineMoveOpts,
   filterPersistableExplorationTree,
   isPartialExplorationMove,
   isPersistableExplorationMove,
@@ -486,5 +487,18 @@ describe("simultaneous exploration moves", () => {
     const engine = mockEntropySimEngine();
     applyExplorationMove(engine, "d4", entropySimContext);
     expect(engine.last).toBe("d4,");
+  });
+});
+
+describe("explorationEngineMoveOpts", () => {
+  it("keeps emulation true for complete and partial exploration plies", () => {
+    expect(explorationEngineMoveOpts(false)).toEqual({
+      partial: false,
+      emulation: true,
+    });
+    expect(explorationEngineMoveOpts(true)).toEqual({
+      partial: true,
+      emulation: true,
+    });
   });
 });

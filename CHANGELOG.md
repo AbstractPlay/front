@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0.0-beta`. Production and dev deploys stamp `1.0.0-ci-<GitHub Actions run id>.0` during the workflow (see `.github/workflows/deploy-prod.js.yml` and `deploy-dev.js.yml`). Entries below are grouped by theme and approximate ship window on **main** (what runs at abstractplay.com); they are not a per-commit log.
 
+## [1.0.0-ci] - 2026-10-05
+
+### Fixed
+
+- **Live play exploration:** restore `emulation: true` on engine moves during exploration (partial still from UI/sim round); Waldmeister/Frogger snapshot reload fixed in gameslib emulated-complete `saveState()` behaviour.
+
 ## [1.0.0-ci] - 2026-10-04
 
 ### Added
