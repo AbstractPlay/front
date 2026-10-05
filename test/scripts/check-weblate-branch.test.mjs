@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   WEBLATE_BRANCH_CONFIG,
   analyzeLocaleDiff,
+  isLikelyTruncatedWeblateExport,
   isLocalePath,
   parseMergeTreeConflicts,
 } from "../../bin/check-weblate-branch.mjs";
@@ -41,6 +42,32 @@ describe("check-weblate-branch", () => {
     const head = JSON.stringify({ title: "Du bist dran" });
     const result = analyzeLocaleDiff(base, head);
     assert.equal(result.valueChanges.length, 1);
+  });
+
+  it("flags truncated Weblate export (mass key drop, no value changes)", () => {
+    const baseObj = { section: {} };
+    for (let i = 0; i < 100; i += 1) {
+      baseObj.section[`k${i}`] = i === 0 ? "traduit" : "";
+    }
+    const headObj = { section: { k0: "traduit" } };
+    const parsed = analyzeLocaleDiff(
+      JSON.stringify(baseObj),
+      JSON.stringify(headObj),
+    );
+    assert.equal(
+      isLikelyTruncatedWeblateExport(parsed, parsed.baseKeyCount),
+      true,
+    );
+  });
+
+  it("does not flag normal translation updates", () => {
+    const base = JSON.stringify({ title: "Your move" });
+    const head = JSON.stringify({ title: "Du bist dran" });
+    const parsed = analyzeLocaleDiff(base, head);
+    assert.equal(
+      isLikelyTruncatedWeblateExport(parsed, parsed.baseKeyCount),
+      false,
+    );
   });
 
   it("matches locale paths for front", () => {
