@@ -2,6 +2,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { normalizeLocaleJsonText } from "./locale-json-format.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 
@@ -72,6 +73,11 @@ ${entries.join("\n")}
   console.log("Synced javascript-time-ago locale imports");
 }
 
+function writeCanonicalLocaleJson(sourcePath, targetPath) {
+  const raw = fs.readFileSync(sourcePath, "utf8");
+  fs.writeFileSync(targetPath, normalizeLocaleJsonText(raw), "utf8");
+}
+
 function copyLocaleTree(sourceRoot, namespaces) {
   if (!fs.existsSync(sourceRoot)) {
     console.warn(`Skipping missing locale source: ${sourceRoot}`);
@@ -95,7 +101,10 @@ function copyLocaleTree(sourceRoot, namespaces) {
       if (!namespaces.includes(namespace)) {
         continue;
       }
-      fs.copyFileSync(path.join(langDir, file), path.join(targetLangDir, file));
+      writeCanonicalLocaleJson(
+        path.join(langDir, file),
+        path.join(targetLangDir, file),
+      );
     }
   }
 }
@@ -110,7 +119,10 @@ function syncBundledEnglish() {
       missing.push(sourcePath);
       continue;
     }
-    fs.copyFileSync(sourcePath, path.join(BUNDLE_LOCALES_EN, `${ns}.json`));
+    writeCanonicalLocaleJson(
+      sourcePath,
+      path.join(BUNDLE_LOCALES_EN, `${ns}.json`),
+    );
   }
 
   if (missing.length > 0) {

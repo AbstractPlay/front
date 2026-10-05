@@ -17,9 +17,9 @@ vi.mock("./misc", () => ({
 }));
 
 vi.mock("../displaySettings.js", () => ({
-  buildRenderDisplayOpts: (_meta, display, { perspective }) => {
-    renderOptsLog.push({ display, perspective });
-    return { perspective };
+  buildRenderDisplayOpts: (_meta, display, extras) => {
+    renderOptsLog.push({ display, ...extras });
+    return extras;
   },
 }));
 
@@ -79,6 +79,34 @@ describe("syncPlayRenderToFocus", () => {
     });
 
     expect(renderOptsLog[0].perspective).to.equal(1);
+    expect(renderOptsLog[0].omniscient).to.be.undefined;
+  });
+
+  it("uses omniscient render when session game is over", () => {
+    const state = JSON.stringify({ stack: [1], renderResult: { renderer: "plain" } });
+    const game = {
+      metaGame: "test",
+      state,
+      me: -1,
+      gameOver: true,
+      players: [],
+      noMoves: true,
+      stackExpanding: false,
+    };
+    const exploration = [new GameNode(null, "", null, 0)];
+    const focus = { moveNumber: 0, exPath: [], canExplore: false };
+
+    syncPlayRenderToFocus(game, exploration, focus, {
+      partialMoveRenderRef: { current: false },
+      engineRef: { current: null },
+      renderrepSetter: vi.fn(),
+      movesRef: { current: null },
+      statusRef: { current: {} },
+      display: [],
+    });
+
+    expect(renderOptsLog[0].perspective).to.equal(1);
+    expect(renderOptsLog[0].omniscient).to.be.true;
   });
 
   it("stackExpanding follows the last rep when render returns an array", () => {
