@@ -1,6 +1,7 @@
 import { GameFactory } from "@abstractplay/gameslib";
 import { resolveRenderLabels } from "../resolveRenderLabels";
 import { buildRenderDisplayOpts } from "../displaySettings.js";
+import { buildGameMoveRenderExtras } from "../GameMove/renderExtras.js";
 
 export function buildFrameRenderRep({
   exploration,
@@ -9,7 +10,6 @@ export function buildFrameRenderRep({
   getFocusNode,
   players,
   users,
-  getPerspective,
   display,
   /** @deprecated use display */
   altDisplay,
@@ -19,10 +19,13 @@ export function buildFrameRenderRep({
     throw new Error("Missing game state for export frame");
   }
   const engine = GameFactory(game.metaGame, node.state);
-  const perspective = getPerspective(engine, game);
   const displayUids = display ?? altDisplay;
   const rep = engine.render(
-    buildRenderDisplayOpts(game.metaGame, displayUids, { perspective })
+    buildRenderDisplayOpts(
+      game.metaGame,
+      displayUids,
+      buildGameMoveRenderExtras(game)
+    )
   );
   if (players?.length) {
     return resolveRenderLabels(rep, players, users ?? {});

@@ -95,6 +95,7 @@ import {
   displaySettingEqual,
   normalizeDisplaySetting,
 } from "../../lib/displaySettings.js";
+import { buildGameMoveRenderExtras } from "../../lib/GameMove/renderExtras.js";
 import { isLabSupportedGame } from "../../lib/Lab/buildGame";
 import { launchLabFromExport } from "../../lib/Lab/storage";
 import { serializeSessionExploration } from "../../lib/Lab/exploration";
@@ -1820,7 +1821,7 @@ export function useGameMoveSession(props) {
           buildRenderDisplayOpts(
             gameRef.current.metaGame,
             newSettings.display,
-            { perspective: gameRef.current.me + 1 }
+            buildGameMoveRenderExtras(gameRef.current)
           )
         ),
         gameRef.current.players,
@@ -2461,7 +2462,6 @@ export function useGameMoveSession(props) {
           getFocusNode,
           players: currentGame.players,
           users: useStore.getState().users,
-          getPerspective: (_engine, game) => (game.me ? game.me + 1 : 1),
           display: displaySettings?.display,
           metaGame,
           gameId: gameID,
