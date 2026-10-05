@@ -2635,6 +2635,10 @@
     "src": "Exports the board along the current line (main line and any variation you are viewing). Stacked column expansions are not included.",
     "out": "Exporta el tablero a lo largo de la línea actual (línea principal y cualquier variante que estés viendo). No se incluyen las expansiones de columnas apiladas."
   },
+  "boardExport.gifNoFrames": {
+    "src": "No move line is available to export. Open a game with move history along the line you are viewing.",
+    "out": "No hay una línea de movimientos disponible para exportar. Abre una partida con historial de movimientos en la línea que estás viendo."
+  },
   "boardExport.gifSuccess": {
     "src": "Animated GIF downloaded.",
     "out": "GIF animado descargado."

@@ -1094,7 +1094,6 @@ function LabSession({
     try {
       await exportCurrentBoardPng({
         renderrep,
-        boardRenderIndex,
         rendered,
         metaGame,
         gameId: currentGame.id,
@@ -1112,7 +1111,6 @@ function LabSession({
   }, [
     rendered,
     renderrep,
-    boardRenderIndex,
     metaGame,
     settings,
     effectiveColourContext,
@@ -1359,7 +1357,9 @@ function LabSession({
         setBoardRenderIndex={setBoardRenderIndex}
         onExportPng={handleExportBoardPng}
         onOpenExportGif={() => showBoardExportGifSetter(true)}
-        boardExportDisabled={rendered.length === 0}
+        boardExportDisabled={
+          rendered.length === 0 || boardExportPathFrames.length === 0
+        }
       />
     </>
   );

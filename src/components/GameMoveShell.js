@@ -18,6 +18,7 @@ import GameMoveCardLayout from "./GameMove/layouts/GameMoveCardLayout";
 import GameMoveNarrativeLayout from "./GameMove/layouts/GameMoveNarrativeLayout";
 import { LayoutPickerProvider } from "./GameMove/LayoutPickerContext";
 import LayoutPickerModal from "./GameMove/LayoutPickerModal";
+import BoardExportGifModal from "./BoardExport/BoardExportGifModal";
 import PageLoading from "./shared/PageLoading";
 
 function GameMoveLayout({ session, layoutId }) {
@@ -91,6 +92,14 @@ function GameMoveShell() {
     return <PageLoading message={t("gameMove.loading")} />;
   }
 
+  const {
+    showBoardExportGif,
+    showBoardExportGifSetter,
+    handleExportBoardGif,
+    boardExportPathFrames,
+    boardExportBusy,
+  } = session;
+
   return (
     <LayoutPickerProvider value={pickerValue}>
       <div className="game-move-shell">
@@ -98,6 +107,14 @@ function GameMoveShell() {
           key={`${params.metaGame}-${params.gameID}-${layoutId}`}
           session={session}
           layoutId={layoutId}
+        />
+        <BoardExportGifModal
+          show={showBoardExportGif}
+          onClose={() => showBoardExportGifSetter(false)}
+          onExport={handleExportBoardGif}
+          pathFrames={boardExportPathFrames}
+          busy={boardExportBusy}
+          t={t}
         />
         <LayoutPickerModal
           show={showLayoutPicker}

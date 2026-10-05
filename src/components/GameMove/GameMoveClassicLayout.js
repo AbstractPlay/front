@@ -14,7 +14,6 @@ import Board from "./Board";
 import RenderOptionsModal from "../RenderOptionsModal";
 import Modal from "../Modal";
 import ClipboardCopy from "../../lib/ClipboardCopy";
-import BoardExportGifModal from "../BoardExport/BoardExportGifModal";
 import UserChats from "./UserChats";
 import Joyride from "react-joyride";
 import PageLoading from "../shared/PageLoading";
@@ -144,11 +143,7 @@ export default function GameMoveClassicLayout({ session }) {
     customCssAccountActive,
     reportError,
     handleExportBoardPng,
-    handleExportBoardGif,
-    showBoardExportGif,
     showBoardExportGifSetter,
-    boardExportBusy,
-    boardExportPathFrames,
     boardExportDisabled,
   } = session;
 
@@ -1016,14 +1011,6 @@ export default function GameMoveClassicLayout({ session }) {
             </label>
           </div>
         </Modal>
-        <BoardExportGifModal
-          show={showBoardExportGif}
-          onClose={() => showBoardExportGifSetter(false)}
-          onExport={handleExportBoardGif}
-          pathFrames={boardExportPathFrames}
-          busy={boardExportBusy}
-          t={t}
-        />
       </article>
     </>
   );

@@ -17,6 +17,7 @@
     "gifButton": "Scarica tavoliere animato (GIF)",
     "gifTitle": "Esporta GIF animata",
     "gifHelp": "Esporta il tavoliere lungo la linea corrente (linea principale e qualsiasi variante che stai visualizzando). Le espansioni delle colonne impilate non sono incluse.",
+    "gifNoFrames": "Nessuna linea di mosse disponibile per l'esportazione. Apri una partita con la cronologia delle mosse lungo la linea che stai visualizzando.",
     "delayLabel": "Ritardo tra i frame (secondi)",
     "startLabel": "Posizione iniziale",
     "endLabel": "Posizione finale",
