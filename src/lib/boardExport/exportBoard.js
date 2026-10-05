@@ -13,34 +13,16 @@ import {
 import { boardGifFilename, boardPngFilename } from "./boardExportFilename";
 import { triggerDownload } from "./downloadBlob";
 
-function pickRenderRep(renderrep, boardRenderIndex) {
+function pickRenderRep(renderrep) {
   if (renderrep == null) return null;
   const reps = Array.isArray(renderrep) ? renderrep : [renderrep];
   if (reps.length === 0) return null;
-  let index = boardRenderIndex;
-  if (
-    index == null ||
-    Number.isNaN(index) ||
-    index < 0 ||
-    index >= reps.length
-  ) {
-    index = reps.length - 1;
-  }
-  return reps[index];
+  return reps[reps.length - 1];
 }
 
-function getLiveSvg(boardRenderIndex, rendered) {
+function getLiveSvg(rendered) {
   if (!rendered?.length) return null;
-  let index = boardRenderIndex;
-  if (
-    index == null ||
-    Number.isNaN(index) ||
-    index < 0 ||
-    index >= rendered.length
-  ) {
-    index = rendered.length - 1;
-  }
-  const node = rendered[index];
+  const node = rendered[rendered.length - 1];
   return node?.tagName?.toLowerCase() === "svg"
     ? node
     : node?.querySelector?.("svg");
@@ -48,7 +30,6 @@ function getLiveSvg(boardRenderIndex, rendered) {
 
 export async function exportCurrentBoardPng({
   renderrep,
-  boardRenderIndex,
   rendered,
   metaGame,
   gameId,
@@ -58,7 +39,7 @@ export async function exportCurrentBoardPng({
   isParticipant,
   numPlayers,
 }) {
-  const rep = pickRenderRep(renderrep, boardRenderIndex);
+  const rep = pickRenderRep(renderrep);
   if (!rep) {
     throw new Error("No board to export");
   }
@@ -79,10 +60,10 @@ export async function exportCurrentBoardPng({
     customizationHints,
   });
 
-  const liveSvg = getLiveSvg(boardRenderIndex, rendered);
+  const liveSvg = getLiveSvg(rendered);
   const svg =
     liveSvg?.cloneNode(true) ??
-    renderBoardSvg(displayRep, options, { layerIndex: 0, metaGame });
+    renderBoardSvg(displayRep, options, { metaGame });
   if (!svg) {
     throw new Error("Board render failed");
   }
@@ -152,10 +133,7 @@ export async function exportBoardGif({
       customizationHints,
     });
     const displayRep = resolveDisplayRenderRep(rep, globalMe, metaGame);
-    const svg = renderBoardSvg(displayRep, frameOptions, {
-      layerIndex: 0,
-      metaGame,
-    });
+    const svg = renderBoardSvg(displayRep, frameOptions, { metaGame });
     if (!svg) {
       throw new Error(`Failed to render frame ${i + 1}`);
     }

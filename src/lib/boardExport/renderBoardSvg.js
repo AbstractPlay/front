@@ -22,23 +22,11 @@ function svgFromStaticString(svgString) {
 /**
  * Render a renderrep offscreen and return the root SVG element.
  */
-export function renderBoardSvg(
-  renderrep,
-  baseOptions,
-  { layerIndex, metaGame } = {}
-) {
+export function renderBoardSvg(renderrep, baseOptions, { metaGame } = {}) {
   const reps = normalizeRenderReps(renderrep);
   if (reps.length === 0) return null;
 
-  let index = layerIndex;
-  if (
-    index == null ||
-    Number.isNaN(index) ||
-    index < 0 ||
-    index >= reps.length
-  ) {
-    index = reps.length - 1;
-  }
+  const index = reps.length - 1;
 
   const container = document.createElement("div");
   container.className = metaGame ? `board _meta_${metaGame}` : "board";

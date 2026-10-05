@@ -17,6 +17,7 @@
         "gifButton": "Download animated board (GIF)",
         "gifTitle": "Export animated GIF",
         "gifHelp": "Exports the board along the current line (main line and any variation you are viewing). Stacked column expansions are not included.",
+        "gifNoFrames": "No move line is available to export. Open a game with move history along the line you are viewing.",
         "delayLabel": "Delay between frames (seconds)",
         "startLabel": "Start position",
         "endLabel": "End position",

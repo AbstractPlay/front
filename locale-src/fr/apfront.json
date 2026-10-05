@@ -2635,6 +2635,10 @@
     "src": "Exports the board along the current line (main line and any variation you are viewing). Stacked column expansions are not included.",
     "out": "Exporte le plateau le long de la ligne actuelle (ligne principale et toute variante consultée). Les extensions de colonnes empilées ne sont pas incluses."
   },
+  "boardExport.gifNoFrames": {
+    "src": "No move line is available to export. Open a game with move history along the line you are viewing.",
+    "out": "Aucune ligne de coups n'est disponible pour l'exportation. Ouvrez une partie avec un historique de coups le long de la ligne que vous visualisez."
+  },
   "boardExport.gifSuccess": {
     "src": "Animated GIF downloaded.",
     "out": "GIF animé téléchargé."

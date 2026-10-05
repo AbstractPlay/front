@@ -17,6 +17,7 @@
     "gifButton": "Animiertes Spielfeld herunterladen (GIF)",
     "gifTitle": "Animiertes GIF exportieren",
     "gifHelp": "Exportiert das Spielfeld entlang der aktuellen Zugfolge (Hauptvariante und die aktuell angezeigte Variante). Gestapelte Spaltenerweiterungen sind nicht enthalten.",
+    "gifNoFrames": "Es ist keine Zugfolge zum Exportieren verfügbar. Öffne ein Spiel mit Zughistorie entlang der angezeigten Variante.",
     "delayLabel": "Verzögerung zwischen Frames (Sekunden)",
     "startLabel": "Startposition",
     "endLabel": "Endposition",

@@ -17,6 +17,7 @@
     "gifButton": "Télécharger le plateau animé (GIF)",
     "gifTitle": "Exporter un GIF animé",
     "gifHelp": "Exporte le plateau le long de la ligne actuelle (ligne principale et toute variante consultée). Les extensions de colonnes empilées ne sont pas incluses.",
+    "gifNoFrames": "Aucune ligne de coups n'est disponible pour l'exportation. Ouvrez une partie avec un historique de coups le long de la ligne que vous visualisez.",
     "delayLabel": "Délai entre les images (secondes)",
     "startLabel": "Position de départ",
     "endLabel": "Position finale",
