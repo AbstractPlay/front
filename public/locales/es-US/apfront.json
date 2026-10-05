@@ -17,6 +17,7 @@
     "gifButton": "Descargar tablero animado (GIF)",
     "gifTitle": "Exportar GIF animado",
     "gifHelp": "Exporta el tablero a lo largo de la línea actual (línea principal y cualquier variante que estés viendo). No se incluyen las expansiones de columnas apiladas.",
+    "gifNoFrames": "No hay una línea de movimientos disponible para exportar. Abre una partida con historial de movimientos en la línea que estás viendo.",
     "delayLabel": "Retraso entre fotogramas (segundos)",
     "startLabel": "Posición inicial",
     "endLabel": "Posición final",

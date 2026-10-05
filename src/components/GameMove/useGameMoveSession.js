@@ -2419,7 +2419,6 @@ export function useGameMoveSession(props) {
     try {
       await exportCurrentBoardPng({
         renderrep,
-        boardRenderIndex,
         rendered,
         metaGame,
         gameId: gameID,
@@ -2438,7 +2437,6 @@ export function useGameMoveSession(props) {
   }, [
     rendered,
     renderrep,
-    boardRenderIndex,
     metaGame,
     gameID,
     displaySettings,
@@ -2838,6 +2836,7 @@ export function useGameMoveSession(props) {
     showBoardExportGifSetter,
     boardExportBusy,
     boardExportPathFrames,
-    boardExportDisabled: rendered.length === 0,
+    boardExportDisabled:
+      rendered.length === 0 || boardExportPathFrames.length === 0,
   };
 }

@@ -14,11 +14,26 @@ function BoardExportGifModal({ show, onClose, onExport, pathFrames, busy, t }) {
     setDelaySec(1);
   }, [show, pathFrames]);
 
-  if (!pathFrames?.length) {
-    return null;
-  }
-
   const frameCount = Math.max(0, endIndex - startIndex + 1);
+
+  if (!pathFrames?.length) {
+    return (
+      <Modal
+        show={show}
+        title={t("boardExport.gifTitle")}
+        buttons={[
+          {
+            label: t("Cancel"),
+            action: onClose,
+          },
+        ]}
+      >
+        <div className="content">
+          <p className="is-size-7">{t("boardExport.gifNoFrames")}</p>
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <Modal
