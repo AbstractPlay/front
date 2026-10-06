@@ -41,6 +41,10 @@ import {
   moveCellsFromVariationChoices,
   rowHasFocus,
 } from "../../lib/GameMove/moveTreeVariations";
+import {
+  livePartialMoveWireForTable,
+  shouldApplyLivePartialPreview,
+} from "../../lib/GameMove/livePartialMove";
 
 function syncRowFocusClasses(cells, focus) {
   return cells.map((cell) => {
@@ -279,6 +283,27 @@ function GameMoves(props) {
                   : false,
               move: exploration[i].move,
               path: movePath,
+            },
+          ]);
+        }
+        if (shouldApplyLivePartialPreview(game, exploration, focus)) {
+          const pendingPath = {
+            moveNumber: exploration.length - 1,
+            exPath: [],
+          };
+          path.push([
+            {
+              class: buildMoveCellClass({
+                movePath: pendingPath,
+                isFocus: true,
+              }),
+              outcome: -1,
+              commented: false,
+              move: livePartialMoveWireForTable(
+                game.partialMove,
+                game.numPlayers
+              ),
+              path: pendingPath,
             },
           ]);
         }
