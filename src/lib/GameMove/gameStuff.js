@@ -29,6 +29,25 @@ import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { buildEngineMoveResults } from "../engineMoveResults";
 import { buildRenderDisplayOpts } from "../displaySettings.js";
 import { buildGameMoveRenderExtras } from "./renderExtras.js";
+import {
+  applyLivePartialPreview,
+  partialMoveSeatFragment,
+  shouldApplyLivePartialPreview,
+} from "./livePartialMove.js";
+
+/** Engine at tree focus; applies server partialMove at live tip when appropriate. */
+export function buildLivePlayViewEngine(game, exploration, focus) {
+  const engine = createEngineAtFocus(game, exploration, focus);
+  let appliedPartial = false;
+  if (shouldApplyLivePartialPreview(game, exploration, focus)) {
+    appliedPartial = applyLivePartialPreview(
+      engine,
+      game.partialMove,
+      game.numPlayers
+    );
+  }
+  return { engine, appliedPartial };
+}
 
 /** me / canSubmit / canExplore from API game + logged-in user (no engine). */
 export function applyPlayerSessionFields(game0, me, explorer) {
@@ -132,8 +151,12 @@ export function syncPlayRenderToFocus(
   }
 ) {
   const users = useStore.getState().users;
-  const engine = createEngineAtFocus(game, exploration, focus);
-  partialMoveRenderRef.current = false;
+  const { engine, appliedPartial } = buildLivePlayViewEngine(
+    game,
+    exploration,
+    focus
+  );
+  partialMoveRenderRef.current = appliedPartial;
   engineRef.current = engine;
 
   const render = resolveRenderLabels(
@@ -161,7 +184,23 @@ export function syncPlayRenderToFocus(
     }
   }
 
-  setStatus(engine, game, isPartialSimMove, "", statusRef.current);
+  const statusPartialWire = appliedPartial
+    ? partialMoveSeatFragment(game.partialMove, game.me, game.numPlayers)
+    : "";
+  setStatus(
+    engine,
+    game,
+    appliedPartial || isPartialSimMove,
+    statusPartialWire,
+    statusRef.current
+  );
+
+  if (appliedPartial) {
+    game.moveResults = buildEngineMoveResults(
+      engine,
+      game.players.map((p) => formatPlayerDisplayName(p, users))
+    );
+  }
 
   if (updateMoveEntry && moveSetter) {
     if (game.simultaneous) {
@@ -235,15 +274,8 @@ export function setupGame(
     (!game0.hasOwnProperty("pieInvoked") || game0.pieInvoked === false);
   game0.variants = engine.getVariants();
 
-  if (game0.simultaneous) {
-    if (game0.toMove !== "") {
-      if (
-        game0.partialMove !== undefined &&
-        game0.partialMove.length > game0.numPlayers - 1
-      )
-        // the empty move is numPlayers - 1 commas
-        engine.move(game0.partialMove, { partial: true, trusted: true });
-    }
+  if (game0.simultaneous && game0.toMove !== "") {
+    applyLivePartialPreview(engine, game0.partialMove, game0.numPlayers);
   }
   // Must match engine before sessionExplorationAllowed (challenge noExplore is in-game only).
   game0.gameOver = engine.gameover;

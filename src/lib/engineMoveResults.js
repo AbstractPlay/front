@@ -15,10 +15,16 @@ export function buildEngineMoveResults(engine, playerNames) {
     names,
     (key, params) => i18n.t(key, params),
   );
-  return nodes
-    .map((e, idx) => ({
+  const rows = nodes
+    .map((e) => ({
       time: e[0],
-      log: e.slice(1).join(" "),
+      log: e.slice(1).join(" ").trim(),
+    }))
+    .filter((row) => row.log.length > 0);
+
+  return rows
+    .map((row, idx) => ({
+      ...row,
       ply: idx + 1,
     }))
     .reverse();
