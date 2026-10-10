@@ -7,10 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0.0-beta`. Production and dev deploys stamp `1.0.0-ci-<GitHub Actions run id>.0` during the workflow (see `.github/workflows/deploy-prod.js.yml` and `deploy-dev.js.yml`). Entries below are grouped by theme and approximate ship window on **main** (what runs at abstractplay.com); they are not a per-commit log.
 
-## [1.0.0-ci] - 2026-10-06
+## [1.0.0-ci] - 2026-10-10
 
 ### Fixed
 
+- **Export to Playground:** disabled on live games when exploration is off (metagame `no-explore` flag or in-progress challenge with no exploration), matching move-tree exploration rules.
 - **Live simultaneous play:** while waiting for opponents, your own submitted sub-moves stay visible on the board, move list, and event log (e.g. Entropy; requires gameslib with partial-round chat log lines).
 - **Board export:** animated GIF dialog on strip/card/narrative layouts (modal mounted in game-move shell); GIF button disabled when no exportable move line; PNG/GIF export uses the last renderrep for multi-board games (e.g. Bao).
 - **Game move (finished games):** move scrubbing and board GIF export show full hidden information (e.g. hands) by using omniscient render when the session is over, matching Lab archive behaviour.
