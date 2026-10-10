@@ -66,19 +66,13 @@ describe("modal display mapping", () => {
 });
 
 describe("board display FAB cycle", () => {
-  it("allows cycle for single projection group and single checkbox games", () => {
+  it("delegates simple-cycle detection to gameslib via gameinfo", () => {
     expect(canCycleBoardDisplay("stigmergy")).toBe(false);
     expect(canCycleBoardDisplay("druid")).toBe(true);
-    expect(canCycleBoardDisplay("asli")).toBe(true);
   });
 
   it("cycles default and flat for druid", () => {
     expect(nextBoardDisplayCycle("druid", [])).toEqual(["flat"]);
     expect(nextBoardDisplayCycle("druid", ["flat"])).toEqual([]);
-  });
-
-  it("cycles default and swap-prison for asli", () => {
-    expect(nextBoardDisplayCycle("asli", [])).toEqual(["swap-prison"]);
-    expect(nextBoardDisplayCycle("asli", ["swap-prison"])).toEqual([]);
   });
 });
