@@ -45,6 +45,7 @@ import {
   livePartialMoveWireForTable,
   shouldApplyLivePartialPreview,
 } from "../../lib/GameMove/livePartialMove";
+import { sessionExplorationAllowed } from "../../lib/effectiveGameFlags";
 
 function syncRowFocusClasses(cells, focus) {
   return cells.map((cell) => {
@@ -645,6 +646,10 @@ function GameMoves(props) {
       }
     }
 
+    const catalogExportOk = validGames.some(([uid]) => game.metaGame === uid);
+    const playgroundExportDisabled =
+      !catalogExportOk || !sessionExplorationAllowed(game);
+
     return (
       <>
         <div className="field is-grouped" id="MoveTreeBtnBar">
@@ -810,7 +815,7 @@ function GameMoves(props) {
           <button
             className={`button is-small apButtonNeutral`}
             onClick={() => handlePlaygroundExport()}
-            disabled={!validGames.find(([uid]) => game.metaGame === uid)}
+            disabled={playgroundExportDisabled}
           >
             {t("ExportToLab")}
           </button>

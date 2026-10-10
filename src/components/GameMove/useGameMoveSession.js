@@ -1328,6 +1328,7 @@ export function useGameMoveSession(props) {
 
   const handlePlaygroundExport = async () => {
     if (!isLabSupportedGame(game.metaGame)) return;
+    if (!sessionExplorationAllowed(game)) return;
     const nodes = explorationRef.current?.nodes;
     if (!nodes || !focus) return;
     try {
