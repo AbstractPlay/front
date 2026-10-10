@@ -9,16 +9,6 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ## [1.0.0-ci] - 2026-10-10
 
-### Fixed
-
-- **Export to Playground:** disabled on live games when exploration is off (metagame `no-explore` flag or in-progress challenge with no exploration), matching move-tree exploration rules.
-- **Live simultaneous play:** while waiting for opponents, your own submitted sub-moves stay visible on the board, move list, and event log (e.g. Entropy; requires gameslib with partial-round chat log lines).
-- **Board export:** animated GIF dialog on strip/card/narrative layouts (modal mounted in game-move shell); GIF button disabled when no exportable move line; PNG/GIF export uses the last renderrep for multi-board games (e.g. Bao).
-- **Game move (finished games):** move scrubbing and board GIF export show full hidden information (e.g. hands) by using omniscient render when the session is over, matching Lab archive behaviour.
-- **Live play exploration:** restore `emulation: true` on engine moves during exploration (partial still from UI/sim round); Waldmeister/Frogger snapshot reload fixed in gameslib emulated-complete `saveState()` behaviour.
-
-## [1.0.0-ci] - 2026-10-04
-
 ### Added
 
 - **Feedback:** attach SVG and Markdown (`.md`) files on bug reports, features, and comments (with PNG/JPEG/WebP, `.txt`, and `.json`).
@@ -30,6 +20,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Changed
 
+- **Tournaments:** automated tournaments help text reflects 120-hour starting clock (full max bank).
 - **Board toolbar:** rotate clockwise/counterclockwise and “back to current position” exploration controls use Unicode arrow glyphs (↳ / ↲ / ↩) instead of Font Awesome icons.
 - **Move tree (round grid):** compact/sparse rows and path indexing delegate to gameslib `getMoveTableRounds` / `pathIndexForMoveTableCell` (exploration wire split stays in a thin front adapter).
 - **Live play move tree:** mainline moves and exploration branches are styled differently (with a short legend when branches are present).
@@ -38,6 +29,11 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Export to Playground:** disabled on live games when exploration is off (metagame `no-explore` flag or in-progress challenge with no exploration), matching move-tree exploration rules.
+- **Live simultaneous play:** while waiting for opponents, your own submitted sub-moves stay visible on the board, move list, and event log (e.g. Entropy; requires gameslib with partial-round chat log lines).
+- **Board export:** animated GIF dialog on strip/card/narrative layouts (modal mounted in game-move shell); GIF button disabled when no exportable move line; PNG/GIF export uses the last renderrep for multi-board games (e.g. Bao).
+- **Game move (finished games):** move scrubbing and board GIF export show full hidden information (e.g. hands) by using omniscient render when the session is over, matching Lab archive behaviour.
+- **Live play exploration:** restore `emulation: true` on engine moves during exploration (partial still from UI/sim round); Waldmeister/Frogger snapshot reload fixed in gameslib emulated-complete `saveState()` behaviour.
 - **Player profile:** Game History Rematch pre-fills variant rules from the original game using variant UIDs encoded in `site.gameid` (not display names in `header.game.variants`).
 - **Live play exploration:** clicks, typed moves, and board render all use one engine built from the hydrated focus node (partials stay in the move string); multi-frame SVG remounts when the focused render changes; exploration premove clock is no longer clipped.
 - **Live play multi-frame boards:** render from live main-line `game.state` at move-tree focus (not stale exploration spine snapshots); clear spine caches on API state refresh.
