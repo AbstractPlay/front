@@ -18,7 +18,7 @@
   },
   "packageManager": "npm@11.6.2",
   "dependencies": {
-    "@abstractplay/gameslib": "1.0.0-ci-38072336793.0",
+    "@abstractplay/gameslib": "1.0.0-ci-38077818196.0",
     "@abstractplay/renderer": "1.0.0-ci-38071028664.0",
     "@atlaskit/pragmatic-drag-and-drop": "^1.3.0",
     "@dicebear/core": "^10.6.0",
