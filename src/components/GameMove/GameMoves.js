@@ -37,7 +37,6 @@ import {
   enrichExplorationMoveCell,
   focusedMovePathIndex,
   explorationPathEquals,
-  isIdleMainlineExplorationTip,
   moveCellsFromVariationChoices,
   rowHasFocus,
 } from "../../lib/GameMove/moveTreeVariations";
@@ -264,7 +263,7 @@ function GameMoves(props) {
     let numRows = 0;
     let showMoveTreeLegend = false;
     if (exploration !== null) {
-      if (isIdleMainlineExplorationTip(focus, exploration, game.gameOver)) {
+      if (!game.gameOver) {
         for (let i = 1; i < exploration.length; i++) {
           const movePath = { moveNumber: i, exPath: [] };
           const className = buildMoveCellClass({

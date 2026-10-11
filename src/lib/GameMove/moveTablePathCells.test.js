@@ -263,6 +263,22 @@ describe("Option A regression baselines", () => {
 
 describe("sequential_2p_tip_multi_cell_branch_row_hex_like", () => {
   const layout = sequential2pLayout;
+
+  it("does not filter single-cell mainline rows (toMoveSeat would empty the mover column)", () => {
+    const mainlineOnly = [{ move: "f6", path: { moveNumber: 23, exPath: [] } }];
+    const ctx = {
+      movenum: 22,
+      layout,
+      playerSeat: 0,
+      toMoveSeat: 1,
+    };
+    expect(filterPathCellsForSeat(mainlineOnly, { ...ctx, seatIdx: 0 })).toEqual(
+      mainlineOnly
+    );
+    expect(filterPathCellsForSeat(mainlineOnly, { ...ctx, seatIdx: 1 })).toEqual(
+      mainlineOnly
+    );
+  });
   const branchRow = [
     {
       move: "f6",
@@ -306,5 +322,31 @@ describe("sequential_2p_tip_multi_cell_branch_row_hex_like", () => {
   it("moveActorSeatForPathIndex alternates plies", () => {
     expect(moveActorSeatForPathIndex(21, 2)).toBe(1);
     expect(moveActorSeatForPathIndex(22, 2)).toBe(0);
+  });
+
+  it("splits actual mainline and opponent branches on one path row (post-fix b058)", () => {
+    const mergedRow = [
+      {
+        move: "f6",
+        path: { moveNumber: 23, exPath: [] },
+        class: "gameMove mainlineMove actualMove",
+      },
+      { move: "f9", path: { moveNumber: 22, exPath: [0] } },
+      { move: "i3", path: { moveNumber: 22, exPath: [1] } },
+    ];
+    const ctx = {
+      movenum: 22,
+      layout,
+      playerSeat: 0,
+      toMoveSeat: 1,
+    };
+    expect(
+      filterPathCellsForSeat(mergedRow, { ...ctx, seatIdx: 0 }).map((c) => c.move)
+    ).toEqual(["f6"]);
+    expect(
+      filterPathCellsForSeat(mergedRow, { ...ctx, seatIdx: 1 })
+        .map((c) => c.move)
+        .sort()
+    ).toEqual(["f9", "i3"]);
   });
 });

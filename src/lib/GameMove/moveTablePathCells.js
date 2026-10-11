@@ -71,8 +71,34 @@ export function filterPathCellsForSeat(cells, ctx) {
     return [];
   }
 
-  if (toMoveSeat != null && toMoveSeat >= 0) {
-    return seatIdx === toMoveSeat ? cells : [];
+  const mainlineCells = cells.filter((c) => !isExplorationPath(c?.path));
+  const branchCells = cells.filter((c) => isExplorationPath(c?.path));
+
+  if (mainlineCells.length > 0 && branchCells.length > 0) {
+    const mainSeat = moveActorSeatForPathIndex(movenum, numcolumns);
+    const branchSeat =
+      numcolumns === 2
+        ? mainSeat === 0
+          ? 1
+          : 0
+        : toMoveSeat != null && toMoveSeat >= 0
+          ? toMoveSeat
+          : mainSeat;
+    if (seatIdx === mainSeat) {
+      return mainlineCells;
+    }
+    if (seatIdx === branchSeat) {
+      return branchCells;
+    }
+    return [];
+  }
+
+  if (branchCells.length === cells.length) {
+    if (toMoveSeat != null && toMoveSeat >= 0) {
+      return seatIdx === toMoveSeat ? cells : [];
+    }
+    const owner = moveActorSeatForPathIndex(movenum, numcolumns);
+    return seatIdx === owner ? cells : [];
   }
 
   const owner = moveActorSeatForPathIndex(movenum, numcolumns);

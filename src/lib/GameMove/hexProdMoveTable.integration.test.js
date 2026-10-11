@@ -95,6 +95,17 @@ describe("prod hex b058a884 exploration move table", () => {
     expect(branchRow.length).toBeGreaterThan(1);
     expect(branchRow.map((c) => c.move).sort()).toEqual(["f9", "i3"]);
 
+    const mainlineIdx = tipIdx - 1;
+    expect(path[mainlineIdx][0].move).toBe("f6");
+    const mainSeat = filterPathCellsForSeat(path[mainlineIdx], {
+      seatIdx: 0,
+      movenum: mainlineIdx,
+      layout,
+      playerSeat: seats.playerSeat,
+      toMoveSeat: seats.toMoveSeat,
+    });
+    expect(mainSeat.map((c) => c.move)).toEqual(["f6"]);
+
     const seat0 = filterPathCellsForSeat(branchRow, {
       seatIdx: 0,
       movenum: tipIdx,
