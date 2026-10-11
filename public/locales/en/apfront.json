@@ -1756,6 +1756,10 @@
   },
   "gameMove": {
     "loading": "Loading game…",
+    "replay": {
+      "banner": "Replay mode — showing a saved snapshot. Moves and edits are disabled.",
+      "loadFailed": "Could not load the replay fixture for this URL."
+    },
     "dev": {
       "copyHomeworldsDiagram": "Copy Homeworlds diagram",
       "injectState": "Inject state",

@@ -1,6 +1,7 @@
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { canCycleBoardDisplay } from "../displaySettings.js";
+import { isMyTurnForPlayUi } from "./playUiToMove.js";
 
 /**
  * Build props objects and context strings shared by beta layout shells.
@@ -207,6 +208,7 @@ export function buildGameMovesProps(session) {
     game,
     explorationRef,
     globalMe,
+    sessionPlayerMe,
     handleGameMoveClick,
     getFocusNode,
     handlePlaygroundExport,
@@ -214,17 +216,19 @@ export function buildGameMovesProps(session) {
     gameRec,
   } = session;
 
+  const moveTableMe = sessionPlayerMe ?? globalMe;
+
   return {
     focus,
     game,
     exploration: explorationRef.current.nodes,
-    noExplore: globalMe?.settings?.all?.exploration === -1,
+    noExplore: moveTableMe?.settings?.all?.exploration === -1,
     handleGameMoveClick,
     getFocusNode,
     handlePlaygroundExport,
     engine: engineRef?.current,
     gameRec,
-    globalMe,
+    globalMe: moveTableMe,
   };
 }
 
@@ -334,6 +338,6 @@ export function getLayoutContext(session, users, myMove, t) {
     myColour,
     toMove,
     moveNumber: focus?.moveNumber ?? 0,
-    isMyTurn: game?.canSubmit && game?.me === toMove,
+    isMyTurn: isMyTurnForPlayUi(game, toMove),
   };
 }

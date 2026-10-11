@@ -24,5 +24,6 @@
   { "slug": "guides/project-structure", "title": "Project structure" },
   { "slug": "guides/routing", "title": "Routing" },
   { "slug": "guides/styling", "title": "Styling" },
-  { "slug": "guides/testing", "title": "Testing" }
+  { "slug": "guides/testing", "title": "Testing" },
+  { "slug": "guides/gamemove-replay", "title": "Game Move replay (local)" }
 ]

@@ -22,9 +22,18 @@ function jsxInJsFiles() {
   };
 }
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const realMode = env.VITE_REAL_MODE ?? "local";
+  const isViteBuild = command === "build";
+  const replayShimEntry = path.resolve(
+    __dirname,
+    "src/lib/GameMove/replay/shimEntry.js"
+  );
+  const replayShimStub = path.resolve(
+    __dirname,
+    "src/lib/GameMove/replay/shimEntry.stub.js"
+  );
   const siblingGameslib = path.resolve(
     __dirname,
     "../gameslib/build/index-browser.js"
@@ -51,6 +60,9 @@ export default defineConfig(({ mode }) => {
       alias: {
         buffer: "buffer",
         "@abstractplay/gameslib": gameslibEntry,
+        ...(isViteBuild && !useBrowserGameslib
+          ? { [replayShimEntry]: replayShimStub }
+          : {}),
       },
       // Vitest runs in Node and would pick gameslib's "node" export (i18n-node + fs).
       conditions: useBrowserGameslib

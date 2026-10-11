@@ -26,6 +26,7 @@ import {
   explorationPathEquals,
   focusedMovePathIndex,
   moveCellsFromVariationChoices,
+  shouldSubstituteVariationChoicesAtCell,
   nodeForExplorationPath,
   rowHasFocus,
 } from "../../lib/GameMove/moveTreeVariations";
@@ -775,9 +776,14 @@ function GameMoves(props) {
               collectVariationChoices(focus, exploration, variationGame);
             let cells = path[movenum];
             if (
-              movenum === focusedBranchPathIndex &&
-              branchChoiceCount > 1 &&
-              cells.length === 1
+              shouldSubstituteVariationChoicesAtCell(
+                focus,
+                exploration,
+                movenum,
+                focusedBranchPathIndex,
+                branchChoiceCount,
+                cells
+              )
             ) {
               cells = moveCellsFromVariationChoices(
                 exploration,

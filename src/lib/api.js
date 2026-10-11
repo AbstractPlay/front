@@ -4,6 +4,7 @@ import {
   getAuthTokenFromSession,
   refreshAuthSession,
 } from "./authSession";
+import { maybeReplayAuthResponse } from "./GameMove/replay/shimEntry.js";
 
 // token is null if not logged in
 export const getAuthToken = getAuthTokenFromSession;
@@ -25,6 +26,11 @@ async function postAuthQuery(query, pars, token) {
 
 // Set requireAuth to false to you are calling this from a flow that is supported for non-logged in users
 export const callAuthApi = async (query, pars, requireAuth = true) => {
+  const replayResponse = maybeReplayAuthResponse(query, pars);
+  if (replayResponse) {
+    return replayResponse;
+  }
+
   const token = await getAuthToken();
   if (token === null) {
     if (requireAuth) {
