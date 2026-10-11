@@ -264,6 +264,37 @@ describe("Option A regression baselines", () => {
 describe("sequential_2p_tip_multi_cell_branch_row_hex_like", () => {
   const layout = sequential2pLayout;
 
+  it("routes opponent branches to toMove when only nested premove exists on children (not parent.premove)", () => {
+    const branchRow = [
+      {
+        move: "f9",
+        premove: false,
+        premoveIndicator: true,
+        path: { moveNumber: 23, exPath: [0] },
+      },
+      {
+        move: "i3",
+        premove: false,
+        premoveIndicator: true,
+        path: { moveNumber: 23, exPath: [1] },
+      },
+    ];
+    const ctx = {
+      movenum: 23,
+      layout,
+      playerSeat: 0,
+      toMoveSeat: 1,
+    };
+    expect(
+      filterPathCellsForSeat(branchRow, { ...ctx, seatIdx: 0 })
+    ).toHaveLength(0);
+    expect(
+      filterPathCellsForSeat(branchRow, { ...ctx, seatIdx: 1 })
+        .map((c) => c.move)
+        .sort()
+    ).toEqual(["f9", "i3"]);
+  });
+
   it("does not filter single-cell mainline rows (toMoveSeat would empty the mover column)", () => {
     const mainlineOnly = [{ move: "f6", path: { moveNumber: 23, exPath: [] } }];
     const ctx = {
