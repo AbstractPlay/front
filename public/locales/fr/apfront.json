@@ -1756,6 +1756,10 @@
   },
   "gameMove": {
     "loading": "Chargement de la partie…",
+    "replay": {
+      "banner": "Mode relecture — affichage d'un instantané sauvegardé. Les coups et les modifications sont désactivés.",
+      "loadFailed": "Impossible de charger les données de relecture pour cette URL."
+    },
     "dev": {
       "copyHomeworldsDiagram": "Copier le diagramme Homeworlds",
       "injectState": "Injecter l'état",

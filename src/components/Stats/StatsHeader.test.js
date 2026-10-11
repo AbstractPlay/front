@@ -3,25 +3,29 @@ import { render, screen } from "@testing-library/react";
 import Stats from "../Stats";
 import { useStore } from "../../stores";
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key, opts) => {
-      if (opts && key === "stats.playersPlayedGames") {
-        return `players:${opts.numPlayers};games:${opts.numGames}`;
-      }
-      if (opts && key === "stats.recordsBetween") {
-        return `oldest:${opts.oldest};newest:${opts.newest}`;
-      }
-      if (opts && key === "stats.day") {
-        return `${opts.count} days`;
-      }
-      if (opts && key === "stats.year") {
-        return `${opts.count} years`;
-      }
-      return key;
-    },
-  }),
-}));
+vi.mock("react-i18next", async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key, opts) => {
+        if (opts && key === "stats.playersPlayedGames") {
+          return `players:${opts.numPlayers};games:${opts.numGames}`;
+        }
+        if (opts && key === "stats.recordsBetween") {
+          return `oldest:${opts.oldest};newest:${opts.newest}`;
+        }
+        if (opts && key === "stats.day") {
+          return `${opts.count} days`;
+        }
+        if (opts && key === "stats.year") {
+          return `${opts.count} years`;
+        }
+        return key;
+      },
+    }),
+  };
+});
 
 vi.mock("../../hooks/useEnsureSummaryTier", () => ({
   useEnsureSummaryTier: vi.fn(),
