@@ -59,7 +59,8 @@ export function filterPathCellsForSeat(cells, ctx) {
     return cells;
   }
 
-  const premoveCells = cells.filter((c) => c.premove);
+  // Only direct premove on this node — not “child has premove” (opponent branches get that flag in the UI path).
+  const premoveCells = cells.filter((c) => Boolean(c.premove));
   if (premoveCells.length > 0 && playerSeat != null && playerSeat >= 0) {
     const opponentSeat = playerSeat === 0 ? 1 : 0;
     if (seatIdx === playerSeat) {

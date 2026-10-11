@@ -70,8 +70,10 @@ function enrichLabMoveCell(exploration, cell) {
     ...cell,
     nag: node.nag,
     commented: moveCommentedState(node),
-    premove:
-      node.premove || node?.children?.some((n) => n.premove) || false,
+    premove: Boolean(node.premove),
+    premoveIndicator:
+      Boolean(node.premove) ||
+      Boolean(node?.children?.some((n) => n.premove)),
   });
 }
 
@@ -411,7 +413,7 @@ function GameMoves(props) {
             <span style={{ fontSize: "1.3em", fontWeight: "bold" }}>...</span>
           )}
           <ExplorationOutcomeIndicator game={game} outcome={m.outcome} />
-          {m.premove ? (
+          {m.premove || m.premoveIndicator ? (
             <i className="fa fa-clock-o premoveIndicator"></i>
           ) : null}
           {m.commented === "filled" ? (
@@ -556,10 +558,10 @@ function GameMoves(props) {
               {
                 class: className,
                 outcome: node.outcome,
-                premove:
-                  node.premove ||
-                  node?.children?.some((n) => n.premove) ||
-                  false,
+                premove: Boolean(node.premove),
+                premoveIndicator:
+                  Boolean(node.premove) ||
+                  Boolean(node?.children?.some((n) => n.premove)),
                 commented: moveCommentedState(node),
                 nag: node.nag,
                 move: fmtMove(focus.moveNumber, node.move),
@@ -579,8 +581,10 @@ function GameMoves(props) {
               next.push({
                 class: className,
                 outcome: c.outcome,
-                premove:
-                  c.premove || c?.children?.some((n) => n.premove) || false,
+                premove: Boolean(c.premove),
+                premoveIndicator:
+                  Boolean(c.premove) ||
+                  Boolean(c?.children?.some((n) => n.premove)),
                 commented: moveCommentedState(c),
                 nag: c.nag,
                 move: fmtMove(focus.moveNumber, c.move),
@@ -798,14 +802,20 @@ function GameMoves(props) {
                   {cells.length === 0 ? null : cells.length === 1 ? (
                     AMove(game, {
                       ...cells[0],
-                      move: moveTextForCell({
-                        layout,
-                        rounds,
-                        rowIdx: i,
-                        seatIdx: j,
-                        path,
-                        movenum,
-                      }),
+                      move: (() => {
+                        const fromCell = cells[0].move;
+                        if (fromCell != null && String(fromCell).length > 0) {
+                          return String(fromCell);
+                        }
+                        return moveTextForCell({
+                          layout,
+                          rounds,
+                          rowIdx: i,
+                          seatIdx: j,
+                          path,
+                          movenum,
+                        });
+                      })(),
                     })
                   ) : (
                     <div className="variation-list">
