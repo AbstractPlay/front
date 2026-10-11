@@ -25,7 +25,6 @@ import {
   enrichExplorationMoveCell,
   explorationPathEquals,
   focusedMovePathIndex,
-  isIdleMainlineExplorationTip,
   moveCellsFromVariationChoices,
   nodeForExplorationPath,
   rowHasFocus,
@@ -108,8 +107,7 @@ function useEventListener(eventName, handler, element = window) {
 }
 
 function shouldUseCompletedPath(focus, exploration, gameOver) {
-  if (gameOver) return true;
-  return !isIdleMainlineExplorationTip(focus, exploration, gameOver);
+  return gameOver;
 }
 
 function getPath(focus, exploration, path, gameOver) {
@@ -521,7 +519,7 @@ function GameMoves(props) {
     let focusRow = 0;
     let numRows = 0;
     if (exploration !== null) {
-      if (isIdleMainlineExplorationTip(focus, exploration, game.gameOver)) {
+      if (!game.gameOver) {
         for (let i = 1; i < exploration.length; i++) {
           let className = "gameMove";
           if (
