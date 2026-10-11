@@ -13,6 +13,7 @@ import {
   roundSlotToMoveText,
 } from "@abstractplay/gameslib";
 import { effectiveTurnModel } from "./effectiveTurnModel.js";
+import { pathRowHasExplorationBranch } from "./moveTablePathCells.js";
 
 /**
  * @typedef {import("./effectiveTurnModel").TurnModel} TurnModel
@@ -335,16 +336,22 @@ export function moveTextForCell({
   movenum,
 }) {
   const pathLength = path?.length ?? 0;
+  const skipRoundGridForExplorationBranch =
+    movenum != null && pathRowHasExplorationBranch(path?.[movenum]);
   let slot = null;
   if (
     layout.useRoundGrid &&
+    !skipRoundGridForExplorationBranch &&
     movenum != null &&
     isStackAlignedRounds(rounds, pathLength) &&
     movenum < pathLength &&
     Array.isArray(rounds?.[movenum])
   ) {
     slot = rounds[movenum][seatIdx] ?? null;
-  } else if (Array.isArray(rounds?.[rowIdx])) {
+  } else if (
+    !skipRoundGridForExplorationBranch &&
+    Array.isArray(rounds?.[rowIdx])
+  ) {
     slot = rounds[rowIdx][seatIdx] ?? null;
   }
 

@@ -34,6 +34,10 @@ import {
   labDisplayMoveLabel,
   resolveLabMoveTableEngine,
 } from "../../lib/Lab/hiddenView";
+import {
+  filterPathCellsForSeat,
+  resolveMoveTablePlayerSeats,
+} from "../../lib/GameMove/moveTablePathCells";
 
 function syncRowFocusClasses(cells, focus) {
   return cells.map((cell) => {
@@ -215,6 +219,7 @@ function GameMoves(props) {
   let exploration = props.exploration;
   let handleGameMoveClick = props.handleGameMoveClick;
   const allUsers = useStore((state) => state.users);
+  const moveTableSeats = resolveMoveTablePlayerSeats(game, props.globalMe);
 
   useEventListener("keydown", keyDownHandler);
 
@@ -781,11 +786,18 @@ function GameMoves(props) {
             } else if (cells.length > 1) {
               cells = syncRowFocusClasses(cells, focus);
             }
+            cells = filterPathCellsForSeat(cells, {
+              seatIdx: j,
+              movenum,
+              layout,
+              playerSeat: moveTableSeats.playerSeat,
+              toMoveSeat: moveTableSeats.toMoveSeat,
+            });
             cells = cells.map((cell) => enrichLabMoveCell(exploration, cell));
             row.push(
               <td key={"td1-" + i + "-" + j}>
                 <div className="move">
-                  {cells.length === 1 ? (
+                  {cells.length === 0 ? null : cells.length === 1 ? (
                     AMove(game, {
                       ...cells[0],
                       move: moveTextForCell({

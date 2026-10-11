@@ -427,6 +427,7 @@ export default function GameMoveClassicLayout({ session }) {
                         handlePlaygroundExport={handlePlaygroundExport}
                         engine={engineRef.current}
                         gameRec={gameRec}
+                        globalMe={globalMe}
                       />
                     ) : key === "chat" ? (
                       <>
@@ -593,6 +594,7 @@ export default function GameMoveClassicLayout({ session }) {
                   handlePlaygroundExport={handlePlaygroundExport}
                   engine={engineRef.current}
                   gameRec={gameRec}
+                  globalMe={globalMe}
                 />
               </div>
               <div style={{ paddingTop: "1em" }} className="tourChat">

@@ -1,0 +1,6 @@
+{
+  "query": "get_private_exploration",
+  "pars": {
+    "id": "8a8e2d42-a0ae-4366-834d-fc476f52adca"
+  }
+}
