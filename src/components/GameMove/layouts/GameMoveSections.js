@@ -80,14 +80,17 @@ export function GameMoveStatusSection({ session }) {
 }
 
 export function GameMoveMovesSection({ session, title }) {
-  const { t, focus } = session;
+  const { t, focus, explorationVersion } = session;
   if (!focus) return null;
   return (
     <div className="game-move-section game-move-section--moves tourMoveList">
       <h2 className="subtitle lined">
         <span>{title ?? t("Moves")}</span>
       </h2>
-      <GameMoves {...buildGameMovesProps(session)} />
+      <GameMoves
+        key={explorationVersion}
+        {...buildGameMovesProps(session)}
+      />
     </div>
   );
 }

@@ -198,6 +198,40 @@ export function rowHasFocus(row, focus) {
 }
 
 /**
+ * Whether to replace a single path cell with sibling variation choices (keyboard / table UI).
+ * At the in-progress main-line tip with branches already on the next path row, keep the
+ * last mainline move visible — do not swap it for tip children (hex b058-style layouts).
+ */
+export function shouldSubstituteVariationChoicesAtCell(
+  focus,
+  exploration,
+  movenum,
+  focusedBranchPathIndex,
+  branchChoiceCount,
+  cells
+) {
+  if (movenum !== focusedBranchPathIndex) {
+    return false;
+  }
+  if (branchChoiceCount <= 1) {
+    return false;
+  }
+  if (!Array.isArray(cells) || cells.length !== 1) {
+    return false;
+  }
+  if (!focus || !exploration?.length) {
+    return false;
+  }
+  const onMainlineTip =
+    focus.moveNumber === exploration.length - 1 &&
+    (focus.exPath?.length ?? 0) === 0;
+  if (onMainlineTip) {
+    return false;
+  }
+  return true;
+}
+
+/**
  * In-progress game with focus on the main-line tip and no explored branches from
  * that node — uses a compact move-tree path. Any exploration (exPath or earlier
  * branch) uses the full path builder instead.

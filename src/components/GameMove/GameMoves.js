@@ -39,6 +39,7 @@ import {
   explorationPathEquals,
   moveCellsFromVariationChoices,
   rowHasFocus,
+  shouldSubstituteVariationChoicesAtCell,
 } from "../../lib/GameMove/moveTreeVariations";
 import {
   livePartialMoveWireForTable,
@@ -580,9 +581,14 @@ function GameMoves(props) {
               collectVariationChoices(focus, exploration, game);
             let cells = path[movenum];
             if (
-              movenum === focusedBranchPathIndex &&
-              branchChoiceCount > 1 &&
-              cells.length === 1
+              shouldSubstituteVariationChoicesAtCell(
+                focus,
+                exploration,
+                movenum,
+                focusedBranchPathIndex,
+                branchChoiceCount,
+                cells
+              )
             ) {
               cells = moveCellsFromVariationChoices(
                 exploration,

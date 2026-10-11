@@ -4,6 +4,7 @@ import {
   explorationPathEquals,
   focusedMovePathIndex,
   isIdleMainlineExplorationTip,
+  shouldSubstituteVariationChoicesAtCell,
 } from "./moveTreeVariations";
 
 describe("moveTreeVariations", () => {
@@ -61,6 +62,56 @@ describe("moveTreeVariations", () => {
       expect(focusedMovePathIndex({ moveNumber: 5, exPath: [0, 1] })).to.equal(
         6
       );
+    });
+  });
+
+  describe("shouldSubstituteVariationChoicesAtCell", () => {
+    it("does not replace the mainline tip cell when branches are on the next path row", () => {
+      const exploration = [{ move: "" }, { move: "f5" }, { move: "f6", children: [{ move: "f9" }, { move: "i3" }] }];
+      const focus = { moveNumber: 2, exPath: [] };
+      const movenum = focusedMovePathIndex(focus);
+      const { count } = collectVariationChoices(focus, exploration, {
+        gameOver: false,
+      });
+      const cells = [{ move: "f6", path: { moveNumber: 2, exPath: [] } }];
+      expect(
+        shouldSubstituteVariationChoicesAtCell(
+          focus,
+          exploration,
+          movenum,
+          movenum,
+          count,
+          cells
+        )
+      ).to.be.false;
+    });
+
+    it("still substitutes when focus is on a tip branch sibling row", () => {
+      const exploration = [
+        { move: "" },
+        { move: "f5" },
+        {
+          move: "f6",
+          children: [{ move: "f9" }, { move: "i3" }],
+        },
+      ];
+      const focus = { moveNumber: 2, exPath: [0] };
+      const movenum = focusedMovePathIndex(focus);
+      const { count } = collectVariationChoices(focus, exploration, {
+        gameOver: false,
+      });
+      const cells = [{ move: "f9", path: { moveNumber: 2, exPath: [0] } }];
+      expect(count).to.be.greaterThan(1);
+      expect(
+        shouldSubstituteVariationChoicesAtCell(
+          focus,
+          exploration,
+          movenum,
+          movenum,
+          count,
+          cells
+        )
+      ).to.be.true;
     });
   });
 

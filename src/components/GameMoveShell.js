@@ -20,6 +20,9 @@ import { LayoutPickerProvider } from "./GameMove/LayoutPickerContext";
 import LayoutPickerModal from "./GameMove/LayoutPickerModal";
 import BoardExportGifModal from "./BoardExport/BoardExportGifModal";
 import PageLoading from "./shared/PageLoading";
+import ReplayModeBanner from "./GameMove/ReplayModeBanner";
+import { isGameMoveReplayEnabled } from "../lib/GameMove/replay/replayEnabled";
+import { activateReplayFromSearchParams } from "../lib/GameMove/replay/shimEntry.js";
 
 function GameMoveLayout({ session, layoutId }) {
   switch (layoutId) {
@@ -42,10 +45,34 @@ function GameMoveShell() {
   const { layoutId, resolvedFrom } = useGameMoveLayout();
   const [showLayoutPicker, setShowLayoutPicker] = useState(false);
   const sessionTrackedRef = useRef(null);
+  const [replayGate, setReplayGate] = useState(() => {
+    if (!isGameMoveReplayEnabled()) {
+      return "ready";
+    }
+    const slug = new URLSearchParams(location.search).get("replay")?.trim();
+    return slug ? "loading" : "ready";
+  });
+
+  useEffect(() => {
+    if (!isGameMoveReplayEnabled()) {
+      setReplayGate("ready");
+      return;
+    }
+    const slug = new URLSearchParams(location.search).get("replay")?.trim();
+    if (!slug) {
+      setReplayGate("ready");
+      return;
+    }
+    setReplayGate("loading");
+    activateReplayFromSearchParams(location.search)
+      .then(() => setReplayGate("ready"))
+      .catch(() => setReplayGate("error"));
+  }, [location.search]);
 
   const session = useGameMoveSession({
     routerState: location.state,
     moveBasePath: MOVE_BASE,
+    replayReady: replayGate === "ready",
   });
 
   const openLayoutPicker = useCallback(() => {
@@ -88,8 +115,14 @@ function GameMoveShell() {
     resolvedFrom,
   ]);
 
-  if (session.isGameLoading) {
+  if (replayGate === "loading" || session.isGameLoading) {
     return <PageLoading message={t("gameMove.loading")} />;
+  }
+
+  if (replayGate === "error") {
+    return (
+      <p className="notification is-danger">{t("gameMove.replay.loadFailed")}</p>
+    );
   }
 
   const {
@@ -103,6 +136,7 @@ function GameMoveShell() {
   return (
     <LayoutPickerProvider value={pickerValue}>
       <div className="game-move-shell">
+        <ReplayModeBanner />
         <GameMoveLayout
           key={`${params.metaGame}-${params.gameID}-${layoutId}`}
           session={session}

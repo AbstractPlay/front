@@ -79,6 +79,8 @@ Backend semantics: [Games and moves](/backend/subsystems/games-and-moves/).
 
 Private and public move exploration (what-if analysis) lives in [`exploration.js`](../src/lib/GameMove/exploration.js). Users can branch from historical positions, comment on nodes, and publish exploration trees.
 
+**Local replay (contributors):** frozen snapshots and `?replay=` on `/move` for seat-specific UI debugging — see [Game Move replay (local)](/front/guides/gamemove-replay/).
+
 ## Settings and display
 
 [`settings.js`](../src/lib/GameMove/settings.js) manages colour schemes, display variants, and renderer options. Session overrides persist across reloads via [`sessionDisplay.js`](../src/lib/GameMove/sessionDisplay.js).

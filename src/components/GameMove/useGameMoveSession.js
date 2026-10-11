@@ -42,6 +42,7 @@ import {
   resolveRenderLabels,
 } from "../../lib/GameMove/misc";
 import {
+  applyPlayerSessionFields,
   setupGame,
   syncGameSessionFromApi,
   syncPlayRenderToFocus,
@@ -112,7 +113,15 @@ import {
   toggleRecommend,
 } from "../../lib/playerGameMarks";
 import { gameUpdateMatchesGame } from "../../lib/watchGames";
+import { resolvePlayUiToMove } from "../../lib/GameMove/playUiToMove.js";
 import { useGameMoveKeyboardNav } from "./useGameMoveKeyboardNav";
+import {
+  applyReplayBundleExploration,
+  getEffectiveSessionMe,
+  isReplayActive,
+  maybeReplayOpenQuery,
+  shouldIgnoreGameRefreshForReplay,
+} from "../../lib/GameMove/replay/shimEntry.js";
 
 export const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
 
@@ -130,6 +139,7 @@ function gamePlayfieldChanged(prev, next) {
 
 export function useGameMoveSession(props) {
   const moveBasePath = props.moveBasePath ?? "/move";
+  const replayReady = props.replayReady !== false;
   const [dbgame, dbgameSetter] = useState(null);
   const [renderrep, renderrepSetter] = useState(null);
   const [rendered, setRendered] = useState([]);
@@ -176,6 +186,10 @@ export function useGameMoveSession(props) {
   const [teachingBusy, teachingBusySetter] = useState(false);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
   const globalMe = useStore((state) => state.globalMe);
+  const sessionMe = useMemo(
+    () => getEffectiveSessionMe(globalMe),
+    [globalMe]
+  );
   const [gameRec, gameRecSetter] = useState(undefined);
   const [showCustomCSS, showCustomCSSSetter] = useState(false);
   const [customCSS, customCSSSetter] = useStorageState("custom-css", {});
@@ -212,6 +226,7 @@ export function useGameMoveSession(props) {
   const focusReady = focus !== null;
   const explorerRef = useRef();
   const globalMeRef = useRef();
+  const sessionMeRef = useRef();
   const navigateRef = useRef();
   const displaySettingsRef = useRef();
   const tRef = useRef();
@@ -380,6 +395,7 @@ export function useGameMoveSession(props) {
 
   explorerRef.current = explorer;
   globalMeRef.current = globalMe;
+  sessionMeRef.current = sessionMe;
   navigateRef.current = navigate;
   displaySettingsRef.current = displaySettings;
   tRef.current = t;
@@ -404,7 +420,7 @@ export function useGameMoveSession(props) {
     processNewMove(
       result,
       explorerRef.current,
-      globalMeRef.current,
+      sessionMeRef.current,
       focusRef.current,
       gameRef,
       movesRef,
@@ -600,6 +616,9 @@ export function useGameMoveSession(props) {
   };
 
   useEffect(() => {
+    if (!replayReady) {
+      return;
+    }
     console.log("Fetching game data");
 
     // We have some evidence that get_game sometimes fails to connect (but report_problem succeeds), implying that a retry might help. Submitting the attempt count
@@ -765,10 +784,14 @@ export function useGameMoveSession(props) {
     commentsSetter,
     commentsTooLongSetter,
     refresh,
+    replayReady,
   ]);
 
   useEffect(() => {
     const handler = (event) => {
+      if (shouldIgnoreGameRefreshForReplay(event.detail)) {
+        return;
+      }
       if (gameUpdateMatchesGame(event.detail, metaGame, gameID)) {
         setRefresh((val) => val + 1);
       }
@@ -807,7 +830,7 @@ export function useGameMoveSession(props) {
   useEffect(() => {
     if (dbgame === null) return;
 
-    const me = globalMeRef.current;
+    const me = sessionMeRef.current;
     const game = dbgame;
     const priorGame = gameRef.current;
     const exploration =
@@ -923,6 +946,23 @@ export function useGameMoveSession(props) {
       displayForRender,
       navigate
     );
+    if (isReplayActive()) {
+      const meForReplay = sessionMeRef.current;
+      applyReplayBundleExploration(
+        gameRef.current,
+        explorationRef.current.nodes,
+        meForReplay,
+        errorSetter,
+        errorMessageRef
+      );
+      if (isExplorer(false, meForReplay)) {
+        explorerSetter(true);
+        applyPlayerSessionFields(gameRef.current, meForReplay, true);
+      }
+      bumpExploration();
+      explorationFetchingRef.current = true;
+      explorationFetchedSetter(true);
+    }
     const newMoveCount = explorationRef.current.nodes.length;
     const newMovePlayed = newMoveCount > priorMoveCount;
     const shouldRestoreFocus =
@@ -988,7 +1028,7 @@ export function useGameMoveSession(props) {
 
   useEffect(() => {
     if (dbgame === null || gameRef.current === null) return;
-    const me = globalMeRef.current;
+    const me = sessionMeRef.current;
     const game = gameRef.current;
     processNewSettings(
       game.me > -1
@@ -1015,7 +1055,7 @@ export function useGameMoveSession(props) {
     ) {
       return;
     }
-    const me = globalMeRef.current;
+    const me = sessionMeRef.current;
     const game = gameRef.current;
     if (!game) return;
     const perGameSettings =
@@ -1036,7 +1076,7 @@ export function useGameMoveSession(props) {
   useEffect(() => {
     if (dbgame === null) return;
     const game = dbgame;
-    const me = globalMeRef.current;
+    const me = sessionMeRef.current;
     if (game.toMove === "" || game.players.some((p) => p.id === me?.id)) {
       return;
     }
@@ -1183,7 +1223,7 @@ export function useGameMoveSession(props) {
               gameRef.current,
               explorationRef.current.nodes,
               data,
-              globalMe,
+              sessionMeRef.current,
               errorSetter,
               errorMessageRef
             );
@@ -1194,6 +1234,8 @@ export function useGameMoveSession(props) {
         console.log(error);
         errorMessageRef.current = `get_exploration, error.message: ${error.message}`;
         errorSetter(true);
+      } finally {
+        explorationFetchingRef.current = false;
       }
     }
 
@@ -1203,6 +1245,32 @@ export function useGameMoveSession(props) {
       explorationFetchingRef.current = true;
       explorationFetchedSetter(true);
       console.log("fetching public exploration");
+      const replayPublic = await maybeReplayOpenQuery(
+        "get_public_exploration",
+        { game: gameID }
+      );
+      if (replayPublic !== null) {
+        if (replayPublic.length > 0) {
+          const data = replayPublic.map((d) => {
+            if (d && typeof d.tree === "string") {
+              d.tree = JSON.parse(d.tree);
+            }
+            return d;
+          });
+          mergePublicExploration(
+            gameRef.current,
+            explorationRef.current.nodes,
+            data
+          );
+          fixMoveOutcomes(
+            explorationRef.current.nodes,
+            explorationRef.current.nodes.length - 1
+          );
+          bumpExploration();
+        }
+        explorationFetchingRef.current = false;
+        return;
+      }
       var url = new URL(API_ENDPOINT_OPEN);
       url.searchParams.append("query", "get_public_exploration");
       url.searchParams.append("game", gameID);
@@ -1309,7 +1377,9 @@ export function useGameMoveSession(props) {
     if (
       focusReady &&
       !explorationFetched &&
-      (gameRef.current.canExplore || gameRef.current.gameOver)
+      (gameRef.current.canExplore ||
+        gameRef.current.gameOver ||
+        isReplayActive())
     ) {
       if (gameRef.current.gameOver) {
         fetchPublicExploration();
@@ -1376,8 +1446,10 @@ export function useGameMoveSession(props) {
       currentGame,
       nextFocus
     );
+    const me = sessionMeRef.current;
     if (
-      !(isExplorer(explorer, globalMe) && currentGame.canExplore) &&
+      !isReplayActive() &&
+      !(isExplorer(explorer, me) && currentGame.canExplore) &&
       nextFocus.moveNumber === explorationRef.current.nodes.length - 1
     ) {
       node.children = []; // if the user doesn't want to explore, don't confuse them with even 1 move variation.
@@ -1455,13 +1527,13 @@ export function useGameMoveSession(props) {
         ? explorationRef.current.nodes[priorNodeCount - 1]
         : null;
     const perGameSettings =
-      game0.me > -1 && globalMe
-        ? game0.players.find((p) => p.id === globalMe.id)?.settings
+      game0.me > -1 && sessionMe
+        ? game0.players.find((p) => p.id === sessionMe.id)?.settings
         : {};
     setupGame(
       game0,
       gameRef,
-      globalMe,
+      sessionMe,
       explorer,
       partialMoveRenderRef,
       renderrepSetter,
@@ -1475,7 +1547,7 @@ export function useGameMoveSession(props) {
       canPublishSetter,
       resolveDisplay(
         perGameSettings,
-        globalMe?.settings,
+        sessionMe?.settings,
         game0.metaGame,
         sessionDisplayOverride
       ),
@@ -2023,13 +2095,13 @@ export function useGameMoveSession(props) {
           ? explorationRef.current.nodes[priorNodeCount - 1]
           : null;
       const perGameSettings =
-        game0.me > -1 && globalMe
-          ? game0.players.find((p) => p.id === globalMe.id)?.settings
+        game0.me > -1 && sessionMe
+          ? game0.players.find((p) => p.id === sessionMe.id)?.settings
           : {};
       setupGame(
         game0,
         gameRef,
-        globalMe,
+        sessionMe,
         explorer,
         partialMoveRenderRef,
         renderrepSetter,
@@ -2043,7 +2115,7 @@ export function useGameMoveSession(props) {
         canPublishSetter,
         resolveDisplay(
           perGameSettings,
-          globalMe?.settings,
+          sessionMe?.settings,
           game0.metaGame,
           sessionDisplayOverride
         ),
@@ -2344,13 +2416,13 @@ export function useGameMoveSession(props) {
           } else {
             let game0 = parsed.data;
             const perGameSettings =
-              game0.me > -1 && globalMe
-                ? game0.players.find((p) => p.id === globalMe.id)?.settings
+              game0.me > -1 && sessionMe
+                ? game0.players.find((p) => p.id === sessionMe.id)?.settings
                 : {};
             setupGame(
               game0,
               gameRef,
-              globalMe,
+              sessionMe,
               explorer,
               partialMoveRenderRef,
               renderrepSetter,
@@ -2364,7 +2436,7 @@ export function useGameMoveSession(props) {
               canPublishSetter,
               resolveDisplay(
                 perGameSettings,
-                globalMe?.settings,
+                sessionMe?.settings,
                 game0.metaGame,
                 sessionDisplayOverride
               ),
@@ -2651,7 +2723,7 @@ export function useGameMoveSession(props) {
     setCanPublish(
       game,
       explorationRef.current.nodes,
-      globalMe,
+      sessionMe,
       canPublishSetter
     );
     explorerSetter(true);
@@ -2695,7 +2767,7 @@ export function useGameMoveSession(props) {
               gameRef.current,
               explorationRef.current.nodes,
               data,
-              globalMe,
+              sessionMe,
               errorSetter,
               errorMessageRef
             );
@@ -2797,19 +2869,10 @@ export function useGameMoveSession(props) {
   }, [commentingCompletedGame, comments, explorationVersion]);
 
   const game = gameRef.current;
-  let toMove;
-  if (!error && focus && game) {
-    if (game.simultaneous) {
-      toMove = game.toMove;
-    } else {
-      const node = getFocusNode(
-        explorationRef.current.nodes,
-        gameRef.current,
-        focus
-      );
-      toMove = node?.toMove;
-    }
-  }
+  const toMove =
+    !error && focus && game
+      ? resolvePlayUiToMove(game, explorationRef.current?.nodes, focus)
+      : "";
 
   return {
     moveBasePath,
@@ -2888,6 +2951,7 @@ export function useGameMoveSession(props) {
     getFocusNode,
     handlePlaygroundExport,
     globalMe,
+    sessionPlayerMe: sessionMe,
     chatComments,
     comments,
     explorationVersion,

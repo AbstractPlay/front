@@ -2551,6 +2551,15 @@ span.hardTime::after {
     }
   }
 
+.gamemove-replay-banner {
+  background: var(--tag-background-color);
+  border: 1px solid var(--tag-background-color);
+  color: var(--main-font-color);
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+}
+
 .game-move-experiment-banner {
   margin-bottom: 1rem;
 }
