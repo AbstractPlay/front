@@ -31,6 +31,11 @@ import {
   ExplorationPlayerWinMarkButton,
   ExplorationUndecidedMarkButton,
 } from "./ExplorationOutcomeIndicator.js";
+import TeachingMoveControls from "./TeachingMoveControls";
+import {
+  isTeachingUndoReviewAtCurrentTip,
+  showPieSeatSwapNotice,
+} from "../../lib/teachingModeChallenge";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -118,6 +123,8 @@ function MoveEntry(props) {
   const gameRec = props.gameRec;
   const forceUndoRight = props.forceUndoRight;
   const submitting = props.submitting;
+  const teachingBusy = props.teachingBusy ?? false;
+  const teachingMoveHandlers = props.teachingMoveHandlers;
   const handleMove = props.handlers[0];
   const handleMark = props.handlers[1];
   const handleSubmit = props.handlers[2];
@@ -243,7 +250,7 @@ function MoveEntry(props) {
 
   if (focus) {
     const moveToSubmit = getPendingSubmitMove(exploration, focus, {
-      canSubmit: game.canSubmit,
+      canSubmit: game.canSubmit && !game.teachingUndo,
     });
 
     let uiState = null;
@@ -352,6 +359,8 @@ function MoveEntry(props) {
       drawOffered &&
       game.players.reduce((acc, p) => acc + (p.draw ? 1 : 0), 0) ===
         game.players.length - 1;
+    const teachingReview =
+      toMove !== "" && isTeachingUndoReviewAtCurrentTip(game, uiState);
 
     return (
       <>
@@ -381,13 +390,25 @@ function MoveEntry(props) {
           )}
           <span className="playerName">{mover}</span>
         </p>
-        {!game.pie ||
-        (typeof engine?.isPieTurn === "function" && !engine?.isPieTurn()) ||
-        (typeof engine?.isPieTurn !== "function" &&
-          engine?.stack?.length !== 2) ||
-        game.pieInvoked ? null : (
+        {teachingReview && teachingMoveHandlers ? (
+          <TeachingMoveControls
+            game={game}
+            globalMe={globalMe}
+            uiState={uiState}
+            submitting={submitting}
+            teachingBusy={teachingBusy}
+            onGrant={teachingMoveHandlers.grant}
+            onKeep={teachingMoveHandlers.keep}
+            onUndo={teachingMoveHandlers.undo}
+            t={t}
+            buttonClassName="button apButton"
+          />
+        ) : null}
+        {!teachingReview && (
+        <>
+        {showPieSeatSwapNotice(game, engine) ? (
           <p style={{ marginBottom: "1em" }}>{t("CanPie")}</p>
-        )}
+        ) : null}
         {moveToSubmit === null ? null : (
           <p style={{ marginBottom: "1em" }} className="yourTurn myTurn">
             {t("PendingSubmit")}
@@ -618,6 +639,20 @@ function MoveEntry(props) {
         ) : (
           ""
         )}
+        {teachingMoveHandlers ? (
+          <TeachingMoveControls
+            game={game}
+            globalMe={globalMe}
+            uiState={uiState}
+            submitting={submitting}
+            teachingBusy={teachingBusy}
+            onGrant={teachingMoveHandlers.grant}
+            onKeep={teachingMoveHandlers.keep}
+            onUndo={teachingMoveHandlers.undo}
+            t={t}
+            buttonClassName="button apButton"
+          />
+        ) : null}
         <div className="submitOrMark game-move-explore-mark-tools">
           {moveToSubmit !== null && focus.exPath.length === 1 && !submitting ? (
             <button
@@ -758,6 +793,8 @@ function MoveEntry(props) {
             ""
           )}
         </div>
+        </>
+        )}
         <Modal
           show={showDrawOfferConfirm}
           title={t("ConfirmDrawOffer")}

@@ -62,9 +62,27 @@ export function applyPlayerSessionFields(game0, me, explorer) {
     game0.canExplore =
       sessionExplorationAllowed(game0) && isExplorer(explorer, me);
   }
+  applyTeachingReviewPlayLocks(game0);
+  if (game0.teachingMode === true) {
+    game0.canPie = false;
+  }
+}
+
+/** During teaching undo review, only keep/undo RPCs — hide move/pie/resign affordances. */
+export function applyTeachingReviewPlayLocks(game0) {
+  if (!game0?.teachingUndo) {
+    return;
+  }
+  game0.canSubmit = false;
+  game0.canExplore = false;
+  game0.canPie = false;
 }
 
 export function populateMovesRefIfNeeded(game, movesRef, engineRef) {
+  if (game.teachingUndo) {
+    movesRef.current = null;
+    return;
+  }
   if (
     game.noMoves ||
     !(game.canSubmit || (!game.simultaneous && game.numPlayers === 2))
@@ -94,6 +112,9 @@ export function syncGameSessionFromApi({
   gameRef,
 }) {
   const merged = { ...game };
+  merged.teachingMode = game.teachingMode;
+  merged.teachingUndo = game.teachingUndo;
+  merged.teachingPlyStart = game.teachingPlyStart;
   if (priorGame?.colors !== undefined) merged.colors = priorGame.colors;
   if (priorGame) {
     merged.canPie = priorGame.canPie;
@@ -568,6 +589,9 @@ export function processNewMove(
   navigate,
   t
 ) {
+  if (gameRef.current?.teachingUndo) {
+    return;
+  }
   // if the move is complete, partial and renderable, or a UI-only update (e.g. scrollbar)
   if (
     (newmove.valid && newmove.complete > 0 && newmove.move !== "") ||

@@ -6,6 +6,7 @@ import ExplorationToolbar from "./ExplorationToolbar";
 import { NoMoves, safeGetButtons, sortLenAlpha } from "./moveEntryUtils";
 import { sessionExplorationAllowed } from "../../../lib/effectiveGameFlags";
 import { resolveCustomButtonLabel } from "../../../lib/customButtonLabel";
+import TeachingMoveControls from "../TeachingMoveControls";
 
 function CardMovePath(props) {
   const state = useDockMoveEntry(props);
@@ -38,6 +39,9 @@ function CardMovePath(props) {
     showBotPing,
     handlers,
     showDrawOfferConfirm,
+    teachingBusy,
+    teachingMoveHandlers,
+    teachingReview,
   } = state;
 
   const canShowExplore =
@@ -46,7 +50,7 @@ function CardMovePath(props) {
     !misc?.explorer &&
     sessionExplorationAllowed(game);
 
-  const showChooser = showMoveControls;
+  const showChooser = showMoveControls && !teachingReview;
 
   return (
     <section
@@ -69,10 +73,24 @@ function CardMovePath(props) {
         </p>
       ) : null}
 
-      {moveToSubmit !== null ? (
+      {moveToSubmit !== null && !teachingReview ? (
         <p className="game-move-card-move-path__pending">
           {t("PendingSubmit")}
         </p>
+      ) : null}
+
+      {teachingReview && teachingMoveHandlers ? (
+        <TeachingMoveControls
+          game={game}
+          globalMe={globalMe}
+          uiState={uiState}
+          submitting={submitting}
+          teachingBusy={teachingBusy}
+          onGrant={teachingMoveHandlers.grant}
+          onKeep={teachingMoveHandlers.keep}
+          onUndo={teachingMoveHandlers.undo}
+          t={t}
+        />
       ) : null}
 
       {showChooser ? (
@@ -172,6 +190,8 @@ function CardMovePath(props) {
         </div>
       ) : null}
 
+      {teachingReview ? null : (
+      <>
       <div className="game-move-card-move-path__primary">
         {moveToSubmit !== null && focus.exPath.length === 1 && !submitting ? (
           <button
@@ -273,8 +293,10 @@ function CardMovePath(props) {
           {t("InvokePie")}
         </button>
       ) : null}
+      </>
+      )}
 
-      {showBotPing ? (
+      {!teachingReview && showBotPing ? (
         <button
           type="button"
           className="button is-small apButtonNeutral"
@@ -284,6 +306,7 @@ function CardMovePath(props) {
         </button>
       ) : null}
 
+      {teachingReview ? null : (
       <div className="game-move-card-move-path__secondary buttons">
         {misc?.canPublish !== "no" ? (
           <button
@@ -315,8 +338,10 @@ function CardMovePath(props) {
           />
         ) : null}
       </div>
+      )}
 
-      {(focus.exPath.length > 0 && game.canExplore) || uiState !== 0 ? (
+      {!teachingReview &&
+      ((focus.exPath.length > 0 && game.canExplore) || uiState !== 0) ? (
         <ExplorationToolbar
           t={t}
           game={game}

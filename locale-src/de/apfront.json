@@ -231,6 +231,10 @@
     "src": "Rated?",
     "out": "Gewertet?"
   },
+  "ChooseTeachingMode": {
+    "src": "Teaching mode?",
+    "out": "Lehrmodus?"
+  },
   "Claim": {
     "src": "Claim",
     "out": "Beanspruchen"
@@ -1043,6 +1047,10 @@
     "src": "Only show starred games",
     "out": "Nur Spiele mit Stern anzeigen"
   },
+  "ForcedTeachingUnrated": {
+    "src": "Teaching games are always unrated.",
+    "out": "Lehrspiele sind immer ungewertet."
+  },
   "ForcedUnrated": {
     "src": "This game will not be rated due to selected variants.",
     "out": "Dieses Spiel wird aufgrund ausgewählter Varianten nicht gewertet."
@@ -1174,6 +1182,14 @@
   "HelpRated": {
     "src": "This game will be rated.",
     "out": "Dieses Spiel wird gewertet."
+  },
+  "HelpTeachingModeFalse": {
+    "src": "Standard play without teaching undo.",
+    "out": "Standardspiel ohne Lehr-Rückgängigmachen."
+  },
+  "HelpTeachingModeTrue": {
+    "src": "Cooperative undo: either player can let the opponent review, keep, or rewind the last move.",
+    "out": "Kooperatives Rückgängigmachen: Jeder Spieler kann dem Gegner erlauben, den letzten Zug zu überprüfen, zu behalten oder zurückzunehmen."
   },
   "HelpUnRated": {
     "src": "This game will not be rated.",
@@ -1914,6 +1930,30 @@
   "TableView": {
     "src": "Table",
     "out": "Tabelle"
+  },
+  "TeachingGameLabel": {
+    "src": "Teaching (unrated)",
+    "out": "Lehrspiel (ungewertet)"
+  },
+  "TeachingGrantUndo": {
+    "src": "Allow opponent to undo and reselect",
+    "out": "Gegner Zug zurücknehmen und neu wählen lassen"
+  },
+  "TeachingKeepMove": {
+    "src": "Keep my move",
+    "out": "Meinen Zug behalten"
+  },
+  "TeachingReviewPrompt": {
+    "src": "Your opponent offered a teaching review. Keep the move or undo and play again.",
+    "out": "Dein Gegner hat eine Lehranalyse angeboten. Behalte den Zug bei oder mache ihn rückgängig und spiele erneut."
+  },
+  "TeachingUndoMove": {
+    "src": "Undo and choose again",
+    "out": "Rückgängig machen und neu wählen"
+  },
+  "TeachingWaitingReview": {
+    "src": "Waiting for your opponent to review your undo offer.",
+    "out": "Warte darauf, dass der Gegner dein Angebot zum Rückgängigmachen prüft."
   },
   "Time": {
     "src": "Time",
@@ -4858,6 +4898,10 @@
   "gameMove.moveTree.legendMainline": {
     "src": "Played moves",
     "out": "Gespielte Züge"
+  },
+  "gameMove.teaching": {
+    "src": "teaching",
+    "out": "Lehrspiel"
   },
   "gameMove.tournamentLink": {
     "src": "tournament",

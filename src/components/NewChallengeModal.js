@@ -26,6 +26,11 @@ import { useVariantSelectionValidity } from "../hooks/useVariantSelectionValidit
 import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
 import { buildHighestGlickoMap } from "../lib/glickoMatchOdds";
 import { useChallengeOpponentFilters } from "../hooks/useChallengeOpponentFilters";
+import {
+  isTeachingChallengeEligible,
+  challengeRatedForPayload,
+  challengeTeachingModeForPayload,
+} from "../lib/teachingModeChallenge";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
@@ -64,6 +69,10 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const [rated, ratedSetter] = useStorageState("new-challenge-rated", true); // rated or not
   const [noExplore, noExploreSetter] = useStorageState(
     "new-challenge-noExplore",
+    false
+  );
+  const [teachingMode, teachingModeSetter] = useStorageState(
+    "new-challenge-teachingMode",
     false
   );
   const [standing, standingSetter] = useState(false); // Standing challenge or not.
@@ -110,6 +119,29 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     setForceUnrated(forced);
   }, [metaGame, selectedVariants]);
 
+  const teachingEligible = useMemo(
+    () => isTeachingChallengeEligible(metaGame, playerCount, selectedVariants),
+    [metaGame, playerCount, selectedVariants]
+  );
+
+  useEffect(() => {
+    if (!show) {
+      return;
+    }
+    if (!teachingEligible) {
+      teachingModeSetter(false);
+    }
+  }, [show, teachingEligible, teachingModeSetter]);
+
+  useEffect(() => {
+    if (!show) {
+      return;
+    }
+    if (teachingMode === true) {
+      ratedSetter(false);
+    }
+  }, [show, teachingMode, ratedSetter]);
+
   const directChallengeOpponentPick =
     show &&
     globalMe?.id &&
@@ -148,6 +180,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     setOnlySee("all");
     ratedSetter(true);
     noExploreSetter(false);
+    teachingModeSetter(false);
   };
 
   const setPlayerCount = useCallback(
@@ -403,6 +436,10 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     noExploreSetter(!noExplore);
   };
 
+  const handleTeachingModeChange = (event) => {
+    teachingModeSetter(event.target.checked);
+  };
+
   const handleChallenge = () => {
     if (metaGame === null) {
       errorSetter(t("SelectAGame"));
@@ -466,8 +503,16 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       clockInc: clockInc,
       clockMax: clockMax,
       clockHard: clockHard,
-      rated: forceUnrated ? false : rated,
+      rated: challengeRatedForPayload({
+        rated,
+        forceUnrated,
+        teachingMode: teachingEligible && teachingMode,
+      }),
       noExplore: noExplore,
+      teachingMode: challengeTeachingModeForPayload(
+        teachingMode,
+        teachingEligible
+      ),
       comment: comment,
     });
     handleNewChallengeClose();
@@ -882,6 +927,26 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                 {noExplore ? t("HelpNoExploreTrue") : t("HelpNoExploreFalse")}
               </p>
             </div>
+            {teachingEligible ? (
+              <div className="field">
+                <div className="control">
+                  <label className="checkbox">
+                    <input
+                      type="checkbox"
+                      id="teachingMode"
+                      checked={teachingMode === true}
+                      onChange={handleTeachingModeChange}
+                    />
+                    {t("ChooseTeachingMode")}
+                  </label>
+                </div>
+                <p className="help">
+                  {teachingMode
+                    ? t("HelpTeachingModeTrue")
+                    : t("HelpTeachingModeFalse")}
+                </p>
+              </div>
+            ) : null}
           </Fragment>
         )}
         {metaGame === null || playerCount !== 2 || soloHandoffPath ? null : (
@@ -893,7 +958,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                   id="rated"
                   checked={rated}
                   onChange={handleRatedChange}
-                  disabled={forceUnrated}
+                  disabled={forceUnrated || teachingMode}
                 />
                 {t("ChooseRated")}
               </label>
@@ -901,6 +966,8 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             <p className="help">
               {forceUnrated
                 ? t("ForcedUnrated")
+                : teachingMode
+                ? t("ForcedTeachingUnrated")
                 : rated
                 ? t("HelpRated")
                 : t("HelpUnRated")}

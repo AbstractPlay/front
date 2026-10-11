@@ -422,6 +422,7 @@ function StandingChallenges(props) {
           fillableDirect: rec.fillableDirect === true,
           players: rec.players.filter((p) => p.id !== rec.challenger?.id),
           rated: rec.rated,
+          teachingMode: rec.teachingMode === true,
           seating: rec.seating,
           variants: expandVariantsForGame(rowMetaGame, variantUids),
           variantUids,
@@ -637,7 +638,12 @@ function StandingChallenges(props) {
       }),
       columnHelper.accessor("rated", {
         header: t("tables.rated"),
-        cell: (props) => (props.getValue() ? t("Yes") : t("No")),
+        cell: (props) =>
+          props.row.original.teachingMode
+            ? t("TeachingGameLabel")
+            : props.getValue()
+              ? t("Yes")
+              : t("No"),
       }),
       columnHelper.accessor("noExplore", {
         header: t("tables.explorationDisabled"),

@@ -173,6 +173,7 @@ export function useGameMoveSession(props) {
   const [comments, commentsSetter] = useState([]);
   const [commentsTooLong, commentsTooLongSetter] = useState(false);
   const [submitting, submittingSetter] = useState(false);
+  const [teachingBusy, teachingBusySetter] = useState(false);
   const [explorationFetched, explorationFetchedSetter] = useState(false);
   const globalMe = useStore((state) => state.globalMe);
   const [gameRec, gameRecSetter] = useState(undefined);
@@ -868,6 +869,9 @@ export function useGameMoveSession(props) {
       if (game.rated === false) {
         parentheticalSetter((val) => [...val, t("gameMove.unrated")]);
       }
+      if (game.teachingMode === true) {
+        parentheticalSetter((val) => [...val, t("gameMove.teaching")]);
+      }
       if (game.noExplore !== undefined && game.noExplore === true) {
         parentheticalSetter((val) => [
           ...val,
@@ -1444,8 +1448,90 @@ export function useGameMoveSession(props) {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   }
 
+  const applyAuthGamePayload = (game0) => {
+    const priorNodeCount = explorationRef.current?.nodes?.length ?? 0;
+    const priorTip =
+      priorNodeCount > 0
+        ? explorationRef.current.nodes[priorNodeCount - 1]
+        : null;
+    const perGameSettings =
+      game0.me > -1 && globalMe
+        ? game0.players.find((p) => p.id === globalMe.id)?.settings
+        : {};
+    setupGame(
+      game0,
+      gameRef,
+      globalMe,
+      explorer,
+      partialMoveRenderRef,
+      renderrepSetter,
+      engineRef,
+      statusRef,
+      movesRef,
+      focusSetter,
+      explorationRef,
+      moveSetter,
+      gameRecSetter,
+      canPublishSetter,
+      resolveDisplay(
+        perGameSettings,
+        globalMe?.settings,
+        game0.metaGame,
+        sessionDisplayOverride
+      ),
+      navigate
+    );
+    const newNodeCount = explorationRef.current.nodes.length;
+    if (
+      gameRef.current.canExplore &&
+      priorTip &&
+      newNodeCount > priorNodeCount
+    ) {
+      mergeExistingExploration(
+        priorNodeCount - 1,
+        priorTip,
+        explorationRef.current.nodes
+      );
+    }
+    if (gameRef.current.customColours) {
+      publishGameColors({ state: engineRef.current.state() });
+    }
+    dbgameSetter(game0);
+  };
+
+  const runTeachingRpc = async (query) => {
+    teachingBusySetter(true);
+    try {
+      const res = await callAuthApi(query, {
+        id: gameRef.current.id,
+        metaGame: gameRef.current.metaGame,
+        cbit,
+      });
+      if (!res) return;
+      const parsed = await parseAuthResponse(res);
+      if (!parsed.ok) {
+        throw new Error(parsed.error);
+      }
+      applyAuthGamePayload(parsed.data);
+    } catch (err) {
+      setError(`${query} failed with: ${err.message}`);
+    } finally {
+      teachingBusySetter(false);
+    }
+  };
+
+  const handleTeachingGrant = () => runTeachingRpc("teaching_grant_undo");
+  const handleTeachingKeep = () => runTeachingRpc("teaching_keep_move");
+  const handleTeachingUndo = () => runTeachingRpc("teaching_undo_move");
+
   // The user has clicked the "Invoke pie rule" button
   const handlePie = async () => {
+    if (
+      gameRef.current?.teachingUndo ||
+      gameRef.current?.teachingMode === true
+    ) {
+      return;
+    }
     console.log("Pie invoked!");
     try {
       const res = await callAuthApi("invoke_pie", {
@@ -1467,6 +1553,9 @@ export function useGameMoveSession(props) {
 
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
   const handleMove = (value) => {
+    if (gameRef.current?.teachingUndo) {
+      return;
+    }
     let gameEngineTmp = createEngineAtFocus(
       gameRef.current,
       explorationRef.current.nodes,
@@ -1892,6 +1981,11 @@ export function useGameMoveSession(props) {
 
   const submitMove = async (m, draw) => {
     try {
+      if (gameRef.current.teachingUndo) {
+        submittingSetter(false);
+        setError("Finish teaching review (keep or undo) before playing.");
+        return;
+      }
       if (gameRef.current.gameOver || !gameRef.current.canSubmit) {
         submittingSetter(false);
         setError("It is not your turn or this game is over.");
@@ -1923,8 +2017,11 @@ export function useGameMoveSession(props) {
       }
       setMyMove((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
       let game0 = parsed.data;
-      const moveNum = explorationRef.current.nodes.length - 1;
-      const cur_exploration = explorationRef.current.nodes[moveNum];
+      const priorNodeCount = explorationRef.current?.nodes?.length ?? 0;
+      const priorTip =
+        priorNodeCount > 0
+          ? explorationRef.current.nodes[priorNodeCount - 1]
+          : null;
       const perGameSettings =
         game0.me > -1 && globalMe
           ? game0.players.find((p) => p.id === globalMe.id)?.settings
@@ -1952,10 +2049,15 @@ export function useGameMoveSession(props) {
         ),
         navigate
       );
-      if (gameRef.current.canExplore) {
+      const newNodeCount = explorationRef.current.nodes.length;
+      if (
+        gameRef.current.canExplore &&
+        priorTip &&
+        newNodeCount > priorNodeCount
+      ) {
         mergeExistingExploration(
-          moveNum,
-          cur_exploration,
+          priorNodeCount - 1,
+          priorTip,
           explorationRef.current.nodes
         );
       }
@@ -2188,6 +2290,9 @@ export function useGameMoveSession(props) {
     handlePie,
     handleDeleteExploration,
     handlePremove,
+    handleTeachingGrant,
+    handleTeachingKeep,
+    handleTeachingUndo,
   };
 
   const handleClosePremoveConfirm = () => {
@@ -2737,6 +2842,12 @@ export function useGameMoveSession(props) {
     move,
     moveEntryHandlers,
     submitting,
+    teachingBusy,
+    teachingMoveHandlers: {
+      grant: handleTeachingGrant,
+      keep: handleTeachingKeep,
+      undo: handleTeachingUndo,
+    },
     gameRec,
     canPublish,
     handlePublishExploration,

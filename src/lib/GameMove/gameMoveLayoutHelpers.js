@@ -120,10 +120,14 @@ export function buildMoveEntryProps(session, { forceUndoRight = false } = {}) {
     explorationRef,
     focus,
     submitting,
+    teachingBusy,
+    teachingMoveHandlers,
     gameRec,
     screenWidth,
     moveEntryHandlers,
   } = session;
+
+  const busy = submitting || teachingBusy;
 
   return {
     move,
@@ -133,7 +137,9 @@ export function buildMoveEntryProps(session, { forceUndoRight = false } = {}) {
     moves: movesRef.current,
     exploration: explorationRef.current.nodes,
     focus,
-    submitting,
+    submitting: busy,
+    teachingBusy,
+    teachingMoveHandlers,
     gameRec,
     forceUndoRight,
     screenWidth,

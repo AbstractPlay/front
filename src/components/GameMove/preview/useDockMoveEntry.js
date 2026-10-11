@@ -9,6 +9,7 @@ import { formatPlayerDisplayName, isClientBotTurn } from "../../Bots/botUtils";
 import { getFocusNode } from "./moveEntryUtils";
 import { formatSoloOutcome, isSoloGame } from "../../../lib/soloPlay";
 import { isPlayerTimedOut } from "../../../lib/gameClockDisplay";
+import { isTeachingUndoReviewAtCurrentTip } from "../../../lib/teachingModeChallenge";
 
 export function useDockMoveEntry(props) {
   const [drawoffer, drawofferSetter] = useState(false);
@@ -25,6 +26,8 @@ export function useDockMoveEntry(props) {
   const engine = props.engine;
   const gameRec = props.gameRec;
   const submitting = props.submitting;
+  const teachingBusy = props.teachingBusy ?? false;
+  const teachingMoveHandlers = props.teachingMoveHandlers;
   const handleMove = props.handlers[0];
   const handleMark = props.handlers[1];
   const handleSubmit = props.handlers[2];
@@ -125,10 +128,6 @@ export function useDockMoveEntry(props) {
     return { ready: false };
   }
 
-  const moveToSubmit = getPendingSubmitMove(exploration, focus, {
-    canSubmit: game.canSubmit,
-  });
-
   let uiState = null;
   if (focus.moveNumber < exploration.length - 1) {
     uiState = -1;
@@ -140,6 +139,12 @@ export function useDockMoveEntry(props) {
   } else {
     uiState = 1;
   }
+
+  const teachingReview = isTeachingUndoReviewAtCurrentTip(game, uiState);
+
+  const moveToSubmit = getPendingSubmitMove(exploration, focus, {
+    canSubmit: game.canSubmit && !game.teachingUndo,
+  });
 
   let mover = "";
   let img = null;
@@ -202,7 +207,7 @@ export function useDockMoveEntry(props) {
   }
 
   let canClaimTimeout = false;
-  if (uiState === 0 && !submitting) {
+  if (uiState === 0 && !submitting && !teachingReview) {
     const now = Date.now();
     if (game.simultaneous) {
       canClaimTimeout =
@@ -237,12 +242,14 @@ export function useDockMoveEntry(props) {
       game.players.length - 1;
 
   const showMoveControls =
+    !teachingReview &&
     focus.canExplore &&
     (moves === null ||
       (Array.isArray(moves) && moves.length > 0) ||
       game.customButtons);
 
   const showBotPing =
+    !teachingReview &&
     uiState === 0 &&
     toMove !== "" &&
     isClientBotTurn(game, toMove, allUsers) &&
@@ -259,6 +266,10 @@ export function useDockMoveEntry(props) {
     focus,
     engine,
     submitting,
+    teachingBusy,
+    teachingMoveHandlers,
+    globalMe,
+    teachingReview,
     uiState,
     mover,
     img,
@@ -270,7 +281,6 @@ export function useDockMoveEntry(props) {
     gameOverNonLeafNode,
     moveState,
     inputValue,
-    globalMe,
     connections,
     showMoveControls,
     showBotPing,

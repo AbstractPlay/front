@@ -50,6 +50,8 @@ export default function GameMoveClassicLayout({ session }) {
     move,
     moveEntryHandlers,
     submitting,
+    teachingBusy,
+    teachingMoveHandlers,
     gameRec,
     canPublish,
     handlePublishExploration,
@@ -356,7 +358,9 @@ export default function GameMoveClassicLayout({ session }) {
                           engine={engineRef.current}
                           exploration={explorationRef.current.nodes}
                           focus={focus}
-                          submitting={submitting}
+                          submitting={submitting || teachingBusy}
+                          teachingBusy={teachingBusy}
+                          teachingMoveHandlers={teachingMoveHandlers}
                           gameRec={gameRec}
                           forceUndoRight={true}
                           screenWidth={screenWidth}
@@ -486,7 +490,9 @@ export default function GameMoveClassicLayout({ session }) {
                   moves={movesRef.current}
                   exploration={explorationRef.current.nodes}
                   focus={focus}
-                  submitting={submitting}
+                  submitting={submitting || teachingBusy}
+                  teachingBusy={teachingBusy}
+                  teachingMoveHandlers={teachingMoveHandlers}
                   gameRec={gameRec}
                   forceUndoRight={false}
                   screenWidth={screenWidth}
