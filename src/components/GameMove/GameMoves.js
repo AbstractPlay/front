@@ -46,6 +46,10 @@ import {
   shouldApplyLivePartialPreview,
 } from "../../lib/GameMove/livePartialMove";
 import { sessionExplorationAllowed } from "../../lib/effectiveGameFlags";
+import {
+  filterPathCellsForSeat,
+  resolveMoveTablePlayerSeats,
+} from "../../lib/GameMove/moveTablePathCells";
 
 function syncRowFocusClasses(cells, focus) {
   return cells.map((cell) => {
@@ -78,6 +82,8 @@ function GameMoves(props) {
   let exploration = props.exploration;
   const handlePlaygroundExport = props.handlePlaygroundExport;
   let handleGameMoveClick = props.handleGameMoveClick;
+  const globalMe = props.globalMe;
+  const moveTableSeats = resolveMoveTablePlayerSeats(game, globalMe);
   const [validGames, validGamesSetter] = useState([]);
   const allUsers = useStore((state) => state.users);
 
@@ -586,13 +592,20 @@ function GameMoves(props) {
             } else if (cells.length > 1) {
               cells = syncRowFocusClasses(cells, focus);
             }
+            cells = filterPathCellsForSeat(cells, {
+              seatIdx: j,
+              movenum,
+              layout,
+              playerSeat: moveTableSeats.playerSeat,
+              toMoveSeat: moveTableSeats.toMoveSeat,
+            });
             cells = cells.map((cell) =>
               enrichExplorationMoveCell(exploration, cell)
             );
             row.push(
               <td key={"td1-" + i + "-" + j}>
                 <div className="move">
-                  {cells.length === 1 ? (
+                  {cells.length === 0 ? null : cells.length === 1 ? (
                     AMove(game, {
                       ...cells[0],
                       move: moveTextForCell({

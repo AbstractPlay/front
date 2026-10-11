@@ -1,0 +1,60 @@
+{
+  "format": "abstractplay-playground",
+  "version": 1,
+  "metaGame": "hex",
+  "state": "{\"game\":\"hex\",\"numplayers\":2,\"variants\":[\"size-11\"],\"gameover\":false,\"winner\":[],\"stack\":[{\"_version\":\"20240101\",\"_results\":[],\"_timestamp\":\"2026-09-27T22:00:31.188Z\",\"currplayer\":1,\"board\":{\"dataType\":\"Map\",\"value\":[]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"c2\"}],\"_timestamp\":\"2026-09-28T04:22:10.756Z\",\"currplayer\":2,\"lastmove\":\"c2\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"h6\"}],\"_timestamp\":\"2026-09-29T20:38:53.608Z\",\"currplayer\":1,\"lastmove\":\"h6\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"d8\"}],\"_timestamp\":\"2026-09-30T04:42:16.505Z\",\"currplayer\":2,\"lastmove\":\"d8\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"d5\"}],\"_timestamp\":\"2026-10-01T16:50:45.799Z\",\"currplayer\":1,\"lastmove\":\"d5\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"g5\"}],\"_timestamp\":\"2026-10-01T16:51:24.117Z\",\"currplayer\":2,\"lastmove\":\"g5\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"f7\"}],\"_timestamp\":\"2026-10-01T17:17:39.014Z\",\"currplayer\":1,\"lastmove\":\"f7\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"e6\"}],\"_timestamp\":\"2026-10-01T17:21:40.855Z\",\"currplayer\":2,\"lastmove\":\"e6\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"d7\"}],\"_timestamp\":\"2026-10-02T14:49:40.643Z\",\"currplayer\":1,\"lastmove\":\"d7\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"e7\"}],\"_timestamp\":\"2026-10-02T18:00:21.174Z\",\"currplayer\":2,\"lastmove\":\"e7\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"g3\"}],\"_timestamp\":\"2026-10-06T19:33:11.831Z\",\"currplayer\":1,\"lastmove\":\"g3\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"h3\"}],\"_timestamp\":\"2026-10-06T23:38:18.573Z\",\"currplayer\":2,\"lastmove\":\"h3\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"c10\"}],\"_timestamp\":\"2026-10-08T19:39:59.830Z\",\"currplayer\":1,\"lastmove\":\"c10\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"e9\"}],\"_timestamp\":\"2026-10-08T23:29:27.226Z\",\"currplayer\":2,\"lastmove\":\"e9\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"d11\"}],\"_timestamp\":\"2026-10-09T16:35:17.696Z\",\"currplayer\":1,\"lastmove\":\"d11\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1],[\"d11\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"f10\"}],\"_timestamp\":\"2026-10-09T23:47:50.307Z\",\"currplayer\":2,\"lastmove\":\"f10\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1],[\"d11\",2],[\"f10\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"h4\"}],\"_timestamp\":\"2026-10-10T17:23:19.901Z\",\"currplayer\":1,\"lastmove\":\"h4\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1],[\"d11\",2],[\"f10\",1],[\"h4\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"g4\"}],\"_timestamp\":\"2026-10-10T17:24:13.225Z\",\"currplayer\":2,\"lastmove\":\"g4\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1],[\"d11\",2],[\"f10\",1],[\"h4\",2],[\"g4\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"i1\"}],\"_timestamp\":\"2026-10-10T17:31:51.764Z\",\"currplayer\":1,\"lastmove\":\"i1\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1],[\"d11\",2],[\"f10\",1],[\"h4\",2],[\"g4\",1],[\"i1\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"j2\"}],\"_timestamp\":\"2026-10-10T17:31:51.765Z\",\"currplayer\":2,\"lastmove\":\"j2\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1],[\"d11\",2],[\"f10\",1],[\"h4\",2],[\"g4\",1],[\"i1\",2],[\"j2\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"j1\"}],\"_timestamp\":\"2026-10-10T18:22:57.432Z\",\"currplayer\":1,\"lastmove\":\"j1\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1],[\"d11\",2],[\"f10\",1],[\"h4\",2],[\"g4\",1],[\"i1\",2],[\"j2\",1],[\"j1\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"k1\"}],\"_timestamp\":\"2026-10-10T18:23:28.479Z\",\"currplayer\":2,\"lastmove\":\"k1\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1],[\"d11\",2],[\"f10\",1],[\"h4\",2],[\"g4\",1],[\"i1\",2],[\"j2\",1],[\"j1\",2],[\"k1\",1]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"f5\"}],\"_timestamp\":\"2026-10-10T18:26:19.448Z\",\"currplayer\":1,\"lastmove\":\"f5\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1],[\"d11\",2],[\"f10\",1],[\"h4\",2],[\"g4\",1],[\"i1\",2],[\"j2\",1],[\"j1\",2],[\"k1\",1],[\"f5\",2]]},\"connPath\":[]},{\"_version\":\"20240101\",\"_results\":[{\"type\":\"place\",\"where\":\"f6\"}],\"_timestamp\":\"2026-10-10T18:26:43.353Z\",\"currplayer\":2,\"lastmove\":\"f6\",\"board\":{\"dataType\":\"Map\",\"value\":[[\"c2\",1],[\"h6\",2],[\"d8\",1],[\"d5\",2],[\"g5\",1],[\"f7\",2],[\"e6\",1],[\"d7\",2],[\"e7\",1],[\"g3\",2],[\"h3\",1],[\"c10\",2],[\"e9\",1],[\"d11\",2],[\"f10\",1],[\"h4\",2],[\"g4\",1],[\"i1\",2],[\"j2\",1],[\"j1\",2],[\"k1\",1],[\"f5\",2],[\"f6\",1]]},\"connPath\":[]}]}",
+  "variants": [],
+  "playerCount": 2,
+  "focus": {
+    "moveNumber": 23,
+    "exPath": []
+  },
+  "exploration": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    [
+      {
+        "move": "f9",
+        "children": [
+          {
+            "move": "e10",
+            "children": [],
+            "premove": true
+          }
+        ]
+      },
+      {
+        "move": "i3",
+        "children": [
+          {
+            "move": "i2",
+            "children": [],
+            "premove": true
+          }
+        ]
+      }
+    ]
+  ],
+  "moveAnnotations": null
+}

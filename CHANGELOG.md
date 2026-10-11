@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0.0-beta`. Production and dev deploys stamp `1.0.0-ci-<GitHub Actions run id>.0` during the workflow (see `.github/workflows/deploy-prod.js.yml` and `deploy-dev.js.yml`). Entries below are grouped by theme and approximate ship window on **main** (what runs at abstractplay.com); they are not a per-commit log.
 
-## [1.0.0-ci] - 2026-10-10
+## [1.0.0-ci] - 2026-10-11
 
 ### Added
 
@@ -40,6 +40,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Move tree (sequenced games):** compact row density merges seat cycles again when the engine exposes a full stack-aligned `getRounds()` grid (playground and live play); sparse density still uses one row per stack move for path indexing.
 - **Playground (Lab):** God vs Live hidden-information controls stay available for card games (e.g. Jacynth, Biscuit) — strip capability is probed on disposable engines so gameslib strip export cannot corrupt the live session engine.
 - **Open challenges:** show a spinner while accept is in flight instead of optimistic “Accepted!” before the server responds.
+- **Live play move list:** sequential games with multiple exploration/premove lines at the tip no longer show opponent branches in the wrong player column or skip the player’s own ply (e.g. Hex premove trees).
 - **i18n CI:** `locale-src/` sidecars are committed again on develop deploy (auto-commit `file_pattern` was multiline, so only `public/locales` were ever staged); backfilled sidecars to stop repeated Gemini rewrites of the same strings.
 
 ## [1.0.0-ci] - 2026-09-30

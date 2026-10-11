@@ -218,6 +218,7 @@ export function buildGameMovesProps(session) {
     handlePlaygroundExport,
     engine: engineRef?.current,
     gameRec,
+    globalMe,
   };
 }
 
