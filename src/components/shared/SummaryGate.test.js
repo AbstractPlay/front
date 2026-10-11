@@ -3,11 +3,15 @@ import { render, screen } from "@testing-library/react";
 import SummaryGate from "./SummaryGate";
 import { useStore } from "../../stores";
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key) => key,
-  }),
-}));
+vi.mock("react-i18next", async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key) => key,
+    }),
+  };
+});
 
 vi.mock("../../hooks/useEnsureSummaryTier", () => ({
   useEnsureSummaryTier: vi.fn(),

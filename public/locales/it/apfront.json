@@ -1756,6 +1756,10 @@
   },
   "gameMove": {
     "loading": "Caricamento partita…",
+    "replay": {
+      "banner": "Modalità replay — visualizzazione di un'istantanea salvata. Mosse e modifiche sono disabilitate.",
+      "loadFailed": "Impossibile caricare il fixture del replay per questo URL."
+    },
     "dev": {
       "copyHomeworldsDiagram": "Copia diagramma Homeworlds",
       "injectState": "Inietta stato",

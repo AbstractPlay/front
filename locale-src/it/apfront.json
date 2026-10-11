@@ -4899,6 +4899,14 @@
     "src": "Played moves",
     "out": "Mosse giocate"
   },
+  "gameMove.replay.banner": {
+    "src": "Replay mode — showing a saved snapshot. Moves and edits are disabled.",
+    "out": "Modalità replay — visualizzazione di un'istantanea salvata. Mosse e modifiche sono disabilitate."
+  },
+  "gameMove.replay.loadFailed": {
+    "src": "Could not load the replay fixture for this URL.",
+    "out": "Impossibile caricare il fixture del replay per questo URL."
+  },
   "gameMove.teaching": {
     "src": "teaching",
     "out": "didattica"
